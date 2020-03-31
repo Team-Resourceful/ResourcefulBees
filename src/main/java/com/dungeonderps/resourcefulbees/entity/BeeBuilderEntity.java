@@ -8,6 +8,7 @@ import net.minecraft.entity.passive.BeeEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -49,6 +50,16 @@ public class BeeBuilderEntity extends BeeEntity {
         }
     }
     // CONSTANT FOR EVERY ENTITY
+    @Override
+    public boolean isHiveValid() {
+        return true;
+    }
+
+    @Override
+    public boolean doesHiveHaveSpace(BlockPos pos) {
+        return true;
+    }
+
 
     // THESE CHANGE FOR EACH
 }
