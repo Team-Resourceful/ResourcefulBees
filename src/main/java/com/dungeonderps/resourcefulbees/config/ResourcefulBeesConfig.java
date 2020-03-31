@@ -1,12 +1,12 @@
 package com.dungeonderps.resourcefulbees.config;
 
 import com.dungeonderps.resourcefulbees.entity.BeeBuilderEntity;
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 import jdk.nashorn.internal.parser.JSONParser;
 import net.minecraft.client.renderer.debug.BeeDebugRenderer;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.passive.BeeEntity;
+import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
@@ -27,6 +27,8 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 public class ResourcefulBeesConfig {
+    EntityType<? extends BeeEntity> p_i225714_1_;
+    World p_i225714_2_;
     public static Path BEE_PATH;
     public static class CommonConfig {
         public static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
@@ -124,7 +126,15 @@ public class ResourcefulBeesConfig {
             BufferedReader reader = new BufferedReader(new FileReader(file));
             JsonElement jsonElement = new JsonParser().parse(reader);
             JsonObject jsonObject = jsonElement.getAsJsonObject();
-            return new BeeBuilderEntity(name, jsonObject.get("drop"), jsonObject.get("beeColor"), jsonObject.get("nestColor"), jsonObject.get("flower"), jsonObject.get("base_block"), jsonObject.get("mutated_block")); // will pass in name,
+            int[] beeColor = new int[3];
+            int[] nestColor = new int[3];
+            JsonArray ar1 = jsonObject.get("beeColor").getAsJsonArray();
+            JsonArray ar2 = jsonObject.get("nestColor").getAsJsonArray();
+            for (int i = 0; i < 3; i++) {
+                beeColor[i] = ar1.get(i).getAsInt();
+                nestColor[i] = ar1.get(i).getAsInt();
+            }
+            return new BeeBuilderEntity(name, jsonObject.get("drop").getAsString(), beeColor, nestColor, jsonObject.get("flower").getAsString(), jsonObject.get("base_block").getAsString(), jsonObject.get("mutated_block").getAsString(), p_i225714_1_, p_i225714_2_); // will pass in name,
         } catch (IOException e) {
             // log an error happened
         }
