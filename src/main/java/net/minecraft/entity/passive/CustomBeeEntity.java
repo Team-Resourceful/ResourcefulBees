@@ -70,23 +70,25 @@ public class CustomBeeEntity extends BeeEntity {
 
     //These are needed for dynamic creation from JSON configs
     public static final ArrayList<String> BEE_TYPES = new ArrayList<>();
-    public static final HashMap<String, String> BEE_COLOR_LIST = new HashMap<>();
-    public static final HashMap<String, String> FLOWERS = new HashMap<>();
-    public static final HashMap<String, String> BASE_BLOCKS = new HashMap<>();
-    public static final HashMap<String, String> MUTATION_BLOCKS = new HashMap<>();
-    public static final HashMap<String, String> BEE_DROPS = new HashMap<>();
+//    public static final HashMap<String, String> BEE_COLOR_LIST = new HashMap<>();
+//    public static final HashMap<String, String> FLOWERS = new HashMap<>();
+//    public static final HashMap<String, String> BASE_BLOCKS = new HashMap<>();
+//    public static final HashMap<String, String> MUTATION_BLOCKS = new HashMap<>();
+//    public static final HashMap<String, String> BEE_DROPS = new HashMap<>();
+    public static final HashMap<String, ArrayList<String>> BEE_INFO = new HashMap<>();
+    // index 0 = color, 1 = flower, 2 = base, 3 = mut, 4 = drop
 
     //These are internal values stored for each instance
     private String Bee_Type = BEE_TYPES.get(rand.nextInt(BEE_TYPES.size()));
-    private String Bee_Color = BEE_COLOR_LIST.get(Bee_Type);
-    private String Bee_Flower = FLOWERS.get(Bee_Type);
-    private String Base_Block = BASE_BLOCKS.get(Bee_Type);
-    private String Mutation_Block = MUTATION_BLOCKS.get(Bee_Type);
-    private String Bee_Drop = BEE_DROPS.get(Bee_Type);
+    private String Bee_Color = BEE_INFO.get(Bee_Type).get(0);//BEE_COLOR_LIST.get(Bee_Type);
+    private String Bee_Flower = BEE_INFO.get(Bee_Type).get(1);//FLOWERS.get(Bee_Type);
+    private String Base_Block = BEE_INFO.get(Bee_Type).get(2);//BASE_BLOCKS.get(Bee_Type);
+    private String Mutation_Block = BEE_INFO.get(Bee_Type).get(3);//MUTATION_BLOCKS.get(Bee_Type);
+    private String Bee_Drop = BEE_INFO.get(Bee_Type).get(4);//BEE_DROPS.get(Bee_Type);
+
 
     public CustomBeeEntity(EntityType<? extends BeeEntity> p_i225714_1_, World p_i225714_2_) {
         super(p_i225714_1_, p_i225714_2_);
-
     }
 
     //TODO Implement Dynamic Resource Loading - See KubeJS for Example
@@ -125,12 +127,12 @@ public class CustomBeeEntity extends BeeEntity {
     @Nullable
     @Override
     public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
-        LOGGER.info(BEE_TYPES + " Current Bee Type");
-        LOGGER.info(BEE_COLOR_LIST + " Current Bee Color");
-        LOGGER.info(FLOWERS + " Current Bee Flower");
-        LOGGER.info(BASE_BLOCKS + " Current Bee block");
-        LOGGER.info(MUTATION_BLOCKS + " Current Bee mutation");
-        LOGGER.info(BEE_DROPS + " Current Bee drop");
+//        LOGGER.info(BEE_TYPES + " Current Bee Type");
+//        LOGGER.info(BEE_COLOR_LIST + " Current Bee Color");
+//        LOGGER.info(FLOWERS + " Current Bee Flower");
+//        LOGGER.info(BASE_BLOCKS + " Current Bee block");
+//        LOGGER.info(MUTATION_BLOCKS + " Current Bee mutation");
+//        LOGGER.info(BEE_DROPS + " Current Bee drop");
 
         LOGGER.info(this.Bee_Type + " Current Bee Type");
         LOGGER.info(this.Bee_Color + " Current Bee Color");
