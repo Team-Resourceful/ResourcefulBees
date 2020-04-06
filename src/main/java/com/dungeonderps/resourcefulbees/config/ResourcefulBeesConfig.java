@@ -1,35 +1,108 @@
 package com.dungeonderps.resourcefulbees.config;
 
-import com.dungeonderps.resourcefulbees.entity.BeeBuilderEntity;
-import com.google.gson.*;
-import jdk.nashorn.internal.parser.JSONParser;
-import net.minecraft.client.renderer.debug.BeeDebugRenderer;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.passive.BeeEntity;
-import net.minecraft.world.World;
+import net.minecraft.entity.passive.CustomBeeEntity;
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.loading.FMLPaths;
-import org.apache.commons.lang3.tuple.Pair;
-import com.electronwill.nightconfig.toml.TomlFormat;
-import com.electronwill.nightconfig.core.Config;
 
-import java.awt.*;
-import java.io.*;
-import java.nio.file.FileAlreadyExistsException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.stream.Stream;
+/*
+TODO REMEMBER THIS INFORMATION!!!!!!
+
+Epic_OreoLast Friday at 9:48 PM
+in 1.15.2 say I wanted to dynamically create and register any number of entities, each with distinct properties, based on a custom mob class that's an extension of a vanilla mob class, how would I go about doing so? Is there a way, when registering the entity, to change specific custom values in the entity's class so that I only need the one class as a template?
+CommobleLast Friday at 9:54 PM
+yes
+y'know how you can register a bunch of different blocks that all use the same Block class?
+same thing
+Epic_OreoLast Friday at 9:58 PM
+hmm ok I'll take a look at that and see how to reapply to entities
+CommobleLast Friday at 9:59 PM
+one thing to keep in mind:
+Epic_OreoLast Friday at 10:00 PM
+trying to set the mod up so users could add their own custom mob varieties given a set of parameters
+CommobleLast Friday at 10:00 PM
+when you register an EntityType, it takes an entity factory of the form (entityType, world) -> entity as an argument; most entities define a constructor shaped like that and use that as the factory
+ah, it's hard to register things dynamically
+lemme finish my other train of thought first and then I'll get to that
+IItemstackLast Friday at 10:00 PM
+time for custom config
+Epic_OreoLast Friday at 10:02 PM
+well the goal was the users would have a template in a json file and then build custom mobs using that template, but I can't account for what quantity of mobs a pack dev might want to make custom
+IItemstackLast Friday at 10:02 PM
+another idea would be to use 1 type but then change up the onInitialSpawn part
+CommobleLast Friday at 10:02 PM
+a problem with that is that datapacks aren't loaded until after entities are registered
+Epic_OreoLast Friday at 10:03 PM
+well the json would be in the config folder
+IItemstackLast Friday at 10:03 PM
+datapacks aren't loaded until after the server starts
+CommobleLast Friday at 10:03 PM
+same with configs, although you can trick forge into loading your configs early
+Epic_OreoLast Friday at 10:03 PM
+ahh
+Epic_OreoLast Friday at 10:07 PM
+so without tricking forge to load a config earlier, it would likely be better to register one mob type, then supply the variation data to the entity class when the configs load, and just have the mob randomly select which data set to use when it's spawned in right?
+CommobleLast Friday at 10:08 PM
+yeah, and it would store its properties in its NBT data
+Epic_OreoLast Friday at 10:09 PM
+ok that makes sense, I'd considered that route but thought maybe I could do do multiple entities at registration.
+thanks for the help :slight_smile:
+ */
 
 public class ResourcefulBeesConfig {
-    EntityType<? extends BeeEntity> p_i225714_1_;
-    World p_i225714_2_;
-    public static Path BEE_PATH;
+
+    public static final String CATEGORY_GENERAL = "general";
+    //public static final String CATEGORY_POWER = "power";
+
+    public static ForgeConfigSpec COMMON_CONFIG;
+
+
+
+    static {
+        ForgeConfigSpec.Builder COMMON_BUILDER = new ForgeConfigSpec.Builder();
+        COMMON_BUILDER.comment("General Settings").push(CATEGORY_GENERAL);
+        COMMON_BUILDER.pop();
+        COMMON_CONFIG = COMMON_BUILDER.build();
+
+        setupBees();
+    }
+
+    public static void setupBees(){
+        CustomBeeEntity.BEE_TYPES.add("IronBee");
+        CustomBeeEntity.BEE_TYPES.add("DiamondBee");
+        CustomBeeEntity.BEE_TYPES.add("EmeraldBee");
+        //TestBeeEntity.BEE_TYPES.add("GoldBee");
+
+
+        CustomBeeEntity.BEE_COLOR_LIST.put("IronBee", "#ffcc99");
+        CustomBeeEntity.BEE_COLOR_LIST.put("DiamondBee", "#00ffff");
+        CustomBeeEntity.BEE_COLOR_LIST.put("EmeraldBee", "#18eb09");
+        //TestBeeEntity.BEE_COLOR_LIST.put("GoldBee", "#bdb708");
+
+        CustomBeeEntity.FLOWERS.put("IronBee", "Poppy");
+        CustomBeeEntity.FLOWERS.put("DiamondBee", "Poppy");
+        CustomBeeEntity.FLOWERS.put("EmeraldBee", "Poppy");
+
+        CustomBeeEntity.BEE_DROPS.put("IronBee", "Drop");
+        CustomBeeEntity.BEE_DROPS.put("DiamondBee", "Drop");
+        CustomBeeEntity.BEE_DROPS.put("EmeraldBee", "Drop");
+
+        CustomBeeEntity.BASE_BLOCKS.put("IronBee", "Block");
+        CustomBeeEntity.BASE_BLOCKS.put("DiamondBee", "Block");
+        CustomBeeEntity.BASE_BLOCKS.put("EmeraldBee", "Block");
+
+        CustomBeeEntity.MUTATION_BLOCKS.put("IronBee", "Block");
+        CustomBeeEntity.MUTATION_BLOCKS.put("DiamondBee", "Block");
+        CustomBeeEntity.MUTATION_BLOCKS.put("EmeraldBee", "Block");
+
+
+    }
+
+
+
+    /*
+    //EntityType<? extends BeeEntity> p_i225714_1_;
+    //World p_i225714_2_;
+    //public static Path BEE_PATH;
+    /*
     public static class CommonConfig {
         public static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
         public static final ForgeConfigSpec SPEC;
@@ -40,6 +113,7 @@ public class ResourcefulBeesConfig {
         }
     }
     // might delete
+    /*
     public static class BeeConfig {
         private ForgeConfigSpec.BooleanValue enabled;
         private ForgeConfigSpec.ConfigValue<ArrayList<Integer>> beeColor;
@@ -52,6 +126,7 @@ public class ResourcefulBeesConfig {
 
     // setup the mod config folder
     public static void setup() {
+        /*
         Path configPath = FMLPaths.CONFIGDIR.get();
         Path rbConfigPath = Paths.get(configPath.toAbsolutePath().toString(), "resourcefulbees");
         // subfolder for bees
@@ -67,8 +142,11 @@ public class ResourcefulBeesConfig {
         }
         writeDefault();
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC, "resourcefulbees/common.toml");
-    }
 
+    }
+    */
+
+    /*
     // write default bees
     public static void writeDefault() {
         // example resource array will add to this
@@ -116,6 +194,9 @@ public class ResourcefulBeesConfig {
         }
     }
 
+     */
+
+    /*
     // parse bees here. to be used where bees are registered.
     public BeeBuilderEntity parseBee(File file) throws FileNotFoundException {
         String name = file.getName(); // find good way to cut the file name
@@ -140,4 +221,8 @@ public class ResourcefulBeesConfig {
         }
         return null;
     }
+     */
+
+
+
 }
