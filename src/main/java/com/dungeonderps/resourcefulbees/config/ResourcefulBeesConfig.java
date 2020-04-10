@@ -1,7 +1,19 @@
 package com.dungeonderps.resourcefulbees.config;
 
+import com.dungeonderps.resourcefulbees.ResourcefulBees;
+import com.google.gson.Gson;
+import com.sun.media.jfxmedia.logging.Logger;
+import javafx.scene.chart.ScatterChart;
 import net.minecraft.entity.passive.CustomBeeEntity;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.loading.FMLPaths;
+import java.io.*;
+import java.nio.file.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /*
 TODO REMEMBER THIS INFORMATION!!!!!!
@@ -48,15 +60,21 @@ thanks for the help :slight_smile:
  */
 
 public class ResourcefulBeesConfig {
-
+    public static Path BEE_PATH;
     public static final String CATEGORY_GENERAL = "general";
     //public static final String CATEGORY_POWER = "power";
 
     public static ForgeConfigSpec COMMON_CONFIG;
 
-
+    // CONFIGS
+    public static ForgeConfigSpec.BooleanValue GENERATE_DEFAULTS;
+    public static ForgeConfigSpec.BooleanValue ENABLE_EASTER_EGG_BEES;
+    public static ForgeConfigSpec.BooleanValue DEBUG_MODE;
+    public static ForgeConfigSpec.DoubleValue HIVE_OUTPUT_MODIFIER;
+    public static ForgeConfigSpec.IntValue HIVE_MAX_BEES;
 
     static {
+        setup();
         ForgeConfigSpec.Builder COMMON_BUILDER = new ForgeConfigSpec.Builder();
         COMMON_BUILDER.comment("General Settings").push(CATEGORY_GENERAL);
         COMMON_BUILDER.pop();
@@ -65,68 +83,49 @@ public class ResourcefulBeesConfig {
         setupBees();
     }
 
-    public static void setupBees(){
-        CustomBeeEntity.BEE_TYPES.add("IronBee");
-        CustomBeeEntity.BEE_TYPES.add("DiamondBee");
-        CustomBeeEntity.BEE_TYPES.add("EmeraldBee");
-        //TestBeeEntity.BEE_TYPES.add("GoldBee");
-
-
-        CustomBeeEntity.BEE_COLOR_LIST.put("IronBee", "#ffcc99");
-        CustomBeeEntity.BEE_COLOR_LIST.put("DiamondBee", "#00ffff");
-        CustomBeeEntity.BEE_COLOR_LIST.put("EmeraldBee", "#18eb09");
-        //TestBeeEntity.BEE_COLOR_LIST.put("GoldBee", "#bdb708");
-
-        CustomBeeEntity.FLOWERS.put("IronBee", "Poppy");
-        CustomBeeEntity.FLOWERS.put("DiamondBee", "Poppy");
-        CustomBeeEntity.FLOWERS.put("EmeraldBee", "Poppy");
-
-        CustomBeeEntity.BEE_DROPS.put("IronBee", "Drop");
-        CustomBeeEntity.BEE_DROPS.put("DiamondBee", "Drop");
-        CustomBeeEntity.BEE_DROPS.put("EmeraldBee", "Drop");
-
-        CustomBeeEntity.BASE_BLOCKS.put("IronBee", "Block");
-        CustomBeeEntity.BASE_BLOCKS.put("DiamondBee", "Block");
-        CustomBeeEntity.BASE_BLOCKS.put("EmeraldBee", "Block");
-
-        CustomBeeEntity.MUTATION_BLOCKS.put("IronBee", "Block");
-        CustomBeeEntity.MUTATION_BLOCKS.put("DiamondBee", "Block");
-        CustomBeeEntity.MUTATION_BLOCKS.put("EmeraldBee", "Block");
-
-
+    public static void setupBees() {// CONFIG FOLDER AND FILES MUST BE RUN BEFORE THIS
+        // check config for hardcoded bee flag
+        if (GENERATE_DEFAULTS.get()) {
+            // get path of this folder
+            File f = new File(Paths.get("").toString());
+            FilenameFilter filter = new FilenameFilter() {
+                @Override
+                public boolean accept(File f, String name) {
+                    return name.endsWith(".json");
+                }
+            };
+            File[] files = f.listFiles(filter);
+            for (File file : files) {
+                try {
+                    Files.copy(file.toPath(), BEE_PATH, StandardCopyOption.REPLACE_EXISTING);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        addBees();
     }
 
-
-
-    /*
-    //EntityType<? extends BeeEntity> p_i225714_1_;
-    //World p_i225714_2_;
-    //public static Path BEE_PATH;
-    /*
     public static class CommonConfig {
         public static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
         public static final ForgeConfigSpec SPEC;
 
         static {
             BUILDER.comment("Mod options");
+            GENERATE_DEFAULTS = BUILDER.comment("Set to true if you want our default bees to populate the bees folder [true/false]").define("generateDefaults",true);
+            ENABLE_EASTER_EGG_BEES = BUILDER.comment("Set to true if you want easter egg bees to generate [true/false]").define("enableEasterEggBees", true);
+            DEBUG_MODE = BUILDER.comment("Extra logger info [true/false]").define("debugMode", false);
+            HIVE_OUTPUT_MODIFIER = BUILDER.comment("Output modifier for the haves when ready to be harvested[range 0.0 - 8.0]").defineInRange("hiveOutputModifier", 1.0,0.0,8.0);
+            HIVE_MAX_BEES = BUILDER.comment("Maximum amount of bees in the hive at any given time[range 0 - 16").defineInRange("hiveMaxBees", 4, 0, 16);
+
+            BUILDER.pop();
             SPEC = BUILDER.build();
         }
-    }
-    // might delete
-    /*
-    public static class BeeConfig {
-        private ForgeConfigSpec.BooleanValue enabled;
-        private ForgeConfigSpec.ConfigValue<ArrayList<Integer>> beeColor;
-        private ForgeConfigSpec.ConfigValue<ArrayList<Integer>> hiveColor1;
-        private ForgeConfigSpec.ConfigValue<ArrayList<Integer>> hiveColor2;
-        private ForgeConfigSpec.ConfigValue<String> name;
-        private ForgeConfigSpec.ConfigValue<String> resource;
-
     }
 
     // setup the mod config folder
     public static void setup() {
-        /*
+
         Path configPath = FMLPaths.CONFIGDIR.get();
         Path rbConfigPath = Paths.get(configPath.toAbsolutePath().toString(), "resourcefulbees");
         // subfolder for bees
@@ -138,91 +137,38 @@ public class ResourcefulBeesConfig {
         } catch (FileAlreadyExistsException e) {
             // do nothing
         } catch (IOException e) {
-            //ResourcefulBeeLogger.logger.error("Failed to create resourcefulbees config directory");
+            //ResourcefulBeeLogger.logger.error("Failed to create resourcefulbees config directory")
+            ResourcefulBees.LOGGER.error("failed to create resourcefulbees config directory");
         }
-        writeDefault();
+
+
+        //writeDefault();
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC, "resourcefulbees/common.toml");
 
     }
-    */
 
-    /*
-    // write default bees
-    public static void writeDefault() {
-        // example resource array will add to this
-        String[] name = new String[]{"iron", "gold", "diamond"};
-        String[] drops = new String[]{"minecraft:iron_ingot", "minecraft:gold_ingot", "minecraft:diamond"};
-        int[][] beeColors = new int[3][3], nestColors= new int[3][3];
-        // REPLACE THIS WITH ACTUAL NUMBERS
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                nestColors[i][j] = 100;
-                beeColors[i][j] = 100;
-            }
-        }
-        String[] flowers = new String[]{"minecraft:poppy", "minecraft:dandelion", "minecraft:orchid"};
-        String[] baseBlocks = new String[]{"minecraft:stone", "minecraft:stone", "minecraft:stone"};
-        String[] mutBlocks = new String[]{"minecraft:iron_ore","minecraft:gold_ore", "minecraft:diamond_ore"};
-
-        try {
-            for (int i = 0; i < drops.length; i++) {
-                File file = new File(BEE_PATH + name[i] + ".json");
-                file.createNewFile();
-                BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-                // begin
-                writer.write("{\n");
-                // drop
-                writer.write("  \"drop\":\"" + drops[i] +"\",\n");
-                // bee color
-                writer.write("  \"beeColor\":" + beeColors[i].toString() + ",\n");
-                // nest color
-                writer.write("  \"nestColor\":" + nestColors[i] + ",\n");
-                // flower
-                writer.write("  \"flower\":\"" + flowers[i] + "\",\n");
-                // base block
-                writer.write("  \"base_block\":\"" + baseBlocks[i] + "\",\n");
-                // mutated block
-                writer.write("  \"mutated_block\":\"" + mutBlocks[i] + "\"\n");
-                // end
-                writer.write("}");
-                writer.close();
-            }
-        } catch (FileAlreadyExistsException e) {
-            // do nothing
-        } catch (IOException e) {
-            // log thing
-        }
-    }
-
-     */
-
-    /*
-    // parse bees here. to be used where bees are registered.
-    public BeeBuilderEntity parseBee(File file) throws FileNotFoundException {
+    private static BeeInfoHolder parseBee(File file) throws FileNotFoundException {
         String name = file.getName(); // find good way to cut the file name
-        int end = name.indexOf('.');
-        name = name.substring(0, end);
-        try {
-            // log the reading of the file here
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-            JsonElement jsonElement = new JsonParser().parse(reader);
-            JsonObject jsonObject = jsonElement.getAsJsonObject();
-            int[] beeColor = new int[3];
-            int[] nestColor = new int[3];
-            JsonArray ar1 = jsonObject.get("beeColor").getAsJsonArray();
-            JsonArray ar2 = jsonObject.get("nestColor").getAsJsonArray();
-            for (int i = 0; i < 3; i++) {
-                beeColor[i] = ar1.get(i).getAsInt();
-                nestColor[i] = ar1.get(i).getAsInt();
-            }
-            return new BeeBuilderEntity(name, jsonObject.get("drop").getAsString(), beeColor, nestColor, jsonObject.get("flower").getAsString(), jsonObject.get("base_block").getAsString(), jsonObject.get("mutated_block").getAsString(), p_i225714_1_, p_i225714_2_); // will pass in name,
-        } catch (IOException e) {
-            // log an error happened
-        }
-        return null;
+        name = name.substring(0, name.indexOf('.'));
+
+        Gson gson = new Gson();
+        Reader reader = new BufferedReader(new FileReader(file));
+        BeeInfoHolder bee = gson.fromJson(reader, BeeInfoHolder.class);
+        bee.setName(name);
+        CustomBeeEntity.BEE_INFO.put(name, bee.getInfo());
+        return bee;
     }
-     */
 
-
-
+    public static void addBees() {
+        for (File f: BEE_PATH.toFile().listFiles()) {
+            String s = f.getName();
+            if (s.substring(s.indexOf('.')) == ".json") {
+                try {
+                    parseBee(f);
+                } catch (FileNotFoundException e) {
+                    ResourcefulBees.LOGGER.error("File not found when parsing bees");
+                }
+            }
+        }
+    }
 }

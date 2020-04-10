@@ -1,0 +1,10 @@
+{
+  "color": "#bdb708",
+  "flower": "minecraft:poppy",
+  "baseBlock": "minecraft:stone",
+  "mutBlock": "minecraft:gold_ore",
+  "drop": "minecraft:gold_ingot",
+  "spawnInWorld": true,
+  "dimensionList": [0],
+  "biomeList": "not really a biome"
+}

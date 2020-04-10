@@ -76,7 +76,7 @@ public class CustomBeeEntity extends BeeEntity {
 //    public static final HashMap<String, String> MUTATION_BLOCKS = new HashMap<>();
 //    public static final HashMap<String, String> BEE_DROPS = new HashMap<>();
     public static final HashMap<String, ArrayList<String>> BEE_INFO = new HashMap<>();
-    // index 0 = color, 1 = flower, 2 = base, 3 = mut, 4 = drop
+    // index 0 = color, 1 = flower, 2 = base, 3 = mut, 4 = drop, 5 = spawnInWorld, 6 = dimensionListString, 7 = biomeListString
 
     //These are internal values stored for each instance
     private String Bee_Type = BEE_TYPES.get(rand.nextInt(BEE_TYPES.size()));
