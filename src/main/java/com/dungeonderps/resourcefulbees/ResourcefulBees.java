@@ -23,7 +23,7 @@ public class ResourcefulBees
 {
     public static final String MOD_ID = "resourcefulbees";
 
-    private static final Logger LOGGER = LogManager.getLogger();
+    public static final Logger LOGGER = LogManager.getLogger();
 
     public ResourcefulBees() {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ResourcefulBeesConfig.COMMON_CONFIG);
@@ -34,7 +34,7 @@ public class ResourcefulBees
         RegistryHandler.init();
         
         MinecraftForge.EVENT_BUS.register(this);
-
+//TODO add CustomBee to Bee Tag Collection using datapack and test releaseBee().
     }
 
     private void setup(final FMLCommonSetupEvent event){

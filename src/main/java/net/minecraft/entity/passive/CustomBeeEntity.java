@@ -66,7 +66,7 @@ public class CustomBeeEntity extends BeeEntity {
 
 
     //These are needed for Server->Client synchronization
-    private static final DataParameter<String> BEE_COLORS = EntityDataManager.createKey(CustomBeeEntity.class, DataSerializers.STRING);
+    private static final DataParameter<String> BEE_COLOR = EntityDataManager.createKey(CustomBeeEntity.class, DataSerializers.STRING);
 
     //These are needed for dynamic creation from JSON configs
     public static final ArrayList<String> BEE_TYPES = new ArrayList<>();
@@ -77,16 +77,14 @@ public class CustomBeeEntity extends BeeEntity {
     public static final HashMap<String, String> BEE_DROPS = new HashMap<>();
 
     //These are internal values stored for each instance
-    private String Bee_Type = BEE_TYPES.get(rand.nextInt(BEE_TYPES.size()));
-    private String Bee_Color = BEE_COLOR_LIST.get(Bee_Type);
-    private String Bee_Flower = FLOWERS.get(Bee_Type);
-    private String Base_Block = BASE_BLOCKS.get(Bee_Type);
-    private String Mutation_Block = MUTATION_BLOCKS.get(Bee_Type);
-    private String Bee_Drop = BEE_DROPS.get(Bee_Type);
+    private String Bee_Type = "Default";
+    private String Bee_Flower = "Poppy";
+    private String Base_Block = "minecraft:cobblestone";
+    private String Mutation_Block = "minecraft:dirt";
+    private String Bee_Drop = "minecraft:apple";
 
     public CustomBeeEntity(EntityType<? extends BeeEntity> p_i225714_1_, World p_i225714_2_) {
         super(p_i225714_1_, p_i225714_2_);
-
     }
 
     //TODO Implement Dynamic Resource Loading - See KubeJS for Example
@@ -95,12 +93,26 @@ public class CustomBeeEntity extends BeeEntity {
     }
 
     public float[] getBeeColorAsFloat() {
-        Color tempColor = Color.decode(this.Bee_Color);
+        String beeColor = getBeeColor();
+        Color tempColor = Color.decode(beeColor);
         return tempColor.getComponents(null);
+    }
+
+    public String getBeeColor(){
+
+        //This check is necessary to keep the client from crashing randomly
+        //TODO LOW PRIORITY - figure out why render happens before temp color has a value.
+        String tempColor = this.dataManager.get(BEE_COLOR);
+        if (tempColor.isEmpty()){
+            return "#FFFFFF";
+        } else {
+            return this.dataManager.get(BEE_COLOR);
+        }
     }
 
 
     //TODO Figure Out why Vanilla Bees aren't angered when attacking Modded Bees
+    // - beesourceful has same issue - not tested since adding (new Class[0])
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new BeeEntity.StingGoal(this, 1.399999976158142D, true));
@@ -118,40 +130,30 @@ public class CustomBeeEntity extends BeeEntity {
         this.goalSelector.addGoal(7, new BeeEntity.FindPollinationTargetGoal());
         this.goalSelector.addGoal(8, new BeeEntity.WanderGoal());
         this.goalSelector.addGoal(9, new SwimGoal(this));
-        this.targetSelector.addGoal(1, (new BeeEntity.AngerGoal(this)).setCallsForHelp());
+        this.targetSelector.addGoal(1, (new BeeEntity.AngerGoal(this)).setCallsForHelp(new Class[0]));
         this.targetSelector.addGoal(2, new BeeEntity.AttackPlayerGoal(this));
     }
 
     @Nullable
     @Override
     public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
-        LOGGER.info(BEE_TYPES + " Current Bee Type");
-        LOGGER.info(BEE_COLOR_LIST + " Current Bee Color");
-        LOGGER.info(FLOWERS + " Current Bee Flower");
-        LOGGER.info(BASE_BLOCKS + " Current Bee block");
-        LOGGER.info(MUTATION_BLOCKS + " Current Bee mutation");
-        LOGGER.info(BEE_DROPS + " Current Bee drop");
+        selectRandomBee();
 
-        LOGGER.info(this.Bee_Type + " Current Bee Type");
-        LOGGER.info(this.Bee_Color + " Current Bee Color");
-        LOGGER.info(this.Bee_Flower + " Current Bee Flower");
-        LOGGER.info(this.Base_Block + " Current Bee block");
-        LOGGER.info(this.Mutation_Block + " Current Bee mutation");
-        LOGGER.info(this.Bee_Drop + " Current Bee drop");
         return super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
     }
 
     @Override
     protected void registerData() {
         super.registerData();
-        this.dataManager.register(BEE_COLORS, Bee_Color);
+        //Need to supply default value
+        this.dataManager.register(BEE_COLOR, "#FFFFFF");
     }
 
     @Override
     public void readAdditional(CompoundNBT compound) {
         super.readAdditional(compound);
         this.Bee_Type = compound.getString("BeeType");
-        this.Bee_Color = compound.getString("BeeColor");
+        this.dataManager.set(BEE_COLOR, compound.getString("BeeColor"));
         this.Bee_Flower = compound.getString("Flower");
         this.Base_Block = compound.getString("BaseBlock");
         this.Mutation_Block = compound.getString("MutationBlock");
@@ -161,11 +163,24 @@ public class CustomBeeEntity extends BeeEntity {
     @Override
     public void writeAdditional(CompoundNBT compound) {
         super.writeAdditional(compound);
-        compound.putString("BeeType", this.Bee_Type);
-        compound.putString("BeeColor", this.Bee_Color);
-        compound.putString("Flower", this.Bee_Flower);
-        compound.putString("BaseBlock", this.Base_Block);
-        compound.putString("MutationBlock", this.Mutation_Block);
-        compound.putString("BeeDrop", this.Bee_Drop);
+        compound.putString("BeeType", Bee_Type);
+        compound.putString("BeeColor", getBeeColor());
+        compound.putString("Flower", Bee_Flower);
+        compound.putString("BaseBlock", Base_Block);
+        compound.putString("MutationBlock", Mutation_Block);
+        compound.putString("BeeDrop", Bee_Drop);
     }
+
+    //easier to manage bee selection for testing, could be useful for bee breeding
+    //or other possible reasons for changing bee type.
+    //if fleshed out further - may want to consider separate class for handling bee types
+    private void selectRandomBee(){
+        this.Bee_Type = BEE_TYPES.get(rand.nextInt(BEE_TYPES.size()));
+        this.dataManager.set(BEE_COLOR, BEE_COLOR_LIST.get(Bee_Type));
+        this.Bee_Flower = FLOWERS.get(Bee_Type);
+        this.Base_Block = BASE_BLOCKS.get(Bee_Type);
+        this.Mutation_Block = MUTATION_BLOCKS.get(Bee_Type);
+        this.Bee_Drop = BEE_DROPS.get(Bee_Type);
+    }
+
 }

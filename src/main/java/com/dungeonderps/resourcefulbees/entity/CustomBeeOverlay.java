@@ -11,11 +11,11 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class CustomBeeOverlay extends LayerRenderer<CustomBeeEntity, TestBeeModel<CustomBeeEntity>> {
+public class CustomBeeOverlay extends LayerRenderer<CustomBeeEntity, CustomBeeModel<CustomBeeEntity>> {
     private static final ResourceLocation BEE_COLLAR = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/entity/bee_collar.png");
     private static final ResourceLocation BEE_COLLAR_ANGRY = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/entity/bee_collar_angry.png");
 
-    public CustomBeeOverlay(IEntityRenderer<CustomBeeEntity, TestBeeModel<CustomBeeEntity>> rendererIn) {
+    public CustomBeeOverlay(IEntityRenderer<CustomBeeEntity, CustomBeeModel<CustomBeeEntity>> rendererIn) {
         super(rendererIn);
     }
 
