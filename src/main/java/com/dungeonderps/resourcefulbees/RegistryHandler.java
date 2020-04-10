@@ -22,7 +22,7 @@ public class RegistryHandler {
 		ENTITY_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
 	}
 
-	public static final RegistryObject<EntityType<?>> BEE = ENTITY_TYPES.register("bee", () -> EntityType.Builder.create(CustomBeeEntity::new, EntityClassification.AMBIENT)
+	public static final RegistryObject<EntityType<?>> BEE = ENTITY_TYPES.register("bee", () -> EntityType.Builder.create(CustomBeeEntity::new, EntityClassification.CREATURE)
 			.size(0.7F, 0.6F)
 			.build("bee"));
 

@@ -79,7 +79,6 @@ public class ResourcefulBeesConfig {
         COMMON_BUILDER.comment("General Settings").push(CATEGORY_GENERAL);
         COMMON_BUILDER.pop();
         COMMON_CONFIG = COMMON_BUILDER.build();
-
         setupBees();
     }
 

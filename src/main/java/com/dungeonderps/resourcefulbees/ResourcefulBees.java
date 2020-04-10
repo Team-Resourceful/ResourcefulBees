@@ -34,7 +34,7 @@ public class ResourcefulBees
         RegistryHandler.init();
         
         MinecraftForge.EVENT_BUS.register(this);
-
+//TODO add CustomBee to Bee Tag Collection using datapack and test releaseBee().
     }
 
     private void setup(final FMLCommonSetupEvent event){

@@ -10,7 +10,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 
 @OnlyIn(Dist.CLIENT)
-public class CustomBeeRenderer extends MobRenderer<CustomBeeEntity, TestBeeModel<CustomBeeEntity>> {
+public class CustomBeeRenderer extends MobRenderer<CustomBeeEntity, CustomBeeModel<CustomBeeEntity>> {
 
     private static final ResourceLocation field_229040_a_ = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/entity/bee_angry.png");
     private static final ResourceLocation field_229041_g_ = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/entity/bee_angry_nectar.png");
@@ -18,7 +18,7 @@ public class CustomBeeRenderer extends MobRenderer<CustomBeeEntity, TestBeeModel
     private static final ResourceLocation field_229043_i_ = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/entity/bee_nectar.png");
 
     public CustomBeeRenderer(EntityRendererManager p_i226033_1_) {
-        super(p_i226033_1_, new TestBeeModel<>(), 0.4F);
+        super(p_i226033_1_, new CustomBeeModel<>(), 0.4F);
         addLayer(new CustomBeeOverlay(this));
     }
 
