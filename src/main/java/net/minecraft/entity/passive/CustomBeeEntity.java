@@ -8,12 +8,15 @@ import net.minecraft.entity.ai.goal.BreedGoal;
 import net.minecraft.entity.ai.goal.FollowParentGoal;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.goal.TemptGoal;
+import net.minecraft.item.Item;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.tileentity.IronBeehiveBlockEntity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.DifficultyInstance;
@@ -70,21 +73,15 @@ public class CustomBeeEntity extends BeeEntity {
 
     //These are needed for dynamic creation from JSON configs
     public static final ArrayList<String> BEE_TYPES = new ArrayList<>();
-//    public static final HashMap<String, String> BEE_COLOR_LIST = new HashMap<>();
-//    public static final HashMap<String, String> FLOWERS = new HashMap<>();
-//    public static final HashMap<String, String> BASE_BLOCKS = new HashMap<>();
-//    public static final HashMap<String, String> MUTATION_BLOCKS = new HashMap<>();
-//    public static final HashMap<String, String> BEE_DROPS = new HashMap<>();
     public static final HashMap<String, ArrayList<String>> BEE_INFO = new HashMap<>();
     // index 0 = color, 1 = flower, 2 = base, 3 = mut, 4 = drop, 5 = spawnInWorld, 6 = dimensionListString, 7 = biomeListString
 
     //These are internal values stored for each instance
-    private String Bee_Type = BEE_TYPES.get(rand.nextInt(BEE_TYPES.size()));
-    private String Bee_Color = BEE_INFO.get(Bee_Type).get(0);//BEE_COLOR_LIST.get(Bee_Type);
-    private String Bee_Flower = BEE_INFO.get(Bee_Type).get(1);//FLOWERS.get(Bee_Type);
-    private String Base_Block = BEE_INFO.get(Bee_Type).get(2);//BASE_BLOCKS.get(Bee_Type);
-    private String Mutation_Block = BEE_INFO.get(Bee_Type).get(3);//MUTATION_BLOCKS.get(Bee_Type);
-    private String Bee_Drop = BEE_INFO.get(Bee_Type).get(4);//BEE_DROPS.get(Bee_Type);
+    private String Bee_Type = "default";
+    private String Bee_Flower = "Poppy";
+    private String Base_Block = "minecraft:dirt";
+    private String Mutation_Block = "minecraft:cobblestone";
+    private String Bee_Drop = "minecraft:stick";
 
 
     public CustomBeeEntity(EntityType<? extends BeeEntity> p_i225714_1_, World p_i225714_2_) {
@@ -138,11 +135,21 @@ public class CustomBeeEntity extends BeeEntity {
         this.targetSelector.addGoal(2, new BeeEntity.AttackPlayerGoal(this));
     }
 
+    @Override
+    public boolean isHiveValid() {
+        if (!this.hasHive()) {
+            return false;
+        } else {
+            TileEntity blockEntity = this.world.getTileEntity(this.hivePos);
+            return blockEntity instanceof IronBeehiveBlockEntity
+                    && ((IronBeehiveBlockEntity) blockEntity).isAllowedBee(this);
+        }
+    }
+
     @Nullable
     @Override
     public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         selectRandomBee();
-
         return super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
     }
 
@@ -180,11 +187,15 @@ public class CustomBeeEntity extends BeeEntity {
     //if fleshed out further - may want to consider separate class for handling bee types
     private void selectRandomBee(){
         this.Bee_Type = BEE_TYPES.get(rand.nextInt(BEE_TYPES.size()));
-        this.dataManager.set(BEE_COLOR, BEE_COLOR_LIST.get(Bee_Type));
-        this.Bee_Flower = FLOWERS.get(Bee_Type);
-        this.Base_Block = BASE_BLOCKS.get(Bee_Type);
-        this.Mutation_Block = MUTATION_BLOCKS.get(Bee_Type);
-        this.Bee_Drop = BEE_DROPS.get(Bee_Type);
+        this.dataManager.set(BEE_COLOR, BEE_INFO.get(Bee_Type).get(0));
+        this.Bee_Flower = BEE_INFO.get(Bee_Type).get(1);
+        this.Base_Block = BEE_INFO.get(Bee_Type).get(2);
+        this.Mutation_Block = BEE_INFO.get(Bee_Type).get(3);
+        this.Bee_Drop = BEE_INFO.get(Bee_Type).get(4);
+    }
+
+    public Item getHoneyComb(){
+        return ResourcefulBees.ObjectHolders.Items.RESOURCEFUL_HONEYCOMB;
     }
 
 }

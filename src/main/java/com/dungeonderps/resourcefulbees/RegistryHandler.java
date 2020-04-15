@@ -1,7 +1,13 @@
 package com.dungeonderps.resourcefulbees;
 
+import com.dungeonderps.resourcefulbees.block.IronBeehiveBlock;
+import com.dungeonderps.resourcefulbees.item.ResourcefulHoneycomb;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.material.MaterialColor;
 import net.minecraft.entity.passive.CustomBeeEntity;
 import net.minecraft.block.Block;
+import net.minecraft.block.Block.Properties;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
@@ -16,15 +22,25 @@ public class RegistryHandler {
 	public static final DeferredRegister<Block> BLOCKS = new DeferredRegister<>(ForgeRegistries.BLOCKS, ResourcefulBees.MOD_ID);
 	public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = new DeferredRegister<>(ForgeRegistries.ENTITIES, ResourcefulBees.MOD_ID);
 
+	private static Block.Properties IronBeehiveProperties;
+
 	public static void init() {
-		//ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
-		//BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
+
+		//need to do the properties here, cannot do in the constructor call due to private fields in high tier super class.
+		IronBeehiveProperties = Block.Properties.create(Material.IRON).hardnessAndResistance(2).sound(SoundType.METAL);
+
+		ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
+		BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
 		ENTITY_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
 	}
 
 	public static final RegistryObject<EntityType<?>> BEE = ENTITY_TYPES.register("bee", () -> EntityType.Builder.create(CustomBeeEntity::new, EntityClassification.CREATURE)
 			.size(0.7F, 0.6F)
 			.build("bee"));
+
+	public static final RegistryObject<Item> RESOURCEFUL_HONEYCOMB = ITEMS.register("resourceful_honeycomb", ResourcefulHoneycomb::new);
+	public static final RegistryObject<Block> IRON_BEEHIVE = BLOCKS.register("iron_beehive", () -> new IronBeehiveBlock(IronBeehiveProperties));
+
 
 	public static void beeItems(String name) {
 		//String nameLowered = name.toLowerCase();

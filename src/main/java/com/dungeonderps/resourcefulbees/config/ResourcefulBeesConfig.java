@@ -7,15 +7,19 @@ import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.loading.FMLPaths;
+import org.apache.logging.log4j.Logger;
+
 import java.io.*;
+import java.net.URISyntaxException;
 import java.nio.file.*;
 
 public class ResourcefulBeesConfig {
-    public static Path BEE_PATH;
-    public static final String CATEGORY_GENERAL = "general";
-    //public static final String CATEGORY_POWER = "power";
 
-    public static ForgeConfigSpec COMMON_CONFIG;
+    public static final Logger LOGGER = ResourcefulBees.LOGGER;
+    public static final String MOD_OPTIONS = "Mod Options";
+
+
+    public static Path BEE_PATH;
 
     // CONFIGS
     public static ForgeConfigSpec.BooleanValue GENERATE_DEFAULTS;
@@ -24,27 +28,49 @@ public class ResourcefulBeesConfig {
     public static ForgeConfigSpec.DoubleValue HIVE_OUTPUT_MODIFIER;
     public static ForgeConfigSpec.IntValue HIVE_MAX_BEES;
 
-    static {
-        setup();
-        ForgeConfigSpec.Builder COMMON_BUILDER = new ForgeConfigSpec.Builder();
-        COMMON_BUILDER.comment("General Settings").push(CATEGORY_GENERAL);
-        COMMON_BUILDER.pop();
-        COMMON_CONFIG = COMMON_BUILDER.build();
-        setupBees();
+    public static class CommonConfig {
+
+        public static ForgeConfigSpec COMMON_CONFIG;
+
+        static {
+            ForgeConfigSpec.Builder COMMON_BUILDER = new ForgeConfigSpec.Builder();
+
+            COMMON_BUILDER.comment("Mod options").push(MOD_OPTIONS);
+            COMMON_BUILDER.pop();
+
+            GENERATE_DEFAULTS = COMMON_BUILDER.comment("Set to true if you want our default bees to populate the bees folder [true/false]")
+                    .define("generateDefaults",true);
+            ENABLE_EASTER_EGG_BEES = COMMON_BUILDER.comment("Set to true if you want easter egg bees to generate [true/false]")
+                    .define("enableEasterEggBees", true);
+            DEBUG_MODE = COMMON_BUILDER.comment("Extra logger info [true/false]")
+                    .define("debugMode", false);
+            HIVE_OUTPUT_MODIFIER = COMMON_BUILDER.comment("Output modifier for the haves when ready to be harvested[range 0.0 - 8.0]")
+                    .defineInRange("hiveOutputModifier", 1.0,0.0,8.0);
+            HIVE_MAX_BEES = COMMON_BUILDER.comment("Maximum amount of bees in the hive at any given time[range 0 - 16")
+                    .defineInRange("hiveMaxBees", 4, 0, 16);
+
+            COMMON_CONFIG = COMMON_BUILDER.build();
+
+            setupBees();
+        }
     }
 
     public static void setupBees() {// CONFIG FOLDER AND FILES MUST BE RUN BEFORE THIS
         // check config for hardcoded bee flag
+        /*
         if (GENERATE_DEFAULTS.get()) {
             // get path of this folder
-            File f = new File(Paths.get("").toString());
-            FilenameFilter filter = new FilenameFilter() {
-                @Override
-                public boolean accept(File f, String name) {
-                    return name.endsWith(".json");
-                }
+            File f = new File(".");//.toString());
+            LOGGER.info("f - Filepath - " + f.getPath());
+            LOGGER.info("f - FilepathABS - " + f.getAbsolutePath());
+
+            FilenameFilter filter = (f1, name) -> {
+                LOGGER.info("printing inside Filter");
+                return name.endsWith(".json");
             };
+            LOGGER.info("printing after Filter");
             File[] files = f.listFiles(filter);
+            LOGGER.info("Filtered Files Array = " + files);
             for (File file : files) {
                 try {
                     Files.copy(file.toPath(), BEE_PATH, StandardCopyOption.REPLACE_EXISTING);
@@ -52,25 +78,8 @@ public class ResourcefulBeesConfig {
                     e.printStackTrace();
                 }
             }
-        }
+        }*/
         addBees();
-    }
-
-    public static class CommonConfig {
-        public static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
-        public static final ForgeConfigSpec SPEC;
-
-        static {
-            BUILDER.comment("Mod options");
-            GENERATE_DEFAULTS = BUILDER.comment("Set to true if you want our default bees to populate the bees folder [true/false]").define("generateDefaults",true);
-            ENABLE_EASTER_EGG_BEES = BUILDER.comment("Set to true if you want easter egg bees to generate [true/false]").define("enableEasterEggBees", true);
-            DEBUG_MODE = BUILDER.comment("Extra logger info [true/false]").define("debugMode", false);
-            HIVE_OUTPUT_MODIFIER = BUILDER.comment("Output modifier for the haves when ready to be harvested[range 0.0 - 8.0]").defineInRange("hiveOutputModifier", 1.0,0.0,8.0);
-            HIVE_MAX_BEES = BUILDER.comment("Maximum amount of bees in the hive at any given time[range 0 - 16").defineInRange("hiveMaxBees", 4, 0, 16);
-
-            BUILDER.pop();
-            SPEC = BUILDER.build();
-        }
     }
 
     // setup the mod config folder
@@ -87,9 +96,9 @@ public class ResourcefulBeesConfig {
             // do nothing
         } catch (IOException e) {
             //ResourcefulBeeLogger.logger.error("Failed to create resourcefulbees config directory")
-            ResourcefulBees.LOGGER.error("failed to create resourcefulbees config directory");
+            LOGGER.error("failed to create resourcefulbees config directory");
         }
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC, "resourcefulbees/common.toml");
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfig.COMMON_CONFIG, "resourcefulbees/common.toml");
 
     }
 
