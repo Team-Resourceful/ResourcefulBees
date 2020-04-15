@@ -3,14 +3,22 @@ package com.dungeonderps.resourcefulbees.config;
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 
 import java.util.ArrayList;
+import java.awt.*;
 
 public class BeeInfoHolder {
     private String name, flower, color, biomeList, baseBlock, mutBlock, drop;
     private boolean enabled, spawnInWorld;
     private int[] dimensionList;
+    // color stuff
+    private float[] rbg;
+    private int col;
     private String hexLength = "INVALID HEX COLOR: please check your color value and make sure it is a # followed by 6 numbers/letters";
     public BeeInfoHolder() {
         // run checkers
+        // store as different vals
+        Color c = new Color(new Integer.decode(color));
+        c.getRGBColorComponents(rbg); // should work if not rbg needs to be assigned to this
+        col = c.getRGB();
     }
 
     public String getName() {
@@ -91,6 +99,14 @@ public class BeeInfoHolder {
 
     public void setBiomeList(String biomeList) {
         this.biomeList = biomeList;
+    }
+    
+    public float[] getRGB() {
+        return rgb;
+    }
+    
+    public int getCol() {
+        return col;
     }
 
     public void checkColor() {
