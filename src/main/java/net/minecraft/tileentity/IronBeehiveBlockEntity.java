@@ -25,9 +25,12 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.dungeonderps.resourcefulbees.ResourcefulBees.LOGGER;
+
 public class IronBeehiveBlockEntity extends BeehiveTileEntity {
 
   public List<Item> honeycombs = new ArrayList<>();
+  public List<String> beeTypes = new ArrayList<>();
 
   @Nonnull
   @Override
@@ -71,7 +74,8 @@ public class IronBeehiveBlockEntity extends BeehiveTileEntity {
                 if (i + j > 5) {
                   --j;
                 }
-                this.honeycombs.add(beeentity.getHoneyComb());
+                this.honeycombs.add(ObjectHolders.Items.RESOURCEFUL_HONEYCOMB);
+                this.beeTypes.add(beeentity.getBeeType());
                 this.world.setBlockState(this.getPos(), state.with(BeehiveBlock.HONEY_LEVEL, i + j));
               }
             }
@@ -129,6 +133,7 @@ public class IronBeehiveBlockEntity extends BeehiveTileEntity {
   public Item getResourceHoneyComb(){
     Item honeycomb = honeycombs.get(honeycombs.size()-1);
     honeycombs.remove(honeycomb);
+    beeTypes.remove(beeTypes.size()-1);
     return honeycomb;
   }
 
@@ -146,9 +151,11 @@ public class IronBeehiveBlockEntity extends BeehiveTileEntity {
     super.read(nbt);
     if (nbt.contains("Honeycombs")){
       CompoundNBT combs = (CompoundNBT) nbt.get("Honeycombs");
+      CompoundNBT beeData = (CompoundNBT) nbt.get("BeeTypes");
       int i = 0;
       while (combs.contains(String.valueOf(i))){
         honeycombs.add(ForgeRegistries.ITEMS.getValue(new ResourceLocation(combs.getString(String.valueOf(i)))));
+        beeTypes.add(beeData.getString(String.valueOf(i)));
         i++;
       }
       ForgeRegistries.ITEMS.getValue(new ResourceLocation(nbt.getString("Honeycomb")));
@@ -159,13 +166,18 @@ public class IronBeehiveBlockEntity extends BeehiveTileEntity {
   @Override
   public CompoundNBT write(CompoundNBT nbt) {
     super.write(nbt);
+    LOGGER.info("Honeycombs are empty!! = " + !honeycombs.isEmpty());
     if (!honeycombs.isEmpty()){
       CompoundNBT combs = new CompoundNBT();
+      CompoundNBT beeData = new CompoundNBT();
       for (int i = 0; i < honeycombs.size();i++){
         combs.putString(String.valueOf(i),honeycombs.get(i).getRegistryName().toString());
+        beeData.putString(String.valueOf(i), beeTypes.get(i));
       }
       nbt.put("Honeycombs",combs);
+      nbt.put("BeeTypes", beeData);
     }
+
     return nbt;
   }
 

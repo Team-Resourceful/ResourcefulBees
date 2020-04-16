@@ -1,24 +1,32 @@
 package com.dungeonderps.resourcefulbees.config;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
+import com.google.common.collect.Lists;
 
 import java.util.ArrayList;
 import java.awt.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public class BeeInfoHolder {
     private String name, flower, color, biomeList, baseBlock, mutBlock, drop;
-    private boolean enabled, spawnInWorld;
+    private boolean spawnInWorld;
     private int[] dimensionList;
+
+    private transient boolean enabled;
     // color stuff
-    private float[] rbg;
-    private int col;
-    private String hexLength = "INVALID HEX COLOR: please check your color value and make sure it is a # followed by 6 numbers/letters";
+    private transient float[] rgb;
+    private transient int col;
+    private transient String hexLength = "INVALID HEX COLOR: please check your color value and make sure it is a # followed by 6 numbers/letters";
     public BeeInfoHolder() {
         // run checkers
         // store as different vals
-        Color c = new Color(new Integer.decode(color));
-        c.getRGBColorComponents(rbg); // should work if not rbg needs to be assigned to this
-        col = c.getRGB();
+        //Color c = Color.decode(color);
+        //c.getRGBColorComponents(rgb); // should work if not rbg needs to be assigned to this
+        //col = c.getRGB();
+
     }
 
     public String getName() {
@@ -45,8 +53,9 @@ public class BeeInfoHolder {
         this.color = color;
     }
 
+
     public int[] getDimensionList() {
-        return dimensionList;
+        return this.dimensionList;
     }
 
     public void setDimensionList(int[] dimensionList) {

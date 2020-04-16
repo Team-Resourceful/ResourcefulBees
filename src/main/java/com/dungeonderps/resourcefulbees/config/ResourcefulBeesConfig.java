@@ -2,21 +2,31 @@ package com.dungeonderps.resourcefulbees.config;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.google.gson.Gson;
-import net.minecraft.entity.passive.CustomBeeEntity;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.loading.FMLPaths;
-import org.apache.logging.log4j.Logger;
 
+import java.lang.*;
 import java.io.*;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.*;
+import java.util.Arrays;
+
+import static com.dungeonderps.resourcefulbees.ResourcefulBees.LOGGER;
 
 public class ResourcefulBeesConfig {
 
-    public static final Logger LOGGER = ResourcefulBees.LOGGER;
     public static final String MOD_OPTIONS = "Mod Options";
+
+    public static final String ASSETS_DIR = "/assets/resourcefulbees/default_bees/";
+    public static final String[] DEFAULT_BEES = new String[]{
+            "Diamond.json",
+            "Emerald.json",
+            "Gold.json",
+            "Iron.json"
+    };
 
 
     public static Path BEE_PATH;
@@ -51,34 +61,25 @@ public class ResourcefulBeesConfig {
 
             COMMON_CONFIG = COMMON_BUILDER.build();
 
-            setupBees();
+            setupDefaultBees();
         }
     }
 
-    public static void setupBees() {// CONFIG FOLDER AND FILES MUST BE RUN BEFORE THIS
+    public static void setupDefaultBees() {// CONFIG FOLDER AND FILES MUST BE RUN BEFORE THIS
         // check config for hardcoded bee flag
         /*
         if (GENERATE_DEFAULTS.get()) {
-            // get path of this folder
-            File f = new File(".");//.toString());
-            LOGGER.info("f - Filepath - " + f.getPath());
-            LOGGER.info("f - FilepathABS - " + f.getAbsolutePath());
-
-            FilenameFilter filter = (f1, name) -> {
-                LOGGER.info("printing inside Filter");
-                return name.endsWith(".json");
-            };
-            LOGGER.info("printing after Filter");
-            File[] files = f.listFiles(filter);
-            LOGGER.info("Filtered Files Array = " + files);
-            for (File file : files) {
+        }*/
+        for (String bee : DEFAULT_BEES) {
+            String path = ASSETS_DIR + bee;   //This allows me dynamically change the path and later create the new path
                 try {
-                    Files.copy(file.toPath(), BEE_PATH, StandardCopyOption.REPLACE_EXISTING);
-                } catch (IOException e) {
+                    Path filePath = Paths.get(ResourcefulBees.class.getResource(path).toURI());  //This gets the existing file from the assets directory
+                    Path newPath =  Paths.get(BEE_PATH.toString() + "/" + bee);  //This is necessary because the target path needs to include the file name
+                    Files.copy(filePath, newPath, StandardCopyOption.REPLACE_EXISTING);
+                } catch (URISyntaxException | IOException e) {
                     e.printStackTrace();
                 }
-            }
-        }*/
+        }
         addBees();
     }
 
@@ -89,9 +90,11 @@ public class ResourcefulBeesConfig {
         // subfolder for bees
         Path rbBeesPath = Paths.get(rbConfigPath.toAbsolutePath().toString(), "bees");
         BEE_PATH = rbBeesPath;
+        LOGGER.info("BEE_PATH" + BEE_PATH.toString());
         try {
             Files.createDirectory(rbConfigPath);
             Files.createDirectory(rbBeesPath);
+            LOGGER.info("DIRS MADE");
         } catch (FileAlreadyExistsException e) {
             // do nothing
         } catch (IOException e) {
@@ -102,27 +105,51 @@ public class ResourcefulBeesConfig {
 
     }
 
-    private static BeeInfoHolder parseBee(File file) throws FileNotFoundException {
+    private static BeeInfoHolder parseBee(File file) throws IOException {
         String name = file.getName(); // find good way to cut the file name
+        LOGGER.info("Name = " + name);
         name = name.substring(0, name.indexOf('.'));
 
         Gson gson = new Gson();
-        Reader reader = new BufferedReader(new FileReader(file));
-        BeeInfoHolder bee = gson.fromJson(reader, BeeInfoHolder.class);
+        Reader r = new FileReader(file);
+        BeeInfoHolder bee = gson.fromJson(r, BeeInfoHolder.class);
         bee.setName(name);
-        CustomBeeEntity.BEE_INFO.put(name, bee.getInfo());
-        return bee;
+
+        //Reader reader = new FileReader(file); //new BufferedReader(new FileReader(file));
+
+
+        LOGGER.info("Bee Info = " + bee.getInfo());
+        LOGGER.info("Bee Info Color = " + bee.getColor());
+        LOGGER.info("Bee Info DIM = " + Arrays.toString(bee.getDimensionList()));
+        LOGGER.info("Bee Info BIO = " + bee.getBiomeList());
+        //LOGGER.info("value of reader = " + gson.newJsonReader(reader).toString());
+
+        //String color = gson.newJsonReader(reader).nextString();
+        //LOGGER.info("DDE1 - Color = " + color);
+        //BeeInfoHolder bee = gson.fromJson(reader, BeeInfoHolder.class);
+        //bee.setName(name);
+        //CustomBeeEntity.BEE_INFO.put(name, bee.getInfo());
+        //return bee;
+        return null;
     }
 
     public static void addBees() {
         for (File f: BEE_PATH.toFile().listFiles()) {
             String s = f.getName();
-            if (s.substring(s.indexOf('.')) == ".json") {
+            LOGGER.info("String S = " + s);
+            LOGGER.info("Substring = " + s.substring(s.indexOf('.')));
+            LOGGER.info("indexOf = " + s.indexOf('.'));
+            LOGGER.info("Equals() = " + s.substring(s.indexOf('.')).equals(".json"));
+            if (s.substring(s.indexOf('.')).equals(".json")) {
+                LOGGER.info("Is this true?");
                 try {
+                    LOGGER.info("ParseBee");
                     parseBee(f);
-                } catch (FileNotFoundException e) {
+                } catch (IOException e) {
                     ResourcefulBees.LOGGER.error("File not found when parsing bees");
                 }
+            } else {
+                LOGGER.info("Must be false - x11");
             }
         }
     }
