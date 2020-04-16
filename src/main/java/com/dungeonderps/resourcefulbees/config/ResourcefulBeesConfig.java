@@ -2,6 +2,7 @@ package com.dungeonderps.resourcefulbees.config;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.google.gson.Gson;
+import net.minecraft.entity.passive.CustomBeeEntity;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
@@ -71,7 +72,7 @@ public class ResourcefulBeesConfig {
         if (GENERATE_DEFAULTS.get()) {
         }*/
         for (String bee : DEFAULT_BEES) {
-            String path = ASSETS_DIR + bee;   //This allows me dynamically change the path and later create the new path
+            String path = ASSETS_DIR + bee;   //This allows me to dynamically change the path and later create the new path
                 try {
                     Path filePath = Paths.get(ResourcefulBees.class.getResource(path).toURI());  //This gets the existing file from the assets directory
                     Path newPath =  Paths.get(BEE_PATH.toString() + "/" + bee);  //This is necessary because the target path needs to include the file name
@@ -90,66 +91,38 @@ public class ResourcefulBeesConfig {
         // subfolder for bees
         Path rbBeesPath = Paths.get(rbConfigPath.toAbsolutePath().toString(), "bees");
         BEE_PATH = rbBeesPath;
-        LOGGER.info("BEE_PATH" + BEE_PATH.toString());
         try {
             Files.createDirectory(rbConfigPath);
             Files.createDirectory(rbBeesPath);
-            LOGGER.info("DIRS MADE");
         } catch (FileAlreadyExistsException e) {
             // do nothing
         } catch (IOException e) {
-            //ResourcefulBeeLogger.logger.error("Failed to create resourcefulbees config directory")
             LOGGER.error("failed to create resourcefulbees config directory");
         }
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfig.COMMON_CONFIG, "resourcefulbees/common.toml");
 
     }
 
-    private static BeeInfoHolder parseBee(File file) throws IOException {
+    private static void parseBee(File file) throws IOException {
         String name = file.getName(); // find good way to cut the file name
-        LOGGER.info("Name = " + name);
         name = name.substring(0, name.indexOf('.'));
 
         Gson gson = new Gson();
         Reader r = new FileReader(file);
         BeeInfoHolder bee = gson.fromJson(r, BeeInfoHolder.class);
         bee.setName(name);
-
-        //Reader reader = new FileReader(file); //new BufferedReader(new FileReader(file));
-
-
-        LOGGER.info("Bee Info = " + bee.getInfo());
-        LOGGER.info("Bee Info Color = " + bee.getColor());
-        LOGGER.info("Bee Info DIM = " + Arrays.toString(bee.getDimensionList()));
-        LOGGER.info("Bee Info BIO = " + bee.getBiomeList());
-        //LOGGER.info("value of reader = " + gson.newJsonReader(reader).toString());
-
-        //String color = gson.newJsonReader(reader).nextString();
-        //LOGGER.info("DDE1 - Color = " + color);
-        //BeeInfoHolder bee = gson.fromJson(reader, BeeInfoHolder.class);
-        //bee.setName(name);
-        //CustomBeeEntity.BEE_INFO.put(name, bee.getInfo());
-        //return bee;
-        return null;
+        CustomBeeEntity.BEE_INFO.put(name, bee.getInfo());
     }
 
     public static void addBees() {
         for (File f: BEE_PATH.toFile().listFiles()) {
             String s = f.getName();
-            LOGGER.info("String S = " + s);
-            LOGGER.info("Substring = " + s.substring(s.indexOf('.')));
-            LOGGER.info("indexOf = " + s.indexOf('.'));
-            LOGGER.info("Equals() = " + s.substring(s.indexOf('.')).equals(".json"));
             if (s.substring(s.indexOf('.')).equals(".json")) {
-                LOGGER.info("Is this true?");
                 try {
-                    LOGGER.info("ParseBee");
                     parseBee(f);
                 } catch (IOException e) {
                     ResourcefulBees.LOGGER.error("File not found when parsing bees");
                 }
-            } else {
-                LOGGER.info("Must be false - x11");
             }
         }
     }

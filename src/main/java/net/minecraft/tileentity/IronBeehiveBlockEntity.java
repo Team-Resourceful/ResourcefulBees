@@ -162,6 +162,8 @@ public class IronBeehiveBlockEntity extends BeehiveTileEntity {
     }
   }
 
+
+  //TODO Why the fuck does this cause ticking entity crash?  look above you ^ honeycomb?
   @Nonnull
   @Override
   public CompoundNBT write(CompoundNBT nbt) {
