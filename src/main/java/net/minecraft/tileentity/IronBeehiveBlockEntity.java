@@ -167,7 +167,6 @@ public class IronBeehiveBlockEntity extends BeehiveTileEntity {
   @Override
   public CompoundNBT write(CompoundNBT nbt) {
     super.write(nbt);
-    LOGGER.info("Honeycombs are empty!! = " + !honeycombs.isEmpty());
     if (!honeycombs.isEmpty()){
       CompoundNBT combs = new CompoundNBT();
       CompoundNBT beeData = new CompoundNBT();

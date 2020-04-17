@@ -82,10 +82,7 @@ public class CustomBeeEntity extends BeeEntity {
     private static final DataParameter<String> BEE_COLOR = EntityDataManager.createKey(CustomBeeEntity.class, DataSerializers.STRING);
 
     //These are needed for dynamic creation from JSON configs
-    //public static final ArrayList<String> BEE_TYPES = new ArrayList<>();
-    //public static final HashMap<String, ArrayList<String>> BEE_INFO = new HashMap<>();
     public static final HashMap<String, BeeInfo> BEE_INFO = new HashMap<>();
-    // index 0 = color, 1 = flower, 2 = base, 3 = mut, 4 = drop, 5 = spawnInWorld, 6 = dimensionListString, 7 = biomeListString
 
 
     //These are internal values stored for each instance
@@ -307,11 +304,6 @@ public class CustomBeeEntity extends BeeEntity {
     //or other possible reasons for changing bee type.
     //if fleshed out further - may want to consider separate class for handling bee types
     private void selectRandomBee(){
-        LOGGER.info("BEE_INFO VALUES = " + BEE_INFO.values());
-        LOGGER.info("BEE_INFO NAME = " + BEE_INFO.get(BEE_INFO.keySet().toArray()[rand.nextInt(BEE_INFO.size())]).getName());
-
-
-        //this.Bee_Type = BEE_INFO.get(rand.nextInt(BEE_INFO.size())).getName();
         this.Bee_Type = BEE_INFO.get(BEE_INFO.keySet().toArray()[rand.nextInt(BEE_INFO.size())]).getName();
         this.dataManager.set(BEE_COLOR, BEE_INFO.get(Bee_Type).getColor());
         this.Bee_Flower = BEE_INFO.get(Bee_Type).getFlower();

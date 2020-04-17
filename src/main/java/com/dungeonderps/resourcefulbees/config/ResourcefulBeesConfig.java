@@ -102,14 +102,14 @@ public class ResourcefulBeesConfig {
     }
 
     private static void parseBee(File file) throws IOException {
-        String name = file.getName(); // find good way to cut the file name
+        String name = file.getName();
         name = name.substring(0, name.indexOf('.'));
 
         Gson gson = new Gson();
         Reader r = new FileReader(file);
         BeeInfo bee = gson.fromJson(r, BeeInfo.class);
         bee.setName(name);
-        CustomBeeEntity.BEE_INFO.put(name, bee);//bee.getInfo());
+        CustomBeeEntity.BEE_INFO.put(name, bee);
     }
 
     public static void addBees() {
