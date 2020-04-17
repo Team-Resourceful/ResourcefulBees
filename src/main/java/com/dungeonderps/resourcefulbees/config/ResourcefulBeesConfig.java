@@ -11,9 +11,7 @@ import net.minecraftforge.fml.loading.FMLPaths;
 import java.lang.*;
 import java.io.*;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.file.*;
-import java.util.Arrays;
 
 import static com.dungeonderps.resourcefulbees.ResourcefulBees.LOGGER;
 
@@ -109,9 +107,9 @@ public class ResourcefulBeesConfig {
 
         Gson gson = new Gson();
         Reader r = new FileReader(file);
-        BeeInfoHolder bee = gson.fromJson(r, BeeInfoHolder.class);
+        BeeInfo bee = gson.fromJson(r, BeeInfo.class);
         bee.setName(name);
-        CustomBeeEntity.BEE_INFO.put(name, bee.getInfo());
+        CustomBeeEntity.BEE_INFO.put(name, bee);//bee.getInfo());
     }
 
     public static void addBees() {

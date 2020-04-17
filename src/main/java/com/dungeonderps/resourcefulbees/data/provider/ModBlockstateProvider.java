@@ -24,7 +24,7 @@ public class ModBlockstateProvider extends BlockStateProvider {
 
     protected void ironBeehive() {
         ResourceLocation iron_block = mcLoc("block/iron_block");
-        Block iron_beehive = ResourcefulBees.ObjectHolders.Blocks.IRON_BEEHIVE;
+        Block iron_beehive = RegistryHandler.IRON_BEEHIVE.get();
         String name = iron_beehive.getRegistryName().getPath();
         String nameHoney = iron_beehive.getRegistryName().getPath() + "_honey";
 

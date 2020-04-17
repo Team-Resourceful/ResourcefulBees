@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-public class BeeInfoHolder {
+public class BeeInfo {
     private String name, flower, color, biomeList, baseBlock, mutBlock, drop;
     private boolean spawnInWorld;
     private int[] dimensionList;
@@ -20,7 +20,7 @@ public class BeeInfoHolder {
     private transient float[] rgb;
     private transient int col;
     private transient String hexLength = "INVALID HEX COLOR: please check your color value and make sure it is a # followed by 6 numbers/letters";
-    public BeeInfoHolder() {
+    public BeeInfo() {
         // run checkers
         // store as different vals
         //Color c = Color.decode(color);

@@ -2,8 +2,7 @@
 package net.minecraft.tileentity;
 
 
-import com.dungeonderps.resourcefulbees.ResourcefulBees;
-import com.dungeonderps.resourcefulbees.ResourcefulBees.ObjectHolders;
+import com.dungeonderps.resourcefulbees.RegistryHandler;
 import net.minecraft.block.BeehiveBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -35,7 +34,7 @@ public class IronBeehiveBlockEntity extends BeehiveTileEntity {
   @Nonnull
   @Override
   public TileEntityType<?> getType() {
-    return ObjectHolders.BlockEntities.IRON_BEEHIVE;
+    return RegistryHandler.IRON_BEEHIVE_ENTITY.get();
   }
 
   @Override
@@ -74,7 +73,7 @@ public class IronBeehiveBlockEntity extends BeehiveTileEntity {
                 if (i + j > 5) {
                   --j;
                 }
-                this.honeycombs.add(ObjectHolders.Items.RESOURCEFUL_HONEYCOMB);
+                this.honeycombs.add(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
                 this.beeTypes.add(beeentity.getBeeType());
                 this.world.setBlockState(this.getPos(), state.with(BeehiveBlock.HONEY_LEVEL, i + j));
               }
@@ -143,7 +142,7 @@ public class IronBeehiveBlockEntity extends BeehiveTileEntity {
 
   public boolean isAllowedBee(CustomBeeEntity bee){
     Block hive = getBlockState().getBlock();
-    return hive == ObjectHolders.Blocks.IRON_BEEHIVE; //|| bee.getAllowedHive() == hive;
+    return hive == RegistryHandler.IRON_BEEHIVE.get(); //|| bee.getAllowedHive() == hive;
   }
 
   @Override

@@ -2,6 +2,7 @@ package net.minecraft.entity.passive;
 
 import com.dungeonderps.resourcefulbees.RegistryHandler;
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
+import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -13,7 +14,6 @@ import net.minecraft.entity.ai.goal.BreedGoal;
 import net.minecraft.entity.ai.goal.FollowParentGoal;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.goal.TemptGoal;
-import net.minecraft.item.Item;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
@@ -82,8 +82,9 @@ public class CustomBeeEntity extends BeeEntity {
     private static final DataParameter<String> BEE_COLOR = EntityDataManager.createKey(CustomBeeEntity.class, DataSerializers.STRING);
 
     //These are needed for dynamic creation from JSON configs
-    public static final ArrayList<String> BEE_TYPES = new ArrayList<>();
-    public static final HashMap<String, ArrayList<String>> BEE_INFO = new HashMap<>();
+    //public static final ArrayList<String> BEE_TYPES = new ArrayList<>();
+    //public static final HashMap<String, ArrayList<String>> BEE_INFO = new HashMap<>();
+    public static final HashMap<String, BeeInfo> BEE_INFO = new HashMap<>();
     // index 0 = color, 1 = flower, 2 = base, 3 = mut, 4 = drop, 5 = spawnInWorld, 6 = dimensionListString, 7 = biomeListString
 
 
@@ -306,12 +307,17 @@ public class CustomBeeEntity extends BeeEntity {
     //or other possible reasons for changing bee type.
     //if fleshed out further - may want to consider separate class for handling bee types
     private void selectRandomBee(){
-        this.Bee_Type = BEE_TYPES.get(rand.nextInt(BEE_TYPES.size()));
-        this.dataManager.set(BEE_COLOR, BEE_INFO.get(Bee_Type).get(0));
-        this.Bee_Flower = BEE_INFO.get(Bee_Type).get(1);
-        this.Base_Block = BEE_INFO.get(Bee_Type).get(2);
-        this.Mutation_Block = BEE_INFO.get(Bee_Type).get(3);
-        this.Bee_Drop = BEE_INFO.get(Bee_Type).get(4);
+        LOGGER.info("BEE_INFO VALUES = " + BEE_INFO.values());
+        LOGGER.info("BEE_INFO NAME = " + BEE_INFO.get(BEE_INFO.keySet().toArray()[rand.nextInt(BEE_INFO.size())]).getName());
+
+
+        //this.Bee_Type = BEE_INFO.get(rand.nextInt(BEE_INFO.size())).getName();
+        this.Bee_Type = BEE_INFO.get(BEE_INFO.keySet().toArray()[rand.nextInt(BEE_INFO.size())]).getName();
+        this.dataManager.set(BEE_COLOR, BEE_INFO.get(Bee_Type).getColor());
+        this.Bee_Flower = BEE_INFO.get(Bee_Type).getFlower();
+        this.Base_Block = BEE_INFO.get(Bee_Type).getBaseBlock();
+        this.Mutation_Block = BEE_INFO.get(Bee_Type).getMutBlock();
+        this.Bee_Drop = BEE_INFO.get(Bee_Type).getDrop();
     }
 
     public String getBeeType() {
