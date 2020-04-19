@@ -182,8 +182,8 @@ public class IronBeehiveBlockEntity extends BeehiveTileEntity {
   }
 
   public static class Bee2 extends Bee {
-    public Bee2(CompoundNBT p_i225767_1_, int p_i225767_2_, int p_i225767_3_) {
-      super(p_i225767_1_, p_i225767_2_, p_i225767_3_);
+    public Bee2(CompoundNBT data, int ticksIn, int minTicks) {
+      super(data, ticksIn, minTicks);
     }
   }
 }

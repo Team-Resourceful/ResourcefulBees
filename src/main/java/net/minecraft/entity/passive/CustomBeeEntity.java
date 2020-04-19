@@ -24,6 +24,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tileentity.IronBeehiveBlockEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -35,6 +36,7 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -107,7 +109,7 @@ public class CustomBeeEntity extends BeeEntity {
         this.goalSelector.addGoal(1, new BeeEntity.EnterBeehiveGoal());
         this.goalSelector.addGoal(2, new BreedGoal(this, 1.0D));
         this.goalSelector.addGoal(3, new TemptGoal(this, 1.25D, Ingredient.fromTag(ItemTags.FLOWERS), false));
-        this.pollinateGoal = new BeeEntity.PollinateGoal();
+        this.pollinateGoal = new PollinateGoal2();
         this.goalSelector.addGoal(4, this.pollinateGoal);
         this.goalSelector.addGoal(5, new FollowParentGoal(this, 1.25D));
         this.goalSelector.addGoal(5, new UpdateBeehiveGoal2());
@@ -115,7 +117,7 @@ public class CustomBeeEntity extends BeeEntity {
         this.goalSelector.addGoal(5, this.findBeehiveGoal);
         this.findFlowerGoal = new BeeEntity.FindFlowerGoal();
         this.goalSelector.addGoal(6, this.findFlowerGoal);
-        this.goalSelector.addGoal(7, new BeeEntity.FindPollinationTargetGoal());
+        this.goalSelector.addGoal(7, new FindPollinationTargetGoal2());
         this.goalSelector.addGoal(8, new BeeEntity.WanderGoal());
         this.goalSelector.addGoal(9, new SwimGoal(this));
         this.targetSelector.addGoal(1, (new BeeEntity.AngerGoal(this)).setCallsForHelp(new Class[0]));
@@ -154,17 +156,18 @@ public class CustomBeeEntity extends BeeEntity {
          */
         public List<BlockPos> getNearbyFreeHives() {
             BlockPos blockpos = new BlockPos(CustomBeeEntity.this);
+            LOGGER.info("POI VALUES = " + PointOfInterestType.field_221073_u.values());
+            LOGGER.info("FORGE POIS = " + ForgeRegistries.POI_TYPES.getValues());
             PointOfInterestManager pointofinterestmanager = ((ServerWorld) world).getPointOfInterestManager();
             Stream<PointOfInterest> stream = pointofinterestmanager.func_219146_b(pointOfInterestType ->
-                            pointOfInterestType == CustomBeeEntity.this.getHivePoi()
-                                    || pointOfInterestType == RegistryHandler.IRON_BEEHIVE_POI.get(), blockpos,
+                            pointOfInterestType == RegistryHandler.IRON_BEEHIVE_POI.get(), blockpos,
                     20, PointOfInterestManager.Status.ANY);
             return stream.map(PointOfInterest::getPos).filter(CustomBeeEntity.this::doesHiveHaveSpace)
                     .sorted(Comparator.comparingDouble(pos -> pos.distanceSq(blockpos))).collect(Collectors.toList());
         }
     }
 
-    /*
+
     protected class FindPollinationTargetGoal2 extends BeeEntity.FindPollinationTargetGoal {
 
         public FindPollinationTargetGoal2(){
@@ -181,22 +184,22 @@ public class CustomBeeEntity extends BeeEntity {
     public void applyPollinationEffect(){
         if (rand.nextInt(1) == 0) {
             for (int i = 1; i <= 2; ++i) {
-                BlockPos beePosDown = (new BlockPos(IronBeeEntity.this)).down(i);
+                BlockPos beePosDown = (new BlockPos(CustomBeeEntity.this)).down(i);
                 BlockState state = world.getBlockState(beePosDown);
                 Block block = state.getBlock();
                 if (validFillerBlock(block)) {
                     world.playEvent(2005, beePosDown, 0);
-                    world.setBlockState(beePosDown, getOre().getDefaultState());
+                    world.setBlockState(beePosDown, ForgeRegistries.BLOCKS.getValue(BEE_INFO.get(Bee_Type).getResource(BEE_INFO.get(Bee_Type).getBaseBlock())).getDefaultState());
                     addCropCounter();
                 }
             }
         }
     }
 
-     */
+
 
     public boolean validFillerBlock(Block block){
-        return block.isIn(Tags.Blocks.STONE);
+        return block.getRegistryName() == BEE_INFO.get(Bee_Type).getResource(BEE_INFO.get(Bee_Type).getBaseBlock());//ForgeRegistries.BLOCKS.getValue(BEE_INFO.get(Bee_Type).getResource(BEE_INFO.get(Bee_Type).getBaseBlock())).getRegistryName();
     }
 
     public class FindBeehiveGoal2 extends BeeEntity.FindBeehiveGoal {
@@ -232,11 +235,12 @@ public class CustomBeeEntity extends BeeEntity {
         return flowerPredicate;
     }
 
+    /*
     @Nonnull
     public PointOfInterestType getHivePoi(){
         return RegistryHandler.IRON_BEEHIVE_POI.get();
     }
-
+*/
 
     //***************************** CUSTOM BEE RELATED METHODS BELOW *************************************************
 

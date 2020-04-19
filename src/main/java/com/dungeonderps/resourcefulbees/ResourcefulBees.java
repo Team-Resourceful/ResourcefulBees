@@ -3,11 +3,13 @@ package com.dungeonderps.resourcefulbees;
 import com.dungeonderps.resourcefulbees.config.ResourcefulBeesConfig;
 import com.dungeonderps.resourcefulbees.data.DataGen;
 import com.dungeonderps.resourcefulbees.utils.ColorHandler;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.passive.CustomBeeEntity;
 import com.dungeonderps.resourcefulbees.entity.CustomBeeRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.village.PointOfInterestType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
@@ -18,6 +20,9 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Mod("resourcefulbees")
 public class ResourcefulBees
 {
@@ -27,10 +32,11 @@ public class ResourcefulBees
 
     public ResourcefulBees() {
         ResourcefulBeesConfig.setup();
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
 
         RegistryHandler.init();
+
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ColorHandler::onItemColors);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(DataGen::gatherData);
@@ -42,6 +48,12 @@ public class ResourcefulBees
 
 
     private void setup(final FMLCommonSetupEvent event){
+
+        Map<BlockState, PointOfInterestType> pointOfInterestTypeMap = new HashMap<>();
+
+        RegistryHandler.IRON_BEEHIVE.get().getStateContainer().getValidStates().forEach(blockState -> pointOfInterestTypeMap.put(blockState, RegistryHandler.IRON_BEEHIVE_POI.get()));
+
+        PointOfInterestType.field_221073_u.putAll(pointOfInterestTypeMap);
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {

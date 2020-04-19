@@ -2,6 +2,7 @@ package com.dungeonderps.resourcefulbees.config;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.google.common.collect.Lists;
+import net.minecraft.util.ResourceLocation;
 
 import java.util.ArrayList;
 import java.awt.*;
@@ -168,5 +169,10 @@ public class BeeInfo {
         s.add(dimensionList.toString());
         s.add(biomeList);
         return s;
+    }
+
+    public ResourceLocation getResource(String resource){
+        String[] resourceSplit = resource.split(":");
+        return new ResourceLocation(resourceSplit[0], resourceSplit[1]);
     }
 }
