@@ -308,6 +308,7 @@ public class CustomBeeEntity extends BeeEntity {
     //or other possible reasons for changing bee type.
     //if fleshed out further - may want to consider separate class for handling bee types
     private void selectRandomBee(){
+        //TODO Cleanup Bee Data
         this.Bee_Type = BEE_INFO.get(BEE_INFO.keySet().toArray()[rand.nextInt(BEE_INFO.size())]).getName();
         this.dataManager.set(BEE_COLOR, BEE_INFO.get(Bee_Type).getColor());
         this.Bee_Flower = BEE_INFO.get(Bee_Type).getFlower();

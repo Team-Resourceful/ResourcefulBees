@@ -48,11 +48,14 @@ public class ResourcefulBees
 
 
     private void setup(final FMLCommonSetupEvent event){
-
+        /*
+        The 3 lines below are necessary for getting mod bees into mod beehive.
+        We're basically pushing the mod data into the minecraft POI list
+        because forge POI doesn't seem to have any impact.
+        Not entirely sure if forge registered POI is even necessary
+         */
         Map<BlockState, PointOfInterestType> pointOfInterestTypeMap = new HashMap<>();
-
         RegistryHandler.IRON_BEEHIVE.get().getStateContainer().getValidStates().forEach(blockState -> pointOfInterestTypeMap.put(blockState, RegistryHandler.IRON_BEEHIVE_POI.get()));
-
         PointOfInterestType.field_221073_u.putAll(pointOfInterestTypeMap);
     }
 
