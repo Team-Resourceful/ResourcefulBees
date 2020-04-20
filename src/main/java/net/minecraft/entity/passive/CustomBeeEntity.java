@@ -24,7 +24,6 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tileentity.IronBeehiveBlockEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -35,10 +34,8 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.*;
@@ -88,12 +85,7 @@ public class CustomBeeEntity extends BeeEntity {
 
 
     //These are internal values stored for each instance
-    private String Bee_Type = "default";
-    private String Bee_Flower = "Poppy";
-    private String Base_Block = "minecraft:dirt";
-    private String Mutation_Block = "minecraft:cobblestone";
-    private String Bee_Drop = "minecraft:stick";
-
+    private String beeType = "default";
 
     public CustomBeeEntity(EntityType<? extends BeeEntity> p_i225714_1_, World p_i225714_2_) {
         super(p_i225714_1_, p_i225714_2_);
@@ -156,7 +148,7 @@ public class CustomBeeEntity extends BeeEntity {
          */
         public List<BlockPos> getNearbyFreeHives() {
             BlockPos blockpos = new BlockPos(CustomBeeEntity.this);
-            LOGGER.info("POI VALUES = " + PointOfInterestType.field_221073_u.values());
+            LOGGER.info("POI VALUES = " + PointOfInterestType.POIT_BY_BLOCKSTATE.values());
             LOGGER.info("FORGE POIS = " + ForgeRegistries.POI_TYPES.getValues());
             PointOfInterestManager pointofinterestmanager = ((ServerWorld) world).getPointOfInterestManager();
             Stream<PointOfInterest> stream = pointofinterestmanager.func_219146_b(pointOfInterestType ->
@@ -189,7 +181,7 @@ public class CustomBeeEntity extends BeeEntity {
                 Block block = state.getBlock();
                 if (validFillerBlock(block)) {
                     world.playEvent(2005, beePosDown, 0);
-                    world.setBlockState(beePosDown, ForgeRegistries.BLOCKS.getValue(BEE_INFO.get(Bee_Type).getResource(BEE_INFO.get(Bee_Type).getBaseBlock())).getDefaultState());
+                    world.setBlockState(beePosDown, ForgeRegistries.BLOCKS.getValue(BEE_INFO.get(beeType).getResource(BEE_INFO.get(beeType).getBaseBlock())).getDefaultState());
                     addCropCounter();
                 }
             }
@@ -199,7 +191,7 @@ public class CustomBeeEntity extends BeeEntity {
 
 
     public boolean validFillerBlock(Block block){
-        return block.getRegistryName() == BEE_INFO.get(Bee_Type).getResource(BEE_INFO.get(Bee_Type).getBaseBlock());//ForgeRegistries.BLOCKS.getValue(BEE_INFO.get(Bee_Type).getResource(BEE_INFO.get(Bee_Type).getBaseBlock())).getRegistryName();
+        return block.getRegistryName() == BEE_INFO.get(beeType).getResource(BEE_INFO.get(beeType).getBaseBlock());
     }
 
     public class FindBeehiveGoal2 extends BeeEntity.FindBeehiveGoal {
@@ -235,19 +227,13 @@ public class CustomBeeEntity extends BeeEntity {
         return flowerPredicate;
     }
 
-    /*
-    @Nonnull
-    public PointOfInterestType getHivePoi(){
-        return RegistryHandler.IRON_BEEHIVE_POI.get();
-    }
-*/
 
     //***************************** CUSTOM BEE RELATED METHODS BELOW *************************************************
 
 
     //TODO Implement Dynamic Resource Loading - See KubeJS for Example
     protected ITextComponent func_225513_by_() {
-        return new TranslationTextComponent("entity" + '.' + ResourcefulBees.MOD_ID + '.' + this.Bee_Type);
+        return new TranslationTextComponent("entity" + '.' + ResourcefulBees.MOD_ID + '.' + this.beeType);
     }
 
     public float[] getBeeColorAsFloat() {
@@ -285,23 +271,16 @@ public class CustomBeeEntity extends BeeEntity {
     @Override
     public void readAdditional(CompoundNBT compound) {
         super.readAdditional(compound);
-        this.Bee_Type = compound.getString("BeeType");
-        this.dataManager.set(BEE_COLOR, compound.getString("BeeColor"));
-        this.Bee_Flower = compound.getString("Flower");
-        this.Base_Block = compound.getString("BaseBlock");
-        this.Mutation_Block = compound.getString("MutationBlock");
-        this.Bee_Drop = compound.getString("BeeDrop");
+        this.beeType = compound.getString("BeeType");
+        if(!beeType.isEmpty()) {
+            this.dataManager.set(BEE_COLOR, BEE_INFO.get(this.beeType).getColor());
+        }
     }
 
     @Override
     public void writeAdditional(CompoundNBT compound) {
         super.writeAdditional(compound);
-        compound.putString("BeeType", Bee_Type);
-        compound.putString("BeeColor", getBeeColor());
-        compound.putString("Flower", Bee_Flower);
-        compound.putString("BaseBlock", Base_Block);
-        compound.putString("MutationBlock", Mutation_Block);
-        compound.putString("BeeDrop", Bee_Drop);
+        compound.putString("BeeType", beeType);
     }
 
     //easier to manage bee selection for testing, could be useful for bee breeding
@@ -309,32 +288,11 @@ public class CustomBeeEntity extends BeeEntity {
     //if fleshed out further - may want to consider separate class for handling bee types
     private void selectRandomBee(){
         //TODO Cleanup Bee Data
-        this.Bee_Type = BEE_INFO.get(BEE_INFO.keySet().toArray()[rand.nextInt(BEE_INFO.size())]).getName();
-        this.dataManager.set(BEE_COLOR, BEE_INFO.get(Bee_Type).getColor());
-        this.Bee_Flower = BEE_INFO.get(Bee_Type).getFlower();
-        this.Base_Block = BEE_INFO.get(Bee_Type).getBaseBlock();
-        this.Mutation_Block = BEE_INFO.get(Bee_Type).getMutBlock();
-        this.Bee_Drop = BEE_INFO.get(Bee_Type).getDrop();
+        this.beeType = BEE_INFO.get(BEE_INFO.keySet().toArray()[rand.nextInt(BEE_INFO.size())]).getName();
+        this.dataManager.set(BEE_COLOR, BEE_INFO.get(beeType).getColor());
     }
 
     public String getBeeType() {
-        return Bee_Type;
+        return beeType;
     }
-
-    public String getBeeFlower() {
-        return Bee_Flower;
-    }
-
-    public String getBaseBlock() {
-        return Base_Block;
-    }
-
-    public String getMutationBlock() {
-        return Mutation_Block;
-    }
-
-    public String getBeeDrop() {
-        return Bee_Drop;
-    }
-
 }

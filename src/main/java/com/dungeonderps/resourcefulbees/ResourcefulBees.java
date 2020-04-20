@@ -56,7 +56,7 @@ public class ResourcefulBees
          */
         Map<BlockState, PointOfInterestType> pointOfInterestTypeMap = new HashMap<>();
         RegistryHandler.IRON_BEEHIVE.get().getStateContainer().getValidStates().forEach(blockState -> pointOfInterestTypeMap.put(blockState, RegistryHandler.IRON_BEEHIVE_POI.get()));
-        PointOfInterestType.field_221073_u.putAll(pointOfInterestTypeMap);
+        PointOfInterestType.POIT_BY_BLOCKSTATE.putAll(pointOfInterestTypeMap);
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {

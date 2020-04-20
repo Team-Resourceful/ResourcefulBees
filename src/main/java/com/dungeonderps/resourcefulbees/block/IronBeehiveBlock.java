@@ -1,7 +1,8 @@
 package com.dungeonderps.resourcefulbees.block;
 
+import com.dungeonderps.resourcefulbees.RegistryHandler;
 import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.tileentity.IronBeehiveBlockEntity;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.entity.passive.BeeEntity;
@@ -24,6 +25,9 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import static net.minecraft.entity.passive.CustomBeeEntity.BEE_INFO;
+import static net.minecraft.state.properties.BlockStateProperties.HORIZONTAL_FACING;
+
 public class IronBeehiveBlock extends BeehiveBlock {
 
   public IronBeehiveBlock(Block.Properties properties) {
@@ -36,8 +40,8 @@ public class IronBeehiveBlock extends BeehiveBlock {
     return null;
   }
 
-  public ActionResultType onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand p_225533_5_, BlockRayTraceResult p_225533_6_) {
-    ItemStack itemstack = player.getHeldItem(p_225533_5_);
+  public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+    ItemStack itemstack = player.getHeldItem(handIn);
     ItemStack itemstack1 = itemstack.copy();
     int honeyLevel = state.get(HONEY_LEVEL);
     boolean angerBees = false;
@@ -45,13 +49,13 @@ public class IronBeehiveBlock extends BeehiveBlock {
       if (itemstack.getItem() == Items.SHEARS) {
         world.playSound(player, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.BLOCK_BEEHIVE_SHEAR, SoundCategory.NEUTRAL, 1.0F, 1.0F);
         dropResourceHoneycomb(world, pos);
-        itemstack.damageItem(1, player, player1 -> player1.sendBreakAnimation(p_225533_5_));
+        itemstack.damageItem(1, player, player1 -> player1.sendBreakAnimation(handIn));
         angerBees = true;
       } else if (itemstack.getItem() == Items.GLASS_BOTTLE) {
         itemstack.shrink(1);
         world.playSound(player, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.ITEM_BOTTLE_FILL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
         if (itemstack.isEmpty()) {
-          player.setHeldItem(p_225533_5_, new ItemStack(Items.HONEY_BOTTLE));
+          player.setHeldItem(handIn, new ItemStack(Items.HONEY_BOTTLE));
         } else if (!player.inventory.addItemStackToInventory(new ItemStack(Items.HONEY_BOTTLE))) {
           player.dropItem(new ItemStack(Items.HONEY_BOTTLE), false);
         }
@@ -79,44 +83,49 @@ public class IronBeehiveBlock extends BeehiveBlock {
     }
   }
 
-  private void angerNearbyBees(World p_226881_1_, BlockPos p_226881_2_) {
-    List<BeeEntity> lvt_3_1_ = p_226881_1_.getEntitiesWithinAABB(BeeEntity.class, (new AxisAlignedBB(p_226881_2_)).grow(8.0D, 6.0D, 8.0D));
-    if (!lvt_3_1_.isEmpty()) {
-      List<PlayerEntity> lvt_4_1_ = p_226881_1_.getEntitiesWithinAABB(PlayerEntity.class, (new AxisAlignedBB(p_226881_2_)).grow(8.0D, 6.0D, 8.0D));
-      int lvt_5_1_ = lvt_4_1_.size();
+  private void angerNearbyBees(World world, BlockPos pos) {
+    List<BeeEntity> beeEntityList = world.getEntitiesWithinAABB(BeeEntity.class, (new AxisAlignedBB(pos)).grow(8.0D, 6.0D, 8.0D));
+    if (!beeEntityList.isEmpty()) {
+      List<PlayerEntity> playerEntityList = world.getEntitiesWithinAABB(PlayerEntity.class, (new AxisAlignedBB(pos)).grow(8.0D, 6.0D, 8.0D));
+      int size = playerEntityList.size();
 
-      for (BeeEntity lvt_7_1_ : lvt_3_1_) {
-        if (lvt_7_1_.getAttackTarget() == null) {
-          lvt_7_1_.setBeeAttacker(lvt_4_1_.get(p_226881_1_.rand.nextInt(lvt_5_1_)));
+      for (BeeEntity beeEntity : beeEntityList) {
+        if (beeEntity.getAttackTarget() == null) {
+          beeEntity.setBeeAttacker(playerEntityList.get(world.rand.nextInt(size)));
         }
       }
     }
   }
 
-  private boolean hasBees(World p_226882_1_, BlockPos p_226882_2_) {
-    TileEntity lvt_3_1_ = p_226882_1_.getTileEntity(p_226882_2_);
-    if (lvt_3_1_ instanceof BeehiveTileEntity) {
-      BeehiveTileEntity lvt_4_1_ = (BeehiveTileEntity) lvt_3_1_;
-      return !lvt_4_1_.hasNoBees();
+  private boolean hasBees(World world, BlockPos pos) {
+    TileEntity tileEntity = world.getTileEntity(pos);
+    if (tileEntity instanceof BeehiveTileEntity) {
+      BeehiveTileEntity beehiveTileEntity = (BeehiveTileEntity) tileEntity;
+      return !beehiveTileEntity.hasNoBees();
     } else {
       return false;
     }
   }
-
+  //needed for Dispenser use, etc.
   public static void dropResourceHoneyComb(IronBeehiveBlock block, World world, BlockPos pos) {
     block.dropResourceHoneycomb(world, pos);
   }
 
-  public void dropResourceHoneycomb(World p_226878_0_, BlockPos p_226878_1_) {
-    TileEntity blockEntity = p_226878_0_.getTileEntity(p_226878_1_);
+  public void dropResourceHoneycomb(World world, BlockPos pos) {
+    TileEntity blockEntity = world.getTileEntity(pos);
     if (blockEntity instanceof IronBeehiveBlockEntity) {
       IronBeehiveBlockEntity hive = (IronBeehiveBlockEntity)blockEntity;
       while (hive.hasCombs()) {
-        ItemStack comb = new ItemStack(hive.getResourceHoneyComb());
-
-        spawnAsEntity(p_226878_0_, p_226878_1_, comb);
+        ItemStack comb = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
+        comb.getOrCreateChildTag("ResourcefulBees").putString("color", BEE_INFO.get(hive.getResourceHoneyComb()).getColor());
+        spawnAsEntity(world, pos, comb);
       }
     }
+  }
+
+  @Override
+  public BlockState getStateForPlacement(BlockItemUseContext context) {
+    return this.getDefaultState().with(HORIZONTAL_FACING, context.getPlacementHorizontalFacing().getOpposite());
   }
 
   @Nullable

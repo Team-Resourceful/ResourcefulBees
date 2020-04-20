@@ -9,27 +9,20 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.CustomBeeEntity;
-import net.minecraft.item.Item;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.util.SoundEvents;import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-import static com.dungeonderps.resourcefulbees.ResourcefulBees.LOGGER;
 
 public class IronBeehiveBlockEntity extends BeehiveTileEntity {
 
-  public List<Item> honeycombs = new ArrayList<>();
-  public List<String> beeTypes = new ArrayList<>();
+  public Stack<String> honeycombs = new Stack<>();
+
 
   @Nonnull
   @Override
@@ -73,8 +66,7 @@ public class IronBeehiveBlockEntity extends BeehiveTileEntity {
                 if (i + j > 5) {
                   --j;
                 }
-                this.honeycombs.add(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
-                this.beeTypes.add(beeentity.getBeeType());
+                this.honeycombs.push(beeentity.getBeeType());
                 this.world.setBlockState(this.getPos(), state.with(BeehiveBlock.HONEY_LEVEL, i + j));
               }
             }
@@ -129,10 +121,8 @@ public class IronBeehiveBlockEntity extends BeehiveTileEntity {
     return bees.size() > 3;
   }
 
-  public Item getResourceHoneyComb(){
-    Item honeycomb = honeycombs.get(honeycombs.size()-1);
-    honeycombs.remove(honeycomb);
-    beeTypes.remove(beeTypes.size()-1);
+  public String getResourceHoneyComb(){
+    String honeycomb = honeycombs.pop();
     return honeycomb;
   }
 
@@ -142,7 +132,7 @@ public class IronBeehiveBlockEntity extends BeehiveTileEntity {
 
   public boolean isAllowedBee(CustomBeeEntity bee){
     Block hive = getBlockState().getBlock();
-    return hive == RegistryHandler.IRON_BEEHIVE.get(); //|| bee.getAllowedHive() == hive;
+    return hive == RegistryHandler.IRON_BEEHIVE.get();
   }
 
   @Override
@@ -150,32 +140,24 @@ public class IronBeehiveBlockEntity extends BeehiveTileEntity {
     super.read(nbt);
     if (nbt.contains("Honeycombs")){
       CompoundNBT combs = (CompoundNBT) nbt.get("Honeycombs");
-      CompoundNBT beeData = (CompoundNBT) nbt.get("BeeTypes");
       int i = 0;
       while (combs.contains(String.valueOf(i))){
-        honeycombs.add(ForgeRegistries.ITEMS.getValue(new ResourceLocation(combs.getString(String.valueOf(i)))));
-        beeTypes.add(beeData.getString(String.valueOf(i)));
+        honeycombs.push(combs.getString(String.valueOf(i)));
         i++;
       }
-      ForgeRegistries.ITEMS.getValue(new ResourceLocation(nbt.getString("Honeycomb")));
     }
   }
 
-
-  //TODO Why the fuck does this cause ticking entity crash?  look above you ^ honeycomb?
   @Nonnull
   @Override
   public CompoundNBT write(CompoundNBT nbt) {
     super.write(nbt);
     if (!honeycombs.isEmpty()){
       CompoundNBT combs = new CompoundNBT();
-      CompoundNBT beeData = new CompoundNBT();
       for (int i = 0; i < honeycombs.size();i++){
-        combs.putString(String.valueOf(i),honeycombs.get(i).getRegistryName().toString());
-        beeData.putString(String.valueOf(i), beeTypes.get(i));
+        combs.putString(String.valueOf(i), honeycombs.elementAt(i));
       }
       nbt.put("Honeycombs",combs);
-      nbt.put("BeeTypes", beeData);
     }
 
     return nbt;
