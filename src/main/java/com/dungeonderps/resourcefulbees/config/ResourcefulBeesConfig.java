@@ -2,16 +2,22 @@ package com.dungeonderps.resourcefulbees.config;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.google.gson.Gson;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.passive.CustomBeeEntity;
+import net.minecraft.resources.FolderPack;
+import net.minecraft.resources.IPackFinder;
+import net.minecraft.resources.ResourcePackInfo;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.loading.FMLPaths;
 
-import java.lang.*;
 import java.io.*;
 import java.net.URISyntaxException;
 import java.nio.file.*;
+import java.util.Map;
 
 import static com.dungeonderps.resourcefulbees.ResourcefulBees.LOGGER;
 
@@ -29,6 +35,7 @@ public class ResourcefulBeesConfig {
 
 
     public static Path BEE_PATH;
+    public static Path RESOURCE_PATH;
 
     // CONFIGS
     public static ForgeConfigSpec.BooleanValue GENERATE_DEFAULTS;
@@ -88,10 +95,13 @@ public class ResourcefulBeesConfig {
         Path rbConfigPath = Paths.get(configPath.toAbsolutePath().toString(), "resourcefulbees");
         // subfolder for bees
         Path rbBeesPath = Paths.get(rbConfigPath.toAbsolutePath().toString(), "bees");
+        Path rbAssetsPath = Paths.get(rbConfigPath.toAbsolutePath().toString(), "resources");
         BEE_PATH = rbBeesPath;
+        RESOURCE_PATH = rbAssetsPath;
         try {
             Files.createDirectory(rbConfigPath);
             Files.createDirectory(rbBeesPath);
+            Files.createDirectory(rbAssetsPath);
         } catch (FileAlreadyExistsException e) {
             // do nothing
         } catch (IOException e) {
@@ -99,7 +109,25 @@ public class ResourcefulBeesConfig {
         }
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfig.COMMON_CONFIG, "resourcefulbees/common.toml");
 
+        DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
+            loadResources();
+        });
     }
+
+    public static void loadResources() {
+        Minecraft.getInstance().getResourcePackList().addPackFinder(new IPackFinder() {
+            @Override
+            public <T extends ResourcePackInfo> void addPackInfosToMap(Map<String, T> map, ResourcePackInfo.IFactory<T> factory) {
+                final T packInfo = ResourcePackInfo.createResourcePack(ResourcefulBees.MOD_ID, true, () -> new FolderPack(RESOURCE_PATH.toFile()), factory, ResourcePackInfo.Priority.TOP);
+                if (packInfo == null) {
+                    LOGGER.error("Failed to load resource pack, some things may not work.");
+                    return;
+                }
+                map.put(ResourcefulBees.MOD_ID, packInfo);
+            }
+        });
+    }
+
 
     private static void parseBee(File file) throws IOException {
         String name = file.getName();
