@@ -19,6 +19,7 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
@@ -117,7 +118,9 @@ public class IronBeehiveBlock extends BeehiveBlock {
       IronBeehiveBlockEntity hive = (IronBeehiveBlockEntity)blockEntity;
       while (hive.hasCombs()) {
         ItemStack comb = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
-        comb.getOrCreateChildTag("ResourcefulBees").putString("color", BEE_INFO.get(hive.getResourceHoneyComb()).getColor());
+        String honeycomb = hive.getResourceHoneyComb();
+        comb.getOrCreateChildTag("ResourcefulBees").putString("color", BEE_INFO.get(honeycomb).getColor());
+        comb.getOrCreateChildTag("ResourcefulBees").putString("beeType", BEE_INFO.get(honeycomb).getName());
         spawnAsEntity(world, pos, comb);
       }
     }

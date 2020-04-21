@@ -9,6 +9,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.CustomBeeEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
@@ -90,7 +91,7 @@ public class IronBeehiveBlockEntity extends BeehiveTileEntity {
       bee.removePassengers();
       CompoundNBT nbt = new CompoundNBT();
       bee.writeUnlessPassenger(nbt);
-      this.bees.add(new BeehiveTileEntity.Bee(nbt, ticksInHive, hasNectar ? 2400 : 600));
+      this.bees.add(new BeehiveTileEntity.Bee(nbt, ticksInHive, hasNectar ? 100 : 600));//*** <---- Change 100 back to 2400!!!!
       if (this.world != null) {
         if (bee instanceof CustomBeeEntity) {
           CustomBeeEntity bee1 = (CustomBeeEntity)bee;
@@ -168,4 +169,5 @@ public class IronBeehiveBlockEntity extends BeehiveTileEntity {
       super(data, ticksIn, minTicks);
     }
   }
+
 }

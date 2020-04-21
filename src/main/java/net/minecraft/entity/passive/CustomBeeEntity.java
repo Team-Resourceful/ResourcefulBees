@@ -7,13 +7,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.DoublePlantBlock;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.ai.goal.BreedGoal;
-import net.minecraft.entity.ai.goal.FollowParentGoal;
-import net.minecraft.entity.ai.goal.SwimGoal;
-import net.minecraft.entity.ai.goal.TemptGoal;
+import net.minecraft.entity.*;
+import net.minecraft.entity.ai.goal.*;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
@@ -24,12 +19,12 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tileentity.IronBeehiveBlockEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.village.PointOfInterest;
 import net.minecraft.village.PointOfInterestManager;
-import net.minecraft.village.PointOfInterestType;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
@@ -76,7 +71,6 @@ Copied from old file as point of reference - do not use
 @SuppressWarnings("EntityConstructor")
 public class CustomBeeEntity extends BeeEntity {
 
-
     //These are needed for Server->Client synchronization
     private static final DataParameter<String> BEE_COLOR = EntityDataManager.createKey(CustomBeeEntity.class, DataSerializers.STRING);
 
@@ -112,7 +106,7 @@ public class CustomBeeEntity extends BeeEntity {
         this.goalSelector.addGoal(7, new FindPollinationTargetGoal2());
         this.goalSelector.addGoal(8, new BeeEntity.WanderGoal());
         this.goalSelector.addGoal(9, new SwimGoal(this));
-        this.targetSelector.addGoal(1, (new BeeEntity.AngerGoal(this)).setCallsForHelp(new Class[0]));
+        this.targetSelector.addGoal(1, (new BeeEntity.AngerGoal(this)).setCallsForHelp());
         this.targetSelector.addGoal(2, new BeeEntity.AttackPlayerGoal(this));
     }
 
@@ -132,7 +126,6 @@ public class CustomBeeEntity extends BeeEntity {
         return blockEntity instanceof IronBeehiveBlockEntity && !((IronBeehiveBlockEntity) blockEntity).isFullOfBees();
     }
 
-
     //*************************** INTERNAL CLASSES AND METHODS FOR BEE GOALS BELOW ***********************************
     //TODO Finish implementing Bee Goals with custom bee data
     // - Pollination, Flower/Mutation/Etc
@@ -143,13 +136,8 @@ public class CustomBeeEntity extends BeeEntity {
             super();
         }
 
-        /**
-         * ()Ljava/util/List;
-         */
         public List<BlockPos> getNearbyFreeHives() {
             BlockPos blockpos = new BlockPos(CustomBeeEntity.this);
-            LOGGER.info("POI VALUES = " + PointOfInterestType.POIT_BY_BLOCKSTATE.values());
-            LOGGER.info("FORGE POIS = " + ForgeRegistries.POI_TYPES.getValues());
             PointOfInterestManager pointofinterestmanager = ((ServerWorld) world).getPointOfInterestManager();
             Stream<PointOfInterest> stream = pointofinterestmanager.func_219146_b(pointOfInterestType ->
                             pointOfInterestType == RegistryHandler.IRON_BEEHIVE_POI.get(), blockpos,
@@ -158,7 +146,6 @@ public class CustomBeeEntity extends BeeEntity {
                     .sorted(Comparator.comparingDouble(pos -> pos.distanceSq(blockpos))).collect(Collectors.toList());
         }
     }
-
 
     protected class FindPollinationTargetGoal2 extends BeeEntity.FindPollinationTargetGoal {
 
@@ -172,6 +159,7 @@ public class CustomBeeEntity extends BeeEntity {
         }
     }
 
+    //***** Pollination Effect is used for Mutating Blocks.
 
     public void applyPollinationEffect(){
         if (rand.nextInt(1) == 0) {
@@ -181,17 +169,15 @@ public class CustomBeeEntity extends BeeEntity {
                 Block block = state.getBlock();
                 if (validFillerBlock(block)) {
                     world.playEvent(2005, beePosDown, 0);
-                    world.setBlockState(beePosDown, ForgeRegistries.BLOCKS.getValue(BEE_INFO.get(beeType).getResource(BEE_INFO.get(beeType).getBaseBlock())).getDefaultState());
+                    world.setBlockState(beePosDown, ForgeRegistries.BLOCKS.getValue(BEE_INFO.get(beeType).getResource(BEE_INFO.get(beeType).getMutBlock())).getDefaultState());
                     addCropCounter();
                 }
             }
         }
     }
 
-
-
     public boolean validFillerBlock(Block block){
-        return block.getRegistryName() == BEE_INFO.get(beeType).getResource(BEE_INFO.get(beeType).getBaseBlock());
+        return block.getRegistryName().equals(BEE_INFO.get(beeType).getResource(BEE_INFO.get(beeType).getBaseBlock()));
     }
 
     public class FindBeehiveGoal2 extends BeeEntity.FindBeehiveGoal {
@@ -219,6 +205,7 @@ public class CustomBeeEntity extends BeeEntity {
         }
     }
 
+    //TODO Figure out how Flowers work and how to make customized
     protected final Predicate<BlockState> flowerPredicate = state ->
             state.isIn(BlockTags.TALL_FLOWERS) ? state.getBlock() != Blocks.SUNFLOWER
                     || state.get(DoublePlantBlock.HALF) == DoubleBlockHalf.UPPER : state.isIn(BlockTags.SMALL_FLOWERS);
@@ -227,9 +214,7 @@ public class CustomBeeEntity extends BeeEntity {
         return flowerPredicate;
     }
 
-
     //***************************** CUSTOM BEE RELATED METHODS BELOW *************************************************
-
 
     //TODO Implement Dynamic Resource Loading - See KubeJS for Example
     protected ITextComponent func_225513_by_() {
@@ -245,7 +230,6 @@ public class CustomBeeEntity extends BeeEntity {
     public String getBeeColor(){
 
         //This check is necessary to keep the client from crashing randomly
-        //TODO LOW PRIORITY - figure out why render happens before temp color has a value.
         String tempColor = this.dataManager.get(BEE_COLOR);
         if (tempColor.isEmpty()){
             return "#FFFFFF";
