@@ -40,13 +40,35 @@ public class IronBeehiveBlock extends BeehiveBlock {
   public TileEntity createNewTileEntity(IBlockReader p_196283_1_) {
     return null;
   }
+  
+  public void smokeHive(BlockPos pos, World world) {
+	    TileEntity blockEntity = world.getTileEntity(pos);
+	    if (blockEntity instanceof IronBeehiveBlockEntity) {
+	      IronBeehiveBlockEntity hive = (IronBeehiveBlockEntity)blockEntity;
+	      hive.smoked = true;
+	    }
+  }
+  
+  public boolean isHiveSmoked(BlockPos pos, World world) {
+	    TileEntity blockEntity = world.getTileEntity(pos);
+	    if (blockEntity instanceof IronBeehiveBlockEntity) {
+	      IronBeehiveBlockEntity hive = (IronBeehiveBlockEntity)blockEntity;
+	      return hive.smoked;
+	    }
+	    else
+	    return false;
+  }
 
   public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
     ItemStack itemstack = player.getHeldItem(handIn);
     ItemStack itemstack1 = itemstack.copy();
     int honeyLevel = state.get(HONEY_LEVEL);
     boolean angerBees = false;
-    if (honeyLevel >= 5) {
+   	if (itemstack.getItem() == RegistryHandler.SMOKER.get()) {
+   		smokeHive(pos, world);
+   		itemstack.damageItem(1, player, player1 -> player1.sendBreakAnimation(handIn));
+    }
+   	else if (honeyLevel >= 5) {
       if (itemstack.getItem() == Items.SHEARS) {
         world.playSound(player, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.BLOCK_BEEHIVE_SHEAR, SoundCategory.NEUTRAL, 1.0F, 1.0F);
         dropResourceHoneycomb(world, pos);
@@ -65,19 +87,20 @@ public class IronBeehiveBlock extends BeehiveBlock {
     }
 
     if (angerBees) {
-      if (!CampfireBlock.isLitCampfireInRange(world, pos, 5)) {
-        if (this.hasBees(world, pos)) {
-          this.angerNearbyBees(world, pos);
-        }
+    	if (isHiveSmoked(pos,world) || CampfireBlock.isLitCampfireInRange(world, pos, 5)) {
+    		LOGGER.info("Smoked: "+ isHiveSmoked(pos,world) + ",Campfire: " + CampfireBlock.isLitCampfireInRange(world, pos, 5));
+            this.takeHoney(world, state, pos);
+            if (player instanceof ServerPlayerEntity) {
+              CriteriaTriggers.SAFELY_HARVEST_HONEY.test((ServerPlayerEntity) player, pos, itemstack1);
+            }
+    	}
+    	else {
+            if (this.hasBees(world, pos)) {
+          	  this.angerNearbyBees(world, pos);
+            }
 
-        this.takeHoney(world, state, pos, player, BeehiveTileEntity.State.EMERGENCY);
-      } else {
-        this.takeHoney(world, state, pos);
-        if (player instanceof ServerPlayerEntity) {
-          CriteriaTriggers.SAFELY_HARVEST_HONEY.test((ServerPlayerEntity) player, pos, itemstack1);
-        }
-      }
-
+              this.takeHoney(world, state, pos, player, BeehiveTileEntity.State.EMERGENCY);
+    	}
       return ActionResultType.SUCCESS;
     } else {
       return ActionResultType.PASS;

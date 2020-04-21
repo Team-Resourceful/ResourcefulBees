@@ -6,6 +6,7 @@ import com.dungeonderps.resourcefulbees.RegistryHandler;
 import net.minecraft.block.BeehiveBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.CampfireBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.CustomBeeEntity;
@@ -13,17 +14,21 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
+import static com.dungeonderps.resourcefulbees.ResourcefulBees.LOGGER;
+
 
 public class IronBeehiveBlockEntity extends BeehiveTileEntity {
 
   public Stack<String> honeycombs = new Stack<>();
-
+  public boolean smoked = false;
+  public int ticksSmoked = 0;
 
   @Nonnull
   @Override
@@ -113,6 +118,33 @@ public class IronBeehiveBlockEntity extends BeehiveTileEntity {
     }
   }
 
+  @Override
+  public boolean isSmoked() {
+	  if (smoked) {
+		  //LOGGER.info(smoked);
+		  return true;
+	  }
+	  else
+      return CampfireBlock.isLitCampfireInRange(this.world, this.getPos(), 5);
+  }
+  
+  @Override
+  public void tick() {
+    if (!this.world.isRemote){
+  	  if (smoked) {
+  		  if (ticksSmoked < 600)
+  			  	ticksSmoked++;
+  		  else if (ticksSmoked == 600) {
+  			  	LOGGER.info("Finished Ticks Smoked!");
+  			  	smoked = false;
+  		  		ticksSmoked = 0;
+  			  	LOGGER.info("Finished Ticks Smoked!: " + smoked);
+  		  }
+	  }
+    }
+    super.tick();
+  }
+  
   public boolean shouldStayInHive(BlockState state, State beehiveState){
     return (this.world.isNightTime() || this.world.isRaining()) && beehiveState != BeehiveTileEntity.State.EMERGENCY;
   }

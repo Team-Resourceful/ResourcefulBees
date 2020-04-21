@@ -3,6 +3,7 @@ package com.dungeonderps.resourcefulbees;
 import com.dungeonderps.resourcefulbees.block.IronBeehiveBlock;
 import com.dungeonderps.resourcefulbees.item.ResourcefulHoneycomb;
 import com.google.common.collect.ImmutableSet;
+import com.dungeonderps.resourcefulbees.item.Smoker;
 import com.google.common.collect.Sets;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
@@ -59,7 +60,8 @@ public class RegistryHandler {
 
 	public static final RegistryObject<Item> RESOURCEFUL_HONEYCOMB = ITEMS.register("resourceful_honeycomb", ResourcefulHoneycomb::new);
 	public static final RegistryObject<Item> IRON_BEEHIVE_ITEM = ITEMS.register("iron_beehive", () -> new BlockItem(IRON_BEEHIVE.get(), new Item.Properties().group(ItemGroup.MISC)));
-
+	public static final RegistryObject<Item> SMOKER = ITEMS.register("smoker", Smoker::new);
+	
 	//**************TILE ENTITIES*************************************
 
 	public static final RegistryObject<TileEntityType<?>> IRON_BEEHIVE_ENTITY = TILE_ENTITY_TYPES.register("iron_beehive", () -> TileEntityType.Builder
