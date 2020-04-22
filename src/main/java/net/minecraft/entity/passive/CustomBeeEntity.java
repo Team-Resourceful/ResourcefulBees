@@ -9,6 +9,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.DoublePlantBlock;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
@@ -81,8 +82,8 @@ public class CustomBeeEntity extends BeeEntity {
     //These are internal values stored for each instance
     private String beeType = "default";
 
-    public CustomBeeEntity(EntityType<? extends BeeEntity> p_i225714_1_, World p_i225714_2_) {
-        super(p_i225714_1_, p_i225714_2_);
+    public CustomBeeEntity(EntityType<? extends BeeEntity> type, World world) {
+        super(type, world);
     }
 
     //*************************** STANDARD BEE METHODS BELOW **********************************************************
@@ -217,6 +218,29 @@ public class CustomBeeEntity extends BeeEntity {
     //***************************** CUSTOM BEE RELATED METHODS BELOW *************************************************
 
     //TODO Implement Dynamic Resource Loading - See KubeJS for Example
+
+    @Override
+    public ITextComponent getDisplayName() {
+        return super.getDisplayName();
+    }
+
+
+
+    /*
+    @Override
+    public String getTranslationKey(ItemStack stack) {
+        CompoundNBT beeType = stack.getChildTag("ResourcefulBees");
+        String name;
+        if ((beeType != null && beeType.contains("beeType"))) {
+            name = "item" + '.' + ResourcefulBees.MOD_ID + '.' + beeType.getString("beeType").toLowerCase() + "_honeycomb";
+        } else {
+            name = "item" + '.' + ResourcefulBees.MOD_ID + '.' + "resourceful_honeycomb";
+        }
+        return name;
+    }
+
+     */
+
     protected ITextComponent func_225513_by_() {
         return new TranslationTextComponent("entity" + '.' + ResourcefulBees.MOD_ID + '.' + this.beeType);
     }
@@ -241,7 +265,9 @@ public class CustomBeeEntity extends BeeEntity {
     @Nullable
     @Override
     public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
-        selectRandomBee();
+        if(reason.equals(SpawnReason.NATURAL) || reason.equals(SpawnReason.COMMAND)){
+            selectRandomBee();
+        }
         return super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
     }
 
@@ -271,12 +297,44 @@ public class CustomBeeEntity extends BeeEntity {
     //or other possible reasons for changing bee type.
     //if fleshed out further - may want to consider separate class for handling bee types
     private void selectRandomBee(){
-        //TODO Cleanup Bee Data
         this.beeType = BEE_INFO.get(BEE_INFO.keySet().toArray()[rand.nextInt(BEE_INFO.size())]).getName();
+        this.dataManager.set(BEE_COLOR, BEE_INFO.get(beeType).getColor());
+    }
+
+    public void selectBeeType(String beeType){
+        this.beeType = BEE_INFO.get(beeType).getName();
         this.dataManager.set(BEE_COLOR, BEE_INFO.get(beeType).getColor());
     }
 
     public String getBeeType() {
         return beeType;
     }
+
+    @Override
+    public CustomBeeEntity createChild(AgeableEntity ageable) {
+        CustomBeeEntity childBee = new CustomBeeEntity(RegistryHandler.CUSTOM_BEE.get(), this.world);
+        childBee.selectBeeType(BEE_INFO.get(BEE_INFO.keySet().toArray()[rand.nextInt(BEE_INFO.size())]).getName());
+        return childBee;
+    }
 }
+
+
+
+/*
+
+Parent1 = Iron, Gold;
+
+Parent2 = Diamond, Coal;
+
+Child =
+
+Weight =
+
+
+
+
+
+
+
+
+ */

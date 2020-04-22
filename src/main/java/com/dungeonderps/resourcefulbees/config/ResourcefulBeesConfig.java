@@ -30,7 +30,11 @@ public class ResourcefulBeesConfig {
             "Diamond.json",
             "Emerald.json",
             "Gold.json",
-            "Iron.json"
+            "Iron.json",
+            "Coal.json",
+            "Redstone.json",
+            "Nether_Quartz.json",
+            "Lapis_Lazuli.json"
     };
 
 

@@ -1,9 +1,12 @@
 package com.dungeonderps.resourcefulbees.item;
 
+import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.silentchaos512.utils.Color;
 
 public class ResourcefulHoneycomb extends Item {
@@ -23,14 +26,31 @@ public class ResourcefulHoneycomb extends Item {
 
 
     //TODO - Add or Change to getDisplayName vs getTranslationKey.
+
+
+
+
     @Override
-    public String getTranslationKey(ItemStack stack) {
+    public ITextComponent getDisplayName(ItemStack stack) {
+
         CompoundNBT beeType = stack.getChildTag("ResourcefulBees");
         String name;
         if ((beeType != null && beeType.contains("beeType"))) {
             name = beeType.getString("beeType") + " Honeycomb";
         } else {
             name = "Resourceful Honeycomb";
+        }
+        return new TranslationTextComponent(name);
+    }
+
+    @Override
+    public String getTranslationKey(ItemStack stack) {
+        CompoundNBT beeType = stack.getChildTag("ResourcefulBees");
+        String name;
+        if ((beeType != null && beeType.contains("beeType"))) {
+            name = "item" + '.' + ResourcefulBees.MOD_ID + '.' + beeType.getString("beeType").toLowerCase() + "_honeycomb";
+        } else {
+            name = "item" + '.' + ResourcefulBees.MOD_ID + '.' + "resourceful_honeycomb";
         }
         return name;
     }

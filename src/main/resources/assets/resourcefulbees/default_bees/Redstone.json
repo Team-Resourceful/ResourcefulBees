@@ -1,9 +1,9 @@
 {
-  "color": "#FFDC00",
+  "color": "#aa0f01",
   "flower": "minecraft:poppy",
   "baseBlock": "minecraft:stone",
-  "mutBlock": "minecraft:gold_ore",
-  "drop": "minecraft:gold_ingot",
+  "mutBlock": "minecraft:redstone_ore",
+  "drop": "minecraft:redstone",
   "spawnInWorld": true,
   "dimensionList": [0],
   "biomeList": "not really a biome"

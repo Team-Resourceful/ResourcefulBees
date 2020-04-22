@@ -1,9 +1,9 @@
 {
-  "color": "#FFDC00",
+  "color": "#345ec3",
   "flower": "minecraft:poppy",
   "baseBlock": "minecraft:stone",
-  "mutBlock": "minecraft:gold_ore",
-  "drop": "minecraft:gold_ingot",
+  "mutBlock": "minecraft:lapis_ore",
+  "drop": "minecraft:lapis_lazuli",
   "spawnInWorld": true,
   "dimensionList": [0],
   "biomeList": "not really a biome"

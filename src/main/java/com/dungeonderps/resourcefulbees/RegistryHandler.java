@@ -70,7 +70,7 @@ public class RegistryHandler {
 
 	//**************ENTITIES******************************************
 
-	public static final RegistryObject<EntityType<?>> BEE = ENTITY_TYPES.register("bee", () -> EntityType.Builder
+	public static final RegistryObject<EntityType<CustomBeeEntity>> CUSTOM_BEE = ENTITY_TYPES.register("bee", () -> EntityType.Builder
 			.create(CustomBeeEntity::new, EntityClassification.CREATURE)
 			.size(0.7F, 0.6F)
 			.build("bee"));
