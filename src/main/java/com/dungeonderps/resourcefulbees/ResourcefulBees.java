@@ -2,14 +2,18 @@ package com.dungeonderps.resourcefulbees;
 
 import com.dungeonderps.resourcefulbees.config.ResourcefulBeesConfig;
 import com.dungeonderps.resourcefulbees.data.DataGen;
+import com.dungeonderps.resourcefulbees.entity.CustomBeeRenderer;
 import com.dungeonderps.resourcefulbees.utils.ColorHandler;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.passive.CustomBeeEntity;
-import com.dungeonderps.resourcefulbees.entity.CustomBeeRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.entity.EntityClassification;
+import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.passive.CustomBeeEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.village.PointOfInterestType;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.Heightmap;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
@@ -57,6 +61,8 @@ public class ResourcefulBees
         Map<BlockState, PointOfInterestType> pointOfInterestTypeMap = new HashMap<>();
         RegistryHandler.IRON_BEEHIVE.get().getStateContainer().getValidStates().forEach(blockState -> pointOfInterestTypeMap.put(blockState, RegistryHandler.IRON_BEEHIVE_POI.get()));
         PointOfInterestType.POIT_BY_BLOCKSTATE.putAll(pointOfInterestTypeMap);
+
+        addBeeToSpawnList();
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {
@@ -64,5 +70,13 @@ public class ResourcefulBees
         RenderingRegistry.registerEntityRenderingHandler(
                 (EntityType<CustomBeeEntity>) ForgeRegistries.ENTITIES.getValue(new ResourceLocation(MOD_ID, "bee")),
                 (EntityRendererManager p_i226033_1_) -> new CustomBeeRenderer(p_i226033_1_));
+    }
+
+    public static void addBeeToSpawnList() {
+        for (Biome biome : ForgeRegistries.BIOMES.getValues()) {
+            biome.getSpawns(EntityClassification.CREATURE).add(new Biome.SpawnListEntry(RegistryHandler.CUSTOM_BEE.get(), 20, 3, 30));
+        }
+
+        EntitySpawnPlacementRegistry.register(RegistryHandler.CUSTOM_BEE.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, CustomBeeEntity::canBeeSpawn);
     }
 }

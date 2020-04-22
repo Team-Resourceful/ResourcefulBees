@@ -5,8 +5,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.silentchaos512.utils.Color;
 
 public class ResourcefulHoneycomb extends Item {
@@ -29,7 +27,7 @@ public class ResourcefulHoneycomb extends Item {
 
 
 
-
+    /*
     @Override
     public ITextComponent getDisplayName(ItemStack stack) {
 
@@ -42,6 +40,8 @@ public class ResourcefulHoneycomb extends Item {
         }
         return new TranslationTextComponent(name);
     }
+
+     */
 
     @Override
     public String getTranslationKey(ItemStack stack) {

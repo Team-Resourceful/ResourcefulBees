@@ -7,9 +7,14 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.DoublePlantBlock;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.item.ItemStack;
+import net.minecraft.entity.AgeableEntity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ILivingEntityData;
+import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.ai.goal.BreedGoal;
+import net.minecraft.entity.ai.goal.FollowParentGoal;
+import net.minecraft.entity.ai.goal.SwimGoal;
+import net.minecraft.entity.ai.goal.TemptGoal;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
@@ -33,14 +38,18 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.awt.*;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /*
 Copied from old file as point of reference - do not use
+
+minecraft:poppy,minecraft:lilac,minecraft:
+
+replace(" ", "")
 
         // create checker for what they passed in for flower
         // single flower
@@ -205,6 +214,15 @@ public class CustomBeeEntity extends BeeEntity {
         }
     }
 
+    /*
+    @Override
+    public boolean isFlowers(BlockPos pos) {
+        return this.world.isBlockPresent(pos) && this.world.getBlockState(pos).getBlock()== Blocks.NETHER_WART;
+    }
+    */
+
+    //protected final Predicate<BlockState> wartPredicate = state -> state.getBlock() == Blocks.NETHER_WART;
+
     //TODO Figure out how Flowers work and how to make customized
     protected final Predicate<BlockState> flowerPredicate = state ->
             state.isIn(BlockTags.TALL_FLOWERS) ? state.getBlock() != Blocks.SUNFLOWER
@@ -264,10 +282,21 @@ public class CustomBeeEntity extends BeeEntity {
     @Nullable
     @Override
     public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
-        if(reason.equals(SpawnReason.NATURAL) || reason.equals(SpawnReason.COMMAND)){
+        if(reason.equals(SpawnReason.NATURAL) || reason.equals(SpawnReason.COMMAND) || reason.equals(SpawnReason.CHUNK_GENERATION)){
             selectRandomBee();
+            LOGGER.info(this.getPosition());
+        } else {
+            LOGGER.info(reason.toString());
         }
+
+
+        //this.remove();   <--- Use this to remove entity from world// use worldIn.getDimension & getBiome for spawn stuffs.
+
         return super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+    }
+
+    public static boolean canBeeSpawn(EntityType<? extends AnimalEntity> typeIn, IWorld worldIn, SpawnReason reason, BlockPos pos, Random randomIn) {
+        return true;
     }
 
     @Override
