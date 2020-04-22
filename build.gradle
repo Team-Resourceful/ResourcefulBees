@@ -75,13 +75,6 @@ minecraft {
     }
 }
 
-allprojects {
-    repositories {
-        jcenter()
-        maven { url "https://jitpack.io" }
-    }
-}
-
 repositories {
     maven { url "https://maven.tterrag.com/" }
     maven {
@@ -107,8 +100,6 @@ dependencies {
     // at runtime, use the full JEI jar
     runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
 
-    implementation "com.github.SilentChaos512:silent-utils:master-SNAPSHOT"
-
     // You may put jars on which you depend on in ./libs or you may define them like so..
     // compile "some.group:artifact:version:classifier"
     // compile "some.group:artifact:version"
@@ -133,7 +124,7 @@ dependencies {
 jar {
     manifest {
         attributes([
-                "Specification-Title": "beesourceful",
+                "Specification-Title": "resourcefulbees",
                 "Specification-Vendor": "examplemodsareus",
                 "Specification-Version": "1", // We are version 1 of ourselves
                 "Implementation-Title": project.name,

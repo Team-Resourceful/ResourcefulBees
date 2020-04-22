@@ -1,6 +1,6 @@
 modLoader="javafml"
 loaderVersion="[31,)"
-issueTrackerURL="http://my.issue.tracker/"
+issueTrackerURL="https://github.com/Dungeon-Derps-Development/ResourcefulBees/issues"
 [[mods]]
 modId="resourcefulbees"
 version="${file.jarVersion}"
@@ -8,24 +8,25 @@ displayName="Resourceful Bees"
 updateJSONURL="http://myurl.me/"
 displayURL="http://example.com/"
 logoFile="examplemod.png"
-credits="Thanks for this example mod goes to Java"
-authors="Love, Cheese and small house plants"
-description=""
-[[dependencies.examplemod]] #optional
+credits="Thanks to Tfarcenim for making Beesourceful which this mod is heavily based on. Thanks to the MMD Discord peeps for all of their assistance. Thanks to Silentchaos512 for his Color Utility"
+authors="Epic_Oreo, ThatGravyBoat, DrDarkfire"
+description="This mod provides pack makers with useful capabilities for creating custom Resource Bee Types."
+
+#[[dependencies.examplemod]] #optional
     # the modid of the dependency
-    modId="forge" #mandatory
+#    modId="forge" #mandatory
     # Does this dependency have to exist - if not, ordering below must be specified
-    mandatory=true #mandatory
+#    mandatory=true #mandatory
     # The version range of the dependency
-    versionRange="[31,)" #mandatory
+#    versionRange="[31,)" #mandatory
     # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
-    ordering="NONE"
+#    ordering="NONE"
     # Side this dependency is applied on - BOTH, CLIENT or SERVER
-    side="BOTH"
+#    side="BOTH"
 # Here's another dependency
-[[dependencies.examplemod]]
-    modId="minecraft"
-    mandatory=true
-    versionRange="[1.15.2]"
-    ordering="NONE"
-    side="BOTH"
+#[[dependencies.examplemod]]
+#    modId="minecraft"
+#    mandatory=true
+#    versionRange="[1.15.2]"
+#    ordering="NONE"
+#    side="BOTH"
