@@ -53,11 +53,11 @@ public class Smoker extends Item {
 					  zDirection = -2;
 				}
 				ServerWorld worldServer = (ServerWorld)world;
-				worldServer.spawnParticle(ParticleTypes.CAMPFIRE_SIGNAL_SMOKE, 
+				worldServer.spawnParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, 
 						player.getPosX() + xDirection,
 						player.getPosY() + 1.0D + player.world.rand.nextDouble(),
 						player.getPosZ() + zDirection,
-						1, 0, 0, 0, 0.1F);
+						50, 0, 0, 0, 0.01F);
 			}		
 		return super.onItemRightClick(world, player, hand);
 	}

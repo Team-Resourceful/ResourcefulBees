@@ -1,7 +1,6 @@
 package com.dungeonderps.resourcefulbees.utils;
 
 import com.dungeonderps.resourcefulbees.item.ResourcefulHoneycomb;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.util.IItemProvider;

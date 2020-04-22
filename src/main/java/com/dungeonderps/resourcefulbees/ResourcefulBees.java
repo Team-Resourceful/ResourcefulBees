@@ -60,6 +60,7 @@ public class ResourcefulBees
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {
+    	new ItemGroupResourcefulBees();
         RenderingRegistry.registerEntityRenderingHandler(
                 (EntityType<CustomBeeEntity>) ForgeRegistries.ENTITIES.getValue(new ResourceLocation(MOD_ID, "bee")),
                 (EntityRendererManager p_i226033_1_) -> new CustomBeeRenderer(p_i226033_1_));

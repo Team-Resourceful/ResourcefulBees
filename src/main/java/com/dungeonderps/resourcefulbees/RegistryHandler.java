@@ -1,23 +1,19 @@
 package com.dungeonderps.resourcefulbees;
 
 import com.dungeonderps.resourcefulbees.block.IronBeehiveBlock;
+import com.dungeonderps.resourcefulbees.item.ModdedSpawnEggItem;
 import com.dungeonderps.resourcefulbees.item.ResourcefulHoneycomb;
-import com.google.common.collect.ImmutableSet;
 import com.dungeonderps.resourcefulbees.item.Smoker;
 import com.google.common.collect.Sets;
-import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.material.MaterialColor;
 import net.minecraft.entity.passive.CustomBeeEntity;
 import net.minecraft.block.Block;
-import net.minecraft.block.Block.Properties;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
-import net.minecraft.particles.ParticleType;
 import net.minecraft.tileentity.IronBeehiveBlockEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.village.PointOfInterestType;
@@ -25,10 +21,6 @@ import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 
 public class RegistryHandler {
 	
@@ -81,6 +73,9 @@ public class RegistryHandler {
 	public static final RegistryObject<PointOfInterestType> IRON_BEEHIVE_POI = POIS.register("iron_beehive",
 			() -> new PointOfInterestType("iron_beehive", Sets.newHashSet(IRON_BEEHIVE.get().getStateContainer().getValidStates()), 0, 1));
 
+	//*************SPAWN EGGS******************************************
+
+	public static final RegistryObject<Item> BEE_SPAWN_EGG = ITEMS.register("bee_spawn_egg", () -> new ModdedSpawnEggItem(CUSTOM_BEE, 0xffffff, 0xffffff, (new Item.Properties())));
 
 /*
 	public static void beeItems(String name) {
