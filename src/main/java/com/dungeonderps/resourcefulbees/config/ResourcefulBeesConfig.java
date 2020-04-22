@@ -1,5 +1,6 @@
 package com.dungeonderps.resourcefulbees.config;
 
+import com.dungeonderps.resourcefulbees.ItemGroupResourcefulBees;
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.google.gson.Gson;
 import net.minecraft.client.Minecraft;
@@ -138,6 +139,7 @@ public class ResourcefulBeesConfig {
         BeeInfo bee = gson.fromJson(r, BeeInfo.class);
         bee.setName(name);
         CustomBeeEntity.BEE_INFO.put(name, bee);
+        ItemGroupResourcefulBees.bees.put(name, bee.getColor());
     }
 
     public static void addBees() {

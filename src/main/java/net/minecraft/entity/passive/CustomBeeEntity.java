@@ -19,7 +19,6 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tileentity.IronBeehiveBlockEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -218,7 +217,7 @@ public class CustomBeeEntity extends BeeEntity {
 
     //TODO Implement Dynamic Resource Loading - See KubeJS for Example
     protected ITextComponent func_225513_by_() {
-        return new TranslationTextComponent("entity" + '.' + ResourcefulBees.MOD_ID + '.' + this.beeType);
+        return new TranslationTextComponent("entity" + '.' + ResourcefulBees.MOD_ID + '.' + this.beeType.toLowerCase() + "_bee");
     }
 
     public float[] getBeeColorAsFloat() {
