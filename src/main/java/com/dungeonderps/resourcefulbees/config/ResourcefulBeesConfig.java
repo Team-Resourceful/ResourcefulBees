@@ -104,8 +104,8 @@ public class ResourcefulBeesConfig {
         Path configPath = FMLPaths.CONFIGDIR.get();
         //Path rbConfigPath = Paths.get(configPath.toAbsolutePath().toString(), "resourcefulbees");
         // subfolder for bees
-        Path rbBeesPath = Paths.get(configPath.toAbsolutePath().toString() + ResourcefulBees.MOD_ID, "bees");
-        Path rbAssetsPath = Paths.get(configPath.toAbsolutePath().toString() + ResourcefulBees.MOD_ID, "resources");
+        Path rbBeesPath = Paths.get(configPath.toAbsolutePath().toString(),ResourcefulBees.MOD_ID, "bees");
+        Path rbAssetsPath = Paths.get(configPath.toAbsolutePath().toString(),ResourcefulBees.MOD_ID, "resources");
         Path rbDatapackPath = Paths.get(rbAssetsPath.toAbsolutePath().toString(), "datapack");
         Path rbDatapackRecipesPath = Paths.get(rbDatapackPath.toAbsolutePath().toString(), "data/resourcefulbees/recipes");
         BEE_PATH = rbBeesPath;
