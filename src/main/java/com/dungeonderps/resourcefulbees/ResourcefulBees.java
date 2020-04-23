@@ -1,13 +1,17 @@
 package com.dungeonderps.resourcefulbees;
 
 import com.dungeonderps.resourcefulbees.config.ResourcefulBeesConfig;
+import com.dungeonderps.resourcefulbees.data.DataPackLoader;
 import com.dungeonderps.resourcefulbees.data.DataGen;
 import com.dungeonderps.resourcefulbees.entity.CustomBeeRenderer;
 import com.dungeonderps.resourcefulbees.utils.ColorHandler;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.CustomBeeEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.village.PointOfInterestType;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.Heightmap;
@@ -19,10 +23,14 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,24 +42,27 @@ public class ResourcefulBees
     public static final Logger LOGGER = LogManager.getLogger();
 
     public ResourcefulBees() {
-
+        try {
+            FileUtils.deleteDirectory(Paths.get(FMLPaths.CONFIGDIR.get().toString(), "resourcefulbees", "resources", "datapack", "data", "resourcefulbees","recipes").toFile());
+        } catch (IOException e) {
+            LOGGER.error("Failled to delete recipe directory.");
+        }
         ResourcefulBeesConfig.setup();
 
         RegistryHandler.init();
 
-
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(DataGen::gatherData);
+        MinecraftForge.EVENT_BUS.addListener(DataPackLoader::serverStarting);
 
         DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
             FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
             FMLJavaModLoadingContext.get().getModEventBus().addListener(ColorHandler::onItemColors);
         });
 
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(DataGen::gatherData);
 
+        
         MinecraftForge.EVENT_BUS.register(this);
-
-
     }
 
 
