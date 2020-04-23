@@ -44,39 +44,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-/*
-Copied from old file as point of reference - do not use
-
-minecraft:poppy,minecraft:lilac,minecraft:
-
-replace(" ", "")
-
-        // create checker for what they passed in for flower
-        // single flower
-        // tag
-        // all
-        // small only
-        // tall only
-        switch (flower) {
-            case "all":
-
-            case "small":
-
-            case "tall":
-
-            default:
-                if (flower.charAt(0) == '#') {
-                    // do something
-                } else {
-                    // do something
-                }
-        }
- */
-
-
-
-
-
 @SuppressWarnings("EntityConstructor")
 public class CustomBeeEntity extends BeeEntity {
 
@@ -122,6 +89,7 @@ public class CustomBeeEntity extends BeeEntity {
         if (!this.hasHive()) {
             return false;
         } else {
+            assert this.hivePos != null;
             TileEntity blockEntity = this.world.getTileEntity(this.hivePos);
             return blockEntity instanceof IronBeehiveBlockEntity
                     && ((IronBeehiveBlockEntity) blockEntity).isAllowedBee(this);
@@ -174,7 +142,7 @@ public class CustomBeeEntity extends BeeEntity {
                 Block block = state.getBlock();
                 if (validFillerBlock(block)) {
                     world.playEvent(2005, beePosDown, 0);
-                    world.setBlockState(beePosDown, ForgeRegistries.BLOCKS.getValue(BEE_INFO.get(beeType).getResource(BEE_INFO.get(beeType).getMutBlock())).getDefaultState());
+                    world.setBlockState(beePosDown, Objects.requireNonNull(ForgeRegistries.BLOCKS.getValue(BEE_INFO.get(beeType).getResource(BEE_INFO.get(beeType).getMutBlock()))).getDefaultState());
                     addCropCounter();
                 }
             }
@@ -182,7 +150,7 @@ public class CustomBeeEntity extends BeeEntity {
     }
 
     public boolean validFillerBlock(Block block){
-        return block.getRegistryName().equals(BEE_INFO.get(beeType).getResource(BEE_INFO.get(beeType).getBaseBlock()));
+        return Objects.equals(block.getRegistryName(), BEE_INFO.get(beeType).getResource(BEE_INFO.get(beeType).getBaseBlock()));
     }
 
     public class FindBeehiveGoal2 extends BeeEntity.FindBeehiveGoal {
@@ -224,15 +192,7 @@ public class CustomBeeEntity extends BeeEntity {
             default:
                 return this.world.isBlockPresent(pos) && this.world.getBlockState(pos).getBlock().equals(ForgeRegistries.BLOCKS.getValue(BEE_INFO.get(beeType).getResource(BEE_INFO.get(beeType).getFlower())));
         }
-        /*
-        return flower.equals("all") || flower.equals("tall") || flower.equals("small") ?
-        this.world.isBlockPresent(pos) && this.world.getBlockState(pos).getBlock().isIn(BlockTags.FLOWERS) :
-        this.world.isBlockPresent(pos) && this.world.getBlockState(pos).getBlock()== ForgeRegistries.BLOCKS.getValue(BEE_INFO.get(beeType).getResource(BEE_INFO.get(beeType).getFlower()));
-         */
     }
-
-
-    //protected final Predicate<BlockState> wartPredicate = state -> state.getBlock() == Blocks.NETHER_WART;
 
     protected final Predicate<BlockState> flowerPredicate = state -> {
 
@@ -296,15 +256,11 @@ public class CustomBeeEntity extends BeeEntity {
         } else {
             LOGGER.info(reason.toString());
         }
-
-
-        //this.remove();   <--- Use this to remove entity from world// use worldIn.getDimension & getBiome for spawn stuffs.
-
         return super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
     }
 
     public static boolean canBeeSpawn(EntityType<? extends AnimalEntity> typeIn, IWorld worldIn, SpawnReason reason, BlockPos pos, Random randomIn) {
-        return true;
+        return true; //this.remove();   <--- Use this to remove entity from world// use worldIn.getDimension & getBiome for spawn stuffs.
     }
 
     @Override

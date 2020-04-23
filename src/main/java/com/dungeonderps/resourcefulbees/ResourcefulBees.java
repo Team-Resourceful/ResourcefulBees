@@ -1,17 +1,14 @@
 package com.dungeonderps.resourcefulbees;
 
 import com.dungeonderps.resourcefulbees.config.ResourcefulBeesConfig;
-import com.dungeonderps.resourcefulbees.data.DataPackLoader;
 import com.dungeonderps.resourcefulbees.data.DataGen;
+import com.dungeonderps.resourcefulbees.data.DataPackLoader;
 import com.dungeonderps.resourcefulbees.entity.CustomBeeRenderer;
 import com.dungeonderps.resourcefulbees.utils.ColorHandler;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.CustomBeeEntity;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.village.PointOfInterestType;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.Heightmap;
