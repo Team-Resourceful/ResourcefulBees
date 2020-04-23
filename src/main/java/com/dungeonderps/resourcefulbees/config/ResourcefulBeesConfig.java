@@ -15,10 +15,7 @@ import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.loading.FMLPaths;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
+import java.io.*;
 import java.net.URISyntaxException;
 import java.nio.file.*;
 import java.util.Map;
@@ -121,7 +118,12 @@ public class ResourcefulBeesConfig {
         } catch (FileAlreadyExistsException e) { // do nothing
         } catch (IOException e) { LOGGER.error("Failed to create assets directory");}
 
-        try { Files.createDirectory(rbDatapackPath);
+        try {
+            Files.createDirectory(rbDatapackPath);
+            FileWriter file = new FileWriter(Paths.get(DATAPACK_PATH.toString(), "pack.mcmeta").toFile());
+            String mcMetaContent = "{\"pack\":{\"pack_format\":1,\"description\":\"Auto generated recipes for Resourceful Bees.\"}}";
+            file.write(mcMetaContent);
+            file.close();
         } catch (FileAlreadyExistsException e) { // do nothing
         } catch (IOException e) { LOGGER.error("Failed to create datapack directory");}
 
