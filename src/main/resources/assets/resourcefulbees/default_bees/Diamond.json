@@ -1,6 +1,6 @@
 {
   "color": "#00ffff",
-  "flower": "minecraft:poppy",
+  "flower": "ALL",
   "baseBlock": "minecraft:stone",
   "mutBlock": "minecraft:diamond_ore",
   "drop": "minecraft:diamond",

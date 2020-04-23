@@ -8,14 +8,15 @@ import net.minecraft.entity.passive.CustomBeeEntity;
 import net.minecraft.resources.FolderPack;
 import net.minecraft.resources.IPackFinder;
 import net.minecraft.resources.ResourcePackInfo;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.loading.FMLPaths;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
 import java.net.URISyntaxException;
 import java.nio.file.*;
 import java.util.Map;
@@ -41,6 +42,8 @@ public class ResourcefulBeesConfig {
 
     public static Path BEE_PATH;
     public static Path RESOURCE_PATH;
+    public static Path DATAPACK_PATH;
+    public static Path RECIPE_PATH;
 
     // CONFIGS
     public static ForgeConfigSpec.BooleanValue GENERATE_DEFAULTS;
@@ -97,26 +100,40 @@ public class ResourcefulBeesConfig {
     // setup the mod config folder
     public static void setup() {
         Path configPath = FMLPaths.CONFIGDIR.get();
-        Path rbConfigPath = Paths.get(configPath.toAbsolutePath().toString(), "resourcefulbees");
+        //Path rbConfigPath = Paths.get(configPath.toAbsolutePath().toString(), "resourcefulbees");
         // subfolder for bees
-        Path rbBeesPath = Paths.get(rbConfigPath.toAbsolutePath().toString(), "bees");
-        Path rbAssetsPath = Paths.get(rbConfigPath.toAbsolutePath().toString(), "resources");
+        Path rbBeesPath = Paths.get(configPath.toAbsolutePath().toString() + ResourcefulBees.MOD_ID, "bees");
+        Path rbAssetsPath = Paths.get(configPath.toAbsolutePath().toString() + ResourcefulBees.MOD_ID, "resources");
+        Path rbDatapackPath = Paths.get(rbAssetsPath.toAbsolutePath().toString(), "datapack");
+        Path rbDatapackRecipesPath = Paths.get(rbDatapackPath.toAbsolutePath().toString(), "data/resourcefulbees/recipes");
         BEE_PATH = rbBeesPath;
         RESOURCE_PATH = rbAssetsPath;
-        try {
-            Files.createDirectory(rbConfigPath);
-            Files.createDirectory(rbBeesPath);
-            Files.createDirectory(rbAssetsPath);
-        } catch (FileAlreadyExistsException e) {
-            // do nothing
-        } catch (IOException e) {
-            LOGGER.error("failed to create resourcefulbees config directory");
-        }
+        DATAPACK_PATH = rbDatapackPath;
+        RECIPE_PATH = rbDatapackRecipesPath;
+
+        try { Files.createDirectories(rbBeesPath);
+        } catch (FileAlreadyExistsException e) { // do nothing
+        } catch (IOException e) { LOGGER.error("failed to create resourcefulbees config directory");}
+
+        try { Files.createDirectory(rbAssetsPath);
+        } catch (FileAlreadyExistsException e) { // do nothing
+        } catch (IOException e) { LOGGER.error("Failed to create assets directory");}
+
+        try { Files.createDirectory(rbDatapackPath);
+        } catch (FileAlreadyExistsException e) { // do nothing
+        } catch (IOException e) { LOGGER.error("Failed to create datapack directory");}
+
+        try { Files.createDirectories(rbDatapackRecipesPath);
+        } catch (FileAlreadyExistsException e) { // do nothing
+        } catch (IOException e) { LOGGER.error("Failed to create recipes directory");}
+
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfig.COMMON_CONFIG, "resourcefulbees/common.toml");
 
+        /*
         DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
             loadResources();
         });
+         */
     }
 
     public static void loadResources() {

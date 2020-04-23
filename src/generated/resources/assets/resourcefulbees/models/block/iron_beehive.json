@@ -1,0 +1,10 @@
+{
+  "parent": "block/orientable_with_bottom",
+  "textures": {
+    "particle": "block/iron_block",
+    "bottom": "block/iron_block",
+    "top": "block/iron_block",
+    "front": "resourcefulbees:block/iron_beehive_front",
+    "side": "resourcefulbees:block/iron_beehive_side"
+  }
+}

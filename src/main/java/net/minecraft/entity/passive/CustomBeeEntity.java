@@ -96,8 +96,6 @@ public class CustomBeeEntity extends BeeEntity {
 
     //*************************** STANDARD BEE METHODS BELOW **********************************************************
 
-    //TODO Figure Out why Vanilla Bees aren't angered when attacking Modded Bees
-    // - beesourceful has same issue - not tested since adding (new Class[0])
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new BeeEntity.StingGoal(this, 1.4, true));
@@ -136,8 +134,6 @@ public class CustomBeeEntity extends BeeEntity {
     }
 
     //*************************** INTERNAL CLASSES AND METHODS FOR BEE GOALS BELOW ***********************************
-    //TODO Finish implementing Bee Goals with custom bee data
-    // - Pollination, Flower/Mutation/Etc
 
     protected class UpdateBeehiveGoal2 extends BeeEntity.UpdateBeehiveGoal {
 
@@ -214,49 +210,61 @@ public class CustomBeeEntity extends BeeEntity {
         }
     }
 
-    /*
     @Override
     public boolean isFlowers(BlockPos pos) {
-        return this.world.isBlockPresent(pos) && this.world.getBlockState(pos).getBlock()== Blocks.NETHER_WART;
+        String flower = BEE_INFO.get(beeType).getFlower().toLowerCase();
+
+        switch (flower){
+            case "all":
+                return this.world.isBlockPresent(pos) && this.world.getBlockState(pos).getBlock().isIn(BlockTags.FLOWERS);
+            case "small":
+                return this.world.isBlockPresent(pos) && this.world.getBlockState(pos).getBlock().isIn(BlockTags.SMALL_FLOWERS);
+            case "tall":
+                return this.world.isBlockPresent(pos) && this.world.getBlockState(pos).getBlock().isIn(BlockTags.TALL_FLOWERS);
+            default:
+                return this.world.isBlockPresent(pos) && this.world.getBlockState(pos).getBlock().equals(ForgeRegistries.BLOCKS.getValue(BEE_INFO.get(beeType).getResource(BEE_INFO.get(beeType).getFlower())));
+        }
+        /*
+        return flower.equals("all") || flower.equals("tall") || flower.equals("small") ?
+        this.world.isBlockPresent(pos) && this.world.getBlockState(pos).getBlock().isIn(BlockTags.FLOWERS) :
+        this.world.isBlockPresent(pos) && this.world.getBlockState(pos).getBlock()== ForgeRegistries.BLOCKS.getValue(BEE_INFO.get(beeType).getResource(BEE_INFO.get(beeType).getFlower()));
+         */
     }
-    */
+
 
     //protected final Predicate<BlockState> wartPredicate = state -> state.getBlock() == Blocks.NETHER_WART;
 
-    //TODO Figure out how Flowers work and how to make customized
-    protected final Predicate<BlockState> flowerPredicate = state ->
-            state.isIn(BlockTags.TALL_FLOWERS) ? state.getBlock() != Blocks.SUNFLOWER
-                    || state.get(DoublePlantBlock.HALF) == DoubleBlockHalf.UPPER : state.isIn(BlockTags.SMALL_FLOWERS);
+    protected final Predicate<BlockState> flowerPredicate = state -> {
 
-    public Predicate<BlockState> getFlowerPredicate(){
-        return flowerPredicate;
-    }
+        String flower = BEE_INFO.get(beeType).getFlower().toLowerCase();
+
+        switch (flower) {
+            case "all":
+                return state.isIn(BlockTags.TALL_FLOWERS) ? state.getBlock() != Blocks.SUNFLOWER || state.get(DoublePlantBlock.HALF) == DoubleBlockHalf.UPPER : state.isIn(BlockTags.SMALL_FLOWERS);
+            case "small":
+                return state.isIn(BlockTags.SMALL_FLOWERS);
+            case "tall":
+                return state.isIn(BlockTags.TALL_FLOWERS) && (state.getBlock() != Blocks.SUNFLOWER || state.get(DoublePlantBlock.HALF) == DoubleBlockHalf.UPPER);
+            default:
+                return state.getBlock().equals(ForgeRegistries.BLOCKS.getValue(BEE_INFO.get(beeType).getResource(BEE_INFO.get(beeType).getFlower())));
+                /*    <---- Leaving this in case there's ever new flower based tags
+                if (flower.charAt(0) == '#') {
+                    // do something
+                } else {
+                    return state.equals(ForgeRegistries.BLOCKS.getValue(BEE_INFO.get(beeType).getResource(BEE_INFO.get(beeType).getFlower())).getDefaultState());
+                }
+                */
+        }
+    };
+
+    public Predicate<BlockState> getFlowerPredicate(){ return flowerPredicate; }
 
     //***************************** CUSTOM BEE RELATED METHODS BELOW *************************************************
-
-    //TODO Implement Dynamic Resource Loading - See KubeJS for Example
 
     @Override
     public ITextComponent getDisplayName() {
         return super.getDisplayName();
     }
-
-
-
-    /*
-    @Override
-    public String getTranslationKey(ItemStack stack) {
-        CompoundNBT beeType = stack.getChildTag("ResourcefulBees");
-        String name;
-        if ((beeType != null && beeType.contains("beeType"))) {
-            name = "item" + '.' + ResourcefulBees.MOD_ID + '.' + beeType.getString("beeType").toLowerCase() + "_honeycomb";
-        } else {
-            name = "item" + '.' + ResourcefulBees.MOD_ID + '.' + "resourceful_honeycomb";
-        }
-        return name;
-    }
-
-     */
 
     protected ITextComponent func_225513_by_() {
         return new TranslationTextComponent("entity" + '.' + ResourcefulBees.MOD_ID + '.' + this.beeType.toLowerCase() + "_bee");

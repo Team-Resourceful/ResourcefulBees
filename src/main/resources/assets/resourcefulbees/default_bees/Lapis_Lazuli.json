@@ -1,6 +1,6 @@
 {
   "color": "#345ec3",
-  "flower": "minecraft:poppy",
+  "flower": "small",
   "baseBlock": "minecraft:stone",
   "mutBlock": "minecraft:lapis_ore",
   "drop": "minecraft:lapis_lazuli",

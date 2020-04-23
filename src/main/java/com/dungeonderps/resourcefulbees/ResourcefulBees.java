@@ -5,16 +5,15 @@ import com.dungeonderps.resourcefulbees.data.DataGen;
 import com.dungeonderps.resourcefulbees.entity.CustomBeeRenderer;
 import com.dungeonderps.resourcefulbees.utils.ColorHandler;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.CustomBeeEntity;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.village.PointOfInterestType;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.Heightmap;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -35,18 +34,23 @@ public class ResourcefulBees
     public static final Logger LOGGER = LogManager.getLogger();
 
     public ResourcefulBees() {
+
         ResourcefulBeesConfig.setup();
 
         RegistryHandler.init();
 
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
 
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(ColorHandler::onItemColors);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+
+        DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
+            FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
+            FMLJavaModLoadingContext.get().getModEventBus().addListener(ColorHandler::onItemColors);
+        });
+
         FMLJavaModLoadingContext.get().getModEventBus().addListener(DataGen::gatherData);
 
-        
         MinecraftForge.EVENT_BUS.register(this);
+
 
     }
 
@@ -66,10 +70,8 @@ public class ResourcefulBees
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {
-    	new ItemGroupResourcefulBees();
-        RenderingRegistry.registerEntityRenderingHandler(
-                (EntityType<CustomBeeEntity>) ForgeRegistries.ENTITIES.getValue(new ResourceLocation(MOD_ID, "bee")),
-                (EntityRendererManager p_i226033_1_) -> new CustomBeeRenderer(p_i226033_1_));
+        new ItemGroupResourcefulBees();
+        RenderingRegistry.registerEntityRenderingHandler(RegistryHandler.CUSTOM_BEE.get(), CustomBeeRenderer::new);
     }
 
     public static void addBeeToSpawnList() {

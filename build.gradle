@@ -40,7 +40,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                beesourceful {
+                resourcefulbees {
                     source sourceSets.main
                 }
             }
@@ -54,7 +54,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                beesourceful {
+                resourcefulbees {
                     source sourceSets.main
                 }
             }
@@ -64,10 +64,9 @@ minecraft {
             workingDirectory project.file('run')
 
             property 'forge.logging.console.level', 'debug'
-            args '--mod', 'beesourceful', '--all', '--output', file('src/generated/resources/'),
-                    '--existing', sourceSets.main.resources.srcDirs[0]
+            args "--mod", "resourcefulbees", "--all", "--output", "\"" + file("src/generated/resources").toString() + "\"", "--validate", "--existing", "\"" + sourceSets.main.resources.srcDirs[0] + "\""
             mods {
-                beesourceful {
+                resourcefulbees {
                     source sourceSets.main
                 }
             }
