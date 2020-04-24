@@ -2,10 +2,10 @@
     "type": "minecraft:crafting_shapeless",
     "ingredients": [
         {
-            "item": "resourcefulbees:bellow"
+            "item": "resourcefulbees:smoker_can"
         },
         {
-            "item": "resourcefulbees:smoker_can"
+            "item": "resourcefulbees:bellow"
         }
     ],
     "result": {
