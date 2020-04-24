@@ -52,7 +52,7 @@ public class ResourcefulBees
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(DataGen::gatherData);
-        MinecraftForge.EVENT_BUS.addListener(DataPackLoader::serverAboutToStarting);
+        MinecraftForge.EVENT_BUS.addListener(DataPackLoader::serverAboutToStart);
         MinecraftForge.EVENT_BUS.addListener(this::serverStarting);
 
         DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
