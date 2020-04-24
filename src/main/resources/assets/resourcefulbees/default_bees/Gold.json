@@ -2,8 +2,8 @@
   "color": "#FFDC00",
   "flower": "TAll",
   "baseBlock": "minecraft:stone",
-  "mutBlock": "minecraft:gold_ore",
-  "drop": "minecraft:gold_ingot",
+  "mutationBlock": "minecraft:gold_ore",
+  "centrifugeOutput": "minecraft:gold_ingot",
   "spawnInWorld": true,
   "dimensionList": [0],
   "biomeList": "not really a biome"

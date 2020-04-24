@@ -27,12 +27,12 @@
 	"item.resourcefulbees.lapis_lazuli_spawn_egg": "Lapis Lazuli Bee Spawn Egg",
 	"item.resourcefulbees.coal_spawn_egg": "Coal Bee spawn Egg",
 
-	"entity.resourcefulbees.gold_bee": "Gold Bee Spawn Egg",
-	"entity.resourcefulbees.iron_bee": "Iron Bee Spawn Egg",
-	"entity.resourcefulbees.emerald_bee": "Emerald Bee Spawn Egg",
-	"entity.resourcefulbees.diamond_bee": "Diamond Bee Spawn Egg",
-	"entity.resourcefulbees.redstone_bee": "Redstone Bee Spawn Egg",
-	"entity.resourcefulbees.nether_quartz_bee": "Quartz Bee Spawn Egg",
-	"entity.resourcefulbees.lapis_lazuli_bee": "lapis Bee Spawn Egg",
-	"entity.resourcefulbees.coal_spawn_egg": "Coal Bee spawn Egg"
+	"entity.resourcefulbees.gold_bee": "Gold Bee",
+	"entity.resourcefulbees.iron_bee": "Iron Bee",
+	"entity.resourcefulbees.emerald_bee": "Emerald Bee",
+	"entity.resourcefulbees.diamond_bee": "Diamond Bee",
+	"entity.resourcefulbees.redstone_bee": "Redstone Bee",
+	"entity.resourcefulbees.nether_quartz_bee": "Quartz Bee",
+	"entity.resourcefulbees.lapis_lazuli_bee": "lapis Bee",
+	"entity.resourcefulbees.coal_spawn_egg": "Coal Bee"
 }

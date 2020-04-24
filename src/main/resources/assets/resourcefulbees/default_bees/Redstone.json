@@ -2,8 +2,8 @@
   "color": "#aa0f01",
   "flower": "minecraft:poppy",
   "baseBlock": "minecraft:stone",
-  "mutBlock": "minecraft:redstone_ore",
-  "drop": "minecraft:redstone",
+  "mutationBlock": "minecraft:redstone_ore",
+  "centrifugeOutput": "minecraft:redstone",
   "spawnInWorld": true,
   "dimensionList": [0],
   "biomeList": "not really a biome"

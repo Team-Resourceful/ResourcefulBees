@@ -2,8 +2,8 @@
   "color": "#FFF8F7",
   "flower": "minecraft:poppy",
   "baseBlock": "minecraft:netherrack",
-  "mutBlock": "minecraft:nether_quartz_ore",
-  "drop": "minecraft:nether_quartz",
+  "mutationBlock": "minecraft:nether_quartz_ore",
+  "centrifugeOutput": "minecraft:nether_quartz",
   "spawnInWorld": true,
   "dimensionList": [0],
   "biomeList": "not really a biome"

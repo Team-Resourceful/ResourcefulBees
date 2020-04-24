@@ -2,8 +2,8 @@
   "color": "#345ec3",
   "flower": "small",
   "baseBlock": "minecraft:stone",
-  "mutBlock": "minecraft:lapis_ore",
-  "drop": "minecraft:lapis_lazuli",
+  "mutationBlock": "minecraft:lapis_ore",
+  "centrifugeOutput": "minecraft:lapis_lazuli",
   "spawnInWorld": true,
   "dimensionList": [0],
   "biomeList": "not really a biome"
