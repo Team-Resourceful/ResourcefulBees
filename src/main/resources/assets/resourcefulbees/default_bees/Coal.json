@@ -2,8 +2,8 @@
   "color": "#303030",
   "flower": "minecraft:poppy",
   "baseBlock": "minecraft:stone",
-  "mutBlock": "minecraft:coal_ore",
-  "drop": "minecraft:coal",
+  "mutationBlock": "minecraft:coal_ore",
+  "centrifugeOutput": "minecraft:coal",
   "spawnInWorld": true,
   "dimensionList": [0],
   "biomeList": "not really a biome"

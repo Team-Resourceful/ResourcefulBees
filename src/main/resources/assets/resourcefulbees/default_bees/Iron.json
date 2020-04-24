@@ -2,8 +2,8 @@
   "color": "#ffcc99",
   "flower": "minecraft:poppy",
   "baseBlock": "minecraft:stone",
-  "mutBlock": "minecraft:iron_ore",
-  "drop": "minecraft:iron_ingot",
+  "mutationBlock": "minecraft:iron_ore",
+  "centrifugeOutput": "minecraft:iron_ingot",
   "spawnInWorld": true,
   "dimensionList": [0],
   "biomeList": "not really a biome"

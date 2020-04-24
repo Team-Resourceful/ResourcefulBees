@@ -2,8 +2,8 @@
   "color": "#00ffff",
   "flower": "ALL",
   "baseBlock": "minecraft:stone",
-  "mutBlock": "minecraft:diamond_ore",
-  "drop": "minecraft:diamond",
+  "mutationBlock": "minecraft:diamond_ore",
+  "centrifugeOutput": "minecraft:diamond",
   "spawnInWorld": true,
   "dimensionList": [0],
   "biomeList": "not really a biome"
