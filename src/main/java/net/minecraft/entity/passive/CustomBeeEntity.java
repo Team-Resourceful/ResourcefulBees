@@ -3,6 +3,7 @@ package net.minecraft.entity.passive;
 import com.dungeonderps.resourcefulbees.RegistryHandler;
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
+import com.dungeonderps.resourcefulbees.entity.goals.BeeBreedGoal;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -64,7 +65,7 @@ public class CustomBeeEntity extends BeeEntity {
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new BeeEntity.StingGoal(this, 1.4, true));
         this.goalSelector.addGoal(1, new BeeEntity.EnterBeehiveGoal());
-        this.goalSelector.addGoal(2, new BreedGoal(this, 1.0D));
+        this.goalSelector.addGoal(2, new BeeBreedGoal(this, 1.0D));
         this.goalSelector.addGoal(3, new TemptGoal(this, 1.25D, Ingredient.fromTag(ItemTags.FLOWERS), false));
         this.pollinateGoal = new PollinateGoal2();
         this.goalSelector.addGoal(4, this.pollinateGoal);
@@ -296,6 +297,12 @@ public class CustomBeeEntity extends BeeEntity {
     public CustomBeeEntity createChild(AgeableEntity ageable) {
         CustomBeeEntity childBee = new CustomBeeEntity(RegistryHandler.CUSTOM_BEE.get(), this.world);
         childBee.selectBeeType(BEE_INFO.get(BEE_INFO.keySet().toArray()[rand.nextInt(BEE_INFO.size())]).getName());
+        return childBee;
+    }
+
+    public CustomBeeEntity createSelectedChild(String beeType) {
+        CustomBeeEntity childBee = new CustomBeeEntity(RegistryHandler.CUSTOM_BEE.get(), this.world);
+        childBee.selectBeeType(beeType);
         return childBee;
     }
 
