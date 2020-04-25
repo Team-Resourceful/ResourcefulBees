@@ -4,6 +4,7 @@ import com.dungeonderps.resourcefulbees.block.IronBeehiveBlock;
 import com.dungeonderps.resourcefulbees.item.ModdedSpawnEggItem;
 import com.dungeonderps.resourcefulbees.item.ResourcefulHoneycomb;
 import com.dungeonderps.resourcefulbees.item.Smoker;
+import com.dungeonderps.resourcefulbees.tileentity.HoneycombBlockEntity;
 import com.google.common.collect.Sets;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -48,7 +49,7 @@ public class RegistryHandler {
 	//**************BLOCKS********************************************
 
 	public static final RegistryObject<Block> IRON_BEEHIVE = BLOCKS.register("iron_beehive", () -> new IronBeehiveBlock(IronBeehiveProperties));
-	RegistryObject<Block> HONEYCOMBBLOCK = BLOCKS.register("resourceful_honeycomb_block", () -> new Block(Block.Properties.create(Material.CLAY, MaterialColor.ADOBE).hardnessAndResistance(0.6F).sound(SoundType.CORAL)));
+	public static final RegistryObject<Block> HONEYCOMBBLOCK = BLOCKS.register("resourceful_honeycomb_block", () -> new Block(Block.Properties.create(Material.CLAY, MaterialColor.ADOBE).hardnessAndResistance(0.6F).sound(SoundType.CORAL)));
 
 	//**************ITEMS*********************************************
 
@@ -57,13 +58,17 @@ public class RegistryHandler {
 	public static final RegistryObject<Item> SMOKER = ITEMS.register("smoker", Smoker::new);
 	public static final RegistryObject<Item> BELLOW = ITEMS.register("bellow", () -> new Item(new Item.Properties().group(ItemGroup.MISC)));
 	public static final RegistryObject<Item> SMOKERCAN = ITEMS.register("smoker_can", () -> new Item(new Item.Properties().group(ItemGroup.MISC)));
-	public static final RegistryObject<Item> BEEWAX = ITEMS.register("bee_wax", () -> new Item(new Item.Properties().group(ItemGroup.DECORATIONS)));
-	RegistryObject<Item> HONEYCOMBBLOCKITEM = ITEMS.register("resourceful_honeycomb_block",  () -> new BlockItem(HONEYCOMBBLOCK.get(), new Item.Properties().group(ItemGroup.DECORATIONS)));
+	public static final RegistryObject<Item> BEESWAX = ITEMS.register("bees_wax", () -> new Item(new Item.Properties().group(ItemGroup.DECORATIONS)));
+	public static final RegistryObject<Item> HONEYCOMBBLOCKITEM = ITEMS.register("resourceful_honeycomb_block",  () -> new BlockItem(HONEYCOMBBLOCK.get(), new Item.Properties().group(ItemGroup.DECORATIONS)));
 
 	//**************TILE ENTITIES*************************************
 
 	public static final RegistryObject<TileEntityType<?>> IRON_BEEHIVE_ENTITY = TILE_ENTITY_TYPES.register("iron_beehive", () -> TileEntityType.Builder
 			.create(IronBeehiveBlockEntity::new, IRON_BEEHIVE.get())
+			.build(null));
+
+	public static final RegistryObject<TileEntityType<?>> HONEYCOMB_BLOCK_ENTITY = TILE_ENTITY_TYPES.register("resourceful_honeycomb_block", () -> TileEntityType.Builder
+			.create(HoneycombBlockEntity::new, HONEYCOMBBLOCK.get())
 			.build(null));
 
 	//**************ENTITIES******************************************

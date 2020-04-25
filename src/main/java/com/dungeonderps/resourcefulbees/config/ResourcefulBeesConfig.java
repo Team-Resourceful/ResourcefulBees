@@ -2,7 +2,6 @@ package com.dungeonderps.resourcefulbees.config;
 
 import com.dungeonderps.resourcefulbees.ItemGroupResourcefulBees;
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
-import com.dungeonderps.resourcefulbees.data.DataPackLoader;
 import com.dungeonderps.resourcefulbees.data.RecipeBuilder;
 import com.google.gson.Gson;
 import net.minecraft.client.Minecraft;
@@ -169,6 +168,14 @@ public class ResourcefulBeesConfig {
     }
 
     public static void addBees() {
+        CustomBeeEntity.BEE_INFO.clear();
+        ItemGroupResourcefulBees.bees.clear();
+
+        BeeInfo defaultBee = new BeeInfo();
+        defaultBee.setName("Default");
+        defaultBee.setColor("#FFFFFF");
+
+
         for (File f: BEE_PATH.toFile().listFiles()) {
             String s = f.getName();
             if (s.substring(s.indexOf('.')).equals(".json")) {

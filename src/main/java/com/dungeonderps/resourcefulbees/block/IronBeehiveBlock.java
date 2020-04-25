@@ -1,16 +1,19 @@
 package com.dungeonderps.resourcefulbees.block;
 
 import com.dungeonderps.resourcefulbees.RegistryHandler;
-import net.minecraft.block.*;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.tileentity.IronBeehiveBlockEntity;
 import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.block.BeehiveBlock;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.CampfireBlock;
 import net.minecraft.entity.passive.BeeEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.tileentity.BeehiveTileEntity;
+import net.minecraft.tileentity.IronBeehiveBlockEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
@@ -141,8 +144,8 @@ public class IronBeehiveBlock extends BeehiveBlock {
       while (hive.hasCombs()) {
         ItemStack comb = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
         String honeycomb = hive.getResourceHoneyComb();
-        comb.getOrCreateChildTag("ResourcefulBees").putString("color", BEE_INFO.get(honeycomb).getColor());
-        comb.getOrCreateChildTag("ResourcefulBees").putString("beeType", BEE_INFO.get(honeycomb).getName());
+        comb.getOrCreateChildTag("ResourcefulBees").putString("Color", BEE_INFO.get(honeycomb).getColor());
+        comb.getOrCreateChildTag("ResourcefulBees").putString("BeeType", BEE_INFO.get(honeycomb).getName());
         spawnAsEntity(world, pos, comb);
       }
     }

@@ -1,5 +1,6 @@
 package com.dungeonderps.resourcefulbees;
 
+import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.config.ResourcefulBeesConfig;
 import com.dungeonderps.resourcefulbees.data.DataGen;
 import com.dungeonderps.resourcefulbees.data.DataPackLoader;
@@ -9,6 +10,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.passive.CustomBeeEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.village.PointOfInterestType;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.Heightmap;
@@ -28,8 +30,8 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Mod("resourcefulbees")
 public class ResourcefulBees
@@ -83,10 +85,27 @@ public class ResourcefulBees
     }
 
     public static void addBeeToSpawnList() {
-        for (Biome biome : ForgeRegistries.BIOMES.getValues()) {
-            biome.getSpawns(EntityClassification.CREATURE).add(new Biome.SpawnListEntry(RegistryHandler.CUSTOM_BEE.get(), 20, 3, 30));
+        ArrayList<String> biomeList = new ArrayList<>();
+        Iterator<Map.Entry<String, BeeInfo>> beeInfoIterator = CustomBeeEntity.BEE_INFO.entrySet().iterator();
+        while (beeInfoIterator.hasNext()) {
+            Map.Entry<String, BeeInfo> element = beeInfoIterator.next();
+            BeeInfo beeInfo = element.getValue();
+
+            HashMap<String, BeeInfo> tempMap = new HashMap<>();
+            tempMap.put(element.getKey(), element.getValue());
+
+
+            biomeList.add(beeInfo.getBiomeList());
         }
 
+        List<String> biomes = biomeList.stream().distinct().collect(Collectors.toList());
+
+        for (String s : biomes) {
+            String[] biomeSubstring = s.split(":");
+            Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(biomeSubstring[0], biomeSubstring[1]));
+            biome.getSpawns(EntityClassification.CREATURE).add(new Biome.SpawnListEntry(RegistryHandler.CUSTOM_BEE.get(), 20, 3, 30));
+        }
+        
         EntitySpawnPlacementRegistry.register(RegistryHandler.CUSTOM_BEE.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, CustomBeeEntity::canBeeSpawn);
     }
 }

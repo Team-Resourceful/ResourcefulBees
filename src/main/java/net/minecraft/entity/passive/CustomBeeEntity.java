@@ -52,7 +52,7 @@ public class CustomBeeEntity extends BeeEntity {
     private static final DataParameter<String> BEE_TYPE = EntityDataManager.createKey(CustomBeeEntity.class, DataSerializers.STRING);
 
     //These are needed for dynamic creation from JSON configs
-    public static final HashMap<String, BeeInfo> BEE_INFO = new HashMap<>();
+    public static final LinkedHashMap<String, BeeInfo> BEE_INFO = new LinkedHashMap<>();
 
     public CustomBeeEntity(EntityType<? extends BeeEntity> type, World world) {
         super(type, world);
@@ -240,15 +240,18 @@ public class CustomBeeEntity extends BeeEntity {
         }
     }
 
-    //REMOVE Reason Stuff AND Create Data Parameter for BeeName
     @Nullable
     @Override
     public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
-        selectRandomBee();
+        selectRandomBee(true);
         return super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
     }
 
+    //TODO Implement Biome/Dimension checking - possibly through biome setup.
     public static boolean canBeeSpawn(EntityType<? extends AnimalEntity> typeIn, IWorld worldIn, SpawnReason reason, BlockPos pos, Random randomIn) {
+
+
+
         return true; //this.remove();   <--- Use this to remove entity from world// use worldIn.getDimension & getBiome for spawn stuffs.
     }
 
@@ -278,10 +281,35 @@ public class CustomBeeEntity extends BeeEntity {
     //easier to manage bee selection for testing, could be useful for bee breeding
     //or other possible reasons for changing bee type.
     //if fleshed out further - may want to consider separate class for handling bee types
-    private void selectRandomBee(){
-        this.dataManager.set(BEE_TYPE, BEE_INFO.get(BEE_INFO.keySet().toArray()[rand.nextInt(BEE_INFO.size())]).getName());
+    private void selectRandomBee(boolean fromBiome){
+        if (fromBiome) {
+            HashMap<String, BeeInfo> tempMap = new HashMap<>();
+            Iterator<Map.Entry<String, BeeInfo>> beeInfoIterator = CustomBeeEntity.BEE_INFO.entrySet().iterator();
+            while (beeInfoIterator.hasNext()) {
+                Map.Entry<String, BeeInfo> element = beeInfoIterator.next();
+                tempMap.put(element.getKey(), element.getValue());
+            }
+            tempMap.remove("Default");
+            int randInt = rand.nextInt(tempMap.size());
+            String randomBee = tempMap.get(tempMap.keySet().toArray()[randInt]).getName();
+            String biome = tempMap.get(randomBee).getBiomeList();
+            String curBiome = this.world.getBiome(this.getPosition()).getRegistryName().toString();
+            if(!biome.toLowerCase().equals("all")) {
+                while (!biome.equals(curBiome)) {
+                    tempMap.remove(randomBee);
+                    randInt = rand.nextInt(tempMap.size());
+                    randomBee = tempMap.get(tempMap.keySet().toArray()[randInt]).getName();
+                    biome = tempMap.get(randomBee).getBiomeList();
+                }
+            }
+
+            this.dataManager.set(BEE_TYPE, BEE_INFO.get(randomBee).getName());
+        } else {
+            this.dataManager.set(BEE_TYPE, BEE_INFO.get(BEE_INFO.keySet().toArray()[rand.nextInt(BEE_INFO.size() - 1) +1]).getName());
+        }
         this.dataManager.set(BEE_COLOR, BEE_INFO.get(getBeeType()).getColor());
     }
+
 
     public void selectBeeType(String beeType){
         this.dataManager.set(BEE_TYPE, BEE_INFO.get(beeType).getName());
@@ -289,7 +317,13 @@ public class CustomBeeEntity extends BeeEntity {
     }
 
     public String getBeeType() {
-        return this.dataManager.get(BEE_TYPE);
+        BeeInfo info = BEE_INFO.get(this.dataManager.get(BEE_TYPE));
+        if (info != null) {
+            return this.dataManager.get(BEE_TYPE);
+        } else {
+            this.remove();
+            return null;
+        }
     }
 
     @Override

@@ -1,21 +1,19 @@
 package com.dungeonderps.resourcefulbees.item;
 
+import com.dungeonderps.resourcefulbees.RegistryHandler;
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.utils.Color;
-import net.minecraft.item.Item;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 
-public class ResourcefulHoneycomb extends Item {
+public class HoneycombBlockItem extends BlockItem {
 
-    public ResourcefulHoneycomb() {
-        super(new Properties().group(ItemGroup.MATERIALS));
+    public HoneycombBlockItem() {
+        super(RegistryHandler.HONEYCOMBBLOCK.get(), new Properties().group(ItemGroup.DECORATIONS));
     }
 
-    //TODO Consider using two separate textures for honeycomb
-    // -One texture for outline
-    // -Another texture to be colored.
     public static int getColor(ItemStack stack, int tintIndex){
 
         CompoundNBT honeycombNBT = stack.getChildTag("ResourcefulBees");
@@ -27,9 +25,9 @@ public class ResourcefulHoneycomb extends Item {
         CompoundNBT beeType = stack.getChildTag("ResourcefulBees");
         String name;
         if ((beeType != null && beeType.contains("BeeType"))) {
-            name = "item" + '.' + ResourcefulBees.MOD_ID + '.' + beeType.getString("BeeType").toLowerCase() + "_honeycomb";
+            name = "item" + '.' + ResourcefulBees.MOD_ID + '.' + beeType.getString("BeeType").toLowerCase() + "_honeycomb_block";
         } else {
-            name = "item" + '.' + ResourcefulBees.MOD_ID + '.' + "resourceful_honeycomb";
+            name = "item" + '.' + ResourcefulBees.MOD_ID + '.' + "resourceful_honeycomb_block";
         }
         return name;
     }

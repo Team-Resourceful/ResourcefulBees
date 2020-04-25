@@ -3,6 +3,7 @@ package com.dungeonderps.resourcefulbees.config;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class BeeInfo {
 
@@ -278,13 +279,14 @@ public class BeeInfo {
     public ArrayList<String> getInfo() {
         ArrayList<String> s = new ArrayList<>();
         String i = spawnInWorld ? "true" : "false";
+        s.add(name);
         s.add(color);
         s.add(flower);
         s.add(baseBlock);
         s.add(mutationBlock);
         s.add(centrifugeOutput);
         s.add(i);
-        s.add(dimensionList.toString());
+        s.add(Arrays.toString(dimensionList));
         s.add(biomeList);
         return s;
     }
