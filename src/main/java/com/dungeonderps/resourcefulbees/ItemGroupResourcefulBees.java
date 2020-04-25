@@ -34,8 +34,8 @@ public class ItemGroupResourcefulBees extends ItemGroup {
 		        
 		        final ItemStack combStack = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
 		        final CompoundNBT combItemTag = combStack.getOrCreateChildTag("ResourcefulBees");
-		        combItemTag.putString("color", beeType.getValue());
-		        combItemTag.putString("beeType", beeType.getKey());
+		        combItemTag.putString("Color", beeType.getValue());
+		        combItemTag.putString("BeeType", beeType.getKey());
 		        items.add(combStack);
 	        } 
     	}
