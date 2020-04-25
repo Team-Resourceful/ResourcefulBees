@@ -108,9 +108,14 @@ public class ResourcefulBees
         List<String> biomes = biomeList.stream().distinct().collect(Collectors.toList());
 
         for (String s : biomes) {
-            String[] biomeSubstring = s.split(":");
-            Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(biomeSubstring[0], biomeSubstring[1]));
-            biome.getSpawns(EntityClassification.CREATURE).add(new Biome.SpawnListEntry(RegistryHandler.CUSTOM_BEE.get(), 20, 3, 30));
+            if (!s.contains(" ")) {
+                LOGGER.info("this biome is being added: " + s);
+                Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(s));
+                LOGGER.info("value returned after inputing biome: " + biome);
+                if (biome != null) {
+                    biome.getSpawns(EntityClassification.CREATURE).add(new Biome.SpawnListEntry(RegistryHandler.CUSTOM_BEE.get(), 20, 3, 30));
+                }
+            }
         }
 
         EntitySpawnPlacementRegistry.register(RegistryHandler.CUSTOM_BEE.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, CustomBeeEntity::canBeeSpawn);
