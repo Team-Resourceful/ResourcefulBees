@@ -13,7 +13,7 @@ import java.util.Map;
 import static com.dungeonderps.resourcefulbees.ResourcefulBees.LOGGER;
 
 public class DataPackLoader {
-    public static void serverStarting(FMLServerAboutToStartEvent event) {
+    public static void serverAboutToStart(FMLServerAboutToStartEvent event) {
         event.getServer().getResourcePacks().addPackFinder(new IPackFinder() {
             @Override
             public <T extends ResourcePackInfo> void addPackInfosToMap(Map<String, T> nameToPackMap, ResourcePackInfo.IFactory<T> packInfoFactory) {

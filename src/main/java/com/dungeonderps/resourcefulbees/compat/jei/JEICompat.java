@@ -2,7 +2,7 @@ package com.dungeonderps.resourcefulbees.compat.jei;
 
 import com.dungeonderps.resourcefulbees.RegistryHandler;
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
-import com.dungeonderps.resourcefulbees.item.ModdedSpawnEggItem;
+import com.dungeonderps.resourcefulbees.item.BeeSpawnEggItem;
 import com.dungeonderps.resourcefulbees.item.ResourcefulHoneycomb;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.ingredients.subtypes.ISubtypeInterpreter;
@@ -47,9 +47,9 @@ public class JEICompat implements IModPlugin {
     /*
     private static final ISubtypeInterpreter beeSpawnEggSubtype = stack -> {
         Item item = stack.getItem();
-        if( !(item instanceof ModdedSpawnEggItem) ) return "";
+        if( !(item instanceof BeeSpawnEggItem) ) return "";
 
-        ModdedSpawnEggItem egg = (ModdedSpawnEggItem) item;
+        BeeSpawnEggItem egg = (BeeSpawnEggItem) item;
 
         String spawnEgg = egg.getTranslationKey(stack);
         return spawnEgg;

@@ -12,7 +12,6 @@ public class BeeInfo {
 
     private String name, flower, color, biomeList, baseBlock, mutationBlock, centrifugeOutput;
     private boolean spawnInWorld;
-    private int[] dimensionList;
 
     private transient boolean enabled;
     // color stuff
@@ -75,25 +74,6 @@ public class BeeInfo {
      */
     public void setColor(String color) {
         this.color = color;
-    }
-
-    /**
-     * NOT CURRENTLY USED
-     * Gets the dimension(s) this bee can spawn in.
-     * @return this bee's spawnable dimension(s).
-     */
-    public int[] getDimensionList() {
-        return this.dimensionList;
-    }
-
-    /**
-     * NOT CURRENTLY USED
-     * Sets the dimension(s) this bee can spawn in.
-     * Can be used to modify bees through code.
-     * @param dimensionList this bee's spawnable dimension(s).
-     */
-    public void setDimensionList(int[] dimensionList) {
-        this.dimensionList = dimensionList;
     }
 
     /**
@@ -279,14 +259,12 @@ public class BeeInfo {
     public ArrayList<String> getInfo() {
         ArrayList<String> s = new ArrayList<>();
         String i = spawnInWorld ? "true" : "false";
-        s.add(name);
         s.add(color);
         s.add(flower);
         s.add(baseBlock);
         s.add(mutationBlock);
         s.add(centrifugeOutput);
         s.add(i);
-        s.add(Arrays.toString(dimensionList));
         s.add(biomeList);
         return s;
     }

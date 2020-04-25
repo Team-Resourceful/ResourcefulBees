@@ -3,11 +3,14 @@ package net.minecraft.entity.passive;
 import com.dungeonderps.resourcefulbees.RegistryHandler;
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
+import com.dungeonderps.resourcefulbees.entity.goals.BeeBreedGoal;
+import io.netty.util.internal.shaded.org.jctools.queues.SpscLinkedQueue;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.DoublePlantBlock;
 import net.minecraft.entity.AgeableEntity;
+import java.util.Map.Entry;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.SpawnReason;
@@ -15,6 +18,10 @@ import net.minecraft.entity.ai.goal.BreedGoal;
 import net.minecraft.entity.ai.goal.FollowParentGoal;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.goal.TemptGoal;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.SpawnEggItem;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
@@ -25,6 +32,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tileentity.IronBeehiveBlockEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -64,7 +72,7 @@ public class CustomBeeEntity extends BeeEntity {
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new BeeEntity.StingGoal(this, 1.4, true));
         this.goalSelector.addGoal(1, new BeeEntity.EnterBeehiveGoal());
-        this.goalSelector.addGoal(2, new BreedGoal(this, 1.0D));
+        this.goalSelector.addGoal(2, new BeeBreedGoal(this, 1.0D));
         this.goalSelector.addGoal(3, new TemptGoal(this, 1.25D, Ingredient.fromTag(ItemTags.FLOWERS), false));
         this.pollinateGoal = new PollinateGoal2();
         this.goalSelector.addGoal(4, this.pollinateGoal);
@@ -240,19 +248,20 @@ public class CustomBeeEntity extends BeeEntity {
         }
     }
 
+    //REMOVE Reason Stuff AND Create Data Parameter for BeeName
     @Nullable
     @Override
     public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
-        selectRandomBee(true);
+        if (reason.equals(SpawnReason.CHUNK_GENERATION) || reason.equals(SpawnReason.NATURAL)){
+            selectRandomBee(true);
+        }
+        else
+            selectRandomBee(false);
         return super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
     }
 
-    //TODO Implement Biome/Dimension checking - possibly through biome setup.
     public static boolean canBeeSpawn(EntityType<? extends AnimalEntity> typeIn, IWorld worldIn, SpawnReason reason, BlockPos pos, Random randomIn) {
-
-
-
-        return true; //this.remove();   <--- Use this to remove entity from world// use worldIn.getDimension & getBiome for spawn stuffs.
+        return worldIn.getLightSubtracted(pos, 0) > 8;
     }
 
     @Override
@@ -310,7 +319,6 @@ public class CustomBeeEntity extends BeeEntity {
         this.dataManager.set(BEE_COLOR, BEE_INFO.get(getBeeType()).getColor());
     }
 
-
     public void selectBeeType(String beeType){
         this.dataManager.set(BEE_TYPE, BEE_INFO.get(beeType).getName());
         this.dataManager.set(BEE_COLOR, BEE_INFO.get(beeType).getColor());
@@ -326,11 +334,52 @@ public class CustomBeeEntity extends BeeEntity {
         }
     }
 
-    @Override
-    public CustomBeeEntity createChild(AgeableEntity ageable) {
+    public CustomBeeEntity createSelectedChild(String beeType) {
         CustomBeeEntity childBee = new CustomBeeEntity(RegistryHandler.CUSTOM_BEE.get(), this.world);
-        childBee.selectBeeType(BEE_INFO.get(BEE_INFO.keySet().toArray()[rand.nextInt(BEE_INFO.size())]).getName());
+        childBee.selectBeeType(beeType);
         return childBee;
+    }
+
+    @Override
+    public boolean processInteract(PlayerEntity player, Hand hand) {
+        ItemStack itemstack = player.getHeldItem(hand);
+        Item item = itemstack.getItem();
+        if (this.isBreedingItem(itemstack)) {
+            if (!this.world.isRemote && this.getGrowingAge() == 0 && this.canBreed()) {
+                this.consumeItemFromStack(player, itemstack);
+                this.setInLove(player);
+                player.func_226292_a_(hand, true);
+                return true;
+            }
+
+            if (this.isChild()) {
+                this.consumeItemFromStack(player, itemstack);
+                this.ageUp((int)((float)(-this.getGrowingAge() / 20) * 0.1F), true);
+                return true;
+            }
+        }
+        if (item instanceof SpawnEggItem && ((SpawnEggItem)item).hasType(itemstack.getTag(), this.getType())) {
+            if (!this.world.isRemote) {
+                AgeableEntity ageableentity = this.createSelectedChild(this.getBeeType());
+                if (ageableentity != null) {
+                    ageableentity.setGrowingAge(-24000);
+                    ageableentity.setLocationAndAngles(this.getPosX(), this.getPosY(), this.getPosZ(), 0.0F, 0.0F);
+                    this.world.addEntity(ageableentity);
+                    if (itemstack.hasDisplayName()) {
+                        ageableentity.setCustomName(itemstack.getDisplayName());
+                    }
+
+                    this.onChildSpawnFromEgg(player, ageableentity);
+                    if (!player.abilities.isCreativeMode) {
+                        itemstack.shrink(1);
+                    }
+                }
+            }
+
+            return true;
+        } else {
+            return false;
+        }
     }
 
     // TODO Override Breeding Goal for custom bee breeding system.
