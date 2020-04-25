@@ -2,7 +2,6 @@ package com.dungeonderps.resourcefulbees.config;
 
 import com.dungeonderps.resourcefulbees.ItemGroupResourcefulBees;
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
-import com.dungeonderps.resourcefulbees.data.DataPackLoader;
 import com.dungeonderps.resourcefulbees.data.RecipeBuilder;
 import com.google.gson.Gson;
 import net.minecraft.client.Minecraft;
@@ -16,7 +15,6 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.loading.FMLPaths;
 
 import java.io.*;
-import java.net.URISyntaxException;
 import java.nio.file.*;
 import java.util.Map;
 
@@ -85,11 +83,11 @@ public class ResourcefulBeesConfig {
         }*/
         for (String bee : DEFAULT_BEES) {
             String path = ASSETS_DIR + bee;   //This allows me to dynamically change the path and later create the new path
-                try {
-                    Path filePath = Paths.get(ResourcefulBees.class.getResource(path).toURI());  //This gets the existing file from the assets directory
-                    Path newPath =  Paths.get(BEE_PATH.toString() + "/" + bee);  //This is necessary because the target path needs to include the file name
-                    Files.copy(filePath, newPath, StandardCopyOption.REPLACE_EXISTING);
-                } catch (URISyntaxException | IOException e) {
+                try (InputStream inputStream = ResourcefulBees.class.getResourceAsStream(path)){
+                    Path newPath =  Paths.get(BEE_PATH.toString() + "/" + bee);
+                    File targetFile = new File(String.valueOf(newPath));
+                    Files.copy(inputStream, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    } catch (IOException e) {
                     e.printStackTrace();
                 }
         }

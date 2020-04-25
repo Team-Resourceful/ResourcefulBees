@@ -1,7 +1,7 @@
 package com.dungeonderps.resourcefulbees;
 
-import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.commands.ResourcefulBeeCommands;
+import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.config.ResourcefulBeesConfig;
 import com.dungeonderps.resourcefulbees.data.DataGen;
 import com.dungeonderps.resourcefulbees.data.DataPackLoader;
@@ -79,7 +79,7 @@ public class ResourcefulBees
         RegistryHandler.IRON_BEEHIVE.get().getStateContainer().getValidStates().forEach(blockState -> pointOfInterestTypeMap.put(blockState, RegistryHandler.IRON_BEEHIVE_POI.get()));
         PointOfInterestType.POIT_BY_BLOCKSTATE.putAll(pointOfInterestTypeMap);
 
-        addBeeToSpawnList();
+        //addBeeToSpawnList();
     }
 
     private void serverStarting(FMLServerStartingEvent event) {
