@@ -44,14 +44,17 @@ public class BeeSpawnEggItem extends SpawnEggItem {
     public ActionResultType onItemUse(ItemUseContext context) {
         ItemStack itemstack = context.getItem();
         PlayerEntity player = context.getPlayer();
-        String stackNbt = itemstack.getChildTag("ResourcefulBees").getString("beeType");
-        if (CustomBeeEntity.BEE_INFO.get(stackNbt) == null && !itemstack.isEmpty()) {
-            for (int i = 0; i < player.inventory.getSizeInventory(); i++){
-                if (player.inventory.getStackInSlot(i) == itemstack){
-                    player.inventory.removeStackFromSlot(i);
+        if (itemstack.getChildTag("ResourcefulBees") != null) {
+            String stackNbt = itemstack.getChildTag("ResourcefulBees").getString("beeType");
+            if (CustomBeeEntity.BEE_INFO.get(stackNbt) == null && !itemstack.isEmpty()) {
+                for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
+                    if (player.inventory.getStackInSlot(i) == itemstack) {
+                        player.inventory.removeStackFromSlot(i);
+                    }
                 }
-            }
-            return ActionResultType.FAIL;
+                return ActionResultType.FAIL;
+            } else
+                return super.onItemUse(context);
         }
         else
             return super.onItemUse(context);

@@ -74,6 +74,7 @@ public class ResourcefulBeesConfig {
 
             COMMON_CONFIG = COMMON_BUILDER.build();
 
+            //addBees();
             setupDefaultBees();
         }
     }
@@ -178,6 +179,7 @@ public class ResourcefulBeesConfig {
         defaultBee.setFlower("minecraft:poppy");
         defaultBee.setBaseBlock("minecraft:stone");
         defaultBee.setMutationBlock("minecraft:stone");
+        defaultBee.setBiomeList("test");
         CustomBeeEntity.BEE_INFO.put("Default", defaultBee);
 
         for (File f: BEE_PATH.toFile().listFiles()) {
