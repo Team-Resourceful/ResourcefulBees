@@ -79,7 +79,7 @@ public class ResourcefulBees
         RegistryHandler.IRON_BEEHIVE.get().getStateContainer().getValidStates().forEach(blockState -> pointOfInterestTypeMap.put(blockState, RegistryHandler.IRON_BEEHIVE_POI.get()));
         PointOfInterestType.POIT_BY_BLOCKSTATE.putAll(pointOfInterestTypeMap);
 
-        //addBeeToSpawnList();
+        addBeeToSpawnList();
     }
 
     private void serverStarting(FMLServerStartingEvent event) {
