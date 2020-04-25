@@ -2,16 +2,14 @@ package com.dungeonderps.resourcefulbees.compat.jei;
 
 import com.dungeonderps.resourcefulbees.RegistryHandler;
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
-import com.dungeonderps.resourcefulbees.item.BeeSpawnEggItem;
 import com.dungeonderps.resourcefulbees.item.ResourcefulHoneycomb;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.ingredients.subtypes.ISubtypeInterpreter;
 import mezz.jei.api.registration.ISubtypeRegistration;
 import net.minecraft.item.Item;
-import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
+
 import javax.annotation.Nonnull;
-import static com.dungeonderps.resourcefulbees.ResourcefulBees.LOGGER;
 
 @mezz.jei.api.JeiPlugin
 public class JEICompat implements IModPlugin {
@@ -40,7 +38,6 @@ public class JEICompat implements IModPlugin {
         ResourcefulHoneycomb comb = (ResourcefulHoneycomb) item;
 
         String combStack = comb.getTranslationKey(stack);
-        LOGGER.warn(combStack);
         return combStack;
     };
 
