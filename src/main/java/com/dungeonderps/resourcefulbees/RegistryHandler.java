@@ -1,7 +1,7 @@
 package com.dungeonderps.resourcefulbees;
 
 import com.dungeonderps.resourcefulbees.block.IronBeehiveBlock;
-import com.dungeonderps.resourcefulbees.item.ModdedSpawnEggItem;
+import com.dungeonderps.resourcefulbees.item.BeeSpawnEggItem;
 import com.dungeonderps.resourcefulbees.item.ResourcefulHoneycomb;
 import com.dungeonderps.resourcefulbees.item.Smoker;
 import com.google.common.collect.Sets;
@@ -81,5 +81,5 @@ public class RegistryHandler {
 
 	//*************SPAWN EGGS******************************************
 
-	public static final RegistryObject<Item> BEE_SPAWN_EGG = ITEMS.register("bee_spawn_egg", () -> new ModdedSpawnEggItem(CUSTOM_BEE, 0xffffff, 0xffffff, (new Item.Properties())));
+	public static final RegistryObject<Item> BEE_SPAWN_EGG = ITEMS.register("bee_spawn_egg", () -> new BeeSpawnEggItem(CUSTOM_BEE, 0xffffff, 0xffffff, (new Item.Properties())));
 }

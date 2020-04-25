@@ -169,6 +169,17 @@ public class ResourcefulBeesConfig {
     }
 
     public static void addBees() {
+        ItemGroupResourcefulBees.bees.clear();
+        CustomBeeEntity.BEE_INFO.clear();
+
+        BeeInfo defaultBee = new BeeInfo();
+        defaultBee.setName("Default");
+        defaultBee.setColor("#FFFFFF");
+        defaultBee.setFlower("minecraft:poppy");
+        defaultBee.setBaseBlock("minecraft:stone");
+        defaultBee.setMutationBlock("minecraft:stone");
+        CustomBeeEntity.BEE_INFO.put("Default", defaultBee);
+
         for (File f: BEE_PATH.toFile().listFiles()) {
             String s = f.getName();
             if (s.substring(s.indexOf('.')).equals(".json")) {

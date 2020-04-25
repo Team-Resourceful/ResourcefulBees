@@ -290,14 +290,14 @@ public class CustomBeeEntity extends BeeEntity {
     }
 
     public String getBeeType() {
-        return this.dataManager.get(BEE_TYPE);
-    }
-
-    @Override
-    public CustomBeeEntity createChild(AgeableEntity ageable) {
-        CustomBeeEntity childBee = new CustomBeeEntity(RegistryHandler.CUSTOM_BEE.get(), this.world);
-        childBee.selectBeeType(BEE_INFO.get(BEE_INFO.keySet().toArray()[rand.nextInt(BEE_INFO.size())]).getName());
-        return childBee;
+        if (BEE_INFO.get(this.dataManager.get(BEE_TYPE)) !=null ){
+            return this.dataManager.get(BEE_TYPE);
+        }
+        else {
+            LOGGER.info(BEE_INFO.get("Default"));
+            this.remove();
+            return "Default";
+        }
     }
 
     public CustomBeeEntity createSelectedChild(String beeType) {
