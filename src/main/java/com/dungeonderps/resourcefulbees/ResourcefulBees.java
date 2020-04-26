@@ -4,7 +4,6 @@ import com.dungeonderps.resourcefulbees.commands.ResourcefulBeeCommands;
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.config.ResourcefulBeesConfig;
 import com.dungeonderps.resourcefulbees.data.DataGen;
-import com.dungeonderps.resourcefulbees.data.DataPackLoader;
 import com.dungeonderps.resourcefulbees.data.RecipeBuilder;
 import com.dungeonderps.resourcefulbees.entity.CustomBeeRenderer;
 import com.dungeonderps.resourcefulbees.utils.ColorHandler;
@@ -58,7 +57,6 @@ public class ResourcefulBees
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(DataGen::gatherData);
 
-        MinecraftForge.EVENT_BUS.addListener(DataPackLoader::serverAboutToStart);
         MinecraftForge.EVENT_BUS.addListener(this::serverStarting);
         MinecraftForge.EVENT_BUS.addListener(this::OnServerSetup);
         DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
@@ -98,7 +96,7 @@ public class ResourcefulBees
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {
-        new ItemGroupResourcefulBees();
+        //new ItemGroupResourcefulBees();
         RenderingRegistry.registerEntityRenderingHandler(RegistryHandler.CUSTOM_BEE.get(), CustomBeeRenderer::new);
     }
 

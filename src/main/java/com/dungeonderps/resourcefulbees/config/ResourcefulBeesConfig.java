@@ -2,7 +2,6 @@ package com.dungeonderps.resourcefulbees.config;
 
 import com.dungeonderps.resourcefulbees.ItemGroupResourcefulBees;
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
-import com.dungeonderps.resourcefulbees.data.RecipeBuilder;
 import com.google.gson.Gson;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.passive.CustomBeeEntity;
@@ -41,8 +40,6 @@ public class ResourcefulBeesConfig {
 
     public static Path BEE_PATH;
     public static Path RESOURCE_PATH;
-    public static Path DATAPACK_PATH;
-    public static Path RECIPE_PATH;
 
     // CONFIGS
     public static ForgeConfigSpec.BooleanValue GENERATE_DEFAULTS;
@@ -103,12 +100,8 @@ public class ResourcefulBeesConfig {
         // subfolder for bees
         Path rbBeesPath = Paths.get(configPath.toAbsolutePath().toString(),ResourcefulBees.MOD_ID, "bees");
         Path rbAssetsPath = Paths.get(configPath.toAbsolutePath().toString(),ResourcefulBees.MOD_ID, "resources");
-        Path rbDatapackPath = Paths.get(rbAssetsPath.toAbsolutePath().toString(), "datapack");
-        Path rbDatapackRecipesPath = Paths.get(rbDatapackPath.toAbsolutePath().toString(), "data/resourcefulbees/recipes");
         BEE_PATH = rbBeesPath;
         RESOURCE_PATH = rbAssetsPath;
-        DATAPACK_PATH = rbDatapackPath;
-        RECIPE_PATH = rbDatapackRecipesPath;
 
         try { Files.createDirectories(rbBeesPath);
         } catch (FileAlreadyExistsException e) { // do nothing
@@ -117,19 +110,6 @@ public class ResourcefulBeesConfig {
         try { Files.createDirectory(rbAssetsPath);
         } catch (FileAlreadyExistsException e) { // do nothing
         } catch (IOException e) { LOGGER.error("Failed to create assets directory");}
-
-        try {
-            Files.createDirectory(rbDatapackPath);
-            FileWriter file = new FileWriter(Paths.get(DATAPACK_PATH.toString(), "pack.mcmeta").toFile());
-            String mcMetaContent = "{\"pack\":{\"pack_format\":1,\"description\":\"Auto generated recipes for Resourceful Bees.\"}}";
-            file.write(mcMetaContent);
-            file.close();
-        } catch (FileAlreadyExistsException e) { // do nothing
-        } catch (IOException e) { LOGGER.error("Failed to create datapack directory");}
-
-        try { Files.createDirectories(rbDatapackRecipesPath);
-        } catch (FileAlreadyExistsException e) { // do nothing
-        } catch (IOException e) { LOGGER.error("Failed to create recipes directory");}
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfig.COMMON_CONFIG, "resourcefulbees/common.toml");
 
@@ -163,12 +143,9 @@ public class ResourcefulBeesConfig {
         BeeInfo bee = gson.fromJson(r, BeeInfo.class);
         bee.setName(name);
         CustomBeeEntity.BEE_INFO.put(name, bee);
-        //RecipeBuilder.buildRecipe(bee.getColor(), name);
-        ItemGroupResourcefulBees.bees.put(name, bee.getColor());
     }
 
     public static void addBees() {
-        ItemGroupResourcefulBees.bees.clear();
         CustomBeeEntity.BEE_INFO.clear();
 
         BeeInfo defaultBee = new BeeInfo();
