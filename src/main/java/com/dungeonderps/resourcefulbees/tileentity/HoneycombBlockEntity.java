@@ -2,6 +2,7 @@ package com.dungeonderps.resourcefulbees.tileentity;
 
 import com.dungeonderps.resourcefulbees.RegistryHandler;
 import com.dungeonderps.resourcefulbees.block.HoneycombBlock;
+import com.dungeonderps.resourcefulbees.utils.Color;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
@@ -16,6 +17,12 @@ public class HoneycombBlockEntity extends TileEntity {
     }
 
     public TileEntityType<?> getType() {return RegistryHandler.HONEYCOMB_BLOCK_ENTITY.get(); }
+
+
+    public int getColor(){
+        return Color.parseInt(combColor);
+    }
+
 
     @Override
     public void read(CompoundNBT compound) {
