@@ -10,7 +10,6 @@ import com.google.common.collect.Sets;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.material.MaterialColor;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.CustomBeeEntity;
@@ -60,7 +59,7 @@ public class RegistryHandler {
 	public static final RegistryObject<Item> BELLOW = ITEMS.register("bellow", () -> new Item(new Item.Properties().group(ItemGroup.MISC)));
 	public static final RegistryObject<Item> SMOKERCAN = ITEMS.register("smoker_can", () -> new Item(new Item.Properties().group(ItemGroup.MISC)));
 	public static final RegistryObject<Item> BEESWAX = ITEMS.register("bees_wax", () -> new Item(new Item.Properties().group(ItemGroup.DECORATIONS)));
-	public static final RegistryObject<Item> HONEYCOMBBLOCKITEM = ITEMS.register("resourceful_honeycomb_block",  () -> new BlockItem(HONEYCOMBBLOCK.get(), new Item.Properties().group(ItemGroup.DECORATIONS)));
+	public static final RegistryObject<Item> HONEYCOMBBLOCKITEM = ITEMS.register("resourceful_honeycomb_block",  () -> new BlockItem(HONEYCOMBBLOCK.get(), new Item.Properties()));
 
 	//**************TILE ENTITIES*************************************
 

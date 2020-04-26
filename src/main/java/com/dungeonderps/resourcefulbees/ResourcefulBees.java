@@ -3,6 +3,7 @@ package com.dungeonderps.resourcefulbees;
 import com.dungeonderps.resourcefulbees.commands.ResourcefulBeeCommands;
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.config.ResourcefulBeesConfig;
+import com.dungeonderps.resourcefulbees.data.BlockItemFunction;
 import com.dungeonderps.resourcefulbees.data.DataGen;
 import com.dungeonderps.resourcefulbees.data.DataPackLoader;
 import com.dungeonderps.resourcefulbees.data.RecipeBuilder;
@@ -17,6 +18,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.village.PointOfInterestType;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.Heightmap;
+import net.minecraft.world.storage.loot.functions.LootFunctionManager;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.DistExecutor;
@@ -64,6 +66,7 @@ public class ResourcefulBees
         DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
             FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
             FMLJavaModLoadingContext.get().getModEventBus().addListener(ColorHandler::onItemColors);
+            FMLJavaModLoadingContext.get().getModEventBus().addListener(ColorHandler::onBlockColors);
         });
 
 
@@ -89,6 +92,8 @@ public class ResourcefulBees
         Map<BlockState, PointOfInterestType> pointOfInterestTypeMap = new HashMap<>();
         RegistryHandler.IRON_BEEHIVE.get().getStateContainer().getValidStates().forEach(blockState -> pointOfInterestTypeMap.put(blockState, RegistryHandler.IRON_BEEHIVE_POI.get()));
         PointOfInterestType.POIT_BY_BLOCKSTATE.putAll(pointOfInterestTypeMap);
+
+        LootFunctionManager.registerFunction(new BlockItemFunction.Serializer());
 
         addBeeToSpawnList();
     }

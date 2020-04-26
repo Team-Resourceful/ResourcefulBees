@@ -1,12 +1,15 @@
 package com.dungeonderps.resourcefulbees.utils;
 
+import com.dungeonderps.resourcefulbees.RegistryHandler;
+import com.dungeonderps.resourcefulbees.block.HoneycombBlock;
 import com.dungeonderps.resourcefulbees.item.ResourcefulHoneycomb;
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.color.BlockColors;
+import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.util.IItemProvider;
 import net.minecraftforge.client.event.ColorHandlerEvent;
-import com.dungeonderps.resourcefulbees.ResourcefulBees;
-import com.dungeonderps.resourcefulbees.RegistryHandler;
 
 import static com.dungeonderps.resourcefulbees.ResourcefulBees.LOGGER;
 
@@ -15,16 +18,28 @@ public final class ColorHandler {
 
     public static void onItemColors(ColorHandlerEvent.Item event) {
         ItemColors colors = event.getItemColors();
-        LOGGER.info("on Item Colors");
         registerItems(colors, ResourcefulHoneycomb::getColor, RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
+        registerItems(colors, HoneycombBlock::getItemColor, RegistryHandler.HONEYCOMBBLOCKITEM.get());
+    }
+
+    public static void onBlockColors(ColorHandlerEvent.Block event){
+        BlockColors colors = event.getBlockColors();
+        registerBlocks(colors, HoneycombBlock::getBlockColor, RegistryHandler.HONEYCOMBBLOCK.get());
     }
 
     private static void registerItems(ItemColors handler, IItemColor itemColor, IItemProvider... items) {
         try {
-            LOGGER.info("item/comb color registration");
             handler.register(itemColor, items);
         } catch (NullPointerException ex) {
-            ResourcefulBees.LOGGER.error("ItemColor Registration Failed", ex);
+            LOGGER.error("ItemColor Registration Failed", ex);
+        }
+    }
+
+    private static void registerBlocks(BlockColors handler, IBlockColor blockColor, Block... blocks) {
+        try{
+            handler.register(blockColor, blocks);
+        } catch (NullPointerException ex) {
+            LOGGER.error("BlockColor Registration Failed", ex);
         }
     }
 }

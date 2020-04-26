@@ -6,17 +6,10 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "beesourceful:diamond_honeycomb_block",
+          "name": "resourcefulbees:resourceful_honeycomb_block",
           "functions": [
             {
-              "function": "set_nbt",
-              "tag": "ResourcefulBees",
-              "functions": [
-                {
-                  "function": "set_nbt",
-                  "tag": "BeeType"
-                }
-              ]
+              "function": "resourcefulbees:blockitem"
             }
           ]
         }

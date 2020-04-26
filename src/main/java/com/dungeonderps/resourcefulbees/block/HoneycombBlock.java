@@ -24,7 +24,7 @@ import javax.annotation.Nullable;
 public class HoneycombBlock extends Block {
 
     public String blockColor = "0xFFFFFF";
-    public String beeType = "Default";
+    public String beeType = "default";
 
     public HoneycombBlock() {
         super(Block.Properties.from(Blocks.HONEYCOMB_BLOCK));
@@ -33,6 +33,10 @@ public class HoneycombBlock extends Block {
     public void setBlockColor(String blockColor) {
         this.blockColor = blockColor;
     }
+
+
+
+
 
     public void setBeeType(String beeType) {
         this.beeType = beeType;
@@ -57,9 +61,29 @@ public class HoneycombBlock extends Block {
         return honeyCombBlockItemStack;
     }
 
-    public static int getColor(BlockState state, @Nullable IBlockReader world, @Nullable BlockPos pos, int tintIndex){
-        HoneycombBlock combBlock = (HoneycombBlock)state.getBlock();
-        return Color.parseInt(combBlock.blockColor);
+    public static int getBlockColor(BlockState state, @Nullable IBlockReader world, @Nullable BlockPos pos, int tintIndex){
+        LOGGER.info("Setting Block Color");
+        if(world != null && pos != null) {
+            TileEntity tile = world.getTileEntity(pos);
+            if (tile instanceof HoneycombBlockEntity) {
+                //HoneycombBlockEntity combBlock = (HoneycombBlockEntity) tile;
+                return ((HoneycombBlockEntity) tile).getColor();
+                //CompoundNBT combNBT = combBlock.getTileData().getCompound("ResourcefulBees");
+                //String color = combNBT.getString("Color");
+                //return Color.parseInt(color);
+             }
+        }
+        return 0x000000;
+        //HoneycombBlock combBlock = (HoneycombBlock)state.getBlock();
+        //return Color.parseInt(combBlock.blockColor);
+    }
+
+
+
+    public static int getItemColor(ItemStack stack, int tintIndex){
+        LOGGER.info("Getting Comb Color");
+        CompoundNBT honeycombNBT = stack.getChildTag("ResourcefulBees");
+        return honeycombNBT != null && honeycombNBT.contains("Color") ? Color.parseInt(honeycombNBT.getString("Color")) : 0x000000;
     }
 
     public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
