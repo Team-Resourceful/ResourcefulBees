@@ -1,28 +1,73 @@
 package com.dungeonderps.resourcefulbees.data;
 
-import com.dungeonderps.resourcefulbees.config.ResourcefulBeesConfig;
+import com.dungeonderps.resourcefulbees.RegistryHandler;
+import com.dungeonderps.resourcefulbees.ResourcefulBees;
+import com.dungeonderps.resourcefulbees.config.BeeInfo;
+import net.minecraft.entity.passive.CustomBeeEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.RecipeManager;
+import net.minecraft.item.crafting.ShapedRecipe;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.resources.IResourceManager;
+import net.minecraft.resources.IResourceManagerReloadListener;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.crafting.NBTIngredient;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.FileAlreadyExistsException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
-import static com.dungeonderps.resourcefulbees.ResourcefulBees.LOGGER;
-public class RecipeBuilder {
+public class RecipeBuilder implements IResourceManagerReloadListener {
+    @Override
+    public void onResourceManagerReload(IResourceManager resourceManager) {
+        MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
 
-    public static void buildRecipe(String color, String BeeType) {
-        try {
-            Path recipeFile = Paths.get(ResourcefulBeesConfig.RECIPE_PATH.toString(),"/" + BeeType.toLowerCase() + ".json");
-            LOGGER.info(recipeFile.toString());
-            FileWriter file = new FileWriter(recipeFile.toFile());
-            String honeyCombBlock = String.format("{\"type\": \"minecraft:crafting_shaped\",\"pattern\": [\"CCC\",\"CCC\",\"CCC\"],\"key\": { \"C\": { \"type\": \"forge:nbt\", \"item\": \"resourcefulbees:resourceful_honeycomb\", \"nbt\":{ \"ResourcefulBees\":{\"Color\": \"%1$s\",\"BeeType\":\"%2$s\"}}}},\"result\":{\"item\":\"resourcefulbees:resourceful_honeycomb\",\"nbt\":{\"ResourcefulBees\":{\"Color\":\"%1$s\",\"BeeType\":\"%2$s\"}}}}", color, BeeType);
-            LOGGER.info(honeyCombBlock);
-            file.write(honeyCombBlock);
-            file.close();
-        } catch (IOException e) {
-            LOGGER.error("Failed to create resourcefulbees recipes.");
+        RecipeManager recipeManager = server.getRecipeManager();
+        recipeManager.recipes = new HashMap<>(recipeManager.recipes);
+        recipeManager.recipes.replaceAll((t, v) -> new HashMap<>(recipeManager.recipes.get(t)));
+        Map<ResourceLocation, IRecipe<?>> recipes = recipeManager.recipes.get(IRecipeType.CRAFTING);
+        for (Map.Entry<String, BeeInfo> beeType : CustomBeeEntity.BEE_INFO.entrySet()){
+            if (beeType.getKey() == "Default")
+                continue;
+            else {
+                IRecipe<?> honeyComb = this.makeHoneyCombRecipe(beeType.getKey(), beeType.getValue().getColor());
+                if (honeyComb != null)
+                    recipes.put(honeyComb.getId(), honeyComb);
+            }
+        }
+    }
+    private IRecipe<?> makeHoneyCombRecipe(String BeeType, String Color) {
+        ItemStack honeyCombItemStack = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
+        final CompoundNBT honeyCombItemStackTag = honeyCombItemStack.getOrCreateChildTag("ResourcefulBees");
+        honeyCombItemStackTag.putString("Color", Color);
+        honeyCombItemStackTag.putString("BeeType", BeeType);
+        Ingredient honeyCombItem = new CustomNBTIngredient(honeyCombItemStack);
+        NonNullList<Ingredient> inputs = NonNullList.from(Ingredient.EMPTY,
+                honeyCombItem, honeyCombItem, honeyCombItem,
+                honeyCombItem, honeyCombItem, honeyCombItem,
+                honeyCombItem, honeyCombItem, honeyCombItem
+        );
+
+        final ItemStack honeyCombOutput = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
+        final CompoundNBT honeyCombBlockItemTag = honeyCombOutput.getOrCreateChildTag("ResourcefulBees");
+        honeyCombBlockItemTag.putString("Color", Color);
+        honeyCombBlockItemTag.putString("BeeType", BeeType);
+
+        ResourceLocation name = new ResourceLocation(ResourcefulBees.MOD_ID, BeeType.toLowerCase() + "_honeycomb");
+
+        return new ShapedRecipe(name, "", 3, 3, inputs, honeyCombOutput);
+    }
+
+    private static class CustomNBTIngredient extends NBTIngredient
+    {
+        public CustomNBTIngredient(ItemStack stack)
+        {
+            super(stack);
         }
     }
 }

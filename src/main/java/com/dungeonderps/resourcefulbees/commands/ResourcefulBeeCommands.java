@@ -45,14 +45,6 @@ public class ResourcefulBeeCommands
 
     private static int reloadBees(ServerPlayerEntity player) {
         //TODO Make it so only OPs can do this command right now anyone can :MonkaS:
-        try {
-            FileUtils.deleteDirectory(Paths.get(FMLPaths.CONFIGDIR.get().toString(), "resourcefulbees", "resources", "datapack", "data", "resourcefulbees","recipes").toFile());
-        } catch (IOException e) {
-            LOGGER.error("Failled to delete recipe directory.");
-        }
-        try { Files.createDirectories(ResourcefulBeesConfig.RECIPE_PATH);
-        } catch (FileAlreadyExistsException e) { // do nothing
-        } catch (IOException e) { LOGGER.error("Failed to create recipes directory");}
         ResourcefulBeesConfig.addBees();
         player.getServer().reload();
         player.sendMessage(new StringTextComponent("RELOAD!, New bees added!").applyTextStyle(TextFormatting.RED));

@@ -2,6 +2,7 @@
 package com.dungeonderps.resourcefulbees.block;
 
 
+import com.dungeonderps.resourcefulbees.RegistryHandler;
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.tileentity.HoneycombBlockEntity;
 import com.dungeonderps.resourcefulbees.utils.Color;
@@ -11,8 +12,10 @@ import net.minecraft.block.Blocks;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
@@ -35,13 +38,26 @@ public class HoneycombBlock extends Block {
         this.beeType = beeType;
     }
 
+    @Override
+    public boolean hasTileEntity(BlockState state) {
+        return true;
+    }
+
     @Nullable
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) { return new HoneycombBlockEntity();}
 
+    @Override
+    public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
+        ItemStack honeyCombBlockItemStack = new ItemStack(RegistryHandler.HONEYCOMBBLOCKITEM.get());
+        final CompoundNBT honeyCombItemStackTag = honeyCombBlockItemStack.getOrCreateChildTag("ResourcefulBees");
+        honeyCombItemStackTag.putString("Color", blockColor);
+        honeyCombItemStackTag.putString("BeeType", beeType);
 
+        return honeyCombBlockItemStack;
+    }
 
-    public static int getColor(BlockState state, @Nullable IBlockReader world, @Nullable BlockPos pos,  int tintIndex){
+    public static int getColor(BlockState state, @Nullable IBlockReader world, @Nullable BlockPos pos, int tintIndex){
         HoneycombBlock combBlock = (HoneycombBlock)state.getBlock();
         return Color.parseInt(combBlock.blockColor);
     }

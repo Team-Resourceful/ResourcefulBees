@@ -1,5 +1,6 @@
 package com.dungeonderps.resourcefulbees;
 
+import com.dungeonderps.resourcefulbees.block.HoneycombBlock;
 import com.dungeonderps.resourcefulbees.block.IronBeehiveBlock;
 import com.dungeonderps.resourcefulbees.item.BeeSpawnEggItem;
 import com.dungeonderps.resourcefulbees.item.ResourcefulHoneycomb;
@@ -49,7 +50,7 @@ public class RegistryHandler {
 	//**************BLOCKS********************************************
 
 	public static final RegistryObject<Block> IRON_BEEHIVE = BLOCKS.register("iron_beehive", () -> new IronBeehiveBlock(IronBeehiveProperties));
-	public static final RegistryObject<Block> HONEYCOMBBLOCK = BLOCKS.register("resourceful_honeycomb_block", () -> new Block(Block.Properties.create(Material.CLAY, MaterialColor.ADOBE).hardnessAndResistance(0.6F).sound(SoundType.CORAL)));
+	public static final RegistryObject<Block> HONEYCOMBBLOCK = BLOCKS.register("resourceful_honeycomb_block", () -> new HoneycombBlock());
 
 	//**************ITEMS*********************************************
 

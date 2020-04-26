@@ -5,12 +5,14 @@ import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.config.ResourcefulBeesConfig;
 import com.dungeonderps.resourcefulbees.data.DataGen;
 import com.dungeonderps.resourcefulbees.data.DataPackLoader;
+import com.dungeonderps.resourcefulbees.data.RecipeBuilder;
 import com.dungeonderps.resourcefulbees.entity.CustomBeeRenderer;
 import com.dungeonderps.resourcefulbees.utils.ColorHandler;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.passive.CustomBeeEntity;
+import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.village.PointOfInterestType;
 import net.minecraft.world.biome.Biome;
@@ -22,6 +24,7 @@ import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
@@ -54,9 +57,10 @@ public class ResourcefulBees
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(DataGen::gatherData);
+
         MinecraftForge.EVENT_BUS.addListener(DataPackLoader::serverAboutToStart);
         MinecraftForge.EVENT_BUS.addListener(this::serverStarting);
-
+        MinecraftForge.EVENT_BUS.addListener(this::OnServerSetup);
         DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
             FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
             FMLJavaModLoadingContext.get().getModEventBus().addListener(ColorHandler::onItemColors);
@@ -67,6 +71,13 @@ public class ResourcefulBees
         MinecraftForge.EVENT_BUS.register(this);
     }
 
+
+    public void OnServerSetup(FMLServerAboutToStartEvent event){
+        LOGGER.info("recipe should be loaded");
+        IReloadableResourceManager manager = event.getServer().getResourceManager();
+
+        manager.addReloadListener(new RecipeBuilder());
+    }
 
     private void setup(final FMLCommonSetupEvent event){
         /*

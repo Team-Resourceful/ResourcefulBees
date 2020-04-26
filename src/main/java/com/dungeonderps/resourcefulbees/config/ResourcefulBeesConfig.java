@@ -9,7 +9,9 @@ import net.minecraft.entity.passive.CustomBeeEntity;
 import net.minecraft.resources.FolderPack;
 import net.minecraft.resources.IPackFinder;
 import net.minecraft.resources.ResourcePackInfo;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.loading.FMLPaths;
@@ -131,11 +133,10 @@ public class ResourcefulBeesConfig {
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfig.COMMON_CONFIG, "resourcefulbees/common.toml");
 
-        /*
         DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
             loadResources();
         });
-         */
+
     }
 
     public static void loadResources() {
@@ -162,7 +163,7 @@ public class ResourcefulBeesConfig {
         BeeInfo bee = gson.fromJson(r, BeeInfo.class);
         bee.setName(name);
         CustomBeeEntity.BEE_INFO.put(name, bee);
-        RecipeBuilder.buildRecipe(bee.getColor(), name);
+        //RecipeBuilder.buildRecipe(bee.getColor(), name);
         ItemGroupResourcefulBees.bees.put(name, bee.getColor());
     }
 
@@ -185,7 +186,7 @@ public class ResourcefulBeesConfig {
                 try {
                     parseBee(f);
                 } catch (IOException e) {
-                    ResourcefulBees.LOGGER.error("File not found when parsing bees");
+                    LOGGER.error("File not found when parsing bees");
                 }
             }
         }
