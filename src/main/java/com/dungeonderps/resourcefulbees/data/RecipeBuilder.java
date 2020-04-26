@@ -18,13 +18,16 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.crafting.NBTIngredient;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
+import net.minecraftforge.resource.IResourceType;
+import net.minecraftforge.resource.ISelectiveResourceReloadListener;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Predicate;
 
-public class RecipeBuilder implements IResourceManagerReloadListener {
+public class RecipeBuilder implements ISelectiveResourceReloadListener {
     @Override
-    public void onResourceManagerReload(IResourceManager resourceManager) {
+    public void onResourceManagerReload(IResourceManager resourceManager, Predicate<IResourceType> resourcePredicate) {
         MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
 
         RecipeManager recipeManager = server.getRecipeManager();
@@ -41,6 +44,7 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
             }
         }
     }
+
     private IRecipe<?> makeHoneyCombRecipe(String BeeType, String Color) {
         ItemStack honeyCombItemStack = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
         final CompoundNBT honeyCombItemStackTag = honeyCombItemStack.getOrCreateChildTag("ResourcefulBees");
