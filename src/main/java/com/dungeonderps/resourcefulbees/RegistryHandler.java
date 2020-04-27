@@ -3,6 +3,7 @@ package com.dungeonderps.resourcefulbees;
 import com.dungeonderps.resourcefulbees.block.HoneycombBlock;
 import com.dungeonderps.resourcefulbees.block.IronBeehiveBlock;
 import com.dungeonderps.resourcefulbees.item.BeeSpawnEggItem;
+import com.dungeonderps.resourcefulbees.item.HoneycombBlockItem;
 import com.dungeonderps.resourcefulbees.item.ResourcefulHoneycomb;
 import com.dungeonderps.resourcefulbees.item.Smoker;
 import com.dungeonderps.resourcefulbees.tileentity.HoneycombBlockEntity;
@@ -15,7 +16,6 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.CustomBeeEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.tileentity.IronBeehiveBlockEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.village.PointOfInterestType;
@@ -59,7 +59,7 @@ public class RegistryHandler {
 	public static final RegistryObject<Item> BELLOW = ITEMS.register("bellow", () -> new Item(new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFULBEES)));
 	public static final RegistryObject<Item> SMOKERCAN = ITEMS.register("smoker_can", () -> new Item(new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFULBEES)));
 	public static final RegistryObject<Item> BEESWAX = ITEMS.register("bees_wax", () -> new Item(new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFULBEES)));
-	public static final RegistryObject<Item> HONEYCOMBBLOCKITEM = ITEMS.register("resourceful_honeycomb_block",  () -> new BlockItem(HONEYCOMBBLOCK.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFULBEES)));
+	public static final RegistryObject<Item> HONEYCOMBBLOCKITEM = ITEMS.register("resourceful_honeycomb_block",  () -> new HoneycombBlockItem());
 
 	//**************TILE ENTITIES*************************************
 

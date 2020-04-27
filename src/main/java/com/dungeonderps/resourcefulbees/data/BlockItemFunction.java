@@ -27,7 +27,7 @@ public class BlockItemFunction extends LootFunction {
             HoneycombBlock combBlock = (HoneycombBlock)block;
             ItemStack blockItem = new ItemStack(new HoneycombBlockItem());
             blockItem.getOrCreateChildTag("ResourcefulBees").putString("BeeType", combBlock.beeType);
-            blockItem.getOrCreateChildTag("ResourcefulBees").putString("Color", combBlock.blockColor);
+            //blockItem.getOrCreateChildTag("ResourcefulBees").putString("Color", combBlock.blockColor);
         }
         return stack;
     }

@@ -23,20 +23,11 @@ import javax.annotation.Nullable;
 
 public class HoneycombBlock extends Block {
 
-    public String blockColor = "0xFFFFFF";
     public String beeType = "default";
 
     public HoneycombBlock() {
         super(Block.Properties.from(Blocks.HONEYCOMB_BLOCK));
     }
-
-    public void setBlockColor(String blockColor) {
-        this.blockColor = blockColor;
-    }
-
-
-
-
 
     public void setBeeType(String beeType) {
         this.beeType = beeType;
@@ -55,7 +46,7 @@ public class HoneycombBlock extends Block {
     public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
         ItemStack honeyCombBlockItemStack = new ItemStack(RegistryHandler.HONEYCOMBBLOCKITEM.get());
         final CompoundNBT honeyCombItemStackTag = honeyCombBlockItemStack.getOrCreateChildTag("ResourcefulBees");
-        honeyCombItemStackTag.putString("Color", blockColor);
+        //honeyCombItemStackTag.putString("Color", blockColor);
         honeyCombItemStackTag.putString("BeeType", beeType);
 
         return honeyCombBlockItemStack;
@@ -74,14 +65,12 @@ public class HoneycombBlock extends Block {
              }
         }
         return 0x000000;
-        //HoneycombBlock combBlock = (HoneycombBlock)state.getBlock();
-        //return Color.parseInt(combBlock.blockColor);
     }
 
 
 
     public static int getItemColor(ItemStack stack, int tintIndex){
-        LOGGER.info("Getting Comb Color");
+        //LOGGER.info("Getting Comb Color");
         CompoundNBT honeycombNBT = stack.getChildTag("ResourcefulBees");
         return honeycombNBT != null && honeycombNBT.contains("Color") ? Color.parseInt(honeycombNBT.getString("Color")) : 0x000000;
     }
@@ -94,6 +83,7 @@ public class HoneycombBlock extends Block {
             HoneycombBlockEntity honeycombBlockEntity = (HoneycombBlockEntity) blockEntity;
             honeycombBlockEntity.setBeeType(stack.getChildTag("ResourcefulBees").getString("BeeType"));
             honeycombBlockEntity.setCombColor(stack.getChildTag("ResourcefulBees").getString("Color"));
+            setBeeType(stack.getChildTag("ResourcefulBees").getString("BeeType"));
         }
 
     }

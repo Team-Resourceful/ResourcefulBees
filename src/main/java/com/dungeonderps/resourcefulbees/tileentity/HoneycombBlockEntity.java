@@ -1,7 +1,6 @@
 package com.dungeonderps.resourcefulbees.tileentity;
 
 import com.dungeonderps.resourcefulbees.RegistryHandler;
-import com.dungeonderps.resourcefulbees.block.HoneycombBlock;
 import com.dungeonderps.resourcefulbees.utils.Color;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
@@ -32,10 +31,6 @@ public class HoneycombBlockEntity extends TileEntity {
             CompoundNBT blockNBT = (CompoundNBT) compound.get("ResourcefulBees");
             beeType = blockNBT.getString("BeeType");
             combColor = blockNBT.getString("CombColor");
-
-            HoneycombBlock combBlock = (HoneycombBlock)getBlockState().getBlock();
-            combBlock.setBeeType(beeType);
-            combBlock.setBlockColor(combColor);
         }
     }
 
@@ -52,6 +47,17 @@ public class HoneycombBlockEntity extends TileEntity {
         return compound;
     }
 
+    @Override
+    public CompoundNBT getUpdateTag() {
+        CompoundNBT nbtTagCompound = new CompoundNBT();
+        write(nbtTagCompound);
+        return nbtTagCompound;
+    }
+
+    @Override
+    public void handleUpdateTag(CompoundNBT tag) {
+        this.read(tag);
+    }
 
     public void setCombColor(String combColor) {
         this.combColor = combColor;

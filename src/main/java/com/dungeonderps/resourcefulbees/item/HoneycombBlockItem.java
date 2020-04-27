@@ -1,27 +1,21 @@
 package com.dungeonderps.resourcefulbees.item;
 
+import com.dungeonderps.resourcefulbees.ItemGroupResourcefulBees;
 import com.dungeonderps.resourcefulbees.RegistryHandler;
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
-import com.dungeonderps.resourcefulbees.utils.Color;
 import net.minecraft.item.BlockItem;
-import net.minecraft.item.ItemGroup;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 
-import static com.dungeonderps.resourcefulbees.ResourcefulBees.LOGGER;
+import javax.annotation.Nullable;
 
 public class HoneycombBlockItem extends BlockItem {
 
     public HoneycombBlockItem() {
-        super(RegistryHandler.HONEYCOMBBLOCK.get(), new Properties().group(ItemGroup.DECORATIONS));
+        super(RegistryHandler.HONEYCOMBBLOCK.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFULBEES));
     }
 
-    public static int getColor(ItemStack stack, int tintIndex){
-
-        LOGGER.info("Getting Comb Color");
-        CompoundNBT honeycombNBT = stack.getChildTag("ResourcefulBees");
-        return honeycombNBT != null && honeycombNBT.contains("Color") ? Color.parseInt(honeycombNBT.getString("Color")) : 0x000000;
-    }
 
     @Override
     public String getTranslationKey(ItemStack stack) {
@@ -34,5 +28,10 @@ public class HoneycombBlockItem extends BlockItem {
             name = "block" + '.' + ResourcefulBees.MOD_ID + '.' + "resourceful_honeycomb_block";
         }
         return name;
+    }
+
+    @Override
+    public void readShareTag(ItemStack stack, @Nullable CompoundNBT nbt) {
+
     }
 }
