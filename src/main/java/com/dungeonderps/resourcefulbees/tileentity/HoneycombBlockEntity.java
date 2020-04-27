@@ -1,6 +1,7 @@
 package com.dungeonderps.resourcefulbees.tileentity;
 
 import com.dungeonderps.resourcefulbees.RegistryHandler;
+import com.dungeonderps.resourcefulbees.block.HoneycombBlock;
 import com.dungeonderps.resourcefulbees.utils.Color;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
@@ -9,7 +10,7 @@ import net.minecraft.tileentity.TileEntityType;
 public class HoneycombBlockEntity extends TileEntity {
 
     public String beeType = "Default";
-    public String combColor = "0xffffff";
+    public String blockColor = "0xffffff";
 
     public HoneycombBlockEntity() {
         super(RegistryHandler.HONEYCOMB_BLOCK_ENTITY.get());
@@ -19,7 +20,7 @@ public class HoneycombBlockEntity extends TileEntity {
 
 
     public int getColor(){
-        return Color.parseInt(combColor);
+        return Color.parseInt(blockColor);
     }
 
 
@@ -30,7 +31,13 @@ public class HoneycombBlockEntity extends TileEntity {
         if (compound.contains("ResourcefulBees")){
             CompoundNBT blockNBT = (CompoundNBT) compound.get("ResourcefulBees");
             beeType = blockNBT.getString("BeeType");
-            combColor = blockNBT.getString("CombColor");
+            blockColor = blockNBT.getString("CombColor");
+        }
+
+        if (this.world != null && this.pos != null){
+            HoneycombBlock combBlock = (HoneycombBlock)getBlockState().getBlock();
+            combBlock.setBeeType(beeType);
+            combBlock.setBlockColor(blockColor);
         }
     }
 
@@ -40,7 +47,7 @@ public class HoneycombBlockEntity extends TileEntity {
 
         CompoundNBT blockNBT = new CompoundNBT();
         blockNBT.putString("BeeType", beeType);
-        blockNBT.putString("CombColor", combColor);
+        blockNBT.putString("CombColor", blockColor);
 
         compound.put("ResourcefulBees", blockNBT);
 
@@ -59,8 +66,8 @@ public class HoneycombBlockEntity extends TileEntity {
         this.read(tag);
     }
 
-    public void setCombColor(String combColor) {
-        this.combColor = combColor;
+    public void setBlockColor(String blockColor) {
+        this.blockColor = blockColor;
     }
 
     public void setBeeType(String beeType) {
