@@ -4,6 +4,7 @@ package com.dungeonderps.resourcefulbees.block;
 
 import com.dungeonderps.resourcefulbees.RegistryHandler;
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
+import com.dungeonderps.resourcefulbees.lib.BeeConst;
 import com.dungeonderps.resourcefulbees.tileentity.HoneycombBlockEntity;
 import com.dungeonderps.resourcefulbees.utils.Color;
 import net.minecraft.block.Block;
@@ -23,8 +24,8 @@ import javax.annotation.Nullable;
 
 public class HoneycombBlock extends Block {
 
-    public String blockColor = "0x000000";
-    public String beeType = "default";
+    public String blockColor;
+    public String beeType;
 
     public HoneycombBlock() {
         super(Block.Properties.from(Blocks.HONEYCOMB_BLOCK));
@@ -50,15 +51,37 @@ public class HoneycombBlock extends Block {
     @Override
     public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
         ItemStack honeyCombBlockItemStack = new ItemStack(RegistryHandler.HONEYCOMBBLOCKITEM.get());
-        final CompoundNBT honeyCombItemStackTag = honeyCombBlockItemStack.getOrCreateChildTag("ResourcefulBees");
-        honeyCombItemStackTag.putString("Color", blockColor);
-        honeyCombItemStackTag.putString("BeeType", beeType);
+        final CompoundNBT honeyCombItemStackTag = honeyCombBlockItemStack.getOrCreateChildTag(BeeConst.NBT_ROOT);
+        honeyCombItemStackTag.putString(BeeConst.NBT_BEE_TYPE, this.beeType);
+        honeyCombItemStackTag.putString(BeeConst.NBT_COLOR, this.blockColor);
 
         return honeyCombBlockItemStack;
     }
 
     public static int getBlockColor(BlockState state, @Nullable IBlockReader world, @Nullable BlockPos pos, int tintIndex){
         LOGGER.info("Setting Block Color");
+
+        /*
+        if(world != null && pos != null) {
+            Block block = world.getBlockState(pos).getBlock();
+            if(block instanceof HoneycombBlock){
+                HoneycombBlock honeycombBlock = (HoneycombBlock)block;
+                return Color.parseInt(honeycombBlock.blockColor);
+            }
+        }
+         */
+
+        if (world != null && pos != null){
+            TileEntity tile = world.getTileEntity(pos);
+            if (tile instanceof HoneycombBlockEntity) {
+                return  ((HoneycombBlockEntity) tile).getColor();
+            }
+        }
+
+        return BeeConst.DEFAULT_COLOR;
+
+
+
         /*
         if(world != null && pos != null) {
             TileEntity tile = world.getTileEntity(pos);
@@ -66,44 +89,35 @@ public class HoneycombBlock extends Block {
                 return ((HoneycombBlockEntity) tile).getColor();
              }
         }
-        */
-        if(world != null && pos != null) {
-            HoneycombBlock combBlock = (HoneycombBlock) world.getBlockState(pos).getBlock();
-            return Color.parseInt(combBlock.blockColor);
-        }
-        return 0x000000;
+
+         */
+
+        //if(world != null && pos != null) {
+        //    HoneycombBlock combBlock = (HoneycombBlock) world.getBlockState(pos).getBlock();
+       //     return Color.parseInt(combBlock.blockColor);
+        //}
     }
 
 
 
     public static int getItemColor(ItemStack stack, int tintIndex){
-        CompoundNBT honeycombNBT = stack.getChildTag("ResourcefulBees");
-        return honeycombNBT != null && honeycombNBT.contains("Color") ? Color.parseInt(honeycombNBT.getString("Color")) : 0x000000;
+        CompoundNBT honeycombNBT = stack.getChildTag(BeeConst.NBT_ROOT);
+        return (honeycombNBT != null && honeycombNBT.contains(BeeConst.NBT_COLOR) && !honeycombNBT.getString(BeeConst.NBT_COLOR).isEmpty())
+                ? Color.parseInt(honeycombNBT.getString(BeeConst.NBT_COLOR)) : BeeConst.DEFAULT_COLOR;
     }
 
     public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
 
-        TileEntity blockEntity = worldIn.getTileEntity(pos);
+        TileEntity tile = worldIn.getTileEntity(pos);
+        if(tile instanceof HoneycombBlockEntity) {
+            HoneycombBlockEntity honeycombBlockEntity = (HoneycombBlockEntity) tile;
+            honeycombBlockEntity.loadFromNBT(stack.getOrCreateChildTag(BeeConst.NBT_ROOT));
 
-        if(blockEntity instanceof HoneycombBlockEntity) {
-            HoneycombBlockEntity honeycombBlockEntity = (HoneycombBlockEntity) blockEntity;
-            CompoundNBT stackNBT = stack.getChildTag("ResourcefulBees");
-
-            if (stackNBT.contains("BeeType")) {
-                honeycombBlockEntity.setBeeType(stack.getChildTag("ResourcefulBees").getString("BeeType"));
-                setBeeType(stack.getChildTag("ResourcefulBees").getString("BeeType"));
-            } else {
-                honeycombBlockEntity.setBeeType("Default");
-                setBeeType("Default");
-            }
-
-            if (stackNBT.contains("BeeType")) {
-                honeycombBlockEntity.setBeeType(stack.getChildTag("ResourcefulBees").getString("Color"));
-            } else {
-                honeycombBlockEntity.setBeeType("0x000000");
-            }
+            setBeeType(stack.getChildTag("ResourcefulBees").getString("BeeType"));
         }
 
+        this.beeType = stack.getChildTag(BeeConst.NBT_ROOT).getString(BeeConst.NBT_BEE_TYPE);
+        this.blockColor = stack.getChildTag(BeeConst.NBT_ROOT).getString(BeeConst.NBT_COLOR);
     }
 
     @Override
@@ -114,8 +128,8 @@ public class HoneycombBlock extends Block {
     @Override
     public String getTranslationKey() {
         String name;
-        if (!beeType.isEmpty()) {
-            name = "block" + '.' + ResourcefulBees.MOD_ID + '.' + beeType.toLowerCase() + "_honeycomb_block";
+        if (!this.beeType.isEmpty()) {
+            name = "block" + '.' + ResourcefulBees.MOD_ID + '.' + this.beeType.toLowerCase() + "_honeycomb_block";
         } else {
             name = "block" + '.' + ResourcefulBees.MOD_ID + '.' + "resourceful_honeycomb_block";
         }
