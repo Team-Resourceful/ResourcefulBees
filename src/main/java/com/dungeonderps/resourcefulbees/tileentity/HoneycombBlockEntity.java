@@ -18,57 +18,35 @@ public class HoneycombBlockEntity extends TileEntity {
         super(RegistryHandler.HONEYCOMB_BLOCK_ENTITY.get());
     }
 
-    public TileEntityType<?> getType() {return RegistryHandler.HONEYCOMB_BLOCK_ENTITY.get(); }
-
-
-    public int getColor(){
-        return (blockColor != null && !blockColor.isEmpty()) ? Color.parseInt(blockColor) : BeeConst.DEFAULT_COLOR;
+    public TileEntityType<?> getType() {
+        return RegistryHandler.HONEYCOMB_BLOCK_ENTITY.get();
     }
 
+
+    public int getColor() {
+        return (blockColor != null && !blockColor.isEmpty()) ? Color.parseInt(blockColor) : BeeConst.DEFAULT_COLOR;
+    }
 
     @Override
     public void read(CompoundNBT compound) {
         this.loadFromNBT(compound);
         super.read(compound);
-
-        /*
-        if (compound.contains("ResourcefulBees")){
-            CompoundNBT blockNBT = (CompoundNBT) compound.get("ResourcefulBees");
-            beeType = blockNBT.getString("BeeType");
-            blockColor = blockNBT.getString("CombColor");
-        }
-
-        if (this.world != null && this.pos != null){
-            HoneycombBlock combBlock = (HoneycombBlock)getBlockState().getBlock();
-            combBlock.setBeeType(beeType);
-            combBlock.setBlockColor(blockColor);
-        }
-         */
     }
 
     @Override
     public CompoundNBT write(CompoundNBT compound) {
         super.write(compound);
         return this.saveToNBT(compound);
-
-        /*
-        CompoundNBT blockNBT = new CompoundNBT();
-        blockNBT.putString("BeeType", beeType);
-        blockNBT.putString("CombColor", blockColor);
-
-        compound.put("ResourcefulBees", blockNBT);
-         */
-
     }
 
     public void loadFromNBT(CompoundNBT compound) {
         blockColor = compound.getString(BeeConst.NBT_COLOR);
         beeType = compound.getString(BeeConst.NBT_BEE_TYPE);
 
-        if (this.world != null && this.pos != null){
+        if (this.world != null && this.pos != null) {
             Block block = this.world.getBlockState(this.pos).getBlock();
-            if (block instanceof HoneycombBlock){
-                HoneycombBlock honeycombBlock = (HoneycombBlock)block;
+            if (block instanceof HoneycombBlock) {
+                HoneycombBlock honeycombBlock = (HoneycombBlock) block;
                 honeycombBlock.setBlockColor(this.blockColor);
                 honeycombBlock.setBeeType(this.beeType);
             }
@@ -76,17 +54,13 @@ public class HoneycombBlockEntity extends TileEntity {
     }
 
     CompoundNBT saveToNBT(CompoundNBT compound) {
-        //CompoundNBT modNBT = new CompoundNBT();
-        if (this.blockColor != String.valueOf(BeeConst.DEFAULT_COLOR)){
+        if (!this.blockColor.equals(String.valueOf(BeeConst.DEFAULT_COLOR))) {
             compound.putString(BeeConst.NBT_COLOR, this.blockColor);
         }
 
         if (this.beeType != null) {
             compound.putString(BeeConst.NBT_BEE_TYPE, this.beeType);
         }
-
-        //compound.put(BeeConst.NBT_ROOT, modNBT);
-
         return compound;
     }
 
@@ -100,13 +74,5 @@ public class HoneycombBlockEntity extends TileEntity {
     @Override
     public void handleUpdateTag(CompoundNBT tag) {
         this.read(tag);
-    }
-
-    public void setBlockColor(String blockColor) {
-        this.blockColor = blockColor;
-    }
-
-    public void setBeeType(String beeType) {
-        this.beeType = beeType;
     }
 }

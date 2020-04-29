@@ -1,9 +1,7 @@
 
 package com.dungeonderps.resourcefulbees.block;
 
-
 import com.dungeonderps.resourcefulbees.RegistryHandler;
-import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.lib.BeeConst;
 import com.dungeonderps.resourcefulbees.tileentity.HoneycombBlockEntity;
 import com.dungeonderps.resourcefulbees.utils.Color;
@@ -25,7 +23,7 @@ import javax.annotation.Nullable;
 public class HoneycombBlock extends Block {
 
     public String blockColor;
-    public String beeType;
+    //public String beeType;
 
     public HoneycombBlock() {
         super(Block.Properties.from(Blocks.HONEYCOMB_BLOCK));
@@ -36,7 +34,7 @@ public class HoneycombBlock extends Block {
     }
 
     public void setBeeType(String beeType) {
-        this.beeType = beeType;
+        //this.beeType = beeType;
     }
 
     @Override
@@ -48,29 +46,17 @@ public class HoneycombBlock extends Block {
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) { return new HoneycombBlockEntity();}
 
-    @Override
+    @Override    // TODO FIX THIS TO USE TE - don't pull data from block instance!!
     public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
         ItemStack honeyCombBlockItemStack = new ItemStack(RegistryHandler.HONEYCOMBBLOCKITEM.get());
         final CompoundNBT honeyCombItemStackTag = honeyCombBlockItemStack.getOrCreateChildTag(BeeConst.NBT_ROOT);
-        honeyCombItemStackTag.putString(BeeConst.NBT_BEE_TYPE, this.beeType);
+        //honeyCombItemStackTag.putString(BeeConst.NBT_BEE_TYPE, this.beeType);
         honeyCombItemStackTag.putString(BeeConst.NBT_COLOR, this.blockColor);
 
         return honeyCombBlockItemStack;
     }
 
     public static int getBlockColor(BlockState state, @Nullable IBlockReader world, @Nullable BlockPos pos, int tintIndex){
-        LOGGER.info("Setting Block Color");
-
-        /*
-        if(world != null && pos != null) {
-            Block block = world.getBlockState(pos).getBlock();
-            if(block instanceof HoneycombBlock){
-                HoneycombBlock honeycombBlock = (HoneycombBlock)block;
-                return Color.parseInt(honeycombBlock.blockColor);
-            }
-        }
-         */
-
         if (world != null && pos != null){
             TileEntity tile = world.getTileEntity(pos);
             if (tile instanceof HoneycombBlockEntity) {
@@ -79,23 +65,6 @@ public class HoneycombBlock extends Block {
         }
 
         return BeeConst.DEFAULT_COLOR;
-
-
-
-        /*
-        if(world != null && pos != null) {
-            TileEntity tile = world.getTileEntity(pos);
-            if (tile instanceof HoneycombBlockEntity) {
-                return ((HoneycombBlockEntity) tile).getColor();
-             }
-        }
-
-         */
-
-        //if(world != null && pos != null) {
-        //    HoneycombBlock combBlock = (HoneycombBlock) world.getBlockState(pos).getBlock();
-       //     return Color.parseInt(combBlock.blockColor);
-        //}
     }
 
 
@@ -116,24 +85,8 @@ public class HoneycombBlock extends Block {
             setBeeType(stack.getChildTag("ResourcefulBees").getString("BeeType"));
         }
 
-        this.beeType = stack.getChildTag(BeeConst.NBT_ROOT).getString(BeeConst.NBT_BEE_TYPE);
+        //this.beeType = stack.getChildTag(BeeConst.NBT_ROOT).getString(BeeConst.NBT_BEE_TYPE);
         this.blockColor = stack.getChildTag(BeeConst.NBT_ROOT).getString(BeeConst.NBT_COLOR);
-    }
-
-    @Override
-    public void onBlockHarvested(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
-        super.onBlockHarvested(worldIn, pos, state, player);
-    }
-
-    @Override
-    public String getTranslationKey() {
-        String name;
-        if (!this.beeType.isEmpty()) {
-            name = "block" + '.' + ResourcefulBees.MOD_ID + '.' + this.beeType.toLowerCase() + "_honeycomb_block";
-        } else {
-            name = "block" + '.' + ResourcefulBees.MOD_ID + '.' + "resourceful_honeycomb_block";
-        }
-        return name;
     }
 }
 

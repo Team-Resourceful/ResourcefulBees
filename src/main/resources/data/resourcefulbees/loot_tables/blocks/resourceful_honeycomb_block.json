@@ -6,12 +6,12 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "resourcefulbees:resourceful_honeycomb_block",
           "functions": [
             {
               "function": "resourcefulbees:blockitem"
             }
-          ]
+          ],
+          "name": "resourcefulbees:resourceful_honeycomb_block"
         }
       ],
       "conditions": [
