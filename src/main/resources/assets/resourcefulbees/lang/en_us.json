@@ -1,5 +1,6 @@
 {
 	"itemGroup.resourcefulbees" : "Resourceful Bees",
+	"gui.resourcefulbees.jei.category.hive" : "Iron Beehive",
 
 	"resourcefulbees.shift_info": "Hold SHIFT for Info",
 	"item.resourcefulbees.smoker.tooltip": "Rightclick the hive to smoke it.",
