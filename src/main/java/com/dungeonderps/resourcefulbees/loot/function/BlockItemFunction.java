@@ -1,12 +1,12 @@
-package com.dungeonderps.resourcefulbees.data;
+package com.dungeonderps.resourcefulbees.loot.function;
 
-import com.dungeonderps.resourcefulbees.block.HoneycombBlock;
-import com.dungeonderps.resourcefulbees.item.HoneycombBlockItem;
+import com.dungeonderps.resourcefulbees.RegistryHandler;
+import com.dungeonderps.resourcefulbees.lib.BeeConst;
+import com.dungeonderps.resourcefulbees.tileentity.HoneycombBlockEntity;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootFunction;
@@ -21,13 +21,13 @@ public class BlockItemFunction extends LootFunction {
 
     @Override
     protected ItemStack doApply(ItemStack stack, LootContext context) {
-        BlockState state = context.get(LootParameters.BLOCK_STATE);
-        Block block = state.getBlock();
-        if (block instanceof HoneycombBlock){
-            HoneycombBlock combBlock = (HoneycombBlock)block;
-            ItemStack blockItem = new ItemStack(new HoneycombBlockItem());
-            blockItem.getOrCreateChildTag("ResourcefulBees").putString("BeeType", combBlock.beeType);
-            //blockItem.getOrCreateChildTag("ResourcefulBees").putString("Color", combBlock.blockColor);
+        TileEntity tile = context.get(LootParameters.BLOCK_ENTITY);
+        if (tile instanceof HoneycombBlockEntity){
+            HoneycombBlockEntity blockEntity = (HoneycombBlockEntity)tile;
+            ItemStack blockItem = new ItemStack(RegistryHandler.HONEYCOMBBLOCKITEM.get());
+            blockItem.getOrCreateChildTag(BeeConst.NBT_ROOT).putString(BeeConst.NBT_BEE_TYPE, blockEntity.beeType);
+            blockItem.getOrCreateChildTag(BeeConst.NBT_ROOT).putString(BeeConst.NBT_COLOR, blockEntity.blockColor);
+            return blockItem;
         }
         return stack;
     }
@@ -37,6 +37,8 @@ public class BlockItemFunction extends LootFunction {
         public Serializer() {
             super(new ResourceLocation("resourcefulbees:blockitem"), BlockItemFunction.class);
         }
+
+
 
         @Override
         public BlockItemFunction deserialize(JsonObject object, JsonDeserializationContext deserializationContext, ILootCondition[] conditionsIn) {

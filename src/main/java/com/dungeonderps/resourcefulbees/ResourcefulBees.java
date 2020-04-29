@@ -3,10 +3,10 @@ package com.dungeonderps.resourcefulbees;
 import com.dungeonderps.resourcefulbees.commands.ResourcefulBeeCommands;
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.config.ResourcefulBeesConfig;
-import com.dungeonderps.resourcefulbees.data.BlockItemFunction;
 import com.dungeonderps.resourcefulbees.data.DataGen;
 import com.dungeonderps.resourcefulbees.data.RecipeBuilder;
 import com.dungeonderps.resourcefulbees.entity.CustomBeeRenderer;
+import com.dungeonderps.resourcefulbees.loot.function.BlockItemFunction;
 import com.dungeonderps.resourcefulbees.utils.ColorHandler;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityClassification;
@@ -50,7 +50,7 @@ public class ResourcefulBees
         try {
             FileUtils.deleteDirectory(Paths.get(FMLPaths.CONFIGDIR.get().toString(), "resourcefulbees", "resources", "datapack", "data", "resourcefulbees","recipes").toFile());
         } catch (IOException e) {
-            LOGGER.error("Failled to delete recipe directory.");
+            LOGGER.error("Failed to delete recipe directory.");
         }
         ResourcefulBeesConfig.setup();
 
