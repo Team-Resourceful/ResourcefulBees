@@ -4,17 +4,14 @@ import com.dungeonderps.resourcefulbees.RegistryHandler;
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.entity.goals.BeeBreedGoal;
-import io.netty.util.internal.shaded.org.jctools.queues.SpscLinkedQueue;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.DoublePlantBlock;
 import net.minecraft.entity.AgeableEntity;
-import java.util.Map.Entry;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.ai.goal.BreedGoal;
 import net.minecraft.entity.ai.goal.FollowParentGoal;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.goal.TemptGoal;
@@ -41,6 +38,7 @@ import net.minecraft.village.PointOfInterestManager;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -58,9 +56,6 @@ public class CustomBeeEntity extends BeeEntity {
     //These are needed for Server->Client synchronization
     private static final DataParameter<String> BEE_COLOR = EntityDataManager.createKey(CustomBeeEntity.class, DataSerializers.STRING);
     private static final DataParameter<String> BEE_TYPE = EntityDataManager.createKey(CustomBeeEntity.class, DataSerializers.STRING);
-
-    //These are needed for dynamic creation from JSON configs
-    public static final LinkedHashMap<String, BeeInfo> BEE_INFO = new LinkedHashMap<>();
 
     public CustomBeeEntity(EntityType<? extends BeeEntity> type, World world) {
         super(type, world);
@@ -147,7 +142,7 @@ public class CustomBeeEntity extends BeeEntity {
                 Block block = state.getBlock();
                 if (validFillerBlock(block)) {
                     world.playEvent(2005, beePosDown, 0);
-                    world.setBlockState(beePosDown, Objects.requireNonNull(ForgeRegistries.BLOCKS.getValue(BEE_INFO.get(this.getBeeType()).getResource(BEE_INFO.get(this.getBeeType()).getMutationBlock()))).getDefaultState());
+                    world.setBlockState(beePosDown, Objects.requireNonNull(ForgeRegistries.BLOCKS.getValue(BeeInfo.BEE_INFO.get(this.getBeeType()).getResource(BeeInfo.BEE_INFO.get(this.getBeeType()).getMutationBlock()))).getDefaultState());
                     addCropCounter();
                 }
             }
@@ -155,7 +150,7 @@ public class CustomBeeEntity extends BeeEntity {
     }
 
     public boolean validFillerBlock(Block block){
-        return Objects.equals(block.getRegistryName(), BEE_INFO.get(this.getBeeType()).getResource(BEE_INFO.get(this.getBeeType()).getBaseBlock()));
+        return Objects.equals(block.getRegistryName(), BeeInfo.BEE_INFO.get(this.getBeeType()).getResource(BeeInfo.BEE_INFO.get(this.getBeeType()).getBaseBlock()));
     }
 
     public class FindBeehiveGoal2 extends BeeEntity.FindBeehiveGoal {
@@ -185,7 +180,7 @@ public class CustomBeeEntity extends BeeEntity {
 
     @Override
     public boolean isFlowers(BlockPos pos) {
-        String flower = BEE_INFO.get(this.getBeeType()).getFlower().toLowerCase();
+        String flower = BeeInfo.BEE_INFO.get(this.getBeeType()).getFlower().toLowerCase();
 
         switch (flower){
             case "all":
@@ -195,13 +190,13 @@ public class CustomBeeEntity extends BeeEntity {
             case "tall":
                 return this.world.isBlockPresent(pos) && this.world.getBlockState(pos).getBlock().isIn(BlockTags.TALL_FLOWERS);
             default:
-                return this.world.isBlockPresent(pos) && this.world.getBlockState(pos).getBlock().equals(ForgeRegistries.BLOCKS.getValue(BEE_INFO.get(this.getBeeType()).getResource(BEE_INFO.get(this.getBeeType()).getFlower())));
+                return this.world.isBlockPresent(pos) && this.world.getBlockState(pos).getBlock().equals(ForgeRegistries.BLOCKS.getValue(BeeInfo.BEE_INFO.get(this.getBeeType()).getResource(BeeInfo.BEE_INFO.get(this.getBeeType()).getFlower())));
         }
     }
 
     protected final Predicate<BlockState> flowerPredicate = state -> {
 
-        String flower = BEE_INFO.get(this.getBeeType()).getFlower().toLowerCase();
+        String flower = BeeInfo.BEE_INFO.get(this.getBeeType()).getFlower().toLowerCase();
 
         switch (flower) {
             case "all":
@@ -211,7 +206,7 @@ public class CustomBeeEntity extends BeeEntity {
             case "tall":
                 return state.isIn(BlockTags.TALL_FLOWERS) && (state.getBlock() != Blocks.SUNFLOWER || state.get(DoublePlantBlock.HALF) == DoubleBlockHalf.UPPER);
             default:
-                return state.getBlock().equals(ForgeRegistries.BLOCKS.getValue(BEE_INFO.get(this.getBeeType()).getResource(BEE_INFO.get(this.getBeeType()).getFlower())));
+                return state.getBlock().equals(ForgeRegistries.BLOCKS.getValue(BeeInfo.BEE_INFO.get(this.getBeeType()).getResource(BeeInfo.BEE_INFO.get(this.getBeeType()).getFlower())));
 
                 /*    <---- Leaving this in case there's ever new flower based tags
                 if (flower.charAt(0) == '#') {
@@ -227,7 +222,7 @@ public class CustomBeeEntity extends BeeEntity {
 
     //***************************** CUSTOM BEE RELATED METHODS BELOW *************************************************
 
-    protected ITextComponent func_225513_by_() {
+    protected ITextComponent getProfessionName() {   //<--- Recently mapped by Darkhax
         return new TranslationTextComponent("entity" + '.' + ResourcefulBees.MOD_ID + '.' + this.getBeeType().toLowerCase() + "_bee");
     }
 
@@ -252,11 +247,7 @@ public class CustomBeeEntity extends BeeEntity {
     @Nullable
     @Override
     public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
-        if (reason.equals(SpawnReason.CHUNK_GENERATION) || reason.equals(SpawnReason.NATURAL)){
-            selectRandomBee(true);
-        }
-        else
-            selectRandomBee(false);
+        selectRandomBee(reason.equals(SpawnReason.CHUNK_GENERATION) || reason.equals(SpawnReason.NATURAL));
         return super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
     }
 
@@ -277,7 +268,7 @@ public class CustomBeeEntity extends BeeEntity {
         super.readAdditional(compound);
         this.dataManager.set(BEE_TYPE, compound.getString("BeeType"));
         if(!this.getBeeType().isEmpty()) {
-            this.dataManager.set(BEE_COLOR, BEE_INFO.get(this.getBeeType()).getColor());
+            this.dataManager.set(BEE_COLOR, BeeInfo.BEE_INFO.get(this.getBeeType()).getColor());
         }
     }
 
@@ -292,40 +283,22 @@ public class CustomBeeEntity extends BeeEntity {
     //if fleshed out further - may want to consider separate class for handling bee types
     private void selectRandomBee(boolean fromBiome){
         if (fromBiome) {
-            HashMap<String, BeeInfo> tempMap = new HashMap<>();
-            Iterator<Map.Entry<String, BeeInfo>> beeInfoIterator = CustomBeeEntity.BEE_INFO.entrySet().iterator();
-            while (beeInfoIterator.hasNext()) {
-                Map.Entry<String, BeeInfo> element = beeInfoIterator.next();
-                tempMap.put(element.getKey(), element.getValue());
-            }
-            tempMap.remove("Default");
-            int randInt = rand.nextInt(tempMap.size());
-            String randomBee = tempMap.get(tempMap.keySet().toArray()[randInt]).getName();
-            String biome = tempMap.get(randomBee).getBiomeList();
-            String curBiome = this.world.getBiome(this.getPosition()).getRegistryName().toString();
-            if(!biome.toLowerCase().equals("all")) {
-                while (!biome.equals(curBiome)) {
-                    tempMap.remove(randomBee);
-                    randInt = rand.nextInt(tempMap.size());
-                    randomBee = tempMap.get(tempMap.keySet().toArray()[randInt]).getName();
-                    biome = tempMap.get(randomBee).getBiomeList();
-                }
-            }
-
-            this.dataManager.set(BEE_TYPE, BEE_INFO.get(randomBee).getName());
+            Biome curBiome = this.world.getBiome(this.getPosition());
+            ArrayList<String> spawnList = BeeInfo.SPAWNABLE_BIOMES.get(curBiome);
+            this.dataManager.set(BEE_TYPE, BeeInfo.BEE_INFO.get(spawnList.get(rand.nextInt(spawnList.size()))).getName());
         } else {
-            this.dataManager.set(BEE_TYPE, BEE_INFO.get(BEE_INFO.keySet().toArray()[rand.nextInt(BEE_INFO.size() - 1) +1]).getName());
+            this.dataManager.set(BEE_TYPE, BeeInfo.BEE_INFO.get(BeeInfo.BEE_INFO.keySet().toArray()[rand.nextInt(BeeInfo.BEE_INFO.size() - 1) +1]).getName());
         }
-        this.dataManager.set(BEE_COLOR, BEE_INFO.get(getBeeType()).getColor());
+        this.dataManager.set(BEE_COLOR, BeeInfo.BEE_INFO.get(getBeeType()).getColor());
     }
 
     public void selectBeeType(String beeType){
-        this.dataManager.set(BEE_TYPE, BEE_INFO.get(beeType).getName());
-        this.dataManager.set(BEE_COLOR, BEE_INFO.get(beeType).getColor());
+        this.dataManager.set(BEE_TYPE, BeeInfo.BEE_INFO.get(beeType).getName());
+        this.dataManager.set(BEE_COLOR, BeeInfo.BEE_INFO.get(beeType).getColor());
     }
 
     public String getBeeType() {
-        BeeInfo info = BEE_INFO.get(this.dataManager.get(BEE_TYPE));
+        BeeInfo info = BeeInfo.BEE_INFO.get(this.dataManager.get(BEE_TYPE));
         if (info != null) {
             return this.dataManager.get(BEE_TYPE);
         } else {

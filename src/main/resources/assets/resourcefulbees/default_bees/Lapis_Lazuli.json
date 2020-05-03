@@ -6,5 +6,5 @@
   "centrifugeOutput": "minecraft:lapis_lazuli",
   "spawnInWorld": true,
   "dimensionList": [0],
-  "biomeList": "not really a biome"
+  "biomeList": "minecraft:plains"
 }

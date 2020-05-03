@@ -13,7 +13,6 @@ import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.passive.CustomBeeEntity;
 import net.minecraft.resources.IReloadableResourceManager;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.village.PointOfInterestType;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.Heightmap;
@@ -29,15 +28,16 @@ import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 @Mod("resourcefulbees")
 public class ResourcefulBees
@@ -106,28 +106,11 @@ public class ResourcefulBees
     }
 
     public static void addBeeToSpawnList() {
-        ArrayList<String> biomeList = new ArrayList<>();
-        Iterator<Map.Entry<String, BeeInfo>> beeInfoIterator = CustomBeeEntity.BEE_INFO.entrySet().iterator();
-        while (beeInfoIterator.hasNext()) {
-            Map.Entry<String, BeeInfo> element = beeInfoIterator.next();
-            BeeInfo beeInfo = element.getValue();
-
-            HashMap<String, BeeInfo> tempMap = new HashMap<>();
-            tempMap.put(element.getKey(), element.getValue());
-
-
-            biomeList.add(beeInfo.getBiomeList());
-        }
-
-        List<String> biomes = biomeList.stream().distinct().collect(Collectors.toList());
-
-        for (String s : biomes) {
-            if (!s.contains(" ")) {
-                Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(s));
-                if (biome != null) {
-                    biome.getSpawns(EntityClassification.CREATURE).add(new Biome.SpawnListEntry(RegistryHandler.CUSTOM_BEE.get(), 20, 3, 30));
-                }
-            }
+        Iterator<Map.Entry<Biome, ArrayList<String>>> spawnableBiomesIterator = BeeInfo.SPAWNABLE_BIOMES.entrySet().iterator();
+        while (spawnableBiomesIterator.hasNext()) {
+            Map.Entry<Biome, ArrayList<String>> element = spawnableBiomesIterator.next();
+            Biome biome = element.getKey();
+            biome.getSpawns(EntityClassification.CREATURE).add(new Biome.SpawnListEntry(RegistryHandler.CUSTOM_BEE.get(),20,3,30));
         }
 
         EntitySpawnPlacementRegistry.register(RegistryHandler.CUSTOM_BEE.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, CustomBeeEntity::canBeeSpawn);

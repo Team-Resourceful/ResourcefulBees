@@ -6,5 +6,5 @@
   "centrifugeOutput": "minecraft:redstone",
   "spawnInWorld": true,
   "dimensionList": [0],
-  "biomeList": "not really a biome"
+  "biomeList": "minecraft:plains"
 }

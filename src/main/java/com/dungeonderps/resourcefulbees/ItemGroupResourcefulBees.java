@@ -1,15 +1,14 @@
 package com.dungeonderps.resourcefulbees;
 
-import java.util.Map;
-
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
-import net.minecraft.entity.passive.CustomBeeEntity;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import java.util.Map;
 
 public class ItemGroupResourcefulBees{
 
@@ -18,8 +17,8 @@ public class ItemGroupResourcefulBees{
 		@Override
 		@OnlyIn(Dist.CLIENT)
 		public void fill(NonNullList<ItemStack> items) {
-			if (!CustomBeeEntity.BEE_INFO.isEmpty()) {
-				for (Map.Entry<String, BeeInfo> beeType : CustomBeeEntity.BEE_INFO.entrySet()) {
+			if (!BeeInfo.BEE_INFO.isEmpty()) {
+				for (Map.Entry<String, BeeInfo> beeType : BeeInfo.BEE_INFO.entrySet()) {
 					if (beeType.getKey() == "Default")
 						continue;
 					else {

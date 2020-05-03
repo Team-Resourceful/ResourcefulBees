@@ -28,7 +28,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import static net.minecraft.entity.passive.CustomBeeEntity.BEE_INFO;
+import static com.dungeonderps.resourcefulbees.config.BeeInfo.BEE_INFO;
 import static net.minecraft.state.properties.BlockStateProperties.HORIZONTAL_FACING;
 
 public class IronBeehiveBlock extends BeehiveBlock {

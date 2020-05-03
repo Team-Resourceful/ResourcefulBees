@@ -1,11 +1,17 @@
 package com.dungeonderps.resourcefulbees.config;
 
+import com.google.common.base.Splitter;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.biome.Biome;
+import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 
 public class BeeInfo {
+    //These are needed for dynamic creation from JSON configs
+    public static final LinkedHashMap<String, BeeInfo> BEE_INFO = new LinkedHashMap<>();
+    public static final HashMap<Biome, ArrayList<String>> SPAWNABLE_BIOMES = new HashMap<>();
 
     //TODO Change biomeList to an ArrayList
     // - Add "Ender" field for Particle Effects usage.
@@ -192,6 +198,35 @@ public class BeeInfo {
      */
     public void setBiomeList(String biomeList) {
         this.biomeList = biomeList;
+    }
+
+    public static void parseBiomeList(BeeInfo bee){
+        if (bee.getBiomeList().toLowerCase().contains("tag:")){
+            //list with parsed biome tags
+            List<String> biomeList = Splitter.on(',').trimResults().splitToList(bee.getBiomeList().toLowerCase().replace("tag:",""));
+            for(String type : biomeList){
+                //creates set containing all biomes of given type
+                Set<Biome> biomeSet = BiomeDictionary.getBiomes(BiomeDictionary.Type.getType(type));
+                updateSpawnableBiomes(biomeSet,bee);
+            }
+
+        } else {
+            List<String> biomeList = Splitter.on(',').trimResults().splitToList(bee.getBiomeList().toLowerCase());
+            Set<Biome> biomeSet = new HashSet<>();
+            for(String biome : biomeList){
+                //creates set containing all biomes
+                biomeSet.add(ForgeRegistries.BIOMES.getValue(new ResourceLocation(biome)));
+            }
+            updateSpawnableBiomes(biomeSet,bee);
+        }
+    }
+
+    private static void updateSpawnableBiomes(Set<Biome> biomeSet, BeeInfo bee){
+        for(Biome biome : biomeSet){
+            //checks to see if spawnable biomes map contains current biome,
+            //if so then adds bee to array value, otherwise creates new key
+            BeeInfo.SPAWNABLE_BIOMES.computeIfAbsent(biome,k -> new ArrayList<>()).add(bee.getName());
+        }
     }
 
     // MAY BE DEPRECATED UNLESS A NEED IS FOUND

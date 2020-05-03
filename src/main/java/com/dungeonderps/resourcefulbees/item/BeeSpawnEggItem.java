@@ -1,8 +1,8 @@
 package com.dungeonderps.resourcefulbees.item;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
+import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.passive.CustomBeeEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
@@ -46,7 +46,7 @@ public class BeeSpawnEggItem extends SpawnEggItem {
         PlayerEntity player = context.getPlayer();
         if (itemstack.getChildTag("ResourcefulBees") != null) {
             String stackNbt = itemstack.getChildTag("ResourcefulBees").getString("beeType");
-            if (CustomBeeEntity.BEE_INFO.get(stackNbt) == null && !itemstack.isEmpty()) {
+            if (BeeInfo.BEE_INFO.get(stackNbt) == null && !itemstack.isEmpty()) {
                 for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
                     if (player.inventory.getStackInSlot(i) == itemstack) {
                         player.inventory.removeStackFromSlot(i);

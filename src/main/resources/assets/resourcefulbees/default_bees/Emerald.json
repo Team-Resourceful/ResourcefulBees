@@ -6,5 +6,5 @@
   "centrifugeOutput": "minecraft:emerald",
   "spawnInWorld": true,
   "dimensionList": [0],
-  "biomeList": "not really a biome"
+  "biomeList": "TAG:Mountain,Hills"
 }

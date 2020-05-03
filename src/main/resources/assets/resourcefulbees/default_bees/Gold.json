@@ -6,5 +6,5 @@
   "centrifugeOutput": "minecraft:gold_ingot",
   "spawnInWorld": true,
   "dimensionList": [0],
-  "biomeList": "minecraft:plains"
+  "biomeList": "tag:MESA"
 }
