@@ -1,6 +1,7 @@
 package com.dungeonderps.resourcefulbees;
 
 import com.dungeonderps.resourcefulbees.commands.ResourcefulBeeCommands;
+import com.dungeonderps.resourcefulbees.compat.top.TopCompat;
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.config.ResourcefulBeesConfig;
 import com.dungeonderps.resourcefulbees.data.DataGen;
@@ -20,10 +21,13 @@ import net.minecraft.world.storage.loot.functions.LootFunctionManager;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.InterModComms;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -62,6 +66,7 @@ public class ResourcefulBees
         MinecraftForge.EVENT_BUS.addListener(this::serverStarting);
         MinecraftForge.EVENT_BUS.addListener(this::OnServerSetup);
         DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
+            FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onInterModEnqueue);
             FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
             FMLJavaModLoadingContext.get().getModEventBus().addListener(ColorHandler::onItemColors);
             FMLJavaModLoadingContext.get().getModEventBus().addListener(ColorHandler::onBlockColors);
@@ -94,6 +99,10 @@ public class ResourcefulBees
         LootFunctionManager.registerFunction(new BlockItemFunction.Serializer());
 
         addBeeToSpawnList();
+    }
+    public void onInterModEnqueue(InterModEnqueueEvent event) {
+        if (ModList.get().isLoaded("theoneprobe"))
+            InterModComms.sendTo("theoneprobe", "getTheOneProbe", TopCompat::new);
     }
 
     private void serverStarting(FMLServerStartingEvent event) {

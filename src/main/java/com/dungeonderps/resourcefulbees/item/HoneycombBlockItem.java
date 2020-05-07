@@ -12,7 +12,7 @@ import net.minecraft.nbt.CompoundNBT;
 public class HoneycombBlockItem extends BlockItem {
 
     public HoneycombBlockItem() {
-        super(RegistryHandler.HONEYCOMBBLOCK.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFULBEES));
+        super(RegistryHandler.HONEYCOMBBLOCK.get(), new Item.Properties());
     }
 
 

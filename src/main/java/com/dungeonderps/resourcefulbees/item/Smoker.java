@@ -1,5 +1,6 @@
 package com.dungeonderps.resourcefulbees.item;
 
+import com.dungeonderps.resourcefulbees.ItemGroupResourcefulBees;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particles.ParticleTypes;
@@ -26,7 +27,7 @@ import net.minecraft.item.Item;
 public class Smoker extends Item {
 
     public Smoker() {
-        super(new Properties().setNoRepair().maxStackSize(1).maxDamage(10).group(ItemGroup.MISC));
+        super(new Properties().setNoRepair().maxStackSize(1).maxDamage(10).group(ItemGroupResourcefulBees.RESOURCEFULBEES));
     }
     
 	public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand)

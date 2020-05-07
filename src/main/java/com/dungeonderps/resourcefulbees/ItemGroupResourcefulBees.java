@@ -34,6 +34,12 @@ public class ItemGroupResourcefulBees{
 						combItemTag.putString("Color", beeType.getValue().getColor());
 						combItemTag.putString("BeeType", beeType.getKey());
 						items.add(combStack);
+
+						final ItemStack combBlockStack = new ItemStack(RegistryHandler.HONEYCOMBBLOCKITEM.get());
+						final CompoundNBT combBlockItemTag = combBlockStack.getOrCreateChildTag("ResourcefulBees");
+						combBlockItemTag.putString("Color", beeType.getValue().getColor());
+						combBlockItemTag.putString("BeeType", beeType.getKey());
+						items.add(combBlockStack);
 					}
 				}
 			}
