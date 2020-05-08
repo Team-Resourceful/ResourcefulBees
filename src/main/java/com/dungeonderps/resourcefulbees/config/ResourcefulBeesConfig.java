@@ -1,6 +1,7 @@
 package com.dungeonderps.resourcefulbees.config;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
+import com.dungeonderps.resourcefulbees.utils.BeeInfoUtils;
 import com.google.gson.Gson;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.FolderPack;
@@ -140,25 +141,17 @@ public class ResourcefulBeesConfig {
         Reader r = new FileReader(file);
         BeeInfo bee = gson.fromJson(r, BeeInfo.class);
         bee.setName(name);
-        if (bee.validate()){
+        if (BeeInfoUtils.validate(bee)){
             BeeInfo.BEE_INFO.put(name, bee);
             if(bee.canSpawnInWorld()){
-                BeeInfo.parseBiomeList(bee);
+                BeeInfoUtils.parseBiomeList(bee);
             }
         }
     }
 
     public static void addBees() {
         BeeInfo.BEE_INFO.clear();
-
-        BeeInfo defaultBee = new BeeInfo();
-        defaultBee.setName("Default");
-        defaultBee.setColor("#FFFFFF");
-        defaultBee.setFlower("minecraft:poppy");
-        defaultBee.setBaseBlock("minecraft:stone");
-        defaultBee.setMutationBlock("minecraft:stone");
-        defaultBee.setBiomeList("test");
-        BeeInfo.BEE_INFO.put("Default", defaultBee);
+        BeeInfoUtils.genDefaultBee();
 
         for (File f: BEE_PATH.toFile().listFiles()) {
             String s = f.getName();

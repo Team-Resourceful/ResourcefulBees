@@ -1,6 +1,11 @@
 package com.dungeonderps.resourcefulbees.item;
 
 import com.dungeonderps.resourcefulbees.ItemGroupResourcefulBees;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.ActionResult;
@@ -14,20 +19,13 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.util.List;
-
 import javax.annotation.Nullable;
-
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
+import java.util.List;
 
 public class Smoker extends Item {
 
     public Smoker() {
-        super(new Properties().setNoRepair().maxStackSize(1).maxDamage(10).group(ItemGroupResourcefulBees.RESOURCEFULBEES));
+        super(new Properties().setNoRepair().maxStackSize(1).maxDamage(10).group(ItemGroupResourcefulBees.RESOURCEFUL_BEES));
     }
     
 	public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand)

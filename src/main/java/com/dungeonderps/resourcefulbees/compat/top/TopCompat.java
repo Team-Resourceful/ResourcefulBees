@@ -1,19 +1,15 @@
 package com.dungeonderps.resourcefulbees.compat.top;
 
 import com.dungeonderps.resourcefulbees.RegistryHandler;
+import com.dungeonderps.resourcefulbees.lib.BeeConst;
 import com.dungeonderps.resourcefulbees.tileentity.HoneycombBlockEntity;
-import mcjty.theoneprobe.api.*;
-import net.minecraft.entity.passive.CustomBeeEntity;
+import mcjty.theoneprobe.api.ITheOneProbe;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.text.TextFormatting;
 
 import javax.annotation.Nullable;
 import java.util.function.Function;
-
-import static com.dungeonderps.resourcefulbees.ResourcefulBees.LOGGER;
 
 public class TopCompat implements Function<ITheOneProbe, Void>
 {
@@ -27,10 +23,9 @@ public class TopCompat implements Function<ITheOneProbe, Void>
             if(world.getTileEntity(data.getPos()) instanceof HoneycombBlockEntity)
             {
                 TileEntity honeyBlock = world.getTileEntity(data.getPos());
-                final ItemStack honeyCombBlock = new ItemStack(RegistryHandler.HONEYCOMBBLOCKITEM.get());
-                final CompoundNBT honeyCombBlockItemTag = honeyCombBlock.getOrCreateChildTag("ResourcefulBees");
-                honeyCombBlockItemTag.putString("Color", honeyBlock.serializeNBT().getString("Color"));
-                honeyCombBlockItemTag.putString("BeeType", honeyBlock.serializeNBT().getString("BeeType"));
+                final ItemStack honeyCombBlock = new ItemStack(RegistryHandler.HONEYCOMB_BLOCK_ITEM.get());
+                honeyCombBlock.getOrCreateChildTag(BeeConst.NBT_ROOT).putString(BeeConst.NBT_BEE_TYPE, honeyBlock.serializeNBT().getString(BeeConst.NBT_BEE_TYPE));
+                honeyCombBlock.getOrCreateChildTag(BeeConst.NBT_ROOT).putString(BeeConst.NBT_COLOR, honeyBlock.serializeNBT().getString(BeeConst.NBT_COLOR));
 
                 probeInfo.horizontal()
                         .item(honeyCombBlock)

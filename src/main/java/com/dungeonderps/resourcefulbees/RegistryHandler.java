@@ -59,11 +59,11 @@ public class RegistryHandler {
 	//**************ITEMS*********************************************
 
 	public static final RegistryObject<Item> RESOURCEFUL_HONEYCOMB = ITEMS.register("resourceful_honeycomb", ResourcefulHoneycomb::new);
-	public static final RegistryObject<Item> IRON_BEEHIVE_ITEM = ITEMS.register("iron_beehive", () -> new BlockItem(IRON_BEEHIVE.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFULBEES)));
+	public static final RegistryObject<Item> IRON_BEEHIVE_ITEM = ITEMS.register("iron_beehive", () -> new BlockItem(IRON_BEEHIVE.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
 	public static final RegistryObject<Item> SMOKER = ITEMS.register("smoker", Smoker::new);
-	public static final RegistryObject<Item> BELLOW = ITEMS.register("bellow", () -> new Item(new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFULBEES)));
-	public static final RegistryObject<Item> SMOKERCAN = ITEMS.register("smoker_can", () -> new Item(new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFULBEES)));
-	public static final RegistryObject<Item> BEESWAX = ITEMS.register("bees_wax", () -> new Item(new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFULBEES)));
+	public static final RegistryObject<Item> BELLOW = ITEMS.register("bellow", () -> new Item(new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
+	public static final RegistryObject<Item> SMOKERCAN = ITEMS.register("smoker_can", () -> new Item(new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
+	public static final RegistryObject<Item> BEESWAX = ITEMS.register("bees_wax", () -> new Item(new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
 	public static final RegistryObject<Item> HONEYCOMB_BLOCK_ITEM = ITEMS.register("resourceful_honeycomb_block",  () -> new HoneycombBlockItem());
 	//public static final RegistryObject<Item> CENTRIFUGE_ITEM = ITEMS.register("centrifuge", () -> new BlockItem(CENTRIFUGE.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFULBEES)));
 

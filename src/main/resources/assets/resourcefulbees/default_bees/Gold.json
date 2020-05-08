@@ -1,9 +1,9 @@
 {
   "color": "#FFDC00",
-  "flower": "TAll",
-  "baseBlock": "minecraft:stone",
-  "mutationBlock": "minecraft:gold_ore",
-  "centrifugeOutput": "minecraft:gold_ingot",
+  "flower": "TaLL",
+  "baseBlock": "tag:minecraft:leaves",
+  "mutationBlock": "minecraft:whore",
+  "centrifugeOutput": "minecraft:kush",
   "spawnInWorld": true,
   "biomeList": "nuclear:wasteland"
 }

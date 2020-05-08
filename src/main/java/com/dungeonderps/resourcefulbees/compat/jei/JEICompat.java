@@ -43,7 +43,7 @@ public class JEICompat implements IModPlugin {
     public void registerItemSubtypes( ISubtypeRegistration subtypeRegistry )
     {
         subtypeRegistry.registerSubtypeInterpreter( RegistryHandler.RESOURCEFUL_HONEYCOMB.get(), honeycombSubtype );
-        subtypeRegistry.registerSubtypeInterpreter( RegistryHandler.HONEYCOMBBLOCKITEM.get(), honeycombblockSubtype );
+        subtypeRegistry.registerSubtypeInterpreter( RegistryHandler.HONEYCOMB_BLOCK_ITEM.get(), honeycombblockSubtype );
         //subtypeRegistry.registerSubtypeInterpreter( RegistryHandler.BEE_SPAWN_EGG.get(), beeSpawnEggSubtype );
     }
 
