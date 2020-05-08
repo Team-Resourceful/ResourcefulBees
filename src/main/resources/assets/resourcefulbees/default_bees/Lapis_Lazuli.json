@@ -5,6 +5,5 @@
   "mutationBlock": "minecraft:lapis_ore",
   "centrifugeOutput": "minecraft:lapis_lazuli",
   "spawnInWorld": true,
-  "dimensionList": [0],
   "biomeList": "minecraft:plains"
 }

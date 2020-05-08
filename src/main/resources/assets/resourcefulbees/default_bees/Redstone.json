@@ -5,6 +5,5 @@
   "mutationBlock": "minecraft:redstone_ore",
   "centrifugeOutput": "minecraft:redstone",
   "spawnInWorld": true,
-  "dimensionList": [0],
   "biomeList": "minecraft:plains"
 }

@@ -1,39 +1,29 @@
 package com.dungeonderps.resourcefulbees.config;
 
+import com.dungeonderps.resourcefulbees.utils.Color;
 import com.google.common.base.Splitter;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.*;
+import java.util.regex.Pattern;
+
+import static com.dungeonderps.resourcefulbees.ResourcefulBees.LOGGER;
 
 public class BeeInfo {
     //These are needed for dynamic creation from JSON configs
     public static final LinkedHashMap<String, BeeInfo> BEE_INFO = new LinkedHashMap<>();
-    public static final HashMap<Biome, ArrayList<String>> SPAWNABLE_BIOMES = new HashMap<>();
-
-    //TODO Change biomeList to an ArrayList
-    // - Add "Ender" field for Particle Effects usage.
+    public static final HashMap<Biome, Set<String>> SPAWNABLE_BIOMES = new HashMap<>();
+    private static final Pattern RESOURCE_PATTERN = Pattern.compile("(tag:)?(\\w+):(\\w+/\\w+|\\w+)", Pattern.CASE_INSENSITIVE);
 
     private String name, flower, color, biomeList, baseBlock, mutationBlock, centrifugeOutput;
-    private boolean spawnInWorld;
+    private boolean spawnInWorld, enderBee;
 
     private transient boolean enabled;
-    // color stuff
-    private transient float[] rgb;
-    private transient int col;
-    private final transient String hexLength = "INVALID HEX COLOR: please check your color value and make sure it is a # followed by 6 numbers/letters";
-    public BeeInfo() {
-        // run checkers
-
-        //TODO This stuff is probably not need any longer
-        //store as different vals
-        //Color c = Color.decode(color);
-        //c.getRGBColorComponents(rgb); // should work if not rbg needs to be assigned to this
-        //col = c.getRGB();
-
-    }
+    public BeeInfo() {}
 
     /**
      * Gets the name/type of this bee.
@@ -53,7 +43,7 @@ public class BeeInfo {
      * @return this bee's flower(s).
      */
     public String getFlower() {
-        return flower;
+        return flower.toLowerCase().trim();
     }
 
     /**
@@ -83,16 +73,14 @@ public class BeeInfo {
     }
 
     /**
-     * NOT CURRENTLY USED
      * Returns whether this bee can naturally spawn in world.
      * @return can this bee spawn naturally in world?
      */
-    public boolean isSpawnInWorld() {
+    public boolean canSpawnInWorld() {
         return spawnInWorld;
     }
 
     /**
-     * NOT CURRENTLY USED
      * Sets whether this bee can naturally spawn in world.
      * Can be used to modify bees through code.
      * @param spawnInWorld can this bee spawn in world?
@@ -122,12 +110,16 @@ public class BeeInfo {
         this.enabled = enabled;
     }
 
+    public boolean isEnderBee() { return enderBee; }
+
+    public void setEnderBee(boolean enderBee) { this.enderBee = enderBee;}
+
     /**
      * Gets the Centrifuge Output for this bee's honeycomb.
      * @return This bee's honeycomb centrifuge output.
      */
     public String getCentrifugeOutput() {
-        return centrifugeOutput;
+        return centrifugeOutput.toLowerCase().trim();
     }
 
     /**
@@ -145,7 +137,7 @@ public class BeeInfo {
      * @return this bee's Mutation Block.
      */
     public String getMutationBlock() {
-        return mutationBlock;
+        return mutationBlock.toLowerCase().trim();
     }
 
     /**
@@ -166,7 +158,7 @@ public class BeeInfo {
      * @return this bee's Base Block.
      */
     public String getBaseBlock() {
-        return baseBlock;
+        return baseBlock.toLowerCase().trim();
     }
 
     /**
@@ -182,16 +174,14 @@ public class BeeInfo {
     }
 
     /**
-     * NOT CURRENTLY USED
      * Gets the biome(s) this bee can spawn in.
      * @return this bee's spawnable biome(s).
      */
     public String getBiomeList() {
-        return biomeList;
+        return biomeList.toLowerCase().trim();
     }
 
     /**
-     * NOT CURRENTLY USED
      * Sets the biome(s) this bee can spawn in.
      * Can be used to modify bees through code.
      * @param biomeList this bee's spawnable biome(s).
@@ -201,9 +191,9 @@ public class BeeInfo {
     }
 
     public static void parseBiomeList(BeeInfo bee){
-        if (bee.getBiomeList().toLowerCase().contains("tag:")){
+        if (bee.getBiomeList().contains("tag:")){
             //list with parsed biome tags
-            List<String> biomeList = Splitter.on(',').trimResults().splitToList(bee.getBiomeList().toLowerCase().replace("tag:",""));
+            List<String> biomeList = Splitter.on(',').trimResults().splitToList(bee.getBiomeList().replace("tag:",""));
             for(String type : biomeList){
                 //creates set containing all biomes of given type
                 Set<Biome> biomeSet = BiomeDictionary.getBiomes(BiomeDictionary.Type.getType(type));
@@ -211,7 +201,7 @@ public class BeeInfo {
             }
 
         } else {
-            List<String> biomeList = Splitter.on(',').trimResults().splitToList(bee.getBiomeList().toLowerCase());
+            List<String> biomeList = Splitter.on(',').trimResults().splitToList(bee.getBiomeList());
             Set<Biome> biomeSet = new HashSet<>();
             for(String biome : biomeList){
                 //creates set containing all biomes
@@ -225,65 +215,89 @@ public class BeeInfo {
         for(Biome biome : biomeSet){
             //checks to see if spawnable biomes map contains current biome,
             //if so then adds bee to array value, otherwise creates new key
-            BeeInfo.SPAWNABLE_BIOMES.computeIfAbsent(biome,k -> new ArrayList<>()).add(bee.getName());
-        }
-    }
-
-    // MAY BE DEPRECATED UNLESS A NEED IS FOUND
-    public float[] getRGB() {
-        return rgb;
-    }
-    // MAY BE DEPRECATED UNLESS A NEED IS FOUND
-    public int getCol() {
-        return col;
-    }
-
-
-    //TODO Needs modification before implementation.
-    // - Doubt '#' has any performance impact,
-    // - in addition '0x' prefix may be used in lieu of '#'
-    /* JSON Validation is not currently implemented
-        Some checks may need modification.
-
-    public void checkColor() {
-        if (color.charAt(0) != '#') {
-            if (color.length() != 6) {
-                enabled = false;
-                ResourcefulBees.LOGGER.error(hexLength);
+            if(biome != null){
+                BeeInfo.SPAWNABLE_BIOMES.computeIfAbsent(biome,k -> new HashSet<>()).add(bee.getName());
+            } else {
+                LOGGER.error("");
             }
-            ResourcefulBees.LOGGER.warn("MISSING #: please remember to put a # in front of your hex value to increase performance :)");
-        } else if (color.length() != 7) {
-            enabled = false;
-            ResourcefulBees.LOGGER.error(hexLength);
         }
     }
 
-    public void checkBiomes() {
-        ResourcefulBees.LOGGER.info("Biomes currently not implemented");
+
+    public boolean validate() {
+        boolean isValid = true;
+
+        isValid = isValid && validateColor();
+        isValid = isValid && validateFlower();
+        isValid = isValid && validateBaseBlock();
+        isValid = isValid && validateMutationBlock();
+        //isValid = isValid ? validateBiomeList() : false;
+        isValid = isValid && validateCentrifugeOutput();
+
+        return isValid;
     }
 
-    public void checkDims() {
-        ResourcefulBees.LOGGER.info("Dimensions currently not implemented");
-    }
-
-    public void checkBlocksNDrops() {
-        if (ResourcefulBeesConfig.DEBUG_MODE.get()) {
-            ResourcefulBees.LOGGER.info("Strict block and item checking not implemented, please don't be stupid");
-            // check base here
-            // check mut here
-            // check drop here
-        }
-        // light checker: only checks syntax
-        for (String i: new String[] {baseBlock, mutationBlock, centrifugeOutput}) {
-            int x = i.indexOf(':');
-            if (x == -1 || x == 0 || x != i.length() - 1) {
-                ResourcefulBees.LOGGER.error("INVALID ID: should be format of \"modid:item_or_block_id\"");
-                enabled = false;
+    private boolean validateCentrifugeOutput() {
+        if (RESOURCE_PATTERN.matcher(getMutationBlock()).matches()){
+            if (ForgeRegistries.ITEMS.getValue(getResource(getCentrifugeOutput())) != null){
+                LOGGER.debug(getName() + " Bee Centrifuge Output Check Passed!");
+                return true;
             }
-        } 
+        }
+        LOGGER.error(getName() + " Bee Centrifuge Output Check Failed! Please check JSON!\nCurrent value: " + getCentrifugeOutput() + " is not a valid item");
+        return false;
     }
 
-     */
+    private boolean validateMutationBlock() {
+        if (RESOURCE_PATTERN.matcher(getMutationBlock()).matches()){
+            if (ForgeRegistries.BLOCKS.getValue(getResource(getMutationBlock())) != null){
+                LOGGER.debug(getName() + " Bee Mutation Block Check Passed!");
+                return true;
+            }
+        }
+        LOGGER.error(getName() + " Bee Mutation Block Check Failed! Please check JSON!\nCurrent value: " + getMutationBlock() + " is not a valid block");
+        return false;
+    }
+
+    private boolean validateBaseBlock() {
+        if(RESOURCE_PATTERN.matcher(getBaseBlock()).matches()){
+            if (getBaseBlock().contains("tag:")){
+                String cleanBaseBlock = getBaseBlock().replace("tag:", "");
+                if (BlockTags.getCollection().get(getResource(cleanBaseBlock)) != null){
+                    LOGGER.debug(getName() + " Bee BaseBlock Check Passed!");
+                    return true;
+                } else {
+                    LOGGER.error(getName() + " Bee BaseBlock Check Failed! Please check JSON!\nCurrent value: " + getBaseBlock() + " is not a valid tag");
+                    return false;
+                }
+            } else if (ForgeRegistries.BLOCKS.getValue(getResource(getBaseBlock())) != null){
+                LOGGER.debug(getName() + "Bee BaseBlock Check Passed!");
+                return true;
+            }
+        }
+        LOGGER.error(getName() + " Bee BaseBlock Check Failed! Please check JSON!\nCurrent value: " + getBaseBlock() + " is not a valid block");
+        return false;
+    }
+
+    private boolean validateFlower() {
+        if (getFlower().equals("all") || getFlower().equals("small") || getFlower().equals("tall") || ForgeRegistries.BLOCKS.getValue(getResource(getFlower())) != null) {
+            LOGGER.debug(getName() + " Bee Flower Check Passed!");
+            return true;
+        } else {
+            LOGGER.error(getName() + " Bee Flower Check Failed! Please check JSON!\nCurrent value: " + getFlower() + " is not a valid flower");
+            return false;
+        }
+    }
+
+    private boolean validateColor() {
+        if (Color.validate(getColor())){
+            LOGGER.debug(getName() + " Bee Color Check Passed!");
+            return true;
+        } else {
+            LOGGER.error(getName() + " Bee Color Check Failed! Please check JSON!\nCurrent value: " + getColor() + " is not a valid color");
+            return false;
+        }
+    }
 
     /**
      * Returns an ArrayList of type String containing all information
@@ -311,7 +325,6 @@ public class BeeInfo {
      * @return Returns New Resource Location for given input.
      */
     public ResourceLocation getResource(String resource){
-        String[] resourceSplit = resource.split(":");
-        return new ResourceLocation(resourceSplit[0], resourceSplit[1]);
+        return new ResourceLocation(resource);
     }
 }

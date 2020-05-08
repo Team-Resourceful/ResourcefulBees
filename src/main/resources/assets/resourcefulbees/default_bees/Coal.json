@@ -5,6 +5,6 @@
   "mutationBlock": "minecraft:coal_ore",
   "centrifugeOutput": "minecraft:coal",
   "spawnInWorld": true,
-  "dimensionList": [0],
-  "biomeList": "tag:OVERWORLD"
+  "biomeList": "tag:OVERWORLD",
+  "enderBee": true
 }

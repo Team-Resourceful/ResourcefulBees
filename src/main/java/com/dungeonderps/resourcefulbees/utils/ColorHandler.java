@@ -19,12 +19,12 @@ public final class ColorHandler {
     public static void onItemColors(ColorHandlerEvent.Item event) {
         ItemColors colors = event.getItemColors();
         registerItems(colors, ResourcefulHoneycomb::getColor, RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
-        registerItems(colors, HoneycombBlock::getItemColor, RegistryHandler.HONEYCOMBBLOCKITEM.get());
+        registerItems(colors, HoneycombBlock::getItemColor, RegistryHandler.HONEYCOMB_BLOCK_ITEM.get());
     }
 
     public static void onBlockColors(ColorHandlerEvent.Block event){
         BlockColors colors = event.getBlockColors();
-        registerBlocks(colors, HoneycombBlock::getBlockColor, RegistryHandler.HONEYCOMBBLOCK.get());
+        registerBlocks(colors, HoneycombBlock::getBlockColor, RegistryHandler.HONEYCOMB_BLOCK.get());
     }
 
     private static void registerItems(ItemColors handler, IItemColor itemColor, IItemProvider... items) {

@@ -1,5 +1,7 @@
 package com.dungeonderps.resourcefulbees;
 
+//import com.dungeonderps.resourcefulbees.block.CentrifugeBlock;
+
 import com.dungeonderps.resourcefulbees.block.HoneycombBlock;
 import com.dungeonderps.resourcefulbees.block.IronBeehiveBlock;
 import com.dungeonderps.resourcefulbees.item.BeeSpawnEggItem;
@@ -23,6 +25,8 @@ import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+
+//import com.dungeonderps.resourcefulbees.tileentity.CentrifugeBlockEntity;
 
 public class RegistryHandler {
 	
@@ -49,7 +53,8 @@ public class RegistryHandler {
 	//**************BLOCKS********************************************
 
 	public static final RegistryObject<Block> IRON_BEEHIVE = BLOCKS.register("iron_beehive", () -> new IronBeehiveBlock(IronBeehiveProperties));
-	public static final RegistryObject<Block> HONEYCOMBBLOCK = BLOCKS.register("resourceful_honeycomb_block", () -> new HoneycombBlock());
+	public static final RegistryObject<Block> HONEYCOMB_BLOCK = BLOCKS.register("resourceful_honeycomb_block", () -> new HoneycombBlock());
+	//public static final RegistryObject<Block> CENTRIFUGE = BLOCKS.register("centrifuge", () -> new CentrifugeBlock(IronBeehiveProperties));
 
 	//**************ITEMS*********************************************
 
@@ -59,7 +64,8 @@ public class RegistryHandler {
 	public static final RegistryObject<Item> BELLOW = ITEMS.register("bellow", () -> new Item(new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFULBEES)));
 	public static final RegistryObject<Item> SMOKERCAN = ITEMS.register("smoker_can", () -> new Item(new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFULBEES)));
 	public static final RegistryObject<Item> BEESWAX = ITEMS.register("bees_wax", () -> new Item(new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFULBEES)));
-	public static final RegistryObject<Item> HONEYCOMBBLOCKITEM = ITEMS.register("resourceful_honeycomb_block",  () -> new HoneycombBlockItem());
+	public static final RegistryObject<Item> HONEYCOMB_BLOCK_ITEM = ITEMS.register("resourceful_honeycomb_block",  () -> new HoneycombBlockItem());
+	//public static final RegistryObject<Item> CENTRIFUGE_ITEM = ITEMS.register("centrifuge", () -> new BlockItem(CENTRIFUGE.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFULBEES)));
 
 	//**************TILE ENTITIES*************************************
 
@@ -68,8 +74,12 @@ public class RegistryHandler {
 			.build(null));
 
 	public static final RegistryObject<TileEntityType<?>> HONEYCOMB_BLOCK_ENTITY = TILE_ENTITY_TYPES.register("resourceful_honeycomb_block", () -> TileEntityType.Builder
-			.create(HoneycombBlockEntity::new, HONEYCOMBBLOCK.get())
+			.create(HoneycombBlockEntity::new, HONEYCOMB_BLOCK.get())
 			.build(null));
+
+	//public static final RegistryObject<TileEntityType<?>> CENTRIFUGE_ENTITY = TILE_ENTITY_TYPES.register("centrifuge", () -> TileEntityType.Builder
+	//		.create(CentrifugeBlockEntity::new, CENTRIFUGE.get())
+	//		.build(null));
 
 	//**************ENTITIES******************************************
 

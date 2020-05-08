@@ -5,6 +5,5 @@
   "mutationBlock": "minecraft:diamond_ore",
   "centrifugeOutput": "minecraft:diamond",
   "spawnInWorld": true,
-  "dimensionList": [0],
   "biomeList": "TAG:OVerWorld"
 }

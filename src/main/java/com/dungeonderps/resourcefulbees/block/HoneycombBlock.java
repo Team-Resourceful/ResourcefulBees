@@ -48,7 +48,7 @@ public class HoneycombBlock extends Block {
 
     @Override    // TODO FIX THIS TO USE TE - don't pull data from block instance!!
     public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
-        ItemStack honeyCombBlockItemStack = new ItemStack(RegistryHandler.HONEYCOMBBLOCKITEM.get());
+        ItemStack honeyCombBlockItemStack = new ItemStack(RegistryHandler.HONEYCOMB_BLOCK_ITEM.get());
         final CompoundNBT honeyCombItemStackTag = honeyCombBlockItemStack.getOrCreateChildTag(BeeConst.NBT_ROOT);
         //honeyCombItemStackTag.putString(BeeConst.NBT_BEE_TYPE, this.beeType);
         honeyCombItemStackTag.putString(BeeConst.NBT_COLOR, this.blockColor);

@@ -5,6 +5,5 @@
   "mutationBlock": "minecraft:iron_ore",
   "centrifugeOutput": "minecraft:iron_ingot",
   "spawnInWorld": true,
-  "dimensionList": [0],
   "biomeList": "minecraft:plains"
 }

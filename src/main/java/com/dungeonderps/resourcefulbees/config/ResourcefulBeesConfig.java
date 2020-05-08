@@ -140,8 +140,12 @@ public class ResourcefulBeesConfig {
         Reader r = new FileReader(file);
         BeeInfo bee = gson.fromJson(r, BeeInfo.class);
         bee.setName(name);
-        BeeInfo.BEE_INFO.put(name, bee);
-        BeeInfo.parseBiomeList(bee);
+        if (bee.validate()){
+            BeeInfo.BEE_INFO.put(name, bee);
+            if(bee.canSpawnInWorld()){
+                BeeInfo.parseBiomeList(bee);
+            }
+        }
     }
 
     public static void addBees() {

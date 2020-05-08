@@ -31,7 +31,7 @@ public class combBlockComponentProvider implements IComponentProvider {
     @Override
     public ItemStack getStack(IDataAccessor accessor, IPluginConfig config) {
         CompoundNBT nbt = accessor.getServerData();
-        ItemStack stack = new ItemStack(RegistryHandler.HONEYCOMBBLOCKITEM.get());
+        ItemStack stack = new ItemStack(RegistryHandler.HONEYCOMB_BLOCK_ITEM.get());
         stack.getOrCreateChildTag(BeeConst.NBT_ROOT).putString(BeeConst.NBT_BEE_TYPE, nbt.getString(BeeConst.NBT_BEE_TYPE));
         stack.getOrCreateChildTag(BeeConst.NBT_ROOT).putString(BeeConst.NBT_COLOR, nbt.getString(BeeConst.NBT_COLOR));
 

@@ -5,6 +5,5 @@
   "mutationBlock": "minecraft:emerald_ore",
   "centrifugeOutput": "minecraft:emerald",
   "spawnInWorld": true,
-  "dimensionList": [0],
   "biomeList": "TAG:Mountain,Hills"
 }

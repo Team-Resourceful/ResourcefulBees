@@ -284,7 +284,7 @@ public class CustomBeeEntity extends BeeEntity {
     private void selectRandomBee(boolean fromBiome){
         if (fromBiome) {
             Biome curBiome = this.world.getBiome(this.getPosition());
-            ArrayList<String> spawnList = BeeInfo.SPAWNABLE_BIOMES.get(curBiome);
+            ArrayList<String> spawnList = new ArrayList<>(BeeInfo.SPAWNABLE_BIOMES.get(curBiome));
             this.dataManager.set(BEE_TYPE, BeeInfo.BEE_INFO.get(spawnList.get(rand.nextInt(spawnList.size()))).getName());
         } else {
             this.dataManager.set(BEE_TYPE, BeeInfo.BEE_INFO.get(BeeInfo.BEE_INFO.keySet().toArray()[rand.nextInt(BeeInfo.BEE_INFO.size() - 1) +1]).getName());

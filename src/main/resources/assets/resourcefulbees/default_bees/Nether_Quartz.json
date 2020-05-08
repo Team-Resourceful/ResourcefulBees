@@ -5,6 +5,5 @@
   "mutationBlock": "minecraft:nether_quartz_ore",
   "centrifugeOutput": "minecraft:nether_quartz",
   "spawnInWorld": true,
-  "dimensionList": [0],
   "biomeList": "tag:nether"
 }

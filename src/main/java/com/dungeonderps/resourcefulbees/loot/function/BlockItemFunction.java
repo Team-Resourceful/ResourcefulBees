@@ -24,7 +24,7 @@ public class BlockItemFunction extends LootFunction {
         TileEntity tile = context.get(LootParameters.BLOCK_ENTITY);
         if (tile instanceof HoneycombBlockEntity){
             HoneycombBlockEntity blockEntity = (HoneycombBlockEntity)tile;
-            ItemStack blockItem = new ItemStack(RegistryHandler.HONEYCOMBBLOCKITEM.get());
+            ItemStack blockItem = new ItemStack(RegistryHandler.HONEYCOMB_BLOCK_ITEM.get());
             blockItem.getOrCreateChildTag(BeeConst.NBT_ROOT).putString(BeeConst.NBT_BEE_TYPE, blockEntity.beeType);
             blockItem.getOrCreateChildTag(BeeConst.NBT_ROOT).putString(BeeConst.NBT_COLOR, blockEntity.blockColor);
             return blockItem;

@@ -34,10 +34,10 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 @Mod("resourcefulbees")
 public class ResourcefulBees
@@ -106,9 +106,9 @@ public class ResourcefulBees
     }
 
     public static void addBeeToSpawnList() {
-        Iterator<Map.Entry<Biome, ArrayList<String>>> spawnableBiomesIterator = BeeInfo.SPAWNABLE_BIOMES.entrySet().iterator();
+        Iterator<Map.Entry<Biome, Set<String>>> spawnableBiomesIterator = BeeInfo.SPAWNABLE_BIOMES.entrySet().iterator();
         while (spawnableBiomesIterator.hasNext()) {
-            Map.Entry<Biome, ArrayList<String>> element = spawnableBiomesIterator.next();
+            Map.Entry<Biome, Set<String>> element = spawnableBiomesIterator.next();
             Biome biome = element.getKey();
             biome.getSpawns(EntityClassification.CREATURE).add(new Biome.SpawnListEntry(RegistryHandler.CUSTOM_BEE.get(),20,3,30));
         }
