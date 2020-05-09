@@ -33,7 +33,10 @@ public class RecipeBuilder implements ISelectiveResourceReloadListener {
             if (beeType.getKey() == "Default")
                 continue;
             else {
-                IRecipe<?> honeyComb = this.makeHoneyCombRecipe(beeType.getKey(), beeType.getValue().getColor());
+                IRecipe<?> honeyCombBlock = this.makeHoneyCombRecipe(beeType.getKey(), beeType.getValue().getColor());
+                IRecipe<?> honeyComb = this.blockToHoneyCombRecipe(beeType.getKey(), beeType.getValue().getColor());
+                if (honeyCombBlock != null)
+                    recipes.put(honeyCombBlock.getId(), honeyCombBlock);
                 if (honeyComb != null)
                     recipes.put(honeyComb.getId(), honeyComb);
             }
@@ -42,25 +45,51 @@ public class RecipeBuilder implements ISelectiveResourceReloadListener {
 
     private IRecipe<?> makeHoneyCombRecipe(String BeeType, String Color) {
         ItemStack honeyCombItemStack = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
-        final CompoundNBT honeyCombItemStackTag = honeyCombItemStack.getOrCreateChildTag(BeeConst.NBT_ROOT);
-        honeyCombItemStackTag.putString(BeeConst.NBT_COLOR, Color);
-        honeyCombItemStackTag.putString(BeeConst.NBT_BEE_TYPE, BeeType);
+        ItemStack honeyCombOutput = new ItemStack(RegistryHandler.HONEYCOMB_BLOCK_ITEM.get());
+
+        CompoundNBT rbNBT = new CompoundNBT();
+        CompoundNBT btcNBT = new CompoundNBT();
+        btcNBT.putString(BeeConst.NBT_COLOR, Color);
+        btcNBT.putString(BeeConst.NBT_BEE_TYPE, BeeType);
+        rbNBT.put(BeeConst.NBT_ROOT,btcNBT);
+
+        honeyCombItemStack.setTag(rbNBT);
+        honeyCombOutput.setTag(rbNBT);
+
         Ingredient honeyCombItem = new CustomNBTIngredient(honeyCombItemStack);
+
         NonNullList<Ingredient> inputs = NonNullList.from(Ingredient.EMPTY,
                 honeyCombItem, honeyCombItem, honeyCombItem,
                 honeyCombItem, honeyCombItem, honeyCombItem,
                 honeyCombItem, honeyCombItem, honeyCombItem
         );
 
-        final ItemStack honeyCombOutput = new ItemStack(RegistryHandler.HONEYCOMB_BLOCK_ITEM.get());
-        final CompoundNBT honeyCombBlockItemTag = honeyCombOutput.getOrCreateChildTag(BeeConst.NBT_ROOT);
-        honeyCombBlockItemTag.putString(BeeConst.NBT_COLOR, Color);
-        honeyCombBlockItemTag.putString(BeeConst.NBT_BEE_TYPE, BeeType);
-
-        ResourceLocation name = new ResourceLocation(ResourcefulBees.MOD_ID, BeeType.toLowerCase() + "_honeycomb");
+        ResourceLocation name = new ResourceLocation(ResourcefulBees.MOD_ID, BeeType.toLowerCase() + "_honeycomb_block");
 
         return new ShapedRecipe(name, "", 3, 3, inputs, honeyCombOutput);
     }
+
+    private IRecipe<?> blockToHoneyCombRecipe(String BeeType, String Color) {
+        ItemStack honeyCombItemStack = new ItemStack(RegistryHandler.HONEYCOMB_BLOCK_ITEM.get());
+        ItemStack honeyCombOutput = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
+
+        CompoundNBT rbNBT = new CompoundNBT();
+        CompoundNBT btcNBT = new CompoundNBT();
+        btcNBT.putString(BeeConst.NBT_COLOR, Color);
+        btcNBT.putString(BeeConst.NBT_BEE_TYPE, BeeType);
+        rbNBT.put(BeeConst.NBT_ROOT,btcNBT);
+
+        honeyCombItemStack.setTag(rbNBT);
+        honeyCombOutput.setTag(rbNBT);
+        honeyCombOutput.setCount(9);
+
+        Ingredient honeyCombItem = new CustomNBTIngredient(honeyCombItemStack);
+
+        ResourceLocation name = new ResourceLocation(ResourcefulBees.MOD_ID, BeeType.toLowerCase() + "_block_to_honeycomb");
+
+        return new ShapelessRecipe(name, "",honeyCombOutput, NonNullList.from(Ingredient.EMPTY, honeyCombItem));
+    }
+
 
     private static class CustomNBTIngredient extends NBTIngredient
     {

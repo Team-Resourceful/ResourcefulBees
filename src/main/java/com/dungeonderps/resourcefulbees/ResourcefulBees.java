@@ -1,5 +1,6 @@
 package com.dungeonderps.resourcefulbees;
 
+import com.dungeonderps.resourcefulbees.block.IronBeehiveBlock;
 import com.dungeonderps.resourcefulbees.commands.ResourcefulBeeCommands;
 import com.dungeonderps.resourcefulbees.compat.top.TopCompat;
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
@@ -9,16 +10,33 @@ import com.dungeonderps.resourcefulbees.data.RecipeBuilder;
 import com.dungeonderps.resourcefulbees.entity.CustomBeeRenderer;
 import com.dungeonderps.resourcefulbees.loot.function.BlockItemFunction;
 import com.dungeonderps.resourcefulbees.utils.ColorHandler;
+import net.minecraft.block.BeehiveBlock;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.DispenserBlock;
+import net.minecraft.dispenser.IBlockSource;
+import net.minecraft.dispenser.OptionalDispenseBehavior;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.passive.CustomBeeEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.resources.IReloadableResourceManager;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tileentity.BeehiveTileEntity;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.village.PointOfInterestType;
+import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.storage.loot.functions.LootFunctionManager;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.common.IShearable;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
@@ -38,10 +56,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Mod("resourcefulbees")
 public class ResourcefulBees
@@ -98,6 +113,7 @@ public class ResourcefulBees
 
         LootFunctionManager.registerFunction(new BlockItemFunction.Serializer());
 
+        addDispenser();
         addBeeToSpawnList();
     }
     public void onInterModEnqueue(InterModEnqueueEvent event) {
@@ -112,6 +128,67 @@ public class ResourcefulBees
     private void doClientStuff(final FMLClientSetupEvent event) {
         //new ItemGroupResourcefulBees();
         RenderingRegistry.registerEntityRenderingHandler(RegistryHandler.CUSTOM_BEE.get(), CustomBeeRenderer::new);
+    }
+
+    public static void addDispenser() {
+        DispenserBlock.registerDispenseBehavior(Items.SHEARS.asItem(), new OptionalDispenseBehavior() {
+            protected ItemStack dispenseStack(IBlockSource source, ItemStack stack) {
+                World world = source.getWorld();
+                if (!world.isRemote()) {
+                    this.successful = false;
+                    BlockPos blockpos = source.getBlockPos().offset(source.getBlockState().get(DispenserBlock.FACING));
+
+                    for(net.minecraft.entity.Entity entity : world.getEntitiesInAABBexcluding(null, new AxisAlignedBB(blockpos), e -> !e.isSpectator() && e instanceof net.minecraftforge.common.IShearable)) {
+                        net.minecraftforge.common.IShearable target = (net.minecraftforge.common.IShearable)entity;
+                        if (target.isShearable(stack, world, blockpos)) {
+                            java.util.List<ItemStack> drops = target.onSheared(stack, entity.world, blockpos,
+                                    net.minecraft.enchantment.EnchantmentHelper.getEnchantmentLevel(net.minecraft.enchantment.Enchantments.FORTUNE, stack));
+                            java.util.Random rand = new java.util.Random();
+                            drops.forEach(d -> {
+                                net.minecraft.entity.item.ItemEntity ent = entity.entityDropItem(d, 1.0F);
+                                ent.setMotion(ent.getMotion().add((rand.nextFloat() - rand.nextFloat()) * 0.1F, rand.nextFloat() * 0.05F, (rand.nextFloat() - rand.nextFloat()) * 0.1F));
+                            });
+                            if (stack.attemptDamageItem(1, world.rand, null)) {
+                                stack.setCount(0);
+                            }
+
+                            this.successful = true;
+                            break;
+                        }
+                    }
+
+                    if (!this.successful) {
+                        BlockState blockstate = world.getBlockState(blockpos);
+                        if (blockstate.isIn(BlockTags.BEEHIVES)) {
+                            int i = blockstate.get(BeehiveBlock.HONEY_LEVEL);
+                            if (i >= 5) {
+                                if (stack.attemptDamageItem(1, world.rand, null)) {
+                                    stack.setCount(0);
+                                }
+
+                                BeehiveBlock.dropHoneyComb(world, blockpos);
+                                ((BeehiveBlock)blockstate.getBlock()).takeHoney(world, blockstate, blockpos, null, BeehiveTileEntity.State.BEE_RELEASED);
+                                this.successful = true;
+                            }
+                        }
+                        else if (blockstate.getBlock() instanceof IronBeehiveBlock) {
+                            int i = blockstate.get(BeehiveBlock.HONEY_LEVEL);
+                            if (i >= 5) {
+                                if (stack.attemptDamageItem(1, world.rand, null)) {
+                                    stack.setCount(0);
+                                }
+
+                                IronBeehiveBlock.dropResourceHoneyComb((IronBeehiveBlock) blockstate.getBlock(), world, blockpos);
+                                ((BeehiveBlock) blockstate.getBlock()).takeHoney(world, blockstate, blockpos, null,
+                                        BeehiveTileEntity.State.BEE_RELEASED);
+                                this.successful = true;
+                            }
+                        }
+                    }
+                }
+                return stack;
+            }
+        });
     }
 
     public static void addBeeToSpawnList() {
