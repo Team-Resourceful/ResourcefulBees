@@ -3,6 +3,7 @@ package com.dungeonderps.resourcefulbees.data;
 import com.dungeonderps.resourcefulbees.RegistryHandler;
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
+import com.dungeonderps.resourcefulbees.lib.BeeConst;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.*;
 import net.minecraft.nbt.CompoundNBT;
@@ -41,9 +42,9 @@ public class RecipeBuilder implements ISelectiveResourceReloadListener {
 
     private IRecipe<?> makeHoneyCombRecipe(String BeeType, String Color) {
         ItemStack honeyCombItemStack = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
-        final CompoundNBT honeyCombItemStackTag = honeyCombItemStack.getOrCreateChildTag("ResourcefulBees");
-        honeyCombItemStackTag.putString("Color", Color);
-        honeyCombItemStackTag.putString("BeeType", BeeType);
+        final CompoundNBT honeyCombItemStackTag = honeyCombItemStack.getOrCreateChildTag(BeeConst.NBT_ROOT);
+        honeyCombItemStackTag.putString(BeeConst.NBT_COLOR, Color);
+        honeyCombItemStackTag.putString(BeeConst.NBT_BEE_TYPE, BeeType);
         Ingredient honeyCombItem = new CustomNBTIngredient(honeyCombItemStack);
         NonNullList<Ingredient> inputs = NonNullList.from(Ingredient.EMPTY,
                 honeyCombItem, honeyCombItem, honeyCombItem,
@@ -51,10 +52,10 @@ public class RecipeBuilder implements ISelectiveResourceReloadListener {
                 honeyCombItem, honeyCombItem, honeyCombItem
         );
 
-        final ItemStack honeyCombOutput = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
-        final CompoundNBT honeyCombBlockItemTag = honeyCombOutput.getOrCreateChildTag("ResourcefulBees");
-        honeyCombBlockItemTag.putString("Color", Color);
-        honeyCombBlockItemTag.putString("BeeType", BeeType);
+        final ItemStack honeyCombOutput = new ItemStack(RegistryHandler.HONEYCOMB_BLOCK_ITEM.get());
+        final CompoundNBT honeyCombBlockItemTag = honeyCombOutput.getOrCreateChildTag(BeeConst.NBT_ROOT);
+        honeyCombBlockItemTag.putString(BeeConst.NBT_COLOR, Color);
+        honeyCombBlockItemTag.putString(BeeConst.NBT_BEE_TYPE, BeeType);
 
         ResourceLocation name = new ResourceLocation(ResourcefulBees.MOD_ID, BeeType.toLowerCase() + "_honeycomb");
 

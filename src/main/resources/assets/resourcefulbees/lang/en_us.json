@@ -7,6 +7,7 @@
 	"item.resourcefulbees.smoker.tooltip.1": "This allows you to stop the bees from being angry at you for shearing honeycombs for 30s.",
 
 	"block.resourcefulbees.iron_beehive": "Iron Beehive",
+	"block.beehive.tileentity.info.smoked": "Smoked: ",
 
 	"item.resourcefulbees.smoker": "Bee Smoker",
 

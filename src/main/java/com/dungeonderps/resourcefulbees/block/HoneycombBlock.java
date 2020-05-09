@@ -46,14 +46,19 @@ public class HoneycombBlock extends Block {
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) { return new HoneycombBlockEntity();}
 
-    @Override    // TODO FIX THIS TO USE TE - don't pull data from block instance!!
+    @Override
     public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
-        ItemStack honeyCombBlockItemStack = new ItemStack(RegistryHandler.HONEYCOMB_BLOCK_ITEM.get());
-        final CompoundNBT honeyCombItemStackTag = honeyCombBlockItemStack.getOrCreateChildTag(BeeConst.NBT_ROOT);
-        //honeyCombItemStackTag.putString(BeeConst.NBT_BEE_TYPE, this.beeType);
-        honeyCombItemStackTag.putString(BeeConst.NBT_COLOR, this.blockColor);
-
-        return honeyCombBlockItemStack;
+        if (world != null && pos != null) {
+            HoneycombBlockEntity tile = (HoneycombBlockEntity) world.getTileEntity(pos);
+            if (tile instanceof HoneycombBlockEntity) {
+                ItemStack honeyCombBlockItemStack = new ItemStack(RegistryHandler.HONEYCOMB_BLOCK_ITEM.get());
+                final CompoundNBT honeyCombItemStackTag = honeyCombBlockItemStack.getOrCreateChildTag(BeeConst.NBT_ROOT);
+                honeyCombItemStackTag.putString(BeeConst.NBT_BEE_TYPE, tile.beeType);
+                honeyCombItemStackTag.putString(BeeConst.NBT_COLOR, tile.blockColor);
+                return honeyCombBlockItemStack;
+            }
+        }
+        return RegistryHandler.HONEYCOMB_BLOCK_ITEM.get().getDefaultInstance();
     }
 
     public static int getBlockColor(BlockState state, @Nullable IBlockReader world, @Nullable BlockPos pos, int tintIndex){
@@ -82,7 +87,7 @@ public class HoneycombBlock extends Block {
             HoneycombBlockEntity honeycombBlockEntity = (HoneycombBlockEntity) tile;
             honeycombBlockEntity.loadFromNBT(stack.getOrCreateChildTag(BeeConst.NBT_ROOT));
 
-            setBeeType(stack.getChildTag("ResourcefulBees").getString("BeeType"));
+            setBeeType(stack.getChildTag(BeeConst.NBT_ROOT).getString(BeeConst.NBT_BEE_TYPE));
         }
 
         //this.beeType = stack.getChildTag(BeeConst.NBT_ROOT).getString(BeeConst.NBT_BEE_TYPE);

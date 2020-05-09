@@ -3,6 +3,7 @@ package com.dungeonderps.resourcefulbees.compat.jei;
 import com.dungeonderps.resourcefulbees.RegistryHandler;
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
+import com.dungeonderps.resourcefulbees.lib.BeeConst;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -87,9 +88,9 @@ public class BeeHiveCategory implements IRecipeCategory<BeeHiveCategory.Recipe> 
                 continue;
             else {
                 ItemStack honeyCombItemStack = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
-                final CompoundNBT honeyCombItemStackTag = honeyCombItemStack.getOrCreateChildTag("ResourcefulBees");
-                honeyCombItemStackTag.putString("Color", beeType.getValue().getColor());
-                honeyCombItemStackTag.putString("BeeType", beeType.getKey());
+                final CompoundNBT honeyCombItemStackTag = honeyCombItemStack.getOrCreateChildTag(BeeConst.NBT_ROOT);
+                honeyCombItemStackTag.putString(BeeConst.NBT_COLOR, beeType.getValue().getColor());
+                honeyCombItemStackTag.putString(BeeConst.NBT_BEE_TYPE, beeType.getKey());
                 recipes.add(new Recipe(honeyCombItemStack));
             }
         }

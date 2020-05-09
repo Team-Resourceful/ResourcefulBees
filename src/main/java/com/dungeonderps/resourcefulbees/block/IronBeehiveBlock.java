@@ -1,6 +1,7 @@
 package com.dungeonderps.resourcefulbees.block;
 
 import com.dungeonderps.resourcefulbees.RegistryHandler;
+import com.dungeonderps.resourcefulbees.lib.BeeConst;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.BeehiveBlock;
 import net.minecraft.block.Block;
@@ -90,7 +91,6 @@ public class IronBeehiveBlock extends BeehiveBlock {
 
     if (angerBees) {
     	if (isHiveSmoked(pos,world) || CampfireBlock.isLitCampfireInRange(world, pos, 5)) {
-    		LOGGER.info("Smoked: "+ isHiveSmoked(pos,world) + ",Campfire: " + CampfireBlock.isLitCampfireInRange(world, pos, 5));
             this.takeHoney(world, state, pos);
             if (player instanceof ServerPlayerEntity) {
               CriteriaTriggers.SAFELY_HARVEST_HONEY.test((ServerPlayerEntity) player, pos, itemstack1);
@@ -144,8 +144,8 @@ public class IronBeehiveBlock extends BeehiveBlock {
       while (hive.hasCombs()) {
         ItemStack comb = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
         String honeycomb = hive.getResourceHoneyComb();
-        comb.getOrCreateChildTag("ResourcefulBees").putString("Color", BEE_INFO.get(honeycomb).getColor());
-        comb.getOrCreateChildTag("ResourcefulBees").putString("BeeType", BEE_INFO.get(honeycomb).getName());
+        comb.getOrCreateChildTag(BeeConst.NBT_ROOT).putString(BeeConst.NBT_COLOR, BEE_INFO.get(honeycomb).getColor());
+        comb.getOrCreateChildTag(BeeConst.NBT_ROOT).putString(BeeConst.NBT_BEE_TYPE, BEE_INFO.get(honeycomb).getName());
         spawnAsEntity(world, pos, comb);
       }
     }
