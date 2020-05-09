@@ -2,6 +2,7 @@ package com.dungeonderps.resourcefulbees.item;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
+import com.dungeonderps.resourcefulbees.lib.BeeConst;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -27,8 +28,8 @@ public class BeeSpawnEggItem extends SpawnEggItem {
     public String getTranslationKey(ItemStack stack) {
         CompoundNBT beeType = stack.getChildTag("ResourcefulBees");
         String name;
-        if ((beeType != null && beeType.contains("beeType"))) {
-            name = "item" + '.' + ResourcefulBees.MOD_ID + '.' + beeType.getString("beeType").toLowerCase() + "_spawn_egg";
+        if ((beeType != null && beeType.contains(BeeConst.NBT_BEE_TYPE))) {
+            name = "item" + '.' + ResourcefulBees.MOD_ID + '.' + beeType.getString(BeeConst.NBT_BEE_TYPE).toLowerCase() + "_spawn_egg";
         } else {
             name = "item" + '.' + ResourcefulBees.MOD_ID + '.' + "bee_spawn_egg";
         }
@@ -44,8 +45,8 @@ public class BeeSpawnEggItem extends SpawnEggItem {
     public ActionResultType onItemUse(ItemUseContext context) {
         ItemStack itemstack = context.getItem();
         PlayerEntity player = context.getPlayer();
-        if (itemstack.getChildTag("ResourcefulBees") != null) {
-            String stackNbt = itemstack.getChildTag("ResourcefulBees").getString("beeType");
+        if (itemstack.getChildTag(BeeConst.NBT_ROOT) != null) {
+            String stackNbt = itemstack.getChildTag(BeeConst.NBT_ROOT).getString(BeeConst.NBT_BEE_TYPE);
             if (BeeInfo.BEE_INFO.get(stackNbt) == null && !itemstack.isEmpty()) {
                 for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
                     if (player.inventory.getStackInSlot(i) == itemstack) {

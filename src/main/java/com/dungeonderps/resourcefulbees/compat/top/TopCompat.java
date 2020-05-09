@@ -4,6 +4,7 @@ import com.dungeonderps.resourcefulbees.RegistryHandler;
 import com.dungeonderps.resourcefulbees.lib.BeeConst;
 import com.dungeonderps.resourcefulbees.tileentity.HoneycombBlockEntity;
 import mcjty.theoneprobe.api.ITheOneProbe;
+import net.minecraft.entity.passive.CustomBeeEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.text.TextFormatting;
@@ -45,21 +46,16 @@ public class TopCompat implements Function<ITheOneProbe, Void>
             return false;
         });
 
-        /*
         theOneProbe.registerEntityDisplayOverride((mode, probeInfo, player, world, entity, data) -> {
             if (entity instanceof CustomBeeEntity){
-                CustomBeeEntity bee = new CustomBeeEntity(RegistryHandler.CUSTOM_BEE.get(), world);
-                bee.selectBeeType(entity.serializeNBT().getString("BeeType"));
                 probeInfo.horizontal()
-                        .entity(bee)
                         .vertical()
+                        .text(entity.getDisplayName().getString())
                         .text(formatting + "Resourceful Bees");
-                LOGGER.info(entity.serializeNBT());
                 return true;
             }
             return false;
         });
-         */
         return null;
     }
 }
