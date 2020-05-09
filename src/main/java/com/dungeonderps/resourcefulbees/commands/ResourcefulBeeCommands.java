@@ -10,13 +10,6 @@
         import net.minecraft.util.Hand;
         import net.minecraft.util.text.StringTextComponent;
         import net.minecraft.util.text.TextFormatting;
-        import net.minecraftforge.fml.loading.FMLPaths;
-        import org.apache.commons.io.FileUtils;
-
-        import java.io.IOException;
-        import java.nio.file.FileAlreadyExistsException;
-        import java.nio.file.Files;
-        import java.nio.file.Paths;
 
         import static com.dungeonderps.resourcefulbees.ResourcefulBees.LOGGER;
 
@@ -25,7 +18,7 @@ public class ResourcefulBeeCommands
     public static void register(CommandDispatcher<CommandSource> dispatcher)
     {
         LOGGER.info("got to command dispatcher");
-        dispatcher.register(Commands.literal("resourcefulbees")
+        dispatcher.register(Commands.literal("resourcefulbees").requires(rq -> rq.hasPermissionLevel(2))
                 .then(Commands.literal("getItem")
                         .executes(context -> itemInfo(context.getSource().asPlayer()))
                 )
@@ -44,7 +37,6 @@ public class ResourcefulBeeCommands
     }
 
     private static int reloadBees(ServerPlayerEntity player) {
-        //TODO Make it so only OPs can do this command right now anyone can :MonkaS:
         ResourcefulBeesConfig.addBees();
         player.getServer().reload();
         player.sendMessage(new StringTextComponent("RELOAD!, New bees added!").applyTextStyle(TextFormatting.RED));
