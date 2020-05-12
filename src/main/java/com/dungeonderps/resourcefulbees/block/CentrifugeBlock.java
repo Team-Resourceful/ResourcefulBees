@@ -3,11 +3,13 @@ package com.dungeonderps.resourcefulbees.block;
 import com.dungeonderps.resourcefulbees.tileentity.CentrifugeBlockEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.ItemStack;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer;
@@ -25,16 +27,12 @@ import net.minecraftforge.items.ItemStackHandler;
 import javax.annotation.Nullable;
 import java.util.stream.IntStream;
 
-//import com.tfar.beesourceful.CentrifugeBlockEntity;
-//import com.dungeonderps.resourcefulbees.tileentity.CentrifugeBlockEntity;
-
 public class CentrifugeBlock extends Block {
     public CentrifugeBlock(Properties properties) {
         super(properties);
-        setDefaultState(getDefaultState().with(PROPERTY_FACING, Direction.NORTH).with(PROPERTY_ON,false));
+        setDefaultState(getDefaultState().with(PROPERTY_ON,false));
     }
 
-    public static final DirectionProperty PROPERTY_FACING = BlockStateProperties.FACING;
     public static final BooleanProperty PROPERTY_ON = BooleanProperty.create("on");
 
     @Override
@@ -55,16 +53,15 @@ public class CentrifugeBlock extends Block {
         return (INamedContainerProvider)worldIn.getTileEntity(pos);
     }
 
-    public BlockState rotate(BlockState p_185499_1_, Rotation p_185499_2_) {
-        return p_185499_1_.with(PROPERTY_FACING, p_185499_2_.rotate(p_185499_1_.get(PROPERTY_FACING)));
-    }
-
-    public BlockState mirror(BlockState p_185471_1_, Mirror p_185471_2_) {
-        return p_185471_1_.rotate(p_185471_2_.toRotation(p_185471_1_.get(PROPERTY_FACING)));
-    }
-
-    public BlockState getStateForPlacement(BlockItemUseContext p_196258_1_) {
-        return this.getDefaultState().with(PROPERTY_FACING, p_196258_1_.getNearestLookingDirection().getOpposite());
+    @Override
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+        if (stack.hasDisplayName()) {
+            TileEntity tileentity = worldIn.getTileEntity(pos);
+            if (tileentity instanceof CentrifugeBlockEntity) {
+                ((CentrifugeBlockEntity)tileentity).setCustomName(stack.getDisplayName());
+            }
+        }
+        super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
     }
 
     @Override
@@ -91,7 +88,7 @@ public class CentrifugeBlock extends Block {
 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-        builder.add(PROPERTY_FACING,PROPERTY_ON);
+        builder.add(PROPERTY_ON);
     }
 }
 

@@ -1,56 +1,10 @@
 {
   "variants": {
-    "facing=down,on=false": {
-      "model": "resourcefulbees:block/centrifuge",
-      "x": 180
-    },
-    "facing=up,on=false": {
+    "on=false": {
       "model": "resourcefulbees:block/centrifuge"
     },
-    "facing=north,on=false": {
-      "model": "resourcefulbees:block/centrifuge",
-      "x": 90
-    },
-    "facing=south,on=false": {
-      "model": "resourcefulbees:block/centrifuge",
-      "x": 90,
-      "y": 180
-    },
-    "facing=west,on=false": {
-      "model": "resourcefulbees:block/centrifuge",
-      "x": 90,
-      "y": 270
-    },
-    "facing=east,on=false": {
-      "model": "resourcefulbees:block/centrifuge",
-      "x": 90,
-      "y": 90
-    },
-    "facing=down,on=true": {
-      "model": "resourcefulbees:block/centrifuge_on",
-      "x": 180
-    },
-    "facing=up,on=true": {
+    "on=true": {
       "model": "resourcefulbees:block/centrifuge_on"
-    },
-    "facing=north,on=true": {
-      "model": "resourcefulbees:block/centrifuge_on",
-      "x": 90
-    },
-    "facing=south,on=true": {
-      "model": "resourcefulbees:block/centrifuge_on",
-      "x": 90,
-      "y": 180
-    },
-    "facing=west,on=true": {
-      "model": "resourcefulbees:block/centrifuge_on",
-      "x": 90,
-      "y": 270
-    },
-    "facing=east,on=true": {
-      "model": "resourcefulbees:block/centrifuge_on",
-      "x": 90,
-      "y": 90
     }
   }
 }

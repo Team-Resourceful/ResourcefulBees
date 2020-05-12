@@ -4,6 +4,7 @@ import com.dungeonderps.resourcefulbees.RegistryHandler;
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.lib.BeeConst;
+import com.dungeonderps.resourcefulbees.tileentity.CentrifugeBlockEntity;
 import com.dungeonderps.resourcefulbees.tileentity.HoneycombBlockEntity;
 import mcjty.theoneprobe.api.ElementAlignment;
 import mcjty.theoneprobe.api.IProbeInfo;
@@ -77,6 +78,20 @@ public class TopCompat implements Function<ITheOneProbe, Void>
                         }
                         return true;
                     }
+                }
+            }
+            if(world.getTileEntity(data.getPos()) instanceof CentrifugeBlockEntity)
+            {
+                CentrifugeBlockEntity beeHiveBlock = (CentrifugeBlockEntity) world.getTileEntity(data.getPos());
+
+                if(beeHiveBlock.time > 0) {
+                    probeInfo.horizontal()
+                            .item(blockState.getBlock().asItem().getDefaultInstance())
+                            .vertical()
+                            .itemLabel(blockState.getBlock().asItem().getDefaultInstance())
+                            .progress((int) Math.floor(beeHiveBlock.time / 20), beeHiveBlock.totalTime / 20)
+                            .text(formatting + "Resourceful Bees");
+                    return true;
                 }
             }
             if (blockState.getBlock().getRegistryName().getNamespace().equals(ResourcefulBees.MOD_ID)){

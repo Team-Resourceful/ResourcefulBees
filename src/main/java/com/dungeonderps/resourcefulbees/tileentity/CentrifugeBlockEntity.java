@@ -1,9 +1,5 @@
 
 package com.dungeonderps.resourcefulbees.tileentity;
-//import com.tfar.beesourceful.block.CentrifugeBlock;
-//import com.tfar.beesourceful.inventory.AutomationSensitiveItemStackHandler;
-//import com.tfar.beesourceful.recipe.CentrifugeRecipe;
-//import com.tfar.beesourceful.recipe.CentrifugeRecipeType;
 import com.dungeonderps.resourcefulbees.RegistryHandler;
 import com.dungeonderps.resourcefulbees.block.CentrifugeBlock;
 import com.dungeonderps.resourcefulbees.container.AutomationSensitiveItemStackHandler;
@@ -32,8 +28,11 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import static com.dungeonderps.resourcefulbees.ResourcefulBees.LOGGER;
+
 public class CentrifugeBlockEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider {
 
+    private ITextComponent customName;
 
     public static final int HONEYCOMB_SLOT = 0;
     public static final int BOTTLE_SLOT = 1;
@@ -50,7 +49,7 @@ public class CentrifugeBlockEntity extends TileEntity implements ITickableTileEn
     public int totalTime = 0;
 
     public CentrifugeBlockEntity() {
-        super(RegistryHandler.HONEYCOMB_BLOCK_ENTITY.get());
+        super(RegistryHandler.CENTRIFUGE_ENTITY.get());
     }
 
 
@@ -86,20 +85,55 @@ public class CentrifugeBlockEntity extends TileEntity implements ITickableTileEn
     protected boolean canProcess(@Nullable CentrifugeRecipe recipe) {
         if (recipe != null) {
             List<Pair<ItemStack, Double>> outputs = recipe.outputs;
+            ItemStack glass_bottle = h.getStackInSlot(BOTTLE_SLOT);
             ItemStack recipeOutput1 = outputs.get(0).getLeft();
             ItemStack recipeOutput2 = outputs.get(1).getLeft();
+            ItemStack recipeOutput3 = outputs.get(2).getLeft();
             ItemStack stackInOutput1 = h.getStackInSlot(OUTPUT1);
             ItemStack stackInOutput2 = h.getStackInSlot(OUTPUT2);
+            ItemStack stackInOutput3 = h.getStackInSlot(HONEY_BOTTLE);
 
-            if (stackInOutput1.isEmpty() && stackInOutput2.isEmpty()) return true;
+            int processScore = 0;
 
-            if (stackInOutput1.isEmpty() && stackInOutput2.getItem() == recipeOutput2.getItem())return true;
+            if (stackInOutput1.isEmpty() && stackInOutput2.isEmpty() && stackInOutput3.isEmpty() && glass_bottle.getItem() == Items.GLASS_BOTTLE) return true;
 
-            if (stackInOutput2.isEmpty() && stackInOutput1.getItem() == recipeOutput1.getItem())return true;
-
-            else if (!stackInOutput1.isItemEqual(recipeOutput1) || !stackInOutput2.isItemEqual(recipeOutput2)) return false;
-            else return stackInOutput1.getCount() + recipeOutput1.getCount() <= stackInOutput1.getMaxStackSize() &&
-                        stackInOutput2.getCount() + recipeOutput2.getCount() <= stackInOutput2.getMaxStackSize();
+            else {
+                for(int i=1;i<=3;i++){
+                    switch (i) {
+                        case 1:
+                            if (stackInOutput1.isEmpty()) processScore++;
+                            else if (stackInOutput1.getItem() == recipeOutput1.getItem()){
+                                if (stackInOutput1.getCount() + recipeOutput1.getCount() <= stackInOutput1.getMaxStackSize()) processScore++;
+                            }
+                        break;
+                        case 2:
+                            if (stackInOutput2.isEmpty()) processScore++;
+                            else if (stackInOutput2.getItem() == recipeOutput2.getItem()){
+                                if (stackInOutput2.getCount() + recipeOutput2.getCount() <= stackInOutput2.getMaxStackSize()) processScore++;
+                            }
+                        break;
+                        case 3:
+                            if (stackInOutput3.isEmpty()) processScore++;
+                            else if (stackInOutput3.getItem() == recipeOutput3.getItem()){
+                                if (stackInOutput3.getCount() + recipeOutput3.getCount() <= stackInOutput3.getMaxStackSize()) processScore++;
+                            }
+                        break;
+                    }
+                }
+                if (processScore == 3) {
+                    if (glass_bottle.getItem() == Items.GLASS_BOTTLE) {
+                        return true;
+                    }
+                    else{
+                        world.setBlockState(pos,getBlockState().with(CentrifugeBlock.PROPERTY_ON,false));
+                        return false;
+                    }
+                }
+                else {
+                    world.setBlockState(pos,getBlockState().with(CentrifugeBlock.PROPERTY_ON,false));
+                    return false;
+                }
+            }
         }
         return false;
     }
@@ -111,6 +145,7 @@ public class CentrifugeBlockEntity extends TileEntity implements ITickableTileEn
 
             ItemStack output1 = outputs.get(0).getLeft();
             ItemStack output2 = outputs.get(1).getLeft();
+            ItemStack output3 = outputs.get(2).getLeft();
             ItemStack glass_bottle = h.getStackInSlot(BOTTLE_SLOT);
 
             ItemStack stackInOutput1 = h.getStackInSlot(OUTPUT1);
@@ -133,9 +168,9 @@ public class CentrifugeBlockEntity extends TileEntity implements ITickableTileEn
                 }
             }
 
-            if (.2 >= world.rand.nextDouble()) {
+            if (outputs.get(2).getRight() >= world.rand.nextDouble()) {
                 if (honey_bottle.isEmpty()) {
-                    this.h.setStackInSlot(HONEY_BOTTLE, new ItemStack(Items.HONEY_BOTTLE));
+                    this.h.setStackInSlot(HONEY_BOTTLE, new ItemStack(output3.getItem()));
                 } else {
                     honey_bottle.grow(1);
                 }
@@ -165,6 +200,10 @@ public class CentrifugeBlockEntity extends TileEntity implements ITickableTileEn
         }
     }
 
+    public void setCustomName(ITextComponent name) {
+        this.customName = name;
+    }
+
     @Nonnull
     @Override
     public CompoundNBT write(CompoundNBT tag) {
@@ -172,6 +211,9 @@ public class CentrifugeBlockEntity extends TileEntity implements ITickableTileEn
         tag.put("inv", inv);
         tag.putInt("time", time);
         tag.putInt("totalTime", totalTime);
+        if (this.customName != null) {
+            tag.putString("CustomName", ITextComponent.Serializer.toJson(this.customName));
+        }
         return super.write(tag);
     }
 
@@ -181,6 +223,9 @@ public class CentrifugeBlockEntity extends TileEntity implements ITickableTileEn
         h.deserializeNBT(invTag);
         time = tag.getInt("time");
         totalTime = tag.getInt("totalTime");
+        if (tag.contains("CustomName", 8)) {
+            this.customName = ITextComponent.Serializer.fromJson(tag.getString("CustomName"));
+        }
         super.read(tag);
     }
 
@@ -199,9 +244,13 @@ public class CentrifugeBlockEntity extends TileEntity implements ITickableTileEn
         return (slot, automation) -> !automation || slot == 2 || slot == 3 || slot == 4;
     }
 
+    protected ITextComponent getDefaultName() {
+        return new TranslationTextComponent("resourcefulbees.container.centrifuge");
+    }
+
     @Override
     public ITextComponent getDisplayName() {
-        return new TranslationTextComponent("Centrifuge");
+        return this.customName != null ? this.customName : this.getDefaultName();
     }
 
     @Nullable

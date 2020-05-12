@@ -32,8 +32,7 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
     public final List<Pair<ItemStack,Double>> outputs;
     public final int time;
 
-    public CentrifugeRecipe(ResourceLocation id,
-                            Ingredient ingredient, List<Pair<ItemStack,Double>> outputs, int time) {
+    public CentrifugeRecipe(ResourceLocation id, Ingredient ingredient, List<Pair<ItemStack,Double>> outputs, int time) {
         this.id = id;
         this.ingredient = ingredient;
         this.outputs = outputs;
