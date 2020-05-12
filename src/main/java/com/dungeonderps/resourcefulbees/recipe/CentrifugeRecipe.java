@@ -1,13 +1,16 @@
-/*
+
 package com.dungeonderps.resourcefulbees.recipe;
+
+import com.dungeonderps.resourcefulbees.RegistryHandler;
 import com.dungeonderps.resourcefulbees.utils.BetterJSONUtils;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-//import com.tfar.beesourceful.BeeSourceful;
-//import com.tfar.beesourceful.BetterJSONUtils;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.*;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
@@ -22,7 +25,7 @@ import java.util.stream.IntStream;
 
 public class CentrifugeRecipe implements IRecipe<IInventory> {
 
-    public static final IRecipeType<CentrifugeRecipe> CENTRIFUGE = IRecipeType.register("beesourceful:centrifuge");
+    public static final IRecipeType<CentrifugeRecipe> CENTRIFUGE = IRecipeType.register("resourcefulbees:centrifuge");
 
     public final ResourceLocation id;
     public final Ingredient ingredient;
@@ -45,25 +48,22 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
     @Override
     @Nonnull
     @Deprecated
-    public ItemStack getCraftingResult(IInventory p_77572_1_) {
+    public ItemStack getCraftingResult(IInventory inventory) {
         return ItemStack.EMPTY;
     }
 
     /**
      * Used to determine if this recipe can fit in a grid of the given width/height
-     *
-     * @param p_194133_1_
-     * @param p_194133_2_
-     *
+     */
     @Override
-    public boolean canFit(int p_194133_1_, int p_194133_2_) {
+    public boolean canFit(int width, int height) {
         return true;
     }
 
     /**
      * Get the result of this recipe, usually for display purposes (e.g. recipe book). If your recipe has more than one
      * possible result (e.g. it's dynamic and depends on its inputs), then return an empty stack.
-     *
+     */
     @Deprecated
     @Override
     @Nonnull
@@ -78,7 +78,7 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
 
     @Override
     public IRecipeSerializer<?> getSerializer() {
-        return BeeSourceful.Objectholders.Recipes.centrifuge;
+        return RegistryHandler.CENTRIFUGE_RECIPE.get();
     }
 
     @Override
@@ -146,4 +146,3 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
     }
 }
 
-*/

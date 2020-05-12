@@ -1,7 +1,6 @@
 package com.dungeonderps.resourcefulbees.block;
-/*
-//import com.tfar.beesourceful.CentrifugeBlockEntity;
-//import com.dungeonderps.resourcefulbees.tileentity.CentrifugeBlockEntity;
+
+import com.dungeonderps.resourcefulbees.tileentity.CentrifugeBlockEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -25,6 +24,9 @@ import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
 import java.util.stream.IntStream;
+
+//import com.tfar.beesourceful.CentrifugeBlockEntity;
+//import com.dungeonderps.resourcefulbees.tileentity.CentrifugeBlockEntity;
 
 public class CentrifugeBlock extends Block {
     public CentrifugeBlock(Properties properties) {
@@ -95,4 +97,3 @@ public class CentrifugeBlock extends Block {
 
 
 
- */

@@ -1,4 +1,5 @@
-package com.dungeonderps.resourcefulbees.block.inventory;
+package com.dungeonderps.resourcefulbees.container;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.items.ItemStackHandler;
@@ -84,5 +85,3 @@ public class AutomationSensitiveItemStackHandler extends ItemStackHandler {
         boolean canRemove(int slot, boolean automation);
     }
 }
-
-
