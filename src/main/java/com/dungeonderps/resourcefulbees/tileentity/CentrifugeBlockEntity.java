@@ -1,11 +1,13 @@
-/*
+
 package com.dungeonderps.resourcefulbees.tileentity;
 //import com.tfar.beesourceful.block.CentrifugeBlock;
 //import com.tfar.beesourceful.inventory.AutomationSensitiveItemStackHandler;
 //import com.tfar.beesourceful.recipe.CentrifugeRecipe;
 //import com.tfar.beesourceful.recipe.CentrifugeRecipeType;
+import com.dungeonderps.resourcefulbees.RegistryHandler;
 import com.dungeonderps.resourcefulbees.block.CentrifugeBlock;
-import com.dungeonderps.resourcefulbees.block.inventory.AutomationSensitiveItemStackHandler;
+import com.dungeonderps.resourcefulbees.container.AutomationSensitiveItemStackHandler;
+import com.dungeonderps.resourcefulbees.container.CentrifugeContainer;
 import com.dungeonderps.resourcefulbees.recipe.CentrifugeRecipe;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -48,8 +50,9 @@ public class CentrifugeBlockEntity extends TileEntity implements ITickableTileEn
     public int totalTime = 0;
 
     public CentrifugeBlockEntity() {
-        super();
+        super(RegistryHandler.HONEYCOMB_BLOCK_ENTITY.get());
     }
+
 
     @Override
     public void tick() {
@@ -132,7 +135,7 @@ public class CentrifugeBlockEntity extends TileEntity implements ITickableTileEn
 
             if (.2 >= world.rand.nextDouble()) {
                 if (honey_bottle.isEmpty()) {
-                    this.h.setStackInSlot(HONEY_BOTTLE, new ItemStack(Items.field_226638_pX_));
+                    this.h.setStackInSlot(HONEY_BOTTLE, new ItemStack(Items.HONEY_BOTTLE));
                 } else {
                     honey_bottle.grow(1);
                 }
@@ -155,7 +158,7 @@ public class CentrifugeBlockEntity extends TileEntity implements ITickableTileEn
         if (recipe != null && recipe.matches(new RecipeWrapper(h), world)) return recipe;
         else {
             CentrifugeRecipe rec = world.getRecipeManager().
-                    getRecipe(CentrifugeRecipeType.CENTRIFUGE, new RecipeWrapper(h), this.world).orElse(null);
+                    getRecipe(CentrifugeRecipe.CENTRIFUGE, new RecipeWrapper(h), this.world).orElse(null);
             if (rec == null) failedMatch = input;
             else failedMatch = ItemStack.EMPTY;
             return recipe = rec;
@@ -231,4 +234,4 @@ public class CentrifugeBlockEntity extends TileEntity implements ITickableTileEn
     }
 
 }
-*/
+
