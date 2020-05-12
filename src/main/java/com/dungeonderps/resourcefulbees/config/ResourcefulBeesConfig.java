@@ -143,9 +143,10 @@ public class ResourcefulBeesConfig {
         bee.setName(name);
         if (BeeInfoUtils.validate(bee)){
             BeeInfo.BEE_INFO.put(name, bee);
-            if(bee.canSpawnInWorld()){
+            if(bee.canSpawnInWorld())
                 BeeInfoUtils.parseBiomeList(bee);
-            }
+            if(bee.isChild())
+                BeeInfoUtils.parseChildren(bee);
         }
     }
 

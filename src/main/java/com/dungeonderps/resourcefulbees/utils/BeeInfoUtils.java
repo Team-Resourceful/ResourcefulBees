@@ -1,6 +1,7 @@
 package com.dungeonderps.resourcefulbees.utils;
 
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
+import com.dungeonderps.resourcefulbees.config.DoubleKeyVal;
 import com.google.common.base.Splitter;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.ResourceLocation;
@@ -14,12 +15,17 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 import static com.dungeonderps.resourcefulbees.ResourcefulBees.LOGGER;
-import static com.dungeonderps.resourcefulbees.config.BeeInfo.BEE_INFO;
-import static com.dungeonderps.resourcefulbees.config.BeeInfo.SPAWNABLE_BIOMES;
+import static com.dungeonderps.resourcefulbees.config.BeeInfo.*;
 
 public class BeeInfoUtils {
 
     private static final Pattern RESOURCE_PATTERN = Pattern.compile("(tag:)?(\\w+):(\\w+/\\w+|\\w+)", Pattern.CASE_INSENSITIVE);
+
+    public static void parseChildren(BeeInfo bee){
+        LOGGER.info("Is CHILD: " + bee.getName());
+    }
+
+
 
     public static void parseBiomeList(BeeInfo bee){
         if (bee.getBiomeList().contains("tag:")){

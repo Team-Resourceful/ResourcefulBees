@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.resources.IResourceManager;
+import net.minecraft.resources.IResourceManagerReloadListener;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
@@ -20,9 +21,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
 
-public class RecipeBuilder implements ISelectiveResourceReloadListener {
+import static com.dungeonderps.resourcefulbees.ResourcefulBees.LOGGER;
+
+public class RecipeBuilder implements IResourceManagerReloadListener {
     @Override
-    public void onResourceManagerReload(IResourceManager resourceManager, Predicate<IResourceType> resourcePredicate) {
+    public void onResourceManagerReload(IResourceManager resourceManager) {
         MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
 
         RecipeManager recipeManager = server.getRecipeManager();

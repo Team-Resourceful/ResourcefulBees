@@ -6,5 +6,8 @@
   "centrifugeOutput": "minecraft:coal",
   "spawnInWorld": true,
   "biomeList": "tag:OVERWORLD",
-  "enderBee": true
+  "enderBee": true,
+  "isChild": true,
+  "parent1": "testparent1",
+  "parent2": "testparent2"
 }

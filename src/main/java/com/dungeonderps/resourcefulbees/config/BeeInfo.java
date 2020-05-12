@@ -3,18 +3,16 @@ package com.dungeonderps.resourcefulbees.config;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Set;
+import java.util.*;
 
 public class BeeInfo {
     //These are needed for dynamic creation from JSON configs
     public static final LinkedHashMap<String, BeeInfo> BEE_INFO = new LinkedHashMap<>();
     public static final HashMap<Biome, Set<String>> SPAWNABLE_BIOMES = new HashMap<>();
+    public static final DoubleKeyVal<String, String, String> PARENTS = new DoubleKeyVal<>();
 
-    private String name, flower, color, biomeList, baseBlock, mutationBlock, centrifugeOutput;
-    private boolean spawnInWorld, enderBee, netherBee;
+    private String name, flower, color, biomeList, baseBlock, mutationBlock, centrifugeOutput, parent1, parent2;
+    private boolean spawnInWorld, enderBee, netherBee, isChild;
 
     private transient boolean enabled;
     public BeeInfo() {}
@@ -182,7 +180,40 @@ public class BeeInfo {
         this.biomeList = biomeList;
     }
 
+    /**
+     * Sets if this bee is a child of 2 parents.
+     * Can be used to modify bees through code.
+     * @param isChild this bee's a child.
+     */
+    public void setIsChild(Boolean isChild) {this.isChild = isChild;}
+    /**
+     * Gets if the bee is a child.
+     * @return if this bee is a child.
+     */
+    public boolean isChild() {return isChild;}
 
+    /**
+     * Sets this bee's first parent.
+     * Can be used to modify bees through code.
+     * @param parent1 this bee's first parent.
+     */
+    public void setParent1(String parent1) { this.parent1 = parent1; }
+    /**
+     * Gets this bee's first parent.
+     * @return this bee's first parent.
+     */
+    public String getParent1() { return parent1; }
+    /**
+     * Sets this bee's second parent.
+     * Can be used to modify bees through code.
+     * @param parent2 this bee's second parent.
+     */
+    public void setParent2(String parent2) { this.parent2 = parent2; }
+    /**
+     * Gets this bee's second parent.
+     * @return this bee's second parent.
+     */
+    public String getParent2() { return parent2; }
 
     /**
      * Returns an ArrayList of type String containing all information

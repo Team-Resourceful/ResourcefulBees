@@ -302,8 +302,11 @@ public class CustomBeeEntity extends BeeEntity {
         if (info != null) {
             return this.dataManager.get(BEE_TYPE);
         } else {
-            this.remove();
-            return null;
+            if (!world.isRemote())
+                this.remove();
+
+            LOGGER.info("Tried to Remove Default bee here: " + this.getPosition().toString());
+            return "Default";
         }
     }
 
