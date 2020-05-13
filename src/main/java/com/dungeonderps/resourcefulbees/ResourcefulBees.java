@@ -23,6 +23,7 @@ import net.minecraft.entity.passive.CustomBeeEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.resources.IReloadableResourceManager;
+import net.minecraft.resources.IResourceManager;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tileentity.BeehiveTileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -34,6 +35,7 @@ import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.storage.loot.functions.LootFunctionManager;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModList;
@@ -78,7 +80,9 @@ public class ResourcefulBees
         FMLJavaModLoadingContext.get().getModEventBus().addListener(DataGen::gatherData);
 
         MinecraftForge.EVENT_BUS.addListener(this::serverStarting);
-        MinecraftForge.EVENT_BUS.addListener(this::OnServerSetup);
+        DistExecutor.runWhenOn(Dist.DEDICATED_SERVER, () -> () -> {
+            MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, true, this::OnServerSetup);
+        });
         DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
             FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onInterModEnqueue);
             FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
@@ -94,9 +98,11 @@ public class ResourcefulBees
 
     public void OnServerSetup(FMLServerAboutToStartEvent event){
         LOGGER.info("recipe should be loaded");
-        IReloadableResourceManager manager = event.getServer().getResourceManager();
-
-        manager.addReloadListener(new RecipeBuilder());
+        IResourceManager manager = event.getServer().getResourceManager();
+        if (manager instanceof IReloadableResourceManager) {
+            IReloadableResourceManager reloader = (IReloadableResourceManager)manager;
+            reloader.addReloadListener(new RecipeBuilder());
+        }
     }
 
     private void setup(final FMLCommonSetupEvent event){

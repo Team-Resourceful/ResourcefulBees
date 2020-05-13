@@ -63,7 +63,7 @@ public class ResourcefulBeesConfig {
                     .define("enableEasterEggBees", true);
             DEBUG_MODE = COMMON_BUILDER.comment("Extra logger info [true/false]")
                     .define("debugMode", false);
-            HIVE_OUTPUT_MODIFIER = COMMON_BUILDER.comment("Output modifier for the haves when ready to be harvested[range 0.0 - 8.0]")
+            HIVE_OUTPUT_MODIFIER = COMMON_BUILDER.comment("Output modifier for the hives when ready to be harvested[range 0.0 - 8.0]")
                     .defineInRange("hiveOutputModifier", 1.0,0.0,8.0);
             HIVE_MAX_BEES = COMMON_BUILDER.comment("Maximum amount of bees in the hive at any given time[range 0 - 16")
                     .defineInRange("hiveMaxBees", 4, 0, 16);

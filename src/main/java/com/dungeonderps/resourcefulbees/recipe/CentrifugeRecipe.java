@@ -2,6 +2,7 @@
 package com.dungeonderps.resourcefulbees.recipe;
 
 import com.dungeonderps.resourcefulbees.RegistryHandler;
+import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.utils.BetterJSONUtils;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -25,8 +26,7 @@ import java.util.stream.IntStream;
 
 public class CentrifugeRecipe implements IRecipe<IInventory> {
 
-    public static final IRecipeType<CentrifugeRecipe> CENTRIFUGE = IRecipeType.register("resourcefulbees:centrifuge");
-
+    public static final IRecipeType<CentrifugeRecipe> CENTRIFUGE_RECIPE_TYPE = IRecipeType.register(ResourcefulBees.MOD_ID + ":centrifuge");
     public final ResourceLocation id;
     public final Ingredient ingredient;
     public final List<Pair<ItemStack,Double>> outputs;
@@ -82,7 +82,7 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
 
     @Override
     public IRecipeType<?> getType() {
-        return CENTRIFUGE;
+        return CENTRIFUGE_RECIPE_TYPE;
     }
 
     public List<Pair<ItemStack,Double>> getCraftingResults() {

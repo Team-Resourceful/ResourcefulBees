@@ -28,8 +28,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import static com.dungeonderps.resourcefulbees.ResourcefulBees.LOGGER;
-
 public class CentrifugeBlockEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider {
 
     private ITextComponent customName;
@@ -193,7 +191,7 @@ public class CentrifugeBlockEntity extends TileEntity implements ITickableTileEn
         if (recipe != null && recipe.matches(new RecipeWrapper(h), world)) return recipe;
         else {
             CentrifugeRecipe rec = world.getRecipeManager().
-                    getRecipe(CentrifugeRecipe.CENTRIFUGE, new RecipeWrapper(h), this.world).orElse(null);
+                    getRecipe(CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE, new RecipeWrapper(h), this.world).orElse(null);
             if (rec == null) failedMatch = input;
             else failedMatch = ItemStack.EMPTY;
             return recipe = rec;

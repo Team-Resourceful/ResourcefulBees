@@ -1,7 +1,7 @@
 package com.dungeonderps.resourcefulbees.utils;
 
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
-import com.dungeonderps.resourcefulbees.config.DoubleKeyVal;
+import com.dungeonderps.resourcefulbees.lib.BeeConst;
 import com.google.common.base.Splitter;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.ResourceLocation;
@@ -15,7 +15,8 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 import static com.dungeonderps.resourcefulbees.ResourcefulBees.LOGGER;
-import static com.dungeonderps.resourcefulbees.config.BeeInfo.*;
+import static com.dungeonderps.resourcefulbees.config.BeeInfo.BEE_INFO;
+import static com.dungeonderps.resourcefulbees.config.BeeInfo.SPAWNABLE_BIOMES;
 
 public class BeeInfoUtils {
 
@@ -69,15 +70,15 @@ public class BeeInfoUtils {
 
     public static void genDefaultBee(){
         BeeInfo defaultBee = new BeeInfo();
-        defaultBee.setName("Default");
-        defaultBee.setColor("#FFFFFF");
+        defaultBee.setName(BeeConst.DEFAULT_BEE_TYPE);
+        defaultBee.setColor(String.valueOf(BeeConst.DEFAULT_COLOR));
         defaultBee.setFlower("minecraft:poppy");
         defaultBee.setBaseBlock("minecraft:stone");
         defaultBee.setMutationBlock("minecraft:stone");
         defaultBee.setBiomeList("test");
         defaultBee.setSpawnInWorld(false);
         defaultBee.setEnderBee(false);
-        BEE_INFO.put("Default", defaultBee);
+        BEE_INFO.put(BeeConst.DEFAULT_BEE_TYPE, defaultBee);
     }
 
     private static boolean logError(String name, String dataCheckType, String data, String dataType){
@@ -132,7 +133,7 @@ public class BeeInfoUtils {
     }
 
     private static boolean validateFlower(BeeInfo bee) {
-        return (bee.getFlower().equals("all") || bee.getFlower().equals("small") || bee.getFlower().equals("tall") || !ForgeRegistries.BLOCKS.getValue(bee.getResource(bee.getFlower())).equals(Blocks.AIR))
+        return (bee.getFlower().equals(BeeConst.FLOWER_TAG_ALL) || bee.getFlower().equals(BeeConst.FLOWER_TAG_SMALL) || bee.getFlower().equals(BeeConst.FLOWER_TAG_TALL) || !ForgeRegistries.BLOCKS.getValue(bee.getResource(bee.getFlower())).equals(Blocks.AIR))
                 ? dataCheckPassed(bee.getName(), "Flower")
                 : logError(bee.getName(), "Flower", bee.getFlower(), "flower");
     }

@@ -4,6 +4,7 @@ import com.dungeonderps.resourcefulbees.RegistryHandler;
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.entity.goals.BeeBreedGoal;
+import com.dungeonderps.resourcefulbees.lib.BeeConst;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -183,11 +184,11 @@ public class CustomBeeEntity extends BeeEntity {
         String flower = BeeInfo.BEE_INFO.get(this.getBeeType()).getFlower().toLowerCase();
 
         switch (flower){
-            case "all":
+            case BeeConst.FLOWER_TAG_ALL:
                 return this.world.isBlockPresent(pos) && this.world.getBlockState(pos).getBlock().isIn(BlockTags.FLOWERS);
-            case "small":
+            case BeeConst.FLOWER_TAG_SMALL:
                 return this.world.isBlockPresent(pos) && this.world.getBlockState(pos).getBlock().isIn(BlockTags.SMALL_FLOWERS);
-            case "tall":
+            case BeeConst.FLOWER_TAG_TALL:
                 return this.world.isBlockPresent(pos) && this.world.getBlockState(pos).getBlock().isIn(BlockTags.TALL_FLOWERS);
             default:
                 return this.world.isBlockPresent(pos) && this.world.getBlockState(pos).getBlock().equals(ForgeRegistries.BLOCKS.getValue(BeeInfo.BEE_INFO.get(this.getBeeType()).getResource(BeeInfo.BEE_INFO.get(this.getBeeType()).getFlower())));
@@ -199,11 +200,11 @@ public class CustomBeeEntity extends BeeEntity {
         String flower = BeeInfo.BEE_INFO.get(this.getBeeType()).getFlower().toLowerCase();
 
         switch (flower) {
-            case "all":
+            case BeeConst.FLOWER_TAG_ALL:
                 return state.isIn(BlockTags.TALL_FLOWERS) ? state.getBlock() != Blocks.SUNFLOWER || state.get(DoublePlantBlock.HALF) == DoubleBlockHalf.UPPER : state.isIn(BlockTags.SMALL_FLOWERS);
-            case "small":
+            case BeeConst.FLOWER_TAG_SMALL:
                 return state.isIn(BlockTags.SMALL_FLOWERS);
-            case "tall":
+            case BeeConst.FLOWER_TAG_TALL:
                 return state.isIn(BlockTags.TALL_FLOWERS) && (state.getBlock() != Blocks.SUNFLOWER || state.get(DoublePlantBlock.HALF) == DoubleBlockHalf.UPPER);
             default:
                 return state.getBlock().equals(ForgeRegistries.BLOCKS.getValue(BeeInfo.BEE_INFO.get(this.getBeeType()).getResource(BeeInfo.BEE_INFO.get(this.getBeeType()).getFlower())));
@@ -237,7 +238,7 @@ public class CustomBeeEntity extends BeeEntity {
         //This check is necessary to keep the client from crashing randomly
         String tempColor = this.dataManager.get(BEE_COLOR);
         if (tempColor.isEmpty()){
-            return "#FFFFFF";
+            return String.valueOf(BeeConst.DEFAULT_COLOR);
         } else {
             return this.dataManager.get(BEE_COLOR);
         }
@@ -259,14 +260,14 @@ public class CustomBeeEntity extends BeeEntity {
     protected void registerData() {
         super.registerData();
         //Need to supply default value
-        this.dataManager.register(BEE_COLOR, "#FFFFFF");
-        this.dataManager.register(BEE_TYPE, "Default");
+        this.dataManager.register(BEE_COLOR, String.valueOf(BeeConst.DEFAULT_COLOR));
+        this.dataManager.register(BEE_TYPE, BeeConst.DEFAULT_BEE_TYPE);
     }
 
     @Override
     public void readAdditional(CompoundNBT compound) {
         super.readAdditional(compound);
-        this.dataManager.set(BEE_TYPE, compound.getString("BeeType"));
+        this.dataManager.set(BEE_TYPE, compound.getString(BeeConst.NBT_BEE_TYPE));
         if(!this.getBeeType().isEmpty()) {
             this.dataManager.set(BEE_COLOR, BeeInfo.BEE_INFO.get(this.getBeeType()).getColor());
         }
@@ -275,7 +276,7 @@ public class CustomBeeEntity extends BeeEntity {
     @Override
     public void writeAdditional(CompoundNBT compound) {
         super.writeAdditional(compound);
-        compound.putString("BeeType", this.getBeeType());
+        compound.putString(BeeConst.NBT_BEE_TYPE, this.getBeeType());
     }
 
     //easier to manage bee selection for testing, could be useful for bee breeding
@@ -306,7 +307,7 @@ public class CustomBeeEntity extends BeeEntity {
                 this.remove();
 
             LOGGER.info("Tried to Remove Default bee here: " + this.getPosition().toString());
-            return "Default";
+            return BeeConst.DEFAULT_BEE_TYPE;
         }
     }
 
