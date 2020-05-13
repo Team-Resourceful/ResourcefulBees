@@ -1,15 +1,19 @@
 package com.dungeonderps.resourcefulbees.config;
 
+import javafx.util.Pair;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Set;
 
 public class BeeInfo {
     //These are needed for dynamic creation from JSON configs
     public static final LinkedHashMap<String, BeeInfo> BEE_INFO = new LinkedHashMap<>();
     public static final HashMap<Biome, Set<String>> SPAWNABLE_BIOMES = new HashMap<>();
-    public static final DoubleKeyVal<String, String, String> PARENTS = new DoubleKeyVal<>();
+    public static final HashMap<Pair, String> FAMILY_TREE = new HashMap<>();
 
     private String name, flower, color, biomeList, baseBlock, mutationBlock, centrifugeOutput, parent1, parent2;
     private boolean spawnInWorld, enderBee, netherBee, isChild;
@@ -105,6 +109,10 @@ public class BeeInfo {
     public boolean isEnderBee() { return enderBee; }
 
     public void setEnderBee(boolean enderBee) { this.enderBee = enderBee;}
+
+    public boolean isNetherBee() { return netherBee; }
+
+    public void setNetherBee(boolean netherBee) { this.netherBee = netherBee;}
 
     /**
      * Gets the Centrifuge Output for this bee's honeycomb.

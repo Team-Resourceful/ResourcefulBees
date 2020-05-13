@@ -80,9 +80,8 @@ public class ResourcefulBees
         FMLJavaModLoadingContext.get().getModEventBus().addListener(DataGen::gatherData);
 
         MinecraftForge.EVENT_BUS.addListener(this::serverStarting);
-        DistExecutor.runWhenOn(Dist.DEDICATED_SERVER, () -> () -> {
-            MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, true, this::OnServerSetup);
-        });
+        MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, true, this::OnServerSetup);
+
         DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
             FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onInterModEnqueue);
             FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);

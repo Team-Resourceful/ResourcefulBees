@@ -3,6 +3,7 @@ package com.dungeonderps.resourcefulbees.utils;
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.lib.BeeConst;
 import com.google.common.base.Splitter;
+import javafx.util.Pair;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
@@ -15,15 +16,19 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 import static com.dungeonderps.resourcefulbees.ResourcefulBees.LOGGER;
-import static com.dungeonderps.resourcefulbees.config.BeeInfo.BEE_INFO;
-import static com.dungeonderps.resourcefulbees.config.BeeInfo.SPAWNABLE_BIOMES;
+import static com.dungeonderps.resourcefulbees.config.BeeInfo.*;
 
 public class BeeInfoUtils {
 
     private static final Pattern RESOURCE_PATTERN = Pattern.compile("(tag:)?(\\w+):(\\w+/\\w+|\\w+)", Pattern.CASE_INSENSITIVE);
 
-    public static void parseChildren(BeeInfo bee){
-        LOGGER.info("Is CHILD: " + bee.getName());
+    public static void buildFamilyTree(BeeInfo bee){
+
+        Pair parents = new Pair(bee.getParent1(), bee.getParent2());
+        FAMILY_TREE.put(parents, bee.getName());
+
+        Pair parentsReverse = new Pair(bee.getParent2(), bee.getParent1());
+        FAMILY_TREE.put(parentsReverse, bee.getName());
     }
 
 

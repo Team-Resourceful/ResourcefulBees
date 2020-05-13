@@ -3,6 +3,7 @@ package com.dungeonderps.resourcefulbees.config;
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.utils.BeeInfoUtils;
 import com.google.gson.Gson;
+import javafx.util.Pair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.FolderPack;
 import net.minecraft.resources.IPackFinder;
@@ -146,7 +147,7 @@ public class ResourcefulBeesConfig {
             if(bee.canSpawnInWorld())
                 BeeInfoUtils.parseBiomeList(bee);
             if(bee.isChild())
-                BeeInfoUtils.parseChildren(bee);
+                BeeInfoUtils.buildFamilyTree(bee);
         }
     }
 
@@ -164,5 +165,7 @@ public class ResourcefulBeesConfig {
                 }
             }
         }
+
+        if (BeeInfo.FAMILY_TREE.containsKey(new Pair("Lapis_Lazuli", "Coal"))) LOGGER.info("BREED");
     }
 }

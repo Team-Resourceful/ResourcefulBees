@@ -3,7 +3,7 @@
   "flower": "minecraft:poppy",
   "baseBlock": "minecraft:netherrack",
   "mutationBlock": "minecraft:nether_quartz_ore",
-  "centrifugeOutput": "minecraft:nether_quartz",
+  "centrifugeOutput": "minecraft:quartz",
   "spawnInWorld": true,
   "biomeList": "tag:nether"
 }

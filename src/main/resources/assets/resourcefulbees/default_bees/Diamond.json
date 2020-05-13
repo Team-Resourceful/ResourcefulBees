@@ -5,5 +5,8 @@
   "mutationBlock": "minecraft:diamond_ore",
   "centrifugeOutput": "minecraft:diamond",
   "spawnInWorld": true,
-  "biomeList": "TAG:OVerWorld"
+  "biomeList": "TAG:OVerWorld",
+  "isChild": true,
+  "parent1": "Coal",
+  "parent2": "Lapis_Lazuli"
 }

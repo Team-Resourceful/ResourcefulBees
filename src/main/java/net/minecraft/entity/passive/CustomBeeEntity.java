@@ -325,7 +325,7 @@ public class CustomBeeEntity extends BeeEntity {
             if (!this.world.isRemote && this.getGrowingAge() == 0 && this.canBreed()) {
                 this.consumeItemFromStack(player, itemstack);
                 this.setInLove(player);
-                player.func_226292_a_(hand, true);
+                player.swing(hand, true);
                 return true;
             }
 
