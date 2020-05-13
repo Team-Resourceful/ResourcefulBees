@@ -1,5 +1,6 @@
 package com.dungeonderps.resourcefulbees.entity.goals;
 
+import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.Entity;
@@ -12,8 +13,11 @@ import net.minecraft.stats.Stats;
 import net.minecraft.world.GameRules;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.BabyEntitySpawnEvent;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.util.Random;
+
+import static com.dungeonderps.resourcefulbees.ResourcefulBees.LOGGER;
 
 public class BeeBreedGoal extends BreedGoal {
     public BeeBreedGoal(AnimalEntity animal, double speedIn) {
@@ -33,19 +37,24 @@ public class BeeBreedGoal extends BreedGoal {
     @Override
     protected void spawnBaby() {
         AgeableEntity ageableentity;
-        //This should be changed when we have custom breed (bees would have parents)
         if (getBeeType(this.targetMate).equals(getBeeType(this.animal))) {
             CustomBeeEntity bee = (CustomBeeEntity)this.animal;
             ageableentity = bee.createSelectedChild(getBeeType(this.animal));
         }
         else {
             Random ran = new Random();
-            int pickbee = ran.nextInt(2);
+            Double pickbee = ran.nextDouble();
             CustomBeeEntity bee = (CustomBeeEntity)this.animal;
-            if (pickbee == 0)
-                ageableentity = bee.createSelectedChild(getBeeType(this.animal));
-            else
-                ageableentity = bee.createSelectedChild(getBeeType(this.targetMate));
+            if (BeeInfo.FAMILY_TREE.containsKey(ImmutablePair.of(getBeeType(this.targetMate), getBeeType(this.animal))) && 0.33 >= pickbee){
+                String childBee = BeeInfo.FAMILY_TREE.get(ImmutablePair.of(getBeeType(this.targetMate), getBeeType(this.animal)));
+                ageableentity = bee.createSelectedChild(childBee);
+            }
+            else{
+                if (0.5 >= pickbee)
+                    ageableentity = bee.createSelectedChild(getBeeType(this.animal));
+                else
+                    ageableentity = bee.createSelectedChild(getBeeType(this.targetMate));
+            }
         }
 
         final BabyEntitySpawnEvent event = new BabyEntitySpawnEvent(animal, targetMate, ageableentity);
