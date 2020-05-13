@@ -9,16 +9,14 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.DoublePlantBlock;
-import net.minecraft.entity.AgeableEntity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.FollowParentGoal;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.goal.TemptGoal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.NameTagItem;
 import net.minecraft.item.SpawnEggItem;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
@@ -244,6 +242,19 @@ public class CustomBeeEntity extends BeeEntity {
         }
     }
 
+    Entity queenBeePlayer = null;
+
+    @Override
+    public void tick() {
+        if (this.getDisplayName().getFormattedText().toLowerCase().equals("queen bee")){
+            if (queenBeePlayer !=null) {
+                this.setBeeAttacker(queenBeePlayer);
+                this.setHasStung(false);
+            }
+        }
+        super.tick();
+    }
+
     //REMOVE Reason Stuff AND Create Data Parameter for BeeName
     @Nullable
     @Override
@@ -321,6 +332,11 @@ public class CustomBeeEntity extends BeeEntity {
     public boolean processInteract(PlayerEntity player, Hand hand) {
         ItemStack itemstack = player.getHeldItem(hand);
         Item item = itemstack.getItem();
+        if (item instanceof NameTagItem){
+            LOGGER.info("queen be player is: " + player.getDisplayName().getFormattedText());
+            queenBeePlayer = player;
+            super.processInteract(player,hand);
+        }
         if (this.isBreedingItem(itemstack)) {
             if (!this.world.isRemote && this.getGrowingAge() == 0 && this.canBreed()) {
                 this.consumeItemFromStack(player, itemstack);

@@ -1,0 +1,10 @@
+{
+  "color": "#339786",
+  "flower": "ALL",
+  "baseBlock": "minecraft:end_stone",
+  "mutationBlock": "minecraft:obsidian",
+  "centrifugeOutput": "minecraft:ender_pearl",
+  "spawnInWorld": true,
+  "biomeList": "TAG:end",
+  "enderBee": true
+}

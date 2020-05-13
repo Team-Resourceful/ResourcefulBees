@@ -34,7 +34,8 @@ public class ResourcefulBeesConfig {
             "Coal.json",
             "Redstone.json",
             "Nether_Quartz.json",
-            "Lapis_Lazuli.json"
+            "Lapis_Lazuli.json",
+            "Ender.json"
     };
 
 
