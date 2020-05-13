@@ -3,7 +3,6 @@ package com.dungeonderps.resourcefulbees.config;
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.utils.BeeInfoUtils;
 import com.google.gson.Gson;
-import javafx.util.Pair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.FolderPack;
 import net.minecraft.resources.IPackFinder;
@@ -14,6 +13,7 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.loading.FMLPaths;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.io.*;
 import java.nio.file.*;
@@ -167,6 +167,6 @@ public class ResourcefulBeesConfig {
             }
         }
 
-        if (BeeInfo.FAMILY_TREE.containsKey(new Pair("Lapis_Lazuli", "Coal"))) LOGGER.info("BREED");
+        if (BeeInfo.FAMILY_TREE.containsKey(ImmutablePair.of("Lapis_Lazuli", "Coal"))) LOGGER.info("BREED");
     }
 }
