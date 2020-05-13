@@ -1,8 +1,8 @@
 package com.dungeonderps.resourcefulbees.config;
 
-import javafx.util.Pair;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,7 +13,7 @@ public class BeeInfo {
     //These are needed for dynamic creation from JSON configs
     public static final LinkedHashMap<String, BeeInfo> BEE_INFO = new LinkedHashMap<>();
     public static final HashMap<Biome, Set<String>> SPAWNABLE_BIOMES = new HashMap<>();
-    public static final HashMap<Pair, String> FAMILY_TREE = new HashMap<>();
+    public static final HashMap<ImmutablePair, String> FAMILY_TREE = new HashMap<>();
 
     private String name, flower, color, biomeList, baseBlock, mutationBlock, centrifugeOutput, parent1, parent2;
     private boolean spawnInWorld, enderBee, netherBee, isChild;

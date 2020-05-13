@@ -3,12 +3,12 @@ package com.dungeonderps.resourcefulbees.utils;
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.lib.BeeConst;
 import com.google.common.base.Splitter;
-import javafx.util.Pair;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.util.HashSet;
 import java.util.List;
@@ -24,10 +24,10 @@ public class BeeInfoUtils {
 
     public static void buildFamilyTree(BeeInfo bee){
 
-        Pair parents = new Pair(bee.getParent1(), bee.getParent2());
+        ImmutablePair parents = new ImmutablePair(bee.getParent1(), bee.getParent2());
         FAMILY_TREE.put(parents, bee.getName());
 
-        Pair parentsReverse = new Pair(bee.getParent2(), bee.getParent1());
+        ImmutablePair parentsReverse = new ImmutablePair(bee.getParent2(), bee.getParent1());
         FAMILY_TREE.put(parentsReverse, bee.getName());
     }
 
