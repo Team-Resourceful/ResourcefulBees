@@ -1,8 +1,8 @@
 
 package com.dungeonderps.resourcefulbees.block;
 
-import com.dungeonderps.resourcefulbees.RegistryHandler;
 import com.dungeonderps.resourcefulbees.lib.BeeConst;
+import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.tileentity.HoneycombBlockEntity;
 import com.dungeonderps.resourcefulbees.utils.Color;
 import net.minecraft.block.Block;

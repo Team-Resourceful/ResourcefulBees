@@ -1,7 +1,7 @@
 package com.dungeonderps.resourcefulbees.block;
 
-import com.dungeonderps.resourcefulbees.RegistryHandler;
 import com.dungeonderps.resourcefulbees.lib.BeeConst;
+import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.BeehiveBlock;
 import net.minecraft.block.Block;

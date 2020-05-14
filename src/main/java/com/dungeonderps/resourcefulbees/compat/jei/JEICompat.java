@@ -1,10 +1,10 @@
 package com.dungeonderps.resourcefulbees.compat.jei;
 
-import com.dungeonderps.resourcefulbees.RegistryHandler;
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.item.HoneycombBlockItem;
 import com.dungeonderps.resourcefulbees.item.ResourcefulHoneycomb;
 import com.dungeonderps.resourcefulbees.recipe.CentrifugeRecipe;
+import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.helpers.IGuiHelper;

@@ -1,6 +1,6 @@
 package com.dungeonderps.resourcefulbees.item;
 
-import com.dungeonderps.resourcefulbees.ItemGroupResourcefulBees;
+import com.dungeonderps.resourcefulbees.registry.ItemGroupResourcefulBees;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;

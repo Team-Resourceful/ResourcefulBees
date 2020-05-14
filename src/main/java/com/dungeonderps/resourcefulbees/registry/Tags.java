@@ -1,4 +1,4 @@
-package com.dungeonderps.resourcefulbees;
+package com.dungeonderps.resourcefulbees.registry;
 
 
 //NOT CURRENTLY USED BUT WILL EVENTUALLY BE NEEDED ANYWAY

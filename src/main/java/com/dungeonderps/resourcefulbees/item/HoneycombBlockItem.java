@@ -1,9 +1,8 @@
 package com.dungeonderps.resourcefulbees.item;
 
-import com.dungeonderps.resourcefulbees.ItemGroupResourcefulBees;
-import com.dungeonderps.resourcefulbees.RegistryHandler;
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.lib.BeeConst;
+import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

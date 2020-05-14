@@ -1,7 +1,8 @@
-package com.dungeonderps.resourcefulbees;
+package com.dungeonderps.resourcefulbees.registry;
 
 //import com.dungeonderps.resourcefulbees.block.CentrifugeBlock;
 
+import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.block.CentrifugeBlock;
 import com.dungeonderps.resourcefulbees.block.HoneycombBlock;
 import com.dungeonderps.resourcefulbees.block.IronBeehiveBlock;

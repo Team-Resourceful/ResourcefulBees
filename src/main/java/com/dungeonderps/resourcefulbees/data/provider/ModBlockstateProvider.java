@@ -1,8 +1,8 @@
 package com.dungeonderps.resourcefulbees.data.provider;
 
-import com.dungeonderps.resourcefulbees.RegistryHandler;
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.block.IronBeehiveBlock;
+import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import net.minecraft.block.Block;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.util.ResourceLocation;

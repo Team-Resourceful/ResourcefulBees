@@ -1,6 +1,5 @@
-package com.dungeonderps.resourcefulbees.utils;
+package com.dungeonderps.resourcefulbees.registry;
 
-import com.dungeonderps.resourcefulbees.RegistryHandler;
 import com.dungeonderps.resourcefulbees.block.HoneycombBlock;
 import com.dungeonderps.resourcefulbees.item.ResourcefulHoneycomb;
 import net.minecraft.block.Block;

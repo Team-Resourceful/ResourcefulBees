@@ -1,10 +1,10 @@
 package net.minecraft.entity.passive;
 
-import com.dungeonderps.resourcefulbees.RegistryHandler;
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.entity.goals.BeeBreedGoal;
 import com.dungeonderps.resourcefulbees.lib.BeeConst;
+import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -43,6 +43,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.awt.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.*;
 import java.util.function.Predicate;
@@ -252,6 +254,8 @@ public class CustomBeeEntity extends BeeEntity {
                 this.setHasStung(false);
             }
         }
+
+
         super.tick();
     }
 
@@ -261,6 +265,15 @@ public class CustomBeeEntity extends BeeEntity {
     public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         selectRandomBee(reason.equals(SpawnReason.CHUNK_GENERATION) || reason.equals(SpawnReason.NATURAL));
         return super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+    }
+
+
+
+    //TODO - DOES NOT WORK - Need to use LivingDamageEvent and negate the damage from fire!!!
+    @Override
+    protected void dealFireDamage(int amount) {
+        int damage =  (BeeInfo.BEE_INFO.get(getBeeType()).isNetherBee()) ? 0 : amount;
+        super.dealFireDamage(damage);
     }
 
     public static boolean canBeeSpawn(EntityType<? extends AnimalEntity> typeIn, IWorld worldIn, SpawnReason reason, BlockPos pos, Random randomIn) {
@@ -337,6 +350,10 @@ public class CustomBeeEntity extends BeeEntity {
             queenBeePlayer = player;
             super.processInteract(player,hand);
         }
+        if (item == RegistryHandler.SMOKER.get() && this.isAngry()) {
+            smokeBee();
+            itemstack.damageItem(1, player, player1 -> player1.sendBreakAnimation(hand));
+        }
         if (this.isBreedingItem(itemstack)) {
             if (!this.world.isRemote && this.getGrowingAge() == 0 && this.canBreed()) {
                 this.consumeItemFromStack(player, itemstack);
@@ -375,26 +392,26 @@ public class CustomBeeEntity extends BeeEntity {
         }
     }
 
-    // TODO Override Breeding Goal for custom bee breeding system.
+    private void smokeBee(){
+        //we're using reflection to access private setAnger method for bee
+        //It's looks scary but it's simple.
+        //create new method, get method from class we want to call,
+        //call method, pass in the object we want to call the method on
+        //pass in the value for the parameter.
+
+        Method setAnger = null;   /// <<<<----- creating method container
+        try {
+            setAnger = BeeEntity.class.getDeclaredMethod("setAnger", int.class); ///<<<<------- Creating instance of method
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+        setAnger.setAccessible(true);     ///<<<<------- Making the method accessible
+        try {
+            setAnger.invoke(this, 0);   ///<<<<------ Invoking method
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+    }
 }
-
-
-
-/*
-
-Parent1 = Iron, Gold;
-
-Parent2 = Diamond, Coal;
-
-Child =
-
-Weight =
-
-
-
-
-
-
-
-
- */

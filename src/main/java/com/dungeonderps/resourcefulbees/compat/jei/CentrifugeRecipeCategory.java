@@ -1,8 +1,8 @@
 package com.dungeonderps.resourcefulbees.compat.jei;
 
-import com.dungeonderps.resourcefulbees.RegistryHandler;
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.recipe.CentrifugeRecipe;
+import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.tileentity.CentrifugeBlockEntity;
 import com.google.common.collect.Lists;
 import mezz.jei.api.constants.VanillaTypes;

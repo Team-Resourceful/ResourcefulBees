@@ -1,10 +1,10 @@
 package com.dungeonderps.resourcefulbees.data;
 
-import com.dungeonderps.resourcefulbees.RegistryHandler;
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.lib.BeeConst;
 import com.dungeonderps.resourcefulbees.recipe.CentrifugeRecipe;
+import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.*;

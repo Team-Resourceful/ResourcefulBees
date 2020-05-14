@@ -1,8 +1,8 @@
 
 package com.dungeonderps.resourcefulbees.recipe;
 
-import com.dungeonderps.resourcefulbees.RegistryHandler;
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
+import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.utils.BetterJSONUtils;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;

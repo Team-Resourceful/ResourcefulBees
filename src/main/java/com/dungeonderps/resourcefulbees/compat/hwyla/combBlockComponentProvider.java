@@ -1,8 +1,8 @@
 package com.dungeonderps.resourcefulbees.compat.hwyla;
 
-import com.dungeonderps.resourcefulbees.RegistryHandler;
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.lib.BeeConst;
+import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.tileentity.HoneycombBlockEntity;
 import mcp.mobius.waila.api.IComponentProvider;
 import mcp.mobius.waila.api.IDataAccessor;
@@ -16,7 +16,6 @@ import java.util.List;
 
 public class combBlockComponentProvider implements IComponentProvider {
 
-    //TODO Verify if lang files are needed for this!
     @Override
     public void appendHead(List<ITextComponent> tooltip, IDataAccessor accessor, IPluginConfig config) {
         tooltip.clear();

@@ -1,7 +1,7 @@
 package com.dungeonderps.resourcefulbees.config;
 
-import com.dungeonderps.resourcefulbees.RegistryHandler;
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
+import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.utils.BeeInfoUtils;
 import com.google.gson.Gson;
 import net.minecraft.entity.EntityClassification;

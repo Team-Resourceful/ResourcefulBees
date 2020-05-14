@@ -1,10 +1,11 @@
 
 package com.dungeonderps.resourcefulbees.tileentity;
-import com.dungeonderps.resourcefulbees.RegistryHandler;
+
 import com.dungeonderps.resourcefulbees.block.CentrifugeBlock;
 import com.dungeonderps.resourcefulbees.container.AutomationSensitiveItemStackHandler;
 import com.dungeonderps.resourcefulbees.container.CentrifugeContainer;
 import com.dungeonderps.resourcefulbees.recipe.CentrifugeRecipe;
+import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;

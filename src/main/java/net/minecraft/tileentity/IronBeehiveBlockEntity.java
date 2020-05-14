@@ -2,7 +2,8 @@
 package net.minecraft.tileentity;
 
 
-import com.dungeonderps.resourcefulbees.RegistryHandler;
+import com.dungeonderps.resourcefulbees.config.BeeInfo;
+import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import net.minecraft.block.BeehiveBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -11,6 +12,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.CustomBeeEntity;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
@@ -18,7 +20,8 @@ import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.List;
+import java.util.Stack;
 
 import static com.dungeonderps.resourcefulbees.ResourcefulBees.LOGGER;
 
@@ -95,24 +98,24 @@ public class IronBeehiveBlockEntity extends BeehiveTileEntity {
       bee.removePassengers();
       CompoundNBT nbt = new CompoundNBT();
       bee.writeUnlessPassenger(nbt);
-      this.bees.add(new BeehiveTileEntity.Bee(nbt, ticksInHive, hasNectar ? 100 : 600));//*** <---- Change 100 back to 2400!!!!
+      this.bees.add(new BeehiveTileEntity.Bee(nbt, ticksInHive, hasNectar ? 100 : 600));// TODO *** <---- Change 100 back to 2400!!!!
       if (this.world != null) {
         if (bee instanceof CustomBeeEntity) {
           CustomBeeEntity bee1 = (CustomBeeEntity)bee;
           if (bee1.hasFlower() && (!this.hasFlowerPos() || this.world.rand.nextBoolean())) {
             this.flowerPos = bee1.getFlowerPos();
           }
+          if (BeeInfo.BEE_INFO.get(bee1.getBeeType()).isEnderBee()){
+            this.world.addParticle(ParticleTypes.PORTAL, bee.getPosXRandom(0.5D),
+                    bee.getPosYRandom() - 0.25D, bee.getPosZRandom(0.5D),
+                    (world.rand.nextDouble() - 0.5D) * 2.0D, -world.rand.nextDouble(),
+                    (world.rand.nextDouble() - 0.5D) * 2.0D);
+          }
         }
         BlockPos lvt_5_2_ = this.getPos();
-        this.world.playSound(null, (double)lvt_5_2_.getX(), (double)lvt_5_2_.getY(), (double)lvt_5_2_.getZ(), SoundEvents.BLOCK_BEEHIVE_ENTER, SoundCategory.BLOCKS, 1.0F, 1.0F);
+        this.world.playSound(null, lvt_5_2_.getX(), lvt_5_2_.getY(), lvt_5_2_.getZ(), SoundEvents.BLOCK_BEEHIVE_ENTER, SoundCategory.BLOCKS, 1.0F, 1.0F);
       }
 
-      /*if (bee.getType() == ResourcefulBees.ObjectHolders.Entities.ender_bee){
-        this.world.addParticle(ParticleTypes.PORTAL, bee.getPosXRandom(0.5D),
-                bee.getPosYRandom() - 0.25D, bee.getPosZRandom(0.5D),
-                (world.rand.nextDouble() - 0.5D) * 2.0D, -world.rand.nextDouble(),
-                (world.rand.nextDouble() - 0.5D) * 2.0D);
-      }*/
       bee.remove();
     }
   }

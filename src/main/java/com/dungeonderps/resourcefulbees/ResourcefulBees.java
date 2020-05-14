@@ -9,8 +9,9 @@ import com.dungeonderps.resourcefulbees.data.RecipeBuilder;
 import com.dungeonderps.resourcefulbees.entity.CustomBeeRenderer;
 import com.dungeonderps.resourcefulbees.init.ModSetup;
 import com.dungeonderps.resourcefulbees.loot.function.BlockItemFunction;
+import com.dungeonderps.resourcefulbees.registry.ColorHandler;
+import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.screen.CentrifugeScreen;
-import com.dungeonderps.resourcefulbees.utils.ColorHandler;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.resources.IReloadableResourceManager;
@@ -35,6 +36,23 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
+
+//TODO - Standardize Default Bees
+//TODO - Test Server and Jar
+//TODO - Add Tiered Hives
+//TODO - Add Config options
+//TODO - Look into "Queen Bee"
+//TODO - Additional Easter Eggs
+//TODO - Cleanup Centrifuge Container/Entity Classes
+//TODO - Add Ender Bee Effects
+//TODO - Add Nether Bee Effects
+//TODO - Add Ender Teleportation Effect
+//TODO - Add Blaze Fire Effect
+//TODO - Make spawn egg select specific bee type
+
+
+
+
 
 @Mod("resourcefulbees")
 public class ResourcefulBees

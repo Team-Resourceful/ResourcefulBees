@@ -5,7 +5,6 @@ import com.dungeonderps.resourcefulbees.lib.BeeConst;
 import com.google.common.base.Splitter;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.Items;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
@@ -127,12 +126,12 @@ public class BeeInfoUtils {
     private static boolean validateBaseBlock(BeeInfo bee) {
         if(RESOURCE_PATTERN.matcher(bee.getBaseBlock()).matches() && bee.getBaseBlock().contains("tag:")) {
             LOGGER.warn("Too early to validate Block Tag for " + bee.getName() + " bee.");
-            //return true;
+            return true;
             //TODO - Can tag check be fixed?
-            String cleanBaseBlock = bee.getBaseBlock().replace("tag:", "");
-            return BlockTags.getCollection().get(bee.getResource(cleanBaseBlock)) != null
-                    ? dataCheckPassed(bee.getName(), "Base Block")
-                    : logError(bee.getName(), "Base Block", cleanBaseBlock, "tag");
+            //String cleanBaseBlock = bee.getBaseBlock().replace("tag:", "");
+            //return BlockTags.getCollection().get(bee.getResource(cleanBaseBlock)) != null
+            //        ? dataCheckPassed(bee.getName(), "Base Block")
+            //       : logError(bee.getName(), "Base Block", cleanBaseBlock, "tag");
         }
         return RESOURCE_PATTERN.matcher(bee.getBaseBlock()).matches() && !ForgeRegistries.BLOCKS.getValue(bee.getResource(bee.getBaseBlock())).equals(Blocks.AIR)
                 ? dataCheckPassed(bee.getName(), "Base Block")

@@ -1,5 +1,6 @@
-package com.dungeonderps.resourcefulbees;
+package com.dungeonderps.resourcefulbees.registry;
 
+import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.lib.BeeConst;
 import net.minecraft.item.ItemGroup;
