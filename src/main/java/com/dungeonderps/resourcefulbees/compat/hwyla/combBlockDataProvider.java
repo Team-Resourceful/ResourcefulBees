@@ -20,8 +20,10 @@ public class combBlockDataProvider implements IServerDataProvider<TileEntity> {
         if (tileEntity instanceof HoneycombBlockEntity){
             HoneycombBlockEntity blockEntity = (HoneycombBlockEntity) tileEntity;
 
-            compoundNBT.putString(BeeConst.NBT_BEE_TYPE, blockEntity.beeType);
-            compoundNBT.putString(BeeConst.NBT_COLOR, blockEntity.blockColor);
+            if (blockEntity.beeType !=null)
+                compoundNBT.putString(BeeConst.NBT_BEE_TYPE, blockEntity.beeType);
+            if (blockEntity.blockColor !=null)
+                compoundNBT.putString(BeeConst.NBT_COLOR, blockEntity.blockColor);
             //compoundNBT.putString(BeeConst.);
 
             //blockEntity.addWailaInfo(info);

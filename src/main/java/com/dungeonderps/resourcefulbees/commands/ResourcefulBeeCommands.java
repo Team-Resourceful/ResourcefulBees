@@ -19,27 +19,17 @@ public class ResourcefulBeeCommands
     {
         LOGGER.info("got to command dispatcher");
         dispatcher.register(Commands.literal("resourcefulbees").requires(rq -> rq.hasPermissionLevel(2))
-                .then(Commands.literal("getItem")
-                        .executes(context -> itemInfo(context.getSource().asPlayer()))
-                )
-                .then(Commands.literal("reloadBees")
-                        .executes(context -> reloadBees(context.getSource().asPlayer()))
+                .then(Commands.literal("help")
+                        .executes(context -> help(context.getSource().asPlayer()))
                 )
         );
     }
 
-    private static int itemInfo(ServerPlayerEntity player)
+    private static int help(ServerPlayerEntity player)
     {
         //TODO Update this with better way of sending data, the ability to click on it to copy to clipboard, and get item tags.
         ItemStack stack = player.getHeldItem(Hand.MAIN_HAND);
         player.sendMessage(new StringTextComponent("Item: " + stack.getItem().getRegistryName().toString()));
-        return Command.SINGLE_SUCCESS;
-    }
-
-    private static int reloadBees(ServerPlayerEntity player) {
-        ResourcefulBeesConfig.addBees();
-        player.getServer().reload();
-        player.sendMessage(new StringTextComponent("RELOAD!, New bees added!").applyTextStyle(TextFormatting.RED));
         return Command.SINGLE_SUCCESS;
     }
 }
