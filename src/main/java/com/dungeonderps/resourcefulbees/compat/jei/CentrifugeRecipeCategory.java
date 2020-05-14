@@ -29,22 +29,24 @@ import java.util.stream.Collectors;
 
 public class CentrifugeRecipeCategory implements IRecipeCategory<CentrifugeRecipe> {
 
+  public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "centrifuge");
+
   private final IDrawable icon;
   private final IDrawable background;
   private final String localizedName;
   protected final IDrawableAnimated arrow;
 
-  public CentrifugeRecipeCategory(IGuiHelper guiHelper, String translationKey) {
+  public CentrifugeRecipeCategory(IGuiHelper guiHelper) {
     this.background = guiHelper.createDrawable(new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/centrifuge.png"), 0, 0, 133, 65);
     this.icon = guiHelper.createDrawableIngredient(new ItemStack(RegistryHandler.CENTRIFUGE_ITEM.get()));
-    this.localizedName = I18n.format(translationKey);
+    this.localizedName = I18n.format("gui.resourcefulbees.jei.category.centrifuge");
     this.arrow = guiHelper.drawableBuilder(new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/centrifuge.png"), 0, 66, 73, 30)
             .buildAnimated(200, IDrawableAnimated.StartDirection.LEFT, false);
   }
 
   @Override
   public ResourceLocation getUid() {
-    return new ResourceLocation(ResourcefulBees.MOD_ID, "centrifuge");
+    return ID;
   }
 
   @Override

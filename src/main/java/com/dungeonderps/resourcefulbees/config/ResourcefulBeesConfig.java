@@ -1,52 +1,14 @@
 package com.dungeonderps.resourcefulbees.config;
 
-import com.dungeonderps.resourcefulbees.ResourcefulBees;
-import com.dungeonderps.resourcefulbees.utils.BeeInfoUtils;
-import com.google.gson.Gson;
-import javafx.util.Pair;
-import net.minecraft.client.Minecraft;
-import net.minecraft.resources.FolderPack;
-import net.minecraft.resources.IPackFinder;
-import net.minecraft.resources.ResourcePackInfo;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.loading.FMLPaths;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-
-import java.io.*;
-import java.nio.file.*;
-import java.util.Map;
-
-import static com.dungeonderps.resourcefulbees.ResourcefulBees.LOGGER;
 
 public class ResourcefulBeesConfig {
 
     public static final String MOD_OPTIONS = "Mod Options";
 
-    public static final String ASSETS_DIR = "/assets/resourcefulbees/default_bees/";
-    public static final String[] DEFAULT_BEES = new String[]{
-            "Diamond.json",
-            "Emerald.json",
-            "Gold.json",
-            "Iron.json",
-            "Coal.json",
-            "Redstone.json",
-            "Nether_Quartz.json",
-            "Lapis_Lazuli.json",
-            "Ender.json"
-    };
-
-
-    public static Path BEE_PATH;
-    public static Path RESOURCE_PATH;
-
-    // CONFIGS
     public static ForgeConfigSpec.BooleanValue GENERATE_DEFAULTS;
     public static ForgeConfigSpec.BooleanValue ENABLE_EASTER_EGG_BEES;
-    public static ForgeConfigSpec.BooleanValue DEBUG_MODE;
+    public static ForgeConfigSpec.BooleanValue DEBUG_MODE;  //TODO possibly remove DEBUG Config option.
     public static ForgeConfigSpec.DoubleValue HIVE_OUTPUT_MODIFIER;
     public static ForgeConfigSpec.IntValue HIVE_MAX_BEES;
 
@@ -72,102 +34,6 @@ public class ResourcefulBeesConfig {
                     .defineInRange("hiveMaxBees", 4, 0, 16);
 
             COMMON_CONFIG = COMMON_BUILDER.build();
-
-            setupDefaultBees();
         }
-    }
-
-    public static void setupDefaultBees() {// CONFIG FOLDER AND FILES MUST BE RUN BEFORE THIS
-        // check config for hardcoded bee flag
-        /*
-        if (GENERATE_DEFAULTS.get()) {
-        }*/
-        for (String bee : DEFAULT_BEES) {
-            String path = ASSETS_DIR + bee;   //This allows me to dynamically change the path and later create the new path
-                try (InputStream inputStream = ResourcefulBees.class.getResourceAsStream(path)){
-                    Path newPath =  Paths.get(BEE_PATH.toString() + "/" + bee);
-                    File targetFile = new File(String.valueOf(newPath));
-                    Files.copy(inputStream, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                    } catch (IOException e) {
-                    e.printStackTrace();
-                }
-        }
-        addBees();
-    }
-
-    // setup the mod config folder
-    public static void setup() {
-        Path configPath = FMLPaths.CONFIGDIR.get();
-        //Path rbConfigPath = Paths.get(configPath.toAbsolutePath().toString(), "resourcefulbees");
-        // subfolder for bees
-        Path rbBeesPath = Paths.get(configPath.toAbsolutePath().toString(),ResourcefulBees.MOD_ID, "bees");
-        Path rbAssetsPath = Paths.get(configPath.toAbsolutePath().toString(),ResourcefulBees.MOD_ID, "resources");
-        BEE_PATH = rbBeesPath;
-        RESOURCE_PATH = rbAssetsPath;
-
-        try { Files.createDirectories(rbBeesPath);
-        } catch (FileAlreadyExistsException e) { // do nothing
-        } catch (IOException e) { LOGGER.error("failed to create resourcefulbees config directory");}
-
-        try { Files.createDirectory(rbAssetsPath);
-        } catch (FileAlreadyExistsException e) { // do nothing
-        } catch (IOException e) { LOGGER.error("Failed to create assets directory");}
-
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfig.COMMON_CONFIG, "resourcefulbees/common.toml");
-
-        DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
-            loadResources();
-        });
-
-    }
-
-    public static void loadResources() {
-        Minecraft.getInstance().getResourcePackList().addPackFinder(new IPackFinder() {
-            @Override
-            public <T extends ResourcePackInfo> void addPackInfosToMap(Map<String, T> map, ResourcePackInfo.IFactory<T> factory) {
-                final T packInfo = ResourcePackInfo.createResourcePack(ResourcefulBees.MOD_ID, true, () -> new FolderPack(RESOURCE_PATH.toFile()), factory, ResourcePackInfo.Priority.TOP);
-                if (packInfo == null) {
-                    LOGGER.error("Failed to load resource pack, some things may not work.");
-                    return;
-                }
-                map.put(ResourcefulBees.MOD_ID, packInfo);
-            }
-        });
-    }
-
-
-    private static void parseBee(File file) throws IOException {
-        String name = file.getName();
-        name = name.substring(0, name.indexOf('.'));
-
-        Gson gson = new Gson();
-        Reader r = new FileReader(file);
-        BeeInfo bee = gson.fromJson(r, BeeInfo.class);
-        bee.setName(name);
-        if (BeeInfoUtils.validate(bee)){
-            BeeInfo.BEE_INFO.put(name, bee);
-            if(bee.canSpawnInWorld())
-                BeeInfoUtils.parseBiomeList(bee);
-            if(bee.isChild())
-                BeeInfoUtils.buildFamilyTree(bee);
-        }
-    }
-
-    public static void addBees() {
-        BeeInfo.BEE_INFO.clear();
-        BeeInfoUtils.genDefaultBee();
-
-        for (File f: BEE_PATH.toFile().listFiles()) {
-            String s = f.getName();
-            if (s.substring(s.indexOf('.')).equals(".json")) {
-                try {
-                    parseBee(f);
-                } catch (IOException e) {
-                    LOGGER.error("File not found when parsing bees");
-                }
-            }
-        }
-
-        if (BeeInfo.FAMILY_TREE.containsKey(ImmutablePair.of("Lapis_Lazuli", "Coal"))) LOGGER.info("BREED");
     }
 }

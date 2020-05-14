@@ -6,7 +6,7 @@
   "centrifugeOutput": "minecraft:diamond",
   "spawnInWorld": true,
   "biomeList": "TAG:OVerWorld",
-  "isChild": true,
+  "breedable": true,
   "parent1": "Coal",
   "parent2": "Lapis_Lazuli"
 }

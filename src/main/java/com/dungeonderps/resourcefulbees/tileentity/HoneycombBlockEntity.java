@@ -75,4 +75,9 @@ public class HoneycombBlockEntity extends TileEntity {
     public void handleUpdateTag(CompoundNBT tag) {
         this.read(tag);
     }
+
+    @Override
+    public void onLoad() {
+
+    }
 }

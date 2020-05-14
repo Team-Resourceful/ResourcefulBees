@@ -41,7 +41,7 @@ public class JEICompat implements IModPlugin {
         IGuiHelper helper = registration.getJeiHelpers().getGuiHelper();
         registration.addRecipeCategories(new BeeHiveCategory(helper));
         registration.addRecipeCategories(
-                new CentrifugeRecipeCategory(helper,"gui.Resourcefulbees.category.centrifuge"));
+                new CentrifugeRecipeCategory(helper));
     }
 
 
@@ -56,7 +56,7 @@ public class JEICompat implements IModPlugin {
     public void registerItemSubtypes( ISubtypeRegistration subtypeRegistry )
     {
         subtypeRegistry.registerSubtypeInterpreter( RegistryHandler.RESOURCEFUL_HONEYCOMB.get(), honeycombSubtype );
-        subtypeRegistry.registerSubtypeInterpreter( RegistryHandler.HONEYCOMB_BLOCK_ITEM.get(), honeycombblockSubtype );
+        subtypeRegistry.registerSubtypeInterpreter( RegistryHandler.HONEYCOMB_BLOCK_ITEM.get(), honeycombBlockSubtype);
         //subtypeRegistry.registerSubtypeInterpreter( RegistryHandler.BEE_SPAWN_EGG.get(), beeSpawnEggSubtype );
     }
 
@@ -70,7 +70,7 @@ public class JEICompat implements IModPlugin {
         return combStack;
     };
 
-    private static final ISubtypeInterpreter honeycombblockSubtype = stack -> {
+    private static final ISubtypeInterpreter honeycombBlockSubtype = stack -> {
         Item item = stack.getItem();
         if( !(item instanceof HoneycombBlockItem) ) return "";
 
@@ -83,7 +83,7 @@ public class JEICompat implements IModPlugin {
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
         registration.addRecipeCatalyst(new ItemStack(RegistryHandler.IRON_BEEHIVE_ITEM.get()), BeeHiveCategory.ID);
-        registration.addRecipeCatalyst(new ItemStack(RegistryHandler.CENTRIFUGE_ITEM.get()), new ResourceLocation(ResourcefulBees.MOD_ID,"centrifuge"));
+        registration.addRecipeCatalyst(new ItemStack(RegistryHandler.CENTRIFUGE_ITEM.get()), CentrifugeRecipeCategory.ID);
     }
 
     @Override
@@ -91,7 +91,7 @@ public class JEICompat implements IModPlugin {
         RecipeManager recipeManager = Minecraft.getInstance().world.getRecipeManager();
         Collection<CentrifugeRecipe> recipes = getRecipes(recipeManager, CENTRIFUGE_RECIPE_TYPE);
         registration.addRecipes(BeeHiveCategory.getHoneycombRecipes(registration.getIngredientManager()), BeeHiveCategory.ID);
-        registration.addRecipes(recipes, new ResourceLocation(ResourcefulBees.MOD_ID,"centrifuge"));
+        registration.addRecipes(recipes, CentrifugeRecipeCategory.ID);
     }
 
     @Override

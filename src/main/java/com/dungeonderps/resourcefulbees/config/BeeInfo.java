@@ -2,7 +2,6 @@ package com.dungeonderps.resourcefulbees.config;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
-import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,10 +12,10 @@ public class BeeInfo {
     //These are needed for dynamic creation from JSON configs
     public static final LinkedHashMap<String, BeeInfo> BEE_INFO = new LinkedHashMap<>();
     public static final HashMap<Biome, Set<String>> SPAWNABLE_BIOMES = new HashMap<>();
-    public static final HashMap<ImmutablePair, String> FAMILY_TREE = new HashMap<>();
+    public static final HashMap<Integer, String> FAMILY_TREE = new HashMap<>();
 
     private String name, flower, color, biomeList, baseBlock, mutationBlock, centrifugeOutput, parent1, parent2;
-    private boolean spawnInWorld, enderBee, netherBee, isChild;
+    private boolean spawnInWorld, enderBee, netherBee, breedable;
 
     private transient boolean enabled;
     public BeeInfo() {}
@@ -193,12 +192,12 @@ public class BeeInfo {
      * Can be used to modify bees through code.
      * @param isChild this bee's a child.
      */
-    public void setIsChild(Boolean isChild) {this.isChild = isChild;}
+    public void setBreedable(Boolean isChild) {this.breedable = isChild;}
     /**
      * Gets if the bee is a child.
      * @return if this bee is a child.
      */
-    public boolean isChild() {return isChild;}
+    public boolean isBreedable() {return breedable;}
 
     /**
      * Sets this bee's first parent.

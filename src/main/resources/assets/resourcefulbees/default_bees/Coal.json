@@ -7,7 +7,7 @@
   "spawnInWorld": true,
   "biomeList": "tag:OVERWORLD",
   "enderBee": true,
-  "isChild": true,
-  "parent1": "testparent1",
-  "parent2": "testparent2"
+  "breedable": true,
+  "parent1": "alphabet",
+  "parent2": "blphabet"
 }

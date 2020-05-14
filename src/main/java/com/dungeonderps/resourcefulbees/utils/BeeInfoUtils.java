@@ -3,16 +3,17 @@ package com.dungeonderps.resourcefulbees.utils;
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.lib.BeeConst;
 import com.google.common.base.Splitter;
-import javafx.util.Pair;
 import net.minecraft.block.Blocks;
+import net.minecraft.item.Items;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -24,15 +25,15 @@ public class BeeInfoUtils {
     private static final Pattern RESOURCE_PATTERN = Pattern.compile("(tag:)?(\\w+):(\\w+/\\w+|\\w+)", Pattern.CASE_INSENSITIVE);
 
     public static void buildFamilyTree(BeeInfo bee){
-
-        ImmutablePair parents = ImmutablePair.of(bee.getParent1(), bee.getParent2());
-        FAMILY_TREE.put(parents, bee.getName());
-
-        ImmutablePair parentsReverse = ImmutablePair.of(bee.getParent2(), bee.getParent1());
-        FAMILY_TREE.put(parentsReverse, bee.getName());
+        String parent1 = bee.getParent1();
+        String parent2 = bee.getParent2();
+        int hash = getHashcode(parent1, parent2);
+        FAMILY_TREE.put(hash, bee.getName());
     }
 
-
+    public static int getHashcode(String parent1, String parent2){
+        return parent1.compareToIgnoreCase(parent2) > 0 ? Objects.hash(parent1,parent2) : Objects.hash(parent2,parent1);
+    }
 
     public static void parseBiomeList(BeeInfo bee){
         if (bee.getBiomeList().contains("tag:")){
@@ -111,7 +112,7 @@ public class BeeInfoUtils {
     }
 
     private static boolean validateCentrifugeOutput(BeeInfo bee) {
-        return RESOURCE_PATTERN.matcher(bee.getMutationBlock()).matches() && ForgeRegistries.ITEMS.getValue(bee.getResource(bee.getCentrifugeOutput())) != null
+        return RESOURCE_PATTERN.matcher(bee.getMutationBlock()).matches() && !ForgeRegistries.ITEMS.getValue(bee.getResource(bee.getCentrifugeOutput())).equals(Items.AIR)
                 ? dataCheckPassed(bee.getName(), "Centrifuge Output")
                 : logError(bee.getName(), "Centrifuge Output", bee.getCentrifugeOutput(), "item");
     }
@@ -126,12 +127,12 @@ public class BeeInfoUtils {
     private static boolean validateBaseBlock(BeeInfo bee) {
         if(RESOURCE_PATTERN.matcher(bee.getBaseBlock()).matches() && bee.getBaseBlock().contains("tag:")) {
             LOGGER.warn("Too early to validate Block Tag for " + bee.getName() + " bee.");
-            return true;
+            //return true;
             //TODO - Can tag check be fixed?
-            //String cleanBaseBlock = getBaseBlock().replace("tag:", "");
-            //return BlockTags.getCollection().get(getResource(cleanBaseBlock)) != null
-            //        ? dataCheckPassed(getName(), "Base Block")
-            //        : logError(getName(), "Base Block", cleanBaseBlock, "tag");
+            String cleanBaseBlock = bee.getBaseBlock().replace("tag:", "");
+            return BlockTags.getCollection().get(bee.getResource(cleanBaseBlock)) != null
+                    ? dataCheckPassed(bee.getName(), "Base Block")
+                    : logError(bee.getName(), "Base Block", cleanBaseBlock, "tag");
         }
         return RESOURCE_PATTERN.matcher(bee.getBaseBlock()).matches() && !ForgeRegistries.BLOCKS.getValue(bee.getResource(bee.getBaseBlock())).equals(Blocks.AIR)
                 ? dataCheckPassed(bee.getName(), "Base Block")
