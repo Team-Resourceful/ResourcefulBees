@@ -9,6 +9,8 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 
+import static com.dungeonderps.resourcefulbees.ResourcefulBees.LOGGER;
+
 public class HoneycombBlockEntity extends TileEntity {
 
     public String beeType;
@@ -21,7 +23,6 @@ public class HoneycombBlockEntity extends TileEntity {
     public TileEntityType<?> getType() {
         return RegistryHandler.HONEYCOMB_BLOCK_ENTITY.get();
     }
-
 
     public int getColor() {
         return (blockColor != null && !blockColor.isEmpty()) ? Color.parseInt(blockColor) : BeeConst.DEFAULT_COLOR;
@@ -54,9 +55,10 @@ public class HoneycombBlockEntity extends TileEntity {
     }
 
     CompoundNBT saveToNBT(CompoundNBT compound) {
-        if (!this.blockColor.equals(String.valueOf(BeeConst.DEFAULT_COLOR))) {
-            compound.putString(BeeConst.NBT_COLOR, this.blockColor);
-        }
+        if (this.blockColor != null)
+            if (!this.blockColor.equals(String.valueOf(BeeConst.DEFAULT_COLOR))) {
+                compound.putString(BeeConst.NBT_COLOR, this.blockColor);
+            }
 
         if (this.beeType != null) {
             compound.putString(BeeConst.NBT_BEE_TYPE, this.beeType);

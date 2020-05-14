@@ -1,6 +1,6 @@
         package com.dungeonderps.resourcefulbees.commands;
 
-        import com.dungeonderps.resourcefulbees.config.BeeBuilder;
+        import com.dungeonderps.resourcefulbees.config.ResourcefulBeesConfig;
         import com.mojang.brigadier.Command;
         import com.mojang.brigadier.CommandDispatcher;
         import net.minecraft.command.CommandSource;
@@ -37,7 +37,7 @@ public class ResourcefulBeeCommands
     }
 
     private static int reloadBees(ServerPlayerEntity player) {
-        BeeBuilder.setupBees();
+        ResourcefulBeesConfig.addBees();
         player.getServer().reload();
         player.sendMessage(new StringTextComponent("RELOAD!, New bees added!").applyTextStyle(TextFormatting.RED));
         return Command.SINGLE_SUCCESS;
