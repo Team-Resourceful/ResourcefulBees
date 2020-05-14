@@ -51,7 +51,7 @@ public class HoneycombBlock extends Block {
         if (world != null && pos != null) {
             HoneycombBlockEntity tile = (HoneycombBlockEntity) world.getTileEntity(pos);
             if (tile instanceof HoneycombBlockEntity) {
-                CompoundNBT combData = tile.getTileData();
+                CompoundNBT combData = tile.serializeNBT();
                 ItemStack honeyCombBlockItemStack = new ItemStack(RegistryHandler.HONEYCOMB_BLOCK_ITEM.get());
                 final CompoundNBT honeyCombItemStackTag = honeyCombBlockItemStack.getOrCreateChildTag(BeeConst.NBT_ROOT);
                 honeyCombItemStackTag.putString(BeeConst.NBT_BEE_TYPE, combData.getString(BeeConst.NBT_BEE_TYPE));

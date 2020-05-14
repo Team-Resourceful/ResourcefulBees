@@ -4,9 +4,11 @@ import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.lib.BeeConst;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import net.minecraft.item.BlockItem;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.ActionResultType;
 
 public class HoneycombBlockItem extends BlockItem {
 
@@ -14,6 +16,15 @@ public class HoneycombBlockItem extends BlockItem {
         super(RegistryHandler.HONEYCOMB_BLOCK.get(), new Item.Properties());
     }
 
+    @Override
+    public ActionResultType tryPlace(BlockItemUseContext context) {
+        CompoundNBT combBlockData = context.getItem().getOrCreateChildTag(BeeConst.NBT_ROOT);
+        if (combBlockData.getString(BeeConst.NBT_BEE_TYPE).equals("") || combBlockData.getString(BeeConst.NBT_COLOR).equals("")){
+            return ActionResultType.FAIL;
+        }
+        else
+            return super.tryPlace(context);
+    }
 
     @Override
     public String getTranslationKey(ItemStack stack) {

@@ -27,7 +27,10 @@ public class BlockItemFunction extends LootFunction {
             ItemStack blockItem = new ItemStack(RegistryHandler.HONEYCOMB_BLOCK_ITEM.get());
             blockItem.getOrCreateChildTag(BeeConst.NBT_ROOT).putString(BeeConst.NBT_BEE_TYPE, blockEntity.beeType);
             blockItem.getOrCreateChildTag(BeeConst.NBT_ROOT).putString(BeeConst.NBT_COLOR, blockEntity.blockColor);
-            return blockItem;
+            if (blockEntity.beeType.equals("") && blockEntity.blockColor.equals(""))
+                return ItemStack.EMPTY;
+            else
+                return blockItem;
         }
         return stack;
     }
