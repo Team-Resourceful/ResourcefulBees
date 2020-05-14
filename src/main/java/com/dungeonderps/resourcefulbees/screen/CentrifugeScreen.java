@@ -29,14 +29,70 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
         ResourceLocation texture = null;
         //TODO Add more guis - all dye colors and maybe some easter eggs
-        switch(title.getFormattedText().toLowerCase()) {
-            case "red":
+        switch(title.getFormattedText().toLowerCase().trim()) {
+            case "white":
+                textColor = 0x000000;
+                texture = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/gui/centrifuges/white_centrifuge.png");
+                break;
+            case "orange":
                 textColor = 0xffffff;
-                texture = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/gui/centrifuges/red_centrifuge.png");
+                texture = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/gui/centrifuges/orange_centrifuge.png");
+                break;
+            case "magenta":
+                textColor = 0xffffff;
+                texture = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/gui/centrifuges/magenta_centrifuge.png");
+                break;
+            case "light blue":
+                textColor = 0xffffff;
+                texture = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/gui/centrifuges/light_blue_centrifuge.png");
+                break;
+            case "yellow":
+                textColor = 0x000000;
+                texture = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/gui/centrifuges/yellow_centrifuge.png");
+                break;
+            case "lime":
+                textColor = 0xffffff;
+                texture = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/gui/centrifuges/lime_centrifuge.png");
+                break;
+            case "pink":
+                textColor = 0x000000;
+                texture = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/gui/centrifuges/pink_centrifuge.png");
+                break;
+            case "gray":
+                textColor = 0xffffff;
+                texture = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/gui/centrifuges/gray_centrifuge.png");
+                break;
+            case "light gray":
+                textColor = 0xffffff;
+                texture = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/gui/centrifuges/light_gray_centrifuge.png");
+                break;
+            case "cyan":
+                textColor = 0xffffff;
+                texture = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/gui/centrifuges/cyan_centrifuge.png");
+                break;
+            case "purple":
+                textColor = 0xffffff;
+                texture = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/gui/centrifuges/purple_centrifuge.png");
+                break;
+            case "blue":
+                textColor = 0xffffff;
+                texture = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/gui/centrifuges/blue_centrifuge.png");
+                break;
+            case "brown":
+                textColor = 0xffffff;
+                texture = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/gui/centrifuges/brown_centrifuge.png");
                 break;
             case "green":
                 textColor = 0xffffff;
                 texture = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/gui/centrifuges/green_centrifuge.png");
+                break;
+            case "red":
+                textColor = 0xffffff;
+                texture = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/gui/centrifuges/red_centrifuge.png");
+                break;
+            case "black":
+                textColor = 0xffffff;
+                texture = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/gui/centrifuges/black_centrifuge.png");
                 break;
             default:
                 switch(new SimpleDateFormat("MM").format(new Date())){
