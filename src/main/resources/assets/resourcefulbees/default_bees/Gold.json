@@ -2,7 +2,7 @@
   "color": "#FFDC00",
   "flower": "TaLL",
   "baseBlock": "tag:minecraft:leaves",
-  "mutationBlock": "minecraft:whore",
+  "mutationBlock": "minecraft:stone",
   "centrifugeOutput": "minecraft:kush",
   "spawnInWorld": true,
   "biomeList": "nuclear:wasteland"
