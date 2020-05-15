@@ -28,7 +28,6 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
         ResourceLocation texture = null;
-        //TODO Add more guis - all dye colors and maybe some easter eggs
         switch(title.getFormattedText().toLowerCase().trim()) {
             case "white":
                 textColor = 0x000000;

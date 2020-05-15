@@ -1,23 +1,28 @@
 {
 	"itemGroup.resourcefulbees" : "Resourceful Bees",
-	"gui.resourcefulbees.jei.category.hive" : "Iron Beehive",
-	"gui.resourcefulbees.jei.category.centrifuge": "Centrifuge",
-
-	"gui.resourcefulbees.category.centrifuge": "Centrifuge",
 
 	"resourcefulbees.shift_info": "Hold SHIFT for Info",
 	"item.resourcefulbees.smoker.tooltip": "Rightclick the hive to smoke it.",
 	"item.resourcefulbees.smoker.tooltip.1": "This allows you to stop the bees from being angry at you for shearing honeycombs for 30s.",
-
-	"block.resourcefulbees.iron_beehive": "Iron Beehive",
 	"block.beehive.tileentity.info.smoked": "Smoked: ",
 
+	"gui.resourcefulbees.jei.category.hive" : "Iron Beehive",
+	"gui.resourcefulbees.jei.category.centrifuge": "Centrifuge",
+	"gui.resourcefulbees.category.centrifuge": "Centrifuge",
+	"gui.resourcefulbees.centrifuge": "Centrifuge",
+
+	"block.resourcefulbees.iron_beehive": "Iron Beehive",
+	"block.resourcefulbees.wax_block": "Beeswax Block",
 	"block.resourcefulbees.centrifuge": "Centrifuge",
+	"block.resourcefulbees._resourceful_honeycomb_block": "Resourceful Honeycomb Block",
+	"block.resourcefulbees.resourceful_honeycomb_block": "Resourceful Honeycomb Block",
 
 	"item.resourcefulbees.smoker_can": "Smoker Canister",
 	"item.resourcefulbees.smoker": "Bee Smoker",
 	"item.resourcefulbees.bellow": "Bellow",
 	"item.resourcefulbees.beeswax": "Beeswax",
+	"item.resourcefulbees.resourceful_honeycomb": "Resourceful Honeycomb",
+	"item.resourcefulbees._resourceful_honeycomb": "Resourceful Honeycomb",
 
 	"block.resourcefulbees.gold_honeycomb_block": "Gold Honeycomb Block",
 	"block.resourcefulbees.iron_honeycomb_block": "Iron Honeycomb Block",

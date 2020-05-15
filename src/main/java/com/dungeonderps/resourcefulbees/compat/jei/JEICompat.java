@@ -43,8 +43,6 @@ public class JEICompat implements IModPlugin {
         registration.addRecipeCategories(
                 new CentrifugeRecipeCategory(helper));
     }
-
-
     @Nonnull
     @Override
     public ResourceLocation getPluginUid()
@@ -57,7 +55,6 @@ public class JEICompat implements IModPlugin {
     {
         subtypeRegistry.registerSubtypeInterpreter( RegistryHandler.RESOURCEFUL_HONEYCOMB.get(), honeycombSubtype );
         subtypeRegistry.registerSubtypeInterpreter( RegistryHandler.HONEYCOMB_BLOCK_ITEM.get(), honeycombBlockSubtype);
-        //subtypeRegistry.registerSubtypeInterpreter( RegistryHandler.BEE_SPAWN_EGG.get(), beeSpawnEggSubtype );
     }
 
     private static final ISubtypeInterpreter honeycombSubtype = stack -> {
@@ -104,16 +101,4 @@ public class JEICompat implements IModPlugin {
         Map<ResourceLocation, IRecipe<C>> recipesMap = recipeManager.getRecipes(recipeType);
         return (Collection<T>) recipesMap.values();
     }
-
-    /*
-    private static final ISubtypeInterpreter beeSpawnEggSubtype = stack -> {
-        Item item = stack.getItem();
-        if( !(item instanceof BeeSpawnEggItem) ) return "";
-
-        BeeSpawnEggItem egg = (BeeSpawnEggItem) item;
-
-        String spawnEgg = egg.getTranslationKey(stack);
-        return spawnEgg;
-    };
-    */
 }

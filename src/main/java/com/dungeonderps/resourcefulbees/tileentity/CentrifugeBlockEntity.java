@@ -244,7 +244,7 @@ public class CentrifugeBlockEntity extends TileEntity implements ITickableTileEn
     }
 
     protected ITextComponent getDefaultName() {
-        return new TranslationTextComponent("resourcefulbees.container.centrifuge");
+        return new TranslationTextComponent("gui.resourcefulbees.centrifuge");
     }
 
     @Override

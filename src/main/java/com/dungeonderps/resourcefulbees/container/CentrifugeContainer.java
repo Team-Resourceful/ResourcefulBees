@@ -1,7 +1,4 @@
 package com.dungeonderps.resourcefulbees.container;
-//import com.tfar.beesourceful.inventory.OutputSlot;
-//import com.tfar.beesourceful.inventory.SlotItemHandlerUnconditioned;
-//import com.tfar.beesourceful.util.FunctionalIntReferenceHolder;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.tileentity.CentrifugeBlockEntity;
 import com.dungeonderps.resourcefulbees.utils.FunctionalIntReferenceHolder;

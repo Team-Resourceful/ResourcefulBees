@@ -2,9 +2,9 @@
   "parent": "block/orientable_with_bottom",
   "textures": {
     "particle": "block/iron_block",
-    "bottom": "block/iron_block",
-    "top": "resourcefulbees:block/centrifuge_front",
-    "front": "block/iron_block",
-    "side": "block/iron_block"
+    "bottom": "resourcefulbees:block/centrifuge_bottom",
+    "top": "resourcefulbees:block/centrifuge_top",
+    "front": "resourcefulbees:block/centrifuge_side",
+    "side": "resourcefulbees:block/centrifuge_side"
   }
 }

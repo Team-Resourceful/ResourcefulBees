@@ -6,7 +6,6 @@ public class ResourcefulBeesConfig {
 
     public static ForgeConfigSpec.BooleanValue GENERATE_DEFAULTS;
     public static ForgeConfigSpec.BooleanValue ENABLE_EASTER_EGG_BEES;
-    public static ForgeConfigSpec.BooleanValue DEBUG_MODE;  //TODO possibly remove DEBUG Config option.
     public static ForgeConfigSpec.BooleanValue CENTRIFUGE_RECIPES;
     public static ForgeConfigSpec.BooleanValue HONEYCOMB_BLOCK_RECIPES;
     public static ForgeConfigSpec.DoubleValue HIVE_OUTPUT_MODIFIER;
@@ -28,8 +27,6 @@ public class ResourcefulBeesConfig {
                         .define("generateDefaults",true);
                 ENABLE_EASTER_EGG_BEES = COMMON_BUILDER.comment("Set to true if you want easter egg bees to generate [true/false]")
                         .define("enableEasterEggBees", true);
-                DEBUG_MODE = COMMON_BUILDER.comment("Extra logger info [true/false]")
-                        .define("debugMode", false);
             COMMON_BUILDER.pop();
 
             COMMON_BUILDER.push("Recipe Options");
