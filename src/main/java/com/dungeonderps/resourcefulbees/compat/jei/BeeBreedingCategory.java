@@ -15,32 +15,35 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.runtime.IIngredientManager;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.Quaternion;
 import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.CustomBeeEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class BeeHiveCategory implements IRecipeCategory<BeeHiveCategory.Recipe> {
-    public static final ResourceLocation GUI_BACK = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/beehive.png");
-    public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "hive");
+public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.Recipe> {
+    public static final ResourceLocation GUI_BACK = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/breeding.png");
+    public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "breeding");
     private final IDrawable background;
     private final IDrawable icon;
     private final String localizedName;
     private final CustomBeeEntity bee;
 
-    public BeeHiveCategory(IGuiHelper guiHelper) {
-        this.background = guiHelper.drawableBuilder(GUI_BACK, 0, 0, 160, 25).addPadding(0, 0, 0, 0).build();
-        this.icon = guiHelper.createDrawableIngredient(new ItemStack(RegistryHandler.IRON_BEEHIVE_ITEM.get()));
-        this.localizedName = I18n.format("gui.resourcefulbees.jei.category.hive");
+    public BeeBreedingCategory(IGuiHelper guiHelper) {
+        this.background = guiHelper.drawableBuilder(GUI_BACK, 0, 0, 160, 30).addPadding(0, 0, 0, 0).build();
+        this.icon = guiHelper.createDrawableIngredient(new ItemStack(RegistryHandler.GOLD_FLOWER.get()));
+        this.localizedName = I18n.format("gui.resourcefulbees.jei.category.breeding");
         bee = RegistryHandler.CUSTOM_BEE.get().create(Minecraft.getInstance().world);
     }
 
@@ -69,21 +72,16 @@ public class BeeHiveCategory implements IRecipeCategory<BeeHiveCategory.Recipe> 
         return this.icon;
     }
 
+
     @Override
     public void setIngredients(Recipe recipe, IIngredients ingredients) {
-        ingredients.setOutput(VanillaTypes.ITEM, recipe.getComb());
-        ingredients.setInput(VanillaTypes.ITEM, new ItemStack(RegistryHandler.IRON_BEEHIVE_ITEM.get()));
     }
 
     @Override
     public void setRecipe(IRecipeLayout iRecipeLayout, Recipe recipe, IIngredients ingredients) {
-        IGuiItemStackGroup itemStacks = iRecipeLayout.getItemStacks();
-        itemStacks.init(0, false, 138, 4);
-        itemStacks.init(1, true, 62, 4);
-        itemStacks.set(ingredients);
     }
 
-    public void renderEntity(String beeType, Float rotation){
+    public void renderEntity(String beeType, Float rotation, Double xPos, Double yPos){
         RenderSystem.pushMatrix();
 
         RenderSystem.translatef(70, 24, 1050.0F);
@@ -102,7 +100,7 @@ public class BeeHiveCategory implements IRecipeCategory<BeeHiveCategory.Recipe> 
         bee.ticksExisted = mc.player.ticksExisted;
         bee.renderYawOffset = rotation;
         bee.selectBeeType(beeType);
-        entityrenderermanager.renderEntityStatic(bee, 1.75D, 0.1D, 0.0D, mc.getRenderPartialTicks(), 1, matrixstack, irendertypebuffer$impl, 15728880);
+        entityrenderermanager.renderEntityStatic(bee, xPos, yPos, 0.0D, mc.getRenderPartialTicks(), 1, matrixstack, irendertypebuffer$impl, 15728880);
 
         irendertypebuffer$impl.finish();
 
@@ -111,39 +109,50 @@ public class BeeHiveCategory implements IRecipeCategory<BeeHiveCategory.Recipe> 
 
     @Override
     public void draw(Recipe recipe, double mouseX, double mouseY) {
-        renderEntity(recipe.getBeeType(), 135.0F);
+        renderEntity(recipe.getParent1(), 135.0F, 1.75D, 0.1D);
+        renderEntity(recipe.getParent2(), -135.0F, 0.05D, 0.1D);
+        renderEntity(recipe.getChild(), 135.0F, -2.3D, 0.1D);
+        Minecraft minecraft = Minecraft.getInstance();
+        FontRenderer fontRenderer = minecraft.fontRenderer;
+        DecimalFormat decimalFormat = new DecimalFormat("##%");
+        fontRenderer.drawString(decimalFormat.format(0.33), 90, 18, 0xff808080);
     }
 
     public static List<Recipe> getHoneycombRecipes(IIngredientManager ingredientManager) {
         List<Recipe> recipes = new ArrayList<>();
-        for (Map.Entry<String, BeeInfo> beeType : BeeInfo.BEE_INFO.entrySet()){
-            if (beeType.getKey() == "Default")
+        for (Map.Entry<String, BeeInfo> bee : BeeInfo.BEE_INFO.entrySet()){
+            if (bee.getKey() == "Default")
                 continue;
             else {
-                ItemStack honeyCombItemStack = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
-                final CompoundNBT honeyCombItemStackTag = honeyCombItemStack.getOrCreateChildTag(BeeConst.NBT_ROOT);
-                honeyCombItemStackTag.putString(BeeConst.NBT_COLOR, beeType.getValue().getColor());
-                honeyCombItemStackTag.putString(BeeConst.NBT_BEE_TYPE, beeType.getKey());
-                recipes.add(new Recipe(honeyCombItemStack, beeType.getKey()));
+                if (bee.getValue().isBreedable()){
+                    if (BeeInfo.BEE_INFO.containsKey(bee.getValue().getParent1()) && BeeInfo.BEE_INFO.containsKey(bee.getValue().getParent2()) && BeeInfo.BEE_INFO.containsKey(bee.getKey()))
+                        recipes.add(new Recipe(bee.getValue().getParent1(), bee.getValue().getParent2(), bee.getKey()));
+                }
             }
         }
         return recipes;
     }
 
     public static class Recipe {
-        private final ItemStack comb;
-        private final String beeType;
+        private final String parent1;
+        private final String parent2;
+        private final String child;
 
-        public Recipe(ItemStack comb, String beeType) {
-            this.comb = comb;
-            this.beeType = beeType;
+        public Recipe(String parent1, String parent2, String child) {
+            this.parent1 = parent1;
+            this.parent2 = parent2;
+            this.child = child;
         }
 
-        public ItemStack getComb() {
-            return this.comb;
+        public String getParent1() {
+            return this.parent1;
         }
-        public String getBeeType() {
-            return this.beeType;
+
+        public String getParent2() {
+            return this.parent2;
+        }
+        public String getChild() {
+            return this.child;
         }
     }
 }

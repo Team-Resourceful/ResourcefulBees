@@ -34,12 +34,11 @@ import static com.dungeonderps.resourcefulbees.recipe.CentrifugeRecipe.CENTRIFUG
 @mezz.jei.api.JeiPlugin
 public class JEICompat implements IModPlugin {
 
-
-
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
         IGuiHelper helper = registration.getJeiHelpers().getGuiHelper();
         registration.addRecipeCategories(new BeeHiveCategory(helper));
+        registration.addRecipeCategories(new BeeBreedingCategory(helper));
         registration.addRecipeCategories(
                 new CentrifugeRecipeCategory(helper));
     }
@@ -89,6 +88,7 @@ public class JEICompat implements IModPlugin {
         Collection<CentrifugeRecipe> recipes = getRecipes(recipeManager, CENTRIFUGE_RECIPE_TYPE);
         registration.addRecipes(BeeHiveCategory.getHoneycombRecipes(registration.getIngredientManager()), BeeHiveCategory.ID);
         registration.addRecipes(recipes, CentrifugeRecipeCategory.ID);
+        registration.addRecipes(BeeBreedingCategory.getHoneycombRecipes(registration.getIngredientManager()), BeeBreedingCategory.ID);
     }
 
     @Override
