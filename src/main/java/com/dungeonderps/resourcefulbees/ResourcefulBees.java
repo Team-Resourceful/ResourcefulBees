@@ -45,7 +45,6 @@ import java.util.Map;
 //TODO - Additional Easter Eggs
 //TODO - Cleanup Centrifuge Container/Entity Classes
 //TODO - Add Ender Bee Effects
-//TODO - Add Nether Bee Effects
 //TODO - Add Ender Teleportation Effect
 //TODO - Add Blaze Fire Effect
 //TODO - Make spawn egg select specific bee type

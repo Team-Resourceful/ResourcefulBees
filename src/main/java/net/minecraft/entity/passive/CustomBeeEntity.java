@@ -247,40 +247,34 @@ public class CustomBeeEntity extends BeeEntity {
         }
     }
 
-    Entity queenBeePlayer = null;
+//    Entity queenBeePlayer = null;
 
     @Override
     public void tick() {
-        if (this.getDisplayName().getFormattedText().toLowerCase().equals("queen bee")){
-            if (queenBeePlayer !=null) {
-                this.setBeeAttacker(queenBeePlayer);
-                this.setHasStung(false);
-            }
+        if (this.hasNectar() && BEE_INFO.get(this.getBeeType()).isNetherBee()){
+            this.setFire(1);
         }
-
-
+//        if (this.getDisplayName().getFormattedText().toLowerCase().equals("queen bee")){
+//            if (queenBeePlayer !=null) {
+//                this.setBeeAttacker(queenBeePlayer);
+//                this.setHasStung(false);
+//            }
+//        }
         super.tick();
     }
 
-    //REMOVE Reason Stuff AND Create Data Parameter for BeeName
+    @Override
+    public boolean attackEntityFrom(DamageSource source, float amount) {
+        if (source.isFireDamage() && BEE_INFO.get(this.getBeeType()).isNetherBee())
+            return false;
+        return super.attackEntityFrom(source, amount);
+    }
+
     @Nullable
     @Override
     public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         selectRandomBee(reason.equals(SpawnReason.CHUNK_GENERATION) || reason.equals(SpawnReason.NATURAL));
         return super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
-    }
-
-
-
-    //TODO - DOES NOT WORK - Need to use LivingDamageEvent and negate the damage from fire!!!
-
-
-    @Override
-    public boolean attackEntityFrom(DamageSource source, float amount) {
-
-        if (source.isFireDamage() && BEE_INFO.get(getBeeType()).isNetherBee())
-            return false;
-        return super.attackEntityFrom(source, amount);
     }
 
     public static boolean canBeeSpawn(EntityType<? extends AnimalEntity> typeIn, IWorld worldIn, SpawnReason reason, BlockPos pos, Random randomIn) {
@@ -348,8 +342,8 @@ public class CustomBeeEntity extends BeeEntity {
         ItemStack itemstack = player.getHeldItem(hand);
         Item item = itemstack.getItem();
         if (item instanceof NameTagItem){
-            LOGGER.info("queen be player is: " + player.getDisplayName().getFormattedText());
-            queenBeePlayer = player;
+//            LOGGER.info("queen be player is: " + player.getDisplayName().getFormattedText());
+//            queenBeePlayer = player;
             super.processInteract(player,hand);
         }
         if (item == RegistryHandler.SMOKER.get() && this.isAngry()) {
@@ -416,7 +410,4 @@ public class CustomBeeEntity extends BeeEntity {
             e.printStackTrace();
         }
     }
-
-
-
 }
