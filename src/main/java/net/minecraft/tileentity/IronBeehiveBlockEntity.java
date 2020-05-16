@@ -3,6 +3,7 @@ package net.minecraft.tileentity;
 
 
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
+import com.dungeonderps.resourcefulbees.config.Config;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import net.minecraft.block.BeehiveBlock;
 import net.minecraft.block.Block;
@@ -23,13 +24,11 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Stack;
 
-import static com.dungeonderps.resourcefulbees.ResourcefulBees.LOGGER;
-
 
 public class IronBeehiveBlockEntity extends BeehiveTileEntity {
 
   public Stack<String> honeycombs = new Stack<>();
-  public boolean smoked = false;
+  public boolean isSmoked = false;
   public int ticksSmoked = 0;
 
   @Nonnull
@@ -61,26 +60,24 @@ public class IronBeehiveBlockEntity extends BeehiveTileEntity {
           double d3 = blockpos.getZ() + 0.5D + d0 * direction.getZOffset();
           entity.setLocationAndAngles(d1, d2, d3, entity.rotationYaw, entity.rotationPitch);
           if (entity instanceof CustomBeeEntity) {
-            CustomBeeEntity beeentity = (CustomBeeEntity) entity;
-            if (this.hasFlowerPos() && !beeentity.hasFlower() && this.world.rand.nextFloat() < 0.9F) {
-              beeentity.setFlowerPos(this.flowerPos);
+            CustomBeeEntity beeEntity = (CustomBeeEntity) entity;
+            if (this.hasFlowerPos() && !beeEntity.hasFlower() && this.world.rand.nextFloat() < 0.9F) {
+              beeEntity.setFlowerPos(this.flowerPos);
             }
 
             if (beehiveState == State.HONEY_DELIVERED) {
-              beeentity.onHoneyDelivered();
+              beeEntity.onHoneyDelivered();
               int i = getHoneyLevel(state);
               if (i < 5) {
-                int j = this.world.rand.nextInt(100) == 0 ? 2 : 1;
-                if (i + j > 5) {
-                  --j;
-                }
-                this.honeycombs.push(beeentity.getBeeType());
-                this.world.setBlockState(this.getPos(), state.with(BeehiveBlock.HONEY_LEVEL, i + j));
+                float percentValue = (float)(this.honeycombs.size() / Config.HIVE_MAX_COMBS.get());
+                int newState = (int)(percentValue  - (percentValue % 20)) * 100 / 20;
+                this.honeycombs.push(beeEntity.getBeeType());
+                this.world.setBlockState(this.getPos(), state.with(BeehiveBlock.HONEY_LEVEL, newState));
               }
             }
-            beeentity.resetTicksWithoutNectar();
+            beeEntity.resetTicksWithoutNectar();
             if (entities != null) {
-              entities.add(beeentity);
+              entities.add(beeEntity);
             }
           }
           BlockPos hivePos = this.getPos();
@@ -122,27 +119,17 @@ public class IronBeehiveBlockEntity extends BeehiveTileEntity {
 
   @Override
   public boolean isSmoked() {
-	  if (smoked) {
-		  //LOGGER.info(smoked);
-		  return true;
-	  }
-	  else
-      return CampfireBlock.isLitCampfireInRange(this.world, this.getPos(), 5);
+	  return isSmoked || CampfireBlock.isLitCampfireInRange(this.world, this.getPos(), 5);
   }
   
   @Override
   public void tick() {
-    if (!this.world.isRemote){
-  	  if (smoked) {
-  		  if (ticksSmoked < 600)
-  			  	ticksSmoked++;
-  		  else if (ticksSmoked == 600) {
-  			  	LOGGER.info("Finished Ticks Smoked!");
-  			  	smoked = false;
-  		  		ticksSmoked = 0;
-  			  	LOGGER.info("Finished Ticks Smoked!: " + smoked);
-  		  }
-	  }
+    if (!this.world.isRemote && isSmoked && ticksSmoked < 600) {
+      ticksSmoked++;
+    }
+    if (ticksSmoked == 600) {
+      isSmoked = false;
+      ticksSmoked = 0;
     }
     super.tick();
   }

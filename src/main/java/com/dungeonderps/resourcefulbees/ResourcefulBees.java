@@ -3,7 +3,7 @@ package com.dungeonderps.resourcefulbees;
 import com.dungeonderps.resourcefulbees.commands.ResourcefulBeeCommands;
 import com.dungeonderps.resourcefulbees.compat.top.TopCompat;
 import com.dungeonderps.resourcefulbees.config.BeeBuilder;
-import com.dungeonderps.resourcefulbees.config.ResourcefulBeesConfig;
+import com.dungeonderps.resourcefulbees.config.Config;
 import com.dungeonderps.resourcefulbees.data.DataGen;
 import com.dungeonderps.resourcefulbees.data.RecipeBuilder;
 import com.dungeonderps.resourcefulbees.entity.CustomBeeRenderer;
@@ -65,7 +65,7 @@ public class ResourcefulBees
         ModSetup.initialize();
         RegistryHandler.init();
 
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ResourcefulBeesConfig.CommonConfig.COMMON_CONFIG, "resourcefulbees/common.toml");
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.CommonConfig.COMMON_CONFIG, "resourcefulbees/common.toml");
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener(EventPriority.LOW, this::setup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(DataGen::gatherData);

@@ -2,7 +2,7 @@ package com.dungeonderps.resourcefulbees.config;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 
-public class ResourcefulBeesConfig {
+public class Config {
 
     public static final String MOD_OPTIONS = "Mod Options";
 
@@ -11,6 +11,7 @@ public class ResourcefulBeesConfig {
     public static ForgeConfigSpec.BooleanValue DEBUG_MODE;  //TODO possibly remove DEBUG Config option.
     public static ForgeConfigSpec.DoubleValue HIVE_OUTPUT_MODIFIER;
     public static ForgeConfigSpec.IntValue HIVE_MAX_BEES;
+    public static ForgeConfigSpec.IntValue HIVE_MAX_COMBS;
 
     public static class CommonConfig {
 
@@ -32,6 +33,8 @@ public class ResourcefulBeesConfig {
                     .defineInRange("hiveOutputModifier", 1.0,0.0,8.0);
             HIVE_MAX_BEES = COMMON_BUILDER.comment("Maximum amount of bees in the hive at any given time[range 0 - 16")
                     .defineInRange("hiveMaxBees", 4, 0, 16);
+            HIVE_MAX_COMBS = COMMON_BUILDER.comment("Maximum honeycombs required before harvest")
+                    .defineInRange("hiveMaxCombs", 5, 5, 16);
 
             COMMON_CONFIG = COMMON_BUILDER.build();
         }

@@ -14,9 +14,10 @@ public class BeeInfo {
     public static final HashMap<Biome, Set<String>> SPAWNABLE_BIOMES = new HashMap<>();
     public static final HashMap<Integer, String> FAMILY_TREE = new HashMap<>();
 
-    private String name, flower, color, biomeList, baseBlock, mutationBlock, centrifugeOutput, parent1, parent2;
-    private boolean spawnInWorld, enderBee, netherBee, breedable;
+    private String flower, color, biomeList, baseBlock, mutationBlock, centrifugeOutput, parent1, parent2;
+    private boolean spawnInWorld, enderBee, netherBee, breedable, creeperBee, skeletonBee, zomBee, pigmanBee, witherBee, blazeBee;
 
+    private transient String name;
     private transient boolean enabled;
     public BeeInfo() {}
 
@@ -193,6 +194,7 @@ public class BeeInfo {
      * @param isChild this bee's a child.
      */
     public void setBreedable(Boolean isChild) {this.breedable = isChild;}
+
     /**
      * Gets if the bee is a child.
      * @return if this bee is a child.
@@ -205,22 +207,62 @@ public class BeeInfo {
      * @param parent1 this bee's first parent.
      */
     public void setParent1(String parent1) { this.parent1 = parent1; }
+
     /**
      * Gets this bee's first parent.
      * @return this bee's first parent.
      */
     public String getParent1() { return parent1; }
+
     /**
      * Sets this bee's second parent.
      * Can be used to modify bees through code.
      * @param parent2 this bee's second parent.
      */
     public void setParent2(String parent2) { this.parent2 = parent2; }
+
     /**
      * Gets this bee's second parent.
      * @return this bee's second parent.
      */
     public String getParent2() { return parent2; }
+
+    /**
+     * Returns true if bee has the creeper trait.
+     * @return is this a creeper bee?
+     */
+    public boolean isCreeperBee() { return creeperBee; }
+
+    /**
+     * Returns true if bee has the skeleton trait.
+     * @return is this a skeleton bee?
+     */
+    public boolean isSkeletonBee() { return skeletonBee; }
+
+    /**
+     * Returns true if bee has the zombie trait.
+     * @return is this a zombie bee?
+     */
+    public boolean isZomBee() { return zomBee; }
+
+    /**
+     * Returns true if bee has the pigman trait.
+     * @return is this a pigman bee?
+     */
+    public boolean isPigmanBee() { return pigmanBee; }
+
+    /**
+     * Returns true if bee has the wither trait.
+     * @return is this a wither bee?
+     */
+    public boolean isWitherBee() { return witherBee; }
+
+    /**
+     * Returns true if bee has the blaze trait.
+     * @return is this a blaze bee?
+     */
+    public boolean isBlazeBee() { return blazeBee; }
+
 
     /**
      * Returns an ArrayList of type String containing all information

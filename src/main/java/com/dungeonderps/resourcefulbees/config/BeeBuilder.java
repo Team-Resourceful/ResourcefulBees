@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.Set;
 
 import static com.dungeonderps.resourcefulbees.ResourcefulBees.LOGGER;
-import static com.dungeonderps.resourcefulbees.config.ResourcefulBeesConfig.GENERATE_DEFAULTS;
+import static com.dungeonderps.resourcefulbees.config.Config.GENERATE_DEFAULTS;
 
 public class BeeBuilder{
 

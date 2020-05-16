@@ -48,12 +48,12 @@ public class TopCompat implements Function<ITheOneProbe, Void>
             {
                 IronBeehiveBlockEntity beeHiveBlock = (IronBeehiveBlockEntity) world.getTileEntity(data.getPos());
 
-                if(beeHiveBlock.smoked) {
+                if(beeHiveBlock.isSmoked) {
                     probeInfo.horizontal()
                             .item(blockState.getBlock().asItem().getDefaultInstance())
                             .vertical()
                             .itemLabel(blockState.getBlock().asItem().getDefaultInstance())
-                            .text(I18n.format("block.beehive.tileentity.info.smoked") + beeHiveBlock.smoked)
+                            .text(I18n.format("block.beehive.tileentity.info.smoked") + beeHiveBlock.isSmoked)
                             .progress((int) Math.floor(beeHiveBlock.ticksSmoked / 20), 30)
                             .text(formatting + "Resourceful Bees");
                     return true;
@@ -67,7 +67,7 @@ public class TopCompat implements Function<ITheOneProbe, Void>
                                 .item(blockState.getBlock().asItem().getDefaultInstance())
                                 .vertical()
                                 .itemLabel(blockState.getBlock().asItem().getDefaultInstance())
-                                .text(I18n.format("block.beehive.tileentity.info.smoked") + beeHiveBlock.smoked)
+                                .text(I18n.format("block.beehive.tileentity.info.smoked") + beeHiveBlock.isSmoked)
                                 .progress((int) Math.floor(beeHiveBlock.ticksSmoked / 20), 30)
                                 .text(formatting + "Resourceful Bees");
                         vertical = probeInfo.vertical(probeInfo.defaultLayoutStyle().borderColor(0xff006699).spacing(0));

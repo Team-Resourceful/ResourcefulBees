@@ -48,7 +48,7 @@ public class IronBeehiveBlock extends BeehiveBlock {
 	    TileEntity blockEntity = world.getTileEntity(pos);
 	    if (blockEntity instanceof IronBeehiveBlockEntity) {
 	      IronBeehiveBlockEntity hive = (IronBeehiveBlockEntity)blockEntity;
-	      hive.smoked = true;
+	      hive.isSmoked = true;
 	    }
   }
   
@@ -56,7 +56,7 @@ public class IronBeehiveBlock extends BeehiveBlock {
 	    TileEntity blockEntity = world.getTileEntity(pos);
 	    if (blockEntity instanceof IronBeehiveBlockEntity) {
 	      IronBeehiveBlockEntity hive = (IronBeehiveBlockEntity)blockEntity;
-	      return hive.smoked;
+	      return hive.isSmoked;
 	    }
 	    else
 	    return false;
