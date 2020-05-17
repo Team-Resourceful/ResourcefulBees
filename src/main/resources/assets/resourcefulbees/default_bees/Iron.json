@@ -5,5 +5,7 @@
   "mutationBlock": "minecraft:iron_ore",
   "centrifugeOutput": "minecraft:iron_ingot",
   "spawnInWorld": true,
-  "biomeList": "minecraft:plains"
+  "biomeList": "minecraft:plains",
+  "maxTimeInHive": 600,
+  "witherBee": true
 }

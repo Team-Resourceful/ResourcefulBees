@@ -5,5 +5,7 @@
   "mutationBlock": "minecraft:emerald_ore",
   "centrifugeOutput": "minecraft:emerald",
   "spawnInWorld": true,
-  "biomeList": "TAG:Mountain,Hills"
+  "biomeList": "TAG:Mountain,Hills",
+  "maxTimeInHive": 600,
+  "skeletonBee": true
 }

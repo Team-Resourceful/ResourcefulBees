@@ -2,7 +2,7 @@ package com.dungeonderps.resourcefulbees.data;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
-import com.dungeonderps.resourcefulbees.config.ResourcefulBeesConfig;
+import com.dungeonderps.resourcefulbees.config.Config;
 import com.dungeonderps.resourcefulbees.lib.BeeConst;
 import com.dungeonderps.resourcefulbees.recipe.CentrifugeRecipe;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
@@ -60,12 +60,12 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
                 continue;
             }
             else {
-                if (ResourcefulBeesConfig.CENTRIFUGE_RECIPES.get()) {
+                if (Config.CENTRIFUGE_RECIPES.get()) {
                     IRecipe<?> honeycombCentrifuge = this.centrifugeRecipe(beeType.getKey(), beeType.getValue().getColor());
                     if (honeycombCentrifuge != null)
                         recipeManager.recipes.computeIfAbsent(honeycombCentrifuge.getType(), t -> new HashMap<>()).put(honeycombCentrifuge.getId(), honeycombCentrifuge);
                 }
-                if (ResourcefulBeesConfig.HONEYCOMB_BLOCK_RECIPES.get()) {
+                if (Config.HONEYCOMB_BLOCK_RECIPES.get()) {
                     IRecipe<?> honeycombBlock = this.makeHoneycombRecipe(beeType.getKey(), beeType.getValue().getColor());
                     IRecipe<?> honeycomb = this.blockToHoneycombRecipe(beeType.getKey(), beeType.getValue().getColor());
                     if (honeycombBlock != null)
@@ -121,14 +121,14 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
 
         NonNullList<Pair<ItemStack,Double>> outputs = NonNullList.from(
                 Pair.of(ItemStack.EMPTY, 0.0),//Required Apparently
-                Pair.of(new ItemStack(Registry.ITEM.getOrDefault(new ResourceLocation(BeeInfo.BEE_INFO.get(BeeType).getCentrifugeOutput()))), ResourcefulBeesConfig.CENTRIFUGE_RECIPE_MAIN.get()),//Main output
-                Pair.of(new ItemStack(RegistryHandler.BEESWAX.get()), ResourcefulBeesConfig.CENTRIFUGE_RECIPE_SECONDARY.get()),//Secondary output
-                Pair.of(bottleOutput,ResourcefulBeesConfig.CENTRIFUGE_RECIPE_HONEYBOTTLE.get())//Honey Bottle output
+                Pair.of(new ItemStack(Registry.ITEM.getOrDefault(new ResourceLocation(BeeInfo.BEE_INFO.get(BeeType).getCentrifugeOutput()))), Config.CENTRIFUGE_RECIPE_MAIN.get()),//Main output
+                Pair.of(new ItemStack(RegistryHandler.BEESWAX.get()), Config.CENTRIFUGE_RECIPE_SECONDARY.get()),//Secondary output
+                Pair.of(bottleOutput,Config.CENTRIFUGE_RECIPE_HONEYBOTTLE.get())//Honey Bottle output
         );
 
         ResourceLocation name = new ResourceLocation(ResourcefulBees.MOD_ID, BeeType.toLowerCase() + "_honeycomb_centrifuge");
 
-        return new CentrifugeRecipe(name,honeycombItem,outputs,ResourcefulBeesConfig.CENTRIFUGE_RECIPE_TIME.get() * 20);
+        return new CentrifugeRecipe(name,honeycombItem,outputs,Config.CENTRIFUGE_RECIPE_TIME.get() * 20);
     }
 
     private IRecipe<?> blockToHoneycombRecipe(String BeeType, String Color) {

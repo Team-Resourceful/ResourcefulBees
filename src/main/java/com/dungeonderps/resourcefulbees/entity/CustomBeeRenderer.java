@@ -35,36 +35,36 @@ public class CustomBeeRenderer extends MobRenderer<CustomBeeEntity, CustomBeeMod
 
     public CustomBeeRenderer(EntityRendererManager manager) {
         super(manager, new CustomBeeModel<>(), 0.4F);
-        addLayer(new CustomBeeOverlay(this));
+                addLayer(new CustomBeeOverlay(this));
+
     }
 
     public ResourceLocation getEntityTexture(CustomBeeEntity entity) {
         BeeInfo bee = BeeInfo.BEE_INFO.get(entity.getBeeType());
         if (entity.isAngry()) {
-            if(bee.isCreeperBee())
-                return CREEPER_SKIN;
-            if(bee.isSkeletonBee())
-                return SKELETON_SKIN;
-            if(bee.isZomBee())
-                return ZOMBIE_SKIN;
-            if(bee.isPigmanBee())
-                return PIGMAN_SKIN;
-            if(bee.isWitherBee())
-                return WITHER_SKIN;
+            if (bee.isCreeperBee())
+                return CREEPER_SKIN_ANGRY;
+            if (bee.isSkeletonBee())
+                return SKELETON_SKIN_ANGRY;
+            if (bee.isZomBee())
+                return ZOMBIE_SKIN_ANGRY;
+            if (bee.isPigmanBee())
+                return PIGMAN_SKIN_ANGRY;
+            if (bee.isWitherBee())
+                return WITHER_SKIN_ANGRY;
             return entity.hasNectar() ? ANGRY_NECTAR_SKIN : ANGRY_SKIN;
         } else {
-            if(bee.isCreeperBee())
-                return CREEPER_SKIN_ANGRY;
-            if(bee.isSkeletonBee())
-                return SKELETON_SKIN_ANGRY;
-            if(bee.isZomBee())
-                return ZOMBIE_SKIN_ANGRY;
-            if(bee.isPigmanBee())
-                return PIGMAN_SKIN_ANGRY;
-            if(bee.isWitherBee())
-                return WITHER_SKIN_ANGRY;
+            if (bee.isCreeperBee())
+                return CREEPER_SKIN;
+            if (bee.isSkeletonBee())
+                return SKELETON_SKIN;
+            if (bee.isZomBee())
+                return ZOMBIE_SKIN;
+            if (bee.isPigmanBee())
+                return PIGMAN_SKIN;
+            if (bee.isWitherBee())
+                return WITHER_SKIN;
             return entity.hasNectar() ? NECTAR_SKIN : PASSIVE_SKIN;
         }
     }
-
 }

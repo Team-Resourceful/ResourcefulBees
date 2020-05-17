@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static com.dungeonderps.resourcefulbees.config.BeeInfo.BEE_INFO;
+
 public class BeeHiveCategory implements IRecipeCategory<BeeHiveCategory.Recipe> {
     public static final ResourceLocation GUI_BACK = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/beehive.png");
     public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "hive");
@@ -83,7 +85,7 @@ public class BeeHiveCategory implements IRecipeCategory<BeeHiveCategory.Recipe> 
 
     public static List<Recipe> getHoneycombRecipes(IIngredientManager ingredientManager) {
         List<Recipe> recipes = new ArrayList<>();
-        for (Map.Entry<String, BeeInfo> beeType : BeeInfo.BEE_INFO.entrySet()){
+        for (Map.Entry<String, BeeInfo> beeType : BEE_INFO.entrySet()){
             if (beeType.getKey() == "Default")
                 continue;
             else {

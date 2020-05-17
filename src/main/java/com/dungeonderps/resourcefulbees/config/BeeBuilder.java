@@ -95,7 +95,7 @@ public class BeeBuilder{
                 e.printStackTrace();
             }
         }
-        addBees();
+        //addBees();
     }
 
     private static void setupBeeSpawns() {

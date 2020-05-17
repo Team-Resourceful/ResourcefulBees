@@ -9,6 +9,9 @@ public class BeeConst {
     public static final String FLOWER_TAG_ALL = "all";
     public static final String FLOWER_TAG_SMALL = "small";
     public static final String FLOWER_TAG_TALL = "tall";
+    public static final String TAG_PREFIX = "tag:";
 
+    public static final int SMOKE_TIME = 600;
+    public static final int MIN_HIVE_TIME = 600;
     public static final int DEFAULT_COLOR = 0x000000;
 }

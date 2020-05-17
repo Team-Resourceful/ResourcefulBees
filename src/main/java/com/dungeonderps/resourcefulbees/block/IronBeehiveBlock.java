@@ -40,7 +40,7 @@ public class IronBeehiveBlock extends BeehiveBlock {
 
   @Nullable
   @Override
-  public TileEntity createNewTileEntity(IBlockReader p_196283_1_) {
+  public TileEntity createNewTileEntity(IBlockReader reader) {
     return null;
   }
   

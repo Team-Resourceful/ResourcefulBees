@@ -2,8 +2,8 @@
 package net.minecraft.tileentity;
 
 
-import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.config.Config;
+import com.dungeonderps.resourcefulbees.lib.BeeConst;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import net.minecraft.block.BeehiveBlock;
 import net.minecraft.block.Block;
@@ -24,8 +24,13 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Stack;
 
+import static com.dungeonderps.resourcefulbees.config.BeeInfo.BEE_INFO;
+
 
 public class IronBeehiveBlockEntity extends BeehiveTileEntity {
+
+  private final int TIER = 1;
+  private final float TIER_MODIFIER = 1;
 
   public Stack<String> honeycombs = new Stack<>();
   public boolean isSmoked = false;
@@ -35,6 +40,14 @@ public class IronBeehiveBlockEntity extends BeehiveTileEntity {
   @Override
   public TileEntityType<?> getType() {
     return RegistryHandler.IRON_BEEHIVE_ENTITY.get();
+  }
+
+  public int getTier() {
+    return TIER;
+  }
+
+  public double getTierModifier() {
+    return TIER_MODIFIER;
   }
 
   @Override
@@ -69,9 +82,11 @@ public class IronBeehiveBlockEntity extends BeehiveTileEntity {
               beeEntity.onHoneyDelivered();
               int i = getHoneyLevel(state);
               if (i < 5) {
-                float percentValue = (float)(this.honeycombs.size() / Config.HIVE_MAX_COMBS.get());
-                int newState = (int)(percentValue  - (percentValue % 20)) * 100 / 20;
                 this.honeycombs.push(beeEntity.getBeeType());
+                float combsInHive = this.honeycombs.size();
+                float maxCombs = Config.HIVE_MAX_COMBS.get() * TIER_MODIFIER;
+                float percentValue = (combsInHive / maxCombs) * 100;
+                int newState = (int)(percentValue  - (percentValue % 20))  / 20;
                 this.world.setBlockState(this.getPos(), state.with(BeehiveBlock.HONEY_LEVEL, newState));
               }
             }
@@ -91,26 +106,26 @@ public class IronBeehiveBlockEntity extends BeehiveTileEntity {
   }
 
   public void tryEnterHive(Entity bee, boolean hasNectar, int ticksInHive) {
-    if (this.bees.size() < 3) {
+    if (this.bees.size() < (Config.HIVE_MAX_BEES.get() * TIER_MODIFIER)) {
       bee.removePassengers();
       CompoundNBT nbt = new CompoundNBT();
       bee.writeUnlessPassenger(nbt);
-      this.bees.add(new BeehiveTileEntity.Bee(nbt, ticksInHive, hasNectar ? 100 : 600));// TODO *** <---- Change 100 back to 2400!!!!
       if (this.world != null) {
         if (bee instanceof CustomBeeEntity) {
           CustomBeeEntity bee1 = (CustomBeeEntity)bee;
+          this.bees.add(new BeehiveTileEntity.Bee(nbt, ticksInHive, hasNectar ? BEE_INFO.get(bee1.getBeeType()).getMaxTimeInHive() : BeeConst.MIN_HIVE_TIME));
           if (bee1.hasFlower() && (!this.hasFlowerPos() || this.world.rand.nextBoolean())) {
             this.flowerPos = bee1.getFlowerPos();
           }
-          if (BeeInfo.BEE_INFO.get(bee1.getBeeType()).isEnderBee()){
+          if (BEE_INFO.get(bee1.getBeeType()).isEnderBee()){
             this.world.addParticle(ParticleTypes.PORTAL, bee.getPosXRandom(0.5D),
                     bee.getPosYRandom() - 0.25D, bee.getPosZRandom(0.5D),
                     (world.rand.nextDouble() - 0.5D) * 2.0D, -world.rand.nextDouble(),
                     (world.rand.nextDouble() - 0.5D) * 2.0D);
           }
         }
-        BlockPos lvt_5_2_ = this.getPos();
-        this.world.playSound(null, lvt_5_2_.getX(), lvt_5_2_.getY(), lvt_5_2_.getZ(), SoundEvents.BLOCK_BEEHIVE_ENTER, SoundCategory.BLOCKS, 1.0F, 1.0F);
+        BlockPos pos = this.getPos();
+        this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BLOCK_BEEHIVE_ENTER, SoundCategory.BLOCKS, 1.0F, 1.0F);
       }
 
       bee.remove();
@@ -124,10 +139,10 @@ public class IronBeehiveBlockEntity extends BeehiveTileEntity {
   
   @Override
   public void tick() {
-    if (!this.world.isRemote && isSmoked && ticksSmoked < 600) {
+    if (!this.world.isRemote && isSmoked && ticksSmoked < BeeConst.SMOKE_TIME) {
       ticksSmoked++;
     }
-    if (ticksSmoked == 600) {
+    if (ticksSmoked == BeeConst.SMOKE_TIME) {
       isSmoked = false;
       ticksSmoked = 0;
     }
@@ -160,8 +175,8 @@ public class IronBeehiveBlockEntity extends BeehiveTileEntity {
   @Override
   public void read(CompoundNBT nbt) {
     super.read(nbt);
-    if (nbt.contains("Honeycombs")){
-      CompoundNBT combs = (CompoundNBT) nbt.get("Honeycombs");
+    if (nbt.contains(BeeConst.NBT_HONEYCOMBS_TE)){
+      CompoundNBT combs = (CompoundNBT) nbt.get(BeeConst.NBT_HONEYCOMBS_TE);
       int i = 0;
       while (combs.contains(String.valueOf(i))){
         honeycombs.push(combs.getString(String.valueOf(i)));
@@ -179,7 +194,7 @@ public class IronBeehiveBlockEntity extends BeehiveTileEntity {
       for (int i = 0; i < honeycombs.size();i++){
         combs.putString(String.valueOf(i), honeycombs.elementAt(i));
       }
-      nbt.put("Honeycombs",combs);
+      nbt.put(BeeConst.NBT_HONEYCOMBS_TE,combs);
     }
 
     return nbt;

@@ -35,7 +35,7 @@ public class BeeInfoUtils {
     }
 
     public static void parseBiomeList(BeeInfo bee){
-        if (bee.getBiomeList().contains("tag:")){
+        if (bee.getBiomeList().contains(BeeConst.TAG_PREFIX)){
             parseBiomeTag(bee);
         } else {
             parseBiome(bee);
@@ -44,7 +44,7 @@ public class BeeInfoUtils {
 
     private static void parseBiomeTag(BeeInfo bee){
         //list with parsed biome tags
-        List<String> biomeList = Splitter.on(',').splitToList(bee.getBiomeList().replace("tag:",""));
+        List<String> biomeList = Splitter.on(',').splitToList(bee.getBiomeList().replace(BeeConst.TAG_PREFIX,""));
         for(String type : biomeList){
             //creates set containing all biomes of given type
             Set<Biome> biomeSet = BiomeDictionary.getBiomes(BiomeDictionary.Type.getType(type));
@@ -89,8 +89,14 @@ public class BeeInfoUtils {
 
     private static boolean logError(String name, String dataCheckType, String data, String dataType){
         LOGGER.error(name + " Bee " + dataCheckType + " Check Failed! Please check JSON!" +
-                "\nCurrent value: \"" + data + "\" is not a valid " + dataType + " - Bee will not be used!");
+                "\n\tCurrent value: \"" + data + "\" is not a valid " + dataType + " - Bee will not be used!");
         return false;
+    }
+
+    private static boolean logWarn(String name, String dataCheckType, String data, String dataType){
+        LOGGER.error(name + " Bee " + dataCheckType + " Check Failed! Please check JSON!" +
+                "\n\tCurrent value: \"" + data + "\" is not a valid " + dataType + " - Bee may not function properly!");
+        return true;
     }
 
     private static boolean dataCheckPassed(String name, String dataCheckType){
@@ -106,40 +112,48 @@ public class BeeInfoUtils {
         isValid = isValid && validateBaseBlock(bee);
         isValid = isValid && validateMutationBlock(bee);
         isValid = isValid && validateCentrifugeOutput(bee);
+        isValid = isValid && validateMaxTimeInHive(bee);
 
         return isValid;
     }
 
+    private static boolean validateMaxTimeInHive(BeeInfo bee) {
+        double time = bee.getMaxTimeInHive();
+        return time >= BeeConst.MIN_HIVE_TIME && time == Math.floor(time) && !Double.isInfinite(time)
+                ? dataCheckPassed(bee.getName(), "Time In Hive")
+                : logWarn(bee.getName(), "Time In Hive", String.valueOf(bee.getMaxTimeInHive()),
+                "time. Value must be greater than or equal to " + BeeConst.MIN_HIVE_TIME);
+    }
+
     private static boolean validateCentrifugeOutput(BeeInfo bee) {
-        return RESOURCE_PATTERN.matcher(bee.getMutationBlock()).matches() && !ForgeRegistries.ITEMS.getValue(bee.getResource(bee.getCentrifugeOutput())).equals(Items.AIR)
+        return RESOURCE_PATTERN.matcher(bee.getMutationBlock()).matches() && !ForgeRegistries.ITEMS.getValue(getResource(bee.getCentrifugeOutput())).equals(Items.AIR)
                 ? dataCheckPassed(bee.getName(), "Centrifuge Output")
                 : logError(bee.getName(), "Centrifuge Output", bee.getCentrifugeOutput(), "item");
     }
 
     private static boolean validateMutationBlock(BeeInfo bee) {
-        return  RESOURCE_PATTERN.matcher(bee.getMutationBlock()).matches() && !ForgeRegistries.BLOCKS.getValue(bee.getResource(bee.getMutationBlock())).equals(Blocks.AIR)
+        return  RESOURCE_PATTERN.matcher(bee.getMutationBlock()).matches() && !ForgeRegistries.BLOCKS.getValue(getResource(bee.getMutationBlock())).equals(Blocks.AIR)
                 ? dataCheckPassed(bee.getName(), "Mutation Block")
                 : logError(bee.getName(), "Mutation Block", bee.getMutationBlock(), "block");
     }
 
-
     private static boolean validateBaseBlock(BeeInfo bee) {
-        if(RESOURCE_PATTERN.matcher(bee.getBaseBlock()).matches() && bee.getBaseBlock().contains("tag:")) {
+        if(RESOURCE_PATTERN.matcher(bee.getBaseBlock()).matches() && bee.getBaseBlock().contains(BeeConst.TAG_PREFIX)) {
             LOGGER.warn("Too early to validate Block Tag for " + bee.getName() + " bee.");
             return true;
             //TODO - Can tag check be fixed?
-            //String cleanBaseBlock = bee.getBaseBlock().replace("tag:", "");
+            //String cleanBaseBlock = bee.getBaseBlock().replace(BeeConst.TAG_PREFIX, "");
             //return BlockTags.getCollection().get(bee.getResource(cleanBaseBlock)) != null
             //        ? dataCheckPassed(bee.getName(), "Base Block")
             //       : logError(bee.getName(), "Base Block", cleanBaseBlock, "tag");
         }
-        return RESOURCE_PATTERN.matcher(bee.getBaseBlock()).matches() && !ForgeRegistries.BLOCKS.getValue(bee.getResource(bee.getBaseBlock())).equals(Blocks.AIR)
+        return RESOURCE_PATTERN.matcher(bee.getBaseBlock()).matches() && !ForgeRegistries.BLOCKS.getValue(getResource(bee.getBaseBlock())).equals(Blocks.AIR)
                 ? dataCheckPassed(bee.getName(), "Base Block")
                 : logError(bee.getName(), "Base Block", bee.getBaseBlock(), "block");
     }
 
     private static boolean validateFlower(BeeInfo bee) {
-        return (bee.getFlower().equals(BeeConst.FLOWER_TAG_ALL) || bee.getFlower().equals(BeeConst.FLOWER_TAG_SMALL) || bee.getFlower().equals(BeeConst.FLOWER_TAG_TALL) || !ForgeRegistries.BLOCKS.getValue(bee.getResource(bee.getFlower())).equals(Blocks.AIR))
+        return (bee.getFlower().equals(BeeConst.FLOWER_TAG_ALL) || bee.getFlower().equals(BeeConst.FLOWER_TAG_SMALL) || bee.getFlower().equals(BeeConst.FLOWER_TAG_TALL) || !ForgeRegistries.BLOCKS.getValue(getResource(bee.getFlower())).equals(Blocks.AIR))
                 ? dataCheckPassed(bee.getName(), "Flower")
                 : logError(bee.getName(), "Flower", bee.getFlower(), "flower");
     }
@@ -150,5 +164,18 @@ public class BeeInfoUtils {
                 : logError(bee.getName(), "Color", bee.getColor(), "color");
     }
 
+    public static float[] getBeeColorAsFloat(String color){
+        java.awt.Color tempColor = java.awt.Color.decode(color);
+        return tempColor.getComponents(null);
+    }
 
+    /**
+     * Returns new Resource Location with given input.
+     *
+     * @param resource Resource input as String in the form of "mod_id:item_or_block_id".
+     * @return Returns New Resource Location for given input.
+     */
+    public static ResourceLocation getResource(String resource){
+        return new ResourceLocation(resource);
+    }
 }

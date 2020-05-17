@@ -51,11 +51,9 @@ public class Config {
             COMMON_BUILDER.pop();
 
             COMMON_BUILDER.push("Beehive Options");
-                HIVE_OUTPUT_MODIFIER = COMMON_BUILDER.comment("Output modifier for the hives when ready to be harvested")
-                        .defineInRange("hiveOutputModifier", 5.0,1.0,10.0);
-                HIVE_MAX_BEES = COMMON_BUILDER.comment("Maximum amount of bees in the hive at any given time")
-                        .defineInRange("hiveMaxBees", 4, 0, 16);
-                HIVE_MAX_COMBS = COMMON_BUILDER.comment("Base honeycomb harvest amount")
+                HIVE_MAX_BEES = COMMON_BUILDER.comment("Maximum amount of bees in the base tier hive. \n(THIS * TIER_MODIFIER = MAX_BEES) for a range of 4 -> 16")
+                        .defineInRange("hiveMaxBees", 1, 1, 4);
+                HIVE_MAX_COMBS = COMMON_BUILDER.comment("Base honeycomb harvest amount \n(THIS * TIER_MODIFIER = MAX_COMBS) for a range of 5 -> 64")
                         .defineInRange("hiveMaxCombs", 5, 5, 16);
             COMMON_BUILDER.pop();
 

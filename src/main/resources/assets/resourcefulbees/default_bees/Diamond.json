@@ -5,6 +5,7 @@
   "mutationBlock": "minecraft:diamond_ore",
   "centrifugeOutput": "minecraft:diamond",
   "spawnInWorld": true,
+  "enderBee": true,
   "biomeList": "TAG:OVerWorld",
   "breedable": true,
   "parent1": "Coal",

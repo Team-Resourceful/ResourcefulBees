@@ -6,5 +6,6 @@
   "centrifugeOutput": "minecraft:quartz",
   "spawnInWorld": true,
   "biomeList": "tag:nether",
-  "netherBee": true
+  "netherBee": true,
+  "maxTimeInHive": 600
 }

@@ -33,6 +33,7 @@
 	"block.resourcefulbees.lapis_lazuli_honeycomb_block": "Lapis Lazuli Honeycomb Block",
 	"block.resourcefulbees.coal_honeycomb_block": "Coal Honeycomb Block",
 	"block.resourcefulbees.ender_honeycomb_block": "Ender Honeycomb Block",
+	"block.resourcefulbees.default_honeycomb_block": "Resourceful Honeycomb Block",
 
 	"item.resourcefulbees.gold_honeycomb": "Gold Honeycomb",
 	"item.resourcefulbees.iron_honeycomb": "Iron Honeycomb",
@@ -43,6 +44,7 @@
 	"item.resourcefulbees.lapis_lazuli_honeycomb": "Lapis Lazuli Honeycomb",
 	"item.resourcefulbees.coal_honeycomb": "Coal Honeycomb",
 	"item.resourcefulbees.ender_honeycomb": "Ender Honeycomb",
+	"item.resourcefulbees.default_honeycomb": "Resourceful Honeycomb",
 
 	"item.resourcefulbees.gold_spawn_egg": "Gold Bee Spawn Egg",
 	"item.resourcefulbees.iron_spawn_egg": "Iron Bee Spawn Egg",
@@ -53,6 +55,7 @@
 	"item.resourcefulbees.lapis_lazuli_spawn_egg": "Lapis Lazuli Bee Spawn Egg",
 	"item.resourcefulbees.coal_spawn_egg": "Coal Bee spawn Egg",
 	"item.resourcefulbees.ender_spawn_egg": "Ender Bee Spawn Egg",
+	"item.resourcefulbees.default_spawn_egg": "Resourceful Bee Spawn Egg",
 
 	"entity.resourcefulbees.gold_bee": "Gold Bee",
 	"entity.resourcefulbees.iron_bee": "Iron Bee",
@@ -62,5 +65,6 @@
 	"entity.resourcefulbees.nether_quartz_bee": "Quartz Bee",
 	"entity.resourcefulbees.lapis_lazuli_bee": "lapis Bee",
 	"entity.resourcefulbees.coal_bee": "Coal Bee",
-	"entity.resourcefulbees.ender_bee": "Ender Bee"
+	"entity.resourcefulbees.ender_bee": "Ender Bee",
+	"entity.resourcefulbees.default_bee": "Resourceful Bee"
 }

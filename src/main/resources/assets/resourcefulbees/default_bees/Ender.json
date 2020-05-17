@@ -6,5 +6,6 @@
   "centrifugeOutput": "minecraft:ender_pearl",
   "spawnInWorld": true,
   "biomeList": "TAG:end",
-  "enderBee": true
+  "enderBee": true,
+  "maxTimeInHive": 600
 }

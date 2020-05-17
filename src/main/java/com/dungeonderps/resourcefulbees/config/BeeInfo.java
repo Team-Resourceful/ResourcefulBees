@@ -1,6 +1,6 @@
 package com.dungeonderps.resourcefulbees.config;
 
-import net.minecraft.util.ResourceLocation;
+import com.dungeonderps.resourcefulbees.utils.MathUtils;
 import net.minecraft.world.biome.Biome;
 
 import java.util.ArrayList;
@@ -16,6 +16,8 @@ public class BeeInfo {
 
     private String flower, color, biomeList, baseBlock, mutationBlock, centrifugeOutput, parent1, parent2;
     private boolean spawnInWorld, enderBee, netherBee, breedable, creeperBee, skeletonBee, zomBee, pigmanBee, witherBee, blazeBee;
+
+    private int maxTimeInHive = 2400;
 
     private transient String name;
     private transient boolean enabled;
@@ -263,6 +265,14 @@ public class BeeInfo {
      */
     public boolean isBlazeBee() { return blazeBee; }
 
+    public int getMaxTimeInHive() {
+        return maxTimeInHive;
+    }
+
+    public void setMaxTimeInHive(int maxTimeInHive) {
+        this.maxTimeInHive = maxTimeInHive;
+    }
+
 
     /**
      * Returns an ArrayList of type String containing all information
@@ -283,13 +293,14 @@ public class BeeInfo {
         return s;
     }
 
-    /**
-     * Returns new Resource Location with given input.
-     *
-     * @param resource Resource input as String in the form of "mod_id:item_or_block_id".
-     * @return Returns New Resource Location for given input.
-     */
-    public ResourceLocation getResource(String resource){
-        return new ResourceLocation(resource);
+    @SuppressWarnings("SuspiciousMethodCalls")
+    public static String getRandomBee(){
+        return BEE_INFO.get(BEE_INFO.keySet().toArray()[MathUtils.nextInt(BEE_INFO.size() - 1) +1]).getName();
     }
+
+    public static String getRandomBee(Biome biome){
+        ArrayList<String> spawnList = new ArrayList<>(BeeInfo.SPAWNABLE_BIOMES.get(biome));
+        return BEE_INFO.get(spawnList.get(MathUtils.nextInt(spawnList.size()))).getName();
+    }
+
 }

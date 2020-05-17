@@ -2,14 +2,19 @@ package net.minecraft.entity.passive;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
+import com.dungeonderps.resourcefulbees.entity.ICustomBee;
 import com.dungeonderps.resourcefulbees.entity.goals.BeeBreedGoal;
 import com.dungeonderps.resourcefulbees.lib.BeeConst;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
+import com.dungeonderps.resourcefulbees.utils.BeeInfoUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.DoublePlantBlock;
-import net.minecraft.entity.*;
+import net.minecraft.entity.AgeableEntity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ILivingEntityData;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.goal.FollowParentGoal;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.goal.TemptGoal;
@@ -43,10 +48,8 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
-import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.List;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -55,7 +58,7 @@ import java.util.stream.Stream;
 import static com.dungeonderps.resourcefulbees.config.BeeInfo.BEE_INFO;
 
 @SuppressWarnings("EntityConstructor")
-public class CustomBeeEntity extends BeeEntity {
+public class CustomBeeEntity extends BeeEntity implements ICustomBee {
 
     //These are needed for Server->Client synchronization
     private static final DataParameter<String> BEE_COLOR = EntityDataManager.createKey(CustomBeeEntity.class, DataSerializers.STRING);
@@ -146,7 +149,7 @@ public class CustomBeeEntity extends BeeEntity {
                 Block block = state.getBlock();
                 if (validFillerBlock(block)) {
                     world.playEvent(2005, beePosDown, 0);
-                    world.setBlockState(beePosDown, Objects.requireNonNull(ForgeRegistries.BLOCKS.getValue(BEE_INFO.get(this.getBeeType()).getResource(BEE_INFO.get(this.getBeeType()).getMutationBlock()))).getDefaultState());
+                    world.setBlockState(beePosDown, ForgeRegistries.BLOCKS.getValue(BeeInfoUtils.getResource(getBeeInfo().getMutationBlock())).getDefaultState());
                     addCropCounter();
                 }
             }
@@ -154,7 +157,7 @@ public class CustomBeeEntity extends BeeEntity {
     }
 
     public boolean validFillerBlock(Block block){
-        return Objects.equals(block.getRegistryName(), BEE_INFO.get(this.getBeeType()).getResource(BEE_INFO.get(this.getBeeType()).getBaseBlock()));
+        return Objects.equals(block.getRegistryName(), BeeInfoUtils.getResource(getBeeInfo().getBaseBlock()));
     }
 
     public class FindBeehiveGoal2 extends BeeEntity.FindBeehiveGoal {
@@ -184,7 +187,7 @@ public class CustomBeeEntity extends BeeEntity {
 
     @Override
     public boolean isFlowers(BlockPos pos) {
-        String flower = BEE_INFO.get(this.getBeeType()).getFlower().toLowerCase();
+        String flower = getBeeInfo().getFlower().toLowerCase();
 
         switch (flower){
             case BeeConst.FLOWER_TAG_ALL:
@@ -194,13 +197,13 @@ public class CustomBeeEntity extends BeeEntity {
             case BeeConst.FLOWER_TAG_TALL:
                 return this.world.isBlockPresent(pos) && this.world.getBlockState(pos).getBlock().isIn(BlockTags.TALL_FLOWERS);
             default:
-                return this.world.isBlockPresent(pos) && this.world.getBlockState(pos).getBlock().equals(ForgeRegistries.BLOCKS.getValue(BEE_INFO.get(this.getBeeType()).getResource(BEE_INFO.get(this.getBeeType()).getFlower())));
+                return this.world.isBlockPresent(pos) && this.world.getBlockState(pos).getBlock().equals(ForgeRegistries.BLOCKS.getValue(BeeInfoUtils.getResource(getBeeInfo().getFlower())));
         }
     }
 
     protected final Predicate<BlockState> flowerPredicate = state -> {
 
-        String flower = BEE_INFO.get(this.getBeeType()).getFlower().toLowerCase();
+        String flower = getBeeInfo().getFlower().toLowerCase();
 
         switch (flower) {
             case BeeConst.FLOWER_TAG_ALL:
@@ -210,13 +213,13 @@ public class CustomBeeEntity extends BeeEntity {
             case BeeConst.FLOWER_TAG_TALL:
                 return state.isIn(BlockTags.TALL_FLOWERS) && (state.getBlock() != Blocks.SUNFLOWER || state.get(DoublePlantBlock.HALF) == DoubleBlockHalf.UPPER);
             default:
-                return state.getBlock().equals(ForgeRegistries.BLOCKS.getValue(BEE_INFO.get(this.getBeeType()).getResource(BEE_INFO.get(this.getBeeType()).getFlower())));
+                return state.getBlock().equals(ForgeRegistries.BLOCKS.getValue(BeeInfoUtils.getResource(getBeeInfo().getFlower())));
 
                 /*    <---- Leaving this in case there's ever new flower based tags
                 if (flower.charAt(0) == '#') {
                     // do something
                 } else {
-                    return state.equals(ForgeRegistries.BLOCKS.getValue(BEE_INFO.get(beeType).getResource(BEE_INFO.get(beeType).getFlower())).getDefaultState());
+                    return state.equals(ForgeRegistries.BLOCKS.getValue(getBeeInfo(beeType).getResource(getBeeInfo(beeType).getFlower())).getDefaultState());
                 }
                 */
         }
@@ -224,17 +227,7 @@ public class CustomBeeEntity extends BeeEntity {
 
     public Predicate<BlockState> getFlowerPredicate(){ return flowerPredicate; }
 
-    //***************************** CUSTOM BEE RELATED METHODS BELOW *************************************************
-
-    protected ITextComponent getProfessionName() {   //<--- Recently mapped by Darkhax
-        return new TranslationTextComponent("entity" + '.' + ResourcefulBees.MOD_ID + '.' + this.getBeeType().toLowerCase() + "_bee");
-    }
-
-    public float[] getBeeColorAsFloat() {
-        String beeColor = getBeeColor();
-        Color tempColor = Color.decode(beeColor);
-        return tempColor.getComponents(null);
-    }
+    //**************************** BEE INFO RELATED METHODS BELOW *******************************************
 
     public String getBeeColor(){
 
@@ -247,11 +240,62 @@ public class CustomBeeEntity extends BeeEntity {
         }
     }
 
+    public void setBeeType(boolean fromBiome){
+        Biome curBiome = this.world.getBiome(this.getPosition());
+        String bee = fromBiome ? BeeInfo.getRandomBee(curBiome) : BeeInfo.getRandomBee();
+        this.dataManager.set(BEE_TYPE, bee);
+        this.dataManager.set(BEE_COLOR, getColorFromInfo(getBeeType()));
+    }
+
+    public void setBeeType(String beeType){
+        this.dataManager.set(BEE_TYPE, getNameFromInfo(beeType));
+        this.dataManager.set(BEE_COLOR, getColorFromInfo(beeType));
+    }
+
+    public String getBeeType() {
+        return this.dataManager.get(BEE_TYPE);
+
+        /*  --- Removed due to compiler not showing possibility of null value ---
+            --- Testing if this block is still needed ---
+        BeeInfo info = getBeeInfo(this.dataManager.get(BEE_TYPE));
+
+        if (info != null) {
+            return this.dataManager.get(BEE_TYPE);
+        } else {
+            if (!world.isRemote())
+                this.remove();
+            return BeeConst.DEFAULT_BEE_TYPE;
+        }
+         */
+    }
+
+    public String getColorFromInfo(String beeType) {
+        return getBeeInfo(beeType).getColor();
+    }
+
+    public String getNameFromInfo(String beeType) {
+        return getBeeInfo(beeType).getName();
+    }
+
+    public BeeInfo getBeeInfo() {
+        return BEE_INFO.get(this.getBeeType());
+    }
+
+    public BeeInfo getBeeInfo(String beeType) {
+        return BEE_INFO.get(beeType);
+    }
+
+    //***************************** CUSTOM BEE RELATED METHODS BELOW *************************************************
+
+    protected ITextComponent getProfessionName() {
+        return new TranslationTextComponent("entity" + '.' + ResourcefulBees.MOD_ID + '.' + this.getBeeType().toLowerCase() + "_bee");
+    }
+
 //    Entity queenBeePlayer = null;
 
     @Override
     public void tick() {
-        if (this.hasNectar() && BEE_INFO.get(this.getBeeType()).isNetherBee()){
+        if (this.hasNectar() && getBeeInfo().isNetherBee()){
             this.setFire(1);
         }
 //        if (this.getDisplayName().getFormattedText().toLowerCase().equals("queen bee")){
@@ -265,7 +309,7 @@ public class CustomBeeEntity extends BeeEntity {
 
     @Override
     public boolean attackEntityFrom(DamageSource source, float amount) {
-        if (source.isFireDamage() && BEE_INFO.get(this.getBeeType()).isNetherBee())
+        if (source.isFireDamage() && getBeeInfo().isNetherBee())
             return false;
         return super.attackEntityFrom(source, amount);
     }
@@ -273,7 +317,7 @@ public class CustomBeeEntity extends BeeEntity {
     @Nullable
     @Override
     public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
-        selectRandomBee(reason.equals(SpawnReason.CHUNK_GENERATION) || reason.equals(SpawnReason.NATURAL));
+        setBeeType(reason.equals(SpawnReason.CHUNK_GENERATION) || reason.equals(SpawnReason.NATURAL));
         return super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
     }
 
@@ -294,7 +338,7 @@ public class CustomBeeEntity extends BeeEntity {
         super.readAdditional(compound);
         this.dataManager.set(BEE_TYPE, compound.getString(BeeConst.NBT_BEE_TYPE));
         if(!this.getBeeType().isEmpty()) {
-            this.dataManager.set(BEE_COLOR, BEE_INFO.get(this.getBeeType()).getColor());
+            this.dataManager.set(BEE_COLOR, getColorFromInfo(this.getBeeType()));
         }
     }
 
@@ -304,36 +348,9 @@ public class CustomBeeEntity extends BeeEntity {
         compound.putString(BeeConst.NBT_BEE_TYPE, this.getBeeType());
     }
 
-    private void selectRandomBee(boolean fromBiome){
-        if (fromBiome) {
-            Biome curBiome = this.world.getBiome(this.getPosition());
-            ArrayList<String> spawnList = new ArrayList<>(BeeInfo.SPAWNABLE_BIOMES.get(curBiome));
-            this.dataManager.set(BEE_TYPE, BEE_INFO.get(spawnList.get(rand.nextInt(spawnList.size()))).getName());
-        } else {
-            this.dataManager.set(BEE_TYPE, BEE_INFO.get(BEE_INFO.keySet().toArray()[rand.nextInt(BEE_INFO.size() - 1) +1]).getName());
-        }
-        this.dataManager.set(BEE_COLOR, BEE_INFO.get(getBeeType()).getColor());
-    }
-
-    public void selectBeeType(String beeType){
-        this.dataManager.set(BEE_TYPE, BEE_INFO.get(beeType).getName());
-        this.dataManager.set(BEE_COLOR, BEE_INFO.get(beeType).getColor());
-    }
-
-    public String getBeeType() {
-        BeeInfo info = BEE_INFO.get(this.dataManager.get(BEE_TYPE));
-        if (info != null) {
-            return this.dataManager.get(BEE_TYPE);
-        } else {
-            if (!world.isRemote())
-                this.remove();
-            return BeeConst.DEFAULT_BEE_TYPE;
-        }
-    }
-
     public CustomBeeEntity createSelectedChild(String beeType) {
         CustomBeeEntity childBee = new CustomBeeEntity(RegistryHandler.CUSTOM_BEE.get(), this.world);
-        childBee.selectBeeType(beeType);
+        childBee.setBeeType(beeType);
         return childBee;
     }
 
@@ -367,46 +384,37 @@ public class CustomBeeEntity extends BeeEntity {
         if (item instanceof SpawnEggItem && ((SpawnEggItem)item).hasType(itemstack.getTag(), this.getType())) {
             if (!this.world.isRemote) {
                 AgeableEntity ageableentity = this.createSelectedChild(this.getBeeType());
-                if (ageableentity != null) {
-                    ageableentity.setGrowingAge(-24000);
-                    ageableentity.setLocationAndAngles(this.getPosX(), this.getPosY(), this.getPosZ(), 0.0F, 0.0F);
-                    this.world.addEntity(ageableentity);
-                    if (itemstack.hasDisplayName()) {
-                        ageableentity.setCustomName(itemstack.getDisplayName());
-                    }
+                ageableentity.setGrowingAge(-24000);
+                ageableentity.setLocationAndAngles(this.getPosX(), this.getPosY(), this.getPosZ(), 0.0F, 0.0F);
+                this.world.addEntity(ageableentity);
+                if (itemstack.hasDisplayName()) {
+                    ageableentity.setCustomName(itemstack.getDisplayName());
+                }
 
-                    this.onChildSpawnFromEgg(player, ageableentity);
-                    if (!player.abilities.isCreativeMode) {
-                        itemstack.shrink(1);
-                    }
+                this.onChildSpawnFromEgg(player, ageableentity);
+                if (!player.abilities.isCreativeMode) {
+                    itemstack.shrink(1);
                 }
             }
 
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
-    private void smokeBee(){
+    public void smokeBee(){
         //we're using reflection to access private setAnger method for bee
         //It's looks scary but it's simple.
         //create new method, get method from class we want to call,
         //call method, pass in the object we want to call the method on
         //pass in the value for the parameter.
 
-        Method setAnger = null;   /// <<<<----- creating method container
+        Method setAnger;   /// <<<<----- creating method container
         try {
             setAnger = BeeEntity.class.getDeclaredMethod("setAnger", int.class); ///<<<<------- Creating instance of method
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        }
-        setAnger.setAccessible(true);     ///<<<<------- Making the method accessible
-        try {
+            setAnger.setAccessible(true);     ///<<<<------- Making the method accessible
             setAnger.invoke(this, 0);   ///<<<<------ Invoking method
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
     }

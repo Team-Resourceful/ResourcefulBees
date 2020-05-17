@@ -5,5 +5,7 @@
   "mutationBlock": "minecraft:stone",
   "centrifugeOutput": "minecraft:kush",
   "spawnInWorld": true,
-  "biomeList": "nuclear:wasteland"
+  "biomeList": "nuclear:wasteland",
+  "maxTimeInHive": 600,
+  "pigmanBee": true
 }
