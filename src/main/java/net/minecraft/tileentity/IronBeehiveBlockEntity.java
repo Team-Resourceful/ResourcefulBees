@@ -13,6 +13,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.CustomBeeEntity;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
@@ -132,12 +133,14 @@ public class IronBeehiveBlockEntity extends BeehiveTileEntity {
   
   @Override
   public void tick() {
-    if (!this.world.isRemote && isSmoked && ticksSmoked < BeeConst.SMOKE_TIME) {
-      ticksSmoked++;
-    }
-    if (ticksSmoked == BeeConst.SMOKE_TIME) {
-      isSmoked = false;
-      ticksSmoked = 0;
+    if (!world.isRemote) {
+      if (isSmoked && ticksSmoked < BeeConst.SMOKE_TIME) {
+        ticksSmoked++;
+      }
+      if (ticksSmoked == BeeConst.SMOKE_TIME) {
+        isSmoked = false;
+        ticksSmoked = 0;
+      }
     }
     super.tick();
   }
@@ -176,6 +179,9 @@ public class IronBeehiveBlockEntity extends BeehiveTileEntity {
         i++;
       }
     }
+    if (nbt.contains(BeeConst.NBT_SMOKED_TE)) {
+      this.isSmoked = nbt.getBoolean(BeeConst.NBT_SMOKED_TE);
+    }
   }
 
   @Nonnull
@@ -189,8 +195,14 @@ public class IronBeehiveBlockEntity extends BeehiveTileEntity {
       }
       nbt.put(BeeConst.NBT_HONEYCOMBS_TE,combs);
     }
-
+    nbt.putBoolean(BeeConst.NBT_SMOKED_TE, isSmoked);
     return nbt;
+  }
+
+  @Nullable
+  @Override
+  public SUpdateTileEntityPacket getUpdatePacket() {
+    return super.getUpdatePacket();
   }
 
   public static class Bee2 extends Bee {

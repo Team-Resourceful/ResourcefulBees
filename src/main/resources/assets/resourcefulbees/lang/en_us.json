@@ -4,7 +4,8 @@
 	"resourcefulbees.shift_info": "Hold SHIFT for Info",
 	"item.resourcefulbees.smoker.tooltip": "Right click the hive to smoke it.",
 	"item.resourcefulbees.smoker.tooltip.1": "This allows you to stop the bees from being angry at you for shearing honeycombs for 30s.",
-	"block.beehive.tileentity.info.smoked": "Smoked: ",
+	"gui.resourcefulbees.beehive.smoked": "Smoked: True",
+	"gui.resourcefulbees.beehive.honeylevel": "Honey Level: ",
 
 	"gui.resourcefulbees.jei.category.hive" : "Iron Beehive",
 	"gui.resourcefulbees.jei.category.centrifuge": "Centrifuge",

@@ -2,13 +2,13 @@ package com.dungeonderps.resourcefulbees.compat.jei;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
+import com.dungeonderps.resourcefulbees.lib.BeeConst;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
-import mezz.jei.api.gui.drawable.IDrawableStatic;
 import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
@@ -27,10 +27,11 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings("NullableProblems")
 public class BeeMutationCategory implements IRecipeCategory<BeeMutationCategory.Recipe> {
     public static final ResourceLocation GUI_BACK = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/beemutation.png");
     public static final ResourceLocation ICONS = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/icons.png");
@@ -48,6 +49,7 @@ public class BeeMutationCategory implements IRecipeCategory<BeeMutationCategory.
         this.info = guiHelper.createDrawable(ICONS, 16, 0, 9, 9);
         this.beeHive = guiHelper.createDrawableIngredient(new ItemStack(RegistryHandler.IRON_BEEHIVE_ITEM.get()));
         this.localizedName = I18n.format("gui.resourcefulbees.jei.category.mutation");
+        assert Minecraft.getInstance().world != null;
         bee = RegistryHandler.CUSTOM_BEE.get().create(Minecraft.getInstance().world);
     }
 
@@ -84,10 +86,10 @@ public class BeeMutationCategory implements IRecipeCategory<BeeMutationCategory.
 
     @Override
     public List<String> getTooltipStrings(Recipe recipe, double mouseX, double mouseY) {
-        Double infoX = 63D;
-        Double infoY = 8D;
+        double infoX = 63D;
+        double infoY = 8D;
         if (mouseX >= infoX && mouseX <= infoX + 9D && mouseY >= infoY && mouseY <= infoY + 9D){
-            return Arrays.asList(I18n.format("gui." + ResourcefulBees.MOD_ID + ".jei.category.mutation.info"));
+            return Collections.singletonList(I18n.format("gui." + ResourcefulBees.MOD_ID + ".jei.category.mutation.info"));
         }
         return IRecipeCategory.super.getTooltipStrings(recipe,mouseX, mouseY);
     }
@@ -116,9 +118,10 @@ public class BeeMutationCategory implements IRecipeCategory<BeeMutationCategory.
         EntityRendererManager entityrenderermanager = mc.getRenderManager();
         IRenderTypeBuffer.Impl irendertypebuffer$impl = mc.getRenderTypeBuffers().getBufferSource();
 
+        assert mc.player != null;
         bee.ticksExisted = mc.player.ticksExisted;
         bee.renderYawOffset = rotation;
-        bee.selectBeeType(beeType);
+        bee.setBeeType(beeType);
         entityrenderermanager.renderEntityStatic(bee, xPos, yPos, 0.0D, mc.getRenderPartialTicks(), 1, matrixstack, irendertypebuffer$impl, 15728880);
 
         irendertypebuffer$impl.finish();
@@ -136,8 +139,8 @@ public class BeeMutationCategory implements IRecipeCategory<BeeMutationCategory.
     public static List<BeeMutationCategory.Recipe> getMutationRecipes(IIngredientManager ingredientManager) {
         List<BeeMutationCategory.Recipe> recipes = new ArrayList<>();
         for (Map.Entry<String, BeeInfo> bee : BeeInfo.BEE_INFO.entrySet()){
-            if (bee.getKey() == "Default")
-                continue;
+            if (bee.getKey() == BeeConst.DEFAULT_BEE_TYPE) {
+            }
             else {
                 Item baseBlock = ForgeRegistries.ITEMS.getValue(new ResourceLocation(bee.getValue().getBaseBlock()));
                 Item mutationBlock = ForgeRegistries.ITEMS.getValue(new ResourceLocation(bee.getValue().getMutationBlock()));

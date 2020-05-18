@@ -7,14 +7,18 @@ import com.dungeonderps.resourcefulbees.tileentity.HoneycombBlockEntity;
 import mcp.mobius.waila.api.IComponentProvider;
 import mcp.mobius.waila.api.IDataAccessor;
 import mcp.mobius.waila.api.IPluginConfig;
+import mcp.mobius.waila.api.IServerDataProvider;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
 
 import java.util.List;
 
-public class combBlockComponentProvider implements IComponentProvider {
+public class HoneycombBlockCompat implements IComponentProvider, IServerDataProvider<TileEntity> {
 
     @Override
     public void appendHead(List<ITextComponent> tooltip, IDataAccessor accessor, IPluginConfig config) {
@@ -24,7 +28,6 @@ public class combBlockComponentProvider implements IComponentProvider {
             TranslationTextComponent text = new TranslationTextComponent("block" + '.' + ResourcefulBees.MOD_ID + '.' + data.getString(BeeConst.NBT_BEE_TYPE).toLowerCase() + "_honeycomb_block");
             tooltip.add(text);
         }
-
     }
 
     @Override
@@ -35,5 +38,17 @@ public class combBlockComponentProvider implements IComponentProvider {
         stack.getOrCreateChildTag(BeeConst.NBT_ROOT).putString(BeeConst.NBT_COLOR, nbt.getString(BeeConst.NBT_COLOR));
 
         return stack;
+    }
+
+    @Override
+    public void appendServerData(CompoundNBT compoundNBT, ServerPlayerEntity serverPlayerEntity, World world, TileEntity tileEntity) {
+        if (tileEntity instanceof HoneycombBlockEntity){
+            HoneycombBlockEntity blockEntity = (HoneycombBlockEntity) tileEntity;
+
+            if (blockEntity.beeType !=null)
+                compoundNBT.putString(BeeConst.NBT_BEE_TYPE, blockEntity.beeType);
+            if (blockEntity.blockColor !=null)
+                compoundNBT.putString(BeeConst.NBT_COLOR, blockEntity.blockColor);
+        }
     }
 }
