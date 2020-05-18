@@ -39,8 +39,8 @@ public class JEICompat implements IModPlugin {
         IGuiHelper helper = registration.getJeiHelpers().getGuiHelper();
         registration.addRecipeCategories(new BeeHiveCategory(helper));
         registration.addRecipeCategories(new BeeBreedingCategory(helper));
-        registration.addRecipeCategories(
-                new CentrifugeRecipeCategory(helper));
+        registration.addRecipeCategories(new BeeMutationCategory(helper));
+        registration.addRecipeCategories(new CentrifugeRecipeCategory(helper));
     }
     @Nonnull
     @Override
@@ -88,7 +88,8 @@ public class JEICompat implements IModPlugin {
         Collection<CentrifugeRecipe> recipes = getRecipes(recipeManager, CENTRIFUGE_RECIPE_TYPE);
         registration.addRecipes(BeeHiveCategory.getHoneycombRecipes(registration.getIngredientManager()), BeeHiveCategory.ID);
         registration.addRecipes(recipes, CentrifugeRecipeCategory.ID);
-        registration.addRecipes(BeeBreedingCategory.getHoneycombRecipes(registration.getIngredientManager()), BeeBreedingCategory.ID);
+        registration.addRecipes(BeeBreedingCategory.getBreedingRecipes(registration.getIngredientManager()), BeeBreedingCategory.ID);
+        registration.addRecipes(BeeMutationCategory.getMutationRecipes(registration.getIngredientManager()), BeeMutationCategory.ID);
     }
 
     @Override
