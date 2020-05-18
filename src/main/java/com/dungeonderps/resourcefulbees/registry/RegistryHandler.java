@@ -14,6 +14,7 @@ import com.dungeonderps.resourcefulbees.item.Smoker;
 import com.dungeonderps.resourcefulbees.recipe.CentrifugeRecipe;
 import com.dungeonderps.resourcefulbees.tileentity.CentrifugeBlockEntity;
 import com.dungeonderps.resourcefulbees.tileentity.HoneycombBlockEntity;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import net.minecraft.block.Block;
 import net.minecraft.block.FlowerBlock;
@@ -21,26 +22,33 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.merchant.villager.VillagerProfession;
 import net.minecraft.entity.passive.CustomBeeEntity;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.potion.Effects;
 import net.minecraft.tileentity.IronBeehiveBlockEntity;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.village.PointOfInterestType;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 //import com.dungeonderps.resourcefulbees.tileentity.CentrifugeBlockEntity;
 
 public class RegistryHandler {
-	
+
 	public static final DeferredRegister<Item> ITEMS = new DeferredRegister<>(ForgeRegistries.ITEMS, ResourcefulBees.MOD_ID);
 	public static final DeferredRegister<Block> BLOCKS = new DeferredRegister<>(ForgeRegistries.BLOCKS, ResourcefulBees.MOD_ID);
 	public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = new DeferredRegister<>(ForgeRegistries.ENTITIES, ResourcefulBees.MOD_ID);
@@ -48,14 +56,11 @@ public class RegistryHandler {
 	public static final DeferredRegister<PointOfInterestType> POIS = new DeferredRegister<>(ForgeRegistries.POI_TYPES, ResourcefulBees.MOD_ID);
 	public static final DeferredRegister<ContainerType<?>> CONTAINER_TYPES = new DeferredRegister<>(ForgeRegistries.CONTAINERS, ResourcefulBees.MOD_ID);
 	public static final DeferredRegister<IRecipeSerializer<?>> RECIPE_SERIALIZERS = new DeferredRegister<>(ForgeRegistries.RECIPE_SERIALIZERS, ResourcefulBees.MOD_ID);
+	public static final DeferredRegister<VillagerProfession> PROFESSIONS = new DeferredRegister<>(ForgeRegistries.PROFESSIONS, ResourcefulBees.MOD_ID);
 
 	private static Block.Properties IronBeehiveProperties;
 
 	public static void init() {
-
-		//need to do the properties here, cannot do in the constructor call due to private fields in high tier super class.
-		IronBeehiveProperties = Block.Properties.create(Material.IRON).hardnessAndResistance(2).sound(SoundType.METAL);
-
 		IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
 		ITEMS.register(bus);
 		BLOCKS.register(bus);
@@ -64,11 +69,12 @@ public class RegistryHandler {
 		POIS.register(bus);
 		CONTAINER_TYPES.register(bus);
 		RECIPE_SERIALIZERS.register(bus);
+		PROFESSIONS.register(bus);
 	}
 
 	//**************BLOCKS********************************************
 
-	public static final RegistryObject<Block> IRON_BEEHIVE = BLOCKS.register("iron_beehive", () -> new IronBeehiveBlock(IronBeehiveProperties));
+	public static final RegistryObject<Block> IRON_BEEHIVE = BLOCKS.register("iron_beehive", () -> new IronBeehiveBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(2).sound(SoundType.METAL)));
 	public static final RegistryObject<Block> HONEYCOMB_BLOCK = BLOCKS.register("resourceful_honeycomb_block", () -> new HoneycombBlock());
 	public static final RegistryObject<Block> CENTRIFUGE = BLOCKS.register("centrifuge", () -> new CentrifugeBlock(IronBeehiveProperties));
 	public static final RegistryObject<Block> WAX_BLOCK = BLOCKS.register("wax_block", () -> new Block(Block.Properties.create(Material.CLAY).sound(SoundType.SNOW)));
@@ -112,8 +118,7 @@ public class RegistryHandler {
 
 	//**************POINT OF INTEREST**********************************
 
-	public static final RegistryObject<PointOfInterestType> IRON_BEEHIVE_POI = POIS.register("iron_beehive",
-			() -> new PointOfInterestType("iron_beehive", Sets.newHashSet(IRON_BEEHIVE.get().getStateContainer().getValidStates()), 0, 1));
+	public static final RegistryObject<PointOfInterestType> IRON_BEEHIVE_POI = POIS.register("iron_beehive", () -> new PointOfInterestType("iron_beehive", ImmutableSet.copyOf(IRON_BEEHIVE.get().getStateContainer().getValidStates()), 1, 1));
 
 	//*************SPAWN EGGS******************************************
 
@@ -129,4 +134,8 @@ public class RegistryHandler {
 
 	public static final RegistryObject<IRecipeSerializer<?>> CENTRIFUGE_RECIPE = RECIPE_SERIALIZERS.register("centrifuge",
 			() -> new CentrifugeRecipe.Serializer<>(CentrifugeRecipe::new));
+
+	//****************VILLAGER PROFESSIONS*******************************
+
+	public static final RegistryObject<VillagerProfession> BEEKEEPER = PROFESSIONS.register("beekeeper", () -> new VillagerProfession("beekeeper", IRON_BEEHIVE_POI.get(), ImmutableSet.of(), ImmutableSet.of(), SoundEvents.ITEM_BOTTLE_FILL));
 }

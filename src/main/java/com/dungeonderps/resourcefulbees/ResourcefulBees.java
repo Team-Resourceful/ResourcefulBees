@@ -16,12 +16,25 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.entity.merchant.villager.VillagerProfession;
+import net.minecraft.entity.merchant.villager.VillagerTrades;
+import net.minecraft.item.DyeColor;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.item.MerchantOffer;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraft.resources.IResourceManager;
+import net.minecraft.tileentity.BannerPattern;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.village.PointOfInterestType;
 import net.minecraft.world.storage.loot.functions.LootFunctionManager;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.fml.*;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -37,6 +50,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 //TODO - Standardize Default Bees
@@ -71,6 +85,7 @@ public class ResourcefulBees
 
         MinecraftForge.EVENT_BUS.addListener(this::serverStarting);
         MinecraftForge.EVENT_BUS.addListener(this::OnServerSetup);
+        MinecraftForge.EVENT_BUS.addListener(this::trade);
 
         DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
             FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onInterModEnqueue);
@@ -82,6 +97,47 @@ public class ResourcefulBees
         MinecraftForge.EVENT_BUS.register(this);
     }
 
+    public void trade(VillagerTradesEvent event) {
+        List<VillagerTrades.ITrade> level1 = event.getTrades().get(1);
+        List<VillagerTrades.ITrade> level2 = event.getTrades().get(2);
+        List<VillagerTrades.ITrade> level3 = event.getTrades().get(3);
+        List<VillagerTrades.ITrade> level4 = event.getTrades().get(4);
+        List<VillagerTrades.ITrade> level5 = event.getTrades().get(5);
+
+        if(event.getType() == RegistryHandler.BEEKEEPER.get()) {
+            ItemStack queenBeeBanner = new ItemStack(Items.BLACK_BANNER);
+            CompoundNBT compoundnbt = queenBeeBanner.getOrCreateChildTag("BlockEntityTag");
+            ListNBT listnbt = (new BannerPattern.Builder()).setPatternWithColor(BannerPattern.RHOMBUS_MIDDLE, DyeColor.LIGHT_BLUE).setPatternWithColor(BannerPattern.STRIPE_DOWNRIGHT, DyeColor.YELLOW).setPatternWithColor(BannerPattern.STRIPE_DOWNLEFT, DyeColor.YELLOW).setPatternWithColor(BannerPattern.STRIPE_BOTTOM, DyeColor.YELLOW).setPatternWithColor(BannerPattern.TRIANGLE_TOP, DyeColor.YELLOW).setPatternWithColor(BannerPattern.CURLY_BORDER, DyeColor.YELLOW).func_222476_a();
+            compoundnbt.put("Patterns", listnbt);
+            queenBeeBanner.setDisplayName((new TranslationTextComponent("block.resourcefulbees.queen_bee_banner")).applyTextStyle(TextFormatting.GOLD));
+            queenBeeBanner.setCount(1);
+
+            level1.add((entity, rand) -> new MerchantOffer(
+                    new ItemStack(Items.EMERALD, 3),
+                    new ItemStack(RegistryHandler.WAX_BLOCK_ITEM.get(), 1),
+                    32, 4, 1));
+            level2.add((entity, rand) -> new MerchantOffer(
+                    new ItemStack(Items.EMERALD, 2),
+                    new ItemStack(Items.HONEYCOMB, 3),
+                    10, 4, 1));
+            level3.add((entity, rand) -> new MerchantOffer(
+                    new ItemStack(Items.EMERALD, 2),
+                    new ItemStack(RegistryHandler.BEESWAX.get(), 6),
+                    15, 4, 1));
+            level4.add((entity, rand) -> new MerchantOffer(
+                    new ItemStack(Items.HONEY_BOTTLE, 4),
+                    new ItemStack(Items.EMERALD, 2),
+                    10, 4, 0));
+            level5.add((entity, rand) -> new MerchantOffer(
+                    new ItemStack(Items.EMERALD, 12),
+                    new ItemStack(RegistryHandler.SMOKER.get(), 1),
+                    10, 4, 0));
+            level5.add((entity, rand) -> new MerchantOffer(
+                    new ItemStack(Items.EMERALD, 64),
+                    queenBeeBanner,
+                    2, 4, 0));
+        }
+    }
 
     public void OnServerSetup(FMLServerAboutToStartEvent event){
         LOGGER.info("recipe should be loaded");
@@ -93,7 +149,6 @@ public class ResourcefulBees
     }
 
     private void setup(final FMLCommonSetupEvent event){
-
         /*
         The 3 lines below are necessary for getting mod bees into mod beehive.
         We're basically pushing the mod data into the minecraft POI list

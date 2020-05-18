@@ -71,5 +71,6 @@
 	"entity.resourcefulbees.lapis_lazuli_bee": "lapis Bee",
 	"entity.resourcefulbees.coal_bee": "Coal Bee",
 	"entity.resourcefulbees.ender_bee": "Ender Bee",
-	"entity.resourcefulbees.default_bee": "Resourceful Bee"
+	"entity.resourcefulbees.default_bee": "Resourceful Bee",
+	"entity.minecraft.villager.resourcefulbees.beekeeper": "Beekeeper"
 }
