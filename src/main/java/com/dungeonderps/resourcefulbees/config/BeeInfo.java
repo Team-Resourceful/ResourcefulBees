@@ -19,6 +19,8 @@ public class BeeInfo {
 
     private int maxTimeInHive = 2400;
 
+    private double breedWeight = 0.33;
+
     private transient String name;
     private transient boolean enabled;
     public BeeInfo() {}
@@ -265,12 +267,36 @@ public class BeeInfo {
      */
     public boolean isBlazeBee() { return blazeBee; }
 
+    /**
+     * Returns the max time bee a has to be in the hive to produce a honeycomb.
+     * @return Gets this bee's max time in hive in ticks.
+     */
     public int getMaxTimeInHive() {
         return maxTimeInHive;
     }
 
+    /**
+     * Sets the max time bee a has to be in the hive to produce a honeycomb.
+     * @param maxTimeInHive Sets this bee's max time in hive in ticks.
+     */
     public void setMaxTimeInHive(int maxTimeInHive) {
         this.maxTimeInHive = maxTimeInHive;
+    }
+
+    /**
+     * A 0 -> 1 Float value weighting for bee breeding
+     * @return Gets this bee's breed weight.
+     */
+    public double getBreedWeight() {
+        return breedWeight;
+    }
+
+    /**
+     * Returns true if bee has the blaze trait.
+     * @param breedWeight Sets this bee's breed weight.
+     */
+    public void setBreedWeight(double breedWeight) {
+        this.breedWeight = breedWeight;
     }
 
 
@@ -293,11 +319,23 @@ public class BeeInfo {
         return s;
     }
 
+    /**
+     * Returns a random bee from the BEE_INFO hashmap.
+     * This is used for selecting a bee from all possible bees.
+     *
+     *  @return Returns random bee type as a string.
+     */
     @SuppressWarnings("SuspiciousMethodCalls")
     public static String getRandomBee(){
         return BEE_INFO.get(BEE_INFO.keySet().toArray()[MathUtils.nextInt(BEE_INFO.size() - 1) +1]).getName();
     }
 
+    /**
+     * Returns a random bee from the SPAWNABLE_BIOMES hashmap.
+     * This is used for in-world spawning based on biome.
+     *
+     *  @return Returns random bee type as a string.
+     */
     public static String getRandomBee(Biome biome){
         ArrayList<String> spawnList = new ArrayList<>(BeeInfo.SPAWNABLE_BIOMES.get(biome));
         return BEE_INFO.get(spawnList.get(MathUtils.nextInt(spawnList.size()))).getName();

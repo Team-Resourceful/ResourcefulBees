@@ -1,7 +1,9 @@
 package com.dungeonderps.resourcefulbees.entity.goals;
 
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
+import com.dungeonderps.resourcefulbees.lib.BeeConst;
 import com.dungeonderps.resourcefulbees.utils.BeeInfoUtils;
+import com.dungeonderps.resourcefulbees.utils.MathUtils;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.Entity;
@@ -15,8 +17,6 @@ import net.minecraft.world.GameRules;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.BabyEntitySpawnEvent;
 
-import java.util.Random;
-
 public class BeeBreedGoal extends BreedGoal {
     public BeeBreedGoal(AnimalEntity animal, double speedIn) {
         super(animal, speedIn);
@@ -29,7 +29,7 @@ public class BeeBreedGoal extends BreedGoal {
             return bee.getBeeType();
         }
         else
-            return "default";
+            return BeeConst.DEFAULT_BEE_TYPE;
     }
 
     @Override
@@ -40,24 +40,20 @@ public class BeeBreedGoal extends BreedGoal {
             ageableentity = bee.createSelectedChild(getBeeType(this.animal));
         }
         else {
-            Random ran = new Random();
-            Double pickbee = ran.nextDouble();
+            Double selection = MathUtils.nextDouble();
             CustomBeeEntity bee = (CustomBeeEntity)this.animal;
-
             String parent1 = getBeeType(this.targetMate);
             String parent2 = getBeeType(this.animal);
             int hashcode = BeeInfoUtils.getHashcode(parent1, parent2);
+            double weight = bee.getBeeInfo().getBreedWeight();
 
-            if (BeeInfo.FAMILY_TREE.containsKey(hashcode) && 0.33 >= pickbee){  // TODO 0.33 percentage chance to pick bee? - should add spawn weighting configuration
+            if (BeeInfo.FAMILY_TREE.containsKey(hashcode) && selection <= weight){
                 String childBee = BeeInfo.FAMILY_TREE.get(hashcode);
                 ageableentity = bee.createSelectedChild(childBee);
-            }
-            else if (0.5 >= pickbee) {
-                ageableentity = bee.createSelectedChild(getBeeType(this.animal));
-            }
-            else {
-                ageableentity = bee.createSelectedChild(getBeeType(this.targetMate));
-            }
+            } else
+                ageableentity = selection <= 0.5
+                        ? bee.createSelectedChild(getBeeType(this.animal))
+                        : bee.createSelectedChild(getBeeType(this.targetMate));
         }
 
         final BabyEntitySpawnEvent event = new BabyEntitySpawnEvent(animal, targetMate, ageableentity);

@@ -4,16 +4,40 @@ import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.config.IBeeInfo;
 
 public interface ICustomBee extends IBeeInfo {
-    //Gets "This" bee's color
+
+    /**
+     * Returns "this" bee's color value.
+     *
+     *  @return Returns "this" bee's color.
+     */
     String getBeeColor();
 
-    //Sets "This" bee's type based on current biome
+    /**
+     * Selects a random bee from the list of biome specific spawnable bees,
+     * and sets "this" bee's type to the selected bee.
+     *
+     *  @param fromBiome  Should this bee based on biome?
+     */
     void setBeeType(boolean fromBiome);
 
-    //Sets "This" bee's type based to given type
+    /**
+     * Sets "this" bee's type to the given type.
+     *
+     *  @param beeType  "This" bee's new type.
+     */
     void setBeeType(String beeType);
 
-    //Returns
+    /**
+     * Gets "this" bee's type.
+     *
+     *  @return "This" bee's type.
+     */
     String getBeeType();
+
+    /**
+     * Gets "this" bee's information card from the BEE_INFO hashmap.
+     *
+     *  @return "This" bee's info card.
+     */
     BeeInfo getBeeInfo();
 }

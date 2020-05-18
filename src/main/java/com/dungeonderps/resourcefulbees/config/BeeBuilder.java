@@ -35,7 +35,7 @@ public class BeeBuilder{
             "Redstone.json",
             "Nether_Quartz.json",
             "Lapis_Lazuli.json",
-            "Ender.json"
+            "Ender.json",
     };
 
     public static Path BEE_PATH;

@@ -6,5 +6,6 @@
   "centrifugeOutput": "minecraft:redstone",
   "spawnInWorld": true,
   "biomeList": "minecraft:plains",
-  "maxTimeTnHive": 600
+  "maxTimeTnHive": 600,
+  "pigmanBee": true
 }

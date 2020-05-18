@@ -6,5 +6,6 @@
   "centrifugeOutput": "minecraft:lapis_lazuli",
   "spawnInWorld": true,
   "biomeList": "minecraft:plains",
-  "maxTimeInHive": 600
+  "maxTimeInHive": 600,
+  "zomBee": true
 }

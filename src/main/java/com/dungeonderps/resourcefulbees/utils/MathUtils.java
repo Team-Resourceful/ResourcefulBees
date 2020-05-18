@@ -164,4 +164,7 @@ public final class MathUtils {
     public static boolean tryPercentage(Random random, double percent) {
         return random.nextDouble() < percent;
     }
+
+    //Added by Resourceful Bees
+    public static double nextDouble() { return RANDOM.nextDouble();}
 }

@@ -11,10 +11,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.DoublePlantBlock;
-import net.minecraft.entity.AgeableEntity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.FollowParentGoal;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.goal.TemptGoal;
@@ -28,23 +25,29 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.particles.ParticleTypes;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.state.properties.DoubleBlockHalf;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tileentity.IronBeehiveBlockEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.village.PointOfInterest;
 import net.minecraft.village.PointOfInterestManager;
-import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
+import net.minecraft.world.*;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.living.EnderTeleportEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
@@ -63,6 +66,7 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
     //These are needed for Server->Client synchronization
     private static final DataParameter<String> BEE_COLOR = EntityDataManager.createKey(CustomBeeEntity.class, DataSerializers.STRING);
     private static final DataParameter<String> BEE_TYPE = EntityDataManager.createKey(CustomBeeEntity.class, DataSerializers.STRING);
+    private int targetChangeTime;
 
     public CustomBeeEntity(EntityType<? extends BeeEntity> type, World world) {
         super(type, world);
@@ -236,7 +240,7 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
         if (tempColor.isEmpty()){
             return String.valueOf(BeeConst.DEFAULT_COLOR);
         } else {
-            return this.dataManager.get(BEE_COLOR);
+            return tempColor;
         }
     }
 
@@ -253,20 +257,17 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
     }
 
     public String getBeeType() {
-        return this.dataManager.get(BEE_TYPE);
-
-        /*  --- Removed due to compiler not showing possibility of null value ---
-            --- Testing if this block is still needed ---
         BeeInfo info = getBeeInfo(this.dataManager.get(BEE_TYPE));
 
         if (info != null) {
             return this.dataManager.get(BEE_TYPE);
         } else {
-            if (!world.isRemote())
+            if (!world.isRemote()) {
+                this.dead = true;
                 this.remove();
+            }
             return BeeConst.DEFAULT_BEE_TYPE;
         }
-         */
     }
 
     public String getColorFromInfo(String beeType) {
@@ -295,9 +296,7 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
 
     @Override
     public void tick() {
-        if (this.hasNectar() && getBeeInfo().isNetherBee()){
-            this.setFire(1);
-        }
+
 //        if (this.getDisplayName().getFormattedText().toLowerCase().equals("queen bee")){
 //            if (queenBeePlayer !=null) {
 //                this.setBeeAttacker(queenBeePlayer);
@@ -312,6 +311,19 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
         if (source.isFireDamage() && getBeeInfo().isNetherBee())
             return false;
         return super.attackEntityFrom(source, amount);
+    }
+
+    @Override
+    public void livingTick() {
+        if (this.world.isRemote && getBeeInfo().isEnderBee()){
+            for(int i = 0; i < 2; ++i) {
+                this.world.addParticle(ParticleTypes.PORTAL, this.getPosXRandom(0.5D),
+                        this.getPosYRandom() - 0.25D, this.getPosZRandom(0.5D),
+                        (this.rand.nextDouble() - 0.5D) * 2.0D, -this.rand.nextDouble(),
+                        (this.rand.nextDouble() - 0.5D) * 2.0D);
+            }
+        }
+        super.livingTick();
     }
 
     @Nullable
@@ -418,4 +430,133 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
             e.printStackTrace();
         }
     }
+
+    //************** CUSTOM ENTITY TASKS/GOALS ***********************************************
+
+    protected void updateAITasks() {
+        if (getBeeInfo().isEnderBee()) {
+            if (this.world.isDaytime() && this.ticksExisted %150 == 0) {
+                this.teleportRandomly();
+            }
+        }
+        if (getBeeInfo().isNetherBee()){
+            if (this.ticksExisted %150 == 0)
+            this.setFire(3);
+        }
+        super.updateAITasks();
+    }
+
+    /**
+     * Teleport the enderman to a random nearby position
+     */
+    protected boolean teleportRandomly() {
+        if (!this.world.isRemote() && this.isAlive()) {
+            double d0 = this.getPosX() + (this.rand.nextDouble() - 0.5D) * 4.0D;
+            double d1 = this.getPosY() + (double)(this.rand.nextInt(4) - 2);
+            double d2 = this.getPosZ() + (this.rand.nextDouble() - 0.5D) * 4.0D;
+            return this.teleportTo(d0, d1, d2);
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Teleport the enderman
+     */
+    private boolean teleportTo(double x, double y, double z) {
+        BlockPos.Mutable blockpos$mutable = new BlockPos.Mutable(x, y, z);
+
+        while(blockpos$mutable.getY() > 0 && !this.world.getBlockState(blockpos$mutable).getMaterial().blocksMovement()) {
+            blockpos$mutable.move(Direction.DOWN);
+        }
+
+        BlockState blockstate = this.world.getBlockState(blockpos$mutable);
+        boolean canMove = blockstate.getMaterial().blocksMovement();
+        boolean water = blockstate.getFluidState().isTagged(FluidTags.WATER);
+        if (canMove && !water) {
+            EnderTeleportEvent event = new EnderTeleportEvent(this, x, y, z, 0);
+            if (MinecraftForge.EVENT_BUS.post(event)) return false;
+            boolean teleported = this.attemptTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), true);
+            if (teleported) {
+                this.world.playSound(null, this.prevPosX, this.prevPosY, this.prevPosZ, SoundEvents.ENTITY_ENDERMAN_TELEPORT, this.getSoundCategory(), 1.0F, 1.0F);
+                this.playSound(SoundEvents.ENTITY_ENDERMAN_TELEPORT, 1.0F, 1.0F);
+            }
+            return teleported;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean attackEntityAsMob(Entity entityIn) {
+        boolean flag = entityIn.attackEntityFrom(DamageSource.func_226252_a_(this), (float)((int)this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue()));
+        if (flag) {
+            this.applyEnchantments(this, entityIn);
+            if (entityIn instanceof LivingEntity) {
+                ((LivingEntity)entityIn).setBeeStingCount(((LivingEntity)entityIn).getBeeStingCount() + 1);
+                int i = 0;
+                if (this.world.getDifficulty() == Difficulty.NORMAL) {
+                    i = 10;
+                } else if (this.world.getDifficulty() == Difficulty.HARD) {
+                    i = 18;
+                }
+                BeeInfo info = this.getBeeInfo();
+
+                if (info.isCreeperBee()) {
+                    this.explode();
+                } else if (info.isNetherBee()){
+                    entityIn.setFire(5);
+                } else if (i > 0) {
+                    if (info.isWitherBee())
+                        ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.WITHER, i * 20, 1));
+                    else if (info.isZomBee())
+                        ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.HUNGER, i * 20, 20));
+                    else if (info.isPigmanBee())
+                        ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.MINING_FATIGUE, i * 20, 0));
+                    else
+                        ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.POISON, i * 20, 0));
+
+                }
+            }
+
+            this.setHasStung(true);
+            this.setAttackTarget(null);
+            this.playSound(SoundEvents.ENTITY_BEE_STING, 1.0F, 1.0F);
+        }
+
+        return flag;
+    }
+
+    /**
+     * Creates an explosion as determined by this creeper's power and explosion radius.
+     */
+    private void explode() {
+        if (!this.world.isRemote) {
+            Explosion.Mode explosion$mode = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this) ? Explosion.Mode.BREAK : Explosion.Mode.NONE;
+            this.dead = true;
+            this.world.createExplosion(this, this.getPosX(), this.getPosY(), this.getPosZ(), rand.nextFloat() * 3, explosion$mode);
+            this.remove();
+            this.spawnLingeringCloud();
+        }
+
+    }
+
+    private void spawnLingeringCloud() {
+        Collection<EffectInstance> collection = this.getActivePotionEffects();
+        if (!collection.isEmpty()) {
+            AreaEffectCloudEntity areaeffectcloudentity = new AreaEffectCloudEntity(this.world, this.getPosX(), this.getPosY(), this.getPosZ());
+            areaeffectcloudentity.setRadius(2.5F);
+            areaeffectcloudentity.setRadiusOnUse(-0.5F);
+            areaeffectcloudentity.setWaitTime(10);
+            areaeffectcloudentity.setDuration(areaeffectcloudentity.getDuration() / 2);
+            areaeffectcloudentity.setRadiusPerTick(-areaeffectcloudentity.getRadius() / (float)areaeffectcloudentity.getDuration());
+
+            for(EffectInstance effectinstance : collection) {
+                areaeffectcloudentity.addEffect(new EffectInstance(effectinstance));
+            }
+
+            this.world.addEntity(areaeffectcloudentity);
+        }
+
+    }
+
 }

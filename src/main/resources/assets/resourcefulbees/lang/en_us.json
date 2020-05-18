@@ -2,7 +2,7 @@
 	"itemGroup.resourcefulbees" : "Resourceful Bees",
 
 	"resourcefulbees.shift_info": "Hold SHIFT for Info",
-	"item.resourcefulbees.smoker.tooltip": "Rightclick the hive to smoke it.",
+	"item.resourcefulbees.smoker.tooltip": "Right click the hive to smoke it.",
 	"item.resourcefulbees.smoker.tooltip.1": "This allows you to stop the bees from being angry at you for shearing honeycombs for 30s.",
 	"block.beehive.tileentity.info.smoked": "Smoked: ",
 

@@ -13,7 +13,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.CustomBeeEntity;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
@@ -116,12 +115,6 @@ public class IronBeehiveBlockEntity extends BeehiveTileEntity {
           this.bees.add(new BeehiveTileEntity.Bee(nbt, ticksInHive, hasNectar ? BEE_INFO.get(bee1.getBeeType()).getMaxTimeInHive() : BeeConst.MIN_HIVE_TIME));
           if (bee1.hasFlower() && (!this.hasFlowerPos() || this.world.rand.nextBoolean())) {
             this.flowerPos = bee1.getFlowerPos();
-          }
-          if (BEE_INFO.get(bee1.getBeeType()).isEnderBee()){
-            this.world.addParticle(ParticleTypes.PORTAL, bee.getPosXRandom(0.5D),
-                    bee.getPosYRandom() - 0.25D, bee.getPosZRandom(0.5D),
-                    (world.rand.nextDouble() - 0.5D) * 2.0D, -world.rand.nextDouble(),
-                    (world.rand.nextDouble() - 0.5D) * 2.0D);
           }
         }
         BlockPos pos = this.getPos();

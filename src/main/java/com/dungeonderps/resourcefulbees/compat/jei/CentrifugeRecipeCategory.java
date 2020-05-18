@@ -109,7 +109,5 @@ public class CentrifugeRecipeCategory implements IRecipeCategory<CentrifugeRecip
     if (beeOutput < 1.0) fontRenderer.drawString(beeOutputString, 80, 10, 0xff808080);
     if (honeyBottle < 1.0) fontRenderer.drawString(honeyBottleString, 80, 50, 0xff808080);
     if (beeswax < 1.0) fontRenderer.drawString(beeswaxString, 80, 30, 0xff808080);
-
-
   }
 }

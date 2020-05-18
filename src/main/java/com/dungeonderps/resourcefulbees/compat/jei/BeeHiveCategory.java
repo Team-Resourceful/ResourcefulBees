@@ -103,7 +103,7 @@ public class BeeHiveCategory implements IRecipeCategory<BeeHiveCategory.Recipe> 
 
         bee.ticksExisted = mc.player.ticksExisted;
         bee.renderYawOffset = rotation;
-        bee.selectBeeType(beeType);
+        bee.setBeeType(beeType);
         entityrenderermanager.renderEntityStatic(bee, 1.75D, 0.1D, 0.0D, mc.getRenderPartialTicks(), 1, matrixstack, irendertypebuffer$impl, 15728880);
 
         irendertypebuffer$impl.finish();
