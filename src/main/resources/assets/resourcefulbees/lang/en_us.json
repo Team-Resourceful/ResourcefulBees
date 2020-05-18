@@ -10,8 +10,9 @@
 	"gui.resourcefulbees.jei.category.centrifuge": "Centrifuge",
 	"gui.resourcefulbees.jei.category.breeding" : "Bee Breeding",
 	"gui.resourcefulbees.category.centrifuge": "Centrifuge",
+	"gui.resourcefulbees.jei.category.mutation": "Bee Block Mutation",
+	"gui.resourcefulbees.jei.category.mutation.info": "Bee block mutation requires there to be a valid hive for the bee to go into & the bee to have nectar.",
 	"gui.resourcefulbees.centrifuge": "Centrifuge",
-
 
 	"block.resourcefulbees.iron_beehive": "Iron Beehive",
 	"block.resourcefulbees.wax_block": "Beeswax Block",

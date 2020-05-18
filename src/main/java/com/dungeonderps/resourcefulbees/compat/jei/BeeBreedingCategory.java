@@ -113,7 +113,7 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
         fontRenderer.drawString(decimalFormat.format(0.33), 90, 18, 0xff808080);
     }
 
-    public static List<Recipe> getHoneycombRecipes(IIngredientManager ingredientManager) {
+    public static List<Recipe> getBreedingRecipes(IIngredientManager ingredientManager) {
         List<Recipe> recipes = new ArrayList<>();
         for (Map.Entry<String, BeeInfo> bee : BeeInfo.BEE_INFO.entrySet()){
             if (bee.getKey() == "Default")
