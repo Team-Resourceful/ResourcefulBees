@@ -163,6 +163,10 @@ public class IronBeehiveBlockEntity extends BeehiveTileEntity {
     return honeycombs.size() > 0;
   }
 
+  public int numberOfCombs() {
+      return honeycombs.size();
+  }
+
   public boolean isAllowedBee(CustomBeeEntity bee){
     Block hive = getBlockState().getBlock();
     return hive == RegistryHandler.IRON_BEEHIVE.get();

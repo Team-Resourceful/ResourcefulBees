@@ -13,18 +13,17 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tileentity.BeehiveTileEntity;
 import net.minecraft.tileentity.IronBeehiveBlockEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -72,7 +71,7 @@ public class IronBeehiveBlock extends BeehiveBlock {
    		itemstack.damageItem(1, player, player1 -> player1.sendBreakAnimation(handIn));
     }
    	else if (honeyLevel >= 5) {
-      if (itemstack.getItem() == Items.SHEARS) {
+      if (itemstack.getItem().isIn(ItemTags.getCollection().getOrCreate(new ResourceLocation("forge:shears")))) {
         world.playSound(player, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.BLOCK_BEEHIVE_SHEAR, SoundCategory.NEUTRAL, 1.0F, 1.0F);
         dropResourceHoneycomb(world, pos);
         itemstack.damageItem(1, player, player1 -> player1.sendBreakAnimation(handIn));

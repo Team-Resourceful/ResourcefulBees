@@ -1,6 +1,7 @@
 package com.dungeonderps.resourcefulbees.compat.top;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
+import com.dungeonderps.resourcefulbees.block.IronBeehiveBlock;
 import com.dungeonderps.resourcefulbees.lib.BeeConst;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.tileentity.CentrifugeBlockEntity;
@@ -59,8 +60,11 @@ public class TopCompat implements Function<ITheOneProbe, Void>
                     return true;
                 }
                 if(mode.equals(ProbeMode.EXTENDED)){
-                    TileEntity honeyBlock = world.getTileEntity(data.getPos());
-                    if (honeyBlock.serializeNBT().getCompound(BeeConst.NBT_HONEYCOMBS_TE).size() != 0) {
+                    IronBeehiveBlockEntity ironBeeHive = (IronBeehiveBlockEntity) world.getTileEntity(data.getPos());
+                    if (ironBeeHive.hasCombs()) {
+                        int honeyLevel = 0;
+                        if (ironBeeHive.getBlockState().has(IronBeehiveBlock.HONEY_LEVEL))
+                            honeyLevel = ironBeeHive.getBlockState().get(IronBeehiveBlock.HONEY_LEVEL);
                         IProbeInfo vertical = null;
                         IProbeInfo horizontal = null;
                         probeInfo.horizontal()
@@ -68,13 +72,16 @@ public class TopCompat implements Function<ITheOneProbe, Void>
                                 .vertical()
                                 .itemLabel(blockState.getBlock().asItem().getDefaultInstance())
                                 .text(I18n.format("gui." + ResourcefulBees.MOD_ID + ".beehive.smoked"))
+                                .text(I18n.format("gui." + ResourcefulBees.MOD_ID + ".beehive.honeylevel") + honeyLevel)
                                 .progress((int) Math.floor(beehiveBlockEntity.ticksSmoked / 20), 30)
                                 .text(formatting + BeeConst.MOD_NAME);
                         vertical = probeInfo.vertical(probeInfo.defaultLayoutStyle().borderColor(0xff006699).spacing(0));
-                        for (int i =0; i < honeyBlock.serializeNBT().getCompound(BeeConst.NBT_HONEYCOMBS_TE).size(); i++){
+                        int hiveCombSize = ironBeeHive.numberOfCombs();
+                        hiveCombSize = hiveCombSize <= 6 ? hiveCombSize : 6;
+                        for (int i =0; i < hiveCombSize; i++){
                             horizontal = vertical.horizontal(probeInfo.defaultLayoutStyle().spacing(10).alignment(ElementAlignment.ALIGN_CENTER));
-                            horizontal.item(honeyComb(String.valueOf(i), honeyBlock))
-                                    .text(honeyComb(String.valueOf(i), honeyBlock).getDisplayName().getFormattedText());
+                            horizontal.item(honeyComb(String.valueOf(i), ironBeeHive))
+                                    .text(honeyComb(String.valueOf(i), ironBeeHive).getDisplayName().getFormattedText());
                         }
                         return true;
                     }
