@@ -12,6 +12,7 @@ public class BeeConst {
     public static final String FLOWER_TAG_TALL = "tall";
     public static final String TAG_PREFIX = "tag:";
     public static final String MOD_NAME = "Resourceful Bees";
+    public static final String NBT_ENTITY = "Entity";
 
     public static final int SMOKE_TIME = 600;
     public static final int MIN_HIVE_TIME = 600;

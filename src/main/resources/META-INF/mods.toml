@@ -10,3 +10,17 @@ logoFile="logo.png"
 credits="Thanks to Tfarcenim for making Beesourceful which this mod is heavily based on. Thanks to the MMD Discord peeps for all of their assistance. Thanks to Silentchaos512 for his Color Utility"
 authors="Epic_Oreo, ThatGravyBoat, DrDarkfire"
 description="This mod provides pack makers with useful capabilities for creating custom Resource Bee Types."
+
+[[dependencies.resourcefulbees]]
+    modId="forge"
+    mandatory=true
+    versionRange="[31.2.0,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.resourcefulbees]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.15,)"
+    ordering="NONE"
+    side="BOTH"

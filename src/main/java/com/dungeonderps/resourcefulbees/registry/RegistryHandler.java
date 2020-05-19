@@ -7,15 +7,13 @@ import com.dungeonderps.resourcefulbees.block.CentrifugeBlock;
 import com.dungeonderps.resourcefulbees.block.HoneycombBlock;
 import com.dungeonderps.resourcefulbees.block.IronBeehiveBlock;
 import com.dungeonderps.resourcefulbees.container.CentrifugeContainer;
-import com.dungeonderps.resourcefulbees.item.BeeSpawnEggItem;
-import com.dungeonderps.resourcefulbees.item.HoneycombBlockItem;
-import com.dungeonderps.resourcefulbees.item.ResourcefulHoneycomb;
-import com.dungeonderps.resourcefulbees.item.Smoker;
+import com.dungeonderps.resourcefulbees.item.*;
 import com.dungeonderps.resourcefulbees.recipe.CentrifugeRecipe;
 import com.dungeonderps.resourcefulbees.tileentity.CentrifugeBlockEntity;
 import com.dungeonderps.resourcefulbees.tileentity.HoneycombBlockEntity;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
+import com.sun.corba.se.spi.ior.IORTemplate;
 import net.minecraft.block.Block;
 import net.minecraft.block.FlowerBlock;
 import net.minecraft.block.SoundType;
@@ -93,6 +91,8 @@ public class RegistryHandler {
 	public static final RegistryObject<Item> CENTRIFUGE_ITEM = ITEMS.register("centrifuge", () -> new BlockItem(CENTRIFUGE.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
 	public static final RegistryObject<Item> WAX_BLOCK_ITEM = ITEMS.register("wax_block", () -> new BlockItem(WAX_BLOCK.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
 	public static final RegistryObject<Item> GOLD_FLOWER_ITEM = ITEMS.register("gold_flower", () -> new BlockItem(GOLD_FLOWER.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
+	public static final RegistryObject<Item> BEE_JAR = ITEMS.register("bee_jar", BeeJar::new);
+
 
 	//**************TILE ENTITIES*************************************
 

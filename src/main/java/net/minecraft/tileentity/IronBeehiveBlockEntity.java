@@ -64,7 +64,7 @@ public class IronBeehiveBlockEntity extends BeehiveTileEntity {
       if (!this.world.getBlockState(blockpos1).getCollisionShape(this.world, blockpos1).isEmpty()) {
         return false;
       } else {
-        Entity entity = EntityType.func_220335_a(nbt, this.world, entity1 -> entity1);
+        Entity entity = EntityType.loadEntityAndExecute(nbt, this.world, entity1 -> entity1);
         if (entity != null) {
           float f = entity.getWidth();
           double d0 = 0.55D + f / 2.0F;

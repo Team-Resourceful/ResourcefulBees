@@ -1,6 +1,7 @@
 package com.dungeonderps.resourcefulbees.registry;
 
 import com.dungeonderps.resourcefulbees.block.HoneycombBlock;
+import com.dungeonderps.resourcefulbees.item.BeeJar;
 import com.dungeonderps.resourcefulbees.item.ResourcefulHoneycomb;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.color.BlockColors;
@@ -19,6 +20,7 @@ public final class ColorHandler {
         ItemColors colors = event.getItemColors();
         registerItems(colors, ResourcefulHoneycomb::getColor, RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
         registerItems(colors, HoneycombBlock::getItemColor, RegistryHandler.HONEYCOMB_BLOCK_ITEM.get());
+        registerItems(colors, BeeJar::getColor, RegistryHandler.HONEYCOMB_BLOCK_ITEM.get());
     }
 
     public static void onBlockColors(ColorHandlerEvent.Block event){
