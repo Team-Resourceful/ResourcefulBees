@@ -1,5 +1,6 @@
 package com.dungeonderps.resourcefulbees.config;
 
+import com.dungeonderps.resourcefulbees.lib.BeeConst;
 import com.dungeonderps.resourcefulbees.utils.MathUtils;
 import net.minecraft.world.biome.Biome;
 
@@ -341,4 +342,8 @@ public class BeeInfo {
         return BEE_INFO.get(spawnList.get(MathUtils.nextInt(spawnList.size()))).getName();
     }
 
+    public static BeeInfo getInfo(String bee){
+        BeeInfo info = BEE_INFO.get(bee);
+        return info != null ? info : BEE_INFO.get(BeeConst.DEFAULT_BEE_TYPE);
+    }
 }

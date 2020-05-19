@@ -259,15 +259,13 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
     public String getBeeType() {
         BeeInfo info = getBeeInfo(this.dataManager.get(BEE_TYPE));
 
-        if (info != null) {
-            return this.dataManager.get(BEE_TYPE);
-        } else {
+        if (info.getName().equals(BeeConst.DEFAULT_BEE_TYPE)) {
             if (!world.isRemote()) {
                 this.dead = true;
                 this.remove();
             }
-            return BeeConst.DEFAULT_BEE_TYPE;
         }
+        return this.dataManager.get(BEE_TYPE);
     }
 
     public String getColorFromInfo(String beeType) {
@@ -279,11 +277,11 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
     }
 
     public BeeInfo getBeeInfo() {
-        return BEE_INFO.get(this.getBeeType());
+        return BeeInfo.getInfo(this.getBeeType());
     }
 
     public BeeInfo getBeeInfo(String beeType) {
-        return BEE_INFO.get(beeType);
+        return BeeInfo.getInfo(beeType);
     }
 
     //***************************** CUSTOM BEE RELATED METHODS BELOW *************************************************
