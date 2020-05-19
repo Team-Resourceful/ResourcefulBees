@@ -24,6 +24,7 @@ import net.minecraft.util.ResourceLocation;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -74,6 +75,26 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
 
     @Override
     public void setRecipe(IRecipeLayout iRecipeLayout, Recipe recipe, IIngredients ingredients) {
+    }
+
+    @Override
+    public List<String> getTooltipStrings(Recipe recipe, double mouseX, double mouseY) {
+        double beeX = 2D;
+        double beeY = 0D;
+        double bee2X = 52D;
+        double bee2Y = 0D;
+        double bee3X = 124D;
+        double bee3Y = 0D;
+        if (mouseX >= beeX && mouseX <= beeX + 30D && mouseY >= beeY && mouseY <= beeY + 30D){
+            return Collections.singletonList(I18n.format("entity." + ResourcefulBees.MOD_ID + "." + recipe.parent1.toLowerCase() + "_bee"));
+        }
+        if (mouseX >= bee2X && mouseX <= bee2X + 30D && mouseY >= bee2Y && mouseY <= bee2Y + 30D){
+            return Collections.singletonList(I18n.format("entity." + ResourcefulBees.MOD_ID + "." + recipe.parent2.toLowerCase() + "_bee"));
+        }
+        if (mouseX >= bee3X && mouseX <= bee3X + 30D && mouseY >= bee3Y && mouseY <= bee3Y + 30D){
+            return Collections.singletonList(I18n.format("entity." + ResourcefulBees.MOD_ID + "." + recipe.child.toLowerCase() + "_bee"));
+        }
+        return IRecipeCategory.super.getTooltipStrings(recipe,mouseX, mouseY);
     }
 
     public void renderEntity(String beeType, Float rotation, Double xPos, Double yPos){
