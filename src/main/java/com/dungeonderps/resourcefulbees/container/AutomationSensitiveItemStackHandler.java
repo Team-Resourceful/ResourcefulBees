@@ -20,8 +20,13 @@ import net.minecraft.util.NonNullList;
 import net.minecraftforge.items.ItemStackHandler;
 
 /**
+<<<<<<< HEAD
  * @author Shadows
  * @implNote Taken from Actually Additions owned by Ellpeck
+=======
+ * @author Ellpeck
+ * @implNote borrowed from Actually Additions
+>>>>>>> master
  */
 public class AutomationSensitiveItemStackHandler extends ItemStackHandler {
 
@@ -79,8 +84,8 @@ public class AutomationSensitiveItemStackHandler extends ItemStackHandler {
 
     public final boolean canAccept(int slot, ItemStack stack, boolean automation) {
         if (slot == CentrifugeBlockEntity.BOTTLE_SLOT && !stack.getItem().equals(Items.GLASS_BOTTLE) ||
-            slot == CentrifugeBlockEntity.HONEYCOMB_SLOT && stack.getItem().equals(Items.GLASS_BOTTLE)
-        ) return false;
+                slot == CentrifugeBlockEntity.HONEYCOMB_SLOT  &&  stack.getItem().equals(Items.GLASS_BOTTLE))
+            return false;
         return this.getAcceptor().canAccept(slot, stack, automation);
     }
 

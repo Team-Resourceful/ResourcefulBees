@@ -236,7 +236,7 @@ public class CentrifugeBlockEntity extends TileEntity implements ITickableTileEn
     }
 
     public AutomationSensitiveItemStackHandler.IAcceptor getAcceptor() {
-        return (slot, stack, automation) -> !automation || slot == 0 || slot == 1;//&& StackUtil.isValid(FurnaceRecipes.instance().getSmeltingResult(stack));
+        return (slot, stack, automation) -> !automation || slot == 0 || slot == 1;
     }
 
     public AutomationSensitiveItemStackHandler.IRemover getRemover() {

@@ -92,8 +92,8 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
     public static class Serializer<T extends CentrifugeRecipe> extends net.minecraftforge.registries.ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<T> {
         final IRecipeFactory<T> factory;
 
-        public Serializer(Serializer.IRecipeFactory<T> p_i50146_1_) {
-            this.factory = p_i50146_1_;
+        public Serializer(Serializer.IRecipeFactory<T> factory) {
+            this.factory = factory;
         }
 
         @Override
