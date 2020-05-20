@@ -20,13 +20,8 @@ import net.minecraft.util.NonNullList;
 import net.minecraftforge.items.ItemStackHandler;
 
 /**
-<<<<<<< HEAD
  * @author Shadows
  * @implNote Taken from Actually Additions owned by Ellpeck
-=======
- * @author Ellpeck
- * @implNote borrowed from Actually Additions
->>>>>>> master
  */
 public class AutomationSensitiveItemStackHandler extends ItemStackHandler {
 
