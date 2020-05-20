@@ -6,6 +6,5 @@
   "centrifugeOutput": "minecraft:emerald",
   "spawnInWorld": true,
   "biomeList": "TAG:Mountain,Hills",
-  "maxTimeInHive": 600,
-  "skeletonBee": true
+  "maxTimeInHive": 600
 }

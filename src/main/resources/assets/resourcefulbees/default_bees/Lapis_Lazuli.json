@@ -5,7 +5,6 @@
   "mutationBlock": "minecraft:lapis_ore",
   "centrifugeOutput": "minecraft:lapis_lazuli",
   "spawnInWorld": true,
-  "biomeList": "minecraft:plains",
-  "maxTimeInHive": 600,
-  "zomBee": true
+  "biomeList": "tag:OVERWORLD",
+  "maxTimeInHive": 600
 }

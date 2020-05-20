@@ -6,9 +6,5 @@
   "centrifugeOutput": "minecraft:coal",
   "spawnInWorld": true,
   "biomeList": "tag:OVERWORLD",
-  "maxTimeInHive": 600,
-  "breedable": true,
-  "parent1": "alphabet",
-  "parent2": "blphabet",
-  "creeperBee": true
+  "maxTimeInHive": 600
 }

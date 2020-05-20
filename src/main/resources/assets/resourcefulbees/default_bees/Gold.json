@@ -1,11 +1,10 @@
 {
   "color": "#FFDC00",
   "flower": "TaLL",
-  "baseBlock": "tag:minecraft:leaves",
-  "mutationBlock": "minecraft:stone",
-  "centrifugeOutput": "minecraft:kush",
+  "baseBlock": "minecraft:stone",
+  "mutationBlock": "minecraft:gold_ore",
+  "centrifugeOutput": "minecraft:gold_ingot",
   "spawnInWorld": true,
-  "biomeList": "nuclear:wasteland",
-  "maxTimeInHive": 600,
-  "pigmanBee": true
+  "biomeList": "tag:OVERWORLD",
+  "maxTimeInHive": 600
 }

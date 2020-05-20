@@ -5,7 +5,6 @@
   "mutationBlock": "minecraft:redstone_ore",
   "centrifugeOutput": "minecraft:redstone",
   "spawnInWorld": true,
-  "biomeList": "minecraft:plains",
-  "maxTimeTnHive": 600,
-  "pigmanBee": true
+  "biomeList": "tag:OVERWORLD",
+  "maxTimeTnHive": 600
 }
