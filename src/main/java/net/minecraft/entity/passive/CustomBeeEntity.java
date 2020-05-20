@@ -100,11 +100,6 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
     }
 
     @Override
-    public void tick() {
-        super.tick();
-    }
-
-    @Override
     public boolean attackEntityFrom(DamageSource source, float amount) {
         if (source.isFireDamage() && getBeeInfo().isNetherBee())
             return false;

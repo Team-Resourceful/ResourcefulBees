@@ -60,7 +60,6 @@ public class BeeBreedGoal extends BreedGoal {
         final boolean cancelled = MinecraftForge.EVENT_BUS.post(event);
         ageableentity = event.getChild();
         if (cancelled) {
-            //Reset the "inLove" state for the animals
             this.animal.setGrowingAge(6000);
             this.targetMate.setGrowingAge(6000);
             this.animal.resetInLove();

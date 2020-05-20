@@ -1,7 +1,5 @@
 package com.dungeonderps.resourcefulbees.registry;
 
-//import com.dungeonderps.resourcefulbees.block.CentrifugeBlock;
-
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.block.CentrifugeBlock;
 import com.dungeonderps.resourcefulbees.block.HoneycombBlock;
@@ -19,7 +17,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.merchant.villager.VillagerProfession;
-import net.minecraft.entity.passive.CustomBeeEntity;
 import net.minecraft.entity.passive.ResourcefulBee;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.BlockItem;
@@ -36,8 +33,6 @@ import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-
-//import com.dungeonderps.resourcefulbees.tileentity.CentrifugeBlockEntity;
 
 public class RegistryHandler {
 

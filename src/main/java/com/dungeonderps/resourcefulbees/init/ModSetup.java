@@ -49,18 +49,21 @@ public class ModSetup {
         BEE_PATH = rbBeesPath;
         RESOURCE_PATH = rbAssetsPath;
 
-        try {
-            Files.createDirectories(rbBeesPath);
+        try { Files.createDirectories(rbBeesPath);
         } catch (FileAlreadyExistsException e) {
         } catch (IOException e) { LOGGER.error("failed to create resourcefulbees config directory");}
 
         try { Files.createDirectory(rbAssetsPath);
+        } catch (FileAlreadyExistsException e) {
+        } catch (IOException e) { LOGGER.error("Failed to create assets directory");}
+
+        try {
             FileWriter file = new FileWriter(Paths.get(rbAssetsPath.toAbsolutePath().toString(), "pack.mcmeta").toFile());
             String mcMetaContent = "{\"pack\":{\"pack_format\":5,\"description\":\"Resourceful Bees resource pack used for lang purposes for the user to add lang for bee/items.\"}}";
             file.write(mcMetaContent);
             file.close();
-        } catch (FileAlreadyExistsException e) {
-        } catch (IOException e) { LOGGER.error("Failed to create assets directory");}
+        } catch (FileAlreadyExistsException e){
+        } catch (IOException e) { LOGGER.error("Failed to create pack.mcmeta file for resource loading");}
     }
 
     public static void setupDispenserCollectionBehavior() {
