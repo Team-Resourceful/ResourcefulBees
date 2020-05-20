@@ -4,6 +4,7 @@ import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.container.CentrifugeContainer;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.DyeColor;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 
@@ -17,6 +18,7 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
         super(screenContainer, inventory, titleIn);
     }
     int textColor = 0x404040;
+    public static String currentMonth;
 
     /**
      * Draws the background layer of this container (behind the items).
@@ -28,79 +30,19 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
         ResourceLocation texture = null;
-        switch(title.getFormattedText().toLowerCase().trim()) {
-            case "white":
-                textColor = 0x000000;
-                texture = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/gui/centrifuges/white_centrifuge.png");
-                break;
-            case "orange":
-                textColor = 0xffffff;
-                texture = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/gui/centrifuges/orange_centrifuge.png");
-                break;
-            case "magenta":
-                textColor = 0xffffff;
-                texture = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/gui/centrifuges/magenta_centrifuge.png");
-                break;
-            case "light blue":
-                textColor = 0xffffff;
-                texture = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/gui/centrifuges/light_blue_centrifuge.png");
-                break;
-            case "yellow":
-                textColor = 0x000000;
-                texture = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/gui/centrifuges/yellow_centrifuge.png");
-                break;
-            case "lime":
-                textColor = 0xffffff;
-                texture = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/gui/centrifuges/lime_centrifuge.png");
-                break;
-            case "pink":
-                textColor = 0x000000;
-                texture = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/gui/centrifuges/pink_centrifuge.png");
-                break;
-            case "gray":
-                textColor = 0xffffff;
-                texture = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/gui/centrifuges/gray_centrifuge.png");
-                break;
-            case "light gray":
-                textColor = 0xffffff;
-                texture = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/gui/centrifuges/light_gray_centrifuge.png");
-                break;
-            case "cyan":
-                textColor = 0xffffff;
-                texture = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/gui/centrifuges/cyan_centrifuge.png");
-                break;
-            case "purple":
-                textColor = 0xffffff;
-                texture = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/gui/centrifuges/purple_centrifuge.png");
-                break;
-            case "blue":
-                textColor = 0xffffff;
-                texture = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/gui/centrifuges/blue_centrifuge.png");
-                break;
-            case "brown":
-                textColor = 0xffffff;
-                texture = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/gui/centrifuges/brown_centrifuge.png");
-                break;
-            case "green":
-                textColor = 0xffffff;
-                texture = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/gui/centrifuges/green_centrifuge.png");
-                break;
-            case "red":
-                textColor = 0xffffff;
-                texture = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/gui/centrifuges/red_centrifuge.png");
-                break;
-            case "black":
-                textColor = 0xffffff;
-                texture = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/gui/centrifuges/black_centrifuge.png");
-                break;
-            default:
-                switch(new SimpleDateFormat("MM").format(new Date())){
-                    case "12":
-                        texture = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/gui/centrifuges/christmas_centrifuge.png");
-                        break;
-                    default:
-                        texture = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/gui/centrifuges/centrifuge.png");
+        String titles = title.getFormattedText().toLowerCase().trim();
+        if (!titles.equals("centrifuge")) {
+            for (DyeColor color : DyeColor.values()) {
+                if (titles.equals(color.getName())) {
+                    if (color.getTextColor() > 12582656) textColor = 0x000000;
+                    else textColor = 0xffffff;
+                    texture = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/centrifuges/" + color.getName() + "_centrifuge.png");
                 }
+            }
+        }
+        else {
+            if (currentMonth.equals("12")) texture = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/gui/centrifuges/christmas_centrifuge.png");
+            else texture = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/gui/centrifuges/centrifuge.png");
         }
         this.minecraft.getTextureManager().bindTexture(texture);
         int i = (this.width - this.xSize) / 2;

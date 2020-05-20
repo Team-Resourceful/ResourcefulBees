@@ -3,10 +3,13 @@
   "flower": "minecraft:wither_rose",
   "baseBlock": "minecraft:netherrack",
   "mutationBlock": "minecraft:soul_sand",
-  "centrifugeOutput": "minecraft:charcoal",
+  "mainOutput": "minecraft:charcoal",
   "spawnInWorld": true,
   "biomeList": "tag:NETHER",
   "maxTimeInHive": 600,
   "witherBee": true,
-  "netherBee": true
+  "netherBee": true,
+  "breedable" : true,
+  "parent1": "Coal",
+  "parent2": "Skeleton"
 }

@@ -3,7 +3,7 @@
   "flower": "ALL",
   "baseBlock": "minecraft:stone",
   "mutationBlock": "minecraft:gold_ore",
-  "centrifugeOutput": "minecraft:gold_ingot",
+  "mainOutput": "minecraft:gold_ingot",
   "spawnInWorld": true,
   "biomeList": "tag:OVERWORLD",
   "maxTimeInHive": 600
