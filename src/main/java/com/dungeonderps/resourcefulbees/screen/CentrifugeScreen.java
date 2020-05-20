@@ -8,11 +8,6 @@ import net.minecraft.item.DyeColor;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import static com.dungeonderps.resourcefulbees.ResourcefulBees.LOGGER;
-
 public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
     public CentrifugeScreen(CentrifugeContainer screenContainer, PlayerInventory inventory, ITextComponent titleIn) {
         super(screenContainer, inventory, titleIn);

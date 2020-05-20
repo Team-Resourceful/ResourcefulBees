@@ -1,15 +1,11 @@
 package com.dungeonderps.resourcefulbees.tileentity;
 
-import com.dungeonderps.resourcefulbees.block.HoneycombBlock;
 import com.dungeonderps.resourcefulbees.lib.BeeConst;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.utils.Color;
-import net.minecraft.block.Block;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
-
-import static com.dungeonderps.resourcefulbees.ResourcefulBees.LOGGER;
 
 public class HoneycombBlockEntity extends TileEntity {
 
