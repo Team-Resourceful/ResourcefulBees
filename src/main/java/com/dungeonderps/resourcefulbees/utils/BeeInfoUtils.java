@@ -1,6 +1,5 @@
 package com.dungeonderps.resourcefulbees.utils;
 
-import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.data.BeeData;
 import com.dungeonderps.resourcefulbees.lib.BeeConst;
 import com.google.common.base.Splitter;
@@ -122,9 +121,9 @@ public class BeeInfoUtils {
     }
 
     private static boolean validateCentrifugeOutput(BeeData bee) {
-        return RESOURCE_PATTERN.matcher(bee.getMutationBlock()).matches() && !ForgeRegistries.ITEMS.getValue(getResource(bee.getCentrifugeOutput())).equals(Items.AIR)
+        return RESOURCE_PATTERN.matcher(bee.getMutationBlock()).matches() && !ForgeRegistries.ITEMS.getValue(getResource(bee.getMainOutput())).equals(Items.AIR)
                 ? dataCheckPassed(bee.getName(), "Centrifuge Output")
-                : logError(bee.getName(), "Centrifuge Output", bee.getCentrifugeOutput(), "item");
+                : logError(bee.getName(), "Centrifuge Output", bee.getMainOutput(), "item");
     }
 
     private static boolean validateMutationBlock(BeeData bee) {

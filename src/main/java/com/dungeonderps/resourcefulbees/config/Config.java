@@ -4,8 +4,6 @@ import net.minecraftforge.common.ForgeConfigSpec;
 
 public class Config {
 
-    public static final String MOD_OPTIONS = "Mod Options";
-
     public static ForgeConfigSpec.BooleanValue GENERATE_DEFAULTS;
     public static ForgeConfigSpec.BooleanValue ENABLE_EASTER_EGG_BEES;
 

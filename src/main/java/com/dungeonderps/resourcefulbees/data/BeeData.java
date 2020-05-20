@@ -1,17 +1,22 @@
 package com.dungeonderps.resourcefulbees.data;
 
 import com.dungeonderps.resourcefulbees.lib.BeeConst;
+import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
+import net.minecraft.item.Items;
 
 public class BeeData {
-    private String flower, color, biomeList, baseBlock, mutationBlock, centrifugeOutput, parent1, parent2;
+    private String flower, color, biomeList, baseBlock, mutationBlock, mainOutput, parent1, parent2;
+    private String output2 = RegistryHandler.BEESWAX.getId().toString();
+    private String bottleOutput = Items.HONEY_BOTTLE.getRegistryName().toString();
     private boolean spawnInWorld, enderBee, netherBee, breedable, creeperBee, skeletonBee, zomBee, pigmanBee, witherBee, blazeBee;
-
     private int maxTimeInHive = 2400;
-
     private double breedWeight = 0.33;
-
+    private double mainOutputWeight = 1.0;
+    private double secondaryOutputWeight = 0.2;
+    private double bottleOutputWeight = 0.25;
     private transient String name = BeeConst.DEFAULT_BEE_TYPE;
-    private transient boolean enabled;
+
+
     public BeeData() {}
 
     /**
@@ -78,27 +83,6 @@ public class BeeData {
         this.spawnInWorld = spawnInWorld;
     }
 
-    /**
-     *  **May be deprecated in favor of alternative method**
-     * Primary use is for default-shipped bees.
-     * Returns if this bee is enabled for use.
-     * @return is this bee enabled?
-     */
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    /**
-     * **May be deprecated in favor of alternative method**
-     * Primary use is for default-shipped bees.
-     * Sets if this bee is enabled for use.
-     * Can be used to modify bees through code.
-     * @param enabled is this bee enabled?
-     */
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
     public boolean isEnderBee() { return enderBee; }
 
     public void setEnderBee(boolean enderBee) { this.enderBee = enderBee;}
@@ -111,17 +95,102 @@ public class BeeData {
      * Gets the Centrifuge Output for this bee's honeycomb.
      * @return This bee's honeycomb centrifuge output.
      */
-    public String getCentrifugeOutput() {
-        return centrifugeOutput.toLowerCase().trim();
+    public String getMainOutput() {
+        return mainOutput.toLowerCase().trim();
     }
 
     /**
      * Sets the Centrifuge Output for this bee's honeycomb.
      * Can be used to modify bees through code.
-     * @param centrifugeOutput This bee's honeycomb centrifuge output.
+     * @param mainOutput This bee's honeycomb centrifuge output.
      */
-    public void setCentrifugeOutput(String centrifugeOutput) {
-        this.centrifugeOutput = centrifugeOutput;
+    public void setMainOutput(String mainOutput) {
+        this.mainOutput = mainOutput;
+    }
+
+    /**
+     * Gets the Centrifuge Secondary Output for this bee's honeycomb.
+     * @return This bee's secondary centrifuge output.
+     */
+    public String getOutput2() {
+        return output2;
+    }
+
+    /**
+     * Sets the Centrifuge Secondary Output for this bee's honeycomb.
+     * Can be used to modify bees through code.
+     * @param output2 This bee's secondary centrifuge output.
+     */
+    public void setOutput2(String output2) {
+        this.output2 = output2;
+    }
+
+    /**
+     * Gets the Centrifuge Bottle Output for this bee's honeycomb.
+     * @return This bee's bottle centrifuge output.
+     */
+    public String getBottleOutput() {
+        return bottleOutput;
+    }
+
+    /**
+     * Sets the Centrifuge Bottle Output for this bee's honeycomb.
+     * Can be used to modify bees through code.
+     * @param bottleOutput This bee's bottle centrifuge output.
+     */
+    public void setBottleOutput(String bottleOutput) {
+        this.bottleOutput = bottleOutput;
+    }
+
+    /**
+     * Gets the main output wighting for centrifuge recipes.
+     * @return This bee's bottle centrifuge output weight.
+     */
+    public double getMainOutputWeight() {
+        return mainOutputWeight;
+    }
+
+    /**
+     * Sets the main output wighting for centrifuge recipes.
+     * Can be used to modify bees through code.
+     * @param mainOutputWeight This bee's main centrifuge output weight.
+     */
+    public void setMainOutputWeight(double mainOutputWeight) {
+        this.mainOutputWeight = mainOutputWeight;
+    }
+
+    /**
+     * Gets the secondary output wighting for centrifuge recipes.
+     * @return This bee's bottle centrifuge output weight.
+     */
+    public double getSecondaryOutputWeight() {
+        return secondaryOutputWeight;
+    }
+
+    /**
+     * Sets the secondary output wighting for centrifuge recipes.
+     * Can be used to modify bees through code.
+     * @param secondaryOutputWeight This bee's secondary centrifuge output weight.
+     */
+    public void setSecondaryOutputWeight(double secondaryOutputWeight) {
+        this.secondaryOutputWeight = secondaryOutputWeight;
+    }
+
+    /**
+     * Gets the secondary output wighting for centrifuge recipes.
+     * @return This bee's bottle centrifuge output weight.
+     */
+    public double getBottleOutputWeight() {
+        return bottleOutputWeight;
+    }
+
+    /**
+     * Sets the bottle output wighting for centrifuge recipes.
+     * Can be used to modify bees through code.
+     * @param bottleOutputWeight This bee's bottle centrifuge output weight.
+     */
+    public void setBottleOutputWeight(double bottleOutputWeight) {
+        this.bottleOutputWeight = bottleOutputWeight;
     }
 
     /**

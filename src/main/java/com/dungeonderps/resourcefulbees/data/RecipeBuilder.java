@@ -120,10 +120,10 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
         ItemStack bottleOutput = new ItemStack((BeeInfo.getInfo(BeeType).isEnderBee()) ? Items.DRAGON_BREATH : Items.HONEY_BOTTLE);
 
         NonNullList<Pair<ItemStack,Double>> outputs = NonNullList.from(
-                Pair.of(ItemStack.EMPTY, 0.0),//Required Apparently
-                Pair.of(new ItemStack(Registry.ITEM.getOrDefault(new ResourceLocation(BeeInfo.getInfo(BeeType).getCentrifugeOutput()))), Config.CENTRIFUGE_RECIPE_MAIN.get()),//Main output
-                Pair.of(new ItemStack(RegistryHandler.BEESWAX.get()), Config.CENTRIFUGE_RECIPE_SECONDARY.get()),//Secondary output
-                Pair.of(bottleOutput,Config.CENTRIFUGE_RECIPE_HONEY_BOTTLE.get())//Honey Bottle output
+                Pair.of(ItemStack.EMPTY, 0.0),
+                Pair.of(new ItemStack(Registry.ITEM.getOrDefault(new ResourceLocation(BeeInfo.getInfo(BeeType).getMainOutput()))), Config.CENTRIFUGE_RECIPE_MAIN.get()),
+                Pair.of(new ItemStack(RegistryHandler.BEESWAX.get()), Config.CENTRIFUGE_RECIPE_SECONDARY.get()),
+                Pair.of(bottleOutput,Config.CENTRIFUGE_RECIPE_HONEY_BOTTLE.get())
         );
 
         ResourceLocation name = new ResourceLocation(ResourcefulBees.MOD_ID, BeeType.toLowerCase() + "_honeycomb_centrifuge");
