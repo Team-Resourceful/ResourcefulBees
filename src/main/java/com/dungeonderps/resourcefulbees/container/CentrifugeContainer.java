@@ -28,15 +28,15 @@ public class CentrifugeContainer extends Container {
         this.trackInt(new FunctionalIntReferenceHolder(() -> centrifugeBlockEntity.totalTime, v -> centrifugeBlockEntity.totalTime = v));
 
         //COMB INPUT
-        this.addSlot(new SlotItemHandlerUnconditioned(centrifugeBlockEntity.h, 0, 30, 20));
+        this.addSlot(new SlotItemHandlerUnconditioned(centrifugeBlockEntity.h, CentrifugeBlockEntity.HONEYCOMB_SLOT, 30, 20));
         //BOTTLE INPUT
-        this.addSlot(new SlotItemHandlerUnconditioned(centrifugeBlockEntity.h, 1, 30, 38));
+        this.addSlot(new SlotItemHandlerUnconditioned(centrifugeBlockEntity.h, CentrifugeBlockEntity.BOTTLE_SLOT, 30, 38));
         //BOTTLE OUTPUT
-        this.addSlot(new OutputSlot(centrifugeBlockEntity.h, 2, 80, 59));
+        this.addSlot(new OutputSlot(centrifugeBlockEntity.h, CentrifugeBlockEntity.HONEY_BOTTLE, 80, 59));
         //MAIN OUTPUT
-        this.addSlot(new OutputSlot(centrifugeBlockEntity.h, 3, 129, 20));
+        this.addSlot(new OutputSlot(centrifugeBlockEntity.h, CentrifugeBlockEntity.OUTPUT1, 129, 20));
         //SECONDARY OUTPUT
-        this.addSlot(new OutputSlot(centrifugeBlockEntity.h, 4, 129, 38));
+        this.addSlot(new OutputSlot(centrifugeBlockEntity.h, CentrifugeBlockEntity.OUTPUT2, 129, 38));
 
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {

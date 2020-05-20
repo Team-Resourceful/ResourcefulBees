@@ -74,9 +74,10 @@ public class CentrifugeRecipeCategory implements IRecipeCategory<CentrifugeRecip
     iIngredients.setInputIngredients(Lists.newArrayList(recipe.ingredient, Ingredient.fromItems(Items.GLASS_BOTTLE)));
     List<Pair<ItemStack,Double>> outputs = recipe.outputs;
     List<ItemStack> stacks = new ArrayList<>();
-    stacks.add(new ItemStack(Items.HONEY_BOTTLE));
-    stacks.addAll(outputs.stream().map(Pair::getLeft).collect(Collectors.toList()));
-      iIngredients.setOutputs(VanillaTypes.ITEM, stacks);
+    stacks.add(new ItemStack(outputs.get(2).getLeft().getItem()));
+    stacks.add(new ItemStack(outputs.get(0).getLeft().getItem()));
+    stacks.add(new ItemStack(outputs.get(1).getLeft().getItem()));
+    iIngredients.setOutputs(VanillaTypes.ITEM, stacks);
   }
 
   @Override
@@ -84,9 +85,9 @@ public class CentrifugeRecipeCategory implements IRecipeCategory<CentrifugeRecip
     IGuiItemStackGroup guiItemStacks = iRecipeLayout.getItemStacks();
     guiItemStacks.init(CentrifugeBlockEntity.HONEYCOMB_SLOT, true, 9, 5);
     guiItemStacks.init(CentrifugeBlockEntity.BOTTLE_SLOT, true, 9, 23);
-    guiItemStacks.init(CentrifugeBlockEntity.HONEY_BOTTLE, false, 59, 44);
     guiItemStacks.init(CentrifugeBlockEntity.OUTPUT1, false, 108, 5);
     guiItemStacks.init(CentrifugeBlockEntity.OUTPUT2, false, 108, 23);
+    guiItemStacks.init(CentrifugeBlockEntity.HONEY_BOTTLE, false, 59, 44);
     guiItemStacks.set(iIngredients);
   }
 
