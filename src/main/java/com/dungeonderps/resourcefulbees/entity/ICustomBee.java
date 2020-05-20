@@ -1,6 +1,5 @@
 package com.dungeonderps.resourcefulbees.entity;
 
-import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.config.IBeeInfo;
 import com.dungeonderps.resourcefulbees.data.BeeData;
 
