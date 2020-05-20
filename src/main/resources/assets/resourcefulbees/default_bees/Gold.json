@@ -1,6 +1,6 @@
 {
   "color": "#FFDC00",
-  "flower": "TaLL",
+  "flower": "ALL",
   "baseBlock": "minecraft:stone",
   "mutationBlock": "minecraft:gold_ore",
   "centrifugeOutput": "minecraft:gold_ingot",

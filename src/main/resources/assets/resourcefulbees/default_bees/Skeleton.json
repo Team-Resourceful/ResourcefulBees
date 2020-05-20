@@ -1,0 +1,11 @@
+{
+  "color": "#F6F2E6",
+  "flower": "ALL",
+  "baseBlock": "minecraft:stone",
+  "mutationBlock": "minecraft:gravel",
+  "centrifugeOutput": "minecraft:bone",
+  "spawnInWorld": true,
+  "biomeList": "tag:OVERWORLD",
+  "maxTimeInHive": 600,
+  "skeletonBee": true
+}

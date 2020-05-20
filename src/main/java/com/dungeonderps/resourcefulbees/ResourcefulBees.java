@@ -50,15 +50,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-//TODO - Standardize Default Bees
 //TODO - Test Server and Jar
 //TODO - Add Tiered Hives
-//TODO - Add Config options
 //TODO - Look into "Queen Bee"
 //TODO - Additional Easter Eggs
-//TODO - Cleanup Centrifuge Container/Entity Classes
-//TODO - Make spawn egg select specific bee type
+//TODO - Cleanup Centrifuge Container
 //TODO - Finish Base Block Tag support and Flower tag support
+//TODO - Change jar texture
+//TODO - Add Langs
+//TODO - Add Recipes
 
 
 

@@ -1,0 +1,11 @@
+{
+  "color": "#885956",
+  "flower": "minecraft:nether_wart",
+  "baseBlock": "minecraft:netherrack",
+  "mutationBlock": "minecraft:glowstone",
+  "centrifugeOutput": "minecraft:glowstone_dust",
+  "spawnInWorld": true,
+  "biomeList": "tag:NETHER",
+  "maxTimeInHive": 600,
+  "pigmanBee": true
+}
