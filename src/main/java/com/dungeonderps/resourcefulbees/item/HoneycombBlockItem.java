@@ -28,7 +28,6 @@ public class HoneycombBlockItem extends BlockItem {
 
     @Override
     public String getTranslationKey(ItemStack stack) {
-        //LOGGER.info("Setting Translation Key");
         CompoundNBT beeType = stack.getChildTag(BeeConst.NBT_ROOT);
         String name;
         if ((beeType != null && beeType.contains(BeeConst.NBT_BEE_TYPE))) {

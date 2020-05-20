@@ -43,7 +43,7 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
     public boolean matches(IInventory inventory, World world) {
         return ingredient.test(inventory.getStackInSlot(0));
     }
-    // use CentrifugeRecipe#getCraftingResults instead
+
     @Override
     @Nonnull
     @Deprecated

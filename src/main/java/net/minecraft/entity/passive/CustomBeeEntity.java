@@ -60,10 +60,8 @@ import java.util.stream.Stream;
 @SuppressWarnings("EntityConstructor")
 public class CustomBeeEntity extends BeeEntity implements ICustomBee {
 
-    //These are needed for Server->Client synchronization
     private static final DataParameter<String> BEE_COLOR = EntityDataManager.createKey(CustomBeeEntity.class, DataSerializers.STRING);
     private static final DataParameter<String> BEE_TYPE = EntityDataManager.createKey(CustomBeeEntity.class, DataSerializers.STRING);
-    private int targetChangeTime;
 
     public CustomBeeEntity(EntityType<? extends BeeEntity> type, World world) {
         super(type, world);
@@ -294,20 +292,6 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
         return new TranslationTextComponent("entity" + '.' + ResourcefulBees.MOD_ID + '.' + this.getBeeType().toLowerCase() + "_bee");
     }
 
-//    Entity queenBeePlayer = null;
-
-    @Override
-    public void tick() {
-
-//        if (this.getDisplayName().getFormattedText().toLowerCase().equals("queen bee")){
-//            if (queenBeePlayer !=null) {
-//                this.setBeeAttacker(queenBeePlayer);
-//                this.setHasStung(false);
-//            }
-//        }
-        super.tick();
-    }
-
     @Override
     public boolean attackEntityFrom(DamageSource source, float amount) {
         if (source.isFireDamage() && getBeeInfo().isNetherBee())
@@ -342,7 +326,6 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
     @Override
     protected void registerData() {
         super.registerData();
-        //Need to supply default value
         this.dataManager.register(BEE_COLOR, String.valueOf(BeeConst.DEFAULT_COLOR));
         this.dataManager.register(BEE_TYPE, BeeConst.DEFAULT_BEE_TYPE);
     }
@@ -372,11 +355,6 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
     public boolean processInteract(PlayerEntity player, Hand hand) {
         ItemStack itemstack = player.getHeldItem(hand);
         Item item = itemstack.getItem();
-        if (item instanceof NameTagItem){
-//            LOGGER.info("queen be player is: " + player.getDisplayName().getFormattedText());
-//            queenBeePlayer = player;
-            super.processInteract(player,hand);
-        }
         if (this.isBreedingItem(itemstack)) {
             if (!this.world.isRemote && this.getGrowingAge() == 0 && this.canBreed()) {
                 this.consumeItemFromStack(player, itemstack);

@@ -44,7 +44,6 @@ public class BeeInfoUtils {
     }
 
     private static void parseBiomeTag(BeeData bee){
-        //list with parsed biome tags
         List<String> biomeList = Splitter.on(',').splitToList(bee.getBiomeList().replace(BeeConst.TAG_PREFIX,""));
         for(String type : biomeList){
             //creates set containing all biomes of given type
@@ -57,7 +56,6 @@ public class BeeInfoUtils {
         List<String> biomeList = Splitter.on(',').splitToList(bee.getBiomeList());
         Set<Biome> biomeSet = new HashSet<>();
         for(String biome : biomeList){
-            //creates set containing all biomes
             biomeSet.add(ForgeRegistries.BIOMES.getValue(new ResourceLocation(biome)));
         }
         updateSpawnableBiomes(biomeSet,bee);
@@ -65,8 +63,6 @@ public class BeeInfoUtils {
 
     private static void updateSpawnableBiomes(Set<Biome> biomeSet, BeeData bee){
         for(Biome biome : biomeSet){
-            //checks to see if spawnable biomes map contains current biome,
-            //if so then adds bee to array value, otherwise creates new key
             if(biome != null){
                 SPAWNABLE_BIOMES.computeIfAbsent(biome,k -> new HashSet<>()).add(bee.getName());
             } else {
