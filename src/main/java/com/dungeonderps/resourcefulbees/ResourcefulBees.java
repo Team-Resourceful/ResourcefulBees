@@ -132,7 +132,6 @@ public class ResourcefulBees
     }
 
     public void OnServerSetup(FMLServerAboutToStartEvent event){
-        LOGGER.info("recipe should be loaded");
         IResourceManager manager = event.getServer().getResourceManager();
         if (manager instanceof IReloadableResourceManager) {
             IReloadableResourceManager reloader = (IReloadableResourceManager)manager;

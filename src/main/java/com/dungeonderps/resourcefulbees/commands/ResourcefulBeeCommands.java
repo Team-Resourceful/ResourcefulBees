@@ -12,7 +12,6 @@ public class ResourcefulBeeCommands
 {
     public static void register(CommandDispatcher<CommandSource> dispatcher)
     {
-        LOGGER.info("got to command dispatcher");
         dispatcher.register(Commands.literal("resourcefulbees")
                 .then(Commands.literal("help")
                         .executes(context -> help(context.getSource().asPlayer()))));
