@@ -3,7 +3,7 @@
   "flower": "ALL",
   "baseBlock": "minecraft:stone",
   "mutationBlock": "minecraft:diamond_ore",
-  "centrifugeOutput": "minecraft:diamond",
+  "mainOutput": "minecraft:diamond",
   "spawnInWorld": true,
   "biomeList": "TAG:OVerWorld"
 }

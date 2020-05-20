@@ -3,7 +3,7 @@
   "flower": "ALL",
   "baseBlock": "minecraft:stone",
   "mutationBlock": "minecraft:coal_ore",
-  "output1": "minecraft:coal",
+  "mainOutput": "minecraft:coal",
   "spawnInWorld": true,
   "biomeList": "tag:OVERWORLD",
   "maxTimeInHive": 600

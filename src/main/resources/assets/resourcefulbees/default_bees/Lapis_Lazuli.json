@@ -3,7 +3,7 @@
   "flower": "ALL",
   "baseBlock": "minecraft:stone",
   "mutationBlock": "minecraft:lapis_ore",
-  "centrifugeOutput": "minecraft:lapis_lazuli",
+  "mainOutput": "minecraft:lapis_lazuli",
   "spawnInWorld": true,
   "biomeList": "tag:OVERWORLD",
   "maxTimeInHive": 600

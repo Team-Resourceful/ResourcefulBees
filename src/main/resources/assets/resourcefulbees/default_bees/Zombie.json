@@ -3,7 +3,7 @@
   "flower": "minecraft:dead_bush",
   "baseBlock": "minecraft:stone",
   "mutationBlock": "minecraft:cobblestone",
-  "centrifugeOutput": "minecraft:rotten_flesh",
+  "mainOutput": "minecraft:rotten_flesh",
   "spawnInWorld": true,
   "biomeList": "tag:OVERWORLD",
   "maxTimeInHive": 600,

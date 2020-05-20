@@ -3,7 +3,7 @@
   "flower": "minecraft:nether_wart",
   "baseBlock": "minecraft:netherrack",
   "mutationBlock": "minecraft:nether_quartz_ore",
-  "centrifugeOutput": "minecraft:quartz",
+  "mainOutput": "minecraft:quartz",
   "spawnInWorld": true,
   "biomeList": "tag:nether",
   "netherBee": true,

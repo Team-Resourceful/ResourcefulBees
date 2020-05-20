@@ -6,7 +6,7 @@ import net.minecraft.item.Items;
 
 public class BeeData {
     private String flower, color, biomeList, baseBlock, mutationBlock, mainOutput, parent1, parent2;
-    private String output2 = RegistryHandler.BEESWAX.getId().toString();
+    private String secondaryOutput = RegistryHandler.BEESWAX.getId().toString();
     private String bottleOutput = Items.HONEY_BOTTLE.getRegistryName().toString();
     private boolean spawnInWorld, enderBee, netherBee, breedable, creeperBee, skeletonBee, zomBee, pigmanBee, witherBee, blazeBee;
     private int maxTimeInHive = 2400;
@@ -112,17 +112,17 @@ public class BeeData {
      * Gets the Centrifuge Secondary Output for this bee's honeycomb.
      * @return This bee's secondary centrifuge output.
      */
-    public String getOutput2() {
-        return output2;
+    public String getSecondaryOutput() {
+        return secondaryOutput;
     }
 
     /**
      * Sets the Centrifuge Secondary Output for this bee's honeycomb.
      * Can be used to modify bees through code.
-     * @param output2 This bee's secondary centrifuge output.
+     * @param secondaryOutput This bee's secondary centrifuge output.
      */
-    public void setOutput2(String output2) {
-        this.output2 = output2;
+    public void setSecondaryOutput(String secondaryOutput) {
+        this.secondaryOutput = secondaryOutput;
     }
 
     /**

@@ -3,7 +3,7 @@
   "flower": "ALL",
   "baseBlock": "minecraft:stone",
   "mutationBlock": "minecraft:redstone_ore",
-  "centrifugeOutput": "minecraft:redstone",
+  "mainOutput": "minecraft:redstone",
   "spawnInWorld": true,
   "biomeList": "tag:OVERWORLD",
   "maxTimeTnHive": 600

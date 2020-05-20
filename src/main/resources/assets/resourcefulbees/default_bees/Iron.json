@@ -3,7 +3,7 @@
   "flower": "ALL",
   "baseBlock": "minecraft:stone",
   "mutationBlock": "minecraft:iron_ore",
-  "centrifugeOutput": "minecraft:iron_ingot",
+  "mainOutput": "minecraft:iron_ingot",
   "spawnInWorld": true,
   "biomeList": "tag:OVERWORLD",
   "maxTimeInHive": 600

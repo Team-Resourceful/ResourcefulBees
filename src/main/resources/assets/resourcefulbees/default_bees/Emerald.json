@@ -3,7 +3,7 @@
   "flower": "ALL",
   "baseBlock": "minecraft:stone",
   "mutationBlock": "minecraft:emerald_ore",
-  "centrifugeOutput": "minecraft:emerald",
+  "mainOutput": "minecraft:emerald",
   "spawnInWorld": true,
   "biomeList": "TAG:Mountain,Hills",
   "maxTimeInHive": 600
