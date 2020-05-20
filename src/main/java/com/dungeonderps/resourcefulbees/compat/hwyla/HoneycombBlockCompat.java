@@ -25,7 +25,7 @@ public class HoneycombBlockCompat implements IComponentProvider, IServerDataProv
         tooltip.clear();
         CompoundNBT data = accessor.getServerData();
         if(accessor.getTileEntity() instanceof HoneycombBlockEntity){
-            TranslationTextComponent text = new TranslationTextComponent("block" + '.' + ResourcefulBees.MOD_ID + '.' + data.getString(BeeConst.NBT_BEE_TYPE).toLowerCase() + "_honeycomb_block");
+            TranslationTextComponent text = new TranslationTextComponent("block" + '.' + ResourcefulBees.MOD_ID + '.' + data.getString(BeeConst.NBT_BEE_TYPE) + "_honeycomb_block");
             tooltip.add(text);
         }
     }

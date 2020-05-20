@@ -29,7 +29,7 @@ public class BeeSpawnEggItem extends SpawnEggItem {
         CompoundNBT beeType = stack.getChildTag(BeeConst.NBT_ROOT);
         String name;
         if ((beeType != null && beeType.contains(BeeConst.NBT_BEE_TYPE))) {
-            name = "item" + '.' + ResourcefulBees.MOD_ID + '.' + beeType.getString(BeeConst.NBT_BEE_TYPE).toLowerCase() + "_spawn_egg";
+            name = "item" + '.' + ResourcefulBees.MOD_ID + '.' + beeType.getString(BeeConst.NBT_BEE_TYPE) + "_spawn_egg";
         } else {
             name = "item" + '.' + ResourcefulBees.MOD_ID + '.' + "bee_spawn_egg";
         }

@@ -120,11 +120,11 @@ public class BeeJar extends Item {
     public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag) {
         super.addInformation(stack, world, tooltip, flag);
         if (isFilled(stack)){
-            if (stack.getTag().getString(BeeConst.NBT_ENTITY).toLowerCase().equals("resourcefulbees:bee")){
+            if (stack.getTag().getString(BeeConst.NBT_ENTITY).equals("resourcefulbees:bee")){
                 String type = stack.getTag().getString(BeeConst.NBT_BEE_TYPE);
-                tooltip.add(new StringTextComponent(I18n.format(ResourcefulBees.MOD_ID + ".information.bee_type.custom") + type.toLowerCase()).applyTextStyle(TextFormatting.WHITE));
+                tooltip.add(new StringTextComponent(I18n.format(ResourcefulBees.MOD_ID + ".information.bee_type.custom") + type).applyTextStyle(TextFormatting.WHITE));
             }
-            else if (stack.getTag().getString(BeeConst.NBT_ENTITY).toLowerCase().equals("minecraft:bee")){
+            else if (stack.getTag().getString(BeeConst.NBT_ENTITY).equals("minecraft:bee")){
                 tooltip.add(new TranslationTextComponent(ResourcefulBees.MOD_ID + ".information.bee_type.vanilla").applyTextStyle(TextFormatting.WHITE));
             }
             else

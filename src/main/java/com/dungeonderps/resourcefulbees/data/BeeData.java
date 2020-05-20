@@ -6,7 +6,7 @@ import net.minecraft.item.Items;
 
 public class BeeData {
     private String flower, color, biomeList, baseBlock, mutationBlock, mainOutput, parent1, parent2;
-    private String output2 = RegistryHandler.BEESWAX.getId().toString();
+    private String secondaryOutput = RegistryHandler.BEESWAX.getId().toString();
     private String bottleOutput = Items.HONEY_BOTTLE.getRegistryName().toString();
     private boolean spawnInWorld, enderBee, netherBee, breedable, creeperBee, skeletonBee, zomBee, pigmanBee, witherBee, blazeBee;
     private int maxTimeInHive = 2400;
@@ -23,14 +23,14 @@ public class BeeData {
      * Gets the name/type of this bee.
      * @return this bee's name.
      */
-    public String getName() { return name; }
+    public String getName() { return name.toLowerCase(); }
 
     /**
      * Sets the name/type of this bee.
      * Can be used to modify bees through code.
      * @param name this bee's name.
      */
-    public void setName(String name) { this.name = name; }
+    public void setName(String name) { this.name = name.toLowerCase(); }
 
     /**
      * Gets the flower(s) this bee can pollinate.
@@ -105,24 +105,24 @@ public class BeeData {
      * @param mainOutput This bee's honeycomb centrifuge output.
      */
     public void setMainOutput(String mainOutput) {
-        this.mainOutput = mainOutput;
+        this.mainOutput = mainOutput.toLowerCase();
     }
 
     /**
      * Gets the Centrifuge Secondary Output for this bee's honeycomb.
      * @return This bee's secondary centrifuge output.
      */
-    public String getOutput2() {
-        return output2;
+    public String getSecondaryOutput() {
+        return secondaryOutput.toLowerCase();
     }
 
     /**
      * Sets the Centrifuge Secondary Output for this bee's honeycomb.
      * Can be used to modify bees through code.
-     * @param output2 This bee's secondary centrifuge output.
+     * @param secondaryOutput This bee's secondary centrifuge output.
      */
-    public void setOutput2(String output2) {
-        this.output2 = output2;
+    public void setSecondaryOutput(String secondaryOutput) {
+        this.secondaryOutput = secondaryOutput.toLowerCase();
     }
 
     /**
@@ -130,7 +130,7 @@ public class BeeData {
      * @return This bee's bottle centrifuge output.
      */
     public String getBottleOutput() {
-        return bottleOutput;
+        return bottleOutput.toLowerCase();
     }
 
     /**
@@ -139,7 +139,7 @@ public class BeeData {
      * @param bottleOutput This bee's bottle centrifuge output.
      */
     public void setBottleOutput(String bottleOutput) {
-        this.bottleOutput = bottleOutput;
+        this.bottleOutput = bottleOutput.toLowerCase();
     }
 
     /**
@@ -209,7 +209,7 @@ public class BeeData {
      * @param mutationBlock this bee's Mutation Block.
      */
     public void setMutationBlock(String mutationBlock) {
-        this.mutationBlock = mutationBlock;
+        this.mutationBlock = mutationBlock.toLowerCase().trim();
     }
 
     /**
@@ -230,7 +230,7 @@ public class BeeData {
      * @param baseBlock this bee's flower(s).
      */
     public void setBaseBlock(String baseBlock) {
-        this.baseBlock = baseBlock;
+        this.baseBlock = baseBlock.toLowerCase();
     }
 
     /**
@@ -247,7 +247,7 @@ public class BeeData {
      * @param biomeList this bee's spawnable biome(s).
      */
     public void setBiomeList(String biomeList) {
-        this.biomeList = biomeList;
+        this.biomeList = biomeList.toLowerCase().trim();
     }
 
     /**
@@ -268,26 +268,26 @@ public class BeeData {
      * Can be used to modify bees through code.
      * @param parent1 this bee's first parent.
      */
-    public void setParent1(String parent1) { this.parent1 = parent1; }
+    public void setParent1(String parent1) { this.parent1 = parent1.toLowerCase(); }
 
     /**
      * Gets this bee's first parent.
      * @return this bee's first parent.
      */
-    public String getParent1() { return parent1; }
+    public String getParent1() { return parent1.toLowerCase(); }
 
     /**
      * Sets this bee's second parent.
      * Can be used to modify bees through code.
      * @param parent2 this bee's second parent.
      */
-    public void setParent2(String parent2) { this.parent2 = parent2; }
+    public void setParent2(String parent2) { this.parent2 = parent2.toLowerCase(); }
 
     /**
      * Gets this bee's second parent.
      * @return this bee's second parent.
      */
-    public String getParent2() { return parent2; }
+    public String getParent2() { return parent2.toLowerCase(); }
 
     /**
      * Returns true if bee has the creeper trait.

@@ -96,7 +96,7 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
     //***************************** CUSTOM BEE RELATED METHODS BELOW *************************************************
 
     protected ITextComponent getProfessionName() {
-        return new TranslationTextComponent("entity" + '.' + ResourcefulBees.MOD_ID + '.' + this.getBeeType().toLowerCase() + "_bee");
+        return new TranslationTextComponent("entity" + '.' + ResourcefulBees.MOD_ID + '.' + this.getBeeType() + "_bee");
     }
 
     @Override

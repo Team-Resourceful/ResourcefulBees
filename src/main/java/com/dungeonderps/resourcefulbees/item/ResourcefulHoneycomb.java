@@ -28,7 +28,7 @@ public class ResourcefulHoneycomb extends Item {
         CompoundNBT beeType = stack.getChildTag(BeeConst.NBT_ROOT);
         String name;
         if ((beeType != null && beeType.contains(BeeConst.NBT_BEE_TYPE))) {
-            name = "item" + '.' + ResourcefulBees.MOD_ID + '.' + beeType.getString(BeeConst.NBT_BEE_TYPE).toLowerCase() + "_honeycomb";
+            name = "item" + '.' + ResourcefulBees.MOD_ID + '.' + beeType.getString(BeeConst.NBT_BEE_TYPE) + "_honeycomb";
         } else {
             name = "item" + '.' + ResourcefulBees.MOD_ID + '.' + "resourceful_honeycomb";
         }

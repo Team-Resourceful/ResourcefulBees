@@ -31,7 +31,7 @@ public class HoneycombBlockItem extends BlockItem {
         CompoundNBT beeType = stack.getChildTag(BeeConst.NBT_ROOT);
         String name;
         if ((beeType != null && beeType.contains(BeeConst.NBT_BEE_TYPE))) {
-            name = "block" + '.' + ResourcefulBees.MOD_ID + '.' + beeType.getString(BeeConst.NBT_BEE_TYPE).toLowerCase() + "_honeycomb_block";
+            name = "block" + '.' + ResourcefulBees.MOD_ID + '.' + beeType.getString(BeeConst.NBT_BEE_TYPE) + "_honeycomb_block";
         } else {
             name = "block" + '.' + ResourcefulBees.MOD_ID + '.' + "resourceful_honeycomb_block";
         }

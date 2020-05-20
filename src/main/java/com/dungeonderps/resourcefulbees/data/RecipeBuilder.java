@@ -104,7 +104,7 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
                 honeycombItem, honeycombItem, honeycombItem
         );
 
-        ResourceLocation name = new ResourceLocation(ResourcefulBees.MOD_ID, BeeType.toLowerCase() + "_honeycomb_block");
+        ResourceLocation name = new ResourceLocation(ResourcefulBees.MOD_ID, BeeType + "_honeycomb_block");
 
         return new ShapedRecipe(name, "", 3, 3, inputs, honeycombOutput);
     }
@@ -126,7 +126,7 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
                 Pair.of(bottleOutput,Config.CENTRIFUGE_RECIPE_HONEY_BOTTLE.get())
         );
 
-        ResourceLocation name = new ResourceLocation(ResourcefulBees.MOD_ID, BeeType.toLowerCase() + "_honeycomb_centrifuge");
+        ResourceLocation name = new ResourceLocation(ResourcefulBees.MOD_ID, BeeType + "_honeycomb_centrifuge");
 
         return new CentrifugeRecipe(name,honeycombItem,outputs,Config.CENTRIFUGE_RECIPE_TIME.get() * 20);
     }
@@ -147,7 +147,7 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
 
         Ingredient honeycombItem = new CustomNBTIngredient(honeycombItemStack);
 
-        ResourceLocation name = new ResourceLocation(ResourcefulBees.MOD_ID, BeeType.toLowerCase() + "_block_to_honeycomb");
+        ResourceLocation name = new ResourceLocation(ResourcefulBees.MOD_ID, BeeType + "_block_to_honeycomb");
 
         return new ShapelessRecipe(name, "",honeycombOutput, NonNullList.from(Ingredient.EMPTY, honeycombItem));
     }

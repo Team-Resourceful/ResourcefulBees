@@ -21,6 +21,7 @@ import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.passive.CustomBeeEntity;
+import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
@@ -88,13 +89,13 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
         double bee3X = 124D;
         double bee3Y = 0D;
         if (mouseX >= beeX && mouseX <= beeX + 30D && mouseY >= beeY && mouseY <= beeY + 30D){
-            return Collections.singletonList(I18n.format("entity." + ResourcefulBees.MOD_ID + "." + recipe.parent1.toLowerCase() + "_bee"));
+            return Collections.singletonList(I18n.format("entity." + ResourcefulBees.MOD_ID + "." + recipe.parent1 + "_bee"));
         }
         if (mouseX >= bee2X && mouseX <= bee2X + 30D && mouseY >= bee2Y && mouseY <= bee2Y + 30D){
-            return Collections.singletonList(I18n.format("entity." + ResourcefulBees.MOD_ID + "." + recipe.parent2.toLowerCase() + "_bee"));
+            return Collections.singletonList(I18n.format("entity." + ResourcefulBees.MOD_ID + "." + recipe.parent2 + "_bee"));
         }
         if (mouseX >= bee3X && mouseX <= bee3X + 30D && mouseY >= bee3Y && mouseY <= bee3Y + 30D){
-            return Collections.singletonList(I18n.format("entity." + ResourcefulBees.MOD_ID + "." + recipe.child.toLowerCase() + "_bee"));
+            return Collections.singletonList(I18n.format("entity." + ResourcefulBees.MOD_ID + "." + recipe.child + "_bee"));
         }
         return IRecipeCategory.super.getTooltipStrings(recipe,mouseX, mouseY);
     }

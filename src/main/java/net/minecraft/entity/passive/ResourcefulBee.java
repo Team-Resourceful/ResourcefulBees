@@ -47,11 +47,6 @@ public class ResourcefulBee extends CustomBeeEntity {
         super(type, world);
     }
 
-
-
-
-
-
     //*************************** STANDARD BEE METHODS BELOW **********************************************************
 
     @Override
@@ -171,7 +166,7 @@ public class ResourcefulBee extends CustomBeeEntity {
 
     @Override
     public boolean isFlowers(BlockPos pos) {
-        String flower = getBeeInfo().getFlower().toLowerCase();
+        String flower = getBeeInfo().getFlower();
 
         switch (flower){
             case BeeConst.FLOWER_TAG_ALL:
@@ -187,7 +182,7 @@ public class ResourcefulBee extends CustomBeeEntity {
 
     protected final Predicate<BlockState> flowerPredicate = state -> {
 
-        String flower = getBeeInfo().getFlower().toLowerCase();
+        String flower = getBeeInfo().getFlower();
 
         switch (flower) {
             case BeeConst.FLOWER_TAG_ALL:
@@ -219,7 +214,7 @@ public class ResourcefulBee extends CustomBeeEntity {
                 this.teleportRandomly();
             }
         }
-        if (getBeeInfo().isNetherBee()){
+        if (getBeeInfo().isBlazeBee()){
             if (this.ticksExisted %150 == 0)
                 this.setFire(3);
         }
@@ -283,7 +278,7 @@ public class ResourcefulBee extends CustomBeeEntity {
 
                 if (info.isCreeperBee()) {
                     this.explode();
-                } else if (info.isNetherBee()){
+                } else if (info.isBlazeBee()){
                     entityIn.setFire(5);
                 } else if (i > 0) {
                     if (info.isWitherBee())
