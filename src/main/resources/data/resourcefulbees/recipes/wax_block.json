@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "WWW",
+    "WWW",
+    "WWW"
+  ],
+  "key": {
+    "W": { "item": "resourcefulbees:beeswax" }
+  },
+  "result": {
+    "item": "resourcefulbees:wax_block"
+  }
+}

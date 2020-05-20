@@ -7,5 +7,6 @@
   "spawnInWorld": true,
   "biomeList": "tag:NETHER",
   "maxTimeInHive": 600,
-  "witherBee": true
+  "witherBee": true,
+  "netherBee": true
 }

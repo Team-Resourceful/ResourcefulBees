@@ -6,7 +6,7 @@
         "ICI"
     ],
     "key": {
-        "I": { "item": "minecraft:iron_ingot" },
+        "I": { "tag": "forge:ingots/iron" },
         "C": { "item": "minecraft:campfire" }
     },
     "result": {

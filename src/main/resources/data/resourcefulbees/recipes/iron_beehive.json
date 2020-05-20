@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "III",
+    "IBI",
+    "III"
+  ],
+  "key": {
+    "I": { "tag": "forge:ingots/iron" },
+    "B": { "item": "minecraft:beehive" }
+  },
+  "result": {
+    "item": "resourcefulbees:iron_beehive"
+  }
+}

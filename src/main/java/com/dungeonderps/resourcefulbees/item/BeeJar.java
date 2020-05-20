@@ -22,9 +22,12 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -114,18 +117,19 @@ public class BeeJar extends Item {
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag) {
         super.addInformation(stack, world, tooltip, flag);
         if (isFilled(stack)){
-            CompoundNBT resourcefulTag = stack.getOrCreateChildTag(ResourcefulBees.MOD_ID);
-            if (resourcefulTag.contains(BeeConst.NBT_BEE_TYPE)) {
-                String type = resourcefulTag.getString(BeeConst.NBT_BEE_TYPE);
-                tooltip.add(new TranslationTextComponent(ResourcefulBees.MOD_ID + ".information.bee_type." + type.toLowerCase())
-                        .applyTextStyle(TextFormatting.valueOf(BeeInfo.getInfo(type).getColor())));
-
+            if (stack.getTag().getString(BeeConst.NBT_ENTITY).toLowerCase().equals("resourcefulbees:bee")){
+                String type = stack.getTag().getString(BeeConst.NBT_BEE_TYPE);
+                tooltip.add(new StringTextComponent(I18n.format(ResourcefulBees.MOD_ID + ".information.bee_type.custom") + type.toLowerCase()).applyTextStyle(TextFormatting.WHITE));
+            }
+            else if (stack.getTag().getString(BeeConst.NBT_ENTITY).toLowerCase().equals("minecraft:bee")){
+                tooltip.add(new TranslationTextComponent(ResourcefulBees.MOD_ID + ".information.bee_type.vanilla").applyTextStyle(TextFormatting.WHITE));
             }
             else
-                tooltip.add(new TranslationTextComponent(ResourcefulBees.MOD_ID + ".information.bee_type.vanilla"));
+                tooltip.add(new TranslationTextComponent(ResourcefulBees.MOD_ID + ".information.bee_type.unknown"));
         }
     }
 }

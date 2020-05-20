@@ -56,12 +56,6 @@ import java.util.Map;
 //TODO - Additional Easter Eggs
 //TODO - Cleanup Centrifuge Container
 //TODO - Finish Base Block Tag support and Flower tag support
-//TODO - Change jar texture
-//TODO - Add Langs
-//TODO - Add Recipes
-
-
-
 
 
 @Mod("resourcefulbees")
@@ -171,7 +165,6 @@ public class ResourcefulBees
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {
-        ModSetup.loadResources();
         RenderingRegistry.registerEntityRenderingHandler(RegistryHandler.CUSTOM_BEE.get(), CustomBeeRenderer::new);
         ScreenManager.registerFactory(RegistryHandler.CENTRIFUGE_CONTAINER.get(), CentrifugeScreen::new);
         RenderTypeLookup.setRenderLayer(RegistryHandler.GOLD_FLOWER.get(), RenderType.getCutout());

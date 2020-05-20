@@ -18,9 +18,12 @@ import net.minecraft.tileentity.BeehiveTileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.loading.FMLPaths;
 import org.apache.commons.io.FileUtils;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
@@ -36,15 +39,10 @@ public class ModSetup {
 
     public static void initialize(){
         setupPaths();
+        DistExecutor.runWhenOn(Dist.CLIENT, () -> ModSetup::loadResources);
     }
 
     private static void setupPaths(){
-        try {
-            FileUtils.deleteDirectory(Paths.get(FMLPaths.CONFIGDIR.get().toString(), "resourcefulbees", "resources", "datapack", "data", "resourcefulbees","recipes").toFile());
-        } catch (IOException e) {
-            LOGGER.error("Failed to delete recipe directory.");
-        }
-
         Path configPath = FMLPaths.CONFIGDIR.get();
         //Path rbConfigPath = Paths.get(configPath.toAbsolutePath().toString(), "resourcefulbees");
         // subfolder for bees
@@ -53,12 +51,17 @@ public class ModSetup {
         BEE_PATH = rbBeesPath;
         RESOURCE_PATH = rbAssetsPath;
 
-        try { Files.createDirectories(rbBeesPath);
-        } catch (FileAlreadyExistsException e) { // do nothing
+        try {
+            Files.createDirectories(rbBeesPath);
+        } catch (FileAlreadyExistsException e) {
         } catch (IOException e) { LOGGER.error("failed to create resourcefulbees config directory");}
 
         try { Files.createDirectory(rbAssetsPath);
-        } catch (FileAlreadyExistsException e) { // do nothing
+            FileWriter file = new FileWriter(Paths.get(rbAssetsPath.toAbsolutePath().toString(), "pack.mcmeta").toFile());
+            String mcMetaContent = "{\"pack\":{\"pack_format\":5,\"description\":\"Resourceful Bees resource pack used for lang purposes for the user to add lang for bee/items.\"}}";
+            file.write(mcMetaContent);
+            file.close();
+        } catch (FileAlreadyExistsException e) {
         } catch (IOException e) { LOGGER.error("Failed to create assets directory");}
     }
 
@@ -127,7 +130,13 @@ public class ModSetup {
         Minecraft.getInstance().getResourcePackList().addPackFinder(new IPackFinder() {
             @Override
             public <T extends ResourcePackInfo> void addPackInfosToMap(Map<String, T> map, ResourcePackInfo.IFactory<T> factory) {
-                final T packInfo = ResourcePackInfo.createResourcePack(ResourcefulBees.MOD_ID, true, () -> new FolderPack(RESOURCE_PATH.toFile()), factory, ResourcePackInfo.Priority.TOP);
+                final T packInfo = ResourcePackInfo.createResourcePack(
+                        ResourcefulBees.MOD_ID,
+                        true,
+                        () -> new FolderPack(RESOURCE_PATH.toFile()),
+                        factory,
+                        ResourcePackInfo.Priority.TOP
+                );
                 if (packInfo == null) {
                     LOGGER.error("Failed to load resource pack, some things may not work.");
                     return;

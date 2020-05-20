@@ -336,7 +336,7 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
     }
 
     public static boolean canBeeSpawn(EntityType<? extends AnimalEntity> typeIn, IWorld worldIn, SpawnReason reason, BlockPos pos, Random randomIn) {
-        return worldIn.getLightSubtracted(pos, 0) > 8;
+        return true;
     }
 
     @Override

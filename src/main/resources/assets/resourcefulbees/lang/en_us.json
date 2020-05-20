@@ -1,11 +1,10 @@
 {
 	"itemGroup.resourcefulbees" : "Resourceful Bees",
 
+	"resourcefulbees.information.bee_type.vanilla": "Bee Type: Vanilla",
+	"resourcefulbees.information.bee_type.unknown": "Bee Type: Unknown",
+	"resourcefulbees.information.bee_type.custom": "Bee Type: ",
 	"resourcefulbees.shift_info": "Hold SHIFT for Info",
-	"item.resourcefulbees.smoker.tooltip": "Right click the hive to smoke it.",
-	"item.resourcefulbees.smoker.tooltip.1": "This allows you to stop the bees from being angry at you for shearing honeycombs for 30s.",
-	"gui.resourcefulbees.beehive.smoked": "Smoked: True",
-	"gui.resourcefulbees.beehive.honeylevel": "Honey Level: ",
 
 	"gui.resourcefulbees.jei.category.hive" : "Iron Beehive",
 	"gui.resourcefulbees.jei.category.centrifuge": "Centrifuge",
@@ -14,6 +13,8 @@
 	"gui.resourcefulbees.jei.category.mutation": "Bee Block Mutation",
 	"gui.resourcefulbees.jei.category.mutation.info": "Bee block mutation requires there to be a valid hive for the bee to go into & the bee to have nectar.",
 	"gui.resourcefulbees.centrifuge": "Centrifuge",
+	"gui.resourcefulbees.beehive.smoked": "Smoked: True",
+	"gui.resourcefulbees.beehive.honeylevel": "Honey Level: ",
 
 	"block.resourcefulbees.iron_beehive": "Iron Beehive",
 	"block.resourcefulbees.wax_block": "Beeswax Block",
@@ -28,6 +29,10 @@
 	"item.resourcefulbees.beeswax": "Beeswax",
 	"item.resourcefulbees.resourceful_honeycomb": "Resourceful Honeycomb",
 	"item.resourcefulbees._honeycomb": "Resourceful Honeycomb",
+	"item.resourcefulbees.smoker.tooltip": "Right click the hive to smoke it.",
+	"item.resourcefulbees.smoker.tooltip.1": "This allows you to stop the bees from being angry at you for shearing honeycombs for 30s.",
+	"item.resourcefulbees.bee_jar_empty": "Empty Bee Jar",
+	"item.resourcefulbees.bee_jar_filled": "Filled Bee jar",
 
 	"block.resourcefulbees.gold_honeycomb_block": "Gold Honeycomb Block",
 	"block.resourcefulbees.iron_honeycomb_block": "Iron Honeycomb Block",
