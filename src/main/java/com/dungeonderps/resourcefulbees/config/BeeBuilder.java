@@ -62,7 +62,7 @@ public class BeeBuilder{
         BeeData bee = gson.fromJson(r, BeeData.class);
         bee.setName(name);
         if (BeeInfoUtils.validate(bee)){
-            BeeInfo.BEE_INFO.put(name, bee);
+            BeeInfo.BEE_INFO.put(name.toLowerCase(), bee);
             if(bee.canSpawnInWorld())
                 BeeInfoUtils.parseBiomeList(bee);
             if(bee.isBreedable())
