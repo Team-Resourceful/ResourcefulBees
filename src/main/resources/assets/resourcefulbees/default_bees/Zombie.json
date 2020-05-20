@@ -1,0 +1,11 @@
+{
+  "color": "#2F4E32",
+  "flower": "minecraft:dead_bush",
+  "baseBlock": "minecraft:stone",
+  "mutationBlock": "minecraft:cobblestone",
+  "centrifugeOutput": "minecraft:rotten_flesh",
+  "spawnInWorld": true,
+  "biomeList": "tag:OVERWORLD",
+  "maxTimeInHive": 600,
+  "zomBee": true
+}

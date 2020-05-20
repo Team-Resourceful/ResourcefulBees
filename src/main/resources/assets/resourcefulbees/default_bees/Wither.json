@@ -1,0 +1,11 @@
+{
+  "color": "#444444",
+  "flower": "minecraft:wither_rose",
+  "baseBlock": "minecraft:netherrack",
+  "mutationBlock": "minecraft:soul_sand",
+  "centrifugeOutput": "minecraft:charcoal",
+  "spawnInWorld": true,
+  "biomeList": "tag:NETHER",
+  "maxTimeInHive": 600,
+  "witherBee": true
+}

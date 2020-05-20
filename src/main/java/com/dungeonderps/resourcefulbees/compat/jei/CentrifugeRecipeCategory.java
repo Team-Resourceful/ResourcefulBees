@@ -74,9 +74,10 @@ public class CentrifugeRecipeCategory implements IRecipeCategory<CentrifugeRecip
     iIngredients.setInputIngredients(Lists.newArrayList(recipe.ingredient, Ingredient.fromItems(Items.GLASS_BOTTLE)));
     List<Pair<ItemStack,Double>> outputs = recipe.outputs;
     List<ItemStack> stacks = new ArrayList<>();
-    stacks.add(new ItemStack(Items.HONEY_BOTTLE));
-    stacks.addAll(outputs.stream().map(Pair::getLeft).collect(Collectors.toList()));
-      iIngredients.setOutputs(VanillaTypes.ITEM, stacks);
+    stacks.add(new ItemStack(outputs.get(2).getLeft().getItem()));
+    stacks.add(new ItemStack(outputs.get(0).getLeft().getItem()));
+    stacks.add(new ItemStack(outputs.get(1).getLeft().getItem()));
+    iIngredients.setOutputs(VanillaTypes.ITEM, stacks);
   }
 
   @Override

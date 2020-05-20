@@ -1,6 +1,6 @@
 {
-  "color": "#F6F2E6",
-  "flower": "minecraft:poppy",
+  "color": "#D4CABA",
+  "flower": "minecraft:nether_wart",
   "baseBlock": "minecraft:netherrack",
   "mutationBlock": "minecraft:nether_quartz_ore",
   "centrifugeOutput": "minecraft:quartz",

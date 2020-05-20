@@ -1,3 +1,16 @@
+/*
+ * This file ("ItemStackHandlerAA.java") is part of the Actually Additions mod for Minecraft.
+ * It is created and owned by Ellpeck and distributed
+ * under the Actually Additions License to be found at
+ * http://ellpeck.de/actaddlicense
+ * View the source code at https://github.com/Ellpeck/ActuallyAdditions
+ *
+ * © 2015-2017 Ellpeck
+ *
+ * ###########-NOTE-###############
+ *  This files name has been changed.
+ *  and additional code has been implemented.
+ */
 package com.dungeonderps.resourcefulbees.container;
 
 import com.dungeonderps.resourcefulbees.tileentity.CentrifugeBlockEntity;
@@ -7,7 +20,8 @@ import net.minecraft.util.NonNullList;
 import net.minecraftforge.items.ItemStackHandler;
 
 /**
- * borrowed from Actually Additions
+ * @author Shadows
+ * @implNote Taken from Actually Additions owned by Ellpeck
  */
 public class AutomationSensitiveItemStackHandler extends ItemStackHandler {
 

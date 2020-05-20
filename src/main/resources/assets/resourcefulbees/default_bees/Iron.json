@@ -1,6 +1,6 @@
 {
   "color": "#ffcc99",
-  "flower": "minecraft:poppy",
+  "flower": "ALL",
   "baseBlock": "minecraft:stone",
   "mutationBlock": "minecraft:iron_ore",
   "centrifugeOutput": "minecraft:iron_ingot",

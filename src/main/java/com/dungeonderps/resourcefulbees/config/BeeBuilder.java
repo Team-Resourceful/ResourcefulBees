@@ -37,6 +37,11 @@ public class BeeBuilder{
             "Nether_Quartz.json",
             "Lapis_Lazuli.json",
             "Ender.json",
+            "Creeper.json",
+            "Pigman.json",
+            "Skeleton.json",
+            "Wither.json",
+            "Zombie.json"
     };
 
     public static Path BEE_PATH;
@@ -99,7 +104,7 @@ public class BeeBuilder{
         while (spawnableBiomesIterator.hasNext()) {
             Map.Entry<Biome, Set<String>> element = spawnableBiomesIterator.next();
             Biome biome = element.getKey();
-            biome.getSpawns(EntityClassification.CREATURE).add(new Biome.SpawnListEntry(RegistryHandler.CUSTOM_BEE.get(),20,3,30));
+            biome.getSpawns(EntityClassification.CREATURE).add(new Biome.SpawnListEntry(RegistryHandler.CUSTOM_BEE.get(),Config.SPAWN_WEIGHT.get(),Config.SPAWN_MIN_GROUP.get(),Config.SPAWN_MAX_GROUP.get()));
         }
 
         EntitySpawnPlacementRegistry.register(RegistryHandler.CUSTOM_BEE.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, CustomBeeEntity::canBeeSpawn);

@@ -1,6 +1,6 @@
 {
   "color": "#345ec3",
-  "flower": "small",
+  "flower": "ALL",
   "baseBlock": "minecraft:stone",
   "mutationBlock": "minecraft:lapis_ore",
   "centrifugeOutput": "minecraft:lapis_lazuli",

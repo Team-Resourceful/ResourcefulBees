@@ -8,14 +8,21 @@ public class Config {
 
     public static ForgeConfigSpec.BooleanValue GENERATE_DEFAULTS;
     public static ForgeConfigSpec.BooleanValue ENABLE_EASTER_EGG_BEES;
+
     public static ForgeConfigSpec.BooleanValue CENTRIFUGE_RECIPES;
     public static ForgeConfigSpec.BooleanValue HONEYCOMB_BLOCK_RECIPES;
+
     public static ForgeConfigSpec.DoubleValue CENTRIFUGE_RECIPE_MAIN;
     public static ForgeConfigSpec.DoubleValue CENTRIFUGE_RECIPE_SECONDARY;
     public static ForgeConfigSpec.DoubleValue CENTRIFUGE_RECIPE_HONEY_BOTTLE;
     public static ForgeConfigSpec.IntValue CENTRIFUGE_RECIPE_TIME;
+
     public static ForgeConfigSpec.IntValue HIVE_MAX_BEES;
     public static ForgeConfigSpec.IntValue HIVE_MAX_COMBS;
+
+    public static ForgeConfigSpec.IntValue SPAWN_WEIGHT;
+    public static ForgeConfigSpec.IntValue SPAWN_MIN_GROUP;
+    public static ForgeConfigSpec.IntValue SPAWN_MAX_GROUP;
 
     public static class CommonConfig {
 
@@ -54,6 +61,15 @@ public class Config {
                         .defineInRange("hiveMaxBees", 1, 1, 4);
                 HIVE_MAX_COMBS = COMMON_BUILDER.comment("Base honeycomb harvest amount \n(THIS * TIER_MODIFIER = MAX_COMBS) for a range of 5 -> 64")
                         .defineInRange("hiveMaxCombs", 5, 5, 16);
+            COMMON_BUILDER.pop();
+
+            COMMON_BUILDER.push("Spawning Options");
+            SPAWN_WEIGHT = COMMON_BUILDER.comment("This is the spawn weighting for ALL bees.")
+                    .defineInRange("spawnWeighting", 5, 1, 20);
+            SPAWN_MIN_GROUP = COMMON_BUILDER.comment("This is the min amount of bees that can spawn in a group. Note this is for ALL bees!")
+                    .defineInRange("spawnMinBeeGroup", 3, 1, 5);
+            SPAWN_MAX_GROUP = COMMON_BUILDER.comment("This is the max amount of bees that can spawn in a group. Note this is for ALL bees!")
+                    .defineInRange("spawnMaxBeeGroup", 5, 5, 10);
             COMMON_BUILDER.pop();
 
             COMMON_CONFIG = COMMON_BUILDER.build();

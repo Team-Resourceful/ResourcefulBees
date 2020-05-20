@@ -1,0 +1,11 @@
+{
+  "color": "#0C9F0A",
+  "flower": "ALL",
+  "baseBlock": "minecraft:stone",
+  "mutationBlock": "minecraft:mossy_cobblestone",
+  "centrifugeOutput": "minecraft:gunpowder",
+  "spawnInWorld": true,
+  "biomeList": "tag:OVERWORLD",
+  "maxTimeInHive": 600,
+  "creeperBee": true
+}
