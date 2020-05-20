@@ -60,14 +60,14 @@ public class CentrifugeBlock extends Block {
     }
 
     @Override
-    public void onReplaced(BlockState state1, World world, BlockPos pos, BlockState state, boolean p_196243_5_) {
+    public void onReplaced(BlockState state1, World world, BlockPos pos, BlockState state, boolean isMoving) {
         TileEntity blockEntity = world.getTileEntity(pos);
         if (blockEntity instanceof CentrifugeBlockEntity && state.getBlock() != state1.getBlock()){
             CentrifugeBlockEntity centrifugeBlockEntity = (CentrifugeBlockEntity)blockEntity;
             ItemStackHandler h = centrifugeBlockEntity.h;
             IntStream.range(0, h.getSlots()).mapToObj(h::getStackInSlot).filter(s -> !s.isEmpty()).forEach(stack -> InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack));
         }
-        super.onReplaced(state1, world, pos, state, p_196243_5_);
+        super.onReplaced(state1, world, pos, state, isMoving);
     }
 
     @Override

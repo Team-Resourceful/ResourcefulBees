@@ -1,6 +1,7 @@
 package com.dungeonderps.resourcefulbees.utils;
 
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
+import com.dungeonderps.resourcefulbees.data.BeeData;
 import com.dungeonderps.resourcefulbees.lib.BeeConst;
 import com.google.common.base.Splitter;
 import net.minecraft.block.Blocks;
@@ -23,7 +24,7 @@ public class BeeInfoUtils {
 
     private static final Pattern RESOURCE_PATTERN = Pattern.compile("(tag:)?(\\w+):(\\w+/\\w+|\\w+)", Pattern.CASE_INSENSITIVE);
 
-    public static void buildFamilyTree(BeeInfo bee){
+    public static void buildFamilyTree(BeeData bee){
         String parent1 = bee.getParent1();
         String parent2 = bee.getParent2();
         int hash = getHashcode(parent1, parent2);
@@ -34,7 +35,7 @@ public class BeeInfoUtils {
         return parent1.compareToIgnoreCase(parent2) > 0 ? Objects.hash(parent1,parent2) : Objects.hash(parent2,parent1);
     }
 
-    public static void parseBiomeList(BeeInfo bee){
+    public static void parseBiomeList(BeeData bee){
         if (bee.getBiomeList().contains(BeeConst.TAG_PREFIX)){
             parseBiomeTag(bee);
         } else {
@@ -42,7 +43,7 @@ public class BeeInfoUtils {
         }
     }
 
-    private static void parseBiomeTag(BeeInfo bee){
+    private static void parseBiomeTag(BeeData bee){
         //list with parsed biome tags
         List<String> biomeList = Splitter.on(',').splitToList(bee.getBiomeList().replace(BeeConst.TAG_PREFIX,""));
         for(String type : biomeList){
@@ -52,7 +53,7 @@ public class BeeInfoUtils {
         }
     }
 
-    private static void parseBiome(BeeInfo bee){
+    private static void parseBiome(BeeData bee){
         List<String> biomeList = Splitter.on(',').splitToList(bee.getBiomeList());
         Set<Biome> biomeSet = new HashSet<>();
         for(String biome : biomeList){
@@ -62,7 +63,7 @@ public class BeeInfoUtils {
         updateSpawnableBiomes(biomeSet,bee);
     }
 
-    private static void updateSpawnableBiomes(Set<Biome> biomeSet, BeeInfo bee){
+    private static void updateSpawnableBiomes(Set<Biome> biomeSet, BeeData bee){
         for(Biome biome : biomeSet){
             //checks to see if spawnable biomes map contains current biome,
             //if so then adds bee to array value, otherwise creates new key
@@ -75,7 +76,7 @@ public class BeeInfoUtils {
     }
 
     public static void genDefaultBee(){
-        BeeInfo defaultBee = new BeeInfo();
+        BeeData defaultBee = new BeeData();
         defaultBee.setName(BeeConst.DEFAULT_BEE_TYPE);
         defaultBee.setColor(String.valueOf(BeeConst.DEFAULT_COLOR));
         defaultBee.setFlower("minecraft:poppy");
@@ -104,7 +105,7 @@ public class BeeInfoUtils {
         return true;
     }
 
-    public static boolean validate(BeeInfo bee) {
+    public static boolean validate(BeeData bee) {
         boolean isValid = true;
 
         isValid = isValid && validateColor(bee);
@@ -117,7 +118,7 @@ public class BeeInfoUtils {
         return isValid;
     }
 
-    private static boolean validateMaxTimeInHive(BeeInfo bee) {
+    private static boolean validateMaxTimeInHive(BeeData bee) {
         double time = bee.getMaxTimeInHive();
         return time >= BeeConst.MIN_HIVE_TIME && time == Math.floor(time) && !Double.isInfinite(time)
                 ? dataCheckPassed(bee.getName(), "Time In Hive")
@@ -125,19 +126,19 @@ public class BeeInfoUtils {
                 "time. Value must be greater than or equal to " + BeeConst.MIN_HIVE_TIME);
     }
 
-    private static boolean validateCentrifugeOutput(BeeInfo bee) {
+    private static boolean validateCentrifugeOutput(BeeData bee) {
         return RESOURCE_PATTERN.matcher(bee.getMutationBlock()).matches() && !ForgeRegistries.ITEMS.getValue(getResource(bee.getCentrifugeOutput())).equals(Items.AIR)
                 ? dataCheckPassed(bee.getName(), "Centrifuge Output")
                 : logError(bee.getName(), "Centrifuge Output", bee.getCentrifugeOutput(), "item");
     }
 
-    private static boolean validateMutationBlock(BeeInfo bee) {
+    private static boolean validateMutationBlock(BeeData bee) {
         return  RESOURCE_PATTERN.matcher(bee.getMutationBlock()).matches() && !ForgeRegistries.BLOCKS.getValue(getResource(bee.getMutationBlock())).equals(Blocks.AIR)
                 ? dataCheckPassed(bee.getName(), "Mutation Block")
                 : logError(bee.getName(), "Mutation Block", bee.getMutationBlock(), "block");
     }
 
-    private static boolean validateBaseBlock(BeeInfo bee) {
+    private static boolean validateBaseBlock(BeeData bee) {
         if(RESOURCE_PATTERN.matcher(bee.getBaseBlock()).matches() && bee.getBaseBlock().contains(BeeConst.TAG_PREFIX)) {
             LOGGER.warn("Too early to validate Block Tag for " + bee.getName() + " bee.");
             return true;
@@ -152,21 +153,16 @@ public class BeeInfoUtils {
                 : logError(bee.getName(), "Base Block", bee.getBaseBlock(), "block");
     }
 
-    private static boolean validateFlower(BeeInfo bee) {
+    private static boolean validateFlower(BeeData bee) {
         return (bee.getFlower().equals(BeeConst.FLOWER_TAG_ALL) || bee.getFlower().equals(BeeConst.FLOWER_TAG_SMALL) || bee.getFlower().equals(BeeConst.FLOWER_TAG_TALL) || !ForgeRegistries.BLOCKS.getValue(getResource(bee.getFlower())).equals(Blocks.AIR))
                 ? dataCheckPassed(bee.getName(), "Flower")
                 : logError(bee.getName(), "Flower", bee.getFlower(), "flower");
     }
 
-    private static boolean validateColor(BeeInfo bee) {
+    private static boolean validateColor(BeeData bee) {
         return Color.validate(bee.getColor())
                 ? dataCheckPassed(bee.getName(), "Color")
                 : logError(bee.getName(), "Color", bee.getColor(), "color");
-    }
-
-    public static float[] getBeeColorAsFloat(String color){
-        java.awt.Color tempColor = java.awt.Color.decode(color);
-        return tempColor.getComponents(null);
     }
 
     /**

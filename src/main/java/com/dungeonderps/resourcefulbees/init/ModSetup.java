@@ -110,7 +110,7 @@ public class ModSetup {
                                     stack.setCount(0);
                                 }
 
-                                IronBeehiveBlock.dropResourceHoneyComb((IronBeehiveBlock) blockstate.getBlock(), world, blockpos);
+                                IronBeehiveBlock.dropResourceHoneycomb((IronBeehiveBlock) blockstate.getBlock(), world, blockpos);
                                 ((BeehiveBlock) blockstate.getBlock()).takeHoney(world, blockstate, blockpos, null,
                                         BeehiveTileEntity.State.BEE_RELEASED);
                                 this.successful = true;

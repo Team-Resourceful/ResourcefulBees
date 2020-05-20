@@ -1,5 +1,7 @@
 package com.dungeonderps.resourcefulbees.config;
 
+import com.dungeonderps.resourcefulbees.data.BeeData;
+
 public interface IBeeInfo {
 
     /**
@@ -21,5 +23,5 @@ public interface IBeeInfo {
      *
      *  @return Returns supplied bee's info card.
      */
-    BeeInfo getBeeInfo(String beeType);
+    BeeData getBeeInfo(String beeType);
 }

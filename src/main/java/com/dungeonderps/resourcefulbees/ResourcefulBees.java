@@ -4,7 +4,6 @@ import com.dungeonderps.resourcefulbees.commands.ResourcefulBeeCommands;
 import com.dungeonderps.resourcefulbees.compat.top.TopCompat;
 import com.dungeonderps.resourcefulbees.config.BeeBuilder;
 import com.dungeonderps.resourcefulbees.config.Config;
-import com.dungeonderps.resourcefulbees.data.DataGen;
 import com.dungeonderps.resourcefulbees.data.RecipeBuilder;
 import com.dungeonderps.resourcefulbees.entity.CustomBeeRenderer;
 import com.dungeonderps.resourcefulbees.init.ModSetup;
@@ -16,7 +15,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
-import net.minecraft.entity.merchant.villager.VillagerProfession;
 import net.minecraft.entity.merchant.villager.VillagerTrades;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
@@ -27,7 +25,6 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.tileentity.BannerPattern;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.village.PointOfInterestType;
@@ -81,7 +78,6 @@ public class ResourcefulBees
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.CommonConfig.COMMON_CONFIG, "resourcefulbees/common.toml");
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener(EventPriority.LOW, this::setup);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(DataGen::gatherData);
 
         MinecraftForge.EVENT_BUS.addListener(this::serverStarting);
         MinecraftForge.EVENT_BUS.addListener(this::OnServerSetup);

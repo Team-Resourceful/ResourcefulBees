@@ -26,7 +26,7 @@ public class BeeSpawnEggItem extends SpawnEggItem {
 
 	@Override
     public String getTranslationKey(ItemStack stack) {
-        CompoundNBT beeType = stack.getChildTag("ResourcefulBees");
+        CompoundNBT beeType = stack.getChildTag(BeeConst.NBT_ROOT);
         String name;
         if ((beeType != null && beeType.contains(BeeConst.NBT_BEE_TYPE))) {
             name = "item" + '.' + ResourcefulBees.MOD_ID + '.' + beeType.getString(BeeConst.NBT_BEE_TYPE).toLowerCase() + "_spawn_egg";
@@ -46,8 +46,8 @@ public class BeeSpawnEggItem extends SpawnEggItem {
         ItemStack itemstack = context.getItem();
         PlayerEntity player = context.getPlayer();
         if (itemstack.getChildTag(BeeConst.NBT_ROOT) != null) {
-            String stackNbt = itemstack.getChildTag(BeeConst.NBT_ROOT).getString(BeeConst.NBT_BEE_TYPE);
-            if (BeeInfo.BEE_INFO.get(stackNbt) == null && !itemstack.isEmpty()) {
+            String bee = itemstack.getChildTag(BeeConst.NBT_ROOT).getString(BeeConst.NBT_BEE_TYPE);
+            if (BeeInfo.getInfo(bee) == null && !itemstack.isEmpty()) {
                 for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
                     if (player.inventory.getStackInSlot(i) == itemstack) {
                         player.inventory.removeStackFromSlot(i);

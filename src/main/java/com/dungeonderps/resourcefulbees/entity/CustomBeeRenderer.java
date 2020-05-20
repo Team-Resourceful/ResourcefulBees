@@ -2,6 +2,7 @@ package com.dungeonderps.resourcefulbees.entity;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
+import com.dungeonderps.resourcefulbees.data.BeeData;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.entity.passive.CustomBeeEntity;
@@ -40,7 +41,7 @@ public class CustomBeeRenderer extends MobRenderer<CustomBeeEntity, CustomBeeMod
     }
 
     public ResourceLocation getEntityTexture(CustomBeeEntity entity) {
-        BeeInfo bee = BeeInfo.BEE_INFO.get(entity.getBeeType());
+        BeeData bee = entity.getBeeInfo();
         if (entity.isAngry()) {
             if (bee.isCreeperBee())
                 return CREEPER_SKIN_ANGRY;

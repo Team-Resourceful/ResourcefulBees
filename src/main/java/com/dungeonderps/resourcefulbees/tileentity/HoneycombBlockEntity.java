@@ -43,15 +43,6 @@ public class HoneycombBlockEntity extends TileEntity {
     public void loadFromNBT(CompoundNBT compound) {
         blockColor = compound.getString(BeeConst.NBT_COLOR);
         beeType = compound.getString(BeeConst.NBT_BEE_TYPE);
-
-        if (this.world != null && this.pos != null) {
-            Block block = this.world.getBlockState(this.pos).getBlock();
-            if (block instanceof HoneycombBlock) {
-                HoneycombBlock honeycombBlock = (HoneycombBlock) block;
-                honeycombBlock.setBlockColor(this.blockColor);
-                honeycombBlock.setBeeType(this.beeType);
-            }
-        }
     }
 
     CompoundNBT saveToNBT(CompoundNBT compound) {

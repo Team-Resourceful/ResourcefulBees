@@ -2,6 +2,7 @@ package com.dungeonderps.resourcefulbees.compat.jei;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
+import com.dungeonderps.resourcefulbees.data.BeeData;
 import com.dungeonderps.resourcefulbees.lib.BeeConst;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -138,9 +139,8 @@ public class BeeMutationCategory implements IRecipeCategory<BeeMutationCategory.
 
     public static List<BeeMutationCategory.Recipe> getMutationRecipes(IIngredientManager ingredientManager) {
         List<BeeMutationCategory.Recipe> recipes = new ArrayList<>();
-        for (Map.Entry<String, BeeInfo> bee : BeeInfo.BEE_INFO.entrySet()){
-            if (bee.getKey() == BeeConst.DEFAULT_BEE_TYPE) {
-            }
+        for (Map.Entry<String, BeeData> bee : BeeInfo.BEE_INFO.entrySet()){
+            if (bee.getKey().equals(BeeConst.DEFAULT_BEE_TYPE) || bee.getKey().equals(BeeConst.DEFAULT_REMOVE)) { }
             else {
                 Item baseBlock = ForgeRegistries.ITEMS.getValue(new ResourceLocation(bee.getValue().getBaseBlock()));
                 Item mutationBlock = ForgeRegistries.ITEMS.getValue(new ResourceLocation(bee.getValue().getMutationBlock()));

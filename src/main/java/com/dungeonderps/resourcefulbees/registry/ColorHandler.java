@@ -20,7 +20,7 @@ public final class ColorHandler {
         ItemColors colors = event.getItemColors();
         registerItems(colors, ResourcefulHoneycomb::getColor, RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
         registerItems(colors, HoneycombBlock::getItemColor, RegistryHandler.HONEYCOMB_BLOCK_ITEM.get());
-        registerItems(colors, BeeJar::getColor, RegistryHandler.HONEYCOMB_BLOCK_ITEM.get());
+        registerItems(colors, BeeJar::getColor, RegistryHandler.BEE_JAR.get());
     }
 
     public static void onBlockColors(ColorHandlerEvent.Block event){

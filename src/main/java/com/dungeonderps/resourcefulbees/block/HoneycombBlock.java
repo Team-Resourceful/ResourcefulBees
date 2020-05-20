@@ -22,19 +22,8 @@ import javax.annotation.Nullable;
 
 public class HoneycombBlock extends Block {
 
-    public String blockColor;
-    //public String beeType;
-
     public HoneycombBlock() {
         super(Block.Properties.from(Blocks.HONEYCOMB_BLOCK));
-    }
-
-    public void setBlockColor(String blockColor){
-        this.blockColor = blockColor;
-    }
-
-    public void setBeeType(String beeType) {
-        //this.beeType = beeType;
     }
 
     @Override
@@ -87,12 +76,7 @@ public class HoneycombBlock extends Block {
         if(tile instanceof HoneycombBlockEntity) {
             HoneycombBlockEntity honeycombBlockEntity = (HoneycombBlockEntity) tile;
             honeycombBlockEntity.loadFromNBT(stack.getOrCreateChildTag(BeeConst.NBT_ROOT));
-
-            setBeeType(stack.getChildTag(BeeConst.NBT_ROOT).getString(BeeConst.NBT_BEE_TYPE));
         }
-
-        //this.beeType = stack.getChildTag(BeeConst.NBT_ROOT).getString(BeeConst.NBT_BEE_TYPE);
-        this.blockColor = stack.getChildTag(BeeConst.NBT_ROOT).getString(BeeConst.NBT_COLOR);
     }
 }
 

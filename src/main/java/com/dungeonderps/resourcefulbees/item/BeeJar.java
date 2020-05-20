@@ -81,6 +81,10 @@ public class BeeJar extends Item {
         CompoundNBT nbt = new CompoundNBT();
         nbt.putString(BeeConst.NBT_ENTITY, type);
         target.writeWithoutTypeId(nbt);
+        if (target instanceof CustomBeeEntity){
+            CustomBeeEntity beeEntity = (CustomBeeEntity) target;
+            nbt.putString(BeeConst.NBT_COLOR, beeEntity.getBeeColor());
+        }
         stack.setTag(nbt);
         player.swingArm(hand);
         player.setHeldItem(hand, stack);
@@ -90,12 +94,12 @@ public class BeeJar extends Item {
 
 
     public static int getColor(ItemStack stack, int tintIndex){
-        if (tintIndex == 1){
-            CompoundNBT honeycombNBT = stack.getChildTag(BeeConst.NBT_ROOT);
-            return honeycombNBT != null && !honeycombNBT.getString(BeeConst.NBT_COLOR).isEmpty() ? Color.parseInt(honeycombNBT.getString(BeeConst.NBT_COLOR)) : 0x000000;
-
+        if (tintIndex == 1 && stack.hasTag() && stack.getTag().contains(BeeConst.NBT_ENTITY)){
+           CompoundNBT tag = stack.getTag();
+           if (tag.contains(BeeConst.NBT_COLOR))
+               return Color.parseInt(tag.getString(BeeConst.NBT_COLOR));
         }
-        return BeeConst.DEFAULT_COLOR;
+        return 0xffffff;
     }
 
     @Override

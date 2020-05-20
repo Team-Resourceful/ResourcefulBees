@@ -2,6 +2,7 @@
 package net.minecraft.tileentity;
 
 
+import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.config.Config;
 import com.dungeonderps.resourcefulbees.lib.BeeConst;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
@@ -24,9 +25,6 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Stack;
 
-import static com.dungeonderps.resourcefulbees.config.BeeInfo.BEE_INFO;
-
-
 public class IronBeehiveBlockEntity extends BeehiveTileEntity {
 
   private final int TIER = 1;
@@ -46,7 +44,7 @@ public class IronBeehiveBlockEntity extends BeehiveTileEntity {
     return TIER;
   }
 
-  public double getTierModifier() {
+  public float getTierModifier() {
     return TIER_MODIFIER;
   }
 
@@ -84,7 +82,7 @@ public class IronBeehiveBlockEntity extends BeehiveTileEntity {
               if (i < 5) {
                 this.honeycombs.push(beeEntity.getBeeType());
                 float combsInHive = this.honeycombs.size();
-                float maxCombs = Config.HIVE_MAX_COMBS.get() * TIER_MODIFIER;
+                float maxCombs = Config.HIVE_MAX_COMBS.get() * getTierModifier();
                 float percentValue = (combsInHive / maxCombs) * 100;
                 int newState = (int)(percentValue  - (percentValue % 20))  / 20;
                 this.world.setBlockState(this.getPos(), state.with(BeehiveBlock.HONEY_LEVEL, newState));
@@ -106,14 +104,14 @@ public class IronBeehiveBlockEntity extends BeehiveTileEntity {
   }
 
   public void tryEnterHive(Entity bee, boolean hasNectar, int ticksInHive) {
-    if (this.bees.size() < (Config.HIVE_MAX_BEES.get() * TIER_MODIFIER)) {
+    if (this.bees.size() < (Config.HIVE_MAX_BEES.get() * getTierModifier())) {
       bee.removePassengers();
       CompoundNBT nbt = new CompoundNBT();
       bee.writeUnlessPassenger(nbt);
       if (this.world != null) {
         if (bee instanceof CustomBeeEntity) {
           CustomBeeEntity bee1 = (CustomBeeEntity)bee;
-          this.bees.add(new BeehiveTileEntity.Bee(nbt, ticksInHive, hasNectar ? BEE_INFO.get(bee1.getBeeType()).getMaxTimeInHive() : BeeConst.MIN_HIVE_TIME));
+          this.bees.add(new BeehiveTileEntity.Bee(nbt, ticksInHive, hasNectar ? BeeInfo.getInfo(bee1.getBeeType()).getMaxTimeInHive() : BeeConst.MIN_HIVE_TIME));
           if (bee1.hasFlower() && (!this.hasFlowerPos() || this.world.rand.nextBoolean())) {
             this.flowerPos = bee1.getFlowerPos();
           }
@@ -134,9 +132,9 @@ public class IronBeehiveBlockEntity extends BeehiveTileEntity {
   @Override
   public void tick() {
     if (!world.isRemote) {
-      if (isSmoked && ticksSmoked < BeeConst.SMOKE_TIME) {
-        ticksSmoked++;
-      }
+      ticksSmoked = isSmoked && ticksSmoked < BeeConst.SMOKE_TIME
+              ? ticksSmoked++
+              : ticksSmoked;
       if (ticksSmoked == BeeConst.SMOKE_TIME) {
         isSmoked = false;
         ticksSmoked = 0;
@@ -154,7 +152,7 @@ public class IronBeehiveBlockEntity extends BeehiveTileEntity {
     return bees.size() > 3;
   }
 
-  public String getResourceHoneyComb(){
+  public String getResourceHoneycomb(){
     String honeycomb = honeycombs.pop();
     return honeycomb;
   }

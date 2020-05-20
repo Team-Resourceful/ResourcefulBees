@@ -2,7 +2,7 @@ package com.dungeonderps.resourcefulbees.client.render.entity;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
-import com.dungeonderps.resourcefulbees.utils.BeeInfoUtils;
+import com.dungeonderps.resourcefulbees.data.BeeData;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.IEntityRenderer;
@@ -22,8 +22,8 @@ public class CustomBeeOverlay extends LayerRenderer<CustomBeeEntity, CustomBeeMo
     }
 
     public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, CustomBeeEntity entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        float[] collarColor = BeeInfoUtils.getBeeColorAsFloat(entitylivingbaseIn.getBeeColor());
-        BeeInfo bee = BeeInfo.BEE_INFO.get(entitylivingbaseIn.getBeeType());
+        float[] collarColor = BeeInfo.getBeeColorAsFloat(entitylivingbaseIn.getBeeColor());
+        BeeData bee = BeeInfo.getInfo(entitylivingbaseIn.getBeeType());
         if (!bee.isCreeperBee() && !bee.isSkeletonBee() && !bee.isZomBee() && !bee.isWitherBee() && !bee.isPigmanBee()) {
             if (entitylivingbaseIn.isAngry())
                 renderCutoutModel(this.getEntityModel(), BEE_COLLAR_ANGRY, matrixStackIn, bufferIn, packedLightIn, entitylivingbaseIn, collarColor[0], collarColor[1], collarColor[2]);

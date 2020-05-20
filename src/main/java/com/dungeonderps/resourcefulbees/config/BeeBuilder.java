@@ -1,6 +1,7 @@
 package com.dungeonderps.resourcefulbees.config;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
+import com.dungeonderps.resourcefulbees.data.BeeData;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.utils.BeeInfoUtils;
 import com.google.gson.Gson;
@@ -53,7 +54,7 @@ public class BeeBuilder{
 
         Gson gson = new Gson();
         Reader r = new FileReader(file);
-        BeeInfo bee = gson.fromJson(r, BeeInfo.class);
+        BeeData bee = gson.fromJson(r, BeeData.class);
         bee.setName(name);
         if (BeeInfoUtils.validate(bee)){
             BeeInfo.BEE_INFO.put(name, bee);
@@ -80,13 +81,9 @@ public class BeeBuilder{
         }
     }
 
-    private static void setupDefaultBees() {// CONFIG FOLDER AND FILES MUST BE RUN BEFORE THIS
-        // check config for hardcoded bee flag
-        /*
-        if (GENERATE_DEFAULTS.get()) {
-        }*/
+    private static void setupDefaultBees() {
         for (String bee : DEFAULT_BEES) {
-            String path = ASSETS_DIR + bee;   //This allows me to dynamically change the path and later create the new path
+            String path = ASSETS_DIR + bee;
             try (InputStream inputStream = ResourcefulBees.class.getResourceAsStream(path)){
                 Path newPath =  Paths.get(BEE_PATH.toString() + "/" + bee);
                 File targetFile = new File(String.valueOf(newPath));
@@ -95,7 +92,6 @@ public class BeeBuilder{
                 e.printStackTrace();
             }
         }
-        //addBees();
     }
 
     private static void setupBeeSpawns() {

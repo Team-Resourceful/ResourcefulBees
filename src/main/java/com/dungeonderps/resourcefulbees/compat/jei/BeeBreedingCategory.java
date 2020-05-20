@@ -2,6 +2,8 @@ package com.dungeonderps.resourcefulbees.compat.jei;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
+import com.dungeonderps.resourcefulbees.data.BeeData;
+import com.dungeonderps.resourcefulbees.lib.BeeConst;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -110,14 +112,13 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
         Minecraft minecraft = Minecraft.getInstance();
         FontRenderer fontRenderer = minecraft.fontRenderer;
         DecimalFormat decimalFormat = new DecimalFormat("##%");
-        fontRenderer.drawString(decimalFormat.format(0.33), 90, 18, 0xff808080);
+        fontRenderer.drawString(decimalFormat.format(BeeInfo.getInfo(recipe.getChild()).getBreedWeight()), 90, 18, 0xff808080);
     }
 
     public static List<Recipe> getBreedingRecipes(IIngredientManager ingredientManager) {
         List<Recipe> recipes = new ArrayList<>();
-        for (Map.Entry<String, BeeInfo> bee : BeeInfo.BEE_INFO.entrySet()){
-            if (bee.getKey() == "Default")
-                continue;
+        for (Map.Entry<String, BeeData> bee : BeeInfo.BEE_INFO.entrySet()){
+            if (bee.getKey().equals(BeeConst.DEFAULT_BEE_TYPE) || bee.getKey().equals(BeeConst.DEFAULT_REMOVE)) { }
             else {
                 if (bee.getValue().isBreedable()){
                     if (BeeInfo.BEE_INFO.containsKey(bee.getValue().getParent1()) && BeeInfo.BEE_INFO.containsKey(bee.getValue().getParent2()) && BeeInfo.BEE_INFO.containsKey(bee.getKey()))
@@ -127,7 +128,6 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
         }
         return recipes;
     }
-
     public static class Recipe {
         private final String parent1;
         private final String parent2;

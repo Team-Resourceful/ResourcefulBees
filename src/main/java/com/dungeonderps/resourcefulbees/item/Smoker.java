@@ -1,9 +1,12 @@
 package com.dungeonderps.resourcefulbees.item;
 
 import com.dungeonderps.resourcefulbees.registry.ItemGroupResourcefulBees;
+import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.passive.BeeEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -20,6 +23,8 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 
 public class Smoker extends Item {
@@ -57,4 +62,34 @@ public class Smoker extends Item {
             tooltip.add(new StringTextComponent(TextFormatting.YELLOW + I18n.format("resourcefulbees.shift_info")));
         }
     }
+
+    @Override
+    public boolean itemInteractionForEntity(ItemStack stack, PlayerEntity player, LivingEntity targetIn, Hand hand) {
+        if (targetIn.getEntityWorld().isRemote() || (!(targetIn instanceof BeeEntity) || !targetIn.isAlive())) {
+            return false;
+        }
+
+        //we're using reflection to access private setAnger method for bee
+        //It's looks scary but it's simple.
+        //create new method, get method from class we want to call,
+        //call method, pass in the object we want to call the method on
+        //pass in the value for the parameter.
+
+        BeeEntity target = (BeeEntity) targetIn;
+        if (target.isAngry()){
+            Method setAnger;   /// <<<<----- creating method container
+            try {
+                setAnger = BeeEntity.class.getDeclaredMethod("setAnger", int.class); ///<<<<------- Creating instance of method
+                setAnger.setAccessible(true);     ///<<<<------- Making the method accessible
+                setAnger.invoke(targetIn, 0);   ///<<<<------ Invoking method
+            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
+
+            stack.damageItem(1, player, player1 -> player1.sendBreakAnimation(hand));
+        }
+
+        return true;
+    }
+
 }

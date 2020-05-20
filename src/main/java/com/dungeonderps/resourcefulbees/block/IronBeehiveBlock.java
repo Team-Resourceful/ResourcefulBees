@@ -1,5 +1,6 @@
 package com.dungeonderps.resourcefulbees.block;
 
+import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.lib.BeeConst;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -12,7 +13,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tileentity.BeehiveTileEntity;
 import net.minecraft.tileentity.IronBeehiveBlockEntity;
@@ -23,12 +23,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
-import static com.dungeonderps.resourcefulbees.config.BeeInfo.BEE_INFO;
 import static net.minecraft.state.properties.BlockStateProperties.HORIZONTAL_FACING;
 
 public class IronBeehiveBlock extends BeehiveBlock {
@@ -75,15 +73,6 @@ public class IronBeehiveBlock extends BeehiveBlock {
         world.playSound(player, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.BLOCK_BEEHIVE_SHEAR, SoundCategory.NEUTRAL, 1.0F, 1.0F);
         dropResourceHoneycomb(world, pos);
         itemstack.damageItem(1, player, player1 -> player1.sendBreakAnimation(handIn));
-        angerBees = true;
-      } else if (itemstack.getItem() == Items.GLASS_BOTTLE) {
-        itemstack.shrink(1);
-        world.playSound(player, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.ITEM_BOTTLE_FILL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
-        if (itemstack.isEmpty()) {
-          player.setHeldItem(handIn, new ItemStack(Items.HONEY_BOTTLE));
-        } else if (!player.inventory.addItemStackToInventory(new ItemStack(Items.HONEY_BOTTLE))) {
-          player.dropItem(new ItemStack(Items.HONEY_BOTTLE), false);
-        }
         angerBees = true;
       }
     }
@@ -132,7 +121,7 @@ public class IronBeehiveBlock extends BeehiveBlock {
     }
   }
   //needed for Dispenser use, etc.
-  public static void dropResourceHoneyComb(IronBeehiveBlock block, World world, BlockPos pos) {
+  public static void dropResourceHoneycomb(IronBeehiveBlock block, World world, BlockPos pos) {
     block.dropResourceHoneycomb(world, pos);
   }
 
@@ -142,9 +131,9 @@ public class IronBeehiveBlock extends BeehiveBlock {
       IronBeehiveBlockEntity hive = (IronBeehiveBlockEntity)blockEntity;
       while (hive.hasCombs()) {
         ItemStack comb = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
-        String honeycomb = hive.getResourceHoneyComb();
-        comb.getOrCreateChildTag(BeeConst.NBT_ROOT).putString(BeeConst.NBT_COLOR, BEE_INFO.get(honeycomb).getColor());
-        comb.getOrCreateChildTag(BeeConst.NBT_ROOT).putString(BeeConst.NBT_BEE_TYPE, BEE_INFO.get(honeycomb).getName());
+        String honeycomb = hive.getResourceHoneycomb();
+        comb.getOrCreateChildTag(BeeConst.NBT_ROOT).putString(BeeConst.NBT_COLOR, BeeInfo.getInfo(honeycomb).getColor());
+        comb.getOrCreateChildTag(BeeConst.NBT_ROOT).putString(BeeConst.NBT_BEE_TYPE, BeeInfo.getInfo(honeycomb).getName());
         spawnAsEntity(world, pos, comb);
       }
     }

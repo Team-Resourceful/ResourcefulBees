@@ -2,6 +2,7 @@ package net.minecraft.entity.passive;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
+import com.dungeonderps.resourcefulbees.data.BeeData;
 import com.dungeonderps.resourcefulbees.entity.ICustomBee;
 import com.dungeonderps.resourcefulbees.entity.goals.BeeBreedGoal;
 import com.dungeonderps.resourcefulbees.lib.BeeConst;
@@ -51,14 +52,10 @@ import net.minecraftforge.event.entity.living.EnderTeleportEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static com.dungeonderps.resourcefulbees.config.BeeInfo.BEE_INFO;
 
 @SuppressWarnings("EntityConstructor")
 public class CustomBeeEntity extends BeeEntity implements ICustomBee {
@@ -257,15 +254,22 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
     }
 
     public String getBeeType() {
-        BeeInfo info = getBeeInfo(this.dataManager.get(BEE_TYPE));
 
-        if (info.getName().equals(BeeConst.DEFAULT_BEE_TYPE)) {
-            if (!world.isRemote()) {
-                this.dead = true;
-                this.remove();
+        if(getBeeInfo(this.dataManager.get(BEE_TYPE)) != null){
+            BeeData info = getBeeInfo(this.dataManager.get(BEE_TYPE));
+
+            if (info.getName().equals(BeeConst.DEFAULT_REMOVE)) {
+                if (!world.isRemote()) {
+                    this.dead = true;
+                    this.remove();
+                }
+            } else if (info.getName().equals(BeeConst.DEFAULT_BEE_TYPE)) {
+                this.dataManager.set(BEE_TYPE, BeeConst.DEFAULT_REMOVE);
+                return BeeConst.DEFAULT_BEE_TYPE;
             }
+            return this.dataManager.get(BEE_TYPE);
         }
-        return this.dataManager.get(BEE_TYPE);
+        return BeeConst.DEFAULT_BEE_TYPE;
     }
 
     public String getColorFromInfo(String beeType) {
@@ -276,11 +280,11 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
         return getBeeInfo(beeType).getName();
     }
 
-    public BeeInfo getBeeInfo() {
+    public BeeData getBeeInfo() {
         return BeeInfo.getInfo(this.getBeeType());
     }
 
-    public BeeInfo getBeeInfo(String beeType) {
+    public BeeData getBeeInfo(String beeType) {
         return BeeInfo.getInfo(beeType);
     }
 
@@ -373,10 +377,6 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
 //            queenBeePlayer = player;
             super.processInteract(player,hand);
         }
-        if (item == RegistryHandler.SMOKER.get() && this.isAngry()) {
-            smokeBee();
-            itemstack.damageItem(1, player, player1 -> player1.sendBreakAnimation(hand));
-        }
         if (this.isBreedingItem(itemstack)) {
             if (!this.world.isRemote && this.getGrowingAge() == 0 && this.canBreed()) {
                 this.consumeItemFromStack(player, itemstack);
@@ -412,22 +412,6 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
         return false;
     }
 
-    public void smokeBee(){
-        //we're using reflection to access private setAnger method for bee
-        //It's looks scary but it's simple.
-        //create new method, get method from class we want to call,
-        //call method, pass in the object we want to call the method on
-        //pass in the value for the parameter.
-
-        Method setAnger;   /// <<<<----- creating method container
-        try {
-            setAnger = BeeEntity.class.getDeclaredMethod("setAnger", int.class); ///<<<<------- Creating instance of method
-            setAnger.setAccessible(true);     ///<<<<------- Making the method accessible
-            setAnger.invoke(this, 0);   ///<<<<------ Invoking method
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
-    }
 
     //************** CUSTOM ENTITY TASKS/GOALS ***********************************************
 
@@ -497,7 +481,7 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
                 } else if (this.world.getDifficulty() == Difficulty.HARD) {
                     i = 18;
                 }
-                BeeInfo info = this.getBeeInfo();
+                BeeData info = this.getBeeInfo();
 
                 if (info.isCreeperBee()) {
                     this.explode();
