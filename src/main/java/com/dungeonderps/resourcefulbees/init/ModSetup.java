@@ -44,8 +44,6 @@ public class ModSetup {
 
     private static void setupPaths(){
         Path configPath = FMLPaths.CONFIGDIR.get();
-        //Path rbConfigPath = Paths.get(configPath.toAbsolutePath().toString(), "resourcefulbees");
-        // subfolder for bees
         Path rbBeesPath = Paths.get(configPath.toAbsolutePath().toString(), ResourcefulBees.MOD_ID, "bees");
         Path rbAssetsPath = Paths.get(configPath.toAbsolutePath().toString(),ResourcefulBees.MOD_ID, "resources");
         BEE_PATH = rbBeesPath;

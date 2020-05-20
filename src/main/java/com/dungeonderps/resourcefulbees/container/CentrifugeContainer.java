@@ -27,15 +27,10 @@ public class CentrifugeContainer extends Container {
         this.trackInt(new FunctionalIntReferenceHolder(() -> centrifugeBlockEntity.time, v -> centrifugeBlockEntity.time = v));
         this.trackInt(new FunctionalIntReferenceHolder(() -> centrifugeBlockEntity.totalTime, v -> centrifugeBlockEntity.totalTime = v));
 
-        //COMB INPUT
         this.addSlot(new SlotItemHandlerUnconditioned(centrifugeBlockEntity.h, CentrifugeBlockEntity.HONEYCOMB_SLOT, 30, 20));
-        //BOTTLE INPUT
         this.addSlot(new SlotItemHandlerUnconditioned(centrifugeBlockEntity.h, CentrifugeBlockEntity.BOTTLE_SLOT, 30, 38));
-        //BOTTLE OUTPUT
         this.addSlot(new OutputSlot(centrifugeBlockEntity.h, CentrifugeBlockEntity.HONEY_BOTTLE, 80, 59));
-        //MAIN OUTPUT
         this.addSlot(new OutputSlot(centrifugeBlockEntity.h, CentrifugeBlockEntity.OUTPUT1, 129, 20));
-        //SECONDARY OUTPUT
         this.addSlot(new OutputSlot(centrifugeBlockEntity.h, CentrifugeBlockEntity.OUTPUT2, 129, 38));
 
         for (int i = 0; i < 3; ++i) {
@@ -48,6 +43,7 @@ public class CentrifugeContainer extends Container {
             this.addSlot(new Slot(inv, k, 8 + k * 18, 142));
         }
     }
+
     /**
      * Determines whether supplied player can use this container
      *

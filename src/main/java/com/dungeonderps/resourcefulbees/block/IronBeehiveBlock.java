@@ -120,7 +120,7 @@ public class IronBeehiveBlock extends BeehiveBlock {
       return false;
     }
   }
-  //needed for Dispenser use, etc.
+
   public static void dropResourceHoneycomb(IronBeehiveBlock block, World world, BlockPos pos) {
     block.dropResourceHoneycomb(world, pos);
   }

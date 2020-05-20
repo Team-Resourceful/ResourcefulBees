@@ -1,7 +1,6 @@
 package com.dungeonderps.resourcefulbees.client.render.entity;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
-import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.data.BeeData;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;

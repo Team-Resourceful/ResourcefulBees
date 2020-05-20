@@ -69,7 +69,7 @@ public class BeeBuilder{
                 BeeInfoUtils.buildFamilyTree(bee);
         }
     }
-    //REMOVE
+
     private static void addBees() {
         BeeInfo.BEE_INFO.clear();
         BeeInfoUtils.genDefaultBee();

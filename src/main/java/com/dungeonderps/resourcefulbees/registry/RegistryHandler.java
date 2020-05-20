@@ -12,8 +12,6 @@ import com.dungeonderps.resourcefulbees.recipe.CentrifugeRecipe;
 import com.dungeonderps.resourcefulbees.tileentity.CentrifugeBlockEntity;
 import com.dungeonderps.resourcefulbees.tileentity.HoneycombBlockEntity;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
-import com.sun.corba.se.spi.ior.IORTemplate;
 import net.minecraft.block.Block;
 import net.minecraft.block.FlowerBlock;
 import net.minecraft.block.SoundType;
@@ -22,10 +20,10 @@ import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.merchant.villager.VillagerProfession;
 import net.minecraft.entity.passive.CustomBeeEntity;
+import net.minecraft.entity.passive.ResourcefulBee;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.Items;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.potion.Effects;
 import net.minecraft.tileentity.IronBeehiveBlockEntity;
@@ -35,13 +33,9 @@ import net.minecraft.village.PointOfInterestType;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 //import com.dungeonderps.resourcefulbees.tileentity.CentrifugeBlockEntity;
 
@@ -108,8 +102,8 @@ public class RegistryHandler {
 
 	//**************ENTITIES******************************************
 
-	public static final RegistryObject<EntityType<CustomBeeEntity>> CUSTOM_BEE = ENTITY_TYPES.register("bee", () -> EntityType.Builder
-			.create(CustomBeeEntity::new, EntityClassification.CREATURE)
+	public static final RegistryObject<EntityType<ResourcefulBee>> CUSTOM_BEE = ENTITY_TYPES.register("bee", () -> EntityType.Builder
+			.create(ResourcefulBee::new, EntityClassification.CREATURE)
 			.size(0.7F, 0.6F)
 			.build("bee"));
 
