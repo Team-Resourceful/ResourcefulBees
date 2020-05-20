@@ -1,11 +1,30 @@
+/*
+ * This file ("ItemStackHandlerAA.java") is part of the Actually Additions mod for Minecraft.
+ * It is created and owned by Ellpeck and distributed
+ * under the Actually Additions License to be found at
+ * http://ellpeck.de/actaddlicense
+ * View the source code at https://github.com/Ellpeck/ActuallyAdditions
+ *
+ * © 2015-2017 Ellpeck
+ *
+ *
+ * ################# NOTE #####################
+ *
+ * File's name has been changed and additional code has been implemented.
+ *
+ */
+
 package com.dungeonderps.resourcefulbees.container;
 
+import com.dungeonderps.resourcefulbees.tileentity.CentrifugeBlockEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.items.ItemStackHandler;
 
 /**
- * borrowed from Actually Additions
+ * @author Ellpeck
+ * @implNote borrowed from Actually Additions
  */
 public class AutomationSensitiveItemStackHandler extends ItemStackHandler {
 
@@ -62,6 +81,9 @@ public class AutomationSensitiveItemStackHandler extends ItemStackHandler {
     }
 
     public final boolean canAccept(int slot, ItemStack stack, boolean automation) {
+        if (slot == CentrifugeBlockEntity.BOTTLE_SLOT && !stack.getItem().equals(Items.GLASS_BOTTLE) ||
+                slot == CentrifugeBlockEntity.HONEYCOMB_SLOT  &&  stack.getItem().equals(Items.GLASS_BOTTLE))
+            return false;
         return this.getAcceptor().canAccept(slot, stack, automation);
     }
 
