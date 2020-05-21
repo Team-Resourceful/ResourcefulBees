@@ -5,15 +5,24 @@ import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import net.minecraft.item.Items;
 
 public class BeeData {
-    private String flower, color, biomeList, baseBlock, mutationBlock, mainOutput, parent1, parent2;
+
+    private String flower, color, biomeList, parent1, parent2;
+
+    private String baseBlock = "";
+    private String mutationBlock = "";
+    private String mainOutput = "";
+
     private String secondaryOutput = RegistryHandler.BEESWAX.getId().toString();
     private String bottleOutput = Items.HONEY_BOTTLE.getRegistryName().toString();
+
     private boolean spawnInWorld, enderBee, netherBee, breedable, creeperBee, skeletonBee, zomBee, pigmanBee, witherBee, blazeBee;
-    private int maxTimeInHive = 2400;
-    private double breedWeight = 0.33;
-    private double mainOutputWeight = 1.0;
-    private double secondaryOutputWeight = 0.2;
-    private double bottleOutputWeight = 0.25;
+
+    private int maxTimeInHive = BeeConst.MAX_TIME_IN_HIVE;
+    private double breedWeight = BeeConst.DEFAULT_BREED_WEIGHT;
+    private double mainOutputWeight = BeeConst.DEFAULT_MAIN_OUTPUT_WEIGHT;
+    private double secondaryOutputWeight = BeeConst.DEFAULT_SEC_OUTPUT_WEIGHT;
+    private double bottleOutputWeight = BeeConst.DEFAULT_BOT_OUTPUT_WEIGHT;
+
     private transient String name = BeeConst.DEFAULT_BEE_TYPE;
 
 
@@ -230,7 +239,7 @@ public class BeeData {
      * @param baseBlock this bee's flower(s).
      */
     public void setBaseBlock(String baseBlock) {
-        this.baseBlock = baseBlock.toLowerCase();
+        this.baseBlock = baseBlock.toLowerCase().trim();
     }
 
     /**

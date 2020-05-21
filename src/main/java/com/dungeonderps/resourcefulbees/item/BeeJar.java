@@ -27,6 +27,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -122,7 +123,7 @@ public class BeeJar extends Item {
         if (isFilled(stack)){
             if (stack.getTag().getString(BeeConst.NBT_ENTITY).equals("resourcefulbees:bee")){
                 String type = stack.getTag().getString(BeeConst.NBT_BEE_TYPE);
-                tooltip.add(new StringTextComponent(I18n.format(ResourcefulBees.MOD_ID + ".information.bee_type.custom") + type).applyTextStyle(TextFormatting.WHITE));
+                tooltip.add(new StringTextComponent(I18n.format(ResourcefulBees.MOD_ID + ".information.bee_type.custom") + StringUtils.capitalize(type)).applyTextStyle(TextFormatting.WHITE));
             }
             else if (stack.getTag().getString(BeeConst.NBT_ENTITY).equals("minecraft:bee")){
                 tooltip.add(new TranslationTextComponent(ResourcefulBees.MOD_ID + ".information.bee_type.vanilla").applyTextStyle(TextFormatting.WHITE));

@@ -1,7 +1,7 @@
 {
   "color": "#303030",
   "flower": "ALL",
-  "baseBlock": "minecraft:stone",
+  "baseBlock": "tag:minecraft:stone",
   "mutationBlock": "minecraft:coal_ore",
   "mainOutput": "minecraft:coal",
   "spawnInWorld": true,

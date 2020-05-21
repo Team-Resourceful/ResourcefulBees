@@ -21,7 +21,8 @@ import static com.dungeonderps.resourcefulbees.config.BeeInfo.*;
 
 public class BeeInfoUtils {
 
-    private static final Pattern RESOURCE_PATTERN = Pattern.compile("(tag:)?(\\w+):(\\w+/\\w+|\\w+)", Pattern.CASE_INSENSITIVE);
+    public static final Pattern RESOURCE_PATTERN = Pattern.compile("(tag:)?(\\w+):(\\w+/\\w+|\\w+)", Pattern.CASE_INSENSITIVE);
+    public static final Pattern TAG_RESOURCE_PATTERN = Pattern.compile("(tag:)(\\w+):(\\w+/\\w+|\\w+)", Pattern.CASE_INSENSITIVE);
 
     public static void buildFamilyTree(BeeData bee){
         String parent1 = bee.getParent1();
@@ -78,7 +79,6 @@ public class BeeInfoUtils {
         defaultBee.setMutationBlock("minecraft:stone");
         defaultBee.setBiomeList("test");
         defaultBee.setSpawnInWorld(false);
-        defaultBee.setEnderBee(false);
         BEE_INFO.put(BeeConst.DEFAULT_BEE_TYPE, defaultBee);
     }
 
@@ -106,7 +106,9 @@ public class BeeInfoUtils {
         isValid = isValid && validateFlower(bee);
         isValid = isValid && validateBaseBlock(bee);
         isValid = isValid && validateMutationBlock(bee);
-        isValid = isValid && validateCentrifugeOutput(bee);
+        isValid = isValid && validateCentrifugeMainOutput(bee);
+        isValid = isValid && validateCentrifugeSecondaryOutput(bee);
+        isValid = isValid && validateCentrifugeBottleOutput(bee);
         isValid = isValid && validateMaxTimeInHive(bee);
 
         return isValid;
@@ -120,31 +122,44 @@ public class BeeInfoUtils {
                 "time. Value must be greater than or equal to " + BeeConst.MIN_HIVE_TIME);
     }
 
-    private static boolean validateCentrifugeOutput(BeeData bee) {
-        return RESOURCE_PATTERN.matcher(bee.getMutationBlock()).matches() && !ForgeRegistries.ITEMS.getValue(getResource(bee.getMainOutput())).equals(Items.AIR)
+    private static boolean validateCentrifugeMainOutput(BeeData bee) {
+        return RESOURCE_PATTERN.matcher(bee.getMainOutput()).matches() && !ForgeRegistries.ITEMS.getValue(getResource(bee.getMainOutput())).equals(Items.AIR)
+                ? dataCheckPassed(bee.getName(), "Centrifuge Output")
+                : logError(bee.getName(), "Centrifuge Output", bee.getMainOutput(), "item");
+    }
+
+    private static boolean validateCentrifugeSecondaryOutput(BeeData bee) {
+        return RESOURCE_PATTERN.matcher(bee.getSecondaryOutput()).matches() && !ForgeRegistries.ITEMS.getValue(getResource(bee.getSecondaryOutput())).equals(Items.AIR)
+                ? dataCheckPassed(bee.getName(), "Centrifuge Output")
+                : logError(bee.getName(), "Centrifuge Output", bee.getMainOutput(), "item");
+    }
+
+    private static boolean validateCentrifugeBottleOutput(BeeData bee) {
+        return RESOURCE_PATTERN.matcher(bee.getBottleOutput()).matches() && !ForgeRegistries.ITEMS.getValue(getResource(bee.getBottleOutput())).equals(Items.AIR)
                 ? dataCheckPassed(bee.getName(), "Centrifuge Output")
                 : logError(bee.getName(), "Centrifuge Output", bee.getMainOutput(), "item");
     }
 
     private static boolean validateMutationBlock(BeeData bee) {
-        return  RESOURCE_PATTERN.matcher(bee.getMutationBlock()).matches() && !ForgeRegistries.BLOCKS.getValue(getResource(bee.getMutationBlock())).equals(Blocks.AIR)
-                ? dataCheckPassed(bee.getName(), "Mutation Block")
-                : logError(bee.getName(), "Mutation Block", bee.getMutationBlock(), "block");
+        if (!bee.getMutationBlock().isEmpty()) {
+            return RESOURCE_PATTERN.matcher(bee.getMutationBlock()).matches() && !ForgeRegistries.BLOCKS.getValue(getResource(bee.getMutationBlock())).equals(Blocks.AIR)
+                    ? dataCheckPassed(bee.getName(), "Mutation Block")
+                    : logError(bee.getName(), "Mutation Block", bee.getMutationBlock(), "block");
+        }
+        return true;
     }
 
     private static boolean validateBaseBlock(BeeData bee) {
-        if(RESOURCE_PATTERN.matcher(bee.getBaseBlock()).matches() && bee.getBaseBlock().contains(BeeConst.TAG_PREFIX)) {
-            LOGGER.warn("Too early to validate Block Tag for " + bee.getName() + " bee.");
-            return true;
-            //TODO - Can tag check be fixed?
-            //String cleanBaseBlock = bee.getBaseBlock().replace(BeeConst.TAG_PREFIX, "");
-            //return BlockTags.getCollection().get(bee.getResource(cleanBaseBlock)) != null
-            //        ? dataCheckPassed(bee.getName(), "Base Block")
-            //       : logError(bee.getName(), "Base Block", cleanBaseBlock, "tag");
+        if (!bee.getBaseBlock().isEmpty()) {
+            if (RESOURCE_PATTERN.matcher(bee.getBaseBlock()).matches() && TAG_RESOURCE_PATTERN.matcher(bee.getBaseBlock()).matches() && !bee.getMutationBlock().isEmpty()) {
+                LOGGER.warn("Too early to validate Block Tag for " + bee.getName() + " bee.");
+                return true;
+            }
+            return RESOURCE_PATTERN.matcher(bee.getBaseBlock()).matches() && !ForgeRegistries.BLOCKS.getValue(getResource(bee.getBaseBlock())).equals(Blocks.AIR)
+                    ? dataCheckPassed(bee.getName(), "Base Block")
+                    : logError(bee.getName(), "Base Block", bee.getBaseBlock(), "block");
         }
-        return RESOURCE_PATTERN.matcher(bee.getBaseBlock()).matches() && !ForgeRegistries.BLOCKS.getValue(getResource(bee.getBaseBlock())).equals(Blocks.AIR)
-                ? dataCheckPassed(bee.getName(), "Base Block")
-                : logError(bee.getName(), "Base Block", bee.getBaseBlock(), "block");
+        return true;
     }
 
     private static boolean validateFlower(BeeData bee) {

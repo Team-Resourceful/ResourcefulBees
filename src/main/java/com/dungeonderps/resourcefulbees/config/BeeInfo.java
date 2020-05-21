@@ -11,7 +11,7 @@ import java.util.LinkedHashMap;
 import java.util.Set;
 
 public class BeeInfo {
-    //These are needed for dynamic creation from JSON configs
+
     public static final LinkedHashMap<String, BeeData> BEE_INFO = new LinkedHashMap<>();
     public static final HashMap<Biome, Set<String>> SPAWNABLE_BIOMES = new HashMap<>();
     public static final HashMap<Integer, String> FAMILY_TREE = new HashMap<>();

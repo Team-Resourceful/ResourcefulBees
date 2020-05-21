@@ -114,7 +114,8 @@ public class ResourcefulBee extends CustomBeeEntity {
 
         @Override
         public void tick() {
-            applyPollinationEffect();
+            if (!getBeeInfo().getBaseBlock().isEmpty() && !getBeeInfo().getMutationBlock().isEmpty())
+                applyPollinationEffect();
         }
     }
 
@@ -136,7 +137,10 @@ public class ResourcefulBee extends CustomBeeEntity {
     }
 
     public boolean validFillerBlock(Block block){
-        return Objects.equals(block.getRegistryName(), BeeInfoUtils.getResource(getBeeInfo().getBaseBlock()));
+        String baseBlock = this.getBeeInfo().getBaseBlock();
+        if (BeeInfoUtils.TAG_RESOURCE_PATTERN.matcher(baseBlock).matches())
+            return block.isIn(Objects.requireNonNull(BlockTags.getCollection().get(BeeInfoUtils.getResource(baseBlock.replace(BeeConst.TAG_PREFIX, "")))));
+        return Objects.equals(block.getRegistryName(), BeeInfoUtils.getResource(baseBlock));
     }
 
     public class FindBeehiveGoal2 extends BeeEntity.FindBeehiveGoal {

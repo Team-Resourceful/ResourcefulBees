@@ -32,7 +32,7 @@
 	"item.resourcefulbees.smoker.tooltip": "Right click the hive to smoke it.",
 	"item.resourcefulbees.smoker.tooltip.1": "This allows you to stop the bees from being angry at you for shearing honeycombs for 30s.",
 	"item.resourcefulbees.bee_jar_empty": "Empty Bee Jar",
-	"item.resourcefulbees.bee_jar_filled": "Filled Bee jar",
+	"item.resourcefulbees.bee_jar_filled": "Filled Bee Jar",
 
 	"block.resourcefulbees.gold_honeycomb_block": "Gold Honeycomb Block",
 	"block.resourcefulbees.iron_honeycomb_block": "Iron Honeycomb Block",

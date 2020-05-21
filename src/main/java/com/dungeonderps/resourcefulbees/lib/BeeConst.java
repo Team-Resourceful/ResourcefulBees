@@ -17,5 +17,11 @@ public class BeeConst {
 
     public static final int SMOKE_TIME = 600;
     public static final int MIN_HIVE_TIME = 600;
+    public static final int MAX_TIME_IN_HIVE = 2400;
+    public static final double DEFAULT_BREED_WEIGHT = 0.33;
+    public static final double DEFAULT_MAIN_OUTPUT_WEIGHT = 1.0;
+    public static final double DEFAULT_SEC_OUTPUT_WEIGHT = 0.2;
+    public static final double DEFAULT_BOT_OUTPUT_WEIGHT = 0.25;
+
     public static final int DEFAULT_COLOR = 0x000000;
 }
