@@ -102,7 +102,7 @@ public class BeeInfoUtils {
     public static boolean validate(BeeData bee) {
         boolean isValid = true;
 
-        isValid = isValid && validateColor(bee);
+        isValid = validateColor(bee);
         isValid = isValid && validateFlower(bee);
         isValid = isValid && validateBaseBlock(bee);
         isValid = isValid && validateMutationBlock(bee);
@@ -110,8 +110,16 @@ public class BeeInfoUtils {
         isValid = isValid && validateCentrifugeSecondaryOutput(bee);
         isValid = isValid && validateCentrifugeBottleOutput(bee);
         isValid = isValid && validateMaxTimeInHive(bee);
+        if (bee.isBreedable()) isValid = isValid && validateBreeding(bee);
 
         return isValid;
+    }
+
+    private static boolean validateBreeding(BeeData bee) {
+        return !bee.getParent1().equals(bee.getParent2())
+                ? dataCheckPassed(bee.getName(), "breeding")
+                : logWarn(bee.getName(), "breeding", (bee.getParent1() + " and " + bee.getParent2()),
+                "are the same parents. Child bee will not spawn from breeding.");
     }
 
     private static boolean validateMaxTimeInHive(BeeData bee) {
