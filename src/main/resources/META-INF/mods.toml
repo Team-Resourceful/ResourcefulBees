@@ -5,16 +5,11 @@ issueTrackerURL="https://github.com/Dungeon-Derps-Development/ResourcefulBees/is
 modId="resourcefulbees"
 version="${file.jarVersion}"
 displayName="Resourceful Bees"
-displayURL="http://example.com/"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/resourceful-bees"
 logoFile="logo.png"
 credits="Thanks to Tfarcenim for making Beesourceful which this mod is heavily based on."
 authors="Epic_Oreo, ThatGravyBoat, DrDarkfire"
-description='''
-This mod provides pack makers with useful capabilities for creating custom Resource Bee Types.
--Special Thanks-
-Thanks to the MMD Discord peeps for all of their assistance.
-Thanks to Silentchaos512 for his Color Utility.
-'''
+description="This mod provides pack makers with useful capabilities for creating custom Resource Bee Types. \n-Special Thanks- \nThanks to the MMD Discord peeps for all of their assistance. \nThanks to Silentchaos512 for his Color Utility."
 
 [[dependencies.resourcefulbees]]
     modId="forge"
