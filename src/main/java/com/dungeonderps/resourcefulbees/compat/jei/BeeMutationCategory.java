@@ -145,7 +145,7 @@ public class BeeMutationCategory implements IRecipeCategory<BeeMutationCategory.
     public static List<BeeMutationCategory.Recipe> getMutationRecipes(IIngredientManager ingredientManager) {
         List<BeeMutationCategory.Recipe> recipes = new ArrayList<>();
         for (Map.Entry<String, BeeData> bee : BeeInfo.BEE_INFO.entrySet()){
-            if (bee.getKey().equals(BeeConst.DEFAULT_BEE_TYPE) || bee.getKey().equals(BeeConst.DEFAULT_REMOVE)) { }
+            if (!bee.getValue().getBaseBlock().isEmpty() || !bee.getValue().getMutationBlock().isEmpty() || bee.getKey().equals(BeeConst.DEFAULT_BEE_TYPE) || bee.getKey().equals(BeeConst.DEFAULT_REMOVE)) { }
             else {
                 Item baseBlock = ForgeRegistries.ITEMS.getValue(new ResourceLocation(bee.getValue().getBaseBlock()));
                 Item mutationBlock = ForgeRegistries.ITEMS.getValue(new ResourceLocation(bee.getValue().getMutationBlock()));
