@@ -17,6 +17,8 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -101,9 +103,16 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
 
     @Override
     public boolean attackEntityFrom(DamageSource source, float amount) {
-        if (source.isFireDamage() && getBeeInfo().isNetherBee())
+        if (source.isFireDamage() && (getBeeInfo().isNetherBee()) || getBeeInfo().isBlazeBee())
             return false;
         return super.attackEntityFrom(source, amount);
+    }
+
+    @Override
+    public boolean isPotionApplicable(EffectInstance potioneffectIn) {
+        if (getBeeInfo().isWitherBee() && potioneffectIn.getPotion().equals(Effects.WITHER))
+            return false;
+        return super.isPotionApplicable(potioneffectIn);
     }
 
     @Override

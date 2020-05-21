@@ -24,21 +24,9 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
      */
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-        ResourceLocation texture = null;
-        String titles = title.getFormattedText().toLowerCase().trim();
-        if (!titles.equals("centrifuge")) {
-            for (DyeColor color : DyeColor.values()) {
-                if (titles.equals(color.getName())) {
-                    if (color.getTextColor() > 12582656) textColor = 0x000000;
-                    else textColor = 0xffffff;
-                    texture = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/centrifuges/" + color.getName() + "_centrifuge.png");
-                }
-            }
-        }
-        else {
-            if (currentMonth.equals("12")) texture = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/gui/centrifuges/christmas_centrifuge.png");
-            else texture = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/gui/centrifuges/centrifuge.png");
-        }
+        ResourceLocation texture;
+        if (currentMonth.equals("12")) texture = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/gui/centrifuges/christmas_centrifuge.png");
+        else texture = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/gui/centrifuges/centrifuge.png");
         this.minecraft.getTextureManager().bindTexture(texture);
         int i = (this.width - this.xSize) / 2;
         int j = (this.height - this.ySize) / 2;
