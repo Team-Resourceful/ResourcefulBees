@@ -23,6 +23,7 @@ import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.passive.CustomBeeEntity;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -35,6 +36,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
+import static com.dungeonderps.resourcefulbees.ResourcefulBees.LOGGER;
 
 @SuppressWarnings("NullableProblems")
 public class BeeMutationCategory implements IRecipeCategory<BeeMutationCategory.Recipe> {
@@ -156,9 +159,15 @@ public class BeeMutationCategory implements IRecipeCategory<BeeMutationCategory.
                     recipes.add(new Recipe(new ItemStack(Items.BARRIER).setDisplayName(new StringTextComponent("Block Tags: " + bee.getValue().getBaseBlock().replace(BeeConst.TAG_PREFIX, ""))), new ItemStack(mutationBlock), bee.getKey()));
                 }
                 else {
-                    Item baseBlock = ForgeRegistries.ITEMS.getValue(new ResourceLocation(bee.getValue().getBaseBlock()));
-                    Item mutationBlock = ForgeRegistries.ITEMS.getValue(new ResourceLocation(bee.getValue().getMutationBlock()));
-                    recipes.add(new Recipe(new ItemStack(baseBlock), new ItemStack(mutationBlock), bee.getKey()));
+                    if (!ForgeRegistries.FLUIDS.getValue(new ResourceLocation(bee.getValue().getBaseBlock())).equals(Fluids.EMPTY)){
+                        Item mutationBlock = ForgeRegistries.ITEMS.getValue(new ResourceLocation(bee.getValue().getMutationBlock()));
+                        recipes.add(new Recipe(new ItemStack(Items.BARRIER).setDisplayName(new StringTextComponent("Fluid: " + bee.getValue().getBaseBlock())), new ItemStack(mutationBlock), bee.getKey()));
+                    }
+                    else{
+                        Item baseBlock = ForgeRegistries.ITEMS.getValue(new ResourceLocation(bee.getValue().getBaseBlock()));
+                        Item mutationBlock = ForgeRegistries.ITEMS.getValue(new ResourceLocation(bee.getValue().getMutationBlock()));
+                        recipes.add(new Recipe(new ItemStack(baseBlock), new ItemStack(mutationBlock), bee.getKey()));
+                    }
                 }
             }
         }

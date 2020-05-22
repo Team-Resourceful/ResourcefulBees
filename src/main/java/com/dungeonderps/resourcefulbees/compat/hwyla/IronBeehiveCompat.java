@@ -5,11 +5,13 @@ import com.dungeonderps.resourcefulbees.block.IronBeehiveBlock;
 import com.dungeonderps.resourcefulbees.lib.BeeConst;
 import mcp.mobius.waila.api.*;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.IronBeehiveBlockEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
@@ -23,7 +25,7 @@ public class IronBeehiveCompat implements IComponentProvider, IServerDataProvide
         if (accessor.getPlayer().isSneaking()) {
             if (nbt.contains("HoneyLevel")) {
                 int honeyLevel = nbt.getInt("HoneyLevel");
-                tooltip.add(new TranslationTextComponent("gui." + ResourcefulBees.MOD_ID + ".beehive.honeylevel", honeyLevel));
+                tooltip.add(new StringTextComponent(I18n.format("gui." + ResourcefulBees.MOD_ID + ".beehive.honeylevel") + honeyLevel));
             }
             if (nbt.contains(BeeConst.NBT_SMOKED_TE)) {
                 tooltip.add(new TranslationTextComponent("gui." + ResourcefulBees.MOD_ID + ".beehive.smoked"));
