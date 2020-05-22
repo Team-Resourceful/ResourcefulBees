@@ -5,6 +5,7 @@ import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.data.BeeData;
 import com.dungeonderps.resourcefulbees.lib.BeeConst;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
+import com.dungeonderps.resourcefulbees.utils.BeeInfoUtils;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import mezz.jei.api.constants.VanillaTypes;
@@ -24,7 +25,10 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.passive.CustomBeeEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
@@ -147,9 +151,15 @@ public class BeeMutationCategory implements IRecipeCategory<BeeMutationCategory.
         for (Map.Entry<String, BeeData> bee : BeeInfo.BEE_INFO.entrySet()){
             if (bee.getValue().getBaseBlock().isEmpty() || bee.getValue().getMutationBlock().isEmpty() || bee.getKey().equals(BeeConst.DEFAULT_BEE_TYPE) || bee.getKey().equals(BeeConst.DEFAULT_REMOVE)) { }
             else {
-                Item baseBlock = ForgeRegistries.ITEMS.getValue(new ResourceLocation(bee.getValue().getBaseBlock()));
-                Item mutationBlock = ForgeRegistries.ITEMS.getValue(new ResourceLocation(bee.getValue().getMutationBlock()));
-                recipes.add(new Recipe(new ItemStack(baseBlock), new ItemStack(mutationBlock), bee.getKey()));
+                if (BeeInfoUtils.TAG_RESOURCE_PATTERN.matcher(bee.getValue().getBaseBlock()).matches()){
+                    Item mutationBlock = ForgeRegistries.ITEMS.getValue(new ResourceLocation(bee.getValue().getMutationBlock()));
+                    recipes.add(new Recipe(new ItemStack(Items.BARRIER).setDisplayName(new StringTextComponent("Block Tags: " + bee.getValue().getBaseBlock().replace(BeeConst.TAG_PREFIX, ""))), new ItemStack(mutationBlock), bee.getKey()));
+                }
+                else {
+                    Item baseBlock = ForgeRegistries.ITEMS.getValue(new ResourceLocation(bee.getValue().getBaseBlock()));
+                    Item mutationBlock = ForgeRegistries.ITEMS.getValue(new ResourceLocation(bee.getValue().getMutationBlock()));
+                    recipes.add(new Recipe(new ItemStack(baseBlock), new ItemStack(mutationBlock), bee.getKey()));
+                }
             }
         }
         return recipes;
