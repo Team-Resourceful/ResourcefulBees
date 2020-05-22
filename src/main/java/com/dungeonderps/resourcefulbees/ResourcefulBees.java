@@ -2,6 +2,7 @@ package com.dungeonderps.resourcefulbees;
 
 import com.dungeonderps.resourcefulbees.client.render.entity.CustomBeeRenderer;
 import com.dungeonderps.resourcefulbees.commands.ResourcefulBeeCommands;
+//import com.dungeonderps.resourcefulbees.compat.top.TopCompat;
 import com.dungeonderps.resourcefulbees.compat.top.TopCompat;
 import com.dungeonderps.resourcefulbees.config.BeeBuilder;
 import com.dungeonderps.resourcefulbees.config.Config;
@@ -157,8 +158,8 @@ public class ResourcefulBees
         DeferredWorkQueue.runLater(BeeBuilder::setupBees);
     }
     public void onInterModEnqueue(InterModEnqueueEvent event) {
-        if (ModList.get().isLoaded("theoneprobe"))
-            InterModComms.sendTo("theoneprobe", "getTheOneProbe", TopCompat::new);
+        //if (ModList.get().isLoaded("theoneprobe"))
+        //    InterModComms.sendTo("theoneprobe", "getTheOneProbe", TopCompat::new);
     }
 
     private void serverStarting(FMLServerStartingEvent event) {

@@ -40,6 +40,7 @@ public class JEICompat implements IModPlugin {
         registration.addRecipeCategories(new BeeHiveCategory(helper));
         registration.addRecipeCategories(new BeeBreedingCategory(helper));
         registration.addRecipeCategories(new BeeMutationCategory(helper));
+        //registration.addRecipeCategories(new BeeFluidMutationCategory(helper));
         registration.addRecipeCategories(new CentrifugeRecipeCategory(helper));
     }
     @Nonnull
@@ -62,8 +63,7 @@ public class JEICompat implements IModPlugin {
 
         ResourcefulHoneycomb comb = (ResourcefulHoneycomb) item;
 
-        String combStack = comb.getTranslationKey(stack);
-        return combStack;
+        return comb.getTranslationKey(stack);
     };
 
     private static final ISubtypeInterpreter honeycombBlockSubtype = stack -> {
@@ -72,8 +72,7 @@ public class JEICompat implements IModPlugin {
 
         HoneycombBlockItem combBlock = (HoneycombBlockItem) item;
 
-        String combBlockStack = combBlock.getTranslationKey(stack);
-        return combBlockStack;
+        return combBlock.getTranslationKey(stack);
     };
 
     @Override
@@ -90,6 +89,7 @@ public class JEICompat implements IModPlugin {
         registration.addRecipes(recipes, CentrifugeRecipeCategory.ID);
         registration.addRecipes(BeeBreedingCategory.getBreedingRecipes(registration.getIngredientManager()), BeeBreedingCategory.ID);
         registration.addRecipes(BeeMutationCategory.getMutationRecipes(registration.getIngredientManager()), BeeMutationCategory.ID);
+        //registration.addRecipes(BeeFluidMutationCategory.getMutationRecipes(registration.getIngredientManager()), BeeFluidMutationCategory.ID);
     }
 
     @Override

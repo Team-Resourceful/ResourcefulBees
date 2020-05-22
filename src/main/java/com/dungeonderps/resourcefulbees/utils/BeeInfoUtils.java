@@ -75,8 +75,6 @@ public class BeeInfoUtils {
         defaultBee.setName(BeeConst.DEFAULT_BEE_TYPE);
         defaultBee.setColor(String.valueOf(BeeConst.DEFAULT_COLOR));
         defaultBee.setFlower("minecraft:poppy");
-        defaultBee.setBaseBlock("minecraft:stone");
-        defaultBee.setMutationBlock("minecraft:stone");
         defaultBee.setBiomeList("test");
         defaultBee.setSpawnInWorld(false);
         BEE_INFO.put(BeeConst.DEFAULT_BEE_TYPE, defaultBee);

@@ -10,6 +10,9 @@ import net.minecraft.entity.passive.BeeEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -25,7 +28,10 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import javax.annotation.Nullable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.List;
+
+import static net.minecraftforge.common.loot.LootModifierManager.LOGGER;
 
 public class Smoker extends Item {
 
@@ -68,27 +74,10 @@ public class Smoker extends Item {
         if (targetIn.getEntityWorld().isRemote() || (!(targetIn instanceof BeeEntity) || !targetIn.isAlive())) {
             return false;
         }
-
-        //we're using reflection to access private setAnger method for bee
-        //It's looks scary but it's simple.
-        //create new method, get method from class we want to call,
-        //call method, pass in the object we want to call the method on
-        //pass in the value for the parameter.
-
         BeeEntity target = (BeeEntity) targetIn;
         if (target.isAngry()){
-            Method setAnger;   /// <<<<----- creating method container
-            try {
-                setAnger = BeeEntity.class.getDeclaredMethod("setAnger", int.class); ///<<<<------- Creating instance of method
-                setAnger.setAccessible(true);     ///<<<<------- Making the method accessible
-                setAnger.invoke(targetIn, 0);   ///<<<<------ Invoking method
-            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-                e.printStackTrace();
-            }
-
-            stack.damageItem(1, player, player1 -> player1.sendBreakAnimation(hand));
+            target.setAnger(0);
         }
-
         return true;
     }
 

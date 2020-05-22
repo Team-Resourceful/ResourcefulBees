@@ -55,7 +55,7 @@ public class TopCompat implements Function<ITheOneProbe, Void>
                             .vertical()
                             .itemLabel(blockState.getBlock().asItem().getDefaultInstance())
                             .text(I18n.format("gui." + ResourcefulBees.MOD_ID + ".beehive.smoked"))
-                            .progress((int) Math.floor(beehiveBlockEntity.ticksSmoked / 20), 30)
+                            .progress((int) Math.floor(beehiveBlockEntity.ticksSmoked / 20.0), 30)
                             .text(formatting + BeeConst.MOD_NAME);
                     return true;
                 }
@@ -73,11 +73,11 @@ public class TopCompat implements Function<ITheOneProbe, Void>
                                 .itemLabel(blockState.getBlock().asItem().getDefaultInstance())
                                 .text(I18n.format("gui." + ResourcefulBees.MOD_ID + ".beehive.smoked"))
                                 .text(I18n.format("gui." + ResourcefulBees.MOD_ID + ".beehive.honeylevel") + honeyLevel)
-                                .progress((int) Math.floor(beehiveBlockEntity.ticksSmoked / 20), 30)
+                                .progress((int) Math.floor(beehiveBlockEntity.ticksSmoked / 20.0), 30)
                                 .text(formatting + BeeConst.MOD_NAME);
                         vertical = probeInfo.vertical(probeInfo.defaultLayoutStyle().borderColor(0xff006699).spacing(0));
                         int hiveCombSize = ironBeeHive.numberOfCombs();
-                        hiveCombSize = hiveCombSize <= 6 ? hiveCombSize : 6;
+                        hiveCombSize = Math.min(hiveCombSize, 6);
                         for (int i =0; i < hiveCombSize; i++){
                             horizontal = vertical.horizontal(probeInfo.defaultLayoutStyle().spacing(10).alignment(ElementAlignment.ALIGN_CENTER));
                             horizontal.item(honeyComb(String.valueOf(i), ironBeeHive))
@@ -96,7 +96,7 @@ public class TopCompat implements Function<ITheOneProbe, Void>
                             .item(blockState.getBlock().asItem().getDefaultInstance())
                             .vertical()
                             .itemLabel(blockState.getBlock().asItem().getDefaultInstance())
-                            .progress((int) Math.floor(beeHiveBlock.time / 20), beeHiveBlock.totalTime / 20)
+                            .progress((int) Math.floor(beeHiveBlock.time / 20.0), beeHiveBlock.totalTime / 20)
                             .text(formatting + BeeConst.MOD_NAME);
                     return true;
                 }
@@ -122,15 +122,19 @@ public class TopCompat implements Function<ITheOneProbe, Void>
             }
             return false;
         });
+
         return null;
     }
+
     public static ItemStack honeyComb(String num, TileEntity te){
         final ItemStack honeyComb = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
-        if (te.serializeNBT().getCompound(BeeConst.NBT_HONEYCOMBS_TE).getString(num) != "") {
+        if (!te.serializeNBT().getCompound(BeeConst.NBT_HONEYCOMBS_TE).getString(num).equals("")) {
                 honeyComb.getOrCreateChildTag(BeeConst.NBT_ROOT).putString(BeeConst.NBT_BEE_TYPE, te.serializeNBT().getCompound(BeeConst.NBT_HONEYCOMBS_TE).getString(num));
                 honeyComb.getOrCreateChildTag(BeeConst.NBT_ROOT).putString(BeeConst.NBT_COLOR, String.valueOf(BEE_INFO.get(te.serializeNBT().getCompound(BeeConst.NBT_HONEYCOMBS_TE).getString(num)).getColor()));
             return honeyComb;
         }
         else return Items.AIR.getDefaultInstance();
     }
+
+
 }

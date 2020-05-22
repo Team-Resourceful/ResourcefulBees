@@ -132,9 +132,8 @@ public class IronBeehiveBlockEntity extends BeehiveTileEntity {
   @Override
   public void tick() {
     if (!world.isRemote) {
-      ticksSmoked = isSmoked && ticksSmoked < BeeConst.SMOKE_TIME
-              ? ticksSmoked++
-              : ticksSmoked;
+      if (isSmoked && ticksSmoked < BeeConst.SMOKE_TIME)
+        ticksSmoked++;
       if (ticksSmoked == BeeConst.SMOKE_TIME) {
         isSmoked = false;
         ticksSmoked = 0;
@@ -153,8 +152,7 @@ public class IronBeehiveBlockEntity extends BeehiveTileEntity {
   }
 
   public String getResourceHoneycomb(){
-    String honeycomb = honeycombs.pop();
-    return honeycomb;
+    return honeycombs.pop();
   }
 
   public boolean hasCombs(){

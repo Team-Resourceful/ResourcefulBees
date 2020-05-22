@@ -1,3 +1,4 @@
+/*
 package com.dungeonderps.resourcefulbees.compat.jei;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
@@ -27,18 +28,20 @@ import net.minecraft.entity.passive.CustomBeeEntity;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.*;
 
 @SuppressWarnings("NullableProblems")
-public class BeeMutationCategory implements IRecipeCategory<BeeMutationCategory.Recipe> {
+public class BeeFluidMutationCategory implements IRecipeCategory<BeeFluidMutationCategory.Recipe> {
     public static final ResourceLocation GUI_BACK = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/beemutation.png");
     public static final ResourceLocation ICONS = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/icons.png");
-    public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "mutation");
+    public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "fluid_mutation");
     private final IDrawable background;
     private final IDrawable icon;
     private final IDrawable info;
@@ -46,7 +49,7 @@ public class BeeMutationCategory implements IRecipeCategory<BeeMutationCategory.
     private final String localizedName;
     private final CustomBeeEntity bee;
 
-    public BeeMutationCategory(IGuiHelper guiHelper) {
+    public BeeFluidMutationCategory(IGuiHelper guiHelper) {
         this.background = guiHelper.drawableBuilder(GUI_BACK, -12, 0, 99, 75).addPadding(0, 0, 0, 0).build();
         this.icon = guiHelper.createDrawable(ICONS, 0,0,16,16);
         this.info = guiHelper.createDrawable(ICONS, 16, 0, 9, 9);
@@ -62,8 +65,8 @@ public class BeeMutationCategory implements IRecipeCategory<BeeMutationCategory.
     }
 
     @Override
-    public Class<? extends BeeMutationCategory.Recipe> getRecipeClass() {
-        return BeeMutationCategory.Recipe.class;
+    public Class<? extends BeeFluidMutationCategory.Recipe> getRecipeClass() {
+        return BeeFluidMutationCategory.Recipe.class;
     }
 
     @Override
@@ -82,15 +85,9 @@ public class BeeMutationCategory implements IRecipeCategory<BeeMutationCategory.
     }
 
     @Override
-    public void setIngredients(BeeMutationCategory.Recipe recipe, IIngredients ingredients) {
-        if (recipe.isBlockToBlock) {
-            ingredients.setOutput(VanillaTypes.ITEM, recipe.mutationBlock);
-            ingredients.setInput(VanillaTypes.ITEM, recipe.itemIn);
-        }
-        if (recipe.isFluidToBlock) {
-            ingredients.setOutput(VanillaTypes.ITEM, recipe.mutationBlock);
-            ingredients.setInput(VanillaTypes.FLUID, recipe.fluidIn);
-        }
+    public void setIngredients(BeeFluidMutationCategory.Recipe recipe, IIngredients ingredients) {
+        ingredients.setOutput(VanillaTypes.ITEM, recipe.mutationBlock);
+        ingredients.setInput(VanillaTypes.FLUID, recipe.baseBlock);
     }
 
     @Override
@@ -108,24 +105,21 @@ public class BeeMutationCategory implements IRecipeCategory<BeeMutationCategory.
         return IRecipeCategory.super.getTooltipStrings(recipe,mouseX, mouseY);
     }
 
-    @Override
-    public void setRecipe(IRecipeLayout iRecipeLayout, BeeMutationCategory.Recipe recipe, IIngredients ingredients) {
-        if (recipe.isBlockToBlock) {
-            IGuiItemStackGroup itemStacks = iRecipeLayout.getItemStacks();
-            itemStacks.init(0, false, 65, 48);
-            itemStacks.init(1, true, 15, 57);
-            itemStacks.set(ingredients);
-        }
 
-        if (recipe.isFluidToBlock) {
-            IGuiItemStackGroup itemStacks = iRecipeLayout.getItemStacks();
-            itemStacks.init(0, false, 65, 48);
-            //itemStacks.init(1, true, 15, 57);
-            itemStacks.set(0, recipe.getMutationBlock());
-            IGuiFluidStackGroup fluidStacks = iRecipeLayout.getFluidStacks();
-            fluidStacks.init(0,true,16,58);
-            fluidStacks.set(0, recipe.getFluidIn());
-        }
+
+
+
+
+
+    @Override
+    public void setRecipe(IRecipeLayout iRecipeLayout, BeeFluidMutationCategory.Recipe recipe, IIngredients ingredients) {
+        IGuiItemStackGroup itemStacks = iRecipeLayout.getItemStacks();
+        itemStacks.init(0, false, 65, 48);
+        //itemStacks.init(1, true, 15, 57);
+        itemStacks.set(ingredients);
+        IGuiFluidStackGroup fluidStacks = iRecipeLayout.getFluidStacks();
+        fluidStacks.init(0,true,15,57);
+        fluidStacks.set(ingredients);
     }
 
     public void renderEntity(String beeType, Float rotation, Double xPos, Double yPos){
@@ -156,37 +150,24 @@ public class BeeMutationCategory implements IRecipeCategory<BeeMutationCategory.
     }
 
     @Override
-    public void draw(BeeMutationCategory.Recipe recipe, double mouseX, double mouseY) {
+    public void draw(BeeFluidMutationCategory.Recipe recipe, double mouseX, double mouseY) {
         this.beeHive.draw(65, 10);
         this.info.draw(63, 8);
         renderEntity(recipe.beeType, 135.0F, 1.5D, -0.2D);
     }
 
-    public static List<BeeMutationCategory.Recipe> getMutationRecipes(IIngredientManager ingredientManager) {
-        List<BeeMutationCategory.Recipe> recipes = new ArrayList<>();
+    public static List<BeeFluidMutationCategory.Recipe> getMutationRecipes(IIngredientManager ingredientManager) {
+        List<BeeFluidMutationCategory.Recipe> recipes = new ArrayList<>();
         for (Map.Entry<String, BeeData> bee : BeeInfo.BEE_INFO.entrySet()){
             if (bee.getValue().getBaseBlock().isEmpty() || bee.getValue().getMutationBlock().isEmpty()) { }
+            String baseBlock = bee.getValue().getBaseBlock();
+            if (BeeInfoUtils.TAG_RESOURCE_PATTERN.matcher(baseBlock).matches()){ }
             else {
-                String baseBlock = bee.getValue().getBaseBlock();
-                if (BeeInfoUtils.TAG_RESOURCE_PATTERN.matcher(baseBlock).matches()){
+                if (ForgeRegistries.FLUIDS.getValue(BeeInfoUtils.getResource(baseBlock)) != null
+                        && !Objects.equals(ForgeRegistries.FLUIDS.getValue(BeeInfoUtils.getResource(baseBlock)), Fluids.EMPTY)) {
+                    FluidStack fluid = new FluidStack(ForgeRegistries.FLUIDS.getValue(BeeInfoUtils.getResource(baseBlock)), 1000);
                     ItemStack mutationBlock = new ItemStack(ForgeRegistries.ITEMS.getValue(BeeInfoUtils.getResource(bee.getValue().getMutationBlock())));
-                    baseBlock = baseBlock.replace(BeeConst.TAG_PREFIX, "");
-                    for (Item item:
-                         ItemTags.getCollection().get(BeeInfoUtils.getResource(baseBlock)).getAllElements()) {
-                        recipes.add(new Recipe(new ItemStack(item), mutationBlock, bee.getKey()));
-                    }
-                }
-                else {
-                    ItemStack mutationBlock = new ItemStack(ForgeRegistries.ITEMS.getValue(BeeInfoUtils.getResource(bee.getValue().getMutationBlock())));
-                    if (ForgeRegistries.FLUIDS.getValue(BeeInfoUtils.getResource(baseBlock)) != null
-                            && !Objects.equals(ForgeRegistries.FLUIDS.getValue(BeeInfoUtils.getResource(baseBlock)), Fluids.EMPTY)) {
-                        FluidStack fluid = new FluidStack(ForgeRegistries.FLUIDS.getValue(BeeInfoUtils.getResource(baseBlock)), 1000);
-                        recipes.add(new BeeMutationCategory.Recipe(fluid, mutationBlock, bee.getKey()));
-                    }
-                    else {
-
-                        recipes.add(new Recipe(new ItemStack(ForgeRegistries.ITEMS.getValue(BeeInfoUtils.getResource(baseBlock))), mutationBlock, bee.getKey()));
-                    }
+                    recipes.add(new Recipe(fluid, mutationBlock, bee.getKey()));
                 }
             }
         }
@@ -194,32 +175,21 @@ public class BeeMutationCategory implements IRecipeCategory<BeeMutationCategory.
     }
 
     public static class Recipe {
-        private final FluidStack fluidIn;
-        private final ItemStack itemIn;
+        private final FluidStack baseBlock;
         private final ItemStack mutationBlock;
         private final String beeType;
 
-        private boolean isFluidToBlock = true;
-        private boolean isBlockToBlock = true;
 
-        public Recipe(ItemStack baseBlock, ItemStack mutationBlock, String beeType) {
-            this.mutationBlock = mutationBlock;
-            this.itemIn = baseBlock;
-            this.beeType = beeType;
-            this.fluidIn = null;
-            isFluidToBlock = false;
-        }
 
         public Recipe(FluidStack baseBlock, ItemStack mutationBlock, String beeType) {
             this.mutationBlock = mutationBlock;
-            this.fluidIn = baseBlock;
+            this.baseBlock = baseBlock;
             this.beeType = beeType;
-            this.itemIn = null;
-            isBlockToBlock = false;
         }
 
-        public FluidStack getFluidIn() {return this.fluidIn;}
-        //public ItemStack getItemIn() {return this.itemIn;}
+        public FluidStack getBaseBlock() {
+            return this.baseBlock;
+        }
         public ItemStack getMutationBlock() {
             return this.mutationBlock;
         }
@@ -228,3 +198,7 @@ public class BeeMutationCategory implements IRecipeCategory<BeeMutationCategory.
         }
     }
 }
+
+
+
+ */

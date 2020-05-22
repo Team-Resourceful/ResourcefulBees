@@ -1,8 +1,8 @@
 {
   "color": "#444444",
   "flower": "minecraft:wither_rose",
-  "baseBlock": "minecraft:netherrack",
-  "mutationBlock": "minecraft:soul_sand",
+  "baseBlock": "minecraft:lava",
+  "mutationBlock": "minecraft:obsidian",
   "mainOutput": "minecraft:charcoal",
   "spawnInWorld": true,
   "biomeList": "tag:NETHER",
