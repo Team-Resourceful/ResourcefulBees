@@ -75,13 +75,13 @@ public class ResourcefulBees
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.CommonConfig.COMMON_CONFIG, "resourcefulbees/common.toml");
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener(EventPriority.LOW, this::setup);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onInterModEnqueue);
 
         MinecraftForge.EVENT_BUS.addListener(this::serverStarting);
         MinecraftForge.EVENT_BUS.addListener(this::OnServerSetup);
         MinecraftForge.EVENT_BUS.addListener(this::trade);
 
         DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
-            FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onInterModEnqueue);
             FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
             FMLJavaModLoadingContext.get().getModEventBus().addListener(ColorHandler::onItemColors);
             FMLJavaModLoadingContext.get().getModEventBus().addListener(ColorHandler::onBlockColors);
@@ -158,8 +158,8 @@ public class ResourcefulBees
         DeferredWorkQueue.runLater(BeeBuilder::setupBees);
     }
     public void onInterModEnqueue(InterModEnqueueEvent event) {
-        //if (ModList.get().isLoaded("theoneprobe"))
-        //    InterModComms.sendTo("theoneprobe", "getTheOneProbe", TopCompat::new);
+        if (ModList.get().isLoaded("theoneprobe"))
+            InterModComms.sendTo("theoneprobe", "getTheOneProbe", TopCompat::new);
     }
 
     private void serverStarting(FMLServerStartingEvent event) {

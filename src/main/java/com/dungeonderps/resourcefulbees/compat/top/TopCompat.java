@@ -10,13 +10,13 @@ import mcjty.theoneprobe.api.ElementAlignment;
 import mcjty.theoneprobe.api.IProbeInfo;
 import mcjty.theoneprobe.api.ITheOneProbe;
 import mcjty.theoneprobe.api.ProbeMode;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.passive.CustomBeeEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.tileentity.IronBeehiveBlockEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import javax.annotation.Nullable;
 import java.util.function.Function;
@@ -49,16 +49,6 @@ public class TopCompat implements Function<ITheOneProbe, Void>
             if(world.getTileEntity(data.getPos()) instanceof IronBeehiveBlockEntity)
             {
                 IronBeehiveBlockEntity beehiveBlockEntity = (IronBeehiveBlockEntity) world.getTileEntity(data.getPos());
-                if(beehiveBlockEntity.isSmoked) {
-                    probeInfo.horizontal()
-                            .item(blockState.getBlock().asItem().getDefaultInstance())
-                            .vertical()
-                            .itemLabel(blockState.getBlock().asItem().getDefaultInstance())
-                            .text(I18n.format("gui." + ResourcefulBees.MOD_ID + ".beehive.smoked"))
-                            .progress((int) Math.floor(beehiveBlockEntity.ticksSmoked / 20.0), 30)
-                            .text(formatting + BeeConst.MOD_NAME);
-                    return true;
-                }
                 if(mode.equals(ProbeMode.EXTENDED)){
                     IronBeehiveBlockEntity ironBeeHive = (IronBeehiveBlockEntity) world.getTileEntity(data.getPos());
                     if (ironBeeHive.hasCombs()) {
@@ -68,11 +58,11 @@ public class TopCompat implements Function<ITheOneProbe, Void>
                         IProbeInfo vertical = null;
                         IProbeInfo horizontal = null;
                         probeInfo.horizontal()
-                                .item(blockState.getBlock().asItem().getDefaultInstance())
+                                .item(new ItemStack(blockState.getBlock().asItem()))
                                 .vertical()
-                                .itemLabel(blockState.getBlock().asItem().getDefaultInstance())
-                                .text(I18n.format("gui." + ResourcefulBees.MOD_ID + ".beehive.smoked"))
-                                .text(I18n.format("gui." + ResourcefulBees.MOD_ID + ".beehive.honeylevel") + honeyLevel)
+                                .itemLabel(new ItemStack(blockState.getBlock().asItem()))
+                                .text(new TranslationTextComponent("gui.resourcefulbees.beehive.smoked").getFormattedText() + beehiveBlockEntity.isSmoked)
+                                .text(new TranslationTextComponent("gui.resourcefulbees.beehive.honeylevel").getFormattedText() + honeyLevel)
                                 .progress((int) Math.floor(beehiveBlockEntity.ticksSmoked / 20.0), 30)
                                 .text(formatting + BeeConst.MOD_NAME);
                         vertical = probeInfo.vertical(probeInfo.defaultLayoutStyle().borderColor(0xff006699).spacing(0));
@@ -93,9 +83,9 @@ public class TopCompat implements Function<ITheOneProbe, Void>
 
                 if(beeHiveBlock.time > 0) {
                     probeInfo.horizontal()
-                            .item(blockState.getBlock().asItem().getDefaultInstance())
+                            .item(new ItemStack(blockState.getBlock().asItem()))
                             .vertical()
-                            .itemLabel(blockState.getBlock().asItem().getDefaultInstance())
+                            .itemLabel(new ItemStack(blockState.getBlock().asItem()))
                             .progress((int) Math.floor(beeHiveBlock.time / 20.0), beeHiveBlock.totalTime / 20)
                             .text(formatting + BeeConst.MOD_NAME);
                     return true;
@@ -103,9 +93,9 @@ public class TopCompat implements Function<ITheOneProbe, Void>
             }
             if (blockState.getBlock().getRegistryName().getNamespace().equals(ResourcefulBees.MOD_ID)){
                 probeInfo.horizontal()
-                        .item(blockState.getBlock().asItem().getDefaultInstance())
+                        .item(new ItemStack(blockState.getBlock().asItem()))
                         .vertical()
-                        .itemLabel(blockState.getBlock().asItem().getDefaultInstance())
+                        .itemLabel(new ItemStack(blockState.getBlock().asItem()))
                         .text(formatting + BeeConst.MOD_NAME);
                 return true;
             }
@@ -133,7 +123,7 @@ public class TopCompat implements Function<ITheOneProbe, Void>
                 honeyComb.getOrCreateChildTag(BeeConst.NBT_ROOT).putString(BeeConst.NBT_COLOR, String.valueOf(BEE_INFO.get(te.serializeNBT().getCompound(BeeConst.NBT_HONEYCOMBS_TE).getString(num)).getColor()));
             return honeyComb;
         }
-        else return Items.AIR.getDefaultInstance();
+        else return new ItemStack(Items.AIR);
     }
 
 
