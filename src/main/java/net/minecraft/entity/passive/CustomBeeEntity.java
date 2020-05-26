@@ -103,7 +103,7 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
 
     @Override
     public boolean attackEntityFrom(DamageSource source, float amount) {
-        if (source.isFireDamage() && (getBeeInfo().isNetherBee()) || getBeeInfo().isBlazeBee())
+        if (source.isFireDamage() && (getBeeInfo().isNetherBee() || getBeeInfo().isBlazeBee()))
             return false;
         return super.attackEntityFrom(source, amount);
     }
