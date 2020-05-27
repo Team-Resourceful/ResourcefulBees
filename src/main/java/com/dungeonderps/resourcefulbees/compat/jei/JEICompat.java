@@ -40,8 +40,11 @@ public class JEICompat implements IModPlugin {
         IGuiHelper helper = registration.getJeiHelpers().getGuiHelper();
         registration.addRecipeCategories(new BeeHiveCategory(helper));
         registration.addRecipeCategories(new BeeBreedingCategory(helper));
-        registration.addRecipeCategories(new BeeMutationCategory(helper));
         registration.addRecipeCategories(new CentrifugeRecipeCategory(helper));
+        registration.addRecipeCategories(new FluidToFluid(helper));
+        registration.addRecipeCategories(new BlockToFluid(helper));
+        registration.addRecipeCategories(new FluidToBlock(helper));
+        registration.addRecipeCategories(new BlockToBlock(helper));
     }
     @Nonnull
     @Override
@@ -90,7 +93,10 @@ public class JEICompat implements IModPlugin {
             registration.addRecipes(BeeHiveCategory.getHoneycombRecipes(registration.getIngredientManager()), BeeHiveCategory.ID);
             registration.addRecipes(recipes, CentrifugeRecipeCategory.ID);
             registration.addRecipes(BeeBreedingCategory.getBreedingRecipes(registration.getIngredientManager()), BeeBreedingCategory.ID);
-            registration.addRecipes(BeeMutationCategory.getMutationRecipes(registration.getIngredientManager()), BeeMutationCategory.ID);
+            registration.addRecipes(FluidToFluid.getMutationRecipes(registration.getIngredientManager()), FluidToFluid.ID);
+            registration.addRecipes(BlockToFluid.getMutationRecipes(registration.getIngredientManager()), BlockToFluid.ID);
+            registration.addRecipes(FluidToBlock.getMutationRecipes(registration.getIngredientManager()), FluidToBlock.ID);
+            registration.addRecipes(BlockToBlock.getMutationRecipes(registration.getIngredientManager()), BlockToBlock.ID);
         }
     }
 
