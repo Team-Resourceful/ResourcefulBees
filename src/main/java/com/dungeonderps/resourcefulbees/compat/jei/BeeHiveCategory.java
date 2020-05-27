@@ -24,7 +24,9 @@ import net.minecraft.entity.passive.CustomBeeEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -44,29 +46,38 @@ public class BeeHiveCategory implements IRecipeCategory<BeeHiveCategory.Recipe> 
         this.background = guiHelper.drawableBuilder(GUI_BACK, 0, 0, 160, 25).addPadding(0, 0, 0, 0).build();
         this.icon = guiHelper.createDrawableIngredient(new ItemStack(RegistryHandler.IRON_BEEHIVE_ITEM.get()));
         this.localizedName = I18n.format("gui.resourcefulbees.jei.category.hive");
-        bee = RegistryHandler.CUSTOM_BEE.get().create(Minecraft.getInstance().world);
+        World clientWorld = Minecraft.getInstance().world;
+        if (clientWorld != null)
+            bee = RegistryHandler.CUSTOM_BEE.get().create(clientWorld);
+        else
+            bee = null;
     }
 
+    @Nonnull
     @Override
     public ResourceLocation getUid() {
         return ID;
     }
 
+    @Nonnull
     @Override
     public Class<? extends Recipe> getRecipeClass() {
         return Recipe.class;
     }
 
+    @Nonnull
     @Override
     public String getTitle() {
         return this.localizedName;
     }
 
+    @Nonnull
     @Override
     public IDrawable getBackground() {
         return this.background;
     }
 
+    @Nonnull
     @Override
     public IDrawable getIcon() {
         return this.icon;
@@ -79,15 +90,16 @@ public class BeeHiveCategory implements IRecipeCategory<BeeHiveCategory.Recipe> 
     }
 
     @Override
-    public void setRecipe(IRecipeLayout iRecipeLayout, Recipe recipe, IIngredients ingredients) {
+    public void setRecipe(IRecipeLayout iRecipeLayout, @Nonnull Recipe recipe, @Nonnull IIngredients ingredients) {
         IGuiItemStackGroup itemStacks = iRecipeLayout.getItemStacks();
         itemStacks.init(0, false, 138, 4);
         itemStacks.init(1, true, 62, 4);
         itemStacks.set(ingredients);
     }
 
+    @Nonnull
     @Override
-    public List<String> getTooltipStrings(Recipe recipe, double mouseX, double mouseY) {
+    public List<String> getTooltipStrings(@Nonnull Recipe recipe, double mouseX, double mouseY) {
         double beeX = 2D;
         double beeY = 2D;
         if (mouseX >= beeX && mouseX <= beeX + 30D && mouseY >= beeY && mouseY <= beeY + 30D){
@@ -112,6 +124,7 @@ public class BeeHiveCategory implements IRecipeCategory<BeeHiveCategory.Recipe> 
         EntityRendererManager entityrenderermanager = mc.getRenderManager();
         IRenderTypeBuffer.Impl irendertypebuffer$impl = mc.getRenderTypeBuffers().getBufferSource();
 
+        assert mc.player != null;
         bee.ticksExisted = mc.player.ticksExisted;
         bee.renderYawOffset = rotation;
         bee.setBeeType(beeType);

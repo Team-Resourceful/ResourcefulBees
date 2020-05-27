@@ -12,6 +12,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import javax.annotation.Nonnull;
+
 @OnlyIn(Dist.CLIENT)
 public class CustomBeeOverlay extends LayerRenderer<CustomBeeEntity, CustomBeeModel<CustomBeeEntity>> {
     private static final ResourceLocation BEE_COLLAR = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/entity/custom/bee_collar.png");
@@ -21,9 +23,9 @@ public class CustomBeeOverlay extends LayerRenderer<CustomBeeEntity, CustomBeeMo
         super(rendererIn);
     }
 
-    public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, CustomBeeEntity entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void render(@Nonnull MatrixStack matrixStackIn, @Nonnull IRenderTypeBuffer bufferIn, int packedLightIn, CustomBeeEntity entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         float[] collarColor = BeeInfo.getBeeColorAsFloat(entitylivingbaseIn.getBeeColor());
-        BeeData bee = BeeInfo.getInfo(entitylivingbaseIn.getBeeType());
+        BeeData bee = entitylivingbaseIn.getBeeInfo();
         if (!bee.isCreeperBee() && !bee.isSkeletonBee() && !bee.isZomBee() && !bee.isWitherBee() && !bee.isPigmanBee()) {
             if (entitylivingbaseIn.isAngry())
                 renderCutoutModel(this.getEntityModel(), BEE_COLLAR_ANGRY, matrixStackIn, bufferIn, packedLightIn, entitylivingbaseIn, collarColor[0], collarColor[1], collarColor[2]);

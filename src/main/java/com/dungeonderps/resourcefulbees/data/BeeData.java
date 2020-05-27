@@ -1,8 +1,11 @@
 package com.dungeonderps.resourcefulbees.data;
 
 import com.dungeonderps.resourcefulbees.lib.BeeConst;
+import com.dungeonderps.resourcefulbees.lib.MutationTypes;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import net.minecraft.item.Items;
+
+import java.util.Objects;
 
 public class BeeData {
 
@@ -10,6 +13,7 @@ public class BeeData {
 
     private String baseBlock = "";
     private String mutationBlock = "";
+
     private String mainOutput = "";
 
     private String secondaryOutput = RegistryHandler.BEESWAX.getId().toString();
@@ -24,7 +28,8 @@ public class BeeData {
     private double bottleOutputWeight = BeeConst.DEFAULT_BOT_OUTPUT_WEIGHT;
 
     private transient String name = BeeConst.DEFAULT_BEE_TYPE;
-
+    private transient boolean mutation;
+    private transient Enum<MutationTypes> mutationType;
 
     public BeeData() {}
 
@@ -364,5 +369,23 @@ public class BeeData {
      */
     public void setBreedWeight(double breedWeight) {
         this.breedWeight = breedWeight;
+    }
+
+    //set during validation
+    public boolean hasMutation() {
+        return mutation;
+    }
+
+    //set during validation
+    public void setMutation(boolean mutation) {
+        this.mutation = mutation;
+    }
+
+    public Enum<MutationTypes> getMutationType() {
+        return mutationType;
+    }
+
+    public void setMutationType(Enum<MutationTypes> mutationType) {
+        this.mutationType = mutationType;
     }
 }

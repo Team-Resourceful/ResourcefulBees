@@ -2,7 +2,6 @@ package com.dungeonderps.resourcefulbees;
 
 import com.dungeonderps.resourcefulbees.client.render.entity.CustomBeeRenderer;
 import com.dungeonderps.resourcefulbees.commands.ResourcefulBeeCommands;
-//import com.dungeonderps.resourcefulbees.compat.top.TopCompat;
 import com.dungeonderps.resourcefulbees.compat.top.TopCompat;
 import com.dungeonderps.resourcefulbees.config.BeeBuilder;
 import com.dungeonderps.resourcefulbees.config.Config;

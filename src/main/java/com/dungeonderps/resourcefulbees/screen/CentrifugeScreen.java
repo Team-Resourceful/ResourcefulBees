@@ -2,7 +2,9 @@ package com.dungeonderps.resourcefulbees.screen;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.container.CentrifugeContainer;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.DyeColor;
 import net.minecraft.util.ResourceLocation;
@@ -27,13 +29,17 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
         ResourceLocation texture;
         if (currentMonth.equals("12")) texture = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/gui/centrifuges/christmas_centrifuge.png");
         else texture = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/gui/centrifuges/centrifuge.png");
-        this.minecraft.getTextureManager().bindTexture(texture);
-        int i = (this.width - this.xSize) / 2;
-        int j = (this.height - this.ySize) / 2;
-        this.blit(i, j, 0, 0, this.xSize, this.ySize);
-        double scaledprogress = 74d * this.container.centrifugeBlockEntity.time /
-                Math.max(this.container.centrifugeBlockEntity.totalTime,1d);
-        this.blit(i + 51, j + 28, 176, 0, (int)scaledprogress, 29);
+        Minecraft client = this.minecraft;
+        if (client != null) {
+            this.minecraft.getTextureManager().bindTexture(texture);
+            int i = (this.width - this.xSize) / 2;
+            int j = (this.height - this.ySize) / 2;
+            this.blit(i, j, 0, 0, this.xSize, this.ySize);
+            double scaledprogress = 74d * this.container.centrifugeBlockEntity.time /
+                    Math.max(this.container.centrifugeBlockEntity.totalTime,1d);
+            this.blit(i + 51, j + 28, 176, 0, (int)scaledprogress, 29);
+
+        }
     }
 
     @Override
@@ -45,7 +51,6 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        int size = font.getStringWidth(title.getFormattedText());
         this.font.drawString(this.title.getFormattedText(), 5, 5, textColor);
     }
 }

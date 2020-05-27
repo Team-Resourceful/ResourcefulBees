@@ -22,6 +22,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.loading.FMLPaths;
 
+import javax.annotation.Nonnull;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
@@ -49,11 +50,11 @@ public class ModSetup {
         RESOURCE_PATH = rbAssetsPath;
 
         try { Files.createDirectories(rbBeesPath);
-        } catch (FileAlreadyExistsException e) {
+        } catch (FileAlreadyExistsException ignored) {
         } catch (IOException e) { LOGGER.error("failed to create resourcefulbees config directory");}
 
         try { Files.createDirectory(rbAssetsPath);
-        } catch (FileAlreadyExistsException e) {
+        } catch (FileAlreadyExistsException ignored) {
         } catch (IOException e) { LOGGER.error("Failed to create assets directory");}
 
         try {
@@ -61,13 +62,14 @@ public class ModSetup {
             String mcMetaContent = "{\"pack\":{\"pack_format\":5,\"description\":\"Resourceful Bees resource pack used for lang purposes for the user to add lang for bee/items.\"}}";
             file.write(mcMetaContent);
             file.close();
-        } catch (FileAlreadyExistsException e){
+        } catch (FileAlreadyExistsException ignored){
         } catch (IOException e) { LOGGER.error("Failed to create pack.mcmeta file for resource loading");}
     }
 
     public static void setupDispenserCollectionBehavior() {
         DispenserBlock.registerDispenseBehavior(Items.SHEARS.asItem(), new OptionalDispenseBehavior() {
-            protected ItemStack dispenseStack(IBlockSource source, ItemStack stack) {
+            @Nonnull
+            protected ItemStack dispenseStack(@Nonnull IBlockSource source, @Nonnull ItemStack stack) {
                 World world = source.getWorld();
                 if (!world.isRemote()) {
                     this.successful = false;
@@ -81,7 +83,8 @@ public class ModSetup {
                             java.util.Random rand = new java.util.Random();
                             drops.forEach(d -> {
                                 net.minecraft.entity.item.ItemEntity ent = entity.entityDropItem(d, 1.0F);
-                                ent.setMotion(ent.getMotion().add((rand.nextFloat() - rand.nextFloat()) * 0.1F, rand.nextFloat() * 0.05F, (rand.nextFloat() - rand.nextFloat()) * 0.1F));
+                                if (ent != null)
+                                    ent.setMotion(ent.getMotion().add((rand.nextFloat() - rand.nextFloat()) * 0.1F, rand.nextFloat() * 0.05F, (rand.nextFloat() - rand.nextFloat()) * 0.1F));
                             });
                             if (stack.attemptDamageItem(1, world.rand, null)) {
                                 stack.setCount(0);
@@ -129,7 +132,7 @@ public class ModSetup {
     public static void loadResources() {
         Minecraft.getInstance().getResourcePackList().addPackFinder(new IPackFinder() {
             @Override
-            public <T extends ResourcePackInfo> void addPackInfosToMap(Map<String, T> map, ResourcePackInfo.IFactory<T> factory) {
+            public <T extends ResourcePackInfo> void addPackInfosToMap(@Nonnull Map<String, T> map, @Nonnull ResourcePackInfo.IFactory<T> factory) {
                 final T packInfo = ResourcePackInfo.createResourcePack(
                         ResourcefulBees.MOD_ID,
                         true,

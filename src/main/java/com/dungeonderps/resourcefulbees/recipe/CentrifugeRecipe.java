@@ -40,14 +40,14 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
     }
 
     @Override
-    public boolean matches(IInventory inventory, World world) {
+    public boolean matches(IInventory inventory, @Nonnull World world) {
         return ingredient.test(inventory.getStackInSlot(0));
     }
 
     @Override
     @Nonnull
     @Deprecated
-    public ItemStack getCraftingResult(IInventory inventory) {
+    public ItemStack getCraftingResult(@Nonnull IInventory inventory) {
         return ItemStack.EMPTY;
     }
 
@@ -70,16 +70,19 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
         return ItemStack.EMPTY;
     }
 
+    @Nonnull
     @Override
     public ResourceLocation getId() {
         return id;
     }
 
+    @Nonnull
     @Override
     public IRecipeSerializer<?> getSerializer() {
         return RegistryHandler.CENTRIFUGE_RECIPE.get();
     }
 
+    @Nonnull
     @Override
     public IRecipeType<?> getType() {
         return CENTRIFUGE_RECIPE_TYPE;
@@ -96,8 +99,9 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
             this.factory = factory;
         }
 
+        @Nonnull
         @Override
-        public T read(ResourceLocation id, JsonObject json) {
+        public T read(@Nonnull ResourceLocation id, @Nonnull JsonObject json) {
             Ingredient ingredient;
             if (JSONUtils.isJsonArray(json, "ingredient")) {
                 ingredient = Ingredient.deserialize(JSONUtils.getJsonArray(json, "ingredient"));
@@ -121,7 +125,7 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
             return this.factory.create(id, ingredient, outputs,time);
         }
 
-        public T read(ResourceLocation id, PacketBuffer buffer) {
+        public T read(@Nonnull ResourceLocation id, @Nonnull PacketBuffer buffer) {
             Ingredient ingredient = Ingredient.read(buffer);
             List<Pair<ItemStack,Double>> outputs = new ArrayList<>();
             IntStream.range(0,buffer.readInt()).forEach(i -> outputs.add(Pair.of(buffer.readItemStack(),buffer.readDouble())));
@@ -129,7 +133,7 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
             return this.factory.create(id, ingredient, outputs,time);
         }
 
-        public void write(PacketBuffer buffer, T recipe) {
+        public void write(@Nonnull PacketBuffer buffer, T recipe) {
             recipe.ingredient.write(buffer);
             buffer.writeInt(recipe.outputs.size());
             recipe.outputs.forEach(itemStackDoublePair -> {

@@ -13,6 +13,7 @@ import net.minecraft.util.ActionResultType;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.fml.RegistryObject;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class BeeSpawnEggItem extends SpawnEggItem {
@@ -24,6 +25,7 @@ public class BeeSpawnEggItem extends SpawnEggItem {
 		this.entityType = Lazy.of(entityTypeSupplier);
 	}
 
+    @Nonnull
 	@Override
     public String getTranslationKey(ItemStack stack) {
         CompoundNBT beeType = stack.getChildTag(BeeConst.NBT_ROOT);
@@ -36,17 +38,20 @@ public class BeeSpawnEggItem extends SpawnEggItem {
         return name;
     }
 
+    @Nonnull
 	@Override
 	public EntityType<?> getType(@Nullable final CompoundNBT p_208076_1_) {
 		return entityType.get();
 	}
 
+    @Nonnull
     @Override
     public ActionResultType onItemUse(ItemUseContext context) {
         ItemStack itemstack = context.getItem();
         PlayerEntity player = context.getPlayer();
-        if (itemstack.getChildTag(BeeConst.NBT_ROOT) != null) {
-            String bee = itemstack.getChildTag(BeeConst.NBT_ROOT).getString(BeeConst.NBT_BEE_TYPE);
+        CompoundNBT tag = itemstack.getChildTag(BeeConst.NBT_ROOT);
+        if (tag != null && player != null) {
+            String bee = tag.getString(BeeConst.NBT_BEE_TYPE);
             if (BeeInfo.getInfo(bee) == null && !itemstack.isEmpty()) {
                 for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
                     if (player.inventory.getStackInSlot(i) == itemstack) {

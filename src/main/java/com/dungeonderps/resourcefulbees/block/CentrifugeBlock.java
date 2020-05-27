@@ -21,6 +21,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.ItemStackHandler;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.stream.IntStream;
 
@@ -32,8 +33,9 @@ public class CentrifugeBlock extends Block {
 
     public static final BooleanProperty PROPERTY_ON = BooleanProperty.create("on");
 
+    @Nonnull
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult blockRayTraceResult) {
+    public ActionResultType onBlockActivated(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult blockRayTraceResult) {
         if (!world.isRemote) {
             INamedContainerProvider blockEntity = state.getContainer(world,pos);
             if (blockEntity != null) {
@@ -45,12 +47,12 @@ public class CentrifugeBlock extends Block {
 
     @Nullable
     @Override
-    public INamedContainerProvider getContainer(BlockState state, World worldIn, BlockPos pos) {
+    public INamedContainerProvider getContainer(@Nonnull BlockState state, World worldIn, @Nonnull BlockPos pos) {
         return (INamedContainerProvider)worldIn.getTileEntity(pos);
     }
 
     @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+    public void onBlockPlacedBy(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
         if (stack.hasDisplayName()) {
             TileEntity tileentity = worldIn.getTileEntity(pos);
             if (tileentity instanceof CentrifugeBlockEntity) {
@@ -61,7 +63,7 @@ public class CentrifugeBlock extends Block {
     }
 
     @Override
-    public void onReplaced(BlockState state1, World world, BlockPos pos, BlockState state, boolean isMoving) {
+    public void onReplaced(@Nonnull BlockState state1, World world, @Nonnull BlockPos pos, @Nonnull BlockState state, boolean isMoving) {
         TileEntity blockEntity = world.getTileEntity(pos);
         if (blockEntity instanceof CentrifugeBlockEntity && state.getBlock() != state1.getBlock()){
             CentrifugeBlockEntity centrifugeBlockEntity = (CentrifugeBlockEntity)blockEntity;

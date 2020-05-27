@@ -10,12 +10,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResultType;
 
+import javax.annotation.Nonnull;
+
 public class HoneycombBlockItem extends BlockItem {
 
     public HoneycombBlockItem() {
         super(RegistryHandler.HONEYCOMB_BLOCK.get(), new Item.Properties());
     }
 
+    @Nonnull
     @Override
     public ActionResultType tryPlace(BlockItemUseContext context) {
         CompoundNBT combBlockData = context.getItem().getOrCreateChildTag(BeeConst.NBT_ROOT);
@@ -26,6 +29,7 @@ public class HoneycombBlockItem extends BlockItem {
             return super.tryPlace(context);
     }
 
+    @Nonnull
     @Override
     public String getTranslationKey(ItemStack stack) {
         CompoundNBT beeType = stack.getChildTag(BeeConst.NBT_ROOT);

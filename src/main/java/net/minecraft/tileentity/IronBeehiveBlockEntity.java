@@ -51,7 +51,7 @@ public class IronBeehiveBlockEntity extends BeehiveTileEntity {
   @Override
   public boolean releaseBee(BlockState state, CompoundNBT nbt, @Nullable List<Entity> entities, BeehiveTileEntity.State beehiveState) {
     BlockPos blockpos = this.getPos();
-    if (shouldStayInHive(state,beehiveState)) {
+    if (shouldStayInHive(beehiveState)) {
       return false;
     } else {
       nbt.remove("Passengers");
@@ -59,7 +59,7 @@ public class IronBeehiveBlockEntity extends BeehiveTileEntity {
       nbt.removeUniqueId("UUID");
       Direction direction = state.get(BeehiveBlock.FACING);
       BlockPos blockpos1 = blockpos.offset(direction);
-      if (!this.world.getBlockState(blockpos1).getCollisionShape(this.world, blockpos1).isEmpty()) {
+      if (world != null && !this.world.getBlockState(blockpos1).getCollisionShape(this.world, blockpos1).isEmpty()) {
         return false;
       } else {
         Entity entity = EntityType.loadEntityAndExecute(nbt, this.world, entity1 -> entity1);
@@ -73,7 +73,8 @@ public class IronBeehiveBlockEntity extends BeehiveTileEntity {
           if (entity instanceof CustomBeeEntity) {
             CustomBeeEntity beeEntity = (CustomBeeEntity) entity;
             if (this.hasFlowerPos() && !beeEntity.hasFlower() && this.world.rand.nextFloat() < 0.9F) {
-              beeEntity.setFlowerPos(this.flowerPos);
+              if (this.flowerPos != null)
+                beeEntity.setFlowerPos(this.flowerPos);
             }
 
             if (beehiveState == State.HONEY_DELIVERED) {
@@ -126,12 +127,14 @@ public class IronBeehiveBlockEntity extends BeehiveTileEntity {
 
   @Override
   public boolean isSmoked() {
-	  return isSmoked || CampfireBlock.isLitCampfireInRange(this.world, this.getPos(), 5);
+	if (world != null)
+    return isSmoked || CampfireBlock.isLitCampfireInRange(this.world, this.getPos(), 5);
+	return false;
   }
   
   @Override
   public void tick() {
-    if (!world.isRemote) {
+    if (world != null && !world.isRemote) {
       if (isSmoked && ticksSmoked < BeeConst.SMOKE_TIME)
         ticksSmoked++;
       if (ticksSmoked == BeeConst.SMOKE_TIME) {
@@ -142,8 +145,10 @@ public class IronBeehiveBlockEntity extends BeehiveTileEntity {
     super.tick();
   }
   
-  public boolean shouldStayInHive(BlockState state, State beehiveState){
+  public boolean shouldStayInHive(State beehiveState){
+    if (world != null)
     return (this.world.isNightTime() || this.world.isRaining()) && beehiveState != BeehiveTileEntity.State.EMERGENCY;
+    return  false;
   }
 
   @Override
@@ -163,7 +168,7 @@ public class IronBeehiveBlockEntity extends BeehiveTileEntity {
       return honeycombs.size();
   }
 
-  public boolean isAllowedBee(CustomBeeEntity bee){
+  public boolean isAllowedBee(){
     Block hive = getBlockState().getBlock();
     return hive == RegistryHandler.IRON_BEEHIVE.get();
   }
@@ -174,7 +179,7 @@ public class IronBeehiveBlockEntity extends BeehiveTileEntity {
     if (nbt.contains(BeeConst.NBT_HONEYCOMBS_TE)){
       CompoundNBT combs = (CompoundNBT) nbt.get(BeeConst.NBT_HONEYCOMBS_TE);
       int i = 0;
-      while (combs.contains(String.valueOf(i))){
+      while (combs != null && combs.contains(String.valueOf(i))){
         honeycombs.push(combs.getString(String.valueOf(i)));
         i++;
       }
@@ -204,11 +209,4 @@ public class IronBeehiveBlockEntity extends BeehiveTileEntity {
   public SUpdateTileEntityPacket getUpdatePacket() {
     return super.getUpdatePacket();
   }
-
-  public static class Bee2 extends Bee {
-    public Bee2(CompoundNBT data, int ticksIn, int minTicks) {
-      super(data, ticksIn, minTicks);
-    }
-  }
-
 }

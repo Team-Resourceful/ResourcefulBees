@@ -40,7 +40,7 @@ public class BeeBreedGoal extends BreedGoal {
             ageableentity = bee.createSelectedChild(getBeeType(this.animal));
         }
         else {
-            Double selection = MathUtils.nextDouble();
+            double selection = MathUtils.nextDouble();
             CustomBeeEntity bee = (CustomBeeEntity)this.animal;
             String parent1 = getBeeType(this.targetMate);
             String parent2 = getBeeType(this.animal);

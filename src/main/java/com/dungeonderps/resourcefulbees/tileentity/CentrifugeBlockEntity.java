@@ -54,7 +54,8 @@ public class CentrifugeBlockEntity extends TileEntity implements ITickableTileEn
 
     @Override
     public void tick() {
-        if (!world.isRemote) {
+
+        if (world != null && !world.isRemote) {
             boolean dirty = false;
             if (!h.getStackInSlot(HONEYCOMB_SLOT).isEmpty() && !h.getStackInSlot(BOTTLE_SLOT).isEmpty()) {
                 CentrifugeRecipe irecipe = getRecipe();
@@ -124,11 +125,13 @@ public class CentrifugeBlockEntity extends TileEntity implements ITickableTileEn
                         return true;
                     }
                     else{
+                        if (world != null)
                         world.setBlockState(pos,getBlockState().with(CentrifugeBlock.PROPERTY_ON,false));
                         return false;
                     }
                 }
                 else {
+                    if (world != null)
                     world.setBlockState(pos,getBlockState().with(CentrifugeBlock.PROPERTY_ON,false));
                     return false;
                 }
@@ -151,6 +154,7 @@ public class CentrifugeBlockEntity extends TileEntity implements ITickableTileEn
             ItemStack stackInOutput2 = h.getStackInSlot(OUTPUT2);
 
             ItemStack honey_bottle = h.getStackInSlot(HONEY_BOTTLE);
+            if (world != null)
             if (outputs.get(0).getRight() >= world.rand.nextDouble()) {
                 if (stackInOutput1.isEmpty()) {
                     this.h.setStackInSlot(OUTPUT1, output1.copy());
@@ -189,6 +193,7 @@ public class CentrifugeBlockEntity extends TileEntity implements ITickableTileEn
     protected CentrifugeRecipe getRecipe() {
         ItemStack input = h.getStackInSlot(HONEYCOMB_SLOT);
         if (input.isEmpty() || input == failedMatch) return null;
+        if (world != null)
         if (recipe != null && recipe.matches(new RecipeWrapper(h), world)) return recipe;
         else {
             CentrifugeRecipe rec = world.getRecipeManager().
@@ -197,6 +202,7 @@ public class CentrifugeBlockEntity extends TileEntity implements ITickableTileEn
             else failedMatch = ItemStack.EMPTY;
             return recipe = rec;
         }
+        return null;
     }
 
     public void setCustomName(ITextComponent name) {
@@ -247,6 +253,7 @@ public class CentrifugeBlockEntity extends TileEntity implements ITickableTileEn
         return new TranslationTextComponent("gui.resourcefulbees.centrifuge");
     }
 
+    @Nonnull
     @Override
     public ITextComponent getDisplayName() {
         return this.customName != null ? this.customName : this.getDefaultName();
@@ -254,8 +261,10 @@ public class CentrifugeBlockEntity extends TileEntity implements ITickableTileEn
 
     @Nullable
     @Override
-    public Container createMenu(int i, PlayerInventory playerInventory, PlayerEntity playerEntity) {
+    public Container createMenu(int i, @Nonnull PlayerInventory playerInventory, @Nonnull PlayerEntity playerEntity) {
+        if (world != null)
         return new CentrifugeContainer(i, world, pos, playerInventory);
+        return null;
     }
 
     protected class TileStackHandler extends AutomationSensitiveItemStackHandler {

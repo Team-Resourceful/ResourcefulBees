@@ -24,6 +24,7 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class IronBeehiveBlock extends BeehiveBlock {
 
   @Nullable
   @Override
-  public TileEntity createNewTileEntity(IBlockReader reader) {
+  public TileEntity createNewTileEntity(@Nonnull IBlockReader reader) {
     return null;
   }
   
@@ -59,7 +60,8 @@ public class IronBeehiveBlock extends BeehiveBlock {
 	    return false;
   }
 
-  public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+    @Nonnull
+  public ActionResultType onBlockActivated(BlockState state, @Nonnull World world, @Nonnull BlockPos pos, PlayerEntity player, @Nonnull Hand handIn, @Nonnull BlockRayTraceResult hit) {
     ItemStack itemstack = player.getHeldItem(handIn);
     ItemStack itemstack1 = itemstack.copy();
     int honeyLevel = state.get(HONEY_LEVEL);

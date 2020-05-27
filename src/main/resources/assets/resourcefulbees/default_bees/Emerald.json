@@ -2,7 +2,7 @@
   "color": "#18eb09",
   "flower": "ALL",
   "baseBlock": "minecraft:stone",
-  "mutationBlock": "minecraft:emerald_ore",
+  "mutationBlock": "minecraft:lava",
   "mainOutput": "minecraft:emerald",
   "spawnInWorld": true,
   "biomeList": "TAG:Mountain,Hills",

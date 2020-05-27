@@ -23,6 +23,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
@@ -40,7 +41,6 @@ public class JEICompat implements IModPlugin {
         registration.addRecipeCategories(new BeeHiveCategory(helper));
         registration.addRecipeCategories(new BeeBreedingCategory(helper));
         registration.addRecipeCategories(new BeeMutationCategory(helper));
-        //registration.addRecipeCategories(new BeeFluidMutationCategory(helper));
         registration.addRecipeCategories(new CentrifugeRecipeCategory(helper));
     }
     @Nonnull
@@ -82,14 +82,16 @@ public class JEICompat implements IModPlugin {
     }
 
     @Override
-    public void registerRecipes(IRecipeRegistration registration) {
-        RecipeManager recipeManager = Minecraft.getInstance().world.getRecipeManager();
-        Collection<CentrifugeRecipe> recipes = getRecipes(recipeManager, CENTRIFUGE_RECIPE_TYPE);
-        registration.addRecipes(BeeHiveCategory.getHoneycombRecipes(registration.getIngredientManager()), BeeHiveCategory.ID);
-        registration.addRecipes(recipes, CentrifugeRecipeCategory.ID);
-        registration.addRecipes(BeeBreedingCategory.getBreedingRecipes(registration.getIngredientManager()), BeeBreedingCategory.ID);
-        registration.addRecipes(BeeMutationCategory.getMutationRecipes(registration.getIngredientManager()), BeeMutationCategory.ID);
-        //registration.addRecipes(BeeFluidMutationCategory.getMutationRecipes(registration.getIngredientManager()), BeeFluidMutationCategory.ID);
+    public void registerRecipes(@Nonnull IRecipeRegistration registration) {
+        World clientWorld= Minecraft.getInstance().world;
+        if (clientWorld != null) {
+            RecipeManager recipeManager = Minecraft.getInstance().world.getRecipeManager();
+            Collection<CentrifugeRecipe> recipes = getRecipes(recipeManager, CENTRIFUGE_RECIPE_TYPE);
+            registration.addRecipes(BeeHiveCategory.getHoneycombRecipes(registration.getIngredientManager()), BeeHiveCategory.ID);
+            registration.addRecipes(recipes, CentrifugeRecipeCategory.ID);
+            registration.addRecipes(BeeBreedingCategory.getBreedingRecipes(registration.getIngredientManager()), BeeBreedingCategory.ID);
+            registration.addRecipes(BeeMutationCategory.getMutationRecipes(registration.getIngredientManager()), BeeMutationCategory.ID);
+        }
     }
 
     @Override

@@ -7,6 +7,8 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 
+import javax.annotation.Nonnull;
+
 public class HoneycombBlockEntity extends TileEntity {
 
     public String beeType;
@@ -16,6 +18,7 @@ public class HoneycombBlockEntity extends TileEntity {
         super(RegistryHandler.HONEYCOMB_BLOCK_ENTITY.get());
     }
 
+    @Nonnull
     public TileEntityType<?> getType() {
         return RegistryHandler.HONEYCOMB_BLOCK_ENTITY.get();
     }
@@ -25,18 +28,19 @@ public class HoneycombBlockEntity extends TileEntity {
     }
 
     @Override
-    public void read(CompoundNBT compound) {
+    public void read(@Nonnull CompoundNBT compound) {
         this.loadFromNBT(compound);
         super.read(compound);
     }
 
+    @Nonnull
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
+    public CompoundNBT write(@Nonnull CompoundNBT compound) {
         super.write(compound);
         return this.saveToNBT(compound);
     }
 
-    public void loadFromNBT(CompoundNBT compound) {
+    public void loadFromNBT(@Nonnull CompoundNBT compound) {
         blockColor = compound.getString(BeeConst.NBT_COLOR);
         beeType = compound.getString(BeeConst.NBT_BEE_TYPE);
     }
@@ -53,6 +57,7 @@ public class HoneycombBlockEntity extends TileEntity {
         return compound;
     }
 
+    @Nonnull
     @Override
     public CompoundNBT getUpdateTag() {
         CompoundNBT nbtTagCompound = new CompoundNBT();

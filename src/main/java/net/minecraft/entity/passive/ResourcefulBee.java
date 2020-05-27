@@ -78,7 +78,7 @@ public class ResourcefulBee extends CustomBeeEntity {
             assert this.hivePos != null;
             TileEntity blockEntity = this.world.getTileEntity(this.hivePos);
             return blockEntity instanceof IronBeehiveBlockEntity
-                    && ((IronBeehiveBlockEntity) blockEntity).isAllowedBee(this);
+                    && ((IronBeehiveBlockEntity) blockEntity).isAllowedBee();
         }
     }
 
@@ -129,7 +129,9 @@ public class ResourcefulBee extends CustomBeeEntity {
                 Block block = state.getBlock();
                 if (validFillerBlock(block)) {
                     world.playEvent(2005, beePosDown, 0);
-                    world.setBlockState(beePosDown, ForgeRegistries.BLOCKS.getValue(BeeInfoUtils.getResource(getBeeInfo().getMutationBlock())).getDefaultState());
+                    Block newBlock = ForgeRegistries.BLOCKS.getValue(BeeInfoUtils.getResource(getBeeInfo().getMutationBlock()));
+                    if (newBlock != null)
+                        world.setBlockState(beePosDown, newBlock.getDefaultState());
                     addCropCounter();
                 }
             }
@@ -228,21 +230,19 @@ public class ResourcefulBee extends CustomBeeEntity {
     /**
      * Teleport the enderman to a random nearby position
      */
-    protected boolean teleportRandomly() {
+    protected void teleportRandomly() {
         if (!this.world.isRemote() && this.isAlive()) {
             double d0 = this.getPosX() + (this.rand.nextDouble() - 0.5D) * 4.0D;
             double d1 = this.getPosY() + (double)(this.rand.nextInt(4) - 2);
             double d2 = this.getPosZ() + (this.rand.nextDouble() - 0.5D) * 4.0D;
-            return this.teleportTo(d0, d1, d2);
-        } else {
-            return false;
+            this.teleportTo(d0, d1, d2);
         }
     }
 
     /**
      * Teleport the enderman
      */
-    private boolean teleportTo(double x, double y, double z) {
+    private void teleportTo(double x, double y, double z) {
         BlockPos.Mutable blockpos$mutable = new BlockPos.Mutable(x, y, z);
 
         while(blockpos$mutable.getY() > 0 && !this.world.getBlockState(blockpos$mutable).getMaterial().blocksMovement()) {
@@ -254,15 +254,13 @@ public class ResourcefulBee extends CustomBeeEntity {
         boolean water = blockstate.getFluidState().isTagged(FluidTags.WATER);
         if (canMove && !water) {
             EnderTeleportEvent event = new EnderTeleportEvent(this, x, y, z, 0);
-            if (MinecraftForge.EVENT_BUS.post(event)) return false;
+            if (MinecraftForge.EVENT_BUS.post(event)) return;
             boolean teleported = this.attemptTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), true);
             if (teleported) {
                 this.world.playSound(null, this.prevPosX, this.prevPosY, this.prevPosZ, SoundEvents.ENTITY_ENDERMAN_TELEPORT, this.getSoundCategory(), 1.0F, 1.0F);
                 this.playSound(SoundEvents.ENTITY_ENDERMAN_TELEPORT, 1.0F, 1.0F);
             }
-            return teleported;
         }
-        return false;
     }
 
     @Override

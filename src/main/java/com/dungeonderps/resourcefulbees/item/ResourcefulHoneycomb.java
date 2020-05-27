@@ -8,6 +8,8 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 
+import javax.annotation.Nonnull;
+
 public class ResourcefulHoneycomb extends Item {
 
     public ResourcefulHoneycomb() {
@@ -23,6 +25,7 @@ public class ResourcefulHoneycomb extends Item {
         return honeycombNBT != null && !honeycombNBT.getString(BeeConst.NBT_COLOR).isEmpty() ? Color.parseInt(honeycombNBT.getString(BeeConst.NBT_COLOR)) : 0x000000;
     }
 
+    @Nonnull
     @Override
     public String getTranslationKey(ItemStack stack) {
         CompoundNBT beeType = stack.getChildTag(BeeConst.NBT_ROOT);

@@ -23,7 +23,9 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.passive.CustomBeeEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -42,29 +44,37 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
         this.background = guiHelper.drawableBuilder(GUI_BACK, 0, 0, 160, 30).addPadding(0, 0, 0, 0).build();
         this.icon = guiHelper.createDrawableIngredient(new ItemStack(RegistryHandler.GOLD_FLOWER.get()));
         this.localizedName = I18n.format("gui.resourcefulbees.jei.category.breeding");
-        bee = RegistryHandler.CUSTOM_BEE.get().create(Minecraft.getInstance().world);
-    }
+        World clientWorld = Minecraft.getInstance().world;
+        if (clientWorld != null)
+            bee = RegistryHandler.CUSTOM_BEE.get().create(clientWorld);
+        else
+            bee = null;    }
 
+    @Nonnull
     @Override
     public ResourceLocation getUid() {
         return ID;
     }
 
+    @Nonnull
     @Override
     public Class<? extends Recipe> getRecipeClass() {
         return Recipe.class;
     }
 
+    @Nonnull
     @Override
     public String getTitle() {
         return this.localizedName;
     }
 
+    @Nonnull
     @Override
     public IDrawable getBackground() {
         return this.background;
     }
 
+    @Nonnull
     @Override
     public IDrawable getIcon() {
         return this.icon;
@@ -72,15 +82,16 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
 
 
     @Override
-    public void setIngredients(Recipe recipe, IIngredients ingredients) {
+    public void setIngredients(@Nonnull Recipe recipe, @Nonnull IIngredients ingredients) {
     }
 
     @Override
-    public void setRecipe(IRecipeLayout iRecipeLayout, Recipe recipe, IIngredients ingredients) {
+    public void setRecipe(@Nonnull IRecipeLayout iRecipeLayout, @Nonnull Recipe recipe, @Nonnull IIngredients ingredients) {
     }
 
+    @Nonnull
     @Override
-    public List<String> getTooltipStrings(Recipe recipe, double mouseX, double mouseY) {
+    public List<String> getTooltipStrings(@Nonnull Recipe recipe, double mouseX, double mouseY) {
         double beeX = 2D;
         double beeY = 0D;
         double bee2X = 52D;
@@ -115,6 +126,7 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
         EntityRendererManager entityrenderermanager = mc.getRenderManager();
         IRenderTypeBuffer.Impl irendertypebuffer$impl = mc.getRenderTypeBuffers().getBufferSource();
 
+        assert mc.player != null;
         bee.ticksExisted = mc.player.ticksExisted;
         bee.renderYawOffset = rotation;
         bee.setBeeType(beeType);

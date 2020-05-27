@@ -15,6 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.tileentity.IronBeehiveBlockEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -36,8 +37,11 @@ public class TopCompat implements Function<ITheOneProbe, Void>
             {
                 TileEntity honeyBlock = world.getTileEntity(data.getPos());
                 final ItemStack honeyCombBlock = new ItemStack(RegistryHandler.HONEYCOMB_BLOCK_ITEM.get());
-                honeyCombBlock.getOrCreateChildTag(BeeConst.NBT_ROOT).putString(BeeConst.NBT_BEE_TYPE, honeyBlock.serializeNBT().getString(BeeConst.NBT_BEE_TYPE));
-                honeyCombBlock.getOrCreateChildTag(BeeConst.NBT_ROOT).putString(BeeConst.NBT_COLOR, honeyBlock.serializeNBT().getString(BeeConst.NBT_COLOR));
+
+                if (honeyBlock != null){
+                    honeyCombBlock.getOrCreateChildTag(BeeConst.NBT_ROOT).putString(BeeConst.NBT_BEE_TYPE, honeyBlock.serializeNBT().getString(BeeConst.NBT_BEE_TYPE));
+                    honeyCombBlock.getOrCreateChildTag(BeeConst.NBT_ROOT).putString(BeeConst.NBT_COLOR, honeyBlock.serializeNBT().getString(BeeConst.NBT_COLOR));
+                }
 
                 probeInfo.horizontal()
                         .item(honeyCombBlock)
@@ -49,14 +53,14 @@ public class TopCompat implements Function<ITheOneProbe, Void>
             if(world.getTileEntity(data.getPos()) instanceof IronBeehiveBlockEntity)
             {
                 IronBeehiveBlockEntity beehiveBlockEntity = (IronBeehiveBlockEntity) world.getTileEntity(data.getPos());
-                if(mode.equals(ProbeMode.EXTENDED)){
+                if(beehiveBlockEntity != null && mode.equals(ProbeMode.EXTENDED)){
                     IronBeehiveBlockEntity ironBeeHive = (IronBeehiveBlockEntity) world.getTileEntity(data.getPos());
-                    if (ironBeeHive.hasCombs()) {
+                    if (ironBeeHive != null && ironBeeHive.hasCombs()) {
                         int honeyLevel = 0;
                         if (ironBeeHive.getBlockState().has(IronBeehiveBlock.HONEY_LEVEL))
                             honeyLevel = ironBeeHive.getBlockState().get(IronBeehiveBlock.HONEY_LEVEL);
-                        IProbeInfo vertical = null;
-                        IProbeInfo horizontal = null;
+                        IProbeInfo vertical;
+                        IProbeInfo horizontal;
                         probeInfo.horizontal()
                                 .item(new ItemStack(blockState.getBlock().asItem()))
                                 .vertical()
@@ -81,7 +85,7 @@ public class TopCompat implements Function<ITheOneProbe, Void>
             {
                 CentrifugeBlockEntity beeHiveBlock = (CentrifugeBlockEntity) world.getTileEntity(data.getPos());
 
-                if(beeHiveBlock.time > 0) {
+                if(beeHiveBlock != null && beeHiveBlock.time > 0) {
                     probeInfo.horizontal()
                             .item(new ItemStack(blockState.getBlock().asItem()))
                             .vertical()
@@ -91,13 +95,16 @@ public class TopCompat implements Function<ITheOneProbe, Void>
                     return true;
                 }
             }
-            if (blockState.getBlock().getRegistryName().getNamespace().equals(ResourcefulBees.MOD_ID)){
-                probeInfo.horizontal()
-                        .item(new ItemStack(blockState.getBlock().asItem()))
-                        .vertical()
-                        .itemLabel(new ItemStack(blockState.getBlock().asItem()))
-                        .text(formatting + BeeConst.MOD_NAME);
-                return true;
+            ResourceLocation registryName = blockState.getBlock().getRegistryName();
+            if (registryName != null ) {
+                if (registryName.getNamespace().equals(ResourcefulBees.MOD_ID)){
+                    probeInfo.horizontal()
+                            .item(new ItemStack(blockState.getBlock().asItem()))
+                            .vertical()
+                            .itemLabel(new ItemStack(blockState.getBlock().asItem()))
+                            .text(formatting + BeeConst.MOD_NAME);
+                    return true;
+                }
             }
             return false;
         });

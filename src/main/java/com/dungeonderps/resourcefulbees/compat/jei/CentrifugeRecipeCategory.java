@@ -22,6 +22,7 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import org.apache.commons.lang3.tuple.Pair;
 
+import javax.annotation.Nonnull;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,26 +44,31 @@ public class CentrifugeRecipeCategory implements IRecipeCategory<CentrifugeRecip
             .buildAnimated(200, IDrawableAnimated.StartDirection.LEFT, false);
   }
 
+  @Nonnull
   @Override
   public ResourceLocation getUid() {
     return ID;
   }
 
+  @Nonnull
   @Override
   public Class<? extends CentrifugeRecipe> getRecipeClass() {
     return CentrifugeRecipe.class;
   }
 
+  @Nonnull
   @Override
   public String getTitle() {
     return localizedName;
   }
 
+  @Nonnull
   @Override
   public IDrawable getBackground() {
     return background;
   }
 
+  @Nonnull
   @Override
   public IDrawable getIcon() {
     return icon;
@@ -80,7 +86,7 @@ public class CentrifugeRecipeCategory implements IRecipeCategory<CentrifugeRecip
   }
 
   @Override
-  public void setRecipe(IRecipeLayout iRecipeLayout, CentrifugeRecipe centrifugeRecipe, IIngredients iIngredients) {
+  public void setRecipe(IRecipeLayout iRecipeLayout, @Nonnull CentrifugeRecipe centrifugeRecipe, @Nonnull IIngredients iIngredients) {
     IGuiItemStackGroup guiItemStacks = iRecipeLayout.getItemStacks();
     guiItemStacks.init(CentrifugeBlockEntity.HONEYCOMB_SLOT, true, 9, 5);
     guiItemStacks.init(CentrifugeBlockEntity.BOTTLE_SLOT, true, 9, 23);

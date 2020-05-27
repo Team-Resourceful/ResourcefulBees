@@ -1,7 +1,7 @@
 {
   "color": "#0C9F0A",
   "flower": "ALL",
-  "baseBlock": "minecraft:stone",
+  "baseBlock": "tag:minecraft:lava",
   "mutationBlock": "minecraft:mossy_cobblestone",
   "mainOutput": "minecraft:gunpowder",
   "spawnInWorld": true,

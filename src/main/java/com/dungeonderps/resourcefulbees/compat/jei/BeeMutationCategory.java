@@ -4,6 +4,7 @@ import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.data.BeeData;
 import com.dungeonderps.resourcefulbees.lib.BeeConst;
+import com.dungeonderps.resourcefulbees.lib.MutationTypes;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.utils.BeeInfoUtils;
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -24,15 +25,20 @@ import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.passive.CustomBeeEntity;
-import net.minecraft.fluid.Fluids;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.Tag;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings("NullableProblems")
 public class BeeMutationCategory implements IRecipeCategory<BeeMutationCategory.Recipe> {
@@ -83,13 +89,68 @@ public class BeeMutationCategory implements IRecipeCategory<BeeMutationCategory.
 
     @Override
     public void setIngredients(BeeMutationCategory.Recipe recipe, IIngredients ingredients) {
-        if (recipe.isBlockToBlock) {
-            ingredients.setOutput(VanillaTypes.ITEM, recipe.mutationBlock);
-            ingredients.setInput(VanillaTypes.ITEM, recipe.itemIn);
+        if (recipe.isAcceptsAny()) {
+            if (MutationTypes.FLUID_TO_FLUID.equals(recipe.mutationType)) {
+                List<FluidStack> fluids = new ArrayList<>();
+                for (Object element: recipe.tag.getAllElements() ) {
+                    if (element instanceof Fluid) {
+                        FluidStack fluid = new FluidStack((Fluid)element, 1000);
+                        fluids.add(fluid);
+                    }
+                }
+                ingredients.setInputs(VanillaTypes.FLUID, fluids);
+                ingredients.setOutput(VanillaTypes.FLUID, recipe.fluidOut);
+            }
+            if (MutationTypes.BLOCK_TO_FLUID.equals(recipe.mutationType)) {
+                List<ItemStack> items = new ArrayList<>();
+                for (Object element: recipe.tag.getAllElements() ) {
+                    if (element instanceof Item) {
+                        ItemStack item = new ItemStack((Item) element);
+                        items.add(item);
+                    }
+                }
+                ingredients.setInputs(VanillaTypes.ITEM, items);
+                ingredients.setOutput(VanillaTypes.FLUID, recipe.fluidOut);
+            }
+            if (MutationTypes.FLUID_TO_BLOCK.equals(recipe.mutationType)) {
+                List<FluidStack> fluids = new ArrayList<>();
+                for (Object element: recipe.tag.getAllElements() ) {
+                    FluidStack fluid = new FluidStack((Fluid)element, 1000);
+                    fluids.add(fluid);
+                }
+                ingredients.setInputs(VanillaTypes.FLUID, fluids);
+                ingredients.setOutput(VanillaTypes.ITEM, recipe.itemOut);
+            }
+            if (MutationTypes.BLOCK_TO_BLOCK.equals(recipe.mutationType)) {
+                List<ItemStack> items = new ArrayList<>();
+                for (Object element: recipe.tag.getAllElements() ) {
+                    if (element instanceof Item) {
+                        ItemStack item = new ItemStack((Item) element);
+                        items.add(item);
+                    }
+                }
+                 //= new ArrayList<>((List<ItemStack>)recipe.tag.getAllElements());
+                ingredients.setInputs(VanillaTypes.ITEM, items);
+                ingredients.setOutput(VanillaTypes.ITEM, recipe.itemOut);
+            }
         }
-        if (recipe.isFluidToBlock) {
-            ingredients.setOutput(VanillaTypes.ITEM, recipe.mutationBlock);
-            ingredients.setInput(VanillaTypes.FLUID, recipe.fluidIn);
+        else {
+            if (MutationTypes.FLUID_TO_FLUID.equals(recipe.mutationType)) {
+                ingredients.setInput(VanillaTypes.FLUID, recipe.fluidIn);
+                ingredients.setOutput(VanillaTypes.FLUID, recipe.fluidOut);
+            }
+            if (MutationTypes.BLOCK_TO_FLUID.equals(recipe.mutationType)) {
+                ingredients.setInput(VanillaTypes.ITEM, recipe.itemIn);
+                ingredients.setOutput(VanillaTypes.FLUID, recipe.fluidOut);
+            }
+            if (MutationTypes.FLUID_TO_BLOCK.equals(recipe.mutationType)) {
+                ingredients.setInput(VanillaTypes.FLUID, recipe.fluidIn);
+                ingredients.setOutput(VanillaTypes.ITEM, recipe.itemOut);
+            }
+            if (MutationTypes.BLOCK_TO_BLOCK.equals(recipe.mutationType)) {
+                ingredients.setInput(VanillaTypes.ITEM, recipe.itemIn);
+                ingredients.setOutput(VanillaTypes.ITEM, recipe.itemOut);
+            }
         }
     }
 
@@ -110,21 +171,39 @@ public class BeeMutationCategory implements IRecipeCategory<BeeMutationCategory.
 
     @Override
     public void setRecipe(IRecipeLayout iRecipeLayout, BeeMutationCategory.Recipe recipe, IIngredients ingredients) {
-        if (recipe.isBlockToBlock) {
+        if (MutationTypes.FLUID_TO_FLUID.equals(recipe.mutationType)) {
+            IGuiFluidStackGroup fluidStacks = iRecipeLayout.getFluidStacks();
+            fluidStacks.init(0, false, 66, 49);
+            fluidStacks.init(1, true, 16, 58);
+            fluidStacks.set(0, ingredients.getOutputs(VanillaTypes.FLUID).get(0));
+            fluidStacks.set(1, ingredients.getInputs(VanillaTypes.FLUID).get(0));
+        }
+        if (MutationTypes.BLOCK_TO_FLUID.equals(recipe.mutationType)) {
+            List<List<ItemStack>> inputs = ingredients.getInputs(VanillaTypes.ITEM);
+            IGuiItemStackGroup itemStacks = iRecipeLayout.getItemStacks();
+            itemStacks.init(0, true, 15, 57);
+            itemStacks.set(0, ingredients.getInputs(VanillaTypes.ITEM).get(0));
+
+            IGuiFluidStackGroup fluidStacks = iRecipeLayout.getFluidStacks();
+            fluidStacks.init(0,false,66,49);
+            fluidStacks.set(0, ingredients.getOutputs(VanillaTypes.FLUID).get(0));
+
+        }
+        if (MutationTypes.FLUID_TO_BLOCK.equals(recipe.mutationType)) {
+            IGuiFluidStackGroup fluidStacks = iRecipeLayout.getFluidStacks();
+            fluidStacks.init(0,true,16,58);
+            fluidStacks.set(0, ingredients.getInputs(VanillaTypes.FLUID).get(0));
+
+            IGuiItemStackGroup itemStacks = iRecipeLayout.getItemStacks();
+            itemStacks.init(0, false, 65, 48);
+            itemStacks.set(0, ingredients.getOutputs(VanillaTypes.ITEM).get(0));
+        }
+        if (MutationTypes.BLOCK_TO_BLOCK.equals(recipe.mutationType)) {
             IGuiItemStackGroup itemStacks = iRecipeLayout.getItemStacks();
             itemStacks.init(0, false, 65, 48);
             itemStacks.init(1, true, 15, 57);
-            itemStacks.set(ingredients);
-        }
-
-        if (recipe.isFluidToBlock) {
-            IGuiItemStackGroup itemStacks = iRecipeLayout.getItemStacks();
-            itemStacks.init(0, false, 65, 48);
-            //itemStacks.init(1, true, 15, 57);
-            itemStacks.set(0, recipe.getMutationBlock());
-            IGuiFluidStackGroup fluidStacks = iRecipeLayout.getFluidStacks();
-            fluidStacks.init(0,true,16,58);
-            fluidStacks.set(0, recipe.getFluidIn());
+            itemStacks.set(0, ingredients.getOutputs(VanillaTypes.ITEM).get(0));
+            itemStacks.set(1, ingredients.getInputs(VanillaTypes.ITEM).get(0));
         }
     }
 
@@ -165,29 +244,67 @@ public class BeeMutationCategory implements IRecipeCategory<BeeMutationCategory.
     public static List<BeeMutationCategory.Recipe> getMutationRecipes(IIngredientManager ingredientManager) {
         List<BeeMutationCategory.Recipe> recipes = new ArrayList<>();
         for (Map.Entry<String, BeeData> bee : BeeInfo.BEE_INFO.entrySet()){
-            if (bee.getValue().getBaseBlock().isEmpty() || bee.getValue().getMutationBlock().isEmpty()) { }
-            else {
-                String baseBlock = bee.getValue().getBaseBlock();
-                if (BeeInfoUtils.TAG_RESOURCE_PATTERN.matcher(baseBlock).matches()){
-                    ItemStack mutationBlock = new ItemStack(ForgeRegistries.ITEMS.getValue(BeeInfoUtils.getResource(bee.getValue().getMutationBlock())));
-                    baseBlock = baseBlock.replace(BeeConst.TAG_PREFIX, "");
-                    for (Item item:
-                         ItemTags.getCollection().get(BeeInfoUtils.getResource(baseBlock)).getAllElements()) {
-                        recipes.add(new Recipe(new ItemStack(item), mutationBlock, bee.getKey()));
-                    }
-                }
-                else {
-                    ItemStack mutationBlock = new ItemStack(ForgeRegistries.ITEMS.getValue(BeeInfoUtils.getResource(bee.getValue().getMutationBlock())));
-                    if (ForgeRegistries.FLUIDS.getValue(BeeInfoUtils.getResource(baseBlock)) != null
-                            && !Objects.equals(ForgeRegistries.FLUIDS.getValue(BeeInfoUtils.getResource(baseBlock)), Fluids.EMPTY)) {
-                        FluidStack fluid = new FluidStack(ForgeRegistries.FLUIDS.getValue(BeeInfoUtils.getResource(baseBlock)), 1000);
-                        recipes.add(new BeeMutationCategory.Recipe(fluid, mutationBlock, bee.getKey()));
-                    }
-                    else {
+            if (bee.getValue().hasMutation()) {
 
-                        recipes.add(new Recipe(new ItemStack(ForgeRegistries.ITEMS.getValue(BeeInfoUtils.getResource(baseBlock))), mutationBlock, bee.getKey()));
+                String mutationIn = bee.getValue().getBaseBlock();
+                String mutationOut = bee.getValue().getMutationBlock();
+
+                if (BeeInfoUtils.TAG_RESOURCE_PATTERN.matcher(mutationIn).matches()) {
+                    mutationIn = mutationIn.replace(BeeConst.TAG_PREFIX, "");
+
+                    Tag<Item> itemTag = ItemTags.getCollection().get(BeeInfoUtils.getResource(mutationIn));
+                    if (itemTag !=null) {
+                        Item itemOut = ForgeRegistries.ITEMS.getValue(BeeInfoUtils.getResource(mutationOut));
+                        if (BeeInfoUtils.isValidItem(itemOut)){
+                            recipes.add( new Recipe(itemTag, new ItemStack(itemOut), bee.getKey(), MutationTypes.BLOCK_TO_BLOCK, true));
+                            continue;
+                        }
+                        Fluid fluidOut = ForgeRegistries.FLUIDS.getValue(BeeInfoUtils.getResource(mutationOut));
+                        if (BeeInfoUtils.isValidFluid(fluidOut)){
+                            recipes.add(new Recipe(itemTag, new FluidStack(fluidOut,1000), bee.getKey(), MutationTypes.BLOCK_TO_FLUID, true));
+                            continue;
+                        }
                     }
-                }
+                    Tag<Fluid> fluidTag = FluidTags.getCollection().get(BeeInfoUtils.getResource(mutationIn));
+                    if (fluidTag != null) {
+                        Item itemOut = ForgeRegistries.ITEMS.getValue(BeeInfoUtils.getResource(mutationOut));
+                        if (BeeInfoUtils.isValidItem(itemOut)){
+                            recipes.add( new Recipe(fluidTag, new ItemStack(itemOut), bee.getKey(), MutationTypes.FLUID_TO_BLOCK, true));
+                            continue;
+                        }
+                        Fluid fluidOut = ForgeRegistries.FLUIDS.getValue(BeeInfoUtils.getResource(mutationOut));
+                        if (BeeInfoUtils.isValidFluid(fluidOut)){
+                            recipes.add(new Recipe(fluidTag, new FluidStack(fluidOut,1000), bee.getKey(), MutationTypes.BLOCK_TO_FLUID, true));
+                        }
+                    }
+                } else {
+                    Enum<MutationTypes> mutationType = bee.getValue().getMutationType();
+
+                    if (MutationTypes.FLUID_TO_FLUID.equals(mutationType)) {
+                        Fluid fluidIn = ForgeRegistries.FLUIDS.getValue(BeeInfoUtils.getResource(mutationIn));
+                        Fluid fluidOut = ForgeRegistries.FLUIDS.getValue(BeeInfoUtils.getResource(mutationOut));
+                        if (BeeInfoUtils.isValidFluid(fluidIn) && BeeInfoUtils.isValidFluid(fluidOut))
+                            recipes.add( new Recipe( new FluidStack(fluidIn, 1000), new FluidStack(fluidOut, 1000), bee.getKey(), mutationType, false));
+                    }
+                    else if (MutationTypes.BLOCK_TO_FLUID.equals(mutationType)) {
+                        Item itemIn = ForgeRegistries.ITEMS.getValue(BeeInfoUtils.getResource(mutationIn));
+                        Fluid fluidOut = ForgeRegistries.FLUIDS.getValue(BeeInfoUtils.getResource(mutationOut));
+                        if (BeeInfoUtils.isValidItem(itemIn) && BeeInfoUtils.isValidFluid(fluidOut))
+                            recipes.add( new Recipe( new ItemStack(itemIn), new FluidStack(fluidOut, 1000), bee.getKey(), mutationType, false));
+                    }
+                    else if (MutationTypes.FLUID_TO_BLOCK.equals(mutationType)) {
+                        Fluid fluidIn = ForgeRegistries.FLUIDS.getValue(BeeInfoUtils.getResource(mutationIn));
+                        Item itemOut = ForgeRegistries.ITEMS.getValue(BeeInfoUtils.getResource(mutationOut));
+                        if (BeeInfoUtils.isValidFluid(fluidIn) && BeeInfoUtils.isValidItem(itemOut))
+                            recipes.add( new Recipe( new FluidStack(fluidIn, 1000), new ItemStack(itemOut), bee.getKey(), mutationType, false));
+                    }
+                    else if (MutationTypes.BLOCK_TO_BLOCK.equals(mutationType)) {
+                        Item itemIn = ForgeRegistries.ITEMS.getValue(BeeInfoUtils.getResource(mutationIn));
+                        Item itemOut = ForgeRegistries.ITEMS.getValue(BeeInfoUtils.getResource(mutationOut));
+                        if (BeeInfoUtils.isValidItem(itemIn) && BeeInfoUtils.isValidItem(itemOut))
+                            recipes.add( new Recipe( new ItemStack(itemIn), new ItemStack(itemOut), bee.getKey(), mutationType, false));
+                    }
+                } //END INDIVIDUAL CHECKS
             }
         }
         return recipes;
@@ -195,36 +312,89 @@ public class BeeMutationCategory implements IRecipeCategory<BeeMutationCategory.
 
     public static class Recipe {
         private final FluidStack fluidIn;
+        private final FluidStack fluidOut;
         private final ItemStack itemIn;
-        private final ItemStack mutationBlock;
+        private final ItemStack itemOut;
         private final String beeType;
 
-        private boolean isFluidToBlock = true;
-        private boolean isBlockToBlock = true;
+        private final boolean acceptsAny;
+        private final Tag<?> tag;
 
-        public Recipe(ItemStack baseBlock, ItemStack mutationBlock, String beeType) {
-            this.mutationBlock = mutationBlock;
+        private final Enum<MutationTypes> mutationType;
+
+        public Recipe(ItemStack baseBlock, ItemStack mutationBlock, String beeType, Enum<MutationTypes> type, boolean acceptsAny) {
+            this.fluidIn = null;
+            this.fluidOut = null;
+            this.itemOut = mutationBlock;
             this.itemIn = baseBlock;
             this.beeType = beeType;
-            this.fluidIn = null;
-            isFluidToBlock = false;
+            this.mutationType = type;
+            this.acceptsAny = acceptsAny;
+            this.tag = null;
         }
 
-        public Recipe(FluidStack baseBlock, ItemStack mutationBlock, String beeType) {
-            this.mutationBlock = mutationBlock;
+        public Recipe(FluidStack baseBlock, ItemStack mutationBlock, String beeType, Enum<MutationTypes> type, boolean acceptsAny) {
+
             this.fluidIn = baseBlock;
-            this.beeType = beeType;
+            this.fluidOut = null;
             this.itemIn = null;
-            isBlockToBlock = false;
+            this.itemOut = mutationBlock;
+            this.beeType = beeType;
+            this.mutationType = type;
+            this.acceptsAny = acceptsAny;
+            this.tag = null;
         }
 
-        public FluidStack getFluidIn() {return this.fluidIn;}
-        //public ItemStack getItemIn() {return this.itemIn;}
-        public ItemStack getMutationBlock() {
-            return this.mutationBlock;
+        public Recipe(ItemStack baseBlock, FluidStack mutationBlock, String beeType, Enum<MutationTypes> type, boolean acceptsAny) {
+            this.fluidIn = null;
+            this.fluidOut = mutationBlock;
+            this.itemIn = baseBlock;
+            this.itemOut = null;
+            this.beeType = beeType;
+            this.mutationType = type;
+            this.acceptsAny = acceptsAny;
+            this.tag = null;
         }
-        public String getBeeType() {
-            return this.beeType;
+
+        public Recipe(FluidStack baseBlock, FluidStack mutationBlock, String beeType, Enum<MutationTypes> type, boolean acceptsAny) {
+            this.fluidIn = baseBlock;
+            this.fluidOut = mutationBlock;
+            this.itemIn = null;
+            this.itemOut = null;
+            this.beeType = beeType;
+            this.mutationType = type;
+            this.acceptsAny = acceptsAny;
+            this.tag = null;
         }
+
+        //TAGS!!!
+        public Recipe(Tag<?> baseBlock, ItemStack mutationBlock, String beeType, Enum<MutationTypes> type, boolean acceptsAny) {
+            this.fluidIn = null;
+            this.fluidOut = null;
+            this.itemOut = mutationBlock;
+            this.itemIn = null;
+            this.beeType = beeType;
+            this.mutationType = type;
+            this.acceptsAny = acceptsAny;
+            this.tag = baseBlock;
+        }
+
+        public Recipe(Tag<?> baseBlock, FluidStack mutationBlock, String beeType, Enum<MutationTypes> type, boolean acceptsAny) {
+            this.fluidIn = null;
+            this.fluidOut = mutationBlock;
+            this.itemIn = null;
+            this.itemOut = null;
+            this.beeType = beeType;
+            this.mutationType = type;
+            this.acceptsAny = acceptsAny;
+            this.tag = baseBlock;
+        }
+
+
+
+
+        public boolean isAcceptsAny() { return acceptsAny; }
+        public Tag<?> getTag() { return tag; }
+        public String getBeeType() { return this.beeType; }
     }
 }

@@ -1,8 +1,8 @@
 {
   "color": "#00ffff",
   "flower": "ALL",
-  "baseBlock": "minecraft:stone",
-  "mutationBlock": "minecraft:diamond_ore",
+  "baseBlock": "minecraft:lava",
+  "mutationBlock": "minecraft:water",
   "mainOutput": "minecraft:diamond",
   "spawnInWorld": true,
   "biomeList": "TAG:OVerWorld"

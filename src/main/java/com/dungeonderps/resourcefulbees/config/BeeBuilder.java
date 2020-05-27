@@ -73,14 +73,17 @@ public class BeeBuilder{
     private static void addBees() {
         BeeInfo.BEE_INFO.clear();
         BeeInfoUtils.genDefaultBee();
+        File[] files = BEE_PATH.toFile().listFiles();
 
-        for (File f: BEE_PATH.toFile().listFiles()) {
-            String s = f.getName();
-            if (s.substring(s.indexOf('.')).equals(".json")) {
-                try {
-                    parseBee(f);
-                } catch (IOException e) {
-                    LOGGER.error("File not found when parsing bees");
+        if (files != null && files.length > 0) {
+            for (File f: files) {
+                String s = f.getName();
+                if (s.substring(s.indexOf('.')).equals(".json")) {
+                    try {
+                        parseBee(f);
+                    } catch (IOException e) {
+                        LOGGER.error("File not found when parsing bees");
+                    }
                 }
             }
         }
@@ -100,11 +103,9 @@ public class BeeBuilder{
     }
 
     private static void setupBeeSpawns() {
-        Iterator<Map.Entry<Biome, Set<String>>> spawnableBiomesIterator = BeeInfo.SPAWNABLE_BIOMES.entrySet().iterator();
-        while (spawnableBiomesIterator.hasNext()) {
-            Map.Entry<Biome, Set<String>> element = spawnableBiomesIterator.next();
+        for (Map.Entry<Biome, Set<String>> element : BeeInfo.SPAWNABLE_BIOMES.entrySet()) {
             Biome biome = element.getKey();
-            biome.getSpawns(EntityClassification.CREATURE).add(new Biome.SpawnListEntry(RegistryHandler.CUSTOM_BEE.get(),Config.SPAWN_WEIGHT.get(),Config.SPAWN_MIN_GROUP.get(),Config.SPAWN_MAX_GROUP.get()));
+            biome.getSpawns(EntityClassification.CREATURE).add(new Biome.SpawnListEntry(RegistryHandler.CUSTOM_BEE.get(), Config.SPAWN_WEIGHT.get(), Config.SPAWN_MIN_GROUP.get(), Config.SPAWN_MAX_GROUP.get()));
         }
 
         EntitySpawnPlacementRegistry.register(RegistryHandler.CUSTOM_BEE.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, CustomBeeEntity::canBeeSpawn);

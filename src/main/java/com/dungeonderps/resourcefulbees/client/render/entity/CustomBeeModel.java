@@ -9,6 +9,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import javax.annotation.Nonnull;
+
 @OnlyIn(Dist.CLIENT)
 public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
     private final ModelRenderer body;
@@ -75,7 +77,7 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
     }
 
 
-    public void setLivingAnimations(T entityIn, float limbSwing, float limbSwingAmount, float partialTick) {
+    public void setLivingAnimations(@Nonnull T entityIn, float limbSwing, float limbSwingAmount, float partialTick) {
         super.setLivingAnimations(entityIn, limbSwing, limbSwingAmount, partialTick);
         this.bodyPitch = entityIn.getBodyPitch(partialTick);
         this.stinger.showModel = !entityIn.hasStung();
@@ -136,10 +138,12 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
 
     }
 
+    @Nonnull
     protected Iterable<ModelRenderer> getHeadParts() {
         return ImmutableList.of();
     }
 
+    @Nonnull
     protected Iterable<ModelRenderer> getBodyParts() {
         return ImmutableList.of(this.body);
     }

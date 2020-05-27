@@ -5,10 +5,7 @@ import com.dungeonderps.resourcefulbees.lib.BeeConst;
 import com.dungeonderps.resourcefulbees.utils.MathUtils;
 import net.minecraft.world.biome.Biome;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Set;
+import java.util.*;
 
 public class BeeInfo {
 
@@ -27,9 +24,11 @@ public class BeeInfo {
      *
      *  @return Returns random bee type as a string.
      */
-    @SuppressWarnings("SuspiciousMethodCalls")
     public static String getRandomBee(){
-        return BEE_INFO.get(BEE_INFO.keySet().toArray()[MathUtils.nextInt(BEE_INFO.size() - 1) +1]).getName();
+        int randInt = MathUtils.nextInt(BEE_INFO.size() - 1) +1;
+        Object[] dataArray = BEE_INFO.keySet().toArray();
+        Object key = dataArray[randInt];
+        return BEE_INFO.get(key.toString()).getName();
     }
 
     /**
@@ -39,12 +38,13 @@ public class BeeInfo {
      *  @return Returns random bee type as a string.
      */
     public static String getRandomBee(Biome biome){
-        ArrayList<String> spawnList = new ArrayList<>(BeeInfo.SPAWNABLE_BIOMES.get(biome));
-        return BEE_INFO.get(spawnList.get(MathUtils.nextInt(spawnList.size()))).getName();
+        ArrayList<String> spawnList = new ArrayList<>(SPAWNABLE_BIOMES.get(biome));
+        return spawnList.get(MathUtils.nextInt(spawnList.size()));
     }
 
     public static BeeData getInfo(String bee){
         BeeData info = BEE_INFO.get(bee);
         return info != null ? info : BEE_INFO.get(BeeConst.DEFAULT_REMOVE);
     }
+
 }

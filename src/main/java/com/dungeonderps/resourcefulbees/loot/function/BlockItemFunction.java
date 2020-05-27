@@ -13,14 +13,17 @@ import net.minecraft.world.storage.loot.LootFunction;
 import net.minecraft.world.storage.loot.LootParameters;
 import net.minecraft.world.storage.loot.conditions.ILootCondition;
 
+import javax.annotation.Nonnull;
+
 public class BlockItemFunction extends LootFunction {
 
     protected BlockItemFunction(ILootCondition[] conditionsIn) {
         super(conditionsIn);
     }
 
+    @Nonnull
     @Override
-    protected ItemStack doApply(ItemStack stack, LootContext context) {
+    protected ItemStack doApply(@Nonnull ItemStack stack, LootContext context) {
         TileEntity tile = context.get(LootParameters.BLOCK_ENTITY);
         if (tile instanceof HoneycombBlockEntity){
             HoneycombBlockEntity blockEntity = (HoneycombBlockEntity)tile;
@@ -41,10 +44,9 @@ public class BlockItemFunction extends LootFunction {
             super(new ResourceLocation("resourcefulbees:blockitem"), BlockItemFunction.class);
         }
 
-
-
+        @Nonnull
         @Override
-        public BlockItemFunction deserialize(JsonObject object, JsonDeserializationContext deserializationContext, ILootCondition[] conditionsIn) {
+        public BlockItemFunction deserialize(@Nonnull JsonObject object, @Nonnull JsonDeserializationContext deserializationContext, @Nonnull ILootCondition[] conditionsIn) {
             return new BlockItemFunction(conditionsIn);
         }
     }

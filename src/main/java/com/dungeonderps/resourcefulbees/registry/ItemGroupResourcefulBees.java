@@ -11,6 +11,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import javax.annotation.Nonnull;
 import java.util.Map;
 
 public class ItemGroupResourcefulBees{
@@ -19,7 +20,7 @@ public class ItemGroupResourcefulBees{
 
 		@Override
 		@OnlyIn(Dist.CLIENT)
-		public void fill(NonNullList<ItemStack> items) {
+		public void fill(@Nonnull NonNullList<ItemStack> items) {
 			if (!BeeInfo.BEE_INFO.isEmpty()) {
 				for (Map.Entry<String, BeeData> bee : BeeInfo.BEE_INFO.entrySet()) {
 					if (bee.getKey().equals(BeeConst.DEFAULT_BEE_TYPE) || bee.getKey().equals(BeeConst.DEFAULT_REMOVE)) { }
@@ -49,6 +50,7 @@ public class ItemGroupResourcefulBees{
 		}
 
 		@Override
+		@Nonnull
 		@OnlyIn(Dist.CLIENT)
 		public ItemStack createIcon() {
 			return new ItemStack(RegistryHandler.IRON_BEEHIVE_ITEM.get());

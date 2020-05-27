@@ -18,6 +18,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class HoneycombBlock extends Block {
@@ -39,7 +40,7 @@ public class HoneycombBlock extends Block {
     public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
         if (world != null && pos != null) {
             HoneycombBlockEntity tile = (HoneycombBlockEntity) world.getTileEntity(pos);
-            if (tile instanceof HoneycombBlockEntity) {
+            if (tile != null) {
                 CompoundNBT combData = tile.serializeNBT();
                 ItemStack honeyCombBlockItemStack = new ItemStack(RegistryHandler.HONEYCOMB_BLOCK_ITEM.get());
                 final CompoundNBT honeyCombItemStackTag = honeyCombBlockItemStack.getOrCreateChildTag(BeeConst.NBT_ROOT);
@@ -70,7 +71,7 @@ public class HoneycombBlock extends Block {
                 ? Color.parseInt(honeycombNBT.getString(BeeConst.NBT_COLOR)) : BeeConst.DEFAULT_COLOR;
     }
 
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+    public void onBlockPlacedBy(World worldIn, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nullable LivingEntity placer, @Nonnull ItemStack stack) {
 
         TileEntity tile = worldIn.getTileEntity(pos);
         if(tile instanceof HoneycombBlockEntity) {
