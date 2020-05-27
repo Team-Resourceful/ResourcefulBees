@@ -20,10 +20,12 @@ import net.minecraft.state.properties.DoubleBlockHalf;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.Tag;
 import net.minecraft.tileentity.IronBeehiveBlockEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Direction;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.village.PointOfInterest;
@@ -140,9 +142,13 @@ public class ResourcefulBee extends CustomBeeEntity {
 
     public boolean validFillerBlock(Block block){
         String baseBlock = this.getBeeInfo().getBaseBlock();
-        if (BeeInfoUtils.TAG_RESOURCE_PATTERN.matcher(baseBlock).matches())
-            return block.isIn(Objects.requireNonNull(BlockTags.getCollection().get(BeeInfoUtils.getResource(baseBlock.replace(BeeConst.TAG_PREFIX, "")))));
-        return Objects.equals(block.getRegistryName(), BeeInfoUtils.getResource(baseBlock));
+        if (BeeInfoUtils.TAG_RESOURCE_PATTERN.matcher(baseBlock).matches()) {
+            Tag<Block> blockTag = BlockTags.getCollection().get(BeeInfoUtils.getResource(baseBlock.replace(BeeConst.TAG_PREFIX, "")));
+            return blockTag != null && block.isIn(blockTag);
+        }
+        ResourceLocation testBlock = block.getRegistryName();
+        ResourceLocation fillerBlock = BeeInfoUtils.getResource(baseBlock);
+        return testBlock != null && testBlock.equals(fillerBlock);
     }
 
     public class FindBeehiveGoal2 extends BeeEntity.FindBeehiveGoal {
