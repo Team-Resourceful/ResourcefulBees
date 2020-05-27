@@ -28,6 +28,7 @@ import net.minecraft.entity.passive.CustomBeeEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;
@@ -91,12 +92,10 @@ public class BlockToFluid implements IRecipeCategory<BlockToFluid.Recipe> {
     public void setIngredients(BlockToFluid.Recipe recipe, IIngredients ingredients) {
         if (recipe.isAcceptsAny()) {
             if (MutationTypes.BLOCK_TO_FLUID.equals(recipe.mutationType)) {
-                List<ItemStack> items = new ArrayList<>();
-                for (Item element: recipe.tag.getAllElements() ) {
-                        ItemStack item = new ItemStack(element);
-                        items.add(item);
-                    }
-                ingredients.setInputs(VanillaTypes.ITEM, items);
+                List<Ingredient> list = new ArrayList<>();
+                Ingredient ing = Ingredient.fromTag(recipe.tag);
+                list.add(ing);
+                ingredients.setInputIngredients(list);
                 ingredients.setOutput(VanillaTypes.FLUID, recipe.fluidOut);
             }
         }

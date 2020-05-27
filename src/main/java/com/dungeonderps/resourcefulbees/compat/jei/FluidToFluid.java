@@ -93,12 +93,13 @@ public class FluidToFluid implements IRecipeCategory<FluidToFluid.Recipe> {
             if (MutationTypes.FLUID_TO_FLUID.equals(recipe.mutationType)) {
                 List<FluidStack> fluids = new ArrayList<>();
                 for (Fluid element: recipe.tag.getAllElements() ) {
-                        FluidStack fluid = new FluidStack(element, 1000);
-                        fluids.add(fluid);
+                    FluidStack fluid = new FluidStack(element, 1000);
+                    fluids.add(fluid);
                 }
-                ingredients.setInputs(VanillaTypes.FLUID, fluids);
-                ingredients.setOutput(VanillaTypes.FLUID, recipe.fluidOut);
-            }
+                List<List<FluidStack>> fluid_fluids = new ArrayList<>();
+                fluid_fluids.add(fluids);
+                ingredients.setInputLists(VanillaTypes.FLUID, fluid_fluids);
+                ingredients.setOutput(VanillaTypes.FLUID, recipe.fluidOut);            }
         }
         else {
             if (MutationTypes.FLUID_TO_FLUID.equals(recipe.mutationType)) {

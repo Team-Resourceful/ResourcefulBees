@@ -96,7 +96,9 @@ public class FluidToBlock implements IRecipeCategory<FluidToBlock.Recipe> {
                     FluidStack fluid = new FluidStack(element, 1000);
                     fluids.add(fluid);
                 }
-                ingredients.setInputs(VanillaTypes.FLUID, fluids);
+                List<List<FluidStack>> fluid_fluids = new ArrayList<>();
+                fluid_fluids.add(fluids);
+                ingredients.setInputLists(VanillaTypes.FLUID, fluid_fluids);
                 ingredients.setOutput(VanillaTypes.ITEM, recipe.itemOut);
             }
         }
