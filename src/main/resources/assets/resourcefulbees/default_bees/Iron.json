@@ -1,8 +1,10 @@
 {
-  "color": "#ffcc99",
+  "honeycombColor": "#ffcc99",
+  "primaryColor": "#ffcc99",
+  "secondaryColor": "#444444",
   "flower": "ALL",
-  "baseBlock": "minecraft:stone",
-  "mutationBlock": "minecraft:iron_ore",
+  "mutationInput": "minecraft:stone",
+  "mutationOutput": "minecraft:iron_ore",
   "mainOutput": "minecraft:iron_ingot",
   "spawnInWorld": true,
   "biomeList": "tag:OVERWORLD",

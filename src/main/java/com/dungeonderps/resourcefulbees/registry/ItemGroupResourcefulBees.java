@@ -35,13 +35,13 @@ public class ItemGroupResourcefulBees{
 						final ItemStack combStack = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
 						final CompoundNBT combItemTag = combStack.getOrCreateChildTag(BeeConst.NBT_ROOT);
 						combItemTag.putString(BeeConst.NBT_BEE_TYPE, bee.getValue().getName());
-						combItemTag.putString(BeeConst.NBT_COLOR, bee.getValue().getColor());
+						combItemTag.putString(BeeConst.NBT_COLOR, bee.getValue().getHoneycombColor());
 						items.add(combStack);
 
 						final ItemStack combBlockStack = new ItemStack(RegistryHandler.HONEYCOMB_BLOCK_ITEM.get());
 						final CompoundNBT combBlockItemTag = combBlockStack.getOrCreateChildTag(BeeConst.NBT_ROOT);
 						combBlockItemTag.putString(BeeConst.NBT_BEE_TYPE, bee.getValue().getName());
-						combBlockItemTag.putString(BeeConst.NBT_COLOR, bee.getValue().getColor());
+						combBlockItemTag.putString(BeeConst.NBT_COLOR, bee.getValue().getHoneycombColor());
 						items.add(combBlockStack);
 					}
 				}

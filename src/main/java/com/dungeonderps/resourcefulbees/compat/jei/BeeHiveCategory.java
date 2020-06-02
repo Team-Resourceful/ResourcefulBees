@@ -147,7 +147,7 @@ public class BeeHiveCategory implements IRecipeCategory<BeeHiveCategory.Recipe> 
             else {
                 ItemStack honeyCombItemStack = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
                 final CompoundNBT honeyCombItemStackTag = honeyCombItemStack.getOrCreateChildTag(BeeConst.NBT_ROOT);
-                honeyCombItemStackTag.putString(BeeConst.NBT_COLOR, bee.getValue().getColor());
+                honeyCombItemStackTag.putString(BeeConst.NBT_COLOR, bee.getValue().getHoneycombColor());
                 honeyCombItemStackTag.putString(BeeConst.NBT_BEE_TYPE, bee.getKey());
                 recipes.add(new Recipe(honeyCombItemStack, bee.getKey()));
             }

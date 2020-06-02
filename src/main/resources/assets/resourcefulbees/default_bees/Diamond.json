@@ -1,8 +1,10 @@
 {
-  "color": "#00ffff",
+  "honeycombColor": "#00ffff",
+  "primaryColor": "#00ffff",
+  "secondaryColor": "#444444",
   "flower": "ALL",
-  "baseBlock": "minecraft:lava",
-  "mutationBlock": "minecraft:water",
+  "mutationInput": "minecraft:lava",
+  "mutationOutput": "minecraft:water",
   "mainOutput": "minecraft:diamond",
   "spawnInWorld": true,
   "biomeList": "TAG:OVerWorld"

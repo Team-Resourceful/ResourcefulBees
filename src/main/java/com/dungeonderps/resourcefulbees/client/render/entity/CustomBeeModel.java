@@ -1,6 +1,9 @@
 package com.dungeonderps.resourcefulbees.client.render.entity;
 
 import com.google.common.collect.ImmutableList;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.entity.model.AgeableModel;
 import net.minecraft.client.renderer.entity.model.ModelUtils;
 import net.minecraft.client.renderer.model.ModelRenderer;
@@ -24,6 +27,8 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
     private final ModelRenderer leftAntenna;
     private final ModelRenderer rightAntenna;
     private float bodyPitch;
+
+    private float beeSize = 0;
 
     public CustomBeeModel() {
         super(false, 24.0F, 0.0F);
@@ -86,7 +91,7 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
     /**
      * Sets this entity's model rotation angles
      */
-    public void setRotationAngles(T entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void setRotationAngles(CustomBeeEntity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.rightWing.rotateAngleX = 0.0F;
         this.leftAntenna.rotateAngleX = 0.0F;
         this.rightAntenna.rotateAngleX = 0.0F;
@@ -136,6 +141,9 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
             this.body.rotateAngleX = ModelUtils.func_228283_a_(this.body.rotateAngleX, 3.0915928F, this.bodyPitch);
         }
 
+        beeSize = entityIn.getSizeModifierFromInfo(entityIn.getBeeType());
+        if(isChild)
+            beeSize /= 2;
     }
 
     @Nonnull
@@ -148,4 +156,12 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
         return ImmutableList.of(this.body);
     }
 
+    @Override
+    public void render(MatrixStack matrixStackIn, @Nonnull IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+        matrixStackIn.push();
+        matrixStackIn.translate(0, 1.5 - beeSize * 1.5, 0);
+        matrixStackIn.scale(beeSize, beeSize, beeSize);
+        super.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+        matrixStackIn.pop();
+    }
 }

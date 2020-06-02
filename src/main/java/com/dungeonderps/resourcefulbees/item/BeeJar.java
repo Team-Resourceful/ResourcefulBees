@@ -97,7 +97,7 @@ public class BeeJar extends Item {
         target.writeWithoutTypeId(nbt);
         if (target instanceof CustomBeeEntity){
             CustomBeeEntity beeEntity = (CustomBeeEntity) target;
-            nbt.putString(BeeConst.NBT_COLOR, beeEntity.getBeeColor());
+            nbt.putString(BeeConst.NBT_COLOR, beeEntity.getBeeInfo().getPrimaryColor());
         }
         stack.setTag(nbt);
         player.swingArm(hand);

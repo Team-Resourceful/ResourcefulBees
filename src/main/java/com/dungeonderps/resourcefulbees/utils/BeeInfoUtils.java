@@ -10,16 +10,15 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.Tag;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Pattern;
 
 import static com.dungeonderps.resourcefulbees.ResourcefulBees.LOGGER;
@@ -79,7 +78,7 @@ public class BeeInfoUtils {
     public static void genDefaultBee(){
         BeeData defaultBee = new BeeData();
         defaultBee.setName(BeeConst.DEFAULT_BEE_TYPE);
-        defaultBee.setColor(String.valueOf(BeeConst.DEFAULT_COLOR));
+        defaultBee.setHoneycombColor(String.valueOf(BeeConst.DEFAULT_COLOR));
         defaultBee.setFlower("minecraft:poppy");
         defaultBee.setBiomeList("test");
         defaultBee.setSpawnInWorld(false);
@@ -95,11 +94,6 @@ public class BeeInfoUtils {
     private static boolean logWarn(String name, String dataCheckType, String data, String dataType){
         LOGGER.warn(name + " Bee " + dataCheckType + " Check Failed! Please check JSON!" +
                 "\n\tCurrent value: \"" + data + "\" is not a valid " + dataType + " - Bee may not function properly!");
-        return true;
-    }
-
-    private static boolean dataCheckPassed(String name, String dataCheckType){
-        LOGGER.debug(name + " Bee " + dataCheckType + " Check Passed!");
         return true;
     }
 
@@ -123,7 +117,7 @@ public class BeeInfoUtils {
             return true;
         }
 
-        if (TAG_RESOURCE_PATTERN.matcher(bee.getBaseBlock()).matches()) {
+        if (TAG_RESOURCE_PATTERN.matcher(bee.getMutationInput()).matches()) {
             LOGGER.warn("Too early to validate Block Tag for " + bee.getName() + " bee.");
             return true;
         }
@@ -131,27 +125,27 @@ public class BeeInfoUtils {
         int mutation = -1;
 
         //validate base block
-        Block inputBlock = ForgeRegistries.BLOCKS.getValue(getResource(bee.getBaseBlock()));
+        Block inputBlock = ForgeRegistries.BLOCKS.getValue(getResource(bee.getMutationInput()));
         if (isValidBlock(inputBlock)) {
-            Fluid inputFluid = ForgeRegistries.FLUIDS.getValue(getResource(bee.getBaseBlock()));
-            Item inputItem = ForgeRegistries.ITEMS.getValue(getResource(bee.getBaseBlock()));
+            Fluid inputFluid = ForgeRegistries.FLUIDS.getValue(getResource(bee.getMutationInput()));
+            Item inputItem = ForgeRegistries.ITEMS.getValue(getResource(bee.getMutationInput()));
             if (isValidFluid(inputFluid)) {
                 mutation++;
             } else if (isValidItem(inputItem)) {
                 mutation += 2;
-            } else return logError(bee.getName(), "Base Block", bee.getBaseBlock(), "block");
-        } else return logError(bee.getName(), "Base Block", bee.getBaseBlock(), "block");
+            } else return logError(bee.getName(), "Base Block", bee.getMutationInput(), "block");
+        } else return logError(bee.getName(), "Base Block", bee.getMutationInput(), "block");
 
         //validate mutation block
-        Block outputBlock = ForgeRegistries.BLOCKS.getValue(getResource(bee.getMutationBlock()));
+        Block outputBlock = ForgeRegistries.BLOCKS.getValue(getResource(bee.getMutationOutput()));
         if (isValidBlock(outputBlock)) {
-            Fluid outputFluid = ForgeRegistries.FLUIDS.getValue(getResource(bee.getMutationBlock()));
-            Item outputItem = ForgeRegistries.ITEMS.getValue(getResource(bee.getMutationBlock()));
+            Fluid outputFluid = ForgeRegistries.FLUIDS.getValue(getResource(bee.getMutationOutput()));
+            Item outputItem = ForgeRegistries.ITEMS.getValue(getResource(bee.getMutationOutput()));
             if (isValidFluid(outputFluid)) { }
             else if (isValidItem(outputItem)) {
                 mutation += 2;
-            } else return logError(bee.getName(), "Mutation Block", bee.getMutationBlock(), "block");
-        } else return logError(bee.getName(), "Mutation Block", bee.getMutationBlock(), "block");
+            } else return logError(bee.getName(), "Mutation Block", bee.getMutationOutput(), "block");
+        } else return logError(bee.getName(), "Mutation Block", bee.getMutationOutput(), "block");
 
         switch (mutation) {
             case (0) :
@@ -170,9 +164,9 @@ public class BeeInfoUtils {
     }
 
     private static boolean beeHasMutation(BeeData bee) {
-        if (TAG_RESOURCE_PATTERN.matcher(bee.getBaseBlock()).matches() ||
-                SINGLE_RESOURCE_PATTERN.matcher(bee.getBaseBlock()).matches() &&
-                SINGLE_RESOURCE_PATTERN.matcher(bee.getMutationBlock()).matches()) {
+        if (TAG_RESOURCE_PATTERN.matcher(bee.getMutationInput()).matches() ||
+                SINGLE_RESOURCE_PATTERN.matcher(bee.getMutationInput()).matches() &&
+                SINGLE_RESOURCE_PATTERN.matcher(bee.getMutationOutput()).matches()) {
             bee.setMutation(true);
             return true;
         }
@@ -181,39 +175,34 @@ public class BeeInfoUtils {
     }
 
     private static boolean validateBreeding(BeeData bee) {
-        return !bee.getParent1().equals(bee.getParent2())
-                ? dataCheckPassed(bee.getName(), "breeding")
-                : logWarn(bee.getName(), "breeding", (bee.getParent1() + " and " + bee.getParent2()),
+        return !bee.getParent1().equals(bee.getParent2()) ||
+                logWarn(bee.getName(), "breeding", (bee.getParent1() + " and " + bee.getParent2()),
                 "are the same parents. Child bee will not spawn from breeding.");
     }
 
     private static boolean validateMaxTimeInHive(BeeData bee) {
         double time = bee.getMaxTimeInHive();
-        return time >= BeeConst.MIN_HIVE_TIME && time == Math.floor(time) && !Double.isInfinite(time)
-                ? dataCheckPassed(bee.getName(), "Time In Hive")
-                : logWarn(bee.getName(), "Time In Hive", String.valueOf(bee.getMaxTimeInHive()),
+        return time >= BeeConst.MIN_HIVE_TIME && time == Math.floor(time) && !Double.isInfinite(time) ||
+                logWarn(bee.getName(), "Time In Hive", String.valueOf(bee.getMaxTimeInHive()),
                 "time. Value must be greater than or equal to " + BeeConst.MIN_HIVE_TIME);
     }
 
     private static boolean validateCentrifugeMainOutput(BeeData bee) {
         Item item = ForgeRegistries.ITEMS.getValue(getResource(bee.getMainOutput()));
-        return SINGLE_RESOURCE_PATTERN.matcher(bee.getMainOutput()).matches() && isValidItem(item)
-                ? dataCheckPassed(bee.getName(), "Centrifuge Output")
-                : logError(bee.getName(), "Centrifuge Output", bee.getMainOutput(), "item");
+        return SINGLE_RESOURCE_PATTERN.matcher(bee.getMainOutput()).matches() && isValidItem(item) ||
+                logError(bee.getName(), "Centrifuge Output", bee.getMainOutput(), "item");
     }
 
     private static boolean validateCentrifugeSecondaryOutput(BeeData bee) {
         Item item = ForgeRegistries.ITEMS.getValue(getResource(bee.getSecondaryOutput()));
-        return SINGLE_RESOURCE_PATTERN.matcher(bee.getSecondaryOutput()).matches() && isValidItem(item)
-                ? dataCheckPassed(bee.getName(), "Centrifuge Output")
-                : logError(bee.getName(), "Centrifuge Output", bee.getMainOutput(), "item");
+        return SINGLE_RESOURCE_PATTERN.matcher(bee.getSecondaryOutput()).matches() && isValidItem(item) ||
+                logError(bee.getName(), "Centrifuge Output", bee.getMainOutput(), "item");
     }
 
     private static boolean validateCentrifugeBottleOutput(BeeData bee) {
         Item item = ForgeRegistries.ITEMS.getValue(getResource(bee.getBottleOutput()));
-        return SINGLE_RESOURCE_PATTERN.matcher(bee.getBottleOutput()).matches() && isValidItem(item)
-                ? dataCheckPassed(bee.getName(), "Centrifuge Output")
-                : logError(bee.getName(), "Centrifuge Output", bee.getMainOutput(), "item");
+        return SINGLE_RESOURCE_PATTERN.matcher(bee.getBottleOutput()).matches() && isValidItem(item) ||
+                logError(bee.getName(), "Centrifuge Output", bee.getMainOutput(), "item");
     }
 
     private static boolean validateFlower(BeeData bee) {
@@ -221,15 +210,15 @@ public class BeeInfoUtils {
         return (bee.getFlower().equals(BeeConst.FLOWER_TAG_ALL) ||
                 bee.getFlower().equals(BeeConst.FLOWER_TAG_SMALL) ||
                 bee.getFlower().equals(BeeConst.FLOWER_TAG_TALL) ||
-                isValidBlock(flower))
-                ? dataCheckPassed(bee.getName(), "Flower")
-                : logError(bee.getName(), "Flower", bee.getFlower(), "flower");
+                isValidBlock(flower)) ||
+                logError(bee.getName(), "Flower", bee.getFlower(), "flower");
     }
 
     private static boolean validateColor(BeeData bee) {
-        return Color.validate(bee.getColor())
-                ? dataCheckPassed(bee.getName(), "Color")
-                : logError(bee.getName(), "Color", bee.getColor(), "color");
+        return Color.validate(bee.getHoneycombColor()) ||
+                Color.validate(bee.getPrimaryColor()) ||
+                Color.validate(bee.getSecondaryColor()) ||
+                logError(bee.getName(), "Color", "Color" , "color");
     }
 
     /**

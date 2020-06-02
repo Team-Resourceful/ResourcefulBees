@@ -1,8 +1,10 @@
 {
-  "color": "#F6F2E6",
+  "honeycombColor": "#F6F2E6",
+  "primaryColor": "#F6F2E6",
+  "secondaryColor": "#444444",
   "flower": "ALL",
-  "baseBlock": "minecraft:stone",
-  "mutationBlock": "minecraft:gravel",
+  "mutationInput": "minecraft:stone",
+  "mutationOutput": "minecraft:gravel",
   "mainOutput": "minecraft:bone",
   "spawnInWorld": true,
   "biomeList": "tag:OVERWORLD",

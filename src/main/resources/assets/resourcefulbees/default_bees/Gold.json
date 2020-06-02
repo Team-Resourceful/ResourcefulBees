@@ -1,8 +1,10 @@
 {
-  "color": "#FFDC00",
+  "honeycombColor": "#FFDC00",
+  "primaryColor": "#FFDC00",
+  "secondaryColor": "#444444",
   "flower": "ALL",
-  "baseBlock": "minecraft:stone",
-  "mutationBlock": "minecraft:gold_ore",
+  "mutationInput": "minecraft:stone",
+  "mutationOutput": "minecraft:gold_ore",
   "mainOutput": "minecraft:gold_ingot",
   "spawnInWorld": true,
   "biomeList": "tag:OVERWORLD",

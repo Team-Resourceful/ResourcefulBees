@@ -1,8 +1,10 @@
 {
-  "color": "#18eb09",
+  "honeycombColor": "#18eb09",
+  "primaryColor": "#18eb09",
+  "secondaryColor": "#444444",
   "flower": "ALL",
-  "baseBlock": "minecraft:stone",
-  "mutationBlock": "minecraft:lava",
+  "mutationInput": "minecraft:stone",
+  "mutationOutput": "minecraft:lava",
   "mainOutput": "minecraft:emerald",
   "spawnInWorld": true,
   "biomeList": "TAG:Mountain,Hills",

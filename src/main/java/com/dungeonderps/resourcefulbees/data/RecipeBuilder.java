@@ -60,13 +60,13 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
             }
             else {
                 if (Config.CENTRIFUGE_RECIPES.get()) {
-                    IRecipe<?> honeycombCentrifuge = this.centrifugeRecipe(bee.getValue().getName(), bee.getValue().getColor());
+                    IRecipe<?> honeycombCentrifuge = this.centrifugeRecipe(bee.getValue().getName(), bee.getValue().getHoneycombColor());
                     if (honeycombCentrifuge != null)
                         recipeManager.recipes.computeIfAbsent(honeycombCentrifuge.getType(), t -> new HashMap<>()).put(honeycombCentrifuge.getId(), honeycombCentrifuge);
                 }
                 if (Config.HONEYCOMB_BLOCK_RECIPES.get()) {
-                    IRecipe<?> honeycombBlock = this.makeHoneycombRecipe(bee.getKey(), bee.getValue().getColor());
-                    IRecipe<?> honeycomb = this.blockToHoneycombRecipe(bee.getKey(), bee.getValue().getColor());
+                    IRecipe<?> honeycombBlock = this.makeHoneycombRecipe(bee.getKey(), bee.getValue().getHoneycombColor());
+                    IRecipe<?> honeycomb = this.blockToHoneycombRecipe(bee.getKey(), bee.getValue().getHoneycombColor());
                     if (honeycombBlock != null)
                         recipes.put(honeycombBlock.getId(), honeycombBlock);
                     if (honeycomb != null)

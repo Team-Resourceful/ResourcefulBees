@@ -27,8 +27,8 @@ import java.util.Stack;
 
 public class IronBeehiveBlockEntity extends BeehiveTileEntity {
 
-  private final int TIER = 1;
-  private final float TIER_MODIFIER = 1;
+  protected final int TIER = 1;
+  protected final float TIER_MODIFIER = 1;
 
   public Stack<String> honeycombs = new Stack<>();
   public boolean isSmoked = false;
@@ -83,7 +83,7 @@ public class IronBeehiveBlockEntity extends BeehiveTileEntity {
               if (i < 5) {
                 this.honeycombs.push(beeEntity.getBeeType());
                 float combsInHive = this.honeycombs.size();
-                float maxCombs = Config.HIVE_MAX_COMBS.get() * getTierModifier();
+                float maxCombs = Math.round(Config.HIVE_MAX_COMBS.get() * getTierModifier());
                 float percentValue = (combsInHive / maxCombs) * 100;
                 int newState = (int)(percentValue  - (percentValue % 20))  / 20;
                 this.world.setBlockState(this.getPos(), state.with(BeehiveBlock.HONEY_LEVEL, newState));
@@ -105,7 +105,7 @@ public class IronBeehiveBlockEntity extends BeehiveTileEntity {
   }
 
   public void tryEnterHive(Entity bee, boolean hasNectar, int ticksInHive) {
-    if (this.bees.size() < (Config.HIVE_MAX_BEES.get() * getTierModifier())) {
+    if (this.bees.size() < Math.round(Config.HIVE_MAX_BEES.get() * getTierModifier())) {
       bee.removePassengers();
       CompoundNBT nbt = new CompoundNBT();
       bee.writeUnlessPassenger(nbt);
@@ -153,7 +153,7 @@ public class IronBeehiveBlockEntity extends BeehiveTileEntity {
 
   @Override
   public boolean isFullOfBees() {
-    return bees.size() > 3;
+    return bees.size() >= Math.round(Config.HIVE_MAX_BEES.get() * getTierModifier());
   }
 
   public String getResourceHoneycomb(){

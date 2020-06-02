@@ -116,7 +116,7 @@ public class ResourcefulBee extends CustomBeeEntity {
 
         @Override
         public void tick() {
-            if (!getBeeInfo().getBaseBlock().isEmpty() && !getBeeInfo().getMutationBlock().isEmpty())
+            if (!getBeeInfo().getMutationInput().isEmpty() && !getBeeInfo().getMutationOutput().isEmpty())
                 applyPollinationEffect();
         }
     }
@@ -131,7 +131,7 @@ public class ResourcefulBee extends CustomBeeEntity {
                 Block block = state.getBlock();
                 if (validFillerBlock(block)) {
                     world.playEvent(2005, beePosDown, 0);
-                    Block newBlock = ForgeRegistries.BLOCKS.getValue(BeeInfoUtils.getResource(getBeeInfo().getMutationBlock()));
+                    Block newBlock = ForgeRegistries.BLOCKS.getValue(BeeInfoUtils.getResource(getBeeInfo().getMutationOutput()));
                     if (newBlock != null)
                         world.setBlockState(beePosDown, newBlock.getDefaultState());
                     addCropCounter();
@@ -141,7 +141,7 @@ public class ResourcefulBee extends CustomBeeEntity {
     }
 
     public boolean validFillerBlock(Block block){
-        String baseBlock = this.getBeeInfo().getBaseBlock();
+        String baseBlock = this.getBeeInfo().getMutationInput();
         if (BeeInfoUtils.TAG_RESOURCE_PATTERN.matcher(baseBlock).matches()) {
             Tag<Block> blockTag = BlockTags.getCollection().get(BeeInfoUtils.getResource(baseBlock.replace(BeeConst.TAG_PREFIX, "")));
             return blockTag != null && block.isIn(blockTag);

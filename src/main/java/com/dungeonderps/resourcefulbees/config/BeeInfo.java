@@ -1,5 +1,6 @@
 package com.dungeonderps.resourcefulbees.config;
 
+import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.data.BeeData;
 import com.dungeonderps.resourcefulbees.lib.BeeConst;
 import com.dungeonderps.resourcefulbees.utils.MathUtils;
@@ -38,13 +39,16 @@ public class BeeInfo {
      *  @return Returns random bee type as a string.
      */
     public static String getRandomBee(Biome biome){
-        ArrayList<String> spawnList = new ArrayList<>(SPAWNABLE_BIOMES.get(biome));
-        return spawnList.get(MathUtils.nextInt(spawnList.size()));
+        if (SPAWNABLE_BIOMES.get(biome) != null) {
+            ArrayList<String> spawnList = new ArrayList<>(SPAWNABLE_BIOMES.get(biome));
+            return spawnList.get(MathUtils.nextInt(spawnList.size()));
+        }
+        return BeeConst.DEFAULT_BEE_TYPE;
     }
 
     public static BeeData getInfo(String bee){
         BeeData info = BEE_INFO.get(bee);
-        return info != null ? info : BEE_INFO.get(BeeConst.DEFAULT_REMOVE);
+        return info != null ? info : BEE_INFO.get(BeeConst.DEFAULT_BEE_TYPE);
     }
 
 }

@@ -1,8 +1,10 @@
 {
-  "color": "#aa0f01",
+  "honeycombColor": "#aa0f01",
+  "primaryColor": "#aa0f01",
+  "secondaryColor": "#444444",
   "flower": "ALL",
-  "baseBlock": "minecraft:stone",
-  "mutationBlock": "minecraft:redstone_ore",
+  "mutationInput": "minecraft:stone",
+  "mutationOutput": "minecraft:redstone_ore",
   "mainOutput": "minecraft:redstone",
   "spawnInWorld": true,
   "biomeList": "tag:OVERWORLD",

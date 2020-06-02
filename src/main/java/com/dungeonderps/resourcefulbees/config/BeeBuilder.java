@@ -4,12 +4,18 @@ import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.data.BeeData;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.utils.BeeInfoUtils;
+import com.dungeonderps.resourcefulbees.world.BeeNestFeature;
 import com.google.gson.Gson;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.passive.CustomBeeEntity;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.Heightmap;
+import net.minecraft.world.gen.feature.DecoratedFeatureConfig;
+import net.minecraft.world.gen.feature.IFeatureConfig;
+import net.minecraft.world.gen.placement.ChanceConfig;
+import net.minecraft.world.gen.placement.Placement;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -67,6 +73,7 @@ public class BeeBuilder{
                 BeeInfoUtils.parseBiomeList(bee);
             if(bee.isBreedable())
                 BeeInfoUtils.buildFamilyTree(bee);
+            LOGGER.info(name + " bee passed validation check!!");
         }
     }
 
@@ -105,9 +112,43 @@ public class BeeBuilder{
     private static void setupBeeSpawns() {
         for (Map.Entry<Biome, Set<String>> element : BeeInfo.SPAWNABLE_BIOMES.entrySet()) {
             Biome biome = element.getKey();
-            biome.getSpawns(EntityClassification.CREATURE).add(new Biome.SpawnListEntry(RegistryHandler.CUSTOM_BEE.get(), Config.SPAWN_WEIGHT.get(), Config.SPAWN_MIN_GROUP.get(), Config.SPAWN_MAX_GROUP.get()));
+            if (Config.GENERATE_BEE_NESTS.get()) {
+                addNestFeature(biome);
+            }
+            LOGGER.info("Biome Setup - " + biome.getRegistryName());
+            int divisor = Config.GENERATE_BEE_NESTS.get() ? 2 : 1;
+            biome.getSpawns(EntityClassification.CREATURE).add(new Biome.SpawnListEntry(RegistryHandler.CUSTOM_BEE.get(), Config.SPAWN_WEIGHT.get()/divisor, Config.SPAWN_MIN_GROUP.get()/divisor, Config.SPAWN_MAX_GROUP.get()/divisor));
         }
 
         EntitySpawnPlacementRegistry.register(RegistryHandler.CUSTOM_BEE.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, CustomBeeEntity::canBeeSpawn);
+    }
+
+    private static void addNestFeature(Biome biome){
+        Biome.Category category = biome.getCategory();
+        biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, RegistryHandler.BEE_NEST_FEATURE.get().withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.CHANCE_HEIGHTMAP_DOUBLE.configure(new ChanceConfig(32))));
+        /*
+        switch (category) {
+            case THEEND:
+                biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, RegistryHandler.BEE_NEST_FEATURE.get().withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.CHANCE_HEIGHTMAP_DOUBLE.configure(new ChanceConfig(32))));
+                break;
+            case NETHER:
+                break;
+            case SAVANNA:
+            case DESERT:
+            case MESA:
+                break;
+            case JUNGLE:
+                break;
+            case BEACH:
+            case OCEAN:
+            case ICY:
+                break;
+            case MUSHROOM:
+            case TAIGA:
+            case SWAMP:
+                break;
+            default:
+        }
+         */
     }
 }

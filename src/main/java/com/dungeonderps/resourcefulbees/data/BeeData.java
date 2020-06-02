@@ -5,14 +5,22 @@ import com.dungeonderps.resourcefulbees.lib.MutationTypes;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import net.minecraft.item.Items;
 
-import java.util.Objects;
-
 public class BeeData {
 
-    private String flower, color, biomeList, parent1, parent2;
+    private String flower, biomeList, parent1, parent2;
 
-    private String baseBlock = "";
-    private String mutationBlock = "";
+    private String baseLayerTexture = "/custom/bee";
+    private String primaryColor = "#000000";
+    private String secondaryColor = "#303030";
+    private String honeycombColor = primaryColor;
+    private String primaryLayerTexture = "/custom/primary_layer";
+    private String secondaryLayerTexture = "/custom/secondary_layer";
+
+    private boolean isBeeColored = true;
+
+
+    private String mutationInput = "";
+    private String mutationOutput = "";
 
     private String mainOutput = "";
 
@@ -26,6 +34,8 @@ public class BeeData {
     private double mainOutputWeight = BeeConst.DEFAULT_MAIN_OUTPUT_WEIGHT;
     private double secondaryOutputWeight = BeeConst.DEFAULT_SEC_OUTPUT_WEIGHT;
     private double bottleOutputWeight = BeeConst.DEFAULT_BOT_OUTPUT_WEIGHT;
+
+    private float sizeModifier = 1.0f;
 
     private transient String name = BeeConst.DEFAULT_BEE_TYPE;
     private transient boolean mutation;
@@ -67,17 +77,17 @@ public class BeeData {
      * Gets the color for this bee and its honeycomb.
      * @return this bee's color.
      */
-    public String getColor() {
-        return color;
+    public String getHoneycombColor() {
+        return honeycombColor;
     }
 
     /**
      * Sets the color for this bee and its honeycomb.
      * Can be used to modify bees through code.
-     * @param color this bee's color.
+     * @param honeycombColor this bee's color.
      */
-    public void setColor(String color) {
-        this.color = color;
+    public void setHoneycombColor(String honeycombColor) {
+        this.honeycombColor = honeycombColor;
     }
 
     /**
@@ -212,18 +222,18 @@ public class BeeData {
      * Bees can only have *ONE* Mutation Block.
      * @return this bee's Mutation Block.
      */
-    public String getMutationBlock() {
-        return mutationBlock.toLowerCase().trim();
+    public String getMutationOutput() {
+        return mutationOutput.toLowerCase().trim();
     }
 
     /**
      * Sets the Mutation Block for this bee.
      * Bees can only have *ONE* Mutation Block.
      * Can be used to modify bees through code.
-     * @param mutationBlock this bee's Mutation Block.
+     * @param mutationOutput this bee's Mutation Block.
      */
-    public void setMutationBlock(String mutationBlock) {
-        this.mutationBlock = mutationBlock.toLowerCase().trim();
+    public void setMutationOutput(String mutationOutput) {
+        this.mutationOutput = mutationOutput.toLowerCase().trim();
     }
 
     /**
@@ -232,8 +242,8 @@ public class BeeData {
      * the Base Block can instead be "mutated" into a different block.
      * @return this bee's Base Block.
      */
-    public String getBaseBlock() {
-        return baseBlock.toLowerCase().trim();
+    public String getMutationInput() {
+        return mutationInput.toLowerCase().trim();
     }
 
     /**
@@ -241,10 +251,10 @@ public class BeeData {
      * Similar to vanilla bees applying growth ticks,
      * the Base Block can instead be "mutated" into a different block.
      * Can be used to modify bees through code.
-     * @param baseBlock this bee's flower(s).
+     * @param mutationInput this bee's flower(s).
      */
-    public void setBaseBlock(String baseBlock) {
-        this.baseBlock = baseBlock.toLowerCase().trim();
+    public void setMutationInput(String mutationInput) {
+        this.mutationInput = mutationInput.toLowerCase().trim();
     }
 
     /**
@@ -387,5 +397,61 @@ public class BeeData {
 
     public void setMutationType(Enum<MutationTypes> mutationType) {
         this.mutationType = mutationType;
+    }
+
+    public String getBaseLayerTexture() {
+        return baseLayerTexture;
+    }
+
+    public void setBaseLayerTexture(String baseLayerTexture) {
+        this.baseLayerTexture = baseLayerTexture;
+    }
+
+    public String getPrimaryColor() {
+        return primaryColor;
+    }
+
+    public void setPrimaryColor(String primaryColor) {
+        this.primaryColor = primaryColor;
+    }
+
+    public String getSecondaryColor() {
+        return secondaryColor;
+    }
+
+    public void setSecondaryColor(String secondaryColor) {
+        this.secondaryColor = secondaryColor;
+    }
+
+    public String getPrimaryLayerTexture() {
+        return primaryLayerTexture;
+    }
+
+    public void setPrimaryLayerTexture(String primaryLayerTexture) {
+        this.primaryLayerTexture = primaryLayerTexture;
+    }
+
+    public String getSecondaryLayerTexture() {
+        return secondaryLayerTexture;
+    }
+
+    public void setSecondaryLayerTexture(String secondaryLayerTexture) {
+        this.secondaryLayerTexture = secondaryLayerTexture;
+    }
+
+    public boolean isBeeColored() {
+        return isBeeColored;
+    }
+
+    public void setBeeColored(boolean beeColored) {
+        isBeeColored = beeColored;
+    }
+
+    public float getSizeModifier() {
+        return sizeModifier;
+    }
+
+    public void setSizeModifier(float sizeModifier) {
+        this.sizeModifier = sizeModifier;
     }
 }

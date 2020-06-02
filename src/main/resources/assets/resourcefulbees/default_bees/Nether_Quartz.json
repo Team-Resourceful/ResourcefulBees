@@ -1,8 +1,10 @@
 {
-  "color": "#D4CABA",
+  "honeycombColor": "#D4CABA",
+  "primaryColor": "#D4CABA",
+  "secondaryColor": "#444444",
   "flower": "minecraft:nether_wart",
-  "baseBlock": "minecraft:netherrack",
-  "mutationBlock": "minecraft:nether_quartz_ore",
+  "mutationInput": "minecraft:netherrack",
+  "mutationOutput": "minecraft:nether_quartz_ore",
   "mainOutput": "minecraft:quartz",
   "spawnInWorld": true,
   "biomeList": "tag:nether",

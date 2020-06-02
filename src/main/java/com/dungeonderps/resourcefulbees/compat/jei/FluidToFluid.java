@@ -13,7 +13,6 @@ import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IGuiFluidStackGroup;
-import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
@@ -26,10 +25,8 @@ import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.passive.CustomBeeEntity;
 import net.minecraft.fluid.Fluid;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
@@ -99,7 +96,8 @@ public class FluidToFluid implements IRecipeCategory<FluidToFluid.Recipe> {
                 List<List<FluidStack>> fluid_fluids = new ArrayList<>();
                 fluid_fluids.add(fluids);
                 ingredients.setInputLists(VanillaTypes.FLUID, fluid_fluids);
-                ingredients.setOutput(VanillaTypes.FLUID, recipe.fluidOut);            }
+                ingredients.setOutput(VanillaTypes.FLUID, recipe.fluidOut);
+            }
         }
         else {
             if (MutationTypes.FLUID_TO_FLUID.equals(recipe.mutationType)) {
@@ -174,8 +172,8 @@ public class FluidToFluid implements IRecipeCategory<FluidToFluid.Recipe> {
         for (Map.Entry<String, BeeData> bee : BeeInfo.BEE_INFO.entrySet()){
             if (bee.getValue().hasMutation()) {
 
-                String mutationIn = bee.getValue().getBaseBlock();
-                String mutationOut = bee.getValue().getMutationBlock();
+                String mutationIn = bee.getValue().getMutationInput();
+                String mutationOut = bee.getValue().getMutationOutput();
 
                 if (BeeInfoUtils.TAG_RESOURCE_PATTERN.matcher(mutationIn).matches()) {
                     mutationIn = mutationIn.replace(BeeConst.TAG_PREFIX, "");

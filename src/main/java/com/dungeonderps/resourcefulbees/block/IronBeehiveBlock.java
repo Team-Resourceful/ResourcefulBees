@@ -13,6 +13,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tileentity.BeehiveTileEntity;
 import net.minecraft.tileentity.IronBeehiveBlockEntity;
@@ -22,6 +24,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
@@ -34,6 +37,11 @@ public class IronBeehiveBlock extends BeehiveBlock {
 
   public IronBeehiveBlock(Block.Properties properties) {
     super(properties);
+  }
+
+  @Override
+  protected void fillStateContainer(@Nonnull StateContainer.Builder<Block, BlockState> builder) {
+    super.fillStateContainer(builder);
   }
 
   @Nullable
@@ -134,16 +142,11 @@ public class IronBeehiveBlock extends BeehiveBlock {
       while (hive.hasCombs()) {
         ItemStack comb = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
         String honeycomb = hive.getResourceHoneycomb();
-        comb.getOrCreateChildTag(BeeConst.NBT_ROOT).putString(BeeConst.NBT_COLOR, BeeInfo.getInfo(honeycomb).getColor());
+        comb.getOrCreateChildTag(BeeConst.NBT_ROOT).putString(BeeConst.NBT_COLOR, BeeInfo.getInfo(honeycomb).getHoneycombColor());
         comb.getOrCreateChildTag(BeeConst.NBT_ROOT).putString(BeeConst.NBT_BEE_TYPE, BeeInfo.getInfo(honeycomb).getName());
         spawnAsEntity(world, pos, comb);
       }
     }
-  }
-
-  @Override
-  public BlockState getStateForPlacement(BlockItemUseContext context) {
-    return this.getDefaultState().with(HORIZONTAL_FACING, context.getPlacementHorizontalFacing().getOpposite());
   }
 
   @Nullable

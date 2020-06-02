@@ -1,10 +1,13 @@
 {
-  "color": "#303030",
+  "honeycombColor": "#303030",
+  "primaryColor": "#F2E718",
+  "secondaryColor": "#EA2727",
   "flower": "ALL",
-  "baseBlock": "tag:forge:stone",
-  "mutationBlock": "minecraft:coal_ore",
+  "mutationInput": "tag:forge:stone",
+  "mutationOutput": "minecraft:coal_ore",
   "mainOutput": "minecraft:coal",
   "spawnInWorld": true,
   "biomeList": "tag:OVERWORLD",
+  "sizeModifier": 0.2,
   "maxTimeInHive": 600
 }

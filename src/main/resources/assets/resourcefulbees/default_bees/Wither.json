@@ -1,8 +1,10 @@
 {
-  "color": "#444444",
+  "honeycombColor": "#444444",
+  "primaryColor": "#444444",
+  "secondaryColor": "#444444",
   "flower": "minecraft:wither_rose",
-  "baseBlock": "minecraft:lava",
-  "mutationBlock": "minecraft:obsidian",
+  "mutationInput": "minecraft:lava",
+  "mutationOutput": "minecraft:obsidian",
   "mainOutput": "minecraft:charcoal",
   "spawnInWorld": true,
   "biomeList": "tag:NETHER",

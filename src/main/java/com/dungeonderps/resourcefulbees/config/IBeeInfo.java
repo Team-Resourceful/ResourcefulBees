@@ -5,11 +5,13 @@ import com.dungeonderps.resourcefulbees.data.BeeData;
 public interface IBeeInfo {
 
     /**
-     * Returns the supplied bee's color value as a float.
+     * Returns the supplied bee's color value as a string.
      *
-     *  @return Returns color as a float.
+     *  @return Returns color as a string.
      */
     String getColorFromInfo(String beeType);
+
+    Float getSizeModifierFromInfo(String beeType);
 
     /**
      * Returns the supplied bee's name value as a string.

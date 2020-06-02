@@ -1,8 +1,10 @@
 {
-  "color": "#2F4E32",
+  "honeycombColor": "#2F4E32",
+  "primaryColor": "#2F4E32",
+  "secondaryColor": "#444444",
   "flower": "minecraft:dead_bush",
-  "baseBlock": "minecraft:stone",
-  "mutationBlock": "minecraft:cobblestone",
+  "mutationInput": "minecraft:stone",
+  "mutationOutput": "minecraft:cobblestone",
   "mainOutput": "minecraft:rotten_flesh",
   "spawnInWorld": true,
   "biomeList": "tag:OVERWORLD",

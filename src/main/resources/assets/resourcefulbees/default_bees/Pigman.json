@@ -1,8 +1,10 @@
 {
-  "color": "#885956",
+  "honeycombColor": "#885956",
+  "primaryColor": "#885956",
+  "secondaryColor": "#444444",
   "flower": "minecraft:nether_wart",
-  "baseBlock": "minecraft:netherrack",
-  "mutationBlock": "minecraft:glowstone",
+  "mutationInput": "minecraft:netherrack",
+  "mutationOutput": "minecraft:glowstone",
   "mainOutput": "minecraft:glowstone_dust",
   "spawnInWorld": true,
   "biomeList": "tag:NETHER",

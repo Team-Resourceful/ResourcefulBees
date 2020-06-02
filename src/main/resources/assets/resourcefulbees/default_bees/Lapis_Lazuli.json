@@ -1,8 +1,10 @@
 {
-  "color": "#345ec3",
+  "honeycombColor": "#345ec3",
+  "primaryColor": "#345ec3",
+  "secondaryColor": "#444444",
   "flower": "ALL",
-  "baseBlock": "minecraft:stone",
-  "mutationBlock": "minecraft:lapis_ore",
+  "mutationInput": "minecraft:stone",
+  "mutationOutput": "minecraft:lapis_ore",
   "mainOutput": "minecraft:lapis_lazuli",
   "spawnInWorld": true,
   "biomeList": "tag:OVERWORLD",
