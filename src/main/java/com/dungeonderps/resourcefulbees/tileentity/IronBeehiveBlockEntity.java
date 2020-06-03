@@ -1,5 +1,5 @@
 
-package net.minecraft.tileentity;
+package com.dungeonderps.resourcefulbees.tileentity;
 
 
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
@@ -12,9 +12,11 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.CampfireBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.passive.CustomBeeEntity;
+import com.dungeonderps.resourcefulbees.entity.passive.CustomBeeEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.tileentity.BeehiveTileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;

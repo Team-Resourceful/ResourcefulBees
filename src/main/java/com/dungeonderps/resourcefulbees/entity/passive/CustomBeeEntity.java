@@ -1,4 +1,4 @@
-package net.minecraft.entity.passive;
+package com.dungeonderps.resourcefulbees.entity.passive;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
@@ -8,20 +8,20 @@ import com.dungeonderps.resourcefulbees.lib.BeeConst;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.utils.MathUtils;
 import net.minecraft.entity.*;
+import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.entity.passive.BeeEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.NameTagItem;
 import net.minecraft.item.SpawnEggItem;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
-import net.minecraft.tileentity.LockableLootTileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -30,7 +30,6 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.*;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.dimension.DimensionType;
-import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -114,12 +113,13 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
     @Override
     public void livingTick() {
         if (remove) {
-            if (!world.isRemote()) {
+            if (!world.isRemote() && getBeeType().equals(BeeConst.DEFAULT_BEE_TYPE)) {
                 LOGGER.info("Remove Bee");
                 remove = false;
                 this.dead = true;
                 this.remove();
-            }
+            } else
+                remove = false;
         }
 
         if (this.world.isRemote && getBeeInfo().isEnderBee()){

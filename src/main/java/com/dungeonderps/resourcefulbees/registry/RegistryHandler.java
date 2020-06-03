@@ -15,18 +15,16 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.merchant.villager.VillagerProfession;
-import net.minecraft.entity.passive.ResourcefulBee;
+import com.dungeonderps.resourcefulbees.entity.passive.ResourcefulBee;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.potion.Effects;
-import net.minecraft.tileentity.IronBeehiveBlockEntity;
+import com.dungeonderps.resourcefulbees.tileentity.IronBeehiveBlockEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.village.PointOfInterestType;
-import net.minecraft.world.gen.feature.DecoratedFeature;
-import net.minecraft.world.gen.feature.DecoratedFeatureConfig;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraftforge.common.extensions.IForgeContainerType;
@@ -156,6 +154,16 @@ public class RegistryHandler {
 	//**************POINT OF INTEREST**********************************
 
 	public static final RegistryObject<PointOfInterestType> IRON_BEEHIVE_POI = POIS.register("iron_beehive", () -> new PointOfInterestType("iron_beehive", ImmutableSet.copyOf(IRON_BEEHIVE.get().getStateContainer().getValidStates()), 1, 1));
+	/*
+	public static final RegistryObject<PointOfInterestType> BEE_NEST_POI = POIS.register("bee_nest", () -> new PointOfInterestType("iron_beehive", ImmutableSet.copyOf(BEE_NEST.get().getStateContainer().getValidStates()), 1, 1));
+	public static final RegistryObject<PointOfInterestType> ACACIA_BEE_NEST_POI = POIS.register("acacia_bee_nest", () -> new PointOfInterestType("iron_beehive", ImmutableSet.copyOf(ACACIA_BEE_NEST.get().getStateContainer().getValidStates()), 1, 1));
+	public static final RegistryObject<PointOfInterestType> GRASS_BEE_NEST_POI = POIS.register("grass_bee_nest", () -> new PointOfInterestType("iron_beehive", ImmutableSet.copyOf(GRASS_BEE_NEST.get().getStateContainer().getValidStates()), 1, 1));
+	public static final RegistryObject<PointOfInterestType> JUNGLE_BEE_NEST_POI = POIS.register("jungle_bee_nest", () -> new PointOfInterestType("iron_beehive", ImmutableSet.copyOf(JUNGLE_BEE_NEST.get().getStateContainer().getValidStates()), 1, 1));
+	public static final RegistryObject<PointOfInterestType> NETHER_BEE_NEST_POI = POIS.register("nether_bee_nest", () -> new PointOfInterestType("iron_beehive", ImmutableSet.copyOf(NETHER_BEE_NEST.get().getStateContainer().getValidStates()), 1, 1));
+	public static final RegistryObject<PointOfInterestType> PRISMARINE_BEE_NEST_POI = POIS.register("prismarine_bee_nest", () -> new PointOfInterestType("iron_beehive", ImmutableSet.copyOf(PRISMARINE_BEE_NEST.get().getStateContainer().getValidStates()), 1, 1));
+	public static final RegistryObject<PointOfInterestType> PURPUR_BEE_NEST_POI = POIS.register("purpur_bee_nest", () -> new PointOfInterestType("iron_beehive", ImmutableSet.copyOf(PURPUR_BEE_NEST.get().getStateContainer().getValidStates()), 1, 1));
+	public static final RegistryObject<PointOfInterestType> WITHER_BEE_NEST_POI = POIS.register("wither_bee_nest", () -> new PointOfInterestType("iron_beehive", ImmutableSet.copyOf(WITHER_BEE_NEST.get().getStateContainer().getValidStates()), 1, 1));
+	 */
 
 	//*************SPAWN EGGS******************************************
 

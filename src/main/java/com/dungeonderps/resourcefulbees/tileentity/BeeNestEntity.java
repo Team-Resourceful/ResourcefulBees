@@ -2,7 +2,6 @@ package com.dungeonderps.resourcefulbees.tileentity;
 
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import net.minecraft.block.Block;
-import net.minecraft.tileentity.IronBeehiveBlockEntity;
 import net.minecraft.tileentity.TileEntityType;
 
 import javax.annotation.Nonnull;

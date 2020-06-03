@@ -67,7 +67,7 @@ public class Config {
                     .define("generateBeeNests", true);
             COMMON_BUILDER.pop();
             BEE_NEST_GENERATION_WEIGHT = COMMON_BUILDER.comment("Bee nest weighting when generating chunks. Higher value means nest is more likely to generate")
-                    .defineInRange("bee_nest_generation_weight", 0.5, 0.0, 1.0);
+                    .defineInRange("bee_nest_generation_weight", 0.3, 0.0, 1.0);
 
             COMMON_CONFIG = COMMON_BUILDER.build();
         }
