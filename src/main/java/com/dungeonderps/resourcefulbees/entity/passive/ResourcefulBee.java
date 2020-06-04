@@ -4,6 +4,7 @@ import com.dungeonderps.resourcefulbees.data.BeeData;
 import com.dungeonderps.resourcefulbees.entity.goals.BeeBreedGoal;
 import com.dungeonderps.resourcefulbees.lib.BeeConst;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
+import com.dungeonderps.resourcefulbees.tileentity.beehive.Tier1BeehiveBlockEntity;
 import com.dungeonderps.resourcefulbees.utils.BeeInfoUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -22,7 +23,6 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;
-import com.dungeonderps.resourcefulbees.tileentity.IronBeehiveBlockEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Direction;
@@ -39,7 +39,11 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.*;
+import javax.annotation.Nonnull;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -80,14 +84,14 @@ public class ResourcefulBee extends CustomBeeEntity {
         } else {
             assert this.hivePos != null;
             TileEntity blockEntity = this.world.getTileEntity(this.hivePos);
-            return blockEntity instanceof IronBeehiveBlockEntity
-                    && ((IronBeehiveBlockEntity) blockEntity).isAllowedBee();
+            return blockEntity instanceof Tier1BeehiveBlockEntity
+                    && ((Tier1BeehiveBlockEntity) blockEntity).isAllowedBee();
         }
     }
 
     public boolean doesHiveHaveSpace(BlockPos pos) {
         TileEntity blockEntity = this.world.getTileEntity(pos);
-        return blockEntity instanceof IronBeehiveBlockEntity && !((IronBeehiveBlockEntity) blockEntity).isFullOfBees();
+        return blockEntity instanceof Tier1BeehiveBlockEntity && !((Tier1BeehiveBlockEntity) blockEntity).isFullOfBees();
     }
 
     //*************************** INTERNAL CLASSES AND METHODS FOR BEE GOALS BELOW ***********************************
@@ -98,11 +102,12 @@ public class ResourcefulBee extends CustomBeeEntity {
             super();
         }
 
+        @Nonnull
         public List<BlockPos> getNearbyFreeHives() {
             BlockPos blockpos = new BlockPos(ResourcefulBee.this);
             PointOfInterestManager pointofinterestmanager = ((ServerWorld) world).getPointOfInterestManager();
             Stream<PointOfInterest> stream = pointofinterestmanager.func_219146_b(pointOfInterestType ->
-                            pointOfInterestType == RegistryHandler.IRON_BEEHIVE_POI.get(), blockpos,
+                            pointOfInterestType == RegistryHandler.T1_BEEHIVE_POI.get(), blockpos,
                     20, PointOfInterestManager.Status.ANY);
             return stream.map(PointOfInterest::getPos).filter(ResourcefulBee.this::doesHiveHaveSpace)
                     .sorted(Comparator.comparingDouble(pos -> pos.distanceSq(blockpos))).collect(Collectors.toList());
@@ -171,6 +176,7 @@ public class ResourcefulBee extends CustomBeeEntity {
             super();
         }
 
+        @Nonnull
         @Override
         public Optional<BlockPos> getFlower() {
             return this.findFlower(getFlowerPredicate(), 5.0D);
@@ -178,7 +184,7 @@ public class ResourcefulBee extends CustomBeeEntity {
     }
 
     @Override
-    public boolean isFlowers(BlockPos pos) {
+    public boolean isFlowers(@Nonnull BlockPos pos) {
         String flower = getBeeInfo().getFlower();
 
         switch (flower){

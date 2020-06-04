@@ -2,6 +2,7 @@ package com.dungeonderps.resourcefulbees.compat.jei;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.data.BeeData;
+import com.dungeonderps.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.dungeonderps.resourcefulbees.lib.BeeConst;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -20,7 +21,6 @@ import net.minecraft.client.renderer.Quaternion;
 import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.resources.I18n;
-import com.dungeonderps.resourcefulbees.entity.passive.CustomBeeEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
@@ -44,7 +44,7 @@ public class BeeHiveCategory implements IRecipeCategory<BeeHiveCategory.Recipe> 
 
     public BeeHiveCategory(IGuiHelper guiHelper) {
         this.background = guiHelper.drawableBuilder(GUI_BACK, 0, 0, 160, 25).addPadding(0, 0, 0, 0).build();
-        this.icon = guiHelper.createDrawableIngredient(new ItemStack(RegistryHandler.IRON_BEEHIVE_ITEM.get()));
+        this.icon = guiHelper.createDrawableIngredient(new ItemStack(RegistryHandler.T1_BEEHIVE_ITEM.get()));
         this.localizedName = I18n.format("gui.resourcefulbees.jei.category.hive");
         World clientWorld = Minecraft.getInstance().world;
         if (clientWorld != null)
@@ -86,7 +86,7 @@ public class BeeHiveCategory implements IRecipeCategory<BeeHiveCategory.Recipe> 
     @Override
     public void setIngredients(Recipe recipe, IIngredients ingredients) {
         ingredients.setOutput(VanillaTypes.ITEM, recipe.getComb());
-        ingredients.setInput(VanillaTypes.ITEM, new ItemStack(RegistryHandler.IRON_BEEHIVE_ITEM.get()));
+        ingredients.setInput(VanillaTypes.ITEM, new ItemStack(RegistryHandler.T1_BEEHIVE_ITEM.get()));
     }
 
     @Override

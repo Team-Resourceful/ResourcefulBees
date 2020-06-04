@@ -53,7 +53,7 @@ public class ItemGroupResourcefulBees{
 		@Nonnull
 		@OnlyIn(Dist.CLIENT)
 		public ItemStack createIcon() {
-			return new ItemStack(RegistryHandler.IRON_BEEHIVE_ITEM.get());
+			return new ItemStack(RegistryHandler.T1_BEEHIVE_ITEM.get());
 		}
 	});
 	

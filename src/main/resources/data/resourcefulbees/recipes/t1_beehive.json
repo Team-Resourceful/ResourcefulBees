@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "GGG",
+    "GBG",
+    "GGG"
+  ],
+  "key": {
+    "I": { "item": "minecraft:grass" },
+    "B": { "item": "minecraft:beehive" }
+  },
+  "result": {
+    "item": "resourcefulbees:t1_beehive"
+  }
+}

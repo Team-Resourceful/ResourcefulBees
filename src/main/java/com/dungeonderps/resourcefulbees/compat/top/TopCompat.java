@@ -1,19 +1,19 @@
 package com.dungeonderps.resourcefulbees.compat.top;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
-import com.dungeonderps.resourcefulbees.block.IronBeehiveBlock;
+import com.dungeonderps.resourcefulbees.block.beehive.Tier1BeehiveBlock;
+import com.dungeonderps.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.dungeonderps.resourcefulbees.lib.BeeConst;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.tileentity.CentrifugeBlockEntity;
 import com.dungeonderps.resourcefulbees.tileentity.HoneycombBlockEntity;
+import com.dungeonderps.resourcefulbees.tileentity.beehive.Tier1BeehiveBlockEntity;
 import mcjty.theoneprobe.api.ElementAlignment;
 import mcjty.theoneprobe.api.IProbeInfo;
 import mcjty.theoneprobe.api.ITheOneProbe;
 import mcjty.theoneprobe.api.ProbeMode;
-import com.dungeonderps.resourcefulbees.entity.passive.CustomBeeEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import com.dungeonderps.resourcefulbees.tileentity.IronBeehiveBlockEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
@@ -50,15 +50,15 @@ public class TopCompat implements Function<ITheOneProbe, Void>
                         .text(formatting + BeeConst.MOD_NAME);
                 return true;
             }
-            if(world.getTileEntity(data.getPos()) instanceof IronBeehiveBlockEntity)
+            if(world.getTileEntity(data.getPos()) instanceof Tier1BeehiveBlockEntity)
             {
-                IronBeehiveBlockEntity beehiveBlockEntity = (IronBeehiveBlockEntity) world.getTileEntity(data.getPos());
+                Tier1BeehiveBlockEntity beehiveBlockEntity = (Tier1BeehiveBlockEntity) world.getTileEntity(data.getPos());
                 if(beehiveBlockEntity != null && mode.equals(ProbeMode.EXTENDED)){
-                    IronBeehiveBlockEntity ironBeeHive = (IronBeehiveBlockEntity) world.getTileEntity(data.getPos());
+                    Tier1BeehiveBlockEntity ironBeeHive = (Tier1BeehiveBlockEntity) world.getTileEntity(data.getPos());
                     if (ironBeeHive != null && ironBeeHive.hasCombs()) {
                         int honeyLevel = 0;
-                        if (ironBeeHive.getBlockState().has(IronBeehiveBlock.HONEY_LEVEL))
-                            honeyLevel = ironBeeHive.getBlockState().get(IronBeehiveBlock.HONEY_LEVEL);
+                        if (ironBeeHive.getBlockState().has(Tier1BeehiveBlock.HONEY_LEVEL))
+                            honeyLevel = ironBeeHive.getBlockState().get(Tier1BeehiveBlock.HONEY_LEVEL);
                         IProbeInfo vertical;
                         IProbeInfo horizontal;
                         probeInfo.horizontal()

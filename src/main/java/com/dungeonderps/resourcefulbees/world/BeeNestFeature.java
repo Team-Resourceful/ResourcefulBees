@@ -2,16 +2,17 @@ package com.dungeonderps.resourcefulbees.world;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.config.Config;
+import com.dungeonderps.resourcefulbees.entity.passive.ResourcefulBee;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
-import com.dungeonderps.resourcefulbees.tileentity.BeeNestEntity;
+import com.dungeonderps.resourcefulbees.tileentity.beehive.Tier1BeehiveBlockEntity;
+import com.dungeonderps.resourcefulbees.tileentity.beenest.BeeNestEntity;
 import com.dungeonderps.resourcefulbees.utils.MathUtils;
 import com.mojang.datafixers.Dynamic;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import com.dungeonderps.resourcefulbees.entity.passive.ResourcefulBee;
 import net.minecraft.block.Blocks;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.properties.BlockStateProperties;
-import com.dungeonderps.resourcefulbees.tileentity.IronBeehiveBlockEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
@@ -57,7 +58,7 @@ public class BeeNestFeature extends Feature<NoFeatureConfig> {
             }
             if (newPos.getY() > 100)
                 return false;
-            if (worldIn.getBlockState(pos.down()).getBlock().equals(Blocks.LAVA))
+            if (worldIn.getBlockState(newPos.down()).getBlock().equals(Blocks.LAVA))
                 if (rand.nextInt(10) != 10)
                     return false;
         }
@@ -65,6 +66,11 @@ public class BeeNestFeature extends Feature<NoFeatureConfig> {
             y = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, pos.getX(), pos.getZ());
             newPos = new BlockPos(pos.getX(), y, pos.getZ());
         }
+
+        Block blockBelow = worldIn.getBlockState(newPos.down()).getBlock();
+        if (blockBelow.equals(Blocks.AIR))
+            return false;
+
 
         ResourcefulBees.LOGGER.debug(newPos.toString());
 
@@ -123,7 +129,7 @@ public class BeeNestFeature extends Feature<NoFeatureConfig> {
         ResourcefulBees.LOGGER.debug("Nest Placed");
         if (tileEntity instanceof BeeNestEntity) {
             BeeNestEntity nest = (BeeNestEntity) tileEntity;
-            int maxBees = Math.round(Config.HIVE_MAX_BEES.get() * nest.getTierModifier());
+            int maxBees = nest.getMaxBees();
             for (int i = rand.nextInt(maxBees); i < maxBees ; i++) {
                 ResourcefulBee bee = RegistryHandler.CUSTOM_BEE.get().create(worldIn.getWorld());
                     if (bee != null) {
@@ -131,7 +137,7 @@ public class BeeNestFeature extends Feature<NoFeatureConfig> {
                         CompoundNBT compoundNBT = new CompoundNBT();
                         bee.writeUnlessPassenger(compoundNBT);
                         int timeinhive = rand.nextInt(bee.getBeeInfo().getMaxTimeInHive());
-                        IronBeehiveBlockEntity.Bee beehivetileentity$bee = new IronBeehiveBlockEntity.Bee(compoundNBT, 0, timeinhive);
+                        Tier1BeehiveBlockEntity.Bee beehivetileentity$bee = new Tier1BeehiveBlockEntity.Bee(compoundNBT, 0, timeinhive);
                         nest.bees.add(beehivetileentity$bee);
                     }
 
