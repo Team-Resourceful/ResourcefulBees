@@ -1,6 +1,7 @@
 package com.dungeonderps.resourcefulbees.compat.jei;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
+import com.dungeonderps.resourcefulbees.item.BeeSpawnEggItem;
 import com.dungeonderps.resourcefulbees.item.HoneycombBlockItem;
 import com.dungeonderps.resourcefulbees.item.ResourcefulHoneycomb;
 import com.dungeonderps.resourcefulbees.recipe.CentrifugeRecipe;
@@ -58,6 +59,7 @@ public class JEICompat implements IModPlugin {
     {
         subtypeRegistry.registerSubtypeInterpreter( RegistryHandler.RESOURCEFUL_HONEYCOMB.get(), honeycombSubtype );
         subtypeRegistry.registerSubtypeInterpreter( RegistryHandler.HONEYCOMB_BLOCK_ITEM.get(), honeycombBlockSubtype);
+        subtypeRegistry.registerSubtypeInterpreter( RegistryHandler.BEE_SPAWN_EGG.get(), beeSpawnEggsSubtype);
     }
 
     private static final ISubtypeInterpreter honeycombSubtype = stack -> {
@@ -77,6 +79,16 @@ public class JEICompat implements IModPlugin {
 
         return combBlock.getTranslationKey(stack);
     };
+
+    private static final ISubtypeInterpreter beeSpawnEggsSubtype = stack -> {
+        Item item = stack.getItem();
+        if( !(item instanceof BeeSpawnEggItem) ) return "";
+
+        BeeSpawnEggItem spawnEgg = (BeeSpawnEggItem) item;
+
+        return spawnEgg.getTranslationKey(stack);
+    };
+
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
