@@ -293,18 +293,19 @@ public class ResourcefulBee extends CustomBeeEntity {
 
                 if (info.isCreeperBee()) {
                     this.explode();
-                } else if (info.isBlazeBee()){
+                }
+                if (info.isBlazeBee()){
                     entityIn.setFire(5);
-                } else if (i > 0) {
+                }
+                if (i > 0) {
                     if (info.isWitherBee())
                         ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.WITHER, i * 20, 1));
-                    else if (info.isZomBee())
+                    if (info.isZomBee())
                         ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.HUNGER, i * 20, 20));
-                    else if (info.isPigmanBee())
+                    if (info.isPigmanBee())
                         ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.MINING_FATIGUE, i * 20, 0));
-                    else
+                    if (!info.isPigmanBee() && !info.isZomBee() && !info.isWitherBee() && !info.isBlazeBee() && !info.isCreeperBee())
                         ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.POISON, i * 20, 0));
-
                 }
             }
 
