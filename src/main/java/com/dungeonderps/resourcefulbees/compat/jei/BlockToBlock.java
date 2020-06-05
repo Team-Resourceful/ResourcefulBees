@@ -24,6 +24,7 @@ import net.minecraft.client.renderer.Quaternion;
 import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.EntitySize;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
@@ -36,6 +37,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
+import static com.dungeonderps.resourcefulbees.ResourcefulBees.LOGGER;
 
 @SuppressWarnings("NullableProblems")
 public class BlockToBlock implements IRecipeCategory<BlockToBlock.Recipe> {
@@ -132,12 +135,11 @@ public class BlockToBlock implements IRecipeCategory<BlockToBlock.Recipe> {
     public void renderEntity(String beeType, Float rotation, Double xPos, Double yPos){
         RenderSystem.pushMatrix();
 
-        RenderSystem.translatef(70, 24, 1050.0F);
+        RenderSystem.translatef(0, 0, 1050.0F);
         RenderSystem.scalef(1.0F, 1.0F, -1.0F);
 
         MatrixStack matrixstack = new MatrixStack();
-        matrixstack.translate(0.0D, 0.0D, 1000.0D);
-        matrixstack.scale(30, 30, 30);
+        matrixstack.translate(xPos, yPos, 1000.0D);
         Quaternion quaternion = Vector3f.ZP.rotationDegrees(180.0F);
         matrixstack.rotate(quaternion);
 
@@ -149,7 +151,14 @@ public class BlockToBlock implements IRecipeCategory<BlockToBlock.Recipe> {
         bee.ticksExisted = mc.player.ticksExisted;
         bee.renderYawOffset = rotation;
         bee.setBeeType(beeType);
-        entityrenderermanager.renderEntityStatic(bee, xPos, yPos, 0.0D, mc.getRenderPartialTicks(), 1, matrixstack, irendertypebuffer$impl, 15728880);
+
+        float scaledSize = 30;
+        if (!bee.getSizeModifierFromInfo(bee.getBeeType()).equals(1.0F)) {
+            scaledSize = 30 / bee.getSizeModifierFromInfo(bee.getBeeType());
+        }
+        matrixstack.scale(scaledSize, scaledSize, 30);
+
+        entityrenderermanager.renderEntityStatic(bee, 0, 0, 0.0D, mc.getRenderPartialTicks(), 1, matrixstack, irendertypebuffer$impl, 15728880);
 
         irendertypebuffer$impl.finish();
 
@@ -160,7 +169,7 @@ public class BlockToBlock implements IRecipeCategory<BlockToBlock.Recipe> {
     public void draw(BlockToBlock.Recipe recipe, double mouseX, double mouseY) {
         this.beeHive.draw(65, 10);
         this.info.draw(63, 8);
-        renderEntity(recipe.beeType, 135.0F, 1.5D, -0.2D);
+        renderEntity(recipe.beeType, 135.0F, 25D, 30D);
     }
 
     public static List<BlockToBlock.Recipe> getMutationRecipes(IIngredientManager ingredientManager) {

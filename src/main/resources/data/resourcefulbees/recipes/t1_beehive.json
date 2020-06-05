@@ -6,7 +6,7 @@
     "GGG"
   ],
   "key": {
-    "I": { "item": "minecraft:grass" },
+    "G": { "item": "minecraft:grass" },
     "B": { "item": "minecraft:beehive" }
   },
   "result": {
