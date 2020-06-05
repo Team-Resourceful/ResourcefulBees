@@ -8,7 +8,6 @@
   "mainOutput": "minecraft:quartz",
   "spawnInWorld": true,
   "biomeWhitelist": "tag:nether",
-  "biomeBlacklist": "tag:ocean",
   "netherBee": true,
   "maxTimeInHive": 1000
 }
