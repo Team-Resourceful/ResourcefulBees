@@ -1,7 +1,5 @@
 {
   "honeycombColor": "#0C9F0A",
-  "primaryColor": "#0C9F0A",
-  "secondaryColor": "#444444",
   "baseLayerTexture": "/creeper/creeper_bee",
   "isBeeColored": false,
   "flower": "ALL",
@@ -9,7 +7,8 @@
   "mutationOutput": "minecraft:mossy_cobblestone",
   "mainOutput": "minecraft:gunpowder",
   "spawnInWorld": true,
-  "biomeList": "tag:OVERWORLD",
+  "biomeWhitelist": "tag:OVERWORLD",
+  "biomeBlacklist": "tag:ocean",
   "maxTimeInHive": 600,
   "creeperBee": true
 }

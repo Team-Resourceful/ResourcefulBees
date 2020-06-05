@@ -2,18 +2,17 @@ package com.dungeonderps.resourcefulbees.config;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.data.BeeData;
+import com.dungeonderps.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.utils.BeeInfoUtils;
 import com.google.gson.Gson;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
-import com.dungeonderps.resourcefulbees.entity.passive.CustomBeeEntity;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.placement.ChanceConfig;
-import net.minecraft.world.gen.placement.FrequencyConfig;
 import net.minecraft.world.gen.placement.HeightWithChanceConfig;
 import net.minecraft.world.gen.placement.Placement;
 
@@ -28,7 +27,7 @@ import java.util.Set;
 import static com.dungeonderps.resourcefulbees.ResourcefulBees.LOGGER;
 import static com.dungeonderps.resourcefulbees.config.Config.GENERATE_DEFAULTS;
 
-public class BeeBuilder{
+public class  BeeBuilder{
 
     private static final String ASSETS_DIR = "/assets/resourcefulbees/default_bees/";
 
@@ -69,7 +68,7 @@ public class BeeBuilder{
         if (BeeInfoUtils.validate(bee)){
             BeeInfo.BEE_INFO.put(name.toLowerCase(), bee);
             if(bee.canSpawnInWorld())
-                BeeInfoUtils.parseBiomeList(bee);
+                BeeInfoUtils.parseBiomes(bee);
             if(bee.isBreedable())
                 BeeInfoUtils.buildFamilyTree(bee);
             LOGGER.info(name + " bee passed validation check!!");

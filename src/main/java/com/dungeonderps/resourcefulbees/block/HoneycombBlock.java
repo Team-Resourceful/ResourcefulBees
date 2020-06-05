@@ -27,6 +27,23 @@ public class HoneycombBlock extends Block {
         super(Block.Properties.from(Blocks.HONEYCOMB_BLOCK));
     }
 
+    public static int getBlockColor(BlockState state, @Nullable IBlockReader world, @Nullable BlockPos pos, int tintIndex){
+        if (world != null && pos != null){
+            TileEntity tile = world.getTileEntity(pos);
+            if (tile instanceof HoneycombBlockEntity) {
+                return  ((HoneycombBlockEntity) tile).getColor();
+            }
+        }
+
+        return BeeConst.DEFAULT_COLOR;
+    }
+
+    public static int getItemColor(ItemStack stack, int tintIndex){
+        CompoundNBT honeycombNBT = stack.getChildTag(BeeConst.NBT_ROOT);
+        return (honeycombNBT != null && honeycombNBT.contains(BeeConst.NBT_COLOR) && !honeycombNBT.getString(BeeConst.NBT_COLOR).isEmpty())
+                ? Color.parseInt(honeycombNBT.getString(BeeConst.NBT_COLOR)) : BeeConst.DEFAULT_COLOR;
+    }
+
     @Override
     public boolean hasTileEntity(BlockState state) {
         return true;
@@ -50,25 +67,6 @@ public class HoneycombBlock extends Block {
             }
         }
         return RegistryHandler.HONEYCOMB_BLOCK_ITEM.get().getDefaultInstance();
-    }
-
-    public static int getBlockColor(BlockState state, @Nullable IBlockReader world, @Nullable BlockPos pos, int tintIndex){
-        if (world != null && pos != null){
-            TileEntity tile = world.getTileEntity(pos);
-            if (tile instanceof HoneycombBlockEntity) {
-                return  ((HoneycombBlockEntity) tile).getColor();
-            }
-        }
-
-        return BeeConst.DEFAULT_COLOR;
-    }
-
-
-
-    public static int getItemColor(ItemStack stack, int tintIndex){
-        CompoundNBT honeycombNBT = stack.getChildTag(BeeConst.NBT_ROOT);
-        return (honeycombNBT != null && honeycombNBT.contains(BeeConst.NBT_COLOR) && !honeycombNBT.getString(BeeConst.NBT_COLOR).isEmpty())
-                ? Color.parseInt(honeycombNBT.getString(BeeConst.NBT_COLOR)) : BeeConst.DEFAULT_COLOR;
     }
 
     public void onBlockPlacedBy(World worldIn, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nullable LivingEntity placer, @Nonnull ItemStack stack) {

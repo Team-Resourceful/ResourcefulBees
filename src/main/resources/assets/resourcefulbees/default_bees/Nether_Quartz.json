@@ -1,13 +1,14 @@
 {
   "honeycombColor": "#D4CABA",
   "primaryColor": "#D4CABA",
-  "secondaryColor": "#444444",
+  "secondaryColor": "#303030",
   "flower": "minecraft:nether_wart",
   "mutationInput": "minecraft:netherrack",
   "mutationOutput": "minecraft:nether_quartz_ore",
   "mainOutput": "minecraft:quartz",
   "spawnInWorld": true,
-  "biomeList": "tag:nether",
+  "biomeWhitelist": "tag:nether",
+  "biomeBlacklist": "tag:ocean",
   "netherBee": true,
-  "maxTimeInHive": 600
+  "maxTimeInHive": 1000
 }

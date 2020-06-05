@@ -30,11 +30,10 @@ import java.util.List;
 public class CentrifugeRecipeCategory implements IRecipeCategory<CentrifugeRecipe> {
 
   public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "centrifuge");
-
+  protected final IDrawableAnimated arrow;
   private final IDrawable icon;
   private final IDrawable background;
   private final String localizedName;
-  protected final IDrawableAnimated arrow;
 
   public CentrifugeRecipeCategory(IGuiHelper guiHelper) {
     this.background = guiHelper.createDrawable(new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/centrifuge.png"), 0, 0, 133, 65);

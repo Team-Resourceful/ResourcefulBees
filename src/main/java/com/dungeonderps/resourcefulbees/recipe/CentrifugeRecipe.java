@@ -3,6 +3,7 @@ package com.dungeonderps.resourcefulbees.recipe;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
+import com.dungeonderps.resourcefulbees.utils.BeeInfoUtils;
 import com.dungeonderps.resourcefulbees.utils.BetterJSONUtils;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -15,7 +16,6 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -88,10 +88,6 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
         return CENTRIFUGE_RECIPE_TYPE;
     }
 
-    public List<Pair<ItemStack,Double>> getCraftingResults() {
-        return outputs;
-    }
-
     public static class Serializer<T extends CentrifugeRecipe> extends net.minecraftforge.registries.ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<T> {
         final IRecipeFactory<T> factory;
 
@@ -116,7 +112,7 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
                 String registryname = JSONUtils.getString(jsonObject,"item");
                 int count = JSONUtils.getInt(jsonObject,"count",1);
                 double chance = BetterJSONUtils.getDouble(jsonObject,"chance",1);
-                ItemStack stack = new ItemStack(Registry.ITEM.getOrDefault(new ResourceLocation(registryname)),count);
+                ItemStack stack = new ItemStack(BeeInfoUtils.getItem(registryname),count);
                 outputs.add(Pair.of(stack,chance));
             });
 

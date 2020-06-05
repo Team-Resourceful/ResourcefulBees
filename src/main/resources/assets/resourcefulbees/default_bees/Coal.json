@@ -1,13 +1,14 @@
 {
   "honeycombColor": "#303030",
-  "primaryColor": "#F2E718",
-  "secondaryColor": "#EA2727",
+  "primaryColor": "#303030",
+  "secondaryColor": "#303030",
   "flower": "ALL",
   "mutationInput": "tag:forge:stone",
   "mutationOutput": "minecraft:coal_ore",
   "mainOutput": "minecraft:coal",
   "spawnInWorld": true,
-  "biomeList": "tag:OVERWORLD",
+  "biomeWhitelist": "tag:OVERWORLD",
+  "biomeBlacklist": "tag:ocean",
   "sizeModifier": 0.2,
   "maxTimeInHive": 600
 }

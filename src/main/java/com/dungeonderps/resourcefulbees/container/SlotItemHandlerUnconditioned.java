@@ -30,12 +30,14 @@ public class SlotItemHandlerUnconditioned extends SlotItemHandler {
 
   @Override
   public boolean isItemValid(ItemStack stack) {
-    if (stack.isEmpty() || !this.inv.canAccept(this.getSlotIndex(), stack, false)) return false;
-    ItemStack currentStack = this.inv.getStackInSlot(this.getSlotIndex());
-    this.inv.setStackInSlot(this.getSlotIndex(), ItemStack.EMPTY);
-    ItemStack remainder = this.inv.insertItem(this.getSlotIndex(), stack, true, false);
-    this.inv.setStackInSlot(this.getSlotIndex(), currentStack);
-    return remainder.isEmpty() || remainder.getCount() < stack.getCount();
+    if (!stack.isEmpty() || this.inv.canAccept(this.getSlotIndex(), stack, false)) {
+      ItemStack currentStack = this.inv.getStackInSlot(this.getSlotIndex());
+      this.inv.setStackInSlot(this.getSlotIndex(), ItemStack.EMPTY);
+      ItemStack remainder = this.inv.insertItem(this.getSlotIndex(), stack, true, false);
+      this.inv.setStackInSlot(this.getSlotIndex(), currentStack);
+      return remainder.isEmpty() || remainder.getCount() < stack.getCount();
+    }
+    return false;
   }
 
   /**
@@ -48,7 +50,7 @@ public class SlotItemHandlerUnconditioned extends SlotItemHandler {
   }
 
   @Override
-  public void putStack(ItemStack stack) {
+  public void putStack(@Nonnull ItemStack stack) {
     this.inv.setStackInSlot(this.getSlotIndex(), stack);
     this.onSlotChanged();
   }
@@ -69,6 +71,7 @@ public class SlotItemHandlerUnconditioned extends SlotItemHandler {
     return !this.inv.extractItem(this.getSlotIndex(), 1, true, false).isEmpty();
   }
 
+  @Nonnull
   @Override
   public ItemStack decrStackSize(int amount) {
     return this.inv.extractItem(this.getSlotIndex(), amount, false, false);

@@ -47,16 +47,16 @@ public class CentrifugeContainer extends Container {
     /**
      * Determines whether supplied player can use this container
      *
-     * @param player
+     * @param player the player
      */
     @Override
-    public boolean canInteractWith(PlayerEntity player) {
+    public boolean canInteractWith(@Nonnull PlayerEntity player) {
         return true;
     }
 
     @Nonnull
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
+    public ItemStack transferStackInSlot(@Nonnull PlayerEntity playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.inventorySlots.get(index);
         if (slot != null && slot.getHasStack()) {

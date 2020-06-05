@@ -3,7 +3,7 @@ package com.dungeonderps.resourcefulbees.compat.jei;
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.data.BeeData;
-import com.dungeonderps.resourcefulbees.lib.BeeConst;
+import com.dungeonderps.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -20,7 +20,6 @@ import net.minecraft.client.renderer.Quaternion;
 import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.resources.I18n;
-import com.dungeonderps.resourcefulbees.entity.passive.CustomBeeEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -49,6 +48,17 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
             bee = RegistryHandler.CUSTOM_BEE.get().create(clientWorld);
         else
             bee = null;    }
+
+    public static List<Recipe> getBreedingRecipes(IIngredientManager ingredientManager) {
+        List<Recipe> recipes = new ArrayList<>();
+        for (Map.Entry<String, BeeData> bee : BeeInfo.BEE_INFO.entrySet()){
+            if (bee.getValue().isBreedable()){
+                if (BeeInfo.BEE_INFO.containsKey(bee.getValue().getParent1()) && BeeInfo.BEE_INFO.containsKey(bee.getValue().getParent2()) && BeeInfo.BEE_INFO.containsKey(bee.getKey()))
+                    recipes.add(new Recipe(bee.getValue().getParent1(), bee.getValue().getParent2(), bee.getKey()));
+            }
+        }
+        return recipes;
+    }
 
     @Nonnull
     @Override
@@ -79,7 +89,6 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
     public IDrawable getIcon() {
         return this.icon;
     }
-
 
     @Override
     public void setIngredients(@Nonnull Recipe recipe, @Nonnull IIngredients ingredients) {
@@ -154,19 +163,6 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
         fontRenderer.drawString(decimalFormat.format(BeeInfo.getInfo(recipe.getChild()).getBreedWeight()), 90, 18, 0xff808080);
     }
 
-    public static List<Recipe> getBreedingRecipes(IIngredientManager ingredientManager) {
-        List<Recipe> recipes = new ArrayList<>();
-        for (Map.Entry<String, BeeData> bee : BeeInfo.BEE_INFO.entrySet()){
-            if (bee.getKey().equals(BeeConst.DEFAULT_BEE_TYPE) || bee.getKey().equals(BeeConst.DEFAULT_REMOVE)) { }
-            else {
-                if (bee.getValue().isBreedable()){
-                    if (BeeInfo.BEE_INFO.containsKey(bee.getValue().getParent1()) && BeeInfo.BEE_INFO.containsKey(bee.getValue().getParent2()) && BeeInfo.BEE_INFO.containsKey(bee.getKey()))
-                        recipes.add(new Recipe(bee.getValue().getParent1(), bee.getValue().getParent2(), bee.getKey()));
-                }
-            }
-        }
-        return recipes;
-    }
     public static class Recipe {
         private final String parent1;
         private final String parent2;

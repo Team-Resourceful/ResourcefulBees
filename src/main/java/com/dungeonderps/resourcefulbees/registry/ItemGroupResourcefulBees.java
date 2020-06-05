@@ -23,8 +23,7 @@ public class ItemGroupResourcefulBees{
 		public void fill(@Nonnull NonNullList<ItemStack> items) {
 			if (!BeeInfo.BEE_INFO.isEmpty()) {
 				for (Map.Entry<String, BeeData> bee : BeeInfo.BEE_INFO.entrySet()) {
-					if (bee.getKey().equals(BeeConst.DEFAULT_BEE_TYPE) || bee.getKey().equals(BeeConst.DEFAULT_REMOVE)) { }
-					else {
+					if (!bee.getKey().equals(BeeConst.DEFAULT_BEE_TYPE)) {
 						final ItemStack eggStack = new ItemStack(RegistryHandler.BEE_SPAWN_EGG.get());
 						final CompoundNBT eggEntityTag = eggStack.getOrCreateChildTag("EntityTag");
 						final CompoundNBT eggItemTag = eggStack.getOrCreateChildTag(BeeConst.NBT_ROOT);
@@ -32,17 +31,19 @@ public class ItemGroupResourcefulBees{
 						eggItemTag.putString(BeeConst.NBT_BEE_TYPE, bee.getValue().getName());
 						items.add(eggStack);
 
-						final ItemStack combStack = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
-						final CompoundNBT combItemTag = combStack.getOrCreateChildTag(BeeConst.NBT_ROOT);
-						combItemTag.putString(BeeConst.NBT_BEE_TYPE, bee.getValue().getName());
-						combItemTag.putString(BeeConst.NBT_COLOR, bee.getValue().getHoneycombColor());
-						items.add(combStack);
+						if (!bee.getValue().getMainOutput().isEmpty()) {
+							final ItemStack combStack = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
+							final CompoundNBT combItemTag = combStack.getOrCreateChildTag(BeeConst.NBT_ROOT);
+							combItemTag.putString(BeeConst.NBT_BEE_TYPE, bee.getValue().getName());
+							combItemTag.putString(BeeConst.NBT_COLOR, bee.getValue().getHoneycombColor());
+							items.add(combStack);
 
-						final ItemStack combBlockStack = new ItemStack(RegistryHandler.HONEYCOMB_BLOCK_ITEM.get());
-						final CompoundNBT combBlockItemTag = combBlockStack.getOrCreateChildTag(BeeConst.NBT_ROOT);
-						combBlockItemTag.putString(BeeConst.NBT_BEE_TYPE, bee.getValue().getName());
-						combBlockItemTag.putString(BeeConst.NBT_COLOR, bee.getValue().getHoneycombColor());
-						items.add(combBlockStack);
+							final ItemStack combBlockStack = new ItemStack(RegistryHandler.HONEYCOMB_BLOCK_ITEM.get());
+							final CompoundNBT combBlockItemTag = combBlockStack.getOrCreateChildTag(BeeConst.NBT_ROOT);
+							combBlockItemTag.putString(BeeConst.NBT_BEE_TYPE, bee.getValue().getName());
+							combBlockItemTag.putString(BeeConst.NBT_COLOR, bee.getValue().getHoneycombColor());
+							items.add(combBlockStack);
+						}
 					}
 				}
 			}

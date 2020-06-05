@@ -56,11 +56,9 @@ import java.util.List;
 import java.util.Map;
 
 //TODO - Test Server and Jar
-//TODO - Add Tiered Hives
 //TODO - Look into "Queen Bee"
 //TODO - Additional Easter Eggs
 //TODO - Cleanup Centrifuge Container
-//TODO - Finish Base Block Tag support and Flower tag support
 
 
 @Mod("resourcefulbees")

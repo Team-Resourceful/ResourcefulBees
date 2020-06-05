@@ -1,14 +1,14 @@
 {
   "honeycombColor": "#885956",
-  "primaryColor": "#885956",
-  "secondaryColor": "#444444",
-  "flower": "minecraft:nether_wart",
+  "baseLayerTexture": "pigman/pigman_bee",
+  "isBeeColored": false,
+  "flower": "minecraft:brown_mushroom",
   "mutationInput": "minecraft:netherrack",
   "mutationOutput": "minecraft:glowstone",
   "mainOutput": "minecraft:glowstone_dust",
   "spawnInWorld": true,
-  "biomeList": "tag:NETHER",
-  "maxTimeInHive": 600,
+  "biomeWhitelist": "tag:NETHER",
+  "maxTimeInHive": 1000,
   "pigmanBee": true,
   "netherBee": true
 }

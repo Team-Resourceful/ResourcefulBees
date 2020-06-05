@@ -36,32 +36,6 @@ import static com.dungeonderps.resourcefulbees.recipe.CentrifugeRecipe.CENTRIFUG
 @mezz.jei.api.JeiPlugin
 public class JEICompat implements IModPlugin {
 
-    @Override
-    public void registerCategories(IRecipeCategoryRegistration registration) {
-        IGuiHelper helper = registration.getJeiHelpers().getGuiHelper();
-        registration.addRecipeCategories(new BeeHiveCategory(helper));
-        registration.addRecipeCategories(new BeeBreedingCategory(helper));
-        registration.addRecipeCategories(new CentrifugeRecipeCategory(helper));
-        registration.addRecipeCategories(new FluidToFluid(helper));
-        registration.addRecipeCategories(new BlockToFluid(helper));
-        registration.addRecipeCategories(new FluidToBlock(helper));
-        registration.addRecipeCategories(new BlockToBlock(helper));
-    }
-    @Nonnull
-    @Override
-    public ResourceLocation getPluginUid()
-    {
-        return new ResourceLocation( ResourcefulBees.MOD_ID, "jei" );
-    }
-
-    @Override
-    public void registerItemSubtypes( ISubtypeRegistration subtypeRegistry )
-    {
-        subtypeRegistry.registerSubtypeInterpreter( RegistryHandler.RESOURCEFUL_HONEYCOMB.get(), honeycombSubtype );
-        subtypeRegistry.registerSubtypeInterpreter( RegistryHandler.HONEYCOMB_BLOCK_ITEM.get(), honeycombBlockSubtype);
-        subtypeRegistry.registerSubtypeInterpreter( RegistryHandler.BEE_SPAWN_EGG.get(), beeSpawnEggsSubtype);
-    }
-
     private static final ISubtypeInterpreter honeycombSubtype = stack -> {
         Item item = stack.getItem();
         if( !(item instanceof ResourcefulHoneycomb) ) return "";
@@ -70,7 +44,6 @@ public class JEICompat implements IModPlugin {
 
         return comb.getTranslationKey(stack);
     };
-
     private static final ISubtypeInterpreter honeycombBlockSubtype = stack -> {
         Item item = stack.getItem();
         if( !(item instanceof HoneycombBlockItem) ) return "";
@@ -89,6 +62,37 @@ public class JEICompat implements IModPlugin {
         return spawnEgg.getTranslationKey(stack);
     };
 
+    private static <C extends IInventory, T extends IRecipe<C>> Collection<T> getRecipes(RecipeManager recipeManager, IRecipeType<T> recipeType) {
+        Map<ResourceLocation, IRecipe<C>> recipesMap = recipeManager.getRecipes(recipeType);
+        return (Collection<T>) recipesMap.values();
+    }
+
+    @Override
+    public void registerCategories(IRecipeCategoryRegistration registration) {
+        IGuiHelper helper = registration.getJeiHelpers().getGuiHelper();
+        registration.addRecipeCategories(new BeeHiveCategory(helper));
+        registration.addRecipeCategories(new BeeBreedingCategory(helper));
+        registration.addRecipeCategories(new CentrifugeRecipeCategory(helper));
+        registration.addRecipeCategories(new FluidToFluid(helper));
+        registration.addRecipeCategories(new BlockToFluid(helper));
+        registration.addRecipeCategories(new FluidToBlock(helper));
+        registration.addRecipeCategories(new BlockToBlock(helper));
+    }
+
+    @Nonnull
+    @Override
+    public ResourceLocation getPluginUid()
+    {
+        return new ResourceLocation( ResourcefulBees.MOD_ID, "jei" );
+    }
+
+    @Override
+    public void registerItemSubtypes( ISubtypeRegistration subtypeRegistry )
+    {
+        subtypeRegistry.registerSubtypeInterpreter( RegistryHandler.RESOURCEFUL_HONEYCOMB.get(), honeycombSubtype );
+        subtypeRegistry.registerSubtypeInterpreter( RegistryHandler.HONEYCOMB_BLOCK_ITEM.get(), honeycombBlockSubtype);
+        subtypeRegistry.registerSubtypeInterpreter( RegistryHandler.BEE_SPAWN_EGG.get(), beeSpawnEggsSubtype);
+    }
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
@@ -116,10 +120,5 @@ public class JEICompat implements IModPlugin {
     public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
         IIngredientManager ingredientManager = jeiRuntime.getIngredientManager();
         ingredientManager.removeIngredientsAtRuntime(VanillaTypes.ITEM, Collections.singletonList(RegistryHandler.RESOURCEFUL_HONEYCOMB.get().getDefaultInstance()));
-    }
-
-    private static <C extends IInventory, T extends IRecipe<C>> Collection<T> getRecipes(RecipeManager recipeManager, IRecipeType<T> recipeType) {
-        Map<ResourceLocation, IRecipe<C>> recipesMap = recipeManager.getRecipes(recipeType);
-        return (Collection<T>) recipesMap.values();
     }
 }

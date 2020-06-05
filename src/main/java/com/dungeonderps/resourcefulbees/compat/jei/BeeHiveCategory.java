@@ -53,6 +53,20 @@ public class BeeHiveCategory implements IRecipeCategory<BeeHiveCategory.Recipe> 
             bee = null;
     }
 
+    public static List<Recipe> getHoneycombRecipes(IIngredientManager ingredientManager) {
+        List<Recipe> recipes = new ArrayList<>();
+        for (Map.Entry<String, BeeData> bee : BEE_INFO.entrySet()){
+            if (!bee.getValue().getMainOutput().isEmpty()) {
+                ItemStack honeyCombItemStack = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
+                final CompoundNBT honeyCombItemStackTag = honeyCombItemStack.getOrCreateChildTag(BeeConst.NBT_ROOT);
+                honeyCombItemStackTag.putString(BeeConst.NBT_COLOR, bee.getValue().getHoneycombColor());
+                honeyCombItemStackTag.putString(BeeConst.NBT_BEE_TYPE, bee.getKey());
+                recipes.add(new Recipe(honeyCombItemStack, bee.getKey()));
+            }
+        }
+        return recipes;
+    }
+
     @Nonnull
     @Override
     public ResourceLocation getUid() {
@@ -144,21 +158,6 @@ public class BeeHiveCategory implements IRecipeCategory<BeeHiveCategory.Recipe> 
     @Override
     public void draw(Recipe recipe, double mouseX, double mouseY) {
         renderEntity(recipe.getBeeType(), 135.0F, 20D, 20D);
-    }
-
-    public static List<Recipe> getHoneycombRecipes(IIngredientManager ingredientManager) {
-        List<Recipe> recipes = new ArrayList<>();
-        for (Map.Entry<String, BeeData> bee : BEE_INFO.entrySet()){
-            if (bee.getKey().equals(BeeConst.DEFAULT_BEE_TYPE) || bee.getKey().equals(BeeConst.DEFAULT_REMOVE)) { }
-            else {
-                ItemStack honeyCombItemStack = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
-                final CompoundNBT honeyCombItemStackTag = honeyCombItemStack.getOrCreateChildTag(BeeConst.NBT_ROOT);
-                honeyCombItemStackTag.putString(BeeConst.NBT_COLOR, bee.getValue().getHoneycombColor());
-                honeyCombItemStackTag.putString(BeeConst.NBT_BEE_TYPE, bee.getKey());
-                recipes.add(new Recipe(honeyCombItemStack, bee.getKey()));
-            }
-        }
-        return recipes;
     }
 
     public static class Recipe {

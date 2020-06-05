@@ -13,7 +13,6 @@ public class BeeConst {
     public static final String TAG_PREFIX = "tag:";
     public static final String MOD_NAME = "Resourceful Bees";
     public static final String NBT_ENTITY = "Entity";
-    public static final String DEFAULT_REMOVE = "REMOVE";
     public static final String ENTITY_TEXTURES_DIR = "textures/entity/";
 
     public static final int SMOKE_TIME = 600;
@@ -25,4 +24,5 @@ public class BeeConst {
     public static final double DEFAULT_BOT_OUTPUT_WEIGHT = 0.25;
 
     public static final int DEFAULT_COLOR = 0x000000;
+    public static final int DEFAULT_SECONDARY_COLOR = 0x303030;
 }

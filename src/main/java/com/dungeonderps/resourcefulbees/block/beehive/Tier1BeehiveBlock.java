@@ -34,11 +34,15 @@ public class Tier1BeehiveBlock extends BeehiveBlock {
     super(properties);
   }
 
+  public static void dropResourceHoneycomb(Tier1BeehiveBlock block, World world, BlockPos pos) {
+    block.dropResourceHoneycomb(world, pos);
+  }
+
   @Override
   protected void fillStateContainer(@Nonnull StateContainer.Builder<Block, BlockState> builder) {
     super.fillStateContainer(builder);
   }
-
+  
   @Nullable
   @Override
   public TileEntity createNewTileEntity(@Nonnull IBlockReader reader) {
@@ -52,7 +56,7 @@ public class Tier1BeehiveBlock extends BeehiveBlock {
 	      hive.isSmoked = true;
 	    }
   }
-  
+
   public boolean isHiveSmoked(BlockPos pos, World world) {
 	    TileEntity blockEntity = world.getTileEntity(pos);
 	    if (blockEntity instanceof Tier1BeehiveBlockEntity) {
@@ -124,10 +128,6 @@ public class Tier1BeehiveBlock extends BeehiveBlock {
     } else {
       return false;
     }
-  }
-
-  public static void dropResourceHoneycomb(Tier1BeehiveBlock block, World world, BlockPos pos) {
-    block.dropResourceHoneycomb(world, pos);
   }
 
   public void dropResourceHoneycomb(World world, BlockPos pos) {

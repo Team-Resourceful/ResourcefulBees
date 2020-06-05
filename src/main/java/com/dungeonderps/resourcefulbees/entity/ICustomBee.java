@@ -5,13 +5,6 @@ import com.dungeonderps.resourcefulbees.data.BeeData;
 
 public interface ICustomBee extends IBeeInfo {
 
-    ///**
-     //* Returns "this" bee's color value.
-    // *
-    // *  @return Returns "this" bee's color.
-   //  */
-    //String getBeeColor();
-
     /**
      * Selects a random bee from the list of biome specific spawnable bees,
      * and sets "this" bee's type to the selected bee.

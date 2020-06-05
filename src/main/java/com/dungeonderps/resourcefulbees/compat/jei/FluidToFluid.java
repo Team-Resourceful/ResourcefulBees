@@ -26,18 +26,14 @@ import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.Tag;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-
-import static com.dungeonderps.resourcefulbees.ResourcefulBees.LOGGER;
 
 @SuppressWarnings("NullableProblems")
 public class FluidToFluid implements IRecipeCategory<FluidToFluid.Recipe> {
@@ -59,6 +55,39 @@ public class FluidToFluid implements IRecipeCategory<FluidToFluid.Recipe> {
         this.localizedName = I18n.format("gui.resourcefulbees.jei.category.fluid_to_fluid_mutation");
         assert Minecraft.getInstance().world != null;
         bee = RegistryHandler.CUSTOM_BEE.get().create(Minecraft.getInstance().world);
+    }
+
+    public static List<FluidToFluid.Recipe> getMutationRecipes(IIngredientManager ingredientManager) {
+        List<FluidToFluid.Recipe> recipes = new ArrayList<>();
+        for (Map.Entry<String, BeeData> bee : BeeInfo.BEE_INFO.entrySet()){
+            if (bee.getValue().hasMutation()) {
+
+                String mutationIn = bee.getValue().getMutationInput();
+                String mutationOut = bee.getValue().getMutationOutput();
+
+                if (BeeInfoUtils.TAG_RESOURCE_PATTERN.matcher(mutationIn).matches()) {
+                    mutationIn = mutationIn.replace(BeeConst.TAG_PREFIX, "");
+
+                    Tag<Fluid> fluidTag = BeeInfoUtils.getFluidTag(mutationIn);
+                    if (fluidTag != null) {
+                        Fluid fluidOut = BeeInfoUtils.getFluid(mutationOut);
+                        if (BeeInfoUtils.isValidFluid(fluidOut)){
+                            recipes.add(new Recipe(fluidTag, new FluidStack(fluidOut,1000), bee.getKey(), MutationTypes.BLOCK_TO_FLUID, true));
+                        }
+                    }
+                } else {
+                    Enum<MutationTypes> mutationType = bee.getValue().getMutationType();
+
+                    if (MutationTypes.FLUID_TO_FLUID.equals(mutationType)) {
+                        Fluid fluidIn = BeeInfoUtils.getFluid(mutationIn);
+                        Fluid fluidOut = BeeInfoUtils.getFluid(mutationOut);
+                        if (BeeInfoUtils.isValidFluid(fluidIn) && BeeInfoUtils.isValidFluid(fluidOut))
+                            recipes.add( new Recipe( new FluidStack(fluidIn, 1000), new FluidStack(fluidOut, 1000), bee.getKey(), mutationType, false));
+                    }
+                } //END INDIVIDUAL CHECKS
+            }
+        }
+        return recipes;
     }
 
     @Override
@@ -173,39 +202,6 @@ public class FluidToFluid implements IRecipeCategory<FluidToFluid.Recipe> {
         this.beeHive.draw(65, 10);
         this.info.draw(63, 8);
         renderEntity(recipe.beeType, 135.0F, 25D, 30D);
-    }
-
-    public static List<FluidToFluid.Recipe> getMutationRecipes(IIngredientManager ingredientManager) {
-        List<FluidToFluid.Recipe> recipes = new ArrayList<>();
-        for (Map.Entry<String, BeeData> bee : BeeInfo.BEE_INFO.entrySet()){
-            if (bee.getValue().hasMutation()) {
-
-                String mutationIn = bee.getValue().getMutationInput();
-                String mutationOut = bee.getValue().getMutationOutput();
-
-                if (BeeInfoUtils.TAG_RESOURCE_PATTERN.matcher(mutationIn).matches()) {
-                    mutationIn = mutationIn.replace(BeeConst.TAG_PREFIX, "");
-
-                    Tag<Fluid> fluidTag = FluidTags.getCollection().get(BeeInfoUtils.getResource(mutationIn));
-                    if (fluidTag != null) {
-                        Fluid fluidOut = ForgeRegistries.FLUIDS.getValue(BeeInfoUtils.getResource(mutationOut));
-                        if (BeeInfoUtils.isValidFluid(fluidOut)){
-                            recipes.add(new Recipe(fluidTag, new FluidStack(fluidOut,1000), bee.getKey(), MutationTypes.BLOCK_TO_FLUID, true));
-                        }
-                    }
-                } else {
-                    Enum<MutationTypes> mutationType = bee.getValue().getMutationType();
-
-                    if (MutationTypes.FLUID_TO_FLUID.equals(mutationType)) {
-                        Fluid fluidIn = ForgeRegistries.FLUIDS.getValue(BeeInfoUtils.getResource(mutationIn));
-                        Fluid fluidOut = ForgeRegistries.FLUIDS.getValue(BeeInfoUtils.getResource(mutationOut));
-                        if (BeeInfoUtils.isValidFluid(fluidIn) && BeeInfoUtils.isValidFluid(fluidOut))
-                            recipes.add( new Recipe( new FluidStack(fluidIn, 1000), new FluidStack(fluidOut, 1000), bee.getKey(), mutationType, false));
-                    }
-                } //END INDIVIDUAL CHECKS
-            }
-        }
-        return recipes;
     }
 
     public static class Recipe {

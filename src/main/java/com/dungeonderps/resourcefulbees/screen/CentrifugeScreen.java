@@ -4,9 +4,7 @@ import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.container.CentrifugeContainer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.DyeColor;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 
@@ -20,9 +18,9 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
     /**
      * Draws the background layer of this container (behind the items).
      *
-     * @param partialTicks
-     * @param mouseX
-     * @param mouseY
+     * @param partialTicks partial ticks
+     * @param mouseX mouse x
+     * @param mouseY mouse y
      */
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {

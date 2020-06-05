@@ -1,6 +1,7 @@
 package com.dungeonderps.resourcefulbees.item;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
+import com.dungeonderps.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.dungeonderps.resourcefulbees.lib.BeeConst;
 import com.dungeonderps.resourcefulbees.registry.ItemGroupResourcefulBees;
 import com.dungeonderps.resourcefulbees.utils.Color;
@@ -10,7 +11,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.BeeEntity;
-import com.dungeonderps.resourcefulbees.entity.passive.CustomBeeEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

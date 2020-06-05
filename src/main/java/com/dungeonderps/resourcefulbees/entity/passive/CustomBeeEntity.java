@@ -27,23 +27,22 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.*;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.dimension.DimensionType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.Random;
 
 @SuppressWarnings("EntityConstructor")
 public class CustomBeeEntity extends BeeEntity implements ICustomBee {
 
-    private static final DataParameter<String> BEE_COLOR = EntityDataManager.createKey(CustomBeeEntity.class, DataSerializers.STRING);
     private static final DataParameter<String> BEE_TYPE = EntityDataManager.createKey(CustomBeeEntity.class, DataSerializers.STRING);
-    private static final DataParameter<Float> SIZE_MODIFIER = EntityDataManager.createKey(CustomBeeEntity.class, DataSerializers.FLOAT);
 
     private boolean remove;
-    private int ticksCounted;
 
     public CustomBeeEntity(EntityType<? extends BeeEntity> type, World world) {
         super(type, world);
@@ -92,6 +91,7 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
 
     //***************************** CUSTOM BEE RELATED METHODS BELOW *************************************************
 
+    @Nonnull
     protected ITextComponent getProfessionName() {
         return new TranslationTextComponent("entity" + '.' + ResourcefulBees.MOD_ID + '.' + this.getBeeType() + "_bee");
     }
@@ -104,7 +104,7 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
     }
 
     @Override
-    public boolean isPotionApplicable(EffectInstance potioneffectIn) {
+    public boolean isPotionApplicable(@Nonnull EffectInstance potioneffectIn) {
         if (getBeeInfo().isWitherBee() && potioneffectIn.getPotion().equals(Effects.WITHER))
             return false;
         return super.isPotionApplicable(potioneffectIn);
@@ -135,7 +135,7 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
 
     @Nullable
     @Override
-    public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
+    public ILivingEntityData onInitialSpawn(@Nonnull IWorld worldIn, @Nonnull DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         setBeeType(reason.equals(SpawnReason.CHUNK_GENERATION) || reason.equals(SpawnReason.NATURAL));
         return super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
     }
@@ -153,13 +153,13 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
     }
 
     @Override
-    public void readAdditional(CompoundNBT compound) {
+    public void readAdditional(@Nonnull CompoundNBT compound) {
         super.readAdditional(compound);
         this.dataManager.set(BEE_TYPE, compound.getString(BeeConst.NBT_BEE_TYPE));
     }
 
     @Override
-    public void writeAdditional(CompoundNBT compound) {
+    public void writeAdditional(@Nonnull CompoundNBT compound) {
         super.writeAdditional(compound);
         compound.putString(BeeConst.NBT_BEE_TYPE, this.getBeeType());
     }
@@ -171,7 +171,7 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
     }
 
     @Override
-    public boolean processInteract(PlayerEntity player, Hand hand) {
+    public boolean processInteract(PlayerEntity player, @Nonnull Hand hand) {
         ItemStack itemstack = player.getHeldItem(hand);
         Item item = itemstack.getItem();
         if (item instanceof NameTagItem){
@@ -213,7 +213,7 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
 
     @Nonnull
     @Override
-    public EntitySize getSize(Pose poseIn) {
+    public EntitySize getSize(@Nonnull Pose poseIn) {
         float scale = getSizeModifierFromInfo(getBeeType());
         return super.getSize(poseIn).scale(scale);
     }

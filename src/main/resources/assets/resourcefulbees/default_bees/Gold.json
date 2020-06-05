@@ -1,12 +1,13 @@
 {
   "honeycombColor": "#FFDC00",
   "primaryColor": "#FFDC00",
-  "secondaryColor": "#444444",
+  "secondaryColor": "#303030",
   "flower": "ALL",
   "mutationInput": "minecraft:stone",
   "mutationOutput": "minecraft:gold_ore",
   "mainOutput": "minecraft:gold_ingot",
   "spawnInWorld": true,
-  "biomeList": "tag:OVERWORLD",
-  "maxTimeInHive": 600
+  "biomeWhitelist": "tag:OVERWORLD",
+  "biomeBlacklist": "tag:ocean",
+  "maxTimeInHive": 800
 }

@@ -1,12 +1,11 @@
 package com.dungeonderps.resourcefulbees.commands;
+
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.StringTextComponent;
-
-import static com.dungeonderps.resourcefulbees.ResourcefulBees.LOGGER;
 
 public class ResourcefulBeeCommands
 {

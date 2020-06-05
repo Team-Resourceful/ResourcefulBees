@@ -11,6 +11,8 @@ import net.minecraft.fluid.Fluids;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
@@ -18,7 +20,10 @@ import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import static com.dungeonderps.resourcefulbees.ResourcefulBees.LOGGER;
@@ -40,37 +45,52 @@ public class BeeInfoUtils {
         return parent1.compareTo(parent2) > 0 ? Objects.hash(parent1,parent2) : Objects.hash(parent2,parent1);
     }
 
-    public static void parseBiomeList(BeeData bee){
-        if (bee.getBiomeList().contains(BeeConst.TAG_PREFIX)){
-            parseBiomeTag(bee);
-        } else {
-            parseBiome(bee);
+    public static void parseBiomes(BeeData bee){
+        if (!bee.getBiomeWhitelist().isEmpty()){
+            Set<Biome> whitelist = new HashSet<>(getBiomeSet(bee.getBiomeWhitelist()));
+            Set<Biome> blacklist = new HashSet<>();
+            if (!bee.getBiomeBlacklist().isEmpty())
+                blacklist = getBiomeSet(bee.getBiomeBlacklist());
+            updateSpawnableBiomes(whitelist, blacklist,bee);
         }
     }
 
-    private static void parseBiomeTag(BeeData bee){
-        List<String> biomeList = Splitter.on(',').splitToList(bee.getBiomeList().replace(BeeConst.TAG_PREFIX,""));
-        for(String type : biomeList){
-            Set<Biome> biomeSet = BiomeDictionary.getBiomes(BiomeDictionary.Type.getType(type));
-            updateSpawnableBiomes(biomeSet,bee);
-        }
+    private static Set<Biome> getBiomeSet(String list){
+        Set<Biome> set = new HashSet<>();
+        if (list.contains(BeeConst.TAG_PREFIX))
+            set.addAll(parseBiomeListWithTag(list));
+        else
+            set.addAll(parseBiomeList(list));
+        return set;
     }
 
-    private static void parseBiome(BeeData bee){
-        List<String> biomeList = Splitter.on(',').splitToList(bee.getBiomeList());
+    private static Set<Biome> parseBiomeListWithTag(String list){
+        List<String> biomeList = Splitter.on(',').splitToList(list.replace(BeeConst.TAG_PREFIX,""));
         Set<Biome> biomeSet = new HashSet<>();
-        for(String biome : biomeList){
-            biomeSet.add(ForgeRegistries.BIOMES.getValue(new ResourceLocation(biome)));
+
+        for(String type : biomeList){
+            biomeSet.addAll(BiomeDictionary.getBiomes(BiomeDictionary.Type.getType(type)));
         }
-        updateSpawnableBiomes(biomeSet,bee);
+        return biomeSet;
     }
 
-    private static void updateSpawnableBiomes(Set<Biome> biomeSet, BeeData bee){
-        for(Biome biome : biomeSet){
-            if(biome != null){
+    private static Set<Biome> parseBiomeList(String list){
+        List<String> biomeList = Splitter.on(',').splitToList(list);
+        Set<Biome> biomeSet = new HashSet<>();
+        for(String biomeName : biomeList){
+            Biome biome = getBiome(biomeName);
+            if (biome != null)
+                biomeSet.add(biome);
+            else
+                LOGGER.error(biomeName +  " - Biome check failed! Please check JSON! Bee MAY NOT SPAWN properly...");
+        }
+        return biomeSet;
+    }
+
+    private static void updateSpawnableBiomes(Set<Biome> whitelist, Set<Biome> blacklist, BeeData bee){
+        for(Biome biome : whitelist){
+            if(!blacklist.contains(biome)){
                 SPAWNABLE_BIOMES.computeIfAbsent(biome,k -> new HashSet<>()).add(bee.getName());
-            } else {
-                LOGGER.error(bee.getName() + " Bee Biome Check Failed! Please check JSON! Bee MAY NOT SPAWN properly...");
             }
         }
     }
@@ -80,7 +100,6 @@ public class BeeInfoUtils {
         defaultBee.setName(BeeConst.DEFAULT_BEE_TYPE);
         defaultBee.setHoneycombColor(String.valueOf(BeeConst.DEFAULT_COLOR));
         defaultBee.setFlower("minecraft:poppy");
-        defaultBee.setBiomeList("test");
         defaultBee.setSpawnInWorld(false);
         BEE_INFO.put(BeeConst.DEFAULT_BEE_TYPE, defaultBee);
     }
@@ -125,10 +144,10 @@ public class BeeInfoUtils {
         int mutation = -1;
 
         //validate base block
-        Block inputBlock = ForgeRegistries.BLOCKS.getValue(getResource(bee.getMutationInput()));
+        Block inputBlock = getBlock(bee.getMutationInput());
         if (isValidBlock(inputBlock)) {
-            Fluid inputFluid = ForgeRegistries.FLUIDS.getValue(getResource(bee.getMutationInput()));
-            Item inputItem = ForgeRegistries.ITEMS.getValue(getResource(bee.getMutationInput()));
+            Fluid inputFluid = getFluid(bee.getMutationInput());
+            Item inputItem = getItem(bee.getMutationInput());
             if (isValidFluid(inputFluid)) {
                 mutation++;
             } else if (isValidItem(inputItem)) {
@@ -137,10 +156,10 @@ public class BeeInfoUtils {
         } else return logError(bee.getName(), "Base Block", bee.getMutationInput(), "block");
 
         //validate mutation block
-        Block outputBlock = ForgeRegistries.BLOCKS.getValue(getResource(bee.getMutationOutput()));
+        Block outputBlock = getBlock(bee.getMutationOutput());
         if (isValidBlock(outputBlock)) {
-            Fluid outputFluid = ForgeRegistries.FLUIDS.getValue(getResource(bee.getMutationOutput()));
-            Item outputItem = ForgeRegistries.ITEMS.getValue(getResource(bee.getMutationOutput()));
+            Fluid outputFluid = getFluid(bee.getMutationOutput());
+            Item outputItem = getItem(bee.getMutationOutput());
             if (isValidFluid(outputFluid)) { }
             else if (isValidItem(outputItem)) {
                 mutation += 2;
@@ -188,30 +207,43 @@ public class BeeInfoUtils {
     }
 
     private static boolean validateCentrifugeMainOutput(BeeData bee) {
-        Item item = ForgeRegistries.ITEMS.getValue(getResource(bee.getMainOutput()));
-        return SINGLE_RESOURCE_PATTERN.matcher(bee.getMainOutput()).matches() && isValidItem(item) ||
-                logError(bee.getName(), "Centrifuge Output", bee.getMainOutput(), "item");
+        if (!bee.getMainOutput().isEmpty()) {
+            Item item = getItem(bee.getMainOutput());
+            return SINGLE_RESOURCE_PATTERN.matcher(bee.getMainOutput()).matches() && isValidItem(item) ||
+                    logError(bee.getName(), "Centrifuge Output", bee.getMainOutput(), "item");
+        }
+        return true;
     }
 
     private static boolean validateCentrifugeSecondaryOutput(BeeData bee) {
-        Item item = ForgeRegistries.ITEMS.getValue(getResource(bee.getSecondaryOutput()));
-        return SINGLE_RESOURCE_PATTERN.matcher(bee.getSecondaryOutput()).matches() && isValidItem(item) ||
-                logError(bee.getName(), "Centrifuge Output", bee.getMainOutput(), "item");
+        if (!bee.getMainOutput().isEmpty()) {
+            Item item = getItem(bee.getSecondaryOutput());
+            return SINGLE_RESOURCE_PATTERN.matcher(bee.getSecondaryOutput()).matches() && isValidItem(item) ||
+                    logError(bee.getName(), "Centrifuge Output", bee.getSecondaryOutput(), "item");
+        }
+        return true;
     }
 
     private static boolean validateCentrifugeBottleOutput(BeeData bee) {
-        Item item = ForgeRegistries.ITEMS.getValue(getResource(bee.getBottleOutput()));
-        return SINGLE_RESOURCE_PATTERN.matcher(bee.getBottleOutput()).matches() && isValidItem(item) ||
-                logError(bee.getName(), "Centrifuge Output", bee.getMainOutput(), "item");
+        if (!bee.getMainOutput().isEmpty()) {
+            Item item = getItem(bee.getBottleOutput());
+            return SINGLE_RESOURCE_PATTERN.matcher(bee.getBottleOutput()).matches() && isValidItem(item) ||
+                    logError(bee.getName(), "Centrifuge Output", bee.getBottleOutput(), "item");
+        }
+        return true;
     }
 
     private static boolean validateFlower(BeeData bee) {
-        Block flower = ForgeRegistries.BLOCKS.getValue(getResource(bee.getFlower()));
-        return (bee.getFlower().equals(BeeConst.FLOWER_TAG_ALL) ||
-                bee.getFlower().equals(BeeConst.FLOWER_TAG_SMALL) ||
-                bee.getFlower().equals(BeeConst.FLOWER_TAG_TALL) ||
-                isValidBlock(flower)) ||
-                logError(bee.getName(), "Flower", bee.getFlower(), "flower");
+        if(TAG_RESOURCE_PATTERN.matcher(bee.getFlower()).matches())
+            return true;
+        else {
+            Block flower = getBlock(bee.getFlower());
+            return (bee.getFlower().equals(BeeConst.FLOWER_TAG_ALL) ||
+                    bee.getFlower().equals(BeeConst.FLOWER_TAG_SMALL) ||
+                    bee.getFlower().equals(BeeConst.FLOWER_TAG_TALL) ||
+                    isValidBlock(flower)) ||
+                    logError(bee.getName(), "Flower", bee.getFlower(), "flower");
+        }
     }
 
     private static boolean validateColor(BeeData bee) {
@@ -242,4 +274,20 @@ public class BeeInfoUtils {
     public static boolean isValidItem(Item item){
         return item != null && item != Items.AIR;
     }
+
+    public static Item getItem(String itemName) { return ForgeRegistries.ITEMS.getValue(getResource(itemName));}
+
+    public static Block getBlock(String blockName) { return ForgeRegistries.BLOCKS.getValue(getResource(blockName));}
+
+    public static Fluid getFluid(String fluidName) { return ForgeRegistries.FLUIDS.getValue(getResource(fluidName));}
+
+    public static Biome getBiome(String biomeName) { return ForgeRegistries.BIOMES.getValue(getResource(biomeName));}
+
+    public static Tag<Item> getItemTag(String itemTag) { return ItemTags.getCollection().get(getResource(itemTag));}
+
+    public static Tag<Fluid> getFluidTag(String fluidTag) { return FluidTags.getCollection().get(getResource(fluidTag));}
+
+    public static Tag<Block> getBlockTag(String blockTag) { return BlockTags.getCollection().get(getResource(blockTag));}
+
+
 }

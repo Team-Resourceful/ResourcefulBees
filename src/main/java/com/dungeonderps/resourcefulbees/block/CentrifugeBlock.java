@@ -26,12 +26,12 @@ import javax.annotation.Nullable;
 import java.util.stream.IntStream;
 
 public class CentrifugeBlock extends Block {
+    public static final BooleanProperty PROPERTY_ON = BooleanProperty.create("on");
+
     public CentrifugeBlock(Properties properties) {
         super(properties);
         setDefaultState(getDefaultState().with(PROPERTY_ON,false));
     }
-
-    public static final BooleanProperty PROPERTY_ON = BooleanProperty.create("on");
 
     @Nonnull
     @Override

@@ -1,6 +1,7 @@
 package com.dungeonderps.resourcefulbees.entity.goals;
 
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
+import com.dungeonderps.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.dungeonderps.resourcefulbees.lib.BeeConst;
 import com.dungeonderps.resourcefulbees.utils.BeeInfoUtils;
 import com.dungeonderps.resourcefulbees.utils.MathUtils;
@@ -10,7 +11,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.goal.BreedGoal;
 import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.passive.AnimalEntity;
-import com.dungeonderps.resourcefulbees.entity.passive.CustomBeeEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.GameRules;

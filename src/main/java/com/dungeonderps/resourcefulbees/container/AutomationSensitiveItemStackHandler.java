@@ -19,6 +19,8 @@ import net.minecraft.item.Items;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.items.ItemStackHandler;
 
+import javax.annotation.Nonnull;
+
 /**
  * @author Shadows
  * @implNote Taken from Actually Additions owned by Ellpeck
@@ -57,16 +59,18 @@ public class AutomationSensitiveItemStackHandler extends ItemStackHandler {
         return this.stacks;
     }
 
+    @Nonnull
     @Override
-    public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
+    public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
         return this.insertItem(slot, stack, simulate, true);
     }
 
     public ItemStack insertItem(int slot, ItemStack stack, boolean simulate, boolean fromAutomation) {
-        if (!this.canAccept(slot, stack, fromAutomation)) return stack;
-        return super.insertItem(slot, stack, simulate);
+        if (this.canAccept(slot, stack, fromAutomation)) return super.insertItem(slot, stack, simulate);
+        return stack;
     }
 
+    @Nonnull
     @Override
     public ItemStack extractItem(int slot, int amount, boolean simulate) {
         return this.extractItem(slot, amount, simulate, true);

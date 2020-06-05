@@ -28,6 +28,16 @@ public class TopCompat implements Function<ITheOneProbe, Void>
 {
     private final String formatting = TextFormatting.BLUE.toString() + TextFormatting.ITALIC.toString();
 
+    public static ItemStack honeyComb(String num, TileEntity te){
+        final ItemStack honeyComb = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
+        if (!te.serializeNBT().getCompound(BeeConst.NBT_HONEYCOMBS_TE).getString(num).equals("")) {
+                honeyComb.getOrCreateChildTag(BeeConst.NBT_ROOT).putString(BeeConst.NBT_BEE_TYPE, te.serializeNBT().getCompound(BeeConst.NBT_HONEYCOMBS_TE).getString(num));
+                honeyComb.getOrCreateChildTag(BeeConst.NBT_ROOT).putString(BeeConst.NBT_COLOR, String.valueOf(BEE_INFO.get(te.serializeNBT().getCompound(BeeConst.NBT_HONEYCOMBS_TE).getString(num)).getHoneycombColor()));
+            return honeyComb;
+        }
+        else return new ItemStack(Items.AIR);
+    }
+
     @Nullable
     @Override
     public Void apply(ITheOneProbe theOneProbe)
@@ -121,16 +131,6 @@ public class TopCompat implements Function<ITheOneProbe, Void>
         });
 
         return null;
-    }
-
-    public static ItemStack honeyComb(String num, TileEntity te){
-        final ItemStack honeyComb = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
-        if (!te.serializeNBT().getCompound(BeeConst.NBT_HONEYCOMBS_TE).getString(num).equals("")) {
-                honeyComb.getOrCreateChildTag(BeeConst.NBT_ROOT).putString(BeeConst.NBT_BEE_TYPE, te.serializeNBT().getCompound(BeeConst.NBT_HONEYCOMBS_TE).getString(num));
-                honeyComb.getOrCreateChildTag(BeeConst.NBT_ROOT).putString(BeeConst.NBT_COLOR, String.valueOf(BEE_INFO.get(te.serializeNBT().getCompound(BeeConst.NBT_HONEYCOMBS_TE).getString(num)).getHoneycombColor()));
-            return honeyComb;
-        }
-        else return new ItemStack(Items.AIR);
     }
 
 

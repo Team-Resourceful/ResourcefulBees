@@ -1,12 +1,11 @@
 {
   "honeycombColor": "#18eb09",
   "primaryColor": "#18eb09",
-  "secondaryColor": "#444444",
+  "secondaryColor": "#303030",
   "flower": "ALL",
   "mutationInput": "minecraft:stone",
   "mutationOutput": "minecraft:lava",
   "mainOutput": "minecraft:emerald",
   "spawnInWorld": true,
-  "biomeList": "TAG:Mountain,Hills",
-  "maxTimeInHive": 600
+  "biomeWhitelist": "TAG:Mountain,Hills"
 }

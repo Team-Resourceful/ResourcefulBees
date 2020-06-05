@@ -1,13 +1,14 @@
 {
   "honeycombColor": "#F6F2E6",
-  "primaryColor": "#F6F2E6",
-  "secondaryColor": "#444444",
+  "isBeeColored": false,
+  "baseLayerTexture": "skeleton/skeleton_bee",
   "flower": "ALL",
   "mutationInput": "minecraft:stone",
   "mutationOutput": "minecraft:gravel",
   "mainOutput": "minecraft:bone",
   "spawnInWorld": true,
-  "biomeList": "tag:OVERWORLD",
+  "biomeWhitelist": "tag:OVERWORLD",
+  "biomeBlacklist": "tag:ocean",
   "maxTimeInHive": 600,
   "skeletonBee": true
 }

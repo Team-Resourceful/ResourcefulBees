@@ -24,21 +24,16 @@ import net.minecraft.client.renderer.Quaternion;
 import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.EntitySize;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-
-import static com.dungeonderps.resourcefulbees.ResourcefulBees.LOGGER;
 
 @SuppressWarnings("NullableProblems")
 public class BlockToBlock implements IRecipeCategory<BlockToBlock.Recipe> {
@@ -60,6 +55,39 @@ public class BlockToBlock implements IRecipeCategory<BlockToBlock.Recipe> {
         this.localizedName = I18n.format("gui.resourcefulbees.jei.category.block_to_block_mutation");
         assert Minecraft.getInstance().world != null;
         bee = RegistryHandler.CUSTOM_BEE.get().create(Minecraft.getInstance().world);
+    }
+
+    public static List<BlockToBlock.Recipe> getMutationRecipes(IIngredientManager ingredientManager) {
+        List<BlockToBlock.Recipe> recipes = new ArrayList<>();
+        for (Map.Entry<String, BeeData> bee : BeeInfo.BEE_INFO.entrySet()){
+            if (bee.getValue().hasMutation()) {
+
+                String mutationIn = bee.getValue().getMutationInput();
+                String mutationOut = bee.getValue().getMutationOutput();
+
+                if (BeeInfoUtils.TAG_RESOURCE_PATTERN.matcher(mutationIn).matches()) {
+                    mutationIn = mutationIn.replace(BeeConst.TAG_PREFIX, "");
+
+                    Tag<Item> itemTag = BeeInfoUtils.getItemTag(mutationIn);
+                    if (itemTag !=null) {
+                        Item itemOut = BeeInfoUtils.getItem(mutationOut);
+                        if (BeeInfoUtils.isValidItem(itemOut)){
+                            recipes.add( new Recipe(itemTag, new ItemStack(itemOut), bee.getKey(), MutationTypes.BLOCK_TO_BLOCK, true));
+                        }
+                    }
+                } else {
+                    Enum<MutationTypes> mutationType = bee.getValue().getMutationType();
+
+                    if (MutationTypes.BLOCK_TO_BLOCK.equals(mutationType)) {
+                        Item itemIn = BeeInfoUtils.getItem(mutationIn);
+                        Item itemOut = BeeInfoUtils.getItem(mutationOut);
+                        if (BeeInfoUtils.isValidItem(itemIn) && BeeInfoUtils.isValidItem(itemOut))
+                            recipes.add( new Recipe( new ItemStack(itemIn), new ItemStack(itemOut), bee.getKey(), mutationType, false));
+                    }
+                }
+            }
+        }
+        return recipes;
     }
 
     @Override
@@ -170,39 +198,6 @@ public class BlockToBlock implements IRecipeCategory<BlockToBlock.Recipe> {
         this.beeHive.draw(65, 10);
         this.info.draw(63, 8);
         renderEntity(recipe.beeType, 135.0F, 25D, 30D);
-    }
-
-    public static List<BlockToBlock.Recipe> getMutationRecipes(IIngredientManager ingredientManager) {
-        List<BlockToBlock.Recipe> recipes = new ArrayList<>();
-        for (Map.Entry<String, BeeData> bee : BeeInfo.BEE_INFO.entrySet()){
-            if (bee.getValue().hasMutation()) {
-
-                String mutationIn = bee.getValue().getMutationInput();
-                String mutationOut = bee.getValue().getMutationOutput();
-
-                if (BeeInfoUtils.TAG_RESOURCE_PATTERN.matcher(mutationIn).matches()) {
-                    mutationIn = mutationIn.replace(BeeConst.TAG_PREFIX, "");
-
-                    Tag<Item> itemTag = ItemTags.getCollection().get(BeeInfoUtils.getResource(mutationIn));
-                    if (itemTag !=null) {
-                        Item itemOut = ForgeRegistries.ITEMS.getValue(BeeInfoUtils.getResource(mutationOut));
-                        if (BeeInfoUtils.isValidItem(itemOut)){
-                            recipes.add( new Recipe(itemTag, new ItemStack(itemOut), bee.getKey(), MutationTypes.BLOCK_TO_BLOCK, true));
-                        }
-                    }
-                } else {
-                    Enum<MutationTypes> mutationType = bee.getValue().getMutationType();
-
-                    if (MutationTypes.BLOCK_TO_BLOCK.equals(mutationType)) {
-                        Item itemIn = ForgeRegistries.ITEMS.getValue(BeeInfoUtils.getResource(mutationIn));
-                        Item itemOut = ForgeRegistries.ITEMS.getValue(BeeInfoUtils.getResource(mutationOut));
-                        if (BeeInfoUtils.isValidItem(itemIn) && BeeInfoUtils.isValidItem(itemOut))
-                            recipes.add( new Recipe( new ItemStack(itemIn), new ItemStack(itemOut), bee.getKey(), mutationType, false));
-                    }
-                } //END INDIVIDUAL CHECKS
-            }
-        }
-        return recipes;
     }
 
     public static class Recipe {

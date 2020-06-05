@@ -1,11 +1,12 @@
 {
   "honeycombColor": "#00ffff",
   "primaryColor": "#00ffff",
-  "secondaryColor": "#444444",
+  "secondaryColor": "#303030",
   "flower": "ALL",
   "mutationInput": "minecraft:lava",
   "mutationOutput": "minecraft:water",
   "mainOutput": "minecraft:diamond",
   "spawnInWorld": true,
-  "biomeList": "TAG:OVerWorld"
+  "biomeWhitelist": "TAG:OVerWorld",
+  "biomeBlacklist": "tag:ocean"
 }

@@ -8,7 +8,6 @@ import com.dungeonderps.resourcefulbees.tileentity.beehive.Tier1BeehiveBlockEnti
 import com.dungeonderps.resourcefulbees.tileentity.beenest.BeeNestEntity;
 import com.dungeonderps.resourcefulbees.utils.MathUtils;
 import com.mojang.datafixers.Dynamic;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.nbt.CompoundNBT;
@@ -38,6 +37,7 @@ public class BeeNestFeature extends Feature<NoFeatureConfig> {
 
     @Override
     public boolean place(@Nonnull IWorld worldIn, @Nonnull ChunkGenerator<? extends GenerationSettings> generator, @Nonnull Random rand, @Nonnull BlockPos pos, @Nonnull NoFeatureConfig config) {
+        long start = System.currentTimeMillis();
         Biome biome = worldIn.getBiome(pos);
         Biome.Category category = biome.getCategory();
 
@@ -66,13 +66,8 @@ public class BeeNestFeature extends Feature<NoFeatureConfig> {
             y = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, pos.getX(), pos.getZ());
             newPos = new BlockPos(pos.getX(), y, pos.getZ());
         }
-
-        Block blockBelow = worldIn.getBlockState(newPos.down()).getBlock();
-        if (blockBelow.equals(Blocks.AIR))
+        if (newPos.getY() == 0)
             return false;
-
-
-        ResourcefulBees.LOGGER.debug(newPos.toString());
 
         Direction direction = Direction.UP;
         for (Direction dir : BlockStateProperties.FACING.getAllowedValues()) {
@@ -126,25 +121,24 @@ public class BeeNestFeature extends Feature<NoFeatureConfig> {
         worldIn.setBlockState(newPos, newState, 1);
         TileEntity tileEntity = worldIn.getTileEntity(newPos);
 
-        ResourcefulBees.LOGGER.debug("Nest Placed");
         if (tileEntity instanceof BeeNestEntity) {
             BeeNestEntity nest = (BeeNestEntity) tileEntity;
             int maxBees = nest.getMaxBees();
             for (int i = rand.nextInt(maxBees); i < maxBees ; i++) {
                 ResourcefulBee bee = RegistryHandler.CUSTOM_BEE.get().create(worldIn.getWorld());
-                    if (bee != null) {
-                        bee.setBeeType(true);
-                        CompoundNBT compoundNBT = new CompoundNBT();
-                        bee.writeUnlessPassenger(compoundNBT);
-                        int timeinhive = rand.nextInt(bee.getBeeInfo().getMaxTimeInHive());
-                        Tier1BeehiveBlockEntity.Bee beehivetileentity$bee = new Tier1BeehiveBlockEntity.Bee(compoundNBT, 0, timeinhive);
-                        nest.bees.add(beehivetileentity$bee);
-                    }
-
-
+                if (bee != null) {
+                    bee.setPosition(newPos.getX(), newPos.getY(), newPos.getZ());
+                    bee.setBeeType(true);
+                    CompoundNBT compoundNBT = new CompoundNBT();
+                    bee.writeUnlessPassenger(compoundNBT);
+                    int timeinhive = rand.nextInt(bee.getBeeInfo().getMaxTimeInHive());
+                    Tier1BeehiveBlockEntity.Bee beehivetileentity$bee = new Tier1BeehiveBlockEntity.Bee(compoundNBT, 0, timeinhive);
+                    nest.bees.add(beehivetileentity$bee);
+                }
             }
-
         }
+        long end = System.currentTimeMillis();
+        ResourcefulBees.LOGGER.info("Nest generation took: " + (end - start) + "ms");
         return true;
     }
 }

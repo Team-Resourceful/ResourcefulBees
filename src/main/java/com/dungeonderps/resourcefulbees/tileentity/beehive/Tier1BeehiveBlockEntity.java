@@ -88,16 +88,19 @@ public class Tier1BeehiveBlockEntity extends BeehiveTileEntity {
 
             if (beehiveState == State.HONEY_DELIVERED) {
               beeEntity.onHoneyDelivered();
-              int i = getHoneyLevel(state);
-              if (i < 5) {
-                this.honeycombs.push(beeEntity.getBeeType());
-                float combsInHive = this.honeycombs.size();
-                float maxCombs = getMaxCombs();
-                float percentValue = (combsInHive / maxCombs) * 100;
-                int newState = (int)(percentValue  - (percentValue % 20))  / 20;
-                this.world.setBlockState(this.getPos(), state.with(BeehiveBlock.HONEY_LEVEL, newState));
+              if (!beeEntity.getBeeInfo().getMainOutput().isEmpty()) {
+                int i = getHoneyLevel(state);
+                if (i < 5) {
+                  this.honeycombs.push(beeEntity.getBeeType());
+                  float combsInHive = this.honeycombs.size();
+                  float maxCombs = getMaxCombs();
+                  float percentValue = (combsInHive / maxCombs) * 100;
+                  int newState = (int) (percentValue - (percentValue % 20)) / 20;
+                  this.world.setBlockState(this.getPos(), state.with(BeehiveBlock.HONEY_LEVEL, newState));
+                }
               }
             }
+
             beeEntity.resetTicksWithoutNectar();
             if (entities != null) {
               entities.add(beeEntity);

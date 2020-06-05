@@ -1,7 +1,6 @@
 package com.dungeonderps.resourcefulbees.item;
 
 import com.dungeonderps.resourcefulbees.registry.ItemGroupResourcefulBees;
-import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -10,9 +9,6 @@ import net.minecraft.entity.passive.BeeEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -27,12 +23,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.List;
-
-import static net.minecraftforge.common.loot.LootModifierManager.LOGGER;
 
 public class Smoker extends Item {
 

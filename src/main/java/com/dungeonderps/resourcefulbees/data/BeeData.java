@@ -3,16 +3,20 @@ package com.dungeonderps.resourcefulbees.data;
 import com.dungeonderps.resourcefulbees.lib.BeeConst;
 import com.dungeonderps.resourcefulbees.lib.MutationTypes;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
+import com.dungeonderps.resourcefulbees.utils.Color;
 import net.minecraft.item.Items;
 
 public class BeeData {
 
-    private String flower, biomeList, parent1, parent2;
+    private String flower, parent1, parent2;
+
+    private String biomeWhitelist = "";
+    private String biomeBlacklist = "";
 
     private String baseLayerTexture = "/custom/bee";
-    private String primaryColor = "#000000";
-    private String secondaryColor = "#303030";
-    private String honeycombColor = primaryColor;
+    private String primaryColor = Color.format(BeeConst.DEFAULT_COLOR);
+    private String secondaryColor = Color.format(BeeConst.DEFAULT_SECONDARY_COLOR);
+    private String honeycombColor = Color.format(BeeConst.DEFAULT_COLOR);
     private String primaryLayerTexture = "/custom/primary_layer";
     private String secondaryLayerTexture = "/custom/secondary_layer";
 
@@ -261,18 +265,24 @@ public class BeeData {
      * Gets the biome(s) this bee can spawn in.
      * @return this bee's spawnable biome(s).
      */
-    public String getBiomeList() {
-        return biomeList.toLowerCase().trim();
+    public String getBiomeWhitelist() {
+        return biomeWhitelist.toLowerCase().trim();
     }
 
     /**
      * Sets the biome(s) this bee can spawn in.
      * Can be used to modify bees through code.
-     * @param biomeList this bee's spawnable biome(s).
+     * @param biomeWhitelist this bee's spawnable biome(s).
      */
-    public void setBiomeList(String biomeList) {
-        this.biomeList = biomeList.toLowerCase().trim();
+    public void setBiomeWhitelist(String biomeWhitelist) {
+        this.biomeWhitelist = biomeWhitelist.toLowerCase().trim();
     }
+
+    /**
+     * Gets if the bee is a child.
+     * @return if this bee is a child.
+     */
+    public boolean isBreedable() {return breedable;}
 
     /**
      * Sets if this bee is a child of 2 parents.
@@ -282,10 +292,10 @@ public class BeeData {
     public void setBreedable(Boolean isChild) {this.breedable = isChild;}
 
     /**
-     * Gets if the bee is a child.
-     * @return if this bee is a child.
+     * Gets this bee's first parent.
+     * @return this bee's first parent.
      */
-    public boolean isBreedable() {return breedable;}
+    public String getParent1() { return parent1.toLowerCase(); }
 
     /**
      * Sets this bee's first parent.
@@ -295,10 +305,10 @@ public class BeeData {
     public void setParent1(String parent1) { this.parent1 = parent1.toLowerCase(); }
 
     /**
-     * Gets this bee's first parent.
-     * @return this bee's first parent.
+     * Gets this bee's second parent.
+     * @return this bee's second parent.
      */
-    public String getParent1() { return parent1.toLowerCase(); }
+    public String getParent2() { return parent2.toLowerCase(); }
 
     /**
      * Sets this bee's second parent.
@@ -306,12 +316,6 @@ public class BeeData {
      * @param parent2 this bee's second parent.
      */
     public void setParent2(String parent2) { this.parent2 = parent2.toLowerCase(); }
-
-    /**
-     * Gets this bee's second parent.
-     * @return this bee's second parent.
-     */
-    public String getParent2() { return parent2.toLowerCase(); }
 
     /**
      * Returns true if bee has the creeper trait.
@@ -453,5 +457,13 @@ public class BeeData {
 
     public void setSizeModifier(float sizeModifier) {
         this.sizeModifier = sizeModifier;
+    }
+
+    public String getBiomeBlacklist() {
+        return biomeBlacklist;
+    }
+
+    public void setBiomeBlacklist(String biomeBlacklist) {
+        this.biomeBlacklist = biomeBlacklist;
     }
 }
