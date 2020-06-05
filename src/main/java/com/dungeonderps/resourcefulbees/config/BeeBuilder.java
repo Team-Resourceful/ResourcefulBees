@@ -113,7 +113,6 @@ public class  BeeBuilder{
             if (Config.GENERATE_BEE_NESTS.get()) {
                 addNestFeature(biome);
             }
-            LOGGER.info("Biome Setup - " + biome.getRegistryName());
             int divisor = Config.GENERATE_BEE_NESTS.get() ? 2 : 1;
             biome.getSpawns(EntityClassification.CREATURE).add(new Biome.SpawnListEntry(RegistryHandler.CUSTOM_BEE.get(),
                     Config.SPAWN_WEIGHT.get()/divisor,

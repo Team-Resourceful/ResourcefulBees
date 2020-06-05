@@ -1,6 +1,5 @@
 package com.dungeonderps.resourcefulbees.world;
 
-import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.config.Config;
 import com.dungeonderps.resourcefulbees.entity.passive.ResourcefulBee;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
@@ -37,7 +36,6 @@ public class BeeNestFeature extends Feature<NoFeatureConfig> {
 
     @Override
     public boolean place(@Nonnull IWorld worldIn, @Nonnull ChunkGenerator<? extends GenerationSettings> generator, @Nonnull Random rand, @Nonnull BlockPos pos, @Nonnull NoFeatureConfig config) {
-        long start = System.currentTimeMillis();
         Biome biome = worldIn.getBiome(pos);
         Biome.Category category = biome.getCategory();
 
@@ -137,8 +135,6 @@ public class BeeNestFeature extends Feature<NoFeatureConfig> {
                 }
             }
         }
-        long end = System.currentTimeMillis();
-        ResourcefulBees.LOGGER.info("Nest generation took: " + (end - start) + "ms");
         return true;
     }
 }
