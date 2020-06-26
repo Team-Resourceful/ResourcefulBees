@@ -87,9 +87,9 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
 
         NonNullList<Pair<ItemStack,Double>> outputs = NonNullList.from(
                 Pair.of(ItemStack.EMPTY, 0.0),
-                Pair.of(new ItemStack(BeeInfoUtils.getItem(info.getMainOutput())), info.getMainOutputWeight()),
-                Pair.of(new ItemStack(BeeInfoUtils.getItem(info.getSecondaryOutput())), info.getSecondaryOutputWeight()),
-                Pair.of(new ItemStack(BeeInfoUtils.getItem(info.getBottleOutput())), info.getBottleOutputWeight())
+                Pair.of(new ItemStack(BeeInfoUtils.getItem(info.getMainOutput()), info.getMainOutputCount()), info.getMainOutputWeight()),
+                Pair.of(new ItemStack(BeeInfoUtils.getItem(info.getSecondaryOutput()), info.getSecondaryOutputCount()), info.getSecondaryOutputWeight()),
+                Pair.of(new ItemStack(BeeInfoUtils.getItem(info.getBottleOutput()), info.getBottleOutputCount()), info.getBottleOutputWeight())
         );
 
         ResourceLocation name = new ResourceLocation(ResourcefulBees.MOD_ID, BeeType + "_honeycomb_centrifuge");

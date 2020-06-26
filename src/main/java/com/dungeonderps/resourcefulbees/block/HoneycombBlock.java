@@ -3,7 +3,7 @@ package com.dungeonderps.resourcefulbees.block;
 
 import com.dungeonderps.resourcefulbees.lib.BeeConst;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
-import com.dungeonderps.resourcefulbees.tileentity.HoneycombBlockEntity;
+import com.dungeonderps.resourcefulbees.tileentity.HoneycombTileEntity;
 import com.dungeonderps.resourcefulbees.utils.Color;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -30,8 +30,8 @@ public class HoneycombBlock extends Block {
     public static int getBlockColor(BlockState state, @Nullable IBlockReader world, @Nullable BlockPos pos, int tintIndex){
         if (world != null && pos != null){
             TileEntity tile = world.getTileEntity(pos);
-            if (tile instanceof HoneycombBlockEntity) {
-                return  ((HoneycombBlockEntity) tile).getColor();
+            if (tile instanceof HoneycombTileEntity) {
+                return  ((HoneycombTileEntity) tile).getColor();
             }
         }
 
@@ -51,12 +51,12 @@ public class HoneycombBlock extends Block {
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) { return new HoneycombBlockEntity();}
+    public TileEntity createTileEntity(BlockState state, IBlockReader world) { return new HoneycombTileEntity();}
 
     @Override
     public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
         if (world != null && pos != null) {
-            HoneycombBlockEntity tile = (HoneycombBlockEntity) world.getTileEntity(pos);
+            HoneycombTileEntity tile = (HoneycombTileEntity) world.getTileEntity(pos);
             if (tile != null) {
                 CompoundNBT combData = tile.serializeNBT();
                 ItemStack honeyCombBlockItemStack = new ItemStack(RegistryHandler.HONEYCOMB_BLOCK_ITEM.get());
@@ -72,9 +72,9 @@ public class HoneycombBlock extends Block {
     public void onBlockPlacedBy(World worldIn, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nullable LivingEntity placer, @Nonnull ItemStack stack) {
 
         TileEntity tile = worldIn.getTileEntity(pos);
-        if(tile instanceof HoneycombBlockEntity) {
-            HoneycombBlockEntity honeycombBlockEntity = (HoneycombBlockEntity) tile;
-            honeycombBlockEntity.loadFromNBT(stack.getOrCreateChildTag(BeeConst.NBT_ROOT));
+        if(tile instanceof HoneycombTileEntity) {
+            HoneycombTileEntity honeycombTileEntity = (HoneycombTileEntity) tile;
+            honeycombTileEntity.loadFromNBT(stack.getOrCreateChildTag(BeeConst.NBT_ROOT));
         }
     }
 }

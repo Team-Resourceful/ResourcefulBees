@@ -1,4 +1,4 @@
-package com.dungeonderps.resourcefulbees.screen;
+package com.dungeonderps.resourcefulbees.client.gui.screen;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.container.CentrifugeContainer;
@@ -33,8 +33,8 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
             int i = (this.width - this.xSize) / 2;
             int j = (this.height - this.ySize) / 2;
             this.blit(i, j, 0, 0, this.xSize, this.ySize);
-            double scaledprogress = 74d * this.container.centrifugeBlockEntity.time /
-                    Math.max(this.container.centrifugeBlockEntity.totalTime,1d);
+            double scaledprogress = 74d * this.container.centrifugeTileEntity.time /
+                    Math.max(this.container.centrifugeTileEntity.totalTime,1d);
             this.blit(i + 51, j + 28, 176, 0, (int)scaledprogress, 29);
 
         }

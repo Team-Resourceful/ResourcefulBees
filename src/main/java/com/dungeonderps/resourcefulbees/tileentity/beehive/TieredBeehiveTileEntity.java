@@ -6,6 +6,7 @@ import com.dungeonderps.resourcefulbees.config.Config;
 import com.dungeonderps.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.dungeonderps.resourcefulbees.lib.BeeConst;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
+import com.dungeonderps.resourcefulbees.utils.MathUtils;
 import net.minecraft.block.BeehiveBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -26,7 +27,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Stack;
 
-public class Tier1BeehiveBlockEntity extends BeehiveTileEntity {
+public class TieredBeehiveTileEntity extends BeehiveTileEntity {
 
   protected final int TIER = 1;
   protected final float TIER_MODIFIER = 1;
@@ -95,7 +96,7 @@ public class Tier1BeehiveBlockEntity extends BeehiveTileEntity {
                   float combsInHive = this.honeycombs.size();
                   float maxCombs = getMaxCombs();
                   float percentValue = (combsInHive / maxCombs) * 100;
-                  int newState = (int) (percentValue - (percentValue % 20)) / 20;
+                  int newState = (int) MathUtils.clamp((percentValue - (percentValue % 20)) / 20, 0, 5) ;
                   this.world.setBlockState(this.getPos(), state.with(BeehiveBlock.HONEY_LEVEL, newState));
                 }
               }

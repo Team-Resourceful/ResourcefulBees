@@ -8,5 +8,8 @@
   "mainOutput": "minecraft:diamond",
   "spawnInWorld": true,
   "biomeWhitelist": "TAG:OVerWorld",
-  "biomeBlacklist": "tag:ocean"
+  "biomeBlacklist": "tag:ocean",
+  "breedable" : true,
+  "parent1": "Coal",
+  "parent2": "Skeleton"
 }

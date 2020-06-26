@@ -3,7 +3,7 @@ package com.dungeonderps.resourcefulbees.compat.hwyla;
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.lib.BeeConst;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
-import com.dungeonderps.resourcefulbees.tileentity.HoneycombBlockEntity;
+import com.dungeonderps.resourcefulbees.tileentity.HoneycombTileEntity;
 import mcp.mobius.waila.api.IComponentProvider;
 import mcp.mobius.waila.api.IDataAccessor;
 import mcp.mobius.waila.api.IPluginConfig;
@@ -24,7 +24,7 @@ public class HoneycombBlockCompat implements IComponentProvider, IServerDataProv
     public void appendHead(List<ITextComponent> tooltip, IDataAccessor accessor, IPluginConfig config) {
         tooltip.clear();
         CompoundNBT data = accessor.getServerData();
-        if(accessor.getTileEntity() instanceof HoneycombBlockEntity){
+        if(accessor.getTileEntity() instanceof HoneycombTileEntity){
             TranslationTextComponent text = new TranslationTextComponent("block" + '.' + ResourcefulBees.MOD_ID + '.' + data.getString(BeeConst.NBT_BEE_TYPE) + "_honeycomb_block");
             tooltip.add(text);
         }
@@ -42,8 +42,8 @@ public class HoneycombBlockCompat implements IComponentProvider, IServerDataProv
 
     @Override
     public void appendServerData(CompoundNBT compoundNBT, ServerPlayerEntity serverPlayerEntity, World world, TileEntity tileEntity) {
-        if (tileEntity instanceof HoneycombBlockEntity){
-            HoneycombBlockEntity blockEntity = (HoneycombBlockEntity) tileEntity;
+        if (tileEntity instanceof HoneycombTileEntity){
+            HoneycombTileEntity blockEntity = (HoneycombTileEntity) tileEntity;
 
             if (blockEntity.beeType !=null)
                 compoundNBT.putString(BeeConst.NBT_BEE_TYPE, blockEntity.beeType);

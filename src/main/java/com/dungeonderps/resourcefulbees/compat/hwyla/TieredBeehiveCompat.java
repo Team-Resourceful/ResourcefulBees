@@ -1,9 +1,9 @@
 package com.dungeonderps.resourcefulbees.compat.hwyla;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
-import com.dungeonderps.resourcefulbees.block.beehive.Tier1BeehiveBlock;
+import com.dungeonderps.resourcefulbees.block.beehive.TieredBeehiveBlock;
 import com.dungeonderps.resourcefulbees.lib.BeeConst;
-import com.dungeonderps.resourcefulbees.tileentity.beehive.Tier1BeehiveBlockEntity;
+import com.dungeonderps.resourcefulbees.tileentity.beehive.TieredBeehiveTileEntity;
 import mcp.mobius.waila.api.*;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.resources.I18n;
@@ -47,16 +47,16 @@ public class TieredBeehiveCompat implements IComponentProvider, IServerDataProvi
 
     @Override
     public void appendServerData(CompoundNBT compoundNBT, ServerPlayerEntity serverPlayerEntity, World world, TileEntity tileEntity) {
-        if (tileEntity instanceof Tier1BeehiveBlockEntity){
-            Tier1BeehiveBlockEntity blockEntity = (Tier1BeehiveBlockEntity) tileEntity;
+        if (tileEntity instanceof TieredBeehiveTileEntity){
+            TieredBeehiveTileEntity blockEntity = (TieredBeehiveTileEntity) tileEntity;
 
             if (blockEntity.isSmoked) {
                 compoundNBT.putBoolean(BeeConst.NBT_SMOKED_TE, true);
                 compoundNBT.putInt("TicksSmoked", blockEntity.ticksSmoked);
             }
             BlockState state = blockEntity.getBlockState();
-            if (state.has(Tier1BeehiveBlock.HONEY_LEVEL)) {
-                compoundNBT.putInt("HoneyLevel", state.get(Tier1BeehiveBlock.HONEY_LEVEL));
+            if (state.has(TieredBeehiveBlock.HONEY_LEVEL)) {
+                compoundNBT.putInt("HoneyLevel", state.get(TieredBeehiveBlock.HONEY_LEVEL));
             }
 
             if (blockEntity.hasCombs()) {

@@ -3,7 +3,7 @@ package com.dungeonderps.resourcefulbees.world;
 import com.dungeonderps.resourcefulbees.config.Config;
 import com.dungeonderps.resourcefulbees.entity.passive.ResourcefulBee;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
-import com.dungeonderps.resourcefulbees.tileentity.beehive.Tier1BeehiveBlockEntity;
+import com.dungeonderps.resourcefulbees.tileentity.beehive.TieredBeehiveTileEntity;
 import com.dungeonderps.resourcefulbees.tileentity.beenest.BeeNestEntity;
 import com.dungeonderps.resourcefulbees.utils.MathUtils;
 import com.mojang.datafixers.Dynamic;
@@ -130,7 +130,7 @@ public class BeeNestFeature extends Feature<NoFeatureConfig> {
                     CompoundNBT compoundNBT = new CompoundNBT();
                     bee.writeUnlessPassenger(compoundNBT);
                     int timeinhive = rand.nextInt(bee.getBeeInfo().getMaxTimeInHive());
-                    Tier1BeehiveBlockEntity.Bee beehivetileentity$bee = new Tier1BeehiveBlockEntity.Bee(compoundNBT, 0, timeinhive);
+                    TieredBeehiveTileEntity.Bee beehivetileentity$bee = new TieredBeehiveTileEntity.Bee(compoundNBT, 0, timeinhive);
                     nest.bees.add(beehivetileentity$bee);
                 }
             }

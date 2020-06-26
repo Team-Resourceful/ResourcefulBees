@@ -35,9 +35,15 @@ public class BeeData {
 
     private int maxTimeInHive = BeeConst.MAX_TIME_IN_HIVE;
     private double breedWeight = BeeConst.DEFAULT_BREED_WEIGHT;
+
     private double mainOutputWeight = BeeConst.DEFAULT_MAIN_OUTPUT_WEIGHT;
     private double secondaryOutputWeight = BeeConst.DEFAULT_SEC_OUTPUT_WEIGHT;
     private double bottleOutputWeight = BeeConst.DEFAULT_BOT_OUTPUT_WEIGHT;
+
+    private int mainOutputCount = 1;
+    private int secondaryOutputCount = 1;
+    private int bottleOutputCount = 1;
+
 
     private float sizeModifier = 1.0f;
 
@@ -466,4 +472,16 @@ public class BeeData {
     public void setBiomeBlacklist(String biomeBlacklist) {
         this.biomeBlacklist = biomeBlacklist;
     }
+
+    public int getMainOutputCount() { return mainOutputCount; }
+
+    public void setMainOutputCount(int mainOutputCount) { this.mainOutputCount = mainOutputCount; }
+
+    public int getSecondaryOutputCount() { return secondaryOutputCount; }
+
+    public void setSecondaryOutputCount(int secondaryOutputCount) { this.secondaryOutputCount = secondaryOutputCount; }
+
+    public int getBottleOutputCount() { return bottleOutputCount; }
+
+    public void setBottleOutputCount(int bottleOutputCount) { this.bottleOutputCount = bottleOutputCount; }
 }

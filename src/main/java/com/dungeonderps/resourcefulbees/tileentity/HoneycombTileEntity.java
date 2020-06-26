@@ -9,12 +9,12 @@ import net.minecraft.tileentity.TileEntityType;
 
 import javax.annotation.Nonnull;
 
-public class HoneycombBlockEntity extends TileEntity {
+public class HoneycombTileEntity extends TileEntity {
 
     public String beeType;
     public String blockColor;
 
-    public HoneycombBlockEntity() {
+    public HoneycombTileEntity() {
         super(RegistryHandler.HONEYCOMB_BLOCK_ENTITY.get());
     }
 

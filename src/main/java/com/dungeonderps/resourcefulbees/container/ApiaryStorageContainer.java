@@ -1,7 +1,7 @@
 package com.dungeonderps.resourcefulbees.container;
+
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
-import com.dungeonderps.resourcefulbees.tileentity.CentrifugeTileEntity;
-import com.dungeonderps.resourcefulbees.utils.FunctionalIntReferenceHolder;
+import com.dungeonderps.resourcefulbees.tileentity.ApiaryStorageTileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -12,26 +12,31 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 
-public class CentrifugeContainer extends Container {
+public class ApiaryStorageContainer extends Container {
 
-    public CentrifugeTileEntity centrifugeTileEntity;
+    public ApiaryStorageTileEntity apiaryStorageTileEntity;
     public PlayerEntity player;
 
-    public CentrifugeContainer(int id, World world, BlockPos pos, PlayerInventory inv) {
-        super(RegistryHandler.CENTRIFUGE_CONTAINER.get(), id);
+    public ApiaryStorageContainer(int id, World world, BlockPos pos, PlayerInventory inv) {
+        super(RegistryHandler.APIARY_STORAGE_CONTAINER.get(), id);
 
         this.player = inv.player;
 
-        centrifugeTileEntity = (CentrifugeTileEntity) world.getTileEntity(pos);
+        apiaryStorageTileEntity = (ApiaryStorageTileEntity) world.getTileEntity(pos);
 
-        this.trackInt(new FunctionalIntReferenceHolder(() -> centrifugeTileEntity.time, v -> centrifugeTileEntity.time = v));
-        this.trackInt(new FunctionalIntReferenceHolder(() -> centrifugeTileEntity.totalTime, v -> centrifugeTileEntity.totalTime = v));
 
-        this.addSlot(new SlotItemHandlerUnconditioned(centrifugeTileEntity.h, CentrifugeTileEntity.HONEYCOMB_SLOT, 30, 20));
-        this.addSlot(new SlotItemHandlerUnconditioned(centrifugeTileEntity.h, CentrifugeTileEntity.BOTTLE_SLOT, 30, 38));
-        this.addSlot(new OutputSlot(centrifugeTileEntity.h, CentrifugeTileEntity.HONEY_BOTTLE, 80, 59));
-        this.addSlot(new OutputSlot(centrifugeTileEntity.h, CentrifugeTileEntity.OUTPUT1, 129, 20));
-        this.addSlot(new OutputSlot(centrifugeTileEntity.h, CentrifugeTileEntity.OUTPUT2, 129, 38));
+
+
+
+
+        //this.trackInt(new FunctionalIntReferenceHolder(() -> apiaryTileEntity.time, v -> apiaryTileEntity.time = v));
+        //this.trackInt(new FunctionalIntReferenceHolder(() -> apiaryTileEntity.totalTime, v -> apiaryTileEntity.totalTime = v));
+
+        //this.addSlot(new SlotItemHandlerUnconditioned(apiaryTileEntity.h, CentrifugeTileEntity.HONEYCOMB_SLOT, 30, 20));
+        //this.addSlot(new SlotItemHandlerUnconditioned(apiaryTileEntity.h, CentrifugeTileEntity.BOTTLE_SLOT, 30, 38));
+        //this.addSlot(new OutputSlot(apiaryTileEntity.h, CentrifugeTileEntity.HONEY_BOTTLE, 80, 59));
+        //this.addSlot(new OutputSlot(apiaryTileEntity.h, CentrifugeTileEntity.OUTPUT1, 129, 20));
+        //this.addSlot(new OutputSlot(apiaryTileEntity.h, CentrifugeTileEntity.OUTPUT2, 129, 38));
 
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {

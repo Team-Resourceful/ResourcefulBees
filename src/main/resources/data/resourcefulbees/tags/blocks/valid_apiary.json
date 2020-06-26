@@ -1,0 +1,33 @@
+{
+  "replace": false,
+  "values": [
+    "resourcefulbees:apiary",
+    "resourcefulbees:apiary_storage",
+    "#minecraft:wool",
+    "#minecraft:planks",
+    "#minecraft:sand",
+    "#minecraft:logs",
+    "#minecraft:doors",
+    "#minecraft:stairs",
+    "#minecraft:slabs",
+    "#minecraft:walls",
+    "#minecraft:leaves",
+    "#minecraft:trapdoors",
+    "#minecraft:fences",
+    "#minecraft:ice",
+    "#minecraft:coral_blocks",
+    "#forge:dirt",
+    "#forge:end_stones",
+    "#forge:fences",
+    "#forge:glass",
+    "#forge:glass_panes",
+    "#forge:gravel",
+    "#forge:netherrack",
+    "#forge:obsidian",
+    "#forge:ores",
+    "#forge:sand",
+    "#forge:sandstone",
+    "#forge:stone",
+    "#forge:storage_blocks"
+  ]
+}

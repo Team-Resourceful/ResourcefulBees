@@ -3,7 +3,7 @@ package com.dungeonderps.resourcefulbees.compat.jei;
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.recipe.CentrifugeRecipe;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
-import com.dungeonderps.resourcefulbees.tileentity.CentrifugeBlockEntity;
+import com.dungeonderps.resourcefulbees.tileentity.CentrifugeTileEntity;
 import com.google.common.collect.Lists;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
@@ -78,20 +78,20 @@ public class CentrifugeRecipeCategory implements IRecipeCategory<CentrifugeRecip
     iIngredients.setInputIngredients(Lists.newArrayList(recipe.ingredient, Ingredient.fromItems(Items.GLASS_BOTTLE)));
     List<Pair<ItemStack,Double>> outputs = recipe.outputs;
     List<ItemStack> stacks = new ArrayList<>();
-    stacks.add(new ItemStack(outputs.get(2).getLeft().getItem()));
-    stacks.add(new ItemStack(outputs.get(0).getLeft().getItem()));
-    stacks.add(new ItemStack(outputs.get(1).getLeft().getItem()));
+    stacks.add(outputs.get(2).getLeft().copy());
+    stacks.add(outputs.get(0).getLeft().copy());
+    stacks.add(outputs.get(1).getLeft().copy());
     iIngredients.setOutputs(VanillaTypes.ITEM, stacks);
   }
 
   @Override
   public void setRecipe(IRecipeLayout iRecipeLayout, @Nonnull CentrifugeRecipe centrifugeRecipe, @Nonnull IIngredients iIngredients) {
     IGuiItemStackGroup guiItemStacks = iRecipeLayout.getItemStacks();
-    guiItemStacks.init(CentrifugeBlockEntity.HONEYCOMB_SLOT, true, 9, 5);
-    guiItemStacks.init(CentrifugeBlockEntity.BOTTLE_SLOT, true, 9, 23);
-    guiItemStacks.init(CentrifugeBlockEntity.OUTPUT1, false, 108, 5);
-    guiItemStacks.init(CentrifugeBlockEntity.OUTPUT2, false, 108, 23);
-    guiItemStacks.init(CentrifugeBlockEntity.HONEY_BOTTLE, false, 59, 44);
+    guiItemStacks.init(CentrifugeTileEntity.HONEYCOMB_SLOT, true, 9, 5);
+    guiItemStacks.init(CentrifugeTileEntity.BOTTLE_SLOT, true, 9, 23);
+    guiItemStacks.init(CentrifugeTileEntity.OUTPUT1, false, 108, 5);
+    guiItemStacks.init(CentrifugeTileEntity.OUTPUT2, false, 108, 23);
+    guiItemStacks.init(CentrifugeTileEntity.HONEY_BOTTLE, false, 59, 44);
     guiItemStacks.set(iIngredients);
   }
 

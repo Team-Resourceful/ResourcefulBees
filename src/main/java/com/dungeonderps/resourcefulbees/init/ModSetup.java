@@ -1,7 +1,7 @@
 package com.dungeonderps.resourcefulbees.init;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
-import com.dungeonderps.resourcefulbees.block.beehive.Tier1BeehiveBlock;
+import com.dungeonderps.resourcefulbees.block.beehive.TieredBeehiveBlock;
 import net.minecraft.block.BeehiveBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.DispenserBlock;
@@ -109,14 +109,14 @@ public class ModSetup {
                                 this.successful = true;
                             }
                         }
-                        else if (blockstate.getBlock() instanceof Tier1BeehiveBlock) {
+                        else if (blockstate.getBlock() instanceof TieredBeehiveBlock) {
                             int i = blockstate.get(BeehiveBlock.HONEY_LEVEL);
                             if (i >= 5) {
                                 if (stack.attemptDamageItem(1, world.rand, null)) {
                                     stack.setCount(0);
                                 }
 
-                                Tier1BeehiveBlock.dropResourceHoneycomb((Tier1BeehiveBlock) blockstate.getBlock(), world, blockpos);
+                                TieredBeehiveBlock.dropResourceHoneycomb((TieredBeehiveBlock) blockstate.getBlock(), world, blockpos);
                                 ((BeehiveBlock) blockstate.getBlock()).takeHoney(world, blockstate, blockpos, null,
                                         BeehiveTileEntity.State.BEE_RELEASED);
                                 this.successful = true;

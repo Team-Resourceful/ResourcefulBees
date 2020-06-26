@@ -2,7 +2,7 @@ package com.dungeonderps.resourcefulbees.compat.hwyla;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.block.HoneycombBlock;
-import com.dungeonderps.resourcefulbees.block.beehive.Tier1BeehiveBlock;
+import com.dungeonderps.resourcefulbees.block.beehive.TieredBeehiveBlock;
 import mcp.mobius.waila.api.IRegistrar;
 import mcp.mobius.waila.api.IWailaPlugin;
 import mcp.mobius.waila.api.TooltipPosition;
@@ -16,9 +16,9 @@ public class HwylaCompat implements IWailaPlugin {
 
     @Override
     public void register(IRegistrar iRegistrar) {
-        iRegistrar.registerComponentProvider(new TieredBeehiveCompat(), TooltipPosition.BODY, Tier1BeehiveBlock.class);
+        iRegistrar.registerComponentProvider(new TieredBeehiveCompat(), TooltipPosition.BODY, TieredBeehiveBlock.class);
         iRegistrar.registerTooltipRenderer(BEEHIVE_SMOKER_PROGRESS, new ProgressBar());
-        iRegistrar.registerBlockDataProvider(new TieredBeehiveCompat(), Tier1BeehiveBlock.class);
+        iRegistrar.registerBlockDataProvider(new TieredBeehiveCompat(), TieredBeehiveBlock.class);
 
         iRegistrar.registerBlockDataProvider(new HoneycombBlockCompat(), HoneycombBlock.class);
         iRegistrar.registerComponentProvider(new HoneycombBlockCompat(), TooltipPosition.HEAD, HoneycombBlock.class);

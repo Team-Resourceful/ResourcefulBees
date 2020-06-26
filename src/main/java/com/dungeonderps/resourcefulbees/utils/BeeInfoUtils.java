@@ -38,7 +38,7 @@ public class BeeInfoUtils {
         String parent1 = bee.getParent1();
         String parent2 = bee.getParent2();
         int hash = getHashcode(parent1, parent2);
-        FAMILY_TREE.put(hash, bee.getName());
+        FAMILY_TREE.computeIfAbsent(hash, k -> new HashSet<>()).add(bee.getName());
     }
 
     public static int getHashcode(String parent1, String parent2){

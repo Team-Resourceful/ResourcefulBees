@@ -8,14 +8,14 @@ import net.minecraft.tileentity.TileEntityType;
 
 import javax.annotation.Nonnull;
 
-public class Tier4BeehiveBlockEntity extends Tier1BeehiveBlockEntity {
-  protected final int TIER = 4;
-  protected final float TIER_MODIFIER = 4f;
+public class Tier2BeehiveTileEntity extends TieredBeehiveTileEntity {
+  protected final int TIER = 2;
+  protected final float TIER_MODIFIER = 1.5f;
 
   @Nonnull
   @Override
   public TileEntityType<?> getType() {
-    return RegistryHandler.T4_BEEHIVE_ENTITY.get();
+    return RegistryHandler.T2_BEEHIVE_ENTITY.get();
   }
 
   @Override
@@ -31,6 +31,6 @@ public class Tier4BeehiveBlockEntity extends Tier1BeehiveBlockEntity {
   @Override
   public boolean isAllowedBee(){
     Block hive = getBlockState().getBlock();
-    return hive == RegistryHandler.T4_BEEHIVE.get();
+    return hive == RegistryHandler.T2_BEEHIVE.get();
   }
 }

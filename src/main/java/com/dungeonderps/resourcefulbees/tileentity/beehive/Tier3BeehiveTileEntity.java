@@ -8,7 +8,7 @@ import net.minecraft.tileentity.TileEntityType;
 
 import javax.annotation.Nonnull;
 
-public class Tier3BeehiveBlockEntity extends Tier1BeehiveBlockEntity {
+public class Tier3BeehiveTileEntity extends TieredBeehiveTileEntity {
   protected final int TIER = 3;
   protected final float TIER_MODIFIER = 2f;
 

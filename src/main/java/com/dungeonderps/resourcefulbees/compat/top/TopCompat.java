@@ -1,13 +1,13 @@
 package com.dungeonderps.resourcefulbees.compat.top;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
-import com.dungeonderps.resourcefulbees.block.beehive.Tier1BeehiveBlock;
+import com.dungeonderps.resourcefulbees.block.beehive.TieredBeehiveBlock;
 import com.dungeonderps.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.dungeonderps.resourcefulbees.lib.BeeConst;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
-import com.dungeonderps.resourcefulbees.tileentity.CentrifugeBlockEntity;
-import com.dungeonderps.resourcefulbees.tileentity.HoneycombBlockEntity;
-import com.dungeonderps.resourcefulbees.tileentity.beehive.Tier1BeehiveBlockEntity;
+import com.dungeonderps.resourcefulbees.tileentity.CentrifugeTileEntity;
+import com.dungeonderps.resourcefulbees.tileentity.HoneycombTileEntity;
+import com.dungeonderps.resourcefulbees.tileentity.beehive.TieredBeehiveTileEntity;
 import mcjty.theoneprobe.api.ElementAlignment;
 import mcjty.theoneprobe.api.IProbeInfo;
 import mcjty.theoneprobe.api.ITheOneProbe;
@@ -43,7 +43,7 @@ public class TopCompat implements Function<ITheOneProbe, Void>
     public Void apply(ITheOneProbe theOneProbe)
     {
         theOneProbe.registerBlockDisplayOverride((mode, probeInfo, player, world, blockState, data) -> {
-            if(world.getTileEntity(data.getPos()) instanceof HoneycombBlockEntity)
+            if(world.getTileEntity(data.getPos()) instanceof HoneycombTileEntity)
             {
                 TileEntity honeyBlock = world.getTileEntity(data.getPos());
                 final ItemStack honeyCombBlock = new ItemStack(RegistryHandler.HONEYCOMB_BLOCK_ITEM.get());
@@ -60,15 +60,15 @@ public class TopCompat implements Function<ITheOneProbe, Void>
                         .text(formatting + BeeConst.MOD_NAME);
                 return true;
             }
-            if(world.getTileEntity(data.getPos()) instanceof Tier1BeehiveBlockEntity)
+            if(world.getTileEntity(data.getPos()) instanceof TieredBeehiveTileEntity)
             {
-                Tier1BeehiveBlockEntity beehiveBlockEntity = (Tier1BeehiveBlockEntity) world.getTileEntity(data.getPos());
+                TieredBeehiveTileEntity beehiveBlockEntity = (TieredBeehiveTileEntity) world.getTileEntity(data.getPos());
                 if(beehiveBlockEntity != null && mode.equals(ProbeMode.EXTENDED)){
-                    Tier1BeehiveBlockEntity ironBeeHive = (Tier1BeehiveBlockEntity) world.getTileEntity(data.getPos());
+                    TieredBeehiveTileEntity ironBeeHive = (TieredBeehiveTileEntity) world.getTileEntity(data.getPos());
                     if (ironBeeHive != null && ironBeeHive.hasCombs()) {
                         int honeyLevel = 0;
-                        if (ironBeeHive.getBlockState().has(Tier1BeehiveBlock.HONEY_LEVEL))
-                            honeyLevel = ironBeeHive.getBlockState().get(Tier1BeehiveBlock.HONEY_LEVEL);
+                        if (ironBeeHive.getBlockState().has(TieredBeehiveBlock.HONEY_LEVEL))
+                            honeyLevel = ironBeeHive.getBlockState().get(TieredBeehiveBlock.HONEY_LEVEL);
                         IProbeInfo vertical;
                         IProbeInfo horizontal;
                         probeInfo.horizontal()
@@ -91,9 +91,9 @@ public class TopCompat implements Function<ITheOneProbe, Void>
                     }
                 }
             }
-            if(world.getTileEntity(data.getPos()) instanceof CentrifugeBlockEntity)
+            if(world.getTileEntity(data.getPos()) instanceof CentrifugeTileEntity)
             {
-                CentrifugeBlockEntity beeHiveBlock = (CentrifugeBlockEntity) world.getTileEntity(data.getPos());
+                CentrifugeTileEntity beeHiveBlock = (CentrifugeTileEntity) world.getTileEntity(data.getPos());
 
                 if(beeHiveBlock != null && beeHiveBlock.time > 0) {
                     probeInfo.horizontal()

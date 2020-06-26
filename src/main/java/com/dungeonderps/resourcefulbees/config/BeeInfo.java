@@ -14,7 +14,7 @@ public class BeeInfo {
 
     public static final LinkedHashMap<String, BeeData> BEE_INFO = new LinkedHashMap<>();
     public static final HashMap<Biome, Set<String>> SPAWNABLE_BIOMES = new HashMap<>();
-    public static final HashMap<Integer, String> FAMILY_TREE = new HashMap<>();
+    public static final HashMap<Integer, Set<String>> FAMILY_TREE = new HashMap<>();
 
     public static float[] getBeeColorAsFloat(String color){
         java.awt.Color tempColor = java.awt.Color.decode(color);

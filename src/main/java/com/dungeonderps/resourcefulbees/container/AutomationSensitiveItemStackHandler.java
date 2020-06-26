@@ -13,7 +13,7 @@
  */
 package com.dungeonderps.resourcefulbees.container;
 
-import com.dungeonderps.resourcefulbees.tileentity.CentrifugeBlockEntity;
+import com.dungeonderps.resourcefulbees.tileentity.CentrifugeTileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.NonNullList;
@@ -82,8 +82,8 @@ public class AutomationSensitiveItemStackHandler extends ItemStackHandler {
     }
 
     public final boolean canAccept(int slot, ItemStack stack, boolean automation) {
-        if (slot == CentrifugeBlockEntity.BOTTLE_SLOT && !stack.getItem().equals(Items.GLASS_BOTTLE) ||
-                slot == CentrifugeBlockEntity.HONEYCOMB_SLOT  &&  stack.getItem().equals(Items.GLASS_BOTTLE))
+        if (slot == CentrifugeTileEntity.BOTTLE_SLOT && !stack.getItem().equals(Items.GLASS_BOTTLE) ||
+                slot == CentrifugeTileEntity.HONEYCOMB_SLOT  &&  stack.getItem().equals(Items.GLASS_BOTTLE))
             return false;
         return this.getAcceptor().canAccept(slot, stack, automation);
     }

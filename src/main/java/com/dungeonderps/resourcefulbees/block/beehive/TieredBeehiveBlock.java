@@ -3,7 +3,7 @@ package com.dungeonderps.resourcefulbees.block.beehive;
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.lib.BeeConst;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
-import com.dungeonderps.resourcefulbees.tileentity.beehive.Tier1BeehiveBlockEntity;
+import com.dungeonderps.resourcefulbees.tileentity.beehive.TieredBeehiveTileEntity;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.BeehiveBlock;
 import net.minecraft.block.Block;
@@ -28,13 +28,13 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class Tier1BeehiveBlock extends BeehiveBlock {
+public class TieredBeehiveBlock extends BeehiveBlock {
 
-  public Tier1BeehiveBlock(Block.Properties properties) {
+  public TieredBeehiveBlock(Block.Properties properties) {
     super(properties);
   }
 
-  public static void dropResourceHoneycomb(Tier1BeehiveBlock block, World world, BlockPos pos) {
+  public static void dropResourceHoneycomb(TieredBeehiveBlock block, World world, BlockPos pos) {
     block.dropResourceHoneycomb(world, pos);
   }
 
@@ -51,16 +51,16 @@ public class Tier1BeehiveBlock extends BeehiveBlock {
   
   public void smokeHive(BlockPos pos, World world) {
 	    TileEntity blockEntity = world.getTileEntity(pos);
-	    if (blockEntity instanceof Tier1BeehiveBlockEntity) {
-	      Tier1BeehiveBlockEntity hive = (Tier1BeehiveBlockEntity)blockEntity;
+	    if (blockEntity instanceof TieredBeehiveTileEntity) {
+	      TieredBeehiveTileEntity hive = (TieredBeehiveTileEntity)blockEntity;
 	      hive.isSmoked = true;
 	    }
   }
 
   public boolean isHiveSmoked(BlockPos pos, World world) {
 	    TileEntity blockEntity = world.getTileEntity(pos);
-	    if (blockEntity instanceof Tier1BeehiveBlockEntity) {
-	      Tier1BeehiveBlockEntity hive = (Tier1BeehiveBlockEntity)blockEntity;
+	    if (blockEntity instanceof TieredBeehiveTileEntity) {
+	      TieredBeehiveTileEntity hive = (TieredBeehiveTileEntity)blockEntity;
 	      return hive.isSmoked;
 	    }
 	    else
@@ -132,8 +132,8 @@ public class Tier1BeehiveBlock extends BeehiveBlock {
 
   public void dropResourceHoneycomb(World world, BlockPos pos) {
     TileEntity blockEntity = world.getTileEntity(pos);
-    if (blockEntity instanceof Tier1BeehiveBlockEntity) {
-      Tier1BeehiveBlockEntity hive = (Tier1BeehiveBlockEntity)blockEntity;
+    if (blockEntity instanceof TieredBeehiveTileEntity) {
+      TieredBeehiveTileEntity hive = (TieredBeehiveTileEntity)blockEntity;
       while (hive.hasCombs()) {
         ItemStack comb = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
         String honeycomb = hive.getResourceHoneycomb();
@@ -147,6 +147,6 @@ public class Tier1BeehiveBlock extends BeehiveBlock {
   @Nullable
   @Override
   public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-    return new Tier1BeehiveBlockEntity();
+    return new TieredBeehiveTileEntity();
   }
 }

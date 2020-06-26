@@ -1,6 +1,6 @@
 package com.dungeonderps.resourcefulbees.block;
 
-import com.dungeonderps.resourcefulbees.tileentity.CentrifugeBlockEntity;
+import com.dungeonderps.resourcefulbees.tileentity.CentrifugeTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
@@ -55,8 +55,8 @@ public class CentrifugeBlock extends Block {
     public void onBlockPlacedBy(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
         if (stack.hasDisplayName()) {
             TileEntity tileentity = worldIn.getTileEntity(pos);
-            if (tileentity instanceof CentrifugeBlockEntity) {
-                ((CentrifugeBlockEntity)tileentity).setCustomName(stack.getDisplayName());
+            if (tileentity instanceof CentrifugeTileEntity) {
+                ((CentrifugeTileEntity)tileentity).setCustomName(stack.getDisplayName());
             }
         }
         super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
@@ -65,9 +65,9 @@ public class CentrifugeBlock extends Block {
     @Override
     public void onReplaced(@Nonnull BlockState state1, World world, @Nonnull BlockPos pos, @Nonnull BlockState state, boolean isMoving) {
         TileEntity blockEntity = world.getTileEntity(pos);
-        if (blockEntity instanceof CentrifugeBlockEntity && state.getBlock() != state1.getBlock()){
-            CentrifugeBlockEntity centrifugeBlockEntity = (CentrifugeBlockEntity)blockEntity;
-            ItemStackHandler h = centrifugeBlockEntity.h;
+        if (blockEntity instanceof CentrifugeTileEntity && state.getBlock() != state1.getBlock()){
+            CentrifugeTileEntity centrifugeTileEntity = (CentrifugeTileEntity)blockEntity;
+            ItemStackHandler h = centrifugeTileEntity.h;
             IntStream.range(0, h.getSlots()).mapToObj(h::getStackInSlot).filter(s -> !s.isEmpty()).forEach(stack -> InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack));
         }
         super.onReplaced(state1, world, pos, state, isMoving);
@@ -81,7 +81,7 @@ public class CentrifugeBlock extends Block {
     @Nullable
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new CentrifugeBlockEntity();
+        return new CentrifugeTileEntity();
     }
 
     @Override

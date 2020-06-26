@@ -1,23 +1,22 @@
 package com.dungeonderps.resourcefulbees.registry;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
+import com.dungeonderps.resourcefulbees.block.ApiaryStorageBlock;
 import com.dungeonderps.resourcefulbees.block.CentrifugeBlock;
 import com.dungeonderps.resourcefulbees.block.HoneycombBlock;
-import com.dungeonderps.resourcefulbees.block.beehive.Tier1BeehiveBlock;
-import com.dungeonderps.resourcefulbees.block.beehive.Tier2BeehiveBlock;
-import com.dungeonderps.resourcefulbees.block.beehive.Tier3BeehiveBlock;
-import com.dungeonderps.resourcefulbees.block.beehive.Tier4BeehiveBlock;
+import com.dungeonderps.resourcefulbees.block.beehive.*;
 import com.dungeonderps.resourcefulbees.block.beenest.*;
+import com.dungeonderps.resourcefulbees.container.ApiaryStorageContainer;
 import com.dungeonderps.resourcefulbees.container.CentrifugeContainer;
+import com.dungeonderps.resourcefulbees.container.UnvalidatedApiaryContainer;
+import com.dungeonderps.resourcefulbees.container.ValidatedApiaryContainer;
 import com.dungeonderps.resourcefulbees.entity.passive.ResourcefulBee;
 import com.dungeonderps.resourcefulbees.item.*;
 import com.dungeonderps.resourcefulbees.recipe.CentrifugeRecipe;
-import com.dungeonderps.resourcefulbees.tileentity.CentrifugeBlockEntity;
-import com.dungeonderps.resourcefulbees.tileentity.HoneycombBlockEntity;
-import com.dungeonderps.resourcefulbees.tileentity.beehive.Tier1BeehiveBlockEntity;
-import com.dungeonderps.resourcefulbees.tileentity.beehive.Tier2BeehiveBlockEntity;
-import com.dungeonderps.resourcefulbees.tileentity.beehive.Tier3BeehiveBlockEntity;
-import com.dungeonderps.resourcefulbees.tileentity.beehive.Tier4BeehiveBlockEntity;
+import com.dungeonderps.resourcefulbees.tileentity.ApiaryStorageTileEntity;
+import com.dungeonderps.resourcefulbees.tileentity.CentrifugeTileEntity;
+import com.dungeonderps.resourcefulbees.tileentity.HoneycombTileEntity;
+import com.dungeonderps.resourcefulbees.tileentity.beehive.*;
 import com.dungeonderps.resourcefulbees.tileentity.beenest.*;
 import com.dungeonderps.resourcefulbees.world.BeeNestFeature;
 import com.google.common.collect.ImmutableSet;
@@ -58,7 +57,7 @@ public class RegistryHandler {
 	public static final DeferredRegister<VillagerProfession> PROFESSIONS = new DeferredRegister<>(ForgeRegistries.PROFESSIONS, ResourcefulBees.MOD_ID);
 	public static final DeferredRegister<Feature<?>> FEATURES = new DeferredRegister<>(ForgeRegistries.FEATURES, ResourcefulBees.MOD_ID);
 
-	public static void init() {
+    public static void init() {
 		IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
 		ITEMS.register(bus);
 		BLOCKS.register(bus);
@@ -73,7 +72,7 @@ public class RegistryHandler {
 
 	//**************BLOCKS********************************************
 
-	public static final RegistryObject<Block> T1_BEEHIVE = BLOCKS.register("t1_beehive", () -> new Tier1BeehiveBlock(Block.Properties.create(Material.WOOD).hardnessAndResistance(2).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> T1_BEEHIVE = BLOCKS.register("t1_beehive", () -> new TieredBeehiveBlock(Block.Properties.create(Material.WOOD).hardnessAndResistance(2).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> T2_BEEHIVE = BLOCKS.register("t2_beehive", () -> new Tier2BeehiveBlock(Block.Properties.create(Material.WOOD).hardnessAndResistance(2).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> T3_BEEHIVE = BLOCKS.register("t3_beehive", () -> new Tier3BeehiveBlock(Block.Properties.create(Material.WOOD).hardnessAndResistance(2).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> T4_BEEHIVE = BLOCKS.register("t4_beehive", () -> new Tier4BeehiveBlock(Block.Properties.create(Material.WOOD).hardnessAndResistance(2).sound(SoundType.WOOD)));
@@ -89,6 +88,8 @@ public class RegistryHandler {
 	public static final RegistryObject<Block> PRISMARINE_BEE_NEST = BLOCKS.register("prismarine_bee_nest", () -> new PrismarineBeeNestBlock(Block.Properties.create(Material.WOOD).hardnessAndResistance(0.3F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> PURPUR_BEE_NEST = BLOCKS.register("purpur_bee_nest", () -> new PurpurBeeNestBlock(Block.Properties.create(Material.WOOD).hardnessAndResistance(0.3F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> WITHER_BEE_NEST = BLOCKS.register("wither_bee_nest", () -> new WitherBeeNestBlock(Block.Properties.create(Material.WOOD).hardnessAndResistance(0.3F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> APIARY_BLOCK = BLOCKS.register("apiary", () -> new ApiaryBlock(Block.Properties.create(Material.WOOD).hardnessAndResistance(.3F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> APIARY_STORAGE_BLOCK = BLOCKS.register("apiary_storage", () -> new ApiaryStorageBlock(Block.Properties.create(Material.WOOD).hardnessAndResistance(.3F).sound(SoundType.WOOD)));
 
 	//**************ITEMS*********************************************
 
@@ -114,31 +115,33 @@ public class RegistryHandler {
 	public static final RegistryObject<Item> PRISMARINE_BEE_NEST_ITEM = ITEMS.register("prismarine_bee_nest",() -> new BlockItem(PRISMARINE_BEE_NEST.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
 	public static final RegistryObject<Item> PURPUR_BEE_NEST_ITEM = ITEMS.register("purpur_bee_nest",() -> new BlockItem(PURPUR_BEE_NEST.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
 	public static final RegistryObject<Item> WITHER_BEE_NEST_ITEM = ITEMS.register("wither_bee_nest",() -> new BlockItem(WITHER_BEE_NEST.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
+	public static final RegistryObject<Item> APIARY_ITEM = ITEMS.register("apiary",() -> new BlockItem(APIARY_BLOCK.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
+	public static final RegistryObject<Item> APIARY_STORAGE_ITEM = ITEMS.register("apiary_storage",() -> new BlockItem(APIARY_STORAGE_BLOCK.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
 
 	//**************TILE ENTITIES*************************************
 
 	public static final RegistryObject<TileEntityType<?>> T1_BEEHIVE_ENTITY = TILE_ENTITY_TYPES.register("t1_beehive", () -> TileEntityType.Builder
-			.create(Tier1BeehiveBlockEntity::new, T1_BEEHIVE.get())
+			.create(TieredBeehiveTileEntity::new, T1_BEEHIVE.get())
 			.build(null));
 
 	public static final RegistryObject<TileEntityType<?>> T2_BEEHIVE_ENTITY = TILE_ENTITY_TYPES.register("t2_beehive", () -> TileEntityType.Builder
-			.create(Tier2BeehiveBlockEntity::new, T2_BEEHIVE.get())
+			.create(Tier2BeehiveTileEntity::new, T2_BEEHIVE.get())
 			.build(null));
 
 	public static final RegistryObject<TileEntityType<?>> T3_BEEHIVE_ENTITY = TILE_ENTITY_TYPES.register("t3_beehive", () -> TileEntityType.Builder
-			.create(Tier3BeehiveBlockEntity::new, T3_BEEHIVE.get())
+			.create(Tier3BeehiveTileEntity::new, T3_BEEHIVE.get())
 			.build(null));
 
 	public static final RegistryObject<TileEntityType<?>> T4_BEEHIVE_ENTITY = TILE_ENTITY_TYPES.register("t4_beehive", () -> TileEntityType.Builder
-			.create(Tier4BeehiveBlockEntity::new, T4_BEEHIVE.get())
+			.create(Tier4BeehiveTileEntity::new, T4_BEEHIVE.get())
 			.build(null));
 
 	public static final RegistryObject<TileEntityType<?>> HONEYCOMB_BLOCK_ENTITY = TILE_ENTITY_TYPES.register("resourceful_honeycomb_block", () -> TileEntityType.Builder
-			.create(HoneycombBlockEntity::new, HONEYCOMB_BLOCK.get())
+			.create(HoneycombTileEntity::new, HONEYCOMB_BLOCK.get())
 			.build(null));
 
 	public static final RegistryObject<TileEntityType<?>> CENTRIFUGE_ENTITY = TILE_ENTITY_TYPES.register("centrifuge", () -> TileEntityType.Builder
-			.create(CentrifugeBlockEntity::new, CENTRIFUGE.get())
+			.create(CentrifugeTileEntity::new, CENTRIFUGE.get())
 			.build(null));
 
 	public static final RegistryObject<TileEntityType<?>> BEE_NEST_ENTITY = TILE_ENTITY_TYPES.register("bee_nest", () -> TileEntityType.Builder
@@ -173,6 +176,14 @@ public class RegistryHandler {
 			.create(WitherBeeNest::new, WITHER_BEE_NEST.get())
 			.build(null));
 
+	public static final RegistryObject<TileEntityType<?>> APIARY_TILE_ENTITY = TILE_ENTITY_TYPES.register("apiary", () -> TileEntityType.Builder
+			.create(ApiaryTileEntity::new, APIARY_BLOCK.get())
+			.build(null));
+
+	public static final RegistryObject<TileEntityType<?>> APIARY_STORAGE_TILE_ENTITY = TILE_ENTITY_TYPES.register("apiary_storage", () -> TileEntityType.Builder
+			.create(ApiaryStorageTileEntity::new, APIARY_STORAGE_BLOCK.get())
+			.build(null));
+
 	//**************ENTITIES******************************************
 
 	public static final RegistryObject<EntityType<ResourcefulBee>> CUSTOM_BEE = ENTITY_TYPES.register("bee", () -> EntityType.Builder
@@ -182,7 +193,7 @@ public class RegistryHandler {
 
 	//**************POINT OF INTEREST**********************************
 
-	public static final RegistryObject<PointOfInterestType> T1_BEEHIVE_POI = POIS.register("t1_beehive", () -> new PointOfInterestType("t1_beehive", ImmutableSet.copyOf(T1_BEEHIVE.get().getStateContainer().getValidStates()), 1, 1));
+	public static final RegistryObject<PointOfInterestType> TIERED_BEEHIVE_POI = POIS.register("t1_beehive", () -> new PointOfInterestType("t1_beehive", ImmutableSet.copyOf(T1_BEEHIVE.get().getStateContainer().getValidStates()), 1, 1));
 
 	//*************SPAWN EGGS******************************************
 
@@ -194,6 +205,16 @@ public class RegistryHandler {
 	public static final RegistryObject<ContainerType<CentrifugeContainer>> CENTRIFUGE_CONTAINER = CONTAINER_TYPES.register("centrifuge", () -> IForgeContainerType
 			.create((id,inv,c) -> new CentrifugeContainer(id, inv.player.world, c.readBlockPos(), inv)));
 
+	public static final RegistryObject<ContainerType<UnvalidatedApiaryContainer>> UNVALIDATED_APIARY_CONTAINER = CONTAINER_TYPES.register("unvalidated_apiary", () -> IForgeContainerType
+			.create((id,inv,c) -> new UnvalidatedApiaryContainer(id, inv.player.world, c.readBlockPos(), inv)));
+
+	public static final RegistryObject<ContainerType<ValidatedApiaryContainer>> VALIDATED_APIARY_CONTAINER = CONTAINER_TYPES.register("validated_apiary", () -> IForgeContainerType
+			.create((id,inv,c) -> new ValidatedApiaryContainer(id, inv.player.world, c.readBlockPos(), inv)));
+
+	public static final RegistryObject<ContainerType<ApiaryStorageContainer>> APIARY_STORAGE_CONTAINER = CONTAINER_TYPES.register("apiary_storage", () -> IForgeContainerType
+			.create((id,inv,c) -> new ApiaryStorageContainer(id, inv.player.world, c.readBlockPos(), inv)));
+
+
 	//****************RECIPES********************************************
 
 	public static final RegistryObject<IRecipeSerializer<?>> CENTRIFUGE_RECIPE = RECIPE_SERIALIZERS.register("centrifuge",
@@ -201,7 +222,7 @@ public class RegistryHandler {
 
 	//****************VILLAGER PROFESSIONS*******************************
 
-	public static final RegistryObject<VillagerProfession> BEEKEEPER = PROFESSIONS.register("beekeeper", () -> new VillagerProfession("beekeeper", T1_BEEHIVE_POI.get(), ImmutableSet.of(), ImmutableSet.of(), SoundEvents.ITEM_BOTTLE_FILL));
+	public static final RegistryObject<VillagerProfession> BEEKEEPER = PROFESSIONS.register("beekeeper", () -> new VillagerProfession("beekeeper", TIERED_BEEHIVE_POI.get(), ImmutableSet.of(), ImmutableSet.of(), SoundEvents.ITEM_BOTTLE_FILL));
 
 	//****************FEATURES*****************************************
 	public static final RegistryObject<Feature<NoFeatureConfig>> BEE_NEST_FEATURE = FEATURES.register("bee_nest_feature", () -> new BeeNestFeature(NoFeatureConfig::deserialize));

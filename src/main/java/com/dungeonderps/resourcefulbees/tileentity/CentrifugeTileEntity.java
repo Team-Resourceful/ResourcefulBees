@@ -29,7 +29,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class CentrifugeBlockEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider {
+public class CentrifugeTileEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider {
 
     private ITextComponent customName;
 
@@ -47,7 +47,7 @@ public class CentrifugeBlockEntity extends TileEntity implements ITickableTileEn
     public ItemStack failedMatch = ItemStack.EMPTY;
     public int totalTime = 0;
 
-    public CentrifugeBlockEntity() {
+    public CentrifugeTileEntity() {
         super(RegistryHandler.CENTRIFUGE_ENTITY.get());
     }
 
@@ -275,12 +275,12 @@ public class CentrifugeBlockEntity extends TileEntity implements ITickableTileEn
 
         @Override
         public AutomationSensitiveItemStackHandler.IAcceptor getAcceptor() {
-            return CentrifugeBlockEntity.this.getAcceptor();
+            return CentrifugeTileEntity.this.getAcceptor();
         }
 
         @Override
         public AutomationSensitiveItemStackHandler.IRemover getRemover() {
-            return CentrifugeBlockEntity.this.getRemover();
+            return CentrifugeTileEntity.this.getRemover();
         }
 
         @Override
