@@ -48,14 +48,14 @@ import javax.annotation.Nullable;
 import java.util.*;
 
 public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider {
-
+    ///     import    -   jar slot     -    export
     public static final int IMPORT_IN = 0;
     public static final int EXPORT_IN = 1;
     public static final int IMPORT_OUT = 2;
     public static final int EXPORT_OUT = 3;
     public static long start;
     public static long end;
-    public final HashMap<String, DummyBee> bees = new HashMap<>();
+    public final HashMap<String, ApiaryBee> bees = new HashMap<>();
     public final List<BlockPos> STRUCTURE_BLOCKS = new ArrayList<>();
     protected final int TIER = 5;
     protected final float TIER_MODIFIER = 5;
@@ -179,7 +179,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
                     maxTimeInHive = this.getTier() > 1 ? (int) (maxTimeInHive * (1 - getTier() * .05)) : maxTimeInHive;
                     int finalMaxTimeInHive = maxTimeInHive;
                     //if (bee1.hasFlower()) {
-                        this.bees.computeIfAbsent(bee1.getBeeType(), k -> new DummyBee(nbt, ticksInHive, hasNectar ? finalMaxTimeInHive : BeeConst.MIN_HIVE_TIME, bee1.getFlowerPos()));
+                        this.bees.computeIfAbsent(bee1.getBeeType(), k -> new ApiaryBee(nbt, ticksInHive, hasNectar ? finalMaxTimeInHive : BeeConst.MIN_HIVE_TIME, bee1.getFlowerPos()));
                     //} else {
                     //    this.bees.computeIfAbsent(bee1.getBeeType(), k -> new DummyBee(nbt, ticksInHive, hasNectar ? finalMaxTimeInHive : BeeConst.MIN_HIVE_TIME, null));
                     //}
@@ -214,21 +214,21 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     }
 
     private void tickBees() {
-        Iterator<Map.Entry<String, DummyBee>> iterator = this.bees.entrySet().iterator();
+        Iterator<Map.Entry<String, ApiaryBee>> iterator = this.bees.entrySet().iterator();
         BlockState blockstate = this.getBlockState();
 
         while (iterator.hasNext()) {
-            Map.Entry<String, DummyBee> element = iterator.next();
-            DummyBee dummyBee = element.getValue();
-            if (dummyBee.ticksInHive > dummyBee.minOccupationTicks) {
+            Map.Entry<String, ApiaryBee> element = iterator.next();
+            ApiaryBee apiaryBee = element.getValue();
+            if (apiaryBee.ticksInHive > apiaryBee.minOccupationTicks && !apiaryBee.isLocked) {
 
-                CompoundNBT compoundnbt = dummyBee.entityData;
+                CompoundNBT compoundnbt = apiaryBee.entityData;
                 State state = compoundnbt.getBoolean("HasNectar") ? State.HONEY_DELIVERED : State.BEE_RELEASED;
-                if (this.releaseBee(blockstate, compoundnbt, null, state, dummyBee.savedFlowerPos, false)) {
+                if (this.releaseBee(blockstate, compoundnbt, null, state, apiaryBee.savedFlowerPos, false)) {
                     iterator.remove();
                 }
             } else {
-                dummyBee.ticksInHive++;
+                apiaryBee.ticksInHive++;
             }
         }
     }
@@ -237,12 +237,12 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     public ListNBT getBees() {
         ListNBT listnbt = new ListNBT();
 
-        this.bees.forEach((key, dummyBee) -> {
-            dummyBee.entityData.removeUniqueId("UUID");
+        this.bees.forEach((key, apiaryBee) -> {
+            apiaryBee.entityData.removeUniqueId("UUID");
             CompoundNBT compoundnbt = new CompoundNBT();
-            compoundnbt.put("EntityData", dummyBee.entityData);
-            compoundnbt.putInt("TicksInHive", dummyBee.ticksInHive);
-            compoundnbt.putInt("MinOccupationTicks", dummyBee.minOccupationTicks);
+            compoundnbt.put("EntityData", apiaryBee.entityData);
+            compoundnbt.putInt("TicksInHive", apiaryBee.ticksInHive);
+            compoundnbt.putInt("MinOccupationTicks", apiaryBee.minOccupationTicks);
             listnbt.add(compoundnbt);
         });
 
@@ -459,14 +459,14 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
         EMERGENCY
     }
 
-    public static class DummyBee {
+    public static class ApiaryBee {
         public final CompoundNBT entityData;
         public final int minOccupationTicks;
         public final BlockPos savedFlowerPos;
         public int ticksInHive;
         public boolean isLocked = false;
 
-        public DummyBee(CompoundNBT nbt, int ticksinhive, int minoccupationticks, @Nullable BlockPos flowerPos) {
+        public ApiaryBee(CompoundNBT nbt, int ticksinhive, int minoccupationticks, @Nullable BlockPos flowerPos) {
             nbt.removeUniqueId("UUID");
             this.entityData = nbt;
             this.ticksInHive = ticksinhive;
