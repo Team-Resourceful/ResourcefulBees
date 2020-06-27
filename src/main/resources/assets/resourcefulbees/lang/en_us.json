@@ -21,6 +21,7 @@
 	"gui.resourcefulbees.beehive.num_combs": "Honeycombs",
 	"gui.resourcefulbees.apiary.button.validate": "Validate",
 	"gui.resourcefulbees.apiary.button.build": "Build",
+	"gui.resourcefulbees.apiary.button.build.creative": "Creative Mode Only!",
 
 	"block.resourcefulbees.t1_beehive": "Tier 1 Beehive",
 	"block.resourcefulbees.t2_beehive": "Tier 2 Beehive",
