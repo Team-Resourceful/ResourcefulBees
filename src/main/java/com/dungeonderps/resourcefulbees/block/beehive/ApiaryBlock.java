@@ -4,14 +4,10 @@ import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.lib.BeeConst;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.tileentity.beehive.ApiaryTileEntity;
-import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalBlock;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.passive.BeeEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
@@ -26,7 +22,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.MathHelper;
@@ -39,7 +34,6 @@ import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.List;
 import java.util.Random;
 
 public class ApiaryBlock extends Block {
@@ -51,38 +45,6 @@ public class ApiaryBlock extends Block {
   public ApiaryBlock(Properties properties) {
     super(properties);
     this.setDefaultState(this.stateContainer.getBaseState().with(VALIDATED, false).with(FACING, Direction.NORTH));
-  }
-
-  /**
-   * Spawns the block's drops in the world. By the time this is called the Block has possibly been set to air via
-   * Block.removedByPlayer
-   */
-  public void harvestBlock(@Nonnull World worldIn, @Nonnull PlayerEntity player, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nullable TileEntity te, @Nonnull ItemStack stack) {
-    super.harvestBlock(worldIn, player, pos, state, te, stack);
-    if (!worldIn.isRemote && te instanceof ApiaryTileEntity) {
-      ApiaryTileEntity apiaryTileEntity = (ApiaryTileEntity)te;
-      if (EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, stack) == 0) {
-        apiaryTileEntity.angerBees(player, state, ApiaryTileEntity.State.EMERGENCY);
-        worldIn.updateComparatorOutputLevel(pos, this);
-        this.angerNearbyBees(worldIn, pos);
-      }
-
-      CriteriaTriggers.BEE_NEST_DESTROYED.test((ServerPlayerEntity)player, state.getBlock(), stack, apiaryTileEntity.getBeeCount());
-    }
-  }
-
-  private void angerNearbyBees(World world, BlockPos pos) {
-    List<BeeEntity> beeEntityList = world.getEntitiesWithinAABB(BeeEntity.class, (new AxisAlignedBB(pos)).grow(8.0D, 6.0D, 8.0D));
-    if (!beeEntityList.isEmpty()) {
-      List<PlayerEntity> playerEntityList = world.getEntitiesWithinAABB(PlayerEntity.class, (new AxisAlignedBB(pos)).grow(8.0D, 6.0D, 8.0D));
-      int size = playerEntityList.size();
-
-      for (BeeEntity beeEntity : beeEntityList) {
-        if (beeEntity.getAttackTarget() == null) {
-          beeEntity.setBeeAttacker(playerEntityList.get(world.rand.nextInt(size)));
-        }
-      }
-    }
   }
 
   @Nonnull
@@ -162,6 +124,9 @@ public class ApiaryBlock extends Block {
   }
 
   public BlockState getStateForPlacement(BlockItemUseContext context) {
+    if (context.getPlayer() != null && context.getPlayer().isSneaking()) {
+      return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing());
+    }
     return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite());
   }
 

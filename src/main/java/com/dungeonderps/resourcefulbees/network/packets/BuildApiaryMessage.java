@@ -9,29 +9,29 @@ import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class ValidateApiaryMessage {
+public class BuildApiaryMessage {
 
     private final BlockPos pos;
     private final int verticalOffset;
     private final int horizontalOffset;
 
-    public ValidateApiaryMessage(BlockPos pos, int verticalOffset, int horizontalOffset){
+    public BuildApiaryMessage(BlockPos pos, int verticalOffset, int horizontalOffset){
         this.pos = pos;
         this.verticalOffset = verticalOffset;
         this.horizontalOffset = horizontalOffset;
     }
 
-    public static void encode(ValidateApiaryMessage message, PacketBuffer buffer){
+    public static void encode(BuildApiaryMessage message, PacketBuffer buffer){
         buffer.writeBlockPos(message.pos);
         buffer.writeInt(message.verticalOffset);
         buffer.writeInt(message.horizontalOffset);
     }
 
-    public static ValidateApiaryMessage decode(PacketBuffer buffer){
-        return new ValidateApiaryMessage(buffer.readBlockPos(), buffer.readInt(), buffer.readInt());
+    public static BuildApiaryMessage decode(PacketBuffer buffer){
+        return new BuildApiaryMessage(buffer.readBlockPos(), buffer.readInt(), buffer.readInt());
     }
 
-    public static void handle(ValidateApiaryMessage message, Supplier<NetworkEvent.Context> context){
+    public static void handle(BuildApiaryMessage message, Supplier<NetworkEvent.Context> context){
         context.get().enqueueWork(() -> {
             ServerPlayerEntity player = context.get().getSender();
             if (player != null) {
@@ -41,7 +41,7 @@ public class ValidateApiaryMessage {
                         ApiaryTileEntity apiaryTileEntity = (ApiaryTileEntity) tileEntity;
                         apiaryTileEntity.setVerticalOffset(message.verticalOffset);
                         apiaryTileEntity.setHorizontalOffset(message.horizontalOffset);
-                        apiaryTileEntity.runStructureValidation(player);
+                        apiaryTileEntity.runCreativeBuild(player);
                     }
                 }
             }

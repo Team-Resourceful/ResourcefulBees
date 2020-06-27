@@ -7,7 +7,7 @@ Here you will find information on how to customize your new bees. Below are link
 **Note:** Set "Generate Default Bees" Config option to false if you would like to overwrite the default variants.
 
 
-[How to create a new bee.](https://github.com/Dungeon-Derps-Development/ResourcefulBees/wiki/Create-New-Bee)
+[How to create a new dummyBee.](https://github.com/Dungeon-Derps-Development/ResourcefulBees/wiki/Create-New-Bee)
 
 
 [Custom Bee Data Options Available](https://github.com/Dungeon-Derps-Development/ResourcefulBees/wiki/Bee-Data)

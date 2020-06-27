@@ -19,6 +19,8 @@
 	"gui.resourcefulbees.beehive.smoked": "Smoked: ",
 	"gui.resourcefulbees.beehive.honeylevel": "Honey Level: ",
 	"gui.resourcefulbees.beehive.num_combs": "Honeycombs",
+	"gui.resourcefulbees.apiary.button.validate": "Validate",
+	"gui.resourcefulbees.apiary.button.build": "Build",
 
 	"block.resourcefulbees.t1_beehive": "Tier 1 Beehive",
 	"block.resourcefulbees.t2_beehive": "Tier 2 Beehive",

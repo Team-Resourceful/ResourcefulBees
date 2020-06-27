@@ -1,6 +1,7 @@
 package com.dungeonderps.resourcefulbees.network;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
+import com.dungeonderps.resourcefulbees.network.packets.BuildApiaryMessage;
 import com.dungeonderps.resourcefulbees.network.packets.ValidateApiaryMessage;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkRegistry;
@@ -19,6 +20,7 @@ public class NetPacketHandler {
 
     public static void init(){
         INSTANCE.registerMessage(++id, ValidateApiaryMessage.class, ValidateApiaryMessage::encode, ValidateApiaryMessage::decode, ValidateApiaryMessage::handle);
+        INSTANCE.registerMessage(++id, BuildApiaryMessage.class, BuildApiaryMessage::encode, BuildApiaryMessage::decode, BuildApiaryMessage::handle);
     }
 
     public static void sendToServer(Object message) {

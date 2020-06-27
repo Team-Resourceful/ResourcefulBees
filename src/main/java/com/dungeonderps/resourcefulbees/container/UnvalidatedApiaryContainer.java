@@ -17,7 +17,6 @@ public class UnvalidatedApiaryContainer extends Container {
 
     public UnvalidatedApiaryContainer(int id, World world, BlockPos pos, PlayerInventory inv) {
         super(RegistryHandler.UNVALIDATED_APIARY_CONTAINER.get(), id);
-
         this.pos = pos;
         this.apiaryTileEntity = (ApiaryTileEntity)world.getTileEntity(pos);
     }

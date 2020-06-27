@@ -1,22 +1,11 @@
 package com.dungeonderps.resourcefulbees.client.gui.widget;
 
-import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.client.gui.widget.button.ImageButton;
+import net.minecraft.util.ResourceLocation;
 
-public class ArrowButton extends Button {
+public class ArrowButton extends ImageButton {
 
-    private final Enum<ArrowDirection> DIRECTION;
-
-    public enum DIRECTION{};
-
-    public ArrowButton(int widthIn, int heightIn, int width, int height, Enum<ArrowDirection> direction, IPressable onPress) {
-        super(widthIn, heightIn, width, height, "", onPress);
-        DIRECTION = direction;
-    }
-
-    public enum ArrowDirection {
-        UP,
-        DOWN,
-        LEFT,
-        RIGHT
+    public ArrowButton(int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int yDiffTextIn, ResourceLocation resourceLocationIn, IPressable onPressIn) {
+        super(xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, yDiffTextIn, resourceLocationIn, onPressIn);
     }
 }
