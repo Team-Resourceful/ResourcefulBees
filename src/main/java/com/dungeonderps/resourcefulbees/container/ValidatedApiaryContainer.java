@@ -17,6 +17,7 @@ public class ValidatedApiaryContainer extends Container {
     public ApiaryTileEntity apiaryTileEntity;
     public BlockPos pos;
     public PlayerEntity player;
+    public int selectedBeeType;
 
     public ValidatedApiaryContainer(int id, World world, BlockPos pos, PlayerInventory inv) {
         super(RegistryHandler.VALIDATED_APIARY_CONTAINER.get(), id);
@@ -25,10 +26,11 @@ public class ValidatedApiaryContainer extends Container {
         this.pos = pos;
         this.apiaryTileEntity = (ApiaryTileEntity)world.getTileEntity(pos);
 
-        this.addSlot(new SlotItemHandlerUnconditioned(apiaryTileEntity.h, ApiaryTileEntity.IMPORT_IN, 30, 20));
-        this.addSlot(new SlotItemHandlerUnconditioned(apiaryTileEntity.h, ApiaryTileEntity.IMPORT_OUT, 30, 38));
-        this.addSlot(new OutputSlot(apiaryTileEntity.h, ApiaryTileEntity.EXPORT_IN, 80, 59));
-        this.addSlot(new OutputSlot(apiaryTileEntity.h, ApiaryTileEntity.EXPORT_OUT, 129, 20));
+        if (apiaryTileEntity != null) {
+            this.addSlot(new SlotItemHandlerUnconditioned(apiaryTileEntity.h, ApiaryTileEntity.IMPORT, 30, 20));
+            this.addSlot(new SlotItemHandlerUnconditioned(apiaryTileEntity.h, ApiaryTileEntity.EMPTY_JAR, 30, 38));
+            this.addSlot(new OutputSlot(apiaryTileEntity.h, ApiaryTileEntity.EXPORT, 80, 59));
+        }
 
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
@@ -54,11 +56,11 @@ public class ValidatedApiaryContainer extends Container {
         if (slot != null && slot.getHasStack()) {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
-            if (index <= 3) {
-                if (!this.mergeItemStack(itemstack1, 4, inventorySlots.size(), true)) {
+            if (index <= 2) {
+                if (!this.mergeItemStack(itemstack1, 3, inventorySlots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.mergeItemStack(itemstack1, 0, 1, false)) {
+            } else if (!this.mergeItemStack(itemstack1, 1, 1, false)) {
                 return ItemStack.EMPTY;
             }
 

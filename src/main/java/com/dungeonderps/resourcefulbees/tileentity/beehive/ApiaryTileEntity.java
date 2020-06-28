@@ -48,11 +48,10 @@ import javax.annotation.Nullable;
 import java.util.*;
 
 public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider {
-    ///     import    -   jar slot     -    export
-    public static final int IMPORT_IN = 0;
-    public static final int EXPORT_IN = 1;
-    public static final int IMPORT_OUT = 2;
-    public static final int EXPORT_OUT = 3;
+    ///     import    ->   jar slot     ->    export
+    public static final int IMPORT = 0;
+    public static final int EXPORT = 2;
+    public static final int EMPTY_JAR = 1;
     public static long start;
     public static long end;
     public final HashMap<String, ApiaryBee> bees = new HashMap<>();
@@ -61,8 +60,6 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     protected final float TIER_MODIFIER = 5;
     private final Tag<Block> validApiaryTag;
     public Stack<String> honeycombs = new Stack<>();
-    public boolean isSmoked = false;
-    public int ticksSmoked = 0;
     public ApiaryStorageTileEntity apiaryStorage;
     public boolean isValidApiary;
     public String lockedBeeType = "";
@@ -287,11 +284,12 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
                 i++;
             }
         }
-        if (nbt.contains(BeeConst.NBT_SMOKED_TE)) {
-            this.isSmoked = nbt.getBoolean(BeeConst.NBT_SMOKED_TE);
-        }
         if (nbt.contains("isValid"))
             this.isValidApiary = nbt.getBoolean("isValid");
+        if (nbt.contains("verticalOffset"))
+            this.verticalOffset = nbt.getInt("verticalOffset");
+        if (nbt.contains("horizontalOffset"))
+            this.horizontalOffset = nbt.getInt("horizontalOffset");
     }
 
     @Nonnull
@@ -305,8 +303,9 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
             }
             nbt.put(BeeConst.NBT_HONEYCOMBS_TE, combs);
         }
-        nbt.putBoolean(BeeConst.NBT_SMOKED_TE, isSmoked);
         nbt.putBoolean("isValid", isValidApiary);
+        nbt.putInt("verticalOffset", verticalOffset);
+        nbt.putInt("horizontalOffset", horizontalOffset);
         return nbt;
     }
 
