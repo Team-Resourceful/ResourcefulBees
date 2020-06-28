@@ -22,6 +22,8 @@
 	"gui.resourcefulbees.apiary.button.validate": "Validate",
 	"gui.resourcefulbees.apiary.button.build": "Build",
 	"gui.resourcefulbees.apiary.button.build.creative": "Creative Mode Only!",
+	"gui.resourcefulbees.apiary.button.preview.disabled": "Preview Disabled!",
+	"gui.resourcefulbees.apiary.button.preview": "Preview",
 
 	"block.resourcefulbees.t1_beehive": "Tier 1 Beehive",
 	"block.resourcefulbees.t2_beehive": "Tier 2 Beehive",

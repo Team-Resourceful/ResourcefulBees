@@ -7,10 +7,12 @@ import com.dungeonderps.resourcefulbees.network.NetPacketHandler;
 import com.dungeonderps.resourcefulbees.network.packets.BuildApiaryMessage;
 import com.dungeonderps.resourcefulbees.network.packets.ValidateApiaryMessage;
 import com.dungeonderps.resourcefulbees.utils.MathUtils;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.client.gui.widget.button.ImageButton;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -28,6 +30,7 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
     private int verticalOffset = 0;
     private int horizontalOffset = 0;
     private ArrowButton upButton, downButton, leftButton, rightButton;
+    private PreviewButton previewButton;
 
 
     public UnvalidatedApiaryScreen(UnvalidatedApiaryContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
@@ -43,10 +46,17 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
         if (!this.player.isCreative()) {
             buildStructureButton.active = false;
         }
+        this.previewButton = this.addButton(new PreviewButton(getGuiLeft() + 22, getGuiTop() + 25, 12, 12, 0, 24, 12, arrowButtonTexture, false, (onPress) -> setPreviewToggle()));
+        this.previewButton.active = false;
         this.upButton = this.addButton(new ArrowButton(getGuiLeft() + 22, getGuiTop() + 12, 12, 12, 0, 0, 12, arrowButtonTexture, (onPress) -> this.offsetPosition(Direction.UP)));
         this.downButton = this.addButton(new ArrowButton(getGuiLeft() + 22, getGuiTop() + 38, 12, 12, 12, 0, 12, arrowButtonTexture, (onPress) -> this.offsetPosition(Direction.DOWN)));
         this.leftButton = this.addButton(new ArrowButton(getGuiLeft() + 9, getGuiTop() + 25, 12, 12, 24, 0, 12, arrowButtonTexture, (onPress) -> this.offsetPosition(Direction.LEFT)));
         this.rightButton = this.addButton(new ArrowButton(getGuiLeft() + 35, getGuiTop() + 25, 12, 12, 36, 0, 12, arrowButtonTexture, (onPress) -> this.offsetPosition(Direction.RIGHT)));
+    }
+
+    private void setPreviewToggle(){
+        if (this.previewButton.active)
+            this.previewButton.setTrigger(!this.previewButton.isTriggered());
     }
 
     private void offsetPosition(Direction direction) {
@@ -99,11 +109,11 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        this.font.drawString("Offset", 60, 13, 0x404040);
-        this.font.drawString("Vert.", 75, 26, 0x404040);
-        this.font.drawString("Horiz.", 75, 39, 0x404040);
-        this.font.drawString(String.valueOf(verticalOffset), 60, 26, 0x404040);
-        this.font.drawString(String.valueOf(horizontalOffset), 60, 39, 0x404040);
+        this.drawString(font,"Offset", 65, 13, 0xffffff);
+        this.drawString(font,"Vert.", 75, 26, 0xffffff);
+        this.drawString(font,"Horiz.", 75, 39, 0xffffff);
+        this.drawRightAlignedString(font,String.valueOf(verticalOffset), 70, 26, 0xffffff);
+        this.drawRightAlignedString(font,String.valueOf(horizontalOffset), 70, 39, 0xffffff);
 
         for(Widget widget : this.buttons) {
             if (widget.isHovered()) {
@@ -132,6 +142,66 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
                 String s = I18n.format("gui.resourcefulbees.apiary.button.build.creative");
                 UnvalidatedApiaryScreen.this.renderTooltip(s, p_renderToolTip_1_, p_renderToolTip_2_);
             }
+        }
+    }
+    @OnlyIn(Dist.CLIENT)
+    public class PreviewButton extends ImageButton {
+        private boolean triggered;
+        private final ResourceLocation resourceLocation;
+        private final int xTexStart;
+        private final int yTexStart;
+        private final int yDiffText;
+
+        public PreviewButton(int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int yDiffTextIn, ResourceLocation resourceLocationIn, boolean triggered, IPressable onPressIn) {
+            super(xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, yDiffTextIn, resourceLocationIn, onPressIn);
+            this.triggered = triggered;
+            this.xTexStart = xTexStartIn;
+            this.yTexStart = yTexStartIn;
+            this.yDiffText = yDiffTextIn;
+            this.resourceLocation = resourceLocationIn;
+        }
+
+        @Override
+        public void renderButton(int p_renderButton_1_, int p_renderButton_2_, float p_renderButton_3_) {
+            Minecraft minecraft = Minecraft.getInstance();
+            minecraft.getTextureManager().bindTexture(this.resourceLocation);
+            RenderSystem.disableDepthTest();
+            int i = this.yTexStart;
+            int j = this.xTexStart;
+            if (!this.active){
+                j += 24;
+            }
+            else if (this.isTriggered()) {
+                j += 12;
+                if (this.isHovered()) {
+                    i += this.yDiffText;
+                }
+            }
+            else {
+                if (this.isHovered()) {
+                    i += this.yDiffText;
+                }
+            }
+            blit(this.x, this.y, (float)j, (float)i, this.width, this.height, 64, 64);
+            RenderSystem.enableDepthTest();
+        }
+
+        @Override
+        public void renderToolTip(int p_renderToolTip_1_, int p_renderToolTip_2_) {
+            String s;
+            if (!active)
+                s = I18n.format("gui.resourcefulbees.apiary.button.preview.disabled");
+            else
+                s = "gui.resourcefulbees.apiary.button.preview";
+            UnvalidatedApiaryScreen.this.renderTooltip(s, p_renderToolTip_1_, p_renderToolTip_2_);
+        }
+
+        public void setTrigger(boolean triggered){
+            this.triggered = triggered;
+        }
+
+        public boolean isTriggered(){
+            return this.triggered;
         }
     }
 }
