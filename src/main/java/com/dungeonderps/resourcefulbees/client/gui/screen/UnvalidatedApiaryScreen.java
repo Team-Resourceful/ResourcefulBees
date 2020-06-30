@@ -6,7 +6,9 @@ import com.dungeonderps.resourcefulbees.container.UnvalidatedApiaryContainer;
 import com.dungeonderps.resourcefulbees.network.NetPacketHandler;
 import com.dungeonderps.resourcefulbees.network.packets.BuildApiaryMessage;
 import com.dungeonderps.resourcefulbees.network.packets.ValidateApiaryMessage;
+import com.dungeonderps.resourcefulbees.tileentity.beehive.ApiaryTileEntity;
 import com.dungeonderps.resourcefulbees.utils.MathUtils;
+import com.dungeonderps.resourcefulbees.utils.PreviewHandler;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -24,11 +26,12 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryContainer> {
 
+    private ApiaryTileEntity apiaryTileEntity;
     private final ResourceLocation unvalidatedTexture = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/apiary/unvalidated.png");
     private final ResourceLocation arrowButtonTexture = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/apiary/arrow_button.png");
     private final PlayerEntity player;
-    private int verticalOffset = 0;
-    private int horizontalOffset = 0;
+    private int verticalOffset;
+    private int horizontalOffset;
     private ArrowButton upButton, downButton, leftButton, rightButton;
     private PreviewButton previewButton;
 
@@ -36,6 +39,9 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
     public UnvalidatedApiaryScreen(UnvalidatedApiaryContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
         super(screenContainer, inv, titleIn);
         this.player = inv.player;
+        this.verticalOffset = screenContainer.apiaryTileEntity.verticalOffset;
+        this.horizontalOffset = screenContainer.apiaryTileEntity.horizontalOffset;
+        this.apiaryTileEntity = this.container.apiaryTileEntity;
     }
 
     @Override
@@ -46,12 +52,27 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
         if (!this.player.isCreative()) {
             buildStructureButton.active = false;
         }
-        this.previewButton = this.addButton(new PreviewButton(getGuiLeft() + 22, getGuiTop() + 25, 12, 12, 0, 24, 12, arrowButtonTexture, false, (onPress) -> setPreviewToggle()));
-        this.previewButton.active = false;
+        this.previewButton = this.addButton(new PreviewButton(getGuiLeft() + 22, getGuiTop() + 25, 12, 12, 0, 24, 12, arrowButtonTexture, this.container.apiaryTileEntity.previewed, (onPress) -> {
+            setPreviewToggle();
+            if (this.previewButton.isTriggered())
+                previewSetToggle(true);
+            else {
+                previewSetToggle(false);
+            }
+        }));
+        previewSetToggle(this.previewButton.isTriggered());
+        //this.previewButton.active = false;
         this.upButton = this.addButton(new ArrowButton(getGuiLeft() + 22, getGuiTop() + 12, 12, 12, 0, 0, 12, arrowButtonTexture, (onPress) -> this.offsetPosition(Direction.UP)));
         this.downButton = this.addButton(new ArrowButton(getGuiLeft() + 22, getGuiTop() + 38, 12, 12, 12, 0, 12, arrowButtonTexture, (onPress) -> this.offsetPosition(Direction.DOWN)));
         this.leftButton = this.addButton(new ArrowButton(getGuiLeft() + 9, getGuiTop() + 25, 12, 12, 24, 0, 12, arrowButtonTexture, (onPress) -> this.offsetPosition(Direction.LEFT)));
         this.rightButton = this.addButton(new ArrowButton(getGuiLeft() + 35, getGuiTop() + 25, 12, 12, 36, 0, 12, arrowButtonTexture, (onPress) -> this.offsetPosition(Direction.RIGHT)));
+    }
+
+    private void previewSetToggle(boolean toggled){
+        if (!toggled)
+            this.previewButton.setTrigger(false);
+
+        PreviewHandler.setPreview(getContainer().pos, this.container.apiaryTileEntity.buildStructureBounds(this.horizontalOffset, this.verticalOffset), toggled);
     }
 
     private void setPreviewToggle(){
@@ -60,6 +81,7 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
     }
 
     private void offsetPosition(Direction direction) {
+        previewSetToggle(false);
         switch (direction) {
             case UP: verticalOffset++;
                 break;
@@ -71,9 +93,13 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
         }
         verticalOffset = MathUtils.clamp(verticalOffset, -1, 2);
         horizontalOffset = MathUtils.clamp(horizontalOffset, -2, 2);
+
+        apiaryTileEntity.verticalOffset =verticalOffset;
+        apiaryTileEntity.horizontalOffset = horizontalOffset;
     }
 
     private void build() {
+        previewSetToggle(false);
         UnvalidatedApiaryContainer container = getContainer();
         BlockPos pos = container.pos;
         NetPacketHandler.sendToServer(new BuildApiaryMessage(pos, verticalOffset, horizontalOffset));
@@ -91,6 +117,7 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
     }
 
     private void validate() {
+        previewSetToggle(false);
         UnvalidatedApiaryContainer container = getContainer();
         BlockPos pos = container.pos;
         NetPacketHandler.sendToServer(new ValidateApiaryMessage(pos, verticalOffset, horizontalOffset));
@@ -197,6 +224,7 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
         }
 
         public void setTrigger(boolean triggered){
+            container.apiaryTileEntity.previewed = triggered;
             this.triggered = triggered;
         }
 

@@ -62,25 +62,18 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     public Stack<String> honeycombs = new Stack<>();
     public ApiaryStorageTileEntity apiaryStorage;
     public boolean isValidApiary;
+    public boolean previewed;
     public String lockedBeeType = "";
     public AutomationSensitiveItemStackHandler h = new ApiaryTileEntity.TileStackHandler(4);
     public LazyOptional<IItemHandler> lazyOptional = LazyOptional.of(() -> h);
     private int ticksSinceValidation = 290;
-    private int horizontalOffset = 0;
-    private int verticalOffset = 0;
+    public int horizontalOffset = 0;
+    public int verticalOffset = 0;
 
 
     public ApiaryTileEntity() {
         super(RegistryHandler.APIARY_TILE_ENTITY.get());
         validApiaryTag = BeeInfoUtils.getBlockTag("resourcefulbees:valid_apiary");
-    }
-
-    public void setHorizontalOffset(int horizontalOffset) {
-        this.horizontalOffset = horizontalOffset;
-    }
-
-    public void setVerticalOffset(int verticalOffset) {
-        this.verticalOffset = verticalOffset;
     }
 
     public int getTier() {
@@ -345,7 +338,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
             } else {
                 isStructureValid = false;
                 if (validatingPlayer != null) {
-                    validatingPlayer.sendMessage(new StringTextComponent(String.format("Block at position ( %1$s %2$s %3$s ) is invalid!", pos.getX(), pos.getY(), pos.getZ())));
+                    validatingPlayer.sendStatusMessage(new StringTextComponent(String.format("Block at position (X: %1$s Y: %2$s Z: %3$s) is invalid!", pos.getX(), pos.getY(), pos.getZ())), false);
                 }
             }
         }
@@ -356,7 +349,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
         return isStructureValid;
     }
 
-    private MutableBoundingBox buildStructureBounds() {
+    public MutableBoundingBox buildStructureBounds(int horioffset, int vertOffset) {
         MutableBoundingBox box;
         int posX = this.getPos().getX();
         int posY = this.getPos().getY();
@@ -364,23 +357,23 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
 
         switch (this.getBlockState().get(ApiaryBlock.FACING)) {
             case NORTH:
-                posX -= 3 + this.horizontalOffset;
-                posY -= 2 + this.verticalOffset;
+                posX -= 3 + horioffset;
+                posY -= 2 + vertOffset;
                 box = new MutableBoundingBox(posX, posY, posZ, posX + 6, posY + 5, posZ - 6);
                 break;
             case EAST:
-                posZ -= 3 + this.horizontalOffset;
-                posY -= 2 + this.verticalOffset;
+                posZ -= 3 + horioffset;
+                posY -= 2 + vertOffset;
                 box = new MutableBoundingBox(posX, posY, posZ, posX + 6, posY + 5, posZ + 6);
                 break;
             case SOUTH:
-                posX -= 3 - this.horizontalOffset;
-                posY -= 2 + this.verticalOffset;
+                posX -= 3 - horioffset;
+                posY -= 2 + vertOffset;
                 box = new MutableBoundingBox(posX, posY, posZ, posX + 6, posY + 5, posZ + 6);
                 break;
             default:
-                posZ -= 3 - this.horizontalOffset;
-                posY -= 2 + this.verticalOffset;
+                posZ -= 3 - horioffset;
+                posY -= 2 + vertOffset;
                 box = new MutableBoundingBox(posX, posY, posZ, posX - 6, posY + 5, posZ + 6);
         }
         return box;
@@ -388,7 +381,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
 
     private void buildStructureBlockList() {
         if (this.world != null) {
-            MutableBoundingBox box = buildStructureBounds();
+            MutableBoundingBox box = buildStructureBounds(this.horizontalOffset, this.verticalOffset);
             STRUCTURE_BLOCKS.clear();
             BlockPos.getAllInBox(box).forEach((blockPos -> {
                 if (blockPos.getX() == box.minX || blockPos.getX() == box.maxX ||
