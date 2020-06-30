@@ -2,7 +2,7 @@ package com.dungeonderps.resourcefulbees.compat.hwyla;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.block.HoneycombBlock;
-import com.dungeonderps.resourcefulbees.block.beehive.TieredBeehiveBlock;
+import com.dungeonderps.resourcefulbees.block.TieredBeehiveBlock;
 import mcp.mobius.waila.api.IRegistrar;
 import mcp.mobius.waila.api.IWailaPlugin;
 import mcp.mobius.waila.api.TooltipPosition;

@@ -1,6 +1,6 @@
 package com.dungeonderps.resourcefulbees.network.packets;
 
-import com.dungeonderps.resourcefulbees.tileentity.beehive.ApiaryTileEntity;
+import com.dungeonderps.resourcefulbees.tileentity.ApiaryTileEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;

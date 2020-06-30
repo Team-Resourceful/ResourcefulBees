@@ -1,14 +1,15 @@
-package com.dungeonderps.resourcefulbees.block.beehive;
+package com.dungeonderps.resourcefulbees.block;
 
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.lib.BeeConst;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
-import com.dungeonderps.resourcefulbees.tileentity.beehive.TieredBeehiveTileEntity;
+import com.dungeonderps.resourcefulbees.tileentity.TieredBeehiveTileEntity;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.BeehiveBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.CampfireBlock;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.BeeEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -30,8 +31,13 @@ import java.util.List;
 
 public class TieredBeehiveBlock extends BeehiveBlock {
 
-  public TieredBeehiveBlock(Block.Properties properties) {
+  private final int TIER;
+  private final float TIER_MODIFIER;
+
+  public TieredBeehiveBlock(final int tier, final float tierModifier, Properties properties) {
     super(properties);
+    TIER = tier;
+    TIER_MODIFIER = tierModifier;
   }
 
   public static void dropResourceHoneycomb(TieredBeehiveBlock block, World world, BlockPos pos) {
@@ -148,5 +154,16 @@ public class TieredBeehiveBlock extends BeehiveBlock {
   @Override
   public TileEntity createTileEntity(BlockState state, IBlockReader world) {
     return new TieredBeehiveTileEntity();
+  }
+
+  @Override
+  public void onBlockPlacedBy(World worldIn, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nullable LivingEntity placer, @Nonnull ItemStack stack) {
+
+    TileEntity tile = worldIn.getTileEntity(pos);
+    if(tile instanceof TieredBeehiveTileEntity) {
+      TieredBeehiveTileEntity tieredBeehiveTileEntity = (TieredBeehiveTileEntity) tile;
+      tieredBeehiveTileEntity.setTier(TIER);
+      tieredBeehiveTileEntity.setTierModifier(TIER_MODIFIER);
+    }
   }
 }

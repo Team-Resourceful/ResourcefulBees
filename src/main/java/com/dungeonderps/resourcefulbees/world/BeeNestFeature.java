@@ -3,8 +3,7 @@ package com.dungeonderps.resourcefulbees.world;
 import com.dungeonderps.resourcefulbees.config.Config;
 import com.dungeonderps.resourcefulbees.entity.passive.ResourcefulBee;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
-import com.dungeonderps.resourcefulbees.tileentity.beehive.TieredBeehiveTileEntity;
-import com.dungeonderps.resourcefulbees.tileentity.beenest.BeeNestEntity;
+import com.dungeonderps.resourcefulbees.tileentity.TieredBeehiveTileEntity;
 import com.dungeonderps.resourcefulbees.utils.MathUtils;
 import com.mojang.datafixers.Dynamic;
 import net.minecraft.block.BlockState;
@@ -25,6 +24,8 @@ import net.minecraft.world.gen.feature.NoFeatureConfig;
 import javax.annotation.Nonnull;
 import java.util.Random;
 import java.util.function.Function;
+
+//import com.dungeonderps.resourcefulbees.tileentity.beenest.BeeNestEntity;
 
 public class BeeNestFeature extends Feature<NoFeatureConfig> {
 
@@ -119,8 +120,8 @@ public class BeeNestFeature extends Feature<NoFeatureConfig> {
         worldIn.setBlockState(newPos, newState, 1);
         TileEntity tileEntity = worldIn.getTileEntity(newPos);
 
-        if (tileEntity instanceof BeeNestEntity) {
-            BeeNestEntity nest = (BeeNestEntity) tileEntity;
+        if (tileEntity instanceof TieredBeehiveTileEntity) {
+            TieredBeehiveTileEntity nest = (TieredBeehiveTileEntity) tileEntity;
             int maxBees = nest.getMaxBees();
             for (int i = rand.nextInt(maxBees); i < maxBees ; i++) {
                 ResourcefulBee bee = RegistryHandler.CUSTOM_BEE.get().create(worldIn.getWorld());

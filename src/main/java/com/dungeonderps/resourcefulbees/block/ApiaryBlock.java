@@ -1,9 +1,9 @@
-package com.dungeonderps.resourcefulbees.block.beehive;
+package com.dungeonderps.resourcefulbees.block;
 
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.lib.BeeConst;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
-import com.dungeonderps.resourcefulbees.tileentity.beehive.ApiaryTileEntity;
+import com.dungeonderps.resourcefulbees.tileentity.ApiaryTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;

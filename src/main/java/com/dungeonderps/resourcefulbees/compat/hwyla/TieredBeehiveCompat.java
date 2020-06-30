@@ -1,9 +1,9 @@
 package com.dungeonderps.resourcefulbees.compat.hwyla;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
-import com.dungeonderps.resourcefulbees.block.beehive.TieredBeehiveBlock;
+import com.dungeonderps.resourcefulbees.block.TieredBeehiveBlock;
 import com.dungeonderps.resourcefulbees.lib.BeeConst;
-import com.dungeonderps.resourcefulbees.tileentity.beehive.TieredBeehiveTileEntity;
+import com.dungeonderps.resourcefulbees.tileentity.TieredBeehiveTileEntity;
 import mcp.mobius.waila.api.*;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.resources.I18n;

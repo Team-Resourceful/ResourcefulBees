@@ -1,13 +1,13 @@
 package com.dungeonderps.resourcefulbees.compat.top;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
-import com.dungeonderps.resourcefulbees.block.beehive.TieredBeehiveBlock;
+import com.dungeonderps.resourcefulbees.block.TieredBeehiveBlock;
 import com.dungeonderps.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.dungeonderps.resourcefulbees.lib.BeeConst;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.tileentity.CentrifugeTileEntity;
 import com.dungeonderps.resourcefulbees.tileentity.HoneycombTileEntity;
-import com.dungeonderps.resourcefulbees.tileentity.beehive.TieredBeehiveTileEntity;
+import com.dungeonderps.resourcefulbees.tileentity.TieredBeehiveTileEntity;
 import mcjty.theoneprobe.api.ElementAlignment;
 import mcjty.theoneprobe.api.IProbeInfo;
 import mcjty.theoneprobe.api.ITheOneProbe;

@@ -1,7 +1,7 @@
 package com.dungeonderps.resourcefulbees.container;
 
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
-import com.dungeonderps.resourcefulbees.tileentity.beehive.ApiaryTileEntity;
+import com.dungeonderps.resourcefulbees.tileentity.ApiaryTileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;

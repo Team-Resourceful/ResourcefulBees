@@ -2,9 +2,13 @@ package com.dungeonderps.resourcefulbees.network;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.network.packets.BuildApiaryMessage;
+import com.dungeonderps.resourcefulbees.network.packets.UpdateClientApiaryMessage;
 import com.dungeonderps.resourcefulbees.network.packets.ValidateApiaryMessage;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkRegistry;
+import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 
 public class NetPacketHandler {
@@ -21,9 +25,14 @@ public class NetPacketHandler {
     public static void init(){
         INSTANCE.registerMessage(++id, ValidateApiaryMessage.class, ValidateApiaryMessage::encode, ValidateApiaryMessage::decode, ValidateApiaryMessage::handle);
         INSTANCE.registerMessage(++id, BuildApiaryMessage.class, BuildApiaryMessage::encode, BuildApiaryMessage::decode, BuildApiaryMessage::handle);
+        INSTANCE.registerMessage(++id, UpdateClientApiaryMessage.class, UpdateClientApiaryMessage::encode, UpdateClientApiaryMessage::decode, UpdateClientApiaryMessage::handle);
     }
 
     public static void sendToServer(Object message) {
         INSTANCE.sendToServer(message);
+    }
+
+    public static void sendToAllLoaded(Object message, World world, BlockPos pos) {
+        INSTANCE.send(PacketDistributor.TRACKING_CHUNK.with(() -> world.getChunkAt(pos)), message);
     }
 }

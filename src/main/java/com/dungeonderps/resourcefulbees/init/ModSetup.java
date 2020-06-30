@@ -1,7 +1,7 @@
 package com.dungeonderps.resourcefulbees.init;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
-import com.dungeonderps.resourcefulbees.block.beehive.TieredBeehiveBlock;
+import com.dungeonderps.resourcefulbees.block.TieredBeehiveBlock;
 import net.minecraft.block.BeehiveBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.DispenserBlock;

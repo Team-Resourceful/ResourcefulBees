@@ -1,7 +1,8 @@
 
-package com.dungeonderps.resourcefulbees.tileentity.beehive;
+package com.dungeonderps.resourcefulbees.tileentity;
 
 
+import com.dungeonderps.resourcefulbees.block.TieredBeehiveBlock;
 import com.dungeonderps.resourcefulbees.config.Config;
 import com.dungeonderps.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.dungeonderps.resourcefulbees.lib.BeeConst;
@@ -29,8 +30,8 @@ import java.util.Stack;
 
 public class TieredBeehiveTileEntity extends BeehiveTileEntity {
 
-  protected final int TIER = 1;
-  protected final float TIER_MODIFIER = 1;
+  protected int TIER;
+  protected float TIER_MODIFIER;
 
   public Stack<String> honeycombs = new Stack<>();
   public boolean isSmoked = false;
@@ -39,11 +40,19 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
   @Nonnull
   @Override
   public TileEntityType<?> getType() {
-    return RegistryHandler.T1_BEEHIVE_ENTITY.get();
+    return RegistryHandler.TIERED_BEEHIVE_TILE_ENTITY.get();
   }
 
   public int getTier() {
     return TIER;
+  }
+
+  public void setTier(int tier){
+    TIER = tier;
+  }
+
+  public void setTierModifier(float tierModifier){
+    TIER_MODIFIER = tierModifier;
   }
 
   public float getTierModifier() {
@@ -126,7 +135,7 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
         if (bee instanceof CustomBeeEntity) {
           CustomBeeEntity bee1 = (CustomBeeEntity)bee;
           int maxTimeInHive = bee1.getBeeInfo().getMaxTimeInHive();
-          maxTimeInHive = this.getTier() > 1 ? (int) (maxTimeInHive * (1 - getTier() * .05)) : maxTimeInHive;
+          maxTimeInHive = this.getTier() != 1 ? this.getTier() == 0 ? (int) (maxTimeInHive * 1.05) : (int) (maxTimeInHive * (1 - getTier() * .05)) : maxTimeInHive;
           this.bees.add(new BeehiveTileEntity.Bee(nbt, ticksInHive,  hasNectar ? maxTimeInHive : BeeConst.MIN_HIVE_TIME));
           if (bee1.hasFlower() && (!this.hasFlowerPos() || this.world.rand.nextBoolean())) {
             this.flowerPos = bee1.getFlowerPos();
@@ -185,7 +194,7 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
 
   public boolean isAllowedBee(){
     Block hive = getBlockState().getBlock();
-    return hive == RegistryHandler.T1_BEEHIVE.get();
+    return hive instanceof TieredBeehiveBlock;
   }
 
   @Override
