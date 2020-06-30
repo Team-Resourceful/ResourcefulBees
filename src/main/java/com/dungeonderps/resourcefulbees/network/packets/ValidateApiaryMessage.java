@@ -39,8 +39,8 @@ public class ValidateApiaryMessage {
                     TileEntity tileEntity = player.world.getTileEntity(message.pos);
                     if (tileEntity instanceof ApiaryTileEntity) {
                         ApiaryTileEntity apiaryTileEntity = (ApiaryTileEntity) tileEntity;
-                        apiaryTileEntity.setVerticalOffset(message.verticalOffset);
-                        apiaryTileEntity.setHorizontalOffset(message.horizontalOffset);
+                        apiaryTileEntity.verticalOffset = message.verticalOffset;
+                        apiaryTileEntity.horizontalOffset = message.horizontalOffset;
                         apiaryTileEntity.runStructureValidation(player);
                     }
                 }
