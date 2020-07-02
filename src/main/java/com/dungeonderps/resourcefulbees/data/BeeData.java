@@ -1,6 +1,6 @@
 package com.dungeonderps.resourcefulbees.data;
 
-import com.dungeonderps.resourcefulbees.lib.BeeConst;
+import com.dungeonderps.resourcefulbees.lib.BeeConstants;
 import com.dungeonderps.resourcefulbees.lib.MutationTypes;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.utils.Color;
@@ -14,9 +14,9 @@ public class BeeData {
     private String biomeBlacklist = "";
 
     private String baseLayerTexture = "/custom/bee";
-    private String primaryColor = Color.format(BeeConst.DEFAULT_COLOR);
-    private String secondaryColor = Color.format(BeeConst.DEFAULT_SECONDARY_COLOR);
-    private String honeycombColor = Color.format(BeeConst.DEFAULT_COLOR);
+    private String primaryColor = Color.format(BeeConstants.DEFAULT_COLOR);
+    private String secondaryColor = Color.format(BeeConstants.DEFAULT_SECONDARY_COLOR);
+    private String honeycombColor = Color.format(BeeConstants.DEFAULT_COLOR);
     private String primaryLayerTexture = "/custom/primary_layer";
     private String secondaryLayerTexture = "/custom/secondary_layer";
 
@@ -33,12 +33,12 @@ public class BeeData {
 
     private boolean spawnInWorld, enderBee, netherBee, breedable, creeperBee, skeletonBee, zomBee, pigmanBee, witherBee, blazeBee;
 
-    private int maxTimeInHive = BeeConst.MAX_TIME_IN_HIVE;
-    private double breedWeight = BeeConst.DEFAULT_BREED_WEIGHT;
+    private int maxTimeInHive = BeeConstants.MAX_TIME_IN_HIVE;
+    private double breedWeight = BeeConstants.DEFAULT_BREED_WEIGHT;
 
-    private double mainOutputWeight = BeeConst.DEFAULT_MAIN_OUTPUT_WEIGHT;
-    private double secondaryOutputWeight = BeeConst.DEFAULT_SEC_OUTPUT_WEIGHT;
-    private double bottleOutputWeight = BeeConst.DEFAULT_BOT_OUTPUT_WEIGHT;
+    private double mainOutputWeight = BeeConstants.DEFAULT_MAIN_OUTPUT_WEIGHT;
+    private double secondaryOutputWeight = BeeConstants.DEFAULT_SEC_OUTPUT_WEIGHT;
+    private double bottleOutputWeight = BeeConstants.DEFAULT_BOT_OUTPUT_WEIGHT;
 
     private int mainOutputCount = 1;
     private int secondaryOutputCount = 1;
@@ -47,7 +47,7 @@ public class BeeData {
 
     private float sizeModifier = 1.0f;
 
-    private transient String name = BeeConst.DEFAULT_BEE_TYPE;
+    private transient String name = BeeConstants.DEFAULT_BEE_TYPE;
     private transient boolean mutation;
     private transient Enum<MutationTypes> mutationType;
 

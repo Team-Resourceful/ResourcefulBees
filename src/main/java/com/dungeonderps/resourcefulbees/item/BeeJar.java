@@ -2,7 +2,7 @@ package com.dungeonderps.resourcefulbees.item;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.entity.passive.CustomBeeEntity;
-import com.dungeonderps.resourcefulbees.lib.BeeConst;
+import com.dungeonderps.resourcefulbees.lib.BeeConstants;
 import com.dungeonderps.resourcefulbees.registry.ItemGroupResourcefulBees;
 import com.dungeonderps.resourcefulbees.utils.Color;
 import net.minecraft.client.resources.I18n;
@@ -45,7 +45,7 @@ public class BeeJar extends Item {
     }
 
     public boolean isFilled(ItemStack stack) {
-        return !stack.isEmpty() && stack.hasTag() && stack.getTag() != null && stack.getTag().contains(BeeConst.NBT_ENTITY);
+        return !stack.isEmpty() && stack.hasTag() && stack.getTag() != null && stack.getTag().contains(BeeConstants.NBT_ENTITY);
     }
 
     @Nonnull
@@ -74,7 +74,7 @@ public class BeeJar extends Item {
     public Entity getEntityFromStack(ItemStack stack, World world, boolean withInfo) {
         CompoundNBT tag = stack.getTag();
         if (tag != null) {
-            EntityType<?> type = EntityType.byKey(tag.getString(BeeConst.NBT_ENTITY)).orElse(null);
+            EntityType<?> type = EntityType.byKey(tag.getString(BeeConstants.NBT_ENTITY)).orElse(null);
             if (type != null) {
                 Entity entity = type.create(world);
                 if (entity != null && withInfo) entity.read(stack.getTag());
@@ -93,11 +93,11 @@ public class BeeJar extends Item {
         BeeEntity target = (BeeEntity)targetIn;
         String type = EntityType.getKey(target.getType()).toString();
         CompoundNBT nbt = new CompoundNBT();
-        nbt.putString(BeeConst.NBT_ENTITY, type);
+        nbt.putString(BeeConstants.NBT_ENTITY, type);
         target.writeWithoutTypeId(nbt);
         if (target instanceof CustomBeeEntity){
             CustomBeeEntity beeEntity = (CustomBeeEntity) target;
-            nbt.putString(BeeConst.NBT_COLOR, beeEntity.getBeeInfo().getPrimaryColor());
+            nbt.putString(BeeConstants.NBT_COLOR, beeEntity.getBeeInfo().getPrimaryColor());
         }
         stack.setTag(nbt);
         player.swingArm(hand);
@@ -110,9 +110,9 @@ public class BeeJar extends Item {
     public static int getColor(ItemStack stack, int tintIndex){
         CompoundNBT tag = stack.getTag();
         if (tag != null){
-            if (tintIndex == 1 && stack.hasTag() && stack.getTag().contains(BeeConst.NBT_ENTITY)){
-                if (tag.contains(BeeConst.NBT_COLOR))
-                    return Color.parseInt(tag.getString(BeeConst.NBT_COLOR));
+            if (tintIndex == 1 && stack.hasTag() && stack.getTag().contains(BeeConstants.NBT_ENTITY)){
+                if (tag.contains(BeeConstants.NBT_COLOR))
+                    return Color.parseInt(tag.getString(BeeConstants.NBT_COLOR));
             }
         }
         return 0xffffff;
@@ -136,11 +136,11 @@ public class BeeJar extends Item {
         super.addInformation(stack, world, tooltip, flag);
         CompoundNBT tag = stack.getTag();
         if (tag != null && isFilled(stack)){
-            if (tag.getString(BeeConst.NBT_ENTITY).equals("resourcefulbees:bee")){
-                String type = stack.getTag().getString(BeeConst.NBT_BEE_TYPE);
+            if (tag.getString(BeeConstants.NBT_ENTITY).equals("resourcefulbees:bee")){
+                String type = stack.getTag().getString(BeeConstants.NBT_BEE_TYPE);
                 tooltip.add(new StringTextComponent(I18n.format(ResourcefulBees.MOD_ID + ".information.bee_type.custom") + StringUtils.capitalize(type)).applyTextStyle(TextFormatting.WHITE));
             }
-            else if (stack.getTag().getString(BeeConst.NBT_ENTITY).equals("minecraft:bee")){
+            else if (stack.getTag().getString(BeeConstants.NBT_ENTITY).equals("minecraft:bee")){
                 tooltip.add(new TranslationTextComponent(ResourcefulBees.MOD_ID + ".information.bee_type.vanilla").applyTextStyle(TextFormatting.WHITE));
             }
             else

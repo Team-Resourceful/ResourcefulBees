@@ -4,7 +4,7 @@ import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.data.BeeData;
 import com.dungeonderps.resourcefulbees.entity.passive.CustomBeeEntity;
-import com.dungeonderps.resourcefulbees.lib.BeeConst;
+import com.dungeonderps.resourcefulbees.lib.BeeConstants;
 import com.dungeonderps.resourcefulbees.lib.MutationTypes;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.utils.BeeInfoUtils;
@@ -66,7 +66,7 @@ public class BlockToBlock implements IRecipeCategory<BlockToBlock.Recipe> {
                 String mutationOut = bee.getValue().getMutationOutput();
 
                 if (BeeInfoUtils.TAG_RESOURCE_PATTERN.matcher(mutationIn).matches()) {
-                    mutationIn = mutationIn.replace(BeeConst.TAG_PREFIX, "");
+                    mutationIn = mutationIn.replace(BeeConstants.TAG_PREFIX, "");
 
                     Tag<Item> itemTag = BeeInfoUtils.getItemTag(mutationIn);
                     if (itemTag !=null) {

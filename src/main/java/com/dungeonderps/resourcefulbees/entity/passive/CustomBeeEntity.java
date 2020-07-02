@@ -4,7 +4,7 @@ import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.data.BeeData;
 import com.dungeonderps.resourcefulbees.entity.ICustomBee;
-import com.dungeonderps.resourcefulbees.lib.BeeConst;
+import com.dungeonderps.resourcefulbees.lib.BeeConstants;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.utils.MathUtils;
 import net.minecraft.entity.*;
@@ -62,7 +62,7 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
 
     public String getBeeType() {
         BeeData info = getBeeInfo(this.dataManager.get(BEE_TYPE));
-        if (info.getName().equals(BeeConst.DEFAULT_BEE_TYPE)) {
+        if (info.getName().equals(BeeConstants.DEFAULT_BEE_TYPE)) {
             markRemove();
         }
         return this.dataManager.get(BEE_TYPE);
@@ -113,7 +113,7 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
     @Override
     public void livingTick() {
         if (remove) {
-            if (!world.isRemote() && getBeeType().equals(BeeConst.DEFAULT_BEE_TYPE)) {
+            if (!world.isRemote() && getBeeType().equals(BeeConstants.DEFAULT_BEE_TYPE)) {
                 LOGGER.info("Remove Bee");
                 remove = false;
                 this.dead = true;
@@ -149,19 +149,19 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
     @Override
     protected void registerData() {
         super.registerData();
-        this.dataManager.register(BEE_TYPE, BeeConst.DEFAULT_BEE_TYPE);
+        this.dataManager.register(BEE_TYPE, BeeConstants.DEFAULT_BEE_TYPE);
     }
 
     @Override
     public void readAdditional(@Nonnull CompoundNBT compound) {
         super.readAdditional(compound);
-        this.dataManager.set(BEE_TYPE, compound.getString(BeeConst.NBT_BEE_TYPE));
+        this.dataManager.set(BEE_TYPE, compound.getString(BeeConstants.NBT_BEE_TYPE));
     }
 
     @Override
     public void writeAdditional(@Nonnull CompoundNBT compound) {
         super.writeAdditional(compound);
-        compound.putString(BeeConst.NBT_BEE_TYPE, this.getBeeType());
+        compound.putString(BeeConstants.NBT_BEE_TYPE, this.getBeeType());
     }
 
     public CustomBeeEntity createSelectedChild(String beeType) {

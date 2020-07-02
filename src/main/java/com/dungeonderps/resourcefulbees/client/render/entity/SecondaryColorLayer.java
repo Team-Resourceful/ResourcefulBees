@@ -4,7 +4,7 @@ import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.data.BeeData;
 import com.dungeonderps.resourcefulbees.entity.passive.CustomBeeEntity;
-import com.dungeonderps.resourcefulbees.lib.BeeConst;
+import com.dungeonderps.resourcefulbees.lib.BeeConstants;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.IEntityRenderer;
@@ -26,7 +26,7 @@ public class SecondaryColorLayer extends LayerRenderer<CustomBeeEntity, CustomBe
         BeeData bee = entitylivingbaseIn.getBeeInfo();
         if (bee.isBeeColored()) {
             float[] secondaryColor = BeeInfo.getBeeColorAsFloat(bee.getSecondaryColor());
-            ResourceLocation location = new ResourceLocation(ResourcefulBees.MOD_ID, BeeConst.ENTITY_TEXTURES_DIR + bee.getSecondaryLayerTexture() + ".png");
+            ResourceLocation location = new ResourceLocation(ResourcefulBees.MOD_ID, BeeConstants.ENTITY_TEXTURES_DIR + bee.getSecondaryLayerTexture() + ".png");
             renderCutoutModel(this.getEntityModel(), location, matrixStackIn, bufferIn, packedLightIn, entitylivingbaseIn, secondaryColor[0], secondaryColor[1], secondaryColor[2]);
         }
     }

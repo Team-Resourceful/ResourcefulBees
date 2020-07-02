@@ -1,8 +1,8 @@
 package com.dungeonderps.resourcefulbees.utils;
 
-import com.dungeonderps.resourcefulbees.block.beehive.ApiaryBlock;
+import com.dungeonderps.resourcefulbees.block.ApiaryBlock;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
-import com.dungeonderps.resourcefulbees.tileentity.beehive.ApiaryTileEntity;
+import com.dungeonderps.resourcefulbees.tileentity.ApiaryTileEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.block.BlockState;

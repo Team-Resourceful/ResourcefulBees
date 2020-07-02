@@ -1,7 +1,7 @@
 package com.dungeonderps.resourcefulbees.config;
 
 import com.dungeonderps.resourcefulbees.data.BeeData;
-import com.dungeonderps.resourcefulbees.lib.BeeConst;
+import com.dungeonderps.resourcefulbees.lib.BeeConstants;
 import com.dungeonderps.resourcefulbees.utils.MathUtils;
 import net.minecraft.world.biome.Biome;
 
@@ -45,12 +45,12 @@ public class BeeInfo {
             ArrayList<String> spawnList = new ArrayList<>(SPAWNABLE_BIOMES.get(biome));
             return spawnList.get(MathUtils.nextInt(spawnList.size()));
         }
-        return BeeConst.DEFAULT_BEE_TYPE;
+        return BeeConstants.DEFAULT_BEE_TYPE;
     }
 
     public static BeeData getInfo(String bee){
         BeeData info = BEE_INFO.get(bee);
-        return info != null ? info : BEE_INFO.get(BeeConst.DEFAULT_BEE_TYPE);
+        return info != null ? info : BEE_INFO.get(BeeConstants.DEFAULT_BEE_TYPE);
     }
 
 }

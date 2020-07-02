@@ -1,9 +1,7 @@
 package com.dungeonderps.resourcefulbees.network;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
-import com.dungeonderps.resourcefulbees.network.packets.BuildApiaryMessage;
-import com.dungeonderps.resourcefulbees.network.packets.UpdateClientApiaryMessage;
-import com.dungeonderps.resourcefulbees.network.packets.ValidateApiaryMessage;
+import com.dungeonderps.resourcefulbees.network.packets.*;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -26,6 +24,9 @@ public class NetPacketHandler {
         INSTANCE.registerMessage(++id, ValidateApiaryMessage.class, ValidateApiaryMessage::encode, ValidateApiaryMessage::decode, ValidateApiaryMessage::handle);
         INSTANCE.registerMessage(++id, BuildApiaryMessage.class, BuildApiaryMessage::encode, BuildApiaryMessage::decode, BuildApiaryMessage::handle);
         INSTANCE.registerMessage(++id, UpdateClientApiaryMessage.class, UpdateClientApiaryMessage::encode, UpdateClientApiaryMessage::decode, UpdateClientApiaryMessage::handle);
+        INSTANCE.registerMessage(++id, LockBeeMessage.class, LockBeeMessage::encode, LockBeeMessage::decode, LockBeeMessage::handle);
+        INSTANCE.registerMessage(++id, ExportBeeMessage.class, ExportBeeMessage::encode, ExportBeeMessage::decode, ExportBeeMessage::handle);
+        INSTANCE.registerMessage(++id, ImportBeeMessage.class, ImportBeeMessage::encode, ImportBeeMessage::decode, ImportBeeMessage::handle);
     }
 
     public static void sendToServer(Object message) {

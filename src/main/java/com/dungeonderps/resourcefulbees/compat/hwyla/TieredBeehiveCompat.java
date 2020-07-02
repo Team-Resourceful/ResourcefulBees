@@ -2,7 +2,7 @@ package com.dungeonderps.resourcefulbees.compat.hwyla;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.block.TieredBeehiveBlock;
-import com.dungeonderps.resourcefulbees.lib.BeeConst;
+import com.dungeonderps.resourcefulbees.lib.BeeConstants;
 import com.dungeonderps.resourcefulbees.tileentity.TieredBeehiveTileEntity;
 import mcp.mobius.waila.api.*;
 import net.minecraft.block.BlockState;
@@ -32,12 +32,12 @@ public class TieredBeehiveCompat implements IComponentProvider, IServerDataProvi
                 int numCombs = nbt.getInt("NumCombs");
                 tooltip.add(new StringTextComponent(numCombs + " / " + maxCombs + " " + I18n.format("gui." + ResourcefulBees.MOD_ID + ".beehive.num_combs")));
             }
-            if (nbt.contains(BeeConst.NBT_SMOKED_TE)) {
+            if (nbt.contains(BeeConstants.NBT_SMOKED_TE)) {
                 tooltip.add(new TranslationTextComponent("gui." + ResourcefulBees.MOD_ID + ".beehive.smoked"));
 
                 CompoundNBT progress = new CompoundNBT();
                 progress.putInt("progress", nbt.getInt("TicksSmoked"));
-                progress.putInt("total", BeeConst.SMOKE_TIME);
+                progress.putInt("total", BeeConstants.SMOKE_TIME);
 
                 RenderableTextComponent renderableTextComponent = new RenderableTextComponent(HwylaCompat.BEEHIVE_SMOKER_PROGRESS, progress);
                 tooltip.add(renderableTextComponent);
@@ -51,7 +51,7 @@ public class TieredBeehiveCompat implements IComponentProvider, IServerDataProvi
             TieredBeehiveTileEntity blockEntity = (TieredBeehiveTileEntity) tileEntity;
 
             if (blockEntity.isSmoked) {
-                compoundNBT.putBoolean(BeeConst.NBT_SMOKED_TE, true);
+                compoundNBT.putBoolean(BeeConstants.NBT_SMOKED_TE, true);
                 compoundNBT.putInt("TicksSmoked", blockEntity.ticksSmoked);
             }
             BlockState state = blockEntity.getBlockState();

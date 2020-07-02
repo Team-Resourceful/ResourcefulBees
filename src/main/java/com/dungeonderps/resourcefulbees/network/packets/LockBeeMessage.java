@@ -1,9 +1,7 @@
 package com.dungeonderps.resourcefulbees.network.packets;
 
 import com.dungeonderps.resourcefulbees.tileentity.ApiaryTileEntity;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -11,34 +9,34 @@ import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class UpdateClientApiaryMessage {
+public class LockBeeMessage {
+
     private final BlockPos pos;
-    private final CompoundNBT data;
+    private final String beeType;
 
-    public UpdateClientApiaryMessage(BlockPos pos, CompoundNBT data){
+    public LockBeeMessage(BlockPos pos, String beeType){
         this.pos = pos;
-        this.data = data;
+        this.beeType = beeType;
     }
 
-    public static void encode(UpdateClientApiaryMessage message, PacketBuffer buffer){
+    public static void encode(LockBeeMessage message, PacketBuffer buffer){
         buffer.writeBlockPos(message.pos);
-        buffer.writeCompoundTag(message.data);
+        buffer.writeString(message.beeType);
     }
 
-    public static UpdateClientApiaryMessage decode(PacketBuffer buffer){
-        return new UpdateClientApiaryMessage(buffer.readBlockPos(), buffer.readCompoundTag());
+    public static LockBeeMessage decode(PacketBuffer buffer){
+        return new LockBeeMessage(buffer.readBlockPos(), buffer.readString());
     }
 
-    public static void handle(UpdateClientApiaryMessage message, Supplier<NetworkEvent.Context> context){
+    public static void handle(LockBeeMessage message, Supplier<NetworkEvent.Context> context){
         context.get().enqueueWork(() -> {
-            ClientPlayerEntity player = Minecraft.getInstance().player;
+            ServerPlayerEntity player = context.get().getSender();
             if (player != null) {
                 if (player.world.isBlockLoaded(message.pos)) {
                     TileEntity tileEntity = player.world.getTileEntity(message.pos);
                     if (tileEntity instanceof ApiaryTileEntity) {
                         ApiaryTileEntity apiaryTileEntity = (ApiaryTileEntity) tileEntity;
-                        apiaryTileEntity.BEES.clear();
-                        apiaryTileEntity.loadFromNBT(message.data);
+                        apiaryTileEntity.lockOrUnlockBee(message.beeType);
                     }
                 }
             }
@@ -46,5 +44,3 @@ public class UpdateClientApiaryMessage {
         context.get().setPacketHandled(true);
     }
 }
-
-

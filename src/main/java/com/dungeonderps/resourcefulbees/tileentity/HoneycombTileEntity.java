@@ -1,6 +1,6 @@
 package com.dungeonderps.resourcefulbees.tileentity;
 
-import com.dungeonderps.resourcefulbees.lib.BeeConst;
+import com.dungeonderps.resourcefulbees.lib.BeeConstants;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.utils.Color;
 import net.minecraft.nbt.CompoundNBT;
@@ -24,7 +24,7 @@ public class HoneycombTileEntity extends TileEntity {
     }
 
     public int getColor() {
-        return (blockColor != null && !blockColor.isEmpty()) ? Color.parseInt(blockColor) : BeeConst.DEFAULT_COLOR;
+        return (blockColor != null && !blockColor.isEmpty()) ? Color.parseInt(blockColor) : BeeConstants.DEFAULT_COLOR;
     }
 
     @Override
@@ -41,18 +41,18 @@ public class HoneycombTileEntity extends TileEntity {
     }
 
     public void loadFromNBT(@Nonnull CompoundNBT compound) {
-        blockColor = compound.getString(BeeConst.NBT_COLOR);
-        beeType = compound.getString(BeeConst.NBT_BEE_TYPE);
+        blockColor = compound.getString(BeeConstants.NBT_COLOR);
+        beeType = compound.getString(BeeConstants.NBT_BEE_TYPE);
     }
 
     CompoundNBT saveToNBT(CompoundNBT compound) {
         if (this.blockColor != null)
-            if (!this.blockColor.equals(String.valueOf(BeeConst.DEFAULT_COLOR))) {
-                compound.putString(BeeConst.NBT_COLOR, this.blockColor);
+            if (!this.blockColor.equals(String.valueOf(BeeConstants.DEFAULT_COLOR))) {
+                compound.putString(BeeConstants.NBT_COLOR, this.blockColor);
             }
 
         if (this.beeType != null) {
-            compound.putString(BeeConst.NBT_BEE_TYPE, this.beeType);
+            compound.putString(BeeConstants.NBT_BEE_TYPE, this.beeType);
         }
         return compound;
     }

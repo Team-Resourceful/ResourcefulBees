@@ -1,5 +1,9 @@
 package com.dungeonderps.resourcefulbees.container;
 
+import com.dungeonderps.resourcefulbees.item.BeeJar;
+import com.dungeonderps.resourcefulbees.lib.BeeConstants;
+import com.dungeonderps.resourcefulbees.network.NetPacketHandler;
+import com.dungeonderps.resourcefulbees.network.packets.LockBeeMessage;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.tileentity.ApiaryTileEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -8,6 +12,7 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.IntReferenceHolder;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -18,7 +23,8 @@ public class ValidatedApiaryContainer extends Container {
     public ApiaryTileEntity apiaryTileEntity;
     public BlockPos pos;
     public PlayerEntity player;
-    public int selectedBeeType = -1;
+    private final IntReferenceHolder selectedBee = IntReferenceHolder.single();
+    public String[] beeList;
 
     public ValidatedApiaryContainer(int id, World world, BlockPos pos, PlayerInventory inv) {
         super(RegistryHandler.VALIDATED_APIARY_CONTAINER.get(), id);
@@ -28,8 +34,32 @@ public class ValidatedApiaryContainer extends Container {
         this.apiaryTileEntity = (ApiaryTileEntity)world.getTileEntity(pos);
 
         if (apiaryTileEntity != null) {
-            this.addSlot(new SlotItemHandlerUnconditioned(apiaryTileEntity.h, ApiaryTileEntity.IMPORT, 74, 37));
-            this.addSlot(new SlotItemHandlerUnconditioned(apiaryTileEntity.h, ApiaryTileEntity.EMPTY_JAR, 128, 37));
+            this.addSlot(new SlotItemHandlerUnconditioned(apiaryTileEntity.h, ApiaryTileEntity.IMPORT, 74, 37) {
+                public boolean isItemValid(ItemStack stack) {
+                    if (stack.getItem() instanceof BeeJar) {
+                        BeeJar jarItem = (BeeJar) stack.getItem();
+                        if(jarItem.isFilled(stack)){
+                            CompoundNBT data = stack.getTag();
+                            //noinspection ConstantConditions
+                            String type = data.getString(BeeConstants.NBT_ENTITY);
+                            String s = RegistryHandler.CUSTOM_BEE.getId().toString();
+                            boolean valid = type.equals(s);
+                            return valid;
+                        }
+                    }
+                    return false;
+                }
+            });
+            this.addSlot(new SlotItemHandlerUnconditioned(apiaryTileEntity.h, ApiaryTileEntity.EMPTY_JAR, 128, 37){
+                public boolean isItemValid(ItemStack stack) {
+                    if (stack.getItem() instanceof BeeJar) {
+                        BeeJar jarItem = (BeeJar) stack.getItem();
+                        boolean isEmpty = !jarItem.isFilled(stack);
+                        return (isEmpty);
+                    }
+                    return false;
+                }
+            });
             this.addSlot(new OutputSlot(apiaryTileEntity.h, ApiaryTileEntity.EXPORT, 182, 37));
             if (!world.isRemote) {
                 this.apiaryTileEntity.numPlayersUsing++;
@@ -84,5 +114,25 @@ public class ValidatedApiaryContainer extends Container {
             }
         }
         return itemstack;
+    }
+
+    public boolean selectBee(int id){
+        if (id >= 0 && id < apiaryTileEntity.getBeeCount()) {
+            this.selectedBee.set(id);
+            //this.updateRecipeResultSlot();
+        }
+        return true;
+    }
+
+    public boolean lockOrUnlockBee(int id){
+        if (id >= 0 && id < apiaryTileEntity.getBeeCount()) {
+            //apiaryTileEntity.BEES.get(beeList[id]).isLocked = !apiaryTileEntity.BEES.get(beeList[id]).isLocked;
+            NetPacketHandler.sendToServer(new LockBeeMessage(apiaryTileEntity.getPos(), beeList[id]));
+        }
+        return true;
+    }
+
+    public int getSelectedBee() {
+        return this.selectedBee.get();
     }
 }

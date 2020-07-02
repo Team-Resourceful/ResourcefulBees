@@ -2,7 +2,7 @@ package com.dungeonderps.resourcefulbees.entity.goals;
 
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.entity.passive.CustomBeeEntity;
-import com.dungeonderps.resourcefulbees.lib.BeeConst;
+import com.dungeonderps.resourcefulbees.lib.BeeConstants;
 import com.dungeonderps.resourcefulbees.utils.BeeInfoUtils;
 import com.dungeonderps.resourcefulbees.utils.MathUtils;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -31,7 +31,7 @@ public class BeeBreedGoal extends BreedGoal {
             return bee.getBeeType();
         }
         else
-            return BeeConst.DEFAULT_BEE_TYPE;
+            return BeeConstants.DEFAULT_BEE_TYPE;
     }
 
     @Override

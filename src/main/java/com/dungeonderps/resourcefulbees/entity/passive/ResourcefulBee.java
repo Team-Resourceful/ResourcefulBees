@@ -2,7 +2,7 @@ package com.dungeonderps.resourcefulbees.entity.passive;
 
 import com.dungeonderps.resourcefulbees.data.BeeData;
 import com.dungeonderps.resourcefulbees.entity.goals.BeeBreedGoal;
-import com.dungeonderps.resourcefulbees.lib.BeeConst;
+import com.dungeonderps.resourcefulbees.lib.BeeConstants;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.tileentity.ApiaryTileEntity;
 import com.dungeonderps.resourcefulbees.tileentity.TieredBeehiveTileEntity;
@@ -205,7 +205,7 @@ public class ResourcefulBee extends CustomBeeEntity {
     public boolean validFillerBlock(Block block){
         String baseBlock = this.getBeeInfo().getMutationInput();
         if (BeeInfoUtils.TAG_RESOURCE_PATTERN.matcher(baseBlock).matches()) {
-            Tag<Block> blockTag = BeeInfoUtils.getBlockTag(baseBlock.replace(BeeConst.TAG_PREFIX, ""));
+            Tag<Block> blockTag = BeeInfoUtils.getBlockTag(baseBlock.replace(BeeConstants.TAG_PREFIX, ""));
             return blockTag != null && block.isIn(blockTag);
         }
         ResourceLocation testBlock = block.getRegistryName();
@@ -244,15 +244,15 @@ public class ResourcefulBee extends CustomBeeEntity {
         String flower = getBeeInfo().getFlower();
 
         if (BeeInfoUtils.TAG_RESOURCE_PATTERN.matcher(flower).matches()) {
-            Tag<Block> blockTag = BeeInfoUtils.getBlockTag(flower.replace(BeeConst.TAG_PREFIX, ""));
+            Tag<Block> blockTag = BeeInfoUtils.getBlockTag(flower.replace(BeeConstants.TAG_PREFIX, ""));
             return blockTag != null && this.world.getBlockState(pos).getBlock().isIn(blockTag);
         } else {
             switch (flower) {
-                case BeeConst.FLOWER_TAG_ALL:
+                case BeeConstants.FLOWER_TAG_ALL:
                     return this.world.isBlockPresent(pos) && this.world.getBlockState(pos).getBlock().isIn(BlockTags.FLOWERS);
-                case BeeConst.FLOWER_TAG_SMALL:
+                case BeeConstants.FLOWER_TAG_SMALL:
                     return this.world.isBlockPresent(pos) && this.world.getBlockState(pos).getBlock().isIn(BlockTags.SMALL_FLOWERS);
-                case BeeConst.FLOWER_TAG_TALL:
+                case BeeConstants.FLOWER_TAG_TALL:
                     return this.world.isBlockPresent(pos) && this.world.getBlockState(pos).getBlock().isIn(BlockTags.TALL_FLOWERS);
                 default:
                     return this.world.isBlockPresent(pos) && this.world.getBlockState(pos).getBlock().equals(BeeInfoUtils.getBlock(flower));
@@ -265,18 +265,18 @@ public class ResourcefulBee extends CustomBeeEntity {
         String flower = getBeeInfo().getFlower();
 
         if (BeeInfoUtils.TAG_RESOURCE_PATTERN.matcher(flower).matches()) {
-            Tag<Block> blockTag = BeeInfoUtils.getBlockTag(flower.replace(BeeConst.TAG_PREFIX, ""));
+            Tag<Block> blockTag = BeeInfoUtils.getBlockTag(flower.replace(BeeConstants.TAG_PREFIX, ""));
             return blockTag != null && state.isIn(blockTag);
         } else {
             switch (flower) {
-                case BeeConst.FLOWER_TAG_ALL:
+                case BeeConstants.FLOWER_TAG_ALL:
                     return state.isIn(BlockTags.TALL_FLOWERS)
                             ? state.getBlock() != Blocks.SUNFLOWER
                             || state.get(DoublePlantBlock.HALF) == DoubleBlockHalf.UPPER
                             : state.isIn(BlockTags.SMALL_FLOWERS);
-                case BeeConst.FLOWER_TAG_SMALL:
+                case BeeConstants.FLOWER_TAG_SMALL:
                     return state.isIn(BlockTags.SMALL_FLOWERS);
-                case BeeConst.FLOWER_TAG_TALL:
+                case BeeConstants.FLOWER_TAG_TALL:
                     return state.isIn(BlockTags.TALL_FLOWERS) && (state.getBlock() != Blocks.SUNFLOWER || state.get(DoublePlantBlock.HALF) == DoubleBlockHalf.UPPER);
                 default:
                     return state.getBlock().equals(BeeInfoUtils.getBlock(flower));

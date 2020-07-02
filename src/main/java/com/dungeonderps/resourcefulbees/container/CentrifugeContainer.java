@@ -7,6 +7,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -27,8 +28,16 @@ public class CentrifugeContainer extends Container {
         this.trackInt(new FunctionalIntReferenceHolder(() -> centrifugeTileEntity.time, v -> centrifugeTileEntity.time = v));
         this.trackInt(new FunctionalIntReferenceHolder(() -> centrifugeTileEntity.totalTime, v -> centrifugeTileEntity.totalTime = v));
 
-        this.addSlot(new SlotItemHandlerUnconditioned(centrifugeTileEntity.h, CentrifugeTileEntity.HONEYCOMB_SLOT, 30, 20));
-        this.addSlot(new SlotItemHandlerUnconditioned(centrifugeTileEntity.h, CentrifugeTileEntity.BOTTLE_SLOT, 30, 38));
+        this.addSlot(new SlotItemHandlerUnconditioned(centrifugeTileEntity.h, CentrifugeTileEntity.HONEYCOMB_SLOT, 30, 20){
+            public boolean isItemValid(ItemStack stack){
+                return !stack.getItem().equals(Items.GLASS_BOTTLE);
+            }
+        });
+        this.addSlot(new SlotItemHandlerUnconditioned(centrifugeTileEntity.h, CentrifugeTileEntity.BOTTLE_SLOT, 30, 38){
+            public boolean isItemValid(ItemStack stack){
+                return stack.getItem().equals(Items.GLASS_BOTTLE);
+            }
+        });
         this.addSlot(new OutputSlot(centrifugeTileEntity.h, CentrifugeTileEntity.HONEY_BOTTLE, 80, 59));
         this.addSlot(new OutputSlot(centrifugeTileEntity.h, CentrifugeTileEntity.OUTPUT1, 129, 20));
         this.addSlot(new OutputSlot(centrifugeTileEntity.h, CentrifugeTileEntity.OUTPUT2, 129, 38));

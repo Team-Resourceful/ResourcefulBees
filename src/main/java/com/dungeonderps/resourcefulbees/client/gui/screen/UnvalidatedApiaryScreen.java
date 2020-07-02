@@ -6,11 +6,12 @@ import com.dungeonderps.resourcefulbees.container.UnvalidatedApiaryContainer;
 import com.dungeonderps.resourcefulbees.network.NetPacketHandler;
 import com.dungeonderps.resourcefulbees.network.packets.BuildApiaryMessage;
 import com.dungeonderps.resourcefulbees.network.packets.ValidateApiaryMessage;
-import com.dungeonderps.resourcefulbees.tileentity.beehive.ApiaryTileEntity;
+import com.dungeonderps.resourcefulbees.tileentity.ApiaryTileEntity;
 import com.dungeonderps.resourcefulbees.utils.MathUtils;
 import com.dungeonderps.resourcefulbees.utils.PreviewHandler;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.client.gui.widget.button.Button;
@@ -24,9 +25,11 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import javax.annotation.Nonnull;
+
 public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryContainer> {
 
-    private ApiaryTileEntity apiaryTileEntity;
+    private final ApiaryTileEntity apiaryTileEntity;
     private final ResourceLocation unvalidatedTexture = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/apiary/unvalidated.png");
     private final ResourceLocation arrowButtonTexture = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/apiary/arrow_button.png");
     private final PlayerEntity player;
@@ -136,11 +139,11 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        this.drawString(font,"Offset", 65, 13, 0xffffff);
-        this.drawString(font,"Vert.", 75, 26, 0xffffff);
-        this.drawString(font,"Horiz.", 75, 39, 0xffffff);
-        this.drawRightAlignedString(font,String.valueOf(verticalOffset), 70, 26, 0xffffff);
-        this.drawRightAlignedString(font,String.valueOf(horizontalOffset), 70, 39, 0xffffff);
+        this.font.drawString("Offset", 65, 13, 0x404040);
+        this.font.drawString("Vert.", 75, 26, 0x404040);
+        this.font.drawString("Horiz.", 75, 39, 0x404040);
+        this.drawRightAlignedString(font,String.valueOf(verticalOffset), 70, 26, 0x404040);
+        this.drawRightAlignedString(font,String.valueOf(horizontalOffset), 70, 39, 0x404040);
 
         for(Widget widget : this.buttons) {
             if (widget.isHovered()) {
@@ -148,6 +151,11 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
                 break;
             }
         }
+    }
+
+    @Override
+    public void drawRightAlignedString(FontRenderer fontRenderer, @Nonnull String s, int posX, int posY, int color) {
+        fontRenderer.drawString(s, (float)(posX - fontRenderer.getStringWidth(s)), (float)posY, color);
     }
 
     private enum Direction {

@@ -6,7 +6,8 @@ import com.dungeonderps.resourcefulbees.container.AutomationSensitiveItemStackHa
 import com.dungeonderps.resourcefulbees.container.UnvalidatedApiaryContainer;
 import com.dungeonderps.resourcefulbees.container.ValidatedApiaryContainer;
 import com.dungeonderps.resourcefulbees.entity.passive.CustomBeeEntity;
-import com.dungeonderps.resourcefulbees.lib.BeeConst;
+import com.dungeonderps.resourcefulbees.item.BeeJar;
+import com.dungeonderps.resourcefulbees.lib.BeeConstants;
 import com.dungeonderps.resourcefulbees.network.NetPacketHandler;
 import com.dungeonderps.resourcefulbees.network.packets.UpdateClientApiaryMessage;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
@@ -22,6 +23,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.NBTUtil;
@@ -53,7 +55,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     public static final int IMPORT = 0;
     public static final int EXPORT = 2;
     public static final int EMPTY_JAR = 1;
-    public final HashMap<String, ApiaryBee> bees = new HashMap<>();
+    public final LinkedHashMap<String, ApiaryBee> BEES = new LinkedHashMap<>();
     public final List<BlockPos> STRUCTURE_BLOCKS = new ArrayList<>();
     protected final int TIER = 5;
     protected final float TIER_MODIFIER = 5;
@@ -95,10 +97,10 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     }
 
     public int getBeeCount() {
-        return this.bees.size();
+        return this.BEES.size();
     }
 
-    public boolean releaseBee(@Nonnull BlockState state, @Nonnull CompoundNBT nbt, @Nullable List<Entity> entities, @Nonnull State beehiveState, @Nullable BlockPos flowerPos, boolean exportBee) {
+    public boolean releaseBee(@Nonnull BlockState state, @Nonnull CompoundNBT nbt, @Nonnull State beehiveState, @Nullable BlockPos flowerPos, boolean exportBee) {
         BlockPos blockpos = this.getPos();
         if (!exportBee && shouldStayInHive(beehiveState)) {
             return false;
@@ -134,17 +136,18 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
                         }
 
                         beeEntity.resetTicksWithoutNectar();
-                        if (entities != null) {
-                            entities.add(beeEntity);
+
+                        if (exportBee) {
+                            export(beeEntity);
+                            //TODO - add bee to jar
+                        } else {
+                            BlockPos hivePos = this.getPos();
+                            this.world.playSound(null, hivePos.getX(), hivePos.getY(), hivePos.getZ(), SoundEvents.BLOCK_BEEHIVE_EXIT, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                            this.world.addEntity(entity);
                         }
+                        return true;
                     }
-                    BlockPos hivePos = this.getPos();
-                    this.world.playSound(null, hivePos.getX(), hivePos.getY(), hivePos.getZ(), SoundEvents.BLOCK_BEEHIVE_EXIT, SoundCategory.BLOCKS, 1.0F, 1.0F);
-                    this.world.addEntity(entity);
-                    if (exportBee) {
-                        //TODO - add bee to jar
-                    }
-                    return true;
+                    return false;
                 } else {
                     return false;
                 }
@@ -152,18 +155,19 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
         }
     }
 
-    public void tryEnterHive(Entity bee, boolean hasNectar) {
+    public boolean tryEnterHive(Entity bee, boolean hasNectar) {
         if (isValidApiary)
-            this.tryEnterHive(bee, hasNectar, 0);
+            return this.tryEnterHive(bee, hasNectar, 0);
+        return false;
     }
 
-    public void tryEnterHive(@Nonnull Entity bee, boolean hasNectar, int ticksInHive) {
+    public boolean tryEnterHive(@Nonnull Entity bee, boolean hasNectar, int ticksInHive) {
         if (this.world != null) {
             if (bee instanceof CustomBeeEntity) {
                 CustomBeeEntity bee1 = (CustomBeeEntity) bee;
                 String type = bee1.getBeeType();
 
-                if (!this.bees.containsKey(type) && this.bees.size() < getMaxBees()) {
+                if (!this.BEES.containsKey(type) && this.BEES.size() < getMaxBees()) {
                     bee.removePassengers();
                     CompoundNBT nbt = new CompoundNBT();
                     bee.writeUnlessPassenger(nbt);
@@ -172,7 +176,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
                     maxTimeInHive = (int) (maxTimeInHive * (1 - (0.30F + this.getTier() * .05)));
                     int finalMaxTimeInHive = 999999999; //maxTimeInHive; TODO revert back before publishing!
 
-                    this.bees.computeIfAbsent(bee1.getBeeType(), k -> new ApiaryBee(nbt, ticksInHive, hasNectar ? finalMaxTimeInHive : BeeConst.MIN_HIVE_TIME, bee1.getFlowerPos(), bee1.getBeeType()));
+                    this.BEES.computeIfAbsent(bee1.getBeeType(), k -> new ApiaryBee(nbt, ticksInHive, hasNectar ? finalMaxTimeInHive : BeeConstants.MIN_HIVE_TIME, bee1.getFlowerPos(), bee1.getBeeType()));
                     BlockPos pos = this.getPos();
                     this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BLOCK_BEEHIVE_ENTER, SoundCategory.BLOCKS, 1.0F, 1.0F);
 
@@ -180,9 +184,11 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
                         syncApiaryToPlayersUsing(this.world, this.getPos(), this.saveToNBT(new CompoundNBT()));
 
                     bee.remove();
+                    return true;
                 }
             }
         }
+        return false;
     }
 
     @Override
@@ -202,7 +208,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
                     ticksSinceValidation++;
                 this.tickBees();
 
-                if (this.bees.size() > 0 && this.world.getRandom().nextDouble() < 0.005D) {
+                if (this.BEES.size() > 0 && this.world.getRandom().nextDouble() < 0.005D) {
                     double d0 = blockpos.getX() + 0.5D;
                     double d1 = blockpos.getY();
                     double d2 = blockpos.getZ() + 0.5D;
@@ -213,17 +219,17 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     }
 
     private void tickBees() {
-        Iterator<Map.Entry<String, ApiaryBee>> iterator = this.bees.entrySet().iterator();
+        Iterator<Map.Entry<String, ApiaryBee>> iterator = this.BEES.entrySet().iterator();
         BlockState blockstate = this.getBlockState();
 
         while (iterator.hasNext()) {
             Map.Entry<String, ApiaryBee> element = iterator.next();
             ApiaryBee apiaryBee = element.getValue();
-            if (apiaryBee.ticksInHive > apiaryBee.minOccupationTicks && !apiaryBee.isLocked) {
+            if (!apiaryBee.isLocked && apiaryBee.ticksInHive > apiaryBee.minOccupationTicks) {
 
                 CompoundNBT compoundnbt = apiaryBee.entityData;
                 State state = compoundnbt.getBoolean("HasNectar") ? State.HONEY_DELIVERED : State.BEE_RELEASED;
-                if (this.releaseBee(blockstate, compoundnbt, null, state, apiaryBee.savedFlowerPos, false)) {
+                if (this.releaseBee(blockstate, compoundnbt, state, apiaryBee.savedFlowerPos, false)) {
                     iterator.remove();
                     if (this.numPlayersUsing > 0 && this.world != null && !this.world.isRemote)
                         syncApiaryToPlayersUsing(this.world, this.getPos(), this.saveToNBT(new CompoundNBT()));
@@ -238,14 +244,14 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     public ListNBT writeBees() {
         ListNBT listnbt = new ListNBT();
 
-        this.bees.forEach((key, apiaryBee) -> {
+        this.BEES.forEach((key, apiaryBee) -> {
             apiaryBee.entityData.removeUniqueId("UUID");
             CompoundNBT compoundnbt = new CompoundNBT();
             compoundnbt.put("EntityData", apiaryBee.entityData);
             compoundnbt.putInt("TicksInHive", apiaryBee.ticksInHive);
             compoundnbt.putInt("MinOccupationTicks", apiaryBee.minOccupationTicks);
             compoundnbt.putBoolean("Locked", apiaryBee.isLocked);
-            compoundnbt.putString(BeeConst.NBT_BEE_TYPE, apiaryBee.beeType);
+            compoundnbt.putString(BeeConstants.NBT_BEE_TYPE, apiaryBee.beeType);
             if (apiaryBee.savedFlowerPos != null) {
                 compoundnbt.put("FlowerPos", NBTUtil.writeBlockPos(apiaryBee.savedFlowerPos));
             }
@@ -264,7 +270,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     }
 
     public boolean isFullOfBees() {
-        return this.bees.size() >= getMaxBees();
+        return this.BEES.size() >= getMaxBees();
     }
 
     public String getResourceHoneycomb() {
@@ -305,12 +311,16 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
 
             BlockPos savedFlowerPos = data.contains("FlowerPos") ? NBTUtil.readBlockPos(data.getCompound("FlowerPos")) : null;
 
-            this.bees.computeIfAbsent(data.getString(BeeConst.NBT_BEE_TYPE), k -> new ApiaryBee(
+            String beeType = data.getString(BeeConstants.NBT_BEE_TYPE);
+
+            this.BEES.computeIfAbsent(data.getString(BeeConstants.NBT_BEE_TYPE), k -> new ApiaryBee(
                     data.getCompound("EntityData"),
                     data.getInt("TicksInHive"),
                     data.getInt("MinOccupationTicks"),
                     savedFlowerPos,
-                    data.getString(BeeConst.NBT_BEE_TYPE)));
+                    beeType));
+
+            this.BEES.get(beeType).isLocked = data.getBoolean("Locked");
         }
 
         if (nbt.contains("isValid"))
@@ -370,6 +380,66 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
 
     public static void syncApiaryToPlayersUsing(World world, BlockPos pos, CompoundNBT data) {
         NetPacketHandler.sendToAllLoaded(new UpdateClientApiaryMessage(pos, data), world, pos);
+    }
+
+    public void lockOrUnlockBee(String beeType) {
+        this.BEES.get(beeType).isLocked = !this.BEES.get(beeType).isLocked;
+        syncApiaryToPlayersUsing(this.world, this.getPos(), this.saveToNBT(new CompoundNBT()));
+    }
+
+    public void importBee(ServerPlayerEntity player){
+        World world = this.world;
+        boolean imported = false;
+
+        if (world != null) {
+            if (!this.h.getStackInSlot(IMPORT).isEmpty() && this.h.getStackInSlot(EMPTY_JAR).getCount() < 64) {
+                ItemStack filledJar = this.h.getStackInSlot(IMPORT);
+                ItemStack emptyJar = this.h.getStackInSlot(EMPTY_JAR);
+
+                if (filledJar.getItem() instanceof BeeJar) {
+                    BeeJar jarItem = (BeeJar) filledJar.getItem();
+                    Entity entity = jarItem.getEntityFromStack(filledJar, world, true);
+
+                    if (entity instanceof CustomBeeEntity){
+                        CustomBeeEntity beeEntity = (CustomBeeEntity) entity;
+                        imported = tryEnterHive(beeEntity, beeEntity.hasNectar());
+                    }
+
+                    if (imported){
+                        filledJar.shrink(1);
+                        if (emptyJar.isEmpty()){
+                            this.h.setStackInSlot(EMPTY_JAR, new ItemStack(jarItem));
+                        } else {
+                            emptyJar.grow(1);
+                        }
+                    }
+                }
+            }
+        }
+
+        player.sendStatusMessage(new TranslationTextComponent("gui.resourcefulbees.apiary.import." + imported), true);
+    }
+
+    public void exportBee(ServerPlayerEntity player, String beeType){
+        boolean exported = false;
+        ApiaryBee bee = this.BEES.get(beeType);
+        CompoundNBT data = bee.entityData;
+        State state = data.getBoolean("HasNectar") ? State.HONEY_DELIVERED : State.BEE_RELEASED;
+
+        if (bee.isLocked && h.getStackInSlot(EXPORT).isEmpty()) {
+            exported = releaseBee(this.getBlockState(), data, state, bee.savedFlowerPos, true);
+        }
+        player.sendStatusMessage(new TranslationTextComponent("gui.resourcefulbees.apiary.export." + exported), true);
+    }
+
+    public void export(CustomBeeEntity beeEntity){
+        ItemStack beeJar = new ItemStack(RegistryHandler.BEE_JAR.get());
+        CompoundNBT data = new CompoundNBT();
+        data.putString(BeeConstants.NBT_ENTITY, "resourcefulbees:bee");
+        beeEntity.writeWithoutTypeId(data);
+        data.putString(BeeConstants.NBT_COLOR, beeEntity.getBeeInfo().getPrimaryColor());
+        beeJar.setTag(data);
+        this.h.setStackInSlot(EXPORT, beeJar);
     }
 
     public void runStructureValidation(@Nullable ServerPlayerEntity validatingPlayer) {

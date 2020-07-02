@@ -1,7 +1,7 @@
 package com.dungeonderps.resourcefulbees.utils;
 
 import com.dungeonderps.resourcefulbees.data.BeeData;
-import com.dungeonderps.resourcefulbees.lib.BeeConst;
+import com.dungeonderps.resourcefulbees.lib.BeeConstants;
 import com.dungeonderps.resourcefulbees.lib.MutationTypes;
 import com.google.common.base.Splitter;
 import net.minecraft.block.Block;
@@ -57,7 +57,7 @@ public class BeeInfoUtils {
 
     private static Set<Biome> getBiomeSet(String list){
         Set<Biome> set = new HashSet<>();
-        if (list.contains(BeeConst.TAG_PREFIX))
+        if (list.contains(BeeConstants.TAG_PREFIX))
             set.addAll(parseBiomeListWithTag(list));
         else
             set.addAll(parseBiomeList(list));
@@ -65,7 +65,7 @@ public class BeeInfoUtils {
     }
 
     private static Set<Biome> parseBiomeListWithTag(String list){
-        List<String> biomeList = Splitter.on(',').splitToList(list.replace(BeeConst.TAG_PREFIX,""));
+        List<String> biomeList = Splitter.on(',').splitToList(list.replace(BeeConstants.TAG_PREFIX,""));
         Set<Biome> biomeSet = new HashSet<>();
 
         for(String type : biomeList){
@@ -97,11 +97,11 @@ public class BeeInfoUtils {
 
     public static void genDefaultBee(){
         BeeData defaultBee = new BeeData();
-        defaultBee.setName(BeeConst.DEFAULT_BEE_TYPE);
-        defaultBee.setHoneycombColor(String.valueOf(BeeConst.DEFAULT_COLOR));
+        defaultBee.setName(BeeConstants.DEFAULT_BEE_TYPE);
+        defaultBee.setHoneycombColor(String.valueOf(BeeConstants.DEFAULT_COLOR));
         defaultBee.setFlower("minecraft:poppy");
         defaultBee.setSpawnInWorld(false);
-        BEE_INFO.put(BeeConst.DEFAULT_BEE_TYPE, defaultBee);
+        BEE_INFO.put(BeeConstants.DEFAULT_BEE_TYPE, defaultBee);
     }
 
     private static boolean logError(String name, String dataCheckType, String data, String dataType){
@@ -201,9 +201,9 @@ public class BeeInfoUtils {
 
     private static boolean validateMaxTimeInHive(BeeData bee) {
         double time = bee.getMaxTimeInHive();
-        return time >= BeeConst.MIN_HIVE_TIME && time == Math.floor(time) && !Double.isInfinite(time) ||
+        return time >= BeeConstants.MIN_HIVE_TIME && time == Math.floor(time) && !Double.isInfinite(time) ||
                 logWarn(bee.getName(), "Time In Hive", String.valueOf(bee.getMaxTimeInHive()),
-                "time. Value must be greater than or equal to " + BeeConst.MIN_HIVE_TIME);
+                "time. Value must be greater than or equal to " + BeeConstants.MIN_HIVE_TIME);
     }
 
     private static boolean validateCentrifugeMainOutput(BeeData bee) {
@@ -238,9 +238,9 @@ public class BeeInfoUtils {
             return true;
         else {
             Block flower = getBlock(bee.getFlower());
-            return (bee.getFlower().equals(BeeConst.FLOWER_TAG_ALL) ||
-                    bee.getFlower().equals(BeeConst.FLOWER_TAG_SMALL) ||
-                    bee.getFlower().equals(BeeConst.FLOWER_TAG_TALL) ||
+            return (bee.getFlower().equals(BeeConstants.FLOWER_TAG_ALL) ||
+                    bee.getFlower().equals(BeeConstants.FLOWER_TAG_SMALL) ||
+                    bee.getFlower().equals(BeeConstants.FLOWER_TAG_TALL) ||
                     isValidBlock(flower)) ||
                     logError(bee.getName(), "Flower", bee.getFlower(), "flower");
         }

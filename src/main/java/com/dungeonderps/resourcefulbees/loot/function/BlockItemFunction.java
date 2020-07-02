@@ -1,6 +1,6 @@
 package com.dungeonderps.resourcefulbees.loot.function;
 
-import com.dungeonderps.resourcefulbees.lib.BeeConst;
+import com.dungeonderps.resourcefulbees.lib.BeeConstants;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.tileentity.HoneycombTileEntity;
 import com.google.gson.JsonDeserializationContext;
@@ -28,8 +28,8 @@ public class BlockItemFunction extends LootFunction {
         if (tile instanceof HoneycombTileEntity){
             HoneycombTileEntity blockEntity = (HoneycombTileEntity)tile;
             ItemStack blockItem = new ItemStack(RegistryHandler.HONEYCOMB_BLOCK_ITEM.get());
-            blockItem.getOrCreateChildTag(BeeConst.NBT_ROOT).putString(BeeConst.NBT_BEE_TYPE, blockEntity.beeType);
-            blockItem.getOrCreateChildTag(BeeConst.NBT_ROOT).putString(BeeConst.NBT_COLOR, blockEntity.blockColor);
+            blockItem.getOrCreateChildTag(BeeConstants.NBT_ROOT).putString(BeeConstants.NBT_BEE_TYPE, blockEntity.beeType);
+            blockItem.getOrCreateChildTag(BeeConstants.NBT_ROOT).putString(BeeConstants.NBT_COLOR, blockEntity.blockColor);
             if (blockEntity.beeType.equals("") && blockEntity.blockColor.equals(""))
                 return ItemStack.EMPTY;
             else

@@ -3,7 +3,7 @@ package com.dungeonderps.resourcefulbees.client.render.entity;
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.data.BeeData;
 import com.dungeonderps.resourcefulbees.entity.passive.CustomBeeEntity;
-import com.dungeonderps.resourcefulbees.lib.BeeConst;
+import com.dungeonderps.resourcefulbees.lib.BeeConstants;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.util.ResourceLocation;
@@ -26,8 +26,8 @@ public class CustomBeeRenderer extends MobRenderer<CustomBeeEntity, CustomBeeMod
     public ResourceLocation getEntityTexture(CustomBeeEntity entity) {
         BeeData bee = entity.getBeeInfo();
         if (entity.isAngry()) {
-            return new ResourceLocation(ResourcefulBees.MOD_ID, BeeConst.ENTITY_TEXTURES_DIR + bee.getBaseLayerTexture() + "_angry.png");
+            return new ResourceLocation(ResourcefulBees.MOD_ID, BeeConstants.ENTITY_TEXTURES_DIR + bee.getBaseLayerTexture() + "_angry.png");
         }
-        return new ResourceLocation(ResourcefulBees.MOD_ID, BeeConst.ENTITY_TEXTURES_DIR + bee.getBaseLayerTexture() + ".png");
+        return new ResourceLocation(ResourcefulBees.MOD_ID, BeeConstants.ENTITY_TEXTURES_DIR + bee.getBaseLayerTexture() + ".png");
     }
 }
