@@ -11,7 +11,6 @@ import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.tileentity.ApiaryTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SimpleSound;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
@@ -23,7 +22,6 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 
-import javax.annotation.Nonnull;
 import java.util.Arrays;
 
 public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContainer> {
@@ -35,6 +33,9 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
     private boolean clickedOnScroll;
 
     private ApiaryTileEntity apiaryTileEntity;
+
+    private Button importButton;
+    private Button exportButton;
 
     public ValidatedApiaryScreen(ValidatedApiaryContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
         super(screenContainer, inv, titleIn);
@@ -48,17 +49,13 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
 
         apiaryTileEntity = this.container.apiaryTileEntity;
 
-        this.addButton(new Button(this.guiLeft + 73, this.guiTop + 10, 40, 20, I18n.format("gui.resourcefulbees.apiary.button.import"), (onPress) -> this.importBee()));
-        this.addButton(new Button(this.guiLeft + 159, this.guiTop + 10, 40, 20, I18n.format("gui.resourcefulbees.apiary.button.export"), (onPress) -> this.exportSelectedBee()));
-
-        ResourcefulBees.LOGGER.debug(this.guiLeft);
-        ResourcefulBees.LOGGER.debug(this.guiTop);
-        ResourcefulBees.LOGGER.debug(this.xSize);
-        ResourcefulBees.LOGGER.debug(this.ySize);
+        importButton = this.addButton(new Button(this.guiLeft + 73, this.guiTop + 10, 40, 20, I18n.format("gui.resourcefulbees.apiary.button.import"), (onPress) -> this.importBee()));
+        exportButton = this.addButton(new Button(this.guiLeft + 159, this.guiTop + 10, 40, 20, I18n.format("gui.resourcefulbees.apiary.button.export"), (onPress) -> this.exportSelectedBee()));
     }
 
     private void exportSelectedBee() {
-        NetPacketHandler.sendToServer(new ExportBeeMessage(this.container.pos, this.container.beeList[this.container.getSelectedBee()]));
+        if (apiaryTileEntity.getBeeCount() != 0)
+            NetPacketHandler.sendToServer(new ExportBeeMessage(this.container.pos, this.container.beeList[this.container.getSelectedBee()]));
     }
 
     private void importBee() {
@@ -76,6 +73,15 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
         Minecraft client = this.minecraft;
         if (client != null) {
+            if (this.container.getSelectedBee() > apiaryTileEntity.getBeeCount() - 1) {
+                this.container.selectBee(apiaryTileEntity.getBeeCount() - 1);
+            }
+            if (this.container.getSelectedBee() == -1 && apiaryTileEntity.getBeeCount() > 0) {
+                this.container.selectBee(0);
+            }
+            exportButton.active = this.container.getSelectedBee() != -1;
+            importButton.active = apiaryTileEntity.getBeeCount() < 9;
+
             this.container.beeList = Arrays.copyOf(apiaryTileEntity.BEES.keySet().toArray(), apiaryTileEntity.getBeeCount(), String[].class);
             this.minecraft.getTextureManager().bindTexture(VALIDATED_TEXTURE);
             int i = this.guiLeft;
@@ -84,7 +90,7 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
             if (!this.canScroll()) {
                 this.sliderProgress = 0;
             }
-            int k = (int)(99.0F * this.sliderProgress);
+            int k = (int) (99.0F * this.sliderProgress);
             this.blit(i + 44, j + 18 + k, 54 + (this.canScroll() ? 0 : 6), 152, 6, 27);
             int l = this.guiLeft + 5;
             int i1 = this.guiTop + 18;
@@ -104,7 +110,7 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
 
     private void drawRecipesBackground(int mouseX, int mouseY, int left, int top, int beeIndexOffsetMax) {
 
-        for(int i = this.beeIndexOffset; i < beeIndexOffsetMax && i < apiaryTileEntity.getBeeCount(); ++i) {
+        for (int i = this.beeIndexOffset; i < beeIndexOffsetMax && i < apiaryTileEntity.getBeeCount(); ++i) {
             int j = i - this.beeIndexOffset;
             int k = left;
             int i1 = top + j * 18;
@@ -131,7 +137,7 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
     }
 
     private void drawRecipesItems(int left, int top, int beeIndexOffsetMax) {
-        for(int i = this.beeIndexOffset; i < beeIndexOffsetMax && i < apiaryTileEntity.getBeeCount(); ++i) {
+        for (int i = this.beeIndexOffset; i < beeIndexOffsetMax && i < apiaryTileEntity.getBeeCount(); ++i) {
             int j = i - this.beeIndexOffset;
             int i1 = top + j * 18 + 2;
             ItemStack beeJar = new ItemStack(RegistryHandler.BEE_JAR.get());
@@ -141,7 +147,7 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
             data.putString(BeeConstants.NBT_COLOR, BeeInfo.getInfo(this.container.beeList[i]).getPrimaryColor());
             beeJar.setTag(data);
             if (this.minecraft != null)
-            this.minecraft.getItemRenderer().renderItemAndEffectIntoGUI(beeJar, left, i1);
+                this.minecraft.getItemRenderer().renderItemAndEffectIntoGUI(beeJar, left, i1);
         }
     }
 
@@ -152,9 +158,9 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
     public boolean mouseScrolled(double mouseX, double mouseY, double scrollAmount) {
         if (this.canScroll()) {
             int i = this.getHiddenRows();
-            this.sliderProgress = (float)(this.sliderProgress - scrollAmount / i);
+            this.sliderProgress = (float) (this.sliderProgress - scrollAmount / i);
             this.sliderProgress = MathHelper.clamp(this.sliderProgress, 0.0F, 1.0F);
-            this.beeIndexOffset = (int)((this.sliderProgress * i) + 0.5D);
+            this.beeIndexOffset = (int) ((this.sliderProgress * i) + 0.5D);
         }
 
         return true;
@@ -164,9 +170,9 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
         if (this.clickedOnScroll && this.canScroll()) {
             int i = this.guiTop + 14;
             int j = i + 101;
-            this.sliderProgress = ((float)mouseY - (float)i - 7.5F) / ((float)(j - i) - 15.0F);
+            this.sliderProgress = ((float) mouseY - (float) i - 7.5F) / ((float) (j - i) - 15.0F);
             this.sliderProgress = MathHelper.clamp(this.sliderProgress, 0.0F, 1.0F);
-            this.beeIndexOffset = (int)((double)(this.sliderProgress * (float)this.getHiddenRows()) + 0.5D);
+            this.beeIndexOffset = (int) ((double) (this.sliderProgress * (float) this.getHiddenRows()) + 0.5D);
             return true;
         } else {
             return super.mouseDragged(mouseX, mouseY, p_mouseDragged_5_, p_mouseDragged_6_, p_mouseDragged_8_);
@@ -184,17 +190,16 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
             int j = this.guiTop + 18;
             int k = this.beeIndexOffset + 7;
 
-            for(int l = this.beeIndexOffset; l < k; ++l) {
+            for (int l = this.beeIndexOffset; l < k; ++l) {
                 int i1 = l - this.beeIndexOffset;
-                double d0 = mouseX - (double)(i);
-                double d1 = mouseY - (double)(j + i1 * 18);
+                double d0 = mouseX - (double) (i);
+                double d1 = mouseY - (double) (j + i1 * 18);
                 if (d0 >= 0.0D && d1 >= 0.0D && d0 < 17.0D && d1 < 17.0D && this.container.selectBee(l)) {
                     Minecraft.getInstance().getSoundHandler().play(SimpleSound.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
-                    //this.minecraft.playerController.sendEnchantPacket((this.container).windowId, l);
                     return true;
                 }
 
-                if (d0 >= 18.0D && d1 >= 0.0D && d0 < 35.0D && d1 < 17.0D && this.container.lockOrUnlockBee(l)){
+                if (d0 >= 18.0D && d1 >= 0.0D && d0 < 35.0D && d1 < 17.0D && this.container.lockOrUnlockBee(l)) {
                     Minecraft.getInstance().getSoundHandler().play(SimpleSound.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
                     return true;
                 }
@@ -202,16 +207,11 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
 
             i = this.guiLeft + 44;
             j = this.guiTop + 18;
-            if (mouseX >= (double)i && mouseX < (double)(i + 6) && mouseY >= (double)j && mouseY < (double)(j + 101)) {
+            if (mouseX >= (double) i && mouseX < (double) (i + 6) && mouseY >= (double) j && mouseY < (double) (j + 101)) {
                 this.clickedOnScroll = true;
             }
         }
 
         return super.mouseClicked(mouseX, mouseY, p_mouseClicked_5_);
-    }
-
-    @Override
-    public void drawRightAlignedString(FontRenderer p_drawRightAlignedString_1_, @Nonnull String p_drawRightAlignedString_2_, int p_drawRightAlignedString_3_, int p_drawRightAlignedString_4_, int p_drawRightAlignedString_5_) {
-        p_drawRightAlignedString_1_.drawString(p_drawRightAlignedString_2_, (float)(p_drawRightAlignedString_3_ - p_drawRightAlignedString_1_.getStringWidth(p_drawRightAlignedString_2_)), (float)p_drawRightAlignedString_4_, p_drawRightAlignedString_5_);
     }
 }

@@ -51,11 +51,33 @@ import java.util.stream.Stream;
 
 @SuppressWarnings("EntityConstructor")
 public class ResourcefulBee extends CustomBeeEntity {
+    protected final Predicate<BlockState> flowerPredicate = state -> {
+
+        String flower = getBeeInfo().getFlower();
+
+        if (BeeInfoUtils.TAG_RESOURCE_PATTERN.matcher(flower).matches()) {
+            Tag<Block> blockTag = BeeInfoUtils.getBlockTag(flower.replace(BeeConstants.TAG_PREFIX, ""));
+            return blockTag != null && state.isIn(blockTag);
+        } else {
+            switch (flower) {
+                case BeeConstants.FLOWER_TAG_ALL:
+                    return state.isIn(BlockTags.TALL_FLOWERS)
+                            ? state.getBlock() != Blocks.SUNFLOWER
+                            || state.get(DoublePlantBlock.HALF) == DoubleBlockHalf.UPPER
+                            : state.isIn(BlockTags.SMALL_FLOWERS);
+                case BeeConstants.FLOWER_TAG_SMALL:
+                    return state.isIn(BlockTags.SMALL_FLOWERS);
+                case BeeConstants.FLOWER_TAG_TALL:
+                    return state.isIn(BlockTags.TALL_FLOWERS) && (state.getBlock() != Blocks.SUNFLOWER || state.get(DoublePlantBlock.HALF) == DoubleBlockHalf.UPPER);
+                default:
+                    return state.getBlock().equals(BeeInfoUtils.getBlock(flower));
+            }
+        }
+    };
+
     public ResourcefulBee(EntityType<? extends BeeEntity> type, World world) {
         super(type, world);
     }
-
-    //*************************** STANDARD BEE METHODS BELOW **********************************************************
 
     @Override
     protected void registerGoals() {
@@ -99,24 +121,190 @@ public class ResourcefulBee extends CustomBeeEntity {
                 || (blockEntity instanceof ApiaryTileEntity && !((ApiaryTileEntity) blockEntity).isFullOfBees());
     }
 
-    //*************************** INTERNAL CLASSES AND METHODS FOR BEE GOALS BELOW ***********************************
+    public void applyPollinationEffect() {
+        if (rand.nextInt(1) == 0) {
+            for (int i = 1; i <= 2; ++i) {
+                BlockPos beePosDown = (new BlockPos(ResourcefulBee.this)).down(i);
+                BlockState state = world.getBlockState(beePosDown);
+                Block block = state.getBlock();
+                if (validFillerBlock(block)) {
+                    world.playEvent(2005, beePosDown, 0);
+                    String mutationOutput = getBeeInfo().getMutationOutput();
+                    Block newBlock = BeeInfoUtils.getBlock(mutationOutput);
+                    if (newBlock != null)
+                        world.setBlockState(beePosDown, newBlock.getDefaultState());
+                    addCropCounter();
+                }
+            }
+        }
+    }
+
+    public boolean validFillerBlock(Block block) {
+        String baseBlock = this.getBeeInfo().getMutationInput();
+        if (BeeInfoUtils.TAG_RESOURCE_PATTERN.matcher(baseBlock).matches()) {
+            Tag<Block> blockTag = BeeInfoUtils.getBlockTag(baseBlock.replace(BeeConstants.TAG_PREFIX, ""));
+            return blockTag != null && block.isIn(blockTag);
+        }
+        ResourceLocation testBlock = block.getRegistryName();
+        ResourceLocation fillerBlock = BeeInfoUtils.getResource(baseBlock);
+        return testBlock != null && testBlock.equals(fillerBlock);
+    }
+
+    @Override
+    public boolean isFlowers(@Nonnull BlockPos pos) {
+        String flower = getBeeInfo().getFlower();
+
+        if (BeeInfoUtils.TAG_RESOURCE_PATTERN.matcher(flower).matches()) {
+            Tag<Block> blockTag = BeeInfoUtils.getBlockTag(flower.replace(BeeConstants.TAG_PREFIX, ""));
+            return blockTag != null && this.world.getBlockState(pos).getBlock().isIn(blockTag);
+        } else {
+            switch (flower) {
+                case BeeConstants.FLOWER_TAG_ALL:
+                    return this.world.isBlockPresent(pos) && this.world.getBlockState(pos).getBlock().isIn(BlockTags.FLOWERS);
+                case BeeConstants.FLOWER_TAG_SMALL:
+                    return this.world.isBlockPresent(pos) && this.world.getBlockState(pos).getBlock().isIn(BlockTags.SMALL_FLOWERS);
+                case BeeConstants.FLOWER_TAG_TALL:
+                    return this.world.isBlockPresent(pos) && this.world.getBlockState(pos).getBlock().isIn(BlockTags.TALL_FLOWERS);
+                default:
+                    return this.world.isBlockPresent(pos) && this.world.getBlockState(pos).getBlock().equals(BeeInfoUtils.getBlock(flower));
+            }
+        }
+    }
+
+    public Predicate<BlockState> getFlowerPredicate() {
+        return flowerPredicate;
+    }
+
+    protected void updateAITasks() {
+        if (getBeeInfo().isEnderBee()) {
+            if (this.world.isDaytime() && this.ticksExisted % 150 == 0) {
+                this.teleportRandomly();
+            }
+        }
+        if (getBeeInfo().isBlazeBee()) {
+            if (this.ticksExisted % 150 == 0)
+                this.setFire(3);
+        }
+        super.updateAITasks();
+    }
+
+    protected void teleportRandomly() {
+        if (!this.world.isRemote() && this.isAlive()) {
+            double d0 = this.getPosX() + (this.rand.nextDouble() - 0.5D) * 4.0D;
+            double d1 = this.getPosY() + (double) (this.rand.nextInt(4) - 2);
+            double d2 = this.getPosZ() + (this.rand.nextDouble() - 0.5D) * 4.0D;
+            this.teleportTo(d0, d1, d2);
+        }
+    }
+
+    private void teleportTo(double x, double y, double z) {
+        BlockPos.Mutable blockpos$mutable = new BlockPos.Mutable(x, y, z);
+
+        while (blockpos$mutable.getY() > 0 && !this.world.getBlockState(blockpos$mutable).getMaterial().blocksMovement()) {
+            blockpos$mutable.move(Direction.DOWN);
+        }
+
+        BlockState blockstate = this.world.getBlockState(blockpos$mutable);
+        boolean canMove = blockstate.getMaterial().blocksMovement();
+        boolean water = blockstate.getFluidState().isTagged(FluidTags.WATER);
+        if (canMove && !water) {
+            EnderTeleportEvent event = new EnderTeleportEvent(this, x, y, z, 0);
+            if (MinecraftForge.EVENT_BUS.post(event)) return;
+            boolean teleported = this.attemptTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), true);
+            if (teleported) {
+                this.world.playSound(null, this.prevPosX, this.prevPosY, this.prevPosZ, SoundEvents.ENTITY_ENDERMAN_TELEPORT, this.getSoundCategory(), 1.0F, 1.0F);
+                this.playSound(SoundEvents.ENTITY_ENDERMAN_TELEPORT, 1.0F, 1.0F);
+            }
+        }
+    }
+
+    @Override
+    public boolean attackEntityAsMob(Entity entityIn) {
+        boolean flag = entityIn.attackEntityFrom(DamageSource.causeBeeStingDamage(this), (float) ((int) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue()));
+        if (flag) {
+            this.applyEnchantments(this, entityIn);
+            if (entityIn instanceof LivingEntity) {
+                ((LivingEntity) entityIn).setBeeStingCount(((LivingEntity) entityIn).getBeeStingCount() + 1);
+                int i = 0;
+                if (this.world.getDifficulty() == Difficulty.NORMAL) {
+                    i = 10;
+                } else if (this.world.getDifficulty() == Difficulty.HARD) {
+                    i = 18;
+                }
+                BeeData info = this.getBeeInfo();
+
+                if (info.isCreeperBee()) {
+                    this.explode();
+                }
+                if (info.isBlazeBee()) {
+                    entityIn.setFire(5);
+                }
+                if (i > 0) {
+                    if (info.isWitherBee())
+                        ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.WITHER, i * 20, 1));
+                    if (info.isZomBee())
+                        ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.HUNGER, i * 20, 20));
+                    if (info.isPigmanBee())
+                        ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.MINING_FATIGUE, i * 20, 0));
+                    if (!info.isPigmanBee() && !info.isZomBee() && !info.isWitherBee() && !info.isBlazeBee() && !info.isCreeperBee())
+                        ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.POISON, i * 20, 0));
+                }
+            }
+
+            this.setHasStung(true);
+            this.setAttackTarget(null);
+            this.playSound(SoundEvents.ENTITY_BEE_STING, 1.0F, 1.0F);
+        }
+
+        return flag;
+    }
+
+    private void explode() {
+        if (!this.world.isRemote) {
+            Explosion.Mode explosion$mode = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this) ? Explosion.Mode.BREAK : Explosion.Mode.NONE;
+            this.dead = true;
+            this.world.createExplosion(this, this.getPosX(), this.getPosY(), this.getPosZ(), rand.nextFloat() * 3, explosion$mode);
+            this.remove();
+            this.spawnLingeringCloud();
+        }
+
+    }
+
+    private void spawnLingeringCloud() {
+        Collection<EffectInstance> collection = this.getActivePotionEffects();
+        if (!collection.isEmpty()) {
+            AreaEffectCloudEntity areaeffectcloudentity = new AreaEffectCloudEntity(this.world, this.getPosX(), this.getPosY(), this.getPosZ());
+            areaeffectcloudentity.setRadius(2.5F);
+            areaeffectcloudentity.setRadiusOnUse(-0.5F);
+            areaeffectcloudentity.setWaitTime(10);
+            areaeffectcloudentity.setDuration(areaeffectcloudentity.getDuration() / 2);
+            areaeffectcloudentity.setRadiusPerTick(-areaeffectcloudentity.getRadius() / (float) areaeffectcloudentity.getDuration());
+
+            for (EffectInstance effectinstance : collection) {
+                areaeffectcloudentity.addEffect(new EffectInstance(effectinstance));
+            }
+
+            this.world.addEntity(areaeffectcloudentity);
+        }
+
+    }
 
     public class EnterBeehiveGoal2 extends BeeEntity.EnterBeehiveGoal {
         public EnterBeehiveGoal2() {
         }
 
         public boolean canBeeStart() {
-            if (ResourcefulBee.this.hasHive() && ResourcefulBee.this.canEnterHive() &&ResourcefulBee.this.hivePos != null && ResourcefulBee.this.hivePos.withinDistance(ResourcefulBee.this.getPositionVec(), 2.0D)) {
+            if (ResourcefulBee.this.hasHive() && ResourcefulBee.this.canEnterHive() && ResourcefulBee.this.hivePos != null && ResourcefulBee.this.hivePos.withinDistance(ResourcefulBee.this.getPositionVec(), 2.0D)) {
                 TileEntity tileentity = ResourcefulBee.this.world.getTileEntity(ResourcefulBee.this.hivePos);
                 if (tileentity instanceof BeehiveTileEntity) {
-                    BeehiveTileEntity beehivetileentity = (BeehiveTileEntity)tileentity;
+                    BeehiveTileEntity beehivetileentity = (BeehiveTileEntity) tileentity;
                     if (!beehivetileentity.isFullOfBees()) {
                         return true;
                     }
 
                     ResourcefulBee.this.hivePos = null;
                 } else if (tileentity instanceof ApiaryTileEntity) {
-                    ApiaryTileEntity beehivetileentity = (ApiaryTileEntity)tileentity;
+                    ApiaryTileEntity beehivetileentity = (ApiaryTileEntity) tileentity;
                     if (!beehivetileentity.isFullOfBees()) {
                         return true;
                     }
@@ -132,9 +320,6 @@ public class ResourcefulBee extends CustomBeeEntity {
             return false;
         }
 
-        /**
-         * Execute a one shot task or start executing a continuous task
-         */
         public void startExecuting() {
             if (ResourcefulBee.this.hivePos != null) {
                 TileEntity tileentity = ResourcefulBee.this.world.getTileEntity(ResourcefulBee.this.hivePos);
@@ -144,7 +329,7 @@ public class ResourcefulBee extends CustomBeeEntity {
                         beehivetileentity.tryEnterHive(ResourcefulBee.this, ResourcefulBee.this.hasNectar());
                     } else if (tileentity instanceof ApiaryTileEntity) {
                         ApiaryTileEntity beehivetileentity = (ApiaryTileEntity) tileentity;
-                        beehivetileentity.tryEnterHive(ResourcefulBee.this, ResourcefulBee.this.hasNectar());
+                        beehivetileentity.tryEnterHive(ResourcefulBee.this, ResourcefulBee.this.hasNectar(), false);
                     }
                 }
             }
@@ -171,7 +356,7 @@ public class ResourcefulBee extends CustomBeeEntity {
 
     protected class FindPollinationTargetGoal2 extends BeeEntity.FindPollinationTargetGoal {
 
-        public FindPollinationTargetGoal2(){
+        public FindPollinationTargetGoal2() {
             super();
         }
 
@@ -182,40 +367,9 @@ public class ResourcefulBee extends CustomBeeEntity {
         }
     }
 
-    //***** Pollination Effect is used for Mutating Blocks.
-
-    public void applyPollinationEffect(){
-        if (rand.nextInt(1) == 0) {
-            for (int i = 1; i <= 2; ++i) {
-                BlockPos beePosDown = (new BlockPos(ResourcefulBee.this)).down(i);
-                BlockState state = world.getBlockState(beePosDown);
-                Block block = state.getBlock();
-                if (validFillerBlock(block)) {
-                    world.playEvent(2005, beePosDown, 0);
-                    String mutationOutput = getBeeInfo().getMutationOutput();
-                    Block newBlock = BeeInfoUtils.getBlock(mutationOutput);
-                    if (newBlock != null)
-                        world.setBlockState(beePosDown, newBlock.getDefaultState());
-                    addCropCounter();
-                }
-            }
-        }
-    }
-
-    public boolean validFillerBlock(Block block){
-        String baseBlock = this.getBeeInfo().getMutationInput();
-        if (BeeInfoUtils.TAG_RESOURCE_PATTERN.matcher(baseBlock).matches()) {
-            Tag<Block> blockTag = BeeInfoUtils.getBlockTag(baseBlock.replace(BeeConstants.TAG_PREFIX, ""));
-            return blockTag != null && block.isIn(blockTag);
-        }
-        ResourceLocation testBlock = block.getRegistryName();
-        ResourceLocation fillerBlock = BeeInfoUtils.getResource(baseBlock);
-        return testBlock != null && testBlock.equals(fillerBlock);
-    }
-
     public class FindBeehiveGoal2 extends BeeEntity.FindBeehiveGoal {
 
-        public FindBeehiveGoal2(){
+        public FindBeehiveGoal2() {
             super();
         }
 
@@ -228,7 +382,7 @@ public class ResourcefulBee extends CustomBeeEntity {
 
     public class PollinateGoal2 extends BeeEntity.PollinateGoal {
 
-        public PollinateGoal2(){
+        public PollinateGoal2() {
             super();
         }
 
@@ -237,178 +391,6 @@ public class ResourcefulBee extends CustomBeeEntity {
         public Optional<BlockPos> getFlower() {
             return this.findFlower(getFlowerPredicate(), 5.0D);
         }
-    }
-
-    @Override
-    public boolean isFlowers(@Nonnull BlockPos pos) {
-        String flower = getBeeInfo().getFlower();
-
-        if (BeeInfoUtils.TAG_RESOURCE_PATTERN.matcher(flower).matches()) {
-            Tag<Block> blockTag = BeeInfoUtils.getBlockTag(flower.replace(BeeConstants.TAG_PREFIX, ""));
-            return blockTag != null && this.world.getBlockState(pos).getBlock().isIn(blockTag);
-        } else {
-            switch (flower) {
-                case BeeConstants.FLOWER_TAG_ALL:
-                    return this.world.isBlockPresent(pos) && this.world.getBlockState(pos).getBlock().isIn(BlockTags.FLOWERS);
-                case BeeConstants.FLOWER_TAG_SMALL:
-                    return this.world.isBlockPresent(pos) && this.world.getBlockState(pos).getBlock().isIn(BlockTags.SMALL_FLOWERS);
-                case BeeConstants.FLOWER_TAG_TALL:
-                    return this.world.isBlockPresent(pos) && this.world.getBlockState(pos).getBlock().isIn(BlockTags.TALL_FLOWERS);
-                default:
-                    return this.world.isBlockPresent(pos) && this.world.getBlockState(pos).getBlock().equals(BeeInfoUtils.getBlock(flower));
-            }
-        }
-    }
-
-    protected final Predicate<BlockState> flowerPredicate = state -> {
-
-        String flower = getBeeInfo().getFlower();
-
-        if (BeeInfoUtils.TAG_RESOURCE_PATTERN.matcher(flower).matches()) {
-            Tag<Block> blockTag = BeeInfoUtils.getBlockTag(flower.replace(BeeConstants.TAG_PREFIX, ""));
-            return blockTag != null && state.isIn(blockTag);
-        } else {
-            switch (flower) {
-                case BeeConstants.FLOWER_TAG_ALL:
-                    return state.isIn(BlockTags.TALL_FLOWERS)
-                            ? state.getBlock() != Blocks.SUNFLOWER
-                            || state.get(DoublePlantBlock.HALF) == DoubleBlockHalf.UPPER
-                            : state.isIn(BlockTags.SMALL_FLOWERS);
-                case BeeConstants.FLOWER_TAG_SMALL:
-                    return state.isIn(BlockTags.SMALL_FLOWERS);
-                case BeeConstants.FLOWER_TAG_TALL:
-                    return state.isIn(BlockTags.TALL_FLOWERS) && (state.getBlock() != Blocks.SUNFLOWER || state.get(DoublePlantBlock.HALF) == DoubleBlockHalf.UPPER);
-                default:
-                    return state.getBlock().equals(BeeInfoUtils.getBlock(flower));
-            }
-        }
-    };
-
-    public Predicate<BlockState> getFlowerPredicate(){ return flowerPredicate; }
-
-    //************** CUSTOM ENTITY TASKS/GOALS ***********************************************
-
-    protected void updateAITasks() {
-        if (getBeeInfo().isEnderBee()) {
-            if (this.world.isDaytime() && this.ticksExisted %150 == 0) {
-                this.teleportRandomly();
-            }
-        }
-        if (getBeeInfo().isBlazeBee()){
-            if (this.ticksExisted %150 == 0)
-                this.setFire(3);
-        }
-        super.updateAITasks();
-    }
-
-    /**
-     * Teleport the enderman to a random nearby position
-     */
-    protected void teleportRandomly() {
-        if (!this.world.isRemote() && this.isAlive()) {
-            double d0 = this.getPosX() + (this.rand.nextDouble() - 0.5D) * 4.0D;
-            double d1 = this.getPosY() + (double)(this.rand.nextInt(4) - 2);
-            double d2 = this.getPosZ() + (this.rand.nextDouble() - 0.5D) * 4.0D;
-            this.teleportTo(d0, d1, d2);
-        }
-    }
-
-    /**
-     * Teleport the enderman
-     */
-    private void teleportTo(double x, double y, double z) {
-        BlockPos.Mutable blockpos$mutable = new BlockPos.Mutable(x, y, z);
-
-        while(blockpos$mutable.getY() > 0 && !this.world.getBlockState(blockpos$mutable).getMaterial().blocksMovement()) {
-            blockpos$mutable.move(Direction.DOWN);
-        }
-
-        BlockState blockstate = this.world.getBlockState(blockpos$mutable);
-        boolean canMove = blockstate.getMaterial().blocksMovement();
-        boolean water = blockstate.getFluidState().isTagged(FluidTags.WATER);
-        if (canMove && !water) {
-            EnderTeleportEvent event = new EnderTeleportEvent(this, x, y, z, 0);
-            if (MinecraftForge.EVENT_BUS.post(event)) return;
-            boolean teleported = this.attemptTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), true);
-            if (teleported) {
-                this.world.playSound(null, this.prevPosX, this.prevPosY, this.prevPosZ, SoundEvents.ENTITY_ENDERMAN_TELEPORT, this.getSoundCategory(), 1.0F, 1.0F);
-                this.playSound(SoundEvents.ENTITY_ENDERMAN_TELEPORT, 1.0F, 1.0F);
-            }
-        }
-    }
-
-    @Override
-    public boolean attackEntityAsMob(Entity entityIn) {
-        boolean flag = entityIn.attackEntityFrom(DamageSource.causeBeeStingDamage(this), (float)((int)this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue()));
-        if (flag) {
-            this.applyEnchantments(this, entityIn);
-            if (entityIn instanceof LivingEntity) {
-                ((LivingEntity)entityIn).setBeeStingCount(((LivingEntity)entityIn).getBeeStingCount() + 1);
-                int i = 0;
-                if (this.world.getDifficulty() == Difficulty.NORMAL) {
-                    i = 10;
-                } else if (this.world.getDifficulty() == Difficulty.HARD) {
-                    i = 18;
-                }
-                BeeData info = this.getBeeInfo();
-
-                if (info.isCreeperBee()) {
-                    this.explode();
-                }
-                if (info.isBlazeBee()){
-                    entityIn.setFire(5);
-                }
-                if (i > 0) {
-                    if (info.isWitherBee())
-                        ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.WITHER, i * 20, 1));
-                    if (info.isZomBee())
-                        ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.HUNGER, i * 20, 20));
-                    if (info.isPigmanBee())
-                        ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.MINING_FATIGUE, i * 20, 0));
-                    if (!info.isPigmanBee() && !info.isZomBee() && !info.isWitherBee() && !info.isBlazeBee() && !info.isCreeperBee())
-                        ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.POISON, i * 20, 0));
-                }
-            }
-
-            this.setHasStung(true);
-            this.setAttackTarget(null);
-            this.playSound(SoundEvents.ENTITY_BEE_STING, 1.0F, 1.0F);
-        }
-
-        return flag;
-    }
-
-    /**
-     * Creates an explosion as determined by this creeper's power and explosion radius.
-     */
-    private void explode() {
-        if (!this.world.isRemote) {
-            Explosion.Mode explosion$mode = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this) ? Explosion.Mode.BREAK : Explosion.Mode.NONE;
-            this.dead = true;
-            this.world.createExplosion(this, this.getPosX(), this.getPosY(), this.getPosZ(), rand.nextFloat() * 3, explosion$mode);
-            this.remove();
-            this.spawnLingeringCloud();
-        }
-
-    }
-
-    private void spawnLingeringCloud() {
-        Collection<EffectInstance> collection = this.getActivePotionEffects();
-        if (!collection.isEmpty()) {
-            AreaEffectCloudEntity areaeffectcloudentity = new AreaEffectCloudEntity(this.world, this.getPosX(), this.getPosY(), this.getPosZ());
-            areaeffectcloudentity.setRadius(2.5F);
-            areaeffectcloudentity.setRadiusOnUse(-0.5F);
-            areaeffectcloudentity.setWaitTime(10);
-            areaeffectcloudentity.setDuration(areaeffectcloudentity.getDuration() / 2);
-            areaeffectcloudentity.setRadiusPerTick(-areaeffectcloudentity.getRadius() / (float)areaeffectcloudentity.getDuration());
-
-            for(EffectInstance effectinstance : collection) {
-                areaeffectcloudentity.addEffect(new EffectInstance(effectinstance));
-            }
-
-            this.world.addEntity(areaeffectcloudentity);
-        }
-
     }
 
 

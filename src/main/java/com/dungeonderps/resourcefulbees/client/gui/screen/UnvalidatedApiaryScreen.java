@@ -29,9 +29,9 @@ import javax.annotation.Nonnull;
 
 public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryContainer> {
 
+    private static final ResourceLocation unvalidatedTexture = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/apiary/unvalidated.png");
+    private static final ResourceLocation arrowButtonTexture = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/apiary/arrow_button.png");
     private final ApiaryTileEntity apiaryTileEntity;
-    private final ResourceLocation unvalidatedTexture = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/apiary/unvalidated.png");
-    private final ResourceLocation arrowButtonTexture = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/apiary/arrow_button.png");
     private final PlayerEntity player;
     private int verticalOffset;
     private int horizontalOffset;
@@ -57,28 +57,23 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
         }
         this.previewButton = this.addButton(new PreviewButton(getGuiLeft() + 22, getGuiTop() + 25, 12, 12, 0, 24, 12, arrowButtonTexture, this.container.apiaryTileEntity.previewed, (onPress) -> {
             setPreviewToggle();
-            if (this.previewButton.isTriggered())
-                previewSetToggle(true);
-            else {
-                previewSetToggle(false);
-            }
+            previewSetToggle(this.previewButton.isTriggered());
         }));
         previewSetToggle(this.previewButton.isTriggered());
-        //this.previewButton.active = false;
         this.upButton = this.addButton(new ArrowButton(getGuiLeft() + 22, getGuiTop() + 12, 12, 12, 0, 0, 12, arrowButtonTexture, (onPress) -> this.offsetPosition(Direction.UP)));
         this.downButton = this.addButton(new ArrowButton(getGuiLeft() + 22, getGuiTop() + 38, 12, 12, 12, 0, 12, arrowButtonTexture, (onPress) -> this.offsetPosition(Direction.DOWN)));
         this.leftButton = this.addButton(new ArrowButton(getGuiLeft() + 9, getGuiTop() + 25, 12, 12, 24, 0, 12, arrowButtonTexture, (onPress) -> this.offsetPosition(Direction.LEFT)));
         this.rightButton = this.addButton(new ArrowButton(getGuiLeft() + 35, getGuiTop() + 25, 12, 12, 36, 0, 12, arrowButtonTexture, (onPress) -> this.offsetPosition(Direction.RIGHT)));
     }
 
-    private void previewSetToggle(boolean toggled){
+    private void previewSetToggle(boolean toggled) {
         if (!toggled)
             this.previewButton.setTrigger(false);
 
         PreviewHandler.setPreview(getContainer().pos, this.container.apiaryTileEntity.buildStructureBounds(this.horizontalOffset, this.verticalOffset), toggled);
     }
 
-    private void setPreviewToggle(){
+    private void setPreviewToggle() {
         if (this.previewButton.active)
             this.previewButton.setTrigger(!this.previewButton.isTriggered());
     }
@@ -86,18 +81,22 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
     private void offsetPosition(Direction direction) {
         previewSetToggle(false);
         switch (direction) {
-            case UP: verticalOffset++;
+            case UP:
+                verticalOffset++;
                 break;
-            case DOWN: verticalOffset--;
+            case DOWN:
+                verticalOffset--;
                 break;
-            case LEFT: horizontalOffset--;
+            case LEFT:
+                horizontalOffset--;
                 break;
-            default: horizontalOffset++;
+            default:
+                horizontalOffset++;
         }
         verticalOffset = MathUtils.clamp(verticalOffset, -1, 2);
         horizontalOffset = MathUtils.clamp(horizontalOffset, -2, 2);
 
-        apiaryTileEntity.verticalOffset =verticalOffset;
+        apiaryTileEntity.verticalOffset = verticalOffset;
         apiaryTileEntity.horizontalOffset = horizontalOffset;
     }
 
@@ -142,10 +141,10 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
         this.font.drawString("Offset", 65, 13, 0x404040);
         this.font.drawString("Vert.", 75, 26, 0x404040);
         this.font.drawString("Horiz.", 75, 39, 0x404040);
-        this.drawRightAlignedString(font,String.valueOf(verticalOffset), 70, 26, 0x404040);
-        this.drawRightAlignedString(font,String.valueOf(horizontalOffset), 70, 39, 0x404040);
+        this.drawRightAlignedString(font, String.valueOf(verticalOffset), 70, 26, 0x404040);
+        this.drawRightAlignedString(font, String.valueOf(horizontalOffset), 70, 39, 0x404040);
 
-        for(Widget widget : this.buttons) {
+        for (Widget widget : this.buttons) {
             if (widget.isHovered()) {
                 widget.renderToolTip(mouseX - this.guiLeft, mouseY - this.guiTop);
                 break;
@@ -155,7 +154,7 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
 
     @Override
     public void drawRightAlignedString(FontRenderer fontRenderer, @Nonnull String s, int posX, int posY, int color) {
-        fontRenderer.drawString(s, (float)(posX - fontRenderer.getStringWidth(s)), (float)posY, color);
+        fontRenderer.drawString(s, (float) (posX - fontRenderer.getStringWidth(s)), (float) posY, color);
     }
 
     private enum Direction {
@@ -179,13 +178,14 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
             }
         }
     }
+
     @OnlyIn(Dist.CLIENT)
     public class PreviewButton extends ImageButton {
-        private boolean triggered;
         private final ResourceLocation resourceLocation;
         private final int xTexStart;
         private final int yTexStart;
         private final int yDiffText;
+        private boolean triggered;
 
         public PreviewButton(int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int yDiffTextIn, ResourceLocation resourceLocationIn, boolean triggered, IPressable onPressIn) {
             super(xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, yDiffTextIn, resourceLocationIn, onPressIn);
@@ -203,21 +203,19 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
             RenderSystem.disableDepthTest();
             int i = this.yTexStart;
             int j = this.xTexStart;
-            if (!this.active){
+            if (!this.active) {
                 j += 24;
-            }
-            else if (this.isTriggered()) {
+            } else if (this.isTriggered()) {
                 j += 12;
                 if (this.isHovered()) {
                     i += this.yDiffText;
                 }
-            }
-            else {
+            } else {
                 if (this.isHovered()) {
                     i += this.yDiffText;
                 }
             }
-            blit(this.x, this.y, (float)j, (float)i, this.width, this.height, 64, 64);
+            blit(this.x, this.y, (float) j, (float) i, this.width, this.height, 64, 64);
             RenderSystem.enableDepthTest();
         }
 
@@ -231,12 +229,12 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
             UnvalidatedApiaryScreen.this.renderTooltip(s, p_renderToolTip_1_, p_renderToolTip_2_);
         }
 
-        public void setTrigger(boolean triggered){
+        public void setTrigger(boolean triggered) {
             container.apiaryTileEntity.previewed = triggered;
             this.triggered = triggered;
         }
 
-        public boolean isTriggered(){
+        public boolean isTriggered() {
             return this.triggered;
         }
     }

@@ -20,10 +20,10 @@ import javax.annotation.Nonnull;
 
 public class ValidatedApiaryContainer extends Container {
 
+    private final IntReferenceHolder selectedBee = IntReferenceHolder.single();
     public ApiaryTileEntity apiaryTileEntity;
     public BlockPos pos;
     public PlayerEntity player;
-    private final IntReferenceHolder selectedBee = IntReferenceHolder.single();
     public String[] beeList;
 
     public ValidatedApiaryContainer(int id, World world, BlockPos pos, PlayerInventory inv) {
@@ -31,31 +31,28 @@ public class ValidatedApiaryContainer extends Container {
 
         this.player = inv.player;
         this.pos = pos;
-        this.apiaryTileEntity = (ApiaryTileEntity)world.getTileEntity(pos);
+        this.apiaryTileEntity = (ApiaryTileEntity) world.getTileEntity(pos);
 
         if (apiaryTileEntity != null) {
             this.addSlot(new SlotItemHandlerUnconditioned(apiaryTileEntity.h, ApiaryTileEntity.IMPORT, 74, 37) {
                 public boolean isItemValid(ItemStack stack) {
                     if (stack.getItem() instanceof BeeJar) {
                         BeeJar jarItem = (BeeJar) stack.getItem();
-                        if(jarItem.isFilled(stack)){
+                        if (jarItem.isFilled(stack)) {
                             CompoundNBT data = stack.getTag();
                             //noinspection ConstantConditions
                             String type = data.getString(BeeConstants.NBT_ENTITY);
-                            String s = RegistryHandler.CUSTOM_BEE.getId().toString();
-                            boolean valid = type.equals(s);
-                            return valid;
+                            return type.equals(RegistryHandler.CUSTOM_BEE.getId().toString());
                         }
                     }
                     return false;
                 }
             });
-            this.addSlot(new SlotItemHandlerUnconditioned(apiaryTileEntity.h, ApiaryTileEntity.EMPTY_JAR, 128, 37){
+            this.addSlot(new SlotItemHandlerUnconditioned(apiaryTileEntity.h, ApiaryTileEntity.EMPTY_JAR, 128, 37) {
                 public boolean isItemValid(ItemStack stack) {
                     if (stack.getItem() instanceof BeeJar) {
                         BeeJar jarItem = (BeeJar) stack.getItem();
-                        boolean isEmpty = !jarItem.isFilled(stack);
-                        return (isEmpty);
+                        return (!jarItem.isFilled(stack));
                     }
                     return false;
                 }
@@ -99,11 +96,11 @@ public class ValidatedApiaryContainer extends Container {
         if (slot != null && slot.getHasStack()) {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
-            if (index <= 2) {
+            if (index <= 1) {
                 if (!this.mergeItemStack(itemstack1, 3, inventorySlots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.mergeItemStack(itemstack1, 1, 1, false)) {
+            } else if (!this.mergeItemStack(itemstack1, 0, 2, false)) {
                 return ItemStack.EMPTY;
             }
 
@@ -116,17 +113,15 @@ public class ValidatedApiaryContainer extends Container {
         return itemstack;
     }
 
-    public boolean selectBee(int id){
-        if (id >= 0 && id < apiaryTileEntity.getBeeCount()) {
+    public boolean selectBee(int id) {
+        if (id >= -1 && id < apiaryTileEntity.getBeeCount()) {
             this.selectedBee.set(id);
-            //this.updateRecipeResultSlot();
         }
         return true;
     }
 
-    public boolean lockOrUnlockBee(int id){
+    public boolean lockOrUnlockBee(int id) {
         if (id >= 0 && id < apiaryTileEntity.getBeeCount()) {
-            //apiaryTileEntity.BEES.get(beeList[id]).isLocked = !apiaryTileEntity.BEES.get(beeList[id]).isLocked;
             NetPacketHandler.sendToServer(new LockBeeMessage(apiaryTileEntity.getPos(), beeList[id]));
         }
         return true;
