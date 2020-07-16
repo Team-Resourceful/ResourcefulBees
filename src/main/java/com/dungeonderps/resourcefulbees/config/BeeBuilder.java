@@ -27,7 +27,7 @@ import java.util.Set;
 import static com.dungeonderps.resourcefulbees.ResourcefulBees.LOGGER;
 import static com.dungeonderps.resourcefulbees.config.Config.GENERATE_DEFAULTS;
 
-public class  BeeBuilder{
+public class BeeBuilder {
 
     private static final String ASSETS_DIR = "/assets/resourcefulbees/default_bees/";
 
@@ -65,11 +65,11 @@ public class  BeeBuilder{
         Reader r = new FileReader(file);
         BeeData bee = gson.fromJson(r, BeeData.class);
         bee.setName(name);
-        if (BeeInfoUtils.validate(bee)){
+        if (BeeInfoUtils.validate(bee)) {
             BeeInfo.BEE_INFO.put(name.toLowerCase(), bee);
-            if(bee.canSpawnInWorld())
+            if (bee.canSpawnInWorld())
                 BeeInfoUtils.parseBiomes(bee);
-            if(bee.isBreedable())
+            if (bee.isBreedable())
                 BeeInfoUtils.buildFamilyTree(bee);
             LOGGER.info(name + " bee passed validation check!!");
         }
@@ -82,15 +82,15 @@ public class  BeeBuilder{
             Files.walk(BEE_PATH)
                     .filter(Files::isRegularFile)
                     .forEach((file) -> {
-                                String s = file.getFileName().toString();
-                                if (s.substring(s.indexOf('.')).equals(".json")) {
-                                    File f = file.toFile();
-                                    try {
-                                        parseBee(f);
-                                    } catch (IOException e) {
-                                        LOGGER.error("File not found when parsing bees");
-                                    }
+                        String s = file.getFileName().toString();
+                        if (s.substring(s.indexOf('.')).equals(".json")) {
+                            File f = file.toFile();
+                            try {
+                                parseBee(f);
+                            } catch (IOException e) {
+                                LOGGER.error("File not found when parsing bees");
                             }
+                        }
                     });
         } catch (IOException e) {
             e.printStackTrace();
@@ -100,8 +100,8 @@ public class  BeeBuilder{
     private static void setupDefaultBees() {
         for (String bee : DEFAULT_BEES) {
             String path = ASSETS_DIR + bee;
-            try (InputStream inputStream = ResourcefulBees.class.getResourceAsStream(path)){
-                Path newPath =  Paths.get(BEE_PATH.toString() + "/" + bee);
+            try (InputStream inputStream = ResourcefulBees.class.getResourceAsStream(path)) {
+                Path newPath = Paths.get(BEE_PATH.toString() + "/" + bee);
                 File targetFile = new File(String.valueOf(newPath));
                 Files.copy(inputStream, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
             } catch (IOException e) {
@@ -118,9 +118,9 @@ public class  BeeBuilder{
             }
             int divisor = Config.GENERATE_BEE_NESTS.get() ? 2 : 1;
             biome.getSpawns(EntityClassification.CREATURE).add(new Biome.SpawnListEntry(RegistryHandler.CUSTOM_BEE.get(),
-                    Config.SPAWN_WEIGHT.get()/divisor,
-                    Config.SPAWN_MIN_GROUP.get()/divisor,
-                    Config.SPAWN_MAX_GROUP.get()/divisor));
+                    Config.SPAWN_WEIGHT.get() / divisor,
+                    Config.SPAWN_MIN_GROUP.get() / divisor,
+                    Config.SPAWN_MAX_GROUP.get() / divisor));
         }
 
         EntitySpawnPlacementRegistry.register(RegistryHandler.CUSTOM_BEE.get(),
@@ -129,19 +129,19 @@ public class  BeeBuilder{
                 CustomBeeEntity::canBeeSpawn);
     }
 
-    private static void addNestFeature(Biome biome){
+    private static void addNestFeature(Biome biome) {
         Biome.Category category = biome.getCategory();
         if (category == Biome.Category.NETHER)
             biome.addFeature(GenerationStage.Decoration.UNDERGROUND_DECORATION,
                     RegistryHandler.BEE_NEST_FEATURE.get()
                             .withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG)
                             .withPlacement(Placement.COUNT_CHANCE_HEIGHTMAP_DOUBLE
-                            .configure(new HeightWithChanceConfig(3, .125f))));
+                                    .configure(new HeightWithChanceConfig(3, .125f))));
         else
             biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION,
                     RegistryHandler.BEE_NEST_FEATURE.get()
                             .withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG)
                             .withPlacement(Placement.CHANCE_TOP_SOLID_HEIGHTMAP
-                            .configure(new ChanceConfig(16))));
+                                    .configure(new ChanceConfig(16))));
     }
 }
