@@ -28,6 +28,7 @@
     "#forge:sand",
     "#forge:sandstone",
     "#forge:stone",
-    "#forge:storage_blocks"
+    "#forge:storage_blocks",
+    "#forge:fence_gates"
   ]
 }

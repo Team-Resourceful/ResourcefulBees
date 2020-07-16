@@ -78,19 +78,22 @@ public class  BeeBuilder{
     private static void addBees() {
         BeeInfo.BEE_INFO.clear();
         BeeInfoUtils.genDefaultBee();
-        File[] files = BEE_PATH.toFile().listFiles();
-
-        if (files != null && files.length > 0) {
-            for (File f: files) {
-                String s = f.getName();
-                if (s.substring(s.indexOf('.')).equals(".json")) {
-                    try {
-                        parseBee(f);
-                    } catch (IOException e) {
-                        LOGGER.error("File not found when parsing bees");
-                    }
-                }
-            }
+        try {
+            Files.walk(BEE_PATH)
+                    .filter(Files::isRegularFile)
+                    .forEach((file) -> {
+                                String s = file.getFileName().toString();
+                                if (s.substring(s.indexOf('.')).equals(".json")) {
+                                    File f = file.toFile();
+                                    try {
+                                        parseBee(f);
+                                    } catch (IOException e) {
+                                        LOGGER.error("File not found when parsing bees");
+                                    }
+                            }
+                    });
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
