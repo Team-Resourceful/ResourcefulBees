@@ -80,17 +80,14 @@ public class BeeBuilder {
         BeeInfoUtils.genDefaultBee();
         try {
             Files.walk(BEE_PATH)
-                    .filter(Files::isRegularFile)
+                    .filter(f -> f.getFileName().toString().endsWith(".json"))
                     .forEach((file) -> {
-                        String s = file.getFileName().toString();
-                        if (s.substring(s.indexOf('.')).equals(".json")) {
                             File f = file.toFile();
                             try {
                                 parseBee(f);
                             } catch (IOException e) {
                                 LOGGER.error("File not found when parsing bees");
                             }
-                        }
                     });
         } catch (IOException e) {
             e.printStackTrace();
