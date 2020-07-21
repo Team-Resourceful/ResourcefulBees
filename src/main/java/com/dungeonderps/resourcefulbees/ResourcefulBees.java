@@ -1,5 +1,6 @@
 package com.dungeonderps.resourcefulbees;
 
+import com.dungeonderps.resourcefulbees.client.gui.screen.ApiaryStorageScreen;
 import com.dungeonderps.resourcefulbees.client.gui.screen.CentrifugeScreen;
 import com.dungeonderps.resourcefulbees.client.gui.screen.UnvalidatedApiaryScreen;
 import com.dungeonderps.resourcefulbees.client.gui.screen.ValidatedApiaryScreen;
@@ -187,6 +188,7 @@ public class ResourcefulBees
         ScreenManager.registerFactory(RegistryHandler.CENTRIFUGE_CONTAINER.get(), CentrifugeScreen::new);
         ScreenManager.registerFactory(RegistryHandler.UNVALIDATED_APIARY_CONTAINER.get(), UnvalidatedApiaryScreen::new);
         ScreenManager.registerFactory(RegistryHandler.VALIDATED_APIARY_CONTAINER.get(), ValidatedApiaryScreen::new);
+        ScreenManager.registerFactory(RegistryHandler.APIARY_STORAGE_CONTAINER.get(), ApiaryStorageScreen::new);
         RenderTypeLookup.setRenderLayer(RegistryHandler.GOLD_FLOWER.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(RegistryHandler.PREVIEW_BLOCK.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(RegistryHandler.ERRORED_PREVIEW_BLOCK.get(), RenderType.getCutout());

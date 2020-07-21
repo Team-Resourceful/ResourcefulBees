@@ -27,9 +27,9 @@
 	"gui.resourcefulbees.apiary.button.import" : "Import",
 	"gui.resourcefulbees.apiary.button.export" : "Export",
 	"gui.resourcefulbees.apiary.import.true" : "Bee import was successful!",
-	"gui.resourcefulbees.apiary.import.false" : "Bee import was not successful!",
+	"gui.resourcefulbees.apiary.import.false" : "Bee import was unsuccessful!",
 	"gui.resourcefulbees.apiary.export.true" : "Bee export was successful!",
-	"gui.resourcefulbees.apiary.export.false" : "Bee export was successful!",
+	"gui.resourcefulbees.apiary.export.false" : "Bee export was unsuccessful!",
 
 	"block.resourcefulbees.t1_beehive": "Tier 1 Beehive",
 	"block.resourcefulbees.t2_beehive": "Tier 2 Beehive",

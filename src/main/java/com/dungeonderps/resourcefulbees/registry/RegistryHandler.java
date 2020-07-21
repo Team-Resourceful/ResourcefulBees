@@ -8,6 +8,7 @@ import com.dungeonderps.resourcefulbees.container.UnvalidatedApiaryContainer;
 import com.dungeonderps.resourcefulbees.container.ValidatedApiaryContainer;
 import com.dungeonderps.resourcefulbees.entity.passive.ResourcefulBee;
 import com.dungeonderps.resourcefulbees.item.*;
+import com.dungeonderps.resourcefulbees.lib.BeeConstants;
 import com.dungeonderps.resourcefulbees.recipe.CentrifugeRecipe;
 import com.dungeonderps.resourcefulbees.tileentity.*;
 import com.dungeonderps.resourcefulbees.world.BeeNestFeature;
@@ -111,10 +112,22 @@ public class RegistryHandler {
 	public static final RegistryObject<Item> WITHER_BEE_NEST_ITEM = ITEMS.register("wither_bee_nest",() -> new BlockItem(WITHER_BEE_NEST.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
 	public static final RegistryObject<Item> APIARY_ITEM = ITEMS.register("apiary",() -> new BlockItem(APIARY_BLOCK.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
 	public static final RegistryObject<Item> APIARY_STORAGE_ITEM = ITEMS.register("apiary_storage",() -> new BlockItem(APIARY_STORAGE_BLOCK.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
-	public static final RegistryObject<Item> IRON_STORAGE_UPGRADE = ITEMS.register("iron_storage_upgrade", () -> new UpgradeItem(UpgradeItem.UpgradeType.CAPACITY, 1));
-	public static final RegistryObject<Item> GOLD_STORAGE_UPGRADE = ITEMS.register("gold_storage_upgrade", () -> new UpgradeItem(UpgradeItem.UpgradeType.CAPACITY, 1));
-	public static final RegistryObject<Item> DIAMOND_STORAGE_UPGRADE = ITEMS.register("diamond_storage_upgrade", () -> new UpgradeItem(UpgradeItem.UpgradeType.CAPACITY, 1));
-	public static final RegistryObject<Item> EMERALD_STORAGE_UPGRADE = ITEMS.register("emerald_storage_upgrade", () -> new UpgradeItem(UpgradeItem.UpgradeType.CAPACITY, 1));
+	public static final RegistryObject<Item> IRON_STORAGE_UPGRADE = ITEMS.register("iron_storage_upgrade", () -> new UpgradeItem(UpgradeItem.builder()
+			.upgradeType(BeeConstants.NBT_STORAGE_UPGRADE)
+			.upgradeModification(BeeConstants.NBT_SLOT_UPGRADE, 27F)
+			.build()));
+	public static final RegistryObject<Item> GOLD_STORAGE_UPGRADE = ITEMS.register("gold_storage_upgrade", () -> new UpgradeItem(UpgradeItem.builder()
+			.upgradeType(BeeConstants.NBT_STORAGE_UPGRADE)
+			.upgradeModification(BeeConstants.NBT_SLOT_UPGRADE, 54F)
+			.build()));
+	public static final RegistryObject<Item> DIAMOND_STORAGE_UPGRADE = ITEMS.register("diamond_storage_upgrade", () -> new UpgradeItem(UpgradeItem.builder()
+			.upgradeType(BeeConstants.NBT_STORAGE_UPGRADE)
+			.upgradeModification(BeeConstants.NBT_SLOT_UPGRADE, 81F)
+			.build()));
+	public static final RegistryObject<Item> EMERALD_STORAGE_UPGRADE = ITEMS.register("emerald_storage_upgrade", () -> new UpgradeItem(UpgradeItem.builder()
+			.upgradeType(BeeConstants.NBT_STORAGE_UPGRADE)
+			.upgradeModification(BeeConstants.NBT_SLOT_UPGRADE, 108F)
+			.build()));
 
 
 	//**************TILE ENTITIES*************************************

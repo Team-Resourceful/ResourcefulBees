@@ -56,7 +56,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     public static final int EMPTY_JAR = 1;
     public final LinkedHashMap<String, ApiaryBee> BEES = new LinkedHashMap<>();
     public final List<BlockPos> STRUCTURE_BLOCKS = new ArrayList<>();
-    protected final int TIER = 5;
+    protected final int TIER = 4;
     protected final float TIER_MODIFIER = 5;
     private final Tag<Block> validApiaryTag;
     public Stack<String> honeycombs = new Stack<>();
@@ -70,6 +70,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     public int numPlayersUsing;
     private int ticksSinceValidation = 290;
     private int ticksSinceSync;
+    public BlockPos apiaryStoragePos;
 
 
     public ApiaryTileEntity() {
@@ -150,9 +151,8 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
 
                         if (beehiveState == State.HONEY_DELIVERED) {
                             beeEntity.onHoneyDelivered();
-                            if (!exportBee && !beeEntity.getBeeInfo().getMainOutput().isEmpty()) {
-                                if (isValidApiary) {
-                                }
+                            if (!exportBee && !beeEntity.getBeeInfo().getMainOutput().isEmpty() && isValidApiary) {
+                                apiaryStorage.deliverHoneycomb(beeEntity.getBeeType(), getTier());
                             }
                         }
 
@@ -192,7 +192,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
 
                     int maxTimeInHive = bee1.getBeeInfo().getMaxTimeInHive();
                     maxTimeInHive = (int) (maxTimeInHive * (1 - (0.30F + this.getTier() * .05)));
-                    int finalMaxTimeInHive = 999999999; //maxTimeInHive; TODO revert back before publishing!
+                    int finalMaxTimeInHive = 200; //maxTimeInHive; TODO revert back before publishing!
 
                     this.BEES.computeIfAbsent(bee1.getBeeType(), k -> new ApiaryBee(nbt, ticksInHive, hasNectar ? finalMaxTimeInHive : BeeConstants.MIN_HIVE_TIME, bee1.getFlowerPos(), bee1.getBeeType()));
                     BlockPos pos = this.getPos();
@@ -351,6 +351,8 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
             this.horizontalOffset = nbt.getInt("horizontalOffset");
         CompoundNBT invTag = nbt.getCompound("inv");
         h.deserializeNBT(invTag);
+
+        apiaryStoragePos = NBTUtil.readBlockPos(nbt.getCompound("StoragePos"));
     }
 
     public CompoundNBT saveToNBT(CompoundNBT nbt) {
@@ -360,6 +362,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
         nbt.putBoolean("isValid", isValidApiary);
         nbt.putInt("verticalOffset", verticalOffset);
         nbt.putInt("horizontalOffset", horizontalOffset);
+        nbt.put("StoragePos", NBTUtil.writeBlockPos(apiaryStoragePos));
         return nbt;
     }
 
@@ -463,8 +466,10 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
             if (block.isIn(validApiaryTag)) {
                 TileEntity tile = worldIn.getTileEntity(pos);
                 if (tile instanceof ApiaryStorageTileEntity) {
-                    if (apiaryStorage == null || apiaryStorage.getPos() != pos)
+                    if (apiaryStorage == null || apiaryStorage.getPos() != pos) {
                         apiaryStorage = (ApiaryStorageTileEntity) tile;
+                        apiaryStoragePos = apiaryStorage.getPos();
+                    }
                 }
             } else {
                 isStructureValid = false;
@@ -473,6 +478,10 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
                 }
             }
         }
+        if (apiaryStorage == null){
+            isStructureValid = false;
+        }
+
         if (validatingPlayer != null) {
             validatingPlayer.sendMessage(new TranslationTextComponent("gui.resourcefulbees.apiary.validated." + isStructureValid));
         }

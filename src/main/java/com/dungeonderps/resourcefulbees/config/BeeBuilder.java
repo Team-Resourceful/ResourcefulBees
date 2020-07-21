@@ -82,12 +82,12 @@ public class BeeBuilder {
             Files.walk(BEE_PATH)
                     .filter(f -> f.getFileName().toString().endsWith(".json"))
                     .forEach((file) -> {
-                            File f = file.toFile();
-                            try {
-                                parseBee(f);
-                            } catch (IOException e) {
-                                LOGGER.error("File not found when parsing bees");
-                            }
+                        File f = file.toFile();
+                        try {
+                            parseBee(f);
+                        } catch (IOException e) {
+                            LOGGER.error("File not found when parsing bees");
+                        }
                     });
         } catch (IOException e) {
             e.printStackTrace();

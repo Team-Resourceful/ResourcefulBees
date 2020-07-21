@@ -1,5 +1,6 @@
 package com.dungeonderps.resourcefulbees.container;
 
+import com.dungeonderps.resourcefulbees.item.UpgradeItem;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.tileentity.ApiaryStorageTileEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -16,6 +17,7 @@ public class ApiaryStorageContainer extends Container {
 
     public ApiaryStorageTileEntity apiaryStorageTileEntity;
     public PlayerEntity player;
+    public int numberOfSlots;
 
     public ApiaryStorageContainer(int id, World world, BlockPos pos, PlayerInventory inv) {
         super(RegistryHandler.APIARY_STORAGE_CONTAINER.get(), id);
@@ -24,28 +26,54 @@ public class ApiaryStorageContainer extends Container {
 
         apiaryStorageTileEntity = (ApiaryStorageTileEntity) world.getTileEntity(pos);
 
+        if (apiaryStorageTileEntity != null) {
+            numberOfSlots = apiaryStorageTileEntity.numberOfSlots;
+            this.addSlot(new SlotItemHandlerUnconditioned(apiaryStorageTileEntity.h, ApiaryStorageTileEntity.UPGRADE_SLOT, -20, 18) {
+                public int getSlotStackLimit()
+                {
+                    return 1;
+                }
+
+                public boolean isItemValid(ItemStack stack) { return stack.getItem() instanceof UpgradeItem; }
+
+                public boolean canTakeStack(PlayerEntity playerIn) {
 
 
 
 
 
-        //this.trackInt(new FunctionalIntReferenceHolder(() -> apiaryTileEntity.time, v -> apiaryTileEntity.time = v));
-        //this.trackInt(new FunctionalIntReferenceHolder(() -> apiaryTileEntity.totalTime, v -> apiaryTileEntity.totalTime = v));
+                    return !this.getInv().extractItem(this.getSlotIndex(), 1, true, false).isEmpty();
+                }
+            });
 
-        //this.addSlot(new SlotItemHandlerUnconditioned(apiaryTileEntity.h, CentrifugeTileEntity.HONEYCOMB_SLOT, 30, 20));
-        //this.addSlot(new SlotItemHandlerUnconditioned(apiaryTileEntity.h, CentrifugeTileEntity.BOTTLE_SLOT, 30, 38));
-        //this.addSlot(new OutputSlot(apiaryTileEntity.h, CentrifugeTileEntity.HONEY_BOTTLE, 80, 59));
-        //this.addSlot(new OutputSlot(apiaryTileEntity.h, CentrifugeTileEntity.OUTPUT1, 129, 20));
-        //this.addSlot(new OutputSlot(apiaryTileEntity.h, CentrifugeTileEntity.OUTPUT2, 129, 38));
-
-        for (int i = 0; i < 3; ++i) {
-            for (int j = 0; j < 9; ++j) {
-                this.addSlot(new Slot(inv, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+            int rows;
+            if (numberOfSlots != 108) {
+                rows = numberOfSlots / 9;
+                for (int r = 0; r < rows; ++r) {
+                    for (int c = 0; c < 9; ++c) {
+                        this.addSlot(new OutputSlot(apiaryStorageTileEntity.h, c + r * 9 + 1, 8 + c * 18, 18 + r * 18));
+                    }
+                }
+            } else {
+                rows = 9;
+                for (int r = 0; r < 9; ++r) {
+                    for (int c = 0; c < 12; ++c){
+                        this.addSlot(new OutputSlot(apiaryStorageTileEntity.h, c + r * 12 + 1, 8 + c * 18, 18 + r * 18));
+                    }
+                }
             }
-        }
 
-        for (int k = 0; k < 9; ++k) {
-            this.addSlot(new Slot(inv, k, 8 + k * 18, 142));
+            int invX = numberOfSlots == 108 ? 35 : 8;
+
+            for (int i = 0; i < 3; ++i) {
+                for (int j = 0; j < 9; ++j) {
+                    this.addSlot(new Slot(inv, j + i * 9 + 9, invX + j * 18, 32 + (rows * 18) + i * 18));
+                }
+            }
+
+            for (int k = 0; k < 9; ++k) {
+                this.addSlot(new Slot(inv, k, invX + k * 18, 90 + rows * 18));
+            }
         }
     }
 

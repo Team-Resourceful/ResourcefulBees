@@ -16,9 +16,6 @@ public class ResourcefulHoneycomb extends Item {
         super(new Properties().group(ItemGroup.MATERIALS));
     }
 
-    //TODO Consider using two separate textures for honeycomb
-    // -One texture for outline
-    // -Another texture to be colored.
     public static int getColor(ItemStack stack, int tintIndex){
 
         CompoundNBT honeycombNBT = stack.getChildTag(BeeConstants.NBT_ROOT);

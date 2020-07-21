@@ -14,6 +14,9 @@ public class BeeConstants {
     public static final String MOD_NAME = "Resourceful Bees";
     public static final String NBT_ENTITY = "Entity";
     public static final String ENTITY_TEXTURES_DIR = "textures/entity/";
+    public static final String NBT_SLOT_UPGRADE = "NumSlots";
+    public static final String NBT_STORAGE_UPGRADE = "Storage";
+    public static final String NBT_UPGRADE_TYPE = "UpgradeType";
 
     public static final int SMOKE_TIME = 600;
     public static final int MIN_HIVE_TIME = 600;

@@ -76,4 +76,9 @@ public class SlotItemHandlerUnconditioned extends SlotItemHandler {
   public ItemStack decrStackSize(int amount) {
     return this.inv.extractItem(this.getSlotIndex(), amount, false, false);
   }
+
+  //Adding an additional method for easy access
+  public AutomationSensitiveItemStackHandler getInv() {
+    return inv;
+  }
 }

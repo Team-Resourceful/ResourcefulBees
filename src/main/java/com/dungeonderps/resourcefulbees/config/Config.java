@@ -1,5 +1,6 @@
 package com.dungeonderps.resourcefulbees.config;
 
+import com.dungeonderps.resourcefulbees.lib.ApiaryOutput;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 public class Config {
@@ -22,6 +23,16 @@ public class Config {
     public static ForgeConfigSpec.IntValue SPAWN_MAX_GROUP;
 
     public static ForgeConfigSpec.DoubleValue BEE_NEST_GENERATION_WEIGHT;
+
+    public static ForgeConfigSpec.EnumValue<ApiaryOutput> T1_APIARY_OUTPUT;
+    public static ForgeConfigSpec.EnumValue<ApiaryOutput> T2_APIARY_OUTPUT;
+    public static ForgeConfigSpec.EnumValue<ApiaryOutput> T3_APIARY_OUTPUT;
+    public static ForgeConfigSpec.EnumValue<ApiaryOutput> T4_APIARY_OUTPUT;
+
+    public static ForgeConfigSpec.IntValue T1_APIARY_QUANTITY;
+    public static ForgeConfigSpec.IntValue T2_APIARY_QUANTITY;
+    public static ForgeConfigSpec.IntValue T3_APIARY_QUANTITY;
+    public static ForgeConfigSpec.IntValue T4_APIARY_QUANTITY;
 
     public static class CommonConfig {
 
@@ -54,6 +65,25 @@ public class Config {
                         .defineInRange("hiveMaxBees", 4, 1, 4);
                 HIVE_MAX_COMBS = COMMON_BUILDER.comment("Base honeycomb harvest amount \n(THIS * TIER_MODIFIER = MAX_COMBS) for a range of 5 -> 64")
                         .defineInRange("hiveMaxCombs", 5, 5, 16);
+            COMMON_BUILDER.pop();
+
+            COMMON_BUILDER.push("Apiary Options");
+                T1_APIARY_OUTPUT = COMMON_BUILDER.comment("Tier 1 Apiary Output")
+                    .defineEnum("tierOneApiaryOutput", ApiaryOutput.COMB, ApiaryOutput.COMB, ApiaryOutput.BLOCK);
+                T1_APIARY_QUANTITY = COMMON_BUILDER.comment("Tier 1 Apiary Output Quantity")
+                    .defineInRange("tierOneApiaryQuantity", 2, 1, Integer.MAX_VALUE);
+                T2_APIARY_OUTPUT = COMMON_BUILDER.comment("Tier 2 Apiary Output")
+                    .defineEnum("tierTwoApiaryOutput", ApiaryOutput.COMB, ApiaryOutput.COMB, ApiaryOutput.BLOCK);
+                T2_APIARY_QUANTITY = COMMON_BUILDER.comment("Tier 2 Apiary Output Quantity")
+                    .defineInRange("tierTwoApiaryQuantity", 4, 1, Integer.MAX_VALUE);
+                T3_APIARY_OUTPUT = COMMON_BUILDER.comment("Tier 3 Apiary Output")
+                    .defineEnum("tierThreeApiaryOutput", ApiaryOutput.BLOCK, ApiaryOutput.COMB, ApiaryOutput.BLOCK);
+                T3_APIARY_QUANTITY = COMMON_BUILDER.comment("Tier 3 Apiary Output Quantity")
+                    .defineInRange("tierThreeApiaryQuantity", 1, 1, Integer.MAX_VALUE);
+                T4_APIARY_OUTPUT = COMMON_BUILDER.comment("Tier 4 Apiary Output")
+                    .defineEnum("tierFourApiaryOutput", ApiaryOutput.BLOCK, ApiaryOutput.COMB, ApiaryOutput.BLOCK);
+                T4_APIARY_QUANTITY = COMMON_BUILDER.comment("Tier 4 Apiary Output Quantity")
+                    .defineInRange("tierFourApiaryQuantity", 2, 1, Integer.MAX_VALUE);
             COMMON_BUILDER.pop();
 
             COMMON_BUILDER.push("Spawning Options");
