@@ -2,7 +2,6 @@ package com.dungeonderps.resourcefulbees.block;
 
 import com.dungeonderps.resourcefulbees.tileentity.ApiaryStorageTileEntity;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -42,10 +41,6 @@ public class ApiaryStorageBlock extends Block {
         return (INamedContainerProvider)worldIn.getTileEntity(pos);
     }
 
-    @Nonnull
-    public BlockRenderType getRenderType(@Nonnull BlockState state) {
-        return BlockRenderType.MODEL;
-    }
     @Override
     public boolean hasTileEntity(BlockState state) {
         return true;

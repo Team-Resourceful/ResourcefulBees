@@ -114,7 +114,7 @@
 	"entity.resourcefulbees.diamond_bee": "Diamond Bee",
 	"entity.resourcefulbees.redstone_bee": "Redstone Bee",
 	"entity.resourcefulbees.nether_quartz_bee": "Quartz Bee",
-	"entity.resourcefulbees.lapis_lazuli_bee": "lapis Bee",
+	"entity.resourcefulbees.lapis_lazuli_bee": "Lapis Bee",
 	"entity.resourcefulbees.coal_bee": "Coal Bee",
 	"entity.resourcefulbees.ender_bee": "Ender Bee",
 	"entity.resourcefulbees.default_bee": "Resourceful Bee",
@@ -125,5 +125,7 @@
 	"entity.resourcefulbees.zombie_bee": "Zombie Bee",
 
 
-	"entity.minecraft.villager.resourcefulbees.beekeeper": "Beekeeper"
+	"entity.minecraft.villager.resourcefulbees.beekeeper": "Beekeeper",
+	"gui.resourcefulbees.apiary.bee.ticks_in_hive": "Ticks in Hive",
+	"gui.resourcefulbees.apiary.bee.ticks_left": "Ticks Left"
 }

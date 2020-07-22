@@ -22,7 +22,9 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContainer> {
 
@@ -67,6 +69,12 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
         this.renderBackground();
         super.render(mouseX, mouseY, partialTicks);
         this.renderHoveredToolTip(mouseX, mouseY);
+
+        int l = this.guiLeft + 5;
+        int i1 = this.guiTop + 18;
+        int j1 = this.beeIndexOffset + 7;
+
+        renderBeeToolTip(mouseX, mouseY, l, i1, j1);
     }
 
     @Override
@@ -106,6 +114,26 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
 
         this.font.drawString(s, 4, 7, 0x404040);
 
+    }
+
+    private void renderBeeToolTip(int mouseX, int mouseY, int left, int top, int beeIndexOffsetMax) {
+        for (int i = this.beeIndexOffset; i < beeIndexOffsetMax && i < apiaryTileEntity.getBeeCount(); ++i) {
+            int j = i - this.beeIndexOffset;
+            int i1 = top + j * 18;
+
+            if (mouseX >= left && mouseY >= i1 && mouseX < left + 16 && mouseY < i1 + 18) {
+                List<String> beeInfo = new ArrayList<>();
+                String beeType = apiaryTileEntity.BEES.get(this.container.beeList[i]).beeType;
+                int ticksInHive = apiaryTileEntity.BEES.get(beeType).ticksInHive;
+                int minTicks = apiaryTileEntity.BEES.get(beeType).minOccupationTicks;
+                int ticksLeft = Math.max(minTicks - ticksInHive, 0);
+                String s = String.format("entity.resourcefulbees.%1$s_bee", beeType);
+                beeInfo.add(I18n.format(s));
+                beeInfo.add(I18n.format("gui.resourcefulbees.apiary.bee.ticks_in_hive") + ": " + ticksInHive);
+                beeInfo.add(I18n.format("gui.resourcefulbees.apiary.bee.ticks_left") + ": " + ticksLeft);
+                this.renderTooltip(beeInfo, mouseX, mouseY);
+            }
+        }
     }
 
     private void drawRecipesBackground(int mouseX, int mouseY, int left, int top, int beeIndexOffsetMax) {

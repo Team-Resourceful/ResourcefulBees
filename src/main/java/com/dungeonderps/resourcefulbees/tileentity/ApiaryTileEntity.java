@@ -114,10 +114,6 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
         return TIER_MODIFIER;
     }
 
-    public int getMaxCombs() {
-        return 0;
-    }
-
     public int getMaxBees() {
         return 9;
     }
@@ -223,13 +219,13 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
             ++ticksSinceSync;
             this.numPlayersUsing = calculatePlayersUsingSync(this.world, this, this.ticksSinceSync, x, y, z, this.numPlayersUsing);
 
+            this.tickBees();
+
             if (!world.isRemote && isValidApiary) {
                 if (ticksSinceValidation >= 300)
                     runStructureValidation(null);
                 else
                     ticksSinceValidation++;
-                this.tickBees();
-
                 if (this.BEES.size() > 0 && this.world.getRandom().nextDouble() < 0.005D) {
                     double d0 = blockpos.getX() + 0.5D;
                     double d1 = blockpos.getY();
@@ -241,23 +237,25 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     }
 
     private void tickBees() {
-        Iterator<Map.Entry<String, ApiaryBee>> iterator = this.BEES.entrySet().iterator();
-        BlockState blockstate = this.getBlockState();
+        if (this.world != null) {
+            Iterator<Map.Entry<String, ApiaryBee>> iterator = this.BEES.entrySet().iterator();
+            BlockState blockstate = this.getBlockState();
 
-        while (iterator.hasNext()) {
-            Map.Entry<String, ApiaryBee> element = iterator.next();
-            ApiaryBee apiaryBee = element.getValue();
-            if (!apiaryBee.isLocked && apiaryBee.ticksInHive > apiaryBee.minOccupationTicks) {
+            while (iterator.hasNext()) {
+                Map.Entry<String, ApiaryBee> element = iterator.next();
+                ApiaryBee apiaryBee = element.getValue();
+                if (!apiaryBee.isLocked && apiaryBee.ticksInHive > apiaryBee.minOccupationTicks && !world.isRemote) {
 
-                CompoundNBT compoundnbt = apiaryBee.entityData;
-                State state = compoundnbt.getBoolean("HasNectar") ? State.HONEY_DELIVERED : State.BEE_RELEASED;
-                if (this.releaseBee(blockstate, compoundnbt, state, apiaryBee.savedFlowerPos, false)) {
-                    iterator.remove();
-                    if (this.numPlayersUsing > 0 && this.world != null && !this.world.isRemote)
-                        syncApiaryToPlayersUsing(this.world, this.getPos(), this.saveToNBT(new CompoundNBT()));
+                    CompoundNBT compoundnbt = apiaryBee.entityData;
+                    State state = compoundnbt.getBoolean("HasNectar") ? State.HONEY_DELIVERED : State.BEE_RELEASED;
+                    if (this.releaseBee(blockstate, compoundnbt, state, apiaryBee.savedFlowerPos, false)) {
+                        iterator.remove();
+                        if (this.numPlayersUsing > 0 && !this.world.isRemote)
+                            syncApiaryToPlayersUsing(this.world, this.getPos(), this.saveToNBT(new CompoundNBT()));
+                    }
+                } else {
+                    apiaryBee.ticksInHive++;
                 }
-            } else {
-                apiaryBee.ticksInHive++;
             }
         }
     }
@@ -291,18 +289,6 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
 
     public boolean isFullOfBees() {
         return this.BEES.size() >= getMaxBees();
-    }
-
-    public String getResourceHoneycomb() {
-        return honeycombs.pop();
-    }
-
-    public boolean hasCombs() {
-        return honeycombs.size() > 0;
-    }
-
-    public int numberOfCombs() {
-        return honeycombs.size();
     }
 
     public boolean isAllowedBee() {
@@ -461,12 +447,13 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
 
     public boolean validateStructure(World worldIn, @Nullable ServerPlayerEntity validatingPlayer) {
         boolean isStructureValid = true;
+        apiaryStorage = null;
         for (BlockPos pos : STRUCTURE_BLOCKS) {
             Block block = worldIn.getBlockState(pos).getBlock();
             if (block.isIn(validApiaryTag)) {
                 TileEntity tile = worldIn.getTileEntity(pos);
                 if (tile instanceof ApiaryStorageTileEntity) {
-                    if (apiaryStorage == null || apiaryStorage.getPos() != pos) {
+                    if (apiaryStorage == null) {
                         apiaryStorage = (ApiaryStorageTileEntity) tile;
                         apiaryStoragePos = apiaryStorage.getPos();
                     }
@@ -542,9 +529,10 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     @Override
     public Container createMenu(int i, @Nonnull PlayerInventory playerInventory, @Nonnull PlayerEntity playerEntity) {
         if (world != null)
-            if (this.isValidApiary)
+            if (this.isValidApiary) {
+                numPlayersUsing++;
                 return new ValidatedApiaryContainer(i, world, pos, playerInventory);
-            else {
+            } else {
                 numPlayersUsing++;
                 return new UnvalidatedApiaryContainer(i, world, pos, playerInventory);
             }

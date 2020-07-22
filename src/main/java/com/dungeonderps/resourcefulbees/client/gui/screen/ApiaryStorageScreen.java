@@ -19,14 +19,18 @@ public class ApiaryStorageScreen extends ContainerScreen<ApiaryStorageContainer>
 
     public ApiaryStorageTileEntity apiaryStorageTileEntity;
 
-    public final ResourceLocation background;
+    public ResourceLocation background;
 
     public ApiaryStorageScreen(ApiaryStorageContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
         super(screenContainer, inv, titleIn);
 
+        preInit();
+    }
+
+    protected void preInit(){
         this.xSize = 176;
 
-        switch (screenContainer.numberOfSlots) {
+        switch (this.container.numberOfSlots) {
             case 27:
                 this.ySize = 168;
                 background = BACKGROUND_3X9;
@@ -66,6 +70,11 @@ public class ApiaryStorageScreen extends ContainerScreen<ApiaryStorageContainer>
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
+        if (this.container.rebuild) {
+            preInit();
+            init();
+            this.container.rebuild = false;
+        }
 
         Minecraft client = this.minecraft;
         if (client != null) {

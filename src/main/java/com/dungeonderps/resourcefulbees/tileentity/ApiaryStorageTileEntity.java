@@ -19,6 +19,8 @@ import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.capabilities.Capability;
@@ -28,13 +30,10 @@ import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.HashMap;
 
 import static net.minecraft.inventory.container.Container.areItemsAndTagsEqual;
 
 public class ApiaryStorageTileEntity extends TileEntity implements INamedContainerProvider, ITickableTileEntity {
-
-    public final HashMap<String, Honeycomb> HONEYCOMBS = new HashMap<>();
 
     public static final int UPGRADE_SLOT = 0;
 
@@ -69,20 +68,23 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
 
     @Override
     public void tick() {
-        numberOfSlots = h.getStackInSlot(0).isEmpty() ? 9 : updateNumberOfSlots();
+
     }
 
-    private int updateNumberOfSlots() {
+    private void updateNumberOfSlots() {
         int count = 9;
-        ItemStack upgradeItem = h.getStackInSlot(0);
-        if (UpgradeItem.isUpgradeItem(upgradeItem)) {
-            CompoundNBT data = UpgradeItem.getUpgradeData(upgradeItem);
+        if (!h.getStackInSlot(0).isEmpty()) {
+            ItemStack upgradeItem = h.getStackInSlot(0);
+            if (UpgradeItem.isUpgradeItem(upgradeItem)) {
+                CompoundNBT data = UpgradeItem.getUpgradeData(upgradeItem);
 
-            if (data != null && data.getString(BeeConstants.NBT_UPGRADE_TYPE).equals(BeeConstants.NBT_STORAGE_UPGRADE)) {
-                count = (int) MathUtils.clamp(data.getFloat(BeeConstants.NBT_SLOT_UPGRADE), 1F, 108F);
+                if (data != null && data.getString(BeeConstants.NBT_UPGRADE_TYPE).equals(BeeConstants.NBT_STORAGE_UPGRADE)) {
+                    count = (int) MathUtils.clamp(data.getFloat(BeeConstants.NBT_SLOT_UPGRADE), 1F, 108F);
+                }
             }
         }
-        return count;
+
+        numberOfSlots = count;
     }
 
     @Override
@@ -158,7 +160,7 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
         itemstack.getOrCreateChildTag(BeeConstants.NBT_ROOT).putString(BeeConstants.NBT_BEE_TYPE, BeeInfo.getInfo(beeType).getName());
 
         while (!itemstack.isEmpty()){
-            if (slotIndex >= numberOfSlots) {
+            if (slotIndex > numberOfSlots) {
                 break;
             }
             ItemStack slotStack = h.getStackInSlot(slotIndex);
@@ -187,99 +189,31 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
 
 
 
-/*
-    protected boolean mergeItemStack(ItemStack stack, int startIndex, int endIndex, boolean reverseDirection) {
-        boolean flag = false;
-        int i = startIndex;
-        if (reverseDirection) {
-            i = endIndex - 1;
-        }
 
-        if (stack.isStackable()) {
-            while(!stack.isEmpty()) {
-                if (reverseDirection) {
-                    if (i < startIndex) {
-                        break;
+
+    public void rebuildOpenContainers() {
+        if (world != null) {
+            float f = 5.0F;
+            BlockPos pos = this.pos;
+
+            for (PlayerEntity playerentity : world.getEntitiesWithinAABB(PlayerEntity.class, new AxisAlignedBB(pos.getX() - f, pos.getY() - f, pos.getZ() - f, (pos.getX() + 1) + f, (pos.getY() + 1) + f, (pos.getZ() + 1) + f))) {
+                if (playerentity.openContainer instanceof ApiaryStorageContainer) {
+                    ApiaryStorageContainer openContainer = (ApiaryStorageContainer) playerentity.openContainer;
+                    ApiaryStorageTileEntity apiaryStorageTileEntity1 = openContainer.apiaryStorageTileEntity;
+                    if (apiaryStorageTileEntity1 == this) {
+                        openContainer.setupSlots(true);
                     }
-                } else if (i >= endIndex) {
-                    break;
-                }
-
-                Slot slot = this.inventorySlots.get(i);
-                ItemStack itemstack = slot.getStack();
-                if (!itemstack.isEmpty() && areItemsAndTagsEqual(stack, itemstack)) {
-                    int j = itemstack.getCount() + stack.getCount();
-                    int maxSize = Math.min(slot.getSlotStackLimit(), stack.getMaxStackSize());
-                    if (j <= maxSize) {
-                        stack.setCount(0);
-                        itemstack.setCount(j);
-                        slot.onSlotChanged();
-                        flag = true;
-                    } else if (itemstack.getCount() < maxSize) {
-                        stack.shrink(maxSize - itemstack.getCount());
-                        itemstack.setCount(maxSize);
-                        slot.onSlotChanged();
-                        flag = true;
-                    }
-                }
-
-                if (reverseDirection) {
-                    --i;
-                } else {
-                    ++i;
                 }
             }
         }
-
-        if (!stack.isEmpty()) {
-            if (reverseDirection) {
-                i = endIndex - 1;
-            } else {
-                i = startIndex;
-            }
-
-            while(true) {
-                if (reverseDirection) {
-                    if (i < startIndex) {
-                        break;
-                    }
-                } else if (i >= endIndex) {
-                    break;
-                }
-
-                Slot slot1 = this.inventorySlots.get(i);
-                ItemStack itemstack1 = slot1.getStack();
-                if (itemstack1.isEmpty() && slot1.isItemValid(stack)) {
-                    if (stack.getCount() > slot1.getSlotStackLimit()) {
-                        slot1.putStack(stack.split(slot1.getSlotStackLimit()));
-                    } else {
-                        slot1.putStack(stack.split(stack.getCount()));
-                    }
-
-                    slot1.onSlotChanged();
-                    flag = true;
-                    break;
-                }
-
-                if (reverseDirection) {
-                    --i;
-                } else {
-                    ++i;
-                }
-            }
-        }
-
-        return flag;
     }
 
 
- */
-
-
-
-
-
-
+    @Override
+    public void onLoad() {
+        super.onLoad();
+        updateNumberOfSlots();
+    }
 
     @Nonnull
     @Override
@@ -316,41 +250,10 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
         protected void onContentsChanged(int slot) {
             super.onContentsChanged(slot);
             markDirty();
-        }
-    }
-
-    public static class Honeycomb {
-        private final String type;
-        private int count;
-        private int slotIndex;
-
-        public Honeycomb(String type, int count) {
-            this.type = type;
-            this.count = count;
-        }
-
-        public void addToStack(int count) {
-            this.count += count;
-        }
-
-        public void takeFromStack(int count) {
-            this.count -= count;
-        }
-
-        public String getType(){
-            return type;
-        }
-
-        public int getCount() {
-            return count;
-        }
-
-        public int getSlotIndex() {
-            return slotIndex;
-        }
-
-        public void setSlotIndex(int slotIndex) {
-            this.slotIndex = slotIndex;
+            if (slot == 0) {
+                updateNumberOfSlots();
+                rebuildOpenContainers();
+            }
         }
     }
 }
