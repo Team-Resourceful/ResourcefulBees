@@ -6,15 +6,18 @@ import com.dungeonderps.resourcefulbees.container.ApiaryStorageContainer;
 import com.dungeonderps.resourcefulbees.container.AutomationSensitiveItemStackHandler;
 import com.dungeonderps.resourcefulbees.item.UpgradeItem;
 import com.dungeonderps.resourcefulbees.lib.ApiaryOutput;
-import com.dungeonderps.resourcefulbees.lib.BeeConstants;
+import com.dungeonderps.resourcefulbees.lib.ApiaryTabs;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.utils.MathUtils;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.NBTUtil;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
@@ -25,17 +28,21 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import static com.dungeonderps.resourcefulbees.lib.BeeConstants.*;
 import static net.minecraft.inventory.container.Container.areItemsAndTagsEqual;
 
-public class ApiaryStorageTileEntity extends TileEntity implements INamedContainerProvider, ITickableTileEntity {
+public class ApiaryStorageTileEntity extends TileEntity implements INamedContainerProvider, ITickableTileEntity, IApiaryMultiblock {
 
     public static final int UPGRADE_SLOT = 0;
+
+    private BlockPos apiaryPos;
 
     public int numberOfSlots = 9;
 
@@ -68,7 +75,17 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
 
     @Override
     public void tick() {
-
+        if (apiaryPos != null && world != null) {
+            TileEntity tile = world.getTileEntity(apiaryPos);
+            if (tile instanceof ApiaryTileEntity) {
+                ApiaryTileEntity apiary = (ApiaryTileEntity) tile;
+                if (apiary.apiaryStoragePos == null || !apiary.apiaryStoragePos.equals(this.getPos()) || !apiary.isValidApiary()) {
+                    apiaryPos = null;
+                }
+            } else {
+                apiaryPos = null;
+            }
+        }
     }
 
     private void updateNumberOfSlots() {
@@ -78,8 +95,8 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
             if (UpgradeItem.isUpgradeItem(upgradeItem)) {
                 CompoundNBT data = UpgradeItem.getUpgradeData(upgradeItem);
 
-                if (data != null && data.getString(BeeConstants.NBT_UPGRADE_TYPE).equals(BeeConstants.NBT_STORAGE_UPGRADE)) {
-                    count = (int) MathUtils.clamp(data.getFloat(BeeConstants.NBT_SLOT_UPGRADE), 1F, 108F);
+                if (data != null && data.getString(NBT_UPGRADE_TYPE).equals(NBT_STORAGE_UPGRADE)) {
+                    count = (int) MathUtils.clamp(data.getFloat(NBT_SLOT_UPGRADE), 1F, 108F);
                 }
             }
         }
@@ -101,13 +118,17 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
     }
 
     public void loadFromNBT(CompoundNBT nbt) {
-        CompoundNBT invTag = nbt.getCompound("inv");
+        CompoundNBT invTag = nbt.getCompound(NBT_INVENTORY);
         h.deserializeNBT(invTag);
+        if (nbt.contains(NBT_APIARY_POS))
+            apiaryPos = NBTUtil.readBlockPos(nbt.getCompound(NBT_APIARY_POS));
     }
 
     public CompoundNBT saveToNBT(CompoundNBT nbt) {
         CompoundNBT inv = this.h.serializeNBT();
-        nbt.put("inv", inv);
+        nbt.put(NBT_INVENTORY, inv);
+        if (apiaryPos != null)
+            nbt.put(NBT_APIARY_POS, NBTUtil.writeBlockPos(apiaryPos));
         return nbt;
     }
 
@@ -124,6 +145,12 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
         this.read(tag);
     }
 
+    @Nullable
+    @Override
+    public SUpdateTileEntityPacket getUpdatePacket() {
+        return super.getUpdatePacket();
+    }
+
     public void deliverHoneycomb(String beeType, int apiaryTier) {
         boolean flag = false;
         ItemStack itemstack;
@@ -131,33 +158,33 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
 
         switch (apiaryTier) {
             case 8:
-                if (Config.T1_APIARY_OUTPUT.get() == ApiaryOutput.BLOCK)
+                if (Config.T4_APIARY_OUTPUT.get() == ApiaryOutput.BLOCK)
                     itemstack = new ItemStack(RegistryHandler.HONEYCOMB_BLOCK_ITEM.get(), Config.T4_APIARY_QUANTITY.get());
                 else
                     itemstack = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get(), Config.T4_APIARY_QUANTITY.get());
                 break;
             case 7:
-                if (Config.T2_APIARY_OUTPUT.get() == ApiaryOutput.BLOCK)
+                if (Config.T3_APIARY_OUTPUT.get() == ApiaryOutput.BLOCK)
                     itemstack = new ItemStack(RegistryHandler.HONEYCOMB_BLOCK_ITEM.get(), Config.T3_APIARY_QUANTITY.get());
                 else
                     itemstack = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get(), Config.T3_APIARY_QUANTITY.get());
                 break;
             case 6:
-                if (Config.T3_APIARY_OUTPUT.get() == ApiaryOutput.BLOCK)
+                if (Config.T2_APIARY_OUTPUT.get() == ApiaryOutput.BLOCK)
                     itemstack = new ItemStack(RegistryHandler.HONEYCOMB_BLOCK_ITEM.get(), Config.T2_APIARY_QUANTITY.get());
                 else
                     itemstack = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get(), Config.T2_APIARY_QUANTITY.get());
                 break;
             default:
-                if (Config.T4_APIARY_OUTPUT.get() == ApiaryOutput.BLOCK)
+                if (Config.T1_APIARY_OUTPUT.get() == ApiaryOutput.BLOCK)
                     itemstack = new ItemStack(RegistryHandler.HONEYCOMB_BLOCK_ITEM.get(), Config.T1_APIARY_QUANTITY.get());
                 else
                     itemstack = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get(), Config.T1_APIARY_QUANTITY.get());
                 break;
         }
 
-        itemstack.getOrCreateChildTag(BeeConstants.NBT_ROOT).putString(BeeConstants.NBT_COLOR, BeeInfo.getInfo(beeType).getHoneycombColor());
-        itemstack.getOrCreateChildTag(BeeConstants.NBT_ROOT).putString(BeeConstants.NBT_BEE_TYPE, BeeInfo.getInfo(beeType).getName());
+        itemstack.getOrCreateChildTag(NBT_ROOT).putString(NBT_COLOR, BeeInfo.getInfo(beeType).getHoneycombColor());
+        itemstack.getOrCreateChildTag(NBT_ROOT).putString(NBT_BEE_TYPE, BeeInfo.getInfo(beeType).getName());
 
         while (!itemstack.isEmpty()){
             if (slotIndex > numberOfSlots) {
@@ -165,20 +192,27 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
             }
             ItemStack slotStack = h.getStackInSlot(slotIndex);
 
+            int maxStackSize = h.getSlotLimit(slotIndex);
+
             if(slotStack.isEmpty()) {
+                int count = itemstack.getCount();
                 slotStack = itemstack.copy();
-                itemstack.setCount(0);
+                if (count > maxStackSize) {
+                    slotStack.setCount(maxStackSize);
+                    itemstack.setCount(count-maxStackSize);
+                } else {
+                    itemstack.setCount(0);
+                }
                 h.setStackInSlot(slotIndex, slotStack);
-                break;
             } else if (areItemsAndTagsEqual(itemstack, slotStack)) {
                 int j = itemstack.getCount() + slotStack.getCount();
-                if (j <= 64) {
+                if (j <= maxStackSize) {
                     itemstack.setCount(0);
                     slotStack.setCount(j);
                     h.setStackInSlot(slotIndex, slotStack);
-                } else if (slotStack.getCount() < 64) {
-                    itemstack.shrink(64 - slotStack.getCount());
-                    slotStack.setCount(64);
+                } else if (slotStack.getCount() < maxStackSize) {
+                    itemstack.shrink(maxStackSize - slotStack.getCount());
+                    slotStack.setCount(maxStackSize);
                     h.setStackInSlot(slotIndex, slotStack);
                 }
             }
@@ -215,6 +249,14 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
         updateNumberOfSlots();
     }
 
+    public BlockPos getApiaryPos() {
+        return apiaryPos;
+    }
+
+    public void setApiaryPos(BlockPos apiaryPos) {
+        this.apiaryPos = apiaryPos;
+    }
+
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
@@ -228,6 +270,16 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
 
     public AutomationSensitiveItemStackHandler.IRemover getRemover() {
         return (slot, automation) -> !automation || slot > 0 && slot <= 110;
+    }
+
+    @Override
+    public void switchTab(ServerPlayerEntity player, ApiaryTabs tab) {
+        if (world != null && apiaryPos != null) {
+            if (tab == ApiaryTabs.MAIN) {
+                TileEntity tile = world.getTileEntity(apiaryPos);
+                NetworkHooks.openGui(player, (INamedContainerProvider) tile, apiaryPos);
+            }
+        }
     }
 
     protected class TileStackHandler extends AutomationSensitiveItemStackHandler {

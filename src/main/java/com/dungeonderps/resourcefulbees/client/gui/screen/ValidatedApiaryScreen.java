@@ -1,10 +1,13 @@
 package com.dungeonderps.resourcefulbees.client.gui.screen;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
+import com.dungeonderps.resourcefulbees.client.gui.widget.TabImageButton;
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.container.ValidatedApiaryContainer;
+import com.dungeonderps.resourcefulbees.lib.ApiaryTabs;
 import com.dungeonderps.resourcefulbees.lib.BeeConstants;
 import com.dungeonderps.resourcefulbees.network.NetPacketHandler;
+import com.dungeonderps.resourcefulbees.network.packets.ApiaryTabMessage;
 import com.dungeonderps.resourcefulbees.network.packets.ExportBeeMessage;
 import com.dungeonderps.resourcefulbees.network.packets.ImportBeeMessage;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
@@ -29,6 +32,8 @@ import java.util.List;
 public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContainer> {
 
     private static final ResourceLocation VALIDATED_TEXTURE = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/apiary/validated.png");
+    private static final ResourceLocation TABS_BG = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/apiary/apiary_gui_tabs.png");
+
     private int beeIndexOffset;
 
     private float sliderProgress;
@@ -41,7 +46,7 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
 
     public ValidatedApiaryScreen(ValidatedApiaryContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
         super(screenContainer, inv, titleIn);
-        this.xSize = 224;
+        this.xSize = 250;
         this.ySize = 152;
     }
 
@@ -53,6 +58,49 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
 
         importButton = this.addButton(new Button(this.guiLeft + 73, this.guiTop + 10, 40, 20, I18n.format("gui.resourcefulbees.apiary.button.import"), (onPress) -> this.importBee()));
         exportButton = this.addButton(new Button(this.guiLeft + 159, this.guiTop + 10, 40, 20, I18n.format("gui.resourcefulbees.apiary.button.export"), (onPress) -> this.exportSelectedBee()));
+
+        addTabButtons();
+    }
+
+    private void addTabButtons() {
+        int i = this.guiLeft;
+        int j = this.guiTop;
+        int t = i + this.xSize - 25;
+
+        this.addButton(new TabImageButton(t+2, j+17, 18, 18, 74, 0, 18, TABS_BG,
+                (onPress) -> this.changeScreen(ApiaryTabs.MAIN)) {
+            public void renderToolTip(int mouseX, int mouseY) {
+                String s = I18n.format("gui.resourcefulbees.apiary.button.main_screen");
+                ValidatedApiaryScreen.this.renderTooltip(s, mouseX, mouseY);
+            }
+        }).active = false;
+
+        this.addButton(new TabImageButton(t + 2, j + 37, 18, 18, 110, 0, 18, TABS_BG,
+                (onPress) -> this.changeScreen(ApiaryTabs.STORAGE)) {
+            public void renderToolTip(int mouseX, int mouseY) {
+                String s = I18n.format("gui.resourcefulbees.apiary.button.storage_screen");
+                ValidatedApiaryScreen.this.renderTooltip(s, mouseX, mouseY);
+            }
+        });
+
+        this.addButton(new TabImageButton(t + 2, j + 57, 18, 18, 92, 0, 18, TABS_BG,
+                (onPress) -> this.changeScreen(ApiaryTabs.BREED)) {
+            public void renderToolTip(int mouseX, int mouseY) {
+                String s = I18n.format("gui.resourcefulbees.apiary.button.breed_screen");
+                ValidatedApiaryScreen.this.renderTooltip(s, mouseX, mouseY);
+            }
+        });
+    }
+
+    private void changeScreen(ApiaryTabs tab) {
+        switch (tab) {
+            case BREED:
+                break;
+            case STORAGE:
+                NetPacketHandler.sendToServer(new ApiaryTabMessage(apiaryTileEntity.getPos(), ApiaryTabs.STORAGE));
+                break;
+            case MAIN:
+        }
     }
 
     private void exportSelectedBee() {
@@ -105,6 +153,10 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
             int j1 = this.beeIndexOffset + 7;
             this.drawRecipesBackground(mouseX, mouseY, l, i1, j1);
             this.drawRecipesItems(l, i1, j1);
+
+            int t = i + this.xSize - 25;
+            this.minecraft.getTextureManager().bindTexture(TABS_BG);
+            blit(t, j + 12, 0,0, 25, 68, 128, 128);
         }
     }
 

@@ -44,7 +44,7 @@ public class ApiaryStorageContainer extends Container {
         if (apiaryStorageTileEntity != null) {
             this.inventorySlots.clear();
             numberOfSlots = apiaryStorageTileEntity.numberOfSlots;
-            this.addSlot(new SlotItemHandlerUnconditioned(apiaryStorageTileEntity.h, ApiaryStorageTileEntity.UPGRADE_SLOT, -20, 18) {
+            this.addSlot(new SlotItemHandlerUnconditioned(apiaryStorageTileEntity.h, ApiaryStorageTileEntity.UPGRADE_SLOT, 6, 18) {
                 public int getSlotStackLimit() {
                     return 1;
                 }
@@ -71,14 +71,14 @@ public class ApiaryStorageContainer extends Container {
                 rows = numberOfSlots / 9;
                 for (int r = 0; r < rows; ++r) {
                     for (int c = 0; c < 9; ++c) {
-                        this.addSlot(new OutputSlot(apiaryStorageTileEntity.h, c + r * 9 + 1, 8 + c * 18, 18 + r * 18));
+                        this.addSlot(new OutputSlot(apiaryStorageTileEntity.h, c + r * 9 + 1, 26 + 8 + c * 18, 18 + r * 18));
                     }
                 }
             } else {
                 rows = 9;
                 for (int r = 0; r < 9; ++r) {
                     for (int c = 0; c < 12; ++c) {
-                        this.addSlot(new OutputSlot(apiaryStorageTileEntity.h, c + r * 12 + 1, 8 + c * 18, 18 + r * 18));
+                        this.addSlot(new OutputSlot(apiaryStorageTileEntity.h, c + r * 12 + 1, 26 + 8 + c * 18, 18 + r * 18));
                     }
                 }
             }
@@ -87,12 +87,12 @@ public class ApiaryStorageContainer extends Container {
 
             for (int i = 0; i < 3; ++i) {
                 for (int j = 0; j < 9; ++j) {
-                    this.addSlot(new Slot(playerInventory, j + i * 9 + 9, invX + j * 18, 32 + (rows * 18) + i * 18));
+                    this.addSlot(new Slot(playerInventory, j + i * 9 + 9, 26 + invX + j * 18, 32 + (rows * 18) + i * 18));
                 }
             }
 
             for (int k = 0; k < 9; ++k) {
-                this.addSlot(new Slot(playerInventory, k, invX + k * 18, 90 + rows * 18));
+                this.addSlot(new Slot(playerInventory, k, 26 + invX + k * 18, 90 + rows * 18));
             }
 
             this.rebuild = rebuild;

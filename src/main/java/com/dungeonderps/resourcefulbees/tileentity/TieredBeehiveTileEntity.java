@@ -5,7 +5,6 @@ package com.dungeonderps.resourcefulbees.tileentity;
 import com.dungeonderps.resourcefulbees.block.TieredBeehiveBlock;
 import com.dungeonderps.resourcefulbees.config.Config;
 import com.dungeonderps.resourcefulbees.entity.passive.CustomBeeEntity;
-import com.dungeonderps.resourcefulbees.lib.BeeConstants;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.utils.MathUtils;
 import net.minecraft.block.BeehiveBlock;
@@ -27,6 +26,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Stack;
+
+import static com.dungeonderps.resourcefulbees.lib.BeeConstants.*;
 
 public class TieredBeehiveTileEntity extends BeehiveTileEntity {
 
@@ -64,7 +65,7 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
   }
 
   public int getMaxBees() {
-    return Math.round(Config.HIVE_MAX_BEES.get() * getTierModifier());
+    return Math.round(Config.HIVE_MAX_BEES.get()*getTierModifier());
   }
 
   @Override
@@ -136,7 +137,7 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
           CustomBeeEntity bee1 = (CustomBeeEntity)bee;
           int maxTimeInHive = bee1.getBeeInfo().getMaxTimeInHive();
           maxTimeInHive = this.getTier() != 1 ? this.getTier() == 0 ? (int) (maxTimeInHive * 1.05) : (int) (maxTimeInHive * (1 - getTier() * .05)) : maxTimeInHive;
-          this.bees.add(new BeehiveTileEntity.Bee(nbt, ticksInHive,  hasNectar ? maxTimeInHive : BeeConstants.MIN_HIVE_TIME));
+          this.bees.add(new BeehiveTileEntity.Bee(nbt, ticksInHive,  hasNectar ? maxTimeInHive : MIN_HIVE_TIME));
           if (bee1.hasFlower() && (!this.hasFlowerPos() || this.world.rand.nextBoolean())) {
             this.flowerPos = bee1.getFlowerPos();
           }
@@ -159,9 +160,9 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
   @Override
   public void tick() {
     if (world != null && !world.isRemote) {
-      if (isSmoked && ticksSmoked < BeeConstants.SMOKE_TIME)
+      if (isSmoked && ticksSmoked < SMOKE_TIME)
         ticksSmoked++;
-      if (ticksSmoked == BeeConstants.SMOKE_TIME) {
+      if (ticksSmoked == SMOKE_TIME) {
         isSmoked = false;
         ticksSmoked = 0;
       }
@@ -200,16 +201,23 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
   @Override
   public void read(@Nonnull CompoundNBT nbt) {
     super.read(nbt);
-    if (nbt.contains(BeeConstants.NBT_HONEYCOMBS_TE)){
-      CompoundNBT combs = (CompoundNBT) nbt.get(BeeConstants.NBT_HONEYCOMBS_TE);
+    if (nbt.contains(NBT_HONEYCOMBS_TE)){
+      CompoundNBT combs = (CompoundNBT) nbt.get(NBT_HONEYCOMBS_TE);
       int i = 0;
       while (combs != null && combs.contains(String.valueOf(i))){
         honeycombs.push(combs.getString(String.valueOf(i)));
         i++;
       }
     }
-    if (nbt.contains(BeeConstants.NBT_SMOKED_TE)) {
-      this.isSmoked = nbt.getBoolean(BeeConstants.NBT_SMOKED_TE);
+    if (nbt.contains(NBT_SMOKED_TE)) {
+      this.isSmoked = nbt.getBoolean(NBT_SMOKED_TE);
+    }
+
+    if (nbt.contains("Tier")) {
+      setTier(nbt.getInt("Tier"));
+    }
+    if (nbt.contains("TierModifier")) {
+      setTierModifier(nbt.getFloat("TierModifier"));
     }
   }
 
@@ -222,9 +230,11 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
       for (int i = 0; i < honeycombs.size();i++){
         combs.putString(String.valueOf(i), honeycombs.elementAt(i));
       }
-      nbt.put(BeeConstants.NBT_HONEYCOMBS_TE,combs);
+      nbt.put(NBT_HONEYCOMBS_TE,combs);
     }
-    nbt.putBoolean(BeeConstants.NBT_SMOKED_TE, isSmoked);
+    nbt.putBoolean(NBT_SMOKED_TE, isSmoked);
+    nbt.putInt("Tier", getTier());
+    nbt.putFloat("TierModifier", getTierModifier());
     return nbt;
   }
 

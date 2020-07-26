@@ -1,0 +1,10 @@
+{
+  "parent": "block/orientable_with_bottom",
+  "textures": {
+    "particle": "resourcefulbees:block/apiary/t1_side",
+    "bottom": "resourcefulbees:block/apiary/t1_end",
+    "top": "resourcefulbees:block/apiary/t1_end",
+    "front": "resourcefulbees:block/apiary/t1_front",
+    "side": "resourcefulbees:block/apiary/t1_side"
+  }
+}

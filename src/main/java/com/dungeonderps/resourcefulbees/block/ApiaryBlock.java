@@ -4,10 +4,14 @@ import com.dungeonderps.resourcefulbees.tileentity.ApiaryTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalBlock;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.ItemStack;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer;
@@ -29,9 +33,11 @@ public class ApiaryBlock extends Block {
   public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
   public static final BooleanProperty VALIDATED = BooleanProperty.create("validated");
 
+  private final int TIER;
 
-  public ApiaryBlock(Properties properties) {
-    super(properties);
+  public ApiaryBlock(final int tier, float hardness, float resistance) {
+    super(Block.Properties.create(Material.IRON).hardnessAndResistance(hardness, resistance).sound(SoundType.METAL));
+    TIER = tier;
     this.setDefaultState(this.stateContainer.getBaseState().with(VALIDATED, false).with(FACING, Direction.NORTH));
   }
 
@@ -74,4 +80,12 @@ public class ApiaryBlock extends Block {
     return new ApiaryTileEntity();
   }
 
+  @Override
+  public void onBlockPlacedBy(World worldIn, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nullable LivingEntity placer, @Nonnull ItemStack stack) {
+    TileEntity tile = worldIn.getTileEntity(pos);
+    if(tile instanceof ApiaryTileEntity) {
+      ApiaryTileEntity apiaryTileEntity = (ApiaryTileEntity) tile;
+      apiaryTileEntity.setTier(TIER);
+    }
+  }
 }

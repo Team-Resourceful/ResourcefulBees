@@ -127,5 +127,8 @@
 
 	"entity.minecraft.villager.resourcefulbees.beekeeper": "Beekeeper",
 	"gui.resourcefulbees.apiary.bee.ticks_in_hive": "Ticks in Hive",
-	"gui.resourcefulbees.apiary.bee.ticks_left": "Ticks Left"
+	"gui.resourcefulbees.apiary.bee.ticks_left": "Ticks Left",
+	"gui.resourcefulbees.apiary.button.breed_screen": "Breeder (Coming in 1.16!)",
+	"gui.resourcefulbees.apiary.button.main_screen": "Bee Import/Export",
+	"gui.resourcefulbees.apiary.button.storage_screen": "Honeycomb Storage"
 }

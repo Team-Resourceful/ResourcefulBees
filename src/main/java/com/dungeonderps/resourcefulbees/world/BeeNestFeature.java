@@ -84,37 +84,37 @@ public class BeeNestFeature extends Feature<NoFeatureConfig> {
 
         switch (category) {
             case THEEND:
-                newState = RegistryHandler.PURPUR_BEE_NEST.get().getDefaultState();
+                newState = RegistryHandler.PURPUR_BEE_NEST.get().getStateContainer().getBaseState();
                 break;
             case NETHER:
                 if (flag)
-                    newState = RegistryHandler.NETHER_BEE_NEST.get().getDefaultState();
+                    newState = RegistryHandler.NETHER_BEE_NEST.get().getStateContainer().getBaseState();
                 else
-                    newState = RegistryHandler.WITHER_BEE_NEST.get().getDefaultState();
+                    newState = RegistryHandler.WITHER_BEE_NEST.get().getStateContainer().getBaseState();
                 break;
             case SAVANNA:
             case DESERT:
             case MESA:
-                newState = RegistryHandler.ACACIA_BEE_NEST.get().getDefaultState();
+                newState = RegistryHandler.ACACIA_BEE_NEST.get().getStateContainer().getBaseState();
                 break;
             case JUNGLE:
-                newState = RegistryHandler.JUNGLE_BEE_NEST.get().getDefaultState();
+                newState = RegistryHandler.JUNGLE_BEE_NEST.get().getStateContainer().getBaseState();
                 break;
             case BEACH:
             case OCEAN:
             case ICY:
-                newState = RegistryHandler.PRISMARINE_BEE_NEST.get().getDefaultState();
+                newState = RegistryHandler.PRISMARINE_BEE_NEST.get().getStateContainer().getBaseState();
                 break;
             case MUSHROOM:
             case TAIGA:
             case SWAMP:
-                newState = RegistryHandler.BEE_NEST.get().getDefaultState();
+                newState = RegistryHandler.BEE_NEST.get().getStateContainer().getBaseState();
                 break;
             default:
                 if (flag)
-                    newState = RegistryHandler.BEE_NEST.get().getDefaultState();
+                    newState = RegistryHandler.BEE_NEST.get().getStateContainer().getBaseState();
                 else
-                    newState = RegistryHandler.GRASS_BEE_NEST.get().getDefaultState();
+                    newState = RegistryHandler.GRASS_BEE_NEST.get().getStateContainer().getBaseState();
         }
 
         worldIn.setBlockState(newPos, newState, 1);
@@ -122,7 +122,8 @@ public class BeeNestFeature extends Feature<NoFeatureConfig> {
 
         if (tileEntity instanceof TieredBeehiveTileEntity) {
             TieredBeehiveTileEntity nest = (TieredBeehiveTileEntity) tileEntity;
-            int maxBees = nest.getMaxBees();
+            // TODO - figure out why 0.5f for nests turns to 0.0 when calling getMaxBees() and breaks when hives work fine.
+            int maxBees = Math.round(Config.HIVE_MAX_BEES.get() * 0.5f);  //nest.getMaxBees();
             for (int i = rand.nextInt(maxBees); i < maxBees ; i++) {
                 ResourcefulBee bee = RegistryHandler.CUSTOM_BEE.get().create(worldIn.getWorld());
                 if (bee != null) {

@@ -1,10 +1,16 @@
 package com.dungeonderps.resourcefulbees.client.gui.screen;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
+import com.dungeonderps.resourcefulbees.client.gui.widget.TabImageButton;
 import com.dungeonderps.resourcefulbees.container.ApiaryStorageContainer;
+import com.dungeonderps.resourcefulbees.lib.ApiaryTabs;
+import com.dungeonderps.resourcefulbees.network.NetPacketHandler;
+import com.dungeonderps.resourcefulbees.network.packets.ApiaryTabMessage;
 import com.dungeonderps.resourcefulbees.tileentity.ApiaryStorageTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
+import net.minecraft.client.gui.widget.Widget;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -16,6 +22,7 @@ public class ApiaryStorageScreen extends ContainerScreen<ApiaryStorageContainer>
     private static final ResourceLocation BACKGROUND_6X9 = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/apiary/apiary_storage_54.png");
     private static final ResourceLocation BACKGROUND_9X9 = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/apiary/apiary_storage_81.png");
     private static final ResourceLocation BACKGROUND_9X12 = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/apiary/apiary_storage_108.png");
+    private static final ResourceLocation TABS_BG = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/apiary/apiary_gui_tabs.png");
 
     public ApiaryStorageTileEntity apiaryStorageTileEntity;
 
@@ -28,7 +35,7 @@ public class ApiaryStorageScreen extends ContainerScreen<ApiaryStorageContainer>
     }
 
     protected void preInit(){
-        this.xSize = 176;
+        this.xSize = 226;
 
         switch (this.container.numberOfSlots) {
             case 27:
@@ -44,7 +51,7 @@ public class ApiaryStorageScreen extends ContainerScreen<ApiaryStorageContainer>
                 background = BACKGROUND_9X9;
                 break;
             case 108:
-                this.xSize = 230;
+                this.xSize = 281;
                 this.ySize = 276;
                 background = BACKGROUND_9X12;
                 break;
@@ -57,8 +64,47 @@ public class ApiaryStorageScreen extends ContainerScreen<ApiaryStorageContainer>
     @Override
     protected void init() {
         super.init();
+        this.buttons.clear();
 
         apiaryStorageTileEntity = this.container.apiaryStorageTileEntity;
+
+        int i = this.guiLeft;
+        int j = this.guiTop;
+        int t = i + this.xSize - 23;
+
+        this.addButton(new TabImageButton(t+2, j+17, 18, 18, 74, 0, 18, TABS_BG,
+                (onPress) -> this.changeScreen(ApiaryTabs.MAIN)) {
+            public void renderToolTip(int mouseX, int mouseY) {
+                String s = I18n.format("gui.resourcefulbees.apiary.button.main_screen");
+                ApiaryStorageScreen.this.renderTooltip(s, mouseX, mouseY);
+            }
+        });
+
+        this.addButton(new TabImageButton(t + 2, j + 37, 18, 18, 110, 0, 18, TABS_BG,
+                (onPress) -> this.changeScreen(ApiaryTabs.STORAGE)) {
+            public void renderToolTip(int mouseX, int mouseY) {
+                String s = I18n.format("gui.resourcefulbees.apiary.button.storage_screen");
+                ApiaryStorageScreen.this.renderTooltip(s, mouseX, mouseY);
+            }
+        }).active = false;
+
+        this.addButton(new TabImageButton(t + 2, j + 57, 18, 18, 92, 0, 18, TABS_BG,
+                (onPress) -> this.changeScreen(ApiaryTabs.BREED)) {
+            public void renderToolTip(int mouseX, int mouseY) {
+                String s = I18n.format("gui.resourcefulbees.apiary.button.breed_screen");
+                ApiaryStorageScreen.this.renderTooltip(s, mouseX, mouseY);
+            }
+        });
+    }
+
+    private void changeScreen(ApiaryTabs tab) {
+        switch (tab) {
+            case BREED:
+            case STORAGE:
+                break;
+            case MAIN:
+                NetPacketHandler.sendToServer(new ApiaryTabMessage(apiaryStorageTileEntity.getPos(), ApiaryTabs.MAIN));
+        }
     }
 
     @Override
@@ -81,7 +127,21 @@ public class ApiaryStorageScreen extends ContainerScreen<ApiaryStorageContainer>
             this.minecraft.getTextureManager().bindTexture(background);
             int i = this.guiLeft;
             int j = this.guiTop;
-            blit(i, j, 0, 0, this.xSize, this.ySize, 384, 384);
+            blit(i + 26, j, 0, 0, this.xSize, this.ySize, 384, 384);
+            blit(i, j + 12, 359, 0, 25, 28, 384, 384);
+            int t = i + this.xSize - 23;
+            this.minecraft.getTextureManager().bindTexture(TABS_BG);
+            blit(t, j + 12, 0,0, 25, 68, 128, 128);
+        }
+    }
+
+    @Override
+    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+        for (Widget widget : this.buttons) {
+            if (widget.isHovered()) {
+                widget.renderToolTip(mouseX - this.guiLeft, mouseY - this.guiTop);
+                break;
+            }
         }
     }
 }

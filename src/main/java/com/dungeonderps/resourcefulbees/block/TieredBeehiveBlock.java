@@ -158,7 +158,6 @@ public class TieredBeehiveBlock extends BeehiveBlock {
 
   @Override
   public void onBlockPlacedBy(World worldIn, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nullable LivingEntity placer, @Nonnull ItemStack stack) {
-
     TileEntity tile = worldIn.getTileEntity(pos);
     if(tile instanceof TieredBeehiveTileEntity) {
       TieredBeehiveTileEntity tieredBeehiveTileEntity = (TieredBeehiveTileEntity) tile;

@@ -17,6 +17,18 @@ public class BeeConstants {
     public static final String NBT_SLOT_UPGRADE = "NumSlots";
     public static final String NBT_STORAGE_UPGRADE = "Storage";
     public static final String NBT_UPGRADE_TYPE = "UpgradeType";
+    public static final String NBT_APIARY_POS = "ApiaryPos";
+    public static final String NBT_INVENTORY = "inv";
+    public static final String NBT_VALID_APIARY = "isValid";
+    public static final String NBT_VERT_OFFSET = "verticalOffset";
+    public static final String NBT_HOR_OFFSET = "horizontalOffset";
+    public static final String NBT_TIER = "Tier";
+    public static final String NBT_TIER_MODIFIER = "TierModifier";
+    public static final String NBT_BEES = "Bees";
+    public static final String NBT_STORAGE_POS = "StoragePos";
+    public static final String NBT_FLOWER_POS = "FlowerPos";
+    public static final String NBT_LOCKED = "Locked";
+
 
     public static final int SMOKE_TIME = 600;
     public static final int MIN_HIVE_TIME = 600;
