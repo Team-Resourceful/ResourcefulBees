@@ -122,6 +122,8 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
         h.deserializeNBT(invTag);
         if (nbt.contains(NBT_APIARY_POS))
             apiaryPos = NBTUtil.readBlockPos(nbt.getCompound(NBT_APIARY_POS));
+        if (nbt.contains(NBT_SLOT_COUNT))
+            this.numberOfSlots = nbt.getInt(NBT_SLOT_COUNT);
     }
 
     public CompoundNBT saveToNBT(CompoundNBT nbt) {
@@ -129,6 +131,9 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
         nbt.put(NBT_INVENTORY, inv);
         if (apiaryPos != null)
             nbt.put(NBT_APIARY_POS, NBTUtil.writeBlockPos(apiaryPos));
+        if (numberOfSlots != 9) {
+            nbt.putInt(NBT_SLOT_COUNT, numberOfSlots);
+        }
         return nbt;
     }
 

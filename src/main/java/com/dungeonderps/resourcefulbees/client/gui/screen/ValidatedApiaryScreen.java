@@ -15,6 +15,7 @@ import com.dungeonderps.resourcefulbees.tileentity.ApiaryTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
+import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerInventory;
@@ -163,9 +164,14 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         String s = String.format("(%1$s/9) Bees", apiaryTileEntity.getBeeCount());
-
         this.font.drawString(s, 4, 7, 0x404040);
 
+        for (Widget widget : this.buttons) {
+            if (widget.isHovered()) {
+                widget.renderToolTip(mouseX - this.guiLeft, mouseY - this.guiTop);
+                break;
+            }
+        }
     }
 
     private void renderBeeToolTip(int mouseX, int mouseY, int left, int top, int beeIndexOffsetMax) {

@@ -4,6 +4,7 @@ import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.dungeonderps.resourcefulbees.lib.BeeConstants;
 import com.dungeonderps.resourcefulbees.registry.ItemGroupResourcefulBees;
+import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.utils.Color;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -110,9 +111,18 @@ public class BeeJar extends Item {
             CustomBeeEntity beeEntity = (CustomBeeEntity) target;
             nbt.putString(BeeConstants.NBT_COLOR, beeEntity.getBeeInfo().getPrimaryColor());
         }
-        stack.setTag(nbt);
-        player.swingArm(hand);
+        if (stack.getCount() > 1) {
+            ItemStack newJar = new ItemStack(RegistryHandler.BEE_JAR.get());
+            newJar.setTag(nbt);
+            stack.shrink(1);
+             if (!player.addItemStackToInventory(newJar)) {
+                 player.dropItem(newJar, false);
+             }
+        } else {
+            stack.setTag(nbt);
+        }
         player.setHeldItem(hand, stack);
+        player.swingArm(hand);
         target.remove(true);
         return true;
     }

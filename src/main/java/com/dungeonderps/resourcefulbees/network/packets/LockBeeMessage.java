@@ -25,7 +25,7 @@ public class LockBeeMessage {
     }
 
     public static LockBeeMessage decode(PacketBuffer buffer){
-        return new LockBeeMessage(buffer.readBlockPos(), buffer.readString());
+        return new LockBeeMessage(buffer.readBlockPos(), buffer.readString(100));
     }
 
     public static void handle(LockBeeMessage message, Supplier<NetworkEvent.Context> context){

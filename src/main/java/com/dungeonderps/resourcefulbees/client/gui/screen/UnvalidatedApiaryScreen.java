@@ -222,10 +222,12 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
         @Override
         public void renderToolTip(int p_renderToolTip_1_, int p_renderToolTip_2_) {
             String s;
-            if (!active)
-                s = I18n.format("gui.resourcefulbees.apiary.button.preview.disabled");
-            else
-                s = "gui.resourcefulbees.apiary.button.preview";
+            if (!isTriggered()) {
+                s = I18n.format("gui.resourcefulbees.apiary.button.preview.enable");
+            }
+            else {
+                s = I18n.format("gui.resourcefulbees.apiary.button.preview.disable");
+            }
             UnvalidatedApiaryScreen.this.renderTooltip(s, p_renderToolTip_1_, p_renderToolTip_2_);
         }
 

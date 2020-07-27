@@ -65,7 +65,7 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
   }
 
   public int getMaxBees() {
-    return Math.round(Config.HIVE_MAX_BEES.get()*getTierModifier());
+    return Math.round(Config.HIVE_MAX_BEES.get() * getTierModifier());
   }
 
   @Override

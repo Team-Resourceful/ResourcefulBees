@@ -28,6 +28,7 @@ public class BeeConstants {
     public static final String NBT_STORAGE_POS = "StoragePos";
     public static final String NBT_FLOWER_POS = "FlowerPos";
     public static final String NBT_LOCKED = "Locked";
+    public static final String NBT_SLOT_COUNT = "SlotCount";
 
 
     public static final int SMOKE_TIME = 600;

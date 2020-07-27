@@ -25,7 +25,7 @@ public class ExportBeeMessage {
     }
 
     public static ExportBeeMessage decode(PacketBuffer buffer){
-        return new ExportBeeMessage(buffer.readBlockPos(), buffer.readString());
+        return new ExportBeeMessage(buffer.readBlockPos(), buffer.readString(100));
     }
 
     public static void handle(ExportBeeMessage message, Supplier<NetworkEvent.Context> context){
