@@ -60,10 +60,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-//TODO - Test Server and Jar
+//1.15.2 Branch
 //TODO - Look into "Queen Bee"
 //TODO - Additional Easter Eggs
-//TODO - Cleanup Centrifuge Container
 
 
 @Mod("resourcefulbees")
