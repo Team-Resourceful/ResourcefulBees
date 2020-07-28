@@ -94,7 +94,7 @@ public class ApiaryStorageScreen extends ContainerScreen<ApiaryStorageContainer>
                 String s = I18n.format("gui.resourcefulbees.apiary.button.breed_screen");
                 ApiaryStorageScreen.this.renderTooltip(s, mouseX, mouseY);
             }
-        });
+        }).active = false;
     }
 
     private void changeScreen(ApiaryTabs tab) {

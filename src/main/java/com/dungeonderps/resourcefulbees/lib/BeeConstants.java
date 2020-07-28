@@ -29,6 +29,7 @@ public class BeeConstants {
     public static final String NBT_FLOWER_POS = "FlowerPos";
     public static final String NBT_LOCKED = "Locked";
     public static final String NBT_SLOT_COUNT = "SlotCount";
+    public static final String NBT_SPAWN_EGG_DATA = "EntityData";
 
 
     public static final int SMOKE_TIME = 600;
@@ -39,6 +40,6 @@ public class BeeConstants {
     public static final double DEFAULT_SEC_OUTPUT_WEIGHT = 0.2;
     public static final double DEFAULT_BOT_OUTPUT_WEIGHT = 0.25;
 
-    public static final int DEFAULT_COLOR = 0x000000;
+    public static final int DEFAULT_COLOR = -1;
     public static final int DEFAULT_SECONDARY_COLOR = 0x303030;
 }

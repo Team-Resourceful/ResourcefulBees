@@ -152,7 +152,7 @@ public class RegistryHandler {
 			.build(null));
 
 	public static final RegistryObject<TileEntityType<?>> APIARY_TILE_ENTITY = TILE_ENTITY_TYPES.register("apiary", () -> TileEntityType.Builder
-			.create(ApiaryTileEntity::new, T1_APIARY_BLOCK.get())
+			.create(ApiaryTileEntity::new, T1_APIARY_BLOCK.get(), T2_APIARY_BLOCK.get(), T3_APIARY_BLOCK.get(), T4_APIARY_BLOCK.get())
 			.build(null));
 
 	public static final RegistryObject<TileEntityType<?>> APIARY_STORAGE_TILE_ENTITY = TILE_ENTITY_TYPES.register("apiary_storage", () -> TileEntityType.Builder
@@ -206,6 +206,7 @@ public class RegistryHandler {
 	//endregion
 
 	//region****************FEATURES*****************************************
+
 	public static final RegistryObject<Feature<NoFeatureConfig>> BEE_NEST_FEATURE = FEATURES.register("bee_nest_feature", () -> new BeeNestFeature(NoFeatureConfig::deserialize));
 	//endregion
 }

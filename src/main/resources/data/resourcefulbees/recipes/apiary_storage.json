@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "BCB",
+    "CHC",
+    "BCB"
+  ],
+  "key": {
+    "C": { "tag": "forge:chests" },
+    "B": { "tag": "resourcefulbees:resourceful_honeycomb_block" },
+    "H": { "item": "minecraft:hopper"}
+  },
+  "result": {
+    "item": "resourcefulbees:apiary_storage"
+  }
+}

@@ -4,9 +4,11 @@ import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.data.BeeData;
 import com.dungeonderps.resourcefulbees.entity.passive.CustomBeeEntity;
+import com.dungeonderps.resourcefulbees.lib.BeeConstants;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.helpers.IGuiHelper;
@@ -21,6 +23,8 @@ import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
@@ -92,6 +96,39 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
 
     @Override
     public void setIngredients(@Nonnull Recipe recipe, @Nonnull IIngredients ingredients) {
+        ItemStack parent1SpawnEgg = new ItemStack(RegistryHandler.BEE_SPAWN_EGG.get());
+        ItemStack parent2SpawnEgg = new ItemStack(RegistryHandler.BEE_SPAWN_EGG.get());
+        ItemStack childSpawnEgg = new ItemStack(RegistryHandler.BEE_SPAWN_EGG.get());
+
+        CompoundNBT p1_type = new CompoundNBT();
+        CompoundNBT p1_rbees = new CompoundNBT();
+        CompoundNBT p1_root = new CompoundNBT();
+        p1_type.putString(BeeConstants.NBT_BEE_TYPE, recipe.parent1);
+        p1_root.put(BeeConstants.NBT_ROOT, p1_type);
+        p1_root.put(BeeConstants.NBT_SPAWN_EGG_DATA, p1_type);
+        parent1SpawnEgg.setTag(p1_root);
+
+        CompoundNBT p2_type = new CompoundNBT();
+        CompoundNBT p2_rbees = new CompoundNBT();
+        CompoundNBT p2_root = new CompoundNBT();
+        p2_type.putString(BeeConstants.NBT_BEE_TYPE, recipe.parent2);
+        p2_root.put(BeeConstants.NBT_ROOT, p2_type);
+        p2_root.put(BeeConstants.NBT_SPAWN_EGG_DATA, p2_type);
+        parent2SpawnEgg.setTag(p2_root);
+
+        CompoundNBT ch_type = new CompoundNBT();
+        CompoundNBT ch_rbees = new CompoundNBT();
+        CompoundNBT ch_root = new CompoundNBT();
+        ch_type.putString(BeeConstants.NBT_BEE_TYPE, recipe.child);
+        ch_root.put(BeeConstants.NBT_ROOT, ch_type);
+        ch_root.put(BeeConstants.NBT_SPAWN_EGG_DATA, ch_type);
+        childSpawnEgg.setTag(ch_root);
+
+        List<Ingredient> list = new ArrayList<>();
+        Ingredient ing = Ingredient.fromStacks(parent1SpawnEgg, parent2SpawnEgg);
+        list.add(ing);
+        ingredients.setInputIngredients(list);
+        ingredients.setOutput(VanillaTypes.ITEM, childSpawnEgg);
     }
 
     @Override
@@ -172,12 +209,12 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
             this.parent1 = parent1;
             this.parent2 = parent2;
             this.child = child;
+
         }
 
         public String getParent1() {
             return this.parent1;
         }
-
         public String getParent2() {
             return this.parent2;
         }

@@ -28,10 +28,10 @@ public class BeeSpawnEggItem extends SpawnEggItem {
     @Nonnull
 	@Override
     public String getTranslationKey(ItemStack stack) {
-        CompoundNBT beeType = stack.getChildTag(BeeConstants.NBT_ROOT);
+        CompoundNBT nbt = stack.getChildTag(BeeConstants.NBT_ROOT);
         String name;
-        if ((beeType != null && beeType.contains(BeeConstants.NBT_BEE_TYPE))) {
-            name = "item" + '.' + ResourcefulBees.MOD_ID + '.' + beeType.getString(BeeConstants.NBT_BEE_TYPE) + "_spawn_egg";
+        if ((nbt != null && nbt.contains(BeeConstants.NBT_BEE_TYPE))) {
+            name = "item" + '.' + ResourcefulBees.MOD_ID + '.' + nbt.getString(BeeConstants.NBT_BEE_TYPE) + "_spawn_egg";
         } else {
             name = "item" + '.' + ResourcefulBees.MOD_ID + '.' + "bee_spawn_egg";
         }

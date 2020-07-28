@@ -90,7 +90,7 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
                 String s = I18n.format("gui.resourcefulbees.apiary.button.breed_screen");
                 ValidatedApiaryScreen.this.renderTooltip(s, mouseX, mouseY);
             }
-        });
+        }).active = false;
     }
 
     private void changeScreen(ApiaryTabs tab) {
