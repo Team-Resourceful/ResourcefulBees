@@ -166,7 +166,7 @@ public class FluidToFluid implements IRecipeCategory<FluidToFluid.Recipe> {
         fluidStacks.init(1, true, 16, 58);
         fluidStacks.set(0, ingredients.getOutputs(VanillaTypes.FLUID).get(0));
         fluidStacks.set(1, ingredients.getInputs(VanillaTypes.FLUID).get(0));
-        ingredientStacks.init(0, true, 20, 15);
+        ingredientStacks.init(0, true, 16, 10);
         ingredientStacks.set(0, ingredients.getInputs(JEICompat.ENTITY_INGREDIENT).get(0));
     }
 

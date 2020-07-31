@@ -71,7 +71,7 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
         int j = this.guiTop;
         int t = i + this.xSize - 25;
 
-        this.addButton(new TabImageButton(t+2, j+17, 18, 18, 74, 0, 18, TABS_BG,
+        this.addButton(new TabImageButton(t+1, j+17, 18, 18, 74, 0, 18, TABS_BG,
                 (onPress) -> this.changeScreen(ApiaryTabs.MAIN)) {
             public void renderToolTip(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
                 StringTextComponent s = new StringTextComponent(I18n.format("gui.resourcefulbees.apiary.button.main_screen"));
@@ -79,7 +79,7 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
             }
         }).active = false;
 
-        this.addButton(new TabImageButton(t + 2, j + 37, 18, 18, 110, 0, 18, TABS_BG,
+        this.addButton(new TabImageButton(t + 1, j + 37, 18, 18, 110, 0, 18, TABS_BG,
                 (onPress) -> this.changeScreen(ApiaryTabs.STORAGE)) {
             public void renderToolTip(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
                 StringTextComponent s = new StringTextComponent(I18n.format("gui.resourcefulbees.apiary.button.storage_screen"));
@@ -87,7 +87,7 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
             }
         });
 
-        this.addButton(new TabImageButton(t + 2, j + 57, 18, 18, 92, 0, 18, TABS_BG,
+        this.addButton(new TabImageButton(t + 1, j + 57, 18, 18, 92, 0, 18, TABS_BG,
                 (onPress) -> this.changeScreen(ApiaryTabs.BREED)) {
             public void renderToolTip(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
                 StringTextComponent s = new StringTextComponent(I18n.format("gui.resourcefulbees.apiary.button.breed_screen"));
@@ -160,7 +160,7 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
 
             int t = i + this.xSize - 25;
             this.minecraft.getTextureManager().bindTexture(TABS_BG);
-            blit(matrix, t, j + 12, 0,0, 25, 68, 128, 128);
+            blit(matrix, t-1, j + 12, 0,0, 25, 68, 128, 128);
         }
     }
 

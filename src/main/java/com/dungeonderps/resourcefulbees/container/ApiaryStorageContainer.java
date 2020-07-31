@@ -44,7 +44,7 @@ public class ApiaryStorageContainer extends Container {
         if (apiaryStorageTileEntity != null) {
             this.inventorySlots.clear();
             numberOfSlots = apiaryStorageTileEntity.numberOfSlots;
-            this.addSlot(new SlotItemHandlerUnconditioned(apiaryStorageTileEntity.h, ApiaryStorageTileEntity.UPGRADE_SLOT, 6, 18) {
+            this.addSlot(new SlotItemHandlerUnconditioned(apiaryStorageTileEntity.h, ApiaryStorageTileEntity.UPGRADE_SLOT, 7, 18) {
                 public int getSlotStackLimit() {
                     return 1;
                 }

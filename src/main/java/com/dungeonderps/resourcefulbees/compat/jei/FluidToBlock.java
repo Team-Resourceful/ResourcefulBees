@@ -172,7 +172,7 @@ public class FluidToBlock implements IRecipeCategory<FluidToBlock.Recipe> {
         itemStacks.set(0, ingredients.getOutputs(VanillaTypes.ITEM).get(0));
 
         IGuiIngredientGroup<EntityIngredient> ingredientStacks = iRecipeLayout.getIngredientsGroup(JEICompat.ENTITY_INGREDIENT);
-        ingredientStacks.init(0, true, 20, 15);
+        ingredientStacks.init(0, true, 16, 10);
         ingredientStacks.set(0, ingredients.getInputs(JEICompat.ENTITY_INGREDIENT).get(0));
     }
 

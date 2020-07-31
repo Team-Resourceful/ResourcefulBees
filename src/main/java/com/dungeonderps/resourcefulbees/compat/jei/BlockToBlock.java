@@ -163,7 +163,7 @@ public class BlockToBlock implements IRecipeCategory<BlockToBlock.Recipe> {
         itemStacks.set(1, ingredients.getInputs(VanillaTypes.ITEM).get(0));
 
         IGuiIngredientGroup<EntityIngredient> ingredientStacks = iRecipeLayout.getIngredientsGroup(JEICompat.ENTITY_INGREDIENT);
-        ingredientStacks.init(0, true, 20, 15);
+        ingredientStacks.init(0, true, 16, 10);
         ingredientStacks.set(0, ingredients.getInputs(JEICompat.ENTITY_INGREDIENT).get(0));
     }
 

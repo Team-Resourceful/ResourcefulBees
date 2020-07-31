@@ -129,20 +129,20 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
         List<EntityIngredient> entitys = new ArrayList<>();
         entitys.add(new EntityIngredient(recipe.parent1, 135.0F));
         entitys.add(new EntityIngredient(recipe.parent2, 45.0F));
-        entitys.add(new EntityIngredient(recipe.child, 135.0F));
 
         ingredients.setInputs(JEICompat.ENTITY_INGREDIENT, entitys);
+        ingredients.setOutput(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(recipe.child, 135.0F));
     }
 
     @Override
     public void setRecipe(@Nonnull IRecipeLayout iRecipeLayout, @Nonnull Recipe recipe, @Nonnull IIngredients ingredients) {
         IGuiIngredientGroup<EntityIngredient> ingredientStacks = iRecipeLayout.getIngredientsGroup(JEICompat.ENTITY_INGREDIENT);
-        ingredientStacks.init(0, true, 5, 5);
-        ingredientStacks.init(1, true, 60, 5);
-        ingredientStacks.init(2, false, 125, 5);
+        ingredientStacks.init(0, true, 5, 2);
+        ingredientStacks.init(1, true, 60, 2);
+        ingredientStacks.init(2, false, 125, 2);
         ingredientStacks.set(0, ingredients.getInputs(JEICompat.ENTITY_INGREDIENT).get(0));
         ingredientStacks.set(1, ingredients.getInputs(JEICompat.ENTITY_INGREDIENT).get(1));
-        ingredientStacks.set(2, ingredients.getInputs(JEICompat.ENTITY_INGREDIENT).get(2));
+        ingredientStacks.set(2, ingredients.getOutputs(JEICompat.ENTITY_INGREDIENT).get(0));
     }
 
     @Nonnull
