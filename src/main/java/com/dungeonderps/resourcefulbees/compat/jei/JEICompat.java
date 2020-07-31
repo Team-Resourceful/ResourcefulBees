@@ -127,7 +127,7 @@ public class JEICompat implements IModPlugin {
         //TODO - Figure out why it only shows last bee in hashmap
         List<EntityIngredient> entityIngredients = EntityIngredientFactory.create();
 
-        registration.register(ENTITY_INGREDIENT, Lists.newArrayList(), new EntityIngredientHelper<>(), new EntityRenderer());
+        registration.register(ENTITY_INGREDIENT, entityIngredients, new EntityIngredientHelper<>(), new EntityRenderer());
     }
 
     @Override

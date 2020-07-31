@@ -25,7 +25,7 @@ public class HoneycombTileEntity extends TileEntity {
     }
 
     public int getColor() {
-        return (blockColor != null && !blockColor.isEmpty()) ? Color.parseInt(blockColor) : BeeConstants.DEFAULT_COLOR;
+        return (blockColor != null && !blockColor.isEmpty()) ? Color.parseInt(blockColor) : BeeConstants.DEFAULT_ITEM_COLOR;
     }
 
     @Override
@@ -48,7 +48,7 @@ public class HoneycombTileEntity extends TileEntity {
 
     CompoundNBT saveToNBT(CompoundNBT compound) {
         if (this.blockColor != null)
-            if (!this.blockColor.equals(String.valueOf(BeeConstants.DEFAULT_COLOR))) {
+            if (!this.blockColor.equals(String.valueOf(BeeConstants.DEFAULT_ITEM_COLOR))) {
                 compound.putString(BeeConstants.NBT_COLOR, this.blockColor);
             }
 

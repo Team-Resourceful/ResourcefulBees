@@ -39,12 +39,12 @@ public class EntityIngredientHelper<T extends EntityIngredient> implements IIngr
 
     @Override
     public String getUniqueId(EntityIngredient entityIngredient) {
-        return "bee";
+        return "bee:" + entityIngredient.getBeeType();
     }
 
     @Override
     public String getWildcardId(EntityIngredient entityIngredient) {
-        return "bee";
+        return this.getUniqueId(entityIngredient);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class EntityIngredientHelper<T extends EntityIngredient> implements IIngr
 
     @Override
     public String getResourceId(EntityIngredient entityIngredient) {
-        return "bee";
+        return entityIngredient.getBeeType();
     }
 
     @Override

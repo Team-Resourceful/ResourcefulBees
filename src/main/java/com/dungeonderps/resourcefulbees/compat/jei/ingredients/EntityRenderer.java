@@ -30,9 +30,9 @@ public class EntityRenderer implements IIngredientRenderer<EntityIngredient> {
                 bee.ticksExisted = mc.player.ticksExisted;
                 bee.renderYawOffset = entityIngredient.getRotation() - 90;
                 bee.setBeeType(entityIngredient.getBeeType());
-                float scaledSize = 30;
+                float scaledSize = 20;
                 if (!bee.getSizeModifierFromInfo(bee.getBeeType()).equals(1.0F)) {
-                    scaledSize = 30 / bee.getSizeModifierFromInfo(bee.getBeeType());
+                    scaledSize = 20 / bee.getSizeModifierFromInfo(bee.getBeeType());
                 }
                 matrixStack.translate(x, y, 1);
                 matrixStack.rotate(Vector3f.ZP.rotationDegrees(180.0F));

@@ -35,13 +35,13 @@ public class HoneycombBlock extends Block {
             }
         }
 
-        return BeeConstants.DEFAULT_COLOR;
+        return BeeConstants.DEFAULT_ITEM_COLOR;
     }
 
     public static int getItemColor(ItemStack stack, int tintIndex){
         CompoundNBT honeycombNBT = stack.getChildTag(BeeConstants.NBT_ROOT);
         return (honeycombNBT != null && honeycombNBT.contains(BeeConstants.NBT_COLOR) && !honeycombNBT.getString(BeeConstants.NBT_COLOR).isEmpty())
-                ? Color.parseInt(honeycombNBT.getString(BeeConstants.NBT_COLOR)) : BeeConstants.DEFAULT_COLOR;
+                ? Color.parseInt(honeycombNBT.getString(BeeConstants.NBT_COLOR)) : BeeConstants.DEFAULT_ITEM_COLOR;
     }
 
     @Override
