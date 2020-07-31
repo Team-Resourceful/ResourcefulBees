@@ -86,6 +86,7 @@
 	"block.resourcefulbees.skeleton_honeycomb_block": "Skeleton Honeycomb Block",
 	"block.resourcefulbees.wither_honeycomb_block": "Wither Honeycomb Block",
 	"block.resourcefulbees.zombie_honeycomb_block": "Zombie Honeycomb Block",
+	"block.resourcefulbees.netherite_honeycomb_block": "Netherite Honeycomb Block",
 
 	"item.resourcefulbees.gold_honeycomb": "Gold Honeycomb",
 	"item.resourcefulbees.iron_honeycomb": "Iron Honeycomb",
@@ -102,6 +103,7 @@
 	"item.resourcefulbees.skeleton_honeycomb": "Skeleton Honeycomb",
 	"item.resourcefulbees.wither_honeycomb": "Wither Honeycomb",
 	"item.resourcefulbees.zombie_honeycomb": "Zombie Honeycomb",
+	"item.resourcefulbees.netherite_honeycomb": "Netherite Honeycomb",
 
 	"item.resourcefulbees.gold_spawn_egg": "Gold Bee Spawn Egg",
 	"item.resourcefulbees.iron_spawn_egg": "Iron Bee Spawn Egg",
@@ -118,6 +120,7 @@
 	"item.resourcefulbees.skeleton_spawn_egg": "Skeleton Bee Spawn Egg",
 	"item.resourcefulbees.wither_spawn_egg": "Wither Bee Spawn Egg",
 	"item.resourcefulbees.zombie_spawn_egg": "Zombie Bee Spawn Egg",
+	"item.resourcefulbees.netherite_spawn_egg": "Netherite Bee Spawn Egg",
 
 	"entity.resourcefulbees.gold_bee": "Gold Bee",
 	"entity.resourcefulbees.iron_bee": "Iron Bee",
@@ -134,6 +137,7 @@
 	"entity.resourcefulbees.skeleton_bee": "Skeleton Bee",
 	"entity.resourcefulbees.wither_bee": "Wither Bee",
 	"entity.resourcefulbees.zombie_bee": "Zombie Bee",
+	"entity.resourcefulbees.netherite_bee": "Nethire Bee",
 
 
 	"entity.minecraft.villager.resourcefulbees.beekeeper": "Beekeeper",

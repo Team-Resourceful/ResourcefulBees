@@ -7,6 +7,7 @@ import com.dungeonderps.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.dungeonderps.resourcefulbees.lib.BeeConstants;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -23,6 +24,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -101,6 +103,7 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
         ItemStack childSpawnEgg = new ItemStack(RegistryHandler.BEE_SPAWN_EGG.get());
 
         CompoundNBT p1_type = new CompoundNBT();
+        CompoundNBT p1_rbees = new CompoundNBT();
         CompoundNBT p1_root = new CompoundNBT();
         p1_type.putString(BeeConstants.NBT_BEE_TYPE, recipe.parent1);
         p1_root.put(BeeConstants.NBT_ROOT, p1_type);
@@ -108,6 +111,7 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
         parent1SpawnEgg.setTag(p1_root);
 
         CompoundNBT p2_type = new CompoundNBT();
+        CompoundNBT p2_rbees = new CompoundNBT();
         CompoundNBT p2_root = new CompoundNBT();
         p2_type.putString(BeeConstants.NBT_BEE_TYPE, recipe.parent2);
         p2_root.put(BeeConstants.NBT_ROOT, p2_type);
@@ -115,6 +119,7 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
         parent2SpawnEgg.setTag(p2_root);
 
         CompoundNBT ch_type = new CompoundNBT();
+        CompoundNBT ch_rbees = new CompoundNBT();
         CompoundNBT ch_root = new CompoundNBT();
         ch_type.putString(BeeConstants.NBT_BEE_TYPE, recipe.child);
         ch_root.put(BeeConstants.NBT_ROOT, ch_type);
@@ -156,23 +161,23 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
     public void renderEntity(MatrixStack matrix, String beeType, Float rotation, Double xPos, Double yPos){
         Minecraft mc = Minecraft.getInstance();
         matrix.push();
-        matrix.translate(0,0,.5D);
+        matrix.translate(0, 0, 0.5D);
 
-        if (mc.player != null){
+        if (mc.player !=null) {
             bee.ticksExisted = mc.player.ticksExisted;
-            bee.renderYawOffset = rotation;
+            bee.renderYawOffset = rotation - 90;
             bee.setBeeType(beeType);
-
-            float scaledSize = !bee.getSizeModifierFromInfo(bee.getBeeType()).equals(1.0F)
-                    ? 30 / bee.getSizeModifierFromInfo(bee.getBeeType())
-                    : 30;
+            float scaledSize = 30;
+            if (!bee.getSizeModifierFromInfo(bee.getBeeType()).equals(1.0F)) {
+                scaledSize = 30 / bee.getSizeModifierFromInfo(bee.getBeeType());
+            }
             matrix.translate(xPos, yPos, 1);
             matrix.rotate(Vector3f.ZP.rotationDegrees(180.0F));
-            matrix.translate(0, -0.2F, 1);
+            matrix.translate(0.0F, -0.2F, 1);
             matrix.scale(scaledSize, scaledSize, 30);
             EntityRendererManager entityrenderermanager = mc.getRenderManager();
             IRenderTypeBuffer.Impl irendertypebuffer$impl = mc.getRenderTypeBuffers().getBufferSource();
-            entityrenderermanager.renderEntityStatic(bee, 0, 0, 0, mc.getRenderPartialTicks(), 1, matrix, irendertypebuffer$impl, 15728880);
+            entityrenderermanager.renderEntityStatic(bee, 0, 0, 0.0D, mc.getRenderPartialTicks(), 1, matrix, irendertypebuffer$impl, 15728880);
             irendertypebuffer$impl.finish();
         }
         matrix.pop();
@@ -180,9 +185,9 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
 
     @Override
     public void draw(Recipe recipe, @Nonnull MatrixStack matrix, double mouseX, double mouseY) {
-        renderEntity(matrix, recipe.getParent1(), 45.0F, 20D, 20D);
-        renderEntity(matrix, recipe.getParent2(), -45.0F, 70D, 20D);
-        renderEntity(matrix, recipe.getChild(), 45.0F, 140D, 20D);
+        renderEntity(matrix, recipe.getParent1(), 135.0F, 20D, 20D);
+        renderEntity(matrix, recipe.getParent2(), 45.0F, 70D, 20D);
+        renderEntity(matrix, recipe.getChild(), 135.0F, 140D, 20D);
         Minecraft minecraft = Minecraft.getInstance();
         FontRenderer fontRenderer = minecraft.fontRenderer;
         DecimalFormat decimalFormat = new DecimalFormat("##%");
