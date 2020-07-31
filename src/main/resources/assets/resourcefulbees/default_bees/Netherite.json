@@ -1,0 +1,17 @@
+{
+  "honeycombColor": "#654740",
+  "primaryColor": "#654740",
+  "secondaryColor": "#95867E",
+  "flower": "minecraft:wither_rose",
+  "mutationInput": "minecraft:blackstone",
+  "mutationOutput": "minecraft:gilded_blackstone",
+  "mainOutput": "minecraft:netherite_ingot",
+  "mainOutputWeight": 0.05,
+  "spawnInWorld": false,
+  "biomeWhitelist": "tag:NETHER",
+  "maxTimeInHive": 600,
+  "netherBee": true,
+  "breedable" : true,
+  "parent1": "Wither",
+  "parent2": "Diamond"
+}

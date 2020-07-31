@@ -9,7 +9,6 @@ import com.dungeonderps.resourcefulbees.lib.MutationTypes;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.utils.BeeInfoUtils;
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -29,7 +28,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tags.ITag;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -169,44 +167,36 @@ public class BlockToFluid implements IRecipeCategory<BlockToFluid.Recipe> {
         }
     }
 
-    public void renderEntity(String beeType, Float rotation, Double xPos, Double yPos){
-        RenderSystem.pushMatrix();
-
-        RenderSystem.translatef(0, 0, 1050.0F);
-        RenderSystem.scalef(1.0F, 1.0F, -1.0F);
-
-        MatrixStack matrixstack = new MatrixStack();
-        matrixstack.translate(xPos, yPos, 1000.0D);
-        Quaternion quaternion = Vector3f.ZP.rotationDegrees(180.0F);
-        matrixstack.rotate(quaternion);
-
+    public void renderEntity(MatrixStack matrix, String beeType, Float rotation, Double xPos, Double yPos){
         Minecraft mc = Minecraft.getInstance();
-        EntityRendererManager entityrenderermanager = mc.getRenderManager();
-        IRenderTypeBuffer.Impl irendertypebuffer$impl = mc.getRenderTypeBuffers().getBufferSource();
+        matrix.push();
+        matrix.translate(0,0,.5D);
 
-        assert mc.player != null;
-        bee.ticksExisted = mc.player.ticksExisted;
-        bee.renderYawOffset = rotation;
-        bee.setBeeType(beeType);
+        if (mc.player != null){
+            bee.ticksExisted = mc.player.ticksExisted;
+            bee.renderYawOffset = rotation;
+            bee.setBeeType(beeType);
 
-        float scaledSize = 30;
-        if (!bee.getSizeModifierFromInfo(bee.getBeeType()).equals(1.0F)) {
-            scaledSize = 30 / bee.getSizeModifierFromInfo(bee.getBeeType());
+            float scaledSize = !bee.getSizeModifierFromInfo(bee.getBeeType()).equals(1.0F)
+                    ? 30 / bee.getSizeModifierFromInfo(bee.getBeeType())
+                    : 30;
+            matrix.translate(xPos, yPos, 1);
+            matrix.rotate(Vector3f.ZP.rotationDegrees(180.0F));
+            matrix.translate(0, -0.2F, 1);
+            matrix.scale(scaledSize, scaledSize, 30);
+            EntityRendererManager entityrenderermanager = mc.getRenderManager();
+            IRenderTypeBuffer.Impl irendertypebuffer$impl = mc.getRenderTypeBuffers().getBufferSource();
+            entityrenderermanager.renderEntityStatic(bee, 0, 0, 0, mc.getRenderPartialTicks(), 1, matrix, irendertypebuffer$impl, 15728880);
+            irendertypebuffer$impl.finish();
         }
-        matrixstack.scale(scaledSize, scaledSize, 30);
-
-        entityrenderermanager.renderEntityStatic(bee, 0, 0, 0.0D, mc.getRenderPartialTicks(), 1, matrixstack, irendertypebuffer$impl, 15728880);
-
-        irendertypebuffer$impl.finish();
-
-        RenderSystem.popMatrix();
+        matrix.pop();
     }
 
     @Override
-    public void draw(BlockToFluid.Recipe recipe, MatrixStack stack, double mouseX, double mouseY) {
-        this.beeHive.draw(stack, 65, 10);
-        this.info.draw(stack, 63, 8);
-        renderEntity(recipe.beeType, 135.0F, 25D, 30D);
+    public void draw(BlockToFluid.Recipe recipe, MatrixStack matrix, double mouseX, double mouseY) {
+        this.beeHive.draw(matrix, 65, 10);
+        this.info.draw(matrix, 63, 8);
+        renderEntity(matrix, recipe.beeType, 135.0F, 25D, 30D);
     }
 
     public static class Recipe {
