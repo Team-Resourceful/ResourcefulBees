@@ -44,6 +44,7 @@ public class BeeData {
     private int secondaryOutputCount = 1;
     private int bottleOutputCount = 1;
 
+    private float attackDamage = 1.0f;
 
     private float sizeModifier = 1.0f;
 
@@ -484,4 +485,8 @@ public class BeeData {
     public int getBottleOutputCount() { return bottleOutputCount; }
 
     public void setBottleOutputCount(int bottleOutputCount) { this.bottleOutputCount = bottleOutputCount; }
+
+    public float getAttackDamage() { return attackDamage; }
+
+    public void setAttackDamage(float attackDamage) { this.attackDamage = attackDamage; }
 }

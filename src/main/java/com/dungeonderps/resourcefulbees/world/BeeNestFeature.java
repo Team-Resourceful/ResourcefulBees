@@ -5,7 +5,7 @@ import com.dungeonderps.resourcefulbees.entity.passive.ResourcefulBee;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.tileentity.TieredBeehiveTileEntity;
 import com.dungeonderps.resourcefulbees.utils.MathUtils;
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.nbt.CompoundNBT;
@@ -13,30 +13,29 @@ import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.world.gen.feature.structure.StructureManager;
 
 import javax.annotation.Nonnull;
 import java.util.Random;
-import java.util.function.Function;
 
 //import com.dungeonderps.resourcefulbees.tileentity.beenest.BeeNestEntity;
 
 public class BeeNestFeature extends Feature<NoFeatureConfig> {
 
-    public BeeNestFeature(Function<Dynamic<?>, NoFeatureConfig> configFactoryIn) {
+    public BeeNestFeature(Codec<NoFeatureConfig> configFactoryIn) {
         super(configFactoryIn);
     }
 
 
 
     @Override
-    public boolean place(@Nonnull IWorld worldIn, @Nonnull ChunkGenerator<? extends GenerationSettings> generator, @Nonnull Random rand, @Nonnull BlockPos pos, @Nonnull NoFeatureConfig config) {
+    public boolean func_230362_a_(@Nonnull ISeedReader worldIn, @Nonnull StructureManager manager, @Nonnull ChunkGenerator generator, @Nonnull Random rand, @Nonnull BlockPos pos, @Nonnull NoFeatureConfig config) {
         Biome biome = worldIn.getBiome(pos);
         Biome.Category category = biome.getCategory();
 

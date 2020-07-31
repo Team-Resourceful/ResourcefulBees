@@ -11,8 +11,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -36,7 +37,7 @@ public class Smoker extends Item {
 	{
 	    if (!world.isRemote)
 	    {
-	        Vec3d vec3d = player.getLookVec();
+	        Vector3d vec3d = player.getLookVec();
 			double x = player.getPosX() + vec3d.x * 2;
 			double y = player.getPosY() + vec3d.y * 2;
 			double z = player.getPosZ() + vec3d.z * 2;
@@ -62,16 +63,17 @@ public class Smoker extends Item {
         }
     }
 
+    @Nonnull
     @Override
-    public boolean itemInteractionForEntity(@Nonnull ItemStack stack, @Nonnull PlayerEntity player, LivingEntity targetIn, @Nonnull Hand hand) {
+    public ActionResultType itemInteractionForEntity(@Nonnull ItemStack stack, @Nonnull PlayerEntity player, LivingEntity targetIn, @Nonnull Hand hand) {
         if (targetIn.getEntityWorld().isRemote() || (!(targetIn instanceof BeeEntity) || !targetIn.isAlive())) {
-            return false;
+            return ActionResultType.FAIL;
         }
         BeeEntity target = (BeeEntity) targetIn;
-        if (target.isAngry()){
-            target.setAnger(0);
+        if (target.func_233678_J__()){
+            target.setAngerTime(0);
         }
-        return true;
+        return ActionResultType.PASS;
     }
 
 }

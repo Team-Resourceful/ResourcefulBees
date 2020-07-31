@@ -3,6 +3,7 @@ package com.dungeonderps.resourcefulbees.tileentity;
 import com.dungeonderps.resourcefulbees.lib.BeeConstants;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.utils.Color;
+import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
@@ -28,9 +29,9 @@ public class HoneycombTileEntity extends TileEntity {
     }
 
     @Override
-    public void read(@Nonnull CompoundNBT compound) {
+    public void read(@Nonnull BlockState state, @Nonnull CompoundNBT compound) {
         this.loadFromNBT(compound);
-        super.read(compound);
+        super.read(state, compound);
     }
 
     @Nonnull
@@ -66,7 +67,7 @@ public class HoneycombTileEntity extends TileEntity {
     }
 
     @Override
-    public void handleUpdateTag(CompoundNBT tag) {
-        this.read(tag);
+    public void handleUpdateTag(@Nonnull BlockState state, CompoundNBT tag) {
+        this.read(state, tag);
     }
 }

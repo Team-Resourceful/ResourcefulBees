@@ -21,15 +21,17 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.runtime.IIngredientManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.Quaternion;
-import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.ITag;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Quaternion;
+import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
@@ -70,7 +72,7 @@ public class FluidToBlock implements IRecipeCategory<FluidToBlock.Recipe> {
                 if (BeeInfoUtils.TAG_RESOURCE_PATTERN.matcher(mutationIn).matches()) {
                     mutationIn = mutationIn.replace(BeeConstants.TAG_PREFIX, "");
 
-                    Tag<Fluid> fluidTag = BeeInfoUtils.getFluidTag(mutationIn);
+                    ITag<Fluid> fluidTag = BeeInfoUtils.getFluidTag(mutationIn);
                     if (fluidTag != null) {
                         Item itemOut = BeeInfoUtils.getItem(mutationOut);
                         if (BeeInfoUtils.isValidItem(itemOut)){
@@ -141,16 +143,16 @@ public class FluidToBlock implements IRecipeCategory<FluidToBlock.Recipe> {
     }
 
     @Override
-    public List<String> getTooltipStrings(Recipe recipe, double mouseX, double mouseY) {
+    public List<ITextComponent> getTooltipStrings(Recipe recipe, double mouseX, double mouseY) {
         double infoX = 63D;
         double infoY = 8D;
         double beeX = 10D;
         double beeY = 6D;
         if (mouseX >= infoX && mouseX <= infoX + 9D && mouseY >= infoY && mouseY <= infoY + 9D){
-            return Collections.singletonList(I18n.format("gui." + ResourcefulBees.MOD_ID + ".jei.category.mutation.info"));
+            return Collections.singletonList(new StringTextComponent(I18n.format("gui." + ResourcefulBees.MOD_ID + ".jei.category.mutation.info")));
         }
         if (mouseX >= beeX && mouseX <= beeX + 30D && mouseY >= beeY && mouseY <= beeY + 30D){
-            return Collections.singletonList(I18n.format("entity." + ResourcefulBees.MOD_ID + "." + recipe.beeType + "_bee"));
+            return Collections.singletonList(new StringTextComponent(I18n.format("entity." + ResourcefulBees.MOD_ID + "." + recipe.beeType + "_bee")));
         }
         return IRecipeCategory.super.getTooltipStrings(recipe,mouseX, mouseY);
     }
@@ -202,9 +204,9 @@ public class FluidToBlock implements IRecipeCategory<FluidToBlock.Recipe> {
     }
 
     @Override
-    public void draw(FluidToBlock.Recipe recipe, double mouseX, double mouseY) {
-        this.beeHive.draw(65, 10);
-        this.info.draw(63, 8);
+    public void draw(FluidToBlock.Recipe recipe, MatrixStack matrix, double mouseX, double mouseY) {
+        this.beeHive.draw(matrix, 65, 10);
+        this.info.draw(matrix, 63, 8);
         renderEntity(recipe.beeType, 135.0F, 25D, 30D);
     }
 
@@ -214,7 +216,7 @@ public class FluidToBlock implements IRecipeCategory<FluidToBlock.Recipe> {
         private final String beeType;
 
         private final boolean acceptsAny;
-        private final Tag<Fluid> tag;
+        private final ITag<Fluid> tag;
 
         private final Enum<MutationTypes> mutationType;
 
@@ -229,7 +231,7 @@ public class FluidToBlock implements IRecipeCategory<FluidToBlock.Recipe> {
         }
 
         //TAGS!!!
-        public Recipe(Tag<Fluid> baseBlock, ItemStack mutationBlock, String beeType, Enum<MutationTypes> type, boolean acceptsAny) {
+        public Recipe(ITag<Fluid> baseBlock, ItemStack mutationBlock, String beeType, Enum<MutationTypes> type, boolean acceptsAny) {
             this.fluidIn = null;
             this.itemOut = mutationBlock;
             this.beeType = beeType;
@@ -239,7 +241,7 @@ public class FluidToBlock implements IRecipeCategory<FluidToBlock.Recipe> {
         }
 
         public boolean isAcceptsAny() { return acceptsAny; }
-        public Tag<?> getTag() { return tag; }
+        public ITag<?> getTag() { return tag; }
         public String getBeeType() { return this.beeType; }
     }
 }

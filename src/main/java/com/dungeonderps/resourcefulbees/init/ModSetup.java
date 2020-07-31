@@ -12,13 +12,17 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.resources.FolderPack;
 import net.minecraft.resources.IPackFinder;
+import net.minecraft.resources.IPackNameDecorator;
 import net.minecraft.resources.ResourcePackInfo;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tileentity.BeehiveTileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.loading.FMLPaths;
 
@@ -29,7 +33,7 @@ import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Map;
+import java.util.function.Consumer;
 
 import static com.dungeonderps.resourcefulbees.ResourcefulBees.LOGGER;
 import static com.dungeonderps.resourcefulbees.config.BeeBuilder.BEE_PATH;
@@ -72,13 +76,14 @@ public class ModSetup {
             protected ItemStack dispenseStack(@Nonnull IBlockSource source, @Nonnull ItemStack stack) {
                 World world = source.getWorld();
                 if (!world.isRemote()) {
-                    this.successful = false;
+                    this.setSuccessful(false);
                     BlockPos blockpos = source.getBlockPos().offset(source.getBlockState().get(DispenserBlock.FACING));
 
-                    for(net.minecraft.entity.Entity entity : world.getEntitiesInAABBexcluding(null, new AxisAlignedBB(blockpos), e -> !e.isSpectator() && e instanceof net.minecraftforge.common.IShearable)) {
-                        net.minecraftforge.common.IShearable target = (net.minecraftforge.common.IShearable)entity;
+                    for(net.minecraft.entity.Entity entity : world.getEntitiesInAABBexcluding(null, new AxisAlignedBB(blockpos), e -> !e.isSpectator() && e instanceof net.minecraftforge.common.IForgeShearable)) {
+                        net.minecraftforge.common.IForgeShearable target = (net.minecraftforge.common.IForgeShearable)entity;
                         if (target.isShearable(stack, world, blockpos)) {
-                            java.util.List<ItemStack> drops = target.onSheared(stack, entity.world, blockpos,
+                            FakePlayer fakie = FakePlayerFactory.getMinecraft((ServerWorld) world);
+                            java.util.List<ItemStack> drops = target.onSheared(fakie, stack, entity.world, blockpos,
                                     net.minecraft.enchantment.EnchantmentHelper.getEnchantmentLevel(net.minecraft.enchantment.Enchantments.FORTUNE, stack));
                             java.util.Random rand = new java.util.Random();
                             drops.forEach(d -> {
@@ -90,12 +95,12 @@ public class ModSetup {
                                 stack.setCount(0);
                             }
 
-                            this.successful = true;
+                            this.setSuccessful(true);
                             break;
                         }
                     }
 
-                    if (!this.successful) {
+                    if (!this.isSuccessful()) {
                         BlockState blockstate = world.getBlockState(blockpos);
                         if (blockstate.isIn(BlockTags.BEEHIVES)) {
                             int i = blockstate.get(BeehiveBlock.HONEY_LEVEL);
@@ -106,7 +111,7 @@ public class ModSetup {
 
                                 BeehiveBlock.dropHoneyComb(world, blockpos);
                                 ((BeehiveBlock)blockstate.getBlock()).takeHoney(world, blockstate, blockpos, null, BeehiveTileEntity.State.BEE_RELEASED);
-                                this.successful = true;
+                                this.setSuccessful(true);
                             }
                         }
                         else if (blockstate.getBlock() instanceof TieredBeehiveBlock) {
@@ -119,7 +124,7 @@ public class ModSetup {
                                 TieredBeehiveBlock.dropResourceHoneycomb((TieredBeehiveBlock) blockstate.getBlock(), world, blockpos);
                                 ((BeehiveBlock) blockstate.getBlock()).takeHoney(world, blockstate, blockpos, null,
                                         BeehiveTileEntity.State.BEE_RELEASED);
-                                this.successful = true;
+                                this.setSuccessful(true);
                             }
                         }
                     }
@@ -131,20 +136,22 @@ public class ModSetup {
 
     public static void loadResources() {
         Minecraft.getInstance().getResourcePackList().addPackFinder(new IPackFinder() {
+
             @Override
-            public <T extends ResourcePackInfo> void addPackInfosToMap(@Nonnull Map<String, T> map, @Nonnull ResourcePackInfo.IFactory<T> factory) {
+            public <T extends ResourcePackInfo> void func_230230_a_(@Nonnull Consumer<T> p_230230_1_, @Nonnull ResourcePackInfo.IFactory<T> factory) {
                 final T packInfo = ResourcePackInfo.createResourcePack(
                         ResourcefulBees.MOD_ID,
                         true,
                         () -> new FolderPack(RESOURCE_PATH.toFile()),
                         factory,
-                        ResourcePackInfo.Priority.TOP
+                        ResourcePackInfo.Priority.TOP,
+                        IPackNameDecorator.createUnnamedDecorator()
                 );
                 if (packInfo == null) {
                     LOGGER.error("Failed to load resource pack, some things may not work.");
                     return;
                 }
-                map.put(ResourcefulBees.MOD_ID, packInfo);
+                p_230230_1_.accept(packInfo);
             }
         });
     }

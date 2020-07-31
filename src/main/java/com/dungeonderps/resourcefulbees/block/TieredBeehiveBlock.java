@@ -4,7 +4,6 @@ import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.lib.BeeConstants;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.tileentity.TieredBeehiveTileEntity;
-import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.BeehiveBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -12,7 +11,6 @@ import net.minecraft.block.CampfireBlock;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.BeeEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tags.ItemTags;
@@ -93,11 +91,8 @@ public class TieredBeehiveBlock extends BeehiveBlock {
     }
 
     if (angerBees) {
-    	if (isHiveSmoked(pos,world) || CampfireBlock.isLitCampfireInRange(world, pos, 5)) {
+    	if (isHiveSmoked(pos,world) || CampfireBlock.isSmokingBlockAt(world, pos)) {
             this.takeHoney(world, state, pos);
-            if (player instanceof ServerPlayerEntity) {
-              CriteriaTriggers.SAFELY_HARVEST_HONEY.test((ServerPlayerEntity) player, pos, itemstack1);
-            }
     	}
     	else {
             if (this.hasBees(world, pos)) {
@@ -120,7 +115,7 @@ public class TieredBeehiveBlock extends BeehiveBlock {
 
       for (BeeEntity beeEntity : beeEntityList) {
         if (beeEntity.getAttackTarget() == null) {
-          beeEntity.setBeeAttacker(playerEntityList.get(world.rand.nextInt(size)));
+          beeEntity.setAttackTarget(playerEntityList.get(world.rand.nextInt(size)));
         }
       }
     }

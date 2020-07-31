@@ -6,6 +6,7 @@ import com.dungeonderps.resourcefulbees.container.AutomationSensitiveItemStackHa
 import com.dungeonderps.resourcefulbees.container.CentrifugeContainer;
 import com.dungeonderps.resourcefulbees.recipe.CentrifugeRecipe;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -223,15 +224,15 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
     }
 
     @Override
-    public void read(CompoundNBT tag) {
+    public void read(@Nonnull BlockState state, CompoundNBT tag) {
         CompoundNBT invTag = tag.getCompound("inv");
         h.deserializeNBT(invTag);
         time = tag.getInt("time");
         totalTime = tag.getInt("totalTime");
         if (tag.contains("CustomName", 8)) {
-            this.customName = ITextComponent.Serializer.fromJson(tag.getString("CustomName"));
+            this.customName = ITextComponent.Serializer.func_240643_a_(tag.getString("CustomName"));
         }
-        super.read(tag);
+        super.read(state, tag);
     }
 
     @Nonnull

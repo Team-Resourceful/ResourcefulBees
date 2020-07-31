@@ -11,7 +11,10 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.DoublePlantBlock;
-import net.minecraft.entity.*;
+import net.minecraft.entity.AreaEffectCloudEntity;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.FollowParentGoal;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.goal.TemptGoal;
@@ -22,8 +25,8 @@ import net.minecraft.potion.Effects;
 import net.minecraft.state.properties.DoubleBlockHalf;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.Tag;
 import net.minecraft.tileentity.BeehiveTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
@@ -56,7 +59,7 @@ public class ResourcefulBee extends CustomBeeEntity {
         String flower = getBeeInfo().getFlower();
 
         if (BeeInfoUtils.TAG_RESOURCE_PATTERN.matcher(flower).matches()) {
-            Tag<Block> blockTag = BeeInfoUtils.getBlockTag(flower.replace(BeeConstants.TAG_PREFIX, ""));
+            ITag<Block> blockTag = BeeInfoUtils.getBlockTag(flower.replace(BeeConstants.TAG_PREFIX, ""));
             return blockTag != null && state.isIn(blockTag);
         } else {
             switch (flower) {
@@ -124,7 +127,7 @@ public class ResourcefulBee extends CustomBeeEntity {
     public void applyPollinationEffect() {
         if (rand.nextInt(1) == 0) {
             for (int i = 1; i <= 2; ++i) {
-                BlockPos beePosDown = (new BlockPos(ResourcefulBee.this)).down(i);
+                BlockPos beePosDown = this.getPosition().down(i);
                 BlockState state = world.getBlockState(beePosDown);
                 Block block = state.getBlock();
                 if (validFillerBlock(block)) {
@@ -142,7 +145,7 @@ public class ResourcefulBee extends CustomBeeEntity {
     public boolean validFillerBlock(Block block) {
         String baseBlock = this.getBeeInfo().getMutationInput();
         if (BeeInfoUtils.TAG_RESOURCE_PATTERN.matcher(baseBlock).matches()) {
-            Tag<Block> blockTag = BeeInfoUtils.getBlockTag(baseBlock.replace(BeeConstants.TAG_PREFIX, ""));
+            ITag<Block> blockTag = BeeInfoUtils.getBlockTag(baseBlock.replace(BeeConstants.TAG_PREFIX, ""));
             return blockTag != null && block.isIn(blockTag);
         }
         ResourceLocation testBlock = block.getRegistryName();
@@ -155,7 +158,7 @@ public class ResourcefulBee extends CustomBeeEntity {
         String flower = getBeeInfo().getFlower();
 
         if (BeeInfoUtils.TAG_RESOURCE_PATTERN.matcher(flower).matches()) {
-            Tag<Block> blockTag = BeeInfoUtils.getBlockTag(flower.replace(BeeConstants.TAG_PREFIX, ""));
+            ITag<Block> blockTag = BeeInfoUtils.getBlockTag(flower.replace(BeeConstants.TAG_PREFIX, ""));
             return blockTag != null && this.world.getBlockState(pos).getBlock().isIn(blockTag);
         } else {
             switch (flower) {
@@ -219,8 +222,8 @@ public class ResourcefulBee extends CustomBeeEntity {
     }
 
     @Override
-    public boolean attackEntityAsMob(Entity entityIn) {
-        boolean flag = entityIn.attackEntityFrom(DamageSource.causeBeeStingDamage(this), (float) ((int) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue()));
+    public boolean attackEntityAsMob(@Nonnull Entity entityIn) {
+        boolean flag = entityIn.attackEntityFrom(DamageSource.causeBeeStingDamage(this), getBeeInfo().getAttackDamage());
         if (flag) {
             this.applyEnchantments(this, entityIn);
             if (entityIn instanceof LivingEntity) {
@@ -344,7 +347,7 @@ public class ResourcefulBee extends CustomBeeEntity {
 
         @Nonnull
         public List<BlockPos> getNearbyFreeHives() {
-            BlockPos blockpos = new BlockPos(ResourcefulBee.this);
+            BlockPos blockpos = ResourcefulBee.this.getPosition();
             PointOfInterestManager pointofinterestmanager = ((ServerWorld) world).getPointOfInterestManager();
             Stream<PointOfInterest> stream = pointofinterestmanager.func_219146_b(pointOfInterestType ->
                             pointOfInterestType == RegistryHandler.TIERED_BEEHIVE_POI.get(), blockpos,

@@ -22,16 +22,17 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.DimensionType;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.dimension.DimensionType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -141,8 +142,8 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
     }
 
     public static boolean canBeeSpawn(EntityType<? extends AnimalEntity> typeIn, IWorld worldIn, SpawnReason reason, BlockPos pos, Random randomIn) {
-        return worldIn.getDimension().getType().equals(DimensionType.THE_NETHER)
-                || worldIn.getDimension().getType().equals(DimensionType.THE_END)
+        return worldIn.getWorld().func_234922_V_().equals(DimensionType.THE_NETHER)
+                || worldIn.getWorld().func_234922_V_().equals(DimensionType.THE_END)
                 || worldIn.getLight(pos) > 8;
     }
 
@@ -170,25 +171,26 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
         return childBee;
     }
 
+    @Nonnull
     @Override
-    public boolean processInteract(PlayerEntity player, @Nonnull Hand hand) {
+    public ActionResultType func_230254_b_(PlayerEntity player, @Nonnull Hand hand) {
         ItemStack itemstack = player.getHeldItem(hand);
         Item item = itemstack.getItem();
         if (item instanceof NameTagItem){
-            super.processInteract(player,hand);
+            super.func_230254_b_(player,hand);
         }
         if (this.isBreedingItem(itemstack)) {
             if (!this.world.isRemote && this.getGrowingAge() == 0 && this.canBreed()) {
                 this.consumeItemFromStack(player, itemstack);
                 this.setInLove(player);
                 player.swing(hand, true);
-                return true;
+                return ActionResultType.PASS;
             }
 
             if (this.isChild()) {
                 this.consumeItemFromStack(player, itemstack);
                 this.ageUp((int)((float)(-this.getGrowingAge() / 20) * 0.1F), true);
-                return true;
+                return ActionResultType.PASS;
             }
         }
         if (item instanceof SpawnEggItem && ((SpawnEggItem)item).hasType(itemstack.getTag(), this.getType())) {
@@ -206,9 +208,9 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
                     itemstack.shrink(1);
                 }
             }
-            return true;
+            return ActionResultType.PASS;
         }
-        return false;
+        return ActionResultType.FAIL;
     }
 
     @Nonnull

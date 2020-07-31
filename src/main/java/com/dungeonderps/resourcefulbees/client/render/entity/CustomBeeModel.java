@@ -96,7 +96,7 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
         this.rightAntenna.rotateAngleX = 0.0F;
         this.body.rotateAngleX = 0.0F;
         this.body.rotationPointY = 19.0F;
-        boolean flag = entityIn.onGround && entityIn.getMotion().lengthSquared() < 1.0E-7D;
+        boolean flag = entityIn.isOnGround() && entityIn.getMotion().lengthSquared() < 1.0E-7D;
         if (flag) {
             this.rightWing.rotateAngleY = -0.2618F;
             this.rightWing.rotateAngleZ = 0.0F;
@@ -121,7 +121,7 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
             this.body.rotateAngleZ = 0.0F;
         }
 
-        if (!entityIn.isAngry()) {
+        if (!entityIn.func_233678_J__()) {
             this.body.rotateAngleX = 0.0F;
             this.body.rotateAngleY = 0.0F;
             this.body.rotateAngleZ = 0.0F;

@@ -17,13 +17,15 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.runtime.IIngredientManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.Quaternion;
-import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Quaternion;
+import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
@@ -113,11 +115,11 @@ public class BeeHiveCategory implements IRecipeCategory<BeeHiveCategory.Recipe> 
 
     @Nonnull
     @Override
-    public List<String> getTooltipStrings(@Nonnull Recipe recipe, double mouseX, double mouseY) {
+    public List<ITextComponent> getTooltipStrings(@Nonnull Recipe recipe, double mouseX, double mouseY) {
         double beeX = 2D;
         double beeY = 2D;
         if (mouseX >= beeX && mouseX <= beeX + 30D && mouseY >= beeY && mouseY <= beeY + 30D){
-            return Collections.singletonList(I18n.format("entity." + ResourcefulBees.MOD_ID + "." + recipe.beeType + "_bee"));
+            return Collections.singletonList(new StringTextComponent(I18n.format("entity." + ResourcefulBees.MOD_ID + "." + recipe.beeType + "_bee")));
         }
         return IRecipeCategory.super.getTooltipStrings(recipe,mouseX, mouseY);
     }
@@ -156,7 +158,7 @@ public class BeeHiveCategory implements IRecipeCategory<BeeHiveCategory.Recipe> 
     }
 
     @Override
-    public void draw(Recipe recipe, double mouseX, double mouseY) {
+    public void draw(Recipe recipe, @Nonnull MatrixStack stack, double mouseX, double mouseY) {
         renderEntity(recipe.getBeeType(), 135.0F, 20D, 20D);
     }
 

@@ -25,7 +25,7 @@ public class CustomBeeRenderer extends MobRenderer<CustomBeeEntity, CustomBeeMod
     @Nonnull
     public ResourceLocation getEntityTexture(CustomBeeEntity entity) {
         BeeData bee = entity.getBeeInfo();
-        if (entity.isAngry()) {
+        if (entity.func_233678_J__()) {
             return new ResourceLocation(ResourcefulBees.MOD_ID, BeeConstants.ENTITY_TEXTURES_DIR + bee.getBaseLayerTexture() + "_angry.png");
         }
         return new ResourceLocation(ResourcefulBees.MOD_ID, BeeConstants.ENTITY_TEXTURES_DIR + bee.getBaseLayerTexture() + ".png");

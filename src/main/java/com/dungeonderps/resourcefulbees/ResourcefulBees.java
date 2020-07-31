@@ -5,13 +5,12 @@ import com.dungeonderps.resourcefulbees.client.gui.screen.CentrifugeScreen;
 import com.dungeonderps.resourcefulbees.client.gui.screen.UnvalidatedApiaryScreen;
 import com.dungeonderps.resourcefulbees.client.gui.screen.ValidatedApiaryScreen;
 import com.dungeonderps.resourcefulbees.client.render.entity.CustomBeeRenderer;
-import com.dungeonderps.resourcefulbees.commands.ResourcefulBeeCommands;
+import com.dungeonderps.resourcefulbees.client.render.items.ItemModelPropertiesHandler;
 import com.dungeonderps.resourcefulbees.compat.top.TopCompat;
 import com.dungeonderps.resourcefulbees.config.BeeBuilder;
 import com.dungeonderps.resourcefulbees.config.Config;
 import com.dungeonderps.resourcefulbees.data.RecipeBuilder;
 import com.dungeonderps.resourcefulbees.init.ModSetup;
-import com.dungeonderps.resourcefulbees.loot.function.BlockItemFunction;
 import com.dungeonderps.resourcefulbees.network.NetPacketHandler;
 import com.dungeonderps.resourcefulbees.registry.ColorHandler;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
@@ -32,7 +31,6 @@ import net.minecraft.tileentity.BannerPattern;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.village.PointOfInterestType;
-import net.minecraft.world.storage.loot.functions.LootFunctionManager;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.village.VillagerTradesEvent;
@@ -59,6 +57,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+//import com.dungeonderps.resourcefulbees.loot.function.BlockItemFunction;
 
 //1.15.2 Branch
 //TODO - Look into "Queen Bee"
@@ -106,9 +106,9 @@ public class ResourcefulBees
         if(event.getType() == RegistryHandler.BEEKEEPER.get()) {
             ItemStack queenBeeBanner = new ItemStack(Items.BLACK_BANNER);
             CompoundNBT compoundnbt = queenBeeBanner.getOrCreateChildTag("BlockEntityTag");
-            ListNBT listnbt = (new BannerPattern.Builder()).setPatternWithColor(BannerPattern.RHOMBUS_MIDDLE, DyeColor.LIGHT_BLUE).setPatternWithColor(BannerPattern.STRIPE_DOWNRIGHT, DyeColor.YELLOW).setPatternWithColor(BannerPattern.STRIPE_DOWNLEFT, DyeColor.YELLOW).setPatternWithColor(BannerPattern.STRIPE_BOTTOM, DyeColor.YELLOW).setPatternWithColor(BannerPattern.TRIANGLE_TOP, DyeColor.YELLOW).setPatternWithColor(BannerPattern.CURLY_BORDER, DyeColor.YELLOW).func_222476_a();
+            ListNBT listnbt = (new BannerPattern.Builder()).setPatternWithColor(BannerPattern.RHOMBUS_MIDDLE, DyeColor.LIGHT_BLUE).setPatternWithColor(BannerPattern.STRIPE_DOWNRIGHT, DyeColor.YELLOW).setPatternWithColor(BannerPattern.STRIPE_DOWNLEFT, DyeColor.YELLOW).setPatternWithColor(BannerPattern.STRIPE_BOTTOM, DyeColor.YELLOW).setPatternWithColor(BannerPattern.TRIANGLE_TOP, DyeColor.YELLOW).setPatternWithColor(BannerPattern.CURLY_BORDER, DyeColor.YELLOW).buildNBT();
             compoundnbt.put("Patterns", listnbt);
-            queenBeeBanner.setDisplayName((new TranslationTextComponent("block.resourcefulbees.queen_bee_banner")).applyTextStyle(TextFormatting.GOLD));
+            queenBeeBanner.setDisplayName(new TranslationTextComponent("block.resourcefulbees.queen_bee_banner").mergeStyle(TextFormatting.GOLD));
             queenBeeBanner.setCount(1);
 
             level1.add((entity, rand) -> new MerchantOffer(
@@ -139,7 +139,7 @@ public class ResourcefulBees
     }
 
     public void OnServerSetup(FMLServerAboutToStartEvent event){
-        IReloadableResourceManager reloader = event.getServer().getResourceManager();
+        IReloadableResourceManager reloader = (IReloadableResourceManager) event.getServer().getDataPackRegistries().getResourceManager();
         reloader.addReloadListener(new RecipeBuilder());
     }
 
@@ -166,11 +166,13 @@ public class ResourcefulBees
         RegistryHandler.T1_APIARY_BLOCK.get().getStateContainer().getValidStates().forEach(blockState -> pointOfInterestTypeMap.put(blockState, RegistryHandler.TIERED_BEEHIVE_POI.get()));
         PointOfInterestType.POIT_BY_BLOCKSTATE.putAll(pointOfInterestTypeMap);
 
-        LootFunctionManager.registerFunction(new BlockItemFunction.Serializer());
+        //LootFunctionManager.func_237451_a_(new BlockItemFunction.Serializer());
 
         ModSetup.setupDispenserCollectionBehavior();
 
         NetPacketHandler.init();
+
+        RegistryHandler.addEntityAttributes();
     }
     public void onInterModEnqueue(InterModEnqueueEvent event) {
         if (ModList.get().isLoaded("theoneprobe"))
@@ -178,7 +180,7 @@ public class ResourcefulBees
     }
 
     private void serverStarting(FMLServerStartingEvent event) {
-        ResourcefulBeeCommands.register(event.getCommandDispatcher());
+        //ResourcefulBeeCommands.register(event.getCommandDispatcher()); //TODO find mapping
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {
@@ -191,6 +193,8 @@ public class ResourcefulBees
         RenderTypeLookup.setRenderLayer(RegistryHandler.GOLD_FLOWER.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(RegistryHandler.PREVIEW_BLOCK.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(RegistryHandler.ERRORED_PREVIEW_BLOCK.get(), RenderType.getCutout());
+
+        ItemModelPropertiesHandler.registerProperties();
     }
 
     private void loadComplete(FMLLoadCompleteEvent event) {

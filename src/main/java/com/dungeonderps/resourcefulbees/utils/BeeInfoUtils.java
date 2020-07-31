@@ -12,8 +12,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.Tag;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
@@ -283,11 +283,11 @@ public class BeeInfoUtils {
 
     public static Biome getBiome(String biomeName) { return ForgeRegistries.BIOMES.getValue(getResource(biomeName));}
 
-    public static Tag<Item> getItemTag(String itemTag) { return ItemTags.getCollection().get(getResource(itemTag));}
+    public static ITag<Item> getItemTag(String itemTag) { return ItemTags.getCollection().get(getResource(itemTag));}
 
-    public static Tag<Fluid> getFluidTag(String fluidTag) { return FluidTags.getCollection().get(getResource(fluidTag));}
+    public static ITag<Fluid> getFluidTag(String fluidTag) { return FluidTags.getCollection().get(getResource(fluidTag));}
 
-    public static Tag<Block> getBlockTag(String blockTag) { return BlockTags.getCollection().get(getResource(blockTag));}
+    public static ITag<Block> getBlockTag(String blockTag) { return BlockTags.getCollection().get(getResource(blockTag));}
 
 
 }

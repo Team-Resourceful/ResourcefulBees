@@ -19,7 +19,6 @@ import net.minecraft.item.ItemUseContext;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -37,12 +36,7 @@ import java.util.List;
 public class BeeJar extends Item {
     public BeeJar() {
         super(new Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES).maxStackSize(16));
-        this.addPropertyOverride(new ResourceLocation("filled"), (stack, world, entity) -> {
-            if (isFilled(stack)) {
-                return 1.0F;
-            }
-            return 0.0F;
-        });
+
     }
 
     public static int getColor(ItemStack stack, int tintIndex) {
@@ -56,7 +50,7 @@ public class BeeJar extends Item {
         return 0xffffff;
     }
 
-    public boolean isFilled(ItemStack stack) {
+    public static boolean isFilled(ItemStack stack) {
         return !stack.isEmpty() && stack.hasTag() && stack.getTag() != null && stack.getTag().contains(BeeConstants.NBT_ENTITY);
     }
 
@@ -96,10 +90,11 @@ public class BeeJar extends Item {
         return null;
     }
 
+    @Nonnull
     @Override
-    public boolean itemInteractionForEntity(@Nonnull ItemStack stack, @Nonnull PlayerEntity player, LivingEntity targetIn, @Nonnull Hand hand) {
+    public ActionResultType itemInteractionForEntity(@Nonnull ItemStack stack, @Nonnull PlayerEntity player, LivingEntity targetIn, @Nonnull Hand hand) {
         if (targetIn.getEntityWorld().isRemote() || (!(targetIn instanceof BeeEntity) || !targetIn.isAlive()) || (isFilled(stack))) {
-            return false;
+            return ActionResultType.FAIL;
         }
 
         BeeEntity target = (BeeEntity) targetIn;
@@ -124,7 +119,7 @@ public class BeeJar extends Item {
         player.setHeldItem(hand, stack);
         player.swingArm(hand);
         target.remove(true);
-        return true;
+        return ActionResultType.PASS;
     }
 
     @Nonnull
@@ -146,9 +141,9 @@ public class BeeJar extends Item {
         if (tag != null && isFilled(stack)) {
             if (tag.getString(BeeConstants.NBT_ENTITY).equals("resourcefulbees:bee")) {
                 String type = stack.getTag().getString(BeeConstants.NBT_BEE_TYPE);
-                tooltip.add(new StringTextComponent(I18n.format(ResourcefulBees.MOD_ID + ".information.bee_type.custom") + StringUtils.capitalize(type)).applyTextStyle(TextFormatting.WHITE));
+                tooltip.add(new StringTextComponent(I18n.format(ResourcefulBees.MOD_ID + ".information.bee_type.custom") + StringUtils.capitalize(type)).mergeStyle(TextFormatting.WHITE));
             } else if (stack.getTag().getString(BeeConstants.NBT_ENTITY).equals("minecraft:bee")) {
-                tooltip.add(new TranslationTextComponent(ResourcefulBees.MOD_ID + ".information.bee_type.vanilla").applyTextStyle(TextFormatting.WHITE));
+                tooltip.add(new TranslationTextComponent(ResourcefulBees.MOD_ID + ".information.bee_type.vanilla").mergeStyle(TextFormatting.WHITE));
             } else
                 tooltip.add(new TranslationTextComponent(ResourcefulBees.MOD_ID + ".information.bee_type.unknown"));
         }

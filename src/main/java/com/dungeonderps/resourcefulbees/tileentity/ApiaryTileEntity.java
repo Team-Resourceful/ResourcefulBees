@@ -28,7 +28,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.ITag;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
@@ -60,7 +60,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     public final LinkedHashMap<String, ApiaryBee> BEES = new LinkedHashMap<>();
     public final List<BlockPos> STRUCTURE_BLOCKS = new ArrayList<>();
     protected int TIER;
-    private final Tag<Block> validApiaryTag;
+    private final ITag<Block> validApiaryTag;
     public Stack<String> honeycombs = new Stack<>();
     //public ApiaryStorageTileEntity apiaryStorage;
     private boolean isValidApiary;
@@ -129,7 +129,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
         if (exportBee || !shouldStayInHive(beehiveState)) {
             nbt.remove("Passengers");
             nbt.remove("Leash");
-            nbt.removeUniqueId("UUID");
+            nbt.remove("UUID");
             Direction direction = state.get(BeehiveBlock.FACING);
             BlockPos blockpos1 = blockpos.offset(direction);
             if (world == null || this.world.getBlockState(blockpos1).getCollisionShape(this.world, blockpos1).isEmpty()) {
@@ -280,7 +280,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
         ListNBT listnbt = new ListNBT();
 
         this.BEES.forEach((key, apiaryBee) -> {
-            apiaryBee.entityData.removeUniqueId("UUID");
+            apiaryBee.entityData.remove("UUID");
             CompoundNBT compoundnbt = new CompoundNBT();
             compoundnbt.put("EntityData", apiaryBee.entityData);
             compoundnbt.putInt("TicksInHive", apiaryBee.ticksInHive);
@@ -313,8 +313,8 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     }
 
     @Override
-    public void read(@Nonnull CompoundNBT nbt) {
-        super.read(nbt);
+    public void read(@Nonnull BlockState state, @Nonnull CompoundNBT nbt) {
+        super.read(state, nbt);
         this.loadFromNBT(nbt);
     }
 
@@ -383,8 +383,8 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     }
 
     @Override
-    public void handleUpdateTag(CompoundNBT tag) {
-        this.read(tag);
+    public void handleUpdateTag(@Nonnull BlockState state, CompoundNBT tag) {
+        this.read(state, tag);
     }
 
     @Nullable
@@ -503,7 +503,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
         }
 
         if (validatingPlayer != null) {
-            validatingPlayer.sendMessage(new TranslationTextComponent("gui.resourcefulbees.apiary.validated." + isStructureValid));
+            validatingPlayer.sendMessage(new TranslationTextComponent("gui.resourcefulbees.apiary.validated." + isStructureValid), validatingPlayer.getUniqueID());
         }
 
         return isStructureValid;
@@ -638,7 +638,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
         public boolean isLocked = false;
 
         public ApiaryBee(CompoundNBT nbt, int ticksinhive, int minoccupationticks, @Nullable BlockPos flowerPos, String beeType) {
-            nbt.removeUniqueId("UUID");
+            nbt.remove("UUID");
             this.entityData = nbt;
             this.ticksInHive = ticksinhive;
             this.minOccupationTicks = minoccupationticks;

@@ -20,15 +20,17 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.runtime.IIngredientManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.Quaternion;
-import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.ITag;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Quaternion;
+import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -68,7 +70,7 @@ public class BlockToBlock implements IRecipeCategory<BlockToBlock.Recipe> {
                 if (BeeInfoUtils.TAG_RESOURCE_PATTERN.matcher(mutationIn).matches()) {
                     mutationIn = mutationIn.replace(BeeConstants.TAG_PREFIX, "");
 
-                    Tag<Item> itemTag = BeeInfoUtils.getItemTag(mutationIn);
+                    ITag<Item> itemTag = BeeInfoUtils.getItemTag(mutationIn);
                     if (itemTag !=null) {
                         Item itemOut = BeeInfoUtils.getItem(mutationOut);
                         if (BeeInfoUtils.isValidItem(itemOut)){
@@ -135,16 +137,16 @@ public class BlockToBlock implements IRecipeCategory<BlockToBlock.Recipe> {
     }
 
     @Override
-    public List<String> getTooltipStrings(Recipe recipe, double mouseX, double mouseY) {
+    public List<ITextComponent> getTooltipStrings(Recipe recipe, double mouseX, double mouseY) {
         double infoX = 63D;
         double infoY = 8D;
         double beeX = 10D;
         double beeY = 6D;
         if (mouseX >= infoX && mouseX <= infoX + 9D && mouseY >= infoY && mouseY <= infoY + 9D){
-            return Collections.singletonList(I18n.format("gui." + ResourcefulBees.MOD_ID + ".jei.category.mutation.info"));
+            return Collections.singletonList(new StringTextComponent(I18n.format("gui." + ResourcefulBees.MOD_ID + ".jei.category.mutation.info")));
         }
         if (mouseX >= beeX && mouseX <= beeX + 30D && mouseY >= beeY && mouseY <= beeY + 30D){
-            return Collections.singletonList(I18n.format("entity." + ResourcefulBees.MOD_ID + "." + recipe.beeType + "_bee"));
+            return Collections.singletonList(new StringTextComponent(I18n.format("entity." + ResourcefulBees.MOD_ID + "." + recipe.beeType + "_bee")));
         }
         return IRecipeCategory.super.getTooltipStrings(recipe,mouseX, mouseY);
     }
@@ -194,9 +196,9 @@ public class BlockToBlock implements IRecipeCategory<BlockToBlock.Recipe> {
     }
 
     @Override
-    public void draw(BlockToBlock.Recipe recipe, double mouseX, double mouseY) {
-        this.beeHive.draw(65, 10);
-        this.info.draw(63, 8);
+    public void draw(BlockToBlock.Recipe recipe, MatrixStack stack, double mouseX, double mouseY) {
+        this.beeHive.draw(stack, 65, 10);
+        this.info.draw(stack, 63, 8);
         renderEntity(recipe.beeType, 135.0F, 25D, 30D);
     }
 
@@ -206,7 +208,7 @@ public class BlockToBlock implements IRecipeCategory<BlockToBlock.Recipe> {
         private final String beeType;
 
         private final boolean acceptsAny;
-        private final Tag<Item> tag;
+        private final ITag<Item> tag;
 
         private final Enum<MutationTypes> mutationType;
 
@@ -220,7 +222,7 @@ public class BlockToBlock implements IRecipeCategory<BlockToBlock.Recipe> {
         }
 
         //TAGS!!!
-        public Recipe(Tag<Item> baseBlock, ItemStack mutationBlock, String beeType, Enum<MutationTypes> type, boolean acceptsAny) {
+        public Recipe(ITag<Item> baseBlock, ItemStack mutationBlock, String beeType, Enum<MutationTypes> type, boolean acceptsAny) {
             this.itemOut = mutationBlock;
             this.itemIn = null;
             this.beeType = beeType;
@@ -230,7 +232,7 @@ public class BlockToBlock implements IRecipeCategory<BlockToBlock.Recipe> {
         }
 
         public boolean isAcceptsAny() { return acceptsAny; }
-        public Tag<?> getTag() { return tag; }
+        public ITag<?> getTag() { return tag; }
         public String getBeeType() { return this.beeType; }
     }
 }

@@ -69,14 +69,15 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
   }
 
   @Override
-  public boolean releaseBee(@Nonnull BlockState state, @Nonnull CompoundNBT nbt, @Nullable List<Entity> entities, @Nonnull BeehiveTileEntity.State beehiveState) {
+  public boolean func_235651_a_(@Nonnull BlockState state, @Nonnull BeehiveTileEntity.Bee tileBee, @Nullable List<Entity> entities, @Nonnull BeehiveTileEntity.State beehiveState) {
     BlockPos blockpos = this.getPos();
     if (shouldStayInHive(beehiveState)) {
       return false;
     } else {
+      CompoundNBT nbt = tileBee.entityData;
       nbt.remove("Passengers");
       nbt.remove("Leash");
-      nbt.removeUniqueId("UUID");
+      nbt.remove("UUID");
       Direction direction = state.get(BeehiveBlock.FACING);
       BlockPos blockpos1 = blockpos.offset(direction);
       if (world != null && !this.world.getBlockState(blockpos1).getCollisionShape(this.world, blockpos1).isEmpty()) {
@@ -153,7 +154,7 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
   @Override
   public boolean isSmoked() {
 	if (world != null)
-    return isSmoked || CampfireBlock.isLitCampfireInRange(this.world, this.getPos(), 5);
+    return isSmoked || CampfireBlock.isSmokingBlockAt(this.world, this.getPos());
 	return false;
   }
   
@@ -199,8 +200,8 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
   }
 
   @Override
-  public void read(@Nonnull CompoundNBT nbt) {
-    super.read(nbt);
+  public void read(@Nonnull BlockState state, @Nonnull CompoundNBT nbt) {
+    super.read(state, nbt);
     if (nbt.contains(NBT_HONEYCOMBS_TE)){
       CompoundNBT combs = (CompoundNBT) nbt.get(NBT_HONEYCOMBS_TE);
       int i = 0;
@@ -213,11 +214,11 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
       this.isSmoked = nbt.getBoolean(NBT_SMOKED_TE);
     }
 
-    if (nbt.contains("Tier")) {
-      setTier(nbt.getInt("Tier"));
+    if (nbt.contains(NBT_TIER)) {
+      setTier(nbt.getInt(NBT_TIER));
     }
-    if (nbt.contains("TierModifier")) {
-      setTierModifier(nbt.getFloat("TierModifier"));
+    if (nbt.contains(NBT_TIER_MODIFIER)) {
+      setTierModifier(nbt.getFloat(NBT_TIER_MODIFIER));
     }
   }
 
@@ -233,8 +234,8 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
       nbt.put(NBT_HONEYCOMBS_TE,combs);
     }
     nbt.putBoolean(NBT_SMOKED_TE, isSmoked);
-    nbt.putInt("Tier", getTier());
-    nbt.putFloat("TierModifier", getTierModifier());
+    nbt.putInt(NBT_TIER, getTier());
+    nbt.putFloat(NBT_TIER_MODIFIER, getTierModifier());
     return nbt;
   }
 

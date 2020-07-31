@@ -18,14 +18,16 @@ import mezz.jei.api.runtime.IIngredientManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.Quaternion;
-import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Quaternion;
+import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
@@ -137,7 +139,7 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
 
     @Nonnull
     @Override
-    public List<String> getTooltipStrings(@Nonnull Recipe recipe, double mouseX, double mouseY) {
+    public List<ITextComponent> getTooltipStrings(@Nonnull Recipe recipe, double mouseX, double mouseY) {
         double beeX = 2D;
         double beeY = 0D;
         double bee2X = 52D;
@@ -145,13 +147,13 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
         double bee3X = 124D;
         double bee3Y = 0D;
         if (mouseX >= beeX && mouseX <= beeX + 30D && mouseY >= beeY && mouseY <= beeY + 30D){
-            return Collections.singletonList(I18n.format("entity." + ResourcefulBees.MOD_ID + "." + recipe.parent1 + "_bee"));
+            return Collections.singletonList(new StringTextComponent(I18n.format("entity." + ResourcefulBees.MOD_ID + "." + recipe.parent1 + "_bee")));
         }
         if (mouseX >= bee2X && mouseX <= bee2X + 30D && mouseY >= bee2Y && mouseY <= bee2Y + 30D){
-            return Collections.singletonList(I18n.format("entity." + ResourcefulBees.MOD_ID + "." + recipe.parent2 + "_bee"));
+            return Collections.singletonList(new StringTextComponent(I18n.format("entity." + ResourcefulBees.MOD_ID + "." + recipe.parent2 + "_bee")));
         }
         if (mouseX >= bee3X && mouseX <= bee3X + 30D && mouseY >= bee3Y && mouseY <= bee3Y + 30D){
-            return Collections.singletonList(I18n.format("entity." + ResourcefulBees.MOD_ID + "." + recipe.child + "_bee"));
+            return Collections.singletonList(new StringTextComponent(I18n.format("entity." + ResourcefulBees.MOD_ID + "." + recipe.child + "_bee")));
         }
         return IRecipeCategory.super.getTooltipStrings(recipe,mouseX, mouseY);
     }
@@ -190,14 +192,14 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
     }
 
     @Override
-    public void draw(Recipe recipe, double mouseX, double mouseY) {
+    public void draw(Recipe recipe, @Nonnull MatrixStack matrix, double mouseX, double mouseY) {
         renderEntity(recipe.getParent1(), 135.0F, 20D, 20D);
         renderEntity(recipe.getParent2(), -135.0F, 70D, 20D);
         renderEntity(recipe.getChild(), 135.0F, 140D, 20D);
         Minecraft minecraft = Minecraft.getInstance();
         FontRenderer fontRenderer = minecraft.fontRenderer;
         DecimalFormat decimalFormat = new DecimalFormat("##%");
-        fontRenderer.drawString(decimalFormat.format(BeeInfo.getInfo(recipe.getChild()).getBreedWeight()), 90, 18, 0xff808080);
+        fontRenderer.drawString(matrix, decimalFormat.format(BeeInfo.getInfo(recipe.getChild()).getBreedWeight()), 90, 18, 0xff808080);
     }
 
     public static class Recipe {

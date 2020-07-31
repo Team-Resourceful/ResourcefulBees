@@ -52,9 +52,9 @@ public class HoneycombBlockItem extends BlockItem {
     @Override
     public void addInformation(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
         if (!stack.hasTag()) {
-            ITextComponent craftingTip = new StringTextComponent("Unless otherwise specified,").applyTextStyle(TextFormatting.AQUA);
+            ITextComponent craftingTip = new StringTextComponent("Unless otherwise specified,").mergeStyle(TextFormatting.AQUA);
             tooltip.add(craftingTip);
-            craftingTip = new StringTextComponent("*ANY* resourceful honeycomb block variant can be used for crafting recipes").applyTextStyle(TextFormatting.AQUA);
+            craftingTip = new StringTextComponent("*ANY* resourceful honeycomb block variant can be used for crafting recipes").mergeStyle(TextFormatting.AQUA);
             tooltip.add(craftingTip);
         }
 

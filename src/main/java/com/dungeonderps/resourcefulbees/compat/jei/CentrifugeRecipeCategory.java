@@ -5,6 +5,7 @@ import com.dungeonderps.resourcefulbees.recipe.CentrifugeRecipe;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.tileentity.CentrifugeTileEntity;
 import com.google.common.collect.Lists;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -96,8 +97,8 @@ public class CentrifugeRecipeCategory implements IRecipeCategory<CentrifugeRecip
   }
 
   @Override
-  public void draw(CentrifugeRecipe recipe, double mouseX, double mouseY) {
-    this.arrow.draw(31, 14);
+  public void draw(CentrifugeRecipe recipe, @Nonnull MatrixStack matrix, double mouseX, double mouseY) {
+    this.arrow.draw(matrix,31, 14);
 
     final double beeOutput = recipe.outputs.get(0).getRight();
     final double beeswax = recipe.outputs.get(1).getRight();
@@ -111,8 +112,8 @@ public class CentrifugeRecipeCategory implements IRecipeCategory<CentrifugeRecip
 
     Minecraft minecraft = Minecraft.getInstance();
     FontRenderer fontRenderer = minecraft.fontRenderer;
-    if (beeOutput < 1.0) fontRenderer.drawString(beeOutputString, 80, 10, 0xff808080);
-    if (honeyBottle < 1.0) fontRenderer.drawString(honeyBottleString, 80, 50, 0xff808080);
-    if (beeswax < 1.0) fontRenderer.drawString(beeswaxString, 80, 30, 0xff808080);
+    if (beeOutput < 1.0) fontRenderer.drawString(matrix, beeOutputString, 80, 10, 0xff808080);
+    if (honeyBottle < 1.0) fontRenderer.drawString(matrix, honeyBottleString, 80, 50, 0xff808080);
+    if (beeswax < 1.0) fontRenderer.drawString(matrix, beeswaxString, 80, 30, 0xff808080);
   }
 }

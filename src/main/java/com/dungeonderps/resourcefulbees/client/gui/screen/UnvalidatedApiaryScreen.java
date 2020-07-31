@@ -9,6 +9,7 @@ import com.dungeonderps.resourcefulbees.network.packets.ValidateApiaryMessage;
 import com.dungeonderps.resourcefulbees.tileentity.ApiaryTileEntity;
 import com.dungeonderps.resourcefulbees.utils.MathUtils;
 import com.dungeonderps.resourcefulbees.utils.PreviewHandler;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -22,6 +23,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -50,8 +52,8 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
     @Override
     protected void init() {
         super.init();
-        this.addButton(new Button(getGuiLeft() + 116, getGuiTop() + 10, 50, 20, I18n.format("gui.resourcefulbees.apiary.button.validate"), (onPress) -> this.validate()));
-        BuildButton buildStructureButton = this.addButton(new BuildButton(getGuiLeft() + 116, getGuiTop() + 35, 50, 20, I18n.format("gui.resourcefulbees.apiary.button.build"), (onPress) -> this.build()));
+        this.addButton(new Button(getGuiLeft() + 116, getGuiTop() + 10, 50, 20, new StringTextComponent(I18n.format("gui.resourcefulbees.apiary.button.validate")), (onPress) -> this.validate()));
+        BuildButton buildStructureButton = this.addButton(new BuildButton(getGuiLeft() + 116, getGuiTop() + 35, 50, 20, new StringTextComponent(I18n.format("gui.resourcefulbees.apiary.button.build")), (onPress) -> this.build()));
         if (!this.player.isCreative()) {
             buildStructureButton.active = false;
         }
@@ -108,14 +110,14 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
     }
 
     @Override
-    public void render(int p_render_1_, int p_render_2_, float p_render_3_) {
+    public void render(@Nonnull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
         this.upButton.active = verticalOffset != 2;
         this.downButton.active = verticalOffset != -1;
         this.leftButton.active = horizontalOffset != -2;
         this.rightButton.active = horizontalOffset != 2;
-        this.renderBackground();
-        super.render(p_render_1_, p_render_2_, p_render_3_);
-        this.renderHoveredToolTip(p_render_1_, p_render_2_);
+        this.renderBackground(matrix);
+        super.render(matrix, mouseX, mouseY, partialTicks);
+        this.func_230459_a_(matrix, mouseX, mouseY);
     }
 
     private void validate() {
@@ -126,35 +128,35 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
+    protected void drawGuiContainerBackgroundLayer(@Nonnull MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
         Minecraft client = this.minecraft;
         if (client != null) {
             this.minecraft.getTextureManager().bindTexture(unvalidatedTexture);
             int i = (this.width - this.xSize) / 2;
             int j = (this.height - this.ySize) / 2;
-            this.blit(i, j, 0, 0, this.xSize, this.ySize);
+            this.blit(matrix, i, j, 0, 0, this.xSize, this.ySize);
         }
     }
 
     @Override
-    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        this.font.drawString("Offset", 65, 13, 0x404040);
-        this.font.drawString("Vert.", 75, 26, 0x404040);
-        this.font.drawString("Horiz.", 75, 39, 0x404040);
-        this.drawRightAlignedString(font, String.valueOf(verticalOffset), 70, 26, 0x404040);
-        this.drawRightAlignedString(font, String.valueOf(horizontalOffset), 70, 39, 0x404040);
+    protected void drawGuiContainerForegroundLayer(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
+        this.font.drawString(matrix,  "Offset", 65, 13, 0x404040);
+        this.font.drawString(matrix, "Vert.", 75, 26, 0x404040);
+        this.font.drawString(matrix, "Horiz.", 75, 39, 0x404040);
+        this.drawRightAlignedString(matrix, font, String.valueOf(verticalOffset), 70, 26, 0x404040);
+        this.drawRightAlignedString(matrix, font, String.valueOf(horizontalOffset), 70, 39, 0x404040);
 
         for (Widget widget : this.buttons) {
             if (widget.isHovered()) {
-                widget.renderToolTip(mouseX - this.guiLeft, mouseY - this.guiTop);
+                widget.renderToolTip(matrix, mouseX - this.guiLeft, mouseY - this.guiTop);
                 break;
             }
         }
     }
 
-    @Override
-    public void drawRightAlignedString(FontRenderer fontRenderer, @Nonnull String s, int posX, int posY, int color) {
-        fontRenderer.drawString(s, (float) (posX - fontRenderer.getStringWidth(s)), (float) posY, color);
+
+    public void drawRightAlignedString(@Nonnull MatrixStack matrix, FontRenderer fontRenderer, @Nonnull String s, int posX, int posY, int color) {
+        fontRenderer.drawString(matrix, s, (float) (posX - fontRenderer.getStringWidth(s)), (float) posY, color);
     }
 
     private enum Direction {
@@ -166,15 +168,15 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
 
     @OnlyIn(Dist.CLIENT)
     public class BuildButton extends Button {
-        public BuildButton(int widthIn, int heightIn, int width, int height, String text, IPressable onPress) {
+        public BuildButton(int widthIn, int heightIn, int width, int height, StringTextComponent text, IPressable onPress) {
             super(widthIn, heightIn, width, height, text, onPress);
         }
 
         @Override
-        public void renderToolTip(int p_renderToolTip_1_, int p_renderToolTip_2_) {
+        public void renderToolTip(@Nonnull MatrixStack matrix, int p_renderToolTip_1_, int p_renderToolTip_2_) {
             if (!this.active) {
-                String s = I18n.format("gui.resourcefulbees.apiary.button.build.creative");
-                UnvalidatedApiaryScreen.this.renderTooltip(s, p_renderToolTip_1_, p_renderToolTip_2_);
+                StringTextComponent s = new StringTextComponent(I18n.format("gui.resourcefulbees.apiary.button.build.creative"));
+                UnvalidatedApiaryScreen.this.renderTooltip(matrix, s, p_renderToolTip_1_, p_renderToolTip_2_);
             }
         }
     }
@@ -197,7 +199,7 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
         }
 
         @Override
-        public void renderButton(int p_renderButton_1_, int p_renderButton_2_, float p_renderButton_3_) {
+        public void renderButton(@Nonnull MatrixStack matrix, int p_renderButton_1_, int p_renderButton_2_, float p_renderButton_3_) {
             Minecraft minecraft = Minecraft.getInstance();
             minecraft.getTextureManager().bindTexture(this.resourceLocation);
             RenderSystem.disableDepthTest();
@@ -215,20 +217,20 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
                     i += this.yDiffText;
                 }
             }
-            blit(this.x, this.y, (float) j, (float) i, this.width, this.height, 64, 64);
+            blit(matrix, this.x, this.y, (float) j, (float) i, this.width, this.height, 64, 64);
             RenderSystem.enableDepthTest();
         }
 
         @Override
-        public void renderToolTip(int p_renderToolTip_1_, int p_renderToolTip_2_) {
-            String s;
+        public void renderToolTip(@Nonnull MatrixStack matrix, int p_renderToolTip_1_, int p_renderToolTip_2_) {
+            StringTextComponent s;
             if (!isTriggered()) {
-                s = I18n.format("gui.resourcefulbees.apiary.button.preview.enable");
+                s = new StringTextComponent(I18n.format("gui.resourcefulbees.apiary.button.preview.enable"));
             }
             else {
-                s = I18n.format("gui.resourcefulbees.apiary.button.preview.disable");
+                s = new StringTextComponent(I18n.format("gui.resourcefulbees.apiary.button.preview.disable"));
             }
-            UnvalidatedApiaryScreen.this.renderTooltip(s, p_renderToolTip_1_, p_renderToolTip_2_);
+            UnvalidatedApiaryScreen.this.renderTooltip(matrix, s, p_renderToolTip_1_, p_renderToolTip_2_);
         }
 
         public void setTrigger(boolean triggered) {

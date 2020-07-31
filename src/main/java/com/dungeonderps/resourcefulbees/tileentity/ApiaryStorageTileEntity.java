@@ -9,6 +9,7 @@ import com.dungeonderps.resourcefulbees.lib.ApiaryOutput;
 import com.dungeonderps.resourcefulbees.lib.ApiaryTabs;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.utils.MathUtils;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -105,8 +106,8 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
     }
 
     @Override
-    public void read(@Nonnull CompoundNBT nbt) {
-        super.read(nbt);
+    public void read(@Nonnull BlockState state, @Nonnull CompoundNBT nbt) {
+        super.read(state, nbt);
         this.loadFromNBT(nbt);
     }
 
@@ -146,8 +147,8 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
     }
 
     @Override
-    public void handleUpdateTag(CompoundNBT tag) {
-        this.read(tag);
+    public void handleUpdateTag(@Nonnull BlockState state, CompoundNBT tag) {
+        this.read(state, tag);
     }
 
     @Nullable

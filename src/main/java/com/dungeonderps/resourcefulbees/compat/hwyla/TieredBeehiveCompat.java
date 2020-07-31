@@ -55,7 +55,7 @@ public class TieredBeehiveCompat implements IComponentProvider, IServerDataProvi
                 compoundNBT.putInt("TicksSmoked", blockEntity.ticksSmoked);
             }
             BlockState state = blockEntity.getBlockState();
-            if (state.has(TieredBeehiveBlock.HONEY_LEVEL)) {
+            if (state.hasProperty(TieredBeehiveBlock.HONEY_LEVEL)) {
                 compoundNBT.putInt("HoneyLevel", state.get(TieredBeehiveBlock.HONEY_LEVEL));
             }
 

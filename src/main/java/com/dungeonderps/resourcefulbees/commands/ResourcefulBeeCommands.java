@@ -17,7 +17,7 @@ public class ResourcefulBeeCommands
     }
 
     private static int help(ServerPlayerEntity player) {
-        player.sendMessage(new StringTextComponent("Resourceful Bees is currently in alpha all information needed is found on our curseforge page: https://www.curseforge.com/minecraft/mc-mods/resourceful-bees"));
+        player.sendStatusMessage(new StringTextComponent("Resourceful Bees is currently in alpha all information needed is found on our curseforge page: https://www.curseforge.com/minecraft/mc-mods/resourceful-bees"), false);
         return Command.SINGLE_SUCCESS;
     }
 }

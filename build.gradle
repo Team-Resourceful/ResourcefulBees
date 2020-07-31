@@ -25,7 +25,7 @@ minecraft {
     // stable_#            Stables are built at the discretion of the MCP team.
     // Use non-default mappings at your own risk. they may not always work.
     // Simply re-run your setup task after changing the mappings to update your workspace.
-    mappings channel: "snapshot", version: "${mapping}-1.15.1"
+    mappings channel: "snapshot", version: "${mapping}-1.16.1"
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
@@ -88,7 +88,7 @@ repositories {
     }
     maven {
         name 'hwyla'
-        url "https://tehnut.info/maven"
+        url "https://maven.tehnut.info"
     }
     maven { // TOP
         name 'tterrag maven'
@@ -107,10 +107,11 @@ dependencies {
     // at runtime, use the full JEI jar
     runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
 
-    compile fg.deobf("mcp.mobius.waila:Hwyla:${hwyla_version}")
+    compileOnly fg.deobf("mcp.mobius.waila:Hwyla:${hwyla_version}")
+    runtimeOnly fg.deobf("mcp.mobius.waila:Hwyla:${hwyla_version}")
 
-    compileOnly fg.deobf ("mcjty.theoneprobe:TheOneProbe-1.15:${top_version}:api")
-    runtime fg.deobf ("mcjty.theoneprobe:TheOneProbe-1.15:${top_version}")
+    compileOnly fg.deobf ("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}:api")
+    runtime fg.deobf ("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}")
 
     // You may put jars on which you depend on in ./libs or you may define them like so..
     // compile "some.group:artifact:version:classifier"

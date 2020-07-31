@@ -16,6 +16,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.IFormattableTextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -26,7 +28,7 @@ import static com.dungeonderps.resourcefulbees.config.BeeInfo.BEE_INFO;
 
 public class TopCompat implements Function<ITheOneProbe, Void>
 {
-    private final String formatting = TextFormatting.BLUE.toString() + TextFormatting.ITALIC.toString();
+    IFormattableTextComponent formattedName = new StringTextComponent(BeeConstants.MOD_NAME).mergeStyle(TextFormatting.BLUE, TextFormatting.ITALIC);
 
     public static ItemStack honeyComb(String num, TileEntity te){
         final ItemStack honeyComb = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
@@ -57,7 +59,7 @@ public class TopCompat implements Function<ITheOneProbe, Void>
                         .item(honeyCombBlock)
                         .vertical()
                         .itemLabel(honeyCombBlock)
-                        .text(formatting + BeeConstants.MOD_NAME);
+                        .text(formattedName);
                 return true;
             }
             if(world.getTileEntity(data.getPos()) instanceof TieredBeehiveTileEntity)
@@ -67,7 +69,7 @@ public class TopCompat implements Function<ITheOneProbe, Void>
                     TieredBeehiveTileEntity ironBeeHive = (TieredBeehiveTileEntity) world.getTileEntity(data.getPos());
                     if (ironBeeHive != null && ironBeeHive.hasCombs()) {
                         int honeyLevel = 0;
-                        if (ironBeeHive.getBlockState().has(TieredBeehiveBlock.HONEY_LEVEL))
+                        if (ironBeeHive.getBlockState().hasProperty(TieredBeehiveBlock.HONEY_LEVEL))
                             honeyLevel = ironBeeHive.getBlockState().get(TieredBeehiveBlock.HONEY_LEVEL);
                         IProbeInfo vertical;
                         IProbeInfo horizontal;
@@ -75,17 +77,17 @@ public class TopCompat implements Function<ITheOneProbe, Void>
                                 .item(new ItemStack(blockState.getBlock().asItem()))
                                 .vertical()
                                 .itemLabel(new ItemStack(blockState.getBlock().asItem()))
-                                .text(new TranslationTextComponent("gui.resourcefulbees.beehive.smoked").getFormattedText() + beehiveBlockEntity.isSmoked)
-                                .text(new TranslationTextComponent("gui.resourcefulbees.beehive.honeylevel").getFormattedText() + honeyLevel)
+                                .text(new StringTextComponent(new TranslationTextComponent("gui.resourcefulbees.beehive.smoked").getString() + beehiveBlockEntity.isSmoked))
+                                .text(new StringTextComponent(new TranslationTextComponent("gui.resourcefulbees.beehive.honeylevel").getString() + honeyLevel))
                                 .progress((int) Math.floor(beehiveBlockEntity.ticksSmoked / 20.0), 30)
-                                .text(formatting + BeeConstants.MOD_NAME);
+                                .text(formattedName);
                         vertical = probeInfo.vertical(probeInfo.defaultLayoutStyle().borderColor(0xff006699).spacing(0));
                         int hiveCombSize = ironBeeHive.numberOfCombs();
                         hiveCombSize = Math.min(hiveCombSize, 6);
                         for (int i =0; i < hiveCombSize; i++){
                             horizontal = vertical.horizontal(probeInfo.defaultLayoutStyle().spacing(10).alignment(ElementAlignment.ALIGN_CENTER));
                             horizontal.item(honeyComb(String.valueOf(i), ironBeeHive))
-                                    .text(honeyComb(String.valueOf(i), ironBeeHive).getDisplayName().getFormattedText());
+                                    .text(new StringTextComponent(honeyComb(String.valueOf(i), ironBeeHive).getDisplayName().getString()));
                         }
                         return true;
                     }
@@ -101,7 +103,7 @@ public class TopCompat implements Function<ITheOneProbe, Void>
                             .vertical()
                             .itemLabel(new ItemStack(blockState.getBlock().asItem()))
                             .progress((int) Math.floor(beeHiveBlock.time / 20.0), beeHiveBlock.totalTime / 20)
-                            .text(formatting + BeeConstants.MOD_NAME);
+                            .text(formattedName);
                     return true;
                 }
             }
@@ -112,7 +114,7 @@ public class TopCompat implements Function<ITheOneProbe, Void>
                             .item(new ItemStack(blockState.getBlock().asItem()))
                             .vertical()
                             .itemLabel(new ItemStack(blockState.getBlock().asItem()))
-                            .text(formatting + BeeConstants.MOD_NAME);
+                            .text(formattedName);
                     return true;
                 }
             }
@@ -123,8 +125,8 @@ public class TopCompat implements Function<ITheOneProbe, Void>
             if (entity instanceof CustomBeeEntity){
                 probeInfo.horizontal()
                         .vertical()
-                        .text(entity.getDisplayName().getString())
-                        .text(formatting + BeeConstants.MOD_NAME);
+                        .text(new StringTextComponent(entity.getDisplayName().getString()))
+                        .text(formattedName);
                 return true;
             }
             return false;

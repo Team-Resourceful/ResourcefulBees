@@ -1,5 +1,6 @@
 modLoader="javafml"
-loaderVersion="[31,)"
+loaderVersion="[32,)"
+license="https://www.gnu.org/licenses/gpl-3.0.en.html"
 issueTrackerURL="https://github.com/Dungeon-Derps-Development/ResourcefulBees/issues"
 [[mods]]
 modId="resourcefulbees"
@@ -14,13 +15,13 @@ description="This mod provides pack makers with useful capabilities for creating
 [[dependencies.resourcefulbees]]
     modId="forge"
     mandatory=true
-    versionRange="[31.2.0,)"
+    versionRange="[32.0.0,)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.resourcefulbees]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.15,)"
+    versionRange="[1.16,)"
     ordering="NONE"
     side="BOTH"

@@ -19,7 +19,9 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ai.attributes.GlobalEntityTypeAttributes;
 import net.minecraft.entity.merchant.villager.VillagerProfession;
+import net.minecraft.entity.passive.BeeEntity;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -205,8 +207,12 @@ public class RegistryHandler {
 	public static final RegistryObject<VillagerProfession> BEEKEEPER = PROFESSIONS.register("beekeeper", () -> new VillagerProfession("beekeeper", TIERED_BEEHIVE_POI.get(), ImmutableSet.of(), ImmutableSet.of(), SoundEvents.ITEM_BOTTLE_FILL));
 	//endregion
 
-	//region****************FEATURES*****************************************
+	//region****************FEATURES****************************************
 
-	public static final RegistryObject<Feature<NoFeatureConfig>> BEE_NEST_FEATURE = FEATURES.register("bee_nest_feature", () -> new BeeNestFeature(NoFeatureConfig::deserialize));
+	public static final RegistryObject<Feature<NoFeatureConfig>> BEE_NEST_FEATURE = FEATURES.register("bee_nest_feature", () -> new BeeNestFeature(NoFeatureConfig.field_236558_a_));
 	//endregion
+
+	public static void addEntityAttributes() {
+		GlobalEntityTypeAttributes.put(CUSTOM_BEE.get(), BeeEntity.func_234182_eX_().create());
+	}
 }
