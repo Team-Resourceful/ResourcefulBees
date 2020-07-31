@@ -158,44 +158,36 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
         return IRecipeCategory.super.getTooltipStrings(recipe,mouseX, mouseY);
     }
 
-    public void renderEntity(String beeType, Float rotation, Double xPos, Double yPos){
-        RenderSystem.pushMatrix();
-
-        RenderSystem.translatef(0, 0, 1050.0F);
-        RenderSystem.scalef(1.0F, 1.0F, -1.0F);
-
-        MatrixStack matrixstack = new MatrixStack();
-        matrixstack.translate(xPos, yPos, 1000.0D);
-        Quaternion quaternion = Vector3f.ZP.rotationDegrees(180.0F);
-        matrixstack.rotate(quaternion);
-
+    public void renderEntity(MatrixStack matrix, String beeType, Float rotation, Double xPos, Double yPos){
         Minecraft mc = Minecraft.getInstance();
-        EntityRendererManager entityrenderermanager = mc.getRenderManager();
-        IRenderTypeBuffer.Impl irendertypebuffer$impl = mc.getRenderTypeBuffers().getBufferSource();
+        matrix.push();
+        matrix.translate(0, 0, 0.5D);
 
-        assert mc.player != null;
-        bee.ticksExisted = mc.player.ticksExisted;
-        bee.renderYawOffset = rotation;
-        bee.setBeeType(beeType);
-
-        float scaledSize = 30;
-        if (!bee.getSizeModifierFromInfo(bee.getBeeType()).equals(1.0F)) {
-            scaledSize = 30 / bee.getSizeModifierFromInfo(bee.getBeeType());
+        if (mc.player !=null) {
+            bee.ticksExisted = mc.player.ticksExisted;
+            bee.renderYawOffset = rotation - 90;
+            bee.setBeeType(beeType);
+            float scaledSize = 30;
+            if (!bee.getSizeModifierFromInfo(bee.getBeeType()).equals(1.0F)) {
+                scaledSize = 30 / bee.getSizeModifierFromInfo(bee.getBeeType());
+            }
+            matrix.translate(xPos, yPos, 1);
+            matrix.rotate(Vector3f.ZP.rotationDegrees(180.0F));
+            matrix.translate(0.0F, -0.2F, 1);
+            matrix.scale(scaledSize, scaledSize, 30);
+            EntityRendererManager entityrenderermanager = mc.getRenderManager();
+            IRenderTypeBuffer.Impl irendertypebuffer$impl = mc.getRenderTypeBuffers().getBufferSource();
+            entityrenderermanager.renderEntityStatic(bee, 0, 0, 0.0D, mc.getRenderPartialTicks(), 1, matrix, irendertypebuffer$impl, 15728880);
+            irendertypebuffer$impl.finish();
         }
-        matrixstack.scale(scaledSize, scaledSize, 30);
-
-        entityrenderermanager.renderEntityStatic(bee, 0, 0, 0.0D, mc.getRenderPartialTicks(), 1, matrixstack, irendertypebuffer$impl, 15728880);
-
-        irendertypebuffer$impl.finish();
-
-        RenderSystem.popMatrix();
+        matrix.pop();
     }
 
     @Override
     public void draw(Recipe recipe, @Nonnull MatrixStack matrix, double mouseX, double mouseY) {
-        renderEntity(recipe.getParent1(), 135.0F, 20D, 20D);
-        renderEntity(recipe.getParent2(), -135.0F, 70D, 20D);
-        renderEntity(recipe.getChild(), 135.0F, 140D, 20D);
+        renderEntity(matrix, recipe.getParent1(), 135.0F, 20D, 20D);
+        renderEntity(matrix, recipe.getParent2(), 45.0F, 70D, 20D);
+        renderEntity(matrix, recipe.getChild(), 135.0F, 140D, 20D);
         Minecraft minecraft = Minecraft.getInstance();
         FontRenderer fontRenderer = minecraft.fontRenderer;
         DecimalFormat decimalFormat = new DecimalFormat("##%");
