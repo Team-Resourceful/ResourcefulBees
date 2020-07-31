@@ -1,6 +1,7 @@
 package com.dungeonderps.resourcefulbees.compat.jei;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
+import com.dungeonderps.resourcefulbees.compat.jei.ingredients.EntityIngredient;
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.data.BeeData;
 import com.dungeonderps.resourcefulbees.entity.passive.CustomBeeEntity;
@@ -14,6 +15,7 @@ import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IGuiFluidStackGroup;
+import mezz.jei.api.gui.ingredient.IGuiIngredientGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
@@ -138,6 +140,7 @@ public class FluidToFluid implements IRecipeCategory<FluidToFluid.Recipe> {
                 ingredients.setOutput(VanillaTypes.FLUID, recipe.fluidOut);
             }
         }
+        ingredients.setInput(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(recipe.beeType, 135.0F));
     }
 
     @Override
@@ -157,45 +160,20 @@ public class FluidToFluid implements IRecipeCategory<FluidToFluid.Recipe> {
 
     @Override
     public void setRecipe(IRecipeLayout iRecipeLayout, FluidToFluid.Recipe recipe, IIngredients ingredients) {
-        if (MutationTypes.FLUID_TO_FLUID.equals(recipe.mutationType)) {
-            IGuiFluidStackGroup fluidStacks = iRecipeLayout.getFluidStacks();
-            fluidStacks.init(0, false, 66, 49);
-            fluidStacks.init(1, true, 16, 58);
-            fluidStacks.set(0, ingredients.getOutputs(VanillaTypes.FLUID).get(0));
-            fluidStacks.set(1, ingredients.getInputs(VanillaTypes.FLUID).get(0));
-        }
-    }
-
-    public void renderEntity(MatrixStack matrix, String beeType, Float rotation, Double xPos, Double yPos){
-        Minecraft mc = Minecraft.getInstance();
-        matrix.push();
-        matrix.translate(0, 0, 0.5D);
-
-        if (mc.player !=null) {
-            bee.ticksExisted = mc.player.ticksExisted;
-            bee.renderYawOffset = rotation - 90;
-            bee.setBeeType(beeType);
-            float scaledSize = 30;
-            if (!bee.getSizeModifierFromInfo(bee.getBeeType()).equals(1.0F)) {
-                scaledSize = 30 / bee.getSizeModifierFromInfo(bee.getBeeType());
-            }
-            matrix.translate(xPos, yPos, 1);
-            matrix.rotate(Vector3f.ZP.rotationDegrees(180.0F));
-            matrix.translate(0.0F, -0.2F, 1);
-            matrix.scale(scaledSize, scaledSize, 30);
-            EntityRendererManager entityrenderermanager = mc.getRenderManager();
-            IRenderTypeBuffer.Impl irendertypebuffer$impl = mc.getRenderTypeBuffers().getBufferSource();
-            entityrenderermanager.renderEntityStatic(bee, 0, 0, 0.0D, mc.getRenderPartialTicks(), 1, matrix, irendertypebuffer$impl, 15728880);
-            irendertypebuffer$impl.finish();
-        }
-        matrix.pop();
+        IGuiIngredientGroup<EntityIngredient> ingredientStacks = iRecipeLayout.getIngredientsGroup(JEICompat.ENTITY_INGREDIENT);
+        IGuiFluidStackGroup fluidStacks = iRecipeLayout.getFluidStacks();
+        fluidStacks.init(0, false, 66, 49);
+        fluidStacks.init(1, true, 16, 58);
+        fluidStacks.set(0, ingredients.getOutputs(VanillaTypes.FLUID).get(0));
+        fluidStacks.set(1, ingredients.getInputs(VanillaTypes.FLUID).get(0));
+        ingredientStacks.init(0, true, 20, 15);
+        ingredientStacks.set(0, ingredients.getInputs(JEICompat.ENTITY_INGREDIENT).get(0));
     }
 
     @Override
     public void draw(FluidToFluid.Recipe recipe, MatrixStack matrix, double mouseX, double mouseY) {
         this.beeHive.draw(matrix, 65, 10);
         this.info.draw(matrix, 63, 8);
-        renderEntity(matrix, recipe.beeType, 135.0F, 25D, 30D);
     }
 
     public static class Recipe {

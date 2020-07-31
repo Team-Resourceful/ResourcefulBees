@@ -1,6 +1,7 @@
 package com.dungeonderps.resourcefulbees.compat.jei;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
+import com.dungeonderps.resourcefulbees.compat.jei.ingredients.EntityIngredient;
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.data.BeeData;
 import com.dungeonderps.resourcefulbees.entity.passive.CustomBeeEntity;
@@ -10,20 +11,18 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.gui.ingredient.IGuiIngredientGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.runtime.IIngredientManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
@@ -126,10 +125,24 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
         list.add(ing);
         ingredients.setInputIngredients(list);
         ingredients.setOutput(VanillaTypes.ITEM, childSpawnEgg);
+
+        List<EntityIngredient> entitys = new ArrayList<>();
+        entitys.add(new EntityIngredient(recipe.parent1, 135.0F));
+        entitys.add(new EntityIngredient(recipe.parent2, 45.0F));
+        entitys.add(new EntityIngredient(recipe.child, 135.0F));
+
+        ingredients.setInputs(JEICompat.ENTITY_INGREDIENT, entitys);
     }
 
     @Override
     public void setRecipe(@Nonnull IRecipeLayout iRecipeLayout, @Nonnull Recipe recipe, @Nonnull IIngredients ingredients) {
+        IGuiIngredientGroup<EntityIngredient> ingredientStacks = iRecipeLayout.getIngredientsGroup(JEICompat.ENTITY_INGREDIENT);
+        ingredientStacks.init(0, true, 5, 5);
+        ingredientStacks.init(1, true, 60, 5);
+        ingredientStacks.init(2, false, 125, 5);
+        ingredientStacks.set(0, ingredients.getInputs(JEICompat.ENTITY_INGREDIENT).get(0));
+        ingredientStacks.set(1, ingredients.getInputs(JEICompat.ENTITY_INGREDIENT).get(1));
+        ingredientStacks.set(2, ingredients.getInputs(JEICompat.ENTITY_INGREDIENT).get(2));
     }
 
     @Nonnull
@@ -153,36 +166,8 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
         return IRecipeCategory.super.getTooltipStrings(recipe,mouseX, mouseY);
     }
 
-    public void renderEntity(MatrixStack matrix, String beeType, Float rotation, Double xPos, Double yPos){
-        Minecraft mc = Minecraft.getInstance();
-        matrix.push();
-        matrix.translate(0, 0, 0.5D);
-
-        if (mc.player !=null) {
-            bee.ticksExisted = mc.player.ticksExisted;
-            bee.renderYawOffset = rotation - 90;
-            bee.setBeeType(beeType);
-            float scaledSize = 30;
-            if (!bee.getSizeModifierFromInfo(bee.getBeeType()).equals(1.0F)) {
-                scaledSize = 30 / bee.getSizeModifierFromInfo(bee.getBeeType());
-            }
-            matrix.translate(xPos, yPos, 1);
-            matrix.rotate(Vector3f.ZP.rotationDegrees(180.0F));
-            matrix.translate(0.0F, -0.2F, 1);
-            matrix.scale(scaledSize, scaledSize, 30);
-            EntityRendererManager entityrenderermanager = mc.getRenderManager();
-            IRenderTypeBuffer.Impl irendertypebuffer$impl = mc.getRenderTypeBuffers().getBufferSource();
-            entityrenderermanager.renderEntityStatic(bee, 0, 0, 0.0D, mc.getRenderPartialTicks(), 1, matrix, irendertypebuffer$impl, 15728880);
-            irendertypebuffer$impl.finish();
-        }
-        matrix.pop();
-    }
-
     @Override
     public void draw(Recipe recipe, @Nonnull MatrixStack matrix, double mouseX, double mouseY) {
-        renderEntity(matrix, recipe.getParent1(), 135.0F, 20D, 20D);
-        renderEntity(matrix, recipe.getParent2(), 45.0F, 70D, 20D);
-        renderEntity(matrix, recipe.getChild(), 135.0F, 140D, 20D);
         Minecraft minecraft = Minecraft.getInstance();
         FontRenderer fontRenderer = minecraft.fontRenderer;
         DecimalFormat decimalFormat = new DecimalFormat("##%");

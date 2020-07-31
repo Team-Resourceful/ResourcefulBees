@@ -1,19 +1,22 @@
 package com.dungeonderps.resourcefulbees.compat.jei;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
+import com.dungeonderps.resourcefulbees.compat.jei.ingredients.EntityIngredient;
+import com.dungeonderps.resourcefulbees.compat.jei.ingredients.EntityIngredientFactory;
+import com.dungeonderps.resourcefulbees.compat.jei.ingredients.EntityIngredientHelper;
+import com.dungeonderps.resourcefulbees.compat.jei.ingredients.EntityRenderer;
 import com.dungeonderps.resourcefulbees.item.BeeSpawnEggItem;
 import com.dungeonderps.resourcefulbees.item.HoneycombBlockItem;
 import com.dungeonderps.resourcefulbees.item.ResourcefulHoneycomb;
 import com.dungeonderps.resourcefulbees.recipe.CentrifugeRecipe;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
+import com.google.common.collect.Lists;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.helpers.IGuiHelper;
+import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.ingredients.subtypes.ISubtypeInterpreter;
-import mezz.jei.api.registration.IRecipeCatalystRegistration;
-import mezz.jei.api.registration.IRecipeCategoryRegistration;
-import mezz.jei.api.registration.IRecipeRegistration;
-import mezz.jei.api.registration.ISubtypeRegistration;
+import mezz.jei.api.registration.*;
 import mezz.jei.api.runtime.IIngredientManager;
 import mezz.jei.api.runtime.IJeiRuntime;
 import net.minecraft.client.Minecraft;
@@ -25,10 +28,12 @@ import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import static com.dungeonderps.resourcefulbees.recipe.CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE;
@@ -52,7 +57,6 @@ public class JEICompat implements IModPlugin {
 
         return combBlock.getTranslationKey(stack);
     };
-
     private static final ISubtypeInterpreter beeSpawnEggsSubtype = stack -> {
         Item item = stack.getItem();
         if( !(item instanceof BeeSpawnEggItem) ) return "";
@@ -61,6 +65,8 @@ public class JEICompat implements IModPlugin {
 
         return spawnEgg.getTranslationKey(stack);
     };
+
+    public static final IIngredientType<EntityIngredient> ENTITY_INGREDIENT = () -> EntityIngredient.class;
 
     private static <C extends IInventory, T extends IRecipe<C>> Collection<T> getRecipes(RecipeManager recipeManager, IRecipeType<T> recipeType) {
         Map<ResourceLocation, IRecipe<C>> recipesMap = recipeManager.getRecipes(recipeType);
@@ -114,6 +120,14 @@ public class JEICompat implements IModPlugin {
             registration.addRecipes(FluidToBlock.getMutationRecipes(registration.getIngredientManager()), FluidToBlock.ID);
             registration.addRecipes(BlockToBlock.getMutationRecipes(registration.getIngredientManager()), BlockToBlock.ID);
         }
+    }
+
+    @Override
+    public void registerIngredients(IModIngredientRegistration registration) {
+        //TODO - Figure out why it only shows last bee in hashmap
+        List<EntityIngredient> entityIngredients = EntityIngredientFactory.create();
+
+        registration.register(ENTITY_INGREDIENT, Lists.newArrayList(), new EntityIngredientHelper<>(), new EntityRenderer());
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.dungeonderps.resourcefulbees.compat.jei;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
+import com.dungeonderps.resourcefulbees.compat.jei.ingredients.EntityIngredient;
 import com.dungeonderps.resourcefulbees.data.BeeData;
 import com.dungeonderps.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.dungeonderps.resourcefulbees.lib.BeeConstants;
@@ -10,6 +11,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.gui.ingredient.IGuiIngredientGroup;
 import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
@@ -103,6 +105,7 @@ public class BeeHiveCategory implements IRecipeCategory<BeeHiveCategory.Recipe> 
     public void setIngredients(Recipe recipe, IIngredients ingredients) {
         ingredients.setOutput(VanillaTypes.ITEM, recipe.getComb());
         ingredients.setInput(VanillaTypes.ITEM, new ItemStack(RegistryHandler.T1_BEEHIVE_ITEM.get()));
+        ingredients.setInput(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(recipe.beeType, 135.0F));
     }
 
     @Override
@@ -111,6 +114,10 @@ public class BeeHiveCategory implements IRecipeCategory<BeeHiveCategory.Recipe> 
         itemStacks.init(0, false, 138, 4);
         itemStacks.init(1, true, 62, 4);
         itemStacks.set(ingredients);
+
+        IGuiIngredientGroup<EntityIngredient> ingredientStacks = iRecipeLayout.getIngredientsGroup(JEICompat.ENTITY_INGREDIENT);
+        ingredientStacks.init(0, true, 5, 5);
+        ingredientStacks.set(0, ingredients.getInputs(JEICompat.ENTITY_INGREDIENT).get(0));
     }
 
     @Nonnull
@@ -122,36 +129,6 @@ public class BeeHiveCategory implements IRecipeCategory<BeeHiveCategory.Recipe> 
             return Collections.singletonList(new StringTextComponent(I18n.format("entity." + ResourcefulBees.MOD_ID + "." + recipe.beeType + "_bee")));
         }
         return IRecipeCategory.super.getTooltipStrings(recipe,mouseX, mouseY);
-    }
-
-    public void renderEntity(MatrixStack matrix, String beeType, Float rotation, Double xPos, Double yPos){
-        Minecraft mc = Minecraft.getInstance();
-        matrix.push();
-        matrix.translate(0, 0, 0.5D);
-
-        if (mc.player !=null) {
-            bee.ticksExisted = mc.player.ticksExisted;
-            bee.renderYawOffset = rotation - 90;
-            bee.setBeeType(beeType);
-            float scaledSize = 30;
-            if (!bee.getSizeModifierFromInfo(bee.getBeeType()).equals(1.0F)) {
-                scaledSize = 30 / bee.getSizeModifierFromInfo(bee.getBeeType());
-            }
-            matrix.translate(xPos, yPos, 1);
-            matrix.rotate(Vector3f.ZP.rotationDegrees(180.0F));
-            matrix.translate(0.0F, -0.2F, 1);
-            matrix.scale(scaledSize, scaledSize, 30);
-            EntityRendererManager entityrenderermanager = mc.getRenderManager();
-            IRenderTypeBuffer.Impl irendertypebuffer$impl = mc.getRenderTypeBuffers().getBufferSource();
-            entityrenderermanager.renderEntityStatic(bee, 0, 0, 0.0D, mc.getRenderPartialTicks(), 1, matrix, irendertypebuffer$impl, 15728880);
-            irendertypebuffer$impl.finish();
-        }
-        matrix.pop();
-    }
-
-    @Override
-    public void draw(Recipe recipe, @Nonnull MatrixStack stack, double mouseX, double mouseY) {
-        renderEntity(stack, recipe.getBeeType(), 135.0F, 20D, 20D);
     }
 
     public static class Recipe {
