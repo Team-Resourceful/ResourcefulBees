@@ -7,7 +7,6 @@ import com.dungeonderps.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.dungeonderps.resourcefulbees.lib.BeeConstants;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -24,7 +23,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -103,7 +101,6 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
         ItemStack childSpawnEgg = new ItemStack(RegistryHandler.BEE_SPAWN_EGG.get());
 
         CompoundNBT p1_type = new CompoundNBT();
-        CompoundNBT p1_rbees = new CompoundNBT();
         CompoundNBT p1_root = new CompoundNBT();
         p1_type.putString(BeeConstants.NBT_BEE_TYPE, recipe.parent1);
         p1_root.put(BeeConstants.NBT_ROOT, p1_type);
@@ -111,7 +108,6 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
         parent1SpawnEgg.setTag(p1_root);
 
         CompoundNBT p2_type = new CompoundNBT();
-        CompoundNBT p2_rbees = new CompoundNBT();
         CompoundNBT p2_root = new CompoundNBT();
         p2_type.putString(BeeConstants.NBT_BEE_TYPE, recipe.parent2);
         p2_root.put(BeeConstants.NBT_ROOT, p2_type);
@@ -119,7 +115,6 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
         parent2SpawnEgg.setTag(p2_root);
 
         CompoundNBT ch_type = new CompoundNBT();
-        CompoundNBT ch_rbees = new CompoundNBT();
         CompoundNBT ch_root = new CompoundNBT();
         ch_type.putString(BeeConstants.NBT_BEE_TYPE, recipe.child);
         ch_root.put(BeeConstants.NBT_ROOT, ch_type);
