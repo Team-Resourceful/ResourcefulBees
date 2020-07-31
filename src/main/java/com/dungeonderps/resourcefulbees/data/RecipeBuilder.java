@@ -16,6 +16,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.crafting.NBTIngredient;
+import net.minecraftforge.event.AddReloadListenerEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -24,29 +26,30 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RecipeBuilder implements IResourceManagerReloadListener {
+    private static RecipeManager recipeManager;
 
     @Override
     public void onResourceManagerReload(@Nonnull IResourceManager resourceManager) {
-        MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
-
-        RecipeManager recipeManager = server.getRecipeManager();
-        recipeManager.recipes = new HashMap<>(recipeManager.recipes);
-        recipeManager.recipes.replaceAll((t, v) -> new HashMap<>(recipeManager.recipes.get(t)));
-        Map<ResourceLocation, IRecipe<?>> recipes = recipeManager.recipes.get(IRecipeType.CRAFTING);
         for (Map.Entry<String, BeeData> bee : BeeInfo.BEE_INFO.entrySet()){
             if (!bee.getValue().getMainOutput().isEmpty()) {
                 if (Config.CENTRIFUGE_RECIPES.get()) {
                     IRecipe<?> honeycombCentrifuge = this.centrifugeRecipe(bee.getValue().getName(), bee.getValue().getHoneycombColor());
-                    recipeManager.recipes.computeIfAbsent(honeycombCentrifuge.getType(), t -> new HashMap<>()).put(honeycombCentrifuge.getId(), honeycombCentrifuge);
+                    getRecipeManager().recipes.computeIfAbsent(honeycombCentrifuge.getType(), t -> new HashMap<>()).put(honeycombCentrifuge.getId(), honeycombCentrifuge);
                 }
                 if (Config.HONEYCOMB_BLOCK_RECIPES.get()) {
                     IRecipe<?> honeycombBlock = this.makeHoneycombRecipe(bee.getKey(), bee.getValue().getHoneycombColor());
                     IRecipe<?> honeycomb = this.blockToHoneycombRecipe(bee.getKey(), bee.getValue().getHoneycombColor());
-                    recipes.put(honeycombBlock.getId(), honeycombBlock);
-                    recipes.put(honeycomb.getId(), honeycomb);
+                    getRecipeManager().recipes.computeIfAbsent(honeycombBlock.getType(), t -> new HashMap<>()).put(honeycombBlock.getId(), honeycombBlock);
+                    getRecipeManager().recipes.computeIfAbsent(honeycomb.getType(), t -> new HashMap<>()).put(honeycomb.getId(), honeycomb);
                 }
             }
         }
+    }
+
+    @SubscribeEvent
+    public void onAddReloadListeners(AddReloadListenerEvent event) {
+        event.addListener(this);
+        recipeManager = event.getDataPackRegistries().getRecipeManager();
     }
 
     private IRecipe<?> makeHoneycombRecipe(String BeeType, String Color) {
@@ -124,5 +127,14 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
         {
             super(stack);
         }
+    }
+
+    public static RecipeManager getRecipeManager() {
+        if (!recipeManager.recipes.getClass().equals(HashMap.class)) {
+            recipeManager.recipes = new HashMap<>(recipeManager.recipes);
+            recipeManager.recipes.replaceAll((t, v) -> new HashMap<>(recipeManager.recipes.get(t)));
+        }
+
+        return recipeManager;
     }
 }

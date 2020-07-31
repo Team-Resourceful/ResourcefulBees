@@ -83,7 +83,6 @@ public class ResourcefulBees
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::loadComplete);
 
         MinecraftForge.EVENT_BUS.addListener(this::serverStarting);
-        MinecraftForge.EVENT_BUS.addListener(this::OnServerSetup);
         MinecraftForge.EVENT_BUS.addListener(this::trade);
 
         DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
@@ -138,11 +137,6 @@ public class ResourcefulBees
         }
     }
 
-    public void OnServerSetup(FMLServerAboutToStartEvent event){
-        IReloadableResourceManager reloader = (IReloadableResourceManager) event.getServer().getDataPackRegistries().getResourceManager();
-        reloader.addReloadListener(new RecipeBuilder());
-    }
-
     private void setup(final FMLCommonSetupEvent event){
         /*
         The lines below are necessary for getting mod bees into mod beehive.
@@ -173,6 +167,7 @@ public class ResourcefulBees
         NetPacketHandler.init();
 
         RegistryHandler.addEntityAttributes();
+        MinecraftForge.EVENT_BUS.register(new RecipeBuilder());
     }
     public void onInterModEnqueue(InterModEnqueueEvent event) {
         if (ModList.get().isLoaded("theoneprobe"))
