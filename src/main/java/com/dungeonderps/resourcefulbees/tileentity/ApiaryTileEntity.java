@@ -482,7 +482,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
         ApiaryStorageTileEntity apiaryStorage = getApiaryStorage();
         for (BlockPos pos : STRUCTURE_BLOCKS) {
             Block block = worldIn.getBlockState(pos).getBlock();
-            if (block.isIn(getValidApiaryTag())) {
+            if (block.isIn(BeeInfoUtils.getValidApiaryTag())) {
                 TileEntity tile = worldIn.getTileEntity(pos);
                 if (tile instanceof ApiaryStorageTileEntity) {
                     ApiaryStorageTileEntity apiaryStorageTile = (ApiaryStorageTileEntity) tile;

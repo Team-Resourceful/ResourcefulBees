@@ -289,5 +289,7 @@ public class BeeInfoUtils {
 
     public static ITag<Block> getBlockTag(String blockTag) { return BlockTags.getCollection().get(getResource(blockTag));}
 
-
+    public static ITag<Block> getValidApiaryTag() {
+        return BlockTags.makeWrapperTag("resourcefulbees:valid_apiary");
+    }
 }
