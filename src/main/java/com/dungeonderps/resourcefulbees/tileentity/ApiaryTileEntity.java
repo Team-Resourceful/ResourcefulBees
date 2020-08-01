@@ -60,7 +60,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     public final LinkedHashMap<String, ApiaryBee> BEES = new LinkedHashMap<>();
     public final List<BlockPos> STRUCTURE_BLOCKS = new ArrayList<>();
     protected int TIER;
-    private final ITag<Block> validApiaryTag;
+    //private ITag<Block> validApiaryTag;
     public Stack<String> honeycombs = new Stack<>();
     //public ApiaryStorageTileEntity apiaryStorage;
     private boolean isValidApiary;
@@ -77,7 +77,6 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
 
     public ApiaryTileEntity() {
         super(RegistryHandler.APIARY_TILE_ENTITY.get());
-        validApiaryTag = BeeInfoUtils.getBlockTag("resourcefulbees:valid_apiary");
     }
 
     public static int calculatePlayersUsingSync(World world, ApiaryTileEntity apiaryTileEntity, int ticksSinceSync, int posX, int posY, int posZ, int numPlayersUsing) {
@@ -463,6 +462,10 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     //endregion
 
     //region Validation
+    public static ITag<Block> getValidApiaryTag(){
+        return BeeInfoUtils.getBlockTag("resourcefulbees:valid_apiary");
+    }
+
     public void runStructureValidation(@Nullable ServerPlayerEntity validatingPlayer) {
         if (this.world != null && !this.world.isRemote()) {
             if (!this.isValidApiary || STRUCTURE_BLOCKS.isEmpty())
@@ -481,7 +484,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
         ApiaryStorageTileEntity apiaryStorage = getApiaryStorage();
         for (BlockPos pos : STRUCTURE_BLOCKS) {
             Block block = worldIn.getBlockState(pos).getBlock();
-            if (block.isIn(validApiaryTag)) {
+            if (block.isIn(getValidApiaryTag())) {
                 TileEntity tile = worldIn.getTileEntity(pos);
                 if (tile instanceof ApiaryStorageTileEntity) {
                     ApiaryStorageTileEntity apiaryStorageTile = (ApiaryStorageTileEntity) tile;
