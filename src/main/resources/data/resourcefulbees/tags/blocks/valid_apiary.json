@@ -33,7 +33,7 @@
     "#forge:stone",
     "#forge:storage_blocks",
     "#forge:fence_gates",
-    "minecraft:bricks:",
+    "minecraft:bricks",
     "minecraft:farmland"
   ]
 }

@@ -60,9 +60,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     public final LinkedHashMap<String, ApiaryBee> BEES = new LinkedHashMap<>();
     public final List<BlockPos> STRUCTURE_BLOCKS = new ArrayList<>();
     protected int TIER;
-    //private ITag<Block> validApiaryTag;
     public Stack<String> honeycombs = new Stack<>();
-    //public ApiaryStorageTileEntity apiaryStorage;
     private boolean isValidApiary;
     public boolean previewed;
     public AutomationSensitiveItemStackHandler h = new ApiaryTileEntity.TileStackHandler(4);
