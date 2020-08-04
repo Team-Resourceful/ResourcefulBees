@@ -3,12 +3,11 @@ package com.dungeonderps.resourcefulbees.block;
 import com.dungeonderps.resourcefulbees.tileentity.CentrifugeTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
+import net.minecraft.inventory.container.IContainerProvider;
 import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
@@ -45,21 +44,11 @@ public class CentrifugeBlock extends Block {
         return ActionResultType.SUCCESS;
     }
 
+
     @Nullable
     @Override
     public INamedContainerProvider getContainer(@Nonnull BlockState state, World worldIn, @Nonnull BlockPos pos) {
         return (INamedContainerProvider)worldIn.getTileEntity(pos);
-    }
-
-    @Override
-    public void onBlockPlacedBy(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
-        if (stack.hasDisplayName()) {
-            TileEntity tileentity = worldIn.getTileEntity(pos);
-            if (tileentity instanceof CentrifugeTileEntity) {
-                ((CentrifugeTileEntity)tileentity).setCustomName(stack.getDisplayName());
-            }
-        }
-        super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
     }
 
     @Override
