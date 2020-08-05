@@ -1,13 +1,18 @@
 package com.dungeonderps.resourcefulbees.block;
 
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
-import com.dungeonderps.resourcefulbees.lib.BeeConstants;
+import com.dungeonderps.resourcefulbees.config.Config;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.tileentity.TieredBeehiveTileEntity;
+import com.dungeonderps.resourcefulbees.utils.NBTHelper;
+import com.dungeonderps.resourcefulbees.utils.TooltipBuilder;
 import net.minecraft.block.BeehiveBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.CampfireBlock;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.BeeEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -20,6 +25,9 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
@@ -131,6 +139,36 @@ public class TieredBeehiveBlock extends BeehiveBlock {
     }
   }
 
+  @Override
+  public void addInformation(@Nonnull ItemStack stack, @Nullable IBlockReader worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
+    if(Screen.hasShiftDown())
+    {
+      tooltip.addAll(new TooltipBuilder()
+              .addTip(I18n.format("block.resourcefulbees.beehive.tooltip.max_bees"))
+              .appendText(" " + Math.round(Config.HIVE_MAX_BEES.get() * TIER_MODIFIER))
+              .applyStyle(TextFormatting.GOLD)
+              .addTip(I18n.format("block.resourcefulbees.beehive.tooltip.max_combs"))
+              .appendText(" " + Math.round(Config.HIVE_MAX_COMBS.get() * TIER_MODIFIER))
+              .applyStyle(TextFormatting.GOLD)
+              .build());
+      if (TIER != 1) {
+        int time_reduction = TIER > 1 ? (int) ((TIER * .05) * 100) : (int) (.05 * 100);
+        String sign = TIER > 1 ? "-" : "+";
+        tooltip.addAll(new TooltipBuilder()
+                .addTip(I18n.format("block.resourcefulbees.beehive.tooltip.hive_time"))
+                .appendText(" " + sign + time_reduction + "%")
+                .applyStyle(TextFormatting.GOLD)
+                .build());
+      }
+    }
+    else
+    {
+      tooltip.add(new StringTextComponent(TextFormatting.YELLOW + I18n.format("resourcefulbees.shift_info")));
+    }
+
+    super.addInformation(stack, worldIn, tooltip, flagIn);
+  }
+
   public void dropResourceHoneycomb(World world, BlockPos pos) {
     TileEntity blockEntity = world.getTileEntity(pos);
     if (blockEntity instanceof TieredBeehiveTileEntity) {
@@ -138,8 +176,7 @@ public class TieredBeehiveBlock extends BeehiveBlock {
       while (hive.hasCombs()) {
         ItemStack comb = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
         String honeycomb = hive.getResourceHoneycomb();
-        comb.getOrCreateChildTag(BeeConstants.NBT_ROOT).putString(BeeConstants.NBT_COLOR, BeeInfo.getInfo(honeycomb).getHoneycombColor());
-        comb.getOrCreateChildTag(BeeConstants.NBT_ROOT).putString(BeeConstants.NBT_BEE_TYPE, BeeInfo.getInfo(honeycomb).getName());
+        comb.setTag(NBTHelper.createHoneycombItemTag(BeeInfo.getInfo(honeycomb).getName(), BeeInfo.getInfo(honeycomb).getHoneycombColor()));
         spawnAsEntity(world, pos, comb);
       }
     }

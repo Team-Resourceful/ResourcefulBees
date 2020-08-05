@@ -2,6 +2,7 @@ package com.dungeonderps.resourcefulbees.tileentity;
 
 
 import com.dungeonderps.resourcefulbees.block.ApiaryBlock;
+import com.dungeonderps.resourcefulbees.config.Config;
 import com.dungeonderps.resourcefulbees.container.AutomationSensitiveItemStackHandler;
 import com.dungeonderps.resourcefulbees.container.UnvalidatedApiaryContainer;
 import com.dungeonderps.resourcefulbees.container.ValidatedApiaryContainer;
@@ -114,7 +115,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     }
 
     public int getMaxBees() {
-        return 9;
+        return Config.APIARY_MAX_BEES.get();
     }
 
     public int getBeeCount() {
@@ -146,8 +147,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
 
                         if (beehiveState == State.HONEY_DELIVERED) {
                             beeEntity.onHoneyDelivered();
-                            if (!exportBee && !beeEntity.getBeeInfo().getMainOutput().isEmpty() && isValidApiary) {
-                                TileEntity tile = world.getTileEntity(apiaryStoragePos);
+                            if (!exportBee && beeEntity.getBeeInfo().getHoneycombColor() != null && !beeEntity.getBeeInfo().getHoneycombColor().isEmpty() && isValidApiary) {
                                 getApiaryStorage().deliverHoneycomb(beeEntity.getBeeType(), getTier());
                             }
                         }

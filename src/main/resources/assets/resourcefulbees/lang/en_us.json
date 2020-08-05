@@ -5,6 +5,10 @@
 	"resourcefulbees.information.bee_type.unknown": "Bee Type: Unknown",
 	"resourcefulbees.information.bee_type.custom": "Bee Type: ",
 	"resourcefulbees.shift_info": "Hold SHIFT for Info",
+	"resourcefulbees.ctrl_info": "Hold CTRL for Multiblock Info",
+
+	"honeycomb.resourcefulbees": "Honeycomb",
+	"honeycomb_block.resourcefulbees": "Honeycomb Block",
 
 	"gui.resourcefulbees.jei.category.hive" : "Beehive",
 	"gui.resourcefulbees.jei.category.centrifuge": "Centrifuge",
@@ -32,6 +36,11 @@
 	"gui.resourcefulbees.apiary.export.false" : "Bee export was unsuccessful!",
 	"gui.resourcefulbees.apiary.validated.true" : "Apiary validation successful!",
 	"gui.resourcefulbees.apiary.validated.false" : "Apiary validation unsuccessful!",
+	"gui.resourcefulbees.apiary.bee.ticks_in_hive": "Ticks in Hive",
+	"gui.resourcefulbees.apiary.bee.ticks_left": "Ticks Left",
+	"gui.resourcefulbees.apiary.button.breed_screen": "Breeder (Coming in 1.16!)",
+	"gui.resourcefulbees.apiary.button.main_screen": "Bee Import/Export",
+	"gui.resourcefulbees.apiary.button.storage_screen": "Honeycomb Storage",
 
 	"block.resourcefulbees.t1_beehive": "Tier 1 Beehive",
 	"block.resourcefulbees.t2_beehive": "Tier 2 Beehive",
@@ -55,6 +64,19 @@
 	"block.resourcefulbees.t3_apiary": "Tier 3 Apiary",
 	"block.resourcefulbees.t4_apiary": "Tier 4 Apiary",
 	"block.resourcefulbees.apiary_storage": "Apiary Storage",
+	"block.resourcefulbees.beehive.tooltip.max_bees": "Max Bees:",
+	"block.resourcefulbees.beehive.tooltip.max_combs": "Max Honeycombs:",
+	"block.resourcefulbees.beehive.tooltip.hive_time": "Hive Time Modification:",
+	"block.resourcefulbees.beehive.tooltip.unique_bees": "UNIQUE",
+	"block.resourcefulbees.apiary.tooltip.output_type": "Output Type:",
+	"block.resourcefulbees.apiary.tooltip.output_quantity": "Output Quantity:",
+	"block.resourcefulbees.apiary.tooltip.structure_size": "Multiblock is 7x6x7 hollow box",
+	"block.resourcefulbees.apiary.tooltip.requisites": "Requires Apiary Storage to validate",
+	"block.resourcefulbees.apiary.tooltip.drops": "Retains contens when broken",
+	"block.resourcefulbees.apiary.tooltip.tags": "Multiblock can be built using any block from the valid_apiary tag",
+	"block.resourcefulbees.apiary.tooltip.offset": "Offset determines the location of the Apiary Block based on its facing direction",
+	"block.resourcefulbees.apiary.tooltip.lock": "Bees are locked on import",
+	"block.resourcefulbees.apiary.tooltip.lock_2": "Bees must be locked and selected to export",
 
 	"item.resourcefulbees.smoker_can": "Smoker Canister",
 	"item.resourcefulbees.smoker": "Bee Smoker",
@@ -139,11 +161,5 @@
 	"entity.resourcefulbees.zombie_bee": "Zombie Bee",
 	"entity.resourcefulbees.netherite_bee": "Netherite Bee",
 
-
-	"entity.minecraft.villager.resourcefulbees.beekeeper": "Beekeeper",
-	"gui.resourcefulbees.apiary.bee.ticks_in_hive": "Ticks in Hive",
-	"gui.resourcefulbees.apiary.bee.ticks_left": "Ticks Left",
-	"gui.resourcefulbees.apiary.button.breed_screen": "Breeder (Coming in 1.16!)",
-	"gui.resourcefulbees.apiary.button.main_screen": "Bee Import/Export",
-	"gui.resourcefulbees.apiary.button.storage_screen": "Honeycomb Storage"
+	"entity.minecraft.villager.resourcefulbees.beekeeper": "Beekeeper"
 }

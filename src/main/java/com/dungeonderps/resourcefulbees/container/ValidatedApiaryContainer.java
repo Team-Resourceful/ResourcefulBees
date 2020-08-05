@@ -37,8 +37,7 @@ public class ValidatedApiaryContainer extends Container {
             this.addSlot(new SlotItemHandlerUnconditioned(apiaryTileEntity.h, ApiaryTileEntity.IMPORT, 74, 37) {
                 public boolean isItemValid(ItemStack stack) {
                     if (stack.getItem() instanceof BeeJar) {
-                        BeeJar jarItem = (BeeJar) stack.getItem();
-                        if (jarItem.isFilled(stack)) {
+                        if (BeeJar.isFilled(stack)) {
                             CompoundNBT data = stack.getTag();
                             //noinspection ConstantConditions
                             String type = data.getString(BeeConstants.NBT_ENTITY);
@@ -51,8 +50,7 @@ public class ValidatedApiaryContainer extends Container {
             this.addSlot(new SlotItemHandlerUnconditioned(apiaryTileEntity.h, ApiaryTileEntity.EMPTY_JAR, 128, 37) {
                 public boolean isItemValid(ItemStack stack) {
                     if (stack.getItem() instanceof BeeJar) {
-                        BeeJar jarItem = (BeeJar) stack.getItem();
-                        return (!jarItem.isFilled(stack));
+                        return (!BeeJar.isFilled(stack));
                     }
                     return false;
                 }

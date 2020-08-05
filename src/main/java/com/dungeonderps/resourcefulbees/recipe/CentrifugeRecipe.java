@@ -45,6 +45,11 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
     }
 
     @Override
+    public boolean isDynamic() {
+        return true;
+    }
+
+    @Override
     @Nonnull
     @Deprecated
     public ItemStack getCraftingResult(@Nonnull IInventory inventory) {

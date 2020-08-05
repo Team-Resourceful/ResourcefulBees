@@ -3,7 +3,6 @@ package com.dungeonderps.resourcefulbees.data;
 import com.dungeonderps.resourcefulbees.lib.BeeConstants;
 import com.dungeonderps.resourcefulbees.lib.MutationTypes;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
-import com.dungeonderps.resourcefulbees.utils.Color;
 import net.minecraft.item.Items;
 
 public class BeeData {
@@ -14,9 +13,9 @@ public class BeeData {
     private String biomeBlacklist = "";
 
     private String baseLayerTexture = "/custom/bee";
-    private String primaryColor = Color.format(BeeConstants.DEFAULT_COLOR);
-    private String secondaryColor = Color.format(BeeConstants.DEFAULT_SECONDARY_COLOR);
-    private String honeycombColor = Color.format(BeeConstants.DEFAULT_ITEM_COLOR);
+    private String primaryColor; //= Color.format(BeeConstants.DEFAULT_COLOR);
+    private String secondaryColor; //= Color.format(BeeConstants.DEFAULT_SECONDARY_COLOR);
+    private String honeycombColor; //= Color.format(BeeConstants.DEFAULT_ITEM_COLOR);
     private String primaryLayerTexture = "/custom/primary_layer";
     private String secondaryLayerTexture = "/custom/secondary_layer";
 
