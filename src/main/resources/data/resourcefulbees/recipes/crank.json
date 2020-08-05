@@ -1,0 +1,14 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "  S",
+        "SSS",
+        "S  "
+    ],
+    "key": {
+        "S": { "tag": "forge:rods/wooden" }
+    },
+    "result": {
+        "item": "resourcefulbees:crank"
+    }
+}

@@ -2,6 +2,7 @@ package com.dungeonderps.resourcefulbees.block;
 
 import com.dungeonderps.resourcefulbees.tileentity.MechanicalCentrifugeTileEntity;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalBlock;
 import net.minecraft.entity.player.PlayerEntity;
@@ -20,6 +21,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -43,7 +45,7 @@ public class MechanicalCentrifugeBlock extends Block {
         if (!world.isRemote) {
             INamedContainerProvider blockEntity = state.getContainer(world, pos);
             MechanicalCentrifugeTileEntity tile = (MechanicalCentrifugeTileEntity)world.getTileEntity(pos);
-            if (player.isCrouching()){
+            if (player.isCrouching() && !(player instanceof FakePlayer)){
                 if (tile !=null && tile.canProcess(tile.getRecipe())) {
                     tile.clicks++;
                     world.setBlockState(pos, state.with(PROPERTY_ROTATION, state.get(PROPERTY_ROTATION) == 7 ? 0 : state.get(PROPERTY_ROTATION) + 1), 3);
@@ -55,7 +57,6 @@ public class MechanicalCentrifugeBlock extends Block {
         }
         return ActionResultType.SUCCESS;
     }
-
 
     @Nullable
     @Override
