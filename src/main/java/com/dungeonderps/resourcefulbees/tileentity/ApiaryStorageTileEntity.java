@@ -9,6 +9,7 @@ import com.dungeonderps.resourcefulbees.lib.ApiaryOutput;
 import com.dungeonderps.resourcefulbees.lib.ApiaryTabs;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.utils.MathUtils;
+import com.dungeonderps.resourcefulbees.utils.NBTHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -158,7 +159,6 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
     }
 
     public void deliverHoneycomb(String beeType, int apiaryTier) {
-        boolean flag = false;
         ItemStack itemstack;
         int slotIndex = 1;
 
@@ -189,8 +189,7 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
                 break;
         }
 
-        itemstack.getOrCreateChildTag(NBT_ROOT).putString(NBT_COLOR, BeeInfo.getInfo(beeType).getHoneycombColor());
-        itemstack.getOrCreateChildTag(NBT_ROOT).putString(NBT_BEE_TYPE, BeeInfo.getInfo(beeType).getName());
+        itemstack.setTag(NBTHelper.createHoneycombItemTag(BeeInfo.getInfo(beeType).getName(), BeeInfo.getInfo(beeType).getHoneycombColor()));
 
         while (!itemstack.isEmpty()){
             if (slotIndex > numberOfSlots) {

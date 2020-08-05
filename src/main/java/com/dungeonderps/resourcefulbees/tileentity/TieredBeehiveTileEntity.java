@@ -61,11 +61,11 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
   }
 
   public int getMaxCombs() {
-    return Math.round(Config.HIVE_MAX_COMBS.get() * getTierModifier());
+    return Math.round((float) Config.HIVE_MAX_COMBS.get() * getTierModifier());
   }
 
   public int getMaxBees() {
-    return Math.round(Config.HIVE_MAX_BEES.get() * getTierModifier());
+    return Math.round((float) Config.HIVE_MAX_BEES.get() * getTierModifier());
   }
 
   @Override
@@ -100,7 +100,7 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
 
             if (beehiveState == State.HONEY_DELIVERED) {
               beeEntity.onHoneyDelivered();
-              if (!beeEntity.getBeeInfo().getMainOutput().isEmpty()) {
+              if (beeEntity.getBeeInfo().getHoneycombColor() != null && !beeEntity.getBeeInfo().getHoneycombColor().isEmpty()) {
                 int i = getHoneyLevel(state);
                 if (i < 5) {
                   this.honeycombs.push(beeEntity.getBeeType());
@@ -244,4 +244,6 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
   public SUpdateTileEntityPacket getUpdatePacket() {
     return super.getUpdatePacket();
   }
+
+
 }

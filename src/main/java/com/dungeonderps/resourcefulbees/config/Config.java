@@ -34,6 +34,8 @@ public class Config {
     public static ForgeConfigSpec.IntValue T3_APIARY_QUANTITY;
     public static ForgeConfigSpec.IntValue T4_APIARY_QUANTITY;
 
+    public static ForgeConfigSpec.IntValue APIARY_MAX_BEES;
+
     public static class CommonConfig {
 
         public static ForgeConfigSpec COMMON_CONFIG;
@@ -61,7 +63,7 @@ public class Config {
             COMMON_BUILDER.pop();
 
             COMMON_BUILDER.push("Beehive Options");
-                HIVE_MAX_BEES = COMMON_BUILDER.comment("\nMaximum amount of bees in the base tier hive. \n(THIS * TIER_MODIFIER = MAX_BEES) for a range of 4 -> 16")
+                HIVE_MAX_BEES = COMMON_BUILDER.comment("\nMaximum number of bees in the base tier hive. \n(THIS * TIER_MODIFIER = MAX_BEES) for a range of 4 -> 16")
                         .defineInRange("hiveMaxBees", 4, 1, 4);
                 HIVE_MAX_COMBS = COMMON_BUILDER.comment("\nBase honeycomb harvest amount \n(THIS * TIER_MODIFIER = MAX_COMBS) for a range of 5 -> 64")
                         .defineInRange("hiveMaxCombs", 5, 5, 16);
@@ -84,14 +86,16 @@ public class Config {
                     .defineEnum("tierFourApiaryOutput", ApiaryOutput.BLOCK, ApiaryOutput.COMB, ApiaryOutput.BLOCK);
                 T4_APIARY_QUANTITY = COMMON_BUILDER.comment("\nTier 4 Apiary Output Quantity")
                     .defineInRange("tierFourApiaryQuantity", 2, 1, Integer.MAX_VALUE);
+                APIARY_MAX_BEES = COMMON_BUILDER.comment("\nMaximum number of UNIQUE bees allowed in the Apiary.")
+                    .defineInRange("apiaryMaxBees", 9, 1, 16);
             COMMON_BUILDER.pop();
 
             COMMON_BUILDER.push("Spawning Options");
                 SPAWN_WEIGHT = COMMON_BUILDER.comment("\nThis is the spawn weighting for ALL bees.")
                         .defineInRange("spawnWeighting", 3, 1, 20);
-                SPAWN_MIN_GROUP = COMMON_BUILDER.comment("\nThis is the min amount of bees that can spawn in a group. \nNote: this is for ALL bees!")
+                SPAWN_MIN_GROUP = COMMON_BUILDER.comment("\nThis is the minimum number of bees that can spawn in a group. \nNote: this is for ALL bees!")
                         .defineInRange("spawnMinBeeGroup", 1, 1, 5);
-                SPAWN_MAX_GROUP = COMMON_BUILDER.comment("\nThis is the max amount of bees that can spawn in a group. \nNote: this is for ALL bees!")
+                SPAWN_MAX_GROUP = COMMON_BUILDER.comment("\nThis is the maximum number of bees that can spawn in a group. \nNote: this is for ALL bees!")
                         .defineInRange("spawnMaxBeeGroup", 5, 5, 10);
                 GENERATE_BEE_NESTS = COMMON_BUILDER.comment("\nShould bee nests generate in world? \nNote: They will only generate in biomes where bees can spawn")
                         .define("generateBeeNests", true);

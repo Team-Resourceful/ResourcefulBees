@@ -247,10 +247,23 @@ public class BeeInfoUtils {
     }
 
     private static boolean validateColor(BeeData bee) {
-        return Color.validate(bee.getHoneycombColor()) ||
-                Color.validate(bee.getPrimaryColor()) ||
-                Color.validate(bee.getSecondaryColor()) ||
-                logError(bee.getName(), "Color", "Color" , "color");
+        boolean flag = true;
+        if (bee.getHoneycombColor() != null && !bee.getHoneycombColor().isEmpty()) {
+            flag = Color.validate(bee.getHoneycombColor());
+            if (!flag)
+                logError(bee.getName(), "Honeycomb Color", bee.getHoneycombColor() , "color");
+        }
+        if (flag && bee.getPrimaryColor() != null && !bee.getPrimaryColor().isEmpty()) {
+            flag = Color.validate(bee.getPrimaryColor());
+            if (!flag)
+                logError(bee.getName(), "Primary Color", bee.getPrimaryColor() , "color");
+        }
+        if (flag && bee.getSecondaryColor() != null && !bee.getSecondaryColor().isEmpty()) {
+            flag = Color.validate(bee.getSecondaryColor());
+            if (!flag)
+                logError(bee.getName(), "Secondary Color", bee.getSecondaryColor() , "color");
+        }
+        return flag;
     }
 
     /**
