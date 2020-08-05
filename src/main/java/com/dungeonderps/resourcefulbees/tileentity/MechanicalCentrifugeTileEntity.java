@@ -205,7 +205,7 @@ public class MechanicalCentrifugeTileEntity extends TileEntity implements ITicka
     @Nonnull
     @Override
     public ITextComponent getDisplayName() {
-        return new TranslationTextComponent("gui.resourcefulbees.centrifuge");
+        return new TranslationTextComponent("gui.resourcefulbees.mechanical_centrifuge");
     }
 
     protected class TileStackHandler extends AutomationSensitiveItemStackHandler {

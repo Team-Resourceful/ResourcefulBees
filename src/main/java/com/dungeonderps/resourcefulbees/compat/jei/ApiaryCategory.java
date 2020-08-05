@@ -2,8 +2,9 @@ package com.dungeonderps.resourcefulbees.compat.jei;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.compat.jei.ingredients.EntityIngredient;
+import com.dungeonderps.resourcefulbees.config.Config;
 import com.dungeonderps.resourcefulbees.data.BeeData;
-import com.dungeonderps.resourcefulbees.entity.passive.CustomBeeEntity;
+import com.dungeonderps.resourcefulbees.lib.ApiaryOutput;
 import com.dungeonderps.resourcefulbees.lib.BeeConstants;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.utils.NBTHelper;
@@ -16,49 +17,51 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.runtime.IIngredientManager;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.dungeonderps.resourcefulbees.config.BeeInfo.BEE_INFO;
 
-public class BeeHiveCategory implements IRecipeCategory<BeeHiveCategory.Recipe> {
+public class ApiaryCategory implements IRecipeCategory<ApiaryCategory.Recipe> {
     public static final ResourceLocation GUI_BACK = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/beehive.png");
-    public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "hive");
+    public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "apiary");
     private final IDrawable background;
     private final IDrawable icon;
     private final String localizedName;
-    private final CustomBeeEntity bee;
+    //private final CustomBeeEntity bee;
 
-    public BeeHiveCategory(IGuiHelper guiHelper) {
+    public ApiaryCategory(IGuiHelper guiHelper) {
         this.background = guiHelper.drawableBuilder(GUI_BACK, 0, 0, 160, 26).addPadding(0, 0, 0, 0).build();
-        this.icon = guiHelper.createDrawableIngredient(new ItemStack(RegistryHandler.T1_BEEHIVE_ITEM.get()));
-        this.localizedName = I18n.format("gui.resourcefulbees.jei.category.hive");
-        World clientWorld = Minecraft.getInstance().world;
+        this.icon = guiHelper.createDrawableIngredient(new ItemStack(RegistryHandler.T1_APIARY_ITEM.get()));
+        this.localizedName = I18n.format("gui.resourcefulbees.jei.category.apiary");
+        /*World clientWorld = Minecraft.getInstance().world;
         if (clientWorld != null)
             bee = RegistryHandler.CUSTOM_BEE.get().create(clientWorld);
         else
-            bee = null;
+            bee = null;*/
     }
 
     public static List<Recipe> getHoneycombRecipes(IIngredientManager ingredientManager) {
         List<Recipe> recipes = new ArrayList<>();
+        final List<ApiaryOutput> outputs = new ArrayList<>(Arrays.asList(Config.T1_APIARY_OUTPUT.get(), Config.T2_APIARY_OUTPUT.get(), Config.T3_APIARY_OUTPUT.get(), Config.T4_APIARY_OUTPUT.get()));
+        final int[] outputQuantities = {Config.T1_APIARY_QUANTITY.get(), Config.T2_APIARY_QUANTITY.get(), Config.T3_APIARY_QUANTITY.get(), Config.T4_APIARY_QUANTITY.get()};
+        final List<Item> apiaryTiers = new ArrayList<>(Arrays.asList(RegistryHandler.T1_APIARY_ITEM.get(), RegistryHandler.T2_APIARY_ITEM.get(), RegistryHandler.T3_APIARY_ITEM.get(), RegistryHandler.T4_APIARY_ITEM.get()));
+
         for (Map.Entry<String, BeeData> bee : BEE_INFO.entrySet()){
             if (!bee.getKey().equals(BeeConstants.DEFAULT_BEE_TYPE) && bee.getValue().getHoneycombColor() != null && !bee.getValue().getHoneycombColor().isEmpty()) {
-                ItemStack honeyCombItemStack = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
-                honeyCombItemStack.setTag(NBTHelper.createHoneycombItemTag(bee.getKey(), bee.getValue().getHoneycombColor()));
-                recipes.add(new Recipe(honeyCombItemStack, bee.getKey()));
+                for (int i = 0; i < 4; i++){
+                    Item outputItem = outputs.get(i).equals(ApiaryOutput.COMB) ? RegistryHandler.RESOURCEFUL_HONEYCOMB.get() : RegistryHandler.HONEYCOMB_BLOCK_ITEM.get();
+                    ItemStack outputStack = new ItemStack(outputItem, outputQuantities[i]);
+                    outputStack.setTag(NBTHelper.createHoneycombItemTag(bee.getKey(), bee.getValue().getHoneycombColor()));
+                    recipes.add(new Recipe(outputStack, bee.getKey(), new ItemStack(apiaryTiers.get(i))));
+                }
             }
         }
         return recipes;
@@ -96,9 +99,8 @@ public class BeeHiveCategory implements IRecipeCategory<BeeHiveCategory.Recipe> 
 
     @Override
     public void setIngredients(Recipe recipe, IIngredients ingredients) {
-        List<Ingredient> list = new ArrayList<>(Collections.singletonList(Ingredient.fromItems(RegistryHandler.T1_BEEHIVE_ITEM.get(), RegistryHandler.T2_BEEHIVE_ITEM.get(), RegistryHandler.T3_BEEHIVE_ITEM.get(), RegistryHandler.T4_BEEHIVE_ITEM.get())));
         ingredients.setOutput(VanillaTypes.ITEM, recipe.getComb());
-        ingredients.setInputIngredients(list);
+        ingredients.setInput(VanillaTypes.ITEM, recipe.apiary);
         ingredients.setInput(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(recipe.beeType, 135.0F));
     }
 
@@ -128,10 +130,14 @@ public class BeeHiveCategory implements IRecipeCategory<BeeHiveCategory.Recipe> 
     public static class Recipe {
         private final ItemStack comb;
         private final String beeType;
+        //private final int outputQuantity;
+        private final ItemStack apiary;
 
-        public Recipe(ItemStack comb, String beeType) {
+        public Recipe(ItemStack comb, String beeType, ItemStack apiary) {
             this.comb = comb;
             this.beeType = beeType;
+            //this.outputQuantity = outputQuantity;
+            this.apiary = apiary;
         }
 
         public ItemStack getComb() {
@@ -140,5 +146,7 @@ public class BeeHiveCategory implements IRecipeCategory<BeeHiveCategory.Recipe> 
         public String getBeeType() {
             return this.beeType;
         }
+        //public int getOutputQuantity() { return this.outputQuantity; }
+        public ItemStack getApiary() { return this.apiary; }
     }
 }
