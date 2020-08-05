@@ -1,14 +1,13 @@
 package com.dungeonderps.resourcefulbees;
 
-import com.dungeonderps.resourcefulbees.client.gui.screen.ApiaryStorageScreen;
-import com.dungeonderps.resourcefulbees.client.gui.screen.CentrifugeScreen;
-import com.dungeonderps.resourcefulbees.client.gui.screen.UnvalidatedApiaryScreen;
-import com.dungeonderps.resourcefulbees.client.gui.screen.ValidatedApiaryScreen;
+import com.dungeonderps.resourcefulbees.client.gui.screen.*;
 import com.dungeonderps.resourcefulbees.client.render.entity.CustomBeeRenderer;
 import com.dungeonderps.resourcefulbees.client.render.items.ItemModelPropertiesHandler;
+import com.dungeonderps.resourcefulbees.commands.ResourcefulBeeCommands;
 import com.dungeonderps.resourcefulbees.compat.top.TopCompat;
 import com.dungeonderps.resourcefulbees.config.BeeBuilder;
 import com.dungeonderps.resourcefulbees.config.Config;
+import com.dungeonderps.resourcefulbees.container.MechanicalCentrifugeContainer;
 import com.dungeonderps.resourcefulbees.data.RecipeBuilder;
 import com.dungeonderps.resourcefulbees.init.ModSetup;
 import com.dungeonderps.resourcefulbees.network.NetPacketHandler;
@@ -32,6 +31,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.village.PointOfInterestType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.fml.DistExecutor;
@@ -80,7 +80,7 @@ public class ResourcefulBees
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onInterModEnqueue);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::loadComplete);
 
-        MinecraftForge.EVENT_BUS.addListener(this::serverStarting);
+        MinecraftForge.EVENT_BUS.addListener(this::registerCommands);
         MinecraftForge.EVENT_BUS.addListener(this::trade);
 
         DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
@@ -173,14 +173,15 @@ public class ResourcefulBees
             InterModComms.sendTo("theoneprobe", "getTheOneProbe", TopCompat::new);
     }
 
-    private void serverStarting(FMLServerStartingEvent event) {
-        //ResourcefulBeeCommands.register(event.getCommandDispatcher()); //TODO find mapping
+    public void registerCommands(RegisterCommandsEvent event) {
+        ResourcefulBeeCommands.register(event.getDispatcher());
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {
         CentrifugeScreen.currentMonth = new SimpleDateFormat("MM").format(new Date());
         RenderingRegistry.registerEntityRenderingHandler(RegistryHandler.CUSTOM_BEE.get(), CustomBeeRenderer::new);
         ScreenManager.registerFactory(RegistryHandler.CENTRIFUGE_CONTAINER.get(), CentrifugeScreen::new);
+        ScreenManager.registerFactory(RegistryHandler.MECHANICAL_CENTRIFUGE_CONTAINER.get(), MechanicalCentrifugeScreen::new);
         ScreenManager.registerFactory(RegistryHandler.UNVALIDATED_APIARY_CONTAINER.get(), UnvalidatedApiaryScreen::new);
         ScreenManager.registerFactory(RegistryHandler.VALIDATED_APIARY_CONTAINER.get(), ValidatedApiaryScreen::new);
         ScreenManager.registerFactory(RegistryHandler.APIARY_STORAGE_CONTAINER.get(), ApiaryStorageScreen::new);

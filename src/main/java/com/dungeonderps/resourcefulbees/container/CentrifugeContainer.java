@@ -1,6 +1,7 @@
 package com.dungeonderps.resourcefulbees.container;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.tileentity.CentrifugeTileEntity;
+import com.dungeonderps.resourcefulbees.utils.CustomEnergyStorage;
 import com.dungeonderps.resourcefulbees.utils.FunctionalIntReferenceHolder;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -8,8 +9,11 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.util.IntReferenceHolder;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
 
 import javax.annotation.Nonnull;
 
@@ -51,6 +55,48 @@ public class CentrifugeContainer extends Container {
         for (int k = 0; k < 9; ++k) {
             this.addSlot(new Slot(inv, k, 8 + k * 18, 142));
         }
+        trackPower();
+    }
+
+    /**
+     * Taken from McJtys YT tutorial
+     */
+    private void trackPower() {
+        // Unfortunatelly on a dedicated server ints are actually truncated to short so we need
+        // to split our integer here (split our 32 bit integer into two 16 bit integers)
+        trackInt(new IntReferenceHolder() {
+            @Override
+            public int get() {
+                return getEnergy() & 0xffff;
+            }
+
+            @Override
+            public void set(int value) {
+                centrifugeTileEntity.getCapability(CapabilityEnergy.ENERGY).ifPresent(h -> {
+                    int energyStored = h.getEnergyStored() & 0xffff0000;
+                    ((CustomEnergyStorage)h).setEnergy(energyStored + (value & 0xffff));
+                });
+            }
+        });
+        trackInt(new IntReferenceHolder() {
+            @Override
+            public int get() {
+                return (getEnergy() >> 16) & 0xffff;
+            }
+
+            @Override
+            public void set(int value) {
+                centrifugeTileEntity.getCapability(CapabilityEnergy.ENERGY).ifPresent(h -> {
+                    int energyStored = h.getEnergyStored() & 0x0000ffff;
+                    ((CustomEnergyStorage)h).setEnergy(energyStored | (value << 16));
+                });
+            }
+        });
+    }
+
+
+    public int getEnergy(){
+        return centrifugeTileEntity.getCapability(CapabilityEnergy.ENERGY).map(IEnergyStorage::getEnergyStored).orElse(0);
     }
 
     /**
