@@ -4,7 +4,6 @@ import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.compat.jei.ingredients.EntityIngredient;
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.data.BeeData;
-import com.dungeonderps.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.dungeonderps.resourcefulbees.lib.BeeConstants;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -25,7 +24,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 import java.text.DecimalFormat;
@@ -40,17 +38,12 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
     private final IDrawable background;
     private final IDrawable icon;
     private final String localizedName;
-    private final CustomBeeEntity bee;
 
     public BeeBreedingCategory(IGuiHelper guiHelper) {
         this.background = guiHelper.drawableBuilder(GUI_BACK, 0, 0, 160, 30).addPadding(0, 0, 0, 0).build();
         this.icon = guiHelper.createDrawableIngredient(new ItemStack(RegistryHandler.GOLD_FLOWER.get()));
         this.localizedName = I18n.format("gui.resourcefulbees.jei.category.breeding");
-        World clientWorld = Minecraft.getInstance().world;
-        if (clientWorld != null)
-            bee = RegistryHandler.CUSTOM_BEE.get().create(clientWorld);
-        else
-            bee = null;    }
+    }
 
     public static List<Recipe> getBreedingRecipes(IIngredientManager ingredientManager) {
         List<Recipe> recipes = new ArrayList<>();

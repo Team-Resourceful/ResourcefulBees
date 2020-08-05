@@ -11,9 +11,7 @@ import com.dungeonderps.resourcefulbees.item.HoneycombBlockItem;
 import com.dungeonderps.resourcefulbees.item.ResourcefulHoneycomb;
 import com.dungeonderps.resourcefulbees.recipe.CentrifugeRecipe;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
-import com.google.common.collect.Lists;
 import mezz.jei.api.IModPlugin;
-import mezz.jei.api.constants.VanillaRecipeCategoryUid;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredientType;
@@ -22,7 +20,6 @@ import mezz.jei.api.registration.*;
 import mezz.jei.api.runtime.IIngredientManager;
 import mezz.jei.api.runtime.IJeiRuntime;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.inventory.CraftingScreen;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -31,7 +28,6 @@ import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
@@ -86,6 +82,7 @@ public class JEICompat implements IModPlugin {
         registration.addRecipeCategories(new BlockToFluid(helper));
         registration.addRecipeCategories(new FluidToBlock(helper));
         registration.addRecipeCategories(new BlockToBlock(helper));
+        registration.addRecipeCategories(new ApiaryCategory(helper));
     }
 
     @Nonnull
@@ -106,6 +103,13 @@ public class JEICompat implements IModPlugin {
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
         registration.addRecipeCatalyst(new ItemStack(RegistryHandler.T1_BEEHIVE_ITEM.get()), BeeHiveCategory.ID);
+        registration.addRecipeCatalyst(new ItemStack(RegistryHandler.T2_BEEHIVE_ITEM.get()), BeeHiveCategory.ID);
+        registration.addRecipeCatalyst(new ItemStack(RegistryHandler.T3_BEEHIVE_ITEM.get()), BeeHiveCategory.ID);
+        registration.addRecipeCatalyst(new ItemStack(RegistryHandler.T4_BEEHIVE_ITEM.get()), BeeHiveCategory.ID);
+        registration.addRecipeCatalyst(new ItemStack(RegistryHandler.T1_APIARY_ITEM.get()), ApiaryCategory.ID);
+        registration.addRecipeCatalyst(new ItemStack(RegistryHandler.T2_APIARY_ITEM.get()), ApiaryCategory.ID);
+        registration.addRecipeCatalyst(new ItemStack(RegistryHandler.T3_APIARY_ITEM.get()), ApiaryCategory.ID);
+        registration.addRecipeCatalyst(new ItemStack(RegistryHandler.T4_APIARY_ITEM.get()), ApiaryCategory.ID);
         registration.addRecipeCatalyst(new ItemStack(RegistryHandler.CENTRIFUGE_ITEM.get()), CentrifugeRecipeCategory.ID);
     }
 
@@ -122,6 +126,7 @@ public class JEICompat implements IModPlugin {
             registration.addRecipes(BlockToFluid.getMutationRecipes(registration.getIngredientManager()), BlockToFluid.ID);
             registration.addRecipes(FluidToBlock.getMutationRecipes(registration.getIngredientManager()), FluidToBlock.ID);
             registration.addRecipes(BlockToBlock.getMutationRecipes(registration.getIngredientManager()), BlockToBlock.ID);
+            registration.addRecipes(ApiaryCategory.getHoneycombRecipes(registration.getIngredientManager()), ApiaryCategory.ID);
         }
     }
 
