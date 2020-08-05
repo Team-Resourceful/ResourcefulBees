@@ -42,6 +42,7 @@ public class MechanicalCentrifugeTileEntity extends TileEntity implements ITicka
 
     public AutomationSensitiveItemStackHandler h = new MechanicalCentrifugeTileEntity.TileStackHandler(5, getAcceptor(), getRemover());
     private final LazyOptional<IItemHandler> lazyOptional = LazyOptional.of(() -> h);
+    public LazyOptional<IItemHandler> automationHandler = LazyOptional.of(() -> new AutomationSensitiveItemStackHandler(5, AutomationSensitiveItemStackHandler.ACCEPT_FALSE, AutomationSensitiveItemStackHandler.REMOVE_FALSE));
     public int clicks = 0;
     public CentrifugeRecipe recipe;
     public ItemStack failedMatch = ItemStack.EMPTY;
@@ -183,7 +184,7 @@ public class MechanicalCentrifugeTileEntity extends TileEntity implements ITicka
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-        if (cap.equals(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)) return lazyOptional.cast();
+        if (cap.equals(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)) return automationHandler.cast();
         return super.getCapability(cap, side);
     }
 
