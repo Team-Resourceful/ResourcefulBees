@@ -3,7 +3,6 @@ package com.dungeonderps.resourcefulbees.block;
 import com.dungeonderps.resourcefulbees.tileentity.MechanicalCentrifugeTileEntity;
 import com.dungeonderps.resourcefulbees.utils.TooltipBuilder;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalBlock;
 import net.minecraft.client.gui.screen.Screen;
@@ -22,6 +21,8 @@ import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.ITextComponent;
@@ -57,6 +58,9 @@ public class MechanicalCentrifugeBlock extends Block {
             if (player.isCrouching() && !(player instanceof FakePlayer)){
                 if (tile !=null && tile.canProcess(tile.getRecipe())) {
                     tile.clicks++;
+                    if (state.get(PROPERTY_ROTATION) == 7)
+                        world.playSound(null, pos, SoundEvents.ITEM_LODESTONE_COMPASS_LOCK, SoundCategory.BLOCKS, 0.5F, 0.1F);
+                    world.playSound(null, pos, SoundEvents.BLOCK_FENCE_GATE_CLOSE, SoundCategory.BLOCKS, 0.5F, 0.1F);
                     world.setBlockState(pos, state.with(PROPERTY_ROTATION, state.get(PROPERTY_ROTATION) == 7 ? 0 : state.get(PROPERTY_ROTATION) + 1), 3);
                 }
             }
