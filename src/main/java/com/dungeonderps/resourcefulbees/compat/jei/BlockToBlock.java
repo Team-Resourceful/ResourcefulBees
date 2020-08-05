@@ -4,13 +4,11 @@ import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.compat.jei.ingredients.EntityIngredient;
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.data.BeeData;
-import com.dungeonderps.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.dungeonderps.resourcefulbees.lib.BeeConstants;
 import com.dungeonderps.resourcefulbees.lib.MutationTypes;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.utils.BeeInfoUtils;
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -20,17 +18,12 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.runtime.IIngredientManager;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tags.ITag;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Quaternion;
-import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 
@@ -49,7 +42,6 @@ public class BlockToBlock implements IRecipeCategory<BlockToBlock.Recipe> {
     private final IDrawable info;
     private final IDrawable beeHive;
     private final String localizedName;
-    private final CustomBeeEntity bee;
 
     public BlockToBlock(IGuiHelper guiHelper) {
         this.background = guiHelper.drawableBuilder(GUI_BACK, -12, 0, 99, 75).addPadding(0, 0, 0, 0).build();
@@ -57,8 +49,6 @@ public class BlockToBlock implements IRecipeCategory<BlockToBlock.Recipe> {
         this.info = guiHelper.createDrawable(ICONS, 16, 0, 9, 9);
         this.beeHive = guiHelper.createDrawableIngredient(new ItemStack(RegistryHandler.T1_BEEHIVE_ITEM.get()));
         this.localizedName = I18n.format("gui.resourcefulbees.jei.category.block_to_block_mutation");
-        assert Minecraft.getInstance().world != null;
-        bee = RegistryHandler.CUSTOM_BEE.get().create(Minecraft.getInstance().world);
     }
 
     public static List<BlockToBlock.Recipe> getMutationRecipes(IIngredientManager ingredientManager) {

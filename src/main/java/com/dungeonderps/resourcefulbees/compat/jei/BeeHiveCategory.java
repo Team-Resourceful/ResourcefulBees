@@ -3,7 +3,6 @@ package com.dungeonderps.resourcefulbees.compat.jei;
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.compat.jei.ingredients.EntityIngredient;
 import com.dungeonderps.resourcefulbees.data.BeeData;
-import com.dungeonderps.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.dungeonderps.resourcefulbees.lib.BeeConstants;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.utils.NBTHelper;
@@ -16,14 +15,12 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.runtime.IIngredientManager;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -39,17 +36,11 @@ public class BeeHiveCategory implements IRecipeCategory<BeeHiveCategory.Recipe> 
     private final IDrawable background;
     private final IDrawable icon;
     private final String localizedName;
-    private final CustomBeeEntity bee;
 
     public BeeHiveCategory(IGuiHelper guiHelper) {
         this.background = guiHelper.drawableBuilder(GUI_BACK, 0, 0, 160, 26).addPadding(0, 0, 0, 0).build();
         this.icon = guiHelper.createDrawableIngredient(new ItemStack(RegistryHandler.T1_BEEHIVE_ITEM.get()));
         this.localizedName = I18n.format("gui.resourcefulbees.jei.category.hive");
-        World clientWorld = Minecraft.getInstance().world;
-        if (clientWorld != null)
-            bee = RegistryHandler.CUSTOM_BEE.get().create(clientWorld);
-        else
-            bee = null;
     }
 
     public static List<Recipe> getHoneycombRecipes(IIngredientManager ingredientManager) {

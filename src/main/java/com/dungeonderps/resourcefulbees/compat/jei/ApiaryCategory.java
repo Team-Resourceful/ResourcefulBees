@@ -35,17 +35,11 @@ public class ApiaryCategory implements IRecipeCategory<ApiaryCategory.Recipe> {
     private final IDrawable background;
     private final IDrawable icon;
     private final String localizedName;
-    //private final CustomBeeEntity bee;
 
     public ApiaryCategory(IGuiHelper guiHelper) {
         this.background = guiHelper.drawableBuilder(GUI_BACK, 0, 0, 160, 26).addPadding(0, 0, 0, 0).build();
         this.icon = guiHelper.createDrawableIngredient(new ItemStack(RegistryHandler.T1_APIARY_ITEM.get()));
         this.localizedName = I18n.format("gui.resourcefulbees.jei.category.apiary");
-        /*World clientWorld = Minecraft.getInstance().world;
-        if (clientWorld != null)
-            bee = RegistryHandler.CUSTOM_BEE.get().create(clientWorld);
-        else
-            bee = null;*/
     }
 
     public static List<Recipe> getHoneycombRecipes(IIngredientManager ingredientManager) {
