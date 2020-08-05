@@ -1,6 +1,6 @@
 {
   "multipart":[
-    { 
+    {
       "when": { "facing": "north" },
       "apply": { "model": "resourcefulbees:block/mechanical_centrifuge" }
     },
@@ -36,7 +36,7 @@
       "when": { "rotations": "7","facing": "north" },
       "apply": { "model": "resourcefulbees:block/mechanical_centrifuge_crank_45", "x": 270 }
     },
-    { 
+    {
       "when": { "facing": "south" },
       "apply": { "model": "resourcefulbees:block/mechanical_centrifuge", "y": 180 }
     },
@@ -72,8 +72,8 @@
       "when": { "rotations": "7", "facing": "south" },
       "apply": { "model": "resourcefulbees:block/mechanical_centrifuge_crank_45", "x": 270, "y": 180 }
     },
-    { 
-      "when": { "facing": "west", "facing": "west" },
+    {
+      "when": { "facing": "west" },
       "apply": { "model": "resourcefulbees:block/mechanical_centrifuge", "y": 270 }
     },
     { 
@@ -108,7 +108,7 @@
       "when": { "rotations": "7", "facing": "west" },
       "apply": { "model": "resourcefulbees:block/mechanical_centrifuge_crank_45", "x": 270, "y": 270 }
     },
-    { 
+    {
       "when": { "facing": "east" },
       "apply": { "model": "resourcefulbees:block/mechanical_centrifuge", "y": 90}
     },
