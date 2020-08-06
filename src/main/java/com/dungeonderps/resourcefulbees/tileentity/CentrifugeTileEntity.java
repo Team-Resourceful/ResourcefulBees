@@ -69,8 +69,8 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
                     world.setBlockState(pos,getBlockState().with(CentrifugeBlock.PROPERTY_ON,true));
                     this.totalTime = this.getTime();
                     ++this.time;
-                    energyStorage.consumeEnergy(Config.RF_TICK_CENTRIFUGE.get());
                     if (this.time == this.totalTime) {
+                        energyStorage.consumeEnergy(Config.RF_TICK_CENTRIFUGE.get() * totalTime);
                         this.time = 0;
                         this.totalTime = this.getTime();
                         this.processItem(irecipe);
