@@ -1,6 +1,7 @@
 package com.dungeonderps.resourcefulbees.entity.passive;
 
 import com.dungeonderps.resourcefulbees.data.BeeData;
+import com.dungeonderps.resourcefulbees.entity.goals.BeeAngerGoal;
 import com.dungeonderps.resourcefulbees.entity.goals.BeeBreedGoal;
 import com.dungeonderps.resourcefulbees.lib.BeeConstants;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
@@ -99,7 +100,7 @@ public class ResourcefulBee extends CustomBeeEntity {
         this.goalSelector.addGoal(7, new ResourcefulBee.FindPollinationTargetGoal2());
         this.goalSelector.addGoal(8, new BeeEntity.WanderGoal());
         this.goalSelector.addGoal(9, new SwimGoal(this));
-        this.targetSelector.addGoal(1, (new BeeEntity.AngerGoal(this)).setCallsForHelp());
+        this.targetSelector.addGoal(1, (new BeeAngerGoal(this)).setCallsForHelp());
         this.targetSelector.addGoal(2, new BeeEntity.AttackPlayerGoal(this));
     }
 
