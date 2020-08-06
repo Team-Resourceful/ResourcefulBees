@@ -7,7 +7,6 @@ import com.dungeonderps.resourcefulbees.commands.ResourcefulBeeCommands;
 import com.dungeonderps.resourcefulbees.compat.top.TopCompat;
 import com.dungeonderps.resourcefulbees.config.BeeBuilder;
 import com.dungeonderps.resourcefulbees.config.Config;
-import com.dungeonderps.resourcefulbees.container.MechanicalCentrifugeContainer;
 import com.dungeonderps.resourcefulbees.data.RecipeBuilder;
 import com.dungeonderps.resourcefulbees.init.ModSetup;
 import com.dungeonderps.resourcefulbees.network.NetPacketHandler;
@@ -45,7 +44,6 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -55,13 +53,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-//import com.dungeonderps.resourcefulbees.loot.function.BlockItemFunction;
-
-//1.15.2 Branch
-//TODO - Look into "Queen Bee"
-//TODO - Additional Easter Eggs
-
 
 @Mod("resourcefulbees")
 public class ResourcefulBees
@@ -161,7 +152,8 @@ public class ResourcefulBees
         RegistryHandler.T4_APIARY_BLOCK.get().getStateContainer().getValidStates().forEach(blockState -> pointOfInterestTypeMap.put(blockState, RegistryHandler.TIERED_BEEHIVE_POI.get()));
         PointOfInterestType.POIT_BY_BLOCKSTATE.putAll(pointOfInterestTypeMap);
 
-        ModSetup.setupDispenserCollectionBehavior();
+        if (Config.ALLOW_SHEARS.get())
+            ModSetup.setupDispenserCollectionBehavior();
 
         NetPacketHandler.init();
 
