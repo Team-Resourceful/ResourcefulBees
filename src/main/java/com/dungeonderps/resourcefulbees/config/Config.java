@@ -36,6 +36,7 @@ public class Config {
 
     public static ForgeConfigSpec.IntValue MAX_CENTRIFUGE_RF;
     public static ForgeConfigSpec.IntValue RF_TICK_CENTRIFUGE;
+    public static ForgeConfigSpec.DoubleValue PLAYER_EXHAUSTION;
 
     public static ForgeConfigSpec.IntValue APIARY_MAX_BEES;
 
@@ -67,6 +68,8 @@ public class Config {
                         .defineInRange("maxCentrifugeRf", 10000,1000,1000000);
                 RF_TICK_CENTRIFUGE = COMMON_BUILDER.comment("\nCentrifuge RF per tick.")
                         .defineInRange("centrifugeRfPerTick", 1,1,100);
+                PLAYER_EXHAUSTION = COMMON_BUILDER.comment("\nAmount of hunger the player uses per click on mechanical centrifuge.")
+                        .defineInRange("mechanicalCentrifugePlayerExhaustion", 0.1,0.0,1);
             COMMON_BUILDER.pop();
 
             COMMON_BUILDER.push("Beehive Options");
