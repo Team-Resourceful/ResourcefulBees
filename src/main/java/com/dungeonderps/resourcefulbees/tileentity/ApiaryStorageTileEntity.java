@@ -270,7 +270,7 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
     }
 
     public AutomationSensitiveItemStackHandler.IAcceptor getAcceptor() {
-        return (slot, stack, automation) -> !automation || slot == 0;
+        return (slot, stack, automation) -> !automation || (slot == 0 && stack.getItem() instanceof UpgradeItem);
     }
 
     public AutomationSensitiveItemStackHandler.IRemover getRemover() {
