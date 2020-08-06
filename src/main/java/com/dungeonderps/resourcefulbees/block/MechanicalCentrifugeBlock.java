@@ -1,5 +1,6 @@
 package com.dungeonderps.resourcefulbees.block;
 
+import com.dungeonderps.resourcefulbees.config.Config;
 import com.dungeonderps.resourcefulbees.tileentity.MechanicalCentrifugeTileEntity;
 import com.dungeonderps.resourcefulbees.utils.TooltipBuilder;
 import net.minecraft.block.Block;
@@ -55,7 +56,7 @@ public class MechanicalCentrifugeBlock extends Block {
             MechanicalCentrifugeTileEntity tile = (MechanicalCentrifugeTileEntity)world.getTileEntity(pos);
             if (player.isCrouching() && !(player instanceof FakePlayer)){
                 if (tile !=null && tile.canProcess(tile.getRecipe())) {
-                    player.addExhaustion(0.1f);
+                    player.addExhaustion(Config.PLAYER_EXHAUSTION.get().floatValue());
                     tile.clicks++;
                     if (state.get(PROPERTY_ROTATION) == 7)
                         world.playSound(null, pos, SoundEvents.ITEM_LODESTONE_COMPASS_LOCK, SoundCategory.BLOCKS, 0.5F, 0.1F);
