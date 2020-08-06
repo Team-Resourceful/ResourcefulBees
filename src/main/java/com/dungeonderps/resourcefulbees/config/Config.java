@@ -40,6 +40,8 @@ public class Config {
 
     public static ForgeConfigSpec.IntValue APIARY_MAX_BEES;
 
+    public static ForgeConfigSpec.IntValue SMOKER_DURABILITY;
+
     public static class CommonConfig {
 
         public static ForgeConfigSpec COMMON_CONFIG;
@@ -52,6 +54,8 @@ public class Config {
                         .define("generateDefaults",true);
                 ENABLE_EASTER_EGG_BEES = COMMON_BUILDER.comment("\nSet to true if you want easter egg bees to generate (WIP) [true/false]")
                         .define("enableEasterEggBees", true);
+                SMOKER_DURABILITY = COMMON_BUILDER.comment("\nSets the max durability for the smoker")
+                    .defineInRange("smokerDurability", 1000,100,5000);
             COMMON_BUILDER.pop();
 
             COMMON_BUILDER.push("Recipe Options");

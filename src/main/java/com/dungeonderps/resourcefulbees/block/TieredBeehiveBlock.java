@@ -82,12 +82,10 @@ public class TieredBeehiveBlock extends BeehiveBlock {
     @Nonnull
   public ActionResultType onBlockActivated(BlockState state, @Nonnull World world, @Nonnull BlockPos pos, PlayerEntity player, @Nonnull Hand handIn, @Nonnull BlockRayTraceResult hit) {
     ItemStack itemstack = player.getHeldItem(handIn);
-    ItemStack itemstack1 = itemstack.copy();
     int honeyLevel = state.get(HONEY_LEVEL);
     boolean angerBees = false;
-   	if (itemstack.getItem() == RegistryHandler.SMOKER.get()) {
+   	if (itemstack.getItem() == RegistryHandler.SMOKER.get() && itemstack.getDamage() < itemstack.getMaxDamage()) {
    		smokeHive(pos, world);
-   		itemstack.damageItem(1, player, player1 -> player1.sendBreakAnimation(handIn));
     }
    	else if (honeyLevel >= 5) {
       if (itemstack.getItem().isIn(ItemTags.getCollection().getOrCreate(new ResourceLocation("forge:shears")))) {

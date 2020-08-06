@@ -1,5 +1,6 @@
 package com.dungeonderps.resourcefulbees.item;
 
+import com.dungeonderps.resourcefulbees.config.Config;
 import com.dungeonderps.resourcefulbees.registry.ItemGroupResourcefulBees;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resources.I18n;
@@ -28,8 +29,10 @@ import java.util.List;
 
 public class Smoker extends Item {
 
+    private int flag = 0;
+
     public Smoker() {
-        super(new Properties().setNoRepair().maxStackSize(1).maxDamage(10).group(ItemGroupResourcefulBees.RESOURCEFUL_BEES));
+        super(new Properties().setNoRepair().maxStackSize(1).maxDamage(Config.SMOKER_DURABILITY.get()).group(ItemGroupResourcefulBees.RESOURCEFUL_BEES));
     }
 
     @Nonnull
@@ -37,6 +40,16 @@ public class Smoker extends Item {
 	{
 	    if (!world.isRemote)
 	    {
+	        int damage = player.getHeldItem(hand).getDamage();
+	        int maxDamage = player.getHeldItem(hand).getMaxDamage();
+
+	        if (flag == 1 && damage < maxDamage) {
+                player.getHeldItem(hand).damageItem(1, player, player1 -> player1.sendBreakAnimation(hand));
+                flag = 0;
+            } else {
+	            flag++;
+            }
+
 	        Vector3d vec3d = player.getLookVec();
 			double x = player.getPosX() + vec3d.x * 2;
 			double y = player.getPosY() + vec3d.y * 2;
@@ -47,6 +60,11 @@ public class Smoker extends Item {
 	    }
 		return super.onItemRightClick(world, player, hand);
 	}
+
+    @Override
+    public int getMaxDamage(ItemStack stack) {
+        return Config.SMOKER_DURABILITY.get();
+    }
 
     @Override
     @OnlyIn(Dist.CLIENT)
@@ -69,6 +87,10 @@ public class Smoker extends Item {
         if (targetIn.getEntityWorld().isRemote() || (!(targetIn instanceof BeeEntity) || !targetIn.isAlive())) {
             return ActionResultType.FAIL;
         }
+        if (player.getHeldItem(hand).getDamage() < player.getHeldItem(hand).getMaxDamage()) {
+            damageItem(player.getHeldItem(hand), 1, player, player1 -> player1.sendBreakAnimation(hand));
+        }
+
         BeeEntity target = (BeeEntity) targetIn;
         if (target.func_233678_J__()){
             target.setAngerTime(0);
