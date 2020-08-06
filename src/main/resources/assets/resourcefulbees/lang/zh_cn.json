@@ -37,7 +37,7 @@
 	"gui.resourcefulbees.apiary.export.false" : "蜜蜂导出失败！",
 	"gui.resourcefulbees.apiary.validated.true" : "养蜂场验证成功！",
 	"gui.resourcefulbees.apiary.validated.false" : "养蜂场验证失败！",
-	"gui.resourcefulbees.apiary.bee.ticks_in_hive": 蜂箱刻数",
+	"gui.resourcefulbees.apiary.bee.ticks_in_hive": "蜂箱刻数",
 	"gui.resourcefulbees.apiary.bee.ticks_left": "剩余刻数",
 	"gui.resourcefulbees.apiary.button.breed_screen": "饲养机(敬请期待！)",
 	"gui.resourcefulbees.apiary.button.main_screen": "蜜蜂导入/导出",
