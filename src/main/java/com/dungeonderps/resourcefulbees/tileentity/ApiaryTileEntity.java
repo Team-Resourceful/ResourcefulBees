@@ -501,10 +501,13 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
         }
         if (apiaryStorage == null){
             isStructureValid = false;
+            if (validatingPlayer != null) {
+                validatingPlayer.sendStatusMessage(new StringTextComponent("Missing Apiary Storage Block!"), false);
+            }
         }
 
         if (validatingPlayer != null) {
-            validatingPlayer.sendMessage(new TranslationTextComponent("gui.resourcefulbees.apiary.validated." + isStructureValid), validatingPlayer.getUniqueID());
+            validatingPlayer.sendStatusMessage(new TranslationTextComponent("gui.resourcefulbees.apiary.validated." + isStructureValid), true);
         }
 
         return isStructureValid;
@@ -559,14 +562,19 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     @Nullable
     @Override
     public Container createMenu(int i, @Nonnull PlayerInventory playerInventory, @Nonnull PlayerEntity playerEntity) {
-        if (world != null)
+        if (world != null) {
+
             if (this.isValidApiary) {
-                numPlayersUsing++;
-                return new ValidatedApiaryContainer(i, world, pos, playerInventory);
+                this.isValidApiary = validateStructure(world, (ServerPlayerEntity) playerEntity);
+                if (this.isValidApiary) {
+                    numPlayersUsing++;
+                    return new ValidatedApiaryContainer(i, world, pos, playerInventory);
+                }
             } else {
                 numPlayersUsing++;
                 return new UnvalidatedApiaryContainer(i, world, pos, playerInventory);
             }
+        }
         return null;
     }
 
