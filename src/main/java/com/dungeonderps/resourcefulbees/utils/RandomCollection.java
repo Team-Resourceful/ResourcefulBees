@@ -1,3 +1,5 @@
+package com.dungeonderps.resourcefulbees.utils;
+
 import java.util.NavigableMap;
 import java.util.Random;
 import java.util.TreeMap;
