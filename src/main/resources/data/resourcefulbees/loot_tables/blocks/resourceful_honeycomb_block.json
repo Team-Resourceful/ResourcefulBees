@@ -8,7 +8,20 @@
           "type": "minecraft:item",
           "functions": [
             {
-              "function": "resourcefulbees:blockitem"
+              "function": "minecraft:copy_nbt",
+              "source": "block_entity",
+              "ops": [
+                {
+                  "source": "Color",
+                  "target": "ResourcefulBees.Color",
+                  "op": "replace"
+                },
+                {
+                  "source": "BeeType",
+                  "target": "ResourcefulBees.BeeType",
+                  "op": "replace"
+                }
+              ]
             }
           ],
           "name": "resourcefulbees:resourceful_honeycomb_block"

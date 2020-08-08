@@ -5,11 +5,16 @@
 	"resourcefulbees.information.bee_type.unknown": "Bee Type: Unknown",
 	"resourcefulbees.information.bee_type.custom": "Bee Type: ",
 	"resourcefulbees.shift_info": "Hold SHIFT for Info",
+	"resourcefulbees.ctrl_info": "Hold CTRL for Multiblock Info",
+
+	"honeycomb.resourcefulbees": "Honeycomb",
+	"honeycomb_block.resourcefulbees": "Honeycomb Block",
 
 	"gui.resourcefulbees.jei.category.hive" : "Beehive",
 	"gui.resourcefulbees.jei.category.centrifuge": "Centrifuge",
 	"gui.resourcefulbees.jei.category.breeding" : "Bee Breeding",
 	"gui.resourcefulbees.category.centrifuge": "Centrifuge",
+	"gui.resourcefulbees.jei.category.apiary": "Apiary",
 	"gui.resourcefulbees.jei.category.fluid_to_fluid_mutation": "Fluid To Fluid Mutation",
 	"gui.resourcefulbees.jei.category.block_to_fluid_mutation": "Block To Fluid Mutation",
 	"gui.resourcefulbees.jei.category.fluid_to_block_mutation": "Fluid To Block Mutation",
@@ -32,6 +37,13 @@
 	"gui.resourcefulbees.apiary.export.false" : "Bee export was unsuccessful!",
 	"gui.resourcefulbees.apiary.validated.true" : "Apiary validation successful!",
 	"gui.resourcefulbees.apiary.validated.false" : "Apiary validation unsuccessful!",
+	"gui.resourcefulbees.apiary.bee.ticks_in_hive": "Ticks in Hive",
+	"gui.resourcefulbees.apiary.bee.ticks_left": "Ticks Left",
+	"gui.resourcefulbees.apiary.button.breed_screen": "Breeder (Coming Soon!)",
+	"gui.resourcefulbees.apiary.button.main_screen": "Bee Import/Export",
+	"gui.resourcefulbees.apiary.button.storage_screen": "Honeycomb Storage",
+	"gui.resourcefulbees.mechanical_centrifuge": "Mechanical Centrifuge",
+	"gui.resourcefulbees.jei.category.bee_pollination_flowers": "Bee Flowers",
 
 	"block.resourcefulbees.t1_beehive": "Tier 1 Beehive",
 	"block.resourcefulbees.t2_beehive": "Tier 2 Beehive",
@@ -55,6 +67,21 @@
 	"block.resourcefulbees.t3_apiary": "Tier 3 Apiary",
 	"block.resourcefulbees.t4_apiary": "Tier 4 Apiary",
 	"block.resourcefulbees.apiary_storage": "Apiary Storage",
+	"block.resourcefulbees.beehive.tooltip.max_bees": "Max Bees:",
+	"block.resourcefulbees.beehive.tooltip.max_combs": "Max Honeycombs:",
+	"block.resourcefulbees.beehive.tooltip.hive_time": "Hive Time Modification:",
+	"block.resourcefulbees.beehive.tooltip.unique_bees": "UNIQUE",
+	"block.resourcefulbees.apiary.tooltip.output_type": "Output Type:",
+	"block.resourcefulbees.apiary.tooltip.output_quantity": "Output Quantity:",
+	"block.resourcefulbees.apiary.tooltip.structure_size": "Multiblock is a 7x6x7 hollow box.",
+	"block.resourcefulbees.apiary.tooltip.requisites": "Requires Apiary Storage to validate.",
+	"block.resourcefulbees.apiary.tooltip.drops": "Retains contents when broken.",
+	"block.resourcefulbees.apiary.tooltip.tags": "Multiblock can be built using any block from the valid_apiary tag.",
+	"block.resourcefulbees.apiary.tooltip.offset": "Offset determines the location of the Apiary Block based on its facing direction.",
+	"block.resourcefulbees.apiary.tooltip.lock": "Bees are locked on import.",
+	"block.resourcefulbees.apiary.tooltip.lock_2": "Bees must be locked and selected to export.",
+	"block.resourcefulbees.mechanical_centrifuge": "Mechanical Centrifuge",
+	"block.resourcefulbees.centrifuge.tooltip.info": "Converts Honeycombs into resources.",
 
 	"item.resourcefulbees.smoker_can": "Smoker Canister",
 	"item.resourcefulbees.smoker": "Bee Smoker",
@@ -63,13 +90,14 @@
 	"item.resourcefulbees.resourceful_honeycomb": "Resourceful Honeycomb",
 	"item.resourcefulbees._honeycomb": "Resourceful Honeycomb",
 	"item.resourcefulbees.smoker.tooltip": "Right click the hive to smoke it.",
-	"item.resourcefulbees.smoker.tooltip.1": "This allows you to stop the bees from being angry at you for shearing honeycombs for 30s.",
+	"item.resourcefulbees.smoker.tooltip.1": "Bees won't get angry for 30s when shearing honeycombs.",
 	"item.resourcefulbees.bee_jar_empty": "Empty Bee Jar",
 	"item.resourcefulbees.bee_jar_filled": "Filled Bee Jar",
 	"item.resourcefulbees.iron_storage_upgrade": "Iron Storage Upgrade",
 	"item.resourcefulbees.gold_storage_upgrade": "Gold Storage Upgrade",
 	"item.resourcefulbees.diamond_storage_upgrade": "Diamond Storage Upgrade",
 	"item.resourcefulbees.emerald_storage_upgrade": "Emerald Storage Upgrade",
+	"item.resourcefulbees.crank": "Crank",
 
 	"block.resourcefulbees.gold_honeycomb_block": "Gold Honeycomb Block",
 	"block.resourcefulbees.iron_honeycomb_block": "Iron Honeycomb Block",
@@ -86,6 +114,7 @@
 	"block.resourcefulbees.skeleton_honeycomb_block": "Skeleton Honeycomb Block",
 	"block.resourcefulbees.wither_honeycomb_block": "Wither Honeycomb Block",
 	"block.resourcefulbees.zombie_honeycomb_block": "Zombie Honeycomb Block",
+	"block.resourcefulbees.netherite_honeycomb_block": "Netherite Honeycomb Block",
 
 	"item.resourcefulbees.gold_honeycomb": "Gold Honeycomb",
 	"item.resourcefulbees.iron_honeycomb": "Iron Honeycomb",
@@ -102,6 +131,7 @@
 	"item.resourcefulbees.skeleton_honeycomb": "Skeleton Honeycomb",
 	"item.resourcefulbees.wither_honeycomb": "Wither Honeycomb",
 	"item.resourcefulbees.zombie_honeycomb": "Zombie Honeycomb",
+	"item.resourcefulbees.netherite_honeycomb": "Netherite Honeycomb",
 
 	"item.resourcefulbees.gold_spawn_egg": "Gold Bee Spawn Egg",
 	"item.resourcefulbees.iron_spawn_egg": "Iron Bee Spawn Egg",
@@ -118,6 +148,7 @@
 	"item.resourcefulbees.skeleton_spawn_egg": "Skeleton Bee Spawn Egg",
 	"item.resourcefulbees.wither_spawn_egg": "Wither Bee Spawn Egg",
 	"item.resourcefulbees.zombie_spawn_egg": "Zombie Bee Spawn Egg",
+	"item.resourcefulbees.netherite_spawn_egg": "Netherite Bee Spawn Egg",
 
 	"entity.resourcefulbees.gold_bee": "Gold Bee",
 	"entity.resourcefulbees.iron_bee": "Iron Bee",
@@ -134,12 +165,8 @@
 	"entity.resourcefulbees.skeleton_bee": "Skeleton Bee",
 	"entity.resourcefulbees.wither_bee": "Wither Bee",
 	"entity.resourcefulbees.zombie_bee": "Zombie Bee",
-
+	"entity.resourcefulbees.netherite_bee": "Netherite Bee",
 
 	"entity.minecraft.villager.resourcefulbees.beekeeper": "Beekeeper",
-	"gui.resourcefulbees.apiary.bee.ticks_in_hive": "Ticks in Hive",
-	"gui.resourcefulbees.apiary.bee.ticks_left": "Ticks Left",
-	"gui.resourcefulbees.apiary.button.breed_screen": "Breeder (Coming in 1.16!)",
-	"gui.resourcefulbees.apiary.button.main_screen": "Bee Import/Export",
-	"gui.resourcefulbees.apiary.button.storage_screen": "Honeycomb Storage"
+	"block.resourcefulbees.mech_centrifuge.tooltip.info": "Hold SHIFT & right-click block to process honeycombs."
 }

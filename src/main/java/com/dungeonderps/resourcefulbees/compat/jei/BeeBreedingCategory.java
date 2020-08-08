@@ -1,6 +1,7 @@
 package com.dungeonderps.resourcefulbees.compat.jei;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
+import com.dungeonderps.resourcefulbees.compat.jei.ingredients.EntityIngredient;
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.data.BeeData;
 import com.dungeonderps.resourcefulbees.entity.passive.CustomBeeEntity;
@@ -11,6 +12,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.gui.ingredient.IGuiIngredientGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
@@ -129,71 +131,28 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
         list.add(ing);
         ingredients.setInputIngredients(list);
         ingredients.setOutput(VanillaTypes.ITEM, childSpawnEgg);
+
+        List<EntityIngredient> entitys = new ArrayList<>();
+        entitys.add(new EntityIngredient(recipe.parent1, 135.0F));
+        entitys.add(new EntityIngredient(recipe.parent2, 45.0F));
+
+        ingredients.setInputs(JEICompat.ENTITY_INGREDIENT, entitys);
+        ingredients.setOutput(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(recipe.child, 135.0F));
     }
 
     @Override
     public void setRecipe(@Nonnull IRecipeLayout iRecipeLayout, @Nonnull Recipe recipe, @Nonnull IIngredients ingredients) {
-    }
-
-    @Nonnull
-    @Override
-    public List<String> getTooltipStrings(@Nonnull Recipe recipe, double mouseX, double mouseY) {
-        double beeX = 2D;
-        double beeY = 0D;
-        double bee2X = 52D;
-        double bee2Y = 0D;
-        double bee3X = 124D;
-        double bee3Y = 0D;
-        if (mouseX >= beeX && mouseX <= beeX + 30D && mouseY >= beeY && mouseY <= beeY + 30D){
-            return Collections.singletonList(I18n.format("entity." + ResourcefulBees.MOD_ID + "." + recipe.parent1 + "_bee"));
-        }
-        if (mouseX >= bee2X && mouseX <= bee2X + 30D && mouseY >= bee2Y && mouseY <= bee2Y + 30D){
-            return Collections.singletonList(I18n.format("entity." + ResourcefulBees.MOD_ID + "." + recipe.parent2 + "_bee"));
-        }
-        if (mouseX >= bee3X && mouseX <= bee3X + 30D && mouseY >= bee3Y && mouseY <= bee3Y + 30D){
-            return Collections.singletonList(I18n.format("entity." + ResourcefulBees.MOD_ID + "." + recipe.child + "_bee"));
-        }
-        return IRecipeCategory.super.getTooltipStrings(recipe,mouseX, mouseY);
-    }
-
-    public void renderEntity(String beeType, Float rotation, Double xPos, Double yPos){
-        RenderSystem.pushMatrix();
-
-        RenderSystem.translatef(0, 0, 1050.0F);
-        RenderSystem.scalef(1.0F, 1.0F, -1.0F);
-
-        MatrixStack matrixstack = new MatrixStack();
-        matrixstack.translate(xPos, yPos, 1000.0D);
-        Quaternion quaternion = Vector3f.ZP.rotationDegrees(180.0F);
-        matrixstack.rotate(quaternion);
-
-        Minecraft mc = Minecraft.getInstance();
-        EntityRendererManager entityrenderermanager = mc.getRenderManager();
-        IRenderTypeBuffer.Impl irendertypebuffer$impl = mc.getRenderTypeBuffers().getBufferSource();
-
-        assert mc.player != null;
-        bee.ticksExisted = mc.player.ticksExisted;
-        bee.renderYawOffset = rotation;
-        bee.setBeeType(beeType);
-
-        float scaledSize = 30;
-        if (!bee.getSizeModifierFromInfo(bee.getBeeType()).equals(1.0F)) {
-            scaledSize = 30 / bee.getSizeModifierFromInfo(bee.getBeeType());
-        }
-        matrixstack.scale(scaledSize, scaledSize, 30);
-
-        entityrenderermanager.renderEntityStatic(bee, 0, 0, 0.0D, mc.getRenderPartialTicks(), 1, matrixstack, irendertypebuffer$impl, 15728880);
-
-        irendertypebuffer$impl.finish();
-
-        RenderSystem.popMatrix();
+        IGuiIngredientGroup<EntityIngredient> ingredientStacks = iRecipeLayout.getIngredientsGroup(JEICompat.ENTITY_INGREDIENT);
+        ingredientStacks.init(0, true, 5, 2);
+        ingredientStacks.init(1, true, 60, 2);
+        ingredientStacks.init(2, false, 125, 2);
+        ingredientStacks.set(0, ingredients.getInputs(JEICompat.ENTITY_INGREDIENT).get(0));
+        ingredientStacks.set(1, ingredients.getInputs(JEICompat.ENTITY_INGREDIENT).get(1));
+        ingredientStacks.set(2, ingredients.getOutputs(JEICompat.ENTITY_INGREDIENT).get(0));
     }
 
     @Override
     public void draw(Recipe recipe, double mouseX, double mouseY) {
-        renderEntity(recipe.getParent1(), 135.0F, 20D, 20D);
-        renderEntity(recipe.getParent2(), -135.0F, 70D, 20D);
-        renderEntity(recipe.getChild(), 135.0F, 140D, 20D);
         Minecraft minecraft = Minecraft.getInstance();
         FontRenderer fontRenderer = minecraft.fontRenderer;
         DecimalFormat decimalFormat = new DecimalFormat("##%");

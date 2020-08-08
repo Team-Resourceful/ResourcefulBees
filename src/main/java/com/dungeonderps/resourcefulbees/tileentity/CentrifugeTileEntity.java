@@ -242,11 +242,11 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
     }
 
     public AutomationSensitiveItemStackHandler.IAcceptor getAcceptor() {
-        return (slot, stack, automation) -> !automation || slot == 0 || slot == 1;
+        return (slot, stack, automation) -> !automation || (slot == HONEYCOMB_SLOT && !stack.getItem().equals(Items.GLASS_BOTTLE)) || (slot == BOTTLE_SLOT && stack.getItem().equals(Items.GLASS_BOTTLE));
     }
 
     public AutomationSensitiveItemStackHandler.IRemover getRemover() {
-        return (slot, automation) -> !automation || slot == 2 || slot == 3 || slot == 4;
+        return (slot, automation) -> !automation || slot == HONEY_BOTTLE || slot == OUTPUT1 || slot == OUTPUT2;
     }
 
     protected ITextComponent getDefaultName() {

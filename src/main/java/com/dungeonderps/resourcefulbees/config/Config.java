@@ -34,6 +34,17 @@ public class Config {
     public static ForgeConfigSpec.IntValue T3_APIARY_QUANTITY;
     public static ForgeConfigSpec.IntValue T4_APIARY_QUANTITY;
 
+    public static ForgeConfigSpec.IntValue APIARY_MAX_BEES;
+
+    public static ForgeConfigSpec.IntValue SMOKER_DURABILITY;
+
+
+    //CLIENT
+
+    public static ForgeConfigSpec.BooleanValue GENERATE_ENGLISH_LANG;
+    public static ForgeConfigSpec.BooleanValue SHOW_DEBUG_INFO;
+
+
     public static class CommonConfig {
 
         public static ForgeConfigSpec COMMON_CONFIG;
@@ -46,6 +57,9 @@ public class Config {
                         .define("generateDefaults",true);
                 ENABLE_EASTER_EGG_BEES = COMMON_BUILDER.comment("\nSet to true if you want easter egg bees to generate (WIP) [true/false]")
                         .define("enableEasterEggBees", true);
+                SMOKER_DURABILITY = COMMON_BUILDER.comment("\nSets the max durability for the smoker")
+                    .defineInRange("smokerDurability", 1000,100,5000);
+
             COMMON_BUILDER.pop();
 
             COMMON_BUILDER.push("Recipe Options");
@@ -84,6 +98,8 @@ public class Config {
                     .defineEnum("tierFourApiaryOutput", ApiaryOutput.BLOCK, ApiaryOutput.COMB, ApiaryOutput.BLOCK);
                 T4_APIARY_QUANTITY = COMMON_BUILDER.comment("\nTier 4 Apiary Output Quantity")
                     .defineInRange("tierFourApiaryQuantity", 2, 1, Integer.MAX_VALUE);
+                APIARY_MAX_BEES = COMMON_BUILDER.comment("\nMaximum number of UNIQUE bees allowed in the Apiary.")
+                    .defineInRange("apiaryMaxBees", 9, 1, 16);
             COMMON_BUILDER.pop();
 
             COMMON_BUILDER.push("Spawning Options");
@@ -100,6 +116,23 @@ public class Config {
                         .defineInRange("bee_nest_generation_weight", 0.3, 0.0, 1.0);
 
             COMMON_CONFIG = COMMON_BUILDER.build();
+        }
+    }
+
+    public static class ClientConfig{
+        public static ForgeConfigSpec CLIENT_CONFIG;
+
+        static {
+            ForgeConfigSpec.Builder CLIENT_BUILDER = new ForgeConfigSpec.Builder();
+
+            CLIENT_BUILDER.push("General Options");
+            GENERATE_ENGLISH_LANG = CLIENT_BUILDER.comment("\nWhen set to true an en_us.json file will be generated for the bees. [true/false] \n This file will be overwritten every time the mod loads. \n The generated names are based on the bee jsons.")
+                    .define("generateEnglishLang",false);
+            SHOW_DEBUG_INFO = CLIENT_BUILDER.comment("\nWhen set to true will display some debug info in console. [true/false]")
+                    .define("showDebugInfo",false);
+            CLIENT_BUILDER.pop();
+
+            CLIENT_CONFIG = CLIENT_BUILDER.build();
         }
     }
 }

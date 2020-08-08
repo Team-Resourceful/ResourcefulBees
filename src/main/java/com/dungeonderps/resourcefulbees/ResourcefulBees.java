@@ -11,7 +11,6 @@ import com.dungeonderps.resourcefulbees.config.BeeBuilder;
 import com.dungeonderps.resourcefulbees.config.Config;
 import com.dungeonderps.resourcefulbees.data.RecipeBuilder;
 import com.dungeonderps.resourcefulbees.init.ModSetup;
-import com.dungeonderps.resourcefulbees.loot.function.BlockItemFunction;
 import com.dungeonderps.resourcefulbees.network.NetPacketHandler;
 import com.dungeonderps.resourcefulbees.registry.ColorHandler;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
@@ -32,7 +31,6 @@ import net.minecraft.tileentity.BannerPattern;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.village.PointOfInterestType;
-import net.minecraft.world.storage.loot.functions.LootFunctionManager;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.village.VillagerTradesEvent;
@@ -77,6 +75,7 @@ public class ResourcefulBees
         RegistryHandler.init();
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.CommonConfig.COMMON_CONFIG, "resourcefulbees/common.toml");
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Config.ClientConfig.CLIENT_CONFIG, "resourcefulbees/client.toml");
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener(EventPriority.LOW, this::setup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onInterModEnqueue);
@@ -166,8 +165,6 @@ public class ResourcefulBees
         RegistryHandler.T1_APIARY_BLOCK.get().getStateContainer().getValidStates().forEach(blockState -> pointOfInterestTypeMap.put(blockState, RegistryHandler.TIERED_BEEHIVE_POI.get()));
         PointOfInterestType.POIT_BY_BLOCKSTATE.putAll(pointOfInterestTypeMap);
 
-        LootFunctionManager.registerFunction(new BlockItemFunction.Serializer());
-
         ModSetup.setupDispenserCollectionBehavior();
 
         NetPacketHandler.init();
@@ -195,5 +192,6 @@ public class ResourcefulBees
 
     private void loadComplete(FMLLoadCompleteEvent event) {
         BeeBuilder.setupBees();
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> BeeBuilder::GenerateEnglishLang);
     }
 }

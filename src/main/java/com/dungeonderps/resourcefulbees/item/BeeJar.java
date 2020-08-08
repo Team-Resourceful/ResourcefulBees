@@ -72,7 +72,7 @@ public class BeeJar extends Item {
                 BlockPos blockPos = pos.offset(context.getFace());
                 entity.setPositionAndRotation(blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5, 0, 0);
                 worldIn.addEntity(entity);
-                stack.setTag(new CompoundNBT());
+                stack.setTag(null);
                 return ActionResultType.SUCCESS;
             }
         }

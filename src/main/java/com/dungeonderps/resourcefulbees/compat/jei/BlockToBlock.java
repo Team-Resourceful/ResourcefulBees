@@ -1,6 +1,7 @@
 package com.dungeonderps.resourcefulbees.compat.jei;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
+import com.dungeonderps.resourcefulbees.compat.jei.ingredients.EntityIngredient;
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.data.BeeData;
 import com.dungeonderps.resourcefulbees.entity.passive.CustomBeeEntity;
@@ -13,6 +14,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.gui.ingredient.IGuiIngredientGroup;
 import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
@@ -116,7 +118,7 @@ public class BlockToBlock implements IRecipeCategory<BlockToBlock.Recipe> {
     }
 
     @Override
-    public void setIngredients(BlockToBlock.Recipe recipe, IIngredients ingredients) {
+    public void setIngredients(Recipe recipe, IIngredients ingredients) {
         if (recipe.isAcceptsAny()) {
             if (MutationTypes.BLOCK_TO_BLOCK.equals(recipe.mutationType)) {
                 List<Ingredient> list = new ArrayList<>();
@@ -132,19 +134,15 @@ public class BlockToBlock implements IRecipeCategory<BlockToBlock.Recipe> {
                 ingredients.setOutput(VanillaTypes.ITEM, recipe.itemOut);
             }
         }
+        ingredients.setInput(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(recipe.beeType, 135.0F));
     }
 
     @Override
     public List<String> getTooltipStrings(Recipe recipe, double mouseX, double mouseY) {
         double infoX = 63D;
         double infoY = 8D;
-        double beeX = 10D;
-        double beeY = 6D;
         if (mouseX >= infoX && mouseX <= infoX + 9D && mouseY >= infoY && mouseY <= infoY + 9D){
             return Collections.singletonList(I18n.format("gui." + ResourcefulBees.MOD_ID + ".jei.category.mutation.info"));
-        }
-        if (mouseX >= beeX && mouseX <= beeX + 30D && mouseY >= beeY && mouseY <= beeY + 30D){
-            return Collections.singletonList(I18n.format("entity." + ResourcefulBees.MOD_ID + "." + recipe.beeType + "_bee"));
         }
         return IRecipeCategory.super.getTooltipStrings(recipe,mouseX, mouseY);
     }
@@ -157,47 +155,17 @@ public class BlockToBlock implements IRecipeCategory<BlockToBlock.Recipe> {
             itemStacks.init(1, true, 15, 57);
             itemStacks.set(0, ingredients.getOutputs(VanillaTypes.ITEM).get(0));
             itemStacks.set(1, ingredients.getInputs(VanillaTypes.ITEM).get(0));
+
+            IGuiIngredientGroup<EntityIngredient> ingredientStacks = iRecipeLayout.getIngredientsGroup(JEICompat.ENTITY_INGREDIENT);
+            ingredientStacks.init(0, true, 16, 10);
+            ingredientStacks.set(0, ingredients.getInputs(JEICompat.ENTITY_INGREDIENT).get(0));
         }
-    }
-
-    public void renderEntity(String beeType, Float rotation, Double xPos, Double yPos){
-        RenderSystem.pushMatrix();
-
-        RenderSystem.translatef(0, 0, 1050.0F);
-        RenderSystem.scalef(1.0F, 1.0F, -1.0F);
-
-        MatrixStack matrixstack = new MatrixStack();
-        matrixstack.translate(xPos, yPos, 1000.0D);
-        Quaternion quaternion = Vector3f.ZP.rotationDegrees(180.0F);
-        matrixstack.rotate(quaternion);
-
-        Minecraft mc = Minecraft.getInstance();
-        EntityRendererManager entityrenderermanager = mc.getRenderManager();
-        IRenderTypeBuffer.Impl irendertypebuffer$impl = mc.getRenderTypeBuffers().getBufferSource();
-
-        assert mc.player != null;
-        bee.ticksExisted = mc.player.ticksExisted;
-        bee.renderYawOffset = rotation;
-        bee.setBeeType(beeType);
-
-        float scaledSize = 30;
-        if (!bee.getSizeModifierFromInfo(bee.getBeeType()).equals(1.0F)) {
-            scaledSize = 30 / bee.getSizeModifierFromInfo(bee.getBeeType());
-        }
-        matrixstack.scale(scaledSize, scaledSize, 30);
-
-        entityrenderermanager.renderEntityStatic(bee, 0, 0, 0.0D, mc.getRenderPartialTicks(), 1, matrixstack, irendertypebuffer$impl, 15728880);
-
-        irendertypebuffer$impl.finish();
-
-        RenderSystem.popMatrix();
     }
 
     @Override
     public void draw(BlockToBlock.Recipe recipe, double mouseX, double mouseY) {
         this.beeHive.draw(65, 10);
         this.info.draw(63, 8);
-        renderEntity(recipe.beeType, 135.0F, 25D, 30D);
     }
 
     public static class Recipe {

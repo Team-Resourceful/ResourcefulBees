@@ -1,8 +1,11 @@
 package com.dungeonderps.resourcefulbees.block;
 
 import com.dungeonderps.resourcefulbees.tileentity.CentrifugeTileEntity;
+import com.dungeonderps.resourcefulbees.utils.TooltipBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -16,6 +19,8 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -23,6 +28,7 @@ import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.stream.IntStream;
 
 public class CentrifugeBlock extends Block {
@@ -87,6 +93,14 @@ public class CentrifugeBlock extends Block {
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(PROPERTY_ON);
+    }
+
+    @Override
+    public void addInformation(@Nonnull ItemStack stack, @Nullable IBlockReader worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
+        tooltip.addAll(new TooltipBuilder()
+                .addTip(I18n.format("block.resourcefulbees.centrifuge.tooltip.info"), TextFormatting.GOLD)
+                .build());
+        super.addInformation(stack, worldIn, tooltip, flagIn);
     }
 }
 

@@ -2,6 +2,7 @@ package com.dungeonderps.resourcefulbees.tileentity;
 
 
 import com.dungeonderps.resourcefulbees.block.ApiaryBlock;
+import com.dungeonderps.resourcefulbees.config.Config;
 import com.dungeonderps.resourcefulbees.container.AutomationSensitiveItemStackHandler;
 import com.dungeonderps.resourcefulbees.container.UnvalidatedApiaryContainer;
 import com.dungeonderps.resourcefulbees.container.ValidatedApiaryContainer;
@@ -60,7 +61,6 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     public final LinkedHashMap<String, ApiaryBee> BEES = new LinkedHashMap<>();
     public final List<BlockPos> STRUCTURE_BLOCKS = new ArrayList<>();
     protected int TIER;
-    private final Tag<Block> validApiaryTag;
     public Stack<String> honeycombs = new Stack<>();
     //public ApiaryStorageTileEntity apiaryStorage;
     private boolean isValidApiary;
@@ -77,7 +77,6 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
 
     public ApiaryTileEntity() {
         super(RegistryHandler.APIARY_TILE_ENTITY.get());
-        validApiaryTag = BeeInfoUtils.getBlockTag("resourcefulbees:valid_apiary");
     }
 
     public static int calculatePlayersUsingSync(World world, ApiaryTileEntity apiaryTileEntity, int ticksSinceSync, int posX, int posY, int posZ, int numPlayersUsing) {
@@ -117,7 +116,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     }
 
     public int getMaxBees() {
-        return 9;
+        return Config.APIARY_MAX_BEES.get();
     }
 
     public int getBeeCount() {
@@ -481,7 +480,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
         ApiaryStorageTileEntity apiaryStorage = getApiaryStorage();
         for (BlockPos pos : STRUCTURE_BLOCKS) {
             Block block = worldIn.getBlockState(pos).getBlock();
-            if (block.isIn(validApiaryTag)) {
+            if (block.isIn(BeeInfoUtils.getValidApiaryTag())) {
                 TileEntity tile = worldIn.getTileEntity(pos);
                 if (tile instanceof ApiaryStorageTileEntity) {
                     ApiaryStorageTileEntity apiaryStorageTile = (ApiaryStorageTileEntity) tile;
@@ -500,6 +499,9 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
         }
         if (apiaryStorage == null){
             isStructureValid = false;
+            if (validatingPlayer != null) {
+                validatingPlayer.sendStatusMessage(new StringTextComponent("Missing Apiary Storage Block!"), false);
+            }
         }
 
         if (validatingPlayer != null) {
@@ -558,14 +560,18 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     @Nullable
     @Override
     public Container createMenu(int i, @Nonnull PlayerInventory playerInventory, @Nonnull PlayerEntity playerEntity) {
-        if (world != null)
+        if (world != null) {
             if (this.isValidApiary) {
-                numPlayersUsing++;
-                return new ValidatedApiaryContainer(i, world, pos, playerInventory);
+                this.isValidApiary = validateStructure(world, (ServerPlayerEntity) playerEntity);
+                if (this.isValidApiary) {
+                    numPlayersUsing++;
+                    return new ValidatedApiaryContainer(i, world, pos, playerInventory);
+                }
             } else {
                 numPlayersUsing++;
                 return new UnvalidatedApiaryContainer(i, world, pos, playerInventory);
             }
+        }
         return null;
     }
 

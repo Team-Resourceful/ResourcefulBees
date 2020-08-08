@@ -32,6 +32,8 @@
     "#forge:sandstone",
     "#forge:stone",
     "#forge:storage_blocks",
-    "#forge:fence_gates"
+    "#forge:fence_gates",
+    "minecraft:bricks",
+    "minecraft:farmland"
   ]
 }

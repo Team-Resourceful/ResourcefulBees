@@ -3,6 +3,7 @@ package com.dungeonderps.resourcefulbees.client.gui.screen;
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.client.gui.widget.TabImageButton;
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
+import com.dungeonderps.resourcefulbees.config.Config;
 import com.dungeonderps.resourcefulbees.container.ValidatedApiaryContainer;
 import com.dungeonderps.resourcefulbees.lib.ApiaryTabs;
 import com.dungeonderps.resourcefulbees.lib.BeeConstants;
@@ -137,7 +138,7 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
                 this.container.selectBee(0);
             }
             exportButton.active = this.container.getSelectedBee() != -1;
-            importButton.active = apiaryTileEntity.getBeeCount() < 9;
+            importButton.active = apiaryTileEntity.getBeeCount() < Config.APIARY_MAX_BEES.get();
 
             this.container.beeList = Arrays.copyOf(apiaryTileEntity.BEES.keySet().toArray(), apiaryTileEntity.getBeeCount(), String[].class);
             this.minecraft.getTextureManager().bindTexture(VALIDATED_TEXTURE);
@@ -163,7 +164,7 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        String s = String.format("(%1$s/9) Bees", apiaryTileEntity.getBeeCount());
+        String s = String.format("(%1$s/%2$s) Bees", apiaryTileEntity.getBeeCount(), Config.APIARY_MAX_BEES.get());
         this.font.drawString(s, 4, 7, 0x404040);
 
         for (Widget widget : this.buttons) {
