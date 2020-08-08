@@ -140,7 +140,7 @@ public class RegistryHandler {
 	//region**************TILE ENTITIES*************************************
 
 	public static final RegistryObject<TileEntityType<?>> TIERED_BEEHIVE_TILE_ENTITY = TILE_ENTITY_TYPES.register("tiered_beehive", () -> TileEntityType.Builder
-			.create(TieredBeehiveTileEntity::new, T1_BEEHIVE.get(), T2_BEEHIVE.get(), T3_BEEHIVE.get(), T4_BEEHIVE.get(), ACACIA_BEE_NEST.get(), GRASS_BEE_NEST.get(), JUNGLE_BEE_NEST.get(), NETHER_BEE_NEST.get(), PRISMARINE_BEE_NEST.get(), PURPUR_BEE_NEST.get(), WITHER_BEE_NEST.get())
+			.create(TieredBeehiveTileEntity::new, T1_BEEHIVE.get(), T2_BEEHIVE.get(), T3_BEEHIVE.get(), T4_BEEHIVE.get(), ACACIA_BEE_NEST.get(), GRASS_BEE_NEST.get(), JUNGLE_BEE_NEST.get(), NETHER_BEE_NEST.get(), PRISMARINE_BEE_NEST.get(), PURPUR_BEE_NEST.get(), WITHER_BEE_NEST.get(), BEE_NEST.get())
 			.build(null));
 
 	public static final RegistryObject<TileEntityType<?>> HONEYCOMB_BLOCK_ENTITY = TILE_ENTITY_TYPES.register("resourceful_honeycomb_block", () -> TileEntityType.Builder
