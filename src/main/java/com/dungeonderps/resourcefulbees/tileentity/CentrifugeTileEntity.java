@@ -16,6 +16,8 @@ import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
@@ -46,7 +48,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
     public static final int OUTPUT2 = 4;
 
     public AutomationSensitiveItemStackHandler h = new TileStackHandler(5);
-    private final CustomEnergyStorage energyStorage = createEnergy();
+    public final CustomEnergyStorage energyStorage = createEnergy();
     private final LazyOptional<IItemHandler> lazyOptional = LazyOptional.of(() -> h);
     private final LazyOptional<IEnergyStorage> energy = LazyOptional.of(() -> energyStorage);
     public int time = 0;
@@ -186,6 +188,20 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
         totalTime = tag.getInt("totalTime");
         energyStorage.deserializeNBT(tag.getCompound("energy"));
         super.read(state, tag);
+    }
+
+    @Nullable
+    @Override
+    public SUpdateTileEntityPacket getUpdatePacket() {
+        CompoundNBT nbt = new CompoundNBT();
+        nbt.put("power",energyStorage.serializeNBT());
+        return new SUpdateTileEntityPacket(pos,0,nbt);
+    }
+
+    @Override
+    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
+        CompoundNBT nbt = pkt.getNbtCompound();
+        energyStorage.deserializeNBT(nbt.getCompound("power"));
     }
 
     @Nonnull

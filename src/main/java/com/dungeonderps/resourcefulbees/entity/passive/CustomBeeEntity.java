@@ -63,7 +63,7 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
 
     public String getBeeType() {
         BeeData info = getBeeInfo(this.dataManager.get(BEE_TYPE));
-        if (info.getName().equals(BeeConstants.DEFAULT_BEE_TYPE)) {
+        if (info.getName().equals(BeeConstants.DEFAULT_BEE_TYPE) || info.getName().isEmpty()) {
             markRemove();
         }
         return this.dataManager.get(BEE_TYPE);
@@ -114,7 +114,7 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
     @Override
     public void livingTick() {
         if (remove) {
-            if (!world.isRemote() && getBeeType().equals(BeeConstants.DEFAULT_BEE_TYPE)) {
+            if (!world.isRemote() && (getBeeType().equals(BeeConstants.DEFAULT_BEE_TYPE) || getBeeType().isEmpty())) {
                 LOGGER.info("Remove Bee");
                 remove = false;
                 this.dead = true;

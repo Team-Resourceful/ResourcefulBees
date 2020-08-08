@@ -36,7 +36,7 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
             this.blit(matrix, i, j, 0, 0, this.xSize, this.ySize);
             int scaledprogress = 74 * this.container.centrifugeTileEntity.time / Math.max(this.container.centrifugeTileEntity.totalTime,1);
             this.blit(matrix, i + 51, j + 28, 176, 0, scaledprogress, 28);
-            int scaledRF = 52 * this.container.getEnergy() / Math.max(Config.MAX_CENTRIFUGE_RF.get(),1);
+            int scaledRF = 52 * this.container.centrifugeTileEntity.energyStorage.getEnergyStored() / Math.max(Config.MAX_CENTRIFUGE_RF.get(),1);
             this.blit(matrix, i + 8, j + 8 + (52-scaledRF), 176, 28 + (52-scaledRF), 11, scaledRF);
         }
     }
@@ -48,8 +48,8 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
         this.func_230459_a_(matrix, mouseX, mouseY);
         DecimalFormat decimalFormat = new DecimalFormat("##0.0");
         if (mouseX >= this.guiLeft + 7 && mouseX <= this.guiLeft + 20 && mouseY >= this.guiTop + 7 && mouseY <= this.guiTop + 59){
-            if (Screen.hasShiftDown() || this.container.getEnergy() < 500) this.renderTooltip(matrix, new StringTextComponent(this.container.getEnergy() + " RF"), mouseX, mouseY);
-            else this.renderTooltip(matrix, new StringTextComponent(decimalFormat.format((double)this.container.getEnergy() / 1000) + " kRF"), mouseX, mouseY);
+            if (Screen.hasShiftDown() || this.container.centrifugeTileEntity.energyStorage.getEnergyStored() < 500) this.renderTooltip(matrix, new StringTextComponent(this.container.centrifugeTileEntity.energyStorage.getEnergyStored() + " RF"), mouseX, mouseY);
+            else this.renderTooltip(matrix, new StringTextComponent(decimalFormat.format((double)this.container.centrifugeTileEntity.energyStorage.getEnergyStored() / 1000) + " kRF"), mouseX, mouseY);
         }
     }
 

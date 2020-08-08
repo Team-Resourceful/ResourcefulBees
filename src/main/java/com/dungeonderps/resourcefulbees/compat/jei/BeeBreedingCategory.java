@@ -138,27 +138,6 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
         ingredientStacks.set(2, ingredients.getOutputs(JEICompat.ENTITY_INGREDIENT).get(0));
     }
 
-    @Nonnull
-    @Override
-    public List<ITextComponent> getTooltipStrings(@Nonnull Recipe recipe, double mouseX, double mouseY) {
-        double beeX = 2D;
-        double beeY = 0D;
-        double bee2X = 52D;
-        double bee2Y = 0D;
-        double bee3X = 124D;
-        double bee3Y = 0D;
-        if (mouseX >= beeX && mouseX <= beeX + 30D && mouseY >= beeY && mouseY <= beeY + 30D){
-            return Collections.singletonList(new StringTextComponent(I18n.format("entity." + ResourcefulBees.MOD_ID + "." + recipe.parent1 + "_bee")));
-        }
-        if (mouseX >= bee2X && mouseX <= bee2X + 30D && mouseY >= bee2Y && mouseY <= bee2Y + 30D){
-            return Collections.singletonList(new StringTextComponent(I18n.format("entity." + ResourcefulBees.MOD_ID + "." + recipe.parent2 + "_bee")));
-        }
-        if (mouseX >= bee3X && mouseX <= bee3X + 30D && mouseY >= bee3Y && mouseY <= bee3Y + 30D){
-            return Collections.singletonList(new StringTextComponent(I18n.format("entity." + ResourcefulBees.MOD_ID + "." + recipe.child + "_bee")));
-        }
-        return IRecipeCategory.super.getTooltipStrings(recipe,mouseX, mouseY);
-    }
-
     @Override
     public void draw(Recipe recipe, @Nonnull MatrixStack matrix, double mouseX, double mouseY) {
         Minecraft minecraft = Minecraft.getInstance();

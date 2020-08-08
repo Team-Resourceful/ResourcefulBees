@@ -1,6 +1,7 @@
 package com.dungeonderps.resourcefulbees.container;
+
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
-import com.dungeonderps.resourcefulbees.tileentity.CentrifugeTileEntity;
+import com.dungeonderps.resourcefulbees.tileentity.HoneyGeneratorTileEntity;
 import com.dungeonderps.resourcefulbees.utils.CustomEnergyStorage;
 import com.dungeonderps.resourcefulbees.utils.FunctionalIntReferenceHolder;
 import net.minecraft.entity.player.PlayerEntity;
@@ -17,34 +18,29 @@ import net.minecraftforge.energy.IEnergyStorage;
 
 import javax.annotation.Nonnull;
 
-public class CentrifugeContainer extends Container {
+public class HoneyGeneratorContainer extends Container {
 
-    public CentrifugeTileEntity centrifugeTileEntity;
+    public HoneyGeneratorTileEntity honeyGeneratorTileEntity;
     public PlayerEntity player;
 
-    public CentrifugeContainer(int id, World world, BlockPos pos, PlayerInventory inv) {
-        super(RegistryHandler.CENTRIFUGE_CONTAINER.get(), id);
+    public HoneyGeneratorContainer(int id, World world, BlockPos pos, PlayerInventory inv) {
+        super(RegistryHandler.HONEY_GENERATOR_CONTAINER.get(), id);
 
         this.player = inv.player;
 
-        centrifugeTileEntity = (CentrifugeTileEntity) world.getTileEntity(pos);
+        honeyGeneratorTileEntity = (HoneyGeneratorTileEntity) world.getTileEntity(pos);
 
-        this.trackInt(new FunctionalIntReferenceHolder(() -> centrifugeTileEntity.time, v -> centrifugeTileEntity.time = v));
-        this.trackInt(new FunctionalIntReferenceHolder(() -> centrifugeTileEntity.totalTime, v -> centrifugeTileEntity.totalTime = v));
+        this.trackInt(new FunctionalIntReferenceHolder(() -> honeyGeneratorTileEntity.time, v -> honeyGeneratorTileEntity.time = v));
+        this.trackInt(new FunctionalIntReferenceHolder(() -> honeyGeneratorTileEntity.totalTime, v -> honeyGeneratorTileEntity.totalTime = v));
+        this.trackInt(new FunctionalIntReferenceHolder(() -> honeyGeneratorTileEntity.energyTime, v -> honeyGeneratorTileEntity.energyTime = v));
+        this.trackInt(new FunctionalIntReferenceHolder(() -> honeyGeneratorTileEntity.energyTotalTime, v -> honeyGeneratorTileEntity.energyTotalTime = v));
 
-        this.addSlot(new SlotItemHandlerUnconditioned(centrifugeTileEntity.h, CentrifugeTileEntity.HONEYCOMB_SLOT, 30, 20){
+        this.addSlot(new SlotItemHandlerUnconditioned(honeyGeneratorTileEntity.h, HoneyGeneratorTileEntity.HONEY_BOTTLE_INPUT, 36, 20){
             public boolean isItemValid(ItemStack stack){
-                return !stack.getItem().equals(Items.GLASS_BOTTLE);
+                return stack.getItem().equals(Items.HONEY_BOTTLE);
             }
         });
-        this.addSlot(new SlotItemHandlerUnconditioned(centrifugeTileEntity.h, CentrifugeTileEntity.BOTTLE_SLOT, 30, 38){
-            public boolean isItemValid(ItemStack stack){
-                return stack.getItem().equals(Items.GLASS_BOTTLE);
-            }
-        });
-        this.addSlot(new OutputSlot(centrifugeTileEntity.h, CentrifugeTileEntity.HONEY_BOTTLE, 80, 59));
-        this.addSlot(new OutputSlot(centrifugeTileEntity.h, CentrifugeTileEntity.OUTPUT1, 129, 20));
-        this.addSlot(new OutputSlot(centrifugeTileEntity.h, CentrifugeTileEntity.OUTPUT2, 129, 38));
+        this.addSlot(new OutputSlot(honeyGeneratorTileEntity.h, HoneyGeneratorTileEntity.BOTTLE_OUPUT, 36, 58));
 
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
@@ -56,6 +52,7 @@ public class CentrifugeContainer extends Container {
             this.addSlot(new Slot(inv, k, 8 + k * 18, 142));
         }
     }
+
 
     /**
      * Determines whether supplied player can use this container
@@ -75,11 +72,12 @@ public class CentrifugeContainer extends Container {
         if (slot != null && slot.getHasStack()) {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
-            if (index <= 4) {
-                if (!this.mergeItemStack(itemstack1, 5, inventorySlots.size(), true)) {
+
+            if (index <= 1) {
+                if (!this.mergeItemStack(itemstack1, 2, inventorySlots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.mergeItemStack(itemstack1, 0, 2, false)) {
+            } else if (!this.mergeItemStack(itemstack1, 0, 1, false)) {
                 return ItemStack.EMPTY;
             }
 

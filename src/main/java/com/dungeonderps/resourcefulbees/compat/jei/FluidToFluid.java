@@ -142,9 +142,6 @@ public class FluidToFluid implements IRecipeCategory<FluidToFluid.Recipe> {
         if (mouseX >= infoX && mouseX <= infoX + 9D && mouseY >= infoY && mouseY <= infoY + 9D){
             return Collections.singletonList(new StringTextComponent(I18n.format("gui." + ResourcefulBees.MOD_ID + ".jei.category.mutation.info")));
         }
-        if (mouseX >= beeX && mouseX <= beeX + 30D && mouseY >= beeY && mouseY <= beeY + 30D){
-            return Collections.singletonList(new StringTextComponent(I18n.format("entity." + ResourcefulBees.MOD_ID + "." + recipe.beeType + "_bee")));
-        }
         return IRecipeCategory.super.getTooltipStrings(recipe,mouseX, mouseY);
     }
 
