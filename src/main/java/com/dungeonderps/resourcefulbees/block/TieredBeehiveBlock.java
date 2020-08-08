@@ -79,7 +79,7 @@ public class TieredBeehiveBlock extends BeehiveBlock {
 	    return false;
   }
 
-    @Nonnull
+  @Nonnull
   public ActionResultType onBlockActivated(BlockState state, @Nonnull World world, @Nonnull BlockPos pos, PlayerEntity player, @Nonnull Hand handIn, @Nonnull BlockRayTraceResult hit) {
     ItemStack itemstack = player.getHeldItem(handIn);
     int honeyLevel = state.get(HONEY_LEVEL);
@@ -87,7 +87,7 @@ public class TieredBeehiveBlock extends BeehiveBlock {
    	if (itemstack.getItem() == RegistryHandler.SMOKER.get() && itemstack.getDamage() < itemstack.getMaxDamage()) {
    		smokeHive(pos, world);
     }
-   	else if (honeyLevel >= 5) {
+   	else if (honeyLevel >= 5 && Config.ALLOW_SHEARS.get()) {
       if (itemstack.getItem().isIn(ItemTags.getCollection().getOrCreate(new ResourceLocation("forge:shears")))) {
         world.playSound(player, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.BLOCK_BEEHIVE_SHEAR, SoundCategory.NEUTRAL, 1.0F, 1.0F);
         dropResourceHoneycomb(world, pos);
@@ -113,7 +113,7 @@ public class TieredBeehiveBlock extends BeehiveBlock {
     }
   }
 
-  private void angerNearbyBees(World world, BlockPos pos) {
+  public void angerNearbyBees(World world, BlockPos pos) {
     List<BeeEntity> beeEntityList = world.getEntitiesWithinAABB(BeeEntity.class, (new AxisAlignedBB(pos)).grow(8.0D, 6.0D, 8.0D));
     if (!beeEntityList.isEmpty()) {
       List<PlayerEntity> playerEntityList = world.getEntitiesWithinAABB(PlayerEntity.class, (new AxisAlignedBB(pos)).grow(8.0D, 6.0D, 8.0D));
@@ -127,7 +127,7 @@ public class TieredBeehiveBlock extends BeehiveBlock {
     }
   }
 
-  private boolean hasBees(World world, BlockPos pos) {
+  public boolean hasBees(World world, BlockPos pos) {
     TileEntity tileEntity = world.getTileEntity(pos);
     if (tileEntity instanceof BeehiveTileEntity) {
       BeehiveTileEntity beehiveTileEntity = (BeehiveTileEntity) tileEntity;

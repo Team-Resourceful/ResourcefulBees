@@ -54,13 +54,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-//import com.dungeonderps.resourcefulbees.loot.function.BlockItemFunction;
-
-//1.15.2 Branch
-//TODO - Look into "Queen Bee"
-//TODO - Additional Easter Eggs
-
-
 @Mod("resourcefulbees")
 public class ResourcefulBees
 {
@@ -160,7 +153,8 @@ public class ResourcefulBees
         RegistryHandler.T4_APIARY_BLOCK.get().getStateContainer().getValidStates().forEach(blockState -> pointOfInterestTypeMap.put(blockState, RegistryHandler.TIERED_BEEHIVE_POI.get()));
         PointOfInterestType.POIT_BY_BLOCKSTATE.putAll(pointOfInterestTypeMap);
 
-        ModSetup.setupDispenserCollectionBehavior();
+        if (Config.ALLOW_SHEARS.get())
+            ModSetup.setupDispenserCollectionBehavior();
 
         NetPacketHandler.init();
 
