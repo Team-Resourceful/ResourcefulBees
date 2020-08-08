@@ -26,7 +26,7 @@ public class ResourcefulHoneycomb extends Item {
     public static int getColor(ItemStack stack, int tintIndex){
 
         CompoundNBT honeycombNBT = stack.getChildTag(BeeConstants.NBT_ROOT);
-        return honeycombNBT != null && !honeycombNBT.getString(BeeConstants.NBT_COLOR).isEmpty() ? Color.parseInt(honeycombNBT.getString(BeeConstants.NBT_COLOR)) : BeeConstants.DEFAULT_COLOR;
+        return honeycombNBT != null && !honeycombNBT.getString(BeeConstants.NBT_COLOR).isEmpty() ? !Integer.decode(honeycombNBT.getString(BeeConstants.NBT_COLOR)).equals(-1) ? Color.parseInt(honeycombNBT.getString(BeeConstants.NBT_COLOR)) : BeeConstants.DEFAULT_COLOR  : BeeConstants.DEFAULT_COLOR;
     }
 
     @Nonnull

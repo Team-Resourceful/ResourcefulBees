@@ -41,7 +41,7 @@ public class HoneycombBlock extends Block {
     public static int getItemColor(ItemStack stack, int tintIndex){
         CompoundNBT honeycombNBT = stack.getChildTag(BeeConstants.NBT_ROOT);
         return (honeycombNBT != null && honeycombNBT.contains(BeeConstants.NBT_COLOR) && !honeycombNBT.getString(BeeConstants.NBT_COLOR).isEmpty())
-                ? Color.parseInt(honeycombNBT.getString(BeeConstants.NBT_COLOR)) : BeeConstants.DEFAULT_COLOR;
+                ? !Integer.decode(honeycombNBT.getString(BeeConstants.NBT_COLOR)).equals(-1) ? Color.parseInt(honeycombNBT.getString(BeeConstants.NBT_COLOR)) : BeeConstants.DEFAULT_COLOR : BeeConstants.DEFAULT_COLOR;
     }
 
     @Override
