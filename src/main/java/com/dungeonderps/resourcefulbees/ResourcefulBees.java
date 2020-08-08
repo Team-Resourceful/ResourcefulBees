@@ -67,6 +67,7 @@ public class ResourcefulBees
         RegistryHandler.init();
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.CommonConfig.COMMON_CONFIG, "resourcefulbees/common.toml");
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Config.ClientConfig.CLIENT_CONFIG, "resourcefulbees/client.toml");
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener(EventPriority.LOW, this::setup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onInterModEnqueue);
@@ -75,7 +76,7 @@ public class ResourcefulBees
         MinecraftForge.EVENT_BUS.addListener(this::registerCommands);
         MinecraftForge.EVENT_BUS.addListener(this::trade);
 
-        DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
             MinecraftForge.EVENT_BUS.addListener(PreviewHandler::onWorldRenderLast);
             FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
             FMLJavaModLoadingContext.get().getModEventBus().addListener(ColorHandler::onItemColors);
@@ -188,5 +189,6 @@ public class ResourcefulBees
 
     private void loadComplete(FMLLoadCompleteEvent event) {
         BeeBuilder.setupBees();
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> BeeBuilder::GenerateEnglishLang);
     }
 }

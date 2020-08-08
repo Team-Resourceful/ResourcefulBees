@@ -115,7 +115,7 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
     public void livingTick() {
         if (remove) {
             if (!world.isRemote() && (getBeeType().equals(BeeConstants.DEFAULT_BEE_TYPE) || getBeeType().isEmpty())) {
-                LOGGER.info("Remove Bee");
+                LOGGER.info("Removed Bee");
                 remove = false;
                 this.dead = true;
                 this.remove();
