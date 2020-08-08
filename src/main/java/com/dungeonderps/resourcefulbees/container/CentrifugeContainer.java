@@ -57,6 +57,43 @@ public class CentrifugeContainer extends Container {
         }
     }
 
+    private void trackPower() {
+        // Unfortunatelly on a dedicated server ints are actually truncated to short so we need
+        // to split our integer here (split our 32 bit integer into two 16 bit integers)
+        trackInt(new IntReferenceHolder() {
+            @Override
+            public int get() {
+                return getEnergy() & 0xffff;
+            }
+
+            @Override
+            public void set(int value) {
+                centrifugeTileEntity.getCapability(CapabilityEnergy.ENERGY).ifPresent(h -> {
+                    int energyStored = h.getEnergyStored() & 0xffff0000;
+                    ((CustomEnergyStorage)h).setEnergy(energyStored + (value & 0xffff));
+                });
+            }
+        });
+        trackInt(new IntReferenceHolder() {
+            @Override
+            public int get() {
+                return (getEnergy() >> 16) & 0xffff;
+            }
+
+            @Override
+            public void set(int value) {
+                centrifugeTileEntity.getCapability(CapabilityEnergy.ENERGY).ifPresent(h -> {
+                    int energyStored = h.getEnergyStored() & 0x0000ffff;
+                    ((CustomEnergyStorage)h).setEnergy(energyStored | (value << 16));
+                });
+            }
+        });
+    }
+
+    public int getEnergy() {
+        return centrifugeTileEntity.getCapability(CapabilityEnergy.ENERGY).map(IEnergyStorage::getEnergyStored).orElse(0);
+    }
+
     /**
      * Determines whether supplied player can use this container
      *

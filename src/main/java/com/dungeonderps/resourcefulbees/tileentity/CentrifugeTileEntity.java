@@ -190,20 +190,6 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
         super.read(state, tag);
     }
 
-    @Nullable
-    @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
-        CompoundNBT nbt = new CompoundNBT();
-        nbt.put("power",energyStorage.serializeNBT());
-        return new SUpdateTileEntityPacket(pos,0,nbt);
-    }
-
-    @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-        CompoundNBT nbt = pkt.getNbtCompound();
-        energyStorage.deserializeNBT(nbt.getCompound("power"));
-    }
-
     @Nonnull
     @Override
     public CompoundNBT getUpdateTag() {
