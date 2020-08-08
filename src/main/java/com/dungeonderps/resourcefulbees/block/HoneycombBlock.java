@@ -2,9 +2,9 @@
 package com.dungeonderps.resourcefulbees.block;
 
 import com.dungeonderps.resourcefulbees.lib.BeeConstants;
+import com.dungeonderps.resourcefulbees.registry.ColorHandler;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.tileentity.HoneycombTileEntity;
-import com.dungeonderps.resourcefulbees.utils.Color;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -39,12 +39,7 @@ public class HoneycombBlock extends Block {
     }
 
     public static int getItemColor(ItemStack stack, int tintIndex){
-        CompoundNBT honeycombNBT = stack.getChildTag(BeeConstants.NBT_ROOT);
-        return (honeycombNBT != null && honeycombNBT.contains(BeeConstants.NBT_COLOR) && !honeycombNBT.getString(BeeConstants.NBT_COLOR).isEmpty())
-                ? Integer.parseInt(honeycombNBT.getString(BeeConstants.NBT_COLOR)) == -1
-                ? BeeConstants.DEFAULT_ITEM_COLOR
-                : Color.parseInt(honeycombNBT.getString(BeeConstants.NBT_COLOR))
-                : BeeConstants.DEFAULT_ITEM_COLOR;
+        return ColorHandler.getItemColor(stack, tintIndex);
     }
 
     @Override

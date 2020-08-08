@@ -149,54 +149,56 @@ public class BeeBuilder {
     }
 
     public static void GenerateEnglishLang() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("{\n");
-        for (Map.Entry<String, BeeData> bee : BEE_INFO.entrySet()) {
-            if (!bee.getKey().equals(BeeConstants.DEFAULT_BEE_TYPE)) {
-                String displayName = StringUtils.replace(bee.getKey(), "_", " ");
-                displayName = WordUtils.capitalizeFully(displayName);
+        if (Config.GENERATE_ENGLISH_LANG.get()) {
+            StringBuilder builder = new StringBuilder();
+            builder.append("{\n");
+            for (Map.Entry<String, BeeData> bee : BEE_INFO.entrySet()) {
+                if (!bee.getKey().equals(BeeConstants.DEFAULT_BEE_TYPE)) {
+                    String displayName = StringUtils.replace(bee.getKey(), "_", " ");
+                    displayName = WordUtils.capitalizeFully(displayName);
 
-                //block
-                builder.append("\"block.resourcefulbees.");
-                builder.append(bee.getKey());
-                builder.append("_honeycomb_block\" : \"");
-                builder.append(displayName);
-                builder.append(" Honeycomb Block\",\n");
-                //comb
-                builder.append("\"item.resourcefulbees.");
-                builder.append(bee.getKey());
-                builder.append("_honeycomb\" : \"");
-                builder.append(displayName);
-                builder.append(" Honeycomb\",\n");
-                //spawn egg
-                builder.append("\"item.resourcefulbees.");
-                builder.append(bee.getKey());
-                builder.append("_spawn_egg\" : \"");
-                builder.append(displayName);
-                builder.append(" Spawn Egg\",\n");
-                //entity
-                builder.append("\"entity.resourcefulbees.");
-                builder.append(bee.getKey());
-                builder.append("_bee\" : \"");
-                builder.append(displayName);
-                builder.append(" Bee\",\n");
+                    //block
+                    builder.append("\"block.resourcefulbees.");
+                    builder.append(bee.getKey());
+                    builder.append("_honeycomb_block\" : \"");
+                    builder.append(displayName);
+                    builder.append(" Honeycomb Block\",\n");
+                    //comb
+                    builder.append("\"item.resourcefulbees.");
+                    builder.append(bee.getKey());
+                    builder.append("_honeycomb\" : \"");
+                    builder.append(displayName);
+                    builder.append(" Honeycomb\",\n");
+                    //spawn egg
+                    builder.append("\"item.resourcefulbees.");
+                    builder.append(bee.getKey());
+                    builder.append("_spawn_egg\" : \"");
+                    builder.append(displayName);
+                    builder.append(" Spawn Egg\",\n");
+                    //entity
+                    builder.append("\"entity.resourcefulbees.");
+                    builder.append(bee.getKey());
+                    builder.append("_bee\" : \"");
+                    builder.append(displayName);
+                    builder.append(" Bee\",\n");
+                }
             }
-        }
 
-        builder.deleteCharAt(builder.lastIndexOf(","));
-        builder.append("}");
+            builder.deleteCharAt(builder.lastIndexOf(","));
+            builder.append("}");
 
-        String langPath = RESOURCE_PATH.toString() + "/assets/resourcefulbees/lang/";
-        String langFile = "en_us.json";
-        try {
-            Files.createDirectories(Paths.get(langPath));
-            FileWriter writer = new FileWriter(Paths.get(langPath, langFile).toFile());
-            writer.write(builder.toString());
-            writer.close();
-            LOGGER.info("Language File Generated!");
-        } catch (IOException e) {
-            LOGGER.error("Could not generate language file!");
-            e.printStackTrace();
+            String langPath = RESOURCE_PATH.toString() + "/assets/resourcefulbees/lang/";
+            String langFile = "en_us.json";
+            try {
+                Files.createDirectories(Paths.get(langPath));
+                FileWriter writer = new FileWriter(Paths.get(langPath, langFile).toFile());
+                writer.write(builder.toString());
+                writer.close();
+                LOGGER.info("Language File Generated!");
+            } catch (IOException e) {
+                LOGGER.error("Could not generate language file!");
+                e.printStackTrace();
+            }
         }
     }
 }

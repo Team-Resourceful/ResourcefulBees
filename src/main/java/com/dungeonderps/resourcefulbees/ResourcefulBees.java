@@ -187,8 +187,6 @@ public class ResourcefulBees
 
     private void loadComplete(FMLLoadCompleteEvent event) {
         BeeBuilder.setupBees();
-        if (Config.GENERATE_ENGLISH_LANG.get()) {
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> BeeBuilder::GenerateEnglishLang);
-        }
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> BeeBuilder::GenerateEnglishLang);
     }
 }

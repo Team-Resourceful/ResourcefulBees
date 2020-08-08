@@ -25,7 +25,7 @@ public class HoneycombTileEntity extends TileEntity {
     }
 
     public int getColor() {
-        return (blockColor != null && !blockColor.isEmpty()) ? Color.parseInt(blockColor) : BeeConstants.DEFAULT_ITEM_COLOR;
+        return (blockColor != null && !blockColor.isEmpty() && !blockColor.equals(BeeConstants.STRING_DEFAULT_ITEM_COLOR)) ? Color.parseInt(blockColor) : BeeConstants.DEFAULT_ITEM_COLOR;
     }
 
     @Override
