@@ -296,11 +296,11 @@ public class BeeInfoUtils {
 
     public static Biome getBiome(String biomeName) { return ForgeRegistries.BIOMES.getValue(getResource(biomeName));}
 
-    public static ITag<Item> getItemTag(String itemTag) { return ItemTags.getCollection().get(getResource(itemTag));}
+    public static ITag<Item> getItemTag(String itemTag) { return ItemTags.makeWrapperTag(itemTag);}
 
-    public static ITag<Fluid> getFluidTag(String fluidTag) { return FluidTags.getCollection().get(getResource(fluidTag));}
+    public static ITag<Fluid> getFluidTag(String fluidTag) { return FluidTags.makeWrapperTag(fluidTag);}
 
-    public static ITag<Block> getBlockTag(String blockTag) { return BlockTags.getCollection().get(getResource(blockTag));}
+    public static ITag<Block> getBlockTag(String blockTag) { return BlockTags.makeWrapperTag(blockTag);}
 
     public static ITag<Block> getValidApiaryTag() {
         return BlockTags.makeWrapperTag("resourcefulbees:valid_apiary");

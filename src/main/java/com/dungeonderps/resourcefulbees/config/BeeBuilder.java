@@ -3,6 +3,7 @@ package com.dungeonderps.resourcefulbees.config;
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.data.BeeData;
 import com.dungeonderps.resourcefulbees.entity.passive.CustomBeeEntity;
+import com.dungeonderps.resourcefulbees.lib.BeeConstants;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.utils.BeeInfoUtils;
 import com.google.gson.Gson;
@@ -15,6 +16,8 @@ import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.placement.ChanceConfig;
 import net.minecraft.world.gen.placement.HeightWithChanceConfig;
 import net.minecraft.world.gen.placement.Placement;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.text.WordUtils;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -25,6 +28,7 @@ import java.util.Map;
 import java.util.Set;
 
 import static com.dungeonderps.resourcefulbees.ResourcefulBees.LOGGER;
+import static com.dungeonderps.resourcefulbees.config.BeeInfo.BEE_INFO;
 import static com.dungeonderps.resourcefulbees.config.Config.GENERATE_DEFAULTS;
 
 public class BeeBuilder {
@@ -72,7 +76,8 @@ public class BeeBuilder {
                 BeeInfoUtils.parseBiomes(bee);
             if (bee.isBreedable())
                 BeeInfoUtils.buildFamilyTree(bee);
-            LOGGER.info(name + " bee passed validation check!!");
+            if (Config.SHOW_DEBUG_INFO.get())
+                LOGGER.info(name + " bee passed validation check!!");
         }
     }
 
@@ -141,5 +146,57 @@ public class BeeBuilder {
                             .withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG)
                             .withPlacement(Placement.CHANCE_TOP_SOLID_HEIGHTMAP
                                     .configure(new ChanceConfig(16))));
+    }
+
+    public static void GenerateEnglishLang() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("{\n");
+        for (Map.Entry<String, BeeData> bee : BEE_INFO.entrySet()) {
+            if (!bee.getKey().equals(BeeConstants.DEFAULT_BEE_TYPE)) {
+                String displayName = StringUtils.replace(bee.getKey(), "_", " ");
+                displayName = WordUtils.capitalizeFully(displayName);
+
+                //block
+                builder.append("\"block.resourcefulbees.");
+                builder.append(bee.getKey());
+                builder.append("_honeycomb_block\" : \"");
+                builder.append(displayName);
+                builder.append(" Honeycomb Block\",\n");
+                //comb
+                builder.append("\"item.resourcefulbees.");
+                builder.append(bee.getKey());
+                builder.append("_honeycomb\" : \"");
+                builder.append(displayName);
+                builder.append(" Honeycomb\",\n");
+                //spawn egg
+                builder.append("\"item.resourcefulbees.");
+                builder.append(bee.getKey());
+                builder.append("_spawn_egg\" : \"");
+                builder.append(displayName);
+                builder.append(" Spawn Egg\",\n");
+                //entity
+                builder.append("\"entity.resourcefulbees.");
+                builder.append(bee.getKey());
+                builder.append("_bee\" : \"");
+                builder.append(displayName);
+                builder.append(" Bee\",\n");
+            }
+        }
+
+        builder.deleteCharAt(builder.lastIndexOf(","));
+        builder.append("}");
+
+        String langPath = RESOURCE_PATH.toString() + "/assets/resourcefulbees/lang/";
+        String langFile = "en_us.json";
+        try {
+            Files.createDirectories(Paths.get(langPath));
+            FileWriter writer = new FileWriter(Paths.get(langPath, langFile).toFile());
+            writer.write(builder.toString());
+            writer.close();
+            LOGGER.info("Language File Generated!");
+        } catch (IOException e) {
+            LOGGER.error("Could not generate language file!");
+            e.printStackTrace();
+        }
     }
 }
