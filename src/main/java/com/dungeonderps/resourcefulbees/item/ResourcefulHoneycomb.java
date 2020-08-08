@@ -2,6 +2,7 @@ package com.dungeonderps.resourcefulbees.item;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.lib.BeeConstants;
+import com.dungeonderps.resourcefulbees.registry.ColorHandler;
 import com.dungeonderps.resourcefulbees.utils.Color;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
@@ -24,9 +25,7 @@ public class ResourcefulHoneycomb extends Item {
     }
 
     public static int getColor(ItemStack stack, int tintIndex){
-
-        CompoundNBT honeycombNBT = stack.getChildTag(BeeConstants.NBT_ROOT);
-        return honeycombNBT != null && !honeycombNBT.getString(BeeConstants.NBT_COLOR).isEmpty() ? Color.parseInt(honeycombNBT.getString(BeeConstants.NBT_COLOR)) : BeeConstants.DEFAULT_COLOR;
+        return ColorHandler.getItemColor(stack, tintIndex);
     }
 
     @Nonnull

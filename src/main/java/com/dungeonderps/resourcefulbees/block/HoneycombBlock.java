@@ -2,6 +2,7 @@
 package com.dungeonderps.resourcefulbees.block;
 
 import com.dungeonderps.resourcefulbees.lib.BeeConstants;
+import com.dungeonderps.resourcefulbees.registry.ColorHandler;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.tileentity.HoneycombTileEntity;
 import com.dungeonderps.resourcefulbees.utils.Color;
@@ -35,13 +36,11 @@ public class HoneycombBlock extends Block {
             }
         }
 
-        return BeeConstants.DEFAULT_COLOR;
+        return BeeConstants.DEFAULT_ITEM_COLOR;
     }
 
     public static int getItemColor(ItemStack stack, int tintIndex){
-        CompoundNBT honeycombNBT = stack.getChildTag(BeeConstants.NBT_ROOT);
-        return (honeycombNBT != null && honeycombNBT.contains(BeeConstants.NBT_COLOR) && !honeycombNBT.getString(BeeConstants.NBT_COLOR).isEmpty())
-                ? Color.parseInt(honeycombNBT.getString(BeeConstants.NBT_COLOR)) : BeeConstants.DEFAULT_COLOR;
+        return ColorHandler.getItemColor(stack, tintIndex);
     }
 
     @Override

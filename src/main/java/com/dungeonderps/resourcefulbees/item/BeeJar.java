@@ -47,13 +47,10 @@ public class BeeJar extends Item {
 
     public static int getColor(ItemStack stack, int tintIndex) {
         CompoundNBT tag = stack.getTag();
-        if (tag != null) {
-            if (tintIndex == 1 && stack.hasTag() && stack.getTag().contains(BeeConstants.NBT_ENTITY)) {
-                if (tag.contains(BeeConstants.NBT_COLOR))
-                    return Color.parseInt(tag.getString(BeeConstants.NBT_COLOR));
-            }
+        if (tintIndex == 1 && tag != null && tag.contains(BeeConstants.NBT_COLOR) && !tag.getString(BeeConstants.NBT_COLOR).equals(BeeConstants.STRING_DEFAULT_ITEM_COLOR)) {
+            return Color.parseInt(tag.getString(BeeConstants.NBT_COLOR));
         }
-        return 0xffffff;
+        return BeeConstants.DEFAULT_ITEM_COLOR;
     }
 
     public boolean isFilled(ItemStack stack) {
@@ -109,7 +106,11 @@ public class BeeJar extends Item {
         target.writeWithoutTypeId(nbt);
         if (target instanceof CustomBeeEntity) {
             CustomBeeEntity beeEntity = (CustomBeeEntity) target;
-            nbt.putString(BeeConstants.NBT_COLOR, beeEntity.getBeeInfo().getPrimaryColor());
+            if (beeEntity.getBeeInfo().getPrimaryColor() != null && !beeEntity.getBeeInfo().getPrimaryColor().isEmpty()) {
+                nbt.putString(BeeConstants.NBT_COLOR, beeEntity.getBeeInfo().getPrimaryColor());
+            } else {
+                nbt.putString(BeeConstants.NBT_COLOR, String.valueOf(BeeConstants.DEFAULT_ITEM_COLOR));
+            }
         }
         if (stack.getCount() > 1) {
             ItemStack newJar = new ItemStack(RegistryHandler.BEE_JAR.get());

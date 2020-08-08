@@ -14,9 +14,9 @@ public class BeeData {
     private String biomeBlacklist = "";
 
     private String baseLayerTexture = "/custom/bee";
-    private String primaryColor = Color.format(BeeConstants.DEFAULT_COLOR);
+    private String primaryColor = Color.format(BeeConstants.DEFAULT_PRIMARY_COLOR);
     private String secondaryColor = Color.format(BeeConstants.DEFAULT_SECONDARY_COLOR);
-    private String honeycombColor = Color.format(BeeConstants.DEFAULT_COLOR);
+    private String honeycombColor = Color.format(BeeConstants.DEFAULT_PRIMARY_COLOR);
     private String primaryLayerTexture = "/custom/primary_layer";
     private String secondaryLayerTexture = "/custom/secondary_layer";
 

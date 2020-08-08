@@ -220,7 +220,7 @@ public class ResourcefulBee extends CustomBeeEntity {
 
     @Override
     public boolean attackEntityAsMob(Entity entityIn) {
-        boolean flag = entityIn.attackEntityFrom(DamageSource.causeBeeStingDamage(this), (float) ((int) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue()));
+        boolean flag = entityIn.attackEntityFrom(DamageSource.causeBeeStingDamage(this), (float) (this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue()));
         if (flag) {
             this.applyEnchantments(this, entityIn);
             if (entityIn instanceof LivingEntity) {

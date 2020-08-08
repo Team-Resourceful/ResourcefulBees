@@ -98,7 +98,7 @@ public class BeeInfoUtils {
     public static void genDefaultBee(){
         BeeData defaultBee = new BeeData();
         defaultBee.setName(BeeConstants.DEFAULT_BEE_TYPE);
-        defaultBee.setHoneycombColor(String.valueOf(BeeConstants.DEFAULT_COLOR));
+        defaultBee.setHoneycombColor(String.valueOf(BeeConstants.DEFAULT_PRIMARY_COLOR));
         defaultBee.setFlower("minecraft:poppy");
         defaultBee.setSpawnInWorld(false);
         BEE_INFO.put(BeeConstants.DEFAULT_BEE_TYPE, defaultBee);
