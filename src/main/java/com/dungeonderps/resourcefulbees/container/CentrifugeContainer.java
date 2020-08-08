@@ -55,6 +55,7 @@ public class CentrifugeContainer extends Container {
         for (int k = 0; k < 9; ++k) {
             this.addSlot(new Slot(inv, k, 8 + k * 18, 142));
         }
+        trackPower();
     }
 
     private void trackPower() {
