@@ -87,12 +87,21 @@ public class TieredBeehiveBlock extends BeehiveBlock {
    	if (itemstack.getItem() == RegistryHandler.SMOKER.get() && itemstack.getDamage() < itemstack.getMaxDamage()) {
    		smokeHive(pos, world);
     }
-   	else if (honeyLevel >= 5 && Config.ALLOW_SHEARS.get()) {
-      if (itemstack.getItem().isIn(ItemTags.getCollection().getOrCreate(new ResourceLocation("forge:shears")))) {
+   	else if (honeyLevel >= 5) {
+      if (Config.ALLOW_SHEARS.get() && itemstack.getItem().isIn(ItemTags.getCollection().getOrCreate(new ResourceLocation("forge:shears")))) {
         world.playSound(player, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.BLOCK_BEEHIVE_SHEAR, SoundCategory.NEUTRAL, 1.0F, 1.0F);
         dropResourceHoneycomb(world, pos);
         itemstack.damageItem(1, player, player1 -> player1.sendBreakAnimation(handIn));
         angerBees = true;
+      }
+      if (itemstack.getItem().equals(RegistryHandler.SCRAPER.get())){
+        world.playSound(player, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.BLOCK_BEEHIVE_SHEAR, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+        dropFirstResourceHoneyComb(world, pos);
+        itemstack.damageItem(1, player, player1 -> player1.sendBreakAnimation(handIn));
+        TieredBeehiveTileEntity hive = (TieredBeehiveTileEntity)world.getTileEntity(pos);
+        if (hive != null && !hive.hasCombs()){
+          angerBees = true;
+        }
       }
     }
 
@@ -172,6 +181,19 @@ public class TieredBeehiveBlock extends BeehiveBlock {
     if (blockEntity instanceof TieredBeehiveTileEntity) {
       TieredBeehiveTileEntity hive = (TieredBeehiveTileEntity)blockEntity;
       while (hive.hasCombs()) {
+        ItemStack comb = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
+        String honeycomb = hive.getResourceHoneycomb();
+        comb.setTag(NBTHelper.createHoneycombItemTag(BeeInfo.getInfo(honeycomb).getName(), BeeInfo.getInfo(honeycomb).getHoneycombColor()));
+        spawnAsEntity(world, pos, comb);
+      }
+    }
+  }
+
+  public void dropFirstResourceHoneyComb(World world, BlockPos pos) {
+    TileEntity blockEntity = world.getTileEntity(pos);
+    if (blockEntity instanceof TieredBeehiveTileEntity) {
+      TieredBeehiveTileEntity hive = (TieredBeehiveTileEntity)blockEntity;
+      if (hive.hasCombs()) {
         ItemStack comb = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
         String honeycomb = hive.getResourceHoneycomb();
         comb.setTag(NBTHelper.createHoneycombItemTag(BeeInfo.getInfo(honeycomb).getName(), BeeInfo.getInfo(honeycomb).getHoneycombColor()));

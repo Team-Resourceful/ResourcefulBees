@@ -43,6 +43,7 @@
 	"gui.resourcefulbees.apiary.button.main_screen": "Bee Import/Export",
 	"gui.resourcefulbees.apiary.button.storage_screen": "Honeycomb Storage",
 	"gui.resourcefulbees.mechanical_centrifuge": "Mechanical Centrifuge",
+	"gui.resourcefulbees.honey_generator": "Generator",
 
 	"block.resourcefulbees.t1_beehive": "Tier 1 Beehive",
 	"block.resourcefulbees.t2_beehive": "Tier 2 Beehive",

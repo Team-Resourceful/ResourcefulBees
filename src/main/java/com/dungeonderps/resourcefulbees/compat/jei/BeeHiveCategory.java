@@ -105,17 +105,6 @@ public class BeeHiveCategory implements IRecipeCategory<BeeHiveCategory.Recipe> 
         ingredientStacks.set(0, ingredients.getInputs(JEICompat.ENTITY_INGREDIENT).get(0));
     }
 
-    @Nonnull
-    @Override
-    public List<ITextComponent> getTooltipStrings(@Nonnull Recipe recipe, double mouseX, double mouseY) {
-        double beeX = 2D;
-        double beeY = 2D;
-        if (mouseX >= beeX && mouseX <= beeX + 30D && mouseY >= beeY && mouseY <= beeY + 30D){
-            return Collections.singletonList(new StringTextComponent(I18n.format("entity." + ResourcefulBees.MOD_ID + "." + recipe.beeType + "_bee")));
-        }
-        return IRecipeCategory.super.getTooltipStrings(recipe,mouseX, mouseY);
-    }
-
     public static class Recipe {
         private final ItemStack comb;
         private final String beeType;

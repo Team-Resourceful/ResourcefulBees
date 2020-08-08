@@ -2,6 +2,7 @@ package com.dungeonderps.resourcefulbees.compat.jei;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.client.gui.screen.CentrifugeScreen;
+import com.dungeonderps.resourcefulbees.client.gui.screen.MechanicalCentrifugeScreen;
 import com.dungeonderps.resourcefulbees.compat.jei.ingredients.EntityIngredient;
 import com.dungeonderps.resourcefulbees.compat.jei.ingredients.EntityIngredientFactory;
 import com.dungeonderps.resourcefulbees.compat.jei.ingredients.EntityIngredientHelper;
@@ -43,9 +44,7 @@ public class JEICompat implements IModPlugin {
     private static final ISubtypeInterpreter honeycombSubtype = stack -> {
         Item item = stack.getItem();
         if( !(item instanceof ResourcefulHoneycomb) ) return "";
-
         ResourcefulHoneycomb comb = (ResourcefulHoneycomb) item;
-
         return comb.getTranslationKey(stack);
     };
     private static final ISubtypeInterpreter honeycombBlockSubtype = stack -> {
@@ -77,6 +76,7 @@ public class JEICompat implements IModPlugin {
         IGuiHelper helper = registration.getJeiHelpers().getGuiHelper();
         registration.addRecipeCategories(new BeeHiveCategory(helper));
         registration.addRecipeCategories(new BeeBreedingCategory(helper));
+        registration.addRecipeCategories(new FlowersCategory(helper));
         registration.addRecipeCategories(new CentrifugeRecipeCategory(helper));
         registration.addRecipeCategories(new FluidToFluid(helper));
         registration.addRecipeCategories(new BlockToFluid(helper));
@@ -112,6 +112,7 @@ public class JEICompat implements IModPlugin {
         registration.addRecipeCatalyst(new ItemStack(RegistryHandler.T4_APIARY_ITEM.get()), ApiaryCategory.ID);
         registration.addRecipeCatalyst(new ItemStack(RegistryHandler.CENTRIFUGE_ITEM.get()), CentrifugeRecipeCategory.ID);
         registration.addRecipeCatalyst(new ItemStack(RegistryHandler.MECHANICAL_CENTRIFUGE_ITEM.get()), CentrifugeRecipeCategory.ID);
+        registration.addRecipeCatalyst(new ItemStack(RegistryHandler.GOLD_FLOWER_ITEM.get()), FlowersCategory.ID);
     }
 
     @Override
@@ -128,19 +129,19 @@ public class JEICompat implements IModPlugin {
             registration.addRecipes(FluidToBlock.getMutationRecipes(registration.getIngredientManager()), FluidToBlock.ID);
             registration.addRecipes(BlockToBlock.getMutationRecipes(registration.getIngredientManager()), BlockToBlock.ID);
             registration.addRecipes(ApiaryCategory.getHoneycombRecipes(registration.getIngredientManager()), ApiaryCategory.ID);
+            registration.addRecipes(FlowersCategory.getFlowersRecipes(registration.getIngredientManager()), FlowersCategory.ID);
         }
     }
 
     @Override
     public void registerGuiHandlers(IGuiHandlerRegistration registration) {
         registration.addRecipeClickArea(CentrifugeScreen.class, 80, 30, 18, 18, CentrifugeRecipeCategory.ID);
+        registration.addRecipeClickArea(MechanicalCentrifugeScreen.class, 80, 30, 18, 18, CentrifugeRecipeCategory.ID);
     }
 
     @Override
     public void registerIngredients(IModIngredientRegistration registration) {
-        //TODO - Figure out why it only shows last bee in hashmap
         List<EntityIngredient> entityIngredients = EntityIngredientFactory.create();
-
         registration.register(ENTITY_INGREDIENT, entityIngredients, new EntityIngredientHelper<>(), new EntityRenderer());
     }
 

@@ -89,10 +89,6 @@ public class Config {
                         .defineInRange("hiveMaxBees", 4, 1, 4);
                 HIVE_MAX_COMBS = COMMON_BUILDER.comment("\nBase honeycomb harvest amount \n(THIS * TIER_MODIFIER = MAX_COMBS) for a range of 5 -> 64")
                         .defineInRange("hiveMaxCombs", 5, 5, 16);
-                SCRAPER_COOLDOWN = COMMON_BUILDER.comment("\nAmount of time scraper is on cooldown for when used. [In Seconds]")
-                        .defineInRange("scraperCooldown", 3, 1, 60);
-                SCRAPER_TIME_TO_USE = COMMON_BUILDER.comment("\nTime required to use the scraper. [In Seconds]")
-                        .defineInRange("scraperCooldown", 5, 1, 60);
                 ALLOW_SHEARS = COMMON_BUILDER.comment("\nSet to false if you want the player to only be able to get honeycombs from the beehive using the scraper [true/false]")
                     .define("allowShears", true);
             COMMON_BUILDER.pop();
