@@ -92,12 +92,4 @@ public class HoneyGenerator extends Block {
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(PROPERTY_ON, FACING);
     }
-
-    @Override
-    public void addInformation(@Nonnull ItemStack stack, @Nullable IBlockReader worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
-            tooltip.addAll(new TooltipBuilder()
-                    .addTip(I18n.format("block.resourcefulbees.mech_centrifuge.tooltip.info"), TextFormatting.GOLD)
-                    .build());
-        super.addInformation(stack, worldIn, tooltip, flagIn);
-    }
 }

@@ -12,6 +12,7 @@ import com.dungeonderps.resourcefulbees.world.BeeNestFeature;
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.block.Block;
 import net.minecraft.block.FlowerBlock;
+import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityClassification;
@@ -19,9 +20,12 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.attributes.GlobalEntityTypeAttributes;
 import net.minecraft.entity.merchant.villager.VillagerProfession;
 import net.minecraft.entity.passive.BeeEntity;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.BucketItem;
+import net.minecraft.item.Items;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.potion.Effects;
 import net.minecraft.tileentity.TileEntityType;
@@ -39,8 +43,9 @@ import net.minecraftforge.registries.ForgeRegistries;
 @SuppressWarnings("ConstantConditions")
 public class RegistryHandler {
 
-	public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, ResourcefulBees.MOD_ID);
 	public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, ResourcefulBees.MOD_ID);
+	public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, ResourcefulBees.MOD_ID);
+	public static final DeferredRegister<Fluid> FLUIDS = DeferredRegister.create(ForgeRegistries.FLUIDS, ResourcefulBees.MOD_ID);
 	public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITIES, ResourcefulBees.MOD_ID);
 	public static final DeferredRegister<TileEntityType<?>>	TILE_ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, ResourcefulBees.MOD_ID);
 	public static final DeferredRegister<PointOfInterestType> POIS = DeferredRegister.create(ForgeRegistries.POI_TYPES, ResourcefulBees.MOD_ID);
@@ -53,6 +58,7 @@ public class RegistryHandler {
 		IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
 		ITEMS.register(bus);
 		BLOCKS.register(bus);
+		FLUIDS.register(bus);
 		ENTITY_TYPES.register(bus);
 		TILE_ENTITY_TYPES.register(bus);
 		POIS.register(bus);
@@ -89,7 +95,7 @@ public class RegistryHandler {
 	public static final RegistryObject<Block> APIARY_STORAGE_BLOCK = BLOCKS.register("apiary_storage", () -> new ApiaryStorageBlock(Block.Properties.create(Material.WOOD).hardnessAndResistance(.3F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> MECHANICAL_CENTRIFUGE = BLOCKS.register("mechanical_centrifuge", () -> new MechanicalCentrifugeBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(2).sound(SoundType.METAL).notSolid()));
 	public static final RegistryObject<Block> HONEY_GENERATOR = BLOCKS.register("honey_generator", () -> new HoneyGenerator(Block.Properties.create(Material.IRON).hardnessAndResistance(2).sound(SoundType.METAL).notSolid()));
-
+	public static final RegistryObject<FlowingFluidBlock> HONEY_FLUID_BLOCK = BLOCKS.register("honey_fluid_block", () -> new FlowingFluidBlock(FluidRegistry.HONEY_FLUID, Block.Properties.create(net.minecraft.block.material.Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops()));
 	//endregion
 
 	//region**************ITEMS*********************************************
@@ -141,6 +147,7 @@ public class RegistryHandler {
 			.upgradeType(BeeConstants.NBT_STORAGE_UPGRADE)
 			.upgradeModification(BeeConstants.NBT_SLOT_UPGRADE, 108F)
 			.build()));
+	public static final RegistryObject<Item> HONEY_FLUID_BUCKET = ITEMS.register("honey_fluid_bucket", () -> new BucketItem(FluidRegistry.HONEY_FLUID, new Item.Properties().containerItem(Items.BUCKET).maxStackSize(1).group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
 	//endregion
 
 	//region**************TILE ENTITIES*************************************

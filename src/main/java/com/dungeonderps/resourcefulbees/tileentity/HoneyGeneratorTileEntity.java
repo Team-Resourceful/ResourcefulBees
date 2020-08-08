@@ -4,6 +4,7 @@ import com.dungeonderps.resourcefulbees.block.HoneyGenerator;
 import com.dungeonderps.resourcefulbees.config.Config;
 import com.dungeonderps.resourcefulbees.container.AutomationSensitiveItemStackHandler;
 import com.dungeonderps.resourcefulbees.container.HoneyGeneratorContainer;
+import com.dungeonderps.resourcefulbees.registry.FluidRegistry;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.utils.CustomEnergyStorage;
 import net.minecraft.block.BlockState;
@@ -153,7 +154,7 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
             honey_bottle.shrink(1);
             if (glass_bottle.isEmpty()) h.setStackInSlot(BOTTLE_OUPUT, new ItemStack(Items.GLASS_BOTTLE));
             else glass_bottle.grow(1);
-            fluidTank.fill(new FluidStack(Fluids.WATER, 50), IFluidHandler.FluidAction.EXECUTE);
+            fluidTank.fill(new FluidStack(FluidRegistry.HONEY_FLUID.get(), 50), IFluidHandler.FluidAction.EXECUTE);
         }
         time = 0;
     }
