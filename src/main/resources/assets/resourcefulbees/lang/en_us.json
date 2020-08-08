@@ -174,5 +174,8 @@
 	"entity.resourcefulbees.netherite_bee": "Netherite Bee",
 
 	"entity.minecraft.villager.resourcefulbees.beekeeper": "Beekeeper",
-	"block.resourcefulbees.mech_centrifuge.tooltip.info": "Hold SHIFT & right-click block to process honeycombs."
+	"block.resourcefulbees.mech_centrifuge.tooltip.info": "Hold SHIFT & right-click block to process honeycombs.",
+	"block.resourcefulbees.generator.tooltip.info": "Generates RF using honey bottles.",
+	"item.resourcefulbees.scraper.tooltip": "Right-click on Tiered Beehives to collect honeycombs.",
+	"item.resourcefulbees.scraper.tooltip.1": "Must collect ALL honeycombs for bees to generate new ones!"
 }
