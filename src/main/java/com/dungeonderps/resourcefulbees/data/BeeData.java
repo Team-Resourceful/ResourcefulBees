@@ -42,6 +42,7 @@ public class BeeData {
     private int mainOutputCount = 1;
     private int secondaryOutputCount = 1;
     private int bottleOutputCount = 1;
+    private int mainInputCount = 1;
 
     private float attackDamage = 1.0f;
 
@@ -174,6 +175,23 @@ public class BeeData {
      */
     public void setBottleOutput(String bottleOutput) {
         this.bottleOutput = bottleOutput.toLowerCase();
+    }
+
+    /**
+     * Gets the Centrifuge Main Input Count for this bee's honeycomb.
+     * @return This bee's main centrifuge input count.
+     */
+    public int getMainInputCount() {
+        return mainInputCount;
+    }
+
+    /**
+     * Sets the Centrifuge Main Input Count for this bee's honeycomb.
+     * Can be used to modify bees through code.
+     * @param mainInputCount This bee's main centrifuge input count.
+     */
+    public void setMainInputCount(int mainInputCount) {
+        this.mainInputCount = mainInputCount;
     }
 
     /**

@@ -17,8 +17,6 @@ public class Config {
 
     public static ForgeConfigSpec.IntValue HIVE_MAX_BEES;
     public static ForgeConfigSpec.IntValue HIVE_MAX_COMBS;
-    public static ForgeConfigSpec.IntValue SCRAPER_COOLDOWN;
-    public static ForgeConfigSpec.IntValue SCRAPER_TIME_TO_USE;
     public static ForgeConfigSpec.BooleanValue ALLOW_SHEARS;
 
     public static ForgeConfigSpec.IntValue SPAWN_WEIGHT;

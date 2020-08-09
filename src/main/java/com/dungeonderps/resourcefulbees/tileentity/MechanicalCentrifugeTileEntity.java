@@ -82,6 +82,8 @@ public class MechanicalCentrifugeTileEntity extends TileEntity implements ITicka
         if (recipe != null) {
             List<Pair<ItemStack, Double>> outputs = recipe.outputs;
             ItemStack glass_bottle = h.getStackInSlot(BOTTLE_SLOT);
+            ItemStack combs = h.getStackInSlot(HONEYCOMB_SLOT);
+            int inputAmount = recipe.ingredient.serialize().getAsJsonObject().get("count").getAsInt();
             List<ItemStack> outputSlots = new ArrayList<>(
                     Arrays.asList(
                             h.getStackInSlot(OUTPUT1),
@@ -90,14 +92,15 @@ public class MechanicalCentrifugeTileEntity extends TileEntity implements ITicka
                     )
             );
             int processScore = 0;
-            if (outputSlots.get(0).isEmpty() && outputSlots.get(1).isEmpty() && outputSlots.get(2).isEmpty() && glass_bottle.getItem() == Items.GLASS_BOTTLE) return true;
+            if (outputSlots.get(0).isEmpty() && outputSlots.get(1).isEmpty() && outputSlots.get(2).isEmpty() && glass_bottle.getItem() == Items.GLASS_BOTTLE && combs.getCount() >= inputAmount) return true;
             else {
                 for(int i=0;i<3;i++){
                     if (outputSlots.get(i).isEmpty()) processScore++;
                     else if (outputSlots.get(i).getItem() == outputs.get(i).getLeft().getItem()
                             && outputSlots.get(i).getCount() + outputs.get(i).getLeft().getCount() <= outputSlots.get(i).getMaxStackSize())processScore++;
                 }
-                if (processScore == 3 && glass_bottle.getItem() == Items.GLASS_BOTTLE)
+                if (combs.getCount() >= inputAmount) processScore++;
+                if (processScore == 4 && glass_bottle.getItem() == Items.GLASS_BOTTLE)
                     return true;
                 else {
                     if (world != null)
@@ -132,7 +135,7 @@ public class MechanicalCentrifugeTileEntity extends TileEntity implements ITicka
                         if (slots.get(i).getRight().equals(HONEY_BOTTLE)) glass_bottle.shrink(1);
                     }
                 }
-            comb.shrink(1);
+            comb.shrink(recipe.ingredient.serialize().getAsJsonObject().get("count").getAsInt());
         }
         clicks = 0;
     }
