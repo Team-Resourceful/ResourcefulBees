@@ -45,9 +45,7 @@ public class BeeInfo {
      */
     public static String getRandomBee(Biome biome){
         if (SPAWNABLE_BIOMES.get(biome) != null) {
-            String beeThatSpawned = SPAWNABLE_BIOMES.get(biome).next();
-            System.out.println(beeThatSpawned);
-            return beeThatSpawned;
+            return SPAWNABLE_BIOMES.get(biome).next();
         }
         return BeeConstants.DEFAULT_BEE_TYPE;
     }
