@@ -31,6 +31,24 @@ public class BeeBreedGoal extends BreedGoal {
     }
 
     @Override
+    public boolean shouldExecute() {
+        if (!this.animal.isInLove()) {
+            return false;
+        } else {
+            this.targetMate = this.getNearbyMate();
+            if (targetMate instanceof CustomBeeEntity){
+                CustomBeeEntity parent1 = ((CustomBeeEntity) targetMate);
+                CustomBeeEntity parent2 = ((CustomBeeEntity) animal);
+                if (BeeInfo.parentsCanBreed(parent1.getBeeType(), parent2.getBeeType()))
+                    return true;
+                else return parent1.getBeeType().equals(parent2.getBeeType());
+            }
+            else
+                return false;
+        }
+    }
+
+    @Override
     protected void spawnBaby() {
         AgeableEntity ageableentity;
         if (getBeeType(this.targetMate).equals(getBeeType(this.animal))) {
