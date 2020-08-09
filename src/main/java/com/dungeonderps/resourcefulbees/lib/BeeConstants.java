@@ -31,7 +31,7 @@ public class BeeConstants {
     public static final String NBT_SLOT_COUNT = "SlotCount";
     public static final String NBT_SPAWN_EGG_DATA = "EntityData";
     public static final String STRING_DEFAULT_ITEM_COLOR = "-1";
-
+    public static final String NBT_FEED_COUNT = "FeedCount";
 
     public static final int SMOKE_TIME = 600;
     public static final int MIN_HIVE_TIME = 600;
