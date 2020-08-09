@@ -171,6 +171,14 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
         return childBee;
     }
 
+    //@TODO TEST THIS!
+    //This is because we don't want IF being able to breed our animals
+    @Override
+    public void setInLove(@Nullable PlayerEntity player) {
+        if(player != null)
+            super.setInLove(player);
+    }
+
     @Nonnull
     @Override
     public ActionResultType func_230254_b_(PlayerEntity player, @Nonnull Hand hand) {

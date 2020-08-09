@@ -13,14 +13,13 @@ public class BeeData {
     private String biomeBlacklist = "";
 
     private String baseLayerTexture = "/custom/bee";
-    private String primaryColor; //= Color.format(BeeConstants.DEFAULT_COLOR);
-    private String secondaryColor; //= Color.format(BeeConstants.DEFAULT_SECONDARY_COLOR);
-    private String honeycombColor; //= Color.format(BeeConstants.DEFAULT_ITEM_COLOR);
+    private String primaryColor;
+    private String secondaryColor;
+    private String honeycombColor;
     private String primaryLayerTexture = "/custom/primary_layer";
     private String secondaryLayerTexture = "/custom/secondary_layer";
 
     private boolean isBeeColored = true;
-
 
     private String mutationInput = "";
     private String mutationOutput = "";
@@ -28,6 +27,7 @@ public class BeeData {
     private String mainOutput = "";
 
     private String secondaryOutput = RegistryHandler.BEESWAX.getId().toString();
+    @SuppressWarnings("ConstantConditions")
     private String bottleOutput = Items.HONEY_BOTTLE.getRegistryName().toString();
 
     private boolean spawnInWorld, enderBee, netherBee, breedable, creeperBee, skeletonBee, zomBee, pigmanBee, witherBee, blazeBee;
@@ -398,7 +398,7 @@ public class BeeData {
      * @return Gets this bee's breed weight.
      */
     public double getBreedWeight() {
-        return breedWeight;
+        return breedWeight < 1.0 ? breedWeight * 100 : breedWeight;
     }
 
     /**

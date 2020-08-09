@@ -63,4 +63,8 @@ public class BeeInfo {
     public static String getWeightedChild(String parent1, String parent2){
         return FAMILY_TREE.get(BeeInfoUtils.sortParents(parent1, parent2)).next();
     }
+
+    public static double getAdjustedWeightForChild(BeeData child){
+        return FAMILY_TREE.get(BeeInfoUtils.sortParents(child.getParent1(), child.getParent2())).getAdjustedWeight(child.getBreedWeight());
+    }
 }

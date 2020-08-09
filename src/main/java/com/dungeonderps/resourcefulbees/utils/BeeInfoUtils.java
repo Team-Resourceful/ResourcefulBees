@@ -37,7 +37,7 @@ public class BeeInfoUtils {
     public static void buildFamilyTree(BeeData bee){
         String parent1 = bee.getParent1();
         String parent2 = bee.getParent2();
-        FAMILY_TREE.computeIfAbsent(sortParents(parent1, parent2), k -> new RandomCollection<>()).add(bee.getBreedWeight() * 100, bee.getName());
+        FAMILY_TREE.computeIfAbsent(sortParents(parent1, parent2), k -> new RandomCollection<>()).add(bee.getBreedWeight(), bee.getName());
     }
 
     public static Pair<String, String> sortParents(String parent1, String parent2){
