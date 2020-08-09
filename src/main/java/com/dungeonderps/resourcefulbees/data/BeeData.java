@@ -48,6 +48,8 @@ public class BeeData {
 
     private float sizeModifier = 1.0f;
 
+    private int spawnWeight = 10;
+
     private transient String name = BeeConstants.DEFAULT_BEE_TYPE;
     private transient boolean mutation;
     private transient Enum<MutationTypes> mutationType;
@@ -506,4 +508,8 @@ public class BeeData {
     public float getAttackDamage() { return attackDamage; }
 
     public void setAttackDamage(float attackDamage) { this.attackDamage = attackDamage; }
+
+    public int getSpawnWeight() { return spawnWeight; }
+
+    public void setSpawnWeight(int spawnWeight) { this.spawnWeight = spawnWeight; }
 }

@@ -89,7 +89,7 @@ public class BeeInfoUtils {
     private static void updateSpawnableBiomes(Set<Biome> whitelist, Set<Biome> blacklist, BeeData bee){
         for(Biome biome : whitelist){
             if(!blacklist.contains(biome)){
-                SPAWNABLE_BIOMES.computeIfAbsent(biome,k -> new HashSet<>()).add(bee.getName());
+                SPAWNABLE_BIOMES.computeIfAbsent(biome, k -> new RandomCollection<>()).add(bee.getSpawnWeight(), bee.getName());
             }
         }
     }

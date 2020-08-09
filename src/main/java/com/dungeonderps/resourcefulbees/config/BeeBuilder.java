@@ -6,6 +6,7 @@ import com.dungeonderps.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.dungeonderps.resourcefulbees.lib.BeeConstants;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.utils.BeeInfoUtils;
+import com.dungeonderps.resourcefulbees.utils.RandomCollection;
 import com.google.gson.Gson;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
@@ -114,7 +115,7 @@ public class BeeBuilder {
     }
 
     private static void setupBeeSpawns() {
-        for (Map.Entry<Biome, Set<String>> element : BeeInfo.SPAWNABLE_BIOMES.entrySet()) {
+        for (Map.Entry<Biome, RandomCollection<String>> element : BeeInfo.SPAWNABLE_BIOMES.entrySet()) {
             Biome biome = element.getKey();
             if (Config.GENERATE_BEE_NESTS.get()) {
                 addNestFeature(biome);

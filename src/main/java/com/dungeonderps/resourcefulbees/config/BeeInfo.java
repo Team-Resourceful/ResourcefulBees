@@ -16,7 +16,7 @@ import java.util.Set;
 public class BeeInfo {
 
     public static final LinkedHashMap<String, BeeData> BEE_INFO = new LinkedHashMap<>();
-    public static final HashMap<Biome, Set<String>> SPAWNABLE_BIOMES = new HashMap<>();
+    public static final HashMap<Biome, RandomCollection<String>> SPAWNABLE_BIOMES = new HashMap<>();
     public static final HashMap<Pair<String, String>, RandomCollection<String>> FAMILY_TREE = new HashMap<>();
 
     public static float[] getBeeColorAsFloat(String color){
@@ -45,8 +45,9 @@ public class BeeInfo {
      */
     public static String getRandomBee(Biome biome){
         if (SPAWNABLE_BIOMES.get(biome) != null) {
-            ArrayList<String> spawnList = new ArrayList<>(SPAWNABLE_BIOMES.get(biome));
-            return spawnList.get(MathUtils.nextInt(spawnList.size()));
+            String beeThatSpawned = SPAWNABLE_BIOMES.get(biome).next();
+            System.out.println(beeThatSpawned);
+            return beeThatSpawned;
         }
         return BeeConstants.DEFAULT_BEE_TYPE;
     }
