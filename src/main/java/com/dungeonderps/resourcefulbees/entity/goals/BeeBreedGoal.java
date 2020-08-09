@@ -3,8 +3,6 @@ package com.dungeonderps.resourcefulbees.entity.goals;
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.dungeonderps.resourcefulbees.lib.BeeConstants;
-import com.dungeonderps.resourcefulbees.utils.BeeInfoUtils;
-import com.dungeonderps.resourcefulbees.utils.MathUtils;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.Entity;
@@ -16,8 +14,6 @@ import net.minecraft.stats.Stats;
 import net.minecraft.world.GameRules;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.BabyEntitySpawnEvent;
-
-import java.util.ArrayList;
 
 public class BeeBreedGoal extends BreedGoal {
     public BeeBreedGoal(AnimalEntity animal, double speedIn) {
@@ -45,22 +41,7 @@ public class BeeBreedGoal extends BreedGoal {
             CustomBeeEntity bee = (CustomBeeEntity)this.animal;
             String parent1 = getBeeType(this.targetMate);
             String parent2 = getBeeType(this.animal);
-            int hashcode = BeeInfoUtils.getHashcode(parent1, parent2);
-            double selection = MathUtils.nextDouble();
-            if (BeeInfo.FAMILY_TREE.containsKey(hashcode)) {
-                ArrayList<String> childList = new ArrayList<>(BeeInfo.FAMILY_TREE.get(hashcode));
-                String childBee = childList.get(MathUtils.nextInt(childList.size()));
-                double weight = BeeInfo.getInfo(childBee).getBreedWeight();
-                if (selection <= weight) {
-                    ageableentity = bee.createSelectedChild(childBee);
-                } else {
-                    resetBreed();
-                    return;
-                }
-            } else
-                ageableentity = selection <= 0.5
-                        ? bee.createSelectedChild(getBeeType(this.animal))
-                        : bee.createSelectedChild(getBeeType(this.targetMate));
+            ageableentity = bee.createSelectedChild(BeeInfo.getWeightedChild(parent1, parent2));
         }
 
         final BabyEntitySpawnEvent event = new BabyEntitySpawnEvent(animal, targetMate, ageableentity);

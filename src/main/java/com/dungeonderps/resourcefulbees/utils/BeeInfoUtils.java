@@ -19,10 +19,10 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -37,12 +37,11 @@ public class BeeInfoUtils {
     public static void buildFamilyTree(BeeData bee){
         String parent1 = bee.getParent1();
         String parent2 = bee.getParent2();
-        int hash = getHashcode(parent1, parent2);
-        FAMILY_TREE.computeIfAbsent(hash, k -> new HashSet<>()).add(bee.getName());
+        FAMILY_TREE.computeIfAbsent(sortParents(parent1, parent2), k -> new RandomCollection<>()).add(bee.getBreedWeight() * 100, bee.getName());
     }
 
-    public static int getHashcode(String parent1, String parent2){
-        return parent1.compareTo(parent2) > 0 ? Objects.hash(parent1,parent2) : Objects.hash(parent2,parent1);
+    public static Pair<String, String> sortParents(String parent1, String parent2){
+        return parent1.compareTo(parent2) > 0 ? Pair.of(parent1, parent2) : Pair.of(parent2, parent1);
     }
 
     public static void parseBiomes(BeeData bee){
