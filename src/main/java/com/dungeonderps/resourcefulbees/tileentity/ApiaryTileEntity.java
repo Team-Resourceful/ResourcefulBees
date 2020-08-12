@@ -453,7 +453,8 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
         CompoundNBT data = new CompoundNBT();
         data.putString(NBT_ENTITY, "resourcefulbees:bee");
         beeEntity.writeWithoutTypeId(data);
-        data.putString(NBT_COLOR, beeEntity.getBeeInfo().getPrimaryColor());
+        String primaryColor = beeEntity.getBeeInfo().getPrimaryColor();
+        data.putString(NBT_COLOR, primaryColor != null && !primaryColor.isEmpty() ? primaryColor : String.valueOf(DEFAULT_ITEM_COLOR));
         beeJar.setTag(data);
         this.h.setStackInSlot(EXPORT, beeJar);
     }

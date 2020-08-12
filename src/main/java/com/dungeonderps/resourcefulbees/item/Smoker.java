@@ -1,6 +1,5 @@
 package com.dungeonderps.resourcefulbees.item;
 
-import com.dungeonderps.resourcefulbees.client.render.items.CustomItemRenderer;
 import com.dungeonderps.resourcefulbees.config.Config;
 import com.dungeonderps.resourcefulbees.registry.ItemGroupResourcefulBees;
 import net.minecraft.client.gui.screen.Screen;
@@ -33,7 +32,7 @@ public class Smoker extends Item {
     private int flag = 0;
 
     public Smoker() {
-        super(new Properties().setNoRepair().maxStackSize(1).maxDamage(Config.SMOKER_DURABILITY.get()).group(ItemGroupResourcefulBees.RESOURCEFUL_BEES).setISTER(()-> CustomItemRenderer::new));
+        super(new Properties().setNoRepair().maxStackSize(1).maxDamage(Config.SMOKER_DURABILITY.get()).group(ItemGroupResourcefulBees.RESOURCEFUL_BEES));
     }
 
     @Nonnull

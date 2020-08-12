@@ -234,7 +234,8 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
             CompoundNBT data = new CompoundNBT();
             data.putString(BeeConstants.NBT_ENTITY, "resourcefulbees:bee");
             data.putString(BeeConstants.NBT_BEE_TYPE, this.container.beeList[i]);
-            data.putString(BeeConstants.NBT_COLOR, BeeInfo.getInfo(this.container.beeList[i]).getPrimaryColor());
+            String primaryColor = BeeInfo.getInfo(this.container.beeList[i]).getPrimaryColor();
+            data.putString(BeeConstants.NBT_COLOR, primaryColor != null && !primaryColor.isEmpty() ? primaryColor : String.valueOf(BeeConstants.DEFAULT_ITEM_COLOR));
             beeJar.setTag(data);
             if (this.minecraft != null)
                 this.minecraft.getItemRenderer().renderItemAndEffectIntoGUI(beeJar, left, i1);
