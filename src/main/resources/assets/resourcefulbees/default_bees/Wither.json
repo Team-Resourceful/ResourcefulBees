@@ -11,5 +11,7 @@
   "netherBee": true,
   "breedable" : true,
   "parent1": "Coal",
-  "parent2": "Skeleton"
+  "parent2": "Skeleton",
+  "feedItem": "minecraft:rotten_flesh",
+  "feedAmount": 12
 }

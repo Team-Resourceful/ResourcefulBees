@@ -8,5 +8,5 @@
   "mainOutput": "minecraft:emerald",
   "spawnInWorld": true,
   "biomeWhitelist": "TAG:Mountain,Hills",
-  "SpawnWeight": 1
+  "spawnWeight": 1
 }

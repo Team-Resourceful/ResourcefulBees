@@ -39,6 +39,9 @@ public class BeeData {
     private int maxTimeInHive = BeeConstants.MAX_TIME_IN_HIVE;
     private double breedWeight = BeeConstants.DEFAULT_BREED_WEIGHT;
 
+    private String feedItem = BeeConstants.FLOWER_TAG_ALL;
+    private int feedAmount = 1;
+
     private double mainOutputWeight = BeeConstants.DEFAULT_MAIN_OUTPUT_WEIGHT;
     private double secondaryOutputWeight = BeeConstants.DEFAULT_SEC_OUTPUT_WEIGHT;
     private double bottleOutputWeight = BeeConstants.DEFAULT_BOT_OUTPUT_WEIGHT;
@@ -528,4 +531,20 @@ public class BeeData {
     public boolean isEnchanted() { return isEnchanted; }
 
     public void setEnchanted(boolean enchanted) { isEnchanted = enchanted; }
+
+    public String getFeedItem() {
+        return feedItem;
+    }
+
+    public void setFeedItem(String feedItem) {
+        this.feedItem = feedItem;
+    }
+
+    public int getFeedAmount() {
+        return feedAmount;
+    }
+
+    public void setFeedAmount(int feedAmount) {
+        this.feedAmount = feedAmount;
+    }
 }
