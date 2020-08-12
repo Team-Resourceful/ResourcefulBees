@@ -44,12 +44,13 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
     private static final DataParameter<String> BEE_TYPE = EntityDataManager.createKey(CustomBeeEntity.class, DataSerializers.STRING);
 
     private boolean remove;
+    private boolean renderingInJei;
 
     public CustomBeeEntity(EntityType<? extends BeeEntity> type, World world) {
         super(type, world);
     }
 
-    //**************************** BEE INFO RELATED METHODS BELOW *******************************************
+    //region BEE INFO RELATED METHODS BELOW
 
     public void setBeeType(boolean fromBiome){
         Biome curBiome = this.world.getBiome(this.getPosition());
@@ -89,8 +90,19 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
     public BeeData getBeeInfo(String beeType) {
         return BeeInfo.getInfo(beeType);
     }
+    //endregion
 
-    //***************************** CUSTOM BEE RELATED METHODS BELOW *************************************************
+    //region JEI RELATED METHODS
+        public void setRenderingInJei(boolean inJei){
+            this.renderingInJei = inJei;
+        }
+
+        public boolean getRenderingInJei(){
+            return this.renderingInJei;
+        }
+    //endregion
+
+    //region CUSTOM BEE RELATED METHODS BELOW
 
     @Nonnull
     protected ITextComponent getProfessionName() {
@@ -115,7 +127,7 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
     public void livingTick() {
         if (remove) {
             if (!world.isRemote() && (getBeeType().equals(BeeConstants.DEFAULT_BEE_TYPE) || getBeeType().isEmpty())) {
-                LOGGER.info("Removed Bee");
+                LOGGER.info("Removed Bee, Reason: " + (getBeeType().isEmpty() ? "Empty BeeType" : "Default Bee"));
                 remove = false;
                 this.dead = true;
                 this.remove();
@@ -240,4 +252,5 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
             this.remove = true;
         }
     }
+    //endregion
 }

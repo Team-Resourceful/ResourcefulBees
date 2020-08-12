@@ -30,6 +30,7 @@ public class EntityRenderer implements IIngredientRenderer<EntityIngredient> {
                 bee.ticksExisted = mc.player.ticksExisted;
                 bee.renderYawOffset = entityIngredient.getRotation() - 90;
                 bee.setBeeType(entityIngredient.getBeeType());
+                bee.setRenderingInJei(true);
                 float scaledSize = 20;
                 if (!bee.getSizeModifierFromInfo(bee.getBeeType()).equals(1.0F)) {
                     scaledSize = 20 / bee.getSizeModifierFromInfo(bee.getBeeType());

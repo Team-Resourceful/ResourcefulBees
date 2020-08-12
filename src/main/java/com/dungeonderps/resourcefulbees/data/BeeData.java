@@ -21,6 +21,10 @@ public class BeeData {
 
     private boolean isBeeColored = true;
 
+    private boolean isGlowing = false;
+    private String glowingColor = "#ffffff";
+    private boolean isEnchanted = false;
+
     private String mutationInput = "";
     private String mutationOutput = "";
 
@@ -512,4 +516,16 @@ public class BeeData {
     public int getSpawnWeight() { return spawnWeight; }
 
     public void setSpawnWeight(int spawnWeight) { this.spawnWeight = spawnWeight; }
+
+    public boolean isGlowing() { return isGlowing; }
+
+    public void setGlowing(boolean glowing) { isGlowing = glowing; }
+
+    public String getGlowingColor() { return glowingColor; }
+
+    public void setGlowingColor(String glowingColor) { this.glowingColor = glowingColor; }
+
+    public boolean isEnchanted() { return isEnchanted; }
+
+    public void setEnchanted(boolean enchanted) { isEnchanted = enchanted; }
 }
