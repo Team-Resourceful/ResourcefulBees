@@ -5,9 +5,11 @@ import com.dungeonderps.resourcefulbees.block.CentrifugeBlock;
 import com.dungeonderps.resourcefulbees.config.Config;
 import com.dungeonderps.resourcefulbees.container.AutomationSensitiveItemStackHandler;
 import com.dungeonderps.resourcefulbees.container.CentrifugeContainer;
+import com.dungeonderps.resourcefulbees.lib.BeeConstants;
 import com.dungeonderps.resourcefulbees.recipe.CentrifugeRecipe;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.utils.CustomEnergyStorage;
+import com.google.gson.JsonElement;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -16,8 +18,6 @@ import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
@@ -90,11 +90,12 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
     }
 
     protected boolean canProcess(@Nullable CentrifugeRecipe recipe) {
-        if (recipe != null) {
+        if (recipe != null && !recipe.multiblock) {
             List<Pair<ItemStack, Double>> outputs = recipe.outputs;
             ItemStack glass_bottle = h.getStackInSlot(BOTTLE_SLOT);
             ItemStack combs = h.getStackInSlot(HONEYCOMB_SLOT);
-            int inputAmount = recipe.ingredient.serialize().getAsJsonObject().get("count").getAsInt();
+            JsonElement count = recipe.ingredient.serialize().getAsJsonObject().get(BeeConstants.INGREDIENT_COUNT);
+            int inputAmount = count !=null ? count.getAsInt() : 1;
             List<ItemStack> outputSlots = new ArrayList<>(
                 Arrays.asList(
                     h.getStackInSlot(OUTPUT1),
@@ -126,6 +127,8 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
 
     private void processItem(@Nullable CentrifugeRecipe recipe) {
         if (recipe != null && this.canProcess(recipe)) {
+            JsonElement count = recipe.ingredient.serialize().getAsJsonObject().get(BeeConstants.INGREDIENT_COUNT);
+            int inputAmount = count !=null ? count.getAsInt() : 1;
             ItemStack comb = h.getStackInSlot(HONEYCOMB_SLOT);
             ItemStack glass_bottle = h.getStackInSlot(BOTTLE_SLOT);
             List<Pair<ItemStack, Integer>> slots = new ArrayList<>(
@@ -147,7 +150,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
                     if (slots.get(i).getRight().equals(HONEY_BOTTLE)) glass_bottle.shrink(1);
                 }
             }
-            comb.shrink(recipe.ingredient.serialize().getAsJsonObject().get("count").getAsInt());
+            comb.shrink(inputAmount);
         }
         time = 0;
     }

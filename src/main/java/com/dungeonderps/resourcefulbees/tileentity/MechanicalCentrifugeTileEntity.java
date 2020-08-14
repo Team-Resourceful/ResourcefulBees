@@ -3,8 +3,10 @@ package com.dungeonderps.resourcefulbees.tileentity;
 import com.dungeonderps.resourcefulbees.block.MechanicalCentrifugeBlock;
 import com.dungeonderps.resourcefulbees.container.AutomationSensitiveItemStackHandler;
 import com.dungeonderps.resourcefulbees.container.MechanicalCentrifugeContainer;
+import com.dungeonderps.resourcefulbees.lib.BeeConstants;
 import com.dungeonderps.resourcefulbees.recipe.CentrifugeRecipe;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
+import com.google.gson.JsonElement;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -79,11 +81,12 @@ public class MechanicalCentrifugeTileEntity extends TileEntity implements ITicka
     }
 
     public boolean canProcess(@Nullable CentrifugeRecipe recipe) {
-        if (recipe != null) {
+        if (recipe != null && !recipe.multiblock) {
             List<Pair<ItemStack, Double>> outputs = recipe.outputs;
             ItemStack glass_bottle = h.getStackInSlot(BOTTLE_SLOT);
             ItemStack combs = h.getStackInSlot(HONEYCOMB_SLOT);
-            int inputAmount = recipe.ingredient.serialize().getAsJsonObject().get("count").getAsInt();
+            JsonElement count = recipe.ingredient.serialize().getAsJsonObject().get(BeeConstants.INGREDIENT_COUNT);
+            int inputAmount = count !=null ? count.getAsInt() : 1;
             List<ItemStack> outputSlots = new ArrayList<>(
                     Arrays.asList(
                             h.getStackInSlot(OUTPUT1),
@@ -114,6 +117,8 @@ public class MechanicalCentrifugeTileEntity extends TileEntity implements ITicka
 
     private void processItem(@Nullable CentrifugeRecipe recipe) {
         if (recipe != null && this.canProcess(recipe)) {
+            JsonElement count = recipe.ingredient.serialize().getAsJsonObject().get(BeeConstants.INGREDIENT_COUNT);
+            int inputAmount = count !=null ? count.getAsInt() : 1;
             ItemStack comb = h.getStackInSlot(HONEYCOMB_SLOT);
             ItemStack glass_bottle = h.getStackInSlot(BOTTLE_SLOT);
             List<Pair<ItemStack, Integer>> slots = new ArrayList<>(
@@ -135,7 +140,7 @@ public class MechanicalCentrifugeTileEntity extends TileEntity implements ITicka
                         if (slots.get(i).getRight().equals(HONEY_BOTTLE)) glass_bottle.shrink(1);
                     }
                 }
-            comb.shrink(recipe.ingredient.serialize().getAsJsonObject().get("count").getAsInt());
+            comb.shrink(inputAmount);
         }
         clicks = 0;
     }
