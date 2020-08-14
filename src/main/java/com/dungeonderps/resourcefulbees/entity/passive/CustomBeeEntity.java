@@ -111,11 +111,11 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
     //endregion
 
     //region JEI RELATED METHODS
-        public void setRenderingInJei(boolean inJei){
+    public void setRenderingInJei(boolean inJei){
             this.renderingInJei = inJei;
         }
 
-        public boolean getRenderingInJei(){
+    public boolean getRenderingInJei(){
             return this.renderingInJei;
         }
     //endregion
