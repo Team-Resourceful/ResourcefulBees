@@ -21,9 +21,8 @@ public class CentrifugeMultiblockScreen extends ContainerScreen<CentrifugeMultib
     public CentrifugeMultiblockScreen(CentrifugeMultiblockContainer screenContainer, PlayerInventory inventory, ITextComponent titleIn) {
         super(screenContainer, inventory, titleIn);
         this.xSize = 176;
-        this.ySize = 186;
+        this.ySize = 228;
     }
-    int textColor = 0x404040;
 
     @Override
     protected void drawGuiContainerBackgroundLayer(@Nonnull MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
@@ -33,11 +32,11 @@ public class CentrifugeMultiblockScreen extends ContainerScreen<CentrifugeMultib
             int i = this.guiLeft;
             int j = this.guiTop;
             this.blit(matrix, i, j, 0, 0, this.xSize, this.ySize);
-            int scaledprogress1 = 16 * this.container.centrifugeTileEntity.time[0] / Math.max(this.container.centrifugeTileEntity.totalTime[0],1);
+            int scaledprogress1 = 16 * this.container.getTime(0) / Math.max(this.container.centrifugeTileEntity.totalTime,1);
             this.blit(matrix, i + 52, j + 26, 176, 1, 16, scaledprogress1);
-            int scaledprogress2 = 16 * this.container.centrifugeTileEntity.time[1] / Math.max(this.container.centrifugeTileEntity.totalTime[1],1);
+            int scaledprogress2 = 16 * this.container.getTime(1) / Math.max(this.container.centrifugeTileEntity.totalTime,1);
             this.blit(matrix, i + 88, j + 26, 176, 1, 16, scaledprogress2);
-            int scaledprogress3 = 16 * this.container.centrifugeTileEntity.time[2] / Math.max(this.container.centrifugeTileEntity.totalTime[2],1);
+            int scaledprogress3 = 16 * this.container.getTime(2) / Math.max(this.container.centrifugeTileEntity.totalTime,1);
             this.blit(matrix, i + 124, j + 26, 176, 1, 16, scaledprogress3);
             int scaledRF = 58 * this.container.getEnergy() / Math.max(Config.MAX_CENTRIFUGE_RF.get() * 5,1);
             this.blit(matrix, i + 10, j + 38 + (58-scaledRF), 176, 28 + (58-scaledRF), 12, scaledRF);

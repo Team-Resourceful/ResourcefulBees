@@ -4,6 +4,7 @@ import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.config.Config;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.tileentity.TieredBeehiveTileEntity;
+import com.dungeonderps.resourcefulbees.utils.BeeInfoUtils;
 import com.dungeonderps.resourcefulbees.utils.NBTHelper;
 import com.dungeonderps.resourcefulbees.utils.TooltipBuilder;
 import net.minecraft.block.BeehiveBlock;
@@ -88,7 +89,7 @@ public class TieredBeehiveBlock extends BeehiveBlock {
    		smokeHive(pos, world);
     }
    	else if (honeyLevel >= 5) {
-      if (Config.ALLOW_SHEARS.get() && itemstack.getItem().isIn(ItemTags.getCollection().getOrCreate(new ResourceLocation("forge:shears")))) {
+      if (Config.ALLOW_SHEARS.get() && itemstack.getItem().isIn(BeeInfoUtils.getItemTag("forge:shears"))) {
         world.playSound(player, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.BLOCK_BEEHIVE_SHEAR, SoundCategory.NEUTRAL, 1.0F, 1.0F);
         dropResourceHoneycomb(world, pos);
         itemstack.damageItem(1, player, player1 -> player1.sendBreakAnimation(handIn));

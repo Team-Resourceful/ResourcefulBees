@@ -12,6 +12,7 @@ import com.dungeonderps.resourcefulbees.recipe.CentrifugeRecipe;
 import com.dungeonderps.resourcefulbees.tileentity.*;
 import com.dungeonderps.resourcefulbees.tileentity.centrifuge.CentrifugeCasingTileEntity;
 import com.dungeonderps.resourcefulbees.tileentity.centrifuge.CentrifugeControllerTileEntity;
+import com.dungeonderps.resourcefulbees.tileentity.CreativeGenTileEntity;
 import com.dungeonderps.resourcefulbees.world.BeeNestFeature;
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.block.Block;
@@ -111,6 +112,8 @@ public class RegistryHandler {
 	public static final RegistryObject<FlowingFluidBlock> HONEY_FLUID_BLOCK = BLOCKS.register("honey_fluid_block", () -> new FlowingFluidBlock(FluidRegistry.HONEY_FLUID, Block.Properties.create(net.minecraft.block.material.Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops()));
 	public static final RegistryObject<Block> CENTRIFUGE_CONTROLLER = BLOCKS.register("centrifuge_controller", () -> new CentrifugeControllerBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(2).sound(SoundType.METAL)));
 	public static final RegistryObject<Block> CENTRIFUGE_CASING = BLOCKS.register("centrifuge_casing", () -> new CentrifugeCasingBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(2).sound(SoundType.METAL)));
+	public static final RegistryObject<Block> CREATIVE_GEN = BLOCKS.register("creative_gen", () -> new CreativeGen(Block.Properties.create(Material.IRON).hardnessAndResistance(2).sound(SoundType.METAL)));
+
 
 	//endregion
 
@@ -204,6 +207,10 @@ public class RegistryHandler {
 
 	public static final RegistryObject<TileEntityType<?>> HONEY_GENERATOR_ENTITY = TILE_ENTITY_TYPES.register("honey_generator", () -> TileEntityType.Builder
 			.create(HoneyGeneratorTileEntity::new, HONEY_GENERATOR.get())
+			.build(null));
+
+	public static final RegistryObject<TileEntityType<?>> CREATIVE_GEN_ENTITY = TILE_ENTITY_TYPES.register("creative_gen", () -> TileEntityType.Builder
+			.create(CreativeGenTileEntity::new, CREATIVE_GEN.get())
 			.build(null));
 
 	public static final RegistryObject<TileEntityType<?>> APIARY_TILE_ENTITY = TILE_ENTITY_TYPES.register("apiary", () -> TileEntityType.Builder

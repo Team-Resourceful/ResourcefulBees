@@ -10,6 +10,8 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.util.IIntArray;
+import net.minecraft.util.IntArray;
 import net.minecraft.util.IntReferenceHolder;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -22,20 +24,28 @@ public class CentrifugeMultiblockContainer extends Container {
 
     public CentrifugeControllerTileEntity centrifugeTileEntity;
     public PlayerEntity player;
+    public final IIntArray times;
 
     public CentrifugeMultiblockContainer(int id, World world, BlockPos pos, PlayerInventory inv) {
+        this(id, world, pos, inv, new IntArray(4));
+    }
+
+    public CentrifugeMultiblockContainer(int id, World world, BlockPos pos, PlayerInventory inv, IIntArray times) {
         super(RegistryHandler.CENTRIFUGE_MULTIBLOCK_CONTAINER.get(), id);
 
         this.player = inv.player;
+        this.times = times;
 
         centrifugeTileEntity = (CentrifugeControllerTileEntity) world.getTileEntity(pos);
 
+        this.addSlot(new SlotItemHandlerUnconditioned(centrifugeTileEntity.h, CentrifugeControllerTileEntity.BOTTLE_SLOT, 8, 8){
+            public boolean isItemValid(ItemStack stack){
+                return stack.getItem().equals(Items.GLASS_BOTTLE);
+            }
+        });
+
         int x = 53;
         for (int i=0; i < 3; i++) {
-            int finalI = i;
-            this.trackInt(new FunctionalIntReferenceHolder(() -> centrifugeTileEntity.time[finalI], v -> centrifugeTileEntity.time[finalI] = v));
-            this.trackInt(new FunctionalIntReferenceHolder(() -> centrifugeTileEntity.totalTime[finalI], v -> centrifugeTileEntity.totalTime[finalI] = v));
-
             this.addSlot(new SlotItemHandlerUnconditioned(centrifugeTileEntity.h, CentrifugeControllerTileEntity.HONEYCOMB_SLOT[i], x, 8){
                 public boolean isItemValid(ItemStack stack){
                     return !stack.getItem().equals(Items.GLASS_BOTTLE);
@@ -45,19 +55,11 @@ public class CentrifugeMultiblockContainer extends Container {
         }
 
 
-        for (int i = 0; i < 9; i++) {
-            this.addSlot(new OutputSlot(centrifugeTileEntity.h, CentrifugeControllerTileEntity.OUTPUT_SLOTS[i], 53 + i * 18, 80));
+        for (int i = 0; i < 6; i++) {
+            this.addSlot(new OutputSlot(centrifugeTileEntity.h, CentrifugeControllerTileEntity.OUTPUT_SLOTS[i], 44 + i * 18, 44));
+            this.addSlot(new OutputSlot(centrifugeTileEntity.h, CentrifugeControllerTileEntity.OUTPUT_SLOTS[i + 6], 44 + i * 18, 62));
+            this.addSlot(new OutputSlot(centrifugeTileEntity.h, CentrifugeControllerTileEntity.OUTPUT_SLOTS[i + 12], 44 + i * 18, 80));
         }
-        for (int i = 0; i < 9; i++) {
-            this.addSlot(new OutputSlot(centrifugeTileEntity.h, CentrifugeControllerTileEntity.OUTPUT_SLOTS[i + 9], 53 + i * 18, 98));
-        }
-
-
-        this.addSlot(new SlotItemHandlerUnconditioned(centrifugeTileEntity.h, CentrifugeControllerTileEntity.BOTTLE_SLOT, 8, 8){
-            public boolean isItemValid(ItemStack stack){
-                return stack.getItem().equals(Items.GLASS_BOTTLE);
-            }
-        });
 
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
@@ -69,6 +71,7 @@ public class CentrifugeMultiblockContainer extends Container {
             this.addSlot(new Slot(inv, k, 8 + k * 18, 162));
         }
         trackPower();
+        this.trackIntArray(times);
     }
 
     private void trackPower() {
@@ -106,6 +109,10 @@ public class CentrifugeMultiblockContainer extends Container {
         return centrifugeTileEntity.getCapability(CapabilityEnergy.ENERGY).map(IEnergyStorage::getEnergyStored).orElse(0);
     }
 
+    public int getTime(int i) {
+        return this.times.get(i);
+    }
+
     /**
      * Determines whether supplied player can use this container
      *
@@ -124,11 +131,15 @@ public class CentrifugeMultiblockContainer extends Container {
         if (slot != null && slot.getHasStack()) {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
-            if (index <= 22) {
+            if (index < 22) {
                 if (!this.mergeItemStack(itemstack1, 22, inventorySlots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.mergeItemStack(itemstack1, 0, 21, false)) {
+            }
+            else if (itemstack1.getItem().equals(Items.GLASS_BOTTLE) && !this.mergeItemStack(itemstack1, 0, 1, false)) {
+                return ItemStack.EMPTY;
+            }
+            else if (!this.mergeItemStack(itemstack1, 0, 3, false)) {
                 return ItemStack.EMPTY;
             }
 

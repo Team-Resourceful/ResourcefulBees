@@ -21,9 +21,11 @@ import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.AbstractFurnaceTileEntity;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.util.IIntArray;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.util.text.ITextComponent;
@@ -43,6 +45,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -58,12 +61,46 @@ public class CentrifugeControllerTileEntity extends TileEntity implements ITicka
     public final CustomEnergyStorage energyStorage = createEnergy();
     public final LazyOptional<IItemHandler> lazyOptional = LazyOptional.of(() -> h);
     public final LazyOptional<IEnergyStorage> energy = LazyOptional.of(() -> energyStorage);
-    public int[] time = {0,0,0,0};
+    public int[] time = {0,0,0};
     public List<CentrifugeRecipe> recipe = new ArrayList<>(Arrays.asList(null,null,null));
     public ItemStack failedMatch = ItemStack.EMPTY;
-    public int[] totalTime = {0,0,0,0};
+    public int totalTime = 100;
     private int validateTime = 300;
     public boolean validStrucutre;
+    private final List<BlockPos> STRUCTURE_BLOCKS = new ArrayList<>();
+    protected final IIntArray times = new IIntArray() {
+        public int get(int index) {
+            switch(index) {
+                case 0:
+                    return CentrifugeControllerTileEntity.this.time[0];
+                case 1:
+                    return CentrifugeControllerTileEntity.this.time[1];
+                case 2:
+                    return CentrifugeControllerTileEntity.this.time[2];
+                default:
+                    return 0;
+            }
+        }
+
+        public void set(int index, int value) {
+            switch(index) {
+                case 0:
+                    CentrifugeControllerTileEntity.this.time[0] = value;
+                    break;
+                case 1:
+                    CentrifugeControllerTileEntity.this.time[1] = value;
+                    break;
+                case 2:
+                    CentrifugeControllerTileEntity.this.time[2] = value;
+            }
+
+        }
+
+        public int size() {
+            return 3;
+        }
+    };
+
 
     public CentrifugeControllerTileEntity() {
         super(RegistryHandler.CENTRIFUGE_CONTROLLER_ENTITY.get());
@@ -78,16 +115,17 @@ public class CentrifugeControllerTileEntity extends TileEntity implements ITicka
                 if (!h.getStackInSlot(HONEYCOMB_SLOT[i]).isEmpty() && !h.getStackInSlot(BOTTLE_SLOT).isEmpty()) {
                     CentrifugeRecipe irecipe = getRecipe(i);
                     if (this.canProcess(irecipe, i)) {
-                        this.totalTime[i] = this.getTime(i);
+                        this.totalTime = 100;
                         ++this.time[i];
-                        if (this.time[i] == this.totalTime[i]) {
-                            energyStorage.consumeEnergy(Config.RF_TICK_CENTRIFUGE.get() * totalTime[i]);
+                        if (this.time[i] == this.totalTime) {
+                            energyStorage.consumeEnergy(Config.RF_TICK_CENTRIFUGE.get() * totalTime);
                             this.time[i] = 0;
-                            this.totalTime[i] = 100;
-                            System.out.println(this.time[i] + "time" + this.totalTime[i] + " " + i);
+                            this.totalTime = 100;
                             this.processItem(irecipe, i);
                             dirty = true;
                         }
+                    } else {
+                        this.time[i] = 0;
                     }
                 } else {
                     this.time[i] = 0;
@@ -108,7 +146,7 @@ public class CentrifugeControllerTileEntity extends TileEntity implements ITicka
 
     //region Recipe Handler
     protected boolean canProcess(@Nullable CentrifugeRecipe recipe, int slot) {
-        if (recipe != null) {
+        if (recipe != null && validStrucutre) {
             ItemStack glass_bottle = h.getStackInSlot(BOTTLE_SLOT);
             ItemStack combs = h.getStackInSlot(HONEYCOMB_SLOT[slot]);
             JsonElement count = recipe.ingredient.serialize().getAsJsonObject().get(BeeConstants.INGREDIENT_COUNT);
@@ -140,12 +178,6 @@ public class CentrifugeControllerTileEntity extends TileEntity implements ITicka
         time[slot] = 0;
     }
 
-    protected int getTime(int i) {
-        CentrifugeRecipe rec = getRecipe(i);
-        if (rec == null) return -1;
-        return Math.max(rec.time / 2, 1);
-    }
-
     protected CentrifugeRecipe getRecipe(int i) {
         ItemStack input = h.getStackInSlot(HONEYCOMB_SLOT[i]);
         if (input.isEmpty() || input == failedMatch) return null;
@@ -168,27 +200,28 @@ public class CentrifugeControllerTileEntity extends TileEntity implements ITicka
         while (!itemstack.isEmpty()){
             ItemStack slotStack = h.getStackInSlot(slotIndex);
 
-            int maxStackSize = h.getSlotLimit(slotIndex);
+            int itemMaxStackSize = itemstack.getMaxStackSize();
 
             if(slotStack.isEmpty()) {
                 int count = itemstack.getCount();
                 slotStack = itemstack.copy();
-                if (count > maxStackSize) {
-                    slotStack.setCount(maxStackSize);
-                    itemstack.setCount(count-maxStackSize);
+
+                if (count > itemMaxStackSize) {
+                    slotStack.setCount(itemMaxStackSize);
+                    itemstack.setCount(count-itemMaxStackSize);
                 } else {
                     itemstack.setCount(0);
                 }
                 h.setStackInSlot(slotIndex, slotStack);
             } else if (areItemsAndTagsEqual(itemstack, slotStack)) {
                 int j = itemstack.getCount() + slotStack.getCount();
-                if (j <= maxStackSize) {
+                if (j <= itemMaxStackSize) {
                     itemstack.setCount(0);
                     slotStack.setCount(j);
                     h.setStackInSlot(slotIndex, slotStack);
-                } else if (slotStack.getCount() < maxStackSize) {
-                    itemstack.shrink(maxStackSize - slotStack.getCount());
-                    slotStack.setCount(maxStackSize);
+                } else if (slotStack.getCount() < itemMaxStackSize) {
+                    itemstack.shrink(itemMaxStackSize - slotStack.getCount());
+                    slotStack.setCount(itemMaxStackSize);
                     h.setStackInSlot(slotIndex, slotStack);
                 }
             }
@@ -199,7 +232,7 @@ public class CentrifugeControllerTileEntity extends TileEntity implements ITicka
 
 
     public boolean inventoryHasSpace(){
-        for (int i=4; i <= 22; ++i){
+        for (int i=4; i < 22; ++i){
             if (h.getStackInSlot(i).isEmpty()){
                 return true;
             }
@@ -207,28 +240,36 @@ public class CentrifugeControllerTileEntity extends TileEntity implements ITicka
         return false;
     }
 
-
     //region NBT
     @Nonnull
     @Override
     public CompoundNBT write(CompoundNBT tag) {
+        saveToNBT(tag);
+        return super.write(tag);
+    }
+
+    public CompoundNBT saveToNBT(CompoundNBT tag) {
         CompoundNBT inv = this.h.serializeNBT();
         tag.put("inv", inv);
         tag.putIntArray("time", time);
-        tag.putIntArray("totalTime", totalTime);
+        tag.putInt("totalTime", totalTime);
         tag.put("energy", energyStorage.serializeNBT());
         tag.putBoolean("valid", validStrucutre);
-        return super.write(tag);
+        return tag;
+    }
+
+    public void loadFromNBT(CompoundNBT tag) {
+        CompoundNBT invTag = tag.getCompound("inv");
+        h.deserializeNBT(invTag);
+        time = tag.getIntArray("time");
+        totalTime = tag.getInt("totalTime");
+        energyStorage.deserializeNBT(tag.getCompound("energy"));
+        validStrucutre = tag.getBoolean("valid");
     }
 
     @Override
     public void read(@Nonnull BlockState state, CompoundNBT tag) {
-        CompoundNBT invTag = tag.getCompound("inv");
-        h.deserializeNBT(invTag);
-        time = tag.getIntArray("time");
-        totalTime = tag.getIntArray("totalTime");
-        energyStorage.deserializeNBT(tag.getCompound("energy"));
-        validStrucutre = tag.getBoolean("valid");
+        this.loadFromNBT(tag);
         super.read(state, tag);
     }
 
@@ -258,7 +299,17 @@ public class CentrifugeControllerTileEntity extends TileEntity implements ITicka
     }
 
     public AutomationSensitiveItemStackHandler.IAcceptor getAcceptor() {
-        return (slot, stack, automation) -> !automation || (slot == HONEYCOMB_SLOT[0] || slot == HONEYCOMB_SLOT[1] || slot == HONEYCOMB_SLOT[2] && !stack.getItem().equals(Items.GLASS_BOTTLE)) || (slot == BOTTLE_SLOT && stack.getItem().equals(Items.GLASS_BOTTLE));
+        return (slot, stack, automation) ->
+            !automation ||
+            (
+                slot == HONEYCOMB_SLOT[0] ||
+                slot == HONEYCOMB_SLOT[1] ||
+                slot == HONEYCOMB_SLOT[2] &&
+                !stack.getItem().equals(Items.GLASS_BOTTLE)
+            )||(
+                slot == BOTTLE_SLOT &&
+                stack.getItem().equals(Items.GLASS_BOTTLE)
+            );
     }
 
     public AutomationSensitiveItemStackHandler.IRemover getRemover() {
@@ -270,7 +321,7 @@ public class CentrifugeControllerTileEntity extends TileEntity implements ITicka
     @Override
     public Container createMenu(int id, @Nonnull PlayerInventory playerInventory, @Nonnull PlayerEntity playerEntity) {
         //noinspection ConstantConditions
-        return new CentrifugeMultiblockContainer(id, world, pos, playerInventory);
+        return new CentrifugeMultiblockContainer(id, world, pos, playerInventory, times);
     }
 
     @Nonnull
@@ -289,6 +340,7 @@ public class CentrifugeControllerTileEntity extends TileEntity implements ITicka
     }
 
 
+    //region STRUCTURE VALIDATION
 
     public MutableBoundingBox buildStructureBounds() {
         MutableBoundingBox box;
@@ -326,9 +378,9 @@ public class CentrifugeControllerTileEntity extends TileEntity implements ITicka
         }));
     }
 
-    public boolean validateStructure(World world, @Nullable ServerPlayerEntity player){
+    public void buildStructureList(){
         MutableBoundingBox box = buildStructureBounds();
-        AtomicBoolean validStructure = new AtomicBoolean(true);
+        STRUCTURE_BLOCKS.clear();
         BlockPos.getAllInBox(box).forEach((pos -> {
             if (world !=null) {
                 Block block = world.getBlockState(pos).getBlock();
@@ -336,16 +388,19 @@ public class CentrifugeControllerTileEntity extends TileEntity implements ITicka
                     CentrifugeCasingTileEntity casingTE = (CentrifugeCasingTileEntity) world.getTileEntity(pos);
                     if (casingTE != null) {
                         casingTE.setControllerPos(this.pos);
-                    } else validStructure.set(false);
-                }
-                else if (!pos.equals(this.pos)) {
-                    validStructure.set(false);
+                        STRUCTURE_BLOCKS.add(pos);
+                    }
                 }
             }
-            else validStructure.set(false);
         }));
+    }
+
+    public boolean validateStructure(World world, @Nullable ServerPlayerEntity player){
+        MutableBoundingBox box = buildStructureBounds();
+        buildStructureList();
+        boolean validStructure = STRUCTURE_BLOCKS.size() == 35;
         if (world !=null) {
-            if (!validStructure.get()) {
+            if (!validStructure) {
                 setCasingsToNotLinked(box);
                 world.setBlockState(pos, getBlockState().with(CentrifugeControllerBlock.PROPERTY_VALID, false));
             } else {
@@ -353,11 +408,13 @@ public class CentrifugeControllerTileEntity extends TileEntity implements ITicka
             }
         }
 
-        if (!validStructure.get() && player !=null){
+        if (!validStructure && player !=null){
             player.sendStatusMessage(new StringTextComponent("Centrifuge Multiblock Invalid"), false);
         }
-        return validStructure.get();
+        return validStructure;
     }
+
+    //endregion
 
     protected class TileStackHandler extends AutomationSensitiveItemStackHandler {
         protected TileStackHandler(int slots) {
