@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " R ",
+    "GGG",
+    " R "
+  ],
+  "key": {
+    "G": {
+      "type": "resourcefulbees:honeycomb",
+      "beetype": "redstone",
+      "honeycombblock": false
+    },
+    "R": {
+      "type": "resourcefulbees:honeycomb",
+      "beetype": "diamond",
+      "honeycombblock": true
+    }
+  },
+  "result": {
+    "item": "resourcefulbees:resourceful_honeycomb",
+    "nbt": {
+      "ResourcefulBees": {"BeeType" : "redstone", "Color" : "#aa0f01"}
+    }
+  }
+}

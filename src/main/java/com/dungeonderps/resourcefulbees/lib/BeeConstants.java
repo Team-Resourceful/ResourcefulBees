@@ -30,6 +30,7 @@ public class BeeConstants {
     public static final String NBT_LOCKED = "Locked";
     public static final String NBT_SLOT_COUNT = "SlotCount";
     public static final String NBT_SPAWN_EGG_DATA = "EntityData";
+    public static final String INGREDIENT_COUNT = "count";
     public static final String STRING_DEFAULT_ITEM_COLOR = "-1";
     public static final String NBT_FEED_COUNT = "FeedCount";
 
