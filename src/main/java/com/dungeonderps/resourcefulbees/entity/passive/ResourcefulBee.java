@@ -51,7 +51,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@SuppressWarnings("EntityConstructor")
 public class ResourcefulBee extends CustomBeeEntity {
     protected final Predicate<BlockState> flowerPredicate = state -> {
 

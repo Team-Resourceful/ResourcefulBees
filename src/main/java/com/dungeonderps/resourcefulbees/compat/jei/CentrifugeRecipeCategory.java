@@ -21,14 +21,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class CentrifugeRecipeCategory implements IRecipeCategory<CentrifugeRecipe> {
@@ -37,7 +34,6 @@ public class CentrifugeRecipeCategory implements IRecipeCategory<CentrifugeRecip
   protected final IDrawableAnimated arrow;
   private final IDrawable icon;
   private final IDrawable background;
-  private final IDrawable multiblock;
   private final String localizedName;
 
   public CentrifugeRecipeCategory(IGuiHelper guiHelper) {
@@ -46,7 +42,6 @@ public class CentrifugeRecipeCategory implements IRecipeCategory<CentrifugeRecip
     this.localizedName = I18n.format("gui.resourcefulbees.jei.category.centrifuge");
     this.arrow = guiHelper.drawableBuilder(new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/centrifuge.png"), 0, 66, 73, 30)
             .buildAnimated(200, IDrawableAnimated.StartDirection.LEFT, false);
-    this.multiblock = guiHelper.createDrawable(new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/icons.png"), 25, 0, 16, 16);
   }
 
   @Nonnull
@@ -120,16 +115,5 @@ public class CentrifugeRecipeCategory implements IRecipeCategory<CentrifugeRecip
     if (beeOutput < 1.0) fontRenderer.drawString(matrix, beeOutputString, 80, 10, 0xff808080);
     if (honeyBottle < 1.0) fontRenderer.drawString(matrix, honeyBottleString, 80, 50, 0xff808080);
     if (beeswax < 1.0) fontRenderer.drawString(matrix, beeswaxString, 80, 30, 0xff808080);
-    if (recipe.multiblock){
-      multiblock.draw(matrix,  10, 45);
-    }
-  }
-
-  @Override
-  public List<ITextComponent> getTooltipStrings(CentrifugeRecipe recipe, double mouseX, double mouseY) {
-    if (mouseX >= 10 && mouseX <= 26 && mouseY >=45 && mouseY <= 61){
-      return Collections.singletonList(new StringTextComponent("Multiblock only recipe."));
-    }
-    return IRecipeCategory.super.getTooltipStrings(recipe,mouseX, mouseY);
   }
 }

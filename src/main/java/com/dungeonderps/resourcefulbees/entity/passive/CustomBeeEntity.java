@@ -41,7 +41,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-@SuppressWarnings("EntityConstructor")
 public class CustomBeeEntity extends BeeEntity implements ICustomBee {
 
     private static final DataParameter<String> BEE_TYPE = EntityDataManager.createKey(CustomBeeEntity.class, DataSerializers.STRING);
@@ -112,11 +111,11 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
     //endregion
 
     //region JEI RELATED METHODS
-        public void setRenderingInJei(boolean inJei){
+    public void setRenderingInJei(boolean inJei){
             this.renderingInJei = inJei;
         }
 
-        public boolean getRenderingInJei(){
+    public boolean getRenderingInJei(){
             return this.renderingInJei;
         }
     //endregion
@@ -131,6 +130,8 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
     @Override
     public boolean attackEntityFrom(DamageSource source, float amount) {
         if (source.isFireDamage() && (getBeeInfo().isNetherBee() || getBeeInfo().isBlazeBee()))
+            return false;
+        if (source.equals(DamageSource.DROWN) && getBeeInfo().isCanSwim())
             return false;
         return super.attackEntityFrom(source, amount);
     }
@@ -172,6 +173,7 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
         return super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
     }
 
+    @SuppressWarnings("unused")
     public static boolean canBeeSpawn(EntityType<? extends AnimalEntity> typeIn, IWorld worldIn, SpawnReason reason, BlockPos pos, Random randomIn) {
         return worldIn.getWorld().func_234922_V_().equals(DimensionType.THE_NETHER)
                 || worldIn.getWorld().func_234922_V_().equals(DimensionType.THE_END)

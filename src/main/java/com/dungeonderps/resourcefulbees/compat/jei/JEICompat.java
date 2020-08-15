@@ -1,7 +1,6 @@
 package com.dungeonderps.resourcefulbees.compat.jei;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
-import com.dungeonderps.resourcefulbees.client.gui.screen.CentrifugeMultiblockScreen;
 import com.dungeonderps.resourcefulbees.client.gui.screen.CentrifugeScreen;
 import com.dungeonderps.resourcefulbees.client.gui.screen.MechanicalCentrifugeScreen;
 import com.dungeonderps.resourcefulbees.compat.jei.ingredients.EntityIngredient;
@@ -113,7 +112,6 @@ public class JEICompat implements IModPlugin {
         registration.addRecipeCatalyst(new ItemStack(RegistryHandler.T4_APIARY_ITEM.get()), ApiaryCategory.ID);
         registration.addRecipeCatalyst(new ItemStack(RegistryHandler.CENTRIFUGE_ITEM.get()), CentrifugeRecipeCategory.ID);
         registration.addRecipeCatalyst(new ItemStack(RegistryHandler.MECHANICAL_CENTRIFUGE_ITEM.get()), CentrifugeRecipeCategory.ID);
-        registration.addRecipeCatalyst(new ItemStack(RegistryHandler.CENTRIFUGE_CONTROLLER_ITEM.get()), CentrifugeRecipeCategory.ID);
     }
 
     @Override
@@ -138,7 +136,6 @@ public class JEICompat implements IModPlugin {
     public void registerGuiHandlers(IGuiHandlerRegistration registration) {
         registration.addRecipeClickArea(CentrifugeScreen.class, 80, 30, 18, 18, CentrifugeRecipeCategory.ID);
         registration.addRecipeClickArea(MechanicalCentrifugeScreen.class, 80, 30, 18, 18, CentrifugeRecipeCategory.ID);
-        registration.addRecipeClickArea(CentrifugeMultiblockScreen.class, 88, 26, 18, 18, CentrifugeRecipeCategory.ID);
     }
 
     @Override

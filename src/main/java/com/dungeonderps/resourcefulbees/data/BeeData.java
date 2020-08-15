@@ -34,7 +34,7 @@ public class BeeData {
     @SuppressWarnings("ConstantConditions")
     private String bottleOutput = Items.HONEY_BOTTLE.getRegistryName().toString();
 
-    private boolean spawnInWorld, enderBee, netherBee, breedable, creeperBee, skeletonBee, zomBee, pigmanBee, witherBee, blazeBee;
+    private boolean spawnInWorld, enderBee, netherBee, breedable, creeperBee, skeletonBee, zomBee, pigmanBee, witherBee, blazeBee, canSwim;
 
     private int maxTimeInHive = BeeConstants.MAX_TIME_IN_HIVE;
     private double breedWeight = BeeConstants.DEFAULT_BREED_WEIGHT;
@@ -547,4 +547,8 @@ public class BeeData {
     public void setFeedAmount(int feedAmount) {
         this.feedAmount = feedAmount;
     }
+
+    public boolean isCanSwim() { return canSwim; }
+
+    public void setCanSwim(boolean canSwim) { this.canSwim = canSwim; }
 }

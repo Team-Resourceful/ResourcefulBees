@@ -83,8 +83,6 @@
 	"block.resourcefulbees.apiary.tooltip.lock": "Bees are locked on import.",
 	"block.resourcefulbees.apiary.tooltip.lock_2": "Bees must be locked and selected to export.",
 	"block.resourcefulbees.mechanical_centrifuge": "Mechanical Centrifuge",
-	"block.resourcefulbees.centrifuge_controller": "Centrifuge Controller",
-	"block.resourcefulbees.centrifuge_casing": "Centrifuge Casing",
 	"block.resourcefulbees.centrifuge.tooltip.info": "Converts Honeycombs into resources using RF.",
 
 	"item.resourcefulbees.smoker_can": "Smoker Canister",

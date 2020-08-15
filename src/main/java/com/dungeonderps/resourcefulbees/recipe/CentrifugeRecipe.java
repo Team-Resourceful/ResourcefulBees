@@ -31,14 +31,12 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
     public final Ingredient ingredient;
     public final List<Pair<ItemStack,Double>> outputs;
     public final int time;
-    public final boolean multiblock;
 
-    public CentrifugeRecipe(ResourceLocation id, Ingredient ingredient, List<Pair<ItemStack,Double>> outputs, int time, boolean multiblock) {
+    public CentrifugeRecipe(ResourceLocation id, Ingredient ingredient, List<Pair<ItemStack,Double>> outputs, int time) {
         this.id = id;
         this.ingredient = ingredient;
         this.outputs = outputs;
         this.time = time;
-        this.multiblock = multiblock;
     }
 
     @Override
@@ -124,9 +122,8 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
             });
 
             int time = JSONUtils.getInt(json,"time");
-            boolean multiblock = JSONUtils.getBoolean(json,"multiblock", false);
 
-            return this.factory.create(id, ingredient, outputs,time, multiblock);
+            return this.factory.create(id, ingredient, outputs,time);
         }
 
         public T read(@Nonnull ResourceLocation id, @Nonnull PacketBuffer buffer) {
@@ -134,8 +131,7 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
             List<Pair<ItemStack,Double>> outputs = new ArrayList<>();
             IntStream.range(0,buffer.readInt()).forEach(i -> outputs.add(Pair.of(buffer.readItemStack(),buffer.readDouble())));
             int time = buffer.readInt();
-            boolean multiblock = buffer.readBoolean();
-            return this.factory.create(id, ingredient, outputs,time, multiblock);
+            return this.factory.create(id, ingredient, outputs,time);
         }
 
         public void write(@Nonnull PacketBuffer buffer, T recipe) {
@@ -146,11 +142,10 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
                 buffer.writeDouble(itemStackDoublePair.getRight());
             });
             buffer.writeInt(recipe.time);
-            buffer.writeBoolean(recipe.multiblock);
         }
 
         public interface IRecipeFactory<T extends CentrifugeRecipe> {
-            T create(ResourceLocation id, Ingredient input, List<Pair<ItemStack,Double>> stacks,int time, boolean multiblock);
+            T create(ResourceLocation id, Ingredient input, List<Pair<ItemStack,Double>> stacks,int time);
         }
     }
 }
