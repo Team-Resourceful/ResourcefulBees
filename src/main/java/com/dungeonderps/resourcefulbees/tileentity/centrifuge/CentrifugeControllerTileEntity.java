@@ -147,12 +147,14 @@ public class CentrifugeControllerTileEntity extends TileEntity implements ITicka
     //region Recipe Handler
     protected boolean canProcess(@Nullable CentrifugeRecipe recipe, int slot) {
         if (recipe != null && validStrucutre) {
-            ItemStack glass_bottle = h.getStackInSlot(BOTTLE_SLOT);
-            ItemStack combs = h.getStackInSlot(HONEYCOMB_SLOT[slot]);
-            JsonElement count = recipe.ingredient.serialize().getAsJsonObject().get(BeeConstants.INGREDIENT_COUNT);
-            int inputAmount = count !=null ? count.getAsInt() : 1;
+            if (!Config.MULTIBLOCK_RECIPES_ONLY.get() || recipe.multiblock) {
+                ItemStack glass_bottle = h.getStackInSlot(BOTTLE_SLOT);
+                ItemStack combs = h.getStackInSlot(HONEYCOMB_SLOT[slot]);
+                JsonElement count = recipe.ingredient.serialize().getAsJsonObject().get(BeeConstants.INGREDIENT_COUNT);
+                int inputAmount = count != null ? count.getAsInt() : 1;
 
-            return inventoryHasSpace() && glass_bottle.getItem() == Items.GLASS_BOTTLE && energyStorage.getEnergyStored() >= recipe.time * Config.RF_TICK_CENTRIFUGE.get() && combs.getCount() >= inputAmount;
+                return inventoryHasSpace() && glass_bottle.getItem() == Items.GLASS_BOTTLE && energyStorage.getEnergyStored() >= recipe.time * Config.RF_TICK_CENTRIFUGE.get() && combs.getCount() >= inputAmount;
+            }else return false;
         }
         return false;
     }
@@ -173,7 +175,7 @@ public class CentrifugeControllerTileEntity extends TileEntity implements ITicka
                         }
                     }
                 }
-            comb.shrink(Math.min(inputAmount, 127));
+            comb.shrink(inputAmount);
         }
         time[slot] = 0;
     }

@@ -140,7 +140,7 @@ public class MechanicalCentrifugeTileEntity extends TileEntity implements ITicka
                         if (slots.get(i).getRight().equals(HONEY_BOTTLE)) glass_bottle.shrink(1);
                     }
                 }
-            comb.shrink(Math.min(inputAmount, 127));
+            comb.shrink(inputAmount);
         }
         clicks = 0;
     }

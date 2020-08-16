@@ -38,6 +38,7 @@ public class Config {
     public static ForgeConfigSpec.IntValue MAX_CENTRIFUGE_RF;
     public static ForgeConfigSpec.IntValue RF_TICK_CENTRIFUGE;
     public static ForgeConfigSpec.DoubleValue PLAYER_EXHAUSTION;
+    public static ForgeConfigSpec.BooleanValue MULTIBLOCK_RECIPES_ONLY;
 
     public static ForgeConfigSpec.IntValue APIARY_MAX_BEES;
 
@@ -80,6 +81,8 @@ public class Config {
                         .defineInRange("centrifugeRfPerTick", 1,1,100);
                 PLAYER_EXHAUSTION = COMMON_BUILDER.comment("\nAmount of hunger the player uses per click on mechanical centrifuge.")
                         .defineInRange("mechanicalCentrifugePlayerExhaustion", 0.1,0.0,1);
+                MULTIBLOCK_RECIPES_ONLY = COMMON_BUILDER.comment("\n Makes it so multiblock centrifuge can only do multiblock recipes. [true/false]")
+                        .define("multiblockRecipesOnly", false);
             COMMON_BUILDER.pop();
 
             COMMON_BUILDER.push("Beehive Options");
