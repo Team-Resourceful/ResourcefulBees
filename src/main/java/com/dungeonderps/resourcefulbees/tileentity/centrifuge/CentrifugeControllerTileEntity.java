@@ -21,7 +21,6 @@ import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.AbstractFurnaceTileEntity;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
@@ -45,9 +44,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import static net.minecraft.inventory.container.Container.areItemsAndTagsEqual;
 
@@ -245,9 +242,9 @@ public class CentrifugeControllerTileEntity extends TileEntity implements ITicka
     //region NBT
     @Nonnull
     @Override
-    public CompoundNBT write(CompoundNBT tag) {
-        saveToNBT(tag);
-        return super.write(tag);
+    public CompoundNBT write(@Nonnull CompoundNBT tag) {
+        super.write(tag);
+        return this.saveToNBT(tag);
     }
 
     public CompoundNBT saveToNBT(CompoundNBT tag) {
@@ -270,7 +267,7 @@ public class CentrifugeControllerTileEntity extends TileEntity implements ITicka
     }
 
     @Override
-    public void read(@Nonnull BlockState state, CompoundNBT tag) {
+    public void read(@Nonnull BlockState state, @Nonnull CompoundNBT tag) {
         this.loadFromNBT(tag);
         super.read(state, tag);
     }
