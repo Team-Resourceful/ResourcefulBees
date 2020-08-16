@@ -500,15 +500,15 @@ public class BeeData {
         this.biomeBlacklist = biomeBlacklist;
     }
 
-    public int getMainOutputCount() { return mainOutputCount; }
+    public int getMainOutputCount() { return Math.min(mainOutputCount, 14); }
 
     public void setMainOutputCount(int mainOutputCount) { this.mainOutputCount = mainOutputCount; }
 
-    public int getSecondaryOutputCount() { return secondaryOutputCount; }
+    public int getSecondaryOutputCount() { return Math.min(secondaryOutputCount, 14); }
 
     public void setSecondaryOutputCount(int secondaryOutputCount) { this.secondaryOutputCount = secondaryOutputCount; }
 
-    public int getBottleOutputCount() { return bottleOutputCount; }
+    public int getBottleOutputCount() { return Math.min(bottleOutputCount, 14); }
 
     public void setBottleOutputCount(int bottleOutputCount) { this.bottleOutputCount = bottleOutputCount; }
 

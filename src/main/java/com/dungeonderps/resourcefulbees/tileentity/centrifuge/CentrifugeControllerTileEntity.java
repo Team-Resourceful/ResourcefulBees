@@ -173,7 +173,7 @@ public class CentrifugeControllerTileEntity extends TileEntity implements ITicka
                         }
                     }
                 }
-            comb.shrink(inputAmount);
+            comb.shrink(Math.min(inputAmount, 127));
         }
         time[slot] = 0;
     }

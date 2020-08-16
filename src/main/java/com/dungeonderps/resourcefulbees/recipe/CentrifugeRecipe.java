@@ -119,7 +119,7 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
                 String registryname = JSONUtils.getString(jsonObject,"item");
                 int count = JSONUtils.getInt(jsonObject,"count",1);
                 double chance = BetterJSONUtils.getDouble(jsonObject,"chance",1);
-                ItemStack stack = new ItemStack(BeeInfoUtils.getItem(registryname),count);
+                ItemStack stack = new ItemStack(BeeInfoUtils.getItem(registryname),Math.min(count, 127));
                 outputs.add(Pair.of(stack,chance));
             });
 

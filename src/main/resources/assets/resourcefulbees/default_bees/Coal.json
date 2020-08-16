@@ -6,7 +6,7 @@
   "mutationInput": "tag:forge:stone",
   "mutationOutput": "minecraft:coal_ore",
   "mainOutput": "minecraft:coal",
-  "mainOutputCount": 16,
+  "mainOutputCount": 14,
   "spawnInWorld": true,
   "biomeWhitelist": "tag:OVERWORLD",
   "biomeBlacklist": "tag:ocean",

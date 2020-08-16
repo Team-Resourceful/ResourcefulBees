@@ -150,7 +150,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
                     if (slots.get(i).getRight().equals(HONEY_BOTTLE)) glass_bottle.shrink(1);
                 }
             }
-            comb.shrink(inputAmount);
+            comb.shrink(Math.min(inputAmount, 127));
         }
         time = 0;
     }
