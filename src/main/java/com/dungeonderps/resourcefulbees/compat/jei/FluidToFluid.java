@@ -8,6 +8,7 @@ import com.dungeonderps.resourcefulbees.lib.BeeConstants;
 import com.dungeonderps.resourcefulbees.lib.MutationTypes;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.utils.BeeInfoUtils;
+import com.dungeonderps.resourcefulbees.utils.BeeValidator;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
@@ -59,7 +60,7 @@ public class FluidToFluid implements IRecipeCategory<FluidToFluid.Recipe> {
                 String mutationIn = bee.getValue().getMutationInput();
                 String mutationOut = bee.getValue().getMutationOutput();
 
-                if (BeeInfoUtils.TAG_RESOURCE_PATTERN.matcher(mutationIn).matches()) {
+                if (BeeValidator.TAG_RESOURCE_PATTERN.matcher(mutationIn).matches()) {
                     mutationIn = mutationIn.replace(BeeConstants.TAG_PREFIX, "");
 
                     ITag<Fluid> fluidTag = BeeInfoUtils.getFluidTag(mutationIn);

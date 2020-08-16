@@ -19,8 +19,6 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -48,7 +46,7 @@ public class BeeHiveCategory implements IRecipeCategory<BeeHiveCategory.Recipe> 
         for (Map.Entry<String, BeeData> bee : BEE_INFO.entrySet()){
             if (!bee.getKey().equals(BeeConstants.DEFAULT_BEE_TYPE) && bee.getValue().getHoneycombColor() != null && !bee.getValue().getHoneycombColor().isEmpty()) {
                 ItemStack honeyCombItemStack = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
-                honeyCombItemStack.setTag(NBTHelper.createHoneycombItemTag(bee.getKey(), bee.getValue().getHoneycombColor()));
+                honeyCombItemStack.setTag(NBTHelper.createHoneycombItemTag(bee.getKey()));
                 recipes.add(new Recipe(honeyCombItemStack, bee.getKey()));
             }
         }

@@ -32,6 +32,9 @@ public class ApiaryStorageScreen extends ContainerScreen<ApiaryStorageContainer>
 
     public ResourceLocation background;
 
+    private TabImageButton mainTabButton;
+    private TabImageButton breedTabButton;
+
     public ApiaryStorageScreen(ApiaryStorageContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
         super(screenContainer, inv, titleIn);
 
@@ -76,7 +79,7 @@ public class ApiaryStorageScreen extends ContainerScreen<ApiaryStorageContainer>
         int j = this.guiTop;
         int t = i + this.xSize - 23;
 
-        this.addButton(new TabImageButton(t+1, j+17, 18, 18, 74, 0, 18, TABS_BG,
+        mainTabButton = this.addButton(new TabImageButton(t+1, j+17, 18, 18, 74, 0, 18, TABS_BG,
                 (onPress) -> this.changeScreen(ApiaryTabs.MAIN)) {
             public void renderToolTip(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
                 StringTextComponent s = new StringTextComponent(I18n.format("gui.resourcefulbees.apiary.button.main_screen"));
@@ -92,22 +95,26 @@ public class ApiaryStorageScreen extends ContainerScreen<ApiaryStorageContainer>
             }
         }).active = false;
 
-        this.addButton(new TabImageButton(t + 1, j + 57, 18, 18, 92, 0, 18, TABS_BG,
+        breedTabButton = this.addButton(new TabImageButton(t + 1, j + 57, 18, 18, 92, 0, 18, TABS_BG,
                 (onPress) -> this.changeScreen(ApiaryTabs.BREED)) {
             public void renderToolTip(@Nonnull MatrixStack matrix,int mouseX, int mouseY) {
                 StringTextComponent s = new StringTextComponent(I18n.format("gui.resourcefulbees.apiary.button.breed_screen"));
                 ApiaryStorageScreen.this.renderTooltip(matrix, s, mouseX, mouseY);
             }
-        }).active = false;
+        });
     }
 
     private void changeScreen(ApiaryTabs tab) {
         switch (tab) {
             case BREED:
+                if (breedTabButton.active)
+                    NetPacketHandler.sendToServer(new ApiaryTabMessage(apiaryStorageTileEntity.getPos(), ApiaryTabs.BREED));
+                break;
             case STORAGE:
                 break;
             case MAIN:
-                NetPacketHandler.sendToServer(new ApiaryTabMessage(apiaryStorageTileEntity.getPos(), ApiaryTabs.MAIN));
+                if (mainTabButton.active)
+                    NetPacketHandler.sendToServer(new ApiaryTabMessage(apiaryStorageTileEntity.getPos(), ApiaryTabs.MAIN));
         }
     }
 
@@ -125,6 +132,9 @@ public class ApiaryStorageScreen extends ContainerScreen<ApiaryStorageContainer>
             init();
             this.container.rebuild = false;
         }
+
+            mainTabButton.active = apiaryStorageTileEntity.getApiary() != null;
+            breedTabButton.active = apiaryStorageTileEntity.getApiary() != null && apiaryStorageTileEntity.getApiary().breederPos != null;
 
         Minecraft client = this.minecraft;
         if (client != null) {

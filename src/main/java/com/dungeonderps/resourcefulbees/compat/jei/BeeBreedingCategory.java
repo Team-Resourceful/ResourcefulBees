@@ -4,7 +4,7 @@ import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.compat.jei.ingredients.EntityIngredient;
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.data.BeeData;
-import com.dungeonderps.resourcefulbees.lib.BeeConstants;
+import com.dungeonderps.resourcefulbees.lib.NBTConstants;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import mezz.jei.api.constants.VanillaTypes;
@@ -91,23 +91,23 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
 
         CompoundNBT p1_type = new CompoundNBT();
         CompoundNBT p1_root = new CompoundNBT();
-        p1_type.putString(BeeConstants.NBT_BEE_TYPE, recipe.parent1);
-        p1_root.put(BeeConstants.NBT_ROOT, p1_type);
-        p1_root.put(BeeConstants.NBT_SPAWN_EGG_DATA, p1_type);
+        p1_type.putString(NBTConstants.NBT_BEE_TYPE, recipe.parent1);
+        p1_root.put(NBTConstants.NBT_ROOT, p1_type);
+        p1_root.put(NBTConstants.NBT_SPAWN_EGG_DATA, p1_type);
         parent1SpawnEgg.setTag(p1_root);
 
         CompoundNBT p2_type = new CompoundNBT();
         CompoundNBT p2_root = new CompoundNBT();
-        p2_type.putString(BeeConstants.NBT_BEE_TYPE, recipe.parent2);
-        p2_root.put(BeeConstants.NBT_ROOT, p2_type);
-        p2_root.put(BeeConstants.NBT_SPAWN_EGG_DATA, p2_type);
+        p2_type.putString(NBTConstants.NBT_BEE_TYPE, recipe.parent2);
+        p2_root.put(NBTConstants.NBT_ROOT, p2_type);
+        p2_root.put(NBTConstants.NBT_SPAWN_EGG_DATA, p2_type);
         parent2SpawnEgg.setTag(p2_root);
 
         CompoundNBT ch_type = new CompoundNBT();
         CompoundNBT ch_root = new CompoundNBT();
-        ch_type.putString(BeeConstants.NBT_BEE_TYPE, recipe.child);
-        ch_root.put(BeeConstants.NBT_ROOT, ch_type);
-        ch_root.put(BeeConstants.NBT_SPAWN_EGG_DATA, ch_type);
+        ch_type.putString(NBTConstants.NBT_BEE_TYPE, recipe.child);
+        ch_root.put(NBTConstants.NBT_ROOT, ch_type);
+        ch_root.put(NBTConstants.NBT_SPAWN_EGG_DATA, ch_type);
         childSpawnEgg.setTag(ch_root);
 
         List<Ingredient> list = new ArrayList<>();

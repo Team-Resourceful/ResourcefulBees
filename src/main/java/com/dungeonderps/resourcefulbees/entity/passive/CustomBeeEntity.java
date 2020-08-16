@@ -5,8 +5,10 @@ import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.data.BeeData;
 import com.dungeonderps.resourcefulbees.entity.ICustomBee;
 import com.dungeonderps.resourcefulbees.lib.BeeConstants;
+import com.dungeonderps.resourcefulbees.lib.NBTConstants;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.utils.BeeInfoUtils;
+import com.dungeonderps.resourcefulbees.utils.BeeValidator;
 import com.dungeonderps.resourcefulbees.utils.MathUtils;
 import net.minecraft.entity.*;
 import net.minecraft.entity.passive.AnimalEntity;
@@ -36,6 +38,7 @@ import net.minecraft.world.DimensionType;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.common.util.FakePlayer;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -188,15 +191,15 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
     @Override
     public void readAdditional(@Nonnull CompoundNBT compound) {
         super.readAdditional(compound);
-        this.dataManager.set(BEE_TYPE, compound.getString(BeeConstants.NBT_BEE_TYPE));
-        this.dataManager.set(FEED_COUNT, compound.getInt(BeeConstants.NBT_FEED_COUNT));
+        this.dataManager.set(BEE_TYPE, compound.getString(NBTConstants.NBT_BEE_TYPE));
+        this.dataManager.set(FEED_COUNT, compound.getInt(NBTConstants.NBT_FEED_COUNT));
     }
 
     @Override
     public void writeAdditional(@Nonnull CompoundNBT compound) {
         super.writeAdditional(compound);
-        compound.putString(BeeConstants.NBT_BEE_TYPE, this.getBeeType());
-        compound.putInt(BeeConstants.NBT_FEED_COUNT, this.getFeedCount());
+        compound.putString(NBTConstants.NBT_BEE_TYPE, this.getBeeType());
+        compound.putInt(NBTConstants.NBT_FEED_COUNT, this.getFeedCount());
     }
 
     public CustomBeeEntity createSelectedChild(String beeType) {
@@ -205,19 +208,24 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
         return childBee;
     }
 
-    //@TODO TEST THIS!
     //This is because we don't want IF being able to breed our animals
     @Override
     public void setInLove(@Nullable PlayerEntity player) {
-        if(player != null)
+        if(player != null && !(player instanceof FakePlayer))
             super.setInLove(player);
+    }
+
+    @Override
+    public void resetInLove() {
+        super.resetInLove();
+        resetFeedCount();
     }
 
     @Override
     public boolean isBreedingItem(@Nonnull ItemStack stack) {
         String validBreedItem = this.getBeeInfo().getFeedItem();
 
-        if (BeeInfoUtils.TAG_RESOURCE_PATTERN.matcher(validBreedItem).matches()) {
+        if (BeeValidator.TAG_RESOURCE_PATTERN.matcher(validBreedItem).matches()) {
             ITag<Item> itemTag = BeeInfoUtils.getItemTag(validBreedItem.replace(BeeConstants.TAG_PREFIX, ""));
             return itemTag != null && stack.getItem().isIn(itemTag);
         } else {

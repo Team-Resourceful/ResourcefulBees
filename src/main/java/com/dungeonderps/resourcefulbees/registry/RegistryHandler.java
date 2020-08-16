@@ -5,7 +5,7 @@ import com.dungeonderps.resourcefulbees.block.*;
 import com.dungeonderps.resourcefulbees.container.*;
 import com.dungeonderps.resourcefulbees.entity.passive.ResourcefulBee;
 import com.dungeonderps.resourcefulbees.item.*;
-import com.dungeonderps.resourcefulbees.lib.BeeConstants;
+import com.dungeonderps.resourcefulbees.lib.NBTConstants;
 import com.dungeonderps.resourcefulbees.recipe.CentrifugeRecipe;
 import com.dungeonderps.resourcefulbees.tileentity.*;
 import com.dungeonderps.resourcefulbees.world.BeeNestFeature;
@@ -102,6 +102,7 @@ public class RegistryHandler {
 	public static final RegistryObject<Block> T3_APIARY_BLOCK = BLOCKS.register("t3_apiary", () -> new ApiaryBlock(7, 6, 8));
 	public static final RegistryObject<Block> T4_APIARY_BLOCK = BLOCKS.register("t4_apiary", () -> new ApiaryBlock(8, 6, 8));
 	public static final RegistryObject<Block> APIARY_STORAGE_BLOCK = BLOCKS.register("apiary_storage", () -> new ApiaryStorageBlock(Block.Properties.create(Material.WOOD).hardnessAndResistance(.3F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> APIARY_BREEDER_BLOCK = BLOCKS.register("apiary_breeder", () -> new ApiaryBreederBlock(Block.Properties.create(Material.WOOD).hardnessAndResistance(.3F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> MECHANICAL_CENTRIFUGE = BLOCKS.register("mechanical_centrifuge", () -> new MechanicalCentrifugeBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(2).sound(SoundType.METAL).notSolid()));
 	public static final RegistryObject<Block> HONEY_GENERATOR = BLOCKS.register("honey_generator", () -> new HoneyGenerator(Block.Properties.create(Material.IRON).hardnessAndResistance(2).sound(SoundType.METAL).notSolid()));
 	public static final RegistryObject<FlowingFluidBlock> HONEY_FLUID_BLOCK = BLOCKS.register("honey_fluid_block", () -> new FlowingFluidBlock(FluidRegistry.HONEY_FLUID, Block.Properties.create(net.minecraft.block.material.Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops()));
@@ -148,21 +149,30 @@ public class RegistryHandler {
 	public static final RegistryObject<Item> T3_APIARY_ITEM = ITEMS.register("t3_apiary",() -> new BlockItem(T3_APIARY_BLOCK.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
 	public static final RegistryObject<Item> T4_APIARY_ITEM = ITEMS.register("t4_apiary",() -> new BlockItem(T4_APIARY_BLOCK.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
 	public static final RegistryObject<Item> APIARY_STORAGE_ITEM = ITEMS.register("apiary_storage",() -> new BlockItem(APIARY_STORAGE_BLOCK.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
+	public static final RegistryObject<Item> APIARY_BREEDER_ITEM = ITEMS.register("apiary_breeder",() -> new BlockItem(APIARY_BREEDER_BLOCK.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
 	public static final RegistryObject<Item> IRON_STORAGE_UPGRADE = ITEMS.register("iron_storage_upgrade", () -> new UpgradeItem(UpgradeItem.builder()
-			.upgradeType(BeeConstants.NBT_STORAGE_UPGRADE)
-			.upgradeModification(BeeConstants.NBT_SLOT_UPGRADE, 27F)
+			.upgradeType(NBTConstants.NBT_STORAGE_UPGRADE)
+			.upgradeModification(NBTConstants.NBT_SLOT_UPGRADE, 27F)
 			.build()));
 	public static final RegistryObject<Item> GOLD_STORAGE_UPGRADE = ITEMS.register("gold_storage_upgrade", () -> new UpgradeItem(UpgradeItem.builder()
-			.upgradeType(BeeConstants.NBT_STORAGE_UPGRADE)
-			.upgradeModification(BeeConstants.NBT_SLOT_UPGRADE, 54F)
+			.upgradeType(NBTConstants.NBT_STORAGE_UPGRADE)
+			.upgradeModification(NBTConstants.NBT_SLOT_UPGRADE, 54F)
 			.build()));
 	public static final RegistryObject<Item> DIAMOND_STORAGE_UPGRADE = ITEMS.register("diamond_storage_upgrade", () -> new UpgradeItem(UpgradeItem.builder()
-			.upgradeType(BeeConstants.NBT_STORAGE_UPGRADE)
-			.upgradeModification(BeeConstants.NBT_SLOT_UPGRADE, 81F)
+			.upgradeType(NBTConstants.NBT_STORAGE_UPGRADE)
+			.upgradeModification(NBTConstants.NBT_SLOT_UPGRADE, 81F)
 			.build()));
 	public static final RegistryObject<Item> EMERALD_STORAGE_UPGRADE = ITEMS.register("emerald_storage_upgrade", () -> new UpgradeItem(UpgradeItem.builder()
-			.upgradeType(BeeConstants.NBT_STORAGE_UPGRADE)
-			.upgradeModification(BeeConstants.NBT_SLOT_UPGRADE, 108F)
+			.upgradeType(NBTConstants.NBT_STORAGE_UPGRADE)
+			.upgradeModification(NBTConstants.NBT_SLOT_UPGRADE, 108F)
+			.build()));
+	public static final RegistryObject<Item> APIARY_BREEDER_UPGRADE = ITEMS.register("apiary_breeder_upgrade", () -> new UpgradeItem(UpgradeItem.builder()
+			.upgradeType(NBTConstants.NBT_BREEDER_UPGRADE)
+			.upgradeModification(NBTConstants.NBT_BREEDER_COUNT, 1)
+			.build()));
+	public static final RegistryObject<Item> APIARY_BREED_TIME_UPGRADE = ITEMS.register("apiary_breed_time_upgrade", () -> new UpgradeItem(UpgradeItem.builder()
+			.upgradeType(NBTConstants.NBT_BREEDER_UPGRADE)
+			.upgradeModification(NBTConstants.NBT_BREED_TIME, 300)
 			.build()));
 	public static final RegistryObject<Item> HONEY_FLUID_BUCKET = ITEMS.register("honey_fluid_bucket", () -> new BucketItem(FluidRegistry.HONEY_FLUID, new Item.Properties().containerItem(Items.BUCKET).maxStackSize(1).group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
 	//endregion
@@ -195,6 +205,10 @@ public class RegistryHandler {
 
 	public static final RegistryObject<TileEntityType<?>> APIARY_STORAGE_TILE_ENTITY = TILE_ENTITY_TYPES.register("apiary_storage", () -> TileEntityType.Builder
 			.create(ApiaryStorageTileEntity::new, APIARY_STORAGE_BLOCK.get())
+			.build(null));
+
+	public static final RegistryObject<TileEntityType<?>> APIARY_BREEDER_TILE_ENTITY = TILE_ENTITY_TYPES.register("apiary_breeder", () -> TileEntityType.Builder
+			.create(ApiaryBreederTileEntity::new, APIARY_BREEDER_BLOCK.get())
 			.build(null));
 	//endregion
 
@@ -236,6 +250,9 @@ public class RegistryHandler {
 
 	public static final RegistryObject<ContainerType<ApiaryStorageContainer>> APIARY_STORAGE_CONTAINER = CONTAINER_TYPES.register("apiary_storage", () -> IForgeContainerType
 			.create((id,inv,c) -> new ApiaryStorageContainer(id, inv.player.world, c.readBlockPos(), inv)));
+
+	public static final RegistryObject<ContainerType<ApiaryBreederContainer>> APIARY_BREEDER_CONTAINER = CONTAINER_TYPES.register("apiary_breeder", () -> IForgeContainerType
+			.create((id,inv,c) -> new ApiaryBreederContainer(id, inv.player.world, c.readBlockPos(), inv)));
 	//endregion
 
 	//region****************RECIPES*****************************************

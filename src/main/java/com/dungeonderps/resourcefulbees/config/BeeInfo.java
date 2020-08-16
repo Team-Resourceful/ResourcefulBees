@@ -8,10 +8,8 @@ import com.dungeonderps.resourcefulbees.utils.RandomCollection;
 import net.minecraft.world.biome.Biome;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.Set;
 
 public class BeeInfo {
 
@@ -55,7 +53,7 @@ public class BeeInfo {
         return info != null ? info : BEE_INFO.get(BeeConstants.DEFAULT_BEE_TYPE);
     }
 
-    public static boolean parentsCanBreed(String parent1, String parent2){
+    public static boolean canParentsBreed(String parent1, String parent2){
         return FAMILY_TREE.containsKey(BeeInfoUtils.sortParents(parent1, parent2));
     }
 

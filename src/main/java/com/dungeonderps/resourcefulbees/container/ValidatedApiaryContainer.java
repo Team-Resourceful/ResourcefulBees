@@ -1,7 +1,7 @@
 package com.dungeonderps.resourcefulbees.container;
 
 import com.dungeonderps.resourcefulbees.item.BeeJar;
-import com.dungeonderps.resourcefulbees.lib.BeeConstants;
+import com.dungeonderps.resourcefulbees.lib.NBTConstants;
 import com.dungeonderps.resourcefulbees.network.NetPacketHandler;
 import com.dungeonderps.resourcefulbees.network.packets.LockBeeMessage;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
@@ -40,7 +40,7 @@ public class ValidatedApiaryContainer extends Container {
                         if (BeeJar.isFilled(stack)) {
                             CompoundNBT data = stack.getTag();
                             //noinspection ConstantConditions
-                            String type = data.getString(BeeConstants.NBT_ENTITY);
+                            String type = data.getString(NBTConstants.NBT_ENTITY);
                             return type.equals(RegistryHandler.CUSTOM_BEE.getId().toString());
                         }
                     }

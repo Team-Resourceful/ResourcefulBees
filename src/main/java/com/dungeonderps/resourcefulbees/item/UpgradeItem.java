@@ -1,6 +1,6 @@
 package com.dungeonderps.resourcefulbees.item;
 
-import com.dungeonderps.resourcefulbees.lib.BeeConstants;
+import com.dungeonderps.resourcefulbees.lib.NBTConstants;
 import com.dungeonderps.resourcefulbees.registry.ItemGroupResourcefulBees;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -36,6 +36,10 @@ public class UpgradeItem extends Item {
         return data;
     }
 
+    public static String getUpgradeType(ItemStack stack) {
+        return getUpgradeData(stack).getString(NBTConstants.NBT_UPGRADE_TYPE);
+    }
+
     public static boolean hasUpgradeData(ItemStack stack) {
         return getUpgradeData(stack) != null;
     }
@@ -53,7 +57,7 @@ public class UpgradeItem extends Item {
         }
 
         public Builder upgradeType(String type) {
-            upgradeData.putString(BeeConstants.NBT_UPGRADE_TYPE, type);
+            upgradeData.putString(NBTConstants.NBT_UPGRADE_TYPE, type);
             return this;
         }
 

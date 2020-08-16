@@ -4,6 +4,7 @@ import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.block.TieredBeehiveBlock;
 import com.dungeonderps.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.dungeonderps.resourcefulbees.lib.BeeConstants;
+import com.dungeonderps.resourcefulbees.lib.NBTConstants;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.tileentity.CentrifugeTileEntity;
 import com.dungeonderps.resourcefulbees.tileentity.HoneycombTileEntity;
@@ -32,9 +33,9 @@ public class TopCompat implements Function<ITheOneProbe, Void>
 
     public static ItemStack honeyComb(String num, TileEntity te){
         final ItemStack honeyComb = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
-        if (!te.serializeNBT().getCompound(BeeConstants.NBT_HONEYCOMBS_TE).getString(num).equals("")) {
-                honeyComb.getOrCreateChildTag(BeeConstants.NBT_ROOT).putString(BeeConstants.NBT_BEE_TYPE, te.serializeNBT().getCompound(BeeConstants.NBT_HONEYCOMBS_TE).getString(num));
-                honeyComb.getOrCreateChildTag(BeeConstants.NBT_ROOT).putString(BeeConstants.NBT_COLOR, String.valueOf(BEE_INFO.get(te.serializeNBT().getCompound(BeeConstants.NBT_HONEYCOMBS_TE).getString(num)).getHoneycombColor()));
+        if (!te.serializeNBT().getCompound(NBTConstants.NBT_HONEYCOMBS_TE).getString(num).equals("")) {
+                honeyComb.getOrCreateChildTag(NBTConstants.NBT_ROOT).putString(NBTConstants.NBT_BEE_TYPE, te.serializeNBT().getCompound(NBTConstants.NBT_HONEYCOMBS_TE).getString(num));
+                honeyComb.getOrCreateChildTag(NBTConstants.NBT_ROOT).putString(NBTConstants.NBT_COLOR, String.valueOf(BEE_INFO.get(te.serializeNBT().getCompound(NBTConstants.NBT_HONEYCOMBS_TE).getString(num)).getHoneycombColor()));
             return honeyComb;
         }
         else return new ItemStack(Items.AIR);
@@ -51,8 +52,8 @@ public class TopCompat implements Function<ITheOneProbe, Void>
                 final ItemStack honeyCombBlock = new ItemStack(RegistryHandler.HONEYCOMB_BLOCK_ITEM.get());
 
                 if (honeyBlock != null){
-                    honeyCombBlock.getOrCreateChildTag(BeeConstants.NBT_ROOT).putString(BeeConstants.NBT_BEE_TYPE, honeyBlock.serializeNBT().getString(BeeConstants.NBT_BEE_TYPE));
-                    honeyCombBlock.getOrCreateChildTag(BeeConstants.NBT_ROOT).putString(BeeConstants.NBT_COLOR, honeyBlock.serializeNBT().getString(BeeConstants.NBT_COLOR));
+                    honeyCombBlock.getOrCreateChildTag(NBTConstants.NBT_ROOT).putString(NBTConstants.NBT_BEE_TYPE, honeyBlock.serializeNBT().getString(NBTConstants.NBT_BEE_TYPE));
+                    honeyCombBlock.getOrCreateChildTag(NBTConstants.NBT_ROOT).putString(NBTConstants.NBT_COLOR, honeyBlock.serializeNBT().getString(NBTConstants.NBT_COLOR));
                 }
 
                 probeInfo.horizontal()

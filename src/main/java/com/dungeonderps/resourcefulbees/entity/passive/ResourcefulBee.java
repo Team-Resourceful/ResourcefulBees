@@ -9,6 +9,7 @@ import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.tileentity.ApiaryTileEntity;
 import com.dungeonderps.resourcefulbees.tileentity.TieredBeehiveTileEntity;
 import com.dungeonderps.resourcefulbees.utils.BeeInfoUtils;
+import com.dungeonderps.resourcefulbees.utils.BeeValidator;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -57,7 +58,7 @@ public class ResourcefulBee extends CustomBeeEntity {
 
         String flower = getBeeInfo().getFlower();
 
-        if (BeeInfoUtils.TAG_RESOURCE_PATTERN.matcher(flower).matches()) {
+        if (BeeValidator.TAG_RESOURCE_PATTERN.matcher(flower).matches()) {
             ITag<Block> blockTag = BeeInfoUtils.getBlockTag(flower.replace(BeeConstants.TAG_PREFIX, ""));
             return blockTag != null && state.isIn(blockTag);
         } else {
@@ -76,6 +77,8 @@ public class ResourcefulBee extends CustomBeeEntity {
             }
         }
     };
+
+    private int numberOfMutations;
 
     public ResourcefulBee(EntityType<? extends BeeEntity> type, World world) {
         super(type, world);
@@ -123,6 +126,24 @@ public class ResourcefulBee extends CustomBeeEntity {
                 || (blockEntity instanceof ApiaryTileEntity && !((ApiaryTileEntity) blockEntity).isFullOfBees());
     }
 
+    @Override
+    public void onHoneyDelivered() {
+        super.onHoneyDelivered();
+        this.resetCropCounter();
+    }
+
+    private int getCropsGrownSincePollination() {
+        return this.numberOfMutations;
+    }
+
+    private void resetCropCounter() {
+        this.numberOfMutations = 0;
+    }
+
+    public void addCropCounter() {
+        ++this.numberOfMutations;
+    }
+
     public void applyPollinationEffect() {
         if (rand.nextInt(1) == 0) {
             for (int i = 1; i <= 2; ++i) {
@@ -143,7 +164,7 @@ public class ResourcefulBee extends CustomBeeEntity {
 
     public boolean validFillerBlock(Block block) {
         String baseBlock = this.getBeeInfo().getMutationInput();
-        if (BeeInfoUtils.TAG_RESOURCE_PATTERN.matcher(baseBlock).matches()) {
+        if (BeeValidator.TAG_RESOURCE_PATTERN.matcher(baseBlock).matches()) {
             ITag<Block> blockTag = BeeInfoUtils.getBlockTag(baseBlock.replace(BeeConstants.TAG_PREFIX, ""));
             return blockTag != null && block.isIn(blockTag);
         }
@@ -156,7 +177,7 @@ public class ResourcefulBee extends CustomBeeEntity {
     public boolean isFlowers(@Nonnull BlockPos pos) {
         String flower = getBeeInfo().getFlower();
 
-        if (BeeInfoUtils.TAG_RESOURCE_PATTERN.matcher(flower).matches()) {
+        if (BeeValidator.TAG_RESOURCE_PATTERN.matcher(flower).matches()) {
             ITag<Block> blockTag = BeeInfoUtils.getBlockTag(flower.replace(BeeConstants.TAG_PREFIX, ""));
             return blockTag != null && this.world.getBlockState(pos).getBlock().isIn(blockTag);
         } else {
@@ -360,6 +381,17 @@ public class ResourcefulBee extends CustomBeeEntity {
 
         public FindPollinationTargetGoal2() {
             super();
+        }
+
+        @Override
+        public boolean canBeeStart() {
+            if (ResourcefulBee.this.getCropsGrownSincePollination() >= getBeeInfo().getMutationCount()) {
+                return false;
+            } else if (ResourcefulBee.this.rand.nextFloat() < 0.3F) {
+                return false;
+            } else {
+                return ResourcefulBee.this.hasNectar() && ResourcefulBee.this.isHiveValid();
+            }
         }
 
         @Override

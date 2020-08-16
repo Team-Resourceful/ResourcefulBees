@@ -1,7 +1,7 @@
 package com.dungeonderps.resourcefulbees.item;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
-import com.dungeonderps.resourcefulbees.lib.BeeConstants;
+import com.dungeonderps.resourcefulbees.lib.NBTConstants;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.BlockItem;
@@ -28,8 +28,8 @@ public class HoneycombBlockItem extends BlockItem {
     @Nonnull
     @Override
     public ActionResultType tryPlace(BlockItemUseContext context) {
-        CompoundNBT combBlockData = context.getItem().getOrCreateChildTag(BeeConstants.NBT_ROOT);
-        if (combBlockData.getString(BeeConstants.NBT_BEE_TYPE).equals("") || combBlockData.getString(BeeConstants.NBT_COLOR).equals("")){
+        CompoundNBT combBlockData = context.getItem().getOrCreateChildTag(NBTConstants.NBT_ROOT);
+        if (combBlockData.getString(NBTConstants.NBT_BEE_TYPE).equals("") || combBlockData.getString(NBTConstants.NBT_COLOR).equals("")){
             return ActionResultType.FAIL;
         }
         else
@@ -39,10 +39,10 @@ public class HoneycombBlockItem extends BlockItem {
     @Nonnull
     @Override
     public String getTranslationKey(ItemStack stack) {
-        CompoundNBT beeType = stack.getChildTag(BeeConstants.NBT_ROOT);
+        CompoundNBT beeType = stack.getChildTag(NBTConstants.NBT_ROOT);
         String name;
-        if ((beeType != null && beeType.contains(BeeConstants.NBT_BEE_TYPE))) {
-            name = "block" + '.' + ResourcefulBees.MOD_ID + '.' + beeType.getString(BeeConstants.NBT_BEE_TYPE) + "_honeycomb_block";
+        if ((beeType != null && beeType.contains(NBTConstants.NBT_BEE_TYPE))) {
+            name = "block" + '.' + ResourcefulBees.MOD_ID + '.' + beeType.getString(NBTConstants.NBT_BEE_TYPE) + "_honeycomb_block";
         } else {
             name = "block" + '.' + ResourcefulBees.MOD_ID + '.' + "resourceful_honeycomb_block";
         }

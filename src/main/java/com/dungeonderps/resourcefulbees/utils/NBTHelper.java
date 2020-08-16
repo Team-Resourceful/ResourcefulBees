@@ -1,6 +1,7 @@
 package com.dungeonderps.resourcefulbees.utils;
 
-import com.dungeonderps.resourcefulbees.lib.BeeConstants;
+import com.dungeonderps.resourcefulbees.config.BeeInfo;
+import com.dungeonderps.resourcefulbees.lib.NBTConstants;
 import net.minecraft.nbt.CompoundNBT;
 
 public class NBTHelper {
@@ -9,13 +10,23 @@ public class NBTHelper {
         CompoundNBT rootTag = new CompoundNBT();
         CompoundNBT childTag = new CompoundNBT();
 
-        childTag.putString(BeeConstants.NBT_BEE_TYPE, beeType);
-        childTag.putString(BeeConstants.NBT_COLOR, color);
+        childTag.putString(NBTConstants.NBT_BEE_TYPE, beeType);
+        childTag.putString(NBTConstants.NBT_COLOR, color);
 
-        rootTag.put(BeeConstants.NBT_ROOT, childTag);
+        rootTag.put(NBTConstants.NBT_ROOT, childTag);
 
         return rootTag;
     }
 
+    public static CompoundNBT createHoneycombItemTag(String beeType){
+        CompoundNBT rootTag = new CompoundNBT();
+        CompoundNBT childTag = new CompoundNBT();
 
+        childTag.putString(NBTConstants.NBT_BEE_TYPE, beeType);
+        childTag.putString(NBTConstants.NBT_COLOR, BeeInfo.getInfo(beeType).getHoneycombColor());
+
+        rootTag.put(NBTConstants.NBT_ROOT, childTag);
+
+        return rootTag;
+    }
 }

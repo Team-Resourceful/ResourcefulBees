@@ -3,7 +3,7 @@ package com.dungeonderps.resourcefulbees.data;
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.config.Config;
-import com.dungeonderps.resourcefulbees.lib.BeeConstants;
+import com.dungeonderps.resourcefulbees.lib.NBTConstants;
 import com.dungeonderps.resourcefulbees.recipe.CentrifugeRecipe;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.utils.BeeInfoUtils;
@@ -59,9 +59,9 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
 
         CompoundNBT rbNBT = new CompoundNBT();
         CompoundNBT btcNBT = new CompoundNBT();
-        btcNBT.putString(BeeConstants.NBT_COLOR, Color);
-        btcNBT.putString(BeeConstants.NBT_BEE_TYPE, BeeType);
-        rbNBT.put(BeeConstants.NBT_ROOT,btcNBT);
+        btcNBT.putString(NBTConstants.NBT_COLOR, Color);
+        btcNBT.putString(NBTConstants.NBT_BEE_TYPE, BeeType);
+        rbNBT.put(NBTConstants.NBT_ROOT,btcNBT);
 
         honeycombItemStack.setTag(rbNBT);
         honeycombOutput.setTag(rbNBT);
@@ -82,9 +82,9 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
     private IRecipe<?> centrifugeRecipe(String BeeType, String Color) {
         BeeData info = BeeInfo.getInfo(BeeType);
         ItemStack honeycombItemStack = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get(), info.getMainInputCount());
-        final CompoundNBT honeycombItemStackTag = honeycombItemStack.getOrCreateChildTag(BeeConstants.NBT_ROOT);
-        honeycombItemStackTag.putString(BeeConstants.NBT_COLOR, Color);
-        honeycombItemStackTag.putString(BeeConstants.NBT_BEE_TYPE, BeeType);
+        final CompoundNBT honeycombItemStackTag = honeycombItemStack.getOrCreateChildTag(NBTConstants.NBT_ROOT);
+        honeycombItemStackTag.putString(NBTConstants.NBT_COLOR, Color);
+        honeycombItemStackTag.putString(NBTConstants.NBT_BEE_TYPE, BeeType);
 
         Ingredient honeycombItem = new CustomNBTIngredient(honeycombItemStack);
 
@@ -106,9 +106,9 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
 
         CompoundNBT rbNBT = new CompoundNBT();
         CompoundNBT btcNBT = new CompoundNBT();
-        btcNBT.putString(BeeConstants.NBT_COLOR, Color);
-        btcNBT.putString(BeeConstants.NBT_BEE_TYPE, BeeType);
-        rbNBT.put(BeeConstants.NBT_ROOT,btcNBT);
+        btcNBT.putString(NBTConstants.NBT_COLOR, Color);
+        btcNBT.putString(NBTConstants.NBT_BEE_TYPE, BeeType);
+        rbNBT.put(NBTConstants.NBT_ROOT,btcNBT);
 
         honeycombItemStack.setTag(rbNBT);
         honeycombOutput.setTag(rbNBT);

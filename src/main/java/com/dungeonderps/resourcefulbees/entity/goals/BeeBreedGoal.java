@@ -39,7 +39,7 @@ public class BeeBreedGoal extends BreedGoal {
             if (targetMate instanceof CustomBeeEntity){
                 CustomBeeEntity parent1 = ((CustomBeeEntity) targetMate);
                 CustomBeeEntity parent2 = ((CustomBeeEntity) animal);
-                if (BeeInfo.parentsCanBreed(parent1.getBeeType(), parent2.getBeeType()))
+                if (BeeInfo.canParentsBreed(parent1.getBeeType(), parent2.getBeeType()))
                     return true;
                 else return parent1.getBeeType().equals(parent2.getBeeType());
             }
