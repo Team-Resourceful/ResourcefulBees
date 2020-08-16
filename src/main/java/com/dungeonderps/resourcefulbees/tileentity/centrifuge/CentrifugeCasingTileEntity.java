@@ -33,7 +33,7 @@ public class CentrifugeCasingTileEntity extends TileEntity {
             if (this. world !=null) {
                 CentrifugeControllerTileEntity controllerTE = (CentrifugeControllerTileEntity) this.world.getTileEntity(controllerPos);
                 if (controllerTE !=null) {
-                    if (controllerTE.validStrucutre) {
+                    if (controllerTE.validStructure) {
                         if (cap.equals(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY))
                             return controllerTE.lazyOptional.cast();
                         if (cap.equals(CapabilityEnergy.ENERGY)) return controllerTE.energy.cast();

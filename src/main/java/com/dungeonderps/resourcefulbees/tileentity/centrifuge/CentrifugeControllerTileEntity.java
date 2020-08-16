@@ -21,7 +21,6 @@ import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.AbstractFurnaceTileEntity;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
@@ -45,9 +44,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import static net.minecraft.inventory.container.Container.areItemsAndTagsEqual;
 
@@ -66,7 +63,7 @@ public class CentrifugeControllerTileEntity extends TileEntity implements ITicka
     public ItemStack failedMatch = ItemStack.EMPTY;
     public int totalTime = 100;
     private int validateTime = 300;
-    public boolean validStrucutre;
+    public boolean validStructure;
     private final List<BlockPos> STRUCTURE_BLOCKS = new ArrayList<>();
     protected final IIntArray times = new IIntArray() {
         public int get(int index) {
@@ -146,7 +143,7 @@ public class CentrifugeControllerTileEntity extends TileEntity implements ITicka
 
     //region Recipe Handler
     protected boolean canProcess(@Nullable CentrifugeRecipe recipe, int slot) {
-        if (recipe != null && validStrucutre) {
+        if (recipe != null && validStructure) {
             if (!Config.MULTIBLOCK_RECIPES_ONLY.get() || recipe.multiblock) {
                 ItemStack glass_bottle = h.getStackInSlot(BOTTLE_SLOT);
                 ItemStack combs = h.getStackInSlot(HONEYCOMB_SLOT[slot]);
@@ -256,7 +253,7 @@ public class CentrifugeControllerTileEntity extends TileEntity implements ITicka
         tag.putIntArray("time", time);
         tag.putInt("totalTime", totalTime);
         tag.put("energy", energyStorage.serializeNBT());
-        tag.putBoolean("valid", validStrucutre);
+        tag.putBoolean("valid", validStructure);
         return tag;
     }
 
@@ -266,7 +263,7 @@ public class CentrifugeControllerTileEntity extends TileEntity implements ITicka
         time = tag.getIntArray("time");
         totalTime = tag.getInt("totalTime");
         energyStorage.deserializeNBT(tag.getCompound("energy"));
-        validStrucutre = tag.getBoolean("valid");
+        validStructure = tag.getBoolean("valid");
     }
 
     @Override
@@ -293,7 +290,7 @@ public class CentrifugeControllerTileEntity extends TileEntity implements ITicka
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-        if (validStrucutre) {
+        if (validStructure) {
             if (cap.equals(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)) return lazyOptional.cast();
             if (cap.equals(CapabilityEnergy.ENERGY)) return energy.cast();
         }

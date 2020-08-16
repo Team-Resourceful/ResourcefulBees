@@ -1,6 +1,5 @@
 package com.dungeonderps.resourcefulbees.block.centrifuge;
 
-import com.dungeonderps.resourcefulbees.container.CentrifugeMultiblockContainer;
 import com.dungeonderps.resourcefulbees.tileentity.centrifuge.CentrifugeControllerTileEntity;
 import com.dungeonderps.resourcefulbees.utils.TooltipBuilder;
 import net.minecraft.block.Block;
@@ -54,8 +53,8 @@ public class CentrifugeControllerBlock extends Block {
             if (blockEntity != null) {
                 if (blockEntity instanceof CentrifugeControllerTileEntity){
                     CentrifugeControllerTileEntity multiblockCentrifuge =  (CentrifugeControllerTileEntity)blockEntity;
-                    multiblockCentrifuge.validStrucutre = multiblockCentrifuge.validateStructure(world, (ServerPlayerEntity) player);
-                    if (multiblockCentrifuge.validStrucutre){
+                    multiblockCentrifuge.validStructure = multiblockCentrifuge.validateStructure(world, (ServerPlayerEntity) player);
+                    if (multiblockCentrifuge.validStructure){
                         NetworkHooks.openGui((ServerPlayerEntity) player, blockEntity, pos);
                     }
                 }
