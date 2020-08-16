@@ -6,6 +6,7 @@ import com.dungeonderps.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.dungeonderps.resourcefulbees.lib.BeeConstants;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.utils.BeeInfoUtils;
+import com.dungeonderps.resourcefulbees.utils.BeeValidator;
 import com.dungeonderps.resourcefulbees.utils.RandomCollection;
 import com.google.gson.Gson;
 import net.minecraft.entity.EntityClassification;
@@ -26,7 +27,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Map;
-import java.util.Set;
 
 import static com.dungeonderps.resourcefulbees.ResourcefulBees.LOGGER;
 import static com.dungeonderps.resourcefulbees.config.BeeInfo.BEE_INFO;
@@ -71,7 +71,7 @@ public class BeeBuilder {
         Reader r = new FileReader(file);
         BeeData bee = gson.fromJson(r, BeeData.class);
         bee.setName(name);
-        if (BeeInfoUtils.validate(bee)) {
+        if (BeeValidator.validate(bee)) {
             BeeInfo.BEE_INFO.put(name.toLowerCase(), bee);
             if (bee.canSpawnInWorld())
                 BeeInfoUtils.parseBiomes(bee);
@@ -83,7 +83,7 @@ public class BeeBuilder {
     }
 
     private static void addBees() {
-        BeeInfo.BEE_INFO.clear();
+        //BeeInfo.BEE_INFO.clear();
         BeeInfoUtils.genDefaultBee();
         try {
             Files.walk(BEE_PATH)
@@ -175,7 +175,7 @@ public class BeeBuilder {
                     builder.append(bee.getKey());
                     builder.append("_spawn_egg\" : \"");
                     builder.append(displayName);
-                    builder.append(" Spawn Egg\",\n");
+                    builder.append(" Bee Spawn Egg\",\n");
                     //entity
                     builder.append("\"entity.resourcefulbees.");
                     builder.append(bee.getKey());

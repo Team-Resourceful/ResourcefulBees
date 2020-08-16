@@ -42,6 +42,8 @@ public class Config {
 
     public static ForgeConfigSpec.IntValue APIARY_MAX_BEES;
 
+    public static ForgeConfigSpec.IntValue APIARY_MAX_BREED_TIME;
+
     public static ForgeConfigSpec.IntValue SMOKER_DURABILITY;
 
     //CLIENT
@@ -113,6 +115,8 @@ public class Config {
                     .defineInRange("tierFourApiaryQuantity", 2, 1, Integer.MAX_VALUE);
                 APIARY_MAX_BEES = COMMON_BUILDER.comment("\nMaximum number of UNIQUE bees allowed in the Apiary.")
                     .defineInRange("apiaryMaxBees", 9, 1, 16);
+                APIARY_MAX_BREED_TIME = COMMON_BUILDER.comment("\nMaximum breed time before upgrades are applied.")
+                    .defineInRange("apiaryMaxBreedTime", 2400, 1200, 4800);
             COMMON_BUILDER.pop();
 
             COMMON_BUILDER.push("Spawning Options");

@@ -7,6 +7,7 @@ import com.dungeonderps.resourcefulbees.config.Config;
 import com.dungeonderps.resourcefulbees.container.ValidatedApiaryContainer;
 import com.dungeonderps.resourcefulbees.lib.ApiaryTabs;
 import com.dungeonderps.resourcefulbees.lib.BeeConstants;
+import com.dungeonderps.resourcefulbees.lib.NBTConstants;
 import com.dungeonderps.resourcefulbees.network.NetPacketHandler;
 import com.dungeonderps.resourcefulbees.network.packets.ApiaryTabMessage;
 import com.dungeonderps.resourcefulbees.network.packets.ExportBeeMessage;
@@ -48,6 +49,8 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
 
     private Button importButton;
     private Button exportButton;
+    private TabImageButton breedTabButton;
+    private TabImageButton storageTabButton;
 
     public ValidatedApiaryScreen(ValidatedApiaryContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
         super(screenContainer, inv, titleIn);
@@ -80,7 +83,7 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
             }
         }).active = false;
 
-        this.addButton(new TabImageButton(t + 1, j + 37, 18, 18, 110, 0, 18, TABS_BG,
+        storageTabButton = this.addButton(new TabImageButton(t + 1, j + 37, 18, 18, 110, 0, 18, TABS_BG,
                 (onPress) -> this.changeScreen(ApiaryTabs.STORAGE)) {
             public void renderToolTip(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
                 StringTextComponent s = new StringTextComponent(I18n.format("gui.resourcefulbees.apiary.button.storage_screen"));
@@ -88,21 +91,24 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
             }
         });
 
-        this.addButton(new TabImageButton(t + 1, j + 57, 18, 18, 92, 0, 18, TABS_BG,
+        breedTabButton = this.addButton(new TabImageButton(t + 1, j + 57, 18, 18, 92, 0, 18, TABS_BG,
                 (onPress) -> this.changeScreen(ApiaryTabs.BREED)) {
             public void renderToolTip(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
                 StringTextComponent s = new StringTextComponent(I18n.format("gui.resourcefulbees.apiary.button.breed_screen"));
                 ValidatedApiaryScreen.this.renderTooltip(matrix, s, mouseX, mouseY);
             }
-        }).active = false;
+        });
     }
 
     private void changeScreen(ApiaryTabs tab) {
         switch (tab) {
             case BREED:
+                if (breedTabButton.active)
+                    NetPacketHandler.sendToServer(new ApiaryTabMessage(apiaryTileEntity.getPos(), ApiaryTabs.BREED));
                 break;
             case STORAGE:
-                NetPacketHandler.sendToServer(new ApiaryTabMessage(apiaryTileEntity.getPos(), ApiaryTabs.STORAGE));
+                if (storageTabButton.active)
+                    NetPacketHandler.sendToServer(new ApiaryTabMessage(apiaryTileEntity.getPos(), ApiaryTabs.STORAGE));
                 break;
             case MAIN:
         }
@@ -142,6 +148,9 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
             }
             exportButton.active = this.container.getSelectedBee() != -1;
             importButton.active = apiaryTileEntity.getBeeCount() < Config.APIARY_MAX_BEES.get();
+
+            breedTabButton.active = apiaryTileEntity.getApiaryBreeder() != null;
+            storageTabButton.active = apiaryTileEntity.getApiaryStorage() != null;
 
             this.container.beeList = Arrays.copyOf(apiaryTileEntity.BEES.keySet().toArray(), apiaryTileEntity.getBeeCount(), String[].class);
             this.minecraft.getTextureManager().bindTexture(VALIDATED_TEXTURE);
@@ -232,10 +241,10 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
             int i1 = top + j * 18 + 2;
             ItemStack beeJar = new ItemStack(RegistryHandler.BEE_JAR.get());
             CompoundNBT data = new CompoundNBT();
-            data.putString(BeeConstants.NBT_ENTITY, "resourcefulbees:bee");
-            data.putString(BeeConstants.NBT_BEE_TYPE, this.container.beeList[i]);
+            data.putString(NBTConstants.NBT_ENTITY, "resourcefulbees:bee");
+            data.putString(NBTConstants.NBT_BEE_TYPE, this.container.beeList[i]);
             String primaryColor = BeeInfo.getInfo(this.container.beeList[i]).getPrimaryColor();
-            data.putString(BeeConstants.NBT_COLOR, primaryColor != null && !primaryColor.isEmpty() ? primaryColor : String.valueOf(BeeConstants.DEFAULT_ITEM_COLOR));
+            data.putString(NBTConstants.NBT_COLOR, primaryColor != null && !primaryColor.isEmpty() ? primaryColor : String.valueOf(BeeConstants.DEFAULT_ITEM_COLOR));
             beeJar.setTag(data);
             if (this.minecraft != null)
                 this.minecraft.getItemRenderer().renderItemAndEffectIntoGUI(beeJar, left, i1);

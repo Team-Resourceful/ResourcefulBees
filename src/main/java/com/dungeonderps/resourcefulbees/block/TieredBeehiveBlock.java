@@ -184,7 +184,7 @@ public class TieredBeehiveBlock extends BeehiveBlock {
       while (hive.hasCombs()) {
         ItemStack comb = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
         String honeycomb = hive.getResourceHoneycomb();
-        comb.setTag(NBTHelper.createHoneycombItemTag(BeeInfo.getInfo(honeycomb).getName(), BeeInfo.getInfo(honeycomb).getHoneycombColor()));
+        comb.setTag(NBTHelper.createHoneycombItemTag(BeeInfo.getInfo(honeycomb).getName()));
         spawnAsEntity(world, pos, comb);
       }
     }
@@ -197,7 +197,7 @@ public class TieredBeehiveBlock extends BeehiveBlock {
       if (hive.hasCombs()) {
         ItemStack comb = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
         String honeycomb = hive.getResourceHoneycomb();
-        comb.setTag(NBTHelper.createHoneycombItemTag(BeeInfo.getInfo(honeycomb).getName(), BeeInfo.getInfo(honeycomb).getHoneycombColor()));
+        comb.setTag(NBTHelper.createHoneycombItemTag(BeeInfo.getInfo(honeycomb).getName()));
         spawnAsEntity(world, pos, comb);
       }
     }

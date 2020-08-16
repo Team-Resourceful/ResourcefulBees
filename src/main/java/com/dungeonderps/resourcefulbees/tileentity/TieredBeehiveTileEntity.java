@@ -5,6 +5,7 @@ package com.dungeonderps.resourcefulbees.tileentity;
 import com.dungeonderps.resourcefulbees.block.TieredBeehiveBlock;
 import com.dungeonderps.resourcefulbees.config.Config;
 import com.dungeonderps.resourcefulbees.entity.passive.CustomBeeEntity;
+import com.dungeonderps.resourcefulbees.lib.NBTConstants;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.utils.MathUtils;
 import net.minecraft.block.BeehiveBlock;
@@ -27,7 +28,8 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Stack;
 
-import static com.dungeonderps.resourcefulbees.lib.BeeConstants.*;
+import static com.dungeonderps.resourcefulbees.lib.BeeConstants.MIN_HIVE_TIME;
+import static com.dungeonderps.resourcefulbees.lib.BeeConstants.SMOKE_TIME;
 
 public class TieredBeehiveTileEntity extends BeehiveTileEntity {
 
@@ -202,23 +204,23 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
   @Override
   public void read(@Nonnull BlockState state, @Nonnull CompoundNBT nbt) {
     super.read(state, nbt);
-    if (nbt.contains(NBT_HONEYCOMBS_TE)){
-      CompoundNBT combs = (CompoundNBT) nbt.get(NBT_HONEYCOMBS_TE);
+    if (nbt.contains(NBTConstants.NBT_HONEYCOMBS_TE)){
+      CompoundNBT combs = (CompoundNBT) nbt.get(NBTConstants.NBT_HONEYCOMBS_TE);
       int i = 0;
       while (combs != null && combs.contains(String.valueOf(i))){
         honeycombs.push(combs.getString(String.valueOf(i)));
         i++;
       }
     }
-    if (nbt.contains(NBT_SMOKED_TE)) {
-      this.isSmoked = nbt.getBoolean(NBT_SMOKED_TE);
+    if (nbt.contains(NBTConstants.NBT_SMOKED_TE)) {
+      this.isSmoked = nbt.getBoolean(NBTConstants.NBT_SMOKED_TE);
     }
 
-    if (nbt.contains(NBT_TIER)) {
-      setTier(nbt.getInt(NBT_TIER));
+    if (nbt.contains(NBTConstants.NBT_TIER)) {
+      setTier(nbt.getInt(NBTConstants.NBT_TIER));
     }
-    if (nbt.contains(NBT_TIER_MODIFIER)) {
-      setTierModifier(nbt.getFloat(NBT_TIER_MODIFIER));
+    if (nbt.contains(NBTConstants.NBT_TIER_MODIFIER)) {
+      setTierModifier(nbt.getFloat(NBTConstants.NBT_TIER_MODIFIER));
     }
   }
 
@@ -231,11 +233,11 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
       for (int i = 0; i < honeycombs.size();i++){
         combs.putString(String.valueOf(i), honeycombs.elementAt(i));
       }
-      nbt.put(NBT_HONEYCOMBS_TE,combs);
+      nbt.put(NBTConstants.NBT_HONEYCOMBS_TE,combs);
     }
-    nbt.putBoolean(NBT_SMOKED_TE, isSmoked);
-    nbt.putInt(NBT_TIER, getTier());
-    nbt.putFloat(NBT_TIER_MODIFIER, getTierModifier());
+    nbt.putBoolean(NBTConstants.NBT_SMOKED_TE, isSmoked);
+    nbt.putInt(NBTConstants.NBT_TIER, getTier());
+    nbt.putFloat(NBTConstants.NBT_TIER_MODIFIER, getTierModifier());
     return nbt;
   }
 

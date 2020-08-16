@@ -5,31 +5,34 @@ import com.dungeonderps.resourcefulbees.compat.jei.ingredients.EntityIngredient;
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.data.BeeData;
 import com.dungeonderps.resourcefulbees.lib.BeeConstants;
+import com.dungeonderps.resourcefulbees.lib.RecipeTypes;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.utils.BeeInfoUtils;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.dungeonderps.resourcefulbees.utils.BeeValidator;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.gui.ingredient.IGuiFluidStackGroup;
 import mezz.jei.api.gui.ingredient.IGuiIngredientGroup;
 import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.runtime.IIngredientManager;
+import net.minecraft.block.Block;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -54,28 +57,38 @@ public class FlowersCategory implements IRecipeCategory<FlowersCategory.Recipe> 
             if (!bee.getValue().getName().equals(DEFAULT_BEE_TYPE)) {
                 if (!bee.getValue().getFlower().isEmpty()) {
                     String flower = bee.getValue().getFlower();
-                    if (BeeInfoUtils.TAG_RESOURCE_PATTERN.matcher(flower).matches()) {
+                    if (BeeValidator.TAG_RESOURCE_PATTERN.matcher(flower).matches()) {
                         flower = flower.replace(BeeConstants.TAG_PREFIX, "");
 
+                        ITag<Fluid> fluidTag = BeeInfoUtils.getFluidTag(flower);
                         ITag<Item> itemTag = BeeInfoUtils.getItemTag(flower);
-                        if (itemTag != null)
-                            recipes.add(new Recipe(itemTag, bee.getKey(), true));
+                        ITag<Block> blockTag = BeeInfoUtils.getBlockTag(flower);
+                        if (itemTag != null) {
+                            recipes.add(new Recipe(itemTag, null, null, bee.getKey(), RecipeTypes.ITEM, true));
+                        } else if (fluidTag != null) {
+                            recipes.add(new Recipe(null, fluidTag, null, bee.getKey(), RecipeTypes.FLUID,  true));
+                        } else if (blockTag != null) {
+                            recipes.add(new Recipe(null, null, blockTag, bee.getKey(), RecipeTypes.BLOCK, true));
+                        }
                     } else if (flower.equals(FLOWER_TAG_ALL)) {
                         ITag<Item> itemTag = ItemTags.FLOWERS;
                         if (itemTag != null)
-                            recipes.add(new Recipe(itemTag, bee.getKey(), true));
+                            recipes.add(new Recipe(itemTag, null,  null, bee.getKey(), RecipeTypes.ITEM, true));
                     } else if (flower.equals(FLOWER_TAG_SMALL)) {
                         ITag<Item> itemTag = ItemTags.SMALL_FLOWERS;
                         if (itemTag != null)
-                            recipes.add(new Recipe(itemTag, bee.getKey(), true));
+                            recipes.add(new Recipe(itemTag, null, null, bee.getKey(), RecipeTypes.ITEM, true));
                     } else if (flower.equals(FLOWER_TAG_TALL)) {
                         ITag<Item> itemTag = ItemTags.TALL_FLOWERS;
                         if (itemTag != null)
-                            recipes.add(new Recipe(itemTag, bee.getKey(), true));
+                            recipes.add(new Recipe(itemTag, null, null, bee.getKey(), RecipeTypes.ITEM, true));
                     } else {
                         Item itemIn = BeeInfoUtils.getItem(flower);
+                        Fluid fluidIn = BeeInfoUtils.getFluid(flower);
                         if (BeeInfoUtils.isValidItem(itemIn))
-                            recipes.add(new Recipe(new ItemStack(itemIn), bee.getKey(), false));
+                            recipes.add(new Recipe(new ItemStack(itemIn), null, bee.getKey(), RecipeTypes.ITEM, false));
+                        else if (BeeInfoUtils.isValidFluid(fluidIn))
+                            recipes.add(new Recipe(null, new FluidStack(fluidIn, 1000), bee.getKey(), RecipeTypes.FLUID, false));
                     }
                 }
             }
@@ -116,19 +129,48 @@ public class FlowersCategory implements IRecipeCategory<FlowersCategory.Recipe> 
     @Override
     public void setIngredients(FlowersCategory.Recipe recipe,@Nonnull IIngredients ingredients) {
         if (recipe.isAcceptsAny()) {
+            if (recipe.recipeType == RecipeTypes.ITEM) {
                 List<Ingredient> list = new ArrayList<>();
-                list.add(Ingredient.fromTag(recipe.tag));
+                list.add(Ingredient.fromTag(recipe.itemITag));
                 ingredients.setInputIngredients(list);
+            } else if (recipe.recipeType == RecipeTypes.FLUID) {
+                List<FluidStack> fluids = new ArrayList<>();
+                for (Fluid element: recipe.fluidITag.getAllElements() ) {
+                    FluidStack fluid = new FluidStack(element, 1000);
+                    fluids.add(fluid);
+                }
+                List<List<FluidStack>> fluid_fluids = new ArrayList<>();
+                fluid_fluids.add(fluids);
+                ingredients.setInputLists(VanillaTypes.FLUID, fluid_fluids);
+            } else if (recipe.recipeType == RecipeTypes.BLOCK) {
+                List<ItemStack> itemStacks = new ArrayList<>();
+                for (Block element: recipe.blockTag.getAllElements() ) {
+                    ItemStack item = new ItemStack(element.asItem());
+                    itemStacks.add(item);
+                }
+                List<List<ItemStack>> item_items = new ArrayList<>();
+                item_items.add(itemStacks);
+                ingredients.setInputLists(VanillaTypes.ITEM, item_items);
+            }
+        } else if (recipe.itemIn != null) {
+            ingredients.setInput(VanillaTypes.ITEM, recipe.itemIn);
+        } else if (recipe.fluidIn != null) {
+            ingredients.setInput(VanillaTypes.FLUID, recipe.fluidIn);
         }
-        else ingredients.setInput(VanillaTypes.ITEM, recipe.itemIn);
         ingredients.setInput(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(recipe.beeType, 135.0F));
     }
 
     @Override
-    public void setRecipe(IRecipeLayout iRecipeLayout,@Nonnull Recipe recipe, IIngredients ingredients) {
-        IGuiItemStackGroup itemStacks = iRecipeLayout.getItemStacks();
-        itemStacks.init(1, true, 3, 57);
-        itemStacks.set(1, ingredients.getInputs(VanillaTypes.ITEM).get(0));
+    public void setRecipe(@Nonnull IRecipeLayout iRecipeLayout, @Nonnull Recipe recipe, @Nonnull IIngredients ingredients) {
+        if (recipe.fluidITag != null) {
+            IGuiFluidStackGroup fluidStacks = iRecipeLayout.getFluidStacks();
+            fluidStacks.init(1,true,4,58);
+            fluidStacks.set(1, ingredients.getInputs(VanillaTypes.FLUID).get(0));
+        } else {
+            IGuiItemStackGroup itemStacks = iRecipeLayout.getItemStacks();
+            itemStacks.init(1, true, 3, 57);
+            itemStacks.set(1, ingredients.getInputs(VanillaTypes.ITEM).get(0));
+        }
 
         IGuiIngredientGroup<EntityIngredient> ingredientStacks = iRecipeLayout.getIngredientsGroup(JEICompat.ENTITY_INGREDIENT);
         ingredientStacks.init(0, true, 4, 10);
@@ -137,29 +179,43 @@ public class FlowersCategory implements IRecipeCategory<FlowersCategory.Recipe> 
 
     public static class Recipe {
         private final ItemStack itemIn;
+        private final FluidStack fluidIn;
+
         private final String beeType;
 
         private final boolean acceptsAny;
-        private final ITag<Item> tag;
 
+        private final ITag<Item> itemITag;
+        private final ITag<Fluid> fluidITag;
+        private final ITag<Block> blockTag;
 
-        public Recipe(ItemStack flower, String beeType, boolean acceptsAny) {
-            this.itemIn = flower;
+        private final RecipeTypes recipeType;
+
+        public Recipe(@Nullable ItemStack flowerItem, @Nullable FluidStack flowerFluid, String beeType, RecipeTypes recipeType, boolean acceptsAny) {
+            this.itemIn = flowerItem;
+            this.fluidIn = flowerFluid;
             this.beeType = beeType;
             this.acceptsAny = acceptsAny;
-            this.tag = null;
+            this.itemITag = null;
+            this.fluidITag = null;
+            this.recipeType = recipeType;
+            this.blockTag = null;
         }
 
         //TAGS!!!
-        public Recipe(ITag<Item> flower, String beeType, boolean acceptsAny) {
+        public Recipe(@Nullable ITag<Item> flowerItemTag, @Nullable ITag<Fluid> flowerFluidTag, ITag<Block> blockTag, String beeType, RecipeTypes recipeType, boolean acceptsAny) {
             this.itemIn = null;
+            this.fluidIn = null;
             this.beeType = beeType;
             this.acceptsAny = acceptsAny;
-            this.tag = flower;
+            this.itemITag = flowerItemTag;
+            this.fluidITag = flowerFluidTag;
+            this.recipeType = recipeType;
+            this.blockTag = blockTag;
         }
 
         public boolean isAcceptsAny() { return acceptsAny; }
-        public ITag<?> getTag() { return tag; }
+        public ITag<?> getItemITag() { return itemITag; }
         public String getBeeType() { return this.beeType; }
     }
 }

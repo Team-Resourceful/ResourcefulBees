@@ -21,11 +21,12 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
 
 import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 import static com.dungeonderps.resourcefulbees.config.BeeInfo.BEE_INFO;
 
@@ -53,7 +54,7 @@ public class ApiaryCategory implements IRecipeCategory<ApiaryCategory.Recipe> {
                 for (int i = 0; i < 4; i++){
                     Item outputItem = outputs.get(i).equals(ApiaryOutput.COMB) ? RegistryHandler.RESOURCEFUL_HONEYCOMB.get() : RegistryHandler.HONEYCOMB_BLOCK_ITEM.get();
                     ItemStack outputStack = new ItemStack(outputItem, outputQuantities[i]);
-                    outputStack.setTag(NBTHelper.createHoneycombItemTag(bee.getKey(), bee.getValue().getHoneycombColor()));
+                    outputStack.setTag(NBTHelper.createHoneycombItemTag(bee.getKey()));
                     recipes.add(new Recipe(outputStack, bee.getKey(), new ItemStack(apiaryTiers.get(i))));
                 }
             }

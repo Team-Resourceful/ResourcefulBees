@@ -3,6 +3,7 @@ package com.dungeonderps.resourcefulbees.entity.goals;
 import com.dungeonderps.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.dungeonderps.resourcefulbees.lib.BeeConstants;
 import com.dungeonderps.resourcefulbees.utils.BeeInfoUtils;
+import com.dungeonderps.resourcefulbees.utils.BeeValidator;
 import net.minecraft.entity.EntityPredicate;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
@@ -61,7 +62,7 @@ public class BeeTemptGoal extends Goal {
     protected boolean isTempting(ItemStack stack) {
         String validBreedItem = this.beeEntity.getBeeInfo().getFeedItem();
 
-        if (BeeInfoUtils.TAG_RESOURCE_PATTERN.matcher(validBreedItem).matches()) {
+        if (BeeValidator.TAG_RESOURCE_PATTERN.matcher(validBreedItem).matches()) {
             ITag<Item> itemTag = BeeInfoUtils.getItemTag(validBreedItem.replace(BeeConstants.TAG_PREFIX, ""));
             return itemTag != null && stack.getItem().isIn(itemTag);
         } else {

@@ -2,6 +2,7 @@
 package com.dungeonderps.resourcefulbees.block;
 
 import com.dungeonderps.resourcefulbees.lib.BeeConstants;
+import com.dungeonderps.resourcefulbees.lib.NBTConstants;
 import com.dungeonderps.resourcefulbees.registry.ColorHandler;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.tileentity.HoneycombTileEntity;
@@ -58,9 +59,9 @@ public class HoneycombBlock extends Block {
             if (tile != null) {
                 CompoundNBT combData = tile.serializeNBT();
                 ItemStack honeyCombBlockItemStack = new ItemStack(RegistryHandler.HONEYCOMB_BLOCK_ITEM.get());
-                final CompoundNBT honeyCombItemStackTag = honeyCombBlockItemStack.getOrCreateChildTag(BeeConstants.NBT_ROOT);
-                honeyCombItemStackTag.putString(BeeConstants.NBT_BEE_TYPE, combData.getString(BeeConstants.NBT_BEE_TYPE));
-                honeyCombItemStackTag.putString(BeeConstants.NBT_COLOR, combData.getString(BeeConstants.NBT_COLOR));
+                final CompoundNBT honeyCombItemStackTag = honeyCombBlockItemStack.getOrCreateChildTag(NBTConstants.NBT_ROOT);
+                honeyCombItemStackTag.putString(NBTConstants.NBT_BEE_TYPE, combData.getString(NBTConstants.NBT_BEE_TYPE));
+                honeyCombItemStackTag.putString(NBTConstants.NBT_COLOR, combData.getString(NBTConstants.NBT_COLOR));
                 return honeyCombBlockItemStack;
             }
         }
@@ -72,7 +73,7 @@ public class HoneycombBlock extends Block {
         TileEntity tile = worldIn.getTileEntity(pos);
         if(tile instanceof HoneycombTileEntity) {
             HoneycombTileEntity honeycombTileEntity = (HoneycombTileEntity) tile;
-            honeycombTileEntity.loadFromNBT(stack.getOrCreateChildTag(BeeConstants.NBT_ROOT));
+            honeycombTileEntity.loadFromNBT(stack.getOrCreateChildTag(NBTConstants.NBT_ROOT));
         }
     }
 }

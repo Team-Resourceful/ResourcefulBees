@@ -27,6 +27,7 @@ public class BeeData {
 
     private String mutationInput = "";
     private String mutationOutput = "";
+    private int mutationCount = 10;
 
     private String mainOutput = "";
 
@@ -546,6 +547,14 @@ public class BeeData {
 
     public void setFeedAmount(int feedAmount) {
         this.feedAmount = feedAmount;
+    }
+
+    public int getMutationCount() {
+        return mutationCount;
+    }
+
+    public void setMutationCount(int mutationCount) {
+        this.mutationCount = mutationCount;
     }
 
     public boolean isCanSwim() { return canSwim; }

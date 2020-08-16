@@ -2,7 +2,6 @@ package com.dungeonderps.resourcefulbees.utils;
 
 import com.dungeonderps.resourcefulbees.data.BeeData;
 import com.dungeonderps.resourcefulbees.lib.BeeConstants;
-import com.dungeonderps.resourcefulbees.lib.MutationTypes;
 import com.google.common.base.Splitter;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -18,21 +17,16 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 import static com.dungeonderps.resourcefulbees.ResourcefulBees.LOGGER;
 import static com.dungeonderps.resourcefulbees.config.BeeInfo.*;
 
 public class BeeInfoUtils {
-
-    public static final Pattern SINGLE_RESOURCE_PATTERN = Pattern.compile("^(\\w+):(\\w+)$", Pattern.CASE_INSENSITIVE);
-    public static final Pattern TAG_RESOURCE_PATTERN = Pattern.compile("^(tag:)(\\w+):(\\w+/\\w+|\\w+)$", Pattern.CASE_INSENSITIVE);
 
     public static void buildFamilyTree(BeeData bee){
         String parent1 = bee.getParent1();
@@ -101,168 +95,6 @@ public class BeeInfoUtils {
         defaultBee.setFlower("minecraft:poppy");
         defaultBee.setSpawnInWorld(false);
         BEE_INFO.put(BeeConstants.DEFAULT_BEE_TYPE, defaultBee);
-    }
-
-    private static boolean logError(String name, String dataCheckType, String data, String dataType){
-        LOGGER.error(name + " Bee " + dataCheckType + " Check Failed! Please check JSON!" +
-                "\n\tCurrent value: \"" + data + "\" is not a valid " + dataType + " - Bee will not be used!");
-        return false;
-    }
-
-    private static boolean logWarn(String name, String dataCheckType, String data, String dataType){
-        LOGGER.warn(name + " Bee " + dataCheckType + " Check Failed! Please check JSON!" +
-                "\n\tCurrent value: \"" + data + "\" is not a valid " + dataType + " - Bee may not function properly!");
-        return true;
-    }
-
-    public static boolean validate(BeeData bee) {
-        boolean isValid;
-
-        isValid = validateColor(bee);
-        isValid = isValid && validateFlower(bee);
-        isValid = isValid && validateMutation(bee);
-        isValid = isValid && validateCentrifugeMainOutput(bee);
-        isValid = isValid && validateCentrifugeSecondaryOutput(bee);
-        isValid = isValid && validateCentrifugeBottleOutput(bee);
-        isValid = isValid && validateMaxTimeInHive(bee);
-        if (bee.isBreedable()) isValid = isValid && validateBreeding(bee);
-
-        return isValid;
-    }
-
-    private static boolean validateMutation(BeeData bee) {
-        if (!beeHasMutation(bee)) {
-            return true;
-        }
-
-        if (TAG_RESOURCE_PATTERN.matcher(bee.getMutationInput()).matches()) {
-            LOGGER.warn("Too early to validate Block Tag for " + bee.getName() + " bee.");
-            return true;
-        }
-
-        int mutation = -1;
-
-        //validate base block
-        Block inputBlock = getBlock(bee.getMutationInput());
-        if (isValidBlock(inputBlock)) {
-            Fluid inputFluid = getFluid(bee.getMutationInput());
-            Item inputItem = getItem(bee.getMutationInput());
-            if (isValidFluid(inputFluid)) {
-                mutation++;
-            } else if (isValidItem(inputItem)) {
-                mutation += 2;
-            } else return logError(bee.getName(), "Base Block", bee.getMutationInput(), "block");
-        } else return logError(bee.getName(), "Base Block", bee.getMutationInput(), "block");
-
-        //validate mutation block
-        Block outputBlock = getBlock(bee.getMutationOutput());
-        if (isValidBlock(outputBlock)) {
-            Fluid outputFluid = getFluid(bee.getMutationOutput());
-            Item outputItem = getItem(bee.getMutationOutput());
-            if (isValidFluid(outputFluid)) { }
-            else if (isValidItem(outputItem)) {
-                mutation += 2;
-            } else return logError(bee.getName(), "Mutation Block", bee.getMutationOutput(), "block");
-        } else return logError(bee.getName(), "Mutation Block", bee.getMutationOutput(), "block");
-
-        switch (mutation) {
-            case (0) :
-                bee.setMutationType(MutationTypes.FLUID_TO_FLUID);
-                break;
-            case (1) :
-                bee.setMutationType(MutationTypes.BLOCK_TO_FLUID);
-                break;
-            case (2) :
-                bee.setMutationType(MutationTypes.FLUID_TO_BLOCK);
-                break;
-            case (3) :
-                bee.setMutationType(MutationTypes.BLOCK_TO_BLOCK);
-        }
-        return true;
-    }
-
-    private static boolean beeHasMutation(BeeData bee) {
-        if (TAG_RESOURCE_PATTERN.matcher(bee.getMutationInput()).matches() ||
-                SINGLE_RESOURCE_PATTERN.matcher(bee.getMutationInput()).matches() &&
-                SINGLE_RESOURCE_PATTERN.matcher(bee.getMutationOutput()).matches()) {
-            bee.setMutation(true);
-            return true;
-        }
-        LOGGER.warn(StringUtils.capitalize(bee.getName()) + " - Bee has no mutations or the patterns don't match.");
-        return false;
-    }
-
-    private static boolean validateBreeding(BeeData bee) {
-        return !bee.getParent1().equals(bee.getParent2()) ||
-                logWarn(bee.getName(), "breeding", (bee.getParent1() + " and " + bee.getParent2()),
-                "are the same parents. Child bee will not spawn from breeding.");
-    }
-
-    private static boolean validateMaxTimeInHive(BeeData bee) {
-        double time = bee.getMaxTimeInHive();
-        return time >= BeeConstants.MIN_HIVE_TIME && time == Math.floor(time) && !Double.isInfinite(time) ||
-                logWarn(bee.getName(), "Time In Hive", String.valueOf(bee.getMaxTimeInHive()),
-                "time. Value must be greater than or equal to " + BeeConstants.MIN_HIVE_TIME);
-    }
-
-    private static boolean validateCentrifugeMainOutput(BeeData bee) {
-        if (!bee.getMainOutput().isEmpty()) {
-            Item item = getItem(bee.getMainOutput());
-            return SINGLE_RESOURCE_PATTERN.matcher(bee.getMainOutput()).matches() && isValidItem(item) ||
-                    logError(bee.getName(), "Centrifuge Output", bee.getMainOutput(), "item");
-        }
-        return true;
-    }
-
-    private static boolean validateCentrifugeSecondaryOutput(BeeData bee) {
-        if (!bee.getMainOutput().isEmpty()) {
-            Item item = getItem(bee.getSecondaryOutput());
-            return SINGLE_RESOURCE_PATTERN.matcher(bee.getSecondaryOutput()).matches() && isValidItem(item) ||
-                    logError(bee.getName(), "Centrifuge Output", bee.getSecondaryOutput(), "item");
-        }
-        return true;
-    }
-
-    private static boolean validateCentrifugeBottleOutput(BeeData bee) {
-        if (!bee.getMainOutput().isEmpty()) {
-            Item item = getItem(bee.getBottleOutput());
-            return SINGLE_RESOURCE_PATTERN.matcher(bee.getBottleOutput()).matches() && isValidItem(item) ||
-                    logError(bee.getName(), "Centrifuge Output", bee.getBottleOutput(), "item");
-        }
-        return true;
-    }
-
-    private static boolean validateFlower(BeeData bee) {
-        if(TAG_RESOURCE_PATTERN.matcher(bee.getFlower()).matches())
-            return true;
-        else {
-            Block flower = getBlock(bee.getFlower());
-            return (bee.getFlower().equals(BeeConstants.FLOWER_TAG_ALL) ||
-                    bee.getFlower().equals(BeeConstants.FLOWER_TAG_SMALL) ||
-                    bee.getFlower().equals(BeeConstants.FLOWER_TAG_TALL) ||
-                    isValidBlock(flower)) ||
-                    logError(bee.getName(), "Flower", bee.getFlower(), "flower");
-        }
-    }
-
-    private static boolean validateColor(BeeData bee) {
-        boolean flag = true;
-        if (bee.getHoneycombColor() != null && !bee.getHoneycombColor().isEmpty()) {
-            flag = Color.validate(bee.getHoneycombColor());
-            if (!flag)
-                logError(bee.getName(), "Honeycomb Color", bee.getHoneycombColor() , "color");
-        }
-        if (flag && bee.getPrimaryColor() != null && !bee.getPrimaryColor().isEmpty()) {
-            flag = Color.validate(bee.getPrimaryColor());
-            if (!flag)
-                logError(bee.getName(), "Primary Color", bee.getPrimaryColor() , "color");
-        }
-        if (flag && bee.getSecondaryColor() != null && !bee.getSecondaryColor().isEmpty()) {
-            flag = Color.validate(bee.getSecondaryColor());
-            if (!flag)
-                logError(bee.getName(), "Secondary Color", bee.getSecondaryColor() , "color");
-        }
-        return flag;
     }
 
     /**
