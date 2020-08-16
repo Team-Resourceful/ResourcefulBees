@@ -135,7 +135,7 @@ public class CentrifugeControllerTileEntity extends TileEntity implements ITicka
                 validateTime--;
             }
             else {
-                validateStructure(this.world, null);
+                validStructure = validateStructure(this.world, null);
                 validateTime = 300;
             }
         }
@@ -242,9 +242,9 @@ public class CentrifugeControllerTileEntity extends TileEntity implements ITicka
     //region NBT
     @Nonnull
     @Override
-    public CompoundNBT write(CompoundNBT tag) {
-        saveToNBT(tag);
-        return super.write(tag);
+    public CompoundNBT write(@Nonnull CompoundNBT tag) {
+        super.write(tag);
+        return saveToNBT(tag);
     }
 
     public CompoundNBT saveToNBT(CompoundNBT tag) {
@@ -267,7 +267,7 @@ public class CentrifugeControllerTileEntity extends TileEntity implements ITicka
     }
 
     @Override
-    public void read(@Nonnull BlockState state, CompoundNBT tag) {
+    public void read(@Nonnull BlockState state, @Nonnull CompoundNBT tag) {
         this.loadFromNBT(tag);
         super.read(state, tag);
     }
@@ -290,10 +290,8 @@ public class CentrifugeControllerTileEntity extends TileEntity implements ITicka
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-        if (validStructure) {
-            if (cap.equals(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)) return lazyOptional.cast();
-            if (cap.equals(CapabilityEnergy.ENERGY)) return energy.cast();
-        }
+        if (cap.equals(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)) return lazyOptional.cast();
+        if (cap.equals(CapabilityEnergy.ENERGY)) return energy.cast();
         return super.getCapability(cap, side);
     }
 
