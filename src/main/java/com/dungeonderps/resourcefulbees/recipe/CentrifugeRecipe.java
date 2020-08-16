@@ -5,14 +5,17 @@ import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.utils.BeeInfoUtils;
 import com.dungeonderps.resourcefulbees.utils.BetterJSONUtils;
+import com.dungeonderps.resourcefulbees.utils.RecipeUtils;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
@@ -31,12 +34,14 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
     public final Ingredient ingredient;
     public final List<Pair<ItemStack,Double>> outputs;
     public final int time;
+    public final boolean multiblock;
 
-    public CentrifugeRecipe(ResourceLocation id, Ingredient ingredient, List<Pair<ItemStack,Double>> outputs, int time) {
+    public CentrifugeRecipe(ResourceLocation id, Ingredient ingredient, List<Pair<ItemStack,Double>> outputs, int time, boolean multiblock) {
         this.id = id;
         this.ingredient = ingredient;
         this.outputs = outputs;
         this.time = time;
+        this.multiblock = multiblock;
     }
 
     @Override
@@ -122,30 +127,34 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
             });
 
             int time = JSONUtils.getInt(json,"time");
+            boolean multiblock = JSONUtils.getBoolean(json,"multiblock", false);
 
-            return this.factory.create(id, ingredient, outputs,time);
+            return this.factory.create(id, ingredient, outputs,time, multiblock);
         }
 
         public T read(@Nonnull ResourceLocation id, @Nonnull PacketBuffer buffer) {
             Ingredient ingredient = Ingredient.read(buffer);
             List<Pair<ItemStack,Double>> outputs = new ArrayList<>();
-            IntStream.range(0,buffer.readInt()).forEach(i -> outputs.add(Pair.of(buffer.readItemStack(),buffer.readDouble())));
+            IntStream.range(0,buffer.readInt()).forEach(i -> outputs.add(Pair.of(RecipeUtils.readItemStack(buffer),buffer.readDouble())));
             int time = buffer.readInt();
-            return this.factory.create(id, ingredient, outputs,time);
+            boolean multiblock = buffer.readBoolean();
+            return this.factory.create(id, ingredient, outputs,time, multiblock);
         }
 
         public void write(@Nonnull PacketBuffer buffer, T recipe) {
             recipe.ingredient.write(buffer);
             buffer.writeInt(recipe.outputs.size());
             recipe.outputs.forEach(itemStackDoublePair -> {
-                buffer.writeItemStack(itemStackDoublePair.getLeft());
+                ItemStack stack = itemStackDoublePair.getLeft();
+                RecipeUtils.writeItemStack(stack, buffer);
                 buffer.writeDouble(itemStackDoublePair.getRight());
             });
             buffer.writeInt(recipe.time);
+            buffer.writeBoolean(recipe.multiblock);
         }
 
         public interface IRecipeFactory<T extends CentrifugeRecipe> {
-            T create(ResourceLocation id, Ingredient input, List<Pair<ItemStack,Double>> stacks,int time);
+            T create(ResourceLocation id, Ingredient input, List<Pair<ItemStack,Double>> stacks,int time, boolean multiblock);
         }
     }
 }

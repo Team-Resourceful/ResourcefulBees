@@ -10,6 +10,7 @@ import com.dungeonderps.resourcefulbees.config.Config;
 import com.dungeonderps.resourcefulbees.data.RecipeBuilder;
 import com.dungeonderps.resourcefulbees.init.ModSetup;
 import com.dungeonderps.resourcefulbees.network.NetPacketHandler;
+import com.dungeonderps.resourcefulbees.recipe.ResourcefulBeesRecipeIngredients;
 import com.dungeonderps.resourcefulbees.registry.ColorHandler;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.utils.PreviewHandler;
@@ -22,15 +23,19 @@ import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.MerchantOffer;
+import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.tileentity.BannerPattern;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.village.PointOfInterestType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.event.RegisterCommandsEvent;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.fml.DistExecutor;
@@ -72,6 +77,8 @@ public class ResourcefulBees
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onInterModEnqueue);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::loadComplete);
 
+        FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(IRecipeSerializer.class, this::registerRecipeSerialziers);
+
         MinecraftForge.EVENT_BUS.addListener(this::registerCommands);
         MinecraftForge.EVENT_BUS.addListener(this::trade);
 
@@ -83,6 +90,11 @@ public class ResourcefulBees
         });
 
         MinecraftForge.EVENT_BUS.register(this);
+    }
+
+    public void registerRecipeSerialziers(RegistryEvent.Register<IRecipeSerializer<?>> event)
+    {
+        CraftingHelper.register(new ResourceLocation(MOD_ID, "honeycomb"), ResourcefulBeesRecipeIngredients.INSTANCE);
     }
 
     public void trade(VillagerTradesEvent event) {
@@ -175,6 +187,7 @@ public class ResourcefulBees
         RenderingRegistry.registerEntityRenderingHandler(RegistryHandler.CUSTOM_BEE.get(), CustomBeeRenderer::new);
         ScreenManager.registerFactory(RegistryHandler.CENTRIFUGE_CONTAINER.get(), CentrifugeScreen::new);
         ScreenManager.registerFactory(RegistryHandler.MECHANICAL_CENTRIFUGE_CONTAINER.get(), MechanicalCentrifugeScreen::new);
+        ScreenManager.registerFactory(RegistryHandler.CENTRIFUGE_MULTIBLOCK_CONTAINER.get(), CentrifugeMultiblockScreen::new);
         ScreenManager.registerFactory(RegistryHandler.UNVALIDATED_APIARY_CONTAINER.get(), UnvalidatedApiaryScreen::new);
         ScreenManager.registerFactory(RegistryHandler.VALIDATED_APIARY_CONTAINER.get(), ValidatedApiaryScreen::new);
         ScreenManager.registerFactory(RegistryHandler.APIARY_STORAGE_CONTAINER.get(), ApiaryStorageScreen::new);

@@ -1,17 +1,15 @@
 package com.dungeonderps.resourcefulbees.tileentity;
 
 import com.dungeonderps.resourcefulbees.block.HoneyGenerator;
-import com.dungeonderps.resourcefulbees.config.Config;
 import com.dungeonderps.resourcefulbees.container.AutomationSensitiveItemStackHandler;
 import com.dungeonderps.resourcefulbees.container.HoneyGeneratorContainer;
 import com.dungeonderps.resourcefulbees.registry.FluidRegistry;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.utils.CustomEnergyStorage;
+import com.dungeonderps.resourcefulbees.utils.CustomTankStorage;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.fluid.WaterFluid;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
@@ -25,15 +23,12 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
@@ -47,7 +42,7 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
     public static final int BOTTLE_OUPUT = 1;
 
     public AutomationSensitiveItemStackHandler h = new HoneyGeneratorTileEntity.TileStackHandler(5, getAcceptor(), getRemover());
-    public final HoneyTank fluidTank = new HoneyTank(5000);
+    public final CustomTankStorage fluidTank = new CustomTankStorage(5000);
     public final CustomEnergyStorage energyStorage = createEnergy();
     private final LazyOptional<IFluidHandler> fluidOptional = LazyOptional.of(() -> fluidTank);
     private final LazyOptional<IItemHandler> lazyOptional = LazyOptional.of(() -> h);
@@ -254,25 +249,6 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
         protected void onContentsChanged(int slot) {
             super.onContentsChanged(slot);
             markDirty();
-        }
-    }
-
-    public static class HoneyTank extends FluidTank implements INBTSerializable<CompoundNBT> {
-
-        public HoneyTank(int capacity) {
-            super(capacity);
-        }
-
-        @Override
-        public CompoundNBT serializeNBT() {
-            CompoundNBT nbt = new CompoundNBT();
-            this.fluid.writeToNBT(nbt);
-            return nbt;
-        }
-
-        @Override
-        public void deserializeNBT(CompoundNBT nbt) {
-            fluid = FluidStack.loadFluidStackFromNBT(nbt);
         }
     }
 }
