@@ -83,7 +83,7 @@
 	"block.resourcefulbees.apiary.tooltip.offset": "Offset determines the location of the Apiary Block based on its facing direction.",
 	"block.resourcefulbees.apiary.tooltip.lock": "Bees are locked on import.",
 	"block.resourcefulbees.apiary.tooltip.lock_2": "Bees must be locked and selected to export.",
-	"block.resourcefulbees.mechanical_centrifuge": "Mechanical Centrifuge",
+	"block.resourcefulbees.mechanical_centrifuge": "Manual Centrifuge",
 	"block.resourcefulbees.centrifuge_controller": "Centrifuge Controller",
 	"block.resourcefulbees.centrifuge_casing": "Centrifuge Casing",
 	"block.resourcefulbees.centrifuge.tooltip.info": "Converts Honeycombs into resources using RF.",
@@ -185,5 +185,10 @@
 	"item.resourcefulbees.scraper.tooltip.1": "Must collect ALL honeycombs for bees to generate new ones!",
 	"block.resourcefulbees.apiary_breeder.tooltip.info": "An OPTIONAL breeder that can be added as part of the Apiary Multiblock",
 	"block.resourcefulbees.apiary_breeder.tooltip.info1": "Max Breed Time:",
-	"block.resourcefulbees.apiary_breeder.tooltip.info2": "Can be upgraded with additional breeders or time modifiers."
+	"block.resourcefulbees.apiary_breeder.tooltip.info2": "Can be upgraded with additional breeders or time modifiers.",
+	"item.resourcefulbees.apiary_breed_time_upgrade.tooltip.info": "Reduces max breed time by 300 ticks.",
+	"item.resourcefulbees.apiary_breeder_upgrade.tooltip.info": "Adds additional breeders to the Apiary Breeder",
+	"block.resourcefulbees.centrifuge.tooltip.structure_size": "Centrifuge multiblock size is 3x4x3, consisting of one controller and the rest casings.",
+	"block.resourcefulbees.centrifuge.tooltip.requisites": "The controller must be the one block up from the bottom in the center of any face.",
+	"block.resourcefulbees.centrifuge.tooltip.capabilities": "Any block in the multiblock will import/export items and energy"
 }

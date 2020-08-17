@@ -27,6 +27,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Map;
+import java.util.zip.ZipFile;
 
 import static com.dungeonderps.resourcefulbees.ResourcefulBees.LOGGER;
 import static com.dungeonderps.resourcefulbees.config.BeeInfo.BEE_INFO;
@@ -86,6 +87,32 @@ public class BeeBuilder {
         //BeeInfo.BEE_INFO.clear();
         BeeInfoUtils.genDefaultBee();
         try {
+            Files.walk(BEE_PATH)
+                    .filter(f -> f.getFileName().toString().endsWith(".zip"))
+                    .forEach((file) -> {
+                        try {
+                            ZipFile zf = new ZipFile(file.toString());
+                            zf.stream().forEach(zipEntry -> {
+                                if(zipEntry.isDirectory()) {
+                                    Path dirToCreate = BEE_PATH.resolve(zipEntry.getName());
+                                    try {
+                                        Files.createDirectories(dirToCreate);
+                                    } catch (IOException e) {
+                                        LOGGER.warn("Could not create directory from ZipFile! ZipFile: " + zf.getName() + " Directory: " + zipEntry.getName());
+                                    }
+                                } else if (zipEntry.getName().endsWith(".json")) {
+                                    try {
+                                        Path fileToCreate = BEE_PATH.resolve(zipEntry.getName());
+                                        Files.copy(zf.getInputStream(zipEntry), fileToCreate);
+                                    } catch (IOException e) {
+                                        LOGGER.warn("Could not create file from ZipFile! ZipFile: " + zf.getName() + " File: " + zipEntry.getName() + " File may already exist.");
+                                    }
+                                }
+                            });
+                        } catch (IOException e) {
+                            LOGGER.warn("Could not read ZipFile! ZipFile: " + file.getFileName());
+                        }
+                    });
             Files.walk(BEE_PATH)
                     .filter(f -> f.getFileName().toString().endsWith(".json"))
                     .forEach((file) -> {

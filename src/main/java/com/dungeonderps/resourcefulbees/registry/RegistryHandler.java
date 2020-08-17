@@ -12,7 +12,7 @@ import com.dungeonderps.resourcefulbees.recipe.CentrifugeRecipe;
 import com.dungeonderps.resourcefulbees.tileentity.*;
 import com.dungeonderps.resourcefulbees.tileentity.centrifuge.CentrifugeCasingTileEntity;
 import com.dungeonderps.resourcefulbees.tileentity.centrifuge.CentrifugeControllerTileEntity;
-import com.dungeonderps.resourcefulbees.tileentity.CreativeGenTileEntity;
+import com.dungeonderps.resourcefulbees.utils.TooltipBuilder;
 import com.dungeonderps.resourcefulbees.world.BeeNestFeature;
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.block.Block;
@@ -181,11 +181,29 @@ public class RegistryHandler {
 	public static final RegistryObject<Item> APIARY_BREEDER_UPGRADE = ITEMS.register("apiary_breeder_upgrade", () -> new UpgradeItem(UpgradeItem.builder()
 			.upgradeType(NBTConstants.NBT_BREEDER_UPGRADE)
 			.upgradeModification(NBTConstants.NBT_BREEDER_COUNT, 1)
-			.build()));
+			.build()) {
+		@Override
+		public void addInformation(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
+			tooltip.addAll(new TooltipBuilder()
+					.addTip(I18n.format("item.resourcefulbees.apiary_breeder_upgrade.tooltip.info"), TextFormatting.GOLD)
+					.addTip("Texture is temporary.", TextFormatting.ITALIC)
+					.build());
+			super.addInformation(stack, worldIn, tooltip, flagIn);
+		}
+	});
 	public static final RegistryObject<Item> APIARY_BREED_TIME_UPGRADE = ITEMS.register("apiary_breed_time_upgrade", () -> new UpgradeItem(UpgradeItem.builder()
 			.upgradeType(NBTConstants.NBT_BREEDER_UPGRADE)
 			.upgradeModification(NBTConstants.NBT_BREED_TIME, 300)
-			.build()));
+			.build()) {
+		@Override
+		public void addInformation(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
+			tooltip.addAll(new TooltipBuilder()
+					.addTip(I18n.format("item.resourcefulbees.apiary_breed_time_upgrade.tooltip.info"), TextFormatting.GOLD)
+					.addTip("Texture is temporary.", TextFormatting.ITALIC)
+					.build());
+			super.addInformation(stack, worldIn, tooltip, flagIn);
+		}
+	});
 	public static final RegistryObject<Item> HONEY_FLUID_BUCKET = ITEMS.register("honey_fluid_bucket", () -> new BucketItem(FluidRegistry.HONEY_FLUID, new Item.Properties().containerItem(Items.BUCKET).maxStackSize(1).group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
 	//endregion
 

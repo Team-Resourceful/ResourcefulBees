@@ -100,19 +100,19 @@ public class Config {
                 T1_APIARY_OUTPUT = COMMON_BUILDER.comment("\nTier 1 Apiary Output")
                     .defineEnum("tierOneApiaryOutput", ApiaryOutput.COMB, ApiaryOutput.COMB, ApiaryOutput.BLOCK);
                 T1_APIARY_QUANTITY = COMMON_BUILDER.comment("\nTier 1 Apiary Output Quantity")
-                    .defineInRange("tierOneApiaryQuantity", 2, 1, Integer.MAX_VALUE);
+                    .defineInRange("tierOneApiaryQuantity", 8, 1, Integer.MAX_VALUE);
                 T2_APIARY_OUTPUT = COMMON_BUILDER.comment("\nTier 2 Apiary Output")
                     .defineEnum("tierTwoApiaryOutput", ApiaryOutput.COMB, ApiaryOutput.COMB, ApiaryOutput.BLOCK);
                 T2_APIARY_QUANTITY = COMMON_BUILDER.comment("\nTier 2 Apiary Output Quantity")
-                    .defineInRange("tierTwoApiaryQuantity", 4, 1, Integer.MAX_VALUE);
+                    .defineInRange("tierTwoApiaryQuantity", 16, 1, Integer.MAX_VALUE);
                 T3_APIARY_OUTPUT = COMMON_BUILDER.comment("\nTier 3 Apiary Output")
                     .defineEnum("tierThreeApiaryOutput", ApiaryOutput.BLOCK, ApiaryOutput.COMB, ApiaryOutput.BLOCK);
                 T3_APIARY_QUANTITY = COMMON_BUILDER.comment("\nTier 3 Apiary Output Quantity")
-                    .defineInRange("tierThreeApiaryQuantity", 1, 1, Integer.MAX_VALUE);
+                    .defineInRange("tierThreeApiaryQuantity", 4, 1, Integer.MAX_VALUE);
                 T4_APIARY_OUTPUT = COMMON_BUILDER.comment("\nTier 4 Apiary Output")
                     .defineEnum("tierFourApiaryOutput", ApiaryOutput.BLOCK, ApiaryOutput.COMB, ApiaryOutput.BLOCK);
                 T4_APIARY_QUANTITY = COMMON_BUILDER.comment("\nTier 4 Apiary Output Quantity")
-                    .defineInRange("tierFourApiaryQuantity", 2, 1, Integer.MAX_VALUE);
+                    .defineInRange("tierFourApiaryQuantity", 8, 1, Integer.MAX_VALUE);
                 APIARY_MAX_BEES = COMMON_BUILDER.comment("\nMaximum number of UNIQUE bees allowed in the Apiary.")
                     .defineInRange("apiaryMaxBees", 9, 1, 16);
                 APIARY_MAX_BREED_TIME = COMMON_BUILDER.comment("\nMaximum breed time before upgrades are applied.")
