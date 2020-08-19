@@ -71,7 +71,7 @@ public class BlockToBlock implements IRecipeCategory<BlockToBlock.Recipe> {
                         }
                     }
                 } else {
-                    Enum<MutationTypes> mutationType = bee.getValue().getMutationType();
+                    MutationTypes mutationType = bee.getValue().getMutationType();
 
                     if (MutationTypes.BLOCK_TO_BLOCK.equals(mutationType)) {
                         Item itemIn = BeeInfoUtils.getItem(mutationIn);
@@ -169,9 +169,9 @@ public class BlockToBlock implements IRecipeCategory<BlockToBlock.Recipe> {
         private final boolean acceptsAny;
         private final ITag<Item> tag;
 
-        private final Enum<MutationTypes> mutationType;
+        private final MutationTypes mutationType;
 
-        public Recipe(ItemStack baseBlock, ItemStack mutationBlock, String beeType, Enum<MutationTypes> type, boolean acceptsAny) {
+        public Recipe(ItemStack baseBlock, ItemStack mutationBlock, String beeType, MutationTypes type, boolean acceptsAny) {
             this.itemOut = mutationBlock;
             this.itemIn = baseBlock;
             this.beeType = beeType;
@@ -181,7 +181,7 @@ public class BlockToBlock implements IRecipeCategory<BlockToBlock.Recipe> {
         }
 
         //TAGS!!!
-        public Recipe(ITag<Item> baseBlock, ItemStack mutationBlock, String beeType, Enum<MutationTypes> type, boolean acceptsAny) {
+        public Recipe(ITag<Item> baseBlock, ItemStack mutationBlock, String beeType, MutationTypes type, boolean acceptsAny) {
             this.itemOut = mutationBlock;
             this.itemIn = null;
             this.beeType = beeType;

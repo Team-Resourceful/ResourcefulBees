@@ -22,11 +22,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
 import java.util.Map;
+import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import static com.dungeonderps.resourcefulbees.ResourcefulBees.LOGGER;
@@ -89,42 +87,56 @@ public class BeeBuilder {
         try {
             Files.walk(BEE_PATH)
                     .filter(f -> f.getFileName().toString().endsWith(".zip"))
-                    .forEach((file) -> {
-                        try {
-                            ZipFile zf = new ZipFile(file.toString());
-                            zf.stream().forEach(zipEntry -> {
-                                if(zipEntry.isDirectory()) {
-                                    Path dirToCreate = BEE_PATH.resolve(zipEntry.getName());
-                                    try {
-                                        Files.createDirectories(dirToCreate);
-                                    } catch (IOException e) {
-                                        LOGGER.warn("Could not create directory from ZipFile! ZipFile: " + zf.getName() + " Directory: " + zipEntry.getName());
-                                    }
-                                } else if (zipEntry.getName().endsWith(".json")) {
-                                    try {
-                                        Path fileToCreate = BEE_PATH.resolve(zipEntry.getName());
-                                        Files.copy(zf.getInputStream(zipEntry), fileToCreate);
-                                    } catch (IOException e) {
-                                        LOGGER.warn("Could not create file from ZipFile! ZipFile: " + zf.getName() + " File: " + zipEntry.getName() + " File may already exist.");
-                                    }
-                                }
-                            });
-                        } catch (IOException e) {
-                            LOGGER.warn("Could not read ZipFile! ZipFile: " + file.getFileName());
-                        }
-                    });
+                    .forEach(BeeBuilder::openZipFile);
             Files.walk(BEE_PATH)
                     .filter(f -> f.getFileName().toString().endsWith(".json"))
-                    .forEach((file) -> {
-                        File f = file.toFile();
-                        try {
-                            parseBee(f);
-                        } catch (IOException e) {
-                            LOGGER.error("File not found when parsing bees");
-                        }
-                    });
+                    .forEach(BeeBuilder::addBee);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private static void addBee(Path file) {
+        File f = file.toFile();
+        try {
+            parseBee(f);
+        } catch (IOException e) {
+            LOGGER.error("File not found when parsing bees");
+        }
+    }
+
+    private static void openZipFile(Path file){
+        try {
+            ZipFile zf = new ZipFile(file.toString());
+            zf.stream().forEach(zipEntry -> {
+                if(zipEntry.isDirectory()) {
+                    extractDirectoryFromZip(zipEntry, zf);
+                } else if (zipEntry.getName().endsWith(".json")) {
+                    extractJSONFromZip(zipEntry, zf);
+                }
+            });
+        } catch (IOException e) {
+            LOGGER.warn("Could not read ZipFile! ZipFile: " + file.getFileName());
+        }
+    }
+
+    public static void extractDirectoryFromZip(ZipEntry zipEntry, ZipFile zf) {
+        Path dirToCreate = BEE_PATH.resolve(zipEntry.getName());
+        try {
+            Files.createDirectory(dirToCreate);
+        } catch (FileAlreadyExistsException ignored) {
+        } catch (IOException e) {
+            LOGGER.warn("Could not create directory from ZipFile! ZipFile: " + zf.getName() + " Directory: " + zipEntry.getName());
+        }
+    }
+
+    public static void extractJSONFromZip(ZipEntry zipEntry, ZipFile zf) {
+        try {
+            Path fileToCreate = BEE_PATH.resolve(zipEntry.getName());
+            Files.copy(zf.getInputStream(zipEntry), fileToCreate, StandardCopyOption.REPLACE_EXISTING);
+        } catch (FileAlreadyExistsException ignored) {
+        } catch (IOException e) {
+            LOGGER.warn("Could not create file from ZipFile! ZipFile: " + zf.getName() + " File: " + zipEntry.getName());
         }
     }
 

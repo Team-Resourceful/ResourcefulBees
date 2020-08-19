@@ -74,7 +74,7 @@ public class BlockToFluid implements IRecipeCategory<BlockToFluid.Recipe> {
                         }
                     }
                 } else {
-                    Enum<MutationTypes> mutationType = bee.getValue().getMutationType();
+                    MutationTypes mutationType = bee.getValue().getMutationType();
 
                     if (MutationTypes.BLOCK_TO_FLUID.equals(mutationType)) {
                         Item itemIn = BeeInfoUtils.getItem(mutationIn);
@@ -175,9 +175,9 @@ public class BlockToFluid implements IRecipeCategory<BlockToFluid.Recipe> {
         private final boolean acceptsAny;
         private final ITag<Item> tag;
 
-        private final Enum<MutationTypes> mutationType;
+        private final MutationTypes mutationType;
 
-        public Recipe(ItemStack baseBlock, FluidStack mutationBlock, String beeType, Enum<MutationTypes> type, boolean acceptsAny) {
+        public Recipe(ItemStack baseBlock, FluidStack mutationBlock, String beeType, MutationTypes type, boolean acceptsAny) {
             this.fluidOut = mutationBlock;
             this.itemIn = baseBlock;
             this.beeType = beeType;
@@ -187,7 +187,7 @@ public class BlockToFluid implements IRecipeCategory<BlockToFluid.Recipe> {
         }
 
         //TAGS!!!
-        public Recipe(ITag<Item> baseBlock, FluidStack mutationBlock, String beeType, Enum<MutationTypes> type, boolean acceptsAny) {
+        public Recipe(ITag<Item> baseBlock, FluidStack mutationBlock, String beeType, MutationTypes type, boolean acceptsAny) {
             this.fluidOut = mutationBlock;
             this.itemIn = null;
             this.beeType = beeType;

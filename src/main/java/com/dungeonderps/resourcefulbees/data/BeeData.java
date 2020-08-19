@@ -60,7 +60,7 @@ public class BeeData {
 
     private transient String name = BeeConstants.DEFAULT_BEE_TYPE;
     private transient boolean mutation;
-    private transient Enum<MutationTypes> mutationType;
+    private transient MutationTypes mutationType;
 
     public BeeData() {}
 
@@ -429,11 +429,11 @@ public class BeeData {
         this.mutation = mutation;
     }
 
-    public Enum<MutationTypes> getMutationType() {
+    public MutationTypes getMutationType() {
         return mutationType;
     }
 
-    public void setMutationType(Enum<MutationTypes> mutationType) {
+    public void setMutationType(MutationTypes mutationType) {
         this.mutationType = mutationType;
     }
 
