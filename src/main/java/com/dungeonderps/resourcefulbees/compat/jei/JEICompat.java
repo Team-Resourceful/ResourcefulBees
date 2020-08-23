@@ -22,6 +22,7 @@ import mezz.jei.api.registration.*;
 import mezz.jei.api.runtime.IIngredientManager;
 import mezz.jei.api.runtime.IJeiRuntime;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -131,6 +132,7 @@ public class JEICompat implements IModPlugin {
             registration.addRecipes(BlockToBlock.getMutationRecipes(registration.getIngredientManager()), BlockToBlock.ID);
             registration.addRecipes(ApiaryCategory.getHoneycombRecipes(registration.getIngredientManager()), ApiaryCategory.ID);
             registration.addRecipes(FlowersCategory.getFlowersRecipes(registration.getIngredientManager()), FlowersCategory.ID);
+            registerInfoDesc(registration);
         }
     }
 
@@ -151,5 +153,17 @@ public class JEICompat implements IModPlugin {
     public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
         IIngredientManager ingredientManager = jeiRuntime.getIngredientManager();
         ingredientManager.removeIngredientsAtRuntime(VanillaTypes.ITEM, Collections.singletonList(RegistryHandler.RESOURCEFUL_HONEYCOMB.get().getDefaultInstance()));
+    }
+
+    public void registerInfoDesc(IRecipeRegistration registration){
+        //TODO Bee not rendering in info is due to this https://github.com/mezz/JustEnoughItems/issues/2061
+        for (EntityIngredient bee : EntityIngredientFactory.create()) {
+            if (I18n.hasKey("info.resourcefulbees.jei." + bee.getBeeType())){
+                registration.addIngredientInfo(bee, ENTITY_INGREDIENT,
+                        "\u00a7e\u00a7l[" + bee.getDisplayName().getString() + "] : \u00a7r" +
+                                I18n.format("info.resourcefulbees.jei." + bee.getBeeType())
+                );
+            }
+        }
     }
 }

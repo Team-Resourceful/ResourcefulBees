@@ -1,6 +1,12 @@
 package com.dungeonderps.resourcefulbees.compat.jei.ingredients;
 
 import net.minecraft.client.resources.I18n;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EntityIngredient {
 
@@ -19,7 +25,22 @@ public class EntityIngredient {
         return rotation;
     }
 
-    public String getDisplayName(){
-        return I18n.format("entity.resourcefulbees."+ beeType + "_bee");
+    public ITextComponent getDisplayName(){
+        return new TranslationTextComponent("entity.resourcefulbees."+ beeType + "_bee");
     }
+
+    public List<ITextComponent> getTooltip(){
+        List<ITextComponent> tooltip = new ArrayList<>();
+        if (!I18n.hasKey("tooltip.resourcefulbees.jei."+ beeType)){
+            return null;
+        } else {
+            String desc = I18n.format("tooltip.resourcefulbees.jei."+ beeType);
+            String[] descTooltip = desc.split("\\r?\\n");
+            for (int i = 0; i < descTooltip.length; i++) {
+                tooltip.add(new StringTextComponent(descTooltip[i]));
+            }
+            return tooltip;
+        }
+    }
+
 }
