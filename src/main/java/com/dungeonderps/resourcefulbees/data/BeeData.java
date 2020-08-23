@@ -18,6 +18,7 @@ public class BeeData {
     private String honeycombColor;
     private String primaryLayerTexture = "/custom/primary_layer";
     private String secondaryLayerTexture = "/custom/secondary_layer";
+    private String emissiveLayerTexture = "/custom/emissive_layer";
 
     private boolean isBeeColored = true;
 
@@ -560,4 +561,8 @@ public class BeeData {
     public boolean isCanSwim() { return canSwim; }
 
     public void setCanSwim(boolean canSwim) { this.canSwim = canSwim; }
+
+    public String getEmissiveLayerTexture() { return emissiveLayerTexture; }
+
+    public void setEmissiveLayerTexture(String emissiveLayerTexture) { this.emissiveLayerTexture = emissiveLayerTexture; }
 }
