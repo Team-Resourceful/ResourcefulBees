@@ -1,10 +1,10 @@
 {
   "parent": "block/orientable_with_bottom",
   "textures": {
-    "particle": "resourcefulbees:block/apiary/t1_side",
-    "bottom": "resourcefulbees:block/apiary/t1_end",
-    "top": "resourcefulbees:block/apiary/t1_end",
-    "front": "resourcefulbees:block/apiary/t1_front",
-    "side": "resourcefulbees:block/apiary/t1_side"
+    "particle": "resourcefulbees:block/apiary/tier_1_apiary_side",
+    "bottom": "resourcefulbees:block/apiary/tier_1_apiary_bottom",
+    "top": "resourcefulbees:block/apiary/tier_1_apiary_top",
+    "front": "resourcefulbees:block/apiary/tier_1_apiary_front",
+    "side": "resourcefulbees:block/apiary/tier_1_apiary_side"
   }
 }

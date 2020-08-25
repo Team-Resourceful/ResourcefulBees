@@ -1,7 +1,7 @@
 {
   "honeycombColor": "#00ffff",
-  "primaryColor": "#00ffff",
-  "secondaryColor": "#303030",
+  "baseLayerTexture": "diamond/diamond_bee",
+  "isBeeColored": false,
   "flower": "ALL",
   "mutationInput": "minecraft:lava",
   "mutationOutput": "minecraft:water",
