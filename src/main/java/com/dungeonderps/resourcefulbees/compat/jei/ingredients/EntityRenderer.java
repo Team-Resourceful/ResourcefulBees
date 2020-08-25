@@ -13,6 +13,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -50,6 +51,12 @@ public class EntityRenderer implements IIngredientRenderer<EntityIngredient> {
 
     @Override
     public List<ITextComponent> getTooltip(EntityIngredient entityIngredient, ITooltipFlag iTooltipFlag) {
-        return Collections.singletonList(new StringTextComponent(entityIngredient.getDisplayName()));
+        List<ITextComponent> tooltip = new ArrayList<>();
+        tooltip.add(entityIngredient.getDisplayName());
+        List<ITextComponent> desc = entityIngredient.getTooltip();
+        if (desc != null){
+            tooltip.addAll(desc);
+        }
+        return tooltip;
     }
 }
