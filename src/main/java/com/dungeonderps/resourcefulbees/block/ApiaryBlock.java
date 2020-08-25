@@ -46,7 +46,7 @@ public class ApiaryBlock extends Block {
   private final int TIER;
 
   public ApiaryBlock(final int tier, float hardness, float resistance) {
-    super(Block.Properties.create(Material.IRON).hardnessAndResistance(hardness, resistance).sound(SoundType.METAL));
+    super(Properties.create(Material.IRON).hardnessAndResistance(hardness, resistance).sound(SoundType.METAL));
     TIER = tier;
     this.setDefaultState(this.stateContainer.getBaseState().with(VALIDATED, false).with(FACING, Direction.NORTH));
   }
@@ -169,5 +169,4 @@ public class ApiaryBlock extends Block {
 
     super.addInformation(stack, worldIn, tooltip, flagIn);
   }
-
 }

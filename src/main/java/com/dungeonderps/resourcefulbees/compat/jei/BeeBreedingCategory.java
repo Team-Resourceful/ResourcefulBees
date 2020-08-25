@@ -4,11 +4,9 @@ import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.compat.jei.ingredients.EntityIngredient;
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.data.BeeData;
-import com.dungeonderps.resourcefulbees.entity.passive.CustomBeeEntity;
-import com.dungeonderps.resourcefulbees.lib.BeeConstants;
+import com.dungeonderps.resourcefulbees.lib.NBTConstants;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -19,21 +17,15 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.runtime.IIngredientManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.Quaternion;
-import net.minecraft.client.renderer.Vector3f;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -43,17 +35,12 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
     private final IDrawable background;
     private final IDrawable icon;
     private final String localizedName;
-    private final CustomBeeEntity bee;
 
     public BeeBreedingCategory(IGuiHelper guiHelper) {
         this.background = guiHelper.drawableBuilder(GUI_BACK, 0, 0, 160, 30).addPadding(0, 0, 0, 0).build();
         this.icon = guiHelper.createDrawableIngredient(new ItemStack(RegistryHandler.GOLD_FLOWER.get()));
         this.localizedName = I18n.format("gui.resourcefulbees.jei.category.breeding");
-        World clientWorld = Minecraft.getInstance().world;
-        if (clientWorld != null)
-            bee = RegistryHandler.CUSTOM_BEE.get().create(clientWorld);
-        else
-            bee = null;    }
+    }
 
     public static List<Recipe> getBreedingRecipes(IIngredientManager ingredientManager) {
         List<Recipe> recipes = new ArrayList<>();
@@ -103,27 +90,24 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
         ItemStack childSpawnEgg = new ItemStack(RegistryHandler.BEE_SPAWN_EGG.get());
 
         CompoundNBT p1_type = new CompoundNBT();
-        CompoundNBT p1_rbees = new CompoundNBT();
         CompoundNBT p1_root = new CompoundNBT();
-        p1_type.putString(BeeConstants.NBT_BEE_TYPE, recipe.parent1);
-        p1_root.put(BeeConstants.NBT_ROOT, p1_type);
-        p1_root.put(BeeConstants.NBT_SPAWN_EGG_DATA, p1_type);
+        p1_type.putString(NBTConstants.NBT_BEE_TYPE, recipe.parent1);
+        p1_root.put(NBTConstants.NBT_ROOT, p1_type);
+        p1_root.put(NBTConstants.NBT_SPAWN_EGG_DATA, p1_type);
         parent1SpawnEgg.setTag(p1_root);
 
         CompoundNBT p2_type = new CompoundNBT();
-        CompoundNBT p2_rbees = new CompoundNBT();
         CompoundNBT p2_root = new CompoundNBT();
-        p2_type.putString(BeeConstants.NBT_BEE_TYPE, recipe.parent2);
-        p2_root.put(BeeConstants.NBT_ROOT, p2_type);
-        p2_root.put(BeeConstants.NBT_SPAWN_EGG_DATA, p2_type);
+        p2_type.putString(NBTConstants.NBT_BEE_TYPE, recipe.parent2);
+        p2_root.put(NBTConstants.NBT_ROOT, p2_type);
+        p2_root.put(NBTConstants.NBT_SPAWN_EGG_DATA, p2_type);
         parent2SpawnEgg.setTag(p2_root);
 
         CompoundNBT ch_type = new CompoundNBT();
-        CompoundNBT ch_rbees = new CompoundNBT();
         CompoundNBT ch_root = new CompoundNBT();
-        ch_type.putString(BeeConstants.NBT_BEE_TYPE, recipe.child);
-        ch_root.put(BeeConstants.NBT_ROOT, ch_type);
-        ch_root.put(BeeConstants.NBT_SPAWN_EGG_DATA, ch_type);
+        ch_type.putString(NBTConstants.NBT_BEE_TYPE, recipe.child);
+        ch_root.put(NBTConstants.NBT_ROOT, ch_type);
+        ch_root.put(NBTConstants.NBT_SPAWN_EGG_DATA, ch_type);
         childSpawnEgg.setTag(ch_root);
 
         List<Ingredient> list = new ArrayList<>();
@@ -156,7 +140,7 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
         Minecraft minecraft = Minecraft.getInstance();
         FontRenderer fontRenderer = minecraft.fontRenderer;
         DecimalFormat decimalFormat = new DecimalFormat("##%");
-        fontRenderer.drawString(decimalFormat.format(BeeInfo.getInfo(recipe.getChild()).getBreedWeight()), 90, 18, 0xff808080);
+        fontRenderer.drawString(decimalFormat.format(BeeInfo.getAdjustedWeightForChild(BeeInfo.getInfo(recipe.getChild()))), 90, 18, 0xff808080);
     }
 
     public static class Recipe {

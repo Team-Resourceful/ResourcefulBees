@@ -1,12 +1,16 @@
 package com.dungeonderps.resourcefulbees.client.gui.screen;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
+import com.dungeonderps.resourcefulbees.config.Config;
 import com.dungeonderps.resourcefulbees.container.CentrifugeContainer;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+
+import java.text.DecimalFormat;
 
 public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
     public CentrifugeScreen(CentrifugeContainer screenContainer, PlayerInventory inventory, ITextComponent titleIn) {
@@ -15,13 +19,6 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
     int textColor = 0x404040;
     public static String currentMonth;
 
-    /**
-     * Draws the background layer of this container (behind the items).
-     *
-     * @param partialTicks partial ticks
-     * @param mouseX mouse x
-     * @param mouseY mouse y
-     */
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
         ResourceLocation texture;
@@ -29,26 +26,31 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
         else texture = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/gui/centrifuges/centrifuge.png");
         Minecraft client = this.minecraft;
         if (client != null) {
-            this.minecraft.getTextureManager().bindTexture(texture);
-            int i = (this.width - this.xSize) / 2;
-            int j = (this.height - this.ySize) / 2;
+            client.getTextureManager().bindTexture(texture);
+            int i = this.guiLeft;
+            int j = this.guiTop;
             this.blit(i, j, 0, 0, this.xSize, this.ySize);
-            double scaledprogress = 74d * this.container.centrifugeTileEntity.time /
-                    Math.max(this.container.centrifugeTileEntity.totalTime,1d);
-            this.blit(i + 51, j + 28, 176, 0, (int)scaledprogress, 29);
-
+            int scaledprogress = 74 * this.container.centrifugeTileEntity.time / Math.max(this.container.centrifugeTileEntity.totalTime,1);
+            this.blit(i + 51, j + 28, 176, 0, scaledprogress, 28);
+            int scaledRF = 52 * this.container.getEnergy() / Math.max(Config.MAX_CENTRIFUGE_RF.get(),1);
+            this.blit(i + 8, j + 8 + (52-scaledRF), 176, 28 + (52-scaledRF), 11, scaledRF);
         }
     }
 
     @Override
-    public void render(int p_render_1_, int p_render_2_, float p_render_3_) {
+    public void render(int mouseX, int mouseY, float partialTicks) {
         this.renderBackground();
-        super.render(p_render_1_, p_render_2_, p_render_3_);
-        this.renderHoveredToolTip(p_render_1_, p_render_2_);
+        super.render(mouseX, mouseY, partialTicks);
+        this.renderHoveredToolTip(mouseX, mouseY);
+        DecimalFormat decimalFormat = new DecimalFormat("##0.0");
+        if (mouseX >= this.guiLeft + 7 && mouseX <= this.guiLeft + 20 && mouseY >= this.guiTop + 7 && mouseY <= this.guiTop + 59){
+            if (Screen.hasShiftDown() || this.container.getEnergy() < 500) this.renderTooltip(this.container.getEnergy() + " RF", mouseX, mouseY);
+            else this.renderTooltip(decimalFormat.format((double)this.container.getEnergy() / 1000) + " kRF", mouseX, mouseY);
+        }
     }
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        this.font.drawString(this.title.getFormattedText(), 5, 5, textColor);
+        this.font.drawString(this.title.getString(), 25, 5, textColor);
     }
 }

@@ -2,6 +2,7 @@ package com.dungeonderps.resourcefulbees.compat.hwyla;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.lib.BeeConstants;
+import com.dungeonderps.resourcefulbees.lib.NBTConstants;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.tileentity.HoneycombTileEntity;
 import mcp.mobius.waila.api.IComponentProvider;
@@ -25,7 +26,7 @@ public class HoneycombBlockCompat implements IComponentProvider, IServerDataProv
         tooltip.clear();
         CompoundNBT data = accessor.getServerData();
         if(accessor.getTileEntity() instanceof HoneycombTileEntity){
-            TranslationTextComponent text = new TranslationTextComponent("block" + '.' + ResourcefulBees.MOD_ID + '.' + data.getString(BeeConstants.NBT_BEE_TYPE) + "_honeycomb_block");
+            TranslationTextComponent text = new TranslationTextComponent("block" + '.' + ResourcefulBees.MOD_ID + '.' + data.getString(NBTConstants.NBT_BEE_TYPE) + "_honeycomb_block");
             tooltip.add(text);
         }
     }
@@ -34,8 +35,8 @@ public class HoneycombBlockCompat implements IComponentProvider, IServerDataProv
     public ItemStack getStack(IDataAccessor accessor, IPluginConfig config) {
         CompoundNBT nbt = accessor.getServerData();
         ItemStack stack = new ItemStack(RegistryHandler.HONEYCOMB_BLOCK_ITEM.get());
-        stack.getOrCreateChildTag(BeeConstants.NBT_ROOT).putString(BeeConstants.NBT_BEE_TYPE, nbt.getString(BeeConstants.NBT_BEE_TYPE));
-        stack.getOrCreateChildTag(BeeConstants.NBT_ROOT).putString(BeeConstants.NBT_COLOR, nbt.getString(BeeConstants.NBT_COLOR));
+        stack.getOrCreateChildTag(NBTConstants.NBT_ROOT).putString(NBTConstants.NBT_BEE_TYPE, nbt.getString(NBTConstants.NBT_BEE_TYPE));
+        stack.getOrCreateChildTag(NBTConstants.NBT_ROOT).putString(NBTConstants.NBT_COLOR, nbt.getString(NBTConstants.NBT_COLOR));
 
         return stack;
     }
@@ -46,9 +47,9 @@ public class HoneycombBlockCompat implements IComponentProvider, IServerDataProv
             HoneycombTileEntity blockEntity = (HoneycombTileEntity) tileEntity;
 
             if (blockEntity.beeType !=null)
-                compoundNBT.putString(BeeConstants.NBT_BEE_TYPE, blockEntity.beeType);
+                compoundNBT.putString(NBTConstants.NBT_BEE_TYPE, blockEntity.beeType);
             if (blockEntity.blockColor !=null)
-                compoundNBT.putString(BeeConstants.NBT_COLOR, blockEntity.blockColor);
+                compoundNBT.putString(NBTConstants.NBT_COLOR, blockEntity.blockColor);
         }
     }
 }

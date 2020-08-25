@@ -4,6 +4,8 @@ import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.data.BeeData;
 import com.dungeonderps.resourcefulbees.lib.BeeConstants;
+import com.dungeonderps.resourcefulbees.lib.NBTConstants;
+import com.dungeonderps.resourcefulbees.utils.NBTHelper;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -26,22 +28,18 @@ public class ItemGroupResourcefulBees{
 					if (!bee.getKey().equals(BeeConstants.DEFAULT_BEE_TYPE) && !bee.getKey().isEmpty()) {
 						final ItemStack eggStack = new ItemStack(RegistryHandler.BEE_SPAWN_EGG.get());
 						final CompoundNBT eggEntityTag = eggStack.getOrCreateChildTag("EntityTag");
-						final CompoundNBT eggItemTag = eggStack.getOrCreateChildTag(BeeConstants.NBT_ROOT);
-						eggEntityTag.putString(BeeConstants.NBT_BEE_TYPE, bee.getValue().getName());
-						eggItemTag.putString(BeeConstants.NBT_BEE_TYPE, bee.getValue().getName());
+						final CompoundNBT eggItemTag = eggStack.getOrCreateChildTag(NBTConstants.NBT_ROOT);
+						eggEntityTag.putString(NBTConstants.NBT_BEE_TYPE, bee.getValue().getName());
+						eggItemTag.putString(NBTConstants.NBT_BEE_TYPE, bee.getValue().getName());
 						items.add(eggStack);
 
 						if (!bee.getValue().getMainOutput().isEmpty()) {
 							final ItemStack combStack = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
-							final CompoundNBT combItemTag = combStack.getOrCreateChildTag(BeeConstants.NBT_ROOT);
-							combItemTag.putString(BeeConstants.NBT_BEE_TYPE, bee.getValue().getName());
-							combItemTag.putString(BeeConstants.NBT_COLOR, bee.getValue().getHoneycombColor());
+							combStack.setTag(NBTHelper.createHoneycombItemTag(bee.getKey()));
 							items.add(combStack);
 
 							final ItemStack combBlockStack = new ItemStack(RegistryHandler.HONEYCOMB_BLOCK_ITEM.get());
-							final CompoundNBT combBlockItemTag = combBlockStack.getOrCreateChildTag(BeeConstants.NBT_ROOT);
-							combBlockItemTag.putString(BeeConstants.NBT_BEE_TYPE, bee.getValue().getName());
-							combBlockItemTag.putString(BeeConstants.NBT_COLOR, bee.getValue().getHoneycombColor());
+							combBlockStack.setTag(NBTHelper.createHoneycombItemTag(bee.getKey()));
 							items.add(combBlockStack);
 						}
 					}

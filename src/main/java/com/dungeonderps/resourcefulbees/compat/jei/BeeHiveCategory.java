@@ -5,7 +5,9 @@ import com.dungeonderps.resourcefulbees.compat.jei.ingredients.EntityIngredient;
 import com.dungeonderps.resourcefulbees.data.BeeData;
 import com.dungeonderps.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.dungeonderps.resourcefulbees.lib.BeeConstants;
+import com.dungeonderps.resourcefulbees.lib.NBTConstants;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
+import com.dungeonderps.resourcefulbees.utils.NBTHelper;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import mezz.jei.api.constants.VanillaTypes;
@@ -60,9 +62,7 @@ public class BeeHiveCategory implements IRecipeCategory<BeeHiveCategory.Recipe> 
         for (Map.Entry<String, BeeData> bee : BEE_INFO.entrySet()){
             if (!bee.getValue().getMainOutput().isEmpty()) {
                 ItemStack honeyCombItemStack = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
-                final CompoundNBT honeyCombItemStackTag = honeyCombItemStack.getOrCreateChildTag(BeeConstants.NBT_ROOT);
-                honeyCombItemStackTag.putString(BeeConstants.NBT_COLOR, bee.getValue().getHoneycombColor());
-                honeyCombItemStackTag.putString(BeeConstants.NBT_BEE_TYPE, bee.getKey());
+                honeyCombItemStack.setTag(NBTHelper.createHoneycombItemTag(bee.getKey()));
                 recipes.add(new Recipe(honeyCombItemStack, bee.getKey()));
             }
         }

@@ -1,7 +1,9 @@
 package com.dungeonderps.resourcefulbees.compat.jei;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
+import com.dungeonderps.resourcefulbees.client.gui.screen.CentrifugeMultiblockScreen;
 import com.dungeonderps.resourcefulbees.client.gui.screen.CentrifugeScreen;
+import com.dungeonderps.resourcefulbees.client.gui.screen.MechanicalCentrifugeScreen;
 import com.dungeonderps.resourcefulbees.compat.jei.ingredients.EntityIngredient;
 import com.dungeonderps.resourcefulbees.compat.jei.ingredients.EntityIngredientFactory;
 import com.dungeonderps.resourcefulbees.compat.jei.ingredients.EntityIngredientHelper;
@@ -43,9 +45,7 @@ public class JEICompat implements IModPlugin {
     private static final ISubtypeInterpreter honeycombSubtype = stack -> {
         Item item = stack.getItem();
         if( !(item instanceof ResourcefulHoneycomb) ) return "";
-
         ResourcefulHoneycomb comb = (ResourcefulHoneycomb) item;
-
         return comb.getTranslationKey(stack);
     };
     private static final ISubtypeInterpreter honeycombBlockSubtype = stack -> {
@@ -56,7 +56,6 @@ public class JEICompat implements IModPlugin {
 
         return combBlock.getTranslationKey(stack);
     };
-
     private static final ISubtypeInterpreter beeSpawnEggsSubtype = stack -> {
         Item item = stack.getItem();
         if( !(item instanceof BeeSpawnEggItem) ) return "";
@@ -113,7 +112,8 @@ public class JEICompat implements IModPlugin {
         registration.addRecipeCatalyst(new ItemStack(RegistryHandler.T3_APIARY_ITEM.get()), ApiaryCategory.ID);
         registration.addRecipeCatalyst(new ItemStack(RegistryHandler.T4_APIARY_ITEM.get()), ApiaryCategory.ID);
         registration.addRecipeCatalyst(new ItemStack(RegistryHandler.CENTRIFUGE_ITEM.get()), CentrifugeRecipeCategory.ID);
-        registration.addRecipeCatalyst(new ItemStack(RegistryHandler.GOLD_FLOWER_ITEM.get()), FlowersCategory.ID);
+        registration.addRecipeCatalyst(new ItemStack(RegistryHandler.MECHANICAL_CENTRIFUGE_ITEM.get()), CentrifugeRecipeCategory.ID);
+        registration.addRecipeCatalyst(new ItemStack(RegistryHandler.CENTRIFUGE_CONTROLLER_ITEM.get()), CentrifugeRecipeCategory.ID);
     }
 
     @Override
@@ -137,6 +137,8 @@ public class JEICompat implements IModPlugin {
     @Override
     public void registerGuiHandlers(IGuiHandlerRegistration registration) {
         registration.addRecipeClickArea(CentrifugeScreen.class, 80, 30, 18, 18, CentrifugeRecipeCategory.ID);
+        registration.addRecipeClickArea(MechanicalCentrifugeScreen.class, 80, 30, 18, 18, CentrifugeRecipeCategory.ID);
+        registration.addRecipeClickArea(CentrifugeMultiblockScreen.class, 88, 26, 18, 18, CentrifugeRecipeCategory.ID);
     }
 
     @Override

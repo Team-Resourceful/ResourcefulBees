@@ -1,9 +1,6 @@
 package com.dungeonderps.resourcefulbees;
 
-import com.dungeonderps.resourcefulbees.client.gui.screen.ApiaryStorageScreen;
-import com.dungeonderps.resourcefulbees.client.gui.screen.CentrifugeScreen;
-import com.dungeonderps.resourcefulbees.client.gui.screen.UnvalidatedApiaryScreen;
-import com.dungeonderps.resourcefulbees.client.gui.screen.ValidatedApiaryScreen;
+import com.dungeonderps.resourcefulbees.client.gui.screen.*;
 import com.dungeonderps.resourcefulbees.client.render.entity.CustomBeeRenderer;
 import com.dungeonderps.resourcefulbees.commands.ResourcefulBeeCommands;
 import com.dungeonderps.resourcefulbees.compat.top.TopCompat;
@@ -163,6 +160,9 @@ public class ResourcefulBees
         RegistryHandler.PURPUR_BEE_NEST.get().getStateContainer().getValidStates().forEach(blockState -> pointOfInterestTypeMap.put(blockState, RegistryHandler.TIERED_BEEHIVE_POI.get()));
         RegistryHandler.WITHER_BEE_NEST.get().getStateContainer().getValidStates().forEach(blockState -> pointOfInterestTypeMap.put(blockState, RegistryHandler.TIERED_BEEHIVE_POI.get()));
         RegistryHandler.T1_APIARY_BLOCK.get().getStateContainer().getValidStates().forEach(blockState -> pointOfInterestTypeMap.put(blockState, RegistryHandler.TIERED_BEEHIVE_POI.get()));
+        RegistryHandler.T2_APIARY_BLOCK.get().getStateContainer().getValidStates().forEach(blockState -> pointOfInterestTypeMap.put(blockState, RegistryHandler.TIERED_BEEHIVE_POI.get()));
+        RegistryHandler.T3_APIARY_BLOCK.get().getStateContainer().getValidStates().forEach(blockState -> pointOfInterestTypeMap.put(blockState, RegistryHandler.TIERED_BEEHIVE_POI.get()));
+        RegistryHandler.T4_APIARY_BLOCK.get().getStateContainer().getValidStates().forEach(blockState -> pointOfInterestTypeMap.put(blockState, RegistryHandler.TIERED_BEEHIVE_POI.get()));
         PointOfInterestType.POIT_BY_BLOCKSTATE.putAll(pointOfInterestTypeMap);
 
         ModSetup.setupDispenserCollectionBehavior();
@@ -182,9 +182,13 @@ public class ResourcefulBees
         CentrifugeScreen.currentMonth = new SimpleDateFormat("MM").format(new Date());
         RenderingRegistry.registerEntityRenderingHandler(RegistryHandler.CUSTOM_BEE.get(), CustomBeeRenderer::new);
         ScreenManager.registerFactory(RegistryHandler.CENTRIFUGE_CONTAINER.get(), CentrifugeScreen::new);
+        ScreenManager.registerFactory(RegistryHandler.MECHANICAL_CENTRIFUGE_CONTAINER.get(), MechanicalCentrifugeScreen::new);
+        ScreenManager.registerFactory(RegistryHandler.CENTRIFUGE_MULTIBLOCK_CONTAINER.get(), CentrifugeMultiblockScreen::new);
         ScreenManager.registerFactory(RegistryHandler.UNVALIDATED_APIARY_CONTAINER.get(), UnvalidatedApiaryScreen::new);
         ScreenManager.registerFactory(RegistryHandler.VALIDATED_APIARY_CONTAINER.get(), ValidatedApiaryScreen::new);
         ScreenManager.registerFactory(RegistryHandler.APIARY_STORAGE_CONTAINER.get(), ApiaryStorageScreen::new);
+        ScreenManager.registerFactory(RegistryHandler.APIARY_BREEDER_CONTAINER.get(), ApiaryBreederScreen::new);
+        ScreenManager.registerFactory(RegistryHandler.HONEY_GENERATOR_CONTAINER.get(), HoneyGeneratorScreen::new);
         RenderTypeLookup.setRenderLayer(RegistryHandler.GOLD_FLOWER.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(RegistryHandler.PREVIEW_BLOCK.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(RegistryHandler.ERRORED_PREVIEW_BLOCK.get(), RenderType.getCutout());

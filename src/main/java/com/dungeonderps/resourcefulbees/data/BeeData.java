@@ -1,9 +1,9 @@
 package com.dungeonderps.resourcefulbees.data;
 
+import com.dungeonderps.resourcefulbees.config.Config;
 import com.dungeonderps.resourcefulbees.lib.BeeConstants;
 import com.dungeonderps.resourcefulbees.lib.MutationTypes;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
-import com.dungeonderps.resourcefulbees.utils.Color;
 import net.minecraft.item.Items;
 
 public class BeeData {
@@ -14,27 +14,35 @@ public class BeeData {
     private String biomeBlacklist = "";
 
     private String baseLayerTexture = "/custom/bee";
-    private String primaryColor = Color.format(BeeConstants.DEFAULT_PRIMARY_COLOR);
-    private String secondaryColor = Color.format(BeeConstants.DEFAULT_SECONDARY_COLOR);
-    private String honeycombColor = Color.format(BeeConstants.DEFAULT_PRIMARY_COLOR);
+    private String primaryColor;
+    private String secondaryColor;
+    private String honeycombColor;
     private String primaryLayerTexture = "/custom/primary_layer";
     private String secondaryLayerTexture = "/custom/secondary_layer";
 
     private boolean isBeeColored = true;
 
+    private boolean isGlowing = false;
+    private String glowingColor = "#ffffff";
+    private boolean isEnchanted = false;
 
     private String mutationInput = "";
     private String mutationOutput = "";
+    private int mutationCount = 10;
 
     private String mainOutput = "";
 
     private String secondaryOutput = RegistryHandler.BEESWAX.getId().toString();
+    @SuppressWarnings("ConstantConditions")
     private String bottleOutput = Items.HONEY_BOTTLE.getRegistryName().toString();
 
-    private boolean spawnInWorld, enderBee, netherBee, breedable, creeperBee, skeletonBee, zomBee, pigmanBee, witherBee, blazeBee;
+    private boolean spawnInWorld, enderBee, netherBee, breedable, creeperBee, skeletonBee, zomBee, pigmanBee, witherBee, blazeBee, canSwim;
 
     private int maxTimeInHive = BeeConstants.MAX_TIME_IN_HIVE;
     private double breedWeight = BeeConstants.DEFAULT_BREED_WEIGHT;
+
+    private String feedItem = BeeConstants.FLOWER_TAG_ALL;
+    private int feedAmount = 1;
 
     private double mainOutputWeight = BeeConstants.DEFAULT_MAIN_OUTPUT_WEIGHT;
     private double secondaryOutputWeight = BeeConstants.DEFAULT_SEC_OUTPUT_WEIGHT;
@@ -43,13 +51,17 @@ public class BeeData {
     private int mainOutputCount = 1;
     private int secondaryOutputCount = 1;
     private int bottleOutputCount = 1;
+    private int mainInputCount = 1;
 
+    private float attackDamage = 1.0f;
 
-    private float sizeModifier = 1.0f;
+    private float sizeModifier = Config.BEE_SIZE_MODIFIER.get().floatValue();
+
+    private int spawnWeight = 10;
 
     private transient String name = BeeConstants.DEFAULT_BEE_TYPE;
     private transient boolean mutation;
-    private transient Enum<MutationTypes> mutationType;
+    private transient MutationTypes mutationType;
 
     public BeeData() {}
 
@@ -174,6 +186,23 @@ public class BeeData {
      */
     public void setBottleOutput(String bottleOutput) {
         this.bottleOutput = bottleOutput.toLowerCase();
+    }
+
+    /**
+     * Gets the Centrifuge Main Input Count for this bee's honeycomb.
+     * @return This bee's main centrifuge input count.
+     */
+    public int getMainInputCount() {
+        return mainInputCount;
+    }
+
+    /**
+     * Sets the Centrifuge Main Input Count for this bee's honeycomb.
+     * Can be used to modify bees through code.
+     * @param mainInputCount This bee's main centrifuge input count.
+     */
+    public void setMainInputCount(int mainInputCount) {
+        this.mainInputCount = mainInputCount;
     }
 
     /**
@@ -380,7 +409,7 @@ public class BeeData {
      * @return Gets this bee's breed weight.
      */
     public double getBreedWeight() {
-        return breedWeight;
+        return breedWeight < 1.0 ? breedWeight * 100 : breedWeight;
     }
 
     /**
@@ -401,11 +430,11 @@ public class BeeData {
         this.mutation = mutation;
     }
 
-    public Enum<MutationTypes> getMutationType() {
+    public MutationTypes getMutationType() {
         return mutationType;
     }
 
-    public void setMutationType(Enum<MutationTypes> mutationType) {
+    public void setMutationType(MutationTypes mutationType) {
         this.mutationType = mutationType;
     }
 
@@ -484,4 +513,52 @@ public class BeeData {
     public int getBottleOutputCount() { return bottleOutputCount; }
 
     public void setBottleOutputCount(int bottleOutputCount) { this.bottleOutputCount = bottleOutputCount; }
+
+    public float getAttackDamage() { return attackDamage; }
+
+    public void setAttackDamage(float attackDamage) { this.attackDamage = attackDamage; }
+
+    public int getSpawnWeight() { return spawnWeight; }
+
+    public void setSpawnWeight(int spawnWeight) { this.spawnWeight = spawnWeight; }
+
+    public boolean isGlowing() { return isGlowing; }
+
+    public void setGlowing(boolean glowing) { isGlowing = glowing; }
+
+    public String getGlowingColor() { return glowingColor; }
+
+    public void setGlowingColor(String glowingColor) { this.glowingColor = glowingColor; }
+
+    public boolean isEnchanted() { return isEnchanted; }
+
+    public void setEnchanted(boolean enchanted) { isEnchanted = enchanted; }
+
+    public String getFeedItem() {
+        return feedItem;
+    }
+
+    public void setFeedItem(String feedItem) {
+        this.feedItem = feedItem;
+    }
+
+    public int getFeedAmount() {
+        return feedAmount;
+    }
+
+    public void setFeedAmount(int feedAmount) {
+        this.feedAmount = feedAmount;
+    }
+
+    public int getMutationCount() {
+        return mutationCount;
+    }
+
+    public void setMutationCount(int mutationCount) {
+        this.mutationCount = mutationCount;
+    }
+
+    public boolean isCanSwim() { return canSwim; }
+
+    public void setCanSwim(boolean canSwim) { this.canSwim = canSwim; }
 }

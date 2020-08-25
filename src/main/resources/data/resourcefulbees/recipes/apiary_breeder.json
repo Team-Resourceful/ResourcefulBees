@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "BFB",
+    "FAF",
+    "BFB"
+  ],
+  "key": {
+    "F": { "tag": "minecraft:flowers" },
+    "B": { "item": "resourcefulbees:bee_jar" },
+    "A": { "item": "resourcefulbees:apiary_storage"}
+  },
+  "result": {
+    "item": "resourcefulbees:apiary_breeder"
+  }
+}

@@ -4,13 +4,11 @@ import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.compat.jei.ingredients.EntityIngredient;
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.data.BeeData;
-import com.dungeonderps.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.dungeonderps.resourcefulbees.lib.BeeConstants;
 import com.dungeonderps.resourcefulbees.lib.MutationTypes;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.utils.BeeInfoUtils;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
+import com.dungeonderps.resourcefulbees.utils.BeeValidator;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -21,11 +19,6 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.runtime.IIngredientManager;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.Quaternion;
-import net.minecraft.client.renderer.Vector3f;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
@@ -50,7 +43,6 @@ public class BlockToFluid implements IRecipeCategory<BlockToFluid.Recipe> {
     private final IDrawable info;
     private final IDrawable beeHive;
     private final String localizedName;
-    private final CustomBeeEntity bee;
 
     public BlockToFluid(IGuiHelper guiHelper) {
         this.background = guiHelper.drawableBuilder(GUI_BACK, -12, 0, 99, 75).addPadding(0, 0, 0, 0).build();
@@ -58,19 +50,17 @@ public class BlockToFluid implements IRecipeCategory<BlockToFluid.Recipe> {
         this.info = guiHelper.createDrawable(ICONS, 16, 0, 9, 9);
         this.beeHive = guiHelper.createDrawableIngredient(new ItemStack(RegistryHandler.T1_BEEHIVE_ITEM.get()));
         this.localizedName = I18n.format("gui.resourcefulbees.jei.category.block_to_fluid_mutation");
-        assert Minecraft.getInstance().world != null;
-        bee = RegistryHandler.CUSTOM_BEE.get().create(Minecraft.getInstance().world);
     }
 
-    public static List<BlockToFluid.Recipe> getMutationRecipes(IIngredientManager ingredientManager) {
-        List<BlockToFluid.Recipe> recipes = new ArrayList<>();
+    public static List<Recipe> getMutationRecipes(IIngredientManager ingredientManager) {
+        List<Recipe> recipes = new ArrayList<>();
         for (Map.Entry<String, BeeData> bee : BeeInfo.BEE_INFO.entrySet()){
             if (bee.getValue().hasMutation()) {
 
                 String mutationIn = bee.getValue().getMutationInput();
                 String mutationOut = bee.getValue().getMutationOutput();
 
-                if (BeeInfoUtils.TAG_RESOURCE_PATTERN.matcher(mutationIn).matches()) {
+                if (BeeValidator.TAG_RESOURCE_PATTERN.matcher(mutationIn).matches()) {
                     mutationIn = mutationIn.replace(BeeConstants.TAG_PREFIX, "");
 
                     Tag<Item> itemTag = BeeInfoUtils.getItemTag(mutationIn);
@@ -81,7 +71,7 @@ public class BlockToFluid implements IRecipeCategory<BlockToFluid.Recipe> {
                         }
                     }
                 } else {
-                    Enum<MutationTypes> mutationType = bee.getValue().getMutationType();
+                    MutationTypes mutationType = bee.getValue().getMutationType();
 
                     if (MutationTypes.BLOCK_TO_FLUID.equals(mutationType)) {
                         Item itemIn = BeeInfoUtils.getItem(mutationIn);
@@ -101,8 +91,8 @@ public class BlockToFluid implements IRecipeCategory<BlockToFluid.Recipe> {
     }
 
     @Override
-    public Class<? extends BlockToFluid.Recipe> getRecipeClass() {
-        return BlockToFluid.Recipe.class;
+    public Class<? extends Recipe> getRecipeClass() {
+        return Recipe.class;
     }
 
     @Override
@@ -121,7 +111,7 @@ public class BlockToFluid implements IRecipeCategory<BlockToFluid.Recipe> {
     }
 
     @Override
-    public void setIngredients(BlockToFluid.Recipe recipe, IIngredients ingredients) {
+    public void setIngredients(Recipe recipe, IIngredients ingredients) {
         if (recipe.isAcceptsAny()) {
             if (MutationTypes.BLOCK_TO_FLUID.equals(recipe.mutationType)) {
                 List<Ingredient> list = new ArrayList<>();
@@ -144,6 +134,8 @@ public class BlockToFluid implements IRecipeCategory<BlockToFluid.Recipe> {
     public List<String> getTooltipStrings(Recipe recipe, double mouseX, double mouseY) {
         double infoX = 63D;
         double infoY = 8D;
+        double beeX = 10D;
+        double beeY = 6D;
         if (mouseX >= infoX && mouseX <= infoX + 9D && mouseY >= infoY && mouseY <= infoY + 9D){
             return Collections.singletonList(I18n.format("gui." + ResourcefulBees.MOD_ID + ".jei.category.mutation.info"));
         }
@@ -151,25 +143,23 @@ public class BlockToFluid implements IRecipeCategory<BlockToFluid.Recipe> {
     }
 
     @Override
-    public void setRecipe(IRecipeLayout iRecipeLayout, BlockToFluid.Recipe recipe, IIngredients ingredients) {
-        if (MutationTypes.BLOCK_TO_FLUID.equals(recipe.mutationType)) {
-            List<List<ItemStack>> inputs = ingredients.getInputs(VanillaTypes.ITEM);
-            IGuiItemStackGroup itemStacks = iRecipeLayout.getItemStacks();
-            itemStacks.init(0, true, 15, 57);
-            itemStacks.set(0, ingredients.getInputs(VanillaTypes.ITEM).get(0));
+    public void setRecipe(IRecipeLayout iRecipeLayout, Recipe recipe, IIngredients ingredients) {
+        List<List<ItemStack>> inputs = ingredients.getInputs(VanillaTypes.ITEM);
+        IGuiItemStackGroup itemStacks = iRecipeLayout.getItemStacks();
+        itemStacks.init(0, true, 15, 57);
+        itemStacks.set(0, ingredients.getInputs(VanillaTypes.ITEM).get(0));
 
-            IGuiFluidStackGroup fluidStacks = iRecipeLayout.getFluidStacks();
-            fluidStacks.init(0,false,66,49);
-            fluidStacks.set(0, ingredients.getOutputs(VanillaTypes.FLUID).get(0));
+        IGuiFluidStackGroup fluidStacks = iRecipeLayout.getFluidStacks();
+        fluidStacks.init(0,false,66,49);
+        fluidStacks.set(0, ingredients.getOutputs(VanillaTypes.FLUID).get(0));
 
-            IGuiIngredientGroup<EntityIngredient> ingredientStacks = iRecipeLayout.getIngredientsGroup(JEICompat.ENTITY_INGREDIENT);
-            ingredientStacks.init(0, true, 16, 10);
-            ingredientStacks.set(0, ingredients.getInputs(JEICompat.ENTITY_INGREDIENT).get(0));
-        }
+        IGuiIngredientGroup<EntityIngredient> ingredientStacks = iRecipeLayout.getIngredientsGroup(JEICompat.ENTITY_INGREDIENT);
+        ingredientStacks.init(0, true, 16, 10);
+        ingredientStacks.set(0, ingredients.getInputs(JEICompat.ENTITY_INGREDIENT).get(0));
     }
 
     @Override
-    public void draw(BlockToFluid.Recipe recipe, double mouseX, double mouseY) {
+    public void draw(Recipe recipe, double mouseX, double mouseY) {
         this.beeHive.draw(65, 10);
         this.info.draw(63, 8);
     }
@@ -182,9 +172,9 @@ public class BlockToFluid implements IRecipeCategory<BlockToFluid.Recipe> {
         private final boolean acceptsAny;
         private final Tag<Item> tag;
 
-        private final Enum<MutationTypes> mutationType;
+        private final MutationTypes mutationType;
 
-        public Recipe(ItemStack baseBlock, FluidStack mutationBlock, String beeType, Enum<MutationTypes> type, boolean acceptsAny) {
+        public Recipe(ItemStack baseBlock, FluidStack mutationBlock, String beeType, MutationTypes type, boolean acceptsAny) {
             this.fluidOut = mutationBlock;
             this.itemIn = baseBlock;
             this.beeType = beeType;
@@ -194,7 +184,7 @@ public class BlockToFluid implements IRecipeCategory<BlockToFluid.Recipe> {
         }
 
         //TAGS!!!
-        public Recipe(Tag<Item> baseBlock, FluidStack mutationBlock, String beeType, Enum<MutationTypes> type, boolean acceptsAny) {
+        public Recipe(Tag<Item> baseBlock, FluidStack mutationBlock, String beeType, MutationTypes type, boolean acceptsAny) {
             this.fluidOut = mutationBlock;
             this.itemIn = null;
             this.beeType = beeType;

@@ -3,6 +3,7 @@ package com.dungeonderps.resourcefulbees.block;
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.config.Config;
 import com.dungeonderps.resourcefulbees.lib.BeeConstants;
+import com.dungeonderps.resourcefulbees.lib.NBTConstants;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.tileentity.TieredBeehiveTileEntity;
 import com.dungeonderps.resourcefulbees.utils.TooltipBuilder;
@@ -181,8 +182,8 @@ public class TieredBeehiveBlock extends BeehiveBlock {
       while (hive.hasCombs()) {
         ItemStack comb = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
         String honeycomb = hive.getResourceHoneycomb();
-        comb.getOrCreateChildTag(BeeConstants.NBT_ROOT).putString(BeeConstants.NBT_COLOR, BeeInfo.getInfo(honeycomb).getHoneycombColor());
-        comb.getOrCreateChildTag(BeeConstants.NBT_ROOT).putString(BeeConstants.NBT_BEE_TYPE, BeeInfo.getInfo(honeycomb).getName());
+        comb.getOrCreateChildTag(NBTConstants.NBT_ROOT).putString(NBTConstants.NBT_COLOR, BeeInfo.getInfo(honeycomb).getHoneycombColor());
+        comb.getOrCreateChildTag(NBTConstants.NBT_ROOT).putString(NBTConstants.NBT_BEE_TYPE, BeeInfo.getInfo(honeycomb).getName());
         spawnAsEntity(world, pos, comb);
       }
     }

@@ -2,6 +2,7 @@ package com.dungeonderps.resourcefulbees.item;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.lib.BeeConstants;
+import com.dungeonderps.resourcefulbees.lib.NBTConstants;
 import com.dungeonderps.resourcefulbees.registry.ColorHandler;
 import com.dungeonderps.resourcefulbees.utils.Color;
 import net.minecraft.client.util.ITooltipFlag;
@@ -31,10 +32,10 @@ public class ResourcefulHoneycomb extends Item {
     @Nonnull
     @Override
     public String getTranslationKey(ItemStack stack) {
-        CompoundNBT beeType = stack.getChildTag(BeeConstants.NBT_ROOT);
+        CompoundNBT beeType = stack.getChildTag(NBTConstants.NBT_ROOT);
         String name;
-        if ((beeType != null && beeType.contains(BeeConstants.NBT_BEE_TYPE))) {
-            name = "item" + '.' + ResourcefulBees.MOD_ID + '.' + beeType.getString(BeeConstants.NBT_BEE_TYPE) + "_honeycomb";
+        if ((beeType != null && beeType.contains(NBTConstants.NBT_BEE_TYPE))) {
+            name = "item" + '.' + ResourcefulBees.MOD_ID + '.' + beeType.getString(NBTConstants.NBT_BEE_TYPE) + "_honeycomb";
         } else {
             name = "item" + '.' + ResourcefulBees.MOD_ID + '.' + "resourceful_honeycomb";
         }

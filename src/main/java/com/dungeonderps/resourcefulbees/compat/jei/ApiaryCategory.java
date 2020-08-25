@@ -53,7 +53,7 @@ public class ApiaryCategory implements IRecipeCategory<ApiaryCategory.Recipe> {
                 for (int i = 0; i < 4; i++){
                     Item outputItem = outputs.get(i).equals(ApiaryOutput.COMB) ? RegistryHandler.RESOURCEFUL_HONEYCOMB.get() : RegistryHandler.HONEYCOMB_BLOCK_ITEM.get();
                     ItemStack outputStack = new ItemStack(outputItem, outputQuantities[i]);
-                    outputStack.setTag(NBTHelper.createHoneycombItemTag(bee.getKey(), bee.getValue().getHoneycombColor()));
+                    outputStack.setTag(NBTHelper.createHoneycombItemTag(bee.getKey()));
                     recipes.add(new Recipe(outputStack, bee.getKey(), new ItemStack(apiaryTiers.get(i))));
                 }
             }

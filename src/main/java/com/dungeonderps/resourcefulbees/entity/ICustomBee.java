@@ -33,4 +33,21 @@ public interface ICustomBee extends IBeeInfo {
      *  @return "This" bee's info card.
      */
     BeeData getBeeInfo();
+
+    /**
+     * Gets "this" bee's current number of times fed.
+     *
+     * @return "This" bee's feed count.
+     */
+    int getFeedCount();
+
+    /**
+     * Resets "this" bee's current number of times fed.
+     */
+    void resetFeedCount();
+
+    /**
+     * Increments "this" bee's current number of times fed by 1.
+     */
+    void addFeedCount();
 }

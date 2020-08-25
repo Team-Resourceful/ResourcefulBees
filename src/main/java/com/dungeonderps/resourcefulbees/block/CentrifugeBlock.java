@@ -6,7 +6,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
@@ -51,21 +50,11 @@ public class CentrifugeBlock extends Block {
         return ActionResultType.SUCCESS;
     }
 
+
     @Nullable
     @Override
     public INamedContainerProvider getContainer(@Nonnull BlockState state, World worldIn, @Nonnull BlockPos pos) {
         return (INamedContainerProvider)worldIn.getTileEntity(pos);
-    }
-
-    @Override
-    public void onBlockPlacedBy(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
-        if (stack.hasDisplayName()) {
-            TileEntity tileentity = worldIn.getTileEntity(pos);
-            if (tileentity instanceof CentrifugeTileEntity) {
-                ((CentrifugeTileEntity)tileentity).setCustomName(stack.getDisplayName());
-            }
-        }
-        super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
     }
 
     @Override
@@ -97,9 +86,9 @@ public class CentrifugeBlock extends Block {
 
     @Override
     public void addInformation(@Nonnull ItemStack stack, @Nullable IBlockReader worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
-        tooltip.addAll(new TooltipBuilder()
-                .addTip(I18n.format("block.resourcefulbees.centrifuge.tooltip.info"), TextFormatting.GOLD)
-                .build());
+            tooltip.addAll(new TooltipBuilder()
+                    .addTip(I18n.format("block.resourcefulbees.centrifuge.tooltip.info"), TextFormatting.GOLD)
+                    .build());
         super.addInformation(stack, worldIn, tooltip, flagIn);
     }
 }

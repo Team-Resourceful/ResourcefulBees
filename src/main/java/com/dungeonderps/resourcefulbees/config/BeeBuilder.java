@@ -6,6 +6,8 @@ import com.dungeonderps.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.dungeonderps.resourcefulbees.lib.BeeConstants;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.utils.BeeInfoUtils;
+import com.dungeonderps.resourcefulbees.utils.BeeValidator;
+import com.dungeonderps.resourcefulbees.utils.RandomCollection;
 import com.google.gson.Gson;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
@@ -20,12 +22,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
 import java.util.Map;
-import java.util.Set;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import static com.dungeonderps.resourcefulbees.ResourcefulBees.LOGGER;
 import static com.dungeonderps.resourcefulbees.config.BeeInfo.BEE_INFO;
@@ -69,32 +69,73 @@ public class BeeBuilder {
         Reader r = new FileReader(file);
         BeeData bee = gson.fromJson(r, BeeData.class);
         bee.setName(name);
-        if (BeeInfoUtils.validate(bee)) {
+        if (BeeValidator.validate(bee)) {
             BeeInfo.BEE_INFO.put(name.toLowerCase(), bee);
             if (bee.canSpawnInWorld())
                 BeeInfoUtils.parseBiomes(bee);
             if (bee.isBreedable())
                 BeeInfoUtils.buildFamilyTree(bee);
-            LOGGER.info(name + " bee passed validation check!!");
+            if (Config.SHOW_DEBUG_INFO.get())
+                LOGGER.info(name + " bee passed validation check!!");
         }
     }
 
     private static void addBees() {
-        BeeInfo.BEE_INFO.clear();
+        //BeeInfo.BEE_INFO.clear();
         BeeInfoUtils.genDefaultBee();
         try {
             Files.walk(BEE_PATH)
+                    .filter(f -> f.getFileName().toString().endsWith(".zip"))
+                    .forEach(BeeBuilder::openZipFile);
+            Files.walk(BEE_PATH)
                     .filter(f -> f.getFileName().toString().endsWith(".json"))
-                    .forEach((file) -> {
-                        File f = file.toFile();
-                        try {
-                            parseBee(f);
-                        } catch (IOException e) {
-                            LOGGER.error("File not found when parsing bees");
-                        }
-                    });
+                    .forEach(BeeBuilder::addBee);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private static void addBee(Path file) {
+        File f = file.toFile();
+        try {
+            parseBee(f);
+        } catch (IOException e) {
+            LOGGER.error("File not found when parsing bees");
+        }
+    }
+
+    private static void openZipFile(Path file){
+        try {
+            ZipFile zf = new ZipFile(file.toString());
+            zf.stream().forEach(zipEntry -> {
+                if(zipEntry.isDirectory()) {
+                    extractDirectoryFromZip(zipEntry, zf);
+                } else if (zipEntry.getName().endsWith(".json")) {
+                    extractJSONFromZip(zipEntry, zf);
+                }
+            });
+        } catch (IOException e) {
+            LOGGER.warn("Could not read ZipFile! ZipFile: " + file.getFileName());
+        }
+    }
+
+    public static void extractDirectoryFromZip(ZipEntry zipEntry, ZipFile zf) {
+        Path dirToCreate = BEE_PATH.resolve(zipEntry.getName());
+        try {
+            Files.createDirectory(dirToCreate);
+        } catch (FileAlreadyExistsException ignored) {
+        } catch (IOException e) {
+            LOGGER.warn("Could not create directory from ZipFile! ZipFile: " + zf.getName() + " Directory: " + zipEntry.getName());
+        }
+    }
+
+    public static void extractJSONFromZip(ZipEntry zipEntry, ZipFile zf) {
+        try {
+            Path fileToCreate = BEE_PATH.resolve(zipEntry.getName());
+            Files.copy(zf.getInputStream(zipEntry), fileToCreate, StandardCopyOption.REPLACE_EXISTING);
+        } catch (FileAlreadyExistsException ignored) {
+        } catch (IOException e) {
+            LOGGER.warn("Could not create file from ZipFile! ZipFile: " + zf.getName() + " File: " + zipEntry.getName());
         }
     }
 
@@ -112,7 +153,7 @@ public class BeeBuilder {
     }
 
     private static void setupBeeSpawns() {
-        for (Map.Entry<Biome, Set<String>> element : BeeInfo.SPAWNABLE_BIOMES.entrySet()) {
+        for (Map.Entry<Biome, RandomCollection<String>> element : BeeInfo.SPAWNABLE_BIOMES.entrySet()) {
             Biome biome = element.getKey();
             if (Config.GENERATE_BEE_NESTS.get()) {
                 addNestFeature(biome);
@@ -172,7 +213,7 @@ public class BeeBuilder {
                     builder.append(bee.getKey());
                     builder.append("_spawn_egg\" : \"");
                     builder.append(displayName);
-                    builder.append(" Spawn Egg\",\n");
+                    builder.append(" Bee Spawn Egg\",\n");
                     //entity
                     builder.append("\"entity.resourcefulbees.");
                     builder.append(bee.getKey());

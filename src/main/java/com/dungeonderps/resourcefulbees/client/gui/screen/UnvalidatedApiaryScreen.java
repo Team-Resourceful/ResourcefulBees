@@ -108,14 +108,14 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
     }
 
     @Override
-    public void render(int p_render_1_, int p_render_2_, float p_render_3_) {
+    public void render(int mouseX, int mouseY, float partialTicks) {
         this.upButton.active = verticalOffset != 2;
         this.downButton.active = verticalOffset != -1;
         this.leftButton.active = horizontalOffset != -2;
         this.rightButton.active = horizontalOffset != 2;
         this.renderBackground();
-        super.render(p_render_1_, p_render_2_, p_render_3_);
-        this.renderHoveredToolTip(p_render_1_, p_render_2_);
+        super.render(mouseX, mouseY, partialTicks);
+        this.renderHoveredToolTip(mouseX, mouseY);
     }
 
     private void validate() {
@@ -138,7 +138,7 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        this.font.drawString("Offset", 65, 13, 0x404040);
+        this.font.drawString( "Offset", 65, 13, 0x404040);
         this.font.drawString("Vert.", 75, 26, 0x404040);
         this.font.drawString("Horiz.", 75, 39, 0x404040);
         this.drawRightAlignedString(font, String.valueOf(verticalOffset), 70, 26, 0x404040);
@@ -152,7 +152,7 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
         }
     }
 
-    @Override
+
     public void drawRightAlignedString(FontRenderer fontRenderer, @Nonnull String s, int posX, int posY, int color) {
         fontRenderer.drawString(s, (float) (posX - fontRenderer.getStringWidth(s)), (float) posY, color);
     }
@@ -171,10 +171,10 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
         }
 
         @Override
-        public void renderToolTip(int p_renderToolTip_1_, int p_renderToolTip_2_) {
+        public void renderToolTip(int mouseX, int mouseY) {
             if (!this.active) {
                 String s = I18n.format("gui.resourcefulbees.apiary.button.build.creative");
-                UnvalidatedApiaryScreen.this.renderTooltip(s, p_renderToolTip_1_, p_renderToolTip_2_);
+                UnvalidatedApiaryScreen.this.renderTooltip(s, mouseX, mouseY);
             }
         }
     }
@@ -220,7 +220,7 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
         }
 
         @Override
-        public void renderToolTip(int p_renderToolTip_1_, int p_renderToolTip_2_) {
+        public void renderToolTip(int mouseX, int mouseY) {
             String s;
             if (!isTriggered()) {
                 s = I18n.format("gui.resourcefulbees.apiary.button.preview.enable");
@@ -228,7 +228,7 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
             else {
                 s = I18n.format("gui.resourcefulbees.apiary.button.preview.disable");
             }
-            UnvalidatedApiaryScreen.this.renderTooltip(s, p_renderToolTip_1_, p_renderToolTip_2_);
+            UnvalidatedApiaryScreen.this.renderTooltip(s, mouseX, mouseY);
         }
 
         public void setTrigger(boolean triggered) {

@@ -20,6 +20,7 @@ public class CustomBeeRenderer extends MobRenderer<CustomBeeEntity, CustomBeeMod
         super(manager, new CustomBeeModel<>(), 0.4F);
                 addLayer(new PrimaryColorLayer(this));
                 addLayer(new SecondaryColorLayer(this));
+                addLayer(new EmissiveBeeLayer(this));
     }
 
     @Nonnull

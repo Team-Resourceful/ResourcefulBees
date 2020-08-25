@@ -1,7 +1,7 @@
 package com.dungeonderps.resourcefulbees.container;
 
 import com.dungeonderps.resourcefulbees.item.BeeJar;
-import com.dungeonderps.resourcefulbees.lib.BeeConstants;
+import com.dungeonderps.resourcefulbees.lib.NBTConstants;
 import com.dungeonderps.resourcefulbees.network.NetPacketHandler;
 import com.dungeonderps.resourcefulbees.network.packets.LockBeeMessage;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
@@ -37,11 +37,10 @@ public class ValidatedApiaryContainer extends Container {
             this.addSlot(new SlotItemHandlerUnconditioned(apiaryTileEntity.h, ApiaryTileEntity.IMPORT, 74, 37) {
                 public boolean isItemValid(ItemStack stack) {
                     if (stack.getItem() instanceof BeeJar) {
-                        BeeJar jarItem = (BeeJar) stack.getItem();
-                        if (jarItem.isFilled(stack)) {
+                        if (BeeJar.isFilled(stack)) {
                             CompoundNBT data = stack.getTag();
                             //noinspection ConstantConditions
-                            String type = data.getString(BeeConstants.NBT_ENTITY);
+                            String type = data.getString(NBTConstants.NBT_ENTITY);
                             return type.equals(RegistryHandler.CUSTOM_BEE.getId().toString());
                         }
                     }
@@ -51,8 +50,7 @@ public class ValidatedApiaryContainer extends Container {
             this.addSlot(new SlotItemHandlerUnconditioned(apiaryTileEntity.h, ApiaryTileEntity.EMPTY_JAR, 128, 37) {
                 public boolean isItemValid(ItemStack stack) {
                     if (stack.getItem() instanceof BeeJar) {
-                        BeeJar jarItem = (BeeJar) stack.getItem();
-                        return (!jarItem.isFilled(stack));
+                        return (!BeeJar.isFilled(stack));
                     }
                     return false;
                 }

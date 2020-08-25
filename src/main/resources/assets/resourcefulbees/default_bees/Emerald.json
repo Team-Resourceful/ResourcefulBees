@@ -7,5 +7,6 @@
   "mutationOutput": "minecraft:lava",
   "mainOutput": "minecraft:emerald",
   "spawnInWorld": true,
-  "biomeWhitelist": "TAG:Mountain,Hills"
+  "biomeWhitelist": "TAG:Mountain,Hills",
+  "spawnWeight": 1
 }

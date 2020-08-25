@@ -11,5 +11,6 @@
   "biomeBlacklist": "tag:ocean",
   "breedable" : true,
   "parent1": "Coal",
-  "parent2": "Skeleton"
+  "parent2": "Skeleton",
+  "feedItem": "tag:forge:ores"
 }

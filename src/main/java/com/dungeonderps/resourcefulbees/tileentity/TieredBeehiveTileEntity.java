@@ -27,6 +27,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Stack;
 
+import static com.dungeonderps.resourcefulbees.lib.NBTConstants.*;
 import static com.dungeonderps.resourcefulbees.lib.BeeConstants.*;
 
 public class TieredBeehiveTileEntity extends BeehiveTileEntity {
@@ -69,8 +70,7 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
   }
 
   @Override
-  public boolean releaseBee(@Nonnull BlockState state, @Nonnull CompoundNBT nbt, @Nullable List<Entity> entities, @Nonnull BeehiveTileEntity.State beehiveState) {
-    BlockPos blockpos = this.getPos();
+  public boolean releaseBee(@Nonnull BlockState state, @Nonnull CompoundNBT nbt, @Nullable List<Entity> entities, @Nonnull BeehiveTileEntity.State beehiveState) {    BlockPos blockpos = this.getPos();
     if (shouldStayInHive(beehiveState)) {
       return false;
     } else {

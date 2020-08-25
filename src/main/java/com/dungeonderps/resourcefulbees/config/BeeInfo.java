@@ -2,19 +2,20 @@ package com.dungeonderps.resourcefulbees.config;
 
 import com.dungeonderps.resourcefulbees.data.BeeData;
 import com.dungeonderps.resourcefulbees.lib.BeeConstants;
+import com.dungeonderps.resourcefulbees.utils.BeeInfoUtils;
 import com.dungeonderps.resourcefulbees.utils.MathUtils;
+import com.dungeonderps.resourcefulbees.utils.RandomCollection;
 import net.minecraft.world.biome.Biome;
+import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.Set;
 
 public class BeeInfo {
 
     public static final LinkedHashMap<String, BeeData> BEE_INFO = new LinkedHashMap<>();
-    public static final HashMap<Biome, Set<String>> SPAWNABLE_BIOMES = new HashMap<>();
-    public static final HashMap<Integer, Set<String>> FAMILY_TREE = new HashMap<>();
+    public static final HashMap<Biome, RandomCollection<String>> SPAWNABLE_BIOMES = new HashMap<>();
+    public static final HashMap<Pair<String, String>, RandomCollection<String>> FAMILY_TREE = new HashMap<>();
 
     public static float[] getBeeColorAsFloat(String color){
         java.awt.Color tempColor = java.awt.Color.decode(color);
@@ -42,8 +43,7 @@ public class BeeInfo {
      */
     public static String getRandomBee(Biome biome){
         if (SPAWNABLE_BIOMES.get(biome) != null) {
-            ArrayList<String> spawnList = new ArrayList<>(SPAWNABLE_BIOMES.get(biome));
-            return spawnList.get(MathUtils.nextInt(spawnList.size()));
+            return SPAWNABLE_BIOMES.get(biome).next();
         }
         return BeeConstants.DEFAULT_BEE_TYPE;
     }
@@ -53,4 +53,15 @@ public class BeeInfo {
         return info != null ? info : BEE_INFO.get(BeeConstants.DEFAULT_BEE_TYPE);
     }
 
+    public static boolean canParentsBreed(String parent1, String parent2){
+        return FAMILY_TREE.containsKey(BeeInfoUtils.sortParents(parent1, parent2));
+    }
+
+    public static String getWeightedChild(String parent1, String parent2){
+        return FAMILY_TREE.get(BeeInfoUtils.sortParents(parent1, parent2)).next();
+    }
+
+    public static double getAdjustedWeightForChild(BeeData child){
+        return FAMILY_TREE.get(BeeInfoUtils.sortParents(child.getParent1(), child.getParent2())).getAdjustedWeight(child.getBreedWeight());
+    }
 }
