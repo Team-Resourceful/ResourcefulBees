@@ -158,45 +158,43 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     //region BEE HANDLING
     public boolean releaseBee(@Nonnull BlockState state, @Nonnull CompoundNBT nbt, @Nonnull State beehiveState, @Nullable BlockPos flowerPos, boolean exportBee) {
         BlockPos blockpos = this.getPos();
-        if (exportBee || !shouldStayInHive(beehiveState)) {
+        Direction direction = state.get(BeehiveBlock.FACING);
+        BlockPos blockpos1 = blockpos.offset(direction);
+        if (world != null && this.world.getBlockState(blockpos1).getCollisionShape(this.world, blockpos1).isEmpty()) {
             nbt.remove("Passengers");
             nbt.remove("Leash");
             nbt.remove("UUID");
-            Direction direction = state.get(BeehiveBlock.FACING);
-            BlockPos blockpos1 = blockpos.offset(direction);
-            if (world == null || this.world.getBlockState(blockpos1).getCollisionShape(this.world, blockpos1).isEmpty()) {
-                Entity entity = EntityType.loadEntityAndExecute(nbt, this.world, entity1 -> entity1);
-                if (entity != null) {
-                    float f = entity.getWidth();
-                    double d0 = 0.55D + f / 2.0F;
-                    double d1 = blockpos.getX() + 0.5D + d0 * direction.getXOffset();
-                    double d2 = blockpos.getY() + 0.5D - (entity.getHeight() / 2.0F);
-                    double d3 = blockpos.getZ() + 0.5D + d0 * direction.getZOffset();
-                    entity.setLocationAndAngles(d1, d2, d3, entity.rotationYaw, entity.rotationPitch);
-                    if (entity instanceof CustomBeeEntity) {
-                        CustomBeeEntity beeEntity = (CustomBeeEntity) entity;
-                        if (flowerPos != null && !beeEntity.hasFlower() && this.world.rand.nextFloat() < 0.9F) {
-                            beeEntity.setFlowerPos(flowerPos);
-                        }
-
-                        if (beehiveState == State.HONEY_DELIVERED) {
-                            beeEntity.onHoneyDelivered();
-                            if (!exportBee && beeEntity.getBeeInfo().getHoneycombColor() != null && !beeEntity.getBeeInfo().getHoneycombColor().isEmpty() && isValidApiary) {
-                                getApiaryStorage().deliverHoneycomb(beeEntity.getBeeType(), getTier());
-                            }
-                        }
-
-                        beeEntity.resetTicksWithoutNectar();
-
-                        if (exportBee) {
-                            export(beeEntity);
-                        } else {
-                            BlockPos hivePos = this.getPos();
-                            this.world.playSound(null, hivePos.getX(), hivePos.getY(), hivePos.getZ(), SoundEvents.BLOCK_BEEHIVE_EXIT, SoundCategory.BLOCKS, 1.0F, 1.0F);
-                            this.world.addEntity(entity);
-                        }
-                        return true;
+            Entity entity = EntityType.loadEntityAndExecute(nbt, this.world, entity1 -> entity1);
+            if (entity != null) {
+                float f = entity.getWidth();
+                double d0 = 0.55D + f / 2.0F;
+                double d1 = blockpos.getX() + 0.5D + d0 * direction.getXOffset();
+                double d2 = blockpos.getY() + 0.5D - (entity.getHeight() / 2.0F);
+                double d3 = blockpos.getZ() + 0.5D + d0 * direction.getZOffset();
+                entity.setLocationAndAngles(d1, d2, d3, entity.rotationYaw, entity.rotationPitch);
+                if (entity instanceof CustomBeeEntity) {
+                    CustomBeeEntity beeEntity = (CustomBeeEntity) entity;
+                    if (flowerPos != null && !beeEntity.hasFlower() && this.world.rand.nextFloat() < 0.9F) {
+                        beeEntity.setFlowerPos(flowerPos);
                     }
+
+                    if (beehiveState == State.HONEY_DELIVERED) {
+                        beeEntity.onHoneyDelivered();
+                        if (!exportBee && beeEntity.getBeeInfo().getHoneycombColor() != null && !beeEntity.getBeeInfo().getHoneycombColor().isEmpty() && isValidApiary) {
+                            getApiaryStorage().deliverHoneycomb(beeEntity.getBeeType(), getTier());
+                        }
+                    }
+
+                    beeEntity.resetTicksWithoutNectar();
+
+                    if (exportBee) {
+                        export(beeEntity);
+                    } else {
+                        BlockPos hivePos = this.getPos();
+                        this.world.playSound(null, hivePos.getX(), hivePos.getY(), hivePos.getZ(), SoundEvents.BLOCK_BEEHIVE_EXIT, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                        this.world.addEntity(entity);
+                    }
+                    return true;
                 }
             }
         }
@@ -294,12 +292,6 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
                 }
             }
         }
-    }
-
-    public boolean shouldStayInHive(State beehiveState) {
-        if (world != null)
-            return (this.world.isNightTime() || this.world.isRaining()) && beehiveState != State.EMERGENCY;
-        return false;
     }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")

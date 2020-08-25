@@ -1,5 +1,6 @@
 package com.dungeonderps.resourcefulbees.utils;
 
+import com.dungeonderps.resourcefulbees.config.Config;
 import com.dungeonderps.resourcefulbees.data.BeeData;
 import com.dungeonderps.resourcefulbees.lib.BeeConstants;
 import com.dungeonderps.resourcefulbees.lib.MutationTypes;
@@ -101,7 +102,8 @@ public class BeeValidator {
             bee.setMutation(true);
             return true;
         }
-        LOGGER.warn(StringUtils.capitalize(bee.getName()) + " - Bee has no mutations or the patterns don't match.");
+        if (Config.SHOW_DEBUG_INFO.get())
+            LOGGER.warn(StringUtils.capitalize(bee.getName()) + " - Bee has no mutations or the patterns don't match.");
         return false;
     }
 

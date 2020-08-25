@@ -1,5 +1,6 @@
 package com.dungeonderps.resourcefulbees.data;
 
+import com.dungeonderps.resourcefulbees.config.Config;
 import com.dungeonderps.resourcefulbees.lib.BeeConstants;
 import com.dungeonderps.resourcefulbees.lib.MutationTypes;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
@@ -54,7 +55,7 @@ public class BeeData {
 
     private float attackDamage = 1.0f;
 
-    private float sizeModifier = 1.0f;
+    private float sizeModifier = Config.BEE_SIZE_MODIFIER.get().floatValue();
 
     private int spawnWeight = 10;
 

@@ -46,6 +46,8 @@ public class Config {
 
     public static ForgeConfigSpec.IntValue SMOKER_DURABILITY;
 
+    public static ForgeConfigSpec.DoubleValue BEE_SIZE_MODIFIER;
+
     //CLIENT
 
     public static ForgeConfigSpec.BooleanValue GENERATE_ENGLISH_LANG;
@@ -130,6 +132,11 @@ public class Config {
                         .define("generateBeeNests", true);
                 BEE_NEST_GENERATION_WEIGHT = COMMON_BUILDER.comment("\nBee nest weighting when generating chunks. Higher value means nest is more likely to generate")
                         .defineInRange("bee_nest_generation_weight", 0.3, 0.0, 1.0);
+            COMMON_BUILDER.pop();
+
+            COMMON_BUILDER.push("Bee Options");
+                BEE_SIZE_MODIFIER = COMMON_BUILDER.comment("\nThis value scales the bee size for all Resource Bees. \nNote: Setting the value in bee JSON overrides this value.")
+                    .defineInRange("global_bee_size_modifier", 1.0, 0.5, 2.0);
             COMMON_BUILDER.pop();
 
             COMMON_CONFIG = COMMON_BUILDER.build();
