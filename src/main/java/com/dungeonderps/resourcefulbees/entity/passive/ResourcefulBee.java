@@ -199,7 +199,7 @@ public class ResourcefulBee extends CustomBeeEntity {
 
     protected void updateAITasks() {
         if (getBeeInfo().isEnderBee()) {
-            if (!(this.hasHive() && this.canEnterHive() && this.hivePos != null && this.hivePos.withinDistance(this.getPositionVec(), 5.0D))) {
+            if (!hasHiveInRange() && !this.pollinateGoal.isRunning()) {
                 if (this.world.isDaytime() && this.ticksExisted % 150 == 0) {
                     this.teleportRandomly();
                 }
@@ -210,6 +210,10 @@ public class ResourcefulBee extends CustomBeeEntity {
                 this.setFire(3);
         }
         super.updateAITasks();
+    }
+
+    protected boolean hasHiveInRange() {
+        return this.hasHive() && this.canEnterHive() && this.hivePos != null && this.hivePos.withinDistance(this.getPositionVec(), 5.0D);
     }
 
     protected void teleportRandomly() {
@@ -250,7 +254,9 @@ public class ResourcefulBee extends CustomBeeEntity {
             if (entityIn instanceof LivingEntity) {
                 ((LivingEntity) entityIn).setBeeStingCount(((LivingEntity) entityIn).getBeeStingCount() + 1);
                 int i = 0;
-                if (this.world.getDifficulty() == Difficulty.NORMAL) {
+                if (this.world.getDifficulty() == Difficulty.EASY) {
+                    i = 5;
+                } else if (this.world.getDifficulty() == Difficulty.NORMAL) {
                     i = 10;
                 } else if (this.world.getDifficulty() == Difficulty.HARD) {
                     i = 18;
@@ -258,7 +264,7 @@ public class ResourcefulBee extends CustomBeeEntity {
                 BeeData info = this.getBeeInfo();
 
                 if (info.isCreeperBee()) {
-                    this.explode();
+                    this.explode(i/4);
                 }
                 if (info.isBlazeBee()) {
                     entityIn.setFire(5);
@@ -283,15 +289,14 @@ public class ResourcefulBee extends CustomBeeEntity {
         return flag;
     }
 
-    private void explode() {
+    private void explode(int radius) {
         if (!this.world.isRemote) {
             Explosion.Mode explosion$mode = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this) ? Explosion.Mode.BREAK : Explosion.Mode.NONE;
             this.dead = true;
-            this.world.createExplosion(this, this.getPosX(), this.getPosY(), this.getPosZ(), rand.nextFloat() * 3, explosion$mode);
+            this.world.createExplosion(this, this.getPosX(), this.getPosY(), this.getPosZ(), rand.nextFloat() * radius, explosion$mode);
             this.remove();
             this.spawnLingeringCloud();
         }
-
     }
 
     private void spawnLingeringCloud() {
@@ -425,6 +430,11 @@ public class ResourcefulBee extends CustomBeeEntity {
         @Override
         public Optional<BlockPos> getFlower() {
             return this.findFlower(getFlowerPredicate(), 5.0D);
+        }
+
+        @Override
+        public boolean isRunning() {
+            return super.isRunning();
         }
     }
 
