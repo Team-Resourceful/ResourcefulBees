@@ -168,7 +168,7 @@ public class CentrifugeControllerTileEntity extends TileEntity implements ITicka
                     if (output.getRight() >= world.rand.nextDouble()) {
                         if (inventoryHasSpace()) {
                             depositItemStacks(output.getLeft().copy());
-                            if (i == 2) glass_bottle.shrink(1);
+                            if (i == 2) glass_bottle.shrink(recipe.outputs.get(2).getLeft().getCount());
                         }
                     }
                 }
@@ -299,9 +299,7 @@ public class CentrifugeControllerTileEntity extends TileEntity implements ITicka
         return (slot, stack, automation) ->
             !automation ||
             (
-                slot == HONEYCOMB_SLOT[0] ||
-                slot == HONEYCOMB_SLOT[1] ||
-                slot == HONEYCOMB_SLOT[2] &&
+                (slot == HONEYCOMB_SLOT[0] || slot == HONEYCOMB_SLOT[1] || slot == HONEYCOMB_SLOT[2]) &&
                 !stack.getItem().equals(Items.GLASS_BOTTLE)
             )||(
                 slot == BOTTLE_SLOT &&

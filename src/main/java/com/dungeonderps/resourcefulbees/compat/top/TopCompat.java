@@ -29,7 +29,7 @@ import static com.dungeonderps.resourcefulbees.config.BeeInfo.BEE_INFO;
 
 public class TopCompat implements Function<ITheOneProbe, Void>
 {
-    IFormattableTextComponent formattedName = new StringTextComponent(BeeConstants.MOD_NAME).mergeStyle(TextFormatting.BLUE, TextFormatting.ITALIC);
+    IFormattableTextComponent formattedName = new StringTextComponent(TextFormatting.BLUE.toString() + TextFormatting.ITALIC.toString() + BeeConstants.MOD_NAME);
 
     public static ItemStack honeyComb(String num, TileEntity te){
         final ItemStack honeyComb = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
