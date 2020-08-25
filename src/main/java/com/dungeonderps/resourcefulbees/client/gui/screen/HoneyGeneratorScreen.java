@@ -14,8 +14,8 @@ import net.minecraft.util.text.StringTextComponent;
 import javax.annotation.Nonnull;
 import java.text.DecimalFormat;
 
-public class HoneyGeneatorScreen extends ContainerScreen<HoneyGeneratorContainer> {
-    public HoneyGeneatorScreen(HoneyGeneratorContainer screenContainer, PlayerInventory inventory, ITextComponent titleIn) {
+public class HoneyGeneratorScreen extends ContainerScreen<HoneyGeneratorContainer> {
+    public HoneyGeneratorScreen(HoneyGeneratorContainer screenContainer, PlayerInventory inventory, ITextComponent titleIn) {
         super(screenContainer, inventory, titleIn);
     }
 

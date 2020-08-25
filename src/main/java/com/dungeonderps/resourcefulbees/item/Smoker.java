@@ -5,15 +5,15 @@ import com.dungeonderps.resourcefulbees.registry.ItemGroupResourcefulBees;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.passive.BeeEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -55,6 +55,15 @@ public class Smoker extends Item {
 			double y = player.getPosY() + vec3d.y * 2;
 			double z = player.getPosZ() + vec3d.z * 2;
 
+            AxisAlignedBB axisalignedbb = new AxisAlignedBB((player.getPosX() + vec3d.x) - 2.5D, (player.getPosY() + vec3d.y) - 2D, (player.getPosZ() + vec3d.z) - 2.5D, (player.getPosX() + vec3d.x) + 2.5D, (player.getPosY() + vec3d.y) + 2D, (player.getPosZ() + vec3d.z) + 2.5D);
+            List<MobEntity> list = world.getLoadedEntitiesWithinAABB(BeeEntity.class, axisalignedbb);
+            for (MobEntity mobEntity : list) {
+                if (mobEntity instanceof BeeEntity && ((BeeEntity) mobEntity).func_233678_J__()){
+                    ((BeeEntity) mobEntity).setAngerTime(0);
+                    mobEntity.setRevengeTarget(null);
+                }
+            }
+
 			ServerWorld worldServer = (ServerWorld)world;
 			worldServer.spawnParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, x, y + 1.3D, z, 50, 0, 0, 0, 0.01F);
 	    }
@@ -81,7 +90,7 @@ public class Smoker extends Item {
         }
     }
 
-    @Nonnull
+/*    @Nonnull
     @Override
     public ActionResultType itemInteractionForEntity(@Nonnull ItemStack stack, @Nonnull PlayerEntity player, LivingEntity targetIn, @Nonnull Hand hand) {
         if (targetIn.getEntityWorld().isRemote() || (!(targetIn instanceof BeeEntity) || !targetIn.isAlive())) {
@@ -96,6 +105,6 @@ public class Smoker extends Item {
             target.setAngerTime(0);
         }
         return ActionResultType.PASS;
-    }
+    }*/
 
 }

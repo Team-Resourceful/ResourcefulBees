@@ -6,6 +6,7 @@ import com.dungeonderps.resourcefulbees.lib.NBTConstants;
 import com.dungeonderps.resourcefulbees.registry.ColorHandler;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.tileentity.HoneycombTileEntity;
+import com.dungeonderps.resourcefulbees.utils.NBTHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -59,9 +60,7 @@ public class HoneycombBlock extends Block {
             if (tile != null) {
                 CompoundNBT combData = tile.serializeNBT();
                 ItemStack honeyCombBlockItemStack = new ItemStack(RegistryHandler.HONEYCOMB_BLOCK_ITEM.get());
-                final CompoundNBT honeyCombItemStackTag = honeyCombBlockItemStack.getOrCreateChildTag(NBTConstants.NBT_ROOT);
-                honeyCombItemStackTag.putString(NBTConstants.NBT_BEE_TYPE, combData.getString(NBTConstants.NBT_BEE_TYPE));
-                honeyCombItemStackTag.putString(NBTConstants.NBT_COLOR, combData.getString(NBTConstants.NBT_COLOR));
+                honeyCombBlockItemStack.setTag(NBTHelper.createHoneycombItemTag(combData.getString(NBTConstants.NBT_BEE_TYPE), combData.getString(NBTConstants.NBT_COLOR)));
                 return honeyCombBlockItemStack;
             }
         }

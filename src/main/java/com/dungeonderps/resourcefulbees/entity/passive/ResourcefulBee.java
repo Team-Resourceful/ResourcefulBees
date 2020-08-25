@@ -199,8 +199,10 @@ public class ResourcefulBee extends CustomBeeEntity {
 
     protected void updateAITasks() {
         if (getBeeInfo().isEnderBee()) {
-            if (this.world.isDaytime() && this.ticksExisted % 150 == 0) {
-                this.teleportRandomly();
+            if (!(this.hasHive() && this.canEnterHive() && this.hivePos != null && this.hivePos.withinDistance(this.getPositionVec(), 5.0D))) {
+                if (this.world.isDaytime() && this.ticksExisted % 150 == 0) {
+                    this.teleportRandomly();
+                }
             }
         }
         if (getBeeInfo().isBlazeBee()) {

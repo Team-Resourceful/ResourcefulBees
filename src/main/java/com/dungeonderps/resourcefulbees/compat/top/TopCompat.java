@@ -126,7 +126,7 @@ public class TopCompat implements Function<ITheOneProbe, Void>
             if (entity instanceof CustomBeeEntity){
                 probeInfo.horizontal()
                         .vertical()
-                        .text(new StringTextComponent(entity.getDisplayName().getString()))
+                        .text(new StringTextComponent(IProbeInfo.STARTLOC + entity.getDisplayName().getString() + IProbeInfo.ENDLOC))
                         .text(formattedName);
                 return true;
             }

@@ -162,7 +162,7 @@ public class FlowersCategory implements IRecipeCategory<FlowersCategory.Recipe> 
 
     @Override
     public void setRecipe(@Nonnull IRecipeLayout iRecipeLayout, @Nonnull Recipe recipe, @Nonnull IIngredients ingredients) {
-        if (recipe.fluidITag != null) {
+        if (recipe.recipeType == RecipeTypes.FLUID) {
             IGuiFluidStackGroup fluidStacks = iRecipeLayout.getFluidStacks();
             fluidStacks.init(1,true,4,58);
             fluidStacks.set(1, ingredients.getInputs(VanillaTypes.FLUID).get(0));
