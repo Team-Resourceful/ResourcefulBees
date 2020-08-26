@@ -31,14 +31,14 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
         for (Map.Entry<String, BeeData> bee : BeeInfo.BEE_INFO.entrySet()){
             if (bee.getValue().getHoneycombColor() != null && !bee.getValue().getHoneycombColor().isEmpty()) {
                 if (!bee.getValue().getMainOutput().isEmpty()) {
-                    if (Config.CENTRIFUGE_RECIPES.get()) {
+                    if (Config.CENTRIFUGE_RECIPES.get() && !Config.DISABLED_CENTRIFUGE_RECIPES.get().contains(bee.getKey())) {
                         IRecipe<?> honeycombCentrifuge = this.centrifugeRecipe(bee.getValue().getName(), bee.getValue().getHoneycombColor());
                         IRecipe<?> honeycombBlockCentrifuge = this.centrifugeHoneyCombBlockRecipe(bee.getValue().getName(), bee.getValue().getHoneycombColor());
                         getRecipeManager().recipes.computeIfAbsent(honeycombCentrifuge.getType(), t -> new HashMap<>()).put(honeycombCentrifuge.getId(), honeycombCentrifuge);
                         getRecipeManager().recipes.computeIfAbsent(honeycombBlockCentrifuge.getType(), t -> new HashMap<>()).put(honeycombBlockCentrifuge.getId(), honeycombBlockCentrifuge);
                     }
                 }
-                if (Config.HONEYCOMB_BLOCK_RECIPES.get()) {
+                if (Config.HONEYCOMB_BLOCK_RECIPES.get() && !Config.DISABLED_CRAFTING_RECIPES.get().contains(bee.getKey())) {
                     IRecipe<?> honeycombBlock = this.makeHoneycombRecipe(bee.getKey(), bee.getValue().getHoneycombColor());
                     IRecipe<?> honeycomb = this.blockToHoneycombRecipe(bee.getKey(), bee.getValue().getHoneycombColor());
                     getRecipeManager().recipes.computeIfAbsent(honeycombBlock.getType(), t -> new HashMap<>()).put(honeycombBlock.getId(), honeycombBlock);
