@@ -13,5 +13,6 @@
   "creeperBee": true,
   "isGlowing": true,
   "glowingColor": "#E2D3D3",
-  "emissiveLayerTexture" : "/creeper/creeper_bee_emissive"
+  "emissiveLayerTexture" : "/creeper/creeper_bee_emissive",
+  "glowingPulse": 2
 }

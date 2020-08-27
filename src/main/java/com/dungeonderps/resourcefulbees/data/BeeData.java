@@ -26,6 +26,7 @@ public class BeeData {
     private boolean isGlowing = false;
     private String glowingColor = "#ffffff";
     private boolean isEnchanted = false;
+    private int glowingPulse = 0;
 
     private String mutationInput = "";
     private String mutationOutput = "";
@@ -562,6 +563,10 @@ public class BeeData {
     public boolean isCanSwim() { return canSwim; }
 
     public void setCanSwim(boolean canSwim) { this.canSwim = canSwim; }
+
+    public int getGlowingPulse() { return glowingPulse; }
+
+    public void setGlowingPulse(int glowingPulse) { this.glowingPulse = glowingPulse; }
 
     public String getEmissiveLayerTexture() { return emissiveLayerTexture; }
 
