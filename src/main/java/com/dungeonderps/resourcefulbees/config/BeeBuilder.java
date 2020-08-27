@@ -22,7 +22,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
 
 import java.io.*;
-import java.nio.file.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -66,9 +70,24 @@ public class BeeBuilder {
         String name = file.getName();
         name = name.substring(0, name.indexOf('.'));
 
+        Reader r = Files.newBufferedReader(file.toPath());
+
+        parseBee(r, name);
+    }
+
+    private static void parseBee(ZipFile zf, ZipEntry zipEntry) throws IOException {
+        String name = zipEntry.getName();
+        name = name.substring(name.lastIndexOf("/") + 1, name.indexOf('.'));
+
+        InputStream input = zf.getInputStream(zipEntry);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(input, StandardCharsets.UTF_8));
+
+        parseBee(reader, name);
+    }
+
+    private static void parseBee(Reader reader, String name) {
         Gson gson = new Gson();
-        Reader r = new FileReader(file);
-        BeeData bee = gson.fromJson(r, BeeData.class);
+        BeeData bee = gson.fromJson(reader, BeeData.class);
         bee.setName(name);
         if (BeeValidator.validate(bee)) {
             BeeInfo.BEE_INFO.put(name.toLowerCase(), bee);
@@ -87,7 +106,7 @@ public class BeeBuilder {
         try {
             Files.walk(BEE_PATH)
                     .filter(f -> f.getFileName().toString().endsWith(".zip"))
-                    .forEach(BeeBuilder::openZipFile);
+                    .forEach(BeeBuilder::addZippedBee);
             Files.walk(BEE_PATH)
                     .filter(f -> f.getFileName().toString().endsWith(".json"))
                     .forEach(BeeBuilder::addBee);
@@ -105,38 +124,22 @@ public class BeeBuilder {
         }
     }
 
-    private static void openZipFile(Path file){
+    private static void addZippedBee(Path file) {
         try {
             ZipFile zf = new ZipFile(file.toString());
             zf.stream().forEach(zipEntry -> {
-                if(zipEntry.isDirectory()) {
-                    extractDirectoryFromZip(zipEntry, zf);
-                } else if (zipEntry.getName().endsWith(".json")) {
-                    extractJSONFromZip(zipEntry, zf);
+                if (zipEntry.getName().endsWith(".json")) {
+                    try {
+                        parseBee(zf, zipEntry);
+                    } catch (IOException e) {
+                        String name = zipEntry.getName();
+                        name = name.substring(name.lastIndexOf("/") + 1, name.indexOf('.'));
+                        LOGGER.error("Could not parse {} bee from ZipFile", name);
+                    }
                 }
             });
         } catch (IOException e) {
             LOGGER.warn("Could not read ZipFile! ZipFile: " + file.getFileName());
-        }
-    }
-
-    public static void extractDirectoryFromZip(ZipEntry zipEntry, ZipFile zf) {
-        Path dirToCreate = BEE_PATH.resolve(zipEntry.getName());
-        try {
-            Files.createDirectory(dirToCreate);
-        } catch (FileAlreadyExistsException ignored) {
-        } catch (IOException e) {
-            LOGGER.warn("Could not create directory from ZipFile! ZipFile: " + zf.getName() + " Directory: " + zipEntry.getName());
-        }
-    }
-
-    public static void extractJSONFromZip(ZipEntry zipEntry, ZipFile zf) {
-        try {
-            Path fileToCreate = BEE_PATH.resolve(zipEntry.getName());
-            Files.copy(zf.getInputStream(zipEntry), fileToCreate, StandardCopyOption.REPLACE_EXISTING);
-        } catch (FileAlreadyExistsException ignored) {
-        } catch (IOException e) {
-            LOGGER.warn("Could not create file from ZipFile! ZipFile: " + zf.getName() + " File: " + zipEntry.getName());
         }
     }
 
