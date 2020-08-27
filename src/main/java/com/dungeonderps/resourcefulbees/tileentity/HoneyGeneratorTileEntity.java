@@ -69,8 +69,9 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
                         this.time = 0;
                         this.processItem();
                         dirty = true;
-                        world.setBlockState(pos,getBlockState().with(HoneyGenerator.PROPERTY_ON,false));
                     }
+                } else {
+                    world.setBlockState(pos,getBlockState().with(HoneyGenerator.PROPERTY_ON,false));
                 }
             } else {
                 time = 0;
@@ -84,7 +85,6 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
                         this.energyTime = 0;
                         this.processEnergy();
                         dirty = true;
-                        world.setBlockState(pos,getBlockState().with(HoneyGenerator.PROPERTY_ON,false));
                     }
                 }
             } else {
