@@ -1,10 +1,7 @@
 package com.dungeonderps.resourcefulbees.config;
 
 import com.dungeonderps.resourcefulbees.lib.ApiaryOutput;
-import com.google.common.collect.ImmutableList;
 import net.minecraftforge.common.ForgeConfigSpec;
-
-import java.util.List;
 
 public class Config {
 
@@ -51,9 +48,6 @@ public class Config {
 
     public static ForgeConfigSpec.DoubleValue BEE_SIZE_MODIFIER;
 
-    public static ForgeConfigSpec.ConfigValue<List<? extends String>> DISABLED_CENTRIFUGE_RECIPES;
-    public static ForgeConfigSpec.ConfigValue<List<? extends String>> DISABLED_CRAFTING_RECIPES;
-
     //CLIENT
 
     public static ForgeConfigSpec.BooleanValue GENERATE_ENGLISH_LANG;
@@ -78,12 +72,8 @@ public class Config {
             COMMON_BUILDER.push("Recipe Options");
                 CENTRIFUGE_RECIPES = COMMON_BUILDER.comment("\nSet to false if you don't want the centrifuge recipes to be auto generated [true/false]")
                         .define("centrifugeRecipes", true);
-                DISABLED_CENTRIFUGE_RECIPES = COMMON_BUILDER.comment("\nAdd BeeTypes that you dont want us to auto generate centrifuge recipes for,\nthis includes normal centrifuge recipes and multiblock only centrifuge recipes IE. Honeycomb Block Centrifuge Recipes.")
-                    .define("disabledCentrifugeRecipes",ImmutableList.of("example_bee", "example_bee_1"));
                 HONEYCOMB_BLOCK_RECIPES = COMMON_BUILDER.comment("\nSet to false if you don't want the honeycomb block recipes to be auto generated [true/false]")
                         .define("honeycombBlockRecipes", true);
-                DISABLED_CRAFTING_RECIPES = COMMON_BUILDER.comment("\nAdd BeeTypes that you dont want us to auto generate crafting recipes for,\nthis includes honeycomb block recipes and honeycomb block to honeycombs recipes.")
-                    .define("disabledCraftingRecipes",ImmutableList.of("example_bee", "example_bee_1"));
             COMMON_BUILDER.pop();
 
             COMMON_BUILDER.push("Centrifuge Options");
