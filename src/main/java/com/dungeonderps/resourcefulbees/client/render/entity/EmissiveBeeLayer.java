@@ -28,13 +28,13 @@ public class EmissiveBeeLayer extends LayerRenderer<CustomBeeEntity, CustomBeeMo
             IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.getEyes(location));
 
 
-            if (bee.isEnchanted()){
-                this.getEntityModel().render(matrixStackIn, bufferIn.getBuffer(RenderType.getEntityGlint()), packedLightIn, OverlayTexture.NO_OVERLAY, 0.0F, 0.0F, 0.0F, 0.0F);
-            }
-            else if (bee.isGlowing() && bee.getGlowingColor() !=null && !bee.getGlowingColor().isEmpty()){
+            if (bee.isGlowing() && bee.getGlowingColor() !=null && !bee.getGlowingColor().isEmpty()){
                 float[] glowColor = BeeInfo.getBeeColorAsFloat(bee.getGlowingColor());
                 if (!entitylivingbaseIn.getRenderingInJei())
                     this.getEntityModel().render(matrixStackIn, ivertexbuilder, 15728640, OverlayTexture.NO_OVERLAY, glowColor[0], glowColor[1], glowColor[2], 1.0F);
+            }
+            else if (bee.isEnchanted()){
+                this.getEntityModel().render(matrixStackIn, bufferIn.getBuffer(RenderType.getEntityGlint()), packedLightIn, OverlayTexture.NO_OVERLAY, 0.0F, 0.0F, 0.0F, 0.0F);
             }
     }
 }
