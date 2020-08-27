@@ -10,5 +10,8 @@
   "biomeWhitelist": "tag:OVERWORLD",
   "biomeBlacklist": "tag:ocean",
   "maxTimeInHive": 600,
-  "creeperBee": true
+  "creeperBee": true,
+  "isGlowing": true,
+  "glowingColor": "#E2D3D3",
+  "emissiveLayerTexture" : "/creeper/creeper_bee_emissive"
 }
