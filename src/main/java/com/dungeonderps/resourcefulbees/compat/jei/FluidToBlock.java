@@ -133,7 +133,7 @@ public class FluidToBlock implements IRecipeCategory<FluidToBlock.Recipe> {
                 ingredients.setOutput(VanillaTypes.ITEM, recipe.itemOut);
             }
         }
-        ingredients.setInput(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(recipe.beeType, 135.0F));
+        ingredients.setInput(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(recipe.beeType, -45.0f));
 
     }
 
@@ -158,6 +158,7 @@ public class FluidToBlock implements IRecipeCategory<FluidToBlock.Recipe> {
         IGuiItemStackGroup itemStacks = iRecipeLayout.getItemStacks();
         itemStacks.init(0, false, 65, 48);
         itemStacks.set(0, ingredients.getOutputs(VanillaTypes.ITEM).get(0));
+
 
         IGuiIngredientGroup<EntityIngredient> ingredientStacks = iRecipeLayout.getIngredientsGroup(JEICompat.ENTITY_INGREDIENT);
         ingredientStacks.init(0, true, 16, 10);

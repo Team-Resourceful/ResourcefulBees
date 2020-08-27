@@ -88,7 +88,7 @@ public class BeeHiveCategory implements IRecipeCategory<BeeHiveCategory.Recipe> 
         List<Ingredient> list = new ArrayList<>(Collections.singletonList(Ingredient.fromItems(RegistryHandler.T1_BEEHIVE_ITEM.get(), RegistryHandler.T2_BEEHIVE_ITEM.get(), RegistryHandler.T3_BEEHIVE_ITEM.get(), RegistryHandler.T4_BEEHIVE_ITEM.get())));
         ingredients.setOutput(VanillaTypes.ITEM, recipe.getComb());
         ingredients.setInputIngredients(list);
-        ingredients.setInput(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(recipe.beeType, 135.0F));
+        ingredients.setInput(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(recipe.beeType, -45.0f));
     }
 
     @Override

@@ -117,11 +117,11 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
         ingredients.setOutput(VanillaTypes.ITEM, childSpawnEgg);
 
         List<EntityIngredient> entitys = new ArrayList<>();
-        entitys.add(new EntityIngredient(recipe.parent1, 135.0F));
+        entitys.add(new EntityIngredient(recipe.parent1, -45.0f));
         entitys.add(new EntityIngredient(recipe.parent2, 45.0F));
 
         ingredients.setInputs(JEICompat.ENTITY_INGREDIENT, entitys);
-        ingredients.setOutput(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(recipe.child, 135.0F));
+        ingredients.setOutput(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(recipe.child, -45.0f));
     }
 
     @Override

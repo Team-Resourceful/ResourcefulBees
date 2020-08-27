@@ -157,7 +157,7 @@ public class FlowersCategory implements IRecipeCategory<FlowersCategory.Recipe> 
         } else if (recipe.fluidIn != null) {
             ingredients.setInput(VanillaTypes.FLUID, recipe.fluidIn);
         }
-        ingredients.setInput(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(recipe.beeType, 135.0F));
+        ingredients.setInput(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(recipe.beeType, -45.0f));
     }
 
     @Override

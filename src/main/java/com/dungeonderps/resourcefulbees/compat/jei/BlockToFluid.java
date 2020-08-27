@@ -130,7 +130,7 @@ public class BlockToFluid implements IRecipeCategory<BlockToFluid.Recipe> {
                 ingredients.setOutput(VanillaTypes.FLUID, recipe.fluidOut);
             }
         }
-        ingredients.setInput(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(recipe.beeType, 135.0F));
+        ingredients.setInput(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(recipe.beeType, -45.0f));
     }
 
     @Override

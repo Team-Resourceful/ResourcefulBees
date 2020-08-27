@@ -96,7 +96,7 @@ public class ApiaryCategory implements IRecipeCategory<ApiaryCategory.Recipe> {
     public void setIngredients(Recipe recipe, IIngredients ingredients) {
         ingredients.setOutput(VanillaTypes.ITEM, recipe.getComb());
         ingredients.setInput(VanillaTypes.ITEM, recipe.apiary);
-        ingredients.setInput(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(recipe.beeType, 135.0F));
+        ingredients.setInput(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(recipe.beeType, -45.0f));
     }
 
     @Override

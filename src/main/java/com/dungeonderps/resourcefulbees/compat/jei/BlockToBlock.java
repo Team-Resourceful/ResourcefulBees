@@ -127,7 +127,7 @@ public class BlockToBlock implements IRecipeCategory<BlockToBlock.Recipe> {
                 ingredients.setOutput(VanillaTypes.ITEM, recipe.itemOut);
             }
         }
-        ingredients.setInput(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(recipe.beeType, 135.0F));
+        ingredients.setInput(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(recipe.beeType, -45.0f));
     }
 
     @Override

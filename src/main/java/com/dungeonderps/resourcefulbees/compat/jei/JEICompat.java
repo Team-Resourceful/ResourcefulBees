@@ -156,12 +156,11 @@ public class JEICompat implements IModPlugin {
     }
 
     public void registerInfoDesc(IRecipeRegistration registration){
-        //TODO Bee not rendering in info is due to this https://github.com/mezz/JustEnoughItems/issues/2061
         for (EntityIngredient bee : EntityIngredientFactory.create()) {
             if (I18n.hasKey("info.resourcefulbees.jei." + bee.getBeeType())){
                 registration.addIngredientInfo(bee, ENTITY_INGREDIENT,
-                        "\u00a7e\u00a7l[" + bee.getDisplayName().getString() + "] : \u00a7r" +
-                                I18n.format("info.resourcefulbees.jei." + bee.getBeeType())
+                    "\u00a7e\u00a7l[" + bee.getDisplayName().getString() + "] : \u00a7r" +
+                            I18n.format("info.resourcefulbees.jei." + bee.getBeeType())
                 );
             }
         }
