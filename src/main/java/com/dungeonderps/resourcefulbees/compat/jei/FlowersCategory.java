@@ -53,7 +53,7 @@ public class FlowersCategory implements IRecipeCategory<FlowersCategory.Recipe> 
 
     public static List<Recipe> getFlowersRecipes(IIngredientManager ingredientManager) {
         List<Recipe> recipes = new ArrayList<>();
-        for (Map.Entry<String, BeeData> bee : BeeInfo.BEE_INFO.entrySet()){
+        for (Map.Entry<String, BeeData> bee : BeeInfo.getBees().entrySet()){
             if (!bee.getValue().getName().equals(DEFAULT_BEE_TYPE)) {
                 if (!bee.getValue().getFlower().isEmpty()) {
                     String flower = bee.getValue().getFlower();

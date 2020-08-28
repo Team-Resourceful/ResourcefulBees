@@ -2,6 +2,7 @@ package com.dungeonderps.resourcefulbees.compat.jei;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.compat.jei.ingredients.EntityIngredient;
+import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.config.Config;
 import com.dungeonderps.resourcefulbees.data.BeeData;
 import com.dungeonderps.resourcefulbees.lib.ApiaryOutput;
@@ -28,8 +29,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import static com.dungeonderps.resourcefulbees.config.BeeInfo.BEE_INFO;
-
 public class ApiaryCategory implements IRecipeCategory<ApiaryCategory.Recipe> {
     public static final ResourceLocation GUI_BACK = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/beehive.png");
     public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "apiary");
@@ -49,7 +48,7 @@ public class ApiaryCategory implements IRecipeCategory<ApiaryCategory.Recipe> {
         final int[] outputQuantities = {Config.T1_APIARY_QUANTITY.get(), Config.T2_APIARY_QUANTITY.get(), Config.T3_APIARY_QUANTITY.get(), Config.T4_APIARY_QUANTITY.get()};
         final List<Item> apiaryTiers = new ArrayList<>(Arrays.asList(RegistryHandler.T1_APIARY_ITEM.get(), RegistryHandler.T2_APIARY_ITEM.get(), RegistryHandler.T3_APIARY_ITEM.get(), RegistryHandler.T4_APIARY_ITEM.get()));
 
-        for (Map.Entry<String, BeeData> bee : BEE_INFO.entrySet()){
+        for (Map.Entry<String, BeeData> bee : BeeInfo.getBees().entrySet()){
             if (!bee.getKey().equals(BeeConstants.DEFAULT_BEE_TYPE) && bee.getValue().getHoneycombColor() != null && !bee.getValue().getHoneycombColor().isEmpty()) {
                 for (int i = 0; i < 4; i++){
                     Item outputItem = outputs.get(i).equals(ApiaryOutput.COMB) ? RegistryHandler.RESOURCEFUL_HONEYCOMB.get() : RegistryHandler.HONEYCOMB_BLOCK_ITEM.get();

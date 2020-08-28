@@ -54,7 +54,7 @@ public class BlockToBlock implements IRecipeCategory<BlockToBlock.Recipe> {
 
     public static List<BlockToBlock.Recipe> getMutationRecipes(IIngredientManager ingredientManager) {
         List<BlockToBlock.Recipe> recipes = new ArrayList<>();
-        for (Map.Entry<String, BeeData> bee : BeeInfo.BEE_INFO.entrySet()){
+        for (Map.Entry<String, BeeData> bee : BeeInfo.getBees().entrySet()){
             if (bee.getValue().hasMutation()) {
 
                 String mutationIn = bee.getValue().getMutationInput();

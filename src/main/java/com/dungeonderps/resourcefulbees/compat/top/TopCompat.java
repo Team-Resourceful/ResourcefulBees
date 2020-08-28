@@ -2,6 +2,7 @@ package com.dungeonderps.resourcefulbees.compat.top;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.block.TieredBeehiveBlock;
+import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.dungeonderps.resourcefulbees.lib.BeeConstants;
 import com.dungeonderps.resourcefulbees.lib.NBTConstants;
@@ -25,8 +26,6 @@ import net.minecraft.util.text.TranslationTextComponent;
 import javax.annotation.Nullable;
 import java.util.function.Function;
 
-import static com.dungeonderps.resourcefulbees.config.BeeInfo.BEE_INFO;
-
 public class TopCompat implements Function<ITheOneProbe, Void>
 {
     IFormattableTextComponent formattedName = new StringTextComponent(TextFormatting.BLUE.toString() + TextFormatting.ITALIC.toString() + BeeConstants.MOD_NAME);
@@ -35,7 +34,7 @@ public class TopCompat implements Function<ITheOneProbe, Void>
         final ItemStack honeyComb = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
         if (!te.serializeNBT().getCompound(NBTConstants.NBT_HONEYCOMBS_TE).getString(num).equals("")) {
                 honeyComb.getOrCreateChildTag(NBTConstants.NBT_ROOT).putString(NBTConstants.NBT_BEE_TYPE, te.serializeNBT().getCompound(NBTConstants.NBT_HONEYCOMBS_TE).getString(num));
-                honeyComb.getOrCreateChildTag(NBTConstants.NBT_ROOT).putString(NBTConstants.NBT_COLOR, String.valueOf(BEE_INFO.get(te.serializeNBT().getCompound(NBTConstants.NBT_HONEYCOMBS_TE).getString(num)).getHoneycombColor()));
+                honeyComb.getOrCreateChildTag(NBTConstants.NBT_ROOT).putString(NBTConstants.NBT_COLOR, String.valueOf(BeeInfo.getBees().get(te.serializeNBT().getCompound(NBTConstants.NBT_HONEYCOMBS_TE).getString(num)).getHoneycombColor()));
             return honeyComb;
         }
         else return new ItemStack(Items.AIR);

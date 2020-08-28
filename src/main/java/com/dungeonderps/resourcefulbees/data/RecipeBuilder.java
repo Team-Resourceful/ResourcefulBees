@@ -28,7 +28,7 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
 
     @Override
     public void onResourceManagerReload(@Nonnull IResourceManager resourceManager) {
-        for (Map.Entry<String, BeeData> bee : BeeInfo.BEE_INFO.entrySet()){
+        for (Map.Entry<String, BeeData> bee : BeeInfo.getBees().entrySet()){
             if (bee.getValue().getHoneycombColor() != null && !bee.getValue().getHoneycombColor().isEmpty()) {
                 if (!bee.getValue().getMainOutput().isEmpty()) {
                     if (Config.CENTRIFUGE_RECIPES.get()) {

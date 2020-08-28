@@ -2,6 +2,7 @@ package com.dungeonderps.resourcefulbees.compat.jei;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.compat.jei.ingredients.EntityIngredient;
+import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.data.BeeData;
 import com.dungeonderps.resourcefulbees.lib.BeeConstants;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
@@ -26,8 +27,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import static com.dungeonderps.resourcefulbees.config.BeeInfo.BEE_INFO;
-
 public class BeeHiveCategory implements IRecipeCategory<BeeHiveCategory.Recipe> {
     public static final ResourceLocation GUI_BACK = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/beehive.png");
     public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "hive");
@@ -43,7 +42,7 @@ public class BeeHiveCategory implements IRecipeCategory<BeeHiveCategory.Recipe> 
 
     public static List<Recipe> getHoneycombRecipes(IIngredientManager ingredientManager) {
         List<Recipe> recipes = new ArrayList<>();
-        for (Map.Entry<String, BeeData> bee : BEE_INFO.entrySet()){
+        for (Map.Entry<String, BeeData> bee : BeeInfo.getBees().entrySet()){
             if (!bee.getKey().equals(BeeConstants.DEFAULT_BEE_TYPE) && bee.getValue().getHoneycombColor() != null && !bee.getValue().getHoneycombColor().isEmpty()) {
                 ItemStack honeyCombItemStack = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
                 honeyCombItemStack.setTag(NBTHelper.createHoneycombItemTag(bee.getKey()));

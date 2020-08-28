@@ -56,7 +56,7 @@ public class FluidToBlock implements IRecipeCategory<FluidToBlock.Recipe> {
 
     public static List<FluidToBlock.Recipe> getMutationRecipes(IIngredientManager ingredientManager) {
         List<FluidToBlock.Recipe> recipes = new ArrayList<>();
-        for (Map.Entry<String, BeeData> bee : BeeInfo.BEE_INFO.entrySet()){
+        for (Map.Entry<String, BeeData> bee : BeeInfo.getBees().entrySet()){
             if (bee.getValue().hasMutation()) {
 
                 String mutationIn = bee.getValue().getMutationInput();

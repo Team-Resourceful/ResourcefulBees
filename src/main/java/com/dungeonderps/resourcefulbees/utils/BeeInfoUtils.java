@@ -1,5 +1,6 @@
 package com.dungeonderps.resourcefulbees.utils;
 
+import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.data.BeeData;
 import com.dungeonderps.resourcefulbees.lib.BeeConstants;
 import com.google.common.base.Splitter;
@@ -24,7 +25,8 @@ import java.util.List;
 import java.util.Set;
 
 import static com.dungeonderps.resourcefulbees.ResourcefulBees.LOGGER;
-import static com.dungeonderps.resourcefulbees.config.BeeInfo.*;
+import static com.dungeonderps.resourcefulbees.config.BeeInfo.FAMILY_TREE;
+import static com.dungeonderps.resourcefulbees.config.BeeInfo.SPAWNABLE_BIOMES;
 
 public class BeeInfoUtils {
 
@@ -94,7 +96,7 @@ public class BeeInfoUtils {
         defaultBee.setHoneycombColor(String.valueOf(BeeConstants.DEFAULT_ITEM_COLOR));
         defaultBee.setFlower("minecraft:poppy");
         defaultBee.setSpawnInWorld(false);
-        BEE_INFO.put(BeeConstants.DEFAULT_BEE_TYPE, defaultBee);
+        BeeInfo.registerBee(BeeConstants.DEFAULT_BEE_TYPE, defaultBee);
     }
 
     /**

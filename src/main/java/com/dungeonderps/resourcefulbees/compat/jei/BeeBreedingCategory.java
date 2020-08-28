@@ -44,9 +44,9 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
 
     public static List<Recipe> getBreedingRecipes(IIngredientManager ingredientManager) {
         List<Recipe> recipes = new ArrayList<>();
-        for (Map.Entry<String, BeeData> bee : BeeInfo.BEE_INFO.entrySet()){
+        for (Map.Entry<String, BeeData> bee : BeeInfo.getBees().entrySet()){
             if (bee.getValue().isBreedable()){
-                if (BeeInfo.BEE_INFO.containsKey(bee.getValue().getParent1()) && BeeInfo.BEE_INFO.containsKey(bee.getValue().getParent2()))
+                if (BeeInfo.getBees().containsKey(bee.getValue().getParent1()) && BeeInfo.getBees().containsKey(bee.getValue().getParent2()))
                     recipes.add(new Recipe(bee.getValue().getParent1(), bee.getValue().getParent2(), bee.getKey()));
             }
         }

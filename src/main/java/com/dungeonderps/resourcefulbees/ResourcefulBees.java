@@ -7,6 +7,7 @@ import com.dungeonderps.resourcefulbees.commands.ResourcefulBeeCommands;
 import com.dungeonderps.resourcefulbees.compat.top.TopCompat;
 import com.dungeonderps.resourcefulbees.config.BeeBuilder;
 import com.dungeonderps.resourcefulbees.config.Config;
+import com.dungeonderps.resourcefulbees.data.DataGen;
 import com.dungeonderps.resourcefulbees.data.RecipeBuilder;
 import com.dungeonderps.resourcefulbees.init.ModSetup;
 import com.dungeonderps.resourcefulbees.network.NetPacketHandler;
@@ -202,6 +203,6 @@ public class ResourcefulBees
 
     private void loadComplete(FMLLoadCompleteEvent event) {
         BeeBuilder.setupBees();
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> BeeBuilder::GenerateEnglishLang);
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> DataGen::GenerateEnglishLang);
     }
 }

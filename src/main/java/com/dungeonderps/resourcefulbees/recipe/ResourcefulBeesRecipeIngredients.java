@@ -13,16 +13,19 @@ import net.minecraft.util.JSONUtils;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 import net.minecraftforge.common.crafting.NBTIngredient;
 
+import javax.annotation.Nonnull;
+
 public class ResourcefulBeesRecipeIngredients implements IIngredientSerializer<ResourcefulBeesRecipeIngredients.CustomNBTIngredient> {
     public static final ResourcefulBeesRecipeIngredients INSTANCE = new ResourcefulBeesRecipeIngredients();
 
+    @Nonnull
     @Override
     public CustomNBTIngredient parse(PacketBuffer buffer) {
         String beeType = buffer.readString();
         BeeData bee = BeeInfo.getInfo(beeType);
         if (bee !=null) {
             int count = Math.max(buffer.readInt(), 1);
-            Boolean block = buffer.readBoolean();
+            boolean block = buffer.readBoolean();
 
             ItemStack tmpStack = new ItemStack(block ? RegistryHandler.HONEYCOMB_BLOCK_ITEM.get() : RegistryHandler.RESOURCEFUL_HONEYCOMB.get(), count);
             final CompoundNBT honeycombItemStackTag = tmpStack.getOrCreateChildTag(NBTConstants.NBT_ROOT);
@@ -36,10 +39,11 @@ public class ResourcefulBeesRecipeIngredients implements IIngredientSerializer<R
         }
     }
 
+    @Nonnull
     @Override
-    public CustomNBTIngredient parse(JsonObject json) {
+    public CustomNBTIngredient parse(@Nonnull JsonObject json) {
         String beeType = JSONUtils.getString(json, "beetype");
-        if (BeeInfo.BEE_INFO.get(beeType) !=null) {
+        if (BeeInfo.getInfo(beeType) != null) {
             BeeData bee = BeeInfo.getInfo(beeType);
             int count = JSONUtils.getInt(json, "count", 1);
             boolean block = JSONUtils.getBoolean(json, "honeycombblock", false);

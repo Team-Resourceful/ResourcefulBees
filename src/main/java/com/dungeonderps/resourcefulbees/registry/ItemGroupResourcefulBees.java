@@ -23,8 +23,8 @@ public class ItemGroupResourcefulBees{
 		@Override
 		@OnlyIn(Dist.CLIENT)
 		public void fill(@Nonnull NonNullList<ItemStack> items) {
-			if (!BeeInfo.BEE_INFO.isEmpty()) {
-				for (Map.Entry<String, BeeData> bee : BeeInfo.BEE_INFO.entrySet()) {
+			if (!BeeInfo.getBees().isEmpty()) {
+				for (Map.Entry<String, BeeData> bee : BeeInfo.getBees().entrySet()) {
 					if (!bee.getKey().equals(BeeConstants.DEFAULT_BEE_TYPE)) {
 						final ItemStack eggStack = new ItemStack(RegistryHandler.BEE_SPAWN_EGG.get());
 						final CompoundNBT eggEntityTag = eggStack.getOrCreateChildTag("EntityTag");
