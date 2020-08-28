@@ -41,12 +41,13 @@ public class Config {
     public static ForgeConfigSpec.BooleanValue MULTIBLOCK_RECIPES_ONLY;
 
     public static ForgeConfigSpec.IntValue APIARY_MAX_BEES;
-
     public static ForgeConfigSpec.IntValue APIARY_MAX_BREED_TIME;
 
     public static ForgeConfigSpec.IntValue SMOKER_DURABILITY;
 
     public static ForgeConfigSpec.DoubleValue BEE_SIZE_MODIFIER;
+
+    public static ForgeConfigSpec.BooleanValue BEE_DIES_FROM_STING;
 
     //CLIENT
 
@@ -137,6 +138,8 @@ public class Config {
             COMMON_BUILDER.push("Bee Options");
                 BEE_SIZE_MODIFIER = COMMON_BUILDER.comment("\nThis value scales the bee size for all Resource Bees. \nNote: Setting the value in bee JSON overrides this value.")
                     .defineInRange("global_bee_size_modifier", 1.0, 0.5, 2.0);
+                BEE_DIES_FROM_STING = COMMON_BUILDER.comment("\nShould bees die from stinging?\nNote: Bees will continue to attack until they are no longer angry!")
+                    .define("beeDiesFromSting", true);
             COMMON_BUILDER.pop();
 
             COMMON_CONFIG = COMMON_BUILDER.build();

@@ -1,5 +1,6 @@
 package com.dungeonderps.resourcefulbees.entity.passive;
 
+import com.dungeonderps.resourcefulbees.config.Config;
 import com.dungeonderps.resourcefulbees.data.BeeData;
 import com.dungeonderps.resourcefulbees.entity.goals.BeeAngerGoal;
 import com.dungeonderps.resourcefulbees.entity.goals.BeeBreedGoal;
@@ -281,7 +282,7 @@ public class ResourcefulBee extends CustomBeeEntity {
                 }
             }
 
-            this.setHasStung(true);
+            this.setHasStung(Config.BEE_DIES_FROM_STING.get());
             this.setAttackTarget(null);
             this.playSound(SoundEvents.ENTITY_BEE_STING, 1.0F, 1.0F);
         }
