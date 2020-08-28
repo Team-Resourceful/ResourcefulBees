@@ -1,9 +1,11 @@
 package com.dungeonderps.resourcefulbees.tileentity;
 
+import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.lib.BeeConstants;
 import com.dungeonderps.resourcefulbees.lib.NBTConstants;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.utils.Color;
+import com.dungeonderps.resourcefulbees.utils.RainbowColor;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
@@ -26,6 +28,9 @@ public class HoneycombTileEntity extends TileEntity {
     }
 
     public int getColor() {
+        if (BeeInfo.getInfo(beeType).isRainbowBee()) {
+            return RainbowColor.getRGB();
+        }
         return (blockColor != null && !blockColor.isEmpty() && !blockColor.equals(BeeConstants.STRING_DEFAULT_ITEM_COLOR)) ? Color.parseInt(blockColor) : BeeConstants.DEFAULT_ITEM_COLOR;
     }
 

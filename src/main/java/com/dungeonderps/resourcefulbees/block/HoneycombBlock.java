@@ -22,6 +22,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Random;
 
 public class HoneycombBlock extends Block {
 
@@ -45,6 +46,12 @@ public class HoneycombBlock extends Block {
     }
 
     @Override
+    public void animateTick(@Nonnull BlockState stateIn, @Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull Random rand) {
+        worldIn.notifyBlockUpdate(pos, stateIn, stateIn, 2);
+        super.animateTick(stateIn, worldIn, pos, rand);
+    }
+
+    @Override
     public boolean hasTileEntity(BlockState state) {
         return true;
     }
@@ -60,7 +67,7 @@ public class HoneycombBlock extends Block {
             if (tile != null) {
                 CompoundNBT combData = tile.serializeNBT();
                 ItemStack honeyCombBlockItemStack = new ItemStack(RegistryHandler.HONEYCOMB_BLOCK_ITEM.get());
-                honeyCombBlockItemStack.setTag(NBTHelper.createHoneycombItemTag(combData.getString(NBTConstants.NBT_BEE_TYPE), combData.getString(NBTConstants.NBT_COLOR)));
+                honeyCombBlockItemStack.setTag(NBTHelper.createHoneycombItemTag(combData.getString(NBTConstants.NBT_BEE_TYPE)));
                 return honeyCombBlockItemStack;
             }
         }

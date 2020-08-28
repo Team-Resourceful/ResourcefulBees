@@ -125,8 +125,9 @@ public class CentrifugeRecipeCategory implements IRecipeCategory<CentrifugeRecip
     }
   }
 
+  @Nonnull
   @Override
-  public List<ITextComponent> getTooltipStrings(CentrifugeRecipe recipe, double mouseX, double mouseY) {
+  public List<ITextComponent> getTooltipStrings(@Nonnull CentrifugeRecipe recipe, double mouseX, double mouseY) {
     if (mouseX >= 10 && mouseX <= 26 && mouseY >=45 && mouseY <= 61){
       return Collections.singletonList(new StringTextComponent("Multiblock only recipe."));
     }

@@ -11,6 +11,7 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.ITextComponent;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,14 +19,14 @@ import java.util.List;
 public class EntityRenderer implements IIngredientRenderer<EntityIngredient> {
 
     @Override
-    public void render(MatrixStack matrixStack, int x, int y, @Nullable EntityIngredient entityIngredient) {
+    public void render(@Nonnull MatrixStack matrixStack, int x, int y, @Nullable EntityIngredient entityIngredient) {
         if (Minecraft.getInstance().world !=null) {
             CustomBeeEntity bee = RegistryHandler.CUSTOM_BEE.get().create(Minecraft.getInstance().world);
             Minecraft mc = Minecraft.getInstance();
             matrixStack.push();
-            matrixStack.translate(8, 17, 0.5D);
+            matrixStack.translate(8, 14, 0.5D);
 
-            if (mc.player != null && entityIngredient !=null) {
+            if (mc.player != null && entityIngredient != null && bee != null) {
                 bee.ticksExisted = mc.player.ticksExisted;
                 bee.renderYawOffset = entityIngredient.getRotation() - 90;
                 bee.setBeeType(entityIngredient.getBeeType());
@@ -48,8 +49,9 @@ public class EntityRenderer implements IIngredientRenderer<EntityIngredient> {
         }
     }
 
+    @Nonnull
     @Override
-    public List<ITextComponent> getTooltip(EntityIngredient entityIngredient, ITooltipFlag iTooltipFlag) {
+    public List<ITextComponent> getTooltip(EntityIngredient entityIngredient, @Nonnull ITooltipFlag iTooltipFlag) {
         List<ITextComponent> tooltip = new ArrayList<>();
         tooltip.add(entityIngredient.getDisplayName());
         List<ITextComponent> desc = entityIngredient.getTooltip();

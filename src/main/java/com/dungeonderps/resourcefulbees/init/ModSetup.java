@@ -2,6 +2,7 @@ package com.dungeonderps.resourcefulbees.init;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.block.TieredBeehiveBlock;
+import com.dungeonderps.resourcefulbees.utils.RainbowColor;
 import net.minecraft.block.BeehiveBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.DispenserBlock;
@@ -43,7 +44,8 @@ public class ModSetup {
 
     public static void initialize(){
         setupPaths();
-        DistExecutor.runWhenOn(Dist.CLIENT, () -> ModSetup::loadResources);
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ModSetup::loadResources);
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> RainbowColor::init);
     }
 
     private static void setupPaths(){

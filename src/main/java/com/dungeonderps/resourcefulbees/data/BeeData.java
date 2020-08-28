@@ -6,6 +6,8 @@ import com.dungeonderps.resourcefulbees.lib.MutationTypes;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import net.minecraft.item.Items;
 
+import java.util.Random;
+
 public class BeeData {
 
     private String flower, parent1, parent2;
@@ -22,6 +24,7 @@ public class BeeData {
     private String emissiveLayerTexture = "/custom/emissive_layer";
 
     private boolean isBeeColored = true;
+    private boolean isRainbowBee = false;
 
     private boolean isGlowing = false;
     private String glowingColor = "#ffffff";
@@ -64,6 +67,7 @@ public class BeeData {
     private transient String name = BeeConstants.DEFAULT_BEE_TYPE;
     private transient boolean mutation;
     private transient MutationTypes mutationType;
+    public transient Random seed = new Random();
 
     public BeeData() {}
 
@@ -571,4 +575,12 @@ public class BeeData {
     public String getEmissiveLayerTexture() { return emissiveLayerTexture; }
 
     public void setEmissiveLayerTexture(String emissiveLayerTexture) { this.emissiveLayerTexture = emissiveLayerTexture; }
+
+    public boolean isRainbowBee() {
+        return isRainbowBee;
+    }
+
+    public void setRainbowBee(boolean rainbowBee) {
+        isRainbowBee = rainbowBee;
+    }
 }

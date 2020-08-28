@@ -1,11 +1,14 @@
 package com.dungeonderps.resourcefulbees.registry;
 
 import com.dungeonderps.resourcefulbees.block.HoneycombBlock;
+import com.dungeonderps.resourcefulbees.config.BeeInfo;
+import com.dungeonderps.resourcefulbees.data.BeeData;
 import com.dungeonderps.resourcefulbees.item.BeeJar;
 import com.dungeonderps.resourcefulbees.item.ResourcefulHoneycomb;
 import com.dungeonderps.resourcefulbees.lib.BeeConstants;
 import com.dungeonderps.resourcefulbees.lib.NBTConstants;
 import com.dungeonderps.resourcefulbees.utils.Color;
+import com.dungeonderps.resourcefulbees.utils.RainbowColor;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.color.BlockColors;
 import net.minecraft.client.renderer.color.IBlockColor;
@@ -51,6 +54,12 @@ public final class ColorHandler {
 
     public static int getItemColor(ItemStack stack, int tintIndex) {
         CompoundNBT honeycombNBT = stack.getChildTag(NBTConstants.NBT_ROOT);
+        if (honeycombNBT != null && honeycombNBT.contains(NBTConstants.NBT_BEE_TYPE)) {
+            BeeData beeData = BeeInfo.getInfo(honeycombNBT.getString(NBTConstants.NBT_BEE_TYPE));
+            if (beeData != null && beeData.isRainbowBee()) {
+                return RainbowColor.getRGB();
+            }
+        }
         if (honeycombNBT != null && honeycombNBT.contains(NBTConstants.NBT_COLOR)
                 && !honeycombNBT.getString(NBTConstants.NBT_COLOR).isEmpty()
                 && !honeycombNBT.getString(NBTConstants.NBT_COLOR).equals(BeeConstants.STRING_DEFAULT_ITEM_COLOR)) {

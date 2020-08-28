@@ -8,6 +8,7 @@ import com.dungeonderps.resourcefulbees.utils.RandomCollection;
 import net.minecraft.world.biome.Biome;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.awt.*;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -18,11 +19,6 @@ public class BeeInfo {
     private static final LinkedHashMap<String, BeeData> BEE_INFO = new LinkedHashMap<>();
     public static final HashMap<Biome, RandomCollection<String>> SPAWNABLE_BIOMES = new HashMap<>();
     public static final HashMap<Pair<String, String>, RandomCollection<String>> FAMILY_TREE = new HashMap<>();
-
-    public static float[] getBeeColorAsFloat(String color){
-        java.awt.Color tempColor = java.awt.Color.decode(color);
-        return tempColor.getComponents(null);
-    }
 
     /**
      * Returns a random bee from the Bee Registry.
@@ -121,5 +117,10 @@ public class BeeInfo {
      */
     public static Map<String, BeeData> getBees() {
         return Collections.unmodifiableMap(BEE_INFO);
+    }
+
+    public static float[] getColorFloats(String color){
+        Color tempColor = Color.decode(color);
+        return tempColor.getComponents(null);
     }
 }
