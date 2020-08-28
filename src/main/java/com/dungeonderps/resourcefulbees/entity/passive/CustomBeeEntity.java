@@ -3,6 +3,7 @@ package com.dungeonderps.resourcefulbees.entity.passive;
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.data.BeeData;
+import com.dungeonderps.resourcefulbees.data.BeeTrait;
 import com.dungeonderps.resourcefulbees.entity.ICustomBee;
 import com.dungeonderps.resourcefulbees.lib.BeeConstants;
 import com.dungeonderps.resourcefulbees.lib.NBTConstants;
@@ -14,17 +15,13 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.BeeEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.NameTagItem;
-import net.minecraft.item.SpawnEggItem;
+import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.particles.ParticleTypes;
+import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
 import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ActionResultType;
@@ -131,39 +128,57 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
     }
 
     @Override
-    public boolean attackEntityFrom(DamageSource source, float amount) {
-        if (source.isFireDamage() && (getBeeInfo().isNetherBee() || getBeeInfo().isBlazeBee()))
-            return false;
-        if (source.equals(DamageSource.DROWN) && getBeeInfo().isCanSwim())
-            return false;
+    public boolean attackEntityFrom(@Nonnull DamageSource source, float amount) {
+        for (CompoundNBT trait : getBeeInfo().getBeeTraits()){
+            if (BeeTrait.hasDamageImmunities(trait))
+                for (DamageSource damage : BeeTrait.getDamageImmunities(trait))
+                    if (source.equals(damage)) return false;
+        }
         return super.attackEntityFrom(source, amount);
     }
 
     @Override
     public boolean isPotionApplicable(@Nonnull EffectInstance potioneffectIn) {
-        if (getBeeInfo().isWitherBee() && potioneffectIn.getPotion().equals(Effects.WITHER))
-            return false;
+        BeeData info = getBeeInfo();
+        for (CompoundNBT trait : info.getBeeTraits()){
+            if (BeeTrait.hasPotionImmunities(trait)){
+                for (Effect potion : BeeTrait.getPotionImmunities(trait)){
+                    if (potion.equals(potioneffectIn.getPotion())) return false;
+                }
+            }
+        }
         return super.isPotionApplicable(potioneffectIn);
     }
 
     @Override
     public void livingTick() {
         if (remove) {
-            if (!world.isRemote() && (getBeeType().equals(BeeConstants.DEFAULT_BEE_TYPE) || getBeeType().isEmpty())) {
-                LOGGER.info("Removed Bee, Reason: " + (getBeeType().isEmpty() ? "Empty BeeType" : "Default Bee"));
-                remove = false;
-                this.dead = true;
-                this.remove();
+            if (!world.isRemote()) {
+                String beeName = getBeeInfo().getName();
+                if (beeName.equals(BeeConstants.DEFAULT_BEE_TYPE) || beeName.isEmpty()) {
+                    LOGGER.info("Removed Bee, Reason: " + (beeName.isEmpty() ? "Empty BeeType" : "Default Bee"));
+                    remove = false;
+                    this.dead = true;
+                    this.remove();
+                }
             } else
                 remove = false;
         }
 
-        if (this.world.isRemote && getBeeInfo().isEnderBee()){
-            for(int i = 0; i < 2; ++i) {
-                this.world.addParticle(ParticleTypes.PORTAL, this.getPosXRandom(0.5D),
-                        this.getPosYRandom() - 0.25D, this.getPosZRandom(0.5D),
-                        (this.rand.nextDouble() - 0.5D) * 2.0D, -this.rand.nextDouble(),
-                        (this.rand.nextDouble() - 0.5D) * 2.0D);
+
+        if (this.world.isRemote){
+            BeeData info = getBeeInfo();
+            if (this.ticksExisted % 40 == 0) {
+                for (CompoundNBT trait : info.getBeeTraits()) {
+                    if (BeeTrait.hasParticleEffects(trait)) {
+                        for (int i = 0; i < 10; ++i) {
+                            this.world.addParticle(BeeTrait.getParticleEffect(trait), this.getPosXRandom(0.5D),
+                                    this.getPosYRandom() - 0.25D, this.getPosZRandom(0.5D),
+                                    (this.rand.nextDouble() - 0.5D) * 2.0D, -this.rand.nextDouble(),
+                                    (this.rand.nextDouble() - 0.5D) * 2.0D);
+                        }
+                    }
+                }
             }
         }
         super.livingTick();

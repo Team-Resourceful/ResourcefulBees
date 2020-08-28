@@ -1,6 +1,7 @@
 package com.dungeonderps.resourcefulbees.entity.passive;
 
 import com.dungeonderps.resourcefulbees.data.BeeData;
+import com.dungeonderps.resourcefulbees.data.BeeTrait;
 import com.dungeonderps.resourcefulbees.entity.goals.BeeAngerGoal;
 import com.dungeonderps.resourcefulbees.entity.goals.BeeBreedGoal;
 import com.dungeonderps.resourcefulbees.entity.goals.BeeTemptGoal;
@@ -21,6 +22,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.FollowParentGoal;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.passive.BeeEntity;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.state.properties.DoubleBlockHalf;
@@ -42,6 +45,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
+import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
@@ -198,16 +202,24 @@ public class ResourcefulBee extends CustomBeeEntity {
     }
 
     protected void updateAITasks() {
-        if (getBeeInfo().isEnderBee()) {
-            if (!hasHiveInRange() && !this.pollinateGoal.isRunning()) {
-                if (this.world.isDaytime() && this.ticksExisted % 150 == 0) {
-                    this.teleportRandomly();
+        BeeData info = getBeeInfo();
+
+        for (CompoundNBT trait : info.getBeeTraits()){
+            if (BeeTrait.hasSpecialAbilities(trait)){
+                for (String ability : BeeTrait.getSpecialAbilities(trait)){
+                    if (ability.equals("teleport")) {
+                        if (!hasHiveInRange() && !this.pollinateGoal.isRunning()) {
+                            if (this.world.isDaytime() && this.ticksExisted % 150 == 0) {
+                                this.teleportRandomly();
+                            }
+                        }
+                    }
+                    if (ability.equals("flammable")) {
+                        if (this.ticksExisted % 150 == 0)
+                            this.setFire(3);
+                    }
                 }
             }
-        }
-        if (getBeeInfo().isBlazeBee()) {
-            if (this.ticksExisted % 150 == 0)
-                this.setFire(3);
         }
         super.updateAITasks();
     }
@@ -262,23 +274,28 @@ public class ResourcefulBee extends CustomBeeEntity {
                     i = 18;
                 }
                 BeeData info = this.getBeeInfo();
+                boolean hasPotionEffect = false;
+                boolean hasDamageType = false;
+                for (CompoundNBT trait : info.getBeeTraits()){
+                    if (BeeTrait.hasDamageTypes(trait)){
+                        hasDamageType = true;
+                        for (Pair<String, Integer> damageType : BeeTrait.getDamageTypes(trait)){
+                            if (damageType.getLeft().equals("setOnFire")) entityIn.setFire(i * damageType.getRight());
+                            if (damageType.getLeft().equals("explosive")) this.explode(i/damageType.getRight());
+                        }
+                    }
+                    if (BeeTrait.hasPotionEffects(trait)){
+                        hasPotionEffect = true;
+                        if (i > 0) {
+                            for (Pair<Effect, Integer> effect : BeeTrait.getPotionEffects(trait)){
+                                ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(effect.getLeft(), i * 20, effect.getRight()));
+                            }
+                        }
+                    }
 
-                if (info.isCreeperBee()) {
-                    this.explode(i/4);
+
                 }
-                if (info.isBlazeBee()) {
-                    entityIn.setFire(5);
-                }
-                if (i > 0) {
-                    if (info.isWitherBee())
-                        ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.WITHER, i * 20, 1));
-                    if (info.isZomBee())
-                        ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.HUNGER, i * 20, 20));
-                    if (info.isPigmanBee())
-                        ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.MINING_FATIGUE, i * 20, 0));
-                    if (!info.isPigmanBee() && !info.isZomBee() && !info.isWitherBee() && !info.isBlazeBee() && !info.isCreeperBee())
-                        ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.POISON, i * 20, 0));
-                }
+                if (!hasPotionEffect && !hasDamageType) ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.POISON, i * 20, 0));
             }
 
             this.setHasStung(true);

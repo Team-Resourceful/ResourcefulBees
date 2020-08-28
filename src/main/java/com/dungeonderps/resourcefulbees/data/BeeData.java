@@ -5,6 +5,10 @@ import com.dungeonderps.resourcefulbees.lib.BeeConstants;
 import com.dungeonderps.resourcefulbees.lib.MutationTypes;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import net.minecraft.item.Items;
+import net.minecraft.nbt.CompoundNBT;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BeeData {
 
@@ -64,6 +68,7 @@ public class BeeData {
     private transient String name = BeeConstants.DEFAULT_BEE_TYPE;
     private transient boolean mutation;
     private transient MutationTypes mutationType;
+    private transient List<CompoundNBT> beeTraits = new ArrayList<>();
 
     public BeeData() {}
 
@@ -571,4 +576,10 @@ public class BeeData {
     public String getEmissiveLayerTexture() { return emissiveLayerTexture; }
 
     public void setEmissiveLayerTexture(String emissiveLayerTexture) { this.emissiveLayerTexture = emissiveLayerTexture; }
+
+    public List<CompoundNBT> getBeeTraits() { return this.beeTraits; }
+
+    public void addBeeTrait(CompoundNBT trait) { this.beeTraits.add(trait); }
+
+    public void addBeeTraits(List<CompoundNBT> traits) { if (traits!=null) this.beeTraits.addAll(traits); }
 }
