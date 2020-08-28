@@ -3,18 +3,27 @@ package com.dungeonderps.resourcefulbees.item;
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
 import com.dungeonderps.resourcefulbees.config.BeeInfo;
 import com.dungeonderps.resourcefulbees.lib.NBTConstants;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.item.SpawnEggItem;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.fml.RegistryObject;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Objects;
+import java.util.Optional;
 
 public class BeeSpawnEggItem extends SpawnEggItem {
 
@@ -31,9 +40,9 @@ public class BeeSpawnEggItem extends SpawnEggItem {
         CompoundNBT nbt = stack.getChildTag(NBTConstants.NBT_ROOT);
         String name;
         if ((nbt != null && nbt.contains(NBTConstants.NBT_BEE_TYPE))) {
-            name = "item" + '.' + ResourcefulBees.MOD_ID + '.' + nbt.getString(NBTConstants.NBT_BEE_TYPE) + "_spawn_egg";
+            name = String.format("item.%1$s.%2$s_spawn_egg", ResourcefulBees.MOD_ID, nbt.getString(NBTConstants.NBT_BEE_TYPE));
         } else {
-            name = "item" + '.' + ResourcefulBees.MOD_ID + '.' + "bee_spawn_egg";
+            name = String.format("item.%1$s.bee_spawn_egg", ResourcefulBees.MOD_ID);
         }
         return name;
     }
@@ -59,10 +68,37 @@ public class BeeSpawnEggItem extends SpawnEggItem {
                     }
                 }
                 return ActionResultType.FAIL;
-            } else
-                return super.onItemUse(context);
+            } else {
+                World world = context.getWorld();
+                if (world.isRemote) {
+                    return ActionResultType.SUCCESS;
+                } else {
+                    BlockPos blockpos = context.getPos();
+                    Direction direction = context.getFace();
+                    BlockState blockstate = world.getBlockState(blockpos);
+
+                    BlockPos blockpos1;
+                    if (blockstate.getCollisionShape(world, blockpos).isEmpty()) {
+                        blockpos1 = blockpos;
+                    } else {
+                        blockpos1 = blockpos.offset(direction);
+                    }
+
+                    EntityType<?> entitytype = this.getType(itemstack.getTag());
+                    if (entitytype.spawn(world, itemstack, context.getPlayer(), blockpos1, SpawnReason.SPAWN_EGG, true, !Objects.equals(blockpos, blockpos1) && direction == Direction.UP) != null) {
+                        itemstack.shrink(1);
+                    }
+
+                    return ActionResultType.CONSUME;
+                }
+            }
         }
-        else
-            return super.onItemUse(context);
+        return ActionResultType.SUCCESS;
+    }
+
+    @Nonnull
+    @Override
+    public Optional<MobEntity> func_234809_a_(@Nonnull PlayerEntity playerEntity, @Nonnull MobEntity mobEntity, @Nonnull EntityType<? extends MobEntity> entityType, @Nonnull World world, @Nonnull Vector3d vector3d, @Nonnull ItemStack stack) {
+        return Optional.empty();
     }
 }

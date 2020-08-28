@@ -17,7 +17,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.NameTagItem;
-import net.minecraft.item.SpawnEggItem;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -269,7 +268,7 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
                 return ActionResultType.PASS;
             }
         }
-        if (item instanceof SpawnEggItem && ((SpawnEggItem)item).hasType(itemstack.getTag(), this.getType())) {
+/*        if (item instanceof SpawnEggItem && ((SpawnEggItem)item).hasType(itemstack.getTag(), this.getType())) {
             if (!this.world.isRemote) {
                 AgeableEntity ageableentity = this.createSelectedChild(this.getBeeType());
                 ageableentity.setGrowingAge(-24000);
@@ -285,7 +284,7 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
                 }
             }
             return ActionResultType.PASS;
-        }
+        }*/
         return ActionResultType.FAIL;
     }
 
