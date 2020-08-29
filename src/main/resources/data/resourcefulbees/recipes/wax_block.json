@@ -6,7 +6,7 @@
     "WWW"
   ],
   "key": {
-    "W": { "item": "resourcefulbees:beeswax" }
+    "W": { "tag": "forge:wax" }
   },
   "result": {
     "item": "resourcefulbees:wax_block"

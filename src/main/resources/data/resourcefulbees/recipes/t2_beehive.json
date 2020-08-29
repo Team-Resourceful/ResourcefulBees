@@ -6,7 +6,7 @@
     "HWH"
   ],
   "key": {
-    "W": { "item": "resourcefulbees:beeswax" },
+    "W": { "tag": "forge:wax" },
     "B": { "item": "resourcefulbees:t1_beehive" },
     "H": { "tag": "resourcefulbees:resourceful_honeycomb"}
   },

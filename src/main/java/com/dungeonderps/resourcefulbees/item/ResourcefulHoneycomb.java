@@ -1,9 +1,11 @@
 package com.dungeonderps.resourcefulbees.item;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
+import com.dungeonderps.resourcefulbees.config.Config;
 import com.dungeonderps.resourcefulbees.lib.NBTConstants;
 import com.dungeonderps.resourcefulbees.registry.ColorHandler;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.item.Food;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -20,7 +22,7 @@ import java.util.List;
 public class ResourcefulHoneycomb extends Item {
 
     public ResourcefulHoneycomb() {
-        super(new Properties().group(ItemGroup.MATERIALS));
+        super(new Properties().group(ItemGroup.MATERIALS).food(new Food.Builder().hunger(Config.HONEYCOMB_HUNGER.get()).saturation(Config.HONEYCOMB_SATURATION.get().floatValue()).build()));
     }
 
     public static int getColor(ItemStack stack, int tintIndex){
@@ -33,9 +35,9 @@ public class ResourcefulHoneycomb extends Item {
         CompoundNBT beeType = stack.getChildTag(NBTConstants.NBT_ROOT);
         String name;
         if ((beeType != null && beeType.contains(NBTConstants.NBT_BEE_TYPE))) {
-            name = "item" + '.' + ResourcefulBees.MOD_ID + '.' + beeType.getString(NBTConstants.NBT_BEE_TYPE) + "_honeycomb";
+            name = String.format("item.%1$s.%2$s_honeycomb", ResourcefulBees.MOD_ID, beeType.getString(NBTConstants.NBT_BEE_TYPE));
         } else {
-            name = "item" + '.' + ResourcefulBees.MOD_ID + '.' + "resourceful_honeycomb";
+            name = String.format("item.%1$s.resourceful_honeycomb", ResourcefulBees.MOD_ID);
         }
         return name;
     }

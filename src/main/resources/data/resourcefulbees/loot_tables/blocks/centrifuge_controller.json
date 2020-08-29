@@ -24,7 +24,7 @@
               ]
             }
           ],
-          "name": "resourcefulbees:centrifuge"
+          "name": "resourcefulbees:centrifuge_controller"
         }
       ],
       "conditions": [

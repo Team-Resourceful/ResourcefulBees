@@ -7,7 +7,7 @@
   ],
   "key": {
     "G": { "item": "minecraft:grass" },
-    "B": { "item": "minecraft:beehive" }
+    "B": { "tag": "minecraft:beehives" }
   },
   "result": {
     "item": "resourcefulbees:t1_beehive"

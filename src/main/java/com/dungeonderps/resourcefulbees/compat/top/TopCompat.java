@@ -66,11 +66,11 @@ public class TopCompat implements Function<ITheOneProbe, Void>
             {
                 TieredBeehiveTileEntity beehiveBlockEntity = (TieredBeehiveTileEntity) world.getTileEntity(data.getPos());
                 if(beehiveBlockEntity != null && mode.equals(ProbeMode.EXTENDED)){
-                    TieredBeehiveTileEntity ironBeeHive = (TieredBeehiveTileEntity) world.getTileEntity(data.getPos());
-                    if (ironBeeHive != null && ironBeeHive.hasCombs()) {
+                    TieredBeehiveTileEntity tieredBeehiveTileEntity = (TieredBeehiveTileEntity) world.getTileEntity(data.getPos());
+                    if (tieredBeehiveTileEntity != null && tieredBeehiveTileEntity.hasCombs()) {
                         int honeyLevel = 0;
-                        if (ironBeeHive.getBlockState().hasProperty(TieredBeehiveBlock.HONEY_LEVEL))
-                            honeyLevel = ironBeeHive.getBlockState().get(TieredBeehiveBlock.HONEY_LEVEL);
+                        if (tieredBeehiveTileEntity.getBlockState().hasProperty(TieredBeehiveBlock.HONEY_LEVEL))
+                            honeyLevel = tieredBeehiveTileEntity.getBlockState().get(TieredBeehiveBlock.HONEY_LEVEL);
                         IProbeInfo vertical;
                         IProbeInfo horizontal;
                         probeInfo.horizontal()
@@ -82,12 +82,12 @@ public class TopCompat implements Function<ITheOneProbe, Void>
                                 .progress((int) Math.floor(beehiveBlockEntity.ticksSmoked / 20.0), 30)
                                 .text(formattedName);
                         vertical = probeInfo.vertical(probeInfo.defaultLayoutStyle().borderColor(0xff006699).spacing(0));
-                        int hiveCombSize = ironBeeHive.numberOfCombs();
+                        int hiveCombSize = tieredBeehiveTileEntity.numberOfCombs();
                         hiveCombSize = Math.min(hiveCombSize, 6);
                         for (int i =0; i < hiveCombSize; i++){
                             horizontal = vertical.horizontal(probeInfo.defaultLayoutStyle().spacing(10).alignment(ElementAlignment.ALIGN_CENTER));
-                            horizontal.item(honeyComb(String.valueOf(i), ironBeeHive))
-                                    .text(new StringTextComponent(honeyComb(String.valueOf(i), ironBeeHive).getDisplayName().getString()));
+                            horizontal.item(honeyComb(String.valueOf(i), tieredBeehiveTileEntity))
+                                    .text(new StringTextComponent(honeyComb(String.valueOf(i), tieredBeehiveTileEntity).getDisplayName().getString()));
                         }
                         return true;
                     }
