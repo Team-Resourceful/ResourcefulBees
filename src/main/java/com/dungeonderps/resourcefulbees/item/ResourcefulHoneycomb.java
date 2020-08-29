@@ -22,11 +22,26 @@ import java.util.List;
 public class ResourcefulHoneycomb extends Item {
 
     public ResourcefulHoneycomb() {
-        super(new Properties().group(ItemGroup.MATERIALS).food(new Food.Builder().hunger(Config.HONEYCOMB_HUNGER.get()).saturation(Config.HONEYCOMB_SATURATION.get().floatValue()).build()));
+        super(new Properties().group(ItemGroup.MATERIALS));
     }
 
     public static int getColor(ItemStack stack, int tintIndex){
         return ColorHandler.getItemColor(stack, tintIndex);
+    }
+
+
+    @Override
+    public boolean isFood() {
+        return true;
+    }
+
+    @Nullable
+    @Override
+    public Food getFood() {
+        return new Food.Builder()
+                .hunger(Config.HONEYCOMB_HUNGER.get())
+                .saturation(Config.HONEYCOMB_SATURATION.get().floatValue())
+                .build();
     }
 
     @Nonnull

@@ -146,10 +146,10 @@ public class Config {
             COMMON_BUILDER.pop();
 
             COMMON_BUILDER.push("Honeycomb Options");
-            HONEYCOMB_HUNGER = COMMON_BUILDER.comment("\nThe amount of hunger restored when eating a honeycomb.")
-                    .defineInRange("honeycombHunger", 1, 0, 4);
-            HONEYCOMB_SATURATION = COMMON_BUILDER.comment("\nThe amount of saturation restored when eating a honeycomb.")
-                    .defineInRange("honeycombSaturation", 0.5, 0, 4.0);
+                HONEYCOMB_HUNGER = COMMON_BUILDER.comment("\nThe amount of hunger restored when eating a honeycomb.")
+                        .defineInRange("honeycombHunger", 1, 0, 4);
+                HONEYCOMB_SATURATION = COMMON_BUILDER.comment("\nThe amount of saturation restored when eating a honeycomb.")
+                        .defineInRange("honeycombSaturation", 0.5, 0, 4.0);
             COMMON_BUILDER.pop();
 
             COMMON_CONFIG = COMMON_BUILDER.build();

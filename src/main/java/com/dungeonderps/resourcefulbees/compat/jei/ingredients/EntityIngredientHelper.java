@@ -1,10 +1,14 @@
 package com.dungeonderps.resourcefulbees.compat.jei.ingredients;
 
 import com.dungeonderps.resourcefulbees.ResourcefulBees;
+import com.dungeonderps.resourcefulbees.lib.NBTConstants;
+import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import mezz.jei.api.ingredients.IIngredientHelper;
 import mezz.jei.api.recipe.IFocus;
 import mezz.jei.api.recipe.IFocusFactory;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 
 import javax.annotation.Nullable;
 import java.util.Iterator;
@@ -35,6 +39,16 @@ public class EntityIngredientHelper<T extends EntityIngredient> implements IIngr
     @Override
     public String getDisplayName(EntityIngredient entityIngredient) {
         return I18n.format("entity.resourcefulbees." + entityIngredient.getBeeType());
+    }
+
+    @Override
+    public ItemStack getCheatItemStack(EntityIngredient ingredient) {
+        final ItemStack eggStack = new ItemStack(RegistryHandler.BEE_SPAWN_EGG.get());
+        final CompoundNBT eggEntityTag = eggStack.getOrCreateChildTag("EntityTag");
+        final CompoundNBT eggItemTag = eggStack.getOrCreateChildTag(NBTConstants.NBT_ROOT);
+        eggEntityTag.putString(NBTConstants.NBT_BEE_TYPE, ingredient.getBeeType());
+        eggItemTag.putString(NBTConstants.NBT_BEE_TYPE, ingredient.getBeeType());
+        return eggStack;
     }
 
     @Override
