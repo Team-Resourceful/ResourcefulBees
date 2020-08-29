@@ -118,7 +118,8 @@ public class ResourcefulBee extends CustomBeeEntity {
             if (pos != null) {
                 TileEntity blockEntity = this.world.getTileEntity(this.hivePos);
                 return blockEntity instanceof TieredBeehiveTileEntity && ((TieredBeehiveTileEntity) blockEntity).isAllowedBee()
-                        || blockEntity instanceof ApiaryTileEntity && ((ApiaryTileEntity) blockEntity).isAllowedBee();
+                        || blockEntity instanceof ApiaryTileEntity && ((ApiaryTileEntity) blockEntity).isAllowedBee()
+                        || blockEntity instanceof BeehiveTileEntity;
             } else
                 return false;
         }
@@ -127,7 +128,8 @@ public class ResourcefulBee extends CustomBeeEntity {
     public boolean doesHiveHaveSpace(BlockPos pos) {
         TileEntity blockEntity = this.world.getTileEntity(pos);
         return (blockEntity instanceof TieredBeehiveTileEntity && !((TieredBeehiveTileEntity) blockEntity).isFullOfBees())
-                || (blockEntity instanceof ApiaryTileEntity && !((ApiaryTileEntity) blockEntity).isFullOfBees());
+                || (blockEntity instanceof ApiaryTileEntity && !((ApiaryTileEntity) blockEntity).isFullOfBees())
+                || (blockEntity instanceof BeehiveTileEntity && !((BeehiveTileEntity) blockEntity).isFullOfBees());
     }
 
     @Override
