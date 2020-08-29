@@ -30,7 +30,7 @@ public class CentrifugeCasingTileEntity extends TileEntity {
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
         if (controllerPos !=null) {
-            if (this. world !=null) {
+            if (this.world !=null) {
                 CentrifugeControllerTileEntity controllerTE = (CentrifugeControllerTileEntity) this.world.getTileEntity(controllerPos);
                 if (controllerTE !=null) {
                     if (controllerTE.validStructure) {
@@ -50,7 +50,7 @@ public class CentrifugeCasingTileEntity extends TileEntity {
 
     @Nonnull
     @Override
-    public CompoundNBT write(CompoundNBT tag) {
+    public CompoundNBT write(@Nonnull CompoundNBT tag) {
         if (controllerPos !=null)
             tag.put("controllerPos", NBTUtil.writeBlockPos(controllerPos));
         return super.write(tag);
@@ -59,7 +59,7 @@ public class CentrifugeCasingTileEntity extends TileEntity {
     @Override
     public void read(@Nonnull BlockState state, CompoundNBT tag) {
         if (tag.contains("controllerPos"))
-            NBTUtil.readBlockPos(tag.getCompound("controllerPos"));
+            controllerPos = NBTUtil.readBlockPos(tag.getCompound("controllerPos"));
         super.read(state, tag);
     }
 
