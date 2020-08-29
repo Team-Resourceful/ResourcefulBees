@@ -1,18 +1,18 @@
 package com.dungeonderps.resourcefulbees.config;
 
 import com.dungeonderps.resourcefulbees.data.BeeData;
+import com.dungeonderps.resourcefulbees.init.TraitRegistration;
 import com.dungeonderps.resourcefulbees.lib.BeeConstants;
 import com.dungeonderps.resourcefulbees.utils.BeeInfoUtils;
 import com.dungeonderps.resourcefulbees.utils.MathUtils;
 import com.dungeonderps.resourcefulbees.utils.RandomCollection;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.biome.Biome;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.awt.*;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.List;
+import java.util.*;
 
 public class BeeInfo {
 
@@ -122,5 +122,24 @@ public class BeeInfo {
     public static float[] getColorFloats(String color){
         Color tempColor = Color.decode(color);
         return tempColor.getComponents(null);
+    }
+
+
+    /**
+     * Sets a bees traits.
+     *  @param name Bee Type of the bee having its traits set.
+     */
+    public static void setBeesTraits(String name){
+        BeeData bee = BEE_INFO.get(name);
+        List<CompoundNBT> traits = new ArrayList<>();
+        if (bee.isWitherBee()) traits.add(TraitRegistration.getTrait("wither"));
+        if (bee.isBlazeBee()) traits.add(TraitRegistration.getTrait("blaze"));
+        if (bee.isCanSwim()) traits.add(TraitRegistration.getTrait("canswim"));
+        if (bee.isCreeperBee()) traits.add(TraitRegistration.getTrait("creeper"));
+        if (bee.isZomBee()) traits.add(TraitRegistration.getTrait("zombie"));
+        if (bee.isPigmanBee()) traits.add(TraitRegistration.getTrait("pigman"));
+        if (bee.isEnderBee()) traits.add(TraitRegistration.getTrait("ender"));
+        if (bee.isNetherBee()) traits.add(TraitRegistration.getTrait("nether"));
+        BEE_INFO.get(name).addBeeTraits(traits);
     }
 }

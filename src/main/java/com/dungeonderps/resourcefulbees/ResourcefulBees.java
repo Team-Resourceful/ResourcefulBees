@@ -10,6 +10,7 @@ import com.dungeonderps.resourcefulbees.config.Config;
 import com.dungeonderps.resourcefulbees.data.DataGen;
 import com.dungeonderps.resourcefulbees.data.RecipeBuilder;
 import com.dungeonderps.resourcefulbees.init.ModSetup;
+import com.dungeonderps.resourcefulbees.init.TraitRegistration;
 import com.dungeonderps.resourcefulbees.network.NetPacketHandler;
 import com.dungeonderps.resourcefulbees.recipe.ResourcefulBeesRecipeIngredients;
 import com.dungeonderps.resourcefulbees.registry.ColorHandler;
@@ -202,7 +203,9 @@ public class ResourcefulBees
     }
 
     private void loadComplete(FMLLoadCompleteEvent event) {
+        TraitRegistration.registerDefaultTraits();
         BeeBuilder.setupBees();
+        TraitRegistration.giveBeesTraits();
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> DataGen::GenerateEnglishLang);
     }
 }
