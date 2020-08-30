@@ -27,7 +27,7 @@ public class BeeInfo {
      *  @return Returns random bee type as a string.
      */
     public static String getRandomBee(){
-        int randInt = MathUtils.nextInt(BEE_INFO.size() - 1) +1;
+        int randInt = MathUtils.nextInt(BEE_INFO.size() - 1) + 1;
         Object[] dataArray = BEE_INFO.keySet().toArray();
         Object key = dataArray[randInt];
         return BEE_INFO.get(key.toString()).getName();

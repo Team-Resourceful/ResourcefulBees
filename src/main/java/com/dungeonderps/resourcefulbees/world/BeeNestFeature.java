@@ -2,10 +2,10 @@ package com.dungeonderps.resourcefulbees.world;
 
 import com.dungeonderps.resourcefulbees.config.Config;
 import com.dungeonderps.resourcefulbees.entity.passive.ResourcefulBee;
-import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.tileentity.TieredBeehiveTileEntity;
 import com.dungeonderps.resourcefulbees.utils.MathUtils;
 import com.mojang.serialization.Codec;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.nbt.CompoundNBT;
@@ -15,6 +15,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ISeedReader;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.Feature;
@@ -22,17 +23,20 @@ import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.structure.StructureManager;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
-//import com.dungeonderps.resourcefulbees.tileentity.beenest.BeeNestEntity;
+import static com.dungeonderps.resourcefulbees.registry.RegistryHandler.*;
 
 public class BeeNestFeature extends Feature<NoFeatureConfig> {
+
+    private final List<Block> overworldBiomes = new ArrayList<>(Arrays.asList(GRASS_BEE_NEST.get(), OAK_BEE_NEST.get(), DARK_OAK_BEE_NEST.get(), SPRUCE_BEE_NEST.get(), BIRCH_BEE_NEST.get(), RED_MUSHROOM_BEE_NEST.get(), BROWN_MUSHROOM_BEE_NEST.get()));
 
     public BeeNestFeature(Codec<NoFeatureConfig> configFactoryIn) {
         super(configFactoryIn);
     }
-
-
 
     @Override
     public boolean func_230362_a_(@Nonnull ISeedReader worldIn, @Nonnull StructureManager manager, @Nonnull ChunkGenerator generator, @Nonnull Random rand, @Nonnull BlockPos pos, @Nonnull NoFeatureConfig config) {
@@ -79,42 +83,62 @@ public class BeeNestFeature extends Feature<NoFeatureConfig> {
         if (direction == Direction.UP)
             return false;
 
+        Block block;
         BlockState newState;
 
         switch (category) {
             case THEEND:
-                newState = RegistryHandler.PURPUR_BEE_NEST.get().getStateContainer().getBaseState();
+                block = PURPUR_BEE_NEST.get();
                 break;
             case NETHER:
-                if (flag)
-                    newState = RegistryHandler.NETHER_BEE_NEST.get().getStateContainer().getBaseState();
-                else
-                    newState = RegistryHandler.WITHER_BEE_NEST.get().getStateContainer().getBaseState();
+                block = flag ? NETHER_BEE_NEST.get() : WITHER_BEE_NEST.get();
                 break;
             case SAVANNA:
             case DESERT:
             case MESA:
-                newState = RegistryHandler.ACACIA_BEE_NEST.get().getStateContainer().getBaseState();
+                block = ACACIA_BEE_NEST.get();
                 break;
             case JUNGLE:
-                newState = RegistryHandler.JUNGLE_BEE_NEST.get().getStateContainer().getBaseState();
+                block = JUNGLE_BEE_NEST.get();
                 break;
             case BEACH:
             case OCEAN:
             case ICY:
-                newState = RegistryHandler.PRISMARINE_BEE_NEST.get().getStateContainer().getBaseState();
+                block = PRISMARINE_BEE_NEST.get();
+                break;
+            case TAIGA:
+                block = SPRUCE_BEE_NEST.get();
                 break;
             case MUSHROOM:
-            case TAIGA:
+                block = flag ? RED_MUSHROOM_BEE_NEST.get() : BROWN_MUSHROOM_BEE_NEST.get();
+                break;
             case SWAMP:
-                newState = RegistryHandler.BEE_NEST.get().getStateContainer().getBaseState();
+                block = OAK_BEE_NEST.get();
+                break;
+            case FOREST:
+                block = flag ? BIRCH_BEE_NEST.get() : DARK_OAK_BEE_NEST.get();
+                break;
+            case PLAINS:
+                block = flag ? OAK_BEE_NEST.get() : GRASS_BEE_NEST.get();
                 break;
             default:
-                if (flag)
-                    newState = RegistryHandler.BEE_NEST.get().getStateContainer().getBaseState();
-                else
-                    newState = RegistryHandler.GRASS_BEE_NEST.get().getStateContainer().getBaseState();
+                if (Biomes.WARPED_FOREST.equals(biome)) {
+                    block = flag ? WARPED_BEE_NEST.get() : WARPED_NYLIUM_BEE_NEST.get();
+                } else if (Biomes.CRIMSON_FOREST.equals(biome)) {
+                    block = flag ? CRIMSON_BEE_NEST.get() : CRIMSON_NYLIUM_BEE_NEST.get();
+                } else {
+                    block = flag ? OAK_BEE_NEST.get() : GRASS_BEE_NEST.get();
+                }
         }
+
+        if (!Biome.Category.NETHER.equals(category) && !Biome.Category.THEEND.equals(category)) {
+            if (rand.nextFloat() < 0.20) {
+                int selection = rand.nextInt(overworldBiomes.size() - 1) + 1;
+                block = overworldBiomes.get(selection);
+            }
+        }
+
+        newState = block.getStateContainer().getBaseState();
 
         worldIn.setBlockState(newPos, newState, 1);
         TileEntity tileEntity = worldIn.getTileEntity(newPos);
@@ -124,7 +148,7 @@ public class BeeNestFeature extends Feature<NoFeatureConfig> {
             // TODO - figure out why 0.5f for nests turns to 0.0 when calling getMaxBees() and breaks when hives work fine.
             int maxBees = Math.round(Config.HIVE_MAX_BEES.get() * 0.5f);  //nest.getMaxBees();
             for (int i = rand.nextInt(maxBees); i < maxBees ; i++) {
-                ResourcefulBee bee = RegistryHandler.CUSTOM_BEE.get().create(worldIn.getWorld());
+                ResourcefulBee bee = CUSTOM_BEE.get().create(worldIn.getWorld());
                 if (bee != null) {
                     bee.setPosition(newPos.getX(), newPos.getY(), newPos.getZ());
                     bee.setBeeType(true);

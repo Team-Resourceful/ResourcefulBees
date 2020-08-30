@@ -3,7 +3,6 @@ package com.dungeonderps.resourcefulbees.container;
 import com.dungeonderps.resourcefulbees.registry.RegistryHandler;
 import com.dungeonderps.resourcefulbees.tileentity.centrifuge.CentrifugeControllerTileEntity;
 import com.dungeonderps.resourcefulbees.utils.CustomEnergyStorage;
-import com.dungeonderps.resourcefulbees.utils.FunctionalIntReferenceHolder;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;

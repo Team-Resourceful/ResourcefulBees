@@ -11,6 +11,15 @@
     "resourcefulbees:nether_bee_nest",
     "resourcefulbees:prismarine_bee_nest",
     "resourcefulbees:purpur_bee_nest",
-    "resourcefulbees:wither_bee_nest"
+    "resourcefulbees:wither_bee_nest",
+    "resourcefulbees:birch_bee_nest",
+    "resourcefulbees:brown_mushroom_bee_nest",
+    "resourcefulbees:crimson_bee_nest",
+    "resourcefulbees:crimson_nylium_bee_nest",
+    "resourcefulbees:dark_oak_bee_nest",
+    "resourcefulbees:red_mushroom_bee_nest",
+    "resourcefulbees:spruce_bee_nest",
+    "resourcefulbees:warped_bee_nest",
+    "resourcefulbees:warped_nylium_bee_nest"
   ]
 }
