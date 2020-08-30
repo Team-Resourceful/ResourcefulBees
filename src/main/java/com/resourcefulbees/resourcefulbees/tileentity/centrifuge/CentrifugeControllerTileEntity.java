@@ -150,7 +150,7 @@ public class CentrifugeControllerTileEntity extends TileEntity implements ITicka
                 JsonElement count = recipe.ingredient.serialize().getAsJsonObject().get(BeeConstants.INGREDIENT_COUNT);
                 int inputAmount = count != null ? count.getAsInt() : 1;
 
-                return inventoryHasSpace() && glass_bottle.getItem() == Items.GLASS_BOTTLE && energyStorage.getEnergyStored() >= recipe.time * Config.RF_TICK_CENTRIFUGE.get() && combs.getCount() >= inputAmount;
+                return inventoryHasSpace() && glass_bottle.getItem() == Items.GLASS_BOTTLE && energyStorage.getEnergyStored() >= recipe.time * Config.RF_TICK_CENTRIFUGE.get() && combs.getCount() >= inputAmount && glass_bottle.getCount() >= recipe.outputs.get(2).getLeft().getCount();
             }else return false;
         }
         return false;
