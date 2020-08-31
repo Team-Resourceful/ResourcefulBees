@@ -104,19 +104,7 @@ public class ModSetup {
 
                     if (!this.isSuccessful()) {
                         BlockState blockstate = world.getBlockState(blockpos);
-                        if (blockstate.isIn(BlockTags.BEEHIVES)) {
-                            int i = blockstate.get(BeehiveBlock.HONEY_LEVEL);
-                            if (i >= 5) {
-                                if (stack.attemptDamageItem(1, world.rand, null)) {
-                                    stack.setCount(0);
-                                }
-
-                                BeehiveBlock.dropHoneyComb(world, blockpos);
-                                ((BeehiveBlock)blockstate.getBlock()).takeHoney(world, blockstate, blockpos, null, BeehiveTileEntity.State.BEE_RELEASED);
-                                this.setSuccessful(true);
-                            }
-                        }
-                        else if (blockstate.getBlock() instanceof TieredBeehiveBlock) {
+                        if (blockstate.getBlock() instanceof TieredBeehiveBlock) {
                             int i = blockstate.get(BeehiveBlock.HONEY_LEVEL);
                             if (i >= 5) {
                                 if (stack.attemptDamageItem(1, world.rand, null)) {
@@ -126,6 +114,17 @@ public class ModSetup {
                                 TieredBeehiveBlock.dropResourceHoneycomb((TieredBeehiveBlock) blockstate.getBlock(), world, blockpos);
                                 ((BeehiveBlock) blockstate.getBlock()).takeHoney(world, blockstate, blockpos, null,
                                         BeehiveTileEntity.State.BEE_RELEASED);
+                                this.setSuccessful(true);
+                            }
+                        } else if (blockstate.isIn(BlockTags.BEEHIVES)) {
+                            int i = blockstate.get(BeehiveBlock.HONEY_LEVEL);
+                            if (i >= 5) {
+                                if (stack.attemptDamageItem(1, world.rand, null)) {
+                                    stack.setCount(0);
+                                }
+
+                                BeehiveBlock.dropHoneyComb(world, blockpos);
+                                ((BeehiveBlock)blockstate.getBlock()).takeHoney(world, blockstate, blockpos, null, BeehiveTileEntity.State.BEE_RELEASED);
                                 this.setSuccessful(true);
                             }
                         }
