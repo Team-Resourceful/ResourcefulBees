@@ -14,5 +14,6 @@
   "isGlowing": true,
   "glowingColor": "#E2D3D3",
   "emissiveLayerTexture" : "/creeper/creeper_bee_emissive",
-  "glowingPulse": 2
+  "glowingPulse": 2,
+  "breedable": true
 }

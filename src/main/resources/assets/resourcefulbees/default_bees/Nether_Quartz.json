@@ -9,5 +9,6 @@
   "spawnInWorld": true,
   "biomeWhitelist": "tag:nether",
   "netherBee": true,
-  "maxTimeInHive": 1000
+  "maxTimeInHive": 1000,
+  "breedable": true
 }

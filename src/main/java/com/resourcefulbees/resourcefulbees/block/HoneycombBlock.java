@@ -1,6 +1,7 @@
 
 package com.resourcefulbees.resourcefulbees.block;
 
+import com.resourcefulbees.resourcefulbees.config.BeeInfo;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.registry.ColorHandler;
@@ -46,9 +47,13 @@ public class HoneycombBlock extends Block {
     }
 
     @Override
-    public void animateTick(@Nonnull BlockState stateIn, @Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull Random rand) {
-        worldIn.notifyBlockUpdate(pos, stateIn, stateIn, 2);
-        super.animateTick(stateIn, worldIn, pos, rand);
+    public void animateTick(@Nonnull BlockState stateIn, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull Random rand) {
+        TileEntity tile = world.getTileEntity(pos);
+        if (tile instanceof HoneycombTileEntity) {
+            if (BeeInfo.getInfo(((HoneycombTileEntity) tile).beeType).isRainbowBee())
+                world.notifyBlockUpdate(pos, stateIn, stateIn, 2);
+        }
+        super.animateTick(stateIn, world, pos, rand);
     }
 
     @Override

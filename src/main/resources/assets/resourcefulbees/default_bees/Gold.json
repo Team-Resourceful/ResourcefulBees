@@ -9,5 +9,6 @@
   "spawnInWorld": true,
   "biomeWhitelist": "tag:OVERWORLD",
   "biomeBlacklist": "tag:ocean",
-  "maxTimeInHive": 800
+  "maxTimeInHive": 800,
+  "breedable": true
 }

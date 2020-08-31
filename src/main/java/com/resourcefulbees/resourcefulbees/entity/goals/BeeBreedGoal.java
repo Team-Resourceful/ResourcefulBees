@@ -39,9 +39,7 @@ public class BeeBreedGoal extends BreedGoal {
             if (targetMate instanceof CustomBeeEntity){
                 CustomBeeEntity parent1 = ((CustomBeeEntity) targetMate);
                 CustomBeeEntity parent2 = ((CustomBeeEntity) animal);
-                if (BeeInfo.canParentsBreed(parent1.getBeeType(), parent2.getBeeType()))
-                    return true;
-                else return parent1.getBeeType().equals(parent2.getBeeType());
+                return BeeInfo.canParentsBreed(parent1.getBeeType(), parent2.getBeeType());
             }
             else
                 return false;
@@ -51,16 +49,10 @@ public class BeeBreedGoal extends BreedGoal {
     @Override
     protected void spawnBaby() {
         AgeableEntity ageableentity;
-        if (getBeeType(this.targetMate).equals(getBeeType(this.animal))) {
-            CustomBeeEntity bee = (CustomBeeEntity)this.animal;
-            ageableentity = bee.createSelectedChild(getBeeType(this.animal));
-        }
-        else {
-            CustomBeeEntity bee = (CustomBeeEntity)this.animal;
-            String parent1 = getBeeType(this.targetMate);
-            String parent2 = getBeeType(this.animal);
-            ageableentity = bee.createSelectedChild(BeeInfo.getWeightedChild(parent1, parent2));
-        }
+        CustomBeeEntity bee = (CustomBeeEntity)this.animal;
+        String parent1 = getBeeType(this.targetMate);
+        String parent2 = getBeeType(this.animal);
+        ageableentity = bee.createSelectedChild(BeeInfo.getWeightedChild(parent1, parent2));
 
         final BabyEntitySpawnEvent event = new BabyEntitySpawnEvent(animal, targetMate, ageableentity);
         final boolean cancelled = MinecraftForge.EVENT_BUS.post(event);

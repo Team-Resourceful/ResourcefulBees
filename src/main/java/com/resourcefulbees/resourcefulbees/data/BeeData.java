@@ -12,7 +12,7 @@ import java.util.List;
 
 public class BeeData {
 
-    private String flower, parent1, parent2;
+    private String flower, parent1 = "", parent2 = "";
 
     private String biomeWhitelist = "";
     private String biomeBlacklist = "";
@@ -64,7 +64,7 @@ public class BeeData {
 
     private float sizeModifier = Config.BEE_SIZE_MODIFIER.get().floatValue();
 
-    private int spawnWeight = 10;
+    private int spawnWeight = 100;
 
     private transient String name = BeeConstants.DEFAULT_BEE_TYPE;
     private transient boolean mutation;

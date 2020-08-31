@@ -12,5 +12,6 @@
   "maxTimeInHive": 600,
   "skeletonBee": true,
   "feedItem": "small",
-  "feedAmount": 8
+  "feedAmount": 8,
+  "breedable": true
 }

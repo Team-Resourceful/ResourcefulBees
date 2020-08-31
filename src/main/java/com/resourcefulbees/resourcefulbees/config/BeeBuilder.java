@@ -50,7 +50,8 @@ public class BeeBuilder {
             "Skeleton.json",
             "Wither.json",
             "Zombie.json",
-            "Netherite.json"
+            "Netherite.json",
+            "RGBee.json"
     };
 
     public static Path BEE_PATH;

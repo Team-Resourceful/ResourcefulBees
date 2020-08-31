@@ -54,24 +54,25 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
         List<Recipe> recipes = new ArrayList<>();
         for (Map.Entry<String, BeeData> entry : BeeInfo.getBees().entrySet()){
             BeeData bee = entry.getValue();
-            if (bee.isBreedable()){
-                if (BeeInfo.getBees().containsKey(bee.getParent1()) && BeeInfo.getBees().containsKey(bee.getParent2())) {
-                    String p1_feedItemS = BeeInfo.getInfo(bee.getParent1()).getFeedItem();
-                    String p2_feedItemS = BeeInfo.getInfo(bee.getParent2()).getFeedItem();
+            if (bee.isBreedable()) {
+                String parent1 = BeeInfo.getBees().containsKey(bee.getParent1()) && BeeInfo.getBees().containsKey(bee.getParent2()) ? bee.getParent1() : bee.getName();
+                String parent2 = BeeInfo.getBees().containsKey(bee.getParent1()) && BeeInfo.getBees().containsKey(bee.getParent2()) ? bee.getParent2() : bee.getName();
 
-                    int p1_feedAmount = BeeInfo.getInfo(bee.getParent1()).getFeedAmount();
-                    int p2_feedAmount = BeeInfo.getInfo(bee.getParent2()).getFeedAmount();
+                String p1_feedItemS = BeeInfo.getInfo(parent1).getFeedItem();
+                String p2_feedItemS = BeeInfo.getInfo(parent2).getFeedItem();
 
-                    p1_feedItemS = finalizeFeedItem(p1_feedItemS);
-                    p2_feedItemS = finalizeFeedItem(p2_feedItemS);
+                int p1_feedAmount = BeeInfo.getInfo(parent1).getFeedAmount();
+                int p2_feedAmount = BeeInfo.getInfo(parent2).getFeedAmount();
 
-                    ITag<Item> p1_feedTag = BeeInfoUtils.getItemTag(p1_feedItemS);
-                    ITag<Item> p2_feedTag = BeeInfoUtils.getItemTag(p2_feedItemS);
-                    Item p1_feedItem = BeeInfoUtils.getItem(p1_feedItemS);
-                    Item p2_feedItem = BeeInfoUtils.getItem(p2_feedItemS);
+                p1_feedItemS = finalizeFeedItem(p1_feedItemS);
+                p2_feedItemS = finalizeFeedItem(p2_feedItemS);
 
-                    recipes.add(new Recipe(bee.getParent1(), p1_feedTag, p1_feedItem, p1_feedAmount, bee.getParent2(), p2_feedTag, p2_feedItem, p2_feedAmount, entry.getKey()));
-                }
+                ITag<Item> p1_feedTag = BeeInfoUtils.getItemTag(p1_feedItemS);
+                ITag<Item> p2_feedTag = BeeInfoUtils.getItemTag(p2_feedItemS);
+                Item p1_feedItem = BeeInfoUtils.getItem(p1_feedItemS);
+                Item p2_feedItem = BeeInfoUtils.getItem(p2_feedItemS);
+
+                recipes.add(new Recipe(parent1, p1_feedTag, p1_feedItem, p1_feedAmount, parent2, p2_feedTag, p2_feedItem, p2_feedAmount, entry.getKey()));
             }
         }
         return recipes;

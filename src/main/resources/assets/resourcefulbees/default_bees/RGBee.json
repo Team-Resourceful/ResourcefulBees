@@ -1,0 +1,16 @@
+{
+  "honeycombColor": "#ffffff",
+  "isBeeColored": true,
+  "isRainbowBee": true,
+  "isGlowing": true,
+  "flower": "ALL",
+  "mainOutput": "minecraft:red_dye",
+  "secondaryOutput": "minecraft:green_dye",
+  "bottleOutput": "minecraft:blue_dye",
+  "bottleOutputWeight": 0.02,
+  "spawnInWorld": true,
+  "biomeWhitelist": "TAG:OVerWorld",
+  "biomeBlacklist": "tag:ocean",
+  "breedable" : true,
+  "spawnWeight": 70
+}

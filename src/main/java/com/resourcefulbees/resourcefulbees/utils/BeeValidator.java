@@ -108,7 +108,7 @@ public class BeeValidator {
     }
 
     private static boolean validateBreeding(BeeData bee) {
-        return !bee.getParent1().equals(bee.getParent2()) ||
+        return !bee.getParent1().equals(bee.getParent2()) || (bee.getParent1().isEmpty() && bee.getParent2().isEmpty()) ||
                 logWarn(bee.getName(), "breeding", (bee.getParent1() + " and " + bee.getParent2()),
                 "are the same parents. Child bee will not spawn from breeding.");
     }

@@ -13,5 +13,6 @@
   "sizeModifier": 0.2,
   "maxTimeInHive": 600,
   "feedItem": "minecraft:poppy",
-  "feedAmount": 4
+  "feedAmount": 4,
+  "breedable": true
 }

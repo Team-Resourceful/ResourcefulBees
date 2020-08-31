@@ -10,5 +10,6 @@
   "spawnInWorld": true,
   "biomeWhitelist": "TAG:end",
   "enderBee": true,
-  "maxTimeInHive": 1800
+  "maxTimeInHive": 1800,
+  "breedable": true
 }

@@ -58,6 +58,15 @@
 	"block.resourcefulbees.prismarine_bee_nest": "Resourceful Bee Nest",
 	"block.resourcefulbees.purpur_bee_nest": "Resourceful Bee Nest",
 	"block.resourcefulbees.wither_bee_nest": "Resourceful Bee Nest",
+	"block.resourcefulbees.birch_bee_nest": "Resourceful Bee Nest",
+	"block.resourcefulbees.brown_mushroom_bee_nest": "Resourceful Bee Nest",
+	"block.resourcefulbees.crimson_bee_nest": "Resourceful Bee Nest",
+	"block.resourcefulbees.crimson_nylium_bee_nest": "Resourceful Bee Nest",
+	"block.resourcefulbees.dark_oak_bee_nest": "Resourceful Bee Nest",
+	"block.resourcefulbees.red_mushroom_bee_nest": "Resourceful Bee Nest",
+	"block.resourcefulbees.spruce_bee_nest": "Resourceful Bee Nest",
+	"block.resourcefulbees.warped_bee_nest": "Resourceful Bee Nest",
+	"block.resourcefulbees.warped_nylium_bee_nest": "Resourceful Bee Nest",
 	"block.resourcefulbees.wax_block": "Beeswax Block",
 	"block.resourcefulbees.centrifuge": "Centrifuge",
 	"block.resourcefulbees.gold_flower": "Golden Flower",
@@ -124,6 +133,7 @@
 	"block.resourcefulbees.wither_honeycomb_block": "Wither Honeycomb Block",
 	"block.resourcefulbees.zombie_honeycomb_block": "Zombie Honeycomb Block",
 	"block.resourcefulbees.netherite_honeycomb_block": "Netherite Honeycomb Block",
+	"block.resourcefulbees.rgbee_honeycomb_block": "RGBee Honeycomb Block",
 
 	"fluid.resourcefulbees.honey": "Honey",
 
@@ -143,6 +153,7 @@
 	"item.resourcefulbees.wither_honeycomb": "Wither Honeycomb",
 	"item.resourcefulbees.zombie_honeycomb": "Zombie Honeycomb",
 	"item.resourcefulbees.netherite_honeycomb": "Netherite Honeycomb",
+	"item.resourcefulbees.rgbee_honeycomb": "RGBee Honeycomb",
 
 	"item.resourcefulbees.gold_spawn_egg": "Gold Bee Spawn Egg",
 	"item.resourcefulbees.iron_spawn_egg": "Iron Bee Spawn Egg",
@@ -160,6 +171,7 @@
 	"item.resourcefulbees.wither_spawn_egg": "Wither Bee Spawn Egg",
 	"item.resourcefulbees.zombie_spawn_egg": "Zombie Bee Spawn Egg",
 	"item.resourcefulbees.netherite_spawn_egg": "Netherite Bee Spawn Egg",
+	"item.resourcefulbees.rgbee_spawn_egg": "RGBee Spawn Egg",
 
 	"entity.resourcefulbees.gold_bee": "Gold Bee",
 	"entity.resourcefulbees.iron_bee": "Iron Bee",
@@ -177,6 +189,7 @@
 	"entity.resourcefulbees.wither_bee": "Wither Bee",
 	"entity.resourcefulbees.zombie_bee": "Zombie Bee",
 	"entity.resourcefulbees.netherite_bee": "Netherite Bee",
+	"entity.resourcefulbees.rgbee_bee": "RGBee",
 
 	"entity.minecraft.villager.resourcefulbees.beekeeper": "Beekeeper",
 	"block.resourcefulbees.mech_centrifuge.tooltip.info": "Hold SHIFT & right-click block to process honeycombs.",

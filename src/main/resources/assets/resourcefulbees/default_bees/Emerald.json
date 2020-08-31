@@ -8,5 +8,6 @@
   "mainOutput": "minecraft:emerald",
   "spawnInWorld": true,
   "biomeWhitelist": "TAG:Mountain,Hills",
-  "spawnWeight": 1
+  "spawnWeight": 10,
+  "breedable": true
 }

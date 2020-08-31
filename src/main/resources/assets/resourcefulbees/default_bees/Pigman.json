@@ -10,5 +10,6 @@
   "biomeWhitelist": "tag:NETHER",
   "maxTimeInHive": 1000,
   "pigmanBee": true,
-  "netherBee": true
+  "netherBee": true,
+  "breedable": true
 }
