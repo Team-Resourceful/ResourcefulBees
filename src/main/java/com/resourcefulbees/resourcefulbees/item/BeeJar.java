@@ -143,9 +143,9 @@ public class BeeJar extends Item {
         if (tag != null && isFilled(stack)) {
             if (tag.getString(NBTConstants.NBT_ENTITY).equals("resourcefulbees:bee")) {
                 String type = stack.getTag().getString(NBTConstants.NBT_BEE_TYPE);
-                tooltip.add(new StringTextComponent(I18n.format(ResourcefulBees.MOD_ID + ".information.bee_type.custom") + StringUtils.capitalize(type)).mergeStyle(TextFormatting.WHITE));
+                tooltip.add(new StringTextComponent(I18n.format(ResourcefulBees.MOD_ID + ".information.bee_type.custom") + StringUtils.capitalize(type)).formatted(TextFormatting.WHITE));
             } else if (stack.getTag().getString(NBTConstants.NBT_ENTITY).equals("minecraft:bee")) {
-                tooltip.add(new TranslationTextComponent(ResourcefulBees.MOD_ID + ".information.bee_type.vanilla").mergeStyle(TextFormatting.WHITE));
+                tooltip.add(new TranslationTextComponent(ResourcefulBees.MOD_ID + ".information.bee_type.vanilla").formatted(TextFormatting.WHITE));
             } else
                 tooltip.add(new TranslationTextComponent(ResourcefulBees.MOD_ID + ".information.bee_type.unknown"));
         }

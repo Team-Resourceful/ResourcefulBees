@@ -3,20 +3,8 @@ package com.resourcefulbees.resourcefulbees.config;
 import com.google.gson.Gson;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.data.BeeData;
-import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
-import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.BeeValidator;
-import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
-import net.minecraft.entity.EntityClassification;
-import net.minecraft.entity.EntitySpawnPlacementRegistry;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.Heightmap;
-import net.minecraft.world.gen.feature.IFeatureConfig;
-import net.minecraft.world.gen.placement.ChanceConfig;
-import net.minecraft.world.gen.placement.HeightWithChanceConfig;
-import net.minecraft.world.gen.placement.Placement;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -24,7 +12,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -60,7 +47,8 @@ public class BeeBuilder {
     public static void setupBees() {
         if (GENERATE_DEFAULTS.get()) setupDefaultBees();
         addBees();
-        setupBeeSpawns();
+        //TODO Fix when forge updates biome stuff
+        //setupBeeSpawns();
     }
 
     private static void parseBee(File file) throws IOException {
@@ -156,7 +144,7 @@ public class BeeBuilder {
         }
     }
 
-    private static void setupBeeSpawns() {
+/*    private static void setupBeeSpawns() {
         for (Map.Entry<Biome, RandomCollection<String>> element : BeeInfo.SPAWNABLE_BIOMES.entrySet()) {
             Biome biome = element.getKey();
             if (Config.GENERATE_BEE_NESTS.get()) {
@@ -173,9 +161,9 @@ public class BeeBuilder {
                 EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
                 CustomBeeEntity::canBeeSpawn);
-    }
+    }*/
 
-    private static void addNestFeature(Biome biome) {
+/*    private static void addNestFeature(Biome biome) {
         Biome.Category category = biome.getCategory();
         if (category == Biome.Category.NETHER)
             biome.addFeature(GenerationStage.Decoration.UNDERGROUND_DECORATION,
@@ -189,6 +177,6 @@ public class BeeBuilder {
                             .withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG)
                             .withPlacement(Placement.CHANCE_TOP_SOLID_HEIGHTMAP
                                     .configure(new ChanceConfig(16))));
-    }
+    }*/
 
 }

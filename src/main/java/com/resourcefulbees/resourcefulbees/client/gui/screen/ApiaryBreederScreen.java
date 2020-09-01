@@ -96,11 +96,11 @@ public class ApiaryBreederScreen extends ContainerScreen<ApiaryBreederContainer>
     public void render(@Nonnull MatrixStack matrix,int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrix);
         super.render(matrix, mouseX, mouseY, partialTicks);
-        this.func_230459_a_(matrix, mouseX, mouseY);
+        this.drawMouseoverTooltip(matrix, mouseX, mouseY);
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(@Nonnull MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
+    protected void drawBackground(@Nonnull MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
         if (this.container.rebuild) {
             preInit();
             init();
@@ -111,36 +111,36 @@ public class ApiaryBreederScreen extends ContainerScreen<ApiaryBreederContainer>
         storageTabButton.active = apiaryBreederTileEntity.getApiary() != null && apiaryBreederTileEntity.getApiary().storagePos != null;
 
 
-        Minecraft client = this.minecraft;
+        Minecraft client = this.client;
         if (client != null) {
             client.getTextureManager().bindTexture(BACKGROUND);
             int i = this.guiLeft;
             int j = this.guiTop;
             //upgrade slots
-            blit(matrix, i, j+16, 0, 16, 25, 82);
+            drawTexture(matrix, i, j+16, 0, 16, 25, 82);
             //Top of screen
-            blit(matrix, i+25, j, 25, 0, 176, 15);
+            drawTexture(matrix, i+25, j, 25, 0, 176, 15);
             //slots
             int scaledprogress;
             for (int z=0; z < this.container.numberOfBreeders; z++){
-                blit(matrix, i+25, j+ 15 + (z*20), 25, 15, 176, 20);
+                drawTexture(matrix, i+25, j+ 15 + (z*20), 25, 15, 176, 20);
             }
 
             for (int k = 0; k < this.container.numberOfBreeders; k++) {
                 scaledprogress = MathUtils.clamp(118 * this.container.times.get(k) / this.container.apiaryBreederTileEntity.totalTime, 0, this.container.apiaryBreederTileEntity.totalTime);
-                blit(matrix, i+54, j + 21 + (k*20), 0, 246, scaledprogress, 10);
+                drawTexture(matrix, i+54, j + 21 + (k*20), 0, 246, scaledprogress, 10);
             }
 
-            blit(matrix, i+25, j+15 + (20 * this.container.numberOfBreeders), 25, 95, 176, 95);
+            drawTexture(matrix, i+25, j+15 + (20 * this.container.numberOfBreeders), 25, 95, 176, 95);
 
             int t = i + this.xSize - 24;
-            this.minecraft.getTextureManager().bindTexture(TABS_BG);
-            blit(matrix, t -1, j + 12, 0,0, 25, 68, 128, 128);
+            this.client.getTextureManager().bindTexture(TABS_BG);
+            drawTexture(matrix, t -1, j + 12, 0,0, 25, 68, 128, 128);
         }
     }
 
     @Override
-    protected void drawGuiContainerForegroundLayer(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
+    protected void drawForeground(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
         for (Widget widget : this.buttons) {
             if (widget.isHovered()) {
                 widget.renderToolTip(matrix, mouseX - this.guiLeft, mouseY - this.guiTop);

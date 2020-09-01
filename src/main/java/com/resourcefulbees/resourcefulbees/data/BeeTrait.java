@@ -132,7 +132,7 @@ public class BeeTrait {
         public BeeTrait.Builder addPotionImmunities(List<Effect> effectList) {
             ListNBT potionEffects = new ListNBT();
             for (Effect effect : effectList) {
-                potionEffects.add(StringNBT.valueOf(Objects.requireNonNull(effect.getRegistryName()).toString()));
+                potionEffects.add(StringNBT.of(Objects.requireNonNull(effect.getRegistryName()).toString()));
             }
             traitData.put(POTION_IMMUNITIES, potionEffects);
             return this;
@@ -143,7 +143,7 @@ public class BeeTrait {
             ListNBT immunityList = new ListNBT();
             for (DamageSource damageSource : sources) {
                 DAMAGE_SOURCE_MAP.put(damageSource.getDamageType(), damageSource);
-                immunityList.add(StringNBT.valueOf(damageSource.getDamageType()));
+                immunityList.add(StringNBT.of(damageSource.getDamageType()));
             }
             traitData.put(DAMAGE_IMMUNITIES, immunityList);
             return this;
@@ -164,7 +164,7 @@ public class BeeTrait {
         public BeeTrait.Builder addSpecialAbilities(List<String> abilities){
             ListNBT abilityList = new ListNBT();
             for (String ability : abilities) {
-                abilityList.add(StringNBT.valueOf(ability));
+                abilityList.add(StringNBT.of(ability));
             }
             traitData.put(ABILITY_TYPES, abilityList);
             return this;

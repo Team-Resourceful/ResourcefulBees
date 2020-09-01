@@ -35,9 +35,9 @@ public class HoneycombTileEntity extends TileEntity {
     }
 
     @Override
-    public void read(@Nonnull BlockState state, @Nonnull CompoundNBT compound) {
+    public void deserializeNBT(@Nonnull BlockState state, @Nonnull CompoundNBT compound) {
         this.loadFromNBT(compound);
-        super.read(state, compound);
+        super.deserializeNBT(state, compound);
     }
 
     @Nonnull
@@ -74,6 +74,6 @@ public class HoneycombTileEntity extends TileEntity {
 
     @Override
     public void handleUpdateTag(@Nonnull BlockState state, CompoundNBT tag) {
-        this.read(state, tag);
+        this.deserializeNBT(state, tag);
     }
 }

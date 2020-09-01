@@ -35,9 +35,9 @@ public class BeeBreedGoal extends BreedGoal {
         if (!this.animal.isInLove()) {
             return false;
         } else {
-            this.targetMate = this.getNearbyMate();
-            if (targetMate instanceof CustomBeeEntity){
-                CustomBeeEntity parent1 = ((CustomBeeEntity) targetMate);
+            this.field_75391_e = this.getNearbyMate();
+            if (field_75391_e instanceof CustomBeeEntity){
+                CustomBeeEntity parent1 = ((CustomBeeEntity) field_75391_e);
                 CustomBeeEntity parent2 = ((CustomBeeEntity) animal);
                 return BeeInfo.canParentsBreed(parent1.getBeeType(), parent2.getBeeType());
             }
@@ -50,11 +50,11 @@ public class BeeBreedGoal extends BreedGoal {
     protected void spawnBaby() {
         AgeableEntity ageableentity;
         CustomBeeEntity bee = (CustomBeeEntity)this.animal;
-        String parent1 = getBeeType(this.targetMate);
+        String parent1 = getBeeType(this.field_75391_e);
         String parent2 = getBeeType(this.animal);
         ageableentity = bee.createSelectedChild(BeeInfo.getWeightedChild(parent1, parent2));
 
-        final BabyEntitySpawnEvent event = new BabyEntitySpawnEvent(animal, targetMate, ageableentity);
+        final BabyEntitySpawnEvent event = new BabyEntitySpawnEvent(animal, field_75391_e, ageableentity);
         final boolean cancelled = MinecraftForge.EVENT_BUS.post(event);
         ageableentity = event.getChild();
         if (cancelled) {
@@ -63,22 +63,22 @@ public class BeeBreedGoal extends BreedGoal {
         }
         if (ageableentity != null) {
             ServerPlayerEntity serverplayerentity = this.animal.getLoveCause();
-            if (serverplayerentity == null && this.targetMate.getLoveCause() != null) {
-                serverplayerentity = this.targetMate.getLoveCause();
+            if (serverplayerentity == null && this.field_75391_e.getLoveCause() != null) {
+                serverplayerentity = this.field_75391_e.getLoveCause();
             }
 
             if (serverplayerentity != null) {
                 serverplayerentity.addStat(Stats.ANIMALS_BRED);
-                CriteriaTriggers.BRED_ANIMALS.trigger(serverplayerentity, this.animal, this.targetMate, ageableentity);
+                CriteriaTriggers.BRED_ANIMALS.trigger(serverplayerentity, this.animal, this.field_75391_e, ageableentity);
             }
 
             resetBreed();
             ageableentity.setGrowingAge(-24000);
-            ageableentity.setLocationAndAngles(this.animal.getPosX(), this.animal.getPosY(), this.animal.getPosZ(), 0.0F, 0.0F);
+            ageableentity.setLocationAndAngles(this.animal.getX(), this.animal.getY(), this.animal.getZ(), 0.0F, 0.0F);
             this.world.addEntity(ageableentity);
             this.world.setEntityState(this.animal, (byte)18);
             if (this.world.getGameRules().getBoolean(GameRules.DO_MOB_LOOT)) {
-                this.world.addEntity(new ExperienceOrbEntity(this.world, this.animal.getPosX(), this.animal.getPosY(), this.animal.getPosZ(), this.animal.getRNG().nextInt(7) + 1));
+                this.world.addEntity(new ExperienceOrbEntity(this.world, this.animal.getX(), this.animal.getY(), this.animal.getZ(), this.animal.getRNG().nextInt(7) + 1));
             }
 
         }
@@ -86,8 +86,8 @@ public class BeeBreedGoal extends BreedGoal {
 
     private void resetBreed() {
         this.animal.setGrowingAge(6000);
-        this.targetMate.setGrowingAge(6000);
+        this.field_75391_e.setGrowingAge(6000);
         this.animal.resetInLove();
-        this.targetMate.resetInLove();
+        this.field_75391_e.resetInLove();
     }
 }

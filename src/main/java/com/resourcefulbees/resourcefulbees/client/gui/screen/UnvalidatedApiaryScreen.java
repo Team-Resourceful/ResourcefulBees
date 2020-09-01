@@ -117,7 +117,7 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
         this.rightButton.active = horizontalOffset != 2;
         this.renderBackground(matrix);
         super.render(matrix, mouseX, mouseY, partialTicks);
-        this.func_230459_a_(matrix, mouseX, mouseY);
+        this.drawMouseoverTooltip(matrix, mouseX, mouseY);
     }
 
     private void validate() {
@@ -128,23 +128,23 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(@Nonnull MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
-        Minecraft client = this.minecraft;
+    protected void drawBackground(@Nonnull MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
+        Minecraft client = this.client;
         if (client != null) {
-            this.minecraft.getTextureManager().bindTexture(unvalidatedTexture);
+            this.client.getTextureManager().bindTexture(unvalidatedTexture);
             int i = (this.width - this.xSize) / 2;
             int j = (this.height - this.ySize) / 2;
-            this.blit(matrix, i, j, 0, 0, this.xSize, this.ySize);
+            this.drawTexture(matrix, i, j, 0, 0, this.xSize, this.ySize);
         }
     }
 
     @Override
-    protected void drawGuiContainerForegroundLayer(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
-        this.font.drawString(matrix,  "Offset", 65, 13, 0x404040);
-        this.font.drawString(matrix, "Vert.", 75, 26, 0x404040);
-        this.font.drawString(matrix, "Horiz.", 75, 39, 0x404040);
-        this.drawRightAlignedString(matrix, font, String.valueOf(verticalOffset), 70, 26, 0x404040);
-        this.drawRightAlignedString(matrix, font, String.valueOf(horizontalOffset), 70, 39, 0x404040);
+    protected void drawForeground(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
+        this.textRenderer.draw(matrix,  "Offset", 65, 13, 0x404040);
+        this.textRenderer.draw(matrix, "Vert.", 75, 26, 0x404040);
+        this.textRenderer.draw(matrix, "Horiz.", 75, 39, 0x404040);
+        this.drawRightAlignedString(matrix, textRenderer, String.valueOf(verticalOffset), 70, 26, 0x404040);
+        this.drawRightAlignedString(matrix, textRenderer, String.valueOf(horizontalOffset), 70, 39, 0x404040);
 
         for (Widget widget : this.buttons) {
             if (widget.isHovered()) {
@@ -156,7 +156,7 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
 
 
     public void drawRightAlignedString(@Nonnull MatrixStack matrix, FontRenderer fontRenderer, @Nonnull String s, int posX, int posY, int color) {
-        fontRenderer.drawString(matrix, s, (float) (posX - fontRenderer.getStringWidth(s)), (float) posY, color);
+        fontRenderer.draw(matrix, s, (float) (posX - fontRenderer.getStringWidth(s)), (float) posY, color);
     }
 
     private enum Direction {
@@ -217,7 +217,7 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
                     i += this.yDiffText;
                 }
             }
-            blit(matrix, this.x, this.y, (float) j, (float) i, this.width, this.height, 64, 64);
+            drawTexture(matrix, this.x, this.y, (float) j, (float) i, this.width, this.height, 64, 64);
             RenderSystem.enableDepthTest();
         }
 

@@ -20,7 +20,6 @@ import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
-import net.minecraft.world.gen.feature.structure.StructureManager;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -39,7 +38,7 @@ public class BeeNestFeature extends Feature<NoFeatureConfig> {
     }
 
     @Override
-    public boolean func_230362_a_(@Nonnull ISeedReader worldIn, @Nonnull StructureManager manager, @Nonnull ChunkGenerator generator, @Nonnull Random rand, @Nonnull BlockPos pos, @Nonnull NoFeatureConfig config) {
+    public boolean generate(@Nonnull ISeedReader worldIn, @Nonnull ChunkGenerator generator, @Nonnull Random rand, @Nonnull BlockPos pos, @Nonnull NoFeatureConfig config) {
         Biome biome = worldIn.getBiome(pos);
         Biome.Category category = biome.getCategory();
 

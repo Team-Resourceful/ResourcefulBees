@@ -267,9 +267,9 @@ public class CentrifugeControllerTileEntity extends TileEntity implements ITicka
     }
 
     @Override
-    public void read(@Nonnull BlockState state, @Nonnull CompoundNBT tag) {
+    public void deserializeNBT(@Nonnull BlockState state, @Nonnull CompoundNBT tag) {
         this.loadFromNBT(tag);
-        super.read(state, tag);
+        super.deserializeNBT(state, tag);
     }
 
     @Nonnull
@@ -282,7 +282,7 @@ public class CentrifugeControllerTileEntity extends TileEntity implements ITicka
 
     @Override
     public void handleUpdateTag(@Nonnull BlockState state, CompoundNBT tag) {
-        this.read(state, tag);
+        this.deserializeNBT(state, tag);
     }
     //endregion
 
@@ -360,7 +360,7 @@ public class CentrifugeControllerTileEntity extends TileEntity implements ITicka
     }
 
     public void setCasingsToNotLinked(MutableBoundingBox box){
-        BlockPos.getAllInBox(box).forEach((pos -> {
+        BlockPos.stream(box).forEach((pos -> {
             if (world !=null) {
                 Block block = world.getBlockState(pos).getBlock();
                 if (block instanceof CentrifugeCasingBlock) {
@@ -376,7 +376,7 @@ public class CentrifugeControllerTileEntity extends TileEntity implements ITicka
     public void buildStructureList(){
         MutableBoundingBox box = buildStructureBounds();
         STRUCTURE_BLOCKS.clear();
-        BlockPos.getAllInBox(box).forEach((pos -> {
+        BlockPos.stream(box).forEach((pos -> {
             if (world !=null) {
                 Block block = world.getBlockState(pos).getBlock();
                 if (block instanceof CentrifugeCasingBlock) {

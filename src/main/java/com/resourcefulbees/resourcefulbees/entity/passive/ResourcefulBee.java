@@ -98,10 +98,10 @@ public class ResourcefulBee extends CustomBeeEntity {
         this.goalSelector.addGoal(4, this.pollinateGoal);
         this.goalSelector.addGoal(5, new FollowParentGoal(this, 1.25D));
         this.goalSelector.addGoal(5, new ResourcefulBee.UpdateBeehiveGoal2());
-        this.findBeehiveGoal = new ResourcefulBee.FindBeehiveGoal2();
-        this.goalSelector.addGoal(5, this.findBeehiveGoal);
-        this.findFlowerGoal = new BeeEntity.FindFlowerGoal();
-        this.goalSelector.addGoal(6, this.findFlowerGoal);
+        this.moveToHiveGoal = new ResourcefulBee.FindBeehiveGoal2();
+        this.goalSelector.addGoal(5, this.moveToHiveGoal);
+        this.moveToFlowerGoal = new BeeEntity.FindFlowerGoal();
+        this.goalSelector.addGoal(6, this.moveToFlowerGoal);
         this.goalSelector.addGoal(7, new ResourcefulBee.FindPollinationTargetGoal2());
         this.goalSelector.addGoal(8, new BeeEntity.WanderGoal());
         this.goalSelector.addGoal(9, new SwimGoal(this));
@@ -153,7 +153,7 @@ public class ResourcefulBee extends CustomBeeEntity {
     public void applyPollinationEffect() {
         if (rand.nextInt(1) == 0) {
             for (int i = 1; i <= 2; ++i) {
-                BlockPos beePosDown = this.getPosition().down(i);
+                BlockPos beePosDown = this.getBlockPos().down(i);
                 BlockState state = world.getBlockState(beePosDown);
                 Block block = state.getBlock();
                 if (validFillerBlock(block)) {
@@ -233,9 +233,9 @@ public class ResourcefulBee extends CustomBeeEntity {
 
     protected void teleportRandomly() {
         if (!this.world.isRemote() && this.isAlive()) {
-            double d0 = this.getPosX() + (this.rand.nextDouble() - 0.5D) * 4.0D;
-            double d1 = this.getPosY() + (double) (this.rand.nextInt(4) - 2);
-            double d2 = this.getPosZ() + (this.rand.nextDouble() - 0.5D) * 4.0D;
+            double d0 = this.getX() + (this.rand.nextDouble() - 0.5D) * 4.0D;
+            double d1 = this.getY() + (double) (this.rand.nextInt(4) - 2);
+            double d2 = this.getZ() + (this.rand.nextDouble() - 0.5D) * 4.0D;
             this.teleportTo(d0, d1, d2);
         }
     }
@@ -263,11 +263,11 @@ public class ResourcefulBee extends CustomBeeEntity {
 
     @Override
     public boolean attackEntityAsMob(@Nonnull Entity entityIn) {
-        boolean flag = entityIn.attackEntityFrom(DamageSource.causeBeeStingDamage(this), getBeeInfo().getAttackDamage());
+        boolean flag = entityIn.attackEntityFrom(DamageSource.sting(this), getBeeInfo().getAttackDamage());
         if (flag) {
             this.applyEnchantments(this, entityIn);
             if (entityIn instanceof LivingEntity) {
-                ((LivingEntity) entityIn).setBeeStingCount(((LivingEntity) entityIn).getBeeStingCount() + 1);
+                ((LivingEntity) entityIn).setStingerCount(((LivingEntity) entityIn).getStingerCount() + 1);
                 int i = 0;
                 if (this.world.getDifficulty() == Difficulty.EASY) {
                     i = 5;
@@ -313,7 +313,7 @@ public class ResourcefulBee extends CustomBeeEntity {
         if (!this.world.isRemote) {
             Explosion.Mode explosion$mode = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this) ? Explosion.Mode.BREAK : Explosion.Mode.NONE;
             this.dead = true;
-            this.world.createExplosion(this, this.getPosX(), this.getPosY(), this.getPosZ(), rand.nextFloat() * radius, explosion$mode);
+            this.world.createExplosion(this, this.getX(), this.getY(), this.getZ(), rand.nextFloat() * radius, explosion$mode);
             this.remove();
             this.spawnLingeringCloud();
         }
@@ -322,7 +322,7 @@ public class ResourcefulBee extends CustomBeeEntity {
     private void spawnLingeringCloud() {
         Collection<EffectInstance> collection = this.getActivePotionEffects();
         if (!collection.isEmpty()) {
-            AreaEffectCloudEntity areaeffectcloudentity = new AreaEffectCloudEntity(this.world, this.getPosX(), this.getPosY(), this.getPosZ());
+            AreaEffectCloudEntity areaeffectcloudentity = new AreaEffectCloudEntity(this.world, this.getX(), this.getY(), this.getZ());
             areaeffectcloudentity.setRadius(2.5F);
             areaeffectcloudentity.setRadiusOnUse(-0.5F);
             areaeffectcloudentity.setWaitTime(10);
@@ -393,7 +393,7 @@ public class ResourcefulBee extends CustomBeeEntity {
 
         @Nonnull
         public List<BlockPos> getNearbyFreeHives() {
-            BlockPos blockpos = ResourcefulBee.this.getPosition();
+            BlockPos blockpos = ResourcefulBee.this.getBlockPos();
             PointOfInterestManager pointofinterestmanager = ((ServerWorld) world).getPointOfInterestManager();
             Stream<PointOfInterest> stream = pointofinterestmanager.func_219146_b(pointOfInterestType ->
                             pointOfInterestType == RegistryHandler.TIERED_BEEHIVE_POI.get(), blockpos,

@@ -117,7 +117,7 @@ public class FluidToBlock implements IRecipeCategory<FluidToBlock.Recipe> {
         if (recipe.isAcceptsAny()) {
             if (MutationTypes.FLUID_TO_BLOCK.equals(recipe.mutationType)) {
                 List<FluidStack> fluids = new ArrayList<>();
-                for (Fluid element: recipe.tag.getAllElements() ) {
+                for (Fluid element: recipe.tag.values() ) {
                     FluidStack fluid = new FluidStack(element, 1000);
                     fluids.add(fluid);
                 }

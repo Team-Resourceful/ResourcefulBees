@@ -117,9 +117,9 @@ public class CentrifugeRecipeCategory implements IRecipeCategory<CentrifugeRecip
 
     Minecraft minecraft = Minecraft.getInstance();
     FontRenderer fontRenderer = minecraft.fontRenderer;
-    if (beeOutput < 1.0) fontRenderer.drawString(matrix, beeOutputString, 80, 10, 0xff808080);
-    if (honeyBottle < 1.0) fontRenderer.drawString(matrix, honeyBottleString, 80, 50, 0xff808080);
-    if (beeswax < 1.0) fontRenderer.drawString(matrix, beeswaxString, 80, 30, 0xff808080);
+    if (beeOutput < 1.0) fontRenderer.draw(matrix, beeOutputString, 80, 10, 0xff808080);
+    if (honeyBottle < 1.0) fontRenderer.draw(matrix, honeyBottleString, 80, 50, 0xff808080);
+    if (beeswax < 1.0) fontRenderer.draw(matrix, beeswaxString, 80, 30, 0xff808080);
     if (recipe.multiblock){
       multiblock.draw(matrix,  10, 45);
     }

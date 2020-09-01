@@ -164,7 +164,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
             nbt.remove("Passengers");
             nbt.remove("Leash");
             nbt.remove("UUID");
-            Entity entity = EntityType.loadEntityAndExecute(nbt, this.world, entity1 -> entity1);
+            Entity entity = EntityType.func_220335_a(nbt, this.world, entity1 -> entity1);
             if (entity != null) {
                 float f = entity.getWidth();
                 double d0 = 0.55D + f / 2.0F;
@@ -185,7 +185,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
                         }
                     }
 
-                    beeEntity.resetTicksWithoutNectar();
+                    beeEntity.resetPollinationTicks();
 
                     if (exportBee) {
                         export(beeEntity);
@@ -334,8 +334,8 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     }
 
     @Override
-    public void read(@Nonnull BlockState state, @Nonnull CompoundNBT nbt) {
-        super.read(state, nbt);
+    public void deserializeNBT(@Nonnull BlockState state, @Nonnull CompoundNBT nbt) {
+        super.deserializeNBT(state, nbt);
         this.loadFromNBT(nbt);
     }
 
@@ -409,7 +409,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
 
     @Override
     public void handleUpdateTag(@Nonnull BlockState state, CompoundNBT tag) {
-        this.read(state, tag);
+        this.deserializeNBT(state, tag);
     }
 
     @Nullable
@@ -564,7 +564,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
         if (this.world != null) {
             MutableBoundingBox box = buildStructureBounds(this.horizontalOffset, this.verticalOffset);
             STRUCTURE_BLOCKS.clear();
-            BlockPos.getAllInBox(box).forEach((blockPos -> {
+            BlockPos.stream(box).forEach((blockPos -> {
                 if (blockPos.getX() == box.minX || blockPos.getX() == box.maxX ||
                         blockPos.getY() == box.minY || blockPos.getY() == box.maxY ||
                         blockPos.getZ() == box.minZ || blockPos.getZ() == box.maxZ) {

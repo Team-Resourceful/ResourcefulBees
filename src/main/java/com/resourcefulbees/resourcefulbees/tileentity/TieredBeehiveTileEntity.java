@@ -71,7 +71,7 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
   }
 
   @Override
-  public boolean func_235651_a_(@Nonnull BlockState state, @Nonnull BeehiveTileEntity.Bee tileBee, @Nullable List<Entity> entities, @Nonnull BeehiveTileEntity.State beehiveState) {
+  public boolean releaseBee(@Nonnull BlockState state, @Nonnull BeehiveTileEntity.Bee tileBee, @Nullable List<Entity> entities, @Nonnull BeehiveTileEntity.State beehiveState) {
     BlockPos blockpos = this.getPos();
     if (shouldStayInHive(beehiveState)) {
       return false;
@@ -85,7 +85,7 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
       if (world != null && !this.world.getBlockState(blockpos1).getCollisionShape(this.world, blockpos1).isEmpty()) {
         return false;
       } else {
-        Entity entity = EntityType.loadEntityAndExecute(nbt, this.world, entity1 -> entity1);
+        Entity entity = EntityType.func_220335_a(nbt, this.world, entity1 -> entity1);
         if (entity != null) {
           float f = entity.getWidth();
           double d0 = 0.55D + f / 2.0F;
@@ -115,7 +115,7 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
               }
             }
 
-            beeEntity.resetTicksWithoutNectar();
+            beeEntity.resetPollinationTicks();
             if (entities != null) {
               entities.add(beeEntity);
             }
@@ -156,7 +156,7 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
   @Override
   public boolean isSmoked() {
 	if (world != null)
-    return isSmoked || CampfireBlock.isSmokingBlockAt(this.world, this.getPos());
+    return isSmoked || CampfireBlock.isLitCampfireInRange(this.world, this.getPos());
 	return false;
   }
   
@@ -175,7 +175,7 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
   
   public boolean shouldStayInHive(State beehiveState){
     if (world != null)
-    return (this.world.isNightTime() || this.world.isRaining()) && beehiveState != BeehiveTileEntity.State.EMERGENCY;
+    return (this.world.isNight() || this.world.isRaining()) && beehiveState != BeehiveTileEntity.State.EMERGENCY;
     return  false;
   }
 
@@ -202,8 +202,8 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
   }
 
   @Override
-  public void read(@Nonnull BlockState state, @Nonnull CompoundNBT nbt) {
-    super.read(state, nbt);
+  public void deserializeNBT(@Nonnull BlockState state, @Nonnull CompoundNBT nbt) {
+    super.deserializeNBT(state, nbt);
     if (nbt.contains(NBTConstants.NBT_HONEYCOMBS_TE)){
       CompoundNBT combs = (CompoundNBT) nbt.get(NBTConstants.NBT_HONEYCOMBS_TE);
       int i = 0;

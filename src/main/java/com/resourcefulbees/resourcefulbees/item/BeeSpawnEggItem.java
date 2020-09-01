@@ -17,6 +17,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.fml.RegistryObject;
 
@@ -85,7 +86,7 @@ public class BeeSpawnEggItem extends SpawnEggItem {
                     }
 
                     EntityType<?> entitytype = this.getType(itemstack.getTag());
-                    if (entitytype.spawn(world, itemstack, context.getPlayer(), blockpos1, SpawnReason.SPAWN_EGG, true, !Objects.equals(blockpos, blockpos1) && direction == Direction.UP) != null) {
+                    if (entitytype.spawn((ServerWorld) world, itemstack, context.getPlayer(), blockpos1, SpawnReason.SPAWN_EGG, true, !Objects.equals(blockpos, blockpos1) && direction == Direction.UP) != null) {
                         itemstack.shrink(1);
                     }
 
@@ -98,7 +99,7 @@ public class BeeSpawnEggItem extends SpawnEggItem {
 
     @Nonnull
     @Override
-    public Optional<MobEntity> func_234809_a_(@Nonnull PlayerEntity playerEntity, @Nonnull MobEntity mobEntity, @Nonnull EntityType<? extends MobEntity> entityType, @Nonnull World world, @Nonnull Vector3d vector3d, @Nonnull ItemStack stack) {
+    public Optional<MobEntity> spawnBaby(@Nonnull PlayerEntity playerEntity, @Nonnull MobEntity mobEntity, @Nonnull EntityType<? extends MobEntity> entityType, @Nonnull ServerWorld world, @Nonnull Vector3d vector3d, @Nonnull ItemStack stack) {
         return Optional.empty();
     }
 }

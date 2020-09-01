@@ -312,9 +312,11 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
         this.totalTime = MathUtils.clamp(totalTime, 300, 4800);
     }
 
+
+
     @Override
-    public void read(@Nonnull BlockState state, @Nonnull CompoundNBT nbt) {
-        super.read(state, nbt);
+    public void deserializeNBT(@Nonnull BlockState state, @Nonnull CompoundNBT nbt) {
+        super.deserializeNBT(state, nbt);
         this.loadFromNBT(nbt);
     }
 
@@ -359,7 +361,7 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
 
     @Override
     public void handleUpdateTag(@Nonnull BlockState state, CompoundNBT tag) {
-        this.read(state, tag);
+        this.deserializeNBT(state, tag);
     }
 
     @Nullable

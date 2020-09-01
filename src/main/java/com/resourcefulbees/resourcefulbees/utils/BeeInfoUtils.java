@@ -16,7 +16,6 @@ import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -65,7 +64,8 @@ public class BeeInfoUtils {
         Set<Biome> biomeSet = new HashSet<>();
 
         for(String type : biomeList){
-            biomeSet.addAll(BiomeDictionary.getBiomes(BiomeDictionary.Type.getType(type)));
+            //TODO Fix when forge updates biome stuff
+            //biomeSet.addAll(BiomeDictionary.getBiomes(BiomeDictionary.Type.getType(type)));
         }
         return biomeSet;
     }
@@ -132,7 +132,7 @@ public class BeeInfoUtils {
 
     public static ITag<Item> getItemTag(String itemTag) { return ItemTags.getCollection().get(getResource(itemTag));}
 
-    public static ITag<Fluid> getFluidTag(String fluidTag) { return FluidTags.getCollection().get(getResource(fluidTag));}
+    public static ITag<Fluid> getFluidTag(String fluidTag) { return FluidTags.func_226157_a_().get(getResource(fluidTag));}
 
     public static ITag<Block> getBlockTag(String blockTag) { return BlockTags.getCollection().get(getResource(blockTag));}
 

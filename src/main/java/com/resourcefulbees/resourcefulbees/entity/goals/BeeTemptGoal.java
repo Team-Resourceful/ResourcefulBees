@@ -93,9 +93,9 @@ public class BeeTemptGoal extends Goal {
                     return false;
                 }
             } else {
-                this.targetX = this.closestPlayer.getPosX();
-                this.targetY = this.closestPlayer.getPosY();
-                this.targetZ = this.closestPlayer.getPosZ();
+                this.targetX = this.closestPlayer.getX();
+                this.targetY = this.closestPlayer.getY();
+                this.targetZ = this.closestPlayer.getZ();
             }
 
 
@@ -114,9 +114,9 @@ public class BeeTemptGoal extends Goal {
      * Execute a one shot task or start executing a continuous task
      */
     public void startExecuting() {
-        this.targetX = this.closestPlayer.getPosX();
-        this.targetY = this.closestPlayer.getPosY();
-        this.targetZ = this.closestPlayer.getPosZ();
+        this.targetX = this.closestPlayer.getX();
+        this.targetY = this.closestPlayer.getY();
+        this.targetZ = this.closestPlayer.getZ();
         this.isRunning = true;
     }
 

@@ -187,13 +187,13 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
     }
 
     @Override
-    public void read(@Nonnull BlockState state, CompoundNBT tag) {
+    public void deserializeNBT(@Nonnull BlockState state, CompoundNBT tag) {
         CompoundNBT invTag = tag.getCompound("inv");
         h.deserializeNBT(invTag);
         time = tag.getInt("time");
         totalTime = tag.getInt("totalTime");
         energyStorage.deserializeNBT(tag.getCompound("energy"));
-        super.read(state, tag);
+        super.deserializeNBT(state, tag);
     }
 
     @Nonnull
@@ -206,7 +206,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
 
     @Override
     public void handleUpdateTag(@Nonnull BlockState state, CompoundNBT tag) {
-        this.read(state, tag);
+        this.deserializeNBT(state, tag);
     }
 
     @Nonnull

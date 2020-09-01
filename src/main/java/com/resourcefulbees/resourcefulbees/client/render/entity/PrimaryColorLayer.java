@@ -30,11 +30,11 @@ public class PrimaryColorLayer extends LayerRenderer<CustomBeeEntity, CustomBeeM
             if (bee.isRainbowBee() && !bee.isGlowing()) {
                 float[] primaryColor = RainbowColor.getColorFloats();
                 ResourceLocation location = new ResourceLocation(ResourcefulBees.MOD_ID, BeeConstants.ENTITY_TEXTURES_DIR + bee.getPrimaryLayerTexture() + ".png");
-                renderCutoutModel(this.getEntityModel(), location, matrixStackIn, bufferIn, packedLightIn, entitylivingbaseIn, primaryColor[0], primaryColor[1], primaryColor[2]);
+                renderModel(this.getEntityModel(), location, matrixStackIn, bufferIn, packedLightIn, entitylivingbaseIn, primaryColor[0], primaryColor[1], primaryColor[2]);
             } else if (bee.getPrimaryColor() != null && !bee.getPrimaryColor().isEmpty()) {
                 float[] primaryColor = BeeInfo.getColorFloats(bee.getPrimaryColor());
                 ResourceLocation location = new ResourceLocation(ResourcefulBees.MOD_ID, BeeConstants.ENTITY_TEXTURES_DIR + bee.getPrimaryLayerTexture() + ".png");
-                renderCutoutModel(this.getEntityModel(), location, matrixStackIn, bufferIn, packedLightIn, entitylivingbaseIn, primaryColor[0], primaryColor[1], primaryColor[2]);
+                renderModel(this.getEntityModel(), location, matrixStackIn, bufferIn, packedLightIn, entitylivingbaseIn, primaryColor[0], primaryColor[1], primaryColor[2]);
             }
         }
     }

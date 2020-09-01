@@ -25,7 +25,7 @@ public class ApiaryStorageBlock extends Block {
     }
 
     @Nonnull
-    public ActionResultType onBlockActivated(@Nonnull BlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand handIn, @Nonnull BlockRayTraceResult hit) {
+    public ActionResultType onUse(@Nonnull BlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand handIn, @Nonnull BlockRayTraceResult hit) {
         if (!world.isRemote) {
             INamedContainerProvider blockEntity = state.getContainer(world,pos);
             if (blockEntity != null) {

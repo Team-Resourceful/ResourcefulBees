@@ -69,7 +69,7 @@ public class TopCompat implements Function<ITheOneProbe, Void>
                     TieredBeehiveTileEntity tieredBeehiveTileEntity = (TieredBeehiveTileEntity) world.getTileEntity(data.getPos());
                     if (tieredBeehiveTileEntity != null && tieredBeehiveTileEntity.hasCombs()) {
                         int honeyLevel = 0;
-                        if (tieredBeehiveTileEntity.getBlockState().hasProperty(TieredBeehiveBlock.HONEY_LEVEL))
+                        if (tieredBeehiveTileEntity.getBlockState().contains(TieredBeehiveBlock.HONEY_LEVEL))
                             honeyLevel = tieredBeehiveTileEntity.getBlockState().get(TieredBeehiveBlock.HONEY_LEVEL);
                         IProbeInfo vertical;
                         IProbeInfo horizontal;

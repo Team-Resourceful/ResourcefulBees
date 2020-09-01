@@ -83,7 +83,7 @@ public class TieredBeehiveBlock extends BeehiveBlock {
   }
 
   @Nonnull
-  public ActionResultType onBlockActivated(BlockState state, @Nonnull World world, @Nonnull BlockPos pos, PlayerEntity player, @Nonnull Hand handIn, @Nonnull BlockRayTraceResult hit) {
+  public ActionResultType onUse(BlockState state, @Nonnull World world, @Nonnull BlockPos pos, PlayerEntity player, @Nonnull Hand handIn, @Nonnull BlockRayTraceResult hit) {
     ItemStack itemstack = player.getHeldItem(handIn);
     int honeyLevel = state.get(HONEY_LEVEL);
     boolean angerBees = false;
@@ -92,13 +92,13 @@ public class TieredBeehiveBlock extends BeehiveBlock {
     }
    	else if (honeyLevel >= 5) {
       if (Config.ALLOW_SHEARS.get() && itemstack.getItem().isIn(BeeInfoUtils.getItemTag("forge:shears"))) {
-        world.playSound(player, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.BLOCK_BEEHIVE_SHEAR, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+        world.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BLOCK_BEEHIVE_SHEAR, SoundCategory.NEUTRAL, 1.0F, 1.0F);
         dropResourceHoneycomb(world, pos);
         itemstack.damageItem(1, player, player1 -> player1.sendBreakAnimation(handIn));
         angerBees = true;
       }
       if (itemstack.getItem().equals(RegistryHandler.SCRAPER.get())){
-        world.playSound(player, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.BLOCK_BEEHIVE_SHEAR, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+        world.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BLOCK_BEEHIVE_SHEAR, SoundCategory.NEUTRAL, 1.0F, 1.0F);
         dropFirstResourceHoneyComb(world, pos);
         itemstack.damageItem(1, player, player1 -> player1.sendBreakAnimation(handIn));
         TieredBeehiveTileEntity hive = (TieredBeehiveTileEntity)world.getTileEntity(pos);
@@ -109,7 +109,7 @@ public class TieredBeehiveBlock extends BeehiveBlock {
     }
 
     if (angerBees) {
-    	if (isHiveSmoked(pos,world) || CampfireBlock.isSmokingBlockAt(world, pos)) {
+    	if (isHiveSmoked(pos,world) || CampfireBlock.isLitCampfireInRange(world, pos)) {
             this.takeHoney(world, state, pos);
     	}
     	else {

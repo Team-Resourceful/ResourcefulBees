@@ -35,7 +35,7 @@ public class TabImageButton extends ImageButton {
         } else if (this.isHovered()) {
             i += this.yDiffText;
         }
-        blit(matrix, this.x, this.y, (float) this.xTexStart, (float) i, this.width, this.height, 128, 128);
+        drawTexture(matrix, this.x, this.y, (float) this.xTexStart, (float) i, this.width, this.height, 128, 128);
         RenderSystem.enableDepthTest();
     }
 }

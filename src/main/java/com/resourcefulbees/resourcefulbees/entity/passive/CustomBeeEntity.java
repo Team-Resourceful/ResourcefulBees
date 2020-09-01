@@ -33,7 +33,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.DimensionType;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -58,7 +58,7 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
     //region BEE INFO RELATED METHODS BELOW
 
     public void setBeeType(boolean fromBiome){
-        Biome curBiome = this.world.getBiome(this.getPosition());
+        Biome curBiome = this.world.getBiome(this.getBlockPos());
         String bee = fromBiome ? BeeInfo.getRandomBee(curBiome) : BeeInfo.getRandomBee();
         this.dataManager.set(BEE_TYPE, bee);
     }
@@ -174,8 +174,8 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
                 for (CompoundNBT trait : info.getBeeTraits()) {
                     if (BeeTrait.hasParticleEffects(trait)) {
                         for (int i = 0; i < 10; ++i) {
-                            this.world.addParticle(BeeTrait.getParticleEffect(trait), this.getPosXRandom(0.5D),
-                                    this.getPosYRandom() - 0.25D, this.getPosZRandom(0.5D),
+                            this.world.addParticle(BeeTrait.getParticleEffect(trait), this.getParticleX(0.5D),
+                                    this.getRandomBodyY() - 0.25D, this.getParticleZ(0.5D),
                                     (this.rand.nextDouble() - 0.5D) * 2.0D, -this.rand.nextDouble(),
                                     (this.rand.nextDouble() - 0.5D) * 2.0D);
                         }
@@ -188,16 +188,18 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
 
     @Nullable
     @Override
-    public ILivingEntityData onInitialSpawn(@Nonnull IWorld worldIn, @Nonnull DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
+    public ILivingEntityData onInitialSpawn(@Nonnull IServerWorld worldIn, @Nonnull DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         setBeeType(reason.equals(SpawnReason.CHUNK_GENERATION) || reason.equals(SpawnReason.NATURAL));
         return super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
     }
 
     @SuppressWarnings("unused")
     public static boolean canBeeSpawn(EntityType<? extends AnimalEntity> typeIn, IWorld worldIn, SpawnReason reason, BlockPos pos, Random randomIn) {
-        return worldIn.getWorld().func_234922_V_().equals(DimensionType.THE_NETHER)
+        return false; //TODO fix when forge updates biome stuff
+
+                /*worldIn.getWorld().func_234922_V_().equals(DimensionType.THE_NETHER)
                 || worldIn.getWorld().func_234922_V_().equals(DimensionType.THE_END)
-                || worldIn.getLight(pos) > 8;
+                || worldIn.getLight(pos) > 8;*/
     }
 
     @Override
@@ -261,13 +263,15 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
         }
     }
 
+
+
     @Nonnull
     @Override
-    public ActionResultType func_230254_b_(PlayerEntity player, @Nonnull Hand hand) {
+    public ActionResultType interactMob(PlayerEntity player, @Nonnull Hand hand) {
         ItemStack itemstack = player.getHeldItem(hand);
         Item item = itemstack.getItem();
         if (item instanceof NameTagItem){
-            super.func_230254_b_(player,hand);
+            super.interactMob(player,hand);
         }
         if (this.isBreedingItem(itemstack)) {
             if (!this.world.isRemote && this.getGrowingAge() == 0 && this.canBreed()) {
@@ -276,7 +280,7 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
                 if (this.getFeedCount() >= this.getBeeInfo().getFeedAmount()) {
                     this.setInLove(player);
                 }
-                player.swing(hand, true);
+                player.swingHand(hand, true);
                 return ActionResultType.PASS;
             }
 

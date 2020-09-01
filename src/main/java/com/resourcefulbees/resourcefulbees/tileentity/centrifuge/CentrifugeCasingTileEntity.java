@@ -57,10 +57,10 @@ public class CentrifugeCasingTileEntity extends TileEntity {
     }
 
     @Override
-    public void read(@Nonnull BlockState state, CompoundNBT tag) {
+    public void deserializeNBT(@Nonnull BlockState state, CompoundNBT tag) {
         if (tag.contains("controllerPos"))
             controllerPos = NBTUtil.readBlockPos(tag.getCompound("controllerPos"));
-        super.read(state, tag);
+        super.deserializeNBT(state, tag);
     }
 
     @Nonnull
@@ -73,6 +73,6 @@ public class CentrifugeCasingTileEntity extends TileEntity {
 
     @Override
     public void handleUpdateTag(@Nonnull BlockState state, CompoundNBT tag) {
-        this.read(state, tag);
+        this.deserializeNBT(state, tag);
     }
 }

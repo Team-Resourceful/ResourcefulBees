@@ -110,9 +110,9 @@ public class ResourcefulBees
         if(event.getType() == RegistryHandler.BEEKEEPER.get()) {
             ItemStack queenBeeBanner = new ItemStack(Items.BLACK_BANNER);
             CompoundNBT compoundnbt = queenBeeBanner.getOrCreateChildTag("BlockEntityTag");
-            ListNBT listnbt = (new BannerPattern.Builder()).setPatternWithColor(BannerPattern.RHOMBUS_MIDDLE, DyeColor.LIGHT_BLUE).setPatternWithColor(BannerPattern.STRIPE_DOWNRIGHT, DyeColor.YELLOW).setPatternWithColor(BannerPattern.STRIPE_DOWNLEFT, DyeColor.YELLOW).setPatternWithColor(BannerPattern.STRIPE_BOTTOM, DyeColor.YELLOW).setPatternWithColor(BannerPattern.TRIANGLE_TOP, DyeColor.YELLOW).setPatternWithColor(BannerPattern.CURLY_BORDER, DyeColor.YELLOW).buildNBT();
+            ListNBT listnbt = (new BannerPattern.Builder()).func_222477_a(BannerPattern.RHOMBUS_MIDDLE, DyeColor.LIGHT_BLUE).func_222477_a(BannerPattern.STRIPE_DOWNRIGHT, DyeColor.YELLOW).func_222477_a(BannerPattern.STRIPE_DOWNLEFT, DyeColor.YELLOW).func_222477_a(BannerPattern.STRIPE_BOTTOM, DyeColor.YELLOW).func_222477_a(BannerPattern.TRIANGLE_TOP, DyeColor.YELLOW).func_222477_a(BannerPattern.CURLY_BORDER, DyeColor.YELLOW).func_222476_a();
             compoundnbt.put("Patterns", listnbt);
-            queenBeeBanner.setDisplayName(new TranslationTextComponent("block.resourcefulbees.queen_bee_banner").mergeStyle(TextFormatting.GOLD));
+            queenBeeBanner.setDisplayName(new TranslationTextComponent("block.resourcefulbees.queen_bee_banner").formatted(TextFormatting.GOLD));
             queenBeeBanner.setCount(1);
 
             level1.add((entity, rand) -> new MerchantOffer(
@@ -177,7 +177,7 @@ public class ResourcefulBees
         RegistryHandler.T4_APIARY_BLOCK.get().getStateContainer().getValidStates().forEach(blockState -> pointOfInterestTypeMap.put(blockState, RegistryHandler.TIERED_BEEHIVE_POI.get()));
         Blocks.BEEHIVE.getStateContainer().getValidStates().forEach(blockState -> pointOfInterestTypeMap.put(blockState, RegistryHandler.TIERED_BEEHIVE_POI.get()));
         Blocks.BEE_NEST.getStateContainer().getValidStates().forEach(blockState -> pointOfInterestTypeMap.put(blockState, RegistryHandler.TIERED_BEEHIVE_POI.get()));
-        PointOfInterestType.POIT_BY_BLOCKSTATE.putAll(pointOfInterestTypeMap);
+        PointOfInterestType.field_221073_u.putAll(pointOfInterestTypeMap);
 
         if (Config.ALLOW_SHEARS.get())
             ModSetup.setupDispenserCollectionBehavior();

@@ -40,7 +40,7 @@ public class CentrifugeBlock extends Block {
 
     @Nonnull
     @Override
-    public ActionResultType onBlockActivated(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult blockRayTraceResult) {
+    public ActionResultType onUse(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult blockRayTraceResult) {
         if (!world.isRemote) {
             INamedContainerProvider blockEntity = state.getContainer(world,pos);
             if (blockEntity != null) {

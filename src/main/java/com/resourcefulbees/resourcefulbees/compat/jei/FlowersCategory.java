@@ -135,7 +135,7 @@ public class FlowersCategory implements IRecipeCategory<FlowersCategory.Recipe> 
                 ingredients.setInputIngredients(list);
             } else if (recipe.recipeType == RecipeTypes.FLUID) {
                 List<FluidStack> fluids = new ArrayList<>();
-                for (Fluid element: recipe.fluidITag.getAllElements() ) {
+                for (Fluid element: recipe.fluidITag.values() ) {
                     FluidStack fluid = new FluidStack(element, 1000);
                     fluids.add(fluid);
                 }
@@ -144,7 +144,7 @@ public class FlowersCategory implements IRecipeCategory<FlowersCategory.Recipe> 
                 ingredients.setInputLists(VanillaTypes.FLUID, fluid_fluids);
             } else if (recipe.recipeType == RecipeTypes.BLOCK) {
                 List<ItemStack> itemStacks = new ArrayList<>();
-                for (Block element: recipe.blockTag.getAllElements() ) {
+                for (Block element: recipe.blockTag.values() ) {
                     ItemStack item = new ItemStack(element.asItem());
                     itemStacks.add(item);
                 }

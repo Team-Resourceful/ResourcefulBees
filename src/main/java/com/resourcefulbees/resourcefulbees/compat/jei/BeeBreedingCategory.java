@@ -145,14 +145,14 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
         }
         if (recipe.p1_feedTag != null) {
             List<ItemStack> stackList = new ArrayList<>();
-            for (Item item : recipe.p1_feedTag.getAllElements()) {
+            for (Item item : recipe.p1_feedTag.values()) {
                 stackList.add(new ItemStack(item, recipe.p1_feedAmount));
             }
             list.add(stackList);
         }
         if (recipe.p2_feedTag != null) {
             List<ItemStack> stackList = new ArrayList<>();
-            for (Item item : recipe.p2_feedTag.getAllElements()) {
+            for (Item item : recipe.p2_feedTag.values()) {
                 stackList.add(new ItemStack(item, recipe.p2_feedAmount));
             }
             list.add(stackList);
@@ -192,7 +192,7 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
         Minecraft minecraft = Minecraft.getInstance();
         FontRenderer fontRenderer = minecraft.fontRenderer;
         DecimalFormat decimalFormat = new DecimalFormat("##%");
-        fontRenderer.drawString(matrix, decimalFormat.format(BeeInfo.getAdjustedWeightForChild(BeeInfo.getInfo(recipe.getChild()))), 90, 35, 0xff808080);
+        fontRenderer.draw(matrix, decimalFormat.format(BeeInfo.getAdjustedWeightForChild(BeeInfo.getInfo(recipe.getChild()))), 90, 35, 0xff808080);
     }
 
     public static class Recipe {

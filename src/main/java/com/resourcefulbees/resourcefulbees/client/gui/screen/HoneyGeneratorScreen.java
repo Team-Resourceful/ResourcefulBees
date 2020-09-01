@@ -20,24 +20,24 @@ public class HoneyGeneratorScreen extends ContainerScreen<HoneyGeneratorContaine
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(@Nonnull MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
+    protected void drawBackground(@Nonnull MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
         ResourceLocation texture = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/gui/generator/honey_gen.png");
-        Minecraft client = this.minecraft;
+        Minecraft client = this.client;
         if (client != null) {
             client.getTextureManager().bindTexture(texture);
             int i = this.guiLeft;
             int j = this.guiTop;
-            this.blit(matrix, i, j, 0, 0, this.xSize, this.ySize);
+            this.drawTexture(matrix, i, j, 0, 0, this.xSize, this.ySize);
             int scaledRF = 62 * this.container.honeyGeneratorTileEntity.energyStorage.getEnergyStored() / Math.max(this.container.honeyGeneratorTileEntity.energyStorage.getMaxEnergyStored(),1);
-            this.blit(matrix, i + 130, j + 12 + (62-scaledRF), 215, (62-scaledRF), 11, scaledRF);
+            this.drawTexture(matrix, i + 130, j + 12 + (62-scaledRF), 215, (62-scaledRF), 11, scaledRF);
             int scaledTank = 62 * this.container.honeyGeneratorTileEntity.fluidTank.getFluidAmount() / Math.max(this.container.honeyGeneratorTileEntity.fluidTank.getCapacity(),1);
-            this.blit(matrix, i + 83, j + 12 + (62-scaledTank), 226, (62-scaledTank), 14, scaledTank);
+            this.drawTexture(matrix, i + 83, j + 12 + (62-scaledTank), 226, (62-scaledTank), 14, scaledTank);
             int scaledProgressX = 21 * this.container.honeyGeneratorTileEntity.time / Math.max(this.container.honeyGeneratorTileEntity.totalTime,1);
             int scaledProgressY = 20 * this.container.honeyGeneratorTileEntity.time / Math.max(this.container.honeyGeneratorTileEntity.totalTime,1);
             int energyScaledProgressX = 21 * this.container.honeyGeneratorTileEntity.energyTime / Math.max(this.container.honeyGeneratorTileEntity.energyTotalTime,1);
-            this.blit(matrix, i + 35, j + 37, 176, 0, 18, scaledProgressY);
-            this.blit(matrix, i + 57, j + 42, 194, 0, scaledProgressX, 10);
-            this.blit(matrix, i + 103, j + 42, 194, 0, energyScaledProgressX, 10);
+            this.drawTexture(matrix, i + 35, j + 37, 176, 0, 18, scaledProgressY);
+            this.drawTexture(matrix, i + 57, j + 42, 194, 0, scaledProgressX, 10);
+            this.drawTexture(matrix, i + 103, j + 42, 194, 0, energyScaledProgressX, 10);
         }
     }
 
@@ -45,7 +45,7 @@ public class HoneyGeneratorScreen extends ContainerScreen<HoneyGeneratorContaine
     public void render(@Nonnull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrix);
         super.render(matrix, mouseX, mouseY, partialTicks);
-        this.func_230459_a_(matrix, mouseX, mouseY);
+        this.drawMouseoverTooltip(matrix, mouseX, mouseY);
         DecimalFormat decimalFormat = new DecimalFormat("##0.0");
         if (mouseX >= this.guiLeft + 83 && mouseX <= this.guiLeft + 97 && mouseY >= this.guiTop + 12 && mouseY <= this.guiTop + 74){
             if (Screen.hasShiftDown() || this.container.honeyGeneratorTileEntity.fluidTank.getFluidAmount() < 500) this.renderTooltip(matrix, new StringTextComponent(this.container.honeyGeneratorTileEntity.fluidTank.getFluidAmount() + " MB"), mouseX, mouseY);
@@ -58,7 +58,7 @@ public class HoneyGeneratorScreen extends ContainerScreen<HoneyGeneratorContaine
     }
 
     @Override
-    protected void drawGuiContainerForegroundLayer(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
-        this.font.drawString(matrix, this.title.getString(), 8, 5, 0x404040);
+    protected void drawForeground(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
+        this.textRenderer.draw(matrix, this.title.getString(), 8, 5, 0x404040);
     }
 }

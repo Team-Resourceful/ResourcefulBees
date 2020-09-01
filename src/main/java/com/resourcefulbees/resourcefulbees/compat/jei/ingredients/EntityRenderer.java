@@ -36,14 +36,14 @@ public class EntityRenderer implements IIngredientRenderer<EntityIngredient> {
                     scaledSize = 20 / bee.getSizeModifierFromInfo(bee.getBeeType());
                 }
                 matrixStack.translate(x, y, 1);
-                matrixStack.rotate(Vector3f.ZP.rotationDegrees(180.0F));
+                matrixStack.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(180.0F));
                 matrixStack.translate(0.0F, -0.2F, 1);
                 matrixStack.scale(-scaledSize, scaledSize, 30);
-                matrixStack.rotate(Vector3f.YP.rotationDegrees(270.0F));
+                matrixStack.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(270.0F));
                 EntityRendererManager entityrenderermanager = mc.getRenderManager();
-                IRenderTypeBuffer.Impl irendertypebuffer$impl = mc.getRenderTypeBuffers().getBufferSource();
-                entityrenderermanager.renderEntityStatic(bee, 0, 0, 0.0D, mc.getRenderPartialTicks(), 1, matrixStack, irendertypebuffer$impl, 15728880);
-                irendertypebuffer$impl.finish();
+                IRenderTypeBuffer.Impl irendertypebuffer$impl = mc.getBufferBuilders().getEntityVertexConsumers();
+                entityrenderermanager.render(bee, 0, 0, 0.0D, mc.getRenderPartialTicks(), 1, matrixStack, irendertypebuffer$impl, 15728880);
+                irendertypebuffer$impl.draw();
             }
             matrixStack.pop();
         }
