@@ -180,7 +180,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
 
                     if (beehiveState == State.HONEY_DELIVERED) {
                         beeEntity.onHoneyDelivered();
-                        if (!exportBee && beeEntity.getBeeInfo().getHoneycombColor() != null && !beeEntity.getBeeInfo().getHoneycombColor().isEmpty() && isValidApiary) {
+                        if (!exportBee && beeEntity.getBeeInfo().ColorData.getHoneycombColor() != null && !beeEntity.getBeeInfo().ColorData.getHoneycombColor().isEmpty() && isValidApiary) {
                             getApiaryStorage().deliverHoneycomb(beeEntity.getBeeType(), getTier());
                         }
                     }
@@ -477,7 +477,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
         CompoundNBT data = new CompoundNBT();
         data.putString(NBTConstants.NBT_ENTITY, "resourcefulbees:bee");
         beeEntity.writeWithoutTypeId(data);
-        String primaryColor = beeEntity.getBeeInfo().getPrimaryColor();
+        String primaryColor = beeEntity.getBeeInfo().ColorData.getPrimaryColor();
         data.putString(NBTConstants.NBT_COLOR, primaryColor != null && !primaryColor.isEmpty() ? primaryColor : String.valueOf(DEFAULT_ITEM_COLOR));
         beeJar.setTag(data);
         this.h.setStackInSlot(EXPORT, beeJar);

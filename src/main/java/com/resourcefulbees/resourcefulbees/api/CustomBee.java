@@ -16,6 +16,7 @@ public class CustomBee {
     private final float attackDamage;
     private final float sizeModifier;
     private final String name;
+    private final String[] traits = {};
     public final MutationData MutationData;
     public final ColorData ColorData;
     public final CentrifugeData CentrifugeData;
@@ -55,17 +56,18 @@ public class CustomBee {
         return attackDamage;
     }
 
-    public float getSizeModifier() {
-        return sizeModifier != 0 ? sizeModifier : Config.BEE_SIZE_MODIFIER.get().floatValue();
-    }
+    public float getSizeModifier() { return sizeModifier != 0 ? sizeModifier : Config.BEE_SIZE_MODIFIER.get().floatValue(); }
 
-    public String getName() {
-        return name;
-    }
+    public String getName() { return name; }
 
-    public List<CompoundNBT> getBeeTraits() {
-        return beeTraits;
-    }
+    public List<CompoundNBT> getBeeTraits() { return beeTraits; }
+
+    /**
+     * This returns the traits array which is only used if a bee
+     * is added via json files.
+     * @return traits array;
+     **/
+    public String[] getBeeTraitArray() { return traits; }
 
     public static class Builder {
         private final String flower;

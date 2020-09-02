@@ -233,8 +233,8 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
                     CompoundNBT nbt = new CompoundNBT();
                     nbt.putString(NBTConstants.NBT_ENTITY, type);
                     childBee.writeWithoutTypeId(nbt);
-                    if (childBee.getBeeInfo().getPrimaryColor() != null && !childBee.getBeeInfo().getPrimaryColor().isEmpty()) {
-                        nbt.putString(NBTConstants.NBT_COLOR, childBee.getBeeInfo().getPrimaryColor());
+                    if (childBee.getBeeInfo().ColorData.getPrimaryColor() != null && !childBee.getBeeInfo().ColorData.getPrimaryColor().isEmpty()) {
+                        nbt.putString(NBTConstants.NBT_COLOR, childBee.getBeeInfo().ColorData.getPrimaryColor());
                     } else {
                         nbt.putString(NBTConstants.NBT_COLOR, String.valueOf(BeeConstants.DEFAULT_ITEM_COLOR));
                     }

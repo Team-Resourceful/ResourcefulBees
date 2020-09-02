@@ -1,18 +1,18 @@
 package com.resourcefulbees.resourcefulbees.config;
 
 import com.resourcefulbees.resourcefulbees.api.CustomBee;
+import com.resourcefulbees.resourcefulbees.api.TraitRegistration;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.MathUtils;
 import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.biome.Biome;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.awt.*;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.List;
 
 public class BeeRegistry {
 
@@ -125,21 +125,20 @@ public class BeeRegistry {
     }
 
 
-/*    *//**
+    /**
      * Sets a bees traits.
      *  @param name Bee Type of the bee having its traits set.
-     *//*
+     **/
     public static void setBeesTraits(String name){
         CustomBee bee = BEE_INFO.get(name);
-        List<CompoundNBT> traits = new ArrayList<>();
-        if (bee.isWitherBee()) traits.add(TraitRegistration.getTrait("wither"));
-        if (bee.isBlazeBee()) traits.add(TraitRegistration.getTrait("blaze"));
-        if (bee.isCanSwim()) traits.add(TraitRegistration.getTrait("canswim"));
-        if (bee.isCreeperBee()) traits.add(TraitRegistration.getTrait("creeper"));
-        if (bee.isZomBee()) traits.add(TraitRegistration.getTrait("zombie"));
-        if (bee.isPigmanBee()) traits.add(TraitRegistration.getTrait("pigman"));
-        if (bee.isEnderBee()) traits.add(TraitRegistration.getTrait("ender"));
-        if (bee.isNetherBee()) traits.add(TraitRegistration.getTrait("nether"));
-        BEE_INFO.get(name).addBeeTraits(traits);
-    }*/
+        if (bee.getBeeTraits().isEmpty()) {
+            List<CompoundNBT> traits = new ArrayList<>();
+            for (String trait : bee.getBeeTraitArray()){
+                CompoundNBT traitNBT = TraitRegistration.getTrait(trait);
+                if (traitNBT != null) traits.add(traitNBT);
+            }
+            //TODO need to add back the addBeeTraits Setter
+            //BEE_INFO.get(name).addBeeTraits(traits);
+        }
+    }
 }

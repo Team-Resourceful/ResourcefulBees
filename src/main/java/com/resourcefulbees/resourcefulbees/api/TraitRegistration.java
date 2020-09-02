@@ -1,5 +1,6 @@
 package com.resourcefulbees.resourcefulbees.api;
 
+import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.config.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.lib.TraitConstants;
 import net.minecraft.nbt.CompoundNBT;
@@ -10,15 +11,22 @@ import java.util.Map;
 public class TraitRegistration {
 
     private static final HashMap<String, CompoundNBT> TRAIT_REGISTRY = new HashMap<>();
+    private static boolean closed = false;
 
     public static void register(String name, CompoundNBT data){
-        if (!TRAIT_REGISTRY.containsKey(name)){
-            TRAIT_REGISTRY.put(name, data);
-        }
+        if (!closed) {
+            if (!TRAIT_REGISTRY.containsKey(name)) {
+                TRAIT_REGISTRY.put(name, data);
+            } else ResourcefulBees.LOGGER.warn("Trait already Registered with that name: {}", name);
+        }else ResourcefulBees.LOGGER.warn("Trait Registration closed register your traits before onLoadComplete, trait not registered: {}", name);
     }
 
     public static CompoundNBT getTrait(String name) {
         return TRAIT_REGISTRY.get(name);
+    }
+
+    public static void setTraitRegistrationClosed(){
+        closed = true;
     }
 
     public static void registerDefaultTraits(){

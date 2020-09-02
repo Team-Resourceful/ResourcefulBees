@@ -28,7 +28,7 @@ public class HoneycombTileEntity extends TileEntity {
     }
 
     public int getColor() {
-        if (BeeRegistry.getInfo(beeType).isRainbowBee()) {
+        if (BeeRegistry.getInfo(beeType).ColorData.isRainbowBee()) {
             return RainbowColor.getRGB();
         }
         return (blockColor != null && !blockColor.isEmpty() && !blockColor.equals(BeeConstants.STRING_DEFAULT_ITEM_COLOR)) ? Color.parseInt(blockColor) : BeeConstants.DEFAULT_ITEM_COLOR;

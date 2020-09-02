@@ -55,10 +55,10 @@ public class FluidToFluid implements IRecipeCategory<FluidToFluid.Recipe> {
     public static List<FluidToFluid.Recipe> getMutationRecipes(IIngredientManager ingredientManager) {
         List<FluidToFluid.Recipe> recipes = new ArrayList<>();
         for (Map.Entry<String, CustomBee> bee : BeeRegistry.getBees().entrySet()){
-            if (bee.getValue().hasMutation()) {
+            if (bee.getValue().MutationData.hasMutation()) {
 
-                String mutationIn = bee.getValue().getMutationInput();
-                String mutationOut = bee.getValue().getMutationOutput();
+                String mutationIn = bee.getValue().MutationData.getMutationInput();
+                String mutationOut = bee.getValue().MutationData.getMutationOutput();
 
                 if (BeeValidator.TAG_RESOURCE_PATTERN.matcher(mutationIn).matches()) {
                     mutationIn = mutationIn.replace(BeeConstants.TAG_PREFIX, "");
@@ -71,7 +71,7 @@ public class FluidToFluid implements IRecipeCategory<FluidToFluid.Recipe> {
                         }
                     }
                 } else {
-                    MutationTypes mutationType = bee.getValue().getMutationType();
+                    MutationTypes mutationType = bee.getValue().MutationData.getMutationType();
 
                     if (MutationTypes.FLUID_TO_FLUID.equals(mutationType)) {
                         Fluid fluidIn = BeeInfoUtils.getFluid(mutationIn);

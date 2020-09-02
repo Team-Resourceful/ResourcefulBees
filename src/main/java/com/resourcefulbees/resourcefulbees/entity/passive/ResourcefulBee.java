@@ -158,7 +158,7 @@ public class ResourcefulBee extends CustomBeeEntity {
                 Block block = state.getBlock();
                 if (validFillerBlock(block)) {
                     world.playEvent(2005, beePosDown, 0);
-                    String mutationOutput = getBeeInfo().getMutationOutput();
+                    String mutationOutput = getBeeInfo().MutationData.getMutationOutput();
                     Block newBlock = BeeInfoUtils.getBlock(mutationOutput);
                     if (newBlock != null)
                         world.setBlockState(beePosDown, newBlock.getDefaultState());
@@ -169,7 +169,7 @@ public class ResourcefulBee extends CustomBeeEntity {
     }
 
     public boolean validFillerBlock(Block block) {
-        String baseBlock = this.getBeeInfo().getMutationInput();
+        String baseBlock = this.getBeeInfo().MutationData.getMutationInput();
         if (BeeValidator.TAG_RESOURCE_PATTERN.matcher(baseBlock).matches()) {
             ITag<Block> blockTag = BeeInfoUtils.getBlockTag(baseBlock.replace(BeeConstants.TAG_PREFIX, ""));
             return blockTag != null && block.isIn(blockTag);
@@ -411,7 +411,7 @@ public class ResourcefulBee extends CustomBeeEntity {
 
         @Override
         public boolean canBeeStart() {
-            if (ResourcefulBee.this.getCropsGrownSincePollination() >= getBeeInfo().getMutationCount()) {
+            if (ResourcefulBee.this.getCropsGrownSincePollination() >= getBeeInfo().MutationData.getMutationCount()) {
                 return false;
             } else if (ResourcefulBee.this.rand.nextFloat() < 0.3F) {
                 return false;
@@ -422,7 +422,7 @@ public class ResourcefulBee extends CustomBeeEntity {
 
         @Override
         public void tick() {
-            if (!getBeeInfo().getMutationInput().isEmpty() && !getBeeInfo().getMutationOutput().isEmpty())
+            if (!getBeeInfo().MutationData.getMutationInput().isEmpty() && !getBeeInfo().MutationData.getMutationOutput().isEmpty())
                 applyPollinationEffect();
         }
     }

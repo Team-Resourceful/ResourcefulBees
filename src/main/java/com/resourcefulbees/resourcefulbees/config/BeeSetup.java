@@ -70,6 +70,10 @@ public class BeeSetup {
         parseBee(reader, name);
     }
 
+    // TODO replace with new bee registration
+    //  (see if we can have this registry call the item and block registration which returns a new object called RegistrationData
+    //  which holds references to all blocks and items related to that bee type)
+
     private static void parseBee(Reader reader, String name) {
         Gson gson = new Gson();
         CustomBee bee = gson.fromJson(reader, CustomBee.class);

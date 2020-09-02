@@ -102,7 +102,7 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
 
             if (beehiveState == State.HONEY_DELIVERED) {
               beeEntity.onHoneyDelivered();
-              if (beeEntity.getBeeInfo().getHoneycombColor() != null && !beeEntity.getBeeInfo().getHoneycombColor().isEmpty()) {
+              if (beeEntity.getBeeInfo().ColorData.getHoneycombColor() != null && !beeEntity.getBeeInfo().ColorData.getHoneycombColor().isEmpty()) {
                 int i = getHoneyLevel(state);
                 if (i < 5) {
                   this.honeycombs.push(beeEntity.getBeeType());

@@ -20,6 +20,8 @@ public class ItemGroupResourcefulBees{
 
 	public static final ItemGroup RESOURCEFUL_BEES = (new ItemGroup(ResourcefulBees.MOD_ID) {
 
+		//TODO replace with registry objects
+
 		@Override
 		@OnlyIn(Dist.CLIENT)
 		public void fill(@Nonnull NonNullList<ItemStack> items) {
@@ -33,7 +35,7 @@ public class ItemGroupResourcefulBees{
 						eggItemTag.putString(NBTConstants.NBT_BEE_TYPE, bee.getValue().getName());
 						items.add(eggStack);
 
-						if (bee.getValue().getHoneycombColor() != null && !bee.getValue().getHoneycombColor().isEmpty()) {
+						if (bee.getValue().ColorData.getHoneycombColor() != null && !bee.getValue().ColorData.getHoneycombColor().isEmpty()) {
 							final ItemStack combStack = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
 							combStack.setTag(NBTHelper.createHoneycombItemTag(bee.getValue().getName()));
 							items.add(combStack);

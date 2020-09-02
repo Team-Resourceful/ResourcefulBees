@@ -18,6 +18,8 @@ import javax.annotation.Nonnull;
 public class ResourcefulBeesRecipeIngredients implements IIngredientSerializer<ResourcefulBeesRecipeIngredients.CustomNBTIngredient> {
     public static final ResourcefulBeesRecipeIngredients INSTANCE = new ResourcefulBeesRecipeIngredients();
 
+    //TODO Possibly remove this class due to it being redundant
+
     @Nonnull
     @Override
     public CustomNBTIngredient parse(PacketBuffer buffer) {
@@ -29,7 +31,7 @@ public class ResourcefulBeesRecipeIngredients implements IIngredientSerializer<R
 
             ItemStack tmpStack = new ItemStack(block ? RegistryHandler.HONEYCOMB_BLOCK_ITEM.get() : RegistryHandler.RESOURCEFUL_HONEYCOMB.get(), count);
             final CompoundNBT honeycombItemStackTag = tmpStack.getOrCreateChildTag(NBTConstants.NBT_ROOT);
-            honeycombItemStackTag.putString(NBTConstants.NBT_COLOR, bee.getHoneycombColor());
+            honeycombItemStackTag.putString(NBTConstants.NBT_COLOR, bee.ColorData.getHoneycombColor());
             honeycombItemStackTag.putString(NBTConstants.NBT_BEE_TYPE, beeType);
 
             return new CustomNBTIngredient(tmpStack);
@@ -50,7 +52,7 @@ public class ResourcefulBeesRecipeIngredients implements IIngredientSerializer<R
 
             ItemStack tmpStack = new ItemStack(block ? RegistryHandler.HONEYCOMB_BLOCK_ITEM.get() : RegistryHandler.RESOURCEFUL_HONEYCOMB.get(), count);
             final CompoundNBT honeycombItemStackTag = tmpStack.getOrCreateChildTag(NBTConstants.NBT_ROOT);
-            honeycombItemStackTag.putString(NBTConstants.NBT_COLOR, bee.getHoneycombColor());
+            honeycombItemStackTag.putString(NBTConstants.NBT_COLOR, bee.ColorData.getHoneycombColor());
             honeycombItemStackTag.putString(NBTConstants.NBT_BEE_TYPE, beeType);
 
             return new CustomNBTIngredient(tmpStack);

@@ -11,7 +11,7 @@ public class NBTHelper {
         CompoundNBT childTag = new CompoundNBT();
 
         childTag.putString(NBTConstants.NBT_BEE_TYPE, beeType);
-        childTag.putString(NBTConstants.NBT_COLOR, BeeRegistry.getInfo(beeType).getHoneycombColor());
+        childTag.putString(NBTConstants.NBT_COLOR, BeeRegistry.getInfo(beeType).ColorData.getHoneycombColor());
 
         rootTag.put(NBTConstants.NBT_ROOT, childTag);
 

@@ -25,20 +25,20 @@ public class EmissiveBeeLayer extends LayerRenderer<CustomBeeEntity, CustomBeeMo
 
     public void render(@Nonnull MatrixStack matrixStackIn, @Nonnull IRenderTypeBuffer bufferIn, int packedLightIn, CustomBeeEntity entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         CustomBee bee = entitylivingbaseIn.getBeeInfo();
-        ResourceLocation location = new ResourceLocation(ResourcefulBees.MOD_ID, BeeConstants.ENTITY_TEXTURES_DIR + bee.getEmissiveLayerTexture() + (entitylivingbaseIn.hasAngerTime() ? "_angry.png" : ".png"));
+        ResourceLocation location = new ResourceLocation(ResourcefulBees.MOD_ID, BeeConstants.ENTITY_TEXTURES_DIR + bee.ColorData.getEmissiveLayerTexture() + (entitylivingbaseIn.hasAngerTime() ? "_angry.png" : ".png"));
         IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.getEyes(location));
 
-        if (bee.isRainbowBee() && bee.isGlowing()) {
+        if (bee.ColorData.isRainbowBee() && bee.ColorData.isGlowing()) {
             float[] glowColor = RainbowColor.getColorFloats();
-            if (!entitylivingbaseIn.getRenderingInJei() && (bee.getGlowingPulse() == 0 || entitylivingbaseIn.ticksExisted / 5 % bee.getGlowingPulse() == 0)) {
+            if (!entitylivingbaseIn.getRenderingInJei() && (bee.ColorData.getGlowingPulse() == 0 || entitylivingbaseIn.ticksExisted / 5 % bee.ColorData.getGlowingPulse() == 0)) {
                 this.getEntityModel().render(matrixStackIn, ivertexbuilder, 15728640, OverlayTexture.DEFAULT_UV, glowColor[0], glowColor[1], glowColor[2], 1.0F);
             }
-        } else if (bee.isGlowing() && bee.getGlowingColor() !=null && !bee.getGlowingColor().isEmpty()){
-            float[] glowColor = BeeRegistry.getColorFloats(bee.getGlowingColor());
-            if (!entitylivingbaseIn.getRenderingInJei() && (bee.getGlowingPulse() == 0 || entitylivingbaseIn.ticksExisted / 5 % bee.getGlowingPulse() == 0)) {
+        } else if (bee.ColorData.isGlowing() && bee.ColorData.getGlowColor() !=null && !bee.ColorData.getGlowColor().isEmpty()){
+            float[] glowColor = BeeRegistry.getColorFloats(bee.ColorData.getGlowColor());
+            if (!entitylivingbaseIn.getRenderingInJei() && (bee.ColorData.getGlowingPulse() == 0 || entitylivingbaseIn.ticksExisted / 5 % bee.ColorData.getGlowingPulse() == 0)) {
                 this.getEntityModel().render(matrixStackIn, ivertexbuilder, 15728640, OverlayTexture.DEFAULT_UV, glowColor[0], glowColor[1], glowColor[2], 1.0F);
             }
-        } else if (bee.isEnchanted()){
+        } else if (bee.ColorData.isEnchanted()){
             this.getEntityModel().render(matrixStackIn, bufferIn.getBuffer(RenderType.getEntityGlint()), packedLightIn, OverlayTexture.DEFAULT_UV, 0.0F, 0.0F, 0.0F, 0.0F);
         }
     }

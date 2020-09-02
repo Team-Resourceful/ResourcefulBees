@@ -56,7 +56,7 @@ public final class ColorHandler {
         CompoundNBT honeycombNBT = stack.getChildTag(NBTConstants.NBT_ROOT);
         if (honeycombNBT != null && honeycombNBT.contains(NBTConstants.NBT_BEE_TYPE)) {
             CustomBee customBee = BeeRegistry.getInfo(honeycombNBT.getString(NBTConstants.NBT_BEE_TYPE));
-            if (customBee != null && customBee.isRainbowBee()) {
+            if (customBee != null && customBee.ColorData.isRainbowBee()) {
                 return RainbowColor.getRGB();
             }
         }

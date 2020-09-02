@@ -58,10 +58,10 @@ public class BlockToFluid implements IRecipeCategory<BlockToFluid.Recipe> {
     public static List<BlockToFluid.Recipe> getMutationRecipes(IIngredientManager ingredientManager) {
         List<BlockToFluid.Recipe> recipes = new ArrayList<>();
         for (Map.Entry<String, CustomBee> bee : BeeRegistry.getBees().entrySet()){
-            if (bee.getValue().hasMutation()) {
+            if (bee.getValue().MutationData.hasMutation()) {
 
-                String mutationIn = bee.getValue().getMutationInput();
-                String mutationOut = bee.getValue().getMutationOutput();
+                String mutationIn = bee.getValue().MutationData.getMutationInput();
+                String mutationOut = bee.getValue().MutationData.getMutationOutput();
 
                 if (BeeValidator.TAG_RESOURCE_PATTERN.matcher(mutationIn).matches()) {
                     mutationIn = mutationIn.replace(BeeConstants.TAG_PREFIX, "");
@@ -74,7 +74,7 @@ public class BlockToFluid implements IRecipeCategory<BlockToFluid.Recipe> {
                         }
                     }
                 } else {
-                    MutationTypes mutationType = bee.getValue().getMutationType();
+                    MutationTypes mutationType = bee.getValue().MutationData.getMutationType();
 
                     if (MutationTypes.BLOCK_TO_FLUID.equals(mutationType)) {
                         Item itemIn = BeeInfoUtils.getItem(mutationIn);

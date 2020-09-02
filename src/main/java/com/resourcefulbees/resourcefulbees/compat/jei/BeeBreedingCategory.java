@@ -54,15 +54,15 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
         List<Recipe> recipes = new ArrayList<>();
         for (Map.Entry<String, CustomBee> entry : BeeRegistry.getBees().entrySet()){
             CustomBee bee = entry.getValue();
-            if (bee.isBreedable()) {
-                String parent1 = BeeRegistry.getBees().containsKey(bee.getParent1()) && BeeRegistry.getBees().containsKey(bee.getParent2()) ? bee.getParent1() : bee.getName();
-                String parent2 = BeeRegistry.getBees().containsKey(bee.getParent1()) && BeeRegistry.getBees().containsKey(bee.getParent2()) ? bee.getParent2() : bee.getName();
+            if (bee.BreedData.isBreedable()) {
+                String parent1 = BeeRegistry.getBees().containsKey(bee.BreedData.getParent1()) && BeeRegistry.getBees().containsKey(bee.BreedData.getParent2()) ? bee.BreedData.getParent1() : bee.getName();
+                String parent2 = BeeRegistry.getBees().containsKey(bee.BreedData.getParent1()) && BeeRegistry.getBees().containsKey(bee.BreedData.getParent2()) ? bee.BreedData.getParent2() : bee.getName();
 
-                String p1_feedItemS = BeeRegistry.getInfo(parent1).getFeedItem();
-                String p2_feedItemS = BeeRegistry.getInfo(parent2).getFeedItem();
+                String p1_feedItemS = BeeRegistry.getInfo(parent1).BreedData.getFeedItem();
+                String p2_feedItemS = BeeRegistry.getInfo(parent2).BreedData.getFeedItem();
 
-                int p1_feedAmount = BeeRegistry.getInfo(parent1).getFeedAmount();
-                int p2_feedAmount = BeeRegistry.getInfo(parent2).getFeedAmount();
+                int p1_feedAmount = BeeRegistry.getInfo(parent1).BreedData.getFeedAmount();
+                int p2_feedAmount = BeeRegistry.getInfo(parent2).BreedData.getFeedAmount();
 
                 p1_feedItemS = finalizeFeedItem(p1_feedItemS);
                 p2_feedItemS = finalizeFeedItem(p2_feedItemS);

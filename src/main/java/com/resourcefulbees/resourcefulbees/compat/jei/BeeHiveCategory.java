@@ -40,10 +40,12 @@ public class BeeHiveCategory implements IRecipeCategory<BeeHiveCategory.Recipe> 
         this.localizedName = I18n.format("gui.resourcefulbees.jei.category.hive");
     }
 
+    //TODO Replace with Registry Objects
+
     public static List<Recipe> getHoneycombRecipes(IIngredientManager ingredientManager) {
         List<Recipe> recipes = new ArrayList<>();
         for (Map.Entry<String, CustomBee> bee : BeeRegistry.getBees().entrySet()){
-            if (!bee.getKey().equals(BeeConstants.DEFAULT_BEE_TYPE) && bee.getValue().getHoneycombColor() != null && !bee.getValue().getHoneycombColor().isEmpty()) {
+            if (!bee.getKey().equals(BeeConstants.DEFAULT_BEE_TYPE) && bee.getValue().ColorData.getHoneycombColor() != null && !bee.getValue().ColorData.getHoneycombColor().isEmpty()) {
                 ItemStack honeyCombItemStack = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
                 honeyCombItemStack.setTag(NBTHelper.createHoneycombItemTag(bee.getKey()));
                 recipes.add(new Recipe(honeyCombItemStack, bee.getKey()));

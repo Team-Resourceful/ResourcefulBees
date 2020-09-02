@@ -46,11 +46,13 @@ public class HoneycombBlock extends Block {
         return ColorHandler.getItemColor(stack, tintIndex);
     }
 
+    //TODO check if this still applies after changing to registry objects
+
     @Override
     public void animateTick(@Nonnull BlockState stateIn, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull Random rand) {
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof HoneycombTileEntity) {
-            if (BeeRegistry.getInfo(((HoneycombTileEntity) tile).beeType).isRainbowBee())
+            if (BeeRegistry.getInfo(((HoneycombTileEntity) tile).beeType).ColorData.isRainbowBee())
                 world.notifyBlockUpdate(pos, stateIn, stateIn, 2);
         }
         super.animateTick(stateIn, world, pos, rand);

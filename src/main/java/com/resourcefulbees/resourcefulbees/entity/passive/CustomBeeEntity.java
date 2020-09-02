@@ -81,7 +81,7 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
     }
 
     public String getColorFromInfo(String beeType) {
-        return getBeeInfo(beeType).getHoneycombColor();
+        return getBeeInfo(beeType).ColorData.getHoneycombColor();
     }
 
     public String getNameFromInfo(String beeType) {
@@ -244,7 +244,7 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
 
     @Override
     public boolean isBreedingItem(@Nonnull ItemStack stack) {
-        String validBreedItem = this.getBeeInfo().getFeedItem();
+        String validBreedItem = this.getBeeInfo().BreedData.getFeedItem();
 
         if (BeeValidator.TAG_RESOURCE_PATTERN.matcher(validBreedItem).matches()) {
             ITag<Item> itemTag = BeeInfoUtils.getItemTag(validBreedItem.replace(BeeConstants.TAG_PREFIX, ""));
@@ -277,7 +277,7 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
             if (!this.world.isRemote && this.getGrowingAge() == 0 && this.canBreed()) {
                 this.consumeItemFromStack(player, itemstack);
                 this.addFeedCount();
-                if (this.getFeedCount() >= this.getBeeInfo().getFeedAmount()) {
+                if (this.getFeedCount() >= this.getBeeInfo().BreedData.getFeedAmount()) {
                     this.setInLove(player);
                 }
                 player.swingHand(hand, true);

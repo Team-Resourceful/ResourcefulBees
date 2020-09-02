@@ -4,7 +4,6 @@ import com.resourcefulbees.resourcefulbees.api.TraitRegistration;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.*;
 import com.resourcefulbees.resourcefulbees.client.render.entity.CustomBeeRenderer;
 import com.resourcefulbees.resourcefulbees.client.render.items.ItemModelPropertiesHandler;
-import com.resourcefulbees.resourcefulbees.commands.ResourcefulBeeCommands;
 import com.resourcefulbees.resourcefulbees.compat.top.TopCompat;
 import com.resourcefulbees.resourcefulbees.config.BeeSetup;
 import com.resourcefulbees.resourcefulbees.config.Config;
@@ -37,7 +36,6 @@ import net.minecraft.village.PointOfInterestType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -82,7 +80,6 @@ public class ResourcefulBees
 
         FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(IRecipeSerializer.class, this::registerRecipeSerialziers);
 
-        MinecraftForge.EVENT_BUS.addListener(this::registerCommands);
         MinecraftForge.EVENT_BUS.addListener(this::trade);
 
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
@@ -192,10 +189,6 @@ public class ResourcefulBees
             InterModComms.sendTo("theoneprobe", "getTheOneProbe", TopCompat::new);
     }
 
-    public void registerCommands(RegisterCommandsEvent event) {
-        ResourcefulBeeCommands.register(event.getDispatcher());
-    }
-
     private void doClientStuff(final FMLClientSetupEvent event) {
         CentrifugeScreen.currentMonth = new SimpleDateFormat("MM").format(new Date());
         RenderingRegistry.registerEntityRenderingHandler(RegistryHandler.CUSTOM_BEE.get(), CustomBeeRenderer::new);
@@ -216,6 +209,7 @@ public class ResourcefulBees
 
     private void loadComplete(FMLLoadCompleteEvent event) {
         TraitRegistration.registerDefaultTraits();
+        TraitRegistration.setTraitRegistrationClosed();
         BeeSetup.setupBees();
         TraitRegistration.giveBeesTraits();
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> DataGen::GenerateEnglishLang);
