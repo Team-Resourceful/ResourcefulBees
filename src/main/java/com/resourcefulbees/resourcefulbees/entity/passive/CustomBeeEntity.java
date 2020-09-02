@@ -1,8 +1,8 @@
 package com.resourcefulbees.resourcefulbees.entity.passive;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
-import com.resourcefulbees.resourcefulbees.config.BeeInfo;
-import com.resourcefulbees.resourcefulbees.data.BeeData;
+import com.resourcefulbees.resourcefulbees.api.CustomBee;
+import com.resourcefulbees.resourcefulbees.config.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.data.BeeTrait;
 import com.resourcefulbees.resourcefulbees.entity.ICustomBee;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
@@ -59,7 +59,7 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
 
     public void setBeeType(boolean fromBiome){
         Biome curBiome = this.world.getBiome(this.getBlockPos());
-        String bee = fromBiome ? BeeInfo.getRandomBee(curBiome) : BeeInfo.getRandomBee();
+        String bee = fromBiome ? BeeRegistry.getRandomBee(curBiome) : BeeRegistry.getRandomBee();
         this.dataManager.set(BEE_TYPE, bee);
     }
 
@@ -68,7 +68,7 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
     }
 
     public String getBeeType() {
-        BeeData info = getBeeInfo(this.dataManager.get(BEE_TYPE));
+        CustomBee info = getBeeInfo(this.dataManager.get(BEE_TYPE));
         if (info.getName().equals(BeeConstants.DEFAULT_BEE_TYPE) || info.getName().isEmpty()) {
             markRemove();
         }
@@ -88,8 +88,8 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
         return getBeeInfo(beeType).getName();
     }
 
-    public BeeData getBeeInfo() {
-        return BeeInfo.getInfo(this.getBeeType());
+    public CustomBee getBeeInfo() {
+        return BeeRegistry.getInfo(this.getBeeType());
     }
 
     @Override
@@ -107,8 +107,8 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
         this.dataManager.set(FEED_COUNT, this.getFeedCount() + 1);
     }
 
-    public BeeData getBeeInfo(String beeType) {
-        return BeeInfo.getInfo(beeType);
+    public CustomBee getBeeInfo(String beeType) {
+        return BeeRegistry.getInfo(beeType);
     }
     //endregion
 
@@ -141,7 +141,7 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
 
     @Override
     public boolean isPotionApplicable(@Nonnull EffectInstance potioneffectIn) {
-        BeeData info = getBeeInfo();
+        CustomBee info = getBeeInfo();
         for (CompoundNBT trait : info.getBeeTraits()){
             if (BeeTrait.hasPotionImmunities(trait)){
                 for (Effect potion : BeeTrait.getPotionImmunities(trait)){
@@ -169,7 +169,7 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
 
 
         if (this.world.isRemote){
-            BeeData info = getBeeInfo();
+            CustomBee info = getBeeInfo();
             if (this.ticksExisted % 40 == 0) {
                 for (CompoundNBT trait : info.getBeeTraits()) {
                     if (BeeTrait.hasParticleEffects(trait)) {

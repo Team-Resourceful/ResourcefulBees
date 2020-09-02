@@ -1,8 +1,8 @@
 package com.resourcefulbees.resourcefulbees.registry;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
-import com.resourcefulbees.resourcefulbees.config.BeeInfo;
-import com.resourcefulbees.resourcefulbees.data.BeeData;
+import com.resourcefulbees.resourcefulbees.api.CustomBee;
+import com.resourcefulbees.resourcefulbees.config.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.utils.NBTHelper;
@@ -23,8 +23,8 @@ public class ItemGroupResourcefulBees{
 		@Override
 		@OnlyIn(Dist.CLIENT)
 		public void fill(@Nonnull NonNullList<ItemStack> items) {
-			if (!BeeInfo.getBees().isEmpty()) {
-				for (Map.Entry<String, BeeData> bee : BeeInfo.getBees().entrySet()) {
+			if (!BeeRegistry.getBees().isEmpty()) {
+				for (Map.Entry<String, CustomBee> bee : BeeRegistry.getBees().entrySet()) {
 					if (!bee.getKey().equals(BeeConstants.DEFAULT_BEE_TYPE)) {
 						final ItemStack eggStack = new ItemStack(RegistryHandler.BEE_SPAWN_EGG.get());
 						final CompoundNBT eggEntityTag = eggStack.getOrCreateChildTag("EntityTag");

@@ -1,8 +1,8 @@
 package com.resourcefulbees.resourcefulbees.registry;
 
+import com.resourcefulbees.resourcefulbees.api.CustomBee;
 import com.resourcefulbees.resourcefulbees.block.HoneycombBlock;
-import com.resourcefulbees.resourcefulbees.config.BeeInfo;
-import com.resourcefulbees.resourcefulbees.data.BeeData;
+import com.resourcefulbees.resourcefulbees.config.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.item.BeeJar;
 import com.resourcefulbees.resourcefulbees.item.ResourcefulHoneycomb;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
@@ -55,8 +55,8 @@ public final class ColorHandler {
     public static int getItemColor(ItemStack stack, int tintIndex) {
         CompoundNBT honeycombNBT = stack.getChildTag(NBTConstants.NBT_ROOT);
         if (honeycombNBT != null && honeycombNBT.contains(NBTConstants.NBT_BEE_TYPE)) {
-            BeeData beeData = BeeInfo.getInfo(honeycombNBT.getString(NBTConstants.NBT_BEE_TYPE));
-            if (beeData != null && beeData.isRainbowBee()) {
+            CustomBee customBee = BeeRegistry.getInfo(honeycombNBT.getString(NBTConstants.NBT_BEE_TYPE));
+            if (customBee != null && customBee.isRainbowBee()) {
                 return RainbowColor.getRGB();
             }
         }

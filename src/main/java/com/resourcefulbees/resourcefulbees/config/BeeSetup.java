@@ -2,7 +2,7 @@ package com.resourcefulbees.resourcefulbees.config;
 
 import com.google.gson.Gson;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
-import com.resourcefulbees.resourcefulbees.data.BeeData;
+import com.resourcefulbees.resourcefulbees.api.CustomBee;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.BeeValidator;
 
@@ -18,7 +18,7 @@ import java.util.zip.ZipFile;
 import static com.resourcefulbees.resourcefulbees.ResourcefulBees.LOGGER;
 import static com.resourcefulbees.resourcefulbees.config.Config.GENERATE_DEFAULTS;
 
-public class BeeBuilder {
+public class BeeSetup {
 
     private static final String ASSETS_DIR = "/assets/resourcefulbees/default_bees/";
 
@@ -72,10 +72,10 @@ public class BeeBuilder {
 
     private static void parseBee(Reader reader, String name) {
         Gson gson = new Gson();
-        BeeData bee = gson.fromJson(reader, BeeData.class);
+        CustomBee bee = gson.fromJson(reader, CustomBee.class);
         bee.setName(name);
         if (BeeValidator.validate(bee)) {
-            if (BeeInfo.registerBee(name.toLowerCase(), bee)) {
+            if (BeeRegistry.registerBee(name.toLowerCase(), bee)) {
                 if (bee.canSpawnInWorld())
                     BeeInfoUtils.parseBiomes(bee);
                 if (bee.isBreedable())
@@ -94,10 +94,10 @@ public class BeeBuilder {
         try {
             Files.walk(BEE_PATH)
                     .filter(f -> f.getFileName().toString().endsWith(".zip"))
-                    .forEach(BeeBuilder::addZippedBee);
+                    .forEach(BeeSetup::addZippedBee);
             Files.walk(BEE_PATH)
                     .filter(f -> f.getFileName().toString().endsWith(".json"))
-                    .forEach(BeeBuilder::addBee);
+                    .forEach(BeeSetup::addBee);
         } catch (IOException e) {
             e.printStackTrace();
         }

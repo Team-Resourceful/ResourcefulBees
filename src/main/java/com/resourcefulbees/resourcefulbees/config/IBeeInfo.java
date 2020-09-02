@@ -1,6 +1,6 @@
 package com.resourcefulbees.resourcefulbees.config;
 
-import com.resourcefulbees.resourcefulbees.data.BeeData;
+import com.resourcefulbees.resourcefulbees.api.CustomBee;
 
 public interface IBeeInfo {
 
@@ -25,5 +25,5 @@ public interface IBeeInfo {
      *
      *  @return Returns supplied bee's info card.
      */
-    BeeData getBeeInfo(String beeType);
+    CustomBee getBeeInfo(String beeType);
 }

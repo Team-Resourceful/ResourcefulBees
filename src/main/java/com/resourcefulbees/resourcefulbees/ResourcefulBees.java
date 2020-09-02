@@ -1,16 +1,16 @@
 package com.resourcefulbees.resourcefulbees;
 
+import com.resourcefulbees.resourcefulbees.api.TraitRegistration;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.*;
 import com.resourcefulbees.resourcefulbees.client.render.entity.CustomBeeRenderer;
 import com.resourcefulbees.resourcefulbees.client.render.items.ItemModelPropertiesHandler;
 import com.resourcefulbees.resourcefulbees.commands.ResourcefulBeeCommands;
 import com.resourcefulbees.resourcefulbees.compat.top.TopCompat;
-import com.resourcefulbees.resourcefulbees.config.BeeBuilder;
+import com.resourcefulbees.resourcefulbees.config.BeeSetup;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.data.DataGen;
 import com.resourcefulbees.resourcefulbees.data.RecipeBuilder;
 import com.resourcefulbees.resourcefulbees.init.ModSetup;
-import com.resourcefulbees.resourcefulbees.init.TraitRegistration;
 import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
 import com.resourcefulbees.resourcefulbees.recipe.ResourcefulBeesRecipeIngredients;
 import com.resourcefulbees.resourcefulbees.registry.ColorHandler;
@@ -216,7 +216,7 @@ public class ResourcefulBees
 
     private void loadComplete(FMLLoadCompleteEvent event) {
         TraitRegistration.registerDefaultTraits();
-        BeeBuilder.setupBees();
+        BeeSetup.setupBees();
         TraitRegistration.giveBeesTraits();
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> DataGen::GenerateEnglishLang);
     }

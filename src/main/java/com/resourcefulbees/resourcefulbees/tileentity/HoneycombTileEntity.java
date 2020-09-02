@@ -1,6 +1,6 @@
 package com.resourcefulbees.resourcefulbees.tileentity;
 
-import com.resourcefulbees.resourcefulbees.config.BeeInfo;
+import com.resourcefulbees.resourcefulbees.config.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
@@ -28,7 +28,7 @@ public class HoneycombTileEntity extends TileEntity {
     }
 
     public int getColor() {
-        if (BeeInfo.getInfo(beeType).isRainbowBee()) {
+        if (BeeRegistry.getInfo(beeType).isRainbowBee()) {
             return RainbowColor.getRGB();
         }
         return (blockColor != null && !blockColor.isEmpty() && !blockColor.equals(BeeConstants.STRING_DEFAULT_ITEM_COLOR)) ? Color.parseInt(blockColor) : BeeConstants.DEFAULT_ITEM_COLOR;

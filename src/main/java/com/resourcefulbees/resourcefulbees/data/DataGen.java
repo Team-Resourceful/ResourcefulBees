@@ -1,7 +1,8 @@
 package com.resourcefulbees.resourcefulbees.data;
 
-import com.resourcefulbees.resourcefulbees.config.BeeBuilder;
-import com.resourcefulbees.resourcefulbees.config.BeeInfo;
+import com.resourcefulbees.resourcefulbees.api.CustomBee;
+import com.resourcefulbees.resourcefulbees.config.BeeRegistry;
+import com.resourcefulbees.resourcefulbees.config.BeeSetup;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import org.apache.commons.lang3.StringUtils;
@@ -20,7 +21,7 @@ public class DataGen {
         if (Config.GENERATE_ENGLISH_LANG.get()) {
             StringBuilder builder = new StringBuilder();
             builder.append("{\n");
-            for (Map.Entry<String, BeeData> bee : BeeInfo.getBees().entrySet()) {
+            for (Map.Entry<String, CustomBee> bee : BeeRegistry.getBees().entrySet()) {
                 if (!bee.getKey().equals(BeeConstants.DEFAULT_BEE_TYPE)) {
                     String displayName = StringUtils.replace(bee.getKey(), "_", " ");
                     displayName = WordUtils.capitalizeFully(displayName);
@@ -55,7 +56,7 @@ public class DataGen {
             builder.deleteCharAt(builder.lastIndexOf(","));
             builder.append("}");
 
-            String langPath = BeeBuilder.RESOURCE_PATH.toString() + "/assets/resourcefulbees/lang/";
+            String langPath = BeeSetup.RESOURCE_PATH.toString() + "/assets/resourcefulbees/lang/";
             String langFile = "en_us.json";
             try {
                 Files.createDirectories(Paths.get(langPath));

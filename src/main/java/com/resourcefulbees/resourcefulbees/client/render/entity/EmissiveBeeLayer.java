@@ -3,8 +3,8 @@ package com.resourcefulbees.resourcefulbees.client.render.entity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
-import com.resourcefulbees.resourcefulbees.config.BeeInfo;
-import com.resourcefulbees.resourcefulbees.data.BeeData;
+import com.resourcefulbees.resourcefulbees.api.CustomBee;
+import com.resourcefulbees.resourcefulbees.config.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.utils.RainbowColor;
@@ -24,7 +24,7 @@ public class EmissiveBeeLayer extends LayerRenderer<CustomBeeEntity, CustomBeeMo
     }
 
     public void render(@Nonnull MatrixStack matrixStackIn, @Nonnull IRenderTypeBuffer bufferIn, int packedLightIn, CustomBeeEntity entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        BeeData bee = entitylivingbaseIn.getBeeInfo();
+        CustomBee bee = entitylivingbaseIn.getBeeInfo();
         ResourceLocation location = new ResourceLocation(ResourcefulBees.MOD_ID, BeeConstants.ENTITY_TEXTURES_DIR + bee.getEmissiveLayerTexture() + (entitylivingbaseIn.hasAngerTime() ? "_angry.png" : ".png"));
         IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.getEyes(location));
 
@@ -34,7 +34,7 @@ public class EmissiveBeeLayer extends LayerRenderer<CustomBeeEntity, CustomBeeMo
                 this.getEntityModel().render(matrixStackIn, ivertexbuilder, 15728640, OverlayTexture.DEFAULT_UV, glowColor[0], glowColor[1], glowColor[2], 1.0F);
             }
         } else if (bee.isGlowing() && bee.getGlowingColor() !=null && !bee.getGlowingColor().isEmpty()){
-            float[] glowColor = BeeInfo.getColorFloats(bee.getGlowingColor());
+            float[] glowColor = BeeRegistry.getColorFloats(bee.getGlowingColor());
             if (!entitylivingbaseIn.getRenderingInJei() && (bee.getGlowingPulse() == 0 || entitylivingbaseIn.ticksExisted / 5 % bee.getGlowingPulse() == 0)) {
                 this.getEntityModel().render(matrixStackIn, ivertexbuilder, 15728640, OverlayTexture.DEFAULT_UV, glowColor[0], glowColor[1], glowColor[2], 1.0F);
             }

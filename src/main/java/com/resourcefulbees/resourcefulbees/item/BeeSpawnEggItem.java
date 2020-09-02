@@ -1,7 +1,7 @@
 package com.resourcefulbees.resourcefulbees.item;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
-import com.resourcefulbees.resourcefulbees.config.BeeInfo;
+import com.resourcefulbees.resourcefulbees.config.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
@@ -62,7 +62,7 @@ public class BeeSpawnEggItem extends SpawnEggItem {
         CompoundNBT tag = itemstack.getChildTag(NBTConstants.NBT_ROOT);
         if (tag != null && player != null) {
             String bee = tag.getString(NBTConstants.NBT_BEE_TYPE);
-            if (BeeInfo.getInfo(bee) == null && !itemstack.isEmpty()) {
+            if (BeeRegistry.getInfo(bee) == null && !itemstack.isEmpty()) {
                 for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
                     if (player.inventory.getStackInSlot(i) == itemstack) {
                         player.inventory.removeStackFromSlot(i);

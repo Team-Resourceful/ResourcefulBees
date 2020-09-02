@@ -1,7 +1,7 @@
 package com.resourcefulbees.resourcefulbees.utils;
 
+import com.resourcefulbees.resourcefulbees.api.CustomBee;
 import com.resourcefulbees.resourcefulbees.config.Config;
-import com.resourcefulbees.resourcefulbees.data.BeeData;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
 import net.minecraft.block.Block;
@@ -29,7 +29,7 @@ public class BeeValidator {
         return true;
     }
 
-    public static boolean validate(BeeData bee) {
+    public static boolean validate(CustomBee bee) {
         boolean isValid;
 
         isValid = validateColor(bee);
@@ -44,7 +44,7 @@ public class BeeValidator {
         return isValid;
     }
 
-    private static boolean validateMutation(BeeData bee) {
+    private static boolean validateMutation(CustomBee bee) {
         if (!beeHasMutation(bee)) {
             return true;
         }
@@ -95,7 +95,7 @@ public class BeeValidator {
         return true;
     }
 
-    private static boolean beeHasMutation(BeeData bee) {
+    private static boolean beeHasMutation(CustomBee bee) {
         if (TAG_RESOURCE_PATTERN.matcher(bee.getMutationInput()).matches() ||
                 SINGLE_RESOURCE_PATTERN.matcher(bee.getMutationInput()).matches() &&
                 SINGLE_RESOURCE_PATTERN.matcher(bee.getMutationOutput()).matches()) {
@@ -107,20 +107,20 @@ public class BeeValidator {
         return false;
     }
 
-    private static boolean validateBreeding(BeeData bee) {
+    private static boolean validateBreeding(CustomBee bee) {
         return !bee.getParent1().equals(bee.getParent2()) || (bee.getParent1().isEmpty() && bee.getParent2().isEmpty()) ||
                 logWarn(bee.getName(), "breeding", (bee.getParent1() + " and " + bee.getParent2()),
                 "are the same parents. Child bee will not spawn from breeding.");
     }
 
-    private static boolean validateMaxTimeInHive(BeeData bee) {
+    private static boolean validateMaxTimeInHive(CustomBee bee) {
         double time = bee.getMaxTimeInHive();
         return time >= BeeConstants.MIN_HIVE_TIME && time == Math.floor(time) && !Double.isInfinite(time) ||
                 logWarn(bee.getName(), "Time In Hive", String.valueOf(bee.getMaxTimeInHive()),
                 "time. Value must be greater than or equal to " + BeeConstants.MIN_HIVE_TIME);
     }
 
-    private static boolean validateCentrifugeMainOutput(BeeData bee) {
+    private static boolean validateCentrifugeMainOutput(CustomBee bee) {
         if (!bee.getMainOutput().isEmpty()) {
             Item item = BeeInfoUtils.getItem(bee.getMainOutput());
             return SINGLE_RESOURCE_PATTERN.matcher(bee.getMainOutput()).matches() && BeeInfoUtils.isValidItem(item) ||
@@ -129,7 +129,7 @@ public class BeeValidator {
         return true;
     }
 
-    private static boolean validateCentrifugeSecondaryOutput(BeeData bee) {
+    private static boolean validateCentrifugeSecondaryOutput(CustomBee bee) {
         if (!bee.getMainOutput().isEmpty()) {
             Item item = BeeInfoUtils.getItem(bee.getSecondaryOutput());
             return SINGLE_RESOURCE_PATTERN.matcher(bee.getSecondaryOutput()).matches() && BeeInfoUtils.isValidItem(item) ||
@@ -138,7 +138,7 @@ public class BeeValidator {
         return true;
     }
 
-    private static boolean validateCentrifugeBottleOutput(BeeData bee) {
+    private static boolean validateCentrifugeBottleOutput(CustomBee bee) {
         if (!bee.getMainOutput().isEmpty()) {
             Item item = BeeInfoUtils.getItem(bee.getBottleOutput());
             return SINGLE_RESOURCE_PATTERN.matcher(bee.getBottleOutput()).matches() && BeeInfoUtils.isValidItem(item) ||
@@ -147,7 +147,7 @@ public class BeeValidator {
         return true;
     }
 
-    private static boolean validateFlower(BeeData bee) {
+    private static boolean validateFlower(CustomBee bee) {
         if(TAG_RESOURCE_PATTERN.matcher(bee.getFlower()).matches())
             return true;
         else {
@@ -160,7 +160,7 @@ public class BeeValidator {
         }
     }
 
-    private static boolean validateFeedItem(BeeData bee) {
+    private static boolean validateFeedItem(CustomBee bee) {
         if(TAG_RESOURCE_PATTERN.matcher(bee.getFeedItem()).matches())
             return true;
         else {
@@ -173,7 +173,7 @@ public class BeeValidator {
         }
     }
 
-    private static boolean validateColor(BeeData bee) {
+    private static boolean validateColor(CustomBee bee) {
         boolean flag = true;
         if (bee.getHoneycombColor() != null && !bee.getHoneycombColor().isEmpty()) {
             flag = Color.validate(bee.getHoneycombColor());

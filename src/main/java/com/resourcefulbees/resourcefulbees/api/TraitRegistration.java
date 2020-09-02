@@ -1,7 +1,6 @@
-package com.resourcefulbees.resourcefulbees.init;
+package com.resourcefulbees.resourcefulbees.api;
 
-import com.resourcefulbees.resourcefulbees.config.BeeInfo;
-import com.resourcefulbees.resourcefulbees.data.BeeData;
+import com.resourcefulbees.resourcefulbees.config.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.lib.TraitConstants;
 import net.minecraft.nbt.CompoundNBT;
 
@@ -34,8 +33,8 @@ public class TraitRegistration {
     }
 
     public static void giveBeesTraits(){
-        for (Map.Entry<String, BeeData> bee : BeeInfo.getBees().entrySet()){
-            BeeInfo.setBeesTraits(bee.getKey());
+        for (Map.Entry<String, CustomBee> bee : BeeRegistry.getBees().entrySet()){
+            BeeRegistry.setBeesTraits(bee.getKey());
         }
     }
 }

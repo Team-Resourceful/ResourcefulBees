@@ -1,6 +1,6 @@
 package com.resourcefulbees.resourcefulbees.tileentity;
 
-import com.resourcefulbees.resourcefulbees.config.BeeInfo;
+import com.resourcefulbees.resourcefulbees.config.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.container.ApiaryBreederContainer;
 import com.resourcefulbees.resourcefulbees.container.AutomationSensitiveItemStackHandler;
@@ -185,7 +185,7 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
                 String p1Type = ((CustomBeeEntity) p1Entity).getBeeInfo().getName();
                 String p2Type = ((CustomBeeEntity) p2Entity).getBeeInfo().getName();
 
-                boolean canBreed = BeeInfo.canParentsBreed(p1Type, p2Type);
+                boolean canBreed = BeeRegistry.canParentsBreed(p1Type, p2Type);
 
                 ItemStack f1Stack = h.getStackInSlot(FEED_1_SLOTS[slot]);
                 ItemStack f2Stack = h.getStackInSlot(FEED_2_SLOTS[slot]);

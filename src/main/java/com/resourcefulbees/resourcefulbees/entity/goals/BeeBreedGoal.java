@@ -1,6 +1,6 @@
 package com.resourcefulbees.resourcefulbees.entity.goals;
 
-import com.resourcefulbees.resourcefulbees.config.BeeInfo;
+import com.resourcefulbees.resourcefulbees.config.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -39,7 +39,7 @@ public class BeeBreedGoal extends BreedGoal {
             if (field_75391_e instanceof CustomBeeEntity){
                 CustomBeeEntity parent1 = ((CustomBeeEntity) field_75391_e);
                 CustomBeeEntity parent2 = ((CustomBeeEntity) animal);
-                return BeeInfo.canParentsBreed(parent1.getBeeType(), parent2.getBeeType());
+                return BeeRegistry.canParentsBreed(parent1.getBeeType(), parent2.getBeeType());
             }
             else
                 return false;
@@ -52,7 +52,7 @@ public class BeeBreedGoal extends BreedGoal {
         CustomBeeEntity bee = (CustomBeeEntity)this.animal;
         String parent1 = getBeeType(this.field_75391_e);
         String parent2 = getBeeType(this.animal);
-        ageableentity = bee.createSelectedChild(BeeInfo.getWeightedChild(parent1, parent2));
+        ageableentity = bee.createSelectedChild(BeeRegistry.getWeightedChild(parent1, parent2));
 
         final BabyEntitySpawnEvent event = new BabyEntitySpawnEvent(animal, field_75391_e, ageableentity);
         final boolean cancelled = MinecraftForge.EVENT_BUS.post(event);

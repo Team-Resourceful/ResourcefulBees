@@ -1,6 +1,6 @@
 package com.resourcefulbees.resourcefulbees.tileentity;
 
-import com.resourcefulbees.resourcefulbees.config.BeeInfo;
+import com.resourcefulbees.resourcefulbees.config.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.container.ApiaryStorageContainer;
 import com.resourcefulbees.resourcefulbees.container.AutomationSensitiveItemStackHandler;
@@ -215,7 +215,7 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
                 break;
         }
 
-        itemstack.setTag(NBTHelper.createHoneycombItemTag(BeeInfo.getInfo(beeType).getName()));
+        itemstack.setTag(NBTHelper.createHoneycombItemTag(BeeRegistry.getInfo(beeType).getName()));
 
         depositItemStack(itemstack);
     }
@@ -227,7 +227,7 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
                 Entity entity = entityType.create(world);
                 if (entity instanceof CustomBeeEntity) {
                     CustomBeeEntity childBee = (CustomBeeEntity) entity;
-                    childBee.setBeeType(BeeInfo.getWeightedChild(p1, p2));
+                    childBee.setBeeType(BeeRegistry.getWeightedChild(p1, p2));
 
                     String type = EntityType.getKey(childBee.getType()).toString();
                     CompoundNBT nbt = new CompoundNBT();

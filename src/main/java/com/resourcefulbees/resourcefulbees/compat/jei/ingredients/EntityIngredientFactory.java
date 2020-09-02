@@ -1,6 +1,6 @@
 package com.resourcefulbees.resourcefulbees.compat.jei.ingredients;
 
-import com.resourcefulbees.resourcefulbees.config.BeeInfo;
+import com.resourcefulbees.resourcefulbees.config.BeeRegistry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ public final class EntityIngredientFactory {
 
     public static List<EntityIngredient> create() {
         List<EntityIngredient> list = new ArrayList<>();
-        BeeInfo.getBees().forEach((s, beeData) -> {
+        BeeRegistry.getBees().forEach((s, beeData) -> {
             if (!s.equals(DEFAULT_BEE_TYPE))
                 list.add(new EntityIngredient(beeData.getName(), 45.0f));
         });

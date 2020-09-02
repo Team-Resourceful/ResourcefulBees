@@ -2,7 +2,7 @@ package com.resourcefulbees.resourcefulbees.compat.top;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.block.TieredBeehiveBlock;
-import com.resourcefulbees.resourcefulbees.config.BeeInfo;
+import com.resourcefulbees.resourcefulbees.config.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
@@ -34,7 +34,7 @@ public class TopCompat implements Function<ITheOneProbe, Void>
         final ItemStack honeyComb = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
         if (!te.serializeNBT().getCompound(NBTConstants.NBT_HONEYCOMBS_TE).getString(num).equals("")) {
                 honeyComb.getOrCreateChildTag(NBTConstants.NBT_ROOT).putString(NBTConstants.NBT_BEE_TYPE, te.serializeNBT().getCompound(NBTConstants.NBT_HONEYCOMBS_TE).getString(num));
-                honeyComb.getOrCreateChildTag(NBTConstants.NBT_ROOT).putString(NBTConstants.NBT_COLOR, String.valueOf(BeeInfo.getBees().get(te.serializeNBT().getCompound(NBTConstants.NBT_HONEYCOMBS_TE).getString(num)).getHoneycombColor()));
+                honeyComb.getOrCreateChildTag(NBTConstants.NBT_ROOT).putString(NBTConstants.NBT_COLOR, String.valueOf(BeeRegistry.getBees().get(te.serializeNBT().getCompound(NBTConstants.NBT_HONEYCOMBS_TE).getString(num)).getHoneycombColor()));
             return honeyComb;
         }
         else return new ItemStack(Items.AIR);

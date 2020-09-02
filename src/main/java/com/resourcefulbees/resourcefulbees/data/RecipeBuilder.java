@@ -1,7 +1,8 @@
 package com.resourcefulbees.resourcefulbees.data;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
-import com.resourcefulbees.resourcefulbees.config.BeeInfo;
+import com.resourcefulbees.resourcefulbees.api.CustomBee;
+import com.resourcefulbees.resourcefulbees.config.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe;
@@ -28,7 +29,7 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
 
     @Override
     public void onResourceManagerReload(@Nonnull IResourceManager resourceManager) {
-        for (Map.Entry<String, BeeData> bee : BeeInfo.getBees().entrySet()){
+        for (Map.Entry<String, CustomBee> bee : BeeRegistry.getBees().entrySet()){
             if (bee.getValue().getHoneycombColor() != null && !bee.getValue().getHoneycombColor().isEmpty()) {
                 if (!bee.getValue().getMainOutput().isEmpty()) {
                     if (Config.CENTRIFUGE_RECIPES.get()) {
@@ -81,7 +82,7 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
     }
 
     private IRecipe<?> centrifugeRecipe(String BeeType, String Color) {
-        BeeData info = BeeInfo.getInfo(BeeType);
+        CustomBee info = BeeRegistry.getInfo(BeeType);
         ItemStack honeycombItemStack = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get(), info.getMainInputCount());
         final CompoundNBT honeycombItemStackTag = honeycombItemStack.getOrCreateChildTag(NBTConstants.NBT_ROOT);
         honeycombItemStackTag.putString(NBTConstants.NBT_COLOR, Color);
@@ -102,7 +103,7 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
     }
 
     private IRecipe<?> centrifugeHoneyCombBlockRecipe(String BeeType, String Color) {
-        BeeData info = BeeInfo.getInfo(BeeType);
+        CustomBee info = BeeRegistry.getInfo(BeeType);
         ItemStack honeycombBlockItemStack = new ItemStack(RegistryHandler.HONEYCOMB_BLOCK_ITEM.get(), 1);
         final CompoundNBT honeycombBlockItemStackTag = honeycombBlockItemStack.getOrCreateChildTag(NBTConstants.NBT_ROOT);
         honeycombBlockItemStackTag.putString(NBTConstants.NBT_COLOR, Color);

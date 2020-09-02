@@ -1,6 +1,6 @@
 package com.resourcefulbees.resourcefulbees.block;
 
-import com.resourcefulbees.resourcefulbees.config.BeeInfo;
+import com.resourcefulbees.resourcefulbees.config.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
 import com.resourcefulbees.resourcefulbees.tileentity.TieredBeehiveTileEntity;
@@ -186,7 +186,7 @@ public class TieredBeehiveBlock extends BeehiveBlock {
       while (hive.hasCombs()) {
         ItemStack comb = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
         String honeycomb = hive.getResourceHoneycomb();
-        comb.setTag(NBTHelper.createHoneycombItemTag(BeeInfo.getInfo(honeycomb).getName()));
+        comb.setTag(NBTHelper.createHoneycombItemTag(BeeRegistry.getInfo(honeycomb).getName()));
         spawnAsEntity(world, pos, comb);
       }
     }
@@ -199,7 +199,7 @@ public class TieredBeehiveBlock extends BeehiveBlock {
       if (hive.hasCombs()) {
         ItemStack comb = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
         String honeycomb = hive.getResourceHoneycomb();
-        comb.setTag(NBTHelper.createHoneycombItemTag(BeeInfo.getInfo(honeycomb).getName()));
+        comb.setTag(NBTHelper.createHoneycombItemTag(BeeRegistry.getInfo(honeycomb).getName()));
         spawnAsEntity(world, pos, comb);
       }
     }

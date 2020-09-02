@@ -1,7 +1,7 @@
 package com.resourcefulbees.resourcefulbees.entity.passive;
 
+import com.resourcefulbees.resourcefulbees.api.CustomBee;
 import com.resourcefulbees.resourcefulbees.config.Config;
-import com.resourcefulbees.resourcefulbees.data.BeeData;
 import com.resourcefulbees.resourcefulbees.data.BeeTrait;
 import com.resourcefulbees.resourcefulbees.entity.goals.BeeAngerGoal;
 import com.resourcefulbees.resourcefulbees.entity.goals.BeeBreedGoal;
@@ -205,7 +205,7 @@ public class ResourcefulBee extends CustomBeeEntity {
     }
 
     protected void updateAITasks() {
-        BeeData info = getBeeInfo();
+        CustomBee info = getBeeInfo();
 
         for (CompoundNBT trait : info.getBeeTraits()){
             if (BeeTrait.hasSpecialAbilities(trait)){
@@ -276,7 +276,7 @@ public class ResourcefulBee extends CustomBeeEntity {
                 } else if (this.world.getDifficulty() == Difficulty.HARD) {
                     i = 18;
                 }
-                BeeData info = this.getBeeInfo();
+                CustomBee info = this.getBeeInfo();
                 boolean hasPotionEffect = false;
                 boolean hasDamageType = false;
                 for (CompoundNBT trait : info.getBeeTraits()){

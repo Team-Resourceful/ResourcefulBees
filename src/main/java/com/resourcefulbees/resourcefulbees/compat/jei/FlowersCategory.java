@@ -1,9 +1,9 @@
 package com.resourcefulbees.resourcefulbees.compat.jei;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
+import com.resourcefulbees.resourcefulbees.api.CustomBee;
 import com.resourcefulbees.resourcefulbees.compat.jei.ingredients.EntityIngredient;
-import com.resourcefulbees.resourcefulbees.config.BeeInfo;
-import com.resourcefulbees.resourcefulbees.data.BeeData;
+import com.resourcefulbees.resourcefulbees.config.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.RecipeTypes;
 import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
@@ -53,7 +53,7 @@ public class FlowersCategory implements IRecipeCategory<FlowersCategory.Recipe> 
 
     public static List<Recipe> getFlowersRecipes(IIngredientManager ingredientManager) {
         List<Recipe> recipes = new ArrayList<>();
-        for (Map.Entry<String, BeeData> bee : BeeInfo.getBees().entrySet()){
+        for (Map.Entry<String, CustomBee> bee : BeeRegistry.getBees().entrySet()){
             if (!bee.getValue().getName().equals(DEFAULT_BEE_TYPE)) {
                 if (!bee.getValue().getFlower().isEmpty()) {
                     String flower = bee.getValue().getFlower();

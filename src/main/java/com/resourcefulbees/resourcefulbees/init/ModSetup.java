@@ -37,8 +37,8 @@ import java.nio.file.Paths;
 import java.util.function.Consumer;
 
 import static com.resourcefulbees.resourcefulbees.ResourcefulBees.LOGGER;
-import static com.resourcefulbees.resourcefulbees.config.BeeBuilder.BEE_PATH;
-import static com.resourcefulbees.resourcefulbees.config.BeeBuilder.RESOURCE_PATH;
+import static com.resourcefulbees.resourcefulbees.config.BeeSetup.BEE_PATH;
+import static com.resourcefulbees.resourcefulbees.config.BeeSetup.RESOURCE_PATH;
 
 public class ModSetup {
 

@@ -2,8 +2,8 @@ package com.resourcefulbees.resourcefulbees.recipe;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import com.resourcefulbees.resourcefulbees.config.BeeInfo;
-import com.resourcefulbees.resourcefulbees.data.BeeData;
+import com.resourcefulbees.resourcefulbees.api.CustomBee;
+import com.resourcefulbees.resourcefulbees.config.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
 import net.minecraft.item.ItemStack;
@@ -22,7 +22,7 @@ public class ResourcefulBeesRecipeIngredients implements IIngredientSerializer<R
     @Override
     public CustomNBTIngredient parse(PacketBuffer buffer) {
         String beeType = buffer.readString();
-        BeeData bee = BeeInfo.getInfo(beeType);
+        CustomBee bee = BeeRegistry.getInfo(beeType);
         if (bee !=null) {
             int count = Math.max(buffer.readInt(), 1);
             boolean block = buffer.readBoolean();
@@ -43,8 +43,8 @@ public class ResourcefulBeesRecipeIngredients implements IIngredientSerializer<R
     @Override
     public CustomNBTIngredient parse(@Nonnull JsonObject json) {
         String beeType = JSONUtils.getString(json, "beetype");
-        if (BeeInfo.getInfo(beeType) != null) {
-            BeeData bee = BeeInfo.getInfo(beeType);
+        if (BeeRegistry.getInfo(beeType) != null) {
+            CustomBee bee = BeeRegistry.getInfo(beeType);
             int count = JSONUtils.getInt(json, "count", 1);
             boolean block = JSONUtils.getBoolean(json, "honeycombblock", false);
 

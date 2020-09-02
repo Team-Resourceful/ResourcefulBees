@@ -3,7 +3,7 @@ package com.resourcefulbees.resourcefulbees.client.gui.screen;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.client.gui.widget.TabImageButton;
-import com.resourcefulbees.resourcefulbees.config.BeeInfo;
+import com.resourcefulbees.resourcefulbees.config.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.container.ValidatedApiaryContainer;
 import com.resourcefulbees.resourcefulbees.lib.ApiaryTabs;
@@ -243,7 +243,7 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
             CompoundNBT data = new CompoundNBT();
             data.putString(NBTConstants.NBT_ENTITY, "resourcefulbees:bee");
             data.putString(NBTConstants.NBT_BEE_TYPE, this.container.beeList[i]);
-            String primaryColor = BeeInfo.getInfo(this.container.beeList[i]).getPrimaryColor();
+            String primaryColor = BeeRegistry.getInfo(this.container.beeList[i]).getPrimaryColor();
             data.putString(NBTConstants.NBT_COLOR, primaryColor != null && !primaryColor.isEmpty() ? primaryColor : String.valueOf(BeeConstants.DEFAULT_ITEM_COLOR));
             beeJar.setTag(data);
             if (this.client != null)

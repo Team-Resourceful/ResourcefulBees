@@ -1,22 +1,22 @@
 package com.resourcefulbees.resourcefulbees.config;
 
-import com.resourcefulbees.resourcefulbees.data.BeeData;
-import com.resourcefulbees.resourcefulbees.init.TraitRegistration;
+import com.resourcefulbees.resourcefulbees.api.CustomBee;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.MathUtils;
 import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.biome.Biome;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.awt.*;
-import java.util.List;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
-public class BeeInfo {
+public class BeeRegistry {
 
-    private static final LinkedHashMap<String, BeeData> BEE_INFO = new LinkedHashMap<>();
+    private static final LinkedHashMap<String, CustomBee> BEE_INFO = new LinkedHashMap<>();
     public static final HashMap<Biome, RandomCollection<String>> SPAWNABLE_BIOMES = new HashMap<>();
     public static final HashMap<Pair<String, String>, RandomCollection<String>> FAMILY_TREE = new HashMap<>();
 
@@ -54,8 +54,8 @@ public class BeeInfo {
      *  @param bee Bee type for which BeeData is requested.
      *  @return Returns a BeeData object for the given bee type.
      */
-    public static BeeData getInfo(String bee){
-        BeeData info = BEE_INFO.get(bee);
+    public static CustomBee getInfo(String bee){
+        CustomBee info = BEE_INFO.get(bee);
         return info != null ? info : BEE_INFO.get(BeeConstants.DEFAULT_BEE_TYPE);
     }
 
@@ -89,8 +89,8 @@ public class BeeInfo {
      *  @param child BeeData object for the child.
      *  @return Returns random bee type as a string.
      */
-    public static double getAdjustedWeightForChild(BeeData child){
-        return FAMILY_TREE.get(BeeInfoUtils.sortParents(child.getParent1(), child.getParent2())).getAdjustedWeight(child.getBreedWeight());
+    public static double getAdjustedWeightForChild(CustomBee child){
+        return FAMILY_TREE.get(BeeInfoUtils.sortParents(child.BreedData.getParent1(), child.BreedData.getParent2())).getAdjustedWeight(child.BreedData.getBreedWeight());
     }
 
     /**
@@ -98,12 +98,12 @@ public class BeeInfo {
      * If the bee already exists in the registry the method will return false.
      *
      *  @param beeType Bee Type of the bee being registered.
-     *  @param beeData BeeData of the bee being registered
+     *  @param customBee BeeData of the bee being registered
      *  @return Returns false if bee already exists in the registry.
      */
-    public static boolean registerBee(String beeType, BeeData beeData) {
+    public static boolean registerBee(String beeType, CustomBee customBee) {
         if (!BEE_INFO.containsKey(beeType)) {
-            BEE_INFO.put(beeType, beeData);
+            BEE_INFO.put(beeType, customBee);
             return true;
         }
         return false;
@@ -115,7 +115,7 @@ public class BeeInfo {
      *
      *  @return Returns unmodifiable copy of bee registry.
      */
-    public static Map<String, BeeData> getBees() {
+    public static Map<String, CustomBee> getBees() {
         return Collections.unmodifiableMap(BEE_INFO);
     }
 
@@ -125,12 +125,12 @@ public class BeeInfo {
     }
 
 
-    /**
+/*    *//**
      * Sets a bees traits.
      *  @param name Bee Type of the bee having its traits set.
-     */
+     *//*
     public static void setBeesTraits(String name){
-        BeeData bee = BEE_INFO.get(name);
+        CustomBee bee = BEE_INFO.get(name);
         List<CompoundNBT> traits = new ArrayList<>();
         if (bee.isWitherBee()) traits.add(TraitRegistration.getTrait("wither"));
         if (bee.isBlazeBee()) traits.add(TraitRegistration.getTrait("blaze"));
@@ -141,5 +141,5 @@ public class BeeInfo {
         if (bee.isEnderBee()) traits.add(TraitRegistration.getTrait("ender"));
         if (bee.isNetherBee()) traits.add(TraitRegistration.getTrait("nether"));
         BEE_INFO.get(name).addBeeTraits(traits);
-    }
+    }*/
 }

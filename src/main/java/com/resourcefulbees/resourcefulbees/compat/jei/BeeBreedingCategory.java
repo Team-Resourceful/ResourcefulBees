@@ -2,9 +2,9 @@ package com.resourcefulbees.resourcefulbees.compat.jei;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
+import com.resourcefulbees.resourcefulbees.api.CustomBee;
 import com.resourcefulbees.resourcefulbees.compat.jei.ingredients.EntityIngredient;
-import com.resourcefulbees.resourcefulbees.config.BeeInfo;
-import com.resourcefulbees.resourcefulbees.data.BeeData;
+import com.resourcefulbees.resourcefulbees.config.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
@@ -52,17 +52,17 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
 
     public static List<Recipe> getBreedingRecipes(IIngredientManager ingredientManager) {
         List<Recipe> recipes = new ArrayList<>();
-        for (Map.Entry<String, BeeData> entry : BeeInfo.getBees().entrySet()){
-            BeeData bee = entry.getValue();
+        for (Map.Entry<String, CustomBee> entry : BeeRegistry.getBees().entrySet()){
+            CustomBee bee = entry.getValue();
             if (bee.isBreedable()) {
-                String parent1 = BeeInfo.getBees().containsKey(bee.getParent1()) && BeeInfo.getBees().containsKey(bee.getParent2()) ? bee.getParent1() : bee.getName();
-                String parent2 = BeeInfo.getBees().containsKey(bee.getParent1()) && BeeInfo.getBees().containsKey(bee.getParent2()) ? bee.getParent2() : bee.getName();
+                String parent1 = BeeRegistry.getBees().containsKey(bee.getParent1()) && BeeRegistry.getBees().containsKey(bee.getParent2()) ? bee.getParent1() : bee.getName();
+                String parent2 = BeeRegistry.getBees().containsKey(bee.getParent1()) && BeeRegistry.getBees().containsKey(bee.getParent2()) ? bee.getParent2() : bee.getName();
 
-                String p1_feedItemS = BeeInfo.getInfo(parent1).getFeedItem();
-                String p2_feedItemS = BeeInfo.getInfo(parent2).getFeedItem();
+                String p1_feedItemS = BeeRegistry.getInfo(parent1).getFeedItem();
+                String p2_feedItemS = BeeRegistry.getInfo(parent2).getFeedItem();
 
-                int p1_feedAmount = BeeInfo.getInfo(parent1).getFeedAmount();
-                int p2_feedAmount = BeeInfo.getInfo(parent2).getFeedAmount();
+                int p1_feedAmount = BeeRegistry.getInfo(parent1).getFeedAmount();
+                int p2_feedAmount = BeeRegistry.getInfo(parent2).getFeedAmount();
 
                 p1_feedItemS = finalizeFeedItem(p1_feedItemS);
                 p2_feedItemS = finalizeFeedItem(p2_feedItemS);
@@ -192,7 +192,7 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
         Minecraft minecraft = Minecraft.getInstance();
         FontRenderer fontRenderer = minecraft.fontRenderer;
         DecimalFormat decimalFormat = new DecimalFormat("##%");
-        fontRenderer.draw(matrix, decimalFormat.format(BeeInfo.getAdjustedWeightForChild(BeeInfo.getInfo(recipe.getChild()))), 90, 35, 0xff808080);
+        fontRenderer.draw(matrix, decimalFormat.format(BeeRegistry.getAdjustedWeightForChild(BeeRegistry.getInfo(recipe.getChild()))), 90, 35, 0xff808080);
     }
 
     public static class Recipe {

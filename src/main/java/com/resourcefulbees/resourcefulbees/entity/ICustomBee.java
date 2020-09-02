@@ -1,7 +1,7 @@
 package com.resourcefulbees.resourcefulbees.entity;
 
+import com.resourcefulbees.resourcefulbees.api.CustomBee;
 import com.resourcefulbees.resourcefulbees.config.IBeeInfo;
-import com.resourcefulbees.resourcefulbees.data.BeeData;
 
 public interface ICustomBee extends IBeeInfo {
 
@@ -32,7 +32,7 @@ public interface ICustomBee extends IBeeInfo {
      *
      *  @return "This" bee's info card.
      */
-    BeeData getBeeInfo();
+    CustomBee getBeeInfo();
 
     /**
      * Gets "this" bee's current number of times fed.
