@@ -207,7 +207,7 @@ public class ResourcefulBee extends CustomBeeEntity {
     protected void updateAITasks() {
         CustomBee info = getBeeInfo();
 
-        for (CompoundNBT trait : info.getBeeTraits()){
+        for (CompoundNBT trait : info.TraitData.getBeeTraits()){
             if (BeeTrait.hasSpecialAbilities(trait)){
                 for (String ability : BeeTrait.getSpecialAbilities(trait)){
                     if (ability.equals("teleport")) {
@@ -279,7 +279,7 @@ public class ResourcefulBee extends CustomBeeEntity {
                 CustomBee info = this.getBeeInfo();
                 boolean hasPotionEffect = false;
                 boolean hasDamageType = false;
-                for (CompoundNBT trait : info.getBeeTraits()){
+                for (CompoundNBT trait : info.TraitData.getBeeTraits()){
                     if (BeeTrait.hasDamageTypes(trait)){
                         hasDamageType = true;
                         for (Pair<String, Integer> damageType : BeeTrait.getDamageTypes(trait)){

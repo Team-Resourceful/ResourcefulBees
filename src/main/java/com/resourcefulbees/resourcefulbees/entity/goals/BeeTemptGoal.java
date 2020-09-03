@@ -29,7 +29,7 @@ public class BeeTemptGoal extends Goal {
     private double pitch;
     private double yaw;
     private int delayTemptCounter;
-    private boolean isRunning;
+
 
     public BeeTemptGoal(CustomBeeEntity beeEntity, double speedIn, boolean scaredByPlayerMovementIn) {
         this.beeEntity = beeEntity;
@@ -117,7 +117,6 @@ public class BeeTemptGoal extends Goal {
         this.targetX = this.closestPlayer.getX();
         this.targetY = this.closestPlayer.getY();
         this.targetZ = this.closestPlayer.getZ();
-        this.isRunning = true;
     }
 
     /**
@@ -127,7 +126,6 @@ public class BeeTemptGoal extends Goal {
         this.closestPlayer = null;
         this.beeEntity.getNavigator().clearPath();
         this.delayTemptCounter = 100;
-        this.isRunning = false;
     }
 
     /**
@@ -141,12 +139,5 @@ public class BeeTemptGoal extends Goal {
             this.beeEntity.getNavigator().tryMoveToEntityLiving(this.closestPlayer, this.speed);
         }
 
-    }
-
-    /**
-     * @see #isRunning
-     */
-    public boolean isRunning() {
-        return this.isRunning;
     }
 }

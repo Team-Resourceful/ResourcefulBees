@@ -1,6 +1,5 @@
 package com.resourcefulbees.resourcefulbees;
 
-import com.resourcefulbees.resourcefulbees.api.TraitRegistration;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.*;
 import com.resourcefulbees.resourcefulbees.client.render.entity.CustomBeeRenderer;
 import com.resourcefulbees.resourcefulbees.client.render.items.ItemModelPropertiesHandler;
@@ -12,8 +11,9 @@ import com.resourcefulbees.resourcefulbees.data.RecipeBuilder;
 import com.resourcefulbees.resourcefulbees.init.ModSetup;
 import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
 import com.resourcefulbees.resourcefulbees.recipe.ResourcefulBeesRecipeIngredients;
-import com.resourcefulbees.resourcefulbees.registry.ColorHandler;
 import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
+import com.resourcefulbees.resourcefulbees.registry.TraitRegistry;
+import com.resourcefulbees.resourcefulbees.utils.ColorHandler;
 import com.resourcefulbees.resourcefulbees.utils.PreviewHandler;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -208,10 +208,11 @@ public class ResourcefulBees
     }
 
     private void loadComplete(FMLLoadCompleteEvent event) {
-        TraitRegistration.registerDefaultTraits();
-        TraitRegistration.setTraitRegistrationClosed();
+        TraitRegistry.registerDefaultTraits();
+        TraitRegistry.setTraitRegistrationClosed();
         BeeSetup.setupBees();
-        TraitRegistration.giveBeesTraits();
+        //TraitRegistry.giveBeesTraits();
+
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> DataGen::GenerateEnglishLang);
     }
 }

@@ -3,10 +3,9 @@ package com.resourcefulbees.resourcefulbees.api;
 import com.resourcefulbees.resourcefulbees.api.beedata.*;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
-import net.minecraft.nbt.CompoundNBT;
-
-import java.util.ArrayList;
-import java.util.List;
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraftforge.fml.RegistryObject;
 
 public class CustomBee {
 
@@ -15,29 +14,31 @@ public class CustomBee {
     private final int maxTimeInHive;
     private final float attackDamage;
     private final float sizeModifier;
-    private final String name;
-    private final String[] traits = {};
+    private transient final String name;
     public final MutationData MutationData;
     public final ColorData ColorData;
     public final CentrifugeData CentrifugeData;
     public final BreedData BreedData;
     public final SpawnData SpawnData;
+    public final TraitData TraitData;
+    private RegistryObject<Item> itemRegistryObject;
+    private RegistryObject<Block> blockRegistryObject;
+    private RegistryObject<Item> blockItemRegistryObject;
+    //private ResourceLocation registryID; not sure if we could use this
 
-    private final List<CompoundNBT> beeTraits;
-
-    private CustomBee(String flower, String baseLayerTexture, int maxTimeInHive, float attackDamage, float sizeModifier, String name, List<CompoundNBT> beeTraits, MutationData MutationData, ColorData ColorData, CentrifugeData CentrifugeData, BreedData BreedData, SpawnData SpawnData) {
+    private CustomBee(String flower, String baseLayerTexture, int maxTimeInHive, float attackDamage, float sizeModifier, String name, MutationData MutationData, ColorData ColorData, CentrifugeData CentrifugeData, BreedData BreedData, SpawnData SpawnData, TraitData TraitData) {
         this.flower = flower;
         this.baseLayerTexture = baseLayerTexture;
         this.maxTimeInHive = maxTimeInHive;
         this.attackDamage = attackDamage;
         this.sizeModifier = sizeModifier;
         this.name = name;
-        this.beeTraits = beeTraits;
         this.MutationData = MutationData;
         this.ColorData = ColorData;
         this.CentrifugeData = CentrifugeData;
         this.BreedData = BreedData;
         this.SpawnData = SpawnData;
+        this.TraitData = TraitData;
     }
 
     public String getFlower() {
@@ -56,18 +57,33 @@ public class CustomBee {
         return attackDamage;
     }
 
+    public RegistryObject<Item> getItemRegistryObject() {
+        return itemRegistryObject;
+    }
+
+    public void setItemRegistryObject(RegistryObject<Item> itemRegistryObject) {
+        this.itemRegistryObject = itemRegistryObject;
+    }
+
+    public RegistryObject<Block> getBlockRegistryObject() {
+        return blockRegistryObject;
+    }
+
+    public void setBlockRegistryObject(RegistryObject<Block> blockRegistryObject) {
+        this.blockRegistryObject = blockRegistryObject;
+    }
+
+    public RegistryObject<Item> getBlockItemRegistryObject() {
+        return blockItemRegistryObject;
+    }
+
+    public void setBlockItemRegistryObject(RegistryObject<Item> blockItemRegistryObject) {
+        this.blockItemRegistryObject = blockItemRegistryObject;
+    }
+
     public float getSizeModifier() { return sizeModifier != 0 ? sizeModifier : Config.BEE_SIZE_MODIFIER.get().floatValue(); }
 
     public String getName() { return name; }
-
-    public List<CompoundNBT> getBeeTraits() { return beeTraits; }
-
-    /**
-     * This returns the traits array which is only used if a bee
-     * is added via json files.
-     * @return traits array;
-     **/
-    public String[] getBeeTraitArray() { return traits; }
 
     public static class Builder {
         private final String flower;
@@ -76,14 +92,14 @@ public class CustomBee {
         private float attackDamage = 1.0f;
         private float sizeModifier;
         private final String name;
-        private final List<CompoundNBT> beeTraits = new ArrayList<>();
-        public final MutationData MutationData;
-        public final ColorData ColorData;
-        public final CentrifugeData CentrifugeData;
-        public final BreedData BreedData;
-        public final SpawnData SpawnData;
+        private final MutationData MutationData;
+        private final ColorData ColorData;
+        private final CentrifugeData CentrifugeData;
+        private final BreedData BreedData;
+        private final SpawnData SpawnData;
+        private final TraitData TraitData;
 
-        public Builder(String name, String flower, MutationData mutationData, ColorData colorData, CentrifugeData centrifugeData, BreedData breedData, SpawnData spawnData) {
+        public Builder(String name, String flower, MutationData mutationData, ColorData colorData, CentrifugeData centrifugeData, BreedData breedData, SpawnData spawnData, TraitData traitData) {
             this.name = name;
             this.flower = flower;
             this.MutationData = mutationData;
@@ -91,6 +107,7 @@ public class CustomBee {
             this.CentrifugeData = centrifugeData;
             this.BreedData = breedData;
             this.SpawnData = spawnData;
+            this.TraitData = traitData;
         }
 
         public Builder setBaseLayerTexture(String baseLayerTexture) {
@@ -113,13 +130,8 @@ public class CustomBee {
             return this;
         }
 
-        public Builder addTrait(CompoundNBT beeTrait) {
-            beeTraits.add(beeTrait);
-            return this;
-        }
-
         public CustomBee createCustomBee() {
-            return new CustomBee(flower, baseLayerTexture, maxTimeInHive, attackDamage, sizeModifier, name, beeTraits, MutationData, ColorData, CentrifugeData, BreedData, SpawnData);
+            return new CustomBee(flower, baseLayerTexture, maxTimeInHive, attackDamage, sizeModifier, name, MutationData, ColorData, CentrifugeData, BreedData, SpawnData, TraitData);
         }
     }
 

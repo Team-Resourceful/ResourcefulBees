@@ -1,12 +1,12 @@
 
 package com.resourcefulbees.resourcefulbees.block;
 
-import com.resourcefulbees.resourcefulbees.config.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
-import com.resourcefulbees.resourcefulbees.registry.ColorHandler;
+import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
 import com.resourcefulbees.resourcefulbees.tileentity.HoneycombTileEntity;
+import com.resourcefulbees.resourcefulbees.utils.ColorHandler;
 import com.resourcefulbees.resourcefulbees.utils.NBTHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;

@@ -1,18 +1,18 @@
-package com.resourcefulbees.resourcefulbees.config;
+package com.resourcefulbees.resourcefulbees.registry;
 
 import com.resourcefulbees.resourcefulbees.api.CustomBee;
-import com.resourcefulbees.resourcefulbees.api.TraitRegistration;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.MathUtils;
 import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.biome.Biome;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.awt.*;
-import java.util.*;
-import java.util.List;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class BeeRegistry {
 
@@ -125,20 +125,23 @@ public class BeeRegistry {
     }
 
 
-    /**
+
+    //TODO This may not be needed now that the TraitData object has been added
+
+/*    *//**
      * Sets a bees traits.
      *  @param name Bee Type of the bee having its traits set.
-     **/
+     **//*
     public static void setBeesTraits(String name){
         CustomBee bee = BEE_INFO.get(name);
         if (bee.getBeeTraits().isEmpty()) {
             List<CompoundNBT> traits = new ArrayList<>();
             for (String trait : bee.getBeeTraitArray()){
-                CompoundNBT traitNBT = TraitRegistration.getTrait(trait);
+                CompoundNBT traitNBT = TraitRegistry.getTrait(trait);
                 if (traitNBT != null) traits.add(traitNBT);
             }
             //TODO need to add back the addBeeTraits Setter
             //BEE_INFO.get(name).addBeeTraits(traits);
         }
-    }
+    }*/
 }

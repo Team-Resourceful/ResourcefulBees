@@ -3,7 +3,7 @@ package com.resourcefulbees.resourcefulbees.item;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
-import com.resourcefulbees.resourcefulbees.registry.ColorHandler;
+import com.resourcefulbees.resourcefulbees.utils.ColorHandler;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Food;
 import net.minecraft.item.Item;

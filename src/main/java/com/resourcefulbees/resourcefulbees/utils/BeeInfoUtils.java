@@ -3,9 +3,9 @@ package com.resourcefulbees.resourcefulbees.utils;
 import com.google.common.base.Splitter;
 import com.resourcefulbees.resourcefulbees.api.CustomBee;
 import com.resourcefulbees.resourcefulbees.api.beedata.*;
-import com.resourcefulbees.resourcefulbees.config.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
+import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.fluid.Fluid;
@@ -26,8 +26,8 @@ import java.util.List;
 import java.util.Set;
 
 import static com.resourcefulbees.resourcefulbees.ResourcefulBees.LOGGER;
-import static com.resourcefulbees.resourcefulbees.config.BeeRegistry.FAMILY_TREE;
-import static com.resourcefulbees.resourcefulbees.config.BeeRegistry.SPAWNABLE_BIOMES;
+import static com.resourcefulbees.resourcefulbees.registry.BeeRegistry.FAMILY_TREE;
+import static com.resourcefulbees.resourcefulbees.registry.BeeRegistry.SPAWNABLE_BIOMES;
 
 public class BeeInfoUtils {
 

@@ -338,4 +338,17 @@ public class RegistryHandler {
 	public static void addEntityAttributes() {
 		GlobalEntityTypeAttributes.put(CUSTOM_BEE.get(), BeeEntity.createBeeAttributes().build());
 	}
+
+
+	//not final version of this. Bee Registration should take place before forge registration.
+	public static void registerBeeHoneycombsAndBlocks() {
+		BeeRegistry.getBees().forEach((name, customBee) -> {
+			final RegistryObject<Block> customHoneycombBlock = BLOCKS.register(name + "resourceful_honeycomb_block", HoneycombBlock::new);
+			final RegistryObject<Item> customHoneycomb = ITEMS.register(name + "resourceful_honeycomb", ResourcefulHoneycomb::new);
+			final RegistryObject<Item> customHoneycombBlockItem = ITEMS.register(name + "resourceful_honeycomb_block", HoneycombBlockItem::new);
+			customBee.setBlockRegistryObject(customHoneycombBlock);
+			customBee.setItemRegistryObject(customHoneycomb);
+			customBee.setBlockItemRegistryObject(customHoneycombBlockItem);
+		});
+	}
 }

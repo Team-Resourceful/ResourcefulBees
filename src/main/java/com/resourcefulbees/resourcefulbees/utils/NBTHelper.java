@@ -1,7 +1,7 @@
 package com.resourcefulbees.resourcefulbees.utils;
 
-import com.resourcefulbees.resourcefulbees.config.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
+import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import net.minecraft.nbt.CompoundNBT;
 
 public class NBTHelper {

@@ -1,14 +1,12 @@
-package com.resourcefulbees.resourcefulbees.api;
+package com.resourcefulbees.resourcefulbees.registry;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
-import com.resourcefulbees.resourcefulbees.config.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.lib.TraitConstants;
 import net.minecraft.nbt.CompoundNBT;
 
 import java.util.HashMap;
-import java.util.Map;
 
-public class TraitRegistration {
+public class TraitRegistry {
 
     private static final HashMap<String, CompoundNBT> TRAIT_REGISTRY = new HashMap<>();
     private static boolean closed = false;
@@ -23,7 +21,7 @@ public class TraitRegistration {
 
     public static CompoundNBT getTrait(String name) {
         return TRAIT_REGISTRY.get(name);
-    }
+    } //As long as other mods are using deferred register or @ObjectHolder for their custom damage sources/potion effects etc. they should be able to supply the static field for use later
 
     public static void setTraitRegistrationClosed(){
         closed = true;
@@ -40,9 +38,11 @@ public class TraitRegistration {
         register("nether", TraitConstants.NETHER);
     }
 
-    public static void giveBeesTraits(){
+
+    //TODO this may not bee needed anymore with the TraitData Builder
+/*    public static void giveBeesTraits(){
         for (Map.Entry<String, CustomBee> bee : BeeRegistry.getBees().entrySet()){
             BeeRegistry.setBeesTraits(bee.getKey());
         }
-    }
+    }*/
 }
