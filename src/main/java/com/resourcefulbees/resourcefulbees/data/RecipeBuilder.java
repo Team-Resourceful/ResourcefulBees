@@ -103,7 +103,7 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
 
     private IRecipe<?> centrifugeHoneyCombBlockRecipe(String BeeType, String Color) {
         BeeData info = BeeInfo.getInfo(BeeType);
-        ItemStack honeycombBlockItemStack = new ItemStack(RegistryHandler.HONEYCOMB_BLOCK_ITEM.get(), 1);
+        ItemStack honeycombBlockItemStack = new ItemStack(RegistryHandler.HONEYCOMB_BLOCK_ITEM.get(), info.getMainInputCount());
         final CompoundNBT honeycombBlockItemStackTag = honeycombBlockItemStack.getOrCreateChildTag(NBTConstants.NBT_ROOT);
         honeycombBlockItemStackTag.putString(NBTConstants.NBT_COLOR, Color);
         honeycombBlockItemStackTag.putString(NBTConstants.NBT_BEE_TYPE, BeeType);
