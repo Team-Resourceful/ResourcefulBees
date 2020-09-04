@@ -343,9 +343,9 @@ public class RegistryHandler {
 	//not final version of this. Bee Registration should take place before forge registration.
 	public static void registerBeeHoneycombsAndBlocks() {
 		BeeRegistry.getBees().forEach((name, customBee) -> {
-			final RegistryObject<Block> customHoneycombBlock = BLOCKS.register(name + "resourceful_honeycomb_block", HoneycombBlock::new);
-			final RegistryObject<Item> customHoneycomb = ITEMS.register(name + "resourceful_honeycomb", ResourcefulHoneycomb::new);
-			final RegistryObject<Item> customHoneycombBlockItem = ITEMS.register(name + "resourceful_honeycomb_block", HoneycombBlockItem::new);
+			final RegistryObject<Block> customHoneycombBlock = BLOCKS.register(name + "_resourceful_honeycomb_block", HoneycombBlock::new);
+			final RegistryObject<Item> customHoneycomb = ITEMS.register(name + "_resourceful_honeycomb", ResourcefulHoneycomb::new);
+			final RegistryObject<Item> customHoneycombBlockItem = ITEMS.register(name + "_resourceful_honeycomb_block", HoneycombBlockItem::new);
 			customBee.setBlockRegistryObject(customHoneycombBlock);
 			customBee.setItemRegistryObject(customHoneycomb);
 			customBee.setBlockItemRegistryObject(customHoneycombBlockItem);

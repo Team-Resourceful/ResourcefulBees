@@ -26,7 +26,7 @@ public class MutationData {
     }
 
     public int getMutationCount() {
-        return mutationCount;
+        return mutationCount <=0 ? 10 : mutationCount;
     }
 
     public boolean hasMutation() {
@@ -38,9 +38,9 @@ public class MutationData {
     }
 
     public static class Builder {
-        private String mutationInput = "";
-        private String mutationOutput = "";
-        private int mutationCount = 10;
+        private String mutationInput;
+        private String mutationOutput;
+        private int mutationCount;
         private final boolean hasMutation;
         private final MutationTypes mutationType;
 

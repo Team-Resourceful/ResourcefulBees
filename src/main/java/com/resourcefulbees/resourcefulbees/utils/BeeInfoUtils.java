@@ -97,9 +97,10 @@ public class BeeInfoUtils {
         CustomBee defaultBee = new CustomBee.Builder(BeeConstants.DEFAULT_BEE_TYPE, BeeConstants.FLOWER_TAG_ALL,
                 new MutationData.Builder(false, MutationTypes.NONE).createMutationData(),
                 new ColorData.Builder(false).createColorData(),
-                new CentrifugeData.Builder(false).createCentrifugeData(),
+                new CentrifugeData.Builder(false, null).createCentrifugeData(),
                 new BreedData.Builder(false).createBreedData(),
-                new SpawnData.Builder(false).createSpawnData())
+                new SpawnData.Builder(false).createSpawnData(),
+                new TraitData.Builder().createTraitData())
                 .createCustomBee();
         BeeRegistry.registerBee(BeeConstants.DEFAULT_BEE_TYPE, defaultBee);
     }

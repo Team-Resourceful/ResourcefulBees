@@ -7,18 +7,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TraitData {
-    private final List<String> traits = new ArrayList<>();
-    private final List<CompoundNBT> beeTraits = new ArrayList<>();
-    private boolean listBuilt = false;
+    private final List<String> traits;
+    private transient final List<CompoundNBT> beeTraits = new ArrayList<>();
+    private transient boolean listBuilt = false;
 
     private TraitData(List<String> traits) {
+        this.traits = new ArrayList<>();
         this.traits.addAll(traits);
     }
 
     private void buildCompoundList() {
-        for (String trait: traits) {
-            CompoundNBT traitNBT = TraitRegistry.getTrait(trait);
-            if (traitNBT != null) beeTraits.add(traitNBT);
+        if (traits != null && beeTraits != null) {
+            for (String trait : traits) {
+                CompoundNBT traitNBT = TraitRegistry.getTrait(trait);
+                if (traitNBT != null) beeTraits.add(traitNBT);
+            }
         }
     }
 
@@ -27,11 +30,11 @@ public class TraitData {
     }
 
     public boolean hasTraits() {
-        if (!listBuilt && beeTraits.isEmpty()) {
+        if (!listBuilt && beeTraits != null && beeTraits.isEmpty()) {
             buildCompoundList();  //to cover both jsons and other mods using builder also keeps build method private
             listBuilt = true;
         }
-        return !beeTraits.isEmpty();
+        return beeTraits != null && !beeTraits.isEmpty();
     }
 
     //TODO Consider making these methods available directly from the TraitData Object vs Static class call

@@ -12,21 +12,21 @@ public class CustomBee {
     private final String flower;
     private final String baseLayerTexture;
     private final int maxTimeInHive;
-    private final float attackDamage;
+    private final Float attackDamage;
     private final float sizeModifier;
-    private transient final String name;
+    private transient String name;
     public final MutationData MutationData;
     public final ColorData ColorData;
     public final CentrifugeData CentrifugeData;
     public final BreedData BreedData;
     public final SpawnData SpawnData;
     public final TraitData TraitData;
-    private RegistryObject<Item> itemRegistryObject;
-    private RegistryObject<Block> blockRegistryObject;
-    private RegistryObject<Item> blockItemRegistryObject;
+    private transient RegistryObject<Item> itemRegistryObject;
+    private transient RegistryObject<Block> blockRegistryObject;
+    private transient RegistryObject<Item> blockItemRegistryObject;
     //private ResourceLocation registryID; not sure if we could use this
 
-    private CustomBee(String flower, String baseLayerTexture, int maxTimeInHive, float attackDamage, float sizeModifier, String name, MutationData MutationData, ColorData ColorData, CentrifugeData CentrifugeData, BreedData BreedData, SpawnData SpawnData, TraitData TraitData) {
+    private CustomBee(String flower, String baseLayerTexture, int maxTimeInHive, Float attackDamage, float sizeModifier, String name, MutationData MutationData, ColorData ColorData, CentrifugeData CentrifugeData, BreedData BreedData, SpawnData SpawnData, TraitData TraitData) {
         this.flower = flower;
         this.baseLayerTexture = baseLayerTexture;
         this.maxTimeInHive = maxTimeInHive;
@@ -42,19 +42,19 @@ public class CustomBee {
     }
 
     public String getFlower() {
-        return flower;
+        return flower == null ? "all" : flower.toLowerCase();
     }
 
     public String getBaseLayerTexture() {
-        return baseLayerTexture;
+        return baseLayerTexture == null ? "/custom/bee" : baseLayerTexture.toLowerCase();
     }
 
     public int getMaxTimeInHive() {
-        return maxTimeInHive;
+        return Math.max(maxTimeInHive, BeeConstants.MAX_TIME_IN_HIVE);
     }
 
     public float getAttackDamage() {
-        return attackDamage;
+        return attackDamage == null ? 1.0f : attackDamage;
     }
 
     public RegistryObject<Item> getItemRegistryObject() {
@@ -62,7 +62,7 @@ public class CustomBee {
     }
 
     public void setItemRegistryObject(RegistryObject<Item> itemRegistryObject) {
-        this.itemRegistryObject = itemRegistryObject;
+        this.itemRegistryObject = this.itemRegistryObject == null ? itemRegistryObject : this.itemRegistryObject;
     }
 
     public RegistryObject<Block> getBlockRegistryObject() {
@@ -70,7 +70,7 @@ public class CustomBee {
     }
 
     public void setBlockRegistryObject(RegistryObject<Block> blockRegistryObject) {
-        this.blockRegistryObject = blockRegistryObject;
+        this.blockRegistryObject = this.blockRegistryObject == null ? blockRegistryObject : this.blockRegistryObject;
     }
 
     public RegistryObject<Item> getBlockItemRegistryObject() {
@@ -78,7 +78,11 @@ public class CustomBee {
     }
 
     public void setBlockItemRegistryObject(RegistryObject<Item> blockItemRegistryObject) {
-        this.blockItemRegistryObject = blockItemRegistryObject;
+        this.blockItemRegistryObject = this.blockItemRegistryObject == null ? blockItemRegistryObject : this.blockItemRegistryObject;
+    }
+
+    public void setName(String name) {
+        this.name = this.name == null ? name : this.name;
     }
 
     public float getSizeModifier() { return sizeModifier != 0 ? sizeModifier : Config.BEE_SIZE_MODIFIER.get().floatValue(); }
@@ -87,9 +91,9 @@ public class CustomBee {
 
     public static class Builder {
         private final String flower;
-        private String baseLayerTexture = "/custom/bee";
-        private int maxTimeInHive = BeeConstants.MAX_TIME_IN_HIVE;
-        private float attackDamage = 1.0f;
+        private String baseLayerTexture;
+        private int maxTimeInHive;
+        private Float attackDamage;
         private float sizeModifier;
         private final String name;
         private final MutationData MutationData;

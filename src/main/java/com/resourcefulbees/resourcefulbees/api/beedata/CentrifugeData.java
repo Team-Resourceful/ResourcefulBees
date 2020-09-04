@@ -4,6 +4,7 @@ import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
 import net.minecraft.item.Items;
 
+import javax.annotation.Nullable;
 import java.util.Objects;
 
 public class CentrifugeData {
@@ -38,7 +39,7 @@ public class CentrifugeData {
     }
 
     public String getSecondaryOutput() {
-        return secondaryOutput;
+        return secondaryOutput == null ? RegistryHandler.BEESWAX.getId().toString() : secondaryOutput;
     }
 
     public String getBottleOutput() {
@@ -46,31 +47,31 @@ public class CentrifugeData {
     }
 
     public double getMainOutputWeight() {
-        return mainOutputWeight;
+        return Math.max(BeeConstants.DEFAULT_MAIN_OUTPUT_WEIGHT, mainOutputWeight);
     }
 
     public double getSecondaryOutputWeight() {
-        return secondaryOutputWeight;
+        return Math.max(BeeConstants.DEFAULT_SEC_OUTPUT_WEIGHT, secondaryOutputWeight);
     }
 
     public double getBottleOutputWeight() {
-        return bottleOutputWeight;
+        return Math.max(BeeConstants.DEFAULT_BOT_OUTPUT_WEIGHT, bottleOutputWeight);
     }
 
     public int getMainOutputCount() {
-        return mainOutputCount;
+        return Math.max(1, mainOutputCount);
     }
 
     public int getSecondaryOutputCount() {
-        return secondaryOutputCount;
+        return Math.max(1, secondaryOutputCount);
     }
 
     public int getBottleOutputCount() {
-        return bottleOutputCount;
+        return Math.max(1, bottleOutputCount);
     }
 
     public int getMainInputCount() {
-        return mainInputCount;
+        return Math.max(1, mainInputCount);
     }
 
     public boolean hasCentrifugeOutput() {
@@ -78,25 +79,21 @@ public class CentrifugeData {
     }
 
     public static class Builder {
-        private String mainOutput = "";
-        private String secondaryOutput = RegistryHandler.BEESWAX.getId().toString();
+        private final String mainOutput;
+        private String secondaryOutput;
         private String bottleOutput;
-        private double mainOutputWeight = BeeConstants.DEFAULT_MAIN_OUTPUT_WEIGHT;
-        private double secondaryOutputWeight = BeeConstants.DEFAULT_SEC_OUTPUT_WEIGHT;
-        private double bottleOutputWeight = BeeConstants.DEFAULT_BOT_OUTPUT_WEIGHT;
-        private int mainOutputCount = 1;
-        private int secondaryOutputCount = 1;
-        private int bottleOutputCount = 1;
-        private int mainInputCount = 1;
+        private double mainOutputWeight;
+        private double secondaryOutputWeight;
+        private double bottleOutputWeight;
+        private int mainOutputCount;
+        private int secondaryOutputCount;
+        private int bottleOutputCount;
+        private int mainInputCount;
         private final boolean hasCentrifugeOutput;
 
-        public Builder(boolean hasCentrifugeOutput) {
+        public Builder(boolean hasCentrifugeOutput, @Nullable String mainOutput) {
             this.hasCentrifugeOutput = hasCentrifugeOutput;
-        }
-
-        public Builder setMainOutput(String mainOutput) {
             this.mainOutput = mainOutput;
-            return this;
         }
 
         public Builder setSecondaryOutput(String secondaryOutput) {

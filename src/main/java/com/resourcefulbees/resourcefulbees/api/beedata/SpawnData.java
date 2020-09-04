@@ -18,22 +18,22 @@ public class SpawnData {
     }
 
     public int getSpawnWeight() {
-        return spawnWeight;
+        return spawnWeight <= 0 ? 100 : spawnWeight;
     }
 
     public String getBiomeWhitelist() {
-        return biomeWhitelist;
+        return biomeWhitelist == null ? "tag:overworld" : biomeWhitelist;
     }
 
     public String getBiomeBlacklist() {
-        return biomeBlacklist;
+        return biomeBlacklist == null ? "tag:ocean" : biomeBlacklist;
     }
 
     public static class Builder {
         private final boolean canSpawnInWorld;
-        private int spawnWeight = 100;
-        private String biomeWhitelist = "";
-        private String biomeBlacklist = "";
+        private int spawnWeight;
+        private String biomeWhitelist;
+        private String biomeBlacklist;
 
         public Builder(boolean canSpawnInWorld) {
             this.canSpawnInWorld = canSpawnInWorld;

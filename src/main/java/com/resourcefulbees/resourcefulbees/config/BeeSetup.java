@@ -5,7 +5,6 @@ import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.CustomBee;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
-import com.resourcefulbees.resourcefulbees.utils.BeeValidator;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -79,18 +78,19 @@ public class BeeSetup {
         Gson gson = new Gson();
         CustomBee bee = gson.fromJson(reader, CustomBee.class);
         bee.setName(name);
-        if (BeeValidator.validate(bee)) {
+        BeeRegistry.registerBee(name.toLowerCase(), bee);
+/*        if (BeeValidator.validate(bee)) {
             if (BeeRegistry.registerBee(name.toLowerCase(), bee)) {
-                if (bee.canSpawnInWorld())
+                if (bee.SpawnData.canSpawnInWorld())
                     BeeInfoUtils.parseBiomes(bee);
-                if (bee.isBreedable())
+                if (bee.BreedData.isBreedable())
                     BeeInfoUtils.buildFamilyTree(bee);
                 if (Config.SHOW_DEBUG_INFO.get())
                     LOGGER.info(name + " bee passed validation check!!");
             } else {
                 LOGGER.warn("{} Bee already exists! {} Bee will not be registered.", name, name);
             }
-        }
+        }*/
     }
 
     private static void addBees() {

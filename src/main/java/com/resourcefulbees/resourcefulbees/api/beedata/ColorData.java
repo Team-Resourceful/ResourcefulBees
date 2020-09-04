@@ -44,15 +44,15 @@ public class ColorData {
     }
 
     public String getPrimaryLayerTexture() {
-        return primaryLayerTexture;
+        return primaryLayerTexture == null ? "/custom/primary_layer" : primaryLayerTexture;
     }
 
     public String getSecondaryLayerTexture() {
-        return secondaryLayerTexture;
+        return secondaryLayerTexture == null ? "/custom/secondary_layer" : secondaryLayerTexture;
     }
 
     public String getEmissiveLayerTexture() {
-        return emissiveLayerTexture;
+        return emissiveLayerTexture == null ? "/custom/emissive_layer" : emissiveLayerTexture;
     }
 
     public boolean isBeeColored() {
@@ -68,7 +68,7 @@ public class ColorData {
     }
 
     public String getGlowColor() {
-        return glowColor;
+        return glowColor == null ? "#ffffff" : glowColor;
     }
 
     public boolean isEnchanted() {
@@ -114,15 +114,15 @@ public class ColorData {
         private String primaryColor;
         private String secondaryColor;
         private String honeycombColor;
-        private String glowColor = "#ffffff";
-        private String primaryLayerTexture = "/custom/primary_layer";
-        private String secondaryLayerTexture = "/custom/secondary_layer";
-        private String emissiveLayerTexture = "/custom/emissive_layer";
+        private String glowColor;
+        private String primaryLayerTexture;
+        private String secondaryLayerTexture;
+        private String emissiveLayerTexture;
         private final boolean isBeeColored;
-        private boolean isRainbowBee = false;
-        private boolean isGlowing = false;
-        private boolean isEnchanted = false;
-        private int glowingPulse = 0;
+        private boolean isRainbowBee;
+        private boolean isGlowing;
+        private boolean isEnchanted;
+        private int glowingPulse;
 
         public Builder(boolean isBeeColored) {
             this.isBeeColored = isBeeColored;
