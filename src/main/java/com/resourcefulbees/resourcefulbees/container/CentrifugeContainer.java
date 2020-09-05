@@ -1,7 +1,7 @@
 package com.resourcefulbees.resourcefulbees.container;
+import com.resourcefulbees.resourcefulbees.lib.CustomStorageContainers;
 import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
 import com.resourcefulbees.resourcefulbees.tileentity.CentrifugeTileEntity;
-import com.resourcefulbees.resourcefulbees.utils.CustomEnergyStorage;
 import com.resourcefulbees.resourcefulbees.utils.FunctionalIntReferenceHolder;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -71,7 +71,7 @@ public class CentrifugeContainer extends Container {
             public void set(int value) {
                 centrifugeTileEntity.getCapability(CapabilityEnergy.ENERGY).ifPresent(h -> {
                     int energyStored = h.getEnergyStored() & 0xffff0000;
-                    ((CustomEnergyStorage)h).setEnergy(energyStored + (value & 0xffff));
+                    ((CustomStorageContainers.CustomEnergyStorage)h).setEnergy(energyStored + (value & 0xffff));
                 });
             }
         });
@@ -85,7 +85,7 @@ public class CentrifugeContainer extends Container {
             public void set(int value) {
                 centrifugeTileEntity.getCapability(CapabilityEnergy.ENERGY).ifPresent(h -> {
                     int energyStored = h.getEnergyStored() & 0x0000ffff;
-                    ((CustomEnergyStorage)h).setEnergy(energyStored | (value << 16));
+                    ((CustomStorageContainers.CustomEnergyStorage)h).setEnergy(energyStored | (value << 16));
                 });
             }
         });

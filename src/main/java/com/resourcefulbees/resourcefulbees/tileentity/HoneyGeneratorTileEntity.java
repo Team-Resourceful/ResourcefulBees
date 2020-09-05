@@ -3,10 +3,9 @@ package com.resourcefulbees.resourcefulbees.tileentity;
 import com.resourcefulbees.resourcefulbees.block.HoneyGenerator;
 import com.resourcefulbees.resourcefulbees.container.AutomationSensitiveItemStackHandler;
 import com.resourcefulbees.resourcefulbees.container.HoneyGeneratorContainer;
+import com.resourcefulbees.resourcefulbees.lib.CustomStorageContainers;
 import com.resourcefulbees.resourcefulbees.registry.FluidRegistry;
 import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
-import com.resourcefulbees.resourcefulbees.utils.CustomEnergyStorage;
-import com.resourcefulbees.resourcefulbees.utils.CustomTankStorage;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -42,8 +41,8 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
     public static final int BOTTLE_OUPUT = 1;
 
     public AutomationSensitiveItemStackHandler h = new HoneyGeneratorTileEntity.TileStackHandler(5, getAcceptor(), getRemover());
-    public final CustomTankStorage fluidTank = new CustomTankStorage(5000);
-    public final CustomEnergyStorage energyStorage = createEnergy();
+    public final CustomStorageContainers.CustomTankStorage fluidTank = new CustomStorageContainers.CustomTankStorage(5000);
+    public final CustomStorageContainers.CustomEnergyStorage energyStorage = createEnergy();
     private final LazyOptional<IFluidHandler> fluidOptional = LazyOptional.of(() -> fluidTank);
     private final LazyOptional<IItemHandler> lazyOptional = LazyOptional.of(() -> h);
     private final LazyOptional<IEnergyStorage> energy = LazyOptional.of(() -> energyStorage);
@@ -232,8 +231,8 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
         return new TranslationTextComponent("gui.resourcefulbees.honey_generator");
     }
 
-    private CustomEnergyStorage createEnergy() {
-        return new CustomEnergyStorage(5000, 0, 100) {
+    private CustomStorageContainers.CustomEnergyStorage createEnergy() {
+        return new CustomStorageContainers.CustomEnergyStorage(5000, 0, 100) {
             @Override
             protected void onEnergyChanged() {
                 markDirty();

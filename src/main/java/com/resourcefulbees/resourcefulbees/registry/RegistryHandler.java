@@ -146,7 +146,7 @@ public class RegistryHandler {
 	public static final RegistryObject<Item> BELLOW = ITEMS.register("bellow", () -> new Item(new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
 	public static final RegistryObject<Item> SMOKERCAN = ITEMS.register("smoker_can", () -> new Item(new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
 	public static final RegistryObject<Item> BEESWAX = ITEMS.register("beeswax", () -> new Item(new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
-	public static final RegistryObject<Item> HONEYCOMB_BLOCK_ITEM = ITEMS.register("resourceful_honeycomb_block", HoneycombBlockItem::new);
+	public static final RegistryObject<Item> HONEYCOMB_BLOCK_ITEM = ITEMS.register("resourceful_honeycomb_block", () -> new HoneycombBlockItem(HONEYCOMB_BLOCK.get()));
 	public static final RegistryObject<Item> CENTRIFUGE_ITEM = ITEMS.register("centrifuge", () -> new BlockItem(CENTRIFUGE.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
 	public static final RegistryObject<Item> MECHANICAL_CENTRIFUGE_ITEM = ITEMS.register("mechanical_centrifuge", () -> new BlockItem(MECHANICAL_CENTRIFUGE.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
 	public static final RegistryObject<Item> CENTRIFUGE_CONTROLLER_ITEM = ITEMS.register("centrifuge_controller", () -> new BlockItem(CENTRIFUGE_CONTROLLER.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
@@ -343,9 +343,9 @@ public class RegistryHandler {
 	//not final version of this. Bee Registration should take place before forge registration.
 	public static void registerBeeHoneycombsAndBlocks() {
 		BeeRegistry.getBees().forEach((name, customBee) -> {
-			final RegistryObject<Block> customHoneycombBlock = BLOCKS.register(name + "_resourceful_honeycomb_block", HoneycombBlock::new);
-			final RegistryObject<Item> customHoneycomb = ITEMS.register(name + "_resourceful_honeycomb", ResourcefulHoneycomb::new);
-			final RegistryObject<Item> customHoneycombBlockItem = ITEMS.register(name + "_resourceful_honeycomb_block", HoneycombBlockItem::new);
+			final RegistryObject<Block> customHoneycombBlock = BLOCKS.register(name + "_resourceful_honeycomb_block", () -> new Block(Block.Properties.create(Material.CLAY)));
+			final RegistryObject<Item> customHoneycomb = ITEMS.register(name + "_resourceful_honeycomb", () -> new Item(new Item.Properties()));
+			final RegistryObject<Item> customHoneycombBlockItem = ITEMS.register(name + "_resourceful_honeycomb_block", () -> new BlockItem(customHoneycombBlock.get(), new Item.Properties()));
 			customBee.setBlockRegistryObject(customHoneycombBlock);
 			customBee.setItemRegistryObject(customHoneycomb);
 			customBee.setBlockItemRegistryObject(customHoneycombBlockItem);

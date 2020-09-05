@@ -1,183 +1,113 @@
 package com.resourcefulbees.resourcefulbees.data;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.StringNBT;
 import net.minecraft.particles.BasicParticleType;
 import net.minecraft.potion.Effect;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
-
-import static com.resourcefulbees.resourcefulbees.lib.TraitConstants.*;
 
 public class BeeTrait {
+    private final List<Pair<Effect, Integer>> potionDamageEffects;
+    private final List<DamageSource> damageImmunities;
+    private final List<Effect> potionImmunities;
+    private final List<Pair<String, Integer>> damageTypes;
+    private final List<String> specialAbilities;
+    private final BasicParticleType particleEffect;
 
-    private static final HashMap<String, DamageSource> DAMAGE_SOURCE_MAP = new HashMap<>();
-
-    public BeeTrait () {}
-
-    public static Builder builder() {
-        return new Builder();
+    private BeeTrait(List<Pair<Effect, Integer>> potionDamageEffects, List<DamageSource> damageImmunities, List<Effect> potionImmunities, List<Pair<String, Integer>> damageTypes, List<String> specialAbilities, BasicParticleType particleEffect) {
+        this.potionDamageEffects = potionDamageEffects;
+        this.damageImmunities = damageImmunities;
+        this.potionImmunities = potionImmunities;
+        this.damageTypes = damageTypes;
+        this.specialAbilities = specialAbilities;
+        this.particleEffect = particleEffect;
     }
 
-    public static List<Pair<Effect, Integer>> getPotionEffects(CompoundNBT nbt){
-        List<Pair<Effect, Integer>> potionEffects = new ArrayList<>();
-        ListNBT potions = nbt.getList(POTION_EFFECTS, 10);
-        for (int i = 0; i < potions.size(); i++) {
-            CompoundNBT potionNbtPair = potions.getCompound(i);
-            Effect potionEffect = ForgeRegistries.POTIONS.getValue(new ResourceLocation(potionNbtPair.getString(POTION_EFFECT)));
-            if (potionEffect !=null){
-                potionEffects.add(Pair.of(potionEffect, potionNbtPair.getInt(POTION_EFFECT_AMPLIFIER)));
-            }
-        }
-        return potionEffects;
-    }
+    public boolean hasDamagePotionEffects(){ return this.potionDamageEffects != null && !this.potionDamageEffects.isEmpty(); }
+    public boolean hasDamageImmunities(){ return this.damageImmunities != null && !this.damageImmunities.isEmpty(); }
+    public boolean hasPotionImmunities(){ return this.potionImmunities != null && !this.potionImmunities.isEmpty(); }
+    public boolean hasDamageTypes(){ return this.damageTypes != null && !this.damageTypes.isEmpty(); }
+    public boolean hasSpecialAbilities(){ return this.specialAbilities != null && !this.specialAbilities.isEmpty(); }
+    public boolean hasParticleEffect(){ return this.particleEffect != null; }
 
-    public static List<DamageSource> getDamageImmunities(CompoundNBT nbt){
-        List<DamageSource> damageImmunities = new ArrayList<>();
-        ListNBT damageImmunitiesNbtList = nbt.getList(DAMAGE_IMMUNITIES, 8);
-        for (int i = 0; i < damageImmunitiesNbtList.size(); i++) {
-            damageImmunities.add(DAMAGE_SOURCE_MAP.get(damageImmunitiesNbtList.getString(i)));
-        }
-        return damageImmunities;
+    public List<Pair<Effect, Integer>> getPotionDamageEffects(){
+        return this.potionDamageEffects;
     }
-
-    public static List<Effect> getPotionImmunities(CompoundNBT nbt){
-        List<Effect> potionImmunities = new ArrayList<>();
-        ListNBT potionImmunitiesNbtList = nbt.getList(POTION_IMMUNITIES, 8);
-        for (int i = 0; i < potionImmunitiesNbtList.size(); i++) {
-            Effect potionEffect = ForgeRegistries.POTIONS.getValue(new ResourceLocation(potionImmunitiesNbtList.getString(i)));
-            if (potionEffect !=null){
-                potionImmunities.add(potionEffect);
-            }
-        }
-        return potionImmunities;
+    public List<DamageSource> getDamageImmunities(){
+        return this.damageImmunities;
     }
-
-    public static List<Pair<String, Integer>> getDamageTypes(CompoundNBT nbt){
-        List<Pair<String, Integer>> damageTypes = new ArrayList<>();
-        ListNBT damageTypeList = nbt.getList(DAMAGE_TYPES, 10);
-        for (int i = 0; i < damageTypeList.size(); i++) {
-            CompoundNBT damageTypeNbtPair = damageTypeList.getCompound(i);
-            damageTypes.add(Pair.of(damageTypeNbtPair.getString(DAMAGE_TYPE), damageTypeNbtPair.getInt(DAMAGE_AMPLIFIER)));
-        }
-        return damageTypes;
+    public List<Effect> getPotionImmunities(){
+        return this.potionImmunities;
     }
-
-    public static List<String> getSpecialAbilities(CompoundNBT nbt){
-        List<String> abilities = new ArrayList<>();
-        ListNBT abilityList = nbt.getList(ABILITY_TYPES, 8);
-        for (int i = 0; i < abilityList.size(); i++) {
-            abilities.add(abilityList.getString(i));
-        }
-        return abilities;
+    public List<Pair<String, Integer>> getDamageTypes(){
+        return this.damageTypes;
     }
-
-    public static BasicParticleType getParticleEffect(CompoundNBT nbt){
-        return (BasicParticleType) ForgeRegistries.PARTICLE_TYPES.getValue(new ResourceLocation(nbt.getString(PARTICLE_EFFECT)));
+    public List<String> getSpecialAbilities(){
+        return this.specialAbilities;
     }
-
-    public static boolean hasPotionEffects(CompoundNBT nbt){
-        ListNBT potions = nbt.getList(POTION_EFFECTS, 10);
-        return potions.size() > 0;
-    }
-
-    public static boolean hasPotionImmunities(CompoundNBT nbt){
-        ListNBT potions = nbt.getList(POTION_IMMUNITIES, 8);
-        return potions.size() > 0;
-    }
-
-    public static boolean hasDamageImmunities(CompoundNBT nbt){
-        ListNBT damageImmunitiesNbtList = nbt.getList(DAMAGE_IMMUNITIES, 8);
-        return damageImmunitiesNbtList.size() > 0;
-    }
-
-    public static boolean hasDamageTypes(CompoundNBT nbt){
-        ListNBT damageTypeList = nbt.getList(DAMAGE_TYPES, 10);
-        return damageTypeList.size() > 0;
-    }
-
-    public static boolean hasSpecialAbilities(CompoundNBT nbt){
-        ListNBT abilityList = nbt.getList(ABILITY_TYPES, 8);
-        return abilityList.size() > 0;
-    }
-
-    public static boolean hasParticleEffects(CompoundNBT nbt){
-        return nbt.contains(PARTICLE_EFFECT);
+    public BasicParticleType getParticleEffect(){
+        return this.particleEffect;
     }
 
     public static class Builder {
+        List<Pair<Effect, Integer>> potionDamageEffects = new ArrayList<>();
+        List<DamageSource> damageImmunities = new ArrayList<>();
+        List<Effect> potionImmunities = new ArrayList<>();
+        List<Pair<String, Integer>> damageTypes = new ArrayList<>();
+        List<String> specialAbilities = new ArrayList<>();
+        BasicParticleType particleEffect;
 
-        CompoundNBT traitData = new CompoundNBT();
+        public Builder(){}
 
-        public BeeTrait.Builder addPotionEffects(List<Pair<Effect, Integer>> effectList) {
-            ListNBT potionEffects = new ListNBT();
-            for (Pair<Effect, Integer> effectIntegerPair : effectList) {
-                CompoundNBT potion = new CompoundNBT();
-                potion.putString(POTION_EFFECT, Objects.requireNonNull(effectIntegerPair.getLeft().getRegistryName()).toString());
-                potion.putInt(POTION_EFFECT_AMPLIFIER,effectIntegerPair.getRight());
-                potionEffects.add(potion);
-            }
-            traitData.put(POTION_EFFECTS, potionEffects);
+        public Builder addDamagePotionEffects(List<Pair<Effect, Integer>> potionDamageEffects) {
+            this.potionDamageEffects.addAll(potionDamageEffects);
+            return this;
+        }
+        public Builder addDamagePotionEffect(Pair<Effect, Integer> potionDamageEffect) {
+            this.potionDamageEffects.add(potionDamageEffect);
+            return this;
+        }
+        public Builder addDamageImmunities(List<DamageSource> damageImmunities) {
+            this.damageImmunities.addAll(damageImmunities);
+            return this;
+        }
+        public Builder addDamageImmunity(DamageSource damageImmunity) {
+            this.damageImmunities.add(damageImmunity);
+            return this;
+        }
+        public Builder addPotionImmunities(List<Effect> potionImmunities) {
+            this.potionImmunities.addAll(potionImmunities);
+            return this;
+        }
+        public Builder addPotionImmunity(Effect potionImmunity) {
+            this.potionImmunities.add(potionImmunity);
+            return this;
+        }
+        public Builder addDamageTypes(List<Pair<String, Integer>> damageTypes) {
+            this.damageTypes.addAll(damageTypes);
+            return this;
+        }
+        public Builder addDamageType(Pair<String, Integer> damageType) {
+            this.damageTypes.add(damageType);
+            return this;
+        }
+        public Builder addSpecialAbilities(List<String> specialAbilities) {
+            this.specialAbilities.addAll(specialAbilities);
+            return this;
+        }
+        public Builder addSpecialAbility(String specialAbility) {
+            this.specialAbilities.add(specialAbility);
+            return this;
+        }
+        public Builder setParticleEffect(BasicParticleType particleEffect) {
+            this.particleEffect = particleEffect;
             return this;
         }
 
-        public BeeTrait.Builder addPotionImmunities(List<Effect> effectList) {
-            ListNBT potionEffects = new ListNBT();
-            for (Effect effect : effectList) {
-                potionEffects.add(StringNBT.of(Objects.requireNonNull(effect.getRegistryName()).toString()));
-            }
-            traitData.put(POTION_IMMUNITIES, potionEffects);
-            return this;
-        }
-
-
-        public BeeTrait.Builder addDamageSourceImmunities (List<DamageSource> sources) {
-            ListNBT immunityList = new ListNBT();
-            for (DamageSource damageSource : sources) {
-                DAMAGE_SOURCE_MAP.put(damageSource.getDamageType(), damageSource);
-                immunityList.add(StringNBT.of(damageSource.getDamageType()));
-            }
-            traitData.put(DAMAGE_IMMUNITIES, immunityList);
-            return this;
-        }
-
-        public BeeTrait.Builder addDamageTypes(List<Pair<String, Integer>> damageTypes) {
-            ListNBT damageList = new ListNBT();
-            for (Pair<String, Integer> damageType : damageTypes) {
-                CompoundNBT damage = new CompoundNBT();
-                damage.putString(DAMAGE_TYPE, damageType.getLeft());
-                damage.putInt(DAMAGE_AMPLIFIER,damageType.getRight());
-                damageList.add(damage);
-            }
-            traitData.put(DAMAGE_TYPES, damageList);
-            return this;
-        }
-
-        public BeeTrait.Builder addSpecialAbilities(List<String> abilities){
-            ListNBT abilityList = new ListNBT();
-            for (String ability : abilities) {
-                abilityList.add(StringNBT.of(ability));
-            }
-            traitData.put(ABILITY_TYPES, abilityList);
-            return this;
-        }
-
-        public BeeTrait.Builder addParticleEffects(BasicParticleType particle){
-            traitData.putString(PARTICLE_EFFECT, Objects.requireNonNull(particle.getRegistryName()).toString());
-            return this;
-        }
-
-        public CompoundNBT build() {
-            return traitData;
+        public BeeTrait build() {
+            return new BeeTrait(potionDamageEffects, damageImmunities, potionImmunities, damageTypes, specialAbilities, particleEffect);
         }
     }
-
 }

@@ -22,6 +22,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.particles.BasicParticleType;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.tags.ITag;
@@ -131,14 +132,13 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
 
     @Override
     public boolean isInvulnerableTo(@Nonnull DamageSource source) {
+        CustomBee info = getBeeInfo();
         if (source.equals(DamageSource.SWEET_BERRY_BUSH)) {
             return true;  //All bees should be immune to this like vanilla - Not sure why it doesn't carry over from vanilla bees
         }
-
-        for (CompoundNBT trait : getBeeInfo().TraitData.getBeeTraits()){
-            if (BeeTrait.hasDamageImmunities(trait))
-                for (DamageSource damage : BeeTrait.getDamageImmunities(trait))
-                    if (source.equals(damage)) return false;
+        if (info.TraitData.hasDamageImmunities()){
+            for (DamageSource damage : info.TraitData.getDamageImmunities())
+                if (source.equals(damage)) return true;
         }
         return super.isInvulnerableTo(source);
     }
@@ -146,11 +146,9 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
     @Override
     public boolean isPotionApplicable(@Nonnull EffectInstance potioneffectIn) {
         CustomBee info = getBeeInfo();
-        for (CompoundNBT trait : info.TraitData.getBeeTraits()){
-            if (BeeTrait.hasPotionImmunities(trait)){
-                for (Effect potion : BeeTrait.getPotionImmunities(trait)){
-                    if (potion.equals(potioneffectIn.getPotion())) return false;
-                }
+        if (info.TraitData.hasPotionImmunities()){
+            for (Effect potion : info.TraitData.getPotionImmunities()){
+                if (potion.equals(potioneffectIn.getPotion())) return false;
             }
         }
         return super.isPotionApplicable(potioneffectIn);
@@ -173,12 +171,12 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
 
 
         if (this.world.isRemote){
-            CustomBee info = getBeeInfo();
             if (this.ticksExisted % 40 == 0) {
-                for (CompoundNBT trait : info.TraitData.getBeeTraits()) {
-                    if (BeeTrait.hasParticleEffects(trait)) {
+                CustomBee info = getBeeInfo();
+                if (info.TraitData.hasParticleEffects()){
+                    for (BasicParticleType particle : info.TraitData.getParticleEffects()){
                         for (int i = 0; i < 10; ++i) {
-                            this.world.addParticle(BeeTrait.getParticleEffect(trait), this.getParticleX(0.5D),
+                            this.world.addParticle(particle, this.getParticleX(0.5D),
                                     this.getRandomBodyY() - 0.25D, this.getParticleZ(0.5D),
                                     (this.rand.nextDouble() - 0.5D) * 2.0D, -this.rand.nextDouble(),
                                     (this.rand.nextDouble() - 0.5D) * 2.0D);

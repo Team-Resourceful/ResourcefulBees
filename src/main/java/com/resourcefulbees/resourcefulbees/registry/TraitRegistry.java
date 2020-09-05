@@ -1,17 +1,22 @@
 package com.resourcefulbees.resourcefulbees.registry;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
-import com.resourcefulbees.resourcefulbees.lib.TraitConstants;
-import net.minecraft.nbt.CompoundNBT;
+import com.resourcefulbees.resourcefulbees.api.CustomBee;
+import com.resourcefulbees.resourcefulbees.data.BeeTrait;
+import net.minecraft.particles.ParticleTypes;
+import net.minecraft.potion.Effects;
+import net.minecraft.util.DamageSource;
+import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class TraitRegistry {
 
-    private static final HashMap<String, CompoundNBT> TRAIT_REGISTRY = new HashMap<>();
+    private static final HashMap<String, BeeTrait> TRAIT_REGISTRY = new HashMap<>();
     private static boolean closed = false;
 
-    public static void register(String name, CompoundNBT data){
+    public static void register(String name, BeeTrait data){
         if (!closed) {
             if (!TRAIT_REGISTRY.containsKey(name)) {
                 TRAIT_REGISTRY.put(name, data);
@@ -19,30 +24,37 @@ public class TraitRegistry {
         }else ResourcefulBees.LOGGER.warn("Trait Registration closed register your traits before onLoadComplete, trait not registered: {}", name);
     }
 
-    public static CompoundNBT getTrait(String name) {
+    public static BeeTrait getTrait(String name) {
         return TRAIT_REGISTRY.get(name);
-    } //As long as other mods are using deferred register or @ObjectHolder for their custom damage sources/potion effects etc. they should be able to supply the static field for use later
+    }
 
-    public static void setTraitRegistrationClosed(){
+    public static void setTraitRegistryClosed(){
         closed = true;
     }
 
     public static void registerDefaultTraits(){
-        register("wither", TraitConstants.WITHER);
-        register("blaze", TraitConstants.BLAZE);
-        register("canswim", TraitConstants.CANSWIM);
-        register("creeper", TraitConstants.CREEPER);
-        register("zombie", TraitConstants.ZOMBIE);
-        register("pigman", TraitConstants.PIGMAN);
-        register("ender", TraitConstants.ENDER);
-        register("nether", TraitConstants.NETHER);
+        register("wither", new BeeTrait.Builder().addPotionImmunity(Effects.WITHER).addDamagePotionEffect(Pair.of(Effects.WITHER, 1)).build());
+        register("blaze", new BeeTrait.Builder()
+                .addDamageImmunities(Arrays.asList(DamageSource.LAVA,DamageSource.IN_FIRE,DamageSource.ON_FIRE,DamageSource.HOT_FLOOR))
+                .addDamageType(Pair.of("setOnFire", 1)).addSpecialAbility("flammable").setParticleEffect(ParticleTypes.FLAME).build());
+        register("canswim", new BeeTrait.Builder().addDamageImmunity(DamageSource.DROWN).build());
+        register("creeper", new BeeTrait.Builder().addDamageType(Pair.of("explosive", 4)).build());
+        register("zombie", new BeeTrait.Builder().addDamagePotionEffect(Pair.of(Effects.HUNGER, 20)).build());
+        register("pigman", new BeeTrait.Builder().addDamagePotionEffect(Pair.of(Effects.MINING_FATIGUE, 0)).build());
+        register("ender", new BeeTrait.Builder().addSpecialAbility("teleport").setParticleEffect(ParticleTypes.PORTAL).build());
+        register("nether", new BeeTrait.Builder().addDamageImmunities(Arrays.asList(DamageSource.LAVA,DamageSource.IN_FIRE,DamageSource.ON_FIRE,DamageSource.HOT_FLOOR)).build());
     }
 
-
-    //TODO this may not bee needed anymore with the TraitData Builder
-/*    public static void giveBeesTraits(){
-        for (Map.Entry<String, CustomBee> bee : BeeRegistry.getBees().entrySet()){
-            BeeRegistry.setBeesTraits(bee.getKey());
+    public static void giveBeeTraits(){
+        for (CustomBee bee : BeeRegistry.getBees().values()){
+            if (bee.hasTraitNames()) {
+                for (String traitString : bee.getTraitNames()) {
+                    BeeTrait trait = TraitRegistry.getTrait(traitString);
+                    if (trait != null) {
+                        bee.TraitData.addTrait(trait);
+                    }
+                }
+            }
         }
-    }*/
+    }
 }

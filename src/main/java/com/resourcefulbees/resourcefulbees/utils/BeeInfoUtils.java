@@ -100,7 +100,7 @@ public class BeeInfoUtils {
                 new CentrifugeData.Builder(false, null).createCentrifugeData(),
                 new BreedData.Builder(false).createBreedData(),
                 new SpawnData.Builder(false).createSpawnData(),
-                new TraitData.Builder().createTraitData())
+                new TraitData(false))
                 .createCustomBee();
         BeeRegistry.registerBee(BeeConstants.DEFAULT_BEE_TYPE, defaultBee);
     }

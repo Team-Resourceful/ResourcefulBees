@@ -14,6 +14,7 @@ public class CustomBee {
     private final int maxTimeInHive;
     private final Float attackDamage;
     private final float sizeModifier;
+    private final String[] traits;
     private transient String name;
     public final MutationData MutationData;
     public final ColorData ColorData;
@@ -26,12 +27,13 @@ public class CustomBee {
     private transient RegistryObject<Item> blockItemRegistryObject;
     //private ResourceLocation registryID; not sure if we could use this
 
-    private CustomBee(String flower, String baseLayerTexture, int maxTimeInHive, Float attackDamage, float sizeModifier, String name, MutationData MutationData, ColorData ColorData, CentrifugeData CentrifugeData, BreedData BreedData, SpawnData SpawnData, TraitData TraitData) {
+    private CustomBee(String flower, String baseLayerTexture, int maxTimeInHive, Float attackDamage, float sizeModifier, String[] traits, String name, MutationData MutationData, ColorData ColorData, CentrifugeData CentrifugeData, BreedData BreedData, SpawnData SpawnData, TraitData TraitData) {
         this.flower = flower;
         this.baseLayerTexture = baseLayerTexture;
         this.maxTimeInHive = maxTimeInHive;
         this.attackDamage = attackDamage;
         this.sizeModifier = sizeModifier;
+        this.traits = traits;
         this.name = name;
         this.MutationData = MutationData;
         this.ColorData = ColorData;
@@ -41,53 +43,35 @@ public class CustomBee {
         this.TraitData = TraitData;
     }
 
-    public String getFlower() {
-        return flower == null ? "all" : flower.toLowerCase();
-    }
+    public String getFlower() { return flower == null ? "all" : flower.toLowerCase(); }
 
-    public String getBaseLayerTexture() {
-        return baseLayerTexture == null ? "/custom/bee" : baseLayerTexture.toLowerCase();
-    }
+    public String getBaseLayerTexture() { return baseLayerTexture == null ? "/custom/bee" : baseLayerTexture.toLowerCase(); }
 
-    public int getMaxTimeInHive() {
-        return Math.max(maxTimeInHive, BeeConstants.MAX_TIME_IN_HIVE);
-    }
+    public int getMaxTimeInHive() { return Math.max(maxTimeInHive, BeeConstants.MAX_TIME_IN_HIVE); }
 
-    public float getAttackDamage() {
-        return attackDamage == null ? 1.0f : attackDamage;
-    }
+    public float getAttackDamage() { return attackDamage == null ? 1.0f : attackDamage; }
 
-    public RegistryObject<Item> getItemRegistryObject() {
-        return itemRegistryObject;
-    }
+    public RegistryObject<Item> getItemRegistryObject() { return itemRegistryObject; }
 
-    public void setItemRegistryObject(RegistryObject<Item> itemRegistryObject) {
-        this.itemRegistryObject = this.itemRegistryObject == null ? itemRegistryObject : this.itemRegistryObject;
-    }
+    public void setItemRegistryObject(RegistryObject<Item> itemRegistryObject) { this.itemRegistryObject = this.itemRegistryObject == null ? itemRegistryObject : this.itemRegistryObject; }
 
-    public RegistryObject<Block> getBlockRegistryObject() {
-        return blockRegistryObject;
-    }
+    public RegistryObject<Block> getBlockRegistryObject() { return blockRegistryObject; }
 
-    public void setBlockRegistryObject(RegistryObject<Block> blockRegistryObject) {
-        this.blockRegistryObject = this.blockRegistryObject == null ? blockRegistryObject : this.blockRegistryObject;
-    }
+    public void setBlockRegistryObject(RegistryObject<Block> blockRegistryObject) { this.blockRegistryObject = this.blockRegistryObject == null ? blockRegistryObject : this.blockRegistryObject; }
 
-    public RegistryObject<Item> getBlockItemRegistryObject() {
-        return blockItemRegistryObject;
-    }
+    public RegistryObject<Item> getBlockItemRegistryObject() { return blockItemRegistryObject; }
 
-    public void setBlockItemRegistryObject(RegistryObject<Item> blockItemRegistryObject) {
-        this.blockItemRegistryObject = this.blockItemRegistryObject == null ? blockItemRegistryObject : this.blockItemRegistryObject;
-    }
+    public void setBlockItemRegistryObject(RegistryObject<Item> blockItemRegistryObject) { this.blockItemRegistryObject = this.blockItemRegistryObject == null ? blockItemRegistryObject : this.blockItemRegistryObject; }
 
-    public void setName(String name) {
-        this.name = this.name == null ? name : this.name;
-    }
+    public void setName(String name) { this.name = this.name == null ? name : this.name; }
 
     public float getSizeModifier() { return sizeModifier != 0 ? sizeModifier : Config.BEE_SIZE_MODIFIER.get().floatValue(); }
 
-    public String getName() { return name; }
+    public String[] getTraitNames() { return traits; }
+
+    public boolean hasTraitNames() { return traits != null && traits.length > 0;}
+
+    public String getName() { return name.toLowerCase(); }
 
     public static class Builder {
         private final String flower;
@@ -95,6 +79,7 @@ public class CustomBee {
         private int maxTimeInHive;
         private Float attackDamage;
         private float sizeModifier;
+        private String[] traits;
         private final String name;
         private final MutationData MutationData;
         private final ColorData ColorData;
@@ -134,8 +119,13 @@ public class CustomBee {
             return this;
         }
 
+        public Builder setTraits(String[] traits){
+            this.traits = traits;
+            return this;
+        }
+
         public CustomBee createCustomBee() {
-            return new CustomBee(flower, baseLayerTexture, maxTimeInHive, attackDamage, sizeModifier, name, MutationData, ColorData, CentrifugeData, BreedData, SpawnData, TraitData);
+            return new CustomBee(flower, baseLayerTexture, maxTimeInHive, attackDamage, sizeModifier, traits, name, MutationData, ColorData, CentrifugeData, BreedData, SpawnData, TraitData);
         }
     }
 

@@ -1,86 +1,84 @@
 package com.resourcefulbees.resourcefulbees.api.beedata;
 
-import com.resourcefulbees.resourcefulbees.registry.TraitRegistry;
-import net.minecraft.nbt.CompoundNBT;
+import com.resourcefulbees.resourcefulbees.data.BeeTrait;
+import net.minecraft.particles.BasicParticleType;
+import net.minecraft.potion.Effect;
+import net.minecraft.util.DamageSource;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class TraitData {
-    private final List<String> traits;
-    private transient final List<CompoundNBT> beeTraits = new ArrayList<>();
-    private transient boolean listBuilt = false;
+    private transient List<Pair<Effect, Integer>> potionDamageEffects = new ArrayList<>();
+    private transient List<DamageSource> damageImmunities = new ArrayList<>();
+    private transient List<Effect> potionImmunities = new ArrayList<>();
+    private transient List<Pair<String, Integer>> damageTypes = new ArrayList<>();
+    private transient List<String> specialAbilities = new ArrayList<>();
+    private transient List<BasicParticleType> particleEffects = new ArrayList<>();
+    private final boolean hasTraits;
 
-    private TraitData(List<String> traits) {
-        this.traits = new ArrayList<>();
-        this.traits.addAll(traits);
+
+
+    public TraitData(boolean hasTraits) {
+        this.hasTraits = hasTraits;
     }
 
-    private void buildCompoundList() {
-        if (traits != null && beeTraits != null) {
-            for (String trait : traits) {
-                CompoundNBT traitNBT = TraitRegistry.getTrait(trait);
-                if (traitNBT != null) beeTraits.add(traitNBT);
-            }
+    public void addTrait(BeeTrait trait){
+        if (trait != null) {
+            if (trait.hasDamagePotionEffects())
+                if (!this.hasDamagePotionEffects())
+                    this.potionDamageEffects = trait.getPotionDamageEffects();
+                else this.potionDamageEffects.addAll(trait.getPotionDamageEffects());
+            if (trait.hasDamageImmunities())
+                if (!this.hasDamageImmunities())
+                    this.damageImmunities = trait.getDamageImmunities();
+                else this.damageImmunities.addAll(trait.getDamageImmunities());
+            if (trait.hasPotionImmunities())
+                if (!this.hasPotionImmunities())
+                    this.potionImmunities = trait.getPotionImmunities();
+                else this.potionImmunities.addAll(trait.getPotionImmunities());
+            if (trait.hasDamageTypes())
+                if (!this.hasDamageTypes())
+                    this.damageTypes = trait.getDamageTypes();
+                else this.damageTypes.addAll(trait.getDamageTypes());
+            if (trait.hasSpecialAbilities())
+                if (!this.hasSpecialAbilities())
+                    this.specialAbilities = trait.getSpecialAbilities();
+                else this.specialAbilities.addAll(trait.getSpecialAbilities());
+            if (trait.hasParticleEffect())
+                if (!this.hasParticleEffects())
+                    this.particleEffects = Collections.singletonList(trait.getParticleEffect());
+                else this.particleEffects.add(trait.getParticleEffect());
         }
     }
 
-    public List<CompoundNBT> getBeeTraits() {
-        return beeTraits;
+    public boolean hasTraits(){ return this.hasTraits; }
+
+    public boolean hasDamagePotionEffects(){ return this.potionImmunities != null && !this.potionDamageEffects.isEmpty(); }
+    public boolean hasDamageImmunities(){ return this.damageImmunities != null && !this.damageImmunities.isEmpty(); }
+    public boolean hasPotionImmunities(){ return this.potionImmunities != null && !this.potionImmunities.isEmpty(); }
+    public boolean hasDamageTypes(){ return this.damageTypes != null && !this.damageTypes.isEmpty(); }
+    public boolean hasSpecialAbilities(){ return this.specialAbilities != null && !this.specialAbilities.isEmpty(); }
+    public boolean hasParticleEffects(){ return this.particleEffects != null && !this.particleEffects.isEmpty(); }
+
+    public List<Pair<Effect, Integer>> getPotionDamageEffects(){
+        return potionDamageEffects;
     }
-
-    public boolean hasTraits() {
-        if (!listBuilt && beeTraits != null && beeTraits.isEmpty()) {
-            buildCompoundList();  //to cover both jsons and other mods using builder also keeps build method private
-            listBuilt = true;
-        }
-        return beeTraits != null && !beeTraits.isEmpty();
+    public List<DamageSource> getDamageImmunities(){
+        return damageImmunities;
     }
-
-    //TODO Consider making these methods available directly from the TraitData Object vs Static class call
-    // may need to add a string parameter to specify the trait name requested instead of the CompoundNBT
-    // should marinate on this some more.
-
-/*    public static boolean hasPotionEffects(CompoundNBT nbt){
-        ListNBT potions = nbt.getList(POTION_EFFECTS, 10);
-        return potions.size() > 0;
+    public List<Effect> getPotionImmunities(){
+        return potionImmunities;
     }
-
-    public static boolean hasPotionImmunities(CompoundNBT nbt){
-        ListNBT potions = nbt.getList(POTION_IMMUNITIES, 8);
-        return potions.size() > 0;
+    public List<Pair<String, Integer>> getDamageTypes(){
+        return damageTypes;
     }
-
-    public static boolean hasDamageImmunities(CompoundNBT nbt){
-        ListNBT damageImmunitiesNbtList = nbt.getList(DAMAGE_IMMUNITIES, 8);
-        return damageImmunitiesNbtList.size() > 0;
+    public List<String> getSpecialAbilities(){
+        return specialAbilities;
     }
-
-    public static boolean hasDamageTypes(CompoundNBT nbt){
-        ListNBT damageTypeList = nbt.getList(DAMAGE_TYPES, 10);
-        return damageTypeList.size() > 0;
-    }
-
-    public static boolean hasSpecialAbilities(CompoundNBT nbt){
-        ListNBT abilityList = nbt.getList(ABILITY_TYPES, 8);
-        return abilityList.size() > 0;
-    }
-
-    public static boolean hasParticleEffects(CompoundNBT nbt){
-        return nbt.contains(PARTICLE_EFFECT);
-    }*/
-
-    public static class Builder{
-
-        private final List<String> traits = new ArrayList<>();
-
-        public Builder addTrait(String trait) {
-            traits.add(trait);
-            return this;
-        }
-
-        public TraitData createTraitData() {
-            return new TraitData(traits);
-        }
+    public List<BasicParticleType> getParticleEffects(){
+        return particleEffects;
     }
 }

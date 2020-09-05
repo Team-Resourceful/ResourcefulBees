@@ -2,7 +2,7 @@ package com.resourcefulbees.resourcefulbees.item;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
-import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
+import net.minecraft.block.Block;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.BlockItemUseContext;
@@ -21,8 +21,8 @@ import java.util.List;
 
 public class HoneycombBlockItem extends BlockItem {
 
-    public HoneycombBlockItem() {
-        super(RegistryHandler.HONEYCOMB_BLOCK.get(), new Item.Properties());
+    public HoneycombBlockItem(Block block) {
+        super(block, new Item.Properties());
     }
 
     @Nonnull

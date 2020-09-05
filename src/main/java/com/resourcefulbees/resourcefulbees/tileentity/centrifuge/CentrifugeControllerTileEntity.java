@@ -7,9 +7,9 @@ import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.container.AutomationSensitiveItemStackHandler;
 import com.resourcefulbees.resourcefulbees.container.CentrifugeMultiblockContainer;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
+import com.resourcefulbees.resourcefulbees.lib.CustomStorageContainers;
 import com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe;
 import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
-import com.resourcefulbees.resourcefulbees.utils.CustomEnergyStorage;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -55,7 +55,7 @@ public class CentrifugeControllerTileEntity extends TileEntity implements ITicka
     public static final int[] OUTPUT_SLOTS = {4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21};
 
     public AutomationSensitiveItemStackHandler h = new CentrifugeControllerTileEntity.TileStackHandler(22);
-    public final CustomEnergyStorage energyStorage = createEnergy();
+    public final CustomStorageContainers.CustomEnergyStorage energyStorage = createEnergy();
     public final LazyOptional<IItemHandler> lazyOptional = LazyOptional.of(() -> h);
     public final LazyOptional<IEnergyStorage> energy = LazyOptional.of(() -> energyStorage);
     public int[] time = {0,0,0};
@@ -325,8 +325,8 @@ public class CentrifugeControllerTileEntity extends TileEntity implements ITicka
         return new TranslationTextComponent("gui.resourcefulbees.centrifuge");
     }
 
-    private CustomEnergyStorage createEnergy() {
-        return new CustomEnergyStorage(Config.MAX_CENTRIFUGE_RF.get() * 5, 500, 0) {
+    private CustomStorageContainers.CustomEnergyStorage createEnergy() {
+        return new CustomStorageContainers.CustomEnergyStorage(Config.MAX_CENTRIFUGE_RF.get() * 5, 500, 0) {
             @Override
             protected void onEnergyChanged() {
                 markDirty();

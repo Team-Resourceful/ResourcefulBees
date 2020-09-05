@@ -207,20 +207,18 @@ public class ResourcefulBee extends CustomBeeEntity {
     protected void updateAITasks() {
         CustomBee info = getBeeInfo();
 
-        for (CompoundNBT trait : info.TraitData.getBeeTraits()){
-            if (BeeTrait.hasSpecialAbilities(trait)){
-                for (String ability : BeeTrait.getSpecialAbilities(trait)){
-                    if (ability.equals("teleport")) {
-                        if (!hasHiveInRange() && !this.pollinateGoal.isRunning()) {
-                            if (this.world.isDaytime() && this.ticksExisted % 150 == 0) {
-                                this.teleportRandomly();
-                            }
+        if (info.TraitData.hasSpecialAbilities()){
+            for (String ability : info.TraitData.getSpecialAbilities()){
+                if (ability.equals("teleport")) {
+                    if (!hasHiveInRange() && !this.pollinateGoal.isRunning()) {
+                        if (this.world.isDaytime() && this.ticksExisted % 150 == 0) {
+                            this.teleportRandomly();
                         }
                     }
-                    if (ability.equals("flammable")) {
-                        if (this.ticksExisted % 150 == 0)
-                            this.setFire(3);
-                    }
+                }
+                if (ability.equals("flammable")) {
+                    if (this.ticksExisted % 150 == 0)
+                        this.setFire(3);
                 }
             }
         }
@@ -277,28 +275,20 @@ public class ResourcefulBee extends CustomBeeEntity {
                     i = 18;
                 }
                 CustomBee info = this.getBeeInfo();
-                boolean hasPotionEffect = false;
-                boolean hasDamageType = false;
-                for (CompoundNBT trait : info.TraitData.getBeeTraits()){
-                    if (BeeTrait.hasDamageTypes(trait)){
-                        hasDamageType = true;
-                        for (Pair<String, Integer> damageType : BeeTrait.getDamageTypes(trait)){
-                            if (damageType.getLeft().equals("setOnFire")) entityIn.setFire(i * damageType.getRight());
-                            if (damageType.getLeft().equals("explosive")) this.explode(i/damageType.getRight());
-                        }
+                if (info.TraitData.hasDamageTypes()){
+                    for (Pair<String, Integer> damageType : info.TraitData.getDamageTypes()){
+                        if (damageType.getLeft().equals("setOnFire")) entityIn.setFire(i * damageType.getRight());
+                        if (damageType.getLeft().equals("explosive")) this.explode(i/damageType.getRight());
                     }
-                    if (BeeTrait.hasPotionEffects(trait)){
-                        hasPotionEffect = true;
-                        if (i > 0) {
-                            for (Pair<Effect, Integer> effect : BeeTrait.getPotionEffects(trait)){
-                                ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(effect.getLeft(), i * 20, effect.getRight()));
-                            }
-                        }
-                    }
-
-
                 }
-                if (!hasPotionEffect && !hasDamageType) ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.POISON, i * 20, 0));
+                if (info.TraitData.hasDamagePotionEffects()){
+                    if (i > 0) {
+                        for (Pair<Effect, Integer> effect : info.TraitData.getPotionDamageEffects()){
+                            ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(effect.getLeft(), i * 20, effect.getRight()));
+                        }
+                    }
+                }
+                if (!info.TraitData.hasDamagePotionEffects() && !info.TraitData.hasDamageTypes()) ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.POISON, i * 20, 0));
             }
 
             this.setHasStung(Config.BEE_DIES_FROM_STING.get());

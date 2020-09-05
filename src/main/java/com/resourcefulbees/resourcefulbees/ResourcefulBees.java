@@ -80,8 +80,6 @@ public class ResourcefulBees
         ConfigLoader.load(Config.CommonConfig.COMMON_CONFIG, "resourcefulbees/common.toml");
 
         BeeSetup.setupBees();
-        CustomBee testBee = BeeRegistry.getInfo("coal");
-        LOGGER.info("TEST!!   {}", testBee.TraitData.getBeeTraits());
         RegistryHandler.registerBeeHoneycombsAndBlocks();
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener(EventPriority.LOW, this::setup);
@@ -219,9 +217,8 @@ public class ResourcefulBees
 
     private void loadComplete(FMLLoadCompleteEvent event) {
         TraitRegistry.registerDefaultTraits();
-        TraitRegistry.setTraitRegistrationClosed();
-
-        //TraitRegistry.giveBeesTraits();
+        TraitRegistry.setTraitRegistryClosed();
+        TraitRegistry.giveBeeTraits();
 
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> DataGen::GenerateEnglishLang);
     }
