@@ -3,12 +3,12 @@ package com.resourcefulbees.resourcefulbees.registry;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
+import com.resourcefulbees.resourcefulbees.utils.FirstPhaseValidator;
 import com.resourcefulbees.resourcefulbees.utils.MathUtils;
 import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
 import net.minecraft.world.biome.Biome;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.awt.*;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -102,7 +102,7 @@ public class BeeRegistry {
      *  @return Returns false if bee already exists in the registry.
      */
     public static boolean registerBee(String beeType, CustomBeeData customBeeData) {
-        if (!BEE_INFO.containsKey(beeType)) {
+        if (!BEE_INFO.containsKey(beeType) && FirstPhaseValidator.validate(customBeeData)) {
             BEE_INFO.put(beeType, customBeeData);
             return true;
         }
@@ -118,30 +118,4 @@ public class BeeRegistry {
     public static Map<String, CustomBeeData> getBees() {
         return Collections.unmodifiableMap(BEE_INFO);
     }
-
-    public static float[] getColorFloats(String color){
-        Color tempColor = Color.decode(color);
-        return tempColor.getComponents(null);
-    }
-
-
-
-    //TODO This may not be needed now that the TraitData object has been added
-
-/*    *//**
-     * Sets a bees traits.
-     *  @param name Bee Type of the bee having its traits set.
-     **//*
-    public static void setBeesTraits(String name){
-        CustomBee bee = BEE_INFO.get(name);
-        if (bee.getBeeTraits().isEmpty()) {
-            List<CompoundNBT> traits = new ArrayList<>();
-            for (String trait : bee.getBeeTraitArray()){
-                CompoundNBT traitNBT = TraitRegistry.getTrait(trait);
-                if (traitNBT != null) traits.add(traitNBT);
-            }
-            //TODO need to add back the addBeeTraits Setter
-            //BEE_INFO.get(name).addBeeTraits(traits);
-        }
-    }*/
 }

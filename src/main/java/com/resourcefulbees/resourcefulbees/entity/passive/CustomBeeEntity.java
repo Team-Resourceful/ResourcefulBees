@@ -7,7 +7,7 @@ import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
-import com.resourcefulbees.resourcefulbees.utils.BeeValidator;
+import com.resourcefulbees.resourcefulbees.utils.ValidatorUtils;
 import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Pose;
@@ -205,7 +205,7 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
     public boolean isBreedingItem(@Nonnull ItemStack stack) {
         String validBreedItem = this.getBeeData().BreedData.getFeedItem();
 
-        if (BeeValidator.TAG_RESOURCE_PATTERN.matcher(validBreedItem).matches()) {
+        if (ValidatorUtils.TAG_RESOURCE_PATTERN.matcher(validBreedItem).matches()) {
             ITag<Item> itemTag = BeeInfoUtils.getItemTag(validBreedItem.replace(BeeConstants.TAG_PREFIX, ""));
             return itemTag != null && stack.getItem().isIn(itemTag);
         } else {

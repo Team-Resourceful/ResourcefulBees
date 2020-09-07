@@ -169,11 +169,11 @@ public class MechanicalCentrifugeTileEntity extends TileEntity implements ITicka
     }
 
     @Override
-    public void deserializeNBT(@Nonnull BlockState state, CompoundNBT tag) {
+    public void fromTag(@Nonnull BlockState state, CompoundNBT tag) {
         CompoundNBT invTag = tag.getCompound("inv");
         h.deserializeNBT(invTag);
         clicks = tag.getInt("clicks");
-        super.deserializeNBT(state, tag);
+        super.fromTag(state, tag);
     }
 
     @Nonnull
@@ -186,7 +186,7 @@ public class MechanicalCentrifugeTileEntity extends TileEntity implements ITicka
 
     @Override
     public void handleUpdateTag(@Nonnull BlockState state, CompoundNBT tag) {
-        this.deserializeNBT(state, tag);
+        this.fromTag(state, tag);
     }
 
     @Nonnull

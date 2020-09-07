@@ -1,26 +1,21 @@
 package com.resourcefulbees.resourcefulbees.utils;
 
-import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
-import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
-import net.minecraft.block.Block;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.Item;
-
 import java.util.regex.Pattern;
 
 import static com.resourcefulbees.resourcefulbees.ResourcefulBees.LOGGER;
 
-public class BeeValidator {
+public class ValidatorUtils {
     public static final Pattern SINGLE_RESOURCE_PATTERN = Pattern.compile("^(\\w+):(\\w+)$", Pattern.CASE_INSENSITIVE);
     public static final Pattern TAG_RESOURCE_PATTERN = Pattern.compile("^(tag:)(\\w+):(\\w+/\\w+|\\w+)$", Pattern.CASE_INSENSITIVE);
 
-    private static boolean logError(String name, String dataCheckType, String data, String dataType){
-        LOGGER.error(name + " Bee " + dataCheckType + " Check Failed! Please check JSON!" +
-                "\n\tCurrent value: \"" + data + "\" is not a valid " + dataType + " - Bee will not be used!");
+    public static boolean logError(String name, String dataCheckType, String data, String dataType){
+        LOGGER.error("{} Bee {} Check Failed! Please check JSON! \n\tCurrent Value: \"{}\" is not a valid {} - Bee will not be used!",
+                name, dataCheckType, data, dataType);
         return false;
     }
 
-    private static boolean logWarn(String name, String dataCheckType, String data, String dataType){
+
+    public static boolean logWarn(String name, String dataCheckType, String data, String dataType){
         LOGGER.warn(name + " Bee " + dataCheckType + " Check Failed! Please check JSON!" +
                 "\n\tCurrent value: \"" + data + "\" is not a valid " + dataType + " - Bee may not function properly!");
         return true;
@@ -39,12 +34,12 @@ public class BeeValidator {
         if (bee.BreedData.isBreedable()) isValid = isValid && validateBreeding(bee);
 
         return isValid;
-    }*/
+    }*//*
 
     private static boolean validateMutation(CustomBeeData bee) {
-/*        if (!beeHasMutation(bee)) {
+*//*        if (!beeHasMutation(bee)) {
             return true;
-        }*/
+        }*//*
 
         if (TAG_RESOURCE_PATTERN.matcher(bee.MutationData.getMutationInput()).matches()) {
             LOGGER.warn("Too early to validate Block Tag for " + bee.getName() + " bee.");
@@ -76,7 +71,7 @@ public class BeeValidator {
             } else return logError(bee.getName(), "Mutation Block", bee.MutationData.getMutationOutput(), "block");
         } else return logError(bee.getName(), "Mutation Block", bee.MutationData.getMutationOutput(), "block");
 
-/*        switch (mutation) {
+*//*        switch (mutation) {
             case (0) :
                 bee.MutationData.setMutationType(MutationTypes.FLUID_TO_FLUID);
                 break;
@@ -88,11 +83,11 @@ public class BeeValidator {
                 break;
             case (3) :
                 bee.setMutationType(MutationTypes.BLOCK_TO_BLOCK);
-        }*/
+        }*//*
         return true;
     }
 
-/*    private static boolean beeHasMutation(CustomBee bee) {
+*//*    private static boolean beeHasMutation(CustomBee bee) {
         if (TAG_RESOURCE_PATTERN.matcher(bee.getMutationInput()).matches() ||
                 SINGLE_RESOURCE_PATTERN.matcher(bee.getMutationInput()).matches() &&
                 SINGLE_RESOURCE_PATTERN.matcher(bee.getMutationOutput()).matches()) {
@@ -102,20 +97,8 @@ public class BeeValidator {
         if (Config.SHOW_DEBUG_INFO.get())
             LOGGER.warn(StringUtils.capitalize(bee.getName()) + " - Bee has no mutations or the patterns don't match.");
         return false;
-    }*/
+    }*//*
 
-    private static boolean validateBreeding(CustomBeeData bee) {
-        return !bee.BreedData.getParent1().equals(bee.BreedData.getParent2()) || (bee.BreedData.getParent1().isEmpty() && bee.BreedData.getParent2().isEmpty()) ||
-                logWarn(bee.getName(), "breeding", (bee.BreedData.getParent1() + " and " + bee.BreedData.getParent2()),
-                "are the same parents. Child bee will not spawn from breeding.");
-    }
-
-    private static boolean validateMaxTimeInHive(CustomBeeData bee) {
-        double time = bee.getMaxTimeInHive();
-        return time >= BeeConstants.MIN_HIVE_TIME && time == Math.floor(time) && !Double.isInfinite(time) ||
-                logWarn(bee.getName(), "Time In Hive", String.valueOf(bee.getMaxTimeInHive()),
-                "time. Value must be greater than or equal to " + BeeConstants.MIN_HIVE_TIME);
-    }
 
     private static boolean validateCentrifugeMainOutput(CustomBeeData bee) {
         if (!bee.CentrifugeData.getMainOutput().isEmpty()) {
@@ -126,7 +109,7 @@ public class BeeValidator {
         return true;
     }
 
-/*    private static boolean validateCentrifugeSecondaryOutput(CustomBee bee) {
+*//*    private static boolean validateCentrifugeSecondaryOutput(CustomBee bee) {
         if (!bee.getMainOutput().isEmpty()) {
             Item item = BeeInfoUtils.getItem(bee.getSecondaryOutput());
             return SINGLE_RESOURCE_PATTERN.matcher(bee.getSecondaryOutput()).matches() && BeeInfoUtils.isValidItem(item) ||

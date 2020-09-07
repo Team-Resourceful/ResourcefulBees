@@ -204,8 +204,8 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
   }
 
   @Override
-  public void deserializeNBT(@Nonnull BlockState state, @Nonnull CompoundNBT nbt) {
-    super.deserializeNBT(state, nbt);
+  public void fromTag(@Nonnull BlockState state, @Nonnull CompoundNBT nbt) {
+    super.fromTag(state, nbt);
     if (nbt.contains(NBTConstants.NBT_HONEYCOMBS_TE)){
       CompoundNBT combs = (CompoundNBT) nbt.get(NBTConstants.NBT_HONEYCOMBS_TE);
       int i = 0;

@@ -267,9 +267,9 @@ public class CentrifugeControllerTileEntity extends TileEntity implements ITicka
     }
 
     @Override
-    public void deserializeNBT(@Nonnull BlockState state, @Nonnull CompoundNBT tag) {
+    public void fromTag(@Nonnull BlockState state, @Nonnull CompoundNBT tag) {
         this.loadFromNBT(tag);
-        super.deserializeNBT(state, tag);
+        super.fromTag(state, tag);
     }
 
     @Nonnull
@@ -282,7 +282,7 @@ public class CentrifugeControllerTileEntity extends TileEntity implements ITicka
 
     @Override
     public void handleUpdateTag(@Nonnull BlockState state, CompoundNBT tag) {
-        this.deserializeNBT(state, tag);
+        this.fromTag(state, tag);
     }
     //endregion
 

@@ -47,8 +47,6 @@ public class HoneycombBlock extends Block {
         return honeycombBlock.colorData.isRainbowBee() ? RainbowColor.getRGB() : honeycombBlock.getHoneycombColor();
     }
 
-    //TODO check if this still applies after changing to registry objects - see todo above
-
     @Override
     public void animateTick(@Nonnull BlockState stateIn, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull Random rand) {
             if (colorData.isRainbowBee())

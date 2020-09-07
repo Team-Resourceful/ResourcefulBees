@@ -80,19 +80,19 @@ public class ColorData {
     }
 
     public boolean hasPrimaryColor() {
-        return primaryColor != null;
+        return primaryColor != null && !primaryColor.isEmpty();
     }
 
     public boolean hasSecondaryColor() {
-        return secondaryColor != null;
+        return secondaryColor != null && !secondaryColor.isEmpty();
     }
 
     public boolean hasHoneycombColor() {
-        return honeycombColor != null;
+        return honeycombColor != null && !honeycombColor.isEmpty();
     }
 
-    public boolean hasGlowingColor() {
-        return glowColor != null;
+    public boolean hasGlowColor() {
+        return glowColor != null && !glowColor.isEmpty();
     }
 
     public float[] getPrimaryColorFloats(){

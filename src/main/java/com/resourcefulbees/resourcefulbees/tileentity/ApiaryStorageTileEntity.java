@@ -12,7 +12,6 @@ import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
 import com.resourcefulbees.resourcefulbees.utils.MathUtils;
-import com.resourcefulbees.resourcefulbees.utils.NBTHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -124,8 +123,8 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
     }
 
     @Override
-    public void deserializeNBT(@Nonnull BlockState state, @Nonnull CompoundNBT nbt) {
-        super.deserializeNBT(state, nbt);
+    public void fromTag(@Nonnull BlockState state, @Nonnull CompoundNBT nbt) {
+        super.fromTag(state, nbt);
         this.loadFromNBT(nbt);
     }
 
@@ -166,7 +165,7 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
 
     @Override
     public void handleUpdateTag(@Nonnull BlockState state, CompoundNBT tag) {
-        this.deserializeNBT(state, tag);
+        this.fromTag(state, tag);
     }
 
     @Nullable
@@ -209,9 +208,6 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
                 itemstack = new ItemStack(outputItem, Config.T1_APIARY_QUANTITY.get());
                 break;
         }
-
-        itemstack.setTag(NBTHelper.createHoneycombItemTag(BeeRegistry.getBeeData(beeType).getName()));
-
         depositItemStack(itemstack);
     }
 

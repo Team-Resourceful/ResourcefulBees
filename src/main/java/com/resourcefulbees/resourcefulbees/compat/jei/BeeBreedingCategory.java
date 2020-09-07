@@ -8,7 +8,7 @@ import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
-import com.resourcefulbees.resourcefulbees.utils.BeeValidator;
+import com.resourcefulbees.resourcefulbees.utils.ValidatorUtils;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -78,7 +78,7 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
     }
 
     private static String finalizeFeedItem(String feedItem) {
-        if (BeeValidator.TAG_RESOURCE_PATTERN.matcher(feedItem).matches()) {
+        if (ValidatorUtils.TAG_RESOURCE_PATTERN.matcher(feedItem).matches()) {
             feedItem = feedItem.replace(BeeConstants.TAG_PREFIX, "");
         } else if (feedItem.equals(FLOWER_TAG_ALL)) {
             feedItem = "minecraft:flowers";

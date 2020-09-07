@@ -18,7 +18,6 @@ public class DataGen {
     public static void generateClientData() {
         BeeRegistry.getBees().forEach(((s, customBeeData) -> {
             if (Config.GENERATE_ENGLISH_LANG.get()) GenerateEnglishLang(s);
-            generateItemModels(s);
         }));
     }
 
@@ -72,41 +71,5 @@ public class DataGen {
             LOGGER.error("Could not generate language file!");
             //e.printStackTrace();
         }
-    }
-    
-    private static void generateItemModels(String name) {
-        StringBuilder builder = new StringBuilder();
-        builder.append("{\n");
-        builder.append("    \"parent\": \"item/generated\",\n");
-        builder.append("    \"textures\": {\n");
-        builder.append("        \"layer0\": \"resourcefulbees:item/honeycomb\"\n");
-        builder.append("    }\n");
-        builder.append("}");
-
-        String itemModelPath = BeeSetup.RESOURCE_PATH.toString() + "/assets/resourcefulbees/models/item/";
-        String modelFile = name + "_honeycomb.json";
-        try {
-            writeFile(itemModelPath, modelFile, builder.toString());
-            LOGGER.info("Model File Generated!");
-        } catch (IOException e) {
-            LOGGER.error("Could not generate model file!");
-            //e.printStackTrace();
-        }
-
-        StringBuilder builder1 = new StringBuilder();
-        builder1.append(String.format("{\n    \"parent\": \"resourcefulbees:block/%1$s_honeycomb_block\"\n}", name));
-        modelFile = name + "_honeycomb_block.json";
-
-        try {
-            writeFile(itemModelPath, modelFile, builder1.toString());
-            LOGGER.info("Model File Generated!");
-        } catch (IOException e) {
-            LOGGER.error("Could not generate model file!");
-            //e.printStackTrace();
-        }
-    }
-
-    private static void generateBlockModels(String name) {
-
     }
 }

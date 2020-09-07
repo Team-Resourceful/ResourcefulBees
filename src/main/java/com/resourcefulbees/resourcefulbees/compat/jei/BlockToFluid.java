@@ -9,7 +9,7 @@ import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
-import com.resourcefulbees.resourcefulbees.utils.BeeValidator;
+import com.resourcefulbees.resourcefulbees.utils.ValidatorUtils;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -63,7 +63,7 @@ public class BlockToFluid implements IRecipeCategory<BlockToFluid.Recipe> {
                 String mutationIn = bee.getValue().MutationData.getMutationInput();
                 String mutationOut = bee.getValue().MutationData.getMutationOutput();
 
-                if (BeeValidator.TAG_RESOURCE_PATTERN.matcher(mutationIn).matches()) {
+                if (ValidatorUtils.TAG_RESOURCE_PATTERN.matcher(mutationIn).matches()) {
                     mutationIn = mutationIn.replace(BeeConstants.TAG_PREFIX, "");
 
                     ITag<Item> itemTag = BeeInfoUtils.getItemTag(mutationIn);

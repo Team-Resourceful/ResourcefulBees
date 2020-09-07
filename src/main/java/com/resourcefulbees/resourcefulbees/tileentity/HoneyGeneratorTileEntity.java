@@ -180,12 +180,12 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
     }
 
     @Override
-    public void deserializeNBT(@Nonnull BlockState state, CompoundNBT tag) {
+    public void fromTag(@Nonnull BlockState state, CompoundNBT tag) {
         CompoundNBT invTag = tag.getCompound("inv");
         h.deserializeNBT(invTag);
         energyStorage.deserializeNBT(tag.getCompound("energy"));
         fluidTank.deserializeNBT(tag.getCompound("fluid"));
-        super.deserializeNBT(state, tag);
+        super.fromTag(state, tag);
     }
 
     @Nonnull
@@ -198,7 +198,7 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
 
     @Override
     public void handleUpdateTag(@Nonnull BlockState state, CompoundNBT tag) {
-        this.deserializeNBT(state, tag);
+        this.fromTag(state, tag);
     }
 
     @Nonnull

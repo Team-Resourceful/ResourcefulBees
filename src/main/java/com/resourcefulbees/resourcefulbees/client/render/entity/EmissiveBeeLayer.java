@@ -6,7 +6,6 @@ import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
-import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.utils.RainbowColor;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
@@ -33,8 +32,8 @@ public class EmissiveBeeLayer extends LayerRenderer<CustomBeeEntity, CustomBeeMo
             if (!entitylivingbaseIn.getRenderingInJei() && (bee.ColorData.getGlowingPulse() == 0 || entitylivingbaseIn.ticksExisted / 5 % bee.ColorData.getGlowingPulse() == 0)) {
                 this.getEntityModel().render(matrixStackIn, ivertexbuilder, 15728640, OverlayTexture.DEFAULT_UV, glowColor[0], glowColor[1], glowColor[2], 1.0F);
             }
-        } else if (bee.ColorData.isGlowing() && bee.ColorData.getGlowColor() !=null && !bee.ColorData.getGlowColor().isEmpty()){
-            float[] glowColor = BeeRegistry.getColorFloats(bee.ColorData.getGlowColor());
+        } else if (bee.ColorData.isGlowing() && bee.ColorData.hasGlowColor()){
+            float[] glowColor = bee.ColorData.getGlowColorFloats();
             if (!entitylivingbaseIn.getRenderingInJei() && (bee.ColorData.getGlowingPulse() == 0 || entitylivingbaseIn.ticksExisted / 5 % bee.ColorData.getGlowingPulse() == 0)) {
                 this.getEntityModel().render(matrixStackIn, ivertexbuilder, 15728640, OverlayTexture.DEFAULT_UV, glowColor[0], glowColor[1], glowColor[2], 1.0F);
             }

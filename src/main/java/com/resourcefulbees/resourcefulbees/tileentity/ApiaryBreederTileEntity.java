@@ -13,8 +13,8 @@ import com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
-import com.resourcefulbees.resourcefulbees.utils.BeeValidator;
 import com.resourcefulbees.resourcefulbees.utils.MathUtils;
+import com.resourcefulbees.resourcefulbees.utils.ValidatorUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -207,7 +207,7 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
     }
 
     private boolean stackIsValidBreedItem(ItemStack stack, String validBreedItem){
-        if (BeeValidator.TAG_RESOURCE_PATTERN.matcher(validBreedItem).matches()) {
+        if (ValidatorUtils.TAG_RESOURCE_PATTERN.matcher(validBreedItem).matches()) {
             ITag<Item> itemTag = BeeInfoUtils.getItemTag(validBreedItem.replace(BeeConstants.TAG_PREFIX, ""));
             return itemTag != null && stack.getItem().isIn(itemTag);
         } else {
@@ -315,8 +315,8 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
 
 
     @Override
-    public void deserializeNBT(@Nonnull BlockState state, @Nonnull CompoundNBT nbt) {
-        super.deserializeNBT(state, nbt);
+    public void fromTag(@Nonnull BlockState state, @Nonnull CompoundNBT nbt) {
+        super.fromTag(state, nbt);
         this.loadFromNBT(nbt);
     }
 
@@ -361,7 +361,7 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
 
     @Override
     public void handleUpdateTag(@Nonnull BlockState state, CompoundNBT tag) {
-        this.deserializeNBT(state, tag);
+        this.fromTag(state, tag);
     }
 
     @Nullable

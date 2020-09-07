@@ -5,7 +5,6 @@ import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
-import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.utils.RainbowColor;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.IEntityRenderer;
@@ -31,8 +30,8 @@ public class PrimaryColorLayer extends LayerRenderer<CustomBeeEntity, CustomBeeM
                 float[] primaryColor = RainbowColor.getColorFloats();
                 ResourceLocation location = new ResourceLocation(ResourcefulBees.MOD_ID, BeeConstants.ENTITY_TEXTURES_DIR + bee.ColorData.getPrimaryLayerTexture() + ".png");
                 renderModel(this.getEntityModel(), location, matrixStackIn, bufferIn, packedLightIn, entitylivingbaseIn, primaryColor[0], primaryColor[1], primaryColor[2]);
-            } else if (bee.ColorData.getPrimaryColor() != null && !bee.ColorData.getPrimaryColor().isEmpty()) {
-                float[] primaryColor = BeeRegistry.getColorFloats(bee.ColorData.getPrimaryColor());
+            } else if (bee.ColorData.hasPrimaryColor()) {
+                float[] primaryColor = bee.ColorData.getPrimaryColorFloats();
                 ResourceLocation location = new ResourceLocation(ResourcefulBees.MOD_ID, BeeConstants.ENTITY_TEXTURES_DIR + bee.ColorData.getPrimaryLayerTexture() + ".png");
                 renderModel(this.getEntityModel(), location, matrixStackIn, bufferIn, packedLightIn, entitylivingbaseIn, primaryColor[0], primaryColor[1], primaryColor[2]);
             }

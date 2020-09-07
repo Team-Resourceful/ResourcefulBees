@@ -10,7 +10,7 @@ import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
 import com.resourcefulbees.resourcefulbees.tileentity.ApiaryTileEntity;
 import com.resourcefulbees.resourcefulbees.tileentity.TieredBeehiveTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
-import com.resourcefulbees.resourcefulbees.utils.BeeValidator;
+import com.resourcefulbees.resourcefulbees.utils.ValidatorUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -60,7 +60,7 @@ public class ResourcefulBee extends CustomBeeEntity {
 
         String flower = getBeeData().getFlower();
 
-        if (BeeValidator.TAG_RESOURCE_PATTERN.matcher(flower).matches()) {
+        if (ValidatorUtils.TAG_RESOURCE_PATTERN.matcher(flower).matches()) {
             ITag<Block> blockTag = BeeInfoUtils.getBlockTag(flower.replace(BeeConstants.TAG_PREFIX, ""));
             return blockTag != null && state.isIn(blockTag);
         } else {
@@ -136,6 +136,16 @@ public class ResourcefulBee extends CustomBeeEntity {
         this.resetCropCounter();
     }
 
+    @Override
+    public boolean canEnterHive() {
+        if (this.cannotEnterHiveTicks <= 0 && !this.pollinateGoal.isRunning() && !this.hasStung() && this.getAttackTarget() == null) {
+            boolean flag = this.failedPollinatingTooLong() || this.hasNectar();
+            return flag && !this.isHiveNearFire();
+        } else {
+            return false;
+        }
+    }
+
     private int getCropsGrownSincePollination() {
         return this.numberOfMutations;
     }
@@ -168,7 +178,7 @@ public class ResourcefulBee extends CustomBeeEntity {
 
     public boolean validFillerBlock(Block block) {
         String baseBlock = this.getBeeData().MutationData.getMutationInput();
-        if (BeeValidator.TAG_RESOURCE_PATTERN.matcher(baseBlock).matches()) {
+        if (ValidatorUtils.TAG_RESOURCE_PATTERN.matcher(baseBlock).matches()) {
             ITag<Block> blockTag = BeeInfoUtils.getBlockTag(baseBlock.replace(BeeConstants.TAG_PREFIX, ""));
             return blockTag != null && block.isIn(blockTag);
         }
@@ -181,7 +191,7 @@ public class ResourcefulBee extends CustomBeeEntity {
     public boolean isFlowers(@Nonnull BlockPos pos) {
         String flower = getBeeData().getFlower();
 
-        if (BeeValidator.TAG_RESOURCE_PATTERN.matcher(flower).matches()) {
+        if (ValidatorUtils.TAG_RESOURCE_PATTERN.matcher(flower).matches()) {
             ITag<Block> blockTag = BeeInfoUtils.getBlockTag(flower.replace(BeeConstants.TAG_PREFIX, ""));
             return blockTag != null && this.world.getBlockState(pos).getBlock().isIn(blockTag);
         } else {
@@ -432,6 +442,26 @@ public class ResourcefulBee extends CustomBeeEntity {
 
         public PollinateGoal2() {
             super();
+        }
+
+        @Override
+        public boolean canBeeStart() {
+            if (ResourcefulBee.this.ticksUntilCanPollinate > 0) {
+                return false;
+            } else if (ResourcefulBee.this.hasNectar()) {
+                return false;
+            } else if (ResourcefulBee.this.rand.nextFloat() < 0.7F) {
+                return false;
+            } else {
+                Optional<BlockPos> optional = this.getFlower();
+                if (optional.isPresent()) {
+                    ResourcefulBee.this.flowerPos = optional.get();
+                    ResourcefulBee.this.navigator.tryMoveToXYZ((double)ResourcefulBee.this.flowerPos.getX() + 0.5D, (double)ResourcefulBee.this.flowerPos.getY() + 0.5D, (double)ResourcefulBee.this.flowerPos.getZ() + 0.5D, 1.2F);
+                    return true;
+                } else {
+                    return false;
+                }
+            }
         }
 
         @Nonnull

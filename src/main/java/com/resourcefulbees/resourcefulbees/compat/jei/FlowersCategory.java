@@ -8,7 +8,7 @@ import com.resourcefulbees.resourcefulbees.lib.RecipeTypes;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
-import com.resourcefulbees.resourcefulbees.utils.BeeValidator;
+import com.resourcefulbees.resourcefulbees.utils.ValidatorUtils;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -57,7 +57,7 @@ public class FlowersCategory implements IRecipeCategory<FlowersCategory.Recipe> 
             if (!bee.getValue().getName().equals(DEFAULT_BEE_TYPE)) {
                 if (!bee.getValue().getFlower().isEmpty()) {
                     String flower = bee.getValue().getFlower();
-                    if (BeeValidator.TAG_RESOURCE_PATTERN.matcher(flower).matches()) {
+                    if (ValidatorUtils.TAG_RESOURCE_PATTERN.matcher(flower).matches()) {
                         flower = flower.replace(BeeConstants.TAG_PREFIX, "");
 
                         ITag<Fluid> fluidTag = BeeInfoUtils.getFluidTag(flower);

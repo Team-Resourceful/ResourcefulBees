@@ -334,8 +334,8 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     }
 
     @Override
-    public void deserializeNBT(@Nonnull BlockState state, @Nonnull CompoundNBT nbt) {
-        super.deserializeNBT(state, nbt);
+    public void fromTag(@Nonnull BlockState state, @Nonnull CompoundNBT nbt) {
+        super.fromTag(state, nbt);
         this.loadFromNBT(nbt);
     }
 
@@ -409,7 +409,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
 
     @Override
     public void handleUpdateTag(@Nonnull BlockState state, CompoundNBT tag) {
-        this.deserializeNBT(state, tag);
+        this.fromTag(state, tag);
     }
 
     @Nullable

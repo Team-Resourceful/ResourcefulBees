@@ -27,7 +27,7 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
     public void onResourceManagerReload(@Nonnull IResourceManager resourceManager) {
         BeeRegistry.getBees().forEach(((s, customBeeData) -> {
             if (customBeeData.hasHoneycomb()) {
-                if (!customBeeData.CentrifugeData.hasCentrifugeOutput()) {
+                if (customBeeData.CentrifugeData.hasCentrifugeOutput()) {
                     if (Config.CENTRIFUGE_RECIPES.get()) {
                         IRecipe<?> honeycombCentrifuge = this.centrifugeRecipe(s);
                         IRecipe<?> honeycombBlockCentrifuge = this.centrifugeHoneyCombBlockRecipe(s);
@@ -37,7 +37,7 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
                 }
                 if (Config.HONEYCOMB_BLOCK_RECIPES.get()) {
                     IRecipe<?> honeycombBlock = this.makeHoneycombRecipe(s);
-                    IRecipe<?> honeycomb = this.blockToHoneycombRecipe(s);
+                    IRecipe<?> honeycomb = this.combBlockToComb(s);
                     getRecipeManager().recipes.computeIfAbsent(honeycombBlock.getType(), t -> new HashMap<>()).put(honeycombBlock.getId(), honeycombBlock);
                     getRecipeManager().recipes.computeIfAbsent(honeycomb.getType(), t -> new HashMap<>()).put(honeycomb.getId(), honeycomb);
                 }
@@ -85,7 +85,7 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
 
     private IRecipe<?> centrifugeHoneyCombBlockRecipe(String beeType) {
         CustomBeeData info = BeeRegistry.getBeeData(beeType);
-        ItemStack honeycombBlockItemStack = new ItemStack(info.getCombRegistryObject().get(), 1);
+        ItemStack honeycombBlockItemStack = new ItemStack(info.getCombBlockRegistryObject().get(), info.CentrifugeData.getMainInputCount());
         Ingredient honeycombblockItem = Ingredient.fromStacks(honeycombBlockItemStack);
 
         NonNullList<Pair<ItemStack,Double>> outputs = NonNullList.from(
@@ -100,7 +100,7 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
         return new CentrifugeRecipe(name,honeycombblockItem,outputs, Config.CENTRIFUGE_RECIPE_TIME.get() * 20, true);
     }
 
-    private IRecipe<?> blockToHoneycombRecipe(String beeType) {
+    private IRecipe<?> combBlockToComb(String beeType) {
         ItemStack honeycombItemStack = new ItemStack(BeeRegistry.getBeeData(beeType).getCombBlockItemRegistryObject().get());
         ItemStack honeycombOutput = new ItemStack(BeeRegistry.getBeeData(beeType).getCombRegistryObject().get(), 9);
         Ingredient honeycombItem = Ingredient.fromStacks(honeycombItemStack);

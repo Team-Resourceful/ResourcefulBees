@@ -50,11 +50,11 @@ public class CustomBeeData {
 
     public String getFlower() { return flower == null ? BeeConstants.FLOWER_TAG_ALL : flower.toLowerCase(); }
 
-    public boolean hasHoneycomb() { return hasHoneycomb; } //TODO should add isHoneycombColored to colorData in case end users supply custom textures
+    public boolean hasHoneycomb() { return hasHoneycomb; }
 
     public String getBaseLayerTexture() { return baseLayerTexture == null ? "/custom/bee" : baseLayerTexture.toLowerCase(); }
 
-    public int getMaxTimeInHive() { return Math.max(maxTimeInHive, BeeConstants.MAX_TIME_IN_HIVE); }
+    public int getMaxTimeInHive() { return maxTimeInHive < BeeConstants.MIN_HIVE_TIME ? maxTimeInHive == 0 ? BeeConstants.MAX_TIME_IN_HIVE : BeeConstants.MIN_HIVE_TIME : maxTimeInHive; }
 
     public float getAttackDamage() { return attackDamage == null ? 1.0f : attackDamage; }
 
