@@ -1,6 +1,6 @@
 package com.resourcefulbees.resourcefulbees.utils;
 
-import com.resourcefulbees.resourcefulbees.api.CustomBee;
+import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import net.minecraft.block.Block;
 import net.minecraft.fluid.Fluid;
@@ -41,7 +41,7 @@ public class BeeValidator {
         return isValid;
     }*/
 
-    private static boolean validateMutation(CustomBee bee) {
+    private static boolean validateMutation(CustomBeeData bee) {
 /*        if (!beeHasMutation(bee)) {
             return true;
         }*/
@@ -104,20 +104,20 @@ public class BeeValidator {
         return false;
     }*/
 
-    private static boolean validateBreeding(CustomBee bee) {
+    private static boolean validateBreeding(CustomBeeData bee) {
         return !bee.BreedData.getParent1().equals(bee.BreedData.getParent2()) || (bee.BreedData.getParent1().isEmpty() && bee.BreedData.getParent2().isEmpty()) ||
                 logWarn(bee.getName(), "breeding", (bee.BreedData.getParent1() + " and " + bee.BreedData.getParent2()),
                 "are the same parents. Child bee will not spawn from breeding.");
     }
 
-    private static boolean validateMaxTimeInHive(CustomBee bee) {
+    private static boolean validateMaxTimeInHive(CustomBeeData bee) {
         double time = bee.getMaxTimeInHive();
         return time >= BeeConstants.MIN_HIVE_TIME && time == Math.floor(time) && !Double.isInfinite(time) ||
                 logWarn(bee.getName(), "Time In Hive", String.valueOf(bee.getMaxTimeInHive()),
                 "time. Value must be greater than or equal to " + BeeConstants.MIN_HIVE_TIME);
     }
 
-    private static boolean validateCentrifugeMainOutput(CustomBee bee) {
+    private static boolean validateCentrifugeMainOutput(CustomBeeData bee) {
         if (!bee.CentrifugeData.getMainOutput().isEmpty()) {
             Item item = BeeInfoUtils.getItem(bee.CentrifugeData.getMainOutput());
             return SINGLE_RESOURCE_PATTERN.matcher(bee.CentrifugeData.getMainOutput()).matches() && BeeInfoUtils.isValidItem(item) ||

@@ -1,6 +1,5 @@
 package com.resourcefulbees.resourcefulbees;
 
-import com.resourcefulbees.resourcefulbees.api.CustomBee;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.*;
 import com.resourcefulbees.resourcefulbees.client.render.entity.CustomBeeRenderer;
 import com.resourcefulbees.resourcefulbees.client.render.items.ItemModelPropertiesHandler;
@@ -12,7 +11,6 @@ import com.resourcefulbees.resourcefulbees.data.DataGen;
 import com.resourcefulbees.resourcefulbees.data.RecipeBuilder;
 import com.resourcefulbees.resourcefulbees.init.ModSetup;
 import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
-import com.resourcefulbees.resourcefulbees.recipe.ResourcefulBeesRecipeIngredients;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
 import com.resourcefulbees.resourcefulbees.registry.TraitRegistry;
@@ -28,18 +26,14 @@ import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.MerchantOffer;
-import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.tileentity.BannerPattern;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.village.PointOfInterestType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.fml.DistExecutor;
@@ -80,13 +74,13 @@ public class ResourcefulBees
         ConfigLoader.load(Config.CommonConfig.COMMON_CONFIG, "resourcefulbees/common.toml");
 
         BeeSetup.setupBees();
-        RegistryHandler.registerBeeHoneycombsAndBlocks();
+        RegistryHandler.registerDynamicBees();
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener(EventPriority.LOW, this::setup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onInterModEnqueue);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::loadComplete);
 
-        FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(IRecipeSerializer.class, this::registerRecipeSerialziers);
+        //FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(IRecipeSerializer.class, this::registerRecipeSerialziers);
 
         MinecraftForge.EVENT_BUS.addListener(this::trade);
 
@@ -100,10 +94,11 @@ public class ResourcefulBees
         MinecraftForge.EVENT_BUS.register(this);
     }
 
-    public void registerRecipeSerialziers(RegistryEvent.Register<IRecipeSerializer<?>> event)
+    //TODO is this still needed??
+/*    public void registerRecipeSerialziers(RegistryEvent.Register<IRecipeSerializer<?>> event)
     {
         CraftingHelper.register(new ResourceLocation(MOD_ID, "honeycomb"), ResourcefulBeesRecipeIngredients.INSTANCE);
-    }
+    }*/
 
     public void trade(VillagerTradesEvent event) {
         List<VillagerTrades.ITrade> level1 = event.getTrades().get(1);
@@ -199,7 +194,7 @@ public class ResourcefulBees
 
     private void doClientStuff(final FMLClientSetupEvent event) {
         CentrifugeScreen.currentMonth = new SimpleDateFormat("MM").format(new Date());
-        RenderingRegistry.registerEntityRenderingHandler(RegistryHandler.CUSTOM_BEE.get(), CustomBeeRenderer::new);
+        BeeRegistry.getBees().forEach((s, customBee) -> RenderingRegistry.registerEntityRenderingHandler(customBee.getEntityTypeRegistryObject().get(), CustomBeeRenderer::new));
         ScreenManager.registerFactory(RegistryHandler.CENTRIFUGE_CONTAINER.get(), CentrifugeScreen::new);
         ScreenManager.registerFactory(RegistryHandler.MECHANICAL_CENTRIFUGE_CONTAINER.get(), MechanicalCentrifugeScreen::new);
         ScreenManager.registerFactory(RegistryHandler.CENTRIFUGE_MULTIBLOCK_CONTAINER.get(), CentrifugeMultiblockScreen::new);
@@ -220,6 +215,6 @@ public class ResourcefulBees
         TraitRegistry.setTraitRegistryClosed();
         TraitRegistry.giveBeeTraits();
 
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> DataGen::GenerateEnglishLang);
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> DataGen::generateClientData);
     }
 }

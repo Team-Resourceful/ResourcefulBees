@@ -1,5 +1,6 @@
 package com.resourcefulbees.resourcefulbees.container;
 
+import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.item.BeeJar;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
@@ -39,9 +40,11 @@ public class ValidatedApiaryContainer extends Container {
                     if (stack.getItem() instanceof BeeJar) {
                         if (BeeJar.isFilled(stack)) {
                             CompoundNBT data = stack.getTag();
+                            //TODO need to validate namespace since entity types are dynamic - check to see if this can be simplified further
                             //noinspection ConstantConditions
                             String type = data.getString(NBTConstants.NBT_ENTITY);
-                            return type.equals(RegistryHandler.CUSTOM_BEE.getId().toString());
+                            type = type.substring(0,type.indexOf(':'));
+                            return type.equals(ResourcefulBees.MOD_ID);
                         }
                     }
                     return false;

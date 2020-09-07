@@ -60,7 +60,7 @@ public class BeeTemptGoal extends Goal {
     }
 
     protected boolean isTempting(ItemStack stack) {
-        String validBreedItem = this.beeEntity.getBeeInfo().BreedData.getFeedItem();
+        String validBreedItem = this.beeEntity.getBeeData().BreedData.getFeedItem();
 
         if (BeeValidator.TAG_RESOURCE_PATTERN.matcher(validBreedItem).matches()) {
             ITag<Item> itemTag = BeeInfoUtils.getItemTag(validBreedItem.replace(BeeConstants.TAG_PREFIX, ""));

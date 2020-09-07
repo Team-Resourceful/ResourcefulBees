@@ -180,7 +180,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
 
                     if (beehiveState == State.HONEY_DELIVERED) {
                         beeEntity.onHoneyDelivered();
-                        if (!exportBee && beeEntity.getBeeInfo().ColorData.getHoneycombColor() != null && !beeEntity.getBeeInfo().ColorData.getHoneycombColor().isEmpty() && isValidApiary) {
+                        if (!exportBee && beeEntity.getBeeData().ColorData.getHoneycombColor() != null && !beeEntity.getBeeData().ColorData.getHoneycombColor().isEmpty() && isValidApiary) {
                             getApiaryStorage().deliverHoneycomb(beeEntity.getBeeType(), getTier());
                         }
                     }
@@ -218,7 +218,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
                     CompoundNBT nbt = new CompoundNBT();
                     bee.writeUnlessPassenger(nbt);
 
-                    int maxTimeInHive = bee1.getBeeInfo().getMaxTimeInHive();
+                    int maxTimeInHive = bee1.getBeeData().getMaxTimeInHive();
                     maxTimeInHive = (int) (maxTimeInHive * (1 - (0.10F + this.getTier() * .05)));
                     int finalMaxTimeInHive = maxTimeInHive;
 
@@ -477,7 +477,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
         CompoundNBT data = new CompoundNBT();
         data.putString(NBTConstants.NBT_ENTITY, "resourcefulbees:bee");
         beeEntity.writeWithoutTypeId(data);
-        String primaryColor = beeEntity.getBeeInfo().ColorData.getPrimaryColor();
+        String primaryColor = beeEntity.getBeeData().ColorData.getPrimaryColor();
         data.putString(NBTConstants.NBT_COLOR, primaryColor != null && !primaryColor.isEmpty() ? primaryColor : String.valueOf(DEFAULT_ITEM_COLOR));
         beeJar.setTag(data);
         this.h.setStackInSlot(EXPORT, beeJar);

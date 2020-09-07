@@ -1,14 +1,11 @@
 package com.resourcefulbees.resourcefulbees.compat.jei;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
-import com.resourcefulbees.resourcefulbees.api.CustomBee;
 import com.resourcefulbees.resourcefulbees.compat.jei.ingredients.EntityIngredient;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.lib.ApiaryOutput;
-import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
-import com.resourcefulbees.resourcefulbees.utils.NBTHelper;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -27,7 +24,6 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 public class ApiaryCategory implements IRecipeCategory<ApiaryCategory.Recipe> {
     public static final ResourceLocation GUI_BACK = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/beehive.png");
@@ -42,24 +38,21 @@ public class ApiaryCategory implements IRecipeCategory<ApiaryCategory.Recipe> {
         this.localizedName = I18n.format("gui.resourcefulbees.jei.category.apiary");
     }
 
-    //TODO Replace with Registry Objects
-
     public static List<Recipe> getHoneycombRecipes(IIngredientManager ingredientManager) {
         List<Recipe> recipes = new ArrayList<>();
         final List<ApiaryOutput> outputs = new ArrayList<>(Arrays.asList(Config.T1_APIARY_OUTPUT.get(), Config.T2_APIARY_OUTPUT.get(), Config.T3_APIARY_OUTPUT.get(), Config.T4_APIARY_OUTPUT.get()));
         final int[] outputQuantities = {Config.T1_APIARY_QUANTITY.get(), Config.T2_APIARY_QUANTITY.get(), Config.T3_APIARY_QUANTITY.get(), Config.T4_APIARY_QUANTITY.get()};
         final List<Item> apiaryTiers = new ArrayList<>(Arrays.asList(RegistryHandler.T1_APIARY_ITEM.get(), RegistryHandler.T2_APIARY_ITEM.get(), RegistryHandler.T3_APIARY_ITEM.get(), RegistryHandler.T4_APIARY_ITEM.get()));
 
-        for (Map.Entry<String, CustomBee> bee : BeeRegistry.getBees().entrySet()){
-            if (!bee.getKey().equals(BeeConstants.DEFAULT_BEE_TYPE) && bee.getValue().ColorData.getHoneycombColor() != null && !bee.getValue().ColorData.getHoneycombColor().isEmpty()) {
+        BeeRegistry.getBees().forEach(((s, customBeeData) -> {
+            if (customBeeData.hasHoneycomb()) {
                 for (int i = 0; i < 4; i++){
-                    Item outputItem = outputs.get(i).equals(ApiaryOutput.COMB) ? RegistryHandler.RESOURCEFUL_HONEYCOMB.get() : RegistryHandler.HONEYCOMB_BLOCK_ITEM.get();
+                    Item outputItem = outputs.get(i).equals(ApiaryOutput.COMB) ? customBeeData.getCombRegistryObject().get() : customBeeData.getCombBlockItemRegistryObject().get();
                     ItemStack outputStack = new ItemStack(outputItem, outputQuantities[i]);
-                    outputStack.setTag(NBTHelper.createHoneycombItemTag(bee.getKey()));
-                    recipes.add(new Recipe(outputStack, bee.getKey(), new ItemStack(apiaryTiers.get(i))));
+                    recipes.add(new Recipe(outputStack, customBeeData.getName(), new ItemStack(apiaryTiers.get(i))));
                 }
             }
-        }
+        }));
         return recipes;
     }
 

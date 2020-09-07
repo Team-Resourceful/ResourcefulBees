@@ -243,7 +243,7 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
             CompoundNBT data = new CompoundNBT();
             data.putString(NBTConstants.NBT_ENTITY, "resourcefulbees:bee");
             data.putString(NBTConstants.NBT_BEE_TYPE, this.container.beeList[i]);
-            String primaryColor = BeeRegistry.getInfo(this.container.beeList[i]).ColorData.getPrimaryColor();
+            String primaryColor = BeeRegistry.getBeeData(this.container.beeList[i]).ColorData.getPrimaryColor();
             data.putString(NBTConstants.NBT_COLOR, primaryColor != null && !primaryColor.isEmpty() ? primaryColor : String.valueOf(BeeConstants.DEFAULT_ITEM_COLOR));
             beeJar.setTag(data);
             if (this.client != null)

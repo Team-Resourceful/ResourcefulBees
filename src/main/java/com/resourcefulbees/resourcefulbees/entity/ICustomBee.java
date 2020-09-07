@@ -1,24 +1,8 @@
 package com.resourcefulbees.resourcefulbees.entity;
 
-import com.resourcefulbees.resourcefulbees.api.CustomBee;
-import com.resourcefulbees.resourcefulbees.config.IBeeInfo;
+import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 
-public interface ICustomBee extends IBeeInfo {
-
-    /**
-     * Selects a random bee from the list of biome specific spawnable bees,
-     * and sets "this" bee's type to the selected bee.
-     *
-     *  @param fromBiome  Should this bee based on biome?
-     */
-    void setBeeType(boolean fromBiome);
-
-    /**
-     * Sets "this" bee's type to the given type.
-     *
-     *  @param beeType  "This" bee's new type.
-     */
-    void setBeeType(String beeType);
+public interface ICustomBee {
 
     /**
      * Gets "this" bee's type.
@@ -32,7 +16,7 @@ public interface ICustomBee extends IBeeInfo {
      *
      *  @return "This" bee's info card.
      */
-    CustomBee getBeeInfo();
+    CustomBeeData getBeeData();
 
     /**
      * Gets "this" bee's current number of times fed.

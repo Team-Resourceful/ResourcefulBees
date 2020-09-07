@@ -102,8 +102,8 @@ public class BeeJar extends Item {
         target.writeWithoutTypeId(nbt);
         if (target instanceof CustomBeeEntity) {
             CustomBeeEntity beeEntity = (CustomBeeEntity) target;
-            if (beeEntity.getBeeInfo().ColorData.getPrimaryColor() != null && !beeEntity.getBeeInfo().ColorData.getPrimaryColor().isEmpty()) {
-                nbt.putString(NBTConstants.NBT_COLOR, beeEntity.getBeeInfo().ColorData.getPrimaryColor());
+            if (beeEntity.getBeeData().ColorData.getPrimaryColor() != null && !beeEntity.getBeeData().ColorData.getPrimaryColor().isEmpty()) {
+                nbt.putString(NBTConstants.NBT_COLOR, beeEntity.getBeeData().ColorData.getPrimaryColor());
             } else {
                 nbt.putString(NBTConstants.NBT_COLOR, String.valueOf(BeeConstants.DEFAULT_ITEM_COLOR));
             }

@@ -1,28 +1,23 @@
 package com.resourcefulbees.resourcefulbees.data;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
-import com.resourcefulbees.resourcefulbees.api.CustomBee;
+import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.config.Config;
-import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
-import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.*;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.resources.IResourceManagerReloadListener;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.crafting.NBTIngredient;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
 import java.util.HashMap;
-import java.util.Map;
 
 public class RecipeBuilder implements IResourceManagerReloadListener {
     private static RecipeManager recipeManager;
@@ -30,24 +25,24 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
     //TODO Needs to be replaced with new registry objects.
     @Override
     public void onResourceManagerReload(@Nonnull IResourceManager resourceManager) {
-        for (Map.Entry<String, CustomBee> bee : BeeRegistry.getBees().entrySet()){
-            if (bee.getValue().ColorData.getHoneycombColor() != null && !bee.getValue().ColorData.getHoneycombColor().isEmpty()) {
-                if (!bee.getValue().CentrifugeData.getMainOutput().isEmpty()) {
+        BeeRegistry.getBees().forEach(((s, customBeeData) -> {
+            if (customBeeData.hasHoneycomb()) {
+                if (!customBeeData.CentrifugeData.hasCentrifugeOutput()) {
                     if (Config.CENTRIFUGE_RECIPES.get()) {
-                        IRecipe<?> honeycombCentrifuge = this.centrifugeRecipe(bee.getValue().getName(), bee.getValue().ColorData.getHoneycombColor());
-                        IRecipe<?> honeycombBlockCentrifuge = this.centrifugeHoneyCombBlockRecipe(bee.getValue().getName(), bee.getValue().ColorData.getHoneycombColor());
+                        IRecipe<?> honeycombCentrifuge = this.centrifugeRecipe(s);
+                        IRecipe<?> honeycombBlockCentrifuge = this.centrifugeHoneyCombBlockRecipe(s);
                         getRecipeManager().recipes.computeIfAbsent(honeycombCentrifuge.getType(), t -> new HashMap<>()).put(honeycombCentrifuge.getId(), honeycombCentrifuge);
                         getRecipeManager().recipes.computeIfAbsent(honeycombBlockCentrifuge.getType(), t -> new HashMap<>()).put(honeycombBlockCentrifuge.getId(), honeycombBlockCentrifuge);
                     }
                 }
                 if (Config.HONEYCOMB_BLOCK_RECIPES.get()) {
-                    IRecipe<?> honeycombBlock = this.makeHoneycombRecipe(bee.getKey(), bee.getValue().ColorData.getHoneycombColor());
-                    IRecipe<?> honeycomb = this.blockToHoneycombRecipe(bee.getKey(), bee.getValue().ColorData.getHoneycombColor());
+                    IRecipe<?> honeycombBlock = this.makeHoneycombRecipe(s);
+                    IRecipe<?> honeycomb = this.blockToHoneycombRecipe(s);
                     getRecipeManager().recipes.computeIfAbsent(honeycombBlock.getType(), t -> new HashMap<>()).put(honeycombBlock.getId(), honeycombBlock);
                     getRecipeManager().recipes.computeIfAbsent(honeycomb.getType(), t -> new HashMap<>()).put(honeycomb.getId(), honeycomb);
                 }
             }
-        }
+        }));
     }
 
     @SubscribeEvent
@@ -56,20 +51,9 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
         recipeManager = event.getDataPackRegistries().getRecipeManager();
     }
 
-    private IRecipe<?> makeHoneycombRecipe(String BeeType, String Color) {
-        ItemStack honeycombItemStack = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
-        ItemStack honeycombOutput = new ItemStack(RegistryHandler.HONEYCOMB_BLOCK_ITEM.get());
-
-        CompoundNBT rbNBT = new CompoundNBT();
-        CompoundNBT btcNBT = new CompoundNBT();
-        btcNBT.putString(NBTConstants.NBT_COLOR, Color);
-        btcNBT.putString(NBTConstants.NBT_BEE_TYPE, BeeType);
-        rbNBT.put(NBTConstants.NBT_ROOT,btcNBT);
-
-        honeycombItemStack.setTag(rbNBT);
-        honeycombOutput.setTag(rbNBT);
-
-        Ingredient honeycombItem = new CustomNBTIngredient(honeycombItemStack);
+    private IRecipe<?> makeHoneycombRecipe(String beeType) {
+        ItemStack honeycombOutput = new ItemStack(BeeRegistry.getBeeData(beeType).getCombBlockItemRegistryObject().get());
+        Ingredient honeycombItem = Ingredient.fromItems(BeeRegistry.getBeeData(beeType).getCombRegistryObject().get());
 
         NonNullList<Ingredient> inputs = NonNullList.from(Ingredient.EMPTY,
                 honeycombItem, honeycombItem, honeycombItem,
@@ -77,19 +61,15 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
                 honeycombItem, honeycombItem, honeycombItem
         );
 
-        ResourceLocation name = new ResourceLocation(ResourcefulBees.MOD_ID, BeeType + "_honeycomb_block");
+        ResourceLocation name = new ResourceLocation(ResourcefulBees.MOD_ID, beeType + "_honeycomb_block");
 
         return new ShapedRecipe(name, "", 3, 3, inputs, honeycombOutput);
     }
 
-    private IRecipe<?> centrifugeRecipe(String BeeType, String Color) {
-        CustomBee info = BeeRegistry.getInfo(BeeType);
-        ItemStack honeycombItemStack = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get(), info.CentrifugeData.getMainInputCount());
-        final CompoundNBT honeycombItemStackTag = honeycombItemStack.getOrCreateChildTag(NBTConstants.NBT_ROOT);
-        honeycombItemStackTag.putString(NBTConstants.NBT_COLOR, Color);
-        honeycombItemStackTag.putString(NBTConstants.NBT_BEE_TYPE, BeeType);
-
-        Ingredient honeycombItem = new CustomNBTIngredient(honeycombItemStack);
+    private IRecipe<?> centrifugeRecipe(String beeType) {
+        CustomBeeData info = BeeRegistry.getBeeData(beeType);
+        ItemStack honeycombItemStack = new ItemStack(info.getCombRegistryObject().get(), info.CentrifugeData.getMainInputCount());
+        Ingredient honeycombItem = Ingredient.fromStacks(honeycombItemStack);
 
         NonNullList<Pair<ItemStack,Double>> outputs = NonNullList.from(
                 Pair.of(ItemStack.EMPTY, 0.0),
@@ -98,19 +78,15 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
                 Pair.of(new ItemStack(BeeInfoUtils.getItem(info.CentrifugeData.getBottleOutput()), info.CentrifugeData.getBottleOutputCount()), info.CentrifugeData.getBottleOutputWeight())
         );
 
-        ResourceLocation name = new ResourceLocation(ResourcefulBees.MOD_ID, BeeType + "_honeycomb_centrifuge");
+        ResourceLocation name = new ResourceLocation(ResourcefulBees.MOD_ID, beeType + "_honeycomb_centrifuge");
 
         return new CentrifugeRecipe(name,honeycombItem,outputs, Config.CENTRIFUGE_RECIPE_TIME.get() * 20, false);
     }
 
-    private IRecipe<?> centrifugeHoneyCombBlockRecipe(String BeeType, String Color) {
-        CustomBee info = BeeRegistry.getInfo(BeeType);
-        ItemStack honeycombBlockItemStack = new ItemStack(RegistryHandler.HONEYCOMB_BLOCK_ITEM.get(), 1);
-        final CompoundNBT honeycombBlockItemStackTag = honeycombBlockItemStack.getOrCreateChildTag(NBTConstants.NBT_ROOT);
-        honeycombBlockItemStackTag.putString(NBTConstants.NBT_COLOR, Color);
-        honeycombBlockItemStackTag.putString(NBTConstants.NBT_BEE_TYPE, BeeType);
-
-        Ingredient honeycombblockItem = new CustomNBTIngredient(honeycombBlockItemStack);
+    private IRecipe<?> centrifugeHoneyCombBlockRecipe(String beeType) {
+        CustomBeeData info = BeeRegistry.getBeeData(beeType);
+        ItemStack honeycombBlockItemStack = new ItemStack(info.getCombRegistryObject().get(), 1);
+        Ingredient honeycombblockItem = Ingredient.fromStacks(honeycombBlockItemStack);
 
         NonNullList<Pair<ItemStack,Double>> outputs = NonNullList.from(
                 Pair.of(ItemStack.EMPTY, 0.0),
@@ -119,38 +95,19 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
                 Pair.of(new ItemStack(BeeInfoUtils.getItem(info.CentrifugeData.getBottleOutput()), info.CentrifugeData.getBottleOutputCount() * 9), info.CentrifugeData.getBottleOutputWeight())
         );
 
-        ResourceLocation name = new ResourceLocation(ResourcefulBees.MOD_ID, BeeType + "_honeycomb_block_centrifuge");
+        ResourceLocation name = new ResourceLocation(ResourcefulBees.MOD_ID, beeType + "_honeycomb_block_centrifuge");
 
         return new CentrifugeRecipe(name,honeycombblockItem,outputs, Config.CENTRIFUGE_RECIPE_TIME.get() * 20, true);
     }
 
-    private IRecipe<?> blockToHoneycombRecipe(String BeeType, String Color) {
-        ItemStack honeycombItemStack = new ItemStack(RegistryHandler.HONEYCOMB_BLOCK_ITEM.get());
-        ItemStack honeycombOutput = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
+    private IRecipe<?> blockToHoneycombRecipe(String beeType) {
+        ItemStack honeycombItemStack = new ItemStack(BeeRegistry.getBeeData(beeType).getCombBlockItemRegistryObject().get());
+        ItemStack honeycombOutput = new ItemStack(BeeRegistry.getBeeData(beeType).getCombRegistryObject().get(), 9);
+        Ingredient honeycombItem = Ingredient.fromStacks(honeycombItemStack);
 
-        CompoundNBT rbNBT = new CompoundNBT();
-        CompoundNBT btcNBT = new CompoundNBT();
-        btcNBT.putString(NBTConstants.NBT_COLOR, Color);
-        btcNBT.putString(NBTConstants.NBT_BEE_TYPE, BeeType);
-        rbNBT.put(NBTConstants.NBT_ROOT,btcNBT);
-
-        honeycombItemStack.setTag(rbNBT);
-        honeycombOutput.setTag(rbNBT);
-        honeycombOutput.setCount(9);
-
-        Ingredient honeycombItem = new CustomNBTIngredient(honeycombItemStack);
-
-        ResourceLocation name = new ResourceLocation(ResourcefulBees.MOD_ID, BeeType + "_block_to_honeycomb");
+        ResourceLocation name = new ResourceLocation(ResourcefulBees.MOD_ID, beeType + "_block_to_honeycomb");
 
         return new ShapelessRecipe(name, "",honeycombOutput, NonNullList.from(Ingredient.EMPTY, honeycombItem));
-    }
-
-    private static class CustomNBTIngredient extends NBTIngredient
-    {
-        public CustomNBTIngredient(ItemStack stack)
-        {
-            super(stack);
-        }
     }
 
     public static RecipeManager getRecipeManager() {

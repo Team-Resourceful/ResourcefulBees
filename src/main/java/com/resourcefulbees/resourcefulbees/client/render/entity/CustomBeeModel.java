@@ -140,7 +140,7 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
             this.body.rotateAngleX = ModelUtils.interpolateAngle(this.body.rotateAngleX, 3.0915928F, this.bodyPitch);
         }
 
-        beeSize = entityIn.getSizeModifierFromInfo(entityIn.getBeeType());
+        beeSize = entityIn.getBeeData().getSizeModifier();
         if(isChild)
             beeSize /= 2;
     }

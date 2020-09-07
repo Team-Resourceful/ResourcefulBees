@@ -2,6 +2,7 @@
   "flower": "ALL",
   "maxTimeInHive": 600,
   "sizeModifier": 0.5,
+  "hasHoneycomb": true,
   "ColorData": {
     "isBeeColored": true,
     "honeycombColor": "#303030",

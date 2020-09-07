@@ -2,7 +2,7 @@ package com.resourcefulbees.resourcefulbees.client.render.entity;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
-import com.resourcefulbees.resourcefulbees.api.CustomBee;
+import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
@@ -24,7 +24,7 @@ public class PrimaryColorLayer extends LayerRenderer<CustomBeeEntity, CustomBeeM
     }
 
     public void render(@Nonnull MatrixStack matrixStackIn, @Nonnull IRenderTypeBuffer bufferIn, int packedLightIn, CustomBeeEntity entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        CustomBee bee = entitylivingbaseIn.getBeeInfo();
+        CustomBeeData bee = entitylivingbaseIn.getBeeData();
 
         if (bee.ColorData.isBeeColored()) {
             if (bee.ColorData.isRainbowBee() && !bee.ColorData.isGlowing()) {

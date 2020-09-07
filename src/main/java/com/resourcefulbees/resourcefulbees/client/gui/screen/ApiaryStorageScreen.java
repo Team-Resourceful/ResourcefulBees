@@ -154,4 +154,7 @@ public class ApiaryStorageScreen extends ContainerScreen<ApiaryStorageContainer>
             }
         }
     }
+
+    @Override
+    protected void drawForeground(@Nonnull MatrixStack stack, int mouseX, int mouseY) { }
 }

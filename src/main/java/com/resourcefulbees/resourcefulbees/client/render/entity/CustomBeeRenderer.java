@@ -1,7 +1,7 @@
 package com.resourcefulbees.resourcefulbees.client.render.entity;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
-import com.resourcefulbees.resourcefulbees.api.CustomBee;
+import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
@@ -25,7 +25,7 @@ public class CustomBeeRenderer extends MobRenderer<CustomBeeEntity, CustomBeeMod
 
     @Nonnull
     public ResourceLocation getEntityTexture(CustomBeeEntity entity) {
-        CustomBee bee = entity.getBeeInfo();
+        CustomBeeData bee = entity.getBeeData();
         if (entity.hasAngerTime()) {
             return new ResourceLocation(ResourcefulBees.MOD_ID, BeeConstants.ENTITY_TEXTURES_DIR + bee.getBaseLayerTexture() + "_angry.png");
         }

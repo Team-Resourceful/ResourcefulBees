@@ -4,19 +4,12 @@ import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.block.TieredBeehiveBlock;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
-import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
-import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
-import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
 import com.resourcefulbees.resourcefulbees.tileentity.CentrifugeTileEntity;
-import com.resourcefulbees.resourcefulbees.tileentity.HoneycombTileEntity;
 import com.resourcefulbees.resourcefulbees.tileentity.TieredBeehiveTileEntity;
-import mcjty.theoneprobe.api.ElementAlignment;
 import mcjty.theoneprobe.api.IProbeInfo;
 import mcjty.theoneprobe.api.ITheOneProbe;
 import mcjty.theoneprobe.api.ProbeMode;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -32,7 +25,7 @@ public class TopCompat implements Function<ITheOneProbe, Void>
 
     //TODO Replace with Registry Objects
 
-    public static ItemStack honeyComb(String num, TileEntity te){
+/*    public static ItemStack honeyComb(String num, TileEntity te){
         final ItemStack honeyComb = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
         if (!te.serializeNBT().getCompound(NBTConstants.NBT_HONEYCOMBS_TE).getString(num).equals("")) {
                 honeyComb.getOrCreateChildTag(NBTConstants.NBT_ROOT).putString(NBTConstants.NBT_BEE_TYPE, te.serializeNBT().getCompound(NBTConstants.NBT_HONEYCOMBS_TE).getString(num));
@@ -40,14 +33,14 @@ public class TopCompat implements Function<ITheOneProbe, Void>
             return honeyComb;
         }
         else return new ItemStack(Items.AIR);
-    }
+    }*/
 
     @Nullable
     @Override
     public Void apply(ITheOneProbe theOneProbe)
     {
         theOneProbe.registerBlockDisplayOverride((mode, probeInfo, player, world, blockState, data) -> {
-            if(world.getTileEntity(data.getPos()) instanceof HoneycombTileEntity)
+/*            if(world.getTileEntity(data.getPos()) instanceof HoneycombTileEntity)
             {
                 TileEntity honeyBlock = world.getTileEntity(data.getPos());
                 final ItemStack honeyCombBlock = new ItemStack(RegistryHandler.HONEYCOMB_BLOCK_ITEM.get());
@@ -63,7 +56,7 @@ public class TopCompat implements Function<ITheOneProbe, Void>
                         .itemLabel(honeyCombBlock)
                         .text(formattedName);
                 return true;
-            }
+            }*/
             if(world.getTileEntity(data.getPos()) instanceof TieredBeehiveTileEntity)
             {
                 TieredBeehiveTileEntity beehiveBlockEntity = (TieredBeehiveTileEntity) world.getTileEntity(data.getPos());
@@ -86,11 +79,12 @@ public class TopCompat implements Function<ITheOneProbe, Void>
                         vertical = probeInfo.vertical(probeInfo.defaultLayoutStyle().borderColor(0xff006699).spacing(0));
                         int hiveCombSize = tieredBeehiveTileEntity.numberOfCombs();
                         hiveCombSize = Math.min(hiveCombSize, 6);
-                        for (int i =0; i < hiveCombSize; i++){
+                        //TODO Fix this. TE now uses List of Items vs Strings
+/*                        for (int i =0; i < hiveCombSize; i++){
                             horizontal = vertical.horizontal(probeInfo.defaultLayoutStyle().spacing(10).alignment(ElementAlignment.ALIGN_CENTER));
                             horizontal.item(honeyComb(String.valueOf(i), tieredBeehiveTileEntity))
                                     .text(new StringTextComponent(honeyComb(String.valueOf(i), tieredBeehiveTileEntity).getDisplayName().getString()));
-                        }
+                        }*/
                         return true;
                     }
                 }

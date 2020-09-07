@@ -1,7 +1,7 @@
 package com.resourcefulbees.resourcefulbees.registry;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
-import com.resourcefulbees.resourcefulbees.api.CustomBee;
+import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.data.BeeTrait;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.Effects;
@@ -46,7 +46,7 @@ public class TraitRegistry {
     }
 
     public static void giveBeeTraits(){
-        for (CustomBee bee : BeeRegistry.getBees().values()){
+        for (CustomBeeData bee : BeeRegistry.getBees().values()){
             if (bee.hasTraitNames()) {
                 for (String traitString : bee.getTraitNames()) {
                     BeeTrait trait = TraitRegistry.getTrait(traitString);

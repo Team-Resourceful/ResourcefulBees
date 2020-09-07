@@ -1,8 +1,5 @@
 package com.resourcefulbees.resourcefulbees.item;
 
-import com.resourcefulbees.resourcefulbees.ResourcefulBees;
-import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
-import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
@@ -35,7 +32,7 @@ public class BeeSpawnEggItem extends SpawnEggItem {
 		this.entityType = Lazy.of(entityTypeSupplier);
 	}
 
-    @Nonnull
+/*    @Nonnull
 	@Override
     public String getTranslationKey(ItemStack stack) {
         CompoundNBT nbt = stack.getChildTag(NBTConstants.NBT_ROOT);
@@ -46,11 +43,11 @@ public class BeeSpawnEggItem extends SpawnEggItem {
             name = String.format("item.%1$s.bee_spawn_egg", ResourcefulBees.MOD_ID);
         }
         return name;
-    }
+    }*/
 
     @Nonnull
 	@Override
-	public EntityType<?> getType(@Nullable final CompoundNBT p_208076_1_) {
+	public EntityType<?> getType(@Nullable final CompoundNBT nbt) {
 		return entityType.get();
 	}
 
@@ -59,39 +56,28 @@ public class BeeSpawnEggItem extends SpawnEggItem {
     public ActionResultType onItemUse(ItemUseContext context) {
         ItemStack itemstack = context.getItem();
         PlayerEntity player = context.getPlayer();
-        CompoundNBT tag = itemstack.getChildTag(NBTConstants.NBT_ROOT);
-        if (tag != null && player != null) {
-            String bee = tag.getString(NBTConstants.NBT_BEE_TYPE);
-            if (BeeRegistry.getInfo(bee) == null && !itemstack.isEmpty()) {
-                for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
-                    if (player.inventory.getStackInSlot(i) == itemstack) {
-                        player.inventory.removeStackFromSlot(i);
-                    }
-                }
-                return ActionResultType.FAIL;
+        if (player != null) {
+            World world = context.getWorld();
+            if (world.isRemote) {
+                return ActionResultType.SUCCESS;
             } else {
-                World world = context.getWorld();
-                if (world.isRemote) {
-                    return ActionResultType.SUCCESS;
+                BlockPos blockpos = context.getPos();
+                Direction direction = context.getFace();
+                BlockState blockstate = world.getBlockState(blockpos);
+
+                BlockPos blockpos1;
+                if (blockstate.getCollisionShape(world, blockpos).isEmpty()) {
+                    blockpos1 = blockpos;
                 } else {
-                    BlockPos blockpos = context.getPos();
-                    Direction direction = context.getFace();
-                    BlockState blockstate = world.getBlockState(blockpos);
-
-                    BlockPos blockpos1;
-                    if (blockstate.getCollisionShape(world, blockpos).isEmpty()) {
-                        blockpos1 = blockpos;
-                    } else {
-                        blockpos1 = blockpos.offset(direction);
-                    }
-
-                    EntityType<?> entitytype = this.getType(itemstack.getTag());
-                    if (entitytype.spawn((ServerWorld) world, itemstack, context.getPlayer(), blockpos1, SpawnReason.SPAWN_EGG, true, !Objects.equals(blockpos, blockpos1) && direction == Direction.UP) != null) {
-                        itemstack.shrink(1);
-                    }
-
-                    return ActionResultType.CONSUME;
+                    blockpos1 = blockpos.offset(direction);
                 }
+
+                EntityType<?> entitytype = this.getType(itemstack.getTag()); //TODO check this against JEI Ingredient Helper cheat stack method
+                if (entitytype.spawn((ServerWorld) world, itemstack, context.getPlayer(), blockpos1, SpawnReason.SPAWN_EGG, true, !Objects.equals(blockpos, blockpos1) && direction == Direction.UP) != null) {
+                    itemstack.shrink(1);
+                }
+
+                return ActionResultType.CONSUME;
             }
         }
         return ActionResultType.SUCCESS;

@@ -1,11 +1,9 @@
 package com.resourcefulbees.resourcefulbees.block;
 
 import com.resourcefulbees.resourcefulbees.config.Config;
-import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
 import com.resourcefulbees.resourcefulbees.tileentity.TieredBeehiveTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
-import com.resourcefulbees.resourcefulbees.utils.NBTHelper;
 import com.resourcefulbees.resourcefulbees.utils.TooltipBuilder;
 import net.minecraft.block.BeehiveBlock;
 import net.minecraft.block.Block;
@@ -184,9 +182,7 @@ public class TieredBeehiveBlock extends BeehiveBlock {
     if (blockEntity instanceof TieredBeehiveTileEntity) {
       TieredBeehiveTileEntity hive = (TieredBeehiveTileEntity)blockEntity;
       while (hive.hasCombs()) {
-        ItemStack comb = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
-        String honeycomb = hive.getResourceHoneycomb();
-        comb.setTag(NBTHelper.createHoneycombItemTag(BeeRegistry.getInfo(honeycomb).getName()));
+        ItemStack comb = new ItemStack(hive.getResourceHoneycomb());
         spawnAsEntity(world, pos, comb);
       }
     }
@@ -197,9 +193,7 @@ public class TieredBeehiveBlock extends BeehiveBlock {
     if (blockEntity instanceof TieredBeehiveTileEntity) {
       TieredBeehiveTileEntity hive = (TieredBeehiveTileEntity)blockEntity;
       if (hive.hasCombs()) {
-        ItemStack comb = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
-        String honeycomb = hive.getResourceHoneycomb();
-        comb.setTag(NBTHelper.createHoneycombItemTag(BeeRegistry.getInfo(honeycomb).getName()));
+        ItemStack comb = new ItemStack(hive.getResourceHoneycomb());
         spawnAsEntity(world, pos, comb);
       }
     }

@@ -1,5 +1,6 @@
 package com.resourcefulbees.resourcefulbees.tileentity;
 
+import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.container.ApiaryStorageContainer;
 import com.resourcefulbees.resourcefulbees.container.AutomationSensitiveItemStackHandler;
@@ -7,20 +8,19 @@ import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.item.UpgradeItem;
 import com.resourcefulbees.resourcefulbees.lib.ApiaryOutput;
 import com.resourcefulbees.resourcefulbees.lib.ApiaryTabs;
-import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
 import com.resourcefulbees.resourcefulbees.utils.MathUtils;
 import com.resourcefulbees.resourcefulbees.utils.NBTHelper;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
@@ -187,58 +187,47 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
 
     public void deliverHoneycomb(String beeType, int apiaryTier) {
         ItemStack itemstack;
+        Item combItem = BeeRegistry.getBeeData(beeType).getCombRegistryObject().get();
+        Item combBlockItem = BeeRegistry.getBeeData(beeType).getCombBlockItemRegistryObject().get();
+        Item outputItem;
 
         switch (apiaryTier) {
             case 8:
-                if (Config.T4_APIARY_OUTPUT.get() == ApiaryOutput.BLOCK)
-                    itemstack = new ItemStack(RegistryHandler.HONEYCOMB_BLOCK_ITEM.get(), Config.T4_APIARY_QUANTITY.get());
-                else
-                    itemstack = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get(), Config.T4_APIARY_QUANTITY.get());
+                outputItem = (Config.T4_APIARY_OUTPUT.get() == ApiaryOutput.BLOCK) ? combBlockItem : combItem;
+                itemstack = new ItemStack(outputItem, Config.T4_APIARY_QUANTITY.get());
                 break;
             case 7:
-                if (Config.T3_APIARY_OUTPUT.get() == ApiaryOutput.BLOCK)
-                    itemstack = new ItemStack(RegistryHandler.HONEYCOMB_BLOCK_ITEM.get(), Config.T3_APIARY_QUANTITY.get());
-                else
-                    itemstack = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get(), Config.T3_APIARY_QUANTITY.get());
+                outputItem = (Config.T3_APIARY_OUTPUT.get() == ApiaryOutput.BLOCK) ? combBlockItem : combItem;
+                itemstack = new ItemStack(outputItem, Config.T3_APIARY_QUANTITY.get());
                 break;
             case 6:
-                if (Config.T2_APIARY_OUTPUT.get() == ApiaryOutput.BLOCK)
-                    itemstack = new ItemStack(RegistryHandler.HONEYCOMB_BLOCK_ITEM.get(), Config.T2_APIARY_QUANTITY.get());
-                else
-                    itemstack = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get(), Config.T2_APIARY_QUANTITY.get());
+                outputItem = (Config.T2_APIARY_OUTPUT.get() == ApiaryOutput.BLOCK) ? combBlockItem : combItem;
+                itemstack = new ItemStack(outputItem, Config.T2_APIARY_QUANTITY.get());
                 break;
             default:
-                if (Config.T1_APIARY_OUTPUT.get() == ApiaryOutput.BLOCK)
-                    itemstack = new ItemStack(RegistryHandler.HONEYCOMB_BLOCK_ITEM.get(), Config.T1_APIARY_QUANTITY.get());
-                else
-                    itemstack = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get(), Config.T1_APIARY_QUANTITY.get());
+                outputItem = (Config.T1_APIARY_OUTPUT.get() == ApiaryOutput.BLOCK) ? combBlockItem : combItem;
+                itemstack = new ItemStack(outputItem, Config.T1_APIARY_QUANTITY.get());
                 break;
         }
 
-        itemstack.setTag(NBTHelper.createHoneycombItemTag(BeeRegistry.getInfo(beeType).getName()));
+        itemstack.setTag(NBTHelper.createHoneycombItemTag(BeeRegistry.getBeeData(beeType).getName()));
 
         depositItemStack(itemstack);
     }
 
     public boolean breedComplete(String p1, String p2) {
         if (inventoryHasSpace()) {
-            EntityType<?> entityType = EntityType.byKey("resourcefulbees:bee").orElse(null);
-            if (entityType != null && world != null) {
-                Entity entity = entityType.create(world);
-                if (entity instanceof CustomBeeEntity) {
-                    CustomBeeEntity childBee = (CustomBeeEntity) entity;
-                    childBee.setBeeType(BeeRegistry.getWeightedChild(p1, p2));
+            String childType = BeeRegistry.getWeightedChild(p1, p2);
+            CustomBeeData childBeeData = BeeRegistry.getBeeData(childType);
+            EntityType<? extends CustomBeeEntity> entityType = childBeeData.getEntityTypeRegistryObject().get();
 
-                    String type = EntityType.getKey(childBee.getType()).toString();
+            if (world != null) {
+                CustomBeeEntity entity = entityType.create(world);
+                if (entity != null) {
+                    String type = EntityType.getKey(entity.getType()).toString();
                     CompoundNBT nbt = new CompoundNBT();
                     nbt.putString(NBTConstants.NBT_ENTITY, type);
-                    childBee.writeWithoutTypeId(nbt);
-                    if (childBee.getBeeInfo().ColorData.getPrimaryColor() != null && !childBee.getBeeInfo().ColorData.getPrimaryColor().isEmpty()) {
-                        nbt.putString(NBTConstants.NBT_COLOR, childBee.getBeeInfo().ColorData.getPrimaryColor());
-                    } else {
-                        nbt.putString(NBTConstants.NBT_COLOR, String.valueOf(BeeConstants.DEFAULT_ITEM_COLOR));
-                    }
-
+                    entity.writeWithoutTypeId(nbt);  //TODO Make Bee Jar hold instance-based ColorData object
                     ItemStack beeJar = new ItemStack(RegistryHandler.BEE_JAR.get());
                     beeJar.setTag(nbt);
 

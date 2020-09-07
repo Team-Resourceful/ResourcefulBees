@@ -2,7 +2,7 @@ package com.resourcefulbees.resourcefulbees.compat.jei;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
-import com.resourcefulbees.resourcefulbees.api.CustomBee;
+import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.compat.jei.ingredients.EntityIngredient;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
@@ -54,7 +54,7 @@ public class BlockToBlock implements IRecipeCategory<BlockToBlock.Recipe> {
 
     public static List<BlockToBlock.Recipe> getMutationRecipes(IIngredientManager ingredientManager) {
         List<BlockToBlock.Recipe> recipes = new ArrayList<>();
-        for (Map.Entry<String, CustomBee> bee : BeeRegistry.getBees().entrySet()){
+        for (Map.Entry<String, CustomBeeData> bee : BeeRegistry.getBees().entrySet()){
             if (bee.getValue().MutationData.hasMutation()) {
 
                 String mutationIn = bee.getValue().MutationData.getMutationInput();

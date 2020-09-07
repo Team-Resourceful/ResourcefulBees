@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "resourcefulbees:item/honeycombbase"
+    "layer0": "resourcefulbees:item/honeycomb"
   }
 }

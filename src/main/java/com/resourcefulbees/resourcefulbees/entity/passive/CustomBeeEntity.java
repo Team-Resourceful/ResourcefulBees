@@ -1,17 +1,17 @@
 package com.resourcefulbees.resourcefulbees.entity.passive;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
-import com.resourcefulbees.resourcefulbees.api.CustomBee;
-import com.resourcefulbees.resourcefulbees.data.BeeTrait;
+import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.entity.ICustomBee;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
-import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.BeeValidator;
-import com.resourcefulbees.resourcefulbees.utils.MathUtils;
-import net.minecraft.entity.*;
+import net.minecraft.entity.EntitySize;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.Pose;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.BeeEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -33,11 +33,8 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.IServerWorld;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.util.FakePlayer;
 
 import javax.annotation.Nonnull;
@@ -46,51 +43,26 @@ import java.util.Random;
 
 public class CustomBeeEntity extends BeeEntity implements ICustomBee {
 
-    private static final DataParameter<String> BEE_TYPE = EntityDataManager.createKey(CustomBeeEntity.class, DataSerializers.STRING);
     private static final DataParameter<Integer> FEED_COUNT = EntityDataManager.createKey(CustomBeeEntity.class, DataSerializers.VARINT);
 
     private boolean remove;
     private boolean renderingInJei;
 
-    public CustomBeeEntity(EntityType<? extends BeeEntity> type, World world) {
+    protected final CustomBeeData beeData;
+
+    public CustomBeeEntity(EntityType<? extends BeeEntity> type, World world, CustomBeeData beeData) {
         super(type, world);
+        this.beeData = beeData;
     }
 
     //region BEE INFO RELATED METHODS BELOW
 
-    public void setBeeType(boolean fromBiome){
-        Biome curBiome = this.world.getBiome(this.getBlockPos());
-        String bee = fromBiome ? BeeRegistry.getRandomBee(curBiome) : BeeRegistry.getRandomBee();
-        this.dataManager.set(BEE_TYPE, bee);
-    }
-
-    public void setBeeType(String beeType){
-        this.dataManager.set(BEE_TYPE, getNameFromInfo(beeType));
-    }
-
     public String getBeeType() {
-        CustomBee info = getBeeInfo(this.dataManager.get(BEE_TYPE));
-        if (info.getName().equals(BeeConstants.DEFAULT_BEE_TYPE) || info.getName().isEmpty()) {
-            markRemove();
-        }
-        return this.dataManager.get(BEE_TYPE);
+        return beeData.getName();
     }
 
-    @Override
-    public Float getSizeModifierFromInfo(String beeType) {
-        return MathUtils.clamp(getBeeInfo(getBeeType()).getSizeModifier(), 0.5f, 2f);
-    }
-
-    public String getColorFromInfo(String beeType) {
-        return getBeeInfo(beeType).ColorData.getHoneycombColor();
-    }
-
-    public String getNameFromInfo(String beeType) {
-        return getBeeInfo(beeType).getName();
-    }
-
-    public CustomBee getBeeInfo() {
-        return BeeRegistry.getInfo(this.getBeeType());
+    public CustomBeeData getBeeData() {
+        return beeData;
     }
 
     @Override
@@ -106,10 +78,6 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
     @Override
     public void addFeedCount() {
         this.dataManager.set(FEED_COUNT, this.getFeedCount() + 1);
-    }
-
-    public CustomBee getBeeInfo(String beeType) {
-        return BeeRegistry.getInfo(beeType);
     }
     //endregion
 
@@ -132,7 +100,7 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
 
     @Override
     public boolean isInvulnerableTo(@Nonnull DamageSource source) {
-        CustomBee info = getBeeInfo();
+        CustomBeeData info = getBeeData();
         if (source.equals(DamageSource.SWEET_BERRY_BUSH)) {
             return true;  //All bees should be immune to this like vanilla - Not sure why it doesn't carry over from vanilla bees
         }
@@ -145,7 +113,7 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
 
     @Override
     public boolean isPotionApplicable(@Nonnull EffectInstance potioneffectIn) {
-        CustomBee info = getBeeInfo();
+        CustomBeeData info = getBeeData();
         if (info.TraitData.hasPotionImmunities()){
             for (Effect potion : info.TraitData.getPotionImmunities()){
                 if (potion.equals(potioneffectIn.getPotion())) return false;
@@ -158,7 +126,7 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
     public void livingTick() {
         if (remove) {
             if (!world.isRemote()) {
-                String beeName = getBeeInfo().getName();
+                String beeName = getBeeData().getName();
                 if (beeName.equals(BeeConstants.DEFAULT_BEE_TYPE) || beeName.isEmpty()) {
                     LOGGER.info("Removed Bee, Reason: " + (beeName.isEmpty() ? "Empty BeeType" : "Default Bee"));
                     remove = false;
@@ -169,10 +137,9 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
                 remove = false;
         }
 
-
         if (this.world.isRemote){
             if (this.ticksExisted % 40 == 0) {
-                CustomBee info = getBeeInfo();
+                CustomBeeData info = getBeeData();
                 if (info.TraitData.hasParticleEffects()){
                     for (BasicParticleType particle : info.TraitData.getParticleEffects()){
                         for (int i = 0; i < 10; ++i) {
@@ -188,13 +155,6 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
         super.livingTick();
     }
 
-    @Nullable
-    @Override
-    public ILivingEntityData onInitialSpawn(@Nonnull IServerWorld worldIn, @Nonnull DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
-        setBeeType(reason.equals(SpawnReason.CHUNK_GENERATION) || reason.equals(SpawnReason.NATURAL));
-        return super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
-    }
-
     @SuppressWarnings("unused")
     public static boolean canBeeSpawn(EntityType<? extends AnimalEntity> typeIn, IWorld worldIn, SpawnReason reason, BlockPos pos, Random randomIn) {
         return false; //TODO fix when forge updates biome stuff
@@ -207,14 +167,12 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
     @Override
     protected void registerData() {
         super.registerData();
-        this.dataManager.register(BEE_TYPE, BeeConstants.DEFAULT_BEE_TYPE);
         this.dataManager.register(FEED_COUNT, 0);
     }
 
     @Override
     public void readAdditional(@Nonnull CompoundNBT compound) {
         super.readAdditional(compound);
-        this.dataManager.set(BEE_TYPE, compound.getString(NBTConstants.NBT_BEE_TYPE));
         this.dataManager.set(FEED_COUNT, compound.getInt(NBTConstants.NBT_FEED_COUNT));
     }
 
@@ -225,10 +183,9 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
         compound.putInt(NBTConstants.NBT_FEED_COUNT, this.getFeedCount());
     }
 
-    public CustomBeeEntity createSelectedChild(String beeType) {
-        CustomBeeEntity childBee = new CustomBeeEntity(RegistryHandler.CUSTOM_BEE.get(), this.world);
-        childBee.setBeeType(beeType);
-        return childBee;
+    public ResourcefulBee createSelectedChild(String beeType) {
+        CustomBeeData customBeeData = BeeRegistry.getBeeData(beeType);
+        return new ResourcefulBee(customBeeData.getEntityTypeRegistryObject().get(), this.world, customBeeData);
     }
 
     //This is because we don't want IF being able to breed our animals
@@ -246,7 +203,7 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
 
     @Override
     public boolean isBreedingItem(@Nonnull ItemStack stack) {
-        String validBreedItem = this.getBeeInfo().BreedData.getFeedItem();
+        String validBreedItem = this.getBeeData().BreedData.getFeedItem();
 
         if (BeeValidator.TAG_RESOURCE_PATTERN.matcher(validBreedItem).matches()) {
             ITag<Item> itemTag = BeeInfoUtils.getItemTag(validBreedItem.replace(BeeConstants.TAG_PREFIX, ""));
@@ -265,8 +222,6 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
         }
     }
 
-
-
     @Nonnull
     @Override
     public ActionResultType interactMob(PlayerEntity player, @Nonnull Hand hand) {
@@ -279,7 +234,7 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
             if (!this.world.isRemote && this.getGrowingAge() == 0 && this.canBreed()) {
                 this.consumeItemFromStack(player, itemstack);
                 this.addFeedCount();
-                if (this.getFeedCount() >= this.getBeeInfo().BreedData.getFeedAmount()) {
+                if (this.getFeedCount() >= this.getBeeData().BreedData.getFeedAmount()) {
                     this.setInLove(player);
                 }
                 player.swingHand(hand, true);
@@ -298,21 +253,13 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
     @Nonnull
     @Override
     public EntitySize getSize(@Nonnull Pose poseIn) {
-        float scale = getSizeModifierFromInfo(getBeeType());
+        float scale = beeData.getSizeModifier();
         return super.getSize(poseIn).scale(scale);
     }
 
     @Override
     public void notifyDataManagerChange(@Nonnull DataParameter<?> parameter) {
-        if (parameter.equals(BEE_TYPE))
-            recalculateSize();
         super.notifyDataManagerChange(parameter);
-    }
-
-    private void markRemove() {
-        if (!remove) {
-            this.remove = true;
-        }
     }
     //endregion
 }

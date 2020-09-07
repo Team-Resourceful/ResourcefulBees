@@ -2,9 +2,8 @@ package com.resourcefulbees.resourcefulbees.config;
 
 import com.google.gson.Gson;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
-import com.resourcefulbees.resourcefulbees.api.CustomBee;
+import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
-import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -22,8 +21,8 @@ public class BeeSetup {
 
     private static final String ASSETS_DIR = "/assets/resourcefulbees/default_bees/";
 
-    private static final String[] DEFAULT_BEES = new String[]{
-            "Diamond.json",
+    private static final String[] DEFAULT_BEES = new String[]{ "Coal.json" };
+/*            "Diamond.json",
             "Emerald.json",
             "Gold.json",
             "Iron.json",
@@ -39,7 +38,7 @@ public class BeeSetup {
             "Zombie.json",
             "Netherite.json",
             "RGBee.json"
-    };
+    };*/
 
     public static Path BEE_PATH;
     public static Path RESOURCE_PATH;
@@ -76,7 +75,7 @@ public class BeeSetup {
 
     private static void parseBee(Reader reader, String name) {
         Gson gson = new Gson();
-        CustomBee bee = gson.fromJson(reader, CustomBee.class);
+        CustomBeeData bee = gson.fromJson(reader, CustomBeeData.class);
         bee.setName(name);
         BeeRegistry.registerBee(name.toLowerCase(), bee);
 /*        if (BeeValidator.validate(bee)) {
@@ -94,8 +93,6 @@ public class BeeSetup {
     }
 
     private static void addBees() {
-        //BeeInfo.BEE_INFO.clear();
-        BeeInfoUtils.genDefaultBee();
         try {
             Files.walk(BEE_PATH)
                     .filter(f -> f.getFileName().toString().endsWith(".zip"))

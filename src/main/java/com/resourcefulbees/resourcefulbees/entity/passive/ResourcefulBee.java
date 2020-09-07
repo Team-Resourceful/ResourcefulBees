@@ -1,8 +1,7 @@
 package com.resourcefulbees.resourcefulbees.entity.passive;
 
-import com.resourcefulbees.resourcefulbees.api.CustomBee;
+import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.config.Config;
-import com.resourcefulbees.resourcefulbees.data.BeeTrait;
 import com.resourcefulbees.resourcefulbees.entity.goals.BeeAngerGoal;
 import com.resourcefulbees.resourcefulbees.entity.goals.BeeBreedGoal;
 import com.resourcefulbees.resourcefulbees.entity.goals.BeeTemptGoal;
@@ -23,7 +22,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.FollowParentGoal;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.passive.BeeEntity;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
@@ -60,7 +58,7 @@ import java.util.stream.Stream;
 public class ResourcefulBee extends CustomBeeEntity {
     protected final Predicate<BlockState> flowerPredicate = state -> {
 
-        String flower = getBeeInfo().getFlower();
+        String flower = getBeeData().getFlower();
 
         if (BeeValidator.TAG_RESOURCE_PATTERN.matcher(flower).matches()) {
             ITag<Block> blockTag = BeeInfoUtils.getBlockTag(flower.replace(BeeConstants.TAG_PREFIX, ""));
@@ -84,8 +82,8 @@ public class ResourcefulBee extends CustomBeeEntity {
 
     private int numberOfMutations;
 
-    public ResourcefulBee(EntityType<? extends BeeEntity> type, World world) {
-        super(type, world);
+    public ResourcefulBee(EntityType<? extends BeeEntity> type, World world, CustomBeeData beeData) {
+        super(type, world, beeData);
     }
 
     @Override
@@ -158,7 +156,7 @@ public class ResourcefulBee extends CustomBeeEntity {
                 Block block = state.getBlock();
                 if (validFillerBlock(block)) {
                     world.playEvent(2005, beePosDown, 0);
-                    String mutationOutput = getBeeInfo().MutationData.getMutationOutput();
+                    String mutationOutput = getBeeData().MutationData.getMutationOutput();
                     Block newBlock = BeeInfoUtils.getBlock(mutationOutput);
                     if (newBlock != null)
                         world.setBlockState(beePosDown, newBlock.getDefaultState());
@@ -169,7 +167,7 @@ public class ResourcefulBee extends CustomBeeEntity {
     }
 
     public boolean validFillerBlock(Block block) {
-        String baseBlock = this.getBeeInfo().MutationData.getMutationInput();
+        String baseBlock = this.getBeeData().MutationData.getMutationInput();
         if (BeeValidator.TAG_RESOURCE_PATTERN.matcher(baseBlock).matches()) {
             ITag<Block> blockTag = BeeInfoUtils.getBlockTag(baseBlock.replace(BeeConstants.TAG_PREFIX, ""));
             return blockTag != null && block.isIn(blockTag);
@@ -181,7 +179,7 @@ public class ResourcefulBee extends CustomBeeEntity {
 
     @Override
     public boolean isFlowers(@Nonnull BlockPos pos) {
-        String flower = getBeeInfo().getFlower();
+        String flower = getBeeData().getFlower();
 
         if (BeeValidator.TAG_RESOURCE_PATTERN.matcher(flower).matches()) {
             ITag<Block> blockTag = BeeInfoUtils.getBlockTag(flower.replace(BeeConstants.TAG_PREFIX, ""));
@@ -205,7 +203,7 @@ public class ResourcefulBee extends CustomBeeEntity {
     }
 
     protected void updateAITasks() {
-        CustomBee info = getBeeInfo();
+        CustomBeeData info = getBeeData();
 
         if (info.TraitData.hasSpecialAbilities()){
             for (String ability : info.TraitData.getSpecialAbilities()){
@@ -261,7 +259,7 @@ public class ResourcefulBee extends CustomBeeEntity {
 
     @Override
     public boolean attackEntityAsMob(@Nonnull Entity entityIn) {
-        boolean flag = entityIn.attackEntityFrom(DamageSource.sting(this), getBeeInfo().getAttackDamage());
+        boolean flag = entityIn.attackEntityFrom(DamageSource.sting(this), getBeeData().getAttackDamage());
         if (flag) {
             this.applyEnchantments(this, entityIn);
             if (entityIn instanceof LivingEntity) {
@@ -274,7 +272,7 @@ public class ResourcefulBee extends CustomBeeEntity {
                 } else if (this.world.getDifficulty() == Difficulty.HARD) {
                     i = 18;
                 }
-                CustomBee info = this.getBeeInfo();
+                CustomBeeData info = this.getBeeData();
                 if (info.TraitData.hasDamageTypes()){
                     for (Pair<String, Integer> damageType : info.TraitData.getDamageTypes()){
                         if (damageType.getLeft().equals("setOnFire")) entityIn.setFire(i * damageType.getRight());
@@ -401,7 +399,7 @@ public class ResourcefulBee extends CustomBeeEntity {
 
         @Override
         public boolean canBeeStart() {
-            if (ResourcefulBee.this.getCropsGrownSincePollination() >= getBeeInfo().MutationData.getMutationCount()) {
+            if (ResourcefulBee.this.getCropsGrownSincePollination() >= getBeeData().MutationData.getMutationCount()) {
                 return false;
             } else if (ResourcefulBee.this.rand.nextFloat() < 0.3F) {
                 return false;
@@ -412,7 +410,7 @@ public class ResourcefulBee extends CustomBeeEntity {
 
         @Override
         public void tick() {
-            if (!getBeeInfo().MutationData.getMutationInput().isEmpty() && !getBeeInfo().MutationData.getMutationOutput().isEmpty())
+            if (!getBeeData().MutationData.getMutationInput().isEmpty() && !getBeeData().MutationData.getMutationOutput().isEmpty())
                 applyPollinationEffect();
         }
     }

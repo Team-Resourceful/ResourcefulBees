@@ -1,6 +1,6 @@
 package com.resourcefulbees.resourcefulbees.registry;
 
-import com.resourcefulbees.resourcefulbees.api.CustomBee;
+import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.MathUtils;
@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class BeeRegistry {
 
-    private static final LinkedHashMap<String, CustomBee> BEE_INFO = new LinkedHashMap<>();
+    private static final LinkedHashMap<String, CustomBeeData> BEE_INFO = new LinkedHashMap<>();
     public static final HashMap<Biome, RandomCollection<String>> SPAWNABLE_BIOMES = new HashMap<>();
     public static final HashMap<Pair<String, String>, RandomCollection<String>> FAMILY_TREE = new HashMap<>();
 
@@ -54,8 +54,8 @@ public class BeeRegistry {
      *  @param bee Bee type for which BeeData is requested.
      *  @return Returns a BeeData object for the given bee type.
      */
-    public static CustomBee getInfo(String bee){
-        CustomBee info = BEE_INFO.get(bee);
+    public static CustomBeeData getBeeData(String bee){
+        CustomBeeData info = BEE_INFO.get(bee);
         return info != null ? info : BEE_INFO.get(BeeConstants.DEFAULT_BEE_TYPE);
     }
 
@@ -89,7 +89,7 @@ public class BeeRegistry {
      *  @param child BeeData object for the child.
      *  @return Returns random bee type as a string.
      */
-    public static double getAdjustedWeightForChild(CustomBee child){
+    public static double getAdjustedWeightForChild(CustomBeeData child){
         return FAMILY_TREE.get(BeeInfoUtils.sortParents(child.BreedData.getParent1(), child.BreedData.getParent2())).getAdjustedWeight(child.BreedData.getBreedWeight());
     }
 
@@ -98,12 +98,12 @@ public class BeeRegistry {
      * If the bee already exists in the registry the method will return false.
      *
      *  @param beeType Bee Type of the bee being registered.
-     *  @param customBee BeeData of the bee being registered
+     *  @param customBeeData BeeData of the bee being registered
      *  @return Returns false if bee already exists in the registry.
      */
-    public static boolean registerBee(String beeType, CustomBee customBee) {
+    public static boolean registerBee(String beeType, CustomBeeData customBeeData) {
         if (!BEE_INFO.containsKey(beeType)) {
-            BEE_INFO.put(beeType, customBee);
+            BEE_INFO.put(beeType, customBeeData);
             return true;
         }
         return false;
@@ -115,7 +115,7 @@ public class BeeRegistry {
      *
      *  @return Returns unmodifiable copy of bee registry.
      */
-    public static Map<String, CustomBee> getBees() {
+    public static Map<String, CustomBeeData> getBees() {
         return Collections.unmodifiableMap(BEE_INFO);
     }
 

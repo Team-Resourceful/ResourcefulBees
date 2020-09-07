@@ -1,8 +1,9 @@
 package com.resourcefulbees.resourcefulbees.compat.jei.ingredients;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
-import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
+import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import mezz.jei.api.ingredients.IIngredientRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -20,21 +21,18 @@ public class EntityRenderer implements IIngredientRenderer<EntityIngredient> {
 
     @Override
     public void render(@Nonnull MatrixStack matrixStack, int x, int y, @Nullable EntityIngredient entityIngredient) {
-        if (Minecraft.getInstance().world !=null) {
-            CustomBeeEntity bee = RegistryHandler.CUSTOM_BEE.get().create(Minecraft.getInstance().world);
+        if (Minecraft.getInstance().world != null && entityIngredient != null) {
+            CustomBeeData beeData = BeeRegistry.getBeeData(entityIngredient.getBeeType());
+            CustomBeeEntity bee = beeData.getEntityTypeRegistryObject().get().create(Minecraft.getInstance().world);
             Minecraft mc = Minecraft.getInstance();
             matrixStack.push();
             matrixStack.translate(8, 14, 0.5D);
 
-            if (mc.player != null && entityIngredient != null && bee != null) {
+            if (mc.player != null && bee != null) {
                 bee.ticksExisted = mc.player.ticksExisted;
                 bee.renderYawOffset = entityIngredient.getRotation() - 90;
-                bee.setBeeType(entityIngredient.getBeeType());
                 bee.setRenderingInJei(true);
-                float scaledSize = 20;
-                if (!bee.getSizeModifierFromInfo(bee.getBeeType()).equals(1.0F)) {
-                    scaledSize = 20 / bee.getSizeModifierFromInfo(bee.getBeeType());
-                }
+                float scaledSize = 20 / bee.getBeeData().getSizeModifier();
                 matrixStack.translate(x, y, 1);
                 matrixStack.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(180.0F));
                 matrixStack.translate(0.0F, -0.2F, 1);
