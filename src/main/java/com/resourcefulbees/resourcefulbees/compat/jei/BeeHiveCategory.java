@@ -36,8 +36,6 @@ public class BeeHiveCategory implements IRecipeCategory<BeeHiveCategory.Recipe> 
         this.localizedName = I18n.format("gui.resourcefulbees.jei.category.hive");
     }
 
-    //TODO Replace with Registry Objects
-
     public static List<Recipe> getHoneycombRecipes(IIngredientManager ingredientManager) {
         List<Recipe> recipes = new ArrayList<>();
         BeeRegistry.getBees().forEach(((s, customBeeData) -> {

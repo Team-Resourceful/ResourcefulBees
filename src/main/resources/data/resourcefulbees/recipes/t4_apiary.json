@@ -8,7 +8,7 @@
   "key": {
     "N": { "item": "minecraft:nether_star" },
     "A": { "item": "resourcefulbees:t3_apiary" },
-    "H": { "item": "resourcefulbees:resourceful_honeycomb_block"}
+    "H": { "tag": "resourcefulbees:resourceful_honeycomb_block"}
   },
   "result": {
     "item": "resourcefulbees:t4_apiary"

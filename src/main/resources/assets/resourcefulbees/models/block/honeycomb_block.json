@@ -1,8 +1,8 @@
 {
   "parent": "block/block",
   "textures": {
-    "0": "resourcefulbees:block/resourceful_honeycomb_block",
-    "particle": "resourcefulbees:block/resourceful_honeycomb_block"
+    "0": "resourcefulbees:block/honeycomb_block",
+    "particle": "resourcefulbees:block/honeycomb_block"
   },
   "elements": [
     {

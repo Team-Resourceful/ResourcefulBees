@@ -82,7 +82,7 @@ public class CentrifugeRecipeCategory implements IRecipeCategory<CentrifugeRecip
   @Override
   public void setIngredients(CentrifugeRecipe recipe, IIngredients iIngredients) {
     iIngredients.setInputIngredients(Lists.newArrayList(recipe.ingredient, Ingredient.fromItems(Items.GLASS_BOTTLE)));
-    List<Pair<ItemStack,Double>> outputs = recipe.outputs;
+    List<Pair<ItemStack, Float>> outputs = recipe.outputs;
     List<ItemStack> stacks = new ArrayList<>();
     stacks.add(outputs.get(2).getLeft().copy());
     stacks.add(outputs.get(0).getLeft().copy());
@@ -105,9 +105,9 @@ public class CentrifugeRecipeCategory implements IRecipeCategory<CentrifugeRecip
   public void draw(CentrifugeRecipe recipe, @Nonnull MatrixStack matrix, double mouseX, double mouseY) {
     this.arrow.draw(matrix,31, 14);
 
-    final double beeOutput = recipe.outputs.get(0).getRight();
-    final double beeswax = recipe.outputs.get(1).getRight();
-    final double honeyBottle = recipe.outputs.get(2).getRight();
+    final float beeOutput = recipe.outputs.get(0).getRight();
+    final float beeswax = recipe.outputs.get(1).getRight();
+    final float honeyBottle = recipe.outputs.get(2).getRight();
 
     DecimalFormat decimalFormat = new DecimalFormat("##%");
 

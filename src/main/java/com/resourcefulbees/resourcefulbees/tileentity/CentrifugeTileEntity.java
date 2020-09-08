@@ -91,7 +91,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
 
     protected boolean canProcess(@Nullable CentrifugeRecipe recipe) {
         if (recipe != null && !recipe.multiblock) {
-            List<Pair<ItemStack, Double>> outputs = recipe.outputs;
+            List<Pair<ItemStack, Float>> outputs = recipe.outputs;
             ItemStack glass_bottle = h.getStackInSlot(BOTTLE_SLOT);
             ItemStack combs = h.getStackInSlot(HONEYCOMB_SLOT);
             JsonElement count = recipe.ingredient.serialize().getAsJsonObject().get(BeeConstants.INGREDIENT_COUNT);
@@ -140,7 +140,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
             );
             if (world != null)
             for(int i = 0; i < 3; i++){
-                Pair<ItemStack, Double> output = recipe.outputs.get(i);
+                Pair<ItemStack, Float> output = recipe.outputs.get(i);
                 if (output.getRight() >= world.rand.nextDouble()) {
                     if (slots.get(i).getLeft().isEmpty()) {
                         this.h.setStackInSlot(slots.get(i).getRight(), output.getLeft().copy());

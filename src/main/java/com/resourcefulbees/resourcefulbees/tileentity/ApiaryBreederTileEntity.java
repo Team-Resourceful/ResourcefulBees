@@ -61,7 +61,6 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
     public AutomationSensitiveItemStackHandler h = new ApiaryBreederTileEntity.TileStackHandler(29);
     private final LazyOptional<IItemHandler> lazyOptional = LazyOptional.of(() -> h);
     public int[] time = {0,0,0,0,0};
-    public CentrifugeRecipe recipe;
     public int totalTime = Config.APIARY_MAX_BREED_TIME.get();
     public int numberOfBreeders = 1;
 

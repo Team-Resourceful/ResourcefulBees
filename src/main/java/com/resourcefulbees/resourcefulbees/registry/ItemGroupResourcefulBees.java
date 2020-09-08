@@ -13,8 +13,6 @@ public class ItemGroupResourcefulBees{
 
 	public static final ItemGroup RESOURCEFUL_BEES = (new ItemGroup(ResourcefulBees.MOD_ID) {
 
-		//TODO replace with registry objects
-
 		@Override
 		@OnlyIn(Dist.CLIENT)
 		public void fill(@Nonnull NonNullList<ItemStack> items) {

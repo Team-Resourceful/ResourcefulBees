@@ -6,7 +6,6 @@ import com.google.gson.JsonObject;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
-import com.resourcefulbees.resourcefulbees.utils.BetterJSONUtils;
 import com.resourcefulbees.resourcefulbees.utils.RecipeUtils;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -30,11 +29,11 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
     public static final IRecipeType<CentrifugeRecipe> CENTRIFUGE_RECIPE_TYPE = IRecipeType.register(ResourcefulBees.MOD_ID + ":centrifuge");
     public final ResourceLocation id;
     public final Ingredient ingredient;
-    public final List<Pair<ItemStack,Double>> outputs;
+    public final List<Pair<ItemStack,Float>> outputs;
     public final int time;
     public final boolean multiblock;
 
-    public CentrifugeRecipe(ResourceLocation id, Ingredient ingredient, List<Pair<ItemStack,Double>> outputs, int time, boolean multiblock) {
+    public CentrifugeRecipe(ResourceLocation id, Ingredient ingredient, List<Pair<ItemStack,Float>> outputs, int time, boolean multiblock) {
         this.id = id;
         this.ingredient = ingredient;
         this.outputs = outputs;
@@ -114,12 +113,12 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
             }
 
             JsonArray jsonArray = JSONUtils.getJsonArray(json, "results");
-            List<Pair<ItemStack,Double>> outputs = new ArrayList<>();
+            List<Pair<ItemStack,Float>> outputs = new ArrayList<>();
             jsonArray.forEach(jsonElement -> {
                 JsonObject jsonObject = jsonElement.getAsJsonObject();
                 String registryname = JSONUtils.getString(jsonObject,"item");
                 int count = JSONUtils.getInt(jsonObject,"count",1);
-                double chance = BetterJSONUtils.getDouble(jsonObject,"chance",1);
+                Float chance = JSONUtils.getFloat(jsonObject, "chance", 1);
                 ItemStack stack = new ItemStack(BeeInfoUtils.getItem(registryname),count);
                 outputs.add(Pair.of(stack,chance));
             });
@@ -132,8 +131,8 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
 
         public T read(@Nonnull ResourceLocation id, @Nonnull PacketBuffer buffer) {
             Ingredient ingredient = Ingredient.read(buffer);
-            List<Pair<ItemStack,Double>> outputs = new ArrayList<>();
-            IntStream.range(0,buffer.readInt()).forEach(i -> outputs.add(Pair.of(RecipeUtils.readItemStack(buffer),buffer.readDouble())));
+            List<Pair<ItemStack,Float>> outputs = new ArrayList<>();
+            IntStream.range(0,buffer.readInt()).forEach(i -> outputs.add(Pair.of(RecipeUtils.readItemStack(buffer),buffer.readFloat())));
             int time = buffer.readInt();
             boolean multiblock = buffer.readBoolean();
             return this.factory.create(id, ingredient, outputs,time, multiblock);
@@ -142,17 +141,17 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
         public void write(@Nonnull PacketBuffer buffer, T recipe) {
             recipe.ingredient.write(buffer);
             buffer.writeInt(recipe.outputs.size());
-            recipe.outputs.forEach(itemStackDoublePair -> {
-                ItemStack stack = itemStackDoublePair.getLeft();
+            recipe.outputs.forEach(itemStackFloatPair -> {
+                ItemStack stack = itemStackFloatPair.getLeft();
                 RecipeUtils.writeItemStack(stack, buffer);
-                buffer.writeDouble(itemStackDoublePair.getRight());
+                buffer.writeFloat(itemStackFloatPair.getRight());
             });
             buffer.writeInt(recipe.time);
             buffer.writeBoolean(recipe.multiblock);
         }
 
         public interface IRecipeFactory<T extends CentrifugeRecipe> {
-            T create(ResourceLocation id, Ingredient input, List<Pair<ItemStack,Double>> stacks,int time, boolean multiblock);
+            T create(ResourceLocation id, Ingredient input, List<Pair<ItemStack,Float>> stacks,int time, boolean multiblock);
         }
     }
 }

@@ -11,6 +11,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootContext;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockReader;
@@ -18,14 +19,13 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Random;
 
 public class HoneycombBlock extends Block {
 
     protected final ColorData colorData;
-    protected final String beeType; //TODO added just in case but may not actually be needed and can be removed
-
-    //TODO make Rainbow Honeycomb Block class?
+    protected final String beeType;
 
     public HoneycombBlock(String beeType, ColorData colorData) {
         super(Block.Properties.from(Blocks.HONEYCOMB_BLOCK));
@@ -45,6 +45,13 @@ public class HoneycombBlock extends Block {
         BlockItem blockItem = (BlockItem) stack.getItem();
         HoneycombBlock honeycombBlock = (HoneycombBlock) blockItem.getBlock();
         return honeycombBlock.colorData.isRainbowBee() ? RainbowColor.getRGB() : honeycombBlock.getHoneycombColor();
+    }
+
+    @Override
+    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+        List<ItemStack> drops = super.getDrops(state, builder);
+        drops.add(BeeRegistry.getBeeData(beeType).getCombBlockItemRegistryObject().get().getDefaultInstance());
+        return drops;
     }
 
     @Override

@@ -21,7 +21,7 @@ public class TraitRegistry {
             if (!TRAIT_REGISTRY.containsKey(name)) {
                 TRAIT_REGISTRY.put(name, data);
             } else ResourcefulBees.LOGGER.warn("Trait already Registered with that name: {}", name);
-        }else ResourcefulBees.LOGGER.warn("Trait Registration closed register your traits before onLoadComplete, trait not registered: {}", name);
+        }else ResourcefulBees.LOGGER.warn("Trait Registration closed, trait not registered: {}", name);
     }
 
     public static BeeTrait getTrait(String name) {
@@ -51,7 +51,9 @@ public class TraitRegistry {
                 for (String traitString : bee.getTraitNames()) {
                     BeeTrait trait = TraitRegistry.getTrait(traitString);
                     if (trait != null) {
-                        bee.TraitData.addTrait(trait);
+                        if (bee.TraitData != null){
+                            bee.TraitData.addTrait(trait);
+                        }
                     }
                 }
             }

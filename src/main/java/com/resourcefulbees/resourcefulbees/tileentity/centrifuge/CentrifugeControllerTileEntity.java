@@ -164,7 +164,7 @@ public class CentrifugeControllerTileEntity extends TileEntity implements ITicka
             ItemStack glass_bottle = h.getStackInSlot(BOTTLE_SLOT);
             if (world != null)
                 for(int i = 0; i < 3; i++){
-                    Pair<ItemStack, Double> output = recipe.outputs.get(i);
+                    Pair<ItemStack, Float> output = recipe.outputs.get(i);
                     if (output.getRight() >= world.rand.nextDouble()) {
                         if (inventoryHasSpace()) {
                             depositItemStacks(output.getLeft().copy());

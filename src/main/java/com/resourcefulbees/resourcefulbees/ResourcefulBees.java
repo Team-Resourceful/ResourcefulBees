@@ -1,6 +1,7 @@
 package com.resourcefulbees.resourcefulbees;
 
 import com.resourcefulbees.resourcefulbees.client.gui.screen.*;
+import com.resourcefulbees.resourcefulbees.client.models.ModelHandler;
 import com.resourcefulbees.resourcefulbees.client.render.entity.CustomBeeRenderer;
 import com.resourcefulbees.resourcefulbees.client.render.items.ItemModelPropertiesHandler;
 import com.resourcefulbees.resourcefulbees.compat.top.TopCompat;
@@ -8,6 +9,7 @@ import com.resourcefulbees.resourcefulbees.config.BeeSetup;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.config.ConfigLoader;
 import com.resourcefulbees.resourcefulbees.data.DataGen;
+import com.resourcefulbees.resourcefulbees.data.DataPackLoader;
 import com.resourcefulbees.resourcefulbees.data.RecipeBuilder;
 import com.resourcefulbees.resourcefulbees.init.ModSetup;
 import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
@@ -79,13 +81,14 @@ public class ResourcefulBees
         FMLJavaModLoadingContext.get().getModEventBus().addListener(EventPriority.LOW, this::setup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onInterModEnqueue);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::loadComplete);
-
-        //FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(IRecipeSerializer.class, this::registerRecipeSerialziers);
+        MinecraftForge.EVENT_BUS.addListener(DataPackLoader::serverStarting);
 
         MinecraftForge.EVENT_BUS.addListener(this::trade);
 
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
             MinecraftForge.EVENT_BUS.addListener(PreviewHandler::onWorldRenderLast);
+            FMLJavaModLoadingContext.get().getModEventBus().addListener(ModelHandler::registerModels);
+            FMLJavaModLoadingContext.get().getModEventBus().addListener(ModelHandler::onModelBake);
             FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
             FMLJavaModLoadingContext.get().getModEventBus().addListener(ColorHandler::onItemColors);
             FMLJavaModLoadingContext.get().getModEventBus().addListener(ColorHandler::onBlockColors);
@@ -93,12 +96,6 @@ public class ResourcefulBees
 
         MinecraftForge.EVENT_BUS.register(this);
     }
-
-    //TODO is this still needed??
-/*    public void registerRecipeSerialziers(RegistryEvent.Register<IRecipeSerializer<?>> event)
-    {
-        CraftingHelper.register(new ResourceLocation(MOD_ID, "honeycomb"), ResourcefulBeesRecipeIngredients.INSTANCE);
-    }*/
 
     public void trade(VillagerTradesEvent event) {
         List<VillagerTrades.ITrade> level1 = event.getTrades().get(1);
@@ -125,7 +122,7 @@ public class ResourcefulBees
                     10, 4, 1));
             level3.add((entity, rand) -> new MerchantOffer(
                     new ItemStack(Items.EMERALD, 2),
-                    new ItemStack(RegistryHandler.BEESWAX.get(), 6),
+                    new ItemStack(RegistryHandler.WAX.get(), 6),
                     15, 4, 1));
             level4.add((entity, rand) -> new MerchantOffer(
                     new ItemStack(Items.HONEY_BOTTLE, 4),
@@ -216,5 +213,6 @@ public class ResourcefulBees
         TraitRegistry.giveBeeTraits();
 
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> DataGen::generateClientData);
+        DataGen.generateCommonData();
     }
 }
