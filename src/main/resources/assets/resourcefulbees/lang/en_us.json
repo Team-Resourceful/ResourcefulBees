@@ -96,6 +96,7 @@
 	"block.resourcefulbees.centrifuge_controller": "Centrifuge Controller",
 	"block.resourcefulbees.centrifuge_casing": "Centrifuge Casing",
 	"block.resourcefulbees.centrifuge.tooltip.info": "Converts Honeycombs into resources using RF.",
+	"block.resourcefulbees.queen_bee_banner": "Queen Bee Banner",
 
 	"item.resourcefulbees.smoker_can": "Smoker Canister",
 	"item.resourcefulbees.smoker": "Bee Smoker",
@@ -113,7 +114,6 @@
 	"item.resourcefulbees.emerald_storage_upgrade": "Emerald Storage Upgrade",
 	"item.resourcefulbees.apiary_breeder_upgrade": "Breeder Upgrade",
 	"item.resourcefulbees.apiary_breed_time_upgrade": "Breed Time Upgrade",
-	"item.resourcefulbees.crank": "Crank",
 	"item.resourcefulbees.honey_fluid_bucket": "Honey Bucket",
 	"item.resourcefulbees.scraper": "Scraper",
 

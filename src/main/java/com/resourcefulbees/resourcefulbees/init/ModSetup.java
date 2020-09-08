@@ -136,24 +136,20 @@ public class ModSetup {
     }
 
     public static void loadResources() {
-        Minecraft.getInstance().getResourcePackList().addPackFinder(new IPackFinder() {
-
-            @Override
-            public void register(@Nonnull Consumer<ResourcePackInfo> p_230230_1_, @Nonnull ResourcePackInfo.IFactory factory) {
-                final ResourcePackInfo packInfo = ResourcePackInfo.createResourcePack(
-                        ResourcefulBees.MOD_ID,
-                        true,
-                        () -> new FolderPack(RESOURCE_PATH.toFile()),
-                        factory,
-                        ResourcePackInfo.Priority.TOP,
-                        IPackNameDecorator.method_29485()
-                );
-                if (packInfo == null) {
-                    LOGGER.error("Failed to load resource pack, some things may not work.");
-                    return;
-                }
-                p_230230_1_.accept(packInfo);
+        Minecraft.getInstance().getResourcePackList().addPackFinder((p_230230_1_, factory) -> {
+            final ResourcePackInfo packInfo = ResourcePackInfo.createResourcePack(
+                    ResourcefulBees.MOD_ID,
+                    true,
+                    () -> new FolderPack(RESOURCE_PATH.toFile()),
+                    factory,
+                    ResourcePackInfo.Priority.TOP,
+                    IPackNameDecorator.method_29485()
+            );
+            if (packInfo == null) {
+                LOGGER.error("Failed to load resource pack, some things may not work.");
+                return;
             }
+            p_230230_1_.accept(packInfo);
         });
     }
 }

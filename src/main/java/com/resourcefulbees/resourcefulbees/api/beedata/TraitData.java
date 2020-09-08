@@ -19,8 +19,6 @@ public class TraitData {
     private transient List<BasicParticleType> particleEffects = new ArrayList<>();
     private final boolean hasTraits;
 
-
-
     public TraitData(boolean hasTraits) {
         this.hasTraits = hasTraits;
     }

@@ -37,27 +37,29 @@ public class CentrifugeMultiblockContainer extends Container {
 
         centrifugeTileEntity = (CentrifugeControllerTileEntity) world.getTileEntity(pos);
 
-        this.addSlot(new SlotItemHandlerUnconditioned(centrifugeTileEntity.h, CentrifugeControllerTileEntity.BOTTLE_SLOT, 8, 8){
-            public boolean isItemValid(ItemStack stack){
-                return stack.getItem().equals(Items.GLASS_BOTTLE);
-            }
-        });
-
-        int x = 53;
-        for (int i=0; i < 3; i++) {
-            this.addSlot(new SlotItemHandlerUnconditioned(centrifugeTileEntity.h, CentrifugeControllerTileEntity.HONEYCOMB_SLOT[i], x, 8){
-                public boolean isItemValid(ItemStack stack){
-                    return !stack.getItem().equals(Items.GLASS_BOTTLE);
+        if (centrifugeTileEntity != null) {
+            this.addSlot(new SlotItemHandlerUnconditioned(centrifugeTileEntity.h, CentrifugeControllerTileEntity.BOTTLE_SLOT, 8, 8) {
+                public boolean isItemValid(ItemStack stack) {
+                    return stack.getItem().equals(Items.GLASS_BOTTLE);
                 }
             });
-            x += 36;
-        }
+
+            int x = 53;
+            for (int i = 0; i < 3; i++) {
+                this.addSlot(new SlotItemHandlerUnconditioned(centrifugeTileEntity.h, CentrifugeControllerTileEntity.HONEYCOMB_SLOT[i], x, 8) {
+                    public boolean isItemValid(ItemStack stack) {
+                        return !stack.getItem().equals(Items.GLASS_BOTTLE);
+                    }
+                });
+                x += 36;
+            }
 
 
-        for (int i = 0; i < 6; i++) {
-            this.addSlot(new OutputSlot(centrifugeTileEntity.h, CentrifugeControllerTileEntity.OUTPUT_SLOTS[i], 44 + i * 18, 44));
-            this.addSlot(new OutputSlot(centrifugeTileEntity.h, CentrifugeControllerTileEntity.OUTPUT_SLOTS[i + 6], 44 + i * 18, 62));
-            this.addSlot(new OutputSlot(centrifugeTileEntity.h, CentrifugeControllerTileEntity.OUTPUT_SLOTS[i + 12], 44 + i * 18, 80));
+            for (int i = 0; i < 6; i++) {
+                this.addSlot(new OutputSlot(centrifugeTileEntity.h, CentrifugeControllerTileEntity.OUTPUT_SLOTS[i], 44 + i * 18, 44));
+                this.addSlot(new OutputSlot(centrifugeTileEntity.h, CentrifugeControllerTileEntity.OUTPUT_SLOTS[i + 6], 44 + i * 18, 62));
+                this.addSlot(new OutputSlot(centrifugeTileEntity.h, CentrifugeControllerTileEntity.OUTPUT_SLOTS[i + 12], 44 + i * 18, 80));
+            }
         }
 
         for (int i = 0; i < 3; ++i) {

@@ -51,7 +51,7 @@ public class TraitRegistry {
                 for (String traitString : bee.getTraitNames()) {
                     BeeTrait trait = TraitRegistry.getTrait(traitString);
                     if (trait != null) {
-                        if (bee.TraitData != null){
+                        if (bee.TraitData != null && bee.TraitData.hasTraits()){
                             bee.TraitData.addTrait(trait);
                         }
                     }
