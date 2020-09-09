@@ -2,6 +2,7 @@ package com.resourcefulbees.resourcefulbees.utils;
 
 import com.resourcefulbees.resourcefulbees.block.HoneycombBlock;
 import com.resourcefulbees.resourcefulbees.item.BeeJar;
+import com.resourcefulbees.resourcefulbees.item.BeeSpawnEggItem;
 import com.resourcefulbees.resourcefulbees.item.HoneycombItem;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
@@ -25,6 +26,7 @@ public final class ColorHandler {
                 registerItems(colors, HoneycombItem::getColor, customBeeData.getCombRegistryObject().get());
                 registerItems(colors, HoneycombBlock::getItemColor, customBeeData.getCombBlockItemRegistryObject().get());
             }
+            registerItems(colors, BeeSpawnEggItem::getColor, customBeeData.getSpawnEggItemRegistryObject().get());
         }));
         registerItems(colors, BeeJar::getColor, RegistryHandler.BEE_JAR.get());
     }

@@ -344,8 +344,8 @@ public class RegistryHandler {
 				.size(0.7F, 0.6F)
 				.build(name + "_bee"));
 
-		int firstEggColor = customBeeData.ColorData.isBeeColored() && customBeeData.ColorData.hasPrimaryColor() ? Color.parseInt(customBeeData.ColorData.getPrimaryColor()) : 0xffffff;
-		int secondEggColor = customBeeData.ColorData.isBeeColored() && customBeeData.ColorData.hasSecondaryColor() ? Color.parseInt(customBeeData.ColorData.getSecondaryColor()) : 0xffffff;
+		int firstEggColor = customBeeData.ColorData.isBeeColored() && customBeeData.ColorData.hasPrimaryColor() ? Color.parseInt(customBeeData.ColorData.getPrimaryColor()) : customBeeData.ColorData.hasHoneycombColor() ? Color.parseInt(customBeeData.ColorData.getHoneycombColor()) : 0xffffff;
+		int secondEggColor = customBeeData.ColorData.isBeeColored() && customBeeData.ColorData.hasSecondaryColor() ? Color.parseInt(customBeeData.ColorData.getSecondaryColor()) : 0x303030;
 
 		final RegistryObject<Item> customBeeSpawnEgg = ITEMS.register(name + "_bee_spawn_egg",
 				() -> new BeeSpawnEggItem(customBeeEntity, firstEggColor, secondEggColor, (new Item.Properties())));

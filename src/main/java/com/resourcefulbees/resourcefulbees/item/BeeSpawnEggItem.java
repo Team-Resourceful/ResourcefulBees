@@ -26,10 +26,14 @@ import java.util.Optional;
 public class BeeSpawnEggItem extends SpawnEggItem {
 
 	private final Lazy<? extends EntityType<?>> entityType;
+    private final int primaryColor;
+    private final int secondaryColor;
 
-	public BeeSpawnEggItem(final RegistryObject<? extends EntityType<?>> entityTypeSupplier, final int firstColor, final int SecondColor, final Properties properties) {
-		super(null, firstColor, SecondColor, properties);
+	public BeeSpawnEggItem(final RegistryObject<? extends EntityType<?>> entityTypeSupplier, final int firstColor, final int secondColor, final Properties properties) {
+		super(null, firstColor, secondColor, properties);
 		this.entityType = Lazy.of(entityTypeSupplier);
+		this.primaryColor = firstColor;
+		this.secondaryColor = secondColor;
 	}
 
     @Nonnull
@@ -37,6 +41,11 @@ public class BeeSpawnEggItem extends SpawnEggItem {
 	public EntityType<?> getType(@Nullable final CompoundNBT nbt) {
 		return entityType.get();
 	}
+
+
+    public static int getColor(ItemStack stack, int tintIndex) {
+        return tintIndex == 0 ? ((BeeSpawnEggItem)stack.getItem()).primaryColor : ((BeeSpawnEggItem)stack.getItem()).secondaryColor;
+    }
 
     @Nonnull
     @Override
