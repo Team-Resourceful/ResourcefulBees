@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
+import net.minecraftforge.fml.ModList;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -18,27 +19,6 @@ import static com.resourcefulbees.resourcefulbees.ResourcefulBees.LOGGER;
 import static com.resourcefulbees.resourcefulbees.config.Config.GENERATE_DEFAULTS;
 
 public class BeeSetup {
-
-    private static final String ASSETS_DIR = "/assets/resourcefulbees/default_bees/";
-
-    private static final String[] DEFAULT_BEES = new String[]{ "Coal.json" };
-/*            "Diamond.json",
-            "Emerald.json",
-            "Gold.json",
-            "Iron.json",
-            "Coal.json",
-            "Redstone.json",
-            "Nether_Quartz.json",
-            "Lapis_Lazuli.json",
-            "Ender.json",
-            "Creeper.json",
-            "Pigman.json",
-            "Skeleton.json",
-            "Wither.json",
-            "Zombie.json",
-            "Netherite.json",
-            "RGBee.json"
-    };*/
 
     public static Path BEE_PATH;
     public static Path RESOURCE_PATH;
@@ -134,15 +114,19 @@ public class BeeSetup {
     }
 
     private static void setupDefaultBees() {
-        for (String bee : DEFAULT_BEES) {
-            String path = ASSETS_DIR + bee;
-            try (InputStream inputStream = ResourcefulBees.class.getResourceAsStream(path)) {
-                Path newPath = Paths.get(BEE_PATH.toString() + "/" + bee);
-                File targetFile = new File(String.valueOf(newPath));
-                Files.copy(inputStream, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-            } catch (IOException e) {
+        try {
+            Files.walk(Paths.get(ModList.get().getModFileById(ResourcefulBees.MOD_ID).getFile().getFilePath().toString(),"/data/resourcefulbees/default_bees"))
+                    .filter(f -> f.getFileName().toString().endsWith(".json"))
+                    .forEach(path -> {
+                        File targetFile = new File(String.valueOf(Paths.get(BEE_PATH.toString(),"/", path.getFileName().toString())));
+                        try {
+                            Files.copy(path, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    });
+        } catch (IOException e) {
                 e.printStackTrace();
-            }
         }
     }
 

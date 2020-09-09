@@ -32,19 +32,6 @@ public class BeeSpawnEggItem extends SpawnEggItem {
 		this.entityType = Lazy.of(entityTypeSupplier);
 	}
 
-/*    @Nonnull
-	@Override
-    public String getTranslationKey(ItemStack stack) {
-        CompoundNBT nbt = stack.getChildTag(NBTConstants.NBT_ROOT);
-        String name;
-        if ((nbt != null && nbt.contains(NBTConstants.NBT_BEE_TYPE))) {
-            name = String.format("item.%1$s.%2$s_spawn_egg", ResourcefulBees.MOD_ID, nbt.getString(NBTConstants.NBT_BEE_TYPE));
-        } else {
-            name = String.format("item.%1$s.bee_spawn_egg", ResourcefulBees.MOD_ID);
-        }
-        return name;
-    }*/
-
     @Nonnull
 	@Override
 	public EntityType<?> getType(@Nullable final CompoundNBT nbt) {

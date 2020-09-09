@@ -23,31 +23,31 @@ public class BreedData {
     }
 
     public double getBreedWeight() {
-        return breedWeight;
+        return breedWeight <= 0 ? BeeConstants.DEFAULT_BREED_WEIGHT : breedWeight;
     }
 
     public String getParent1() {
-        return parent1;
+        return parent1 != null ? parent1 : "";
     }
 
     public String getParent2() {
-        return parent2;
+        return parent2 != null ? parent2 : "";
     }
 
     public String getFeedItem() {
-        return feedItem;
+        return feedItem != null ? feedItem : BeeConstants.FLOWER_TAG_ALL;
     }
 
     public int getFeedAmount() {
-        return feedAmount;
+        return feedAmount <= 0 ? 1 : feedAmount;
     }
 
     public static class Builder {
         private final boolean isBreedable;
-        private double breedWeight = BeeConstants.DEFAULT_BREED_WEIGHT;
-        private String parent1 = "", parent2 = "";
-        private String feedItem = BeeConstants.FLOWER_TAG_ALL;
-        private int feedAmount = 1;
+        private double breedWeight;
+        private String parent1, parent2;
+        private String feedItem;
+        private int feedAmount;
 
         public Builder(boolean isBreedable) {
             this.isBreedable = isBreedable;

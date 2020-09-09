@@ -53,7 +53,11 @@ public class TraitRegistry {
                     if (trait != null) {
                         if (bee.TraitData != null && bee.TraitData.hasTraits()){
                             bee.TraitData.addTrait(trait);
+                        } else {
+                            ResourcefulBees.LOGGER.warn("Traits provided but TraitData object does not exist or does not contain \"hasTraits: true\" for '{}'", bee.getName());
                         }
+                    } else {
+                        ResourcefulBees.LOGGER.warn("Trait '{}' given to '{}' does not exist in trait registry.", traitString, bee.getName());
                     }
                 }
             }
