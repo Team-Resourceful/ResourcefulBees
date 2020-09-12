@@ -2,7 +2,7 @@ package com.resourcefulbees.resourcefulbees.api.beedata;
 
 import java.awt.*;
 
-public class ColorData {
+public class ColorData extends AbstractBeeData {
     private final String primaryColor;
     private final String secondaryColor;
     private final String honeycombColor;
@@ -31,69 +31,43 @@ public class ColorData {
         this.glowingPulse = glowingPulse;
     }
 
-    public String getPrimaryColor() {
-        return primaryColor;
-    }
+    public String getPrimaryColor() { return primaryColor; }
 
-    public String getSecondaryColor() {
-        return secondaryColor;
-    }
+    public String getSecondaryColor() { return secondaryColor; }
 
-    public String getHoneycombColor() {
-        return honeycombColor;
-    }
+    public String getHoneycombColor() { return honeycombColor; }
 
-    public String getPrimaryLayerTexture() {
-        return primaryLayerTexture == null ? "/custom/primary_layer" : primaryLayerTexture;
-    }
+    public String getGlowColor() { return glowColor == null ? "#ffffff" : glowColor; }
 
-    public String getSecondaryLayerTexture() {
-        return secondaryLayerTexture == null ? "/custom/secondary_layer" : secondaryLayerTexture;
-    }
+    public String getPrimaryLayerTexture() { return primaryLayerTexture == null ? "/custom/primary_layer" : primaryLayerTexture; }
 
-    public String getEmissiveLayerTexture() {
-        return emissiveLayerTexture == null ? "/custom/emissive_layer" : emissiveLayerTexture;
-    }
+    public String getSecondaryLayerTexture() { return secondaryLayerTexture == null ? "/custom/secondary_layer" : secondaryLayerTexture; }
 
-    public boolean isBeeColored() {
-        return isBeeColored;
-    }
+    public String getEmissiveLayerTexture() { return emissiveLayerTexture == null ? "/custom/emissive_layer" : emissiveLayerTexture; }
 
-    public boolean isRainbowBee() {
-        return isRainbowBee;
-    }
+    public boolean isBeeColored() { return isBeeColored; }
 
-    public boolean isGlowing() {
-        return isGlowing;
-    }
+    public boolean isRainbowBee() { return isRainbowBee; }
 
-    public String getGlowColor() {
-        return glowColor == null ? "#ffffff" : glowColor;
-    }
+    public boolean isGlowing() { return isGlowing; }
 
-    public boolean isEnchanted() {
-        return isEnchanted;
-    }
+    public boolean isEnchanted() { return isEnchanted; }
 
-    public int getGlowingPulse() {
-        return glowingPulse;
-    }
+    public boolean hasPrimaryColor() { return primaryColor != null && !primaryColor.isEmpty(); }
 
-    public boolean hasPrimaryColor() {
-        return primaryColor != null && !primaryColor.isEmpty();
-    }
+    public boolean hasSecondaryColor() { return secondaryColor != null && !secondaryColor.isEmpty(); }
 
-    public boolean hasSecondaryColor() {
-        return secondaryColor != null && !secondaryColor.isEmpty();
-    }
+    public boolean hasHoneycombColor() { return honeycombColor != null && !honeycombColor.isEmpty(); }
 
-    public boolean hasHoneycombColor() {
-        return honeycombColor != null && !honeycombColor.isEmpty();
-    }
+    public boolean hasGlowColor() { return glowColor != null && !glowColor.isEmpty(); }
 
-    public boolean hasGlowColor() {
-        return glowColor != null && !glowColor.isEmpty();
-    }
+    public int getGlowingPulse() { return glowingPulse; }
+
+    public int getPrimaryColorInt() { return com.resourcefulbees.resourcefulbees.utils.color.Color.parseInt(primaryColor); }
+
+    public int getSecondaryColorInt() { return com.resourcefulbees.resourcefulbees.utils.color.Color.parseInt(secondaryColor); }
+
+    public int getHoneycombColorInt() { return com.resourcefulbees.resourcefulbees.utils.color.Color.parseInt(honeycombColor); }
 
     public float[] getPrimaryColorFloats(){
         Color tempColor = Color.decode(primaryColor);

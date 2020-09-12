@@ -1,6 +1,6 @@
 package com.resourcefulbees.resourcefulbees.api.beedata;
 
-public class SpawnData {
+public class SpawnData extends AbstractBeeData {
     private final boolean canSpawnInWorld;
     private final int spawnWeight;
     private final String biomeWhitelist;
@@ -13,21 +13,13 @@ public class SpawnData {
         this.biomeBlacklist = biomeBlacklist;
     }
 
-    public boolean canSpawnInWorld() {
-        return canSpawnInWorld;
-    }
+    public boolean canSpawnInWorld() { return canSpawnInWorld; }
 
-    public int getSpawnWeight() {
-        return spawnWeight <= 0 ? 100 : spawnWeight;
-    }
+    public int getSpawnWeight() { return spawnWeight <= 0 ? 100 : spawnWeight; }
 
-    public String getBiomeWhitelist() {
-        return biomeWhitelist == null ? "tag:overworld" : biomeWhitelist;
-    }
+    public String getBiomeWhitelist() { return biomeWhitelist == null ? "tag:overworld" : biomeWhitelist; }
 
-    public String getBiomeBlacklist() {
-        return biomeBlacklist == null ? "tag:ocean" : biomeBlacklist;
-    }
+    public String getBiomeBlacklist() { return biomeBlacklist == null ? "tag:ocean" : biomeBlacklist; }
 
     public static class Builder {
         private final boolean canSpawnInWorld;

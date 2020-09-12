@@ -3,6 +3,7 @@ package com.resourcefulbees.resourcefulbees.utils;
 import com.google.common.base.Splitter;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
+import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.fluid.Fluid;
@@ -23,16 +24,14 @@ import java.util.List;
 import java.util.Set;
 
 import static com.resourcefulbees.resourcefulbees.ResourcefulBees.LOGGER;
-import static com.resourcefulbees.resourcefulbees.registry.BeeRegistry.FAMILY_TREE;
-import static com.resourcefulbees.resourcefulbees.registry.BeeRegistry.SPAWNABLE_BIOMES;
 
 public class BeeInfoUtils {
 
     public static void buildFamilyTree(CustomBeeData bee){
-        String parent1 = bee.BreedData.getParent1();
-        String parent2 = bee.BreedData.getParent2();
-        FAMILY_TREE.computeIfAbsent(sortParents(parent1, parent2), k -> new RandomCollection<>()).add(bee.BreedData.getBreedWeight(), bee.getName());
-        FAMILY_TREE.computeIfAbsent(Pair.of(bee.getName(), bee.getName()), k -> new RandomCollection<>()).add(bee.BreedData.getBreedWeight(), bee.getName());
+        String parent1 = bee.getBreedData().getParent1();
+        String parent2 = bee.getBreedData().getParent2();
+        BeeRegistry.getRegistry().FAMILY_TREE.computeIfAbsent(sortParents(parent1, parent2), k -> new RandomCollection<>()).add(bee.getBreedData().getBreedWeight(), bee.getName());
+        BeeRegistry.getRegistry().FAMILY_TREE.computeIfAbsent(Pair.of(bee.getName(), bee.getName()), k -> new RandomCollection<>()).add(bee.getBreedData().getBreedWeight(), bee.getName());
     }
 
     public static Pair<String, String> sortParents(String parent1, String parent2){
@@ -40,11 +39,11 @@ public class BeeInfoUtils {
     }
 
     public static void parseBiomes(CustomBeeData bee){
-        if (!bee.SpawnData.getBiomeWhitelist().isEmpty()){
-            Set<Biome> whitelist = new HashSet<>(getBiomeSet(bee.SpawnData.getBiomeWhitelist()));
+        if (!bee.getSpawnData().getBiomeWhitelist().isEmpty()){
+            Set<Biome> whitelist = new HashSet<>(getBiomeSet(bee.getSpawnData().getBiomeWhitelist()));
             Set<Biome> blacklist = new HashSet<>();
-            if (!bee.SpawnData.getBiomeBlacklist().isEmpty())
-                blacklist = getBiomeSet(bee.SpawnData.getBiomeBlacklist());
+            if (!bee.getSpawnData().getBiomeBlacklist().isEmpty())
+                blacklist = getBiomeSet(bee.getSpawnData().getBiomeBlacklist());
             updateSpawnableBiomes(whitelist, blacklist,bee);
         }
     }
@@ -85,7 +84,7 @@ public class BeeInfoUtils {
     private static void updateSpawnableBiomes(Set<Biome> whitelist, Set<Biome> blacklist, CustomBeeData bee){
         for(Biome biome : whitelist){
             if(!blacklist.contains(biome)){
-                SPAWNABLE_BIOMES.computeIfAbsent(biome, k -> new RandomCollection<>()).add(bee.SpawnData.getSpawnWeight(), bee.getName());
+                BeeRegistry.getRegistry().SPAWNABLE_BIOMES.computeIfAbsent(biome, k -> new RandomCollection<>()).add(bee.getSpawnData().getSpawnWeight(), bee.getName());
             }
         }
     }

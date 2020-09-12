@@ -128,7 +128,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
     private void processItem(@Nullable CentrifugeRecipe recipe) {
         if (recipe != null && this.canProcess(recipe)) {
             JsonElement count = recipe.ingredient.serialize().getAsJsonObject().get(BeeConstants.INGREDIENT_COUNT);
-            int inputAmount = count !=null ? count.getAsInt() : 1;
+            int inputAmount = count != null ? count.getAsInt() : 1;
             ItemStack comb = h.getStackInSlot(HONEYCOMB_SLOT);
             ItemStack glass_bottle = h.getStackInSlot(BOTTLE_SLOT);
             List<Pair<ItemStack, Integer>> slots = new ArrayList<>(

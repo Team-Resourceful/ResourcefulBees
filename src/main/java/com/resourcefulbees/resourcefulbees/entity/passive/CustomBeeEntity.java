@@ -1,13 +1,13 @@
 package com.resourcefulbees.resourcefulbees.entity.passive;
 
-import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
+import com.resourcefulbees.resourcefulbees.api.beedata.TraitData;
 import com.resourcefulbees.resourcefulbees.entity.ICustomBee;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
-import com.resourcefulbees.resourcefulbees.utils.ValidatorUtils;
+import com.resourcefulbees.resourcefulbees.utils.validation.ValidatorUtils;
 import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Pose;
@@ -31,8 +31,6 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
@@ -93,19 +91,14 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
 
     //region CUSTOM BEE RELATED METHODS BELOW
 
-    @Nonnull
-    protected ITextComponent getProfessionName() {
-        return new TranslationTextComponent("entity" + '.' + ResourcefulBees.MOD_ID + '.' + this.getBeeType() + "_bee");
-    }
-
     @Override
     public boolean isInvulnerableTo(@Nonnull DamageSource source) {
-        CustomBeeData info = getBeeData();
+        TraitData info = getBeeData().getTraitData();
         if (source.equals(DamageSource.SWEET_BERRY_BUSH)) {
-            return true;  //All bees should be immune to this like vanilla - Not sure why it doesn't carry over from vanilla bees
+            return true;
         }
-        if (info.TraitData.hasDamageImmunities()){
-            for (DamageSource damage : info.TraitData.getDamageImmunities())
+        if (info.hasDamageImmunities()){
+            for (DamageSource damage : info.getDamageImmunities())
                 if (source.equals(damage)) return true;
         }
         return super.isInvulnerableTo(source);
@@ -113,9 +106,9 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
 
     @Override
     public boolean isPotionApplicable(@Nonnull EffectInstance potioneffectIn) {
-        CustomBeeData info = getBeeData();
-        if (info.TraitData.hasPotionImmunities()){
-            for (Effect potion : info.TraitData.getPotionImmunities()){
+        TraitData info = getBeeData().getTraitData();
+        if (info.hasPotionImmunities()){
+            for (Effect potion : info.getPotionImmunities()){
                 if (potion.equals(potioneffectIn.getPotion())) return false;
             }
         }
@@ -139,9 +132,9 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
 
         if (this.world.isRemote){
             if (this.ticksExisted % 40 == 0) {
-                CustomBeeData info = getBeeData();
-                if (info.TraitData.hasParticleEffects()){
-                    for (BasicParticleType particle : info.TraitData.getParticleEffects()){
+                TraitData info = getBeeData().getTraitData();
+                if (info.hasParticleEffects()){
+                    for (BasicParticleType particle : info.getParticleEffects()){
                         for (int i = 0; i < 10; ++i) {
                             this.world.addParticle(particle, this.getParticleX(0.5D),
                                     this.getRandomBodyY() - 0.25D, this.getParticleZ(0.5D),
@@ -183,8 +176,9 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
         compound.putInt(NBTConstants.NBT_FEED_COUNT, this.getFeedCount());
     }
 
+    //TODO put this in each subclass type
     public ResourcefulBee createSelectedChild(String beeType) {
-        CustomBeeData customBeeData = BeeRegistry.getBeeData(beeType);
+        CustomBeeData customBeeData = BeeRegistry.getRegistry().getBeeData(beeType);
         return new ResourcefulBee(customBeeData.getEntityTypeRegistryObject().get(), this.world, customBeeData);
     }
 
@@ -203,7 +197,7 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
 
     @Override
     public boolean isBreedingItem(@Nonnull ItemStack stack) {
-        String validBreedItem = this.getBeeData().BreedData.getFeedItem();
+        String validBreedItem = this.getBeeData().getBreedData().getFeedItem();
 
         if (ValidatorUtils.TAG_RESOURCE_PATTERN.matcher(validBreedItem).matches()) {
             ITag<Item> itemTag = BeeInfoUtils.getItemTag(validBreedItem.replace(BeeConstants.TAG_PREFIX, ""));
@@ -234,7 +228,7 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
             if (!this.world.isRemote && this.getGrowingAge() == 0 && this.canBreed()) {
                 this.consumeItemFromStack(player, itemstack);
                 this.addFeedCount();
-                if (this.getFeedCount() >= this.getBeeData().BreedData.getFeedAmount()) {
+                if (this.getFeedCount() >= this.getBeeData().getBreedData().getFeedAmount()) {
                     this.setInLove(player);
                 }
                 player.swingHand(hand, true);

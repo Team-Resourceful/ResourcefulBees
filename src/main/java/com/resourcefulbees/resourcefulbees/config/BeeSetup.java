@@ -57,7 +57,8 @@ public class BeeSetup {
         Gson gson = new Gson();
         CustomBeeData bee = gson.fromJson(reader, CustomBeeData.class);
         bee.setName(name);
-        BeeRegistry.registerBee(name.toLowerCase(), bee);
+        bee.shouldResourcefulBeesDoForgeRegistration = true;
+        BeeRegistry.getRegistry().registerBee(name.toLowerCase(), bee);
 /*        if (BeeValidator.validate(bee)) {
             if (BeeRegistry.registerBee(name.toLowerCase(), bee)) {
                 if (bee.SpawnData.canSpawnInWorld())

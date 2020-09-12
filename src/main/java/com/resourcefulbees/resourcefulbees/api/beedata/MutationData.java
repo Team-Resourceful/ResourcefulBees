@@ -2,11 +2,11 @@ package com.resourcefulbees.resourcefulbees.api.beedata;
 
 import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
 
-public class MutationData {
+public class MutationData extends AbstractBeeData {
     private final String mutationInput;
     private final String mutationOutput;
     private final int mutationCount;
-    private final boolean hasMutation;
+    private boolean hasMutation;
     private final MutationTypes mutationType;
 
     private MutationData(String mutationInput, String mutationOutput, int mutationCount, boolean hasMutation, MutationTypes mutationType) {
@@ -32,6 +32,8 @@ public class MutationData {
     public boolean hasMutation() {
         return hasMutation;
     }
+
+    public void setHasMutation(boolean hasMutation) { this.hasMutation = hasMutation; }
 
     public MutationTypes getMutationType() {
         return mutationType;

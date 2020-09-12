@@ -1,4 +1,4 @@
-package com.resourcefulbees.resourcefulbees.utils;
+package com.resourcefulbees.resourcefulbees.utils.color;
 
 import java.awt.Color;
 import java.util.Timer;

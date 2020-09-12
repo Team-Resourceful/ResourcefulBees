@@ -10,6 +10,8 @@ public class BeeConstants {
     public static final String ENTITY_TEXTURES_DIR = "textures/entity/";
     public static final String STRING_DEFAULT_ITEM_COLOR = "-1";
     public static final String INGREDIENT_COUNT = "count";
+    public static final String VANILLA_BEE_TYPE = "mc_vanilla";
+    public static final String VANILLA_BEE_ID = "minecraft:bee";
 
     public static final int SMOKE_TIME = 600;
     public static final int MIN_HIVE_TIME = 600;

@@ -2,7 +2,7 @@ package com.resourcefulbees.resourcefulbees.init;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.block.TieredBeehiveBlock;
-import com.resourcefulbees.resourcefulbees.utils.RainbowColor;
+import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
 import net.minecraft.block.BeehiveBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.DispenserBlock;
@@ -12,7 +12,6 @@ import net.minecraft.dispenser.OptionalDispenseBehavior;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.resources.FolderPack;
-import net.minecraft.resources.IPackFinder;
 import net.minecraft.resources.IPackNameDecorator;
 import net.minecraft.resources.ResourcePackInfo;
 import net.minecraft.tags.BlockTags;
@@ -34,7 +33,6 @@ import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.function.Consumer;
 
 import static com.resourcefulbees.resourcefulbees.ResourcefulBees.LOGGER;
 import static com.resourcefulbees.resourcefulbees.config.BeeSetup.BEE_PATH;
@@ -111,7 +109,7 @@ public class ModSetup {
                                     stack.setCount(0);
                                 }
 
-                                TieredBeehiveBlock.dropResourceHoneycomb((TieredBeehiveBlock) blockstate.getBlock(), world, blockpos);
+                                TieredBeehiveBlock.dropResourceHoneycomb((TieredBeehiveBlock) blockstate.getBlock(), world, blockpos, false);
                                 ((BeehiveBlock) blockstate.getBlock()).takeHoney(world, blockstate, blockpos, null,
                                         BeehiveTileEntity.State.BEE_RELEASED);
                                 this.setSuccess(true);

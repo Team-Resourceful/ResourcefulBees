@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class TraitData {
+public class TraitData extends AbstractBeeData {
     private transient List<Pair<Effect, Integer>> potionDamageEffects = new ArrayList<>();
     private transient List<DamageSource> damageImmunities = new ArrayList<>();
     private transient List<Effect> potionImmunities = new ArrayList<>();

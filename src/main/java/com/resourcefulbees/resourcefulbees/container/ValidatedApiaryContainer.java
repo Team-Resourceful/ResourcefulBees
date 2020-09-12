@@ -43,8 +43,7 @@ public class ValidatedApiaryContainer extends Container {
                             //TODO need to validate namespace since entity types are dynamic - check to see if this can be simplified further
                             //noinspection ConstantConditions
                             String type = data.getString(NBTConstants.NBT_ENTITY);
-                            type = type.substring(0,type.indexOf(':'));
-                            return type.equals(ResourcefulBees.MOD_ID);
+                            return type.startsWith(ResourcefulBees.MOD_ID);
                         }
                     }
                     return false;

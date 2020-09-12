@@ -1,7 +1,6 @@
 package com.resourcefulbees.resourcefulbees.registry;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
-import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.data.BeeTrait;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.Effects;
@@ -46,21 +45,23 @@ public class TraitRegistry {
     }
 
     public static void giveBeeTraits(){
-        for (CustomBeeData bee : BeeRegistry.getBees().values()){
-            if (bee.hasTraitNames()) {
-                for (String traitString : bee.getTraitNames()) {
+
+        BeeRegistry.getRegistry().getBees().forEach(((s, beeData) -> {
+            if (beeData.hasTraitNames()) {
+                for (String traitString : beeData.getTraitNames()) {
                     BeeTrait trait = TraitRegistry.getTrait(traitString);
                     if (trait != null) {
-                        if (bee.TraitData != null && bee.TraitData.hasTraits()){
-                            bee.TraitData.addTrait(trait);
+                        if (beeData.getTraitData() != null && beeData.getTraitData().hasTraits()){
+                            beeData.getTraitData().addTrait(trait);
                         } else {
-                            ResourcefulBees.LOGGER.warn("Traits provided but TraitData object does not exist or does not contain \"hasTraits: true\" for '{}'", bee.getName());
+                            ResourcefulBees.LOGGER.warn("Traits provided but TraitData object does not exist or does not contain \"hasTraits: true\" for '{}'", s);
                         }
                     } else {
-                        ResourcefulBees.LOGGER.warn("Trait '{}' given to '{}' does not exist in trait registry.", traitString, bee.getName());
+                        ResourcefulBees.LOGGER.warn("Trait '{}' given to '{}' does not exist in trait registry.", traitString, s);
                     }
                 }
             }
-        }
+
+        }));
     }
 }

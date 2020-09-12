@@ -7,7 +7,7 @@ import net.minecraft.item.Items;
 import javax.annotation.Nullable;
 import java.util.Objects;
 
-public class CentrifugeData {
+public class CentrifugeData extends AbstractBeeData {
     private final String mainOutput;
     private final String secondaryOutput;
     private final String bottleOutput;
@@ -18,7 +18,7 @@ public class CentrifugeData {
     private final int secondaryOutputCount;
     private final int bottleOutputCount;
     private final int mainInputCount;
-    private final boolean hasCentrifugeOutput;
+    private boolean hasCentrifugeOutput;
 
     private CentrifugeData(String mainOutput, String secondaryOutput, String bottleOutput, float mainOutputWeight, float secondaryOutputWeight, float bottleOutputWeight, int mainOutputCount, int secondaryOutputCount, int bottleOutputCount, int mainInputCount, boolean hasCentrifugeOutput) {
         this.mainOutput = mainOutput;
@@ -34,49 +34,29 @@ public class CentrifugeData {
         this.hasCentrifugeOutput = hasCentrifugeOutput;
     }
 
-    public String getMainOutput() {
-        return mainOutput;
-    }
+    public String getMainOutput() { return mainOutput; }
 
-    public String getSecondaryOutput() {
-        return secondaryOutput == null ? RegistryHandler.WAX.getId().toString() : secondaryOutput;
-    }
+    public String getSecondaryOutput() { return secondaryOutput == null ? RegistryHandler.WAX.getId().toString() : secondaryOutput; }
 
-    public String getBottleOutput() {
-        return bottleOutput != null ? bottleOutput : Objects.requireNonNull(Items.HONEY_BOTTLE.getRegistryName()).toString();
-    }
+    public String getBottleOutput() { return bottleOutput != null ? bottleOutput : Objects.requireNonNull(Items.HONEY_BOTTLE.getRegistryName()).toString(); }
 
-    public float getMainOutputWeight() {
-        return Math.max(BeeConstants.DEFAULT_MAIN_OUTPUT_WEIGHT, mainOutputWeight);
-    }
+    public float getMainOutputWeight() { return mainOutputWeight <= 0 ? BeeConstants.DEFAULT_MAIN_OUTPUT_WEIGHT : mainOutputWeight; }
 
-    public float getSecondaryOutputWeight() {
-        return Math.max(BeeConstants.DEFAULT_SEC_OUTPUT_WEIGHT, secondaryOutputWeight);
-    }
+    public float getSecondaryOutputWeight() { return secondaryOutputWeight <= 0 ? BeeConstants.DEFAULT_SEC_OUTPUT_WEIGHT : secondaryOutputWeight; }
 
-    public float getBottleOutputWeight() {
-        return Math.max(BeeConstants.DEFAULT_BOT_OUTPUT_WEIGHT, bottleOutputWeight);
-    }
+    public float getBottleOutputWeight() { return bottleOutputWeight <= 0 ? BeeConstants.DEFAULT_BOT_OUTPUT_WEIGHT : bottleOutputWeight; }
 
-    public int getMainOutputCount() {
-        return Math.max(1, mainOutputCount);
-    }
+    public int getMainOutputCount() { return Math.max(1, mainOutputCount); }
 
-    public int getSecondaryOutputCount() {
-        return Math.max(1, secondaryOutputCount);
-    }
+    public int getSecondaryOutputCount() { return Math.max(1, secondaryOutputCount); }
 
-    public int getBottleOutputCount() {
-        return Math.max(1, bottleOutputCount);
-    }
+    public int getBottleOutputCount() { return Math.max(1, bottleOutputCount); }
 
-    public int getMainInputCount() {
-        return Math.max(1, mainInputCount);
-    }
+    public int getMainInputCount() { return Math.max(1, mainInputCount); }
 
-    public boolean hasCentrifugeOutput() {
-        return hasCentrifugeOutput;
-    }
+    public boolean hasCentrifugeOutput() { return hasCentrifugeOutput; }
+
+    public void setHasCentrifugeOutput(boolean hasCentrifugeOutput) { this.hasCentrifugeOutput = hasCentrifugeOutput; }
 
     public static class Builder {
         private final String mainOutput;

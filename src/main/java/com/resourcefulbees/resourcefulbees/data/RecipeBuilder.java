@@ -1,11 +1,14 @@
 package com.resourcefulbees.resourcefulbees.data;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
+import com.resourcefulbees.resourcefulbees.api.IBeeRegistry;
+import com.resourcefulbees.resourcefulbees.api.beedata.CentrifugeData;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
+import com.resourcefulbees.resourcefulbees.utils.validation.SecondPhaseValidator;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.*;
 import net.minecraft.resources.IResourceManager;
@@ -22,16 +25,25 @@ import java.util.HashMap;
 public class RecipeBuilder implements IResourceManagerReloadListener {
     private static RecipeManager recipeManager;
 
+    private static final IBeeRegistry BEE_REGISTRY = BeeRegistry.getRegistry();
+
     @Override
     public void onResourceManagerReload(@Nonnull IResourceManager resourceManager) {
-        BeeRegistry.getBees().forEach(((s, customBeeData) -> {
+        BEE_REGISTRY.getBees().forEach(((s, customBeeData) -> {
             if (customBeeData.hasHoneycomb()) {
-                if (customBeeData.CentrifugeData.hasCentrifugeOutput() && Config.CENTRIFUGE_RECIPES.get()) {
-                    IRecipe<?> honeycombCentrifuge = this.centrifugeRecipe(s, customBeeData);
-                    IRecipe<?> honeycombBlockCentrifuge = this.centrifugeHoneyCombBlockRecipe(s, customBeeData);
-                    getRecipeManager().recipes.computeIfAbsent(honeycombCentrifuge.getType(), t -> new HashMap<>()).put(honeycombCentrifuge.getId(), honeycombCentrifuge);
-                    getRecipeManager().recipes.computeIfAbsent(honeycombBlockCentrifuge.getType(), t -> new HashMap<>()).put(honeycombBlockCentrifuge.getId(), honeycombBlockCentrifuge);
+                CentrifugeData centrifugeData = customBeeData.getCentrifugeData();
+
+                if (centrifugeData.hasCentrifugeOutput() && Config.CENTRIFUGE_RECIPES.get()) {
+                    SecondPhaseValidator.validateCentrifugeOutputs(customBeeData);
+
+                    if (centrifugeData.hasCentrifugeOutput()) {
+                        IRecipe<?> honeycombCentrifuge = this.centrifugeRecipe(s, customBeeData);
+                        IRecipe<?> honeycombBlockCentrifuge = this.centrifugeHoneyCombBlockRecipe(s, customBeeData);
+                        getRecipeManager().recipes.computeIfAbsent(honeycombCentrifuge.getType(), t -> new HashMap<>()).put(honeycombCentrifuge.getId(), honeycombCentrifuge);
+                        getRecipeManager().recipes.computeIfAbsent(honeycombBlockCentrifuge.getType(), t -> new HashMap<>()).put(honeycombBlockCentrifuge.getId(), honeycombBlockCentrifuge);
+                    }
                 }
+
                 if (Config.HONEYCOMB_BLOCK_RECIPES.get()) {
                     IRecipe<?> honeycombBlock = this.makeHoneycombRecipe(s, customBeeData);
                     IRecipe<?> honeycomb = this.combBlockToCombRecipe(s, customBeeData);
@@ -65,14 +77,16 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
     }
 
     private IRecipe<?> centrifugeRecipe(String beeType, CustomBeeData info) {
+        CentrifugeData centrifugeData = info.getCentrifugeData();
+
         return new CentrifugeRecipe(
                 new ResourceLocation(ResourcefulBees.MOD_ID, beeType + "_honeycomb_centrifuge"),
-                Ingredient.fromStacks(new ItemStack(info.getCombRegistryObject().get(), info.CentrifugeData.getMainInputCount())),
+                Ingredient.fromStacks(new ItemStack(info.getCombRegistryObject().get(), centrifugeData.getMainInputCount())),
                 NonNullList.from(
                         Pair.of(ItemStack.EMPTY, 0.0f),
-                        Pair.of(new ItemStack(BeeInfoUtils.getItem(info.CentrifugeData.getMainOutput()), info.CentrifugeData.getMainOutputCount()), info.CentrifugeData.getMainOutputWeight()),
-                        Pair.of(new ItemStack(BeeInfoUtils.getItem(info.CentrifugeData.getSecondaryOutput()), info.CentrifugeData.getSecondaryOutputCount()), info.CentrifugeData.getSecondaryOutputWeight()),
-                        Pair.of(new ItemStack(BeeInfoUtils.getItem(info.CentrifugeData.getBottleOutput()), info.CentrifugeData.getBottleOutputCount()), info.CentrifugeData.getBottleOutputWeight())
+                        Pair.of(new ItemStack(BeeInfoUtils.getItem(centrifugeData.getMainOutput()), centrifugeData.getMainOutputCount()), centrifugeData.getMainOutputWeight()),
+                        Pair.of(new ItemStack(BeeInfoUtils.getItem(centrifugeData.getSecondaryOutput()), centrifugeData.getSecondaryOutputCount()), centrifugeData.getSecondaryOutputWeight()),
+                        Pair.of(new ItemStack(BeeInfoUtils.getItem(centrifugeData.getBottleOutput()), centrifugeData.getBottleOutputCount()), centrifugeData.getBottleOutputWeight())
                 ),
                 Config.CENTRIFUGE_RECIPE_TIME.get() * 20,
                 false
@@ -80,14 +94,16 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
     }
 
     private IRecipe<?> centrifugeHoneyCombBlockRecipe(String beeType, CustomBeeData info) {
+        CentrifugeData centrifugeData = info.getCentrifugeData();
+
         return new CentrifugeRecipe(
                 new ResourceLocation(ResourcefulBees.MOD_ID, beeType + "_honeycomb_block_centrifuge"),
-                Ingredient.fromStacks(new ItemStack(info.getCombBlockItemRegistryObject().get(), info.CentrifugeData.getMainInputCount())),
+                Ingredient.fromStacks(new ItemStack(info.getCombBlockItemRegistryObject().get(), centrifugeData.getMainInputCount())),
                 NonNullList.from(
                         Pair.of(ItemStack.EMPTY, 0.0f),
-                        Pair.of(new ItemStack(BeeInfoUtils.getItem(info.CentrifugeData.getMainOutput()), info.CentrifugeData.getMainOutputCount() * 9), info.CentrifugeData.getMainOutputWeight()),
-                        Pair.of(new ItemStack(BeeInfoUtils.getItem(info.CentrifugeData.getSecondaryOutput()), info.CentrifugeData.getSecondaryOutputCount() * 9), info.CentrifugeData.getSecondaryOutputWeight()),
-                        Pair.of(new ItemStack(BeeInfoUtils.getItem(info.CentrifugeData.getBottleOutput()), info.CentrifugeData.getBottleOutputCount() * 9), info.CentrifugeData.getBottleOutputWeight())
+                        Pair.of(new ItemStack(BeeInfoUtils.getItem(centrifugeData.getMainOutput()), centrifugeData.getMainOutputCount() * 9), centrifugeData.getMainOutputWeight()),
+                        Pair.of(new ItemStack(BeeInfoUtils.getItem(centrifugeData.getSecondaryOutput()), centrifugeData.getSecondaryOutputCount() * 9), centrifugeData.getSecondaryOutputWeight()),
+                        Pair.of(new ItemStack(BeeInfoUtils.getItem(centrifugeData.getBottleOutput()), centrifugeData.getBottleOutputCount() * 9), centrifugeData.getBottleOutputWeight())
                 ),
                 Config.CENTRIFUGE_RECIPE_TIME.get() * 20,
                 true

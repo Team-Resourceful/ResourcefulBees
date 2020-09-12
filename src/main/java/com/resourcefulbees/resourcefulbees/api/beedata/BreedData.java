@@ -2,8 +2,8 @@ package com.resourcefulbees.resourcefulbees.api.beedata;
 
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 
-public class BreedData {
-    private final boolean isBreedable;
+public class BreedData extends AbstractBeeData {
+    private boolean isBreedable;
     private final double breedWeight;
     private final String parent1, parent2;
     private final String feedItem;
@@ -18,29 +18,19 @@ public class BreedData {
         this.feedAmount = feedAmount;
     }
 
-    public boolean isBreedable() {
-        return isBreedable;
-    }
+    public boolean isBreedable() { return isBreedable; }
 
-    public double getBreedWeight() {
-        return breedWeight <= 0 ? BeeConstants.DEFAULT_BREED_WEIGHT : breedWeight;
-    }
+    public void setBreedable(boolean breedable) { isBreedable = breedable; }
 
-    public String getParent1() {
-        return parent1 != null ? parent1 : "";
-    }
+    public double getBreedWeight() { return breedWeight <= 0 ? BeeConstants.DEFAULT_BREED_WEIGHT : breedWeight; }
 
-    public String getParent2() {
-        return parent2 != null ? parent2 : "";
-    }
+    public String getParent1() { return parent1 != null ? parent1 : ""; }
 
-    public String getFeedItem() {
-        return feedItem != null ? feedItem : BeeConstants.FLOWER_TAG_ALL;
-    }
+    public String getParent2() { return parent2 != null ? parent2 : ""; }
 
-    public int getFeedAmount() {
-        return feedAmount <= 0 ? 1 : feedAmount;
-    }
+    public String getFeedItem() { return feedItem != null ? feedItem : BeeConstants.FLOWER_TAG_ALL; }
+
+    public int getFeedAmount() { return Math.max(1, feedAmount); }
 
     public static class Builder {
         private final boolean isBreedable;

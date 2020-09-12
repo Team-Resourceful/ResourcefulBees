@@ -10,8 +10,8 @@ import java.util.List;
 
 public class EntityIngredient {
 
-    private String beeType;
-    private float rotation;
+    private final String beeType;
+    private final float rotation;
 
     public EntityIngredient(String beeType, float rotation){
         this.beeType = beeType;
@@ -36,8 +36,8 @@ public class EntityIngredient {
         } else {
             String desc = I18n.format("tooltip.resourcefulbees.jei."+ beeType);
             String[] descTooltip = desc.split("\\r?\\n");
-            for (int i = 0; i < descTooltip.length; i++) {
-                tooltip.add(new StringTextComponent(descTooltip[i]));
+            for (String s : descTooltip) {
+                tooltip.add(new StringTextComponent(s));
             }
             return tooltip;
         }

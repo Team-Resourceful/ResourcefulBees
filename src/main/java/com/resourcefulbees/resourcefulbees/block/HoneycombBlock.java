@@ -3,8 +3,7 @@ package com.resourcefulbees.resourcefulbees.block;
 
 import com.resourcefulbees.resourcefulbees.api.beedata.ColorData;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
-import com.resourcefulbees.resourcefulbees.utils.Color;
-import com.resourcefulbees.resourcefulbees.utils.RainbowColor;
+import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -33,7 +32,7 @@ public class HoneycombBlock extends Block {
         this.beeType = beeType;
     }
 
-    public int getHoneycombColor() { return Color.parseInt(colorData.getHoneycombColor()); }
+    public int getHoneycombColor() { return colorData.getHoneycombColorInt(); }
 
     public String getBeeType() { return beeType; }
 
@@ -47,10 +46,11 @@ public class HoneycombBlock extends Block {
         return honeycombBlock.colorData.isRainbowBee() ? RainbowColor.getRGB() : honeycombBlock.getHoneycombColor();
     }
 
+    @Nonnull
     @Override
-    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+    public List<ItemStack> getDrops(@Nonnull BlockState state, @Nonnull LootContext.Builder builder) {
         List<ItemStack> drops = super.getDrops(state, builder);
-        drops.add(BeeRegistry.getBeeData(beeType).getCombBlockItemRegistryObject().get().getDefaultInstance());
+        drops.add(BeeRegistry.getRegistry().getBeeData(beeType).getCombBlockItemRegistryObject().get().getDefaultInstance());
         return drops;
     }
 
@@ -63,7 +63,7 @@ public class HoneycombBlock extends Block {
 
     @Override
     public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
-        return BeeRegistry.getBeeData(beeType).getCombBlockItemRegistryObject().get().getDefaultInstance();
+        return BeeRegistry.getRegistry().getBeeData(beeType).getCombBlockItemRegistryObject().get().getDefaultInstance();
     }
 }
 

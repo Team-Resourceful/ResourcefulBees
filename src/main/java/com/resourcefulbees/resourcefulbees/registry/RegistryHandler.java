@@ -14,7 +14,6 @@ import com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe;
 import com.resourcefulbees.resourcefulbees.tileentity.*;
 import com.resourcefulbees.resourcefulbees.tileentity.centrifuge.CentrifugeCasingTileEntity;
 import com.resourcefulbees.resourcefulbees.tileentity.centrifuge.CentrifugeControllerTileEntity;
-import com.resourcefulbees.resourcefulbees.utils.Color;
 import com.resourcefulbees.resourcefulbees.utils.TooltipBuilder;
 import com.resourcefulbees.resourcefulbees.world.BeeNestFeature;
 import net.minecraft.block.Block;
@@ -46,7 +45,9 @@ import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.extensions.IForgeContainerType;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
@@ -267,7 +268,7 @@ public class RegistryHandler {
 
 	//region**************POINT OF INTEREST*********************************
 
-	public static final RegistryObject<PointOfInterestType> TIERED_BEEHIVE_POI = POIS.register("t1_beehive", () -> new PointOfInterestType("t1_beehive", ImmutableSet.copyOf(T1_BEEHIVE.get().getStateContainer().getValidStates()), 1, 1));
+	public static final RegistryObject<PointOfInterestType> TIERED_BEEHIVE_POI = POIS.register("tiered_beehive_poi", () -> new PointOfInterestType("tiered_beehive_poi", ImmutableSet.copyOf(T1_BEEHIVE.get().getStateContainer().getValidStates()), 1, 1));
 	//endregion
 
 	//region**************CONTAINERS****************************************
@@ -314,23 +315,25 @@ public class RegistryHandler {
 	//endregion
 
 	public static void addEntityAttributes() {
-		BeeRegistry.getBees().forEach(((s, customBee) -> GlobalEntityTypeAttributes.put(customBee.getEntityTypeRegistryObject().get(), BeeEntity.createBeeAttributes().build())));
+		BeeRegistry.getRegistry().getBees().forEach((s, customBee) -> GlobalEntityTypeAttributes.put(customBee.getEntityTypeRegistryObject().get(), BeeEntity.createBeeAttributes().build()));
 	}
 
 
 	//split combs/entity into two methods for better readability
 	public static void registerDynamicBees() {
-		BeeRegistry.getBees().forEach((name, customBee) -> {
-			if (customBee.hasHoneycomb()) {
-				registerHoneycomb(name, customBee);
+		BeeRegistry.getRegistry().getBees().forEach((name, customBee) -> {
+			if (customBee.shouldResourcefulBeesDoForgeRegistration) {
+				if (customBee.hasHoneycomb()) {
+					registerHoneycomb(name, customBee);
+				}
+				registerBee(name, customBee);
 			}
-			registerBee(name, customBee);
 		});
 	}
 
 	private static void registerHoneycomb(String name, CustomBeeData customBeeData) {
-		final RegistryObject<Block> customHoneycombBlock = BLOCKS.register(name + "_honeycomb_block", () -> new HoneycombBlock(name, customBeeData.ColorData));
-		final RegistryObject<Item> customHoneycomb = ITEMS.register(name + "_honeycomb", () -> new HoneycombItem(name, customBeeData.ColorData));
+		final RegistryObject<Block> customHoneycombBlock = BLOCKS.register(name + "_honeycomb_block", () -> new HoneycombBlock(name, customBeeData.getColorData()));
+		final RegistryObject<Item> customHoneycomb = ITEMS.register(name + "_honeycomb", () -> new HoneycombItem(name, customBeeData.getColorData()));
 		final RegistryObject<Item> customHoneycombBlockItem = ITEMS.register(name + "_honeycomb_block", () -> new BlockItem(customHoneycombBlock.get(), new Item.Properties()));
 
 		customBeeData.setCombBlockRegistryObject(customHoneycombBlock);
@@ -344,8 +347,8 @@ public class RegistryHandler {
 				.size(0.7F, 0.6F)
 				.build(name + "_bee"));
 
-		int firstEggColor = customBeeData.ColorData.isBeeColored() && customBeeData.ColorData.hasPrimaryColor() ? Color.parseInt(customBeeData.ColorData.getPrimaryColor()) : customBeeData.ColorData.hasHoneycombColor() ? Color.parseInt(customBeeData.ColorData.getHoneycombColor()) : 0xffffff;
-		int secondEggColor = customBeeData.ColorData.isBeeColored() && customBeeData.ColorData.hasSecondaryColor() ? Color.parseInt(customBeeData.ColorData.getSecondaryColor()) : 0x303030;
+		int firstEggColor = customBeeData.getColorData().isBeeColored() && customBeeData.getColorData().hasPrimaryColor() ? customBeeData.getColorData().getPrimaryColorInt() : customBeeData.getColorData().hasHoneycombColor() ? customBeeData.getColorData().getHoneycombColorInt() : 0xffffff;
+		int secondEggColor = customBeeData.getColorData().isBeeColored() && customBeeData.getColorData().hasSecondaryColor() ? customBeeData.getColorData().getSecondaryColorInt() : 0x303030;
 
 		final RegistryObject<Item> customBeeSpawnEgg = ITEMS.register(name + "_bee_spawn_egg",
 				() -> new BeeSpawnEggItem(customBeeEntity, firstEggColor, secondEggColor, (new Item.Properties())));
@@ -354,5 +357,10 @@ public class RegistryHandler {
 		customBeeData.setSpawnEggItemRegistryObject(customBeeSpawnEgg);
 	}
 
-
+	@SubscribeEvent
+	public void onRegisterBlocks(RegistryEvent.Register<Block> event) {
+		//Exists to disallow further bee registrations
+		//preventing potential for NPE's
+		BeeRegistry.getRegistry().denyRegistration();
+	}
 }

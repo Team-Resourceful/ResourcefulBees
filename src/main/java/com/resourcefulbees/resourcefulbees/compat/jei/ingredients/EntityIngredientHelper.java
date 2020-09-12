@@ -46,7 +46,7 @@ public class EntityIngredientHelper<T extends EntityIngredient> implements IIngr
     @Nonnull
     @Override
     public ItemStack getCheatItemStack(EntityIngredient ingredient) {
-        return new ItemStack(BeeRegistry.getBeeData(ingredient.getBeeType()).getSpawnEggItemRegistryObject().get());
+        return new ItemStack(BeeRegistry.getRegistry().getBeeData(ingredient.getBeeType()).getSpawnEggItemRegistryObject().get());
     }
 
     @Nonnull

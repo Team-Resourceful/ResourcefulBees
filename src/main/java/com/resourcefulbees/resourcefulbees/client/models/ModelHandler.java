@@ -26,7 +26,7 @@ public class ModelHandler {
     public static void registerModels(ModelRegistryEvent event) {
         IResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
 
-        BeeRegistry.getBees().forEach((string, customBee) -> {
+        BeeRegistry.getRegistry().getBees().forEach((string, customBee) -> {
             Block honeycombBlock = customBee.getCombBlockRegistryObject().get();
             Item honeycombBlockItem = customBee.getCombBlockItemRegistryObject().get();
             Item honeycomb = customBee.getCombRegistryObject().get();

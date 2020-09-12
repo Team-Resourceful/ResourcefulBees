@@ -1,5 +1,6 @@
-package com.resourcefulbees.resourcefulbees.utils;
+package com.resourcefulbees.resourcefulbees.utils.color;
 
+import com.resourcefulbees.resourcefulbees.api.IBeeRegistry;
 import com.resourcefulbees.resourcefulbees.block.HoneycombBlock;
 import com.resourcefulbees.resourcefulbees.item.BeeJar;
 import com.resourcefulbees.resourcefulbees.item.BeeSpawnEggItem;
@@ -17,12 +18,15 @@ import net.minecraftforge.client.event.ColorHandlerEvent;
 import static com.resourcefulbees.resourcefulbees.ResourcefulBees.LOGGER;
 
 public final class ColorHandler {
+
+    private static final IBeeRegistry BEE_REGISTRY = BeeRegistry.getRegistry();
+
     private ColorHandler() {}
 
     public static void onItemColors(ColorHandlerEvent.Item event) {
         ItemColors colors = event.getItemColors();
-        BeeRegistry.getBees().forEach(((s, customBeeData) -> {
-            if (customBeeData.hasHoneycomb() && customBeeData.ColorData.hasHoneycombColor()) {
+        BEE_REGISTRY.getBees().forEach(((s, customBeeData) -> {
+            if (customBeeData.hasHoneycomb() && customBeeData.getColorData().hasHoneycombColor()) {
                 registerItems(colors, HoneycombItem::getColor, customBeeData.getCombRegistryObject().get());
                 registerItems(colors, HoneycombBlock::getItemColor, customBeeData.getCombBlockItemRegistryObject().get());
             }
@@ -33,8 +37,8 @@ public final class ColorHandler {
 
     public static void onBlockColors(ColorHandlerEvent.Block event){
         BlockColors colors = event.getBlockColors();
-        BeeRegistry.getBees().forEach(((s, customBeeData) -> {
-            if (customBeeData.hasHoneycomb() && customBeeData.ColorData.hasHoneycombColor()) {
+        BEE_REGISTRY.getBees().forEach(((s, customBeeData) -> {
+            if (customBeeData.hasHoneycomb() && customBeeData.getColorData().hasHoneycombColor()) {
                 registerBlocks(colors, HoneycombBlock::getBlockColor, customBeeData.getCombBlockRegistryObject().get());
             }
         }));

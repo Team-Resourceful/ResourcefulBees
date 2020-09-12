@@ -16,7 +16,7 @@ public class ItemGroupResourcefulBees{
 		@Override
 		@OnlyIn(Dist.CLIENT)
 		public void fill(@Nonnull NonNullList<ItemStack> items) {
-			BeeRegistry.getBees().forEach(((s, customBeeData) -> {
+			BeeRegistry.getRegistry().getBees().forEach(((s, customBeeData) -> {
 				final ItemStack eggStack = new ItemStack(customBeeData.getSpawnEggItemRegistryObject().get());
 				items.add(eggStack);
 				if (customBeeData.hasHoneycomb()) {

@@ -1,18 +1,21 @@
 package com.resourcefulbees.resourcefulbees.tileentity;
 
+import com.resourcefulbees.resourcefulbees.api.IBeeRegistry;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.container.ApiaryStorageContainer;
 import com.resourcefulbees.resourcefulbees.container.AutomationSensitiveItemStackHandler;
-import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
+import com.resourcefulbees.resourcefulbees.entity.ICustomBee;
 import com.resourcefulbees.resourcefulbees.item.UpgradeItem;
 import com.resourcefulbees.resourcefulbees.lib.ApiaryOutput;
 import com.resourcefulbees.resourcefulbees.lib.ApiaryTabs;
+import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
 import com.resourcefulbees.resourcefulbees.utils.MathUtils;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -21,6 +24,7 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.NetworkManager;
@@ -47,6 +51,7 @@ import static net.minecraft.inventory.container.Container.areItemsAndTagsEqual;
 public class ApiaryStorageTileEntity extends TileEntity implements INamedContainerProvider, ITickableTileEntity, IApiaryMultiblock {
 
     public static final int UPGRADE_SLOT = 0;
+    private static final IBeeRegistry BEE_REGISTRY = BeeRegistry.getRegistry();
 
     private BlockPos apiaryPos;
     private ApiaryTileEntity apiary;
@@ -186,8 +191,8 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
 
     public void deliverHoneycomb(String beeType, int apiaryTier) {
         ItemStack itemstack;
-        Item combItem = BeeRegistry.getBeeData(beeType).getCombRegistryObject().get();
-        Item combBlockItem = BeeRegistry.getBeeData(beeType).getCombBlockItemRegistryObject().get();
+        Item combItem = beeType.equals(BeeConstants.VANILLA_BEE_TYPE) ? Items.HONEYCOMB : BEE_REGISTRY.getBeeData(beeType).getCombRegistryObject().get();
+        Item combBlockItem = beeType.equals(BeeConstants.VANILLA_BEE_TYPE) ? Items.HONEYCOMB_BLOCK : BEE_REGISTRY.getBeeData(beeType).getCombBlockItemRegistryObject().get();
         Item outputItem;
 
         switch (apiaryTier) {
@@ -213,17 +218,24 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
 
     public boolean breedComplete(String p1, String p2) {
         if (inventoryHasSpace()) {
-            String childType = BeeRegistry.getWeightedChild(p1, p2);
-            CustomBeeData childBeeData = BeeRegistry.getBeeData(childType);
-            EntityType<? extends CustomBeeEntity> entityType = childBeeData.getEntityTypeRegistryObject().get();
+            String childType = BEE_REGISTRY.getWeightedChild(p1, p2);
+            CustomBeeData childBeeData = BEE_REGISTRY.getBeeData(childType);
+            EntityType<? extends ICustomBee> entityType = childBeeData.getEntityTypeRegistryObject().get();
 
             if (world != null) {
-                CustomBeeEntity entity = entityType.create(world);
+                Entity entity = entityType.create(world);
                 if (entity != null) {
                     String type = EntityType.getKey(entity.getType()).toString();
                     CompoundNBT nbt = new CompoundNBT();
                     nbt.putString(NBTConstants.NBT_ENTITY, type);
-                    entity.writeWithoutTypeId(nbt);  //TODO Make Bee Jar hold instance-based ColorData object
+                    ICustomBee beeEntity = (ICustomBee) entity;
+                    nbt.putString(NBTConstants.NBT_BEE_TYPE, beeEntity.getBeeType());
+                    if (beeEntity.getBeeData().getColorData().hasPrimaryColor()) {
+                        nbt.putString(NBTConstants.NBT_COLOR, beeEntity.getBeeData().getColorData().getPrimaryColor());
+                    } else {
+                        nbt.putString(NBTConstants.NBT_COLOR, String.valueOf(BeeConstants.DEFAULT_ITEM_COLOR));
+                    }
+                    entity.writeWithoutTypeId(nbt);
                     ItemStack beeJar = new ItemStack(RegistryHandler.BEE_JAR.get());
                     beeJar.setTag(nbt);
 

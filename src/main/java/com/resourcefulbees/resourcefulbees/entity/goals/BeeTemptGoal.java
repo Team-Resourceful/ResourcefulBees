@@ -3,7 +3,7 @@ package com.resourcefulbees.resourcefulbees.entity.goals;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
-import com.resourcefulbees.resourcefulbees.utils.ValidatorUtils;
+import com.resourcefulbees.resourcefulbees.utils.validation.ValidatorUtils;
 import net.minecraft.entity.EntityPredicate;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
@@ -60,7 +60,7 @@ public class BeeTemptGoal extends Goal {
     }
 
     protected boolean isTempting(ItemStack stack) {
-        String validBreedItem = this.beeEntity.getBeeData().BreedData.getFeedItem();
+        String validBreedItem = this.beeEntity.getBeeData().getBreedData().getFeedItem();
 
         if (ValidatorUtils.TAG_RESOURCE_PATTERN.matcher(validBreedItem).matches()) {
             ITag<Item> itemTag = BeeInfoUtils.getItemTag(validBreedItem.replace(BeeConstants.TAG_PREFIX, ""));

@@ -1,11 +1,12 @@
 package com.resourcefulbees.resourcefulbees.registry;
 
+import com.resourcefulbees.resourcefulbees.api.IBeeRegistry;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
-import com.resourcefulbees.resourcefulbees.utils.FirstPhaseValidator;
 import com.resourcefulbees.resourcefulbees.utils.MathUtils;
 import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
+import com.resourcefulbees.resourcefulbees.utils.validation.FirstPhaseValidator;
 import net.minecraft.world.biome.Biome;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -14,11 +15,29 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class BeeRegistry {
+import static com.resourcefulbees.resourcefulbees.lib.BeeConstants.VANILLA_BEE_TYPE;
 
-    private static final LinkedHashMap<String, CustomBeeData> BEE_INFO = new LinkedHashMap<>();
-    public static final HashMap<Biome, RandomCollection<String>> SPAWNABLE_BIOMES = new HashMap<>();
-    public static final HashMap<Pair<String, String>, RandomCollection<String>> FAMILY_TREE = new HashMap<>();
+public class BeeRegistry implements IBeeRegistry {
+
+    private static final BeeRegistry INSTANCE = new BeeRegistry();
+
+    private final LinkedHashMap<String, CustomBeeData> BEE_INFO = new LinkedHashMap<>();
+    public final HashMap<Biome, RandomCollection<String>> SPAWNABLE_BIOMES = new HashMap<>();
+    public final HashMap<Pair<String, String>, RandomCollection<String>> FAMILY_TREE = new HashMap<>();
+
+    private boolean ALLOW_REGISTRATION;
+
+    public static BeeRegistry getRegistry() {
+        return INSTANCE;
+    }
+
+    public void allowRegistration() {
+        this.ALLOW_REGISTRATION = true;
+    }
+
+    public void denyRegistration() {
+        this.ALLOW_REGISTRATION = false;
+    }
 
     /**
      * Returns a random bee from the Bee Registry.
@@ -26,7 +45,7 @@ public class BeeRegistry {
      *
      *  @return Returns random bee type as a string.
      */
-    public static String getRandomBee(){
+    public String getRandomBee() {
         int randInt = MathUtils.nextInt(BEE_INFO.size() - 1) + 1;
         Object[] dataArray = BEE_INFO.keySet().toArray();
         Object key = dataArray[randInt];
@@ -40,7 +59,7 @@ public class BeeRegistry {
      *  @param biome Biome supplied determines which bees the random bee is chosen from.
      *  @return Returns random bee type as a string.
      */
-    public static String getRandomBee(Biome biome){
+    public String getRandomBee(Biome biome) {
         if (SPAWNABLE_BIOMES.get(biome) != null) {
             return SPAWNABLE_BIOMES.get(biome).next();
         }
@@ -54,9 +73,8 @@ public class BeeRegistry {
      *  @param bee Bee type for which BeeData is requested.
      *  @return Returns a BeeData object for the given bee type.
      */
-    public static CustomBeeData getBeeData(String bee){
-        CustomBeeData info = BEE_INFO.get(bee);
-        return info != null ? info : BEE_INFO.get(BeeConstants.DEFAULT_BEE_TYPE);
+    public CustomBeeData getBeeData(String bee) {
+        return BEE_INFO.get(bee);
     }
 
     /**
@@ -66,7 +84,7 @@ public class BeeRegistry {
      *  @param parent2 Bee type for parent 2.
      *  @return Returns true/false if parents can breed.
      */
-    public static boolean canParentsBreed(String parent1, String parent2){
+    public boolean canParentsBreed(String parent1, String parent2) {
         return FAMILY_TREE.containsKey(BeeInfoUtils.sortParents(parent1, parent2));
     }
 
@@ -77,7 +95,7 @@ public class BeeRegistry {
      *  @param parent2 Bee type for parent 2.
      *  @return Returns a weighted random bee type as a string.
      */
-    public static String getWeightedChild(String parent1, String parent2){
+    public String getWeightedChild(String parent1, String parent2) {
         return FAMILY_TREE.get(BeeInfoUtils.sortParents(parent1, parent2)).next();
     }
 
@@ -89,8 +107,8 @@ public class BeeRegistry {
      *  @param child BeeData object for the child.
      *  @return Returns random bee type as a string.
      */
-    public static double getAdjustedWeightForChild(CustomBeeData child){
-        return FAMILY_TREE.get(BeeInfoUtils.sortParents(child.BreedData.getParent1(), child.BreedData.getParent2())).getAdjustedWeight(child.BreedData.getBreedWeight());
+    public double getAdjustedWeightForChild(CustomBeeData child) {
+        return FAMILY_TREE.get(BeeInfoUtils.sortParents(child.getBreedData().getParent1(), child.getBreedData().getParent2())).getAdjustedWeight(child.getBreedData().getBreedWeight());
     }
 
     /**
@@ -101,10 +119,14 @@ public class BeeRegistry {
      *  @param customBeeData BeeData of the bee being registered
      *  @return Returns false if bee already exists in the registry.
      */
-    public static boolean registerBee(String beeType, CustomBeeData customBeeData) {
-        if (!BEE_INFO.containsKey(beeType) && FirstPhaseValidator.validate(customBeeData)) {
-            BEE_INFO.put(beeType, customBeeData);
-            return true;
+    public boolean registerBee(String beeType, CustomBeeData customBeeData) {
+        if (ALLOW_REGISTRATION) {
+            if (!beeType.equals(VANILLA_BEE_TYPE)) {
+                if (!BEE_INFO.containsKey(beeType) && FirstPhaseValidator.validate(customBeeData)) {
+                    BEE_INFO.put(beeType, customBeeData);
+                    return true;
+                }
+            }
         }
         return false;
     }
@@ -115,7 +137,7 @@ public class BeeRegistry {
      *
      *  @return Returns unmodifiable copy of bee registry.
      */
-    public static Map<String, CustomBeeData> getBees() {
+    public Map<String, CustomBeeData> getBees() {
         return Collections.unmodifiableMap(BEE_INFO);
     }
 }

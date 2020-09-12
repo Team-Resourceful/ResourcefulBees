@@ -22,7 +22,7 @@ public class EntityRenderer implements IIngredientRenderer<EntityIngredient> {
     @Override
     public void render(@Nonnull MatrixStack matrixStack, int x, int y, @Nullable EntityIngredient entityIngredient) {
         if (Minecraft.getInstance().world != null && entityIngredient != null) {
-            CustomBeeData beeData = BeeRegistry.getBeeData(entityIngredient.getBeeType());
+            CustomBeeData beeData = BeeRegistry.getRegistry().getBeeData(entityIngredient.getBeeType());
             CustomBeeEntity bee = beeData.getEntityTypeRegistryObject().get().create(Minecraft.getInstance().world);
             Minecraft mc = Minecraft.getInstance();
             matrixStack.push();

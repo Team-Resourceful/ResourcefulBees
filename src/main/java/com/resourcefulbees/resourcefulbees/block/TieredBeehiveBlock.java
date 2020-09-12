@@ -47,8 +47,8 @@ public class TieredBeehiveBlock extends BeehiveBlock {
     TIER_MODIFIER = tierModifier;
   }
 
-  public static void dropResourceHoneycomb(TieredBeehiveBlock block, World world, BlockPos pos) {
-    block.dropResourceHoneycomb(world, pos);
+  public static void dropResourceHoneycomb(TieredBeehiveBlock block, World world, BlockPos pos, boolean useScraper) {
+    block.dropResourceHoneycomb(world, pos, useScraper);
   }
 
   @Override
@@ -89,21 +89,25 @@ public class TieredBeehiveBlock extends BeehiveBlock {
    		smokeHive(pos, world);
     }
    	else if (honeyLevel >= 5) {
-      if (Config.ALLOW_SHEARS.get() && itemstack.getItem().isIn(BeeInfoUtils.getItemTag("forge:shears"))) {
+   	  boolean isShear = Config.ALLOW_SHEARS.get() && itemstack.getItem().isIn(BeeInfoUtils.getItemTag("forge:shears"));
+   	  boolean isScraper = itemstack.getItem().equals(RegistryHandler.SCRAPER.get());
+
+      if (isShear || isScraper) {
         world.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BLOCK_BEEHIVE_SHEAR, SoundCategory.NEUTRAL, 1.0F, 1.0F);
-        dropResourceHoneycomb(world, pos);
-        itemstack.damageItem(1, player, player1 -> player1.sendBreakAnimation(handIn));
-        angerBees = true;
-      }
-      if (itemstack.getItem().equals(RegistryHandler.SCRAPER.get())){
-        world.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BLOCK_BEEHIVE_SHEAR, SoundCategory.NEUTRAL, 1.0F, 1.0F);
-        dropFirstResourceHoneyComb(world, pos);
+        dropResourceHoneycomb(world, pos, isScraper);
         itemstack.damageItem(1, player, player1 -> player1.sendBreakAnimation(handIn));
         TieredBeehiveTileEntity hive = (TieredBeehiveTileEntity)world.getTileEntity(pos);
-        if (hive != null && !hive.hasCombs()){
+        angerBees = hive != null && !hive.hasCombs();
+      }
+/*      if (){
+        world.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BLOCK_BEEHIVE_SHEAR, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+        dropResourceHoneycomb(world, pos, true);
+        itemstack.damageItem(1, player, player1 -> player1.sendBreakAnimation(handIn));
+        TieredBeehiveTileEntity hive = (TieredBeehiveTileEntity)world.getTileEntity(pos);
+        if (){
           angerBees = true;
         }
-      }
+      }*/
     }
 
     if (angerBees) {
@@ -177,27 +181,28 @@ public class TieredBeehiveBlock extends BeehiveBlock {
     super.addInformation(stack, worldIn, tooltip, flagIn);
   }
 
-  public void dropResourceHoneycomb(World world, BlockPos pos) {
+  public void dropResourceHoneycomb(World world, BlockPos pos, boolean useScraper) {
     TileEntity blockEntity = world.getTileEntity(pos);
     if (blockEntity instanceof TieredBeehiveTileEntity) {
       TieredBeehiveTileEntity hive = (TieredBeehiveTileEntity)blockEntity;
       while (hive.hasCombs()) {
-        ItemStack comb = new ItemStack(hive.getResourceHoneycomb());
+        ItemStack comb = hive.getResourceHoneycomb();
         spawnAsEntity(world, pos, comb);
+        if (useScraper) break;
       }
     }
   }
 
-  public void dropFirstResourceHoneyComb(World world, BlockPos pos) {
+/*  public void dropFirstResourceHoneyComb(World world, BlockPos pos) {
     TileEntity blockEntity = world.getTileEntity(pos);
     if (blockEntity instanceof TieredBeehiveTileEntity) {
       TieredBeehiveTileEntity hive = (TieredBeehiveTileEntity)blockEntity;
       if (hive.hasCombs()) {
-        ItemStack comb = new ItemStack(hive.getResourceHoneycomb());
+        ItemStack comb = hive.getResourceHoneycomb();
         spawnAsEntity(world, pos, comb);
       }
     }
-  }
+  }*/
 
   @Nullable
   @Override

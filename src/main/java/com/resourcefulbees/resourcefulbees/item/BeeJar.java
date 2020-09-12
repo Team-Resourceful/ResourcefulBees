@@ -1,12 +1,12 @@
 package com.resourcefulbees.resourcefulbees.item;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
-import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
+import com.resourcefulbees.resourcefulbees.entity.ICustomBee;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.registry.ItemGroupResourcefulBees;
 import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
-import com.resourcefulbees.resourcefulbees.utils.Color;
+import com.resourcefulbees.resourcefulbees.utils.color.Color;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -67,7 +67,7 @@ public class BeeJar extends Item {
                 BlockPos blockPos = pos.offset(context.getFace());
                 entity.setPositionAndRotation(blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5, 0, 0);
                 worldIn.addEntity(entity);
-                stack.setTag(null);//     setTag(new CompoundNBT());
+                stack.setTag(null);
                 return ActionResultType.SUCCESS;
             }
         }
@@ -100,10 +100,11 @@ public class BeeJar extends Item {
         CompoundNBT nbt = new CompoundNBT();
         nbt.putString(NBTConstants.NBT_ENTITY, type);
         target.writeWithoutTypeId(nbt);
-        if (target instanceof CustomBeeEntity) {
-            CustomBeeEntity beeEntity = (CustomBeeEntity) target;
-            if (beeEntity.getBeeData().ColorData.getPrimaryColor() != null && !beeEntity.getBeeData().ColorData.getPrimaryColor().isEmpty()) {
-                nbt.putString(NBTConstants.NBT_COLOR, beeEntity.getBeeData().ColorData.getPrimaryColor());
+        if (target instanceof ICustomBee) {
+            ICustomBee beeEntity = (ICustomBee) target;
+            nbt.putString(NBTConstants.NBT_BEE_TYPE, beeEntity.getBeeType());
+            if (beeEntity.getBeeData().getColorData().hasPrimaryColor()) {
+                nbt.putString(NBTConstants.NBT_COLOR, beeEntity.getBeeData().getColorData().getPrimaryColor());
             } else {
                 nbt.putString(NBTConstants.NBT_COLOR, String.valueOf(BeeConstants.DEFAULT_ITEM_COLOR));
             }
@@ -129,9 +130,9 @@ public class BeeJar extends Item {
     public String getTranslationKey(@Nonnull ItemStack stack) {
         String name;
         if (isFilled(stack)) {
-            name = "item." + ResourcefulBees.MOD_ID + '.' + "bee_jar_filled";
+            name = "item." + ResourcefulBees.MOD_ID + ".bee_jar_filled";
         } else
-            name = "item." + ResourcefulBees.MOD_ID + '.' + "bee_jar_empty";
+            name = "item." + ResourcefulBees.MOD_ID + ".bee_jar_empty";
         return name;
     }
 
@@ -141,13 +142,15 @@ public class BeeJar extends Item {
         super.addInformation(stack, world, tooltip, flag);
         CompoundNBT tag = stack.getTag();
         if (tag != null && isFilled(stack)) {
-            if (tag.getString(NBTConstants.NBT_ENTITY).equals("resourcefulbees:bee")) {
-                String type = stack.getTag().getString(NBTConstants.NBT_BEE_TYPE);
+            String rbType = tag.getString(NBTConstants.NBT_ENTITY);
+            if (tag.contains(NBTConstants.NBT_BEE_TYPE)) {
+                String type = tag.getString(NBTConstants.NBT_BEE_TYPE).replaceAll("_", " ");
                 tooltip.add(new StringTextComponent(I18n.format(ResourcefulBees.MOD_ID + ".information.bee_type.custom") + StringUtils.capitalize(type)).formatted(TextFormatting.WHITE));
-            } else if (stack.getTag().getString(NBTConstants.NBT_ENTITY).equals("minecraft:bee")) {
+            } else if (rbType.equals(BeeConstants.VANILLA_BEE_ID)) {
                 tooltip.add(new TranslationTextComponent(ResourcefulBees.MOD_ID + ".information.bee_type.vanilla").formatted(TextFormatting.WHITE));
-            } else
+            } else {
                 tooltip.add(new TranslationTextComponent(ResourcefulBees.MOD_ID + ".information.bee_type.unknown"));
+            }
         }
     }
 }

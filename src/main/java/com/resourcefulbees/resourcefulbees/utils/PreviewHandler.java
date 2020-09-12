@@ -24,7 +24,7 @@ import java.util.List;
 
 public class PreviewHandler {
     private static BlockPos apiaryPos = null;
-    private static List<BlockPos> STRUCTURE_PREVIEW_POS = new ArrayList<>();
+    private static final List<BlockPos> STRUCTURE_PREVIEW_POS = new ArrayList<>();
     private static boolean enabled;
 
     public static void setPreview(BlockPos apiary, MutableBoundingBox box, boolean enabled){

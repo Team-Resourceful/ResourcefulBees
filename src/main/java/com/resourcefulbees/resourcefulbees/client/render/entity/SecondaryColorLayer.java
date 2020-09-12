@@ -23,9 +23,10 @@ public class SecondaryColorLayer extends LayerRenderer<CustomBeeEntity, CustomBe
 
     public void render(@Nonnull MatrixStack matrixStackIn, @Nonnull IRenderTypeBuffer bufferIn, int packedLightIn, CustomBeeEntity entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         CustomBeeData bee = entitylivingbaseIn.getBeeData();
-        if (bee.ColorData.isBeeColored() && bee.ColorData.hasSecondaryColor()) {
-            float[] secondaryColor = bee.ColorData.getSecondaryColorFloats();
-            ResourceLocation location = new ResourceLocation(ResourcefulBees.MOD_ID, BeeConstants.ENTITY_TEXTURES_DIR + bee.ColorData.getSecondaryLayerTexture() + ".png");
+
+        if (bee.getColorData().isBeeColored() && bee.getColorData().hasSecondaryColor()) {
+            float[] secondaryColor = bee.getColorData().getSecondaryColorFloats();
+            ResourceLocation location = new ResourceLocation(ResourcefulBees.MOD_ID, BeeConstants.ENTITY_TEXTURES_DIR + bee.getColorData().getSecondaryLayerTexture() + ".png");
             renderModel(this.getEntityModel(), location, matrixStackIn, bufferIn, packedLightIn, entitylivingbaseIn, secondaryColor[0], secondaryColor[1], secondaryColor[2]);
         }
     }

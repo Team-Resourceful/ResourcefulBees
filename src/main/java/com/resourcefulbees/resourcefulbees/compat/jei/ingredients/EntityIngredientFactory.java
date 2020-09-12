@@ -5,18 +5,13 @@ import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.resourcefulbees.resourcefulbees.lib.BeeConstants.DEFAULT_BEE_TYPE;
-
 public final class EntityIngredientFactory {
     private EntityIngredientFactory() {
     }
 
     public static List<EntityIngredient> create() {
         List<EntityIngredient> list = new ArrayList<>();
-        BeeRegistry.getBees().forEach((s, beeData) -> {
-            if (!s.equals(DEFAULT_BEE_TYPE))
-                list.add(new EntityIngredient(beeData.getName(), 45.0f));
-        });
+        BeeRegistry.getRegistry().getBees().forEach((s, beeData) -> list.add(new EntityIngredient(beeData.getName(), 45.0f)));
         return list;
     }
 }

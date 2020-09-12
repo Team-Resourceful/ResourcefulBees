@@ -8,7 +8,9 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.RegistryObject;
 
-public class CustomBeeData {
+import java.util.HashMap;
+
+public class CustomBeeData extends AbstractBeeData {
 
     private final String flower;
     private final String baseLayerTexture;
@@ -18,20 +20,22 @@ public class CustomBeeData {
     private final String[] traits;
     private transient String name;
     private final boolean hasHoneycomb;
-    public final MutationData MutationData;
-    public final ColorData ColorData;
-    public final CentrifugeData CentrifugeData;
-    public final BreedData BreedData;
-    public final SpawnData SpawnData;
-    public final TraitData TraitData;
+    public transient boolean shouldResourcefulBeesDoForgeRegistration;
+    private final transient HashMap<String, AbstractBeeData> ADDITIONAL_DATA = new HashMap<>();
+    private final BreedData BreedData;
+    private final CentrifugeData CentrifugeData;
+    private final ColorData ColorData;
+    private final MutationData MutationData;
+    private final SpawnData SpawnData;
+    private final TraitData TraitData;
     private transient RegistryObject<Item> combRegistryObject;
     private transient RegistryObject<Block> combBlockRegistryObject;
     private transient RegistryObject<Item> combBlockItemRegistryObject;
+    //TODO Figure out how to make this accept any bee implementing ICustomBee without breaking everything else
     private transient RegistryObject<EntityType<ResourcefulBee>> entityTypeRegistryObject;
     private transient RegistryObject<Item> spawnEggItemRegistryObject;
-    //private ResourceLocation registryID; not sure if we could use this
 
-    private CustomBeeData(String flower, String baseLayerTexture, int maxTimeInHive, Float attackDamage, float sizeModifier, String[] traits, String name, boolean hasHoneycomb, MutationData MutationData, ColorData ColorData, CentrifugeData CentrifugeData, BreedData BreedData, SpawnData SpawnData, TraitData TraitData) {
+    private CustomBeeData(String flower, String baseLayerTexture, int maxTimeInHive, Float attackDamage, float sizeModifier, String[] traits, String name, boolean hasHoneycomb, MutationData mutationData, ColorData colorData, CentrifugeData centrifugeData, BreedData breedData, SpawnData spawnData, TraitData traitData) {
         this.flower = flower;
         this.baseLayerTexture = baseLayerTexture;
         this.maxTimeInHive = maxTimeInHive;
@@ -40,12 +44,12 @@ public class CustomBeeData {
         this.traits = traits;
         this.name = name;
         this.hasHoneycomb = hasHoneycomb;
-        this.MutationData = MutationData;
-        this.ColorData = ColorData;
-        this.CentrifugeData = CentrifugeData;
-        this.BreedData = BreedData;
-        this.SpawnData = SpawnData;
-        this.TraitData = TraitData;
+        this.BreedData = breedData;
+        this.CentrifugeData = centrifugeData;
+        this.ColorData = colorData;
+        this.MutationData = mutationData;
+        this.SpawnData = spawnData;
+        this.TraitData = traitData;
     }
 
     public String getFlower() { return flower == null ? BeeConstants.FLOWER_TAG_ALL : flower.toLowerCase(); }
@@ -70,25 +74,15 @@ public class CustomBeeData {
 
     public void setCombBlockItemRegistryObject(RegistryObject<Item> combBlockItemRegistryObject) { this.combBlockItemRegistryObject = this.combBlockItemRegistryObject == null ? combBlockItemRegistryObject : this.combBlockItemRegistryObject; }
 
-    public RegistryObject<EntityType<ResourcefulBee>> getEntityTypeRegistryObject() {
-        return entityTypeRegistryObject;
-    }
+    public RegistryObject<EntityType<ResourcefulBee>> getEntityTypeRegistryObject() { return entityTypeRegistryObject; }
 
-    public void setEntityTypeRegistryObject(RegistryObject<EntityType<ResourcefulBee>> entityTypeRegistryObject) {
-        this.entityTypeRegistryObject = this.entityTypeRegistryObject == null ? entityTypeRegistryObject : this.entityTypeRegistryObject;
-    }
+    public void setEntityTypeRegistryObject(RegistryObject<EntityType<ResourcefulBee>> entityTypeRegistryObject) { this.entityTypeRegistryObject = this.entityTypeRegistryObject == null ? entityTypeRegistryObject : this.entityTypeRegistryObject; }
 
-    public RegistryObject<Item> getSpawnEggItemRegistryObject() {
-        return spawnEggItemRegistryObject;
-    }
+    public RegistryObject<Item> getSpawnEggItemRegistryObject() { return spawnEggItemRegistryObject; }
 
-    public void setSpawnEggItemRegistryObject(RegistryObject<Item> spawnEggItemRegistryObject) {
-        this.spawnEggItemRegistryObject = this.spawnEggItemRegistryObject == null ? spawnEggItemRegistryObject : this.spawnEggItemRegistryObject;
-    }
+    public void setSpawnEggItemRegistryObject(RegistryObject<Item> spawnEggItemRegistryObject) { this.spawnEggItemRegistryObject = this.spawnEggItemRegistryObject == null ? spawnEggItemRegistryObject : this.spawnEggItemRegistryObject; }
 
-    public void setName(String name) {
-        this.name = this.name == null ? name.toLowerCase() : this.name;
-    }
+    public void setName(String name) { this.name = this.name == null ? name.toLowerCase() : this.name; }
 
     public float getSizeModifier() { return sizeModifier != 0 ? sizeModifier : Config.BEE_SIZE_MODIFIER.get().floatValue(); }
 
@@ -97,6 +91,28 @@ public class CustomBeeData {
     public boolean hasTraitNames() { return traits != null && traits.length > 0;}
 
     public String getName() { return name.toLowerCase(); }
+
+    public void addData(String key, AbstractBeeData data){
+        if (data != null) {
+            this.ADDITIONAL_DATA.put(key, data);
+        }
+    }
+
+    public AbstractBeeData getData(String key) { return this.ADDITIONAL_DATA.get(key); }
+
+    public boolean containsData(String key) { return this.ADDITIONAL_DATA.containsKey(key); }
+
+    public BreedData getBreedData() { return this.BreedData; }
+
+    public CentrifugeData getCentrifugeData() { return this.CentrifugeData; }
+
+    public ColorData getColorData() { return  this.ColorData; }
+
+    public MutationData getMutationData() { return this.MutationData; }
+
+    public SpawnData getSpawnData() { return this.SpawnData; }
+
+    public TraitData getTraitData() { return this.TraitData; }
 
     public static class Builder {
         private final String flower;
@@ -107,23 +123,23 @@ public class CustomBeeData {
         private String[] traits;
         private final String name;
         private final boolean hasHoneycomb;
-        private final MutationData MutationData;
-        private final ColorData ColorData;
-        private final CentrifugeData CentrifugeData;
-        private final BreedData BreedData;
-        private final SpawnData SpawnData;
-        private final TraitData TraitData;
+        private final MutationData mutationData;
+        private final ColorData colorData;
+        private final CentrifugeData centrifugeData;
+        private final BreedData breedData;
+        private final SpawnData spawnData;
+        private final TraitData traitData;
 
         public Builder(String name, String flower, boolean hasHoneycomb, MutationData mutationData, ColorData colorData, CentrifugeData centrifugeData, BreedData breedData, SpawnData spawnData, TraitData traitData) {
             this.name = name;
             this.flower = flower;
             this.hasHoneycomb = hasHoneycomb;
-            this.MutationData = mutationData;
-            this.ColorData = colorData;
-            this.CentrifugeData = centrifugeData;
-            this.BreedData = breedData;
-            this.SpawnData = spawnData;
-            this.TraitData = traitData;
+            this.mutationData = mutationData;
+            this.colorData = colorData;
+            this.centrifugeData = centrifugeData;
+            this.breedData = breedData;
+            this.spawnData = spawnData;
+            this.traitData = traitData;
         }
 
         public Builder setBaseLayerTexture(String baseLayerTexture) {
@@ -152,7 +168,7 @@ public class CustomBeeData {
         }
 
         public CustomBeeData createCustomBee() {
-            return new CustomBeeData(flower, baseLayerTexture, maxTimeInHive, attackDamage, sizeModifier, traits, name, hasHoneycomb, MutationData, ColorData, CentrifugeData, BreedData, SpawnData, TraitData);
+            return new CustomBeeData(flower, baseLayerTexture, maxTimeInHive, attackDamage, sizeModifier, traits, name, hasHoneycomb, mutationData, colorData, centrifugeData, breedData, spawnData, traitData);
         }
     }
 }

@@ -38,7 +38,7 @@ public class BeeHiveCategory implements IRecipeCategory<BeeHiveCategory.Recipe> 
 
     public static List<Recipe> getHoneycombRecipes(IIngredientManager ingredientManager) {
         List<Recipe> recipes = new ArrayList<>();
-        BeeRegistry.getBees().forEach(((s, customBeeData) -> {
+        BeeRegistry.getRegistry().getBees().forEach(((s, customBeeData) -> {
             if (customBeeData.hasHoneycomb()) {
                 ItemStack honeyCombItemStack = new ItemStack(customBeeData.getCombRegistryObject().get());
                 recipes.add(new Recipe(honeyCombItemStack, customBeeData.getName()));

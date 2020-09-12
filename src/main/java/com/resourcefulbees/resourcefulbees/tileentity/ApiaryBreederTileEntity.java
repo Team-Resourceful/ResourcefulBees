@@ -3,6 +3,7 @@ package com.resourcefulbees.resourcefulbees.tileentity;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.container.ApiaryBreederContainer;
 import com.resourcefulbees.resourcefulbees.container.AutomationSensitiveItemStackHandler;
+import com.resourcefulbees.resourcefulbees.entity.ICustomBee;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.item.BeeJar;
 import com.resourcefulbees.resourcefulbees.item.UpgradeItem;
@@ -13,7 +14,7 @@ import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.MathUtils;
-import com.resourcefulbees.resourcefulbees.utils.ValidatorUtils;
+import com.resourcefulbees.resourcefulbees.utils.validation.ValidatorUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -183,19 +184,19 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
                 String p1Type = ((CustomBeeEntity) p1Entity).getBeeData().getName();
                 String p2Type = ((CustomBeeEntity) p2Entity).getBeeData().getName();
 
-                boolean canBreed = BeeRegistry.canParentsBreed(p1Type, p2Type);
+                boolean canBreed = BeeRegistry.getRegistry().canParentsBreed(p1Type, p2Type);
 
                 ItemStack f1Stack = h.getStackInSlot(FEED_1_SLOTS[slot]);
                 ItemStack f2Stack = h.getStackInSlot(FEED_2_SLOTS[slot]);
 
-                String p1FeedItem = ((CustomBeeEntity) p1Entity).getBeeData().BreedData.getFeedItem();
-                String p2FeedItem = ((CustomBeeEntity) p2Entity).getBeeData().BreedData.getFeedItem();
+                String p1FeedItem = ((CustomBeeEntity) p1Entity).getBeeData().getBreedData().getFeedItem();
+                String p2FeedItem = ((CustomBeeEntity) p2Entity).getBeeData().getBreedData().getFeedItem();
 
                 int f1StackCount = h.getStackInSlot(FEED_1_SLOTS[slot]).getCount();
                 int f2StackCount = h.getStackInSlot(FEED_2_SLOTS[slot]).getCount();
 
-                int p1FeedAmount = ((CustomBeeEntity) p1Entity).getBeeData().BreedData.getFeedAmount();
-                int p2FeedAmount = ((CustomBeeEntity) p2Entity).getBeeData().BreedData.getFeedAmount();
+                int p1FeedAmount = ((CustomBeeEntity) p1Entity).getBeeData().getBreedData().getFeedAmount();
+                int p2FeedAmount = ((CustomBeeEntity) p2Entity).getBeeData().getBreedData().getFeedAmount();
 
                 return (canBreed && stackIsValidBreedItem(f1Stack, p1FeedItem) && stackIsValidBreedItem(f2Stack, p2FeedItem)
                 && f1StackCount >= p1FeedAmount && f2StackCount >= p2FeedAmount && !h.getStackInSlot(EMPTY_JAR_SLOTS[slot]).isEmpty());
@@ -233,9 +234,9 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
                 Entity p1Entity = p1Jar.getEntityFromStack(p1Stack, world, true);
                 Entity p2Entity = p2Jar.getEntityFromStack(p2Stack, world, true);
 
-                if (p1Entity instanceof CustomBeeEntity && p2Entity instanceof CustomBeeEntity) {
-                    CustomBeeEntity bee1 = (CustomBeeEntity) p1Entity;
-                    CustomBeeEntity bee2 = (CustomBeeEntity) p2Entity;
+                if (p1Entity instanceof ICustomBee && p2Entity instanceof ICustomBee) {
+                    ICustomBee bee1 = (ICustomBee) p1Entity;
+                    ICustomBee bee2 = (ICustomBee) p2Entity;
 
                     String p1Type = bee1.getBeeData().getName();
                     String p2Type = bee2.getBeeData().getName();
@@ -246,8 +247,8 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
                             ApiaryStorageTileEntity apiaryStorage = (ApiaryStorageTileEntity) tile;
                             if (apiaryStorage.breedComplete(p1Type, p2Type)){
                                 h.getStackInSlot(EMPTY_JAR_SLOTS[slot]).shrink(1);
-                                h.getStackInSlot(FEED_1_SLOTS[slot]).shrink(bee1.getBeeData().BreedData.getFeedAmount());
-                                h.getStackInSlot(FEED_2_SLOTS[slot]).shrink(bee2.getBeeData().BreedData.getFeedAmount());
+                                h.getStackInSlot(FEED_1_SLOTS[slot]).shrink(bee1.getBeeData().getBreedData().getFeedAmount());
+                                h.getStackInSlot(FEED_2_SLOTS[slot]).shrink(bee2.getBeeData().getBreedData().getFeedAmount());
                             }
                         }
                     }

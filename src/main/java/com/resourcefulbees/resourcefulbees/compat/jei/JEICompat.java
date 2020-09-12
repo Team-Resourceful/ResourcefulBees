@@ -28,29 +28,6 @@ import static com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe.CENTRI
 @mezz.jei.api.JeiPlugin
 public class JEICompat implements IModPlugin {
 
-/*    private static final ISubtypeInterpreter honeycombSubtype = stack -> {
-        Item item = stack.getItem();
-        if( !(item instanceof ResourcefulHoneycomb) ) return "";
-        ResourcefulHoneycomb comb = (ResourcefulHoneycomb) item;
-        return comb.getTranslationKey(stack);
-    };
-    private static final ISubtypeInterpreter honeycombBlockSubtype = stack -> {
-        Item item = stack.getItem();
-        if( !(item instanceof HoneycombBlockItem) ) return "";
-
-        HoneycombBlockItem combBlock = (HoneycombBlockItem) item;
-
-        return combBlock.getTranslationKey(stack);
-    };
-    private static final ISubtypeInterpreter beeSpawnEggsSubtype = stack -> {
-        Item item = stack.getItem();
-        if( !(item instanceof BeeSpawnEggItem) ) return "";
-
-        BeeSpawnEggItem spawnEgg = (BeeSpawnEggItem) item;
-
-        return spawnEgg.getTranslationKey(stack);
-    };*/
-
     public static final IIngredientType<EntityIngredient> ENTITY_INGREDIENT = () -> EntityIngredient.class;
 
     @Override
@@ -73,14 +50,6 @@ public class JEICompat implements IModPlugin {
     {
         return new ResourceLocation( ResourcefulBees.MOD_ID, "jei" );
     }
-
-/*    @Override
-    public void registerItemSubtypes( ISubtypeRegistration subtypeRegistry )
-    {
-        subtypeRegistry.registerSubtypeInterpreter( RegistryHandler.RESOURCEFUL_HONEYCOMB.get(), honeycombSubtype );
-        subtypeRegistry.registerSubtypeInterpreter( RegistryHandler.HONEYCOMB_BLOCK_ITEM.get(), honeycombBlockSubtype);
-        subtypeRegistry.registerSubtypeInterpreter( RegistryHandler.BEE_SPAWN_EGG.get(), beeSpawnEggsSubtype);
-    }*/
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
@@ -127,12 +96,6 @@ public class JEICompat implements IModPlugin {
         List<EntityIngredient> entityIngredients = EntityIngredientFactory.create();
         registration.register(ENTITY_INGREDIENT, entityIngredients, new EntityIngredientHelper<>(), new EntityRenderer());
     }
-
-/*    @Override
-    public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
-        IIngredientManager ingredientManager = jeiRuntime.getIngredientManager();
-        ingredientManager.removeIngredientsAtRuntime(VanillaTypes.ITEM, Collections.singletonList(RegistryHandler.RESOURCEFUL_HONEYCOMB.get().getDefaultInstance()));
-    }*/
 
     public void registerInfoDesc(IRecipeRegistration registration){
         for (EntityIngredient bee : EntityIngredientFactory.create()) {
