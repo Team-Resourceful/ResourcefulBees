@@ -1,11 +1,11 @@
-package com.resourcefulbees.resourcefulbees.tileentity;
+package com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary;
 
 import com.resourcefulbees.resourcefulbees.api.IBeeRegistry;
+import com.resourcefulbees.resourcefulbees.api.ICustomBee;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.container.ApiaryStorageContainer;
 import com.resourcefulbees.resourcefulbees.container.AutomationSensitiveItemStackHandler;
-import com.resourcefulbees.resourcefulbees.entity.ICustomBee;
 import com.resourcefulbees.resourcefulbees.item.UpgradeItem;
 import com.resourcefulbees.resourcefulbees.lib.ApiaryOutput;
 import com.resourcefulbees.resourcefulbees.lib.ApiaryTabs;
@@ -42,6 +42,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -102,6 +103,7 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
         return null;
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public boolean validateApiaryLink() {
         apiary = getApiary();
         if (apiary == null || apiary.storagePos == null || !apiary.storagePos.equals(this.getPos()) || !apiary.isValidApiary()) { //check apiary has storage location equal to this and apiary is valid
@@ -220,9 +222,9 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
         if (inventoryHasSpace()) {
             String childType = BEE_REGISTRY.getWeightedChild(p1, p2);
             CustomBeeData childBeeData = BEE_REGISTRY.getBeeData(childType);
-            EntityType<? extends ICustomBee> entityType = childBeeData.getEntityTypeRegistryObject().get();
+            EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(childBeeData.getEntityTypeRegistryID());
 
-            if (world != null) {
+            if (world != null && entityType != null) {
                 Entity entity = entityType.create(world);
                 if (entity != null) {
                     String type = EntityType.getKey(entity.getType()).toString();

@@ -1,9 +1,9 @@
-package com.resourcefulbees.resourcefulbees.tileentity;
+package com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary;
 
+import com.resourcefulbees.resourcefulbees.api.ICustomBee;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.container.ApiaryBreederContainer;
 import com.resourcefulbees.resourcefulbees.container.AutomationSensitiveItemStackHandler;
-import com.resourcefulbees.resourcefulbees.entity.ICustomBee;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.item.BeeJar;
 import com.resourcefulbees.resourcefulbees.item.UpgradeItem;

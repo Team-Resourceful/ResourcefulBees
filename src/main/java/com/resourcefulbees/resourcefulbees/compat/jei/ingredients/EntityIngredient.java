@@ -13,23 +13,19 @@ public class EntityIngredient {
     private final String beeType;
     private final float rotation;
 
-    public EntityIngredient(String beeType, float rotation){
+    public EntityIngredient(String beeType, float rotation) {
         this.beeType = beeType;
         this.rotation = rotation;
     }
 
-    public String getBeeType(){
-        return beeType;
-    }
-    public float getRotation(){
-        return rotation;
-    }
+    public String getBeeType() { return beeType; }
+    public float getRotation() { return rotation; }
 
-    public ITextComponent getDisplayName(){
+    public ITextComponent getDisplayName() {
         return new TranslationTextComponent("entity.resourcefulbees."+ beeType + "_bee");
     }
 
-    public List<ITextComponent> getTooltip(){
+    public List<ITextComponent> getTooltip() {
         List<ITextComponent> tooltip = new ArrayList<>();
         if (!I18n.hasKey("tooltip.resourcefulbees.jei."+ beeType)){
             return null;

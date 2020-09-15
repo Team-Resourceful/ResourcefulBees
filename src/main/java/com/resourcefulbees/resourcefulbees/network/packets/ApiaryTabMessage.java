@@ -1,7 +1,7 @@
 package com.resourcefulbees.resourcefulbees.network.packets;
 
 import com.resourcefulbees.resourcefulbees.lib.ApiaryTabs;
-import com.resourcefulbees.resourcefulbees.tileentity.IApiaryMultiblock;
+import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.IApiaryMultiblock;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;

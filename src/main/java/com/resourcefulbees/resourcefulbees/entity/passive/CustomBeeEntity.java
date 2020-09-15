@@ -1,8 +1,8 @@
 package com.resourcefulbees.resourcefulbees.entity.passive;
 
+import com.resourcefulbees.resourcefulbees.api.ICustomBee;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.api.beedata.TraitData;
-import com.resourcefulbees.resourcefulbees.entity.ICustomBee;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
@@ -34,6 +34,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -43,7 +44,7 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
 
     private static final DataParameter<Integer> FEED_COUNT = EntityDataManager.createKey(CustomBeeEntity.class, DataSerializers.VARINT);
 
-    private boolean remove;
+    //private boolean remove;
     private boolean renderingInJei;
 
     protected final CustomBeeData beeData;
@@ -84,6 +85,7 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
             this.renderingInJei = inJei;
         }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean getRenderingInJei(){
             return this.renderingInJei;
         }
@@ -117,7 +119,7 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
 
     @Override
     public void livingTick() {
-        if (remove) {
+/*        if (remove) {
             if (!world.isRemote()) {
                 String beeName = getBeeData().getName();
                 if (beeName.equals(BeeConstants.DEFAULT_BEE_TYPE) || beeName.isEmpty()) {
@@ -128,7 +130,7 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
                 }
             } else
                 remove = false;
-        }
+        }*/
 
         if (this.world.isRemote){
             if (this.ticksExisted % 40 == 0) {
@@ -176,10 +178,9 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
         compound.putInt(NBTConstants.NBT_FEED_COUNT, this.getFeedCount());
     }
 
-    //TODO put this in each subclass type
-    public ResourcefulBee createSelectedChild(String beeType) {
+    public ICustomBee createSelectedChild(String beeType) {
         CustomBeeData customBeeData = BeeRegistry.getRegistry().getBeeData(beeType);
-        return new ResourcefulBee(customBeeData.getEntityTypeRegistryObject().get(), this.world, customBeeData);
+        return (ICustomBee) ForgeRegistries.ENTITIES.getValue(customBeeData.getEntityTypeRegistryID());  //new ResourcefulBee(BeeRegistry.MOD_BEES.get(customBeeData.getName()).get(), this.world, customBeeData);
     }
 
     //This is because we don't want IF being able to breed our animals

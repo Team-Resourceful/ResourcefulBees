@@ -1,8 +1,8 @@
-package com.resourcefulbees.resourcefulbees.tileentity.centrifuge;
+package com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge;
 
 import com.google.gson.JsonElement;
-import com.resourcefulbees.resourcefulbees.block.centrifuge.CentrifugeCasingBlock;
-import com.resourcefulbees.resourcefulbees.block.centrifuge.CentrifugeControllerBlock;
+import com.resourcefulbees.resourcefulbees.block.multiblocks.centrifuge.CentrifugeCasingBlock;
+import com.resourcefulbees.resourcefulbees.block.multiblocks.centrifuge.CentrifugeControllerBlock;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.container.AutomationSensitiveItemStackHandler;
 import com.resourcefulbees.resourcefulbees.container.CentrifugeMultiblockContainer;

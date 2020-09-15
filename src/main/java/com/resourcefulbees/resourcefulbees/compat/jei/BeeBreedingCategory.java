@@ -53,7 +53,6 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
     public static List<Recipe> getBreedingRecipes(IIngredientManager ingredientManager) {
         List<Recipe> recipes = new ArrayList<>();
         beeRegistry.getBees().forEach(((s, beeData) -> {
-            //CustomBeeData bee = entry.getValue();
             if (beeData.getBreedData().isBreedable()) {
                 String parent1 = beeRegistry.getBees().containsKey(beeData.getBreedData().getParent1()) && beeRegistry.getBees().containsKey(beeData.getBreedData().getParent2()) ? beeData.getBreedData().getParent1() : beeData.getName();
                 String parent2 = beeRegistry.getBees().containsKey(beeData.getBreedData().getParent1()) && beeRegistry.getBees().containsKey(beeData.getBreedData().getParent2()) ? beeData.getBreedData().getParent2() : beeData.getName();

@@ -1,11 +1,11 @@
 package com.resourcefulbees.resourcefulbees.api.beedata;
 
 import com.resourcefulbees.resourcefulbees.config.Config;
-import com.resourcefulbees.resourcefulbees.entity.passive.ResourcefulBee;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
+import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
 import net.minecraft.block.Block;
-import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.RegistryObject;
 
 import java.util.HashMap;
@@ -32,8 +32,9 @@ public class CustomBeeData extends AbstractBeeData {
     private transient RegistryObject<Block> combBlockRegistryObject;
     private transient RegistryObject<Item> combBlockItemRegistryObject;
     //TODO Figure out how to make this accept any bee implementing ICustomBee without breaking everything else
-    private transient RegistryObject<EntityType<ResourcefulBee>> entityTypeRegistryObject;
+    //private transient RegistryObject<EntityType<? extends CustomBeeEntity>> customBeeEntityRegistryObject;
     private transient RegistryObject<Item> spawnEggItemRegistryObject;
+    private transient ResourceLocation entityTypeRegistryID;
 
     private CustomBeeData(String flower, String baseLayerTexture, int maxTimeInHive, Float attackDamage, float sizeModifier, String[] traits, String name, boolean hasHoneycomb, MutationData mutationData, ColorData colorData, CentrifugeData centrifugeData, BreedData breedData, SpawnData spawnData, TraitData traitData) {
         this.flower = flower;
@@ -74,9 +75,15 @@ public class CustomBeeData extends AbstractBeeData {
 
     public void setCombBlockItemRegistryObject(RegistryObject<Item> combBlockItemRegistryObject) { this.combBlockItemRegistryObject = this.combBlockItemRegistryObject == null ? combBlockItemRegistryObject : this.combBlockItemRegistryObject; }
 
-    public RegistryObject<EntityType<ResourcefulBee>> getEntityTypeRegistryObject() { return entityTypeRegistryObject; }
+    //FOR INTERNAL USE ONLY
+    //public RegistryObject<EntityType<? extends CustomBeeEntity>> getCustomBeeEntityRegistryObject() { return customBeeEntityRegistryObject; }
 
-    public void setEntityTypeRegistryObject(RegistryObject<EntityType<ResourcefulBee>> entityTypeRegistryObject) { this.entityTypeRegistryObject = this.entityTypeRegistryObject == null ? entityTypeRegistryObject : this.entityTypeRegistryObject; }
+    //FOR INTERNAL USE ONLY
+    //public void setCustomBeeEntityRegistryObject(RegistryObject<EntityType<? extends CustomBeeEntity>> customBeeEntityRegistryObject) { this.customBeeEntityRegistryObject = this.customBeeEntityRegistryObject == null ? customBeeEntityRegistryObject : this.customBeeEntityRegistryObject; }
+
+    public ResourceLocation getEntityTypeRegistryID() { return entityTypeRegistryID; }
+
+    public void setEntityTypeRegistryID(ResourceLocation entityTypeRegistryID) { this.entityTypeRegistryID = this.entityTypeRegistryID == null ? entityTypeRegistryID : this.entityTypeRegistryID; }
 
     public RegistryObject<Item> getSpawnEggItemRegistryObject() { return spawnEggItemRegistryObject; }
 
@@ -102,17 +109,17 @@ public class CustomBeeData extends AbstractBeeData {
 
     public boolean containsData(String key) { return this.ADDITIONAL_DATA.containsKey(key); }
 
-    public BreedData getBreedData() { return this.BreedData; }
+    public BreedData getBreedData() { return this.BreedData != null ? this.BreedData : new BreedData.Builder(false).createBreedData(); }
 
-    public CentrifugeData getCentrifugeData() { return this.CentrifugeData; }
+    public CentrifugeData getCentrifugeData() { return this.CentrifugeData != null ? this.CentrifugeData : new CentrifugeData.Builder(false, "minecraft:stone").createCentrifugeData(); }
 
-    public ColorData getColorData() { return  this.ColorData; }
+    public ColorData getColorData() { return this.ColorData != null ? this.ColorData : new ColorData.Builder(false).createColorData(); }
 
-    public MutationData getMutationData() { return this.MutationData; }
+    public MutationData getMutationData() { return this.MutationData != null ? this.MutationData : new MutationData.Builder(false, MutationTypes.NONE).createMutationData(); }
 
-    public SpawnData getSpawnData() { return this.SpawnData; }
+    public SpawnData getSpawnData() { return this.SpawnData != null ? this.SpawnData : new SpawnData.Builder(false).createSpawnData(); }
 
-    public TraitData getTraitData() { return this.TraitData; }
+    public TraitData getTraitData() { return this.TraitData != null ? this.TraitData : new TraitData(false); }
 
     public static class Builder {
         private final String flower;

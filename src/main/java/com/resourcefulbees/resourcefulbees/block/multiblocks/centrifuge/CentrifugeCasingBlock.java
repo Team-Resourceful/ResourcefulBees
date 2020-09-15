@@ -1,6 +1,6 @@
-package com.resourcefulbees.resourcefulbees.block.centrifuge;
+package com.resourcefulbees.resourcefulbees.block.multiblocks.centrifuge;
 
-import com.resourcefulbees.resourcefulbees.tileentity.centrifuge.CentrifugeCasingTileEntity;
+import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.CentrifugeCasingTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.TileEntity;

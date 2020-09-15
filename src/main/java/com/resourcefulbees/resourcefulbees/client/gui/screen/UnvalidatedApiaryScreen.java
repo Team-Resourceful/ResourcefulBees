@@ -8,7 +8,7 @@ import com.resourcefulbees.resourcefulbees.container.UnvalidatedApiaryContainer;
 import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
 import com.resourcefulbees.resourcefulbees.network.packets.BuildApiaryMessage;
 import com.resourcefulbees.resourcefulbees.network.packets.ValidateApiaryMessage;
-import com.resourcefulbees.resourcefulbees.tileentity.ApiaryTileEntity;
+import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.MathUtils;
 import com.resourcefulbees.resourcefulbees.utils.PreviewHandler;
 import net.minecraft.client.Minecraft;

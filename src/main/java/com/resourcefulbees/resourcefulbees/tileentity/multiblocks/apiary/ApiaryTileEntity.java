@@ -1,14 +1,14 @@
-package com.resourcefulbees.resourcefulbees.tileentity;
+package com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary;
 
 
-import com.resourcefulbees.resourcefulbees.block.ApiaryBlock;
-import com.resourcefulbees.resourcefulbees.block.ApiaryBreederBlock;
-import com.resourcefulbees.resourcefulbees.block.ApiaryStorageBlock;
+import com.resourcefulbees.resourcefulbees.api.ICustomBee;
+import com.resourcefulbees.resourcefulbees.block.multiblocks.apiary.ApiaryBlock;
+import com.resourcefulbees.resourcefulbees.block.multiblocks.apiary.ApiaryBreederBlock;
+import com.resourcefulbees.resourcefulbees.block.multiblocks.apiary.ApiaryStorageBlock;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.container.AutomationSensitiveItemStackHandler;
 import com.resourcefulbees.resourcefulbees.container.UnvalidatedApiaryContainer;
 import com.resourcefulbees.resourcefulbees.container.ValidatedApiaryContainer;
-import com.resourcefulbees.resourcefulbees.entity.ICustomBee;
 import com.resourcefulbees.resourcefulbees.item.BeeJar;
 import com.resourcefulbees.resourcefulbees.lib.ApiaryTabs;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;

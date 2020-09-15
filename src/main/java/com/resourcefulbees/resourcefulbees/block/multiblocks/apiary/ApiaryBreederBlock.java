@@ -1,7 +1,7 @@
-package com.resourcefulbees.resourcefulbees.block;
+package com.resourcefulbees.resourcefulbees.block.multiblocks.apiary;
 
 import com.resourcefulbees.resourcefulbees.config.Config;
-import com.resourcefulbees.resourcefulbees.tileentity.ApiaryBreederTileEntity;
+import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryBreederTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.TooltipBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;

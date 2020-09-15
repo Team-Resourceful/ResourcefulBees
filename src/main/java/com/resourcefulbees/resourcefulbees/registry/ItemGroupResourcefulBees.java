@@ -17,15 +17,15 @@ public class ItemGroupResourcefulBees{
 		@OnlyIn(Dist.CLIENT)
 		public void fill(@Nonnull NonNullList<ItemStack> items) {
 			BeeRegistry.getRegistry().getBees().forEach(((s, customBeeData) -> {
-				final ItemStack eggStack = new ItemStack(customBeeData.getSpawnEggItemRegistryObject().get());
-				items.add(eggStack);
-				if (customBeeData.hasHoneycomb()) {
-					final ItemStack combStack = new ItemStack(customBeeData.getCombRegistryObject().get());
-					items.add(combStack);
+					final ItemStack eggStack = new ItemStack(customBeeData.getSpawnEggItemRegistryObject().get());
+					items.add(eggStack);
+					if (customBeeData.hasHoneycomb()) {
+						final ItemStack combStack = new ItemStack(customBeeData.getCombRegistryObject().get());
+						items.add(combStack);
 
-					final ItemStack combBlockStack = new ItemStack(customBeeData.getCombBlockItemRegistryObject().get());
-					items.add(combBlockStack);
-				}
+						final ItemStack combBlockStack = new ItemStack(customBeeData.getCombBlockItemRegistryObject().get());
+						items.add(combBlockStack);
+					}
 			}));
 			super.fill(items);
 		}

@@ -1,7 +1,6 @@
 package com.resourcefulbees.resourcefulbees.lib;
 
 public class BeeConstants {
-    public static final String DEFAULT_BEE_TYPE = "default";
     public static final String FLOWER_TAG_ALL = "all";
     public static final String FLOWER_TAG_SMALL = "small";
     public static final String FLOWER_TAG_TALL = "tall";

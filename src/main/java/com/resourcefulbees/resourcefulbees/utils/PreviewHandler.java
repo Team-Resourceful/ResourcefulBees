@@ -2,9 +2,9 @@ package com.resourcefulbees.resourcefulbees.utils;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-import com.resourcefulbees.resourcefulbees.block.ApiaryBlock;
+import com.resourcefulbees.resourcefulbees.block.multiblocks.apiary.ApiaryBlock;
 import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
-import com.resourcefulbees.resourcefulbees.tileentity.ApiaryTileEntity;
+import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryTileEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;

@@ -2,12 +2,13 @@ package com.resourcefulbees.resourcefulbees.registry;
 
 import com.resourcefulbees.resourcefulbees.api.IBeeRegistry;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
-import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
+import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
-import com.resourcefulbees.resourcefulbees.utils.MathUtils;
 import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
 import com.resourcefulbees.resourcefulbees.utils.validation.FirstPhaseValidator;
+import net.minecraft.entity.EntityType;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.fml.RegistryObject;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Collections;
@@ -15,11 +16,13 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static com.resourcefulbees.resourcefulbees.lib.BeeConstants.VANILLA_BEE_TYPE;
-
 public class BeeRegistry implements IBeeRegistry {
 
+    public static final HashMap<String, RegistryObject<EntityType<? extends CustomBeeEntity>>> MOD_BEES = new HashMap<>();
+
     private static final BeeRegistry INSTANCE = new BeeRegistry();
+
+    public static BeeRegistry getRegistry() { return INSTANCE; }
 
     private final LinkedHashMap<String, CustomBeeData> BEE_INFO = new LinkedHashMap<>();
     public final HashMap<Biome, RandomCollection<String>> SPAWNABLE_BIOMES = new HashMap<>();
@@ -27,24 +30,34 @@ public class BeeRegistry implements IBeeRegistry {
 
     private boolean ALLOW_REGISTRATION;
 
-    public static BeeRegistry getRegistry() {
-        return INSTANCE;
-    }
+/*    //USED INTERNALLY
+    public static void genVanillaBee() {
+        CustomBeeData vanillaBee = new CustomBeeData.Builder(VANILLA_BEE_TYPE, BeeConstants.FLOWER_TAG_ALL, false,
+                new MutationData.Builder(false, MutationTypes.NONE).createMutationData(),
+                new ColorData.Builder(false).createColorData(),
+                new CentrifugeData.Builder(false, null).createCentrifugeData(),
+                new BreedData.Builder(false).createBreedData(),
+                new SpawnData.Builder(false).createSpawnData(),
+                new TraitData(false))
+                .setSizeModifier(1.0f)
+                .createCustomBee();
+        vanillaBee.shouldResourcefulBeesDoForgeRegistration = false;
+        vanillaBee.setEntityTypeRegistryID(EntityType.BEE.getRegistryName());
+        RegistryObject<Item> beeEgg = Items.BEE_SPAWN_EGG.;
+        vanillaBee.setSpawnEggItemRegistryObject();
+        getRegistry().registerBee(VANILLA_BEE_TYPE, vanillaBee);
+    }*/
 
-    public void allowRegistration() {
-        this.ALLOW_REGISTRATION = true;
-    }
+    public void allowRegistration() { this.ALLOW_REGISTRATION = true; }
 
-    public void denyRegistration() {
-        this.ALLOW_REGISTRATION = false;
-    }
+    public void denyRegistration() { this.ALLOW_REGISTRATION = false; }
 
-    /**
+/*    *//**
      * Returns a random bee from the Bee Registry.
      * This is used for selecting a bee from all possible bees.
      *
      *  @return Returns random bee type as a string.
-     */
+     *//*
     public String getRandomBee() {
         int randInt = MathUtils.nextInt(BEE_INFO.size() - 1) + 1;
         Object[] dataArray = BEE_INFO.keySet().toArray();
@@ -52,19 +65,19 @@ public class BeeRegistry implements IBeeRegistry {
         return BEE_INFO.get(key.toString()).getName();
     }
 
-    /**
+    *//**
      * Returns a random bee from the SPAWNABLE_BIOMES hashmap.
      * This is used for in-world spawning based on biome.
      *
      *  @param biome Biome supplied determines which bees the random bee is chosen from.
      *  @return Returns random bee type as a string.
-     */
+     *//*
     public String getRandomBee(Biome biome) {
         if (SPAWNABLE_BIOMES.get(biome) != null) {
             return SPAWNABLE_BIOMES.get(biome).next();
         }
         return BeeConstants.DEFAULT_BEE_TYPE;
-    }
+    }*/
 
     /**
      * Returns a BeeData object for the given bee type.
@@ -121,11 +134,9 @@ public class BeeRegistry implements IBeeRegistry {
      */
     public boolean registerBee(String beeType, CustomBeeData customBeeData) {
         if (ALLOW_REGISTRATION) {
-            if (!beeType.equals(VANILLA_BEE_TYPE)) {
-                if (!BEE_INFO.containsKey(beeType) && FirstPhaseValidator.validate(customBeeData)) {
-                    BEE_INFO.put(beeType, customBeeData);
-                    return true;
-                }
+            if (!BEE_INFO.containsKey(beeType) && FirstPhaseValidator.validate(customBeeData)) {
+                BEE_INFO.put(beeType, customBeeData);
+                return true;
             }
         }
         return false;

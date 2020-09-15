@@ -4,16 +4,23 @@ import com.google.common.collect.ImmutableSet;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.block.*;
-import com.resourcefulbees.resourcefulbees.block.centrifuge.CentrifugeCasingBlock;
-import com.resourcefulbees.resourcefulbees.block.centrifuge.CentrifugeControllerBlock;
+import com.resourcefulbees.resourcefulbees.block.multiblocks.apiary.ApiaryBlock;
+import com.resourcefulbees.resourcefulbees.block.multiblocks.apiary.ApiaryBreederBlock;
+import com.resourcefulbees.resourcefulbees.block.multiblocks.apiary.ApiaryStorageBlock;
+import com.resourcefulbees.resourcefulbees.block.multiblocks.centrifuge.CentrifugeCasingBlock;
+import com.resourcefulbees.resourcefulbees.block.multiblocks.centrifuge.CentrifugeControllerBlock;
 import com.resourcefulbees.resourcefulbees.container.*;
+import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.entity.passive.ResourcefulBee;
 import com.resourcefulbees.resourcefulbees.item.*;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe;
 import com.resourcefulbees.resourcefulbees.tileentity.*;
-import com.resourcefulbees.resourcefulbees.tileentity.centrifuge.CentrifugeCasingTileEntity;
-import com.resourcefulbees.resourcefulbees.tileentity.centrifuge.CentrifugeControllerTileEntity;
+import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryBreederTileEntity;
+import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryStorageTileEntity;
+import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryTileEntity;
+import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.CentrifugeCasingTileEntity;
+import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.CentrifugeControllerTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.TooltipBuilder;
 import com.resourcefulbees.resourcefulbees.world.BeeNestFeature;
 import net.minecraft.block.Block;
@@ -315,7 +322,7 @@ public class RegistryHandler {
 	//endregion
 
 	public static void addEntityAttributes() {
-		BeeRegistry.getRegistry().getBees().forEach((s, customBee) -> GlobalEntityTypeAttributes.put(customBee.getEntityTypeRegistryObject().get(), BeeEntity.createBeeAttributes().build()));
+		BeeRegistry.MOD_BEES.forEach((s, customBee) -> GlobalEntityTypeAttributes.put(customBee.get(), BeeEntity.createBeeAttributes().build()));
 	}
 
 
@@ -342,7 +349,7 @@ public class RegistryHandler {
 	}
 
 	private static void registerBee(String name, CustomBeeData customBeeData) {
-		final RegistryObject<EntityType<ResourcefulBee>> customBeeEntity = ENTITY_TYPES.register(name + "_bee", () -> EntityType.Builder
+		final RegistryObject<EntityType<? extends CustomBeeEntity>> customBeeEntity = ENTITY_TYPES.register(name + "_bee", () -> EntityType.Builder
 				.<ResourcefulBee>create((type, world) -> new ResourcefulBee(type, world, customBeeData), EntityClassification.CREATURE)
 				.size(0.7F, 0.6F)
 				.build(name + "_bee"));
@@ -353,7 +360,9 @@ public class RegistryHandler {
 		final RegistryObject<Item> customBeeSpawnEgg = ITEMS.register(name + "_bee_spawn_egg",
 				() -> new BeeSpawnEggItem(customBeeEntity, firstEggColor, secondEggColor, (new Item.Properties())));
 
-		customBeeData.setEntityTypeRegistryObject(customBeeEntity);
+		BeeRegistry.MOD_BEES.put(name, customBeeEntity);
+		//customBeeData.setCustomBeeEntityRegistryObject(customBeeEntity);
+		customBeeData.setEntityTypeRegistryID(customBeeEntity.getId());
 		customBeeData.setSpawnEggItemRegistryObject(customBeeSpawnEgg);
 	}
 

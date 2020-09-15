@@ -12,6 +12,7 @@ public final class EntityIngredientFactory {
     public static List<EntityIngredient> create() {
         List<EntityIngredient> list = new ArrayList<>();
         BeeRegistry.getRegistry().getBees().forEach((s, beeData) -> list.add(new EntityIngredient(beeData.getName(), 45.0f)));
+        //list.add(new EntityIngredient(BeeConstants.VANILLA_BEE_TYPE, 45.0f));
         return list;
     }
 }

@@ -2,8 +2,8 @@ package com.resourcefulbees.resourcefulbees;
 
 import com.google.common.collect.Sets;
 import com.resourcefulbees.resourcefulbees.api.ResourcefulBeesAPI;
-import com.resourcefulbees.resourcefulbees.block.ApiaryBlock;
 import com.resourcefulbees.resourcefulbees.block.TieredBeehiveBlock;
+import com.resourcefulbees.resourcefulbees.block.multiblocks.apiary.ApiaryBlock;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.*;
 import com.resourcefulbees.resourcefulbees.client.models.ModelHandler;
 import com.resourcefulbees.resourcefulbees.client.render.entity.CustomBeeRenderer;
@@ -82,6 +82,7 @@ public class ResourcefulBees
         RegistryHandler.init();
         ResourcefulBeesAPI.setBeeRegistry(BeeRegistry.getRegistry());
         BeeRegistry.getRegistry().allowRegistration();
+        //BeeRegistry.genVanillaBee();
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.CommonConfig.COMMON_CONFIG, "resourcefulbees/common.toml");
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Config.ClientConfig.CLIENT_CONFIG, "resourcefulbees/client.toml");
@@ -198,7 +199,7 @@ public class ResourcefulBees
 
     private void doClientStuff(final FMLClientSetupEvent event) {
         CentrifugeScreen.currentMonth = new SimpleDateFormat("MM").format(new Date());
-        BeeRegistry.getRegistry().getBees().forEach((s, customBee) -> RenderingRegistry.registerEntityRenderingHandler(customBee.getEntityTypeRegistryObject().get(), CustomBeeRenderer::new));
+        BeeRegistry.MOD_BEES.forEach((s, customBee) -> RenderingRegistry.registerEntityRenderingHandler(customBee.get(), CustomBeeRenderer::new));
         ScreenManager.registerFactory(RegistryHandler.CENTRIFUGE_CONTAINER.get(), CentrifugeScreen::new);
         ScreenManager.registerFactory(RegistryHandler.MECHANICAL_CENTRIFUGE_CONTAINER.get(), MechanicalCentrifugeScreen::new);
         ScreenManager.registerFactory(RegistryHandler.CENTRIFUGE_MULTIBLOCK_CONTAINER.get(), CentrifugeMultiblockScreen::new);

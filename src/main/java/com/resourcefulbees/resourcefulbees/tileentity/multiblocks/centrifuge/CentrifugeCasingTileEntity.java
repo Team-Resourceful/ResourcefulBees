@@ -1,4 +1,4 @@
-package com.resourcefulbees.resourcefulbees.tileentity.centrifuge;
+package com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge;
 
 import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
 import net.minecraft.block.BlockState;

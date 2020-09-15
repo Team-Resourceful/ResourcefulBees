@@ -1,6 +1,6 @@
-package com.resourcefulbees.resourcefulbees.block.centrifuge;
+package com.resourcefulbees.resourcefulbees.block.multiblocks.centrifuge;
 
-import com.resourcefulbees.resourcefulbees.tileentity.centrifuge.CentrifugeControllerTileEntity;
+import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.CentrifugeControllerTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.TooltipBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;

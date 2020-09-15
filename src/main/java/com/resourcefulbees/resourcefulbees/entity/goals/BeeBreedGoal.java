@@ -1,11 +1,9 @@
 package com.resourcefulbees.resourcefulbees.entity.goals;
 
-import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
-import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
+import com.resourcefulbees.resourcefulbees.api.ICustomBee;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.entity.AgeableEntity;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.goal.BreedGoal;
 import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.passive.AnimalEntity;
@@ -21,25 +19,15 @@ public class BeeBreedGoal extends BreedGoal {
         super(animal, speedIn);
     }
 
-    public String getBeeType(AnimalEntity entity) {
-        Entity beeEntity = entity.getEntity();
-        if (beeEntity instanceof CustomBeeEntity) {
-            CustomBeeEntity bee = (CustomBeeEntity)beeEntity;
-            return bee.getBeeType();
-        }
-        else
-            return BeeConstants.DEFAULT_BEE_TYPE;
-    }
-
     @Override
     public boolean shouldExecute() {
         if (!this.animal.isInLove()) {
             return false;
         } else {
             this.field_75391_e = this.getNearbyMate();
-            if (field_75391_e instanceof CustomBeeEntity){
-                CustomBeeEntity parent1 = ((CustomBeeEntity) field_75391_e);
-                CustomBeeEntity parent2 = ((CustomBeeEntity) animal);
+            if (field_75391_e instanceof ICustomBee){
+                ICustomBee parent1 = ((ICustomBee) field_75391_e);
+                ICustomBee parent2 = ((ICustomBee) animal);
                 return BeeRegistry.getRegistry().canParentsBreed(parent1.getBeeType(), parent2.getBeeType());
             }
             else
@@ -50,10 +38,10 @@ public class BeeBreedGoal extends BreedGoal {
     @Override
     protected void spawnBaby() {
         AgeableEntity ageableentity;
-        CustomBeeEntity bee = (CustomBeeEntity)this.animal;
-        String parent1 = getBeeType(this.field_75391_e);
-        String parent2 = getBeeType(this.animal);
-        ageableentity = bee.createSelectedChild(BeeRegistry.getRegistry().getWeightedChild(parent1, parent2));
+        ICustomBee bee = (ICustomBee)this.animal;
+        String parent1 = ((ICustomBee)this.field_75391_e).getBeeType();
+        String parent2 = ((ICustomBee)this.animal).getBeeType();
+        ageableentity = (AgeableEntity) bee.createSelectedChild(BeeRegistry.getRegistry().getWeightedChild(parent1, parent2));
 
         final BabyEntitySpawnEvent event = new BabyEntitySpawnEvent(animal, field_75391_e, ageableentity);
         final boolean cancelled = MinecraftForge.EVENT_BUS.post(event);

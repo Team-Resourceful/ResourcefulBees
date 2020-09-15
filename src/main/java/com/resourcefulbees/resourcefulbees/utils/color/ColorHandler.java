@@ -30,7 +30,9 @@ public final class ColorHandler {
                 registerItems(colors, HoneycombItem::getColor, customBeeData.getCombRegistryObject().get());
                 registerItems(colors, HoneycombBlock::getItemColor, customBeeData.getCombBlockItemRegistryObject().get());
             }
-            registerItems(colors, BeeSpawnEggItem::getColor, customBeeData.getSpawnEggItemRegistryObject().get());
+            if (customBeeData.getColorData().isBeeColored()) {
+                registerItems(colors, BeeSpawnEggItem::getColor, customBeeData.getSpawnEggItemRegistryObject().get());
+            }
         }));
         registerItems(colors, BeeJar::getColor, RegistryHandler.BEE_JAR.get());
     }

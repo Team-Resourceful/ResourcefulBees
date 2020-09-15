@@ -1,6 +1,6 @@
-package com.resourcefulbees.resourcefulbees.block;
+package com.resourcefulbees.resourcefulbees.block.multiblocks.apiary;
 
-import com.resourcefulbees.resourcefulbees.tileentity.ApiaryStorageTileEntity;
+import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryStorageTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;

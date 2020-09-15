@@ -157,9 +157,9 @@ public class DataGen {
         builder.append("{\n");
         builder.append("\"replace\": false,\n");
         builder.append("\"values\": [\n");
-        BEE_REGISTRY.getBees().entrySet().stream().filter((c)-> c.getValue().hasHoneycomb()).forEach(((c) -> {
+        BeeRegistry.MOD_BEES.forEach(((s, entityTypeRegistryObject) -> {
             builder.append("\"");
-            builder.append(c.getValue().getEntityTypeRegistryObject().getId());
+            builder.append(entityTypeRegistryObject.getId());
             builder.append("\",\n");
         }));
         builder.deleteCharAt(builder.lastIndexOf(","));

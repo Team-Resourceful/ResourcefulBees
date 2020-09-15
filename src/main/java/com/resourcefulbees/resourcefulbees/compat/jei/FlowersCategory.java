@@ -55,45 +55,40 @@ public class FlowersCategory implements IRecipeCategory<FlowersCategory.Recipe> 
         List<Recipe> recipes = new ArrayList<>();
 
         BEE_REGISTRY.getBees().forEach(((s, beeData) -> {
-            if (!beeData.getName().equals(DEFAULT_BEE_TYPE)) {
-                if (!beeData.getFlower().isEmpty()) {
-                    String flower = beeData.getFlower();
-                    if (ValidatorUtils.TAG_RESOURCE_PATTERN.matcher(flower).matches()) {
-                        flower = flower.replace(BeeConstants.TAG_PREFIX, "");
+            String flower = beeData.getFlower();
+            if (ValidatorUtils.TAG_RESOURCE_PATTERN.matcher(flower).matches()) {
+                flower = flower.replace(BeeConstants.TAG_PREFIX, "");
 
-                        ITag<Fluid> fluidTag = BeeInfoUtils.getFluidTag(flower);
-                        ITag<Item> itemTag = BeeInfoUtils.getItemTag(flower);
-                        ITag<Block> blockTag = BeeInfoUtils.getBlockTag(flower);
-                        if (itemTag != null) {
-                            recipes.add(new Recipe(itemTag, null, null, beeData.getName(), RecipeTypes.ITEM, true));
-                        } else if (fluidTag != null) {
-                            recipes.add(new Recipe(null, fluidTag, null, beeData.getName(), RecipeTypes.FLUID,  true));
-                        } else if (blockTag != null) {
-                            recipes.add(new Recipe(null, null, blockTag, beeData.getName(), RecipeTypes.BLOCK, true));
-                        }
-                    } else if (flower.equals(FLOWER_TAG_ALL)) {
-                        ITag<Item> itemTag = ItemTags.FLOWERS;
-                        if (itemTag != null)
-                            recipes.add(new Recipe(itemTag, null,  null, beeData.getName(), RecipeTypes.ITEM, true));
-                    } else if (flower.equals(FLOWER_TAG_SMALL)) {
-                        ITag<Item> itemTag = ItemTags.SMALL_FLOWERS;
-                        if (itemTag != null)
-                            recipes.add(new Recipe(itemTag, null, null, beeData.getName(), RecipeTypes.ITEM, true));
-                    } else if (flower.equals(FLOWER_TAG_TALL)) {
-                        ITag<Item> itemTag = ItemTags.TALL_FLOWERS;
-                        if (itemTag != null)
-                            recipes.add(new Recipe(itemTag, null, null, beeData.getName(), RecipeTypes.ITEM, true));
-                    } else {
-                        Item itemIn = BeeInfoUtils.getItem(flower);
-                        Fluid fluidIn = BeeInfoUtils.getFluid(flower);
-                        if (BeeInfoUtils.isValidItem(itemIn))
-                            recipes.add(new Recipe(new ItemStack(itemIn), null, beeData.getName(), RecipeTypes.ITEM, false));
-                        else if (BeeInfoUtils.isValidFluid(fluidIn))
-                            recipes.add(new Recipe(null, new FluidStack(fluidIn, 1000), beeData.getName(), RecipeTypes.FLUID, false));
-                    }
+                ITag<Fluid> fluidTag = BeeInfoUtils.getFluidTag(flower);
+                ITag<Item> itemTag = BeeInfoUtils.getItemTag(flower);
+                ITag<Block> blockTag = BeeInfoUtils.getBlockTag(flower);
+                if (itemTag != null) {
+                    recipes.add(new Recipe(itemTag, null, null, beeData.getName(), RecipeTypes.ITEM, true));
+                } else if (fluidTag != null) {
+                    recipes.add(new Recipe(null, fluidTag, null, beeData.getName(), RecipeTypes.FLUID,  true));
+                } else if (blockTag != null) {
+                    recipes.add(new Recipe(null, null, blockTag, beeData.getName(), RecipeTypes.BLOCK, true));
                 }
+            } else if (flower.equals(FLOWER_TAG_ALL)) {
+                ITag<Item> itemTag = ItemTags.FLOWERS;
+                if (itemTag != null)
+                    recipes.add(new Recipe(itemTag, null,  null, beeData.getName(), RecipeTypes.ITEM, true));
+            } else if (flower.equals(FLOWER_TAG_SMALL)) {
+                ITag<Item> itemTag = ItemTags.SMALL_FLOWERS;
+                if (itemTag != null)
+                    recipes.add(new Recipe(itemTag, null, null, beeData.getName(), RecipeTypes.ITEM, true));
+            } else if (flower.equals(FLOWER_TAG_TALL)) {
+                ITag<Item> itemTag = ItemTags.TALL_FLOWERS;
+                if (itemTag != null)
+                    recipes.add(new Recipe(itemTag, null, null, beeData.getName(), RecipeTypes.ITEM, true));
+            } else {
+                Item itemIn = BeeInfoUtils.getItem(flower);
+                Fluid fluidIn = BeeInfoUtils.getFluid(flower);
+                if (BeeInfoUtils.isValidItem(itemIn))
+                    recipes.add(new Recipe(new ItemStack(itemIn), null, beeData.getName(), RecipeTypes.ITEM, false));
+                else if (BeeInfoUtils.isValidFluid(fluidIn))
+                    recipes.add(new Recipe(null, new FluidStack(fluidIn, 1000), beeData.getName(), RecipeTypes.FLUID, false));
             }
-
         }));
         return recipes;
     }

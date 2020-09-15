@@ -1,4 +1,4 @@
-package com.resourcefulbees.resourcefulbees.entity;
+package com.resourcefulbees.resourcefulbees.api;
 
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 
@@ -34,4 +34,7 @@ public interface ICustomBee {
      * Increments "this" bee's current number of times fed by 1.
      */
     void addFeedCount();
+
+
+    ICustomBee createSelectedChild(String beeType);
 }
