@@ -39,18 +39,24 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider {
 
     public static final int HONEY_BOTTLE_INPUT = 0;
-    public static final int BOTTLE_OUPUT = 1;
+    public static final int BOTTLE_OUTPUT = 1;
+    public static final int HONEY_FILL_AMOUNT = 250;
+    public static final int HONEY_DRAIN_AMOUNT = 50;
+    public static final int ENERGY_FILL_AMOUNT = 50;
+    public static final int ENERGY_TRANSFER_AMOUNT = 100;
+    public static final int MAX_ENERGY_CAPACITY = 50000;
+    public static final int MAX_TANK_STORAGE = 10000;
 
     public AutomationSensitiveItemStackHandler h = new HoneyGeneratorTileEntity.TileStackHandler(5, getAcceptor(), getRemover());
-    public final CustomTankStorage fluidTank = new CustomTankStorage(5000);
+    public final CustomTankStorage fluidTank = new CustomTankStorage(MAX_TANK_STORAGE);
     public final CustomEnergyStorage energyStorage = createEnergy();
     private final LazyOptional<IFluidHandler> fluidOptional = LazyOptional.of(() -> fluidTank);
     private final LazyOptional<IItemHandler> lazyOptional = LazyOptional.of(() -> h);
     private final LazyOptional<IEnergyStorage> energy = LazyOptional.of(() -> energyStorage);
     public int time = 0;
-    public int totalTime = 100;
+    public final int totalTime = 100;
     public int energyTime = 0;
-    public int energyTotalTime = 100;
+    public final int energyTotalTime = 50;
 
     public HoneyGeneratorTileEntity() {
         super(RegistryHandler.HONEY_GENERATOR_ENTITY.get());
@@ -77,6 +83,7 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
                 time = 0;
                 world.setBlockState(pos,getBlockState().with(HoneyGenerator.PROPERTY_ON,false));
             }
+
             if (!fluidTank.isEmpty()) {
                 if (this.canProcessEnergy()) {
                     world.setBlockState(pos, getBlockState().with(HoneyGenerator.PROPERTY_ON, true));
@@ -91,6 +98,7 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
                 energyTime = 0;
                 world.setBlockState(pos,getBlockState().with(HoneyGenerator.PROPERTY_ON,false));
             }
+
             if (dirty) {
                 this.markDirty();
             }
@@ -102,11 +110,12 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
         AtomicInteger capacity = new AtomicInteger(energyStorage.getEnergyStored());
         if (capacity.get() > 0) {
             for (Direction direction : Direction.values()) {
-                TileEntity te = world.getTileEntity(pos.offset(direction));
-                if (te != null) {
-                    boolean doContinue = te.getCapability(CapabilityEnergy.ENERGY, direction).map(handler -> {
+                if (world != null) {
+                    TileEntity te = world.getTileEntity(pos.offset(direction));
+                    if (te != null) {
+                        boolean doContinue = te.getCapability(CapabilityEnergy.ENERGY, direction).map(handler -> {
                                 if (handler.canReceive()) {
-                                    int received = handler.receiveEnergy(Math.min(capacity.get(), 100), false);
+                                    int received = handler.receiveEnergy(Math.min(capacity.get(), ENERGY_TRANSFER_AMOUNT), false);
                                     capacity.addAndGet(-received);
                                     energyStorage.consumeEnergy(received);
                                     markDirty();
@@ -114,10 +123,10 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
                                 } else {
                                     return true;
                                 }
-                            }
-                    ).orElse(true);
-                    if (!doContinue) {
-                        return;
+                            }).orElse(true);
+                        if (!doContinue) {
+                            return;
+                        }
                     }
                 }
             }
@@ -126,18 +135,18 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
 
     public boolean canProcess() {
         return h.getStackInSlot(HONEY_BOTTLE_INPUT).getItem().equals(Items.HONEY_BOTTLE) &&
-                (h.getStackInSlot(BOTTLE_OUPUT).isEmpty() || h.getStackInSlot(BOTTLE_OUPUT).getCount() < h.getStackInSlot(BOTTLE_OUPUT).getMaxStackSize()) &&
-                (fluidTank.getFluidAmount() + 50) <= fluidTank.getCapacity();
+                (h.getStackInSlot(BOTTLE_OUTPUT).isEmpty() || h.getStackInSlot(BOTTLE_OUTPUT).getCount() < h.getStackInSlot(BOTTLE_OUTPUT).getMaxStackSize()) &&
+                (fluidTank.getFluidAmount() + HONEY_FILL_AMOUNT) <= fluidTank.getCapacity();
     }
 
     public boolean canProcessEnergy(){
-        return energyStorage.getEnergyStored() + 50 <= energyStorage.getMaxEnergyStored() && fluidTank.getFluidAmount() >= 50;
+        return energyStorage.getEnergyStored() + ENERGY_FILL_AMOUNT <= energyStorage.getMaxEnergyStored() && fluidTank.getFluidAmount() >= HONEY_DRAIN_AMOUNT;
     }
 
     private void processEnergy() {
         if (this.canProcessEnergy()) {
-            fluidTank.drain(50, IFluidHandler.FluidAction.EXECUTE);
-            energyStorage.addEnergy(50);
+            fluidTank.drain(HONEY_DRAIN_AMOUNT, IFluidHandler.FluidAction.EXECUTE);
+            energyStorage.addEnergy(ENERGY_FILL_AMOUNT);
         }
         energyTime = 0;
     }
@@ -145,11 +154,11 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
     private void processItem() {
         if (this.canProcess()) {
             ItemStack honey_bottle = h.getStackInSlot(HONEY_BOTTLE_INPUT);
-            ItemStack glass_bottle = h.getStackInSlot(BOTTLE_OUPUT);
+            ItemStack glass_bottle = h.getStackInSlot(BOTTLE_OUTPUT);
             honey_bottle.shrink(1);
-            if (glass_bottle.isEmpty()) h.setStackInSlot(BOTTLE_OUPUT, new ItemStack(Items.GLASS_BOTTLE));
+            if (glass_bottle.isEmpty()) h.setStackInSlot(BOTTLE_OUTPUT, new ItemStack(Items.GLASS_BOTTLE));
             else glass_bottle.grow(1);
-            fluidTank.fill(new FluidStack(FluidRegistry.HONEY_FLUID.get(), 50), IFluidHandler.FluidAction.EXECUTE);
+            fluidTank.fill(new FluidStack(FluidRegistry.HONEY_FLUID.get(), HONEY_FILL_AMOUNT), IFluidHandler.FluidAction.EXECUTE);
         }
         time = 0;
     }
@@ -233,7 +242,7 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
     }
 
     private CustomEnergyStorage createEnergy() {
-        return new CustomEnergyStorage(5000, 0, 100) {
+        return new CustomEnergyStorage(MAX_ENERGY_CAPACITY, 0, ENERGY_TRANSFER_AMOUNT) {
             @Override
             protected void onEnergyChanged() {
                 markDirty();

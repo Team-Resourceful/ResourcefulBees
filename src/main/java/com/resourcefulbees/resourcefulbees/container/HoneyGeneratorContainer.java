@@ -1,5 +1,6 @@
 package com.resourcefulbees.resourcefulbees.container;
 
+import com.resourcefulbees.resourcefulbees.registry.FluidRegistry;
 import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
 import com.resourcefulbees.resourcefulbees.tileentity.HoneyGeneratorTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.FunctionalIntReferenceHolder;
@@ -11,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nonnull;
 
@@ -27,16 +29,16 @@ public class HoneyGeneratorContainer extends Container {
         honeyGeneratorTileEntity = (HoneyGeneratorTileEntity) world.getTileEntity(pos);
 
         this.trackInt(new FunctionalIntReferenceHolder(() -> honeyGeneratorTileEntity.time, v -> honeyGeneratorTileEntity.time = v));
-        this.trackInt(new FunctionalIntReferenceHolder(() -> honeyGeneratorTileEntity.totalTime, v -> honeyGeneratorTileEntity.totalTime = v));
         this.trackInt(new FunctionalIntReferenceHolder(() -> honeyGeneratorTileEntity.energyTime, v -> honeyGeneratorTileEntity.energyTime = v));
-        this.trackInt(new FunctionalIntReferenceHolder(() -> honeyGeneratorTileEntity.energyTotalTime, v -> honeyGeneratorTileEntity.energyTotalTime = v));
+        this.trackInt(new FunctionalIntReferenceHolder(() -> honeyGeneratorTileEntity.fluidTank.getFluidAmount(), v -> honeyGeneratorTileEntity.fluidTank.setFluid(new FluidStack(FluidRegistry.HONEY_FLUID.get(), v))));
+        this.trackInt(new FunctionalIntReferenceHolder(() -> honeyGeneratorTileEntity.energyStorage.getEnergyStored(), v -> honeyGeneratorTileEntity.energyStorage.setEnergy(v)));
 
         this.addSlot(new SlotItemHandlerUnconditioned(honeyGeneratorTileEntity.h, HoneyGeneratorTileEntity.HONEY_BOTTLE_INPUT, 36, 20){
             public boolean isItemValid(ItemStack stack){
                 return stack.getItem().equals(Items.HONEY_BOTTLE);
             }
         });
-        this.addSlot(new OutputSlot(honeyGeneratorTileEntity.h, HoneyGeneratorTileEntity.BOTTLE_OUPUT, 36, 58));
+        this.addSlot(new OutputSlot(honeyGeneratorTileEntity.h, HoneyGeneratorTileEntity.BOTTLE_OUTPUT, 36, 58));
 
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
@@ -49,12 +51,10 @@ public class HoneyGeneratorContainer extends Container {
         }
     }
 
+    public int getEnergy() {
+        return honeyGeneratorTileEntity.energyStorage.getEnergyStored();
+    }
 
-    /**
-     * Determines whether supplied player can use this container
-     *
-     * @param player the player
-     */
     @Override
     public boolean canInteractWith(@Nonnull PlayerEntity player) {
         return true;

@@ -162,11 +162,11 @@ public class BeeBuilder {
             if (Config.GENERATE_BEE_NESTS.get()) {
                 addNestFeature(biome);
             }
-            int divisor = Config.GENERATE_BEE_NESTS.get() ? 2 : 1;
+            //int divisor = Config.GENERATE_BEE_NESTS.get() ? 2 : 1;  tweaked since it seems to make things worse than better.
             biome.getSpawns(EntityClassification.CREATURE).add(new Biome.SpawnListEntry(RegistryHandler.CUSTOM_BEE.get(),
-                    Config.SPAWN_WEIGHT.get() / divisor,
-                    Config.SPAWN_MIN_GROUP.get() / divisor,
-                    Config.SPAWN_MAX_GROUP.get() / divisor));
+                    Config.SPAWN_WEIGHT.get(),
+                    Config.SPAWN_MIN_GROUP.get(),
+                    Config.SPAWN_MAX_GROUP.get()));
         }
 
         EntitySpawnPlacementRegistry.register(RegistryHandler.CUSTOM_BEE.get(),

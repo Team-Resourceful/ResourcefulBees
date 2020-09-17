@@ -28,7 +28,7 @@ public class HoneyGeneratorScreen extends ContainerScreen<HoneyGeneratorContaine
             int i = this.guiLeft;
             int j = this.guiTop;
             this.blit(matrix, i, j, 0, 0, this.xSize, this.ySize);
-            int scaledRF = 62 * this.container.honeyGeneratorTileEntity.energyStorage.getEnergyStored() / Math.max(this.container.honeyGeneratorTileEntity.energyStorage.getMaxEnergyStored(),1);
+            int scaledRF = 62 * this.container.getEnergy() / Math.max(this.container.honeyGeneratorTileEntity.energyStorage.getMaxEnergyStored(),1);
             this.blit(matrix, i + 130, j + 12 + (62-scaledRF), 215, (62-scaledRF), 11, scaledRF);
             int scaledTank = 62 * this.container.honeyGeneratorTileEntity.fluidTank.getFluidAmount() / Math.max(this.container.honeyGeneratorTileEntity.fluidTank.getCapacity(),1);
             this.blit(matrix, i + 83, j + 12 + (62-scaledTank), 226, (62-scaledTank), 14, scaledTank);
