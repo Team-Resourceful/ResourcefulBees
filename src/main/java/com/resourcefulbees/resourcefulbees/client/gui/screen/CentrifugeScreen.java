@@ -44,7 +44,7 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
     public void render(@Nonnull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrix);
         super.render(matrix, mouseX, mouseY, partialTicks);
-        this.func_230459_a_(matrix, mouseX, mouseY);
+        this.renderHoveredTooltip(matrix, mouseX, mouseY);
         DecimalFormat decimalFormat = new DecimalFormat("##0.0");
         if (mouseX >= this.guiLeft + 7 && mouseX <= this.guiLeft + 20 && mouseY >= this.guiTop + 7 && mouseY <= this.guiTop + 59){
             if (Screen.hasShiftDown() || this.container.getEnergy() < 500) this.renderTooltip(matrix, new StringTextComponent(this.container.getEnergy() + " RF"), mouseX, mouseY);

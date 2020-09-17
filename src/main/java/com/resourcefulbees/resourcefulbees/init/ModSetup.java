@@ -146,7 +146,7 @@ public class ModSetup {
                         () -> new FolderPack(RESOURCE_PATH.toFile()),
                         factory,
                         ResourcePackInfo.Priority.TOP,
-                        IPackNameDecorator.createUnnamedDecorator()
+                        IPackNameDecorator.func_232629_a_()
                 );
                 if (packInfo == null) {
                     LOGGER.error("Failed to load resource pack, some things may not work.");

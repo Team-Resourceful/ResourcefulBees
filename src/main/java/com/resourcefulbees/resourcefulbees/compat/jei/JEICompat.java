@@ -11,7 +11,6 @@ import com.resourcefulbees.resourcefulbees.compat.jei.ingredients.EntityRenderer
 import com.resourcefulbees.resourcefulbees.item.BeeSpawnEggItem;
 import com.resourcefulbees.resourcefulbees.item.HoneycombBlockItem;
 import com.resourcefulbees.resourcefulbees.item.ResourcefulHoneycomb;
-import com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe;
 import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.constants.VanillaTypes;
@@ -122,9 +121,8 @@ public class JEICompat implements IModPlugin {
         World clientWorld= Minecraft.getInstance().world;
         if (clientWorld != null) {
             RecipeManager recipeManager = Minecraft.getInstance().world.getRecipeManager();
-            Collection<CentrifugeRecipe> recipes = getRecipes(recipeManager, CENTRIFUGE_RECIPE_TYPE);
             registration.addRecipes(BeeHiveCategory.getHoneycombRecipes(registration.getIngredientManager()), BeeHiveCategory.ID);
-            registration.addRecipes(recipes, CentrifugeRecipeCategory.ID);
+            registration.addRecipes(recipeManager.getRecipes(CENTRIFUGE_RECIPE_TYPE).values(), CentrifugeRecipeCategory.ID);
             registration.addRecipes(BeeBreedingCategory.getBreedingRecipes(registration.getIngredientManager()), BeeBreedingCategory.ID);
             registration.addRecipes(FluidToFluid.getMutationRecipes(registration.getIngredientManager()), FluidToFluid.ID);
             registration.addRecipes(BlockToFluid.getMutationRecipes(registration.getIngredientManager()), BlockToFluid.ID);

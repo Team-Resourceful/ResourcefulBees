@@ -31,7 +31,7 @@ public class BeeAngerGoal extends HurtByTargetGoal {
     @Override
     public void alertOthers() {
         double d0 = this.getTargetDistance();
-        AxisAlignedBB axisalignedbb = AxisAlignedBB.func_241549_a_(this.goalOwner.getPositionVec()).grow(d0, 10.0D, d0);
+        AxisAlignedBB axisalignedbb = AxisAlignedBB.fromVector(this.goalOwner.getPositionVec()).grow(d0, 10.0D, d0);
         List<MobEntity> list = this.goalOwner.world.getLoadedEntitiesWithinAABB(BeeEntity.class, axisalignedbb);
         for (MobEntity mobEntity : list) {
             if (this.goalOwner.getRevengeTarget() != null)

@@ -45,7 +45,7 @@ public class HoneyGeneratorScreen extends ContainerScreen<HoneyGeneratorContaine
     public void render(@Nonnull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrix);
         super.render(matrix, mouseX, mouseY, partialTicks);
-        this.func_230459_a_(matrix, mouseX, mouseY);
+        this.renderHoveredTooltip(matrix, mouseX, mouseY);
         DecimalFormat decimalFormat = new DecimalFormat("##0.0");
         if (mouseX >= this.guiLeft + 83 && mouseX <= this.guiLeft + 97 && mouseY >= this.guiTop + 12 && mouseY <= this.guiTop + 74){
             if (Screen.hasShiftDown() || this.container.honeyGeneratorTileEntity.fluidTank.getFluidAmount() < 500) this.renderTooltip(matrix, new StringTextComponent(this.container.honeyGeneratorTileEntity.fluidTank.getFluidAmount() + " MB"), mouseX, mouseY);

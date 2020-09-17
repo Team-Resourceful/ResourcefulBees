@@ -195,8 +195,8 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
 
     @SuppressWarnings("unused")
     public static boolean canBeeSpawn(EntityType<? extends AnimalEntity> typeIn, IWorld worldIn, SpawnReason reason, BlockPos pos, Random randomIn) {
-        return worldIn.getWorld().func_234922_V_().equals(DimensionType.THE_NETHER)
-                || worldIn.getWorld().func_234922_V_().equals(DimensionType.THE_END)
+        return worldIn.getWorld().getDimensionTypeKey().equals(DimensionType.THE_NETHER)
+                || worldIn.getWorld().getDimensionTypeKey().equals(DimensionType.THE_END)
                 || worldIn.getLight(pos) > 8;
     }
 

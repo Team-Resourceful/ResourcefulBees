@@ -127,7 +127,7 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
     public void render(@Nonnull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrix);
         super.render(matrix, mouseX, mouseY, partialTicks);
-        this.func_230459_a_(matrix, mouseX, mouseY);
+        this.renderHoveredTooltip(matrix, mouseX, mouseY);
 
         int l = this.guiLeft + 5;
         int i1 = this.guiTop + 18;
