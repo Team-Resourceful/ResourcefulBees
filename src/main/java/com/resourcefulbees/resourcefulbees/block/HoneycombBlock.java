@@ -37,7 +37,8 @@ public class HoneycombBlock extends Block {
     public String getBeeType() { return beeType; }
 
     public static int getBlockColor(BlockState state, @Nullable IBlockReader world, @Nullable BlockPos pos, int tintIndex){
-        return ((HoneycombBlock) state.getBlock()).getHoneycombColor();
+        HoneycombBlock honeycombBlock = ((HoneycombBlock) state.getBlock());
+        return honeycombBlock.colorData.isRainbowBee() ? RainbowColor.getRGB() : honeycombBlock.getHoneycombColor();
     }
 
     public static int getItemColor(ItemStack stack, int tintIndex){
@@ -56,8 +57,8 @@ public class HoneycombBlock extends Block {
 
     @Override
     public void animateTick(@Nonnull BlockState stateIn, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull Random rand) {
-            if (colorData.isRainbowBee())
-                world.notifyBlockUpdate(pos, stateIn, stateIn, 2);
+        if (colorData.isRainbowBee())
+            world.notifyBlockUpdate(pos, stateIn, stateIn, 2);
         super.animateTick(stateIn, world, pos, rand);
     }
 

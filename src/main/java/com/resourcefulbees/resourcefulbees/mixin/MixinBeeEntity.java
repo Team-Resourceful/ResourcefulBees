@@ -33,10 +33,10 @@ public abstract class MixinBeeEntity extends AnimalEntity {
         super(entityType, world);
     }
 
-    @Shadow
+    @Shadow(aliases = "field_226369_bI_")
     public BlockPos hivePos;
 
-    @Shadow
+    @Shadow(aliases = "func_226409_eA_()Z")
     public boolean hasHive() { return this.hivePos != null; }
 
     @Inject(at = @At("HEAD"), method = "doesHiveHaveSpace(Lnet/minecraft/util/math/BlockPos;)Z", cancellable = true)
@@ -92,6 +92,7 @@ public abstract class MixinBeeEntity extends AnimalEntity {
 
         /**
          * @author epic_oreo
+         * @reason crashes when switching to vanilla code due to hivePos being null. retained vanilla checks in overwrite.
          */
         @Overwrite()
         public void startExecuting() {
