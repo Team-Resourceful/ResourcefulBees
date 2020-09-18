@@ -1,10 +1,11 @@
 package com.resourcefulbees.resourcefulbees.container;
 
+import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.item.BeeJar;
 import com.resourcefulbees.resourcefulbees.item.UpgradeItem;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
-import com.resourcefulbees.resourcefulbees.tileentity.ApiaryBreederTileEntity;
+import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryBreederTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.MathUtils;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -19,7 +20,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 
-import static com.resourcefulbees.resourcefulbees.tileentity.ApiaryBreederTileEntity.*;
+import static com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryBreederTileEntity.*;
 
 public class ApiaryBreederContainer extends Container {
 
@@ -106,7 +107,7 @@ public class ApiaryBreederContainer extends Container {
 
                     public boolean isItemValid(ItemStack stack) {
                         //noinspection ConstantConditions
-                        return stack.getItem() instanceof BeeJar && BeeJar.isFilled(stack) && stack.getTag().getString(NBTConstants.NBT_ENTITY).equals("resourcefulbees:bee");
+                        return stack.getItem() instanceof BeeJar && BeeJar.isFilled(stack) && stack.getTag().getString(NBTConstants.NBT_ENTITY).startsWith(ResourcefulBees.MOD_ID);
                     }
                 });
                 this.addSlot(new SlotItemHandlerUnconditioned(apiaryBreederTileEntity.h, FEED_1_SLOTS[i], 69, 18 +(i*20)){
@@ -121,7 +122,7 @@ public class ApiaryBreederContainer extends Container {
 
                     public boolean isItemValid(ItemStack stack) {
                         //noinspection ConstantConditions
-                        return stack.getItem() instanceof BeeJar && BeeJar.isFilled(stack) && stack.getTag().getString(NBTConstants.NBT_ENTITY).equals("resourcefulbees:bee");
+                        return stack.getItem() instanceof BeeJar && BeeJar.isFilled(stack) && stack.getTag().getString(NBTConstants.NBT_ENTITY).startsWith(ResourcefulBees.MOD_ID);
                     }
                 });
                 this.addSlot(new SlotItemHandlerUnconditioned(apiaryBreederTileEntity.h, FEED_2_SLOTS[i], 141, 18 +(i*20)){

@@ -1,21 +1,28 @@
 package com.resourcefulbees.resourcefulbees;
 
+import com.google.common.collect.Sets;
+import com.resourcefulbees.resourcefulbees.api.ResourcefulBeesAPI;
+import com.resourcefulbees.resourcefulbees.block.TieredBeehiveBlock;
+import com.resourcefulbees.resourcefulbees.block.multiblocks.apiary.ApiaryBlock;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.*;
+import com.resourcefulbees.resourcefulbees.client.models.ModelHandler;
 import com.resourcefulbees.resourcefulbees.client.render.entity.CustomBeeRenderer;
 import com.resourcefulbees.resourcefulbees.client.render.items.ItemModelPropertiesHandler;
-import com.resourcefulbees.resourcefulbees.commands.ResourcefulBeeCommands;
 import com.resourcefulbees.resourcefulbees.compat.top.TopCompat;
-import com.resourcefulbees.resourcefulbees.config.BeeBuilder;
+import com.resourcefulbees.resourcefulbees.config.BeeSetup;
 import com.resourcefulbees.resourcefulbees.config.Config;
+import com.resourcefulbees.resourcefulbees.config.ConfigLoader;
 import com.resourcefulbees.resourcefulbees.data.DataGen;
+import com.resourcefulbees.resourcefulbees.data.DataPackLoader;
 import com.resourcefulbees.resourcefulbees.data.RecipeBuilder;
 import com.resourcefulbees.resourcefulbees.init.ModSetup;
-import com.resourcefulbees.resourcefulbees.init.TraitRegistration;
 import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
-import com.resourcefulbees.resourcefulbees.recipe.ResourcefulBeesRecipeIngredients;
-import com.resourcefulbees.resourcefulbees.registry.ColorHandler;
+import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
+import com.resourcefulbees.resourcefulbees.registry.TraitRegistry;
 import com.resourcefulbees.resourcefulbees.utils.PreviewHandler;
+import com.resourcefulbees.resourcefulbees.utils.color.ColorHandler;
+import com.resourcefulbees.resourcefulbees.utils.validation.SecondPhaseValidator;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
@@ -25,19 +32,14 @@ import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.MerchantOffer;
-import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.tileentity.BannerPattern;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.village.PointOfInterestType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.fml.DistExecutor;
@@ -51,19 +53,20 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
+import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Mod("resourcefulbees")
 public class ResourcefulBees
 {
+    //TODO Test other mods can register their own bees with minimal issue
+    //TODO Weed out all possible NPE's
+
     public static final String MOD_ID = "resourcefulbees";
 
     public static final Logger LOGGER = LogManager.getLogger();
@@ -71,21 +74,29 @@ public class ResourcefulBees
     public ResourcefulBees() {
         ModSetup.initialize();
         RegistryHandler.init();
+        ResourcefulBeesAPI.setBeeRegistry(BeeRegistry.getRegistry());
+        BeeRegistry.getRegistry().allowRegistration();
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.CommonConfig.COMMON_CONFIG, "resourcefulbees/common.toml");
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Config.ClientConfig.CLIENT_CONFIG, "resourcefulbees/client.toml");
 
+        ConfigLoader.load(Config.CommonConfig.COMMON_CONFIG, "resourcefulbees/common.toml");
+
+        BeeSetup.setupBees();
+        RegistryHandler.registerDynamicBees();
+
         FMLJavaModLoadingContext.get().getModEventBus().addListener(EventPriority.LOW, this::setup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onInterModEnqueue);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::loadComplete);
+        MinecraftForge.EVENT_BUS.addListener(DataPackLoader::serverStarting);
+        MinecraftForge.EVENT_BUS.addListener(this::ServerLoaded);
 
-        FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(IRecipeSerializer.class, this::registerRecipeSerialziers);
-
-        MinecraftForge.EVENT_BUS.addListener(this::registerCommands);
         MinecraftForge.EVENT_BUS.addListener(this::trade);
 
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
             MinecraftForge.EVENT_BUS.addListener(PreviewHandler::onWorldRenderLast);
+            FMLJavaModLoadingContext.get().getModEventBus().addListener(ModelHandler::registerModels);
+            FMLJavaModLoadingContext.get().getModEventBus().addListener(ModelHandler::onModelBake);
             FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
             FMLJavaModLoadingContext.get().getModEventBus().addListener(ColorHandler::onItemColors);
             FMLJavaModLoadingContext.get().getModEventBus().addListener(ColorHandler::onBlockColors);
@@ -94,9 +105,8 @@ public class ResourcefulBees
         MinecraftForge.EVENT_BUS.register(this);
     }
 
-    public void registerRecipeSerialziers(RegistryEvent.Register<IRecipeSerializer<?>> event)
-    {
-        CraftingHelper.register(new ResourceLocation(MOD_ID, "honeycomb"), ResourcefulBeesRecipeIngredients.INSTANCE);
+    private void ServerLoaded(FMLServerStartedEvent event) {
+        BeeRegistry.getRegistry().getBees().forEach(((s, beeData) -> SecondPhaseValidator.validateMutation(beeData)));
     }
 
     public void trade(VillagerTradesEvent event) {
@@ -109,9 +119,9 @@ public class ResourcefulBees
         if(event.getType() == RegistryHandler.BEEKEEPER.get()) {
             ItemStack queenBeeBanner = new ItemStack(Items.BLACK_BANNER);
             CompoundNBT compoundnbt = queenBeeBanner.getOrCreateChildTag("BlockEntityTag");
-            ListNBT listnbt = (new BannerPattern.Builder()).setPatternWithColor(BannerPattern.RHOMBUS_MIDDLE, DyeColor.LIGHT_BLUE).setPatternWithColor(BannerPattern.STRIPE_DOWNRIGHT, DyeColor.YELLOW).setPatternWithColor(BannerPattern.STRIPE_DOWNLEFT, DyeColor.YELLOW).setPatternWithColor(BannerPattern.STRIPE_BOTTOM, DyeColor.YELLOW).setPatternWithColor(BannerPattern.TRIANGLE_TOP, DyeColor.YELLOW).setPatternWithColor(BannerPattern.CURLY_BORDER, DyeColor.YELLOW).buildNBT();
+            ListNBT listnbt = (new BannerPattern.Builder()).func_222477_a(BannerPattern.RHOMBUS_MIDDLE, DyeColor.LIGHT_BLUE).func_222477_a(BannerPattern.STRIPE_DOWNRIGHT, DyeColor.YELLOW).func_222477_a(BannerPattern.STRIPE_DOWNLEFT, DyeColor.YELLOW).func_222477_a(BannerPattern.STRIPE_BOTTOM, DyeColor.YELLOW).func_222477_a(BannerPattern.TRIANGLE_TOP, DyeColor.YELLOW).func_222477_a(BannerPattern.CURLY_BORDER, DyeColor.YELLOW).func_222476_a();
             compoundnbt.put("Patterns", listnbt);
-            queenBeeBanner.setDisplayName(new TranslationTextComponent("block.resourcefulbees.queen_bee_banner").mergeStyle(TextFormatting.GOLD));
+            queenBeeBanner.setDisplayName(new TranslationTextComponent("block.resourcefulbees.queen_bee_banner").formatted(TextFormatting.GOLD));
             queenBeeBanner.setCount(1);
 
             level1.add((entity, rand) -> new MerchantOffer(
@@ -124,7 +134,7 @@ public class ResourcefulBees
                     10, 4, 1));
             level3.add((entity, rand) -> new MerchantOffer(
                     new ItemStack(Items.EMERALD, 2),
-                    new ItemStack(RegistryHandler.BEESWAX.get(), 6),
+                    new ItemStack(RegistryHandler.WAX.get(), 6),
                     15, 4, 1));
             level4.add((entity, rand) -> new MerchantOffer(
                     new ItemStack(Items.HONEY_BOTTLE, 4),
@@ -142,39 +152,23 @@ public class ResourcefulBees
     }
 
     private void setup(final FMLCommonSetupEvent event){
-        /*
-        The lines below are necessary for getting mod bees into mod beehive.
-        We're basically pushing the mod data into the minecraft POI list
-        because forge POI doesn't seem to have any impact.
-        Not entirely sure if forge registered POI is even necessary
-         */
+        //PointOfInterestType.BEEHIVE.field_221075_w = this.makeBeehivePOIMutable(PointOfInterestType.BEEHIVE.field_221075_w);
         Map<BlockState, PointOfInterestType> pointOfInterestTypeMap = new HashMap<>();
-        RegistryHandler.T1_BEEHIVE.get().getStateContainer().getValidStates().forEach(blockState -> pointOfInterestTypeMap.put(blockState, RegistryHandler.TIERED_BEEHIVE_POI.get()));
-        RegistryHandler.T2_BEEHIVE.get().getStateContainer().getValidStates().forEach(blockState -> pointOfInterestTypeMap.put(blockState, RegistryHandler.TIERED_BEEHIVE_POI.get()));
-        RegistryHandler.T3_BEEHIVE.get().getStateContainer().getValidStates().forEach(blockState -> pointOfInterestTypeMap.put(blockState, RegistryHandler.TIERED_BEEHIVE_POI.get()));
-        RegistryHandler.T4_BEEHIVE.get().getStateContainer().getValidStates().forEach(blockState -> pointOfInterestTypeMap.put(blockState, RegistryHandler.TIERED_BEEHIVE_POI.get()));
-        RegistryHandler.OAK_BEE_NEST.get().getStateContainer().getValidStates().forEach(blockState -> pointOfInterestTypeMap.put(blockState, RegistryHandler.TIERED_BEEHIVE_POI.get()));
-        RegistryHandler.ACACIA_BEE_NEST.get().getStateContainer().getValidStates().forEach(blockState -> pointOfInterestTypeMap.put(blockState, RegistryHandler.TIERED_BEEHIVE_POI.get()));
-        RegistryHandler.GRASS_BEE_NEST.get().getStateContainer().getValidStates().forEach(blockState -> pointOfInterestTypeMap.put(blockState, RegistryHandler.TIERED_BEEHIVE_POI.get()));
-        RegistryHandler.JUNGLE_BEE_NEST.get().getStateContainer().getValidStates().forEach(blockState -> pointOfInterestTypeMap.put(blockState, RegistryHandler.TIERED_BEEHIVE_POI.get()));
-        RegistryHandler.NETHER_BEE_NEST.get().getStateContainer().getValidStates().forEach(blockState -> pointOfInterestTypeMap.put(blockState, RegistryHandler.TIERED_BEEHIVE_POI.get()));
-        RegistryHandler.PRISMARINE_BEE_NEST.get().getStateContainer().getValidStates().forEach(blockState -> pointOfInterestTypeMap.put(blockState, RegistryHandler.TIERED_BEEHIVE_POI.get()));
-        RegistryHandler.PURPUR_BEE_NEST.get().getStateContainer().getValidStates().forEach(blockState -> pointOfInterestTypeMap.put(blockState, RegistryHandler.TIERED_BEEHIVE_POI.get()));
-        RegistryHandler.WITHER_BEE_NEST.get().getStateContainer().getValidStates().forEach(blockState -> pointOfInterestTypeMap.put(blockState, RegistryHandler.TIERED_BEEHIVE_POI.get()));
-        RegistryHandler.BIRCH_BEE_NEST.get().getStateContainer().getValidStates().forEach(blockState -> pointOfInterestTypeMap.put(blockState, RegistryHandler.TIERED_BEEHIVE_POI.get()));
-        RegistryHandler.BROWN_MUSHROOM_BEE_NEST.get().getStateContainer().getValidStates().forEach(blockState -> pointOfInterestTypeMap.put(blockState, RegistryHandler.TIERED_BEEHIVE_POI.get()));
-        RegistryHandler.CRIMSON_BEE_NEST.get().getStateContainer().getValidStates().forEach(blockState -> pointOfInterestTypeMap.put(blockState, RegistryHandler.TIERED_BEEHIVE_POI.get()));
-        RegistryHandler.CRIMSON_NYLIUM_BEE_NEST.get().getStateContainer().getValidStates().forEach(blockState -> pointOfInterestTypeMap.put(blockState, RegistryHandler.TIERED_BEEHIVE_POI.get()));
-        RegistryHandler.DARK_OAK_BEE_NEST.get().getStateContainer().getValidStates().forEach(blockState -> pointOfInterestTypeMap.put(blockState, RegistryHandler.TIERED_BEEHIVE_POI.get()));
-        RegistryHandler.RED_MUSHROOM_BEE_NEST.get().getStateContainer().getValidStates().forEach(blockState -> pointOfInterestTypeMap.put(blockState, RegistryHandler.TIERED_BEEHIVE_POI.get()));
-        RegistryHandler.SPRUCE_BEE_NEST.get().getStateContainer().getValidStates().forEach(blockState -> pointOfInterestTypeMap.put(blockState, RegistryHandler.TIERED_BEEHIVE_POI.get()));
-        RegistryHandler.WARPED_BEE_NEST.get().getStateContainer().getValidStates().forEach(blockState -> pointOfInterestTypeMap.put(blockState, RegistryHandler.TIERED_BEEHIVE_POI.get()));
-        RegistryHandler.WARPED_NYLIUM_BEE_NEST.get().getStateContainer().getValidStates().forEach(blockState -> pointOfInterestTypeMap.put(blockState, RegistryHandler.TIERED_BEEHIVE_POI.get()));
-        RegistryHandler.T1_APIARY_BLOCK.get().getStateContainer().getValidStates().forEach(blockState -> pointOfInterestTypeMap.put(blockState, RegistryHandler.TIERED_BEEHIVE_POI.get()));
-        RegistryHandler.T2_APIARY_BLOCK.get().getStateContainer().getValidStates().forEach(blockState -> pointOfInterestTypeMap.put(blockState, RegistryHandler.TIERED_BEEHIVE_POI.get()));
-        RegistryHandler.T3_APIARY_BLOCK.get().getStateContainer().getValidStates().forEach(blockState -> pointOfInterestTypeMap.put(blockState, RegistryHandler.TIERED_BEEHIVE_POI.get()));
-        RegistryHandler.T4_APIARY_BLOCK.get().getStateContainer().getValidStates().forEach(blockState -> pointOfInterestTypeMap.put(blockState, RegistryHandler.TIERED_BEEHIVE_POI.get()));
-        PointOfInterestType.POIT_BY_BLOCKSTATE.putAll(pointOfInterestTypeMap);
+        RegistryHandler.BLOCKS.getEntries().stream()
+                .filter(blockRegistryObject -> blockRegistryObject.get() instanceof TieredBeehiveBlock)
+                .forEach((blockRegistryObject -> blockRegistryObject.get()
+                        .getStateContainer()
+                        .getValidStates()
+                        .forEach(blockState -> putPOIInMap(blockState, pointOfInterestTypeMap))));
+        RegistryHandler.BLOCKS.getEntries().stream()
+                .filter(blockRegistryObject -> blockRegistryObject.get() instanceof ApiaryBlock)
+                .forEach((blockRegistryObject -> blockRegistryObject.get()
+                        .getStateContainer()
+                        .getValidStates()
+                        .forEach(blockState -> putPOIInMap(blockState, pointOfInterestTypeMap))));
+        //Blocks.BEEHIVE.getStateContainer().getValidStates().forEach(blockState -> pointOfInterestTypeMap.put(blockState, RegistryHandler.TIERED_BEEHIVE_POI.get()));
+        //Blocks.BEE_NEST.getStateContainer().getValidStates().forEach(blockState -> pointOfInterestTypeMap.put(blockState, RegistryHandler.TIERED_BEEHIVE_POI.get()));
+        PointOfInterestType.field_221073_u.putAll(pointOfInterestTypeMap);
 
         if (Config.ALLOW_SHEARS.get())
             ModSetup.setupDispenserCollectionBehavior();
@@ -184,18 +178,21 @@ public class ResourcefulBees
         RegistryHandler.addEntityAttributes();
         MinecraftForge.EVENT_BUS.register(new RecipeBuilder());
     }
+
+    private void putPOIInMap(BlockState blockState, Map<BlockState, PointOfInterestType> pointOfInterestTypeMap) {
+        //PointOfInterestType.field_221073_u.put(blockState, PointOfInterestType.BEEHIVE);
+        //PointOfInterestType.BEEHIVE.field_221075_w.add(blockState);
+        pointOfInterestTypeMap.put(blockState, RegistryHandler.TIERED_BEEHIVE_POI.get());
+    }
+
     public void onInterModEnqueue(InterModEnqueueEvent event) {
         if (ModList.get().isLoaded("theoneprobe"))
             InterModComms.sendTo("theoneprobe", "getTheOneProbe", TopCompat::new);
     }
 
-    public void registerCommands(RegisterCommandsEvent event) {
-        ResourcefulBeeCommands.register(event.getDispatcher());
-    }
-
     private void doClientStuff(final FMLClientSetupEvent event) {
         CentrifugeScreen.currentMonth = new SimpleDateFormat("MM").format(new Date());
-        RenderingRegistry.registerEntityRenderingHandler(RegistryHandler.CUSTOM_BEE.get(), CustomBeeRenderer::new);
+        BeeRegistry.MOD_BEES.forEach((s, customBee) -> RenderingRegistry.registerEntityRenderingHandler(customBee.get(), CustomBeeRenderer::new));
         ScreenManager.registerFactory(RegistryHandler.CENTRIFUGE_CONTAINER.get(), CentrifugeScreen::new);
         ScreenManager.registerFactory(RegistryHandler.MECHANICAL_CENTRIFUGE_CONTAINER.get(), MechanicalCentrifugeScreen::new);
         ScreenManager.registerFactory(RegistryHandler.CENTRIFUGE_MULTIBLOCK_CONTAINER.get(), CentrifugeMultiblockScreen::new);
@@ -212,9 +209,17 @@ public class ResourcefulBees
     }
 
     private void loadComplete(FMLLoadCompleteEvent event) {
-        TraitRegistration.registerDefaultTraits();
-        BeeBuilder.setupBees();
-        TraitRegistration.giveBeesTraits();
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> DataGen::GenerateEnglishLang);
+        TraitRegistry.registerDefaultTraits();
+        TraitRegistry.setTraitRegistryClosed();
+        TraitRegistry.giveBeeTraits();
+
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> DataGen::generateClientData);
+        DataGen.generateCommonData();
+    }
+
+    private Set<BlockState> makeBeehivePOIMutable(Set<BlockState> toCopy) {
+        Set<BlockState> copy = Sets.newHashSet();
+        copy.addAll(toCopy);
+        return copy;
     }
 }

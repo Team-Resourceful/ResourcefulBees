@@ -7,9 +7,9 @@ import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.container.AutomationSensitiveItemStackHandler;
 import com.resourcefulbees.resourcefulbees.container.CentrifugeContainer;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
+import com.resourcefulbees.resourcefulbees.lib.CustomStorageContainers;
 import com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe;
 import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
-import com.resourcefulbees.resourcefulbees.utils.CustomEnergyStorage;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -48,7 +48,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
     public static final int OUTPUT2 = 4;
 
     public AutomationSensitiveItemStackHandler h = new TileStackHandler(5);
-    public final CustomEnergyStorage energyStorage = createEnergy();
+    public final CustomStorageContainers.CustomEnergyStorage energyStorage = createEnergy();
     private final LazyOptional<IItemHandler> lazyOptional = LazyOptional.of(() -> h);
     private final LazyOptional<IEnergyStorage> energy = LazyOptional.of(() -> energyStorage);
     public int time = 0;
@@ -91,7 +91,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
 
     protected boolean canProcess(@Nullable CentrifugeRecipe recipe) {
         if (recipe != null && !recipe.multiblock) {
-            List<Pair<ItemStack, Double>> outputs = recipe.outputs;
+            List<Pair<ItemStack, Float>> outputs = recipe.outputs;
             ItemStack glass_bottle = h.getStackInSlot(BOTTLE_SLOT);
             ItemStack combs = h.getStackInSlot(HONEYCOMB_SLOT);
             JsonElement count = recipe.ingredient.serialize().getAsJsonObject().get(BeeConstants.INGREDIENT_COUNT);
@@ -128,7 +128,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
     private void processItem(@Nullable CentrifugeRecipe recipe) {
         if (recipe != null && this.canProcess(recipe)) {
             JsonElement count = recipe.ingredient.serialize().getAsJsonObject().get(BeeConstants.INGREDIENT_COUNT);
-            int inputAmount = count !=null ? count.getAsInt() : 1;
+            int inputAmount = count != null ? count.getAsInt() : 1;
             ItemStack comb = h.getStackInSlot(HONEYCOMB_SLOT);
             ItemStack glass_bottle = h.getStackInSlot(BOTTLE_SLOT);
             List<Pair<ItemStack, Integer>> slots = new ArrayList<>(
@@ -140,7 +140,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
             );
             if (world != null)
             for(int i = 0; i < 3; i++){
-                Pair<ItemStack, Double> output = recipe.outputs.get(i);
+                Pair<ItemStack, Float> output = recipe.outputs.get(i);
                 if (output.getRight() >= world.rand.nextDouble()) {
                     if (slots.get(i).getLeft().isEmpty()) {
                         this.h.setStackInSlot(slots.get(i).getRight(), output.getLeft().copy());
@@ -187,13 +187,13 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
     }
 
     @Override
-    public void read(@Nonnull BlockState state, CompoundNBT tag) {
+    public void fromTag(@Nonnull BlockState state, CompoundNBT tag) {
         CompoundNBT invTag = tag.getCompound("inv");
         h.deserializeNBT(invTag);
         time = tag.getInt("time");
         totalTime = tag.getInt("totalTime");
         energyStorage.deserializeNBT(tag.getCompound("energy"));
-        super.read(state, tag);
+        super.fromTag(state, tag);
     }
 
     @Nonnull
@@ -206,7 +206,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
 
     @Override
     public void handleUpdateTag(@Nonnull BlockState state, CompoundNBT tag) {
-        this.read(state, tag);
+        this.fromTag(state, tag);
     }
 
     @Nonnull
@@ -238,8 +238,8 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
         return new TranslationTextComponent("gui.resourcefulbees.centrifuge");
     }
 
-    private CustomEnergyStorage createEnergy() {
-        return new CustomEnergyStorage(Config.MAX_CENTRIFUGE_RF.get(), 100, 0) {
+    private CustomStorageContainers.CustomEnergyStorage createEnergy() {
+        return new CustomStorageContainers.CustomEnergyStorage(Config.MAX_CENTRIFUGE_RF.get(), 100, 0) {
             @Override
             protected void onEnergyChanged() {
                 markDirty();

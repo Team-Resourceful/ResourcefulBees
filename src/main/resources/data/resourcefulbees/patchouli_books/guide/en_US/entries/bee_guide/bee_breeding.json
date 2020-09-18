@@ -1,0 +1,12 @@
+{
+    "name": "Bee Breeding",
+    "icon": "resourcefulbees:gold_flower",
+    "category": "bee_guide",
+    "sortnum": 2,
+    "pages": [
+        {
+            "type": "text",
+            "text": "Bees can have parents these parents can produce children, you can see the childrens parents in JEI."
+        }
+    ]
+}

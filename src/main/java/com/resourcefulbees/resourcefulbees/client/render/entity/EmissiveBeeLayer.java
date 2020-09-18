@@ -3,11 +3,10 @@ package com.resourcefulbees.resourcefulbees.client.render.entity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
-import com.resourcefulbees.resourcefulbees.config.BeeInfo;
-import com.resourcefulbees.resourcefulbees.data.BeeData;
+import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
-import com.resourcefulbees.resourcefulbees.utils.RainbowColor;
+import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.IEntityRenderer;
@@ -24,22 +23,22 @@ public class EmissiveBeeLayer extends LayerRenderer<CustomBeeEntity, CustomBeeMo
     }
 
     public void render(@Nonnull MatrixStack matrixStackIn, @Nonnull IRenderTypeBuffer bufferIn, int packedLightIn, CustomBeeEntity entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        BeeData bee = entitylivingbaseIn.getBeeInfo();
-        ResourceLocation location = new ResourceLocation(ResourcefulBees.MOD_ID, BeeConstants.ENTITY_TEXTURES_DIR + bee.getEmissiveLayerTexture() + (entitylivingbaseIn.func_233678_J__() ? "_angry.png" : ".png"));
+        CustomBeeData bee = entitylivingbaseIn.getBeeData();
+        ResourceLocation location = new ResourceLocation(ResourcefulBees.MOD_ID, BeeConstants.ENTITY_TEXTURES_DIR + bee.getColorData().getEmissiveLayerTexture() + (entitylivingbaseIn.hasAngerTime() ? "_angry.png" : ".png"));
         IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.getEyes(location));
 
-        if (bee.isRainbowBee() && bee.isGlowing()) {
+        if (bee.getColorData().isRainbowBee() && bee.getColorData().isGlowing()) {
             float[] glowColor = RainbowColor.getColorFloats();
-            if (!entitylivingbaseIn.getRenderingInJei() && (bee.getGlowingPulse() == 0 || entitylivingbaseIn.ticksExisted / 5 % bee.getGlowingPulse() == 0)) {
-                this.getEntityModel().render(matrixStackIn, ivertexbuilder, 15728640, OverlayTexture.NO_OVERLAY, glowColor[0], glowColor[1], glowColor[2], 1.0F);
+            if (bee.getColorData().getGlowingPulse() == 0 || entitylivingbaseIn.ticksExisted / 5 % bee.getColorData().getGlowingPulse() == 0) {
+                this.getEntityModel().render(matrixStackIn, ivertexbuilder, 15728640, OverlayTexture.DEFAULT_UV, glowColor[0], glowColor[1], glowColor[2], 1.0F);
             }
-        } else if (bee.isGlowing() && bee.getGlowingColor() !=null && !bee.getGlowingColor().isEmpty()){
-            float[] glowColor = BeeInfo.getColorFloats(bee.getGlowingColor());
-            if (!entitylivingbaseIn.getRenderingInJei() && (bee.getGlowingPulse() == 0 || entitylivingbaseIn.ticksExisted / 5 % bee.getGlowingPulse() == 0)) {
-                this.getEntityModel().render(matrixStackIn, ivertexbuilder, 15728640, OverlayTexture.NO_OVERLAY, glowColor[0], glowColor[1], glowColor[2], 1.0F);
+        } else if (bee.getColorData().isGlowing() && bee.getColorData().hasGlowColor()){
+            float[] glowColor = bee.getColorData().getGlowColorFloats();
+            if (bee.getColorData().getGlowingPulse() == 0 || entitylivingbaseIn.ticksExisted / 5 % bee.getColorData().getGlowingPulse() == 0) {
+                this.getEntityModel().render(matrixStackIn, ivertexbuilder, 15728640, OverlayTexture.DEFAULT_UV, glowColor[0], glowColor[1], glowColor[2], 1.0F);
             }
-        } else if (bee.isEnchanted()){
-            this.getEntityModel().render(matrixStackIn, bufferIn.getBuffer(RenderType.getEntityGlint()), packedLightIn, OverlayTexture.NO_OVERLAY, 0.0F, 0.0F, 0.0F, 0.0F);
+        } else if (bee.getColorData().isEnchanted()){
+            this.getEntityModel().render(matrixStackIn, bufferIn.getBuffer(RenderType.getEntityGlint()), packedLightIn, OverlayTexture.DEFAULT_UV, 0.0F, 0.0F, 0.0F, 0.0F);
         }
     }
 }

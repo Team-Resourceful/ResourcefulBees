@@ -23,20 +23,20 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
     public static String currentMonth;
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(@Nonnull MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
+    protected void drawBackground(@Nonnull MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
         ResourceLocation texture;
         if (currentMonth.equals("12")) texture = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/gui/centrifuges/christmas_centrifuge.png");
         else texture = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/gui/centrifuges/centrifuge.png");
-        Minecraft client = this.minecraft;
+        Minecraft client = this.client;
         if (client != null) {
             client.getTextureManager().bindTexture(texture);
             int i = this.guiLeft;
             int j = this.guiTop;
-            this.blit(matrix, i, j, 0, 0, this.xSize, this.ySize);
+            this.drawTexture(matrix, i, j, 0, 0, this.xSize, this.ySize);
             int scaledprogress = 74 * this.container.centrifugeTileEntity.time / Math.max(this.container.centrifugeTileEntity.totalTime,1);
-            this.blit(matrix, i + 51, j + 28, 176, 0, scaledprogress, 28);
+            this.drawTexture(matrix, i + 51, j + 28, 176, 0, scaledprogress, 28);
             int scaledRF = 52 * this.container.getEnergy() / Math.max(Config.MAX_CENTRIFUGE_RF.get(),1);
-            this.blit(matrix, i + 8, j + 8 + (52-scaledRF), 176, 28 + (52-scaledRF), 11, scaledRF);
+            this.drawTexture(matrix, i + 8, j + 8 + (52-scaledRF), 176, 28 + (52-scaledRF), 11, scaledRF);
         }
     }
 
@@ -44,7 +44,7 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
     public void render(@Nonnull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrix);
         super.render(matrix, mouseX, mouseY, partialTicks);
-        this.func_230459_a_(matrix, mouseX, mouseY);
+        this.drawMouseoverTooltip(matrix, mouseX, mouseY);
         DecimalFormat decimalFormat = new DecimalFormat("##0.0");
         if (mouseX >= this.guiLeft + 7 && mouseX <= this.guiLeft + 20 && mouseY >= this.guiTop + 7 && mouseY <= this.guiTop + 59){
             if (Screen.hasShiftDown() || this.container.getEnergy() < 500) this.renderTooltip(matrix, new StringTextComponent(this.container.getEnergy() + " RF"), mouseX, mouseY);
@@ -53,7 +53,7 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
     }
 
     @Override
-    protected void drawGuiContainerForegroundLayer(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
-        this.font.drawString(matrix, this.title.getString(), 25, 5, textColor);
+    protected void drawForeground(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
+        this.textRenderer.draw(matrix, this.title.getString(), 25, 5, textColor);
     }
 }

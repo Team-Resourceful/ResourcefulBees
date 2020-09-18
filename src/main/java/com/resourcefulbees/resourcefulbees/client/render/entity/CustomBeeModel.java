@@ -38,16 +38,16 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
         this.torso = new ModelRenderer(this, 0, 0);
         this.torso.setRotationPoint(0.0F, 0.0F, 0.0F);
         this.body.addChild(this.torso);
-        this.torso.addBox(-3.5F, -4.0F, -5.0F, 7.0F, 7.0F, 10.0F, 0.0F);
+        this.torso.addCuboid(-3.5F, -4.0F, -5.0F, 7.0F, 7.0F, 10.0F, 0.0F);
         this.stinger = new ModelRenderer(this, 26, 7);
-        this.stinger.addBox(0.0F, -1.0F, 5.0F, 0.0F, 1.0F, 2.0F, 0.0F);
+        this.stinger.addCuboid(0.0F, -1.0F, 5.0F, 0.0F, 1.0F, 2.0F, 0.0F);
         this.torso.addChild(this.stinger);
         this.leftAntenna = new ModelRenderer(this, 2, 0);
         this.leftAntenna.setRotationPoint(0.0F, -2.0F, -5.0F);
-        this.leftAntenna.addBox(1.5F, -2.0F, -3.0F, 1.0F, 2.0F, 3.0F, 0.0F);
+        this.leftAntenna.addCuboid(1.5F, -2.0F, -3.0F, 1.0F, 2.0F, 3.0F, 0.0F);
         this.rightAntenna = new ModelRenderer(this, 2, 3);
         this.rightAntenna.setRotationPoint(0.0F, -2.0F, -5.0F);
-        this.rightAntenna.addBox(-2.5F, -2.0F, -3.0F, 1.0F, 2.0F, 3.0F, 0.0F);
+        this.rightAntenna.addCuboid(-2.5F, -2.0F, -3.0F, 1.0F, 2.0F, 3.0F, 0.0F);
         this.torso.addChild(this.leftAntenna);
         this.torso.addChild(this.rightAntenna);
         this.rightWing = new ModelRenderer(this, 0, 18);
@@ -56,7 +56,7 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
         this.rightWing.rotateAngleY = -0.2618F;
         this.rightWing.rotateAngleZ = 0.0F;
         this.body.addChild(this.rightWing);
-        this.rightWing.addBox(-9.0F, 0.0F, 0.0F, 9.0F, 0.0F, 6.0F, 0.001F);
+        this.rightWing.addCuboid(-9.0F, 0.0F, 0.0F, 9.0F, 0.0F, 6.0F, 0.001F);
         this.leftWing = new ModelRenderer(this, 0, 18);
         this.leftWing.setRotationPoint(1.5F, -4.0F, -3.0F);
         this.leftWing.rotateAngleX = 0.0F;
@@ -64,19 +64,19 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
         this.leftWing.rotateAngleZ = 0.0F;
         this.leftWing.mirror = true;
         this.body.addChild(this.leftWing);
-        this.leftWing.addBox(0.0F, 0.0F, 0.0F, 9.0F, 0.0F, 6.0F, 0.001F);
+        this.leftWing.addCuboid(0.0F, 0.0F, 0.0F, 9.0F, 0.0F, 6.0F, 0.001F);
         this.frontLegs = new ModelRenderer(this);
         this.frontLegs.setRotationPoint(1.5F, 3.0F, -2.0F);
         this.body.addChild(this.frontLegs);
-        this.frontLegs.addBox("frontLegBox", -5.0F, 0.0F, 0.0F, 7, 2, 0, 0.0F, 26, 1);
+        this.frontLegs.func_217178_a("frontLegBox", -5.0F, 0.0F, 0.0F, 7, 2, 0, 0.0F, 26, 1);
         this.middleLegs = new ModelRenderer(this);
         this.middleLegs.setRotationPoint(1.5F, 3.0F, 0.0F);
         this.body.addChild(this.middleLegs);
-        this.middleLegs.addBox("midLegBox", -5.0F, 0.0F, 0.0F, 7, 2, 0, 0.0F, 26, 3);
+        this.middleLegs.func_217178_a("midLegBox", -5.0F, 0.0F, 0.0F, 7, 2, 0, 0.0F, 26, 3);
         this.backLegs = new ModelRenderer(this);
         this.backLegs.setRotationPoint(1.5F, 3.0F, 2.0F);
         this.body.addChild(this.backLegs);
-        this.backLegs.addBox("backLegBox", -5.0F, 0.0F, 0.0F, 7, 2, 0, 0.0F, 26, 5);
+        this.backLegs.func_217178_a("backLegBox", -5.0F, 0.0F, 0.0F, 7, 2, 0, 0.0F, 26, 5);
 
     }
 
@@ -90,7 +90,7 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
     /**
      * Sets this entity's model rotation angles
      */
-    public void setRotationAngles(CustomBeeEntity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void setAngles(CustomBeeEntity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.rightWing.rotateAngleX = 0.0F;
         this.leftAntenna.rotateAngleX = 0.0F;
         this.rightAntenna.rotateAngleX = 0.0F;
@@ -121,7 +121,7 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
             this.body.rotateAngleZ = 0.0F;
         }
 
-        if (!entityIn.func_233678_J__()) {
+        if (!entityIn.hasAngerTime()) {
             this.body.rotateAngleX = 0.0F;
             this.body.rotateAngleY = 0.0F;
             this.body.rotateAngleZ = 0.0F;
@@ -137,10 +137,10 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
         }
 
         if (this.bodyPitch > 0.0F) {
-            this.body.rotateAngleX = ModelUtils.func_228283_a_(this.body.rotateAngleX, 3.0915928F, this.bodyPitch);
+            this.body.rotateAngleX = ModelUtils.interpolateAngle(this.body.rotateAngleX, 3.0915928F, this.bodyPitch);
         }
 
-        beeSize = entityIn.getSizeModifierFromInfo(entityIn.getBeeType());
+        beeSize = entityIn.getBeeData().getSizeModifier();
         if(isChild)
             beeSize /= 2;
     }

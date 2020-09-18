@@ -1,7 +1,7 @@
 package com.resourcefulbees.resourcefulbees.container;
 
 import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
-import com.resourcefulbees.resourcefulbees.tileentity.ApiaryTileEntity;
+import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryTileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;

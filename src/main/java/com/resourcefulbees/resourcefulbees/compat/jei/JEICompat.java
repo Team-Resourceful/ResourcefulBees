@@ -8,70 +8,27 @@ import com.resourcefulbees.resourcefulbees.compat.jei.ingredients.EntityIngredie
 import com.resourcefulbees.resourcefulbees.compat.jei.ingredients.EntityIngredientFactory;
 import com.resourcefulbees.resourcefulbees.compat.jei.ingredients.EntityIngredientHelper;
 import com.resourcefulbees.resourcefulbees.compat.jei.ingredients.EntityRenderer;
-import com.resourcefulbees.resourcefulbees.item.BeeSpawnEggItem;
-import com.resourcefulbees.resourcefulbees.item.HoneycombBlockItem;
-import com.resourcefulbees.resourcefulbees.item.ResourcefulHoneycomb;
-import com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe;
 import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
 import mezz.jei.api.IModPlugin;
-import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredientType;
-import mezz.jei.api.ingredients.subtypes.ISubtypeInterpreter;
 import mezz.jei.api.registration.*;
-import mezz.jei.api.runtime.IIngredientManager;
-import mezz.jei.api.runtime.IJeiRuntime;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import static com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE;
 
 @mezz.jei.api.JeiPlugin
 public class JEICompat implements IModPlugin {
 
-    private static final ISubtypeInterpreter honeycombSubtype = stack -> {
-        Item item = stack.getItem();
-        if( !(item instanceof ResourcefulHoneycomb) ) return "";
-        ResourcefulHoneycomb comb = (ResourcefulHoneycomb) item;
-        return comb.getTranslationKey(stack);
-    };
-    private static final ISubtypeInterpreter honeycombBlockSubtype = stack -> {
-        Item item = stack.getItem();
-        if( !(item instanceof HoneycombBlockItem) ) return "";
-
-        HoneycombBlockItem combBlock = (HoneycombBlockItem) item;
-
-        return combBlock.getTranslationKey(stack);
-    };
-    private static final ISubtypeInterpreter beeSpawnEggsSubtype = stack -> {
-        Item item = stack.getItem();
-        if( !(item instanceof BeeSpawnEggItem) ) return "";
-
-        BeeSpawnEggItem spawnEgg = (BeeSpawnEggItem) item;
-
-        return spawnEgg.getTranslationKey(stack);
-    };
-
     public static final IIngredientType<EntityIngredient> ENTITY_INGREDIENT = () -> EntityIngredient.class;
-
-    private static <C extends IInventory, T extends IRecipe<C>> Collection<T> getRecipes(RecipeManager recipeManager, IRecipeType<T> recipeType) {
-        Map<ResourceLocation, IRecipe<C>> recipesMap = recipeManager.getRecipes(recipeType);
-        return (Collection<T>) recipesMap.values();
-    }
 
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
@@ -95,14 +52,6 @@ public class JEICompat implements IModPlugin {
     }
 
     @Override
-    public void registerItemSubtypes( ISubtypeRegistration subtypeRegistry )
-    {
-        subtypeRegistry.registerSubtypeInterpreter( RegistryHandler.RESOURCEFUL_HONEYCOMB.get(), honeycombSubtype );
-        subtypeRegistry.registerSubtypeInterpreter( RegistryHandler.HONEYCOMB_BLOCK_ITEM.get(), honeycombBlockSubtype);
-        subtypeRegistry.registerSubtypeInterpreter( RegistryHandler.BEE_SPAWN_EGG.get(), beeSpawnEggsSubtype);
-    }
-
-    @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
         registration.addRecipeCatalyst(new ItemStack(RegistryHandler.T1_BEEHIVE_ITEM.get()), BeeHiveCategory.ID);
         registration.addRecipeCatalyst(new ItemStack(RegistryHandler.T2_BEEHIVE_ITEM.get()), BeeHiveCategory.ID);
@@ -122,9 +71,8 @@ public class JEICompat implements IModPlugin {
         World clientWorld= Minecraft.getInstance().world;
         if (clientWorld != null) {
             RecipeManager recipeManager = Minecraft.getInstance().world.getRecipeManager();
-            Collection<CentrifugeRecipe> recipes = getRecipes(recipeManager, CENTRIFUGE_RECIPE_TYPE);
             registration.addRecipes(BeeHiveCategory.getHoneycombRecipes(registration.getIngredientManager()), BeeHiveCategory.ID);
-            registration.addRecipes(recipes, CentrifugeRecipeCategory.ID);
+            registration.addRecipes(recipeManager.getRecipes(CENTRIFUGE_RECIPE_TYPE).values(), CentrifugeRecipeCategory.ID);
             registration.addRecipes(BeeBreedingCategory.getBreedingRecipes(registration.getIngredientManager()), BeeBreedingCategory.ID);
             registration.addRecipes(FluidToFluid.getMutationRecipes(registration.getIngredientManager()), FluidToFluid.ID);
             registration.addRecipes(BlockToFluid.getMutationRecipes(registration.getIngredientManager()), BlockToFluid.ID);
@@ -147,12 +95,6 @@ public class JEICompat implements IModPlugin {
     public void registerIngredients(IModIngredientRegistration registration) {
         List<EntityIngredient> entityIngredients = EntityIngredientFactory.create();
         registration.register(ENTITY_INGREDIENT, entityIngredients, new EntityIngredientHelper<>(), new EntityRenderer());
-    }
-
-    @Override
-    public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
-        IIngredientManager ingredientManager = jeiRuntime.getIngredientManager();
-        ingredientManager.removeIngredientsAtRuntime(VanillaTypes.ITEM, Collections.singletonList(RegistryHandler.RESOURCEFUL_HONEYCOMB.get().getDefaultInstance()));
     }
 
     public void registerInfoDesc(IRecipeRegistration registration){

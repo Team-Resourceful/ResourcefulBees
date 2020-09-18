@@ -10,34 +10,30 @@ import java.util.List;
 
 public class EntityIngredient {
 
-    private String beeType;
-    private float rotation;
+    private final String beeType;
+    private final float rotation;
 
-    public EntityIngredient(String beeType, float rotation){
+    public EntityIngredient(String beeType, float rotation) {
         this.beeType = beeType;
         this.rotation = rotation;
     }
 
-    public String getBeeType(){
-        return beeType;
-    }
-    public float getRotation(){
-        return rotation;
-    }
+    public String getBeeType() { return beeType; }
+    public float getRotation() { return rotation; }
 
-    public ITextComponent getDisplayName(){
+    public ITextComponent getDisplayName() {
         return new TranslationTextComponent("entity.resourcefulbees."+ beeType + "_bee");
     }
 
-    public List<ITextComponent> getTooltip(){
+    public List<ITextComponent> getTooltip() {
         List<ITextComponent> tooltip = new ArrayList<>();
         if (!I18n.hasKey("tooltip.resourcefulbees.jei."+ beeType)){
             return null;
         } else {
             String desc = I18n.format("tooltip.resourcefulbees.jei."+ beeType);
             String[] descTooltip = desc.split("\\r?\\n");
-            for (int i = 0; i < descTooltip.length; i++) {
-                tooltip.add(new StringTextComponent(descTooltip[i]));
+            for (String s : descTooltip) {
+                tooltip.add(new StringTextComponent(s));
             }
             return tooltip;
         }

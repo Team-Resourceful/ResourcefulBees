@@ -2,9 +2,9 @@ package com.resourcefulbees.resourcefulbees.utils;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-import com.resourcefulbees.resourcefulbees.block.ApiaryBlock;
+import com.resourcefulbees.resourcefulbees.block.multiblocks.apiary.ApiaryBlock;
 import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
-import com.resourcefulbees.resourcefulbees.tileentity.ApiaryTileEntity;
+import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryTileEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
@@ -24,14 +24,14 @@ import java.util.List;
 
 public class PreviewHandler {
     private static BlockPos apiaryPos = null;
-    private static List<BlockPos> STRUCTURE_PREVIEW_POS = new ArrayList<>();
+    private static final List<BlockPos> STRUCTURE_PREVIEW_POS = new ArrayList<>();
     private static boolean enabled;
 
     public static void setPreview(BlockPos apiary, MutableBoundingBox box, boolean enabled){
         STRUCTURE_PREVIEW_POS.clear();
         if (enabled) {
             PreviewHandler.apiaryPos = apiary;
-            BlockPos.getAllInBox(box).forEach((blockPos -> {
+            BlockPos.stream(box).forEach((blockPos -> {
                 if (blockPos.getX() == box.minX || blockPos.getX() == box.maxX ||
                         blockPos.getY() == box.minY || blockPos.getY() == box.maxY ||
                         blockPos.getZ() == box.minZ || blockPos.getZ() == box.maxZ) {
@@ -50,7 +50,7 @@ public class PreviewHandler {
         World world = Minecraft.getInstance().world;
         MatrixStack ms = event.getMatrixStack();
 
-        IRenderTypeBuffer.Impl buffers = Minecraft.getInstance().getRenderTypeBuffers().getBufferSource();
+        IRenderTypeBuffer.Impl buffers = Minecraft.getInstance().getBufferBuilders().getEntityVertexConsumers();
         IVertexBuilder buffer = buffers.getBuffer(RenderType.getTranslucent());
 
         if (apiaryPos != null && enabled) {
@@ -76,7 +76,7 @@ public class PreviewHandler {
             }
         }
 
-        buffers.finish(RenderType.getTranslucent());
+        buffers.draw(RenderType.getTranslucent());
     }
 
     private static void renderBlockAt(MatrixStack ms, IVertexBuilder buffer, BlockState state, BlockPos pos, int lightIn) {
@@ -94,7 +94,7 @@ public class PreviewHandler {
         float r = (float) (color >> 16 & 255) / 255.0F;
         float g = (float) (color >> 8 & 255) / 255.0F;
         float b = (float) (color & 255) / 255.0F;
-        brd.getBlockModelRenderer().renderModel(ms.getLast(), buffer, state, model, r, g, b, lightIn, OverlayTexture.NO_OVERLAY, EmptyModelData.INSTANCE);
+        brd.getBlockModelRenderer().renderModel(ms.peek(), buffer, state, model, r, g, b, lightIn, OverlayTexture.DEFAULT_UV, EmptyModelData.INSTANCE);
 
         ms.pop();
     }
