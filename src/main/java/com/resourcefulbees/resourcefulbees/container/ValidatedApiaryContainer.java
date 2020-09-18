@@ -40,7 +40,6 @@ public class ValidatedApiaryContainer extends Container {
                     if (stack.getItem() instanceof BeeJar) {
                         if (BeeJar.isFilled(stack)) {
                             CompoundNBT data = stack.getTag();
-                            //TODO need to validate namespace since entity types are dynamic - check to see if this can be simplified further
                             //noinspection ConstantConditions
                             String type = data.getString(NBTConstants.NBT_ENTITY);
                             return type.startsWith(ResourcefulBees.MOD_ID);

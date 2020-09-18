@@ -7,6 +7,7 @@ import com.resourcefulbees.resourcefulbees.entity.goals.BeeAngerGoal;
 import com.resourcefulbees.resourcefulbees.entity.goals.BeeBreedGoal;
 import com.resourcefulbees.resourcefulbees.entity.goals.BeeTemptGoal;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
+import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
 import com.resourcefulbees.resourcefulbees.tileentity.TieredBeehiveTileEntity;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryTileEntity;
@@ -89,10 +90,18 @@ public class ResourcefulBee extends CustomBeeEntity {
 
     @Override
     protected void registerGoals() {
+
+        String namespaceID = this.getEntityString();
+        assert namespaceID != null;
+        String beeType = namespaceID.substring(namespaceID.lastIndexOf(":") + 1, namespaceID.length() - 4);
+        CustomBeeData customBeeData = BeeRegistry.getRegistry().getBeeData(beeType);
+
         this.goalSelector.addGoal(0, new BeeEntity.StingGoal(this, 1.4, true));
         this.goalSelector.addGoal(1, new EnterBeehiveGoal2());
-        this.goalSelector.addGoal(2, new BeeBreedGoal(this, 1.0D));
-        this.goalSelector.addGoal(3, new BeeTemptGoal(this, 1.25D, false));
+        if (customBeeData.getBreedData().isBreedable()) {
+            this.goalSelector.addGoal(2, new BeeBreedGoal(this, 1.0D));
+            this.goalSelector.addGoal(3, new BeeTemptGoal(this, 1.25D, false));
+        }
         this.pollinateGoal = new ResourcefulBee.PollinateGoal2();
         this.goalSelector.addGoal(4, this.pollinateGoal);
         this.goalSelector.addGoal(5, new FollowParentGoal(this, 1.25D));
@@ -161,19 +170,17 @@ public class ResourcefulBee extends CustomBeeEntity {
 
     public void applyPollinationEffect() {
         if (getBeeData().getMutationData().hasMutation()) {
-            if (rand.nextInt(1) == 0) {
-                for (int i = 1; i <= 2; ++i) {
-                    BlockPos beePosDown = this.getBlockPos().down(i);
-                    BlockState state = world.getBlockState(beePosDown);
-                    Block block = state.getBlock();
-                    if (validFillerBlock(block)) {
-                        world.playEvent(2005, beePosDown, 0);
-                        String mutationOutput = getBeeData().getMutationData().getMutationOutput();
-                        Block newBlock = BeeInfoUtils.getBlock(mutationOutput);
-                        if (newBlock != null)
-                            world.setBlockState(beePosDown, newBlock.getDefaultState());
-                        addCropCounter();
-                    }
+            for (int i = 1; i <= 2; ++i) {
+                BlockPos beePosDown = this.getBlockPos().down(i);
+                BlockState state = world.getBlockState(beePosDown);
+                Block block = state.getBlock();
+                if (validFillerBlock(block)) {
+                    world.playEvent(2005, beePosDown, 0);
+                    String mutationOutput = getBeeData().getMutationData().getMutationOutput();
+                    Block newBlock = BeeInfoUtils.getBlock(mutationOutput);
+                    if (newBlock != null)
+                        world.setBlockState(beePosDown, newBlock.getDefaultState());
+                    addCropCounter();
                 }
             }
         }
@@ -436,8 +443,7 @@ public class ResourcefulBee extends CustomBeeEntity {
 
         @Override
         public boolean canBeeStart() {
-            return hivePos != null && !detachHome() && canEnterHive() && !this.isCloseEnough(hivePos)
-                    && isHiveValid();
+            return hivePos != null && !detachHome() && canEnterHive() && !this.isCloseEnough(hivePos) && isHiveValid();
         }
     }
 

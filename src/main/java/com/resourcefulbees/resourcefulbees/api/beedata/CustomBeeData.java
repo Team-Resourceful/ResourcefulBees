@@ -27,12 +27,10 @@ public class CustomBeeData extends AbstractBeeData {
     private final ColorData ColorData;
     private final MutationData MutationData;
     private final SpawnData SpawnData;
-    private final TraitData TraitData;
+    private TraitData TraitData;
     private transient RegistryObject<Item> combRegistryObject;
     private transient RegistryObject<Block> combBlockRegistryObject;
     private transient RegistryObject<Item> combBlockItemRegistryObject;
-    //TODO Figure out how to make this accept any bee implementing ICustomBee without breaking everything else
-    //private transient RegistryObject<EntityType<? extends CustomBeeEntity>> customBeeEntityRegistryObject;
     private transient RegistryObject<Item> spawnEggItemRegistryObject;
     private transient ResourceLocation entityTypeRegistryID;
 
@@ -75,12 +73,6 @@ public class CustomBeeData extends AbstractBeeData {
 
     public void setCombBlockItemRegistryObject(RegistryObject<Item> combBlockItemRegistryObject) { this.combBlockItemRegistryObject = this.combBlockItemRegistryObject == null ? combBlockItemRegistryObject : this.combBlockItemRegistryObject; }
 
-    //FOR INTERNAL USE ONLY
-    //public RegistryObject<EntityType<? extends CustomBeeEntity>> getCustomBeeEntityRegistryObject() { return customBeeEntityRegistryObject; }
-
-    //FOR INTERNAL USE ONLY
-    //public void setCustomBeeEntityRegistryObject(RegistryObject<EntityType<? extends CustomBeeEntity>> customBeeEntityRegistryObject) { this.customBeeEntityRegistryObject = this.customBeeEntityRegistryObject == null ? customBeeEntityRegistryObject : this.customBeeEntityRegistryObject; }
-
     public ResourceLocation getEntityTypeRegistryID() { return entityTypeRegistryID; }
 
     public void setEntityTypeRegistryID(ResourceLocation entityTypeRegistryID) { this.entityTypeRegistryID = this.entityTypeRegistryID == null ? entityTypeRegistryID : this.entityTypeRegistryID; }
@@ -120,6 +112,8 @@ public class CustomBeeData extends AbstractBeeData {
     public SpawnData getSpawnData() { return this.SpawnData != null ? this.SpawnData : new SpawnData.Builder(false).createSpawnData(); }
 
     public TraitData getTraitData() { return this.TraitData != null ? this.TraitData : new TraitData(false); }
+
+    public void setTraitData(TraitData traitData){ this.TraitData = this.TraitData != null ? this.TraitData : traitData; }
 
     public static class Builder {
         private final String flower;

@@ -135,8 +135,6 @@ public class BlockToBlock implements IRecipeCategory<BlockToBlock.Recipe> {
     public List<ITextComponent> getTooltipStrings(Recipe recipe, double mouseX, double mouseY) {
         double infoX = 63D;
         double infoY = 8D;
-        double beeX = 10D;
-        double beeY = 6D;
         if (mouseX >= infoX && mouseX <= infoX + 9D && mouseY >= infoY && mouseY <= infoY + 9D){
             return Collections.singletonList(new StringTextComponent(I18n.format("gui." + ResourcefulBees.MOD_ID + ".jei.category.mutation.info")));
         }

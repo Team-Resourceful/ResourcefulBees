@@ -2,7 +2,6 @@ package com.resourcefulbees.resourcefulbees.compat.jei.ingredients;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
-import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import mezz.jei.api.ingredients.IIngredientRenderer;
@@ -37,7 +36,6 @@ public class EntityRenderer implements IIngredientRenderer<EntityIngredient> {
                 if (mc.player != null && beeEntity != null) {
                     beeEntity.ticksExisted = mc.player.ticksExisted;
                     beeEntity.renderYawOffset = entityIngredient.getRotation() - 90;
-                    if (beeEntity instanceof CustomBeeEntity) ((CustomBeeEntity) beeEntity).setRenderingInJei(true);
                     float scaledSize = entityIngredient.getBeeType().equals(BeeConstants.VANILLA_BEE_TYPE) ? 20 : 20 / beeData.getSizeModifier();
                     matrixStack.translate(x, y, 1);
                     matrixStack.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(180.0F));

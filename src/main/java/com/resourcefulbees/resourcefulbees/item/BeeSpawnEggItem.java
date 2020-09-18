@@ -68,7 +68,7 @@ public class BeeSpawnEggItem extends SpawnEggItem {
                     blockpos1 = blockpos.offset(direction);
                 }
 
-                EntityType<?> entitytype = this.getType(itemstack.getTag()); //TODO check this against JEI Ingredient Helper cheat stack method
+                EntityType<?> entitytype = this.getType(itemstack.getTag());
                 if (entitytype.spawn((ServerWorld) world, itemstack, context.getPlayer(), blockpos1, SpawnReason.SPAWN_EGG, true, !Objects.equals(blockpos, blockpos1) && direction == Direction.UP) != null) {
                     itemstack.shrink(1);
                 }

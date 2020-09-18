@@ -1,0 +1,12 @@
+{
+    "name": "Bee Spawning",
+    "icon": "resourcefulbees:bee_nest",
+    "category": "bee_guide",
+    "sortnum": 3,
+    "pages": [
+        {
+            "type": "text",
+            "text": "Bees spawn in world some bees can have different weights and spawn locations some bees can spawn naturally but majority come from bee nests that spawn in world."
+        }
+    ]
+}

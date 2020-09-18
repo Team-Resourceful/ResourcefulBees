@@ -15,23 +15,19 @@ public class TraitRegistry {
     private static final HashMap<String, BeeTrait> TRAIT_REGISTRY = new HashMap<>();
     private static boolean closed = false;
 
-    public static void register(String name, BeeTrait data){
+    public static void register(String name, BeeTrait data) {
         if (!closed) {
             if (!TRAIT_REGISTRY.containsKey(name)) {
                 TRAIT_REGISTRY.put(name, data);
-            } else ResourcefulBees.LOGGER.warn("Trait already Registered with that name: {}", name);
-        }else ResourcefulBees.LOGGER.warn("Trait Registration closed, trait not registered: {}", name);
+            } else ResourcefulBees.LOGGER.error("Trait already Registered with that name: {}", name);
+        } else ResourcefulBees.LOGGER.warn("Trait Registration closed, trait not registered: {}", name);
     }
 
-    public static BeeTrait getTrait(String name) {
-        return TRAIT_REGISTRY.get(name);
-    }
+    public static BeeTrait getTrait(String name) { return TRAIT_REGISTRY.get(name); }
 
-    public static void setTraitRegistryClosed(){
-        closed = true;
-    }
+    public static void setTraitRegistryClosed() { closed = true; }
 
-    public static void registerDefaultTraits(){
+    public static void registerDefaultTraits() {
         register("wither", new BeeTrait.Builder().addPotionImmunity(Effects.WITHER).addDamagePotionEffect(Pair.of(Effects.WITHER, 1)).build());
         register("blaze", new BeeTrait.Builder()
                 .addDamageImmunities(Arrays.asList(DamageSource.LAVA,DamageSource.IN_FIRE,DamageSource.ON_FIRE,DamageSource.HOT_FLOOR))
@@ -44,14 +40,13 @@ public class TraitRegistry {
         register("nether", new BeeTrait.Builder().addDamageImmunities(Arrays.asList(DamageSource.LAVA,DamageSource.IN_FIRE,DamageSource.ON_FIRE,DamageSource.HOT_FLOOR)).build());
     }
 
-    public static void giveBeeTraits(){
-
+    public static void giveBeeTraits() {
         BeeRegistry.getRegistry().getBees().forEach(((s, beeData) -> {
             if (beeData.hasTraitNames()) {
                 for (String traitString : beeData.getTraitNames()) {
                     BeeTrait trait = TraitRegistry.getTrait(traitString);
                     if (trait != null) {
-                        if (beeData.getTraitData() != null && beeData.getTraitData().hasTraits()){
+                        if (beeData.getTraitData().hasTraits()) {
                             beeData.getTraitData().addTrait(trait);
                         } else {
                             ResourcefulBees.LOGGER.warn("Traits provided but TraitData object does not exist or does not contain \"hasTraits: true\" for '{}'", s);
@@ -61,7 +56,6 @@ public class TraitRegistry {
                     }
                 }
             }
-
         }));
     }
 }

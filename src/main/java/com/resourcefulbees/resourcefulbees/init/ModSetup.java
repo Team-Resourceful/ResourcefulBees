@@ -9,6 +9,9 @@ import net.minecraft.block.DispenserBlock;
 import net.minecraft.client.Minecraft;
 import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.dispenser.OptionalDispenseBehavior;
+import net.minecraft.enchantment.Enchantments;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.resources.FolderPack;
@@ -18,9 +21,9 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.tileentity.BeehiveTileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.common.IForgeShearable;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.fml.DistExecutor;
@@ -33,6 +36,8 @@ import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.Random;
 
 import static com.resourcefulbees.resourcefulbees.ResourcefulBees.LOGGER;
 import static com.resourcefulbees.resourcefulbees.config.BeeSetup.BEE_PATH;
@@ -74,20 +79,20 @@ public class ModSetup {
         DispenserBlock.registerDispenseBehavior(Items.SHEARS.asItem(), new OptionalDispenseBehavior() {
             @Nonnull
             protected ItemStack dispenseStack(@Nonnull IBlockSource source, @Nonnull ItemStack stack) {
-                World world = source.getWorld();
+                ServerWorld world = source.getWorld();
                 if (!world.isRemote()) {
                     this.setSuccess(false);
                     BlockPos blockpos = source.getBlockPos().offset(source.getBlockState().get(DispenserBlock.FACING));
 
-                    for(net.minecraft.entity.Entity entity : world.getEntitiesInAABBexcluding(null, new AxisAlignedBB(blockpos), e -> !e.isSpectator() && e instanceof net.minecraftforge.common.IForgeShearable)) {
-                        net.minecraftforge.common.IForgeShearable target = (net.minecraftforge.common.IForgeShearable)entity;
+                    for(Entity entity : world.getEntitiesInAABBexcluding(null, new AxisAlignedBB(blockpos), e -> !e.isSpectator() && e instanceof IForgeShearable)) {
+                        IForgeShearable target = (IForgeShearable)entity;
                         if (target.isShearable(stack, world, blockpos)) {
-                            FakePlayer fakie = FakePlayerFactory.getMinecraft((ServerWorld) world);
-                            java.util.List<ItemStack> drops = target.onSheared(fakie, stack, entity.world, blockpos,
-                                    net.minecraft.enchantment.EnchantmentHelper.getEnchantmentLevel(net.minecraft.enchantment.Enchantments.FORTUNE, stack));
-                            java.util.Random rand = new java.util.Random();
+                            FakePlayer fakie = FakePlayerFactory.getMinecraft(world);
+                            List<ItemStack> drops = target.onSheared(fakie, stack, entity.world, blockpos,
+                                    net.minecraft.enchantment.EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, stack));
+                            Random rand = new Random();
                             drops.forEach(d -> {
-                                net.minecraft.entity.item.ItemEntity ent = entity.entityDropItem(d, 1.0F);
+                                ItemEntity ent = entity.entityDropItem(d, 1.0F);
                                 if (ent != null)
                                     ent.setMotion(ent.getMotion().add((rand.nextFloat() - rand.nextFloat()) * 0.1F, rand.nextFloat() * 0.05F, (rand.nextFloat() - rand.nextFloat()) * 0.1F));
                             });

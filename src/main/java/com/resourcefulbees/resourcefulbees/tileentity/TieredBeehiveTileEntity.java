@@ -223,12 +223,6 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
     super.fromTag(state, nbt);
     if (nbt.contains(NBTConstants.NBT_HONEYCOMBS_TE)) {
       honeycombs = getHoneycombs(nbt);
-/*      CompoundNBT combs = (CompoundNBT) nbt.get(NBTConstants.NBT_HONEYCOMBS_TE);
-      int i = 0;
-      while (combs != null && combs.contains(String.valueOf(i))){
-        honeycombs.push(BeeInfoUtils.getItem(combs.getString(String.valueOf(i))));
-        i++;
-      }*/
     }
     if (nbt.contains(NBTConstants.NBT_SMOKED_TE)) {
       this.isSmoked = nbt.getBoolean(NBTConstants.NBT_SMOKED_TE);
@@ -248,12 +242,6 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
     super.write(nbt);
     if (!honeycombs.isEmpty()) {
       nbt.put(NBTConstants.NBT_HONEYCOMBS_TE, writeHoneycombs());
-/*      CompoundNBT combs = new CompoundNBT();
-      for (int i = 0; i < honeycombs.size();i++){
-        //noinspection ConstantConditions
-        combs.putString(String.valueOf(i), honeycombs.elementAt(i).getRegistryName().toString());
-      }
-      nbt.put(NBTConstants.NBT_HONEYCOMBS_TE,combs);*/
     }
     nbt.putBoolean(NBTConstants.NBT_SMOKED_TE, isSmoked);
     nbt.putInt(NBTConstants.NBT_TIER, getTier());
@@ -289,42 +277,4 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
     }
     return honeycombs;
   }
-
-/*  @Override
-  public CompoundNBT serializeNBT(Stack<ItemStack> stacks)
-  {
-    ListNBT nbtTagList = new ListNBT();
-    for (int i = 0; i < stacks.size(); i++)
-    {
-      if (!stacks.get(i).isEmpty())
-      {
-        CompoundNBT itemTag = new CompoundNBT();
-        itemTag.putInt("Slot", i);
-        stacks.get(i).write(itemTag);
-        nbtTagList.add(itemTag);
-      }
-    }
-    CompoundNBT nbt = new CompoundNBT();
-    nbt.put("Items", nbtTagList);
-    nbt.putInt("Size", stacks.size());
-    return nbt;
-  }
-
-  @Override
-  public Stack<ItemStack> deserializeNBT(CompoundNBT nbt)
-  {
-    setSize(nbt.contains("Size", Constants.NBT.TAG_INT) ? nbt.getInt("Size") : stacks.size());
-    ListNBT tagList = nbt.getList("Items", Constants.NBT.TAG_COMPOUND);
-    for (int i = 0; i < tagList.size(); i++)
-    {
-      CompoundNBT itemTags = tagList.getCompound(i);
-      int slot = itemTags.getInt("Slot");
-
-      if (slot >= 0 && slot < stacks.size())
-      {
-        stacks.set(slot, ItemStack.read(itemTags));
-      }
-    }
-    onLoad();
-  }*/
 }

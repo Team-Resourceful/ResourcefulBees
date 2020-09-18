@@ -44,9 +44,6 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
 
     private static final DataParameter<Integer> FEED_COUNT = EntityDataManager.createKey(CustomBeeEntity.class, DataSerializers.VARINT);
 
-    //private boolean remove;
-    private boolean renderingInJei;
-
     protected final CustomBeeData beeData;
 
     public CustomBeeEntity(EntityType<? extends BeeEntity> type, World world, CustomBeeData beeData) {
@@ -56,39 +53,18 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
 
     //region BEE INFO RELATED METHODS BELOW
 
-    public String getBeeType() {
-        return beeData.getName();
-    }
+    public String getBeeType() { return beeData.getName(); }
 
-    public CustomBeeData getBeeData() {
-        return beeData;
-    }
+    public CustomBeeData getBeeData() { return beeData; }
 
     @Override
-    public int getFeedCount() {
-        return this.dataManager.get(FEED_COUNT);
-    }
+    public int getFeedCount() { return this.dataManager.get(FEED_COUNT); }
 
     @Override
-    public void resetFeedCount() {
-        this.dataManager.set(FEED_COUNT, 0);
-    }
+    public void resetFeedCount() { this.dataManager.set(FEED_COUNT, 0); }
 
     @Override
-    public void addFeedCount() {
-        this.dataManager.set(FEED_COUNT, this.getFeedCount() + 1);
-    }
-    //endregion
-
-    //region JEI RELATED METHODS
-    public void setRenderingInJei(boolean inJei){
-            this.renderingInJei = inJei;
-        }
-
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    public boolean getRenderingInJei(){
-            return this.renderingInJei;
-        }
+    public void addFeedCount() { this.dataManager.set(FEED_COUNT, this.getFeedCount() + 1); }
     //endregion
 
     //region CUSTOM BEE RELATED METHODS BELOW
@@ -119,19 +95,6 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
 
     @Override
     public void livingTick() {
-/*        if (remove) {
-            if (!world.isRemote()) {
-                String beeName = getBeeData().getName();
-                if (beeName.equals(BeeConstants.DEFAULT_BEE_TYPE) || beeName.isEmpty()) {
-                    LOGGER.info("Removed Bee, Reason: " + (beeName.isEmpty() ? "Empty BeeType" : "Default Bee"));
-                    remove = false;
-                    this.dead = true;
-                    this.remove();
-                }
-            } else
-                remove = false;
-        }*/
-
         if (this.world.isRemote){
             if (this.ticksExisted % 40 == 0) {
                 TraitData info = getBeeData().getTraitData();
@@ -180,7 +143,7 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
 
     public ICustomBee createSelectedChild(String beeType) {
         CustomBeeData customBeeData = BeeRegistry.getRegistry().getBeeData(beeType);
-        return (ICustomBee) ForgeRegistries.ENTITIES.getValue(customBeeData.getEntityTypeRegistryID());  //new ResourcefulBee(BeeRegistry.MOD_BEES.get(customBeeData.getName()).get(), this.world, customBeeData);
+        return (ICustomBee) ForgeRegistries.ENTITIES.getValue(customBeeData.getEntityTypeRegistryID());
     }
 
     //This is because we don't want IF being able to breed our animals

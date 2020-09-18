@@ -4,6 +4,11 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "resourcefulbees.refmap.json",
   "mixins": [
-    "MixinBeeEntity"
-  ]
+    "BeeEntityAccessor",
+    "MixinBeeEntity",
+    "MixinBeeEntity$MixinEnterBeehiveGoal",
+    "MixinBeeEntity$MixinFindBeehiveGoal",
+    "MixinBeeEntity$MixinUpdateBeehiveGoal"
+  ],
+  "minVersion": "0.8.1"
 }

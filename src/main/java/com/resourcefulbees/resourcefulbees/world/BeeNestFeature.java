@@ -58,7 +58,7 @@ public class BeeNestFeature extends Feature<NoFeatureConfig> {
             if (newPos.getY() > 100)
                 return false;
             if (worldIn.getBlockState(newPos.down()).getBlock().equals(Blocks.LAVA))
-                if (rand.nextInt(10) != 10)
+                if (rand.nextInt(11) != 10)
                     return false;
         }
         else {

@@ -37,7 +37,6 @@ import java.util.List;
 public class BeeJar extends Item {
     public BeeJar() {
         super(new Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES).maxStackSize(16));
-
     }
 
     public static int getColor(ItemStack stack, int tintIndex) {

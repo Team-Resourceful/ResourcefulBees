@@ -30,24 +30,6 @@ public class BeeRegistry implements IBeeRegistry {
 
     private boolean ALLOW_REGISTRATION;
 
-/*    //USED INTERNALLY
-    public static void genVanillaBee() {
-        CustomBeeData vanillaBee = new CustomBeeData.Builder(VANILLA_BEE_TYPE, BeeConstants.FLOWER_TAG_ALL, false,
-                new MutationData.Builder(false, MutationTypes.NONE).createMutationData(),
-                new ColorData.Builder(false).createColorData(),
-                new CentrifugeData.Builder(false, null).createCentrifugeData(),
-                new BreedData.Builder(false).createBreedData(),
-                new SpawnData.Builder(false).createSpawnData(),
-                new TraitData(false))
-                .setSizeModifier(1.0f)
-                .createCustomBee();
-        vanillaBee.shouldResourcefulBeesDoForgeRegistration = false;
-        vanillaBee.setEntityTypeRegistryID(EntityType.BEE.getRegistryName());
-        RegistryObject<Item> beeEgg = Items.BEE_SPAWN_EGG.;
-        vanillaBee.setSpawnEggItemRegistryObject();
-        getRegistry().registerBee(VANILLA_BEE_TYPE, vanillaBee);
-    }*/
-
     public void allowRegistration() { this.ALLOW_REGISTRATION = true; }
 
     public void denyRegistration() { this.ALLOW_REGISTRATION = false; }

@@ -24,7 +24,6 @@ import com.resourcefulbees.resourcefulbees.utils.PreviewHandler;
 import com.resourcefulbees.resourcefulbees.utils.color.ColorHandler;
 import com.resourcefulbees.resourcefulbees.utils.validation.SecondPhaseValidator;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
@@ -65,13 +64,8 @@ import java.util.*;
 @Mod("resourcefulbees")
 public class ResourcefulBees
 {
-    //TODO figure out how to weed out only our bees from the bee registry to prevent registering stuff to other mods bees that implement our data system.
-    //TODO Mixin the Vanilla Bee Entity to use our Hives/Apiaries with the "DoesHiveHaveSpace" method on BeeEntity class
-    //TODO test servers
     //TODO Test other mods can register their own bees with minimal issue
     //TODO Weed out all possible NPE's
-    //TODO Target 1.16.3
-
 
     public static final String MOD_ID = "resourcefulbees";
 
@@ -82,7 +76,6 @@ public class ResourcefulBees
         RegistryHandler.init();
         ResourcefulBeesAPI.setBeeRegistry(BeeRegistry.getRegistry());
         BeeRegistry.getRegistry().allowRegistration();
-        //BeeRegistry.genVanillaBee();
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.CommonConfig.COMMON_CONFIG, "resourcefulbees/common.toml");
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Config.ClientConfig.CLIENT_CONFIG, "resourcefulbees/client.toml");
@@ -159,7 +152,7 @@ public class ResourcefulBees
     }
 
     private void setup(final FMLCommonSetupEvent event){
-        PointOfInterestType.BEEHIVE.field_221075_w = this.makeBeehivePOIMutable(PointOfInterestType.BEEHIVE.field_221075_w);
+        //PointOfInterestType.BEEHIVE.field_221075_w = this.makeBeehivePOIMutable(PointOfInterestType.BEEHIVE.field_221075_w);
         Map<BlockState, PointOfInterestType> pointOfInterestTypeMap = new HashMap<>();
         RegistryHandler.BLOCKS.getEntries().stream()
                 .filter(blockRegistryObject -> blockRegistryObject.get() instanceof TieredBeehiveBlock)
@@ -173,8 +166,8 @@ public class ResourcefulBees
                         .getStateContainer()
                         .getValidStates()
                         .forEach(blockState -> putPOIInMap(blockState, pointOfInterestTypeMap))));
-        Blocks.BEEHIVE.getStateContainer().getValidStates().forEach(blockState -> pointOfInterestTypeMap.put(blockState, RegistryHandler.TIERED_BEEHIVE_POI.get()));
-        Blocks.BEE_NEST.getStateContainer().getValidStates().forEach(blockState -> pointOfInterestTypeMap.put(blockState, RegistryHandler.TIERED_BEEHIVE_POI.get()));
+        //Blocks.BEEHIVE.getStateContainer().getValidStates().forEach(blockState -> pointOfInterestTypeMap.put(blockState, RegistryHandler.TIERED_BEEHIVE_POI.get()));
+        //Blocks.BEE_NEST.getStateContainer().getValidStates().forEach(blockState -> pointOfInterestTypeMap.put(blockState, RegistryHandler.TIERED_BEEHIVE_POI.get()));
         PointOfInterestType.field_221073_u.putAll(pointOfInterestTypeMap);
 
         if (Config.ALLOW_SHEARS.get())
@@ -187,8 +180,8 @@ public class ResourcefulBees
     }
 
     private void putPOIInMap(BlockState blockState, Map<BlockState, PointOfInterestType> pointOfInterestTypeMap) {
-        PointOfInterestType.field_221073_u.put(blockState, PointOfInterestType.BEEHIVE);
-        PointOfInterestType.BEEHIVE.field_221075_w.add(blockState);
+        //PointOfInterestType.field_221073_u.put(blockState, PointOfInterestType.BEEHIVE);
+        //PointOfInterestType.BEEHIVE.field_221075_w.add(blockState);
         pointOfInterestTypeMap.put(blockState, RegistryHandler.TIERED_BEEHIVE_POI.get());
     }
 
