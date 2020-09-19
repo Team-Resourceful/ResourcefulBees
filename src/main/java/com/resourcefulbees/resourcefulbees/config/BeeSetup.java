@@ -5,13 +5,16 @@ import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.loading.moddiscovery.ModFileInfo;
+import net.minecraftforge.forgespi.language.IModFileInfo;
+import net.minecraftforge.forgespi.language.IModInfo;
 
 import java.io.*;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
+import java.util.Iterator;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -111,21 +114,98 @@ public class BeeSetup {
     }
 
     private static void setupDefaultBees() {
+
+        ModFileInfo mod = ModList.get().getModFileById(ResourcefulBees.MOD_ID);
+        Path source = mod.getFile().getFilePath();
+
         try {
-            Files.walk(Paths.get(ModList.get().getModFileById(ResourcefulBees.MOD_ID).getFile().getFilePath().toString(),"/data/resourcefulbees/default_bees"))
-                    .filter(f -> f.getFileName().toString().endsWith(".json"))
-                    .forEach(path -> {
-                        File targetFile = new File(String.valueOf(Paths.get(BEE_PATH.toString(),"/", path.getFileName().toString())));
-                        try {
-                            Files.copy(path, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    });
+            if (Files.isRegularFile(source)) {
+                createFileSystem(source);
+            } else if (Files.isDirectory(source)) {
+                copyDefaultBees(Paths.get(source.toString(), "/data/resourcefulbees/default_bees"));
+            }
         } catch (IOException e) {
-                e.printStackTrace();
+            e.printStackTrace();
         }
     }
+
+    private static void createFileSystem(Path source) throws IOException {
+        try (FileSystem fileSystem = FileSystems.newFileSystem(source, null)) {
+            Path defaultBees = fileSystem.getPath("/data/resourcefulbees/default_bees");
+            if (Files.exists(defaultBees)) {
+                copyDefaultBees(defaultBees);
+            }
+        }
+    }
+
+    private static void copyDefaultBees(Path source) throws IOException {
+        Files.walk(source)
+                .filter(f -> f.getFileName().toString().endsWith(".json"))
+                .forEach(path -> {
+                    File targetFile = new File(String.valueOf(Paths.get(BEE_PATH.toString(),"/", path.getFileName().toString())));
+                    try {
+                        Files.copy(path, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /*    private static void setupBeeSpawns() {
         for (Map.Entry<Biome, RandomCollection<String>> element : BeeInfo.SPAWNABLE_BIOMES.entrySet()) {
