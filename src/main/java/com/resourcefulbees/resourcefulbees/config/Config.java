@@ -52,6 +52,8 @@ public class Config {
     public static ForgeConfigSpec.IntValue HONEYCOMB_HUNGER;
     public static ForgeConfigSpec.DoubleValue HONEYCOMB_SATURATION;
 
+    public static ForgeConfigSpec.BooleanValue BEES_DIE_IN_VOID;
+
     //CLIENT
 
     public static ForgeConfigSpec.BooleanValue GENERATE_ENGLISH_LANG;
@@ -143,6 +145,8 @@ public class Config {
                     .defineInRange("global_bee_size_modifier", 1.0, 0.5, 2.0);
                 BEE_DIES_FROM_STING = COMMON_BUILDER.comment("\nShould bees die from stinging?\nNote: Bees will continue to attack until they are no longer angry!")
                     .define("beeDiesFromSting", true);
+                BEES_DIE_IN_VOID = COMMON_BUILDER.comment("\nShould bees die when their Y-level is below 0?\nNote: If false, bees will get stuck just below y-0 and not move.")
+                        .define("beeDiesInVoid", true);
             COMMON_BUILDER.pop();
 
             COMMON_BUILDER.push("Honeycomb Options");
