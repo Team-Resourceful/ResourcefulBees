@@ -1,228 +1,179 @@
-package com.resourcefulbees.resourcefulbees.entity.passive;
+package com.resourcefulbees.resourcefulbees.config;
 
-import com.resourcefulbees.resourcefulbees.api.ICustomBee;
-import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
-import com.resourcefulbees.resourcefulbees.api.beedata.TraitData;
-import com.resourcefulbees.resourcefulbees.config.Config;
-import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
-import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
-import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
-import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
-import com.resourcefulbees.resourcefulbees.utils.validation.ValidatorUtils;
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Pose;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.passive.BeeEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.NameTagItem;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.particles.BasicParticleType;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.tags.ITag;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.registries.ForgeRegistries;
+import com.resourcefulbees.resourcefulbees.lib.ApiaryOutput;
+import net.minecraftforge.common.ForgeConfigSpec;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.Random;
+public class Config {
 
-public class CustomBeeEntity extends BeeEntity implements ICustomBee {
+    public static ForgeConfigSpec.BooleanValue GENERATE_DEFAULTS;
+    public static ForgeConfigSpec.BooleanValue ENABLE_EASTER_EGG_BEES;
 
-    private static final DataParameter<Integer> FEED_COUNT = EntityDataManager.createKey(CustomBeeEntity.class, DataSerializers.VARINT);
+    public static ForgeConfigSpec.BooleanValue GENERATE_BEE_NESTS;
 
-    protected final CustomBeeData beeData;
+    public static ForgeConfigSpec.BooleanValue CENTRIFUGE_RECIPES;
+    public static ForgeConfigSpec.BooleanValue HONEYCOMB_BLOCK_RECIPES;
 
-    public CustomBeeEntity(EntityType<? extends BeeEntity> type, World world, CustomBeeData beeData) {
-        super(type, world);
-        this.beeData = beeData;
-    }
+    public static ForgeConfigSpec.IntValue CENTRIFUGE_RECIPE_TIME;
 
-    //region BEE INFO RELATED METHODS BELOW
+    public static ForgeConfigSpec.IntValue HIVE_MAX_BEES;
+    public static ForgeConfigSpec.IntValue HIVE_MAX_COMBS;
+    public static ForgeConfigSpec.BooleanValue ALLOW_SHEARS;
 
-    public String getBeeType() { return beeData.getName(); }
+    public static ForgeConfigSpec.IntValue SPAWN_WEIGHT;
+    public static ForgeConfigSpec.IntValue SPAWN_MIN_GROUP;
+    public static ForgeConfigSpec.IntValue SPAWN_MAX_GROUP;
 
-    public CustomBeeData getBeeData() { return beeData; }
+    public static ForgeConfigSpec.DoubleValue BEE_NEST_GENERATION_WEIGHT;
 
-    @Override
-    public int getFeedCount() { return this.dataManager.get(FEED_COUNT); }
+    public static ForgeConfigSpec.EnumValue<ApiaryOutput> T1_APIARY_OUTPUT;
+    public static ForgeConfigSpec.EnumValue<ApiaryOutput> T2_APIARY_OUTPUT;
+    public static ForgeConfigSpec.EnumValue<ApiaryOutput> T3_APIARY_OUTPUT;
+    public static ForgeConfigSpec.EnumValue<ApiaryOutput> T4_APIARY_OUTPUT;
 
-    @Override
-    public void resetFeedCount() { this.dataManager.set(FEED_COUNT, 0); }
+    public static ForgeConfigSpec.IntValue T1_APIARY_QUANTITY;
+    public static ForgeConfigSpec.IntValue T2_APIARY_QUANTITY;
+    public static ForgeConfigSpec.IntValue T3_APIARY_QUANTITY;
+    public static ForgeConfigSpec.IntValue T4_APIARY_QUANTITY;
 
-    @Override
-    public void addFeedCount() { this.dataManager.set(FEED_COUNT, this.getFeedCount() + 1); }
-    //endregion
+    public static ForgeConfigSpec.IntValue MAX_CENTRIFUGE_RF;
+    public static ForgeConfigSpec.IntValue RF_TICK_CENTRIFUGE;
+    public static ForgeConfigSpec.DoubleValue PLAYER_EXHAUSTION;
+    public static ForgeConfigSpec.BooleanValue MULTIBLOCK_RECIPES_ONLY;
 
-    //region CUSTOM BEE RELATED METHODS BELOW
+    public static ForgeConfigSpec.IntValue APIARY_MAX_BEES;
+    public static ForgeConfigSpec.IntValue APIARY_MAX_BREED_TIME;
 
-    @Override
-    public boolean isInvulnerableTo(@Nonnull DamageSource source) {
-        TraitData info = getBeeData().getTraitData();
-        if (source.equals(DamageSource.SWEET_BERRY_BUSH)) {
-            return true;
-        }
-        if (info.hasDamageImmunities()){
-            for (DamageSource damage : info.getDamageImmunities())
-                if (source.equals(damage)) return true;
-        }
-        return super.isInvulnerableTo(source);
-    }
+    public static ForgeConfigSpec.IntValue SMOKER_DURABILITY;
 
-    @Override
-    public boolean isPotionApplicable(@Nonnull EffectInstance potioneffectIn) {
-        TraitData info = getBeeData().getTraitData();
-        if (info.hasPotionImmunities()){
-            for (Effect potion : info.getPotionImmunities()){
-                if (potion.equals(potioneffectIn.getPotion())) return false;
-            }
-        }
-        return super.isPotionApplicable(potioneffectIn);
-    }
+    public static ForgeConfigSpec.DoubleValue BEE_SIZE_MODIFIER;
 
-    @Override
-    public void livingTick() {
-        if (this.world.isRemote) {
-            if (this.ticksExisted % 40 == 0) {
-                TraitData info = getBeeData().getTraitData();
-                if (info.hasParticleEffects()){
-                    for (BasicParticleType particle : info.getParticleEffects()){
-                        for (int i = 0; i < 10; ++i) {
-                            this.world.addParticle(particle, this.getParticleX(0.5D),
-                                    this.getRandomBodyY() - 0.25D, this.getParticleZ(0.5D),
-                                    (this.rand.nextDouble() - 0.5D) * 2.0D, -this.rand.nextDouble(),
-                                    (this.rand.nextDouble() - 0.5D) * 2.0D);
-                        }
-                    }
-                }
-            }
-        } else {
-            if (Config.BEES_DIE_IN_VOID.get() && this.getPositionVec().y < -3) {
-                this.remove();
-            }
-        }
-        super.livingTick();
-    }
+    public static ForgeConfigSpec.BooleanValue BEE_DIES_FROM_STING;
 
-    @SuppressWarnings("unused")
-    public static boolean canBeeSpawn(EntityType<? extends AnimalEntity> typeIn, IWorld worldIn, SpawnReason reason, BlockPos pos, Random randomIn) {
-        return false; //TODO fix when forge updates biome stuff
+    public static ForgeConfigSpec.IntValue HONEYCOMB_HUNGER;
+    public static ForgeConfigSpec.DoubleValue HONEYCOMB_SATURATION;
 
-                /*worldIn.getWorld().func_234922_V_().equals(DimensionType.THE_NETHER)
-                || worldIn.getWorld().func_234922_V_().equals(DimensionType.THE_END)
-                || worldIn.getLight(pos) > 8;*/
-    }
+    public static ForgeConfigSpec.BooleanValue BEES_DIE_IN_VOID;
 
-    @Override
-    protected void registerData() {
-        super.registerData();
-        this.dataManager.register(FEED_COUNT, 0);
-    }
+    //CLIENT
 
-    @Override
-    public void readAdditional(@Nonnull CompoundNBT compound) {
-        super.readAdditional(compound);
-        this.dataManager.set(FEED_COUNT, compound.getInt(NBTConstants.NBT_FEED_COUNT));
-    }
+    public static ForgeConfigSpec.BooleanValue GENERATE_ENGLISH_LANG;
+    public static ForgeConfigSpec.BooleanValue SHOW_DEBUG_INFO;
 
-    @Override
-    public void writeAdditional(@Nonnull CompoundNBT compound) {
-        super.writeAdditional(compound);
-        compound.putString(NBTConstants.NBT_BEE_TYPE, this.getBeeType());
-        compound.putInt(NBTConstants.NBT_FEED_COUNT, this.getFeedCount());
-    }
+    public static class CommonConfig {
 
-    public ICustomBee createSelectedChild(String beeType) {
-        CustomBeeData customBeeData = BeeRegistry.getRegistry().getBeeData(beeType);
-        return (ICustomBee) ForgeRegistries.ENTITIES.getValue(customBeeData.getEntityTypeRegistryID());
-    }
+        public static ForgeConfigSpec COMMON_CONFIG;
 
-    //This is because we don't want IF being able to breed our animals
-    @Override
-    public void setInLove(@Nullable PlayerEntity player) {
-        if(player != null && !(player instanceof FakePlayer))
-            super.setInLove(player);
-    }
+        static {
+            ForgeConfigSpec.Builder COMMON_BUILDER = new ForgeConfigSpec.Builder();
 
-    @Override
-    public void resetInLove() {
-        super.resetInLove();
-        resetFeedCount();
-    }
+            COMMON_BUILDER.push("General Options");
+            GENERATE_DEFAULTS = COMMON_BUILDER.comment("\nSet this to false when you want to overwrite the default bee files. [true/false]")
+                    .define("generateDefaults",true);
+            ENABLE_EASTER_EGG_BEES = COMMON_BUILDER.comment("\nSet to true if you want easter egg bees to generate (WIP) [true/false]")
+                    .define("enableEasterEggBees", true);
+            SMOKER_DURABILITY = COMMON_BUILDER.comment("\nSets the max durability for the smoker")
+                    .defineInRange("smokerDurability", 1000,100,5000);
+            COMMON_BUILDER.pop();
 
-    @Override
-    public boolean isBreedingItem(@Nonnull ItemStack stack) {
-        String validBreedItem = this.getBeeData().getBreedData().getFeedItem();
+            COMMON_BUILDER.push("Recipe Options");
+            CENTRIFUGE_RECIPES = COMMON_BUILDER.comment("\nSet to false if you don't want the centrifuge recipes to be auto generated [true/false]")
+                    .define("centrifugeRecipes", true);
+            HONEYCOMB_BLOCK_RECIPES = COMMON_BUILDER.comment("\nSet to false if you don't want the honeycomb block recipes to be auto generated [true/false]")
+                    .define("honeycombBlockRecipes", true);
+            COMMON_BUILDER.pop();
 
-        if (ValidatorUtils.TAG_RESOURCE_PATTERN.matcher(validBreedItem).matches()) {
-            ITag<Item> itemTag = BeeInfoUtils.getItemTag(validBreedItem.replace(BeeConstants.TAG_PREFIX, ""));
-            return itemTag != null && stack.getItem().isIn(itemTag);
-        } else {
-            switch (validBreedItem) {
-                case BeeConstants.FLOWER_TAG_ALL:
-                    return stack.getItem().isIn(ItemTags.FLOWERS);
-                case BeeConstants.FLOWER_TAG_SMALL:
-                    return stack.getItem().isIn(ItemTags.SMALL_FLOWERS);
-                case BeeConstants.FLOWER_TAG_TALL:
-                    return stack.getItem().isIn(ItemTags.TALL_FLOWERS);
-                default:
-                    return stack.getItem().equals(BeeInfoUtils.getItem(validBreedItem));
-            }
+            COMMON_BUILDER.push("Centrifuge Options");
+            CENTRIFUGE_RECIPE_TIME = COMMON_BUILDER.comment("\nRecipe time for generated centrifuge recipes","This does not affect recipes that are not auto generated by us.","Time is in seconds.")
+                    .defineInRange("centrifugeRecipeTime", 10,1,60);
+            MAX_CENTRIFUGE_RF = COMMON_BUILDER.comment("\nCentrifuge Max energy storage.\nThe Centrifuge Multiblocks max energy storage is 5x this amount")
+                    .defineInRange("maxCentrifugeRf", 10000,1000,1000000);
+            RF_TICK_CENTRIFUGE = COMMON_BUILDER.comment("\nCentrifuge RF per tick.")
+                    .defineInRange("centrifugeRfPerTick", 1,1,100);
+            PLAYER_EXHAUSTION = COMMON_BUILDER.comment("\nAmount of hunger the player uses per click on mechanical centrifuge.")
+                    .defineInRange("mechanicalCentrifugePlayerExhaustion", 0.1,0.0,1);
+            MULTIBLOCK_RECIPES_ONLY = COMMON_BUILDER.comment("\n Makes it so multiblock centrifuge can only do multiblock recipes. [true/false]")
+                    .define("multiblockRecipesOnly", false);
+            COMMON_BUILDER.pop();
+
+            COMMON_BUILDER.push("Beehive Options");
+            HIVE_MAX_BEES = COMMON_BUILDER.comment("\nMaximum number of bees in the base tier hive. \n(THIS * TIER_MODIFIER = MAX_BEES) for a range of 4 -> 16")
+                    .defineInRange("hiveMaxBees", 4, 1, 4);
+            HIVE_MAX_COMBS = COMMON_BUILDER.comment("\nBase honeycomb harvest amount \n(THIS * TIER_MODIFIER = MAX_COMBS) for a range of 5 -> 64")
+                    .defineInRange("hiveMaxCombs", 5, 5, 16);
+            ALLOW_SHEARS = COMMON_BUILDER.comment("\nSet to false if you want the player to only be able to get honeycombs from the beehive using the scraper [true/false]")
+                    .define("allowShears", true);
+            COMMON_BUILDER.pop();
+
+            COMMON_BUILDER.push("Apiary Options");
+            T1_APIARY_OUTPUT = COMMON_BUILDER.comment("\nTier 1 Apiary Output")
+                    .defineEnum("tierOneApiaryOutput", ApiaryOutput.COMB, ApiaryOutput.COMB, ApiaryOutput.BLOCK);
+            T1_APIARY_QUANTITY = COMMON_BUILDER.comment("\nTier 1 Apiary Output Quantity")
+                    .defineInRange("tierOneApiaryQuantity", 8, 1, Integer.MAX_VALUE);
+            T2_APIARY_OUTPUT = COMMON_BUILDER.comment("\nTier 2 Apiary Output")
+                    .defineEnum("tierTwoApiaryOutput", ApiaryOutput.COMB, ApiaryOutput.COMB, ApiaryOutput.BLOCK);
+            T2_APIARY_QUANTITY = COMMON_BUILDER.comment("\nTier 2 Apiary Output Quantity")
+                    .defineInRange("tierTwoApiaryQuantity", 16, 1, Integer.MAX_VALUE);
+            T3_APIARY_OUTPUT = COMMON_BUILDER.comment("\nTier 3 Apiary Output")
+                    .defineEnum("tierThreeApiaryOutput", ApiaryOutput.BLOCK, ApiaryOutput.COMB, ApiaryOutput.BLOCK);
+            T3_APIARY_QUANTITY = COMMON_BUILDER.comment("\nTier 3 Apiary Output Quantity")
+                    .defineInRange("tierThreeApiaryQuantity", 4, 1, Integer.MAX_VALUE);
+            T4_APIARY_OUTPUT = COMMON_BUILDER.comment("\nTier 4 Apiary Output")
+                    .defineEnum("tierFourApiaryOutput", ApiaryOutput.BLOCK, ApiaryOutput.COMB, ApiaryOutput.BLOCK);
+            T4_APIARY_QUANTITY = COMMON_BUILDER.comment("\nTier 4 Apiary Output Quantity")
+                    .defineInRange("tierFourApiaryQuantity", 8, 1, Integer.MAX_VALUE);
+            APIARY_MAX_BEES = COMMON_BUILDER.comment("\nMaximum number of UNIQUE bees allowed in the Apiary.")
+                    .defineInRange("apiaryMaxBees", 9, 1, 16);
+            APIARY_MAX_BREED_TIME = COMMON_BUILDER.comment("\nMaximum breed time before upgrades are applied.")
+                    .defineInRange("apiaryMaxBreedTime", 2400, 1200, 4800);
+            COMMON_BUILDER.pop();
+
+            COMMON_BUILDER.push("Spawning Options");
+            SPAWN_WEIGHT = COMMON_BUILDER.comment("\nThis is the spawn weighting for ALL bees.")
+                    .defineInRange("spawnWeighting", 3, 1, 20);
+            SPAWN_MIN_GROUP = COMMON_BUILDER.comment("\nThis is the minimum number of bees that can spawn in a group. \nNote: this is for ALL bees!")
+                    .defineInRange("spawnMinBeeGroup", 1, 1, 5);
+            SPAWN_MAX_GROUP = COMMON_BUILDER.comment("\nThis is the maximum number of bees that can spawn in a group. \nNote: this is for ALL bees!")
+                    .defineInRange("spawnMaxBeeGroup", 5, 5, 10);
+            GENERATE_BEE_NESTS = COMMON_BUILDER.comment("\nShould bee nests generate in world? \nNote: They will only generate in biomes where bees can spawn")
+                    .define("generateBeeNests", true);
+            BEE_NEST_GENERATION_WEIGHT = COMMON_BUILDER.comment("\nBee nest weighting when generating chunks. Higher value means nest is more likely to generate")
+                    .defineInRange("bee_nest_generation_weight", 0.3, 0.0, 1.0);
+            COMMON_BUILDER.pop();
+
+            COMMON_BUILDER.push("Bee Options");
+            BEE_SIZE_MODIFIER = COMMON_BUILDER.comment("\nThis value scales the bee size for all Resource Bees. \nNote: Setting the value in bee JSON overrides this value.")
+                    .defineInRange("global_bee_size_modifier", 1.0, 0.5, 2.0);
+            BEE_DIES_FROM_STING = COMMON_BUILDER.comment("\nShould bees die from stinging?\nNote: Bees will continue to attack until they are no longer angry!")
+                    .define("beeDiesFromSting", true);
+            BEES_DIE_IN_VOID = COMMON_BUILDER.comment("\nShould bees die when their Y-level is below 0?\nNote: If false, bees will get stuck just below y-0 and not move.")
+                    .define("beeDiesInVoid", true);
+            COMMON_BUILDER.pop();
+
+            COMMON_BUILDER.push("Honeycomb Options");
+            HONEYCOMB_HUNGER = COMMON_BUILDER.comment("\nThe amount of hunger restored when eating a honeycomb.")
+                    .defineInRange("honeycombHunger", 1, 0, 4);
+            HONEYCOMB_SATURATION = COMMON_BUILDER.comment("\nThe amount of saturation restored when eating a honeycomb.")
+                    .defineInRange("honeycombSaturation", 0.5, 0, 4.0);
+            COMMON_BUILDER.pop();
+
+            COMMON_CONFIG = COMMON_BUILDER.build();
         }
     }
 
-    @Nonnull
-    @Override
-    public ActionResultType interactMob(PlayerEntity player, @Nonnull Hand hand) {
-        ItemStack itemstack = player.getHeldItem(hand);
-        Item item = itemstack.getItem();
-        if (item instanceof NameTagItem){
-            super.interactMob(player,hand);
+    public static class ClientConfig{
+        public static ForgeConfigSpec CLIENT_CONFIG;
+
+        static {
+            ForgeConfigSpec.Builder CLIENT_BUILDER = new ForgeConfigSpec.Builder();
+
+            CLIENT_BUILDER.push("General Options");
+            GENERATE_ENGLISH_LANG = CLIENT_BUILDER.comment("\nWhen set to true an en_us.json file will be generated for the bees. [true/false] \n This file will be overwritten every time the mod loads. \n The generated names are based on the bee jsons.")
+                    .define("generateEnglishLang",false);
+            SHOW_DEBUG_INFO = CLIENT_BUILDER.comment("\nWhen set to true will display some debug info in console. [true/false]")
+                    .define("showDebugInfo",false);
+            CLIENT_BUILDER.pop();
+
+            CLIENT_CONFIG = CLIENT_BUILDER.build();
         }
-        if (this.isBreedingItem(itemstack)) {
-            if (!this.world.isRemote && this.getGrowingAge() == 0 && this.canBreed()) {
-                this.consumeItemFromStack(player, itemstack);
-                this.addFeedCount();
-                if (this.getFeedCount() >= this.getBeeData().getBreedData().getFeedAmount()) {
-                    this.setInLove(player);
-                }
-                player.swingHand(hand, true);
-                return ActionResultType.PASS;
-            }
-
-            if (this.isChild()) {
-                this.consumeItemFromStack(player, itemstack);
-                this.ageUp((int)((float)(-this.getGrowingAge() / 20) * 0.1F), true);
-                return ActionResultType.PASS;
-            }
-        }
-        return ActionResultType.FAIL;
     }
-
-    @Nonnull
-    @Override
-    public EntitySize getSize(@Nonnull Pose poseIn) {
-        float scale = beeData.getSizeModifier();
-        return super.getSize(poseIn).scale(scale);
-    }
-
-    @Override
-    public void notifyDataManagerChange(@Nonnull DataParameter<?> parameter) {
-        super.notifyDataManagerChange(parameter);
-    }
-    //endregion
 }
