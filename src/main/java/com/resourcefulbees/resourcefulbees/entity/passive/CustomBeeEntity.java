@@ -3,6 +3,7 @@ package com.resourcefulbees.resourcefulbees.entity.passive;
 import com.resourcefulbees.resourcefulbees.api.ICustomBee;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.api.beedata.TraitData;
+import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
@@ -108,6 +109,10 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
                         }
                     }
                 }
+            }
+        }else {
+            if (Config.BEES_DIE_IN_VOID.get() && this.getPositionVec().y < -3) {
+                this.remove();
             }
         }
         super.livingTick();
