@@ -6,7 +6,9 @@ labels: ''
 assignees: ''
 
 ---
-If this is about a specific bee please report to the pack dev as we do not create bees we just give tools to packdevs.
+If this is about a specific bee please report to the pack dev as we do not create bees we just give tools to pack devs.
+If you do report a "bug" that is about a specific bee or set of bees it will be instantly closed due to it most likely being
+an issue with the bees that pack devs added themself and not our code.
 **Describe the bug**
 A clear and concise description of what the bug is.
 
