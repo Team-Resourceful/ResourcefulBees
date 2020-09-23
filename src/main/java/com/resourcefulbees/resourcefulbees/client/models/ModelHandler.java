@@ -26,34 +26,36 @@ public class ModelHandler {
         IResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
 
         BeeRegistry.getRegistry().getBees().forEach((string, customBee) -> {
-            if (customBee.shouldResourcefulBeesDoForgeRegistration && customBee.hasHoneycomb()) {
-                Block honeycombBlock = customBee.getCombBlockRegistryObject().get();
-                Item honeycombBlockItem = customBee.getCombBlockItemRegistryObject().get();
-                Item honeycomb = customBee.getCombRegistryObject().get();
-                Item spawnEgg = customBee.getSpawnEggItemRegistryObject().get();
+            if (customBee.shouldResourcefulBeesDoForgeRegistration) {
+                Block honeycombBlock = customBee.getCombBlockRegistryObject() != null ? customBee.getCombBlockRegistryObject().get() : null;
+                Item honeycombBlockItem = customBee.getCombBlockItemRegistryObject() != null ? customBee.getCombBlockItemRegistryObject().get() : null;
+                Item honeycomb = customBee.getCombRegistryObject() != null ? customBee.getCombRegistryObject().get() : null;
+                Item spawnEgg = customBee.getSpawnEggItemRegistryObject() != null ? customBee.getSpawnEggItemRegistryObject().get() : null;
 
-                if (honeycombBlock.getRegistryName() != null && !resourceManager.hasResource(new ResourceLocation(ResourcefulBees.MOD_ID, "blockstates/" + honeycombBlock.getRegistryName().getPath() + ".json"))) {
-                    honeycombBlock.getStateContainer().getValidStates().forEach(state -> {
-                        String propertyMapString = BlockModelShapes.getPropertyMapString(state.getValues());
+                if (customBee.hasHoneycomb()) {
+                    if (honeycombBlock != null && honeycombBlock.getRegistryName() != null && !resourceManager.hasResource(new ResourceLocation(ResourcefulBees.MOD_ID, "blockstates/" + honeycombBlock.getRegistryName().getPath() + ".json"))) {
+                        honeycombBlock.getStateContainer().getValidStates().forEach(state -> {
+                            String propertyMapString = BlockModelShapes.getPropertyMapString(state.getValues());
+                            ModelResourceLocation defaultModelLocation = new ModelResourceLocation(
+                                    ResourcefulBees.MOD_ID + ":honeycomb_block", propertyMapString);
+                            ModelLoader.addSpecialModel(defaultModelLocation);
+                            MODEL_MAP.put(defaultModelLocation, new ModelResourceLocation(honeycombBlock.getRegistryName(), propertyMapString));
+                        });
+                    }
+                    if (honeycombBlockItem != null && honeycombBlockItem.getRegistryName() != null && !resourceManager.hasResource(new ResourceLocation(ResourcefulBees.MOD_ID, "item/models/" + honeycombBlockItem.getRegistryName().getPath() + ".json"))) {
                         ModelResourceLocation defaultModelLocation = new ModelResourceLocation(
-                                ResourcefulBees.MOD_ID + ":honeycomb_block", propertyMapString);
+                                ResourcefulBees.MOD_ID + ":honeycomb_block", "inventory");
                         ModelLoader.addSpecialModel(defaultModelLocation);
-                        MODEL_MAP.put(defaultModelLocation, new ModelResourceLocation(honeycombBlock.getRegistryName(), propertyMapString));
-                    });
+                        MODEL_MAP.put(defaultModelLocation, new ModelResourceLocation(honeycombBlockItem.getRegistryName(), "inventory"));
+                    }
+                    if (honeycomb != null && honeycomb.getRegistryName() != null && !resourceManager.hasResource(new ResourceLocation(ResourcefulBees.MOD_ID, "item/models/" + honeycomb.getRegistryName().getPath() + ".json"))) {
+                        ModelResourceLocation defaultModelLocation = new ModelResourceLocation(
+                                ResourcefulBees.MOD_ID + ":honeycomb", "inventory");
+                        ModelLoader.addSpecialModel(defaultModelLocation);
+                        MODEL_MAP.put(defaultModelLocation, new ModelResourceLocation(honeycomb.getRegistryName(), "inventory"));
+                    }
                 }
-                if (honeycombBlockItem.getRegistryName() != null && !resourceManager.hasResource(new ResourceLocation(ResourcefulBees.MOD_ID, "item/models/" + honeycombBlockItem.getRegistryName().getPath() + ".json"))) {
-                    ModelResourceLocation defaultModelLocation = new ModelResourceLocation(
-                            ResourcefulBees.MOD_ID + ":honeycomb_block", "inventory");
-                    ModelLoader.addSpecialModel(defaultModelLocation);
-                    MODEL_MAP.put(defaultModelLocation, new ModelResourceLocation(honeycombBlockItem.getRegistryName(), "inventory"));
-                }
-                if (honeycomb.getRegistryName() != null && !resourceManager.hasResource(new ResourceLocation(ResourcefulBees.MOD_ID, "item/models/" + honeycomb.getRegistryName().getPath() + ".json"))) {
-                    ModelResourceLocation defaultModelLocation = new ModelResourceLocation(
-                            ResourcefulBees.MOD_ID + ":honeycomb", "inventory");
-                    ModelLoader.addSpecialModel(defaultModelLocation);
-                    MODEL_MAP.put(defaultModelLocation, new ModelResourceLocation(honeycomb.getRegistryName(), "inventory"));
-                }
-                if (spawnEgg.getRegistryName() != null && !resourceManager.hasResource(new ResourceLocation(ResourcefulBees.MOD_ID, "item/models/" + spawnEgg.getRegistryName().getPath() + ".json"))) {
+                if (spawnEgg != null && spawnEgg.getRegistryName() != null && !resourceManager.hasResource(new ResourceLocation(ResourcefulBees.MOD_ID, "item/models/" + spawnEgg.getRegistryName().getPath() + ".json"))) {
                     ModelResourceLocation defaultModelLocation = new ModelResourceLocation(
                             "minecraft:template_spawn_egg", "inventory");
                     ModelLoader.addSpecialModel(defaultModelLocation);

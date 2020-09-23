@@ -31,11 +31,11 @@ public class ColorData extends AbstractBeeData {
         this.glowingPulse = glowingPulse;
     }
 
-    public String getPrimaryColor() { return primaryColor; }
+    public String getPrimaryColor() { return primaryColor == null ? "#ffffff" :  primaryColor; }
 
-    public String getSecondaryColor() { return secondaryColor; }
+    public String getSecondaryColor() { return secondaryColor == null ? "#303030" : secondaryColor; }
 
-    public String getHoneycombColor() { return honeycombColor; }
+    public String getHoneycombColor() { return honeycombColor == null ? "#ffffff" : honeycombColor; }
 
     public String getGlowColor() { return glowColor == null ? "#ffffff" : glowColor; }
 

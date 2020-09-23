@@ -58,7 +58,7 @@ public class DataGen {
             //spawn egg
             builder.append("\"item.resourcefulbees.");
             builder.append(name);
-            builder.append("_spawn_egg\" : \"");
+            builder.append("_bee_spawn_egg\" : \"");
             builder.append(displayName);
             builder.append(" Bee Spawn Egg\",\n");
             //entity

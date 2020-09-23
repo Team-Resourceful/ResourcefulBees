@@ -107,9 +107,8 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
             this.middleLegs.rotateAngleX = 0.0F;
             this.backLegs.rotateAngleX = 0.0F;
         } else {
-            float f = ageInTicks * 2.1F;
             this.rightWing.rotateAngleY = 0.0F;
-            this.rightWing.rotateAngleZ = MathHelper.cos(f) * (float)Math.PI * 0.15F;
+            this.rightWing.rotateAngleZ = MathHelper.cos((ageInTicks % 98000 * 2.1F)) * (float)Math.PI * 0.15F;
             this.leftWing.rotateAngleX = this.rightWing.rotateAngleX;
             this.leftWing.rotateAngleY = this.rightWing.rotateAngleY;
             this.leftWing.rotateAngleZ = -this.rightWing.rotateAngleZ;

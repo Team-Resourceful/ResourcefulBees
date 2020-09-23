@@ -37,7 +37,7 @@ public class FirstPhaseValidator {
 
     private static boolean validateSecondaryColor(boolean isValid, CustomBeeData beeData) {
         if (beeData.getColorData() != null) {
-            if (isValid && beeData.getColorData().hasPrimaryColor()) {
+            if (isValid && beeData.getColorData().hasSecondaryColor()) {
                 return validateGlowColor(validateColor(beeData.getName(), "SecondaryColor", beeData.getColorData().getSecondaryColor()), beeData);
             } else if (isValid && !beeData.getColorData().hasSecondaryColor()) {
                 return validateGlowColor(true, beeData);
