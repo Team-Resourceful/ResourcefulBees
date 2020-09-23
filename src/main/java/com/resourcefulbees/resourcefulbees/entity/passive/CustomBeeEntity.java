@@ -146,8 +146,7 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
         compound.putInt(NBTConstants.NBT_FEED_COUNT, this.getFeedCount());
     }
 
-    public ICustomBee createSelectedChild(String beeType) {
-        CustomBeeData customBeeData = BeeRegistry.getRegistry().getBeeData(beeType);
+    public ICustomBee createSelectedChild(CustomBeeData customBeeData) {
         return (ICustomBee) ForgeRegistries.ENTITIES.getValue(customBeeData.getEntityTypeRegistryID());
     }
 

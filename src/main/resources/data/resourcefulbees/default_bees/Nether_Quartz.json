@@ -25,7 +25,7 @@
     "biomeWhitelist": "tag:nether"
   },
   "BreedData": {
-    "breedable": true
+    "isBreedable": true
   },
   "TraitData": {
     "hasTraits": true

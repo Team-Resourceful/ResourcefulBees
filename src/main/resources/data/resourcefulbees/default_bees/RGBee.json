@@ -23,7 +23,7 @@
     "spawnWeight": 70
   },
   "BreedData": {
-    "breedable": true
+    "isBreedable": true
   },
   "TraitData": {}
 }

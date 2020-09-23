@@ -23,7 +23,7 @@
     "biomeBlacklist": "tag:ocean"
   },
   "BreedData": {
-    "breedable": true,
+    "isBreedable": true,
     "feedItem": "small",
     "feedAmount": 8
   },

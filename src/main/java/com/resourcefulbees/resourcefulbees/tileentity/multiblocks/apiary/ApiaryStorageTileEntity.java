@@ -220,8 +220,7 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
 
     public boolean breedComplete(String p1, String p2) {
         if (inventoryHasSpace()) {
-            String childType = BEE_REGISTRY.getWeightedChild(p1, p2);
-            CustomBeeData childBeeData = BEE_REGISTRY.getBeeData(childType);
+            CustomBeeData childBeeData = BEE_REGISTRY.getWeightedChild(p1, p2);
             EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(childBeeData.getEntityTypeRegistryID());
 
             if (world != null && entityType != null) {

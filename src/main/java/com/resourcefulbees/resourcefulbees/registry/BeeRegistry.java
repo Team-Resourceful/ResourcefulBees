@@ -26,7 +26,7 @@ public class BeeRegistry implements IBeeRegistry {
 
     private final LinkedHashMap<String, CustomBeeData> BEE_INFO = new LinkedHashMap<>();
     public final HashMap<Biome, RandomCollection<String>> SPAWNABLE_BIOMES = new HashMap<>();
-    public final HashMap<Pair<String, String>, RandomCollection<String>> FAMILY_TREE = new HashMap<>();
+    public final HashMap<Pair<String, String>, RandomCollection<CustomBeeData>> FAMILY_TREE = new HashMap<>();
 
     private boolean ALLOW_REGISTRATION;
 
@@ -90,7 +90,7 @@ public class BeeRegistry implements IBeeRegistry {
      *  @param parent2 Bee type for parent 2.
      *  @return Returns a weighted random bee type as a string.
      */
-    public String getWeightedChild(String parent1, String parent2) {
+    public CustomBeeData getWeightedChild(String parent1, String parent2) {
         return FAMILY_TREE.get(BeeInfoUtils.sortParents(parent1, parent2)).next();
     }
 
@@ -102,8 +102,8 @@ public class BeeRegistry implements IBeeRegistry {
      *  @param child BeeData object for the child.
      *  @return Returns random bee type as a string.
      */
-    public double getAdjustedWeightForChild(CustomBeeData child) {
-        return FAMILY_TREE.get(BeeInfoUtils.sortParents(child.getBreedData().getParent1(), child.getBreedData().getParent2())).getAdjustedWeight(child.getBreedData().getBreedWeight());
+    public double getAdjustedWeightForChild(CustomBeeData child, boolean sameType) {
+        return FAMILY_TREE.get(sameType ? Pair.of(child.getName(), child.getName()) : BeeInfoUtils.sortParents(child.getBreedData().getParent1(), child.getBreedData().getParent2())).getAdjustedWeight(child.getBreedData().getBreedWeight());
     }
 
     /**
@@ -117,6 +117,8 @@ public class BeeRegistry implements IBeeRegistry {
     public boolean registerBee(String beeType, CustomBeeData customBeeData) {
         if (ALLOW_REGISTRATION) {
             if (!BEE_INFO.containsKey(beeType) && FirstPhaseValidator.validate(customBeeData)) {
+                if (customBeeData.getBreedData().isBreedable())
+                    BeeInfoUtils.buildFamilyTree(customBeeData);
                 BEE_INFO.put(beeType, customBeeData);
                 return true;
             }

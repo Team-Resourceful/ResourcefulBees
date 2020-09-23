@@ -10,9 +10,9 @@ public interface IBeeRegistry {
 
     boolean canParentsBreed(String parent1, String parent2);
 
-    String getWeightedChild(String parent1, String parent2);
+    CustomBeeData getWeightedChild(String parent1, String parent2);
 
-    double getAdjustedWeightForChild(CustomBeeData child);
+    double getAdjustedWeightForChild(CustomBeeData child, boolean sameType);
 
     boolean registerBee(String beeType, CustomBeeData customBeeData);
 

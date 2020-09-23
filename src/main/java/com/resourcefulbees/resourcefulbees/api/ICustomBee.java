@@ -36,5 +36,5 @@ public interface ICustomBee {
     void addFeedCount();
 
 
-    ICustomBee createSelectedChild(String beeType);
+    ICustomBee createSelectedChild(CustomBeeData beeType);
 }

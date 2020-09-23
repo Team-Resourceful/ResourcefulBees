@@ -63,24 +63,24 @@ public class ColorData extends AbstractBeeData {
 
     public int getGlowingPulse() { return glowingPulse; }
 
-    public int getPrimaryColorInt() { return com.resourcefulbees.resourcefulbees.utils.color.Color.parseInt(primaryColor); }
+    public int getPrimaryColorInt() { return com.resourcefulbees.resourcefulbees.utils.color.Color.parseInt(getPrimaryColor()); }
 
-    public int getSecondaryColorInt() { return com.resourcefulbees.resourcefulbees.utils.color.Color.parseInt(secondaryColor); }
+    public int getSecondaryColorInt() { return com.resourcefulbees.resourcefulbees.utils.color.Color.parseInt(getSecondaryColor()); }
 
-    public int getHoneycombColorInt() { return com.resourcefulbees.resourcefulbees.utils.color.Color.parseInt(honeycombColor); }
+    public int getHoneycombColorInt() { return com.resourcefulbees.resourcefulbees.utils.color.Color.parseInt(getHoneycombColor()); }
 
     public float[] getPrimaryColorFloats(){
-        Color tempColor = Color.decode(primaryColor);
+        Color tempColor = Color.decode(getPrimaryColor());
         return tempColor.getComponents(null);
     }
 
     public float[] getSecondaryColorFloats(){
-        Color tempColor = Color.decode(secondaryColor);
+        Color tempColor = Color.decode(getSecondaryColor());
         return tempColor.getComponents(null);
     }
 
     public float[] getGlowColorFloats(){
-        Color tempColor = Color.decode(glowColor);
+        Color tempColor = Color.decode(getGlowColor());
         return tempColor.getComponents(null);
     }
 

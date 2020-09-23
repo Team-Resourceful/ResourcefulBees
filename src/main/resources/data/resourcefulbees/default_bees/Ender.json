@@ -25,7 +25,7 @@
     "biomeWhitelist": "TAG:end"
   },
   "BreedData": {
-    "breedable": true
+    "isBreedable": true
   },
   "TraitData": {
     "hasTraits": true

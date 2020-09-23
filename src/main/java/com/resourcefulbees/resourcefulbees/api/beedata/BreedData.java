@@ -24,13 +24,15 @@ public class BreedData extends AbstractBeeData {
 
     public double getBreedWeight() { return breedWeight <= 0 ? BeeConstants.DEFAULT_BREED_WEIGHT : breedWeight; }
 
-    public String getParent1() { return parent1 != null ? parent1 : ""; }
+    public String getParent1() { return parent1 != null ? parent1.toLowerCase() : ""; }
 
-    public String getParent2() { return parent2 != null ? parent2 : ""; }
+    public String getParent2() { return parent2 != null ? parent2.toLowerCase() : ""; }
 
     public String getFeedItem() { return feedItem != null ? feedItem : BeeConstants.FLOWER_TAG_ALL; }
 
     public int getFeedAmount() { return Math.max(1, feedAmount); }
+
+    public boolean hasParents() { return parent1 != null && parent2 != null && !parent1.isEmpty() && !parent2.isEmpty(); }
 
     public static class Builder {
         private final boolean isBreedable;

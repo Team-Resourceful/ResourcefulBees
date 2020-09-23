@@ -25,7 +25,7 @@
     "biomeBlacklist": "tag:ocean"
   },
   "BreedData": {
-    "breedable": true
+    "isBreedable": true
   },
   "TraitData": {}
 }

@@ -22,7 +22,7 @@
     "biomeWhitelist": "TAG:Mountain,Hills"
   },
   "BreedData": {
-    "breedable": true,
+    "isBreedable": true,
     "spawnWeight": 10
   },
   "TraitData": {}

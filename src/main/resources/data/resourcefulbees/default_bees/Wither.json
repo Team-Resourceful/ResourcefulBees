@@ -21,7 +21,7 @@
   },
   "SpawnData": {},
   "BreedData": {
-    "breedable": true,
+    "isBreedable": true,
     "parent1": "Coal",
     "parent2": "Skeleton",
     "feedItem": "minecraft:rotten_flesh",

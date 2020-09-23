@@ -28,7 +28,7 @@
   "BreedData": {
     "feedItem": "minecraft:poppy",
     "feedAmount": 4,
-    "breedable": true
+    "isBreedable": true
   },
   "TraitData": {}
 }

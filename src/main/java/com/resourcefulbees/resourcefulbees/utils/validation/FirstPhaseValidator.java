@@ -159,6 +159,7 @@ public class FirstPhaseValidator {
     private static boolean validateFlower(boolean isValid, CustomBeeData beeData) {
         if (isValid && beeData.getFlower() != null) {
             return TAG_RESOURCE_PATTERN.matcher(beeData.getFlower()).matches()
+                    || SINGLE_RESOURCE_PATTERN.matcher(beeData.getFlower()).matches()
                     || beeData.getFlower().equals(BeeConstants.FLOWER_TAG_ALL)
                     || beeData.getFlower().equals(BeeConstants.FLOWER_TAG_SMALL)
                     || beeData.getFlower().equals(BeeConstants.FLOWER_TAG_TALL);

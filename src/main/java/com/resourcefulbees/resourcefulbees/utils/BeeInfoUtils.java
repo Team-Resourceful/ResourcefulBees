@@ -30,8 +30,8 @@ public class BeeInfoUtils {
     public static void buildFamilyTree(CustomBeeData bee){
         String parent1 = bee.getBreedData().getParent1();
         String parent2 = bee.getBreedData().getParent2();
-        BeeRegistry.getRegistry().FAMILY_TREE.computeIfAbsent(sortParents(parent1, parent2), k -> new RandomCollection<>()).add(bee.getBreedData().getBreedWeight(), bee.getName());
-        BeeRegistry.getRegistry().FAMILY_TREE.computeIfAbsent(Pair.of(bee.getName(), bee.getName()), k -> new RandomCollection<>()).add(bee.getBreedData().getBreedWeight(), bee.getName());
+        BeeRegistry.getRegistry().FAMILY_TREE.computeIfAbsent(sortParents(parent1, parent2), k -> new RandomCollection<>()).add(bee.getBreedData().getBreedWeight(), bee);
+        BeeRegistry.getRegistry().FAMILY_TREE.computeIfAbsent(Pair.of(bee.getName(), bee.getName()), k -> new RandomCollection<>()).add(bee.getBreedData().getBreedWeight(), bee);
     }
 
     public static Pair<String, String> sortParents(String parent1, String parent2){

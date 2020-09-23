@@ -104,6 +104,9 @@ public class BeeJar extends Item {
             nbt.putString(NBTConstants.NBT_BEE_TYPE, beeEntity.getBeeType());
             if (beeEntity.getBeeData().getColorData().hasPrimaryColor()) {
                 nbt.putString(NBTConstants.NBT_COLOR, beeEntity.getBeeData().getColorData().getPrimaryColor());
+            }
+            if (beeEntity.getBeeData().getColorData().hasHoneycombColor()) {
+                nbt.putString(NBTConstants.NBT_COLOR, beeEntity.getBeeData().getColorData().getHoneycombColor());
             } else {
                 nbt.putString(NBTConstants.NBT_COLOR, String.valueOf(BeeConstants.DEFAULT_ITEM_COLOR));
             }

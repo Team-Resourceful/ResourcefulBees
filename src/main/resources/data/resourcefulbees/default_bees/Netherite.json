@@ -24,7 +24,7 @@
     "biomeWhitelist": "tag:nether"
   },
   "BreedData": {
-    "breedable": true,
+    "isBreedable": true,
     "parent1": "Wither",
     "parent2": "Diamond"
   },

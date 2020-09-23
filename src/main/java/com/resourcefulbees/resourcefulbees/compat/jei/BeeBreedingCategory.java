@@ -52,26 +52,35 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
 
     public static List<Recipe> getBreedingRecipes(IIngredientManager ingredientManager) {
         List<Recipe> recipes = new ArrayList<>();
+
         beeRegistry.getBees().forEach(((s, beeData) -> {
             if (beeData.getBreedData().isBreedable()) {
-                String parent1 = beeRegistry.getBees().containsKey(beeData.getBreedData().getParent1()) && beeRegistry.getBees().containsKey(beeData.getBreedData().getParent2()) ? beeData.getBreedData().getParent1() : beeData.getName();
-                String parent2 = beeRegistry.getBees().containsKey(beeData.getBreedData().getParent1()) && beeRegistry.getBees().containsKey(beeData.getBreedData().getParent2()) ? beeData.getBreedData().getParent2() : beeData.getName();
+                if (beeData.getBreedData().hasParents()){
+                    if (beeRegistry.getBees().containsKey(beeData.getBreedData().getParent1()) && beeRegistry.getBees().containsKey(beeData.getBreedData().getParent2())) {
+                        String parent1 = beeData.getBreedData().getParent1();
+                        String parent2 = beeData.getBreedData().getParent2();
 
-                String p1_feedItemS = beeRegistry.getBeeData(parent1).getBreedData().getFeedItem();
-                String p2_feedItemS = beeRegistry.getBeeData(parent2).getBreedData().getFeedItem();
+                        int p1_feedAmount = beeRegistry.getBeeData(parent1).getBreedData().getFeedAmount();
+                        int p2_feedAmount = beeRegistry.getBeeData(parent2).getBreedData().getFeedAmount();
 
-                int p1_feedAmount = beeRegistry.getBeeData(parent1).getBreedData().getFeedAmount();
-                int p2_feedAmount = beeRegistry.getBeeData(parent2).getBreedData().getFeedAmount();
+                        String p1_feedItemS = finalizeFeedItem(beeRegistry.getBeeData(parent1).getBreedData().getFeedItem());
+                        String p2_feedItemS = finalizeFeedItem(beeRegistry.getBeeData(parent2).getBreedData().getFeedItem());
 
-                p1_feedItemS = finalizeFeedItem(p1_feedItemS);
-                p2_feedItemS = finalizeFeedItem(p2_feedItemS);
+                        ITag<Item> p1_feedTag = BeeInfoUtils.getItemTag(p1_feedItemS);
+                        ITag<Item> p2_feedTag = BeeInfoUtils.getItemTag(p2_feedItemS);
+                        Item p1_feedItem = BeeInfoUtils.getItem(p1_feedItemS);
+                        Item p2_feedItem = BeeInfoUtils.getItem(p2_feedItemS);
 
-                ITag<Item> p1_feedTag = BeeInfoUtils.getItemTag(p1_feedItemS);
-                ITag<Item> p2_feedTag = BeeInfoUtils.getItemTag(p2_feedItemS);
-                Item p1_feedItem = BeeInfoUtils.getItem(p1_feedItemS);
-                Item p2_feedItem = BeeInfoUtils.getItem(p2_feedItemS);
+                        recipes.add(new Recipe(parent1, p1_feedTag, p1_feedItem, p1_feedAmount, parent2, p2_feedTag, p2_feedItem, p2_feedAmount, beeData.getName()));
+                    }
+                }
+                int feedAmount = beeRegistry.getBeeData(beeData.getName()).getBreedData().getFeedAmount();
+                String feedItemS = finalizeFeedItem(beeRegistry.getBeeData(beeData.getName()).getBreedData().getFeedItem());
 
-                recipes.add(new Recipe(parent1, p1_feedTag, p1_feedItem, p1_feedAmount, parent2, p2_feedTag, p2_feedItem, p2_feedAmount, beeData.getName()));
+                ITag<Item> feedTag = BeeInfoUtils.getItemTag(feedItemS);
+                Item feedItem = BeeInfoUtils.getItem(feedItemS);
+
+                recipes.add(new Recipe(beeData.getName(), feedTag, feedItem, feedAmount, beeData.getName(), feedTag, feedItem, feedAmount, beeData.getName()));
             }
         }));
         return recipes;
@@ -187,7 +196,7 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
         Minecraft minecraft = Minecraft.getInstance();
         FontRenderer fontRenderer = minecraft.fontRenderer;
         DecimalFormat decimalFormat = new DecimalFormat("##%");
-        fontRenderer.draw(matrix, decimalFormat.format(beeRegistry.getAdjustedWeightForChild(beeRegistry.getBeeData(recipe.child))), 90, 35, 0xff808080);
+        fontRenderer.draw(matrix, decimalFormat.format(beeRegistry.getAdjustedWeightForChild(beeRegistry.getBeeData(recipe.child), recipe.parent1.equals(recipe.parent2))), 90, 35, 0xff808080);
     }
 
     public static class Recipe {
