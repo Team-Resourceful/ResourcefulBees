@@ -1,6 +1,6 @@
 package com.resourcefulbees.resourcefulbees.network.packets;
 
-import com.resourcefulbees.resourcefulbees.tileentity.ApiaryTileEntity;
+import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;

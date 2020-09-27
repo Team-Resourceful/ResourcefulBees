@@ -33,9 +33,9 @@ public class ArrowButton extends ImageButton {
             if (this.isHovered()) {
                 i += this.yDiffText;
             }
-            blit(matrix, this.x, this.y, (float)this.xTexStart, (float)i, this.width, this.height, 64, 64);
+            drawTexture(matrix, this.x, this.y, (float)this.xTexStart, (float)i, this.width, this.height, 64, 64);
         } else {
-            blit(matrix, this.x, this.y, (float)48, (float)i, this.width, this.height, 64, 64);
+            drawTexture(matrix, this.x, this.y, (float)48, (float)i, this.width, this.height, 64, 64);
         }
 
         RenderSystem.enableDepthTest();

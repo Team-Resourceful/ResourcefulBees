@@ -2,11 +2,8 @@ package com.resourcefulbees.resourcefulbees.compat.jei;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.compat.jei.ingredients.EntityIngredient;
-import com.resourcefulbees.resourcefulbees.config.BeeInfo;
-import com.resourcefulbees.resourcefulbees.data.BeeData;
-import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
+import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
-import com.resourcefulbees.resourcefulbees.utils.NBTHelper;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -25,7 +22,6 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 public class BeeHiveCategory implements IRecipeCategory<BeeHiveCategory.Recipe> {
     public static final ResourceLocation GUI_BACK = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/beehive.png");
@@ -42,13 +38,12 @@ public class BeeHiveCategory implements IRecipeCategory<BeeHiveCategory.Recipe> 
 
     public static List<Recipe> getHoneycombRecipes(IIngredientManager ingredientManager) {
         List<Recipe> recipes = new ArrayList<>();
-        for (Map.Entry<String, BeeData> bee : BeeInfo.getBees().entrySet()){
-            if (!bee.getKey().equals(BeeConstants.DEFAULT_BEE_TYPE) && bee.getValue().getHoneycombColor() != null && !bee.getValue().getHoneycombColor().isEmpty()) {
-                ItemStack honeyCombItemStack = new ItemStack(RegistryHandler.RESOURCEFUL_HONEYCOMB.get());
-                honeyCombItemStack.setTag(NBTHelper.createHoneycombItemTag(bee.getKey()));
-                recipes.add(new Recipe(honeyCombItemStack, bee.getKey()));
+        BeeRegistry.getRegistry().getBees().forEach(((s, customBeeData) -> {
+            if (customBeeData.hasHoneycomb()) {
+                ItemStack honeyCombItemStack = new ItemStack(customBeeData.getCombRegistryObject().get());
+                recipes.add(new Recipe(honeyCombItemStack, customBeeData.getName()));
             }
-        }
+        }));
         return recipes;
     }
 

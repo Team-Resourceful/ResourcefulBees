@@ -2,11 +2,10 @@ package com.resourcefulbees.resourcefulbees.client.render.entity;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
-import com.resourcefulbees.resourcefulbees.config.BeeInfo;
-import com.resourcefulbees.resourcefulbees.data.BeeData;
+import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
-import com.resourcefulbees.resourcefulbees.utils.RainbowColor;
+import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.IEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
@@ -24,17 +23,17 @@ public class PrimaryColorLayer extends LayerRenderer<CustomBeeEntity, CustomBeeM
     }
 
     public void render(@Nonnull MatrixStack matrixStackIn, @Nonnull IRenderTypeBuffer bufferIn, int packedLightIn, CustomBeeEntity entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        BeeData bee = entitylivingbaseIn.getBeeInfo();
+        CustomBeeData bee = entitylivingbaseIn.getBeeData();
 
-        if (bee.isBeeColored()) {
-            if (bee.isRainbowBee() && !bee.isGlowing()) {
+        if (bee.getColorData().isBeeColored()) {
+            if (bee.getColorData().isRainbowBee() && !bee.getColorData().isGlowing()) {
                 float[] primaryColor = RainbowColor.getColorFloats();
-                ResourceLocation location = new ResourceLocation(ResourcefulBees.MOD_ID, BeeConstants.ENTITY_TEXTURES_DIR + bee.getPrimaryLayerTexture() + ".png");
-                renderCutoutModel(this.getEntityModel(), location, matrixStackIn, bufferIn, packedLightIn, entitylivingbaseIn, primaryColor[0], primaryColor[1], primaryColor[2]);
-            } else if (bee.getPrimaryColor() != null && !bee.getPrimaryColor().isEmpty()) {
-                float[] primaryColor = BeeInfo.getColorFloats(bee.getPrimaryColor());
-                ResourceLocation location = new ResourceLocation(ResourcefulBees.MOD_ID, BeeConstants.ENTITY_TEXTURES_DIR + bee.getPrimaryLayerTexture() + ".png");
-                renderCutoutModel(this.getEntityModel(), location, matrixStackIn, bufferIn, packedLightIn, entitylivingbaseIn, primaryColor[0], primaryColor[1], primaryColor[2]);
+                ResourceLocation location = new ResourceLocation(ResourcefulBees.MOD_ID, BeeConstants.ENTITY_TEXTURES_DIR + bee.getColorData().getPrimaryLayerTexture() + ".png");
+                renderModel(this.getEntityModel(), location, matrixStackIn, bufferIn, packedLightIn, entitylivingbaseIn, primaryColor[0], primaryColor[1], primaryColor[2]);
+            } else if (bee.getColorData().hasPrimaryColor()) {
+                float[] primaryColor = bee.getColorData().getPrimaryColorFloats();
+                ResourceLocation location = new ResourceLocation(ResourcefulBees.MOD_ID, BeeConstants.ENTITY_TEXTURES_DIR + bee.getColorData().getPrimaryLayerTexture() + ".png");
+                renderModel(this.getEntityModel(), location, matrixStackIn, bufferIn, packedLightIn, entitylivingbaseIn, primaryColor[0], primaryColor[1], primaryColor[2]);
             }
         }
     }

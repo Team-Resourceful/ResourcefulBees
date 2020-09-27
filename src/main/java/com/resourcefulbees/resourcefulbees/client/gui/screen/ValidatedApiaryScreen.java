@@ -3,7 +3,6 @@ package com.resourcefulbees.resourcefulbees.client.gui.screen;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.client.gui.widget.TabImageButton;
-import com.resourcefulbees.resourcefulbees.config.BeeInfo;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.container.ValidatedApiaryContainer;
 import com.resourcefulbees.resourcefulbees.lib.ApiaryTabs;
@@ -13,8 +12,9 @@ import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
 import com.resourcefulbees.resourcefulbees.network.packets.ApiaryTabMessage;
 import com.resourcefulbees.resourcefulbees.network.packets.ExportBeeMessage;
 import com.resourcefulbees.resourcefulbees.network.packets.ImportBeeMessage;
+import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
-import com.resourcefulbees.resourcefulbees.tileentity.ApiaryTileEntity;
+import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -23,6 +23,7 @@ import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvents;
@@ -75,7 +76,7 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
         int j = this.guiTop;
         int t = i + this.xSize - 25;
 
-        this.addButton(new TabImageButton(t+1, j+17, 18, 18, 74, 0, 18, TABS_BG,
+        this.addButton(new TabImageButton(t+1, j+17, 18, 18, 110, 0, 18, TABS_BG, new ItemStack(RegistryHandler.BEE_JAR.get()), 1, 1,
                 (onPress) -> this.changeScreen(ApiaryTabs.MAIN)) {
             public void renderToolTip(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
                 StringTextComponent s = new StringTextComponent(I18n.format("gui.resourcefulbees.apiary.button.main_screen"));
@@ -83,7 +84,7 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
             }
         }).active = false;
 
-        storageTabButton = this.addButton(new TabImageButton(t + 1, j + 37, 18, 18, 110, 0, 18, TABS_BG,
+        storageTabButton = this.addButton(new TabImageButton(t + 1, j + 37, 18, 18, 110, 0, 18, TABS_BG, new ItemStack(Items.HONEYCOMB),2, 1,
                 (onPress) -> this.changeScreen(ApiaryTabs.STORAGE)) {
             public void renderToolTip(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
                 StringTextComponent s = new StringTextComponent(I18n.format("gui.resourcefulbees.apiary.button.storage_screen"));
@@ -91,7 +92,7 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
             }
         });
 
-        breedTabButton = this.addButton(new TabImageButton(t + 1, j + 57, 18, 18, 92, 0, 18, TABS_BG,
+        breedTabButton = this.addButton(new TabImageButton(t + 1, j + 57, 18, 18, 110, 0, 18, TABS_BG, new ItemStack(RegistryHandler.GOLD_FLOWER_ITEM.get()), 1, 1,
                 (onPress) -> this.changeScreen(ApiaryTabs.BREED)) {
             public void renderToolTip(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
                 StringTextComponent s = new StringTextComponent(I18n.format("gui.resourcefulbees.apiary.button.breed_screen"));
@@ -127,7 +128,7 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
     public void render(@Nonnull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrix);
         super.render(matrix, mouseX, mouseY, partialTicks);
-        this.func_230459_a_(matrix, mouseX, mouseY);
+        this.drawMouseoverTooltip(matrix, mouseX, mouseY);
 
         int l = this.guiLeft + 5;
         int i1 = this.guiTop + 18;
@@ -137,8 +138,8 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(@Nonnull MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
-        Minecraft client = this.minecraft;
+    protected void drawBackground(@Nonnull MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
+        Minecraft client = this.client;
         if (client != null) {
             if (this.container.getSelectedBee() > apiaryTileEntity.getBeeCount() - 1) {
                 this.container.selectBee(apiaryTileEntity.getBeeCount() - 1);
@@ -153,15 +154,15 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
             storageTabButton.active = apiaryTileEntity.getApiaryStorage() != null;
 
             this.container.beeList = Arrays.copyOf(apiaryTileEntity.BEES.keySet().toArray(), apiaryTileEntity.getBeeCount(), String[].class);
-            this.minecraft.getTextureManager().bindTexture(VALIDATED_TEXTURE);
+            this.client.getTextureManager().bindTexture(VALIDATED_TEXTURE);
             int i = this.guiLeft;
             int j = this.guiTop;
-            this.blit(matrix, i, j, 0, 0, this.xSize, this.ySize);
+            this.drawTexture(matrix, i, j, 0, 0, this.xSize, this.ySize);
             if (!this.canScroll()) {
                 this.sliderProgress = 0;
             }
             int k = (int) (99.0F * this.sliderProgress);
-            this.blit(matrix, i + 44, j + 18 + k, 54 + (this.canScroll() ? 0 : 6), 152, 6, 27);
+            this.drawTexture(matrix, i + 44, j + 18 + k, 54 + (this.canScroll() ? 0 : 6), 152, 6, 27);
             int l = this.guiLeft + 5;
             int i1 = this.guiTop + 18;
             int j1 = this.beeIndexOffset + 7;
@@ -169,15 +170,15 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
             this.drawRecipesItems(l, i1, j1);
 
             int t = i + this.xSize - 25;
-            this.minecraft.getTextureManager().bindTexture(TABS_BG);
-            blit(matrix, t-1, j + 12, 0,0, 25, 68, 128, 128);
+            this.client.getTextureManager().bindTexture(TABS_BG);
+            drawTexture(matrix, t-1, j + 12, 0,0, 25, 68, 128, 128);
         }
     }
 
     @Override
-    protected void drawGuiContainerForegroundLayer(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
+    protected void drawForeground(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
         String s = String.format("(%1$s/%2$s) Bees", apiaryTileEntity.getBeeCount(), Config.APIARY_MAX_BEES.get());
-        this.font.drawString(matrix, s, 4, 7, 0x404040);
+        this.textRenderer.draw(matrix, s, 4, 7, 0x404040);
 
         for (Widget widget : this.buttons) {
             if (widget.isHovered()) {
@@ -193,7 +194,7 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
             int i1 = top + j * 18;
 
             if (mouseX >= left && mouseY >= i1 && mouseX < left + 16 && mouseY < i1 + 18) {
-                List<StringTextComponent> beeInfo = new ArrayList<>();
+                List<ITextComponent> beeInfo = new ArrayList<>();
                 String beeType = apiaryTileEntity.BEES.get(this.container.beeList[i]).beeType;
                 int ticksInHive = apiaryTileEntity.BEES.get(beeType).ticksInHive;
                 int minTicks = apiaryTileEntity.BEES.get(beeType).minOccupationTicks;
@@ -219,7 +220,7 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
             } else if (mouseX >= k && mouseY >= i1 && mouseX < k + 16 && mouseY < i1 + 18) {
                 j1 += 36;
             }
-            this.blit(matrix, k, i1, 0, j1, 18, 18);
+            this.drawTexture(matrix, k, i1, 0, j1, 18, 18);
             int l1 = 18;
             k = k + 18;
             j1 = this.ySize;
@@ -230,7 +231,7 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
                 j1 += 18;
             }
 
-            this.blit(matrix, k, i1, l1, j1, 18, 18);
+            this.drawTexture(matrix, k, i1, l1, j1, 18, 18);
         }
 
     }
@@ -243,11 +244,11 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
             CompoundNBT data = new CompoundNBT();
             data.putString(NBTConstants.NBT_ENTITY, "resourcefulbees:bee");
             data.putString(NBTConstants.NBT_BEE_TYPE, this.container.beeList[i]);
-            String primaryColor = BeeInfo.getInfo(this.container.beeList[i]).getPrimaryColor();
+            String primaryColor = BeeRegistry.getRegistry().getBeeData(this.container.beeList[i]).getColorData().getPrimaryColor();
             data.putString(NBTConstants.NBT_COLOR, primaryColor != null && !primaryColor.isEmpty() ? primaryColor : String.valueOf(BeeConstants.DEFAULT_ITEM_COLOR));
             beeJar.setTag(data);
-            if (this.minecraft != null)
-                this.minecraft.getItemRenderer().renderItemAndEffectIntoGUI(beeJar, left, i1);
+            if (this.client != null)
+                this.client.getItemRenderer().renderItemAndEffectIntoGUI(beeJar, left, i1);
         }
     }
 

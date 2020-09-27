@@ -82,7 +82,7 @@ public class MechanicalCentrifugeTileEntity extends TileEntity implements ITicka
 
     public boolean canProcess(@Nullable CentrifugeRecipe recipe) {
         if (recipe != null && !recipe.multiblock) {
-            List<Pair<ItemStack, Double>> outputs = recipe.outputs;
+            List<Pair<ItemStack, Float>> outputs = recipe.outputs;
             ItemStack glass_bottle = h.getStackInSlot(BOTTLE_SLOT);
             ItemStack combs = h.getStackInSlot(HONEYCOMB_SLOT);
             JsonElement count = recipe.ingredient.serialize().getAsJsonObject().get(BeeConstants.INGREDIENT_COUNT);
@@ -130,7 +130,7 @@ public class MechanicalCentrifugeTileEntity extends TileEntity implements ITicka
             );
             if (world != null)
                 for(int i = 0; i < 3; i++){
-                    Pair<ItemStack, Double> output = recipe.outputs.get(i);
+                    Pair<ItemStack, Float> output = recipe.outputs.get(i);
                     if (output.getRight() >= world.rand.nextDouble()) {
                         if (slots.get(i).getLeft().isEmpty()) {
                             this.h.setStackInSlot(slots.get(i).getRight(), output.getLeft().copy());
@@ -169,11 +169,11 @@ public class MechanicalCentrifugeTileEntity extends TileEntity implements ITicka
     }
 
     @Override
-    public void read(@Nonnull BlockState state, CompoundNBT tag) {
+    public void fromTag(@Nonnull BlockState state, CompoundNBT tag) {
         CompoundNBT invTag = tag.getCompound("inv");
         h.deserializeNBT(invTag);
         clicks = tag.getInt("clicks");
-        super.read(state, tag);
+        super.fromTag(state, tag);
     }
 
     @Nonnull
@@ -186,7 +186,7 @@ public class MechanicalCentrifugeTileEntity extends TileEntity implements ITicka
 
     @Override
     public void handleUpdateTag(@Nonnull BlockState state, CompoundNBT tag) {
-        this.read(state, tag);
+        this.fromTag(state, tag);
     }
 
     @Nonnull

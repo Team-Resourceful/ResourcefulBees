@@ -1,8 +1,8 @@
 package com.resourcefulbees.resourcefulbees.container;
 
+import com.resourcefulbees.resourcefulbees.lib.CustomStorageContainers;
 import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
-import com.resourcefulbees.resourcefulbees.tileentity.centrifuge.CentrifugeControllerTileEntity;
-import com.resourcefulbees.resourcefulbees.utils.CustomEnergyStorage;
+import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.CentrifugeControllerTileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -37,27 +37,29 @@ public class CentrifugeMultiblockContainer extends Container {
 
         centrifugeTileEntity = (CentrifugeControllerTileEntity) world.getTileEntity(pos);
 
-        this.addSlot(new SlotItemHandlerUnconditioned(centrifugeTileEntity.h, CentrifugeControllerTileEntity.BOTTLE_SLOT, 8, 8){
-            public boolean isItemValid(ItemStack stack){
-                return stack.getItem().equals(Items.GLASS_BOTTLE);
-            }
-        });
-
-        int x = 53;
-        for (int i=0; i < 3; i++) {
-            this.addSlot(new SlotItemHandlerUnconditioned(centrifugeTileEntity.h, CentrifugeControllerTileEntity.HONEYCOMB_SLOT[i], x, 8){
-                public boolean isItemValid(ItemStack stack){
-                    return !stack.getItem().equals(Items.GLASS_BOTTLE);
+        if (centrifugeTileEntity != null) {
+            this.addSlot(new SlotItemHandlerUnconditioned(centrifugeTileEntity.h, CentrifugeControllerTileEntity.BOTTLE_SLOT, 8, 8) {
+                public boolean isItemValid(ItemStack stack) {
+                    return stack.getItem().equals(Items.GLASS_BOTTLE);
                 }
             });
-            x += 36;
-        }
+
+            int x = 53;
+            for (int i = 0; i < 3; i++) {
+                this.addSlot(new SlotItemHandlerUnconditioned(centrifugeTileEntity.h, CentrifugeControllerTileEntity.HONEYCOMB_SLOT[i], x, 8) {
+                    public boolean isItemValid(ItemStack stack) {
+                        return !stack.getItem().equals(Items.GLASS_BOTTLE);
+                    }
+                });
+                x += 36;
+            }
 
 
-        for (int i = 0; i < 6; i++) {
-            this.addSlot(new OutputSlot(centrifugeTileEntity.h, CentrifugeControllerTileEntity.OUTPUT_SLOTS[i], 44 + i * 18, 44));
-            this.addSlot(new OutputSlot(centrifugeTileEntity.h, CentrifugeControllerTileEntity.OUTPUT_SLOTS[i + 6], 44 + i * 18, 62));
-            this.addSlot(new OutputSlot(centrifugeTileEntity.h, CentrifugeControllerTileEntity.OUTPUT_SLOTS[i + 12], 44 + i * 18, 80));
+            for (int i = 0; i < 6; i++) {
+                this.addSlot(new OutputSlot(centrifugeTileEntity.h, CentrifugeControllerTileEntity.OUTPUT_SLOTS[i], 44 + i * 18, 44));
+                this.addSlot(new OutputSlot(centrifugeTileEntity.h, CentrifugeControllerTileEntity.OUTPUT_SLOTS[i + 6], 44 + i * 18, 62));
+                this.addSlot(new OutputSlot(centrifugeTileEntity.h, CentrifugeControllerTileEntity.OUTPUT_SLOTS[i + 12], 44 + i * 18, 80));
+            }
         }
 
         for (int i = 0; i < 3; ++i) {
@@ -84,7 +86,7 @@ public class CentrifugeMultiblockContainer extends Container {
             public void set(int value) {
                 centrifugeTileEntity.getCapability(CapabilityEnergy.ENERGY).ifPresent(h -> {
                     int energyStored = h.getEnergyStored() & 0xffff0000;
-                    ((CustomEnergyStorage)h).setEnergy(energyStored + (value & 0xffff));
+                    ((CustomStorageContainers.CustomEnergyStorage)h).setEnergy(energyStored + (value & 0xffff));
                 });
             }
         });
@@ -98,7 +100,7 @@ public class CentrifugeMultiblockContainer extends Container {
             public void set(int value) {
                 centrifugeTileEntity.getCapability(CapabilityEnergy.ENERGY).ifPresent(h -> {
                     int energyStored = h.getEnergyStored() & 0x0000ffff;
-                    ((CustomEnergyStorage)h).setEnergy(energyStored | (value << 16));
+                    ((CustomStorageContainers.CustomEnergyStorage)h).setEnergy(energyStored | (value << 16));
                 });
             }
         });

@@ -8,7 +8,7 @@
     "key": {
         "I": { "item": "minecraft:iron_trapdoor" },
         "B": { "item": "minecraft:barrel" },
-        "C": { "item": "resourcefulbees:crank" }
+        "C": { "item": "minecraft:lever" }
     },
     "result": {
         "item": "resourcefulbees:mechanical_centrifuge"

@@ -3,10 +3,9 @@ package com.resourcefulbees.resourcefulbees.tileentity;
 import com.resourcefulbees.resourcefulbees.block.HoneyGenerator;
 import com.resourcefulbees.resourcefulbees.container.AutomationSensitiveItemStackHandler;
 import com.resourcefulbees.resourcefulbees.container.HoneyGeneratorContainer;
+import com.resourcefulbees.resourcefulbees.lib.CustomStorageContainers;
 import com.resourcefulbees.resourcefulbees.registry.FluidRegistry;
 import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
-import com.resourcefulbees.resourcefulbees.utils.CustomEnergyStorage;
-import com.resourcefulbees.resourcefulbees.utils.CustomTankStorage;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -46,17 +45,19 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
     public static final int ENERGY_TRANSFER_AMOUNT = 100;
     public static final int MAX_ENERGY_CAPACITY = 50000;
     public static final int MAX_TANK_STORAGE = 10000;
+    public static final int TOTAL_TIME = 100;
+    public static final int ENERGY_TOTAL_TIME = 50;
+
+
 
     public AutomationSensitiveItemStackHandler h = new HoneyGeneratorTileEntity.TileStackHandler(5, getAcceptor(), getRemover());
-    public final CustomTankStorage fluidTank = new CustomTankStorage(MAX_TANK_STORAGE);
-    public final CustomEnergyStorage energyStorage = createEnergy();
+    public final CustomStorageContainers.CustomTankStorage fluidTank = new CustomStorageContainers.CustomTankStorage(MAX_TANK_STORAGE);
+    public final CustomStorageContainers.CustomEnergyStorage energyStorage = createEnergy();
     private final LazyOptional<IFluidHandler> fluidOptional = LazyOptional.of(() -> fluidTank);
     private final LazyOptional<IItemHandler> lazyOptional = LazyOptional.of(() -> h);
     private final LazyOptional<IEnergyStorage> energy = LazyOptional.of(() -> energyStorage);
     public int time = 0;
-    public final int totalTime = 100;
     public int energyTime = 0;
-    public final int energyTotalTime = 50;
 
     public HoneyGeneratorTileEntity() {
         super(RegistryHandler.HONEY_GENERATOR_ENTITY.get());
@@ -71,7 +72,7 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
                 if (this.canProcess()) {
                     world.setBlockState(pos, getBlockState().with(HoneyGenerator.PROPERTY_ON, true));
                     ++this.time;
-                    if (this.time >= totalTime) {
+                    if (this.time >= TOTAL_TIME) {
                         this.time = 0;
                         this.processItem();
                         dirty = true;
@@ -83,12 +84,11 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
                 time = 0;
                 world.setBlockState(pos,getBlockState().with(HoneyGenerator.PROPERTY_ON,false));
             }
-
             if (!fluidTank.isEmpty()) {
                 if (this.canProcessEnergy()) {
                     world.setBlockState(pos, getBlockState().with(HoneyGenerator.PROPERTY_ON, true));
                     ++this.energyTime;
-                    if (this.energyTime >= energyTotalTime) {
+                    if (this.energyTime >= ENERGY_TOTAL_TIME) {
                         this.energyTime = 0;
                         this.processEnergy();
                         dirty = true;
@@ -98,7 +98,6 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
                 energyTime = 0;
                 world.setBlockState(pos,getBlockState().with(HoneyGenerator.PROPERTY_ON,false));
             }
-
             if (dirty) {
                 this.markDirty();
             }
@@ -114,16 +113,17 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
                     TileEntity te = world.getTileEntity(pos.offset(direction));
                     if (te != null) {
                         boolean doContinue = te.getCapability(CapabilityEnergy.ENERGY, direction).map(handler -> {
-                                if (handler.canReceive()) {
-                                    int received = handler.receiveEnergy(Math.min(capacity.get(), ENERGY_TRANSFER_AMOUNT), false);
-                                    capacity.addAndGet(-received);
-                                    energyStorage.consumeEnergy(received);
-                                    markDirty();
-                                    return capacity.get() > 0;
-                                } else {
-                                    return true;
+                                    if (handler.canReceive()) {
+                                        int received = handler.receiveEnergy(Math.min(capacity.get(), ENERGY_TRANSFER_AMOUNT), false);
+                                        capacity.addAndGet(-received);
+                                        energyStorage.consumeEnergy(received);
+                                        markDirty();
+                                        return capacity.get() > 0;
+                                    } else {
+                                        return true;
+                                    }
                                 }
-                            }).orElse(true);
+                        ).orElse(true);
                         if (!doContinue) {
                             return;
                         }
@@ -190,12 +190,12 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
     }
 
     @Override
-    public void read(@Nonnull BlockState state, CompoundNBT tag) {
+    public void fromTag(@Nonnull BlockState state, CompoundNBT tag) {
         CompoundNBT invTag = tag.getCompound("inv");
         h.deserializeNBT(invTag);
         energyStorage.deserializeNBT(tag.getCompound("energy"));
         fluidTank.deserializeNBT(tag.getCompound("fluid"));
-        super.read(state, tag);
+        super.fromTag(state, tag);
     }
 
     @Nonnull
@@ -208,7 +208,7 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
 
     @Override
     public void handleUpdateTag(@Nonnull BlockState state, CompoundNBT tag) {
-        this.read(state, tag);
+        this.fromTag(state, tag);
     }
 
     @Nonnull
@@ -241,8 +241,8 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
         return new TranslationTextComponent("gui.resourcefulbees.honey_generator");
     }
 
-    private CustomEnergyStorage createEnergy() {
-        return new CustomEnergyStorage(MAX_ENERGY_CAPACITY, 0, ENERGY_TRANSFER_AMOUNT) {
+    private CustomStorageContainers.CustomEnergyStorage createEnergy() {
+        return new CustomStorageContainers.CustomEnergyStorage(MAX_ENERGY_CAPACITY, 0, ENERGY_TRANSFER_AMOUNT) {
             @Override
             protected void onEnergyChanged() {
                 markDirty();

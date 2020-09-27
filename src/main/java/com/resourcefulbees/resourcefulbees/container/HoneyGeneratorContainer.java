@@ -51,10 +51,23 @@ public class HoneyGeneratorContainer extends Container {
         }
     }
 
-    public int getEnergy() {
-        return honeyGeneratorTileEntity.energyStorage.getEnergyStored();
-    }
+    public int getEnergy() { return honeyGeneratorTileEntity.energyStorage.getEnergyStored(); }
+    
+    public int getFluid() { return honeyGeneratorTileEntity.fluidTank.getFluidAmount(); }
+    
+    public int getMaxEnergy() { return honeyGeneratorTileEntity.energyStorage.getMaxEnergyStored(); }
 
+    public int getMaxFluid() { return honeyGeneratorTileEntity.fluidTank.getCapacity(); }
+
+    public int getTime() { return honeyGeneratorTileEntity.time; }
+
+    public int getEnergyTime() { return honeyGeneratorTileEntity.energyTime; }
+    
+    /**
+     * Determines whether supplied player can use this container
+     *
+     * @param player the player
+     */
     @Override
     public boolean canInteractWith(@Nonnull PlayerEntity player) {
         return true;

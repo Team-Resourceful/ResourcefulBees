@@ -18,15 +18,15 @@ public class MechanicalCentrifugeScreen extends ContainerScreen<MechanicalCentri
     int textColor = 0x404040;
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(@Nonnull MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
+    protected void drawBackground(@Nonnull MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
         ResourceLocation texture;
         texture = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/gui/centrifuges/mechanical_centrifuge.png");
-        Minecraft client = this.minecraft;
+        Minecraft client = this.client;
         if (client != null) {
             client.getTextureManager().bindTexture(texture);
             int i = this.guiLeft;
             int j = this.guiTop;
-            this.blit(matrix, i, j, 0, 0, this.xSize, this.ySize);
+            this.drawTexture(matrix, i, j, 0, 0, this.xSize, this.ySize);
         }
     }
 
@@ -34,11 +34,11 @@ public class MechanicalCentrifugeScreen extends ContainerScreen<MechanicalCentri
     public void render(@Nonnull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrix);
         super.render(matrix, mouseX, mouseY, partialTicks);
-        this.func_230459_a_(matrix, mouseX, mouseY);
+        this.drawMouseoverTooltip(matrix, mouseX, mouseY);
     }
 
     @Override
-    protected void drawGuiContainerForegroundLayer(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
-        this.font.drawString(matrix, this.title.getString(), 25, 5, textColor);
+    protected void drawForeground(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
+        this.textRenderer.draw(matrix, this.title.getString(), 25, 5, textColor);
     }
 }

@@ -29,14 +29,14 @@ public class TooltipBuilder {
 
     public TooltipBuilder appendText(String text) {
         StringTextComponent textComponent = (StringTextComponent) tooltip.remove(tooltip.size() - 1);
-        textComponent.appendString(text);
+        textComponent.append(text);
         tooltip.add(textComponent);
         return this;
     }
 
     public TooltipBuilder appendText(String text, TextFormatting formatting) {
         StringTextComponent textComponent = (StringTextComponent) tooltip.remove(tooltip.size() - 1);
-        textComponent.appendString(formatting + text);
+        textComponent.append(formatting + text);
         tooltip.add(textComponent);
         return this;
     }

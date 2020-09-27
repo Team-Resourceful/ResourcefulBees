@@ -3,7 +3,7 @@ package com.resourcefulbees.resourcefulbees.entity.goals;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
-import com.resourcefulbees.resourcefulbees.utils.BeeValidator;
+import com.resourcefulbees.resourcefulbees.utils.validation.ValidatorUtils;
 import net.minecraft.entity.EntityPredicate;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
@@ -29,7 +29,7 @@ public class BeeTemptGoal extends Goal {
     private double pitch;
     private double yaw;
     private int delayTemptCounter;
-    private boolean isRunning;
+
 
     public BeeTemptGoal(CustomBeeEntity beeEntity, double speedIn, boolean scaredByPlayerMovementIn) {
         this.beeEntity = beeEntity;
@@ -60,9 +60,9 @@ public class BeeTemptGoal extends Goal {
     }
 
     protected boolean isTempting(ItemStack stack) {
-        String validBreedItem = this.beeEntity.getBeeInfo().getFeedItem();
+        String validBreedItem = this.beeEntity.getBeeData().getBreedData().getFeedItem();
 
-        if (BeeValidator.TAG_RESOURCE_PATTERN.matcher(validBreedItem).matches()) {
+        if (ValidatorUtils.TAG_RESOURCE_PATTERN.matcher(validBreedItem).matches()) {
             ITag<Item> itemTag = BeeInfoUtils.getItemTag(validBreedItem.replace(BeeConstants.TAG_PREFIX, ""));
             return itemTag != null && stack.getItem().isIn(itemTag);
         } else {
@@ -93,9 +93,9 @@ public class BeeTemptGoal extends Goal {
                     return false;
                 }
             } else {
-                this.targetX = this.closestPlayer.getPosX();
-                this.targetY = this.closestPlayer.getPosY();
-                this.targetZ = this.closestPlayer.getPosZ();
+                this.targetX = this.closestPlayer.getX();
+                this.targetY = this.closestPlayer.getY();
+                this.targetZ = this.closestPlayer.getZ();
             }
 
 
@@ -114,10 +114,9 @@ public class BeeTemptGoal extends Goal {
      * Execute a one shot task or start executing a continuous task
      */
     public void startExecuting() {
-        this.targetX = this.closestPlayer.getPosX();
-        this.targetY = this.closestPlayer.getPosY();
-        this.targetZ = this.closestPlayer.getPosZ();
-        this.isRunning = true;
+        this.targetX = this.closestPlayer.getX();
+        this.targetY = this.closestPlayer.getY();
+        this.targetZ = this.closestPlayer.getZ();
     }
 
     /**
@@ -127,7 +126,6 @@ public class BeeTemptGoal extends Goal {
         this.closestPlayer = null;
         this.beeEntity.getNavigator().clearPath();
         this.delayTemptCounter = 100;
-        this.isRunning = false;
     }
 
     /**
@@ -141,12 +139,5 @@ public class BeeTemptGoal extends Goal {
             this.beeEntity.getNavigator().tryMoveToEntityLiving(this.closestPlayer, this.speed);
         }
 
-    }
-
-    /**
-     * @see #isRunning
-     */
-    public boolean isRunning() {
-        return this.isRunning;
     }
 }

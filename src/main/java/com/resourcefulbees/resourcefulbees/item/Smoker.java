@@ -51,14 +51,14 @@ public class Smoker extends Item {
             }
 
 	        Vector3d vec3d = player.getLookVec();
-			double x = player.getPosX() + vec3d.x * 2;
-			double y = player.getPosY() + vec3d.y * 2;
-			double z = player.getPosZ() + vec3d.z * 2;
+			double x = player.getX() + vec3d.x * 2;
+			double y = player.getY() + vec3d.y * 2;
+			double z = player.getZ() + vec3d.z * 2;
 
-            AxisAlignedBB axisalignedbb = new AxisAlignedBB((player.getPosX() + vec3d.x) - 2.5D, (player.getPosY() + vec3d.y) - 2D, (player.getPosZ() + vec3d.z) - 2.5D, (player.getPosX() + vec3d.x) + 2.5D, (player.getPosY() + vec3d.y) + 2D, (player.getPosZ() + vec3d.z) + 2.5D);
-            List<MobEntity> list = world.getLoadedEntitiesWithinAABB(BeeEntity.class, axisalignedbb);
+            AxisAlignedBB axisalignedbb = new AxisAlignedBB((player.getX() + vec3d.x) - 2.5D, (player.getY() + vec3d.y) - 2D, (player.getZ() + vec3d.z) - 2.5D, (player.getX() + vec3d.x) + 2.5D, (player.getY() + vec3d.y) + 2D, (player.getZ() + vec3d.z) + 2.5D);
+            List<MobEntity> list = world.getEntitiesIncludingUngeneratedChunks(BeeEntity.class, axisalignedbb);
             for (MobEntity mobEntity : list) {
-                if (mobEntity instanceof BeeEntity && ((BeeEntity) mobEntity).func_233678_J__()){
+                if (mobEntity instanceof BeeEntity && ((BeeEntity) mobEntity).hasAngerTime()){
                     ((BeeEntity) mobEntity).setAngerTime(0);
                     mobEntity.setRevengeTarget(null);
                 }

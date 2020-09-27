@@ -2,8 +2,7 @@ package com.resourcefulbees.resourcefulbees.client.render.entity;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
-import com.resourcefulbees.resourcefulbees.config.BeeInfo;
-import com.resourcefulbees.resourcefulbees.data.BeeData;
+import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -23,11 +22,12 @@ public class SecondaryColorLayer extends LayerRenderer<CustomBeeEntity, CustomBe
     }
 
     public void render(@Nonnull MatrixStack matrixStackIn, @Nonnull IRenderTypeBuffer bufferIn, int packedLightIn, CustomBeeEntity entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        BeeData bee = entitylivingbaseIn.getBeeInfo();
-        if (bee.isBeeColored() && bee.getSecondaryColor() != null && !bee.getSecondaryColor().isEmpty()) {
-            float[] secondaryColor = BeeInfo.getColorFloats(bee.getSecondaryColor());
-            ResourceLocation location = new ResourceLocation(ResourcefulBees.MOD_ID, BeeConstants.ENTITY_TEXTURES_DIR + bee.getSecondaryLayerTexture() + ".png");
-            renderCutoutModel(this.getEntityModel(), location, matrixStackIn, bufferIn, packedLightIn, entitylivingbaseIn, secondaryColor[0], secondaryColor[1], secondaryColor[2]);
+        CustomBeeData bee = entitylivingbaseIn.getBeeData();
+
+        if (bee.getColorData().isBeeColored() && bee.getColorData().hasSecondaryColor()) {
+            float[] secondaryColor = bee.getColorData().getSecondaryColorFloats();
+            ResourceLocation location = new ResourceLocation(ResourcefulBees.MOD_ID, BeeConstants.ENTITY_TEXTURES_DIR + bee.getColorData().getSecondaryLayerTexture() + ".png");
+            renderModel(this.getEntityModel(), location, matrixStackIn, bufferIn, packedLightIn, entitylivingbaseIn, secondaryColor[0], secondaryColor[1], secondaryColor[2]);
         }
     }
 }

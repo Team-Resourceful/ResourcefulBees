@@ -1,14 +1,14 @@
 package com.resourcefulbees.resourcefulbees.compat.jei;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
+import com.resourcefulbees.resourcefulbees.api.IBeeRegistry;
 import com.resourcefulbees.resourcefulbees.compat.jei.ingredients.EntityIngredient;
-import com.resourcefulbees.resourcefulbees.config.BeeInfo;
-import com.resourcefulbees.resourcefulbees.data.BeeData;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.RecipeTypes;
+import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
-import com.resourcefulbees.resourcefulbees.utils.BeeValidator;
+import com.resourcefulbees.resourcefulbees.utils.validation.ValidatorUtils;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -34,13 +34,13 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static com.resourcefulbees.resourcefulbees.lib.BeeConstants.*;
 
 public class FlowersCategory implements IRecipeCategory<FlowersCategory.Recipe> {
     public static final ResourceLocation GUI_BACK = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/beeflowers.png");
     public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "bee_pollination_flowers");
+    private static final IBeeRegistry BEE_REGISTRY = BeeRegistry.getRegistry();
     private final IDrawable background;
     private final IDrawable icon;
     private final String localizedName;
@@ -53,46 +53,43 @@ public class FlowersCategory implements IRecipeCategory<FlowersCategory.Recipe> 
 
     public static List<Recipe> getFlowersRecipes(IIngredientManager ingredientManager) {
         List<Recipe> recipes = new ArrayList<>();
-        for (Map.Entry<String, BeeData> bee : BeeInfo.getBees().entrySet()){
-            if (!bee.getValue().getName().equals(DEFAULT_BEE_TYPE)) {
-                if (!bee.getValue().getFlower().isEmpty()) {
-                    String flower = bee.getValue().getFlower();
-                    if (BeeValidator.TAG_RESOURCE_PATTERN.matcher(flower).matches()) {
-                        flower = flower.replace(BeeConstants.TAG_PREFIX, "");
 
-                        ITag<Fluid> fluidTag = BeeInfoUtils.getFluidTag(flower);
-                        ITag<Item> itemTag = BeeInfoUtils.getItemTag(flower);
-                        ITag<Block> blockTag = BeeInfoUtils.getBlockTag(flower);
-                        if (itemTag != null) {
-                            recipes.add(new Recipe(itemTag, null, null, bee.getKey(), RecipeTypes.ITEM, true));
-                        } else if (fluidTag != null) {
-                            recipes.add(new Recipe(null, fluidTag, null, bee.getKey(), RecipeTypes.FLUID,  true));
-                        } else if (blockTag != null) {
-                            recipes.add(new Recipe(null, null, blockTag, bee.getKey(), RecipeTypes.BLOCK, true));
-                        }
-                    } else if (flower.equals(FLOWER_TAG_ALL)) {
-                        ITag<Item> itemTag = ItemTags.FLOWERS;
-                        if (itemTag != null)
-                            recipes.add(new Recipe(itemTag, null,  null, bee.getKey(), RecipeTypes.ITEM, true));
-                    } else if (flower.equals(FLOWER_TAG_SMALL)) {
-                        ITag<Item> itemTag = ItemTags.SMALL_FLOWERS;
-                        if (itemTag != null)
-                            recipes.add(new Recipe(itemTag, null, null, bee.getKey(), RecipeTypes.ITEM, true));
-                    } else if (flower.equals(FLOWER_TAG_TALL)) {
-                        ITag<Item> itemTag = ItemTags.TALL_FLOWERS;
-                        if (itemTag != null)
-                            recipes.add(new Recipe(itemTag, null, null, bee.getKey(), RecipeTypes.ITEM, true));
-                    } else {
-                        Item itemIn = BeeInfoUtils.getItem(flower);
-                        Fluid fluidIn = BeeInfoUtils.getFluid(flower);
-                        if (BeeInfoUtils.isValidItem(itemIn))
-                            recipes.add(new Recipe(new ItemStack(itemIn), null, bee.getKey(), RecipeTypes.ITEM, false));
-                        else if (BeeInfoUtils.isValidFluid(fluidIn))
-                            recipes.add(new Recipe(null, new FluidStack(fluidIn, 1000), bee.getKey(), RecipeTypes.FLUID, false));
-                    }
+        BEE_REGISTRY.getBees().forEach(((s, beeData) -> {
+            String flower = beeData.getFlower();
+            if (ValidatorUtils.TAG_RESOURCE_PATTERN.matcher(flower).matches()) {
+                flower = flower.replace(BeeConstants.TAG_PREFIX, "");
+
+                ITag<Fluid> fluidTag = BeeInfoUtils.getFluidTag(flower);
+                ITag<Item> itemTag = BeeInfoUtils.getItemTag(flower);
+                ITag<Block> blockTag = BeeInfoUtils.getBlockTag(flower);
+                if (itemTag != null) {
+                    recipes.add(new Recipe(itemTag, null, null, beeData.getName(), RecipeTypes.ITEM, true));
+                } else if (fluidTag != null) {
+                    recipes.add(new Recipe(null, fluidTag, null, beeData.getName(), RecipeTypes.FLUID,  true));
+                } else if (blockTag != null) {
+                    recipes.add(new Recipe(null, null, blockTag, beeData.getName(), RecipeTypes.BLOCK, true));
                 }
+            } else if (flower.equals(FLOWER_TAG_ALL)) {
+                ITag<Item> itemTag = ItemTags.FLOWERS;
+                if (itemTag != null)
+                    recipes.add(new Recipe(itemTag, null,  null, beeData.getName(), RecipeTypes.ITEM, true));
+            } else if (flower.equals(FLOWER_TAG_SMALL)) {
+                ITag<Item> itemTag = ItemTags.SMALL_FLOWERS;
+                if (itemTag != null)
+                    recipes.add(new Recipe(itemTag, null, null, beeData.getName(), RecipeTypes.ITEM, true));
+            } else if (flower.equals(FLOWER_TAG_TALL)) {
+                ITag<Item> itemTag = ItemTags.TALL_FLOWERS;
+                if (itemTag != null)
+                    recipes.add(new Recipe(itemTag, null, null, beeData.getName(), RecipeTypes.ITEM, true));
+            } else {
+                Item itemIn = BeeInfoUtils.getItem(flower);
+                Fluid fluidIn = BeeInfoUtils.getFluid(flower);
+                if (BeeInfoUtils.isValidItem(itemIn))
+                    recipes.add(new Recipe(new ItemStack(itemIn), null, beeData.getName(), RecipeTypes.ITEM, false));
+                else if (BeeInfoUtils.isValidFluid(fluidIn))
+                    recipes.add(new Recipe(null, new FluidStack(fluidIn, 1000), beeData.getName(), RecipeTypes.FLUID, false));
             }
-        }
+        }));
         return recipes;
     }
 
@@ -135,7 +132,7 @@ public class FlowersCategory implements IRecipeCategory<FlowersCategory.Recipe> 
                 ingredients.setInputIngredients(list);
             } else if (recipe.recipeType == RecipeTypes.FLUID) {
                 List<FluidStack> fluids = new ArrayList<>();
-                for (Fluid element: recipe.fluidITag.getAllElements() ) {
+                for (Fluid element: recipe.fluidITag.values() ) {
                     FluidStack fluid = new FluidStack(element, 1000);
                     fluids.add(fluid);
                 }
@@ -144,7 +141,7 @@ public class FlowersCategory implements IRecipeCategory<FlowersCategory.Recipe> 
                 ingredients.setInputLists(VanillaTypes.FLUID, fluid_fluids);
             } else if (recipe.recipeType == RecipeTypes.BLOCK) {
                 List<ItemStack> itemStacks = new ArrayList<>();
-                for (Block element: recipe.blockTag.getAllElements() ) {
+                for (Block element: recipe.blockTag.values() ) {
                     ItemStack item = new ItemStack(element.asItem());
                     itemStacks.add(item);
                 }

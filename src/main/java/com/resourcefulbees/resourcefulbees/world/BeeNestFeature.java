@@ -2,13 +2,11 @@ package com.resourcefulbees.resourcefulbees.world;
 
 import com.mojang.serialization.Codec;
 import com.resourcefulbees.resourcefulbees.config.Config;
-import com.resourcefulbees.resourcefulbees.entity.passive.ResourcefulBee;
 import com.resourcefulbees.resourcefulbees.tileentity.TieredBeehiveTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.MathUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
@@ -20,7 +18,6 @@ import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
-import net.minecraft.world.gen.feature.structure.StructureManager;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -39,7 +36,7 @@ public class BeeNestFeature extends Feature<NoFeatureConfig> {
     }
 
     @Override
-    public boolean func_230362_a_(@Nonnull ISeedReader worldIn, @Nonnull StructureManager manager, @Nonnull ChunkGenerator generator, @Nonnull Random rand, @Nonnull BlockPos pos, @Nonnull NoFeatureConfig config) {
+    public boolean generate(@Nonnull ISeedReader worldIn, @Nonnull ChunkGenerator generator, @Nonnull Random rand, @Nonnull BlockPos pos, @Nonnull NoFeatureConfig config) {
         Biome biome = worldIn.getBiome(pos);
         Biome.Category category = biome.getCategory();
 
@@ -61,7 +58,7 @@ public class BeeNestFeature extends Feature<NoFeatureConfig> {
             if (newPos.getY() > 100)
                 return false;
             if (worldIn.getBlockState(newPos.down()).getBlock().equals(Blocks.LAVA))
-                if (rand.nextInt(10) != 10)
+                if (rand.nextInt(11) != 10)
                     return false;
         }
         else {
@@ -145,20 +142,20 @@ public class BeeNestFeature extends Feature<NoFeatureConfig> {
 
         if (tileEntity instanceof TieredBeehiveTileEntity) {
             TieredBeehiveTileEntity nest = (TieredBeehiveTileEntity) tileEntity;
-            // TODO - figure out why 0.5f for nests turns to 0.0 when calling getMaxBees() and breaks when hives work fine.
+            // TODO change to dynamically pick bee registry ID from spawnable biomes map
             int maxBees = Math.round(Config.HIVE_MAX_BEES.get() * 0.5f);  //nest.getMaxBees();
-            for (int i = rand.nextInt(maxBees); i < maxBees ; i++) {
-                ResourcefulBee bee = CUSTOM_BEE.get().create(worldIn.getWorld());
+/*            for (int i = rand.nextInt(maxBees); i < maxBees ; i++) {
+                ResourcefulBee bee = CUSTOM_BEE.get().create(worldIn.getWorld()); //TODO <---- This line here!!!
                 if (bee != null) {
                     bee.setPosition(newPos.getX(), newPos.getY(), newPos.getZ());
                     bee.setBeeType(true);
                     CompoundNBT compoundNBT = new CompoundNBT();
                     bee.writeUnlessPassenger(compoundNBT);
-                    int timeinhive = rand.nextInt(bee.getBeeInfo().getMaxTimeInHive());
+                    int timeinhive = rand.nextInt(bee.getBeeData().getMaxTimeInHive());
                     TieredBeehiveTileEntity.Bee beehivetileentity$bee = new TieredBeehiveTileEntity.Bee(compoundNBT, 0, timeinhive);
                     nest.bees.add(beehivetileentity$bee);
                 }
-            }
+            }*/
         }
         return true;
     }

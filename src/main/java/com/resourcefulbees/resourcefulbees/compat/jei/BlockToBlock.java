@@ -2,14 +2,14 @@ package com.resourcefulbees.resourcefulbees.compat.jei;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
+import com.resourcefulbees.resourcefulbees.api.IBeeRegistry;
 import com.resourcefulbees.resourcefulbees.compat.jei.ingredients.EntityIngredient;
-import com.resourcefulbees.resourcefulbees.config.BeeInfo;
-import com.resourcefulbees.resourcefulbees.data.BeeData;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
+import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
-import com.resourcefulbees.resourcefulbees.utils.BeeValidator;
+import com.resourcefulbees.resourcefulbees.utils.validation.ValidatorUtils;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -31,13 +31,13 @@ import net.minecraft.util.text.StringTextComponent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 @SuppressWarnings("NullableProblems")
 public class BlockToBlock implements IRecipeCategory<BlockToBlock.Recipe> {
     public static final ResourceLocation GUI_BACK = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/beemutation.png");
     public static final ResourceLocation ICONS = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/icons.png");
     public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "block_to_block_mutation");
+    private static final IBeeRegistry BEE_REGISTRY = BeeRegistry.getRegistry();
     private final IDrawable background;
     private final IDrawable icon;
     private final IDrawable info;
@@ -54,34 +54,35 @@ public class BlockToBlock implements IRecipeCategory<BlockToBlock.Recipe> {
 
     public static List<BlockToBlock.Recipe> getMutationRecipes(IIngredientManager ingredientManager) {
         List<BlockToBlock.Recipe> recipes = new ArrayList<>();
-        for (Map.Entry<String, BeeData> bee : BeeInfo.getBees().entrySet()){
-            if (bee.getValue().hasMutation()) {
 
-                String mutationIn = bee.getValue().getMutationInput();
-                String mutationOut = bee.getValue().getMutationOutput();
+        BEE_REGISTRY.getBees().forEach(((s, beeData) -> {
+            if (beeData.getMutationData().hasMutation()) {
 
-                if (BeeValidator.TAG_RESOURCE_PATTERN.matcher(mutationIn).matches()) {
+                String mutationIn = beeData.getMutationData().getMutationInput();
+                String mutationOut = beeData.getMutationData().getMutationOutput();
+
+                if (ValidatorUtils.TAG_RESOURCE_PATTERN.matcher(mutationIn).matches()) {
                     mutationIn = mutationIn.replace(BeeConstants.TAG_PREFIX, "");
 
                     ITag<Item> itemTag = BeeInfoUtils.getItemTag(mutationIn);
                     if (itemTag !=null) {
                         Item itemOut = BeeInfoUtils.getItem(mutationOut);
                         if (BeeInfoUtils.isValidItem(itemOut)){
-                            recipes.add( new Recipe(itemTag, new ItemStack(itemOut), bee.getKey(), MutationTypes.BLOCK_TO_BLOCK, true));
+                            recipes.add( new Recipe(itemTag, new ItemStack(itemOut), beeData.getName(), MutationTypes.BLOCK_TO_BLOCK, true));
                         }
                     }
                 } else {
-                    MutationTypes mutationType = bee.getValue().getMutationType();
+                    MutationTypes mutationType = beeData.getMutationData().getMutationType();
 
                     if (MutationTypes.BLOCK_TO_BLOCK.equals(mutationType)) {
                         Item itemIn = BeeInfoUtils.getItem(mutationIn);
                         Item itemOut = BeeInfoUtils.getItem(mutationOut);
                         if (BeeInfoUtils.isValidItem(itemIn) && BeeInfoUtils.isValidItem(itemOut))
-                            recipes.add( new Recipe( new ItemStack(itemIn), new ItemStack(itemOut), bee.getKey(), mutationType, false));
+                            recipes.add( new Recipe( new ItemStack(itemIn), new ItemStack(itemOut), beeData.getName(), mutationType, false));
                     }
                 }
             }
-        }
+        }));
         return recipes;
     }
 
@@ -134,8 +135,6 @@ public class BlockToBlock implements IRecipeCategory<BlockToBlock.Recipe> {
     public List<ITextComponent> getTooltipStrings(Recipe recipe, double mouseX, double mouseY) {
         double infoX = 63D;
         double infoY = 8D;
-        double beeX = 10D;
-        double beeY = 6D;
         if (mouseX >= infoX && mouseX <= infoX + 9D && mouseY >= infoY && mouseY <= infoY + 9D){
             return Collections.singletonList(new StringTextComponent(I18n.format("gui." + ResourcefulBees.MOD_ID + ".jei.category.mutation.info")));
         }

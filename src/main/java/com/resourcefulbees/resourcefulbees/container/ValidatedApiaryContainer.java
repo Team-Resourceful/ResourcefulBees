@@ -1,11 +1,12 @@
 package com.resourcefulbees.resourcefulbees.container;
 
+import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.item.BeeJar;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
 import com.resourcefulbees.resourcefulbees.network.packets.LockBeeMessage;
 import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
-import com.resourcefulbees.resourcefulbees.tileentity.ApiaryTileEntity;
+import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryTileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -41,7 +42,7 @@ public class ValidatedApiaryContainer extends Container {
                             CompoundNBT data = stack.getTag();
                             //noinspection ConstantConditions
                             String type = data.getString(NBTConstants.NBT_ENTITY);
-                            return type.equals(RegistryHandler.CUSTOM_BEE.getId().toString());
+                            return type.startsWith(ResourcefulBees.MOD_ID);
                         }
                     }
                     return false;

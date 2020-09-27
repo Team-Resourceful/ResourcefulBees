@@ -1,0 +1,7 @@
+{
+	"name": "book.resourcefulbees.bee_category",
+	"description": "book.resourcefulbees.bee_category.desc",
+	"icon": "resourcefulbees:t4_beehive",
+	"sortnum": 1,
+	"i18n": true
+}

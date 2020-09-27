@@ -1,7 +1,7 @@
 package com.resourcefulbees.resourcefulbees.tileentity;
 
+import com.resourcefulbees.resourcefulbees.lib.CustomStorageContainers;
 import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
-import com.resourcefulbees.resourcefulbees.utils.CustomEnergyStorage;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
@@ -16,7 +16,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class CreativeGenTileEntity extends TileEntity implements ITickableTileEntity {
 
-    public final CustomEnergyStorage energyStorage = createEnergy();
+    public final CustomStorageContainers.CustomEnergyStorage energyStorage = createEnergy();
     private final LazyOptional<IEnergyStorage> energy = LazyOptional.of(() -> energyStorage);
 
     public CreativeGenTileEntity() {
@@ -58,8 +58,8 @@ public class CreativeGenTileEntity extends TileEntity implements ITickableTileEn
         }
     }
 
-    private CustomEnergyStorage createEnergy() {
-        return new CustomEnergyStorage(1000000, 0, 10000) {
+    private CustomStorageContainers.CustomEnergyStorage createEnergy() {
+        return new CustomStorageContainers.CustomEnergyStorage(1000000, 0, 10000) {
             @Override
             protected void onEnergyChanged() {
                 markDirty();

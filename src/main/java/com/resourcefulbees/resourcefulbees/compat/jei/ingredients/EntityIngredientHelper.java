@@ -1,28 +1,31 @@
 package com.resourcefulbees.resourcefulbees.compat.jei.ingredients;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
-import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
-import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
+import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
+import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import mezz.jei.api.ingredients.IIngredientHelper;
 import mezz.jei.api.recipe.IFocus;
 import mezz.jei.api.recipe.IFocusFactory;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.item.Items;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Iterator;
 
 public class EntityIngredientHelper<T extends EntityIngredient> implements IIngredientHelper<EntityIngredient> {
+
+    @Nonnull
     @Override
-    public IFocus<?> translateFocus(IFocus<EntityIngredient> focus, IFocusFactory focusFactory) {
+    public IFocus<?> translateFocus(@Nonnull IFocus<EntityIngredient> focus, @Nonnull IFocusFactory focusFactory) {
         return focus;
     }
 
     @Nullable
     @Override
-    public EntityIngredient getMatch(Iterable<EntityIngredient> iterable, EntityIngredient entityIngredient) {
-        Iterator var3 = iterable.iterator();
+    public EntityIngredient getMatch(Iterable<EntityIngredient> iterable, @Nonnull EntityIngredient entityIngredient) {
+        Iterator<EntityIngredient> var3 = iterable.iterator();
 
         EntityIngredient entity;
         do {
@@ -30,52 +33,55 @@ public class EntityIngredientHelper<T extends EntityIngredient> implements IIngr
                 return null;
             }
 
-            entity = (EntityIngredient)var3.next();
+            entity = var3.next();
         } while(entityIngredient.getBeeType().equals(entity.getBeeType()));
 
         return entity;
     }
 
+    @Nonnull
     @Override
     public String getDisplayName(EntityIngredient entityIngredient) {
         return I18n.format("entity.resourcefulbees." + entityIngredient.getBeeType());
     }
 
+    @Nonnull
     @Override
     public ItemStack getCheatItemStack(EntityIngredient ingredient) {
-        final ItemStack eggStack = new ItemStack(RegistryHandler.BEE_SPAWN_EGG.get());
-        final CompoundNBT eggEntityTag = eggStack.getOrCreateChildTag("EntityTag");
-        final CompoundNBT eggItemTag = eggStack.getOrCreateChildTag(NBTConstants.NBT_ROOT);
-        eggEntityTag.putString(NBTConstants.NBT_BEE_TYPE, ingredient.getBeeType());
-        eggItemTag.putString(NBTConstants.NBT_BEE_TYPE, ingredient.getBeeType());
-        return eggStack;
+        return ingredient.getBeeType().equals(BeeConstants.VANILLA_BEE_TYPE) ? new ItemStack(Items.BEE_SPAWN_EGG) : new ItemStack(BeeRegistry.getRegistry().getBeeData(ingredient.getBeeType()).getSpawnEggItemRegistryObject().get());
     }
 
+    @Nonnull
     @Override
     public String getUniqueId(EntityIngredient entityIngredient) {
         return "bee:" + entityIngredient.getBeeType();
     }
 
+    @Nonnull
     @Override
-    public String getWildcardId(EntityIngredient entityIngredient) {
+    public String getWildcardId(@Nonnull EntityIngredient entityIngredient) {
         return this.getUniqueId(entityIngredient);
     }
 
+    @Nonnull
     @Override
-    public String getModId(EntityIngredient entityIngredient) {
+    public String getModId(@Nonnull EntityIngredient entityIngredient) {
         return ResourcefulBees.MOD_ID;
     }
 
+    @Nonnull
     @Override
     public String getResourceId(EntityIngredient entityIngredient) {
         return entityIngredient.getBeeType();
     }
 
+    @Nonnull
     @Override
-    public EntityIngredient copyIngredient(EntityIngredient entityIngredient) {
+    public EntityIngredient copyIngredient(@Nonnull EntityIngredient entityIngredient) {
         return entityIngredient;
     }
 
+    @Nonnull
     @Override
     public String getErrorInfo(@Nullable EntityIngredient entityIngredient) {
         return null;

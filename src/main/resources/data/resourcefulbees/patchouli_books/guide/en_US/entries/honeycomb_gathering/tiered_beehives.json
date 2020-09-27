@@ -1,0 +1,12 @@
+{
+    "name": "How to Set Up an Apiary",
+    "icon": "resourcefulbees:t1_apiary",
+    "category": "honeycomb_gathering",
+    "sortnum": 1,
+    "pages": [
+        {
+            "type": "text",
+            "text": "Setting up your apiary is rather simple first craft your apiary, then place it down and open it up you'll see a validation screen with with multiple buttons such as Offset, Build, Validate, and Preview you'll want to use the Preview button to see the structures bounds, these bounds will show you "
+        }
+    ]
+}
