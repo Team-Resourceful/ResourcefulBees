@@ -13,7 +13,7 @@ public class ItemGroupResourcefulBees{
 
 	public static final ItemGroup RESOURCEFUL_BEES = (new ItemGroup(ResourcefulBees.MOD_ID) {
 
-		@Override
+/*		@Override
 		@OnlyIn(Dist.CLIENT)
 		public void fill(@Nonnull NonNullList<ItemStack> items) {
 			BeeRegistry.getRegistry().getBees().forEach(((s, customBeeData) -> {
@@ -28,7 +28,7 @@ public class ItemGroupResourcefulBees{
 					}
 			}));
 			super.fill(items);
-		}
+		}*/
 
 		@Override
 		@Nonnull

@@ -69,6 +69,8 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
         exportButton = this.addButton(new Button(this.guiLeft + 159, this.guiTop + 10, 40, 20, new StringTextComponent(I18n.format("gui.resourcefulbees.apiary.button.export")), (onPress) -> this.exportSelectedBee()));
 
         addTabButtons();
+
+
     }
 
     private void addTabButtons() {
@@ -116,8 +118,10 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
     }
 
     private void exportSelectedBee() {
-        if (apiaryTileEntity.getBeeCount() != 0)
+        if (apiaryTileEntity.getBeeCount() != 0) {
             NetPacketHandler.sendToServer(new ExportBeeMessage(this.container.pos, this.container.beeList[this.container.getSelectedBee()]));
+            beeIndexOffset--;
+        }
     }
 
     private void importBee() {
@@ -167,7 +171,7 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
             int i1 = this.guiTop + 18;
             int j1 = this.beeIndexOffset + 7;
             this.drawRecipesBackground(matrix, mouseX, mouseY, l, i1, j1);
-            this.drawRecipesItems(l, i1, j1);
+            this.drawBees(l, i1, j1);
 
             int t = i + this.xSize - 25;
             this.client.getTextureManager().bindTexture(TABS_BG);
@@ -195,12 +199,12 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
 
             if (mouseX >= left && mouseY >= i1 && mouseX < left + 16 && mouseY < i1 + 18) {
                 List<ITextComponent> beeInfo = new ArrayList<>();
-                String beeType = apiaryTileEntity.BEES.get(this.container.beeList[i]).beeType;
-                int ticksInHive = apiaryTileEntity.BEES.get(beeType).ticksInHive;
-                int minTicks = apiaryTileEntity.BEES.get(beeType).minOccupationTicks;
+                ApiaryTileEntity.ApiaryBee apiaryBee = this.container.getApiaryBee(i);
+
+                int ticksInHive = apiaryBee.ticksInHive;
+                int minTicks = apiaryBee.minOccupationTicks;
                 int ticksLeft = Math.max(minTicks - ticksInHive, 0);
-                String s = String.format("entity.resourcefulbees.%1$s_bee", beeType);
-                beeInfo.add(new StringTextComponent(I18n.format(s)));
+                beeInfo.add(apiaryBee.displayName);
                 beeInfo.add(new StringTextComponent(I18n.format("gui.resourcefulbees.apiary.bee.ticks_in_hive") + ": " + ticksInHive));
                 beeInfo.add(new StringTextComponent(I18n.format("gui.resourcefulbees.apiary.bee.ticks_left") + ": " + ticksLeft));
                 this.renderTooltip(matrix, beeInfo, mouseX, mouseY);
@@ -224,7 +228,7 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
             int l1 = 18;
             k = k + 18;
             j1 = this.ySize;
-            if (apiaryTileEntity.BEES.get(this.container.beeList[i]).isLocked) {
+            if (this.container.getApiaryBee(i).isLocked) {
                 l1 += 18;
             }
             if (mouseX >= k && mouseY >= i1 && mouseX < k + 16 && mouseY < i1 + 18) {
@@ -236,16 +240,19 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
 
     }
 
-    private void drawRecipesItems(int left, int top, int beeIndexOffsetMax) {
+    private void drawBees(int left, int top, int beeIndexOffsetMax) {
         for (int i = this.beeIndexOffset; i < beeIndexOffsetMax && i < apiaryTileEntity.getBeeCount(); ++i) {
             int j = i - this.beeIndexOffset;
             int i1 = top + j * 18 + 2;
             ItemStack beeJar = new ItemStack(RegistryHandler.BEE_JAR.get());
             CompoundNBT data = new CompoundNBT();
-            data.putString(NBTConstants.NBT_ENTITY, "resourcefulbees:bee");
-            data.putString(NBTConstants.NBT_BEE_TYPE, this.container.beeList[i]);
-            String primaryColor = BeeRegistry.getRegistry().getBeeData(this.container.beeList[i]).getColorData().getPrimaryColor();
-            data.putString(NBTConstants.NBT_COLOR, primaryColor != null && !primaryColor.isEmpty() ? primaryColor : String.valueOf(BeeConstants.DEFAULT_ITEM_COLOR));
+
+            CompoundNBT tag = this.container.getApiaryBee(i).entityData;
+            String entityID = tag.getString("id");
+
+            data.putString(NBTConstants.NBT_ENTITY, entityID);
+            data.putString(NBTConstants.NBT_COLOR, this.container.getApiaryBee(i).beeColor);
+
             beeJar.setTag(data);
             if (this.client != null)
                 this.client.getItemRenderer().renderItemAndEffectIntoGUI(beeJar, left, i1);
@@ -280,9 +287,7 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
         }
     }
 
-    private int getHiddenRows() {
-        return apiaryTileEntity.getBeeCount() - 7;
-    }
+    private int getHiddenRows() { return apiaryTileEntity.getBeeCount() - 7; }
 
     public boolean mouseClicked(double mouseX, double mouseY, int p_mouseClicked_5_) {
         this.clickedOnScroll = false;

@@ -28,4 +28,5 @@ public class NBTConstants {
     public static final String NBT_BREEDER_UPGRADE = "Breeder";
     public static final String NBT_BREEDER_COUNT = "BreederCount";
     public static final String NBT_BREED_TIME = "BreedTimeModifier";
+    public static final String NBT_BEE_NAME = "DisplayName";
 }

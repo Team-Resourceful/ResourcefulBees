@@ -31,8 +31,8 @@ public class Smoker extends Item {
 
     private int flag = 0;
 
-    public Smoker() {
-        super(new Properties().setNoRepair().maxStackSize(1).maxDamage(Config.SMOKER_DURABILITY.get()).group(ItemGroupResourcefulBees.RESOURCEFUL_BEES));
+    public Smoker(Item.Properties properties) {
+        super(properties);
     }
 
     @Nonnull

@@ -9,7 +9,7 @@ public class ItemModelPropertiesHandler {
 
     public static void registerProperties() {
         ItemModelsProperties.register(RegistryHandler.BEE_JAR.get(), new ResourceLocation("filled"),
-                (itemStack, p_239422_1_, livingEntity) -> itemStack.getItem() instanceof BeeJar && BeeJar.isFilled(itemStack) ? 1.0F : 0.0F);
+                (itemStack, clientWorld, livingEntity) -> itemStack.getItem() instanceof BeeJar && BeeJar.isFilled(itemStack) ? 1.0F : 0.0F);
     }
 
 }

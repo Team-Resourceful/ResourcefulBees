@@ -29,15 +29,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.text.WordUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
 public class BeeJar extends Item {
-    public BeeJar() {
-        super(new Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES).maxStackSize(16));
-    }
+    public BeeJar(Item.Properties properties) { super(properties); }
 
     public static int getColor(ItemStack stack, int tintIndex) {
         CompoundNBT tag = stack.getTag();
@@ -95,31 +94,16 @@ public class BeeJar extends Item {
         }
 
         BeeEntity target = (BeeEntity) targetIn;
-        String type = EntityType.getKey(target.getType()).toString();
-        CompoundNBT nbt = new CompoundNBT();
-        nbt.putString(NBTConstants.NBT_ENTITY, type);
-        target.writeWithoutTypeId(nbt);
-        if (target instanceof ICustomBee) {
-            ICustomBee beeEntity = (ICustomBee) target;
-            nbt.putString(NBTConstants.NBT_BEE_TYPE, beeEntity.getBeeType());
-            if (beeEntity.getBeeData().getColorData().hasPrimaryColor()) {
-                nbt.putString(NBTConstants.NBT_COLOR, beeEntity.getBeeData().getColorData().getPrimaryColor());
-            }
-            if (beeEntity.getBeeData().getColorData().hasHoneycombColor()) {
-                nbt.putString(NBTConstants.NBT_COLOR, beeEntity.getBeeData().getColorData().getHoneycombColor());
-            } else {
-                nbt.putString(NBTConstants.NBT_COLOR, String.valueOf(BeeConstants.DEFAULT_ITEM_COLOR));
-            }
-        }
+
         if (stack.getCount() > 1) {
             ItemStack newJar = new ItemStack(RegistryHandler.BEE_JAR.get());
-            newJar.setTag(nbt);
+            newJar.setTag(createTag(target));
             stack.shrink(1);
              if (!player.addItemStackToInventory(newJar)) {
                  player.dropItem(newJar, false);
              }
         } else {
-            stack.setTag(nbt);
+            stack.setTag(createTag(target));
         }
         player.setHeldItem(hand, stack);
         player.swingArm(hand);
@@ -144,15 +128,38 @@ public class BeeJar extends Item {
         super.addInformation(stack, world, tooltip, flag);
         CompoundNBT tag = stack.getTag();
         if (tag != null && isFilled(stack)) {
-            String rbType = tag.getString(NBTConstants.NBT_ENTITY);
+            String type = tag.getString(NBTConstants.NBT_ENTITY);
             if (tag.contains(NBTConstants.NBT_BEE_TYPE)) {
-                String type = tag.getString(NBTConstants.NBT_BEE_TYPE).replaceAll("_", " ");
-                tooltip.add(new StringTextComponent(I18n.format(ResourcefulBees.MOD_ID + ".information.bee_type.custom") + StringUtils.capitalize(type)).formatted(TextFormatting.WHITE));
-            } else if (rbType.equals(BeeConstants.VANILLA_BEE_ID)) {
+                String rbType = tag.getString(NBTConstants.NBT_BEE_TYPE).replaceAll("_", " ");
+                tooltip.add(new StringTextComponent(I18n.format(ResourcefulBees.MOD_ID + ".information.bee_type.custom") + WordUtils.capitalize(rbType)).formatted(TextFormatting.WHITE));
+            } else if (type.equals(BeeConstants.VANILLA_BEE_ID)) {
                 tooltip.add(new TranslationTextComponent(ResourcefulBees.MOD_ID + ".information.bee_type.vanilla").formatted(TextFormatting.WHITE));
             } else {
                 tooltip.add(new TranslationTextComponent(ResourcefulBees.MOD_ID + ".information.bee_type.unknown"));
             }
         }
+    }
+
+    public static CompoundNBT createTag(BeeEntity beeEntity){
+        String type = EntityType.getKey(beeEntity.getType()).toString();
+        CompoundNBT nbt = new CompoundNBT();
+        nbt.putString(NBTConstants.NBT_ENTITY, type);
+        beeEntity.writeWithoutTypeId(nbt);
+
+        String beeColor = BeeConstants.VANILLA_BEE_COLOR;
+
+        if (beeEntity instanceof ICustomBee) {
+            ICustomBee iCustomBee = (ICustomBee) beeEntity;
+            nbt.putString(NBTConstants.NBT_BEE_TYPE, iCustomBee.getBeeType());
+            if (iCustomBee.getBeeData().getColorData().hasPrimaryColor()) {
+                beeColor = iCustomBee.getBeeData().getColorData().getPrimaryColor();
+            } else if (iCustomBee.getBeeData().getColorData().hasHoneycombColor()) {
+                beeColor = iCustomBee.getBeeData().getColorData().getHoneycombColor();
+            }
+        }
+
+        nbt.putString(NBTConstants.NBT_COLOR, beeColor);
+
+        return nbt;
     }
 }

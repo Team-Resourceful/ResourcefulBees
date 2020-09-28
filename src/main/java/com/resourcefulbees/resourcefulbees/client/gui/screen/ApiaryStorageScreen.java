@@ -122,7 +122,7 @@ public class ApiaryStorageScreen extends ContainerScreen<ApiaryStorageContainer>
     }
 
     @Override
-    public void render(@Nonnull MatrixStack matrix,int mouseX, int mouseY, float partialTicks) {
+    public void render(@Nonnull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrix);
         super.render(matrix, mouseX, mouseY, partialTicks);
         this.drawMouseoverTooltip(matrix, mouseX, mouseY);
@@ -150,6 +150,10 @@ public class ApiaryStorageScreen extends ContainerScreen<ApiaryStorageContainer>
             this.client.getTextureManager().bindTexture(TABS_BG);
             drawTexture(matrix, t -1, j + 12, 0,0, 25, 68, 128, 128);
         }
+    }
+
+    @Override
+    protected void drawForeground(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
         for (Widget widget : this.buttons) {
             if (widget.isHovered()) {
                 widget.renderToolTip(matrix, mouseX - this.guiLeft, mouseY - this.guiTop);
@@ -157,7 +161,4 @@ public class ApiaryStorageScreen extends ContainerScreen<ApiaryStorageContainer>
             }
         }
     }
-
-    @Override
-    protected void drawForeground(@Nonnull MatrixStack stack, int mouseX, int mouseY) { }
 }

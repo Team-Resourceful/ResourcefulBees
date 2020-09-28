@@ -56,8 +56,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
-import static com.resourcefulbees.resourcefulbees.lib.BeeConstants.DEFAULT_ITEM_COLOR;
-import static com.resourcefulbees.resourcefulbees.lib.BeeConstants.MIN_HIVE_TIME;
+import static com.resourcefulbees.resourcefulbees.lib.BeeConstants.*;
 
 public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider, IApiaryMultiblock {
     public static final int IMPORT = 0;
@@ -116,6 +115,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     //endregion
 
     public boolean isValidApiary() {
+        runStructureValidation(null);
         return isValidApiary;
     }
 
@@ -221,6 +221,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
             if (bee instanceof BeeEntity) {
                 BeeEntity beeEntity = (BeeEntity) bee;
                 String type = BeeConstants.VANILLA_BEE_TYPE;
+                String beeColor = BeeConstants.VANILLA_BEE_COLOR;
 
                 if (bee instanceof ICustomBee) {
                     type = ((ICustomBee) bee).getBeeType();
@@ -233,12 +234,24 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
 
                     int maxTimeInHive = setMaxTimeInHive(BeeConstants.MAX_TIME_IN_HIVE);
                     if (bee instanceof ICustomBee) {
-                        maxTimeInHive = setMaxTimeInHive(((ICustomBee) bee).getBeeData().getMaxTimeInHive());
-                    }
-                    int finalMaxTimeInHive = maxTimeInHive;
+                        ICustomBee iCustomBee = (ICustomBee) bee;
+                        maxTimeInHive = setMaxTimeInHive(iCustomBee.getBeeData().getMaxTimeInHive());
 
+                        if (iCustomBee.getBeeData().getColorData().hasPrimaryColor()) {
+                            beeColor = iCustomBee.getBeeData().getColorData().getPrimaryColor();
+                        } else if (iCustomBee.getBeeData().getColorData().hasHoneycombColor()) {
+                            beeColor = iCustomBee.getBeeData().getColorData().getHoneycombColor();
+                        }
+                    }
+
+                    int finalMaxTimeInHive = maxTimeInHive;
                     String finalType = type;
-                    this.BEES.computeIfAbsent(finalType, k -> new ApiaryBee(nbt, ticksInHive, hasNectar ? finalMaxTimeInHive : MIN_HIVE_TIME, beeEntity.getFlowerPos(), finalType));
+
+                    String finalBeeColor = beeColor;
+
+                    ITextComponent displayName = bee.getName();
+
+                    this.BEES.computeIfAbsent(finalType, k -> new ApiaryBee(nbt, ticksInHive, hasNectar ? finalMaxTimeInHive : MIN_HIVE_TIME, beeEntity.getFlowerPos(), finalType, finalBeeColor, displayName));
                     BlockPos pos = this.getPos();
                     this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BLOCK_BEEHIVE_ENTER, SoundCategory.BLOCKS, 1.0F, 1.0F);
 
@@ -274,19 +287,19 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
             this.tickBees();
 
             if (!world.isRemote && isValidApiary()) {
-                if (ticksSinceValidation >= 300)
+/*                if (ticksSinceValidation >= 300)
                     runStructureValidation(null);
                 else
-                    ticksSinceValidation++;
+                    ticksSinceValidation++;*/
                 if (this.BEES.size() > 0 && this.world.getRandom().nextDouble() < 0.005D) {
                     double d0 = blockpos.getX() + 0.5D;
                     double d1 = blockpos.getY();
                     double d2 = blockpos.getZ() + 0.5D;
                     this.world.playSound(null, d0, d1, d2, SoundEvents.BLOCK_BEEHIVE_WORK, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 }
-            } else if (!world.isRemote && storagePos != null) {
+            }/* else if (!world.isRemote && storagePos != null) {
                 storagePos = null;
-            }
+            }*/
         }
     }
 
@@ -314,7 +327,6 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
         }
     }
 
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isFullOfBees() {
         return this.BEES.size() >= getMaxBees();
     }
@@ -344,6 +356,8 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
             compoundnbt.putInt("MinOccupationTicks", apiaryBee.minOccupationTicks);
             compoundnbt.putBoolean(NBTConstants.NBT_LOCKED, apiaryBee.isLocked);
             compoundnbt.putString(NBTConstants.NBT_BEE_TYPE, apiaryBee.beeType);
+            compoundnbt.putString(NBTConstants.NBT_COLOR, apiaryBee.beeColor);
+            compoundnbt.putString(NBTConstants.NBT_BEE_NAME, ITextComponent.Serializer.toJson(apiaryBee.displayName));
             if (apiaryBee.savedFlowerPos != null) {
                 compoundnbt.put(NBTConstants.NBT_FLOWER_POS, NBTUtil.writeBlockPos(apiaryBee.savedFlowerPos));
             }
@@ -351,6 +365,30 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
         });
 
         return listnbt;
+    }
+
+    public void loadBees(CompoundNBT nbt) {
+        ListNBT listnbt = nbt.getList(NBTConstants.NBT_BEES, 10);
+
+        for (int i = 0; i < listnbt.size(); ++i) {
+            CompoundNBT data = listnbt.getCompound(i);
+
+            BlockPos savedFlowerPos = data.contains(NBTConstants.NBT_FLOWER_POS) ? NBTUtil.readBlockPos(data.getCompound(NBTConstants.NBT_FLOWER_POS)) : null;
+            String beeType = data.getString(NBTConstants.NBT_BEE_TYPE);
+            String beeColor = data.contains(NBTConstants.NBT_COLOR) ? data.getString(NBTConstants.NBT_COLOR) : BeeConstants.VANILLA_BEE_COLOR;
+            ITextComponent displayName = data.contains(NBTConstants.NBT_BEE_NAME) ? ITextComponent.Serializer.fromJson(data.getString(NBTConstants.NBT_BEE_NAME)) : new StringTextComponent("Temp Bee Name");
+
+            this.BEES.computeIfAbsent(data.getString(NBTConstants.NBT_BEE_TYPE), k -> new ApiaryBee(
+                    data.getCompound("EntityData"),
+                    data.getInt("TicksInHive"),
+                    data.getInt("MinOccupationTicks"),
+                    savedFlowerPos,
+                    beeType,
+                    beeColor,
+                    displayName));
+
+            this.BEES.get(beeType).isLocked = data.getBoolean(NBTConstants.NBT_LOCKED);
+        }
     }
 
     @Override
@@ -367,24 +405,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     }
 
     public void loadFromNBT(CompoundNBT nbt) {
-        ListNBT listnbt = nbt.getList(NBTConstants.NBT_BEES, 10);
-
-        for (int i = 0; i < listnbt.size(); ++i) {
-            CompoundNBT data = listnbt.getCompound(i);
-
-            BlockPos savedFlowerPos = data.contains(NBTConstants.NBT_FLOWER_POS) ? NBTUtil.readBlockPos(data.getCompound(NBTConstants.NBT_FLOWER_POS)) : null;
-
-            String beeType = data.getString(NBTConstants.NBT_BEE_TYPE);
-
-            this.BEES.computeIfAbsent(data.getString(NBTConstants.NBT_BEE_TYPE), k -> new ApiaryBee(
-                    data.getCompound("EntityData"),
-                    data.getInt("TicksInHive"),
-                    data.getInt("MinOccupationTicks"),
-                    savedFlowerPos,
-                    beeType));
-
-            this.BEES.get(beeType).isLocked = data.getBoolean(NBTConstants.NBT_LOCKED);
-        }
+        loadBees(nbt);
 
         if (nbt.contains(NBTConstants.NBT_VALID_APIARY))
             this.isValidApiary = nbt.getBoolean(NBTConstants.NBT_VALID_APIARY);
@@ -494,20 +515,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
 
     public void export(BeeEntity beeEntity) {
         ItemStack beeJar = new ItemStack(RegistryHandler.BEE_JAR.get());
-        CompoundNBT data = new CompoundNBT();
-        data.putString(NBTConstants.NBT_ENTITY, EntityType.getKey(beeEntity.getType()).toString());
-        beeEntity.writeWithoutTypeId(data);
-        String primaryColor = String.valueOf(DEFAULT_ITEM_COLOR);
-        String beeType = BeeConstants.VANILLA_BEE_TYPE;
-        if (beeEntity instanceof ICustomBee) {
-            if (((ICustomBee)beeEntity).getBeeData().getColorData().hasPrimaryColor()) {
-                primaryColor = ((ICustomBee) beeEntity).getBeeData().getColorData().getPrimaryColor();
-            }
-            beeType = ((ICustomBee) beeEntity).getBeeType();
-        }
-        data.putString(NBTConstants.NBT_COLOR, primaryColor);
-        data.putString(NBTConstants.NBT_BEE_TYPE, beeType);
-        beeJar.setTag(data);
+        beeJar.setTag(BeeJar.createTag(beeEntity));
         this.h.setStackInSlot(EXPORT, beeJar);
     }
     //endregion
@@ -515,11 +523,11 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     //region STRUCTURE VALIDATION
     public void runStructureValidation(@Nullable ServerPlayerEntity validatingPlayer) {
         if (this.world != null && !this.world.isRemote()) {
-            if (!isValidApiary() || STRUCTURE_BLOCKS.isEmpty())
+            if (!this.isValidApiary || STRUCTURE_BLOCKS.isEmpty())
                 buildStructureBlockList();
             this.isValidApiary = validateStructure(this.world, validatingPlayer);
-            this.world.setBlockState(this.getPos(), getBlockState().with(ApiaryBlock.VALIDATED, isValidApiary()));
-            if (validatingPlayer != null && isValidApiary()) {
+            this.world.setBlockState(this.getPos(), getBlockState().with(ApiaryBlock.VALIDATED, this.isValidApiary));
+            if (validatingPlayer != null && this.isValidApiary) {
                 NetworkHooks.openGui(validatingPlayer, this, this.getPos());
             }
             this.ticksSinceValidation = 0;
@@ -679,10 +687,10 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
         if (world != null) {
             numPlayersUsing++;
             if (isValidApiary()) {
-                this.isValidApiary = validateStructure(world, (ServerPlayerEntity) playerEntity);
-                if (isValidApiary()) {
+                //this.isValidApiary = validateStructure(world, (ServerPlayerEntity) playerEntity);
+                //if (this.isValidApiary) {
                     return new ValidatedApiaryContainer(i, world, pos, playerInventory);
-                }
+                //}
             }
             return new UnvalidatedApiaryContainer(i, world, pos, playerInventory);
         }
@@ -737,14 +745,18 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
         public final String beeType;
         public int ticksInHive;
         public boolean isLocked = false;
+        public final String beeColor;
+        public final ITextComponent displayName;
 
-        public ApiaryBee(CompoundNBT nbt, int ticksinhive, int minoccupationticks, @Nullable BlockPos flowerPos, String beeType) {
+        public ApiaryBee(CompoundNBT nbt, int ticksinhive, int minoccupationticks, @Nullable BlockPos flowerPos, String beeType, String beeColor, ITextComponent displayName) {
             nbt.remove("UUID");
             this.entityData = nbt;
             this.ticksInHive = ticksinhive;
             this.minOccupationTicks = minoccupationticks;
             this.savedFlowerPos = flowerPos;
             this.beeType = beeType;
+            this.beeColor = beeColor;
+            this.displayName = displayName;
         }
     }
 

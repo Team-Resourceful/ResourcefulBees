@@ -15,8 +15,8 @@ public class HoneycombItem extends Item {
     private final ColorData colorData;
     private final String beeType;
 
-    public HoneycombItem(String beeType, ColorData colorData) {
-        super(new Properties().group(ItemGroup.MATERIALS));
+    public HoneycombItem(String beeType, ColorData colorData, Item.Properties properties) {
+        super(properties);
         this.colorData = colorData;
         this.beeType = beeType;
     }

@@ -1,7 +1,7 @@
 {
 	"itemGroup.resourcefulbees" : "Resourceful Bees",
 
-	"resourcefulbees.information.bee_type.vanilla": "Bee Type: Vanilla",
+	"resourcefulbees.information.bee_type.vanilla": "Bee Type: Minecraft",
 	"resourcefulbees.information.bee_type.unknown": "Bee Type: Unknown",
 	"resourcefulbees.information.bee_type.custom": "Bee Type: ",
 	"resourcefulbees.shift_info": "Hold SHIFT for Info",

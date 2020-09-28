@@ -4,6 +4,7 @@ package com.resourcefulbees.resourcefulbees.block;
 import com.resourcefulbees.resourcefulbees.api.beedata.ColorData;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -26,8 +27,8 @@ public class HoneycombBlock extends Block {
     protected final ColorData colorData;
     protected final String beeType;
 
-    public HoneycombBlock(String beeType, ColorData colorData) {
-        super(Block.Properties.from(Blocks.HONEYCOMB_BLOCK));
+    public HoneycombBlock(String beeType, ColorData colorData, AbstractBlock.Properties properties) {
+        super(properties);
         this.colorData = colorData;
         this.beeType = beeType;
     }

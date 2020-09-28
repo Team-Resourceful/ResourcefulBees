@@ -37,23 +37,12 @@ public class ValidatedApiaryContainer extends Container {
         if (apiaryTileEntity != null) {
             this.addSlot(new SlotItemHandlerUnconditioned(apiaryTileEntity.h, ApiaryTileEntity.IMPORT, 74, 37) {
                 public boolean isItemValid(ItemStack stack) {
-                    if (stack.getItem() instanceof BeeJar) {
-                        if (BeeJar.isFilled(stack)) {
-                            CompoundNBT data = stack.getTag();
-                            //noinspection ConstantConditions
-                            String type = data.getString(NBTConstants.NBT_ENTITY);
-                            return type.startsWith(ResourcefulBees.MOD_ID);
-                        }
-                    }
-                    return false;
+                    return (stack.getItem() instanceof BeeJar && BeeJar.isFilled(stack));
                 }
             });
             this.addSlot(new SlotItemHandlerUnconditioned(apiaryTileEntity.h, ApiaryTileEntity.EMPTY_JAR, 128, 37) {
                 public boolean isItemValid(ItemStack stack) {
-                    if (stack.getItem() instanceof BeeJar) {
-                        return (!BeeJar.isFilled(stack));
-                    }
-                    return false;
+                    return (stack.getItem() instanceof BeeJar && !BeeJar.isFilled(stack));
                 }
             });
             this.addSlot(new OutputSlot(apiaryTileEntity.h, ApiaryTileEntity.EXPORT, 182, 37));
@@ -126,7 +115,9 @@ public class ValidatedApiaryContainer extends Container {
         return true;
     }
 
-    public int getSelectedBee() {
-        return this.selectedBee.get();
+    public int getSelectedBee() { return this.selectedBee.get(); }
+
+    public ApiaryTileEntity.ApiaryBee getApiaryBee(int i) {
+        return apiaryTileEntity.BEES.get(beeList[i]);
     }
 }

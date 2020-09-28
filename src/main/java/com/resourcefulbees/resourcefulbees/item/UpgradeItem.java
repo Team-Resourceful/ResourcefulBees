@@ -11,8 +11,8 @@ public class UpgradeItem extends Item {
 
     private CompoundNBT upgradeData = new CompoundNBT();
 
-    public UpgradeItem(CompoundNBT upgradeData) {
-        super(new Properties().setNoRepair().maxStackSize(16).group(ItemGroupResourcefulBees.RESOURCEFUL_BEES));
+    public UpgradeItem(Item.Properties properties, CompoundNBT upgradeData) {
+        super(properties);
         setUpgradeData(upgradeData);
     }
 
