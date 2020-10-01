@@ -1,7 +1,7 @@
 package com.resourcefulbees.resourcefulbees.data;
 
 import com.resourcefulbees.resourcefulbees.api.IBeeRegistry;
-import com.resourcefulbees.resourcefulbees.config.BeeSetup;
+import com.resourcefulbees.resourcefulbees.init.BeeSetup;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import org.apache.commons.lang3.StringUtils;
@@ -88,7 +88,7 @@ public class DataGen {
         builder.append("{\n");
         builder.append("\"replace\": false,\n");
         builder.append("\"values\": [\n");
-        BEE_REGISTRY.getBees().entrySet().stream().filter((c)-> c.getValue().hasHoneycomb()).forEach(((c) -> {
+        BEE_REGISTRY.getBees().entrySet().stream().filter((c)-> c.getValue().hasHoneycomb() && !c.getValue().hasCustomDrop()).forEach(((c) -> {
             builder.append("\"");
             builder.append(c.getValue().getCombRegistryObject().getId());
             builder.append("\",\n");
@@ -111,7 +111,7 @@ public class DataGen {
         builder.append("{\n");
         builder.append("\"replace\": false,\n");
         builder.append("\"values\": [\n");
-        BEE_REGISTRY.getBees().entrySet().stream().filter((c)-> c.getValue().hasHoneycomb()).forEach(((c) -> {
+        BEE_REGISTRY.getBees().entrySet().stream().filter((c)-> c.getValue().hasHoneycomb() && !c.getValue().hasCustomDrop()).forEach(((c) -> {
             builder.append("\"");
             builder.append(c.getValue().getCombBlockItemRegistryObject().getId());
             builder.append("\",\n");
@@ -134,7 +134,7 @@ public class DataGen {
         builder.append("{\n");
         builder.append("\"replace\": false,\n");
         builder.append("\"values\": [\n");
-        BEE_REGISTRY.getBees().entrySet().stream().filter((c)-> c.getValue().hasHoneycomb()).forEach(((c) -> {
+        BEE_REGISTRY.getBees().entrySet().stream().filter((c)-> c.getValue().hasHoneycomb() && !c.getValue().hasCustomDrop()).forEach(((c) -> {
             builder.append("\"");
             builder.append(c.getValue().getCombBlockRegistryObject().getId());
             builder.append("\",\n");

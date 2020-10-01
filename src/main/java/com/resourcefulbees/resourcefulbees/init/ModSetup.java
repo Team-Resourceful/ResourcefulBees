@@ -40,8 +40,8 @@ import java.util.List;
 import java.util.Random;
 
 import static com.resourcefulbees.resourcefulbees.ResourcefulBees.LOGGER;
-import static com.resourcefulbees.resourcefulbees.config.BeeSetup.BEE_PATH;
-import static com.resourcefulbees.resourcefulbees.config.BeeSetup.RESOURCE_PATH;
+import static com.resourcefulbees.resourcefulbees.init.BeeSetup.BEE_PATH;
+import static com.resourcefulbees.resourcefulbees.init.BeeSetup.RESOURCE_PATH;
 
 public class ModSetup {
 
@@ -54,17 +54,23 @@ public class ModSetup {
     private static void setupPaths(){
         Path configPath = FMLPaths.CONFIGDIR.get();
         Path rbBeesPath = Paths.get(configPath.toAbsolutePath().toString(), ResourcefulBees.MOD_ID, "bees");
+        Path rbBiomePath = Paths.get(configPath.toAbsolutePath().toString(), ResourcefulBees.MOD_ID, "biome_dictionary");
         Path rbAssetsPath = Paths.get(configPath.toAbsolutePath().toString(),ResourcefulBees.MOD_ID, "resources");
         BEE_PATH = rbBeesPath;
         RESOURCE_PATH = rbAssetsPath;
+        BiomeDictonarySetup.DICTIONARY_PATH = rbBiomePath;
 
         try { Files.createDirectories(rbBeesPath);
         } catch (FileAlreadyExistsException ignored) {
-        } catch (IOException e) { LOGGER.error("failed to create resourcefulbees config directory");}
+        } catch (IOException e) { LOGGER.error("failed to create \"bees\" directory");}
+
+        try { Files.createDirectories(rbBiomePath);
+        } catch (FileAlreadyExistsException ignored) {
+        } catch (IOException e) { LOGGER.error("failed to create \"biome_dictionary\" directory");}
 
         try { Files.createDirectory(rbAssetsPath);
         } catch (FileAlreadyExistsException ignored) {
-        } catch (IOException e) { LOGGER.error("Failed to create assets directory");}
+        } catch (IOException e) { LOGGER.error("Failed to create \"assets\" directory");}
 
         try {
             FileWriter file = new FileWriter(Paths.get(rbAssetsPath.toAbsolutePath().toString(), "pack.mcmeta").toFile());

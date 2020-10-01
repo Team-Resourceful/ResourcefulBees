@@ -140,7 +140,7 @@ public class CentrifugeMultiblockContainer extends Container {
             else if (itemstack1.getItem().equals(Items.GLASS_BOTTLE) && !this.mergeItemStack(itemstack1, 0, 1, false)) {
                 return ItemStack.EMPTY;
             }
-            else if (!this.mergeItemStack(itemstack1, 0, 3, false)) {
+            else if (!this.mergeItemStack(itemstack1, 1, 4, false)) {
                 return ItemStack.EMPTY;
             }
 

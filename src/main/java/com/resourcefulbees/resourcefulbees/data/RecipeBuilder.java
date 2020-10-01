@@ -44,7 +44,7 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
                     }
                 }
 
-                if (Config.HONEYCOMB_BLOCK_RECIPES.get()) {
+                if (Config.HONEYCOMB_BLOCK_RECIPES.get() && !customBeeData.hasCustomDrop()) {
                     IRecipe<?> honeycombBlock = this.makeHoneycombRecipe(s, customBeeData);
                     IRecipe<?> honeycomb = this.combBlockToCombRecipe(s, customBeeData);
                     getRecipeManager().recipes.computeIfAbsent(honeycombBlock.getType(), t -> new HashMap<>()).put(honeycombBlock.getId(), honeycombBlock);

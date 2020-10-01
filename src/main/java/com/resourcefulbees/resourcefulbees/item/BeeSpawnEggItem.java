@@ -1,5 +1,9 @@
 package com.resourcefulbees.resourcefulbees.item;
 
+import com.resourcefulbees.resourcefulbees.api.beedata.ColorData;
+import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
+import com.resourcefulbees.resourcefulbees.utils.color.Color;
+import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
@@ -26,14 +30,12 @@ import java.util.Optional;
 public class BeeSpawnEggItem extends SpawnEggItem {
 
 	private final Lazy<? extends EntityType<?>> entityType;
-    private final int primaryColor;
-    private final int secondaryColor;
+	private final ColorData colorData;
 
-	public BeeSpawnEggItem(final RegistryObject<? extends EntityType<?>> entityTypeSupplier, final int firstColor, final int secondColor, final Properties properties) {
+	public BeeSpawnEggItem(RegistryObject<? extends EntityType<?>> entityTypeSupplier, int firstColor, int secondColor, ColorData colorData, Properties properties) {
 		super(null, firstColor, secondColor, properties);
 		this.entityType = Lazy.of(entityTypeSupplier);
-		this.primaryColor = firstColor;
-		this.secondaryColor = secondColor;
+		this.colorData = colorData;
 	}
 
     @Nonnull
@@ -44,7 +46,22 @@ public class BeeSpawnEggItem extends SpawnEggItem {
 
 
     public static int getColor(ItemStack stack, int tintIndex) {
-        return tintIndex == 0 ? ((BeeSpawnEggItem)stack.getItem()).primaryColor : ((BeeSpawnEggItem)stack.getItem()).secondaryColor;
+	    ColorData colorData = ((BeeSpawnEggItem)stack.getItem()).colorData;
+	    int primaryColor = Color.parseInt(BeeConstants.VANILLA_BEE_COLOR);
+	    int secondaryColor = 0x303030;
+
+	    if (colorData.hasPrimaryColor()) {
+            primaryColor = colorData.getPrimaryColorInt();
+        } else if (colorData.isRainbowBee()) {
+            primaryColor = RainbowColor.getRGB();
+        } else if (colorData.hasHoneycombColor()) {
+            primaryColor = colorData.getHoneycombColorInt();
+        }
+        if (colorData.hasSecondaryColor()) {
+            secondaryColor = colorData.getSecondaryColorInt();
+        }
+
+        return tintIndex == 0 ? primaryColor : secondaryColor;
     }
 
     @Nonnull

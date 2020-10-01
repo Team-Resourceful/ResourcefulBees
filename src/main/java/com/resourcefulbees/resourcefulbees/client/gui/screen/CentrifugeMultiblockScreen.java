@@ -15,6 +15,8 @@ import net.minecraft.util.text.StringTextComponent;
 import javax.annotation.Nonnull;
 import java.text.DecimalFormat;
 
+import static com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.CentrifugeControllerTileEntity.TOTAL_TIME;
+
 public class CentrifugeMultiblockScreen extends ContainerScreen<CentrifugeMultiblockContainer> {
     public CentrifugeMultiblockScreen(CentrifugeMultiblockContainer screenContainer, PlayerInventory inventory, ITextComponent titleIn) {
         super(screenContainer, inventory, titleIn);
@@ -30,13 +32,13 @@ public class CentrifugeMultiblockScreen extends ContainerScreen<CentrifugeMultib
             int i = this.guiLeft;
             int j = this.guiTop;
             this.drawTexture(matrix, i, j, 0, 0, this.xSize, this.ySize);
-            int scaledprogress1 = 16 * this.container.getTime(0) / Math.max(this.container.centrifugeTileEntity.totalTime,1);
+            int scaledprogress1 = 16 * this.container.getTime(0) / TOTAL_TIME;
             this.drawTexture(matrix, i + 52, j + 26, 176, 1, 16, scaledprogress1);
-            int scaledprogress2 = 16 * this.container.getTime(1) / Math.max(this.container.centrifugeTileEntity.totalTime,1);
+            int scaledprogress2 = 16 * this.container.getTime(1) / TOTAL_TIME;
             this.drawTexture(matrix, i + 88, j + 26, 176, 1, 16, scaledprogress2);
-            int scaledprogress3 = 16 * this.container.getTime(2) / Math.max(this.container.centrifugeTileEntity.totalTime,1);
+            int scaledprogress3 = 16 * this.container.getTime(2) / TOTAL_TIME;
             this.drawTexture(matrix, i + 124, j + 26, 176, 1, 16, scaledprogress3);
-            int scaledRF = 58 * this.container.getEnergy() / Math.max(Config.MAX_CENTRIFUGE_RF.get() * 5,1);
+            int scaledRF = 58 * this.container.getEnergy() / (Config.MAX_CENTRIFUGE_RF.get() * 5);
             this.drawTexture(matrix, i + 10, j + 38 + (58-scaledRF), 176, 28 + (58-scaledRF), 12, scaledRF);
         }
     }

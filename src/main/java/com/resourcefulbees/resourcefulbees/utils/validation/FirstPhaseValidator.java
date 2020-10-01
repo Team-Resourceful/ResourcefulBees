@@ -1,8 +1,10 @@
 package com.resourcefulbees.resourcefulbees.utils.validation;
 
+import com.google.common.base.Splitter;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
+import com.resourcefulbees.resourcefulbees.registry.BiomeDictionary;
 import com.resourcefulbees.resourcefulbees.utils.color.Color;
 
 import static com.resourcefulbees.resourcefulbees.utils.validation.ValidatorUtils.*;
@@ -143,11 +145,9 @@ public class FirstPhaseValidator {
             if (isValid && beeData.getBreedData().isBreedable()) {
                 return validateFlower (!beeData.getBreedData().getParent1().equals(beeData.getBreedData().getParent2())
                         || (beeData.getBreedData().getParent1().isEmpty() && beeData.getBreedData().getParent2().isEmpty())
-                        || logWarn(beeData.getName(),
-                        "breeding",
+                        || logWarn(beeData.getName(), "breeding",
                         (beeData.getBreedData().getParent1() + " and " + beeData.getBreedData().getParent2()),
-                                "are the same parents. Child bee will not spawn from breeding."),
-                        beeData);
+                                "are the same parents. Child bee will not spawn from breeding."), beeData);
             }
             if (isValid && !beeData.getBreedData().isBreedable()) {
                 return true;
@@ -162,7 +162,10 @@ public class FirstPhaseValidator {
                     || SINGLE_RESOURCE_PATTERN.matcher(beeData.getFlower()).matches()
                     || beeData.getFlower().equals(BeeConstants.FLOWER_TAG_ALL)
                     || beeData.getFlower().equals(BeeConstants.FLOWER_TAG_SMALL)
-                    || beeData.getFlower().equals(BeeConstants.FLOWER_TAG_TALL);
+                    || beeData.getFlower().equals(BeeConstants.FLOWER_TAG_TALL)
+                    || logWarn(beeData.getName(), "pollination",
+                    (beeData.getFlower()),
+                    "flower");
         }
 
         return logMissingData(beeData.getName(), "flower");

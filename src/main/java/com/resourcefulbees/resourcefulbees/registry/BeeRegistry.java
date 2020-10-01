@@ -7,25 +7,24 @@ import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
 import com.resourcefulbees.resourcefulbees.utils.validation.FirstPhaseValidator;
 import net.minecraft.entity.EntityType;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.RegistryObject;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 public class BeeRegistry implements IBeeRegistry {
 
     public static final HashMap<String, RegistryObject<EntityType<? extends CustomBeeEntity>>> MOD_BEES = new HashMap<>();
+    public static final HashMap<ResourceLocation, RandomCollection<CustomBeeData>> SPAWNABLE_BIOMES = new HashMap<>();
+
 
     private static final BeeRegistry INSTANCE = new BeeRegistry();
 
     public static BeeRegistry getRegistry() { return INSTANCE; }
 
     private final LinkedHashMap<String, CustomBeeData> BEE_INFO = new LinkedHashMap<>();
-    public final HashMap<Biome, RandomCollection<String>> SPAWNABLE_BIOMES = new HashMap<>();
     public final HashMap<Pair<String, String>, RandomCollection<CustomBeeData>> FAMILY_TREE = new HashMap<>();
 
     private boolean ALLOW_REGISTRATION;
@@ -34,36 +33,8 @@ public class BeeRegistry implements IBeeRegistry {
 
     public void denyRegistration() { this.ALLOW_REGISTRATION = false; }
 
-/*    *//**
-     * Returns a random bee from the Bee Registry.
-     * This is used for selecting a bee from all possible bees.
-     *
-     *  @return Returns random bee type as a string.
-     *//*
-    public String getRandomBee() {
-        int randInt = MathUtils.nextInt(BEE_INFO.size() - 1) + 1;
-        Object[] dataArray = BEE_INFO.keySet().toArray();
-        Object key = dataArray[randInt];
-        return BEE_INFO.get(key.toString()).getName();
-    }
-
-    *//**
-     * Returns a random bee from the SPAWNABLE_BIOMES hashmap.
-     * This is used for in-world spawning based on biome.
-     *
-     *  @param biome Biome supplied determines which bees the random bee is chosen from.
-     *  @return Returns random bee type as a string.
-     *//*
-    public String getRandomBee(Biome biome) {
-        if (SPAWNABLE_BIOMES.get(biome) != null) {
-            return SPAWNABLE_BIOMES.get(biome).next();
-        }
-        return BeeConstants.DEFAULT_BEE_TYPE;
-    }*/
-
     /**
      * Returns a BeeData object for the given bee type.
-     * If the bee type does not exist the default bee will be returned as a fallback.
      *
      *  @param bee Bee type for which BeeData is requested.
      *  @return Returns a BeeData object for the given bee type.
@@ -117,9 +88,9 @@ public class BeeRegistry implements IBeeRegistry {
     public boolean registerBee(String beeType, CustomBeeData customBeeData) {
         if (ALLOW_REGISTRATION) {
             if (!BEE_INFO.containsKey(beeType) && FirstPhaseValidator.validate(customBeeData)) {
-                if (customBeeData.getBreedData().isBreedable())
-                    BeeInfoUtils.buildFamilyTree(customBeeData);
                 BEE_INFO.put(beeType, customBeeData);
+                if (customBeeData.getBreedData().isBreedable()) BeeInfoUtils.buildFamilyTree(customBeeData);
+                if (customBeeData.getSpawnData().canSpawnInWorld()) BeeInfoUtils.parseBiomes(customBeeData);
                 return true;
             }
         }
@@ -132,7 +103,5 @@ public class BeeRegistry implements IBeeRegistry {
      *
      *  @return Returns unmodifiable copy of bee registry.
      */
-    public Map<String, CustomBeeData> getBees() {
-        return Collections.unmodifiableMap(BEE_INFO);
-    }
+    public Map<String, CustomBeeData> getBees() { return Collections.unmodifiableMap(BEE_INFO); }
 }

@@ -8,6 +8,7 @@ import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.RegistryObject;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class CustomBeeData extends AbstractBeeData {
@@ -20,6 +21,8 @@ public class CustomBeeData extends AbstractBeeData {
     private final String[] traits;
     private transient String name;
     private final boolean hasHoneycomb;
+    private String customCombDrop;
+    private String customCombBlockDrop;
     public transient boolean shouldResourcefulBeesDoForgeRegistration;
     private final transient HashMap<String, AbstractBeeData> ADDITIONAL_DATA = new HashMap<>();
     private final BreedData BreedData;
@@ -52,6 +55,16 @@ public class CustomBeeData extends AbstractBeeData {
     }
 
     public String getFlower() { return flower == null ? BeeConstants.FLOWER_TAG_ALL : flower.toLowerCase(); }
+
+    public String getCustomCombDrop() { return customCombDrop; }
+
+    public String getCustomCombBlockDrop() { return customCombBlockDrop; }
+
+/*    public void setCustomCombDrop(String customCombDrop) { this.customCombDrop = customCombDrop; }
+
+    public void setCustomCombBlockDrop(String customCombBlockDrop) { this.customCombBlockDrop = customCombBlockDrop; }*/
+
+    public boolean hasCustomDrop() { return (customCombDrop != null && !customCombDrop.isEmpty() && customCombBlockDrop != null && !customCombBlockDrop.isEmpty()) || name.equals(BeeConstants.OREO_BEE); }
 
     public boolean hasHoneycomb() { return hasHoneycomb; }
 
@@ -87,7 +100,7 @@ public class CustomBeeData extends AbstractBeeData {
 
     public String[] getTraitNames() { return traits; }
 
-    public boolean hasTraitNames() { return traits != null && traits.length > 0;}
+    public boolean hasTraitNames() { return traits != null && traits.length > 0; }
 
     public String getName() { return name.toLowerCase(); }
 

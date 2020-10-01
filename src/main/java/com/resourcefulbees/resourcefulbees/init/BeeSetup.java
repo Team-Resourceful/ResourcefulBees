@@ -1,24 +1,35 @@
-package com.resourcefulbees.resourcefulbees.config;
+package com.resourcefulbees.resourcefulbees.init;
 
 import com.google.gson.Gson;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
+import com.resourcefulbees.resourcefulbees.config.Config;
+import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
+import com.resourcefulbees.resourcefulbees.entity.passive.OreoBee;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
+import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
+import net.minecraft.entity.EntityClassification;
+import net.minecraft.entity.EntitySpawnPlacementRegistry;
+import net.minecraft.entity.EntityType;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.MobSpawnInfo;
+import net.minecraft.world.gen.GenerationStage;
+import net.minecraft.world.gen.Heightmap;
+import net.minecraft.world.gen.feature.IFeatureConfig;
+import net.minecraft.world.gen.placement.*;
+import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.moddiscovery.ModFileInfo;
-import net.minecraftforge.forgespi.language.IModFileInfo;
-import net.minecraftforge.forgespi.language.IModInfo;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.io.*;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
-import java.util.Iterator;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import static com.resourcefulbees.resourcefulbees.ResourcefulBees.LOGGER;
+import static com.resourcefulbees.resourcefulbees.config.Config.ENABLE_EASTER_EGG_BEES;
 import static com.resourcefulbees.resourcefulbees.config.Config.GENERATE_DEFAULTS;
 
 public class BeeSetup {
@@ -27,10 +38,9 @@ public class BeeSetup {
     public static Path RESOURCE_PATH;
 
     public static void setupBees() {
+        if (ENABLE_EASTER_EGG_BEES.get()) OreoBee.register();
         if (GENERATE_DEFAULTS.get()) setupDefaultBees();
         addBees();
-        //TODO Fix when forge updates biome stuff
-        //setupBeeSpawns();
     }
 
     private static void parseBee(File file) throws IOException {
@@ -58,18 +68,6 @@ public class BeeSetup {
         bee.setName(name);
         bee.shouldResourcefulBeesDoForgeRegistration = true;
         BeeRegistry.getRegistry().registerBee(name.toLowerCase(), bee);
-/*        if (BeeValidator.validate(bee)) {
-            if (BeeRegistry.registerBee(name.toLowerCase(), bee)) {
-                if (bee.SpawnData.canSpawnInWorld())
-                    BeeInfoUtils.parseBiomes(bee);
-                if (bee.BreedData.isBreedable())
-                    BeeInfoUtils.buildFamilyTree(bee);
-                if (Config.SHOW_DEBUG_INFO.get())
-                    LOGGER.info(name + " bee passed validation check!!");
-            } else {
-                LOGGER.warn("{} Bee already exists! {} Bee will not be registered.", name, name);
-            }
-        }*/
     }
 
     private static void addBees() {
@@ -151,95 +149,57 @@ public class BeeSetup {
                 });
     }
 
+    public static void onBiomeLoad(BiomeLoadingEvent event) {
+        if (BeeRegistry.SPAWNABLE_BIOMES.containsKey(event.getName())) {
+            BeeRegistry.SPAWNABLE_BIOMES.get(event.getName()).forEach(customBeeData -> {
+                EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(customBeeData.getEntityTypeRegistryID());
+                if (entityType != null) {
+                    event.getSpawns().getSpawner(EntityClassification.CREATURE)
+                            .add(new MobSpawnInfo.Spawners(entityType,
+                                    customBeeData.getSpawnData().getSpawnWeight(),
+                                    customBeeData.getSpawnData().getMinGroupSize(),
+                                    customBeeData.getSpawnData().getMaxGroupSize()));
+                }
+            });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*    private static void setupBeeSpawns() {
-        for (Map.Entry<Biome, RandomCollection<String>> element : BeeInfo.SPAWNABLE_BIOMES.entrySet()) {
-            Biome biome = element.getKey();
             if (Config.GENERATE_BEE_NESTS.get()) {
-                addNestFeature(biome);
+                addNestFeature(event);
             }
-            //int divisor = Config.GENERATE_BEE_NESTS.get() ? 2 : 1;  tweaked since it seems to make things worse than better.
-            biome.getSpawns(EntityClassification.CREATURE).add(new Biome.SpawnListEntry(RegistryHandler.CUSTOM_BEE.get(),
-                    Config.SPAWN_WEIGHT.get(),
-                    Config.SPAWN_MIN_GROUP.get(),
-                    Config.SPAWN_MAX_GROUP.get()));
         }
+    }
 
-        EntitySpawnPlacementRegistry.register(RegistryHandler.CUSTOM_BEE.get(),
-                EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
-                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
-                CustomBeeEntity::canBeeSpawn);
-    }*/
-
-/*    private static void addNestFeature(Biome biome) {
-        Biome.Category category = biome.getCategory();
-        if (category == Biome.Category.NETHER)
-            biome.addFeature(GenerationStage.Decoration.UNDERGROUND_DECORATION,
+    private static void addNestFeature(BiomeLoadingEvent event) {
+        Biome.Category category = event.getCategory();
+        if (category == Biome.Category.NETHER) {
+            event.getGeneration().feature(GenerationStage.Decoration.VEGETAL_DECORATION,
                     RegistryHandler.BEE_NEST_FEATURE.get()
-                            .withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG)
-                            .withPlacement(Placement.COUNT_CHANCE_HEIGHTMAP_DOUBLE
-                                    .configure(new HeightWithChanceConfig(3, .125f))));
-        else
-            biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION,
+                            .configure(IFeatureConfig.NO_FEATURE_CONFIG)
+                            .decorate(Placement.TOP_SOLID_HEIGHTMAP.configure(new NoPlacementConfig()))
+                            .decorate(Placement.CHANCE.configure(new ChanceConfig(Config.NETHER_NEST_GENERATION_CHANCE.get()))));
+        } else if (category == Biome.Category.THEEND) {
+            event.getGeneration().feature(GenerationStage.Decoration.VEGETAL_DECORATION,
                     RegistryHandler.BEE_NEST_FEATURE.get()
-                            .withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG)
-                            .withPlacement(Placement.CHANCE_TOP_SOLID_HEIGHTMAP
-                                    .configure(new ChanceConfig(16))));
-    }*/
+                            .configure(IFeatureConfig.NO_FEATURE_CONFIG)
+                            .decorate(Placement.HEIGHTMAP_WORLD_SURFACE.configure(new NoPlacementConfig()))
+                            .decorate(Placement.CHANCE.configure(new ChanceConfig(Config.END_NEST_GENERATION_CHANCE.get()))));
+        } else {
+            event.getGeneration().feature(GenerationStage.Decoration.VEGETAL_DECORATION,
+                    RegistryHandler.BEE_NEST_FEATURE.get()
+                            .configure(IFeatureConfig.NO_FEATURE_CONFIG)
+                            .decorate(Placement.HEIGHTMAP_WORLD_SURFACE.configure(new NoPlacementConfig()))
+                            .decorate(Placement.CHANCE.configure(new ChanceConfig(Config.OVERWORLD_NEST_GENERATION_CHANCE.get()))));
+        }
+    }
 
+    public static void registerBeePlacements() {
+        BeeRegistry.MOD_BEES.forEach((s, entityTypeRegistryObject) -> {
+            CustomBeeData beeData = BeeRegistry.getRegistry().getBeeData(s);
+            if (beeData.getSpawnData().canSpawnInWorld()){
+                EntitySpawnPlacementRegistry.register(entityTypeRegistryObject.get(),
+                        EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
+                        Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
+                        CustomBeeEntity::canBeeSpawn);
+            }
+        });
+    }
 }

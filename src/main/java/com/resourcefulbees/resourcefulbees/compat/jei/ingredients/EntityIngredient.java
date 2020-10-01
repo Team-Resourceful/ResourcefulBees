@@ -3,6 +3,7 @@ package com.resourcefulbees.resourcefulbees.compat.jei.ingredients;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.ArrayList;
@@ -27,7 +28,16 @@ public class EntityIngredient {
 
     public List<ITextComponent> getTooltip() {
         List<ITextComponent> tooltip = new ArrayList<>();
-        if (!I18n.hasKey("tooltip.resourcefulbees.jei."+ beeType)){
+
+        String desc = I18n.format("tooltip.resourcefulbees.jei.click_bee_info");
+        String[] descTooltip = desc.split("\\r?\\n");
+        for (String s : descTooltip) {
+            tooltip.add(new StringTextComponent(s).formatted(TextFormatting.GOLD));
+        }
+        return tooltip;
+
+        //saving old format just in case
+/*        if (!I18n.hasKey("tooltip.resourcefulbees.jei."+ beeType)){
             return null;
         } else {
             String desc = I18n.format("tooltip.resourcefulbees.jei."+ beeType);
@@ -35,8 +45,9 @@ public class EntityIngredient {
             for (String s : descTooltip) {
                 tooltip.add(new StringTextComponent(s));
             }
+            tooltip.add(new TranslationTextComponent("tooltip.resourcefulbees.jei.click_bee_info"));
             return tooltip;
-        }
+        }*/
     }
 
 }

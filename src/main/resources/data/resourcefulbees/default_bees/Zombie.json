@@ -21,7 +21,8 @@
   "SpawnData": {
     "canSpawnInWorld": true,
     "biomeWhitelist": "tag:OVERWORLD",
-    "biomeBlacklist": "tag:ocean"
+    "biomeBlacklist": "tag:ocean",
+    "lightLevel": "NIGHT"
   },
   "BreedData": {
     "isBreedable": true

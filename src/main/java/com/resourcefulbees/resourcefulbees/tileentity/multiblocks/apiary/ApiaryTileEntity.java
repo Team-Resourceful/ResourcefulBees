@@ -72,7 +72,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     public int horizontalOffset = 0;
     public int verticalOffset = 0;
     public int numPlayersUsing;
-    private int ticksSinceValidation = 290;
+    //private int ticksSinceValidation = 290;
     private int ticksSinceSync;
     public BlockPos storagePos;
     public BlockPos breederPos;
@@ -80,9 +80,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     private ApiaryBreederTileEntity apiaryBreeder;
 
 
-    public ApiaryTileEntity() {
-        super(RegistryHandler.APIARY_TILE_ENTITY.get());
-    }
+    public ApiaryTileEntity() { super(RegistryHandler.APIARY_TILE_ENTITY.get()); }
 
     //region PLAYER SYNCING
     public static int calculatePlayersUsingSync(World world, ApiaryTileEntity apiaryTileEntity, int ticksSinceSync, int posX, int posY, int posZ, int numPlayersUsing) {
@@ -239,6 +237,8 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
 
                         if (iCustomBee.getBeeData().getColorData().hasPrimaryColor()) {
                             beeColor = iCustomBee.getBeeData().getColorData().getPrimaryColor();
+                        } else if (iCustomBee.getBeeData().getColorData().isRainbowBee()) {
+                            beeColor = RAINBOW_COLOR;
                         } else if (iCustomBee.getBeeData().getColorData().hasHoneycombColor()) {
                             beeColor = iCustomBee.getBeeData().getColorData().getHoneycombColor();
                         }
@@ -530,7 +530,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
             if (validatingPlayer != null && this.isValidApiary) {
                 NetworkHooks.openGui(validatingPlayer, this, this.getPos());
             }
-            this.ticksSinceValidation = 0;
+            //this.ticksSinceValidation = 0;
         }
     }
 

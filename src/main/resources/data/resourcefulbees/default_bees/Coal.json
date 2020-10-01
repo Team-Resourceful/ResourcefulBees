@@ -22,7 +22,7 @@
   },
   "SpawnData": {
     "canSpawnInWorld": true,
-    "biomeWhitelist": "tag:OVERWORLD",
+    "biomeWhitelist": "tag:mountain",
     "biomeBlacklist": "tag:ocean"
   },
   "BreedData": {

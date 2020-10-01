@@ -155,7 +155,7 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
     }
 
     @Override
-    public void render(MatrixStack matrixStackIn, @Nonnull IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+    public void render(@Nonnull MatrixStack matrixStackIn, @Nonnull IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
         matrixStackIn.push();
         matrixStackIn.translate(0, 1.5 - beeSize * 1.5, 0);
         matrixStackIn.scale(beeSize, beeSize, beeSize);

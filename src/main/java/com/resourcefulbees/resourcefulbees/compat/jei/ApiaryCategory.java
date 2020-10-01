@@ -58,33 +58,23 @@ public class ApiaryCategory implements IRecipeCategory<ApiaryCategory.Recipe> {
 
     @Nonnull
     @Override
-    public ResourceLocation getUid() {
-        return ID;
-    }
+    public ResourceLocation getUid() { return ID; }
 
     @Nonnull
     @Override
-    public Class<? extends Recipe> getRecipeClass() {
-        return Recipe.class;
-    }
+    public Class<? extends Recipe> getRecipeClass() { return Recipe.class; }
 
     @Nonnull
     @Override
-    public String getTitle() {
-        return this.localizedName;
-    }
+    public String getTitle() { return this.localizedName; }
 
     @Nonnull
     @Override
-    public IDrawable getBackground() {
-        return this.background;
-    }
+    public IDrawable getBackground() { return this.background; }
 
     @Nonnull
     @Override
-    public IDrawable getIcon() {
-        return this.icon;
-    }
+    public IDrawable getIcon() { return this.icon; }
 
     @Override
     public void setIngredients(Recipe recipe, IIngredients ingredients) {

@@ -32,7 +32,7 @@ public class ModelHandler {
                 Item honeycomb = customBee.getCombRegistryObject() != null ? customBee.getCombRegistryObject().get() : null;
                 Item spawnEgg = customBee.getSpawnEggItemRegistryObject() != null ? customBee.getSpawnEggItemRegistryObject().get() : null;
 
-                if (customBee.hasHoneycomb()) {
+                if (customBee.hasHoneycomb() && !customBee.hasCustomDrop()) {
                     if (honeycombBlock != null && honeycombBlock.getRegistryName() != null && !resourceManager.hasResource(new ResourceLocation(ResourcefulBees.MOD_ID, "blockstates/" + honeycombBlock.getRegistryName().getPath() + ".json"))) {
                         honeycombBlock.getStateContainer().getValidStates().forEach(state -> {
                             String propertyMapString = BlockModelShapes.getPropertyMapString(state.getValues());

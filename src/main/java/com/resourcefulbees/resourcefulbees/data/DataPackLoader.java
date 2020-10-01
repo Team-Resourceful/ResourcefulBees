@@ -1,7 +1,7 @@
 package com.resourcefulbees.resourcefulbees.data;
 
 import com.google.common.collect.Lists;
-import com.resourcefulbees.resourcefulbees.config.BeeSetup;
+import com.resourcefulbees.resourcefulbees.init.BeeSetup;
 import net.minecraft.resources.FolderPack;
 import net.minecraft.resources.IPackNameDecorator;
 import net.minecraft.resources.ResourcePackInfo;

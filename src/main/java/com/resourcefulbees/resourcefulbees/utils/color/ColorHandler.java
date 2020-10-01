@@ -26,7 +26,7 @@ public final class ColorHandler {
     public static void onItemColors(ColorHandlerEvent.Item event) {
         ItemColors colors = event.getItemColors();
         BEE_REGISTRY.getBees().forEach(((s, customBeeData) -> {
-            if (customBeeData.hasHoneycomb() && customBeeData.getColorData().hasHoneycombColor()) {
+            if (customBeeData.hasHoneycomb() && customBeeData.getColorData().hasHoneycombColor() && !customBeeData.hasCustomDrop()) {
                 registerItems(colors, HoneycombItem::getColor, customBeeData.getCombRegistryObject().get());
                 registerItems(colors, HoneycombBlock::getItemColor, customBeeData.getCombBlockItemRegistryObject().get());
             }
@@ -38,7 +38,7 @@ public final class ColorHandler {
     public static void onBlockColors(ColorHandlerEvent.Block event){
         BlockColors colors = event.getBlockColors();
         BEE_REGISTRY.getBees().forEach(((s, customBeeData) -> {
-            if (customBeeData.hasHoneycomb() && customBeeData.getColorData().hasHoneycombColor()) {
+            if (customBeeData.hasHoneycomb() && customBeeData.getColorData().hasHoneycombColor() && !customBeeData.hasCustomDrop()) {
                 registerBlocks(colors, HoneycombBlock::getBlockColor, customBeeData.getCombBlockRegistryObject().get());
             }
         }));

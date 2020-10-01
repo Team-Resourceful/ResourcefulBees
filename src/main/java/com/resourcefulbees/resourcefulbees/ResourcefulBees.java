@@ -1,6 +1,5 @@
 package com.resourcefulbees.resourcefulbees;
 
-import com.google.common.collect.Sets;
 import com.resourcefulbees.resourcefulbees.api.ResourcefulBeesAPI;
 import com.resourcefulbees.resourcefulbees.block.TieredBeehiveBlock;
 import com.resourcefulbees.resourcefulbees.block.multiblocks.apiary.ApiaryBlock;
@@ -9,12 +8,13 @@ import com.resourcefulbees.resourcefulbees.client.models.ModelHandler;
 import com.resourcefulbees.resourcefulbees.client.render.entity.CustomBeeRenderer;
 import com.resourcefulbees.resourcefulbees.client.render.items.ItemModelPropertiesHandler;
 import com.resourcefulbees.resourcefulbees.compat.top.TopCompat;
-import com.resourcefulbees.resourcefulbees.config.BeeSetup;
+import com.resourcefulbees.resourcefulbees.init.BeeSetup;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.config.ConfigLoader;
 import com.resourcefulbees.resourcefulbees.data.DataGen;
 import com.resourcefulbees.resourcefulbees.data.DataPackLoader;
 import com.resourcefulbees.resourcefulbees.data.RecipeBuilder;
+import com.resourcefulbees.resourcefulbees.init.BiomeDictonarySetup;
 import com.resourcefulbees.resourcefulbees.init.ModSetup;
 import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
@@ -75,6 +75,7 @@ public class ResourcefulBees
         ModSetup.initialize();
         RegistryHandler.init();
         ResourcefulBeesAPI.setBeeRegistry(BeeRegistry.getRegistry());
+        ResourcefulBeesAPI.setTraitRegistry(TraitRegistry.getRegistry());
         BeeRegistry.getRegistry().allowRegistration();
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.CommonConfig.COMMON_CONFIG, "resourcefulbees/common.toml");
@@ -82,12 +83,14 @@ public class ResourcefulBees
 
         ConfigLoader.load(Config.CommonConfig.COMMON_CONFIG, "resourcefulbees/common.toml");
 
+        BiomeDictonarySetup.buildDictionary();
         BeeSetup.setupBees();
         RegistryHandler.registerDynamicBees();
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener(EventPriority.LOW, this::setup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onInterModEnqueue);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::loadComplete);
+        MinecraftForge.EVENT_BUS.addListener(BeeSetup::onBiomeLoad);
         MinecraftForge.EVENT_BUS.addListener(DataPackLoader::serverStarting);
         MinecraftForge.EVENT_BUS.addListener(this::ServerLoaded);
 
@@ -152,7 +155,6 @@ public class ResourcefulBees
     }
 
     private void setup(final FMLCommonSetupEvent event){
-        //PointOfInterestType.BEEHIVE.field_221075_w = this.makeBeehivePOIMutable(PointOfInterestType.BEEHIVE.field_221075_w);
         Map<BlockState, PointOfInterestType> pointOfInterestTypeMap = new HashMap<>();
         RegistryHandler.BLOCKS.getEntries().stream()
                 .filter(blockRegistryObject -> blockRegistryObject.get() instanceof TieredBeehiveBlock)
@@ -166,8 +168,6 @@ public class ResourcefulBees
                         .getStateContainer()
                         .getValidStates()
                         .forEach(blockState -> putPOIInMap(blockState, pointOfInterestTypeMap))));
-        //Blocks.BEEHIVE.getStateContainer().getValidStates().forEach(blockState -> pointOfInterestTypeMap.put(blockState, RegistryHandler.TIERED_BEEHIVE_POI.get()));
-        //Blocks.BEE_NEST.getStateContainer().getValidStates().forEach(blockState -> pointOfInterestTypeMap.put(blockState, RegistryHandler.TIERED_BEEHIVE_POI.get()));
         PointOfInterestType.field_221073_u.putAll(pointOfInterestTypeMap);
 
         if (Config.ALLOW_SHEARS.get())
@@ -180,8 +180,6 @@ public class ResourcefulBees
     }
 
     private void putPOIInMap(BlockState blockState, Map<BlockState, PointOfInterestType> pointOfInterestTypeMap) {
-        //PointOfInterestType.field_221073_u.put(blockState, PointOfInterestType.BEEHIVE);
-        //PointOfInterestType.BEEHIVE.field_221075_w.add(blockState);
         pointOfInterestTypeMap.put(blockState, RegistryHandler.TIERED_BEEHIVE_POI.get());
     }
 
@@ -211,15 +209,10 @@ public class ResourcefulBees
     private void loadComplete(FMLLoadCompleteEvent event) {
         TraitRegistry.registerDefaultTraits();
         TraitRegistry.setTraitRegistryClosed();
-        TraitRegistry.giveBeeTraits();
+        TraitRegistry.applyBeeTraits();
+        BeeSetup.registerBeePlacements();
 
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> DataGen::generateClientData);
         DataGen.generateCommonData();
-    }
-
-    private Set<BlockState> makeBeehivePOIMutable(Set<BlockState> toCopy) {
-        Set<BlockState> copy = Sets.newHashSet();
-        copy.addAll(toCopy);
-        return copy;
     }
 }

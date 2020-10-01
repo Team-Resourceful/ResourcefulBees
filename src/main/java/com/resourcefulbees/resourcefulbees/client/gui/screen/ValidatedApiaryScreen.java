@@ -120,7 +120,10 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
     private void exportSelectedBee() {
         if (apiaryTileEntity.getBeeCount() != 0) {
             NetPacketHandler.sendToServer(new ExportBeeMessage(this.container.pos, this.container.beeList[this.container.getSelectedBee()]));
-            beeIndexOffset--;
+            //beeIndexOffset--;
+            // TODO this causes Array Out of Bounds exception.
+            //  Not having it causes GUI to not update correctly when last bee in list is exported.
+            //  Figure out how to make list update correctly when last bee is exported without this error.
         }
     }
 

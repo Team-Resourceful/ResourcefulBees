@@ -22,7 +22,9 @@
   },
   "SpawnData": {
     "canSpawnInWorld": true,
-    "biomeWhitelist": "TAG:end"
+    "biomeWhitelist": "TAG:end",
+    "lightLevel": "NIGHT",
+    "spawnWeight": 20
   },
   "BreedData": {
     "isBreedable": true

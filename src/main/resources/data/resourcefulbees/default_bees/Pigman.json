@@ -20,7 +20,8 @@
   },
   "SpawnData": {
     "canSpawnInWorld": true,
-    "biomeWhitelist": "tag:nether"
+    "biomeWhitelist": "tag:nether",
+    "lightLevel": "NIGHT"
   },
   "BreedData": {
     "isBreedable": true

@@ -1,6 +1,7 @@
 package com.resourcefulbees.resourcefulbees.compat.jei;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
+import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.CentrifugeMultiblockScreen;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.CentrifugeScreen;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.MechanicalCentrifugeScreen;
@@ -8,7 +9,9 @@ import com.resourcefulbees.resourcefulbees.compat.jei.ingredients.EntityIngredie
 import com.resourcefulbees.resourcefulbees.compat.jei.ingredients.EntityIngredientFactory;
 import com.resourcefulbees.resourcefulbees.compat.jei.ingredients.EntityIngredientHelper;
 import com.resourcefulbees.resourcefulbees.compat.jei.ingredients.EntityRenderer;
+import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
+import com.resourcefulbees.resourcefulbees.utils.validation.ValidatorUtils;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredientType;
@@ -19,8 +22,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.text.WordUtils;
 
 import javax.annotation.Nonnull;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE;
@@ -99,12 +105,37 @@ public class JEICompat implements IModPlugin {
 
     public void registerInfoDesc(IRecipeRegistration registration){
         for (EntityIngredient bee : EntityIngredientFactory.create()) {
-            if (I18n.hasKey("info.resourcefulbees.jei." + bee.getBeeType())){
-                registration.addIngredientInfo(bee, ENTITY_INGREDIENT,
-                    "\u00a7e\u00a7l[" + bee.getDisplayName().getString() + "] : \u00a7r" +
-                            I18n.format("info.resourcefulbees.jei." + bee.getBeeType())
-                );
+            CustomBeeData beeData = BeeRegistry.getRegistry().getBeeData(bee.getBeeType());
+
+            StringBuilder stats = new StringBuilder();
+
+            stats.append("\u00A73 Attack Damage: \u00A70").append(beeData.getAttackDamage()).append("\n");
+            stats.append("\u00A73 Has Honeycomb: \u00A70").append(StringUtils.capitalize(String.valueOf(beeData.hasHoneycomb()))).append("\n");
+            stats.append("\u00A73 Max Time in Hive: \u00A70").append(beeData.getMaxTimeInHive()).append(" ticks\n");
+
+            stats.append("\u00A73 Is Breedable: \u00A70").append(StringUtils.capitalize(String.valueOf(beeData.getBreedData().isBreedable()))).append("\n");
+            if (beeData.getBreedData().isBreedable() && beeData.getBreedData().hasParents()) {
+                stats.append("\u00A73 Parents: \u00A70").append(StringUtils.capitalize(beeData.getBreedData().getParent1())).append(" Bee, ")
+                        .append(StringUtils.capitalize(beeData.getBreedData().getParent2())).append(" Bee\n");
             }
+
+            if (beeData.hasTraitNames()) {
+                StringBuilder traits = new StringBuilder();
+                Arrays.stream(beeData.getTraitNames()).forEach(trait -> traits.append(WordUtils.capitalize(trait.replaceAll("_"," "))).append(", "));
+                traits.deleteCharAt(traits.lastIndexOf(","));
+                stats.append("\u00A73 Traits: \u00A70").append(traits.toString()).append("\n");
+            }
+
+            stats.append("\u00A73 Spawns in World: \u00A70").append(StringUtils.capitalize(String.valueOf(beeData.getSpawnData().canSpawnInWorld()))).append("\n");
+            if (beeData.getSpawnData().canSpawnInWorld()) {
+                stats.append("\u00A73 Light Level: \u00A70").append(beeData.getSpawnData().getLightLevel()).append("\n");
+                stats.append("\u00A73 Min Group Size: \u00A70").append(beeData.getSpawnData().getMinGroupSize()).append("\n");
+                stats.append("\u00A73 Max Group Size: \u00A70").append(beeData.getSpawnData().getMaxGroupSize()).append("\n");
+                stats.append("\u00A73 Biomes: \u00A70").append(BiomeParser.parseBiomes(beeData));
+            }
+
+
+            registration.addIngredientInfo(bee, ENTITY_INGREDIENT, stats.toString());
         }
     }
 }

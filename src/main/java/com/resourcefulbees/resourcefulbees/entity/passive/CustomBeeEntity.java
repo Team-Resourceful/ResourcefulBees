@@ -2,6 +2,7 @@ package com.resourcefulbees.resourcefulbees.entity.passive;
 
 import com.resourcefulbees.resourcefulbees.api.ICustomBee;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
+import com.resourcefulbees.resourcefulbees.api.beedata.SpawnData;
 import com.resourcefulbees.resourcefulbees.api.beedata.TraitData;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
@@ -9,10 +10,7 @@ import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.validation.ValidatorUtils;
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Pose;
-import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.*;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.BeeEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -24,6 +22,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.BasicParticleType;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.tags.ITag;
@@ -31,7 +30,9 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
@@ -96,7 +97,7 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
 
     @Override
     public void livingTick() {
-        if (this.world.isRemote){
+        if (this.world.isRemote) {
             if (this.ticksExisted % 40 == 0) {
                 TraitData info = getBeeData().getTraitData();
                 if (info.hasParticleEffects()){
@@ -110,21 +111,41 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
                     }
                 }
             }
-        }else {
-            if (Config.BEES_DIE_IN_VOID.get() && this.getPositionVec().y < -3) {
+        } else {
+            if (Config.BEES_DIE_IN_VOID.get() && this.getPositionVec().y <= -1) {
                 this.remove();
             }
         }
+
         super.livingTick();
     }
 
-    @SuppressWarnings("unused")
-    public static boolean canBeeSpawn(EntityType<? extends AnimalEntity> typeIn, IWorld worldIn, SpawnReason reason, BlockPos pos, Random randomIn) {
-        return false; //TODO fix when forge updates biome stuff
+    public static boolean canBeeSpawn(EntityType<? extends AgeableEntity> typeIn, IWorld worldIn, SpawnReason reason, BlockPos pos, Random randomIn) {
 
-                /*worldIn.getWorld().func_234922_V_().equals(DimensionType.THE_NETHER)
-                || worldIn.getWorld().func_234922_V_().equals(DimensionType.THE_END)
-                || worldIn.getLight(pos) > 8;*/
+
+        //TODO figure out how to get the Spawn Data object in here!!!
+
+/*            SpawnData spawnData = ((ICustomBee) typeIn).getBeeData().getSpawnData();
+
+            switch (reason) {
+                case NATURAL:
+                case CHUNK_GENERATION:
+                    if (spawnData.canSpawnInWorld()) {
+                        switch (spawnData.getLightLevel()) {
+                            case DAY:
+                                return worldIn.getLight(pos) >= 8;
+                            case NIGHT:
+                                return worldIn.getLight(pos) <= 7;
+                            case ANY:
+                                return true;
+                        }
+                    }
+                    break;
+                default:
+                    return true;
+            }*/
+
+        return true;
     }
 
     @Override

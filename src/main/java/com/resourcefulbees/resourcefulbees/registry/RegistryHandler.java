@@ -14,6 +14,7 @@ import com.resourcefulbees.resourcefulbees.container.*;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.entity.passive.ResourcefulBee;
 import com.resourcefulbees.resourcefulbees.item.*;
+import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe;
 import com.resourcefulbees.resourcefulbees.tileentity.*;
@@ -23,6 +24,7 @@ import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryT
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.CentrifugeCasingTileEntity;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.CentrifugeControllerTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.TooltipBuilder;
+import com.resourcefulbees.resourcefulbees.utils.color.Color;
 import com.resourcefulbees.resourcefulbees.world.BeeNestFeature;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
@@ -37,8 +39,10 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.*;
 import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -64,7 +68,6 @@ import java.util.List;
 
 @SuppressWarnings("ConstantConditions")
 public class RegistryHandler {
-	private static final Item.Properties BASIC_ITEM_PROPERTIES = new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES);
 	private static final AbstractBlock.Properties HIVE_PROPERTIES = Block.Properties.create(Material.WOOD).hardnessAndResistance(2).sound(SoundType.WOOD);
 	private static final AbstractBlock.Properties NEST_PROPERTIES = Block.Properties.create(Material.WOOD).hardnessAndResistance(0.3F).sound(SoundType.WOOD);
 	private static final AbstractBlock.Properties CENTRIFUGE_PROPERTIES = Block.Properties.create(Material.IRON).hardnessAndResistance(2).sound(SoundType.METAL);
@@ -139,11 +142,25 @@ public class RegistryHandler {
 
 	//region**************ITEMS*********************************************
 
-	public static final RegistryObject<Item> T1_BEEHIVE_ITEM = ITEMS.register("t1_beehive",() -> new BlockItem(T1_BEEHIVE.get(), BASIC_ITEM_PROPERTIES));
-	public static final RegistryObject<Item> T2_BEEHIVE_ITEM = ITEMS.register("t2_beehive",() -> new BlockItem(T2_BEEHIVE.get(), BASIC_ITEM_PROPERTIES));
-	public static final RegistryObject<Item> T3_BEEHIVE_ITEM = ITEMS.register("t3_beehive",() -> new BlockItem(T3_BEEHIVE.get(), BASIC_ITEM_PROPERTIES));
-	public static final RegistryObject<Item> T4_BEEHIVE_ITEM = ITEMS.register("t4_beehive",() -> new BlockItem(T4_BEEHIVE.get(), BASIC_ITEM_PROPERTIES));
-	public static final RegistryObject<Item> SCRAPER = ITEMS.register("scraper", () ->  new Item(BASIC_ITEM_PROPERTIES) {
+	public static final RegistryObject<Item> OREO_COOKIE = ITEMS.register("oreo_cookie", () -> new Item(new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES).food(new Food.Builder()
+			.effect(new EffectInstance(Effects.REGENERATION, 600, 1), 1)
+			.effect(new EffectInstance(Effects.ABSORPTION, 2400, 3), 1)
+			.effect(new EffectInstance(Effects.SATURATION, 2400, 1), 1)
+			.effect(new EffectInstance(Effects.LUCK, 600, 3), 1)
+			.effect(new EffectInstance(Effects.FIRE_RESISTANCE, 6000, 0), 1)
+			.effect(new EffectInstance(Effects.RESISTANCE, 6000, 0), 1)
+			.effect(new EffectInstance(Effects.WATER_BREATHING, 6000, 0), 1)
+			.effect(new EffectInstance(Effects.NIGHT_VISION, 1200, 0), 1)
+			.hunger(8)
+			.saturation(8)
+			.setAlwaysEdible()
+			.build())
+			.rarity(Rarity.EPIC)));
+	public static final RegistryObject<Item> T1_BEEHIVE_ITEM = ITEMS.register("t1_beehive",() -> new BlockItem(T1_BEEHIVE.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
+	public static final RegistryObject<Item> T2_BEEHIVE_ITEM = ITEMS.register("t2_beehive",() -> new BlockItem(T2_BEEHIVE.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
+	public static final RegistryObject<Item> T3_BEEHIVE_ITEM = ITEMS.register("t3_beehive",() -> new BlockItem(T3_BEEHIVE.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
+	public static final RegistryObject<Item> T4_BEEHIVE_ITEM = ITEMS.register("t4_beehive",() -> new BlockItem(T4_BEEHIVE.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
+	public static final RegistryObject<Item> SCRAPER = ITEMS.register("scraper", () ->  new Item(new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)) {
 		@OnlyIn(Dist.CLIENT)
 		@Override
 		public void addInformation(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
@@ -152,62 +169,62 @@ public class RegistryHandler {
 			super.addInformation(stack, worldIn, tooltip, flagIn);
 		}
 	});
-	public static final RegistryObject<Item> SMOKER = ITEMS.register("smoker", () -> new Smoker(BASIC_ITEM_PROPERTIES.setNoRepair().maxDamage(Config.SMOKER_DURABILITY.get())));
-	public static final RegistryObject<Item> BELLOW = ITEMS.register("bellow", () -> new Item(BASIC_ITEM_PROPERTIES));
-	public static final RegistryObject<Item> SMOKERCAN = ITEMS.register("smoker_can", () -> new Item(BASIC_ITEM_PROPERTIES));
-	public static final RegistryObject<Item> WAX = ITEMS.register("wax", () -> new Item(BASIC_ITEM_PROPERTIES));
-	public static final RegistryObject<Item> CENTRIFUGE_ITEM = ITEMS.register("centrifuge", () -> new BlockItem(CENTRIFUGE.get(), BASIC_ITEM_PROPERTIES));
-	public static final RegistryObject<Item> MECHANICAL_CENTRIFUGE_ITEM = ITEMS.register("mechanical_centrifuge", () -> new BlockItem(MECHANICAL_CENTRIFUGE.get(), BASIC_ITEM_PROPERTIES));
-	public static final RegistryObject<Item> CENTRIFUGE_CONTROLLER_ITEM = ITEMS.register("centrifuge_controller", () -> new BlockItem(CENTRIFUGE_CONTROLLER.get(), BASIC_ITEM_PROPERTIES));
-	public static final RegistryObject<Item> CENTRIFUGE_CASING_ITEM = ITEMS.register("centrifuge_casing", () -> new BlockItem(CENTRIFUGE_CASING.get(), BASIC_ITEM_PROPERTIES));
-	public static final RegistryObject<Item> HONEY_GENERATOR_ITEM = ITEMS.register("honey_generator", () -> new BlockItem(HONEY_GENERATOR.get(), BASIC_ITEM_PROPERTIES));
-	public static final RegistryObject<Item> WAX_BLOCK_ITEM = ITEMS.register("wax_block", () -> new BlockItem(WAX_BLOCK.get(), BASIC_ITEM_PROPERTIES));
-	public static final RegistryObject<Item> GOLD_FLOWER_ITEM = ITEMS.register("gold_flower", () -> new BlockItem(GOLD_FLOWER.get(), BASIC_ITEM_PROPERTIES));
-	public static final RegistryObject<Item> BEE_JAR = ITEMS.register("bee_jar", () -> new BeeJar(BASIC_ITEM_PROPERTIES.maxDamage(0).maxStackSize(16)));
-	public static final RegistryObject<Item> OAK_BEE_NEST_ITEM = ITEMS.register("bee_nest",() -> new BlockItem(OAK_BEE_NEST.get(), BASIC_ITEM_PROPERTIES));
-	public static final RegistryObject<Item> ACACIA_BEE_NEST_ITEM = ITEMS.register("acacia_bee_nest",() -> new BlockItem(ACACIA_BEE_NEST.get(), BASIC_ITEM_PROPERTIES));
-	public static final RegistryObject<Item> GRASS_BEE_NEST_ITEM = ITEMS.register("grass_bee_nest",() -> new BlockItem(GRASS_BEE_NEST.get(), BASIC_ITEM_PROPERTIES));
-	public static final RegistryObject<Item> JUNGLE_BEE_NEST_ITEM = ITEMS.register("jungle_bee_nest",() -> new BlockItem(JUNGLE_BEE_NEST.get(), BASIC_ITEM_PROPERTIES));
-	public static final RegistryObject<Item> NETHER_BEE_NEST_ITEM = ITEMS.register("nether_bee_nest",() -> new BlockItem(NETHER_BEE_NEST.get(), BASIC_ITEM_PROPERTIES));
-	public static final RegistryObject<Item> PRISMARINE_BEE_NEST_ITEM = ITEMS.register("prismarine_bee_nest",() -> new BlockItem(PRISMARINE_BEE_NEST.get(), BASIC_ITEM_PROPERTIES));
-	public static final RegistryObject<Item> PURPUR_BEE_NEST_ITEM = ITEMS.register("purpur_bee_nest",() -> new BlockItem(PURPUR_BEE_NEST.get(), BASIC_ITEM_PROPERTIES));
-	public static final RegistryObject<Item> BIRCH_BEE_NEST_ITEM = ITEMS.register("birch_bee_nest",() -> new BlockItem(BIRCH_BEE_NEST.get(), BASIC_ITEM_PROPERTIES));
-	public static final RegistryObject<Item> WITHER_BEE_NEST_ITEM = ITEMS.register("wither_bee_nest",() -> new BlockItem(WITHER_BEE_NEST.get(), BASIC_ITEM_PROPERTIES));
-	public static final RegistryObject<Item> BROWN_MUSHROOM_NEST_ITEM = ITEMS.register("brown_mushroom_bee_nest",() -> new BlockItem(BROWN_MUSHROOM_BEE_NEST.get(), BASIC_ITEM_PROPERTIES));
-	public static final RegistryObject<Item> CRIMSON_BEE_NEST_ITEM = ITEMS.register("crimson_bee_nest",() -> new BlockItem(CRIMSON_BEE_NEST.get(), BASIC_ITEM_PROPERTIES));
-	public static final RegistryObject<Item> CRIMSON_NYLIUM_BEE_NEST_ITEM = ITEMS.register("crimson_nylium_bee_nest",() -> new BlockItem(CRIMSON_NYLIUM_BEE_NEST.get(), BASIC_ITEM_PROPERTIES));
-	public static final RegistryObject<Item> DARK_OAK_NEST_ITEM = ITEMS.register("dark_oak_bee_nest",() -> new BlockItem(DARK_OAK_BEE_NEST.get(), BASIC_ITEM_PROPERTIES));
-	public static final RegistryObject<Item> RED_MUSHROOM_NEST_ITEM = ITEMS.register("red_mushroom_bee_nest",() -> new BlockItem(RED_MUSHROOM_BEE_NEST.get(), BASIC_ITEM_PROPERTIES));
-	public static final RegistryObject<Item> SPRUCE_BEE_NEST_ITEM = ITEMS.register("spruce_bee_nest",() -> new BlockItem(SPRUCE_BEE_NEST.get(), BASIC_ITEM_PROPERTIES));
-	public static final RegistryObject<Item> WARPED_BEE_NEST_ITEM = ITEMS.register("warped_bee_nest",() -> new BlockItem(WARPED_BEE_NEST.get(), BASIC_ITEM_PROPERTIES));
-	public static final RegistryObject<Item> WARPED_NYLIUM_BEE_NEST_ITEM = ITEMS.register("warped_nylium_bee_nest",() -> new BlockItem(WARPED_NYLIUM_BEE_NEST.get(), BASIC_ITEM_PROPERTIES));
-	public static final RegistryObject<Item> T1_APIARY_ITEM = ITEMS.register("t1_apiary",() -> new BlockItem(T1_APIARY_BLOCK.get(), BASIC_ITEM_PROPERTIES));
-	public static final RegistryObject<Item> T2_APIARY_ITEM = ITEMS.register("t2_apiary",() -> new BlockItem(T2_APIARY_BLOCK.get(), BASIC_ITEM_PROPERTIES));
-	public static final RegistryObject<Item> T3_APIARY_ITEM = ITEMS.register("t3_apiary",() -> new BlockItem(T3_APIARY_BLOCK.get(), BASIC_ITEM_PROPERTIES));
-	public static final RegistryObject<Item> T4_APIARY_ITEM = ITEMS.register("t4_apiary",() -> new BlockItem(T4_APIARY_BLOCK.get(), BASIC_ITEM_PROPERTIES));
-	public static final RegistryObject<Item> APIARY_STORAGE_ITEM = ITEMS.register("apiary_storage",() -> new BlockItem(APIARY_STORAGE_BLOCK.get(), BASIC_ITEM_PROPERTIES));
-	public static final RegistryObject<Item> APIARY_BREEDER_ITEM = ITEMS.register("apiary_breeder",() -> new BlockItem(APIARY_BREEDER_BLOCK.get(), BASIC_ITEM_PROPERTIES));
-	public static final RegistryObject<Item> IRON_STORAGE_UPGRADE = ITEMS.register("iron_storage_upgrade", () -> new UpgradeItem(BASIC_ITEM_PROPERTIES.maxDamage(0).maxStackSize(16),
+	public static final RegistryObject<Item> SMOKER = ITEMS.register("smoker", () -> new Smoker(new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES).setNoRepair().maxDamage(Config.SMOKER_DURABILITY.get())));
+	public static final RegistryObject<Item> BELLOW = ITEMS.register("bellow", () -> new Item(new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
+	public static final RegistryObject<Item> SMOKERCAN = ITEMS.register("smoker_can", () -> new Item(new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
+	public static final RegistryObject<Item> WAX = ITEMS.register("wax", () -> new Item(new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
+	public static final RegistryObject<Item> CENTRIFUGE_ITEM = ITEMS.register("centrifuge", () -> new BlockItem(CENTRIFUGE.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
+	public static final RegistryObject<Item> MECHANICAL_CENTRIFUGE_ITEM = ITEMS.register("mechanical_centrifuge", () -> new BlockItem(MECHANICAL_CENTRIFUGE.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
+	public static final RegistryObject<Item> CENTRIFUGE_CONTROLLER_ITEM = ITEMS.register("centrifuge_controller", () -> new BlockItem(CENTRIFUGE_CONTROLLER.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
+	public static final RegistryObject<Item> CENTRIFUGE_CASING_ITEM = ITEMS.register("centrifuge_casing", () -> new BlockItem(CENTRIFUGE_CASING.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
+	public static final RegistryObject<Item> HONEY_GENERATOR_ITEM = ITEMS.register("honey_generator", () -> new BlockItem(HONEY_GENERATOR.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
+	public static final RegistryObject<Item> WAX_BLOCK_ITEM = ITEMS.register("wax_block", () -> new BlockItem(WAX_BLOCK.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
+	public static final RegistryObject<Item> GOLD_FLOWER_ITEM = ITEMS.register("gold_flower", () -> new BlockItem(GOLD_FLOWER.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
+	public static final RegistryObject<Item> BEE_JAR = ITEMS.register("bee_jar", () -> new BeeJar(new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES).maxDamage(0).maxStackSize(16)));
+	public static final RegistryObject<Item> OAK_BEE_NEST_ITEM = ITEMS.register("bee_nest",() -> new BlockItem(OAK_BEE_NEST.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
+	public static final RegistryObject<Item> ACACIA_BEE_NEST_ITEM = ITEMS.register("acacia_bee_nest",() -> new BlockItem(ACACIA_BEE_NEST.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
+	public static final RegistryObject<Item> GRASS_BEE_NEST_ITEM = ITEMS.register("grass_bee_nest",() -> new BlockItem(GRASS_BEE_NEST.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
+	public static final RegistryObject<Item> JUNGLE_BEE_NEST_ITEM = ITEMS.register("jungle_bee_nest",() -> new BlockItem(JUNGLE_BEE_NEST.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
+	public static final RegistryObject<Item> NETHER_BEE_NEST_ITEM = ITEMS.register("nether_bee_nest",() -> new BlockItem(NETHER_BEE_NEST.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
+	public static final RegistryObject<Item> PRISMARINE_BEE_NEST_ITEM = ITEMS.register("prismarine_bee_nest",() -> new BlockItem(PRISMARINE_BEE_NEST.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
+	public static final RegistryObject<Item> PURPUR_BEE_NEST_ITEM = ITEMS.register("purpur_bee_nest",() -> new BlockItem(PURPUR_BEE_NEST.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
+	public static final RegistryObject<Item> BIRCH_BEE_NEST_ITEM = ITEMS.register("birch_bee_nest",() -> new BlockItem(BIRCH_BEE_NEST.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
+	public static final RegistryObject<Item> WITHER_BEE_NEST_ITEM = ITEMS.register("wither_bee_nest",() -> new BlockItem(WITHER_BEE_NEST.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
+	public static final RegistryObject<Item> BROWN_MUSHROOM_NEST_ITEM = ITEMS.register("brown_mushroom_bee_nest",() -> new BlockItem(BROWN_MUSHROOM_BEE_NEST.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
+	public static final RegistryObject<Item> CRIMSON_BEE_NEST_ITEM = ITEMS.register("crimson_bee_nest",() -> new BlockItem(CRIMSON_BEE_NEST.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
+	public static final RegistryObject<Item> CRIMSON_NYLIUM_BEE_NEST_ITEM = ITEMS.register("crimson_nylium_bee_nest",() -> new BlockItem(CRIMSON_NYLIUM_BEE_NEST.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
+	public static final RegistryObject<Item> DARK_OAK_NEST_ITEM = ITEMS.register("dark_oak_bee_nest",() -> new BlockItem(DARK_OAK_BEE_NEST.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
+	public static final RegistryObject<Item> RED_MUSHROOM_NEST_ITEM = ITEMS.register("red_mushroom_bee_nest",() -> new BlockItem(RED_MUSHROOM_BEE_NEST.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
+	public static final RegistryObject<Item> SPRUCE_BEE_NEST_ITEM = ITEMS.register("spruce_bee_nest",() -> new BlockItem(SPRUCE_BEE_NEST.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
+	public static final RegistryObject<Item> WARPED_BEE_NEST_ITEM = ITEMS.register("warped_bee_nest",() -> new BlockItem(WARPED_BEE_NEST.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
+	public static final RegistryObject<Item> WARPED_NYLIUM_BEE_NEST_ITEM = ITEMS.register("warped_nylium_bee_nest",() -> new BlockItem(WARPED_NYLIUM_BEE_NEST.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
+	public static final RegistryObject<Item> T1_APIARY_ITEM = ITEMS.register("t1_apiary",() -> new BlockItem(T1_APIARY_BLOCK.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
+	public static final RegistryObject<Item> T2_APIARY_ITEM = ITEMS.register("t2_apiary",() -> new BlockItem(T2_APIARY_BLOCK.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
+	public static final RegistryObject<Item> T3_APIARY_ITEM = ITEMS.register("t3_apiary",() -> new BlockItem(T3_APIARY_BLOCK.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
+	public static final RegistryObject<Item> T4_APIARY_ITEM = ITEMS.register("t4_apiary",() -> new BlockItem(T4_APIARY_BLOCK.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
+	public static final RegistryObject<Item> APIARY_STORAGE_ITEM = ITEMS.register("apiary_storage",() -> new BlockItem(APIARY_STORAGE_BLOCK.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
+	public static final RegistryObject<Item> APIARY_BREEDER_ITEM = ITEMS.register("apiary_breeder",() -> new BlockItem(APIARY_BREEDER_BLOCK.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
+	public static final RegistryObject<Item> IRON_STORAGE_UPGRADE = ITEMS.register("iron_storage_upgrade", () -> new UpgradeItem(new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES).maxDamage(0).maxStackSize(16),
 			UpgradeItem.builder()
 			.upgradeType(NBTConstants.NBT_STORAGE_UPGRADE)
 			.upgradeModification(NBTConstants.NBT_SLOT_UPGRADE, 27F)
 			.build()));
-	public static final RegistryObject<Item> GOLD_STORAGE_UPGRADE = ITEMS.register("gold_storage_upgrade", () -> new UpgradeItem(BASIC_ITEM_PROPERTIES.maxDamage(0).maxStackSize(16),
+	public static final RegistryObject<Item> GOLD_STORAGE_UPGRADE = ITEMS.register("gold_storage_upgrade", () -> new UpgradeItem(new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES).maxDamage(0).maxStackSize(16),
 			UpgradeItem.builder()
 			.upgradeType(NBTConstants.NBT_STORAGE_UPGRADE)
 			.upgradeModification(NBTConstants.NBT_SLOT_UPGRADE, 54F)
 			.build()));
-	public static final RegistryObject<Item> DIAMOND_STORAGE_UPGRADE = ITEMS.register("diamond_storage_upgrade", () -> new UpgradeItem(BASIC_ITEM_PROPERTIES.maxDamage(0).maxStackSize(16),
+	public static final RegistryObject<Item> DIAMOND_STORAGE_UPGRADE = ITEMS.register("diamond_storage_upgrade", () -> new UpgradeItem(new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES).maxDamage(0).maxStackSize(16),
 			UpgradeItem.builder()
 			.upgradeType(NBTConstants.NBT_STORAGE_UPGRADE)
 			.upgradeModification(NBTConstants.NBT_SLOT_UPGRADE, 81F)
 			.build()));
-	public static final RegistryObject<Item> EMERALD_STORAGE_UPGRADE = ITEMS.register("emerald_storage_upgrade", () -> new UpgradeItem(BASIC_ITEM_PROPERTIES.maxDamage(0).maxStackSize(16),
+	public static final RegistryObject<Item> EMERALD_STORAGE_UPGRADE = ITEMS.register("emerald_storage_upgrade", () -> new UpgradeItem(new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES).maxDamage(0).maxStackSize(16),
 			UpgradeItem.builder()
 			.upgradeType(NBTConstants.NBT_STORAGE_UPGRADE)
 			.upgradeModification(NBTConstants.NBT_SLOT_UPGRADE, 108F)
 			.build()));
-	public static final RegistryObject<Item> APIARY_BREEDER_UPGRADE = ITEMS.register("apiary_breeder_upgrade", () -> new UpgradeItem(BASIC_ITEM_PROPERTIES.maxDamage(0).maxStackSize(16),
+	public static final RegistryObject<Item> APIARY_BREEDER_UPGRADE = ITEMS.register("apiary_breeder_upgrade", () -> new UpgradeItem(new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES).maxDamage(0).maxStackSize(16),
 			UpgradeItem.builder()
 			.upgradeType(NBTConstants.NBT_BREEDER_UPGRADE)
 			.upgradeModification(NBTConstants.NBT_BREEDER_COUNT, 1)
@@ -220,7 +237,7 @@ public class RegistryHandler {
 			super.addInformation(stack, worldIn, tooltip, flagIn);
 		}
 	});
-	public static final RegistryObject<Item> APIARY_BREED_TIME_UPGRADE = ITEMS.register("apiary_breed_time_upgrade", () -> new UpgradeItem(BASIC_ITEM_PROPERTIES.maxDamage(0).maxStackSize(16),
+	public static final RegistryObject<Item> APIARY_BREED_TIME_UPGRADE = ITEMS.register("apiary_breed_time_upgrade", () -> new UpgradeItem(new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES).maxDamage(0).maxStackSize(16),
 			UpgradeItem.builder()
 			.upgradeType(NBTConstants.NBT_BREEDER_UPGRADE)
 			.upgradeModification(NBTConstants.NBT_BREED_TIME, 300)
@@ -233,7 +250,7 @@ public class RegistryHandler {
 			super.addInformation(stack, worldIn, tooltip, flagIn);
 		}
 	});
-	public static final RegistryObject<Item> HONEY_FLUID_BUCKET = ITEMS.register("honey_fluid_bucket", () -> new BucketItem(FluidRegistry.HONEY_FLUID, BASIC_ITEM_PROPERTIES.containerItem(Items.BUCKET).maxStackSize(1)));
+	public static final RegistryObject<Item> HONEY_FLUID_BUCKET = ITEMS.register("honey_fluid_bucket", () -> new BucketItem(FluidRegistry.HONEY_FLUID, new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES).containerItem(Items.BUCKET).maxStackSize(1)));
 	//endregion
 
 	//region**************TILE ENTITIES*************************************
@@ -336,8 +353,10 @@ public class RegistryHandler {
 	public static void registerDynamicBees() {
 		BeeRegistry.getRegistry().getBees().forEach((name, customBee) -> {
 			if (customBee.shouldResourcefulBeesDoForgeRegistration) {
-				if (customBee.hasHoneycomb()) {
+				if (customBee.hasHoneycomb() && !customBee.hasCustomDrop()) {
 					registerHoneycomb(name, customBee);
+				} else if (customBee.hasHoneycomb() && customBee.hasCustomDrop() && !customBee.getName().equals(BeeConstants.OREO_BEE)) {
+					fillCustomDrops(customBee);
 				}
 				registerBee(name, customBee);
 			}
@@ -346,8 +365,8 @@ public class RegistryHandler {
 
 	private static void registerHoneycomb(String name, CustomBeeData customBeeData) {
 		final RegistryObject<Block> customHoneycombBlock = BLOCKS.register(name + "_honeycomb_block", () -> new HoneycombBlock(name, customBeeData.getColorData(), Block.Properties.from(Blocks.HONEYCOMB_BLOCK)));
-		final RegistryObject<Item> customHoneycomb = ITEMS.register(name + "_honeycomb", () -> new HoneycombItem(name, customBeeData.getColorData(), BASIC_ITEM_PROPERTIES));
-		final RegistryObject<Item> customHoneycombBlockItem = ITEMS.register(name + "_honeycomb_block", () -> new BlockItem(customHoneycombBlock.get(), BASIC_ITEM_PROPERTIES));
+		final RegistryObject<Item> customHoneycomb = ITEMS.register(name + "_honeycomb", () -> new HoneycombItem(name, customBeeData.getColorData(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
+		final RegistryObject<Item> customHoneycombBlockItem = ITEMS.register(name + "_honeycomb_block", () -> new BlockItem(customHoneycombBlock.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
 
 		customBeeData.setCombBlockRegistryObject(customHoneycombBlock);
 		customBeeData.setCombRegistryObject(customHoneycomb);
@@ -360,15 +379,20 @@ public class RegistryHandler {
 				.size(0.7F, 0.6F)
 				.build(name + "_bee"));
 
-		int firstEggColor = customBeeData.getColorData().isBeeColored() && customBeeData.getColorData().hasPrimaryColor() ? customBeeData.getColorData().getPrimaryColorInt() : customBeeData.getColorData().hasHoneycombColor() ? customBeeData.getColorData().getHoneycombColorInt() : 0xffffff;
-		int secondEggColor = customBeeData.getColorData().isBeeColored() && customBeeData.getColorData().hasSecondaryColor() ? customBeeData.getColorData().getSecondaryColorInt() : 0x303030;
-
 		final RegistryObject<Item> customBeeSpawnEgg = ITEMS.register(name + "_bee_spawn_egg",
-				() -> new BeeSpawnEggItem(customBeeEntity, firstEggColor, secondEggColor, (BASIC_ITEM_PROPERTIES)));
+				() -> new BeeSpawnEggItem(customBeeEntity, Color.parseInt(BeeConstants.VANILLA_BEE_COLOR), 0x303030, customBeeData.getColorData(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
 
 		BeeRegistry.MOD_BEES.put(name, customBeeEntity);
 		customBeeData.setEntityTypeRegistryID(customBeeEntity.getId());
 		customBeeData.setSpawnEggItemRegistryObject(customBeeSpawnEgg);
+	}
+
+	private static void fillCustomDrops(CustomBeeData customBeeData) {
+		RegistryObject<Item> customComb = RegistryObject.of(new ResourceLocation(customBeeData.getCustomCombDrop()), ForgeRegistries.ITEMS);
+		RegistryObject<Item> customCombBlock = RegistryObject.of(new ResourceLocation(customBeeData.getCustomCombBlockDrop()), ForgeRegistries.ITEMS);
+
+		customBeeData.setCombRegistryObject(customComb);
+		customBeeData.setCombBlockItemRegistryObject(customCombBlock);
 	}
 
 	@SubscribeEvent

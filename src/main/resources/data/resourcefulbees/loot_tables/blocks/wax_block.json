@@ -8,11 +8,6 @@
           "type": "minecraft:item",
           "name": "resourcefulbees:wax_block"
         }
-      ],
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
-        }
       ]
     }
   ]

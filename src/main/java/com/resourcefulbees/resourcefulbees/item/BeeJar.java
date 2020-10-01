@@ -7,6 +7,7 @@ import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.registry.ItemGroupResourcefulBees;
 import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
 import com.resourcefulbees.resourcefulbees.utils.color.Color;
+import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -18,6 +19,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.BeehiveTileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -41,7 +43,7 @@ public class BeeJar extends Item {
     public static int getColor(ItemStack stack, int tintIndex) {
         CompoundNBT tag = stack.getTag();
         if (tintIndex == 1 && tag != null && tag.contains(NBTConstants.NBT_COLOR) && !tag.getString(NBTConstants.NBT_COLOR).equals(BeeConstants.STRING_DEFAULT_ITEM_COLOR)) {
-            return Color.parseInt(tag.getString(NBTConstants.NBT_COLOR));
+            return tag.getString(NBTConstants.NBT_COLOR).equals(BeeConstants.RAINBOW_COLOR) ? RainbowColor.getRGB() : Color.parseInt(tag.getString(NBTConstants.NBT_COLOR));
         }
         return BeeConstants.DEFAULT_ITEM_COLOR;
     }
@@ -153,6 +155,8 @@ public class BeeJar extends Item {
             nbt.putString(NBTConstants.NBT_BEE_TYPE, iCustomBee.getBeeType());
             if (iCustomBee.getBeeData().getColorData().hasPrimaryColor()) {
                 beeColor = iCustomBee.getBeeData().getColorData().getPrimaryColor();
+            } else if (iCustomBee.getBeeData().getColorData().isRainbowBee()) {
+                beeColor = BeeConstants.RAINBOW_COLOR;
             } else if (iCustomBee.getBeeData().getColorData().hasHoneycombColor()) {
                 beeColor = iCustomBee.getBeeData().getColorData().getHoneycombColor();
             }

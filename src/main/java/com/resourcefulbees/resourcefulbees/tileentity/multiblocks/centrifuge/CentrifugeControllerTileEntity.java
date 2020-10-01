@@ -53,6 +53,7 @@ public class CentrifugeControllerTileEntity extends TileEntity implements ITicka
     public static final int BOTTLE_SLOT = 0;
     public static final int[] HONEYCOMB_SLOT = {1,2,3};
     public static final int[] OUTPUT_SLOTS = {4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21};
+    public static final int TOTAL_TIME = Config.CENTRIFUGE_MULTIBLOCK_RECIPE_TIME.get() * 20;
 
     public AutomationSensitiveItemStackHandler h = new CentrifugeControllerTileEntity.TileStackHandler(22);
     public final CustomStorageContainers.CustomEnergyStorage energyStorage = createEnergy();
@@ -61,7 +62,7 @@ public class CentrifugeControllerTileEntity extends TileEntity implements ITicka
     public int[] time = {0,0,0};
     public List<CentrifugeRecipe> recipe = new ArrayList<>(Arrays.asList(null,null,null));
     public ItemStack failedMatch = ItemStack.EMPTY;
-    public int totalTime = 100;
+    //public int totalTime = 100;
     private int validateTime = 300;
     public boolean validStructure;
     private final List<BlockPos> STRUCTURE_BLOCKS = new ArrayList<>();
@@ -112,12 +113,12 @@ public class CentrifugeControllerTileEntity extends TileEntity implements ITicka
                 if (!h.getStackInSlot(HONEYCOMB_SLOT[i]).isEmpty() && !h.getStackInSlot(BOTTLE_SLOT).isEmpty()) {
                     CentrifugeRecipe irecipe = getRecipe(i);
                     if (this.canProcess(irecipe, i)) {
-                        this.totalTime = 100;
+                        //this.totalTime = 100;
                         ++this.time[i];
-                        if (this.time[i] == this.totalTime) {
-                            energyStorage.consumeEnergy(Config.RF_TICK_CENTRIFUGE.get() * totalTime);
+                        if (this.time[i] == TOTAL_TIME) {
+                            energyStorage.consumeEnergy(Config.RF_TICK_CENTRIFUGE.get() * TOTAL_TIME);
                             this.time[i] = 0;
-                            this.totalTime = 100;
+                            //this.totalTime = 100;
                             this.processItem(irecipe, i);
                             dirty = true;
                         }
@@ -251,7 +252,7 @@ public class CentrifugeControllerTileEntity extends TileEntity implements ITicka
         CompoundNBT inv = this.h.serializeNBT();
         tag.put("inv", inv);
         tag.putIntArray("time", time);
-        tag.putInt("totalTime", totalTime);
+        //tag.putInt("totalTime", totalTime);
         tag.put("energy", energyStorage.serializeNBT());
         tag.putBoolean("valid", validStructure);
         return tag;
@@ -261,7 +262,7 @@ public class CentrifugeControllerTileEntity extends TileEntity implements ITicka
         CompoundNBT invTag = tag.getCompound("inv");
         h.deserializeNBT(invTag);
         time = tag.getIntArray("time");
-        totalTime = tag.getInt("totalTime");
+        //totalTime = tag.getInt("totalTime");
         energyStorage.deserializeNBT(tag.getCompound("energy"));
         validStructure = tag.getBoolean("valid");
     }
