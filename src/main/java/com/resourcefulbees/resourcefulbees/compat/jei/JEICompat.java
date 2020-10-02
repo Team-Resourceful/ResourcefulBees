@@ -28,6 +28,7 @@ import org.apache.commons.lang3.text.WordUtils;
 import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.List;
+import java.util.StringJoiner;
 
 import static com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE;
 
@@ -120,9 +121,8 @@ public class JEICompat implements IModPlugin {
             }
 
             if (beeData.hasTraitNames()) {
-                StringBuilder traits = new StringBuilder();
-                Arrays.stream(beeData.getTraitNames()).forEach(trait -> traits.append(WordUtils.capitalize(trait.replaceAll("_"," "))).append(", "));
-                traits.deleteCharAt(traits.lastIndexOf(","));
+                StringJoiner traits = new StringJoiner(",");
+                Arrays.stream(beeData.getTraitNames()).forEach(trait -> traits.add(WordUtils.capitalize(trait.replaceAll("_"," "))));
                 stats.append("\u00A73 Traits: \u00A70").append(traits.toString()).append("\n");
             }
 
@@ -133,7 +133,6 @@ public class JEICompat implements IModPlugin {
                 stats.append("\u00A73 Max Group Size: \u00A70").append(beeData.getSpawnData().getMaxGroupSize()).append("\n");
                 stats.append("\u00A73 Biomes: \u00A70").append(BiomeParser.parseBiomes(beeData));
             }
-
 
             registration.addIngredientInfo(bee, ENTITY_INGREDIENT, stats.toString());
         }

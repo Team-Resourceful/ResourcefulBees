@@ -5,11 +5,11 @@ import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.registry.BiomeDictionary;
 import net.minecraft.util.ResourceLocation;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.StringJoiner;
 
 public class BiomeParser {
 
@@ -53,11 +53,10 @@ public class BiomeParser {
     }
 
     private static String buildReturnString(Set<ResourceLocation> whitelist, Set<ResourceLocation> blacklist, CustomBeeData bee) {
-        StringBuilder returnList = new StringBuilder();
+        StringJoiner returnList = new StringJoiner(",");
         whitelist.stream()
                 .filter(resourceLocation -> !blacklist.contains(resourceLocation))
-                .forEach(resourceLocation -> returnList.append(WordUtils.capitalize(resourceLocation.getPath().replaceAll("_"," "))).append(", "));
-        returnList.deleteCharAt(returnList.lastIndexOf(","));
+                .forEach(resourceLocation -> returnList.add(WordUtils.capitalize(resourceLocation.getPath().replaceAll("_"," "))));
         return returnList.toString();
     }
 }

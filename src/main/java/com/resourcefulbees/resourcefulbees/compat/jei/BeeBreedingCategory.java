@@ -131,10 +131,6 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
 
     @Override
     public void setIngredients(@Nonnull Recipe recipe, @Nonnull IIngredients ingredients) {
-        ItemStack parent1SpawnEgg = new ItemStack(beeRegistry.getBeeData(recipe.parent1).getSpawnEggItemRegistryObject().get());
-        ItemStack parent2SpawnEgg = new ItemStack(beeRegistry.getBeeData(recipe.parent2).getSpawnEggItemRegistryObject().get());
-        ItemStack childSpawnEgg = new ItemStack(beeRegistry.getBeeData(recipe.child).getSpawnEggItemRegistryObject().get());
-
         List<List<ItemStack>> list = new ArrayList<>();
 
         if (recipe.p1_feedItem != null && recipe.p1_feedItem != Items.AIR) {
@@ -162,9 +158,7 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
             list.add(stackList);
         }
 
-        list.add(Arrays.asList(parent1SpawnEgg, parent2SpawnEgg));
         ingredients.setInputLists(VanillaTypes.ITEM, list);
-        ingredients.setOutput(VanillaTypes.ITEM, childSpawnEgg);
 
         List<EntityIngredient> entities = new ArrayList<>();
         entities.add(new EntityIngredient(recipe.parent1, -45.0f));
@@ -176,7 +170,13 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
 
     @Override
     public void setRecipe(@Nonnull IRecipeLayout iRecipeLayout, @Nonnull Recipe recipe, @Nonnull IIngredients ingredients) {
+        ResourcefulBees.LOGGER.info("{} + {} + {} + {} + {} + {} + {} + {} + {}", recipe.child, recipe.parent1, recipe.p1_feedAmount, recipe.p1_feedItem, recipe.p1_feedTag, recipe.parent2, recipe.p2_feedAmount, recipe.p2_feedItem, recipe.p2_feedTag);
+        //Logs all recipe info ^
+
         IGuiIngredientGroup<EntityIngredient> ingredientStacks = iRecipeLayout.getIngredientsGroup(JEICompat.ENTITY_INGREDIENT);
+
+        System.out.println(ingredientStacks.toString());//LOGGERRRRRRR
+
         ingredientStacks.init(0, true, 6, 6);
         ingredientStacks.init(1, true, 60, 6);
         ingredientStacks.init(2, false, 130, 18);
@@ -185,6 +185,9 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
         ingredientStacks.set(2, ingredients.getOutputs(JEICompat.ENTITY_INGREDIENT).get(0));
 
         IGuiItemStackGroup itemStacks = iRecipeLayout.getItemStacks();
+
+        System.out.println(itemStacks.toString());//LOGGGERRRRRRR
+
         itemStacks.init(0, true, 6, 32);
         itemStacks.init(1, true, 60, 32);
         itemStacks.set(0, ingredients.getInputs(VanillaTypes.ITEM).get(0));
