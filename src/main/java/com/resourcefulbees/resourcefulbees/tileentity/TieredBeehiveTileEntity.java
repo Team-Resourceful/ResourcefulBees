@@ -255,7 +255,7 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
     return super.getUpdatePacket();
   }
 
-  public CompoundNBT writeHoneycombs() {
+  public ListNBT writeHoneycombs() {
     ListNBT nbtTagList = new ListNBT();
     for (int i = 0; i < numberOfCombs(); i++) {
       CompoundNBT itemTag = new CompoundNBT();
@@ -263,13 +263,10 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
       honeycombs.get(i).write(itemTag);
       nbtTagList.add(itemTag);
     }
-    CompoundNBT nbt = new CompoundNBT();
-    nbt.put(NBTConstants.NBT_HONEYCOMBS_TE, nbtTagList);
-    return nbt;
+    return nbtTagList;
   }
 
-  public Stack<ItemStack> getHoneycombs(CompoundNBT nbt)
-  {
+  public Stack<ItemStack> getHoneycombs(CompoundNBT nbt) {
     Stack<ItemStack> honeycombs = new Stack<>();
     ListNBT tagList = nbt.getList(NBTConstants.NBT_HONEYCOMBS_TE, Constants.NBT.TAG_COMPOUND);
     for (int i = 0; i < tagList.size(); i++) {

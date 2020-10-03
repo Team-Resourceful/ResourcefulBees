@@ -121,6 +121,7 @@
 	"item.resourcefulbees.apiary_breed_time_upgrade": "Breed Time Upgrade",
 	"item.resourcefulbees.honey_fluid_bucket": "Honey Bucket",
 	"item.resourcefulbees.scraper": "Scraper",
+	"item.resourcefulbees.oreo_cookie": "Epic Oreo",
 
 	"block.resourcefulbees.gold_honeycomb_block": "Gold Honeycomb Block",
 	"block.resourcefulbees.iron_honeycomb_block": "Iron Honeycomb Block",
@@ -131,7 +132,6 @@
 	"block.resourcefulbees.lapis_honeycomb_block": "Lapis Honeycomb Block",
 	"block.resourcefulbees.coal_honeycomb_block": "Coal Honeycomb Block",
 	"block.resourcefulbees.ender_honeycomb_block": "Ender Honeycomb Block",
-	"block.resourcefulbees.default_honeycomb_block": "Resourceful Honeycomb Block",
 	"block.resourcefulbees.creeper_honeycomb_block": "Beeper Honeycomb Block",
 	"block.resourcefulbees.pigman_honeycomb_block": "Pigman Honeycomb Block",
 	"block.resourcefulbees.skeleton_honeycomb_block": "Skeleton Honeycomb Block",
@@ -151,7 +151,6 @@
 	"item.resourcefulbees.lapis_honeycomb": "Lapis Honeycomb",
 	"item.resourcefulbees.coal_honeycomb": "Coal Honeycomb",
 	"item.resourcefulbees.ender_honeycomb": "Ender Honeycomb",
-	"item.resourcefulbees.default_honeycomb": "Resourceful Honeycomb",
 	"item.resourcefulbees.creeper_honeycomb": "Beeper Honeycomb",
 	"item.resourcefulbees.pigman_honeycomb": "Pigman Honeycomb",
 	"item.resourcefulbees.skeleton_honeycomb": "Skeleton Honeycomb",
@@ -169,7 +168,6 @@
 	"item.resourcefulbees.lapis_bee_spawn_egg": "Lapis Bee Spawn Egg",
 	"item.resourcefulbees.coal_bee_spawn_egg": "Coal Bee Spawn Egg",
 	"item.resourcefulbees.ender_bee_spawn_egg": "Ender Bee Spawn Egg",
-	"item.resourcefulbees.default_bee_spawn_egg": "Resourceful Bee Spawn Egg",
 	"item.resourcefulbees.creeper_bee_spawn_egg": "Beeper Bee Spawn Egg",
 	"item.resourcefulbees.pigman_bee_spawn_egg": "Pigman Bee Spawn Egg",
 	"item.resourcefulbees.skeleton_bee_spawn_egg": "Skeleton Bee Spawn Egg",
@@ -187,7 +185,6 @@
 	"entity.resourcefulbees.lapis_bee": "Lapis Bee",
 	"entity.resourcefulbees.coal_bee": "Coal Bee",
 	"entity.resourcefulbees.ender_bee": "Ender Bee",
-	"entity.resourcefulbees.default_bee": "Resourceful Bee",
 	"entity.resourcefulbees.creeper_bee": "Beeper Bee",
 	"entity.resourcefulbees.pigman_bee": "Pigman Bee",
 	"entity.resourcefulbees.skeleton_bee": "Skeleton Bee",
@@ -195,6 +192,7 @@
 	"entity.resourcefulbees.zombie_bee": "Zombie Bee",
 	"entity.resourcefulbees.netherite_bee": "Netherite Bee",
 	"entity.resourcefulbees.rgbee_bee": "RGBee",
+	"entity.resourcefulbees.oreo_bee": "Oreo Bee",
 
 	"entity.minecraft.villager.resourcefulbees.beekeeper": "Beekeeper",
 	"block.resourcefulbees.mech_centrifuge.tooltip.info": "Hold SHIFT & right-click block to process honeycombs.",
@@ -208,5 +206,7 @@
 	"item.resourcefulbees.apiary_breeder_upgrade.tooltip.info": "Adds additional breeders to the Apiary Breeder",
 	"block.resourcefulbees.centrifuge.tooltip.structure_size": "Centrifuge multiblock size is 3x4x3, consisting of one controller and the rest casings.",
 	"block.resourcefulbees.centrifuge.tooltip.requisites": "The controller must be the one block up from the bottom in the center of any face.",
-	"block.resourcefulbees.centrifuge.tooltip.capabilities": "Any block in the multiblock will import/export items and energy"
+	"block.resourcefulbees.centrifuge.tooltip.capabilities": "Any block in the multiblock will import/export items and energy",
+	"block.resourcefulbees.beehive.tooltip.bees": "Bees:",
+	"block.resourcefulbees.beehive.tooltip.honeycombs": "Honeycombs:"
 }

@@ -21,6 +21,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
@@ -110,28 +111,28 @@ public class JEICompat implements IModPlugin {
 
             StringBuilder stats = new StringBuilder();
 
-            stats.append("\u00A73 Attack Damage: \u00A70").append(beeData.getAttackDamage()).append("\n");
-            stats.append("\u00A73 Has Honeycomb: \u00A70").append(StringUtils.capitalize(String.valueOf(beeData.hasHoneycomb()))).append("\n");
-            stats.append("\u00A73 Max Time in Hive: \u00A70").append(beeData.getMaxTimeInHive()).append(" ticks\n");
+            stats.append("\u00a7b Attack Damage: \u00A70").append(beeData.getAttackDamage()).append("\n");
+            stats.append("\u00a7b Has Honeycomb: \u00A70").append(StringUtils.capitalize(String.valueOf(beeData.hasHoneycomb()))).append("\n");
+            stats.append("\u00a7b Max Time in Hive: \u00A70").append(beeData.getMaxTimeInHive()).append(" ticks\n");
 
-            stats.append("\u00A73 Is Breedable: \u00A70").append(StringUtils.capitalize(String.valueOf(beeData.getBreedData().isBreedable()))).append("\n");
+            stats.append("\u00a7b Is Breedable: \u00A70").append(StringUtils.capitalize(String.valueOf(beeData.getBreedData().isBreedable()))).append("\n");
             if (beeData.getBreedData().isBreedable() && beeData.getBreedData().hasParents()) {
-                stats.append("\u00A73 Parents: \u00A70").append(StringUtils.capitalize(beeData.getBreedData().getParent1())).append(" Bee, ")
+                stats.append("\u00a7b Parents: \u00A70").append(StringUtils.capitalize(beeData.getBreedData().getParent1())).append(" Bee, ")
                         .append(StringUtils.capitalize(beeData.getBreedData().getParent2())).append(" Bee\n");
             }
 
             if (beeData.hasTraitNames()) {
                 StringJoiner traits = new StringJoiner(",");
                 Arrays.stream(beeData.getTraitNames()).forEach(trait -> traits.add(WordUtils.capitalize(trait.replaceAll("_"," "))));
-                stats.append("\u00A73 Traits: \u00A70").append(traits.toString()).append("\n");
+                stats.append("\u00a7b Traits: \u00A70").append(traits.toString()).append("\n");
             }
 
-            stats.append("\u00A73 Spawns in World: \u00A70").append(StringUtils.capitalize(String.valueOf(beeData.getSpawnData().canSpawnInWorld()))).append("\n");
+            stats.append("\u00a7b Spawns in World: \u00A70").append(StringUtils.capitalize(String.valueOf(beeData.getSpawnData().canSpawnInWorld()))).append("\n");
             if (beeData.getSpawnData().canSpawnInWorld()) {
-                stats.append("\u00A73 Light Level: \u00A70").append(beeData.getSpawnData().getLightLevel()).append("\n");
-                stats.append("\u00A73 Min Group Size: \u00A70").append(beeData.getSpawnData().getMinGroupSize()).append("\n");
-                stats.append("\u00A73 Max Group Size: \u00A70").append(beeData.getSpawnData().getMaxGroupSize()).append("\n");
-                stats.append("\u00A73 Biomes: \u00A70").append(BiomeParser.parseBiomes(beeData));
+                stats.append("\u00a7b Light Level: \u00A70").append(beeData.getSpawnData().getLightLevel()).append("\n");
+                stats.append("\u00a7b Min Group Size: \u00A70").append(beeData.getSpawnData().getMinGroupSize()).append("\n");
+                stats.append("\u00a7b Max Group Size: \u00A70").append(beeData.getSpawnData().getMaxGroupSize()).append("\n");
+                stats.append("\u00a7b Biomes: \u00A70").append(BiomeParser.parseBiomes(beeData));
             }
 
             registration.addIngredientInfo(bee, ENTITY_INGREDIENT, stats.toString());

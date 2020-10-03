@@ -1,5 +1,6 @@
 package com.resourcefulbees.resourcefulbees.compat.jei;
 
+import com.google.common.collect.Lists;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.IBeeRegistry;
@@ -31,6 +32,7 @@ import javax.annotation.Nonnull;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static com.resourcefulbees.resourcefulbees.lib.BeeConstants.*;
@@ -176,6 +178,10 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
         IGuiIngredientGroup<EntityIngredient> ingredientStacks = iRecipeLayout.getIngredientsGroup(JEICompat.ENTITY_INGREDIENT);
 
         System.out.println(ingredientStacks.toString());//LOGGERRRRRRR
+        System.out.println(ingredients.getInputs(JEICompat.ENTITY_INGREDIENT));
+        System.out.println(ingredients.getOutputs(JEICompat.ENTITY_INGREDIENT));
+        System.out.println(ingredients.getInputs(VanillaTypes.ITEM));
+        System.out.println(ingredients.getOutputs(VanillaTypes.ITEM));
 
         ingredientStacks.init(0, true, 6, 6);
         ingredientStacks.init(1, true, 60, 6);

@@ -132,8 +132,10 @@ public class BeeJar extends Item {
         if (tag != null && isFilled(stack)) {
             String type = tag.getString(NBTConstants.NBT_ENTITY);
             if (tag.contains(NBTConstants.NBT_BEE_TYPE)) {
-                String rbType = tag.getString(NBTConstants.NBT_BEE_TYPE).replaceAll("_", " ");
-                tooltip.add(new StringTextComponent(I18n.format(ResourcefulBees.MOD_ID + ".information.bee_type.custom") + WordUtils.capitalize(rbType)).formatted(TextFormatting.WHITE));
+                String rbType = tag.getString(NBTConstants.NBT_BEE_TYPE);
+                tooltip.add(new StringTextComponent(I18n.format(ResourcefulBees.MOD_ID + ".information.bee_type.custom")
+                        + (I18n.hasKey("entity.resourcefulbees." + rbType.toLowerCase()) ? I18n.format("entity.resourcefulbees."
+                        + rbType.toLowerCase()) : WordUtils.capitalize(rbType.replaceAll("_", " ")))).formatted(TextFormatting.WHITE));
             } else if (type.equals(BeeConstants.VANILLA_BEE_ID)) {
                 tooltip.add(new TranslationTextComponent(ResourcefulBees.MOD_ID + ".information.bee_type.vanilla").formatted(TextFormatting.WHITE));
             } else {

@@ -37,11 +37,10 @@ public class BeeBreedGoal extends BreedGoal {
 
     @Override
     protected void spawnBaby() {
-        AgeableEntity ageableentity;
         ICustomBee bee = (ICustomBee)this.animal;
         String parent1 = ((ICustomBee)this.field_75391_e).getBeeType();
         String parent2 = ((ICustomBee)this.animal).getBeeType();
-        ageableentity = (AgeableEntity) bee.createSelectedChild(BeeRegistry.getRegistry().getWeightedChild(parent1, parent2));
+        AgeableEntity ageableentity = bee.createSelectedChild(BeeRegistry.getRegistry().getWeightedChild(parent1, parent2));
 
         final BabyEntitySpawnEvent event = new BabyEntitySpawnEvent(animal, field_75391_e, ageableentity);
         final boolean cancelled = MinecraftForge.EVENT_BUS.post(event);

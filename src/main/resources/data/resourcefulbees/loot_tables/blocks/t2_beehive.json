@@ -33,6 +33,11 @@
                       "source": "Bees",
                       "target": "BlockEntityTag.Bees",
                       "op": "replace"
+                    },
+                    {
+                      "source": "Honeycombs",
+                      "target": "BlockEntityTag.Honeycombs",
+                      "op": "replace"
                     }
                   ]
                 },

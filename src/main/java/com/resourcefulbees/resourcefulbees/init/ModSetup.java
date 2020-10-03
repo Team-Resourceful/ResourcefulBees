@@ -2,6 +2,7 @@ package com.resourcefulbees.resourcefulbees.init;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.block.TieredBeehiveBlock;
+import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
 import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
 import net.minecraft.block.BeehiveBlock;
 import net.minecraft.block.BlockState;
@@ -121,8 +122,7 @@ public class ModSetup {
                                 }
 
                                 TieredBeehiveBlock.dropResourceHoneycomb((TieredBeehiveBlock) blockstate.getBlock(), world, blockpos, false);
-                                ((BeehiveBlock) blockstate.getBlock()).takeHoney(world, blockstate, blockpos, null,
-                                        BeehiveTileEntity.State.BEE_RELEASED);
+                                ((BeehiveBlock) blockstate.getBlock()).takeHoney(world, blockstate, blockpos, null, BeehiveTileEntity.State.BEE_RELEASED);
                                 this.setSuccess(true);
                             }
                         } else if (blockstate.isIn(BlockTags.BEEHIVES)) {
@@ -139,6 +139,33 @@ public class ModSetup {
                         }
                     }
                 }
+                return stack;
+            }
+        });
+
+        DispenserBlock.registerDispenseBehavior(RegistryHandler.SCRAPER.get(), new OptionalDispenseBehavior() {
+            @Nonnull
+            protected ItemStack dispenseStack(@Nonnull IBlockSource source, @Nonnull ItemStack stack) {
+                ServerWorld world = source.getWorld();
+                if (!world.isRemote()) {
+                    this.setSuccess(false);
+                    BlockPos blockpos = source.getBlockPos().offset(source.getBlockState().get(DispenserBlock.FACING));
+                    BlockState blockstate = world.getBlockState(blockpos);
+                    if (blockstate.getBlock() instanceof TieredBeehiveBlock) {
+                        int i = blockstate.get(BeehiveBlock.HONEY_LEVEL);
+                        if (i >= 5) {
+                            if (stack.attemptDamageItem(1, world.rand, null)) {
+                                stack.setCount(0);
+                            }
+
+                            if (TieredBeehiveBlock.dropResourceHoneycomb((TieredBeehiveBlock) blockstate.getBlock(), world, blockpos, true)) {
+                                ((BeehiveBlock) blockstate.getBlock()).takeHoney(world, blockstate, blockpos, null, BeehiveTileEntity.State.BEE_RELEASED);
+                            }
+                            this.setSuccess(true);
+                        }
+                    }
+                }
+
                 return stack;
             }
         });

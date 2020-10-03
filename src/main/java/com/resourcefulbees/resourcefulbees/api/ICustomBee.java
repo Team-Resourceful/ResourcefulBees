@@ -1,6 +1,7 @@
 package com.resourcefulbees.resourcefulbees.api;
 
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
+import net.minecraft.entity.AgeableEntity;
 
 public interface ICustomBee {
 
@@ -36,5 +37,5 @@ public interface ICustomBee {
     void addFeedCount();
 
 
-    ICustomBee createSelectedChild(CustomBeeData beeType);
+    AgeableEntity createSelectedChild(CustomBeeData beeType);
 }
