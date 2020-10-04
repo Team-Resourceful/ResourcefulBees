@@ -28,8 +28,8 @@ public class HoneyGeneratorContainer extends Container {
 
         honeyGeneratorTileEntity = (HoneyGeneratorTileEntity) world.getTileEntity(pos);
 
-        this.trackInt(new FunctionalIntReferenceHolder(() -> honeyGeneratorTileEntity.time, v -> honeyGeneratorTileEntity.time = v));
-        this.trackInt(new FunctionalIntReferenceHolder(() -> honeyGeneratorTileEntity.energyTime, v -> honeyGeneratorTileEntity.energyTime = v));
+        this.trackInt(new FunctionalIntReferenceHolder(() -> honeyGeneratorTileEntity.fluidFilled, v -> honeyGeneratorTileEntity.fluidFilled = v));
+        this.trackInt(new FunctionalIntReferenceHolder(() -> honeyGeneratorTileEntity.energyFilled, v -> honeyGeneratorTileEntity.energyFilled = v));
         this.trackInt(new FunctionalIntReferenceHolder(() -> honeyGeneratorTileEntity.fluidTank.getFluidAmount(), v -> honeyGeneratorTileEntity.fluidTank.setFluid(new FluidStack(FluidRegistry.HONEY_FLUID.get(), v))));
         this.trackInt(new FunctionalIntReferenceHolder(() -> honeyGeneratorTileEntity.energyStorage.getEnergyStored(), v -> honeyGeneratorTileEntity.energyStorage.setEnergy(v)));
 
@@ -59,9 +59,9 @@ public class HoneyGeneratorContainer extends Container {
 
     public int getMaxFluid() { return honeyGeneratorTileEntity.fluidTank.getCapacity(); }
 
-    public int getTime() { return honeyGeneratorTileEntity.time; }
+    public int getTime() { return honeyGeneratorTileEntity.fluidFilled; }
 
-    public int getEnergyTime() { return honeyGeneratorTileEntity.energyTime; }
+    public int getEnergyTime() { return honeyGeneratorTileEntity.energyFilled; }
     
     /**
      * Determines whether supplied player can use this container

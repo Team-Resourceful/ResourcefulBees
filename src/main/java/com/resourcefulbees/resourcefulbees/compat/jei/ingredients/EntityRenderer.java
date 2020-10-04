@@ -9,6 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.BeeEntity;
 import net.minecraft.util.math.vector.Vector3f;
@@ -28,26 +29,29 @@ public class EntityRenderer implements IIngredientRenderer<EntityIngredient> {
             CustomBeeData beeData = BeeRegistry.getRegistry().getBeeData(entityIngredient.getBeeType());
             EntityType<?> entityType = entityIngredient.getBeeType().equals(BeeConstants.VANILLA_BEE_TYPE) ? EntityType.BEE : ForgeRegistries.ENTITIES.getValue(beeData.getEntityTypeRegistryID());
             if (entityType != null) {
-                BeeEntity beeEntity = (BeeEntity) entityType.create(Minecraft.getInstance().world);
-                Minecraft mc = Minecraft.getInstance();
-                matrixStack.push();
-                matrixStack.translate(8, 14, 0.5D);
+                Entity entity = entityType.create(Minecraft.getInstance().world);
+                if (entity instanceof BeeEntity) {
+                    BeeEntity beeEntity = (BeeEntity) entity;
+                    Minecraft mc = Minecraft.getInstance();
+                    matrixStack.push();
+                    matrixStack.translate(8, 14, 0.5D);
 
-                if (mc.player != null && beeEntity != null) {
-                    beeEntity.ticksExisted = mc.player.ticksExisted;
-                    beeEntity.renderYawOffset = entityIngredient.getRotation() - 90;
-                    float scaledSize = entityIngredient.getBeeType().equals(BeeConstants.VANILLA_BEE_TYPE) ? 20 : 20 / beeData.getSizeModifier();
-                    matrixStack.translate(x, y, 1);
-                    matrixStack.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(180.0F));
-                    matrixStack.translate(0.0F, -0.2F, 1);
-                    matrixStack.scale(-scaledSize, scaledSize, 30);
-                    matrixStack.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(270.0F));
-                    EntityRendererManager entityrenderermanager = mc.getRenderManager();
-                    IRenderTypeBuffer.Impl irendertypebuffer$impl = mc.getBufferBuilders().getEntityVertexConsumers();
-                    entityrenderermanager.render(beeEntity, 0, 0, 0.0D, mc.getRenderPartialTicks(), 1, matrixStack, irendertypebuffer$impl, 15728880);
-                    irendertypebuffer$impl.draw();
+                    if (mc.player != null) {
+                        beeEntity.ticksExisted = mc.player.ticksExisted;
+                        beeEntity.renderYawOffset = entityIngredient.getRotation() - 90;
+                        float scaledSize = entityIngredient.getBeeType().equals(BeeConstants.VANILLA_BEE_TYPE) ? 20 : 20 / beeData.getSizeModifier();
+                        matrixStack.translate(x, y, 1);
+                        matrixStack.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(180.0F));
+                        matrixStack.translate(0.0F, -0.2F, 1);
+                        matrixStack.scale(-scaledSize, scaledSize, 30);
+                        matrixStack.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(270.0F));
+                        EntityRendererManager entityrenderermanager = mc.getRenderManager();
+                        IRenderTypeBuffer.Impl irendertypebuffer$impl = mc.getBufferBuilders().getEntityVertexConsumers();
+                        entityrenderermanager.render(beeEntity, 0, 0, 0.0D, mc.getRenderPartialTicks(), 1, matrixStack, irendertypebuffer$impl, 15728880);
+                        irendertypebuffer$impl.draw();
+                    }
+                    matrixStack.pop();
                 }
-                matrixStack.pop();
             }
         }
     }

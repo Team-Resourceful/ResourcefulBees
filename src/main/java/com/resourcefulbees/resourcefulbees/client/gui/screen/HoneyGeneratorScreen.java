@@ -33,9 +33,9 @@ public class HoneyGeneratorScreen extends ContainerScreen<HoneyGeneratorContaine
             this.drawTexture(matrix, i + 130, j + 12 + (62-scaledRF), 215, (62-scaledRF), 11, scaledRF);
             int scaledTank = 62 * this.container.getFluid() / Math.max(this.container.getMaxFluid(),1);
             this.drawTexture(matrix, i + 83, j + 12 + (62-scaledTank), 226, (62-scaledTank), 14, scaledTank);
-            int scaledProgressX = 21 * this.container.getTime() / Math.max(HoneyGeneratorTileEntity.TOTAL_TIME,1);
-            int scaledProgressY = 20 * this.container.getTime() / Math.max(HoneyGeneratorTileEntity.TOTAL_TIME,1);
-            int energyScaledProgressX = 21 * this.container.getEnergyTime() / Math.max(HoneyGeneratorTileEntity.ENERGY_TOTAL_TIME,1);
+            int scaledProgressX = 21 * this.container.getTime() / Math.max(HoneyGeneratorTileEntity.HONEY_PER_BOTTLE,1);
+            int scaledProgressY = 20 * this.container.getTime() / Math.max(HoneyGeneratorTileEntity.HONEY_PER_BOTTLE,1);
+            int energyScaledProgressX = 21 * this.container.getEnergyTime() / Math.max(HoneyGeneratorTileEntity.ENERGY_PER_BOTTLE,1);
             this.drawTexture(matrix, i + 35, j + 37, 176, 0, 18, scaledProgressY);
             this.drawTexture(matrix, i + 57, j + 42, 194, 0, scaledProgressX, 10);
             this.drawTexture(matrix, i + 103, j + 42, 194, 0, energyScaledProgressX, 10);
