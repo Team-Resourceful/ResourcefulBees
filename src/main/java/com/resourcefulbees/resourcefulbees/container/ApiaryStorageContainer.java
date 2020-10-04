@@ -1,6 +1,7 @@
 package com.resourcefulbees.resourcefulbees.container;
 
 import com.resourcefulbees.resourcefulbees.item.UpgradeItem;
+import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryStorageTileEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -45,13 +46,9 @@ public class ApiaryStorageContainer extends Container {
             this.inventorySlots.clear();
             numberOfSlots = apiaryStorageTileEntity.numberOfSlots;
             this.addSlot(new SlotItemHandlerUnconditioned(apiaryStorageTileEntity.h, ApiaryStorageTileEntity.UPGRADE_SLOT, 7, 18) {
-                public int getSlotStackLimit() {
-                    return 1;
-                }
+                public int getSlotStackLimit() { return 1; }
 
-                public boolean isItemValid(ItemStack stack) {
-                    return stack.getItem() instanceof UpgradeItem;
-                }
+                public boolean isItemValid(ItemStack stack) { return UpgradeItem.hasUpgradeData(stack) && (UpgradeItem.getUpgradeType(stack).contains(NBTConstants.NBT_STORAGE_UPGRADE)); }
 
                 public boolean canTakeStack(PlayerEntity playerIn) {
                     boolean flag = true;

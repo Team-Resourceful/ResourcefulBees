@@ -18,28 +18,11 @@ apply plugin: 'org.spongepowered.mixin'
 
 repositories {
     //mappings
-    maven {
-        url 'https://www.dogforce-games.com/maven/'
-    }
-
+    maven { url "https://www.dogforce-games.com/maven/" }
     maven { url "https://maven.tterrag.com/" }
-    maven {
-        // location of the maven that hosts JEI files
-        name = "Progwml6 maven"
-        url = "https://dvs1.progwml6.com/files/maven/"
-    }
-
-    maven { url 'https://maven.blamejared.com' }
-
-    maven {
-        // location of a maven mirror for JEI files, as a fallback
-        name = "ModMaven"
-        url = "https://modmaven.k-4u.nl"
-    }
-    maven { // TOP
-        name 'tterrag maven'
-        url "https://maven.tterrag.com/"
-    }
+    maven { url "https://maven.blamejared.com" }
+    maven { url "https://dvs1.progwml6.com/files/maven/" }
+    maven { url "https://modmaven.k-4u.nl" }
 }
 
 version = "${mod_version}"
@@ -113,8 +96,8 @@ mixin {
 dependencies {
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}" //21
 
-    compileOnly fg.deobf("mezz.jei:jei-1.16.2:${jei_version}:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-1.16.2:${jei_version}")
+    compileOnly fg.deobf("mezz.jei:jei-1.16.3:${jei_version}:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-1.16.3:${jei_version}")
 
     compileOnly fg.deobf ("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}:api")
     runtime fg.deobf ("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}")
