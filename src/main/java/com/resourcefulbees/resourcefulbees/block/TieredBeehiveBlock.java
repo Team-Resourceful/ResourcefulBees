@@ -169,7 +169,8 @@ public class TieredBeehiveBlock extends BeehiveBlock {
                         if (blockEntityTag.contains("Bees", Constants.NBT.TAG_LIST)) {
                             HashMap<String, Integer> bees = new HashMap<>();
 
-                            tooltip.add(new TranslationTextComponent("block.resourcefulbees.beehive.tooltip.bees"));
+                            tooltip.add(new TranslationTextComponent("block.resourcefulbees.beehive.tooltip.bees")
+                                    .formatted(TextFormatting.AQUA, TextFormatting.RESET));
                             ListNBT beeList = blockEntityTag.getList(NBTConstants.NBT_BEES, Constants.NBT.TAG_COMPOUND);
 
                             for (int i = 0; i < beeList.size(); i++) {
@@ -184,12 +185,15 @@ public class TieredBeehiveBlock extends BeehiveBlock {
                             }
 
                             bees.forEach((name, count) -> tooltip.add(new StringTextComponent("     ")
-                                    .append(name).append(" - ").append(String.valueOf(count)).append("x")));
+                                    .append(String.valueOf(count))
+                                    .append("x ")
+                                    .append(WordUtils.capitalize(name))));
                         }
 
                         if (blockEntityTag.contains(NBTConstants.NBT_HONEYCOMBS_TE, Constants.NBT.TAG_LIST)) {
                             HashMap<String, Integer> combs = new HashMap<>();
-                            tooltip.add(new TranslationTextComponent("block.resourcefulbees.beehive.tooltip.honeycombs"));
+                            tooltip.add(new TranslationTextComponent("block.resourcefulbees.beehive.tooltip.honeycombs")
+                                    .formatted(TextFormatting.AQUA, TextFormatting.RESET));
                             ListNBT combList = blockEntityTag.getList(NBTConstants.NBT_HONEYCOMBS_TE, Constants.NBT.TAG_COMPOUND);
 
                             for (int i = 0; i < combList.size(); i++) {
@@ -199,37 +203,17 @@ public class TieredBeehiveBlock extends BeehiveBlock {
                             }
 
                             combs.forEach((comb, count) -> tooltip.add(new StringTextComponent("     ")
-                                    .append(comb).append(" - ").append(String.valueOf(count)).append("x")));
+                                    .append(String.valueOf(count))
+                                    .append("x ")
+                                    .append(WordUtils.capitalize(comb))));
                         }
                     }
-
-
-
-
-/*                    HashMap<Item, Integer> combs = new HashMap<>();
-                    int columnCount = 0;
-                    tieredBeehiveTileEntity.honeycombs.forEach(comb -> combs.merge(comb.getItem(), 1, Integer::sum));
-                    horizontal = vertical.horizontal(probeInfo.defaultLayoutStyle().spacing(10).alignment(ElementAlignment.ALIGN_CENTER));
-                    for (Map.Entry<Item, Integer> entry : combs.entrySet()) {
-                        if (columnCount == 7) {
-                            horizontal = vertical.horizontal(probeInfo.defaultLayoutStyle().spacing(10).alignment(ElementAlignment.ALIGN_CENTER));
-                            columnCount = 0;
-                        }
-                        horizontal.item(new ItemStack(entry.getKey(), entry.getValue()));
-                        columnCount++;
-                    }
-                }*/
-
-
-
-
-
-
-
-
-
-
                 }
+            } else {
+                tooltip.add(new TranslationTextComponent("block.resourcefulbees.beehive.tooltip.bees")
+                        .formatted(TextFormatting.AQUA, TextFormatting.RESET));
+                tooltip.add(new TranslationTextComponent("block.resourcefulbees.beehive.tooltip.honeycombs")
+                        .formatted(TextFormatting.AQUA, TextFormatting.RESET));
             }
         } else {
             tooltip.add(new StringTextComponent(TextFormatting.YELLOW + I18n.format("resourcefulbees.shift_info")));
