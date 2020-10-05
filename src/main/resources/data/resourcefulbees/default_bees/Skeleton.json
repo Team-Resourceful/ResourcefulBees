@@ -1,5 +1,5 @@
 {
-  "flower": "minecraft:wither_rose",
+  "flower": "small",
   "maxTimeInHive": 600,
   "hasHoneycomb": true,
   "baseLayerTexture": "skeleton/skeleton_bee",

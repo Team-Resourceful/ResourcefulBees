@@ -136,7 +136,7 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
 
     public boolean validateApiaryLink() {
         apiary = getApiary();
-        if (apiary == null || apiary.breederPos == null || !apiary.breederPos.equals(this.getPos()) || !apiary.isValidApiary()) { //check apiary has storage location equal to this and apiary is valid
+        if (apiary == null || apiary.breederPos == null || !apiary.breederPos.equals(this.getPos()) || !apiary.isValidApiary(false)) { //check apiary has storage location equal to this and apiary is valid
             apiaryPos = null; //if not set these to null
             return false;
         }

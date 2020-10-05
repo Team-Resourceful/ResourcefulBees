@@ -106,7 +106,7 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
     @SuppressWarnings("UnusedReturnValue")
     public boolean validateApiaryLink() {
         apiary = getApiary();
-        if (apiary == null || apiary.storagePos == null || !apiary.storagePos.equals(this.getPos()) || !apiary.isValidApiary()) { //check apiary has storage location equal to this and apiary is valid
+        if (apiary == null || apiary.storagePos == null || !apiary.storagePos.equals(this.getPos()) || !apiary.isValidApiary(false)) { //check apiary has storage location equal to this and apiary is valid
             apiaryPos = null; //if not set these to null
             return false;
         }

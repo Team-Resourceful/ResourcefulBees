@@ -160,7 +160,6 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
             List<ItemStack> stackList = (List<ItemStack>) new Ingredient.TagList(recipe.p2_feedTag).getStacks();
             stackList.forEach(itemStack -> itemStack.setCount(recipe.p2_feedAmount));
             list.add(stackList);
-            list.add(stackList);
         }
 
         ingredients.setInputLists(VanillaTypes.ITEM, list);

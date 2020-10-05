@@ -25,7 +25,7 @@ public class OreoBee {
                 new SpawnData.Builder(true)
                         .setSpawnWeight(6)
                         .setBiomeWhitelist("tag:rare")
-                        .setLightLevel(LightLevels.ANY)
+                        .setLightLevel(LightLevels.DAY)
                         .setMinGroupSize(1)
                         .setMaxGroupSize(1)
                         .createSpawnData(),
