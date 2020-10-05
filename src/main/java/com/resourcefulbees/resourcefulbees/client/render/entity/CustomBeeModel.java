@@ -3,6 +3,7 @@ package com.resourcefulbees.resourcefulbees.client.render.entity;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import net.minecraft.client.renderer.entity.model.AgeableModel;
 import net.minecraft.client.renderer.entity.model.ModelUtils;
@@ -140,8 +141,7 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
         }
 
         beeSize = entityIn.getBeeData().getSizeModifier();
-        if(isChild)
-            beeSize /= 2;
+        if (isChild) beeSize *= Config.CHILD_SIZE_MODIFIER.get();
     }
 
     @Nonnull

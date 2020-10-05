@@ -46,6 +46,7 @@ public class Config {
     public static ForgeConfigSpec.IntValue SMOKER_DURABILITY;
 
     public static ForgeConfigSpec.DoubleValue BEE_SIZE_MODIFIER;
+    public static ForgeConfigSpec.DoubleValue CHILD_SIZE_MODIFIER;
 
     public static ForgeConfigSpec.BooleanValue BEE_DIES_FROM_STING;
 
@@ -135,16 +136,18 @@ public class Config {
             GENERATE_BEE_NESTS = COMMON_BUILDER.comment("\nShould bee nests generate in world? \nNote: They will only generate in biomes where bees can spawn")
                     .define("generateBeeNests", true);
             OVERWORLD_NEST_GENERATION_CHANCE = COMMON_BUILDER.comment("\nChance for nest to spawn when generating chunks in overworld category biomes. [1/x]\nA higher value means the nest is less likely to spawn.")
-                    .defineInRange("bee_nest_generation_chance", 48, 4, 100);
+                    .defineInRange("overworld_nest_generation_chance", 48, 4, 100);
             NETHER_NEST_GENERATION_CHANCE = COMMON_BUILDER.comment("\nChance for nest to spawn when generating chunks in nether category biomes. [1/x]\nA higher value means the nest is less likely to spawn.")
-                    .defineInRange("bee_nest_generation_chance", 8, 4, 100);
+                    .defineInRange("nether_nest_generation_chance", 8, 4, 100);
             END_NEST_GENERATION_CHANCE = COMMON_BUILDER.comment("\nChance for nest to spawn when generating chunks in end category biomes. [1/x]\nA higher value means the nest is less likely to spawn.")
-                    .defineInRange("bee_nest_generation_chance", 32, 4, 100);
+                    .defineInRange("end_nest_generation_chance", 32, 4, 100);
             COMMON_BUILDER.pop();
 
             COMMON_BUILDER.push("Bee Options");
             BEE_SIZE_MODIFIER = COMMON_BUILDER.comment("\nThis value scales the bee size for all Resource Bees. \nNote: Setting the value in bee JSON overrides this value.")
                     .defineInRange("global_bee_size_modifier", 1.0, 0.5, 2.0);
+            CHILD_SIZE_MODIFIER = COMMON_BUILDER.comment("\nThis value scales the child size for all Resource Bees.")
+                    .defineInRange("global_child_size_modifier", 1.0, 1.0, 2.0);
             BEE_DIES_FROM_STING = COMMON_BUILDER.comment("\nShould bees die from stinging?\nNote: Bees will continue to attack until they are no longer angry!")
                     .define("beeDiesFromSting", true);
             BEES_DIE_IN_VOID = COMMON_BUILDER.comment("\nShould bees die when their Y-level is below 0?\nNote: If false, bees will get stuck just below y-0 and not move.")
@@ -153,9 +156,9 @@ public class Config {
 
             COMMON_BUILDER.push("Honeycomb Options");
             HONEYCOMB_HUNGER = COMMON_BUILDER.comment("\nThe amount of hunger restored when eating a honeycomb.")
-                    .defineInRange("honeycombHunger", 1, 0, 4);
+                    .defineInRange("honeycombHunger", 1, 0, 8);
             HONEYCOMB_SATURATION = COMMON_BUILDER.comment("\nThe amount of saturation restored when eating a honeycomb.")
-                    .defineInRange("honeycombSaturation", 0.5, 0, 4.0);
+                    .defineInRange("honeycombSaturation", 0.6, 0, 8.0);
             COMMON_BUILDER.pop();
 
             COMMON_CONFIG = COMMON_BUILDER.build();

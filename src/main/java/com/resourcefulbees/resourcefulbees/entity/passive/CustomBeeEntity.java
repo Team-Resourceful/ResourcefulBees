@@ -2,10 +2,12 @@ package com.resourcefulbees.resourcefulbees.entity.passive;
 
 import com.resourcefulbees.resourcefulbees.api.ICustomBee;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
+import com.resourcefulbees.resourcefulbees.api.beedata.SpawnData;
 import com.resourcefulbees.resourcefulbees.api.beedata.TraitData;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
+import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.validation.ValidatorUtils;
 import net.minecraft.entity.*;
@@ -116,29 +118,28 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
     }
 
     public static boolean canBeeSpawn(EntityType<? extends AgeableEntity> typeIn, IWorld worldIn, SpawnReason reason, BlockPos pos, Random randomIn) {
+        String namespaceID = EntityType.getKey(typeIn).toString();
+        String beeType = namespaceID.substring(namespaceID.lastIndexOf(":") + 1, namespaceID.length() - 4);
+        SpawnData spawnData = BeeRegistry.getRegistry().getBeeData(beeType).getSpawnData();
 
-
-        //TODO figure out how to get the Spawn Data object in here!!!
-
-/*            SpawnData spawnData = ((ICustomBee) typeIn).getBeeData().getSpawnData();
-
-            switch (reason) {
-                case NATURAL:
-                case CHUNK_GENERATION:
-                    if (spawnData.canSpawnInWorld()) {
-                        switch (spawnData.getLightLevel()) {
-                            case DAY:
-                                return worldIn.getLight(pos) >= 8;
-                            case NIGHT:
-                                return worldIn.getLight(pos) <= 7;
-                            case ANY:
-                                return true;
-                        }
+        switch (reason) {
+            case NATURAL:
+            case CHUNK_GENERATION:
+            case BREEDING:
+                if (spawnData.canSpawnInWorld()) {
+                    switch (spawnData.getLightLevel()) {
+                        case DAY:
+                            return worldIn.getLight(pos) >= 8;
+                        case NIGHT:
+                            return worldIn.getLight(pos) <= 7;
+                        case ANY:
+                            return true;
                     }
-                    break;
-                default:
-                    return true;
-            }*/
+                }
+                break;
+            default:
+                return true;
+        }
 
         return true;
     }
@@ -230,10 +231,12 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
         return ActionResultType.FAIL;
     }
 
+
+
     @Nonnull
     @Override
     public EntitySize getSize(@Nonnull Pose poseIn) {
-        float scale = beeData.getSizeModifier();
+        float scale = this.isChild() ? Config.CHILD_SIZE_MODIFIER.get().floatValue() : beeData.getSizeModifier();
         return super.getSize(poseIn).scale(scale);
     }
 

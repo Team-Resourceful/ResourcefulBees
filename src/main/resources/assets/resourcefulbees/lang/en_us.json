@@ -175,6 +175,7 @@
 	"item.resourcefulbees.zombie_bee_spawn_egg": "Zombie Bee Spawn Egg",
 	"item.resourcefulbees.netherite_bee_spawn_egg": "Netherite Bee Spawn Egg",
 	"item.resourcefulbees.rgbee_bee_spawn_egg": "RGBee Spawn Egg",
+	"item.resourcefulbees.oreo_bee_spawn_egg": "Oreo Bee Spawn Egg",
 
 	"entity.resourcefulbees.gold_bee": "Gold Bee",
 	"entity.resourcefulbees.iron_bee": "Iron Bee",
@@ -208,5 +209,7 @@
 	"block.resourcefulbees.centrifuge.tooltip.requisites": "The controller must be the one block up from the bottom in the center of any face.",
 	"block.resourcefulbees.centrifuge.tooltip.capabilities": "Any block in the multiblock will import/export items and energy",
 	"block.resourcefulbees.beehive.tooltip.bees": "Bees:",
-	"block.resourcefulbees.beehive.tooltip.honeycombs": "Honeycombs:"
+	"block.resourcefulbees.beehive.tooltip.honeycombs": "Honeycombs:",
+
+	"book.resourcefulbee.name": "Fifty Shades of Bees"
 }

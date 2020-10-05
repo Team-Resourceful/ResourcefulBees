@@ -41,6 +41,7 @@ public class HoneycombItem extends Item {
         return new Food.Builder()
                 .hunger(Config.HONEYCOMB_HUNGER.get())
                 .saturation(Config.HONEYCOMB_SATURATION.get().floatValue())
+                .fastToEat()
                 .build();
     }
 }

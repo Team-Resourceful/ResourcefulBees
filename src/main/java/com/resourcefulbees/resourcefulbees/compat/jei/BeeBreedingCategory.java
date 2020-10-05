@@ -1,9 +1,9 @@
 package com.resourcefulbees.resourcefulbees.compat.jei;
 
-import com.google.common.collect.Lists;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.IBeeRegistry;
+import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.compat.jei.ingredients.EntityIngredient;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
@@ -25,14 +25,14 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tags.ITag;
+import net.minecraft.tags.TagCollectionManager;
 import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nonnull;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import static com.resourcefulbees.resourcefulbees.lib.BeeConstants.*;
@@ -59,28 +59,34 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
             if (beeData.getBreedData().isBreedable()) {
                 if (beeData.getBreedData().hasParents()){
                     if (beeRegistry.getBees().containsKey(beeData.getBreedData().getParent1()) && beeRegistry.getBees().containsKey(beeData.getBreedData().getParent2())) {
-                        String parent1 = beeData.getBreedData().getParent1();
-                        String parent2 = beeData.getBreedData().getParent2();
+                        CustomBeeData p1_data = beeRegistry.getBeeData(beeData.getBreedData().getParent1());
+                        CustomBeeData p2_data = beeRegistry.getBeeData(beeData.getBreedData().getParent2());
 
-                        int p1_feedAmount = beeRegistry.getBeeData(parent1).getBreedData().getFeedAmount();
-                        int p2_feedAmount = beeRegistry.getBeeData(parent2).getBreedData().getFeedAmount();
+                        String p1_feedItemS = finalizeFeedItem(p1_data.getBreedData().getFeedItem());
+                        String p2_feedItemS = finalizeFeedItem(p2_data.getBreedData().getFeedItem());
 
-                        String p1_feedItemS = finalizeFeedItem(beeRegistry.getBeeData(parent1).getBreedData().getFeedItem());
-                        String p2_feedItemS = finalizeFeedItem(beeRegistry.getBeeData(parent2).getBreedData().getFeedItem());
+                        ITag<Item> p1_feedTag = TagCollectionManager.getTagManager().getItems().get(new ResourceLocation(p1_feedItemS));
+                        ITag<Item> p2_feedTag = TagCollectionManager.getTagManager().getItems().get(new ResourceLocation(p2_feedItemS));
 
-                        ITag<Item> p1_feedTag = BeeInfoUtils.getItemTag(p1_feedItemS);
-                        ITag<Item> p2_feedTag = BeeInfoUtils.getItemTag(p2_feedItemS);
                         Item p1_feedItem = BeeInfoUtils.getItem(p1_feedItemS);
                         Item p2_feedItem = BeeInfoUtils.getItem(p2_feedItemS);
 
-                        recipes.add(new Recipe(parent1, p1_feedTag, p1_feedItem, p1_feedAmount, parent2, p2_feedTag, p2_feedItem, p2_feedAmount, beeData.getName()));
+                        if (BeeInfoUtils.isTag(p1_data.getBreedData().getFeedItem())) p1_feedItem = null;
+                        if (BeeInfoUtils.isTag(p2_data.getBreedData().getFeedItem())) p2_feedItem = null;
+
+                        recipes.add(new Recipe(
+                                p1_data.getName(), p1_feedTag, p1_feedItem, p2_data.getBreedData().getFeedAmount(),
+                                p2_data.getName(), p2_feedTag, p2_feedItem, p2_data.getBreedData().getFeedAmount(),
+                                beeData.getName()));
                     }
                 }
-                int feedAmount = beeRegistry.getBeeData(beeData.getName()).getBreedData().getFeedAmount();
-                String feedItemS = finalizeFeedItem(beeRegistry.getBeeData(beeData.getName()).getBreedData().getFeedItem());
+                int feedAmount = beeData.getBreedData().getFeedAmount();
+                String feedItemS = finalizeFeedItem(beeData.getBreedData().getFeedItem());
 
-                ITag<Item> feedTag = BeeInfoUtils.getItemTag(feedItemS);
+                ITag<Item> feedTag = TagCollectionManager.getTagManager().getItems().get(new ResourceLocation(feedItemS));
                 Item feedItem = BeeInfoUtils.getItem(feedItemS);
+
+                if (BeeInfoUtils.isTag(beeData.getBreedData().getFeedItem())) feedItem = null;
 
                 recipes.add(new Recipe(beeData.getName(), feedTag, feedItem, feedAmount, beeData.getName(), feedTag, feedItem, feedAmount, beeData.getName()));
             }
@@ -90,13 +96,13 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
 
     private static String finalizeFeedItem(String feedItem) {
         if (ValidatorUtils.TAG_RESOURCE_PATTERN.matcher(feedItem).matches()) {
-            feedItem = feedItem.replace(BeeConstants.TAG_PREFIX, "");
-        } else if (feedItem.equals(FLOWER_TAG_ALL)) {
-            feedItem = "minecraft:flowers";
+            return feedItem.replace(BeeConstants.TAG_PREFIX, "");
         } else if (feedItem.equals(FLOWER_TAG_TALL)) {
-            feedItem = "minecraft:tall_flowers";
+            return "minecraft:tall_flowers";
         } else if (feedItem.equals(FLOWER_TAG_SMALL)) {
-            feedItem = "minecraft:small_flowers";
+            return "minecraft:small_flowers";
+        } else if (feedItem.equals(FLOWER_TAG_ALL)) {
+            return "minecraft:flowers";
         }
         return feedItem;
     }
@@ -146,17 +152,14 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
             list.add(stackList);
         }
         if (recipe.p1_feedTag != null) {
-            List<ItemStack> stackList = new ArrayList<>();
-            for (Item item : recipe.p1_feedTag.values()) {
-                stackList.add(new ItemStack(item, recipe.p1_feedAmount));
-            }
+            List<ItemStack> stackList = (List<ItemStack>) new Ingredient.TagList(recipe.p1_feedTag).getStacks();
+            stackList.forEach(itemStack -> itemStack.setCount(recipe.p1_feedAmount));
             list.add(stackList);
         }
         if (recipe.p2_feedTag != null) {
-            List<ItemStack> stackList = new ArrayList<>();
-            for (Item item : recipe.p2_feedTag.values()) {
-                stackList.add(new ItemStack(item, recipe.p2_feedAmount));
-            }
+            List<ItemStack> stackList = (List<ItemStack>) new Ingredient.TagList(recipe.p2_feedTag).getStacks();
+            stackList.forEach(itemStack -> itemStack.setCount(recipe.p2_feedAmount));
+            list.add(stackList);
             list.add(stackList);
         }
 

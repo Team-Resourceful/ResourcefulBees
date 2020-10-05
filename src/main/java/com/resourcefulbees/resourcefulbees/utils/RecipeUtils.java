@@ -36,6 +36,4 @@ public class RecipeUtils {
             return itemstack;
         }
     }
-
-
 }

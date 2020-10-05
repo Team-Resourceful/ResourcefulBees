@@ -5,6 +5,7 @@ import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.BiomeDictionary;
+import com.resourcefulbees.resourcefulbees.utils.validation.ValidatorUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.fluid.Fluid;
@@ -23,6 +24,8 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+
+import static com.resourcefulbees.resourcefulbees.lib.BeeConstants.*;
 
 public class BeeInfoUtils {
 
@@ -118,5 +121,15 @@ public class BeeInfoUtils {
 
     public static ITag<Block> getValidApiaryTag() {
         return BlockTags.makeWrapperTag("resourcefulbees:valid_apiary");
+    }
+
+    public static boolean isTag(String input) {
+        if (ValidatorUtils.TAG_RESOURCE_PATTERN.matcher(input).matches()) {
+            return true;
+        } else if (input.equals(FLOWER_TAG_TALL)) {
+            return true;
+        } else if (input.equals(FLOWER_TAG_SMALL)) {
+            return true;
+        } else return input.equals(FLOWER_TAG_ALL);
     }
 }

@@ -56,8 +56,9 @@ public class BeeNestFeature extends Feature<NoFeatureConfig> {
 
         if (category == Biome.Category.NETHER) {
             y = MathUtils.nextIntInclusive(32, 100);
-            newPos = new BlockPos(pos.getX(), y, pos.getZ());
-            while (worldIn.isAirBlock(newPos.down())){
+            newPos = new BlockPos(pos.getX(), y, pos.getZ())
+                    .south(rand.nextInt(15)).east(rand.nextInt(15));
+            while (worldIn.isAirBlock(newPos.down())) {
                 newPos = newPos.down();
             }
             while (!worldIn.isAirBlock(newPos)) {

@@ -28,11 +28,11 @@ public class BreedData extends AbstractBeeData {
 
     public String getParent2() { return parent2 != null ? parent2.toLowerCase() : ""; }
 
-    public String getFeedItem() { return feedItem != null ? feedItem : BeeConstants.FLOWER_TAG_ALL; }
+    public String getFeedItem() { return feedItem != null ? feedItem.toLowerCase() : BeeConstants.FLOWER_TAG_ALL; }
 
     public int getFeedAmount() { return Math.max(1, feedAmount); }
 
-    public boolean hasParents() { return parent1 != null && parent2 != null && !parent1.isEmpty() && !parent2.isEmpty(); }
+    public boolean hasParents() { return !getParent1().isEmpty() && !getParent2().isEmpty(); }
 
     public static class Builder {
         private final boolean isBreedable;
@@ -41,9 +41,7 @@ public class BreedData extends AbstractBeeData {
         private String feedItem;
         private int feedAmount;
 
-        public Builder(boolean isBreedable) {
-            this.isBreedable = isBreedable;
-        }
+        public Builder(boolean isBreedable) { this.isBreedable = isBreedable; }
 
         public Builder setBreedWeight(double breedWeight) {
             this.breedWeight = breedWeight;

@@ -53,7 +53,7 @@ public class BiomeParser {
     }
 
     private static String buildReturnString(Set<ResourceLocation> whitelist, Set<ResourceLocation> blacklist, CustomBeeData bee) {
-        StringJoiner returnList = new StringJoiner(",");
+        StringJoiner returnList = new StringJoiner(", ");
         whitelist.stream()
                 .filter(resourceLocation -> !blacklist.contains(resourceLocation))
                 .forEach(resourceLocation -> returnList.add(WordUtils.capitalize(resourceLocation.getPath().replaceAll("_"," "))));

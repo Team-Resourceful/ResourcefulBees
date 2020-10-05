@@ -54,8 +54,8 @@ public class MechanicalCentrifugeBlock extends Block {
         if (!world.isRemote) {
             INamedContainerProvider blockEntity = state.getContainer(world, pos);
             MechanicalCentrifugeTileEntity tile = (MechanicalCentrifugeTileEntity)world.getTileEntity(pos);
-            if (player.isCrouching() && !(player instanceof FakePlayer)){
-                if (tile !=null && tile.canProcess(tile.getRecipe())) {
+            if (player.isSneaking() && !(player instanceof FakePlayer)) {
+                if (tile != null && tile.canProcess(tile.getRecipe())) {
                     player.addExhaustion(Config.PLAYER_EXHAUSTION.get().floatValue());
                     tile.clicks++;
                     if (state.get(PROPERTY_ROTATION) == 7)
@@ -63,8 +63,7 @@ public class MechanicalCentrifugeBlock extends Block {
                     world.playSound(null, pos, SoundEvents.BLOCK_FENCE_GATE_CLOSE, SoundCategory.BLOCKS, 0.5F, 0.1F);
                     world.setBlockState(pos, state.with(PROPERTY_ROTATION, state.get(PROPERTY_ROTATION) == 7 ? 0 : state.get(PROPERTY_ROTATION) + 1), 3);
                 }
-            }
-            else if (blockEntity != null) {
+            } else if (blockEntity != null) {
                 NetworkHooks.openGui((ServerPlayerEntity) player, blockEntity, pos);
             }
         }

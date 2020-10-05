@@ -15,6 +15,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.passive.BeeEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -37,6 +38,7 @@ import net.minecraft.world.GameRules;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.common.util.FakePlayer;
 import org.apache.commons.lang3.text.WordUtils;
 
 import javax.annotation.Nonnull;
@@ -67,6 +69,13 @@ public class TieredBeehiveBlock extends BeehiveBlock {
      */
     public static boolean dropResourceHoneycomb(TieredBeehiveBlock block, World world, BlockPos pos, boolean useScraper) {
         return block.dropResourceHoneycomb(world, pos, useScraper);
+    }
+
+    public BlockState getStateForPlacement(BlockItemUseContext context) {
+        if (context.getPlayer() != null && context.getPlayer().isSneaking()) {
+            return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing());
+        }
+        return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite());
     }
 
     @Override
@@ -141,7 +150,10 @@ public class TieredBeehiveBlock extends BeehiveBlock {
 
             for (BeeEntity beeEntity : beeEntityList) {
                 if (beeEntity.getAttackTarget() == null) {
-                    beeEntity.setAttackTarget(playerEntityList.get(world.rand.nextInt(size)));
+                    PlayerEntity randomPlayer = playerEntityList.get(world.rand.nextInt(size));
+                    if (!(randomPlayer instanceof FakePlayer)) {
+                        beeEntity.setAttackTarget(randomPlayer);
+                    }
                 }
             }
         }
