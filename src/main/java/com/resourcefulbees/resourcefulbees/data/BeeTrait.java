@@ -15,14 +15,16 @@ public class BeeTrait {
     private final List<Pair<String, Integer>> damageTypes;
     private final List<String> specialAbilities;
     private final BasicParticleType particleEffect;
+    private final boolean shouldSting;
 
-    private BeeTrait(List<Pair<Effect, Integer>> potionDamageEffects, List<DamageSource> damageImmunities, List<Effect> potionImmunities, List<Pair<String, Integer>> damageTypes, List<String> specialAbilities, BasicParticleType particleEffect) {
+    private BeeTrait(List<Pair<Effect, Integer>> potionDamageEffects, List<DamageSource> damageImmunities, List<Effect> potionImmunities, List<Pair<String, Integer>> damageTypes, List<String> specialAbilities, BasicParticleType particleEffect, boolean shouldSting) {
         this.potionDamageEffects = potionDamageEffects;
         this.damageImmunities = damageImmunities;
         this.potionImmunities = potionImmunities;
         this.damageTypes = damageTypes;
         this.specialAbilities = specialAbilities;
         this.particleEffect = particleEffect;
+        this.shouldSting = shouldSting;
     }
 
     public boolean hasDamagePotionEffects(){ return this.potionDamageEffects != null && !this.potionDamageEffects.isEmpty(); }
@@ -31,6 +33,7 @@ public class BeeTrait {
     public boolean hasDamageTypes(){ return this.damageTypes != null && !this.damageTypes.isEmpty(); }
     public boolean hasSpecialAbilities(){ return this.specialAbilities != null && !this.specialAbilities.isEmpty(); }
     public boolean hasParticleEffect(){ return this.particleEffect != null; }
+    public boolean shouldNotString() { return this.shouldSting; }
 
     public List<Pair<Effect, Integer>> getPotionDamageEffects(){
         return this.potionDamageEffects;
@@ -58,6 +61,7 @@ public class BeeTrait {
         List<Pair<String, Integer>> damageTypes = new ArrayList<>();
         List<String> specialAbilities = new ArrayList<>();
         BasicParticleType particleEffect;
+        boolean shouldSting;
 
         public Builder(){}
 
@@ -105,9 +109,13 @@ public class BeeTrait {
             this.particleEffect = particleEffect;
             return this;
         }
+        public Builder setShouldNotString(){
+            this.shouldSting = true;
+            return this;
+        }
 
         public BeeTrait build() {
-            return new BeeTrait(potionDamageEffects, damageImmunities, potionImmunities, damageTypes, specialAbilities, particleEffect);
+            return new BeeTrait(potionDamageEffects, damageImmunities, potionImmunities, damageTypes, specialAbilities, particleEffect, shouldSting);
         }
     }
 }

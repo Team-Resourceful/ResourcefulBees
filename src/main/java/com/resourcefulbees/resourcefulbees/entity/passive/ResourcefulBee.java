@@ -301,38 +301,39 @@ public class ResourcefulBee extends CustomBeeEntity {
 
     @Override
     public boolean attackEntityAsMob(@Nonnull Entity entityIn) {
-        boolean flag = entityIn.attackEntityFrom(DamageSource.sting(this), getBeeData().getAttackDamage());
-        if (flag || this.getBeeType().equals(BeeConstants.OREO_BEE)) {
+        TraitData info = this.getBeeData().getTraitData();
+        boolean flag = entityIn.attackEntityFrom(DamageSource.sting(this), info.shouldSting() ? getBeeData().getAttackDamage() : 0);
+        if (flag) {
             this.applyEnchantments(this, entityIn);
             if (entityIn instanceof LivingEntity) {
                 ((LivingEntity) entityIn).setStingerCount(((LivingEntity) entityIn).getStingerCount() + 1);
-                int i = 0;
-                if (this.world.getDifficulty() == Difficulty.EASY) {
-                    i = 5;
-                } else if (this.world.getDifficulty() == Difficulty.NORMAL) {
-                    i = 10;
-                } else if (this.world.getDifficulty() == Difficulty.HARD) {
-                    i = 18;
-                }
-                TraitData info = this.getBeeData().getTraitData();
-                if (info.hasDamageTypes()){
-                    for (Pair<String, Integer> damageType : info.getDamageTypes()){
-                        if (damageType.getLeft().equals(TraitConstants.SET_ON_FIRE)) entityIn.setFire(i * damageType.getRight());
-                        if (damageType.getLeft().equals(TraitConstants.EXPLOSIVE)) this.explode(i/damageType.getRight());
-                    }
-                }
-                if (info.hasDamagePotionEffects()){
-                    if (i > 0) {
-                        for (Pair<Effect, Integer> effect : info.getPotionDamageEffects()){
-                            ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(effect.getLeft(), i * 20, effect.getRight()));
-                        }
-                    }
-                }
-                if (!info.hasDamagePotionEffects() && !info.hasDamageTypes()) ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.POISON, i * 20, 0));
             }
-
-            this.setHasStung(Config.BEE_DIES_FROM_STING.get() && !this.getBeeType().equals(BeeConstants.OREO_BEE));
-            this.setAttackTarget(null);
+        }
+        if (entityIn instanceof LivingEntity) {
+            int i = 0;
+            switch (this.world.getDifficulty()){
+                case EASY: i = 5; break;
+                case NORMAL: i = 10; break;
+                case HARD: i = 18; break;
+            }
+            if (info.hasDamageTypes()){
+                for (Pair<String, Integer> damageType : info.getDamageTypes()){
+                    if (damageType.getLeft().equals(TraitConstants.SET_ON_FIRE)) entityIn.setFire(i * damageType.getRight());
+                    if (damageType.getLeft().equals(TraitConstants.EXPLOSIVE)) this.explode(i/damageType.getRight());
+                }
+            }
+            if (info.hasDamagePotionEffects()){
+                if (i > 0) {
+                    for (Pair<Effect, Integer> effect : info.getPotionDamageEffects()){
+                        ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(effect.getLeft(), i * 20, effect.getRight()));
+                    }
+                }
+            }
+            if (info.shouldSting() && !info.hasDamagePotionEffects() && !info.hasDamageTypes()) ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.POISON, i * 20, 0));
+        }
+        this.setAttackTarget(null);
+        if (info.shouldSting()) {
+            this.setHasStung(Config.BEE_DIES_FROM_STING.get());
             this.playSound(SoundEvents.ENTITY_BEE_STING, 1.0F, 1.0F);
         }
 

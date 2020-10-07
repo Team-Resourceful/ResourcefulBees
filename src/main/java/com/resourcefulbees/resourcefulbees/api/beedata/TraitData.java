@@ -17,6 +17,7 @@ public class TraitData extends AbstractBeeData {
     private transient List<Pair<String, Integer>> damageTypes = new ArrayList<>();
     private transient List<String> specialAbilities = new ArrayList<>();
     private transient List<BasicParticleType> particleEffects = new ArrayList<>();
+    private transient boolean shouldSting = true;
     private final boolean hasTraits;
 
     public TraitData(boolean hasTraits) {
@@ -49,6 +50,8 @@ public class TraitData extends AbstractBeeData {
                 if (!this.hasParticleEffects())
                     this.particleEffects = Collections.singletonList(trait.getParticleEffect());
                 else this.particleEffects.add(trait.getParticleEffect());
+            if (trait.shouldNotString() && shouldSting)
+                this.shouldSting = false;
         }
     }
 
@@ -60,6 +63,7 @@ public class TraitData extends AbstractBeeData {
     public boolean hasDamageTypes(){ return this.damageTypes != null && !this.damageTypes.isEmpty(); }
     public boolean hasSpecialAbilities(){ return this.specialAbilities != null && !this.specialAbilities.isEmpty(); }
     public boolean hasParticleEffects(){ return this.particleEffects != null && !this.particleEffects.isEmpty(); }
+    public boolean shouldSting(){ return shouldSting; }
 
     public List<Pair<Effect, Integer>> getPotionDamageEffects(){
         return potionDamageEffects;
