@@ -1,7 +1,5 @@
 package com.resourcefulbees.resourcefulbees.lib;
 
-import javax.swing.text.Style;
-
 public class TraitConstants {
     public static String WITHER = "wither";
     public static String BLAZE = "blaze";

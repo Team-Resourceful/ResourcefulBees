@@ -113,12 +113,10 @@ public class CentrifugeControllerTileEntity extends TileEntity implements ITicka
                 if (!h.getStackInSlot(HONEYCOMB_SLOT[i]).isEmpty() && !h.getStackInSlot(BOTTLE_SLOT).isEmpty()) {
                     CentrifugeRecipe irecipe = getRecipe(i);
                     if (this.canProcess(irecipe, i)) {
-                        //this.totalTime = 100;
                         ++this.time[i];
                         if (this.time[i] == TOTAL_TIME) {
                             energyStorage.consumeEnergy(Config.RF_TICK_CENTRIFUGE.get() * TOTAL_TIME);
                             this.time[i] = 0;
-                            //this.totalTime = 100;
                             this.processItem(irecipe, i);
                             dirty = true;
                         }
@@ -151,7 +149,7 @@ public class CentrifugeControllerTileEntity extends TileEntity implements ITicka
                 JsonElement count = recipe.ingredient.serialize().getAsJsonObject().get(BeeConstants.INGREDIENT_COUNT);
                 int inputAmount = count != null ? count.getAsInt() : 1;
 
-                return inventoryHasSpace(recipe.outputs.get(0).getLeft()) && glass_bottle.getItem() == Items.GLASS_BOTTLE && energyStorage.getEnergyStored() >= recipe.time * Config.RF_TICK_CENTRIFUGE.get() && combs.getCount() >= inputAmount && glass_bottle.getCount() >= recipe.outputs.get(2).getLeft().getCount();
+                return inventoryHasSpace(recipe) && glass_bottle.getItem() == Items.GLASS_BOTTLE && energyStorage.getEnergyStored() >= recipe.time * Config.RF_TICK_CENTRIFUGE.get() && combs.getCount() >= inputAmount && glass_bottle.getCount() >= recipe.outputs.get(2).getLeft().getCount();
             }else return false;
         }
         return false;
@@ -163,17 +161,22 @@ public class CentrifugeControllerTileEntity extends TileEntity implements ITicka
             int inputAmount = count !=null ? count.getAsInt() : 1;
             ItemStack comb = h.getStackInSlot(HONEYCOMB_SLOT[slot]);
             ItemStack glass_bottle = h.getStackInSlot(BOTTLE_SLOT);
-            if (world != null)
-                for(int i = 0; i < 3; i++){
-                    Pair<ItemStack, Float> output = recipe.outputs.get(i);
-                    if (output.getRight() >= world.rand.nextDouble()) {
-                        if (inventoryHasSpace(output.getLeft().copy())) {
-                            depositItemStacks(output.getLeft().copy());
+            List<ItemStack> depositStacks = new ArrayList<>();
+            if (world != null) {
+                if (inventoryHasSpace(recipe)) {
+                    for (int i = 0; i < 3; i++) {
+                        Pair<ItemStack, Float> output = recipe.outputs.get(i);
+                        if (output.getRight() >= world.rand.nextDouble()) {
+                            depositStacks.add(output.getLeft().copy());
                             if (i == 2) glass_bottle.shrink(recipe.outputs.get(2).getLeft().getCount());
                         }
                     }
+                    if (!depositStacks.isEmpty()) {
+                        comb.shrink(inputAmount);
+                        depositItemStacks(depositStacks);
+                    }
                 }
-            comb.shrink(inputAmount);
+            }
         }
         time[slot] = 0;
     }
@@ -195,56 +198,65 @@ public class CentrifugeControllerTileEntity extends TileEntity implements ITicka
     }
     //endregion
 
-    public void depositItemStacks(ItemStack itemstack){
-        int slotIndex = 4;
-        while (!itemstack.isEmpty()){
-            ItemStack slotStack = h.getStackInSlot(slotIndex);
+    public void depositItemStacks(List<ItemStack> itemStacks){
+        itemStacks.forEach(itemStack -> {
+            int slotIndex = 4;
+            while (!itemStack.isEmpty()){
+                ItemStack slotStack = h.getStackInSlot(slotIndex);
 
-            int itemMaxStackSize = itemstack.getMaxStackSize();
+                int itemMaxStackSize = itemStack.getMaxStackSize();
 
-            if(slotStack.isEmpty()) {
-                int count = itemstack.getCount();
-                slotStack = itemstack.copy();
+                if(slotStack.isEmpty()) {
+                    int count = itemStack.getCount();
+                    slotStack = itemStack.copy();
 
-                if (count > itemMaxStackSize) {
-                    slotStack.setCount(itemMaxStackSize);
-                    itemstack.setCount(count-itemMaxStackSize);
-                } else {
-                    itemstack.setCount(0);
-                }
-                h.setStackInSlot(slotIndex, slotStack);
-            } else if (areItemsAndTagsEqual(itemstack, slotStack)) {
-                int j = itemstack.getCount() + slotStack.getCount();
-                if (j <= itemMaxStackSize) {
-                    itemstack.setCount(0);
-                    slotStack.setCount(j);
+                    if (count > itemMaxStackSize) {
+                        slotStack.setCount(itemMaxStackSize);
+                        itemStack.setCount(count-itemMaxStackSize);
+                    } else {
+                        itemStack.setCount(0);
+                    }
                     h.setStackInSlot(slotIndex, slotStack);
-                } else if (slotStack.getCount() < itemMaxStackSize) {
-                    itemstack.shrink(itemMaxStackSize - slotStack.getCount());
-                    slotStack.setCount(itemMaxStackSize);
-                    h.setStackInSlot(slotIndex, slotStack);
+                } else if (areItemsAndTagsEqual(itemStack, slotStack)) {
+                    int j = itemStack.getCount() + slotStack.getCount();
+                    if (j <= itemMaxStackSize) {
+                        itemStack.setCount(0);
+                        slotStack.setCount(j);
+                        h.setStackInSlot(slotIndex, slotStack);
+                    } else if (slotStack.getCount() < itemMaxStackSize) {
+                        itemStack.shrink(itemMaxStackSize - slotStack.getCount());
+                        slotStack.setCount(itemMaxStackSize);
+                        h.setStackInSlot(slotIndex, slotStack);
+                    }
                 }
+
+                ++slotIndex;
             }
-
-            ++slotIndex;
-        }
+        });
     }
 
 
-    public boolean inventoryHasSpace(ItemStack stack) {
-        int needed = 0;
-        int count = stack.copy().getCount();
-        while (count > 0) {
-            needed += 1;
-            count -= stack.getMaxStackSize();
-        }
-        int has = 0;
-        for (int i = 4; i < 22; ++i) {
-            if (h.getStackInSlot(i).isEmpty()) {
-                has++;
-                if (has >= needed) return true;
+    public boolean inventoryHasSpace(CentrifugeRecipe recipe) {
+        int spaceCount = 0;
+        for (Pair<ItemStack, Float> stackPair : recipe.outputs) {
+            int needed = 0;
+            int count = stackPair.getLeft().copy().getCount();
+            while (count > 0) {
+                needed += 1;
+                count -= stackPair.getLeft().getMaxStackSize();
+            }
+            int has = 0;
+            for (int i = 4; i < 22; ++i) {
+                if (h.getStackInSlot(i).isEmpty()) {
+                    has++;
+                    if (has >= needed) {
+                        spaceCount++;
+                        break;
+                    }
+                }
             }
         }
+        if (spaceCount == 3) return true;
         return false;
     }
 
