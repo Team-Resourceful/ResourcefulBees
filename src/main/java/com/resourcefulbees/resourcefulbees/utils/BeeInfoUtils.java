@@ -21,7 +21,6 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -120,8 +119,14 @@ public class BeeInfoUtils {
     public static ITag<Block> getBlockTag(String blockTag) { return BlockTags.getCollection().get(getResource(blockTag));}
 
     public static ITag<Block> getValidApiaryTag() {
-        return BlockTags.makeWrapperTag("resourcefulbees:valid_apiary");
+        return BlockTags.getCollection().get(VALID_APIARY);
     }
+
+    public static void makeValidApiaryTag() {
+        BlockTags.makeWrapperTag("resourcefulbees:valid_apiary");
+    }
+
+    private static ResourceLocation VALID_APIARY = new ResourceLocation("resourcefulbees:valid_apiary");
 
     public static boolean isTag(String input) {
         if (ValidatorUtils.TAG_RESOURCE_PATTERN.matcher(input).matches()) {

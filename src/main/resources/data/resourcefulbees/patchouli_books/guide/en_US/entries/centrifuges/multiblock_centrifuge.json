@@ -1,0 +1,41 @@
+{
+  "name": "Multiblock Centrifuge",
+  "icon": "resourcefulbees:centrifuge_controller",
+  "category": "centrifuges",
+  "sortnum": 3,
+  "pages": [
+    {
+      "type": "text",
+      "text": "The Multiblock Centrifuge is a powerhouse compared to the $(item)Powered Centrifuge$(). It has the capability to process Honeycomb Blocks in addition to normal honeycombs. It can also process 3 separate combs simultaneously."
+    },
+    {
+      "type": "multiblock",
+      "name": "Centrifuge",
+      "multiblock": {
+        "mapping": {
+          "C": "resourcefulbees:centrifuge_controller[facing=north]",
+          "A": "resourcefulbees:centrifuge_casing",
+          "0": "resourcefulbees:centrifuge_casing"
+        },
+        "pattern": [
+          ["AAA", "AAA", "AAA"],
+          ["AAA", "AAA", "AAA"],
+          ["AAA", "CAA", "AAA"],
+          ["AAA", "A0A", "AAA"]
+        ],
+        "symmetrical": true
+      },
+      "enable_visualize": true,
+      "text": "Visualize the structure to get an idea of how to build it."
+    },
+    {
+      "type": "text",
+      "text": "To build the multiblock you will need $(or)one $(item)Centrifuge Controller$() and $(or)35 $(item)Centrifuge Casings$().$(br2)The structure size is 3x4x3 with the controller one block up from the bottom in the center of any face."
+    },
+    {
+      "type": "crafting",
+      "recipe": "resourcefulbees:centrifuge_controller",
+      "recipe2": "resourcefulbees:centrifuge_casing"
+    }
+  ]
+}

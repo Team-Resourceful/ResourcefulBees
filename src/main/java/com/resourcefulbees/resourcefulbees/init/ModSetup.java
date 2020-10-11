@@ -2,6 +2,7 @@ package com.resourcefulbees.resourcefulbees.init;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.block.TieredBeehiveBlock;
+import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
 import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
 import net.minecraft.block.BeehiveBlock;
@@ -83,65 +84,67 @@ public class ModSetup {
     }
 
     public static void setupDispenserCollectionBehavior() {
-        DispenserBlock.registerDispenseBehavior(Items.SHEARS.asItem(), new OptionalDispenseBehavior() {
-            @Nonnull
-            protected ItemStack dispenseStack(@Nonnull IBlockSource source, @Nonnull ItemStack stack) {
-                ServerWorld world = source.getWorld();
-                if (!world.isRemote()) {
-                    this.setSuccess(false);
-                    BlockPos blockpos = source.getBlockPos().offset(source.getBlockState().get(DispenserBlock.FACING));
+        if (Config.ALLOW_SHEARS.get()) {
+            DispenserBlock.registerDispenseBehavior(Items.SHEARS.asItem(), new OptionalDispenseBehavior() {
+                @Nonnull
+                protected ItemStack dispenseStack(@Nonnull IBlockSource source, @Nonnull ItemStack stack) {
+                    ServerWorld world = source.getWorld();
+                    if (!world.isRemote()) {
+                        this.setSuccess(false);
+                        BlockPos blockpos = source.getBlockPos().offset(source.getBlockState().get(DispenserBlock.FACING));
 
-                    for(Entity entity : world.getEntitiesInAABBexcluding(null, new AxisAlignedBB(blockpos), e -> !e.isSpectator() && e instanceof IForgeShearable)) {
-                        IForgeShearable target = (IForgeShearable)entity;
-                        if (target.isShearable(stack, world, blockpos)) {
-                            FakePlayer fakie = FakePlayerFactory.getMinecraft(world);
-                            List<ItemStack> drops = target.onSheared(fakie, stack, entity.world, blockpos,
-                                    net.minecraft.enchantment.EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, stack));
-                            Random rand = new Random();
-                            drops.forEach(d -> {
-                                ItemEntity ent = entity.entityDropItem(d, 1.0F);
-                                if (ent != null)
-                                    ent.setMotion(ent.getMotion().add((rand.nextFloat() - rand.nextFloat()) * 0.1F, rand.nextFloat() * 0.05F, (rand.nextFloat() - rand.nextFloat()) * 0.1F));
-                            });
-                            if (stack.attemptDamageItem(1, world.rand, null)) {
-                                stack.setCount(0);
-                            }
-
-                            this.setSuccess(true);
-                            break;
-                        }
-                    }
-
-                    if (!this.isSuccess()) {
-                        BlockState blockstate = world.getBlockState(blockpos);
-                        if (blockstate.getBlock() instanceof TieredBeehiveBlock) {
-                            int i = blockstate.get(BeehiveBlock.HONEY_LEVEL);
-                            if (i >= 5) {
+                        for (Entity entity : world.getEntitiesInAABBexcluding(null, new AxisAlignedBB(blockpos), e -> !e.isSpectator() && e instanceof IForgeShearable)) {
+                            IForgeShearable target = (IForgeShearable) entity;
+                            if (target.isShearable(stack, world, blockpos)) {
+                                FakePlayer fakie = FakePlayerFactory.getMinecraft(world);
+                                List<ItemStack> drops = target.onSheared(fakie, stack, entity.world, blockpos,
+                                        net.minecraft.enchantment.EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, stack));
+                                Random rand = new Random();
+                                drops.forEach(d -> {
+                                    ItemEntity ent = entity.entityDropItem(d, 1.0F);
+                                    if (ent != null)
+                                        ent.setMotion(ent.getMotion().add((rand.nextFloat() - rand.nextFloat()) * 0.1F, rand.nextFloat() * 0.05F, (rand.nextFloat() - rand.nextFloat()) * 0.1F));
+                                });
                                 if (stack.attemptDamageItem(1, world.rand, null)) {
                                     stack.setCount(0);
                                 }
 
-                                TieredBeehiveBlock.dropResourceHoneycomb((TieredBeehiveBlock) blockstate.getBlock(), world, blockpos, false);
-                                ((BeehiveBlock) blockstate.getBlock()).takeHoney(world, blockstate, blockpos, null, BeehiveTileEntity.State.BEE_RELEASED);
                                 this.setSuccess(true);
+                                break;
                             }
-                        } else if (blockstate.isIn(BlockTags.BEEHIVES)) {
-                            int i = blockstate.get(BeehiveBlock.HONEY_LEVEL);
-                            if (i >= 5) {
-                                if (stack.attemptDamageItem(1, world.rand, null)) {
-                                    stack.setCount(0);
-                                }
+                        }
 
-                                BeehiveBlock.dropHoneycomb(world, blockpos);
-                                ((BeehiveBlock)blockstate.getBlock()).takeHoney(world, blockstate, blockpos, null, BeehiveTileEntity.State.BEE_RELEASED);
-                                this.setSuccess(true);
+                        if (!this.isSuccess()) {
+                            BlockState blockstate = world.getBlockState(blockpos);
+                            if (blockstate.getBlock() instanceof TieredBeehiveBlock) {
+                                int i = blockstate.get(BeehiveBlock.HONEY_LEVEL);
+                                if (i >= 5) {
+                                    if (stack.attemptDamageItem(1, world.rand, null)) {
+                                        stack.setCount(0);
+                                    }
+
+                                    TieredBeehiveBlock.dropResourceHoneycomb((TieredBeehiveBlock) blockstate.getBlock(), world, blockpos, false);
+                                    ((BeehiveBlock) blockstate.getBlock()).takeHoney(world, blockstate, blockpos, null, BeehiveTileEntity.State.BEE_RELEASED);
+                                    this.setSuccess(true);
+                                }
+                            } else if (blockstate.isIn(BlockTags.BEEHIVES)) {
+                                int i = blockstate.get(BeehiveBlock.HONEY_LEVEL);
+                                if (i >= 5) {
+                                    if (stack.attemptDamageItem(1, world.rand, null)) {
+                                        stack.setCount(0);
+                                    }
+
+                                    BeehiveBlock.dropHoneycomb(world, blockpos);
+                                    ((BeehiveBlock) blockstate.getBlock()).takeHoney(world, blockstate, blockpos, null, BeehiveTileEntity.State.BEE_RELEASED);
+                                    this.setSuccess(true);
+                                }
                             }
                         }
                     }
+                    return stack;
                 }
-                return stack;
-            }
-        });
+            });
+        }
 
         DispenserBlock.registerDispenseBehavior(RegistryHandler.SCRAPER.get(), new OptionalDispenseBehavior() {
             @Nonnull

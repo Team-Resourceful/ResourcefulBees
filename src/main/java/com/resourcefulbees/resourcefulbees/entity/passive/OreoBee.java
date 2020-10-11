@@ -23,7 +23,7 @@ public class OreoBee {
                 new CentrifugeData.Builder(false, null).createCentrifugeData(),
                 new BreedData.Builder(false).createBreedData(),
                 new SpawnData.Builder(true)
-                        .setSpawnWeight(6)
+                        .setSpawnWeight(3)
                         .setBiomeWhitelist("tag:rare")
                         .setLightLevel(LightLevels.DAY)
                         .setMinGroupSize(1)
@@ -35,6 +35,7 @@ public class OreoBee {
                 .setSizeModifier(1.25f)
                 .setAttackDamage(0)
                 .setTraits(new String[]{BeeConstants.OREO_BEE})
+                .setApiaryOutputAmounts(new int[]{1, 2, 3, 4})
                 .createCustomBee();
 
         data.shouldResourcefulBeesDoForgeRegistration = true;

@@ -196,23 +196,24 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
         Item combItem = beeType.equals(BeeConstants.VANILLA_BEE_TYPE) ? Items.HONEYCOMB : BEE_REGISTRY.getBeeData(beeType).getCombRegistryObject().get();
         Item combBlockItem = beeType.equals(BeeConstants.VANILLA_BEE_TYPE) ? Items.HONEYCOMB_BLOCK : BEE_REGISTRY.getBeeData(beeType).getCombBlockItemRegistryObject().get();
         Item outputItem;
+        int[] outputAmounts = BEE_REGISTRY.getBeeData(beeType).getApiaryOutputAmounts();
 
         switch (apiaryTier) {
             case 8:
                 outputItem = (Config.T4_APIARY_OUTPUT.get() == ApiaryOutput.BLOCK) ? combBlockItem : combItem;
-                itemstack = new ItemStack(outputItem, Config.T4_APIARY_QUANTITY.get());
+                itemstack = new ItemStack(outputItem, outputAmounts != null && outputAmounts[3] != -1 ? outputAmounts[3] : Config.T4_APIARY_QUANTITY.get());
                 break;
             case 7:
                 outputItem = (Config.T3_APIARY_OUTPUT.get() == ApiaryOutput.BLOCK) ? combBlockItem : combItem;
-                itemstack = new ItemStack(outputItem, Config.T3_APIARY_QUANTITY.get());
+                itemstack = new ItemStack(outputItem, outputAmounts != null && outputAmounts[2] != -1 ? outputAmounts[2] : Config.T3_APIARY_QUANTITY.get());
                 break;
             case 6:
                 outputItem = (Config.T2_APIARY_OUTPUT.get() == ApiaryOutput.BLOCK) ? combBlockItem : combItem;
-                itemstack = new ItemStack(outputItem, Config.T2_APIARY_QUANTITY.get());
+                itemstack = new ItemStack(outputItem, outputAmounts != null && outputAmounts[1] != -1 ? outputAmounts[1] : Config.T2_APIARY_QUANTITY.get());
                 break;
             default:
                 outputItem = (Config.T1_APIARY_OUTPUT.get() == ApiaryOutput.BLOCK) ? combBlockItem : combItem;
-                itemstack = new ItemStack(outputItem, Config.T1_APIARY_QUANTITY.get());
+                itemstack = new ItemStack(outputItem, outputAmounts != null && outputAmounts[0] != -1 ? outputAmounts[0] : Config.T1_APIARY_QUANTITY.get());
                 break;
         }
         depositItemStack(itemstack);

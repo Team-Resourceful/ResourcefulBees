@@ -1,16 +1,16 @@
 {
     "name": "Bee Mutation",
-    "icon": "resourcefulbees:bee_spawn_egg",
+    "icon": "minecraft:diamond_ore",
     "category": "bee_guide",
     "sortnum": 1,
     "pages": [
         {
             "type": "text",
-            "text": "    Some bees are customized with a special pollination effect called $(l)Mutations$(). Mutations allow a bee to convert a block into another block when the bee has $(#ff7300)nectar$() and $(#ff7300)valid hive$()."
+            "text": "  Some bees are customized with a special pollination effect called $(l)Mutations$(). Mutations allow a bee to convert a block into another block when the bee has $(or)nectar$() and $(or)valid hive$()."
         },
         {
             "type": "text",
-            "text": "    A mutation input is the block or block tag being converted. A mutation output is the block the input is being converted to.$(br2)    Each bee can have a customizable number of mutations. By this, we mean that the bee can either mutate one block, ten blocks, or a hundred blocks before it would need to enter the hive and reset the counter."
+            "text": "  A mutation input is the block or block tag being converted. A mutation output is the block the input is being converted to.$(br2)  Each bee can have a customizable number of mutations. By this, we mean that the bee can either mutate one block, ten blocks, or a hundred blocks before it would need to enter the hive and reset the counter."
         },
         {
             "type": "text",

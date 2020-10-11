@@ -109,7 +109,9 @@ public class BeeTrait {
             this.particleEffect = particleEffect;
             return this;
         }
-        public Builder setShouldNotString(){
+
+        //DO NOT USE WILL BE REMOVED
+        public Builder setShouldNotSting(){
             this.shouldSting = true;
             return this;
         }

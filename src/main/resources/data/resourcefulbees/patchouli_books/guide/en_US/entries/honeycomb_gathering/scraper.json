@@ -1,0 +1,16 @@
+{
+    "name": "Scraper",
+    "icon": "resourcefulbees:scraper",
+    "category": "honeycomb_gathering",
+    "sortnum": 2,
+    "pages": [
+        {
+            "type": "text",
+            "text": "The $(item)Scraper$() is a tool that allows an aspiring beekeeper to collect honeycombs from a beehive. Unlike shears however, the scraper will only collect $(or)one comb$() at a time from a hive. $(l)All$() combs must be collected in order to reset the $(or)Honey Level$()."
+        },
+        {
+            "type": "crafting",
+            "recipe": "resourcefulbees:scraper"
+        }
+    ]
+}

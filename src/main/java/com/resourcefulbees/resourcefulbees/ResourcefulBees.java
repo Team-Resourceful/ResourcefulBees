@@ -20,6 +20,7 @@ import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
 import com.resourcefulbees.resourcefulbees.registry.TraitRegistry;
+import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.PreviewHandler;
 import com.resourcefulbees.resourcefulbees.utils.color.ColorHandler;
 import com.resourcefulbees.resourcefulbees.utils.validation.SecondPhaseValidator;
@@ -155,6 +156,7 @@ public class ResourcefulBees
     }
 
     private void setup(final FMLCommonSetupEvent event){
+        BeeInfoUtils.makeValidApiaryTag();
         Map<BlockState, PointOfInterestType> pointOfInterestTypeMap = new HashMap<>();
         RegistryHandler.BLOCKS.getEntries().stream()
                 .filter(blockRegistryObject -> blockRegistryObject.get() instanceof TieredBeehiveBlock)
@@ -170,8 +172,8 @@ public class ResourcefulBees
                         .forEach(blockState -> putPOIInMap(blockState, pointOfInterestTypeMap))));
         PointOfInterestType.field_221073_u.putAll(pointOfInterestTypeMap);
 
-        if (Config.ALLOW_SHEARS.get())
-            ModSetup.setupDispenserCollectionBehavior();
+
+        ModSetup.setupDispenserCollectionBehavior();
 
         NetPacketHandler.init();
 

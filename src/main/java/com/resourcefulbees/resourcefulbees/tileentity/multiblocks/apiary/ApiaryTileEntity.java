@@ -321,6 +321,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
                     }
                 } else {
                     apiaryBee.ticksInHive++;
+                    apiaryBee.ticksInHive = Math.min(apiaryBee.ticksInHive, Integer.MAX_VALUE - 1);
                 }
             }
         }

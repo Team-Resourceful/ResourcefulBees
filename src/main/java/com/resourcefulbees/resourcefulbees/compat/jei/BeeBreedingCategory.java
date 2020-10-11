@@ -75,7 +75,7 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
                         if (BeeInfoUtils.isTag(p2_data.getBreedData().getFeedItem())) p2_feedItem = null;
 
                         recipes.add(new Recipe(
-                                p1_data.getName(), p1_feedTag, p1_feedItem, p2_data.getBreedData().getFeedAmount(),
+                                p1_data.getName(), p1_feedTag, p1_feedItem, p1_data.getBreedData().getFeedAmount(),
                                 p2_data.getName(), p2_feedTag, p2_feedItem, p2_data.getBreedData().getFeedAmount(),
                                 beeData.getName()));
                     }
@@ -146,14 +146,14 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
             stackList.add(new ItemStack(recipe.p1_feedItem, recipe.p1_feedAmount));
             list.add(stackList);
         }
-        if (recipe.p2_feedItem != null && recipe.p2_feedItem != Items.AIR) {
-            List<ItemStack> stackList = new ArrayList<>();
-            stackList.add(new ItemStack(recipe.p2_feedItem, recipe.p2_feedAmount));
-            list.add(stackList);
-        }
         if (recipe.p1_feedTag != null) {
             List<ItemStack> stackList = (List<ItemStack>) new Ingredient.TagList(recipe.p1_feedTag).getStacks();
             stackList.forEach(itemStack -> itemStack.setCount(recipe.p1_feedAmount));
+            list.add(stackList);
+        }
+        if (recipe.p2_feedItem != null && recipe.p2_feedItem != Items.AIR) {
+            List<ItemStack> stackList = new ArrayList<>();
+            stackList.add(new ItemStack(recipe.p2_feedItem, recipe.p2_feedAmount));
             list.add(stackList);
         }
         if (recipe.p2_feedTag != null) {
@@ -174,16 +174,7 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
 
     @Override
     public void setRecipe(@Nonnull IRecipeLayout iRecipeLayout, @Nonnull Recipe recipe, @Nonnull IIngredients ingredients) {
-        ResourcefulBees.LOGGER.info("{} + {} + {} + {} + {} + {} + {} + {} + {}", recipe.child, recipe.parent1, recipe.p1_feedAmount, recipe.p1_feedItem, recipe.p1_feedTag, recipe.parent2, recipe.p2_feedAmount, recipe.p2_feedItem, recipe.p2_feedTag);
-        //Logs all recipe info ^
-
         IGuiIngredientGroup<EntityIngredient> ingredientStacks = iRecipeLayout.getIngredientsGroup(JEICompat.ENTITY_INGREDIENT);
-
-        System.out.println(ingredientStacks.toString());//LOGGERRRRRRR
-        System.out.println(ingredients.getInputs(JEICompat.ENTITY_INGREDIENT));
-        System.out.println(ingredients.getOutputs(JEICompat.ENTITY_INGREDIENT));
-        System.out.println(ingredients.getInputs(VanillaTypes.ITEM));
-        System.out.println(ingredients.getOutputs(VanillaTypes.ITEM));
 
         ingredientStacks.init(0, true, 6, 6);
         ingredientStacks.init(1, true, 60, 6);
@@ -193,8 +184,6 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
         ingredientStacks.set(2, ingredients.getOutputs(JEICompat.ENTITY_INGREDIENT).get(0));
 
         IGuiItemStackGroup itemStacks = iRecipeLayout.getItemStacks();
-
-        System.out.println(itemStacks.toString());//LOGGGERRRRRRR
 
         itemStacks.init(0, true, 6, 32);
         itemStacks.init(1, true, 60, 32);

@@ -57,7 +57,7 @@ public class TraitData extends AbstractBeeData {
 
     public boolean hasTraits(){ return this.hasTraits; }
 
-    public boolean hasDamagePotionEffects(){ return this.potionImmunities != null && !this.potionDamageEffects.isEmpty(); }
+    public boolean hasDamagePotionEffects(){ return this.potionDamageEffects != null && !this.potionDamageEffects.isEmpty(); }
     public boolean hasDamageImmunities(){ return this.damageImmunities != null && !this.damageImmunities.isEmpty(); }
     public boolean hasPotionImmunities(){ return this.potionImmunities != null && !this.potionImmunities.isEmpty(); }
     public boolean hasDamageTypes(){ return this.damageTypes != null && !this.damageTypes.isEmpty(); }

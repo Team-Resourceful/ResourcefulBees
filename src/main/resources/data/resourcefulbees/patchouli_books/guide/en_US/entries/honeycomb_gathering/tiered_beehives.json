@@ -1,12 +1,34 @@
 {
-    "name": "How to Set Up an Apiary",
-    "icon": "resourcefulbees:t1_apiary",
+    "name": "Tiered Beehives",
+    "icon": "resourcefulbees:t4_beehive",
     "category": "honeycomb_gathering",
     "sortnum": 1,
     "pages": [
         {
             "type": "text",
-            "text": "Setting up your apiary is rather simple first craft your apiary, then place it down and open it up you'll see a validation screen with with multiple buttons such as Offset, Build, Validate, and Preview you'll want to use the Preview button to see the structures bounds, these bounds will show you "
+            "text": "  Tiered beehives are a $(l)massive$() upgrade from the vanilla beehive.$(br2)  Tiered Hives are also the only hives which support generation of our custom honeycombs, other than the apiary of course."
+        },
+        {
+            "type": "text",
+            "text": "  For the uninitiated, when a bee collects pollen from a \"flower\", the bee will fly into a hive and after a period of time will emerge to repeat the process. When the bee is released from the hive a $(or)honeycomb$() will have been generated.$(br2)  When the $(or)Honey Level$() reaches 5, the combs can be collected."
+        },
+        {
+            "type": "text",
+            "text": "  Combs can be collected from a Tiered Hive in $(or)two ways$().$(br2)  First, when enabled, combs can be collected following the vanilla method using $(item)Shears$().$(br2)  The second method is using a $(l:resourcefulbees:honeycomb_gathering/scraper)$(item)Scraper$(), which is $(l)always enabled$()."
+        },
+        {
+            "type": "text",
+            "text": "  Both methods can be automated using the $(item)Dispenser$() and some $(#ff0000)redstone$().$(br2)  $(l)$(#ff0000)Beware$(), however, that if a Tiered Hive has not been $(l:resourcefulbees:honeycomb_gathering/smoker)$(or)smoked$() prior to collecting the combs, any bees inside will release and become angry."
+        },
+        {
+            "type": "crafting",
+            "recipe": "resourcefulbees:t1_beehive",
+            "recipe2": "resourcefulbees:t2_beehive"
+        },
+        {
+            "type": "crafting",
+            "recipe": "resourcefulbees:t3_beehive",
+            "recipe2": "resourcefulbees:t4_beehive"
         }
     ]
 }

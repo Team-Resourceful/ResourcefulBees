@@ -176,6 +176,8 @@
 	"item.resourcefulbees.netherite_bee_spawn_egg": "Netherite Bee Spawn Egg",
 	"item.resourcefulbees.rgbee_bee_spawn_egg": "RGBee Spawn Egg",
 	"item.resourcefulbees.oreo_bee_spawn_egg": "Oreo Bee Spawn Egg",
+	"entity.resourcefulbees.slimy_bee_spawn_egg": "Slimy Bee Spawn Egg",
+	"entity.resourcefulbees.icy_bee_spawn_egg": "Icy Bee Spawn Egg",
 
 	"entity.resourcefulbees.gold_bee": "Gold Bee",
 	"entity.resourcefulbees.iron_bee": "Iron Bee",
@@ -194,6 +196,8 @@
 	"entity.resourcefulbees.netherite_bee": "Netherite Bee",
 	"entity.resourcefulbees.rgbee_bee": "RGBee",
 	"entity.resourcefulbees.oreo_bee": "Oreo Bee",
+	"entity.resourcefulbees.slimy_bee": "Slimy Bee",
+	"entity.resourcefulbees.icy_bee": "Icy Bee",
 
 	"entity.minecraft.villager.resourcefulbees.beekeeper": "Beekeeper",
 	"block.resourcefulbees.mech_centrifuge.tooltip.info": "Hold SHIFT & right-click block to process honeycombs.",
@@ -211,5 +215,14 @@
 	"block.resourcefulbees.beehive.tooltip.bees": "Bees:",
 	"block.resourcefulbees.beehive.tooltip.honeycombs": "Honeycombs:",
 
-	"book.resourcefulbees.name": "Fifty Shades of Bees"
+	"book.resourcefulbees.name": "Fifty Shades of Bees",
+	"book.resourcefulbees.bee_category": "Bee Basics",
+	"book.resourcefulbees.honeycomb_category": "Honeycomb Basics",
+	"book.resourcefulbees.centrifuge_category": "Centrifuge Basics",
+	"book.resourcefulbees.apiary_category": "Apiary Basics",
+	"book.resourcefulbees.landing_text": "Welcome Resourceful Beekeeper! This guide is much less filled with bee erotica than it is information about beekeeping. We hope that it serves you well in understanding the basics.$(br)$(o)$(#ff0000)  Please keep in mind that MOST, if not ALL, bees are added by pack developers!$()",
+	"book.resourcefulbees.bee_category.desc": "In this section you will learn basic information about bee keeping.$(br2)  Topics covered include: how and where bees $(or)spawn$(), how bees can be $(or)bred$(), what bee $(or)traits$() are and why they are important, and how resourceful bees can $(or)mutate$() blocks into other blocks.",
+	"book.resourcefulbees.honeycomb_category.desc": "This section will walk you through honeycomb generation and collection. We will also discuss several tools available to the most avid beekeepers.",
+	"book.resourcefulbees.centrifuge_category.desc": "The chapters here will walk through the various honeycomb processing machines available to your disposal. These machines are key to converting honeycombs into something more useful in your day to day journeys.",
+	"book.resourcefulbees.apiary_category.desc": "The best of the best beekeepers maintain apiaries for the varieties of bees they own. Here, we will cover how to build one, why you want one, what it can do to expand your capabilities as a beekeeper."
 }

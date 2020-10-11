@@ -1,0 +1,13 @@
+{
+  "name": "Powered Centrifuge",
+  "icon": "resourcefulbees:centrifuge",
+  "category": "centrifuges",
+  "sortnum": 2,
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "resourcefulbees:centrifuge",
+      "text": "The powered centrifuge will increase efficiency in processing honeycombs at the expense of energy."
+    }
+  ]
+}

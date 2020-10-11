@@ -137,6 +137,7 @@ public class RegistryHandler {
 	public static final RegistryObject<Block> CENTRIFUGE_CONTROLLER = BLOCKS.register("centrifuge_controller", () -> new CentrifugeControllerBlock(CENTRIFUGE_PROPERTIES));
 	public static final RegistryObject<Block> CENTRIFUGE_CASING = BLOCKS.register("centrifuge_casing", () -> new CentrifugeCasingBlock(CENTRIFUGE_PROPERTIES));
 	public static final RegistryObject<Block> CREATIVE_GEN = BLOCKS.register("creative_gen", () -> new CreativeGen(CENTRIFUGE_PROPERTIES));
+	public static final RegistryObject<Block> ACCELERATOR = BLOCKS.register("accelerator", () -> new AcceleratorBlock(CENTRIFUGE_PROPERTIES));
 
 	//endregion
 
@@ -152,7 +153,7 @@ public class RegistryHandler {
 			.effect(new EffectInstance(Effects.WATER_BREATHING, 6000, 0), 1)
 			.effect(new EffectInstance(Effects.NIGHT_VISION, 1200, 0), 1)
 			.hunger(8)
-			.saturation(8)
+			.saturation(2)
 			.setAlwaysEdible()
 			.build())
 			.rarity(Rarity.EPIC)));
@@ -295,6 +296,10 @@ public class RegistryHandler {
 
 	public static final RegistryObject<TileEntityType<?>> APIARY_BREEDER_TILE_ENTITY = TILE_ENTITY_TYPES.register("apiary_breeder", () -> TileEntityType.Builder
 			.create(ApiaryBreederTileEntity::new, APIARY_BREEDER_BLOCK.get())
+			.build(null));
+
+	public static final RegistryObject<TileEntityType<?>> ACCELERATOR_TILE_ENTITY = TILE_ENTITY_TYPES.register("accelerator", () -> TileEntityType.Builder
+			.create(AcceleratorTileEntity::new, ACCELERATOR.get())
 			.build(null));
 	//endregion
 

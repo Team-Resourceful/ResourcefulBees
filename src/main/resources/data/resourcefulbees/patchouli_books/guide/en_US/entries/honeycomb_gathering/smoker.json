@@ -1,0 +1,22 @@
+{
+    "name": "Smoker",
+    "icon": "resourcefulbees:smoker",
+    "category": "honeycomb_gathering",
+    "sortnum": 3,
+    "pages": [
+        {
+            "type": "text",
+            "text": "The $(item)Smoker$() is an absolute must for any bee keepers just getting their feet $(or)sticky$(). Using a Smoker on a hive will have the same effect as placing a $(or)campfire$() beneath the hive. For everyone else, smoking a hive $(or)prevents$() bees from becoming $(#ff0000)angry$() when collecting honeycombs."
+        },
+        {
+            "type": "crafting",
+            "recipe": "resourcefulbees:smoker",
+            "text": "To craft a smoker you must first make a Bellow and Smoker Canister which can be combined.$(br2)  $(o)Wonder what would happen if I used it on a bee?$()"
+        },
+        {
+            "type": "crafting",
+            "recipe": "resourcefulbees:bellow",
+            "recipe2": "resourcefulbees:smoker_can"
+        }
+    ]
+}

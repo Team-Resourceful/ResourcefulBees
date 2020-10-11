@@ -8,7 +8,6 @@ import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.RegistryObject;
 
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class CustomBeeData extends AbstractBeeData {
@@ -23,6 +22,7 @@ public class CustomBeeData extends AbstractBeeData {
     private final boolean hasHoneycomb;
     private String customCombDrop;
     private String customCombBlockDrop;
+    private final int[] apiaryOutputAmounts;
     public transient boolean shouldResourcefulBeesDoForgeRegistration;
     private final transient HashMap<String, AbstractBeeData> ADDITIONAL_DATA = new HashMap<>();
     private final BreedData BreedData;
@@ -37,13 +37,14 @@ public class CustomBeeData extends AbstractBeeData {
     private transient RegistryObject<Item> spawnEggItemRegistryObject;
     private transient ResourceLocation entityTypeRegistryID;
 
-    private CustomBeeData(String flower, String baseLayerTexture, int maxTimeInHive, Float attackDamage, float sizeModifier, String[] traits, String name, boolean hasHoneycomb, MutationData mutationData, ColorData colorData, CentrifugeData centrifugeData, BreedData breedData, SpawnData spawnData, TraitData traitData) {
+    private CustomBeeData(String flower, String baseLayerTexture, int maxTimeInHive, Float attackDamage, float sizeModifier, String[] traits, int[] apiaryOutputAmounts, String name, boolean hasHoneycomb, MutationData mutationData, ColorData colorData, CentrifugeData centrifugeData, BreedData breedData, SpawnData spawnData, TraitData traitData) {
         this.flower = flower;
         this.baseLayerTexture = baseLayerTexture;
         this.maxTimeInHive = maxTimeInHive;
         this.attackDamage = attackDamage;
         this.sizeModifier = sizeModifier;
         this.traits = traits;
+        this.apiaryOutputAmounts = apiaryOutputAmounts;
         this.name = name;
         this.hasHoneycomb = hasHoneycomb;
         this.BreedData = breedData;
@@ -60,9 +61,7 @@ public class CustomBeeData extends AbstractBeeData {
 
     public String getCustomCombBlockDrop() { return customCombBlockDrop; }
 
-/*    public void setCustomCombDrop(String customCombDrop) { this.customCombDrop = customCombDrop; }
-
-    public void setCustomCombBlockDrop(String customCombBlockDrop) { this.customCombBlockDrop = customCombBlockDrop; }*/
+    public int[] getApiaryOutputAmounts() { return apiaryOutputAmounts; }
 
     public boolean hasCustomDrop() { return (customCombDrop != null && !customCombDrop.isEmpty() && customCombBlockDrop != null && !customCombBlockDrop.isEmpty()) || name.equals(BeeConstants.OREO_BEE); }
 
@@ -135,6 +134,7 @@ public class CustomBeeData extends AbstractBeeData {
         private Float attackDamage;
         private float sizeModifier;
         private String[] traits;
+        private int[] apiaryOutputAmounts;
         private final String name;
         private final boolean hasHoneycomb;
         private final MutationData mutationData;
@@ -181,8 +181,13 @@ public class CustomBeeData extends AbstractBeeData {
             return this;
         }
 
+        public Builder setApiaryOutputAmounts(int[] apiaryOutputAmounts) {
+            this.apiaryOutputAmounts = apiaryOutputAmounts;
+            return this;
+        }
+
         public CustomBeeData createCustomBee() {
-            return new CustomBeeData(flower, baseLayerTexture, maxTimeInHive, attackDamage, sizeModifier, traits, name, hasHoneycomb, mutationData, colorData, centrifugeData, breedData, spawnData, traitData);
+            return new CustomBeeData(flower, baseLayerTexture, maxTimeInHive, attackDamage, sizeModifier, traits, apiaryOutputAmounts, name, hasHoneycomb, mutationData, colorData, centrifugeData, breedData, spawnData, traitData);
         }
     }
 }

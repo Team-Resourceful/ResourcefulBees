@@ -10,6 +10,7 @@ import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.validation.ValidatorUtils;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
 import net.minecraft.entity.passive.BeeEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -44,6 +45,7 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
     private static final DataParameter<Integer> FEED_COUNT = EntityDataManager.createKey(CustomBeeEntity.class, DataSerializers.VARINT);
 
     protected final CustomBeeData beeData;
+    protected int timeWithoutHive;
 
     public CustomBeeEntity(EntityType<? extends BeeEntity> type, World world, CustomBeeData beeData) {
         super(type, world);
@@ -111,6 +113,14 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
         } else {
             if (Config.BEES_DIE_IN_VOID.get() && this.getPositionVec().y <= -1) {
                 this.remove();
+            }
+            if (!hasCustomName()) {
+                if (hasHive()) {
+                    timeWithoutHive = 0;
+                } else {
+                    timeWithoutHive++;
+                }
+                if (timeWithoutHive >= 12000) this.remove();
             }
         }
 

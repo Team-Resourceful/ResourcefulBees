@@ -2,7 +2,6 @@ package com.resourcefulbees.resourcefulbees.registry;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.ITraitRegistry;
-import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.data.BeeTrait;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.TraitConstants;
@@ -74,7 +73,7 @@ public class TraitRegistry implements ITraitRegistry {
         getRegistry().register(TraitConstants.PIGMAN, new BeeTrait.Builder().addDamagePotionEffect(Pair.of(Effects.MINING_FATIGUE, 0)).build());
         getRegistry().register(TraitConstants.ENDER, new BeeTrait.Builder().addSpecialAbility(TraitConstants.TELEPORT).setParticleEffect(ParticleTypes.PORTAL).build());
         getRegistry().register(TraitConstants.NETHER, new BeeTrait.Builder().addDamageImmunities(Arrays.asList(DamageSource.LAVA,DamageSource.IN_FIRE,DamageSource.ON_FIRE,DamageSource.HOT_FLOOR)).build());
-        getRegistry().register(BeeConstants.OREO_BEE, new BeeTrait.Builder().addDamagePotionEffect(Pair.of(Effects.INSTANT_HEALTH, 2)).setShouldNotString().build());
+        getRegistry().register(BeeConstants.OREO_BEE, new BeeTrait.Builder().addDamagePotionEffect(Pair.of(Effects.INSTANT_HEALTH, 2)).setShouldNotSting().build());
         getRegistry().register(TraitConstants.SLIMY, new BeeTrait.Builder().addSpecialAbility(TraitConstants.SLIMY).build());
     }
 

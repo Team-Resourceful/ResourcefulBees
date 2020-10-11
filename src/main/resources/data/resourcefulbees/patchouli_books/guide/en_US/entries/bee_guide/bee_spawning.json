@@ -1,12 +1,20 @@
 {
     "name": "Bee Spawning",
-    "icon": "resourcefulbees:bee_nest",
+    "icon": "minecraft:bee_nest",
     "category": "bee_guide",
     "sortnum": 3,
     "pages": [
         {
             "type": "text",
-            "text": "Bees spawn in world some bees can have different weights and spawn locations some bees can spawn naturally but majority come from bee nests that spawn in world."
+            "text": "  Some bees may have been configured to spawn in the world. The $(or)spawn weight$(), $(or)biome$() and $(or)light level$() can be customized as well as the $(or)min$() and $(or)max$() $(or)group size$().$(br2)    Nest generation is also configurable."
+        },
+        {
+            "type": "text",
+            "text": "  When configured to generate, nests will $(l)always$() generate in biomes where bees were configured to spawn.$(br)  Weighting for nest generation can be configured independently for Nether, End and Overworld biome categories.$(br)  The texture for nests will vary based on the biome."
+        },
+        {
+            "type": "text",
+            "text": "  When nests spawn in the world, they may come prefilled with bees. The number of bees can vary from 0 to 1/2 the $(or)hive max bees$() config value."
         }
     ]
 }

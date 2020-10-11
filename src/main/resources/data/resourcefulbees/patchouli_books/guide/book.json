@@ -7,5 +7,8 @@
   "i18n": true,
   "model": "resourcefulbees:guide_book",
   "book_texture": "patchouli:textures/gui/book_gray.png",
-  "version": 1
+  "version": 1,
+  "macros": {
+    "$(or)": "$(#ff7300)"
+  }
 }

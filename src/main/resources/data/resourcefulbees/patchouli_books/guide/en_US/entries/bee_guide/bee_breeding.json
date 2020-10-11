@@ -6,7 +6,15 @@
     "pages": [
         {
             "type": "text",
-            "text": "Bees can have parents these parents can produce children, you can see the childrens parents in JEI."
+            "text": "  Some bees may be configured to be breedable. If a bee is breedable, it $(o)may$() have predefined parents, but will $(l)always$() be able to breed with another bee of the same type. "
+        },
+        {
+            "type": "text",
+            "text": "  Bee breeding works very much like vanilla breeding, with one notable exception. Some bees may be configured to require multiple $(or)feed items$() in order to trigger the \"love\" state.$(br2)  The $(or)feed item$() for a bee doesn't have to specifically be a flower. It can be configured to use any type of item or tag."
+        },
+        {
+            "type": "text",
+            "text": "  Bees can only be bred in world. Optionally, an $(item)Apiary Breeder$() can be used to breed bees. Visit that section of the book for more information on its usage."
         }
     ]
 }
