@@ -57,10 +57,12 @@ public class ModSetup {
         Path configPath = FMLPaths.CONFIGDIR.get();
         Path rbBeesPath = Paths.get(configPath.toAbsolutePath().toString(), ResourcefulBees.MOD_ID, "bees");
         Path rbBiomePath = Paths.get(configPath.toAbsolutePath().toString(), ResourcefulBees.MOD_ID, "biome_dictionary");
+        Path rbTraitPath = Paths.get(configPath.toAbsolutePath().toString(), ResourcefulBees.MOD_ID, "bee_traits");
         Path rbAssetsPath = Paths.get(configPath.toAbsolutePath().toString(),ResourcefulBees.MOD_ID, "resources");
         BEE_PATH = rbBeesPath;
         RESOURCE_PATH = rbAssetsPath;
         BiomeDictonarySetup.DICTIONARY_PATH = rbBiomePath;
+        TraitSetup.DICTIONARY_PATH = rbTraitPath;
 
         try { Files.createDirectories(rbBeesPath);
         } catch (FileAlreadyExistsException ignored) {
@@ -69,6 +71,10 @@ public class ModSetup {
         try { Files.createDirectories(rbBiomePath);
         } catch (FileAlreadyExistsException ignored) {
         } catch (IOException e) { LOGGER.error("failed to create \"biome_dictionary\" directory");}
+
+        try { Files.createDirectories(rbTraitPath);
+        } catch (FileAlreadyExistsException ignored) {
+        } catch (IOException e) { LOGGER.error("failed to create \"bee_traits\" directory");}
 
         try { Files.createDirectory(rbAssetsPath);
         } catch (FileAlreadyExistsException ignored) {

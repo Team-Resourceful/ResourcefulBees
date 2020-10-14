@@ -44,7 +44,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.village.PointOfInterest;
 import net.minecraft.village.PointOfInterestManager;
 import net.minecraft.village.PointOfInterestType;
-import net.minecraft.world.Difficulty;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
@@ -302,7 +301,7 @@ public class ResourcefulBee extends CustomBeeEntity {
     @Override
     public boolean attackEntityAsMob(@Nonnull Entity entityIn) {
         TraitData info = this.getBeeData().getTraitData();
-        boolean flag = entityIn.attackEntityFrom(DamageSource.sting(this), info.shouldSting() ? getBeeData().getAttackDamage() : 0);
+        boolean flag = entityIn.attackEntityFrom(DamageSource.sting(this), getBeeData().getAttackDamage());
         if (flag) {
             this.applyEnchantments(this, entityIn);
             if (entityIn instanceof LivingEntity) {
@@ -329,10 +328,10 @@ public class ResourcefulBee extends CustomBeeEntity {
                     }
                 }
             }
-            if (info.shouldSting() && !info.hasDamagePotionEffects() && !info.hasDamageTypes()) ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.POISON, i * 20, 0));
+            if (!info.hasDamagePotionEffects() && !info.hasDamageTypes()) ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.POISON, i * 20, 0));
         }
         this.setAttackTarget(null);
-        if (info.shouldSting()) {
+        if (!this.getBeeType().equals(BeeConstants.OREO_BEE)) {
             this.setHasStung(Config.BEE_DIES_FROM_STING.get());
             this.playSound(SoundEvents.ENTITY_BEE_STING, 1.0F, 1.0F);
         }

@@ -16,6 +16,7 @@ import com.resourcefulbees.resourcefulbees.data.DataPackLoader;
 import com.resourcefulbees.resourcefulbees.data.RecipeBuilder;
 import com.resourcefulbees.resourcefulbees.init.BiomeDictonarySetup;
 import com.resourcefulbees.resourcefulbees.init.ModSetup;
+import com.resourcefulbees.resourcefulbees.init.TraitSetup;
 import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
@@ -210,6 +211,7 @@ public class ResourcefulBees
 
     private void loadComplete(FMLLoadCompleteEvent event) {
         TraitRegistry.registerDefaultTraits();
+        TraitSetup.buildCustomTraits();
         TraitRegistry.setTraitRegistryClosed();
         TraitRegistry.applyBeeTraits();
         BeeSetup.registerBeePlacements();
