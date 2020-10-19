@@ -201,7 +201,7 @@ public class CentrifugeControllerTileEntity extends TileEntity implements ITicka
     public void depositItemStacks(List<ItemStack> itemStacks){
         itemStacks.forEach(itemStack -> {
             int slotIndex = 4;
-            while (!itemStack.isEmpty()){
+            while (!itemStack.isEmpty() && slotIndex < h.getSlots()){
                 ItemStack slotStack = h.getStackInSlot(slotIndex);
 
                 int itemMaxStackSize = itemStack.getMaxStackSize();
@@ -237,26 +237,15 @@ public class CentrifugeControllerTileEntity extends TileEntity implements ITicka
 
 
     public boolean inventoryHasSpace(CentrifugeRecipe recipe) {
-        int spaceCount = 0;
-        for (Pair<ItemStack, Float> stackPair : recipe.outputs) {
-            int needed = 0;
-            int count = stackPair.getLeft().copy().getCount();
-            while (count > 0) {
-                needed += 1;
-                count -= stackPair.getLeft().getMaxStackSize();
-            }
-            int has = 0;
-            for (int i = 4; i < 22; ++i) {
-                if (h.getStackInSlot(i).isEmpty()) {
-                    has++;
-                    if (has >= needed) {
-                        spaceCount++;
-                        break;
-                    }
-                }
+        int needed = recipe.outputs.stream().mapToInt(itemStackFloatPair ->
+                (int) Math.ceil((double)itemStackFloatPair.getLeft().copy().getCount() / itemStackFloatPair.getLeft().getMaxStackSize())).sum();
+        int has = 0;
+        for (int i = 4; i < 22; ++i) {
+            if (h.getStackInSlot(i).isEmpty()) {
+                has++;
+                if (has >= needed) return true;
             }
         }
-        if (spaceCount == 3) return true;
         return false;
     }
 

@@ -8,6 +8,7 @@ import com.resourcefulbees.resourcefulbees.registry.BiomeDictionary;
 import com.resourcefulbees.resourcefulbees.utils.validation.ValidatorUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.EntityType;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.Item;
@@ -104,6 +105,10 @@ public class BeeInfoUtils {
         return item != null && item != Items.AIR;
     }
 
+    public static boolean isValidEntityType(EntityType<?> entityType){
+        return entityType != null;
+    }
+
     public static Item getItem(String itemName) { return ForgeRegistries.ITEMS.getValue(getResource(itemName));}
 
     public static Block getBlock(String blockName) { return ForgeRegistries.BLOCKS.getValue(getResource(blockName));}
@@ -111,6 +116,8 @@ public class BeeInfoUtils {
     public static Fluid getFluid(String fluidName) { return ForgeRegistries.FLUIDS.getValue(getResource(fluidName));}
 
     public static Biome getBiome(String biomeName) { return ForgeRegistries.BIOMES.getValue(getResource(biomeName));}
+
+    public static EntityType<?> getEntityType(String entityName) { return ForgeRegistries.ENTITIES.getValue(getResource(entityName));}
 
     public static ITag<Item> getItemTag(String itemTag) { return ItemTags.getCollection().get(getResource(itemTag));}
 
@@ -126,7 +133,7 @@ public class BeeInfoUtils {
         BlockTags.makeWrapperTag("resourcefulbees:valid_apiary");
     }
 
-    private static ResourceLocation VALID_APIARY = new ResourceLocation("resourcefulbees:valid_apiary");
+    private static final ResourceLocation VALID_APIARY = new ResourceLocation("resourcefulbees:valid_apiary");
 
     public static boolean isTag(String input) {
         if (ValidatorUtils.TAG_RESOURCE_PATTERN.matcher(input).matches()) {

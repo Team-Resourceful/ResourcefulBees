@@ -84,7 +84,9 @@ public class FirstPhaseValidator {
     }
 
     private static boolean validateMutationInput(String name, String input) {
-        if (TAG_RESOURCE_PATTERN.matcher(input).matches() || SINGLE_RESOURCE_PATTERN.matcher(input).matches()) {
+        if (TAG_RESOURCE_PATTERN.matcher(input).matches() ||
+            SINGLE_RESOURCE_PATTERN.matcher(input).matches() ||
+            ENTITY_RESOURCE_PATTERN.matcher(input).matches()) {
             return true;
         } else {
             return logError(name, "Mutation Input", input, "mutation");
@@ -92,7 +94,7 @@ public class FirstPhaseValidator {
     }
 
     private static boolean validateMutationOutput(String name, String output) {
-        if (SINGLE_RESOURCE_PATTERN.matcher(output).matches()) {
+        if (SINGLE_RESOURCE_PATTERN.matcher(output).matches() || ENTITY_RESOURCE_PATTERN.matcher(output).matches()) {
             return true;
         } else {
             return logError(name, "Mutation Output", output, "mutation");
@@ -160,6 +162,7 @@ public class FirstPhaseValidator {
         if (isValid && beeData.getFlower() != null) {
             return TAG_RESOURCE_PATTERN.matcher(beeData.getFlower()).matches()
                     || SINGLE_RESOURCE_PATTERN.matcher(beeData.getFlower()).matches()
+                    || ENTITY_RESOURCE_PATTERN.matcher(beeData.getFlower()).matches()
                     || beeData.getFlower().equals(BeeConstants.FLOWER_TAG_ALL)
                     || beeData.getFlower().equals(BeeConstants.FLOWER_TAG_SMALL)
                     || beeData.getFlower().equals(BeeConstants.FLOWER_TAG_TALL)

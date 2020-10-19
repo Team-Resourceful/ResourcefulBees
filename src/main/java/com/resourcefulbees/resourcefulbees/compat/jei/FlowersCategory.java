@@ -81,7 +81,7 @@ public class FlowersCategory implements IRecipeCategory<FlowersCategory.Recipe> 
                 ITag<Item> itemTag = ItemTags.TALL_FLOWERS;
                 if (itemTag != null)
                     recipes.add(new Recipe(itemTag, null, null, beeData.getName(), RecipeTypes.ITEM, true));
-            } else {
+            } else if (!ValidatorUtils.ENTITY_RESOURCE_PATTERN.matcher(flower).matches()) {
                 Item itemIn = BeeInfoUtils.getItem(flower);
                 Fluid fluidIn = BeeInfoUtils.getFluid(flower);
                 if (BeeInfoUtils.isValidItem(itemIn))
@@ -189,14 +189,14 @@ public class FlowersCategory implements IRecipeCategory<FlowersCategory.Recipe> 
         private final RecipeTypes recipeType;
 
         public Recipe(@Nullable ItemStack flowerItem, @Nullable FluidStack flowerFluid, String beeType, RecipeTypes recipeType, boolean acceptsAny) {
+            this.itemITag = null;
+            this.fluidITag = null;
+            this.blockTag = null;
             this.itemIn = flowerItem;
             this.fluidIn = flowerFluid;
             this.beeType = beeType;
             this.acceptsAny = acceptsAny;
-            this.itemITag = null;
-            this.fluidITag = null;
             this.recipeType = recipeType;
-            this.blockTag = null;
         }
 
         //TAGS!!!

@@ -7,6 +7,7 @@ public class BeeConstants {
     public static final String FLOWER_TAG_SMALL = "small";
     public static final String FLOWER_TAG_TALL = "tall";
     public static final String TAG_PREFIX = "tag:";
+    public static final String ENTITY_PREFIX = "entity:";
     public static final String MOD_NAME = "Resourceful Bees";
     public static final String ENTITY_TEXTURES_DIR = "textures/entity/";
     public static final String STRING_DEFAULT_ITEM_COLOR = "-1";

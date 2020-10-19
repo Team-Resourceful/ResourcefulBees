@@ -44,6 +44,7 @@ public class JEICompat implements IModPlugin {
         registration.addRecipeCategories(new BeeHiveCategory(helper));
         registration.addRecipeCategories(new BeeBreedingCategory(helper));
         registration.addRecipeCategories(new FlowersCategory(helper));
+        registration.addRecipeCategories(new EntityFlowerCategory(helper));
         registration.addRecipeCategories(new CentrifugeRecipeCategory(helper));
         registration.addRecipeCategories(new FluidToFluid(helper));
         registration.addRecipeCategories(new BlockToFluid(helper));
@@ -88,6 +89,7 @@ public class JEICompat implements IModPlugin {
             registration.addRecipes(BlockToBlock.getMutationRecipes(registration.getIngredientManager()), BlockToBlock.ID);
             registration.addRecipes(ApiaryCategory.getHoneycombRecipes(registration.getIngredientManager()), ApiaryCategory.ID);
             registration.addRecipes(FlowersCategory.getFlowersRecipes(registration.getIngredientManager()), FlowersCategory.ID);
+            registration.addRecipes(EntityFlowerCategory.getFlowersRecipes(registration.getIngredientManager()), EntityFlowerCategory.ID);
             registerInfoDesc(registration);
         }
     }

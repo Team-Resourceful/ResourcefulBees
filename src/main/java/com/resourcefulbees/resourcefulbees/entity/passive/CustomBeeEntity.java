@@ -10,7 +10,6 @@ import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.validation.ValidatorUtils;
-import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
 import net.minecraft.entity.passive.BeeEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -46,6 +45,7 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
 
     protected final CustomBeeData beeData;
     protected int timeWithoutHive;
+    protected int flowerID;
 
     public CustomBeeEntity(EntityType<? extends BeeEntity> type, World world, CustomBeeData beeData) {
         super(type, world);
@@ -57,6 +57,10 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
     public String getBeeType() { return beeData.getName(); }
 
     public CustomBeeData getBeeData() { return beeData; }
+
+    public int getFlowerEntityID() { return flowerID; }
+
+    public void setFlowerEntityID(int id) { flowerID = id; }
 
     @Override
     public int getFeedCount() { return this.dataManager.get(FEED_COUNT); }

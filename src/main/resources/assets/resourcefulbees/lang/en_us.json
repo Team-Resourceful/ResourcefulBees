@@ -50,6 +50,7 @@
 	"gui.resourcefulbees.apiary.button.storage_screen": "Apiary Storage",
 	"gui.resourcefulbees.mechanical_centrifuge": "Mechanical Centrifuge",
 	"gui.resourcefulbees.honey_generator": "Generator",
+	"gui.resourcefulbees.jei.category.bee_pollination_entity_flowers": "Bee Entity Flowers",
 
 	"block.resourcefulbees.t1_beehive": "Tier 1 Beehive",
 	"block.resourcefulbees.t2_beehive": "Tier 2 Beehive",

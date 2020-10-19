@@ -5,8 +5,10 @@ import com.resourcefulbees.resourcefulbees.api.beedata.TraitData;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.entity.goals.BeeAngerGoal;
 import com.resourcefulbees.resourcefulbees.entity.goals.BeeBreedGoal;
+import com.resourcefulbees.resourcefulbees.entity.goals.BeePollinateGoal;
 import com.resourcefulbees.resourcefulbees.entity.goals.BeeTemptGoal;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
+import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
 import com.resourcefulbees.resourcefulbees.lib.TraitConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
@@ -16,12 +18,7 @@ import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.validation.ValidatorUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.DoublePlantBlock;
-import net.minecraft.entity.AreaEffectCloudEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.FollowParentGoal;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.passive.BeeEntity;
@@ -29,7 +26,6 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
-import net.minecraft.state.properties.DoubleBlockHalf;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ITag;
@@ -55,39 +51,14 @@ import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ResourcefulBee extends CustomBeeEntity {
 
-    protected final Predicate<BlockState> flowerPredicate = state -> {
-
-        String flower = getBeeData().getFlower();
-
-        if (ValidatorUtils.TAG_RESOURCE_PATTERN.matcher(flower).matches()) {
-            ITag<Block> blockTag = BeeInfoUtils.getBlockTag(flower.replace(BeeConstants.TAG_PREFIX, ""));
-            return blockTag != null && state.isIn(blockTag);
-        } else {
-            switch (flower) {
-                case BeeConstants.FLOWER_TAG_ALL:
-                    return state.isIn(BlockTags.TALL_FLOWERS)
-                            ? state.getBlock() != Blocks.SUNFLOWER
-                            || state.get(DoublePlantBlock.HALF) == DoubleBlockHalf.UPPER
-                            : state.isIn(BlockTags.SMALL_FLOWERS);
-                case BeeConstants.FLOWER_TAG_SMALL:
-                    return state.isIn(BlockTags.SMALL_FLOWERS);
-                case BeeConstants.FLOWER_TAG_TALL:
-                    return state.isIn(BlockTags.TALL_FLOWERS) && (state.getBlock() != Blocks.SUNFLOWER || state.get(DoublePlantBlock.HALF) == DoubleBlockHalf.UPPER);
-                default:
-                    return state.getBlock().equals(BeeInfoUtils.getBlock(flower));
-            }
-        }
-    };
-
     private boolean wasColliding;
     private int numberOfMutations;
+    public BeePollinateGoal beePollinateGoal;
 
     public ResourcefulBee(EntityType<? extends BeeEntity> type, World world, CustomBeeData beeData) {
         super(type, world, beeData);
@@ -103,18 +74,26 @@ public class ResourcefulBee extends CustomBeeEntity {
 
         this.goalSelector.addGoal(0, new BeeEntity.StingGoal(this, 1.4, true));
         this.goalSelector.addGoal(1, new EnterBeehiveGoal2());
+
         if (customBeeData.getBreedData().isBreedable()) {
             this.goalSelector.addGoal(2, new BeeBreedGoal(this, 1.0D));
             this.goalSelector.addGoal(3, new BeeTemptGoal(this, 1.25D, false));
         }
-        this.pollinateGoal = new ResourcefulBee.PollinateGoal2();
-        this.goalSelector.addGoal(4, this.pollinateGoal);
+        this.beePollinateGoal = new BeePollinateGoal(this, customBeeData.getFlower());
+        this.goalSelector.addGoal(4, this.beePollinateGoal);
+
+        this.pollinateGoal = new ResourcefulBee.fakePollinateGoal();
+
         this.goalSelector.addGoal(5, new FollowParentGoal(this, 1.25D));
+
         this.goalSelector.addGoal(5, new ResourcefulBee.UpdateBeehiveGoal2());
+
         this.moveToHiveGoal = new ResourcefulBee.FindBeehiveGoal2();
         this.goalSelector.addGoal(5, this.moveToHiveGoal);
+
         this.moveToFlowerGoal = new BeeEntity.FindFlowerGoal();
         this.goalSelector.addGoal(6, this.moveToFlowerGoal);
+
         if(customBeeData.getMutationData().hasMutation()) {
             this.goalSelector.addGoal(7, new ResourcefulBee.FindPollinationTargetGoal2());
         }
@@ -155,7 +134,7 @@ public class ResourcefulBee extends CustomBeeEntity {
 
     @Override
     public boolean canEnterHive() {
-        if (this.cannotEnterHiveTicks <= 0 && !this.pollinateGoal.isRunning() && !this.hasStung() && this.getAttackTarget() == null) {
+        if (this.cannotEnterHiveTicks <= 0 && !this.beePollinateGoal.isRunning() && !this.hasStung() && this.getAttackTarget() == null) {
             boolean flag = this.failedPollinatingTooLong() || this.hasNectar();
             return flag && !this.isHiveNearFire();
         } else {
@@ -177,17 +156,33 @@ public class ResourcefulBee extends CustomBeeEntity {
 
     public void applyPollinationEffect() {
         if (getBeeData().getMutationData().hasMutation()) {
+            String mutationOutput = getBeeData().getMutationData().getMutationOutput();
+            String mutationInput = getBeeData().getMutationData().getMutationInput();
             for (int i = 1; i <= 2; ++i) {
-                BlockPos beePosDown = this.getBlockPos().down(i);
-                BlockState state = world.getBlockState(beePosDown);
-                Block block = state.getBlock();
-                if (validFillerBlock(block)) {
-                    world.playEvent(2005, beePosDown, 0);
-                    String mutationOutput = getBeeData().getMutationData().getMutationOutput();
-                    Block newBlock = BeeInfoUtils.getBlock(mutationOutput);
-                    if (newBlock != null)
-                        world.setBlockState(beePosDown, newBlock.getDefaultState());
-                    addCropCounter();
+                if (getBeeData().getMutationData().getMutationType().equals(MutationTypes.ENTITY_TO_ENTITY)) {
+                    String entityMutationOutput = mutationOutput.replace(BeeConstants.ENTITY_PREFIX, "");
+                    String entityMutationInput = mutationInput.replace(BeeConstants.ENTITY_PREFIX, "");
+                    List<Entity> entityList = this.world.getEntitiesInAABBexcluding(this, this.getBoundingBox(),
+                            (entity) -> entity.getEntityString() != null && entity.getEntityString().equals(entityMutationInput));
+                    if (!entityList.isEmpty()) {
+                            BeeInfoUtils.getEntityType(entityMutationOutput)
+                                .spawn((ServerWorld)world, null, null, entityList.get(0).getBlockPos(), SpawnReason.NATURAL, false, false);
+                            entityList.get(0).remove();
+                        world.playEvent(2005, this.getBlockPos().down(1), 0);
+                        addCropCounter();
+                            break;
+                    }
+                } else {
+                    BlockPos beePosDown = this.getBlockPos().down(i);
+                    BlockState state = world.getBlockState(beePosDown);
+                    Block block = state.getBlock();
+                    if (validFillerBlock(block)) {
+                        world.playEvent(2005, beePosDown, 0);
+                        Block newBlock = BeeInfoUtils.getBlock(mutationOutput);
+                        if (newBlock != null)
+                            world.setBlockState(beePosDown, newBlock.getDefaultState());
+                        addCropCounter();
+                    }
                 }
             }
         }
@@ -211,6 +206,8 @@ public class ResourcefulBee extends CustomBeeEntity {
         if (ValidatorUtils.TAG_RESOURCE_PATTERN.matcher(flower).matches()) {
             ITag<Block> blockTag = BeeInfoUtils.getBlockTag(flower.replace(BeeConstants.TAG_PREFIX, ""));
             return blockTag != null && this.world.getBlockState(pos).getBlock().isIn(blockTag);
+        } else if (ValidatorUtils.ENTITY_RESOURCE_PATTERN.matcher(flower).matches()){
+            return this.world.getEntityByID(this.getFlowerEntityID()) != null;
         } else {
             switch (flower) {
                 case BeeConstants.FLOWER_TAG_ALL:
@@ -225,17 +222,13 @@ public class ResourcefulBee extends CustomBeeEntity {
         }
     }
 
-    public Predicate<BlockState> getFlowerPredicate() {
-        return flowerPredicate;
-    }
-
     protected void updateAITasks() {
         TraitData info = getBeeData().getTraitData();
 
         if (info.hasSpecialAbilities()) {
             info.getSpecialAbilities().forEach(ability -> {
                 if (ability.equals(TraitConstants.TELEPORT)) {
-                    if (!hasHiveInRange() && !this.pollinateGoal.isRunning()) {
+                    if (!hasHiveInRange() && !this.beePollinateGoal.isRunning()) {
                         if (this.world.isDaytime() && this.ticksExisted % 150 == 0) {
                             this.teleportRandomly();
                         }
@@ -446,7 +439,7 @@ public class ResourcefulBee extends CustomBeeEntity {
             } else if (ResourcefulBee.this.rand.nextFloat() < 0.3F) {
                 return false;
             } else {
-                return ResourcefulBee.this.hasNectar() && ResourcefulBee.this.isHiveValid();
+                return ResourcefulBee.this.hasNectar();
             }
         }
 
@@ -469,43 +462,20 @@ public class ResourcefulBee extends CustomBeeEntity {
         }
     }
 
-    public class PollinateGoal2 extends BeeEntity.PollinateGoal {
-
-        public PollinateGoal2() {
+    public class fakePollinateGoal extends BeeEntity.PollinateGoal {
+        public fakePollinateGoal() {
             super();
         }
 
         @Override
-        public boolean canBeeStart() {
-            if (ResourcefulBee.this.ticksUntilCanPollinate > 0) {
-                return false;
-            } else if (ResourcefulBee.this.hasNectar()) {
-                return false;
-            } else if (ResourcefulBee.this.rand.nextFloat() < 0.7F) {
-                return false;
-            } else {
-                Optional<BlockPos> optional = this.getFlower();
-                if (optional.isPresent()) {
-                    ResourcefulBee.this.flowerPos = optional.get();
-                    ResourcefulBee.this.navigator.tryMoveToXYZ((double)ResourcefulBee.this.flowerPos.getX() + 0.5D, (double)ResourcefulBee.this.flowerPos.getY() + 0.5D, (double)ResourcefulBee.this.flowerPos.getZ() + 0.5D, 1.2F);
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        }
-
-        @Nonnull
-        @Override
-        public Optional<BlockPos> getFlower() {
-            return this.findFlower(getFlowerPredicate(), 5.0D);
-        }
-
-        @Override
         public boolean isRunning() {
-            return super.isRunning();
+            return beePollinateGoal.isRunning();
+        }
+
+        @Override
+        public void cancel() {
+            beePollinateGoal.cancel();
         }
     }
-
 
 }
