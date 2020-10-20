@@ -107,19 +107,19 @@ public class CustomBeeData extends AbstractBeeData {
 
     public boolean containsData(String key) { return this.ADDITIONAL_DATA.containsKey(key); }
 
-    public BreedData getBreedData() { return this.BreedData != null ? this.BreedData : new BreedData.Builder(false).createBreedData(); }
+    public BreedData getBreedData() { return this.BreedData != null ? this.BreedData : com.resourcefulbees.resourcefulbees.api.beedata.BreedData.createDefault(); }
 
-    public CentrifugeData getCentrifugeData() { return this.CentrifugeData != null ? this.CentrifugeData : new CentrifugeData.Builder(false, "minecraft:stone").createCentrifugeData(); }
+    public CentrifugeData getCentrifugeData() { return this.CentrifugeData != null ? this.CentrifugeData : com.resourcefulbees.resourcefulbees.api.beedata.CentrifugeData.createDefault(); }
 
-    public ColorData getColorData() { return this.ColorData != null ? this.ColorData : new ColorData.Builder(false).createColorData(); }
+    public ColorData getColorData() { return this.ColorData != null ? this.ColorData : com.resourcefulbees.resourcefulbees.api.beedata.ColorData.createDefault(); }
 
-    public com.resourcefulbees.resourcefulbees.api.beedata.CombatData getCombatData() { return this.CombatData != null ? this.CombatData : new CombatData.Builder(false).create(); }
+    public CombatData getCombatData() { return this.CombatData != null ? this.CombatData : com.resourcefulbees.resourcefulbees.api.beedata.CombatData.createDefault(); }
 
-    public MutationData getMutationData() { return this.MutationData != null ? this.MutationData : new MutationData.Builder(false, MutationTypes.NONE).createMutationData(); }
+    public MutationData getMutationData() { return this.MutationData != null ? this.MutationData : com.resourcefulbees.resourcefulbees.api.beedata.MutationData.createDefault(); }
 
-    public SpawnData getSpawnData() { return this.SpawnData != null ? this.SpawnData : new SpawnData.Builder(false).createSpawnData(); }
+    public SpawnData getSpawnData() { return this.SpawnData != null ? this.SpawnData : com.resourcefulbees.resourcefulbees.api.beedata.SpawnData.createDefault(); }
 
-    public TraitData getTraitData() { return this.TraitData != null ? this.TraitData : new TraitData(false); }
+    public TraitData getTraitData() { return this.TraitData != null ? this.TraitData : com.resourcefulbees.resourcefulbees.api.beedata.TraitData.createDefault(); }
 
     public void setTraitData(TraitData traitData) { this.TraitData = this.TraitData != null ? this.TraitData : traitData; }
 
