@@ -153,7 +153,8 @@ public class TieredBeehiveBlock extends BeehiveBlock {
                 if (beeEntity.getAttackTarget() == null) {
                     if (size > 0) {
                         PlayerEntity randomPlayer = playerEntityList.get(world.rand.nextInt(size));
-                        beeEntity.setAttackTarget(randomPlayer);
+                        if (!(randomPlayer instanceof FakePlayer))
+                            beeEntity.setAttackTarget(randomPlayer);
                     }
                 }
             }
