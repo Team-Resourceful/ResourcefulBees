@@ -131,7 +131,8 @@ public class TieredBeehiveBlock extends BeehiveBlock {
                 this.takeHoney(world, state, pos);
             } else {
                 if (this.hasBees(world, pos)) {
-                    this.angerNearbyBees(world, pos);
+                    if (!(player instanceof FakePlayer))
+                        this.angerNearbyBees(world, pos);
                 }
 
                 this.takeHoney(world, state, pos, player, BeehiveTileEntity.State.EMERGENCY);
@@ -150,8 +151,8 @@ public class TieredBeehiveBlock extends BeehiveBlock {
 
             for (BeeEntity beeEntity : beeEntityList) {
                 if (beeEntity.getAttackTarget() == null) {
-                    PlayerEntity randomPlayer = playerEntityList.get(world.rand.nextInt(size));
-                    if (!(randomPlayer instanceof FakePlayer)) {
+                    if (size > 0) {
+                        PlayerEntity randomPlayer = playerEntityList.get(world.rand.nextInt(size));
                         beeEntity.setAttackTarget(randomPlayer);
                     }
                 }
