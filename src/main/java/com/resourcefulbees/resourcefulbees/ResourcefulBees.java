@@ -18,9 +18,7 @@ import com.resourcefulbees.resourcefulbees.init.BiomeDictonarySetup;
 import com.resourcefulbees.resourcefulbees.init.ModSetup;
 import com.resourcefulbees.resourcefulbees.init.TraitSetup;
 import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
-import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
-import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
-import com.resourcefulbees.resourcefulbees.registry.TraitRegistry;
+import com.resourcefulbees.resourcefulbees.registry.*;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.PreviewHandler;
 import com.resourcefulbees.resourcefulbees.utils.color.ColorHandler;
@@ -32,7 +30,6 @@ import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.entity.merchant.villager.VillagerTrades;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.item.MerchantOffer;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -121,8 +118,8 @@ public class ResourcefulBees
         List<VillagerTrades.ITrade> level4 = event.getTrades().get(4);
         List<VillagerTrades.ITrade> level5 = event.getTrades().get(5);
 
-        if(event.getType() == RegistryHandler.BEEKEEPER.get()) {
-            ItemStack queenBeeBanner = new ItemStack(Items.BLACK_BANNER);
+        if(event.getType() == ModVillagerProfessions.BEEKEEPER.get()) {
+            ItemStack queenBeeBanner = new ItemStack(net.minecraft.item.Items.BLACK_BANNER);
             CompoundNBT compoundnbt = queenBeeBanner.getOrCreateChildTag("BlockEntityTag");
             ListNBT listnbt = (new BannerPattern.Builder()).func_222477_a(BannerPattern.RHOMBUS_MIDDLE, DyeColor.LIGHT_BLUE).func_222477_a(BannerPattern.STRIPE_DOWNRIGHT, DyeColor.YELLOW).func_222477_a(BannerPattern.STRIPE_DOWNLEFT, DyeColor.YELLOW).func_222477_a(BannerPattern.STRIPE_BOTTOM, DyeColor.YELLOW).func_222477_a(BannerPattern.TRIANGLE_TOP, DyeColor.YELLOW).func_222477_a(BannerPattern.CURLY_BORDER, DyeColor.YELLOW).func_222476_a();
             compoundnbt.put("Patterns", listnbt);
@@ -130,27 +127,27 @@ public class ResourcefulBees
             queenBeeBanner.setCount(1);
 
             level1.add((entity, rand) -> new MerchantOffer(
-                    new ItemStack(Items.EMERALD, 3),
-                    new ItemStack(RegistryHandler.WAX_BLOCK_ITEM.get(), 1),
+                    new ItemStack(net.minecraft.item.Items.EMERALD, 3),
+                    new ItemStack(ModItems.WAX_BLOCK_ITEM.get(), 1),
                     32, 4, 1));
             level2.add((entity, rand) -> new MerchantOffer(
-                    new ItemStack(Items.EMERALD, 2),
-                    new ItemStack(Items.HONEYCOMB, 3),
+                    new ItemStack(net.minecraft.item.Items.EMERALD, 2),
+                    new ItemStack(net.minecraft.item.Items.HONEYCOMB, 3),
                     10, 4, 1));
             level3.add((entity, rand) -> new MerchantOffer(
-                    new ItemStack(Items.EMERALD, 2),
-                    new ItemStack(RegistryHandler.WAX.get(), 6),
+                    new ItemStack(net.minecraft.item.Items.EMERALD, 2),
+                    new ItemStack(ModItems.WAX.get(), 6),
                     15, 4, 1));
             level4.add((entity, rand) -> new MerchantOffer(
-                    new ItemStack(Items.HONEY_BOTTLE, 4),
-                    new ItemStack(Items.EMERALD, 2),
+                    new ItemStack(net.minecraft.item.Items.HONEY_BOTTLE, 4),
+                    new ItemStack(net.minecraft.item.Items.EMERALD, 2),
                     10, 4, 0));
             level5.add((entity, rand) -> new MerchantOffer(
-                    new ItemStack(Items.EMERALD, 12),
-                    new ItemStack(RegistryHandler.SMOKER.get(), 1),
+                    new ItemStack(net.minecraft.item.Items.EMERALD, 12),
+                    new ItemStack(ModItems.SMOKER.get(), 1),
                     10, 4, 0));
             level5.add((entity, rand) -> new MerchantOffer(
-                    new ItemStack(Items.EMERALD, 64),
+                    new ItemStack(net.minecraft.item.Items.EMERALD, 64),
                     queenBeeBanner,
                     2, 4, 0));
         }
@@ -159,13 +156,13 @@ public class ResourcefulBees
     private void setup(final FMLCommonSetupEvent event){
         BeeInfoUtils.makeValidApiaryTag();
         Map<BlockState, PointOfInterestType> pointOfInterestTypeMap = new HashMap<>();
-        RegistryHandler.BLOCKS.getEntries().stream()
+        ModBlocks.BLOCKS.getEntries().stream()
                 .filter(blockRegistryObject -> blockRegistryObject.get() instanceof TieredBeehiveBlock)
                 .forEach((blockRegistryObject -> blockRegistryObject.get()
                         .getStateContainer()
                         .getValidStates()
                         .forEach(blockState -> putPOIInMap(blockState, pointOfInterestTypeMap))));
-        RegistryHandler.BLOCKS.getEntries().stream()
+        ModBlocks.BLOCKS.getEntries().stream()
                 .filter(blockRegistryObject -> blockRegistryObject.get() instanceof ApiaryBlock)
                 .forEach((blockRegistryObject -> blockRegistryObject.get()
                         .getStateContainer()
@@ -180,10 +177,12 @@ public class ResourcefulBees
 
         RegistryHandler.addEntityAttributes();
         MinecraftForge.EVENT_BUS.register(new RecipeBuilder());
+
+        ModFeatures.ConfiguredFeatures.registerConfiguredFeatures();
     }
 
     private void putPOIInMap(BlockState blockState, Map<BlockState, PointOfInterestType> pointOfInterestTypeMap) {
-        pointOfInterestTypeMap.put(blockState, RegistryHandler.TIERED_BEEHIVE_POI.get());
+        pointOfInterestTypeMap.put(blockState, ModPOIs.TIERED_BEEHIVE_POI.get());
     }
 
     public void onInterModEnqueue(InterModEnqueueEvent event) {
@@ -194,17 +193,17 @@ public class ResourcefulBees
     private void doClientStuff(final FMLClientSetupEvent event) {
         CentrifugeScreen.currentMonth = new SimpleDateFormat("MM").format(new Date());
         BeeRegistry.MOD_BEES.forEach((s, customBee) -> RenderingRegistry.registerEntityRenderingHandler(customBee.get(), CustomBeeRenderer::new));
-        ScreenManager.registerFactory(RegistryHandler.CENTRIFUGE_CONTAINER.get(), CentrifugeScreen::new);
-        ScreenManager.registerFactory(RegistryHandler.MECHANICAL_CENTRIFUGE_CONTAINER.get(), MechanicalCentrifugeScreen::new);
-        ScreenManager.registerFactory(RegistryHandler.CENTRIFUGE_MULTIBLOCK_CONTAINER.get(), CentrifugeMultiblockScreen::new);
-        ScreenManager.registerFactory(RegistryHandler.UNVALIDATED_APIARY_CONTAINER.get(), UnvalidatedApiaryScreen::new);
-        ScreenManager.registerFactory(RegistryHandler.VALIDATED_APIARY_CONTAINER.get(), ValidatedApiaryScreen::new);
-        ScreenManager.registerFactory(RegistryHandler.APIARY_STORAGE_CONTAINER.get(), ApiaryStorageScreen::new);
-        ScreenManager.registerFactory(RegistryHandler.APIARY_BREEDER_CONTAINER.get(), ApiaryBreederScreen::new);
-        ScreenManager.registerFactory(RegistryHandler.HONEY_GENERATOR_CONTAINER.get(), HoneyGeneratorScreen::new);
-        RenderTypeLookup.setRenderLayer(RegistryHandler.GOLD_FLOWER.get(), RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(RegistryHandler.PREVIEW_BLOCK.get(), RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(RegistryHandler.ERRORED_PREVIEW_BLOCK.get(), RenderType.getCutout());
+        ScreenManager.registerFactory(ModContainers.CENTRIFUGE_CONTAINER.get(), CentrifugeScreen::new);
+        ScreenManager.registerFactory(ModContainers.MECHANICAL_CENTRIFUGE_CONTAINER.get(), MechanicalCentrifugeScreen::new);
+        ScreenManager.registerFactory(ModContainers.CENTRIFUGE_MULTIBLOCK_CONTAINER.get(), CentrifugeMultiblockScreen::new);
+        ScreenManager.registerFactory(ModContainers.UNVALIDATED_APIARY_CONTAINER.get(), UnvalidatedApiaryScreen::new);
+        ScreenManager.registerFactory(ModContainers.VALIDATED_APIARY_CONTAINER.get(), ValidatedApiaryScreen::new);
+        ScreenManager.registerFactory(ModContainers.APIARY_STORAGE_CONTAINER.get(), ApiaryStorageScreen::new);
+        ScreenManager.registerFactory(ModContainers.APIARY_BREEDER_CONTAINER.get(), ApiaryBreederScreen::new);
+        ScreenManager.registerFactory(ModContainers.HONEY_GENERATOR_CONTAINER.get(), HoneyGeneratorScreen::new);
+        RenderTypeLookup.setRenderLayer(ModBlocks.GOLD_FLOWER.get(), RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(ModBlocks.PREVIEW_BLOCK.get(), RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(ModBlocks.ERRORED_PREVIEW_BLOCK.get(), RenderType.getCutout());
 
         ItemModelPropertiesHandler.registerProperties();
     }

@@ -7,6 +7,7 @@ public class Config {
 
     public static ForgeConfigSpec.BooleanValue GENERATE_DEFAULTS;
     public static ForgeConfigSpec.BooleanValue GENERATE_BIOME_DICTIONARIES;
+    public static ForgeConfigSpec.BooleanValue USE_FORGE_DICTIONARIES;
     public static ForgeConfigSpec.BooleanValue ENABLE_EASTER_EGG_BEES;
 
     public static ForgeConfigSpec.BooleanValue GENERATE_BEE_NESTS;
@@ -40,6 +41,13 @@ public class Config {
     public static ForgeConfigSpec.DoubleValue PLAYER_EXHAUSTION;
     public static ForgeConfigSpec.BooleanValue MULTIBLOCK_RECIPES_ONLY;
 
+    public static ForgeConfigSpec.IntValue HONEY_FILL_AMOUNT;
+    public static ForgeConfigSpec.IntValue HONEY_DRAIN_AMOUNT;
+    public static ForgeConfigSpec.IntValue ENERGY_FILL_AMOUNT;
+    public static ForgeConfigSpec.IntValue ENERGY_TRANSFER_AMOUNT;
+    public static ForgeConfigSpec.IntValue MAX_ENERGY_CAPACITY;
+    public static ForgeConfigSpec.IntValue MAX_TANK_STORAGE;
+
     public static ForgeConfigSpec.IntValue APIARY_MAX_BEES;
     public static ForgeConfigSpec.IntValue APIARY_MAX_BREED_TIME;
 
@@ -70,8 +78,10 @@ public class Config {
             COMMON_BUILDER.push("General Options");
             GENERATE_DEFAULTS = COMMON_BUILDER.comment("\nSet this to false when you want to overwrite the default bee files. [true/false]\nThis should be run at least once for initial generation.")
                     .define("generateDefaults",true);
-            GENERATE_BIOME_DICTIONARIES = COMMON_BUILDER.comment("\nSet this to false when you want to overwrite the default biome dictionary files. [true/false]\nThis should be run at least once for initial generation.")
-                    .define("generateBiomeDictionaries",true);
+            GENERATE_BIOME_DICTIONARIES = COMMON_BUILDER.comment("\nSet this to false when you want to overwrite the default provided Biome Dictionary files. [true/false]\nThis should be run at least once for initial generation.")
+                    .define("generateBiomeDictionaries",false);
+            USE_FORGE_DICTIONARIES = COMMON_BUILDER.comment("\nSet this to false when you want to use our custom Biome Dictionary system. [true/false]\nAt a later time we will look into either combining with the Forge system or making the Forge system data pack capable.")
+                    .define("useForgeBiomeDictionaries",true);
             ENABLE_EASTER_EGG_BEES = COMMON_BUILDER.comment("\nSet to true if you want easter egg bees to generate (WIP) [true/false]")
                     .define("enableEasterEggBees", true);
             SMOKER_DURABILITY = COMMON_BUILDER.comment("\nSets the max durability for the smoker")
@@ -98,6 +108,21 @@ public class Config {
                     .defineInRange("mechanicalCentrifugePlayerExhaustion", 0.1,0.0,1);
             MULTIBLOCK_RECIPES_ONLY = COMMON_BUILDER.comment("\n Makes it so multiblock centrifuge can only do multiblock recipes. [true/false]")
                     .define("multiblockRecipesOnly", false);
+            COMMON_BUILDER.pop();
+
+            COMMON_BUILDER.push("Honey Generator Options");
+            HONEY_FILL_AMOUNT = COMMON_BUILDER.comment("\nAmount of honey generated in mb/t. 1 bottle = 250mb honey")
+                    .defineInRange("honeyFillAmount", 10,1,50);
+            HONEY_DRAIN_AMOUNT = COMMON_BUILDER.comment("\nAmount of honey consumed in mb/t.")
+                    .defineInRange("honeyDrainAmount", 5,1,50);
+            ENERGY_FILL_AMOUNT = COMMON_BUILDER.comment("\nAmount of rf/t generated.")
+                    .defineInRange("energyFillAmount", 125,50,500);
+            ENERGY_TRANSFER_AMOUNT = COMMON_BUILDER.comment("\nAmount of energy transferred out of the generator in rf/t.")
+                    .defineInRange("energyTransferAmount", 100,50,500);
+            MAX_ENERGY_CAPACITY = COMMON_BUILDER.comment("\nMaximum internal energy buffer.")
+                    .defineInRange("maxEnergyCapacity", 100000,10000,1000000);
+            MAX_TANK_STORAGE = COMMON_BUILDER.comment("\nMaximum internal honey capacity.")
+                    .defineInRange("maxTankCapacity", 10000,1000,100000);
             COMMON_BUILDER.pop();
 
             COMMON_BUILDER.push("Beehive Options");

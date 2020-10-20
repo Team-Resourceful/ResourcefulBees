@@ -161,4 +161,8 @@ public class ColorData extends AbstractBeeData {
             return new ColorData(primaryColor, secondaryColor, honeycombColor, primaryLayerTexture, secondaryLayerTexture, emissiveLayerTexture, isBeeColored, isRainbowBee, isGlowing, glowColor, isEnchanted, glowingPulse);
         }
     }
+
+    public static ColorData createDefault() {
+        return new Builder(false).createColorData();
+    }
 }

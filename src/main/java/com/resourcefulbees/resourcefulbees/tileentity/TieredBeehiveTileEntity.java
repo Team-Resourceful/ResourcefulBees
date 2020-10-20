@@ -7,7 +7,7 @@ import com.resourcefulbees.resourcefulbees.block.TieredBeehiveBlock;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
-import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
+import com.resourcefulbees.resourcefulbees.registry.ModTileEntityTypes;
 import com.resourcefulbees.resourcefulbees.utils.MathUtils;
 import net.minecraft.block.BeehiveBlock;
 import net.minecraft.block.Block;
@@ -49,7 +49,7 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
   @Nonnull
   @Override
   public TileEntityType<?> getType() {
-    return RegistryHandler.TIERED_BEEHIVE_TILE_ENTITY.get();
+    return ModTileEntityTypes.TIERED_BEEHIVE_TILE_ENTITY.get();
   }
 
   public int getTier() {

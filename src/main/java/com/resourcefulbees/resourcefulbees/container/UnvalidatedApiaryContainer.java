@@ -1,6 +1,6 @@
 package com.resourcefulbees.resourcefulbees.container;
 
-import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
+import com.resourcefulbees.resourcefulbees.registry.ModContainers;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryTileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -16,7 +16,7 @@ public class UnvalidatedApiaryContainer extends Container {
     public BlockPos pos;
 
     public UnvalidatedApiaryContainer(int id, World world, BlockPos pos, PlayerInventory inv) {
-        super(RegistryHandler.UNVALIDATED_APIARY_CONTAINER.get(), id);
+        super(ModContainers.UNVALIDATED_APIARY_CONTAINER.get(), id);
         this.pos = pos;
         this.apiaryTileEntity = (ApiaryTileEntity)world.getTileEntity(pos);
     }

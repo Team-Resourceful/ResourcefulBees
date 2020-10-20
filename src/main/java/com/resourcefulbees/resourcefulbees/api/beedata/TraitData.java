@@ -79,4 +79,8 @@ public class TraitData extends AbstractBeeData {
     public List<BasicParticleType> getParticleEffects(){
         return particleEffects;
     }
+
+    public static TraitData createDefault() {
+        return new TraitData(false);
+    }
 }

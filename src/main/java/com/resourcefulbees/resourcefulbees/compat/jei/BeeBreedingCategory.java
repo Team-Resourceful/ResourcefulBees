@@ -1,5 +1,6 @@
 package com.resourcefulbees.resourcefulbees.compat.jei;
 
+import com.google.common.base.Splitter;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.IBeeRegistry;
@@ -7,7 +8,7 @@ import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.compat.jei.ingredients.EntityIngredient;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
-import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
+import com.resourcefulbees.resourcefulbees.registry.ModBlocks;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.validation.ValidatorUtils;
 import mezz.jei.api.constants.VanillaTypes;
@@ -33,6 +34,7 @@ import net.minecraft.util.ResourceLocation;
 import javax.annotation.Nonnull;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import static com.resourcefulbees.resourcefulbees.lib.BeeConstants.*;
@@ -48,7 +50,7 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
 
     public BeeBreedingCategory(IGuiHelper guiHelper) {
         this.background = guiHelper.drawableBuilder(GUI_BACK, 0, 0, 160, 60).addPadding(0, 0, 0, 0).build();
-        this.icon = guiHelper.createDrawableIngredient(new ItemStack(RegistryHandler.GOLD_FLOWER.get()));
+        this.icon = guiHelper.createDrawableIngredient(new ItemStack(ModBlocks.GOLD_FLOWER.get()));
         this.localizedName = I18n.format("gui.resourcefulbees.jei.category.breeding");
     }
 
@@ -57,27 +59,36 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
 
         beeRegistry.getBees().forEach(((s, beeData) -> {
             if (beeData.getBreedData().isBreedable()) {
-                if (beeData.getBreedData().hasParents()){
-                    if (beeRegistry.getBees().containsKey(beeData.getBreedData().getParent1()) && beeRegistry.getBees().containsKey(beeData.getBreedData().getParent2())) {
-                        CustomBeeData p1_data = beeRegistry.getBeeData(beeData.getBreedData().getParent1());
-                        CustomBeeData p2_data = beeRegistry.getBeeData(beeData.getBreedData().getParent2());
+                if (beeData.getBreedData().hasParents()) {
 
-                        String p1_feedItemS = finalizeFeedItem(p1_data.getBreedData().getFeedItem());
-                        String p2_feedItemS = finalizeFeedItem(p2_data.getBreedData().getFeedItem());
+                    Iterator<String> parent1 = Splitter.on(",").trimResults().split(beeData.getBreedData().getParent1()).iterator();
+                    Iterator<String> parent2 = Splitter.on(",").trimResults().split(beeData.getBreedData().getParent2()).iterator();
 
-                        ITag<Item> p1_feedTag = TagCollectionManager.getTagManager().getItems().get(new ResourceLocation(p1_feedItemS));
-                        ITag<Item> p2_feedTag = TagCollectionManager.getTagManager().getItems().get(new ResourceLocation(p2_feedItemS));
+                    while (parent1.hasNext() && parent2.hasNext()) {
+                        String p1 = parent1.next();
+                        String p2 = parent2.next();
 
-                        Item p1_feedItem = BeeInfoUtils.getItem(p1_feedItemS);
-                        Item p2_feedItem = BeeInfoUtils.getItem(p2_feedItemS);
+                        if (beeRegistry.getBees().containsKey(p1) && beeRegistry.getBees().containsKey(p2)) {
+                            CustomBeeData p1_data = beeRegistry.getBeeData(p1);
+                            CustomBeeData p2_data = beeRegistry.getBeeData(p2);
 
-                        if (BeeInfoUtils.isTag(p1_data.getBreedData().getFeedItem())) p1_feedItem = null;
-                        if (BeeInfoUtils.isTag(p2_data.getBreedData().getFeedItem())) p2_feedItem = null;
+                            String p1_feedItemS = finalizeFeedItem(p1_data.getBreedData().getFeedItem());
+                            String p2_feedItemS = finalizeFeedItem(p2_data.getBreedData().getFeedItem());
 
-                        recipes.add(new Recipe(
-                                p1_data.getName(), p1_feedTag, p1_feedItem, p1_data.getBreedData().getFeedAmount(),
-                                p2_data.getName(), p2_feedTag, p2_feedItem, p2_data.getBreedData().getFeedAmount(),
-                                beeData.getName()));
+                            ITag<Item> p1_feedTag = TagCollectionManager.getTagManager().getItems().get(new ResourceLocation(p1_feedItemS));
+                            ITag<Item> p2_feedTag = TagCollectionManager.getTagManager().getItems().get(new ResourceLocation(p2_feedItemS));
+
+                            Item p1_feedItem = BeeInfoUtils.getItem(p1_feedItemS);
+                            Item p2_feedItem = BeeInfoUtils.getItem(p2_feedItemS);
+
+                            if (BeeInfoUtils.isTag(p1_data.getBreedData().getFeedItem())) p1_feedItem = null;
+                            if (BeeInfoUtils.isTag(p2_data.getBreedData().getFeedItem())) p2_feedItem = null;
+
+                            recipes.add(new Recipe(
+                                    p1_data.getName(), p1_feedTag, p1_feedItem, p1_data.getBreedData().getFeedAmount(),
+                                    p2_data.getName(), p2_feedTag, p2_feedItem, p2_data.getBreedData().getFeedAmount(),
+                                    beeData.getName()));
+                        }
                     }
                 }
                 int feedAmount = beeData.getBreedData().getFeedAmount();
@@ -196,7 +207,7 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
         Minecraft minecraft = Minecraft.getInstance();
         FontRenderer fontRenderer = minecraft.fontRenderer;
         DecimalFormat decimalFormat = new DecimalFormat("##%");
-        fontRenderer.draw(matrix, decimalFormat.format(beeRegistry.getAdjustedWeightForChild(beeRegistry.getBeeData(recipe.child), recipe.parent1.equals(recipe.parent2))), 90, 35, 0xff808080);
+        fontRenderer.draw(matrix, decimalFormat.format(beeRegistry.getAdjustedWeightForChild(beeRegistry.getBeeData(recipe.child), recipe.parent1, recipe.parent2)), 90, 35, 0xff808080);
     }
 
     public static class Recipe {

@@ -3,15 +3,12 @@ package com.resourcefulbees.resourcefulbees.entity.passive;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.api.beedata.TraitData;
 import com.resourcefulbees.resourcefulbees.config.Config;
-import com.resourcefulbees.resourcefulbees.entity.goals.BeeAngerGoal;
-import com.resourcefulbees.resourcefulbees.entity.goals.BeeBreedGoal;
-import com.resourcefulbees.resourcefulbees.entity.goals.BeePollinateGoal;
-import com.resourcefulbees.resourcefulbees.entity.goals.BeeTemptGoal;
+import com.resourcefulbees.resourcefulbees.entity.goals.*;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
 import com.resourcefulbees.resourcefulbees.lib.TraitConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
-import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
+import com.resourcefulbees.resourcefulbees.registry.ModPOIs;
 import com.resourcefulbees.resourcefulbees.tileentity.TieredBeehiveTileEntity;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
@@ -72,19 +69,22 @@ public class ResourcefulBee extends CustomBeeEntity {
         String beeType = namespaceID.substring(namespaceID.lastIndexOf(":") + 1, namespaceID.length() - 4);
         CustomBeeData customBeeData = BeeRegistry.getRegistry().getBeeData(beeType);
 
-        this.goalSelector.addGoal(0, new BeeEntity.StingGoal(this, 1.4, true));
+        if (!customBeeData.getCombatData().isPassive()) {
+            this.goalSelector.addGoal(0, new BeeEntity.StingGoal(this, 1.4, true));
+            this.targetSelector.addGoal(1, (new BeeAngerGoal(this)).setCallsForHelp());
+            this.targetSelector.addGoal(2, new BeeEntity.AttackPlayerGoal(this));
+        }
         this.goalSelector.addGoal(1, new EnterBeehiveGoal2());
 
         if (customBeeData.getBreedData().isBreedable()) {
             this.goalSelector.addGoal(2, new BeeBreedGoal(this, 1.0D));
             this.goalSelector.addGoal(3, new BeeTemptGoal(this, 1.25D, false));
+            this.goalSelector.addGoal(5, new FollowParentGoal(this, 1.25D));
         }
         this.beePollinateGoal = new BeePollinateGoal(this, customBeeData.getFlower());
         this.goalSelector.addGoal(4, this.beePollinateGoal);
 
         this.pollinateGoal = new ResourcefulBee.fakePollinateGoal();
-
-        this.goalSelector.addGoal(5, new FollowParentGoal(this, 1.25D));
 
         this.goalSelector.addGoal(5, new ResourcefulBee.UpdateBeehiveGoal2());
 
@@ -97,10 +97,8 @@ public class ResourcefulBee extends CustomBeeEntity {
         if(customBeeData.getMutationData().hasMutation()) {
             this.goalSelector.addGoal(7, new ResourcefulBee.FindPollinationTargetGoal2());
         }
-        this.goalSelector.addGoal(8, new BeeEntity.WanderGoal());
+        this.goalSelector.addGoal(8, new BeeWanderGoal(this));
         this.goalSelector.addGoal(9, new SwimGoal(this));
-        this.targetSelector.addGoal(1, (new BeeAngerGoal(this)).setCallsForHelp());
-        this.targetSelector.addGoal(2, new BeeEntity.AttackPlayerGoal(this));
     }
 
     @Override
@@ -294,8 +292,8 @@ public class ResourcefulBee extends CustomBeeEntity {
     @Override
     public boolean attackEntityAsMob(@Nonnull Entity entityIn) {
         TraitData info = this.getBeeData().getTraitData();
-        boolean flag = entityIn.attackEntityFrom(DamageSource.sting(this), getBeeData().getAttackDamage());
-        if (flag) {
+        boolean flag = entityIn.attackEntityFrom(DamageSource.sting(this), getBeeData().getCombatData().getAttackDamage());
+        if (flag && this.getBeeData().getCombatData().removeStingerOnAttack()) {
             this.applyEnchantments(this, entityIn);
             if (entityIn instanceof LivingEntity) {
                 ((LivingEntity) entityIn).setStingerCount(((LivingEntity) entityIn).getStingerCount() + 1);
@@ -323,11 +321,10 @@ public class ResourcefulBee extends CustomBeeEntity {
             }
             if (!info.hasDamagePotionEffects() && !info.hasDamageTypes()) ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.POISON, i * 20, 0));
         }
+
         this.setAttackTarget(null);
-        if (!this.getBeeType().equals(BeeConstants.OREO_BEE)) {
-            this.setHasStung(Config.BEE_DIES_FROM_STING.get());
-            this.playSound(SoundEvents.ENTITY_BEE_STING, 1.0F, 1.0F);
-        }
+        this.setHasStung(Config.BEE_DIES_FROM_STING.get() || this.getBeeData().getCombatData().removeStingerOnAttack());
+        this.playSound(SoundEvents.ENTITY_BEE_STING, 1.0F, 1.0F);
 
         return flag;
     }
@@ -419,7 +416,7 @@ public class ResourcefulBee extends CustomBeeEntity {
             BlockPos blockpos = ResourcefulBee.this.getBlockPos();
             PointOfInterestManager pointofinterestmanager = ((ServerWorld) world).getPointOfInterestManager();
             Stream<PointOfInterest> stream = pointofinterestmanager.func_219146_b(pointOfInterestType ->
-                            pointOfInterestType == RegistryHandler.TIERED_BEEHIVE_POI.get() || pointOfInterestType == PointOfInterestType.BEE_NEST || pointOfInterestType == PointOfInterestType.BEEHIVE, blockpos,
+                            pointOfInterestType == ModPOIs.TIERED_BEEHIVE_POI.get() || pointOfInterestType == PointOfInterestType.BEE_NEST || pointOfInterestType == PointOfInterestType.BEEHIVE, blockpos,
                     20, PointOfInterestManager.Status.ANY);
             return stream.map(PointOfInterest::getPos).filter(ResourcefulBee.this::doesHiveHaveSpace)
                     .sorted(Comparator.comparingDouble(pos -> pos.distanceSq(blockpos))).collect(Collectors.toList());

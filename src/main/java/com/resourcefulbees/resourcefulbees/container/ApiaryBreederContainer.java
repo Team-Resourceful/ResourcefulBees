@@ -4,7 +4,7 @@ import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.item.BeeJar;
 import com.resourcefulbees.resourcefulbees.item.UpgradeItem;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
-import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
+import com.resourcefulbees.resourcefulbees.registry.ModContainers;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryBreederTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.MathUtils;
 import net.minecraft.entity.player.PlayerEntity;
@@ -37,7 +37,7 @@ public class ApiaryBreederContainer extends Container {
     }
 
     public ApiaryBreederContainer(int id, World world, BlockPos pos, PlayerInventory inv, IIntArray times) {
-        super(RegistryHandler.APIARY_BREEDER_CONTAINER.get(), id);
+        super(ModContainers.APIARY_BREEDER_CONTAINER.get(), id);
         this.player = inv.player;
         this.playerInventory = inv;
         apiaryBreederTileEntity = (ApiaryBreederTileEntity) world.getTileEntity(pos);

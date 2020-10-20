@@ -10,18 +10,15 @@ import com.resourcefulbees.resourcefulbees.compat.jei.ingredients.EntityIngredie
 import com.resourcefulbees.resourcefulbees.compat.jei.ingredients.EntityIngredientHelper;
 import com.resourcefulbees.resourcefulbees.compat.jei.ingredients.EntityRenderer;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
-import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
-import com.resourcefulbees.resourcefulbees.utils.validation.ValidatorUtils;
+import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.registration.*;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
@@ -62,17 +59,17 @@ public class JEICompat implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(new ItemStack(RegistryHandler.T1_BEEHIVE_ITEM.get()), BeeHiveCategory.ID);
-        registration.addRecipeCatalyst(new ItemStack(RegistryHandler.T2_BEEHIVE_ITEM.get()), BeeHiveCategory.ID);
-        registration.addRecipeCatalyst(new ItemStack(RegistryHandler.T3_BEEHIVE_ITEM.get()), BeeHiveCategory.ID);
-        registration.addRecipeCatalyst(new ItemStack(RegistryHandler.T4_BEEHIVE_ITEM.get()), BeeHiveCategory.ID);
-        registration.addRecipeCatalyst(new ItemStack(RegistryHandler.T1_APIARY_ITEM.get()), ApiaryCategory.ID);
-        registration.addRecipeCatalyst(new ItemStack(RegistryHandler.T2_APIARY_ITEM.get()), ApiaryCategory.ID);
-        registration.addRecipeCatalyst(new ItemStack(RegistryHandler.T3_APIARY_ITEM.get()), ApiaryCategory.ID);
-        registration.addRecipeCatalyst(new ItemStack(RegistryHandler.T4_APIARY_ITEM.get()), ApiaryCategory.ID);
-        registration.addRecipeCatalyst(new ItemStack(RegistryHandler.CENTRIFUGE_ITEM.get()), CentrifugeRecipeCategory.ID);
-        registration.addRecipeCatalyst(new ItemStack(RegistryHandler.MECHANICAL_CENTRIFUGE_ITEM.get()), CentrifugeRecipeCategory.ID);
-        registration.addRecipeCatalyst(new ItemStack(RegistryHandler.CENTRIFUGE_CONTROLLER_ITEM.get()), CentrifugeRecipeCategory.ID);
+        registration.addRecipeCatalyst(new ItemStack(ModItems.T1_BEEHIVE_ITEM.get()), BeeHiveCategory.ID);
+        registration.addRecipeCatalyst(new ItemStack(ModItems.T2_BEEHIVE_ITEM.get()), BeeHiveCategory.ID);
+        registration.addRecipeCatalyst(new ItemStack(ModItems.T3_BEEHIVE_ITEM.get()), BeeHiveCategory.ID);
+        registration.addRecipeCatalyst(new ItemStack(ModItems.T4_BEEHIVE_ITEM.get()), BeeHiveCategory.ID);
+        registration.addRecipeCatalyst(new ItemStack(ModItems.T1_APIARY_ITEM.get()), ApiaryCategory.ID);
+        registration.addRecipeCatalyst(new ItemStack(ModItems.T2_APIARY_ITEM.get()), ApiaryCategory.ID);
+        registration.addRecipeCatalyst(new ItemStack(ModItems.T3_APIARY_ITEM.get()), ApiaryCategory.ID);
+        registration.addRecipeCatalyst(new ItemStack(ModItems.T4_APIARY_ITEM.get()), ApiaryCategory.ID);
+        registration.addRecipeCatalyst(new ItemStack(ModItems.CENTRIFUGE_ITEM.get()), CentrifugeRecipeCategory.ID);
+        registration.addRecipeCatalyst(new ItemStack(ModItems.MECHANICAL_CENTRIFUGE_ITEM.get()), CentrifugeRecipeCategory.ID);
+        registration.addRecipeCatalyst(new ItemStack(ModItems.CENTRIFUGE_CONTROLLER_ITEM.get()), CentrifugeRecipeCategory.ID);
     }
 
     @Override
@@ -113,7 +110,7 @@ public class JEICompat implements IModPlugin {
 
             StringBuilder stats = new StringBuilder();
 
-            stats.append("\u00A73 Attack Damage: \u00A75").append(beeData.getAttackDamage()).append("\n");
+            stats.append("\u00A73 Attack Damage: \u00A75").append(beeData.getCombatData().getAttackDamage()).append("\n");
             stats.append("\u00A73 Has Honeycomb: \u00A75").append(StringUtils.capitalize(String.valueOf(beeData.hasHoneycomb()))).append("\n");
             stats.append("\u00A73 Max Time in Hive: \u00A75").append(beeData.getMaxTimeInHive()).append(" ticks\n");
 

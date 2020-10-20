@@ -6,7 +6,7 @@ import com.resourcefulbees.resourcefulbees.item.BeeJar;
 import com.resourcefulbees.resourcefulbees.item.BeeSpawnEggItem;
 import com.resourcefulbees.resourcefulbees.item.HoneycombItem;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
-import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
+import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.color.BlockColors;
 import net.minecraft.client.renderer.color.IBlockColor;
@@ -32,7 +32,7 @@ public final class ColorHandler {
             }
             registerItems(colors, BeeSpawnEggItem::getColor, customBeeData.getSpawnEggItemRegistryObject().get());
         }));
-        registerItems(colors, BeeJar::getColor, RegistryHandler.BEE_JAR.get());
+        registerItems(colors, BeeJar::getColor, ModItems.BEE_JAR.get());
     }
 
     public static void onBlockColors(ColorHandlerEvent.Block event){

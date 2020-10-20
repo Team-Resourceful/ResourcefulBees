@@ -1,11 +1,9 @@
 package com.resourcefulbees.resourcefulbees.container;
 
-import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.item.BeeJar;
-import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
 import com.resourcefulbees.resourcefulbees.network.packets.LockBeeMessage;
-import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
+import com.resourcefulbees.resourcefulbees.registry.ModContainers;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryTileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -28,7 +26,7 @@ public class ValidatedApiaryContainer extends Container {
     public String[] beeList;
 
     public ValidatedApiaryContainer(int id, World world, BlockPos pos, PlayerInventory inv) {
-        super(RegistryHandler.VALIDATED_APIARY_CONTAINER.get(), id);
+        super(ModContainers.VALIDATED_APIARY_CONTAINER.get(), id);
 
         this.player = inv.player;
         this.pos = pos;

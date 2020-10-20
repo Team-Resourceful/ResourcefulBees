@@ -1,7 +1,7 @@
 package com.resourcefulbees.resourcefulbees.tileentity;
 
 import com.resourcefulbees.resourcefulbees.lib.CustomStorageContainers;
-import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
+import com.resourcefulbees.resourcefulbees.registry.ModTileEntityTypes;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
@@ -20,7 +20,7 @@ public class CreativeGenTileEntity extends TileEntity implements ITickableTileEn
     private final LazyOptional<IEnergyStorage> energy = LazyOptional.of(() -> energyStorage);
 
     public CreativeGenTileEntity() {
-        super(RegistryHandler.CREATIVE_GEN_ENTITY.get());
+        super(ModTileEntityTypes.CREATIVE_GEN_ENTITY.get());
     }
 
     @Nonnull

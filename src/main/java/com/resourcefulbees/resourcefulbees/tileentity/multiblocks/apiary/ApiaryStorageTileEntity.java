@@ -12,7 +12,8 @@ import com.resourcefulbees.resourcefulbees.lib.ApiaryTabs;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
-import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
+import com.resourcefulbees.resourcefulbees.registry.ModItems;
+import com.resourcefulbees.resourcefulbees.registry.ModTileEntityTypes;
 import com.resourcefulbees.resourcefulbees.utils.MathUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
@@ -24,7 +25,6 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.NetworkManager;
@@ -63,13 +63,13 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
     public LazyOptional<IItemHandler> lazyOptional = LazyOptional.of(() -> h);
 
     public ApiaryStorageTileEntity() {
-        super(RegistryHandler.APIARY_STORAGE_TILE_ENTITY.get());
+        super(ModTileEntityTypes.APIARY_STORAGE_TILE_ENTITY.get());
     }
 
     @Nonnull
     @Override
     public TileEntityType<?> getType() {
-        return RegistryHandler.APIARY_STORAGE_TILE_ENTITY.get();
+        return ModTileEntityTypes.APIARY_STORAGE_TILE_ENTITY.get();
     }
 
     @Nonnull
@@ -193,10 +193,10 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
 
     public void deliverHoneycomb(String beeType, int apiaryTier) {
         ItemStack itemstack;
-        Item combItem = beeType.equals(BeeConstants.VANILLA_BEE_TYPE) ? Items.HONEYCOMB : BEE_REGISTRY.getBeeData(beeType).getCombRegistryObject().get();
-        Item combBlockItem = beeType.equals(BeeConstants.VANILLA_BEE_TYPE) ? Items.HONEYCOMB_BLOCK : BEE_REGISTRY.getBeeData(beeType).getCombBlockItemRegistryObject().get();
+        Item combItem = beeType.equals(BeeConstants.VANILLA_BEE_TYPE) ? net.minecraft.item.Items.HONEYCOMB : BEE_REGISTRY.getBeeData(beeType).getCombRegistryObject().get();
+        Item combBlockItem = beeType.equals(BeeConstants.VANILLA_BEE_TYPE) ? net.minecraft.item.Items.HONEYCOMB_BLOCK : BEE_REGISTRY.getBeeData(beeType).getCombBlockItemRegistryObject().get();
         Item outputItem;
-        int[] outputAmounts = BEE_REGISTRY.getBeeData(beeType).getApiaryOutputAmounts();
+        int[] outputAmounts = beeType.equals(BeeConstants.VANILLA_BEE_TYPE) ? null : BEE_REGISTRY.getBeeData(beeType).getApiaryOutputAmounts();
 
         switch (apiaryTier) {
             case 8:
@@ -238,7 +238,7 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
                         nbt.putString(NBTConstants.NBT_COLOR, String.valueOf(BeeConstants.DEFAULT_ITEM_COLOR));
                     }
                     entity.writeWithoutTypeId(nbt);
-                    ItemStack beeJar = new ItemStack(RegistryHandler.BEE_JAR.get());
+                    ItemStack beeJar = new ItemStack(ModItems.BEE_JAR.get());
                     beeJar.setTag(nbt);
 
                     return depositItemStack(beeJar);

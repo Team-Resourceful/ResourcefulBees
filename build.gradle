@@ -52,6 +52,7 @@ minecraft {
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
             property 'mixin.env.disableRefMap', 'true'
+            property 'fml.earlyprogresswindow','false'
 
             mods {
                 resourcefulbees {
@@ -67,6 +68,7 @@ minecraft {
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
             property 'mixin.env.disableRefMap', 'true'
+            property 'fml.earlyprogresswindow','false'
 
             mods {
                 resourcefulbees {
@@ -94,6 +96,7 @@ mixin {
 }
 
 dependencies {
+    implementation 'org.jetbrains:annotations:19.0.0'
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}" //21
 
     compileOnly fg.deobf("mezz.jei:jei-1.16.3:${jei_version}:api")

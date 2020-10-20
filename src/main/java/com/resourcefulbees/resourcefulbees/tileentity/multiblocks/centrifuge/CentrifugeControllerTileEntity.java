@@ -9,7 +9,7 @@ import com.resourcefulbees.resourcefulbees.container.CentrifugeMultiblockContain
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.CustomStorageContainers;
 import com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe;
-import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
+import com.resourcefulbees.resourcefulbees.registry.ModTileEntityTypes;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -101,7 +101,7 @@ public class CentrifugeControllerTileEntity extends TileEntity implements ITicka
 
 
     public CentrifugeControllerTileEntity() {
-        super(RegistryHandler.CENTRIFUGE_CONTROLLER_ENTITY.get());
+        super(ModTileEntityTypes.CENTRIFUGE_CONTROLLER_ENTITY.get());
     }
 
 
@@ -240,7 +240,7 @@ public class CentrifugeControllerTileEntity extends TileEntity implements ITicka
         int needed = recipe.outputs.stream().mapToInt(itemStackFloatPair ->
                 (int) Math.ceil((double)itemStackFloatPair.getLeft().copy().getCount() / itemStackFloatPair.getLeft().getMaxStackSize())).sum();
         int has = 0;
-        for (int i = 4; i < 22; ++i) {
+        for (int i = 4; i < h.getSlots(); ++i) {
             if (h.getStackInSlot(i).isEmpty()) {
                 has++;
                 if (has >= needed) return true;

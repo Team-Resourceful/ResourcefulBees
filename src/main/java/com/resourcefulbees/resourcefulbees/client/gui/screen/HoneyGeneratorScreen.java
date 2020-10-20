@@ -16,6 +16,8 @@ import javax.annotation.Nonnull;
 import java.text.DecimalFormat;
 
 public class HoneyGeneratorScreen extends ContainerScreen<HoneyGeneratorContainer> {
+    private static int ENERGY_PER_BOTTLE = (HoneyGeneratorTileEntity.HONEY_PER_BOTTLE/HoneyGeneratorTileEntity.HONEY_DRAIN_AMOUNT)*HoneyGeneratorTileEntity.ENERGY_FILL_AMOUNT;
+
     public HoneyGeneratorScreen(HoneyGeneratorContainer screenContainer, PlayerInventory inventory, ITextComponent titleIn) {
         super(screenContainer, inventory, titleIn);
     }
@@ -35,7 +37,7 @@ public class HoneyGeneratorScreen extends ContainerScreen<HoneyGeneratorContaine
             this.drawTexture(matrix, i + 83, j + 12 + (62-scaledTank), 226, (62-scaledTank), 14, scaledTank);
             int scaledProgressX = 21 * this.container.getTime() / Math.max(HoneyGeneratorTileEntity.HONEY_PER_BOTTLE,1);
             int scaledProgressY = 20 * this.container.getTime() / Math.max(HoneyGeneratorTileEntity.HONEY_PER_BOTTLE,1);
-            int energyScaledProgressX = 21 * this.container.getEnergyTime() / Math.max(HoneyGeneratorTileEntity.ENERGY_PER_BOTTLE,1);
+            int energyScaledProgressX = 21 * this.container.getEnergyTime() / Math.max(ENERGY_PER_BOTTLE,1);
             this.drawTexture(matrix, i + 35, j + 37, 176, 0, 18, scaledProgressY);
             this.drawTexture(matrix, i + 57, j + 42, 194, 0, scaledProgressX, 10);
             this.drawTexture(matrix, i + 103, j + 42, 194, 0, energyScaledProgressX, 10);

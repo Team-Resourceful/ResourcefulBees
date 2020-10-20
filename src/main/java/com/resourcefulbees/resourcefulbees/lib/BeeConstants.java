@@ -25,6 +25,8 @@ public class BeeConstants {
     public static final float DEFAULT_MAIN_OUTPUT_WEIGHT = 1.0f;
     public static final float DEFAULT_SEC_OUTPUT_WEIGHT = 0.2f;
     public static final float DEFAULT_BOT_OUTPUT_WEIGHT = 0.25f;
+    public static final int CHILD_GROWTH_DELAY = -24000;
+    public static final int BREED_DELAY = 6000;
 
     public static final int DEFAULT_ITEM_COLOR = -1;
 }

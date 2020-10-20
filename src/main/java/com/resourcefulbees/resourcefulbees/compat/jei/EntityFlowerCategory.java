@@ -6,6 +6,8 @@ import com.resourcefulbees.resourcefulbees.api.IBeeRegistry;
 import com.resourcefulbees.resourcefulbees.compat.jei.ingredients.EntityIngredient;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
+import com.resourcefulbees.resourcefulbees.registry.ModBlocks;
+import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.validation.ValidatorUtils;
@@ -37,7 +39,7 @@ public class EntityFlowerCategory implements IRecipeCategory<EntityFlowerCategor
 
     public EntityFlowerCategory(IGuiHelper guiHelper){
         this.background = guiHelper.drawableBuilder(GUI_BACK, 0, 0, 100, 75).addPadding(0, 0, 0, 0).build();
-        this.icon = guiHelper.createDrawableIngredient(new ItemStack(RegistryHandler.GOLD_FLOWER.get()));
+        this.icon = guiHelper.createDrawableIngredient(new ItemStack(ModBlocks.GOLD_FLOWER.get()));
         this.localizedName = I18n.format("gui.resourcefulbees.jei.category.bee_pollination_entity_flowers");
     }
 

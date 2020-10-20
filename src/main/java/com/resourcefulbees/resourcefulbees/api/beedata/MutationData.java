@@ -70,5 +70,9 @@ public class MutationData extends AbstractBeeData {
             return new MutationData(mutationInput, mutationOutput, mutationCount, hasMutation, mutationType);
         }
     }
+
+    public static MutationData createDefault() {
+        return new Builder(false, MutationTypes.NONE).createMutationData();
+    }
 }
 

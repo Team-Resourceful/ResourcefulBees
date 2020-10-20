@@ -73,8 +73,8 @@ public class BeeRegistry implements IBeeRegistry {
      *  @param child BeeData object for the child.
      *  @return Returns random bee type as a string.
      */
-    public double getAdjustedWeightForChild(CustomBeeData child, boolean sameType) {
-        return FAMILY_TREE.get(sameType ? Pair.of(child.getName(), child.getName()) : BeeInfoUtils.sortParents(child.getBreedData().getParent1(), child.getBreedData().getParent2())).getAdjustedWeight(child.getBreedData().getBreedWeight());
+    public double getAdjustedWeightForChild(CustomBeeData child, String parent1, String parent2) {
+        return FAMILY_TREE.get(BeeInfoUtils.sortParents(parent1, parent2)).getAdjustedWeight(child.getBreedData().getBreedWeight());
     }
 
     /**

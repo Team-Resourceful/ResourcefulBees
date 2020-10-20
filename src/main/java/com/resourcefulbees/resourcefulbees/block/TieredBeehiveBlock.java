@@ -2,21 +2,18 @@ package com.resourcefulbees.resourcefulbees.block;
 
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
-import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
+import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import com.resourcefulbees.resourcefulbees.tileentity.TieredBeehiveTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.TooltipBuilder;
-import mcjty.theoneprobe.api.ElementAlignment;
 import net.minecraft.block.*;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.passive.BeeEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -34,7 +31,6 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.GameRules;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
@@ -45,7 +41,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class TieredBeehiveBlock extends BeehiveBlock {
 
@@ -111,11 +106,11 @@ public class TieredBeehiveBlock extends BeehiveBlock {
         ItemStack itemstack = player.getHeldItem(handIn);
         int honeyLevel = state.get(HONEY_LEVEL);
         boolean angerBees = false;
-        if (itemstack.getItem() == RegistryHandler.SMOKER.get() && itemstack.getDamage() < itemstack.getMaxDamage()) {
+        if (itemstack.getItem() == ModItems.SMOKER.get() && itemstack.getDamage() < itemstack.getMaxDamage()) {
             smokeHive(pos, world);
         } else if (honeyLevel >= 5) {
             boolean isShear = Config.ALLOW_SHEARS.get() && itemstack.getItem().isIn(BeeInfoUtils.getItemTag("forge:shears"));
-            boolean isScraper = itemstack.getItem().equals(RegistryHandler.SCRAPER.get());
+            boolean isScraper = itemstack.getItem().equals(ModItems.SCRAPER.get());
 
             if (isShear || isScraper) {
                 world.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BLOCK_BEEHIVE_SHEAR, SoundCategory.NEUTRAL, 1.0F, 1.0F);

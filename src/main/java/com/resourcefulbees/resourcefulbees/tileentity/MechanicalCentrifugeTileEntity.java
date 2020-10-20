@@ -6,7 +6,7 @@ import com.resourcefulbees.resourcefulbees.container.AutomationSensitiveItemStac
 import com.resourcefulbees.resourcefulbees.container.MechanicalCentrifugeContainer;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe;
-import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
+import com.resourcefulbees.resourcefulbees.registry.ModTileEntityTypes;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -50,7 +50,7 @@ public class MechanicalCentrifugeTileEntity extends TileEntity implements ITicka
     public ItemStack failedMatch = ItemStack.EMPTY;
 
     public MechanicalCentrifugeTileEntity() {
-        super(RegistryHandler.MECHANICAL_CENTRIFUGE_ENTITY.get());
+        super(ModTileEntityTypes.MECHANICAL_CENTRIFUGE_ENTITY.get());
     }
 
 

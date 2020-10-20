@@ -1,6 +1,6 @@
 package com.resourcefulbees.resourcefulbees.container;
 import com.resourcefulbees.resourcefulbees.lib.CustomStorageContainers;
-import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
+import com.resourcefulbees.resourcefulbees.registry.ModContainers;
 import com.resourcefulbees.resourcefulbees.tileentity.CentrifugeTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.FunctionalIntReferenceHolder;
 import net.minecraft.entity.player.PlayerEntity;
@@ -23,7 +23,7 @@ public class CentrifugeContainer extends Container {
     public PlayerEntity player;
 
     public CentrifugeContainer(int id, World world, BlockPos pos, PlayerInventory inv) {
-        super(RegistryHandler.CENTRIFUGE_CONTAINER.get(), id);
+        super(ModContainers.CENTRIFUGE_CONTAINER.get(), id);
 
         this.player = inv.player;
 

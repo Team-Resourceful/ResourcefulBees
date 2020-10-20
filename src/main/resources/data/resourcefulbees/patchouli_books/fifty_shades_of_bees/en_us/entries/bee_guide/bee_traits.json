@@ -1,0 +1,12 @@
+{
+  "name": "book.resourcefulbees.bee_category.traits",
+  "icon": "minecraft:enchanted_book",
+  "category": "resourcefulbees:bee_guide",
+  "sortnum": 4,
+  "pages": [
+    {
+      "type": "text",
+      "text": "book.resourcefulbees.bee_category.traits.1"
+    }
+  ]
+}

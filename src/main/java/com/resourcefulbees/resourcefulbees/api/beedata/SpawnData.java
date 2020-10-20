@@ -82,4 +82,8 @@ public class SpawnData extends AbstractBeeData {
             return new SpawnData(canSpawnInWorld, spawnWeight, minGroupSize, maxGroupSize, biomeWhitelist, biomeBlacklist, lightLevel);
         }
     }
+
+    public static SpawnData createDefault() {
+        return new Builder(false).createSpawnData();
+    }
 }

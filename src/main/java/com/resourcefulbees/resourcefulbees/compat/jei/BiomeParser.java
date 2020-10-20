@@ -36,7 +36,7 @@ public class BiomeParser {
 
     private static Set<ResourceLocation> parseBiomeListFromTag(String list) {
         Set<ResourceLocation> biomeSet = new HashSet<>();
-        Splitter.on(",").split(list.replace(BeeConstants.TAG_PREFIX,"")).forEach(s -> {
+        Splitter.on(",").trimResults().split(list.replace(BeeConstants.TAG_PREFIX,"")).forEach(s -> {
             if (BiomeDictionary.TYPES.containsKey(s)) {
                 biomeSet.addAll(BiomeDictionary.TYPES.get(s));
             }
@@ -47,7 +47,7 @@ public class BiomeParser {
 
     private static Set<ResourceLocation> parseBiomeList(String list) {
         Set<ResourceLocation> biomeSet = new HashSet<>();
-        Splitter.on(',').split(list).forEach(s -> biomeSet.add(new ResourceLocation(s)));
+        Splitter.on(',').trimResults().split(list).forEach(s -> biomeSet.add(new ResourceLocation(s)));
 
         return biomeSet;
     }

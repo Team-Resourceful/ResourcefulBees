@@ -6,7 +6,7 @@ import com.resourcefulbees.resourcefulbees.compat.jei.ingredients.EntityIngredie
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.RecipeTypes;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
-import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
+import com.resourcefulbees.resourcefulbees.registry.ModBlocks;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.validation.ValidatorUtils;
 import mezz.jei.api.constants.VanillaTypes;
@@ -47,7 +47,7 @@ public class FlowersCategory implements IRecipeCategory<FlowersCategory.Recipe> 
 
     public FlowersCategory(IGuiHelper guiHelper) {
         this.background = guiHelper.drawableBuilder(GUI_BACK, 0, 0, 24, 75).addPadding(0, 0, 0, 0).build();
-        this.icon = guiHelper.createDrawableIngredient(new ItemStack(RegistryHandler.GOLD_FLOWER.get()));
+        this.icon = guiHelper.createDrawableIngredient(new ItemStack(ModBlocks.GOLD_FLOWER.get()));
         this.localizedName = I18n.format("gui.resourcefulbees.jei.category.bee_pollination_flowers");
     }
 

@@ -5,14 +5,17 @@ import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
+import com.resourcefulbees.resourcefulbees.registry.ModBlocks;
 import com.resourcefulbees.resourcefulbees.tileentity.TieredBeehiveTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.MathUtils;
+import net.minecraft.block.BeehiveBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.state.DirectionProperty;
+import net.minecraft.state.Property;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
@@ -29,12 +32,13 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 import java.util.*;
-
-import static com.resourcefulbees.resourcefulbees.registry.RegistryHandler.*;
+import java.util.stream.Collectors;
 
 public class BeeNestFeature extends Feature<NoFeatureConfig> {
 
-    private final List<Block> overworldBiomes = new ArrayList<>(Arrays.asList(GRASS_BEE_NEST.get(), OAK_BEE_NEST.get(), DARK_OAK_BEE_NEST.get(), SPRUCE_BEE_NEST.get(), BIRCH_BEE_NEST.get(), RED_MUSHROOM_BEE_NEST.get(), BROWN_MUSHROOM_BEE_NEST.get()));
+    private static final EnumSet<Direction> ALLOWED_DIRECTIONS = EnumSet.of(Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST);
+
+    private final List<Block> overworldBiomes = new ArrayList<>(Arrays.asList(ModBlocks.GRASS_BEE_NEST.get(), ModBlocks.OAK_BEE_NEST.get(), ModBlocks.DARK_OAK_BEE_NEST.get(), ModBlocks.SPRUCE_BEE_NEST.get(), ModBlocks.BIRCH_BEE_NEST.get(), ModBlocks.RED_MUSHROOM_BEE_NEST.get(), ModBlocks.BROWN_MUSHROOM_BEE_NEST.get()));
 
     public BeeNestFeature(Codec<NoFeatureConfig> configFactoryIn) {
         super(configFactoryIn);
@@ -67,8 +71,8 @@ public class BeeNestFeature extends Feature<NoFeatureConfig> {
             if (newPos.getY() > 100) {
                 return false;
             }
-            if (worldIn.getBlockState(newPos.down()).getBlock().equals(Blocks.LAVA)) {
-                if (rand.nextInt(11) != 5) {
+            if (worldIn.getBlockState(newPos.down()).getBlock().equals(net.minecraft.block.Blocks.LAVA)) {
+                if (rand.nextInt(10) != 0) {
                     return false;
                 }
             }
@@ -81,16 +85,17 @@ public class BeeNestFeature extends Feature<NoFeatureConfig> {
             return false;
         }
 
-        Direction direction = Direction.UP;
-        for (Direction dir : BlockStateProperties.FACING.getAllowedValues()) {
-            BlockPos blockPos = newPos.offset(dir, 1);
-            if (worldIn.isAirBlock(blockPos)) {
-                direction = dir;
-                break;
-            }
-        }
+        Direction direction;
 
-        if (direction == Direction.UP) {
+        BlockPos finalNewPos = newPos;
+        List<Direction> possibleDirections = ALLOWED_DIRECTIONS.stream().filter(dir -> {
+            BlockPos blockPos = finalNewPos.offset(dir, 1);
+            return worldIn.isAirBlock(blockPos);
+        }).collect(Collectors.toList());
+
+        if(!possibleDirections.isEmpty()) {
+            direction = possibleDirections.get(rand.nextInt(possibleDirections.size()));
+        } else {
             return false;
         }
 
@@ -99,44 +104,44 @@ public class BeeNestFeature extends Feature<NoFeatureConfig> {
 
         switch (category) {
             case THEEND:
-                block = PURPUR_BEE_NEST.get();
+                block = ModBlocks.PURPUR_BEE_NEST.get();
                 break;
             case NETHER:
                 if (Biomes.WARPED_FOREST.equals(biomeKey.orElse(null))) {
-                    block = headsOrTails ? WARPED_BEE_NEST.get() : WARPED_NYLIUM_BEE_NEST.get();
+                    block = headsOrTails ? ModBlocks.WARPED_BEE_NEST.get() : ModBlocks.WARPED_NYLIUM_BEE_NEST.get();
                 } else if (Biomes.CRIMSON_FOREST.equals(biomeKey.orElse(null))) {
-                    block = headsOrTails ? CRIMSON_BEE_NEST.get() : CRIMSON_NYLIUM_BEE_NEST.get();
+                    block = headsOrTails ? ModBlocks.CRIMSON_BEE_NEST.get() : ModBlocks.CRIMSON_NYLIUM_BEE_NEST.get();
                 } else {
-                    block = headsOrTails ? NETHER_BEE_NEST.get() : WITHER_BEE_NEST.get();
+                    block = headsOrTails ? ModBlocks.NETHER_BEE_NEST.get() : ModBlocks.WITHER_BEE_NEST.get();
                 }
                 break;
             case SAVANNA:
             case DESERT:
             case MESA:
-                block = ACACIA_BEE_NEST.get();
+                block = ModBlocks.ACACIA_BEE_NEST.get();
                 break;
             case JUNGLE:
-                block = JUNGLE_BEE_NEST.get();
+                block = ModBlocks.JUNGLE_BEE_NEST.get();
                 break;
             case BEACH:
             case OCEAN:
             case ICY:
-                block = PRISMARINE_BEE_NEST.get();
+                block = ModBlocks.PRISMARINE_BEE_NEST.get();
                 break;
             case TAIGA:
-                block = SPRUCE_BEE_NEST.get();
+                block = ModBlocks.SPRUCE_BEE_NEST.get();
                 break;
             case MUSHROOM:
-                block = headsOrTails ? RED_MUSHROOM_BEE_NEST.get() : BROWN_MUSHROOM_BEE_NEST.get();
+                block = headsOrTails ? ModBlocks.RED_MUSHROOM_BEE_NEST.get() : ModBlocks.BROWN_MUSHROOM_BEE_NEST.get();
                 break;
             case SWAMP:
-                block = OAK_BEE_NEST.get();
+                block = ModBlocks.OAK_BEE_NEST.get();
                 break;
             case FOREST:
-                block = headsOrTails ? BIRCH_BEE_NEST.get() : DARK_OAK_BEE_NEST.get();
+                block = headsOrTails ? ModBlocks.BIRCH_BEE_NEST.get() : ModBlocks.DARK_OAK_BEE_NEST.get();
                 break;
             default:
-                block = headsOrTails ? OAK_BEE_NEST.get() : GRASS_BEE_NEST.get();
+                block = headsOrTails ? ModBlocks.OAK_BEE_NEST.get() : ModBlocks.GRASS_BEE_NEST.get();
         }
 
         if (!Biome.Category.NETHER.equals(category) && !Biome.Category.THEEND.equals(category)) {
@@ -146,7 +151,7 @@ public class BeeNestFeature extends Feature<NoFeatureConfig> {
             }
         }
 
-        newState = block.getStateContainer().getBaseState();
+        newState = block.getDefaultState().with(BeehiveBlock.FACING, direction);
 
         worldIn.setBlockState(newPos, newState, 1);
         TileEntity tileEntity = worldIn.getTileEntity(newPos);

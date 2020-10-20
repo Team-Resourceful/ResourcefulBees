@@ -1,8 +1,7 @@
 package com.resourcefulbees.resourcefulbees.api.beedata;
 
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
-import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
-import net.minecraft.item.Items;
+import com.resourcefulbees.resourcefulbees.registry.ModItems;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
@@ -36,9 +35,9 @@ public class CentrifugeData extends AbstractBeeData {
 
     public String getMainOutput() { return mainOutput; }
 
-    public String getSecondaryOutput() { return secondaryOutput == null ? RegistryHandler.WAX.getId().toString() : secondaryOutput; }
+    public String getSecondaryOutput() { return secondaryOutput == null ? ModItems.WAX.getId().toString() : secondaryOutput; }
 
-    public String getBottleOutput() { return bottleOutput != null ? bottleOutput : Objects.requireNonNull(Items.HONEY_BOTTLE.getRegistryName()).toString(); }
+    public String getBottleOutput() { return bottleOutput != null ? bottleOutput : Objects.requireNonNull(net.minecraft.item.Items.HONEY_BOTTLE.getRegistryName()).toString(); }
 
     public float getMainOutputWeight() { return mainOutputWeight <= 0 ? BeeConstants.DEFAULT_MAIN_OUTPUT_WEIGHT : mainOutputWeight; }
 
@@ -124,5 +123,9 @@ public class CentrifugeData extends AbstractBeeData {
         public CentrifugeData createCentrifugeData() {
             return new CentrifugeData(mainOutput, secondaryOutput, bottleOutput, mainOutputWeight, secondaryOutputWeight, bottleOutputWeight, mainOutputCount, secondaryOutputCount, bottleOutputCount, mainInputCount, hasCentrifugeOutput);
         }
+    }
+
+    public static CentrifugeData createDefault() {
+        return new Builder(false, "minecraft:stone").createCentrifugeData();
     }
 }
