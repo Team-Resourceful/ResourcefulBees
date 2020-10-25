@@ -2,9 +2,11 @@
 package com.resourcefulbees.resourcefulbees.tileentity;
 
 
+import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.ICustomBee;
 import com.resourcefulbees.resourcefulbees.block.TieredBeehiveBlock;
 import com.resourcefulbees.resourcefulbees.config.Config;
+import com.resourcefulbees.resourcefulbees.entity.passive.ResourcefulBee;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
@@ -115,7 +117,7 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
               int i = getHoneyLevel(state);
               if (i < 5) {
                 if (entity instanceof ICustomBee && ((ICustomBee)entity).getBeeData().hasHoneycomb()) {
-                  honeycomb = new ItemStack(((ICustomBee)entity).getBeeData().getCombRegistryObject().get());
+                  honeycomb = ((ICustomBee)entity).getBeeData().getCombStack();
                 } else if (!(entity instanceof ICustomBee)) {
                   honeycomb = new ItemStack(Items.HONEYCOMB);
                 }
@@ -206,7 +208,7 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
   }
 
   public boolean hasCombs(){
-    return honeycombs.size() > 0;
+    return numberOfCombs() > 0;
   }
 
   public int numberOfCombs() {

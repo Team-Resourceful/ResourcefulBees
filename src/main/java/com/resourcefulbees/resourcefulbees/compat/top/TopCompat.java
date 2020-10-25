@@ -57,20 +57,22 @@ public class TopCompat implements Function<ITheOneProbe, Void>
                             if (hiveCombSize <= 4) {
                                 for (int i = 0; i < hiveCombSize; i++) {
                                     horizontal = vertical.horizontal(probeInfo.defaultLayoutStyle().spacing(10).alignment(ElementAlignment.ALIGN_CENTER));
-                                    horizontal.item(tieredBeehiveTileEntity.honeycombs.get(i).getItem().getDefaultInstance())
-                                            .text(tieredBeehiveTileEntity.honeycombs.get(i).getItem().getDefaultInstance().getDisplayName());
+                                    horizontal.item(tieredBeehiveTileEntity.honeycombs.get(i))
+                                            .text(tieredBeehiveTileEntity.honeycombs.get(i).getDisplayName());
                                 }
                             } else {
-                                HashMap<Item, Integer> combs = new HashMap<>();
+                                HashMap<ItemStack, Integer> combs = new HashMap<>();
                                 int columnCount = 0;
-                                tieredBeehiveTileEntity.honeycombs.forEach(comb -> combs.merge(comb.getItem(), 1, Integer::sum));
+                                tieredBeehiveTileEntity.honeycombs.forEach(comb -> combs.merge(comb, 1, Integer::sum));
                                 horizontal = vertical.horizontal(probeInfo.defaultLayoutStyle().spacing(10).alignment(ElementAlignment.ALIGN_CENTER));
-                                for (Map.Entry<Item, Integer> entry : combs.entrySet()) {
+                                for (Map.Entry<ItemStack, Integer> entry : combs.entrySet()) {
                                     if (columnCount == 7) {
                                         horizontal = vertical.horizontal(probeInfo.defaultLayoutStyle().spacing(10).alignment(ElementAlignment.ALIGN_CENTER));
                                         columnCount = 0;
                                     }
-                                    horizontal.item(new ItemStack(entry.getKey(), entry.getValue()));
+                                    ItemStack stack = entry.getKey().copy();
+                                    stack.setCount(entry.getValue());
+                                    horizontal.item(stack);
                                     columnCount++;
                                 }
                             }

@@ -186,11 +186,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
                         vanillaBeeEntity.onHoneyDelivered();
 
                         if (!exportBee && isValidApiary(true)) {
-                            if (entity instanceof ICustomBee && ((ICustomBee)entity).getBeeData().hasHoneycomb()) {
-                                getApiaryStorage().deliverHoneycomb(((ICustomBee)entity).getBeeType(), getTier());
-                            } else if (!(entity instanceof ICustomBee)) {
-                                getApiaryStorage().deliverHoneycomb(BeeConstants.VANILLA_BEE_TYPE, getTier());
-                            }
+                            getApiaryStorage().deliverHoneycomb(((BeeEntity) entity), getTier());
                         }
                     }
 
