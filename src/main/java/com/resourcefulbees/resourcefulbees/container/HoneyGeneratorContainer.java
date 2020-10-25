@@ -1,7 +1,7 @@
 package com.resourcefulbees.resourcefulbees.container;
 
-import com.resourcefulbees.resourcefulbees.registry.FluidRegistry;
-import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
+import com.resourcefulbees.resourcefulbees.registry.ModContainers;
+import com.resourcefulbees.resourcefulbees.registry.ModFluids;
 import com.resourcefulbees.resourcefulbees.tileentity.HoneyGeneratorTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.FunctionalIntReferenceHolder;
 import net.minecraft.entity.player.PlayerEntity;
@@ -22,7 +22,7 @@ public class HoneyGeneratorContainer extends Container {
     public PlayerEntity player;
 
     public HoneyGeneratorContainer(int id, World world, BlockPos pos, PlayerInventory inv) {
-        super(RegistryHandler.HONEY_GENERATOR_CONTAINER.get(), id);
+        super(ModContainers.HONEY_GENERATOR_CONTAINER.get(), id);
 
         this.player = inv.player;
 
@@ -30,7 +30,7 @@ public class HoneyGeneratorContainer extends Container {
 
         this.trackInt(new FunctionalIntReferenceHolder(() -> honeyGeneratorTileEntity.fluidFilled, v -> honeyGeneratorTileEntity.fluidFilled = v));
         this.trackInt(new FunctionalIntReferenceHolder(() -> honeyGeneratorTileEntity.energyFilled, v -> honeyGeneratorTileEntity.energyFilled = v));
-        this.trackInt(new FunctionalIntReferenceHolder(() -> honeyGeneratorTileEntity.fluidTank.getFluidAmount(), v -> honeyGeneratorTileEntity.fluidTank.setFluid(new FluidStack(FluidRegistry.HONEY_FLUID.get(), v))));
+        this.trackInt(new FunctionalIntReferenceHolder(() -> honeyGeneratorTileEntity.fluidTank.getFluidAmount(), v -> honeyGeneratorTileEntity.fluidTank.setFluid(new FluidStack(ModFluids.HONEY_FLUID.get(), v))));
         this.trackInt(new FunctionalIntReferenceHolder(() -> honeyGeneratorTileEntity.energyStorage.getEnergyStored(), v -> honeyGeneratorTileEntity.energyStorage.setEnergy(v)));
 
         this.addSlot(new SlotItemHandlerUnconditioned(honeyGeneratorTileEntity.h, HoneyGeneratorTileEntity.HONEY_BOTTLE_INPUT, 36, 20){

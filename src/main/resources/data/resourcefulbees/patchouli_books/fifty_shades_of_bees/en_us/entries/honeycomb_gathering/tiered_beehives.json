@@ -1,0 +1,34 @@
+{
+    "name": "book.resourcefulbees.honeycomb_category.tiered_hives",
+    "icon": "resourcefulbees:t4_beehive",
+    "category": "resourcefulbees:honeycomb_gathering",
+    "sortnum": 1,
+    "pages": [
+        {
+            "type": "text",
+            "text": "book.resourcefulbees.honeycomb_category.tiered_hives.1"
+        },
+        {
+            "type": "text",
+            "text": "book.resourcefulbees.honeycomb_category.tiered_hives.2"
+        },
+        {
+            "type": "text",
+            "text": "book.resourcefulbees.honeycomb_category.tiered_hives.3"
+        },
+        {
+            "type": "text",
+            "text": "book.resourcefulbees.honeycomb_category.tiered_hives.4"
+        },
+        {
+            "type": "crafting",
+            "recipe": "resourcefulbees:t1_beehive",
+            "recipe2": "resourcefulbees:t2_beehive"
+        },
+        {
+            "type": "crafting",
+            "recipe": "resourcefulbees:t3_beehive",
+            "recipe2": "resourcefulbees:t4_beehive"
+        }
+    ]
+}

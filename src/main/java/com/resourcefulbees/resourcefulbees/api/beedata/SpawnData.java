@@ -23,7 +23,7 @@ public class SpawnData extends AbstractBeeData {
 
     public boolean canSpawnInWorld() { return canSpawnInWorld; }
 
-    public int getSpawnWeight() { return spawnWeight <= 0 ? 12 : spawnWeight; }
+    public int getSpawnWeight() { return spawnWeight <= 0 ? 8 : spawnWeight; }
 
     public int getMinGroupSize() { return Math.max(minGroupSize, 0); }
 
@@ -81,5 +81,9 @@ public class SpawnData extends AbstractBeeData {
         public SpawnData createSpawnData() {
             return new SpawnData(canSpawnInWorld, spawnWeight, minGroupSize, maxGroupSize, biomeWhitelist, biomeBlacklist, lightLevel);
         }
+    }
+
+    public static SpawnData createDefault() {
+        return new Builder(false).createSpawnData();
     }
 }

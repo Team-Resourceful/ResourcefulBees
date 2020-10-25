@@ -4,8 +4,7 @@ import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.ICustomBee;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
-import com.resourcefulbees.resourcefulbees.registry.ItemGroupResourcefulBees;
-import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
+import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import com.resourcefulbees.resourcefulbees.utils.color.Color;
 import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
 import net.minecraft.client.resources.I18n;
@@ -19,7 +18,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.BeehiveTileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -30,7 +28,6 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
 
 import javax.annotation.Nonnull;
@@ -98,7 +95,7 @@ public class BeeJar extends Item {
         BeeEntity target = (BeeEntity) targetIn;
 
         if (stack.getCount() > 1) {
-            ItemStack newJar = new ItemStack(RegistryHandler.BEE_JAR.get());
+            ItemStack newJar = new ItemStack(ModItems.BEE_JAR.get());
             newJar.setTag(createTag(target));
             stack.shrink(1);
              if (!player.addItemStackToInventory(newJar)) {

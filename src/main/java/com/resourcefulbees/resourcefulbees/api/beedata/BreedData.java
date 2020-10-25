@@ -8,14 +8,18 @@ public class BreedData extends AbstractBeeData {
     private final String parent1, parent2;
     private final String feedItem;
     private final int feedAmount;
+    private final int childGrowthDelay;
+    private final int breedDelay;
 
-    private BreedData(boolean isBreedable, double breedWeight, String parent1, String parent2, String feedItem, int feedAmount) {
+    private BreedData(boolean isBreedable, double breedWeight, String parent1, String parent2, String feedItem, int feedAmount, int childGrowthDelay, int breedDelay) {
         this.isBreedable = isBreedable;
         this.breedWeight = breedWeight;
         this.parent1 = parent1;
         this.parent2 = parent2;
         this.feedItem = feedItem;
         this.feedAmount = feedAmount;
+        this.childGrowthDelay = childGrowthDelay;
+        this.breedDelay = breedDelay;
     }
 
     public boolean isBreedable() { return isBreedable; }
@@ -32,6 +36,10 @@ public class BreedData extends AbstractBeeData {
 
     public int getFeedAmount() { return Math.max(1, feedAmount); }
 
+    public int getChildGrowthDelay() { return childGrowthDelay != 0 ? BeeConstants.CHILD_GROWTH_DELAY : childGrowthDelay; }
+
+    public int getBreedDelay() { return breedDelay != 0 ? BeeConstants.BREED_DELAY : breedDelay; }
+
     public boolean hasParents() { return !getParent1().isEmpty() && !getParent2().isEmpty(); }
 
     public static class Builder {
@@ -40,6 +48,8 @@ public class BreedData extends AbstractBeeData {
         private String parent1, parent2;
         private String feedItem;
         private int feedAmount;
+        private int childGrowthDelay;
+        private int breedDelay;
 
         public Builder(boolean isBreedable) { this.isBreedable = isBreedable; }
 
@@ -68,8 +78,22 @@ public class BreedData extends AbstractBeeData {
             return this;
         }
 
-        public BreedData createBreedData() {
-            return new BreedData(isBreedable, breedWeight, parent1, parent2, feedItem, feedAmount);
+        public Builder setChildGrowthDelay(int childGrowthDelay) {
+            this.childGrowthDelay = childGrowthDelay;
+            return this;
         }
+
+        public Builder setBreedDelay(int breedDelay) {
+            this.breedDelay = breedDelay;
+            return this;
+        }
+
+        public BreedData createBreedData() {
+            return new BreedData(isBreedable, breedWeight, parent1, parent2, feedItem, feedAmount, childGrowthDelay, breedDelay);
+        }
+    }
+
+    public static BreedData createDefault() {
+        return new Builder(false).createBreedData();
     }
 }

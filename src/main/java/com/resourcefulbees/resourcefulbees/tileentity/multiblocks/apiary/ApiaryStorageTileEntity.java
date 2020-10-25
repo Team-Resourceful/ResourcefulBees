@@ -12,7 +12,8 @@ import com.resourcefulbees.resourcefulbees.lib.ApiaryTabs;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
-import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
+import com.resourcefulbees.resourcefulbees.registry.ModItems;
+import com.resourcefulbees.resourcefulbees.registry.ModTileEntityTypes;
 import com.resourcefulbees.resourcefulbees.utils.MathUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
@@ -63,13 +64,13 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
     public LazyOptional<IItemHandler> lazyOptional = LazyOptional.of(() -> h);
 
     public ApiaryStorageTileEntity() {
-        super(RegistryHandler.APIARY_STORAGE_TILE_ENTITY.get());
+        super(ModTileEntityTypes.APIARY_STORAGE_TILE_ENTITY.get());
     }
 
     @Nonnull
     @Override
     public TileEntityType<?> getType() {
-        return RegistryHandler.APIARY_STORAGE_TILE_ENTITY.get();
+        return ModTileEntityTypes.APIARY_STORAGE_TILE_ENTITY.get();
     }
 
     @Nonnull
@@ -202,9 +203,9 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
         }
 
         ItemStack itemstack;
-        int[] outputAmounts = BEE_REGISTRY.getBeeData(beeType).getApiaryOutputAmounts();
         ItemStack comb = beeType.equals(BeeConstants.VANILLA_BEE_TYPE) ? new ItemStack(Items.HONEYCOMB) : ((ICustomBee)entity).getBeeData().getCombStack();
         ItemStack combBlock = beeType.equals(BeeConstants.VANILLA_BEE_TYPE) ? new ItemStack(Items.HONEYCOMB_BLOCK) : ((ICustomBee)entity).getBeeData().getCombBlockItemStack();
+        int[] outputAmounts = beeType.equals(BeeConstants.VANILLA_BEE_TYPE) ? null : BEE_REGISTRY.getBeeData(beeType).getApiaryOutputAmounts();
 
         switch (apiaryTier) {
             case 8:
@@ -246,7 +247,7 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
                         nbt.putString(NBTConstants.NBT_COLOR, String.valueOf(BeeConstants.DEFAULT_ITEM_COLOR));
                     }
                     entity.writeWithoutTypeId(nbt);
-                    ItemStack beeJar = new ItemStack(RegistryHandler.BEE_JAR.get());
+                    ItemStack beeJar = new ItemStack(ModItems.BEE_JAR.get());
                     beeJar.setTag(nbt);
 
                     return depositItemStack(beeJar);

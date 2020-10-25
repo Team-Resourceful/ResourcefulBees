@@ -1,6 +1,6 @@
 package com.resourcefulbees.resourcefulbees.tileentity;
 
-import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
+import com.resourcefulbees.resourcefulbees.registry.ModTileEntityTypes;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.ITickableTileEntity;
@@ -11,7 +11,7 @@ import net.minecraft.world.server.ServerWorld;
 
 public class AcceleratorTileEntity extends TileEntity implements ITickableTileEntity {
     public AcceleratorTileEntity() {
-        super(RegistryHandler.ACCELERATOR_TILE_ENTITY.get());
+        super(ModTileEntityTypes.ACCELERATOR_TILE_ENTITY.get());
     }
 
     @Override

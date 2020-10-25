@@ -9,7 +9,7 @@ import com.resourcefulbees.resourcefulbees.container.CentrifugeContainer;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.CustomStorageContainers;
 import com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe;
-import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
+import com.resourcefulbees.resourcefulbees.registry.ModTileEntityTypes;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -57,7 +57,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
     public int totalTime = 0;
 
     public CentrifugeTileEntity() {
-        super(RegistryHandler.CENTRIFUGE_ENTITY.get());
+        super(ModTileEntityTypes.CENTRIFUGE_ENTITY.get());
     }
 
 

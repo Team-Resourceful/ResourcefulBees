@@ -2,6 +2,7 @@ package com.resourcefulbees.resourcefulbees.utils.validation;
 
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
+import net.minecraft.entity.EntityType;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 
@@ -19,6 +20,8 @@ public class SecondPhaseValidator {
                 Item outputItem;
                 Fluid inputFluid;
                 Fluid outputFluid;
+                EntityType<?> inputEntity;
+                EntityType<?> outputEntity;
 
                 switch (bee.getMutationData().getMutationType()) {
                     case BLOCK_TO_BLOCK:
@@ -35,10 +38,16 @@ public class SecondPhaseValidator {
                         inputFluid = getFluid(bee.getMutationData().getMutationInput());
                         outputItem = getItem(bee.getMutationData().getMutationOutput());
                         bee.getMutationData().setHasMutation(isValidFluid(inputFluid) && isValidItem(outputItem));
+                        break;
                     case FLUID_TO_FLUID:
                         inputFluid = getFluid(bee.getMutationData().getMutationInput());
                         outputFluid = getFluid(bee.getMutationData().getMutationOutput());
                         bee.getMutationData().setHasMutation(isValidFluid(inputFluid) && isValidFluid(outputFluid));
+                        break;
+                    case ENTITY_TO_ENTITY:
+                        inputEntity = getEntityType(bee.getMutationData().getMutationInput().replace(BeeConstants.ENTITY_PREFIX, ""));
+                        outputEntity = getEntityType(bee.getMutationData().getMutationOutput().replace(BeeConstants.ENTITY_PREFIX, ""));
+                        bee.getMutationData().setHasMutation(isValidEntityType(inputEntity) && isValidEntityType(outputEntity));
                         break;
                     default:
                         bee.getMutationData().setHasMutation(false);

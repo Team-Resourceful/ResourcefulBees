@@ -1,0 +1,22 @@
+{
+    "name": "book.resourcefulbees.honeycomb_category.smoker",
+    "icon": "resourcefulbees:smoker",
+    "category": "resourcefulbees:honeycomb_gathering",
+    "sortnum": 3,
+    "pages": [
+        {
+            "type": "text",
+            "text": "book.resourcefulbees.honeycomb_category.smoker.1"
+        },
+        {
+            "type": "crafting",
+            "recipe": "resourcefulbees:smoker",
+            "text": "book.resourcefulbees.honeycomb_category.smoker.2"
+        },
+        {
+            "type": "crafting",
+            "recipe": "resourcefulbees:bellow",
+            "recipe2": "resourcefulbees:smoker_can"
+        }
+    ]
+}

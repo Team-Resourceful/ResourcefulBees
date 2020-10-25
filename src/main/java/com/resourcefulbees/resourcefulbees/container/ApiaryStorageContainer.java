@@ -2,7 +2,7 @@ package com.resourcefulbees.resourcefulbees.container;
 
 import com.resourcefulbees.resourcefulbees.item.UpgradeItem;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
-import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
+import com.resourcefulbees.resourcefulbees.registry.ModContainers;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryStorageTileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -23,7 +23,7 @@ public class ApiaryStorageContainer extends Container {
     public boolean rebuild;
 
     public ApiaryStorageContainer(int id, World world, BlockPos pos, PlayerInventory inv) {
-        super(RegistryHandler.APIARY_STORAGE_CONTAINER.get(), id);
+        super(ModContainers.APIARY_STORAGE_CONTAINER.get(), id);
         this.player = inv.player;
         this.playerInventory = inv;
         apiaryStorageTileEntity = (ApiaryStorageTileEntity) world.getTileEntity(pos);

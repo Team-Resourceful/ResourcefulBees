@@ -1,7 +1,7 @@
 modLoader="javafml"
 loaderVersion="[34,)"
 license="https://www.gnu.org/licenses/gpl-3.0.en.html"
-issueTrackerURL="https://github.com/Dungeon-Derps-Development/ResourcefulBees/issues"
+issueTrackerURL="https://github.com/Resourceful-Bees/ResourcefulBees/issues/new/choose"
 [[mods]]
 modId="resourcefulbees"
 version="${file.jarVersion}"

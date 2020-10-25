@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe;
-import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
+import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import com.resourcefulbees.resourcefulbees.tileentity.CentrifugeTileEntity;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
@@ -18,7 +18,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -42,7 +41,7 @@ public class CentrifugeRecipeCategory implements IRecipeCategory<CentrifugeRecip
 
   public CentrifugeRecipeCategory(IGuiHelper guiHelper) {
     this.background = guiHelper.createDrawable(new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/centrifuge.png"), 0, 0, 133, 65);
-    this.icon = guiHelper.createDrawableIngredient(new ItemStack(RegistryHandler.CENTRIFUGE_ITEM.get()));
+    this.icon = guiHelper.createDrawableIngredient(new ItemStack(ModItems.CENTRIFUGE_ITEM.get()));
     this.localizedName = I18n.format("gui.resourcefulbees.jei.category.centrifuge");
     this.arrow = guiHelper.drawableBuilder(new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/centrifuge.png"), 0, 66, 73, 30)
             .buildAnimated(200, IDrawableAnimated.StartDirection.LEFT, false);
@@ -81,7 +80,7 @@ public class CentrifugeRecipeCategory implements IRecipeCategory<CentrifugeRecip
 
   @Override
   public void setIngredients(CentrifugeRecipe recipe, IIngredients iIngredients) {
-    iIngredients.setInputIngredients(Lists.newArrayList(recipe.ingredient, Ingredient.fromItems(Items.GLASS_BOTTLE)));
+    iIngredients.setInputIngredients(Lists.newArrayList(recipe.ingredient, Ingredient.fromItems(net.minecraft.item.Items.GLASS_BOTTLE)));
     List<Pair<ItemStack, Float>> outputs = recipe.outputs;
     List<ItemStack> stacks = new ArrayList<>();
     stacks.add(outputs.get(2).getLeft().copy());

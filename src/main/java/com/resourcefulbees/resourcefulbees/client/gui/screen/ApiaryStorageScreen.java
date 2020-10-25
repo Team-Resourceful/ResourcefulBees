@@ -7,7 +7,7 @@ import com.resourcefulbees.resourcefulbees.container.ApiaryStorageContainer;
 import com.resourcefulbees.resourcefulbees.lib.ApiaryTabs;
 import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
 import com.resourcefulbees.resourcefulbees.network.packets.ApiaryTabMessage;
-import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
+import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryStorageTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -82,7 +82,7 @@ public class ApiaryStorageScreen extends ContainerScreen<ApiaryStorageContainer>
         int j = this.guiTop;
         int t = i + this.xSize - 23;
 
-        mainTabButton = this.addButton(new TabImageButton(t+1, j+17, 18, 18, 110, 0, 18, TABS_BG, new ItemStack(RegistryHandler.BEE_JAR.get()), 1, 1,
+        mainTabButton = this.addButton(new TabImageButton(t+1, j+17, 18, 18, 110, 0, 18, TABS_BG, new ItemStack(ModItems.BEE_JAR.get()), 1, 1,
                 (onPress) -> this.changeScreen(ApiaryTabs.MAIN)) {
             public void renderToolTip(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
                 StringTextComponent s = new StringTextComponent(I18n.format("gui.resourcefulbees.apiary.button.main_screen"));
@@ -98,7 +98,7 @@ public class ApiaryStorageScreen extends ContainerScreen<ApiaryStorageContainer>
             }
         }).active = false;
 
-        breedTabButton = this.addButton(new TabImageButton(t + 1, j + 57, 18, 18, 110, 0, 18, TABS_BG, new ItemStack(RegistryHandler.GOLD_FLOWER_ITEM.get()), 1, 1,
+        breedTabButton = this.addButton(new TabImageButton(t + 1, j + 57, 18, 18, 110, 0, 18, TABS_BG, new ItemStack(ModItems.GOLD_FLOWER_ITEM.get()), 1, 1,
                 (onPress) -> this.changeScreen(ApiaryTabs.BREED)) {
             public void renderToolTip(@Nonnull MatrixStack matrix,int mouseX, int mouseY) {
                 StringTextComponent s = new StringTextComponent(I18n.format("gui.resourcefulbees.apiary.button.breed_screen"));

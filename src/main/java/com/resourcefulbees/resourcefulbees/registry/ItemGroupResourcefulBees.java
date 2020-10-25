@@ -3,7 +3,6 @@ package com.resourcefulbees.resourcefulbees.registry;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -34,7 +33,7 @@ public class ItemGroupResourcefulBees{
 		@Nonnull
 		@OnlyIn(Dist.CLIENT)
 		public ItemStack createIcon() {
-			return new ItemStack(RegistryHandler.T1_BEEHIVE_ITEM.get());
+			return new ItemStack(ModItems.T1_BEEHIVE_ITEM.get());
 		}
 	});
 	

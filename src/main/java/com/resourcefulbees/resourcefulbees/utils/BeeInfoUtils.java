@@ -1,13 +1,14 @@
 package com.resourcefulbees.resourcefulbees.utils;
 
 import com.google.common.base.Splitter;
-import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
+import com.resourcefulbees.resourcefulbees.api.beedata.*;
+import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
-import com.resourcefulbees.resourcefulbees.registry.BiomeDictionary;
 import com.resourcefulbees.resourcefulbees.utils.validation.ValidatorUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.EntityType;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.Item;
@@ -18,20 +19,28 @@ import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import static com.resourcefulbees.resourcefulbees.lib.BeeConstants.*;
 
 public class BeeInfoUtils {
 
     public static void buildFamilyTree(CustomBeeData bee) {
-        String parent1 = bee.getBreedData().getParent1();
-        String parent2 = bee.getBreedData().getParent2();
-        BeeRegistry.getRegistry().FAMILY_TREE.computeIfAbsent(sortParents(parent1, parent2), k -> new RandomCollection<>()).add(bee.getBreedData().getBreedWeight(), bee);
+        if (bee.getBreedData().hasParents()) {
+            Iterator<String> parent1 = Splitter.on(",").trimResults().split(bee.getBreedData().getParent1()).iterator();
+            Iterator<String> parent2 = Splitter.on(",").trimResults().split(bee.getBreedData().getParent2()).iterator();
+
+            while (parent1.hasNext() && parent2.hasNext()) {
+                String p1 = parent1.next();
+                String p2 = parent2.next();
+                BeeRegistry.getRegistry().FAMILY_TREE.computeIfAbsent(sortParents(p1, p2), k -> new RandomCollection<>()).add(bee.getBreedData().getBreedWeight(), bee);
+            }
+        }
+
         BeeRegistry.getRegistry().FAMILY_TREE.computeIfAbsent(Pair.of(bee.getName(), bee.getName()), k -> new RandomCollection<>()).add(bee.getBreedData().getBreedWeight(), bee);
     }
 
@@ -60,18 +69,24 @@ public class BeeInfoUtils {
 
     private static Set<ResourceLocation> parseBiomeListFromTag(String list) {
         Set<ResourceLocation> biomeSet = new HashSet<>();
-        Splitter.on(",").split(list.replace(BeeConstants.TAG_PREFIX,"")).forEach(s -> {
-            if (BiomeDictionary.TYPES.containsKey(s)) {
-                biomeSet.addAll(BiomeDictionary.TYPES.get(s));
-            }
-        });
+        if (Config.USE_FORGE_DICTIONARIES.get()) {
+            Splitter.on(",").trimResults().split(list.replace(BeeConstants.TAG_PREFIX, ""))
+                    .forEach(s -> BiomeDictionary.getBiomes(BiomeDictionary.Type.getType(s))
+                            .forEach(biomeRegistryKey -> biomeSet.add(biomeRegistryKey.getValue())));
+        } else {
+            Splitter.on(",").trimResults().split(list.replace(BeeConstants.TAG_PREFIX,"")).forEach(s -> {
+                if (com.resourcefulbees.resourcefulbees.registry.BiomeDictionary.TYPES.containsKey(s)) {
+                    biomeSet.addAll(com.resourcefulbees.resourcefulbees.registry.BiomeDictionary.TYPES.get(s));
+                }
+            });
+        }
 
         return biomeSet;
     }
 
     private static Set<ResourceLocation> parseBiomeList(String list) {
         Set<ResourceLocation> biomeSet = new HashSet<>();
-        Splitter.on(',').split(list).forEach(s -> biomeSet.add(new ResourceLocation(s)));
+        Splitter.on(',').trimResults().split(list).forEach(s -> biomeSet.add(new ResourceLocation(s)));
 
         return biomeSet;
     }
@@ -104,6 +119,10 @@ public class BeeInfoUtils {
         return item != null && item != Items.AIR;
     }
 
+    public static boolean isValidEntityType(EntityType<?> entityType){
+        return entityType != null;
+    }
+
     public static Item getItem(String itemName) { return ForgeRegistries.ITEMS.getValue(getResource(itemName));}
 
     public static Block getBlock(String blockName) { return ForgeRegistries.BLOCKS.getValue(getResource(blockName));}
@@ -111,6 +130,8 @@ public class BeeInfoUtils {
     public static Fluid getFluid(String fluidName) { return ForgeRegistries.FLUIDS.getValue(getResource(fluidName));}
 
     public static Biome getBiome(String biomeName) { return ForgeRegistries.BIOMES.getValue(getResource(biomeName));}
+
+    public static EntityType<?> getEntityType(String entityName) { return ForgeRegistries.ENTITIES.getValue(getResource(entityName));}
 
     public static ITag<Item> getItemTag(String itemTag) { return ItemTags.getCollection().get(getResource(itemTag));}
 
@@ -126,7 +147,7 @@ public class BeeInfoUtils {
         BlockTags.makeWrapperTag("resourcefulbees:valid_apiary");
     }
 
-    private static ResourceLocation VALID_APIARY = new ResourceLocation("resourcefulbees:valid_apiary");
+    private static final ResourceLocation VALID_APIARY = new ResourceLocation("resourcefulbees:valid_apiary");
 
     public static boolean isTag(String input) {
         if (ValidatorUtils.TAG_RESOURCE_PATTERN.matcher(input).matches()) {

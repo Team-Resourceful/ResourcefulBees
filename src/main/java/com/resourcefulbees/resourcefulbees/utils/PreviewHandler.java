@@ -3,10 +3,9 @@ package com.resourcefulbees.resourcefulbees.utils;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.resourcefulbees.resourcefulbees.block.multiblocks.apiary.ApiaryBlock;
-import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
+import com.resourcefulbees.resourcefulbees.registry.ModBlocks;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryTileEntity;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -59,12 +58,12 @@ public class PreviewHandler {
                     ApiaryTileEntity apiaryTE = (ApiaryTileEntity) world.getTileEntity(apiaryPos);
                     if (apiaryTE != null && apiaryTE.previewed)
                         for (BlockPos pos : STRUCTURE_PREVIEW_POS) {
-                            if (world.getBlockState(pos).equals(Blocks.AIR.getDefaultState()))
-                                renderBlockAt(ms, buffer, RegistryHandler.PREVIEW_BLOCK.get().getDefaultState(), pos, 0xffffff);
+                            if (world.getBlockState(pos).equals(net.minecraft.block.Blocks.AIR.getDefaultState()))
+                                renderBlockAt(ms, buffer, ModBlocks.PREVIEW_BLOCK.get().getDefaultState(), pos, 0xffffff);
                             else {
                                 if (BeeInfoUtils.getBlockTag("resourcefulbees:valid_apiary") != null)
                                     if (!world.getBlockState(pos).isIn(BeeInfoUtils.getBlockTag("resourcefulbees:valid_apiary"))) {
-                                        renderBlockAt(ms, buffer, RegistryHandler.ERRORED_PREVIEW_BLOCK.get().getDefaultState(), pos, 0xffffff);
+                                        renderBlockAt(ms, buffer, ModBlocks.ERRORED_PREVIEW_BLOCK.get().getDefaultState(), pos, 0xffffff);
                                     }
                             }
                         }

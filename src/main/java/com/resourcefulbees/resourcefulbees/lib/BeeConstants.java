@@ -7,6 +7,7 @@ public class BeeConstants {
     public static final String FLOWER_TAG_SMALL = "small";
     public static final String FLOWER_TAG_TALL = "tall";
     public static final String TAG_PREFIX = "tag:";
+    public static final String ENTITY_PREFIX = "entity:";
     public static final String MOD_NAME = "Resourceful Bees";
     public static final String ENTITY_TEXTURES_DIR = "textures/entity/";
     public static final String STRING_DEFAULT_ITEM_COLOR = "-1";
@@ -24,6 +25,8 @@ public class BeeConstants {
     public static final float DEFAULT_MAIN_OUTPUT_WEIGHT = 1.0f;
     public static final float DEFAULT_SEC_OUTPUT_WEIGHT = 0.2f;
     public static final float DEFAULT_BOT_OUTPUT_WEIGHT = 0.25f;
+    public static final int CHILD_GROWTH_DELAY = -24000;
+    public static final int BREED_DELAY = 6000;
 
     public static final int DEFAULT_ITEM_COLOR = -1;
 }

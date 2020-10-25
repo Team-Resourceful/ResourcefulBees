@@ -5,7 +5,7 @@ import com.resourcefulbees.resourcefulbees.compat.jei.ingredients.EntityIngredie
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.lib.ApiaryOutput;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
-import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
+import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -34,7 +34,7 @@ public class ApiaryCategory implements IRecipeCategory<ApiaryCategory.Recipe> {
 
     public ApiaryCategory(IGuiHelper guiHelper) {
         this.background = guiHelper.drawableBuilder(GUI_BACK, 0, 0, 160, 26).addPadding(0, 0, 0, 0).build();
-        this.icon = guiHelper.createDrawableIngredient(new ItemStack(RegistryHandler.T1_APIARY_ITEM.get()));
+        this.icon = guiHelper.createDrawableIngredient(new ItemStack(ModItems.T1_APIARY_ITEM.get()));
         this.localizedName = I18n.format("gui.resourcefulbees.jei.category.apiary");
     }
 
@@ -42,7 +42,7 @@ public class ApiaryCategory implements IRecipeCategory<ApiaryCategory.Recipe> {
         List<Recipe> recipes = new ArrayList<>();
         final List<ApiaryOutput> outputs = new ArrayList<>(Arrays.asList(Config.T1_APIARY_OUTPUT.get(), Config.T2_APIARY_OUTPUT.get(), Config.T3_APIARY_OUTPUT.get(), Config.T4_APIARY_OUTPUT.get()));
         final int[] outputQuantities = {Config.T1_APIARY_QUANTITY.get(), Config.T2_APIARY_QUANTITY.get(), Config.T3_APIARY_QUANTITY.get(), Config.T4_APIARY_QUANTITY.get()};
-        final List<Item> apiaryTiers = new ArrayList<>(Arrays.asList(RegistryHandler.T1_APIARY_ITEM.get(), RegistryHandler.T2_APIARY_ITEM.get(), RegistryHandler.T3_APIARY_ITEM.get(), RegistryHandler.T4_APIARY_ITEM.get()));
+        final List<Item> apiaryTiers = new ArrayList<>(Arrays.asList(ModItems.T1_APIARY_ITEM.get(), ModItems.T2_APIARY_ITEM.get(), ModItems.T3_APIARY_ITEM.get(), ModItems.T4_APIARY_ITEM.get()));
 
         BeeRegistry.getRegistry().getBees().forEach(((s, customBeeData) -> {
             if (customBeeData.hasHoneycomb()) {

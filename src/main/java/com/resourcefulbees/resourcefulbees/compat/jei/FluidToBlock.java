@@ -7,7 +7,7 @@ import com.resourcefulbees.resourcefulbees.compat.jei.ingredients.EntityIngredie
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
-import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
+import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.validation.ValidatorUtils;
 import mezz.jei.api.constants.VanillaTypes;
@@ -50,7 +50,7 @@ public class FluidToBlock implements IRecipeCategory<FluidToBlock.Recipe> {
         this.background = guiHelper.drawableBuilder(GUI_BACK, -12, 0, 99, 75).addPadding(0, 0, 0, 0).build();
         this.icon = guiHelper.createDrawable(ICONS, 0,0,16,16);
         this.info = guiHelper.createDrawable(ICONS, 16, 0, 9, 9);
-        this.beeHive = guiHelper.createDrawableIngredient(new ItemStack(RegistryHandler.T1_BEEHIVE_ITEM.get()));
+        this.beeHive = guiHelper.createDrawableIngredient(new ItemStack(ModItems.T1_BEEHIVE_ITEM.get()));
         this.localizedName = I18n.format("gui.resourcefulbees.jei.category.fluid_to_block_mutation");
     }
 

@@ -10,4 +10,7 @@ public interface BeeEntityAccessor {
 
     @Invoker
     boolean callDoesHiveHaveSpace(BlockPos pos);
+
+    @Invoker
+    void callSetBeeFlag(int i, boolean flag);
 }

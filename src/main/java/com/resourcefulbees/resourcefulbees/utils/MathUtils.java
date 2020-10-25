@@ -167,4 +167,7 @@ public final class MathUtils {
 
     //Added by Resourceful Bees
     public static double nextDouble() { return RANDOM.nextDouble();}
+
+    public static final double HALF_PI = Math.PI/2;
+    public static final double QUARTER_PI = Math.PI/4;
 }

@@ -11,7 +11,8 @@ import com.resourcefulbees.resourcefulbees.lib.ApiaryTabs;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
-import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
+import com.resourcefulbees.resourcefulbees.registry.ModItems;
+import com.resourcefulbees.resourcefulbees.registry.ModTileEntityTypes;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.MathUtils;
 import com.resourcefulbees.resourcefulbees.utils.validation.ValidatorUtils;
@@ -113,7 +114,7 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
     };
 
     public ApiaryBreederTileEntity() {
-        super(RegistryHandler.APIARY_BREEDER_TILE_ENTITY.get());
+        super(ModTileEntityTypes.APIARY_BREEDER_TILE_ENTITY.get());
     }
 
     public BlockPos getApiaryPos() {
@@ -390,7 +391,7 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
     }
 
     public AutomationSensitiveItemStackHandler.IAcceptor getAcceptor() {
-        return (slot, stack, automation) -> !automation || (slot == EMPTY_JAR_SLOTS[0] || slot == EMPTY_JAR_SLOTS[1] || slot == EMPTY_JAR_SLOTS[2] || slot == EMPTY_JAR_SLOTS[3] && stack.getItem().equals(RegistryHandler.BEE_JAR.get()));
+        return (slot, stack, automation) -> !automation || (slot == EMPTY_JAR_SLOTS[0] || slot == EMPTY_JAR_SLOTS[1] || slot == EMPTY_JAR_SLOTS[2] || slot == EMPTY_JAR_SLOTS[3] && stack.getItem().equals(ModItems.BEE_JAR.get()));
     }
 
     public AutomationSensitiveItemStackHandler.IRemover getRemover() {

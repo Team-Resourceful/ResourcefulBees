@@ -3,7 +3,7 @@ package com.resourcefulbees.resourcefulbees.compat.jei;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.compat.jei.ingredients.EntityIngredient;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
-import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
+import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -32,7 +32,7 @@ public class BeeHiveCategory implements IRecipeCategory<BeeHiveCategory.Recipe> 
 
     public BeeHiveCategory(IGuiHelper guiHelper) {
         this.background = guiHelper.drawableBuilder(GUI_BACK, 0, 0, 160, 26).addPadding(0, 0, 0, 0).build();
-        this.icon = guiHelper.createDrawableIngredient(new ItemStack(RegistryHandler.T1_BEEHIVE_ITEM.get()));
+        this.icon = guiHelper.createDrawableIngredient(new ItemStack(ModItems.T1_BEEHIVE_ITEM.get()));
         this.localizedName = I18n.format("gui.resourcefulbees.jei.category.hive");
     }
 
@@ -79,7 +79,7 @@ public class BeeHiveCategory implements IRecipeCategory<BeeHiveCategory.Recipe> 
 
     @Override
     public void setIngredients(Recipe recipe, IIngredients ingredients) {
-        List<Ingredient> list = new ArrayList<>(Collections.singletonList(Ingredient.fromItems(RegistryHandler.T1_BEEHIVE_ITEM.get(), RegistryHandler.T2_BEEHIVE_ITEM.get(), RegistryHandler.T3_BEEHIVE_ITEM.get(), RegistryHandler.T4_BEEHIVE_ITEM.get())));
+        List<Ingredient> list = new ArrayList<>(Collections.singletonList(Ingredient.fromItems(ModItems.T1_BEEHIVE_ITEM.get(), ModItems.T2_BEEHIVE_ITEM.get(), ModItems.T3_BEEHIVE_ITEM.get(), ModItems.T4_BEEHIVE_ITEM.get())));
         ingredients.setOutput(VanillaTypes.ITEM, recipe.getComb());
         ingredients.setInputIngredients(list);
         ingredients.setInput(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(recipe.beeType, -45.0f));

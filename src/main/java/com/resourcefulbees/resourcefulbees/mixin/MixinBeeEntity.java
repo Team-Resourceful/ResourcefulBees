@@ -1,6 +1,6 @@
 package com.resourcefulbees.resourcefulbees.mixin;
 
-import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
+import com.resourcefulbees.resourcefulbees.registry.ModPOIs;
 import com.resourcefulbees.resourcefulbees.tileentity.TieredBeehiveTileEntity;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryTileEntity;
 import net.minecraft.entity.EntityType;
@@ -123,7 +123,7 @@ public abstract class MixinBeeEntity extends AnimalEntity {
             PointOfInterestManager pointofinterestmanager = ((ServerWorld) beeEntity.world).getPointOfInterestManager();
             Stream<PointOfInterest> stream = pointofinterestmanager.func_219146_b(pointOfInterestType -> pointOfInterestType == PointOfInterestType.BEEHIVE
                     || pointOfInterestType == PointOfInterestType.BEE_NEST
-                    || pointOfInterestType == RegistryHandler.TIERED_BEEHIVE_POI.get(), blockpos, 20, PointOfInterestManager.Status.ANY);
+                    || pointOfInterestType == ModPOIs.TIERED_BEEHIVE_POI.get(), blockpos, 20, PointOfInterestManager.Status.ANY);
             cir.setReturnValue(stream.map(PointOfInterest::getPos)
                     .filter(((BeeEntityAccessor) beeEntity)::callDoesHiveHaveSpace)
                     .sorted(Comparator.comparingDouble(blockPos -> blockPos.distanceSq(blockpos)))

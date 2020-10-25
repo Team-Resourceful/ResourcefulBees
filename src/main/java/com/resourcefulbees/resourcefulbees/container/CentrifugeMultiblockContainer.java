@@ -1,7 +1,7 @@
 package com.resourcefulbees.resourcefulbees.container;
 
 import com.resourcefulbees.resourcefulbees.lib.CustomStorageContainers;
-import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
+import com.resourcefulbees.resourcefulbees.registry.ModContainers;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.CentrifugeControllerTileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -30,7 +30,7 @@ public class CentrifugeMultiblockContainer extends Container {
     }
 
     public CentrifugeMultiblockContainer(int id, World world, BlockPos pos, PlayerInventory inv, IIntArray times) {
-        super(RegistryHandler.CENTRIFUGE_MULTIBLOCK_CONTAINER.get(), id);
+        super(ModContainers.CENTRIFUGE_MULTIBLOCK_CONTAINER.get(), id);
 
         this.player = inv.player;
         this.times = times;

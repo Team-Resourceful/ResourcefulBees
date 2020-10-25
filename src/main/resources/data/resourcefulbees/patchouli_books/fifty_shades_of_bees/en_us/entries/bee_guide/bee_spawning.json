@@ -1,0 +1,20 @@
+{
+    "name": "book.resourcefulbees.bee_category.spawning",
+    "icon": "minecraft:bee_nest",
+    "category": "resourcefulbees:bee_guide",
+    "sortnum": 3,
+    "pages": [
+        {
+            "type": "text",
+            "text": "book.resourcefulbees.bee_category.spawning.1"
+        },
+        {
+            "type": "text",
+            "text": "book.resourcefulbees.bee_category.spawning.2"
+        },
+        {
+            "type": "text",
+            "text": "book.resourcefulbees.bee_category.spawning.3"
+        }
+    ]
+}

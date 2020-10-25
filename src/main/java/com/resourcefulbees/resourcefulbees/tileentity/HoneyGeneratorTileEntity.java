@@ -1,11 +1,13 @@
 package com.resourcefulbees.resourcefulbees.tileentity;
 
 import com.resourcefulbees.resourcefulbees.block.HoneyGenerator;
+import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.container.AutomationSensitiveItemStackHandler;
 import com.resourcefulbees.resourcefulbees.container.HoneyGeneratorContainer;
 import com.resourcefulbees.resourcefulbees.lib.CustomStorageContainers;
-import com.resourcefulbees.resourcefulbees.registry.FluidRegistry;
-import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
+import com.resourcefulbees.resourcefulbees.registry.ModFluids;
+import com.resourcefulbees.resourcefulbees.registry.ModTileEntityTypes;
+import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -39,19 +41,23 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
 
     public static final int HONEY_BOTTLE_INPUT = 0;
     public static final int BOTTLE_OUTPUT = 1;
-    public static final int HONEY_FILL_AMOUNT = 10;
-    public static final int HONEY_DRAIN_AMOUNT = 5;
-    public static final int ENERGY_FILL_AMOUNT = 125;
-    public static final int ENERGY_TRANSFER_AMOUNT = 100;
-    public static final int MAX_ENERGY_CAPACITY = 100000;
-    public static final int MAX_TANK_STORAGE = 10000;
+    public static final int HONEY_FILL_AMOUNT = Config.HONEY_FILL_AMOUNT.get();
+    public static final int HONEY_DRAIN_AMOUNT = Config.HONEY_DRAIN_AMOUNT.get();
+    public static final int ENERGY_FILL_AMOUNT = Config.ENERGY_FILL_AMOUNT.get();
+    public static final int ENERGY_TRANSFER_AMOUNT = Config.ENERGY_TRANSFER_AMOUNT.get();
+    public static final int MAX_ENERGY_CAPACITY = Config.MAX_ENERGY_CAPACITY.get();
+    public static final int MAX_TANK_STORAGE = Config.MAX_TANK_STORAGE.get();
     public static final int HONEY_PER_BOTTLE = 250;
-    public static final int ENERGY_PER_BOTTLE = 6250;
 
 
 
     public AutomationSensitiveItemStackHandler h = new HoneyGeneratorTileEntity.TileStackHandler(5, getAcceptor(), getRemover());
-    public final CustomStorageContainers.CustomTankStorage fluidTank = new CustomStorageContainers.CustomTankStorage(MAX_TANK_STORAGE);
+    public final CustomStorageContainers.CustomTankStorage fluidTank = new CustomStorageContainers.CustomTankStorage(MAX_TANK_STORAGE) {
+        @Override
+        public boolean isFluidValid(FluidStack stack) {
+            return stack.getFluid().isIn(BeeInfoUtils.getFluidTag("forge:honey"));
+        }
+    };
     public final CustomStorageContainers.CustomEnergyStorage energyStorage = createEnergy();
     private final LazyOptional<IFluidHandler> fluidOptional = LazyOptional.of(() -> fluidTank);
     private final LazyOptional<IItemHandler> lazyOptional = LazyOptional.of(() -> h);
@@ -61,7 +67,7 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
     private boolean isProcessing;
     private boolean dirty;
 
-    public HoneyGeneratorTileEntity() { super(RegistryHandler.HONEY_GENERATOR_ENTITY.get()); }
+    public HoneyGeneratorTileEntity() { super(ModTileEntityTypes.HONEY_GENERATOR_ENTITY.get()); }
 
     @Override
     public void tick() {
@@ -130,7 +136,7 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
 
     private void processFluid() {
         if(canProcessFluid()) {
-            fluidTank.fill(new FluidStack(FluidRegistry.HONEY_FLUID.get(), HONEY_FILL_AMOUNT), IFluidHandler.FluidAction.EXECUTE);
+            fluidTank.fill(new FluidStack(ModFluids.HONEY_FLUID.get(), HONEY_FILL_AMOUNT), IFluidHandler.FluidAction.EXECUTE);
             fluidFilled += HONEY_FILL_AMOUNT;
             isProcessing = fluidFilled < HONEY_PER_BOTTLE;
             if (!isProcessing) fluidFilled = 0;

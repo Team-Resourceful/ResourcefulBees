@@ -18,7 +18,6 @@ public class CustomBeeData extends AbstractBeeData {
     private final String flower;
     private final String baseLayerTexture;
     private final int maxTimeInHive;
-    private final Float attackDamage;
     private final float sizeModifier;
     private final String[] traits;
     private transient String name;
@@ -31,6 +30,7 @@ public class CustomBeeData extends AbstractBeeData {
     private final BreedData BreedData;
     private final CentrifugeData CentrifugeData;
     private final ColorData ColorData;
+    private final CombatData CombatData;
     private final MutationData MutationData;
     private final SpawnData SpawnData;
     private TraitData TraitData;
@@ -42,11 +42,10 @@ public class CustomBeeData extends AbstractBeeData {
     private transient RegistryObject<Item> spawnEggItemRegistryObject;
     private transient ResourceLocation entityTypeRegistryID;
 
-    private CustomBeeData(String flower, String baseLayerTexture, int maxTimeInHive, Float attackDamage, float sizeModifier, String[] traits, int[] apiaryOutputAmounts, String name, boolean hasHoneycomb, MutationData mutationData, ColorData colorData, CentrifugeData centrifugeData, BreedData breedData, SpawnData spawnData, TraitData traitData) {
+    private CustomBeeData(String flower, String baseLayerTexture, int maxTimeInHive, float sizeModifier, String[] traits, int[] apiaryOutputAmounts, String name, boolean hasHoneycomb, MutationData mutationData, ColorData colorData, CombatData CombatData, CentrifugeData centrifugeData, BreedData breedData, SpawnData spawnData, TraitData traitData) {
         this.flower = flower;
         this.baseLayerTexture = baseLayerTexture;
         this.maxTimeInHive = maxTimeInHive;
-        this.attackDamage = attackDamage;
         this.sizeModifier = sizeModifier;
         this.traits = traits;
         this.apiaryOutputAmounts = apiaryOutputAmounts;
@@ -58,6 +57,7 @@ public class CustomBeeData extends AbstractBeeData {
         this.MutationData = mutationData;
         this.SpawnData = spawnData;
         this.TraitData = traitData;
+        this.CombatData = CombatData;
     }
 
     public String getFlower() { return flower == null ? BeeConstants.FLOWER_TAG_ALL : flower.toLowerCase(); }
@@ -75,8 +75,6 @@ public class CustomBeeData extends AbstractBeeData {
     public String getBaseLayerTexture() { return baseLayerTexture == null ? "/custom/bee" : baseLayerTexture.toLowerCase(); }
 
     public int getMaxTimeInHive() { return maxTimeInHive < BeeConstants.MIN_HIVE_TIME ? maxTimeInHive == 0 ? BeeConstants.MAX_TIME_IN_HIVE : BeeConstants.MIN_HIVE_TIME : maxTimeInHive; }
-
-    public float getAttackDamage() { return attackDamage == null ? 1.0f : attackDamage; }
 
     public RegistryObject<Item> getCombRegistryObject() { return combRegistryObject; }
 
@@ -108,29 +106,27 @@ public class CustomBeeData extends AbstractBeeData {
 
     public String getName() { return name.toLowerCase(); }
 
-    public void addData(String key, AbstractBeeData data){
-        if (data != null) {
-            this.ADDITIONAL_DATA.put(key, data);
-        }
-    }
+    public void addData(String key, AbstractBeeData data) { if (data != null) this.ADDITIONAL_DATA.put(key, data); }
 
     public AbstractBeeData getData(String key) { return this.ADDITIONAL_DATA.get(key); }
 
     public boolean containsData(String key) { return this.ADDITIONAL_DATA.containsKey(key); }
 
-    public BreedData getBreedData() { return this.BreedData != null ? this.BreedData : new BreedData.Builder(false).createBreedData(); }
+    public BreedData getBreedData() { return this.BreedData != null ? this.BreedData : com.resourcefulbees.resourcefulbees.api.beedata.BreedData.createDefault(); }
 
-    public CentrifugeData getCentrifugeData() { return this.CentrifugeData != null ? this.CentrifugeData : new CentrifugeData.Builder(false, "minecraft:stone").createCentrifugeData(); }
+    public CentrifugeData getCentrifugeData() { return this.CentrifugeData != null ? this.CentrifugeData : com.resourcefulbees.resourcefulbees.api.beedata.CentrifugeData.createDefault(); }
 
-    public ColorData getColorData() { return this.ColorData != null ? this.ColorData : new ColorData.Builder(false).createColorData(); }
+    public ColorData getColorData() { return this.ColorData != null ? this.ColorData : com.resourcefulbees.resourcefulbees.api.beedata.ColorData.createDefault(); }
 
-    public MutationData getMutationData() { return this.MutationData != null ? this.MutationData : new MutationData.Builder(false, MutationTypes.NONE).createMutationData(); }
+    public CombatData getCombatData() { return this.CombatData != null ? this.CombatData : com.resourcefulbees.resourcefulbees.api.beedata.CombatData.createDefault(); }
 
-    public SpawnData getSpawnData() { return this.SpawnData != null ? this.SpawnData : new SpawnData.Builder(false).createSpawnData(); }
+    public MutationData getMutationData() { return this.MutationData != null ? this.MutationData : com.resourcefulbees.resourcefulbees.api.beedata.MutationData.createDefault(); }
 
-    public TraitData getTraitData() { return this.TraitData != null ? this.TraitData : new TraitData(false); }
+    public SpawnData getSpawnData() { return this.SpawnData != null ? this.SpawnData : com.resourcefulbees.resourcefulbees.api.beedata.SpawnData.createDefault(); }
 
-    public void setTraitData(TraitData traitData){ this.TraitData = this.TraitData != null ? this.TraitData : traitData; }
+    public TraitData getTraitData() { return this.TraitData != null ? this.TraitData : com.resourcefulbees.resourcefulbees.api.beedata.TraitData.createDefault(); }
+
+    public void setTraitData(TraitData traitData) { this.TraitData = this.TraitData != null ? this.TraitData : traitData; }
 
     public ItemStack getCombStack() {
         if (combSupplier != null) {
@@ -158,7 +154,6 @@ public class CustomBeeData extends AbstractBeeData {
         private final String flower;
         private String baseLayerTexture;
         private int maxTimeInHive;
-        private Float attackDamage;
         private float sizeModifier;
         private String[] traits;
         private int[] apiaryOutputAmounts;
@@ -166,17 +161,19 @@ public class CustomBeeData extends AbstractBeeData {
         private final boolean hasHoneycomb;
         private final MutationData mutationData;
         private final ColorData colorData;
+        private final CombatData combatData;
         private final CentrifugeData centrifugeData;
         private final BreedData breedData;
         private final SpawnData spawnData;
         private final TraitData traitData;
 
-        public Builder(String name, String flower, boolean hasHoneycomb, MutationData mutationData, ColorData colorData, CentrifugeData centrifugeData, BreedData breedData, SpawnData spawnData, TraitData traitData) {
+        public Builder(String name, String flower, boolean hasHoneycomb, MutationData mutationData, ColorData colorData, CombatData combatData, CentrifugeData centrifugeData, BreedData breedData, SpawnData spawnData, TraitData traitData) {
             this.name = name;
             this.flower = flower;
             this.hasHoneycomb = hasHoneycomb;
             this.mutationData = mutationData;
             this.colorData = colorData;
+            this.combatData = combatData;
             this.centrifugeData = centrifugeData;
             this.breedData = breedData;
             this.spawnData = spawnData;
@@ -190,11 +187,6 @@ public class CustomBeeData extends AbstractBeeData {
 
         public Builder setMaxTimeInHive(int maxTimeInHive) {
             this.maxTimeInHive = maxTimeInHive;
-            return this;
-        }
-
-        public Builder setAttackDamage(float attackDamage) {
-            this.attackDamage = attackDamage;
             return this;
         }
 
@@ -214,7 +206,7 @@ public class CustomBeeData extends AbstractBeeData {
         }
 
         public CustomBeeData createCustomBee() {
-            return new CustomBeeData(flower, baseLayerTexture, maxTimeInHive, attackDamage, sizeModifier, traits, apiaryOutputAmounts, name, hasHoneycomb, mutationData, colorData, centrifugeData, breedData, spawnData, traitData);
+            return new CustomBeeData(flower, baseLayerTexture, maxTimeInHive, sizeModifier, traits, apiaryOutputAmounts, name, hasHoneycomb, mutationData, colorData, combatData, centrifugeData, breedData, spawnData, traitData);
         }
     }
 }

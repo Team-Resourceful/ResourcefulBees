@@ -7,7 +7,7 @@ import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.entity.passive.OreoBee;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
-import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
+import com.resourcefulbees.resourcefulbees.registry.ModFeatures;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.EntityType;
@@ -15,8 +15,6 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.Heightmap;
-import net.minecraft.world.gen.feature.IFeatureConfig;
-import net.minecraft.world.gen.placement.*;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.moddiscovery.ModFileInfo;
@@ -171,23 +169,11 @@ public class BeeSetup {
     private static void addNestFeature(BiomeLoadingEvent event) {
         Biome.Category category = event.getCategory();
         if (category == Biome.Category.NETHER) {
-            event.getGeneration().feature(GenerationStage.Decoration.VEGETAL_DECORATION,
-                    RegistryHandler.BEE_NEST_FEATURE.get()
-                            .configure(IFeatureConfig.NO_FEATURE_CONFIG)
-                            .decorate(Placement.TOP_SOLID_HEIGHTMAP.configure(new NoPlacementConfig()))
-                            .decorate(Placement.CHANCE.configure(new ChanceConfig(Config.NETHER_NEST_GENERATION_CHANCE.get()))));
+            event.getGeneration().feature(GenerationStage.Decoration.VEGETAL_DECORATION, ModFeatures.ConfiguredFeatures.NETHER_NESTS);
         } else if (category == Biome.Category.THEEND) {
-            event.getGeneration().feature(GenerationStage.Decoration.VEGETAL_DECORATION,
-                    RegistryHandler.BEE_NEST_FEATURE.get()
-                            .configure(IFeatureConfig.NO_FEATURE_CONFIG)
-                            .decorate(Placement.HEIGHTMAP_WORLD_SURFACE.configure(new NoPlacementConfig()))
-                            .decorate(Placement.CHANCE.configure(new ChanceConfig(Config.END_NEST_GENERATION_CHANCE.get()))));
+            event.getGeneration().feature(GenerationStage.Decoration.VEGETAL_DECORATION, ModFeatures.ConfiguredFeatures.THE_END_NESTS);
         } else {
-            event.getGeneration().feature(GenerationStage.Decoration.VEGETAL_DECORATION,
-                    RegistryHandler.BEE_NEST_FEATURE.get()
-                            .configure(IFeatureConfig.NO_FEATURE_CONFIG)
-                            .decorate(Placement.HEIGHTMAP_WORLD_SURFACE.configure(new NoPlacementConfig()))
-                            .decorate(Placement.CHANCE.configure(new ChanceConfig(Config.OVERWORLD_NEST_GENERATION_CHANCE.get()))));
+            event.getGeneration().feature(GenerationStage.Decoration.VEGETAL_DECORATION, ModFeatures.ConfiguredFeatures.OVERWORLD_NESTS);
         }
     }
 

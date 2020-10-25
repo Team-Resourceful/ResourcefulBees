@@ -97,43 +97,26 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
         this.rightAntenna.rotateAngleX = 0.0F;
         this.body.rotateAngleX = 0.0F;
         this.body.rotationPointY = 19.0F;
-        boolean flag = entityIn.isOnGround() && entityIn.getMotion().lengthSquared() < 1.0E-7D;
-        if (flag) {
-            this.rightWing.rotateAngleY = -0.2618F;
-            this.rightWing.rotateAngleZ = 0.0F;
-            this.leftWing.rotateAngleX = 0.0F;
-            this.leftWing.rotateAngleY = 0.2618F;
-            this.leftWing.rotateAngleZ = 0.0F;
-            this.frontLegs.rotateAngleX = 0.0F;
-            this.middleLegs.rotateAngleX = 0.0F;
-            this.backLegs.rotateAngleX = 0.0F;
-        } else {
-            this.rightWing.rotateAngleY = 0.0F;
-            this.rightWing.rotateAngleZ = MathHelper.cos((ageInTicks % 98000 * 2.1F)) * (float)Math.PI * 0.15F;
-            this.leftWing.rotateAngleX = this.rightWing.rotateAngleX;
-            this.leftWing.rotateAngleY = this.rightWing.rotateAngleY;
-            this.leftWing.rotateAngleZ = -this.rightWing.rotateAngleZ;
-            this.frontLegs.rotateAngleX = ((float)Math.PI / 4F);
-            this.middleLegs.rotateAngleX = ((float)Math.PI / 4F);
-            this.backLegs.rotateAngleX = ((float)Math.PI / 4F);
-            this.body.rotateAngleX = 0.0F;
-            this.body.rotateAngleY = 0.0F;
-            this.body.rotateAngleZ = 0.0F;
-        }
+        this.rightWing.rotateAngleY = 0.0F;
+        this.rightWing.rotateAngleZ = MathHelper.cos((ageInTicks % 98000 * 2.1F)) * (float)Math.PI * 0.15F;
+        this.leftWing.rotateAngleX = this.rightWing.rotateAngleX;
+        this.leftWing.rotateAngleY = this.rightWing.rotateAngleY;
+        this.leftWing.rotateAngleZ = -this.rightWing.rotateAngleZ;
+        this.frontLegs.rotateAngleX = ((float)Math.PI / 4F);
+        this.middleLegs.rotateAngleX = ((float)Math.PI / 4F);
+        this.backLegs.rotateAngleX = ((float)Math.PI / 4F);
+        this.body.rotateAngleX = 0.0F;
+        this.body.rotateAngleY = 0.0F;
+        this.body.rotateAngleZ = 0.0F;
 
         if (!entityIn.hasAngerTime()) {
-            this.body.rotateAngleX = 0.0F;
-            this.body.rotateAngleY = 0.0F;
-            this.body.rotateAngleZ = 0.0F;
-            if (!flag) {
-                float f1 = MathHelper.cos(ageInTicks * 0.18F);
-                this.body.rotateAngleX = 0.1F + f1 * (float)Math.PI * 0.025F;
-                this.leftAntenna.rotateAngleX = f1 * (float)Math.PI * 0.03F;
-                this.rightAntenna.rotateAngleX = f1 * (float)Math.PI * 0.03F;
-                this.frontLegs.rotateAngleX = -f1 * (float)Math.PI * 0.1F + ((float)Math.PI / 8F);
-                this.backLegs.rotateAngleX = -f1 * (float)Math.PI * 0.05F + ((float)Math.PI / 4F);
-                this.body.rotationPointY = 19.0F - MathHelper.cos(ageInTicks * 0.18F) * 0.9F;
-            }
+            float f1 = MathHelper.cos(ageInTicks * 0.18F);
+            this.body.rotateAngleX = 0.1F + f1 * (float)Math.PI * 0.025F;
+            this.leftAntenna.rotateAngleX = f1 * (float)Math.PI * 0.03F;
+            this.rightAntenna.rotateAngleX = f1 * (float)Math.PI * 0.03F;
+            this.frontLegs.rotateAngleX = -f1 * (float)Math.PI * 0.1F + ((float)Math.PI / 8F);
+            this.backLegs.rotateAngleX = -f1 * (float)Math.PI * 0.05F + ((float)Math.PI / 4F);
+            this.body.rotationPointY = 19.0F - MathHelper.cos(ageInTicks * 0.18F) * 0.9F;
         }
 
         if (this.bodyPitch > 0.0F) {

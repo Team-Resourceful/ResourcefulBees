@@ -3,7 +3,7 @@ package com.resourcefulbees.resourcefulbees.init;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.block.TieredBeehiveBlock;
 import com.resourcefulbees.resourcefulbees.config.Config;
-import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
+import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
 import net.minecraft.block.BeehiveBlock;
 import net.minecraft.block.BlockState;
@@ -15,7 +15,6 @@ import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.resources.FolderPack;
 import net.minecraft.resources.IPackNameDecorator;
 import net.minecraft.resources.ResourcePackInfo;
@@ -91,7 +90,7 @@ public class ModSetup {
 
     public static void setupDispenserCollectionBehavior() {
         if (Config.ALLOW_SHEARS.get()) {
-            DispenserBlock.registerDispenseBehavior(Items.SHEARS.asItem(), new OptionalDispenseBehavior() {
+            DispenserBlock.registerDispenseBehavior(net.minecraft.item.Items.SHEARS.asItem(), new OptionalDispenseBehavior() {
                 @Nonnull
                 protected ItemStack dispenseStack(@Nonnull IBlockSource source, @Nonnull ItemStack stack) {
                     ServerWorld world = source.getWorld();
@@ -152,7 +151,7 @@ public class ModSetup {
             });
         }
 
-        DispenserBlock.registerDispenseBehavior(RegistryHandler.SCRAPER.get(), new OptionalDispenseBehavior() {
+        DispenserBlock.registerDispenseBehavior(ModItems.SCRAPER.get(), new OptionalDispenseBehavior() {
             @Nonnull
             protected ItemStack dispenseStack(@Nonnull IBlockSource source, @Nonnull ItemStack stack) {
                 ServerWorld world = source.getWorld();

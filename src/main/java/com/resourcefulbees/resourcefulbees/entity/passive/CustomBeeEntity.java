@@ -10,7 +10,6 @@ import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.validation.ValidatorUtils;
-import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
 import net.minecraft.entity.passive.BeeEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -30,6 +29,7 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
@@ -40,12 +40,13 @@ import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.Random;
 
-public class CustomBeeEntity extends BeeEntity implements ICustomBee {
+public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
 
     private static final DataParameter<Integer> FEED_COUNT = EntityDataManager.createKey(CustomBeeEntity.class, DataSerializers.VARINT);
 
     protected final CustomBeeData beeData;
     protected int timeWithoutHive;
+    protected int flowerID;
 
     public CustomBeeEntity(EntityType<? extends BeeEntity> type, World world, CustomBeeData beeData) {
         super(type, world);
@@ -57,6 +58,10 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
     public String getBeeType() { return beeData.getName(); }
 
     public CustomBeeData getBeeData() { return beeData; }
+
+    public int getFlowerEntityID() { return flowerID; }
+
+    public void setFlowerEntityID(int id) { flowerID = id; }
 
     @Override
     public int getFeedCount() { return this.dataManager.get(FEED_COUNT); }
@@ -234,7 +239,7 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
 
             if (this.isChild()) {
                 this.consumeItemFromStack(player, itemstack);
-                this.ageUp((int)((float)(-this.getGrowingAge() / 20) * 0.1F), true);
+                this.ageUp((int)((-this.getGrowingAge() / 20) * 0.1F), true);
                 return ActionResultType.PASS;
             }
         }
@@ -254,5 +259,15 @@ public class CustomBeeEntity extends BeeEntity implements ICustomBee {
     public void notifyDataManagerChange(@Nonnull DataParameter<?> parameter) {
         super.notifyDataManagerChange(parameter);
     }
+
+    @Override
+    protected void onGrowingAdult() {
+        super.onGrowingAdult();
+        if (!this.isChild()) {
+            BlockPos pos = this.getBlockPos();
+            this.setPositionAndUpdate(pos.getX(), pos.getY(), pos.getZ());
+        }
+    }
+
     //endregion
 }

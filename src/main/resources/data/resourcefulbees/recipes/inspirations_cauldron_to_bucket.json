@@ -1,0 +1,30 @@
+{
+  "type": "inspirations:cauldron",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "inspirations"
+    }
+  ],
+  "input": {
+    "item": {
+      "item": "minecraft:bucket"
+    },
+    "contents": {
+      "type": "inspirations:fluid",
+      "name": "resourcefulbees:honey"
+    },
+    "level": {
+      "min": 12
+    }
+  },
+  "output": {
+    "item": {
+      "item": "resourcefulbees:honey_fluid_bucket"
+    },
+    "level": {
+      "set": 0
+    }
+  },
+  "sound": "minecraft:item.bucket.fill"
+}

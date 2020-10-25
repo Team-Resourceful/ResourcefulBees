@@ -1,6 +1,8 @@
 package com.resourcefulbees.resourcefulbees.entity.goals;
 
 import com.resourcefulbees.resourcefulbees.api.ICustomBee;
+import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
+import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.entity.AgeableEntity;
@@ -40,13 +42,17 @@ public class BeeBreedGoal extends BreedGoal {
         ICustomBee bee = (ICustomBee)this.animal;
         String parent1 = ((ICustomBee)this.field_75391_e).getBeeType();
         String parent2 = ((ICustomBee)this.animal).getBeeType();
-        AgeableEntity ageableentity = bee.createSelectedChild(BeeRegistry.getRegistry().getWeightedChild(parent1, parent2));
+        CustomBeeData childData = BeeRegistry.getRegistry().getWeightedChild(parent1, parent2);
+        AgeableEntity ageableentity = bee.createSelectedChild(childData);
 
         final BabyEntitySpawnEvent event = new BabyEntitySpawnEvent(animal, field_75391_e, ageableentity);
         final boolean cancelled = MinecraftForge.EVENT_BUS.post(event);
         ageableentity = event.getChild();
         if (cancelled) {
-            resetBreed();
+            int p1_breedDelay = ((ICustomBee)this.animal).getBeeData().getBreedData().getBreedDelay();
+            int p2_breedDelay = ((ICustomBee)this.field_75391_e).getBeeData().getBreedData().getBreedDelay();
+
+            resetBreed(p1_breedDelay, p2_breedDelay);
             return;
         }
         if (ageableentity != null) {
@@ -59,9 +65,11 @@ public class BeeBreedGoal extends BreedGoal {
                 serverplayerentity.addStat(Stats.ANIMALS_BRED);
                 CriteriaTriggers.BRED_ANIMALS.trigger(serverplayerentity, this.animal, this.field_75391_e, ageableentity);
             }
+            int p1_breedDelay = ((ICustomBee)this.animal).getBeeData().getBreedData().getBreedDelay();
+            int p2_breedDelay = ((ICustomBee)this.field_75391_e).getBeeData().getBreedData().getBreedDelay();
+            resetBreed(p1_breedDelay, p2_breedDelay);
 
-            resetBreed();
-            ageableentity.setGrowingAge(-24000);
+            ageableentity.setGrowingAge(childData.getBreedData().getChildGrowthDelay());
             ageableentity.setLocationAndAngles(this.animal.getX(), this.animal.getY(), this.animal.getZ(), 0.0F, 0.0F);
             this.world.addEntity(ageableentity);
             this.world.setEntityState(this.animal, (byte)18);
@@ -72,9 +80,9 @@ public class BeeBreedGoal extends BreedGoal {
         }
     }
 
-    private void resetBreed() {
-        this.animal.setGrowingAge(6000);
-        this.field_75391_e.setGrowingAge(6000);
+    private void resetBreed(int p1_breedDelay, int p2BreedDelay) {
+        this.animal.setGrowingAge(p1_breedDelay);
+        this.field_75391_e.setGrowingAge(p2BreedDelay);
         this.animal.resetInLove();
         this.field_75391_e.resetInLove();
     }

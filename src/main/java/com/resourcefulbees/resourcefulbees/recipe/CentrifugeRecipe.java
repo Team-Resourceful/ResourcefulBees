@@ -4,7 +4,7 @@ package com.resourcefulbees.resourcefulbees.recipe;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
-import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
+import com.resourcefulbees.resourcefulbees.registry.ModRecipeSerializers;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.RecipeUtils;
 import net.minecraft.inventory.IInventory;
@@ -86,7 +86,7 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
     @Nonnull
     @Override
     public IRecipeSerializer<?> getSerializer() {
-        return RegistryHandler.CENTRIFUGE_RECIPE.get();
+        return ModRecipeSerializers.CENTRIFUGE_RECIPE.get();
     }
 
     @Nonnull

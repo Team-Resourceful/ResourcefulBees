@@ -1,6 +1,6 @@
 package com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge;
 
-import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
+import com.resourcefulbees.resourcefulbees.registry.ModTileEntityTypes;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
@@ -19,7 +19,7 @@ public class CentrifugeCasingTileEntity extends TileEntity {
     private BlockPos controllerPos;
 
     public CentrifugeCasingTileEntity() {
-        super(RegistryHandler.CENTRIFUGE_CASING_ENTITY.get());
+        super(ModTileEntityTypes.CENTRIFUGE_CASING_ENTITY.get());
     }
 
     public void setControllerPos(BlockPos pos){

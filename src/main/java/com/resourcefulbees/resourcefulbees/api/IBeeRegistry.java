@@ -12,7 +12,7 @@ public interface IBeeRegistry {
 
     CustomBeeData getWeightedChild(String parent1, String parent2);
 
-    double getAdjustedWeightForChild(CustomBeeData child, boolean sameType);
+    double getAdjustedWeightForChild(CustomBeeData child, String parent1, String parent2);
 
     boolean registerBee(String beeType, CustomBeeData customBeeData);
 

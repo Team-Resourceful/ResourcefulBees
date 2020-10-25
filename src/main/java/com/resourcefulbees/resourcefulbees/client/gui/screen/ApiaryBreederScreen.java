@@ -7,7 +7,7 @@ import com.resourcefulbees.resourcefulbees.container.ApiaryBreederContainer;
 import com.resourcefulbees.resourcefulbees.lib.ApiaryTabs;
 import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
 import com.resourcefulbees.resourcefulbees.network.packets.ApiaryTabMessage;
-import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
+import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryBreederTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.MathUtils;
 import net.minecraft.client.Minecraft;
@@ -56,7 +56,7 @@ public class ApiaryBreederScreen extends ContainerScreen<ApiaryBreederContainer>
         int j = this.guiTop;
         int t = i + this.xSize - 24;
 
-        mainTabButton = this.addButton(new TabImageButton(t+1, j+17, 18, 18, 110, 0, 18, TABS_BG, new ItemStack(RegistryHandler.BEE_JAR.get()), 1, 1,
+        mainTabButton = this.addButton(new TabImageButton(t+1, j+17, 18, 18, 110, 0, 18, TABS_BG, new ItemStack(ModItems.BEE_JAR.get()), 1, 1,
                 (onPress) -> this.changeScreen(ApiaryTabs.MAIN)) {
             public void renderToolTip(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
                 StringTextComponent s = new StringTextComponent(I18n.format("gui.resourcefulbees.apiary.button.main_screen"));
@@ -72,7 +72,7 @@ public class ApiaryBreederScreen extends ContainerScreen<ApiaryBreederContainer>
             }
         });
 
-        this.addButton(new TabImageButton(t + 1, j + 57, 18, 18, 110, 0, 18, TABS_BG, new ItemStack(RegistryHandler.GOLD_FLOWER_ITEM.get()), 1, 1,
+        this.addButton(new TabImageButton(t + 1, j + 57, 18, 18, 110, 0, 18, TABS_BG, new ItemStack(ModItems.GOLD_FLOWER_ITEM.get()), 1, 1,
                 (onPress) -> this.changeScreen(ApiaryTabs.BREED)) {
             public void renderToolTip(@Nonnull MatrixStack matrix,int mouseX, int mouseY) {
                 StringTextComponent s = new StringTextComponent(I18n.format("gui.resourcefulbees.apiary.button.breed_screen"));

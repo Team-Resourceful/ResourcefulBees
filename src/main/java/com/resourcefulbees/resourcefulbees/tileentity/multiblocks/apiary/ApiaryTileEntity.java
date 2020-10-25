@@ -15,13 +15,13 @@ import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
 import com.resourcefulbees.resourcefulbees.network.packets.UpdateClientApiaryMessage;
-import com.resourcefulbees.resourcefulbees.registry.RegistryHandler;
+import com.resourcefulbees.resourcefulbees.registry.ModBlocks;
+import com.resourcefulbees.resourcefulbees.registry.ModItems;
+import com.resourcefulbees.resourcefulbees.registry.ModTileEntityTypes;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
-import com.resourcefulbees.resourcefulbees.utils.LogTimer;
 import net.minecraft.block.BeehiveBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.BeeEntity;
@@ -82,7 +82,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     private ApiaryBreederTileEntity apiaryBreeder;
 
 
-    public ApiaryTileEntity() { super(RegistryHandler.APIARY_TILE_ENTITY.get()); }
+    public ApiaryTileEntity() { super(ModTileEntityTypes.APIARY_TILE_ENTITY.get()); }
 
     //region PLAYER SYNCING
     public static int calculatePlayersUsingSync(World world, ApiaryTileEntity apiaryTileEntity, int ticksSinceSync, int posX, int posY, int posZ, int numPlayersUsing) {
@@ -510,7 +510,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     }
 
     public void export(BeeEntity beeEntity) {
-        ItemStack beeJar = new ItemStack(RegistryHandler.BEE_JAR.get());
+        ItemStack beeJar = new ItemStack(ModItems.BEE_JAR.get());
         beeJar.setTag(BeeJar.createTag(beeEntity));
         this.h.setStackInSlot(EXPORT, beeJar);
     }
@@ -619,10 +619,10 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
                 Block block = this.world.getBlockState(pos).getBlock();
                 if (!(block instanceof ApiaryBlock)) {
                     if (addedStorage) {
-                        this.world.setBlockState(pos, Blocks.GLASS.getDefaultState());
+                        this.world.setBlockState(pos, net.minecraft.block.Blocks.GLASS.getDefaultState());
                     }
                     else {
-                        this.world.setBlockState(pos, RegistryHandler.APIARY_STORAGE_BLOCK.get().getDefaultState());
+                        this.world.setBlockState(pos, ModBlocks.APIARY_STORAGE_BLOCK.get().getDefaultState());
                         addedStorage = true;
                     }
                 }

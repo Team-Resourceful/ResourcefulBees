@@ -35,19 +35,6 @@ public class EntityIngredient {
             tooltip.add(new StringTextComponent(s).formatted(TextFormatting.GOLD));
         }
         return tooltip;
-
-        //saving old format just in case
-/*        if (!I18n.hasKey("tooltip.resourcefulbees.jei."+ beeType)){
-            return null;
-        } else {
-            String desc = I18n.format("tooltip.resourcefulbees.jei."+ beeType);
-            String[] descTooltip = desc.split("\\r?\\n");
-            for (String s : descTooltip) {
-                tooltip.add(new StringTextComponent(s));
-            }
-            tooltip.add(new TranslationTextComponent("tooltip.resourcefulbees.jei.click_bee_info"));
-            return tooltip;
-        }*/
     }
 
 }
