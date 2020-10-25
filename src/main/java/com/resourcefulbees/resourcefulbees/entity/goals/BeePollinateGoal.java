@@ -57,6 +57,7 @@ public class BeePollinateGoal extends Goal {
             Optional<BlockPos> optional = this.findFlower(5.0D, flower.startsWith(BeeConstants.ENTITY_PREFIX), flower.replace(BeeConstants.ENTITY_PREFIX, ""));
             if (optional.isPresent()) {
                 bee.flowerPos = optional.get();
+                bee.setLastFlower(bee.flowerPos);
                 bee.getNavigator().tryMoveToXYZ((double) bee.flowerPos.getX() + 0.5D, (double) bee.flowerPos.getY() + 0.5D, (double) bee.flowerPos.getZ() + 0.5D, 1.2D);
                 return true;
             } else {
