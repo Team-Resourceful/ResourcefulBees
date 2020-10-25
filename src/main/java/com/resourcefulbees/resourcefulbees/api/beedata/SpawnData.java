@@ -3,12 +3,39 @@ package com.resourcefulbees.resourcefulbees.api.beedata;
 import com.resourcefulbees.resourcefulbees.lib.LightLevels;
 
 public class SpawnData extends AbstractBeeData {
+    /**
+     * If the bee can spawn naturally
+     */
     private final boolean canSpawnInWorld;
+
+    /**
+     * How common a bee is
+     */
     private final int spawnWeight;
+
+    /**
+     * How big a group has to be
+     */
     private final int minGroupSize;
+
+    /**
+     * The maximum size a group of bees can be.
+     */
     private final int maxGroupSize;
+
+    /**
+     * What biomes the bee can only spawn in.
+     */
     private final String biomeWhitelist;
+
+    /**
+     * What biomes the bee will not spawn. No matter if the are in the whitelist.
+     */
     private final String biomeBlacklist;
+
+    /**
+     * What LightLevel the Bee needs to spawn.
+     */
     private final LightLevels lightLevel;
 
     private SpawnData(boolean canSpawnInWorld, int spawnWeight, int minGroupSize, int maxGroupSize, String biomeWhitelist, String biomeBlacklist, LightLevels lightLevel) {

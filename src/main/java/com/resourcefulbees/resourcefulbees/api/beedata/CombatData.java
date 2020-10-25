@@ -1,8 +1,19 @@
 package com.resourcefulbees.resourcefulbees.api.beedata;
 
 public class CombatData extends AbstractBeeData {
+    /**
+     * The damage the bee makes.
+     */
     private final Float attackDamage;
+
+    /**
+     * If the bee gets tortured when it stings you.
+     */
     private final boolean removeStingerOnAttack;
+
+    /**
+     * If the bee is passive and doensn't attacks at all.
+     */
     private final boolean isPassive;
 
     private CombatData(boolean isPassive, Float attackDamage, boolean removeStingerOnAttack) {

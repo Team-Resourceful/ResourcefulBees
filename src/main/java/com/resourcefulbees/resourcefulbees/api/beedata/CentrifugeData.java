@@ -7,16 +7,59 @@ import javax.annotation.Nullable;
 import java.util.Objects;
 
 public class CentrifugeData extends AbstractBeeData {
+    /**
+     * The main output that comes from the comb.
+     */
     private final String mainOutput;
-    private final String secondaryOutput;
-    private final String bottleOutput;
-    private final float mainOutputWeight;
-    private final float secondaryOutputWeight;
-    private final float bottleOutputWeight;
-    private final int mainOutputCount;
-    private final int secondaryOutputCount;
-    private final int bottleOutputCount;
-    private final int mainInputCount;
+
+    /**
+     * The second output that comes from the comb.
+     */
+    private String secondaryOutput;
+
+    /**
+     * What the bottle gets converted into.
+     */
+    private String bottleOutput;
+
+    /**
+     * The chance that the main output comes out of the comb.
+     */
+    private float mainOutputWeight;
+
+    /**
+     * The chance that the second output comes out of the comb.
+     */
+    private float secondaryOutputWeight;
+
+    /**
+     * The chance that a bottle is converted to the bottleOutput.
+     */
+    private float bottleOutputWeight;
+
+    /**
+     * How many items come out of the first output.
+     */
+    private int mainOutputCount;
+
+    /**
+     * How many items come out of the second output.
+     */
+    private int secondaryOutputCount;
+
+    /**
+     * How many items come out of the bottle output.
+     */
+    private int bottleOutputCount;
+
+    /**
+     * How many comb are consumed per iteration.
+     */
+    private int mainInputCount;
+
+    /**
+     * If it should have centrifuge output.
+     */
     private boolean hasCentrifugeOutput;
 
     private CentrifugeData(String mainOutput, String secondaryOutput, String bottleOutput, float mainOutputWeight, float secondaryOutputWeight, float bottleOutputWeight, int mainOutputCount, int secondaryOutputCount, int bottleOutputCount, int mainInputCount, boolean hasCentrifugeOutput) {
@@ -125,6 +168,10 @@ public class CentrifugeData extends AbstractBeeData {
         }
     }
 
+    /**
+     * Creates a default CentrifugeData for faster Bee Creation
+     * @return CentrifugeData that says Bee doesn't have centrifuge output
+     */
     public static CentrifugeData createDefault() {
         return new Builder(false, "minecraft:stone").createCentrifugeData();
     }

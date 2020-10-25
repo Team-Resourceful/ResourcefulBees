@@ -123,6 +123,8 @@ public class ResourcefulBees
 
     private void entityDies(LivingDeathEvent event) {
 
+        //TODO: enable WIP Pollen Feature.
+        /*
         if (event.getEntity() instanceof ResourcefulBee) {
             ResourcefulBee bee = (ResourcefulBee) event.getEntity();
 
@@ -163,7 +165,7 @@ public class ResourcefulBees
                 world.addEntity(entityItem);
             }
         }
-
+        */
     }
 
     public void trade(VillagerTradesEvent event) {
