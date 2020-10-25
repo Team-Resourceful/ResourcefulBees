@@ -26,7 +26,7 @@ repositories {
 }
 
 version = "${mod_version}"
-group = "com.resourcefulbees.${modid}" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+group = "com.resourcefulbees" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "${modid}"
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
