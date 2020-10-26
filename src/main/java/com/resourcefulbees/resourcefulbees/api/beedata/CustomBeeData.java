@@ -1,14 +1,17 @@
 package com.resourcefulbees.resourcefulbees.api.beedata;
 
+import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.RegistryObject;
 
 import java.util.HashMap;
+import java.util.function.Supplier;
 
 public class CustomBeeData extends AbstractBeeData {
 
@@ -108,6 +111,9 @@ public class CustomBeeData extends AbstractBeeData {
      * Data for Bee traits
      */
     private TraitData TraitData;
+    
+    private transient Supplier<ItemStack> combSupplier;
+    private transient Supplier<ItemStack> combBlockItemSupplier;
 
     /**
      * The RegistryObject of the Bee Comb
@@ -219,6 +225,28 @@ public class CustomBeeData extends AbstractBeeData {
     public TraitData getTraitData() { return this.TraitData != null ? this.TraitData : com.resourcefulbees.resourcefulbees.api.beedata.TraitData.createDefault(); }
 
     public void setTraitData(TraitData traitData) { this.TraitData = this.TraitData != null ? this.TraitData : traitData; }
+
+    public ItemStack getCombStack() {
+        if (combSupplier != null) {
+            return combSupplier.get();
+        }
+        return new ItemStack(getCombRegistryObject().get());
+    }
+
+    public ItemStack getCombBlockItemStack() {
+        if (combSupplier != null) {
+            return combBlockItemSupplier.get();
+        }
+        return new ItemStack(getCombBlockItemRegistryObject().get());
+    }
+
+    public void setCombSupplier(Supplier<ItemStack> combSupplier) {
+        this.combSupplier = combSupplier;
+    }
+
+    public void setCombBlockItemSupplier(Supplier<ItemStack> combBlockItemSupplier) {
+        this.combBlockItemSupplier = combBlockItemSupplier;
+    }
 
     public static class Builder {
         private final String flower;
