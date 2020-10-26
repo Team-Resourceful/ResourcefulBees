@@ -19,9 +19,12 @@ public class BeeRegistry implements IBeeRegistry {
     public static final HashMap<String, RegistryObject<EntityType<? extends CustomBeeEntity>>> MOD_BEES = new HashMap<>();
     public static final HashMap<ResourceLocation, RandomCollection<CustomBeeData>> SPAWNABLE_BIOMES = new HashMap<>();
 
-
     private static final BeeRegistry INSTANCE = new BeeRegistry();
 
+    /**
+     * Return the instance of this class. This is useful for calling methods to the mod from a static or threaded context.
+     * @return Instance of this class
+     */
     public static BeeRegistry getRegistry() { return INSTANCE; }
 
     private final LinkedHashMap<String, CustomBeeData> BEE_INFO = new LinkedHashMap<>();

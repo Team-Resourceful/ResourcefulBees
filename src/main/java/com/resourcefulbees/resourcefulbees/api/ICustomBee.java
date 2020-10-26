@@ -3,6 +3,11 @@ package com.resourcefulbees.resourcefulbees.api;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import net.minecraft.entity.AgeableEntity;
 
+/**
+ * Implemented in CustomBeeEntity and ResourcefulBee
+ *
+ * It is recommended to use ResourcefulBee (or a class that is child of it) when referred to ICustomBee
+ */
 public interface ICustomBee {
 
     /**
@@ -35,7 +40,6 @@ public interface ICustomBee {
      * Increments "this" bee's current number of times fed by 1.
      */
     void addFeedCount();
-
 
     AgeableEntity createSelectedChild(CustomBeeData beeType);
 }

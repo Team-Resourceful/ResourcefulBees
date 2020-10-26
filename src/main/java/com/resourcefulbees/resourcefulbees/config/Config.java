@@ -10,6 +10,8 @@ public class Config {
     public static ForgeConfigSpec.BooleanValue USE_FORGE_DICTIONARIES;
     public static ForgeConfigSpec.BooleanValue ENABLE_EASTER_EGG_BEES;
 
+    public static ForgeConfigSpec.IntValue BEE_FLOWERFOREST_MULTIPLIER;
+
     public static ForgeConfigSpec.BooleanValue GENERATE_BEE_NESTS;
 
     public static ForgeConfigSpec.BooleanValue CENTRIFUGE_RECIPES;
@@ -160,6 +162,8 @@ public class Config {
             COMMON_BUILDER.push("Spawning Options");
             GENERATE_BEE_NESTS = COMMON_BUILDER.comment("\nShould bee nests generate in world? \nNote: They will only generate in biomes where bees can spawn")
                     .define("generateBeeNests", true);
+            BEE_FLOWERFOREST_MULTIPLIER = COMMON_BUILDER.comment("The value added to weight for bees in a flower forests")
+                    .defineInRange("beesMoreCommonInFlowerForests", 4, 0, 9);
             OVERWORLD_NEST_GENERATION_CHANCE = COMMON_BUILDER.comment("\nChance for nest to spawn when generating chunks in overworld category biomes. [1/x]\nA higher value means the nest is less likely to spawn.")
                     .defineInRange("overworld_nest_generation_chance", 48, 4, 100);
             NETHER_NEST_GENERATION_CHANCE = COMMON_BUILDER.comment("\nChance for nest to spawn when generating chunks in nether category biomes. [1/x]\nA higher value means the nest is less likely to spawn.")

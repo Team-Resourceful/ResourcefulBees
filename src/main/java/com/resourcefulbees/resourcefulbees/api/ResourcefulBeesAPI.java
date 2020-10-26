@@ -5,7 +5,14 @@ import net.minecraftforge.fml.ModLoadingContext;
 public class ResourcefulBeesAPI {
 
     public static final String MOD_ID = "resourcefulbees";
+    /**
+     * Instance of IBeeRegistry
+     */
     private static IBeeRegistry beeRegistry;
+
+    /**
+     * Instance of ITraitRegistry
+     */
     private static ITraitRegistry traitRegistry;
 
     public static void setBeeRegistry(IBeeRegistry beeRegistry) {

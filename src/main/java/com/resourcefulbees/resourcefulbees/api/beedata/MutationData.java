@@ -3,10 +3,29 @@ package com.resourcefulbees.resourcefulbees.api.beedata;
 import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
 
 public class MutationData extends AbstractBeeData {
+    /**
+     * The Input that is getting mutated
+     */
     private final String mutationInput;
+
+    /**
+     * The new muted output
+     */
     private final String mutationOutput;
+
+    /**
+     * how many inputs in a radius get mutated
+     */
     private final int mutationCount;
+
+    /**
+     * If the bee has a mutation
+     */
     private boolean hasMutation;
+
+    /**
+     * What type of mutation it is
+     */
     private final MutationTypes mutationType;
 
     private MutationData(String mutationInput, String mutationOutput, int mutationCount, boolean hasMutation, MutationTypes mutationType) {

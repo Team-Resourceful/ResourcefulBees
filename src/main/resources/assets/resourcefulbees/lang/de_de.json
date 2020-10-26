@@ -1,9 +1,10 @@
 {
 	"itemGroup.resourcefulbees" : "Resourceful Bees",
 
-	"resourcefulbees.information.bee_type.vanilla": "Bee Type: Vanilla",
-	"resourcefulbees.information.bee_type.unknown": "Bee Type: Unbekannt",
-	"resourcefulbees.information.bee_type.custom": "Bee Type: ",
+	"resourcefulbees.information.bee_type.vanilla": "Bienen-Art: Vanilla",
+	"resourcefulbees.information.bee_type.unknown": "Bienen-Ar: Unbekannt",
+	"resourcefulbees.information.bee_type.custom": "Bienen-Ar: ",
+	"resourcefulbees.information.unknown_type": "Unbekannte Art",
 	"resourcefulbees.shift_info": "Halte SHIFT für mehr Info",
 	"resourcefulbees.ctrl_info": "Halte STRG für Multiblock Info",
 
@@ -101,6 +102,8 @@
 	"item.resourcefulbees.smoker": "Bienenraucher",
 	"item.resourcefulbees.bellow": "Blasebalg",
 	"item.resourcefulbees.beeswax": "Bienenwachs",
+	"item.resourcefulbees.pollen": "Pollen",
+	"item.resourcefulbees.fertilizer": "Dünger",
 	"item.resourcefulbees.resourceful_honeycomb": "Resourceful Bienenwabe",
 	"item.resourcefulbees._honeycomb": "Resourceful Bienenwabe",
 	"item.resourcefulbees.smoker.tooltip": "Rechtsclick auf das Nest um es zu räuchern.",
