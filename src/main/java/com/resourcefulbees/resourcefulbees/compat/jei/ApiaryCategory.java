@@ -45,10 +45,11 @@ public class ApiaryCategory implements IRecipeCategory<ApiaryCategory.Recipe> {
         final List<Item> apiaryTiers = new ArrayList<>(Arrays.asList(ModItems.T1_APIARY_ITEM.get(), ModItems.T2_APIARY_ITEM.get(), ModItems.T3_APIARY_ITEM.get(), ModItems.T4_APIARY_ITEM.get()));
 
         BeeRegistry.getRegistry().getBees().forEach(((s, customBeeData) -> {
+            int[] customAmounts = customBeeData.getApiaryOutputAmounts();
             if (customBeeData.hasHoneycomb()) {
                 for (int i = 0; i < 4; i++){
                     Item outputItem = outputs.get(i).equals(ApiaryOutput.COMB) ? customBeeData.getCombRegistryObject().get() : customBeeData.getCombBlockItemRegistryObject().get();
-                    ItemStack outputStack = new ItemStack(outputItem, outputQuantities[i]);
+                    ItemStack outputStack = new ItemStack(outputItem, customAmounts != null && customAmounts[i] > 0 ? customAmounts[i] :  outputQuantities[i]);
                     recipes.add(new Recipe(outputStack, customBeeData.getName(), new ItemStack(apiaryTiers.get(i))));
                 }
             }

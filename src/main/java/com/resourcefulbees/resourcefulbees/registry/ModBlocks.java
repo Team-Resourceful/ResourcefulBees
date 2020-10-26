@@ -23,7 +23,7 @@ public class ModBlocks {
     private static final AbstractBlock.Properties HIVE_PROPERTIES = Block.Properties.create(Material.WOOD).hardnessAndResistance(2).sound(SoundType.WOOD);
     private static final AbstractBlock.Properties NEST_PROPERTIES = Block.Properties.create(Material.WOOD).hardnessAndResistance(0.3F).sound(SoundType.WOOD);
 
-
+    //TODO 1.17 remove Tiered hives in favor of upgradeable nests
     public static final RegistryObject<Block> T1_BEEHIVE = BLOCKS.register("t1_beehive", () -> new TieredBeehiveBlock(1,1.0F, HIVE_PROPERTIES));
     public static final RegistryObject<Block> T2_BEEHIVE = BLOCKS.register("t2_beehive", () -> new TieredBeehiveBlock(2, 1.5F, HIVE_PROPERTIES));
     public static final RegistryObject<Block> T3_BEEHIVE = BLOCKS.register("t3_beehive", () -> new TieredBeehiveBlock(3, 2.0F, HIVE_PROPERTIES));

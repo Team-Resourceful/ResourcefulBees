@@ -171,8 +171,8 @@ public class CentrifugeControllerTileEntity extends TileEntity implements ITicka
                             if (i == 2) glass_bottle.shrink(recipe.outputs.get(2).getLeft().getCount());
                         }
                     }
+                    comb.shrink(inputAmount);
                     if (!depositStacks.isEmpty()) {
-                        comb.shrink(inputAmount);
                         depositItemStacks(depositStacks);
                     }
                 }

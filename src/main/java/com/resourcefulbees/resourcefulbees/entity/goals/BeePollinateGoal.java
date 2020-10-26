@@ -213,7 +213,7 @@ public class BeePollinateGoal extends Goal {
                     mutableBlockPos.setPos(blockPos);
                 }
             });
-            return Optional.of(mutableBlockPos);
+            if (lastDistance.get() < 100) return Optional.of(mutableBlockPos);
         } else {
             List<Entity> entityList = bee.world.getEntitiesInAABBexcluding(bee, (new AxisAlignedBB(bee.getBlockPos())).grow(range),
                     (entity) -> entity.getEntityString() != null && entity.getEntityString().equals(entityRegistryName));

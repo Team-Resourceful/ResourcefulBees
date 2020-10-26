@@ -180,7 +180,7 @@ public class BeeSetup {
     public static void registerBeePlacements() {
         BeeRegistry.MOD_BEES.forEach((s, entityTypeRegistryObject) -> {
             CustomBeeData beeData = BeeRegistry.getRegistry().getBeeData(s);
-            if (beeData.getSpawnData().canSpawnInWorld()){
+            if (beeData.getSpawnData().canSpawnInWorld()) {
                 EntitySpawnPlacementRegistry.register(entityTypeRegistryObject.get(),
                         EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
                         Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,

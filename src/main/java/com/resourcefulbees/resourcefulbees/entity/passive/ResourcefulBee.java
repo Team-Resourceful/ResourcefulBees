@@ -319,7 +319,8 @@ public class ResourcefulBee extends CustomBeeEntity {
                     }
                 }
             }
-            if (!info.hasDamagePotionEffects() && !info.hasDamageTypes()) ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.POISON, i * 20, 0));
+            if ((Config.BEES_INFLICT_POISON.get() || this.getBeeData().getCombatData().inflictsPoison()) && !info.hasDamagePotionEffects() && !info.hasDamageTypes())
+                ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.POISON, i * 20, 0));
         }
 
         this.setAttackTarget(null);

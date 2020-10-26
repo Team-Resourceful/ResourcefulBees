@@ -171,7 +171,7 @@ public class ResourcefulBees
         PointOfInterestType.field_221073_u.putAll(pointOfInterestTypeMap);
 
 
-        ModSetup.setupDispenserCollectionBehavior();
+        event.enqueueWork(ModSetup::registerDispenserBehaviors);
 
         NetPacketHandler.init();
 
