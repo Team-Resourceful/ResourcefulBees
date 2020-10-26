@@ -47,6 +47,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
     protected final CustomBeeData beeData;
     protected int timeWithoutHive;
     protected int flowerID;
+    public BlockPos lastFlower;
 
     public CustomBeeEntity(EntityType<? extends BeeEntity> type, World world, CustomBeeData beeData) {
         super(type, world);
@@ -56,6 +57,14 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
     //region BEE INFO RELATED METHODS BELOW
 
     public String getBeeType() { return beeData.getName(); }
+
+    public BlockPos getLastFlower() {
+        return lastFlower;
+    }
+
+    public void setLastFlower(BlockPos lastFlower) {
+        this.lastFlower = lastFlower;
+    }
 
     public CustomBeeData getBeeData() { return beeData; }
 

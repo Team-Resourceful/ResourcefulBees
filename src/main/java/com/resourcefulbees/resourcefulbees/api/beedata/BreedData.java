@@ -3,12 +3,39 @@ package com.resourcefulbees.resourcefulbees.api.beedata;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 
 public class BreedData extends AbstractBeeData {
+    /**
+     * If bee can be breeded from 2 parents.
+     */
     private boolean isBreedable;
+
+    /**
+     * The weight specified for that bee. The weight is calculated against all the other bees the bees parents can make with the same item.
+     */
     private final double breedWeight;
+
+    /**
+     * Strings of the parent bees needed to be breed.
+     */
     private final String parent1, parent2;
+
+    /**
+     * The item the parents need to be fed with for breeding.
+     */
     private final String feedItem;
+
+    /**
+     * The amount the single parent needs to be feed with the item.
+     */
     private final int feedAmount;
+
+    /**
+     * The time it takes the child to be an adult.
+     */
     private final int childGrowthDelay;
+
+    /**
+     * The delay till the same bees can breed again.
+     */
     private final int breedDelay;
 
     private BreedData(boolean isBreedable, double breedWeight, String parent1, String parent2, String feedItem, int feedAmount, int childGrowthDelay, int breedDelay) {
@@ -42,6 +69,9 @@ public class BreedData extends AbstractBeeData {
 
     public boolean hasParents() { return !getParent1().isEmpty() && !getParent2().isEmpty(); }
 
+    /**
+     * Builder to easily create new BreedData
+     */
     public static class Builder {
         private final boolean isBreedable;
         private double breedWeight;
@@ -93,6 +123,10 @@ public class BreedData extends AbstractBeeData {
         }
     }
 
+    /**
+     * Creates a default BreedData for faster Bee Creation
+     * @return BreedData that says Bee can't be breed
+     */
     public static BreedData createDefault() {
         return new Builder(false).createBreedData();
     }

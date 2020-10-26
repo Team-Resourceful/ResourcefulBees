@@ -3,10 +3,14 @@ package com.resourcefulbees.resourcefulbees.init;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.block.TieredBeehiveBlock;
 import com.resourcefulbees.resourcefulbees.config.Config;
+import com.resourcefulbees.resourcefulbees.item.dispenser.ScraperDispenserBehavior;
+import com.resourcefulbees.resourcefulbees.item.dispenser.ShearsDispenserBehavior;
+import com.resourcefulbees.resourcefulbees.mixin.DispenserBlockInvoker;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
 import net.minecraft.block.BeehiveBlock;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.client.Minecraft;
 import net.minecraft.dispenser.IBlockSource;
@@ -15,6 +19,7 @@ import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.resources.FolderPack;
 import net.minecraft.resources.IPackNameDecorator;
 import net.minecraft.resources.ResourcePackInfo;
@@ -88,95 +93,15 @@ public class ModSetup {
         } catch (IOException e) { LOGGER.error("Failed to create pack.mcmeta file for resource loading");}
     }
 
-    public static void setupDispenserCollectionBehavior() {
+    public static void registerDispenserBehaviors() {
         if (Config.ALLOW_SHEARS.get()) {
-            DispenserBlock.registerDispenseBehavior(net.minecraft.item.Items.SHEARS.asItem(), new OptionalDispenseBehavior() {
-                @Nonnull
-                protected ItemStack dispenseStack(@Nonnull IBlockSource source, @Nonnull ItemStack stack) {
-                    ServerWorld world = source.getWorld();
-                    if (!world.isRemote()) {
-                        this.setSuccess(false);
-                        BlockPos blockpos = source.getBlockPos().offset(source.getBlockState().get(DispenserBlock.FACING));
+            ShearsDispenserBehavior.DEFAULT_SHEARS_DISPENSE_BEHAVIOR =
+                    ((DispenserBlockInvoker) Blocks.DISPENSER).invokeGetBehaviorForItem(new ItemStack(Items.SHEARS));
 
-                        for (Entity entity : world.getEntitiesInAABBexcluding(null, new AxisAlignedBB(blockpos), e -> !e.isSpectator() && e instanceof IForgeShearable)) {
-                            IForgeShearable target = (IForgeShearable) entity;
-                            if (target.isShearable(stack, world, blockpos)) {
-                                FakePlayer fakie = FakePlayerFactory.getMinecraft(world);
-                                List<ItemStack> drops = target.onSheared(fakie, stack, entity.world, blockpos,
-                                        net.minecraft.enchantment.EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, stack));
-                                Random rand = new Random();
-                                drops.forEach(d -> {
-                                    ItemEntity ent = entity.entityDropItem(d, 1.0F);
-                                    if (ent != null)
-                                        ent.setMotion(ent.getMotion().add((rand.nextFloat() - rand.nextFloat()) * 0.1F, rand.nextFloat() * 0.05F, (rand.nextFloat() - rand.nextFloat()) * 0.1F));
-                                });
-                                if (stack.attemptDamageItem(1, world.rand, null)) {
-                                    stack.setCount(0);
-                                }
-
-                                this.setSuccess(true);
-                                break;
-                            }
-                        }
-
-                        if (!this.isSuccess()) {
-                            BlockState blockstate = world.getBlockState(blockpos);
-                            if (blockstate.getBlock() instanceof TieredBeehiveBlock) {
-                                int i = blockstate.get(BeehiveBlock.HONEY_LEVEL);
-                                if (i >= 5) {
-                                    if (stack.attemptDamageItem(1, world.rand, null)) {
-                                        stack.setCount(0);
-                                    }
-
-                                    TieredBeehiveBlock.dropResourceHoneycomb((TieredBeehiveBlock) blockstate.getBlock(), world, blockpos, false);
-                                    ((BeehiveBlock) blockstate.getBlock()).takeHoney(world, blockstate, blockpos, null, BeehiveTileEntity.State.BEE_RELEASED);
-                                    this.setSuccess(true);
-                                }
-                            } else if (blockstate.isIn(BlockTags.BEEHIVES)) {
-                                int i = blockstate.get(BeehiveBlock.HONEY_LEVEL);
-                                if (i >= 5) {
-                                    if (stack.attemptDamageItem(1, world.rand, null)) {
-                                        stack.setCount(0);
-                                    }
-
-                                    BeehiveBlock.dropHoneycomb(world, blockpos);
-                                    ((BeehiveBlock) blockstate.getBlock()).takeHoney(world, blockstate, blockpos, null, BeehiveTileEntity.State.BEE_RELEASED);
-                                    this.setSuccess(true);
-                                }
-                            }
-                        }
-                    }
-                    return stack;
-                }
-            });
+            DispenserBlock.registerDispenseBehavior(net.minecraft.item.Items.SHEARS.asItem(), new ShearsDispenserBehavior());
         }
 
-        DispenserBlock.registerDispenseBehavior(ModItems.SCRAPER.get(), new OptionalDispenseBehavior() {
-            @Nonnull
-            protected ItemStack dispenseStack(@Nonnull IBlockSource source, @Nonnull ItemStack stack) {
-                ServerWorld world = source.getWorld();
-                if (!world.isRemote()) {
-                    this.setSuccess(false);
-                    BlockPos blockpos = source.getBlockPos().offset(source.getBlockState().get(DispenserBlock.FACING));
-                    BlockState blockstate = world.getBlockState(blockpos);
-                    if (blockstate.getBlock() instanceof TieredBeehiveBlock) {
-                        int i = blockstate.get(BeehiveBlock.HONEY_LEVEL);
-                        if (i >= 5) {
-                            if (stack.attemptDamageItem(1, world.rand, null)) {
-                                stack.setCount(0);
-                            }
-
-                            if (TieredBeehiveBlock.dropResourceHoneycomb((TieredBeehiveBlock) blockstate.getBlock(), world, blockpos, true)) {
-                                ((BeehiveBlock) blockstate.getBlock()).takeHoney(world, blockstate, blockpos, null, BeehiveTileEntity.State.BEE_RELEASED);
-                            }
-                            this.setSuccess(true);
-                        }
-                    }
-                }
-
-                return stack;
-            }
-        });
+        DispenserBlock.registerDispenseBehavior(ModItems.SCRAPER.get().asItem(), new ScraperDispenserBehavior());
     }
 
     public static void loadResources() {

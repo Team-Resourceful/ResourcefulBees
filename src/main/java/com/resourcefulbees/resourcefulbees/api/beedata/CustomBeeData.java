@@ -15,31 +15,129 @@ import java.util.function.Supplier;
 
 public class CustomBeeData extends AbstractBeeData {
 
+    /**
+     * Which flowers the bee pollinates.
+     */
     private final String flower;
+
+    /**
+     * The base texture the bee uses if it uses a custom texture.
+     */
     private final String baseLayerTexture;
+
+    /**
+     * How long the bee can stay in a hive.
+     */
     private final int maxTimeInHive;
+
+    /**
+     * How big the bee is.
+     */
     private final float sizeModifier;
+
+    /**
+     * The special atributes can have.
+     *
+     * With that it can as example port like an enderman.
+     */
     private final String[] traits;
+
+    /**
+     * The name of the bee for the registry.
+     */
     private transient String name;
+
+    /**
+     * If the bee has a comb.
+     */
     private final boolean hasHoneycomb;
+
+    /**
+     * If a custom item should drop when normally combs drop.
+     */
     private String customCombDrop;
+
+    /**
+     * If a custom item should drop when the comb block is broken.
+     */
     private String customCombBlockDrop;
+
+    /**
+     * How much should come out of apiaries in combs.
+     */
     private final int[] apiaryOutputAmounts;
+
+    /**
+     * If the ResourcefulBees mod should handle the registration
+     */
     public transient boolean shouldResourcefulBeesDoForgeRegistration;
+
+    /**
+     * Additional Data added by a Mod Author
+     */
     private final transient HashMap<String, AbstractBeeData> ADDITIONAL_DATA = new HashMap<>();
+
+    /**
+     * Data for Breeding the Bee
+     */
     private final BreedData BreedData;
+
+    /**
+     * Data for Comb outputs
+     */
     private final CentrifugeData CentrifugeData;
+
+    /**
+     * Data for the coloring of the bee
+     */
     private final ColorData ColorData;
+
+    /**
+     * Data for the combat skills of the bee
+     */
     private final CombatData CombatData;
+
+    /**
+     * Data for Block Mutation
+     */
     private final MutationData MutationData;
+
+    /**
+     * Data for spawning of the Bee
+     */
     private final SpawnData SpawnData;
+
+    /**
+     * Data for Bee traits
+     */
     private TraitData TraitData;
+    
     private transient Supplier<ItemStack> combSupplier;
     private transient Supplier<ItemStack> combBlockItemSupplier;
+
+    /**
+     * The RegistryObject of the Bee Comb
+     */
     private transient RegistryObject<Item> combRegistryObject;
+
+    /**
+     * The RegistryObject of the Bee Comb Block
+     */
     private transient RegistryObject<Block> combBlockRegistryObject;
+
+    /**
+     * The RegistryObject of the Bee Comb Block Item
+     */
     private transient RegistryObject<Item> combBlockItemRegistryObject;
+
+    /**
+     * The RegistryObject of the Bee Spawn Egg
+     */
     private transient RegistryObject<Item> spawnEggItemRegistryObject;
+
+    /**
+     * The RegistryObject of the Bee EntityType
+     */
     private transient ResourceLocation entityTypeRegistryID;
 
     private CustomBeeData(String flower, String baseLayerTexture, int maxTimeInHive, float sizeModifier, String[] traits, int[] apiaryOutputAmounts, String name, boolean hasHoneycomb, MutationData mutationData, ColorData colorData, CombatData CombatData, CentrifugeData centrifugeData, BreedData breedData, SpawnData spawnData, TraitData traitData) {

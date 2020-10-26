@@ -3,17 +3,61 @@ package com.resourcefulbees.resourcefulbees.api.beedata;
 import java.awt.*;
 
 public class ColorData extends AbstractBeeData {
+    /**
+     * The color the bee is primary tinted in.
+     */
     private final String primaryColor;
+
+    /**
+     * The color the bee is secondary tinted in.
+     */
     private final String secondaryColor;
+
+    /**
+     * The color the comb is tinted in.
+     */
     private final String honeycombColor;
+
+    /**
+     * A custom texture specified for the first texture layer of the bee.
+     */
     private final String primaryLayerTexture;
+
+    /**
+     * A custom texture specified for the second texture layer of the bee.
+     */
     private final String secondaryLayerTexture;
+
+    /**
+     * A custom texture specified for the emissive texture layer of the bee.
+     */
     private final String emissiveLayerTexture;
+
+    /**
+     * If the bee is colored.
+     */
     private final boolean isBeeColored;
+
+    /**
+     * If the bee changes its color like a rainbow.
+     */
     private final boolean isRainbowBee;
+
+    /**
+     * If the bee is glowing.
+     */
     private final boolean isGlowing;
+
+    /**
+     * The color the bee is glowing in.
+     */
     private final String glowColor;
+
+    /**
+     * If the comb has an enchantment glint.
+     */
     private final boolean isEnchanted;
+
     private final int glowingPulse;
 
     private ColorData(String primaryColor, String secondaryColor, String honeycombColor, String primaryLayerTexture, String secondaryLayerTexture, String emissiveLayerTexture, boolean isBeeColored, boolean isRainbowBee, boolean isGlowing, String glowColor, boolean isEnchanted, int glowingPulse) {

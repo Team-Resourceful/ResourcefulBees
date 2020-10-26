@@ -8,6 +8,8 @@ import com.resourcefulbees.resourcefulbees.client.models.ModelHandler;
 import com.resourcefulbees.resourcefulbees.client.render.entity.CustomBeeRenderer;
 import com.resourcefulbees.resourcefulbees.client.render.items.ItemModelPropertiesHandler;
 import com.resourcefulbees.resourcefulbees.compat.top.TopCompat;
+import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
+import com.resourcefulbees.resourcefulbees.entity.passive.ResourcefulBee;
 import com.resourcefulbees.resourcefulbees.init.BeeSetup;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.config.ConfigLoader;
@@ -27,18 +29,24 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.merchant.villager.VillagerTrades;
 import net.minecraft.item.DyeColor;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.MerchantOffer;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.tileentity.BannerPattern;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.village.PointOfInterestType;
+import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.fml.DistExecutor;
@@ -54,6 +62,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -63,7 +72,7 @@ import java.util.*;
 @Mod("resourcefulbees")
 public class ResourcefulBees
 {
-    //TODO Test other mods can register their own bees with minimal issue
+    //TODO Test other mods can register their own bees (and pollen) with minimal issue
     //TODO Weed out all possible NPE's
 
     public static final String MOD_ID = "resourcefulbees";
@@ -94,6 +103,7 @@ public class ResourcefulBees
         MinecraftForge.EVENT_BUS.addListener(this::ServerLoaded);
 
         MinecraftForge.EVENT_BUS.addListener(this::trade);
+        MinecraftForge.EVENT_BUS.addListener(this::entityDies);
 
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
             MinecraftForge.EVENT_BUS.addListener(PreviewHandler::onWorldRenderLast);
@@ -109,6 +119,53 @@ public class ResourcefulBees
 
     private void ServerLoaded(FMLServerStartedEvent event) {
         BeeRegistry.getRegistry().getBees().forEach(((s, beeData) -> SecondPhaseValidator.validateMutation(beeData)));
+    }
+
+    private void entityDies(LivingDeathEvent event) {
+
+        //TODO: enable WIP Pollen Feature.
+        /*
+        if (event.getEntity() instanceof ResourcefulBee) {
+            ResourcefulBee bee = (ResourcefulBee) event.getEntity();
+
+            if (bee.hasNectar()) {
+
+                World world = event.getEntity().world;
+                ItemStack item = new ItemStack(ModItems.POLLEN.get());
+
+                int count = Math.round((world.rand.nextFloat() + 1) * 2.5f);
+                CompoundNBT beeNBT = new CompoundNBT();
+                bee.writeUnlessPassenger(beeNBT);
+                BlockPos flower = bee.getLastFlower();
+
+                System.out.println(flower.getX() + " " + flower.getY() + " " + flower.getZ());
+
+                if(flower != null) {
+                    CompoundNBT compoundNBT = new CompoundNBT();
+                    BlockState flowerState = world.getBlockState(flower);
+
+                    compoundNBT.putString("specific", ForgeRegistries.BLOCKS.getKey(flowerState.getBlock()).toString());
+
+                    item.setTag(compoundNBT);
+                }
+
+                item.setCount(count);
+
+                ItemEntity entityItem = new ItemEntity(world,
+                        bee.getX(), bee.getY(), bee.getZ(),
+                        item.copy());
+
+                //To give the item the little and neat drop motion ;)
+                entityItem.setMotion(
+                        world.rand.nextGaussian() * 0.08F,
+                        world.rand.nextGaussian() * 0.08F + 0.2F,
+                        world.rand.nextGaussian() * 0.08F);
+
+
+                world.addEntity(entityItem);
+            }
+        }
+        */
     }
 
     public void trade(VillagerTradesEvent event) {
@@ -171,7 +228,7 @@ public class ResourcefulBees
         PointOfInterestType.field_221073_u.putAll(pointOfInterestTypeMap);
 
 
-        ModSetup.setupDispenserCollectionBehavior();
+        event.enqueueWork(ModSetup::registerDispenserBehaviors);
 
         NetPacketHandler.init();
 

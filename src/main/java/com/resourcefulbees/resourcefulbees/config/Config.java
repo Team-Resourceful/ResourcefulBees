@@ -10,6 +10,8 @@ public class Config {
     public static ForgeConfigSpec.BooleanValue USE_FORGE_DICTIONARIES;
     public static ForgeConfigSpec.BooleanValue ENABLE_EASTER_EGG_BEES;
 
+    public static ForgeConfigSpec.IntValue BEE_FLOWERFOREST_MULTIPLIER;
+
     public static ForgeConfigSpec.BooleanValue GENERATE_BEE_NESTS;
 
     public static ForgeConfigSpec.BooleanValue CENTRIFUGE_RECIPES;
@@ -57,6 +59,7 @@ public class Config {
     public static ForgeConfigSpec.DoubleValue CHILD_SIZE_MODIFIER;
 
     public static ForgeConfigSpec.BooleanValue BEE_DIES_FROM_STING;
+    public static ForgeConfigSpec.BooleanValue BEES_INFLICT_POISON;
 
     public static ForgeConfigSpec.IntValue HONEYCOMB_HUNGER;
     public static ForgeConfigSpec.DoubleValue HONEYCOMB_SATURATION;
@@ -160,6 +163,8 @@ public class Config {
             COMMON_BUILDER.push("Spawning Options");
             GENERATE_BEE_NESTS = COMMON_BUILDER.comment("\nShould bee nests generate in world? \nNote: They will only generate in biomes where bees can spawn")
                     .define("generateBeeNests", true);
+            BEE_FLOWERFOREST_MULTIPLIER = COMMON_BUILDER.comment("The value added to weight for bees in a flower forests")
+                    .defineInRange("beesMoreCommonInFlowerForests", 4, 0, 9);
             OVERWORLD_NEST_GENERATION_CHANCE = COMMON_BUILDER.comment("\nChance for nest to spawn when generating chunks in overworld category biomes. [1/x]\nA higher value means the nest is less likely to spawn.")
                     .defineInRange("overworld_nest_generation_chance", 48, 4, 100);
             NETHER_NEST_GENERATION_CHANCE = COMMON_BUILDER.comment("\nChance for nest to spawn when generating chunks in nether category biomes. [1/x]\nA higher value means the nest is less likely to spawn.")
@@ -174,8 +179,10 @@ public class Config {
             CHILD_SIZE_MODIFIER = COMMON_BUILDER.comment("\nThis value scales the child size for all Resource Bees.")
                     .defineInRange("global_child_size_modifier", 1.0, 1.0, 2.0);
             BEE_DIES_FROM_STING = COMMON_BUILDER.comment("\nShould bees die from stinging?\nNote: Bees will continue to attack until they are no longer angry!")
-                    .define("beeDiesFromSting", true);
-            BEES_DIE_IN_VOID = COMMON_BUILDER.comment("\nShould bees die when their Y-level is below 0?\nNote: If false, bees will get stuck just below y-0 and not move.")
+                    .define("beeDiesFromSting", true); //TODO 1.17 change to "beesDieFromSting"
+            BEES_INFLICT_POISON = COMMON_BUILDER.comment("\nShould bees inflict poison damage?\nNote: Poison is only inflicted if a bee has not been given a trait with a special damage output.\nSet to false if you want to configure bees individually.")
+                    .define("beesInflictPoison", true);
+            BEES_DIE_IN_VOID = COMMON_BUILDER.comment("\nShould bees die when their Y-level is below 0?\nNote: If false, bees will get stuck just below y-0 and not move. **May not be useful with new AI**")
                     .define("beeDiesInVoid", true);
             COMMON_BUILDER.pop();
 
