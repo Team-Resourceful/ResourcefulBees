@@ -146,7 +146,7 @@ public class BeePollinateGoal extends Goal {
                 if (boundingBox != null) vector3d = boundingBox.add(0.0D, 0.4F, 0.0D);
                 if (vector3d.distanceTo(bee.getPositionVec()) > 0.5D) {
                     this.nextTarget = vector3d;
-                    this.moveToNextTarget(0.5F);
+                    this.moveToNextTarget();
                 } else {
                     if (this.nextTarget == null) {
                         this.nextTarget = vector3d;
@@ -169,7 +169,7 @@ public class BeePollinateGoal extends Goal {
                         }
 
                         if (shouldMoveToNewTraget) {
-                            this.moveToNextTarget(0.5F);
+                            this.moveToNextTarget();
                         }
 
                         ++this.pollinationTicks;
@@ -184,8 +184,8 @@ public class BeePollinateGoal extends Goal {
         }
     }
 
-    private void moveToNextTarget(float speed) {
-        bee.getMoveHelper().setMoveTo(this.nextTarget.getX(), this.nextTarget.getY(), this.nextTarget.getZ(), speed);
+    private void moveToNextTarget() {
+        bee.getMoveHelper().setMoveTo(this.nextTarget.getX(), this.nextTarget.getY(), this.nextTarget.getZ(), (float) 0.5);
     }
 
     private double getRandomOffset() { return ((double)bee.getRNG().nextFloat() * 2.0D - 1.0D) * 0.33333334D; }
