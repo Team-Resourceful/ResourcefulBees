@@ -4,6 +4,7 @@
 	"resourcefulbees.information.bee_type.vanilla": "Bee Type: Minecraft",
 	"resourcefulbees.information.bee_type.unknown": "Bee Type: Unknown",
 	"resourcefulbees.information.bee_type.custom": "Bee Type: ",
+	"resourcefulbees.information.unknown_type": "Unknown Type",
 	"resourcefulbees.shift_info": "Hold SHIFT for Info",
 	"resourcefulbees.ctrl_info": "Hold CTRL for Multiblock Info",
 
@@ -108,6 +109,8 @@
 	"item.resourcefulbees.smoker": "Bee Smoker",
 	"item.resourcefulbees.bellow": "Bellow",
 	"item.resourcefulbees.wax": "Beeswax",
+	"item.resourcefulbees.pollen": "Pollen",
+	"item.resourcefulbees.fertilizer": "Fertilizer",
 	"item.resourcefulbees.resourceful_honeycomb": "Resourceful Honeycomb",
 	"item.resourcefulbees._honeycomb": "Resourceful Honeycomb",
 	"item.resourcefulbees.smoker.tooltip": "Right click the hive to smoke it.",

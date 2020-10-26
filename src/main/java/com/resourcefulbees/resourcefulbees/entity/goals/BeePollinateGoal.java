@@ -55,7 +55,8 @@ public class BeePollinateGoal extends Goal {
             Optional<BlockPos> optional = this.findFlower(5.0D, flower.startsWith(BeeConstants.ENTITY_PREFIX), flower.replace(BeeConstants.ENTITY_PREFIX, ""));
             if (optional.isPresent()) {
                 bee.flowerPos = optional.get();
-                bee.getNavigator().tryMoveToXYZ(bee.flowerPos.getX() + 0.5D, bee.flowerPos.getY() + 0.5D, bee.flowerPos.getZ() + 0.5D, 1.2D);
+                bee.setLastFlower(bee.flowerPos);
+                bee.getNavigator().tryMoveToXYZ((double) bee.flowerPos.getX() + 0.5D, (double) bee.flowerPos.getY() + 0.5D, (double) bee.flowerPos.getZ() + 0.5D, 1.2D);
                 return true;
             } else {
                 return false;
@@ -145,7 +146,7 @@ public class BeePollinateGoal extends Goal {
                 if (boundingBox != null) vector3d = boundingBox.add(0.0D, 0.4F, 0.0D);
                 if (vector3d.distanceTo(bee.getPositionVec()) > 0.5D) {
                     this.nextTarget = vector3d;
-                    this.moveToNextTarget();
+                    this.moveToNextTarget(0.5F);
                 } else {
                     if (this.nextTarget == null) {
                         this.nextTarget = vector3d;
@@ -168,7 +169,7 @@ public class BeePollinateGoal extends Goal {
                         }
 
                         if (shouldMoveToNewTraget) {
-                            this.moveToNextTarget();
+                            this.moveToNextTarget(0.5F);
                         }
 
                         ++this.pollinationTicks;
@@ -183,8 +184,8 @@ public class BeePollinateGoal extends Goal {
         }
     }
 
-    private void moveToNextTarget() {
-        bee.getMoveHelper().setMoveTo(this.nextTarget.getX(), this.nextTarget.getY(), this.nextTarget.getZ(), (float) 0.5);
+    private void moveToNextTarget(float speed) {
+        bee.getMoveHelper().setMoveTo(this.nextTarget.getX(), this.nextTarget.getY(), this.nextTarget.getZ(), speed);
     }
 
     private double getRandomOffset() { return ((double)bee.getRNG().nextFloat() * 2.0D - 1.0D) * 0.33333334D; }

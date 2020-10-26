@@ -11,12 +11,35 @@ import java.util.Collections;
 import java.util.List;
 
 public class TraitData extends AbstractBeeData {
+    /**
+     * A list of Potion Effects and their strength.
+     */
     private transient List<Pair<Effect, Integer>> potionDamageEffects = new ArrayList<>();
+
+    /**
+     * A list of damage sources the bee is immune to
+     */
     private transient List<DamageSource> damageImmunities = new ArrayList<>();
+
+    /**
+     * A list of effects the bee is immune to
+     */
     private transient List<Effect> potionImmunities = new ArrayList<>();
+
+    /**
+     * A list of damage types and their strength.
+     */
     private transient List<Pair<String, Integer>> damageTypes = new ArrayList<>();
+
+    /**
+     * A list of special abilities the bee has
+     */
     private transient List<String> specialAbilities = new ArrayList<>();
     private transient List<BasicParticleType> particleEffects = new ArrayList<>();
+
+    /**
+     * If the bee has traits
+     */
     private final boolean hasTraits;
 
     public TraitData(boolean hasTraits) {

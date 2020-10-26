@@ -151,13 +151,11 @@ public class BeeSetup {
         if (BeeRegistry.SPAWNABLE_BIOMES.containsKey(event.getName())) {
             BeeRegistry.SPAWNABLE_BIOMES.get(event.getName()).forEach(customBeeData -> {
                 EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(customBeeData.getEntityTypeRegistryID());
-                if (entityType != null) {
-                    event.getSpawns().getSpawner(EntityClassification.CREATURE)
-                            .add(new MobSpawnInfo.Spawners(entityType,
-                                    customBeeData.getSpawnData().getSpawnWeight(),
-                                    customBeeData.getSpawnData().getMinGroupSize(),
-                                    customBeeData.getSpawnData().getMaxGroupSize()));
-                }
+                event.getSpawns().getSpawner(EntityClassification.CREATURE)
+                        .add(new MobSpawnInfo.Spawners(entityType,
+                                customBeeData.getSpawnData().getSpawnWeight() + (event.getName().getPath().contains("flower_forest") ? Config.BEE_FLOWERFOREST_MULTIPLIER.get() : 0),
+                                customBeeData.getSpawnData().getMinGroupSize(),
+                                customBeeData.getSpawnData().getMaxGroupSize()));
             });
 
             if (Config.GENERATE_BEE_NESTS.get()) {
