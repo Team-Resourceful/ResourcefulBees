@@ -21,7 +21,7 @@ import javax.annotation.Nonnull;
 
 /**
  * @author Shadows
- * @implNote Taken from Actually Additions owned by Ellpeck
+ * Taken from Actually Additions owned by Ellpeck
  */
 public class AutomationSensitiveItemStackHandler extends ItemStackHandler {
 

@@ -264,7 +264,7 @@ public class Color {
      * @return A Color object based on str
      * @throws NumberFormatException If the string cannot be parsed
      * @throws NullPointerException  If the string is null
-     * @implNote Uses {@link UnsignedInts#parseUnsignedInt(String, int)} for parsing
+     * Uses {@link UnsignedInts#parseUnsignedInt(String, int)} for parsing
      */
     public static Color parse(String str) {
         return new Color(parseInt(str));
@@ -291,7 +291,7 @@ public class Color {
      * @return A Color object based on str
      * @throws NumberFormatException If the string cannot be parsed
      * @throws NullPointerException  If the string is null
-     * @implNote Uses {@link UnsignedInts#parseUnsignedInt(String, int)} for parsing
+     * Uses {@link UnsignedInts#parseUnsignedInt(String, int)} for parsing
      */
     public static int parseInt(String str) {
         // Named color?

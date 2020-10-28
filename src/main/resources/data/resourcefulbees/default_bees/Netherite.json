@@ -3,7 +3,7 @@
   "maxTimeInHive": 600,
   "hasHoneycomb": true,
   "baseLayerTexture": "netherite/netherite_bee",
-  "traits": ["nether"],
+  "traits": ["nether", "wither"],
   "ColorData": {
     "isBeeColored": false,
     "honeycombColor": "#654740"
