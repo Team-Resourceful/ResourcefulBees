@@ -16,7 +16,7 @@ import javax.annotation.Nonnull;
 import java.text.DecimalFormat;
 
 public class HoneyGeneratorScreen extends ContainerScreen<HoneyGeneratorContainer> {
-    private static int ENERGY_PER_BOTTLE = (HoneyGeneratorTileEntity.HONEY_PER_BOTTLE/HoneyGeneratorTileEntity.HONEY_DRAIN_AMOUNT)*HoneyGeneratorTileEntity.ENERGY_FILL_AMOUNT;
+    private static final int ENERGY_PER_BOTTLE = (HoneyGeneratorTileEntity.HONEY_PER_BOTTLE/HoneyGeneratorTileEntity.HONEY_DRAIN_AMOUNT)*HoneyGeneratorTileEntity.ENERGY_FILL_AMOUNT;
 
     public HoneyGeneratorScreen(HoneyGeneratorContainer screenContainer, PlayerInventory inventory, ITextComponent titleIn) {
         super(screenContainer, inventory, titleIn);
