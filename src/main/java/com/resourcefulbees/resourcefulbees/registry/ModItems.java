@@ -136,5 +136,5 @@ public class ModItems {
             super.addInformation(stack, worldIn, tooltip, flagIn);
         }
     });
-    public static final RegistryObject<Item> HONEY_FLUID_BUCKET = ITEMS.register("honey_fluid_bucket", () -> new BucketItem(ModFluids.HONEY_FLUID, new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES).containerItem(net.minecraft.item.Items.BUCKET).maxStackSize(1)));
+    public static final RegistryObject<Item> HONEY_FLUID_BUCKET = ITEMS.register("honey_fluid_bucket", () -> new BucketItem(ModFluids.HONEY_STILL, new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES).containerItem(net.minecraft.item.Items.BUCKET).maxStackSize(1)));
 }

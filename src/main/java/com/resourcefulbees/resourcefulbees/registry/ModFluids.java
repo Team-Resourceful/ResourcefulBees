@@ -15,21 +15,21 @@ public class ModFluids {
 
     public static final DeferredRegister<Fluid> FLUIDS = DeferredRegister.create(ForgeRegistries.FLUIDS, ResourcefulBees.MOD_ID);
 
-    public static final ResourceLocation FLUID_STILL = new ResourceLocation(ResourcefulBees.MOD_ID, "block/honey_liquid");
-    public static final ResourceLocation FLUID_FLOWING = new ResourceLocation(ResourcefulBees.MOD_ID, "block/honey_liquid_flowing");
-    public static final ResourceLocation FLUID_OVERLAY = new ResourceLocation(ResourcefulBees.MOD_ID, "block/honey_liquid");
+    public static final ResourceLocation FLUID_STILL = new ResourceLocation(ResourcefulBees.MOD_ID, "block/honey/honey_still");
+    public static final ResourceLocation FLUID_FLOWING = new ResourceLocation(ResourcefulBees.MOD_ID, "block/honey/honey_flow");
+    public static final ResourceLocation FLUID_OVERLAY = new ResourceLocation(ResourcefulBees.MOD_ID, "block/honey/honey_overlay");
 
     private static ForgeFlowingFluid.Properties makeProperties()
     {
-        return new ForgeFlowingFluid.Properties(HONEY_FLUID, HONEY_FLUID_FLOWING,
+        return new ForgeFlowingFluid.Properties(HONEY_STILL, HONEY_FLOWING,
                 FluidAttributes.builder(FLUID_STILL, FLUID_FLOWING).overlay(FLUID_OVERLAY).density(1300).temperature(300).viscosity(1800).rarity(Rarity.COMMON))
                 .bucket(ModItems.HONEY_FLUID_BUCKET).block(ModBlocks.HONEY_FLUID_BLOCK).tickRate(20);
     }
 
-    public static RegistryObject<FlowingFluid> HONEY_FLUID = FLUIDS.register("honey", () ->
+    public static RegistryObject<FlowingFluid> HONEY_STILL = FLUIDS.register("honey", () ->
             new ForgeFlowingFluid.Source(makeProperties())
     );
-    public static RegistryObject<FlowingFluid> HONEY_FLUID_FLOWING = FLUIDS.register("honey_flowing", () ->
+    public static RegistryObject<FlowingFluid> HONEY_FLOWING = FLUIDS.register("honey_flowing", () ->
             new ForgeFlowingFluid.Flowing(makeProperties())
     );
 }

@@ -30,7 +30,7 @@ public class HoneyGeneratorContainer extends Container {
 
         this.trackInt(new FunctionalIntReferenceHolder(() -> honeyGeneratorTileEntity.fluidFilled, v -> honeyGeneratorTileEntity.fluidFilled = v));
         this.trackInt(new FunctionalIntReferenceHolder(() -> honeyGeneratorTileEntity.energyFilled, v -> honeyGeneratorTileEntity.energyFilled = v));
-        this.trackInt(new FunctionalIntReferenceHolder(() -> honeyGeneratorTileEntity.fluidTank.getFluidAmount(), v -> honeyGeneratorTileEntity.fluidTank.setFluid(new FluidStack(ModFluids.HONEY_FLUID.get(), v))));
+        this.trackInt(new FunctionalIntReferenceHolder(() -> honeyGeneratorTileEntity.fluidTank.getFluidAmount(), v -> honeyGeneratorTileEntity.fluidTank.setFluid(new FluidStack(ModFluids.HONEY_STILL.get(), v))));
         this.trackInt(new FunctionalIntReferenceHolder(() -> honeyGeneratorTileEntity.energyStorage.getEnergyStored(), v -> honeyGeneratorTileEntity.energyStorage.setEnergy(v)));
 
         this.addSlot(new SlotItemHandlerUnconditioned(honeyGeneratorTileEntity.h, HoneyGeneratorTileEntity.HONEY_BOTTLE_INPUT, 36, 20){

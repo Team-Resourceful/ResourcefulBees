@@ -136,7 +136,7 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
 
     private void processFluid() {
         if(canProcessFluid()) {
-            fluidTank.fill(new FluidStack(ModFluids.HONEY_FLUID.get(), HONEY_FILL_AMOUNT), IFluidHandler.FluidAction.EXECUTE);
+            fluidTank.fill(new FluidStack(ModFluids.HONEY_STILL.get(), HONEY_FILL_AMOUNT), IFluidHandler.FluidAction.EXECUTE);
             fluidFilled += HONEY_FILL_AMOUNT;
             isProcessing = fluidFilled < HONEY_PER_BOTTLE;
             if (!isProcessing) fluidFilled = 0;

@@ -6,6 +6,7 @@ import com.resourcefulbees.resourcefulbees.block.multiblocks.apiary.ApiaryBlock;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.*;
 import com.resourcefulbees.resourcefulbees.client.models.ModelHandler;
 import com.resourcefulbees.resourcefulbees.client.render.entity.CustomBeeRenderer;
+import com.resourcefulbees.resourcefulbees.client.render.fluid.FluidRender;
 import com.resourcefulbees.resourcefulbees.client.render.items.ItemModelPropertiesHandler;
 import com.resourcefulbees.resourcefulbees.compat.top.TopCompat;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
@@ -49,10 +50,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.InterModComms;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.*;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -112,6 +110,7 @@ public class ResourcefulBees
             FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
             FMLJavaModLoadingContext.get().getModEventBus().addListener(ColorHandler::onItemColors);
             FMLJavaModLoadingContext.get().getModEventBus().addListener(ColorHandler::onBlockColors);
+            MinecraftForge.EVENT_BUS.addListener(FluidRender::honeyOverlay);
         });
 
         MinecraftForge.EVENT_BUS.register(this);
@@ -122,7 +121,7 @@ public class ResourcefulBees
     }
 
     private void entityDies(LivingDeathEvent event) {
-
+        //TODO: move this to it's own class in the entity package - epic
         //TODO: enable WIP Pollen Feature.
         /*
         if (event.getEntity() instanceof ResourcefulBee) {
@@ -263,6 +262,8 @@ public class ResourcefulBees
         RenderTypeLookup.setRenderLayer(ModBlocks.ERRORED_PREVIEW_BLOCK.get(), RenderType.getCutout());
 
         ItemModelPropertiesHandler.registerProperties();
+
+        event.enqueueWork(FluidRender::setHoneyRenderType);
     }
 
     private void loadComplete(FMLLoadCompleteEvent event) {
