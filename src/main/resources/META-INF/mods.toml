@@ -15,7 +15,7 @@ description="This mod provides pack makers with useful capabilities for creating
 [[dependencies.resourcefulbees]]
     modId="forge"
     mandatory=true
-    versionRange="[34.0.0,)"
+    versionRange="[34.0.21,)"
     ordering="NONE"
     side="BOTH"
 
