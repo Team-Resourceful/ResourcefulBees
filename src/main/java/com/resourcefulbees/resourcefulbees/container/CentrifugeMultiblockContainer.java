@@ -1,6 +1,7 @@
 package com.resourcefulbees.resourcefulbees.container;
 
-import com.resourcefulbees.resourcefulbees.lib.CustomStorageContainers;
+import com.resourcefulbees.resourcefulbees.capabilities.CustomEnergyStorage;
+import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.registry.ModContainers;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.CentrifugeControllerTileEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -24,6 +25,7 @@ public class CentrifugeMultiblockContainer extends Container {
     public CentrifugeControllerTileEntity centrifugeTileEntity;
     public PlayerEntity player;
     public final IIntArray times;
+    protected final int slotsPerRow = 6;
 
     public CentrifugeMultiblockContainer(int id, World world, BlockPos pos, PlayerInventory inv) {
         this(id, world, pos, inv, new IntArray(4));
@@ -38,27 +40,23 @@ public class CentrifugeMultiblockContainer extends Container {
         centrifugeTileEntity = (CentrifugeControllerTileEntity) world.getTileEntity(pos);
 
         if (centrifugeTileEntity != null) {
-            this.addSlot(new SlotItemHandlerUnconditioned(centrifugeTileEntity.h, CentrifugeControllerTileEntity.BOTTLE_SLOT, 8, 8) {
-                public boolean isItemValid(ItemStack stack) {
-                    return stack.getItem().equals(Items.GLASS_BOTTLE);
-                }
+            this.addSlot(new SlotItemHandlerUnconditioned(centrifugeTileEntity.getItemStackHandler(), CentrifugeControllerTileEntity.BOTTLE_SLOT, 8, 8) {
+                public boolean isItemValid(ItemStack stack) { return stack.getItem().equals(Items.GLASS_BOTTLE); }
             });
 
             int x = 53;
-            for (int i = 0; i < 3; i++) {
-                this.addSlot(new SlotItemHandlerUnconditioned(centrifugeTileEntity.h, CentrifugeControllerTileEntity.HONEYCOMB_SLOT[i], x, 8) {
-                    public boolean isItemValid(ItemStack stack) {
-                        return !stack.getItem().equals(Items.GLASS_BOTTLE);
-                    }
+            for (int i = 0; i < centrifugeTileEntity.getHoneycombSlots().length; i++) {
+                this.addSlot(new SlotItemHandlerUnconditioned(centrifugeTileEntity.getItemStackHandler(), centrifugeTileEntity.getHoneycombSlots()[i], x, 8) {
+                    public boolean isItemValid(ItemStack stack) { return !stack.getItem().equals(Items.GLASS_BOTTLE); }
                 });
                 x += 36;
             }
 
 
-            for (int i = 0; i < 6; i++) {
-                this.addSlot(new OutputSlot(centrifugeTileEntity.h, CentrifugeControllerTileEntity.OUTPUT_SLOTS[i], 44 + i * 18, 44));
-                this.addSlot(new OutputSlot(centrifugeTileEntity.h, CentrifugeControllerTileEntity.OUTPUT_SLOTS[i + 6], 44 + i * 18, 62));
-                this.addSlot(new OutputSlot(centrifugeTileEntity.h, CentrifugeControllerTileEntity.OUTPUT_SLOTS[i + 12], 44 + i * 18, 80));
+            for (int i = 0; i < slotsPerRow; i++) {
+                this.addSlot(new OutputSlot(centrifugeTileEntity.getItemStackHandler(), centrifugeTileEntity.getOutputSlots()[i], 44 + i * 18, 44));
+                this.addSlot(new OutputSlot(centrifugeTileEntity.getItemStackHandler(), centrifugeTileEntity.getOutputSlots()[i + 6], 44 + i * 18, 62));
+                this.addSlot(new OutputSlot(centrifugeTileEntity.getItemStackHandler(), centrifugeTileEntity.getOutputSlots()[i + 12], 44 + i * 18, 80));
             }
         }
 
@@ -78,29 +76,25 @@ public class CentrifugeMultiblockContainer extends Container {
     private void trackPower() {
         trackInt(new IntReferenceHolder() {
             @Override
-            public int get() {
-                return getEnergy() & 0xffff;
-            }
+            public int get() { return getEnergy() & 0xffff; }
 
             @Override
             public void set(int value) {
                 centrifugeTileEntity.getCapability(CapabilityEnergy.ENERGY).ifPresent(h -> {
                     int energyStored = h.getEnergyStored() & 0xffff0000;
-                    ((CustomStorageContainers.CustomEnergyStorage)h).setEnergy(energyStored + (value & 0xffff));
+                    ((CustomEnergyStorage)h).setEnergy(energyStored + (value & 0xffff));
                 });
             }
         });
         trackInt(new IntReferenceHolder() {
             @Override
-            public int get() {
-                return (getEnergy() >> 16) & 0xffff;
-            }
+            public int get() { return (getEnergy() >> 16) & 0xffff; }
 
             @Override
             public void set(int value) {
                 centrifugeTileEntity.getCapability(CapabilityEnergy.ENERGY).ifPresent(h -> {
                     int energyStored = h.getEnergyStored() & 0x0000ffff;
-                    ((CustomStorageContainers.CustomEnergyStorage)h).setEnergy(energyStored | (value << 16));
+                    ((CustomEnergyStorage)h).setEnergy(energyStored | (value << 16));
                 });
             }
         });
@@ -110,8 +104,12 @@ public class CentrifugeMultiblockContainer extends Container {
         return centrifugeTileEntity.getCapability(CapabilityEnergy.ENERGY).map(IEnergyStorage::getEnergyStored).orElse(0);
     }
 
-    public int getTime(int i) {
-        return this.times.get(i);
+    public int getTime(int i) { return this.times.get(i); }
+
+    public int getTotalTime(int i) {
+        return this.centrifugeTileEntity.getRecipe(i) != null
+            ? Math.max(10, this.centrifugeTileEntity.getRecipe(i).time - Config.MULTIBLOCK_RECIPE_TIME_REDUCTION.get())
+            : Config.GLOBAL_CENTRIFUGE_RECIPE_TIME.get();
     }
 
     /**
@@ -120,9 +118,7 @@ public class CentrifugeMultiblockContainer extends Container {
      * @param player the player
      */
     @Override
-    public boolean canInteractWith(@Nonnull PlayerEntity player) {
-        return true;
-    }
+    public boolean canInteractWith(@Nonnull PlayerEntity player) { return true; }
 
     @Nonnull
     @Override

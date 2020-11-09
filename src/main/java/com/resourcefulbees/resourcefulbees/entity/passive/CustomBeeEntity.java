@@ -129,7 +129,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
                 this.remove();
             }
             if (!hasCustomName()) {
-                if (hasHive()) {
+                if (hasHive() || hasFlower()) {
                     timeWithoutHive = 0;
                 } else {
                     timeWithoutHive++;

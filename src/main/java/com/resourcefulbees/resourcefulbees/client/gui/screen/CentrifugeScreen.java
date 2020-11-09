@@ -33,7 +33,7 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
             int i = this.guiLeft;
             int j = this.guiTop;
             this.drawTexture(matrix, i, j, 0, 0, this.xSize, this.ySize);
-            int scaledprogress = 74 * this.container.centrifugeTileEntity.time / Math.max(this.container.centrifugeTileEntity.totalTime,1);
+            int scaledprogress = 74 * this.container.getTime(0) / Math.max(this.container.getTotalTime(0),1);
             this.drawTexture(matrix, i + 51, j + 28, 176, 0, scaledprogress, 28);
             int scaledRF = 52 * this.container.getEnergy() / Math.max(Config.MAX_CENTRIFUGE_RF.get(),1);
             this.drawTexture(matrix, i + 8, j + 8 + (52-scaledRF), 176, 28 + (52-scaledRF), 11, scaledRF);

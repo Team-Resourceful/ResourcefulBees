@@ -3,6 +3,7 @@ package com.resourcefulbees.resourcefulbees.client.gui.screen;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.container.HoneyGeneratorContainer;
+import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.tileentity.HoneyGeneratorTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
@@ -16,7 +17,7 @@ import javax.annotation.Nonnull;
 import java.text.DecimalFormat;
 
 public class HoneyGeneratorScreen extends ContainerScreen<HoneyGeneratorContainer> {
-    private static final int ENERGY_PER_BOTTLE = (HoneyGeneratorTileEntity.HONEY_PER_BOTTLE/HoneyGeneratorTileEntity.HONEY_DRAIN_AMOUNT)*HoneyGeneratorTileEntity.ENERGY_FILL_AMOUNT;
+    private static final int ENERGY_PER_BOTTLE = (ModConstants.HONEY_PER_BOTTLE/HoneyGeneratorTileEntity.HONEY_DRAIN_AMOUNT)*HoneyGeneratorTileEntity.ENERGY_FILL_AMOUNT;
 
     public HoneyGeneratorScreen(HoneyGeneratorContainer screenContainer, PlayerInventory inventory, ITextComponent titleIn) {
         super(screenContainer, inventory, titleIn);
@@ -35,8 +36,8 @@ public class HoneyGeneratorScreen extends ContainerScreen<HoneyGeneratorContaine
             this.drawTexture(matrix, i + 130, j + 12 + (62-scaledRF), 215, (62-scaledRF), 11, scaledRF);
             int scaledTank = 62 * this.container.getFluid() / Math.max(this.container.getMaxFluid(),1);
             this.drawTexture(matrix, i + 83, j + 12 + (62-scaledTank), 226, (62-scaledTank), 14, scaledTank);
-            int scaledProgressX = 21 * this.container.getTime() / Math.max(HoneyGeneratorTileEntity.HONEY_PER_BOTTLE,1);
-            int scaledProgressY = 20 * this.container.getTime() / Math.max(HoneyGeneratorTileEntity.HONEY_PER_BOTTLE,1);
+            int scaledProgressX = 21 * this.container.getTime() / Math.max(ModConstants.HONEY_PER_BOTTLE,1);
+            int scaledProgressY = 20 * this.container.getTime() / Math.max(ModConstants.HONEY_PER_BOTTLE,1);
             int energyScaledProgressX = 21 * this.container.getEnergyTime() / Math.max(ENERGY_PER_BOTTLE,1);
             this.drawTexture(matrix, i + 35, j + 37, 176, 0, 18, scaledProgressY);
             this.drawTexture(matrix, i + 57, j + 42, 194, 0, scaledProgressX, 10);

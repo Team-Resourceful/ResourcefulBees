@@ -3,8 +3,11 @@ package com.resourcefulbees.resourcefulbees.client.render.entity;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.resourcefulbees.resourcefulbees.api.beedata.ColorData;
+import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
+import com.resourcefulbees.resourcefulbees.lib.ModelTypes;
 import net.minecraft.client.renderer.entity.model.AgeableModel;
 import net.minecraft.client.renderer.entity.model.ModelUtils;
 import net.minecraft.client.renderer.model.ModelRenderer;
@@ -30,16 +33,16 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
 
     private float beeSize = 0;
 
-    public CustomBeeModel() {
+    public CustomBeeModel(CustomBeeData beeData) {
         super(false, 24.0F, 0.0F);
         this.textureWidth = 64;
         this.textureHeight = 64;
         this.body = new ModelRenderer(this);
         this.body.setRotationPoint(0.0F, 19.0F, 0.0F);
-        this.torso = new ModelRenderer(this, 0, 0);
+        this.torso = new ModelRenderer(this);
         this.torso.setRotationPoint(0.0F, 0.0F, 0.0F);
         this.body.addChild(this.torso);
-        this.torso.addCuboid(-3.5F, -4.0F, -5.0F, 7.0F, 7.0F, 10.0F, 0.0F);
+        this.torso.setTextureOffset(0,0).addCuboid(-3.5F, -4.0F, -5.0F, 7.0F, 7.0F, 10.0F, 0.0F);
         this.stinger = new ModelRenderer(this, 26, 7);
         this.stinger.addCuboid(0.0F, -1.0F, 5.0F, 0.0F, 1.0F, 2.0F, 0.0F);
         this.torso.addChild(this.stinger);
@@ -79,6 +82,15 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
         this.body.addChild(this.backLegs);
         this.backLegs.func_217178_a("backLegBox", -5.0F, 0.0F, 0.0F, 7, 2, 0, 0.0F, 26, 5);
 
+        switch (beeData.getColorData().getModelType()) {
+            case GELATINOUS:
+                addGelatinousLayer();
+                break;
+            case ORE:
+                addOreCrystals();
+                break;
+            case DEFAULT:
+        }
     }
 
 
@@ -144,5 +156,55 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
         matrixStackIn.scale(beeSize, beeSize, beeSize);
         super.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
         matrixStackIn.pop();
+    }
+
+    public void addGelatinousLayer() {
+        this.torso.setTextureOffset(0, 25).addCuboid(-3.5F, 4.0F, -5.0F, 7.0F, 7.0F, 10.0F, 0.7F);
+    }
+
+    private void addOreCrystals() {
+        ModelRenderer crystals = new ModelRenderer(this);
+        crystals.setRotationPoint(-1.0F, 3.0F, -9.0F);
+        body.addChild(crystals);
+        setRotationAngle(crystals, 0.3927F, 0.0F, 0.0F);
+        crystals.setTextureOffset(48, 48).addCuboid(1.0F, -3.8582F, 5.7674F, 2.0F, 2.0F, 2.0F, 0.0F, false);
+        crystals.setTextureOffset(48, 52).addCuboid(-1.0F, -6.0F, 4.0F, 2.0F, 3.0F, 2.0F, 0.0F, false);
+
+        ModelRenderer bone = new ModelRenderer(this);
+        bone.setRotationPoint(0.0F, 0.2242F, 3.1543F);
+        crystals.addChild(bone);
+        setRotationAngle(bone, -0.3927F, 0.0F, 0.0F);
+        bone.setTextureOffset(48, 57).addCuboid(-2.0F, -7.7242F, 1.8457F, 3.0F, 4.0F, 3.0F, 0.0F, true);
+
+        ModelRenderer bone2 = new ModelRenderer(this);
+        bone2.setRotationPoint(-1.0F, -0.5412F, 1.3066F);
+        crystals.addChild(bone2);
+        setRotationAngle(bone2, -0.3927F, 0.0F, 0.0F);
+        bone2.setTextureOffset(48, 48).addCuboid(-1.99F, -5.8588F, 2.6934F, 2.0F, 2.0F, 2.0F, 0.0F, false);
+        bone2.setTextureOffset(48, 52).addCuboid(1.0F, -6.8588F, 5.6934F, 2.0F, 3.0F, 2.0F, 0.0F, true);
+
+        ModelRenderer bone5 = new ModelRenderer(this);
+        bone5.setRotationPoint(2.0F, 0.0F, 0.0F);
+        bone2.addChild(bone5);
+        setRotationAngle(bone5, 0.0F, 0.0F, -0.3927F);
+        bone5.setTextureOffset(48, 52).addCuboid(-1.5F, -6.6588F, 5.6934F, 2.0F, 3.0F, 2.0F, 0.0F, true);
+
+        ModelRenderer bone3 = new ModelRenderer(this);
+        bone3.setRotationPoint(3.0F, -4.4588F, -3.3066F);
+        bone2.addChild(bone3);
+        setRotationAngle(bone3, 0.0F, 0.0F, 0.5236F);
+        bone3.setTextureOffset(56, 51).addCuboid(-0.7321F, -2.0F, 10.0F, 2.0F, 4.0F, 2.0F, 0.0F, false);
+
+        ModelRenderer bone4 = new ModelRenderer(this);
+        bone4.setRotationPoint(-5.0981F, 0.634F, 0.0F);
+        bone3.addChild(bone4);
+        setRotationAngle(bone4, 0.0F, 0.0F, -1.3963F);
+        bone4.setTextureOffset(56, 51).addCuboid(-1.1252F, 1.9F, 11.0F, 2.0F, 4.0F, 2.0F, 0.0F, true);
+    }
+
+    public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {
+        modelRenderer.rotateAngleX = x;
+        modelRenderer.rotateAngleY = y;
+        modelRenderer.rotateAngleZ = z;
     }
 }

@@ -94,12 +94,10 @@ public class ModSetup {
     }
 
     public static void registerDispenserBehaviors() {
-        if (Config.ALLOW_SHEARS.get()) {
-            ShearsDispenserBehavior.DEFAULT_SHEARS_DISPENSE_BEHAVIOR =
-                    ((DispenserBlockInvoker) Blocks.DISPENSER).invokeGetBehaviorForItem(new ItemStack(Items.SHEARS));
+        ShearsDispenserBehavior.DEFAULT_SHEARS_DISPENSE_BEHAVIOR =
+                ((DispenserBlockInvoker) Blocks.DISPENSER).invokeGetBehaviorForItem(new ItemStack(Items.SHEARS));
 
-            DispenserBlock.registerDispenseBehavior(net.minecraft.item.Items.SHEARS.asItem(), new ShearsDispenserBehavior());
-        }
+        DispenserBlock.registerDispenseBehavior(net.minecraft.item.Items.SHEARS.asItem(), new ShearsDispenserBehavior());
 
         DispenserBlock.registerDispenseBehavior(ModItems.SCRAPER.get().asItem(), new ScraperDispenserBehavior());
     }

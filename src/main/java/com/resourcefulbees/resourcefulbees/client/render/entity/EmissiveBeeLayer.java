@@ -22,19 +22,19 @@ public class EmissiveBeeLayer extends LayerRenderer<CustomBeeEntity, CustomBeeMo
             super(rendererIn);
     }
 
-    public void render(@Nonnull MatrixStack matrixStackIn, @Nonnull IRenderTypeBuffer bufferIn, int packedLightIn, CustomBeeEntity entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        CustomBeeData bee = entitylivingbaseIn.getBeeData();
-        ResourceLocation location = new ResourceLocation(ResourcefulBees.MOD_ID, BeeConstants.ENTITY_TEXTURES_DIR + bee.getColorData().getEmissiveLayerTexture() + (entitylivingbaseIn.hasAngerTime() ? "_angry.png" : ".png"));
+    public void render(@Nonnull MatrixStack matrixStackIn, @Nonnull IRenderTypeBuffer bufferIn, int packedLightIn, CustomBeeEntity customBeeEntity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+        CustomBeeData bee = customBeeEntity.getBeeData();
+        ResourceLocation location = new ResourceLocation(ResourcefulBees.MOD_ID, BeeConstants.ENTITY_TEXTURES_DIR + bee.getColorData().getEmissiveLayerTexture() + (customBeeEntity.hasAngerTime() ? "_angry.png" : ".png"));
         IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.getEyes(location));
 
         if (bee.getColorData().isRainbowBee() && bee.getColorData().isGlowing()) {
             float[] glowColor = RainbowColor.getColorFloats();
-            if (bee.getColorData().getGlowingPulse() == 0 || entitylivingbaseIn.ticksExisted / 5 % bee.getColorData().getGlowingPulse() == 0) {
+            if (bee.getColorData().getGlowingPulse() == 0 || customBeeEntity.ticksExisted / 5 % bee.getColorData().getGlowingPulse() == 0) {
                 this.getEntityModel().render(matrixStackIn, ivertexbuilder, 15728640, OverlayTexture.DEFAULT_UV, glowColor[0], glowColor[1], glowColor[2], 1.0F);
             }
         } else if (bee.getColorData().isGlowing() && bee.getColorData().hasGlowColor()){
             float[] glowColor = bee.getColorData().getGlowColorFloats();
-            if (bee.getColorData().getGlowingPulse() == 0 || entitylivingbaseIn.ticksExisted / 5 % bee.getColorData().getGlowingPulse() == 0) {
+            if (bee.getColorData().getGlowingPulse() == 0 || customBeeEntity.ticksExisted / 5 % bee.getColorData().getGlowingPulse() == 0) {
                 this.getEntityModel().render(matrixStackIn, ivertexbuilder, 15728640, OverlayTexture.DEFAULT_UV, glowColor[0], glowColor[1], glowColor[2], 1.0F);
             }
         } else if (bee.getColorData().isEnchanted()){

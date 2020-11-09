@@ -1,6 +1,6 @@
 package com.resourcefulbees.resourcefulbees.tileentity;
 
-import com.resourcefulbees.resourcefulbees.lib.CustomStorageContainers;
+import com.resourcefulbees.resourcefulbees.capabilities.CustomEnergyStorage;
 import com.resourcefulbees.resourcefulbees.registry.ModTileEntityTypes;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -12,65 +12,54 @@ import net.minecraftforge.energy.IEnergyStorage;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.Arrays;
+import java.util.Objects;
 
 public class CreativeGenTileEntity extends TileEntity implements ITickableTileEntity {
 
-    public final CustomStorageContainers.CustomEnergyStorage energyStorage = createEnergy();
-    private final LazyOptional<IEnergyStorage> energy = LazyOptional.of(() -> energyStorage);
+    public final CustomEnergyStorage energyStorage = createEnergy();
+    private final LazyOptional<IEnergyStorage> energyOptional = LazyOptional.of(() -> energyStorage);
 
-    public CreativeGenTileEntity() {
-        super(ModTileEntityTypes.CREATIVE_GEN_ENTITY.get());
-    }
+    public CreativeGenTileEntity() { super(ModTileEntityTypes.CREATIVE_GEN_ENTITY.get()); }
 
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-        if (cap.equals(CapabilityEnergy.ENERGY)) return energy.cast();
+        if (cap.equals(CapabilityEnergy.ENERGY)) return energyOptional.cast();
         return super.getCapability(cap, side);
     }
 
+    @Override
+    protected void invalidateCaps() {
+        this.energyOptional.invalidate();
+    }
+
     private void sendOutPower() {
-        AtomicInteger capacity = new AtomicInteger(energyStorage.getEnergyStored());
-        if (capacity.get() > 0) {
-            for (Direction direction : Direction.values()) {
-                if (world != null) {
-                    TileEntity te = world.getTileEntity(pos.offset(direction));
-                    if (te != null) {
-                        boolean doContinue = te.getCapability(CapabilityEnergy.ENERGY, direction).map(handler -> {
-                                    if (handler.canReceive()) {
-                                        int received = handler.receiveEnergy(Math.min(capacity.get(), 100), false);
-                                        capacity.addAndGet(-received);
-                                        energyStorage.consumeEnergy(received);
-                                        markDirty();
-                                        return capacity.get() > 0;
-                                    } else {
-                                        return true;
-                                    }
+        if (world != null && !world.isRemote) {
+            Arrays.stream(Direction.values())
+                    .map(direction -> world.getTileEntity(pos.offset(direction)))
+                    .filter(Objects::nonNull)
+                    .forEach(tileEntity -> tileEntity.getCapability(CapabilityEnergy.ENERGY)
+                            .map(energyStorage -> {
+                                if (energyStorage.canReceive()) {
+                                    return energyStorage.receiveEnergy(Integer.MAX_VALUE, false) != 0;
                                 }
-                        ).orElse(true);
-                        if (!doContinue) {
-                            return;
-                        }
-                    }
-                }
-            }
+                                return true;
+                            }));
         }
     }
 
-    private CustomStorageContainers.CustomEnergyStorage createEnergy() {
-        return new CustomStorageContainers.CustomEnergyStorage(1000000, 0, 10000) {
+    private CustomEnergyStorage createEnergy() {
+        return new CustomEnergyStorage(Integer.MAX_VALUE, 0, Integer.MAX_VALUE) {
             @Override
-            protected void onEnergyChanged() {
-                markDirty();
-            }
+            protected void onEnergyChanged() { markDirty(); }
         };
     }
 
     @Override
     public void tick() {
         if (world != null && !world.isRemote) {
-            energyStorage.setEnergy(1000000);
+            energyStorage.setEnergy(Integer.MAX_VALUE);
             sendOutPower();
         }
     }

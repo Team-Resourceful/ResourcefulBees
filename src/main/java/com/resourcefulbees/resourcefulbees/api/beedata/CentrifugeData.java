@@ -1,5 +1,6 @@
 package com.resourcefulbees.resourcefulbees.api.beedata;
 
+import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import net.minecraft.item.Items;
@@ -16,54 +17,64 @@ public class CentrifugeData extends AbstractBeeData {
     /**
      * The second output that comes from the comb.
      */
-    private String secondaryOutput;
+    private final String secondaryOutput;
 
     /**
      * What the bottle gets converted into.
      */
-    private String bottleOutput;
+    private final String bottleOutput;
 
     /**
      * The chance that the main output comes out of the comb.
      */
-    private float mainOutputWeight;
+    private final float mainOutputWeight;
 
     /**
      * The chance that the second output comes out of the comb.
      */
-    private float secondaryOutputWeight;
+    private final float secondaryOutputWeight;
 
     /**
      * The chance that a bottle is converted to the bottleOutput.
      */
-    private float bottleOutputWeight;
+    private final float bottleOutputWeight;
 
     /**
      * How many items come out of the first output.
      */
-    private int mainOutputCount;
+    private final int mainOutputCount;
 
     /**
      * How many items come out of the second output.
      */
-    private int secondaryOutputCount;
+    private final int secondaryOutputCount;
 
     /**
      * How many items come out of the bottle output.
      */
-    private int bottleOutputCount;
+    private final int bottleOutputCount;
 
     /**
      * How many comb are consumed per iteration.
      */
-    private int mainInputCount;
+    private final int mainInputCount;
+
+    /**
+     * The time (in ticks) that it takes for a honeycomb to be processed in the centrifuge.
+     */
+    private final int recipeTime;
 
     /**
      * If it should have centrifuge output.
      */
     private boolean hasCentrifugeOutput;
 
-    private CentrifugeData(String mainOutput, String secondaryOutput, String bottleOutput, float mainOutputWeight, float secondaryOutputWeight, float bottleOutputWeight, int mainOutputCount, int secondaryOutputCount, int bottleOutputCount, int mainInputCount, boolean hasCentrifugeOutput) {
+    /**
+     * Use this when the main output is a fluid.
+     */
+    private final boolean hasFluidOutput;
+
+    private CentrifugeData(String mainOutput, String secondaryOutput, String bottleOutput, float mainOutputWeight, float secondaryOutputWeight, float bottleOutputWeight, int mainOutputCount, int secondaryOutputCount, int bottleOutputCount, int mainInputCount, boolean hasCentrifugeOutput, int recipeTime, boolean hasFluidOutput) {
         this.mainOutput = mainOutput;
         this.secondaryOutput = secondaryOutput;
         this.bottleOutput = bottleOutput;
@@ -75,6 +86,8 @@ public class CentrifugeData extends AbstractBeeData {
         this.bottleOutputCount = bottleOutputCount;
         this.mainInputCount = mainInputCount;
         this.hasCentrifugeOutput = hasCentrifugeOutput;
+        this.recipeTime = recipeTime;
+        this.hasFluidOutput = hasFluidOutput;
     }
 
     public String getMainOutput() { return mainOutput; }
@@ -101,6 +114,10 @@ public class CentrifugeData extends AbstractBeeData {
 
     public void setHasCentrifugeOutput(boolean hasCentrifugeOutput) { this.hasCentrifugeOutput = hasCentrifugeOutput; }
 
+    public int getRecipeTime() { return this.recipeTime > 0 ? this.recipeTime : Config.GLOBAL_CENTRIFUGE_RECIPE_TIME.get(); }
+
+    public boolean hasFluidoutput() { return hasFluidOutput; }
+
     public static class Builder {
         private final String mainOutput;
         private String secondaryOutput;
@@ -113,6 +130,8 @@ public class CentrifugeData extends AbstractBeeData {
         private int bottleOutputCount;
         private int mainInputCount;
         private final boolean hasCentrifugeOutput;
+        private int recipeTime;
+        private boolean hasFluidOutput;
 
         public Builder(boolean hasCentrifugeOutput, @Nullable String mainOutput) {
             this.hasCentrifugeOutput = hasCentrifugeOutput;
@@ -164,8 +183,18 @@ public class CentrifugeData extends AbstractBeeData {
             return this;
         }
 
+        public Builder setRecipeTime(int recipeTime) {
+            this.recipeTime = recipeTime;
+            return this;
+        }
+
+        public Builder setHasFluidoutput(boolean hasFluidOutput) {
+            this.hasFluidOutput = hasFluidOutput;
+            return this;
+        }
+
         public CentrifugeData createCentrifugeData() {
-            return new CentrifugeData(mainOutput, secondaryOutput, bottleOutput, mainOutputWeight, secondaryOutputWeight, bottleOutputWeight, mainOutputCount, secondaryOutputCount, bottleOutputCount, mainInputCount, hasCentrifugeOutput);
+            return new CentrifugeData(mainOutput, secondaryOutput, bottleOutput, mainOutputWeight, secondaryOutputWeight, bottleOutputWeight, mainOutputCount, secondaryOutputCount, bottleOutputCount, mainInputCount, hasCentrifugeOutput, recipeTime, hasFluidOutput);
         }
     }
 

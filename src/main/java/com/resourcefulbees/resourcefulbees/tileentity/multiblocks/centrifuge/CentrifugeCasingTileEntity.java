@@ -10,6 +10,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 
 import javax.annotation.Nonnull;
@@ -18,31 +19,46 @@ import javax.annotation.Nullable;
 public class CentrifugeCasingTileEntity extends TileEntity {
     private BlockPos controllerPos;
 
-    public CentrifugeCasingTileEntity() {
-        super(ModTileEntityTypes.CENTRIFUGE_CASING_ENTITY.get());
+    public CentrifugeCasingTileEntity() { super(ModTileEntityTypes.CENTRIFUGE_CASING_ENTITY.get()); }
+
+    public void setControllerPos(@Nullable BlockPos controllerPos) {
+        this.controllerPos = controllerPos;
     }
 
-    public void setControllerPos(BlockPos pos){
-        this.controllerPos = pos;
+    public boolean isLinked() {
+        return controllerPos != null;
+    }
+
+    @Override
+    public void remove() {
+        CentrifugeControllerTileEntity controller = getController();
+        if (controller != null) {
+            controller.invalidateStructure();
+        }
+        super.remove();
+    }
+
+    public CentrifugeControllerTileEntity getController() {
+        if (isLinked() && this.world != null) {
+            TileEntity tileEntity = this.world.getTileEntity(controllerPos);
+            if (tileEntity instanceof CentrifugeControllerTileEntity) {
+                return (CentrifugeControllerTileEntity) tileEntity;
+            } else {
+                setControllerPos(null);
+            }
+        }
+        return null;
     }
 
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-        if (controllerPos !=null) {
-            if (this.world !=null) {
-                CentrifugeControllerTileEntity controllerTE = (CentrifugeControllerTileEntity) this.world.getTileEntity(controllerPos);
-                if (controllerTE !=null) {
-                    if (controllerTE.validStructure) {
-                        if (cap.equals(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY))
-                            return controllerTE.lazyOptional.cast();
-                        if (cap.equals(CapabilityEnergy.ENERGY)) return controllerTE.energy.cast();
-                    }else{
-                        controllerTE.setCasingsToNotLinked(controllerTE.buildStructureBounds());
-                    }
-                }else {
-                    setControllerPos(null);
-                }
+        if (isLinked() && this.world != null) {
+            CentrifugeControllerTileEntity controller = getController();
+            if (controller != null && controller.isValidStructure()) {
+/*                if (cap.equals(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)) return controller.lazyOptional.cast();
+                if (cap.equals(CapabilityEnergy.ENERGY)) return controller.energyOptional.cast();*/
+                /*if (cap.equals(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)) */return controller.getCapability(cap, side);
             }
         }
         return super.getCapability(cap, side);
@@ -51,7 +67,7 @@ public class CentrifugeCasingTileEntity extends TileEntity {
     @Nonnull
     @Override
     public CompoundNBT write(@Nonnull CompoundNBT tag) {
-        if (controllerPos !=null)
+        if (isLinked())
             tag.put("controllerPos", NBTUtil.writeBlockPos(controllerPos));
         return super.write(tag);
     }
@@ -75,4 +91,6 @@ public class CentrifugeCasingTileEntity extends TileEntity {
     public void handleUpdateTag(@Nonnull BlockState state, CompoundNBT tag) {
         this.fromTag(state, tag);
     }
+
+
 }

@@ -15,8 +15,6 @@ import net.minecraft.util.text.StringTextComponent;
 import javax.annotation.Nonnull;
 import java.text.DecimalFormat;
 
-import static com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.CentrifugeControllerTileEntity.TOTAL_TIME;
-
 public class CentrifugeMultiblockScreen extends ContainerScreen<CentrifugeMultiblockContainer> {
     public CentrifugeMultiblockScreen(CentrifugeMultiblockContainer screenContainer, PlayerInventory inventory, ITextComponent titleIn) {
         super(screenContainer, inventory, titleIn);
@@ -32,12 +30,12 @@ public class CentrifugeMultiblockScreen extends ContainerScreen<CentrifugeMultib
             int i = this.guiLeft;
             int j = this.guiTop;
             this.drawTexture(matrix, i, j, 0, 0, this.xSize, this.ySize);
-            int scaledprogress1 = 16 * this.container.getTime(0) / TOTAL_TIME;
-            this.drawTexture(matrix, i + 52, j + 26, 176, 1, 16, scaledprogress1);
-            int scaledprogress2 = 16 * this.container.getTime(1) / TOTAL_TIME;
-            this.drawTexture(matrix, i + 88, j + 26, 176, 1, 16, scaledprogress2);
-            int scaledprogress3 = 16 * this.container.getTime(2) / TOTAL_TIME;
-            this.drawTexture(matrix, i + 124, j + 26, 176, 1, 16, scaledprogress3);
+            int scaledProgress1 = 16 * this.container.getTime(0) / this.container.getTotalTime(0);
+            this.drawTexture(matrix, i + 52, j + 26, 176, 1, 16, scaledProgress1);
+            int scaledProgress2 = 16 * this.container.getTime(1) / this.container.getTotalTime(1);
+            this.drawTexture(matrix, i + 88, j + 26, 176, 1, 16, scaledProgress2);
+            int scaledProgress3 = 16 * this.container.getTime(2) / this.container.getTotalTime(2);
+            this.drawTexture(matrix, i + 124, j + 26, 176, 1, 16, scaledProgress3);
             int scaledRF = 58 * this.container.getEnergy() / (Config.MAX_CENTRIFUGE_RF.get() * 5);
             this.drawTexture(matrix, i + 10, j + 38 + (58-scaledRF), 176, 28 + (58-scaledRF), 12, scaledRF);
         }

@@ -7,6 +7,7 @@ import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.registry.ModRecipeSerializers;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.RecipeUtils;
+import com.sun.jna.platform.unix.X11;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -17,11 +18,15 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidStack;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.IntStream;
 
 public class CentrifugeRecipe implements IRecipe<IInventory> {
@@ -29,16 +34,20 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
     public static final IRecipeType<CentrifugeRecipe> CENTRIFUGE_RECIPE_TYPE = IRecipeType.register(ResourcefulBees.MOD_ID + ":centrifuge");
     public final ResourceLocation id;
     public final Ingredient ingredient;
-    public final List<Pair<ItemStack,Float>> outputs;
+    public final List<Pair<ItemStack,Float>> itemOutputs;
+    public final List<Pair<FluidStack, Float>> fluidOutput;
     public final int time;
     public final boolean multiblock;
+    public final boolean hasFluidOutput;
 
-    public CentrifugeRecipe(ResourceLocation id, Ingredient ingredient, List<Pair<ItemStack,Float>> outputs, int time, boolean multiblock) {
+    public CentrifugeRecipe(ResourceLocation id, Ingredient ingredient, List<Pair<ItemStack,Float>> itemOutputs, List<Pair<FluidStack, Float>> fluidOutput, int time, boolean multiblock, boolean hasFluidOutput) {
         this.id = id;
         this.ingredient = ingredient;
-        this.outputs = outputs;
+        this.itemOutputs = itemOutputs;
+        this.fluidOutput = fluidOutput;
         this.time = time;
         this.multiblock = multiblock;
+        this.hasFluidOutput = hasFluidOutput;
     }
 
     @Override
@@ -47,9 +56,7 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
     }
 
     @Override
-    public boolean isDynamic() {
-        return true;
-    }
+    public boolean isDynamic() { return true; }
 
     @Override
     @Nonnull
@@ -79,28 +86,20 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
 
     @Nonnull
     @Override
-    public ResourceLocation getId() {
-        return id;
-    }
+    public ResourceLocation getId() { return id; }
 
     @Nonnull
     @Override
-    public IRecipeSerializer<?> getSerializer() {
-        return ModRecipeSerializers.CENTRIFUGE_RECIPE.get();
-    }
+    public IRecipeSerializer<?> getSerializer() { return ModRecipeSerializers.CENTRIFUGE_RECIPE.get(); }
 
     @Nonnull
     @Override
-    public IRecipeType<?> getType() {
-        return CENTRIFUGE_RECIPE_TYPE;
-    }
+    public IRecipeType<?> getType() { return CENTRIFUGE_RECIPE_TYPE; }
 
     public static class Serializer<T extends CentrifugeRecipe> extends net.minecraftforge.registries.ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<T> {
         final IRecipeFactory<T> factory;
 
-        public Serializer(Serializer.IRecipeFactory<T> factory) {
-            this.factory = factory;
-        }
+        public Serializer(Serializer.IRecipeFactory<T> factory) { this.factory = factory; }
 
         @Nonnull
         @Override
@@ -114,44 +113,67 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
 
             JsonArray jsonArray = JSONUtils.getJsonArray(json, "results");
             List<Pair<ItemStack,Float>> outputs = new ArrayList<>();
+            List<Pair<FluidStack, Float>> fluidOutput = new ArrayList<>();
+
             jsonArray.forEach(jsonElement -> {
                 JsonObject jsonObject = jsonElement.getAsJsonObject();
-                String registryname = JSONUtils.getString(jsonObject,"item");
-                int count = JSONUtils.getInt(jsonObject,"count",1);
-                Float chance = JSONUtils.getFloat(jsonObject, "chance", 1);
-                ItemStack stack = new ItemStack(BeeInfoUtils.getItem(registryname),count);
-                outputs.add(Pair.of(stack,chance));
+                if (jsonObject.has("item")) {
+                    String registryName = JSONUtils.getString(jsonObject, "item");
+                    int count = JSONUtils.getInt(jsonObject, "count", 1);
+                    Float chance = JSONUtils.getFloat(jsonObject, "chance", 1);
+                    ItemStack stack = new ItemStack(BeeInfoUtils.getItem(registryName), count);
+                    outputs.add(Pair.of(stack, chance));
+                    fluidOutput.add(Pair.of(FluidStack.EMPTY, chance));
+                } else if (jsonObject.has("fluid")) {
+                    String fluid = JSONUtils.getString(jsonObject, "fluid");
+                    int amount = JSONUtils.getInt(jsonObject, "amount", 1);
+                    Float chance = JSONUtils.getFloat(jsonObject, "chance", 1);
+                    FluidStack stack = new FluidStack(BeeInfoUtils.getFluid(fluid), amount);
+                    outputs.add(Pair.of(ItemStack.EMPTY, 0f));
+                    fluidOutput.add(Pair.of(stack, chance));
+                }
             });
 
             int time = JSONUtils.getInt(json,"time");
             boolean multiblock = JSONUtils.getBoolean(json,"multiblock", false);
+            boolean hasFluidOutput = JSONUtils.getBoolean(json, "hasFluidOutput", false);
 
-            return this.factory.create(id, ingredient, outputs,time, multiblock);
+            return this.factory.create(id, ingredient, outputs, fluidOutput, time, multiblock, hasFluidOutput);
         }
 
         public T read(@Nonnull ResourceLocation id, @Nonnull PacketBuffer buffer) {
             Ingredient ingredient = Ingredient.read(buffer);
-            List<Pair<ItemStack,Float>> outputs = new ArrayList<>();
-            IntStream.range(0,buffer.readInt()).forEach(i -> outputs.add(Pair.of(RecipeUtils.readItemStack(buffer),buffer.readFloat())));
+            List<Pair<ItemStack, Float>> itemOutputs = new ArrayList<>();
+            List<Pair<FluidStack, Float>> fluidOutput = new ArrayList<>();
+            IntStream.range(0, buffer.readInt()).forEach(i -> itemOutputs.add(Pair.of(RecipeUtils.readItemStack(buffer), buffer.readFloat())));
+            IntStream.range(0, buffer.readInt()).forEach(value -> fluidOutput.add(Pair.of(FluidStack.readFromPacket(buffer), buffer.readFloat())));
             int time = buffer.readInt();
             boolean multiblock = buffer.readBoolean();
-            return this.factory.create(id, ingredient, outputs,time, multiblock);
+            boolean hasFluidOutput = buffer.readBoolean();
+            return this.factory.create(id, ingredient, itemOutputs, fluidOutput, time, multiblock, hasFluidOutput);
         }
 
         public void write(@Nonnull PacketBuffer buffer, T recipe) {
             recipe.ingredient.write(buffer);
-            buffer.writeInt(recipe.outputs.size());
-            recipe.outputs.forEach(itemStackFloatPair -> {
+            buffer.writeInt(recipe.itemOutputs.size());
+            recipe.itemOutputs.forEach(itemStackFloatPair -> {
                 ItemStack stack = itemStackFloatPair.getLeft();
                 RecipeUtils.writeItemStack(stack, buffer);
                 buffer.writeFloat(itemStackFloatPair.getRight());
             });
+            buffer.writeInt(recipe.fluidOutput.size());
+            recipe.fluidOutput.forEach(fluidStackFloatPair -> {
+                FluidStack fluidStack = fluidStackFloatPair.getLeft();
+                fluidStack.writeToPacket(buffer);
+                buffer.writeFloat(fluidStackFloatPair.getRight());
+            });
             buffer.writeInt(recipe.time);
             buffer.writeBoolean(recipe.multiblock);
+            buffer.writeBoolean(recipe.hasFluidOutput);
         }
 
         public interface IRecipeFactory<T extends CentrifugeRecipe> {
-            T create(ResourceLocation id, Ingredient input, List<Pair<ItemStack,Float>> stacks,int time, boolean multiblock);
+            T create(ResourceLocation id, Ingredient input, List<Pair<ItemStack,Float>> itemOutputs, List<Pair<FluidStack,Float>> fluidOutputs, int time, boolean multiblock, boolean hasFluidOutput);
         }
     }
 }

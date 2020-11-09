@@ -136,7 +136,7 @@ public class CustomBeeData extends AbstractBeeData {
     private transient RegistryObject<Item> spawnEggItemRegistryObject;
 
     /**
-     * The RegistryObject of the Bee EntityType
+     * The Registry ID of the Bee EntityType
      */
     private transient ResourceLocation entityTypeRegistryID;
 
@@ -240,13 +240,9 @@ public class CustomBeeData extends AbstractBeeData {
         return new ItemStack(getCombBlockItemRegistryObject().get());
     }
 
-    public void setCombSupplier(Supplier<ItemStack> combSupplier) {
-        this.combSupplier = combSupplier;
-    }
+    public void setCombSupplier(Supplier<ItemStack> combSupplier) { this.combSupplier = combSupplier; }
 
-    public void setCombBlockItemSupplier(Supplier<ItemStack> combBlockItemSupplier) {
-        this.combBlockItemSupplier = combBlockItemSupplier;
-    }
+    public void setCombBlockItemSupplier(Supplier<ItemStack> combBlockItemSupplier) { this.combBlockItemSupplier = combBlockItemSupplier; }
 
     public static class Builder {
         private final String flower;

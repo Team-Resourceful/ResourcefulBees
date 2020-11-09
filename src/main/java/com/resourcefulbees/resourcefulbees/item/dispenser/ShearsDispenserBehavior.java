@@ -1,6 +1,7 @@
 package com.resourcefulbees.resourcefulbees.item.dispenser;
 
 import com.resourcefulbees.resourcefulbees.block.TieredBeehiveBlock;
+import com.resourcefulbees.resourcefulbees.config.Config;
 import net.minecraft.block.BeehiveBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.DispenserBlock;
@@ -25,14 +26,16 @@ public class ShearsDispenserBehavior extends DefaultDispenseItemBehavior {
         BlockPos blockpos = source.getBlockPos().offset(source.getBlockState().get(DispenserBlock.FACING));
         BlockState blockstate = world.getBlockState(blockpos);
         if (blockstate.getBlock() instanceof TieredBeehiveBlock) {
-            int i = blockstate.get(BeehiveBlock.HONEY_LEVEL);
-            if (i >= 5) {
-                if (stack.attemptDamageItem(1, world.rand, null)) {
-                    stack.setCount(0);
-                }
+            if (Config.ALLOW_SHEARS.get()) {
+                int i = blockstate.get(BeehiveBlock.HONEY_LEVEL);
+                if (i >= 5) {
+                    if (stack.attemptDamageItem(1, world.rand, null)) {
+                        stack.setCount(0);
+                    }
 
-                TieredBeehiveBlock.dropResourceHoneycomb((TieredBeehiveBlock) blockstate.getBlock(), world, blockpos, false);
-                ((BeehiveBlock) blockstate.getBlock()).takeHoney(world, blockstate, blockpos, null, BeehiveTileEntity.State.BEE_RELEASED);
+                    TieredBeehiveBlock.dropResourceHoneycomb((TieredBeehiveBlock) blockstate.getBlock(), world, blockpos, false);
+                    ((BeehiveBlock) blockstate.getBlock()).takeHoney(world, blockstate, blockpos, null, BeehiveTileEntity.State.BEE_RELEASED);
+                }
             }
         } else {
             return DEFAULT_SHEARS_DISPENSE_BEHAVIOR.dispense(source, stack);

@@ -1,5 +1,6 @@
 package com.resourcefulbees.resourcefulbees.block;
 
+import com.resourcefulbees.resourcefulbees.registry.ModTileEntityTypes;
 import com.resourcefulbees.resourcefulbees.tileentity.CentrifugeTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.TooltipBuilder;
 import net.minecraft.block.Block;
@@ -62,7 +63,7 @@ public class CentrifugeBlock extends Block {
         TileEntity blockEntity = world.getTileEntity(pos);
         if (blockEntity instanceof CentrifugeTileEntity && state.getBlock() != state1.getBlock()){
             CentrifugeTileEntity centrifugeTileEntity = (CentrifugeTileEntity)blockEntity;
-            ItemStackHandler h = centrifugeTileEntity.h;
+            ItemStackHandler h = centrifugeTileEntity.getItemStackHandler();
             IntStream.range(0, h.getSlots()).mapToObj(h::getStackInSlot).filter(s -> !s.isEmpty()).forEach(stack -> InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack));
         }
         super.onReplaced(state1, world, pos, state, isMoving);
@@ -76,7 +77,7 @@ public class CentrifugeBlock extends Block {
     @Nullable
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new CentrifugeTileEntity();
+        return new CentrifugeTileEntity(ModTileEntityTypes.CENTRIFUGE_ENTITY.get());
     }
 
     @Override

@@ -82,7 +82,7 @@ public class MechanicalCentrifugeTileEntity extends TileEntity implements ITicka
 
     public boolean canProcess(@Nullable CentrifugeRecipe recipe) {
         if (recipe != null && !recipe.multiblock) {
-            List<Pair<ItemStack, Float>> outputs = recipe.outputs;
+            List<Pair<ItemStack, Float>> outputs = recipe.itemOutputs;
             ItemStack glass_bottle = h.getStackInSlot(BOTTLE_SLOT);
             ItemStack combs = h.getStackInSlot(HONEYCOMB_SLOT);
             JsonElement count = recipe.ingredient.serialize().getAsJsonObject().get(BeeConstants.INGREDIENT_COUNT);
@@ -130,7 +130,7 @@ public class MechanicalCentrifugeTileEntity extends TileEntity implements ITicka
             );
             if (world != null)
                 for(int i = 0; i < 3; i++){
-                    Pair<ItemStack, Float> output = recipe.outputs.get(i);
+                    Pair<ItemStack, Float> output = recipe.itemOutputs.get(i);
                     if (output.getRight() >= world.rand.nextDouble()) {
                         if (slots.get(i).getLeft().isEmpty()) {
                             this.h.setStackInSlot(slots.get(i).getRight(), output.getLeft().copy());
@@ -185,15 +185,18 @@ public class MechanicalCentrifugeTileEntity extends TileEntity implements ITicka
     }
 
     @Override
-    public void handleUpdateTag(@Nonnull BlockState state, CompoundNBT tag) {
-        this.fromTag(state, tag);
-    }
+    public void handleUpdateTag(@Nonnull BlockState state, CompoundNBT tag) { this.fromTag(state, tag); }
 
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
         if (cap.equals(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)) return automationHandler.cast();
         return super.getCapability(cap, side);
+    }
+
+    @Override
+    protected void invalidateCaps() {
+        this.lazyOptional.invalidate();
     }
 
     public AutomationSensitiveItemStackHandler.IAcceptor getAcceptor() {

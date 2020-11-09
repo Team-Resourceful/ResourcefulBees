@@ -16,7 +16,7 @@ import net.minecraftforge.client.event.RenderBlockOverlayEvent;
 @OnlyIn(Dist.CLIENT)
 public class FluidRender {
 
-    private static final ResourceLocation HONEY_UNDERWATER = new ResourceLocation(ResourcefulBees.MOD_ID + ":textures/honey/honey_underwater.png");
+    private static final ResourceLocation HONEY_UNDERWATER = new ResourceLocation(ResourcefulBees.MOD_ID + ":textures/block/honey/honey_underwater.png");
 
     public static void honeyOverlay(RenderBlockOverlayEvent event)
     {

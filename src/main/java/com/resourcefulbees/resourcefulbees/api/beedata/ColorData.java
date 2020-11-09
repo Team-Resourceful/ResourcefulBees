@@ -1,5 +1,7 @@
 package com.resourcefulbees.resourcefulbees.api.beedata;
 
+import com.resourcefulbees.resourcefulbees.lib.ModelTypes;
+
 import java.awt.*;
 
 public class ColorData extends AbstractBeeData {
@@ -60,7 +62,9 @@ public class ColorData extends AbstractBeeData {
 
     private final int glowingPulse;
 
-    private ColorData(String primaryColor, String secondaryColor, String honeycombColor, String primaryLayerTexture, String secondaryLayerTexture, String emissiveLayerTexture, boolean isBeeColored, boolean isRainbowBee, boolean isGlowing, String glowColor, boolean isEnchanted, int glowingPulse) {
+    private final ModelTypes modelType;
+
+    private ColorData(String primaryColor, String secondaryColor, String honeycombColor, String primaryLayerTexture, String secondaryLayerTexture, String emissiveLayerTexture, boolean isBeeColored, boolean isRainbowBee, boolean isGlowing, String glowColor, boolean isEnchanted, int glowingPulse, ModelTypes modelType) {
         this.primaryColor = primaryColor;
         this.secondaryColor = secondaryColor;
         this.honeycombColor = honeycombColor;
@@ -73,6 +77,7 @@ public class ColorData extends AbstractBeeData {
         this.glowColor = glowColor;
         this.isEnchanted = isEnchanted;
         this.glowingPulse = glowingPulse;
+        this.modelType = modelType;
     }
 
     public String getPrimaryColor() { return primaryColor == null ? "#ffffff" :  primaryColor; }
@@ -113,6 +118,8 @@ public class ColorData extends AbstractBeeData {
 
     public int getHoneycombColorInt() { return com.resourcefulbees.resourcefulbees.utils.color.Color.parseInt(getHoneycombColor()); }
 
+    public ModelTypes getModelType() { return modelType != null ? modelType : ModelTypes.DEFAULT; }
+
     public float[] getPrimaryColorFloats(){
         Color tempColor = Color.decode(getPrimaryColor());
         return tempColor.getComponents(null);
@@ -141,6 +148,7 @@ public class ColorData extends AbstractBeeData {
         private boolean isGlowing;
         private boolean isEnchanted;
         private int glowingPulse;
+        private ModelTypes modelType;
 
         public Builder(boolean isBeeColored) {
             this.isBeeColored = isBeeColored;
@@ -201,12 +209,15 @@ public class ColorData extends AbstractBeeData {
             return this;
         }
 
+        public Builder setModelType(ModelTypes modelType) {
+            this.modelType = modelType;
+            return this;
+        }
+
         public ColorData createColorData() {
-            return new ColorData(primaryColor, secondaryColor, honeycombColor, primaryLayerTexture, secondaryLayerTexture, emissiveLayerTexture, isBeeColored, isRainbowBee, isGlowing, glowColor, isEnchanted, glowingPulse);
+            return new ColorData(primaryColor, secondaryColor, honeycombColor, primaryLayerTexture, secondaryLayerTexture, emissiveLayerTexture, isBeeColored, isRainbowBee, isGlowing, glowColor, isEnchanted, glowingPulse, modelType);
         }
     }
 
-    public static ColorData createDefault() {
-        return new Builder(false).createColorData();
-    }
+    public static ColorData createDefault() { return new Builder(false).createColorData(); }
 }

@@ -1,10 +1,11 @@
 package com.resourcefulbees.resourcefulbees.tileentity;
 
 import com.resourcefulbees.resourcefulbees.block.HoneyGenerator;
+import com.resourcefulbees.resourcefulbees.capabilities.CustomEnergyStorage;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.container.AutomationSensitiveItemStackHandler;
 import com.resourcefulbees.resourcefulbees.container.HoneyGeneratorContainer;
-import com.resourcefulbees.resourcefulbees.lib.CustomStorageContainers;
+import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.registry.ModFluids;
 import com.resourcefulbees.resourcefulbees.registry.ModTileEntityTypes;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
@@ -30,12 +31,14 @@ import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Predicate;
 
 public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider {
 
@@ -47,21 +50,17 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
     public static final int ENERGY_TRANSFER_AMOUNT = Config.ENERGY_TRANSFER_AMOUNT.get();
     public static final int MAX_ENERGY_CAPACITY = Config.MAX_ENERGY_CAPACITY.get();
     public static final int MAX_TANK_STORAGE = Config.MAX_TANK_STORAGE.get();
-    public static final int HONEY_PER_BOTTLE = 250;
 
-
+    private static Predicate<FluidStack> honeyFluidPredicate() {
+        return fluidStack -> fluidStack.getFluid().isIn(BeeInfoUtils.getFluidTag("forge:honey"));
+    }
 
     public AutomationSensitiveItemStackHandler h = new HoneyGeneratorTileEntity.TileStackHandler(5, getAcceptor(), getRemover());
-    public final CustomStorageContainers.CustomTankStorage fluidTank = new CustomStorageContainers.CustomTankStorage(MAX_TANK_STORAGE) {
-        @Override
-        public boolean isFluidValid(FluidStack stack) {
-            return stack.getFluid().isIn(BeeInfoUtils.getFluidTag("forge:honey"));
-        }
-    };
-    public final CustomStorageContainers.CustomEnergyStorage energyStorage = createEnergy();
+    public final FluidTank fluidTank = new FluidTank(MAX_TANK_STORAGE, honeyFluidPredicate());
+    public final CustomEnergyStorage energyStorage = createEnergy();
     private final LazyOptional<IFluidHandler> fluidOptional = LazyOptional.of(() -> fluidTank);
     private final LazyOptional<IItemHandler> lazyOptional = LazyOptional.of(() -> h);
-    private final LazyOptional<IEnergyStorage> energy = LazyOptional.of(() -> energyStorage);
+    private final LazyOptional<IEnergyStorage> energyOptional = LazyOptional.of(() -> energyStorage);
     public int fluidFilled;
     public int energyFilled;
     private boolean isProcessing;
@@ -138,7 +137,7 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
         if(canProcessFluid()) {
             fluidTank.fill(new FluidStack(ModFluids.HONEY_STILL.get(), HONEY_FILL_AMOUNT), IFluidHandler.FluidAction.EXECUTE);
             fluidFilled += HONEY_FILL_AMOUNT;
-            isProcessing = fluidFilled < HONEY_PER_BOTTLE;
+            isProcessing = fluidFilled < ModConstants.HONEY_PER_BOTTLE;
             if (!isProcessing) fluidFilled = 0;
             assert world != null : "World is null?";
             world.setBlockState(pos, getBlockState().with(HoneyGenerator.PROPERTY_ON, true));
@@ -170,15 +169,15 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
     @Override
     public SUpdateTileEntityPacket getUpdatePacket() {
         CompoundNBT nbt = new CompoundNBT();
-        nbt.put("tank",fluidTank.serializeNBT());
-        nbt.put("power",energyStorage.serializeNBT());
+        nbt.put("tank", fluidTank.writeToNBT(new CompoundNBT()));
+        nbt.put("power", energyStorage.serializeNBT());
         return new SUpdateTileEntityPacket(pos,0,nbt);
     }
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
         CompoundNBT nbt = pkt.getNbtCompound();
-        fluidTank.deserializeNBT(nbt.getCompound("tank"));
+        fluidTank.readFromNBT(nbt.getCompound("tank"));
         energyStorage.deserializeNBT(nbt.getCompound("power"));
     }
 
@@ -189,18 +188,18 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
         tag.put("inv", inv);
         tag.put("energy", energyStorage.serializeNBT());
         tag.putInt("energyFilled", energyFilled);
-        tag.put("fluid", fluidTank.serializeNBT());
+        tag.put("fluid", fluidTank.writeToNBT(new CompoundNBT()));
         tag.putInt("bottleFilled", fluidFilled);
         tag.putBoolean("isProcessing", isProcessing);
         return super.write(tag);
-    }
+    } //TODO 1.17 - change "fluid" to tank
 
     @Override
     public void fromTag(@Nonnull BlockState state, CompoundNBT tag) {
         CompoundNBT invTag = tag.getCompound("inv");
         h.deserializeNBT(invTag);
         energyStorage.deserializeNBT(tag.getCompound("energy"));
-        fluidTank.deserializeNBT(tag.getCompound("fluid"));
+        fluidTank.readFromNBT(tag.getCompound("fluid"));
         if(tag.contains("energyFilled")) energyFilled = tag.getInt("energyFilled");
         if(tag.contains("fluidFilled")) fluidFilled = tag.getInt("fluidFilled");
         if(tag.contains("isProcessing")) isProcessing = tag.getBoolean("isProcessing");
@@ -224,9 +223,16 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
         if (cap.equals(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)) return lazyOptional.cast();
-        if (cap.equals(CapabilityEnergy.ENERGY)) return energy.cast();
+        if (cap.equals(CapabilityEnergy.ENERGY)) return energyOptional.cast();
         if (cap.equals(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)) return fluidOptional.cast();
         return super.getCapability(cap, side);
+    }
+
+    @Override
+    protected void invalidateCaps() {
+        this.lazyOptional.invalidate();
+        this.energyOptional.invalidate();
+        this.fluidOptional.invalidate();
     }
 
     public AutomationSensitiveItemStackHandler.IAcceptor getAcceptor() {
@@ -250,8 +256,8 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
         return new TranslationTextComponent("gui.resourcefulbees.honey_generator");
     }
 
-    private CustomStorageContainers.CustomEnergyStorage createEnergy() {
-        return new CustomStorageContainers.CustomEnergyStorage(MAX_ENERGY_CAPACITY, 0, ENERGY_TRANSFER_AMOUNT) {
+    private CustomEnergyStorage createEnergy() {
+        return new CustomEnergyStorage(MAX_ENERGY_CAPACITY, 0, ENERGY_TRANSFER_AMOUNT) {
             @Override
             protected void onEnergyChanged() {
                 markDirty();

@@ -23,13 +23,13 @@ public class ModTileEntityTypes {
                     ModBlocks.CRIMSON_NYLIUM_BEE_NEST.get(), ModBlocks.DARK_OAK_BEE_NEST.get(), ModBlocks.RED_MUSHROOM_BEE_NEST.get(), ModBlocks.SPRUCE_BEE_NEST.get(), ModBlocks.WARPED_BEE_NEST.get(), ModBlocks.WARPED_NYLIUM_BEE_NEST.get())
             .build(null));
     public static final RegistryObject<TileEntityType<?>> CENTRIFUGE_ENTITY = TILE_ENTITY_TYPES.register("centrifuge", () -> TileEntityType.Builder
-            .create(CentrifugeTileEntity::new, ModBlocks.CENTRIFUGE.get())
+            .create(() -> new CentrifugeTileEntity(ModTileEntityTypes.CENTRIFUGE_ENTITY.get()), ModBlocks.CENTRIFUGE.get())
             .build(null));
     public static final RegistryObject<TileEntityType<?>> MECHANICAL_CENTRIFUGE_ENTITY = TILE_ENTITY_TYPES.register("mechanical_centrifuge", () -> TileEntityType.Builder
             .create(MechanicalCentrifugeTileEntity::new, ModBlocks.MECHANICAL_CENTRIFUGE.get())
             .build(null));
     public static final RegistryObject<TileEntityType<?>> CENTRIFUGE_CONTROLLER_ENTITY = TILE_ENTITY_TYPES.register("centrifuge_controller", () -> TileEntityType.Builder
-            .create(CentrifugeControllerTileEntity::new, ModBlocks.CENTRIFUGE_CONTROLLER.get())
+            .create(() -> new CentrifugeControllerTileEntity(ModTileEntityTypes.CENTRIFUGE_CONTROLLER_ENTITY.get()), ModBlocks.CENTRIFUGE_CONTROLLER.get())
             .build(null));
     public static final RegistryObject<TileEntityType<?>> CENTRIFUGE_CASING_ENTITY = TILE_ENTITY_TYPES.register("centrifuge_casing", () -> TileEntityType.Builder
             .create(CentrifugeCasingTileEntity::new, ModBlocks.CENTRIFUGE_CASING.get())

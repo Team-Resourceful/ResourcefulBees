@@ -231,7 +231,7 @@ public class ResourcefulBees
 
         NetPacketHandler.init();
 
-        RegistryHandler.addEntityAttributes();
+        event.enqueueWork(RegistryHandler::addEntityAttributes);
         MinecraftForge.EVENT_BUS.register(new RecipeBuilder());
 
         ModFeatures.ConfiguredFeatures.registerConfiguredFeatures();
@@ -248,7 +248,7 @@ public class ResourcefulBees
 
     private void doClientStuff(final FMLClientSetupEvent event) {
         CentrifugeScreen.currentMonth = new SimpleDateFormat("MM").format(new Date());
-        BeeRegistry.MOD_BEES.forEach((s, customBee) -> RenderingRegistry.registerEntityRenderingHandler(customBee.get(), CustomBeeRenderer::new));
+        BeeRegistry.MOD_BEES.forEach((s, customBee) -> RenderingRegistry.registerEntityRenderingHandler(customBee.get(), manager -> new CustomBeeRenderer(manager, BeeRegistry.getRegistry().getBeeData(s))));
         ScreenManager.registerFactory(ModContainers.CENTRIFUGE_CONTAINER.get(), CentrifugeScreen::new);
         ScreenManager.registerFactory(ModContainers.MECHANICAL_CENTRIFUGE_CONTAINER.get(), MechanicalCentrifugeScreen::new);
         ScreenManager.registerFactory(ModContainers.CENTRIFUGE_MULTIBLOCK_CONTAINER.get(), CentrifugeMultiblockScreen::new);

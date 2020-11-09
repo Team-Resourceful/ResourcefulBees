@@ -18,6 +18,7 @@ import com.resourcefulbees.resourcefulbees.network.packets.UpdateClientApiaryMes
 import com.resourcefulbees.resourcefulbees.registry.ModBlocks;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import com.resourcefulbees.resourcefulbees.registry.ModTileEntityTypes;
+import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.MultiBlockHelper;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import net.minecraft.block.BeehiveBlock;
 import net.minecraft.block.Block;
@@ -65,7 +66,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     public static final int EXPORT = 2;
     public static final int EMPTY_JAR = 1;
     public final LinkedHashMap<String, ApiaryBee> BEES = new LinkedHashMap<>();
-    public final List<BlockPos> STRUCTURE_BLOCKS = new ArrayList<>();
+    private final List<BlockPos> STRUCTURE_BLOCKS = new ArrayList<>();
     protected int TIER;
     private boolean isValidApiary;
     public boolean previewed;
@@ -366,24 +367,26 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     public void loadBees(CompoundNBT nbt) {
         ListNBT listnbt = nbt.getList(NBTConstants.NBT_BEES, 10);
 
-        for (int i = 0; i < listnbt.size(); ++i) {
-            CompoundNBT data = listnbt.getCompound(i);
+        if (!listnbt.isEmpty()) {
+            for (int i = 0; i < listnbt.size(); ++i) {
+                CompoundNBT data = listnbt.getCompound(i);
 
-            BlockPos savedFlowerPos = data.contains(NBTConstants.NBT_FLOWER_POS) ? NBTUtil.readBlockPos(data.getCompound(NBTConstants.NBT_FLOWER_POS)) : null;
-            String beeType = data.getString(NBTConstants.NBT_BEE_TYPE);
-            String beeColor = data.contains(NBTConstants.NBT_COLOR) ? data.getString(NBTConstants.NBT_COLOR) : BeeConstants.VANILLA_BEE_COLOR;
-            ITextComponent displayName = data.contains(NBTConstants.NBT_BEE_NAME) ? ITextComponent.Serializer.fromJson(data.getString(NBTConstants.NBT_BEE_NAME)) : new StringTextComponent("Temp Bee Name");
+                BlockPos savedFlowerPos = data.contains(NBTConstants.NBT_FLOWER_POS) ? NBTUtil.readBlockPos(data.getCompound(NBTConstants.NBT_FLOWER_POS)) : null;
+                String beeType = data.getString(NBTConstants.NBT_BEE_TYPE);
+                String beeColor = data.contains(NBTConstants.NBT_COLOR) ? data.getString(NBTConstants.NBT_COLOR) : BeeConstants.VANILLA_BEE_COLOR;
+                ITextComponent displayName = data.contains(NBTConstants.NBT_BEE_NAME) ? ITextComponent.Serializer.fromJson(data.getString(NBTConstants.NBT_BEE_NAME)) : new StringTextComponent("Temp Bee Name");
 
-            this.BEES.computeIfAbsent(data.getString(NBTConstants.NBT_BEE_TYPE), k -> new ApiaryBee(
-                    data.getCompound("EntityData"),
-                    data.getInt("TicksInHive"),
-                    data.getInt("MinOccupationTicks"),
-                    savedFlowerPos,
-                    beeType,
-                    beeColor,
-                    displayName));
+                this.BEES.computeIfAbsent(data.getString(NBTConstants.NBT_BEE_TYPE), k -> new ApiaryBee(
+                        data.getCompound("EntityData"),
+                        data.getInt("TicksInHive"),
+                        data.getInt("MinOccupationTicks"),
+                        savedFlowerPos,
+                        beeType,
+                        beeColor,
+                        displayName));
 
-            this.BEES.get(beeType).isLocked = data.getBoolean(NBTConstants.NBT_LOCKED);
+                this.BEES.get(beeType).isLocked = data.getBoolean(NBTConstants.NBT_LOCKED);
+            }
         }
     }
 
@@ -567,33 +570,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
 
 
     public MutableBoundingBox buildStructureBounds(int horizontalOffset, int verticalOffset) {
-        MutableBoundingBox box;
-        int posX = this.getPos().getX();
-        int posY = this.getPos().getY();
-        int posZ = this.getPos().getZ();
-
-        switch (this.getBlockState().get(ApiaryBlock.FACING)) {
-            case NORTH:
-                posX -= 3 + horizontalOffset;
-                posY -= 2 + verticalOffset;
-                box = new MutableBoundingBox(posX, posY, posZ, posX + 6, posY + 5, posZ - 6);
-                break;
-            case EAST:
-                posZ -= 3 + horizontalOffset;
-                posY -= 2 + verticalOffset;
-                box = new MutableBoundingBox(posX, posY, posZ, posX + 6, posY + 5, posZ + 6);
-                break;
-            case SOUTH:
-                posX -= 3 - horizontalOffset;
-                posY -= 2 + verticalOffset;
-                box = new MutableBoundingBox(posX, posY, posZ, posX + 6, posY + 5, posZ + 6);
-                break;
-            default:
-                posZ -= 3 - horizontalOffset;
-                posY -= 2 + verticalOffset;
-                box = new MutableBoundingBox(posX, posY, posZ, posX - 6, posY + 5, posZ + 6);
-        }
-        return box;
+        return MultiBlockHelper.buildStructureBounds(this.getPos(), 7, 6, 7, -horizontalOffset - 3, -verticalOffset - 2, 0, this.getBlockState().get(ApiaryBlock.FACING));
     }
 
     private void buildStructureBlockList() {

@@ -3,10 +3,12 @@
   "hasHoneycomb": false,
   "traits": ["slimy"],
   "maxTimeInHive": 1200,
+  "baseLayerTexture": "slime/slime_bee",
   "ColorData": {
-    "isBeeColored": true,
+    "isBeeColored": false,
     "primaryColor": "#73c262",
-    "secondaryColor": "#303030"
+    "secondaryColor": "#303030",
+    "modelType": "GELATINOUS"
   },
   "MutationData": {
     "hasMutation": true,

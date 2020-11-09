@@ -1,6 +1,7 @@
 package com.resourcefulbees.resourcefulbees.client.render.entity;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
+import com.resourcefulbees.resourcefulbees.api.beedata.ColorData;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
@@ -16,19 +17,25 @@ import javax.annotation.Nonnull;
 @OnlyIn(Dist.CLIENT)
 public class CustomBeeRenderer extends MobRenderer<CustomBeeEntity, CustomBeeModel<CustomBeeEntity>> {
 
-    public CustomBeeRenderer(EntityRendererManager manager) {
-        super(manager, new CustomBeeModel<>(), 0.4F);
-                addLayer(new PrimaryColorLayer(this));
-                addLayer(new SecondaryColorLayer(this));
+    private final ResourceLocation angryTexture;
+    private final ResourceLocation baseTexture;
+
+    public CustomBeeRenderer(EntityRendererManager manager, CustomBeeData beeData) {
+        super(manager, new CustomBeeModel<>(beeData), 0.4F);
+
+        angryTexture = new ResourceLocation(ResourcefulBees.MOD_ID, BeeConstants.ENTITY_TEXTURES_DIR + beeData.getBaseLayerTexture() + "_angry.png");
+        baseTexture = new ResourceLocation(ResourcefulBees.MOD_ID, BeeConstants.ENTITY_TEXTURES_DIR + beeData.getBaseLayerTexture() + ".png");
+
+        if (beeData.getColorData().isBeeColored()) {
+            addLayer(new PrimaryColorLayer(this, beeData.getColorData()));
+            addLayer(new SecondaryColorLayer(this, beeData.getColorData()));
+
+            if (beeData.getColorData().isGlowing() || beeData.getColorData().isEnchanted()) {
                 addLayer(new EmissiveBeeLayer(this));
+            }
+        }
     }
 
     @Nonnull
-    public ResourceLocation getEntityTexture(CustomBeeEntity entity) {
-        CustomBeeData bee = entity.getBeeData();
-        if (entity.hasAngerTime()) {
-            return new ResourceLocation(ResourcefulBees.MOD_ID, BeeConstants.ENTITY_TEXTURES_DIR + bee.getBaseLayerTexture() + "_angry.png");
-        }
-        return new ResourceLocation(ResourcefulBees.MOD_ID, BeeConstants.ENTITY_TEXTURES_DIR + bee.getBaseLayerTexture() + ".png");
-    }
+    public ResourceLocation getEntityTexture(CustomBeeEntity entity) { return entity.hasAngerTime() ? angryTexture : baseTexture; }
 }

@@ -1,5 +1,6 @@
 package com.resourcefulbees.resourcefulbees.block.multiblocks.centrifuge;
 
+import com.resourcefulbees.resourcefulbees.registry.ModTileEntityTypes;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.CentrifugeControllerTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.TooltipBuilder;
 import net.minecraft.block.Block;
@@ -10,10 +11,10 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.BucketItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.DirectionProperty;
@@ -27,16 +28,15 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.network.NetworkHooks;
-import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.stream.IntStream;
 
 public class CentrifugeControllerBlock extends Block {
     public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
@@ -47,78 +47,50 @@ public class CentrifugeControllerBlock extends Block {
         setDefaultState(getDefaultState().with(PROPERTY_VALID,false).with(FACING, Direction.NORTH));
     }
 
+    protected CentrifugeControllerTileEntity getControllerEntity(World world, BlockPos pos) {
+        TileEntity tileEntity = world.getTileEntity(pos);
+        if (tileEntity instanceof CentrifugeControllerTileEntity) {
+            return (CentrifugeControllerTileEntity) tileEntity;
+        }
+        return null;
+    }
+
     @Nonnull
     @Override
     public ActionResultType onUse(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult blockRayTraceResult) {
         if (!world.isRemote) {
-            INamedContainerProvider blockEntity = state.getContainer(world,pos);
-            if (blockEntity != null) {
-                if (blockEntity instanceof CentrifugeControllerTileEntity){
-                    CentrifugeControllerTileEntity multiblockCentrifuge =  (CentrifugeControllerTileEntity)blockEntity;
-                    multiblockCentrifuge.validStructure = multiblockCentrifuge.validateStructure(world, (ServerPlayerEntity) player);
-                    if (multiblockCentrifuge.validStructure){
-                        NetworkHooks.openGui((ServerPlayerEntity) player, blockEntity, pos);
+            ItemStack heldItem = player.getHeldItem(hand);
+            boolean usingBucket = heldItem.getItem() instanceof BucketItem;
+            boolean placingBlock = heldItem.getItem() instanceof BlockItem;
+            CentrifugeControllerTileEntity controller = getControllerEntity(world, pos);
+
+            if (!placingBlock) {
+                if (controller != null && controller.isValidStructure()) {
+                    if (usingBucket) {
+                        controller.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+                                .ifPresent(iFluidHandler -> FluidUtil.interactWithFluidHandler(player, hand, world, pos, null));
+                    } else {
+                        NetworkHooks.openGui((ServerPlayerEntity) player, controller, pos);
                     }
                 }
             }
         }
-        return ActionResultType.SUCCESS;
-    }
 
-    @Override
-    public boolean removedByPlayer(BlockState state, World world, BlockPos pos, PlayerEntity player, boolean willHarvest, FluidState fluid) {
-        if (!world.isRemote){
-            CentrifugeControllerTileEntity controller = (CentrifugeControllerTileEntity)world.getTileEntity(pos);
-            if (controller !=null){
-                controller.setCasingsToNotLinked(controller.buildStructureBounds());
-                return super.removedByPlayer(state,world,pos,player,willHarvest,fluid);
-            }
-        }
-        return super.removedByPlayer(state,world,pos,player,willHarvest,fluid);
-    }
-
-    @Override
-    public void onBlockExploded(BlockState state, World world, BlockPos pos, Explosion explosion) {
-        if (!world.isRemote){
-            CentrifugeControllerTileEntity controller = (CentrifugeControllerTileEntity)world.getTileEntity(pos);
-            if (controller !=null){
-                controller.setCasingsToNotLinked(controller.buildStructureBounds());
-                super.onBlockExploded(state,world,pos,explosion);
-            }
-        } else {
-            super.onBlockExploded(state,world,pos,explosion);
-        }
+        return super.onUse(state, world, pos, player, hand, blockRayTraceResult);
     }
 
     @Nullable
     @Override
-    public INamedContainerProvider getContainer(@Nonnull BlockState state, World worldIn, @Nonnull BlockPos pos) {
-        return (INamedContainerProvider)worldIn.getTileEntity(pos);
+    public INamedContainerProvider getContainer(@Nonnull BlockState state, @Nonnull World worldIn, @Nonnull BlockPos pos) {
+        return getControllerEntity(worldIn, pos);
     }
 
     @Override
-    public void onReplaced(@Nonnull BlockState state1, World world, @Nonnull BlockPos pos, @Nonnull BlockState state, boolean isMoving) {
-        TileEntity blockEntity = world.getTileEntity(pos);
-        if (blockEntity instanceof CentrifugeControllerTileEntity && state.getBlock() != state1.getBlock()){
-            CentrifugeControllerTileEntity centrifugeTileEntity = (CentrifugeControllerTileEntity)blockEntity;
-            ItemStackHandler h = centrifugeTileEntity.h;
-            IntStream.range(0, h.getSlots()).mapToObj(h::getStackInSlot).filter(s -> !s.isEmpty()).forEach(stack -> InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack));
-        }
-        super.onReplaced(state1, world, pos, state, isMoving);
-    }
-
-
-
-    @Override
-    public boolean hasTileEntity(BlockState state) {
-        return true;
-    }
+    public boolean hasTileEntity(BlockState state) { return true; }
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new CentrifugeControllerTileEntity();
-    }
+    public TileEntity createTileEntity(BlockState state, IBlockReader world) { return new CentrifugeControllerTileEntity(ModTileEntityTypes.CENTRIFUGE_CONTROLLER_ENTITY.get()); }
 
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) { return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite()); }
@@ -136,15 +108,14 @@ public class CentrifugeControllerBlock extends Block {
                     .addTip(I18n.format("block.resourcefulbees.centrifuge.tooltip.structure_size"), TextFormatting.AQUA)
                     .addTip(I18n.format("block.resourcefulbees.centrifuge.tooltip.requisites"), TextFormatting.AQUA)
                     .addTip(I18n.format("block.resourcefulbees.centrifuge.tooltip.capabilities"), TextFormatting.AQUA)
-                    .addTip("Patchouli book coming soon!", TextFormatting.AQUA)
                     .build());
-        }
-        else
-        {
+        } else {
             tooltip.add(new StringTextComponent(TextFormatting.AQUA + I18n.format("resourcefulbees.ctrl_info")));
         }
         super.addInformation(stack, worldIn, tooltip, flagIn);
     }
+
+
 }
 
 

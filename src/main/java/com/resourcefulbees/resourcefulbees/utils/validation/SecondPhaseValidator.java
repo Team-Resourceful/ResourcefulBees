@@ -85,9 +85,10 @@ public class SecondPhaseValidator {
 
     public static void validateCentrifugeOutputs(CustomBeeData bee) {
         Item mainOutput = getItem(bee.getCentrifugeData().getMainOutput());
+        Fluid fluidOutput = getFluid(bee.getCentrifugeData().getMainOutput());
         Item secondaryOutput = getItem(bee.getCentrifugeData().getSecondaryOutput());
         Item bottleOutput = getItem(bee.getCentrifugeData().getBottleOutput());
-        bee.getCentrifugeData().setHasCentrifugeOutput(isValidItem(mainOutput) && isValidItem(secondaryOutput) && isValidItem(bottleOutput));
+        bee.getCentrifugeData().setHasCentrifugeOutput((isValidFluid(fluidOutput) || isValidItem(mainOutput)) && isValidItem(secondaryOutput) && isValidItem(bottleOutput));
     }
 }
 

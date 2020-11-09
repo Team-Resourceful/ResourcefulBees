@@ -1,6 +1,7 @@
 package com.resourcefulbees.resourcefulbees.compat.top;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
+import com.resourcefulbees.resourcefulbees.block.CentrifugeBlock;
 import com.resourcefulbees.resourcefulbees.block.TieredBeehiveBlock;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.tileentity.CentrifugeTileEntity;
@@ -81,16 +82,16 @@ public class TopCompat implements Function<ITheOneProbe, Void>
                     }
                 }
             }
-            if(world.getTileEntity(data.getPos()) instanceof CentrifugeTileEntity)
+            if(world.getBlockState(data.getPos()).getBlock() instanceof CentrifugeBlock && world.getTileEntity(data.getPos()) instanceof CentrifugeTileEntity)
             {
-                CentrifugeTileEntity beeHiveBlock = (CentrifugeTileEntity) world.getTileEntity(data.getPos());
+                CentrifugeTileEntity centrifugeTileEntity = (CentrifugeTileEntity) world.getTileEntity(data.getPos());
 
-                if(beeHiveBlock != null && beeHiveBlock.time > 0) {
+                if(centrifugeTileEntity != null && centrifugeTileEntity.getProcessTime(0) > 0) {
                     probeInfo.horizontal()
                             .item(new ItemStack(blockState.getBlock().asItem()))
                             .vertical()
                             .itemLabel(new ItemStack(blockState.getBlock().asItem()))
-                            .progress((int) Math.floor(beeHiveBlock.time / 20.0), beeHiveBlock.totalTime / 20)
+                            .progress((int) Math.floor(centrifugeTileEntity.getProcessTime(0) / 20.0), centrifugeTileEntity.getRecipeTime(0) / 20)
                             .text(formattedName);
                     return true;
                 }
