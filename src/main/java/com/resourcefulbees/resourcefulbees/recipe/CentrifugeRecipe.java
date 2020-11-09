@@ -52,7 +52,22 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
 
     @Override
     public boolean matches(IInventory inventory, @Nonnull World world) {
-        return ingredient.test(inventory.getStackInSlot(0));
+        ItemStack stack = inventory.getStackInSlot(0);
+        if (stack == ItemStack.EMPTY) return false;
+        else {
+            ItemStack[] matchingStacks = ingredient.getMatchingStacks();
+            if (matchingStacks.length == 0)return stack.isEmpty();
+            else {
+                for(ItemStack itemstack : matchingStacks) {
+                    if (itemstack.getItem() == stack.getItem()) {
+                        if (itemstack.hasTag() && stack.hasTag()){
+                            return itemstack.getTag().equals(stack.getTag());
+                        }else return !itemstack.hasTag() && !stack.hasTag();
+                    }
+                }
+                return false;
+            }
+        }
     }
 
     @Override
