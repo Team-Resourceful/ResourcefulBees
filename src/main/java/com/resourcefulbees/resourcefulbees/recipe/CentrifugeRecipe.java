@@ -44,7 +44,7 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
     @Override
     public boolean matches(IInventory inventory, @Nonnull World world) {
         ItemStack stack = inventory.getStackInSlot(0);
-        if (stack == null) return false;
+        if (stack == ItemStack.EMPTY) return false;
         else {
             ItemStack[] matchingStacks = ingredient.getMatchingStacks();
             if (matchingStacks.length == 0)return stack.isEmpty();
