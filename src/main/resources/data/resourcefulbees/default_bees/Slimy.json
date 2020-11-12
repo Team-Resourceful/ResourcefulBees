@@ -5,10 +5,8 @@
   "maxTimeInHive": 1200,
   "baseLayerTexture": "slime/slime_bee",
   "ColorData": {
-    "isBeeColored": false,
-    "primaryColor": "#73c262",
-    "secondaryColor": "#303030",
-    "modelType": "GELATINOUS"
+    "modelType": "GELATINOUS",
+    "gelLayerTexture": "/slime/slime_gel_Layer"
   },
   "MutationData": {
     "hasMutation": true,

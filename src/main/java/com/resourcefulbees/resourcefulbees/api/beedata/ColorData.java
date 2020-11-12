@@ -21,12 +21,12 @@ public class ColorData extends AbstractBeeData {
     private final String honeycombColor;
 
     /**
-     * A custom texture specified for the first texture layer of the bee.
+     * A custom texture specified for the primary texture layer of the bee.
      */
     private final String primaryLayerTexture;
 
     /**
-     * A custom texture specified for the second texture layer of the bee.
+     * A custom texture specified for the secondary texture layer of the bee.
      */
     private final String secondaryLayerTexture;
 
@@ -34,6 +34,12 @@ public class ColorData extends AbstractBeeData {
      * A custom texture specified for the emissive texture layer of the bee.
      */
     private final String emissiveLayerTexture;
+
+    /**
+     * A custom texture specified for the gel layer of the bee.
+     * Does not have a default value!!
+     */
+    private final String gelLayerTexture;
 
     /**
      * If the bee is colored.
@@ -64,13 +70,14 @@ public class ColorData extends AbstractBeeData {
 
     private final ModelTypes modelType;
 
-    private ColorData(String primaryColor, String secondaryColor, String honeycombColor, String primaryLayerTexture, String secondaryLayerTexture, String emissiveLayerTexture, boolean isBeeColored, boolean isRainbowBee, boolean isGlowing, String glowColor, boolean isEnchanted, int glowingPulse, ModelTypes modelType) {
+    private ColorData(String primaryColor, String secondaryColor, String honeycombColor, String primaryLayerTexture, String secondaryLayerTexture, String emissiveLayerTexture, String gelLayerTexture, boolean isBeeColored, boolean isRainbowBee, boolean isGlowing, String glowColor, boolean isEnchanted, int glowingPulse, ModelTypes modelType) {
         this.primaryColor = primaryColor;
         this.secondaryColor = secondaryColor;
         this.honeycombColor = honeycombColor;
         this.primaryLayerTexture = primaryLayerTexture;
         this.secondaryLayerTexture = secondaryLayerTexture;
         this.emissiveLayerTexture = emissiveLayerTexture;
+        this.gelLayerTexture = gelLayerTexture;
         this.isBeeColored = isBeeColored;
         this.isRainbowBee = isRainbowBee;
         this.isGlowing = isGlowing;
@@ -93,6 +100,8 @@ public class ColorData extends AbstractBeeData {
     public String getSecondaryLayerTexture() { return secondaryLayerTexture == null ? "/custom/secondary_layer" : secondaryLayerTexture; }
 
     public String getEmissiveLayerTexture() { return emissiveLayerTexture == null ? "/custom/emissive_layer" : emissiveLayerTexture; }
+
+    public String getGelLayerTexture() { return gelLayerTexture; }
 
     public boolean isBeeColored() { return isBeeColored; }
 
@@ -143,6 +152,7 @@ public class ColorData extends AbstractBeeData {
         private String primaryLayerTexture;
         private String secondaryLayerTexture;
         private String emissiveLayerTexture;
+        private String gelLayerTexture;
         private final boolean isBeeColored;
         private boolean isRainbowBee;
         private boolean isGlowing;
@@ -184,6 +194,11 @@ public class ColorData extends AbstractBeeData {
             return this;
         }
 
+        public Builder setGelLayerTexture(String gelLayerTexture) {
+            this.gelLayerTexture = gelLayerTexture;
+            return this;
+        }
+
         public Builder setIsRainbowBee(boolean isRainbowBee) {
             this.isRainbowBee = isRainbowBee;
             return this;
@@ -215,7 +230,7 @@ public class ColorData extends AbstractBeeData {
         }
 
         public ColorData createColorData() {
-            return new ColorData(primaryColor, secondaryColor, honeycombColor, primaryLayerTexture, secondaryLayerTexture, emissiveLayerTexture, isBeeColored, isRainbowBee, isGlowing, glowColor, isEnchanted, glowingPulse, modelType);
+            return new ColorData(primaryColor, secondaryColor, honeycombColor, primaryLayerTexture, secondaryLayerTexture, emissiveLayerTexture, gelLayerTexture, isBeeColored, isRainbowBee, isGlowing, glowColor, isEnchanted, glowingPulse, modelType);
         }
     }
 

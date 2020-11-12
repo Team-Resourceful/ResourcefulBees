@@ -140,14 +140,10 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
     }
 
     @Nonnull
-    protected Iterable<ModelRenderer> getHeadParts() {
-        return ImmutableList.of();
-    }
+    protected Iterable<ModelRenderer> getHeadParts() { return ImmutableList.of(); }
 
     @Nonnull
-    protected Iterable<ModelRenderer> getBodyParts() {
-        return ImmutableList.of(this.body);
-    }
+    protected Iterable<ModelRenderer> getBodyParts() { return ImmutableList.of(this.body); }
 
     @Override
     public void render(@Nonnull MatrixStack matrixStackIn, @Nonnull IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
@@ -164,7 +160,7 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
 
     private void addOreCrystals() {
         ModelRenderer crystals = new ModelRenderer(this);
-        crystals.setRotationPoint(-1.0F, 3.0F, -9.0F);
+        crystals.setRotationPoint(-0.25F, 1.0F, -6.5F);
         body.addChild(crystals);
         setRotationAngle(crystals, 0.3927F, 0.0F, 0.0F);
         crystals.setTextureOffset(48, 48).addCuboid(1.0F, -3.8582F, 5.7674F, 2.0F, 2.0F, 2.0F, 0.0F, false);
@@ -177,10 +173,10 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
         bone.setTextureOffset(48, 57).addCuboid(-2.0F, -7.7242F, 1.8457F, 3.0F, 4.0F, 3.0F, 0.0F, true);
 
         ModelRenderer bone2 = new ModelRenderer(this);
-        bone2.setRotationPoint(-1.0F, -0.5412F, 1.3066F);
+        bone2.setRotationPoint(-1.0F, -0.5412F, 1.45F);
         crystals.addChild(bone2);
         setRotationAngle(bone2, -0.3927F, 0.0F, 0.0F);
-        bone2.setTextureOffset(48, 48).addCuboid(-1.99F, -5.8588F, 2.6934F, 2.0F, 2.0F, 2.0F, 0.0F, false);
+        bone2.setTextureOffset(48, 48).addCuboid(-1.5F, -5.8588F, 2.6934F, 2.0F, 2.0F, 2.0F, 0.0F, false);
         bone2.setTextureOffset(48, 52).addCuboid(1.0F, -6.8588F, 5.6934F, 2.0F, 3.0F, 2.0F, 0.0F, true);
 
         ModelRenderer bone5 = new ModelRenderer(this);
@@ -206,5 +202,9 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
         modelRenderer.rotateAngleX = x;
         modelRenderer.rotateAngleY = y;
         modelRenderer.rotateAngleZ = z;
+    }
+
+    public void addBox(ModelRenderer modelRenderer, float x, float y, float z, float xSize, float ySize, float zSize, float scale, boolean mirrored) {
+        modelRenderer.addCuboid(x, y, z, xSize, ySize, zSize, scale, mirrored);
     }
 }
