@@ -22,8 +22,8 @@ Steps to reproduce the behavior:
 **Expected behavior**
 A clear and concise description of what you expected to happen.
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+**Screenshots or Crash Logs**
+If applicable, add screenshots or crash logs to help explain your problem.
 
 **please complete the following information:**
  - Forge Version [e.g. '1.15.2 - 31.2.5']
