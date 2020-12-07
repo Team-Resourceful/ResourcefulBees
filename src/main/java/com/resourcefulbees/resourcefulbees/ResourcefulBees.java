@@ -14,10 +14,7 @@ import com.resourcefulbees.resourcefulbees.config.ConfigLoader;
 import com.resourcefulbees.resourcefulbees.data.DataGen;
 import com.resourcefulbees.resourcefulbees.data.DataPackLoader;
 import com.resourcefulbees.resourcefulbees.data.RecipeBuilder;
-import com.resourcefulbees.resourcefulbees.init.BeeSetup;
-import com.resourcefulbees.resourcefulbees.init.BiomeDictonarySetup;
-import com.resourcefulbees.resourcefulbees.init.ModSetup;
-import com.resourcefulbees.resourcefulbees.init.TraitSetup;
+import com.resourcefulbees.resourcefulbees.init.*;
 import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
 import com.resourcefulbees.resourcefulbees.registry.*;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
@@ -101,15 +98,7 @@ public class ResourcefulBees
         MinecraftForge.EVENT_BUS.addListener(this::trade);
         MinecraftForge.EVENT_BUS.addListener(this::entityDies);
 
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-            MinecraftForge.EVENT_BUS.addListener(PreviewHandler::onWorldRenderLast);
-            FMLJavaModLoadingContext.get().getModEventBus().addListener(ModelHandler::registerModels);
-            FMLJavaModLoadingContext.get().getModEventBus().addListener(ModelHandler::onModelBake);
-            FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
-            FMLJavaModLoadingContext.get().getModEventBus().addListener(ColorHandler::onItemColors);
-            FMLJavaModLoadingContext.get().getModEventBus().addListener(ColorHandler::onBlockColors);
-            MinecraftForge.EVENT_BUS.addListener(FluidRender::honeyOverlay);
-        });
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ClientEventHandlers::clientStuff);
 
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -244,8 +233,7 @@ public class ResourcefulBees
             InterModComms.sendTo("theoneprobe", "getTheOneProbe", TopCompat::new);
     }
 
-    private void doClientStuff(final FMLClientSetupEvent event) {
-        //CentrifugeScreen.currentMonth = new SimpleDateFormat("MM").format(new Date());
+    /*private void doClientStuff(final FMLClientSetupEvent event) {
         BeeRegistry.MOD_BEES.forEach((s, customBee) -> RenderingRegistry.registerEntityRenderingHandler(customBee.get(), manager -> new CustomBeeRenderer(manager, BeeRegistry.getRegistry().getBeeData(s))));
         ScreenManager.registerFactory(ModContainers.CENTRIFUGE_CONTAINER.get(), CentrifugeScreen::new);
         ScreenManager.registerFactory(ModContainers.MECHANICAL_CENTRIFUGE_CONTAINER.get(), MechanicalCentrifugeScreen::new);
@@ -262,7 +250,7 @@ public class ResourcefulBees
         ItemModelPropertiesHandler.registerProperties();
 
         event.enqueueWork(FluidRender::setHoneyRenderType);
-    }
+    }*/
 
     private void loadComplete(FMLLoadCompleteEvent event) {
         TraitRegistry.registerDefaultTraits();
