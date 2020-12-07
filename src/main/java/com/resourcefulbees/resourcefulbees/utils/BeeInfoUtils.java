@@ -12,6 +12,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
@@ -23,6 +24,7 @@ import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
 
+import javax.annotation.Nonnull;
 import java.util.*;
 
 import static com.resourcefulbees.resourcefulbees.lib.BeeConstants.*;
@@ -157,5 +159,23 @@ public class BeeInfoUtils {
         } else if (input.equals(FLOWER_TAG_SMALL)) {
             return true;
         } else return input.equals(FLOWER_TAG_ALL);
+    }
+
+    public static boolean isValidBreedItem(@Nonnull ItemStack stack, String validBreedItem) {
+        if (ValidatorUtils.TAG_RESOURCE_PATTERN.matcher(validBreedItem).matches()) {
+            ITag<Item> itemTag = getItemTag(validBreedItem.replace(TAG_PREFIX, ""));
+            return itemTag != null && stack.getItem().isIn(itemTag);
+        } else {
+            switch (validBreedItem) {
+                case FLOWER_TAG_ALL:
+                    return stack.getItem().isIn(ItemTags.FLOWERS);
+                case FLOWER_TAG_SMALL:
+                    return stack.getItem().isIn(ItemTags.SMALL_FLOWERS);
+                case FLOWER_TAG_TALL:
+                    return stack.getItem().isIn(ItemTags.TALL_FLOWERS);
+                default:
+                    return stack.getItem().equals(getItem(validBreedItem));
+            }
+        }
     }
 }

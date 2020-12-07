@@ -34,6 +34,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.MutableBoundingBox;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.village.PointOfInterest;
 import net.minecraft.village.PointOfInterestManager;
 import net.minecraft.village.PointOfInterestType;
@@ -225,38 +228,53 @@ public class ResourcefulBee extends CustomBeeEntity {
 
         if (info.hasSpecialAbilities()) {
             info.getSpecialAbilities().forEach(ability -> {
-                if (ability.equals(TraitConstants.TELEPORT)) {
-                    if (!hasHiveInRange() && !this.beePollinateGoal.isRunning()) {
-                        if (this.world.isDaytime() && this.ticksExisted % 150 == 0) {
-                            this.teleportRandomly();
-                        }
-                    }
-                }
-                if (ability.equals(TraitConstants.FLAMMABLE)) {
-                    if (this.ticksExisted % 150 == 0)
-                        this.setFire(3);
-                }
-                if (ability.equals(TraitConstants.SLIMY)) {
-                    if (!isNotColliding(world) && !wasColliding) {
-                        for (int j = 0; j < 8; ++j) {
-                            float f = this.rand.nextFloat() * ((float) Math.PI * 2F);
-                            float f1 = this.rand.nextFloat() * 0.5F + 0.5F;
-                            float f2 = MathHelper.sin(f) * 1 * 0.5F * f1;
-                            float f3 = MathHelper.cos(f) * 1 * 0.5F * f1;
-                            this.world.addParticle(ParticleTypes.ITEM_SLIME, this.getX() + (double) f2, this.getY(), this.getZ() + (double) f3, 0.0D, 0.0D, 0.0D);
-                        }
-
-                        this.playSound(SoundEvents.ENTITY_SLIME_SQUISH, this.getSoundVolume(), ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F) / 0.8F);
-                        wasColliding = true;
-                    }
+                switch (ability) {
+                    case TraitConstants.TELEPORT:
+                        doTeleportEffect();
+                    case TraitConstants.FLAMMABLE:
+                        doFlameEffect();
+                    case TraitConstants.SLIMY:
+                        doSlimeEffect();
                 }
             });
         }
         super.updateAITasks();
     }
 
+    private void doTeleportEffect() {
+        if (canTeleport() && !hasHiveInRange()) {
+                this.teleportRandomly();
+        }
+    }
+
+    private void doFlameEffect() {
+        if (this.ticksExisted % 150 == 0) this.setFire(3);
+    }
+
+    private void doSlimeEffect() {
+        if (!isNotColliding(world) && !wasColliding) {
+            for (int j = 0; j < 8; ++j) {
+                float f = this.rand.nextFloat() * ((float) Math.PI * 2F);
+                float f1 = this.rand.nextFloat() * 0.5F + 0.5F;
+                float f2 = MathHelper.sin(f) * 1 * 0.5F * f1;
+                float f3 = MathHelper.cos(f) * 1 * 0.5F * f1;
+                this.world.addParticle(ParticleTypes.ITEM_SLIME, this.getX() + (double) f2, this.getY(), this.getZ() + (double) f3, 0.0D, 0.0D, 0.0D);
+            }
+
+            this.playSound(SoundEvents.ENTITY_SLIME_SQUISH, this.getSoundVolume(), ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F) / 0.8F);
+            wasColliding = true;
+        }
+    }
+
+    private boolean canTeleport() {
+        return !hasCustomName() && this.ticksExisted % 150 == 0 && this.world.isDaytime() && !this.beePollinateGoal.isRunning();
+    }
+
     protected boolean hasHiveInRange() {
-        return this.hasHive() && this.canEnterHive() && this.hivePos != null && this.hivePos.withinDistance(this.getPositionVec(), 5.0D);
+        //return this.hasHive() && this.canEnterHive() && this.hivePos != null && this.hivePos.withinDistance(this.getPositionVec(), 5.0D);
+        BlockPos pos = getBlockPos();
+        MutableBoundingBox box = MutableBoundingBox.createProper(pos.getX() + 5 , pos.getY() + 5 , pos.getZ() + 5, pos.getX() - 5, pos.getY() - 5, pos.getZ() - 5);
+        return BlockPos.stream(box).anyMatch(blockPos -> world.getTileEntity(blockPos) instanceof BeehiveTileEntity || world.getTileEntity(blockPos) instanceof ApiaryTileEntity);
     }
 
     protected void teleportRandomly() {

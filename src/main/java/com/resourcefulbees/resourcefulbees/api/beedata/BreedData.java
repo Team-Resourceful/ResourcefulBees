@@ -63,9 +63,9 @@ public class BreedData extends AbstractBeeData {
 
     public int getFeedAmount() { return Math.max(1, feedAmount); }
 
-    public int getChildGrowthDelay() { return childGrowthDelay != 0 ? BeeConstants.CHILD_GROWTH_DELAY : childGrowthDelay; }
+    public int getChildGrowthDelay() { return childGrowthDelay != 0 ? childGrowthDelay : BeeConstants.CHILD_GROWTH_DELAY; }
 
-    public int getBreedDelay() { return breedDelay != 0 ? BeeConstants.BREED_DELAY : breedDelay; }
+    public int getBreedDelay() { return breedDelay != 0 ? breedDelay : BeeConstants.BREED_DELAY; }
 
     public boolean hasParents() { return !getParent1().isEmpty() && !getParent2().isEmpty(); }
 

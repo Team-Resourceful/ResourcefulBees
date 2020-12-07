@@ -169,8 +169,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
             nbt.remove("UUID");
             Entity entity = EntityType.func_220335_a(nbt, this.world, entity1 -> entity1);
             if (entity != null) {
-                float f = entity.getWidth();
-                double d0 = 0.55D + f / 2.0F;
+                double d0 = 0.55D + entity.getWidth() / 2.0F;
                 double d1 = blockpos.getX() + 0.5D + d0 * direction.getXOffset();
                 double d2 = blockpos.getY() + 0.5D - (entity.getHeight() / 2.0F);
                 double d3 = blockpos.getZ() + 0.5D + d0 * direction.getZOffset();

@@ -1,6 +1,7 @@
 package com.resourcefulbees.resourcefulbees.block.multiblocks.centrifuge;
 
 import com.resourcefulbees.resourcefulbees.registry.ModTileEntityTypes;
+import com.resourcefulbees.resourcefulbees.tileentity.CentrifugeTileEntity;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.CentrifugeControllerTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.TooltipBuilder;
 import net.minecraft.block.Block;
@@ -33,6 +34,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.network.NetworkHooks;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -77,6 +79,15 @@ public class CentrifugeControllerBlock extends Block {
         }
 
         return super.onUse(state, world, pos, player, hand, blockRayTraceResult);
+    }
+
+    @Override
+    public void neighborChanged(@NotNull BlockState state, World world, @NotNull BlockPos pos, @NotNull Block changedBlock, @NotNull BlockPos changedBlockPos, boolean bool) {
+        TileEntity tileEntity = world.getTileEntity(pos);
+        if (tileEntity instanceof CentrifugeTileEntity) {
+            CentrifugeTileEntity centrifugeTileEntity = (CentrifugeTileEntity) tileEntity;
+            centrifugeTileEntity.setIsPoweredByRedstone(world.isBlockPowered(pos));
+        }
     }
 
     @Nullable

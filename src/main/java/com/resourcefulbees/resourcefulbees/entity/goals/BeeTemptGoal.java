@@ -60,23 +60,7 @@ public class BeeTemptGoal extends Goal {
     }
 
     protected boolean isTempting(ItemStack stack) {
-        String validBreedItem = this.beeEntity.getBeeData().getBreedData().getFeedItem();
-
-        if (ValidatorUtils.TAG_RESOURCE_PATTERN.matcher(validBreedItem).matches()) {
-            ITag<Item> itemTag = BeeInfoUtils.getItemTag(validBreedItem.replace(BeeConstants.TAG_PREFIX, ""));
-            return itemTag != null && stack.getItem().isIn(itemTag);
-        } else {
-            switch (validBreedItem) {
-                case BeeConstants.FLOWER_TAG_ALL:
-                    return stack.getItem().isIn(ItemTags.FLOWERS);
-                case BeeConstants.FLOWER_TAG_SMALL:
-                    return stack.getItem().isIn(ItemTags.SMALL_FLOWERS);
-                case BeeConstants.FLOWER_TAG_TALL:
-                    return stack.getItem().isIn(ItemTags.TALL_FLOWERS);
-                default:
-                    return stack.getItem().equals(BeeInfoUtils.getItem(validBreedItem));
-            }
-        }
+        return BeeInfoUtils.isValidBreedItem(stack, this.beeEntity.getBeeData().getBreedData().getFeedItem());
     }
 
     /**

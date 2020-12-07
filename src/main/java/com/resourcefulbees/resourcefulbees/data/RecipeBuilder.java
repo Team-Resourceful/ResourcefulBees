@@ -123,6 +123,8 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
                         Pair.of(fluidOutput, data.getMainOutputWeight())
                 ),
                 data.getRecipeTime(),
+                //TODO switch to this? (data.getRecipeTime() - Config.MULTIBLOCK_RECIPE_TIME_REDUCTION.get()) * 9
+                // if so then centrifuge needs to discern between data pack and comb block recipes
                 true,
                 data.hasFluidoutput()
         );

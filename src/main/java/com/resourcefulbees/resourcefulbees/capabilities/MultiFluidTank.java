@@ -41,6 +41,10 @@ public class MultiFluidTank implements IFluidHandler {
     @Override
     public boolean isFluidValid(int tank, @NotNull FluidStack stack) { return fluidTanks[tank].isFluidValid(stack); }
 
+    public int getFluidAmountInTank(int tank) {
+        return fluidTanks[tank].getFluidAmount();
+    }
+
     /**
      *  DO NOT USE!!
      */
@@ -94,7 +98,7 @@ public class MultiFluidTank implements IFluidHandler {
 
     /**
      * Drains fluid from specific internal tank. Convenience method added for mod integrations.
-     * <p/>
+     *
      * This method is not Fluid-sensitive.
      *
      * @param maxDrain Maximum amount of fluid to drain.

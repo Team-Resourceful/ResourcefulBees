@@ -1,13 +1,12 @@
 {
   "flower": "ALL",
   "maxTimeInHive": 600,
-  "sizeModifier": 0.5,
   "hasHoneycomb": true,
+  "baseLayerTexture": "ores/coal/coal_bee",
   "ColorData": {
-    "isBeeColored": true,
+    "isBeeColored": false,
     "honeycombColor": "#303030",
-    "primaryColor": "#303030",
-    "secondaryColor": "#303030"
+    "modelType": "ORE"
   },
   "MutationData": {
     "hasMutation": true,

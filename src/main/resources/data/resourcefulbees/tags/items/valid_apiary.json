@@ -32,6 +32,9 @@
     "#forge:storage_blocks",
     "#forge:fence_gates",
     "minecraft:bricks",
-    "minecraft:farmland"
+    "minecraft:farmland",
+    "minecraft:glowstone",
+    "minecraft:redstone_lamp",
+    "minecraft:shroomlight"
   ]
 }

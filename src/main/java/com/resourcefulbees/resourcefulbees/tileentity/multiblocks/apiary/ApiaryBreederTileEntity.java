@@ -199,29 +199,11 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
                 int p1FeedAmount = ((CustomBeeEntity) p1Entity).getBeeData().getBreedData().getFeedAmount();
                 int p2FeedAmount = ((CustomBeeEntity) p2Entity).getBeeData().getBreedData().getFeedAmount();
 
-                return (canBreed && stackIsValidBreedItem(f1Stack, p1FeedItem) && stackIsValidBreedItem(f2Stack, p2FeedItem)
+                return (canBreed && BeeInfoUtils.isValidBreedItem(f1Stack, p1FeedItem) && BeeInfoUtils.isValidBreedItem(f2Stack, p2FeedItem)
                 && f1StackCount >= p1FeedAmount && f2StackCount >= p2FeedAmount && !h.getStackInSlot(EMPTY_JAR_SLOTS[slot]).isEmpty());
             }
         }
         return false;
-    }
-
-    private boolean stackIsValidBreedItem(ItemStack stack, String validBreedItem){
-        if (ValidatorUtils.TAG_RESOURCE_PATTERN.matcher(validBreedItem).matches()) {
-            ITag<Item> itemTag = BeeInfoUtils.getItemTag(validBreedItem.replace(BeeConstants.TAG_PREFIX, ""));
-            return itemTag != null && stack.getItem().isIn(itemTag);
-        } else {
-            switch (validBreedItem) {
-                case BeeConstants.FLOWER_TAG_ALL:
-                    return stack.getItem().isIn(ItemTags.FLOWERS);
-                case BeeConstants.FLOWER_TAG_SMALL:
-                    return stack.getItem().isIn(ItemTags.SMALL_FLOWERS);
-                case BeeConstants.FLOWER_TAG_TALL:
-                    return stack.getItem().isIn(ItemTags.TALL_FLOWERS);
-                default:
-                    return stack.getItem().equals(BeeInfoUtils.getItem(validBreedItem));
-            }
-        }
     }
 
     private void processBreed(int slot) {
@@ -368,10 +350,6 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
     @Override
     public SUpdateTileEntityPacket getUpdatePacket() {
         CompoundNBT nbt = new CompoundNBT();
-/*        nbt.putIntArray("time", time);
-        nbt.putInt("totalTime", totalTime);
-        if (apiaryPos != null)
-            nbt.put(NBTConstants.NBT_APIARY_POS, NBTUtil.writeBlockPos(apiaryPos));*/
         return new SUpdateTileEntityPacket(pos,0, saveToNBT(nbt));
     }
 
@@ -379,8 +357,6 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
         CompoundNBT nbt = pkt.getNbtCompound();
         loadFromNBT(nbt);
-        /*if (nbt.contains(NBTConstants.NBT_APIARY_POS))
-            apiaryPos = NBTUtil.readBlockPos(nbt.getCompound(NBTConstants.NBT_APIARY_POS));*/
     }
 
     @Nonnull

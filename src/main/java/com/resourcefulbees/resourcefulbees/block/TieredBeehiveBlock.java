@@ -1,13 +1,14 @@
 package com.resourcefulbees.resourcefulbees.block;
 
-import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import com.resourcefulbees.resourcefulbees.tileentity.TieredBeehiveTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.TooltipBuilder;
-import net.minecraft.block.*;
+import net.minecraft.block.BeehiveBlock;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -37,6 +38,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.FakePlayer;
 import org.apache.commons.lang3.text.WordUtils;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -45,13 +47,14 @@ import java.util.List;
 
 public class TieredBeehiveBlock extends BeehiveBlock {
 
-    private final int TIER;
-    private final float TIER_MODIFIER;
+    private static final String SHEARS_TAG = "forge:shears";
+    private final int tier;
+    private final float tierModifier;
 
     public TieredBeehiveBlock(final int tier, final float tierModifier, Properties properties) {
         super(properties);
-        TIER = tier;
-        TIER_MODIFIER = tierModifier;
+        this.tier = tier;
+        this.tierModifier = tierModifier;
     }
 
     /**
@@ -81,89 +84,75 @@ public class TieredBeehiveBlock extends BeehiveBlock {
 
     @Nullable
     @Override
-    public TileEntity createNewTileEntity(@Nonnull IBlockReader reader) {
-        return null;
-    }
+    public TileEntity createNewTileEntity(@Nonnull IBlockReader reader) { return null; }
 
-    public void smokeHive(BlockPos pos, World world) {
+    protected void smokeHive(BlockPos pos, World world) {
         TileEntity blockEntity = world.getTileEntity(pos);
         if (blockEntity instanceof TieredBeehiveTileEntity) {
-            TieredBeehiveTileEntity hive = (TieredBeehiveTileEntity) blockEntity;
-            hive.isSmoked = true;
+            ((TieredBeehiveTileEntity) blockEntity).smokeHive();
         }
     }
 
     public boolean isHiveSmoked(BlockPos pos, World world) {
-        TileEntity blockEntity = world.getTileEntity(pos);
-        if (blockEntity instanceof TieredBeehiveTileEntity) {
-            TieredBeehiveTileEntity hive = (TieredBeehiveTileEntity) blockEntity;
-            return hive.isSmoked;
-        } else
-            return false;
+        TileEntity tileEntity = world.getTileEntity(pos);
+        return tileEntity instanceof TieredBeehiveTileEntity && ((TieredBeehiveTileEntity) tileEntity).isSmoked();
     }
 
     @Nonnull
-    public ActionResultType onUse(BlockState state, @Nonnull World world, @Nonnull BlockPos pos, PlayerEntity player, @Nonnull Hand handIn, @Nonnull BlockRayTraceResult hit) {
+    public ActionResultType onUse(@NotNull BlockState state, @Nonnull World world, @Nonnull BlockPos pos, PlayerEntity player, @Nonnull Hand handIn, @Nonnull BlockRayTraceResult hit) {
         ItemStack itemstack = player.getHeldItem(handIn);
-        int honeyLevel = state.get(HONEY_LEVEL);
-        boolean angerBees = false;
+
         if (itemstack.getItem() == ModItems.SMOKER.get() && itemstack.getDamage() < itemstack.getMaxDamage()) {
             smokeHive(pos, world);
-        } else if (honeyLevel >= 5) {
-            boolean isShear = Config.ALLOW_SHEARS.get() && itemstack.getItem().isIn(BeeInfoUtils.getItemTag("forge:shears"));
+            return ActionResultType.SUCCESS;
+        }
+
+        if (state.get(HONEY_LEVEL) >= 5) {
+            boolean isShear = Config.ALLOW_SHEARS.get() && itemstack.getItem().isIn(BeeInfoUtils.getItemTag(SHEARS_TAG));
             boolean isScraper = itemstack.getItem().equals(ModItems.SCRAPER.get());
 
             if (isShear || isScraper) {
                 world.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BLOCK_BEEHIVE_SHEAR, SoundCategory.NEUTRAL, 1.0F, 1.0F);
                 dropResourceHoneycomb(world, pos, isScraper);
                 itemstack.damageItem(1, player, player1 -> player1.sendBreakAnimation(handIn));
-                TieredBeehiveTileEntity hive = (TieredBeehiveTileEntity) world.getTileEntity(pos);
-                angerBees = hive != null && !hive.hasCombs();
-            }
-        }
 
-        if (angerBees) {
-            if (isHiveSmoked(pos, world) || CampfireBlock.isLitCampfireInRange(world, pos)) {
-                this.takeHoney(world, state, pos);
-            } else {
-                if (this.hasBees(world, pos)) {
-                    if (!(player instanceof FakePlayer))
-                        this.angerNearbyBees(world, pos);
-                }
+                TileEntity tileEntity = world.getTileEntity(pos);
+                if (tileEntity instanceof TieredBeehiveTileEntity) {
+                    TieredBeehiveTileEntity beehiveTileEntity = (TieredBeehiveTileEntity) tileEntity;
 
-                this.takeHoney(world, state, pos, player, BeehiveTileEntity.State.EMERGENCY);
-            }
-            return ActionResultType.SUCCESS;
-        } else {
-            return ActionResultType.PASS;
-        }
-    }
-
-    public void angerNearbyBees(World world, BlockPos pos) {
-        List<BeeEntity> beeEntityList = world.getEntitiesWithinAABB(BeeEntity.class, (new AxisAlignedBB(pos)).grow(8.0D, 6.0D, 8.0D));
-        if (!beeEntityList.isEmpty()) {
-            List<PlayerEntity> playerEntityList = world.getEntitiesWithinAABB(PlayerEntity.class, (new AxisAlignedBB(pos)).grow(8.0D, 6.0D, 8.0D));
-            int size = playerEntityList.size();
-
-            for (BeeEntity beeEntity : beeEntityList) {
-                if (beeEntity.getAttackTarget() == null) {
-                    if (size > 0) {
-                        PlayerEntity randomPlayer = playerEntityList.get(world.rand.nextInt(size));
-                        if (!(randomPlayer instanceof FakePlayer))
-                            beeEntity.setAttackTarget(randomPlayer);
+                    if (!beehiveTileEntity.hasCombs()) {
+                        if (isHiveSmoked(pos, world)) {
+                            this.takeHoney(world, state, pos);
+                        } else {
+                            if (beehiveTileEntity.hasBees() && !(player instanceof FakePlayer)) {
+                                this.angerNearbyBees(world, pos);
+                            }
+                            this.takeHoney(world, state, pos, player, BeehiveTileEntity.State.EMERGENCY);
+                        }
+                        return ActionResultType.SUCCESS;
                     }
                 }
             }
         }
+
+        return ActionResultType.PASS;
     }
 
-    public boolean hasBees(World world, BlockPos pos) {
-        TileEntity tileEntity = world.getTileEntity(pos);
-        if (tileEntity instanceof BeehiveTileEntity) {
-            BeehiveTileEntity beehiveTileEntity = (BeehiveTileEntity) tileEntity;
-            return !beehiveTileEntity.hasNoBees();
-        } else {
-            return false;
+    public void angerNearbyBees(World world, BlockPos pos) {
+        AxisAlignedBB aabb = new AxisAlignedBB(pos).grow(8.0D, 6.0D, 8.0D);
+        List<BeeEntity> beeEntityList = world.getEntitiesWithinAABB(BeeEntity.class, aabb);
+        if (!beeEntityList.isEmpty()) {
+            List<PlayerEntity> playerEntityList = world.getEntitiesWithinAABB(PlayerEntity.class, aabb);
+
+            if (!playerEntityList.isEmpty()) {
+                beeEntityList.stream()
+                        .filter(beeEntity -> beeEntity.getAttackTarget() == null)
+                        .forEach(beeEntity -> {
+                            PlayerEntity randomPlayer = playerEntityList.get(world.rand.nextInt(playerEntityList.size()));
+                            if (!(randomPlayer instanceof FakePlayer))
+                                beeEntity.setAttackTarget(randomPlayer);
+                        });
+            }
         }
     }
 
@@ -230,16 +219,16 @@ public class TieredBeehiveBlock extends BeehiveBlock {
 
             tooltip.addAll(new TooltipBuilder()
                     .addTip(I18n.format("block.resourcefulbees.beehive.tooltip.max_bees"))
-                    .appendText(" " + Math.round(Config.HIVE_MAX_BEES.get() * TIER_MODIFIER))
+                    .appendText(" " + Math.round(Config.HIVE_MAX_BEES.get() * tierModifier))
                     .applyStyle(TextFormatting.GOLD)
                     .addTip(I18n.format("block.resourcefulbees.beehive.tooltip.max_combs"))
-                    .appendText(" " + Math.round(Config.HIVE_MAX_COMBS.get() * TIER_MODIFIER))
+                    .appendText(" " + Math.round(Config.HIVE_MAX_COMBS.get() * tierModifier))
                     .applyStyle(TextFormatting.GOLD)
                     .build());
 
-            if (TIER != 1) {
-                int time_reduction = TIER > 1 ? (int) ((TIER * .05) * 100) : (int) (.05 * 100);
-                String sign = TIER > 1 ? "-" : "+";
+            if (tier != 1) {
+                int time_reduction = tier > 1 ? (int) ((tier * .05) * 100) : (int) (.05 * 100);
+                String sign = tier > 1 ? "-" : "+";
                 tooltip.addAll(new TooltipBuilder()
                         .addTip(I18n.format("block.resourcefulbees.beehive.tooltip.hive_time"))
                         .appendText(" " + sign + time_reduction + "%")
@@ -276,8 +265,8 @@ public class TieredBeehiveBlock extends BeehiveBlock {
         TileEntity tile = worldIn.getTileEntity(pos);
         if (tile instanceof TieredBeehiveTileEntity) {
             TieredBeehiveTileEntity tieredBeehiveTileEntity = (TieredBeehiveTileEntity) tile;
-            tieredBeehiveTileEntity.setTier(TIER);
-            tieredBeehiveTileEntity.setTierModifier(TIER_MODIFIER);
+            tieredBeehiveTileEntity.setTier(tier);
+            tieredBeehiveTileEntity.setTierModifier(tierModifier);
         }
     }
 }

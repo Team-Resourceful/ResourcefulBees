@@ -1,10 +1,8 @@
-package com.resourcefulbees.resourcefulbees.client.render.entity;
+package com.resourcefulbees.resourcefulbees.client.render.entity.models;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-import com.resourcefulbees.resourcefulbees.api.beedata.ColorData;
-import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.lib.ModelTypes;
@@ -33,63 +31,30 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
 
     private float beeSize = 0;
 
-    public CustomBeeModel(CustomBeeData beeData) {
+    public CustomBeeModel(ModelTypes modelType) {
         super(false, 24.0F, 0.0F);
         this.textureWidth = 64;
         this.textureHeight = 64;
         this.body = new ModelRenderer(this);
-        this.body.setRotationPoint(0.0F, 19.0F, 0.0F);
         this.torso = new ModelRenderer(this);
-        this.torso.setRotationPoint(0.0F, 0.0F, 0.0F);
-        this.body.addChild(this.torso);
-        this.torso.setTextureOffset(0,0).addCuboid(-3.5F, -4.0F, -5.0F, 7.0F, 7.0F, 10.0F, 0.0F);
         this.stinger = new ModelRenderer(this, 26, 7);
-        this.stinger.addCuboid(0.0F, -1.0F, 5.0F, 0.0F, 1.0F, 2.0F, 0.0F);
-        this.torso.addChild(this.stinger);
         this.leftAntenna = new ModelRenderer(this, 2, 0);
-        this.leftAntenna.setRotationPoint(0.0F, -2.0F, -5.0F);
-        this.leftAntenna.addCuboid(1.5F, -2.0F, -3.0F, 1.0F, 2.0F, 3.0F, 0.0F);
         this.rightAntenna = new ModelRenderer(this, 2, 3);
-        this.rightAntenna.setRotationPoint(0.0F, -2.0F, -5.0F);
-        this.rightAntenna.addCuboid(-2.5F, -2.0F, -3.0F, 1.0F, 2.0F, 3.0F, 0.0F);
-        this.torso.addChild(this.leftAntenna);
-        this.torso.addChild(this.rightAntenna);
         this.rightWing = new ModelRenderer(this, 0, 18);
-        this.rightWing.setRotationPoint(-1.5F, -4.0F, -3.0F);
-        this.rightWing.rotateAngleX = 0.0F;
-        this.rightWing.rotateAngleY = -0.2618F;
-        this.rightWing.rotateAngleZ = 0.0F;
-        this.body.addChild(this.rightWing);
-        this.rightWing.addCuboid(-9.0F, 0.0F, 0.0F, 9.0F, 0.0F, 6.0F, 0.001F);
         this.leftWing = new ModelRenderer(this, 0, 18);
-        this.leftWing.setRotationPoint(1.5F, -4.0F, -3.0F);
-        this.leftWing.rotateAngleX = 0.0F;
-        this.leftWing.rotateAngleY = 0.2618F;
-        this.leftWing.rotateAngleZ = 0.0F;
-        this.leftWing.mirror = true;
-        this.body.addChild(this.leftWing);
-        this.leftWing.addCuboid(0.0F, 0.0F, 0.0F, 9.0F, 0.0F, 6.0F, 0.001F);
         this.frontLegs = new ModelRenderer(this);
-        this.frontLegs.setRotationPoint(1.5F, 3.0F, -2.0F);
-        this.body.addChild(this.frontLegs);
-        this.frontLegs.func_217178_a("frontLegBox", -5.0F, 0.0F, 0.0F, 7, 2, 0, 0.0F, 26, 1);
         this.middleLegs = new ModelRenderer(this);
-        this.middleLegs.setRotationPoint(1.5F, 3.0F, 0.0F);
-        this.body.addChild(this.middleLegs);
-        this.middleLegs.func_217178_a("midLegBox", -5.0F, 0.0F, 0.0F, 7, 2, 0, 0.0F, 26, 3);
         this.backLegs = new ModelRenderer(this);
-        this.backLegs.setRotationPoint(1.5F, 3.0F, 2.0F);
-        this.body.addChild(this.backLegs);
-        this.backLegs.func_217178_a("backLegBox", -5.0F, 0.0F, 0.0F, 7, 2, 0, 0.0F, 26, 5);
 
-        switch (beeData.getColorData().getModelType()) {
+        switch (modelType) {
             case GELATINOUS:
-                addGelatinousLayer();
+                addGelatinousParts();
                 break;
             case ORE:
                 addOreCrystals();
                 break;
             case DEFAULT:
+                addDefaultParts();
         }
     }
 
@@ -104,7 +69,7 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
      * Sets this entity's model rotation angles
      */
     public void setAngles(CustomBeeEntity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-        this.rightWing.rotateAngleX = 0.0F;
+        //this.rightWing.rotateAngleX = 0.0F;
         this.leftAntenna.rotateAngleX = 0.0F;
         this.rightAntenna.rotateAngleX = 0.0F;
         this.body.rotateAngleX = 0.0F;
@@ -117,9 +82,7 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
         this.frontLegs.rotateAngleX = ((float)Math.PI / 4F);
         this.middleLegs.rotateAngleX = ((float)Math.PI / 4F);
         this.backLegs.rotateAngleX = ((float)Math.PI / 4F);
-        this.body.rotateAngleX = 0.0F;
-        this.body.rotateAngleY = 0.0F;
-        this.body.rotateAngleZ = 0.0F;
+        setRotationAngle(body, 0, 0, 0);
 
         if (!entityIn.hasAngerTime()) {
             float f1 = MathHelper.cos(ageInTicks * 0.18F);
@@ -154,8 +117,52 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
         matrixStackIn.pop();
     }
 
-    public void addGelatinousLayer() {
-        this.torso.setTextureOffset(0, 25).addCuboid(-3.5F, 4.0F, -5.0F, 7.0F, 7.0F, 10.0F, 0.7F);
+    private void addDefaultParts() {
+        this.body.setRotationPoint(0.0F, 19.0F, 0.0F);
+        this.torso.setRotationPoint(0.0F, 0.0F, 0.0F);
+        this.body.addChild(this.torso);
+        this.torso.setTextureOffset(0,0).addCuboid(-3.5F, -4.0F, -5.0F, 7.0F, 7.0F, 10.0F, 0.0F);
+
+        this.stinger.addCuboid(0.0F, -1.0F, 5.0F, 0.0F, 1.0F, 2.0F, 0.0F);
+        this.torso.addChild(this.stinger);
+
+        this.leftAntenna.setRotationPoint(0.0F, -2.0F, -5.0F);
+        this.leftAntenna.addCuboid(1.5F, -2.0F, -3.0F, 1.0F, 2.0F, 3.0F, 0.0F);
+
+        this.rightAntenna.setRotationPoint(0.0F, -2.0F, -5.0F);
+        this.rightAntenna.addCuboid(-2.5F, -2.0F, -3.0F, 1.0F, 2.0F, 3.0F, 0.0F);
+        this.torso.addChild(this.leftAntenna);
+        this.torso.addChild(this.rightAntenna);
+
+        this.rightWing.setRotationPoint(-1.5F, -4.0F, -3.0F);
+        this.setRotationAngle(rightWing, 0 , -0.2618F, 0);
+        this.body.addChild(this.rightWing);
+        this.rightWing.addCuboid(-9.0F, 0.0F, 0.0F, 9.0F, 0.0F, 6.0F, 0.001F);
+
+        this.leftWing.setRotationPoint(1.5F, -4.0F, -3.0F);
+        this.setRotationAngle(leftWing, 0 , 0.2618F, 0);
+        this.leftWing.mirror = true;
+        this.body.addChild(this.leftWing);
+        this.leftWing.addCuboid(0.0F, 0.0F, 0.0F, 9.0F, 0.0F, 6.0F, 0.001F);
+
+        this.frontLegs.setRotationPoint(1.5F, 3.0F, -2.0F);
+        this.body.addChild(this.frontLegs);
+        this.frontLegs.func_217178_a("frontLegBox", -5.0F, 0.0F, 0.0F, 7, 2, 0, 0.0F, 26, 1);
+
+        this.middleLegs.setRotationPoint(1.5F, 3.0F, 0.0F);
+        this.body.addChild(this.middleLegs);
+        this.middleLegs.func_217178_a("midLegBox", -5.0F, 0.0F, 0.0F, 7, 2, 0, 0.0F, 26, 3);
+
+        this.backLegs.setRotationPoint(1.5F, 3.0F, 2.0F);
+        this.body.addChild(this.backLegs);
+        this.backLegs.func_217178_a("backLegBox", -5.0F, 0.0F, 0.0F, 7, 2, 0, 0.0F, 26, 5);
+    }
+
+    private void addGelatinousParts() {
+        this.body.setRotationPoint(0.0F, 19.0F, 0.0F);
+        this.torso.setRotationPoint(0.0F, 0.0F, 0.0F);
+        this.body.addChild(this.torso);
+        this.torso.setTextureOffset(0, 25).addCuboid(-3.5F, -4.0F, -5.0F, 7.0F, 7.0F, 10.0F, 0.7F);
     }
 
     private void addOreCrystals() {

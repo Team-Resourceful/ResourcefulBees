@@ -58,7 +58,7 @@ public class SpawnData extends AbstractBeeData {
 
     public String getBiomeWhitelist() { return biomeWhitelist != null ? biomeWhitelist.toLowerCase() : "tag:overworld"; }
 
-    public String getBiomeBlacklist() { return biomeBlacklist != null ? biomeBlacklist.toLowerCase() : "tag:ocean"; }
+    public String getBiomeBlacklist() { return biomeBlacklist != null ? biomeBlacklist.toLowerCase() : biomeWhitelist.equals("tag:ocean") ? "" : "tag:ocean"; }
 
     public LightLevels getLightLevel() { return lightLevel != null ? lightLevel : LightLevels.ANY; }
 
@@ -71,9 +71,7 @@ public class SpawnData extends AbstractBeeData {
         private String biomeBlacklist;
         private LightLevels lightLevel;
 
-        public Builder(boolean canSpawnInWorld) {
-            this.canSpawnInWorld = canSpawnInWorld;
-        }
+        public Builder(boolean canSpawnInWorld) { this.canSpawnInWorld = canSpawnInWorld; }
 
         public Builder setSpawnWeight(int spawnWeight) {
             this.spawnWeight = spawnWeight;
@@ -110,7 +108,5 @@ public class SpawnData extends AbstractBeeData {
         }
     }
 
-    public static SpawnData createDefault() {
-        return new Builder(false).createSpawnData();
-    }
+    public static SpawnData createDefault() { return new Builder(false).createSpawnData(); }
 }

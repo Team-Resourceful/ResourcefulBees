@@ -9,14 +9,12 @@ import com.resourcefulbees.resourcefulbees.client.render.entity.CustomBeeRendere
 import com.resourcefulbees.resourcefulbees.client.render.fluid.FluidRender;
 import com.resourcefulbees.resourcefulbees.client.render.items.ItemModelPropertiesHandler;
 import com.resourcefulbees.resourcefulbees.compat.top.TopCompat;
-import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
-import com.resourcefulbees.resourcefulbees.entity.passive.ResourcefulBee;
-import com.resourcefulbees.resourcefulbees.init.BeeSetup;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.config.ConfigLoader;
 import com.resourcefulbees.resourcefulbees.data.DataGen;
 import com.resourcefulbees.resourcefulbees.data.DataPackLoader;
 import com.resourcefulbees.resourcefulbees.data.RecipeBuilder;
+import com.resourcefulbees.resourcefulbees.init.BeeSetup;
 import com.resourcefulbees.resourcefulbees.init.BiomeDictonarySetup;
 import com.resourcefulbees.resourcefulbees.init.ModSetup;
 import com.resourcefulbees.resourcefulbees.init.TraitSetup;
@@ -30,27 +28,25 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
-import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.merchant.villager.VillagerTrades;
 import net.minecraft.item.DyeColor;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.MerchantOffer;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.NBTUtil;
 import net.minecraft.tileentity.BannerPattern;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.village.PointOfInterestType;
-import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.fml.*;
+import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.InterModComms;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -60,12 +56,14 @@ import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Mod("resourcefulbees")
 public class ResourcefulBees
@@ -247,7 +245,7 @@ public class ResourcefulBees
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {
-        CentrifugeScreen.currentMonth = new SimpleDateFormat("MM").format(new Date());
+        //CentrifugeScreen.currentMonth = new SimpleDateFormat("MM").format(new Date());
         BeeRegistry.MOD_BEES.forEach((s, customBee) -> RenderingRegistry.registerEntityRenderingHandler(customBee.get(), manager -> new CustomBeeRenderer(manager, BeeRegistry.getRegistry().getBeeData(s))));
         ScreenManager.registerFactory(ModContainers.CENTRIFUGE_CONTAINER.get(), CentrifugeScreen::new);
         ScreenManager.registerFactory(ModContainers.MECHANICAL_CENTRIFUGE_CONTAINER.get(), MechanicalCentrifugeScreen::new);

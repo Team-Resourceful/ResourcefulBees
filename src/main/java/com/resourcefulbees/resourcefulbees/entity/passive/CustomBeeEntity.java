@@ -5,11 +5,9 @@ import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.api.beedata.SpawnData;
 import com.resourcefulbees.resourcefulbees.api.beedata.TraitData;
 import com.resourcefulbees.resourcefulbees.config.Config;
-import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
-import com.resourcefulbees.resourcefulbees.utils.validation.ValidatorUtils;
 import net.minecraft.entity.*;
 import net.minecraft.entity.passive.BeeEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -23,13 +21,10 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.BasicParticleType;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.tags.ITag;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
@@ -58,13 +53,9 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
 
     public String getBeeType() { return beeData.getName(); }
 
-    public BlockPos getLastFlower() {
-        return lastFlower;
-    }
+    public BlockPos getLastFlower() { return lastFlower; }
 
-    public void setLastFlower(BlockPos lastFlower) {
-        this.lastFlower = lastFlower;
-    }
+    public void setLastFlower(BlockPos lastFlower) { this.lastFlower = lastFlower; }
 
     public CustomBeeData getBeeData() { return beeData; }
 
@@ -90,7 +81,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
         if (source.equals(DamageSource.SWEET_BERRY_BUSH)) {
             return true;
         }
-        if (info.hasDamageImmunities()){
+        if (info.hasDamageImmunities()) {
             for (DamageSource damage : info.getDamageImmunities())
                 if (source.equals(damage)) return true;
         }
@@ -129,10 +120,10 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
                 this.remove();
             }
             if (!hasCustomName()) {
-                if (hasHive() || hasFlower()) {
+                if (hasHive() || hasFlower() || isPassenger() || getLeashed()) {
                     timeWithoutHive = 0;
                 } else {
-                    timeWithoutHive++;
+                    ++timeWithoutHive;
                 }
                 if (timeWithoutHive >= 12000) this.remove();
             }
@@ -208,23 +199,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
 
     @Override
     public boolean isBreedingItem(@Nonnull ItemStack stack) {
-        String validBreedItem = this.getBeeData().getBreedData().getFeedItem();
-
-        if (ValidatorUtils.TAG_RESOURCE_PATTERN.matcher(validBreedItem).matches()) {
-            ITag<Item> itemTag = BeeInfoUtils.getItemTag(validBreedItem.replace(BeeConstants.TAG_PREFIX, ""));
-            return itemTag != null && stack.getItem().isIn(itemTag);
-        } else {
-            switch (validBreedItem) {
-                case BeeConstants.FLOWER_TAG_ALL:
-                    return stack.getItem().isIn(ItemTags.FLOWERS);
-                case BeeConstants.FLOWER_TAG_SMALL:
-                    return stack.getItem().isIn(ItemTags.SMALL_FLOWERS);
-                case BeeConstants.FLOWER_TAG_TALL:
-                    return stack.getItem().isIn(ItemTags.TALL_FLOWERS);
-                default:
-                    return stack.getItem().equals(BeeInfoUtils.getItem(validBreedItem));
-            }
-        }
+        return BeeInfoUtils.isValidBreedItem(stack, this.getBeeData().getBreedData().getFeedItem());
     }
 
     @Nonnull

@@ -2,11 +2,11 @@
   "flower": "ALL",
   "hasHoneycomb": true,
   "maxTimeInHive": 600,
+  "baseLayerTexture": "ores/iron/iron_bee",
   "ColorData": {
-    "isBeeColored": true,
+    "isBeeColored": false,
     "honeycombColor": "#ffcc99",
-    "primaryColor": "#ffcc99",
-    "secondaryColor": "#303030"
+    "modelType": "ORE"
   },
   "MutationData": {
     "hasMutation": true,

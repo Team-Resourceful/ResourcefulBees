@@ -1,15 +1,11 @@
 package com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge;
 
-import com.google.gson.JsonElement;
 import com.resourcefulbees.resourcefulbees.block.multiblocks.centrifuge.CentrifugeCasingBlock;
 import com.resourcefulbees.resourcefulbees.block.multiblocks.centrifuge.CentrifugeControllerBlock;
 import com.resourcefulbees.resourcefulbees.capabilities.CustomEnergyStorage;
-import com.resourcefulbees.resourcefulbees.capabilities.MultiFluidTank;
 import com.resourcefulbees.resourcefulbees.config.Config;
-import com.resourcefulbees.resourcefulbees.container.AutomationSensitiveItemStackHandler;
 import com.resourcefulbees.resourcefulbees.container.CentrifugeMultiblockContainer;
-import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
-import com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe;
+import com.resourcefulbees.resourcefulbees.registry.ModContainers;
 import com.resourcefulbees.resourcefulbees.tileentity.CentrifugeTileEntity;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.MultiBlockHelper;
 import com.resourcefulbees.resourcefulbees.utils.MathUtils;
@@ -19,8 +15,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
@@ -28,6 +22,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IIntArray;
+import net.minecraft.util.IntArray;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.util.text.ITextComponent;
@@ -43,22 +38,19 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 
 import static com.resourcefulbees.resourcefulbees.tileentity.multiblocks.MultiBlockHelper.buildStructureBounds;
 import static com.resourcefulbees.resourcefulbees.tileentity.multiblocks.MultiBlockHelper.buildStructureList;
-import static net.minecraft.inventory.container.Container.areItemsAndTagsEqual;
 
 public class CentrifugeControllerTileEntity extends CentrifugeTileEntity {
 
-    public static final int BOTTLE_SLOT = 0;
     protected int validateTime = MathUtils.nextInt(10) + 10;
     protected boolean validStructure;
     protected final List<BlockPos> STRUCTURE_BLOCKS = new ArrayList<>();
 
-    private final IIntArray times = new IIntArray() {
+    private final IntArray times = new IntArray(4) {
         public int get(int index) {
             switch(index) {
                 case 0:
@@ -93,21 +85,15 @@ public class CentrifugeControllerTileEntity extends CentrifugeTileEntity {
     public CentrifugeControllerTileEntity(TileEntityType<?> tileEntityType) { super(tileEntityType); }
 
     @Override
-    protected void initialize() {
+    protected void initializeInputsAndOutputs() {
         honeycombSlots = new int[] {1, 2, 3};
         outputSlots = new int[] {4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21};
-        itemStackHandler = new CentrifugeControllerTileEntity.TileStackHandler(22);
-        fluidTanks = new MultiFluidTank(10000, 4);
-        time = new int[honeycombSlots.length];
-        recipes = Arrays.asList(null, null, null);
-        isProcessing = new boolean[honeycombSlots.length];
-        processCompleted = new boolean[honeycombSlots.length];
     }
 
     @Override
     public void tick() {
         if (world != null && !world.isRemote()) {
-            if (isValidStructure()) {
+            if (isValidStructure() && (!requiresRedstone || isPoweredByRedstone)) {
                 for (int i = 0; i < honeycombSlots.length; i++) {
                     recipes.set(i, getRecipe(i));
                     if (canStartCentrifugeProcess(i)) {
@@ -133,102 +119,23 @@ public class CentrifugeControllerTileEntity extends CentrifugeTileEntity {
     }
 
     @Override
-    protected void processRecipe(int i) {
-        if (canProcess(recipes.get(i), i)) {
-            energyStorage.consumeEnergy(Config.RF_TICK_CENTRIFUGE.get());
-            ++time[i];
-            processCompleted[i] = time[i] >= Math.max(10, recipes.get(i).time - Config.MULTIBLOCK_RECIPE_TIME_REDUCTION.get());
-            this.dirty = true;
-        } else {
-            resetProcess(i);
-        }
-    }
+    public int getMaxTankCapacity() { return 10000; }
 
     @Override
-    protected boolean canStartCentrifugeProcess(int i) {
-        if (!isProcessing[i] && !itemStackHandler.getStackInSlot(honeycombSlots[i]).isEmpty()) {
-            if (recipes.get(i) != null && (!Config.MULTIBLOCK_RECIPES_ONLY.get() || recipes.get(i).multiblock)) {
-                ItemStack combInput = itemStackHandler.getStackInSlot(honeycombSlots[i]);
-                JsonElement count = recipes.get(i).ingredient.serialize().getAsJsonObject().get(BeeConstants.INGREDIENT_COUNT);
-                int inputAmount = count != null ? count.getAsInt() : 1;
+    public int getRecipeTime(int i) { return getRecipe(i) != null ? Math.max(5, getRecipe(i).time - Config.MULTIBLOCK_RECIPE_TIME_REDUCTION.get()) : Config.GLOBAL_CENTRIFUGE_RECIPE_TIME.get(); }
 
-                return combInput.getCount() >= inputAmount ;
-            }
-        }
-        return false;
-    }
+    @Override
+    protected boolean canProcessRecipe(int i) { return recipes.get(i) != null && (!Config.MULTIBLOCK_RECIPES_ONLY.get() || recipes.get(i).multiblock); }
 
     //endregion
 
+    //TODO this is not the right way to sync the fluids but using it for now until I can find a better way
+    // Powered centrifuge is only syncing to client properly bc of the BlockState changes
     @Override
-    protected void depositItemStacks(List<ItemStack> itemStacks) {
-        itemStacks.forEach(itemStack -> {
-            int slotIndex = 4;
-            while (!itemStack.isEmpty() && slotIndex < itemStackHandler.getSlots()){
-                ItemStack slotStack = itemStackHandler.getStackInSlot(slotIndex);
-
-                int itemMaxStackSize = itemStack.getMaxStackSize();
-
-                if(slotStack.isEmpty()) {
-                    itemStackHandler.setStackInSlot(slotIndex, itemStack.split(itemMaxStackSize));
-                } else if (areItemsAndTagsEqual(itemStack, slotStack) && slotStack.getCount() != itemMaxStackSize) {
-                    int combinedCount = itemStack.getCount() + slotStack.getCount();
-                    if (combinedCount <= itemMaxStackSize) {
-                        itemStack.setCount(0);
-                        slotStack.setCount(combinedCount);
-                    } else {
-                        itemStack.shrink(itemMaxStackSize - slotStack.getCount());
-                        slotStack.setCount(itemMaxStackSize);
-                    }
-                    itemStackHandler.setStackInSlot(slotIndex, slotStack);
-                }
-
-                ++slotIndex;
-            }
-        });
+    protected void setPoweredBlockState(boolean powered) {
+        assert world != null;
+        world.notifyBlockUpdate(this.pos, this.getBlockState(), this.getBlockState(), 2);
     }
-
-    @Override
-    protected boolean inventoryHasSpace(CentrifugeRecipe recipe) {
-        int emptySlots = 0;
-
-        for (int i = outputSlots[0]; i < itemStackHandler.getSlots(); ++i) {
-            if (itemStackHandler.getStackInSlot(i).isEmpty()) {
-                emptySlots++;
-            }
-        }
-
-        boolean hasSpace = true;
-        int i = 0;
-        while (hasSpace && i < recipe.itemOutputs.size()) {
-            ItemStack output = recipe.itemOutputs.get(i).getLeft();
-            if (!output.isEmpty() && !(i == 2 && itemStackHandler.getStackInSlot(BOTTLE_SLOT).isEmpty())) {
-                int count = output.getCount();
-                int j = outputSlots[0];
-
-                while (count > 0 && j < itemStackHandler.getSlots()) {
-                    ItemStack slotStack = itemStackHandler.getStackInSlot(j);
-
-                    if (slotStack.isEmpty() && emptySlots != 0) {
-                        count -= Math.min(count, output.getMaxStackSize());
-                        emptySlots--;
-                    } else if (areItemsAndTagsEqual(output, slotStack) && slotStack.getCount() != output.getMaxStackSize()) {
-                        count -= Math.min(count, output.getMaxStackSize() - slotStack.getCount());
-                    }
-
-                    j++;
-                }
-
-                hasSpace = count <= 0;
-            }
-            i++;
-        }
-
-        return hasSpace;
-    }
-
-    @Override
-    protected void setPoweredBlockState(boolean powered) {}
 
     //region NBT
     @Nonnull
@@ -238,90 +145,31 @@ public class CentrifugeControllerTileEntity extends CentrifugeTileEntity {
         return saveToNBT(tag);
     }
 
+    @Override
     protected CompoundNBT saveToNBT(CompoundNBT tag) {
         tag.putBoolean("valid", validStructure);
-        return tag;
+        return super.saveToNBT(tag);
     }
 
+    @Override
     protected void loadFromNBT(CompoundNBT tag) {
         validStructure = tag.getBoolean("valid");
-    }
-
-    @Override
-    public void fromTag(@Nonnull BlockState state, @Nonnull CompoundNBT tag) {
-        this.loadFromNBT(tag);
-        super.fromTag(state, tag);
-    }
-
-    @Nonnull
-    @Override
-    public CompoundNBT getUpdateTag() {
-        CompoundNBT nbtTagCompound = new CompoundNBT();
-        write(nbtTagCompound);
-        return nbtTagCompound;
-    }
-
-    @Override
-    public void handleUpdateTag(@Nonnull BlockState state, CompoundNBT tag) { this.fromTag(state, tag); }
-
-    @Nullable
-    @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(pos,0,saveToNBT(new CompoundNBT()));
-    }
-
-    @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-        CompoundNBT nbt = pkt.getNbtCompound();
-        loadFromNBT(nbt);
-    }
-    //endregion
-
-    //region Capabilities
-    @Nonnull
-    @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-        if (cap.equals(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)) return lazyOptional.cast();
-        if (cap.equals(CapabilityEnergy.ENERGY)) return energyOptional.cast();
-        if (cap.equals(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)) return fluidOptional.cast();
-        return super.getCapability(cap, side);
-    }
-
-    @Override
-    protected void invalidateCaps() {
-        this.lazyOptional.invalidate();
-        this.energyOptional.invalidate();
-        this.fluidOptional.invalidate();
-    }
-
-    public AutomationSensitiveItemStackHandler.IAcceptor getAcceptor() {
-        return (slot, stack, automation) ->
-            !automation ||
-            (
-                (slot == honeycombSlots[0] || slot == honeycombSlots[1] || slot == honeycombSlots[2]) &&
-                !stack.getItem().equals(Items.GLASS_BOTTLE)
-            )||(
-                slot == BOTTLE_SLOT &&
-                stack.getItem().equals(Items.GLASS_BOTTLE)
-            );
-    }
-
-    public AutomationSensitiveItemStackHandler.IRemover getRemover() {
-        return (slot, automation) -> !automation || slot > 3;
+        super.loadFromNBT(tag);
     }
     //endregion
 
     @Nullable
     @Override
     public Container createMenu(int id, @Nonnull PlayerInventory playerInventory, @Nonnull PlayerEntity playerEntity) {
-        //noinspection ConstantConditions
-        return new CentrifugeMultiblockContainer(id, world, pos, playerInventory, times);
+        assert world != null;
+        return new CentrifugeMultiblockContainer(ModContainers.CENTRIFUGE_MULTIBLOCK_CONTAINER.get(), id, world, pos, playerInventory, times);
     }
 
     @Nonnull
     @Override
     public ITextComponent getDisplayName() { return new TranslationTextComponent("gui.resourcefulbees.centrifuge"); }
 
+    @Override
     protected CustomEnergyStorage createEnergy() {
         return new CustomEnergyStorage(Config.MAX_CENTRIFUGE_RF.get() * 5, 500, 0) {
             @Override
@@ -398,25 +246,5 @@ public class CentrifugeControllerTileEntity extends CentrifugeTileEntity {
     }
 
     //endregion
-
-    protected class TileStackHandler extends AutomationSensitiveItemStackHandler {
-        protected TileStackHandler(int slots) { super(slots); }
-
-        @Override
-        public AutomationSensitiveItemStackHandler.IAcceptor getAcceptor() {
-            return CentrifugeControllerTileEntity.this.getAcceptor();
-        }
-
-        @Override
-        public AutomationSensitiveItemStackHandler.IRemover getRemover() {
-            return CentrifugeControllerTileEntity.this.getRemover();
-        }
-
-        @Override
-        protected void onContentsChanged(int slot) {
-            super.onContentsChanged(slot);
-            markDirty();
-        }
-    }
 }
 

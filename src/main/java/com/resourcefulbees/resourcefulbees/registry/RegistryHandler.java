@@ -61,7 +61,7 @@ public class RegistryHandler {
 	}
 
 	private static void registerHoneycomb(String name, CustomBeeData customBeeData) {
-		final RegistryObject<Block> customHoneycombBlock = ModBlocks.BLOCKS.register(name + "_honeycomb_block", () -> new HoneycombBlock(name, customBeeData.getColorData(), Block.Properties.from(net.minecraft.block.Blocks.HONEYCOMB_BLOCK)));
+		final RegistryObject<Block> customHoneycombBlock = ModBlocks.BLOCKS.register(name + "_honeycomb_block", () -> new HoneycombBlock(name, customBeeData.getColorData(), Block.Properties.from(Blocks.HONEYCOMB_BLOCK)));
 		final RegistryObject<Item> customHoneycomb = ModItems.ITEMS.register(name + "_honeycomb", () -> new HoneycombItem(name, customBeeData.getColorData(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
 		final RegistryObject<Item> customHoneycombBlockItem = ModItems.ITEMS.register(name + "_honeycomb_block", () -> new BlockItem(customHoneycombBlock.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
 

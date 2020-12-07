@@ -4,7 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.beedata.ColorData;
-import com.resourcefulbees.resourcefulbees.client.render.entity.CustomBeeModel;
+import com.resourcefulbees.resourcefulbees.client.render.entity.models.CustomBeeModel;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
@@ -26,12 +26,13 @@ public class EmissiveBeeLayer extends LayerRenderer<CustomBeeEntity, CustomBeeMo
 
     public EmissiveBeeLayer(IEntityRenderer<CustomBeeEntity, CustomBeeModel<CustomBeeEntity>> rendererIn, ColorData colorData) {
         super(rendererIn);
+        this.colorData = colorData;
         this.emissiveLayerTexture = new ResourceLocation(ResourcefulBees.MOD_ID, BeeConstants.ENTITY_TEXTURES_DIR + colorData.getEmissiveLayerTexture() + ".png");
         this.angryEmissiveLayerTexture = new ResourceLocation(ResourcefulBees.MOD_ID, BeeConstants.ENTITY_TEXTURES_DIR + colorData.getEmissiveLayerTexture() + "_angry.png");
     }
 
     public void render(@Nonnull MatrixStack matrixStackIn, @Nonnull IRenderTypeBuffer bufferIn, int packedLightIn, @NotNull CustomBeeEntity customBeeEntity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.getEyes(customBeeEntity.hasAngerTime() ? angryEmissiveLayerTexture : emissiveLayerTexture));
+        IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.getEyes(customBeeEntity.hasAngerTime() && angryEmissiveLayerTexture != null ? angryEmissiveLayerTexture : emissiveLayerTexture));
 
         if (colorData.isRainbowBee() && colorData.isGlowing()) {
             float[] glowColor = RainbowColor.getColorFloats();

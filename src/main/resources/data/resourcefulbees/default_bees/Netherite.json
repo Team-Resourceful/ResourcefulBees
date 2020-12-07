@@ -2,7 +2,7 @@
   "flower": "minecraft:wither_rose",
   "maxTimeInHive": 600,
   "hasHoneycomb": true,
-  "baseLayerTexture": "netherite/netherite_bee",
+  "baseLayerTexture": "ores/netherite/netherite_bee",
   "traits": ["nether", "wither"],
   "ColorData": {
     "isBeeColored": false,

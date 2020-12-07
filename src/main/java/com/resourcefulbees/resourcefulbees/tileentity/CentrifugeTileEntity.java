@@ -6,17 +6,22 @@ import com.resourcefulbees.resourcefulbees.block.CentrifugeBlock;
 import com.resourcefulbees.resourcefulbees.capabilities.CustomEnergyStorage;
 import com.resourcefulbees.resourcefulbees.capabilities.MultiFluidTank;
 import com.resourcefulbees.resourcefulbees.config.Config;
+import com.resourcefulbees.resourcefulbees.container.ApiaryBreederContainer;
 import com.resourcefulbees.resourcefulbees.container.AutomationSensitiveItemStackHandler;
 import com.resourcefulbees.resourcefulbees.container.CentrifugeContainer;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe;
+import com.resourcefulbees.resourcefulbees.registry.ModContainers;
 import com.resourcefulbees.resourcefulbees.registry.ModFluids;
+import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryBreederTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.NBTUtils;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
@@ -30,6 +35,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IntArray;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.capabilities.Capability;
@@ -38,6 +45,7 @@ import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
@@ -54,10 +62,9 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
 
     public static final int BOTTLE_SLOT = 0;
     public static final int HONEYCOMB_SLOT = 1;
-
-    public static final int HONEY_BOTTLE = 4;
     public static final int OUTPUT1 = 2;
     public static final int OUTPUT2 = 3;
+    public static final int HONEY_BOTTLE = 4;
 
     protected int[] honeycombSlots;
     protected int[] outputSlots;
@@ -74,6 +81,8 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
     protected boolean dirty;
     protected boolean[] isProcessing;
     protected boolean[] processCompleted;
+    protected boolean isPoweredByRedstone;
+    protected boolean requiresRedstone;
 
     private final IntArray times = new IntArray(1) {
         @Override
@@ -85,19 +94,19 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
 
     public CentrifugeTileEntity(TileEntityType<?> tileEntityType) {
         super(tileEntityType);
-        initialize();
+        initializeInputsAndOutputs();
+        itemStackHandler = new CentrifugeTileEntity.TileStackHandler(getTotalSlots());
+        fluidTanks = new MultiFluidTank(getMaxTankCapacity(), getTotalTanks());
+        time = new int[getNumberOfInputs()];
+        recipes = Arrays.asList(null, null, null, null, null, null, null, null, null);
+        isProcessing = new boolean[getNumberOfInputs()];
+        processCompleted = new boolean[getNumberOfInputs()];
     }
 
-    //TODO move this to constructor and parameterize the values eliminating need for subclasses to override
-    protected void initialize() {
+    //Override this for subclasses
+    protected void initializeInputsAndOutputs() {
         honeycombSlots = new int[] {1};
-        outputSlots = new int[] {2,3,4};
-        itemStackHandler = new CentrifugeTileEntity.TileStackHandler(5);
-        fluidTanks = new MultiFluidTank(5000, 2);
-        time = new int[3];
-        recipes = Arrays.asList(null, null, null);
-        isProcessing = new boolean[3];
-        processCompleted = new boolean[3];
+        outputSlots = new int[] {2,3,4,5,6,7};
     }
 
 
@@ -110,22 +119,24 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
     @Override
     public void tick() {
         if (world != null && !world.isRemote()) {
-            for (int i = 0; i < honeycombSlots.length; i++) {
-                recipes.set(i, getRecipe(i));
-                if (canStartCentrifugeProcess(i)) {
-                    isProcessing[i] = true;
-                    setPoweredBlockState(true);
+            if (!requiresRedstone || isPoweredByRedstone) {
+                for (int i = 0; i < honeycombSlots.length; i++) {
+                    recipes.set(i, getRecipe(i));
+                    if (canStartCentrifugeProcess(i)) {
+                        isProcessing[i] = true;
+                        setPoweredBlockState(true);
+                    }
+                    if (isProcessing[i] && !processCompleted[i]) {
+                        processRecipe(i);
+                    }
+                    if (processCompleted[i]) {
+                        processCompleted(i);
+                    }
                 }
-                if (isProcessing[i] && !processCompleted[i]) {
-                    processRecipe(i);
+                if (dirty) {
+                    this.dirty = false;
+                    this.markDirty();
                 }
-                if (processCompleted[i]) {
-                    processCompleted(i);
-                }
-            }
-            if (dirty) {
-                this.dirty = false;
-                this.markDirty();
             }
         }
     }
@@ -140,67 +151,71 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
 
     //TODO see if this can be shortened and optimized further
     protected void processCompleted(int i) {
-        if (inventoryHasSpace(recipes.get(i))) {
-            consumeInput(i);
-            ItemStack glass_bottle = itemStackHandler.getStackInSlot(BOTTLE_SLOT);
-            List<ItemStack> depositStacks = new ArrayList<>();
-            if (world != null) {
-                for (int j = 0; j < 3; j++) {
-                    float nextFloat = world.rand.nextFloat();
-                    float chance;
-                    switch (j) {
-                        case 0:
-                            if (recipes.get(i).hasFluidOutput) {
-                                chance = recipes.get(i).fluidOutput.get(0).getRight();
-                                if (chance >= nextFloat) {
-                                    fluidTanks.fill(i + 1, recipes.get(i).fluidOutput.get(0).getLeft().copy(), MultiFluidTank.FluidAction.EXECUTE);
+        if (recipes.get(i) != null) {
+            if (inventoryHasSpace(recipes.get(i))) {
+                consumeInput(i);
+                ItemStack glass_bottle = itemStackHandler.getStackInSlot(BOTTLE_SLOT);
+                List<ItemStack> depositStacks = new ArrayList<>();
+                if (world != null) {
+                    for (int j = 0; j < 3; j++) {
+                        float nextFloat = world.rand.nextFloat();
+                        float chance;
+                        switch (j) {
+                            case 0:
+                                if (recipes.get(i).hasFluidOutput) {
+                                    chance = recipes.get(i).fluidOutput.get(0).getRight();
+                                    if (chance >= nextFloat) {
+                                        fluidTanks.fill(i + 1, recipes.get(i).fluidOutput.get(0).getLeft().copy(), MultiFluidTank.FluidAction.EXECUTE);
+                                    }
+                                    depositStacks.add(ItemStack.EMPTY);
+                                } else {
+                                    chance = recipes.get(i).itemOutputs.get(j).getRight();
+                                    if (chance >= nextFloat) {
+                                        depositStacks.add(recipes.get(i).itemOutputs.get(j).getLeft().copy());
+                                    } else {
+                                        depositStacks.add(ItemStack.EMPTY);
+                                    }
                                 }
-                                depositStacks.add(ItemStack.EMPTY);
-                            } else {
+                                break;
+                            case 1:
                                 chance = recipes.get(i).itemOutputs.get(j).getRight();
                                 if (chance >= nextFloat) {
                                     depositStacks.add(recipes.get(i).itemOutputs.get(j).getLeft().copy());
                                 } else {
                                     depositStacks.add(ItemStack.EMPTY);
                                 }
-                            }
-                            break;
-                        case 1:
-                            chance = recipes.get(i).itemOutputs.get(j).getRight();
-                            if (chance >= nextFloat) {
-                                depositStacks.add(recipes.get(i).itemOutputs.get(j).getLeft().copy());
-                            } else {
-                                depositStacks.add(ItemStack.EMPTY);
-                            }
-                            break;
-                        case 2:
-                            if (glass_bottle.isEmpty()) {
-                                fluidTanks.fill(0, new FluidStack(ModFluids.HONEY_STILL.get(), ModConstants.HONEY_PER_BOTTLE), MultiFluidTank.FluidAction.EXECUTE);
-                                depositStacks.add(ItemStack.EMPTY);
-                            } else {
-                                chance = recipes.get(i).itemOutputs.get(j).getRight();
-                                if (chance >= nextFloat) {
-                                    glass_bottle.shrink(recipes.get(i).itemOutputs.get(j).getLeft().getCount());
-                                    depositStacks.add(recipes.get(i).itemOutputs.get(j).getLeft().copy());
-                                } else {
+                                break;
+                            case 2:
+                                if (glass_bottle.isEmpty()) {
+                                    fluidTanks.fill(0, new FluidStack(ModFluids.HONEY_STILL.get(), ModConstants.HONEY_PER_BOTTLE), MultiFluidTank.FluidAction.EXECUTE);
                                     depositStacks.add(ItemStack.EMPTY);
+                                } else {
+                                    chance = recipes.get(i).itemOutputs.get(j).getRight();
+                                    if (chance >= nextFloat) {
+                                        glass_bottle.shrink(recipes.get(i).itemOutputs.get(j).getLeft().getCount());
+                                        depositStacks.add(recipes.get(i).itemOutputs.get(j).getLeft().copy());
+                                    } else {
+                                        depositStacks.add(ItemStack.EMPTY);
+                                    }
                                 }
-                            }
+                        }
+                    }
+                    if (!depositStacks.isEmpty()) {
+                        depositItemStacks(depositStacks);
                     }
                 }
-                if (!depositStacks.isEmpty()) {
-                    depositItemStacks(depositStacks);
-                }
+                resetProcess(i);
             }
+        } else {
             resetProcess(i);
         }
     }
 
     protected void processRecipe(int i) {
-        if (canProcess(recipes.get(i), i)) {
+        if (canProcess(i)) {
             energyStorage.consumeEnergy(Config.RF_TICK_CENTRIFUGE.get());
             ++time[i];
-            processCompleted[i] = time[i] >= Math.max(10, recipes.get(i).time);
+            processCompleted[i] = time[i] >= getRecipeTime(i);
             this.dirty = true;
         } else {
             resetProcess(i);
@@ -216,7 +231,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
 
     protected boolean canStartCentrifugeProcess(int i) {
         if (!isProcessing[i] && !itemStackHandler.getStackInSlot(honeycombSlots[i]).isEmpty()) {
-            if (recipes.get(i) != null && !recipes.get(i).multiblock) {
+            if (canProcessRecipe(i)) {
                 ItemStack combInput = itemStackHandler.getStackInSlot(honeycombSlots[i]);
                 JsonElement count = recipes.get(i).ingredient.serialize().getAsJsonObject().get(BeeConstants.INGREDIENT_COUNT);
                 int inputAmount = count != null ? count.getAsInt() : 1;
@@ -227,7 +242,9 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
         return false;
     }
 
-    protected boolean canProcess(CentrifugeRecipe recipe, int i) { return !itemStackHandler.getStackInSlot(honeycombSlots[i]).isEmpty() && canProcessFluid(i) && canProcessEnergy(); }
+    protected boolean canProcessRecipe(int i) { return recipes.get(i) != null && !recipes.get(i).multiblock; }
+
+    protected boolean canProcess(int i) { return !itemStackHandler.getStackInSlot(honeycombSlots[i]).isEmpty() && canProcessFluid(i) && canProcessEnergy(); }
 
     //TODO Should MainOutput Fluids not be voided?
     protected boolean canProcessFluid(int i) { return true; }
@@ -252,48 +269,95 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
 
     public int getProcessTime(int i) { return time[i]; }
 
-    public int getRecipeTime(int i) { return getRecipe(i) != null ? Math.max(10, getRecipe(i).time) : Config.GLOBAL_CENTRIFUGE_RECIPE_TIME.get(); }
+    public int getTotalSlots() { return 1 + honeycombSlots.length + outputSlots.length;}
+
+    public int getNumberOfInputs() { return honeycombSlots.length; }
+
+    public int getTotalTanks() { return 1 + honeycombSlots.length; }
+
+    public int getMaxTankCapacity() { return 5000; }
+
+    public int getRecipeTime(int i) { return getRecipe(i) != null ? Math.max(5, getRecipe(i).time) : Config.GLOBAL_CENTRIFUGE_RECIPE_TIME.get(); }
     //endregion
 
     protected void depositItemStacks(List<ItemStack> itemStacks) {
-        for (int i = 0; i < 3; i++) {
-            ItemStack slotStack = itemStackHandler.getStackInSlot(outputSlots[i]);
+        itemStacks.forEach(itemStack -> {
+            int slotIndex = outputSlots[0];
+            while (!itemStack.isEmpty() && slotIndex < itemStackHandler.getSlots()){
+                ItemStack slotStack = itemStackHandler.getStackInSlot(slotIndex);
 
-            if (!itemStacks.get(i).isEmpty()) {
-                if (slotStack.isEmpty()) {
-                    itemStackHandler.setStackInSlot(outputSlots[i], itemStacks.get(i));
-                } else {
-                    slotStack.grow(itemStacks.get(i).getCount());
+                int itemMaxStackSize = itemStack.getMaxStackSize();
+
+                if(slotStack.isEmpty()) {
+                    itemStackHandler.setStackInSlot(slotIndex, itemStack.split(itemMaxStackSize));
+                } else if (areItemsAndTagsEqual(itemStack, slotStack) && slotStack.getCount() != itemMaxStackSize) {
+                    int combinedCount = itemStack.getCount() + slotStack.getCount();
+                    if (combinedCount <= itemMaxStackSize) {
+                        itemStack.setCount(0);
+                        slotStack.setCount(combinedCount);
+                    } else {
+                        itemStack.shrink(itemMaxStackSize - slotStack.getCount());
+                        slotStack.setCount(itemMaxStackSize);
+                    }
+                    itemStackHandler.setStackInSlot(slotIndex, slotStack);
                 }
+
+                ++slotIndex;
             }
-        }
+        });
     }
 
-
     protected boolean inventoryHasSpace(CentrifugeRecipe recipe) {
-        boolean hasSpace = true;
+        int emptySlots = 0;
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = outputSlots[0]; i < itemStackHandler.getSlots(); ++i) {
+            if (itemStackHandler.getStackInSlot(i).isEmpty()) {
+                emptySlots++;
+            }
+        }
+
+        boolean hasSpace = true;
+        int i = 0;
+        while (recipe != null && hasSpace && i < recipe.itemOutputs.size()) {
             ItemStack output = recipe.itemOutputs.get(i).getLeft();
             if (!output.isEmpty() && !(i == 2 && itemStackHandler.getStackInSlot(BOTTLE_SLOT).isEmpty())) {
                 int count = output.getCount();
+                int j = outputSlots[0];
 
-                ItemStack slotStack = itemStackHandler.getStackInSlot(outputSlots[i]);
+                while (count > 0 && j < itemStackHandler.getSlots()) {
+                    ItemStack slotStack = itemStackHandler.getStackInSlot(j);
 
-                if (slotStack.isEmpty()) {
-                    count -= Math.min(count, output.getMaxStackSize());
-                } else if (areItemsAndTagsEqual(output, slotStack) && slotStack.getCount() != output.getMaxStackSize()) {
-                    count -= Math.min(count, output.getMaxStackSize() - slotStack.getCount());
+                    if (slotStack.isEmpty() && emptySlots != 0) {
+                        count -= Math.min(count, output.getMaxStackSize());
+                        emptySlots--;
+                    } else if (areItemsAndTagsEqual(output, slotStack) && slotStack.getCount() != output.getMaxStackSize()) {
+                        count -= Math.min(count, output.getMaxStackSize() - slotStack.getCount());
+                    }
+
+                    j++;
                 }
 
                 hasSpace = count <= 0;
             }
-
-            if (!hasSpace) break;
+            i++;
         }
 
         return hasSpace;
     }
+
+    public void drainFluidInTank(int tank) {
+        fluidTanks.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.EXECUTE, tank);
+        assert world != null;
+        world.notifyBlockUpdate(this.pos, this.getBlockState(), this.getBlockState(), 2);
+    }
+
+    public void updateRequiresRedstone() { this.requiresRedstone = !requiresRedstone; }
+
+    public boolean getRequiresRedstone() { return requiresRedstone; }
+
+    public void setRequiresRedstone(boolean requiresRedstone) { this.requiresRedstone = requiresRedstone; }
+
+    public void setIsPoweredByRedstone(boolean isPoweredByRedstone) { this.isPoweredByRedstone = isPoweredByRedstone; }
 
     protected void setPoweredBlockState(boolean powered) { if (world != null) world.setBlockState(pos, getBlockState().with(CentrifugeBlock.PROPERTY_ON, powered)); }
 
@@ -309,10 +373,11 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
         tag.put(NBTConstants.NBT_INVENTORY, itemStackHandler.serializeNBT());
         tag.putIntArray("time", time);
         tag.put("energy", energyStorage.serializeNBT());
-        //tag.putBoolean("valid", validStructure);
         tag.put(NBTConstants.NBT_TANKS, fluidTanks.writeToNBT());
         tag.put("isProcessing", NBTUtils.writeBooleans(isProcessing));
         tag.put("processCompleted", NBTUtils.writeBooleans(processCompleted));
+        tag.putBoolean("requiresRedstone", requiresRedstone);
+        tag.putBoolean("isPoweredByRedstone", isPoweredByRedstone);
         return tag;
     }
 
@@ -320,10 +385,11 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
         itemStackHandler.deserializeNBT(tag.getCompound(NBTConstants.NBT_INVENTORY));
         time = tag.getIntArray("time");
         energyStorage.deserializeNBT(tag.getCompound("energy"));
-        //validStructure = tag.getBoolean("valid");
         fluidTanks.readFromNBT(tag);
         isProcessing = NBTUtils.loadBooleans(honeycombSlots.length, tag.getCompound("isProcessing"));
         processCompleted = NBTUtils.loadBooleans(honeycombSlots.length, tag.getCompound("processCompleted"));
+        requiresRedstone = tag.getBoolean("requiresRedstone");
+        isPoweredByRedstone = tag.getBoolean("isPoweredByRedstone");
     }
 
     @Override
@@ -374,11 +440,14 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
     }
 
     public AutomationSensitiveItemStackHandler.IAcceptor getAcceptor() {
-        return (slot, stack, automation) -> !automation || (slot == HONEYCOMB_SLOT && !stack.getItem().equals(Items.GLASS_BOTTLE)) || (slot == BOTTLE_SLOT && stack.getItem().equals(Items.GLASS_BOTTLE));
+        return (slot, stack, automation) -> {
+            boolean isBottleSlot = slot == BOTTLE_SLOT;
+            return !automation || (!isBottleSlot && !stack.getItem().equals(Items.GLASS_BOTTLE)) || (isBottleSlot && stack.getItem().equals(Items.GLASS_BOTTLE));
+        };
     }
 
     public AutomationSensitiveItemStackHandler.IRemover getRemover() {
-        return (slot, automation) -> !automation || slot == HONEY_BOTTLE || slot == OUTPUT1 || slot == OUTPUT2;
+        return (slot, automation) -> !automation || slot > getNumberOfInputs();
     }
     //endregion
 
@@ -386,7 +455,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
     @Override
     public Container createMenu(int id, @Nonnull PlayerInventory playerInventory, @Nonnull PlayerEntity playerEntity) {
         assert world != null;
-        return new CentrifugeContainer(id, world, pos, playerInventory, times);
+        return new CentrifugeContainer(ModContainers.CENTRIFUGE_CONTAINER.get(), id, world, pos, playerInventory, times);
     }
 
     @Nonnull

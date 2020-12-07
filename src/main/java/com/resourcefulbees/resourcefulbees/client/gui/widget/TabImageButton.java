@@ -11,13 +11,13 @@ import javax.annotation.Nonnull;
 
 public class TabImageButton extends ImageButton {
 
-    private final ResourceLocation resourceLocation;
-    private final int xTexStart;
-    private final int yTexStart;
-    private final int yDiffText;
-    private final ItemStack displayItem;
-    private final int itemX;
-    private final int itemY;
+    protected final ResourceLocation resourceLocation;
+    protected final int xTexStart;
+    protected final int yTexStart;
+    protected final int yDiffText;
+    protected final ItemStack displayItem;
+    protected final int itemX;
+    protected final int itemY;
 
     public TabImageButton(int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int yDiffTextIn, ResourceLocation resourceLocationIn, @Nonnull ItemStack displayItem, int itemX, int itemY, IPressable onPressIn) {
         super(xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, yDiffTextIn, resourceLocationIn, onPressIn);

@@ -226,19 +226,9 @@ public class CustomBeeData extends AbstractBeeData {
 
     public void setTraitData(TraitData traitData) { this.TraitData = this.TraitData != null ? this.TraitData : traitData; }
 
-    public ItemStack getCombStack() {
-        if (combSupplier != null) {
-            return combSupplier.get();
-        }
-        return new ItemStack(getCombRegistryObject().get());
-    }
+    public ItemStack getCombStack() { return combSupplier != null ? combSupplier.get() : new ItemStack(getCombRegistryObject().get()); }
 
-    public ItemStack getCombBlockItemStack() {
-        if (combSupplier != null) {
-            return combBlockItemSupplier.get();
-        }
-        return new ItemStack(getCombBlockItemRegistryObject().get());
-    }
+    public ItemStack getCombBlockItemStack() { return combBlockItemSupplier != null ? combBlockItemSupplier.get() : new ItemStack(getCombBlockItemRegistryObject().get()); }
 
     public void setCombSupplier(Supplier<ItemStack> combSupplier) { this.combSupplier = combSupplier; }
 

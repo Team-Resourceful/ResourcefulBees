@@ -20,7 +20,7 @@ public class NetPacketHandler {
             PROTOCOL_VERSION::equals
     );
 
-    public static void init(){
+    public static void init() {
         INSTANCE.registerMessage(++id, ValidateApiaryMessage.class, ValidateApiaryMessage::encode, ValidateApiaryMessage::decode, ValidateApiaryMessage::handle);
         INSTANCE.registerMessage(++id, BuildApiaryMessage.class, BuildApiaryMessage::encode, BuildApiaryMessage::decode, BuildApiaryMessage::handle);
         INSTANCE.registerMessage(++id, UpdateClientApiaryMessage.class, UpdateClientApiaryMessage::encode, UpdateClientApiaryMessage::decode, UpdateClientApiaryMessage::handle);
@@ -28,11 +28,11 @@ public class NetPacketHandler {
         INSTANCE.registerMessage(++id, ExportBeeMessage.class, ExportBeeMessage::encode, ExportBeeMessage::decode, ExportBeeMessage::handle);
         INSTANCE.registerMessage(++id, ImportBeeMessage.class, ImportBeeMessage::encode, ImportBeeMessage::decode, ImportBeeMessage::handle);
         INSTANCE.registerMessage(++id, ApiaryTabMessage.class, ApiaryTabMessage::encode, ApiaryTabMessage::decode, ApiaryTabMessage::handle);
+        INSTANCE.registerMessage(++id, DrainCentrifugeTankMessage.class, DrainCentrifugeTankMessage::encode, DrainCentrifugeTankMessage::decode, DrainCentrifugeTankMessage::handle);
+        INSTANCE.registerMessage(++id, UpdateRedstoneReqMessage.class, UpdateRedstoneReqMessage::encode, UpdateRedstoneReqMessage::decode, UpdateRedstoneReqMessage::handle);
     }
 
-    public static void sendToServer(Object message) {
-        INSTANCE.sendToServer(message);
-    }
+    public static void sendToServer(Object message) { INSTANCE.sendToServer(message); }
 
     public static void sendToAllLoaded(Object message, World world, BlockPos pos) {
         INSTANCE.send(PacketDistributor.TRACKING_CHUNK.with(() -> world.getChunkAt(pos)), message);

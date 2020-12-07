@@ -1,5 +1,7 @@
 package com.resourcefulbees.resourcefulbees.container;
 
+import com.resourcefulbees.resourcefulbees.capabilities.CustomEnergyStorage;
+import com.resourcefulbees.resourcefulbees.container.sync.SyncPower;
 import com.resourcefulbees.resourcefulbees.registry.ModContainers;
 import com.resourcefulbees.resourcefulbees.registry.ModFluids;
 import com.resourcefulbees.resourcefulbees.tileentity.HoneyGeneratorTileEntity;
@@ -10,8 +12,10 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.util.IntReferenceHolder;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nonnull;
@@ -29,9 +33,7 @@ public class HoneyGeneratorContainer extends Container {
         honeyGeneratorTileEntity = (HoneyGeneratorTileEntity) world.getTileEntity(pos);
 
         this.trackInt(new FunctionalIntReferenceHolder(() -> honeyGeneratorTileEntity.fluidFilled, v -> honeyGeneratorTileEntity.fluidFilled = v));
-        this.trackInt(new FunctionalIntReferenceHolder(() -> honeyGeneratorTileEntity.energyFilled, v -> honeyGeneratorTileEntity.energyFilled = v));
         this.trackInt(new FunctionalIntReferenceHolder(() -> honeyGeneratorTileEntity.fluidTank.getFluidAmount(), v -> honeyGeneratorTileEntity.fluidTank.setFluid(new FluidStack(ModFluids.HONEY_STILL.get(), v))));
-        this.trackInt(new FunctionalIntReferenceHolder(() -> honeyGeneratorTileEntity.energyStorage.getEnergyStored(), v -> honeyGeneratorTileEntity.energyStorage.setEnergy(v)));
 
         this.addSlot(new SlotItemHandlerUnconditioned(honeyGeneratorTileEntity.h, HoneyGeneratorTileEntity.HONEY_BOTTLE_INPUT, 36, 20){
             public boolean isItemValid(ItemStack stack){
@@ -49,6 +51,8 @@ public class HoneyGeneratorContainer extends Container {
         for (int k = 0; k < 9; ++k) {
             this.addSlot(new Slot(inv, k, 8 + k * 18, 142));
         }
+
+        this.trackIntArray(SyncPower.getSyncableArray(honeyGeneratorTileEntity, getEnergy()));
     }
 
     public int getEnergy() { return honeyGeneratorTileEntity.energyStorage.getEnergyStored(); }
