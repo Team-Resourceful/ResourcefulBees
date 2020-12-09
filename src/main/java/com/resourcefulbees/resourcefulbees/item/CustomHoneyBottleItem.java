@@ -24,6 +24,6 @@ public class CustomHoneyBottleItem extends HoneyBottleItem {
     }
 
     public int getHoneyBottleColor() {
-        return honeyBottleData.getHoneyBottleColorInt();
+        return honeyBottleData.getHoneyColorInt();
     }
 }

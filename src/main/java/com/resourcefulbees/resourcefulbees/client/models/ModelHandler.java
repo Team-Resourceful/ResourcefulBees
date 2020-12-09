@@ -7,6 +7,8 @@ import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockModelShapes;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.item.Item;
@@ -67,11 +69,29 @@ public class ModelHandler {
         BeeRegistry.getRegistry().getHoneyBottles().forEach((string, honeyData) -> {
             if (honeyData.shouldResourcefulBeesDoForgeRegistration) {
                 Item honeyBottleItem = honeyData.getHoneyBottleRegistryObject() != null ? honeyData.getHoneyBottleRegistryObject().get() : null;
+                Block honeyBlock = honeyData.getHoneyBlockRegistryObject() != null ? honeyData.getHoneyBlockRegistryObject().get() : null;
+                Item honeyBlockItem = honeyData.getHoneyBlockItemRegistryObject() != null ? honeyData.getHoneyBlockItemRegistryObject().get() : null;
                 if (honeyBottleItem!= null && honeyBottleItem.getRegistryName() != null && !resourceManager.hasResource(new ResourceLocation(ResourcefulBees.MOD_ID, "item/models/" + honeyBottleItem.getRegistryName().getPath() + ".json"))) {
                     ModelResourceLocation defaultModelLocation = new ModelResourceLocation(
                             ResourcefulBees.MOD_ID + ":honey_bottle", "inventory");
                     ModelLoader.addSpecialModel(defaultModelLocation);
                     MODEL_MAP.put(defaultModelLocation, new ModelResourceLocation(honeyBottleItem.getRegistryName(), "inventory"));
+                }
+                if (honeyBlock != null && honeyBlock.getRegistryName() != null && !resourceManager.hasResource(new ResourceLocation(ResourcefulBees.MOD_ID, "blockstates/" + honeyBlock.getRegistryName().getPath() + ".json"))) {
+                    RenderTypeLookup.setRenderLayer(honeyBlock, RenderType.getTranslucent());
+                    honeyBlock.getStateContainer().getValidStates().forEach(state -> {
+                        String propertyMapString = BlockModelShapes.getPropertyMapString(state.getValues());
+                        ModelResourceLocation defaultModelLocation = new ModelResourceLocation(
+                                ResourcefulBees.MOD_ID + ":honey_block", propertyMapString);
+                        ModelLoader.addSpecialModel(defaultModelLocation);
+                        MODEL_MAP.put(defaultModelLocation, new ModelResourceLocation(honeyBlock.getRegistryName(), propertyMapString));
+                    });
+                }
+                if (honeyBlockItem != null && honeyBlockItem.getRegistryName() != null && !resourceManager.hasResource(new ResourceLocation(ResourcefulBees.MOD_ID, "item/models/" + honeyBlockItem.getRegistryName().getPath() + ".json"))) {
+                    ModelResourceLocation defaultModelLocation = new ModelResourceLocation(
+                            ResourcefulBees.MOD_ID + ":honey_block", "inventory");
+                    ModelLoader.addSpecialModel(defaultModelLocation);
+                    MODEL_MAP.put(defaultModelLocation, new ModelResourceLocation(honeyBlockItem.getRegistryName(), "inventory"));
                 }
             }
         });

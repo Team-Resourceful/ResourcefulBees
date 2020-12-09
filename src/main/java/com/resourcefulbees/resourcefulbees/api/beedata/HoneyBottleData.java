@@ -1,6 +1,7 @@
 package com.resourcefulbees.resourcefulbees.api.beedata;
 
 import com.resourcefulbees.resourcefulbees.registry.ItemGroupResourcefulBees;
+import net.minecraft.block.Block;
 import net.minecraft.item.Food;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
@@ -54,12 +55,22 @@ public class HoneyBottleData {
     private transient RegistryObject<Item> honeyBottleRegistryObject;
 
     /**
+     * The RegistryObject of the Honey Block Item
+     */
+    private transient RegistryObject<Item> honeyBlockItemRegistryObject;
+
+    /**
+     * The RegistryObject of the Honey Block
+     */
+    private transient RegistryObject<Block> honeyBlockRegistryObject;
+
+    /**
      * If the ResourcefulBees mod should handle the registration
      */
     public transient boolean shouldResourcefulBeesDoForgeRegistration;
 
 
-    public int getHoneyBottleColorInt() {
+    public int getHoneyColorInt() {
         return com.resourcefulbees.resourcefulbees.utils.color.Color.parseInt(honeyColor);
     }
 
@@ -99,8 +110,24 @@ public class HoneyBottleData {
         this.honeyBottleRegistryObject = this.honeyBottleRegistryObject == null ? honeyBottleRegistryObject : this.honeyBottleRegistryObject;
     }
 
+    public void setHoneyBlockItemRegistryObject(RegistryObject<Item> honeyBlockItemRegistryObject) {
+        this.honeyBlockItemRegistryObject = this.honeyBlockItemRegistryObject == null ? honeyBlockItemRegistryObject : this.honeyBlockItemRegistryObject;
+    }
+
+    public void setHoneyBlockRegistryObject(RegistryObject<Block> honeyBlockRegistryObject) {
+        this.honeyBlockRegistryObject = this.honeyBlockRegistryObject == null ? honeyBlockRegistryObject : this.honeyBlockRegistryObject;
+    }
+
     public RegistryObject<Item> getHoneyBottleRegistryObject() {
         return honeyBottleRegistryObject;
+    }
+
+    public RegistryObject<Item> getHoneyBlockItemRegistryObject() {
+        return honeyBlockItemRegistryObject;
+    }
+
+    public RegistryObject<Block> getHoneyBlockRegistryObject() {
+        return honeyBlockRegistryObject;
     }
 
     public Item.Properties getProperties() {
@@ -125,6 +152,7 @@ public class HoneyBottleData {
     private boolean hasEffects() {
         return effects != null && !effects.isEmpty();
     }
+
 
     /**
      * effect : generated from the effect id
