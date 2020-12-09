@@ -2,6 +2,7 @@ package com.resourcefulbees.resourcefulbees.registry;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
+import com.resourcefulbees.resourcefulbees.api.beedata.HoneyBottleData;
 import com.resourcefulbees.resourcefulbees.block.*;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.entity.passive.ResourcefulBee;
@@ -58,6 +59,20 @@ public class RegistryHandler {
 				registerBee(name, customBee);
 			}
 		});
+	}
+
+	public static void registerDynamicHoney() {
+		BeeRegistry.getRegistry().getHoneyBottles().forEach((name, honeyData) -> {
+			if (honeyData.shouldResourcefulBeesDoForgeRegistration) {
+				registerHoneyBottle(name, honeyData);
+			}
+		});
+	}
+
+	private static void registerHoneyBottle(String name, HoneyBottleData honeyData) {
+		final RegistryObject<Item> customHoneyBottle = ModItems.ITEMS.register(name + "_honey", () -> new CustomHoneyBottleItem(honeyData.getProperties(), honeyData));
+
+		honeyData.setHoneyBottleRegistryObject(customHoneyBottle);
 	}
 
 	private static void registerHoneycomb(String name, CustomBeeData customBeeData) {

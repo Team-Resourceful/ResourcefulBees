@@ -3,11 +3,6 @@ package com.resourcefulbees.resourcefulbees;
 import com.resourcefulbees.resourcefulbees.api.ResourcefulBeesAPI;
 import com.resourcefulbees.resourcefulbees.block.TieredBeehiveBlock;
 import com.resourcefulbees.resourcefulbees.block.multiblocks.apiary.ApiaryBlock;
-import com.resourcefulbees.resourcefulbees.client.gui.screen.*;
-import com.resourcefulbees.resourcefulbees.client.models.ModelHandler;
-import com.resourcefulbees.resourcefulbees.client.render.entity.CustomBeeRenderer;
-import com.resourcefulbees.resourcefulbees.client.render.fluid.FluidRender;
-import com.resourcefulbees.resourcefulbees.client.render.items.ItemModelPropertiesHandler;
 import com.resourcefulbees.resourcefulbees.compat.top.TopCompat;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.config.ConfigLoader;
@@ -18,13 +13,8 @@ import com.resourcefulbees.resourcefulbees.init.*;
 import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
 import com.resourcefulbees.resourcefulbees.registry.*;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
-import com.resourcefulbees.resourcefulbees.utils.PreviewHandler;
-import com.resourcefulbees.resourcefulbees.utils.color.ColorHandler;
 import com.resourcefulbees.resourcefulbees.utils.validation.SecondPhaseValidator;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.gui.ScreenManager;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.entity.merchant.villager.VillagerTrades;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
@@ -44,10 +34,8 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
@@ -56,15 +44,12 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Mod("resourcefulbees")
-public class ResourcefulBees
-{
+public class ResourcefulBees {
     //TODO Test other mods can register their own bees (and pollen) with minimal issue
     //TODO Weed out all possible NPE's
 
@@ -87,6 +72,7 @@ public class ResourcefulBees
         BiomeDictonarySetup.buildDictionary();
         BeeSetup.setupBees();
         RegistryHandler.registerDynamicBees();
+        RegistryHandler.registerDynamicHoney();
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener(EventPriority.LOW, this::setup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onInterModEnqueue);
@@ -161,7 +147,7 @@ public class ResourcefulBees
         List<VillagerTrades.ITrade> level4 = event.getTrades().get(4);
         List<VillagerTrades.ITrade> level5 = event.getTrades().get(5);
 
-        if(event.getType() == ModVillagerProfessions.BEEKEEPER.get()) {
+        if (event.getType() == ModVillagerProfessions.BEEKEEPER.get()) {
             ItemStack queenBeeBanner = new ItemStack(net.minecraft.item.Items.BLACK_BANNER);
             CompoundNBT compoundnbt = queenBeeBanner.getOrCreateChildTag("BlockEntityTag");
             ListNBT listnbt = (new BannerPattern.Builder()).func_222477_a(BannerPattern.RHOMBUS_MIDDLE, DyeColor.LIGHT_BLUE).func_222477_a(BannerPattern.STRIPE_DOWNRIGHT, DyeColor.YELLOW).func_222477_a(BannerPattern.STRIPE_DOWNLEFT, DyeColor.YELLOW).func_222477_a(BannerPattern.STRIPE_BOTTOM, DyeColor.YELLOW).func_222477_a(BannerPattern.TRIANGLE_TOP, DyeColor.YELLOW).func_222477_a(BannerPattern.CURLY_BORDER, DyeColor.YELLOW).func_222476_a();
@@ -196,7 +182,7 @@ public class ResourcefulBees
         }
     }
 
-    private void setup(final FMLCommonSetupEvent event){
+    private void setup(final FMLCommonSetupEvent event) {
         BeeInfoUtils.makeValidApiaryTag();
         Map<BlockState, PointOfInterestType> pointOfInterestTypeMap = new HashMap<>();
         ModBlocks.BLOCKS.getEntries().stream()

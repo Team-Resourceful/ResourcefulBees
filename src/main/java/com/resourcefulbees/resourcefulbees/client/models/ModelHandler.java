@@ -63,6 +63,18 @@ public class ModelHandler {
                 }
             }
         });
+
+        BeeRegistry.getRegistry().getHoneyBottles().forEach((string, honeyData) -> {
+            if (honeyData.shouldResourcefulBeesDoForgeRegistration) {
+                Item honeyBottleItem = honeyData.getHoneyBottleRegistryObject() != null ? honeyData.getHoneyBottleRegistryObject().get() : null;
+                if (honeyBottleItem!= null && honeyBottleItem.getRegistryName() != null && !resourceManager.hasResource(new ResourceLocation(ResourcefulBees.MOD_ID, "item/models/" + honeyBottleItem.getRegistryName().getPath() + ".json"))) {
+                    ModelResourceLocation defaultModelLocation = new ModelResourceLocation(
+                            ResourcefulBees.MOD_ID + ":honey_bottle", "inventory");
+                    ModelLoader.addSpecialModel(defaultModelLocation);
+                    MODEL_MAP.put(defaultModelLocation, new ModelResourceLocation(honeyBottleItem.getRegistryName(), "inventory"));
+                }
+            }
+        });
     }
 
     public static void onModelBake(ModelBakeEvent event) {
