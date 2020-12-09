@@ -146,7 +146,6 @@ public class HoneyBottleData {
 
         public Effect getEffect() {
             ResourceLocation location = new ResourceLocation(effectID);
-            LOGGER.info(String.format("Effect found: %s", location.toString()));
             return effectID == null ? null : ForgeRegistries.POTIONS.getValue(location);
         }
 
