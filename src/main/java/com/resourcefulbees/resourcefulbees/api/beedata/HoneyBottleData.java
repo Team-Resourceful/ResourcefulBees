@@ -116,7 +116,7 @@ public class HoneyBottleData {
 
         if (hasEffects()) {
             effects.forEach(honeyEffect -> {
-                builder.effect(() -> honeyEffect.instance, honeyEffect.chance);
+                builder.effect(() -> honeyEffect.getInstance(), honeyEffect.chance);
             });
         }
         return builder.build();
@@ -135,14 +135,13 @@ public class HoneyBottleData {
      * chance : chance for effect to proc on drinking honey
      */
     public class HoneyEffect {
-        public transient EffectInstance instance;
         public String effectID;
         public int duration = 60;
-        public int strength = 1;
+        public int strength = 0;
         public float chance = 100;
 
-        public HoneyEffect() {
-            instance = new EffectInstance(getEffect(), duration, strength);
+        public EffectInstance getInstance() {
+            return new EffectInstance(getEffect(), duration, strength);
         }
 
         public Effect getEffect() {
