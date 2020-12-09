@@ -49,7 +49,7 @@ public class BeeSetup {
 
     private static void parseBee(File file) throws IOException {
         String name = file.getName();
-        name = name.substring(0, name.indexOf('.'));
+        name = name.substring(0, name.indexOf('.')).toLowerCase();
 
         Reader r = Files.newBufferedReader(file.toPath());
 
@@ -67,6 +67,7 @@ public class BeeSetup {
     }
 
     private static void parseBee(Reader reader, String name) {
+        name = name.toLowerCase().replace(" ", "_");
         Gson gson = new Gson();
         CustomBeeData bee = gson.fromJson(reader, CustomBeeData.class);
         bee.setName(name);
@@ -94,6 +95,7 @@ public class BeeSetup {
     }
 
     private static void parseHoney(Reader reader, String name) {
+        name = name.toLowerCase().replace(" ", "_");
         Gson gson = new Gson();
         HoneyBottleData honey = gson.fromJson(reader, HoneyBottleData.class);
         if (honey.getName() == null) honey.setName(name);
