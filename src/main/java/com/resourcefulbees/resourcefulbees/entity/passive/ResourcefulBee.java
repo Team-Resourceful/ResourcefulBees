@@ -231,10 +231,13 @@ public class ResourcefulBee extends CustomBeeEntity {
                 switch (ability) {
                     case TraitConstants.TELEPORT:
                         doTeleportEffect();
+                        break;
                     case TraitConstants.FLAMMABLE:
                         doFlameEffect();
+                        break;
                     case TraitConstants.SLIMY:
                         doSlimeEffect();
+                        break;
                 }
             });
         }
