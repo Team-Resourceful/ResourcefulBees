@@ -1,0 +1,7 @@
+{
+  "parent": "resourcefulbees:block/honey_tank/honey_tank",
+  "textures": {
+    "0": "resourcefulbees:block/honey_tank/purpur_honey_tank",
+    "particle": "resourcefulbees:block/honey_tank/purpur_honey_tank"
+  }
+}

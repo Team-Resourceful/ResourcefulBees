@@ -7,6 +7,7 @@ import com.resourcefulbees.resourcefulbees.block.multiblocks.apiary.ApiaryBreede
 import com.resourcefulbees.resourcefulbees.block.multiblocks.apiary.ApiaryStorageBlock;
 import com.resourcefulbees.resourcefulbees.block.multiblocks.centrifuge.CentrifugeCasingBlock;
 import com.resourcefulbees.resourcefulbees.block.multiblocks.centrifuge.CentrifugeControllerBlock;
+import com.resourcefulbees.resourcefulbees.tileentity.HoneyTankTileEntity;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.potion.Effects;
@@ -24,7 +25,7 @@ public class ModBlocks {
     private static final AbstractBlock.Properties NEST_PROPERTIES = Block.Properties.create(Material.WOOD).hardnessAndResistance(0.3F).sound(SoundType.WOOD);
 
     //TODO 1.17 remove Tiered hives in favor of upgradeable nests
-    public static final RegistryObject<Block> T1_BEEHIVE = BLOCKS.register("t1_beehive", () -> new TieredBeehiveBlock(1,1.0F, HIVE_PROPERTIES));
+    public static final RegistryObject<Block> T1_BEEHIVE = BLOCKS.register("t1_beehive", () -> new TieredBeehiveBlock(1, 1.0F, HIVE_PROPERTIES));
     public static final RegistryObject<Block> T2_BEEHIVE = BLOCKS.register("t2_beehive", () -> new TieredBeehiveBlock(2, 1.5F, HIVE_PROPERTIES));
     public static final RegistryObject<Block> T3_BEEHIVE = BLOCKS.register("t3_beehive", () -> new TieredBeehiveBlock(3, 2.0F, HIVE_PROPERTIES));
     public static final RegistryObject<Block> T4_BEEHIVE = BLOCKS.register("t4_beehive", () -> new TieredBeehiveBlock(4, 4.0F, HIVE_PROPERTIES));
@@ -63,4 +64,8 @@ public class ModBlocks {
     public static final RegistryObject<Block> CENTRIFUGE_CASING = BLOCKS.register("centrifuge_casing", () -> new CentrifugeCasingBlock(CENTRIFUGE_PROPERTIES));
     public static final RegistryObject<Block> CREATIVE_GEN = BLOCKS.register("creative_gen", () -> new CreativeGen(CENTRIFUGE_PROPERTIES));
     public static final RegistryObject<Block> ACCELERATOR = BLOCKS.register("accelerator", () -> new AcceleratorBlock(CENTRIFUGE_PROPERTIES));
+    public static final RegistryObject<Block> ENDER_BEECON = BLOCKS.register("ender_beecon", () -> new EnderBeecon(EnderBeecon.PROPERTIES));
+    public static final RegistryObject<Block> PURPUR_HONEY_TANK = BLOCKS.register("purpur_honey_tank", () -> new HoneyTank(HoneyTank.PROPERTIES, HoneyTankTileEntity.TankTier.PURPUR));
+    public static final RegistryObject<Block> NETHER_HONEY_TANK = BLOCKS.register("nether_honey_tank", () -> new HoneyTank(HoneyTank.PROPERTIES, HoneyTankTileEntity.TankTier.NETHER));
+    public static final RegistryObject<Block> WOODEN_HONEY_TANK = BLOCKS.register("wooden_honey_tank", () -> new HoneyTank(HoneyTank.PROPERTIES, HoneyTankTileEntity.TankTier.WOODEN));
 }
