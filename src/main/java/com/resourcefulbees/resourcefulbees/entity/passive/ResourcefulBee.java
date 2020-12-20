@@ -2,6 +2,7 @@ package com.resourcefulbees.resourcefulbees.entity.passive;
 
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.api.beedata.TraitData;
+import com.resourcefulbees.resourcefulbees.tileentity.EnderBeeconTileEntity;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.entity.goals.*;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
@@ -35,8 +36,6 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.village.PointOfInterest;
 import net.minecraft.village.PointOfInterestManager;
 import net.minecraft.village.PointOfInterestType;
@@ -231,10 +230,13 @@ public class ResourcefulBee extends CustomBeeEntity {
                 switch (ability) {
                     case TraitConstants.TELEPORT:
                         doTeleportEffect();
+                        break;
                     case TraitConstants.FLAMMABLE:
                         doFlameEffect();
+                        break;
                     case TraitConstants.SLIMY:
                         doSlimeEffect();
+                        break;
                 }
             });
         }
@@ -242,9 +244,15 @@ public class ResourcefulBee extends CustomBeeEntity {
     }
 
     private void doTeleportEffect() {
-        if (canTeleport() && !hasHiveInRange()) {
+        if (canTeleport() && !hasHiveInRange() && !distruptorInRange()) {
                 this.teleportRandomly();
         }
+    }
+
+    private boolean distruptorInRange() {
+        BlockPos pos = getBlockPos();
+        MutableBoundingBox box = EnderBeeconTileEntity.getDistruptorBox(pos);
+        return BlockPos.stream(box).anyMatch(blockPos -> world.getTileEntity(blockPos) instanceof EnderBeeconTileEntity);
     }
 
     private void doFlameEffect() {

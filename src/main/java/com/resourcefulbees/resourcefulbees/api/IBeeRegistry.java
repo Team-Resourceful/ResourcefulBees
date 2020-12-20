@@ -1,6 +1,7 @@
 package com.resourcefulbees.resourcefulbees.api;
 
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
+import com.resourcefulbees.resourcefulbees.api.beedata.HoneyBottleData;
 
 import java.util.Map;
 
@@ -65,4 +66,12 @@ public interface IBeeRegistry {
      *  @return Returns unmodifiable copy of bee registry.
      */
     Map<String, CustomBeeData> getBees();
+
+    /**
+     * Returns an unmodifiable copy of the Honey Registry.
+     * This is useful for iterating over all honey without worry of changing data
+     *
+     *  @return Returns unmodifiable copy of honey registry.
+     */
+    Map<String, HoneyBottleData> getHoneyBottles();
 }

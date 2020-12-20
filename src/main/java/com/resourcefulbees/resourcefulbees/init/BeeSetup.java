@@ -3,6 +3,7 @@ package com.resourcefulbees.resourcefulbees.init;
 import com.google.gson.Gson;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
+import com.resourcefulbees.resourcefulbees.api.beedata.HoneyBottleData;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.entity.passive.OreoBee;
@@ -22,6 +23,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileSystem;
 import java.nio.file.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -32,18 +34,22 @@ import static com.resourcefulbees.resourcefulbees.config.Config.GENERATE_DEFAULT
 
 public class BeeSetup {
 
+
     public static Path BEE_PATH;
     public static Path RESOURCE_PATH;
+    public static Path HONEY_PATH;
 
     public static void setupBees() {
         if (ENABLE_EASTER_EGG_BEES.get()) OreoBee.register();
         if (GENERATE_DEFAULTS.get()) setupDefaultBees();
         addBees();
+        addHoney();
     }
+
 
     private static void parseBee(File file) throws IOException {
         String name = file.getName();
-        name = name.substring(0, name.indexOf('.'));
+        name = name.substring(0, name.indexOf('.')).toLowerCase();
 
         Reader r = Files.newBufferedReader(file.toPath());
 
@@ -61,11 +67,40 @@ public class BeeSetup {
     }
 
     private static void parseBee(Reader reader, String name) {
+        name = name.toLowerCase().replace(" ", "_");
         Gson gson = new Gson();
         CustomBeeData bee = gson.fromJson(reader, CustomBeeData.class);
         bee.setName(name);
         bee.shouldResourcefulBeesDoForgeRegistration = true;
         BeeRegistry.getRegistry().registerBee(name.toLowerCase(), bee);
+    }
+
+    private static void parseHoney(File file) throws IOException {
+        String name = file.getName();
+        name = name.substring(0, name.indexOf('.'));
+
+        Reader r = Files.newBufferedReader(file.toPath());
+
+        parseHoney(r, name);
+    }
+
+    private static void parseHoney(ZipFile zf, ZipEntry zipEntry) throws IOException {
+        String name = zipEntry.getName();
+        name = name.substring(name.lastIndexOf("/") + 1, name.indexOf('.'));
+
+        InputStream input = zf.getInputStream(zipEntry);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(input, StandardCharsets.UTF_8));
+
+        parseHoney(reader, name);
+    }
+
+    private static void parseHoney(Reader reader, String name) {
+        name = name.toLowerCase().replace(" ", "_");
+        Gson gson = new Gson();
+        HoneyBottleData honey = gson.fromJson(reader, HoneyBottleData.class);
+        if (honey.getName() == null) honey.setName(name);
+        honey.shouldResourcefulBeesDoForgeRegistration = true;
+        BeeRegistry.getRegistry().registerHoney(name.toLowerCase(), honey);
     }
 
     private static void addBees() {
@@ -78,6 +113,47 @@ public class BeeSetup {
                     .forEach(BeeSetup::addBee);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private static void addHoney() {
+        try {
+            Files.walk(HONEY_PATH)
+                    .filter(f -> f.getFileName().toString().endsWith(".zip"))
+                    .forEach(BeeSetup::addZippedHoney);
+            Files.walk(HONEY_PATH)
+                    .filter(f -> f.getFileName().toString().endsWith(".json"))
+                    .forEach(BeeSetup::addHoney);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void addHoney(Path file) {
+        File f = file.toFile();
+        try {
+            parseHoney(f);
+        } catch (IOException e) {
+            LOGGER.error("File not found when parsing honey");
+        }
+    }
+
+    private static void addZippedHoney(Path file) {
+        try {
+            ZipFile zf = new ZipFile(file.toString());
+            zf.stream().forEach(zipEntry -> {
+                if (zipEntry.getName().endsWith(".json")) {
+                    try {
+                        parseHoney(zf, zipEntry);
+                    } catch (IOException e) {
+                        String name = zipEntry.getName();
+                        name = name.substring(name.lastIndexOf("/") + 1, name.indexOf('.'));
+                        LOGGER.error("Could not parse {} honey from ZipFile", name);
+                    }
+                }
+            });
+        } catch (IOException e) {
+            LOGGER.warn("Could not read ZipFile! ZipFile: " + file.getFileName());
         }
     }
 
@@ -138,7 +214,7 @@ public class BeeSetup {
         Files.walk(source)
                 .filter(f -> f.getFileName().toString().endsWith(".json"))
                 .forEach(path -> {
-                    File targetFile = new File(String.valueOf(Paths.get(BEE_PATH.toString(),"/", path.getFileName().toString())));
+                    File targetFile = new File(String.valueOf(Paths.get(BEE_PATH.toString(), "/", path.getFileName().toString())));
                     try {
                         Files.copy(path, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
                     } catch (IOException e) {

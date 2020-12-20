@@ -1,9 +1,11 @@
 package com.resourcefulbees.resourcefulbees.utils.color;
 
 import com.resourcefulbees.resourcefulbees.api.IBeeRegistry;
+import com.resourcefulbees.resourcefulbees.block.CustomHoneyBlock;
 import com.resourcefulbees.resourcefulbees.block.HoneycombBlock;
 import com.resourcefulbees.resourcefulbees.item.BeeJar;
 import com.resourcefulbees.resourcefulbees.item.BeeSpawnEggItem;
+import com.resourcefulbees.resourcefulbees.item.CustomHoneyBottleItem;
 import com.resourcefulbees.resourcefulbees.item.HoneycombItem;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
@@ -21,7 +23,8 @@ public final class ColorHandler {
 
     private static final IBeeRegistry BEE_REGISTRY = BeeRegistry.getRegistry();
 
-    private ColorHandler() {}
+    private ColorHandler() {
+    }
 
     public static void onItemColors(ColorHandlerEvent.Item event) {
         ItemColors colors = event.getItemColors();
@@ -32,16 +35,23 @@ public final class ColorHandler {
             }
             registerItems(colors, BeeSpawnEggItem::getColor, customBeeData.getSpawnEggItemRegistryObject().get());
         }));
+        BEE_REGISTRY.getHoneyBottles().forEach((h, honeyData) -> {
+            registerItems(colors, CustomHoneyBottleItem::getColor, honeyData.getHoneyBottleRegistryObject().get());
+            registerItems(colors, CustomHoneyBlock::getItemColor, honeyData.getHoneyBlockItemRegistryObject().get());
+        });
         registerItems(colors, BeeJar::getColor, ModItems.BEE_JAR.get());
     }
 
-    public static void onBlockColors(ColorHandlerEvent.Block event){
+    public static void onBlockColors(ColorHandlerEvent.Block event) {
         BlockColors colors = event.getBlockColors();
         BEE_REGISTRY.getBees().forEach(((s, customBeeData) -> {
             if (customBeeData.hasHoneycomb() && customBeeData.getColorData().hasHoneycombColor() && !customBeeData.hasCustomDrop()) {
                 registerBlocks(colors, HoneycombBlock::getBlockColor, customBeeData.getCombBlockRegistryObject().get());
             }
         }));
+        BEE_REGISTRY.getHoneyBottles().forEach((h, honeyData) -> {
+            registerBlocks(colors, CustomHoneyBlock::getBlockColor, honeyData.getHoneyBlockRegistryObject().get());
+        });
     }
 
     private static void registerItems(ItemColors handler, IItemColor itemColor, IItemProvider... items) {
@@ -53,7 +63,7 @@ public final class ColorHandler {
     }
 
     private static void registerBlocks(BlockColors handler, IBlockColor blockColor, Block... blocks) {
-        try{
+        try {
             handler.register(blockColor, blocks);
         } catch (NullPointerException ex) {
             LOGGER.error("BlockColor Registration Failed", ex);

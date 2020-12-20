@@ -26,6 +26,13 @@ public class FirstPhaseValidator {
         return true;
     }
 
+    public static boolean validate(HoneyBottleData honeyData) {
+        validateHoneyBottleColor(honeyData, honeyData.getName());
+        validateEffectValues(honeyData, honeyData.getName());
+        return true;
+    }
+
+
     private static void validateHoneycombColor(ColorData colorData, String name) {
         if (colorData != null && colorData.hasHoneycombColor() && !Color.validate(colorData.getHoneycombColor())) {
             logError(name);
@@ -51,6 +58,13 @@ public class FirstPhaseValidator {
         if (colorData != null && colorData.hasGlowColor() && !Color.validate(colorData.getGlowColor())) {
             logError(name);
             throw new IllegalArgumentException(String.format("Glow Color: %1$s is not valid!!", colorData.getGlowColor()));
+        }
+    }
+
+    private static void validateHoneyBottleColor(HoneyBottleData honeyBottleData, String name) {
+        if (honeyBottleData != null && honeyBottleData.hasHoneyColor() && !Color.validate(honeyBottleData.getHoneyColor())) {
+            logError(name);
+            throw new IllegalArgumentException(String.format("Honey Bottle Color: %1$s is not valid!!", honeyBottleData.getHoneyColor()));
         }
     }
 
@@ -145,8 +159,21 @@ public class FirstPhaseValidator {
         }
     }
 
+    private static void validateEffectValues(HoneyBottleData honeyData, String name) {
+        if (honeyData.getEffects() != null && honeyData.getEffects().size() != 0) {
+            honeyData.getEffects().forEach(honeyEffect -> {
+                if (honeyEffect.getEffect() == null) {
+                    logError(name);
+                    throw new IllegalArgumentException(String.format("Custom effect could not be found! Value: %s", honeyEffect.getEffectID()));
+                }
+            });
+        }
+    }
+
     private static void logError(String name) {
         LOGGER.error("{} bee has failed validation!", name);
     }
+
+
 }
 
