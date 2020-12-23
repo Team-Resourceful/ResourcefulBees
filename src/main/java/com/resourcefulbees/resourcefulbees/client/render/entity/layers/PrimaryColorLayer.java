@@ -13,7 +13,6 @@ import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 
@@ -31,7 +30,7 @@ public class PrimaryColorLayer extends LayerRenderer<CustomBeeEntity, CustomBeeM
         primaryColor = isRainbowBee ? RainbowColor.getColorFloats() : colorData.getPrimaryColorFloats();
     }
 
-    public void render(@Nonnull MatrixStack matrixStackIn, @Nonnull IRenderTypeBuffer bufferIn, int packedLightIn, @NotNull CustomBeeEntity customBeeEntity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void render(@Nonnull MatrixStack matrixStackIn, @Nonnull IRenderTypeBuffer bufferIn, int packedLightIn, @Nonnull CustomBeeEntity customBeeEntity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         if (isRainbowBee) primaryColor = RainbowColor.getColorFloats();
         renderModel(this.getEntityModel(), primaryLayerTexture, matrixStackIn, bufferIn, packedLightIn, customBeeEntity, primaryColor[0], primaryColor[1], primaryColor[2]);
     }

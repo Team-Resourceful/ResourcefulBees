@@ -1,6 +1,5 @@
 package com.resourcefulbees.resourcefulbees.block.multiblocks.centrifuge;
 
-import com.resourcefulbees.resourcefulbees.tileentity.CentrifugeTileEntity;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.CentrifugeCasingTileEntity;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.CentrifugeControllerTileEntity;
 import net.minecraft.block.Block;
@@ -20,7 +19,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.network.NetworkHooks;
-import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -48,7 +46,7 @@ public class CentrifugeCasingBlock extends Block {
     //TODO this can break if other casings are powered need to find an alternative solution.
     // may have to loop through every casing and check if any are still powered.
     @Override
-    public void neighborChanged(@NotNull BlockState state, @NotNull World world, @NotNull BlockPos pos, @NotNull Block changedBlock, @NotNull BlockPos changedBlockPos, boolean bool) {
+    public void neighborChanged(@Nonnull BlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull Block changedBlock, @Nonnull BlockPos changedBlockPos, boolean bool) {
         CentrifugeControllerTileEntity centrifugeControllerTileEntity = getControllerEntity(world, pos);
         if (centrifugeControllerTileEntity != null) {
             centrifugeControllerTileEntity.setIsPoweredByRedstone(world.isBlockPowered(pos));

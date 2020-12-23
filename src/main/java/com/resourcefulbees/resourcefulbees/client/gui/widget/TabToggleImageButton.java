@@ -6,7 +6,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import org.jetbrains.annotations.NotNull;
+
+import javax.annotation.Nonnull;
 
 public class TabToggleImageButton extends TabImageButton {
 
@@ -26,7 +27,7 @@ public class TabToggleImageButton extends TabImageButton {
     public boolean isStateTriggered() { return this.stateTriggered; }
 
     @Override
-    public void renderButton(@NotNull MatrixStack matrixStack, int p_230431_2_, int p_230431_3_, float p_230431_4_) {
+    public void renderButton(@Nonnull MatrixStack matrixStack, int p_230431_2_, int p_230431_3_, float p_230431_4_) {
         Minecraft minecraft = Minecraft.getInstance();
         minecraft.getTextureManager().bindTexture(this.resourceLocation);
         RenderSystem.disableDepthTest();

@@ -12,7 +12,6 @@ import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 
@@ -29,7 +28,7 @@ public class SecondaryColorLayer extends LayerRenderer<CustomBeeEntity, CustomBe
         secondaryColor = colorData.getSecondaryColorFloats();
     }
 
-    public void render(@Nonnull MatrixStack matrixStackIn, @Nonnull IRenderTypeBuffer bufferIn, int packedLightIn, @NotNull CustomBeeEntity customBeeEntity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void render(@Nonnull MatrixStack matrixStackIn, @Nonnull IRenderTypeBuffer bufferIn, int packedLightIn, @Nonnull CustomBeeEntity customBeeEntity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         renderModel(this.getEntityModel(), primaryLayerTexture, matrixStackIn, bufferIn, packedLightIn, customBeeEntity, secondaryColor[0], secondaryColor[1], secondaryColor[2]);
 
         /*        CustomBeeData bee = customBeeEntity.getBeeData();
