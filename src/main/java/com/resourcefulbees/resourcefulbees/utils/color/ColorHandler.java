@@ -2,10 +2,11 @@ package com.resourcefulbees.resourcefulbees.utils.color;
 
 import com.resourcefulbees.resourcefulbees.api.IBeeRegistry;
 import com.resourcefulbees.resourcefulbees.block.CustomHoneyBlock;
-import com.resourcefulbees.resourcefulbees.block.CustomHoneyFluidBlock;
+import com.resourcefulbees.resourcefulbees.block.HoneyTank;
 import com.resourcefulbees.resourcefulbees.block.HoneycombBlock;
 import com.resourcefulbees.resourcefulbees.item.*;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
+import com.resourcefulbees.resourcefulbees.registry.ModBlocks;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.color.BlockColors;
@@ -14,8 +15,6 @@ import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.util.IItemProvider;
 import net.minecraftforge.client.event.ColorHandlerEvent;
-import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.fluids.FluidAttributes;
 
 import static com.resourcefulbees.resourcefulbees.ResourcefulBees.LOGGER;
 
@@ -52,8 +51,8 @@ public final class ColorHandler {
         }));
         BEE_REGISTRY.getHoneyBottles().forEach((h, honeyData) -> {
             registerBlocks(colors, CustomHoneyBlock::getBlockColor, honeyData.getHoneyBlockRegistryObject().get());
-//            registerBlocks(colors, CustomHoneyFluidBlock::getBlockColor, honeyData.getHoneyFluidBlockRegistryObject().get());
         });
+        registerBlocks(colors, HoneyTank::getBlockColor, ModBlocks.WOODEN_HONEY_TANK.get(), ModBlocks.NETHER_HONEY_TANK.get(), ModBlocks.PURPUR_HONEY_TANK.get());
     }
 
     private static void registerItems(ItemColors handler, IItemColor itemColor, IItemProvider... items) {
