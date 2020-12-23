@@ -2,11 +2,9 @@ package com.resourcefulbees.resourcefulbees.utils.color;
 
 import com.resourcefulbees.resourcefulbees.api.IBeeRegistry;
 import com.resourcefulbees.resourcefulbees.block.CustomHoneyBlock;
+import com.resourcefulbees.resourcefulbees.block.CustomHoneyFluidBlock;
 import com.resourcefulbees.resourcefulbees.block.HoneycombBlock;
-import com.resourcefulbees.resourcefulbees.item.BeeJar;
-import com.resourcefulbees.resourcefulbees.item.BeeSpawnEggItem;
-import com.resourcefulbees.resourcefulbees.item.CustomHoneyBottleItem;
-import com.resourcefulbees.resourcefulbees.item.HoneycombItem;
+import com.resourcefulbees.resourcefulbees.item.*;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import net.minecraft.block.Block;
@@ -16,6 +14,8 @@ import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.util.IItemProvider;
 import net.minecraftforge.client.event.ColorHandlerEvent;
+import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.fluids.FluidAttributes;
 
 import static com.resourcefulbees.resourcefulbees.ResourcefulBees.LOGGER;
 
@@ -38,6 +38,7 @@ public final class ColorHandler {
         BEE_REGISTRY.getHoneyBottles().forEach((h, honeyData) -> {
             registerItems(colors, CustomHoneyBottleItem::getColor, honeyData.getHoneyBottleRegistryObject().get());
             registerItems(colors, CustomHoneyBlock::getItemColor, honeyData.getHoneyBlockItemRegistryObject().get());
+            registerItems(colors, CustomHoneyBucketItem::getColor, honeyData.getHoneyBucketItemRegistryObject().get());
         });
         registerItems(colors, BeeJar::getColor, ModItems.BEE_JAR.get());
     }
@@ -51,6 +52,7 @@ public final class ColorHandler {
         }));
         BEE_REGISTRY.getHoneyBottles().forEach((h, honeyData) -> {
             registerBlocks(colors, CustomHoneyBlock::getBlockColor, honeyData.getHoneyBlockRegistryObject().get());
+//            registerBlocks(colors, CustomHoneyFluidBlock::getBlockColor, honeyData.getHoneyFluidBlockRegistryObject().get());
         });
     }
 
