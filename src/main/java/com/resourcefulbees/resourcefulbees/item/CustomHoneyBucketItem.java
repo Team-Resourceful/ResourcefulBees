@@ -7,6 +7,7 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.item.BucketItem;
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
 public class CustomHoneyBucketItem extends BucketItem {
@@ -28,5 +29,13 @@ public class CustomHoneyBucketItem extends BucketItem {
 
     public int getHoneyBucketColor() {
         return honeyBottleData.getHoneyColorInt();
+    }
+
+    @Override
+    public net.minecraftforge.common.capabilities.ICapabilityProvider initCapabilities(ItemStack stack, @Nullable net.minecraft.nbt.CompoundNBT nbt) {
+        if (this instanceof BucketItem)
+            return new net.minecraftforge.fluids.capability.wrappers.FluidBucketWrapper(stack);
+        else
+            return super.initCapabilities(stack, nbt);
     }
 }
