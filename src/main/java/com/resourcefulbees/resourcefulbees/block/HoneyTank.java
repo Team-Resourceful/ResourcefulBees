@@ -100,9 +100,9 @@ public class HoneyTank extends Block {
             HoneyFlowingFluid fluid = (HoneyFlowingFluid) tank.fluidTank.getFluid().getFluid();
             if (fluid.getHoneyData().isRainbow()) {
                 world.notifyBlockUpdate(pos, stateIn, stateIn, 2);
-                super.animateTick(stateIn, world, pos, rand);
             }
         }
+        super.animateTick(stateIn, world, pos, rand);
     }
 
     @Nullable
@@ -221,7 +221,7 @@ public class HoneyTank extends Block {
         if (tileEntity instanceof HoneyTankTileEntity) {
             HoneyTankTileEntity tank = (HoneyTankTileEntity) tileEntity;
             if (itemStack.getTag() != null) {
-                tank.updateNBT(itemStack.getTag());
+                tank.readNBT(itemStack.getTag());
             }
         }
         updateBlockState(world, pos);
@@ -234,7 +234,7 @@ public class HoneyTank extends Block {
         if (tileEntity instanceof HoneyTankTileEntity) {
             HoneyTankTileEntity tank = (HoneyTankTileEntity) tileEntity;
             ItemStack stack = new ItemStack(state.getBlock().asItem());
-            stack.setTag(tank.getNBT(new CompoundNBT()));
+            stack.setTag(tank.writeNBT(new CompoundNBT()));
             return stack;
         }
         return tier.getTankItem().get().getDefaultInstance();
