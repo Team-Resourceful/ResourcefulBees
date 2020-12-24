@@ -14,7 +14,10 @@
 package com.resourcefulbees.resourcefulbees.container;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.NonNullList;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
@@ -66,6 +69,22 @@ public class AutomationSensitiveItemStackHandler extends ItemStackHandler {
     public ItemStack insertItem(int slot, ItemStack stack, boolean simulate, boolean fromAutomation) {
         if (this.canAccept(slot, stack, fromAutomation)) return super.insertItem(slot, stack, simulate);
         return stack;
+    }
+
+    public void deserializeNBTWithoutCheckingSize(CompoundNBT nbt)
+    {
+        ListNBT tagList = nbt.getList("Items", Constants.NBT.TAG_COMPOUND);
+        for (int i = 0; i < tagList.size(); i++)
+        {
+            CompoundNBT itemTags = tagList.getCompound(i);
+            int slot = itemTags.getInt("Slot");
+
+            if (slot >= 0 && slot < stacks.size())
+            {
+                stacks.set(slot, ItemStack.read(itemTags));
+            }
+        }
+        onLoad();
     }
 
     @Nonnull

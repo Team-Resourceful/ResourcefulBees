@@ -376,7 +376,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
     }
 
     protected void loadFromNBT(CompoundNBT tag) {
-        itemStackHandler.deserializeNBT(tag.getCompound(NBTConstants.NBT_INVENTORY));
+        itemStackHandler.deserializeNBTWithoutCheckingSize(tag.getCompound(NBTConstants.NBT_INVENTORY));
         time = NBTUtils.getFallbackIntArray("time", tag, getNumberOfInputs());
         energyStorage.deserializeNBT(tag.getCompound("energy"));
         fluidTanks.readFromNBT(tag);
