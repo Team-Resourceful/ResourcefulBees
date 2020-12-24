@@ -7,6 +7,8 @@ import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryS
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryTileEntity;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.CentrifugeCasingTileEntity;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.CentrifugeControllerTileEntity;
+import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.EliteCentrifugeCasingTileEntity;
+import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.EliteCentrifugeControllerTileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
@@ -32,7 +34,7 @@ public class ModTileEntityTypes {
             .create(() -> new CentrifugeControllerTileEntity(ModTileEntityTypes.CENTRIFUGE_CONTROLLER_ENTITY.get()), ModBlocks.CENTRIFUGE_CONTROLLER.get())
             .build(null));
     public static final RegistryObject<TileEntityType<?>> CENTRIFUGE_CASING_ENTITY = TILE_ENTITY_TYPES.register("centrifuge_casing", () -> TileEntityType.Builder
-            .create(CentrifugeCasingTileEntity::new, ModBlocks.CENTRIFUGE_CASING.get())
+            .create(() -> new CentrifugeCasingTileEntity(ModTileEntityTypes.CENTRIFUGE_CASING_ENTITY.get()), ModBlocks.CENTRIFUGE_CASING.get())
             .build(null));
     public static final RegistryObject<TileEntityType<?>> HONEY_GENERATOR_ENTITY = TILE_ENTITY_TYPES.register("honey_generator", () -> TileEntityType.Builder
             .create(HoneyGeneratorTileEntity::new, ModBlocks.HONEY_GENERATOR.get())
@@ -52,6 +54,10 @@ public class ModTileEntityTypes {
     public static final RegistryObject<TileEntityType<?>> ACCELERATOR_TILE_ENTITY = TILE_ENTITY_TYPES.register("accelerator", () -> TileEntityType.Builder
             .create(AcceleratorTileEntity::new, ModBlocks.ACCELERATOR.get())
             .build(null));
-
-
+    public static final RegistryObject<TileEntityType<?>> ELITE_CENTRIFUGE_CONTROLLER_ENTITY = TILE_ENTITY_TYPES.register("elite_centrifuge_controller", () -> TileEntityType.Builder
+            .create(() -> new EliteCentrifugeControllerTileEntity(ModTileEntityTypes.ELITE_CENTRIFUGE_CONTROLLER_ENTITY.get()), ModBlocks.ELITE_CENTRIFUGE_CONTROLLER.get())
+            .build(null));
+    public static final RegistryObject<TileEntityType<?>> ELITE_CENTRIFUGE_CASING_ENTITY = TILE_ENTITY_TYPES.register("elite_centrifuge_casing", () -> TileEntityType.Builder
+            .create(() -> new EliteCentrifugeCasingTileEntity(ModTileEntityTypes.ELITE_CENTRIFUGE_CASING_ENTITY.get()), ModBlocks.ELITE_CENTRIFUGE_CASING.get())
+            .build(null));
 }

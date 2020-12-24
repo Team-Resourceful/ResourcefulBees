@@ -19,6 +19,8 @@ public class ModContainers {
             .create((id,inv,c) -> new MechanicalCentrifugeContainer(id, inv.player.world, c.readBlockPos(), inv)));
     public static final RegistryObject<ContainerType<CentrifugeMultiblockContainer>> CENTRIFUGE_MULTIBLOCK_CONTAINER = CONTAINER_TYPES.register("centrifuge_multiblock", () -> IForgeContainerType
             .create((id,inv,c) -> new CentrifugeMultiblockContainer(id, inv.player.world, c.readBlockPos(), inv)));
+    public static final RegistryObject<ContainerType<EliteCentrifugeMultiblockContainer>> ELITE_CENTRIFUGE_MULTIBLOCK_CONTAINER = CONTAINER_TYPES.register("elite_centrifuge_multiblock", () -> IForgeContainerType
+            .create((id,inv,c) -> new EliteCentrifugeMultiblockContainer(id, inv.player.world, c.readBlockPos(), inv)));
     public static final RegistryObject<ContainerType<HoneyGeneratorContainer>> HONEY_GENERATOR_CONTAINER = CONTAINER_TYPES.register("honey_generator", () -> IForgeContainerType
             .create((id,inv,c) -> new HoneyGeneratorContainer(id, inv.player.world, c.readBlockPos(), inv)));
     public static final RegistryObject<ContainerType<UnvalidatedApiaryContainer>> UNVALIDATED_APIARY_CONTAINER = CONTAINER_TYPES.register("unvalidated_apiary", () -> IForgeContainerType

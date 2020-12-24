@@ -45,6 +45,10 @@ public class MultiFluidTank implements IFluidHandler {
         return fluidTanks[tank].getFluidAmount();
     }
 
+    public void setFluidInTank(int tank, FluidStack fluidStack) {
+        fluidTanks[tank].setFluid(fluidStack);
+    }
+
     /**
      *  DO NOT USE!!
      */

@@ -6,40 +6,41 @@ import com.resourcefulbees.resourcefulbees.block.CentrifugeBlock;
 import com.resourcefulbees.resourcefulbees.capabilities.CustomEnergyStorage;
 import com.resourcefulbees.resourcefulbees.capabilities.MultiFluidTank;
 import com.resourcefulbees.resourcefulbees.config.Config;
-import com.resourcefulbees.resourcefulbees.container.ApiaryBreederContainer;
 import com.resourcefulbees.resourcefulbees.container.AutomationSensitiveItemStackHandler;
 import com.resourcefulbees.resourcefulbees.container.CentrifugeContainer;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
+import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
+import com.resourcefulbees.resourcefulbees.network.packets.SyncGUIMessage;
 import com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe;
 import com.resourcefulbees.resourcefulbees.registry.ModContainers;
 import com.resourcefulbees.resourcefulbees.registry.ModFluids;
-import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryBreederTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.NBTUtils;
+import io.netty.buffer.Unpooled;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IntArray;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
@@ -103,10 +104,16 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
         processCompleted = new boolean[getNumberOfInputs()];
     }
 
-    //Override this for subclasses
     protected void initializeInputsAndOutputs() {
-        honeycombSlots = new int[] {1};
-        outputSlots = new int[] {2,3,4,5,6,7};
+        honeycombSlots = new int[getNumberOfInputs()];
+        for (int i = 0; i < honeycombSlots.length; i++) {
+            honeycombSlots[i] = i + 1;
+        }
+
+        outputSlots = new int[getNumberOfInputs() * 6];
+        for (int i = 0; i < outputSlots.length; i++) {
+            outputSlots[i] = i + honeycombSlots.length + 1;
+        }
     }
 
 
@@ -271,7 +278,8 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
 
     public int getTotalSlots() { return 1 + honeycombSlots.length + outputSlots.length;}
 
-    public int getNumberOfInputs() { return honeycombSlots.length; }
+    //Override this for subclasses
+    public int getNumberOfInputs() { return 1; }
 
     public int getTotalTanks() { return 1 + honeycombSlots.length; }
 
@@ -345,11 +353,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
         return hasSpace;
     }
 
-    public void drainFluidInTank(int tank) {
-        fluidTanks.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.EXECUTE, tank);
-        assert world != null;
-        world.notifyBlockUpdate(this.pos, this.getBlockState(), this.getBlockState(), 2);
-    }
+    public void drainFluidInTank(int tank) { fluidTanks.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.EXECUTE, tank); }
 
     public void updateRequiresRedstone() { this.requiresRedstone = !requiresRedstone; }
 
@@ -383,7 +387,8 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
 
     protected void loadFromNBT(CompoundNBT tag) {
         itemStackHandler.deserializeNBT(tag.getCompound(NBTConstants.NBT_INVENTORY));
-        time = tag.getIntArray("time");
+        int[] timeNbt = tag.getIntArray("time");
+        time = timeNbt.length != getNumberOfInputs() ? new int[getNumberOfInputs()] : timeNbt;
         energyStorage.deserializeNBT(tag.getCompound("energy"));
         fluidTanks.readFromNBT(tag);
         isProcessing = NBTUtils.loadBooleans(honeycombSlots.length, tag.getCompound("isProcessing"));
@@ -441,8 +446,9 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
 
     public AutomationSensitiveItemStackHandler.IAcceptor getAcceptor() {
         return (slot, stack, automation) -> {
+            boolean isInputSlot = slot <= getNumberOfInputs();
             boolean isBottleSlot = slot == BOTTLE_SLOT;
-            return !automation || (!isBottleSlot && !stack.getItem().equals(Items.GLASS_BOTTLE)) || (isBottleSlot && stack.getItem().equals(Items.GLASS_BOTTLE));
+            return !automation || (isInputSlot && !isBottleSlot && !stack.getItem().equals(Items.GLASS_BOTTLE)) || (isBottleSlot && stack.getItem().equals(Items.GLASS_BOTTLE));
         };
     }
 
@@ -467,6 +473,27 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
             @Override
             protected void onEnergyChanged() { markDirty(); }
         };
+    }
+
+    public void sendGUINetworkPacket(IContainerListener player) {
+        if (player instanceof ServerPlayerEntity && (!(player instanceof FakePlayer))) {
+            PacketBuffer buffer = new PacketBuffer(Unpooled.buffer());
+
+            for (int i = 0; i < fluidTanks.getTanks(); i++) {
+                buffer.writeFluidStack(fluidTanks.getFluidInTank(i));
+            }
+
+            buffer.writeInt(energyStorage.getEnergyStored());
+
+            NetPacketHandler.sendToPlayer(new SyncGUIMessage(this.pos, buffer), (ServerPlayerEntity) player);
+        }
+    }
+
+    public void handleGUINetworkPacket(PacketBuffer buffer) {
+        for (int i = 0; i < fluidTanks.getTanks(); i++) {
+            fluidTanks.setFluidInTank(i, buffer.readFluidStack());
+        }
+        energyStorage.setEnergy(buffer.readInt());
     }
 
     protected class TileStackHandler extends AutomationSensitiveItemStackHandler {

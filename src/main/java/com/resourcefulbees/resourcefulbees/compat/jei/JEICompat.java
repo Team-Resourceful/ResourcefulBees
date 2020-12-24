@@ -2,7 +2,6 @@ package com.resourcefulbees.resourcefulbees.compat.jei;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
-import com.resourcefulbees.resourcefulbees.client.gui.screen.CentrifugeMultiblockScreen;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.CentrifugeScreen;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.MechanicalCentrifugeScreen;
 import com.resourcefulbees.resourcefulbees.compat.jei.ingredients.EntityIngredient;
@@ -12,6 +11,8 @@ import com.resourcefulbees.resourcefulbees.compat.jei.ingredients.EntityRenderer
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import mezz.jei.api.IModPlugin;
+import mezz.jei.api.gui.handlers.IGuiClickableArea;
+import mezz.jei.api.gui.handlers.IGuiContainerHandler;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.registration.*;
@@ -22,11 +23,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
-import java.util.Arrays;
-import java.util.List;
-import java.util.StringJoiner;
+import java.util.*;
 
 import static com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE;
 
@@ -70,6 +70,7 @@ public class JEICompat implements IModPlugin {
         registration.addRecipeCatalyst(new ItemStack(ModItems.CENTRIFUGE_ITEM.get()), CentrifugeRecipeCategory.ID);
         registration.addRecipeCatalyst(new ItemStack(ModItems.MECHANICAL_CENTRIFUGE_ITEM.get()), CentrifugeRecipeCategory.ID);
         registration.addRecipeCatalyst(new ItemStack(ModItems.CENTRIFUGE_CONTROLLER_ITEM.get()), CentrifugeRecipeCategory.ID);
+        registration.addRecipeCatalyst(new ItemStack(ModItems.ELITE_CENTRIFUGE_CONTROLLER_ITEM.get()), CentrifugeRecipeCategory.ID);
     }
 
     @Override
@@ -93,9 +94,17 @@ public class JEICompat implements IModPlugin {
 
     @Override
     public void registerGuiHandlers(IGuiHandlerRegistration registration) {
-        registration.addRecipeClickArea(CentrifugeScreen.class, 80, 30, 18, 18, CentrifugeRecipeCategory.ID);
+        //registration.addRecipeClickArea(CentrifugeScreen.class, 80, 30, 18, 18, CentrifugeRecipeCategory.ID);
         registration.addRecipeClickArea(MechanicalCentrifugeScreen.class, 80, 30, 18, 18, CentrifugeRecipeCategory.ID);
-        registration.addRecipeClickArea(CentrifugeMultiblockScreen.class, 88, 26, 18, 18, CentrifugeRecipeCategory.ID);
+        //registration.addRecipeClickArea(CentrifugeMultiblockScreen.class, 88, 26, 18, 18, CentrifugeRecipeCategory.ID);
+
+        registration.addGuiContainerHandler(CentrifugeScreen.class, new IGuiContainerHandler<CentrifugeScreen>() {
+            public @NotNull
+            Collection<IGuiClickableArea> getGuiClickableAreas(@NotNull CentrifugeScreen screen, double mouseX, double mouseY) {
+                IGuiClickableArea clickableArea = IGuiClickableArea.createBasic(screen.getXSize() - 25, 50, 18, 18, CentrifugeRecipeCategory.ID);
+                return Collections.singleton(clickableArea);
+            }
+        });
     }
 
     @Override

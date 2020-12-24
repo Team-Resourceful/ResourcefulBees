@@ -1,7 +1,7 @@
 package com.resourcefulbees.resourcefulbees.utils;
 
 import com.google.common.base.Splitter;
-import com.resourcefulbees.resourcefulbees.api.beedata.*;
+import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
@@ -25,7 +25,9 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 import static com.resourcefulbees.resourcefulbees.lib.BeeConstants.*;
 
@@ -105,49 +107,35 @@ public class BeeInfoUtils {
      * @param resource Resource input as String in the form of "mod_id:item_or_block_id".
      * @return Returns New Resource Location for given input.
      */
-    public static ResourceLocation getResource(String resource){
-        return new ResourceLocation(resource);
-    }
+    public static ResourceLocation getResource(String resource){ return new ResourceLocation(resource); }
     
-    public static boolean isValidBlock(Block block){
-        return block != null && block != Blocks.AIR;
-    }
+    public static boolean isValidBlock(Block block){ return block != null && block != Blocks.AIR; }
 
-    public static boolean isValidFluid(Fluid fluid){
-        return fluid != null && fluid != Fluids.EMPTY;
-    }
+    public static boolean isValidFluid(Fluid fluid){ return fluid != null && fluid != Fluids.EMPTY; }
 
-    public static boolean isValidItem(Item item){
-        return item != null && item != Items.AIR;
-    }
+    public static boolean isValidItem(Item item){ return item != null && item != Items.AIR; }
 
-    public static boolean isValidEntityType(EntityType<?> entityType){
-        return entityType != null;
-    }
+    public static boolean isValidEntityType(EntityType<?> entityType){ return entityType != null; }
 
-    public static Item getItem(String itemName) { return ForgeRegistries.ITEMS.getValue(getResource(itemName));}
+    public static Item getItem(String itemName) { return ForgeRegistries.ITEMS.getValue(getResource(itemName)); }
 
-    public static Block getBlock(String blockName) { return ForgeRegistries.BLOCKS.getValue(getResource(blockName));}
+    public static Block getBlock(String blockName) { return ForgeRegistries.BLOCKS.getValue(getResource(blockName)); }
 
-    public static Fluid getFluid(String fluidName) { return ForgeRegistries.FLUIDS.getValue(getResource(fluidName));}
+    public static Fluid getFluid(String fluidName) { return ForgeRegistries.FLUIDS.getValue(getResource(fluidName)); }
 
-    public static Biome getBiome(String biomeName) { return ForgeRegistries.BIOMES.getValue(getResource(biomeName));}
+    public static Biome getBiome(String biomeName) { return ForgeRegistries.BIOMES.getValue(getResource(biomeName)); }
 
-    public static EntityType<?> getEntityType(String entityName) { return ForgeRegistries.ENTITIES.getValue(getResource(entityName));}
+    public static EntityType<?> getEntityType(String entityName) { return ForgeRegistries.ENTITIES.getValue(getResource(entityName)); }
 
-    public static ITag<Item> getItemTag(String itemTag) { return ItemTags.getCollection().get(getResource(itemTag));}
+    public static ITag<Item> getItemTag(String itemTag) { return ItemTags.getCollection().get(getResource(itemTag)); }
 
-    public static ITag<Fluid> getFluidTag(String fluidTag) { return FluidTags.func_226157_a_().get(getResource(fluidTag));}
+    public static ITag<Fluid> getFluidTag(String fluidTag) { return FluidTags.func_226157_a_().get(getResource(fluidTag));  }
 
-    public static ITag<Block> getBlockTag(String blockTag) { return BlockTags.getCollection().get(getResource(blockTag));}
+    public static ITag<Block> getBlockTag(String blockTag) { return BlockTags.getCollection().get(getResource(blockTag)); }
 
-    public static ITag<Block> getValidApiaryTag() {
-        return BlockTags.getCollection().get(VALID_APIARY);
-    }
+    public static ITag<Block> getValidApiaryTag() { return BlockTags.getCollection().get(VALID_APIARY); }
 
-    public static void makeValidApiaryTag() {
-        BlockTags.makeWrapperTag("resourcefulbees:valid_apiary");
-    }
+    public static void makeValidApiaryTag() { BlockTags.makeWrapperTag("resourcefulbees:valid_apiary"); }
 
     private static final ResourceLocation VALID_APIARY = new ResourceLocation("resourcefulbees:valid_apiary");
 

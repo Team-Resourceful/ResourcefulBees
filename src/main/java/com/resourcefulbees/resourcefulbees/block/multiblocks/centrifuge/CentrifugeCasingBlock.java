@@ -1,5 +1,6 @@
 package com.resourcefulbees.resourcefulbees.block.multiblocks.centrifuge;
 
+import com.resourcefulbees.resourcefulbees.registry.ModTileEntityTypes;
 import com.resourcefulbees.resourcefulbees.tileentity.CentrifugeTileEntity;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.CentrifugeCasingTileEntity;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.CentrifugeControllerTileEntity;
@@ -34,7 +35,7 @@ public class CentrifugeCasingBlock extends Block {
     @Nullable
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new CentrifugeCasingTileEntity();
+        return new CentrifugeCasingTileEntity(ModTileEntityTypes.CENTRIFUGE_CASING_ENTITY.get());
     }
 
     protected CentrifugeControllerTileEntity getControllerEntity(World world, BlockPos pos) {
@@ -61,10 +62,10 @@ public class CentrifugeCasingBlock extends Block {
         if (!world.isRemote) {
             ItemStack heldItem = player.getHeldItem(hand);
             boolean usingBucket = heldItem.getItem() instanceof BucketItem;
-            boolean placingBlock = heldItem.getItem() instanceof BlockItem;
+            //boolean placingBlock = heldItem.getItem() instanceof BlockItem;
             CentrifugeControllerTileEntity controller = getControllerEntity(world, pos);
 
-            if (!placingBlock) {
+            //if (!placingBlock) {
                 if (controller != null && controller.isValidStructure()) {
                     if (usingBucket) {
                         controller.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
@@ -73,7 +74,7 @@ public class CentrifugeCasingBlock extends Block {
                         NetworkHooks.openGui((ServerPlayerEntity) player, controller, controller.getPos());
                     }
                 }
-            }
+            //}
         }
 
         return super.onUse(state, world, pos, player, hand, rayTraceResult);

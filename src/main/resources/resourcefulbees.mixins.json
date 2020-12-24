@@ -5,6 +5,7 @@
   "refmap": "resourcefulbees.refmap.json",
   "mixins": [
     "BeeEntityAccessor",
+    "ContainerAccessor",
     "DispenserBlockInvoker",
     "MixinBeeEntity",
     "MixinBeeEntity$MixinEnterBeehiveGoal",
