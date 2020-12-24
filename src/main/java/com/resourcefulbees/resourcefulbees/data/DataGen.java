@@ -222,7 +222,7 @@ public class DataGen {
         if (honey.size() != 0) {
             honey.entrySet().stream().forEach(((c) -> {
                 builder.append("\"");
-                builder.append(c.getValue().getHoneyBottleRegistryObject().getId());
+                builder.append(c.getValue().getHoneyBlockRegistryObject().getId());
                 builder.append("\",\n");
             }));
             builder.deleteCharAt(builder.lastIndexOf(","));

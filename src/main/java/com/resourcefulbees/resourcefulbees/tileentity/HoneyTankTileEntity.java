@@ -111,20 +111,31 @@ public class HoneyTankTileEntity extends TileEntity implements ITickableTileEnti
         return super.getCapability(cap, side);
     }
 
-    @Nonnull
+
+    // read from tag
     @Override
-    public CompoundNBT write(CompoundNBT tag) {
-        return super.write(getNBT(tag));
+    public void fromTag(@Nonnull BlockState state, @Nonnull CompoundNBT tag) {
+        super.fromTag(state, tag);
+        readNBT(tag);
     }
 
-    public CompoundNBT getNBT(CompoundNBT tag) {
+    // write to tag
+    @Nonnull
+    @Override
+    public CompoundNBT write(@Nonnull CompoundNBT tag) {
+        super.write(tag);
+        writeNBT(tag);
+        return tag;
+    }
+
+    public CompoundNBT writeNBT(CompoundNBT tag) {
         tag.putInt("tier", tier.tier);
         if (fluidTank.isEmpty()) return tag;
         tag.put("fluid", fluidTank.writeToNBT(new CompoundNBT()));
         return tag;
     }
 
-    public void updateNBT(CompoundNBT tag) {
+    public void readNBT(CompoundNBT tag) {
         fluidTank.readFromNBT(tag.getCompound("fluid"));
         tier = TankTier.getTier(tag.getInt("tier"));
         if (fluidTank.getTankCapacity(0) != tier.maxFillAmount) fluidTank.setCapacity(tier.maxFillAmount);
@@ -135,24 +146,30 @@ public class HoneyTankTileEntity extends TileEntity implements ITickableTileEnti
     @Nullable
     @Override
     public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(pos, 0, getNBT(new CompoundNBT()));
+        return new SUpdateTileEntityPacket(pos, 0, writeNBT(new CompoundNBT()));
     }
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
         CompoundNBT nbt = pkt.getNbtCompound();
-        updateNBT(nbt);
-    }
-
-    @Override
-    public void fromTag(@Nonnull BlockState state, CompoundNBT tag) {
-        updateNBT(tag);
-        super.fromTag(state, tag);
+        readNBT(nbt);
     }
 
     @Override
     public void tick() {
 
+    }
+
+    @Override
+    public CompoundNBT getUpdateTag() {
+        CompoundNBT nbt = super.getUpdateTag();
+        return writeNBT(nbt);
+    }
+
+    @Override
+    public void handleUpdateTag(BlockState state, CompoundNBT tag) {
+        super.handleUpdateTag(state, tag);
+        readNBT(tag);
     }
 
     public void fillBottle(PlayerEntity player, Hand hand) {
