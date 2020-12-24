@@ -1,17 +1,14 @@
 package com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge;
 
-import com.resourcefulbees.resourcefulbees.registry.ModTileEntityTypes;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.items.CapabilityItemHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -19,7 +16,7 @@ import javax.annotation.Nullable;
 public class CentrifugeCasingTileEntity extends TileEntity {
     private BlockPos controllerPos;
 
-    public CentrifugeCasingTileEntity() { super(ModTileEntityTypes.CENTRIFUGE_CASING_ENTITY.get()); }
+    public CentrifugeCasingTileEntity(TileEntityType<?> tileEntityType) { super(tileEntityType); }
 
     public void setControllerPos(@Nullable BlockPos controllerPos) {
         this.controllerPos = controllerPos;
@@ -56,9 +53,7 @@ public class CentrifugeCasingTileEntity extends TileEntity {
         if (isLinked() && this.world != null) {
             CentrifugeControllerTileEntity controller = getController();
             if (controller != null && controller.isValidStructure()) {
-/*                if (cap.equals(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)) return controller.lazyOptional.cast();
-                if (cap.equals(CapabilityEnergy.ENERGY)) return controller.energyOptional.cast();*/
-                /*if (cap.equals(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)) */return controller.getCapability(cap, side);
+                return controller.getCapability(cap, side);
             }
         }
         return super.getCapability(cap, side);

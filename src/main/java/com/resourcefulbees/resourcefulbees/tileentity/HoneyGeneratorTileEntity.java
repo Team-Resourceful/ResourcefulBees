@@ -6,18 +6,24 @@ import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.container.AutomationSensitiveItemStackHandler;
 import com.resourcefulbees.resourcefulbees.container.HoneyGeneratorContainer;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
+import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
+import com.resourcefulbees.resourcefulbees.network.packets.SyncGUIMessage;
 import com.resourcefulbees.resourcefulbees.registry.ModFluids;
 import com.resourcefulbees.resourcefulbees.registry.ModTileEntityTypes;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
+import io.netty.buffer.Unpooled;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -25,6 +31,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
@@ -156,6 +163,7 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
     private void processEnergy() {
         if (this.canProcessEnergy()) {
             fluidTank.drain(HONEY_DRAIN_AMOUNT, IFluidHandler.FluidAction.EXECUTE);
+            //energyStorage.receiveEnergy(ENERGY_FILL_AMOUNT, true);
             energyStorage.addEnergy(ENERGY_FILL_AMOUNT);
             energyFilled += ENERGY_FILL_AMOUNT;
             if (energyFilled >= ENERGY_FILL_AMOUNT) energyFilled = 0;
@@ -263,6 +271,20 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
                 markDirty();
             }
         };
+    }
+
+    public void sendGUINetworkPacket(IContainerListener player) {
+        if (player instanceof ServerPlayerEntity && (!(player instanceof FakePlayer))) {
+            PacketBuffer buffer = new PacketBuffer(Unpooled.buffer());
+            buffer.writeFluidStack(fluidTank.getFluid());
+            buffer.writeInt(energyStorage.getEnergyStored());
+            NetPacketHandler.sendToPlayer(new SyncGUIMessage(this.pos, buffer), (ServerPlayerEntity) player);
+        }
+    }
+
+    public void handleGUINetworkPacket(PacketBuffer buffer) {
+        fluidTank.setFluid(buffer.readFluidStack());
+        energyStorage.setEnergy(buffer.readInt());
     }
 
     protected class TileStackHandler extends AutomationSensitiveItemStackHandler {

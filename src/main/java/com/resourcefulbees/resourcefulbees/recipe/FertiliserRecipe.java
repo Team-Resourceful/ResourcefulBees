@@ -13,7 +13,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -77,7 +76,7 @@ public class FertiliserRecipe extends ShapelessRecipe {
     }
 
     @Override
-    public @NotNull NonNullList<ItemStack> getRemainingItems(final CraftingInventory inv) {
+    public @Nonnull NonNullList<ItemStack> getRemainingItems(final CraftingInventory inv) {
         final NonNullList<ItemStack> remainingItems = NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
         for (int i = 0; i < remainingItems.size(); ++i) {
             ItemStack itemstack = inv.getStackInSlot(i);

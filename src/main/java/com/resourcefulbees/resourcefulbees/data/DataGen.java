@@ -31,6 +31,7 @@ public class DataGen {
         generateCombItemTags();
         generateHoneyBlockTags();
         generateHoneyBlockItemTags();
+        generateHoneyBottleTags();
         generateHoneyTags();
     }
 
@@ -80,15 +81,27 @@ public class DataGen {
             //honey bottle
             builder.append("\"item.resourcefulbees.");
             builder.append(name);
-            builder.append("_honey\": \"");
+            builder.append("_honey_bottle\": \"");
             builder.append(displayName);
-            builder.append(" Honey\",\n");
+            builder.append(" Honey Bottle\",\n");
+            //honey bucket
+            builder.append("\"item.resourcefulbees.");
+            builder.append(name);
+            builder.append("_honey_fluid_bucket\": \"");
+            builder.append(displayName);
+            builder.append(" Honey Bucket\",\n");
             //honey block
             builder.append("\"block.resourcefulbees.");
             builder.append(name);
             builder.append("_honey_block\" : \"");
             builder.append(displayName);
             builder.append(" Honey Block\",\n");
+            //honey fluid
+            builder.append("\"fluid.resourcefulbees.");
+            builder.append(name);
+            builder.append("_honey\": \"");
+            builder.append(displayName);
+            builder.append(" Honey\",\n");
 
         });
         builder.deleteCharAt(builder.lastIndexOf(","));
@@ -174,7 +187,7 @@ public class DataGen {
         }
     }
 
-    private static void generateHoneyTags() {
+    private static void generateHoneyBottleTags() {
         StringBuilder builder = new StringBuilder();
         builder.append("{\n");
         builder.append("\"replace\": false,\n");
@@ -272,6 +285,34 @@ public class DataGen {
             LOGGER.info("Beehive Inhabitor Tag Generated!");
         } catch (IOException e) {
             LOGGER.error("Could not generate beehive inhabitor tag!");
+        }
+    }
+
+    private static void generateHoneyTags() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("{\n");
+        builder.append("\t\"replace\": false,\n");
+        builder.append("\t\"values\": [\n");
+        Map<String, HoneyBottleData> honey = BEE_REGISTRY.getHoneyBottles();
+        if (honey.size() != 0) {
+            honey.entrySet().stream().forEach(((c) -> {
+                builder.append("\t\t\"");
+                builder.append(c.getValue().getHoneyStillFluidRegistryObject().getId());
+                builder.append("\",\n\t\t\"");
+                builder.append(c.getValue().getHoneyFlowingFluidRegistryObject().getId());
+                builder.append("\",\n");
+            }));
+            builder.deleteCharAt(builder.lastIndexOf(","));
+        }
+        builder.append("\t]\n}");
+
+        String honeyTagPath = BeeSetup.RESOURCE_PATH.toString() + "/data/forge/tags/fluids";
+        String honeyTagFile = "honey.json";
+        try {
+            writeFile(honeyTagPath, honeyTagFile, builder.toString());
+            LOGGER.info("Resourceful Honey Fluid Tag Generated!");
+        } catch (IOException e) {
+            LOGGER.error("Could not generate Honey Fluid Tag!");
         }
     }
 

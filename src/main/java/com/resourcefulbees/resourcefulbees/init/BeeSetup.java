@@ -41,7 +41,10 @@ public class BeeSetup {
 
     public static void setupBees() {
         if (ENABLE_EASTER_EGG_BEES.get()) OreoBee.register();
-        if (GENERATE_DEFAULTS.get()) setupDefaultBees();
+        if (GENERATE_DEFAULTS.get()) {
+            setupDefaultBees();
+            setupDefaultHoney();
+        }
         addBees();
         addHoney();
     }
@@ -199,6 +202,34 @@ public class BeeSetup {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private static void setupDefaultHoney() {
+        ModFileInfo mod = ModList.get().getModFileById(ResourcefulBees.MOD_ID);
+        Path source = mod.getFile().getFilePath();
+
+        try {
+            if (Files.isRegularFile(source)) {
+                createFileSystem(source);
+            } else if (Files.isDirectory(source)) {
+                copyDefaultHoney(Paths.get(source.toString(), "/data/resourcefulbees/default_honey"));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void copyDefaultHoney(Path source) throws IOException {
+        Files.walk(source)
+                .filter(f -> f.getFileName().toString().endsWith(".json"))
+                .forEach(path -> {
+                    File targetFile = new File(String.valueOf(Paths.get(HONEY_PATH.toString(), "/", path.getFileName().toString())));
+                    try {
+                        Files.copy(path, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
     }
 
     private static void createFileSystem(Path source) throws IOException {

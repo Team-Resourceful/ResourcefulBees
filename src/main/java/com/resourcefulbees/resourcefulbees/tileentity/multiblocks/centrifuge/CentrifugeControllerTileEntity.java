@@ -10,18 +10,13 @@ import com.resourcefulbees.resourcefulbees.tileentity.CentrifugeTileEntity;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.MultiBlockHelper;
 import com.resourcefulbees.resourcefulbees.utils.MathUtils;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IIntArray;
 import net.minecraft.util.IntArray;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;
@@ -29,11 +24,6 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.items.CapabilityItemHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -85,10 +75,7 @@ public class CentrifugeControllerTileEntity extends CentrifugeTileEntity {
     public CentrifugeControllerTileEntity(TileEntityType<?> tileEntityType) { super(tileEntityType); }
 
     @Override
-    protected void initializeInputsAndOutputs() {
-        honeycombSlots = new int[] {1, 2, 3};
-        outputSlots = new int[] {4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21};
-    }
+    public int getNumberOfInputs() { return 3; }
 
     @Override
     public void tick() {
@@ -122,20 +109,15 @@ public class CentrifugeControllerTileEntity extends CentrifugeTileEntity {
     public int getMaxTankCapacity() { return 10000; }
 
     @Override
-    public int getRecipeTime(int i) { return getRecipe(i) != null ? Math.max(5, getRecipe(i).time - Config.MULTIBLOCK_RECIPE_TIME_REDUCTION.get()) : Config.GLOBAL_CENTRIFUGE_RECIPE_TIME.get(); }
+    public int getRecipeTime(int i) { return getRecipe(i) != null ? Math.max(5, getRecipe(i).multiblockTime) : Config.GLOBAL_CENTRIFUGE_RECIPE_TIME.get(); }
 
     @Override
     protected boolean canProcessRecipe(int i) { return recipes.get(i) != null && (!Config.MULTIBLOCK_RECIPES_ONLY.get() || recipes.get(i).multiblock); }
 
     //endregion
 
-    //TODO this is not the right way to sync the fluids but using it for now until I can find a better way
-    // Powered centrifuge is only syncing to client properly bc of the BlockState changes
     @Override
-    protected void setPoweredBlockState(boolean powered) {
-        assert world != null;
-        world.notifyBlockUpdate(this.pos, this.getBlockState(), this.getBlockState(), 2);
-    }
+    protected void setPoweredBlockState(boolean powered) { }
 
     //region NBT
     @Nonnull
@@ -184,23 +166,25 @@ public class CentrifugeControllerTileEntity extends CentrifugeTileEntity {
         return buildStructureBounds(this.getPos(), 3, 4, 3, -1, -1, -2, this.getBlockState().get(CentrifugeControllerBlock.FACING));
     }
 
-    protected final Predicate<BlockPos> validBlocks = blockPos -> {
-        assert world != null : "Validating Centrifuge - How is world null??";
-        Block block  = world.getBlockState(blockPos).getBlock();
-        TileEntity tileEntity = world.getTileEntity(blockPos);
-        if (block instanceof CentrifugeCasingBlock && tileEntity instanceof CentrifugeCasingTileEntity) {
-            CentrifugeCasingTileEntity casing = (CentrifugeCasingTileEntity) tileEntity;
-            return !casing.isLinked() || (casing.getController() != null && casing.getController().equals(this));
-        }
-        return false;
-    };
+    protected Predicate<BlockPos> validBlocks() {
+        return blockPos -> {
+            assert world != null : "Validating Centrifuge - How is world null??";
+            Block block = world.getBlockState(blockPos).getBlock();
+            TileEntity tileEntity = world.getTileEntity(blockPos);
+            if (block instanceof CentrifugeCasingBlock && tileEntity instanceof CentrifugeCasingTileEntity) {
+                CentrifugeCasingTileEntity casing = (CentrifugeCasingTileEntity) tileEntity;
+                return !casing.isLinked() || (casing.getController() != null && casing.getController().equals(this));
+            }
+            return false;
+        };
+    }
 
     protected int numberOfCasingsRequired() { return 35; }
 
     protected void validateStructure(World world, @Nullable ServerPlayerEntity player) {
         validateTime = 0;
         buildStructureList(getBounds(), STRUCTURE_BLOCKS, blockPos -> true, this.getPos());
-        validStructure = MultiBlockHelper.validateStructure(STRUCTURE_BLOCKS, validBlocks, numberOfCasingsRequired());
+        validStructure = MultiBlockHelper.validateStructure(STRUCTURE_BLOCKS, validBlocks(), numberOfCasingsRequired());
         world.setBlockState(pos, getBlockState().with(CentrifugeControllerBlock.PROPERTY_VALID, validStructure));
 
         if (validStructure) {
@@ -234,9 +218,7 @@ public class CentrifugeControllerTileEntity extends CentrifugeTileEntity {
         unlinkCasings(world);
     }
 
-    public boolean isValidStructure() {
-        return this.validStructure;
-    }
+    public boolean isValidStructure() { return this.validStructure; }
 
     @Override
     public void remove() {

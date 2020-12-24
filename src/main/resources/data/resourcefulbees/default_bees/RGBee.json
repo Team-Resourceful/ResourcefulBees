@@ -13,7 +13,7 @@
     "hasCentrifugeOutput": true,
     "mainOutput": "minecraft:red_dye",
     "secondaryOutput": "minecraft:green_dye",
-    "bottleOutput": "minecraft:blue_dye",
+    "bottleOutput": "resourcefulbees:rainbow_honey_bottle",
     "bottleOutputWeight": 0.02
   },
   "SpawnData": {

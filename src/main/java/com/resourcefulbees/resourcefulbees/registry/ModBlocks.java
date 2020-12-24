@@ -8,6 +8,8 @@ import com.resourcefulbees.resourcefulbees.block.multiblocks.apiary.ApiaryStorag
 import com.resourcefulbees.resourcefulbees.block.multiblocks.centrifuge.CentrifugeCasingBlock;
 import com.resourcefulbees.resourcefulbees.block.multiblocks.centrifuge.CentrifugeControllerBlock;
 import com.resourcefulbees.resourcefulbees.tileentity.HoneyTankTileEntity;
+import com.resourcefulbees.resourcefulbees.block.multiblocks.centrifuge.EliteCentrifugeCasingBlock;
+import com.resourcefulbees.resourcefulbees.block.multiblocks.centrifuge.EliteCentrifugeControllerBlock;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.potion.Effects;
@@ -64,6 +66,8 @@ public class ModBlocks {
     public static final RegistryObject<Block> CENTRIFUGE_CASING = BLOCKS.register("centrifuge_casing", () -> new CentrifugeCasingBlock(CENTRIFUGE_PROPERTIES));
     public static final RegistryObject<Block> CREATIVE_GEN = BLOCKS.register("creative_gen", () -> new CreativeGen(CENTRIFUGE_PROPERTIES));
     public static final RegistryObject<Block> ACCELERATOR = BLOCKS.register("accelerator", () -> new AcceleratorBlock(CENTRIFUGE_PROPERTIES));
+    public static final RegistryObject<Block> ELITE_CENTRIFUGE_CONTROLLER = BLOCKS.register("elite_centrifuge_controller", () -> new EliteCentrifugeControllerBlock(CENTRIFUGE_PROPERTIES));
+    public static final RegistryObject<Block> ELITE_CENTRIFUGE_CASING = BLOCKS.register("elite_centrifuge_casing", () -> new EliteCentrifugeCasingBlock(CENTRIFUGE_PROPERTIES));
     public static final RegistryObject<Block> ENDER_BEECON = BLOCKS.register("ender_beecon", () -> new EnderBeecon(EnderBeecon.PROPERTIES));
     public static final RegistryObject<Block> PURPUR_HONEY_TANK = BLOCKS.register("purpur_honey_tank", () -> new HoneyTank(HoneyTank.PROPERTIES, HoneyTankTileEntity.TankTier.PURPUR));
     public static final RegistryObject<Block> NETHER_HONEY_TANK = BLOCKS.register("nether_honey_tank", () -> new HoneyTank(HoneyTank.PROPERTIES, HoneyTankTileEntity.TankTier.NETHER));
