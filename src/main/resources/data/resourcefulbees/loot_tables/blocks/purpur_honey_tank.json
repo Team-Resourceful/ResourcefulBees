@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "functions": [
+                {
+                  "function": "minecraft:copy_nbt",
+                  "source": "block_entity",
+                  "ops": [
+                    {
+                      "source": "fluid",
+                      "target": "fluid",
+                      "op": "replace"
+                    },
+                    {
+                      "source": "tier",
+                      "target": "tier",
+                      "op": "replace"
+                    }
+                  ]
+                }
+              ],
+              "name": "resourcefulbees:purpur_honey_tank"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

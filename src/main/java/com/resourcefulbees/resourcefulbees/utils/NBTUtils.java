@@ -1,18 +1,6 @@
 package com.resourcefulbees.resourcefulbees.utils;
 
-import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
-import com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
 
 public class NBTUtils {
 
@@ -31,5 +19,10 @@ public class NBTUtils {
             booleans[i] = nbt.getBoolean(String.valueOf(i));
         }
         return booleans;
+    }
+
+    public static int[] getFallbackIntArray(String value, CompoundNBT nbt, int fallbackSize) {
+        int[] array = nbt.getIntArray(value);
+        return array.length != fallbackSize ? new int[fallbackSize] : array;
     }
 }

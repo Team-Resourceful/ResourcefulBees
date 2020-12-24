@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "LPL",
+    "GCG",
+    "LPL"
+  ],
+  "key": {
+    "C": { "tag": "resourcefulbees:resourceful_honeycomb" },
+    "L": { "tag": "minecraft:logs" },
+    "G": { "tag": "forge:glass" },
+    "P": { "tag": "minecraft:planks" }
+  },
+  "result": {
+    "item": "resourcefulbees:wooden_honey_tank"
+  }
+}

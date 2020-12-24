@@ -110,6 +110,10 @@
 	"block.resourcefulbees.elite_centrifuge_casing": "Elite Centrifuge Casing",
 	"block.resourcefulbees.centrifuge.tooltip.info": "Converts Honeycombs into resources using RF.",
 	"block.resourcefulbees.queen_bee_banner": "Queen Bee Banner",
+	"block.resourcefulbees.ender_beecon": "Ender Beecon",
+	"block.resourcefulbees.purpur_honey_tank": "Purpur Honey Tank",
+	"block.resourcefulbees.nether_honey_tank": "Nether Honey Tank",
+	"block.resourcefulbees.wooden_honey_tank": "Wooden Honey Tank",
 
 	"item.resourcefulbees.smoker_can": "Smoker Canister",
 	"item.resourcefulbees.smoker": "Bee Smoker",
@@ -212,6 +216,7 @@
 	"entity.minecraft.villager.resourcefulbees.beekeeper": "Beekeeper",
 	"block.resourcefulbees.mech_centrifuge.tooltip.info": "Hold SHIFT & right-click block to process honeycombs.",
 	"block.resourcefulbees.generator.tooltip.info": "Generates RF using honey bottles.",
+	"block.resourcefulbees.beecon.tooltip.info": "Prevents Bees from teleporting in a 10 block radius.",
 	"item.resourcefulbees.scraper.tooltip": "Right-click on Tiered Beehives to collect honeycombs.",
 	"item.resourcefulbees.scraper.tooltip.1": "Must collect ALL honeycombs for bees to generate new ones!",
 	"block.resourcefulbees.apiary_breeder.tooltip.info": "An OPTIONAL breeder that can be added as part of the Apiary Multiblock",
