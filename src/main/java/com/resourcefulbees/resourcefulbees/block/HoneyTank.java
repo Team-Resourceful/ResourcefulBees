@@ -80,6 +80,7 @@ public class HoneyTank extends Block {
         if (tintIndex == 1) {
             HoneyTankTileEntity tank = getTileEntity(world, pos);
             if (tank == null) return -1;
+            if (tank.fluidTank.isEmpty()) return 0x00000000;
             if (tank.fluidTank.getFluid().getFluid() instanceof HoneyFlowingFluid) {
                 HoneyFlowingFluid fluid = (HoneyFlowingFluid) tank.fluidTank.getFluid().getFluid();
                 return fluid.getHoneyData().isRainbow() ? RainbowColor.getRGB() : fluid.getHoneyData().getHoneyColorInt();
