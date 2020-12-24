@@ -10,7 +10,7 @@
     "C": { "item": "minecraft:comparator" },
     "S": { "item": "minecraft:iron_bars" },
     "R": { "tag": "forge:storage_blocks/redstone" },
-    "@": { "tag": "forge:storage_blocks/iron" }
+    "@": { "item": "resourcefulbees:centrifuge_casing" }
   },
   "result": {
     "item": "resourcefulbees:centrifuge_controller"

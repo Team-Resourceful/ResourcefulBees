@@ -2,13 +2,14 @@ package com.resourcefulbees.resourcefulbees.container;
 
 import com.resourcefulbees.resourcefulbees.capabilities.MultiFluidTank;
 import com.resourcefulbees.resourcefulbees.config.Config;
-import com.resourcefulbees.resourcefulbees.container.sync.SyncPower;
+import com.resourcefulbees.resourcefulbees.mixin.ContainerAccessor;
 import com.resourcefulbees.resourcefulbees.registry.ModContainers;
 import com.resourcefulbees.resourcefulbees.tileentity.CentrifugeTileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
+import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -20,7 +21,6 @@ import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nonnull;
 
@@ -51,7 +51,6 @@ public class CentrifugeContainer extends Container {
         this.inv = inv;
         this.times = times;
         centrifugeTileEntity = (CentrifugeTileEntity) world.getTileEntity(pos);
-        this.trackIntArray(SyncPower.getSyncableArray(centrifugeTileEntity, getEnergy()));
         this.trackIntArray(times);
         this.trackInt(requiresRedstone);
         setupSlots();
@@ -109,14 +108,15 @@ public class CentrifugeContainer extends Container {
             }
         }
 
+        int xStart = (int) (Math.max(numInputs * 36 + 70, 178) * 0.5) - 81;
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
-                this.addSlot(new Slot(inv, j + i * 9 + 9, 8 + j * 18, 104 + i * 18));
+                this.addSlot(new Slot(inv, j + i * 9 + 9, xStart + j * 18, 104 + i * 18));
             }
         }
 
         for (int k = 0; k < 9; ++k) {
-            this.addSlot(new Slot(inv, k, 8 + k * 18, 162));
+            this.addSlot(new Slot(inv, k, xStart + k * 18, 162));
         }
 
     }
@@ -195,5 +195,12 @@ public class CentrifugeContainer extends Container {
     @Override
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
+        if (centrifugeTileEntity == null) {
+            return;
+        }
+
+        for (IContainerListener listener : ((ContainerAccessor) this).getListeners()) {
+            centrifugeTileEntity.sendGUINetworkPacket(listener);
+        }
     }
 }

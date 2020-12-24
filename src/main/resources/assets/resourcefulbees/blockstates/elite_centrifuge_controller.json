@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "resourcefulbees:block/elite_centrifuge_controller",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "resourcefulbees:block/elite_centrifuge_controller"
+    },
+    "facing=south": {
+      "model": "resourcefulbees:block/elite_centrifuge_controller",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "resourcefulbees:block/elite_centrifuge_controller",
+      "y": 270
+    }
+  }
+}

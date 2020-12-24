@@ -12,7 +12,6 @@ public class CentrifugeMultiblockScreen extends CentrifugeScreen {
 
     @Override
     protected void initializeData() {
-        this.screenWidth = 178;
         inputStartX = 52;
         outputStartX = 43;
         rBdrCor = -2;

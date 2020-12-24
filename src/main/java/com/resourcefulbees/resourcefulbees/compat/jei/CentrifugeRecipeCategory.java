@@ -116,7 +116,7 @@ public class CentrifugeRecipeCategory implements IRecipeCategory<CentrifugeRecip
         guiItemStacks.set(CentrifugeTileEntity.BOTTLE_SLOT, iIngredients.getInputs(VanillaTypes.ITEM).get(1));
 
         if (centrifugeRecipe.hasFluidOutput) {
-            guiFluidStacks.init(CentrifugeTileEntity.OUTPUT1, false, 109, 6);
+            guiFluidStacks.init(CentrifugeTileEntity.OUTPUT1, false, 109, 6, 16, 16, iIngredients.getOutputs(VanillaTypes.FLUID).get(0).get(0).getAmount(), true, null);
             guiFluidStacks.set(CentrifugeTileEntity.OUTPUT1, iIngredients.getOutputs(VanillaTypes.FLUID).get(0));
 
             guiItemStacks.init(CentrifugeTileEntity.OUTPUT2, false, 108, 23);
@@ -157,6 +157,8 @@ public class CentrifugeRecipeCategory implements IRecipeCategory<CentrifugeRecip
         if (recipe.multiblock) {
             multiblock.draw(matrix, 10, 45);
         }
+
+
     }
 
     @Nonnull

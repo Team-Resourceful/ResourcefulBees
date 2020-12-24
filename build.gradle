@@ -25,6 +25,7 @@ repositories {
     maven { url "https://maven.blamejared.com" }
     maven { url "https://dvs1.progwml6.com/files/maven/" }
     maven { url "https://modmaven.k-4u.nl" }
+    maven { url 'https://modmaven.dev/' }
 }
 
 version = "${mod_version}"
@@ -126,17 +127,23 @@ mixin {
 }
 
 dependencies {
-    implementation 'org.jetbrains:annotations:19.0.0'
+    implementation 'org.jetbrains:annotations:20.1.0'
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}" //21
 
-    compileOnly fg.deobf("mezz.jei:jei-1.16.3:${jei_version}:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-1.16.3:${jei_version}")
+    compileOnly fg.deobf("mezz.jei:jei-1.16.4:${jei_version}:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-1.16.4:${jei_version}")
 
     compileOnly fg.deobf ("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}:api")
     runtime fg.deobf ("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}")
 
     compileOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}:api")
     runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
+
+    // If you want to test/use Mekanism & its modules during `runClient` invocation, use the following
+    runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}")// core
+    runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:additions")// Mekanism: Additions
+    runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:generators")// Mekanism: Generators
+    runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:tools")// Mekanism: Tools
 }
 
 jar {

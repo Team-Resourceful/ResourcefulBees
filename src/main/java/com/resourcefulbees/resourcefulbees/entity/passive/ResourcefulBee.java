@@ -278,13 +278,6 @@ public class ResourcefulBee extends CustomBeeEntity {
         return !hasCustomName() && this.ticksExisted % 150 == 0 && this.world.isDaytime() && !this.beePollinateGoal.isRunning();
     }
 
-    protected boolean hasHiveInRange() {
-        //return this.hasHive() && this.canEnterHive() && this.hivePos != null && this.hivePos.withinDistance(this.getPositionVec(), 5.0D);
-        BlockPos pos = getBlockPos();
-        MutableBoundingBox box = MutableBoundingBox.createProper(pos.getX() + 5 , pos.getY() + 5 , pos.getZ() + 5, pos.getX() - 5, pos.getY() - 5, pos.getZ() - 5);
-        return BlockPos.stream(box).anyMatch(blockPos -> world.getTileEntity(blockPos) instanceof BeehiveTileEntity || world.getTileEntity(blockPos) instanceof ApiaryTileEntity);
-    }
-
     protected void teleportRandomly() {
         if (!this.world.isRemote() && this.isAlive()) {
             double d0 = this.getX() + (this.rand.nextDouble() - 0.5D) * 4.0D;

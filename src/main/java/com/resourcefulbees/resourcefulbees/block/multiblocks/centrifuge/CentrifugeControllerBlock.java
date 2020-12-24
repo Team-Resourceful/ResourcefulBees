@@ -62,10 +62,10 @@ public class CentrifugeControllerBlock extends Block {
         if (!world.isRemote) {
             ItemStack heldItem = player.getHeldItem(hand);
             boolean usingBucket = heldItem.getItem() instanceof BucketItem;
-            boolean placingBlock = heldItem.getItem() instanceof BlockItem;
+            //boolean placingBlock = heldItem.getItem() instanceof BlockItem;
             CentrifugeControllerTileEntity controller = getControllerEntity(world, pos);
 
-            if (!placingBlock) {
+            //if (!placingBlock) {
                 if (controller != null && controller.isValidStructure()) {
                     if (usingBucket) {
                         controller.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
@@ -74,7 +74,7 @@ public class CentrifugeControllerBlock extends Block {
                         NetworkHooks.openGui((ServerPlayerEntity) player, controller, pos);
                     }
                 }
-            }
+            //}
         }
 
         return super.onUse(state, world, pos, player, hand, blockRayTraceResult);

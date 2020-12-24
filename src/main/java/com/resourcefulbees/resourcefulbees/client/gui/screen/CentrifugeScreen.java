@@ -17,13 +17,16 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.widget.Widget;
+import net.minecraft.client.gui.widget.button.ImageButton;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.*;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.text.WordUtils;
 
@@ -36,7 +39,8 @@ import java.util.Objects;
 public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
 
     // drawTexture(matrix, x, y, textureX, textureY, textWidth, textHeight)
-    protected static final ResourceLocation BACKGROUND = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/centrifuges/centrifuge_gui.png");
+    private static final ResourceLocation BACKGROUND = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/centrifuges/centrifuge_gui.png");
+    private static final ResourceLocation RECIPE_BUTTON_TEXTURE = new ResourceLocation("textures/gui/recipe_button.png");
     protected static final int L_BDR_WD = 7;  //Left border width
     protected static final int BG_FILL_WD = 4; //Background filler width
     protected static final int R_BDR_WD = 7; //Right Border Width
@@ -60,11 +64,12 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
 
     public CentrifugeScreen(CentrifugeContainer screenContainer, PlayerInventory inventory, ITextComponent titleIn) {
         super(screenContainer, inventory, titleIn);
+        numInputs = screenContainer.getCentrifugeTileEntity().getNumberOfInputs();
         initializeData();
+        this.screenWidth =  Math.max(numInputs * 36 + 70, 178) ;
         this.xSize = screenWidth + TAB_BG_WIDTH;
         this.ySize = 186;
-        bgRpt = MathUtils.clamp((xSize - L_BDR_WD - R_BDR_WD - TAB_BG_WIDTH) / BG_FILL_WD, 41, 59);
-        numInputs = screenContainer.getCentrifugeTileEntity().getNumberOfInputs();
+        bgRpt = MathUtils.clamp((xSize - L_BDR_WD - R_BDR_WD - TAB_BG_WIDTH) / BG_FILL_WD, 41, 68);
     }
 
     @Override
@@ -87,6 +92,7 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
                 CentrifugeScreen.this.renderTooltip(matrix, s, mouseX, mouseY);
             }
         });
+        this.addButton(new ImageButton(buttonX - 1, top + 44, 20, 18, 0, 0, 19, RECIPE_BUTTON_TEXTURE, (button) -> {}));
     }
 
     private void displayFluids() {
@@ -101,7 +107,6 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
     }
 
     protected void initializeData() {
-        this.screenWidth = 178;
         inputStartX = 88;
         outputStartX = 79;
         rBdrCor = -2;
@@ -175,7 +180,7 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
         }
         int x = left + L_BDR_WD + (BG_FILL_WD * bgRpt) + rBdrCor;
         this.drawTexture(matrix, x, top, L_BDR_WD + BG_FILL_WD, 0, R_BDR_WD, ySize);
-        this.drawTexture(matrix, x + L_BDR_WD, top + 5, 0, 208, 25, 48);
+        this.drawTexture(matrix, x + L_BDR_WD, top + 5, 0, 188, 25, 68);
     }
 
     private void drawInputSlots(MatrixStack matrix, int left, int top) {
@@ -207,14 +212,16 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
     }
 
     private void drawInventorySlots(MatrixStack matrix, int left, int top) {
+        int xStart = left + (int) (screenWidth * 0.5) - 82;
+
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
-                this.drawTexture(matrix, left + L_BDR_WD + (j * SLOT_WD), top + INV_START_Y + (i * SLOT_HT), 62, SLOT_HT, SLOT_WD, SLOT_HT);
+                this.drawTexture(matrix, xStart + (j * SLOT_WD), top + INV_START_Y + (i * SLOT_HT), 62, SLOT_HT, SLOT_WD, SLOT_HT);
             }
         }
 
         for (int k = 0; k < 9; ++k) {
-            this.drawTexture(matrix, left + L_BDR_WD + (k * SLOT_WD), top + INV_START_Y + 58, 62, SLOT_HT, SLOT_WD, SLOT_HT);
+            this.drawTexture(matrix, xStart + (k * SLOT_WD), top + INV_START_Y + 58, 62, SLOT_HT, SLOT_WD, SLOT_HT);
         }
     }
 

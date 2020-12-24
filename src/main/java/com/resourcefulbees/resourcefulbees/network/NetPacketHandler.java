@@ -2,6 +2,7 @@ package com.resourcefulbees.resourcefulbees.network;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.network.packets.*;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -30,11 +31,16 @@ public class NetPacketHandler {
         INSTANCE.registerMessage(++id, ApiaryTabMessage.class, ApiaryTabMessage::encode, ApiaryTabMessage::decode, ApiaryTabMessage::handle);
         INSTANCE.registerMessage(++id, DrainCentrifugeTankMessage.class, DrainCentrifugeTankMessage::encode, DrainCentrifugeTankMessage::decode, DrainCentrifugeTankMessage::handle);
         INSTANCE.registerMessage(++id, UpdateRedstoneReqMessage.class, UpdateRedstoneReqMessage::encode, UpdateRedstoneReqMessage::decode, UpdateRedstoneReqMessage::handle);
+        INSTANCE.registerMessage(++id, SyncGUIMessage.class, SyncGUIMessage::encode, SyncGUIMessage::decode, SyncGUIMessage::handle);
     }
 
     public static void sendToServer(Object message) { INSTANCE.sendToServer(message); }
 
     public static void sendToAllLoaded(Object message, World world, BlockPos pos) {
         INSTANCE.send(PacketDistributor.TRACKING_CHUNK.with(() -> world.getChunkAt(pos)), message);
+    }
+
+    public static void sendToPlayer(Object message, ServerPlayerEntity playerEntity) {
+        INSTANCE.send(PacketDistributor.PLAYER.with(() -> playerEntity), message);
     }
 }

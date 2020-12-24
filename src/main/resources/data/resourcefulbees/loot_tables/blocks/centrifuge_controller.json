@@ -20,6 +20,11 @@
                   "source": "energy",
                   "target": "BlockEntityTag.energy",
                   "op": "replace"
+                },
+                {
+                  "source": "Tanks",
+                  "target": "BlockEntityTag.Tanks",
+                  "op": "replace"
                 }
               ]
             }
