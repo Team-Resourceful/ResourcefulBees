@@ -1,7 +1,9 @@
 package com.resourcefulbees.resourcefulbees.block;
 
+import com.resourcefulbees.resourcefulbees.fluids.HoneyFlowingFluid;
 import com.resourcefulbees.resourcefulbees.tileentity.HoneyTankTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.TooltipBuilder;
+import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -14,9 +16,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.*;
-import net.minecraft.item.crafting.BannerDuplicateRecipe;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.LootParameters;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.IntegerProperty;
@@ -42,8 +41,8 @@ import net.minecraftforge.fluids.capability.templates.FluidTank;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
-import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 public class HoneyTank extends Block {
 
@@ -67,6 +66,43 @@ public class HoneyTank extends Block {
                 .with(LEVEL, 0)
                 .with(WATERLOGGED, false);
         this.setDefaultState(defaultState);
+    }
+
+    private static HoneyTankTileEntity getTileEntity(@javax.annotation.Nullable IBlockReader world, @javax.annotation.Nullable BlockPos pos) {
+        TileEntity entity = world.getTileEntity(pos);
+        if (entity instanceof HoneyTankTileEntity) {
+            return (HoneyTankTileEntity) entity;
+        }
+        return null;
+    }
+
+    public static int getBlockColor(BlockState state, @javax.annotation.Nullable IBlockReader world, @javax.annotation.Nullable BlockPos pos, int tintIndex) {
+        if (tintIndex == 1) {
+            HoneyTankTileEntity tank = getTileEntity(world, pos);
+            if (tank == null) return -1;
+            if (tank.fluidTank.getFluid().getFluid() instanceof HoneyFlowingFluid) {
+                HoneyFlowingFluid fluid = (HoneyFlowingFluid) tank.fluidTank.getFluid().getFluid();
+                return fluid.getHoneyData().isRainbow() ? RainbowColor.getRGB() : fluid.getHoneyData().getHoneyColorInt();
+            } else {
+                return 0xFFF69909;
+            }
+        }
+        return -1;
+    }
+
+    @Override
+    public void animateTick(@Nonnull BlockState stateIn, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull Random rand) {
+        HoneyTankTileEntity tank = getTileEntity(world, pos);
+        if (tank == null) {
+            return;
+        }
+        if (tank.fluidTank.getFluid().getFluid() instanceof HoneyFlowingFluid) {
+            HoneyFlowingFluid fluid = (HoneyFlowingFluid) tank.fluidTank.getFluid().getFluid();
+            if (fluid.getHoneyData().isRainbow()) {
+                world.notifyBlockUpdate(pos, stateIn, stateIn, 2);
+                super.animateTick(stateIn, world, pos, rand);
+            }
+        }
     }
 
     @Nullable
@@ -104,6 +140,7 @@ public class HoneyTank extends Block {
                     tank.emptyBottle(player, hand);
                 }
                 updateBlockState(world, pos);
+                world.notifyBlockUpdate(pos, state, state, 2);
             }
         }
         if (usingBottle || usingBucket || usingHoney) {

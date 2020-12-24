@@ -4,10 +4,8 @@ import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
-import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
@@ -31,7 +29,7 @@ public class MultiFluidTank implements IFluidHandler {
     @Override
     public int getTanks() { return fluidTanks.length; }
 
-    @NotNull
+    @Nonnull
     @Override
     public FluidStack getFluidInTank(int tank) { return fluidTanks[tank].getFluid(); }
 
@@ -39,7 +37,7 @@ public class MultiFluidTank implements IFluidHandler {
     public int getTankCapacity(int tank) { return fluidTanks[tank].getCapacity(); }
 
     @Override
-    public boolean isFluidValid(int tank, @NotNull FluidStack stack) { return fluidTanks[tank].isFluidValid(stack); }
+    public boolean isFluidValid(int tank, @Nonnull FluidStack stack) { return fluidTanks[tank].isFluidValid(stack); }
 
     public int getFluidAmountInTank(int tank) {
         return fluidTanks[tank].getFluidAmount();
@@ -60,7 +58,7 @@ public class MultiFluidTank implements IFluidHandler {
         return fluidTanks[tank].fill(resource, action);
     }
 
-    @NotNull
+    @Nonnull
     @Override
     public FluidStack drain(FluidStack resource, FluidAction action) {
         if (resource.isEmpty()) {
@@ -76,7 +74,7 @@ public class MultiFluidTank implements IFluidHandler {
         return FluidStack.EMPTY;
     }
 
-    @NotNull
+    @Nonnull
     @Override
     public FluidStack drain(int maxDrain, FluidAction action) {
         Optional<FluidTank> largestTank = Arrays.stream(fluidTanks).max(Comparator.comparingInt(FluidTank::getFluidAmount));
@@ -91,7 +89,7 @@ public class MultiFluidTank implements IFluidHandler {
      * @return FluidStack representing the Fluid and amount that was (or would have been, if
      * simulated) drained.
      */
-    @NotNull
+    @Nonnull
     public FluidStack drain(FluidStack resource, FluidAction action, int tank) {
         if (resource.isEmpty()) {
             return FluidStack.EMPTY;
@@ -110,7 +108,7 @@ public class MultiFluidTank implements IFluidHandler {
      * @return FluidStack representing the Fluid and amount that was (or would have been, if
      * simulated) drained.
      */
-    @NotNull
+    @Nonnull
     public FluidStack drain(int maxDrain, FluidAction action, int tank) {
         if (fluidTanks[tank].getFluidAmount() > 0) {
             return fluidTanks[tank].drain(maxDrain, action);

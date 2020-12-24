@@ -2,6 +2,8 @@ package com.resourcefulbees.resourcefulbees.api.beedata;
 
 import com.resourcefulbees.resourcefulbees.registry.ItemGroupResourcefulBees;
 import net.minecraft.block.Block;
+import net.minecraft.block.FlowingFluidBlock;
+import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.item.Food;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
@@ -65,9 +67,30 @@ public class HoneyBottleData {
     private transient RegistryObject<Block> honeyBlockRegistryObject;
 
     /**
+     * The RegistryObject of the Still Honey Fluid
+     */
+    private transient RegistryObject<FlowingFluid> honeyStillFluidRegistryObject;
+
+    /**
+     * The RegistryObject of the Flowing Honey Fluid
+     */
+    private transient RegistryObject<FlowingFluid> honeyFlowingFluidRegistryObject;
+
+    /**
+     * The RegistryObject of the Honey Bucket Item
+     */
+    private transient RegistryObject<Item> honeyBucketItemRegistryObject;
+
+    /**
+     * The RegistryObject of the Honey Flowing Block
+     */
+    private transient RegistryObject<FlowingFluidBlock> honeyFluidBlockRegistryObject;
+
+    /**
      * If the ResourcefulBees mod should handle the registration
      */
     public transient boolean shouldResourcefulBeesDoForgeRegistration;
+
 
 
     public int getHoneyColorInt() {
@@ -118,6 +141,22 @@ public class HoneyBottleData {
         this.honeyBlockRegistryObject = this.honeyBlockRegistryObject == null ? honeyBlockRegistryObject : this.honeyBlockRegistryObject;
     }
 
+    public void setHoneyStillFluidRegistryObject(RegistryObject<FlowingFluid> honeyStillFluidRegistryObject) {
+        this.honeyStillFluidRegistryObject = this.honeyStillFluidRegistryObject == null ? honeyStillFluidRegistryObject : this.honeyStillFluidRegistryObject;
+    }
+
+    public void setHoneyFlowingFluidRegistryObject(RegistryObject<FlowingFluid> honeyFlowingFluidRegistryObject) {
+        this.honeyFlowingFluidRegistryObject = this.honeyFlowingFluidRegistryObject == null ? honeyFlowingFluidRegistryObject : this.honeyFlowingFluidRegistryObject;
+    }
+
+    public void setHoneyBucketItemRegistryObject(RegistryObject<Item> honeyBucketItemRegistryObject) {
+        this.honeyBucketItemRegistryObject = this.honeyBucketItemRegistryObject == null ? honeyBucketItemRegistryObject : this.honeyBucketItemRegistryObject;
+    }
+
+    public void setHoneyFluidBlockRegistryObject(RegistryObject<FlowingFluidBlock> honeyFluidBlockRegistryObject) {
+        this.honeyFluidBlockRegistryObject = this.honeyFluidBlockRegistryObject == null ? honeyFluidBlockRegistryObject : this.honeyFluidBlockRegistryObject;
+    }
+
     public RegistryObject<Item> getHoneyBottleRegistryObject() {
         return honeyBottleRegistryObject;
     }
@@ -128,6 +167,22 @@ public class HoneyBottleData {
 
     public RegistryObject<Block> getHoneyBlockRegistryObject() {
         return honeyBlockRegistryObject;
+    }
+
+    public RegistryObject<FlowingFluid> getHoneyStillFluidRegistryObject() {
+        return honeyStillFluidRegistryObject;
+    }
+
+    public RegistryObject<FlowingFluid> getHoneyFlowingFluidRegistryObject() {
+        return honeyFlowingFluidRegistryObject;
+    }
+
+    public RegistryObject<Item> getHoneyBucketItemRegistryObject() {
+        return honeyBucketItemRegistryObject;
+    }
+
+    public RegistryObject<FlowingFluidBlock> getHoneyFluidBlockRegistryObject() {
+        return honeyFluidBlockRegistryObject;
     }
 
     public Item.Properties getProperties() {
@@ -152,6 +207,8 @@ public class HoneyBottleData {
     private boolean hasEffects() {
         return effects != null && !effects.isEmpty();
     }
+
+
 
 
     /**

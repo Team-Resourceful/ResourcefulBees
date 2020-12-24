@@ -38,7 +38,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.FakePlayer;
 import org.apache.commons.lang3.text.WordUtils;
-import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -99,7 +98,7 @@ public class TieredBeehiveBlock extends BeehiveBlock {
     }
 
     @Nonnull
-    public ActionResultType onUse(@NotNull BlockState state, @Nonnull World world, @Nonnull BlockPos pos, PlayerEntity player, @Nonnull Hand handIn, @Nonnull BlockRayTraceResult hit) {
+    public ActionResultType onUse(@Nonnull BlockState state, @Nonnull World world, @Nonnull BlockPos pos, PlayerEntity player, @Nonnull Hand handIn, @Nonnull BlockRayTraceResult hit) {
         ItemStack itemstack = player.getHeldItem(handIn);
 
         if (itemstack.getItem() == ModItems.SMOKER.get() && itemstack.getDamage() < itemstack.getMaxDamage()) {
