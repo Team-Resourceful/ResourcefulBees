@@ -1,5 +1,6 @@
 package com.resourcefulbees.resourcefulbees.tileentity;
 
+import com.resourcefulbees.resourcefulbees.block.HoneyTank;
 import com.resourcefulbees.resourcefulbees.fluids.HoneyFlowingFluid;
 import com.resourcefulbees.resourcefulbees.item.CustomHoneyBottleItem;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
@@ -91,11 +92,12 @@ public class HoneyTankTileEntity extends TileEntity implements ITickableTileEnti
     public final FluidTank fluidTank;
     private final LazyOptional<IFluidHandler> fluidOptional;
     public static final FluidStack HONEY_BOTTLE_FLUID_STACK = new FluidStack(ModFluids.HONEY_STILL.get(), ModConstants.HONEY_PER_BOTTLE);
+    private FluidStack last = null;
     private TankTier tier;
 
     public HoneyTankTileEntity(TankTier tier) {
         super(ModTileEntityTypes.HONEY_TANK_TILE_ENTITY.get());
-        fluidTank = new FluidTank(tier.maxFillAmount, honeyFluidPredicate());
+        fluidTank = new InternalFluidTank(tier.maxFillAmount, honeyFluidPredicate());
         fluidOptional = LazyOptional.of(() -> fluidTank);
         this.tier = tier;
     }
@@ -215,6 +217,30 @@ public class HoneyTankTileEntity extends TileEntity implements ITickableTileEnti
                 player.addItemStackToInventory(new ItemStack(Items.GLASS_BOTTLE, 1));
             } else {
                 player.setHeldItem(hand, new ItemStack(Items.GLASS_BOTTLE, 1));
+            }
+        }
+    }
+
+    public class InternalFluidTank extends FluidTank {
+
+        public InternalFluidTank(int capacity) {
+            super(capacity);
+        }
+
+        public InternalFluidTank(int capacity, Predicate<FluidStack> validator) {
+            super(capacity, validator);
+        }
+
+        @Override
+        protected void onContentsChanged() {
+            super.onContentsChanged();
+            if (world != null) {
+                BlockState state = world.getBlockState(pos);
+                world.notifyBlockUpdate(pos, state, state, 2);
+                if (state.getBlock() instanceof HoneyTank) {
+                    HoneyTank tank = (HoneyTank) state.getBlock();
+                    tank.updateBlockState(world, pos);
+                }
             }
         }
     }

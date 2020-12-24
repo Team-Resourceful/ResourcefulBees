@@ -149,7 +149,7 @@ public class HoneyTank extends Block {
         return ActionResultType.FAIL;
     }
 
-    private void updateBlockState(World world, BlockPos pos) {
+    public void updateBlockState(World world, BlockPos pos) {
         BlockState state = world.getBlockState(pos);
         if (state.getBlock() instanceof HoneyTank) {
             world.setBlockState(pos, state.with(LEVEL, getLevel(world, pos)));
