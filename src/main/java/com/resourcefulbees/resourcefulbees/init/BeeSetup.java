@@ -103,7 +103,7 @@ public class BeeSetup {
         HoneyBottleData honey = gson.fromJson(reader, HoneyBottleData.class);
         if (honey.getName() == null) honey.setName(name);
         honey.shouldResourcefulBeesDoForgeRegistration = true;
-        BeeRegistry.getRegistry().registerHoney(name.toLowerCase(), honey);
+        BeeRegistry.getRegistry().registerHoney(honey.getName().toLowerCase(), honey);
     }
 
     private static void addBees() {

@@ -223,7 +223,7 @@ public class HoneyBottleData {
         public String effectID;
         public int duration = 60;
         public int strength = 0;
-        public float chance = 100;
+        public float chance = 1;
 
         public EffectInstance getInstance() {
             return new EffectInstance(getEffect(), duration, strength);
