@@ -80,6 +80,7 @@ public class HoneyTank extends Block {
         if (tintIndex == 1) {
             HoneyTankTileEntity tank = getTileEntity(world, pos);
             if (tank == null) return -1;
+            if (tank.fluidTank.isEmpty()) return 0x00000000;
             if (tank.fluidTank.getFluid().getFluid() instanceof HoneyFlowingFluid) {
                 HoneyFlowingFluid fluid = (HoneyFlowingFluid) tank.fluidTank.getFluid().getFluid();
                 return fluid.getHoneyData().isRainbow() ? RainbowColor.getRGB() : fluid.getHoneyData().getHoneyColorInt();
@@ -149,7 +150,7 @@ public class HoneyTank extends Block {
         return ActionResultType.FAIL;
     }
 
-    private void updateBlockState(World world, BlockPos pos) {
+    public void updateBlockState(World world, BlockPos pos) {
         BlockState state = world.getBlockState(pos);
         if (state.getBlock() instanceof HoneyTank) {
             world.setBlockState(pos, state.with(LEVEL, getLevel(world, pos)));
