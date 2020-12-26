@@ -29,10 +29,16 @@ public class DataGen {
         generateCombBlockItemTags();
         generateCombBlockTags();
         generateCombItemTags();
-        generateHoneyBlockTags();
-        generateHoneyBlockItemTags();
+
+        //custom honey data
         generateHoneyBottleTags();
-        generateHoneyTags();
+        if (Config.HONEY_GENERATE_BLOCKS.get()) {
+            generateHoneyBlockTags();
+            generateHoneyBlockItemTags();
+        }
+        if (Config.HONEY_GENERATE_FLUIDS.get()) {
+            generateHoneyTags();
+        }
     }
 
     private static void writeFile(String path, String file, String data) throws IOException {
@@ -84,25 +90,31 @@ public class DataGen {
             builder.append("_honey_bottle\": \"");
             builder.append(displayName);
             builder.append(" Honey Bottle\",\n");
-            //honey bucket
-            builder.append("\"item.resourcefulbees.");
-            builder.append(name);
-            builder.append("_honey_fluid_bucket\": \"");
-            builder.append(displayName);
-            builder.append(" Honey Bucket\",\n");
-            //honey block
-            builder.append("\"block.resourcefulbees.");
-            builder.append(name);
-            builder.append("_honey_block\" : \"");
-            builder.append(displayName);
-            builder.append(" Honey Block\",\n");
-            //honey fluid
-            builder.append("\"fluid.resourcefulbees.");
-            builder.append(name);
-            builder.append("_honey\": \"");
-            builder.append(displayName);
-            builder.append(" Honey\",\n");
 
+            //honey block
+            if (Config.HONEY_GENERATE_BLOCKS.get() && honeyData.doGenerateHoneyBlock()) {
+                builder.append("\"block.resourcefulbees.");
+                builder.append(name);
+                builder.append("_honey_block\" : \"");
+                builder.append(displayName);
+                builder.append(" Honey Block\",\n");
+            }
+
+            if (Config.HONEY_GENERATE_FLUIDS.get() && honeyData.doGenerateHoneyFluid()) {
+                //honey bucket
+                builder.append("\"item.resourcefulbees.");
+                builder.append(name);
+                builder.append("_honey_fluid_bucket\": \"");
+                builder.append(displayName);
+                builder.append(" Honey Bucket\",\n");
+
+                //honey fluid
+                builder.append("\"fluid.resourcefulbees.");
+                builder.append(name);
+                builder.append("_honey\": \"");
+                builder.append(displayName);
+                builder.append(" Honey\",\n");
+            }
         });
         builder.deleteCharAt(builder.lastIndexOf(","));
         builder.append("}");
@@ -221,9 +233,11 @@ public class DataGen {
         Map<String, HoneyBottleData> honey = BEE_REGISTRY.getHoneyBottles();
         if (honey.size() != 0) {
             honey.entrySet().stream().forEach(((c) -> {
-                builder.append("\"");
-                builder.append(c.getValue().getHoneyBlockRegistryObject().getId());
-                builder.append("\",\n");
+                if (c.getValue().doGenerateHoneyBlock()) {
+                    builder.append("\"");
+                    builder.append(c.getValue().getHoneyBlockRegistryObject().getId());
+                    builder.append("\",\n");
+                }
             }));
             builder.deleteCharAt(builder.lastIndexOf(","));
         }
@@ -247,9 +261,11 @@ public class DataGen {
         Map<String, HoneyBottleData> honey = BEE_REGISTRY.getHoneyBottles();
         if (honey.size() != 0) {
             honey.entrySet().stream().forEach(((c) -> {
-                builder.append("\"");
-                builder.append(c.getValue().getHoneyBlockItemRegistryObject().getId());
-                builder.append("\",\n");
+                if (c.getValue().doGenerateHoneyBlock()) {
+                    builder.append("\"");
+                    builder.append(c.getValue().getHoneyBlockItemRegistryObject().getId());
+                    builder.append("\",\n");
+                }
             }));
             builder.deleteCharAt(builder.lastIndexOf(","));
         }
@@ -296,11 +312,13 @@ public class DataGen {
         Map<String, HoneyBottleData> honey = BEE_REGISTRY.getHoneyBottles();
         if (honey.size() != 0) {
             honey.entrySet().stream().forEach(((c) -> {
-                builder.append("\t\t\"");
-                builder.append(c.getValue().getHoneyStillFluidRegistryObject().getId());
-                builder.append("\",\n\t\t\"");
-                builder.append(c.getValue().getHoneyFlowingFluidRegistryObject().getId());
-                builder.append("\",\n");
+                if (c.getValue().doGenerateHoneyFluid()) {
+                    builder.append("\t\t\"");
+                    builder.append(c.getValue().getHoneyStillFluidRegistryObject().getId());
+                    builder.append("\",\n\t\t\"");
+                    builder.append(c.getValue().getHoneyFlowingFluidRegistryObject().getId());
+                    builder.append("\",\n");
+                }
             }));
             builder.deleteCharAt(builder.lastIndexOf(","));
         }

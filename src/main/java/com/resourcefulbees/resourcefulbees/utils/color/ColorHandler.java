@@ -4,6 +4,7 @@ import com.resourcefulbees.resourcefulbees.api.IBeeRegistry;
 import com.resourcefulbees.resourcefulbees.block.CustomHoneyBlock;
 import com.resourcefulbees.resourcefulbees.block.HoneyTank;
 import com.resourcefulbees.resourcefulbees.block.HoneycombBlock;
+import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.item.*;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.ModBlocks;
@@ -36,8 +37,12 @@ public final class ColorHandler {
         }));
         BEE_REGISTRY.getHoneyBottles().forEach((h, honeyData) -> {
             registerItems(colors, CustomHoneyBottleItem::getColor, honeyData.getHoneyBottleRegistryObject().get());
-            registerItems(colors, CustomHoneyBlock::getItemColor, honeyData.getHoneyBlockItemRegistryObject().get());
-            registerItems(colors, CustomHoneyBucketItem::getColor, honeyData.getHoneyBucketItemRegistryObject().get());
+            if (Config.HONEY_GENERATE_BLOCKS.get() && honeyData.doGenerateHoneyBlock()) {
+                registerItems(colors, CustomHoneyBlock::getItemColor, honeyData.getHoneyBlockItemRegistryObject().get());
+            }
+            if (Config.HONEY_GENERATE_FLUIDS.get() && honeyData.doGenerateHoneyFluid()) {
+                registerItems(colors, CustomHoneyBucketItem::getColor, honeyData.getHoneyBucketItemRegistryObject().get());
+            }
         });
         registerItems(colors, BeeJar::getColor, ModItems.BEE_JAR.get());
     }
@@ -50,7 +55,9 @@ public final class ColorHandler {
             }
         }));
         BEE_REGISTRY.getHoneyBottles().forEach((h, honeyData) -> {
-            registerBlocks(colors, CustomHoneyBlock::getBlockColor, honeyData.getHoneyBlockRegistryObject().get());
+            if (Config.HONEY_GENERATE_BLOCKS.get() && honeyData.doGenerateHoneyBlock()) {
+                registerBlocks(colors, CustomHoneyBlock::getBlockColor, honeyData.getHoneyBlockRegistryObject().get());
+            }
         });
         registerBlocks(colors, HoneyTank::getBlockColor, ModBlocks.WOODEN_HONEY_TANK.get(), ModBlocks.NETHER_HONEY_TANK.get(), ModBlocks.PURPUR_HONEY_TANK.get());
     }
