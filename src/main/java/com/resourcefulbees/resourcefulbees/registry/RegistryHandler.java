@@ -72,7 +72,7 @@ public class RegistryHandler {
             if (customBee.shouldResourcefulBeesDoForgeRegistration) {
                 if (customBee.hasHoneycomb() && !customBee.hasCustomDrop()) {
                     registerHoneycomb(name, customBee);
-                } else if (customBee.hasHoneycomb() && customBee.hasCustomDrop() && !customBee.getName().equals(BeeConstants.OREO_BEE)) {
+                } else if (customBee.hasHoneycomb() && customBee.hasCustomDrop() && !customBee.isEasterEggBee()) {
                     fillCustomDrops(customBee);
                 }
                 registerBee(name, customBee);

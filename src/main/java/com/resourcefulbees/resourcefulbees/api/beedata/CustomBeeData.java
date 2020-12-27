@@ -1,9 +1,8 @@
 package com.resourcefulbees.resourcefulbees.api.beedata;
 
-import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.config.Config;
+import com.resourcefulbees.resourcefulbees.lib.BaseModelTypes;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
-import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -26,6 +25,11 @@ public class CustomBeeData extends AbstractBeeData {
     private final String baseLayerTexture;
 
     /**
+     * The base model the bee uses
+     */
+    private BaseModelTypes baseModelType;
+
+    /**
      * How long the bee can stay in a hive.
      */
     private final int maxTimeInHive;
@@ -37,7 +41,7 @@ public class CustomBeeData extends AbstractBeeData {
 
     /**
      * The special atributes can have.
-     *
+     * <p>
      * With that it can as example port like an enderman.
      */
     private final String[] traits;
@@ -111,7 +115,7 @@ public class CustomBeeData extends AbstractBeeData {
      * Data for Bee traits
      */
     private TraitData TraitData;
-    
+
     private transient Supplier<ItemStack> combSupplier;
     private transient Supplier<ItemStack> combBlockItemSupplier;
 
@@ -140,9 +144,15 @@ public class CustomBeeData extends AbstractBeeData {
      */
     private transient ResourceLocation entityTypeRegistryID;
 
-    private CustomBeeData(String flower, String baseLayerTexture, int maxTimeInHive, float sizeModifier, String[] traits, int[] apiaryOutputAmounts, String name, boolean hasHoneycomb, MutationData mutationData, ColorData colorData, CombatData CombatData, CentrifugeData centrifugeData, BreedData breedData, SpawnData spawnData, TraitData traitData) {
+    /**
+     * is an easter egg bee
+     */
+    private transient boolean isEasterEggBee;
+
+    private CustomBeeData(String flower, String baseLayerTexture, BaseModelTypes baseModelType, int maxTimeInHive, float sizeModifier, String[] traits, int[] apiaryOutputAmounts, String name, boolean hasHoneycomb, MutationData mutationData, ColorData colorData, CombatData CombatData, CentrifugeData centrifugeData, BreedData breedData, SpawnData spawnData, TraitData traitData, boolean isEasterEggBee) {
         this.flower = flower;
         this.baseLayerTexture = baseLayerTexture;
+        this.baseModelType = baseModelType;
         this.maxTimeInHive = maxTimeInHive;
         this.sizeModifier = sizeModifier;
         this.traits = traits;
@@ -156,87 +166,173 @@ public class CustomBeeData extends AbstractBeeData {
         this.SpawnData = spawnData;
         this.TraitData = traitData;
         this.CombatData = CombatData;
+        this.isEasterEggBee = isEasterEggBee;
     }
 
-    public String getFlower() { return flower == null ? BeeConstants.FLOWER_TAG_ALL : flower.toLowerCase(); }
+    public boolean isEasterEggBee() {
+        return isEasterEggBee;
+    }
 
-    public String getCustomCombDrop() { return customCombDrop; }
+    public String getFlower() {
+        return flower == null ? BeeConstants.FLOWER_TAG_ALL : flower.toLowerCase();
+    }
 
-    public String getCustomCombBlockDrop() { return customCombBlockDrop; }
+    public String getCustomCombDrop() {
+        return customCombDrop;
+    }
 
-    public int[] getApiaryOutputAmounts() { return apiaryOutputAmounts; }
+    public String getCustomCombBlockDrop() {
+        return customCombBlockDrop;
+    }
 
-    public boolean hasCustomDrop() { return (customCombDrop != null && !customCombDrop.isEmpty() && customCombBlockDrop != null && !customCombBlockDrop.isEmpty()) || name.equals(BeeConstants.OREO_BEE); }
+    public int[] getApiaryOutputAmounts() {
+        return apiaryOutputAmounts;
+    }
 
-    public boolean hasHoneycomb() { return hasHoneycomb; }
+    public boolean hasCustomDrop() {
+        return (customCombDrop != null && !customCombDrop.isEmpty() && customCombBlockDrop != null && !customCombBlockDrop.isEmpty()) || isEasterEggBee();
+    }
 
-    public String getBaseLayerTexture() { return baseLayerTexture == null ? "/custom/bee" : baseLayerTexture.toLowerCase(); }
+    public boolean hasHoneycomb() {
+        return hasHoneycomb;
+    }
 
-    public int getMaxTimeInHive() { return maxTimeInHive < BeeConstants.MIN_HIVE_TIME ? maxTimeInHive == 0 ? BeeConstants.MAX_TIME_IN_HIVE : BeeConstants.MIN_HIVE_TIME : maxTimeInHive; }
+    public String getBaseLayerTexture() {
+        return baseLayerTexture == null ? "/custom/bee" : baseLayerTexture.toLowerCase();
+    }
 
-    public RegistryObject<Item> getCombRegistryObject() { return combRegistryObject; }
+    public int getMaxTimeInHive() {
+        return maxTimeInHive < BeeConstants.MIN_HIVE_TIME ? maxTimeInHive == 0 ? BeeConstants.MAX_TIME_IN_HIVE : BeeConstants.MIN_HIVE_TIME : maxTimeInHive;
+    }
 
-    public void setCombRegistryObject(RegistryObject<Item> combRegistryObject) { this.combRegistryObject = this.combRegistryObject == null ? combRegistryObject : this.combRegistryObject; }
+    public RegistryObject<Item> getCombRegistryObject() {
+        return combRegistryObject;
+    }
 
-    public RegistryObject<Block> getCombBlockRegistryObject() { return combBlockRegistryObject; }
+    public void setCombRegistryObject(RegistryObject<Item> combRegistryObject) {
+        this.combRegistryObject = this.combRegistryObject == null ? combRegistryObject : this.combRegistryObject;
+    }
 
-    public void setCombBlockRegistryObject(RegistryObject<Block> combBlockRegistryObject) { this.combBlockRegistryObject = this.combBlockRegistryObject == null ? combBlockRegistryObject : this.combBlockRegistryObject; }
+    public RegistryObject<Block> getCombBlockRegistryObject() {
+        return combBlockRegistryObject;
+    }
 
-    public RegistryObject<Item> getCombBlockItemRegistryObject() { return combBlockItemRegistryObject; }
+    public void setCombBlockRegistryObject(RegistryObject<Block> combBlockRegistryObject) {
+        this.combBlockRegistryObject = this.combBlockRegistryObject == null ? combBlockRegistryObject : this.combBlockRegistryObject;
+    }
 
-    public void setCombBlockItemRegistryObject(RegistryObject<Item> combBlockItemRegistryObject) { this.combBlockItemRegistryObject = this.combBlockItemRegistryObject == null ? combBlockItemRegistryObject : this.combBlockItemRegistryObject; }
+    public RegistryObject<Item> getCombBlockItemRegistryObject() {
+        return combBlockItemRegistryObject;
+    }
 
-    public ResourceLocation getEntityTypeRegistryID() { return entityTypeRegistryID; }
+    public void setCombBlockItemRegistryObject(RegistryObject<Item> combBlockItemRegistryObject) {
+        this.combBlockItemRegistryObject = this.combBlockItemRegistryObject == null ? combBlockItemRegistryObject : this.combBlockItemRegistryObject;
+    }
 
-    public void setEntityTypeRegistryID(ResourceLocation entityTypeRegistryID) { this.entityTypeRegistryID = this.entityTypeRegistryID == null ? entityTypeRegistryID : this.entityTypeRegistryID; }
+    public ResourceLocation getEntityTypeRegistryID() {
+        return entityTypeRegistryID;
+    }
 
-    public RegistryObject<Item> getSpawnEggItemRegistryObject() { return spawnEggItemRegistryObject; }
+    public void setEntityTypeRegistryID(ResourceLocation entityTypeRegistryID) {
+        this.entityTypeRegistryID = this.entityTypeRegistryID == null ? entityTypeRegistryID : this.entityTypeRegistryID;
+    }
 
-    public void setSpawnEggItemRegistryObject(RegistryObject<Item> spawnEggItemRegistryObject) { this.spawnEggItemRegistryObject = this.spawnEggItemRegistryObject == null ? spawnEggItemRegistryObject : this.spawnEggItemRegistryObject; }
+    public RegistryObject<Item> getSpawnEggItemRegistryObject() {
+        return spawnEggItemRegistryObject;
+    }
 
-    public void setName(String name) { this.name = this.name == null ? name.toLowerCase() : this.name; }
+    public void setSpawnEggItemRegistryObject(RegistryObject<Item> spawnEggItemRegistryObject) {
+        this.spawnEggItemRegistryObject = this.spawnEggItemRegistryObject == null ? spawnEggItemRegistryObject : this.spawnEggItemRegistryObject;
+    }
 
-    public float getSizeModifier() { return sizeModifier != 0 ? sizeModifier : Config.BEE_SIZE_MODIFIER.get().floatValue(); }
+    public void setName(String name) {
+        this.name = this.name == null ? name.toLowerCase() : this.name;
+    }
 
-    public String[] getTraitNames() { return traits; }
+    public float getSizeModifier() {
+        return sizeModifier != 0 ? sizeModifier : Config.BEE_SIZE_MODIFIER.get().floatValue();
+    }
 
-    public boolean hasTraitNames() { return traits != null && traits.length > 0; }
+    public String[] getTraitNames() {
+        return traits;
+    }
 
-    public String getName() { return name.toLowerCase(); }
+    public boolean hasTraitNames() {
+        return traits != null && traits.length > 0;
+    }
 
-    public void addData(String key, AbstractBeeData data) { if (data != null) this.ADDITIONAL_DATA.put(key, data); }
+    public String getName() {
+        return name.toLowerCase();
+    }
 
-    public AbstractBeeData getData(String key) { return this.ADDITIONAL_DATA.get(key); }
+    public void addData(String key, AbstractBeeData data) {
+        if (data != null) this.ADDITIONAL_DATA.put(key, data);
+    }
 
-    public boolean containsData(String key) { return this.ADDITIONAL_DATA.containsKey(key); }
+    public AbstractBeeData getData(String key) {
+        return this.ADDITIONAL_DATA.get(key);
+    }
 
-    public BreedData getBreedData() { return this.BreedData != null ? this.BreedData : com.resourcefulbees.resourcefulbees.api.beedata.BreedData.createDefault(); }
+    public boolean containsData(String key) {
+        return this.ADDITIONAL_DATA.containsKey(key);
+    }
 
-    public CentrifugeData getCentrifugeData() { return this.CentrifugeData != null ? this.CentrifugeData : com.resourcefulbees.resourcefulbees.api.beedata.CentrifugeData.createDefault(); }
+    public BreedData getBreedData() {
+        return this.BreedData != null ? this.BreedData : com.resourcefulbees.resourcefulbees.api.beedata.BreedData.createDefault();
+    }
 
-    public ColorData getColorData() { return this.ColorData != null ? this.ColorData : com.resourcefulbees.resourcefulbees.api.beedata.ColorData.createDefault(); }
+    public CentrifugeData getCentrifugeData() {
+        return this.CentrifugeData != null ? this.CentrifugeData : com.resourcefulbees.resourcefulbees.api.beedata.CentrifugeData.createDefault();
+    }
 
-    public CombatData getCombatData() { return this.CombatData != null ? this.CombatData : com.resourcefulbees.resourcefulbees.api.beedata.CombatData.createDefault(); }
+    public ColorData getColorData() {
+        return this.ColorData != null ? this.ColorData : com.resourcefulbees.resourcefulbees.api.beedata.ColorData.createDefault();
+    }
 
-    public MutationData getMutationData() { return this.MutationData != null ? this.MutationData : com.resourcefulbees.resourcefulbees.api.beedata.MutationData.createDefault(); }
+    public CombatData getCombatData() {
+        return this.CombatData != null ? this.CombatData : com.resourcefulbees.resourcefulbees.api.beedata.CombatData.createDefault();
+    }
 
-    public SpawnData getSpawnData() { return this.SpawnData != null ? this.SpawnData : com.resourcefulbees.resourcefulbees.api.beedata.SpawnData.createDefault(); }
+    public MutationData getMutationData() {
+        return this.MutationData != null ? this.MutationData : com.resourcefulbees.resourcefulbees.api.beedata.MutationData.createDefault();
+    }
 
-    public TraitData getTraitData() { return this.TraitData != null ? this.TraitData : com.resourcefulbees.resourcefulbees.api.beedata.TraitData.createDefault(); }
+    public SpawnData getSpawnData() {
+        return this.SpawnData != null ? this.SpawnData : com.resourcefulbees.resourcefulbees.api.beedata.SpawnData.createDefault();
+    }
 
-    public void setTraitData(TraitData traitData) { this.TraitData = this.TraitData != null ? this.TraitData : traitData; }
+    public TraitData getTraitData() {
+        return this.TraitData != null ? this.TraitData : com.resourcefulbees.resourcefulbees.api.beedata.TraitData.createDefault();
+    }
 
-    public ItemStack getCombStack() { return combSupplier != null ? combSupplier.get() : new ItemStack(getCombRegistryObject().get()); }
+    public void setTraitData(TraitData traitData) {
+        this.TraitData = this.TraitData != null ? this.TraitData : traitData;
+    }
 
-    public ItemStack getCombBlockItemStack() { return combBlockItemSupplier != null ? combBlockItemSupplier.get() : new ItemStack(getCombBlockItemRegistryObject().get()); }
+    public ItemStack getCombStack() {
+        return combSupplier != null ? combSupplier.get() : new ItemStack(getCombRegistryObject().get());
+    }
 
-    public void setCombSupplier(Supplier<ItemStack> combSupplier) { this.combSupplier = combSupplier; }
+    public ItemStack getCombBlockItemStack() {
+        return combBlockItemSupplier != null ? combBlockItemSupplier.get() : new ItemStack(getCombBlockItemRegistryObject().get());
+    }
 
-    public void setCombBlockItemSupplier(Supplier<ItemStack> combBlockItemSupplier) { this.combBlockItemSupplier = combBlockItemSupplier; }
+    public void setCombSupplier(Supplier<ItemStack> combSupplier) {
+        this.combSupplier = combSupplier;
+    }
+
+    public void setCombBlockItemSupplier(Supplier<ItemStack> combBlockItemSupplier) {
+        this.combBlockItemSupplier = combBlockItemSupplier;
+    }
+
+    public BaseModelTypes getBaseModelType() {
+        return baseModelType == null ? BaseModelTypes.DEFAULT : baseModelType;
+    }
 
     public static class Builder {
         private final String flower;
         private String baseLayerTexture;
+        private BaseModelTypes baseModelType = BaseModelTypes.DEFAULT;
         private int maxTimeInHive;
         private float sizeModifier;
         private String[] traits;
@@ -250,6 +346,7 @@ public class CustomBeeData extends AbstractBeeData {
         private final BreedData breedData;
         private final SpawnData spawnData;
         private final TraitData traitData;
+        private boolean isEasterEggBee = false;
 
         public Builder(String name, String flower, boolean hasHoneycomb, MutationData mutationData, ColorData colorData, CombatData combatData, CentrifugeData centrifugeData, BreedData breedData, SpawnData spawnData, TraitData traitData) {
             this.name = name;
@@ -264,8 +361,19 @@ public class CustomBeeData extends AbstractBeeData {
             this.traitData = traitData;
         }
 
+
+        public Builder setEasterEggBee(boolean easterEggBee) {
+            isEasterEggBee = easterEggBee;
+            return this;
+        }
+
         public Builder setBaseLayerTexture(String baseLayerTexture) {
             this.baseLayerTexture = baseLayerTexture;
+            return this;
+        }
+
+        public Builder setBaseModelType(BaseModelTypes modelType) {
+            this.baseModelType = modelType;
             return this;
         }
 
@@ -279,7 +387,7 @@ public class CustomBeeData extends AbstractBeeData {
             return this;
         }
 
-        public Builder setTraits(String[] traits){
+        public Builder setTraits(String[] traits) {
             this.traits = traits;
             return this;
         }
@@ -290,7 +398,7 @@ public class CustomBeeData extends AbstractBeeData {
         }
 
         public CustomBeeData createCustomBee() {
-            return new CustomBeeData(flower, baseLayerTexture, maxTimeInHive, sizeModifier, traits, apiaryOutputAmounts, name, hasHoneycomb, mutationData, colorData, combatData, centrifugeData, breedData, spawnData, traitData);
+            return new CustomBeeData(flower, baseLayerTexture, baseModelType, maxTimeInHive, sizeModifier, traits, apiaryOutputAmounts, name, hasHoneycomb, mutationData, colorData, combatData, centrifugeData, breedData, spawnData, traitData, isEasterEggBee);
         }
     }
 }

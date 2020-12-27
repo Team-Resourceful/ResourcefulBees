@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "minecraft:honeycomb"
+    "minecraft:honeycomb",
+    "resourcefulbees:catnip_honeycomb"
   ]
 }
