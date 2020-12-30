@@ -18,10 +18,8 @@ public class FluidRender {
 
     private static final ResourceLocation HONEY_UNDERWATER = new ResourceLocation(ResourcefulBees.MOD_ID + ":textures/block/honey/honey_underwater.png");
 
-    public static void honeyOverlay(RenderBlockOverlayEvent event)
-    {
-        if (event.getPlayer().world.getBlockState(event.getBlockPos()).getBlock() == ModBlocks.HONEY_FLUID_BLOCK.get())
-        {
+    public static void honeyOverlay(RenderBlockOverlayEvent event) {
+        if (event.getPlayer().world.getBlockState(event.getBlockPos()).getBlock() == ModBlocks.HONEY_FLUID_BLOCK.get()) {
             Minecraft minecraftIn = Minecraft.getInstance();
             minecraftIn.getTextureManager().bindTexture(HONEY_UNDERWATER);
             BufferBuilder bufferbuilder = Tessellator.getInstance().getBuffer();
@@ -43,9 +41,13 @@ public class FluidRender {
         }
     }
 
-    public static void setHoneyRenderType(){
+    public static void setHoneyRenderType() {
         RenderTypeLookup.setRenderLayer(ModBlocks.HONEY_FLUID_BLOCK.get(), RenderType.getTranslucent());
         RenderTypeLookup.setRenderLayer(ModFluids.HONEY_STILL.get(), RenderType.getTranslucent());
         RenderTypeLookup.setRenderLayer(ModFluids.HONEY_FLOWING.get(), RenderType.getTranslucent());
+        RenderTypeLookup.setRenderLayer(ModFluids.CATNIP_HONEY_FLOWING.get(), RenderType.getTranslucent());
+        RenderTypeLookup.setRenderLayer(ModFluids.CATNIP_HONEY_STILL.get(), RenderType.getTranslucent());
+        RenderTypeLookup.setRenderLayer(ModBlocks.CATNIP_HONEY_BLOCK.get(), RenderType.getTranslucent());
+        RenderTypeLookup.setRenderLayer(ModBlocks.CATNIP_HONEY_FLUID_BLOCK.get(), RenderType.getTranslucent());
     }
 }

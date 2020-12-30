@@ -136,6 +136,9 @@
 	"item.resourcefulbees.honey_fluid_bucket": "Honey Bucket",
 	"item.resourcefulbees.scraper": "Scraper",
 	"item.resourcefulbees.oreo_cookie": "Epic Oreo",
+	"item.resourcefulbees.catnip_honeycomb": "Catnip Honeycomb",
+	"item.resourcefulbees.catnip_honey_bottle": "Catnip Honey Bottle",
+	"item.resourcefulbees.catnip_honey_fluid_bucket": "Catnip Honey Bucket",
 
 	"block.resourcefulbees.gold_honeycomb_block": "Gold Honeycomb Block",
 	"block.resourcefulbees.iron_honeycomb_block": "Iron Honeycomb Block",
@@ -153,8 +156,11 @@
 	"block.resourcefulbees.zombie_honeycomb_block": "Zombie Honeycomb Block",
 	"block.resourcefulbees.netherite_honeycomb_block": "Netherite Honeycomb Block",
 	"block.resourcefulbees.rgbee_honeycomb_block": "RGBee Honeycomb Block",
+	"block.resourcefulbees.catnip_honeycomb_block": "Catnip Honeycomb Block",
+	"block.resourcefulbees.catnip_honey_block": "Catnip Honey Block",
 
 	"fluid.resourcefulbees.honey": "Honey",
+	"fluid.resourcefulbees.catnip_honey": "Catnip Honey",
 
 	"item.resourcefulbees.gold_honeycomb": "Gold Honeycomb",
 	"item.resourcefulbees.iron_honeycomb": "Iron Honeycomb",
@@ -192,6 +198,8 @@
 	"item.resourcefulbees.oreo_bee_spawn_egg": "Oreo Bee Spawn Egg",
 	"item.resourcefulbees.slimy_bee_spawn_egg": "Slimy Bee Spawn Egg",
 	"item.resourcefulbees.icy_bee_spawn_egg": "Icy Bee Spawn Egg",
+	"item.resourcefulbees.kitten_bee_spawn_egg": "Kitten Bee Spawn Egg",
+
 
 	"entity.resourcefulbees.gold_bee": "Gold Bee",
 	"entity.resourcefulbees.iron_bee": "Iron Bee",
@@ -212,6 +220,7 @@
 	"entity.resourcefulbees.oreo_bee": "Oreo Bee",
 	"entity.resourcefulbees.slimy_bee": "Slimy Bee",
 	"entity.resourcefulbees.icy_bee": "Icy Bee",
+	"entity.resourcefulbees.kitten_bee": "Kitten Bee",
 
 	"entity.minecraft.villager.resourcefulbees.beekeeper": "Beekeeper",
 	"block.resourcefulbees.mech_centrifuge.tooltip.info": "Hold SHIFT & right-click block to process honeycombs.",

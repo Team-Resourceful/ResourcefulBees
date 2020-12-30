@@ -66,6 +66,10 @@ public class Config {
 
     public static ForgeConfigSpec.BooleanValue BEES_DIE_IN_VOID;
 
+    public static ForgeConfigSpec.BooleanValue HONEY_GENERATE_FLUIDS;
+    public static ForgeConfigSpec.BooleanValue HONEY_GENERATE_BLOCKS;
+    public static ForgeConfigSpec.BooleanValue HONEY_BLOCK_RECIPIES;
+
     //CLIENT
 
     public static ForgeConfigSpec.BooleanValue GENERATE_ENGLISH_LANG;
@@ -192,6 +196,14 @@ public class Config {
             HONEYCOMB_SATURATION = COMMON_BUILDER.comment("\nThe amount of saturation restored when eating a honeycomb.")
                     .defineInRange("honeycombSaturation", 0.6, 0, 8.0);
             COMMON_BUILDER.pop();
+
+            COMMON_BUILDER.push("Honey Options");
+            HONEY_GENERATE_FLUIDS = COMMON_BUILDER.comment("\nSet to false if you don't want the custom honey fluids to be generated [true/false]")
+                    .define("generateHoneyFluids", true);
+            HONEY_GENERATE_BLOCKS = COMMON_BUILDER.comment("\nSet to false if you don't want the custom honey blocks to be generated [true/false]")
+                    .define("generateHoneyBlocks", true);
+            HONEY_BLOCK_RECIPIES = COMMON_BUILDER.comment("\nShould honey block recipies be generated? [true/false]")
+                    .define("honeyBlockRecipies", true);
 
             COMMON_CONFIG = COMMON_BUILDER.build();
         }

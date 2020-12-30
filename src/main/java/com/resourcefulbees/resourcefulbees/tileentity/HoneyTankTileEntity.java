@@ -182,8 +182,13 @@ public class HoneyTankTileEntity extends TileEntity implements ITickableTileEnti
             itemStack = new ItemStack(fluid.getHoneyData().getHoneyBottleRegistryObject().get(), 1);
             fluidStack = new FluidStack(fluid.getHoneyData().getHoneyStillFluidRegistryObject().get(), ModConstants.HONEY_PER_BOTTLE);
         } else {
-            itemStack = new ItemStack(Items.HONEY_BOTTLE, 1);
-            fluidStack = new FluidStack(ModFluids.HONEY_STILL.get(), ModConstants.HONEY_PER_BOTTLE);
+            if (fluidStack.getFluid() == ModFluids.CATNIP_HONEY_STILL.get()) {
+                itemStack = new ItemStack(ModItems.CATNIP_HONEY_BOTTLE.get(), 1);
+                fluidStack = new FluidStack(ModFluids.CATNIP_HONEY_STILL.get(), ModConstants.HONEY_PER_BOTTLE);
+            } else {
+                itemStack = new ItemStack(Items.HONEY_BOTTLE, 1);
+                fluidStack = new FluidStack(ModFluids.HONEY_STILL.get(), ModConstants.HONEY_PER_BOTTLE);
+            }
         }
         if (fluidTank.isEmpty()) return;
         if (fluidTank.getFluidAmount() >= ModConstants.HONEY_PER_BOTTLE) {
@@ -204,7 +209,11 @@ public class HoneyTankTileEntity extends TileEntity implements ITickableTileEnti
             CustomHoneyBottleItem item = (CustomHoneyBottleItem) player.getHeldItem(hand).getItem();
             fluidStack = new FluidStack(item.getHoneyData().getHoneyStillFluidRegistryObject().get(), ModConstants.HONEY_PER_BOTTLE);
         } else {
-            fluidStack = HONEY_BOTTLE_FLUID_STACK;
+            if (player.getHeldItem(hand).getItem() == ModItems.CATNIP_HONEY_BOTTLE.get()){
+                fluidStack = new FluidStack(ModFluids.CATNIP_HONEY_STILL.get(), ModConstants.HONEY_PER_BOTTLE);
+            }else {
+                fluidStack = HONEY_BOTTLE_FLUID_STACK;
+            }
         }
         if (!fluidTank.getFluid().isFluidEqual(fluidStack) && !fluidTank.isEmpty()) {
             return;

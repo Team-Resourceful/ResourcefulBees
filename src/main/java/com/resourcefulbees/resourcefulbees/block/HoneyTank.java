@@ -1,6 +1,7 @@
 package com.resourcefulbees.resourcefulbees.block;
 
 import com.resourcefulbees.resourcefulbees.fluids.HoneyFlowingFluid;
+import com.resourcefulbees.resourcefulbees.registry.ModFluids;
 import com.resourcefulbees.resourcefulbees.tileentity.HoneyTankTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.TooltipBuilder;
 import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
@@ -85,6 +86,9 @@ public class HoneyTank extends Block {
                 HoneyFlowingFluid fluid = (HoneyFlowingFluid) tank.fluidTank.getFluid().getFluid();
                 return fluid.getHoneyData().isRainbow() ? RainbowColor.getRGB() : fluid.getHoneyData().getHoneyColorInt();
             } else {
+                if (tank.fluidTank.getFluid().getFluid() == ModFluids.CATNIP_HONEY_STILL.get()){
+                    return 0xFF812819;
+                }
                 return 0xFFF69909;
             }
         }

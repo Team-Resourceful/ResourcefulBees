@@ -3,6 +3,7 @@ package com.resourcefulbees.resourcefulbees.client.models;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
+import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.FlowingFluidBlock;

@@ -5,6 +5,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
+import com.resourcefulbees.resourcefulbees.lib.BaseModelTypes;
 import com.resourcefulbees.resourcefulbees.lib.ModelTypes;
 import net.minecraft.client.renderer.entity.model.AgeableModel;
 import net.minecraft.client.renderer.entity.model.ModelUtils;
@@ -58,6 +59,32 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
         }
     }
 
+    public CustomBeeModel(BaseModelTypes modelType) {
+        super(false, 24.0F, 0.0F);
+        this.textureWidth = 64;
+        this.textureHeight = 64;
+        this.body = new ModelRenderer(this);
+        this.torso = new ModelRenderer(this);
+        this.stinger = new ModelRenderer(this, 26, 7);
+        this.leftAntenna = new ModelRenderer(this, 2, 0);
+        this.rightAntenna = new ModelRenderer(this, 2, 3);
+        this.rightWing = new ModelRenderer(this, 0, 18);
+        this.leftWing = new ModelRenderer(this, 0, 18);
+        this.frontLegs = new ModelRenderer(this);
+        this.middleLegs = new ModelRenderer(this);
+        this.backLegs = new ModelRenderer(this);
+
+
+        switch (modelType) {
+            case KITTEN:
+                addKittenParts();
+                break;
+            case DEFAULT:
+                addDefaultParts();
+                break;
+        }
+    }
+
 
     public void setLivingAnimations(@Nonnull T entityIn, float limbSwing, float limbSwingAmount, float partialTick) {
         super.setLivingAnimations(entityIn, limbSwing, limbSwingAmount, partialTick);
@@ -75,22 +102,22 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
         this.body.rotateAngleX = 0.0F;
         this.body.rotationPointY = 19.0F;
         this.rightWing.rotateAngleY = 0.0F;
-        this.rightWing.rotateAngleZ = MathHelper.cos((ageInTicks % 98000 * 2.1F)) * (float)Math.PI * 0.15F;
+        this.rightWing.rotateAngleZ = MathHelper.cos((ageInTicks % 98000 * 2.1F)) * (float) Math.PI * 0.15F;
         this.leftWing.rotateAngleX = this.rightWing.rotateAngleX;
         this.leftWing.rotateAngleY = this.rightWing.rotateAngleY;
         this.leftWing.rotateAngleZ = -this.rightWing.rotateAngleZ;
-        this.frontLegs.rotateAngleX = ((float)Math.PI / 4F);
-        this.middleLegs.rotateAngleX = ((float)Math.PI / 4F);
-        this.backLegs.rotateAngleX = ((float)Math.PI / 4F);
+        this.frontLegs.rotateAngleX = ((float) Math.PI / 4F);
+        this.middleLegs.rotateAngleX = ((float) Math.PI / 4F);
+        this.backLegs.rotateAngleX = ((float) Math.PI / 4F);
         setRotationAngle(body, 0, 0, 0);
 
         if (!entityIn.hasAngerTime()) {
             float f1 = MathHelper.cos(ageInTicks * 0.18F);
-            this.body.rotateAngleX = 0.1F + f1 * (float)Math.PI * 0.025F;
-            this.leftAntenna.rotateAngleX = f1 * (float)Math.PI * 0.03F;
-            this.rightAntenna.rotateAngleX = f1 * (float)Math.PI * 0.03F;
-            this.frontLegs.rotateAngleX = -f1 * (float)Math.PI * 0.1F + ((float)Math.PI / 8F);
-            this.backLegs.rotateAngleX = -f1 * (float)Math.PI * 0.05F + ((float)Math.PI / 4F);
+            this.body.rotateAngleX = 0.1F + f1 * (float) Math.PI * 0.025F;
+            this.leftAntenna.rotateAngleX = f1 * (float) Math.PI * 0.03F;
+            this.rightAntenna.rotateAngleX = f1 * (float) Math.PI * 0.03F;
+            this.frontLegs.rotateAngleX = -f1 * (float) Math.PI * 0.1F + ((float) Math.PI / 8F);
+            this.backLegs.rotateAngleX = -f1 * (float) Math.PI * 0.05F + ((float) Math.PI / 4F);
             this.body.rotationPointY = 19.0F - MathHelper.cos(ageInTicks * 0.18F) * 0.9F;
         }
 
@@ -103,10 +130,14 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
     }
 
     @Nonnull
-    protected Iterable<ModelRenderer> getHeadParts() { return ImmutableList.of(); }
+    protected Iterable<ModelRenderer> getHeadParts() {
+        return ImmutableList.of();
+    }
 
     @Nonnull
-    protected Iterable<ModelRenderer> getBodyParts() { return ImmutableList.of(this.body); }
+    protected Iterable<ModelRenderer> getBodyParts() {
+        return ImmutableList.of(this.body);
+    }
 
     @Override
     public void render(@Nonnull MatrixStack matrixStackIn, @Nonnull IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
@@ -117,11 +148,13 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
         matrixStackIn.pop();
     }
 
+    // base bee parts
+
     private void addDefaultParts() {
         this.body.setRotationPoint(0.0F, 19.0F, 0.0F);
         this.torso.setRotationPoint(0.0F, 0.0F, 0.0F);
         this.body.addChild(this.torso);
-        this.torso.setTextureOffset(0,0).addCuboid(-3.5F, -4.0F, -5.0F, 7.0F, 7.0F, 10.0F, 0.0F);
+        this.torso.setTextureOffset(0, 0).addCuboid(-3.5F, -4.0F, -5.0F, 7.0F, 7.0F, 10.0F, 0.0F);
 
         this.stinger.addCuboid(0.0F, -1.0F, 5.0F, 0.0F, 1.0F, 2.0F, 0.0F);
         this.torso.addChild(this.stinger);
@@ -135,12 +168,12 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
         this.torso.addChild(this.rightAntenna);
 
         this.rightWing.setRotationPoint(-1.5F, -4.0F, -3.0F);
-        this.setRotationAngle(rightWing, 0 , -0.2618F, 0);
+        this.setRotationAngle(rightWing, 0, -0.2618F, 0);
         this.body.addChild(this.rightWing);
         this.rightWing.addCuboid(-9.0F, 0.0F, 0.0F, 9.0F, 0.0F, 6.0F, 0.001F);
 
         this.leftWing.setRotationPoint(1.5F, -4.0F, -3.0F);
-        this.setRotationAngle(leftWing, 0 , 0.2618F, 0);
+        this.setRotationAngle(leftWing, 0, 0.2618F, 0);
         this.leftWing.mirror = true;
         this.body.addChild(this.leftWing);
         this.leftWing.addCuboid(0.0F, 0.0F, 0.0F, 9.0F, 0.0F, 6.0F, 0.001F);
@@ -157,6 +190,53 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
         this.body.addChild(this.backLegs);
         this.backLegs.func_217178_a("backLegBox", -5.0F, 0.0F, 0.0F, 7, 2, 0, 0.0F, 26, 5);
     }
+
+    private void addKittenParts() {
+        body.setRotationPoint(0.0F, 19.0F, 0.0F);
+
+        torso.setRotationPoint(0.0F, 0.0F, 0.0F);
+        body.addChild(torso);
+        torso.setTextureOffset(24, 6).addCuboid(-1.5F, 1.0F, -6.0F, 3.0F, 2.0F, 1.0F, 0.0F, false);
+        torso.setTextureOffset(24, 3).addCuboid(-2.5F, -5.0F, -4.0F, 1.0F, 1.0F, 2.0F, 0.0F, false);
+        torso.setTextureOffset(24, 3).addCuboid(1.5F, -5.0F, -4.0F, 1.0F, 1.0F, 2.0F, 0.0F, false);
+        torso.setTextureOffset(0, 0).addCuboid(-3.5F, -4.0F, -5.0F, 7.0F, 7.0F, 10.0F, 0.0F, false);
+
+        stinger.setRotationPoint(0.0F, 0.0F, 0.0F);
+        torso.addChild(stinger);
+        stinger.setTextureOffset(3, 1).addCuboid(0F, -1.0F, 5.0F, 0.0F, 1.0F, 2.0F, 0.0F, false);
+
+        leftAntenna.setRotationPoint(0.0F, -2.0F, -5.0F);
+        torso.addChild(leftAntenna);
+        leftAntenna.setTextureOffset(2, 0).addCuboid(1.5F, -2.0F, -3.0F, 1.0F, 2.0F, 3.0F, 0.0F, false);
+
+        rightAntenna.setRotationPoint(0.0F, -2.0F, -5.0F);
+        torso.addChild(rightAntenna);
+        rightAntenna.setTextureOffset(2, 3).addCuboid(-2.5F, -2.0F, -3.0F, 1.0F, 2.0F, 3.0F, 0.0F, false);
+
+        rightWing.setRotationPoint(-1.5F, -4.0F, -3.0F);
+        body.addChild(rightWing);
+        rightWing.setTextureOffset(0, 18).addCuboid(-9F, 0.0F, 0.0F, 9.0F, 0.0F, 6.0F, 0.0F, false);
+
+        leftWing.setRotationPoint(1.5F, -4.0F, -3.0F);
+        body.addChild(leftWing);
+        leftWing.setTextureOffset(0, 18).addCuboid(0F, 0.0F, 0.0F, 9.0F, 0.0F, 6.0F, 0.0F, true);
+
+        frontLegs.setRotationPoint(1.5F, 3.0F, -2.0F);
+        body.addChild(frontLegs);
+        frontLegs.setTextureOffset(24, 0).addCuboid(-3F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F, 0.0F, false);
+        frontLegs.setTextureOffset(24, 0).addCuboid(-1F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F, 0.0F, false);
+
+        middleLegs.setRotationPoint(1.5F, 3.0F, 0.0F);
+        body.addChild(middleLegs);
+        middleLegs.setTextureOffset(24, 0).addCuboid(-4F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F, 0.0F, false);
+        middleLegs.setTextureOffset(24, 0).addCuboid(0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F, 0.0F, false);
+        backLegs.setRotationPoint(1.5F, 3.0F, 2.0F);
+        body.addChild(backLegs);
+        backLegs.setTextureOffset(24, 0).addCuboid(-4F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F, 0.0F, false);
+        backLegs.setTextureOffset(24, 0).addCuboid(0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F, 0.0F, false);
+    }
+
+    // extra parts
 
     private void addGelatinousParts() {
         this.body.setRotationPoint(0.0F, 19.0F, 0.0F);
