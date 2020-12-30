@@ -147,7 +147,7 @@ public class CustomBeeData extends AbstractBeeData {
     /**
      * is an easter egg bee
      */
-    private transient boolean isEasterEggBee;
+    private final transient boolean isEasterEggBee;
 
     private CustomBeeData(String flower, String baseLayerTexture, BaseModelTypes baseModelType, int maxTimeInHive, float sizeModifier, String[] traits, int[] apiaryOutputAmounts, String name, boolean hasHoneycomb, MutationData mutationData, ColorData colorData, CombatData CombatData, CentrifugeData centrifugeData, BreedData breedData, SpawnData spawnData, TraitData traitData, boolean isEasterEggBee) {
         this.flower = flower;
