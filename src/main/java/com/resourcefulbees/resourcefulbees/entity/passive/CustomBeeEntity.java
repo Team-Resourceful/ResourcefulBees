@@ -55,26 +55,44 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
 
     //region BEE INFO RELATED METHODS BELOW
 
-    public String getBeeType() { return beeData.getName(); }
+    public String getBeeType() {
+        return beeData.getName();
+    }
 
-    public BlockPos getLastFlower() { return lastFlower; }
+    public BlockPos getLastFlower() {
+        return lastFlower;
+    }
 
-    public void setLastFlower(BlockPos lastFlower) { this.lastFlower = lastFlower; }
+    public void setLastFlower(BlockPos lastFlower) {
+        this.lastFlower = lastFlower;
+    }
 
-    public CustomBeeData getBeeData() { return beeData; }
+    public CustomBeeData getBeeData() {
+        return beeData;
+    }
 
-    public int getFlowerEntityID() { return flowerID; }
+    public int getFlowerEntityID() {
+        return flowerID;
+    }
 
-    public void setFlowerEntityID(int id) { flowerID = id; }
+    public void setFlowerEntityID(int id) {
+        flowerID = id;
+    }
 
     @Override
-    public int getFeedCount() { return this.dataManager.get(FEED_COUNT); }
+    public int getFeedCount() {
+        return this.dataManager.get(FEED_COUNT);
+    }
 
     @Override
-    public void resetFeedCount() { this.dataManager.set(FEED_COUNT, 0); }
+    public void resetFeedCount() {
+        this.dataManager.set(FEED_COUNT, 0);
+    }
 
     @Override
-    public void addFeedCount() { this.dataManager.set(FEED_COUNT, this.getFeedCount() + 1); }
+    public void addFeedCount() {
+        this.dataManager.set(FEED_COUNT, this.getFeedCount() + 1);
+    }
     //endregion
 
     //region CUSTOM BEE RELATED METHODS BELOW
@@ -95,8 +113,8 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
     @Override
     public boolean isPotionApplicable(@Nonnull EffectInstance potioneffectIn) {
         TraitData info = getBeeData().getTraitData();
-        if (info.hasPotionImmunities()){
-            for (Effect potion : info.getPotionImmunities()){
+        if (info.hasPotionImmunities()) {
+            for (Effect potion : info.getPotionImmunities()) {
                 if (potion.equals(potioneffectIn.getPotion())) return false;
             }
         }
@@ -108,8 +126,8 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
         if (this.world.isRemote) {
             if (this.ticksExisted % 40 == 0) {
                 TraitData info = getBeeData().getTraitData();
-                if (info.hasParticleEffects()){
-                    for (BasicParticleType particle : info.getParticleEffects()){
+                if (info.hasParticleEffects()) {
+                    for (BasicParticleType particle : info.getParticleEffects()) {
                         for (int i = 0; i < 10; ++i) {
                             this.world.addParticle(particle, this.getParticleX(0.5D),
                                     this.getRandomBodyY() - 0.25D, this.getParticleZ(0.5D),
@@ -124,15 +142,16 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
                 this.remove();
             }
             if (!hasCustomName()) {
-                if (hasHiveInRange() || hasFlower() || isPassenger() || getLeashed() || hasNectar()) {
-                    timeWithoutHive = 0;
-                } else {
-                    ++timeWithoutHive;
+                if (ticksExisted % 100 == 0) {
+                    if (hasHiveInRange() || hasFlower() || isPassenger() || getLeashed() || hasNectar()) {
+                        timeWithoutHive = 0;
+                    } else {
+                        timeWithoutHive += 100;
+                    }
                 }
                 if (timeWithoutHive >= 12000 && !hasHiveInRange()) this.remove();
             }
         }
-
         super.livingTick();
     }
 
@@ -201,7 +220,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
     //This is because we don't want IF being able to breed our animals
     @Override
     public void setInLove(@Nullable PlayerEntity player) {
-        if(player != null && !(player instanceof FakePlayer))
+        if (player != null && !(player instanceof FakePlayer))
             super.setInLove(player);
     }
 
@@ -221,8 +240,8 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
     public ActionResultType interactMob(PlayerEntity player, @Nonnull Hand hand) {
         ItemStack itemstack = player.getHeldItem(hand);
         Item item = itemstack.getItem();
-        if (item instanceof NameTagItem){
-            super.interactMob(player,hand);
+        if (item instanceof NameTagItem) {
+            super.interactMob(player, hand);
         }
         if (this.isBreedingItem(itemstack)) {
             if (!this.world.isRemote && this.getGrowingAge() == 0 && this.canBreed()) {
@@ -237,7 +256,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
 
             if (this.isChild()) {
                 this.consumeItemFromStack(player, itemstack);
-                this.ageUp((int)((-this.getGrowingAge() / 20) * 0.1F), true);
+                this.ageUp((int) ((-this.getGrowingAge() / 20) * 0.1F), true);
                 return ActionResultType.PASS;
             }
         }
@@ -245,12 +264,17 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
     }
 
 
-
     @Nonnull
     @Override
     public EntitySize getSize(@Nonnull Pose poseIn) {
-        float scale = this.isChild() ? Config.CHILD_SIZE_MODIFIER.get().floatValue() : beeData.getSizeModifier();
+        float scale = beeData.getSizeModifier();
+        scale = this.isChild() ? scale * Config.CHILD_SIZE_MODIFIER.get().floatValue() : scale;
         return super.getSize(poseIn).scale(scale);
+    }
+
+    @Override
+    public float getEyeHeight(Pose p_213307_1_) {
+        return super.getEyeHeight(p_213307_1_);
     }
 
     @Override
@@ -266,6 +290,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
             this.setPositionAndUpdate(pos.getX(), pos.getY(), pos.getZ());
         }
     }
+
 
     //endregion
 }

@@ -9,6 +9,7 @@ import com.resourcefulbees.resourcefulbees.registry.ModFluids;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import com.resourcefulbees.resourcefulbees.registry.ModTileEntityTypes;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
+import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -38,6 +39,18 @@ import java.util.function.Predicate;
 
 public class HoneyTankTileEntity extends TileEntity implements ITickableTileEntity {
 
+    public int getFluidColor() {
+        if (fluidTank.isEmpty()) return 0x00000000;
+        if (fluidTank.getFluid().getFluid() instanceof HoneyFlowingFluid) {
+            HoneyFlowingFluid fluid = (HoneyFlowingFluid) fluidTank.getFluid().getFluid();
+            return fluid.getHoneyData().isRainbow() ? RainbowColor.getRGB() : fluid.getHoneyData().getHoneyColorInt();
+        } else {
+            if (fluidTank.getFluid().getFluid() == ModFluids.CATNIP_HONEY_STILL.get()) {
+                return 0xFF812819;
+            }
+            return 0xFFF69909;
+        }
+    }
 
     public enum TankTier {
         PURPUR(3, 64000, ModBlocks.PURPUR_HONEY_TANK, ModItems.PURPUR_HONEY_TANK_ITEM),
@@ -209,9 +222,9 @@ public class HoneyTankTileEntity extends TileEntity implements ITickableTileEnti
             CustomHoneyBottleItem item = (CustomHoneyBottleItem) player.getHeldItem(hand).getItem();
             fluidStack = new FluidStack(item.getHoneyData().getHoneyStillFluidRegistryObject().get(), ModConstants.HONEY_PER_BOTTLE);
         } else {
-            if (player.getHeldItem(hand).getItem() == ModItems.CATNIP_HONEY_BOTTLE.get()){
+            if (player.getHeldItem(hand).getItem() == ModItems.CATNIP_HONEY_BOTTLE.get()) {
                 fluidStack = new FluidStack(ModFluids.CATNIP_HONEY_STILL.get(), ModConstants.HONEY_PER_BOTTLE);
-            }else {
+            } else {
                 fluidStack = HONEY_BOTTLE_FLUID_STACK;
             }
         }
@@ -228,6 +241,11 @@ public class HoneyTankTileEntity extends TileEntity implements ITickableTileEnti
                 player.setHeldItem(hand, new ItemStack(Items.GLASS_BOTTLE, 1));
             }
         }
+    }
+
+    public int getLevel() {
+        float fillPercentage = ((float) fluidTank.getFluidAmount()) / ((float) fluidTank.getTankCapacity(0));
+        return (int) Math.ceil(fillPercentage * 14);
     }
 
     public class InternalFluidTank extends FluidTank {
