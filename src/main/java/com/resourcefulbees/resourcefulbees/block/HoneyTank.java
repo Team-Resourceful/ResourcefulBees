@@ -1,10 +1,8 @@
 package com.resourcefulbees.resourcefulbees.block;
 
 import com.resourcefulbees.resourcefulbees.fluids.HoneyFlowingFluid;
-import com.resourcefulbees.resourcefulbees.registry.ModFluids;
 import com.resourcefulbees.resourcefulbees.tileentity.HoneyTankTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.TooltipBuilder;
-import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -79,18 +77,8 @@ public class HoneyTank extends Block {
 
     public static int getBlockColor(BlockState state, @javax.annotation.Nullable IBlockReader world, @javax.annotation.Nullable BlockPos pos, int tintIndex) {
         if (tintIndex == 1) {
-            HoneyTankTileEntity tank = getTileEntity(world, pos);
-            if (tank == null) return -1;
-            if (tank.fluidTank.isEmpty()) return 0x00000000;
-            if (tank.fluidTank.getFluid().getFluid() instanceof HoneyFlowingFluid) {
-                HoneyFlowingFluid fluid = (HoneyFlowingFluid) tank.fluidTank.getFluid().getFluid();
-                return fluid.getHoneyData().isRainbow() ? RainbowColor.getRGB() : fluid.getHoneyData().getHoneyColorInt();
-            } else {
-                if (tank.fluidTank.getFluid().getFluid() == ModFluids.CATNIP_HONEY_STILL.get()){
-                    return 0xFF812819;
-                }
-                return 0xFFF69909;
-            }
+            TileEntity fluidTank = getTileEntity(world, pos);
+            if (fluidTank != null) return ((HoneyTankTileEntity) fluidTank).getFluidColor();
         }
         return -1;
     }

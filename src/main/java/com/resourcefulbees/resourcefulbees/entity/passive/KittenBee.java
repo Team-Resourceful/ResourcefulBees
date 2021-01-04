@@ -15,7 +15,7 @@ public class KittenBee {
     }
 
     private static CustomBeeData getKittenBeeData() {
-        CustomBeeData data = new CustomBeeData.Builder(BeeConstants.KITTEN_BEE, "all", true,
+        CustomBeeData data = new CustomBeeData.Builder(BeeConstants.KITTEN_BEE, "tag:minecraft:beds", true,
                 MutationData.createDefault(),
                 new ColorData.Builder(false)
                         .setPrimaryColor("#EAA939")

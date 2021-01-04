@@ -48,7 +48,7 @@ public class ModItems {
             .containerItem(Items.GLASS_BOTTLE)
             .food(new Food.Builder()
                     .hunger(8)
-                    .saturation(5)
+                    .saturation(1.6f)
                     .setAlwaysEdible()
                     .effect(() -> new EffectInstance(Effects.SPEED, 2400, 2), 1)
                     .effect(() -> new EffectInstance(Effects.NIGHT_VISION, 2400, 0), 1)
