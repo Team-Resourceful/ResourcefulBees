@@ -142,14 +142,12 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
                 this.remove();
             }
             if (!hasCustomName()) {
-                if (ticksExisted % 100 == 0) {
-                    if (hasHiveInRange() || hasFlower() || isPassenger() || getLeashed() || hasNectar()) {
-                        timeWithoutHive = 0;
-                    } else {
-                        timeWithoutHive += 100;
-                    }
+                if (hasHiveInRange() || hasFlower() || isPassenger() || getLeashed() || hasNectar()) {
+                    timeWithoutHive = 0;
+                } else {
+                    timeWithoutHive += 100;
+                    if (timeWithoutHive >= 12000) this.remove();
                 }
-                if (timeWithoutHive >= 12000 && !hasHiveInRange()) this.remove();
             }
         }
         super.livingTick();
@@ -157,7 +155,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
 
     //TODO add hook for bee totem
     protected boolean hasHiveInRange() {
-        if (timeWithoutHive % 20 == 0) {
+        if (timeWithoutHive % 100 == 0) {
             BlockPos pos = getBlockPos();
             MutableBoundingBox box = MutableBoundingBox.createProper(pos.getX() + 8, pos.getY() + 5, pos.getZ() + 8, pos.getX() - 8, pos.getY() - 5, pos.getZ() - 8);
             this.hasHiveInRange = BlockPos.stream(box).anyMatch(blockPos -> world.getTileEntity(blockPos) instanceof BeehiveTileEntity || world.getTileEntity(blockPos) instanceof ApiaryTileEntity);
