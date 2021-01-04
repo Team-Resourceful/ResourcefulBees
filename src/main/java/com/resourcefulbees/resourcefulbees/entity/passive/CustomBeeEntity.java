@@ -43,7 +43,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
     private static final DataParameter<Integer> FEED_COUNT = EntityDataManager.createKey(CustomBeeEntity.class, DataSerializers.VARINT);
 
     protected final CustomBeeData beeData;
-    protected int timeWithoutHive;
+    protected int timeWithoutHive = 0;
     protected int flowerID;
     public BlockPos lastFlower;
     private boolean hasHiveInRange;
@@ -142,11 +142,13 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
                 this.remove();
             }
             if (!hasCustomName()) {
-                if (hasHiveInRange() || hasFlower() || isPassenger() || getLeashed() || hasNectar()) {
-                    timeWithoutHive = 0;
-                } else {
-                    timeWithoutHive += 100;
-                    if (timeWithoutHive >= 12000) this.remove();
+                if (this.ticksExisted % 100 == 0) {
+                    if (hasHiveInRange() || hasFlower() || isPassenger() || getLeashed() || hasNectar()) {
+                        timeWithoutHive = 0;
+                    } else {
+                        timeWithoutHive += 100;
+                        if (timeWithoutHive >= 12000) this.remove();
+                    }
                 }
             }
         }
@@ -155,11 +157,9 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
 
     //TODO add hook for bee totem
     protected boolean hasHiveInRange() {
-        if (timeWithoutHive % 100 == 0) {
-            BlockPos pos = getBlockPos();
-            MutableBoundingBox box = MutableBoundingBox.createProper(pos.getX() + 8, pos.getY() + 5, pos.getZ() + 8, pos.getX() - 8, pos.getY() - 5, pos.getZ() - 8);
-            this.hasHiveInRange = BlockPos.stream(box).anyMatch(blockPos -> world.getTileEntity(blockPos) instanceof BeehiveTileEntity || world.getTileEntity(blockPos) instanceof ApiaryTileEntity);
-        }
+        BlockPos pos = getBlockPos();
+        MutableBoundingBox box = MutableBoundingBox.createProper(pos.getX() + 8, pos.getY() + 5, pos.getZ() + 8, pos.getX() - 8, pos.getY() - 5, pos.getZ() - 8);
+        this.hasHiveInRange = BlockPos.stream(box).anyMatch(blockPos -> world.getTileEntity(blockPos) instanceof BeehiveTileEntity || world.getTileEntity(blockPos) instanceof ApiaryTileEntity);
         return hasHiveInRange;
     }
 
