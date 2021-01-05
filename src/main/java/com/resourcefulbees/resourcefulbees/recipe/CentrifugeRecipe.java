@@ -136,6 +136,10 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
                     int count = JSONUtils.getInt(jsonObject, "count", 1);
                     Float chance = JSONUtils.getFloat(jsonObject, "chance", 1);
                     ItemStack stack = new ItemStack(BeeInfoUtils.getItem(registryName), count);
+                    if (registryName.equals("minecraft:potion") && jsonObject.has("potion")){
+                        stack.getOrCreateTag()
+                                .putString("Potion", JSONUtils.getString(jsonObject, "potion"));
+                    }
                     outputs.add(Pair.of(stack, chance));
                     fluidOutput.add(Pair.of(FluidStack.EMPTY, chance));
                 } else if (jsonObject.has("fluid")) {
