@@ -6,6 +6,7 @@ import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.api.beedata.HoneyBottleData;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
+import com.resourcefulbees.resourcefulbees.entity.passive.KittenBee;
 import com.resourcefulbees.resourcefulbees.entity.passive.OreoBee;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.ModFeatures;
@@ -40,7 +41,10 @@ public class BeeSetup {
     public static Path HONEY_PATH;
 
     public static void setupBees() {
-        if (ENABLE_EASTER_EGG_BEES.get()) OreoBee.register();
+        if (ENABLE_EASTER_EGG_BEES.get()) {
+            OreoBee.register();
+            KittenBee.register();
+        }
         if (GENERATE_DEFAULTS.get()) {
             setupDefaultBees();
             setupDefaultHoney();
@@ -103,7 +107,7 @@ public class BeeSetup {
         HoneyBottleData honey = gson.fromJson(reader, HoneyBottleData.class);
         if (honey.getName() == null) honey.setName(name);
         honey.shouldResourcefulBeesDoForgeRegistration = true;
-        BeeRegistry.getRegistry().registerHoney(name.toLowerCase(), honey);
+        BeeRegistry.getRegistry().registerHoney(honey.getName().toLowerCase(), honey);
     }
 
     private static void addBees() {

@@ -55,12 +55,16 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
                 }
             }
         }));
-        BEE_REGISTRY.getHoneyBottles().forEach((s, honeyData) -> {
-            IRecipe<?> honeyBlock = this.makeHoneyBlockRecipe(honeyData);
-            IRecipe<?> honeyBottle = this.makeHoneyBottleRecipe(honeyData);
-            getRecipeManager().recipes.computeIfAbsent(honeyBlock.getType(), t -> new HashMap<>()).put(honeyBlock.getId(), honeyBlock);
-            getRecipeManager().recipes.computeIfAbsent(honeyBottle.getType(), t -> new HashMap<>()).put(honeyBottle.getId(), honeyBottle);
-        });
+        if (Config.HONEY_BLOCK_RECIPIES.get() && Config.HONEY_GENERATE_BLOCKS.get()) {
+            BEE_REGISTRY.getHoneyBottles().forEach((s, honeyData) -> {
+                if (honeyData.doGenerateHoneyBlock() && honeyData.doHoneyBlockRecipe()) {
+                    IRecipe<?> honeyBlock = this.makeHoneyBlockRecipe(honeyData);
+                    IRecipe<?> honeyBottle = this.makeHoneyBottleRecipe(honeyData);
+                    getRecipeManager().recipes.computeIfAbsent(honeyBlock.getType(), t -> new HashMap<>()).put(honeyBlock.getId(), honeyBlock);
+                    getRecipeManager().recipes.computeIfAbsent(honeyBottle.getType(), t -> new HashMap<>()).put(honeyBottle.getId(), honeyBottle);
+                }
+            });
+        }
     }
 
 

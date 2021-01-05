@@ -47,6 +47,21 @@ public class HoneyBottleData {
     private boolean isRainbow = false;
 
     /**
+     * optional: defines if a honey block should be generated
+     */
+    private boolean generateHoneyBlock = true;
+
+    /**
+     * optional: defines if a honey block should be generated
+     */
+    private boolean honeyBlockRecipe = true;
+
+    /**
+     * optional: defines if honey fluid should be generated
+     */
+    private boolean generateHoneyFluid = true;
+
+    /**
      * optional: list of effects given by drinking the item
      */
     private List<HoneyEffect> effects;
@@ -208,7 +223,17 @@ public class HoneyBottleData {
         return effects != null && !effects.isEmpty();
     }
 
+    public boolean doGenerateHoneyBlock() {
+        return generateHoneyBlock;
+    }
 
+    public boolean doGenerateHoneyFluid() {
+        return generateHoneyFluid;
+    }
+
+    public boolean doHoneyBlockRecipe() {
+        return honeyBlockRecipe;
+    }
 
 
     /**
@@ -223,7 +248,7 @@ public class HoneyBottleData {
         public String effectID;
         public int duration = 60;
         public int strength = 0;
-        public float chance = 100;
+        public float chance = 1;
 
         public EffectInstance getInstance() {
             return new EffectInstance(getEffect(), duration, strength);

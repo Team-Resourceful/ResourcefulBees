@@ -3,7 +3,6 @@ package com.resourcefulbees.resourcefulbees.block;
 import com.resourcefulbees.resourcefulbees.fluids.HoneyFlowingFluid;
 import com.resourcefulbees.resourcefulbees.tileentity.HoneyTankTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.TooltipBuilder;
-import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -78,14 +77,8 @@ public class HoneyTank extends Block {
 
     public static int getBlockColor(BlockState state, @javax.annotation.Nullable IBlockReader world, @javax.annotation.Nullable BlockPos pos, int tintIndex) {
         if (tintIndex == 1) {
-            HoneyTankTileEntity tank = getTileEntity(world, pos);
-            if (tank == null) return -1;
-            if (tank.fluidTank.getFluid().getFluid() instanceof HoneyFlowingFluid) {
-                HoneyFlowingFluid fluid = (HoneyFlowingFluid) tank.fluidTank.getFluid().getFluid();
-                return fluid.getHoneyData().isRainbow() ? RainbowColor.getRGB() : fluid.getHoneyData().getHoneyColorInt();
-            } else {
-                return 0xFFF69909;
-            }
+            TileEntity fluidTank = getTileEntity(world, pos);
+            if (fluidTank != null) return ((HoneyTankTileEntity) fluidTank).getFluidColor();
         }
         return -1;
     }
@@ -100,9 +93,9 @@ public class HoneyTank extends Block {
             HoneyFlowingFluid fluid = (HoneyFlowingFluid) tank.fluidTank.getFluid().getFluid();
             if (fluid.getHoneyData().isRainbow()) {
                 world.notifyBlockUpdate(pos, stateIn, stateIn, 2);
-                super.animateTick(stateIn, world, pos, rand);
             }
         }
+        super.animateTick(stateIn, world, pos, rand);
     }
 
     @Nullable
@@ -149,7 +142,7 @@ public class HoneyTank extends Block {
         return ActionResultType.FAIL;
     }
 
-    private void updateBlockState(World world, BlockPos pos) {
+    public void updateBlockState(World world, BlockPos pos) {
         BlockState state = world.getBlockState(pos);
         if (state.getBlock() instanceof HoneyTank) {
             world.setBlockState(pos, state.with(LEVEL, getLevel(world, pos)));
@@ -221,7 +214,7 @@ public class HoneyTank extends Block {
         if (tileEntity instanceof HoneyTankTileEntity) {
             HoneyTankTileEntity tank = (HoneyTankTileEntity) tileEntity;
             if (itemStack.getTag() != null) {
-                tank.updateNBT(itemStack.getTag());
+                tank.readNBT(itemStack.getTag());
             }
         }
         updateBlockState(world, pos);
@@ -234,7 +227,7 @@ public class HoneyTank extends Block {
         if (tileEntity instanceof HoneyTankTileEntity) {
             HoneyTankTileEntity tank = (HoneyTankTileEntity) tileEntity;
             ItemStack stack = new ItemStack(state.getBlock().asItem());
-            stack.setTag(tank.getNBT(new CompoundNBT()));
+            stack.setTag(tank.writeNBT(new CompoundNBT()));
             return stack;
         }
         return tier.getTankItem().get().getDefaultInstance();

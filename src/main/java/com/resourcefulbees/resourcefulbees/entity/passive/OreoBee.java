@@ -34,6 +34,7 @@ public class OreoBee {
                         .setMaxGroupSize(1)
                         .createSpawnData(),
                 new TraitData(true))
+                .setEasterEggBee(true)
                 .setBaseLayerTexture("/oreo/oreo_bee")
                 .setMaxTimeInHive(6000)
                 .setSizeModifier(1.25f)
