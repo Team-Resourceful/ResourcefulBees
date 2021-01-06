@@ -11,15 +11,19 @@ import com.resourcefulbees.resourcefulbees.compat.jei.ingredients.EntityRenderer
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import mezz.jei.api.IModPlugin;
+import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.handlers.IGuiClickableArea;
 import mezz.jei.api.gui.handlers.IGuiContainerHandler;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.registration.*;
+import mezz.jei.api.runtime.IIngredientManager;
+import mezz.jei.api.runtime.IJeiRuntime;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
@@ -118,37 +122,46 @@ public class JEICompat implements IModPlugin {
             CustomBeeData beeData = BeeRegistry.getRegistry().getBeeData(bee.getBeeType());
 
             StringBuilder stats = new StringBuilder();
+            String aqua = TextFormatting.DARK_AQUA.toString();
+            String purple = TextFormatting.DARK_PURPLE.toString();
 
-            stats.append("\u00A73 Attack Damage: \u00A75").append(beeData.getCombatData().getAttackDamage()).append("\n");
-            stats.append("\u00A73 Has Honeycomb: \u00A75").append(StringUtils.capitalize(String.valueOf(beeData.hasHoneycomb()))).append("\n");
-            stats.append("\u00A73 Max Time in Hive: \u00A75").append(beeData.getMaxTimeInHive()).append(" ticks\n");
 
-            stats.append("\u00A73 Has Mutation: \u00A75").append(StringUtils.capitalize(String.valueOf(beeData.getMutationData().hasMutation()))).append("\n");
+            stats.append(aqua).append(" Attack Damage: ").append(purple).append(beeData.getCombatData().getAttackDamage()).append("\n");
+            stats.append(aqua).append(" Has Honeycomb: ").append(purple).append(StringUtils.capitalize(String.valueOf(beeData.hasHoneycomb()))).append("\n");
+            stats.append(aqua).append(" Max Time in Hive: ").append(purple).append(beeData.getMaxTimeInHive()).append(" ticks\n");
+
+            stats.append(aqua).append(" Has Mutation: ").append(purple).append(StringUtils.capitalize(String.valueOf(beeData.getMutationData().hasMutation()))).append("\n");
             if (beeData.getMutationData().hasMutation()) {
-                stats.append("\u00A73 Mutation Count: \u00A75").append(StringUtils.capitalize(String.valueOf(beeData.getMutationData().getMutationCount()))).append("\n");
+                stats.append(aqua).append(" Mutation Count: ").append(purple).append(StringUtils.capitalize(String.valueOf(beeData.getMutationData().getMutationCount()))).append("\n");
             }
 
-            stats.append("\u00A73 Is Breedable: \u00A75").append(StringUtils.capitalize(String.valueOf(beeData.getBreedData().isBreedable()))).append("\n");
+            stats.append(aqua).append(" Is Breedable: ").append(purple).append(StringUtils.capitalize(String.valueOf(beeData.getBreedData().isBreedable()))).append("\n");
             if (beeData.getBreedData().isBreedable() && beeData.getBreedData().hasParents()) {
-                stats.append("\u00A73 Parents: \u00A75").append(StringUtils.capitalize(beeData.getBreedData().getParent1())).append(" Bee, ")
+                stats.append(aqua).append(" Parents: ").append(purple).append(StringUtils.capitalize(beeData.getBreedData().getParent1())).append(" Bee, ")
                         .append(StringUtils.capitalize(beeData.getBreedData().getParent2())).append(" Bee\n");
             }
 
             if (beeData.hasTraitNames()) {
                 StringJoiner traits = new StringJoiner(", ");
                 Arrays.stream(beeData.getTraitNames()).forEach(trait -> traits.add(WordUtils.capitalize(trait.replaceAll("_"," "))));
-                stats.append("\u00A73 Traits: \u00A75").append(traits.toString()).append("\n");
+                stats.append(aqua).append(" Traits: ").append(purple).append(traits.toString()).append("\n");
             }
 
-            stats.append("\u00A73 Spawns in World: \u00A75").append(StringUtils.capitalize(String.valueOf(beeData.getSpawnData().canSpawnInWorld()))).append("\n");
+            stats.append(aqua).append(" Spawns in World: ").append(purple).append(StringUtils.capitalize(String.valueOf(beeData.getSpawnData().canSpawnInWorld()))).append("\n");
             if (beeData.getSpawnData().canSpawnInWorld()) {
-                stats.append("\u00A73 Light Level: \u00A75").append(beeData.getSpawnData().getLightLevel()).append("\n");
-                stats.append("\u00A73 Min Group Size: \u00A75").append(beeData.getSpawnData().getMinGroupSize()).append("\n");
-                stats.append("\u00A73 Max Group Size: \u00A75").append(beeData.getSpawnData().getMaxGroupSize()).append("\n");
-                stats.append("\u00A73 Biomes: \u00A75").append(BiomeParser.parseBiomes(beeData));
+                stats.append(aqua).append(" Light Level: ").append(purple).append(beeData.getSpawnData().getLightLevel()).append("\n");
+                stats.append(aqua).append(" Min Group Size: ").append(purple).append(beeData.getSpawnData().getMinGroupSize()).append("\n");
+                stats.append(aqua).append(" Max Group Size: ").append(purple).append(beeData.getSpawnData().getMaxGroupSize()).append("\n");
+                stats.append(aqua).append(" Biomes: ").append(purple).append(BiomeParser.parseBiomes(beeData));
             }
 
             registration.addIngredientInfo(bee, ENTITY_INGREDIENT, stats.toString());
         }
+    }
+
+    @Override
+    public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
+        IIngredientManager ingredientManager = jeiRuntime.getIngredientManager();
+        ingredientManager.removeIngredientsAtRuntime(VanillaTypes.ITEM, Arrays.asList(ModItems.POLLEN.get().getDefaultInstance(), ModItems.FERTILIZER.get().getDefaultInstance()));
     }
 }
