@@ -32,11 +32,14 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
@@ -67,7 +70,7 @@ public class HoneyTank extends Block {
         this.setDefaultState(defaultState);
     }
 
-    private static HoneyTankTileEntity getTileEntity(@javax.annotation.Nullable IBlockReader world, @javax.annotation.Nullable BlockPos pos) {
+    private static HoneyTankTileEntity getTileEntity(@Nonnull IBlockReader world, @Nonnull BlockPos pos) {
         TileEntity entity = world.getTileEntity(pos);
         if (entity instanceof HoneyTankTileEntity) {
             return (HoneyTankTileEntity) entity;
@@ -75,10 +78,10 @@ public class HoneyTank extends Block {
         return null;
     }
 
-    public static int getBlockColor(BlockState state, @javax.annotation.Nullable IBlockReader world, @javax.annotation.Nullable BlockPos pos, int tintIndex) {
+    public static int getBlockColor(BlockState state, @Nonnull IBlockReader world, @Nonnull BlockPos pos, int tintIndex) {
         if (tintIndex == 1) {
-            TileEntity fluidTank = getTileEntity(world, pos);
-            if (fluidTank != null) return ((HoneyTankTileEntity) fluidTank).getFluidColor();
+            HoneyTankTileEntity fluidTank = getTileEntity(world, pos);
+            if (fluidTank != null) return fluidTank.getFluidColor();
         }
         return -1;
     }
@@ -149,7 +152,7 @@ public class HoneyTank extends Block {
         }
     }
 
-
+    @Nonnull
     @Override
     public FluidState getFluidState(BlockState state) {
         return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : Fluids.EMPTY.getDefaultState();
@@ -166,13 +169,15 @@ public class HoneyTank extends Block {
         builder.add(WATERLOGGED, LEVEL);
     }
 
+    @Nonnull
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getShape(@NotNull BlockState state, @NotNull IBlockReader worldIn, @NotNull BlockPos pos, @NotNull ISelectionContext context) {
         return VOXEL_SHAPE;
     }
 
+    @Nonnull
     @Override
-    public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld world, BlockPos currentPos, BlockPos facingPos) {
+    public BlockState updatePostPlacement(BlockState stateIn, @NotNull Direction facing, @NotNull BlockState facingState, @NotNull IWorld world, @NotNull BlockPos currentPos, @NotNull BlockPos facingPos) {
         if (stateIn.get(WATERLOGGED)) {
             world.getPendingFluidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickRate(world));
         }
@@ -192,6 +197,7 @@ public class HoneyTank extends Block {
         return 0;
     }
 
+    @OnlyIn(Dist.CLIENT)
     @Override
     public void addInformation(@Nonnull ItemStack stack, @javax.annotation.Nullable IBlockReader worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
         if (!stack.hasTag() || stack.getTag() == null || stack.getTag().isEmpty() || !stack.getTag().contains("fluid"))
@@ -209,7 +215,7 @@ public class HoneyTank extends Block {
     }
 
     @Override
-    public void onBlockPlacedBy(World world, BlockPos pos, BlockState blockState, @Nullable LivingEntity livingEntity, ItemStack itemStack) {
+    public void onBlockPlacedBy(World world, @NotNull BlockPos pos, @NotNull BlockState blockState, @Nullable LivingEntity livingEntity, @NotNull ItemStack itemStack) {
         TileEntity tileEntity = world.getTileEntity(pos);
         if (tileEntity instanceof HoneyTankTileEntity) {
             HoneyTankTileEntity tank = (HoneyTankTileEntity) tileEntity;

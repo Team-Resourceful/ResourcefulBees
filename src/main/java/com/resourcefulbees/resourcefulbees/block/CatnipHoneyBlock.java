@@ -24,6 +24,7 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
@@ -55,14 +56,14 @@ public class CatnipHoneyBlock extends HoneyBlock {
         return entity instanceof LivingEntity || entity instanceof AbstractMinecartEntity || entity instanceof TNTEntity || entity instanceof BoatEntity;
     }
 
-    public VoxelShape getCollisionShape(BlockState blockState, IBlockReader blockReader, BlockPos blockPos, ISelectionContext selectionContext) {
+    public @NotNull VoxelShape getCollisionShape(@NotNull BlockState blockState, @NotNull IBlockReader blockReader, @NotNull BlockPos blockPos, @NotNull ISelectionContext selectionContext) {
         return SHAPE;
     }
 
     /**
      * Block's chance to react to a living entity falling on it.
      */
-    public void onFallenUpon(World world, BlockPos blockPos, Entity entity, float distance) {
+    public void onFallenUpon(World world, @NotNull BlockPos blockPos, Entity entity, float distance) {
         entity.playSound(SoundEvents.BLOCK_HONEY_BLOCK_SLIDE, 1.0F, 1.0F);
         if (world.isRemote) {
             addParticles(entity, 5);
@@ -74,7 +75,7 @@ public class CatnipHoneyBlock extends HoneyBlock {
 
     }
 
-    public void onEntityCollision(BlockState state, World world, BlockPos blockPos, Entity entity) {
+    public void onEntityCollision(@NotNull BlockState state, @NotNull World world, @NotNull BlockPos blockPos, @NotNull Entity entity) {
         if (this.isSliding(blockPos, entity)) {
             this.triggerAdvancement(entity, blockPos);
             this.updateSlidingVelocity(entity);

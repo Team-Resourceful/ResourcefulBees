@@ -41,7 +41,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
     private static final DataParameter<Integer> FEED_COUNT = EntityDataManager.createKey(CustomBeeEntity.class, DataSerializers.VARINT);
 
     protected final CustomBeeData beeData;
-    protected int timeWithoutHive = 0;
+    protected int timeWithoutHive;  //<- does not need to be initialized to 0 that is done by default - oreo
     protected int flowerID;
     public BlockPos lastFlower;
     private boolean hasHiveInRange;
