@@ -66,12 +66,13 @@ public class CentrifugeCasingBlock extends Block {
                     if (usingBucket) {
                         controller.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
                                 .ifPresent(iFluidHandler -> FluidUtil.interactWithFluidHandler(player, hand, world, pos, null));
-                    } else {
+                    } else if(!player.isSneaking()) {
                         NetworkHooks.openGui((ServerPlayerEntity) player, controller, controller.getPos());
+                        return ActionResultType.SUCCESS;
                     }
                 }
         }
 
-        return ActionResultType.SUCCESS;
+        return super.onUse(state, world, pos, player, hand, rayTraceResult);
     }
 }

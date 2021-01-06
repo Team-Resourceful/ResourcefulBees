@@ -57,7 +57,7 @@ public class CentrifugeControllerBlock extends Block {
 
     @Nonnull
     @Override
-    public ActionResultType onUse(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult blockRayTraceResult) {
+    public ActionResultType onUse(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult rayTraceResult) {
         if (!world.isRemote) {
             ItemStack heldItem = player.getHeldItem(hand);
             boolean usingBucket = heldItem.getItem() instanceof BucketItem;
@@ -67,13 +67,14 @@ public class CentrifugeControllerBlock extends Block {
                     if (usingBucket) {
                         controller.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
                                 .ifPresent(iFluidHandler -> FluidUtil.interactWithFluidHandler(player, hand, world, pos, null));
-                    } else {
+                    } else if (!player.isSneaking()) {
                         NetworkHooks.openGui((ServerPlayerEntity) player, controller, pos);
+                        return ActionResultType.SUCCESS;
                     }
                 }
         }
 
-        return ActionResultType.SUCCESS;
+        return super.onUse(state, world, pos, player, hand, rayTraceResult);
     }
 
     @Override
