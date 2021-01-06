@@ -343,7 +343,8 @@ public class ResourcefulBee extends CustomBeeEntity {
         }
 
         this.setAttackTarget(null);
-        this.setHasStung(Config.BEE_DIES_FROM_STING.get() || this.getBeeData().getCombatData().removeStingerOnAttack());
+
+        this.setHasStung(Config.BEE_DIES_FROM_STING.get() && this.getBeeData().getCombatData().removeStingerOnAttack());
         this.playSound(SoundEvents.ENTITY_BEE_STING, 1.0F, 1.0F);
 
         return flag;
