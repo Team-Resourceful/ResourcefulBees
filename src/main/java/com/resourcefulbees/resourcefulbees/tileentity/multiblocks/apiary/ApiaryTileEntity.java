@@ -59,7 +59,8 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static com.resourcefulbees.resourcefulbees.lib.BeeConstants.*;
+import static com.resourcefulbees.resourcefulbees.lib.BeeConstants.MIN_HIVE_TIME;
+import static com.resourcefulbees.resourcefulbees.lib.BeeConstants.RAINBOW_COLOR;
 
 public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider, IApiaryMultiblock {
     public static final int IMPORT = 0;
@@ -81,6 +82,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     public BlockPos breederPos;
     private ApiaryStorageTileEntity apiaryStorage;
     private ApiaryBreederTileEntity apiaryBreeder;
+    protected int ticksSinceBeesFlagged;
 
 
     public ApiaryTileEntity() { super(ModTileEntityTypes.APIARY_TILE_ENTITY.get()); }
@@ -293,6 +295,12 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
                     double d1 = blockpos.getY();
                     double d2 = blockpos.getZ() + 0.5D;
                     this.world.playSound(null, d0, d1, d2, SoundEvents.BLOCK_BEEHIVE_WORK, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                }
+
+                ticksSinceBeesFlagged++;
+                if (ticksSinceBeesFlagged == 80) {
+                    BeeInfoUtils.flagBeesInRange(pos, world);
+                    ticksSinceBeesFlagged = 0;
                 }
             }
         }

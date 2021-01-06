@@ -7,7 +7,6 @@ import com.resourcefulbees.resourcefulbees.api.beedata.TraitData;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
-import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import net.minecraft.entity.*;
 import net.minecraft.entity.passive.BeeEntity;
@@ -22,16 +21,15 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.BasicParticleType;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.tileentity.BeehiveTileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -138,7 +136,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
                 }
             }
         } else {
-            if (Config.BEES_DIE_IN_VOID.get() && this.getPositionVec().y <= -1) {
+            if (Config.BEES_DIE_IN_VOID.get() && this.getPositionVec().y <= 0) {
                 this.remove();
             }
             if (!hasCustomName()) {
@@ -149,18 +147,19 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
                         timeWithoutHive += 100;
                         if (timeWithoutHive >= 12000) this.remove();
                     }
+                    hasHiveInRange = false;
                 }
             }
         }
         super.livingTick();
     }
 
-    //TODO add hook for bee totem
-    protected boolean hasHiveInRange() {
-        BlockPos pos = getBlockPos();
-        MutableBoundingBox box = MutableBoundingBox.createProper(pos.getX() + 8, pos.getY() + 5, pos.getZ() + 8, pos.getX() - 8, pos.getY() - 5, pos.getZ() - 8);
-        this.hasHiveInRange = BlockPos.stream(box).anyMatch(blockPos -> world.getTileEntity(blockPos) instanceof BeehiveTileEntity || world.getTileEntity(blockPos) instanceof ApiaryTileEntity);
+    public boolean hasHiveInRange() {
         return hasHiveInRange;
+    }
+
+    public void setHasHiveInRange(boolean hasHiveInRange) {
+        this.hasHiveInRange = hasHiveInRange;
     }
 
     public static boolean canBeeSpawn(EntityType<? extends AgeableEntity> typeIn, IWorld worldIn, SpawnReason reason, BlockPos pos, Random randomIn) {
@@ -271,7 +270,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
     }
 
     @Override
-    public float getEyeHeight(Pose p_213307_1_) {
+    public float getEyeHeight(@NotNull Pose p_213307_1_) {
         return super.getEyeHeight(p_213307_1_);
     }
 

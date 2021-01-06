@@ -27,7 +27,7 @@ public class CustomBeeData extends AbstractBeeData {
     /**
      * The base model the bee uses
      */
-    private BaseModelTypes baseModelType;
+    private final BaseModelTypes baseModelType;
 
     /**
      * How long the bee can stay in a hive.
