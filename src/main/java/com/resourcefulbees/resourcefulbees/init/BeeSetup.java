@@ -26,6 +26,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystem;
 import java.nio.file.*;
+import java.util.Locale;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -79,7 +80,7 @@ public class BeeSetup {
         CustomBeeData bee = gson.fromJson(reader, CustomBeeData.class);
         bee.setName(name);
         bee.shouldResourcefulBeesDoForgeRegistration = true;
-        BeeRegistry.getRegistry().registerBee(name.toLowerCase(), bee);
+        BeeRegistry.getRegistry().registerBee(name.toLowerCase(Locale.ENGLISH), bee);
     }
 
     private static void parseHoney(File file) throws IOException {

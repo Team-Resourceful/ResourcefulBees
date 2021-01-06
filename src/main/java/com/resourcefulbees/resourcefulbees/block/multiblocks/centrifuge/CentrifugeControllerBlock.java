@@ -13,7 +13,6 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.BlockItem;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.BucketItem;
 import net.minecraft.item.ItemStack;
@@ -62,10 +61,8 @@ public class CentrifugeControllerBlock extends Block {
         if (!world.isRemote) {
             ItemStack heldItem = player.getHeldItem(hand);
             boolean usingBucket = heldItem.getItem() instanceof BucketItem;
-            //boolean placingBlock = heldItem.getItem() instanceof BlockItem;
             CentrifugeControllerTileEntity controller = getControllerEntity(world, pos);
 
-            //if (!placingBlock) {
                 if (controller != null && controller.isValidStructure()) {
                     if (usingBucket) {
                         controller.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
@@ -74,10 +71,9 @@ public class CentrifugeControllerBlock extends Block {
                         NetworkHooks.openGui((ServerPlayerEntity) player, controller, pos);
                     }
                 }
-            //}
         }
 
-        return super.onUse(state, world, pos, player, hand, blockRayTraceResult);
+        return ActionResultType.SUCCESS;
     }
 
     @Override

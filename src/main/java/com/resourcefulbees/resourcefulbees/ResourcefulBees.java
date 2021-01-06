@@ -1,8 +1,6 @@
 package com.resourcefulbees.resourcefulbees;
 
 import com.resourcefulbees.resourcefulbees.api.ResourcefulBeesAPI;
-import com.resourcefulbees.resourcefulbees.block.TieredBeehiveBlock;
-import com.resourcefulbees.resourcefulbees.block.multiblocks.apiary.ApiaryBlock;
 import com.resourcefulbees.resourcefulbees.compat.top.TopCompat;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.config.ConfigLoader;
@@ -14,7 +12,6 @@ import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
 import com.resourcefulbees.resourcefulbees.registry.*;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.validation.SecondPhaseValidator;
-import net.minecraft.block.BlockState;
 import net.minecraft.entity.merchant.villager.VillagerTrades;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
@@ -24,7 +21,6 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.tileentity.BannerPattern;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.village.PointOfInterestType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -44,9 +40,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Mod("resourcefulbees")
 public class ResourcefulBees {
@@ -184,21 +178,6 @@ public class ResourcefulBees {
 
     private void setup(final FMLCommonSetupEvent event) {
         BeeInfoUtils.makeValidApiaryTag();
-        Map<BlockState, PointOfInterestType> pointOfInterestTypeMap = new HashMap<>();
-        ModBlocks.BLOCKS.getEntries().stream()
-                .filter(blockRegistryObject -> blockRegistryObject.get() instanceof TieredBeehiveBlock)
-                .forEach((blockRegistryObject -> blockRegistryObject.get()
-                        .getStateContainer()
-                        .getValidStates()
-                        .forEach(blockState -> putPOIInMap(blockState, pointOfInterestTypeMap))));
-        ModBlocks.BLOCKS.getEntries().stream()
-                .filter(blockRegistryObject -> blockRegistryObject.get() instanceof ApiaryBlock)
-                .forEach((blockRegistryObject -> blockRegistryObject.get()
-                        .getStateContainer()
-                        .getValidStates()
-                        .forEach(blockState -> putPOIInMap(blockState, pointOfInterestTypeMap))));
-        PointOfInterestType.field_221073_u.putAll(pointOfInterestTypeMap);
-
 
         event.enqueueWork(ModSetup::registerDispenserBehaviors);
 
@@ -210,33 +189,10 @@ public class ResourcefulBees {
         ModFeatures.ConfiguredFeatures.registerConfiguredFeatures();
     }
 
-    private void putPOIInMap(BlockState blockState, Map<BlockState, PointOfInterestType> pointOfInterestTypeMap) {
-        pointOfInterestTypeMap.put(blockState, ModPOIs.TIERED_BEEHIVE_POI.get());
-    }
-
     public void onInterModEnqueue(InterModEnqueueEvent event) {
         if (ModList.get().isLoaded("theoneprobe"))
             InterModComms.sendTo("theoneprobe", "getTheOneProbe", TopCompat::new);
     }
-
-    /*private void doClientStuff(final FMLClientSetupEvent event) {
-        BeeRegistry.MOD_BEES.forEach((s, customBee) -> RenderingRegistry.registerEntityRenderingHandler(customBee.get(), manager -> new CustomBeeRenderer(manager, BeeRegistry.getRegistry().getBeeData(s))));
-        ScreenManager.registerFactory(ModContainers.CENTRIFUGE_CONTAINER.get(), CentrifugeScreen::new);
-        ScreenManager.registerFactory(ModContainers.MECHANICAL_CENTRIFUGE_CONTAINER.get(), MechanicalCentrifugeScreen::new);
-        ScreenManager.registerFactory(ModContainers.CENTRIFUGE_MULTIBLOCK_CONTAINER.get(), CentrifugeMultiblockScreen::new);
-        ScreenManager.registerFactory(ModContainers.UNVALIDATED_APIARY_CONTAINER.get(), UnvalidatedApiaryScreen::new);
-        ScreenManager.registerFactory(ModContainers.VALIDATED_APIARY_CONTAINER.get(), ValidatedApiaryScreen::new);
-        ScreenManager.registerFactory(ModContainers.APIARY_STORAGE_CONTAINER.get(), ApiaryStorageScreen::new);
-        ScreenManager.registerFactory(ModContainers.APIARY_BREEDER_CONTAINER.get(), ApiaryBreederScreen::new);
-        ScreenManager.registerFactory(ModContainers.HONEY_GENERATOR_CONTAINER.get(), HoneyGeneratorScreen::new);
-        RenderTypeLookup.setRenderLayer(ModBlocks.GOLD_FLOWER.get(), RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(ModBlocks.PREVIEW_BLOCK.get(), RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(ModBlocks.ERRORED_PREVIEW_BLOCK.get(), RenderType.getCutout());
-
-        ItemModelPropertiesHandler.registerProperties();
-
-        event.enqueueWork(FluidRender::setHoneyRenderType);
-    }*/
 
     private void loadComplete(FMLLoadCompleteEvent event) {
         TraitRegistry.registerDefaultTraits();

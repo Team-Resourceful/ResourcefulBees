@@ -2,14 +2,12 @@ package com.resourcefulbees.resourcefulbees.block.multiblocks.centrifuge;
 
 
 import com.resourcefulbees.resourcefulbees.registry.ModTileEntityTypes;
-import com.resourcefulbees.resourcefulbees.tileentity.CentrifugeTileEntity;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.CentrifugeCasingTileEntity;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.CentrifugeControllerTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.BlockItem;
 import net.minecraft.item.BucketItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -62,10 +60,8 @@ public class CentrifugeCasingBlock extends Block {
         if (!world.isRemote) {
             ItemStack heldItem = player.getHeldItem(hand);
             boolean usingBucket = heldItem.getItem() instanceof BucketItem;
-            //boolean placingBlock = heldItem.getItem() instanceof BlockItem;
             CentrifugeControllerTileEntity controller = getControllerEntity(world, pos);
 
-            //if (!placingBlock) {
                 if (controller != null && controller.isValidStructure()) {
                     if (usingBucket) {
                         controller.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
@@ -74,9 +70,8 @@ public class CentrifugeCasingBlock extends Block {
                         NetworkHooks.openGui((ServerPlayerEntity) player, controller, controller.getPos());
                     }
                 }
-            //}
         }
 
-        return super.onUse(state, world, pos, player, hand, rayTraceResult);
+        return ActionResultType.SUCCESS;
     }
 }

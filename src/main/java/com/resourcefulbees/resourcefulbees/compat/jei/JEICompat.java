@@ -113,7 +113,7 @@ public class JEICompat implements IModPlugin {
         registration.register(ENTITY_INGREDIENT, entityIngredients, new EntityIngredientHelper<>(), new EntityRenderer());
     }
 
-    public void registerInfoDesc(IRecipeRegistration registration){
+    public void registerInfoDesc(IRecipeRegistration registration) {
         for (EntityIngredient bee : EntityIngredientFactory.create()) {
             CustomBeeData beeData = BeeRegistry.getRegistry().getBeeData(bee.getBeeType());
 
