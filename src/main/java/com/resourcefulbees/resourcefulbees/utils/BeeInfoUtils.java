@@ -3,6 +3,7 @@ package com.resourcefulbees.resourcefulbees.utils;
 import com.google.common.base.Splitter;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.config.Config;
+import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.utils.validation.ValidatorUtils;
@@ -19,6 +20,10 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MutableBoundingBox;
+import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -27,6 +32,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import javax.annotation.Nonnull;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import static com.resourcefulbees.resourcefulbees.lib.BeeConstants.*;
@@ -165,5 +171,13 @@ public class BeeInfoUtils {
                     return stack.getItem().equals(getItem(validBreedItem));
             }
         }
+    }
+
+    public static void flagBeesInRange(BlockPos pos, World world) {
+        MutableBoundingBox box = MutableBoundingBox.createProper(pos.getX() + 10, pos.getY() + 10, pos.getZ() + 10, pos.getX() - 10, pos.getY() - 10, pos.getZ() - 10);
+        AxisAlignedBB aabb = AxisAlignedBB.func_216363_a(box);
+        assert world != null;
+        List<CustomBeeEntity> list = world.getEntitiesWithinAABB(CustomBeeEntity.class, aabb);
+        list.forEach(customBeeEntity -> customBeeEntity.setHasHiveInRange(true));
     }
 }

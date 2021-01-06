@@ -14,9 +14,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.state.DirectionProperty;
-import net.minecraft.state.Property;
-import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.RegistryKey;
@@ -58,8 +55,9 @@ public class BeeNestFeature extends Feature<NoFeatureConfig> {
         BlockPos newPos;
         int y;
 
-        if (category == Biome.Category.NETHER) {
-            y = MathUtils.nextIntInclusive(32, 100);
+        if (category == Biome.Category.NETHER || worldIn.getDimension().hasCeiling()) {
+            int ceilHeight = worldIn.getDimensionHeight();
+            y = MathUtils.nextIntInclusive(32, ceilHeight);
             newPos = new BlockPos(pos.getX(), y, pos.getZ())
                     .south(rand.nextInt(15)).east(rand.nextInt(15));
             while (worldIn.isAirBlock(newPos.down())) {
@@ -68,7 +66,7 @@ public class BeeNestFeature extends Feature<NoFeatureConfig> {
             while (!worldIn.isAirBlock(newPos)) {
                 newPos = newPos.up();
             }
-            if (newPos.getY() > 100) {
+            if (newPos.getY() >= ceilHeight) {
                 return false;
             }
             if (worldIn.getBlockState(newPos.down()).getBlock().equals(net.minecraft.block.Blocks.LAVA)) {

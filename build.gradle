@@ -26,6 +26,7 @@ repositories {
     maven { url "https://dvs1.progwml6.com/files/maven/" }
     maven { url "https://modmaven.k-4u.nl" }
     maven { url 'https://modmaven.dev/' }
+    //flatDir { dirs 'C:\\Users\\James\\Documents\\Minecraft Modding\\Test Mods'}
 }
 
 version = "${mod_version}"
@@ -72,7 +73,7 @@ minecraft {
 
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
-            property 'mixin.env.disableRefMap', 'true'
+            properties 'mixin.env.disableRefMap': 'true'
             property 'fml.earlyprogresswindow','false'
 
             mods {

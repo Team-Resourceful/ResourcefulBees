@@ -35,6 +35,7 @@
 	"gui.resourcefulbees.beehive.smoked": "Smoked: ",
 	"gui.resourcefulbees.beehive.honeylevel": "Honey Level: ",
 	"gui.resourcefulbees.beehive.num_combs": "Honeycombs",
+	"gui.resourcefulbees.beehive.smoke_time": "Smoke Time: ",
 	"gui.resourcefulbees.apiary.button.validate": "Validate",
 	"gui.resourcefulbees.apiary.button.build": "Build",
 	"gui.resourcefulbees.apiary.button.build.creative": "Creative Mode Only!",

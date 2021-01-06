@@ -8,6 +8,7 @@ import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.registry.ModTileEntityTypes;
+import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.MathUtils;
 import net.minecraft.block.BeehiveBlock;
 import net.minecraft.block.Block;
@@ -29,7 +30,6 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.util.Constants;
-import org.lwjgl.system.MathUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -47,6 +47,7 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
     public Stack<ItemStack> honeycombs = new Stack<>();
     protected boolean isSmoked = false;
     protected int ticksSmoked = 0;
+    protected int ticksSinceBeesFlagged;
 
     @Nonnull
     @Override
@@ -170,6 +171,12 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
                     isSmoked = false;
                     ticksSmoked = -1;
                 }
+            }
+
+            ticksSinceBeesFlagged++;
+            if (ticksSinceBeesFlagged == 80) {
+                BeeInfoUtils.flagBeesInRange(pos, world);
+                ticksSinceBeesFlagged = 0;
             }
         }
         super.tick();
