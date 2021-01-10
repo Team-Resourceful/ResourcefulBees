@@ -145,9 +145,8 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
                 this.bees.add(new BeehiveTileEntity.Bee(nbt, ticksInHive,  hasNectar ? maxTimeInHive : MIN_HIVE_TIME));
                 BlockPos pos = this.getPos();
                 this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BLOCK_BEEHIVE_ENTER, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                bee.remove();
             }
-
-            bee.remove();
         }
     }
 
