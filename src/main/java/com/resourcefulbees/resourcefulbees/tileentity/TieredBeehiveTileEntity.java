@@ -84,7 +84,7 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
             nbt.remove("UUID");
             Direction direction = state.get(BeehiveBlock.FACING);
             BlockPos blockpos1 = blockpos.offset(direction);
-            if (world != null && !this.world.getBlockState(blockpos1).getCollisionShape(this.world, blockpos1).isEmpty()) {
+            if (world != null && !this.world.getBlockState(blockpos1).getCollisionShape(this.world, blockpos1).isEmpty() && beehiveState != State.EMERGENCY) {
                 return false;
             } else {
                 Entity entity = EntityType.func_220335_a(nbt, this.world, entity1 -> entity1);
