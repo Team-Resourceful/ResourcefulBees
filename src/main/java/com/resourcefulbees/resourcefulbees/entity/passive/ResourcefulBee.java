@@ -2,7 +2,6 @@ package com.resourcefulbees.resourcefulbees.entity.passive;
 
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.api.beedata.TraitData;
-import com.resourcefulbees.resourcefulbees.tileentity.EnderBeeconTileEntity;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.entity.goals.*;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
@@ -10,6 +9,7 @@ import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
 import com.resourcefulbees.resourcefulbees.lib.TraitConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.ModPOIs;
+import com.resourcefulbees.resourcefulbees.tileentity.EnderBeeconTileEntity;
 import com.resourcefulbees.resourcefulbees.tileentity.TieredBeehiveTileEntity;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
@@ -244,14 +244,14 @@ public class ResourcefulBee extends CustomBeeEntity {
     }
 
     private void doTeleportEffect() {
-        if (canTeleport() && !hasHiveInRange() && !distruptorInRange()) {
+        if (canTeleport() && !hasHiveInRange() && !disruptorInRange()) {
                 this.teleportRandomly();
         }
     }
 
-    private boolean distruptorInRange() {
+    private boolean disruptorInRange() {
         BlockPos pos = getBlockPos();
-        MutableBoundingBox box = EnderBeeconTileEntity.getDistruptorBox(pos);
+        MutableBoundingBox box = EnderBeeconTileEntity.getDisruptorBox(pos);
         return BlockPos.stream(box).anyMatch(blockPos -> world.getTileEntity(blockPos) instanceof EnderBeeconTileEntity);
     }
 
@@ -320,20 +320,20 @@ public class ResourcefulBee extends CustomBeeEntity {
         }
         if (entityIn instanceof LivingEntity) {
             int i = 0;
-            switch (this.world.getDifficulty()){
+            switch (this.world.getDifficulty()) {
                 case EASY: i = 5; break;
                 case NORMAL: i = 10; break;
                 case HARD: i = 18; break;
             }
-            if (info.hasDamageTypes()){
-                for (Pair<String, Integer> damageType : info.getDamageTypes()){
+            if (info.hasDamageTypes()) {
+                for (Pair<String, Integer> damageType : info.getDamageTypes()) {
                     if (damageType.getLeft().equals(TraitConstants.SET_ON_FIRE)) entityIn.setFire(i * damageType.getRight());
                     if (damageType.getLeft().equals(TraitConstants.EXPLOSIVE)) this.explode(i/damageType.getRight());
                 }
             }
-            if (info.hasDamagePotionEffects()){
+            if (info.hasDamagePotionEffects()) {
                 if (i > 0) {
-                    for (Pair<Effect, Integer> effect : info.getPotionDamageEffects()){
+                    for (Pair<Effect, Integer> effect : info.getPotionDamageEffects()) {
                         ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(effect.getLeft(), i * 20, effect.getRight()));
                     }
                 }
