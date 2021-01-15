@@ -165,7 +165,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
         BlockPos blockpos = this.getPos();
         Direction direction = state.get(BeehiveBlock.FACING);
         BlockPos blockpos1 = blockpos.offset(direction);
-        if (world != null && this.world.getBlockState(blockpos1).getCollisionShape(this.world, blockpos1).isEmpty()) {
+        if (world != null && (this.world.getBlockState(blockpos1).getCollisionShape(this.world, blockpos1).isEmpty() || beehiveState == State.EMERGENCY)) {
             nbt.remove("Passengers");
             nbt.remove("Leash");
             nbt.remove("UUID");
