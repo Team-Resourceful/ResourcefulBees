@@ -1,9 +1,7 @@
 {
-  "multipart": [
-    {
-      "apply": {
-        "model": "resourcefulbees:block/wooden_honey_tank"
-      }
+  "variants": {
+    "": {
+      "model": "resourcefulbees:block/wooden_honey_tank"
     }
-  ]
+  }
 }

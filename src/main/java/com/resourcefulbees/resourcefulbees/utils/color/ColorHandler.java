@@ -59,7 +59,6 @@ public final class ColorHandler {
                 registerBlocks(colors, CustomHoneyBlock::getBlockColor, honeyData.getHoneyBlockRegistryObject().get());
             }
         });
-        registerBlocks(colors, HoneyTank::getBlockColor, ModBlocks.WOODEN_HONEY_TANK.get(), ModBlocks.NETHER_HONEY_TANK.get(), ModBlocks.PURPUR_HONEY_TANK.get());
     }
 
     private static void registerItems(ItemColors handler, IItemColor itemColor, IItemProvider... items) {

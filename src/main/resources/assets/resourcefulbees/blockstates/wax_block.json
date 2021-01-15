@@ -1,7 +1,7 @@
 {
-    "variants": {
-      "": {
-        "model": "resourcefulbees:block/wax_block"
-      }
+  "variants": {
+    "": {
+      "model": "resourcefulbees:block/wax_block"
     }
   }
+}

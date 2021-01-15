@@ -1,6 +1,5 @@
 package com.resourcefulbees.resourcefulbees.tileentity;
 
-import com.resourcefulbees.resourcefulbees.block.HoneyTank;
 import com.resourcefulbees.resourcefulbees.fluids.HoneyFlowingFluid;
 import com.resourcefulbees.resourcefulbees.item.CustomHoneyBottleItem;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
@@ -19,7 +18,6 @@ import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
@@ -37,7 +35,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.function.Predicate;
 
-public class HoneyTankTileEntity extends TileEntity implements ITickableTileEntity {
+public class HoneyTankTileEntity extends TileEntity {
 
     public int getFluidColor() {
         if (fluidTank.isEmpty()) return 0x00000000;
@@ -105,7 +103,6 @@ public class HoneyTankTileEntity extends TileEntity implements ITickableTileEnti
     public final FluidTank fluidTank;
     private final LazyOptional<IFluidHandler> fluidOptional;
     public static final FluidStack HONEY_BOTTLE_FLUID_STACK = new FluidStack(ModFluids.HONEY_STILL.get(), ModConstants.HONEY_PER_BOTTLE);
-    private FluidStack last = null;
     private TankTier tier;
 
     public HoneyTankTileEntity(TankTier tier) {
@@ -168,11 +165,6 @@ public class HoneyTankTileEntity extends TileEntity implements ITickableTileEnti
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
         CompoundNBT nbt = pkt.getNbtCompound();
         readNBT(nbt);
-    }
-
-    @Override
-    public void tick() {
-
     }
 
     @Override
@@ -245,7 +237,7 @@ public class HoneyTankTileEntity extends TileEntity implements ITickableTileEnti
 
     public int getLevel() {
         float fillPercentage = ((float) fluidTank.getFluidAmount()) / ((float) fluidTank.getTankCapacity(0));
-        return (int) Math.ceil(fillPercentage * 14);
+        return (int) Math.ceil(fillPercentage * 100);
     }
 
     public class InternalFluidTank extends FluidTank {
@@ -264,10 +256,6 @@ public class HoneyTankTileEntity extends TileEntity implements ITickableTileEnti
             if (world != null) {
                 BlockState state = world.getBlockState(pos);
                 world.notifyBlockUpdate(pos, state, state, 2);
-                if (state.getBlock() instanceof HoneyTank) {
-                    HoneyTank tank = (HoneyTank) state.getBlock();
-                    tank.updateBlockState(world, pos);
-                }
             }
         }
     }

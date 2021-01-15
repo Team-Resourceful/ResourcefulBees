@@ -7,9 +7,11 @@ import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Direction.Axis;
-import net.minecraft.util.math.vector.*;
+import net.minecraft.util.math.vector.Matrix3f;
+import net.minecraft.util.math.vector.Matrix4f;
+import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.util.math.vector.Vector3i;
 
-import java.awt.*;
 import java.util.Arrays;
 
 public class RenderCuboid {
@@ -34,21 +36,40 @@ public class RenderCuboid {
         }
     }
 
-    public static double getValue(Vector3d vector, Axis axis) {
+    public static double getValue(Vector3f vector, Axis axis) {
         if (axis == Axis.X) {
-            return vector.x;
+            return vector.getX();
         } else if (axis == Axis.Y) {
-            return vector.y;
+            return vector.getY();
         } else if (axis == Axis.Z) {
-            return vector.z;
+            return vector.getZ();
         } else {
             throw new RuntimeException("Was given a null axis! That was probably not intentional, consider this a bug! (Vector = " + vector + ")");
         }
     }
 
+    public static float getRed(int color) {
+        return (float) (color >> 16 & 255) / 255.0F;
+    }
+
+    public static float getGreen(int color) {
+        return (float) (color >> 8 & 255) / 255.0F;
+    }
+
+    public static float getBlue(int color) {
+        return (float) (color & 255) / 255.0F;
+    }
+
+    public static float getAlpha(int color) {
+        return (float) (color >> 24 & 255) / 255.0F;
+    }
+
     public void renderCube(CubeModel cube, MatrixStack matrix, IVertexBuilder buffer, int argb, int light, int overlay) {
-        Color color = new Color(argb);
-        Vector3d size = new Vector3d(cube.sizeX(), cube.sizeY(), cube.sizeZ());
+        float red = getRed(argb);
+        float green = getGreen(argb);
+        float blue = getBlue(argb);
+        float alpha = getAlpha(argb);
+        Vector3f size = cube.getSize();
         matrix.push();
         matrix.translate(cube.start.getX(), cube.start.getY(), cube.start.getZ());
         MatrixStack.Entry lastMatrix = matrix.peek();
@@ -72,7 +93,6 @@ public class RenderCuboid {
                 float maxV = sprite.getMinV();
                 double sizeU = getValue(size, u);
                 double sizeV = getValue(size, v);
-
                 for (int uIndex = 0; (double) uIndex < sizeU; ++uIndex) {
                     float[] baseUV = new float[]{minU, maxU, minV, maxV};
                     double addU = 1.0D;
@@ -80,7 +100,6 @@ public class RenderCuboid {
                         addU = sizeU - (double) uIndex;
                         baseUV[1] = baseUV[0] + (baseUV[1] - baseUV[0]) * (float) addU;
                     }
-
                     for (int vIndex = 0; (double) vIndex < sizeV; ++vIndex) {
                         float[] uv = Arrays.copyOf(baseUV, 4);
                         double addV = 1.0D;
@@ -88,16 +107,15 @@ public class RenderCuboid {
                             addV = sizeV - (double) vIndex;
                             uv[3] = uv[2] + (uv[3] - uv[2]) * (float) addV;
                         }
-
                         float[] xyz = new float[]{(float) uIndex, (float) ((double) uIndex + addU), (float) vIndex, (float) ((double) vIndex + addV)};
-                        this.renderPoint(matrix4f, normal, buffer, face, u, v, other, uv, xyz, true, false, color, light, overlay);
-                        this.renderPoint(matrix4f, normal, buffer, face, u, v, other, uv, xyz, true, true, color, light, overlay);
-                        this.renderPoint(matrix4f, normal, buffer, face, u, v, other, uv, xyz, false, true, color, light, overlay);
-                        this.renderPoint(matrix4f, normal, buffer, face, u, v, other, uv, xyz, false, false, color, light, overlay);
-                        this.renderPoint(matrix4f, normal, buffer, opposite, u, v, other, uv, xyz, false, false, color, light, overlay);
-                        this.renderPoint(matrix4f, normal, buffer, opposite, u, v, other, uv, xyz, false, true, color, light, overlay);
-                        this.renderPoint(matrix4f, normal, buffer, opposite, u, v, other, uv, xyz, true, true, color, light, overlay);
-                        this.renderPoint(matrix4f, normal, buffer, opposite, u, v, other, uv, xyz, true, false, color, light, overlay);
+                        this.renderPoint(matrix4f, normal, buffer, face, u, v, other, uv, xyz, true, false, red, green, blue, alpha, light, overlay);
+                        this.renderPoint(matrix4f, normal, buffer, face, u, v, other, uv, xyz, true, true, red, green, blue, alpha, light, overlay);
+                        this.renderPoint(matrix4f, normal, buffer, face, u, v, other, uv, xyz, false, true, red, green, blue, alpha, light, overlay);
+                        this.renderPoint(matrix4f, normal, buffer, face, u, v, other, uv, xyz, false, false, red, green, blue, alpha, light, overlay);
+                        this.renderPoint(matrix4f, normal, buffer, opposite, u, v, other, uv, xyz, false, false, red, green, blue, alpha, light, overlay);
+                        this.renderPoint(matrix4f, normal, buffer, opposite, u, v, other, uv, xyz, false, true, red, green, blue, alpha, light, overlay);
+                        this.renderPoint(matrix4f, normal, buffer, opposite, u, v, other, uv, xyz, true, true, red, green, blue, alpha, light, overlay);
+                        this.renderPoint(matrix4f, normal, buffer, opposite, u, v, other, uv, xyz, true, false, red, green, blue, alpha, light, overlay);
                     }
                 }
             }
@@ -106,7 +124,7 @@ public class RenderCuboid {
         matrix.pop();
     }
 
-    private void renderPoint(Matrix4f matrix4f, Matrix3f normal, IVertexBuilder buffer, Direction face, Axis u, Axis v, float other, float[] uv, float[] xyz, boolean minU, boolean minV, Color color, int light, int overlay) {
+    private void renderPoint(Matrix4f matrix4f, Matrix3f normal, IVertexBuilder buffer, Direction face, Axis u, Axis v, float other, float[] uv, float[] xyz, boolean minU, boolean minV, float red, float green, float blue, float alpha, int light, int overlay) {
         int U_ARRAY = minU ? 0 : 1;
         int V_ARRAY = minV ? 2 : 3;
         Vector3f vertex = withValue(VEC_ZERO, u, xyz[U_ARRAY]);
@@ -116,7 +134,7 @@ public class RenderCuboid {
         float adjustment = 2.5F;
         Vector3f norm = new Vector3f((float) normalForFace.getX() + adjustment, (float) normalForFace.getY() + adjustment, (float) normalForFace.getZ() + adjustment);
         norm.normalize();
-        buffer.vertex(matrix4f, vertex.getX(), vertex.getY(), vertex.getZ()).color(color.getRed(), color.getBlue(), color.getGreen(), color.getAlpha()).texture(uv[U_ARRAY], uv[V_ARRAY]).overlay(overlay).light(light).normal(normal, norm.getX(), norm.getY(), norm.getZ()).endVertex();
+        buffer.vertex(matrix4f, vertex.getX(), vertex.getY(), vertex.getZ()).color(red, green, blue, alpha).texture(uv[U_ARRAY], uv[V_ARRAY]).overlay(overlay).light(light).normal(normal, norm.getX(), norm.getY(), norm.getZ()).endVertex();
     }
 }
 

@@ -80,15 +80,19 @@ public class CubeModel {
         return Minecraft.getInstance().getSpriteAtlas(AtlasTexture.LOCATION_BLOCKS_TEXTURE).apply(spriteLocation);
     }
 
-    public double sizeX() {
-        return this.start.getX() - this.end.getX();
+    public Vector3f getSize() {
+        return new Vector3f(this.end.getX()- this.start.getX(), this.end.getY()- this.start.getY(), this.end.getZ()- this.start.getZ());
     }
 
-    public double sizeY() {
-        return this.start.getY() - this.end.getY();
+    public float sizeX() {
+        return this.end.getX() - this.start.getX();
     }
 
-    public double sizeZ() {
-        return this.start.getZ() - this.end.getZ();
+    public float sizeY() {
+        return this.end.getY() - this.start.getY();
+    }
+
+    public float sizeZ() {
+        return this.end.getZ() - this.start.getZ();
     }
 }
