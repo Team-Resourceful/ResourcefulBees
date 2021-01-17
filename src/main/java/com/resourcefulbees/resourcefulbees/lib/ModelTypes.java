@@ -6,5 +6,6 @@ public enum ModelTypes {
     GELATINOUS,
     DRAGON,
     QUEEN,
-    VILLAGER
+    VILLAGER,
+    MUSHROOM
 }
