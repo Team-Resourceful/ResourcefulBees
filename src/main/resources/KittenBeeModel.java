@@ -2,7 +2,6 @@
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
 
-import net.minecraft.client.renderer.model.ModelRenderer;
 
 public class KittenBeeModel extends EntityModel<Entity> {
 	private final ModelRenderer body;
@@ -10,27 +9,30 @@ public class KittenBeeModel extends EntityModel<Entity> {
 	private final ModelRenderer stinger;
 	private final ModelRenderer leftAntenna;
 	private final ModelRenderer rightAntenna;
+	private final ModelRenderer gel;
+	private final ModelRenderer dragon;
+	private final ModelRenderer horns;
 	private final ModelRenderer rightWing;
 	private final ModelRenderer leftWing;
 	private final ModelRenderer frontLegs;
 	private final ModelRenderer middleLegs;
 	private final ModelRenderer backLegs;
+	private final ModelRenderer crystals;
+	private final ModelRenderer bone;
+	private final ModelRenderer bone2;
+	private final ModelRenderer bone5;
+	private final ModelRenderer bone3;
+	private final ModelRenderer bone4;
 
 	public KittenBeeModel() {
 		textureWidth = 64;
 		textureHeight = 64;
-		body = new ModelRenderer(this);
-		torso = new ModelRenderer(this);
-		stinger = new ModelRenderer(this);
-		leftAntenna = new ModelRenderer(this);
-		rightAntenna = new ModelRenderer(this);
-		rightWing = new ModelRenderer(this);
-		leftWing = new ModelRenderer(this);
-		frontLegs = new ModelRenderer(this);
-		middleLegs = new ModelRenderer(this);
-		backLegs = new ModelRenderer(this);
-		body.setRotationPoint(0.0F, 19.0F, 0.0F);
 
+		body = new ModelRenderer(this);
+		body.setRotationPoint(0.0F, 19.0F, 0.0F);
+		
+
+		torso = new ModelRenderer(this);
 		torso.setRotationPoint(0.0F, 0.0F, 0.0F);
 		body.addChild(torso);
 		torso.setTextureOffset(24, 6).addBox(-1.5F, 1.0F, -6.0F, 3.0F, 2.0F, 1.0F, 0.0F, false);
@@ -38,44 +40,67 @@ public class KittenBeeModel extends EntityModel<Entity> {
 		torso.setTextureOffset(24, 3).addBox(1.5F, -5.0F, -4.0F, 1.0F, 1.0F, 2.0F, 0.0F, false);
 		torso.setTextureOffset(0, 0).addBox(-3.5F, -4.0F, -5.0F, 7.0F, 7.0F, 10.0F, 0.0F, false);
 
+		stinger = new ModelRenderer(this);
 		stinger.setRotationPoint(0.0F, 0.0F, 0.0F);
 		torso.addChild(stinger);
-		stinger.setTextureOffset(3, 1).addBox(0F, -1.0F, 5.0F, 0.0F, 1.0F, 2.0F, 0.0F, false);
+		stinger.setTextureOffset(3, 1).addBox(0.0F, -1.0F, 5.0F, 0.0F, 1.0F, 2.0F, 0.0F, false);
 
+		leftAntenna = new ModelRenderer(this);
 		leftAntenna.setRotationPoint(0.0F, -2.0F, -5.0F);
 		torso.addChild(leftAntenna);
 		leftAntenna.setTextureOffset(2, 0).addBox(1.5F, -2.0F, -3.0F, 1.0F, 2.0F, 3.0F, 0.0F, false);
 
+		rightAntenna = new ModelRenderer(this);
 		rightAntenna.setRotationPoint(0.0F, -2.0F, -5.0F);
 		torso.addChild(rightAntenna);
 		rightAntenna.setTextureOffset(2, 3).addBox(-2.5F, -2.0F, -3.0F, 1.0F, 2.0F, 3.0F, 0.0F, false);
-
-		rightWing.setRotationPoint(-1.5F, -4.0F, -3.0F);
-		body.addChild(rightWing);
-		rightWing.setTextureOffset(0, 18).addBox(-9F, 0.0F, 0.0F, 9.0F, 0.0F, 6.0F, 0.0F, false);
-
-		leftWing.setRotationPoint(1.5F, -4.0F, -3.0F);
-		body.addChild(leftWing);
-		leftWing.setTextureOffset(0, 18).addBox(0F, 0.0F, 0.0F, 9.0F, 0.0F, 6.0F, 0.0F, true);
-
-		frontLegs.setRotationPoint(1.5F, 3.0F, -2.0F);
-		body.addChild(frontLegs);
-		frontLegs.setTextureOffset(24, 0).addBox(-3F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F, 0.0F, false);
-		frontLegs.setTextureOffset(24, 0).addBox(-1F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F, 0.0F, false);
-
-		middleLegs.setRotationPoint(1.5F, 3.0F, 0.0F);
-		body.addChild(middleLegs);
-		middleLegs.setTextureOffset(24, 0).addBox(-4F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F, 0.0F, false);
-		middleLegs.setTextureOffset(24, 0).addBox(0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F, 0.0F, false);
-		backLegs.setRotationPoint(1.5F, 3.0F, 2.0F);
-		body.addChild(backLegs);
-		backLegs.setTextureOffset(24, 0).addBox(-4F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F, 0.0F, false);
-		backLegs.setTextureOffset(24, 0).addBox(0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F, 0.0F, false);
 
 		gel = new ModelRenderer(this);
 		gel.setRotationPoint(0.0F, 0.0F, 0.0F);
 		torso.addChild(gel);
 		gel.setTextureOffset(0, 25).addBox(-3.5F, -4.0F, -5.0F, 7.0F, 7.0F, 10.0F, 0.7F, false);
+
+		dragon = new ModelRenderer(this);
+		dragon.setRotationPoint(0.0F, -4.0F, -4.0F);
+		torso.addChild(dragon);
+		dragon.setTextureOffset(0, 61).addBox(-0.5F, -1.0F, 0.0F, 1.0F, 1.0F, 2.0F, 0.0F, false);
+		dragon.setTextureOffset(6, 61).addBox(-0.5F, -1.0F, 3.0F, 1.0F, 1.0F, 2.0F, 0.0F, false);
+		dragon.setTextureOffset(12, 61).addBox(-0.5F, -1.0F, 6.0F, 1.0F, 1.0F, 2.0F, 0.0F, false);
+
+		horns = new ModelRenderer(this);
+		horns.setRotationPoint(0.0F, 1.0F, -2.0F);
+		dragon.addChild(horns);
+		setRotationAngle(horns, -0.6109F, 0.0F, 0.0F);
+		horns.setTextureOffset(6, 55).addBox(1.75F, -6.0F, 1.5F, 1.0F, 4.0F, 2.0F, 0.0F, false);
+		horns.setTextureOffset(0, 55).addBox(-2.75F, -6.0F, 1.5F, 1.0F, 4.0F, 2.0F, 0.0F, false);
+
+		rightWing = new ModelRenderer(this);
+		rightWing.setRotationPoint(-1.5F, -4.0F, -3.0F);
+		body.addChild(rightWing);
+		rightWing.setTextureOffset(0, 18).addBox(-9.0F, 0.0F, 0.0F, 9.0F, 0.0F, 6.0F, 0.0F, false);
+
+		leftWing = new ModelRenderer(this);
+		leftWing.setRotationPoint(1.5F, -4.0F, -3.0F);
+		body.addChild(leftWing);
+		leftWing.setTextureOffset(0, 18).addBox(0.0F, 0.0F, 0.0F, 9.0F, 0.0F, 6.0F, 0.0F, true);
+
+		frontLegs = new ModelRenderer(this);
+		frontLegs.setRotationPoint(1.5F, 3.0F, -2.0F);
+		body.addChild(frontLegs);
+		frontLegs.setTextureOffset(24, 0).addBox(-3.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F, 0.0F, false);
+		frontLegs.setTextureOffset(24, 0).addBox(-1.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F, 0.0F, false);
+
+		middleLegs = new ModelRenderer(this);
+		middleLegs.setRotationPoint(1.5F, 3.0F, 0.0F);
+		body.addChild(middleLegs);
+		middleLegs.setTextureOffset(24, 0).addBox(-4.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F, 0.0F, false);
+		middleLegs.setTextureOffset(24, 0).addBox(0.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F, 0.0F, false);
+
+		backLegs = new ModelRenderer(this);
+		backLegs.setRotationPoint(1.5F, 3.0F, 2.0F);
+		body.addChild(backLegs);
+		backLegs.setTextureOffset(24, 0).addBox(-4.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F, 0.0F, false);
+		backLegs.setTextureOffset(24, 0).addBox(0.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F, 0.0F, false);
 
 		crystals = new ModelRenderer(this);
 		crystals.setRotationPoint(-0.25F, 1.0F, -6.5F);

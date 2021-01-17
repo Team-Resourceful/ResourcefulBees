@@ -16,21 +16,21 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 
-@Deprecated
 @OnlyIn(Dist.CLIENT)
-public class GelLayer<T extends CustomBeeEntity> extends LayerRenderer<T, CustomBeeModel<T>> {
+public class AdditionLayer<T extends CustomBeeEntity> extends LayerRenderer<T, CustomBeeModel<T>> {
 
-    private final EntityModel<T> gelModel = new CustomBeeModel<>(ModelTypes.GELATINOUS);
+    private final CustomBeeModel<T> additionModel;
 
-    public GelLayer(IEntityRenderer<T, CustomBeeModel<T>> rendererIn) {
+    public AdditionLayer(IEntityRenderer<T, CustomBeeModel<T>> rendererIn, ModelTypes type) {
         super(rendererIn);
+        additionModel = new CustomBeeModel<>(type);
     }
 
     public void render(@Nonnull MatrixStack matrixStackIn, @Nonnull IRenderTypeBuffer bufferIn, int packedLightIn, @Nonnull T customBeeEntity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        this.getEntityModel().setModelAttributes(this.gelModel);
-        this.gelModel.setLivingAnimations(customBeeEntity, limbSwing, limbSwingAmount, partialTicks);
-        this.gelModel.setAngles(customBeeEntity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+        this.getEntityModel().setModelAttributes(this.additionModel);
+        this.additionModel.setLivingAnimations(customBeeEntity, limbSwing, limbSwingAmount, partialTicks);
+        this.additionModel.setAngles(customBeeEntity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
         IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.getEntityTranslucent(this.getTexture(customBeeEntity)));
-        this.gelModel.render(matrixStackIn, ivertexbuilder, packedLightIn, LivingRenderer.getOverlay(customBeeEntity, 0.0F), 1.0F, 1.0F, 1.0F, 1.0F);
+        this.additionModel.render(matrixStackIn, ivertexbuilder, packedLightIn, LivingRenderer.getOverlay(customBeeEntity, 0.0F), 1.0F, 1.0F, 1.0F, 1.0F);
     }
 }

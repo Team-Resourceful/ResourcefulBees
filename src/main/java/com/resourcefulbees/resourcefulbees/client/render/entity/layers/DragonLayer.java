@@ -18,19 +18,20 @@ import javax.annotation.Nonnull;
 
 @Deprecated
 @OnlyIn(Dist.CLIENT)
-public class GelLayer<T extends CustomBeeEntity> extends LayerRenderer<T, CustomBeeModel<T>> {
+public class DragonLayer <T extends CustomBeeEntity> extends LayerRenderer<T, CustomBeeModel<T>> {
 
-    private final EntityModel<T> gelModel = new CustomBeeModel<>(ModelTypes.GELATINOUS);
+    private final EntityModel<T> dragonModel = new CustomBeeModel<>(ModelTypes.DRAGON);
 
-    public GelLayer(IEntityRenderer<T, CustomBeeModel<T>> rendererIn) {
-        super(rendererIn);
+    public DragonLayer(IEntityRenderer<T, CustomBeeModel<T>> p_i50926_1_) {
+        super(p_i50926_1_);
     }
 
+    @Override
     public void render(@Nonnull MatrixStack matrixStackIn, @Nonnull IRenderTypeBuffer bufferIn, int packedLightIn, @Nonnull T customBeeEntity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        this.getEntityModel().setModelAttributes(this.gelModel);
-        this.gelModel.setLivingAnimations(customBeeEntity, limbSwing, limbSwingAmount, partialTicks);
-        this.gelModel.setAngles(customBeeEntity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+        this.getEntityModel().setModelAttributes(this.dragonModel);
+        this.dragonModel.setLivingAnimations(customBeeEntity, limbSwing, limbSwingAmount, partialTicks);
+        this.dragonModel.setAngles(customBeeEntity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
         IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.getEntityTranslucent(this.getTexture(customBeeEntity)));
-        this.gelModel.render(matrixStackIn, ivertexbuilder, packedLightIn, LivingRenderer.getOverlay(customBeeEntity, 0.0F), 1.0F, 1.0F, 1.0F, 1.0F);
+        this.dragonModel.render(matrixStackIn, ivertexbuilder, packedLightIn, LivingRenderer.getOverlay(customBeeEntity, 0.0F), 1.0F, 1.0F, 1.0F, 1.0F);
     }
 }
