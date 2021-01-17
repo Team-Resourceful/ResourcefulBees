@@ -101,7 +101,6 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
      * Sets this entity's model rotation angles
      */
     public void setAngles(CustomBeeEntity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-        //this.rightWing.rotateAngleX = 0.0F;
         this.leftAntenna.rotateAngleX = 0.0F;
         this.rightAntenna.rotateAngleX = 0.0F;
         this.body.rotateAngleX = 0.0F;

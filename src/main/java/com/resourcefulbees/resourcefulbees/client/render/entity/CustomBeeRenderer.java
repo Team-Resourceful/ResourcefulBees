@@ -21,8 +21,8 @@ import javax.annotation.Nonnull;
 @OnlyIn(Dist.CLIENT)
 public class CustomBeeRenderer extends MobRenderer<CustomBeeEntity, CustomBeeModel<CustomBeeEntity>> {
 
-    private ResourceLocation angryTexture;
-    private ResourceLocation baseTexture;
+    private final ResourceLocation angryTexture;
+    private final ResourceLocation baseTexture;
 
     public CustomBeeRenderer(BaseModelTypes modelType, EntityRendererManager manager, CustomBeeData beeData) {
         super(manager, new CustomBeeModel<>(modelType), 0.4F);
@@ -36,7 +36,7 @@ public class CustomBeeRenderer extends MobRenderer<CustomBeeEntity, CustomBeeMod
             addLayer(new BeeLayer(this, LayerType.SECONDARY, beeData.getColorData().getModelType(), beeData.getColorData()));
         }else {
             if (beeData.getColorData().getModelType() != ModelTypes.DEFAULT) {
-                addLayer(new AdditionLayer(this, beeData.getColorData().getModelType()));
+                addLayer(new AdditionLayer<>(this, beeData.getColorData().getModelType()));
             }
         }
         if (beeData.getColorData().isGlowing() || beeData.getColorData().isEnchanted()) {
