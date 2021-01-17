@@ -57,6 +57,9 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
             case DRAGON:
                 addDragonParts();
                 break;
+            case QUEEN:
+                addQueenParts();
+                break;
             case DEFAULT:
                 addDefaultParts();
         }
@@ -304,6 +307,21 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
         horns.setTextureOffset(6, 55).addCuboid(1.75F, -6.0F, 1.5F, 1.0F, 4.0F, 2.0F, 0.0F, false);
         horns.setTextureOffset(0, 55).addCuboid(-2.75F, -6.0F, 1.5F, 1.0F, 4.0F, 2.0F, 0.0F, false);
 
+    }
+
+    private void addQueenParts() {
+        ModelRenderer queen = new ModelRenderer(this);
+        queen.setRotationPoint(0.0F, 0.0F, 0.0F);
+        body.addChild(queen);
+        queen.setTextureOffset(0, 42).addCuboid(-2.5F, -5.0F, -4.0F, 5.0F, 1.0F, 5.0F, 0.0F, false);
+        queen.setTextureOffset(0, 45).addCuboid(-2.5F, -6.0F, 0.0F, 1.0F, 1.0F, 1.0F, 0.0F, false);
+        queen.setTextureOffset(0, 45).addCuboid(1.5F, -6.0F, -4.0F, 1.0F, 1.0F, 1.0F, 0.0F, false);
+        queen.setTextureOffset(0, 45).addCuboid(1.5F, -6.0F, 0.0F, 1.0F, 1.0F, 1.0F, 0.0F, false);
+        queen.setTextureOffset(0, 45).addCuboid(-0.5F, -6.0F, 0.0F, 1.0F, 1.0F, 1.0F, 0.0F, false);
+        queen.setTextureOffset(0, 45).addCuboid(-2.5F, -6.0F, -2.0F, 1.0F, 1.0F, 1.0F, 0.0F, false);
+        queen.setTextureOffset(0, 45).addCuboid(1.5F, -6.0F, -2.0F, 1.0F, 1.0F, 1.0F, 0.0F, false);
+        queen.setTextureOffset(0, 45).addCuboid(-2.5F, -6.0F, -4.0F, 1.0F, 1.0F, 1.0F, 0.0F, false);
+        queen.setTextureOffset(0, 42).addCuboid(-0.5F, -6.0F, -4.0F, 1.0F, 1.0F, 1.0F, 0.0F, false);
     }
 
     public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {

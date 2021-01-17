@@ -4,5 +4,6 @@ public enum ModelTypes {
     DEFAULT,
     ORE,
     GELATINOUS,
-    DRAGON
+    DRAGON,
+    QUEEN
 }
