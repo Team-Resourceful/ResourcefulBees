@@ -60,10 +60,14 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
             case QUEEN:
                 addQueenParts();
                 break;
+            case VILLAGER:
+                addVillagerNose();
+                break;
             case DEFAULT:
                 addDefaultParts();
         }
     }
+
 
 
 
@@ -322,6 +326,13 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
         queen.setTextureOffset(0, 45).addCuboid(1.5F, -6.0F, -2.0F, 1.0F, 1.0F, 1.0F, 0.0F, false);
         queen.setTextureOffset(0, 45).addCuboid(-2.5F, -6.0F, -4.0F, 1.0F, 1.0F, 1.0F, 0.0F, false);
         queen.setTextureOffset(0, 42).addCuboid(-0.5F, -6.0F, -4.0F, 1.0F, 1.0F, 1.0F, 0.0F, false);
+    }
+
+    private void addVillagerNose() {
+        ModelRenderer nose = new ModelRenderer(this);
+        nose.setRotationPoint(0.0F, -21.0F, 0.0F);
+        body.addChild(nose);
+        nose.setTextureOffset(26, 25).addCuboid(-1.0F, 21.0F, -6.5F, 2.0F, 4.0F, 2.0F, 0.0F, false);
     }
 
     public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {

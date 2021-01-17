@@ -24,6 +24,7 @@ public class BaseBeeModel extends EntityModel<Entity> {
 	private final ModelRenderer horns;
 	private final ModelRenderer gel;
 	private final ModelRenderer queen;
+	private final ModelRenderer nose;
 
 	public BaseBeeModel() {
 		textureWidth = 64;
@@ -147,6 +148,11 @@ public class BaseBeeModel extends EntityModel<Entity> {
 		queen.setTextureOffset(0, 45).addBox(1.5F, -6.0F, -2.0F, 1.0F, 1.0F, 1.0F, 0.0F, false);
 		queen.setTextureOffset(0, 45).addBox(-2.5F, -6.0F, -4.0F, 1.0F, 1.0F, 1.0F, 0.0F, false);
 		queen.setTextureOffset(0, 42).addBox(-0.5F, -6.0F, -4.0F, 1.0F, 1.0F, 1.0F, 0.0F, false);
+
+		nose = new ModelRenderer(this);
+		nose.setRotationPoint(0.0F, -21.0F, 0.0F);
+		body.addChild(nose);
+		nose.setTextureOffset(26, 25).addBox(-1.0F, 21.0F, -6.5F, 2.0F, 4.0F, 2.0F, 0.0F, false);
 	}
 
 	@Override
