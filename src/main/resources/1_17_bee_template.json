@@ -1,0 +1,167 @@
+{
+    "note" : "This file may change in up till the 1.17 release, this is simply for both the devs and pack devs to have an idea of how the new bee file will be set up.",
+    "flower": "ALL",
+    "maxTimeInHive": 2400,
+    "ModelData" : {
+        "sizeModifier" : 1.0,
+        "baseModelType" : "DEFAULT",
+        "customBaseModel" : "/base/kitten_bee",
+        "additionModelType" : "ORE",
+        "customAdditionModel" : "/additions/ore",
+        "baseLayerTexture":"/creeper/creeper_bee",
+        "isEnchanted" : false,
+        "glowingPulse" : 2,
+        "primaryLayer" : {
+            "layerTexture" : "/custom/primary_layer",
+            "layerColor" : "#00ffff",
+            "isRainbow" : false
+        },
+        "secondaryLayer" : {
+            "layerTexture" : "/custom/secondary_layer",
+            "layerColor" : "#ff0000",
+            "isRainbow" : false
+        },
+        "emissiveLayer" : {
+            "layerTexture" : "/custom/emissve_layer",
+            "layerColor" : "#ff0000",
+            "isRainbow" : false
+        },
+        "pollenLayer" : {
+            "layerTexture" : "/custom/pollen_layer",
+            "layerColor" : "#ff0000",
+            "isRainbow" : false
+        },
+        "angerLayer" : {
+            "layerTexture" : "/custom/anger_layer",
+            "layerColor" : "#ff0000",
+            "isRainbow" : false
+        },
+        "emissivePollenLayer" : {
+            "layerTexture" : "/custom/emissive_pollen_layer",
+            "layerColor" : "#ff0000",
+            "isRainbow" : false
+        },
+        "emissiveAngerLayer" : {
+            "layerTexture" : "/custom/emissive_anger_layer",
+            "layerColor" : "#ff0000",
+            "isRainbow" : false
+        }
+    },
+    "CombData" : {
+        "hasHoneycomb" : true,
+        "honeycombColor" : "#00ffff",
+        "customCombDrop": "",
+        "customBombBlockDrop": "",
+        "apiaryOutputAmounts" : [1,2,3,4],
+        "hasCentrifugeOutput": true,
+        "recipeTime": 200,
+        "noPrimaryOutputWeight" : 0,
+        "noSecondaryOutputWeight" : 0,
+        "noBottleOutputWeight" : 1,
+        "outputs": [
+            {
+                "outputType": "PRIMARY",
+                "output": "minecraft:red_dye",
+                "outputWeight": 1,
+                "outputCount": 2
+            },
+            {
+                "outputType": "PRIMARY",
+                "output": "minecraft:white_dye",
+                "outputWeight": 1,
+                "outputCount": 2
+            },
+            {
+                "outputType": "PRIMARY",
+                "output": "minecraft:orange_dye",
+                "outputWeight": 1,
+                "outputCount": 2
+            },
+            {
+                "outputType": "BOTTLE",
+                "output": "minecraft:water_bottle",
+                "outputWeight": 1,
+                "outputCount": 1
+            }
+        ],
+        "fluidOutput" : {
+            "fluid" : "minecraft:water",
+            "chance" : 1,
+            "amount" : 10
+        }
+    },
+    "CombatData": {
+        "isPassive": false,
+        "removeStingerOnAttack": true,
+        "attackDamage": 1,
+        "inflictsEffect": true,
+        "effectData" : [
+            {
+                "id" : "minecraft:poison",
+                "level" : 0,
+                "duration" : 20
+            },
+            {
+                "id" : "minecraft:hunger",
+                "level" : 0,
+                "duration" : 20
+            }
+        ]
+    },
+    "SpawnData": {
+        "canSpawnInWorld": true,
+        "spawnWeight": 8,
+        "biomeWhitelist": ["tag:ocean"],
+        "biomeBlacklist": ["tag:overworld"],
+        "minGroupSize": 1,
+        "maxGroupSize": 1,
+        "lightLevel": "ANY"
+    },
+    "MutationData": {
+        "hasMutation":true,
+        "mutationCount":10,
+        "mutations" : [
+            {
+                "type" : "BLOCK_TO_FLUID",
+                "input" : "minecraft:stone",
+                "output": "minecraft:water",
+                "chance" : 1
+            },
+            {
+                "type" : "BLOCK_TO_BLOCK",
+                "input" : "minecraft:stone",
+                "output": "minecraft:diamond_ore",
+                "chance" : 0.1
+            },
+            {
+                "type" : "BLOCK_TO_BLOCK",
+                "input" : "minecraft:cobblestone",
+                "output": "minecraft:stone",
+                "chance" : 1
+            }
+        ]
+    },
+    "BreedData": {
+        "isBreedable": true,
+        "feedItem": "minecraft:poppy",
+        "feedAmount": 5,
+        "childGrowthDelay": -24000,
+        "breedDelay": 6000,
+        "parentData" : [
+            {
+                "primaryParent": "Skeleton",
+                "secondaryParent": "Creeper",
+                "breedWeight": 1
+            },
+            {
+                "primaryParent": "Skeleton",
+                "secondaryParent": "Zombie",
+                "breedWeight": 1
+            }
+        ]
+    },
+    "TraitData": {
+        "hasTraits": true,
+        "traits": ["wither","blaze","can_swim","creeper","zombie","pigman","ender","nether", "oreo", "slimy"]
+    }
+}
