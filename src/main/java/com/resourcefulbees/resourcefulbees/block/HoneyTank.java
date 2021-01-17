@@ -17,7 +17,6 @@ import net.minecraft.fluid.Fluids;
 import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
@@ -50,7 +49,6 @@ public class HoneyTank extends Block {
 
     protected static final VoxelShape VOXEL_SHAPE = Block.makeCuboidShape(1.0D, 0.0D, 1.0D, 15.0D, 16.0D, 15.0D);
 
-    public static final IntegerProperty LEVEL = IntegerProperty.create("level", 0, 14);
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     public static final AbstractBlock.Properties PROPERTIES = Block.Properties.create(Material.GLASS)
@@ -65,7 +63,6 @@ public class HoneyTank extends Block {
         super(properties);
         this.tier = tier;
         BlockState defaultState = this.stateContainer.getBaseState()
-                .with(LEVEL, 0)
                 .with(WATERLOGGED, false);
         this.setDefaultState(defaultState);
     }
@@ -135,7 +132,6 @@ public class HoneyTank extends Block {
                     world.playSound(player, pos, SoundEvents.ITEM_BOTTLE_FILL, SoundCategory.PLAYERS, 1.0f, 1.0f);
                     tank.emptyBottle(player, hand);
                 }
-                updateBlockState(world, pos);
                 world.notifyBlockUpdate(pos, state, state, 2);
             }
         }
@@ -143,13 +139,6 @@ public class HoneyTank extends Block {
             return ActionResultType.SUCCESS;
         }
         return ActionResultType.FAIL;
-    }
-
-    public void updateBlockState(World world, BlockPos pos) {
-        BlockState state = world.getBlockState(pos);
-        if (state.getBlock() instanceof HoneyTank) {
-            world.setBlockState(pos, state.with(LEVEL, getLevel(world, pos)));
-        }
     }
 
     @Nonnull
@@ -166,7 +155,7 @@ public class HoneyTank extends Block {
 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-        builder.add(WATERLOGGED, LEVEL);
+        builder.add(WATERLOGGED);
     }
 
     @Nonnull
@@ -180,9 +169,6 @@ public class HoneyTank extends Block {
     public BlockState updatePostPlacement(BlockState stateIn, @NotNull Direction facing, @NotNull BlockState facingState, @NotNull IWorld world, @NotNull BlockPos currentPos, @NotNull BlockPos facingPos) {
         if (stateIn.get(WATERLOGGED)) {
             world.getPendingFluidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickRate(world));
-        }
-        if (!world.isRemote()) {
-            stateIn.with(LEVEL, getLevel(world, currentPos));
         }
         return stateIn;
     }
@@ -223,7 +209,6 @@ public class HoneyTank extends Block {
                 tank.readNBT(itemStack.getTag());
             }
         }
-        updateBlockState(world, pos);
     }
 
 

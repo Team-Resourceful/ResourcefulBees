@@ -10,6 +10,7 @@ public class TraitConstants {
     public static final String ENDER = "ender";
     public static final String NETHER = "nether";
     public static final String SLIMY = "slimy";
+    public static final String DESERT = "desert";
     public static final String FLAMMABLE = "flammable";
     public static final String TELEPORT = "teleport";
     public static final String SET_ON_FIRE = "setOnFire";

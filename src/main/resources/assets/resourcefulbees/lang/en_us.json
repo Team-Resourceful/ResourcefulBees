@@ -141,6 +141,10 @@
 	"item.resourcefulbees.catnip_honey_bottle": "Catnip Honey Bottle",
 	"item.resourcefulbees.catnip_honey_fluid_bucket": "Catnip Honey Bucket",
 
+	"item.resourcefulbees.rainbow_honeycomb": "Rainbow Honeycomb",
+	"item.resourcefulbees.rainbow_honey_bottle": "Rainbow Honey Bottle",
+	"item.resourcefulbees.rainbow_honey_fluid_bucket": "Rainbow Honey Bucket",
+
 	"block.resourcefulbees.gold_honeycomb_block": "Gold Honeycomb Block",
 	"block.resourcefulbees.iron_honeycomb_block": "Iron Honeycomb Block",
 	"block.resourcefulbees.emerald_honeycomb_block": "Emerald Honeycomb Block",
@@ -157,11 +161,13 @@
 	"block.resourcefulbees.zombie_honeycomb_block": "Zombie Honeycomb Block",
 	"block.resourcefulbees.netherite_honeycomb_block": "Netherite Honeycomb Block",
 	"block.resourcefulbees.rgbee_honeycomb_block": "RGBee Honeycomb Block",
+	"block.resourcefulbees.rainbow_honey_block": "Rainbow Honey Block",
 	"block.resourcefulbees.catnip_honeycomb_block": "Catnip Honeycomb Block",
 	"block.resourcefulbees.catnip_honey_block": "Catnip Honey Block",
 
 	"fluid.resourcefulbees.honey": "Honey",
 	"fluid.resourcefulbees.catnip_honey": "Catnip Honey",
+	"fluid.resourcefulbees.rainbow_honey": "Rainbow Honey",
 
 	"item.resourcefulbees.gold_honeycomb": "Gold Honeycomb",
 	"item.resourcefulbees.iron_honeycomb": "Iron Honeycomb",

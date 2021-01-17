@@ -63,7 +63,7 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
     }
 
     public AutomationSensitiveItemStackHandler h = new HoneyGeneratorTileEntity.TileStackHandler(5, getAcceptor(), getRemover());
-    public final FluidTank fluidTank = new FluidTank(MAX_TANK_STORAGE, honeyFluidPredicate());
+    public final InternalFluidTank fluidTank = new InternalFluidTank(MAX_TANK_STORAGE, honeyFluidPredicate());
     public final CustomEnergyStorage energyStorage = createEnergy();
     private final LazyOptional<IFluidHandler> fluidOptional = LazyOptional.of(() -> fluidTank);
     private final LazyOptional<IItemHandler> lazyOptional = LazyOptional.of(() -> h);
@@ -73,7 +73,9 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
     private boolean isProcessing;
     private boolean dirty;
 
-    public HoneyGeneratorTileEntity() { super(ModTileEntityTypes.HONEY_GENERATOR_ENTITY.get()); }
+    public HoneyGeneratorTileEntity() {
+        super(ModTileEntityTypes.HONEY_GENERATOR_ENTITY.get());
+    }
 
     @Override
     public void tick() {
@@ -126,7 +128,7 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
     }
 
     private boolean canStartFluidProcess() {
-        return !isProcessing && !h.getStackInSlot(HONEY_BOTTLE_INPUT).isEmpty()&& h.getStackInSlot(HONEY_BOTTLE_INPUT).getItem().equals(Items.HONEY_BOTTLE) &&
+        return !isProcessing && !h.getStackInSlot(HONEY_BOTTLE_INPUT).isEmpty() && h.getStackInSlot(HONEY_BOTTLE_INPUT).getItem().equals(Items.HONEY_BOTTLE) &&
                 (h.getStackInSlot(BOTTLE_OUTPUT).isEmpty() || h.getStackInSlot(BOTTLE_OUTPUT).getCount() < h.getStackInSlot(BOTTLE_OUTPUT).getMaxStackSize());
     }
 
@@ -141,7 +143,7 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
     }
 
     private void processFluid() {
-        if(canProcessFluid()) {
+        if (canProcessFluid()) {
             fluidTank.fill(new FluidStack(ModFluids.HONEY_STILL.get(), HONEY_FILL_AMOUNT), IFluidHandler.FluidAction.EXECUTE);
             fluidFilled += HONEY_FILL_AMOUNT;
             isProcessing = fluidFilled < ModConstants.HONEY_PER_BOTTLE;
@@ -156,7 +158,7 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
         return (fluidTank.getFluidAmount() + HONEY_FILL_AMOUNT) <= fluidTank.getCapacity();
     }
 
-    public boolean canProcessEnergy(){
+    public boolean canProcessEnergy() {
         return energyStorage.getEnergyStored() + ENERGY_FILL_AMOUNT <= energyStorage.getMaxEnergyStored() && fluidTank.getFluidAmount() >= HONEY_DRAIN_AMOUNT;
     }
 
@@ -179,7 +181,7 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
         CompoundNBT nbt = new CompoundNBT();
         nbt.put("tank", fluidTank.writeToNBT(new CompoundNBT()));
         nbt.put("power", energyStorage.serializeNBT());
-        return new SUpdateTileEntityPacket(pos,0,nbt);
+        return new SUpdateTileEntityPacket(pos, 0, nbt);
     }
 
     @Override
@@ -208,9 +210,9 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
         h.deserializeNBT(invTag);
         energyStorage.deserializeNBT(tag.getCompound("energy"));
         fluidTank.readFromNBT(tag.getCompound("fluid"));
-        if(tag.contains("energyFilled")) energyFilled = tag.getInt("energyFilled");
-        if(tag.contains("fluidFilled")) fluidFilled = tag.getInt("fluidFilled");
-        if(tag.contains("isProcessing")) isProcessing = tag.getBoolean("isProcessing");
+        if (tag.contains("energyFilled")) energyFilled = tag.getInt("energyFilled");
+        if (tag.contains("fluidFilled")) fluidFilled = tag.getInt("fluidFilled");
+        if (tag.contains("isProcessing")) isProcessing = tag.getBoolean("isProcessing");
         super.fromTag(state, tag);
     }
 
@@ -287,14 +289,36 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
         energyStorage.setEnergy(buffer.readInt());
     }
 
+    public int getLevel() {
+        float fillPercentage = ((float) fluidTank.getFluidAmount()) / ((float) fluidTank.getTankCapacity(0));
+        return (int) Math.ceil(fillPercentage * 100);
+    }
+
     protected class TileStackHandler extends AutomationSensitiveItemStackHandler {
         protected TileStackHandler(int slots, IAcceptor acceptor, IRemover remover) {
-            super(slots,acceptor,remover);
+            super(slots, acceptor, remover);
         }
+
         @Override
         protected void onContentsChanged(int slot) {
             super.onContentsChanged(slot);
             markDirty();
+        }
+    }
+
+    public class InternalFluidTank extends FluidTank {
+
+        public InternalFluidTank(int capacity, Predicate<FluidStack> validator) {
+            super(capacity, validator);
+        }
+
+        @Override
+        protected void onContentsChanged() {
+            super.onContentsChanged();
+            if (world != null) {
+                BlockState state = world.getBlockState(pos);
+                world.notifyBlockUpdate(pos, state, state, 2);
+            }
         }
     }
 }

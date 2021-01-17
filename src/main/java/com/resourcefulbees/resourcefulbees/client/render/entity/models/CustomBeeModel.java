@@ -54,10 +54,15 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
             case ORE:
                 addOreCrystals();
                 break;
+            case DRAGON:
+                addDragonParts();
+                break;
             case DEFAULT:
                 addDefaultParts();
         }
     }
+
+
 
     public CustomBeeModel(BaseModelTypes modelType) {
         super(false, 24.0F, 0.0F);
@@ -202,8 +207,8 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
         torso.setTextureOffset(0, 0).addCuboid(-3.5F, -4.0F, -5.0F, 7.0F, 7.0F, 10.0F, 0.0F, false);
 
         stinger.setRotationPoint(0.0F, 0.0F, 0.0F);
-        torso.addChild(stinger);
-        stinger.setTextureOffset(3, 1).addCuboid(0F, -1.0F, 5.0F, 0.0F, 1.0F, 2.0F, 0.0F, false);
+        torso.addChild(this.stinger);
+        stinger.addCuboid(0.0F, -1.0F, 5.0F, 0.0F, 1.0F, 2.0F, 0.0F);
 
         leftAntenna.setRotationPoint(0.0F, -2.0F, -5.0F);
         torso.addChild(leftAntenna);
@@ -283,6 +288,23 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
         bone3.addChild(bone4);
         setRotationAngle(bone4, 0.0F, 0.0F, -1.3963F);
         bone4.setTextureOffset(56, 51).addCuboid(-1.1252F, 1.9F, 11.0F, 2.0F, 4.0F, 2.0F, 0.0F, true);
+    }
+
+    private void addDragonParts() {
+        ModelRenderer dragon = new ModelRenderer(this);
+        dragon.setRotationPoint(0.0F, -4.0F, -4.0F);
+        body.addChild(dragon);
+        dragon.setTextureOffset(0, 61).addCuboid(-0.5F, -1.0F, 0.0F, 1.0F, 1.0F, 2.0F, 0.0F, false);
+        dragon.setTextureOffset(6, 61).addCuboid(-0.5F, -1.0F, 3.0F, 1.0F, 1.0F, 2.0F, 0.0F, false);
+        dragon.setTextureOffset(12, 61).addCuboid(-0.5F, -1.0F, 6.0F, 1.0F, 1.0F, 2.0F, 0.0F, false);
+
+        ModelRenderer horns = new ModelRenderer(this);
+        horns.setRotationPoint(0.0F, 1.0F, -2.0F);
+        dragon.addChild(horns);
+        setRotationAngle(horns, -0.6109F, 0.0F, 0.0F);
+        horns.setTextureOffset(6, 55).addCuboid(1.75F, -6.0F, 1.5F, 1.0F, 4.0F, 2.0F, 0.0F, false);
+        horns.setTextureOffset(0, 55).addCuboid(-2.75F, -6.0F, 1.5F, 1.0F, 4.0F, 2.0F, 0.0F, false);
+
     }
 
     public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {

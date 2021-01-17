@@ -16,10 +16,11 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 
+@Deprecated
 @OnlyIn(Dist.CLIENT)
 public class CrystalsLayer extends LayerRenderer<CustomBeeEntity, CustomBeeModel<CustomBeeEntity>> {
 
-    private final EntityModel<CustomBeeEntity> crystalsModel= new CustomBeeModel<>(ModelTypes.ORE);
+    private final EntityModel<CustomBeeEntity> crystalsModel = new CustomBeeModel<>(ModelTypes.ORE);
 
     public CrystalsLayer(IEntityRenderer<CustomBeeEntity, CustomBeeModel<CustomBeeEntity>> rendererIn) {
         super(rendererIn);

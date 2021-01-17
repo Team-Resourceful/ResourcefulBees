@@ -84,7 +84,7 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
             nbt.remove("UUID");
             Direction direction = state.get(BeehiveBlock.FACING);
             BlockPos blockpos1 = blockpos.offset(direction);
-            if (world != null && !this.world.getBlockState(blockpos1).getCollisionShape(this.world, blockpos1).isEmpty()) {
+            if (world != null && !this.world.getBlockState(blockpos1).getCollisionShape(this.world, blockpos1).isEmpty() && beehiveState != State.EMERGENCY) {
                 return false;
             } else {
                 Entity entity = EntityType.func_220335_a(nbt, this.world, entity1 -> entity1);
@@ -145,9 +145,8 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
                 this.bees.add(new BeehiveTileEntity.Bee(nbt, ticksInHive,  hasNectar ? maxTimeInHive : MIN_HIVE_TIME));
                 BlockPos pos = this.getPos();
                 this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BLOCK_BEEHIVE_ENTER, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                bee.remove();
             }
-
-            bee.remove();
         }
     }
 

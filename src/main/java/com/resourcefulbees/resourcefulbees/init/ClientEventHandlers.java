@@ -6,6 +6,7 @@ import com.resourcefulbees.resourcefulbees.client.models.ModelHandler;
 import com.resourcefulbees.resourcefulbees.client.render.entity.CustomBeeRenderer;
 import com.resourcefulbees.resourcefulbees.client.render.fluid.FluidRender;
 import com.resourcefulbees.resourcefulbees.client.render.items.ItemModelPropertiesHandler;
+import com.resourcefulbees.resourcefulbees.client.render.tileentity.RenderHoneyGenerator;
 import com.resourcefulbees.resourcefulbees.client.render.tileentity.RenderHoneyTank;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.ModBlocks;
@@ -16,7 +17,6 @@ import com.resourcefulbees.resourcefulbees.utils.color.ColorHandler;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -56,9 +56,11 @@ public class ClientEventHandlers {
         RenderTypeLookup.setRenderLayer(ModBlocks.PURPUR_HONEY_TANK.get(), RenderType.getTranslucent());
         RenderTypeLookup.setRenderLayer(ModBlocks.NETHER_HONEY_TANK.get(), RenderType.getTranslucent());
         RenderTypeLookup.setRenderLayer(ModBlocks.WOODEN_HONEY_TANK.get(), RenderType.getTranslucent());
+        RenderTypeLookup.setRenderLayer(ModBlocks.HONEY_GENERATOR.get(), RenderType.getTranslucent());
 
         ItemModelPropertiesHandler.registerProperties();
         ClientRegistry.bindTileEntityRenderer(ModTileEntityTypes.HONEY_TANK_TILE_ENTITY.get(), RenderHoneyTank::new);
+        ClientRegistry.bindTileEntityRenderer(ModTileEntityTypes.HONEY_GENERATOR_ENTITY.get(), RenderHoneyGenerator::new);
         event.enqueueWork(FluidRender::setHoneyRenderType);
     }
 }

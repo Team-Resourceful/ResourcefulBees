@@ -36,7 +36,7 @@ public class ModTileEntityTypes {
     public static final RegistryObject<TileEntityType<?>> CENTRIFUGE_CASING_ENTITY = TILE_ENTITY_TYPES.register("centrifuge_casing", () -> TileEntityType.Builder
             .create(() -> new CentrifugeCasingTileEntity(ModTileEntityTypes.CENTRIFUGE_CASING_ENTITY.get()), ModBlocks.CENTRIFUGE_CASING.get())
             .build(null));
-    public static final RegistryObject<TileEntityType<?>> HONEY_GENERATOR_ENTITY = TILE_ENTITY_TYPES.register("honey_generator", () -> TileEntityType.Builder
+    public static final RegistryObject<TileEntityType<HoneyGeneratorTileEntity>> HONEY_GENERATOR_ENTITY = TILE_ENTITY_TYPES.register("honey_generator", () -> TileEntityType.Builder
             .create(HoneyGeneratorTileEntity::new, ModBlocks.HONEY_GENERATOR.get())
             .build(null));
     public static final RegistryObject<TileEntityType<?>> CREATIVE_GEN_ENTITY = TILE_ENTITY_TYPES.register("creative_gen", () -> TileEntityType.Builder

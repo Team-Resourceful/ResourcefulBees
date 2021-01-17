@@ -60,8 +60,16 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
                 if (honeyData.doGenerateHoneyBlock() && honeyData.doHoneyBlockRecipe()) {
                     IRecipe<?> honeyBlock = this.makeHoneyBlockRecipe(honeyData);
                     IRecipe<?> honeyBottle = this.makeHoneyBottleRecipe(honeyData);
+                    IRecipe<?> bottleToBucket = this.makeBottleToBucketRecipe(honeyData);
+                    IRecipe<?> bucketToBottle = this.makeBucketToBottleRecipe(honeyData);
+                    IRecipe<?> blockToBucket = this.makeBlockToBucketRecipe(honeyData);
+                    IRecipe<?> bucketToBlock = this.makeBucketToBlockRecipe(honeyData);
                     getRecipeManager().recipes.computeIfAbsent(honeyBlock.getType(), t -> new HashMap<>()).put(honeyBlock.getId(), honeyBlock);
                     getRecipeManager().recipes.computeIfAbsent(honeyBottle.getType(), t -> new HashMap<>()).put(honeyBottle.getId(), honeyBottle);
+                    getRecipeManager().recipes.computeIfAbsent(bottleToBucket.getType(), t -> new HashMap<>()).put(bottleToBucket.getId(), bottleToBucket);
+                    getRecipeManager().recipes.computeIfAbsent(bucketToBottle.getType(), t -> new HashMap<>()).put(bucketToBottle.getId(), bucketToBottle);
+                    getRecipeManager().recipes.computeIfAbsent(blockToBucket.getType(), t -> new HashMap<>()).put(blockToBucket.getId(), blockToBucket);
+                    getRecipeManager().recipes.computeIfAbsent(bucketToBlock.getType(), t -> new HashMap<>()).put(bucketToBlock.getId(), bucketToBlock);
                 }
             });
         }
@@ -105,11 +113,66 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
         );
     }
 
+    private IRecipe<?> makeBottleToBucketRecipe(HoneyBottleData info) {
+        Ingredient honeyBottleItem = Ingredient.fromItems(info.getHoneyBottleRegistryObject().get());
+        Ingredient bucketItem = Ingredient.fromItems(Items.BUCKET);
+        return new ShapelessRecipe(
+                new ResourceLocation(ResourcefulBees.MOD_ID, info.getName() + "_bottle_to_bucket"),
+                "",
+                new ItemStack(info.getHoneyBucketItemRegistryObject().get()),
+                NonNullList.from(Ingredient.EMPTY,
+                        bucketItem, honeyBottleItem,
+                        honeyBottleItem, honeyBottleItem,
+                        honeyBottleItem
+                )
+        );
+    }
+
+    private IRecipe<?> makeBucketToBottleRecipe(HoneyBottleData info) {
+        Ingredient honeyBucketItem = Ingredient.fromItems(info.getHoneyBucketItemRegistryObject().get());
+        Ingredient bottleItem = Ingredient.fromItems(Items.GLASS_BOTTLE);
+        return new ShapelessRecipe(
+                new ResourceLocation(ResourcefulBees.MOD_ID, info.getName() + "_bucket_to_bottle"),
+                "",
+                new ItemStack(info.getHoneyBottleRegistryObject().get(), 4),
+                NonNullList.from(Ingredient.EMPTY,
+                        bottleItem, bottleItem,
+                        bottleItem, bottleItem,
+                        honeyBucketItem
+                )
+        );
+    }
+
+    private IRecipe<?> makeBlockToBucketRecipe(HoneyBottleData info) {
+        Ingredient honeyBlockItem = Ingredient.fromItems(info.getHoneyBlockItemRegistryObject().get());
+        Ingredient bucketItem = Ingredient.fromItems(Items.BUCKET);
+        return new ShapelessRecipe(
+                new ResourceLocation(ResourcefulBees.MOD_ID, info.getName() + "_block_to_bucket"),
+                "",
+                new ItemStack(info.getHoneyBucketItemRegistryObject().get()),
+                NonNullList.from(Ingredient.EMPTY,
+                        honeyBlockItem, bucketItem
+                )
+        );
+    }
+
+    private IRecipe<?> makeBucketToBlockRecipe(HoneyBottleData info) {
+        Ingredient honeyBucketItem = Ingredient.fromItems(info.getHoneyBucketItemRegistryObject().get());
+        return new ShapelessRecipe(
+                new ResourceLocation(ResourcefulBees.MOD_ID, info.getName() + "_bucket_to_block"),
+                "",
+                new ItemStack(info.getHoneyBlockItemRegistryObject().get()),
+                NonNullList.from(Ingredient.EMPTY,
+                        honeyBucketItem
+                )
+        );
+    }
+
     private IRecipe<?> makeHoneyBottleRecipe(HoneyBottleData info) {
         Ingredient honeyBlockItem = Ingredient.fromItems(info.getHoneyBlockItemRegistryObject().get());
         Ingredient bottleItem = Ingredient.fromItems(Items.GLASS_BOTTLE);
         return new ShapelessRecipe(
-                new ResourceLocation(ResourcefulBees.MOD_ID, info.getName() + "_honey"),
+                new ResourceLocation(ResourcefulBees.MOD_ID, info.getName() + "_honey_bottle"),
                 "",
                 new ItemStack(info.getHoneyBottleRegistryObject().get(), 4),
                 NonNullList.from(Ingredient.EMPTY,
