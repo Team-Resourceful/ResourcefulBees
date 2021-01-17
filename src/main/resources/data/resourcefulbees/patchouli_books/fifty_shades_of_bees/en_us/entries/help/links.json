@@ -7,6 +7,10 @@
         {
             "type": "text",
             "text": "book.resourcefulbees.help_category.links.1"
+        },
+        {
+            "type": "text",
+            "text": "book.resourcefulbees.help_category.links.2"
         }
     ]
 }
