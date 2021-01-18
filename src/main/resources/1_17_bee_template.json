@@ -55,39 +55,43 @@
         "apiaryOutputAmounts" : [1,2,3,4],
         "hasCentrifugeOutput": true,
         "recipeTime": 200,
-        "noPrimaryOutputWeight" : 0,
-        "noSecondaryOutputWeight" : 0,
-        "noBottleOutputWeight" : 1,
-        "outputs": [
+        "defaultPrimaryWeight": 1,
+        "defaultPrimaryCount": 2,
+        "primaryOutput": [
+            {"output": "minecraft:white_dye"},
+            {"output": "minecraft:orange_dye"},
+            {"output": "minecraft:magenta_dye"},
+            {"output": "minecraft:light_blue_dye"},
+            {"output": "minecraft:yellow_dye"},
+            {"output": "minecraft:lime_dye"},
+            {"output": "minecraft:pink_dye"},
+            {"output": "minecraft:gray_dye"},
+            {"output": "minecraft:light_gray_dye"},
+            {"output": "minecraft:cyan_dye"},
+            {"output": "minecraft:purple_dye"},
+            {"output": "minecraft:blue_dye"},
+            {"output": "minecraft:brown_dye"},
+            {"output": "minecraft:green_dye"},
+            {"output": "minecraft:red_dye"},
+            {"output": "minecraft:black_dye"}
+        ],
+        "secondaryOutput" : [
+            {"output": "minecraft:glowstone_dust", "weight": 1, "count":  4},
+            {"output": "none", "weight": 10}
+        ],
+        "bottleOutput": [
             {
-                "outputType": "PRIMARY",
-                "output": "minecraft:red_dye",
-                "outputWeight": 1,
-                "outputCount": 2
+                "output": "minecraft:potion",
+                "nbtData" : [ {"Potion": "water"} ],
+                "weight": 1,
+                "count": 1
             },
-            {
-                "outputType": "PRIMARY",
-                "output": "minecraft:white_dye",
-                "outputWeight": 1,
-                "outputCount": 2
-            },
-            {
-                "outputType": "PRIMARY",
-                "output": "minecraft:orange_dye",
-                "outputWeight": 1,
-                "outputCount": 2
-            },
-            {
-                "outputType": "BOTTLE",
-                "output": "minecraft:water_bottle",
-                "outputWeight": 1,
-                "outputCount": 1
-            }
+            {"output": "none", "weight": 1}
         ],
         "fluidOutput" : {
             "fluid" : "minecraft:water",
             "chance" : 1,
-            "amount" : 10
+            "amount" : 250
         }
     },
     "CombatData": {
