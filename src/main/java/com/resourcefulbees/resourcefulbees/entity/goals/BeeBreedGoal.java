@@ -7,11 +7,20 @@ import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.ai.goal.BreedGoal;
+import net.minecraft.entity.ai.goal.TradeWithPlayerGoal;
 import net.minecraft.entity.item.ExperienceOrbEntity;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.particles.IParticleData;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.stats.Stats;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.world.GameRules;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.BabyEntitySpawnEvent;
 
@@ -69,14 +78,34 @@ public class BeeBreedGoal extends BreedGoal {
             int p2_breedDelay = ((ICustomBee)this.field_75391_e).getBeeData().getBreedData().getBreedDelay();
             resetBreed(p1_breedDelay, p2_breedDelay);
 
-            ageableentity.setGrowingAge(childData.getBreedData().getChildGrowthDelay());
-            ageableentity.setLocationAndAngles(this.animal.getX(), this.animal.getY(), this.animal.getZ(), 0.0F, 0.0F);
-            this.world.addEntity(ageableentity);
-            this.world.setEntityState(this.animal, (byte)18);
-            if (this.world.getGameRules().getBoolean(GameRules.DO_MOB_LOOT)) {
-                this.world.addEntity(new ExperienceOrbEntity(this.world, this.animal.getX(), this.animal.getY(), this.animal.getZ(), this.animal.getRNG().nextInt(7) + 1));
-            }
 
+            float nextFloat = world.rand.nextFloat();
+            if (childData.getBreedData().getBreedChance() >= nextFloat) {
+                ageableentity.setGrowingAge(childData.getBreedData().getChildGrowthDelay());
+                ageableentity.setLocationAndAngles(this.animal.getX(), this.animal.getY(), this.animal.getZ(), 0.0F, 0.0F);
+                this.world.addEntity(ageableentity);
+                this.world.setEntityState(this.animal, (byte)18);
+                if (this.world.getGameRules().getBoolean(GameRules.DO_MOB_LOOT)) {
+                    this.world.addEntity(new ExperienceOrbEntity(this.world, this.animal.getX(), this.animal.getY(), this.animal.getZ(), this.animal.getRNG().nextInt(7) + 1));
+                }
+                this.animal.playSound(SoundEvents.BLOCK_BEEHIVE_ENTER, 2.0f, 1.0f);
+                spawnParticles(ParticleTypes.HAPPY_VILLAGER);
+                System.out.println("success");
+            }else {
+                this.animal.playSound(SoundEvents.ENTITY_BEE_HURT, 2.0f, 1.0f);
+                spawnParticles(ParticleTypes.ANGRY_VILLAGER);
+                System.out.println("failure");
+            }
+        }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    protected void spawnParticles(IParticleData p_213718_1_) {
+        for(int i = 0; i < 5; ++i) {
+            double d0 = world.rand.nextGaussian() * 0.02D;
+            double d1 = world.rand.nextGaussian() * 0.02D;
+            double d2 = world.rand.nextGaussian() * 0.02D;
+            this.world.addParticle(p_213718_1_, this.animal.getParticleX(1.0D), this.animal.getRandomBodyY() + 1.0D, this.animal.getParticleZ(1.0D), d0, d1, d2);
         }
     }
 
