@@ -93,20 +93,7 @@
     "CombatData": {
         "isPassive": false,
         "removeStingerOnAttack": true,
-        "attackDamage": 1,
-        "inflictsEffect": true,
-        "effectData" : [
-            {
-                "id" : "minecraft:poison",
-                "level" : 0,
-                "duration" : 20
-            },
-            {
-                "id" : "minecraft:hunger",
-                "level" : 0,
-                "duration" : 20
-            }
-        ]
+        "attackDamage": 1
     },
     "SpawnData": {
         "canSpawnInWorld": true,
@@ -118,7 +105,7 @@
         "lightLevel": "ANY"
     },
     "MutationData": {
-        "hasMutation":true,
+        "hasMutation": true,
         "mutationCount":10,
         "mutations" : [
             {
@@ -151,6 +138,7 @@
             {
                 "primaryParent": "Skeleton",
                 "secondaryParent": "Creeper",
+                "successChance" : 0.5,
                 "breedWeight": 1
             },
             {
@@ -162,6 +150,21 @@
     },
     "TraitData": {
         "hasTraits": true,
-        "traits": ["wither","blaze","can_swim","creeper","zombie","pigman","ender","nether", "oreo", "slimy"]
+        "specialTraits": ["wither","blaze","can_swim","creeper","zombie","pigman","ender","nether", "oreo", "slimy"],
+        "damageImmunities" : ["poison", "inFire", "onFire", "lava", "hotFloor"],
+        "damageType": "cactus",
+        "inflictsEffectOnAttack" : true,
+        "effectData" : [
+            {
+                "id": "poison",
+                "level" : 0,
+                "duration": 60
+            },
+            {
+                "id": "hunger",
+                "level" : 1,
+                "duration": 10
+            }
+        ]
     }
 }
