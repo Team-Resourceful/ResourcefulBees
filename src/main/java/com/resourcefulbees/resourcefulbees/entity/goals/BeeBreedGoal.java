@@ -19,9 +19,11 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.world.GameRules;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.extensions.IForgeWorldServer;
 import net.minecraftforge.event.entity.living.BabyEntitySpawnEvent;
 
 public class BeeBreedGoal extends BreedGoal {
@@ -100,12 +102,17 @@ public class BeeBreedGoal extends BreedGoal {
     }
 
     protected void spawnParticles(IParticleData p_213718_1_) {
-        if (world.isRemote()) {
+        if (!world.isRemote()) {
+            ServerWorld worldServer = (ServerWorld)world;
             for(int i = 0; i < 5; ++i) {
                 double d0 = world.rand.nextGaussian() * 0.02D;
                 double d1 = world.rand.nextGaussian() * 0.02D;
                 double d2 = world.rand.nextGaussian() * 0.02D;
-                this.world.addParticle(p_213718_1_, this.animal.getParticleX(1.0D), this.animal.getRandomBodyY() + 1.0D, this.animal.getParticleZ(1.0D), d0, d1, d2);
+                worldServer.spawnParticle(p_213718_1_,
+                        this.animal.getParticleX(1.0D),
+                        this.animal.getRandomBodyY(),
+                        this.animal.getParticleZ(1.0D),
+                        50, d0, d1, d2, 0.1f);
             }
         }
     }
