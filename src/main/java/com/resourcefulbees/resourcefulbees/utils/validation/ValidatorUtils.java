@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 import static com.resourcefulbees.resourcefulbees.ResourcefulBees.LOGGER;
 
 public class ValidatorUtils {
-    public static final Pattern SINGLE_RESOURCE_PATTERN = Pattern.compile("^([\\w,\\-,\\.]+):([\\w,\\-,\\.,\\/]+)$", Pattern.CASE_INSENSITIVE);
+    public static final Pattern SINGLE_RESOURCE_PATTERN = Pattern.compile("^([\\w\\-\\.]+):([\\w\\-\\.\\/]+)$", Pattern.CASE_INSENSITIVE);
     public static final Pattern TAG_RESOURCE_PATTERN = Pattern.compile("^(tag:)(\\w+):(\\w+/\\w+|\\w+)$", Pattern.CASE_INSENSITIVE);
     public static final Pattern ENTITY_RESOURCE_PATTERN = Pattern.compile("^(entity:)(\\w+):(\\w+/\\w+|\\w+)$", Pattern.CASE_INSENSITIVE);
 
