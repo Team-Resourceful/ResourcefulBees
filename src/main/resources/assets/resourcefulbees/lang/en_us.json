@@ -234,6 +234,8 @@
 	"entity.resourcefulbees.kitten_bee": "Kitten Bee",
 	"entity.resourcefulbees.dragon_bee": "Dragon Bee",
 
+	"effect.resourcefulbees.calming" : "Calming",
+
 	"entity.minecraft.villager.resourcefulbees.beekeeper": "Beekeeper",
 	"block.resourcefulbees.mech_centrifuge.tooltip.info": "Hold SHIFT & right-click block to process honeycombs.",
 	"block.resourcefulbees.generator.tooltip.info": "Generates RF using honey bottles.",
