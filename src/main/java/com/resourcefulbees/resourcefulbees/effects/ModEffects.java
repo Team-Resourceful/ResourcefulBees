@@ -11,5 +11,5 @@ public class ModEffects {
 
     public static final DeferredRegister<Effect> EFFECTS = DeferredRegister.create(ForgeRegistries.POTIONS, ResourcefulBees.MOD_ID);
 
-    public static final RegistryObject<Effect> CALMING = EFFECTS.register("calming", () -> new Calming(EffectType.BENEFICIAL, 8912845));
+    public static final RegistryObject<Effect> CALMING = EFFECTS.register("calming", () -> new Calming(EffectType.BENEFICIAL, 16763783));
 }
