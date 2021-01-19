@@ -3,6 +3,7 @@ package com.resourcefulbees.resourcefulbees.entity.goals;
 import com.resourcefulbees.resourcefulbees.api.ICustomBee;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
+import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.entity.AgeableEntity;
@@ -54,6 +55,7 @@ public class BeeBreedGoal extends BreedGoal {
         String parent1 = ((ICustomBee)this.field_75391_e).getBeeType();
         String parent2 = ((ICustomBee)this.animal).getBeeType();
         CustomBeeData childData = BeeRegistry.getRegistry().getWeightedChild(parent1, parent2);
+        float breedChance = BeeRegistry.getRegistry().getBreedChance(parent1, parent2, childData);
         AgeableEntity ageableentity = bee.createSelectedChild(childData);
 
         final BabyEntitySpawnEvent event = new BabyEntitySpawnEvent(animal, field_75391_e, ageableentity);
@@ -82,7 +84,7 @@ public class BeeBreedGoal extends BreedGoal {
 
 
             float nextFloat = world.rand.nextFloat();
-            if (childData.getBreedData().getBreedChance() >= nextFloat) {
+            if (breedChance >= nextFloat) {
                 ageableentity.setGrowingAge(childData.getBreedData().getChildGrowthDelay());
                 ageableentity.setLocationAndAngles(this.animal.getX(), this.animal.getY(), this.animal.getZ(), 0.0F, 0.0F);
                 this.world.addEntity(ageableentity);
@@ -90,13 +92,9 @@ public class BeeBreedGoal extends BreedGoal {
                 if (this.world.getGameRules().getBoolean(GameRules.DO_MOB_LOOT)) {
                     this.world.addEntity(new ExperienceOrbEntity(this.world, this.animal.getX(), this.animal.getY(), this.animal.getZ(), this.animal.getRNG().nextInt(7) + 1));
                 }
-                this.animal.playSound(SoundEvents.BLOCK_BEEHIVE_ENTER, 2.0f, 1.0f);
-                spawnParticles(ParticleTypes.HAPPY_VILLAGER);
-                System.out.println("success");
             }else {
                 this.animal.playSound(SoundEvents.ENTITY_BEE_HURT, 2.0f, 1.0f);
                 spawnParticles(ParticleTypes.ANGRY_VILLAGER);
-                System.out.println("failure");
             }
         }
     }

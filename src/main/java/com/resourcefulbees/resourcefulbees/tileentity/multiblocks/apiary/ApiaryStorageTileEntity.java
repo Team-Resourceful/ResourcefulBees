@@ -231,6 +231,7 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
     public boolean breedComplete(String p1, String p2) {
         if (inventoryHasSpace()) {
             CustomBeeData childBeeData = BEE_REGISTRY.getWeightedChild(p1, p2);
+            float breedChance = BeeRegistry.getRegistry().getBreedChance(p1, p2, childBeeData);
             EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(childBeeData.getEntityTypeRegistryID());
 
             if (world != null && entityType != null) {
@@ -252,7 +253,7 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
                     beeJar.setTag(nbt);
                     // if failed, will deposit empty bee jar
                     float nextFloat = world.rand.nextFloat();
-                    if (childBeeData.getBreedData().getBreedChance() >= nextFloat) {
+                    if (breedChance >= nextFloat) {
                         return depositItemStack(beeJar);
                     } else {
                         return depositItemStack(emptyBeeJar);
