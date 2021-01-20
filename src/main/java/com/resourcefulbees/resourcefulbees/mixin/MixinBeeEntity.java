@@ -6,10 +6,10 @@ import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryT
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.BeeEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTUtil;
+import net.minecraft.potion.Effects;
 import net.minecraft.tileentity.BeehiveTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.village.PointOfInterest;
 import net.minecraft.village.PointOfInterestManager;
@@ -21,7 +21,6 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Comparator;
@@ -40,25 +39,34 @@ public abstract class MixinBeeEntity extends AnimalEntity {
     public BlockPos hivePos;
 
     @Shadow(aliases = "func_226409_eA_()Z")
-    public boolean hasHive() { return this.hivePos != null; }
+    public boolean hasHive() {
+        return this.hivePos != null;
+    }
 
     @Inject(at = @At("HEAD"), method = "doesHiveHaveSpace(Lnet/minecraft/util/math/BlockPos;)Z", cancellable = true)
     private void doesHiveHaveSpace(BlockPos pos, CallbackInfoReturnable<Boolean> callback) {
         TileEntity tileentity = this.world.getTileEntity(pos);
         if ((tileentity instanceof TieredBeehiveTileEntity && !((TieredBeehiveTileEntity) tileentity).isFullOfBees())
-            || (tileentity instanceof ApiaryTileEntity && !((ApiaryTileEntity) tileentity).isFullOfBees())) {
+                || (tileentity instanceof ApiaryTileEntity && !((ApiaryTileEntity) tileentity).isFullOfBees())) {
             callback.setReturnValue(true);
         }
     }
 
+    public boolean isInvulnerableTo(DamageSource p_180431_1_) {
+        if (getActivePotionEffect(Effects.WATER_BREATHING) != null && p_180431_1_ == DamageSource.DROWN) {
+            return true;
+        }
+        return super.isInvulnerableTo(p_180431_1_);
+    }
+
     @Inject(at = @At("HEAD"), method = "isHiveValid()Z", cancellable = true)
     public void isHiveValid(CallbackInfoReturnable<Boolean> callback) {
-        if(this.hasHive()) {
+        if (this.hasHive()) {
             BlockPos pos = this.hivePos;
             if (pos != null) {
                 TileEntity blockEntity = this.world.getTileEntity(this.hivePos);
                 if ((blockEntity instanceof TieredBeehiveTileEntity && ((TieredBeehiveTileEntity) blockEntity).isAllowedBee())
-                    || (blockEntity instanceof ApiaryTileEntity && ((ApiaryTileEntity) blockEntity).isAllowedBee())) {
+                        || (blockEntity instanceof ApiaryTileEntity && ((ApiaryTileEntity) blockEntity).isAllowedBee())) {
                     callback.setReturnValue(true);
                 }
             }
@@ -68,7 +76,7 @@ public abstract class MixinBeeEntity extends AnimalEntity {
     @Mixin(BeeEntity.EnterBeehiveGoal.class)
     abstract static class MixinEnterBeehiveGoal {
 
-        @Shadow(aliases = { "this$0" })
+        @Shadow(aliases = {"this$0"})
         private BeeEntity beeEntity;
 
         @Inject(at = @At("HEAD"), method = "canBeeStart()Z", cancellable = true)
@@ -117,7 +125,7 @@ public abstract class MixinBeeEntity extends AnimalEntity {
     @Mixin(BeeEntity.UpdateBeehiveGoal.class)
     public static abstract class MixinUpdateBeehiveGoal {
 
-        @Shadow(aliases = { "this$0" })
+        @Shadow(aliases = {"this$0"})
         private BeeEntity beeEntity;
 
         @Inject(at = @At(value = "HEAD"), method = "getNearbyFreeHives()Ljava/util/List;", cancellable = true)
@@ -137,11 +145,11 @@ public abstract class MixinBeeEntity extends AnimalEntity {
     @Mixin(BeeEntity.FindBeehiveGoal.class)
     public static abstract class MixinFindBeehiveGoal {
 
-        @Shadow(aliases = { "this$0" })
+        @Shadow(aliases = {"this$0"})
         private BeeEntity beeEntity;
 
         @Shadow
-        public boolean isCloseEnough(BlockPos pos){
+        public boolean isCloseEnough(BlockPos pos) {
             throw new IllegalStateException("Mixin failed to shadow isCloseEnough()");
         }
 

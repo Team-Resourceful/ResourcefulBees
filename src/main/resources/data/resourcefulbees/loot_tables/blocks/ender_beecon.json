@@ -5,13 +5,36 @@
       "rolls": 1,
       "entries": [
         {
-          "type": "minecraft:item",
-          "name": "resourcefulbees:ender_beecon"
-        }
-      ],
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "functions": [
+                {
+                  "function": "minecraft:copy_nbt",
+                  "source": "block_entity",
+                  "ops": [
+                    {
+                      "source": "fluid",
+                      "target": "fluid",
+                      "op": "replace"
+                    },
+                    {
+                      "source": "active_effects",
+                      "target": "active_effects",
+                      "op": "replace"
+                    },
+                    {
+                      "source": "tier",
+                      "target": "tier",
+                      "op": "replace"
+                    }
+                  ]
+                }
+              ],
+              "name": "resourcefulbees:ender_beecon"
+            }
+          ]
         }
       ]
     }

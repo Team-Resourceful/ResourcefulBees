@@ -113,6 +113,8 @@
 	"block.resourcefulbees.centrifuge.tooltip.info": "Converts Honeycombs into resources using RF.",
 	"block.resourcefulbees.queen_bee_banner": "Queen Bee Banner",
 	"block.resourcefulbees.ender_beecon": "Ender Beecon",
+	"block.resourcefulbees.ender_beecon.primary": "Bee Effects",
+	"block.resourcefulbees.ender_beecon.drain": "Drain: ",
 	"block.resourcefulbees.purpur_honey_tank": "Purpur Honey Tank",
 	"block.resourcefulbees.nether_honey_tank": "Nether Honey Tank",
 	"block.resourcefulbees.wooden_honey_tank": "Wooden Honey Tank",

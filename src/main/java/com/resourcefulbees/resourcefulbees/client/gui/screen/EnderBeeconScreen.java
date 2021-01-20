@@ -4,15 +4,15 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.container.EnderBeeconContainer;
-import com.resourcefulbees.resourcefulbees.effects.ModEffects;
+import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
+import com.resourcefulbees.resourcefulbees.network.packets.UpdateBeeconMessage;
+import com.resourcefulbees.resourcefulbees.tileentity.EnderBeeconTileEntity;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.inventory.BeaconScreen;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.widget.button.AbstractButton;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.potion.Effect;
-import net.minecraft.potion.Effects;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
@@ -22,23 +22,24 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
+import java.util.LinkedList;
+import java.util.List;
 
 public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
 
+    private EnderBeeconTileEntity tileEntity;
+
     public EnderBeeconScreen(EnderBeeconContainer screenContainer, PlayerInventory inventory, ITextComponent titleIn) {
         super(screenContainer, inventory, titleIn);
+        this.tileEntity = screenContainer.enderBeeconTileEntity;
         preInit();
     }
 
+    private static final ITextComponent primaryLabel = new TranslationTextComponent("block.resourcefulbees.ender_beecon.primary");
+    private static final ITextComponent drainLabel = new TranslationTextComponent("block.resourcefulbees.ender_beecon.drain");
     private static final ResourceLocation BUTTON_CALMING = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/ender_beecon/calming_button.png");
-    private static final ResourceLocation BUTTON_WATER = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/ender_beecon/calming_button.png");
-    private static final ResourceLocation BUTTON_FIRE = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/ender_beecon/calming_button.png");
-    private static final ResourceLocation BUTTON_REGEN = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/ender_beecon/calming_button.png");
 
-    private PowerButton calmingButton;
-    private PowerButton waterBreathingButton;
-    private PowerButton fireResistanceButton;
-    private PowerButton regenerationButton;
+    List<PowerButton> powerButtons = new LinkedList<>();
 
     private void preInit() {
         this.xSize = 230;
@@ -53,14 +54,19 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
         buttons.clear();
         int i = this.guiLeft;
         int j = this.guiTop;
+        int buttonX = i + 26;
+        int buttonY = j + 36;
+        int buttonWidth = 22;
+        int padding = 16;
+        int buttonStartX = buttonX;
 
-        calmingButton = this.addButton(new PowerButton(i + 18, j + 36, ModEffects.CALMING.get(), BUTTON_CALMING));
-
-        waterBreathingButton = this.addButton(new PowerButton(i + 43, j + 36, Effects.WATER_BREATHING, BUTTON_CALMING));
-
-        fireResistanceButton = this.addButton(new PowerButton(i + 68, j + 36, Effects.FIRE_RESISTANCE, BUTTON_CALMING));
-
-        regenerationButton = this.addButton(new PowerButton(i + 93, j + 36, Effects.REGENERATION, BUTTON_CALMING));
+        for (EnderBeeconTileEntity.BeeconEffect effect : tileEntity.getEffects()) {
+            PowerButton button = this.addButton(new PowerButton(buttonStartX, buttonY, effect.effect, BUTTON_CALMING));
+            button.active = true;
+            button.setSelected(effect.active);
+            powerButtons.add(button);
+            buttonStartX += buttonWidth + padding;
+        }
     }
 
     @Override
@@ -73,10 +79,19 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
             int j = this.guiTop;
             this.drawTexture(matrix, i, j, 0, 0, this.xSize, this.ySize);
         }
-        calmingButton.active = true;
-        waterBreathingButton.active = true;
-        fireResistanceButton.active = true;
-        regenerationButton.active = true;
+    }
+
+    protected void drawForeground(MatrixStack matrixStack, int xPos, int yPos) {
+        super.drawForeground(matrixStack, xPos, yPos);
+        drawCenteredText(matrixStack, this.textRenderer, primaryLabel, 62, 10, 14737632);
+        this.textRenderer.draw(matrixStack, tileEntity.getDrain() + "", 50, 50, 16751628);
+
+        for (PowerButton widget : this.powerButtons) {
+            if (widget.isHovered()) {
+                widget.renderToolTip(matrixStack, xPos - this.guiLeft, yPos - this.guiTop);
+                break;
+            }
+        }
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -102,7 +117,7 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
                 j += this.width * 3;
             }
 
-            this.drawTexture(matrixStack, this.x, this.y, j, i, this.width, this.height);
+            this.drawTexture(matrixStack, this.x, this.y, j, i, this.width, this.height, 22 * 4, 22);
             this.renderExtra(matrixStack);
         }
 
@@ -136,12 +151,10 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
         }
 
         public void onPress() {
-            if (!this.isSelected()) {
-                EnderBeeconScreen.this.buttons.clear();
-                EnderBeeconScreen.this.children.clear();
-                EnderBeeconScreen.this.init();
-                EnderBeeconScreen.this.tick();
-            }
+            NetPacketHandler.sendToServer(new UpdateBeeconMessage(effect.getRegistryName(), !this.isSelected(), tileEntity.getPos()));
+            this.setSelected(!this.isSelected());
+            tileEntity.toggleEffect(effect);
+            EnderBeeconScreen.this.tick();
         }
 
         public void renderToolTip(MatrixStack matrixStack, int xPos, int yPos) {
