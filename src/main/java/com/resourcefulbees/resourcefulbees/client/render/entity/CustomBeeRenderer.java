@@ -36,7 +36,7 @@ public class CustomBeeRenderer extends MobRenderer<CustomBeeEntity, CustomBeeMod
             addLayer(new BeeLayer(this, LayerType.SECONDARY, beeData.getColorData().getModelType(), beeData.getColorData()));
         }else {
             if (beeData.getColorData().getModelType() != ModelTypes.DEFAULT) {
-                addLayer(new AdditionLayer<>(this, beeData.getColorData().getModelType()));
+                addLayer(new AdditionLayer<>(this, beeData.getColorData().getModelType(), angryTexture, baseTexture));
             }
         }
         if (beeData.getColorData().isGlowing() || beeData.getColorData().isEnchanted()) {

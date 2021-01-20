@@ -215,11 +215,11 @@ public class DataGen {
         }
         builder.append("]\n}");
 
-        String combTagPath = BeeSetup.RESOURCE_PATH.toString() + "/data/resourcefulbees/tags/items";
-        String combTagFile = "resourceful_honey_bottle.json";
+        String combTagPath = BeeSetup.RESOURCE_PATH.toString() + "/data/forge/tags/items";
+        String combTagFile = "honey_bottle.json";
         try {
             writeFile(combTagPath, combTagFile, builder.toString());
-            LOGGER.info("Resourceful Honey Bottle Item Tag Generated!");
+            LOGGER.info("Honey Bottle Item Tag Generated!");
         } catch (IOException e) {
             LOGGER.error("Could not generate resourceful honey bottle item tag!");
         }

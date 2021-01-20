@@ -60,7 +60,7 @@ public class ModTileEntityTypes {
     public static final RegistryObject<TileEntityType<?>> ELITE_CENTRIFUGE_CASING_ENTITY = TILE_ENTITY_TYPES.register("elite_centrifuge_casing", () -> TileEntityType.Builder
             .create(() -> new EliteCentrifugeCasingTileEntity(ModTileEntityTypes.ELITE_CENTRIFUGE_CASING_ENTITY.get()), ModBlocks.ELITE_CENTRIFUGE_CASING.get())
             .build(null));
-    public static final RegistryObject<TileEntityType<?>> ENDER_BEECON_TILE_ENTITY = TILE_ENTITY_TYPES.register("ender_beecon", () -> TileEntityType.Builder
+    public static final RegistryObject<TileEntityType<EnderBeeconTileEntity>> ENDER_BEECON_TILE_ENTITY = TILE_ENTITY_TYPES.register("ender_beecon", () -> TileEntityType.Builder
             .create(() -> new EnderBeeconTileEntity(ModTileEntityTypes.ENDER_BEECON_TILE_ENTITY.get()), ModBlocks.ENDER_BEECON.get())
             .build(null));
     public static final RegistryObject<TileEntityType<HoneyTankTileEntity>> HONEY_TANK_TILE_ENTITY = TILE_ENTITY_TYPES.register("honey_tank", () -> TileEntityType.Builder
