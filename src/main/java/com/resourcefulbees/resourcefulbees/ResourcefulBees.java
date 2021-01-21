@@ -85,6 +85,7 @@ public class ResourcefulBees {
 
     private void ServerLoaded(FMLServerStartedEvent event) {
         BeeRegistry.getRegistry().getBees().forEach(((s, beeData) -> SecondPhaseValidator.validateMutation(beeData)));
+        ModPotions.createMixes();
     }
 
     private void entityDies(LivingDeathEvent event) {

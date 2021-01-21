@@ -57,6 +57,7 @@ public class RegistryHandler {
         ENTITY_TYPES.register(bus);
         ModTileEntityTypes.TILE_ENTITY_TYPES.register(bus);
         ModPOIs.POIS.register(bus);
+        ModPotions.POTIONS.register(bus);
         ModContainers.CONTAINER_TYPES.register(bus);
         ModRecipeSerializers.RECIPE_SERIALIZERS.register(bus);
         ModVillagerProfessions.PROFESSIONS.register(bus);

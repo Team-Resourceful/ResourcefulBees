@@ -66,7 +66,7 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
         int buttonWidth = 22;
         int padding = 16;
         int buttonStartX = buttonX;
-
+        powerButtons.clear();
         for (EnderBeeconTileEntity.BeeconEffect effect : tileEntity.getEffects()) {
             PowerButton button = this.addButton(new PowerButton(buttonStartX, buttonY, effect.effect, BUTTON_CALMING));
             button.active = true;

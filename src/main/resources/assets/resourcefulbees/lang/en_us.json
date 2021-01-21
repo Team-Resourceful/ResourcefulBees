@@ -239,8 +239,6 @@
 	"entity.resourcefulbees.kitten_bee": "Kitten Bee",
 	"entity.resourcefulbees.dragon_bee": "Dragon Bee",
 
-	"effect.resourcefulbees.calming" : "Calming",
-
 	"entity.minecraft.villager.resourcefulbees.beekeeper": "Beekeeper",
 	"block.resourcefulbees.mech_centrifuge.tooltip.info": "Hold SHIFT & right-click block to process honeycombs.",
 	"block.resourcefulbees.generator.tooltip.info": "Generates RF using honey bottles.",
@@ -257,6 +255,17 @@
 	"block.resourcefulbees.centrifuge.tooltip.capabilities": "Any block in the multiblock will import/export items and energy",
 	"block.resourcefulbees.beehive.tooltip.bees": "Bees:",
 	"block.resourcefulbees.beehive.tooltip.honeycombs": "Honeycombs:",
+
+
+	"effect.resourcefulbees.calming" : "Calming",
+	"item.minecraft.potion.effect.calming" : "Calming Potion",
+	"item.minecraft.potion.effect.long_calming" : "Calming Potion",
+	"item.minecraft.splash_potion.effect.calming" : "Splash Potion of Calming",
+	"item.minecraft.splash_potion.effect.long_calming" : "Splash Potion of Calming",
+	"item.minecraft.lingering_potion.effect.calming" : "Lingering Potion of Calming",
+	"item.minecraft.lingering_potion.effect.long_calming" : "Lingering Potion of Calming",
+	"item.minecraft.tipped_arrow.effect.calming" : "Arrow of Calming",
+	"item.minecraft.tipped_arrow.effect.long_calming" : "Arrow of Calming",
 
 	"book.resourcefulbees.name": "Fifty Shades of Bees",
 	"book.resourcefulbees.landing_text": "Welcome Resourceful Beekeeper! This guide is much less filled with bee erotica than it is information about beekeeping. We hope that it serves you well in understanding the basics.$(br)$(o)$(#ff0000)Please keep in mind that MOST, if not ALL, bees are added by pack developers!$()",
