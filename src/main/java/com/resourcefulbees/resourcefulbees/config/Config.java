@@ -150,11 +150,11 @@ public class Config {
             BEECON_CALMING_VALUE = COMMON_BUILDER.comment("\nMultiplier for the drain rate for the Ender Beecon when the Calming effect is active.")
                     .defineInRange("beeconCalmingValue", 2d, 1d, 128d);
             BEECON_WATER_BREATHING_VALUE = COMMON_BUILDER.comment("\nMultiplier for the drain rate for the Ender Beecon when the Water Breathing effect is active.")
-                    .defineInRange("beeconWaterBreathingValue", 2d, 1d, 128d);
+                    .defineInRange("beeconWaterBreathingValue", 1.5d, 1d, 128d);
             BEECON_FIRE_RESISTANCE_VALUE = COMMON_BUILDER.comment("\nMultiplier for the drain rate for the Ender Beecon when the Fire Resistance effect is active.")
                     .defineInRange("beeconFireResistanceValue", 2d, 1d, 128d);
             BEECON_REGENERATION_VALUE = COMMON_BUILDER.comment("\nMultiplier for the drain rate for the Ender Beecon when the Regeneration effect is active.")
-                    .defineInRange("beeconRegenerationValue", 4d, 1d, 128d);
+                    .defineInRange("beeconRegenerationValue", 2.5d, 1d, 128d);
             BEECON_RANGE_PER_EFFECT = COMMON_BUILDER.comment("\nRange in blocks added for each effect that is currently active.")
                     .defineInRange("beeconRangePerEffect", 10, 1, 25);
             BEECON_BASE_DRAIN = COMMON_BUILDER.comment("\nThe base drain rate for the Ender Beecon when an effect is active.")
