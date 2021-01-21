@@ -3,10 +3,13 @@ package com.resourcefulbees.resourcefulbees.client.gui.screen;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
+import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.container.EnderBeeconContainer;
 import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
 import com.resourcefulbees.resourcefulbees.network.packets.UpdateBeeconMessage;
 import com.resourcefulbees.resourcefulbees.tileentity.EnderBeeconTileEntity;
+import com.resourcefulbees.resourcefulbees.utils.RenderCuboid;
+import com.resourcefulbees.resourcefulbees.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.widget.button.AbstractButton;
@@ -20,6 +23,7 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nonnull;
 import java.util.LinkedList;
@@ -37,6 +41,8 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
 
     private static final ITextComponent primaryLabel = new TranslationTextComponent("block.resourcefulbees.ender_beecon.primary");
     private static final ITextComponent drainLabel = new TranslationTextComponent("block.resourcefulbees.ender_beecon.drain");
+    private static final ITextComponent rangeLabel = new TranslationTextComponent("block.resourcefulbees.ender_beecon.range");
+    private static final ITextComponent activeLabel = new TranslationTextComponent("block.resourcefulbees.ender_beecon.is_active");
     private static final ResourceLocation BUTTON_CALMING = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/ender_beecon/calming_button.png");
 
     List<PowerButton> powerButtons = new LinkedList<>();
@@ -54,7 +60,7 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
         buttons.clear();
         int i = this.guiLeft;
         int j = this.guiTop;
-        int buttonX = i + 26;
+        int buttonX = i + 24;
         int buttonY = j + 36;
         int buttonWidth = 22;
         int padding = 16;
@@ -79,18 +85,63 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
             int j = this.guiTop;
             this.drawTexture(matrix, i, j, 0, 0, this.xSize, this.ySize);
         }
+        drawFluidTank(matrix, mouseX, mouseY);
     }
 
-    protected void drawForeground(MatrixStack matrixStack, int xPos, int yPos) {
-        super.drawForeground(matrixStack, xPos, yPos);
-        drawCenteredText(matrixStack, this.textRenderer, primaryLabel, 62, 10, 14737632);
-        this.textRenderer.draw(matrixStack, tileEntity.getDrain() + "", 50, 50, 16751628);
+    private void drawFluidTank(MatrixStack matrix, int mouseX, int mouseY) {
+        if (!tileEntity.fluidTank.isEmpty()) {
+
+            //init stuff
+            FluidStack stack = tileEntity.fluidTank.getFluid();
+            ResourceLocation texture = stack.getFluid().getAttributes().getStillTexture();
+            TextureAtlasSprite fluid = RenderUtils.getStillFluidTexture(stack);
+            this.client.getTextureManager().bindTexture(texture);
+            //prep color
+            int color = stack.getFluid().getAttributes().getColor();
+            float red = RenderCuboid.INSTANCE.getRed(color);
+            float green = RenderCuboid.INSTANCE.getGreen(color);
+            float blue = RenderCuboid.INSTANCE.getBlue(color);
+            float alpha = RenderCuboid.INSTANCE.getAlpha(color);
+            RenderSystem.color4f(red, green, blue, alpha);
+            int tankPosX = this.guiLeft + 207;
+            int tankPosY = this.guiTop + 92;
+            int tankHeight = 62;
+            int tankWidth = 14;
+
+            int effectiveHeight = stack.getAmount() / tileEntity.fluidTank.getCapacity() * tankHeight;
+
+            this.drawTexture(matrix, tankPosX, tankPosY - effectiveHeight, 0, 0, tankWidth, effectiveHeight, fluid.getWidth(), fluid.getHeight());
+        }
+    }
+
+    protected void drawForeground(MatrixStack matrixStack, int mouseX, int mouseY) {
+        super.drawForeground(matrixStack, mouseX, mouseY);
+        int buttonX = 24 + 11;
+        int buttonY = 36 + 25;
+        int buttonWidth = 22;
+        int padding = 16;
+        int buttonStartX = buttonX;
+        drawCenteredText(matrixStack, this.textRenderer, primaryLabel, 92, 24, 14737632);
+        this.textRenderer.draw(matrixStack, drainLabel, 13, 90, 14737632);
+        this.textRenderer.draw(matrixStack, tileEntity.getDrain() + " mb/t", 44, 90, 16751628);
+        this.textRenderer.draw(matrixStack, rangeLabel, 90, 90, 14737632);
+        this.textRenderer.draw(matrixStack, tileEntity.getRange() + " blocks", 125, 90, 34815);
+        this.textRenderer.draw(matrixStack, activeLabel, 13, 78, 14737632);
+        if (tileEntity.doEffects()) {
+            this.textRenderer.draw(matrixStack, "Yes", 63, 78, 47104);
+        } else {
+            this.textRenderer.draw(matrixStack, "No", 63, 78, 12320768);
+        }
 
         for (PowerButton widget : this.powerButtons) {
-            if (widget.isHovered()) {
-                widget.renderToolTip(matrixStack, xPos - this.guiLeft, yPos - this.guiTop);
-                break;
+            EnderBeeconTileEntity.BeeconEffect effect = tileEntity.getEffect(widget.effect);
+            if (Config.BEECON_DO_MULTIPLIER.get()) {
+                drawCenteredText(matrixStack, this.textRenderer, new StringTextComponent("x" + effect.value), buttonStartX, buttonY, 14737632);
+            } else {
+                drawCenteredText(matrixStack, this.textRenderer, new StringTextComponent("+" + effect.value), buttonStartX, buttonY, 14737632);
             }
+            buttonStartX += buttonWidth + padding;
+            if (widget.isHovered()) widget.renderToolTip(matrixStack, mouseX - this.guiLeft, mouseY - this.guiTop);
         }
     }
 

@@ -7,6 +7,7 @@ import com.resourcefulbees.resourcefulbees.container.EnderBeeconContainer;
 import com.resourcefulbees.resourcefulbees.effects.ModEffects;
 import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
 import com.resourcefulbees.resourcefulbees.network.packets.SyncGUIMessage;
+import com.resourcefulbees.resourcefulbees.network.packets.UpdateClientApiaryMessage;
 import io.netty.buffer.Unpooled;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -23,7 +24,6 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
-import net.minecraft.tileentity.BeaconTileEntity;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
@@ -35,11 +35,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
@@ -123,6 +125,9 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
         } else {
             blockpos = new BlockPos(i, this.worldHeight + 1, k);
         }
+        if (doEffects()) {
+            fluidTank.drain(getDrain(), IFluidHandler.FluidAction.EXECUTE);
+        }
 
         BeamSegment segment = this.beams.isEmpty() ? null : this.beams.get(this.beams.size() - 1);
         int l = this.world.getHeight(Heightmap.Type.WORLD_SURFACE, i, k);
@@ -191,6 +196,10 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
             buffer.writeFluidStack(fluidTank.getFluid());
             NetPacketHandler.sendToPlayer(new SyncGUIMessage(this.pos, buffer), (ServerPlayerEntity) player);
         }
+    }
+
+    public static void syncApiaryToPlayersUsing(World world, BlockPos pos, CompoundNBT data) {
+        NetPacketHandler.sendToAllLoaded(new UpdateClientApiaryMessage(pos, data), world, pos);
     }
 
 
@@ -274,16 +283,12 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
             int range = getRange();
             AxisAlignedBB axisalignedbb = (new AxisAlignedBB(this.pos)).grow(range).expand(0.0D, (double) this.world.getHeight(), 0.0D);
             List<BeeEntity> mobs = this.world.getEntitiesWithinAABB(BeeEntity.class, axisalignedbb);
-            List<PlayerEntity> players = this.world.getEntitiesWithinAABB(PlayerEntity.class, axisalignedbb);
             int j = (9 + 8) * 20;
             for (BeeconEffect effect : effects) {
                 if (!effect.active) continue;
                 EffectInstance effectInstance = new EffectInstance(effect.effect, j, 0, true, true);
                 for (BeeEntity mob : mobs) {
                     mob.addPotionEffect(effectInstance);
-                }
-                for (PlayerEntity player : players) {
-                    player.addPotionEffect(effectInstance);
                 }
             }
         }
@@ -312,12 +317,17 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
                 e.active = active;
             }
         }
+        syncApiaryToPlayersUsing(this.world, this.getPos(), this.writeNBT(new CompoundNBT()));
     }
 
     public int getDrain() {
         int base = Config.BEECON_BASE_DRAIN.get();
         for (BeeconEffect e : effects) {
-            if (e.active) base *= e.multiplier;
+            if (Config.BEECON_DO_MULTIPLIER.get()) {
+                if (e.active) base *= e.value;
+            } else {
+                if (e.active) base += e.value;
+            }
         }
         return base;
     }
@@ -349,21 +359,21 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
 
     public List<BeeconEffect> readEffectsFromNBT(CompoundNBT nbt) {
         List<BeeconEffect> beeconEffects = new LinkedList<>();
-        beeconEffects.add(new BeeconEffect(ModEffects.CALMING.get(), Config.BEECON_CALMING_MULTIPLIER.get(), nbt.getBoolean("calming")));
-        beeconEffects.add(new BeeconEffect(Effects.WATER_BREATHING, Config.BEECON_WATER_BREATHING_MULTIPLIER.get(), nbt.getBoolean("water_breathing")));
-        beeconEffects.add(new BeeconEffect(Effects.FIRE_RESISTANCE, Config.BEECON_FIRE_RESISTANCE_MULTIPLIER.get(), nbt.getBoolean("fire_resistance")));
-        beeconEffects.add(new BeeconEffect(Effects.REGENERATION, Config.BEECON_REGENERATION_MULTIPLIER.get(), nbt.getBoolean("regeneration")));
+        beeconEffects.add(new BeeconEffect(ModEffects.CALMING.get(), Config.BEECON_CALMING_VALUE.get(), nbt.getBoolean("calming")));
+        beeconEffects.add(new BeeconEffect(Effects.WATER_BREATHING, Config.BEECON_WATER_BREATHING_VALUE.get(), nbt.getBoolean("water_breathing")));
+        beeconEffects.add(new BeeconEffect(Effects.FIRE_RESISTANCE, Config.BEECON_FIRE_RESISTANCE_VALUE.get(), nbt.getBoolean("fire_resistance")));
+        beeconEffects.add(new BeeconEffect(Effects.REGENERATION, Config.BEECON_REGENERATION_VALUE.get(), nbt.getBoolean("regeneration")));
         return beeconEffects;
     }
 
     public class BeeconEffect {
         public Effect effect;
-        public int multiplier;
+        public int value;
         public boolean active;
 
         public BeeconEffect(Effect effect, int multiplier, boolean active) {
             this.effect = effect;
-            this.multiplier = multiplier;
+            this.value = multiplier;
             this.active = active;
         }
     }

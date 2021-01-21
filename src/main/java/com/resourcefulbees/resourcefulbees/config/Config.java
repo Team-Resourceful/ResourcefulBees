@@ -71,10 +71,11 @@ public class Config {
     public static ForgeConfigSpec.BooleanValue HONEY_GENERATE_BLOCKS;
     public static ForgeConfigSpec.BooleanValue HONEY_BLOCK_RECIPIES;
 
-    public static ForgeConfigSpec.IntValue BEECON_CALMING_MULTIPLIER;
-    public static ForgeConfigSpec.IntValue BEECON_WATER_BREATHING_MULTIPLIER;
-    public static ForgeConfigSpec.IntValue BEECON_FIRE_RESISTANCE_MULTIPLIER;
-    public static ForgeConfigSpec.IntValue BEECON_REGENERATION_MULTIPLIER;
+    public static ForgeConfigSpec.BooleanValue BEECON_DO_MULTIPLIER;
+    public static ForgeConfigSpec.IntValue BEECON_CALMING_VALUE;
+    public static ForgeConfigSpec.IntValue BEECON_WATER_BREATHING_VALUE;
+    public static ForgeConfigSpec.IntValue BEECON_FIRE_RESISTANCE_VALUE;
+    public static ForgeConfigSpec.IntValue BEECON_REGENERATION_VALUE;
     public static ForgeConfigSpec.IntValue BEECON_BASE_DRAIN;
 
 
@@ -87,6 +88,8 @@ public class Config {
     public static class CommonConfig {
 
         public static ForgeConfigSpec COMMON_CONFIG;
+
+
 
         static {
             ForgeConfigSpec.Builder COMMON_BUILDER = new ForgeConfigSpec.Builder();
@@ -142,16 +145,18 @@ public class Config {
             COMMON_BUILDER.pop();
 
             COMMON_BUILDER.push("Ender Beecon Options");
-            BEECON_CALMING_MULTIPLIER = COMMON_BUILDER.comment("\nMultiplier for the drain rate for the Ender Beecon when the Calming effect is active.")
-                    .defineInRange("beeconCalmingMultiplier", 2, 1, 50);
-            BEECON_WATER_BREATHING_MULTIPLIER = COMMON_BUILDER.comment("\nMultiplier for the drain rate for the Ender Beecon when the Water Breathing effect is active.")
-                    .defineInRange("beeconWaterBreathingMultiplier", 2, 1, 50);
-            BEECON_FIRE_RESISTANCE_MULTIPLIER = COMMON_BUILDER.comment("\nMultiplier for the drain rate for the Ender Beecon when the Fire Resistance effect is active.")
-                    .defineInRange("beeconFireResistanceMultiplier", 2, 1, 50);
-            BEECON_REGENERATION_MULTIPLIER = COMMON_BUILDER.comment("\nMultiplier for the drain rate for the Ender Beecon when the Regeneration effect is active.")
-                    .defineInRange("beeconRegenerationMultiplier", 4, 1, 50);
+            BEECON_DO_MULTIPLIER = COMMON_BUILDER.comment("\nIf true, the below values will be mulitplied with the base value, if false they will be added instead.")
+                    .define("beeconDoMultiplier", true);
+            BEECON_CALMING_VALUE = COMMON_BUILDER.comment("\nMultiplier for the drain rate for the Ender Beecon when the Calming effect is active.")
+                    .defineInRange("beeconCalmingValue", 2, 1, 128);
+            BEECON_WATER_BREATHING_VALUE = COMMON_BUILDER.comment("\nMultiplier for the drain rate for the Ender Beecon when the Water Breathing effect is active.")
+                    .defineInRange("beeconWaterBreathingValue", 2, 1, 128);
+            BEECON_FIRE_RESISTANCE_VALUE = COMMON_BUILDER.comment("\nMultiplier for the drain rate for the Ender Beecon when the Fire Resistance effect is active.")
+                    .defineInRange("beeconFireResistanceValue", 2, 1, 128);
+            BEECON_REGENERATION_VALUE = COMMON_BUILDER.comment("\nMultiplier for the drain rate for the Ender Beecon when the Regeneration effect is active.")
+                    .defineInRange("beeconRegenerationValue", 4, 1, 128);
             BEECON_BASE_DRAIN = COMMON_BUILDER.comment("\nThe base drain rate for the Ender Beecon when an effect is active.")
-                    .defineInRange("beeconBaseDrain", 4, 1, 50);
+                    .defineInRange("beeconBaseDrain", 2, 1, 128);
             COMMON_BUILDER.pop();
 
             COMMON_BUILDER.push("Beehive Options");
