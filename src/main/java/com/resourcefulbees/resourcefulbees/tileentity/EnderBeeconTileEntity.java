@@ -7,9 +7,10 @@ import com.resourcefulbees.resourcefulbees.container.EnderBeeconContainer;
 import com.resourcefulbees.resourcefulbees.effects.ModEffects;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.item.CustomHoneyBottleItem;
+import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
 import com.resourcefulbees.resourcefulbees.network.packets.SyncGUIMessage;
-import com.resourcefulbees.resourcefulbees.network.packets.UpdateClientApiaryMessage;
+import com.resourcefulbees.resourcefulbees.network.packets.UpdateClientBeeconMessage;
 import com.resourcefulbees.resourcefulbees.registry.ModFluids;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
@@ -75,16 +76,17 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
     private boolean beeconActive = false;
     public static final int HONEY_BOTTLE_INPUT = 0;
     public static final int BOTTLE_OUTPUT = 1;
-    public static final int HONEY_FILL_AMOUNT = Config.HONEY_FILL_AMOUNT.get();
+    public static final int HONEY_FILL_AMOUNT = ModConstants.HONEY_PER_BOTTLE;
     public AutomationSensitiveItemStackHandler h = new EnderBeeconTileEntity.TileStackHandler(5, getAcceptor(), getRemover());
     private final LazyOptional<IItemHandler> lazyOptional = LazyOptional.of(() -> h);
     private boolean dirty;
 
-    private List<BeeconEffect> effects = new LinkedList<>();
+    private List<BeeconEffect> effects;
 
     public EnderBeeconTileEntity(TileEntityType<?> tileEntityType) {
         super(tileEntityType, TankTier.NETHER);
         fluidTank = new EnderBeeconTileEntity.InternalFluidTank(tier.maxFillAmount, honeyFluidPredicate());
+        effects = readEffectsFromNBT(new CompoundNBT());
     }
 
     @Override
@@ -101,9 +103,12 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
     @Override
     public CompoundNBT writeNBT(CompoundNBT tag) {
         tag.putInt("tier", TankTier.NETHER.getTier());
-        tag.put("active_effects", writeEffectsToNBT(new CompoundNBT()));
-        if (fluidTank.isEmpty()) return tag;
-        tag.put("fluid", fluidTank.writeToNBT(new CompoundNBT()));
+        if (effects != null && !effects.isEmpty()){
+            tag.put("active_effects", writeEffectsToNBT(new CompoundNBT()));
+        }
+        if (fluidTank!= null && !fluidTank.isEmpty()){
+            tag.put("fluid", fluidTank.writeToNBT(new CompoundNBT()));
+        }
         return tag;
     }
 
@@ -173,6 +178,9 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
                 if (stack.getItem() instanceof CustomHoneyBottleItem) {
                     CustomHoneyBottleItem item = (CustomHoneyBottleItem) stack.getItem();
                     FluidStack fluid = new FluidStack(item.getHoneyData().getHoneyStillFluidRegistryObject().get().getStillFluid(), HONEY_FILL_AMOUNT);
+                    fluidTank.fill(fluid, IFluidHandler.FluidAction.EXECUTE);
+                } else if (stack.getItem() == ModItems.CATNIP_HONEY_BOTTLE.get()) {
+                    FluidStack fluid = new FluidStack(ModFluids.CATNIP_HONEY_STILL.get(), HONEY_FILL_AMOUNT);
                     fluidTank.fill(fluid, IFluidHandler.FluidAction.EXECUTE);
                 }
                 stack.shrink(1);
@@ -319,7 +327,7 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
     }
 
     public static void syncApiaryToPlayersUsing(World world, BlockPos pos, CompoundNBT data) {
-        NetPacketHandler.sendToAllLoaded(new UpdateClientApiaryMessage(pos, data), world, pos);
+        NetPacketHandler.sendToAllLoaded(new UpdateClientBeeconMessage(pos, data), world, pos);
     }
 
 
@@ -450,14 +458,9 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
         return (int) Math.ceil(base);
     }
 
-    public boolean toggleEffect(Effect effect) {
-        BeeconEffect e = getEffect(effect);
-        e.active = !e.active;
-        return e.active;
-    }
-
     public boolean getEffectActive(Effect effect) {
-        return getEffect(effect).active;
+        BeeconEffect e = getEffect(effect);
+        return e == null ? false : e.active;
     }
 
     public BeeconEffect getEffect(Effect effect) {
