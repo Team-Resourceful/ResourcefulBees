@@ -269,9 +269,10 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
 
 
         if (this.world.getGameTime() % 80L == 0L) {
-            List<CustomBeeEntity> bees = world.getEntitiesWithinAABB(CustomBeeEntity.class, getEffectBox());
-            bees.forEach(e -> e.setHasDistrupterInRange());
             if (!this.beamSegments.isEmpty() && !fluidTank.isEmpty()) {
+                AxisAlignedBB box = getEffectBox();
+                List<BeeEntity> bees = world.getEntitiesWithinAABB(BeeEntity.class, box);
+                bees.stream().filter(b -> b instanceof CustomBeeEntity).map(b -> (CustomBeeEntity) b).forEach(b -> b.setHasDistrupterInRange());
                 this.addEffectsToBees(bees);
                 this.playSound(SoundEvents.BLOCK_BEACON_AMBIENT);
             }
@@ -400,14 +401,12 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
         }
     }
 
-    private void addEffectsToBees(List<CustomBeeEntity> bees) {
+    private void addEffectsToBees(List<BeeEntity> bees) {
         if (!this.world.isRemote && doEffects()) {
-            int j = (9 + 8) * 20;
-            for (BeeconEffect effect : effects) {
-                if (!effect.active) continue;
-                EffectInstance effectInstance = new EffectInstance(effect.effect, j, 0, true, true);
-                for (BeeEntity mob : bees) {
-                    mob.addPotionEffect(effectInstance);
+            for (BeeEntity mob : bees) {
+                for (BeeconEffect effect : effects) {
+                    if (!effect.active) continue;
+                    mob.addPotionEffect(new EffectInstance(effect.effect, 120, 0, true, true));
                 }
             }
         }
