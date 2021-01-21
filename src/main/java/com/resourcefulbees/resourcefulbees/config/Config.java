@@ -156,7 +156,7 @@ public class Config {
             BEECON_REGENERATION_VALUE = COMMON_BUILDER.comment("\nMultiplier for the drain rate for the Ender Beecon when the Regeneration effect is active.")
                     .defineInRange("beeconRegenerationValue", 4, 1, 128);
             BEECON_BASE_DRAIN = COMMON_BUILDER.comment("\nThe base drain rate for the Ender Beecon when an effect is active.")
-                    .defineInRange("beeconBaseDrain", 2, 1, 128);
+                    .defineInRange("beeconBaseDrain", 1, 1, 128);
             COMMON_BUILDER.pop();
 
             COMMON_BUILDER.push("Beehive Options");
