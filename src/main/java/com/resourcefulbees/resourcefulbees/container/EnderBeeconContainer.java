@@ -10,17 +10,12 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.Item;
+import net.minecraft.item.BucketItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tags.ITag;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeTagHandler;
 
 import javax.annotation.Nonnull;
-import java.util.Map;
 
 public class EnderBeeconContainer extends Container {
 
@@ -34,12 +29,17 @@ public class EnderBeeconContainer extends Container {
         enderBeeconTileEntity = (EnderBeeconTileEntity) world.getTileEntity(pos);
 
         if (enderBeeconTileEntity != null) {
-            this.addSlot(new SlotItemHandlerUnconditioned(enderBeeconTileEntity.h, HoneyGeneratorTileEntity.HONEY_BOTTLE_INPUT, 184, 34) {
+            this.addSlot(new SlotItemHandlerUnconditioned(enderBeeconTileEntity.h, EnderBeeconTileEntity.HONEY_BOTTLE_INPUT, 184, 34) {
                 public boolean isItemValid(ItemStack stack) {
-                    return stack.getItem().isIn(BeeInfoUtils.getItemTag("forge:honey_bottle"));
+                    if (stack.getItem() instanceof BucketItem) {
+                        BucketItem bucket = (BucketItem) stack.getItem();
+                        return bucket.getFluid().isIn(enderBeeconTileEntity.honeyFluidTag);
+                    } else {
+                        return stack.getItem().isIn(enderBeeconTileEntity.honeyBottleTag);
+                    }
                 }
             });
-            this.addSlot(new OutputSlot(enderBeeconTileEntity.h, HoneyGeneratorTileEntity.BOTTLE_OUTPUT, 184, 72));
+            this.addSlot(new OutputSlot(enderBeeconTileEntity.h, EnderBeeconTileEntity.BOTTLE_OUTPUT, 184, 72));
 
             for (int i = 0; i < 3; ++i) {
                 for (int j = 0; j < 9; ++j) {

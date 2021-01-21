@@ -119,6 +119,11 @@ public class HoneyTankTileEntity extends TileEntity {
         return super.getCapability(cap, side);
     }
 
+    @Override
+    protected void invalidateCaps() {
+        this.fluidOptional.invalidate();
+        super.invalidateCaps();
+    }
 
     // read from tag
     @Override

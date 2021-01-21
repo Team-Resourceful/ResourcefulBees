@@ -45,6 +45,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
     protected int flowerID;
     public BlockPos lastFlower;
     private boolean hasHiveInRange;
+    private int disrupterInRange;
 
     public CustomBeeEntity(EntityType<? extends BeeEntity> type, World world, CustomBeeData beeData) {
         super(type, world);
@@ -149,6 +150,10 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
                     }
                     hasHiveInRange = false;
                 }
+            }
+            if (this.ticksExisted % 100 == 0) {
+                disrupterInRange--;
+                if (disrupterInRange < 0) disrupterInRange = 0;
             }
         }
         super.livingTick();
@@ -288,6 +293,13 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
         }
     }
 
+    public void setHasDistrupterInRange() {
+        disrupterInRange += 2;
+        if (disrupterInRange > 10) disrupterInRange = 10;
+    }
 
+    public boolean isDisrupterInRange() {
+        return disrupterInRange > 0;
+    }
     //endregion
 }

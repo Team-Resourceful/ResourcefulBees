@@ -9,7 +9,6 @@ import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
 import com.resourcefulbees.resourcefulbees.network.packets.UpdateBeeconMessage;
 import com.resourcefulbees.resourcefulbees.tileentity.EnderBeeconTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.RenderCuboid;
-import com.resourcefulbees.resourcefulbees.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.widget.button.AbstractButton;
@@ -26,6 +25,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nonnull;
+import java.text.DecimalFormat;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -44,6 +44,7 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
     private static final ITextComponent rangeLabel = new TranslationTextComponent("block.resourcefulbees.ender_beecon.range");
     private static final ITextComponent activeLabel = new TranslationTextComponent("block.resourcefulbees.ender_beecon.is_active");
     private static final ResourceLocation BUTTON_CALMING = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/ender_beecon/calming_button.png");
+    private static final ResourceLocation FLUID_TEXTURE = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/ender_beecon/fluid.png");
 
     List<PowerButton> powerButtons = new LinkedList<>();
 
@@ -93,24 +94,22 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
 
             //init stuff
             FluidStack stack = tileEntity.fluidTank.getFluid();
-            ResourceLocation texture = stack.getFluid().getAttributes().getStillTexture();
-            TextureAtlasSprite fluid = RenderUtils.getStillFluidTexture(stack);
-            this.client.getTextureManager().bindTexture(texture);
+            this.client.getTextureManager().bindTexture(FLUID_TEXTURE);
             //prep color
             int color = stack.getFluid().getAttributes().getColor();
+            if (color == -1) color = 16751628;
             float red = RenderCuboid.INSTANCE.getRed(color);
             float green = RenderCuboid.INSTANCE.getGreen(color);
             float blue = RenderCuboid.INSTANCE.getBlue(color);
-            float alpha = RenderCuboid.INSTANCE.getAlpha(color);
+            float alpha = 1.0f;
             RenderSystem.color4f(red, green, blue, alpha);
             int tankPosX = this.guiLeft + 207;
             int tankPosY = this.guiTop + 92;
             int tankHeight = 62;
             int tankWidth = 14;
 
-            int effectiveHeight = stack.getAmount() / tileEntity.fluidTank.getCapacity() * tankHeight;
-
-            this.drawTexture(matrix, tankPosX, tankPosY - effectiveHeight, 0, 0, tankWidth, effectiveHeight, fluid.getWidth(), fluid.getHeight());
+            int effectiveHeight = (int) (((float) stack.getAmount() / (float) tileEntity.fluidTank.getCapacity()) * tankHeight);
+            this.drawTexture(matrix, tankPosX, tankPosY - effectiveHeight, 0, 0, tankWidth, effectiveHeight, tankWidth, tankHeight);
         }
     }
 
@@ -142,6 +141,16 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
             }
             buttonStartX += buttonWidth + padding;
             if (widget.isHovered()) widget.renderToolTip(matrixStack, mouseX - this.guiLeft, mouseY - this.guiTop);
+        }
+        StringTextComponent fluidCount;
+        DecimalFormat decimalFormat = new DecimalFormat("##0.0");
+        if (tileEntity.fluidTank.getFluidAmount() < 500) {
+            fluidCount = new StringTextComponent(decimalFormat.format(tileEntity.fluidTank.getFluidAmount()) + " mb");
+        } else {
+            fluidCount = new StringTextComponent(decimalFormat.format(tileEntity.fluidTank.getFluidAmount() / 1000) + " B");
+        }
+        if (mouseX >= this.guiLeft + 207 && mouseX <= this.guiLeft + 221 && mouseY >= this.guiTop + 30 && mouseY <= this.guiTop + 92) {
+            renderTooltip(matrixStack, fluidCount, mouseX - this.guiLeft, mouseY - this.guiTop);
         }
     }
 
