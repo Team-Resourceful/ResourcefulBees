@@ -413,9 +413,9 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
     }
 
     public int getRange() {
-        int range = 10;
+        int range = Config.BEECON_RANGE_PER_EFFECT.get();
         for (BeeconEffect effect : effects) {
-            if (effect.active) range += 10;
+            if (effect.active) range += Config.BEECON_RANGE_PER_EFFECT.get();
         }
         return range;
     }
@@ -439,7 +439,7 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
     }
 
     public int getDrain() {
-        int base = Config.BEECON_BASE_DRAIN.get();
+        double base = Config.BEECON_BASE_DRAIN.get();
         for (BeeconEffect e : effects) {
             if (Config.BEECON_DO_MULTIPLIER.get()) {
                 if (e.active) base *= e.value;
@@ -447,7 +447,7 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
                 if (e.active) base += e.value;
             }
         }
-        return base;
+        return (int) Math.ceil(base);
     }
 
     public boolean toggleEffect(Effect effect) {
@@ -486,10 +486,10 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
 
     public class BeeconEffect {
         public Effect effect;
-        public int value;
+        public double value;
         public boolean active;
 
-        public BeeconEffect(Effect effect, int multiplier, boolean active) {
+        public BeeconEffect(Effect effect, double multiplier, boolean active) {
             this.effect = effect;
             this.value = multiplier;
             this.active = active;
