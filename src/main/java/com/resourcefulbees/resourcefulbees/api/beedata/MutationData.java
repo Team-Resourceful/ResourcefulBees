@@ -125,7 +125,7 @@ public class MutationData extends AbstractBeeData {
     }
 
     public void initBlockTagMutationList() {
-        blockMutations.stream().filter(b -> !b.inputID.toLowerCase().startsWith("tag:")).forEach(b -> {
+        blockMutations.stream().filter(b -> b.inputID.toLowerCase().startsWith("tag:")).forEach(b -> {
             ITag<Block> input = BeeInfoUtils.getBlockTag(b.inputID.replace("tag:", ""));
             Block output = BeeInfoUtils.getBlock(b.outputID);
             if (input != null && output != null) {
