@@ -3,7 +3,6 @@ package com.resourcefulbees.resourcefulbees.api.beedata;
 import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.tags.ITag;
 
@@ -116,8 +115,8 @@ public class MutationData extends AbstractBeeData {
 
     public void initBlockMutationList() {
         blockMutations.stream().filter(b -> !b.inputID.toLowerCase().startsWith("tag:")).forEach(b -> {
-            Block input = BeeInfoUtils.getBlock(b.inputID);
-            Block output = BeeInfoUtils.getBlock(b.outputID);
+            Block input = BeeInfoUtils.getBlock(b.inputID.toLowerCase());
+            Block output = BeeInfoUtils.getBlock(b.outputID.toLowerCase());
             if (input != null && output != null) {
                 iBlockMutations.put(input, new IBlockMutation(output, b.getChance()));
             }
@@ -126,8 +125,8 @@ public class MutationData extends AbstractBeeData {
 
     public void initBlockTagMutationList() {
         blockMutations.stream().filter(b -> b.inputID.toLowerCase().startsWith("tag:")).forEach(b -> {
-            ITag<Block> input = BeeInfoUtils.getBlockTag(b.inputID.replace("tag:", ""));
-            Block output = BeeInfoUtils.getBlock(b.outputID);
+            ITag<Block> input = BeeInfoUtils.getBlockTag(b.inputID.replace("tag:", "").toLowerCase());
+            Block output = BeeInfoUtils.getBlock(b.outputID.toLowerCase());
             if (input != null && output != null) {
                 iBlockTagMutations.put(input, new IBlockMutation(output, b.getChance()));
             }
@@ -136,8 +135,8 @@ public class MutationData extends AbstractBeeData {
 
     public void initEntityMutationList() {
         entityMutations.stream().forEach(e -> {
-            EntityType input = BeeInfoUtils.getEntityType(e.inputID);
-            EntityType output = BeeInfoUtils.getEntityType(e.outputID);
+            EntityType input = BeeInfoUtils.getEntityType(e.inputID.toLowerCase());
+            EntityType output = BeeInfoUtils.getEntityType(e.outputID.toLowerCase());
             if (input != null && output != null) {
                 iEntityMutations.put(input, new IEntityMutation(output, e.getChance()));
             }
