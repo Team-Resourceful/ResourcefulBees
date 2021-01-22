@@ -33,8 +33,10 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.village.PointOfInterest;
 import net.minecraft.village.PointOfInterestManager;
 import net.minecraft.village.PointOfInterestType;
@@ -155,8 +157,8 @@ public class ResourcefulBee extends CustomBeeEntity {
 
     public void applyPollinationEffect() {
         if (getBeeData().getMutationData().hasMutation()) {
-
-            List<Entity> entityList = this.world.getEntitiesInAABBexcluding(this, this.getBoundingBox(), (entity) ->
+            AxisAlignedBB box = this.getMutationBoundingBox();
+            List<Entity> entityList = this.world.getEntitiesInAABBexcluding(this, box, (entity) ->
                     getBeeData().getMutationData().iEntityMutations.get(entity.getType()) != null);
             if (!entityList.isEmpty()) {
                 MutationData.IEntityMutation mutation = getBeeData().getMutationData().iEntityMutations.get(entityList.get(0).getType());
@@ -193,6 +195,10 @@ public class ResourcefulBee extends CustomBeeEntity {
                 }
             }
         }
+    }
+
+    private AxisAlignedBB getMutationBoundingBox() {
+        return getBoundingBox().expand(new Vector3d(0, -2, 0));
     }
 
     @Override
