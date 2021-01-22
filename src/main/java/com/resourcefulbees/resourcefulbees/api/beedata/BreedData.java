@@ -14,6 +14,11 @@ public class BreedData extends AbstractBeeData {
     private final double breedWeight;
 
     /**
+     * The the chance that when trying to breed this bee the breed will succeed, if the breed fails, items will be consumed but no bee will be made.
+     */
+    private final float breedChance;
+
+    /**
      * Strings of the parent bees needed to be breed.
      */
     private final String parent1, parent2;
@@ -38,9 +43,10 @@ public class BreedData extends AbstractBeeData {
      */
     private final int breedDelay;
 
-    private BreedData(boolean isBreedable, double breedWeight, String parent1, String parent2, String feedItem, int feedAmount, int childGrowthDelay, int breedDelay) {
+    private BreedData(boolean isBreedable, double breedWeight, float breedChance, String parent1, String parent2, String feedItem, int feedAmount, int childGrowthDelay, int breedDelay) {
         this.isBreedable = isBreedable;
         this.breedWeight = breedWeight;
+        this.breedChance = breedChance;
         this.parent1 = parent1;
         this.parent2 = parent2;
         this.feedItem = feedItem;
@@ -49,25 +55,49 @@ public class BreedData extends AbstractBeeData {
         this.breedDelay = breedDelay;
     }
 
-    public boolean isBreedable() { return isBreedable; }
+    public boolean isBreedable() {
+        return isBreedable;
+    }
 
-    public void setBreedable(boolean breedable) { isBreedable = breedable; }
+    public void setBreedable(boolean breedable) {
+        isBreedable = breedable;
+    }
 
-    public double getBreedWeight() { return breedWeight <= 0 ? BeeConstants.DEFAULT_BREED_WEIGHT : breedWeight; }
+    public double getBreedWeight() {
+        return breedWeight <= 0 ? BeeConstants.DEFAULT_BREED_WEIGHT : breedWeight;
+    }
 
-    public String getParent1() { return parent1 != null ? parent1.toLowerCase() : ""; }
+    public float getBreedChance() {
+        return breedChance <= 0 ? BeeConstants.DEFAULT_BREED_CHANCE : breedChance;
+    }
 
-    public String getParent2() { return parent2 != null ? parent2.toLowerCase() : ""; }
+    public String getParent1() {
+        return parent1 != null ? parent1.toLowerCase() : "";
+    }
 
-    public String getFeedItem() { return feedItem != null ? feedItem.toLowerCase() : BeeConstants.FLOWER_TAG_ALL; }
+    public String getParent2() {
+        return parent2 != null ? parent2.toLowerCase() : "";
+    }
 
-    public int getFeedAmount() { return Math.max(1, feedAmount); }
+    public String getFeedItem() {
+        return feedItem != null ? feedItem.toLowerCase() : BeeConstants.FLOWER_TAG_ALL;
+    }
 
-    public int getChildGrowthDelay() { return childGrowthDelay != 0 ? childGrowthDelay : BeeConstants.CHILD_GROWTH_DELAY; }
+    public int getFeedAmount() {
+        return Math.max(1, feedAmount);
+    }
 
-    public int getBreedDelay() { return breedDelay != 0 ? breedDelay : BeeConstants.BREED_DELAY; }
+    public int getChildGrowthDelay() {
+        return childGrowthDelay != 0 ? childGrowthDelay : BeeConstants.CHILD_GROWTH_DELAY;
+    }
 
-    public boolean hasParents() { return !getParent1().isEmpty() && !getParent2().isEmpty(); }
+    public int getBreedDelay() {
+        return breedDelay != 0 ? breedDelay : BeeConstants.BREED_DELAY;
+    }
+
+    public boolean hasParents() {
+        return !getParent1().isEmpty() && !getParent2().isEmpty();
+    }
 
     /**
      * Builder to easily create new BreedData
@@ -75,16 +105,24 @@ public class BreedData extends AbstractBeeData {
     public static class Builder {
         private final boolean isBreedable;
         private double breedWeight;
+        private float breedChance;
         private String parent1, parent2;
         private String feedItem;
         private int feedAmount;
         private int childGrowthDelay;
         private int breedDelay;
 
-        public Builder(boolean isBreedable) { this.isBreedable = isBreedable; }
+        public Builder(boolean isBreedable) {
+            this.isBreedable = isBreedable;
+        }
 
         public Builder setBreedWeight(double breedWeight) {
             this.breedWeight = breedWeight;
+            return this;
+        }
+
+        public Builder setBreedChance(float breedChance) {
+            this.breedChance = breedChance;
             return this;
         }
 
@@ -119,12 +157,13 @@ public class BreedData extends AbstractBeeData {
         }
 
         public BreedData createBreedData() {
-            return new BreedData(isBreedable, breedWeight, parent1, parent2, feedItem, feedAmount, childGrowthDelay, breedDelay);
+            return new BreedData(isBreedable, breedWeight, breedChance, parent1, parent2, feedItem, feedAmount, childGrowthDelay, breedDelay);
         }
     }
 
     /**
      * Creates a default BreedData for faster Bee Creation
+     *
      * @return BreedData that says Bee can't be breed
      */
     public static BreedData createDefault() {

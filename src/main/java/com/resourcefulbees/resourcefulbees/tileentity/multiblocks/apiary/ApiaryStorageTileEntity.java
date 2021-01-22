@@ -182,7 +182,7 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
         CompoundNBT nbt = new CompoundNBT();
         if (apiaryPos != null)
             nbt.put(NBTConstants.NBT_APIARY_POS, NBTUtil.writeBlockPos(apiaryPos));
-        return new SUpdateTileEntityPacket(pos,0,nbt);
+        return new SUpdateTileEntityPacket(pos, 0, nbt);
     }
 
     @Override
@@ -194,8 +194,8 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
 
     public void deliverHoneycomb(BeeEntity entity, int apiaryTier) {
         String beeType;
-        if (entity instanceof ICustomBee && ((ICustomBee)entity).getBeeData().hasHoneycomb()) {
-            beeType = ((ICustomBee)entity).getBeeType();
+        if (entity instanceof ICustomBee && ((ICustomBee) entity).getBeeData().hasHoneycomb()) {
+            beeType = ((ICustomBee) entity).getBeeType();
         } else if (!(entity instanceof ICustomBee)) {
             beeType = BeeConstants.VANILLA_BEE_TYPE;
         } else {
@@ -203,8 +203,8 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
         }
 
         ItemStack itemstack;
-        ItemStack comb = beeType.equals(BeeConstants.VANILLA_BEE_TYPE) ? new ItemStack(Items.HONEYCOMB) : ((ICustomBee)entity).getBeeData().getCombStack();
-        ItemStack combBlock = beeType.equals(BeeConstants.VANILLA_BEE_TYPE) ? new ItemStack(Items.HONEYCOMB_BLOCK) : ((ICustomBee)entity).getBeeData().getCombBlockItemStack();
+        ItemStack comb = beeType.equals(BeeConstants.VANILLA_BEE_TYPE) ? new ItemStack(Items.HONEYCOMB) : ((ICustomBee) entity).getBeeData().getCombStack();
+        ItemStack combBlock = beeType.equals(BeeConstants.VANILLA_BEE_TYPE) ? new ItemStack(Items.HONEYCOMB_BLOCK) : ((ICustomBee) entity).getBeeData().getCombBlockItemStack();
         int[] outputAmounts = beeType.equals(BeeConstants.VANILLA_BEE_TYPE) ? null : BEE_REGISTRY.getBeeData(beeType).getApiaryOutputAmounts();
 
         switch (apiaryTier) {
@@ -231,6 +231,7 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
     public boolean breedComplete(String p1, String p2) {
         if (inventoryHasSpace()) {
             CustomBeeData childBeeData = BEE_REGISTRY.getWeightedChild(p1, p2);
+            float breedChance = BeeRegistry.getRegistry().getBreedChance(p1, p2, childBeeData);
             EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(childBeeData.getEntityTypeRegistryID());
 
             if (world != null && entityType != null) {
@@ -248,9 +249,15 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
                     }
                     entity.writeWithoutTypeId(nbt);
                     ItemStack beeJar = new ItemStack(ModItems.BEE_JAR.get());
+                    ItemStack emptyBeeJar = new ItemStack(ModItems.BEE_JAR.get());
                     beeJar.setTag(nbt);
-
-                    return depositItemStack(beeJar);
+                    // if failed, will deposit empty bee jar
+                    float nextFloat = world.rand.nextFloat();
+                    if (breedChance >= nextFloat) {
+                        return depositItemStack(beeJar);
+                    } else {
+                        return depositItemStack(emptyBeeJar);
+                    }
                 }
             }
         }
@@ -258,18 +265,18 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
         return false;
     }
 
-    public boolean inventoryHasSpace(){
-        for (int i=1; i <= numberOfSlots; ++i){
-            if (h.getStackInSlot(i).isEmpty()){
+    public boolean inventoryHasSpace() {
+        for (int i = 1; i <= numberOfSlots; ++i) {
+            if (h.getStackInSlot(i).isEmpty()) {
                 return true;
             }
         }
         return false;
     }
 
-    public boolean depositItemStack(ItemStack itemstack){
+    public boolean depositItemStack(ItemStack itemstack) {
         int slotIndex = 1;
-        while (!itemstack.isEmpty()){
+        while (!itemstack.isEmpty()) {
             if (slotIndex > numberOfSlots) {
                 break;
             }
@@ -277,12 +284,12 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
 
             int maxStackSize = h.getSlotLimit(slotIndex);
 
-            if(slotStack.isEmpty()) {
+            if (slotStack.isEmpty()) {
                 int count = itemstack.getCount();
                 slotStack = itemstack.copy();
                 if (count > maxStackSize) {
                     slotStack.setCount(maxStackSize);
-                    itemstack.setCount(count-maxStackSize);
+                    itemstack.setCount(count - maxStackSize);
                 } else {
                     itemstack.setCount(0);
                 }

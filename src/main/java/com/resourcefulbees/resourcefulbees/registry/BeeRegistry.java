@@ -145,8 +145,8 @@ public class BeeRegistry implements IBeeRegistry {
      * Registers the supplied Honey Type and associated data to the mod.
      * If the bee already exists in the registry the method will return false.
      *
-     * @param honeyType     Honey Type of the honey being registered.
-     * @param honeyData     HoneyData of the honey being registered
+     * @param honeyType Honey Type of the honey being registered.
+     * @param honeyData HoneyData of the honey being registered
      * @return Returns false if bee already exists in the registry.
      */
     public boolean registerHoney(String honeyType, HoneyBottleData honeyData) {
@@ -157,5 +157,10 @@ public class BeeRegistry implements IBeeRegistry {
             }
         }
         return false;
+    }
+
+    public float getBreedChance(String parent1, String parent2, CustomBeeData childData) {
+        if (parent1.equals(parent2)) return 1f;
+        else return childData.getBreedData().getBreedChance();
     }
 }

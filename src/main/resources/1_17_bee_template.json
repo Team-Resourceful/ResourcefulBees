@@ -104,6 +104,8 @@
         "spawnWeight": 8,
         "biomeWhitelist": ["tag:ocean"],
         "biomeBlacklist": ["tag:overworld"],
+        "minHeight" : 0,
+        "maxHeight": 20,
         "minGroupSize": 1,
         "maxGroupSize": 1,
         "lightLevel": "ANY"
