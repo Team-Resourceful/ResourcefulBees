@@ -18,7 +18,6 @@ public class FirstPhaseValidator {
         validatePrimaryColor(bee.getColorData(), bee.getName());
         validateSecondaryColor(bee.getColorData(), bee.getName());
         validateGlowColor(bee.getColorData(), bee.getName());
-        validateMutation(bee.getMutationData(), bee.getName());
         validateCentrifugeData(bee.getCentrifugeData(), bee.getName());
         validateBreeding(bee.getBreedData(), bee.getName());
         validateFlower(bee, bee.getName());
@@ -65,27 +64,6 @@ public class FirstPhaseValidator {
         if (honeyBottleData != null && honeyBottleData.hasHoneyColor() && !Color.validate(honeyBottleData.getHoneyColor())) {
             logError(name);
             throw new IllegalArgumentException(String.format("Honey Bottle Color: %1$s is not valid!!", honeyBottleData.getHoneyColor()));
-        }
-    }
-
-    private static void validateMutation(MutationData mutationData, String name) {
-        if (mutationData != null && mutationData.hasMutation()) {
-            if (mutationData.getMutationType() == null || mutationData.getMutationType().equals(MutationTypes.NONE)) {
-                logError(name);
-                throw new IllegalArgumentException(String.format("Mutation Type: %1$s is not valid!!", mutationData.getMutationType()));
-            }
-            if (!TAG_RESOURCE_PATTERN.matcher(mutationData.getMutationInput()).matches() && !SINGLE_RESOURCE_PATTERN.matcher(mutationData.getMutationInput()).matches() && !ENTITY_RESOURCE_PATTERN.matcher(mutationData.getMutationInput()).matches()) {
-                logError(name);
-                throw new IllegalArgumentException(String.format("Mutation Input: %1$s has invalid syntax!!", mutationData.getMutationInput()));
-            }
-            if (!SINGLE_RESOURCE_PATTERN.matcher(mutationData.getMutationOutput()).matches() && !ENTITY_RESOURCE_PATTERN.matcher(mutationData.getMutationOutput()).matches()) {
-                logError(name);
-                throw new IllegalArgumentException(String.format("Mutation Output: %1$s has invalid syntax!!", mutationData.getMutationOutput()));
-            }
-            if (mutationData.getMutationType().equals(MutationTypes.ENTITY_TO_ENTITY) && (!ENTITY_RESOURCE_PATTERN.matcher(mutationData.getMutationInput()).matches() || !ENTITY_RESOURCE_PATTERN.matcher(mutationData.getMutationOutput()).matches())) {
-                logError(name);
-                throw new IllegalArgumentException("Mutation Inputs and Outputs don't match Mutation Type!!");
-            }
         }
     }
 

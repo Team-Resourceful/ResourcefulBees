@@ -9,7 +9,6 @@ import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
-import com.resourcefulbees.resourcefulbees.utils.validation.ValidatorUtils;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -30,6 +29,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.fluids.FluidStack;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -47,9 +48,11 @@ public class BlockToFluid implements IRecipeCategory<BlockToFluid.Recipe> {
     private final IDrawable beeHive;
     private final String localizedName;
 
+    public static final Logger LOGGER = LogManager.getLogger();
+
     public BlockToFluid(IGuiHelper guiHelper) {
         this.background = guiHelper.drawableBuilder(GUI_BACK, -12, 0, 99, 75).addPadding(0, 0, 0, 0).build();
-        this.icon = guiHelper.createDrawable(ICONS, 0,0,16,16);
+        this.icon = guiHelper.createDrawable(ICONS, 0, 0, 16, 16);
         this.info = guiHelper.createDrawable(ICONS, 16, 0, 9, 9);
         this.beeHive = guiHelper.createDrawableIngredient(new ItemStack(ModItems.T1_BEEHIVE_ITEM.get()));
         this.localizedName = I18n.format("gui.resourcefulbees.jei.category.block_to_fluid_mutation");
@@ -60,30 +63,30 @@ public class BlockToFluid implements IRecipeCategory<BlockToFluid.Recipe> {
 
         BEE_REGISTRY.getBees().forEach(((s, beeData) -> {
             if (beeData.getMutationData().hasMutation()) {
-
-                String mutationIn = beeData.getMutationData().getMutationInput();
-                String mutationOut = beeData.getMutationData().getMutationOutput();
-
-                if (ValidatorUtils.TAG_RESOURCE_PATTERN.matcher(mutationIn).matches()) {
-                    mutationIn = mutationIn.replace(BeeConstants.TAG_PREFIX, "");
-
-                    ITag<Item> itemTag = BeeInfoUtils.getItemTag(mutationIn);
-                    if (itemTag !=null) {
-                        Fluid fluidOut = BeeInfoUtils.getFluid(mutationOut);
-                        if (BeeInfoUtils.isValidFluid(fluidOut)){
-                            recipes.add(new Recipe(itemTag, new FluidStack(fluidOut,1000), beeData.getName(), MutationTypes.BLOCK_TO_FLUID, true));
+                beeData.getMutationData().iBlockTagMutations.forEach((t, m) -> {
+                    if (m.type == MutationTypes.BLOCK_TO_FLUID) {
+                        ITag<Item> tag = BeeInfoUtils.getItemTag(m.mutationData.inputID.toLowerCase().replace(BeeConstants.TAG_PREFIX, ""));
+                        Fluid output = BeeInfoUtils.getFluid(m.mutationData.outputID);
+                        if (tag != null && output != null) {
+                            recipes.add(new Recipe(tag, new FluidStack(output, 1000), beeData.getName(), m.type, m.chance, true));
+                        } else if (tag != null && output == null) {
+                            LOGGER.warn(String.format("Fluid output: [%s] is not valid.", m.mutationData.outputID));
+                        } else {
+                            LOGGER.warn(String.format("Block Tag: [%s] does not have Item Tag equivalent", m.mutationData.inputID));
                         }
                     }
-                } else {
-                    MutationTypes mutationType = beeData.getMutationData().getMutationType();
-
-                    if (MutationTypes.BLOCK_TO_FLUID.equals(mutationType)) {
-                        Item itemIn = BeeInfoUtils.getItem(mutationIn);
-                        Fluid fluidOut = BeeInfoUtils.getFluid(mutationOut);
-                        if (BeeInfoUtils.isValidItem(itemIn) && BeeInfoUtils.isValidFluid(fluidOut))
-                            recipes.add( new Recipe( new ItemStack(itemIn), new FluidStack(fluidOut, 1000), beeData.getName(), mutationType, false));
+                });
+                beeData.getMutationData().iBlockMutations.forEach((b, m) -> {
+                    if (m.type == MutationTypes.BLOCK_TO_FLUID) {
+                        Item input = BeeInfoUtils.getItem(m.mutationData.inputID);
+                        Fluid output = BeeInfoUtils.getFluid(m.mutationData.outputID);
+                        if (input == null || output == null) {
+                            LOGGER.warn(String.format("One or both of the following values are not valid: [%s, %s]", m.mutationData.inputID, m.mutationData.outputID));
+                        } else {
+                            recipes.add(new Recipe(new ItemStack(input), new FluidStack(output, 1000), beeData.getName(), m.type, m.chance, false));
+                        }
                     }
-                }
+                });
             }
         }));
 
@@ -125,8 +128,7 @@ public class BlockToFluid implements IRecipeCategory<BlockToFluid.Recipe> {
                 ingredients.setInputIngredients(list);
                 ingredients.setOutput(VanillaTypes.FLUID, recipe.fluidOut);
             }
-        }
-        else {
+        } else {
             if (MutationTypes.BLOCK_TO_FLUID.equals(recipe.mutationType)) {
                 ingredients.setInput(VanillaTypes.ITEM, recipe.itemIn);
                 ingredients.setOutput(VanillaTypes.FLUID, recipe.fluidOut);
@@ -139,10 +141,10 @@ public class BlockToFluid implements IRecipeCategory<BlockToFluid.Recipe> {
     public List<ITextComponent> getTooltipStrings(Recipe recipe, double mouseX, double mouseY) {
         double infoX = 63D;
         double infoY = 8D;
-        if (mouseX >= infoX && mouseX <= infoX + 9D && mouseY >= infoY && mouseY <= infoY + 9D){
+        if (mouseX >= infoX && mouseX <= infoX + 9D && mouseY >= infoY && mouseY <= infoY + 9D) {
             return Collections.singletonList(new StringTextComponent(I18n.format("gui." + ResourcefulBees.MOD_ID + ".jei.category.mutation.info")));
         }
-        return IRecipeCategory.super.getTooltipStrings(recipe,mouseX, mouseY);
+        return IRecipeCategory.super.getTooltipStrings(recipe, mouseX, mouseY);
     }
 
     @Override
@@ -153,7 +155,7 @@ public class BlockToFluid implements IRecipeCategory<BlockToFluid.Recipe> {
         itemStacks.set(0, ingredients.getInputs(VanillaTypes.ITEM).get(0));
 
         IGuiFluidStackGroup fluidStacks = iRecipeLayout.getFluidStacks();
-        fluidStacks.init(0,false,66,49);
+        fluidStacks.init(0, false, 66, 49);
         fluidStacks.set(0, ingredients.getOutputs(VanillaTypes.FLUID).get(0));
 
         IGuiIngredientGroup<EntityIngredient> ingredientStacks = iRecipeLayout.getIngredientsGroup(JEICompat.ENTITY_INGREDIENT);
@@ -174,33 +176,42 @@ public class BlockToFluid implements IRecipeCategory<BlockToFluid.Recipe> {
 
         private final boolean acceptsAny;
         private final ITag<Item> tag;
+        private final float chance;
 
         private final MutationTypes mutationType;
 
-        public Recipe(ItemStack baseBlock, FluidStack mutationBlock, String beeType, MutationTypes type, boolean acceptsAny) {
+        public Recipe(ItemStack baseBlock, FluidStack mutationBlock, String beeType, MutationTypes type, float chance, boolean acceptsAny) {
             this.fluidOut = mutationBlock;
             this.itemIn = baseBlock;
             this.beeType = beeType;
             this.mutationType = type;
             this.acceptsAny = acceptsAny;
+            this.chance = chance;
             this.tag = null;
         }
 
         //TAGS!!!
-        public Recipe(ITag<Item> baseBlock, FluidStack mutationBlock, String beeType, MutationTypes type, boolean acceptsAny) {
+        public Recipe(ITag<Item> baseBlock, FluidStack mutationBlock, String beeType, MutationTypes type, float chance, boolean acceptsAny) {
             this.fluidOut = mutationBlock;
             this.itemIn = null;
             this.beeType = beeType;
             this.mutationType = type;
             this.acceptsAny = acceptsAny;
+            this.chance = chance;
             this.tag = baseBlock;
         }
 
 
+        public boolean isAcceptsAny() {
+            return acceptsAny;
+        }
 
+        public ITag<?> getTag() {
+            return tag;
+        }
 
-        public boolean isAcceptsAny() { return acceptsAny; }
-        public ITag<?> getTag() { return tag; }
-        public String getBeeType() { return this.beeType; }
+        public String getBeeType() {
+            return this.beeType;
+        }
     }
 }

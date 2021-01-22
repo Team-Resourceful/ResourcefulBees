@@ -1,11 +1,11 @@
 package com.resourcefulbees.resourcefulbees.entity.passive;
 
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
+import com.resourcefulbees.resourcefulbees.api.beedata.MutationData;
 import com.resourcefulbees.resourcefulbees.api.beedata.TraitData;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.entity.goals.*;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
-import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
 import com.resourcefulbees.resourcefulbees.lib.TraitConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.ModPOIs;
@@ -19,6 +19,7 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.FollowParentGoal;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.passive.BeeEntity;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
@@ -154,47 +155,44 @@ public class ResourcefulBee extends CustomBeeEntity {
 
     public void applyPollinationEffect() {
         if (getBeeData().getMutationData().hasMutation()) {
-            String mutationOutput = getBeeData().getMutationData().getMutationOutput();
-            String mutationInput = getBeeData().getMutationData().getMutationInput();
+
+            List<Entity> entityList = this.world.getEntitiesInAABBexcluding(this, this.getBoundingBox(), (entity) ->
+                    getBeeData().getMutationData().iEntityMutations.get(entity.getType()) != null);
+            if (!entityList.isEmpty()) {
+                MutationData.IEntityMutation mutation = getBeeData().getMutationData().iEntityMutations.get(entityList.get(0).getType());
+                mutation.output.spawn((ServerWorld) world, null, null, entityList.get(0).getBlockPos(), SpawnReason.NATURAL, false, false);
+                entityList.get(0).remove();
+                world.playEvent(2005, this.getBlockPos().down(1), 0);
+                addCropCounter();
+                return;
+            }
+
             for (int i = 1; i <= 2; ++i) {
-                if (getBeeData().getMutationData().getMutationType().equals(MutationTypes.ENTITY_TO_ENTITY)) {
-                    String entityMutationOutput = mutationOutput.replace(BeeConstants.ENTITY_PREFIX, "");
-                    String entityMutationInput = mutationInput.replace(BeeConstants.ENTITY_PREFIX, "");
-                    List<Entity> entityList = this.world.getEntitiesInAABBexcluding(this, this.getBoundingBox(),
-                            (entity) -> entity.getEntityString() != null && entity.getEntityString().equals(entityMutationInput));
-                    if (!entityList.isEmpty()) {
-                        BeeInfoUtils.getEntityType(entityMutationOutput)
-                                .spawn((ServerWorld) world, null, null, entityList.get(0).getBlockPos(), SpawnReason.NATURAL, false, false);
-                        entityList.get(0).remove();
-                        world.playEvent(2005, this.getBlockPos().down(1), 0);
-                        addCropCounter();
-                        break;
+                BlockPos beePosDown = this.getBlockPos().down(i);
+                FluidState fluidState = world.getFluidState(beePosDown);
+                BlockState state = world.getBlockState(beePosDown);
+                Block block = state.getBlock();
+                MutationData.IBlockMutation mutation = getBeeData().getMutationData().iBlockMutations.get(block);
+                if (mutation == null) {
+                    if (fluidState != null) {
+                        for (ResourceLocation resourceLocation : fluidState.getFluid().getTags()) {
+                            mutation = getBeeData().getMutationData().iBlockTagMutations.get(resourceLocation.toString());
+                            if (mutation != null) break;
+                        }
+                    } else {
+                        for (ResourceLocation resourceLocation : block.getTags()) {
+                            mutation = getBeeData().getMutationData().iBlockTagMutations.get(resourceLocation.toString());
+                            if (mutation != null) break;
+                        }
                     }
-                } else {
-                    BlockPos beePosDown = this.getBlockPos().down(i);
-                    BlockState state = world.getBlockState(beePosDown);
-                    Block block = state.getBlock();
-                    if (validFillerBlock(block)) {
-                        world.playEvent(2005, beePosDown, 0);
-                        Block newBlock = BeeInfoUtils.getBlock(mutationOutput);
-                        if (newBlock != null)
-                            world.setBlockState(beePosDown, newBlock.getDefaultState());
-                        addCropCounter();
-                    }
+                }
+                if (mutation != null) {
+                    world.playEvent(2005, beePosDown, 0);
+                    world.setBlockState(beePosDown, mutation.output.getDefaultState());
+                    addCropCounter();
                 }
             }
         }
-    }
-
-    public boolean validFillerBlock(Block block) {
-        String baseBlock = this.getBeeData().getMutationData().getMutationInput();
-        if (ValidatorUtils.TAG_RESOURCE_PATTERN.matcher(baseBlock).matches()) {
-            ITag<Block> blockTag = BeeInfoUtils.getBlockTag(baseBlock.replace(BeeConstants.TAG_PREFIX, ""));
-            return blockTag != null && block.isIn(blockTag);
-        }
-        ResourceLocation testBlock = block.getRegistryName();
-        ResourceLocation fillerBlock = BeeInfoUtils.getResource(baseBlock);
-        return testBlock != null && testBlock.equals(fillerBlock);
     }
 
     @Override
@@ -462,8 +460,12 @@ public class ResourcefulBee extends CustomBeeEntity {
 
         @Override
         public void tick() {
-            if (getBeeData().getMutationData().hasMutation() && !getBeeData().getMutationData().getMutationInput().isEmpty() && !getBeeData().getMutationData().getMutationOutput().isEmpty())
-                applyPollinationEffect();
+            if (world.getGameTime() % 5 == 0) {
+                if (getBeeData().getMutationData().hasMutation() && (!getBeeData().getMutationData().iBlockTagMutations.isEmpty() ||
+                        !getBeeData().getMutationData().iBlockMutations.isEmpty() ||
+                        !getBeeData().getMutationData().iEntityMutations.isEmpty()))
+                    applyPollinationEffect();
+            }
         }
     }
 

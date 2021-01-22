@@ -163,4 +163,8 @@ public class BeeRegistry implements IBeeRegistry {
         if (parent1.equals(parent2)) return 1f;
         else return childData.getBreedData().getBreedChance();
     }
+
+    public void registerMutations() {
+        getBees().forEach((s, b) -> b.getMutationData().initMutations());
+    }
 }
