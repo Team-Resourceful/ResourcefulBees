@@ -65,18 +65,17 @@ public class CentrifugeControllerBlock extends Block {
             boolean usingBucket = heldItem.getItem() instanceof BucketItem;
             CentrifugeControllerTileEntity controller = getControllerEntity(world, pos);
 
-                if (controller != null && controller.isValidStructure()) {
-                    if (usingBucket) {
-                        controller.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
-                                .ifPresent(iFluidHandler -> FluidUtil.interactWithFluidHandler(player, hand, world, pos, null));
-                    } else if (!player.isSneaking()) {
-                        NetworkHooks.openGui((ServerPlayerEntity) player, controller, pos);
-                        return ActionResultType.SUCCESS;
-                    }
+            if (controller != null && controller.isValidStructure()) {
+                if (usingBucket) {
+                    controller.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+                            .ifPresent(iFluidHandler -> FluidUtil.interactWithFluidHandler(player, hand, world, pos, null));
+                } else if (!player.isSneaking()) {
+                    NetworkHooks.openGui((ServerPlayerEntity) player, controller, pos);
                 }
+            }
         }
 
-        return super.onUse(state, world, pos, player, hand, rayTraceResult);
+        return ActionResultType.SUCCESS;
     }
 
     @Override
