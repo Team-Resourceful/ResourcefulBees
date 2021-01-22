@@ -77,7 +77,7 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
     public static final int HONEY_BOTTLE_INPUT = 0;
     public static final int BOTTLE_OUTPUT = 1;
     public static final int HONEY_FILL_AMOUNT = ModConstants.HONEY_PER_BOTTLE;
-    public AutomationSensitiveItemStackHandler h = new EnderBeeconTileEntity.TileStackHandler(5, getAcceptor(), getRemover());
+    public AutomationSensitiveItemStackHandler h = new EnderBeeconTileEntity.TileStackHandler(2, getAcceptor(), getRemover());
     private final LazyOptional<IItemHandler> lazyOptional = LazyOptional.of(() -> h);
     private boolean dirty;
 
@@ -316,6 +316,11 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
     @Override
     public AxisAlignedBB getRenderBoundingBox() {
         return new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX(), pos.getY() + 255, pos.getZ());
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public double getMaxRenderDistanceSquared() {
+        return 256.0D;
     }
 
     public void sendGUINetworkPacket(IContainerListener player) {
