@@ -9,9 +9,6 @@ public class BaseBeeModel extends EntityModel<Entity> {
 	private final ModelRenderer stinger;
 	private final ModelRenderer leftAntenna;
 	private final ModelRenderer rightAntenna;
-	private final ModelRenderer gel;
-	private final ModelRenderer dragon;
-	private final ModelRenderer horns;
 	private final ModelRenderer rightWing;
 	private final ModelRenderer leftWing;
 	private final ModelRenderer frontLegs;
@@ -23,6 +20,16 @@ public class BaseBeeModel extends EntityModel<Entity> {
 	private final ModelRenderer bone5;
 	private final ModelRenderer bone3;
 	private final ModelRenderer bone4;
+	private final ModelRenderer dragon;
+	private final ModelRenderer horns;
+	private final ModelRenderer gel;
+	private final ModelRenderer queen;
+	private final ModelRenderer nose;
+	private final ModelRenderer mushroom;
+	private final ModelRenderer frontMushroom1;
+	private final ModelRenderer frontMushroom2;
+	private final ModelRenderer backMushroom1;
+	private final ModelRenderer backMushroom2;
 
 	public BaseBeeModel() {
 		textureWidth = 64;
@@ -51,25 +58,6 @@ public class BaseBeeModel extends EntityModel<Entity> {
 		rightAntenna.setRotationPoint(0.0F, -2.0F, -5.0F);
 		torso.addChild(rightAntenna);
 		rightAntenna.setTextureOffset(2, 3).addBox(-2.5F, -2.0F, -3.0F, 1.0F, 2.0F, 3.0F, 0.0F, false);
-
-		gel = new ModelRenderer(this);
-		gel.setRotationPoint(0.0F, 0.0F, 0.0F);
-		torso.addChild(gel);
-		gel.setTextureOffset(0, 25).addBox(-3.5F, -4.0F, -5.0F, 7.0F, 7.0F, 10.0F, 0.7F, false);
-
-		dragon = new ModelRenderer(this);
-		dragon.setRotationPoint(0.0F, -4.0F, -4.0F);
-		torso.addChild(dragon);
-		dragon.setTextureOffset(0, 61).addBox(-0.5F, -1.0F, 0.0F, 1.0F, 1.0F, 2.0F, 0.0F, false);
-		dragon.setTextureOffset(6, 61).addBox(-0.5F, -1.0F, 3.0F, 1.0F, 1.0F, 2.0F, 0.0F, false);
-		dragon.setTextureOffset(12, 61).addBox(-0.5F, -1.0F, 6.0F, 1.0F, 1.0F, 2.0F, 0.0F, false);
-
-		horns = new ModelRenderer(this);
-		horns.setRotationPoint(0.0F, 1.0F, -2.0F);
-		dragon.addChild(horns);
-		setRotationAngle(horns, -0.6109F, 0.0F, 0.0F);
-		horns.setTextureOffset(6, 55).addBox(1.75F, -6.0F, 1.5F, 1.0F, 4.0F, 2.0F, 0.0F, false);
-		horns.setTextureOffset(0, 55).addBox(-2.75F, -6.0F, 1.5F, 1.0F, 4.0F, 2.0F, 0.0F, false);
 
 		rightWing = new ModelRenderer(this);
 		rightWing.setRotationPoint(-1.5F, -4.0F, -3.0F);
@@ -133,6 +121,71 @@ public class BaseBeeModel extends EntityModel<Entity> {
 		bone3.addChild(bone4);
 		setRotationAngle(bone4, 0.0F, 0.0F, -1.3963F);
 		bone4.setTextureOffset(56, 51).addBox(-1.1252F, 1.9F, 11.0F, 2.0F, 4.0F, 2.0F, 0.0F, true);
+
+		dragon = new ModelRenderer(this);
+		dragon.setRotationPoint(0.0F, -4.0F, -4.0F);
+		body.addChild(dragon);
+		dragon.setTextureOffset(0, 61).addBox(-0.5F, -1.0F, 0.0F, 1.0F, 1.0F, 2.0F, 0.0F, false);
+		dragon.setTextureOffset(6, 61).addBox(-0.5F, -1.0F, 3.0F, 1.0F, 1.0F, 2.0F, 0.0F, false);
+		dragon.setTextureOffset(12, 61).addBox(-0.5F, -1.0F, 6.0F, 1.0F, 1.0F, 2.0F, 0.0F, false);
+
+		horns = new ModelRenderer(this);
+		horns.setRotationPoint(0.0F, 1.0F, -2.0F);
+		dragon.addChild(horns);
+		setRotationAngle(horns, -0.6109F, 0.0F, 0.0F);
+		horns.setTextureOffset(6, 55).addBox(1.75F, -6.0F, 1.5F, 1.0F, 4.0F, 2.0F, 0.0F, false);
+		horns.setTextureOffset(0, 55).addBox(-2.75F, -6.0F, 1.5F, 1.0F, 4.0F, 2.0F, 0.0F, false);
+
+		gel = new ModelRenderer(this);
+		gel.setRotationPoint(0.0F, 0.0F, 0.0F);
+		body.addChild(gel);
+		gel.setTextureOffset(0, 25).addBox(-3.5F, -4.0F, -5.0F, 7.0F, 7.0F, 10.0F, 0.7F, false);
+
+		queen = new ModelRenderer(this);
+		queen.setRotationPoint(0.0F, 0.0F, 0.0F);
+		body.addChild(queen);
+		queen.setTextureOffset(0, 42).addBox(-2.5F, -5.0F, -4.0F, 5.0F, 1.0F, 5.0F, 0.0F, false);
+		queen.setTextureOffset(0, 45).addBox(-2.5F, -6.0F, 0.0F, 1.0F, 1.0F, 1.0F, 0.0F, false);
+		queen.setTextureOffset(0, 45).addBox(1.5F, -6.0F, -4.0F, 1.0F, 1.0F, 1.0F, 0.0F, false);
+		queen.setTextureOffset(0, 45).addBox(1.5F, -6.0F, 0.0F, 1.0F, 1.0F, 1.0F, 0.0F, false);
+		queen.setTextureOffset(0, 45).addBox(-0.5F, -6.0F, 0.0F, 1.0F, 1.0F, 1.0F, 0.0F, false);
+		queen.setTextureOffset(0, 45).addBox(-2.5F, -6.0F, -2.0F, 1.0F, 1.0F, 1.0F, 0.0F, false);
+		queen.setTextureOffset(0, 45).addBox(1.5F, -6.0F, -2.0F, 1.0F, 1.0F, 1.0F, 0.0F, false);
+		queen.setTextureOffset(0, 45).addBox(-2.5F, -6.0F, -4.0F, 1.0F, 1.0F, 1.0F, 0.0F, false);
+		queen.setTextureOffset(0, 42).addBox(-0.5F, -6.0F, -4.0F, 1.0F, 1.0F, 1.0F, 0.0F, false);
+
+		nose = new ModelRenderer(this);
+		nose.setRotationPoint(0.0F, -21.0F, 0.0F);
+		body.addChild(nose);
+		nose.setTextureOffset(26, 25).addBox(-1.0F, 21.0F, -6.5F, 2.0F, 4.0F, 2.0F, 0.0F, false);
+
+		mushroom = new ModelRenderer(this);
+		mushroom.setRotationPoint(0.0F, 0.0F, 0.0F);
+		body.addChild(mushroom);
+		mushroom.setTextureOffset(0, 25).addBox(-3.5F, -4.0F, -5.0F, 7.0F, 7.0F, 10.0F, 0.4F, false);
+
+		frontMushroom1 = new ModelRenderer(this);
+		frontMushroom1.setRotationPoint(-1.5F, -4.0F, 0.0F);
+		mushroom.addChild(frontMushroom1);
+		frontMushroom1.setTextureOffset(32, 48).addBox(-8.0F, -14.0F, -4.0F, 16.0F, 16.0F, 0.0F, -2.0F, false);
+
+		frontMushroom2 = new ModelRenderer(this);
+		frontMushroom2.setRotationPoint(0.0F, 0.0F, -2.0F);
+		frontMushroom1.addChild(frontMushroom2);
+		setRotationAngle(frontMushroom2, 0.0F, -1.5708F, 0.0F);
+		frontMushroom2.setTextureOffset(32, 48).addBox(-8.0F, -14.0F, -2.0F, 16.0F, 16.0F, 0.0F, -2.0F, false);
+
+		backMushroom1 = new ModelRenderer(this);
+		backMushroom1.setRotationPoint(2.5F, -4.0F, 4.0F);
+		mushroom.addChild(backMushroom1);
+		setRotationAngle(backMushroom1, 0.0F, -0.7854F, 0.0F);
+		backMushroom1.setTextureOffset(0, 48).addBox(-8.0F, -14.0F, -2.0F, 16.0F, 16.0F, 0.0F, -2.0F, false);
+
+		backMushroom2 = new ModelRenderer(this);
+		backMushroom2.setRotationPoint(0.0F, 0.0F, 0.0F);
+		backMushroom1.addChild(backMushroom2);
+		setRotationAngle(backMushroom2, 0.0F, -1.5708F, 0.0F);
+		backMushroom2.setTextureOffset(0, 48).addBox(-8.0F, -14.0F, -2.0F, 16.0F, 16.0F, 0.0F, -2.0F, false);
 	}
 
 	@Override

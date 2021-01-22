@@ -27,6 +27,7 @@
 	"gui.resourcefulbees.jei.category.block_to_block_mutation": "Block To Block Mutation",
 	"gui.resourcefulbees.jei.category.bee_pollination_flowers": "Bee Flowers",
 	"gui.resourcefulbees.jei.category.mutation.info": "Bee block mutation requires there to be a valid hive for the bee to go into & the bee to have nectar.",
+	"gui.resourcefulbees.jei.category.breed_chance.info": "Chance that this will succeed in creating a new bee.",
 	"gui.resourcefulbees.centrifuge": "Powered Centrifuge",
 	"gui.resourcefulbees.centrifuge.button.redstone.true": "Disable Redstone Control",
 	"gui.resourcefulbees.centrifuge.button.redstone.false": "Enable Redstone Control",
@@ -56,6 +57,7 @@
 	"gui.resourcefulbees.apiary.button.storage_screen": "Apiary Storage",
 	"gui.resourcefulbees.mechanical_centrifuge": "Mechanical Centrifuge",
 	"gui.resourcefulbees.honey_generator": "Generator",
+	"gui.resourcefulbees.ender_beecon": "Ender Beecon",
 	"gui.resourcefulbees.jei.category.bee_pollination_entity_flowers": "Bee Entity Flowers",
 
 	"block.resourcefulbees.t1_beehive": "Tier 1 Beehive",
@@ -112,6 +114,10 @@
 	"block.resourcefulbees.centrifuge.tooltip.info": "Converts Honeycombs into resources using RF.",
 	"block.resourcefulbees.queen_bee_banner": "Queen Bee Banner",
 	"block.resourcefulbees.ender_beecon": "Ender Beecon",
+	"block.resourcefulbees.ender_beecon.primary": "Bee Effects",
+	"block.resourcefulbees.ender_beecon.drain": "Drain: ",
+	"block.resourcefulbees.ender_beecon.range": "Range: ",
+	"block.resourcefulbees.ender_beecon.is_active": "Is Active: ",
 	"block.resourcefulbees.purpur_honey_tank": "Purpur Honey Tank",
 	"block.resourcefulbees.nether_honey_tank": "Nether Honey Tank",
 	"block.resourcefulbees.wooden_honey_tank": "Wooden Honey Tank",
@@ -161,9 +167,11 @@
 	"block.resourcefulbees.zombie_honeycomb_block": "Zombie Honeycomb Block",
 	"block.resourcefulbees.netherite_honeycomb_block": "Netherite Honeycomb Block",
 	"block.resourcefulbees.rgbee_honeycomb_block": "RGBee Honeycomb Block",
+	"block.resourcefulbees.dragon_honeycomb_block": "Dragon Honeycomb Block",
 	"block.resourcefulbees.rainbow_honey_block": "Rainbow Honey Block",
 	"block.resourcefulbees.catnip_honeycomb_block": "Catnip Honeycomb Block",
 	"block.resourcefulbees.catnip_honey_block": "Catnip Honey Block",
+
 
 	"fluid.resourcefulbees.honey": "Honey",
 	"fluid.resourcefulbees.catnip_honey": "Catnip Honey",
@@ -185,6 +193,7 @@
 	"item.resourcefulbees.zombie_honeycomb": "Zombie Honeycomb",
 	"item.resourcefulbees.netherite_honeycomb": "Netherite Honeycomb",
 	"item.resourcefulbees.rgbee_honeycomb": "RGBee Honeycomb",
+	"item.resourcefulbees.dragon_honeycomb": "Dragon Honeycomb",
 
 	"item.resourcefulbees.gold_bee_spawn_egg": "Gold Bee Spawn Egg",
 	"item.resourcefulbees.iron_bee_spawn_egg": "Iron Bee Spawn Egg",
@@ -206,6 +215,7 @@
 	"item.resourcefulbees.slimy_bee_spawn_egg": "Slimy Bee Spawn Egg",
 	"item.resourcefulbees.icy_bee_spawn_egg": "Icy Bee Spawn Egg",
 	"item.resourcefulbees.kitten_bee_spawn_egg": "Kitten Bee Spawn Egg",
+	"item.resourcefulbees.dragon_bee_spawn_egg": "Dragon Bee Spawn Egg",
 
 
 	"entity.resourcefulbees.gold_bee": "Gold Bee",
@@ -228,11 +238,12 @@
 	"entity.resourcefulbees.slimy_bee": "Slimy Bee",
 	"entity.resourcefulbees.icy_bee": "Icy Bee",
 	"entity.resourcefulbees.kitten_bee": "Kitten Bee",
+	"entity.resourcefulbees.dragon_bee": "Dragon Bee",
 
 	"entity.minecraft.villager.resourcefulbees.beekeeper": "Beekeeper",
 	"block.resourcefulbees.mech_centrifuge.tooltip.info": "Hold SHIFT & right-click block to process honeycombs.",
 	"block.resourcefulbees.generator.tooltip.info": "Generates RF using honey bottles.",
-	"block.resourcefulbees.beecon.tooltip.info": "Prevents Bees from teleporting in a 10 block radius.",
+	"block.resourcefulbees.beecon.tooltip.info": "Consumes honey, grants bees safety.\n[Prevents bees from teleporting in effect range]",
 	"item.resourcefulbees.scraper.tooltip": "Right-click on Tiered Beehives to collect honeycombs.",
 	"item.resourcefulbees.scraper.tooltip.1": "Must collect ALL honeycombs for bees to generate new ones!",
 	"block.resourcefulbees.apiary_breeder.tooltip.info": "An OPTIONAL breeder that can be added as part of the Apiary Multiblock",
@@ -245,6 +256,17 @@
 	"block.resourcefulbees.centrifuge.tooltip.capabilities": "Any block in the multiblock will import/export items and energy",
 	"block.resourcefulbees.beehive.tooltip.bees": "Bees:",
 	"block.resourcefulbees.beehive.tooltip.honeycombs": "Honeycombs:",
+
+
+	"effect.resourcefulbees.calming" : "Calming",
+	"item.minecraft.potion.effect.calming" : "Calming Potion",
+	"item.minecraft.potion.effect.long_calming" : "Calming Potion",
+	"item.minecraft.splash_potion.effect.calming" : "Splash Potion of Calming",
+	"item.minecraft.splash_potion.effect.long_calming" : "Splash Potion of Calming",
+	"item.minecraft.lingering_potion.effect.calming" : "Lingering Potion of Calming",
+	"item.minecraft.lingering_potion.effect.long_calming" : "Lingering Potion of Calming",
+	"item.minecraft.tipped_arrow.effect.calming" : "Arrow of Calming",
+	"item.minecraft.tipped_arrow.effect.long_calming" : "Arrow of Calming",
 
 	"book.resourcefulbees.name": "Fifty Shades of Bees",
 	"book.resourcefulbees.landing_text": "Welcome Resourceful Beekeeper! This guide is much less filled with bee erotica than it is information about beekeeping. We hope that it serves you well in understanding the basics.$(br)$(o)$(#ff0000)Please keep in mind that MOST, if not ALL, bees are added by pack developers!$()",

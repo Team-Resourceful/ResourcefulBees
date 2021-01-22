@@ -57,11 +57,19 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
             case DRAGON:
                 addDragonParts();
                 break;
+            case QUEEN:
+                addQueenParts();
+                break;
+            case VILLAGER:
+                addVillagerNose();
+                break;
+            case MUSHROOM:
+                addMushrooms();
+                break;
             case DEFAULT:
                 addDefaultParts();
         }
     }
-
 
 
     public CustomBeeModel(BaseModelTypes modelType) {
@@ -304,6 +312,59 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
         horns.setTextureOffset(6, 55).addCuboid(1.75F, -6.0F, 1.5F, 1.0F, 4.0F, 2.0F, 0.0F, false);
         horns.setTextureOffset(0, 55).addCuboid(-2.75F, -6.0F, 1.5F, 1.0F, 4.0F, 2.0F, 0.0F, false);
 
+    }
+
+    private void addQueenParts() {
+        ModelRenderer queen = new ModelRenderer(this);
+        queen.setRotationPoint(0.0F, 0.0F, 0.0F);
+        body.addChild(queen);
+        queen.setTextureOffset(0, 42).addCuboid(-2.5F, -5.0F, -4.0F, 5.0F, 1.0F, 5.0F, 0.0F, false);
+        queen.setTextureOffset(0, 45).addCuboid(-2.5F, -6.0F, 0.0F, 1.0F, 1.0F, 1.0F, 0.0F, false);
+        queen.setTextureOffset(0, 45).addCuboid(1.5F, -6.0F, -4.0F, 1.0F, 1.0F, 1.0F, 0.0F, false);
+        queen.setTextureOffset(0, 45).addCuboid(1.5F, -6.0F, 0.0F, 1.0F, 1.0F, 1.0F, 0.0F, false);
+        queen.setTextureOffset(0, 45).addCuboid(-0.5F, -6.0F, 0.0F, 1.0F, 1.0F, 1.0F, 0.0F, false);
+        queen.setTextureOffset(0, 45).addCuboid(-2.5F, -6.0F, -2.0F, 1.0F, 1.0F, 1.0F, 0.0F, false);
+        queen.setTextureOffset(0, 45).addCuboid(1.5F, -6.0F, -2.0F, 1.0F, 1.0F, 1.0F, 0.0F, false);
+        queen.setTextureOffset(0, 45).addCuboid(-2.5F, -6.0F, -4.0F, 1.0F, 1.0F, 1.0F, 0.0F, false);
+        queen.setTextureOffset(0, 42).addCuboid(-0.5F, -6.0F, -4.0F, 1.0F, 1.0F, 1.0F, 0.0F, false);
+    }
+
+    private void addVillagerNose() {
+        ModelRenderer nose = new ModelRenderer(this);
+        nose.setRotationPoint(0.0F, -21.0F, 0.0F);
+        body.addChild(nose);
+        nose.setTextureOffset(26, 25).addCuboid(-1.0F, 21.0F, -6.5F, 2.0F, 4.0F, 2.0F, 0.0F, false);
+    }
+
+    private void addMushrooms() {
+
+        ModelRenderer mushroom = new ModelRenderer(this);
+        mushroom.setRotationPoint(0.0F, 0.0F, 0.0F);
+        body.addChild(mushroom);
+        mushroom.setTextureOffset(0, 25).addCuboid(-3.5F, -4.0F, -5.0F, 7.0F, 7.0F, 10.0F, 0.4F, false);
+
+        ModelRenderer frontMushroom1 = new ModelRenderer(this);
+        frontMushroom1.setRotationPoint(-1.5F, -4.0F, 0.0F);
+        mushroom.addChild(frontMushroom1);
+        frontMushroom1.setTextureOffset(32, 48).addCuboid(-8.0F, -14.0F, -4.0F, 16.0F, 16.0F, 0.0F, -2.0F, false);
+
+        ModelRenderer frontMushroom2 = new ModelRenderer(this);
+        frontMushroom2.setRotationPoint(0.0F, 0.0F, -2.0F);
+        frontMushroom1.addChild(frontMushroom2);
+        setRotationAngle(frontMushroom2, 0.0F, -1.5708F, 0.0F);
+        frontMushroom2.setTextureOffset(32, 48).addCuboid(-8.0F, -14.0F, -2.0F, 16.0F, 16.0F, 0.0F, -2.0F, false);
+
+        ModelRenderer backMushroom1 = new ModelRenderer(this);
+        backMushroom1.setRotationPoint(2.5F, -4.0F, 4.0F);
+        mushroom.addChild(backMushroom1);
+        setRotationAngle(backMushroom1, 0.0F, -0.7854F, 0.0F);
+        backMushroom1.setTextureOffset(0, 48).addCuboid(-8.0F, -14.0F, -2.0F, 16.0F, 16.0F, 0.0F, -2.0F, false);
+
+        ModelRenderer backMushroom2 = new ModelRenderer(this);
+        backMushroom2.setRotationPoint(0.0F, 0.0F, 0.0F);
+        backMushroom1.addChild(backMushroom2);
+        setRotationAngle(backMushroom2, 0.0F, -1.5708F, 0.0F);
+        backMushroom2.setTextureOffset(0, 48).addCuboid(-8.0F, -14.0F, -2.0F, 16.0F, 16.0F, 0.0F, -2.0F, false);
     }
 
     public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {

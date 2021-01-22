@@ -3,16 +3,28 @@ package com.resourcefulbees.resourcefulbees.entity.goals;
 import com.resourcefulbees.resourcefulbees.api.ICustomBee;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
+import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.ai.goal.BreedGoal;
+import net.minecraft.entity.ai.goal.TradeWithPlayerGoal;
 import net.minecraft.entity.item.ExperienceOrbEntity;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.particles.IParticleData;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.stats.Stats;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.world.GameRules;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.extensions.IForgeWorldServer;
 import net.minecraftforge.event.entity.living.BabyEntitySpawnEvent;
 
 public class BeeBreedGoal extends BreedGoal {
@@ -43,6 +55,7 @@ public class BeeBreedGoal extends BreedGoal {
         String parent1 = ((ICustomBee)this.field_75391_e).getBeeType();
         String parent2 = ((ICustomBee)this.animal).getBeeType();
         CustomBeeData childData = BeeRegistry.getRegistry().getWeightedChild(parent1, parent2);
+        float breedChance = BeeRegistry.getRegistry().getBreedChance(parent1, parent2, childData);
         AgeableEntity ageableentity = bee.createSelectedChild(childData);
 
         final BabyEntitySpawnEvent event = new BabyEntitySpawnEvent(animal, field_75391_e, ageableentity);
@@ -69,14 +82,36 @@ public class BeeBreedGoal extends BreedGoal {
             int p2_breedDelay = ((ICustomBee)this.field_75391_e).getBeeData().getBreedData().getBreedDelay();
             resetBreed(p1_breedDelay, p2_breedDelay);
 
-            ageableentity.setGrowingAge(childData.getBreedData().getChildGrowthDelay());
-            ageableentity.setLocationAndAngles(this.animal.getX(), this.animal.getY(), this.animal.getZ(), 0.0F, 0.0F);
-            this.world.addEntity(ageableentity);
-            this.world.setEntityState(this.animal, (byte)18);
-            if (this.world.getGameRules().getBoolean(GameRules.DO_MOB_LOOT)) {
-                this.world.addEntity(new ExperienceOrbEntity(this.world, this.animal.getX(), this.animal.getY(), this.animal.getZ(), this.animal.getRNG().nextInt(7) + 1));
-            }
 
+            float nextFloat = world.rand.nextFloat();
+            if (breedChance >= nextFloat) {
+                ageableentity.setGrowingAge(childData.getBreedData().getChildGrowthDelay());
+                ageableentity.setLocationAndAngles(this.animal.getX(), this.animal.getY(), this.animal.getZ(), 0.0F, 0.0F);
+                this.world.addEntity(ageableentity);
+                this.world.setEntityState(this.animal, (byte)18);
+                if (this.world.getGameRules().getBoolean(GameRules.DO_MOB_LOOT)) {
+                    this.world.addEntity(new ExperienceOrbEntity(this.world, this.animal.getX(), this.animal.getY(), this.animal.getZ(), this.animal.getRNG().nextInt(7) + 1));
+                }
+            }else {
+                this.animal.playSound(SoundEvents.ENTITY_BEE_HURT, 2.0f, 1.0f);
+                spawnParticles(ParticleTypes.ANGRY_VILLAGER);
+            }
+        }
+    }
+
+    protected void spawnParticles(IParticleData p_213718_1_) {
+        if (!world.isRemote()) {
+            ServerWorld worldServer = (ServerWorld)world;
+            for(int i = 0; i < 5; ++i) {
+                double d0 = world.rand.nextGaussian() * 0.02D;
+                double d1 = world.rand.nextGaussian() * 0.02D;
+                double d2 = world.rand.nextGaussian() * 0.02D;
+                worldServer.spawnParticle(p_213718_1_,
+                        this.animal.getParticleX(1.0D),
+                        this.animal.getRandomBodyY(),
+                        this.animal.getParticleZ(1.0D),
+                        50, d0, d1, d2, 0.1f);
+            }
         }
     }
 

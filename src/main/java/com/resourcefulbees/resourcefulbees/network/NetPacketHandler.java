@@ -32,9 +32,13 @@ public class NetPacketHandler {
         INSTANCE.registerMessage(++id, DrainCentrifugeTankMessage.class, DrainCentrifugeTankMessage::encode, DrainCentrifugeTankMessage::decode, DrainCentrifugeTankMessage::handle);
         INSTANCE.registerMessage(++id, UpdateRedstoneReqMessage.class, UpdateRedstoneReqMessage::encode, UpdateRedstoneReqMessage::decode, UpdateRedstoneReqMessage::handle);
         INSTANCE.registerMessage(++id, SyncGUIMessage.class, SyncGUIMessage::encode, SyncGUIMessage::decode, SyncGUIMessage::handle);
+        INSTANCE.registerMessage(++id, UpdateBeeconMessage.class, UpdateBeeconMessage::encode, UpdateBeeconMessage::decode, UpdateBeeconMessage::handle);
+        INSTANCE.registerMessage(++id, UpdateClientBeeconMessage.class, UpdateClientBeeconMessage::encode, UpdateClientBeeconMessage::decode, UpdateClientBeeconMessage::handle);
     }
 
-    public static void sendToServer(Object message) { INSTANCE.sendToServer(message); }
+    public static void sendToServer(Object message) {
+        INSTANCE.sendToServer(message);
+    }
 
     public static void sendToAllLoaded(Object message, World world, BlockPos pos) {
         INSTANCE.send(PacketDistributor.TRACKING_CHUNK.with(() -> world.getChunkAt(pos)), message);

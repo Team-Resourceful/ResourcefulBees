@@ -21,6 +21,7 @@ public class BeeConstants {
     public static final int MIN_HIVE_TIME = 600;
     public static final int MAX_TIME_IN_HIVE = 2400;
     public static final double DEFAULT_BREED_WEIGHT = 10;
+    public static final float DEFAULT_BREED_CHANCE = 1.0f;
     public static final float DEFAULT_MAIN_OUTPUT_WEIGHT = 1.0f;
     public static final float DEFAULT_SEC_OUTPUT_WEIGHT = 0.5f;
     public static final float DEFAULT_BOT_OUTPUT_WEIGHT = 0.25f;

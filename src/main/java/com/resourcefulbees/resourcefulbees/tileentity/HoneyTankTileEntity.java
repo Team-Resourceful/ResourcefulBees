@@ -19,8 +19,8 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
+import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.*;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
@@ -37,18 +37,6 @@ import java.util.function.Predicate;
 
 public class HoneyTankTileEntity extends TileEntity {
 
-    public int getFluidColor() {
-        if (fluidTank.isEmpty()) return 0x00000000;
-        if (fluidTank.getFluid().getFluid() instanceof HoneyFlowingFluid) {
-            HoneyFlowingFluid fluid = (HoneyFlowingFluid) fluidTank.getFluid().getFluid();
-            return fluid.getHoneyData().isRainbow() ? RainbowColor.getRGB() : fluid.getHoneyData().getHoneyColorInt();
-        } else {
-            if (fluidTank.getFluid().getFluid() == ModFluids.CATNIP_HONEY_STILL.get()) {
-                return 0xFF812819;
-            }
-            return 0xFFF69909;
-        }
-    }
 
     public enum TankTier {
         PURPUR(3, 64000, ModBlocks.PURPUR_HONEY_TANK, ModItems.PURPUR_HONEY_TANK_ITEM),
@@ -100,10 +88,10 @@ public class HoneyTankTileEntity extends TileEntity {
 
     public static final Logger LOGGER = LogManager.getLogger();
 
-    public final FluidTank fluidTank;
-    private final LazyOptional<IFluidHandler> fluidOptional;
+    public FluidTank fluidTank;
+    public final LazyOptional<IFluidHandler> fluidOptional;
     public static final FluidStack HONEY_BOTTLE_FLUID_STACK = new FluidStack(ModFluids.HONEY_STILL.get(), ModConstants.HONEY_PER_BOTTLE);
-    private TankTier tier;
+    public TankTier tier;
 
     public HoneyTankTileEntity(TankTier tier) {
         super(ModTileEntityTypes.HONEY_TANK_TILE_ENTITY.get());
@@ -112,7 +100,15 @@ public class HoneyTankTileEntity extends TileEntity {
         this.tier = tier;
     }
 
-    private static Predicate<FluidStack> honeyFluidPredicate() {
+    public HoneyTankTileEntity(TileEntityType<?> tileEntityType, TankTier tier) {
+        super(tileEntityType);
+        this.fluidTank = new InternalFluidTank(tier.maxFillAmount, honeyFluidPredicate());
+        fluidOptional = LazyOptional.of(() -> fluidTank);
+        this.tier = tier;
+    }
+
+
+    protected static Predicate<FluidStack> honeyFluidPredicate() {
         return fluidStack -> fluidStack.getFluid().isIn(BeeInfoUtils.getFluidTag("forge:honey"));
     }
 
@@ -123,6 +119,11 @@ public class HoneyTankTileEntity extends TileEntity {
         return super.getCapability(cap, side);
     }
 
+    @Override
+    protected void invalidateCaps() {
+        this.fluidOptional.invalidate();
+        super.invalidateCaps();
+    }
 
     // read from tag
     @Override
@@ -206,6 +207,7 @@ public class HoneyTankTileEntity extends TileEntity {
                 player.setHeldItem(hand, itemStack);
             }
         }
+        playSound(SoundEvents.ITEM_BOTTLE_FILL);
     }
 
     public void emptyBottle(PlayerEntity player, Hand hand) {
@@ -233,6 +235,11 @@ public class HoneyTankTileEntity extends TileEntity {
                 player.setHeldItem(hand, new ItemStack(Items.GLASS_BOTTLE, 1));
             }
         }
+        playSound(SoundEvents.ITEM_BOTTLE_EMPTY);
+    }
+
+    public void playSound(SoundEvent p_205736_1_) {
+        this.world.playSound((PlayerEntity) null, this.pos, p_205736_1_, SoundCategory.BLOCKS, 1.0F, 1.0F);
     }
 
     public int getLevel() {

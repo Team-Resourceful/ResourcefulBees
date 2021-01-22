@@ -30,10 +30,13 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tags.ITag;
 import net.minecraft.tags.TagCollectionManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 
 import javax.annotation.Nonnull;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -41,9 +44,11 @@ import static com.resourcefulbees.resourcefulbees.lib.BeeConstants.*;
 
 public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.Recipe> {
     public static final ResourceLocation GUI_BACK = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/breeding.png");
+    public static final ResourceLocation ICONS = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/icons.png");
     public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "breeding");
     private final IDrawable background;
     private final IDrawable icon;
+    private final IDrawable info;
     private final String localizedName;
     private static final IBeeRegistry beeRegistry = BeeRegistry.getRegistry();
 
@@ -51,6 +56,7 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
     public BeeBreedingCategory(IGuiHelper guiHelper) {
         this.background = guiHelper.drawableBuilder(GUI_BACK, 0, 0, 160, 60).addPadding(0, 0, 0, 0).build();
         this.icon = guiHelper.createDrawableIngredient(new ItemStack(ModBlocks.GOLD_FLOWER.get()));
+        this.info = guiHelper.createDrawable(ICONS, 16, 0, 9, 9);
         this.localizedName = I18n.format("gui.resourcefulbees.jei.category.breeding");
     }
 
@@ -87,7 +93,7 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
                             recipes.add(new Recipe(
                                     p1_data.getName(), p1_feedTag, p1_feedItem, p1_data.getBreedData().getFeedAmount(),
                                     p2_data.getName(), p2_feedTag, p2_feedItem, p2_data.getBreedData().getFeedAmount(),
-                                    beeData.getName()));
+                                    beeData.getName(), beeData.getBreedData().getBreedChance()));
                         }
                     }
                 }
@@ -99,7 +105,7 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
 
                 if (BeeInfoUtils.isTag(beeData.getBreedData().getFeedItem())) feedItem = null;
 
-                recipes.add(new Recipe(beeData.getName(), feedTag, feedItem, feedAmount, beeData.getName(), feedTag, feedItem, feedAmount, beeData.getName()));
+                recipes.add(new Recipe(beeData.getName(), feedTag, feedItem, feedAmount, beeData.getName(), feedTag, feedItem, feedAmount, beeData.getName(), 1));
             }
         }));
         return recipes;
@@ -208,12 +214,27 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
         FontRenderer fontRenderer = minecraft.fontRenderer;
         DecimalFormat decimalFormat = new DecimalFormat("##%");
         fontRenderer.draw(matrix, decimalFormat.format(beeRegistry.getAdjustedWeightForChild(beeRegistry.getBeeData(recipe.child), recipe.parent1, recipe.parent2)), 90, 35, 0xff808080);
+        if (recipe.chance < 1) {
+            fontRenderer.draw(matrix, decimalFormat.format(recipe.chance), 130, 40, 0xff808080);
+            info.draw(matrix, 115, 40);
+        }
+    }
+
+    @Override
+    public List<ITextComponent> getTooltipStrings(Recipe recipe, double mouseX, double mouseY) {
+        double infoX = 115D;
+        double infoY = 40D;
+        if (mouseX >= infoX && mouseX <= infoX + 9D && mouseY >= infoY && mouseY <= infoY + 9D && recipe.chance < 1) {
+            return Collections.singletonList(new StringTextComponent(I18n.format("gui." + ResourcefulBees.MOD_ID + ".jei.category.breed_chance.info")));
+        }
+        return IRecipeCategory.super.getTooltipStrings(recipe, mouseX, mouseY);
     }
 
     public static class Recipe {
         private final String parent1;
         private final String parent2;
         private final String child;
+        private final float chance;
 
         private final ITag<Item> p1_feedTag;
         private final Item p1_feedItem;
@@ -224,10 +245,11 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
         private final int p1_feedAmount;
         private final int p2_feedAmount;
 
-        public Recipe(String parent1, ITag<Item> p1_feedTag, Item p1_feedItem, int p1_feedAmount, String parent2, ITag<Item> p2_feedTag, Item p2_feedItem, int p2_feedAmount, String child) {
+        public Recipe(String parent1, ITag<Item> p1_feedTag, Item p1_feedItem, int p1_feedAmount, String parent2, ITag<Item> p2_feedTag, Item p2_feedItem, int p2_feedAmount, String child, float chance) {
             this.parent1 = parent1;
             this.parent2 = parent2;
             this.child = child;
+            this.chance = chance;
             this.p1_feedItem = p1_feedItem;
             this.p2_feedItem = p2_feedItem;
             this.p1_feedTag = p1_feedTag;

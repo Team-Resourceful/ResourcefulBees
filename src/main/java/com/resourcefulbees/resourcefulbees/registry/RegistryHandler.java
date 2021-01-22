@@ -7,6 +7,7 @@ import com.resourcefulbees.resourcefulbees.block.CustomHoneyBlock;
 import com.resourcefulbees.resourcefulbees.block.CustomHoneyFluidBlock;
 import com.resourcefulbees.resourcefulbees.block.HoneycombBlock;
 import com.resourcefulbees.resourcefulbees.config.Config;
+import com.resourcefulbees.resourcefulbees.effects.ModEffects;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.entity.passive.ResourcefulBee;
 import com.resourcefulbees.resourcefulbees.fluids.HoneyFlowingFluid;
@@ -50,11 +51,13 @@ public class RegistryHandler {
     public static void init() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         ModItems.ITEMS.register(bus);
+        ModEffects.EFFECTS.register(bus);
         ModBlocks.BLOCKS.register(bus);
         ModFluids.FLUIDS.register(bus);
         ENTITY_TYPES.register(bus);
         ModTileEntityTypes.TILE_ENTITY_TYPES.register(bus);
         ModPOIs.POIS.register(bus);
+        ModPotions.POTIONS.register(bus);
         ModContainers.CONTAINER_TYPES.register(bus);
         ModRecipeSerializers.RECIPE_SERIALIZERS.register(bus);
         ModVillagerProfessions.PROFESSIONS.register(bus);

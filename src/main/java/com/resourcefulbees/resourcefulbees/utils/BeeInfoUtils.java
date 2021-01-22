@@ -173,6 +173,7 @@ public class BeeInfoUtils {
         }
     }
 
+
     public static void flagBeesInRange(BlockPos pos, World world) {
         MutableBoundingBox box = MutableBoundingBox.createProper(pos.getX() + 10, pos.getY() + 10, pos.getZ() + 10, pos.getX() - 10, pos.getY() - 10, pos.getZ() - 10);
         AxisAlignedBB aabb = AxisAlignedBB.func_216363_a(box);

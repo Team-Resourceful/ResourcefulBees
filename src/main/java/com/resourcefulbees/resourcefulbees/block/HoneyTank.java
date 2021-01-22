@@ -3,11 +3,9 @@ package com.resourcefulbees.resourcefulbees.block;
 import com.resourcefulbees.resourcefulbees.fluids.HoneyFlowingFluid;
 import com.resourcefulbees.resourcefulbees.tileentity.HoneyTankTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.TooltipBuilder;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
@@ -19,6 +17,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.tileentity.BeaconTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
@@ -75,14 +74,6 @@ public class HoneyTank extends Block {
         return null;
     }
 
-    public static int getBlockColor(BlockState state, @Nonnull IBlockReader world, @Nonnull BlockPos pos, int tintIndex) {
-        if (tintIndex == 1) {
-            HoneyTankTileEntity fluidTank = getTileEntity(world, pos);
-            if (fluidTank != null) return fluidTank.getFluidColor();
-        }
-        return -1;
-    }
-
     @Override
     public void animateTick(@Nonnull BlockState stateIn, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull Random rand) {
         HoneyTankTileEntity tank = getTileEntity(world, pos);
@@ -126,10 +117,8 @@ public class HoneyTank extends Block {
                     tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
                             .ifPresent(iFluidHandler -> FluidUtil.interactWithFluidHandler(player, hand, world, pos, null));
                 } else if (usingBottle) {
-                    world.playSound(player, pos, SoundEvents.ITEM_BOTTLE_EMPTY, SoundCategory.PLAYERS, 1.0f, 1.0f);
                     tank.fillBottle(player, hand);
                 } else if (usingHoney) {
-                    world.playSound(player, pos, SoundEvents.ITEM_BOTTLE_FILL, SoundCategory.PLAYERS, 1.0f, 1.0f);
                     tank.emptyBottle(player, hand);
                 }
                 world.notifyBlockUpdate(pos, state, state, 2);
@@ -211,7 +200,6 @@ public class HoneyTank extends Block {
         }
     }
 
-
     @Override
     public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
         TileEntity tileEntity = world.getTileEntity(pos);
@@ -222,5 +210,10 @@ public class HoneyTank extends Block {
             return stack;
         }
         return tier.getTankItem().get().getDefaultInstance();
+    }
+
+    @Override
+    public BlockRenderType getRenderType(BlockState blockState) {
+        return BlockRenderType.MODEL;
     }
 }

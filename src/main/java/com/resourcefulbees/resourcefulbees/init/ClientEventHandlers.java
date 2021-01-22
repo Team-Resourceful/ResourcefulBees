@@ -1,11 +1,13 @@
 package com.resourcefulbees.resourcefulbees.init;
 
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
+import com.resourcefulbees.resourcefulbees.block.EnderBeecon;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.*;
 import com.resourcefulbees.resourcefulbees.client.models.ModelHandler;
 import com.resourcefulbees.resourcefulbees.client.render.entity.CustomBeeRenderer;
 import com.resourcefulbees.resourcefulbees.client.render.fluid.FluidRender;
 import com.resourcefulbees.resourcefulbees.client.render.items.ItemModelPropertiesHandler;
+import com.resourcefulbees.resourcefulbees.client.render.tileentity.RenderEnderBeecon;
 import com.resourcefulbees.resourcefulbees.client.render.tileentity.RenderHoneyGenerator;
 import com.resourcefulbees.resourcefulbees.client.render.tileentity.RenderHoneyTank;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
@@ -49,6 +51,7 @@ public class ClientEventHandlers {
         ScreenManager.registerFactory(ModContainers.APIARY_STORAGE_CONTAINER.get(), ApiaryStorageScreen::new);
         ScreenManager.registerFactory(ModContainers.APIARY_BREEDER_CONTAINER.get(), ApiaryBreederScreen::new);
         ScreenManager.registerFactory(ModContainers.HONEY_GENERATOR_CONTAINER.get(), HoneyGeneratorScreen::new);
+        ScreenManager.registerFactory(ModContainers.ENDER_BEECON_CONTAINER.get(), EnderBeeconScreen::new);
         RenderTypeLookup.setRenderLayer(ModBlocks.GOLD_FLOWER.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(ModBlocks.PREVIEW_BLOCK.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(ModBlocks.ERRORED_PREVIEW_BLOCK.get(), RenderType.getCutout());
@@ -61,6 +64,7 @@ public class ClientEventHandlers {
         ItemModelPropertiesHandler.registerProperties();
         ClientRegistry.bindTileEntityRenderer(ModTileEntityTypes.HONEY_TANK_TILE_ENTITY.get(), RenderHoneyTank::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityTypes.HONEY_GENERATOR_ENTITY.get(), RenderHoneyGenerator::new);
+        ClientRegistry.bindTileEntityRenderer(ModTileEntityTypes.ENDER_BEECON_TILE_ENTITY.get(), RenderEnderBeecon::new);
         event.enqueueWork(FluidRender::setHoneyRenderType);
     }
 }

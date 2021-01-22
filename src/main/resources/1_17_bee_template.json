@@ -1,0 +1,176 @@
+{
+    "note" : "This file may change in up till the 1.17 release, this is simply for both the devs and pack devs to have an idea of how the new bee file will be set up.",
+    "flower": "ALL",
+    "maxTimeInHive": 2400,
+    "ModelData" : {
+        "sizeModifier" : 1.0,
+        "baseModelType" : "DEFAULT",
+        "customBaseModel" : "/base/kitten_bee",
+        "additionModelType" : "ORE",
+        "customAdditionModel" : "/additions/ore",
+        "baseLayerTexture":"/creeper/creeper_bee",
+        "isEnchanted" : false,
+        "glowingPulse" : 2,
+        "primaryLayer" : {
+            "layerTexture" : "/custom/primary_layer",
+            "layerColor" : "#00ffff",
+            "isRainbow" : false
+        },
+        "secondaryLayer" : {
+            "layerTexture" : "/custom/secondary_layer",
+            "layerColor" : "#ff0000",
+            "isRainbow" : false
+        },
+        "emissiveLayer" : {
+            "layerTexture" : "/custom/emissve_layer",
+            "layerColor" : "#ff0000",
+            "isRainbow" : false
+        },
+        "pollenLayer" : {
+            "layerTexture" : "/custom/pollen_layer",
+            "layerColor" : "#ff0000",
+            "isRainbow" : false
+        },
+        "angerLayer" : {
+            "layerTexture" : "/custom/anger_layer",
+            "layerColor" : "#ff0000",
+            "isRainbow" : false
+        },
+        "emissivePollenLayer" : {
+            "layerTexture" : "/custom/emissive_pollen_layer",
+            "layerColor" : "#ff0000",
+            "isRainbow" : false
+        },
+        "emissiveAngerLayer" : {
+            "layerTexture" : "/custom/emissive_anger_layer",
+            "layerColor" : "#ff0000",
+            "isRainbow" : false
+        }
+    },
+    "CombData" : {
+        "hasHoneycomb" : true,
+        "honeycombColor" : "#00ffff",
+        "customCombDrop": "",
+        "customBombBlockDrop": "",
+        "apiaryOutputAmounts" : [1,2,3,4],
+        "hasCentrifugeOutput": true,
+        "recipeTime": 200,
+        "defaultPrimaryWeight": 1,
+        "defaultPrimaryCount": 2,
+        "primaryOutput": [
+            {"output": "minecraft:white_dye"},
+            {"output": "minecraft:orange_dye"},
+            {"output": "minecraft:magenta_dye"},
+            {"output": "minecraft:light_blue_dye"},
+            {"output": "minecraft:yellow_dye"},
+            {"output": "minecraft:lime_dye"},
+            {"output": "minecraft:pink_dye"},
+            {"output": "minecraft:gray_dye"},
+            {"output": "minecraft:light_gray_dye"},
+            {"output": "minecraft:cyan_dye"},
+            {"output": "minecraft:purple_dye"},
+            {"output": "minecraft:blue_dye"},
+            {"output": "minecraft:brown_dye"},
+            {"output": "minecraft:green_dye"},
+            {"output": "minecraft:red_dye"},
+            {"output": "minecraft:black_dye"}
+        ],
+        "secondaryOutput" : [
+            {"output": "minecraft:glowstone_dust", "weight": 1, "count":  4},
+            {"output": "none", "weight": 10}
+        ],
+        "bottleOutput": [
+            {
+                "output": "minecraft:potion",
+                "nbtData" : [ {"Potion": "water"} ],
+                "weight": 1,
+                "count": 1
+            },
+            {"output": "none", "weight": 1}
+        ],
+        "fluidOutput" : {
+            "fluid" : "minecraft:water",
+            "chance" : 1,
+            "amount" : 250
+        }
+    },
+    "CombatData": {
+        "isPassive": false,
+        "removeStingerOnAttack": true,
+        "attackDamage": 1
+    },
+    "SpawnData": {
+        "canSpawnInWorld": true,
+        "spawnWeight": 8,
+        "biomeWhitelist": ["tag:ocean"],
+        "biomeBlacklist": ["tag:overworld"],
+        "minHeight" : 0,
+        "maxHeight": 20,
+        "minGroupSize": 1,
+        "maxGroupSize": 1,
+        "lightLevel": "ANY"
+    },
+    "MutationData": {
+        "hasMutation": true,
+        "mutationCount":10,
+        "mutations" : [
+            {
+                "type" : "BLOCK_TO_FLUID",
+                "input" : "minecraft:stone",
+                "output": "minecraft:water",
+                "chance" : 1
+            },
+            {
+                "type" : "BLOCK_TO_BLOCK",
+                "input" : "minecraft:stone",
+                "output": "minecraft:diamond_ore",
+                "chance" : 0.1
+            },
+            {
+                "type" : "BLOCK_TO_BLOCK",
+                "input" : "minecraft:cobblestone",
+                "output": "minecraft:stone",
+                "chance" : 1
+            }
+        ]
+    },
+    "BreedData": {
+        "isBreedable": true,
+        "feedItem": "minecraft:poppy",
+        "feedAmount": 5,
+        "childGrowthDelay": -24000,
+        "breedDelay": 6000,
+        "parentData" : [
+            {
+                "primaryParent": "Skeleton",
+                "secondaryParent": "Creeper",
+                "successChance" : 0.5,
+                "breedWeight": 1
+            },
+            {
+                "primaryParent": "Skeleton",
+                "secondaryParent": "Zombie",
+                "breedWeight": 1
+            }
+        ]
+    },
+    "TraitData": {
+        "hasTraits": true,
+        "specialTraits": ["wither","blaze","can_swim","creeper","zombie","pigman","ender","nether", "oreo", "slimy"],
+        "damageImmunities" : ["poison", "inFire", "onFire", "lava", "hotFloor"],
+        "damageType": "cactus",
+        "inflictsEffectOnAttack" : true,
+        "effectData" : [
+            {
+                "id": "poison",
+                "level" : 0,
+                "duration": 60
+            },
+            {
+                "id": "hunger",
+                "level" : 1,
+                "duration": 10
+            }
+        ]
+    }
+}
