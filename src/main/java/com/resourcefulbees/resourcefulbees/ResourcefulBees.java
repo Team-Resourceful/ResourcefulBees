@@ -7,6 +7,7 @@ import com.resourcefulbees.resourcefulbees.config.ConfigLoader;
 import com.resourcefulbees.resourcefulbees.data.DataGen;
 import com.resourcefulbees.resourcefulbees.data.DataPackLoader;
 import com.resourcefulbees.resourcefulbees.data.RecipeBuilder;
+import com.resourcefulbees.resourcefulbees.entity.EntityEventHandlers;
 import com.resourcefulbees.resourcefulbees.init.*;
 import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
 import com.resourcefulbees.resourcefulbees.registry.*;
@@ -76,7 +77,7 @@ public class ResourcefulBees {
         MinecraftForge.EVENT_BUS.addListener(this::ServerLoaded);
 
         MinecraftForge.EVENT_BUS.addListener(this::trade);
-        MinecraftForge.EVENT_BUS.addListener(this::entityDies);
+        //MinecraftForge.EVENT_BUS.addListener(EntityEventHandlers::entityDies);
 
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ClientEventHandlers::clientStuff);
 
@@ -86,53 +87,6 @@ public class ResourcefulBees {
     private void ServerLoaded(FMLServerStartedEvent event) {
         BeeRegistry.getRegistry().getBees().forEach(((s, beeData) -> SecondPhaseValidator.validateMutation(beeData)));
         ModPotions.createMixes();
-    }
-
-    private void entityDies(LivingDeathEvent event) {
-        //TODO: move this to it's own class in the entity package - epic
-        //TODO: enable WIP Pollen Feature.
-        /*
-        if (event.getEntity() instanceof ResourcefulBee) {
-            ResourcefulBee bee = (ResourcefulBee) event.getEntity();
-
-            if (bee.hasNectar()) {
-
-                World world = event.getEntity().world;
-                ItemStack item = new ItemStack(ModItems.POLLEN.get());
-
-                int count = Math.round((world.rand.nextFloat() + 1) * 2.5f);
-                CompoundNBT beeNBT = new CompoundNBT();
-                bee.writeUnlessPassenger(beeNBT);
-                BlockPos flower = bee.getLastFlower();
-
-                System.out.println(flower.getX() + " " + flower.getY() + " " + flower.getZ());
-
-                if(flower != null) {
-                    CompoundNBT compoundNBT = new CompoundNBT();
-                    BlockState flowerState = world.getBlockState(flower);
-
-                    compoundNBT.putString("specific", ForgeRegistries.BLOCKS.getKey(flowerState.getBlock()).toString());
-
-                    item.setTag(compoundNBT);
-                }
-
-                item.setCount(count);
-
-                ItemEntity entityItem = new ItemEntity(world,
-                        bee.getX(), bee.getY(), bee.getZ(),
-                        item.copy());
-
-                //To give the item the little and neat drop motion ;)
-                entityItem.setMotion(
-                        world.rand.nextGaussian() * 0.08F,
-                        world.rand.nextGaussian() * 0.08F + 0.2F,
-                        world.rand.nextGaussian() * 0.08F);
-
-
-                world.addEntity(entityItem);
-            }
-        }
-        */
     }
 
     public void trade(VillagerTradesEvent event) {
