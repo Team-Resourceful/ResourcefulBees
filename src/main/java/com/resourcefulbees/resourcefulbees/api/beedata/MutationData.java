@@ -3,17 +3,17 @@ package com.resourcefulbees.resourcefulbees.api.beedata;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
+import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
+import net.minecraft.item.Item;
 import net.minecraft.tags.ITag;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class MutationData extends AbstractBeeData {
 
@@ -54,6 +54,9 @@ public class MutationData extends AbstractBeeData {
     public transient Map<Block, IBlockMutation> iBlockMutations = new HashMap<>();
     public transient Map<String, IBlockMutation> iBlockTagMutations = new HashMap<>();
     public transient Map<EntityType, IEntityMutation> iEntityMutations = new HashMap<>();
+    public transient Map<Block, IItemMutation> iBlockItemMutations = new HashMap<>();
+    public transient Map<String, IItemMutation> iBlockItemTagMutations = new HashMap<>();
+
 
     private MutationData(String mutationInput, String mutationOutput, int mutationCount, boolean hasMutation, MutationTypes mutationType) {
         this.mutationInput = mutationInput;
@@ -112,8 +115,10 @@ public class MutationData extends AbstractBeeData {
     }
 
     public void initMutations() {
-        iBlockTagMutations = new HashMap<String, IBlockMutation>();
+        iBlockTagMutations = new HashMap<>();
         iBlockMutations = new HashMap<>();
+        iBlockItemTagMutations = new HashMap<>();
+        iBlockItemMutations = new HashMap<>();
         iEntityMutations = new HashMap<>();
         initMutationList();
         initBaseMutationData();
@@ -121,7 +126,8 @@ public class MutationData extends AbstractBeeData {
 
     private void initBaseMutationData() {
         if (hasMutation) {
-            Mutation mutation = new Mutation(mutationType, mutationInput, mutationOutput, 1);
+            Mutation mutation = new Mutation(mutationType, mutationInput, new MutationOutput(mutationOutput, 1, 1));
+            if (mutationType == null || mutationInput == null || mutationOutput == null) return;
             switch (mutationType) {
                 case FLUID_TO_FLUID:
                 case BLOCK_TO_FLUID:
@@ -133,6 +139,12 @@ public class MutationData extends AbstractBeeData {
                         addBlockMutation(mutation);
                     }
                     break;
+                case BLOCK_TO_ITEM:
+                    if (mutationInput.startsWith(BeeConstants.TAG_PREFIX)) {
+                        addBlockItemTagMutation(mutation);
+                    } else {
+                        addBlockItemMutation(mutation);
+                    }
                 case ENTITY_TO_ENTITY:
                     if (mutationInput.startsWith(BeeConstants.ENTITY_PREFIX) && mutationOutput.startsWith(BeeConstants.ENTITY_PREFIX)) {
                         addEntityMutation(mutation);
@@ -144,9 +156,15 @@ public class MutationData extends AbstractBeeData {
 
     private void addBlockMutation(Mutation mutation) {
         Block input = BeeInfoUtils.getBlock(mutation.inputID);
-        Block output = BeeInfoUtils.getBlock(mutation.outputID);
-        if (input != null && input != Blocks.AIR && output != null && output != Blocks.AIR && mutation.type != null) {
-            iBlockMutations.put(input, new IBlockMutation(mutation.type, output, mutation.getChance(), mutation));
+        IBlockMutation blockMutation = new IBlockMutation(mutation.type, mutation);
+        for (MutationOutput m : mutation.outputs) {
+            Block output = BeeInfoUtils.getBlock(m.outputID);
+            if (output != null && output != Blocks.AIR) {
+                blockMutation.addBlock(output, m.weight, m.chance);
+            }
+        }
+        if (input != null && input != Blocks.AIR && !blockMutation.outputs.isEmpty() && mutation.type != null) {
+            iBlockMutations.put(input, blockMutation);
         } else {
             printWarning(mutation);
         }
@@ -158,9 +176,51 @@ public class MutationData extends AbstractBeeData {
         if (input == null) {
             input = BeeInfoUtils.getFluidTag(tag);
         }
-        Block output = BeeInfoUtils.getBlock(mutation.outputID.toLowerCase());
-        if (input != null && output != null && mutation.type != null) {
-            iBlockTagMutations.put(tag, new IBlockMutation(mutation.type, output, mutation.getChance(), mutation));
+        IBlockMutation blockMutation = new IBlockMutation(mutation.type, mutation);
+        for (MutationOutput m : mutation.outputs) {
+            Block output = BeeInfoUtils.getBlock(m.outputID);
+            if (output != null && output != Blocks.AIR) {
+                blockMutation.addBlock(output, m.weight, m.chance);
+            }
+        }
+        if (input != null && !blockMutation.outputs.isEmpty() && mutation.type != null) {
+            iBlockTagMutations.put(tag, blockMutation);
+        } else {
+            printWarning(mutation);
+        }
+    }
+
+    private void addBlockItemMutation(Mutation mutation) {
+        Block input = BeeInfoUtils.getBlock(mutation.inputID);
+        IItemMutation itemMutation = new IItemMutation(mutation.type, mutation);
+        for (MutationOutput m : mutation.outputs) {
+            Item output = BeeInfoUtils.getItem(m.outputID);
+            if (output != null) {
+                itemMutation.addItem(output, m.weight, m.chance);
+            }
+        }
+        if (input != null && input != Blocks.AIR && !itemMutation.outputs.isEmpty() && mutation.type != null) {
+            iBlockItemMutations.put(input, itemMutation);
+        } else {
+            printWarning(mutation);
+        }
+    }
+
+    private void addBlockItemTagMutation(Mutation mutation) {
+        String tag = mutation.inputID.toLowerCase().replace(BeeConstants.TAG_PREFIX, "");
+        ITag input = BeeInfoUtils.getBlockTag(tag);
+        if (input == null) {
+            input = BeeInfoUtils.getFluidTag(tag);
+        }
+        IItemMutation itemMutation = new IItemMutation(mutation.type, mutation);
+        for (MutationOutput m : mutation.outputs) {
+            Item output = BeeInfoUtils.getItem(m.outputID);
+            if (output != null) {
+                itemMutation.addItem(output, m.weight, m.chance);
+            }
+        }
+        if (input != null && !itemMutation.outputs.isEmpty() && mutation.type != null) {
+            iBlockItemTagMutations.put(tag, itemMutation);
         } else {
             printWarning(mutation);
         }
@@ -168,9 +228,15 @@ public class MutationData extends AbstractBeeData {
 
     private void addEntityMutation(Mutation mutation) {
         EntityType input = BeeInfoUtils.getEntityType(mutation.inputID.toLowerCase().replace(BeeConstants.ENTITY_PREFIX, ""));
-        EntityType output = BeeInfoUtils.getEntityType(mutation.outputID.toLowerCase().replace(BeeConstants.ENTITY_PREFIX, ""));
-        if (input != null && output != null && mutation.type != null) {
-            iEntityMutations.put(input, new IEntityMutation(mutation.type, output, mutation.getChance(), mutation));
+        IEntityMutation entityMutation = new IEntityMutation(mutation.type, mutation);
+        for (MutationOutput m : mutation.outputs) {
+            EntityType output = BeeInfoUtils.getEntityType(m.outputID.replace(BeeConstants.ENTITY_PREFIX, ""));
+            if (output != null) {
+                entityMutation.addEntity(output, m.weight, m.chance);
+            }
+        }
+        if (input != null && !entityMutation.outputs.isEmpty() && mutation.type != null) {
+            iEntityMutations.put(input, entityMutation);
         } else {
             printWarning(mutation);
         }
@@ -181,26 +247,24 @@ public class MutationData extends AbstractBeeData {
         mutations.stream().forEach(b -> {
             if (b.inputID.toLowerCase().startsWith(BeeConstants.TAG_PREFIX)) {
                 addBlockTagMutation(b);
-            } else if (isEntityMutation(b.inputID, b.outputID) && isValidEntityMutation(b.inputID, b.outputID, b.type)) {
+            } else if (isValidEntityMutation(b.inputID, b.type)) {
                 addEntityMutation(b);
-            } else if (isEntityMutation(b.inputID, b.outputID) && !isValidEntityMutation(b.inputID, b.outputID, b.type)) {
-                printWarning(b);
+            } else if (b.type == MutationTypes.BLOCK_TO_ITEM && b.inputID.toLowerCase().startsWith(BeeConstants.TAG_PREFIX)) {
+                addBlockItemTagMutation(b);
+            } else if (b.type == MutationTypes.BLOCK_TO_ITEM) {
+                addBlockItemMutation(b);
             } else {
                 addBlockMutation(b);
             }
         });
     }
 
-    private boolean isValidEntityMutation(String inputID, String outputID, MutationTypes type) {
-        return inputID.toLowerCase().startsWith(BeeConstants.ENTITY_PREFIX) && outputID.toLowerCase().startsWith(BeeConstants.ENTITY_PREFIX) && type == MutationTypes.ENTITY_TO_ENTITY;
-    }
-
-    private boolean isEntityMutation(String inputID, String outputID) {
-        return inputID.toLowerCase().startsWith(BeeConstants.ENTITY_PREFIX) || outputID.toLowerCase().startsWith(BeeConstants.ENTITY_PREFIX);
+    private boolean isValidEntityMutation(String inputID, MutationTypes type) {
+        return inputID.toLowerCase().startsWith(BeeConstants.ENTITY_PREFIX) && type == MutationTypes.ENTITY_TO_ENTITY;
     }
 
     private void printWarning(Mutation mutation) {
-        LOGGER.warn(String.format("Could not validate mutation: [\"type\": \"%s\", \"inputID\": \"%s\", \"outputID\": \"%s\", \"chance\": %f]", mutation.type, mutation.inputID, mutation.outputID, mutation.getChance()));
+        LOGGER.warn(String.format("Could not validate mutation: [\"type\": \"%s\", \"inputID\": \"%s\", \"outputID\": \"%s\", \"chance\": %f]", mutation.type, mutation.inputID, mutation.outputs, mutation.getDefaultChance()));
     }
 
     /**
@@ -210,49 +274,102 @@ public class MutationData extends AbstractBeeData {
     public class Mutation {
         public MutationTypes type;
         public String inputID;
-        public String outputID;
-        private float chance = 1;
+        public List<MutationOutput> outputs;
+        public double defaultWeight = 1;
+        private double defaultChance = 1;
 
-        public Mutation(MutationTypes type, String inputID, String outputID, int chance) {
+        public Mutation(MutationTypes type, String inputID, MutationOutput... outputs) {
             this.type = type;
             this.inputID = inputID;
+            this.outputs = new ArrayList<>();
+            this.outputs.addAll(Arrays.asList(outputs));
+        }
+
+        public double getDefaultWeight() {
+            return defaultWeight <= 0 ? 1 : defaultWeight;
+        }
+
+        public double getDefaultChance() {
+            return defaultChance <= 0 ? 1 : defaultChance;
+        }
+    }
+
+    public class MutationOutput {
+        public String outputID;
+        private double weight = 1;
+        private double chance = 1;
+
+        public MutationOutput(String outputID, double weight, double chance) {
             this.outputID = outputID;
+            this.weight = weight;
             this.chance = chance;
         }
 
-        public float getChance() {
-            return chance < 0 ? 1 : chance;
+        public double getWeight() {
+            return weight <= 0 ? 1 : weight;
+        }
+
+        public double getChance() {
+            return chance <= 0 ? 1 : chance;
         }
     }
 
     public class IBlockMutation {
         public MutationTypes type;
-        public Block output;
-        public float chance;
+        public RandomCollection<Pair<Block, Double>> outputs;
         public Mutation mutationData;
 
-        public IBlockMutation(MutationTypes type, Block output, float chance, Mutation mutationData) {
+        public IBlockMutation(MutationTypes type, Mutation mutationData) {
             this.type = type;
-            this.output = output;
-            this.chance = chance;
+            this.outputs = new RandomCollection<>();
             this.mutationData = mutationData;
+        }
+
+        public IBlockMutation addBlock(Block block, double weight, double chance) {
+            if (weight <= 0) weight = mutationData.getDefaultWeight();
+            if (chance <= 0) chance = mutationData.getDefaultChance();
+            outputs.add(weight, Pair.of(block, chance));
+            return this;
+        }
+    }
+
+    public class IItemMutation {
+        public MutationTypes type;
+        public RandomCollection<Pair<Item, Double>> outputs;
+        public Mutation mutationData;
+
+        public IItemMutation(MutationTypes type, Mutation mutationData) {
+            this.type = type;
+            this.outputs = new RandomCollection<>();
+            this.mutationData = mutationData;
+        }
+
+        public IItemMutation addItem(Item item, double weight, double chance) {
+            if (weight <= 0) weight = mutationData.getDefaultWeight();
+            if (chance <= 0) chance = mutationData.getDefaultChance();
+            outputs.add(weight, Pair.of(item, chance));
+            return this;
         }
     }
 
     public class IEntityMutation {
         public MutationTypes type;
-        public EntityType output;
+        public RandomCollection<Pair<EntityType, Double>> outputs;
         public float chance;
         public Mutation mutationData;
 
-        public IEntityMutation(MutationTypes type, EntityType output, float chance, Mutation mutationData) {
+        public IEntityMutation(MutationTypes type, Mutation mutationData) {
             this.type = type;
-            this.output = output;
-            this.chance = chance;
+            this.outputs = new RandomCollection<>();
             this.mutationData = mutationData;
         }
+
+        public IEntityMutation addEntity(EntityType entity, double weight, double chance) {
+            if (weight <= 0) weight = mutationData.getDefaultWeight();
+            if (chance <= 0) chance = mutationData.getDefaultChance();
+            outputs.add(weight, Pair.of(entity, chance));
+            return this;
+        }
     }
-
-
 }
 

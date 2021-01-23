@@ -18,8 +18,11 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.FollowParentGoal;
 import net.minecraft.entity.ai.goal.SwimGoal;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.passive.BeeEntity;
 import net.minecraft.fluid.FluidState;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
@@ -160,12 +163,18 @@ public class ResourcefulBee extends CustomBeeEntity {
             AxisAlignedBB box = this.getMutationBoundingBox();
             List<Entity> entityList = this.world.getEntitiesInAABBexcluding(this, box, (entity) ->
                     getBeeData().getMutationData().iEntityMutations.get(entity.getType()) != null);
+
+
             if (!entityList.isEmpty()) {
                 MutationData.IEntityMutation mutation = getBeeData().getMutationData().iEntityMutations.get(entityList.get(0).getType());
-                mutation.output.spawn((ServerWorld) world, null, null, entityList.get(0).getBlockPos(), SpawnReason.NATURAL, false, false);
-                entityList.get(0).remove();
-                world.playEvent(2005, this.getBlockPos().down(1), 0);
-                addCropCounter();
+                Pair<EntityType, Double> output = mutation.outputs.next();
+                float nextFloat = world.rand.nextFloat();
+                if (output.getRight() >= nextFloat) {
+                    output.getKey().spawn((ServerWorld) world, null, null, entityList.get(0).getBlockPos(), SpawnReason.NATURAL, false, false);
+                    entityList.get(0).remove();
+                    world.playEvent(2005, this.getBlockPos().down(1), 0);
+                    addCropCounter();
+                }
                 return;
             }
 
@@ -175,23 +184,45 @@ public class ResourcefulBee extends CustomBeeEntity {
                 BlockState state = world.getBlockState(beePosDown);
                 Block block = state.getBlock();
                 MutationData.IBlockMutation mutation = getBeeData().getMutationData().iBlockMutations.get(block);
+                MutationData.IItemMutation itemMutation = null;
                 if (mutation == null) {
-                    if (fluidState != null) {
+                    itemMutation = getBeeData().getMutationData().iBlockItemMutations.get(block);
+                }
+                if (mutation == null || itemMutation == null) {
+                    if (fluidState != null && !fluidState.isEmpty()) {
                         for (ResourceLocation resourceLocation : fluidState.getFluid().getTags()) {
                             mutation = getBeeData().getMutationData().iBlockTagMutations.get(resourceLocation.toString());
-                            if (mutation != null) break;
+                            itemMutation = getBeeData().getMutationData().iBlockItemTagMutations.get(resourceLocation.toString());
+                            if (mutation != null || itemMutation != null) break;
                         }
                     } else {
                         for (ResourceLocation resourceLocation : block.getTags()) {
                             mutation = getBeeData().getMutationData().iBlockTagMutations.get(resourceLocation.toString());
-                            if (mutation != null) break;
+                            itemMutation = getBeeData().getMutationData().iBlockItemTagMutations.get(resourceLocation.toString());
+                            if (mutation != null || itemMutation != null) break;
                         }
                     }
                 }
                 if (mutation != null) {
-                    world.playEvent(2005, beePosDown, 0);
-                    world.setBlockState(beePosDown, mutation.output.getDefaultState());
-                    addCropCounter();
+                    Pair<Block, Double> output = mutation.outputs.next();
+                    float nextFloat = world.rand.nextFloat();
+                    if (output.getRight() >= nextFloat) {
+                        world.playEvent(2005, beePosDown, 0);
+                        world.setBlockState(beePosDown, output.getKey().getDefaultState());
+                        addCropCounter();
+                    }
+                    return;
+                }
+                if (itemMutation != null) {
+                    Pair<Item, Double> output = itemMutation.outputs.next();
+                    float nextFloat = world.rand.nextFloat();
+                    if (output.getRight() >= nextFloat) {
+                        world.playEvent(2005, beePosDown, 0);
+                        world.removeBlock(beePosDown, false);
+                        ItemStack stack = new ItemStack(output.getKey());
+                        world.addEntity(new ItemEntity(world, beePosDown.getX(), beePosDown.getY(), beePosDown.getZ(), stack));
+                        addCropCounter();
+                    }
                 }
             }
         }
@@ -469,6 +500,8 @@ public class ResourcefulBee extends CustomBeeEntity {
             if (world.getGameTime() % 5 == 0) {
                 if (getBeeData().getMutationData().hasMutation() && (!getBeeData().getMutationData().iBlockTagMutations.isEmpty() ||
                         !getBeeData().getMutationData().iBlockMutations.isEmpty() ||
+                        !getBeeData().getMutationData().iBlockItemMutations.isEmpty() ||
+                        !getBeeData().getMutationData().iBlockItemTagMutations.isEmpty() ||
                         !getBeeData().getMutationData().iEntityMutations.isEmpty()))
                     applyPollinationEffect();
             }

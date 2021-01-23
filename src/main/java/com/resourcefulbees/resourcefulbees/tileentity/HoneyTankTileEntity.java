@@ -8,7 +8,6 @@ import com.resourcefulbees.resourcefulbees.registry.ModFluids;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import com.resourcefulbees.resourcefulbees.registry.ModTileEntityTypes;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
-import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -21,6 +20,7 @@ import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.*;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
@@ -120,6 +120,12 @@ public class HoneyTankTileEntity extends TileEntity {
     }
 
     @Override
+    public AxisAlignedBB getRenderBoundingBox() {
+        AxisAlignedBB box = new AxisAlignedBB(this.getPos().down().south().west(), this.getPos().up().north().east());
+        return box;
+    }
+
+    @Override
     protected void invalidateCaps() {
         this.fluidOptional.invalidate();
         super.invalidateCaps();
@@ -155,6 +161,7 @@ public class HoneyTankTileEntity extends TileEntity {
         if (fluidTank.getFluidAmount() > fluidTank.getTankCapacity(0))
             fluidTank.getFluid().setAmount(fluidTank.getTankCapacity(0));
     }
+
 
     @Nullable
     @Override

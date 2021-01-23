@@ -31,12 +31,18 @@ public class RandomCollection<E> {
         return map.higherEntry(value).getValue();
     }
 
-    public double getAdjustedWeight(double weight){ return weight/total; }
+    public double getAdjustedWeight(double weight) {
+        return weight / total;
+    }
 
     public void forEach(Consumer<? super E> action) {
         Objects.requireNonNull(action);
         for (E e : map.values()) {
             action.accept(e);
         }
+    }
+
+    public boolean isEmpty() {
+        return map.isEmpty();
     }
 }

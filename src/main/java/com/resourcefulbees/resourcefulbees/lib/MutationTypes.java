@@ -6,5 +6,6 @@ public enum MutationTypes {
     BLOCK_TO_FLUID,
     FLUID_TO_BLOCK,
     BLOCK_TO_BLOCK,
-    ENTITY_TO_ENTITY
+    ENTITY_TO_ENTITY,
+    BLOCK_TO_ITEM
 }

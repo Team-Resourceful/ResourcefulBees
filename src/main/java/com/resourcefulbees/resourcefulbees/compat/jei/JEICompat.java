@@ -51,6 +51,7 @@ public class JEICompat implements IModPlugin {
         registration.addRecipeCategories(new BlockToFluid(helper));
         registration.addRecipeCategories(new FluidToBlock(helper));
         registration.addRecipeCategories(new BlockToBlock(helper));
+        registration.addRecipeCategories(new BlockToItem(helper));
         registration.addRecipeCategories(new ApiaryCategory(helper));
     }
 
@@ -89,6 +90,7 @@ public class JEICompat implements IModPlugin {
             registration.addRecipes(BlockToFluid.getMutationRecipes(registration.getIngredientManager()), BlockToFluid.ID);
             registration.addRecipes(FluidToBlock.getMutationRecipes(registration.getIngredientManager()), FluidToBlock.ID);
             registration.addRecipes(BlockToBlock.getMutationRecipes(registration.getIngredientManager()), BlockToBlock.ID);
+            registration.addRecipes(BlockToItem.getMutationRecipes(registration.getIngredientManager()), BlockToItem.ID);
             registration.addRecipes(ApiaryCategory.getHoneycombRecipes(registration.getIngredientManager()), ApiaryCategory.ID);
             registration.addRecipes(FlowersCategory.getFlowersRecipes(registration.getIngredientManager()), FlowersCategory.ID);
             registration.addRecipes(EntityFlowerCategory.getFlowersRecipes(registration.getIngredientManager()), EntityFlowerCategory.ID);
