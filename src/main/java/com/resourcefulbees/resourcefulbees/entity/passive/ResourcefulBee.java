@@ -173,8 +173,8 @@ public class ResourcefulBee extends CustomBeeEntity {
                     output.getKey().spawn((ServerWorld) world, null, null, entityList.get(0).getBlockPos(), SpawnReason.NATURAL, false, false);
                     entityList.get(0).remove();
                     world.playEvent(2005, this.getBlockPos().down(1), 0);
-                    addCropCounter();
                 }
+                addCropCounter();
                 return;
             }
 
@@ -209,8 +209,8 @@ public class ResourcefulBee extends CustomBeeEntity {
                     if (output.getRight() >= nextFloat) {
                         world.playEvent(2005, beePosDown, 0);
                         world.setBlockState(beePosDown, output.getKey().getDefaultState());
-                        addCropCounter();
                     }
+                    addCropCounter();
                     return;
                 }
                 if (itemMutation != null) {
@@ -221,8 +221,8 @@ public class ResourcefulBee extends CustomBeeEntity {
                         world.removeBlock(beePosDown, false);
                         ItemStack stack = new ItemStack(output.getKey());
                         world.addEntity(new ItemEntity(world, beePosDown.getX(), beePosDown.getY(), beePosDown.getZ(), stack));
-                        addCropCounter();
                     }
+                    addCropCounter();
                 }
             }
         }

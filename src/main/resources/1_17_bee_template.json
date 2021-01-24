@@ -116,21 +116,36 @@
         "mutations" : [
             {
                 "type" : "BLOCK_TO_FLUID",
-                "input" : "minecraft:stone",
-                "output": "minecraft:water",
-                "chance" : 1
+                "inputID" : "minecraft:stone",
+                "defaultWeight" : 1,
+                "defaultChance" : 0.5,
+                "outputs" : [
+                    {"outputID": "minecraft:water", "chance" : 1, "weight":  10},
+                    {"outputID": "minecraft:lava"}
+                ]
             },
             {
                 "type" : "BLOCK_TO_BLOCK",
                 "input" : "minecraft:stone",
-                "output": "minecraft:diamond_ore",
-                "chance" : 0.1
+                "outputs" : [
+                    {"outputID": "minecraft:cobblestone", "chance" : 0.75}
+                ]
             },
             {
-                "type" : "BLOCK_TO_BLOCK",
+                "type" : "ENTITY_TO_ENTITY",
+                "input" : "entity:minecraft:skeleton",
+                "outputs" : [
+                    {"outputID": "entity:minecraft:zombie"},
+                    {"outputID": "entity:minecraft:creeper"}
+                ]
+            },
+            {
+                "type" : "BLOCK_TO_ITEM",
                 "input" : "minecraft:cobblestone",
-                "output": "minecraft:stone",
-                "chance" : 1
+                "outputs" : [
+                    {"outputID": "minecraft:cobblestone", "weight":  20},
+                    {"outputID": "minecraft:diamond", "weight":  1}
+                ]
             }
         ]
     },
