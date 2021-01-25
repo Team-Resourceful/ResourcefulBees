@@ -6,13 +6,21 @@ import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.command.arguments.NBTCompoundTagArgument;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.NBTSizeTracker;
 import net.minecraft.tags.ITag;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.util.*;
 
 public class MutationData extends AbstractBeeData {
@@ -160,7 +168,7 @@ public class MutationData extends AbstractBeeData {
         for (MutationOutput m : mutation.outputs) {
             Block output = BeeInfoUtils.getBlock(m.outputID);
             if (output != null && output != Blocks.AIR) {
-                blockMutation.addBlock(output, m.weight, m.chance);
+                blockMutation.addBlock(output, m.weight, m.chance, m.getNbt());
             }
         }
         if (input != null && input != Blocks.AIR && !blockMutation.outputs.isEmpty() && mutation.type != null) {
@@ -180,7 +188,7 @@ public class MutationData extends AbstractBeeData {
         for (MutationOutput m : mutation.outputs) {
             Block output = BeeInfoUtils.getBlock(m.outputID);
             if (output != null && output != Blocks.AIR) {
-                blockMutation.addBlock(output, m.weight, m.chance);
+                blockMutation.addBlock(output, m.weight, m.chance, m.getNbt());
             }
         }
         if (input != null && !blockMutation.outputs.isEmpty() && mutation.type != null) {
@@ -196,7 +204,7 @@ public class MutationData extends AbstractBeeData {
         for (MutationOutput m : mutation.outputs) {
             Item output = BeeInfoUtils.getItem(m.outputID);
             if (output != null) {
-                itemMutation.addItem(output, m.weight, m.chance);
+                itemMutation.addItem(output, m.weight, m.chance, m.getNbt());
             }
         }
         if (input != null && input != Blocks.AIR && !itemMutation.outputs.isEmpty() && mutation.type != null) {
@@ -216,7 +224,7 @@ public class MutationData extends AbstractBeeData {
         for (MutationOutput m : mutation.outputs) {
             Item output = BeeInfoUtils.getItem(m.outputID);
             if (output != null) {
-                itemMutation.addItem(output, m.weight, m.chance);
+                itemMutation.addItem(output, m.weight, m.chance, m.getNbt());
             }
         }
         if (input != null && !itemMutation.outputs.isEmpty() && mutation.type != null) {
@@ -232,7 +240,7 @@ public class MutationData extends AbstractBeeData {
         for (MutationOutput m : mutation.outputs) {
             EntityType output = BeeInfoUtils.getEntityType(m.outputID.replace(BeeConstants.ENTITY_PREFIX, ""));
             if (output != null) {
-                entityMutation.addEntity(output, m.weight, m.chance);
+                entityMutation.addEntity(output, m.weight, m.chance, m.getNbt());
             }
         }
         if (input != null && !entityMutation.outputs.isEmpty() && mutation.type != null) {
@@ -296,6 +304,7 @@ public class MutationData extends AbstractBeeData {
 
     public class MutationOutput {
         public String outputID;
+        private CompoundNBT nbt;
         private double weight = 1;
         private double chance = 1;
 
@@ -303,6 +312,10 @@ public class MutationData extends AbstractBeeData {
             this.outputID = outputID;
             this.weight = weight;
             this.chance = chance;
+        }
+
+        public CompoundNBT getNbt() {
+            return nbt == null ? new CompoundNBT() : nbt;
         }
 
         public double getWeight() {
@@ -316,7 +329,7 @@ public class MutationData extends AbstractBeeData {
 
     public class IBlockMutation {
         public MutationTypes type;
-        public RandomCollection<Pair<Block, Double>> outputs;
+        public RandomCollection<Pair<Block, MutationOutputData>> outputs;
         public Mutation mutationData;
 
         public IBlockMutation(MutationTypes type, Mutation mutationData) {
@@ -325,17 +338,17 @@ public class MutationData extends AbstractBeeData {
             this.mutationData = mutationData;
         }
 
-        public IBlockMutation addBlock(Block block, double weight, double chance) {
+        public IBlockMutation addBlock(Block block, double weight, double chance, CompoundNBT nbt) {
             if (weight <= 0) weight = mutationData.getDefaultWeight();
             if (chance <= 0) chance = mutationData.getDefaultChance();
-            outputs.add(weight, Pair.of(block, chance));
+            outputs.add(weight, Pair.of(block, new MutationOutputData(chance, weight, nbt)));
             return this;
         }
     }
 
     public class IItemMutation {
         public MutationTypes type;
-        public RandomCollection<Pair<Item, Double>> outputs;
+        public RandomCollection<Pair<Item, MutationOutputData>> outputs;
         public Mutation mutationData;
 
         public IItemMutation(MutationTypes type, Mutation mutationData) {
@@ -344,17 +357,17 @@ public class MutationData extends AbstractBeeData {
             this.mutationData = mutationData;
         }
 
-        public IItemMutation addItem(Item item, double weight, double chance) {
+        public IItemMutation addItem(Item item, double weight, double chance, CompoundNBT nbt) {
             if (weight <= 0) weight = mutationData.getDefaultWeight();
             if (chance <= 0) chance = mutationData.getDefaultChance();
-            outputs.add(weight, Pair.of(item, chance));
+            outputs.add(weight, Pair.of(item, new MutationOutputData(chance, weight, nbt)));
             return this;
         }
     }
 
     public class IEntityMutation {
         public MutationTypes type;
-        public RandomCollection<Pair<EntityType, Double>> outputs;
+        public RandomCollection<Pair<EntityType, MutationOutputData>> outputs;
         public float chance;
         public Mutation mutationData;
 
@@ -364,11 +377,23 @@ public class MutationData extends AbstractBeeData {
             this.mutationData = mutationData;
         }
 
-        public IEntityMutation addEntity(EntityType entity, double weight, double chance) {
+        public IEntityMutation addEntity(EntityType entity, double weight, double chance, CompoundNBT nbt) {
             if (weight <= 0) weight = mutationData.getDefaultWeight();
             if (chance <= 0) chance = mutationData.getDefaultChance();
-            outputs.add(weight, Pair.of(entity, chance));
+            outputs.add(weight, Pair.of(entity, new MutationOutputData(chance, weight, nbt)));
             return this;
+        }
+    }
+
+    public class MutationOutputData {
+        public double weight;
+        public double chance;
+        public CompoundNBT nbt;
+
+        public MutationOutputData(double weight, double chance, CompoundNBT nbt) {
+            this.weight = weight;
+            this.chance = chance;
+            this.nbt = nbt;
         }
     }
 }

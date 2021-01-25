@@ -1,7 +1,9 @@
 package com.resourcefulbees.resourcefulbees.init;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
+import com.resourcefulbees.resourcefulbees.utils.INBTInstanceCreator;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.api.beedata.HoneyBottleData;
 import com.resourcefulbees.resourcefulbees.config.Config;
@@ -13,6 +15,7 @@ import com.resourcefulbees.resourcefulbees.registry.ModFeatures;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.EntityType;
+import net.minecraft.nbt.INBT;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraft.world.gen.GenerationStage;
@@ -54,7 +57,6 @@ public class BeeSetup {
         addHoney();
     }
 
-
     private static void parseBee(File file) throws IOException {
         String name = file.getName();
         name = name.substring(0, name.indexOf('.')).toLowerCase();
@@ -76,7 +78,9 @@ public class BeeSetup {
 
     private static void parseBee(Reader reader, String name) {
         name = name.toLowerCase().replace(" ", "_");
-        Gson gson = new Gson();
+        GsonBuilder builder = new GsonBuilder();
+        builder.registerTypeAdapter(INBT.class, new INBTInstanceCreator());
+        Gson gson = builder.create();
         CustomBeeData bee = gson.fromJson(reader, CustomBeeData.class);
         bee.setName(name);
         bee.shouldResourcefulBeesDoForgeRegistration = true;

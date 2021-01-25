@@ -20,6 +20,7 @@ import net.minecraft.entity.ai.goal.FollowParentGoal;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.passive.BeeEntity;
+import net.minecraft.entity.passive.MooshroomEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -164,13 +165,12 @@ public class ResourcefulBee extends CustomBeeEntity {
             List<Entity> entityList = this.world.getEntitiesInAABBexcluding(this, box, (entity) ->
                     getBeeData().getMutationData().iEntityMutations.get(entity.getType()) != null);
 
-
             if (!entityList.isEmpty()) {
                 MutationData.IEntityMutation mutation = getBeeData().getMutationData().iEntityMutations.get(entityList.get(0).getType());
-                Pair<EntityType, Double> output = mutation.outputs.next();
+                Pair<EntityType, MutationData.MutationOutputData> output = mutation.outputs.next();
                 float nextFloat = world.rand.nextFloat();
-                if (output.getRight() >= nextFloat) {
-                    output.getKey().spawn((ServerWorld) world, null, null, entityList.get(0).getBlockPos(), SpawnReason.NATURAL, false, false);
+                if (output.getRight().chance >= nextFloat) {
+                    output.getKey().spawn((ServerWorld) world, output.getRight().nbt, null, null, entityList.get(0).getBlockPos(), SpawnReason.NATURAL, false, false);
                     entityList.get(0).remove();
                     world.playEvent(2005, this.getBlockPos().down(1), 0);
                 }
@@ -204,22 +204,25 @@ public class ResourcefulBee extends CustomBeeEntity {
                     }
                 }
                 if (mutation != null) {
-                    Pair<Block, Double> output = mutation.outputs.next();
+                    Pair<Block, MutationData.MutationOutputData> output = mutation.outputs.next();
                     float nextFloat = world.rand.nextFloat();
-                    if (output.getRight() >= nextFloat) {
+                    if (output.getRight().chance >= nextFloat) {
                         world.playEvent(2005, beePosDown, 0);
                         world.setBlockState(beePosDown, output.getKey().getDefaultState());
+                        TileEntity tile = world.getTileEntity(beePosDown);
+                        if (tile != null) tile.handleUpdateTag(block.getDefaultState(), output.getRight().nbt);
                     }
                     addCropCounter();
                     return;
                 }
                 if (itemMutation != null) {
-                    Pair<Item, Double> output = itemMutation.outputs.next();
+                    Pair<Item, MutationData.MutationOutputData> output = itemMutation.outputs.next();
                     float nextFloat = world.rand.nextFloat();
-                    if (output.getRight() >= nextFloat) {
+                    if (output.getRight().chance >= nextFloat) {
                         world.playEvent(2005, beePosDown, 0);
                         world.removeBlock(beePosDown, false);
                         ItemStack stack = new ItemStack(output.getKey());
+                        stack.setTag(output.getRight().nbt);
                         world.addEntity(new ItemEntity(world, beePosDown.getX(), beePosDown.getY(), beePosDown.getZ(), stack));
                     }
                     addCropCounter();
