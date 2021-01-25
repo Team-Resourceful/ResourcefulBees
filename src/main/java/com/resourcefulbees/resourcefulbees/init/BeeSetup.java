@@ -78,9 +78,7 @@ public class BeeSetup {
 
     private static void parseBee(Reader reader, String name) {
         name = name.toLowerCase().replace(" ", "_");
-        GsonBuilder builder = new GsonBuilder();
-        builder.registerTypeAdapter(INBT.class, new INBTInstanceCreator());
-        Gson gson = builder.create();
+        Gson gson = new Gson();
         CustomBeeData bee = gson.fromJson(reader, CustomBeeData.class);
         bee.setName(name);
         bee.shouldResourcefulBeesDoForgeRegistration = true;

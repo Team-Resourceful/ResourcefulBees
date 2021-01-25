@@ -1,24 +1,22 @@
 package com.resourcefulbees.resourcefulbees.api.beedata;
 
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.command.arguments.NBTCompoundTagArgument;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTSizeTracker;
+import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.tags.ITag;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.*;
@@ -304,7 +302,8 @@ public class MutationData extends AbstractBeeData {
 
     public class MutationOutput {
         public String outputID;
-        private CompoundNBT nbt;
+        public String nbtData;
+        private transient CompoundNBT nbt;
         private double weight = 1;
         private double chance = 1;
 
@@ -315,7 +314,27 @@ public class MutationData extends AbstractBeeData {
         }
 
         public CompoundNBT getNbt() {
-            return nbt == null ? new CompoundNBT() : nbt;
+            return nbt == null ? initNbt() : nbt;
+        }
+
+        private CompoundNBT initNbt() {
+            if (nbtData != null) {
+                try {
+                    JsonToNBT.getTagFromJson(nbtData);
+                } catch (CommandSyntaxException e) {
+                    nbt = new CompoundNBT();
+                    LOGGER.warn(String.format("could not deserialize NBT: [%s]", nbtData));
+                }
+            } else {
+                nbt = new CompoundNBT();
+            }
+            CompoundNBT test = new CompoundNBT();
+            test.putString("Type", "brown");
+            test.putInt("Age", 100);
+            test.putBoolean("NoAi", true);
+            System.out.println(nbt.toString());
+            System.out.println(test.toString());
+            return nbt;
         }
 
         public double getWeight() {
