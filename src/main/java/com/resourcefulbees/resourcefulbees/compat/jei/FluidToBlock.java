@@ -11,7 +11,6 @@ import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
-import javafx.util.Pair;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -33,6 +32,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.fluids.FluidStack;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -112,7 +112,7 @@ public class FluidToBlock implements IRecipeCategory<FluidToBlock.Recipe> {
                 LOGGER.warn("Fluid Output: [%s] does not have an Item equivalent", mutation.outputID);
                 continue;
             }
-            outputs.add(mutation.getWeight(), new Pair<>(item, mutation));
+            outputs.add(mutation.getWeight(), Pair.of(item, mutation));
         }
         return outputs;
     }
