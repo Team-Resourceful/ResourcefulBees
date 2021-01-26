@@ -71,7 +71,7 @@ public class FluidToBlock implements IRecipeCategory<FluidToBlock.Recipe> {
             if (beeData.getMutationData().hasMutation()) {
 
                 beeData.getMutationData().iBlockTagMutations.forEach((t, m) -> {
-                    if (m.type == MutationTypes.BLOCK_TO_FLUID) {
+                    if (m.type == MutationTypes.FLUID_TO_BLOCK) {
                         ITag<Fluid> tag = BeeInfoUtils.getFluidTag(m.mutationData.inputID.toLowerCase().replace(BeeConstants.TAG_PREFIX, ""));
                         if (tag != null) {
                             RandomCollection<Pair<Item, MutationData.MutationOutput>> outputs = addMutations(m);
@@ -85,7 +85,7 @@ public class FluidToBlock implements IRecipeCategory<FluidToBlock.Recipe> {
                     }
                 });
                 beeData.getMutationData().iBlockMutations.forEach((b, m) -> {
-                    if (m.type == MutationTypes.BLOCK_TO_FLUID) {
+                    if (m.type == MutationTypes.FLUID_TO_BLOCK) {
                         Fluid input = BeeInfoUtils.getFluid(m.mutationData.inputID);
                         if (input == null) {
                             LOGGER.warn(String.format("Block Input: [%s] does not have an item equivalent: ", m.mutationData.inputID));

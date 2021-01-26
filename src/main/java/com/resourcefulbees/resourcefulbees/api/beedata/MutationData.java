@@ -1,6 +1,7 @@
 package com.resourcefulbees.resourcefulbees.api.beedata;
 
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.google.gson.JsonElement;
+import com.mojang.serialization.JsonOps;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
@@ -10,15 +11,11 @@ import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.tags.ITag;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.nio.charset.Charset;
 import java.util.*;
 
 public class MutationData extends AbstractBeeData {
@@ -120,12 +117,18 @@ public class MutationData extends AbstractBeeData {
         return new Builder(false, MutationTypes.NONE).createMutationData();
     }
 
-    public void initMutations() {
+    public void initMutations(CustomBeeData b) {
         iBlockTagMutations = new HashMap<>();
         iBlockMutations = new HashMap<>();
         iBlockItemTagMutations = new HashMap<>();
         iBlockItemMutations = new HashMap<>();
         iEntityMutations = new HashMap<>();
+        if (mutations != null) {
+            Iterator<Mutation> iterator = mutations.iterator();
+            while (iterator.hasNext()) {
+                if (!iterator.next().validateMutation(b)) iterator.remove();
+            }
+        }
         initMutationList();
         initBaseMutationData();
     }
@@ -251,12 +254,12 @@ public class MutationData extends AbstractBeeData {
     private void initMutationList() {
         if (mutations == null || mutations.isEmpty()) return;
         mutations.stream().forEach(b -> {
-            if (b.inputID.toLowerCase().startsWith(BeeConstants.TAG_PREFIX)) {
+            if (b.type == MutationTypes.BLOCK_TO_ITEM && b.inputID.toLowerCase().startsWith(BeeConstants.TAG_PREFIX)) {
+                addBlockItemTagMutation(b);
+            } else if (b.inputID.toLowerCase().startsWith(BeeConstants.TAG_PREFIX)) {
                 addBlockTagMutation(b);
             } else if (isValidEntityMutation(b.inputID, b.type)) {
                 addEntityMutation(b);
-            } else if (b.type == MutationTypes.BLOCK_TO_ITEM && b.inputID.toLowerCase().startsWith(BeeConstants.TAG_PREFIX)) {
-                addBlockItemTagMutation(b);
             } else if (b.type == MutationTypes.BLOCK_TO_ITEM) {
                 addBlockItemMutation(b);
             } else {
@@ -298,11 +301,40 @@ public class MutationData extends AbstractBeeData {
         public double getDefaultChance() {
             return defaultChance <= 0 ? 1 : defaultChance;
         }
+
+        public boolean validateMutation(CustomBeeData b) {
+            String name = b.getName();
+            if (type == null) {
+                LOGGER.warn(String.format("\"type\" could not be validated for %s's mutation.", name));
+                return false;
+            }
+            if (inputID == null) {
+                LOGGER.warn(String.format("\"inputID\" does not exist for %s's mutation.", name));
+                return false;
+            }
+            if (outputs == null) {
+                LOGGER.warn(String.format("\"outputs\" does not exist for %s's mutation.", name));
+                return false;
+            }
+            Iterator<MutationOutput> iterator = outputs.iterator();
+            while (iterator.hasNext()) {
+                MutationOutput i = iterator.next();
+                if (i.outputID == null) {
+                    LOGGER.warn(String.format("an instance of \"outputID\" does not exist for %s's mutation.", name));
+                    iterator.remove();
+                }
+            }
+            if (outputs.isEmpty()) {
+                LOGGER.warn(String.format("No valid outputs could be found for %s's mutation.", name));
+                return false;
+            }
+            return true;
+        }
     }
 
     public class MutationOutput {
         public String outputID;
-        public String nbtData;
+        private JsonElement nbtData;
         private transient CompoundNBT nbt;
         private double weight = 1;
         private double chance = 1;
@@ -318,22 +350,11 @@ public class MutationData extends AbstractBeeData {
         }
 
         private CompoundNBT initNbt() {
-            if (nbtData != null) {
-                try {
-                    JsonToNBT.getTagFromJson(nbtData);
-                } catch (CommandSyntaxException e) {
-                    nbt = new CompoundNBT();
-                    LOGGER.warn(String.format("could not deserialize NBT: [%s]", nbtData));
-                }
-            } else {
+            if (nbtData == null) {
                 nbt = new CompoundNBT();
+            } else {
+                nbt = CompoundNBT.CODEC.parse(JsonOps.INSTANCE, nbtData).resultOrPartial(e -> LOGGER.warn(String.format("could not deserialize NBT: [%s]", nbtData.toString()))).get();
             }
-            CompoundNBT test = new CompoundNBT();
-            test.putString("Type", "brown");
-            test.putInt("Age", 100);
-            test.putBoolean("NoAi", true);
-            System.out.println(nbt.toString());
-            System.out.println(test.toString());
             return nbt;
         }
 

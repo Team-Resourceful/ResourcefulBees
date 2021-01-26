@@ -165,6 +165,6 @@ public class BeeRegistry implements IBeeRegistry {
     }
 
     public void registerMutations() {
-        getBees().forEach((s, b) -> b.getMutationData().initMutations());
+        getBees().forEach((s, b) -> b.getMutationData().initMutations(b));
     }
 }
