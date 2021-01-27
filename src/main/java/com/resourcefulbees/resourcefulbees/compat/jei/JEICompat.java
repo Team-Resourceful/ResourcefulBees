@@ -51,15 +51,15 @@ public class JEICompat implements IModPlugin {
         registration.addRecipeCategories(new BlockToFluid(helper));
         registration.addRecipeCategories(new FluidToBlock(helper));
         registration.addRecipeCategories(new BlockToBlock(helper));
+        registration.addRecipeCategories(new EntitytoEntity(helper));
         registration.addRecipeCategories(new BlockToItem(helper));
         registration.addRecipeCategories(new ApiaryCategory(helper));
     }
 
     @Nonnull
     @Override
-    public ResourceLocation getPluginUid()
-    {
-        return new ResourceLocation( ResourcefulBees.MOD_ID, "jei" );
+    public ResourceLocation getPluginUid() {
+        return new ResourceLocation(ResourcefulBees.MOD_ID, "jei");
     }
 
     @Override
@@ -80,7 +80,7 @@ public class JEICompat implements IModPlugin {
 
     @Override
     public void registerRecipes(@Nonnull IRecipeRegistration registration) {
-        World clientWorld= Minecraft.getInstance().world;
+        World clientWorld = Minecraft.getInstance().world;
         if (clientWorld != null) {
             RecipeManager recipeManager = Minecraft.getInstance().world.getRecipeManager();
             registration.addRecipes(BeeHiveCategory.getHoneycombRecipes(registration.getIngredientManager()), BeeHiveCategory.ID);
@@ -91,6 +91,7 @@ public class JEICompat implements IModPlugin {
             registration.addRecipes(FluidToBlock.getMutationRecipes(registration.getIngredientManager()), FluidToBlock.ID);
             registration.addRecipes(BlockToBlock.getMutationRecipes(registration.getIngredientManager()), BlockToBlock.ID);
             registration.addRecipes(BlockToItem.getMutationRecipes(registration.getIngredientManager()), BlockToItem.ID);
+            registration.addRecipes(EntitytoEntity.getMutationRecipes(registration.getIngredientManager()), EntitytoEntity.ID);
             registration.addRecipes(ApiaryCategory.getHoneycombRecipes(registration.getIngredientManager()), ApiaryCategory.ID);
             registration.addRecipes(FlowersCategory.getFlowersRecipes(registration.getIngredientManager()), FlowersCategory.ID);
             registration.addRecipes(EntityFlowerCategory.getFlowersRecipes(registration.getIngredientManager()), EntityFlowerCategory.ID);
@@ -145,7 +146,7 @@ public class JEICompat implements IModPlugin {
 
             if (beeData.hasTraitNames()) {
                 StringJoiner traits = new StringJoiner(", ");
-                Arrays.stream(beeData.getTraitNames()).forEach(trait -> traits.add(WordUtils.capitalize(trait.replaceAll("_"," "))));
+                Arrays.stream(beeData.getTraitNames()).forEach(trait -> traits.add(WordUtils.capitalize(trait.replaceAll("_", " "))));
                 stats.append(aqua).append(" Traits: ").append(purple).append(traits.toString()).append("\n");
             }
 
