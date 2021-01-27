@@ -8,7 +8,6 @@ import com.resourcefulbees.resourcefulbees.api.beedata.HoneyBottleData;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
-import com.resourcefulbees.resourcefulbees.registry.ModPotions;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.validation.SecondPhaseValidator;
 import net.minecraft.item.ItemStack;
@@ -189,6 +188,12 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
 
         ItemStack mainOutput = data.hasFluidoutput() ? ItemStack.EMPTY : new ItemStack(BeeInfoUtils.getItem(data.getMainOutput()), data.getMainOutputCount());
         FluidStack fluidOutput = data.hasFluidoutput() ? new FluidStack(BeeInfoUtils.getFluid(data.getMainOutput()), data.getMainOutputCount()) : FluidStack.EMPTY;
+        ItemStack secondaryOutput = new ItemStack(BeeInfoUtils.getItem(data.getSecondaryOutput()), data.getSecondaryOutputCount());
+        ItemStack bottleOutput = new ItemStack(BeeInfoUtils.getItem(data.getBottleOutput()), data.getBottleOutputCount());
+
+        if (!data.hasFluidoutput()) mainOutput.setTag(data.getMainNBT());
+        secondaryOutput.setTag(data.getSecondaryNBT());
+        bottleOutput.setTag(data.getBottleNBT());
 
         return new CentrifugeRecipe(
                 new ResourceLocation(ResourcefulBees.MOD_ID, beeType + "_honeycomb_centrifuge"),
@@ -196,8 +201,8 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
                 NonNullList.from(
                         Pair.of(ItemStack.EMPTY, 0f),
                         Pair.of(mainOutput, data.getMainOutputWeight()),
-                        Pair.of(new ItemStack(BeeInfoUtils.getItem(data.getSecondaryOutput()), data.getSecondaryOutputCount()), data.getSecondaryOutputWeight()),
-                        Pair.of(new ItemStack(BeeInfoUtils.getItem(data.getBottleOutput()), data.getBottleOutputCount()), data.getBottleOutputWeight())
+                        Pair.of(secondaryOutput, data.getSecondaryOutputWeight()),
+                        Pair.of(bottleOutput, data.getBottleOutputWeight())
                 ),
                 NonNullList.from(
                         Pair.of(FluidStack.EMPTY, 0f),
@@ -215,7 +220,12 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
 
         ItemStack mainOutput = data.hasFluidoutput() ? ItemStack.EMPTY : new ItemStack(BeeInfoUtils.getItem(data.getMainOutput()), data.getMainOutputCount() * 9);
         FluidStack fluidOutput = data.hasFluidoutput() ? new FluidStack(BeeInfoUtils.getFluid(data.getMainOutput()), data.getMainOutputCount() * 9) : FluidStack.EMPTY;
+        ItemStack secondaryOutput = new ItemStack(BeeInfoUtils.getItem(data.getSecondaryOutput()), data.getSecondaryOutputCount() * 9);
+        ItemStack bottleOutput = new ItemStack(BeeInfoUtils.getItem(data.getBottleOutput()), data.getBottleOutputCount() * 9);
 
+        if (!data.hasFluidoutput()) mainOutput.setTag(data.getMainNBT());
+        secondaryOutput.setTag(data.getSecondaryNBT());
+        bottleOutput.setTag(data.getBottleNBT());
 
         return new CentrifugeRecipe(
                 new ResourceLocation(ResourcefulBees.MOD_ID, beeType + "_honeycomb_block_centrifuge"),
@@ -223,8 +233,8 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
                 NonNullList.from(
                         Pair.of(ItemStack.EMPTY, 0.0f),
                         Pair.of(mainOutput, data.getMainOutputWeight()),
-                        Pair.of(new ItemStack(BeeInfoUtils.getItem(data.getSecondaryOutput()), data.getSecondaryOutputCount() * 9), data.getSecondaryOutputWeight()),
-                        Pair.of(new ItemStack(BeeInfoUtils.getItem(data.getBottleOutput()), data.getBottleOutputCount() * 9), data.getBottleOutputWeight())
+                        Pair.of(secondaryOutput, data.getSecondaryOutputWeight()),
+                        Pair.of(bottleOutput, data.getBottleOutputWeight())
                 ),
                 NonNullList.from(
                         Pair.of(FluidStack.EMPTY, 0f),

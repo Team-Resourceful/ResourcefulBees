@@ -2,7 +2,9 @@
 package com.resourcefulbees.resourcefulbees.recipe;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.mojang.serialization.JsonOps;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.registry.ModRecipeSerializers;
@@ -14,12 +16,15 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -28,17 +33,19 @@ import java.util.stream.IntStream;
 
 public class CentrifugeRecipe implements IRecipe<IInventory> {
 
+    public static final Logger LOGGER = LogManager.getLogger();
+
     public static final IRecipeType<CentrifugeRecipe> CENTRIFUGE_RECIPE_TYPE = IRecipeType.register(ResourcefulBees.MOD_ID + ":centrifuge");
     public final ResourceLocation id;
     public final Ingredient ingredient;
-    public final List<Pair<ItemStack,Float>> itemOutputs;
+    public final List<Pair<ItemStack, Float>> itemOutputs;
     public final List<Pair<FluidStack, Float>> fluidOutput;
     public final int time;
     public final int multiblockTime;
     public final boolean multiblock;
     public final boolean hasFluidOutput;
 
-    public CentrifugeRecipe(ResourceLocation id, Ingredient ingredient, List<Pair<ItemStack,Float>> itemOutputs, List<Pair<FluidStack, Float>> fluidOutput, int time, int multiblockTime, boolean multiblock, boolean hasFluidOutput) {
+    public CentrifugeRecipe(ResourceLocation id, Ingredient ingredient, List<Pair<ItemStack, Float>> itemOutputs, List<Pair<FluidStack, Float>> fluidOutput, int time, int multiblockTime, boolean multiblock, boolean hasFluidOutput) {
         this.id = id;
         this.ingredient = ingredient;
         this.itemOutputs = itemOutputs;
@@ -55,13 +62,13 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
         if (stack == ItemStack.EMPTY) return false;
         else {
             ItemStack[] matchingStacks = ingredient.getMatchingStacks();
-            if (matchingStacks.length == 0)return stack.isEmpty();
+            if (matchingStacks.length == 0) return stack.isEmpty();
             else {
-                for(ItemStack itemstack : matchingStacks) {
+                for (ItemStack itemstack : matchingStacks) {
                     if (itemstack.getItem() == stack.getItem()) {
-                        if (itemstack.hasTag() && stack.hasTag()){
+                        if (itemstack.hasTag() && stack.hasTag()) {
                             return itemstack.getTag().equals(stack.getTag());
-                        }else return !itemstack.hasTag() && !stack.hasTag();
+                        } else return !itemstack.hasTag() && !stack.hasTag();
                     }
                 }
                 return false;
@@ -70,7 +77,9 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
     }
 
     @Override
-    public boolean isDynamic() { return true; }
+    public boolean isDynamic() {
+        return true;
+    }
 
     @Override
     @Nonnull
@@ -100,20 +109,28 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
 
     @Nonnull
     @Override
-    public ResourceLocation getId() { return id; }
+    public ResourceLocation getId() {
+        return id;
+    }
 
     @Nonnull
     @Override
-    public IRecipeSerializer<?> getSerializer() { return ModRecipeSerializers.CENTRIFUGE_RECIPE.get(); }
+    public IRecipeSerializer<?> getSerializer() {
+        return ModRecipeSerializers.CENTRIFUGE_RECIPE.get();
+    }
 
     @Nonnull
     @Override
-    public IRecipeType<?> getType() { return CENTRIFUGE_RECIPE_TYPE; }
+    public IRecipeType<?> getType() {
+        return CENTRIFUGE_RECIPE_TYPE;
+    }
 
     public static class Serializer<T extends CentrifugeRecipe> extends net.minecraftforge.registries.ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<T> {
         final IRecipeFactory<T> factory;
 
-        public Serializer(Serializer.IRecipeFactory<T> factory) { this.factory = factory; }
+        public Serializer(Serializer.IRecipeFactory<T> factory) {
+            this.factory = factory;
+        }
 
         @Nonnull
         @Override
@@ -126,20 +143,36 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
             }
 
             JsonArray jsonArray = JSONUtils.getJsonArray(json, "results");
-            List<Pair<ItemStack,Float>> outputs = new ArrayList<>();
+            List<Pair<ItemStack, Float>> outputs = new ArrayList<>();
             List<Pair<FluidStack, Float>> fluidOutput = new ArrayList<>();
 
             jsonArray.forEach(jsonElement -> {
                 JsonObject jsonObject = jsonElement.getAsJsonObject();
                 if (jsonObject.has("item")) {
+                    // collect data
                     String registryName = JSONUtils.getString(jsonObject, "item");
                     int count = JSONUtils.getInt(jsonObject, "count", 1);
                     Float chance = JSONUtils.getFloat(jsonObject, "chance", 1);
+
+                    // collect nbt
+                    CompoundNBT nbt = new CompoundNBT();
+                    if (jsonObject.has("nbtData")) {
+                        JsonElement nbtData = JSONUtils.getJsonObject(jsonObject, "nbtData");
+                        CompoundNBT.CODEC.parse(JsonOps.INSTANCE, nbtData).resultOrPartial(e -> LOGGER.warn(String.format("Could not deserialize NBT: [%s]", nbtData.toString()))).get();
+                    }
+
+                    // create item stack
                     ItemStack stack = new ItemStack(BeeInfoUtils.getItem(registryName), count);
-                    if (registryName.equals("minecraft:potion") && jsonObject.has("potion")){
+
+                    // apply nbt
+                    if (nbt != null && !nbt.isEmpty()) stack.setTag(nbt);
+
+                    // collect and set potion
+                    if (registryName.equals("minecraft:potion") && jsonObject.has("potion")) {
                         stack.getOrCreateTag()
                                 .putString("Potion", JSONUtils.getString(jsonObject, "potion"));
                     }
+                    // add outputs
                     outputs.add(Pair.of(stack, chance));
                     fluidOutput.add(Pair.of(FluidStack.EMPTY, chance));
                 } else if (jsonObject.has("fluid")) {
@@ -152,9 +185,9 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
                 }
             });
 
-            int time = JSONUtils.getInt(json,"time", Config.GLOBAL_CENTRIFUGE_RECIPE_TIME.get());
+            int time = JSONUtils.getInt(json, "time", Config.GLOBAL_CENTRIFUGE_RECIPE_TIME.get());
             int multiblockTime = JSONUtils.getInt(json, "multiblockTime", time - Config.MULTIBLOCK_RECIPE_TIME_REDUCTION.get());
-            boolean multiblock = JSONUtils.getBoolean(json,"multiblock", false);
+            boolean multiblock = JSONUtils.getBoolean(json, "multiblock", false);
             boolean hasFluidOutput = JSONUtils.getBoolean(json, "hasFluidOutput", false);
 
             return this.factory.create(id, ingredient, outputs, fluidOutput, time, multiblockTime, multiblock, hasFluidOutput);
@@ -194,7 +227,7 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
         }
 
         public interface IRecipeFactory<T extends CentrifugeRecipe> {
-            T create(ResourceLocation id, Ingredient input, List<Pair<ItemStack,Float>> itemOutputs, List<Pair<FluidStack,Float>> fluidOutputs, int time, int multiblockTime, boolean multiblock, boolean hasFluidOutput);
+            T create(ResourceLocation id, Ingredient input, List<Pair<ItemStack, Float>> itemOutputs, List<Pair<FluidStack, Float>> fluidOutputs, int time, int multiblockTime, boolean multiblock, boolean hasFluidOutput);
         }
     }
 }

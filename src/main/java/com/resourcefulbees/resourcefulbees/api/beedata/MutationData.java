@@ -353,7 +353,7 @@ public class MutationData extends AbstractBeeData {
             if (nbtData == null) {
                 nbt = new CompoundNBT();
             } else {
-                nbt = CompoundNBT.CODEC.parse(JsonOps.INSTANCE, nbtData).resultOrPartial(e -> LOGGER.warn(String.format("could not deserialize NBT: [%s]", nbtData.toString()))).get();
+                nbt = CompoundNBT.CODEC.parse(JsonOps.INSTANCE, nbtData).resultOrPartial(e -> LOGGER.warn(String.format("Could not deserialize NBT: [%s]", nbtData.toString()))).get();
             }
             return nbt;
         }
