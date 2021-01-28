@@ -193,7 +193,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
                                 }
                                 break;
                             case 2:
-                                if (glass_bottle.isEmpty()) {
+                                if (glass_bottle.isEmpty() || glass_bottle.getCount() < recipes.get(i).itemOutputs.get(j).getLeft().getCount()) {
                                     fluidTanks.fill(0, new FluidStack(ModFluids.HONEY_STILL.get(), ModConstants.HONEY_PER_BOTTLE), MultiFluidTank.FluidAction.EXECUTE);
                                     depositStacks.add(ItemStack.EMPTY);
                                 } else {
