@@ -63,12 +63,9 @@ public abstract class MixinBeeEntity extends AnimalEntity {
         return super.isInvulnerableTo(p_180431_1_);
     }
 
-    public float getEyeHeight(@NotNull Pose pose, EntitySize size) {
-        float eyeHeight = super.getEyeHeight(pose, size);
-        if (isChild()) {
-            eyeHeight = eyeHeight * 0.5f;
-        }
-        return eyeHeight;
+    @Override
+    protected float getStandingEyeHeight(@NotNull Pose pose, EntitySize size) {
+        return this.isChild() ? size.height * 0.25F : size.height * 0.5F;
     }
 
     @Inject(at = @At("HEAD"), method = "isHiveValid()Z", cancellable = true)
