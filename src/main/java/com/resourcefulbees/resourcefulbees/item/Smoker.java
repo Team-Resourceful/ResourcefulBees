@@ -36,10 +36,8 @@ public class Smoker extends Item {
     }
 
     @Nonnull
-	public ActionResult<ItemStack> onItemRightClick(World world, @Nonnull PlayerEntity player, @Nonnull Hand hand)
-	{
-	    if (!world.isRemote)
-	    {
+	public ActionResult<ItemStack> onItemRightClick(World world, @Nonnull PlayerEntity player, @Nonnull Hand hand) {
+	    if (!world.isRemote && !player.isSneaking()) {
 	        int damage = player.getHeldItem(hand).getDamage();
 	        int maxDamage = player.getHeldItem(hand).getMaxDamage();
 
@@ -57,12 +55,12 @@ public class Smoker extends Item {
 
             AxisAlignedBB axisalignedbb = new AxisAlignedBB((player.getX() + vec3d.x) - 2.5D, (player.getY() + vec3d.y) - 2D, (player.getZ() + vec3d.z) - 2.5D, (player.getX() + vec3d.x) + 2.5D, (player.getY() + vec3d.y) + 2D, (player.getZ() + vec3d.z) + 2.5D);
             List<MobEntity> list = world.getEntitiesIncludingUngeneratedChunks(BeeEntity.class, axisalignedbb);
-            for (MobEntity mobEntity : list) {
-                if (mobEntity instanceof BeeEntity && ((BeeEntity) mobEntity).hasAngerTime()){
-                    ((BeeEntity) mobEntity).setAngerTime(0);
-                    mobEntity.setRevengeTarget(null);
-                }
-            }
+            list.stream()
+                    .filter(mobEntity -> mobEntity instanceof BeeEntity && ((BeeEntity) mobEntity).hasAngerTime())
+                    .forEach(mobEntity -> {
+                        ((BeeEntity) mobEntity).setAngerTime(0);
+                        mobEntity.setRevengeTarget(null);
+                    });
 
 			ServerWorld worldServer = (ServerWorld)world;
 			worldServer.spawnParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, x, y + 1.3D, z, 50, 0, 0, 0, 0.01F);
@@ -77,34 +75,12 @@ public class Smoker extends Item {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void addInformation(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn)
-    {
-        if(Screen.hasShiftDown())
-        {
+    public void addInformation(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
+        if(Screen.hasShiftDown()) {
             tooltip.add(new StringTextComponent(TextFormatting.GOLD + I18n.format("item.resourcefulbees.smoker.tooltip")));
             tooltip.add(new StringTextComponent(TextFormatting.GOLD + I18n.format("item.resourcefulbees.smoker.tooltip.1")));
-        }
-        else
-        {
+        } else {
             tooltip.add(new StringTextComponent(TextFormatting.YELLOW + I18n.format("resourcefulbees.shift_info")));
         }
     }
-
-/*    @Nonnull
-    @Override
-    public ActionResultType itemInteractionForEntity(@Nonnull ItemStack stack, @Nonnull PlayerEntity player, LivingEntity targetIn, @Nonnull Hand hand) {
-        if (targetIn.getEntityWorld().isRemote() || (!(targetIn instanceof BeeEntity) || !targetIn.isAlive())) {
-            return ActionResultType.FAIL;
-        }
-        if (player.getHeldItem(hand).getDamage() < player.getHeldItem(hand).getMaxDamage()) {
-            damageItem(player.getHeldItem(hand), 1, player, player1 -> player1.sendBreakAnimation(hand));
-        }
-
-        BeeEntity target = (BeeEntity) targetIn;
-        if (target.func_233678_J__()){
-            target.setAngerTime(0);
-        }
-        return ActionResultType.PASS;
-    }*/
-
 }

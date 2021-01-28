@@ -68,11 +68,10 @@ public class CentrifugeCasingBlock extends Block {
                                 .ifPresent(iFluidHandler -> FluidUtil.interactWithFluidHandler(player, hand, world, pos, null));
                     } else if(!player.isSneaking()) {
                         NetworkHooks.openGui((ServerPlayerEntity) player, controller, controller.getPos());
-                        return ActionResultType.SUCCESS;
                     }
                 }
         }
 
-        return super.onUse(state, world, pos, player, hand, rayTraceResult);
+        return ActionResultType.SUCCESS;
     }
 }
