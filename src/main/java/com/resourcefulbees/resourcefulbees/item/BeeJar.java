@@ -21,10 +21,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.*;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -104,10 +101,22 @@ public class BeeJar extends Item {
         } else {
             stack.setTag(createTag(target));
         }
+        renameJar(stack, target);
         player.setHeldItem(hand, stack);
         player.swingArm(hand);
         target.remove(true);
         return ActionResultType.PASS;
+    }
+
+    public static void renameJar(ItemStack stack, BeeEntity target) {
+        CompoundNBT nbt = stack.getTag();
+        ITextComponent beeName = target.getName();
+        TranslationTextComponent bottleName = new TranslationTextComponent(stack.getItem().getTranslationKey(stack));
+        bottleName.append(" - ").append(beeName);
+        bottleName.setStyle(Style.EMPTY.withItalic(false));
+        CompoundNBT displayNBT = stack.getOrCreateChildTag("display");
+        displayNBT.putString("Name", ITextComponent.Serializer.toJson(bottleName));
+        nbt.put("display", displayNBT);
     }
 
     @Nonnull

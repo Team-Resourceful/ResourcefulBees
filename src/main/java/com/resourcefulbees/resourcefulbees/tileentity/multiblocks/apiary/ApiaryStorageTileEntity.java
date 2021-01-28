@@ -6,6 +6,7 @@ import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.container.ApiaryStorageContainer;
 import com.resourcefulbees.resourcefulbees.container.AutomationSensitiveItemStackHandler;
+import com.resourcefulbees.resourcefulbees.item.BeeJar;
 import com.resourcefulbees.resourcefulbees.item.UpgradeItem;
 import com.resourcefulbees.resourcefulbees.lib.ApiaryOutput;
 import com.resourcefulbees.resourcefulbees.lib.ApiaryTabs;
@@ -237,20 +238,12 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
             if (world != null && entityType != null) {
                 Entity entity = entityType.create(world);
                 if (entity != null) {
-                    String type = EntityType.getKey(entity.getType()).toString();
-                    CompoundNBT nbt = new CompoundNBT();
-                    nbt.putString(NBTConstants.NBT_ENTITY, type);
                     ICustomBee beeEntity = (ICustomBee) entity;
-                    nbt.putString(NBTConstants.NBT_BEE_TYPE, beeEntity.getBeeType());
-                    if (beeEntity.getBeeData().getColorData().hasPrimaryColor()) {
-                        nbt.putString(NBTConstants.NBT_COLOR, beeEntity.getBeeData().getColorData().getPrimaryColor());
-                    } else {
-                        nbt.putString(NBTConstants.NBT_COLOR, String.valueOf(BeeConstants.DEFAULT_ITEM_COLOR));
-                    }
-                    entity.writeWithoutTypeId(nbt);
+                    CompoundNBT nbt = BeeJar.createTag((BeeEntity) beeEntity);
                     ItemStack beeJar = new ItemStack(ModItems.BEE_JAR.get());
                     ItemStack emptyBeeJar = new ItemStack(ModItems.BEE_JAR.get());
                     beeJar.setTag(nbt);
+                    BeeJar.renameJar(beeJar, (BeeEntity) beeEntity);
                     // if failed, will deposit empty bee jar
                     float nextFloat = world.rand.nextFloat();
                     if (breedChance >= nextFloat) {
