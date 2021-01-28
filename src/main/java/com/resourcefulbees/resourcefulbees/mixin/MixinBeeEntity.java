@@ -1,9 +1,12 @@
 package com.resourcefulbees.resourcefulbees.mixin;
 
+import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.registry.ModPOIs;
 import com.resourcefulbees.resourcefulbees.tileentity.TieredBeehiveTileEntity;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryTileEntity;
+import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.Pose;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.BeeEntity;
 import net.minecraft.potion.Effects;
@@ -16,6 +19,7 @@ import net.minecraft.village.PointOfInterestManager;
 import net.minecraft.village.PointOfInterestType;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -57,6 +61,14 @@ public abstract class MixinBeeEntity extends AnimalEntity {
             return true;
         }
         return super.isInvulnerableTo(p_180431_1_);
+    }
+
+    public float getEyeHeight(@NotNull Pose pose, EntitySize size) {
+        float eyeHeight = super.getEyeHeight(pose, size);
+        if (isChild()) {
+            eyeHeight = eyeHeight * 0.5f;
+        }
+        return eyeHeight;
     }
 
     @Inject(at = @At("HEAD"), method = "isHiveValid()Z", cancellable = true)
