@@ -1,9 +1,11 @@
 package com.resourcefulbees.resourcefulbees.config;
 
 import com.resourcefulbees.resourcefulbees.lib.ApiaryOutput;
+import com.resourcefulbees.resourcefulbees.utils.FunctionalIntReferenceHolder;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 public class Config {
+
 
 
     public static ForgeConfigSpec.BooleanValue GENERATE_DEFAULTS;
@@ -78,6 +80,7 @@ public class Config {
     public static ForgeConfigSpec.DoubleValue BEECON_FIRE_RESISTANCE_VALUE;
     public static ForgeConfigSpec.DoubleValue BEECON_REGENERATION_VALUE;
     public static ForgeConfigSpec.IntValue BEECON_BASE_DRAIN;
+    public static ForgeConfigSpec.IntValue BEECON_PULL_AMOUNT;
 
 
     //CLIENT
@@ -159,6 +162,8 @@ public class Config {
                     .defineInRange("beeconRangePerEffect", 10, 1, 25);
             BEECON_BASE_DRAIN = COMMON_BUILDER.comment("\nThe base drain rate for the Ender Beecon when an effect is active.")
                     .defineInRange("beeconBaseDrain", 1, 1, 128);
+            BEECON_PULL_AMOUNT = COMMON_BUILDER.comment("\nThe amount of fluid per tick the Ender Beecon can pull from below blocks.")
+                    .defineInRange("beeconPullAmount", 250, 1, 16000);
             COMMON_BUILDER.pop();
 
             COMMON_BUILDER.push("Beehive Options");

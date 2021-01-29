@@ -37,6 +37,7 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.tags.ITag;
 import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -51,6 +52,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -67,6 +69,7 @@ import java.util.function.Predicate;
 
 public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITickableTileEntity, INamedContainerProvider {
 
+
     public static ITag<Fluid> honeyFluidTag = BeeInfoUtils.getFluidTag("forge:honey");
     public static ITag<Item> honeyBottleTag = BeeInfoUtils.getItemTag("forge:honey_bottle");
     private List<BeamSegment> beamSegments = Lists.newArrayList();
@@ -78,6 +81,7 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
     public static final int HONEY_BOTTLE_INPUT = 0;
     public static final int BOTTLE_OUTPUT = 1;
     public static final int HONEY_FILL_AMOUNT = ModConstants.HONEY_PER_BOTTLE;
+    private static final int FLUID_PULL_RATE = Config.BEECON_PULL_AMOUNT.get();
     public AutomationSensitiveItemStackHandler h = new EnderBeeconTileEntity.TileStackHandler(2, getAcceptor(), getRemover());
     private final LazyOptional<IItemHandler> lazyOptional = LazyOptional.of(() -> h);
     private boolean dirty;
@@ -291,6 +295,8 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
             processFluid();
         }
 
+        doPullProcess();
+
         if (dirty) {
             this.dirty = false;
             this.markDirty();
@@ -310,6 +316,35 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
                     beeconActive = false;
                 }
                 updateBeecon = false;
+            }
+        }
+    }
+
+    private void pullFluid(Fluid i, IFluidHandler handler) {
+        int remainingSpace = fluidTank.getSpace();
+        FluidStack amountDrained;
+        if (FLUID_PULL_RATE > remainingSpace) {
+            amountDrained = handler.drain(new FluidStack(i, remainingSpace), IFluidHandler.FluidAction.EXECUTE);
+        } else {
+            amountDrained = handler.drain(new FluidStack(i, FLUID_PULL_RATE), IFluidHandler.FluidAction.EXECUTE);
+        }
+        fluidTank.fill(amountDrained, IFluidHandler.FluidAction.EXECUTE);
+    }
+
+    private void doPullProcess() {
+        TileEntity tileEntity = world.getTileEntity(pos.down());
+        if (tileEntity == null) return;
+        LazyOptional<IFluidHandler> fluidCap = tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, Direction.UP);
+        IFluidHandler handler = fluidCap.orElse(null);
+        if (handler != null) {
+            int tanks = handler.getTanks();
+            for (int i = 0; i < tanks; i++) {
+                if (!handler.getFluidInTank(i).isEmpty() &&
+                        handler.getFluidInTank(i).getFluid().isIn(honeyFluidTag) &&
+                        (fluidTank.isEmpty() || handler.getFluidInTank(i).getFluid() == fluidTank.getFluid().getFluid())) {
+                    pullFluid(handler.getFluidInTank(i).getFluid(), handler);
+                    return;
+                }
             }
         }
     }
