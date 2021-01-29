@@ -32,7 +32,9 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public class BeeJar extends Item {
-    public BeeJar(Item.Properties properties) { super(properties); }
+    public BeeJar(Item.Properties properties) {
+        super(properties);
+    }
 
     public static int getColor(ItemStack stack, int tintIndex) {
         CompoundNBT tag = stack.getTag();
@@ -61,9 +63,9 @@ public class BeeJar extends Item {
                 BlockPos blockPos = pos.offset(context.getFace());
                 entity.setPositionAndRotation(blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5, 0, 0);
                 worldIn.addEntity(entity);
-                stack.setTag(null);
-                return ActionResultType.SUCCESS;
             }
+            stack.setTag(null);
+            return ActionResultType.SUCCESS;
         }
         return ActionResultType.FAIL;
     }
@@ -95,9 +97,9 @@ public class BeeJar extends Item {
             ItemStack newJar = new ItemStack(ModItems.BEE_JAR.get());
             newJar.setTag(createTag(target));
             stack.shrink(1);
-             if (!player.addItemStackToInventory(newJar)) {
-                 player.dropItem(newJar, false);
-             }
+            if (!player.addItemStackToInventory(newJar)) {
+                player.dropItem(newJar, false);
+            }
             renameJar(newJar, target);
         } else {
             stack.setTag(createTag(target));
@@ -151,7 +153,7 @@ public class BeeJar extends Item {
         }
     }
 
-    public static CompoundNBT createTag(BeeEntity beeEntity){
+    public static CompoundNBT createTag(BeeEntity beeEntity) {
         String type = EntityType.getKey(beeEntity.getType()).toString();
         CompoundNBT nbt = new CompoundNBT();
         nbt.putString(NBTConstants.NBT_ENTITY, type);

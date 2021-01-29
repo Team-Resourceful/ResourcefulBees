@@ -434,6 +434,16 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
         if (nbt.contains(NBTConstants.NBT_TIER)) {
             setTier(nbt.getInt(NBTConstants.NBT_TIER));
         }
+        validateBees();
+    }
+
+    private void validateBees() {
+        if (this.world == null) return;
+        BEES.forEach((s, apiaryBee) -> {
+            String id = apiaryBee.entityData.getString("id");
+            EntityType type = BeeInfoUtils.getEntityType(id);
+            if (type == EntityType.PIG) BEES.remove(s);
+        });
     }
 
     public CompoundNBT saveToNBT(CompoundNBT nbt) {
@@ -527,6 +537,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     public void export(BeeEntity beeEntity) {
         ItemStack beeJar = new ItemStack(ModItems.BEE_JAR.get());
         beeJar.setTag(BeeJar.createTag(beeEntity));
+        BeeJar.renameJar(beeJar, beeEntity);
         this.h.setStackInSlot(EXPORT, beeJar);
     }
     //endregion
