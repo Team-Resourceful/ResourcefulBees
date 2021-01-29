@@ -5,10 +5,13 @@ import com.resourcefulbees.resourcefulbees.capabilities.CustomEnergyStorage;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.container.AutomationSensitiveItemStackHandler;
 import com.resourcefulbees.resourcefulbees.container.HoneyGeneratorContainer;
+import com.resourcefulbees.resourcefulbees.item.CustomHoneyBottleItem;
+import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
 import com.resourcefulbees.resourcefulbees.network.packets.SyncGUIMessage;
 import com.resourcefulbees.resourcefulbees.registry.ModFluids;
+import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import com.resourcefulbees.resourcefulbees.registry.ModTileEntityTypes;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import io.netty.buffer.Unpooled;
@@ -16,15 +19,19 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.item.BucketItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.tags.ITag;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
@@ -41,6 +48,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -51,7 +59,7 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
 
     public static final int HONEY_BOTTLE_INPUT = 0;
     public static final int BOTTLE_OUTPUT = 1;
-    public static final int HONEY_FILL_AMOUNT = Config.HONEY_FILL_AMOUNT.get();
+    public static final int HONEY_FILL_AMOUNT = ModConstants.HONEY_PER_BOTTLE;
     public static final int HONEY_DRAIN_AMOUNT = Config.HONEY_DRAIN_AMOUNT.get();
     public static final int ENERGY_FILL_AMOUNT = Config.ENERGY_FILL_AMOUNT.get();
     public static final int ENERGY_TRANSFER_AMOUNT = Config.ENERGY_TRANSFER_AMOUNT.get();
@@ -62,12 +70,16 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
         return fluidStack -> fluidStack.getFluid().isIn(BeeInfoUtils.getFluidTag("forge:honey"));
     }
 
-    public AutomationSensitiveItemStackHandler h = new HoneyGeneratorTileEntity.TileStackHandler(5, getAcceptor(), getRemover());
+    public HoneyGeneratorTileEntity.TileStackHandler h = new HoneyGeneratorTileEntity.TileStackHandler(5, getAcceptor(), getRemover());
     public final InternalFluidTank fluidTank = new InternalFluidTank(MAX_TANK_STORAGE, honeyFluidPredicate());
     public final CustomEnergyStorage energyStorage = createEnergy();
     private final LazyOptional<IFluidHandler> fluidOptional = LazyOptional.of(() -> fluidTank);
     private final LazyOptional<IItemHandler> lazyOptional = LazyOptional.of(() -> h);
     private final LazyOptional<IEnergyStorage> energyOptional = LazyOptional.of(() -> energyStorage);
+
+    public static ITag<Fluid> honeyFluidTag = BeeInfoUtils.getFluidTag("forge:honey");
+    public static ITag<Item> honeyBottleTag = BeeInfoUtils.getItemTag("forge:honey_bottle");
+
     public int fluidFilled;
     public int energyFilled;
     private boolean isProcessing;
@@ -81,9 +93,6 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
     public void tick() {
         if (world != null && !world.isRemote) {
             if (canStartFluidProcess()) {
-                startFluidProcess();
-            }
-            if (isProcessing) {
                 processFluid();
             }
             if (!fluidTank.isEmpty() && this.canProcessEnergy()) {
@@ -128,34 +137,87 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
     }
 
     private boolean canStartFluidProcess() {
-        return !isProcessing && !h.getStackInSlot(HONEY_BOTTLE_INPUT).isEmpty() && h.getStackInSlot(HONEY_BOTTLE_INPUT).getItem().equals(Items.HONEY_BOTTLE) &&
-                (h.getStackInSlot(BOTTLE_OUTPUT).isEmpty() || h.getStackInSlot(BOTTLE_OUTPUT).getCount() < h.getStackInSlot(BOTTLE_OUTPUT).getMaxStackSize());
-    }
+        ItemStack stack = h.getStackInSlot(HONEY_BOTTLE_INPUT);
+        ItemStack output = h.getStackInSlot(BOTTLE_OUTPUT);
 
-    private void startFluidProcess() {
-        ItemStack honey_bottle = h.getStackInSlot(HONEY_BOTTLE_INPUT);
-        ItemStack glass_bottle = h.getStackInSlot(BOTTLE_OUTPUT);
-        honey_bottle.shrink(1);
-        if (glass_bottle.isEmpty()) h.setStackInSlot(BOTTLE_OUTPUT, new ItemStack(Items.GLASS_BOTTLE));
-        else glass_bottle.grow(1);
-        fluidFilled = 0;
-        isProcessing = true;
+        boolean stackValid = false;
+        boolean isBucket = false;
+        boolean outputValid;
+        boolean hasRoom;
+        if (!stack.isEmpty()) {
+            if (stack.getItem() instanceof BucketItem) {
+                BucketItem bucket = (BucketItem) stack.getItem();
+                stackValid = bucket.getFluid().isIn(honeyFluidTag);
+                isBucket = true;
+            } else {
+                stackValid = stack.getItem().isIn(honeyBottleTag);
+            }
+        }
+        if (!output.isEmpty()) {
+            if (isBucket) {
+                outputValid = output.getItem() == Items.BUCKET;
+            } else {
+                outputValid = output.getItem() == Items.GLASS_BOTTLE;
+            }
+            hasRoom = output.getCount() < output.getMaxStackSize();
+        } else {
+            outputValid = true;
+            hasRoom = true;
+        }
+        return stackValid && outputValid && hasRoom;
     }
 
     private void processFluid() {
         if (canProcessFluid()) {
-            fluidTank.fill(new FluidStack(ModFluids.HONEY_STILL.get(), HONEY_FILL_AMOUNT), IFluidHandler.FluidAction.EXECUTE);
-            fluidFilled += HONEY_FILL_AMOUNT;
-            isProcessing = fluidFilled < ModConstants.HONEY_PER_BOTTLE;
-            if (!isProcessing) fluidFilled = 0;
-            assert world != null : "World is null?";
-            world.setBlockState(pos, getBlockState().with(HoneyGenerator.PROPERTY_ON, true));
+            ItemStack stack = h.getStackInSlot(HONEY_BOTTLE_INPUT);
+            ItemStack output = h.getStackInSlot(BOTTLE_OUTPUT);
+            if (stack.getItem() instanceof BucketItem) {
+                BucketItem bucket = (BucketItem) stack.getItem();
+                fluidTank.fill(new FluidStack(bucket.getFluid(), 1000), IFluidHandler.FluidAction.EXECUTE);
+                stack.shrink(1);
+                if (output.isEmpty()) {
+                    h.setStackInSlot(BOTTLE_OUTPUT, new ItemStack(Items.BUCKET));
+                } else {
+                    output.grow(1);
+                }
+            } else {
+                if (stack.getItem() instanceof CustomHoneyBottleItem) {
+                    CustomHoneyBottleItem item = (CustomHoneyBottleItem) stack.getItem();
+                    FluidStack fluid = new FluidStack(item.getHoneyData().getHoneyStillFluidRegistryObject().get().getStillFluid(), HONEY_FILL_AMOUNT);
+                    fluidTank.fill(fluid, IFluidHandler.FluidAction.EXECUTE);
+                } else if (stack.getItem() == ModItems.CATNIP_HONEY_BOTTLE.get()) {
+                    FluidStack fluid = new FluidStack(ModFluids.CATNIP_HONEY_STILL.get(), HONEY_FILL_AMOUNT);
+                    fluidTank.fill(fluid, IFluidHandler.FluidAction.EXECUTE);
+                }
+                stack.shrink(1);
+                if (output.isEmpty()) {
+                    h.setStackInSlot(BOTTLE_OUTPUT, new ItemStack(Items.GLASS_BOTTLE));
+                } else {
+                    output.grow(1);
+                }
+            }
             this.dirty = true;
         }
     }
 
     private boolean canProcessFluid() {
-        return (fluidTank.getFluidAmount() + HONEY_FILL_AMOUNT) <= fluidTank.getCapacity();
+        boolean spaceLeft;
+        ItemStack stack = h.getStackInSlot(HONEY_BOTTLE_INPUT);
+        Fluid fluid = ModFluids.HONEY_STILL.get();
+        if (stack.getItem() instanceof BucketItem) {
+            BucketItem item = (BucketItem) stack.getItem();
+            spaceLeft = (fluidTank.getFluidAmount() + 1000) <= fluidTank.getCapacity();
+            fluid = item.getFluid();
+        } else {
+            spaceLeft = (fluidTank.getFluidAmount() + HONEY_FILL_AMOUNT) <= fluidTank.getCapacity();
+            if (stack.getItem() instanceof CustomHoneyBottleItem) {
+                CustomHoneyBottleItem item = (CustomHoneyBottleItem) stack.getItem();
+                fluid = item.getHoneyData().getHoneyStillFluidRegistryObject().get().getStillFluid();
+            } else if (stack.getItem() == ModItems.CATNIP_HONEY_BOTTLE.get()) {
+                fluid = ModFluids.CATNIP_HONEY_STILL.get();
+            }
+        }
+        return spaceLeft && (fluidTank.getFluid().getFluid() == fluid || fluidTank.isEmpty());
     }
 
     public boolean canProcessEnergy() {
@@ -294,9 +356,19 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
         return (int) Math.ceil(fillPercentage * 100);
     }
 
-    protected class TileStackHandler extends AutomationSensitiveItemStackHandler {
+    public class TileStackHandler extends AutomationSensitiveItemStackHandler {
         protected TileStackHandler(int slots, IAcceptor acceptor, IRemover remover) {
             super(slots, acceptor, remover);
+        }
+
+        @Override
+        public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+            if (stack.getItem() instanceof BucketItem) {
+                BucketItem bucket = (BucketItem) stack.getItem();
+                return bucket.getFluid().isIn(honeyFluidTag);
+            } else {
+                return stack.getItem().isIn(honeyBottleTag);
+            }
         }
 
         @Override

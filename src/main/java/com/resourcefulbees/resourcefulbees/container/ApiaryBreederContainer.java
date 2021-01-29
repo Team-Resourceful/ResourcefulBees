@@ -58,15 +58,16 @@ public class ApiaryBreederContainer extends Container {
             numberOfBreeders = apiaryBreederTileEntity.numberOfBreeders;
 
             for (int i=0; i<4; i++){
-                this.addSlot(new SlotItemHandlerUnconditioned(apiaryBreederTileEntity.h, UPGRADE_SLOTS[i], 6, 22 + (i *18)) {
+                int finalI = i;
+                this.addSlot(new SlotItemHandlerUnconditioned(apiaryBreederTileEntity.h, UPGRADE_SLOTS[finalI], 6, 22 + (finalI *18)) {
                     @Override
                     public int getSlotStackLimit() {
-                        return 1;
+                        return apiaryBreederTileEntity.h.getSlotLimit(UPGRADE_SLOTS[finalI]);
                     }
 
                     @Override
                     public boolean isItemValid(ItemStack stack) {
-                        return UpgradeItem.hasUpgradeData(stack) && (UpgradeItem.getUpgradeType(stack).contains(NBTConstants.NBT_BREEDER_UPGRADE));
+                        return apiaryBreederTileEntity.h.isItemValid(UPGRADE_SLOTS[finalI], stack);
                     }
 
                     @Override
@@ -100,43 +101,44 @@ public class ApiaryBreederContainer extends Container {
             }
 
             for (int i=0; i<numberOfBreeders; i++) {
-                this.addSlot(new SlotItemHandlerUnconditioned(apiaryBreederTileEntity.h, PARENT_1_SLOTS[i], 33, 18 +(i*20)){
+                int finalI = i;
+                this.addSlot(new SlotItemHandlerUnconditioned(apiaryBreederTileEntity.h, PARENT_1_SLOTS[finalI], 33, 18 +(finalI *20)){
                     public int getSlotStackLimit() {
-                        return 1;
+                        return apiaryBreederTileEntity.h.getSlotLimit(PARENT_1_SLOTS[finalI]);
                     }
 
                     public boolean isItemValid(ItemStack stack) {
                         //noinspection ConstantConditions
-                        return stack.getItem() instanceof BeeJar && BeeJar.isFilled(stack) && stack.getTag().getString(NBTConstants.NBT_ENTITY).startsWith(ResourcefulBees.MOD_ID);
+                        return apiaryBreederTileEntity.h.isItemValid(PARENT_1_SLOTS[finalI], stack);
                     }
                 });
                 this.addSlot(new SlotItemHandlerUnconditioned(apiaryBreederTileEntity.h, FEED_1_SLOTS[i], 69, 18 +(i*20)){
                     public boolean isItemValid(ItemStack stack) {
-                        return !(stack.getItem() instanceof BeeJar);
+                        return apiaryBreederTileEntity.h.isItemValid(FEED_1_SLOTS[finalI], stack);
                     }
                 });
                 this.addSlot(new SlotItemHandlerUnconditioned(apiaryBreederTileEntity.h, PARENT_2_SLOTS[i], 105, 18 +(i*20)){
                     public int getSlotStackLimit() {
-                        return 1;
+                        return apiaryBreederTileEntity.h.getSlotLimit(PARENT_2_SLOTS[finalI]);
                     }
 
                     public boolean isItemValid(ItemStack stack) {
                         //noinspection ConstantConditions
-                        return stack.getItem() instanceof BeeJar && BeeJar.isFilled(stack) && stack.getTag().getString(NBTConstants.NBT_ENTITY).startsWith(ResourcefulBees.MOD_ID);
+                        return apiaryBreederTileEntity.h.isItemValid(PARENT_2_SLOTS[finalI], stack);
                     }
                 });
                 this.addSlot(new SlotItemHandlerUnconditioned(apiaryBreederTileEntity.h, FEED_2_SLOTS[i], 141, 18 +(i*20)){
                     public boolean isItemValid(ItemStack stack) {
-                        return !(stack.getItem() instanceof BeeJar);
+                        return apiaryBreederTileEntity.h.isItemValid(FEED_2_SLOTS[finalI], stack);
                     }
                 });
                 this.addSlot(new SlotItemHandlerUnconditioned(apiaryBreederTileEntity.h, EMPTY_JAR_SLOTS[i], 177, 18 +(i*20)){
                     public int getSlotStackLimit() {
-                        return 64;
+                        return apiaryBreederTileEntity.h.getSlotLimit(EMPTY_JAR_SLOTS[finalI]);
                     }
 
                     public boolean isItemValid(ItemStack stack) {
-                        return stack.getItem() instanceof BeeJar && !BeeJar.isFilled(stack);
+                        return apiaryBreederTileEntity.h.isItemValid(EMPTY_JAR_SLOTS[finalI], stack);
                     }
                 });
             }

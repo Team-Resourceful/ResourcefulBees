@@ -31,12 +31,7 @@ public class EnderBeeconContainer extends Container {
         if (enderBeeconTileEntity != null) {
             this.addSlot(new SlotItemHandlerUnconditioned(enderBeeconTileEntity.h, EnderBeeconTileEntity.HONEY_BOTTLE_INPUT, 184, 34) {
                 public boolean isItemValid(ItemStack stack) {
-                    if (stack.getItem() instanceof BucketItem) {
-                        BucketItem bucket = (BucketItem) stack.getItem();
-                        return bucket.getFluid().isIn(enderBeeconTileEntity.honeyFluidTag);
-                    } else {
-                        return stack.getItem().isIn(enderBeeconTileEntity.honeyBottleTag);
-                    }
+                    return EnderBeeconTileEntity.isItemValid(stack);
                 }
             });
             this.addSlot(new OutputSlot(enderBeeconTileEntity.h, EnderBeeconTileEntity.BOTTLE_OUTPUT, 184, 72));

@@ -31,7 +31,7 @@ public class HoneyGeneratorContainer extends Container {
         if (honeyGeneratorTileEntity != null) {
             this.addSlot(new SlotItemHandlerUnconditioned(honeyGeneratorTileEntity.h, HoneyGeneratorTileEntity.HONEY_BOTTLE_INPUT, 36, 20) {
                 public boolean isItemValid(ItemStack stack) {
-                    return stack.getItem().equals(Items.HONEY_BOTTLE);
+                    return honeyGeneratorTileEntity.h.isItemValid(HoneyGeneratorTileEntity.HONEY_BOTTLE_INPUT, stack);
                 }
             });
             this.addSlot(new OutputSlot(honeyGeneratorTileEntity.h, HoneyGeneratorTileEntity.BOTTLE_OUTPUT, 36, 58));

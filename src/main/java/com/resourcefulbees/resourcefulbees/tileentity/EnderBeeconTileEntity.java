@@ -56,6 +56,7 @@ import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
@@ -66,8 +67,8 @@ import java.util.function.Predicate;
 
 public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITickableTileEntity, INamedContainerProvider {
 
-    public ITag<Fluid> honeyFluidTag = BeeInfoUtils.getFluidTag("forge:honey");
-    public ITag<Item> honeyBottleTag = BeeInfoUtils.getItemTag("forge:honey_bottle");
+    public static ITag<Fluid> honeyFluidTag = BeeInfoUtils.getFluidTag("forge:honey");
+    public static ITag<Item> honeyBottleTag = BeeInfoUtils.getItemTag("forge:honey_bottle");
     private List<BeamSegment> beamSegments = Lists.newArrayList();
     private List<BeamSegment> beams = Lists.newArrayList();
     private int worldHeight = -1;
@@ -103,10 +104,10 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
     @Override
     public CompoundNBT writeNBT(CompoundNBT tag) {
         tag.putInt("tier", TankTier.NETHER.getTier());
-        if (effects != null && !effects.isEmpty()){
+        if (effects != null && !effects.isEmpty()) {
             tag.put("active_effects", writeEffectsToNBT(new CompoundNBT()));
         }
-        if (fluidTank!= null && !fluidTank.isEmpty()){
+        if (fluidTank != null && !fluidTank.isEmpty()) {
             tag.put("fluid", fluidTank.writeToNBT(new CompoundNBT()));
         }
         return tag;
@@ -391,6 +392,11 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
             super.onContentsChanged(slot);
             markDirty();
         }
+
+        @Override
+        public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+            return EnderBeeconTileEntity.isItemValid(stack);
+        }
     }
 
     public class InternalFluidTank extends FluidTank {
@@ -490,6 +496,15 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
         beeconEffects.add(new BeeconEffect(Effects.FIRE_RESISTANCE, Config.BEECON_FIRE_RESISTANCE_VALUE.get(), nbt.getBoolean("fire_resistance")));
         beeconEffects.add(new BeeconEffect(Effects.REGENERATION, Config.BEECON_REGENERATION_VALUE.get(), nbt.getBoolean("regeneration")));
         return beeconEffects;
+    }
+
+    public static boolean isItemValid(ItemStack stack) {
+        if (stack.getItem() instanceof BucketItem) {
+            BucketItem bucket = (BucketItem) stack.getItem();
+            return bucket.getFluid().isIn(honeyFluidTag);
+        } else {
+            return stack.getItem().isIn(honeyBottleTag);
+        }
     }
 
     public class BeeconEffect {

@@ -34,13 +34,23 @@ public class ValidatedApiaryContainer extends Container {
 
         if (apiaryTileEntity != null) {
             this.addSlot(new SlotItemHandlerUnconditioned(apiaryTileEntity.h, ApiaryTileEntity.IMPORT, 74, 37) {
+                @Override
+                public int getSlotStackLimit() {
+                    return apiaryTileEntity.h.getSlotLimit(ApiaryTileEntity.IMPORT);
+                }
+
                 public boolean isItemValid(ItemStack stack) {
-                    return (stack.getItem() instanceof BeeJar && BeeJar.isFilled(stack));
+                    return apiaryTileEntity.h.isItemValid(ApiaryTileEntity.IMPORT, stack);
                 }
             });
             this.addSlot(new SlotItemHandlerUnconditioned(apiaryTileEntity.h, ApiaryTileEntity.EMPTY_JAR, 128, 37) {
+                @Override
+                public int getSlotStackLimit() {
+                    return apiaryTileEntity.h.getSlotLimit(ApiaryTileEntity.EMPTY_JAR);
+                }
+
                 public boolean isItemValid(ItemStack stack) {
-                    return (stack.getItem() instanceof BeeJar && !BeeJar.isFilled(stack));
+                    return apiaryTileEntity.h.isItemValid(ApiaryTileEntity.EMPTY_JAR, stack);
                 }
             });
             this.addSlot(new OutputSlot(apiaryTileEntity.h, ApiaryTileEntity.EXPORT, 182, 37));
@@ -83,7 +93,7 @@ public class ValidatedApiaryContainer extends Container {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
             if (index <= 1) {
-                if (!this.mergeItemStack(itemstack1, 3, inventorySlots.size(), true)) {
+                if (!this.mergeItemStack(itemstack1, 2, inventorySlots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
             } else if (!this.mergeItemStack(itemstack1, 0, 2, false)) {

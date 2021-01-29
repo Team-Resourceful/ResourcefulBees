@@ -53,6 +53,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -71,7 +72,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     protected int TIER;
     private boolean isValidApiary;
     public boolean previewed;
-    public AutomationSensitiveItemStackHandler h = new ApiaryTileEntity.TileStackHandler(4);
+    public ApiaryTileEntity.TileStackHandler h = new ApiaryTileEntity.TileStackHandler(3);
     public LazyOptional<IItemHandler> lazyOptional = LazyOptional.of(() -> h);
     public int horizontalOffset = 0;
     public int verticalOffset = 0;
@@ -85,7 +86,9 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     protected int ticksSinceBeesFlagged;
 
 
-    public ApiaryTileEntity() { super(ModTileEntityTypes.APIARY_TILE_ENTITY.get()); }
+    public ApiaryTileEntity() {
+        super(ModTileEntityTypes.APIARY_TILE_ENTITY.get());
+    }
 
     //region PLAYER SYNCING
     public static int calculatePlayersUsingSync(World world, ApiaryTileEntity apiaryTileEntity, int ticksSinceSync, int posX, int posY, int posZ, int numPlayersUsing) {
@@ -118,7 +121,9 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     //endregion
 
     public boolean isValidApiary(boolean runValidation) {
-        if (runValidation) { runStructureValidation(null); }
+        if (runValidation) {
+            runStructureValidation(null);
+        }
         return isValidApiary;
     }
 
@@ -134,7 +139,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
         return this.BEES.size();
     }
 
-    public ApiaryStorageTileEntity getApiaryStorage(){
+    public ApiaryStorageTileEntity getApiaryStorage() {
         if (world != null && storagePos != null) {
             TileEntity tile = world.getTileEntity(storagePos);
             if (tile instanceof ApiaryStorageTileEntity) {
@@ -145,7 +150,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
         return null;
     }
 
-    public ApiaryBreederTileEntity getApiaryBreeder(){
+    public ApiaryBreederTileEntity getApiaryBreeder() {
         if (world != null && breederPos != null) {
             TileEntity tile = world.getTileEntity(breederPos);
             if (tile instanceof ApiaryBreederTileEntity) {
@@ -547,7 +552,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
         validateLinks();
         isStructureValid.set(validateBlocks(isStructureValid, worldIn, validatingPlayer));
 
-        if (apiaryStorage == null){
+        if (apiaryStorage == null) {
             isStructureValid.set(false);
             if (validatingPlayer != null) {
                 validatingPlayer.sendStatusMessage(new StringTextComponent("Missing Apiary Storage Block!"), false);
@@ -568,7 +573,8 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
                 linkStorageAndBreeder(tile);
             } else {
                 isStructureValid.set(false);
-                if (validatingPlayer != null) validatingPlayer.sendStatusMessage(new StringTextComponent(String.format("Block at position (X: %1$s Y: %2$s Z: %3$s) is invalid!", pos.getX(), pos.getY(), pos.getZ())), false);
+                if (validatingPlayer != null)
+                    validatingPlayer.sendStatusMessage(new StringTextComponent(String.format("Block at position (X: %1$s Y: %2$s Z: %3$s) is invalid!", pos.getX(), pos.getY(), pos.getZ())), false);
             }
         });
 
@@ -604,8 +610,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
                 if (!(block instanceof ApiaryBlock)) {
                     if (addedStorage) {
                         this.world.setBlockState(pos, net.minecraft.block.Blocks.GLASS.getDefaultState());
-                    }
-                    else {
+                    } else {
                         this.world.setBlockState(pos, ModBlocks.APIARY_STORAGE_BLOCK.get().getDefaultState());
                         addedStorage = true;
                     }
@@ -616,7 +621,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     }
 
     @SuppressWarnings("UnusedReturnValue")
-    public boolean linkStorageAndBreeder(TileEntity tile){
+    public boolean linkStorageAndBreeder(TileEntity tile) {
         if (tile instanceof ApiaryStorageTileEntity) {
             if (apiaryStorage == null && ((ApiaryStorageTileEntity) tile).getApiaryPos() == null) {
                 apiaryStorage = (ApiaryStorageTileEntity) tile;
@@ -673,7 +678,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
             if (isValidApiary(true)) {
                 //this.isValidApiary = validateStructure(world, (ServerPlayerEntity) playerEntity);
                 //if (this.isValidApiary) {
-                    return new ValidatedApiaryContainer(i, world, pos, playerInventory);
+                return new ValidatedApiaryContainer(i, world, pos, playerInventory);
                 //}
             }
             return new UnvalidatedApiaryContainer(i, world, pos, playerInventory);
@@ -707,7 +712,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     }
 
     public AutomationSensitiveItemStackHandler.IRemover getRemover() {
-        return (slot, automation) -> !automation || slot == 2 || slot == 3 || slot == 4;
+        return (slot, automation) -> !automation || slot == 1 || slot == 2;
     }
 
     @Nonnull
@@ -744,10 +749,29 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
         }
     }
 
-    protected class TileStackHandler extends AutomationSensitiveItemStackHandler {
+    public class TileStackHandler extends AutomationSensitiveItemStackHandler {
 
         protected TileStackHandler(int slots) {
             super(slots);
+        }
+
+        @Override
+        public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+            if (slot == IMPORT) {
+                return stack.getItem() instanceof BeeJar && BeeJar.isFilled(stack);
+            } else if (slot == EMPTY_JAR) {
+                return stack.getItem() instanceof BeeJar && !BeeJar.isFilled(stack);
+            } else {
+                return false;
+            }
+        }
+
+        @Override
+        public int getSlotLimit(int slot) {
+            if (slot == IMPORT) {
+                return 1;
+            }
+            return super.getSlotLimit(slot);
         }
 
         @Override

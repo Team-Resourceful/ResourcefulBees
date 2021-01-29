@@ -98,10 +98,11 @@ public class BeeJar extends Item {
              if (!player.addItemStackToInventory(newJar)) {
                  player.dropItem(newJar, false);
              }
+            renameJar(newJar, target);
         } else {
             stack.setTag(createTag(target));
+            renameJar(stack, target);
         }
-        renameJar(stack, target);
         player.setHeldItem(hand, stack);
         player.swingArm(hand);
         target.remove(true);
@@ -114,7 +115,7 @@ public class BeeJar extends Item {
         TranslationTextComponent bottleName = new TranslationTextComponent(stack.getItem().getTranslationKey(stack));
         bottleName.append(" - ").append(beeName);
         bottleName.setStyle(Style.EMPTY.withItalic(false));
-        CompoundNBT displayNBT = stack.getOrCreateChildTag("display");
+        CompoundNBT displayNBT = new CompoundNBT();
         displayNBT.putString("Name", ITextComponent.Serializer.toJson(bottleName));
         nbt.put("display", displayNBT);
     }

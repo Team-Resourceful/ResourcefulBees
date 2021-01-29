@@ -1,5 +1,6 @@
 package com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary;
 
+import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.ICustomBee;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.container.ApiaryBreederContainer;
@@ -8,14 +9,12 @@ import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.item.BeeJar;
 import com.resourcefulbees.resourcefulbees.item.UpgradeItem;
 import com.resourcefulbees.resourcefulbees.lib.ApiaryTabs;
-import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import com.resourcefulbees.resourcefulbees.registry.ModTileEntityTypes;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.MathUtils;
-import com.resourcefulbees.resourcefulbees.utils.validation.ValidatorUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -23,14 +22,11 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tags.ITag;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
@@ -44,6 +40,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -52,16 +49,16 @@ import static com.resourcefulbees.resourcefulbees.lib.NBTConstants.NBT_BREEDER_C
 
 public class ApiaryBreederTileEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider, IApiaryMultiblock {
 
-    public static final int[] UPGRADE_SLOTS = {0,1,2,3};
-    public static final int[] PARENT_1_SLOTS = {4,9,14,19,24};
-    public static final int[] FEED_1_SLOTS = {5,10,15,20,25};
-    public static final int[] PARENT_2_SLOTS = {6,11,16,21,26};
-    public static final int[] FEED_2_SLOTS = {7,12,17,22,27};
-    public static final int[] EMPTY_JAR_SLOTS = {8,13,18,23,28};
+    public static final int[] UPGRADE_SLOTS = {0, 1, 2, 3};
+    public static final int[] PARENT_1_SLOTS = {4, 9, 14, 19, 24};
+    public static final int[] FEED_1_SLOTS = {5, 10, 15, 20, 25};
+    public static final int[] PARENT_2_SLOTS = {6, 11, 16, 21, 26};
+    public static final int[] FEED_2_SLOTS = {7, 12, 17, 22, 27};
+    public static final int[] EMPTY_JAR_SLOTS = {8, 13, 18, 23, 28};
 
-    public AutomationSensitiveItemStackHandler h = new ApiaryBreederTileEntity.TileStackHandler(29);
+    public ApiaryBreederTileEntity.TileStackHandler h = new ApiaryBreederTileEntity.TileStackHandler(29);
     private final LazyOptional<IItemHandler> lazyOptional = LazyOptional.of(() -> h);
-    public int[] time = {0,0,0,0,0};
+    public int[] time = {0, 0, 0, 0, 0};
     public int totalTime = Config.APIARY_MAX_BREED_TIME.get();
     public int numberOfBreeders = 1;
 
@@ -149,11 +146,11 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
         if (world != null && !world.isRemote) {
             validateApiaryLink();
             boolean dirty = false;
-            for (int i = 0; i < numberOfBreeders; i++){
-                if(!h.getStackInSlot(PARENT_1_SLOTS[i]).isEmpty() && !h.getStackInSlot(FEED_1_SLOTS[i]).isEmpty()
-                && !h.getStackInSlot(PARENT_2_SLOTS[i]).isEmpty() && !h.getStackInSlot(FEED_2_SLOTS[i]).isEmpty()
-                && !h.getStackInSlot(EMPTY_JAR_SLOTS[i]).isEmpty()) {
-                    if(canProcess(i)){
+            for (int i = 0; i < numberOfBreeders; i++) {
+                if (!h.getStackInSlot(PARENT_1_SLOTS[i]).isEmpty() && !h.getStackInSlot(FEED_1_SLOTS[i]).isEmpty()
+                        && !h.getStackInSlot(PARENT_2_SLOTS[i]).isEmpty() && !h.getStackInSlot(FEED_2_SLOTS[i]).isEmpty()
+                        && !h.getStackInSlot(EMPTY_JAR_SLOTS[i]).isEmpty()) {
+                    if (canProcess(i)) {
                         ++this.time[i];
                         if (this.time[i] >= this.totalTime) {
                             this.time[i] = 0;
@@ -164,7 +161,7 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
                 } else {
                     this.time[i] = 0;
                 }
-                if (dirty){
+                if (dirty) {
                     this.markDirty();
                 }
             }
@@ -174,14 +171,14 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
     protected boolean canProcess(int slot) {
         ItemStack p1Stack = h.getStackInSlot(PARENT_1_SLOTS[slot]);
         ItemStack p2Stack = h.getStackInSlot(PARENT_2_SLOTS[slot]);
-        if(p1Stack.getItem() instanceof BeeJar && p2Stack.getItem() instanceof BeeJar){
+        if (p1Stack.getItem() instanceof BeeJar && p2Stack.getItem() instanceof BeeJar) {
             BeeJar p1Jar = (BeeJar) p1Stack.getItem();
             BeeJar p2Jar = (BeeJar) p2Stack.getItem();
 
             Entity p1Entity = p1Jar.getEntityFromStack(p1Stack, world, true);
             Entity p2Entity = p2Jar.getEntityFromStack(p2Stack, world, true);
 
-            if (p1Entity instanceof CustomBeeEntity && p2Entity instanceof CustomBeeEntity){
+            if (p1Entity instanceof CustomBeeEntity && p2Entity instanceof CustomBeeEntity) {
                 String p1Type = ((CustomBeeEntity) p1Entity).getBeeData().getName();
                 String p2Type = ((CustomBeeEntity) p2Entity).getBeeData().getName();
 
@@ -200,7 +197,7 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
                 int p2FeedAmount = ((CustomBeeEntity) p2Entity).getBeeData().getBreedData().getFeedAmount();
 
                 return (canBreed && BeeInfoUtils.isValidBreedItem(f1Stack, p1FeedItem) && BeeInfoUtils.isValidBreedItem(f2Stack, p2FeedItem)
-                && f1StackCount >= p1FeedAmount && f2StackCount >= p2FeedAmount && !h.getStackInSlot(EMPTY_JAR_SLOTS[slot]).isEmpty());
+                        && f1StackCount >= p1FeedAmount && f2StackCount >= p2FeedAmount && !h.getStackInSlot(EMPTY_JAR_SLOTS[slot]).isEmpty());
             }
         }
         return false;
@@ -224,11 +221,11 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
                     String p1Type = bee1.getBeeData().getName();
                     String p2Type = bee2.getBeeData().getName();
 
-                    if (world != null && validateApiaryLink()){
+                    if (world != null && validateApiaryLink()) {
                         TileEntity tile = world.getTileEntity(apiary.storagePos);
-                        if (tile instanceof ApiaryStorageTileEntity){
+                        if (tile instanceof ApiaryStorageTileEntity) {
                             ApiaryStorageTileEntity apiaryStorage = (ApiaryStorageTileEntity) tile;
-                            if (apiaryStorage.breedComplete(p1Type, p2Type)){
+                            if (apiaryStorage.breedComplete(p1Type, p2Type)) {
                                 h.getStackInSlot(EMPTY_JAR_SLOTS[slot]).shrink(1);
                                 h.getStackInSlot(FEED_1_SLOTS[slot]).shrink(bee1.getBeeData().getBreedData().getFeedAmount());
                                 h.getStackInSlot(FEED_2_SLOTS[slot]).shrink(bee2.getBeeData().getBreedData().getFeedAmount());
@@ -274,6 +271,7 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
         }
 
         numberOfBreeders = count;
+        h.setMaxSlots(3 + numberOfBreeders * 5);
     }
 
     private void updateBreedTime() {
@@ -293,7 +291,6 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
 
         this.totalTime = MathUtils.clamp(totalTime, 300, 4800);
     }
-
 
 
     @Override
@@ -350,7 +347,7 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
     @Override
     public SUpdateTileEntityPacket getUpdatePacket() {
         CompoundNBT nbt = new CompoundNBT();
-        return new SUpdateTileEntityPacket(pos,0, saveToNBT(nbt));
+        return new SUpdateTileEntityPacket(pos, 0, saveToNBT(nbt));
     }
 
     @Override
@@ -367,11 +364,11 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
     }
 
     public AutomationSensitiveItemStackHandler.IAcceptor getAcceptor() {
-        return (slot, stack, automation) -> !automation || (slot == EMPTY_JAR_SLOTS[0] || slot == EMPTY_JAR_SLOTS[1] || slot == EMPTY_JAR_SLOTS[2] || slot == EMPTY_JAR_SLOTS[3] && stack.getItem().equals(ModItems.BEE_JAR.get()));
+        return (slot, stack, automation) -> !automation || slot > 3;
     }
 
     public AutomationSensitiveItemStackHandler.IRemover getRemover() {
-        return (slot, automation) -> !automation || (slot == EMPTY_JAR_SLOTS[0] || slot == EMPTY_JAR_SLOTS[1] || slot == EMPTY_JAR_SLOTS[2] || slot == EMPTY_JAR_SLOTS[3]);
+        return (slot, automation) -> !automation || slot > 3;
     }
 
     @Nullable
@@ -401,7 +398,14 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
         }
     }
 
-    protected class TileStackHandler extends AutomationSensitiveItemStackHandler {
+    public class TileStackHandler extends AutomationSensitiveItemStackHandler {
+
+        private int maxSlots = 8;
+
+        public void setMaxSlots(int maxSlots) {
+            this.maxSlots = maxSlots;
+        }
+
         protected TileStackHandler(int slots) {
             super(slots);
         }
@@ -421,7 +425,7 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
             super.onContentsChanged(slot);
             markDirty();
 
-            for (int i=0; i<4; i++){
+            for (int i = 0; i < 4; i++) {
                 if (slot == UPGRADE_SLOTS[i]) {
                     updateNumberOfBreeders();
                     rebuildOpenContainers();
@@ -433,12 +437,82 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
 
         @Override
         public int getSlotLimit(int slot) {
-            for (int i = 0; i < 4; i++) {
-                if (slot == UPGRADE_SLOTS[i]) {
+            switch (slot) {
+                case 0:
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                case 9:
+                case 14:
+                case 19:
+                case 24:
+                case 6:
+                case 11:
+                case 16:
+                case 21:
+                case 26:
+                    //parent slots
                     return 1;
-                }
+                default:
+                    return 64;
             }
-            return super.getSlotLimit(slot);
+        }
+
+        @Override
+        public boolean isItemValid(int slot, ItemStack stack) {
+            switch (slot) {
+                case 0:
+                case 1:
+                case 2:
+                case 3:
+                    // upgrade slots
+                    return UpgradeItem.hasUpgradeData(stack) && (UpgradeItem.getUpgradeType(stack).contains(NBTConstants.NBT_BREEDER_UPGRADE));
+                case 4:
+                case 9:
+                case 14:
+                case 19:
+                case 24:
+                case 6:
+                case 11:
+                case 16:
+                case 21:
+                case 26:
+                    //parent slots
+                    if (isSlotVisible(slot)) {
+                        return stack.getItem() instanceof BeeJar && BeeJar.isFilled(stack) && stack.getTag().getString(NBTConstants.NBT_ENTITY).startsWith(ResourcefulBees.MOD_ID);
+                    } else return false;
+                case 5:
+                case 10:
+                case 15:
+                case 20:
+                case 25:
+                case 7:
+                case 12:
+                case 17:
+                case 22:
+                case 27:
+                    // feed slots
+                    if (isSlotVisible(slot)) {
+                        return !(stack.getItem() instanceof BeeJar);
+                    } else return false;
+                case 8:
+                case 13:
+                case 18:
+                case 23:
+                case 28:
+                    // jar slots
+                    if (isSlotVisible(slot)) {
+                        return stack.getItem() instanceof BeeJar && !BeeJar.isFilled(stack);
+                    } else return false;
+                default:
+                    System.out.println("defaulting" + slot);
+                    return false;
+            }
+        }
+
+        private boolean isSlotVisible(int slot) {
+            return slot <= maxSlots;
         }
     }
 }
