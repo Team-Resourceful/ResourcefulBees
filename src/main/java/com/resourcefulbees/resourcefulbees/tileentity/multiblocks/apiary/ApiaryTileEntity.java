@@ -24,7 +24,9 @@ import net.minecraft.block.BeehiveBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.Pose;
 import net.minecraft.entity.passive.BeeEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -35,6 +37,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.NBTUtil;
+import net.minecraft.nbt.StringNBT;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -176,9 +179,10 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
             nbt.remove("UUID");
             Entity entity = EntityType.func_220335_a(nbt, this.world, entity1 -> entity1);
             if (entity != null) {
-                double d0 = 0.55D + entity.getWidth() / 2.0F;
+                EntitySize size = entity.getSize(Pose.STANDING);
+                double d0 = 0.55D + size.width / 2.0F;
                 double d1 = blockpos.getX() + 0.5D + d0 * direction.getXOffset();
-                double d2 = blockpos.getY() + 0.5D - (entity.getHeight() / 2.0F);
+                double d2 = blockpos.getY() + Math.max(0.5D - (size.height / 2.0F), 0);
                 double d3 = blockpos.getZ() + 0.5D + d0 * direction.getZOffset();
                 entity.setLocationAndAngles(d1, d2, d3, entity.rotationYaw, entity.rotationPitch);
 
