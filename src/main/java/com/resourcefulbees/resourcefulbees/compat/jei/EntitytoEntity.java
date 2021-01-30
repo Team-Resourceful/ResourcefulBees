@@ -28,8 +28,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.StringNBT;
 import net.minecraft.tags.ITag;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.*;
@@ -87,16 +85,12 @@ public class EntitytoEntity implements IRecipeCategory<EntitytoEntity.Recipe> {
                             IFormattableTextComponent outputName = out.getKey().getName().copy();
                             outputName.setStyle(Style.EMPTY.withColor(Color.parse("gold")).withBold(true).withItalic(false));
                             outputDisplay.putString("Name", ITextComponent.Serializer.toJson(outputName));
-                            if (!out.getRight().getNbt().isEmpty()) {
-                                IFormattableTextComponent outputLore = new StringTextComponent("NBT: " + out.getRight().getNbt().toString());
-                                outputLore.setStyle(Style.EMPTY.withColor(Color.parse("dark_purple")));
-                                ListNBT lore = new ListNBT();
-                                lore.add(StringNBT.of(ITextComponent.Serializer.toJson(outputLore)));
-                                outputDisplay.put("Lore", lore);
-                            }
                             CompoundNBT outputTag = new CompoundNBT();
                             outputTag.put("display", outputDisplay);
                             outputEgg.setTag(outputTag);
+                            if (!out.getRight().getNbt().isEmpty()) {
+                                BeeInfoUtils.addNBTLore(outputEgg, out.getRight().getNbt());
+                            }
 
                             double effectiveWeight = outputs.getAdjustedWeight(out.getValue().getWeight());
                             recipes.add(new Recipe(input, out.getKey(), inputEgg, outputEgg, beeData.getName(), m.type, effectiveWeight, out.getValue().getChance(), false));

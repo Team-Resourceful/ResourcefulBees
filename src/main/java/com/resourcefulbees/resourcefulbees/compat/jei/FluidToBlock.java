@@ -77,7 +77,9 @@ public class FluidToBlock implements IRecipeCategory<FluidToBlock.Recipe> {
                             RandomCollection<Pair<Item, MutationData.MutationOutput>> outputs = addMutations(m);
                             outputs.forEach(out -> {
                                 double effectiveWeight = outputs.getAdjustedWeight(out.getValue().getWeight());
-                                recipes.add(new Recipe(tag, new ItemStack(out.getKey()), beeData.getName(), m.type, effectiveWeight, out.getValue().getChance(), true));
+                                ItemStack outputStack = new ItemStack(out.getKey());
+                                BeeInfoUtils.addNBTLore(outputStack, out.getRight().getNbt());
+                                recipes.add(new Recipe(tag, outputStack, beeData.getName(), m.type, effectiveWeight, out.getValue().getChance(), true));
                             });
                         } else {
                             LOGGER.warn(String.format("Block Tag: [%s] does not have Item Tag equivalent", m.mutationData.inputID));
@@ -93,7 +95,9 @@ public class FluidToBlock implements IRecipeCategory<FluidToBlock.Recipe> {
                             RandomCollection<Pair<Item, MutationData.MutationOutput>> outputs = addMutations(m);
                             outputs.forEach(out -> {
                                 double effectiveWeight = outputs.getAdjustedWeight(out.getValue().getWeight());
-                                recipes.add(new Recipe(new FluidStack(input, 1000), new ItemStack(out.getKey()), beeData.getName(), m.type, effectiveWeight, out.getValue().getChance(), false));
+                                ItemStack outputStack = new ItemStack(out.getKey());
+                                BeeInfoUtils.addNBTLore(outputStack, out.getRight().getNbt());
+                                recipes.add(new Recipe(new FluidStack(input, 1000), outputStack, beeData.getName(), m.type, effectiveWeight, out.getValue().getChance(), false));
                             });
                         }
                     }
