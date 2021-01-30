@@ -40,6 +40,7 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.village.PointOfInterest;
 import net.minecraft.village.PointOfInterestManager;
@@ -470,6 +471,11 @@ public class ResourcefulBee extends CustomBeeEntity {
                 }
             }
         }
+    }
+
+    @Override
+    public ItemStack getPickedResult(RayTraceResult target) {
+        return new ItemStack(beeData.getSpawnEggItemRegistryObject().get());
     }
 
     protected class UpdateBeehiveGoal2 extends BeeEntity.UpdateBeehiveGoal {
