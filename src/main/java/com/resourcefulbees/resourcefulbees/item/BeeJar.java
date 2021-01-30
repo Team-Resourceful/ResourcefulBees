@@ -97,10 +97,10 @@ public class BeeJar extends Item {
             ItemStack newJar = new ItemStack(ModItems.BEE_JAR.get());
             newJar.setTag(createTag(target));
             stack.shrink(1);
+            renameJar(newJar, target);
             if (!player.addItemStackToInventory(newJar)) {
                 player.dropItem(newJar, false);
             }
-            renameJar(newJar, target);
         } else {
             stack.setTag(createTag(target));
             renameJar(stack, target);
