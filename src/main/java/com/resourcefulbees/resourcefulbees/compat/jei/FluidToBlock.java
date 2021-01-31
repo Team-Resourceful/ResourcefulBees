@@ -11,6 +11,7 @@ import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
+import com.sun.jna.platform.KeyboardUtils;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -27,14 +28,15 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tags.ITag;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.*;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.lwjgl.glfw.GLFW;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -77,9 +79,7 @@ public class FluidToBlock implements IRecipeCategory<FluidToBlock.Recipe> {
                             RandomCollection<Pair<Item, MutationData.MutationOutput>> outputs = addMutations(m);
                             outputs.forEach(out -> {
                                 double effectiveWeight = outputs.getAdjustedWeight(out.getValue().getWeight());
-                                ItemStack outputStack = new ItemStack(out.getKey());
-                                BeeInfoUtils.addNBTLore(outputStack, out.getRight().getNbt());
-                                recipes.add(new Recipe(tag, outputStack, beeData.getName(), m.type, effectiveWeight, out.getValue().getChance(), true));
+                                recipes.add(new Recipe(tag, new ItemStack(out.getKey()), out.getRight().getNbt(), beeData.getName(), m.type, effectiveWeight, out.getValue().getChance(), true));
                             });
                         } else {
                             LOGGER.warn(String.format("Block Tag: [%s] does not have Item Tag equivalent", m.mutationData.inputID));
@@ -95,9 +95,7 @@ public class FluidToBlock implements IRecipeCategory<FluidToBlock.Recipe> {
                             RandomCollection<Pair<Item, MutationData.MutationOutput>> outputs = addMutations(m);
                             outputs.forEach(out -> {
                                 double effectiveWeight = outputs.getAdjustedWeight(out.getValue().getWeight());
-                                ItemStack outputStack = new ItemStack(out.getKey());
-                                BeeInfoUtils.addNBTLore(outputStack, out.getRight().getNbt());
-                                recipes.add(new Recipe(new FluidStack(input, 1000), outputStack, beeData.getName(), m.type, effectiveWeight, out.getValue().getChance(), false));
+                                recipes.add(new Recipe(new FluidStack(input, 1000), new ItemStack(out.getKey()), out.getRight().getNbt(), beeData.getName(), m.type, effectiveWeight, out.getValue().getChance(), false));
                             });
                         }
                     }
@@ -194,6 +192,16 @@ public class FluidToBlock implements IRecipeCategory<FluidToBlock.Recipe> {
         IGuiItemStackGroup itemStacks = iRecipeLayout.getItemStacks();
         itemStacks.init(0, false, 65, 48);
         itemStacks.set(0, ingredients.getOutputs(VanillaTypes.ITEM).get(0));
+        itemStacks.addTooltipCallback((slotIndex, isInputStack, stack, tooltip) -> {
+            if (slotIndex == 0 && !recipe.outputNBT.isEmpty()) {
+                if (BeeInfoUtils.isShiftPressed()) {
+                    List<String> lore = BeeInfoUtils.getLoreLines(recipe.outputNBT);
+                    lore.forEach(l -> tooltip.add(new StringTextComponent(l).fillStyle(Style.EMPTY.withColor(Color.parse("dark_purple")))));
+                } else {
+                    tooltip.add(new TranslationTextComponent("gui.resourcefulbees.jei.tooltip.show_nbt").fillStyle(Style.EMPTY.withColor(Color.parse("dark_purple"))));
+                }
+            }
+        });
 
 
         IGuiIngredientGroup<EntityIngredient> ingredientStacks = iRecipeLayout.getIngredientsGroup(JEICompat.ENTITY_INGREDIENT);
@@ -230,10 +238,12 @@ public class FluidToBlock implements IRecipeCategory<FluidToBlock.Recipe> {
         private final double chance;
 
         private final MutationTypes mutationType;
+        public final CompoundNBT outputNBT;
 
-        public Recipe(FluidStack baseBlock, ItemStack mutationBlock, String beeType, MutationTypes type, double weight, double chance, boolean acceptsAny) {
+        public Recipe(FluidStack baseBlock, ItemStack mutationBlock, CompoundNBT outputNBT, String beeType, MutationTypes type, double weight, double chance, boolean acceptsAny) {
             this.fluidIn = baseBlock;
             this.itemOut = mutationBlock;
+            this.outputNBT = outputNBT;
             this.beeType = beeType;
             this.mutationType = type;
             this.chance = chance;
@@ -243,7 +253,8 @@ public class FluidToBlock implements IRecipeCategory<FluidToBlock.Recipe> {
         }
 
         //TAGS!!!
-        public Recipe(ITag<Fluid> baseBlock, ItemStack mutationBlock, String beeType, MutationTypes type, double weight, double chance, boolean acceptsAny) {
+        public Recipe(ITag<Fluid> baseBlock, ItemStack mutationBlock, CompoundNBT outputNBT, String beeType, MutationTypes type, double weight, double chance, boolean acceptsAny) {
+            this.outputNBT = outputNBT;
             this.weight = weight;
             this.chance = chance;
             this.fluidIn = null;

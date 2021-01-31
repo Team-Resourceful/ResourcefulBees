@@ -26,10 +26,10 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tags.ITag;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.*;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -74,9 +74,7 @@ public class BlockToBlock implements IRecipeCategory<BlockToBlock.Recipe> {
                             RandomCollection<Pair<Item, MutationData.MutationOutput>> outputs = addMutations(m);
                             outputs.forEach(out -> {
                                 double effectiveWeight = outputs.getAdjustedWeight(out.getValue().getWeight());
-                                ItemStack outputStack = new ItemStack(out.getKey());
-                                BeeInfoUtils.addNBTLore(outputStack, out.getRight().getNbt());
-                                recipes.add(new Recipe(tag, outputStack, beeData.getName(), m.type, effectiveWeight, out.getValue().getChance(), true));
+                                recipes.add(new Recipe(tag, new ItemStack(out.getKey()), out.getRight().getNbt(), beeData.getName(), m.type, effectiveWeight, out.getValue().getChance(), true));
                             });
                         } else {
                             LOGGER.warn(String.format("Block Tag: [%s] does not have Item Tag equivalent", m.mutationData.inputID));
@@ -92,9 +90,7 @@ public class BlockToBlock implements IRecipeCategory<BlockToBlock.Recipe> {
                             RandomCollection<Pair<Item, MutationData.MutationOutput>> outputs = addMutations(m);
                             outputs.forEach(out -> {
                                 double effectiveWeight = outputs.getAdjustedWeight(out.getValue().getWeight());
-                                ItemStack outputStack = new ItemStack(out.getKey());
-                                BeeInfoUtils.addNBTLore(outputStack, out.getRight().getNbt());
-                                recipes.add(new Recipe(new ItemStack(input), outputStack, beeData.getName(), m.type, effectiveWeight, out.getValue().getChance(), false));
+                                recipes.add(new Recipe(new ItemStack(input), new ItemStack(out.getKey()), out.getRight().getNbt(), beeData.getName(), m.type, effectiveWeight, out.getValue().getChance(), false));
                             });
                         }
                     }
@@ -183,6 +179,16 @@ public class BlockToBlock implements IRecipeCategory<BlockToBlock.Recipe> {
         itemStacks.init(1, true, 15, 57);
         itemStacks.set(0, ingredients.getOutputs(VanillaTypes.ITEM).get(0));
         itemStacks.set(1, ingredients.getInputs(VanillaTypes.ITEM).get(0));
+        itemStacks.addTooltipCallback((slotIndex, isInputStack, stack, tooltip) -> {
+            if (slotIndex == 0 && !recipe.outputNBT.isEmpty()) {
+                if (BeeInfoUtils.isShiftPressed()) {
+                    List<String> lore = BeeInfoUtils.getLoreLines(recipe.outputNBT);
+                    lore.forEach(l -> tooltip.add(new StringTextComponent(l).fillStyle(Style.EMPTY.withColor(Color.parse("dark_purple")))));
+                } else {
+                    tooltip.add(new TranslationTextComponent("gui.resourcefulbees.jei.tooltip.show_nbt").fillStyle(Style.EMPTY.withColor(Color.parse("dark_purple"))));
+                }
+            }
+        });
 
         IGuiIngredientGroup<EntityIngredient> ingredientStacks = iRecipeLayout.getIngredientsGroup(JEICompat.ENTITY_INGREDIENT);
         ingredientStacks.init(0, true, 16, 10);
@@ -218,8 +224,9 @@ public class BlockToBlock implements IRecipeCategory<BlockToBlock.Recipe> {
         private final double chance;
 
         private final MutationTypes mutationType;
+        public final CompoundNBT outputNBT;
 
-        public Recipe(ItemStack baseBlock, ItemStack mutationBlock, String beeType, MutationTypes type, double weight, double chance, boolean acceptsAny) {
+        public Recipe(ItemStack baseBlock, ItemStack mutationBlock, CompoundNBT outputNBT, String beeType, MutationTypes type, double weight, double chance, boolean acceptsAny) {
             this.itemOut = mutationBlock;
             this.itemIn = baseBlock;
             this.beeType = beeType;
@@ -228,10 +235,11 @@ public class BlockToBlock implements IRecipeCategory<BlockToBlock.Recipe> {
             this.weight = weight;
             this.chance = chance;
             this.tag = null;
+            this.outputNBT = outputNBT;
         }
 
         //TAGS!!!
-        public Recipe(ITag<Item> baseBlock, ItemStack mutationBlock, String beeType, MutationTypes type, double weight, double chance, boolean acceptsAny) {
+        public Recipe(ITag<Item> baseBlock, ItemStack mutationBlock, CompoundNBT outputNBT, String beeType, MutationTypes type, double weight, double chance, boolean acceptsAny) {
             this.itemOut = mutationBlock;
             this.itemIn = null;
             this.beeType = beeType;
@@ -240,6 +248,7 @@ public class BlockToBlock implements IRecipeCategory<BlockToBlock.Recipe> {
             this.weight = weight;
             this.chance = chance;
             this.tag = baseBlock;
+            this.outputNBT = outputNBT;
         }
 
         public boolean isAcceptsAny() {

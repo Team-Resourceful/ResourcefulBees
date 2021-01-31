@@ -13,6 +13,8 @@ import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.utils.validation.ValidatorUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.util.InputMappings;
 import net.minecraft.entity.EntityType;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
@@ -20,8 +22,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.StringNBT;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ITag;
@@ -30,18 +30,15 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.util.text.*;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
+import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.Nonnull;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static com.resourcefulbees.resourcefulbees.lib.BeeConstants.*;
 
@@ -220,27 +217,17 @@ public class BeeInfoUtils {
         list.forEach(customBeeEntity -> customBeeEntity.setHasHiveInRange(true));
     }
 
-    public static void addNBTLore(ItemStack outputStack, CompoundNBT nbt) {
-        if (nbt.isEmpty()) return;
-        CompoundNBT display;
-        CompoundNBT tag = outputStack.hasTag() ? outputStack.getTag() : new CompoundNBT();
-        if (!tag.isEmpty() && tag.contains("display")) {
-            display = (CompoundNBT) tag.get("display");
-        } else {
-            display = new CompoundNBT();
-        }
-        ListNBT lore = new ListNBT();
+    public static List<String> getLoreLines(CompoundNBT outputNBT) {
+        if (outputNBT.isEmpty()) return new LinkedList<>();
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         JsonParser jp = new JsonParser();
-        JsonElement je = jp.parse(nbt.toString());
+        JsonElement je = jp.parse(outputNBT.toString());
         String nbtString = "NBT: " + gson.toJson(je);
-        for (String s: nbtString.split("\n")){
-            IFormattableTextComponent outputLore = new StringTextComponent(s);
-            outputLore.setStyle(Style.EMPTY.withColor(Color.parse("dark_purple")));
-            lore.add(StringNBT.of(ITextComponent.Serializer.toJson(outputLore)));
-        }
-        display.put("Lore", lore);
-        tag.put("display", display);
-        outputStack.setTag(tag);
+        return Arrays.asList(nbtString.split("\n"));
+    }
+
+    public static boolean isShiftPressed() {
+        long windowID = Minecraft.getInstance().getWindow().getHandle();
+        return InputMappings.isKeyDown(windowID, GLFW.GLFW_KEY_LEFT_SHIFT) || InputMappings.isKeyDown(windowID, GLFW.GLFW_KEY_RIGHT_SHIFT);
     }
 }

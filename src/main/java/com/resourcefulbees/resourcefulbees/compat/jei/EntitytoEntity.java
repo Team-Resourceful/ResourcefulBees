@@ -11,6 +11,7 @@ import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
+import com.sun.jna.platform.KeyboardUtils;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -34,6 +35,7 @@ import net.minecraft.util.text.*;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.lwjgl.glfw.GLFW;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -88,12 +90,9 @@ public class EntitytoEntity implements IRecipeCategory<EntitytoEntity.Recipe> {
                             CompoundNBT outputTag = new CompoundNBT();
                             outputTag.put("display", outputDisplay);
                             outputEgg.setTag(outputTag);
-                            if (!out.getRight().getNbt().isEmpty()) {
-                                BeeInfoUtils.addNBTLore(outputEgg, out.getRight().getNbt());
-                            }
 
                             double effectiveWeight = outputs.getAdjustedWeight(out.getValue().getWeight());
-                            recipes.add(new Recipe(input, out.getKey(), inputEgg, outputEgg, beeData.getName(), m.type, effectiveWeight, out.getValue().getChance(), false));
+                            recipes.add(new Recipe(input, out.getKey(), inputEgg, outputEgg, out.getRight().getNbt(), beeData.getName(), m.type, effectiveWeight, out.getValue().getChance(), false));
                         });
                     }
                 });
@@ -172,6 +171,16 @@ public class EntitytoEntity implements IRecipeCategory<EntitytoEntity.Recipe> {
         itemStacks.init(1, true, 15, 57);
         itemStacks.set(0, ingredients.getOutputs(VanillaTypes.ITEM).get(0));
         itemStacks.set(1, ingredients.getInputs(VanillaTypes.ITEM).get(0));
+        itemStacks.addTooltipCallback((slotIndex, isInputStack, stack, tooltip) -> {
+            if (slotIndex == 0 && !recipe.outputNBT.isEmpty()) {
+                if (BeeInfoUtils.isShiftPressed()) {
+                    List<String> lore = BeeInfoUtils.getLoreLines(recipe.outputNBT);
+                    lore.forEach(l -> tooltip.add(new StringTextComponent(l).fillStyle(Style.EMPTY.withColor(Color.parse("dark_purple")))));
+                } else {
+                    tooltip.add(new TranslationTextComponent("gui.resourcefulbees.jei.tooltip.show_nbt").fillStyle(Style.EMPTY.withColor(Color.parse("dark_purple"))));
+                }
+            }
+        });
 
         IGuiIngredientGroup<EntityIngredient> ingredientStacks = iRecipeLayout.getIngredientsGroup(JEICompat.ENTITY_INGREDIENT);
         ingredientStacks.init(0, true, 16, 10);
@@ -209,12 +218,14 @@ public class EntitytoEntity implements IRecipeCategory<EntitytoEntity.Recipe> {
         private final double chance;
 
         private final MutationTypes mutationType;
+        public final CompoundNBT outputNBT;
 
-        public Recipe(EntityType baseEntity, EntityType outputEntity, ItemStack inputEgg, ItemStack outputEgg, String beeType, MutationTypes type, double weight, double chance, boolean acceptsAny) {
+        public Recipe(EntityType baseEntity, EntityType outputEntity, ItemStack inputEgg, ItemStack outputEgg, CompoundNBT outputNBT, String beeType, MutationTypes type, double weight, double chance, boolean acceptsAny) {
             this.entityIn = baseEntity;
             this.entityOut = outputEntity;
             this.eggIn = inputEgg;
             this.eggOut = outputEgg;
+            this.outputNBT = outputNBT;
             this.beeType = beeType;
             this.mutationType = type;
             this.acceptsAny = acceptsAny;
