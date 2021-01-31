@@ -30,8 +30,10 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tags.ITag;
 import net.minecraft.tags.TagCollectionManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.Color;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.Style;
 
 import javax.annotation.Nonnull;
 import java.text.DecimalFormat;
@@ -199,6 +201,14 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
         ingredientStacks.set(0, ingredients.getInputs(JEICompat.ENTITY_INGREDIENT).get(0));
         ingredientStacks.set(1, ingredients.getInputs(JEICompat.ENTITY_INGREDIENT).get(1));
         ingredientStacks.set(2, ingredients.getOutputs(JEICompat.ENTITY_INGREDIENT).get(0));
+        ingredientStacks.addTooltipCallback((slotIndex, b, entityIngredient, tooltip) -> {
+            if (Minecraft.getInstance().gameSettings.advancedItemTooltips) {
+                EntityIngredient i = ingredients.getInputs(JEICompat.ENTITY_INGREDIENT).get(0).get(0);
+                if (slotIndex == 1) {
+                }
+            }
+        });
+
 
         IGuiItemStackGroup itemStacks = iRecipeLayout.getItemStacks();
 

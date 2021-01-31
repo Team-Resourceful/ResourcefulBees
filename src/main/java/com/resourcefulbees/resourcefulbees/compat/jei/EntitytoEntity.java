@@ -11,7 +11,6 @@ import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
-import com.sun.jna.platform.KeyboardUtils;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -35,7 +34,6 @@ import net.minecraft.util.text.*;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.lwjgl.glfw.GLFW;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -74,7 +72,7 @@ public class EntitytoEntity implements IRecipeCategory<EntitytoEntity.Recipe> {
                     EntityType input = BeeInfoUtils.getEntityType(m.mutationData.inputID.toLowerCase().replace(BeeConstants.ENTITY_PREFIX, ""));
                     ItemStack inputEgg = new ItemStack(Items.GHAST_SPAWN_EGG);
                     IFormattableTextComponent inputName = input.getName().copy();
-                    inputName.setStyle(Style.EMPTY.withColor(Color.parse("gold")).withBold(true).withItalic(false));
+                    inputName.setStyle(Style.EMPTY.withColor(Color.parse("gold")).withItalic(false));
                     inputEgg.setDisplayName(inputName);
                     if (input == null) {
                         LOGGER.warn(String.format("Entity Input: [%s] could not be found: ", m.mutationData.inputID));
@@ -172,6 +170,13 @@ public class EntitytoEntity implements IRecipeCategory<EntitytoEntity.Recipe> {
         itemStacks.set(0, ingredients.getOutputs(VanillaTypes.ITEM).get(0));
         itemStacks.set(1, ingredients.getInputs(VanillaTypes.ITEM).get(0));
         itemStacks.addTooltipCallback((slotIndex, isInputStack, stack, tooltip) -> {
+            if (Minecraft.getInstance().gameSettings.advancedItemTooltips) {
+                if (slotIndex == 1) {
+                    tooltip.add(new StringTextComponent(recipe.entityIn.getRegistryName().toString()).formatted(TextFormatting.DARK_GRAY));
+                } else {
+                    tooltip.add(new StringTextComponent(recipe.entityOut.getRegistryName().toString()).formatted(TextFormatting.DARK_GRAY));
+                }
+            }
             if (slotIndex == 0 && !recipe.outputNBT.isEmpty()) {
                 if (BeeInfoUtils.isShiftPressed()) {
                     List<String> lore = BeeInfoUtils.getLoreLines(recipe.outputNBT);
