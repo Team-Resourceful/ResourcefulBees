@@ -4,6 +4,7 @@ import net.minecraft.entity.IAngerable;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectType;
+import org.jetbrains.annotations.NotNull;
 
 public class Calming extends Effect {
     protected Calming(EffectType beneficial, int color) {
@@ -11,7 +12,7 @@ public class Calming extends Effect {
     }
 
     @Override
-    public void performEffect(LivingEntity entity, int level) {
+    public void performEffect(@NotNull LivingEntity entity, int level) {
         if (entity instanceof IAngerable) {
             IAngerable angerable = (IAngerable) entity;
             angerable.stopAnger();
@@ -21,7 +22,6 @@ public class Calming extends Effect {
 
     @Override
     public boolean isReady(int duration, int level) {
-        if (duration % 5 == 0) return true;
-        else return false;
+        return duration % 5 == 0;
     }
 }

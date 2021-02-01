@@ -58,7 +58,7 @@ public class BiomeParser {
     }
 
     private static Collection<? extends ResourceLocation> getForgeBiomeLocations(net.minecraftforge.common.BiomeDictionary.Type type) {
-        return getForgeBiomes(type).stream().map(b -> b.getValue()).collect(Collectors.toList());
+        return getForgeBiomes(type).stream().map(RegistryKey::getValue).collect(Collectors.toList());
     }
 
     private static net.minecraftforge.common.BiomeDictionary.Type getForgeType(String s) {

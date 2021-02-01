@@ -121,8 +121,7 @@ public class HoneyTankTileEntity extends TileEntity {
 
     @Override
     public AxisAlignedBB getRenderBoundingBox() {
-        AxisAlignedBB box = new AxisAlignedBB(this.getPos().down().south().west(), this.getPos().up().north().east());
-        return box;
+        return new AxisAlignedBB(this.getPos().down().south().west(), this.getPos().up().north().east());
     }
 
     @Override
@@ -175,6 +174,7 @@ public class HoneyTankTileEntity extends TileEntity {
         readNBT(nbt);
     }
 
+    @Nonnull
     @Override
     public CompoundNBT getUpdateTag() {
         CompoundNBT nbt = super.getUpdateTag();
@@ -246,7 +246,8 @@ public class HoneyTankTileEntity extends TileEntity {
     }
 
     public void playSound(SoundEvent p_205736_1_) {
-        this.world.playSound((PlayerEntity) null, this.pos, p_205736_1_, SoundCategory.BLOCKS, 1.0F, 1.0F);
+        assert this.world != null;
+        this.world.playSound(null, this.pos, p_205736_1_, SoundCategory.BLOCKS, 1.0F, 1.0F);
     }
 
     public int getLevel() {

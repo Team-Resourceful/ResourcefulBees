@@ -112,7 +112,7 @@ public class BeeJar extends Item {
     }
 
     public static void renameJar(ItemStack stack, BeeEntity target) {
-        CompoundNBT nbt = stack.getTag();
+        CompoundNBT nbt = stack.getOrCreateTag();
         ITextComponent beeName = target.getName();
         TranslationTextComponent bottleName = new TranslationTextComponent(stack.getItem().getTranslationKey(stack));
         bottleName.append(" - ").append(beeName);

@@ -85,7 +85,7 @@ public class EnderBeeconContainer extends Container {
 
     public int getMaxFluid() {
         return enderBeeconTileEntity.fluidTank.getCapacity();
-    }
+    } // TODO Unused?
 
     @Override
     public void detectAndSendChanges() {

@@ -1,5 +1,6 @@
 package com.resourcefulbees.resourcefulbees.compat.jei.ingredients;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.*;
 
@@ -33,9 +34,11 @@ public class EntityIngredient {
 
         String desc = I18n.format("tooltip.resourcefulbees.jei.click_bee_info");
         String[] descTooltip = desc.split("\\r?\\n");
-        tooltip.add(new StringTextComponent("resourcefulbees:" + beeType + "_bee").formatted(TextFormatting.DARK_GRAY));
         for (String s : descTooltip) {
             tooltip.add(new StringTextComponent(s).formatted(TextFormatting.GOLD));
+        }
+        if (Minecraft.getInstance().gameSettings.advancedItemTooltips) {
+            tooltip.add(new StringTextComponent("resourcefulbees:" + beeType + "_bee").formatted(TextFormatting.DARK_GRAY));
         }
         return tooltip;
     }

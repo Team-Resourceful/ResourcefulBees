@@ -68,14 +68,14 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITickableTileEntity, INamedContainerProvider {
-
+    //TODO see about trimming the duplicate code if possible - epic
 
     public static ITag<Fluid> honeyFluidTag = BeeInfoUtils.getFluidTag("forge:honey");
     public static ITag<Item> honeyBottleTag = BeeInfoUtils.getItemTag("forge:honey_bottle");
     private List<BeamSegment> beamSegments = Lists.newArrayList();
     private List<BeamSegment> beams = Lists.newArrayList();
     private int worldHeight = -1;
-    private float[] afloat = {255f, 255f, 255f};
+    private final float[] afloat = {255f, 255f, 255f};
     private boolean updateBeecon = true;
     private boolean beeconActive = false;
     public static final int HONEY_BOTTLE_INPUT = 0;
@@ -94,6 +94,7 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
         effects = readEffectsFromNBT(new CompoundNBT());
     }
 
+    @Nonnull
     @Override
     public ITextComponent getDisplayName() {
         return new TranslationTextComponent("gui.resourcefulbees.ender_beecon");
@@ -101,7 +102,8 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
 
     @Nullable
     @Override
-    public Container createMenu(int id, PlayerInventory playerInventory, PlayerEntity playerEntity) {
+    public Container createMenu(int id, @NotNull PlayerInventory playerInventory, @NotNull PlayerEntity playerEntity) {
+        assert world != null;
         return new EnderBeeconContainer(id, world, pos, playerInventory);
     }
 
@@ -251,6 +253,7 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
         }
 
         BeamSegment segment = this.beams.isEmpty() ? null : this.beams.get(this.beams.size() - 1);
+        assert this.world != null; //will fix later - epic
         int l = this.world.getHeight(Heightmap.Type.WORLD_SURFACE, i, k);
 
         for (int i1 = 0; i1 < 10 && blockpos.getY() <= l; ++i1) {
@@ -285,7 +288,7 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
             if (!this.beamSegments.isEmpty() && !fluidTank.isEmpty()) {
                 AxisAlignedBB box = getEffectBox();
                 List<BeeEntity> bees = world.getEntitiesWithinAABB(BeeEntity.class, box);
-                bees.stream().filter(b -> b instanceof CustomBeeEntity).map(b -> (CustomBeeEntity) b).forEach(b -> b.setHasDistrupterInRange());
+                bees.stream().filter(b -> b instanceof CustomBeeEntity).map(b -> (CustomBeeEntity) b).forEach(CustomBeeEntity::setHasDistrupterInRange);
                 this.addEffectsToBees(bees);
                 this.playSound(SoundEvents.BLOCK_BEACON_AMBIENT);
             }
@@ -332,11 +335,12 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
     }
 
     private void doPullProcess() {
+        assert world != null; //will fix later - epic
         TileEntity tileEntity = world.getTileEntity(pos.down());
         if (tileEntity == null) return;
         LazyOptional<IFluidHandler> fluidCap = tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, Direction.UP);
         IFluidHandler handler = fluidCap.orElse(null);
-        if (handler != null) {
+        if (handler != null) {  // is the null check needed? - epic
             int tanks = handler.getTanks();
             for (int i = 0; i < tanks; i++) {
                 if (!handler.getFluidInTank(i).isEmpty() &&
@@ -382,6 +386,7 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
     }
 
     public AxisAlignedBB getEffectBox() {
+        assert this.world != null;
         return (new AxisAlignedBB(this.pos)).grow(getRange()).expand(0.0D, (double) this.world.getHeight(), 0.0D);
     }
 
@@ -413,6 +418,7 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
     }
 
     public void playSound(SoundEvent p_205736_1_) {
+        assert this.world != null;
         this.world.playSound((PlayerEntity) null, this.pos, p_205736_1_, SoundCategory.BLOCKS, 1.0F, 1.0F);
     }
 
@@ -456,6 +462,7 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
     }
 
     private void addEffectsToBees(List<BeeEntity> bees) {
+        assert this.world != null;
         if (!this.world.isRemote && doEffects()) {
             for (BeeEntity mob : bees) {
                 for (BeeconEffect effect : effects) {
@@ -506,7 +513,7 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
 
     public boolean getEffectActive(Effect effect) {
         BeeconEffect e = getEffect(effect);
-        return e == null ? false : e.active;
+        return e != null && e.active;
     }
 
     public BeeconEffect getEffect(Effect effect) {
@@ -542,7 +549,7 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
         }
     }
 
-    public class BeeconEffect {
+    public static class BeeconEffect {
         public Effect effect;
         public double value;
         public boolean active;

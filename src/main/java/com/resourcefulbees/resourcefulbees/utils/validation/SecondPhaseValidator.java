@@ -10,6 +10,7 @@ import static com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils.*;
 import static com.resourcefulbees.resourcefulbees.utils.validation.ValidatorUtils.TAG_RESOURCE_PATTERN;
 
 public class SecondPhaseValidator {
+    //TODO - is this safe to delete??
 //
 //    public static void validateMutation(CustomBeeData bee) {
 //        if (bee.getMutationData().hasMutation()) {

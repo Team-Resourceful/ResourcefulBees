@@ -36,20 +36,8 @@ public class CatnipHoneyBlock extends HoneyBlock {
         super(AbstractBlock.Properties.create(Material.CLAY).velocityMultiplier(0.4F).jumpVelocityMultiplier(0.5F).nonOpaque().sound(SoundType.HONEY));
     }
 
-    public static int getBlockColor(BlockState state, @Nullable IBlockReader world, @Nullable BlockPos pos, int tintIndex) {
-        CustomHoneyBlock honeycombBlock = ((CustomHoneyBlock) state.getBlock());
-        return honeycombBlock.honeyData.isRainbow() ? RainbowColor.getRGB() : honeycombBlock.getHoneyColor();
-    }
-
-    public static int getItemColor(ItemStack stack, int tintIndex) {
-        BlockItem blockItem = (BlockItem) stack.getItem();
-        CustomHoneyBlock honeycombBlock = (CustomHoneyBlock) blockItem.getBlock();
-        return honeycombBlock.honeyData.isRainbow() ? RainbowColor.getRGB() : honeycombBlock.getHoneyColor();
-    }
-
-
     /**
-     * Data copyied from minecraft:honey_block
+     * Data copied from minecraft:honey_block
      */
 
     private static boolean hasHoneyBlockEffects(Entity entity) {

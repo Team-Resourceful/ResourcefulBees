@@ -1,9 +1,7 @@
 package com.resourcefulbees.resourcefulbees.init;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
-import com.resourcefulbees.resourcefulbees.utils.INBTInstanceCreator;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.api.beedata.HoneyBottleData;
 import com.resourcefulbees.resourcefulbees.config.Config;
@@ -15,7 +13,6 @@ import com.resourcefulbees.resourcefulbees.registry.ModFeatures;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.EntityType;
-import net.minecraft.nbt.INBT;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraft.world.gen.GenerationStage;

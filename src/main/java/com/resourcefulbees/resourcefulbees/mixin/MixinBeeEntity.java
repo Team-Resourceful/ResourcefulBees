@@ -56,15 +56,15 @@ public abstract class MixinBeeEntity extends AnimalEntity {
         }
     }
 
-    public boolean isInvulnerableTo(DamageSource p_180431_1_) {
-        if (getActivePotionEffect(Effects.WATER_BREATHING) != null && p_180431_1_ == DamageSource.DROWN) {
+    public boolean isInvulnerableTo(@NotNull DamageSource damageSource) {
+        if (getActivePotionEffect(Effects.WATER_BREATHING) != null && damageSource == DamageSource.DROWN) {
             return true;
         }
-        return super.isInvulnerableTo(p_180431_1_);
+        return super.isInvulnerableTo(damageSource);
     }
 
     @Override
-    protected float getStandingEyeHeight(@NotNull Pose pose, EntitySize size) {
+    protected float getStandingEyeHeight(@NotNull Pose pose, @NotNull EntitySize size) {
         return this.isChild() ? size.height * 0.25F : size.height * 0.5F;
     }
 
@@ -123,8 +123,8 @@ public abstract class MixinBeeEntity extends AnimalEntity {
                         BeehiveTileEntity beehivetileentity = (BeehiveTileEntity) tileentity;
                         beehivetileentity.tryEnterHive(beeEntity, beeEntity.hasNectar());
                     } else if (tileentity instanceof ApiaryTileEntity) {
-                        ApiaryTileEntity beehivetileentity = (ApiaryTileEntity) tileentity;
-                        beehivetileentity.tryEnterHive(beeEntity, beeEntity.hasNectar(), false);
+                        ApiaryTileEntity apiaryTileEntity = (ApiaryTileEntity) tileentity;
+                        apiaryTileEntity.tryEnterHive(beeEntity, beeEntity.hasNectar(), false);
                     }
                 }
             }

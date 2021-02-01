@@ -7,6 +7,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3f;
 
 public class CubeModel {
+
+    //TODO - ummm lots of unused methods and duplicate code.....
+
     public Vector3f start;
     public Vector3f end;
     public final TextureAtlasSprite[] sprites = new TextureAtlasSprite[6];

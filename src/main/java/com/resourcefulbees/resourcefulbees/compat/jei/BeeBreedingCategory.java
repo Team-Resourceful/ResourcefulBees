@@ -34,6 +34,7 @@ import net.minecraft.util.text.Color;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.Style;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.text.DecimalFormat;
@@ -201,13 +202,13 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
         ingredientStacks.set(0, ingredients.getInputs(JEICompat.ENTITY_INGREDIENT).get(0));
         ingredientStacks.set(1, ingredients.getInputs(JEICompat.ENTITY_INGREDIENT).get(1));
         ingredientStacks.set(2, ingredients.getOutputs(JEICompat.ENTITY_INGREDIENT).get(0));
-        ingredientStacks.addTooltipCallback((slotIndex, b, entityIngredient, tooltip) -> {
+        /*ingredientStacks.addTooltipCallback((slotIndex, b, entityIngredient, tooltip) -> {
             if (Minecraft.getInstance().gameSettings.advancedItemTooltips) {
                 EntityIngredient i = ingredients.getInputs(JEICompat.ENTITY_INGREDIENT).get(0).get(0);
                 if (slotIndex == 1) {
                 }
             }
-        });
+        });*/ //TODO: This line seems unnecessary?
 
 
         IGuiItemStackGroup itemStacks = iRecipeLayout.getItemStacks();
@@ -230,8 +231,9 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
         }
     }
 
+    @NotNull
     @Override
-    public List<ITextComponent> getTooltipStrings(Recipe recipe, double mouseX, double mouseY) {
+    public List<ITextComponent> getTooltipStrings(@NotNull Recipe recipe, double mouseX, double mouseY) {
         double infoX = 115D;
         double infoY = 40D;
         if (mouseX >= infoX && mouseX <= infoX + 9D && mouseY >= infoY && mouseY <= infoY + 9D && recipe.chance < 1) {
