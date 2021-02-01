@@ -340,7 +340,7 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
         if (tileEntity == null) return;
         LazyOptional<IFluidHandler> fluidCap = tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, Direction.UP);
         IFluidHandler handler = fluidCap.orElse(null);
-        if (handler != null) {  // is the null check needed? - epic
+        if (handler != null) {
             int tanks = handler.getTanks();
             for (int i = 0; i < tanks; i++) {
                 if (!handler.getFluidInTank(i).isEmpty() &&

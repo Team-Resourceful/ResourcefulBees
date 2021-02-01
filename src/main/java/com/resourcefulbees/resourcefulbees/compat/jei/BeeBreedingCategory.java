@@ -202,14 +202,6 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
         ingredientStacks.set(0, ingredients.getInputs(JEICompat.ENTITY_INGREDIENT).get(0));
         ingredientStacks.set(1, ingredients.getInputs(JEICompat.ENTITY_INGREDIENT).get(1));
         ingredientStacks.set(2, ingredients.getOutputs(JEICompat.ENTITY_INGREDIENT).get(0));
-        /*ingredientStacks.addTooltipCallback((slotIndex, b, entityIngredient, tooltip) -> {
-            if (Minecraft.getInstance().gameSettings.advancedItemTooltips) {
-                EntityIngredient i = ingredients.getInputs(JEICompat.ENTITY_INGREDIENT).get(0).get(0);
-                if (slotIndex == 1) {
-                }
-            }
-        });*/ //TODO: This line seems unnecessary?
-
 
         IGuiItemStackGroup itemStacks = iRecipeLayout.getItemStacks();
 
