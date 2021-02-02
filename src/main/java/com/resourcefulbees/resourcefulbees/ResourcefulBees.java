@@ -26,6 +26,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.village.VillagerTradesEvent;
+import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
@@ -156,7 +157,7 @@ public class ResourcefulBees {
         TraitRegistry.setTraitRegistryClosed();
         TraitRegistry.applyBeeTraits();
         BeeSetup.registerBeePlacements();
-
+        HoneySetup.setupHoneyEffects();
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> DataGen::generateClientData);
         DataGen.generateCommonData();
     }

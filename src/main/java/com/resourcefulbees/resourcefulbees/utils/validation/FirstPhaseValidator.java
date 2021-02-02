@@ -140,9 +140,9 @@ public class FirstPhaseValidator {
     private static void validateEffectValues(HoneyBottleData honeyData, String name) {
         if (honeyData.getEffects() != null && honeyData.getEffects().size() != 0) {
             honeyData.getEffects().forEach(honeyEffect -> {
-                if (honeyEffect.getEffect() == null) {
+                if (!honeyEffect.isEffectIDValid()) {
                     logError(name);
-                    throw new IllegalArgumentException(String.format("Custom effect could not be found! Value: %s", honeyEffect.getEffectID()));
+                    throw new IllegalArgumentException(String.format("Custom effect is not valid! Value: %s", honeyEffect.getEffectID()));
                 }
             });
         }
