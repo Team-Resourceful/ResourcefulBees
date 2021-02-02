@@ -57,6 +57,7 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
         }));
         if (Config.HONEY_BLOCK_RECIPIES.get() && Config.HONEY_GENERATE_BLOCKS.get()) {
             BEE_REGISTRY.getHoneyBottles().forEach((s, honeyData) -> {
+                SecondPhaseValidator.validateHoneyEffects(honeyData);
                 if (honeyData.doGenerateHoneyBlock() && honeyData.doHoneyBlockRecipe()) {
                     IRecipe<?> honeyBlock = this.makeHoneyBlockRecipe(honeyData);
                     IRecipe<?> honeyBottle = this.makeHoneyBottleRecipe(honeyData);

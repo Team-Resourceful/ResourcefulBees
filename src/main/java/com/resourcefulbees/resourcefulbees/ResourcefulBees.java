@@ -157,7 +157,6 @@ public class ResourcefulBees {
         TraitRegistry.setTraitRegistryClosed();
         TraitRegistry.applyBeeTraits();
         BeeSetup.registerBeePlacements();
-        HoneySetup.setupHoneyEffects();
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> DataGen::generateClientData);
         DataGen.generateCommonData();
     }

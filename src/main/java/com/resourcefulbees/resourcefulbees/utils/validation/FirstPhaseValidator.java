@@ -3,7 +3,6 @@ package com.resourcefulbees.resourcefulbees.utils.validation;
 import com.google.common.base.Splitter;
 import com.resourcefulbees.resourcefulbees.api.beedata.*;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
-import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
 import com.resourcefulbees.resourcefulbees.utils.color.Color;
 
 import java.util.Iterator;

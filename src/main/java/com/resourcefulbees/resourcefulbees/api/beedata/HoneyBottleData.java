@@ -106,7 +106,6 @@ public class HoneyBottleData {
      */
     public transient boolean shouldResourcefulBeesDoForgeRegistration;
 
-
     public int getHoneyColorInt() {
         return com.resourcefulbees.resourcefulbees.utils.color.Color.parseInt(honeyColor);
     }
@@ -208,13 +207,8 @@ public class HoneyBottleData {
 
     public Food getFood() {
         Food.Builder builder = new Food.Builder().hunger(hunger).saturation(saturation);
-
         if (hasEffects()) {
             for (HoneyEffect honeyEffect : effects) {
-                if (honeyEffect.getEffect() == null) {
-                    LOGGER.warn(String.format("An effect for: $s could not be properly validated and was skipped.", honeyBottleRegistryObject.getId().toString()));
-                    continue;
-                }
                 builder.effect(() -> honeyEffect.getInstance(), honeyEffect.chance);
             }
         }
@@ -237,6 +231,10 @@ public class HoneyBottleData {
         return honeyBlockRecipe;
     }
 
+    public void setEffects(List<HoneyEffect> effects) {
+        this.effects = effects;
+    }
+
 
     /**
      * effect : generated from the effect id
@@ -251,6 +249,7 @@ public class HoneyBottleData {
         public int duration = 60;
         public int strength = 0;
         public float chance = 1;
+        public transient Effect effect = null;
 
         public EffectInstance getInstance() {
             return new EffectInstance(getEffect(), duration, strength);
@@ -261,8 +260,13 @@ public class HoneyBottleData {
         }
 
         public Effect getEffect() {
+            if (effect != null) return effect;
             ResourceLocation location = ResourceLocation.tryCreate(effectID);
             return effectID == null || location == null ? null : ForgeRegistries.POTIONS.getValue(location);
+        }
+
+        public void setEffect(Effect effect) {
+            this.effect = effect;
         }
 
         public String getEffectID() {
