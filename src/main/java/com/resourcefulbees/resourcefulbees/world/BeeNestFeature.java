@@ -77,6 +77,9 @@ public class BeeNestFeature extends Feature<NoFeatureConfig> {
         } else {
             y = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, pos.getX(), pos.getZ());
             newPos = new BlockPos(pos.getX(), y, pos.getZ());
+            if (!worldIn.getBlockState(newPos.down()).getFluidState().isEmpty()) {
+                return false;
+            }
         }
 
         if (newPos.getY() == 0) {
