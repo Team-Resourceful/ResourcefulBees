@@ -90,7 +90,6 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
                 return false;
             } else {
                 Entity entity = EntityType.func_220335_a(nbt, this.world, entity1 -> entity1);
-
                 if (entity != null) {
                     EntitySize size = entity.getSize(Pose.STANDING);
                     double d0 = 0.55D + size.width / 2.0F;
@@ -131,7 +130,7 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
                     this.world.playSound(null, hivePos.getX(), hivePos.getY(),  hivePos.getZ(), SoundEvents.BLOCK_BEEHIVE_EXIT, SoundCategory.BLOCKS, 1.0F, 1.0F);
                     return this.world.addEntity(entity);
                 } else {
-                    return false;
+                    return true;
                 }
             }
         }
