@@ -21,20 +21,20 @@ import javax.annotation.Nonnull;
 @OnlyIn(Dist.CLIENT)
 public class CustomBeeRenderer extends MobRenderer<CustomBeeEntity, CustomBeeModel<CustomBeeEntity>> {
 
-    private final ResourceLocation angryTexture;
-    private final ResourceLocation baseTexture;
+    private ResourceLocation angryTexture;
+    private ResourceLocation baseTexture;
 
     public CustomBeeRenderer(BaseModelTypes modelType, EntityRendererManager manager, CustomBeeData beeData) {
         super(manager, new CustomBeeModel<>(modelType), 0.4F);
 
-        angryTexture = new ResourceLocation(ResourcefulBees.MOD_ID, BeeConstants.ENTITY_TEXTURES_DIR + beeData.getBaseLayerTexture() + "_angry.png");
-        baseTexture = new ResourceLocation(ResourcefulBees.MOD_ID, BeeConstants.ENTITY_TEXTURES_DIR + beeData.getBaseLayerTexture() + ".png");
+        angryTexture = ResourceLocation.tryCreate(ResourcefulBees.MOD_ID + ":" + BeeConstants.ENTITY_TEXTURES_DIR + beeData.getBaseLayerTexture() + "_angry.png");
+        baseTexture = ResourceLocation.tryCreate(ResourcefulBees.MOD_ID + ":" + BeeConstants.ENTITY_TEXTURES_DIR + beeData.getBaseLayerTexture() + ".png");
 
 
         if (beeData.getColorData().isBeeColored()) {
             addLayer(new BeeLayer(this, LayerType.PRIMARY, beeData.getColorData().getModelType(), beeData.getColorData()));
             addLayer(new BeeLayer(this, LayerType.SECONDARY, beeData.getColorData().getModelType(), beeData.getColorData()));
-        }else {
+        } else {
             if (beeData.getColorData().getModelType() != ModelTypes.DEFAULT) {
                 addLayer(new AdditionLayer<>(this, beeData.getColorData().getModelType(), angryTexture, baseTexture));
             }
@@ -42,11 +42,19 @@ public class CustomBeeRenderer extends MobRenderer<CustomBeeEntity, CustomBeeMod
         if (beeData.getColorData().isGlowing() || beeData.getColorData().isEnchanted()) {
             addLayer(new BeeLayer(this, LayerType.EMISSIVE, beeData.getColorData().getModelType(), beeData.getColorData()));
         }
+
+        if (!BeeLayer.textureExists(baseTexture)) {
+            baseTexture = BeeConstants.MISSING_TEXTURE;
+        }
+        if (!BeeLayer.textureExists(angryTexture)) {
+            angryTexture = baseTexture;
+        }
     }
 
     @Nonnull
     public ResourceLocation getEntityTexture(CustomBeeEntity entity) {
-        return entity.hasAngerTime() ? angryTexture : baseTexture;
+        ResourceLocation texture = entity.hasAngerTime() ? angryTexture : baseTexture;
+        return texture;
     }
 
     public enum LayerType {

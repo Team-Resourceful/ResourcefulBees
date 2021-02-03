@@ -1,5 +1,9 @@
 package com.resourcefulbees.resourcefulbees.lib;
 
+import com.resourcefulbees.resourcefulbees.ResourcefulBees;
+import com.resourcefulbees.resourcefulbees.entity.passive.ResourcefulBee;
+import net.minecraft.util.ResourceLocation;
+
 public class BeeConstants {
     public static final String FLOWER_TAG_ALL = "all";
     public static final String FLOWER_TAG_SMALL = "small";
@@ -29,4 +33,5 @@ public class BeeConstants {
     public static final int BREED_DELAY = 6000;
 
     public static final int DEFAULT_ITEM_COLOR = -1;
+    public static final ResourceLocation MISSING_TEXTURE = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/entity/missing_texture.png");
 }
