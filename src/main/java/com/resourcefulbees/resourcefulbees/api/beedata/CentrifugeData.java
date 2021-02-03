@@ -4,7 +4,9 @@ import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
+import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import org.apache.logging.log4j.LogManager;
@@ -33,6 +35,11 @@ public class CentrifugeData extends AbstractBeeData {
     private final String bottleOutput;
 
     /**
+     * The fluid output when no bottles are used.
+     */
+    private final String fluidOutput;
+
+    /**
      * The chance that the main output comes out of the comb.
      */
     private final float mainOutputWeight;
@@ -46,6 +53,11 @@ public class CentrifugeData extends AbstractBeeData {
      * The chance that a bottle is converted to the bottleOutput.
      */
     private final float bottleOutputWeight;
+
+    /**
+     * The chance that the fluid output comes out of the comb.
+     */
+    private final float fluidOutputWeight;
 
     /**
      * How many items come out of the first output.
@@ -63,22 +75,33 @@ public class CentrifugeData extends AbstractBeeData {
     private final int bottleOutputCount;
 
     /**
+     * How many millibuckets come out of the fluid output
+     */
+    private final int fluidOutputCount;
+
+    /**
      * How many comb are consumed per iteration.
      */
     private final int mainInputCount;
 
+    /**
+     * Does the recipe output a bottle and a fluid or just one of the other.
+     * If true, the recipe will require free space in a tank and a bottle to process.
+     * Default: false
+     */
+    private final boolean outputBottleAndFluid;
 
     private final JsonElement mainNBTData;
 
-    private transient CompoundNBT mainNBT = null;
+    private transient CompoundNBT mainNBT;
 
     private final JsonElement secondaryNBTData;
 
-    private transient CompoundNBT secondaryNBT = null;
+    private transient CompoundNBT secondaryNBT;
 
     private final JsonElement bottleNBTData;
 
-    private transient CompoundNBT bottleNBT = null;
+    private transient CompoundNBT bottleNBT;
 
 
     /**
@@ -92,21 +115,36 @@ public class CentrifugeData extends AbstractBeeData {
     private boolean hasCentrifugeOutput;
 
     /**
-     * Use this when the main output is a fluid.
+     * Whether the recipe has a fluid or not.
+     * if hasFluidOutput true and no fluidOutput is specified, fluidOutput will be initialised from mainOutput to keep backwards compatibility
      */
     private final boolean hasFluidOutput;
 
-    private CentrifugeData(String mainOutput, String secondaryOutput, String bottleOutput, float mainOutputWeight, float secondaryOutputWeight, float bottleOutputWeight, int mainOutputCount, int secondaryOutputCount, int bottleOutputCount, int mainInputCount, CompoundNBT mainNBT, CompoundNBT secondaryNBT, CompoundNBT bottleNBT, boolean hasCentrifugeOutput, int recipeTime, boolean hasFluidOutput) {
+    private transient boolean mainIsFluidOutput = false;
+
+
+    public boolean isMainIsFluidOutput() {
+        return mainIsFluidOutput;
+    }
+
+    private CentrifugeData(String mainOutput, String secondaryOutput, String bottleOutput, String fluidOutput,
+                           float mainOutputWeight, float secondaryOutputWeight, float bottleOutputWeight, float fluidOutputWeight, int mainOutputCount,
+                           int secondaryOutputCount, int bottleOutputCount, int fluidOutputCount, int mainInputCount,
+                           CompoundNBT mainNBT, CompoundNBT secondaryNBT, CompoundNBT bottleNBT, boolean outputBottleAndFluid,
+                           boolean hasCentrifugeOutput, int recipeTime, boolean hasFluidOutput) {
         this.mainOutput = mainOutput;
         this.secondaryOutput = secondaryOutput;
         this.bottleOutput = bottleOutput;
         this.mainOutputWeight = mainOutputWeight;
         this.secondaryOutputWeight = secondaryOutputWeight;
         this.bottleOutputWeight = bottleOutputWeight;
+        this.fluidOutputWeight = fluidOutputWeight;
         this.mainOutputCount = mainOutputCount;
         this.secondaryOutputCount = secondaryOutputCount;
         this.bottleOutputCount = bottleOutputCount;
         this.mainInputCount = mainInputCount;
+        this.fluidOutputCount = fluidOutputCount;
+        this.outputBottleAndFluid = outputBottleAndFluid;
         this.mainNBTData = null;
         this.mainNBT = mainNBT;
         this.secondaryNBT = secondaryNBT;
@@ -116,6 +154,7 @@ public class CentrifugeData extends AbstractBeeData {
         this.hasCentrifugeOutput = hasCentrifugeOutput;
         this.recipeTime = recipeTime;
         this.hasFluidOutput = hasFluidOutput;
+        this.fluidOutput = fluidOutput;
     }
 
     public String getMainOutput() {
@@ -128,6 +167,11 @@ public class CentrifugeData extends AbstractBeeData {
 
     public String getBottleOutput() {
         return bottleOutput != null ? bottleOutput : Objects.requireNonNull(Items.HONEY_BOTTLE.getRegistryName()).toString();
+    }
+
+    public String getFluidOutput() {
+        if (mainIsFluidOutput) return getMainOutput();
+        return fluidOutput != null ? fluidOutput : Objects.requireNonNull(Fluids.EMPTY.getRegistryName().toString());
     }
 
     public float getMainOutputWeight() {
@@ -154,6 +198,11 @@ public class CentrifugeData extends AbstractBeeData {
         return Math.max(1, bottleOutputCount);
     }
 
+    public int getFluidOutputCount() {
+        if (mainIsFluidOutput) return getMainOutputCount();
+        return fluidOutputCount <= 1 ? ModConstants.HONEY_PER_BOTTLE : fluidOutputCount;
+    }
+
     public int getMainInputCount() {
         return Math.max(1, mainInputCount);
     }
@@ -170,14 +219,14 @@ public class CentrifugeData extends AbstractBeeData {
         return this.recipeTime > 0 ? this.recipeTime : Config.GLOBAL_CENTRIFUGE_RECIPE_TIME.get();
     }
 
-    public boolean hasFluidoutput() {
+    public boolean hasFluidOutput() {
         return hasFluidOutput;
     }
 
     public CompoundNBT getMainNBT() {
         if (mainNBTData != null && mainNBT == null) {
             mainNBT = CompoundNBT.CODEC.parse(JsonOps.INSTANCE, mainNBTData).resultOrPartial(e -> LOGGER.warn(String.format("Could not deserialize NBT: [%s]", mainNBTData.toString()))).get();
-        }else if (mainNBTData == null && mainNBT == null){
+        } else if (mainNBTData == null && mainNBT == null) {
             mainNBT = new CompoundNBT();
         }
         if (bottleNBT == null || mainNBT.isEmpty()) return null;
@@ -187,7 +236,7 @@ public class CentrifugeData extends AbstractBeeData {
     public CompoundNBT getSecondaryNBT() {
         if (secondaryNBTData != null && secondaryNBT == null) {
             secondaryNBT = CompoundNBT.CODEC.parse(JsonOps.INSTANCE, secondaryNBTData).resultOrPartial(e -> LOGGER.warn(String.format("Could not deserialize NBT: [%s]", secondaryNBTData.toString()))).get();
-        }else if (mainNBTData == null && secondaryNBT == null){
+        } else if (mainNBTData == null && secondaryNBT == null) {
             secondaryNBT = new CompoundNBT();
         }
         if (secondaryNBT == null || secondaryNBT.isEmpty()) return null;
@@ -197,30 +246,51 @@ public class CentrifugeData extends AbstractBeeData {
     public CompoundNBT getBottleNBT() {
         if (bottleNBTData != null && bottleNBT == null) {
             bottleNBT = CompoundNBT.CODEC.parse(JsonOps.INSTANCE, bottleNBTData).resultOrPartial(e -> LOGGER.warn(String.format("Could not deserialize NBT: [%s]", bottleNBTData.toString()))).get();
-        }else if (bottleNBTData == null && bottleNBT == null){
+        } else if (bottleNBTData == null && bottleNBT == null) {
             bottleNBT = new CompoundNBT();
         }
         if (bottleNBT == null || bottleNBT.isEmpty()) return null;
         return bottleNBT;
     }
 
+    public void init() {
+        if (hasFluidOutput && fluidOutput == null) {
+            mainIsFluidOutput = true;
+        }
+    }
+
+    public boolean isOutputBottleAndFluid() {
+        return outputBottleAndFluid;
+    }
+
+    public float getFluidOutputWeight() {
+        if (mainIsFluidOutput) return getMainOutputWeight();
+        return fluidOutputWeight <= 0 ? BeeConstants.DEFAULT_FLUID_OUTPUT_WEIGHT : fluidOutputWeight;
+    }
+
+
     public static class Builder {
         private final String mainOutput;
         private String secondaryOutput;
         private String bottleOutput;
+        private String fluidOutput;
         private float mainOutputWeight;
         private float secondaryOutputWeight;
         private float bottleOutputWeight;
+        private float fluidOutputWeight;
         private int mainOutputCount;
         private int secondaryOutputCount;
         private int bottleOutputCount;
         private int mainInputCount;
+        private int fluidOutputCount;
         private CompoundNBT mainNBT;
         private CompoundNBT secondaryNBT;
         private CompoundNBT bottleNBT;
+        private boolean outputBottleAndFluid;
         private final boolean hasCentrifugeOutput;
         private int recipeTime;
         private boolean hasFluidOutput;
+
 
         public Builder setMainNBT(CompoundNBT mainNBT) {
             this.mainNBT = mainNBT;
@@ -249,6 +319,11 @@ public class CentrifugeData extends AbstractBeeData {
 
         public Builder setBottleOutput(String bottleOutput) {
             this.bottleOutput = bottleOutput;
+            return this;
+        }
+
+        public Builder setFluidOutputWeight(float fluidOutputWeight) {
+            this.fluidOutputWeight = fluidOutputWeight;
             return this;
         }
 
@@ -292,13 +367,33 @@ public class CentrifugeData extends AbstractBeeData {
             return this;
         }
 
-        public Builder setHasFluidoutput(boolean hasFluidOutput) {
+        public Builder setHasFluidOutput(boolean hasFluidOutput) {
             this.hasFluidOutput = hasFluidOutput;
             return this;
         }
 
+        public Builder setFluidOutput(String fluidOutput) {
+            this.fluidOutput = fluidOutput;
+            this.hasFluidOutput = true;
+            return this;
+        }
+
+        public Builder setFluidOutputCount(int fluidOutputCount) {
+            this.fluidOutputCount = fluidOutputCount;
+            return this;
+        }
+
+        public Builder setOutputBottleAndFluid(boolean outputBottleAndFluid) {
+            this.outputBottleAndFluid = outputBottleAndFluid;
+            return this;
+        }
+
         public CentrifugeData createCentrifugeData() {
-            return new CentrifugeData(mainOutput, secondaryOutput, bottleOutput, mainOutputWeight, secondaryOutputWeight, bottleOutputWeight, mainOutputCount, secondaryOutputCount, bottleOutputCount, mainInputCount, mainNBT, secondaryNBT, bottleNBT, hasCentrifugeOutput, recipeTime, hasFluidOutput);
+            return new CentrifugeData(mainOutput, secondaryOutput, bottleOutput, fluidOutput,
+                    mainOutputWeight, secondaryOutputWeight, bottleOutputWeight, fluidOutputWeight, mainOutputCount,
+                    secondaryOutputCount, bottleOutputCount, fluidOutputCount, mainInputCount,
+                    mainNBT, secondaryNBT, bottleNBT, outputBottleAndFluid,
+                    hasCentrifugeOutput, recipeTime, hasFluidOutput);
         }
     }
 

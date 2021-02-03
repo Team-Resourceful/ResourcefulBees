@@ -78,7 +78,11 @@ public class FirstPhaseValidator {
             }
             if (!centrifugeData.getBottleOutput().isEmpty() && !SINGLE_RESOURCE_PATTERN.matcher(centrifugeData.getMainOutput()).matches()) {
                 logError(name);
-                throw new IllegalArgumentException(String.format("Centrifuge Bottle Output: %1$s has invalid syntax!!", centrifugeData.getMainOutput()));
+                throw new IllegalArgumentException(String.format("Centrifuge Bottle Output: %1$s has invalid syntax!!", centrifugeData.getBottleOutput()));
+            }
+            if (!centrifugeData.getFluidOutput().isEmpty() && !SINGLE_RESOURCE_PATTERN.matcher(centrifugeData.getMainOutput()).matches()) {
+                logError(name);
+                throw new IllegalArgumentException(String.format("Centrifuge Fluid Output: %1$s has invalid syntax!!", centrifugeData.getFluidOutput()));
             }
         }
     }

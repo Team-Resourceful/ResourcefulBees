@@ -5,7 +5,6 @@ import com.resourcefulbees.resourcefulbees.item.crafting.HoneyTankRecipe;
 import com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe;
 import com.resourcefulbees.resourcefulbees.recipe.FertiliserRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.SpecialRecipeSerializer;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -16,7 +15,7 @@ public class ModRecipeSerializers {
 
 
     public static final RegistryObject<IRecipeSerializer<?>> CENTRIFUGE_RECIPE = RECIPE_SERIALIZERS.register("centrifuge",
-            () -> new CentrifugeRecipe.Serializer<>(CentrifugeRecipe::new));
+            () -> new CentrifugeRecipe.Serializer<>((id, ingredient, itemOutputs, fluidOutput, time, multiblockTime, multiblock, hasFluidOutput, outputBottleAndFluid) -> new CentrifugeRecipe(id, ingredient, itemOutputs, fluidOutput, time, multiblockTime, multiblock, hasFluidOutput, outputBottleAndFluid)));
 
     public static final RegistryObject<IRecipeSerializer<?>> FERTILIZER_RECIPE = RECIPE_SERIALIZERS.register("fertilizer_crafting",
             FertiliserRecipe.Serializer::new);
