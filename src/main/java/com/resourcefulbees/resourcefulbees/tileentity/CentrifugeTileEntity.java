@@ -468,7 +468,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
     public ITextComponent getDisplayName() { return new TranslationTextComponent("gui.resourcefulbees.centrifuge"); }
 
     protected CustomEnergyStorage createEnergy() {
-        return new CustomEnergyStorage(Config.MAX_CENTRIFUGE_RF.get(), 100, 0) {
+        return new CustomEnergyStorage(Config.MAX_CENTRIFUGE_RF.get(), Config.MAX_CENTRIFUGE_RECEIVE_RATE.get(), 0) {
             @Override
             protected void onEnergyChanged() { markDirty(); }
         };

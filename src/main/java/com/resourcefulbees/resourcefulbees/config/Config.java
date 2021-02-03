@@ -42,6 +42,7 @@ public class Config {
     public static ForgeConfigSpec.IntValue T4_APIARY_QUANTITY;
 
     public static ForgeConfigSpec.IntValue MAX_CENTRIFUGE_RF;
+    public static ForgeConfigSpec.IntValue MAX_CENTRIFUGE_RECEIVE_RATE;
     public static ForgeConfigSpec.IntValue RF_TICK_CENTRIFUGE;
     public static ForgeConfigSpec.DoubleValue PLAYER_EXHAUSTION;
     public static ForgeConfigSpec.BooleanValue MULTIBLOCK_RECIPES_ONLY;
@@ -128,8 +129,10 @@ public class Config {
                     .defineInRange("centrifugeRfPerTick", 30, 2, 1000);
             PLAYER_EXHAUSTION = COMMON_BUILDER.comment("\nAmount of hunger the player uses per click on mechanical centrifuge.")
                     .defineInRange("mechanicalCentrifugePlayerExhaustion", 0.1, 0.0, 1);
-            MULTIBLOCK_RECIPES_ONLY = COMMON_BUILDER.comment("\n Makes it so multiblock centrifuge can only do multiblock recipes. [true/false]")
+            MULTIBLOCK_RECIPES_ONLY = COMMON_BUILDER.comment("\nMakes it so multiblock centrifuge can only do multiblock recipes. [true/false]")
                     .define("multiblockRecipesOnly", false);
+            MAX_CENTRIFUGE_RECEIVE_RATE = COMMON_BUILDER.comment("\nSets the max RF/t that the centrifuge can receive. This should idealy be set higher than centrifugeRfPerTick.")
+                    .defineInRange("maxCentrifugeReceiveRate", 1, 100, 10000);
             COMMON_BUILDER.pop();
 
             COMMON_BUILDER.push("Honey Generator Options");
