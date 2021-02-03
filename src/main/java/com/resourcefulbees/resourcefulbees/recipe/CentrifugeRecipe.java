@@ -158,7 +158,7 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
                     CompoundNBT nbt = new CompoundNBT();
                     if (jsonObject.has("nbtData")) {
                         JsonElement nbtData = JSONUtils.getJsonObject(jsonObject, "nbtData");
-                        CompoundNBT.CODEC.parse(JsonOps.INSTANCE, nbtData).resultOrPartial(e -> LOGGER.warn(String.format("Could not deserialize NBT: [%s]", nbtData.toString()))).get();
+                        nbt = CompoundNBT.CODEC.parse(JsonOps.INSTANCE, nbtData).resultOrPartial(e -> LOGGER.warn(String.format("Could not deserialize NBT: [%s]", nbtData.toString()))).get();
                     }
 
                     // create item stack

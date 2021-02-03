@@ -13,6 +13,7 @@ import com.resourcefulbees.resourcefulbees.utils.validation.SecondPhaseValidator
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.*;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.resources.IResourceManagerReloadListener;
 import net.minecraft.util.NonNullList;

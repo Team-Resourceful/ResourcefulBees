@@ -180,6 +180,7 @@ public class CentrifugeData extends AbstractBeeData {
         }else if (mainNBTData == null && mainNBT == null){
             mainNBT = new CompoundNBT();
         }
+        if (bottleNBT == null || mainNBT.isEmpty()) return null;
         return mainNBT;
     }
 
@@ -189,6 +190,7 @@ public class CentrifugeData extends AbstractBeeData {
         }else if (mainNBTData == null && secondaryNBT == null){
             secondaryNBT = new CompoundNBT();
         }
+        if (secondaryNBT == null || secondaryNBT.isEmpty()) return null;
         return secondaryNBT;
     }
 
@@ -198,6 +200,7 @@ public class CentrifugeData extends AbstractBeeData {
         }else if (bottleNBTData == null && bottleNBT == null){
             bottleNBT = new CompoundNBT();
         }
+        if (bottleNBT == null || bottleNBT.isEmpty()) return null;
         return bottleNBT;
     }
 
