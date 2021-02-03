@@ -95,11 +95,11 @@ public class ColorData extends AbstractBeeData {
 
     public String getGlowColor() { return glowColor == null ? "#ffffff" : glowColor; }
 
-    public String getPrimaryLayerTexture() { return primaryLayerTexture == null ? "/custom/primary_layer" : primaryLayerTexture; }
+    public String getPrimaryLayerTexture() { return primaryLayerTexture == null ? "custom/primary_layer" : primaryLayerTexture; }
 
-    public String getSecondaryLayerTexture() { return secondaryLayerTexture == null ? "/custom/secondary_layer" : secondaryLayerTexture; }
+    public String getSecondaryLayerTexture() { return secondaryLayerTexture == null ? "custom/secondary_layer" : secondaryLayerTexture; }
 
-    public String getEmissiveLayerTexture() { return emissiveLayerTexture == null ? "/custom/emissive_layer" : emissiveLayerTexture; }
+    public String getEmissiveLayerTexture() { return emissiveLayerTexture == null ? "custom/emissive_layer" : emissiveLayerTexture; }
 
     public String getGelLayerTexture() { return gelLayerTexture; }
 

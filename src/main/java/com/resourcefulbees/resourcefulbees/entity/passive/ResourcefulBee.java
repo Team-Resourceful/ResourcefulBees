@@ -4,6 +4,7 @@ import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.api.beedata.MutationData;
 import com.resourcefulbees.resourcefulbees.api.beedata.TraitData;
 import com.resourcefulbees.resourcefulbees.config.Config;
+import com.resourcefulbees.resourcefulbees.effects.ModEffects;
 import com.resourcefulbees.resourcefulbees.entity.goals.*;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.TraitConstants;
@@ -51,7 +52,6 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
 import org.apache.commons.lang3.tuple.Pair;
-import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
@@ -283,10 +283,21 @@ public class ResourcefulBee extends CustomBeeEntity {
                     case TraitConstants.SLIMY:
                         doSlimeEffect();
                         break;
+                    case TraitConstants.ANGRY:
+                        doAngryEffect();
+                        break;
                 }
             });
         }
         super.updateAITasks();
+    }
+
+    private void doAngryEffect() {
+        if (getActivePotionEffect(ModEffects.CALMING.get()) == null) {
+            Entity player = world.getClosestPlayer(getEntity(), 20);
+            setAngryAt(player != null ? player.getUniqueID() : null);
+            setAngerTime(1000);
+        }
     }
 
     private void doTeleportEffect() {

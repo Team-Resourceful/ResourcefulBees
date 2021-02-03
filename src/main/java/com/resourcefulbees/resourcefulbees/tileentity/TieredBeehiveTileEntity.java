@@ -92,7 +92,7 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
                 Entity entity = EntityType.func_220335_a(nbt, this.world, entity1 -> entity1);
                 if (entity != null) {
                     EntitySize size = entity.getSize(Pose.STANDING);
-                    double d0 = 0.55D + size.width / 2.0F;
+                    double d0 = 0.65D + size.width / 2.0F;
                     double d1 = blockpos.getX() + 0.5D + d0 * direction.getXOffset();
                     double d2 = blockpos.getY() + Math.max(0.5D - (size.height / 2.0F), 0);
                     double d3 = blockpos.getZ() + 0.5D + d0 * direction.getZOffset();
