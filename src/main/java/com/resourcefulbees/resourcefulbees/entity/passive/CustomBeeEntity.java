@@ -227,6 +227,11 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
     }
 
     @Override
+    public void setInLove(int time) {
+        //super.setInLove(time);
+    }
+
+    @Override
     public void resetInLove() {
         super.resetInLove();
         resetFeedCount();

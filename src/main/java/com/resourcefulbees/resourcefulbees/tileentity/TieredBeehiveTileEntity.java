@@ -7,6 +7,8 @@ import com.resourcefulbees.resourcefulbees.block.TieredBeehiveBlock;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
+import com.resourcefulbees.resourcefulbees.mixin.BTEBeeAccessor;
+import com.resourcefulbees.resourcefulbees.mixin.BeehiveTileEntityInvoker;
 import com.resourcefulbees.resourcefulbees.registry.ModTileEntityTypes;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.MathUtils;
@@ -94,9 +96,9 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
                 if (entity != null) {
                     EntitySize size = entity.getSize(Pose.STANDING);
                     double d0 = 0.55D + size.width / 2.0F;
-                    double d1 = blockpos.getX() + 0.5D + d0 * direction.getXOffset();
-                    double d2 = blockpos.getY() + Math.max(0.5D - (size.height / 2.0F), 0);
-                    double d3 = blockpos.getZ() + 0.5D + d0 * direction.getZOffset();
+                    double d1 = blockpos1.getX() + 0.5D + d0 * direction.getXOffset();
+                    double d2 = blockpos1.getY() + Math.max(0.5D - (size.height / 2.0F), 0);
+                    double d3 = blockpos1.getZ() + 0.5D + d0 * direction.getZOffset();
                     entity.setLocationAndAngles(d1, d2, d3, entity.rotationYaw, entity.rotationPitch);
 
                     if (entity instanceof BeeEntity) {
@@ -124,7 +126,7 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
                             }
                         }
 
-                        vanillaBeeEntity.resetPollinationTicks();
+                        ((BeehiveTileEntityInvoker) this).invokeAgeBee(((BTEBeeAccessor) tileBee).getTicksInHive(), vanillaBeeEntity);
                         if (entities != null) entities.add(entity);
                     }
                     BlockPos hivePos = this.getPos();

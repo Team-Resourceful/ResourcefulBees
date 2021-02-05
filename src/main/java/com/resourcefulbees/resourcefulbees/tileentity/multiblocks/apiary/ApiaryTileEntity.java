@@ -37,7 +37,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.NBTUtil;
-import net.minecraft.nbt.StringNBT;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -169,11 +168,13 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     }
 
     //region BEE HANDLING
-    public boolean releaseBee(@Nonnull BlockState state, @Nonnull CompoundNBT nbt, @Nonnull State beehiveState, @Nullable BlockPos flowerPos, boolean exportBee) {
+    public boolean releaseBee(@Nonnull BlockState state, ApiaryBee apiaryBee, boolean exportBee) {
         BlockPos blockpos = this.getPos();
         Direction direction = state.get(BeehiveBlock.FACING);
         BlockPos blockpos1 = blockpos.offset(direction);
-        if (world != null && (this.world.getBlockState(blockpos1).getCollisionShape(this.world, blockpos1).isEmpty() || beehiveState == State.EMERGENCY)) {
+        CompoundNBT nbt = apiaryBee.entityData;
+
+        if (world != null && this.world.getBlockState(blockpos1).getCollisionShape(this.world, blockpos1).isEmpty()) {
             nbt.remove("Passengers");
             nbt.remove("Leash");
             nbt.remove("UUID");
@@ -189,11 +190,12 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
                 if (entity instanceof BeeEntity) {
                     BeeEntity vanillaBeeEntity = (BeeEntity) entity;
 
+                    BlockPos flowerPos = apiaryBee.savedFlowerPos;
                     if (flowerPos != null && !vanillaBeeEntity.hasFlower() && this.world.rand.nextFloat() < 0.9F) {
                         vanillaBeeEntity.setFlowerPos(flowerPos);
                     }
 
-                    if (beehiveState == State.HONEY_DELIVERED) {
+                    if (nbt.getBoolean("HasNectar")) {
                         vanillaBeeEntity.onHoneyDelivered();
 
                         if (!exportBee && isValidApiary(true)) {
@@ -201,7 +203,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
                         }
                     }
 
-                    vanillaBeeEntity.resetPollinationTicks();
+                    this.ageBee(apiaryBee.ticksInHive, vanillaBeeEntity);
 
                     if (exportBee) {
                         export(vanillaBeeEntity);
@@ -210,11 +212,23 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
                         this.world.playSound(null, hivePos.getX(), hivePos.getY(), hivePos.getZ(), SoundEvents.BLOCK_BEEHIVE_EXIT, SoundCategory.BLOCKS, 1.0F, 1.0F);
                         this.world.addEntity(entity);
                     }
-                    return true;
                 }
             }
+            return true;
         }
         return false;
+    }
+
+    private void ageBee(int ticksInHive, BeeEntity beeEntity) {
+        int i = beeEntity.getGrowingAge();
+        if (i < 0) {
+            beeEntity.setGrowingAge(Math.min(0, i + ticksInHive));
+        } else if (i > 0) {
+            beeEntity.setGrowingAge(Math.max(0, i - ticksInHive));
+        }
+
+        beeEntity.setInLove(Math.max(0, beeEntity.getLoveTicks() - ticksInHive));
+        beeEntity.resetPollinationTicks();
     }
 
     public boolean tryEnterHive(Entity bee, boolean hasNectar, boolean imported) {
@@ -325,9 +339,8 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
                 ApiaryBee apiaryBee = element.getValue();
                 if (!apiaryBee.isLocked && apiaryBee.ticksInHive > apiaryBee.minOccupationTicks && !world.isRemote) {
 
-                    CompoundNBT compoundnbt = apiaryBee.entityData;
-                    State state = compoundnbt.getBoolean("HasNectar") ? State.HONEY_DELIVERED : State.BEE_RELEASED;
-                    if (this.releaseBee(blockstate, compoundnbt, state, apiaryBee.savedFlowerPos, false)) {
+
+                    if (this.releaseBee(blockstate, apiaryBee, false)) {
                         iterator.remove();
                         if (this.numPlayersUsing > 0 && !this.world.isRemote)
                             syncApiaryToPlayersUsing(this.world, this.getPos(), this.saveToNBT(new CompoundNBT()));
@@ -445,7 +458,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
         if (this.world == null) return;
         BEES.forEach((s, apiaryBee) -> {
             String id = apiaryBee.entityData.getString("id");
-            EntityType type = BeeInfoUtils.getEntityType(id);
+            EntityType<?> type = BeeInfoUtils.getEntityType(id);
             if (type == EntityType.PIG) BEES.remove(s);
         });
     }
@@ -526,7 +539,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
         State state = data.getBoolean("HasNectar") ? State.HONEY_DELIVERED : State.BEE_RELEASED;
 
         if (bee.isLocked && h.getStackInSlot(EXPORT).isEmpty() && !h.getStackInSlot(EMPTY_JAR).isEmpty()) {
-            exported = releaseBee(this.getBlockState(), data, state, bee.savedFlowerPos, true);
+            exported = releaseBee(this.getBlockState(), bee, true);
         }
         if (exported) {
             this.BEES.remove(beeType);
@@ -752,11 +765,11 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
         public final String beeColor;
         public final ITextComponent displayName;
 
-        public ApiaryBee(CompoundNBT nbt, int ticksinhive, int minoccupationticks, @Nullable BlockPos flowerPos, String beeType, String beeColor, ITextComponent displayName) {
+        public ApiaryBee(CompoundNBT nbt, int ticksInHive, int minOccupationTicks, @Nullable BlockPos flowerPos, String beeType, String beeColor, ITextComponent displayName) {
             nbt.remove("UUID");
             this.entityData = nbt;
-            this.ticksInHive = ticksinhive;
-            this.minOccupationTicks = minoccupationticks;
+            this.ticksInHive = ticksInHive;
+            this.minOccupationTicks = minOccupationTicks;
             this.savedFlowerPos = flowerPos;
             this.beeType = beeType;
             this.beeColor = beeColor;
