@@ -92,13 +92,12 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
                 return false;
             } else {
                 Entity entity = EntityType.func_220335_a(nbt, this.world, entity1 -> entity1);
-
                 if (entity != null) {
                     EntitySize size = entity.getSize(Pose.STANDING);
-                    double d0 = 0.55D + size.width / 2.0F;
-                    double d1 = blockpos1.getX() + 0.5D + d0 * direction.getXOffset();
-                    double d2 = blockpos1.getY() + Math.max(0.5D - (size.height / 2.0F), 0);
-                    double d3 = blockpos1.getZ() + 0.5D + d0 * direction.getZOffset();
+                    double d0 = 0.65D + size.width / 2.0F;
+                    double d1 = blockpos.getX() + 0.5D + d0 * direction.getXOffset();
+                    double d2 = blockpos.getY() + Math.max(0.5D - (size.height / 2.0F), 0);
+                    double d3 = blockpos.getZ() + 0.5D + d0 * direction.getZOffset();
                     entity.setLocationAndAngles(d1, d2, d3, entity.rotationYaw, entity.rotationPitch);
 
                     if (entity instanceof BeeEntity) {
@@ -133,7 +132,7 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
                     this.world.playSound(null, hivePos.getX(), hivePos.getY(),  hivePos.getZ(), SoundEvents.BLOCK_BEEHIVE_EXIT, SoundCategory.BLOCKS, 1.0F, 1.0F);
                     return this.world.addEntity(entity);
                 } else {
-                    return false;
+                    return true;
                 }
             }
         }

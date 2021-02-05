@@ -106,8 +106,6 @@ public class HoneyBottleData {
      */
     public transient boolean shouldResourcefulBeesDoForgeRegistration;
 
-
-
     public int getHoneyColorInt() {
         return com.resourcefulbees.resourcefulbees.utils.color.Color.parseInt(honeyColor);
     }
@@ -204,17 +202,15 @@ public class HoneyBottleData {
         return new Item.Properties()
                 .group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)
                 .containerItem(Items.GLASS_BOTTLE)
-                .food(getFood())
                 .maxStackSize(16);
     }
 
-    private Food getFood() {
+    public Food getFood() {
         Food.Builder builder = new Food.Builder().hunger(hunger).saturation(saturation);
-
         if (hasEffects()) {
-            effects.forEach(honeyEffect -> {
+            for (HoneyEffect honeyEffect : effects) {
                 builder.effect(() -> honeyEffect.getInstance(), honeyEffect.chance);
-            });
+            }
         }
         return builder.build();
     }
@@ -235,6 +231,10 @@ public class HoneyBottleData {
         return honeyBlockRecipe;
     }
 
+    public void setEffects(List<HoneyEffect> effects) {
+        this.effects = effects;
+    }
+
 
     /**
      * effect : generated from the effect id
@@ -249,14 +249,24 @@ public class HoneyBottleData {
         public int duration = 60;
         public int strength = 0;
         public float chance = 1;
+        public transient Effect effect = null;
 
         public EffectInstance getInstance() {
             return new EffectInstance(getEffect(), duration, strength);
         }
 
+        public boolean isEffectIDValid() {
+            return effectID != null && effectID.matches("([(a-z)(0-9)_-]*|[(a-z)(0-9)_-]*:[(a-z)(0-9)_-]*)");
+        }
+
         public Effect getEffect() {
-            ResourceLocation location = new ResourceLocation(effectID);
-            return effectID == null ? null : ForgeRegistries.POTIONS.getValue(location);
+            if (effect != null) return effect;
+            ResourceLocation location = ResourceLocation.tryCreate(effectID);
+            return effectID == null || location == null ? null : ForgeRegistries.POTIONS.getValue(location);
+        }
+
+        public void setEffect(Effect effect) {
+            this.effect = effect;
         }
 
         public String getEffectID() {

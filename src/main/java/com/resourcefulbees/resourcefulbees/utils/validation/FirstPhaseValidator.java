@@ -3,7 +3,6 @@ package com.resourcefulbees.resourcefulbees.utils.validation;
 import com.google.common.base.Splitter;
 import com.resourcefulbees.resourcefulbees.api.beedata.*;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
-import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
 import com.resourcefulbees.resourcefulbees.utils.color.Color;
 
 import java.util.Iterator;
@@ -140,9 +139,9 @@ public class FirstPhaseValidator {
     private static void validateEffectValues(HoneyBottleData honeyData, String name) {
         if (honeyData.getEffects() != null && honeyData.getEffects().size() != 0) {
             honeyData.getEffects().forEach(honeyEffect -> {
-                if (honeyEffect.getEffect() == null) {
+                if (!honeyEffect.isEffectIDValid()) {
                     logError(name);
-                    throw new IllegalArgumentException(String.format("Custom effect could not be found! Value: %s", honeyEffect.getEffectID()));
+                    throw new IllegalArgumentException(String.format("Custom effect is not valid! Value: %s", honeyEffect.getEffectID()));
                 }
             });
         }

@@ -10,18 +10,19 @@ import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.ModelTypes;
 import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.IEntityRenderer;
 import net.minecraft.client.renderer.entity.LivingRenderer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
-import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
+import java.io.IOException;
 
 @OnlyIn(Dist.CLIENT)
 public class BeeLayer extends LayerRenderer<CustomBeeEntity, CustomBeeModel<CustomBeeEntity>> {
@@ -30,8 +31,8 @@ public class BeeLayer extends LayerRenderer<CustomBeeEntity, CustomBeeModel<Cust
     private final int glowingPulse;
     private final boolean isEnchanted;
     private final CustomBeeModel<CustomBeeEntity> additionModel;
-    private final ResourceLocation layerTexture;
-    private final ResourceLocation angerLayerTexture;
+    private ResourceLocation layerTexture;
+    private ResourceLocation angerLayerTexture;
     private float[] color;
     private final boolean isRainbowBee;
 
@@ -45,31 +46,46 @@ public class BeeLayer extends LayerRenderer<CustomBeeEntity, CustomBeeModel<Cust
         switch (layerType) {
             case PRIMARY:
                 this.isEmissive = false;
-                this.layerTexture = new ResourceLocation(ResourcefulBees.MOD_ID, BeeConstants.ENTITY_TEXTURES_DIR + colorData.getPrimaryLayerTexture() + ".png");
-                this.angerLayerTexture = new ResourceLocation(ResourcefulBees.MOD_ID, BeeConstants.ENTITY_TEXTURES_DIR + colorData.getPrimaryLayerTexture() + "_angry.png");
+                this.layerTexture = ResourceLocation.tryCreate(ResourcefulBees.MOD_ID + ":" + BeeConstants.ENTITY_TEXTURES_DIR + colorData.getPrimaryLayerTexture() + ".png");
+                this.angerLayerTexture = ResourceLocation.tryCreate(ResourcefulBees.MOD_ID + ":" + BeeConstants.ENTITY_TEXTURES_DIR + colorData.getPrimaryLayerTexture() + "_angry.png");
                 this.color = isRainbowBee ? RainbowColor.getColorFloats() : colorData.getPrimaryColorFloats();
                 break;
             case SECONDARY:
                 this.isEmissive = false;
-                this.layerTexture = new ResourceLocation(ResourcefulBees.MOD_ID, BeeConstants.ENTITY_TEXTURES_DIR + colorData.getSecondaryLayerTexture() + ".png");
-                this.angerLayerTexture = new ResourceLocation(ResourcefulBees.MOD_ID, BeeConstants.ENTITY_TEXTURES_DIR + colorData.getSecondaryLayerTexture() + "_angry.png");
+                this.layerTexture = ResourceLocation.tryCreate(ResourcefulBees.MOD_ID + ":" + BeeConstants.ENTITY_TEXTURES_DIR + colorData.getSecondaryLayerTexture() + ".png");
+                this.angerLayerTexture = ResourceLocation.tryCreate(ResourcefulBees.MOD_ID + ":" + BeeConstants.ENTITY_TEXTURES_DIR + colorData.getSecondaryLayerTexture() + "_angry.png");
                 this.color = isRainbowBee ? RainbowColor.getColorFloats() : colorData.getSecondaryColorFloats();
                 break;
             case EMISSIVE:
                 this.isEmissive = true;
-                this.layerTexture = new ResourceLocation(ResourcefulBees.MOD_ID, BeeConstants.ENTITY_TEXTURES_DIR + colorData.getEmissiveLayerTexture() + ".png");
-                this.angerLayerTexture = new ResourceLocation(ResourcefulBees.MOD_ID, BeeConstants.ENTITY_TEXTURES_DIR + colorData.getEmissiveLayerTexture() + "_angry.png");
+                this.layerTexture = ResourceLocation.tryCreate(ResourcefulBees.MOD_ID + ":" + BeeConstants.ENTITY_TEXTURES_DIR + colorData.getEmissiveLayerTexture() + ".png");
+                this.angerLayerTexture = ResourceLocation.tryCreate(ResourcefulBees.MOD_ID + ":" + BeeConstants.ENTITY_TEXTURES_DIR + colorData.getEmissiveLayerTexture() + "_angry.png");
                 this.color = isRainbowBee ? RainbowColor.getColorFloats() : colorData.getGlowColorFloats();
                 break;
             default:
                 throw new IllegalStateException("You dun screwed up, did you add a new layer?");
+        }
+        if (!textureExists(layerTexture)) {
+            layerTexture = BeeConstants.MISSING_TEXTURE;
+        }
+        if (!textureExists(angerLayerTexture)) {
+            angerLayerTexture = layerTexture;
+        }
+    }
+
+    public static boolean textureExists(ResourceLocation texture) {
+        try {
+            Minecraft.getInstance().getResourceManager().getResource(texture);
+            return true;
+        } catch (IOException e) {
+            return false;
         }
     }
 
     @Override
     public void render(@Nonnull MatrixStack matrixStackIn, @Nonnull IRenderTypeBuffer bufferIn, int packedLightIn, @Nonnull CustomBeeEntity customBeeEntity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         if (isRainbowBee) color = RainbowColor.getColorFloats();
-        ResourceLocation texture = customBeeEntity.hasAngerTime() && angerLayerTexture != null ? angerLayerTexture : layerTexture;
+        ResourceLocation texture = customBeeEntity.hasAngerTime() ? angerLayerTexture : layerTexture;
 
         if (additionModel != null) {
             this.getEntityModel().setModelAttributes(additionModel);

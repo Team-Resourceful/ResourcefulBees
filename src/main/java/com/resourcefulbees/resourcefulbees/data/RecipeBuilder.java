@@ -13,6 +13,7 @@ import com.resourcefulbees.resourcefulbees.utils.validation.SecondPhaseValidator
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.*;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.resources.IResourceManagerReloadListener;
 import net.minecraft.util.NonNullList;
@@ -57,6 +58,7 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
         }));
         if (Config.HONEY_BLOCK_RECIPIES.get() && Config.HONEY_GENERATE_BLOCKS.get()) {
             BEE_REGISTRY.getHoneyBottles().forEach((s, honeyData) -> {
+                SecondPhaseValidator.validateHoneyEffects(honeyData);
                 if (honeyData.doGenerateHoneyBlock() && honeyData.doHoneyBlockRecipe()) {
                     IRecipe<?> honeyBlock = this.makeHoneyBlockRecipe(honeyData);
                     IRecipe<?> honeyBottle = this.makeHoneyBottleRecipe(honeyData);

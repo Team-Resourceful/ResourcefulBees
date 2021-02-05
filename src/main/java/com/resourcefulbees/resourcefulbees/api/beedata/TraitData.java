@@ -50,23 +50,23 @@ public class TraitData extends AbstractBeeData {
         if (trait != null) {
             if (trait.hasDamagePotionEffects())
                 if (!this.hasDamagePotionEffects())
-                    this.potionDamageEffects = trait.getPotionDamageEffects();
+                    this.potionDamageEffects = new ArrayList<>(trait.getPotionDamageEffects());
                 else this.potionDamageEffects.addAll(trait.getPotionDamageEffects());
             if (trait.hasDamageImmunities())
                 if (!this.hasDamageImmunities())
-                    this.damageImmunities = trait.getDamageImmunities();
+                    this.damageImmunities = new ArrayList<>(trait.getDamageImmunities());
                 else this.damageImmunities.addAll(trait.getDamageImmunities());
             if (trait.hasPotionImmunities())
                 if (!this.hasPotionImmunities())
-                    this.potionImmunities = trait.getPotionImmunities();
+                    this.potionImmunities = new ArrayList<>(trait.getPotionImmunities());
                 else this.potionImmunities.addAll(trait.getPotionImmunities());
             if (trait.hasDamageTypes())
                 if (!this.hasDamageTypes())
-                    this.damageTypes = trait.getDamageTypes();
+                    this.damageTypes = new ArrayList<>(trait.getDamageTypes());
                 else this.damageTypes.addAll(trait.getDamageTypes());
             if (trait.hasSpecialAbilities())
                 if (!this.hasSpecialAbilities())
-                    this.specialAbilities = trait.getSpecialAbilities();
+                    this.specialAbilities = new ArrayList<>(trait.getSpecialAbilities());
                 else this.specialAbilities.addAll(trait.getSpecialAbilities());
             if (trait.hasParticleEffect())
                 if (!this.hasParticleEffects())

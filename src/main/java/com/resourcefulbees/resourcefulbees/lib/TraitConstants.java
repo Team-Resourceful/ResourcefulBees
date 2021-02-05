@@ -15,4 +15,5 @@ public class TraitConstants {
     public static final String TELEPORT = "teleport";
     public static final String SET_ON_FIRE = "setOnFire";
     public static final String EXPLOSIVE = "explosive";
+    public static final String ANGRY = "angry";
 }
