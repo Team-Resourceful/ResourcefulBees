@@ -18,7 +18,7 @@ import java.util.zip.ZipFile;
 
 import static com.resourcefulbees.resourcefulbees.ResourcefulBees.LOGGER;
 
-public class BiomeDictonarySetup {
+public class BiomeDictionarySetup {
 
     public static Path DICTIONARY_PATH;
 
@@ -61,10 +61,10 @@ public class BiomeDictonarySetup {
         try {
             Files.walk(DICTIONARY_PATH)
                     .filter(f -> f.getFileName().toString().endsWith(".zip"))
-                    .forEach(BiomeDictonarySetup::addZippedType);
+                    .forEach(BiomeDictionarySetup::addZippedType);
             Files.walk(DICTIONARY_PATH)
                     .filter(f -> f.getFileName().toString().endsWith(".json"))
-                    .forEach(BiomeDictonarySetup::addType);
+                    .forEach(BiomeDictionarySetup::addType);
         } catch (IOException e) {
             e.printStackTrace();
         }
