@@ -1,49 +1,29 @@
 package com.resourcefulbees.resourcefulbees.init;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
-import com.resourcefulbees.resourcefulbees.block.TieredBeehiveBlock;
-import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.item.dispenser.ScraperDispenserBehavior;
 import com.resourcefulbees.resourcefulbees.item.dispenser.ShearsDispenserBehavior;
 import com.resourcefulbees.resourcefulbees.mixin.DispenserBlockInvoker;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
-import net.minecraft.block.BeehiveBlock;
-import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.client.Minecraft;
-import net.minecraft.dispenser.IBlockSource;
-import net.minecraft.dispenser.OptionalDispenseBehavior;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.resources.FolderPack;
 import net.minecraft.resources.IPackNameDecorator;
 import net.minecraft.resources.ResourcePackInfo;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.tileentity.BeehiveTileEntity;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.common.IForgeShearable;
-import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.loading.FMLPaths;
 
-import javax.annotation.Nonnull;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.Random;
 
 import static com.resourcefulbees.resourcefulbees.ResourcefulBees.LOGGER;
 import static com.resourcefulbees.resourcefulbees.init.BeeSetup.*;
@@ -66,7 +46,7 @@ public class ModSetup {
         BEE_PATH = rbBeesPath;
         RESOURCE_PATH = rbAssetsPath;
         HONEY_PATH = rbHoneyPath;
-        BiomeDictonarySetup.DICTIONARY_PATH = rbBiomePath;
+        BiomeDictionarySetup.DICTIONARY_PATH = rbBiomePath;
         TraitSetup.DICTIONARY_PATH = rbTraitPath;
 
         try { Files.createDirectories(rbBeesPath);

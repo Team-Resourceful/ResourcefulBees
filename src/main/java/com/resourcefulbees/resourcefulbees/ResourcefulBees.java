@@ -7,12 +7,10 @@ import com.resourcefulbees.resourcefulbees.config.ConfigLoader;
 import com.resourcefulbees.resourcefulbees.data.DataGen;
 import com.resourcefulbees.resourcefulbees.data.DataPackLoader;
 import com.resourcefulbees.resourcefulbees.data.RecipeBuilder;
-import com.resourcefulbees.resourcefulbees.entity.EntityEventHandlers;
 import com.resourcefulbees.resourcefulbees.init.*;
 import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
 import com.resourcefulbees.resourcefulbees.registry.*;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
-import com.resourcefulbees.resourcefulbees.utils.validation.SecondPhaseValidator;
 import net.minecraft.entity.merchant.villager.VillagerTrades;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
@@ -24,9 +22,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.village.VillagerTradesEvent;
-import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
@@ -65,7 +61,7 @@ public class ResourcefulBees {
 
         ConfigLoader.load(Config.CommonConfig.COMMON_CONFIG, "resourcefulbees/common.toml");
 
-        BiomeDictonarySetup.buildDictionary();
+        BiomeDictionarySetup.buildDictionary();
         BeeSetup.setupBees();
         RegistryHandler.registerDynamicBees();
         RegistryHandler.registerDynamicHoney();
