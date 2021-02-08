@@ -5,10 +5,10 @@ package com.resourcefulbees.resourcefulbees.tileentity;
 import com.resourcefulbees.resourcefulbees.api.ICustomBee;
 import com.resourcefulbees.resourcefulbees.block.TieredBeehiveBlock;
 import com.resourcefulbees.resourcefulbees.config.Config;
+import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.mixin.BTEBeeAccessor;
-import com.resourcefulbees.resourcefulbees.mixin.BeehiveTileEntityInvoker;
 import com.resourcefulbees.resourcefulbees.registry.ModTileEntityTypes;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.MathUtils;
@@ -125,7 +125,7 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
                             }
                         }
 
-                        ((BeehiveTileEntityInvoker) this).invokeAgeBee(((BTEBeeAccessor) tileBee).getTicksInHive(), vanillaBeeEntity);
+                        this.ageBee(((BTEBeeAccessor) tileBee).getTicksInHive(), vanillaBeeEntity);
                         if (entities != null) entities.add(entity);
                     }
                     BlockPos hivePos = this.getPos();
@@ -136,6 +136,22 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
                 }
             }
         }
+    }
+
+    private void ageBee(int ticksInHive, BeeEntity beeEntity) {
+        int i = beeEntity.getGrowingAge();
+        if (i < 0) {
+            beeEntity.setGrowingAge(Math.min(0, i + ticksInHive));
+        } else if (i > 0) {
+            beeEntity.setGrowingAge(Math.max(0, i - ticksInHive));
+        }
+
+        if (beeEntity instanceof CustomBeeEntity) {
+            ((CustomBeeEntity) beeEntity).setLoveTime(Math.max(0, beeEntity.getLoveTicks() - ticksInHive));
+        } else {
+            beeEntity.setInLove(Math.max(0, beeEntity.getLoveTicks() - ticksInHive));
+        }
+        beeEntity.resetPollinationTicks();
     }
 
     public void tryEnterHive(@Nonnull Entity bee, boolean hasNectar, int ticksInHive) {

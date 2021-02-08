@@ -8,5 +8,5 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 public interface AnimalEntityAccessor {
 
     @Accessor("inLove")
-    int inLove();
+    void setLove(int time);
 }

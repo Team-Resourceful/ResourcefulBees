@@ -6,7 +6,7 @@
   "mixins": [
     "AnimalEntityAccessor",
     "BeeEntityAccessor",
-    "BeehiveTileEntityInvoker",
+    "BTEBeeAccessor",
     "ContainerAccessor",
     "DispenserBlockInvoker",
     "MixinBeeEntity",

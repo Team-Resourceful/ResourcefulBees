@@ -6,6 +6,7 @@ import com.resourcefulbees.resourcefulbees.api.beedata.SpawnData;
 import com.resourcefulbees.resourcefulbees.api.beedata.TraitData;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
+import com.resourcefulbees.resourcefulbees.mixin.AnimalEntityAccessor;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import net.minecraft.entity.*;
@@ -228,7 +229,13 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
 
     @Override
     public void setInLove(int time) {
-        //super.setInLove(time);
+        //This is overridden bc Botania breeds animals regardless of breeding rules
+        // See the method below ( setLove() ) as alternative
+        // super.setInLove(time);
+    }
+
+    public void setLoveTime(int time) {
+        ((AnimalEntityAccessor) this).setLove(time);
     }
 
     @Override

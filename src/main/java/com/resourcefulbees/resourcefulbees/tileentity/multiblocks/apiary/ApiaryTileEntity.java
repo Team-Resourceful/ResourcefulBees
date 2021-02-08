@@ -9,6 +9,7 @@ import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.container.AutomationSensitiveItemStackHandler;
 import com.resourcefulbees.resourcefulbees.container.UnvalidatedApiaryContainer;
 import com.resourcefulbees.resourcefulbees.container.ValidatedApiaryContainer;
+import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.item.BeeJar;
 import com.resourcefulbees.resourcefulbees.lib.ApiaryTabs;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
@@ -226,7 +227,11 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
             beeEntity.setGrowingAge(Math.max(0, i - ticksInHive));
         }
 
-        beeEntity.setInLove(Math.max(0, beeEntity.getLoveTicks() - ticksInHive));
+        if (beeEntity instanceof CustomBeeEntity) {
+            ((CustomBeeEntity) beeEntity).setLoveTime(Math.max(0, beeEntity.getLoveTicks() - ticksInHive));
+        } else {
+            beeEntity.setInLove(Math.max(0, beeEntity.getLoveTicks() - ticksInHive));
+        }
         beeEntity.resetPollinationTicks();
     }
 
