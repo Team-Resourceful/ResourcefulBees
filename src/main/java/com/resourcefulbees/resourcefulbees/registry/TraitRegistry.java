@@ -87,8 +87,6 @@ public class TraitRegistry implements ITraitRegistry {
         getRegistry().register(TraitConstants.SLIMY, new BeeTrait.Builder().addSpecialAbility(TraitConstants.SLIMY).build());
         getRegistry().register(TraitConstants.DESERT, new BeeTrait.Builder().addDamageImmunity(DamageSource.CACTUS).build());
         getRegistry().register(TraitConstants.ANGRY, new BeeTrait.Builder().addSpecialAbility(TraitConstants.ANGRY).build());
-
-        System.out.println("stop fickin with me ");
     }
 
     public static void applyBeeTraits() {

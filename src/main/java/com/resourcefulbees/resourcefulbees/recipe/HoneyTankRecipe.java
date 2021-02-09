@@ -1,4 +1,4 @@
-package com.resourcefulbees.resourcefulbees.item.crafting;
+package com.resourcefulbees.resourcefulbees.recipe;
 
 import com.google.gson.JsonObject;
 import com.resourcefulbees.resourcefulbees.registry.ModRecipeSerializers;
