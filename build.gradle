@@ -10,6 +10,9 @@ buildscript {
         classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
     }
 }
+plugins {
+    id "org.sonarqube" version "3.1.1"
+}
 apply plugin: 'net.minecraftforge.gradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
@@ -51,6 +54,14 @@ task javadocJar(type: Jar) {
 task sourcesJar(type: Jar) {
     classifier = 'sources'
     from sourceSets.main.allSource
+}
+
+sonarqube {
+    properties {
+        property "sonar.projectKey", "Resourceful-Bees_ResourcefulBees"
+        property "sonar.organization", "resourceful-bees"
+        property "sonar.host.url", "https://sonarcloud.io"
+    }
 }
 
 minecraft {
@@ -128,7 +139,6 @@ mixin {
 }
 
 dependencies {
-    implementation 'org.jetbrains:annotations:20.1.0'
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}" //21
 
     compileOnly fg.deobf("mezz.jei:jei-1.16.4:${jei_version}:api")
@@ -145,6 +155,7 @@ dependencies {
     runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:additions")// Mekanism: Additions
     runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:generators")// Mekanism: Generators
     runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:tools")// Mekanism: Tools
+    compileOnly 'org.jetbrains:annotations:20.1.0'
 }
 
 jar {
