@@ -59,6 +59,8 @@ public class ModItems {
     public static final RegistryObject<Item> CATNIP_HONEYCOMB_BLOCK_ITEM = ITEMS.register("catnip_honeycomb_block", () -> new BlockItem(ModBlocks.CATNIP_HONEYCOMB_BLOCK.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES).rarity(Rarity.RARE)));
     public static final RegistryObject<Item> CATNIP_HONEY_BLOCK_ITEM = ITEMS.register("catnip_honey_block", () -> new BlockItem(ModBlocks.CATNIP_HONEY_BLOCK.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES).rarity(Rarity.RARE)));
     public static final RegistryObject<Item> CATNIP_HONEY_FLUID_BUCKET = ITEMS.register("catnip_honey_fluid_bucket", () -> new BucketItem(ModFluids.CATNIP_HONEY_STILL, new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES).containerItem(net.minecraft.item.Items.BUCKET).maxStackSize(1).rarity(Rarity.RARE)));
+    public static final RegistryObject<Item> BEE_BOX = ITEMS.register("bee_box", () -> new BeeBox(new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES).maxStackSize(1)));
+
 
     public static final RegistryObject<Item> T1_BEEHIVE_ITEM = ITEMS.register("t1_beehive", () -> new BlockItem(ModBlocks.T1_BEEHIVE.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
     public static final RegistryObject<Item> T2_BEEHIVE_ITEM = ITEMS.register("t2_beehive", () -> new BlockItem(ModBlocks.T2_BEEHIVE.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
@@ -116,6 +118,7 @@ public class ModItems {
     public static final RegistryObject<Item> PURPUR_HONEY_TANK_ITEM = ITEMS.register("purpur_honey_tank", () -> new BlockItem(ModBlocks.PURPUR_HONEY_TANK.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
     public static final RegistryObject<Item> NETHER_HONEY_TANK_ITEM = ITEMS.register("nether_honey_tank", () -> new BlockItem(ModBlocks.NETHER_HONEY_TANK.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
     public static final RegistryObject<Item> WOODEN_HONEY_TANK_ITEM = ITEMS.register("wooden_honey_tank", () -> new BlockItem(ModBlocks.WOODEN_HONEY_TANK.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
+
     public static final RegistryObject<Item> IRON_STORAGE_UPGRADE = ITEMS.register("iron_storage_upgrade", () -> new UpgradeItem(new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES).maxDamage(0).maxStackSize(16),
             UpgradeItem.builder()
                     .upgradeType(NBTConstants.NBT_STORAGE_UPGRADE)
@@ -163,6 +166,7 @@ public class ModItems {
         }
     });
     public static final RegistryObject<Item> HONEY_FLUID_BUCKET = ITEMS.register("honey_fluid_bucket", () -> new BucketItem(ModFluids.HONEY_STILL, new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES).containerItem(net.minecraft.item.Items.BUCKET).maxStackSize(1)));
+
 
 
 }

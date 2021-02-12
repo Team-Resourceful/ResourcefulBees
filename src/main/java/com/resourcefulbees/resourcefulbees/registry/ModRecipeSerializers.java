@@ -1,9 +1,7 @@
 package com.resourcefulbees.resourcefulbees.registry;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
-import com.resourcefulbees.resourcefulbees.recipe.HoneyTankRecipe;
-import com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe;
-import com.resourcefulbees.resourcefulbees.recipe.FertiliserRecipe;
+import com.resourcefulbees.resourcefulbees.recipe.*;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
@@ -20,6 +18,7 @@ public class ModRecipeSerializers {
     public static final RegistryObject<IRecipeSerializer<?>> FERTILIZER_RECIPE = RECIPE_SERIALIZERS.register("fertilizer_crafting",
             FertiliserRecipe.Serializer::new);
     public static final RegistryObject<IRecipeSerializer<?>> HONEY_TANK_RECIPE = RECIPE_SERIALIZERS.register("honey_tank_recipe", HoneyTankRecipe.Serializer::new);
+    public static final RegistryObject<IRecipeSerializer<?>> APIARY_UPGRADE_RECIPE = RECIPE_SERIALIZERS.register("hive_upgrade_recipe", HiveUpgradeRecipe.Serializer::new);
 
 //    public static final SpecialRecipeSerializer<HoneyTankRecipe> NETHER_HONEY_TANK_RECIPE = RECIPE_SERIALIZERS.register("nether_honey_tank_recipe",
 //            () -> new HoneyTankRecipe(ModItems.NETHER_HONEY_TANK_ITEM.getId(), new String[]{

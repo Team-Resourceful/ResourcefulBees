@@ -1,5 +1,5 @@
 {
-  "type": "minecraft:crafting_shaped",
+  "type": "resourcefulbees:hive_upgrade_recipe",
   "pattern": [
     "HBH",
     "BNB",
