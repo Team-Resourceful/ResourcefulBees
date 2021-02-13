@@ -8,6 +8,13 @@
 	"resourcefulbees.shift_info": "Hold SHIFT for Info",
 	"resourcefulbees.ctrl_info": "Hold CTRL for Multiblock Info",
 
+	"item.resourcefulbees.bee_box" : "Bee Box",
+	"item.resourcefulbees.crafting_bee_box" : "Lost Bee Box",
+	"item.resourcefulbees.information.bee_box.temp_info" : "Contains Lost bees, use while sneaking to release them. (Consumed on use)",
+	"item.resourcefulbees.information.bee_box.info" : "Can be used to hold up to 10 bees. Use while sneaking to release them.",
+	"item.resourcefulbees.information.bee_box.bees" : "Bees:",
+	"item.resourcefulbees.information.bee_box.more_info" : "[Hold SHIFT for more info]",
+
 	"honeycomb.resourcefulbees": "Honeycomb",
 	"honeycomb_block.resourcefulbees": "Honeycomb Block",
 

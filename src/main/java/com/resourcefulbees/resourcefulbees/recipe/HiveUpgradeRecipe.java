@@ -32,7 +32,7 @@ public class HiveUpgradeRecipe extends ShapedRecipe {
     public NonNullList<ItemStack> getRemainingItems(CraftingInventory inventory) {
         List<ItemStack> stacks = getHives(inventory);
         NonNullList<ItemStack> remainingItems = super.getRemainingItems(inventory);
-        ItemStack beeBox = new ItemStack(ModItems.BEE_BOX.get());
+        ItemStack beeBox = new ItemStack(ModItems.CRAFTING_BEE_BOX.get());
         CompoundNBT tag = new CompoundNBT();
         ListNBT allBees = new ListNBT();
         for (ItemStack stack : stacks) {
