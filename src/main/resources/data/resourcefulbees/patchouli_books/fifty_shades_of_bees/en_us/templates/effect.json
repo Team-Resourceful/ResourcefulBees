@@ -1,0 +1,17 @@
+{
+  "components": [
+    {
+      "x": 58,
+      "y": 0,
+      "type": "custom",
+      "class": "com.resourcefulbees.resourcefulbees.compat.patchouli.EffectComponent",
+      "effectID": "#id"
+    },
+    {
+      "x" : 0,
+      "y" : 36,
+      "type": "text",
+      "text": "#text"
+    }
+  ]
+}

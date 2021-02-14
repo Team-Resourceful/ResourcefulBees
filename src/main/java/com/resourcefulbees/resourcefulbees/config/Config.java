@@ -89,7 +89,6 @@ public class Config {
     public static ForgeConfigSpec.BooleanValue GENERATE_ENGLISH_LANG;
     public static ForgeConfigSpec.BooleanValue SHOW_DEBUG_INFO;
 
-
     public static class CommonConfig {
 
         public static ForgeConfigSpec COMMON_CONFIG;
@@ -248,6 +247,8 @@ public class Config {
 
     public static class ClientConfig {
         public static ForgeConfigSpec CLIENT_CONFIG;
+
+
 
         static {
             ForgeConfigSpec.Builder CLIENT_BUILDER = new ForgeConfigSpec.Builder();

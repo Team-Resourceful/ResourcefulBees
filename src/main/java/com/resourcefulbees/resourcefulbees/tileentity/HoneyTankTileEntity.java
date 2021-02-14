@@ -37,7 +37,6 @@ import java.util.function.Predicate;
 
 public class HoneyTankTileEntity extends TileEntity {
 
-
     public enum TankTier {
         PURPUR(3, 64000, ModBlocks.PURPUR_HONEY_TANK, ModItems.PURPUR_HONEY_TANK_ITEM),
         NETHER(2, 16000, ModBlocks.NETHER_HONEY_TANK, ModItems.NETHER_HONEY_TANK_ITEM),
