@@ -188,6 +188,9 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
                 } else if (stack.getItem() == ModItems.CATNIP_HONEY_BOTTLE.get()) {
                     FluidStack fluid = new FluidStack(ModFluids.CATNIP_HONEY_STILL.get(), HONEY_FILL_AMOUNT);
                     fluidTank.fill(fluid, IFluidHandler.FluidAction.EXECUTE);
+                } else {
+                    FluidStack fluid = new FluidStack(ModFluids.HONEY_STILL.get(), HONEY_FILL_AMOUNT);
+                    fluidTank.fill(fluid, IFluidHandler.FluidAction.EXECUTE);
                 }
                 stack.shrink(1);
                 if (output.isEmpty()) {
