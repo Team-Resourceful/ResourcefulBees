@@ -9,13 +9,11 @@ import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.container.AutomationSensitiveItemStackHandler;
 import com.resourcefulbees.resourcefulbees.container.CentrifugeContainer;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
-import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
 import com.resourcefulbees.resourcefulbees.network.packets.SyncGUIMessage;
 import com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe;
 import com.resourcefulbees.resourcefulbees.registry.ModContainers;
-import com.resourcefulbees.resourcefulbees.registry.ModFluids;
 import com.resourcefulbees.resourcefulbees.utils.NBTUtils;
 import io.netty.buffer.Unpooled;
 import net.minecraft.block.BlockState;
@@ -49,7 +47,7 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.wrapper.RecipeWrapper;
+import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -87,10 +85,14 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
 
     private final IntArray times = new IntArray(1) {
         @Override
-        public int get(int i) { return time[0]; }
+        public int get(int i) {
+            return time[0];
+        }
 
         @Override
-        public void set(int i, int i1) { time[0] = i1; }
+        public void set(int i, int i1) {
+            time[0] = i1;
+        }
     };
 
     public CentrifugeTileEntity(TileEntityType<?> tileEntityType) {
@@ -117,11 +119,17 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
     }
 
 
-    public int[] getHoneycombSlots() { return this.honeycombSlots; }
+    public int[] getHoneycombSlots() {
+        return this.honeycombSlots;
+    }
 
-    public int[] getOutputSlots() { return this.outputSlots; }
+    public int[] getOutputSlots() {
+        return this.outputSlots;
+    }
 
-    public AutomationSensitiveItemStackHandler getItemStackHandler() { return this.itemStackHandler; }
+    public AutomationSensitiveItemStackHandler getItemStackHandler() {
+        return this.itemStackHandler;
+    }
 
     @Override
     public void tick() {
@@ -156,66 +164,73 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
         setPoweredBlockState(false);
     }
 
-    //TODO see if this can be shortened and optimized further
     protected void processCompleted(int i) {
-        if (recipes.get(i) != null) {
-            if (inventoryHasSpace(recipes.get(i))) {
-                consumeInput(i);
-                ItemStack glass_bottle = itemStackHandler.getStackInSlot(BOTTLE_SLOT);
-                List<ItemStack> depositStacks = new ArrayList<>();
-                if (world != null) {
-                    for (int j = 0; j < 3; j++) {
-                        float nextFloat = world.rand.nextFloat();
-                        float chance;
-                        switch (j) {
-                            case 0:
-                                if (recipes.get(i).hasFluidOutput) {
-                                    chance = recipes.get(i).fluidOutput.get(0).getRight();
-                                    if (chance >= nextFloat) {
-                                        fluidTanks.fill(i + 1, recipes.get(i).fluidOutput.get(0).getLeft().copy(), MultiFluidTank.FluidAction.EXECUTE);
-                                    }
-                                    depositStacks.add(ItemStack.EMPTY);
-                                } else {
-                                    chance = recipes.get(i).itemOutputs.get(j).getRight();
-                                    if (chance >= nextFloat) {
-                                        depositStacks.add(recipes.get(i).itemOutputs.get(j).getLeft().copy());
-                                    } else {
-                                        depositStacks.add(ItemStack.EMPTY);
-                                    }
-                                }
-                                break;
-                            case 1:
-                                chance = recipes.get(i).itemOutputs.get(j).getRight();
-                                if (chance >= nextFloat) {
-                                    depositStacks.add(recipes.get(i).itemOutputs.get(j).getLeft().copy());
-                                } else {
-                                    depositStacks.add(ItemStack.EMPTY);
-                                }
-                                break;
-                            case 2:
-                                if (glass_bottle.isEmpty() || glass_bottle.getCount() < recipes.get(i).itemOutputs.get(j).getLeft().getCount()) {
-                                    fluidTanks.fill(0, new FluidStack(ModFluids.HONEY_STILL.get(), ModConstants.HONEY_PER_BOTTLE), MultiFluidTank.FluidAction.EXECUTE);
-                                    depositStacks.add(ItemStack.EMPTY);
-                                } else {
-                                    chance = recipes.get(i).itemOutputs.get(j).getRight();
-                                    if (chance >= nextFloat) {
-                                        glass_bottle.shrink(recipes.get(i).itemOutputs.get(j).getLeft().getCount());
-                                        depositStacks.add(recipes.get(i).itemOutputs.get(j).getLeft().copy());
-                                    } else {
-                                        depositStacks.add(ItemStack.EMPTY);
-                                    }
-                                }
-                        }
-                    }
-                    if (!depositStacks.isEmpty()) {
-                        depositItemStacks(depositStacks);
-                    }
-                }
-                resetProcess(i);
-            }
-        } else {
+        if (recipes.get(i) == null) {
             resetProcess(i);
+            return;
         }
+        if (!inventoryHasSpace(recipes.get(i))) {
+            return;
+        }
+        if (!tanksHasSpace(recipes.get(i))) {
+            return;
+        }
+        consumeInput(i);
+        ItemStack glass_bottle = itemStackHandler.getStackInSlot(BOTTLE_SLOT);
+        List<ItemStack> depositStacks = new ArrayList<>();
+        if (world == null) {
+            resetProcess(i);
+            return;
+        }
+        CentrifugeRecipe recipe = recipes.get(i);
+        float nextFloat = world.rand.nextFloat();
+
+        for (int j = 0; j < recipe.itemOutputs.size(); j++) {
+            float chance = recipe.itemOutputs.get(j).getRight();
+            if (chance >= nextFloat) {
+                depositStacks.add(recipe.itemOutputs.get(j).getLeft().copy());
+                if (j == 2 && !recipe.noBottleInput) {
+                    glass_bottle.shrink(recipes.get(i).itemOutputs.get(2).getLeft().getCount());
+                }
+            }
+        }
+        for (Pair<FluidStack, Float> fluidOutput : recipe.fluidOutput) {
+            float chance = fluidOutput.getRight();
+            if (chance >= nextFloat) {
+                if (chance >= nextFloat) {
+                    FluidStack fluid = fluidOutput.getLeft().copy();
+                    int tank = getValidTank(fluid);
+                    fluidTanks.fill(tank, fluid, IFluidHandler.FluidAction.EXECUTE);
+                }
+            }
+        }
+        if (!depositStacks.isEmpty()) {
+            depositItemStacks(depositStacks);
+        }
+        resetProcess(i);
+    }
+
+    private boolean tanksHasSpace(CentrifugeRecipe centrifugeRecipe) {
+        for (Pair<FluidStack, Float> f : centrifugeRecipe.fluidOutput) {
+            if (f.getLeft().isEmpty()) continue;
+            if (getValidTank(f.getKey()) < 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private int getValidTank(FluidStack fluid) {
+        for (int i = 0; i < fluidTanks.getTanks(); i++) {
+            if (fluidTanks.getFluidInTank(i).getFluid() == fluid.getFluid() || fluidTanks.getFluidInTank(i).isEmpty()) {
+                if (fluidTanks.getFluidInTank(i).getAmount() + fluid.getAmount() <= fluidTanks.getTankCapacity(i)) {
+                    return i;
+                } else {
+                    return -1;
+                }
+            }
+        }
+        return -1;
     }
 
     protected void processRecipe(int i) {
@@ -243,60 +258,82 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
                 JsonElement count = recipes.get(i).ingredient.serialize().getAsJsonObject().get(BeeConstants.INGREDIENT_COUNT);
                 int inputAmount = count != null ? count.getAsInt() : 1;
 
-                return combInput.getCount() >= inputAmount ;
+                return combInput.getCount() >= inputAmount;
             }
         }
         return false;
     }
 
-    protected boolean canProcessRecipe(int i) { return recipes.get(i) != null && !recipes.get(i).multiblock; }
+    protected boolean canProcessRecipe(int i) {
+        return recipes.get(i) != null && !recipes.get(i).multiblock;
+    }
 
-    protected boolean canProcess(int i) { return !itemStackHandler.getStackInSlot(honeycombSlots[i]).isEmpty() && canProcessFluid(i) && canProcessEnergy(); }
+    protected boolean canProcess(int i) {
+        return !itemStackHandler.getStackInSlot(honeycombSlots[i]).isEmpty() && canProcessFluid(i) && canProcessEnergy();
+    }
 
     //TODO Should MainOutput Fluids not be voided?
-    protected boolean canProcessFluid(int i) { return true; }
+    protected boolean canProcessFluid(int i) {
+        return true;
+    }
 
-    protected boolean canProcessEnergy(){ return energyStorage.getEnergyStored() >= Config.RF_TICK_CENTRIFUGE.get(); }
+    protected boolean canProcessEnergy() {
+        return energyStorage.getEnergyStored() >= Config.RF_TICK_CENTRIFUGE.get();
+    }
 
     public CentrifugeRecipe getRecipe(int i) {
         ItemStack input = itemStackHandler.getStackInSlot(honeycombSlots[i]);
+        Inventory recipeInv = new Inventory(input, itemStackHandler.getStackInSlot(BOTTLE_SLOT));
         if (input.isEmpty() || input == failedMatch) return null;
-        if (world != null)
-            if (this.recipes.get(i) != null && this.recipes.get(i).matches(new RecipeWrapper(itemStackHandler), world)) return this.recipes.get(i);
-            else {
-                Inventory recipeInv = new Inventory(input);
+        if (world != null) {
+            boolean matches = this.recipes.get(i) == null;
+            if (!matches) matches = !this.recipes.get(i).matches(recipeInv, world);
+            if (matches) {
                 CentrifugeRecipe rec = world.getRecipeManager().getRecipe(CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE, recipeInv, this.world).orElse(null);
                 if (rec == null) failedMatch = input;
                 else failedMatch = ItemStack.EMPTY;
                 this.recipes.set(i, rec);
-                return this.recipes.get(i);
             }
+            return this.recipes.get(i);
+        }
         return null;
     }
 
-    public int getProcessTime(int i) { return time[i]; }
+    public int getProcessTime(int i) {
+        return time[i];
+    }
 
-    public int getTotalSlots() { return 1 + honeycombSlots.length + outputSlots.length;}
+    public int getTotalSlots() {
+        return 1 + honeycombSlots.length + outputSlots.length;
+    }
 
     //Override this for subclasses
-    public int getNumberOfInputs() { return 1; }
+    public int getNumberOfInputs() {
+        return 1;
+    }
 
-    public int getTotalTanks() { return 1 + honeycombSlots.length; }
+    public int getTotalTanks() {
+        return 1 + honeycombSlots.length;
+    }
 
-    public int getMaxTankCapacity() { return 5000; }
+    public int getMaxTankCapacity() {
+        return 5000;
+    }
 
-    public int getRecipeTime(int i) { return getRecipe(i) != null ? Math.max(5, getRecipe(i).time) : Config.GLOBAL_CENTRIFUGE_RECIPE_TIME.get(); }
+    public int getRecipeTime(int i) {
+        return getRecipe(i) != null ? Math.max(5, getRecipe(i).time) : Config.GLOBAL_CENTRIFUGE_RECIPE_TIME.get();
+    }
     //endregion
 
     protected void depositItemStacks(List<ItemStack> itemStacks) {
         itemStacks.forEach(itemStack -> {
             int slotIndex = outputSlots[0];
-            while (!itemStack.isEmpty() && slotIndex < itemStackHandler.getSlots()){
+            while (!itemStack.isEmpty() && slotIndex < itemStackHandler.getSlots()) {
                 ItemStack slotStack = itemStackHandler.getStackInSlot(slotIndex);
 
                 int itemMaxStackSize = itemStack.getMaxStackSize();
 
-                if(slotStack.isEmpty()) {
+                if (slotStack.isEmpty()) {
                     itemStackHandler.setStackInSlot(slotIndex, itemStack.split(itemMaxStackSize));
                 } else if (areItemsAndTagsEqual(itemStack, slotStack) && slotStack.getCount() != itemMaxStackSize) {
                     int combinedCount = itemStack.getCount() + slotStack.getCount();
@@ -353,17 +390,29 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
         return hasSpace;
     }
 
-    public void drainFluidInTank(int tank) { fluidTanks.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.EXECUTE, tank); }
+    public void drainFluidInTank(int tank) {
+        fluidTanks.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.EXECUTE, tank);
+    }
 
-    public void updateRequiresRedstone() { this.requiresRedstone = !requiresRedstone; }
+    public void updateRequiresRedstone() {
+        this.requiresRedstone = !requiresRedstone;
+    }
 
-    public boolean getRequiresRedstone() { return requiresRedstone; }
+    public boolean getRequiresRedstone() {
+        return requiresRedstone;
+    }
 
-    public void setRequiresRedstone(boolean requiresRedstone) { this.requiresRedstone = requiresRedstone; }
+    public void setRequiresRedstone(boolean requiresRedstone) {
+        this.requiresRedstone = requiresRedstone;
+    }
 
-    public void setIsPoweredByRedstone(boolean isPoweredByRedstone) { this.isPoweredByRedstone = isPoweredByRedstone; }
+    public void setIsPoweredByRedstone(boolean isPoweredByRedstone) {
+        this.isPoweredByRedstone = isPoweredByRedstone;
+    }
 
-    protected void setPoweredBlockState(boolean powered) { if (world != null) world.setBlockState(pos, getBlockState().with(CentrifugeBlock.PROPERTY_ON, powered)); }
+    protected void setPoweredBlockState(boolean powered) {
+        if (world != null) world.setBlockState(pos, getBlockState().with(CentrifugeBlock.PROPERTY_ON, powered));
+    }
 
     //region NBT
     @Nonnull
@@ -411,12 +460,14 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
     }
 
     @Override
-    public void handleUpdateTag(@Nonnull BlockState state, CompoundNBT tag) { this.fromTag(state, tag); }
+    public void handleUpdateTag(@Nonnull BlockState state, CompoundNBT tag) {
+        this.fromTag(state, tag);
+    }
 
     @Nullable
     @Override
     public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(pos,0,saveToNBT(new CompoundNBT()));
+        return new SUpdateTileEntityPacket(pos, 0, saveToNBT(new CompoundNBT()));
     }
 
     @Override
@@ -465,12 +516,16 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
 
     @Nonnull
     @Override
-    public ITextComponent getDisplayName() { return new TranslationTextComponent("gui.resourcefulbees.centrifuge"); }
+    public ITextComponent getDisplayName() {
+        return new TranslationTextComponent("gui.resourcefulbees.centrifuge");
+    }
 
     protected CustomEnergyStorage createEnergy() {
         return new CustomEnergyStorage(Config.MAX_CENTRIFUGE_RF.get(), Config.MAX_CENTRIFUGE_RECEIVE_RATE.get(), 0) {
             @Override
-            protected void onEnergyChanged() { markDirty(); }
+            protected void onEnergyChanged() {
+                markDirty();
+            }
         };
     }
 
@@ -496,7 +551,9 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
     }
 
     protected class TileStackHandler extends AutomationSensitiveItemStackHandler {
-        protected TileStackHandler(int slots) { super(slots); }
+        protected TileStackHandler(int slots) {
+            super(slots);
+        }
 
         @Override
         public AutomationSensitiveItemStackHandler.IAcceptor getAcceptor() {

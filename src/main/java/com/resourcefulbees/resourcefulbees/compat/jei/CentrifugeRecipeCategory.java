@@ -16,7 +16,6 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
@@ -49,7 +48,7 @@ public class CentrifugeRecipeCategory implements IRecipeCategory<CentrifugeRecip
     public CentrifugeRecipeCategory(IGuiHelper guiHelper) {
         this.background = guiHelper.createDrawable(BACKGROUND_IMAGE, 0, 0, 133, 65);
         this.icon = guiHelper.createDrawableIngredient(new ItemStack(ModItems.CENTRIFUGE_ITEM.get()));
-        this.fluidHider = guiHelper.createDrawable(BACKGROUND_IMAGE,9, 41, 18, 18);
+        this.fluidHider = guiHelper.createDrawable(BACKGROUND_IMAGE, 9, 41, 18, 18);
         this.localizedName = I18n.format("gui.resourcefulbees.jei.category.centrifuge");
         this.arrow = guiHelper.drawableBuilder(new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/centrifuge.png"), 0, 66, 73, 30)
                 .buildAnimated(200, IDrawableAnimated.StartDirection.LEFT, false);
@@ -93,8 +92,14 @@ public class CentrifugeRecipeCategory implements IRecipeCategory<CentrifugeRecip
         List<ItemStack> stacks = new ArrayList<>();
         List<FluidStack> fluids = new ArrayList<>();
 
+
         fluids.add(fluidOutput.get(0).getLeft().copy());
-        stacks.add(outputs.get(0).getLeft().copy());
+
+        if (outputs.get(0).getLeft().copy().isEmpty()) {
+            stacks.add(new ItemStack(Items.STONE));
+        } else {
+            stacks.add(outputs.get(0).getLeft().copy());
+        }
         stacks.add(outputs.get(1).getLeft().copy());
         if (recipe.noBottleInput) {
             iIngredients.setInputIngredients(Lists.newArrayList(recipe.ingredient));
@@ -152,19 +157,28 @@ public class CentrifugeRecipeCategory implements IRecipeCategory<CentrifugeRecip
 
         final float beeOutput = recipe.itemOutputs.get(0).getRight();
         final float beeswax = recipe.itemOutputs.get(1).getRight();
-        final float honeyBottle = recipe.itemOutputs.get(2).getRight();
+        final float honeyBottle = recipe.itemOutputs.size() < 3 ? recipe.fluidOutput.get(1).getRight() : recipe.itemOutputs.get(2).getRight();
+        final float fluid = recipe.fluidOutput.get(0).getRight();
 
         DecimalFormat decimalFormat = new DecimalFormat("##%");
 
         String honeyBottleString = decimalFormat.format(honeyBottle);
         String beeOutputString = decimalFormat.format(beeOutput);
         String beeswaxString = decimalFormat.format(beeswax);
+        String fluidString = decimalFormat.format(fluid);
 
         Minecraft minecraft = Minecraft.getInstance();
         FontRenderer fontRenderer = minecraft.fontRenderer;
-        if (beeOutput < 1.0) fontRenderer.draw(matrix, beeOutputString, 80, 10, 0xff808080);
-        if (honeyBottle < 1.0) fontRenderer.draw(matrix, honeyBottleString, 80, 50, 0xff808080);
-        if (beeswax < 1.0) fontRenderer.draw(matrix, beeswaxString, 80, 30, 0xff808080);
+        int honeyBottleOffset = fontRenderer.getStringWidth(honeyBottleString) / 2;
+        int beeOutputOffset = fontRenderer.getStringWidth(beeOutputString) / 2;
+        int beeswaxOffset = fontRenderer.getStringWidth(beeswaxString) / 2;
+        int fluidOffset = fontRenderer.getStringWidth(fluidString) / 2;
+
+        if (beeOutput < 1.0) fontRenderer.draw(matrix, beeOutputString, 95 - beeOutputOffset, 10, 0xff808080);
+        if (beeswax < 1.0) fontRenderer.draw(matrix, beeswaxString, 95 - beeswaxOffset, 30, 0xff808080);
+        if (fluid < 1.0 && !(recipe.hasFluidOutput && recipe.itemOutputs.get(0).getLeft().isEmpty()))
+            fontRenderer.draw(matrix, fluidString, 95 - fluidOffset, 46, 0xff808080);
+        if (honeyBottle < 1.0) fontRenderer.draw(matrix, honeyBottleString, 45 - honeyBottleOffset, 49, 0xff808080);
         if (recipe.multiblock) {
             multiblock.draw(matrix, 10, 45);
         }

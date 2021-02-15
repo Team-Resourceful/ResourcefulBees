@@ -292,7 +292,7 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
     }
 
     public String formatFluidAmount(int amount) {
-        return Screen.hasShiftDown() || amount < 500 ? amount + "mb" : ModConstants.DECIMAL_FORMAT.format(amount / 1000) + "B";
+        return Screen.hasShiftDown() || amount < 500f ? amount + "mb" : ModConstants.DECIMAL_FORMAT.format((float) amount / 1000f) + "B";
     }
 
     public String getFluidNamespace(@Nonnull Fluid fluid) {

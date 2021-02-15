@@ -191,7 +191,7 @@ public class CentrifugeData extends AbstractBeeData {
     }
 
     public int getFluidOutputCount() {
-        if (mainIsFluidOutput) return getMainOutputCount();
+        if (mainIsFluidOutput) return getMainOutputCount() <= 1 ? ModConstants.HONEY_PER_BOTTLE : getMainOutputCount();
         return fluidOutputCount <= 1 ? ModConstants.HONEY_PER_BOTTLE : fluidOutputCount;
     }
 

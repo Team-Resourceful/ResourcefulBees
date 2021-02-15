@@ -220,8 +220,7 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
                 NonNullList.from(
                         Pair.of(ItemStack.EMPTY, 0f),
                         Pair.of(mainOutput, data.getMainOutputWeight()),
-                        Pair.of(secondaryOutput, data.getSecondaryOutputWeight()),
-                        Pair.of(ItemStack.EMPTY, data.getBottleOutputWeight())
+                        Pair.of(secondaryOutput, data.getSecondaryOutputWeight())
                 ),
                 NonNullList.from(
                         Pair.of(FluidStack.EMPTY, 0f),
