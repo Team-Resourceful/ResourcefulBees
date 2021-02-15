@@ -5,8 +5,10 @@ package com.resourcefulbees.resourcefulbees.tileentity;
 import com.resourcefulbees.resourcefulbees.api.ICustomBee;
 import com.resourcefulbees.resourcefulbees.block.TieredBeehiveBlock;
 import com.resourcefulbees.resourcefulbees.config.Config;
+import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
+import com.resourcefulbees.resourcefulbees.mixin.BTEBeeAccessor;
 import com.resourcefulbees.resourcefulbees.registry.ModTileEntityTypes;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.MathUtils;
@@ -90,10 +92,9 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
                 return false;
             } else {
                 Entity entity = EntityType.func_220335_a(nbt, this.world, entity1 -> entity1);
-
                 if (entity != null) {
                     EntitySize size = entity.getSize(Pose.STANDING);
-                    double d0 = 0.55D + size.width / 2.0F;
+                    double d0 = 0.65D + size.width / 2.0F;
                     double d1 = blockpos.getX() + 0.5D + d0 * direction.getXOffset();
                     double d2 = blockpos.getY() + Math.max(0.5D - (size.height / 2.0F), 0);
                     double d3 = blockpos.getZ() + 0.5D + d0 * direction.getZOffset();
@@ -124,17 +125,33 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
                             }
                         }
 
-                        vanillaBeeEntity.resetPollinationTicks();
+                        this.ageBee(((BTEBeeAccessor) tileBee).getTicksInHive(), vanillaBeeEntity);
                         if (entities != null) entities.add(entity);
                     }
                     BlockPos hivePos = this.getPos();
                     this.world.playSound(null, hivePos.getX(), hivePos.getY(),  hivePos.getZ(), SoundEvents.BLOCK_BEEHIVE_EXIT, SoundCategory.BLOCKS, 1.0F, 1.0F);
                     return this.world.addEntity(entity);
                 } else {
-                    return false;
+                    return true;
                 }
             }
         }
+    }
+
+    private void ageBee(int ticksInHive, BeeEntity beeEntity) {
+        int i = beeEntity.getGrowingAge();
+        if (i < 0) {
+            beeEntity.setGrowingAge(Math.min(0, i + ticksInHive));
+        } else if (i > 0) {
+            beeEntity.setGrowingAge(Math.max(0, i - ticksInHive));
+        }
+
+        if (beeEntity instanceof CustomBeeEntity) {
+            ((CustomBeeEntity) beeEntity).setLoveTime(Math.max(0, beeEntity.getLoveTicks() - ticksInHive));
+        } else {
+            beeEntity.setInLove(Math.max(0, beeEntity.getLoveTicks() - ticksInHive));
+        }
+        beeEntity.resetPollinationTicks();
     }
 
     public void tryEnterHive(@Nonnull Entity bee, boolean hasNectar, int ticksInHive) {

@@ -1,0 +1,153 @@
+{
+  "body" : {
+    "pivotPoint" : [0, 5, 0],
+    "isPivotCentred" : true,
+    "rotation": [0, 0, 0],
+    "parts" : [],
+    "parent" : ""
+  },
+  "torso": {
+    "pivotPoint" : [0, 5, 0],
+    "isPivotCentred" : true,
+    "rotation": [0, 0, 0],
+    "parts": [
+      {
+        "position": [-3.5, 2, -5],
+        "size": [7, 7, 10, 0],
+        "pivotPoint": [0, 0, 0],
+        "isPivotCentred" : true,
+        "rotation": [0, 0, 0],
+        "textureOffset": [0, 0]
+      }
+    ],
+    "parent" : "body"
+  },
+  "stinger" : {
+    "pivotPoint" : [0, 5, 0],
+    "isPivotCentred" : true,
+    "rotation": [0, 0, 0],
+    "parts" : [
+      {
+        "position": [0, 5, 5],
+        "size": [0, 1, 2, 0],
+        "pivotPoint": [0, 0, 0],
+        "isPivotCentred" : true,
+        "rotation": [0, 0, 0],
+        "textureOffset": [24, 7]
+      }
+    ],
+    "parent": "torso"
+  },
+  "leftAntenna" : {
+    "pivotPoint" : [0, 7, -5],
+    "isPivotCentred" : true,
+    "rotation": [0, 0, 0],
+    "parts" : [
+      {
+        "position": [-2.5, 7, -8],
+        "size": [1, 2, 3, 0],
+        "pivotPoint": [0, 0, 0],
+        "isPivotCentred" : true,
+        "rotation": [0, 0, 0],
+        "textureOffset": [2, 0]
+      }
+    ],
+    "parent": "torso"
+  },
+  "rightAntenna" : {
+    "pivotPoint" : [0, 7, -5],
+    "isPivotCentred" : true,
+    "rotation": [0, 0, 0],
+    "parts" : [
+      {
+        "position": [1.5, 7, -8],
+        "size": [1, 2, 3, 0],
+        "pivotPoint": [0, 0, 0],
+        "isPivotCentred" : true,
+        "rotation": [0, 0, 0],
+        "textureOffset": [2, 3]
+      }
+    ],
+    "parent": "torso"
+  },
+  "leftWing" : {
+    "pivotPoint" : [-1.5, 9, -3],
+    "isPivotCentred" : true,
+    "rotation": [0, 0, 0],
+    "parts" : [
+      {
+        "position": [-10.5, 9, -3],
+        "size": [9, 0, 6, 0],
+        "pivotPoint": [0, 0, 0],
+        "isPivotCentred" : true,
+        "rotation": [0, 0, 0],
+        "textureOffset": [0, 18]
+      }
+    ],
+    "parent": "body"
+  },
+  "rightWing" : {
+    "pivotPoint" : [1.5, 9, -3],
+    "isPivotCentred" : true,
+    "rotation": [0, 0, 0],
+    "parts" : [
+      {
+        "position": [1.5, 9, -3],
+        "size": [9, 0, 6, 0],
+        "pivotPoint": [0, 0, 0],
+        "isPivotCentred" : true,
+        "rotation": [0, 0, 0],
+        "textureOffset": [0, 18]
+      }
+    ],
+    "parent": "body"
+  },
+  "frontLegs" : {
+    "pivotPoint" : [-1.5, 2, -2],
+    "isPivotCentred" : true,
+    "rotation": [0, 0, 0],
+    "parts" : [
+      {
+        "position": [-1.5, 0, -2],
+        "size": [3, 2, 0, 0],
+        "pivotPoint": [0, 0, 0],
+        "isPivotCentred" : true,
+        "rotation": [0, 0, 0],
+        "textureOffset": [28, 1]
+      }
+    ],
+    "parent": "body"
+  },
+  "middleLegs" : {
+    "pivotPoint" : [-1.5, 2, 0],
+    "isPivotCentred" : true,
+    "rotation": [0, 0, 0],
+    "parts" : [
+      {
+        "position": [-2.5, 0, 0],
+        "size": [5, 2, 0, 0],
+        "pivotPoint": [0, 0, 0],
+        "isPivotCentred" : true,
+        "rotation": [0, 0, 0],
+        "textureOffset": [27, 3]
+      }
+    ],
+    "parent": "body"
+  },
+  "backLegs" : {
+    "pivotPoint" : [-1.5, 2, 2],
+    "isPivotCentred" : true,
+    "rotation": [0, 0, 0],
+    "parts" : [
+      {
+        "position": [-2.5, 0, 2],
+        "size": [5, 2, 0, 0],
+        "pivotPoint": [0, 0, 0],
+        "isPivotCentred" : true,
+        "rotation": [0, 0, 0],
+        "textureOffset": [27, 5]
+      }
+    ],
+    "parent": "body"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "name": "book.resourcefulbees.ender_beecon_category.tanks",
+  "icon": "resourcefulbees:purpur_honey_tank",
+  "category": "resourcefulbees:ender_beecon",
+  "sortnum": 3,
+  "pages": [
+    {
+      "type": "image",
+      "images": [
+        "resourcefulbees:textures/gui/patchouli/ender_beecon_tanks_filling.png"
+      ],
+      "title": "book.resourcefulbees.ender_beecon_category.tanks",
+      "text": "book.resourcefulbees.ender_beecon_category.tanks.1",
+      "border" : true
+    },
+    {
+      "type": "text",
+      "text": "book.resourcefulbees.ender_beecon_category.tanks.2"
+    },
+    {
+      "type": "image",
+      "images": [
+        "resourcefulbees:textures/gui/patchouli/ender_beecon_tanks.png"
+      ],
+      "title": "book.resourcefulbees.ender_beecon_category.tanks.stacking",
+      "border" : true
+    },
+    {
+      "type": "text",
+      "text": "book.resourcefulbees.ender_beecon_category.tanks.3"
+    },
+    {
+      "type": "crafting",
+      "recipe": "resourcefulbees:wooden_honey_tank",
+      "recipe2": "resourcefulbees:nether_honey_tank"
+    },
+    {
+      "type": "crafting",
+      "recipe": "resourcefulbees:purpur_honey_tank",
+      "text": "book.resourcefulbees.ender_beecon_category.tanks.4"
+    }
+  ]
+}

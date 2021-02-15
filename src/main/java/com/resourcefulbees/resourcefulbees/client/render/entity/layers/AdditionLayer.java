@@ -4,6 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.resourcefulbees.resourcefulbees.client.render.entity.models.CustomBeeModel;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
+import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.ModelTypes;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
@@ -20,14 +21,23 @@ import javax.annotation.Nonnull;
 public class AdditionLayer<T extends CustomBeeEntity> extends LayerRenderer<T, CustomBeeModel<T>> {
 
     private final CustomBeeModel<T> additionModel;
-    private final ResourceLocation baseTexture;
-    private final ResourceLocation angryTexture;
+    private ResourceLocation baseTexture;
+    private ResourceLocation angryTexture;
 
     public AdditionLayer(IEntityRenderer<T, CustomBeeModel<T>> rendererIn, ModelTypes type, ResourceLocation angryTexture, ResourceLocation baseTexture) {
         super(rendererIn);
         additionModel = new CustomBeeModel<>(type);
         this.baseTexture = baseTexture;
         this.angryTexture = angryTexture;
+        if (!BeeLayer.textureExists(baseTexture) || baseTexture == null) {
+            this.baseTexture = BeeConstants.MISSING_TEXTURE;
+        }
+        if (!BeeLayer.textureExists(angryTexture) || angryTexture == null) {
+            this.angryTexture = baseTexture;
+        }
+        if (this.angryTexture == null || this.baseTexture == null) {
+            System.out.println("UCK");
+        }
     }
 
     public void render(@Nonnull MatrixStack matrixStackIn, @Nonnull IRenderTypeBuffer bufferIn, int packedLightIn, @Nonnull T customBeeEntity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {

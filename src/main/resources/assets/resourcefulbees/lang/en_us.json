@@ -8,6 +8,13 @@
 	"resourcefulbees.shift_info": "Hold SHIFT for Info",
 	"resourcefulbees.ctrl_info": "Hold CTRL for Multiblock Info",
 
+	"item.resourcefulbees.bee_box" : "Bee Box",
+	"item.resourcefulbees.crafting_bee_box" : "Lost Bee Box",
+	"item.resourcefulbees.information.bee_box.temp_info" : "Contains Lost bees, use while sneaking to release them. (Consumed on use)",
+	"item.resourcefulbees.information.bee_box.info" : "Can be used to hold up to 10 bees. Use while sneaking to release them.",
+	"item.resourcefulbees.information.bee_box.bees" : "Bees:",
+	"item.resourcefulbees.information.bee_box.more_info" : "[Hold SHIFT for more info]",
+
 	"honeycomb.resourcefulbees": "Honeycomb",
 	"honeycomb_block.resourcefulbees": "Honeycomb Block",
 
@@ -370,5 +377,33 @@
 	"book.resourcefulbees.jei.fluid_mutation_category": "Fluid Mutation Cat.",
 	"book.resourcefulbees.jei.fluid_mutation_category.title": "Fluid Mutation Cat.",
 	"book.resourcefulbees.jei.fluid_mutation_category.text.1": "Bees can mutate blocks into fluids or fluids into other fluids",
-	"book.resourcefulbees.jei.fluid_mutation_category.text.2": "$(#bd0000)1$() - The bee performing the fluid mutation$(br2)$(#bd0000)2$() - The block or fluid being mutated when the bee is carrying nectar$(br2)$(#bd0000)3$() - The resulting fluid from the mutation$(br2)$(#bd0000)4$() - A helpful hint is displayed when mouse is hovering over"
+	"book.resourcefulbees.jei.fluid_mutation_category.text.2": "$(#bd0000)1$() - The bee performing the fluid mutation$(br2)$(#bd0000)2$() - The block or fluid being mutated when the bee is carrying nectar$(br2)$(#bd0000)3$() - The resulting fluid from the mutation$(br2)$(#bd0000)4$() - A helpful hint is displayed when mouse is hovering over",
+
+	"book.resourcefulbees.ender_beecon_category" : "Ender Beecon",
+	"book.resourcefulbees.ender_beecon_category.desc" : "Consumes honey to protect your bees.",
+	"book.resourcefulbees.ender_beecon_category.basics" : "Beecon Basics",
+	"book.resourcefulbees.ender_beecon_category.teleportation" : "Ender Disruption",
+	"book.resourcefulbees.ender_beecon_category.tanks" : "Filling the Beecon",
+	"book.resourcefulbees.ender_beecon_category.effects" : "Effects",
+	"book.resourcefulbees.ender_beecon_category.options" : "Beecon Options",
+	"book.resourcefulbees.ender_beecon_category.basics.1" : "The Ender Beecon is designed with giving all your bees freedom to mingle in mind.$(br2)It does this by effecting your bees in various ways. One major one is that it will prevent bees from despawning within it's effect range.$(br2)Other ways bees are effected can be found in later chapters.",
+	"book.resourcefulbees.ender_beecon_category.teleportation.range" : "Disruption Range",
+	"book.resourcefulbees.ender_beecon_category.teleportation.1" : "If you have issues with bees teleporting away then the Ender Beecon is for you.$(br2)To prevent your bees from teleporting you simply need to supply your Ender Beecon with honey.$(br2)So long as the internal tank has honey in it it will prevent bees from teleporting.",
+	"book.resourcefulbees.ender_beecon_category.teleportation.2" : "The range that the Ender Beecon will prevent bees from teleporting can be found in the interface.$(br2)This range will increase with each effect that is active.",
+	"book.resourcefulbees.ender_beecon_category.tanks.stacking" : "Tank Stacking",
+	"book.resourcefulbees.ender_beecon_category.tanks.1" : "The Ender Beecon requires honey to function as such you",
+	"book.resourcefulbees.ender_beecon_category.tanks.2" : "will need to be able to fill it with honey.$(br2)This can be done in many ways, with either a honey bucket or honey bottle you can insert the item into the interface and the tank will automatically fill itself from the contents.$(br2)You can also simply right click the tank with bottle or buckets to fill it that way.",
+	"book.resourcefulbees.ender_beecon_category.tanks.3" : "If you need more honey input, you can simply put any tank with honey in it underneath the Ender Beecon.$(br2)It will automatically refill itself from the tank, You can also simply pipe honey in from any side of the device.",
+	"book.resourcefulbees.ender_beecon_category.tanks.4" : "When you upgrade your tank from one tier to another it will retain any honey left in it.",
+	"book.resourcefulbees.ender_beecon_category.effects.calming" : "The Calming effect when applied to bees will prevent them from getting angry, It will also calm bees down who are already angry.$(br2)If a bee has the Angry trait it will calm them down, allowing you to keep them around other bees.",
+	"book.resourcefulbees.ender_beecon_category.effects.water_breathing" : "Water Breathing when applied to bees will prevent them from drowning when coming in contact with water.$(br2)Now your bees can take a nice little drink without dying.",
+	"book.resourcefulbees.ender_beecon_category.effects.fire_resistance" : "Fire Resistance does what it says on the tin, it will prevent all forms of fire damage from hurting your bees.$(br2)Now you can keep your nether bees around without worry.",
+	"book.resourcefulbees.ender_beecon_category.effects.regeneration" : "Regeneration is for any other damage that bees can take, warning though it tends to be quite honey consuming to keep this active.",
+	"book.resourcefulbees.ender_beecon_category.effects.1" : "The Ender Beecon can apply certain effects to your bees. While effects are active they will drain honey from the internal tank.$(br2)The more effects that are active the larger the effect range will be and the more honey the Beecon will consume.",
+	"book.resourcefulbees.ender_beecon_category.options.beam_color" : "Beam Color",
+	"book.resourcefulbees.ender_beecon_category.options.show_beam" : "Toggling the Beam",
+	"book.resourcefulbees.ender_beecon_category.options.muting" :  "Muting the Beecon",
+	"book.resourcefulbees.ender_beecon_category.options.1" : "The Ender Beecon's beam will change color based on the type of honey that is inside the internal tank.$(br2)Default honey and Catnip honey will leave the Beecon beam white if you don't want to stand out.$(br2)Rainbow colored honey will make the beam rainbow too.",
+	"book.resourcefulbees.ender_beecon_category.options.2" : "If you want to hide the Ender Beecon's beam all you need to do is right click the Beecon with a stick.$(br2)Now you can hide your Beecons without them beeing seen.",
+	"book.resourcefulbees.ender_beecon_category.options.3" : "If you can't stand the noise the Ender Beecon makes you can suppress it by simply right clicking it with some wool.$(br2)If you want to hear your Beecon again simply right click it again."
 }

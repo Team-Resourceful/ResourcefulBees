@@ -39,7 +39,9 @@ import net.minecraft.tags.ITag;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.*;
+import net.minecraft.util.Direction;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
@@ -78,6 +80,8 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
     private final float[] afloat = {255f, 255f, 255f};
     private boolean updateBeecon = true;
     private boolean beeconActive = false;
+    private boolean playSound = true;
+    public boolean showBeam = true;
     public static final int HONEY_BOTTLE_INPUT = 0;
     public static final int BOTTLE_OUTPUT = 1;
     public static final int HONEY_FILL_AMOUNT = ModConstants.HONEY_PER_BOTTLE;
@@ -110,6 +114,8 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
     @Override
     public CompoundNBT writeNBT(CompoundNBT tag) {
         tag.putInt("tier", TankTier.NETHER.getTier());
+        tag.putBoolean("showBeam", showBeam);
+        tag.putBoolean("playSound", playSound);
         if (effects != null && !effects.isEmpty()) {
             tag.put("active_effects", writeEffectsToNBT(new CompoundNBT()));
         }
@@ -123,6 +129,8 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
     public void readNBT(CompoundNBT tag) {
         fluidTank.readFromNBT(tag.getCompound("fluid"));
         effects = readEffectsFromNBT(tag.getCompound("active_effects"));
+        if (tag.contains("showBeam")) showBeam = tag.getBoolean("showBeam");
+        if (tag.contains("playSound")) playSound = tag.getBoolean("playSound");
         tier = TankTier.NETHER;
         if (fluidTank.getTankCapacity(0) != tier.maxFillAmount) fluidTank.setCapacity(tier.maxFillAmount);
         if (fluidTank.getFluidAmount() > fluidTank.getTankCapacity(0))
@@ -290,7 +298,7 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
                 List<BeeEntity> bees = world.getEntitiesWithinAABB(BeeEntity.class, box);
                 bees.stream().filter(b -> b instanceof CustomBeeEntity).map(b -> (CustomBeeEntity) b).forEach(CustomBeeEntity::setHasDistrupterInRange);
                 this.addEffectsToBees(bees);
-                this.playSound(SoundEvents.BLOCK_BEACON_AMBIENT);
+                if (playSound) this.playSound(SoundEvents.BLOCK_BEACON_AMBIENT);
             }
         }
 
@@ -353,6 +361,11 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
         }
     }
 
+
+    public void toggleSound() {
+        playSound = !playSound;
+    }
+
     @Override
     public AxisAlignedBB getRenderBoundingBox() {
         return new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX(), pos.getY() + 255, pos.getZ());
@@ -390,6 +403,11 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
         return (new AxisAlignedBB(this.pos)).grow(getRange()).expand(0.0D, (double) this.world.getHeight(), 0.0D);
     }
 
+    public void toggleBeam() {
+        showBeam = !showBeam;
+        syncApiaryToPlayersUsing(this.world, this.getPos(), this.writeNBT(new CompoundNBT()));
+    }
+
     public static class BeamSegment {
         private final float[] colors;
         private int height;
@@ -416,12 +434,6 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
             return this.height;
         }
     }
-
-    public void playSound(SoundEvent p_205736_1_) {
-        assert this.world != null;
-        this.world.playSound((PlayerEntity) null, this.pos, p_205736_1_, SoundCategory.BLOCKS, 1.0F, 1.0F);
-    }
-
 
     protected class TileStackHandler extends AutomationSensitiveItemStackHandler {
         protected TileStackHandler(int slots, IAcceptor acceptor, IRemover remover) {

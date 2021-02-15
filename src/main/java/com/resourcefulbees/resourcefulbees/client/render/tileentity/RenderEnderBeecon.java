@@ -43,6 +43,7 @@ public class RenderEnderBeecon extends TileEntityRenderer<EnderBeeconTileEntity>
             CubeModel model = new CubeModel(start, end);
             model.setTextures(stillTexture);
             RenderCuboid.INSTANCE.renderCube(model, matrix, builder, color, light, overlayLight);
+            if (!tile.showBeam) return;
             float red = RenderCuboid.INSTANCE.getRed(color);
             float green = RenderCuboid.INSTANCE.getGreen(color);
             float blue = RenderCuboid.INSTANCE.getBlue(color);

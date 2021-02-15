@@ -86,6 +86,7 @@ public class TraitRegistry implements ITraitRegistry {
         getRegistry().register(BeeConstants.KITTEN_BEE, new BeeTrait.Builder().addDamagePotionEffect(Pair.of(Effects.SPEED, 2)).build());
         getRegistry().register(TraitConstants.SLIMY, new BeeTrait.Builder().addSpecialAbility(TraitConstants.SLIMY).build());
         getRegistry().register(TraitConstants.DESERT, new BeeTrait.Builder().addDamageImmunity(DamageSource.CACTUS).build());
+        getRegistry().register(TraitConstants.ANGRY, new BeeTrait.Builder().addSpecialAbility(TraitConstants.ANGRY).build());
     }
 
     public static void applyBeeTraits() {

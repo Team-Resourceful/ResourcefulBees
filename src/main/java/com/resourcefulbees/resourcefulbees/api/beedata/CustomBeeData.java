@@ -198,7 +198,7 @@ public class CustomBeeData extends AbstractBeeData {
     }
 
     public String getBaseLayerTexture() {
-        return baseLayerTexture == null ? "/custom/bee" : baseLayerTexture.toLowerCase();
+        return baseLayerTexture == null ? "custom/bee" : baseLayerTexture.toLowerCase();
     }
 
     public int getMaxTimeInHive() {
