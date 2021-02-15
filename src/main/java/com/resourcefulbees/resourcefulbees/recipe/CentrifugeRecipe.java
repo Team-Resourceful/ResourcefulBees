@@ -44,9 +44,9 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
     public final int multiblockTime;
     public final boolean multiblock;
     public final boolean hasFluidOutput;
-    public final boolean outputBottleAndFluid;
+    public boolean noBottleInput;
 
-    public CentrifugeRecipe(ResourceLocation id, Ingredient ingredient, List<Pair<ItemStack, Float>> itemOutputs, List<Pair<FluidStack, Float>> fluidOutput, int time, int multiblockTime, boolean multiblock, boolean hasFluidOutput, boolean outputBottleAndFluid) {
+    public CentrifugeRecipe(ResourceLocation id, Ingredient ingredient, List<Pair<ItemStack, Float>> itemOutputs, List<Pair<FluidStack, Float>> fluidOutput, int time, int multiblockTime, boolean multiblock, boolean hasFluidOutput) {
         this.id = id;
         this.ingredient = ingredient;
         this.itemOutputs = itemOutputs;
@@ -55,7 +55,19 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
         this.multiblockTime = multiblockTime;
         this.multiblock = multiblock;
         this.hasFluidOutput = hasFluidOutput;
-        this.outputBottleAndFluid = outputBottleAndFluid;
+        this.noBottleInput = false;
+    }
+
+    public CentrifugeRecipe(ResourceLocation id, Ingredient ingredient, List<Pair<ItemStack, Float>> itemOutputs, List<Pair<FluidStack, Float>> fluidOutput, int time, int multiblockTime, boolean multiblock, boolean hasFluidOutput, boolean noBottleInput) {
+        this.id = id;
+        this.ingredient = ingredient;
+        this.itemOutputs = itemOutputs;
+        this.fluidOutput = fluidOutput;
+        this.time = time;
+        this.multiblockTime = multiblockTime;
+        this.multiblock = multiblock;
+        this.hasFluidOutput = hasFluidOutput;
+        this.noBottleInput = noBottleInput;
     }
 
     @Override
@@ -191,9 +203,8 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
             int multiblockTime = JSONUtils.getInt(json, "multiblockTime", time - Config.MULTIBLOCK_RECIPE_TIME_REDUCTION.get());
             boolean multiblock = JSONUtils.getBoolean(json, "multiblock", false);
             boolean hasFluidOutput = JSONUtils.getBoolean(json, "hasFluidOutput", false);
-            boolean outputBottleAndFluid = JSONUtils.getBoolean(json, "outputBottleAndFluid", false);
 
-            return this.factory.create(id, ingredient, outputs, fluidOutput, time, multiblockTime, multiblock, hasFluidOutput, outputBottleAndFluid);
+            return this.factory.create(id, ingredient, outputs, fluidOutput, time, multiblockTime, multiblock, hasFluidOutput);
         }
 
         public T read(@Nonnull ResourceLocation id, @Nonnull PacketBuffer buffer) {
@@ -206,8 +217,7 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
             int multiblockTime = buffer.readInt();
             boolean multiblock = buffer.readBoolean();
             boolean hasFluidOutput = buffer.readBoolean();
-            boolean outputBottleAndFluid = buffer.readBoolean();
-            return this.factory.create(id, ingredient, itemOutputs, fluidOutput, time, multiblockTime, multiblock, hasFluidOutput, outputBottleAndFluid);
+            return this.factory.create(id, ingredient, itemOutputs, fluidOutput, time, multiblockTime, multiblock, hasFluidOutput);
         }
 
         public void write(@Nonnull PacketBuffer buffer, T recipe) {
@@ -231,7 +241,7 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
         }
 
         public interface IRecipeFactory<T extends CentrifugeRecipe> {
-            T create(ResourceLocation id, Ingredient input, List<Pair<ItemStack, Float>> itemOutputs, List<Pair<FluidStack, Float>> fluidOutputs, int time, int multiblockTime, boolean multiblock, boolean hasFluidOutput, boolean outputBottleAndFluid);
+            T create(ResourceLocation id, Ingredient input, List<Pair<ItemStack, Float>> itemOutputs, List<Pair<FluidStack, Float>> fluidOutputs, int time, int multiblockTime, boolean multiblock, boolean hasFluidOutput);
         }
     }
 }

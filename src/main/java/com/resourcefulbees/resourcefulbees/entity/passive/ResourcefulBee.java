@@ -70,6 +70,7 @@ public class ResourcefulBee extends CustomBeeEntity {
         super(type, world, beeData);
     }
 
+
     @Override
     protected void registerGoals() {
 

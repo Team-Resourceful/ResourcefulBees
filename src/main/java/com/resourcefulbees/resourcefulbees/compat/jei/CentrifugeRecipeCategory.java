@@ -16,6 +16,7 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
@@ -39,12 +40,16 @@ public class CentrifugeRecipeCategory implements IRecipeCategory<CentrifugeRecip
     protected final IDrawableAnimated arrow;
     private final IDrawable icon;
     private final IDrawable background;
+    private final IDrawable fluidHider;
     private final IDrawable multiblock;
     private final String localizedName;
 
+    private static final ResourceLocation BACKGROUND_IMAGE = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/centrifuge.png");
+
     public CentrifugeRecipeCategory(IGuiHelper guiHelper) {
-        this.background = guiHelper.createDrawable(new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/centrifuge.png"), 0, 0, 133, 65);
+        this.background = guiHelper.createDrawable(BACKGROUND_IMAGE, 0, 0, 133, 65);
         this.icon = guiHelper.createDrawableIngredient(new ItemStack(ModItems.CENTRIFUGE_ITEM.get()));
+        this.fluidHider = guiHelper.createDrawable(BACKGROUND_IMAGE,9, 41, 18, 18);
         this.localizedName = I18n.format("gui.resourcefulbees.jei.category.centrifuge");
         this.arrow = guiHelper.drawableBuilder(new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/centrifuge.png"), 0, 66, 73, 30)
                 .buildAnimated(200, IDrawableAnimated.StartDirection.LEFT, false);
@@ -83,25 +88,24 @@ public class CentrifugeRecipeCategory implements IRecipeCategory<CentrifugeRecip
 
     @Override
     public void setIngredients(CentrifugeRecipe recipe, IIngredients iIngredients) {
-        iIngredients.setInputIngredients(Lists.newArrayList(recipe.ingredient, Ingredient.fromItems(Items.GLASS_BOTTLE)));
         List<Pair<ItemStack, Float>> outputs = recipe.itemOutputs;
         List<Pair<FluidStack, Float>> fluidOutput = recipe.fluidOutput;
-
         List<ItemStack> stacks = new ArrayList<>();
-        if (recipe.hasFluidOutput) {
-            stacks.add(outputs.get(1).getLeft().copy());
-            stacks.add(outputs.get(2).getLeft().copy());
-            iIngredients.setOutputs(VanillaTypes.ITEM, stacks);
-            List<FluidStack> fluids = new ArrayList<>();
-            fluids.add(fluidOutput.get(0).getLeft().copy());
-            iIngredients.setOutputs(VanillaTypes.FLUID, fluids);
-            System.out.println("test");
+        List<FluidStack> fluids = new ArrayList<>();
+
+        fluids.add(fluidOutput.get(0).getLeft().copy());
+        stacks.add(outputs.get(0).getLeft().copy());
+        stacks.add(outputs.get(1).getLeft().copy());
+        if (recipe.noBottleInput) {
+            iIngredients.setInputIngredients(Lists.newArrayList(recipe.ingredient));
+            fluids.add(fluidOutput.get(1).getLeft().copy());
         } else {
-            stacks.add(outputs.get(0).getLeft().copy());
-            stacks.add(outputs.get(1).getLeft().copy());
             stacks.add(outputs.get(2).getLeft().copy());
-            iIngredients.setOutputs(VanillaTypes.ITEM, stacks);
+            iIngredients.setInputIngredients(Lists.newArrayList(recipe.ingredient, Ingredient.fromItems(Items.GLASS_BOTTLE)));
         }
+
+        iIngredients.setOutputs(VanillaTypes.ITEM, stacks);
+        iIngredients.setOutputs(VanillaTypes.FLUID, fluids);
     }
 
     @Override
@@ -110,29 +114,36 @@ public class CentrifugeRecipeCategory implements IRecipeCategory<CentrifugeRecip
         IGuiFluidStackGroup guiFluidStacks = iRecipeLayout.getFluidStacks();
 
         guiItemStacks.init(CentrifugeTileEntity.HONEYCOMB_SLOT, true, 9, 5);
-        guiItemStacks.init(CentrifugeTileEntity.BOTTLE_SLOT, true, 9, 23);
-
         guiItemStacks.set(CentrifugeTileEntity.HONEYCOMB_SLOT, iIngredients.getInputs(VanillaTypes.ITEM).get(0));
-        guiItemStacks.set(CentrifugeTileEntity.BOTTLE_SLOT, iIngredients.getInputs(VanillaTypes.ITEM).get(1));
+
 
         if (centrifugeRecipe.hasFluidOutput) {
-            guiFluidStacks.init(CentrifugeTileEntity.OUTPUT1, false, 109, 6, 16, 16, iIngredients.getOutputs(VanillaTypes.FLUID).get(0).get(0).getAmount(), true, null);
-            guiFluidStacks.set(CentrifugeTileEntity.OUTPUT1, iIngredients.getOutputs(VanillaTypes.FLUID).get(0));
-
-            guiItemStacks.init(CentrifugeTileEntity.OUTPUT2, false, 108, 23);
-            guiItemStacks.init(CentrifugeTileEntity.HONEY_BOTTLE, false, 59, 44);
-
-            guiItemStacks.set(CentrifugeTileEntity.OUTPUT2, iIngredients.getOutputs(VanillaTypes.ITEM).get(0));
-            guiItemStacks.set(CentrifugeTileEntity.HONEY_BOTTLE, iIngredients.getOutputs(VanillaTypes.ITEM).get(1));
+            if (centrifugeRecipe.itemOutputs.get(0).getLeft().isEmpty()) {
+                guiFluidStacks.init(CentrifugeTileEntity.OUTPUT1, false, 109, 6, 16, 16, iIngredients.getOutputs(VanillaTypes.FLUID).get(0).get(0).getAmount(), true, null);
+                guiFluidStacks.set(CentrifugeTileEntity.OUTPUT1, iIngredients.getOutputs(VanillaTypes.FLUID).get(0));
+            } else {
+                guiItemStacks.init(CentrifugeTileEntity.OUTPUT1, false, 108, 5);
+                guiItemStacks.set(CentrifugeTileEntity.OUTPUT1, iIngredients.getOutputs(VanillaTypes.ITEM).get(0));
+                guiFluidStacks.init(5, false, 109, 42, 16, 16, iIngredients.getOutputs(VanillaTypes.FLUID).get(0).get(0).getAmount(), true, null);
+                guiFluidStacks.set(5, iIngredients.getOutputs(VanillaTypes.FLUID).get(0));
+            }
         } else {
             guiItemStacks.init(CentrifugeTileEntity.OUTPUT1, false, 108, 5);
-            guiItemStacks.init(CentrifugeTileEntity.OUTPUT2, false, 108, 23);
             guiItemStacks.init(CentrifugeTileEntity.HONEY_BOTTLE, false, 59, 44);
-
             guiItemStacks.set(CentrifugeTileEntity.OUTPUT1, iIngredients.getOutputs(VanillaTypes.ITEM).get(0));
-            guiItemStacks.set(CentrifugeTileEntity.OUTPUT2, iIngredients.getOutputs(VanillaTypes.ITEM).get(1));
+        }
+        if (centrifugeRecipe.noBottleInput) {
+            guiFluidStacks.init(CentrifugeTileEntity.HONEY_BOTTLE, false, 60, 45, 16, 16, iIngredients.getOutputs(VanillaTypes.FLUID).get(1).get(0).getAmount(), true, null);
+            guiFluidStacks.set(CentrifugeTileEntity.HONEY_BOTTLE, iIngredients.getOutputs(VanillaTypes.FLUID).get(1));
+        } else {
+            guiItemStacks.init(CentrifugeTileEntity.BOTTLE_SLOT, true, 9, 23);
+            guiItemStacks.set(CentrifugeTileEntity.BOTTLE_SLOT, iIngredients.getInputs(VanillaTypes.ITEM).get(1));
+            guiItemStacks.init(CentrifugeTileEntity.HONEY_BOTTLE, false, 59, 44);
             guiItemStacks.set(CentrifugeTileEntity.HONEY_BOTTLE, iIngredients.getOutputs(VanillaTypes.ITEM).get(2));
         }
+        guiItemStacks.init(CentrifugeTileEntity.OUTPUT2, false, 108, 23);
+        guiItemStacks.set(CentrifugeTileEntity.OUTPUT2, iIngredients.getOutputs(VanillaTypes.ITEM).get(1));
+
     }
 
     @Override
@@ -157,8 +168,9 @@ public class CentrifugeRecipeCategory implements IRecipeCategory<CentrifugeRecip
         if (recipe.multiblock) {
             multiblock.draw(matrix, 10, 45);
         }
-
-
+        if (!recipe.hasFluidOutput || (recipe.hasFluidOutput && recipe.itemOutputs.get(0).getLeft().isEmpty())) {
+            this.fluidHider.draw(matrix, 108, 41);
+        }
     }
 
     @Nonnull

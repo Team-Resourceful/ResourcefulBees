@@ -84,13 +84,6 @@ public class CentrifugeData extends AbstractBeeData {
      */
     private final int mainInputCount;
 
-    /**
-     * Does the recipe output a bottle and a fluid or just one of the other.
-     * If true, the recipe will require free space in a tank and a bottle to process.
-     * Default: false
-     */
-    private final boolean outputBottleAndFluid;
-
     private final JsonElement mainNBTData;
 
     private transient CompoundNBT mainNBT;
@@ -130,7 +123,7 @@ public class CentrifugeData extends AbstractBeeData {
     private CentrifugeData(String mainOutput, String secondaryOutput, String bottleOutput, String fluidOutput,
                            float mainOutputWeight, float secondaryOutputWeight, float bottleOutputWeight, float fluidOutputWeight, int mainOutputCount,
                            int secondaryOutputCount, int bottleOutputCount, int fluidOutputCount, int mainInputCount,
-                           CompoundNBT mainNBT, CompoundNBT secondaryNBT, CompoundNBT bottleNBT, boolean outputBottleAndFluid,
+                           CompoundNBT mainNBT, CompoundNBT secondaryNBT, CompoundNBT bottleNBT,
                            boolean hasCentrifugeOutput, int recipeTime, boolean hasFluidOutput) {
         this.mainOutput = mainOutput;
         this.secondaryOutput = secondaryOutput;
@@ -144,7 +137,6 @@ public class CentrifugeData extends AbstractBeeData {
         this.bottleOutputCount = bottleOutputCount;
         this.mainInputCount = mainInputCount;
         this.fluidOutputCount = fluidOutputCount;
-        this.outputBottleAndFluid = outputBottleAndFluid;
         this.mainNBTData = null;
         this.mainNBT = mainNBT;
         this.secondaryNBT = secondaryNBT;
@@ -259,10 +251,6 @@ public class CentrifugeData extends AbstractBeeData {
         }
     }
 
-    public boolean isOutputBottleAndFluid() {
-        return outputBottleAndFluid;
-    }
-
     public float getFluidOutputWeight() {
         if (mainIsFluidOutput) return getMainOutputWeight();
         return fluidOutputWeight <= 0 ? BeeConstants.DEFAULT_FLUID_OUTPUT_WEIGHT : fluidOutputWeight;
@@ -286,7 +274,6 @@ public class CentrifugeData extends AbstractBeeData {
         private CompoundNBT mainNBT;
         private CompoundNBT secondaryNBT;
         private CompoundNBT bottleNBT;
-        private boolean outputBottleAndFluid;
         private final boolean hasCentrifugeOutput;
         private int recipeTime;
         private boolean hasFluidOutput;
@@ -383,16 +370,11 @@ public class CentrifugeData extends AbstractBeeData {
             return this;
         }
 
-        public Builder setOutputBottleAndFluid(boolean outputBottleAndFluid) {
-            this.outputBottleAndFluid = outputBottleAndFluid;
-            return this;
-        }
-
         public CentrifugeData createCentrifugeData() {
             return new CentrifugeData(mainOutput, secondaryOutput, bottleOutput, fluidOutput,
                     mainOutputWeight, secondaryOutputWeight, bottleOutputWeight, fluidOutputWeight, mainOutputCount,
                     secondaryOutputCount, bottleOutputCount, fluidOutputCount, mainInputCount,
-                    mainNBT, secondaryNBT, bottleNBT, outputBottleAndFluid,
+                    mainNBT, secondaryNBT, bottleNBT,
                     hasCentrifugeOutput, recipeTime, hasFluidOutput);
         }
     }
