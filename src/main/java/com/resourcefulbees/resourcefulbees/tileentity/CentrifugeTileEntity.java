@@ -183,11 +183,10 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
             return;
         }
         CentrifugeRecipe recipe = recipes.get(i);
-        float nextFloat = world.rand.nextFloat();
 
         for (int j = 0; j < recipe.itemOutputs.size(); j++) {
             float chance = recipe.itemOutputs.get(j).getRight();
-            if (chance >= nextFloat) {
+            if (chance >= world.rand.nextFloat()) {
                 depositStacks.add(recipe.itemOutputs.get(j).getLeft().copy());
                 if (j == 2 && !recipe.noBottleInput) {
                     glass_bottle.shrink(recipes.get(i).itemOutputs.get(2).getLeft().getCount());
@@ -196,12 +195,10 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
         }
         for (Pair<FluidStack, Float> fluidOutput : recipe.fluidOutput) {
             float chance = fluidOutput.getRight();
-            if (chance >= nextFloat) {
-                if (chance >= nextFloat) {
-                    FluidStack fluid = fluidOutput.getLeft().copy();
-                    int tank = getValidTank(fluid);
-                    fluidTanks.fill(tank, fluid, IFluidHandler.FluidAction.EXECUTE);
-                }
+            if (chance >= world.rand.nextFloat()) {
+                FluidStack fluid = fluidOutput.getLeft().copy();
+                int tank = getValidTank(fluid);
+                fluidTanks.fill(tank, fluid, IFluidHandler.FluidAction.EXECUTE);
             }
         }
         if (!depositStacks.isEmpty()) {
