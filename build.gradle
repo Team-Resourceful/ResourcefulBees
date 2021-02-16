@@ -45,10 +45,10 @@ tasks.withType(JavaCompile) {
 // Create Jar Files
 
 //Creates the JavaDoc (useful for modders) https://en.wikipedia.org/wiki/Javadoc
-task javadocJar(type: Jar) {
-    classifier = 'javadoc'
-    from javadoc
-}
+//task javadocJar(type: Jar) {
+//    classifier = 'javadoc'
+//    from javadoc
+//}
 
 //Packages a jar with the source files of the mod
 task sourcesJar(type: Jar) {
