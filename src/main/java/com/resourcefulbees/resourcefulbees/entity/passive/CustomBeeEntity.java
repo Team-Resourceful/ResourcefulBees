@@ -142,7 +142,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
             }
             if (!hasCustomName()) {
                 if (this.ticksExisted % 100 == 0) {
-                    if (hasHiveInRange() || hasFlower() || isPassenger() || getLeashed() || hasNectar() || disrupterInRange > 0) {
+                    if (hasHiveInRange() || hasFlower() || isPassenger() || getLeashed() || hasNectar() || disruptorInRange > 0) {
                         timeWithoutHive = 0;
                     } else {
                         timeWithoutHive += 100;

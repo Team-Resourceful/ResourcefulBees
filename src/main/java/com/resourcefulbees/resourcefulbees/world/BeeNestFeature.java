@@ -142,8 +142,8 @@ public class BeeNestFeature extends Feature<NoFeatureConfig> {
             int maxBees = Math.round(Config.HIVE_MAX_BEES.get() * 0.5f);
 
             for (int i = rand.nextInt(maxBees); i < maxBees ; i++) {
-                if (biomeKey != null && BeeRegistry.SPAWNABLE_BIOMES.containsKey(biomeKey.getValue())) {
-                    CustomBeeData beeData = BeeRegistry.SPAWNABLE_BIOMES.get(biomeKey.getValue()).next();
+                if (biomeKey != null && BeeRegistry.getSpawnableBiomes().containsKey(biomeKey.getValue())) {
+                    CustomBeeData beeData = BeeRegistry.getSpawnableBiomes().get(biomeKey.getValue()).next();
                     EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(beeData.getEntityTypeRegistryID());
                     addBeeToNest(entityType, worldIn, nestPos, beeData, rand, nestTE);
                 } else logMissingBiome(biomeKey);
