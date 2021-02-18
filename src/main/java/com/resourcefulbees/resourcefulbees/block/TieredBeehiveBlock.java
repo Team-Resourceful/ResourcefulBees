@@ -40,9 +40,9 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.FakePlayer;
 import org.apache.commons.lang3.text.WordUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.List;
 
@@ -79,20 +79,13 @@ public class TieredBeehiveBlock extends BeehiveBlock {
     }
 
     @Override
-    protected void fillStateContainer(@Nonnull StateContainer.Builder<Block, BlockState> builder) {
+    protected void fillStateContainer(@NotNull StateContainer.Builder<Block, BlockState> builder) {
         super.fillStateContainer(builder);
     }
 
     @Nullable
     @Override
-    public TileEntity createNewTileEntity(@Nonnull IBlockReader reader) { return null; }
-
-    protected void smokeHive(BlockPos pos, World world) {
-        TileEntity blockEntity = world.getTileEntity(pos);
-        if (blockEntity instanceof TieredBeehiveTileEntity) {
-            ((TieredBeehiveTileEntity) blockEntity).smokeHive();
-        }
-    }
+    public TileEntity createNewTileEntity(@NotNull IBlockReader reader) { return null; }
 
     public boolean isHiveSmoked(BlockPos pos, World world) {
         TileEntity tileEntity = world.getTileEntity(pos);
@@ -100,14 +93,8 @@ public class TieredBeehiveBlock extends BeehiveBlock {
     }
 
     @Override
-    @Nonnull
-    public ActionResultType onUse(@Nonnull BlockState state, @Nonnull World world, @Nonnull BlockPos pos, PlayerEntity player, @Nonnull Hand handIn, @Nonnull BlockRayTraceResult hit) {
+    public @NotNull ActionResultType onUse(@NotNull BlockState state, @NotNull World world, @NotNull BlockPos pos, PlayerEntity player, @NotNull Hand handIn, @NotNull BlockRayTraceResult hit) {
         ItemStack itemstack = player.getHeldItem(handIn);
-
-        if (itemstack.getItem() == ModItems.SMOKER.get() && itemstack.getDamage() < itemstack.getMaxDamage()) {
-            smokeHive(pos, world);
-            return ActionResultType.PASS;
-        }
 
         if (state.get(HONEY_LEVEL) >= 5) {
             boolean isShear = Config.ALLOW_SHEARS.get() && itemstack.getItem().isIn(BeeInfoUtils.getItemTag(SHEARS_TAG));
@@ -160,7 +147,7 @@ public class TieredBeehiveBlock extends BeehiveBlock {
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void addInformation(@Nonnull ItemStack stack, @Nullable IBlockReader worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
+    public void addInformation(@NotNull ItemStack stack, @Nullable IBlockReader worldIn, @NotNull List<ITextComponent> tooltip, @NotNull ITooltipFlag flagIn) {
         if (Screen.hasShiftDown()) {
             if (stack.hasTag()) {
                 CompoundNBT stackTag = stack.getTag();
@@ -264,7 +251,7 @@ public class TieredBeehiveBlock extends BeehiveBlock {
     }
 
     @Override
-    public void onBlockPlacedBy(World worldIn, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nullable LivingEntity placer, @Nonnull ItemStack stack) {
+    public void onBlockPlacedBy(World worldIn, @NotNull BlockPos pos, @NotNull BlockState state, @Nullable LivingEntity placer, @NotNull ItemStack stack) {
         TileEntity tile = worldIn.getTileEntity(pos);
         if (tile instanceof TieredBeehiveTileEntity) {
             TieredBeehiveTileEntity tieredBeehiveTileEntity = (TieredBeehiveTileEntity) tile;
