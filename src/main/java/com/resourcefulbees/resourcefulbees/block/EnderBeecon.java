@@ -15,17 +15,12 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.BucketItem;
-import net.minecraft.item.GlassBottleItem;
-import net.minecraft.item.HoneyBottleItem;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
@@ -36,10 +31,12 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -77,12 +74,18 @@ public class EnderBeecon extends HoneyTank {
         boolean usingHoney = heldItem.getItem() instanceof HoneyBottleItem;
         boolean usingBottle = heldItem.getItem() instanceof GlassBottleItem;
         boolean usingBucket = heldItem.getItem() instanceof BucketItem;
+        boolean usingWool = heldItem.getItem().isIn(ItemTags.createOptional(new ResourceLocation("minecraft", "wool")));
+        boolean usingStick = heldItem.getItem() == Items.STICK;
         TileEntity tileEntity = world.getTileEntity(pos);
 
         if (!world.isRemote) {
-            if (tileEntity instanceof HoneyTankTileEntity) {
-                HoneyTankTileEntity tank = (HoneyTankTileEntity) tileEntity;
-                if (usingBucket) {
+            if (tileEntity instanceof EnderBeeconTileEntity) {
+                EnderBeeconTileEntity tank = (EnderBeeconTileEntity) tileEntity;
+                if (usingWool) {
+                  tank.toggleSound();
+                }else if (usingStick) {
+                    tank.toggleBeam();
+                } else if (usingBucket) {
                     tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
                             .ifPresent(iFluidHandler -> FluidUtil.interactWithFluidHandler(player, hand, world, pos, null));
                 } else if (usingBottle) {

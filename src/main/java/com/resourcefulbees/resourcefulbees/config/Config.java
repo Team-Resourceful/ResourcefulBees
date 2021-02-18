@@ -93,7 +93,6 @@ public class Config {
     public static BooleanValue GENERATE_ENGLISH_LANG;
     public static BooleanValue SHOW_DEBUG_INFO;
 
-
     public static class CommonConfig {
 
         private CommonConfig() {
@@ -267,6 +266,8 @@ public class Config {
         }
 
         public static ForgeConfigSpec CLIENT_CONFIG;
+
+
 
         static {
             Builder CLIENT_BUILDER = new Builder();

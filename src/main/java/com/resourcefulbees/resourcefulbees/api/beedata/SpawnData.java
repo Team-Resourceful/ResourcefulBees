@@ -38,7 +38,11 @@ public class SpawnData extends AbstractBeeData {
      */
     private final LightLevels lightLevel;
 
-    private SpawnData(boolean canSpawnInWorld, int spawnWeight, int minGroupSize, int maxGroupSize, String biomeWhitelist, String biomeBlacklist, LightLevels lightLevel) {
+    private int minYLevel;
+
+    private int maxYLevel;
+
+    private SpawnData(boolean canSpawnInWorld, int spawnWeight, int minGroupSize, int maxGroupSize, String biomeWhitelist, String biomeBlacklist, LightLevels lightLevel, int minYLevel, int maxYLevel) {
         this.canSpawnInWorld = canSpawnInWorld;
         this.spawnWeight = spawnWeight;
         this.minGroupSize = minGroupSize;
@@ -46,6 +50,8 @@ public class SpawnData extends AbstractBeeData {
         this.biomeWhitelist = biomeWhitelist;
         this.biomeBlacklist = biomeBlacklist;
         this.lightLevel = lightLevel;
+        this.minYLevel = minYLevel;
+        this.maxYLevel = maxYLevel;
     }
 
     public boolean canSpawnInWorld() { return canSpawnInWorld; }
@@ -62,6 +68,14 @@ public class SpawnData extends AbstractBeeData {
 
     public LightLevels getLightLevel() { return lightLevel != null ? lightLevel : LightLevels.ANY; }
 
+    public int getMinYLevel() {
+        return minYLevel <= 0 ? 1 : minYLevel;
+    }
+
+    public int getMaxYLevel() {
+        return maxYLevel <= 0 ? 256 : maxYLevel;
+    }
+
     public static class Builder {
         private final boolean canSpawnInWorld;
         private int spawnWeight;
@@ -70,6 +84,8 @@ public class SpawnData extends AbstractBeeData {
         private String biomeWhitelist;
         private String biomeBlacklist;
         private LightLevels lightLevel;
+        private int minYLevel;
+        private int maxYLevel;
 
         public Builder(boolean canSpawnInWorld) { this.canSpawnInWorld = canSpawnInWorld; }
 
@@ -85,6 +101,16 @@ public class SpawnData extends AbstractBeeData {
 
         public Builder setMaxGroupSize(int maxGroupSize) {
             this.maxGroupSize = maxGroupSize;
+            return this;
+        }
+
+        public Builder setMinYLevel(int minYLevel) {
+            this.minYLevel = minYLevel;
+            return this;
+        }
+
+        public Builder setMaxYLevel(int maxYLevel) {
+            this.maxYLevel = maxYLevel;
             return this;
         }
 
@@ -104,7 +130,7 @@ public class SpawnData extends AbstractBeeData {
         }
 
         public SpawnData createSpawnData() {
-            return new SpawnData(canSpawnInWorld, spawnWeight, minGroupSize, maxGroupSize, biomeWhitelist, biomeBlacklist, lightLevel);
+            return new SpawnData(canSpawnInWorld, spawnWeight, minGroupSize, maxGroupSize, biomeWhitelist, biomeBlacklist, lightLevel, minYLevel, maxYLevel);
         }
     }
 

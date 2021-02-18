@@ -30,6 +30,9 @@ public class BaseBeeModel extends EntityModel<Entity> {
 	private final ModelRenderer frontMushroom2;
 	private final ModelRenderer backMushroom1;
 	private final ModelRenderer backMushroom2;
+	private final ModelRenderer crop;
+	private final ModelRenderer crop2;
+	private final ModelRenderer crop3;
 
 	public BaseBeeModel() {
 		textureWidth = 64;
@@ -186,6 +189,24 @@ public class BaseBeeModel extends EntityModel<Entity> {
 		backMushroom1.addChild(backMushroom2);
 		setRotationAngle(backMushroom2, 0.0F, -1.5708F, 0.0F);
 		backMushroom2.setTextureOffset(0, 48).addBox(-8.0F, -14.0F, -2.0F, 16.0F, 16.0F, 0.0F, -2.0F, false);
+
+		crop = new ModelRenderer(this);
+		crop.setRotationPoint(0.0F, 0.0F, 0.0F);
+		body.addChild(crop);
+		crop.setTextureOffset(0, 25).addBox(-3.5F, -4.0F, -5.0F, 7.0F, 7.0F, 10.0F, 0.4F, false);
+
+		crop2 = new ModelRenderer(this);
+		crop2.setRotationPoint(-1.6F, -4.0F, 1.5F);
+		crop.addChild(crop2);
+
+		crop3 = new ModelRenderer(this);
+		crop3.setRotationPoint(0.0F, -9.0F, -2.0F);
+		crop2.addChild(crop3);
+		setRotationAngle(crop3, 0.0F, -1.5708F, 0.0F);
+		crop3.setTextureOffset(0, 28).addBox(6.85F, -3.9F, -10.625F, 0.0F, 18.0F, 18.0F, -4.0F, true);
+		crop3.setTextureOffset(0, 28).addBox(2.5F, -3.9F, -10.625F, 0.0F, 18.0F, 18.0F, -4.0F, true);
+		crop3.setTextureOffset(0, 46).addBox(-8.3F, -3.9F, -7.9F, 18.0F, 18.0F, 0.0F, -4.0F, true);
+		crop3.setTextureOffset(0, 46).addBox(-8.3F, -3.9F, -3.4F, 18.0F, 18.0F, 0.0F, -4.0F, true);
 	}
 
 	@Override

@@ -73,6 +73,10 @@ public class CentrifugeControllerBlock extends Block {
                     NetworkHooks.openGui((ServerPlayerEntity) player, controller, pos);
                 }
             }
+            else
+            {
+                return ActionResultType.PASS;
+            }
         }
 
         return ActionResultType.SUCCESS;

@@ -372,8 +372,4 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
         modelRenderer.rotateAngleY = y;
         modelRenderer.rotateAngleZ = z;
     }
-
-    public void addBox(ModelRenderer modelRenderer, float x, float y, float z, float xSize, float ySize, float zSize, float scale, boolean mirrored) {
-        modelRenderer.addCuboid(x, y, z, xSize, ySize, zSize, scale, mirrored);
-    }
 }

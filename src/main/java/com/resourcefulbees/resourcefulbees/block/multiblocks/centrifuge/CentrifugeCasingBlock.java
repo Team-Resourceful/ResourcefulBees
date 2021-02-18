@@ -70,6 +70,10 @@ public class CentrifugeCasingBlock extends Block {
                         NetworkHooks.openGui((ServerPlayerEntity) player, controller, controller.getPos());
                     }
                 }
+                else
+                {
+                    return ActionResultType.PASS;
+                }
         }
 
         return ActionResultType.SUCCESS;

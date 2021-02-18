@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "PPP",
+    "WIW",
+    "PPP"
+  ],
+  "key": {
+    "I": { "tag": "forge:ingots/iron" },
+    "P": { "tag": "minecraft:planks" },
+    "W": { "tag": "forge:wax" }
+  },
+  "result": {
+    "item": "resourcefulbees:bee_box"
+  }
+}

@@ -142,7 +142,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
             }
             if (!hasCustomName()) {
                 if (this.ticksExisted % 100 == 0) {
-                    if (hasHiveInRange() || hasFlower() || isPassenger() || getLeashed() || hasNectar()) {
+                    if (hasHiveInRange() || hasFlower() || isPassenger() || getLeashed() || hasNectar() || disrupterInRange > 0) {
                         timeWithoutHive = 0;
                     } else {
                         timeWithoutHive += 100;
@@ -175,8 +175,10 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
         switch (reason) {
             case NATURAL:
             case CHUNK_GENERATION:
-            case BREEDING:
                 if (spawnData.canSpawnInWorld()) {
+                    if (pos.getY() < spawnData.getMinYLevel() || pos.getY() > spawnData.getMaxYLevel()) {
+                        return false;
+                    }
                     switch (spawnData.getLightLevel()) {
                         case DAY:
                             return worldIn.getLight(pos) >= 8;

@@ -155,6 +155,8 @@ public class JEICompat implements IModPlugin {
             stats.append(aqua).append(" Spawns in World: ").append(purple).append(StringUtils.capitalize(String.valueOf(beeData.getSpawnData().canSpawnInWorld()))).append("\n");
             if (beeData.getSpawnData().canSpawnInWorld()) {
                 stats.append(aqua).append(" Light Level: ").append(purple).append(beeData.getSpawnData().getLightLevel()).append("\n");
+                stats.append(aqua).append(" Min Y Level: ").append(purple).append(beeData.getSpawnData().getMinYLevel()).append("\n");
+                stats.append(aqua).append(" Max Y Level: ").append(purple).append(beeData.getSpawnData().getMaxYLevel()).append("\n");
                 stats.append(aqua).append(" Min Group Size: ").append(purple).append(beeData.getSpawnData().getMinGroupSize()).append("\n");
                 stats.append(aqua).append(" Max Group Size: ").append(purple).append(beeData.getSpawnData().getMaxGroupSize()).append("\n");
                 stats.append(aqua).append(" Biomes: ").append(purple).append(BiomeParser.parseBiomes(beeData));

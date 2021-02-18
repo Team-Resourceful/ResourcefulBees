@@ -41,7 +41,8 @@ public class ClientEventHandlers {
     private static void doClientStuff(final FMLClientSetupEvent event) {
         ModEntities.MOD_BEES.forEach((s, customBee) -> RenderingRegistry.registerEntityRenderingHandler(customBee.get(), manager -> {
             CustomBeeData data = BeeRegistry.getRegistry().getBeeData(s);
-            return new CustomBeeRenderer(data.getBaseModelType(), manager, data);
+            CustomBeeRenderer renderer = new CustomBeeRenderer(data.getBaseModelType(), manager, data);
+            return renderer;
         }));
         ScreenManager.registerFactory(ModContainers.CENTRIFUGE_CONTAINER.get(), CentrifugeScreen::new);
         ScreenManager.registerFactory(ModContainers.MECHANICAL_CENTRIFUGE_CONTAINER.get(), MechanicalCentrifugeScreen::new);

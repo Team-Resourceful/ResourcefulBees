@@ -29,11 +29,14 @@ public class AdditionLayer<T extends CustomBeeEntity> extends LayerRenderer<T, C
         additionModel = new CustomBeeModel<>(type);
         this.baseTexture = baseTexture;
         this.angryTexture = angryTexture;
-        if (!BeeLayer.textureExists(baseTexture)) {
+        if (!BeeLayer.textureExists(baseTexture) || baseTexture == null) {
             this.baseTexture = BeeConstants.MISSING_TEXTURE;
         }
-        if (!BeeLayer.textureExists(angryTexture)) {
+        if (!BeeLayer.textureExists(angryTexture) || angryTexture == null) {
             this.angryTexture = baseTexture;
+        }
+        if (this.angryTexture == null || this.baseTexture == null) {
+            System.out.println("UCK");
         }
     }
 
