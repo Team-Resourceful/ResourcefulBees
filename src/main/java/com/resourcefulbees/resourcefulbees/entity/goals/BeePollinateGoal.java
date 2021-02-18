@@ -52,7 +52,7 @@ public class BeePollinateGoal extends Goal {
         } else if (bee.getRNG().nextFloat() < 0.7F) {
             return false;
         } else {
-            if (bee.ticksExisted % 100 == 0 || bee.ticksExisted < 20) {
+            if (bee.ticksExisted % 40 == 0 || bee.ticksExisted <= 20) {
                 Optional<BlockPos> optional = this.findFlower(5.0D, flower.startsWith(BeeConstants.ENTITY_PREFIX), flower.replace(BeeConstants.ENTITY_PREFIX, ""));
                 if (optional.isPresent()) {
                     bee.flowerPos = optional.get();

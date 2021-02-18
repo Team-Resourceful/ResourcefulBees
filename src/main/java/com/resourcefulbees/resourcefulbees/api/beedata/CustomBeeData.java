@@ -40,7 +40,7 @@ public class CustomBeeData extends AbstractBeeData {
     private final float sizeModifier;
 
     /**
-     * The special atributes can have.
+     * The special attributes can have.
      * <p>
      * With that it can as example port like an enderman.
      */

@@ -4,7 +4,9 @@ import com.resourcefulbees.resourcefulbees.api.IBeeRegistry;
 import com.resourcefulbees.resourcefulbees.api.beedata.HoneyBottleData;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.init.BeeSetup;
+import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
+import com.resourcefulbees.resourcefulbees.registry.ModEntities;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
 
@@ -16,12 +18,23 @@ import java.util.Map;
 
 import static com.resourcefulbees.resourcefulbees.ResourcefulBees.LOGGER;
 
+@SuppressWarnings("deprecation")
 public class DataGen {
+
+    private DataGen() {
+        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+    }
 
     private static final IBeeRegistry BEE_REGISTRY = BeeRegistry.getRegistry();
 
+    private static final String ITEM_RESOURCEFULBEES = "\"item.resourcefulbees.";
+    private static final String DATA_RESOURCEFULBEES_TAGS_ITEMS = "/data/resourcefulbees/tags/items";
+    private static final String REPLACE_FALSE = "\"replace\": false,\n";
+    private static final String VALUES = "\"values\": [\n";
+    private static final String FINAL_COMMA = "\",\n";
+
     public static void generateClientData() {
-        if (Config.GENERATE_ENGLISH_LANG.get()) GenerateEnglishLang();
+        if (Config.GENERATE_ENGLISH_LANG.get().equals(Boolean.TRUE)) generateEnglishLang();
     }
 
     public static void generateCommonData() {
@@ -32,23 +45,25 @@ public class DataGen {
 
         //custom honey data
         generateHoneyBottleTags();
-        if (Config.HONEY_GENERATE_BLOCKS.get()) {
+        if (Config.HONEY_GENERATE_BLOCKS.get().equals(Boolean.TRUE)) {
             generateHoneyBlockTags();
             generateHoneyBlockItemTags();
         }
-        if (Config.HONEY_GENERATE_FLUIDS.get()) {
+        if (Config.HONEY_GENERATE_FLUIDS.get().equals(Boolean.TRUE)) {
             generateHoneyTags();
         }
     }
 
     private static void writeFile(String path, String file, String data) throws IOException {
         Files.createDirectories(Paths.get(path));
-        FileWriter writer = new FileWriter(Paths.get(path, file).toFile());
-        writer.write(data);
-        writer.close();
+        try (FileWriter writer = new FileWriter(Paths.get(path, file).toFile())) {
+            writer.write(data);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    private static void GenerateEnglishLang() {
+    private static void generateEnglishLang() {
         StringBuilder builder = new StringBuilder();
         builder.append("{\n");
         BEE_REGISTRY.getBees().forEach(((name, customBeeData) -> {
@@ -62,13 +77,13 @@ public class DataGen {
             builder.append(displayName);
             builder.append(" Honeycomb Block\",\n");
             //comb
-            builder.append("\"item.resourcefulbees.");
+            builder.append(ITEM_RESOURCEFULBEES);
             builder.append(name);
             builder.append("_honeycomb\" : \"");
             builder.append(displayName);
             builder.append(" Honeycomb\",\n");
             //spawn egg
-            builder.append("\"item.resourcefulbees.");
+            builder.append(ITEM_RESOURCEFULBEES);
             builder.append(name);
             builder.append("_bee_spawn_egg\" : \"");
             builder.append(displayName);
@@ -85,14 +100,14 @@ public class DataGen {
             displayName = WordUtils.capitalizeFully(displayName);
 
             //honey bottle
-            builder.append("\"item.resourcefulbees.");
+            builder.append(ITEM_RESOURCEFULBEES);
             builder.append(name);
             builder.append("_honey_bottle\": \"");
             builder.append(displayName);
             builder.append(" Honey Bottle\",\n");
 
             //honey block
-            if (Config.HONEY_GENERATE_BLOCKS.get() && honeyData.doGenerateHoneyBlock()) {
+            if (Boolean.TRUE.equals(Config.HONEY_GENERATE_BLOCKS.get()) && honeyData.doGenerateHoneyBlock()) {
                 builder.append("\"block.resourcefulbees.");
                 builder.append(name);
                 builder.append("_honey_block\" : \"");
@@ -100,9 +115,9 @@ public class DataGen {
                 builder.append(" Honey Block\",\n");
             }
 
-            if (Config.HONEY_GENERATE_FLUIDS.get() && honeyData.doGenerateHoneyFluid()) {
+            if (Boolean.TRUE.equals(Config.HONEY_GENERATE_FLUIDS.get()) && honeyData.doGenerateHoneyFluid()) {
                 //honey bucket
-                builder.append("\"item.resourcefulbees.");
+                builder.append(ITEM_RESOURCEFULBEES);
                 builder.append(name);
                 builder.append("_honey_fluid_bucket\": \"");
                 builder.append(displayName);
@@ -119,7 +134,7 @@ public class DataGen {
         builder.deleteCharAt(builder.lastIndexOf(","));
         builder.append("}");
 
-        String langPath = BeeSetup.RESOURCE_PATH.toString() + "/assets/resourcefulbees/lang/";
+        String langPath = BeeSetup.getResourcePath().toString() + "/assets/resourcefulbees/lang/";
         String langFile = "en_us.json";
         try {
             writeFile(langPath, langFile, builder.toString());
@@ -133,17 +148,17 @@ public class DataGen {
     private static void generateCombItemTags() {
         StringBuilder builder = new StringBuilder();
         builder.append("{\n");
-        builder.append("\"replace\": false,\n");
-        builder.append("\"values\": [\n");
-        BEE_REGISTRY.getBees().entrySet().stream().filter((c) -> c.getValue().hasHoneycomb() && !c.getValue().hasCustomDrop()).forEach(((c) -> {
+        builder.append(REPLACE_FALSE);
+        builder.append(VALUES);
+        BEE_REGISTRY.getBees().entrySet().stream().filter(c -> c.getValue().hasHoneycomb() && !c.getValue().hasCustomDrop()).forEach((c -> {
             builder.append("\"");
             builder.append(c.getValue().getCombRegistryObject().getId());
-            builder.append("\",\n");
+            builder.append(FINAL_COMMA);
         }));
         builder.deleteCharAt(builder.lastIndexOf(","));
         builder.append("]\n}");
 
-        String combTagPath = BeeSetup.RESOURCE_PATH.toString() + "/data/resourcefulbees/tags/items";
+        String combTagPath = BeeSetup.getResourcePath().toString() + DATA_RESOURCEFULBEES_TAGS_ITEMS;
         String combTagFile = "resourceful_honeycomb.json";
         try {
             writeFile(combTagPath, combTagFile, builder.toString());
@@ -156,17 +171,17 @@ public class DataGen {
     private static void generateCombBlockItemTags() {
         StringBuilder builder = new StringBuilder();
         builder.append("{\n");
-        builder.append("\"replace\": false,\n");
-        builder.append("\"values\": [\n");
-        BEE_REGISTRY.getBees().entrySet().stream().filter((c) -> c.getValue().hasHoneycomb() && !c.getValue().hasCustomDrop()).forEach(((c) -> {
+        builder.append(REPLACE_FALSE);
+        builder.append(VALUES);
+        BEE_REGISTRY.getBees().entrySet().stream().filter(c -> c.getValue().hasHoneycomb() && !c.getValue().hasCustomDrop()).forEach((c -> {
             builder.append("\"");
             builder.append(c.getValue().getCombBlockItemRegistryObject().getId());
-            builder.append("\",\n");
+            builder.append(FINAL_COMMA);
         }));
         builder.deleteCharAt(builder.lastIndexOf(","));
         builder.append("]\n}");
 
-        String combTagPath = BeeSetup.RESOURCE_PATH.toString() + "/data/resourcefulbees/tags/items";
+        String combTagPath = BeeSetup.getResourcePath().toString() + DATA_RESOURCEFULBEES_TAGS_ITEMS;
         String combTagFile = "resourceful_honeycomb_block.json";
         try {
             writeFile(combTagPath, combTagFile, builder.toString());
@@ -179,17 +194,17 @@ public class DataGen {
     private static void generateCombBlockTags() {
         StringBuilder builder = new StringBuilder();
         builder.append("{\n");
-        builder.append("\"replace\": false,\n");
-        builder.append("\"values\": [\n");
-        BEE_REGISTRY.getBees().entrySet().stream().filter((c) -> c.getValue().hasHoneycomb() && !c.getValue().hasCustomDrop()).forEach(((c) -> {
+        builder.append(REPLACE_FALSE);
+        builder.append(VALUES);
+        BEE_REGISTRY.getBees().entrySet().stream().filter(c -> c.getValue().hasHoneycomb() && !c.getValue().hasCustomDrop()).forEach((c -> {
             builder.append("\"");
             builder.append(c.getValue().getCombBlockRegistryObject().getId());
-            builder.append("\",\n");
+            builder.append(FINAL_COMMA);
         }));
         builder.deleteCharAt(builder.lastIndexOf(","));
         builder.append("]\n}");
 
-        String combTagPath = BeeSetup.RESOURCE_PATH.toString() + "/data/resourcefulbees/tags/blocks";
+        String combTagPath = BeeSetup.getResourcePath().toString() + "/data/resourcefulbees/tags/blocks";
         String combTagFile = "resourceful_honeycomb_block.json";
         try {
             writeFile(combTagPath, combTagFile, builder.toString());
@@ -202,20 +217,20 @@ public class DataGen {
     private static void generateHoneyBottleTags() {
         StringBuilder builder = new StringBuilder();
         builder.append("{\n");
-        builder.append("\"replace\": false,\n");
-        builder.append("\"values\": [\n");
+    builder.append(REPLACE_FALSE);
+        builder.append(VALUES);
         Map<String, HoneyBottleData> honey = BEE_REGISTRY.getHoneyBottles();
         if (honey.size() != 0) {
-            honey.entrySet().stream().forEach(((c) -> {
+            honey.entrySet().forEach((c -> {
                 builder.append("\"");
                 builder.append(c.getValue().getHoneyBottleRegistryObject().getId());
-                builder.append("\",\n");
+                builder.append(FINAL_COMMA);
             }));
             builder.deleteCharAt(builder.lastIndexOf(","));
         }
         builder.append("]\n}");
 
-        String combTagPath = BeeSetup.RESOURCE_PATH.toString() + "/data/forge/tags/items";
+        String combTagPath = BeeSetup.getResourcePath().toString() + "/data/forge/tags/items";
         String combTagFile = "honey_bottle.json";
         try {
             writeFile(combTagPath, combTagFile, builder.toString());
@@ -228,50 +243,50 @@ public class DataGen {
     private static void generateHoneyBlockTags() {
         StringBuilder builder = new StringBuilder();
         builder.append("{\n");
-        builder.append("\"replace\": false,\n");
-        builder.append("\"values\": [\n");
+        builder.append(REPLACE_FALSE);
+        builder.append(VALUES);
         Map<String, HoneyBottleData> honey = BEE_REGISTRY.getHoneyBottles();
         if (honey.size() != 0) {
-            honey.entrySet().stream().forEach(((c) -> {
+            honey.entrySet().forEach((c -> {
                 if (c.getValue().doGenerateHoneyBlock()) {
                     builder.append("\"");
                     builder.append(c.getValue().getHoneyBlockRegistryObject().getId());
-                    builder.append("\",\n");
+                    builder.append(FINAL_COMMA);
                 }
             }));
             builder.deleteCharAt(builder.lastIndexOf(","));
         }
         builder.append("]\n}");
 
-        String combTagPath = BeeSetup.RESOURCE_PATH.toString() + "/data/resourcefulbees/tags/blocks";
+        String combTagPath = BeeSetup.getResourcePath().toString() + "/data/resourcefulbees/tags/blocks";
         String combTagFile = "resourceful_honey_block.json";
         try {
             writeFile(combTagPath, combTagFile, builder.toString());
-            LOGGER.info("Resourceful Honey Bottle Item Tag Generated!");
+            LOGGER.info("Resourceful Honey Block Tag Generated!");
         } catch (IOException e) {
-            LOGGER.error("Could not generate resourceful honey bottle item tag!");
+            LOGGER.error("Could not generate resourceful honey block tag!");
         }
     }
 
     private static void generateHoneyBlockItemTags() {
         StringBuilder builder = new StringBuilder();
         builder.append("{\n");
-        builder.append("\"replace\": false,\n");
-        builder.append("\"values\": [\n");
+        builder.append(REPLACE_FALSE);
+        builder.append(VALUES);
         Map<String, HoneyBottleData> honey = BEE_REGISTRY.getHoneyBottles();
         if (honey.size() != 0) {
-            honey.entrySet().stream().forEach(((c) -> {
+            honey.entrySet().forEach((c -> {
                 if (c.getValue().doGenerateHoneyBlock()) {
                     builder.append("\"");
                     builder.append(c.getValue().getHoneyBlockItemRegistryObject().getId());
-                    builder.append("\",\n");
+                    builder.append(FINAL_COMMA);
                 }
             }));
             builder.deleteCharAt(builder.lastIndexOf(","));
         }
         builder.append("]\n}");
 
-        String combTagPath = BeeSetup.RESOURCE_PATH.toString() + "/data/resourcefulbees/tags/items";
+        String combTagPath = BeeSetup.getResourcePath().toString() + DATA_RESOURCEFULBEES_TAGS_ITEMS;
         String combTagFile = "resourceful_honey_block.json";
         try {
             writeFile(combTagPath, combTagFile, builder.toString());
@@ -284,17 +299,17 @@ public class DataGen {
     private static void generateBeeTags() {
         StringBuilder builder = new StringBuilder();
         builder.append("{\n");
-        builder.append("\"replace\": false,\n");
-        builder.append("\"values\": [\n");
-        BeeRegistry.MOD_BEES.forEach(((s, entityTypeRegistryObject) -> {
+        builder.append(REPLACE_FALSE);
+        builder.append(VALUES);
+        ModEntities.MOD_BEES.forEach(((s, entityTypeRegistryObject) -> {
             builder.append("\"");
             builder.append(entityTypeRegistryObject.getId());
-            builder.append("\",\n");
+        builder.append(FINAL_COMMA);
         }));
         builder.deleteCharAt(builder.lastIndexOf(","));
         builder.append("]\n}");
 
-        String entityTagPath = BeeSetup.RESOURCE_PATH.toString() + "/data/minecraft/tags/entity_types";
+        String entityTagPath = BeeSetup.getResourcePath().toString() + "/data/minecraft/tags/entity_types";
         String entityTagFile = "beehive_inhabitors.json";
         try {
             writeFile(entityTagPath, entityTagFile, builder.toString());
@@ -311,20 +326,20 @@ public class DataGen {
         builder.append("\t\"values\": [\n");
         Map<String, HoneyBottleData> honey = BEE_REGISTRY.getHoneyBottles();
         if (honey.size() != 0) {
-            honey.entrySet().stream().forEach(((c) -> {
+            honey.entrySet().forEach((c -> {
                 if (c.getValue().doGenerateHoneyFluid()) {
                     builder.append("\t\t\"");
                     builder.append(c.getValue().getHoneyStillFluidRegistryObject().getId());
                     builder.append("\",\n\t\t\"");
                     builder.append(c.getValue().getHoneyFlowingFluidRegistryObject().getId());
-                    builder.append("\",\n");
+                    builder.append(FINAL_COMMA);
                 }
             }));
             builder.deleteCharAt(builder.lastIndexOf(","));
         }
         builder.append("\t]\n}");
 
-        String honeyTagPath = BeeSetup.RESOURCE_PATH.toString() + "/data/forge/tags/fluids";
+        String honeyTagPath = BeeSetup.getResourcePath().toString() + "/data/forge/tags/fluids";
         String honeyTagFile = "honey.json";
         try {
             writeFile(honeyTagPath, honeyTagFile, builder.toString());

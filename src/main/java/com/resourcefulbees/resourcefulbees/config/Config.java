@@ -1,102 +1,110 @@
 package com.resourcefulbees.resourcefulbees.config;
 
 import com.resourcefulbees.resourcefulbees.lib.ApiaryOutput;
-import com.resourcefulbees.resourcefulbees.utils.FunctionalIntReferenceHolder;
+import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.common.ForgeConfigSpec.*;
 
 public class Config {
 
+    private Config() {
+        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+    }
 
+    public static BooleanValue GENERATE_DEFAULTS;
+    public static BooleanValue GENERATE_BIOME_DICTIONARIES;
+    public static BooleanValue USE_FORGE_DICTIONARIES;
+    public static BooleanValue ENABLE_EASTER_EGG_BEES;
 
-    public static ForgeConfigSpec.BooleanValue GENERATE_DEFAULTS;
-    public static ForgeConfigSpec.BooleanValue GENERATE_BIOME_DICTIONARIES;
-    public static ForgeConfigSpec.BooleanValue USE_FORGE_DICTIONARIES;
-    public static ForgeConfigSpec.BooleanValue ENABLE_EASTER_EGG_BEES;
+    public static IntValue BEE_FLOWER_FOREST_MULTIPLIER;
 
-    public static ForgeConfigSpec.IntValue BEE_FLOWERFOREST_MULTIPLIER;
+    public static BooleanValue GENERATE_BEE_NESTS;
 
-    public static ForgeConfigSpec.BooleanValue GENERATE_BEE_NESTS;
+    public static BooleanValue CENTRIFUGE_RECIPES;
+    public static BooleanValue HONEYCOMB_BLOCK_RECIPES;
 
-    public static ForgeConfigSpec.BooleanValue CENTRIFUGE_RECIPES;
-    public static ForgeConfigSpec.BooleanValue HONEYCOMB_BLOCK_RECIPES;
+    public static IntValue GLOBAL_CENTRIFUGE_RECIPE_TIME;
+    public static IntValue MULTIBLOCK_RECIPE_TIME_REDUCTION;
 
-    public static ForgeConfigSpec.IntValue GLOBAL_CENTRIFUGE_RECIPE_TIME;
-    public static ForgeConfigSpec.IntValue MULTIBLOCK_RECIPE_TIME_REDUCTION;
+    public static IntValue HIVE_MAX_BEES;
+    public static IntValue HIVE_MAX_COMBS;
+    public static BooleanValue ALLOW_SHEARS;
 
-    public static ForgeConfigSpec.IntValue HIVE_MAX_BEES;
-    public static ForgeConfigSpec.IntValue HIVE_MAX_COMBS;
-    public static ForgeConfigSpec.BooleanValue ALLOW_SHEARS;
+    public static IntValue OVERWORLD_NEST_GENERATION_CHANCE;
+    public static IntValue NETHER_NEST_GENERATION_CHANCE;
+    public static IntValue END_NEST_GENERATION_CHANCE;
 
-    public static ForgeConfigSpec.IntValue OVERWORLD_NEST_GENERATION_CHANCE;
-    public static ForgeConfigSpec.IntValue NETHER_NEST_GENERATION_CHANCE;
-    public static ForgeConfigSpec.IntValue END_NEST_GENERATION_CHANCE;
+    public static EnumValue<ApiaryOutput> T1_APIARY_OUTPUT;
+    public static EnumValue<ApiaryOutput> T2_APIARY_OUTPUT;
+    public static EnumValue<ApiaryOutput> T3_APIARY_OUTPUT;
+    public static EnumValue<ApiaryOutput> T4_APIARY_OUTPUT;
 
-    public static ForgeConfigSpec.EnumValue<ApiaryOutput> T1_APIARY_OUTPUT;
-    public static ForgeConfigSpec.EnumValue<ApiaryOutput> T2_APIARY_OUTPUT;
-    public static ForgeConfigSpec.EnumValue<ApiaryOutput> T3_APIARY_OUTPUT;
-    public static ForgeConfigSpec.EnumValue<ApiaryOutput> T4_APIARY_OUTPUT;
+    public static IntValue T1_APIARY_QUANTITY;
+    public static IntValue T2_APIARY_QUANTITY;
+    public static IntValue T3_APIARY_QUANTITY;
+    public static IntValue T4_APIARY_QUANTITY;
 
-    public static ForgeConfigSpec.IntValue T1_APIARY_QUANTITY;
-    public static ForgeConfigSpec.IntValue T2_APIARY_QUANTITY;
-    public static ForgeConfigSpec.IntValue T3_APIARY_QUANTITY;
-    public static ForgeConfigSpec.IntValue T4_APIARY_QUANTITY;
+    public static IntValue MAX_CENTRIFUGE_RF;
+    public static IntValue MAX_CENTRIFUGE_RECEIVE_RATE;
+    public static IntValue RF_TICK_CENTRIFUGE;
+    public static DoubleValue PLAYER_EXHAUSTION;
+    public static BooleanValue MULTIBLOCK_RECIPES_ONLY;
 
-    public static ForgeConfigSpec.IntValue MAX_CENTRIFUGE_RF;
-    public static ForgeConfigSpec.IntValue MAX_CENTRIFUGE_RECEIVE_RATE;
-    public static ForgeConfigSpec.IntValue RF_TICK_CENTRIFUGE;
-    public static ForgeConfigSpec.DoubleValue PLAYER_EXHAUSTION;
-    public static ForgeConfigSpec.BooleanValue MULTIBLOCK_RECIPES_ONLY;
+    public static IntValue HONEY_FILL_AMOUNT;
+    public static IntValue HONEY_DRAIN_AMOUNT;
+    public static IntValue ENERGY_FILL_AMOUNT;
+    public static IntValue ENERGY_TRANSFER_AMOUNT;
+    public static IntValue MAX_ENERGY_CAPACITY;
+    public static IntValue MAX_TANK_STORAGE;
 
-    public static ForgeConfigSpec.IntValue HONEY_FILL_AMOUNT;
-    public static ForgeConfigSpec.IntValue HONEY_DRAIN_AMOUNT;
-    public static ForgeConfigSpec.IntValue ENERGY_FILL_AMOUNT;
-    public static ForgeConfigSpec.IntValue ENERGY_TRANSFER_AMOUNT;
-    public static ForgeConfigSpec.IntValue MAX_ENERGY_CAPACITY;
-    public static ForgeConfigSpec.IntValue MAX_TANK_STORAGE;
+    public static IntValue APIARY_MAX_BEES;
+    public static IntValue APIARY_MAX_BREED_TIME;
 
-    public static ForgeConfigSpec.IntValue APIARY_MAX_BEES;
-    public static ForgeConfigSpec.IntValue APIARY_MAX_BREED_TIME;
+    public static IntValue SMOKER_DURABILITY;
 
-    public static ForgeConfigSpec.IntValue SMOKER_DURABILITY;
+    public static DoubleValue BEE_SIZE_MODIFIER;
+    public static DoubleValue CHILD_SIZE_MODIFIER;
 
-    public static ForgeConfigSpec.DoubleValue BEE_SIZE_MODIFIER;
-    public static ForgeConfigSpec.DoubleValue CHILD_SIZE_MODIFIER;
+    public static BooleanValue BEE_DIES_FROM_STING;
+    public static BooleanValue BEES_INFLICT_POISON;
 
-    public static ForgeConfigSpec.BooleanValue BEE_DIES_FROM_STING;
-    public static ForgeConfigSpec.BooleanValue BEES_INFLICT_POISON;
+    public static IntValue HONEYCOMB_HUNGER;
+    public static DoubleValue HONEYCOMB_SATURATION;
 
-    public static ForgeConfigSpec.IntValue HONEYCOMB_HUNGER;
-    public static ForgeConfigSpec.DoubleValue HONEYCOMB_SATURATION;
+    public static BooleanValue BEES_DIE_IN_VOID;
 
-    public static ForgeConfigSpec.BooleanValue BEES_DIE_IN_VOID;
+    public static BooleanValue HONEY_GENERATE_FLUIDS;
+    public static BooleanValue HONEY_GENERATE_BLOCKS;
+    public static BooleanValue HONEY_BLOCK_RECIPES;
 
-    public static ForgeConfigSpec.BooleanValue HONEY_GENERATE_FLUIDS;
-    public static ForgeConfigSpec.BooleanValue HONEY_GENERATE_BLOCKS;
-    public static ForgeConfigSpec.BooleanValue HONEY_BLOCK_RECIPIES;
+    public static BooleanValue BEECON_DO_MULTIPLIER;
+    public static IntValue BEECON_RANGE_PER_EFFECT;
+    public static DoubleValue BEECON_CALMING_VALUE;
+    public static DoubleValue BEECON_WATER_BREATHING_VALUE;
+    public static DoubleValue BEECON_FIRE_RESISTANCE_VALUE;
+    public static DoubleValue BEECON_REGENERATION_VALUE;
+    public static IntValue BEECON_BASE_DRAIN;
+    public static IntValue BEECON_PULL_AMOUNT;
 
-    public static ForgeConfigSpec.BooleanValue BEECON_DO_MULTIPLIER;
-    public static ForgeConfigSpec.IntValue BEECON_RANGE_PER_EFFECT;
-    public static ForgeConfigSpec.DoubleValue BEECON_CALMING_VALUE;
-    public static ForgeConfigSpec.DoubleValue BEECON_WATER_BREATHING_VALUE;
-    public static ForgeConfigSpec.DoubleValue BEECON_FIRE_RESISTANCE_VALUE;
-    public static ForgeConfigSpec.DoubleValue BEECON_REGENERATION_VALUE;
-    public static ForgeConfigSpec.IntValue BEECON_BASE_DRAIN;
-    public static ForgeConfigSpec.IntValue BEECON_PULL_AMOUNT;
-
+    public static BooleanValue BYPASS_PERFORMANT_CHECK;
 
     //CLIENT
 
-    public static ForgeConfigSpec.BooleanValue GENERATE_ENGLISH_LANG;
-    public static ForgeConfigSpec.BooleanValue SHOW_DEBUG_INFO;
+    public static BooleanValue GENERATE_ENGLISH_LANG;
+    public static BooleanValue SHOW_DEBUG_INFO;
 
 
     public static class CommonConfig {
+
+        private CommonConfig() {
+            throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+        }
 
         public static ForgeConfigSpec COMMON_CONFIG;
 
 
         static {
-            ForgeConfigSpec.Builder COMMON_BUILDER = new ForgeConfigSpec.Builder();
+            Builder COMMON_BUILDER = new Builder();
 
             COMMON_BUILDER.push("General Options");
             GENERATE_DEFAULTS = COMMON_BUILDER.comment("\nSet this to false when you want to overwrite the default bee files. [true/false]\nThis should be run at least once for initial generation.")
@@ -131,7 +139,7 @@ public class Config {
                     .defineInRange("mechanicalCentrifugePlayerExhaustion", 0.1, 0.0, 1);
             MULTIBLOCK_RECIPES_ONLY = COMMON_BUILDER.comment("\nMakes it so multiblock centrifuge can only do multiblock recipes. [true/false]")
                     .define("multiblockRecipesOnly", false);
-            MAX_CENTRIFUGE_RECEIVE_RATE = COMMON_BUILDER.comment("\nSets the max RF/t that the centrifuge can receive. This should idealy be set higher than centrifugeRfPerTick.")
+            MAX_CENTRIFUGE_RECEIVE_RATE = COMMON_BUILDER.comment("\nSets the max RF/t that the centrifuge can receive. This should ideally be set higher than centrifugeRfPerTick.")
                     .defineInRange("maxCentrifugeReceiveRate", 1, 100, 10000);
             COMMON_BUILDER.pop();
 
@@ -151,7 +159,7 @@ public class Config {
             COMMON_BUILDER.pop();
 
             COMMON_BUILDER.push("Ender Beecon Options");
-            BEECON_DO_MULTIPLIER = COMMON_BUILDER.comment("\nIf true, the below values will be mulitplied with the base value, if false they will be added instead.")
+            BEECON_DO_MULTIPLIER = COMMON_BUILDER.comment("\nIf true, the below values will be multiplied with the base value, if false they will be added instead.")
                     .define("beeconDoMultiplier", true);
             BEECON_CALMING_VALUE = COMMON_BUILDER.comment("\nMultiplier for the drain rate for the Ender Beecon when the Calming effect is active.")
                     .defineInRange("beeconCalmingValue", 2d, 1d, 128d);
@@ -204,7 +212,7 @@ public class Config {
             COMMON_BUILDER.push("Spawning Options");
             GENERATE_BEE_NESTS = COMMON_BUILDER.comment("\nShould bee nests generate in world? \nNote: They will only generate in biomes where bees can spawn")
                     .define("generateBeeNests", true);
-            BEE_FLOWERFOREST_MULTIPLIER = COMMON_BUILDER.comment("The value added to weight for bees in a flower forests")
+            BEE_FLOWER_FOREST_MULTIPLIER = COMMON_BUILDER.comment("The value added to weight for bees in a flower forests")
                     .defineInRange("beesMoreCommonInFlowerForests", 4, 0, 9);
             OVERWORLD_NEST_GENERATION_CHANCE = COMMON_BUILDER.comment("\nChance for nest to spawn when generating chunks in overworld category biomes. [1/x]\nA higher value means the nest is less likely to spawn.")
                     .defineInRange("overworld_nest_generation_chance", 48, 4, 100);
@@ -239,18 +247,29 @@ public class Config {
                     .define("generateHoneyFluids", true);
             HONEY_GENERATE_BLOCKS = COMMON_BUILDER.comment("\nSet to false if you don't want the custom honey blocks to be generated [true/false]")
                     .define("generateHoneyBlocks", true);
-            HONEY_BLOCK_RECIPIES = COMMON_BUILDER.comment("\nShould honey block recipies be generated? [true/false]")
-                    .define("honeyBlockRecipies", true);
+            HONEY_BLOCK_RECIPES = COMMON_BUILDER.comment("\nShould honey block recipes be generated? [true/false]")
+                    .define("honeyBlockRecipes", true);
+            COMMON_BUILDER.pop();
+
+            COMMON_BUILDER.push("Mod Options");
+            BYPASS_PERFORMANT_CHECK = COMMON_BUILDER.comment("Set this to true if you wish to live life on the edge!", "Seriously though it is recommended this only be used for testing purposes!!!")
+                    .define("bypassPerformantCheck", false);
+            COMMON_BUILDER.pop();
 
             COMMON_CONFIG = COMMON_BUILDER.build();
         }
     }
 
     public static class ClientConfig {
+
+        private ClientConfig() {
+            throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+        }
+
         public static ForgeConfigSpec CLIENT_CONFIG;
 
         static {
-            ForgeConfigSpec.Builder CLIENT_BUILDER = new ForgeConfigSpec.Builder();
+            Builder CLIENT_BUILDER = new Builder();
 
             CLIENT_BUILDER.push("General Options");
             GENERATE_ENGLISH_LANG = CLIENT_BUILDER.comment("\nWhen set to true an en_us.json file will be generated for the bees. [true/false] \n This file will be overwritten every time the mod loads. \n The generated names are based on the bee jsons. \nThis is best used by pack devs as a one-time run.")

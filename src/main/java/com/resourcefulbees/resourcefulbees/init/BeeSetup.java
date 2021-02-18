@@ -8,7 +8,9 @@ import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.entity.passive.KittenBee;
 import com.resourcefulbees.resourcefulbees.entity.passive.OreoBee;
+import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
+import com.resourcefulbees.resourcefulbees.registry.ModEntities;
 import com.resourcefulbees.resourcefulbees.registry.ModFeatures;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
@@ -27,6 +29,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystem;
 import java.nio.file.*;
 import java.util.Locale;
+import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -36,17 +39,39 @@ import static com.resourcefulbees.resourcefulbees.config.Config.GENERATE_DEFAULT
 
 public class BeeSetup {
 
+    private BeeSetup() {
+        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+    }
 
-    public static Path BEE_PATH;
-    public static Path RESOURCE_PATH;
-    public static Path HONEY_PATH;
+    private static final String JSON = ".json";
+    private static final String ZIP = ".zip";
+
+    private static Path beePath;
+    private static Path resourcePath;
+    private static Path honeyPath;
+
+    public static void setBeePath(Path path) {
+        beePath = path;
+    }
+
+    public static void setResourcePath(Path path) {
+        resourcePath = path;
+    }
+
+    public static Path getResourcePath() {
+        return resourcePath;
+    }
+
+    public static void setHoneyPath(Path path) {
+        honeyPath = path;
+    }
 
     public static void setupBees() {
-        if (ENABLE_EASTER_EGG_BEES.get()) {
+        if (Boolean.TRUE.equals(ENABLE_EASTER_EGG_BEES.get())) {
             OreoBee.register();
             KittenBee.register();
         }
-        if (GENERATE_DEFAULTS.get()) {
+        if (Boolean.TRUE.equals(GENERATE_DEFAULTS.get())) {
             setupDefaultBees();
             setupDefaultHoney();
         }
@@ -111,26 +136,20 @@ public class BeeSetup {
     }
 
     private static void addBees() {
-        try {
-            Files.walk(BEE_PATH)
-                    .filter(f -> f.getFileName().toString().endsWith(".zip"))
-                    .forEach(BeeSetup::addZippedBee);
-            Files.walk(BEE_PATH)
-                    .filter(f -> f.getFileName().toString().endsWith(".json"))
-                    .forEach(BeeSetup::addBee);
+        try (Stream<Path> zipStream = Files.walk(beePath);
+             Stream<Path> jsonStream = Files.walk(beePath)) {
+            zipStream.filter(f -> f.getFileName().toString().endsWith(ZIP)).forEach(BeeSetup::addZippedBee);
+            jsonStream.filter(f -> f.getFileName().toString().endsWith(JSON)).forEach(BeeSetup::addBee);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     private static void addHoney() {
-        try {
-            Files.walk(HONEY_PATH)
-                    .filter(f -> f.getFileName().toString().endsWith(".zip"))
-                    .forEach(BeeSetup::addZippedHoney);
-            Files.walk(HONEY_PATH)
-                    .filter(f -> f.getFileName().toString().endsWith(".json"))
-                    .forEach(BeeSetup::addHoney);
+        try (Stream<Path> zipStream = Files.walk(honeyPath);
+             Stream<Path> jsonStream = Files.walk(honeyPath)) {
+            zipStream.filter(f -> f.getFileName().toString().endsWith(ZIP)).forEach(BeeSetup::addZippedHoney);
+            jsonStream.filter(f -> f.getFileName().toString().endsWith(JSON)).forEach(BeeSetup::addHoney);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -146,10 +165,9 @@ public class BeeSetup {
     }
 
     private static void addZippedHoney(Path file) {
-        try {
-            ZipFile zf = new ZipFile(file.toString());
+        try (ZipFile zf = new ZipFile(file.toString())) {
             zf.stream().forEach(zipEntry -> {
-                if (zipEntry.getName().endsWith(".json")) {
+                if (zipEntry.getName().endsWith(JSON)) {
                     try {
                         parseHoney(zf, zipEntry);
                     } catch (IOException e) {
@@ -160,7 +178,7 @@ public class BeeSetup {
                 }
             });
         } catch (IOException e) {
-            LOGGER.warn("Could not read ZipFile! ZipFile: " + file.getFileName());
+            LOGGER.warn("Could not read ZipFile! ZipFile: {}", file.getFileName());
         }
     }
 
@@ -174,10 +192,9 @@ public class BeeSetup {
     }
 
     private static void addZippedBee(Path file) {
-        try {
-            ZipFile zf = new ZipFile(file.toString());
+        try (ZipFile zf = new ZipFile(file.toString())) {
             zf.stream().forEach(zipEntry -> {
-                if (zipEntry.getName().endsWith(".json")) {
+                if (zipEntry.getName().endsWith(JSON)) {
                     try {
                         parseBee(zf, zipEntry);
                     } catch (IOException e) {
@@ -188,7 +205,7 @@ public class BeeSetup {
                 }
             });
         } catch (IOException e) {
-            LOGGER.warn("Could not read ZipFile! ZipFile: " + file.getFileName());
+            LOGGER.warn("Could not read ZipFile! ZipFile: {}",  file.getFileName());
         }
     }
 
@@ -224,16 +241,19 @@ public class BeeSetup {
     }
 
     private static void copyDefaultHoney(Path source) throws IOException {
-        Files.walk(source)
-                .filter(f -> f.getFileName().toString().endsWith(".json"))
-                .forEach(path -> {
-                    File targetFile = new File(String.valueOf(Paths.get(HONEY_PATH.toString(), "/", path.getFileName().toString())));
-                    try {
-                        Files.copy(path, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                });
+        try (Stream<Path> sourceStream = Files.walk(source)) {
+            sourceStream.filter(f -> f.getFileName().toString().endsWith(JSON))
+            .forEach(path -> {
+                File targetFile = new File(String.valueOf(Paths.get(honeyPath.toString(), "/", path.getFileName().toString())));
+                try {
+                    Files.copy(path, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private static void createFileSystem(Path source) throws IOException {
@@ -245,32 +265,36 @@ public class BeeSetup {
         }
     }
 
-    private static void copyDefaultBees(Path source) throws IOException {
-        Files.walk(source)
-                .filter(f -> f.getFileName().toString().endsWith(".json"))
-                .forEach(path -> {
-                    File targetFile = new File(String.valueOf(Paths.get(BEE_PATH.toString(), "/", path.getFileName().toString())));
-                    try {
-                        Files.copy(path, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                });
+    private static void copyDefaultBees(Path source) {
+        try (Stream<Path> sourceStream = Files.walk(source)) {
+            sourceStream.filter(f -> f.getFileName().toString().endsWith(JSON))
+            .forEach(path -> {
+                File targetFile = new File(String.valueOf(Paths.get(beePath.toString(), "/", path.getFileName().toString())));
+                try {
+                    Files.copy(path, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void onBiomeLoad(BiomeLoadingEvent event) {
-        if (BeeRegistry.SPAWNABLE_BIOMES.containsKey(event.getName())) {
-            BeeRegistry.SPAWNABLE_BIOMES.get(event.getName()).forEach(customBeeData -> {
+        if (event.getName() != null && BeeRegistry.getSpawnableBiomes().containsKey(event.getName())) {
+            BeeRegistry.getSpawnableBiomes().get(event.getName()).forEach(customBeeData -> {
                 EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(customBeeData.getEntityTypeRegistryID());
-                assert entityType != null;
-                event.getSpawns().getSpawner(EntityClassification.CREATURE)
-                        .add(new MobSpawnInfo.Spawners(entityType,
-                                customBeeData.getSpawnData().getSpawnWeight() + (event.getName().getPath().contains("flower_forest") ? Config.BEE_FLOWERFOREST_MULTIPLIER.get() : 0),
-                                customBeeData.getSpawnData().getMinGroupSize(),
-                                customBeeData.getSpawnData().getMaxGroupSize()));
+                if (entityType != null) {
+                    event.getSpawns().getSpawner(EntityClassification.CREATURE)
+                            .add(new MobSpawnInfo.Spawners(entityType,
+                                    customBeeData.getSpawnData().getSpawnWeight() + (event.getName().getPath().contains("flower_forest") ? Config.BEE_FLOWER_FOREST_MULTIPLIER.get() : 0),
+                                    customBeeData.getSpawnData().getMinGroupSize(),
+                                    customBeeData.getSpawnData().getMaxGroupSize()));
+                }
             });
 
-            if (Config.GENERATE_BEE_NESTS.get()) {
+            if (Boolean.TRUE.equals(Config.GENERATE_BEE_NESTS.get())) {
                 addNestFeature(event);
             }
         }
@@ -288,7 +312,7 @@ public class BeeSetup {
     }
 
     public static void registerBeePlacements() {
-        BeeRegistry.MOD_BEES.forEach((s, entityTypeRegistryObject) -> {
+        ModEntities.MOD_BEES.forEach((s, entityTypeRegistryObject) -> {
             CustomBeeData beeData = BeeRegistry.getRegistry().getBeeData(s);
             if (beeData.getSpawnData().canSpawnInWorld()) {
                 EntitySpawnPlacementRegistry.register(entityTypeRegistryObject.get(),

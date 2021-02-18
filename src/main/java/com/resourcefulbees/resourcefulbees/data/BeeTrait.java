@@ -59,7 +59,9 @@ public class BeeTrait {
         List<String> specialAbilities = new ArrayList<>();
         BasicParticleType particleEffect;
 
-        public Builder(){}
+        public Builder() {
+            //constructor
+        }
 
         public Builder addDamagePotionEffects(List<Pair<Effect, Integer>> potionDamageEffects) {
             this.potionDamageEffects.addAll(potionDamageEffects);

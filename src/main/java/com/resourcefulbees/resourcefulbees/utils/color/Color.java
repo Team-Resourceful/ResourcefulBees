@@ -31,7 +31,7 @@ import java.util.regex.Pattern;
 public class Color {
     private static final Map<String, Color> NAMED_MAP = new HashMap<>();
     private static final Pattern PATTERN_LEADING_JUNK = Pattern.compile("(#|0x)", Pattern.CASE_INSENSITIVE);
-    private static final Pattern PATTERN_HEX_CODE = Pattern.compile("(#|0x)?[0-9a-f]{1,8}", Pattern.CASE_INSENSITIVE);
+    private static final Pattern PATTERN_HEX_CODE = Pattern.compile("(#|0x)[0-9a-f]{1,8}", Pattern.CASE_INSENSITIVE); //Removed `?` to force requirement
 
     public static final int VALUE_WHITE = 0xFFFFFF;
 

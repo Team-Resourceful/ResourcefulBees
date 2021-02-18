@@ -13,6 +13,7 @@ import net.minecraft.nbt.INBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 public class HoneyTankRecipe extends ShapedRecipe {
 
@@ -24,7 +25,7 @@ public class HoneyTankRecipe extends ShapedRecipe {
     }
 
     @Override
-    public ItemStack getCraftingResult(CraftingInventory inventory) {
+    public @NotNull ItemStack getCraftingResult(CraftingInventory inventory) {
         ItemStack toCopy = inventory.getStackInSlot(4);
         if (!toCopy.hasTag() || toCopy.getTag() == null || toCopy.getTag().isEmpty() || !toCopy.getTag().contains("fluid")) {
             return this.result;

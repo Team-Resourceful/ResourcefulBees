@@ -99,13 +99,14 @@ public class TieredBeehiveBlock extends BeehiveBlock {
         return tileEntity instanceof TieredBeehiveTileEntity && ((TieredBeehiveTileEntity) tileEntity).isSmoked();
     }
 
+    @Override
     @Nonnull
     public ActionResultType onUse(@Nonnull BlockState state, @Nonnull World world, @Nonnull BlockPos pos, PlayerEntity player, @Nonnull Hand handIn, @Nonnull BlockRayTraceResult hit) {
         ItemStack itemstack = player.getHeldItem(handIn);
 
         if (itemstack.getItem() == ModItems.SMOKER.get() && itemstack.getDamage() < itemstack.getMaxDamage()) {
             smokeHive(pos, world);
-            return ActionResultType.SUCCESS;
+            return ActionResultType.PASS;
         }
 
         if (state.get(HONEY_LEVEL) >= 5) {

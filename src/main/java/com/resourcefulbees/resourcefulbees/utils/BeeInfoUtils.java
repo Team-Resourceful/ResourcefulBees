@@ -38,6 +38,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.*;
 
 import static com.resourcefulbees.resourcefulbees.lib.BeeConstants.*;
@@ -52,11 +53,11 @@ public class BeeInfoUtils {
             while (parent1.hasNext() && parent2.hasNext()) {
                 String p1 = parent1.next();
                 String p2 = parent2.next();
-                BeeRegistry.getRegistry().FAMILY_TREE.computeIfAbsent(sortParents(p1, p2), k -> new RandomCollection<>()).add(bee.getBreedData().getBreedWeight(), bee);
+                BeeRegistry.getRegistry().familyTree.computeIfAbsent(sortParents(p1, p2), k -> new RandomCollection<>()).add(bee.getBreedData().getBreedWeight(), bee);
             }
         }
 
-        BeeRegistry.getRegistry().FAMILY_TREE.computeIfAbsent(Pair.of(bee.getName(), bee.getName()), k -> new RandomCollection<>()).add(bee.getBreedData().getBreedWeight(), bee);
+        BeeRegistry.getRegistry().familyTree.computeIfAbsent(Pair.of(bee.getName(), bee.getName()), k -> new RandomCollection<>()).add(bee.getBreedData().getBreedWeight(), bee);
     }
 
     public static Pair<String, String> sortParents(String parent1, String parent2) {
@@ -109,7 +110,7 @@ public class BeeInfoUtils {
     private static void updateSpawnableBiomes(Set<ResourceLocation> whitelist, Set<ResourceLocation> blacklist, CustomBeeData bee) {
         whitelist.stream()
                 .filter(resourceLocation -> !blacklist.contains(resourceLocation))
-                .forEach(resourceLocation -> BeeRegistry.SPAWNABLE_BIOMES.computeIfAbsent(resourceLocation, k -> new RandomCollection<>()).add(bee.getSpawnData().getSpawnWeight(), bee));
+                .forEach(resourceLocation -> BeeRegistry.getSpawnableBiomes().computeIfAbsent(resourceLocation, k -> new RandomCollection<>()).add(bee.getSpawnData().getSpawnWeight(), bee));
     }
 
     /**
@@ -154,6 +155,7 @@ public class BeeInfoUtils {
         return ForgeRegistries.BIOMES.getValue(getResource(biomeName));
     }
 
+    @Nullable
     public static EntityType<?> getEntityType(String entityName) {
         return ForgeRegistries.ENTITIES.getValue(getResource(entityName));
     }

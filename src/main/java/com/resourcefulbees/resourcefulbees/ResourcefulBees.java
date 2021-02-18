@@ -35,6 +35,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -61,6 +62,8 @@ public class ResourcefulBees {
 
         ConfigLoader.load(Config.CommonConfig.COMMON_CONFIG, "resourcefulbees/common.toml");
 
+        checkForIncompatibleMods();
+
         BiomeDictionarySetup.buildDictionary();
         BeeSetup.setupBees();
         RegistryHandler.registerDynamicBees();
@@ -71,7 +74,7 @@ public class ResourcefulBees {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::loadComplete);
         MinecraftForge.EVENT_BUS.addListener(BeeSetup::onBiomeLoad);
         MinecraftForge.EVENT_BUS.addListener(DataPackLoader::serverStarting);
-        MinecraftForge.EVENT_BUS.addListener(this::ServerLoaded);
+        MinecraftForge.EVENT_BUS.addListener(this::serverLoaded);
 
         MinecraftForge.EVENT_BUS.addListener(this::trade);
         //MinecraftForge.EVENT_BUS.addListener(EntityEventHandlers::entityDies);
@@ -81,10 +84,9 @@ public class ResourcefulBees {
         MinecraftForge.EVENT_BUS.register(this);
     }
 
-    private void ServerLoaded(FMLServerStartedEvent event) {
-//        BeeRegistry.getRegistry().getBees().forEach(((s, beeData) -> SecondPhaseValidator.validateMutation(beeData)));
+    private void serverLoaded(FMLServerStartedEvent event) {
         ModPotions.createMixes();
-        BeeRegistry.getRegistry().registerMutations();
+        MutationSetup.setupMutations();
     }
 
     public void trade(VillagerTradesEvent event) {
@@ -155,5 +157,23 @@ public class ResourcefulBees {
         BeeSetup.registerBeePlacements();
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> DataGen::generateClientData);
         DataGen.generateCommonData();
+    }
+
+    private void checkForIncompatibleMods() {
+        if(Config.BYPASS_PERFORMANT_CHECK.get()) {
+            LOGGER.warn("Performant check bypassed");
+            LOGGER.warn("Performant {} present", (FMLLoader.getLoadingModList().getModFileById("performant") != null ? "is" : "is not"));
+        } else {
+            if (FMLLoader.getLoadingModList().getModFileById("performant") != null) {
+                throw new IllegalStateException("" +
+                        "Performant is incompatible with Resourceful Bees\n" +
+                        "This is a known issue with performant and it breaking other mods, the author does not care\n" +
+                        "GitHub issue on the matter: https://github.com/someaddons/performant_issues/issues/70\n" +
+                        "To bypass this check set \"bypassPerformantCheck: true\" in your Resourceful Bees common.toml config\n" +
+                        "If you bypass this check we will not provide any support for any issues related to Resourceful Bees or the mods that use it\n" +
+                        "If you believe your issue is unrelated, disable performant and reproduce it\n" +
+                        "By choosing to bypass this check you understand that here there be dragons");
+            }
+        }
     }
 }

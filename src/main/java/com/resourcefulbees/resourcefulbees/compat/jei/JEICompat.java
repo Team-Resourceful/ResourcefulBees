@@ -47,11 +47,12 @@ public class JEICompat implements IModPlugin {
         registration.addRecipeCategories(new FlowersCategory(helper));
         registration.addRecipeCategories(new EntityFlowerCategory(helper));
         registration.addRecipeCategories(new CentrifugeRecipeCategory(helper));
-        registration.addRecipeCategories(new FluidToFluid(helper));
+        registration.addRecipeCategories(new BlockMutation(helper));
+        /*registration.addRecipeCategories(new FluidToFluid(helper));
         registration.addRecipeCategories(new BlockToFluid(helper));
         registration.addRecipeCategories(new FluidToBlock(helper));
-        registration.addRecipeCategories(new BlockToBlock(helper));
-        registration.addRecipeCategories(new EntitytoEntity(helper));
+        registration.addRecipeCategories(new BlockToBlock(helper));*/
+        registration.addRecipeCategories(new EntityToEntity(helper));
         registration.addRecipeCategories(new BlockToItem(helper));
         registration.addRecipeCategories(new ApiaryCategory(helper));
     }
@@ -86,12 +87,13 @@ public class JEICompat implements IModPlugin {
             registration.addRecipes(BeeHiveCategory.getHoneycombRecipes(registration.getIngredientManager()), BeeHiveCategory.ID);
             registration.addRecipes(recipeManager.getRecipes(CENTRIFUGE_RECIPE_TYPE).values(), CentrifugeRecipeCategory.ID);
             registration.addRecipes(BeeBreedingCategory.getBreedingRecipes(registration.getIngredientManager()), BeeBreedingCategory.ID);
-            registration.addRecipes(FluidToFluid.getMutationRecipes(registration.getIngredientManager()), FluidToFluid.ID);
+            registration.addRecipes(BlockMutation.getMutationRecipes(), BlockMutation.ID);
+            /*registration.addRecipes(FluidToFluid.getMutationRecipes(registration.getIngredientManager()), FluidToFluid.ID);
             registration.addRecipes(BlockToFluid.getMutationRecipes(registration.getIngredientManager()), BlockToFluid.ID);
             registration.addRecipes(FluidToBlock.getMutationRecipes(registration.getIngredientManager()), FluidToBlock.ID);
-            registration.addRecipes(BlockToBlock.getMutationRecipes(registration.getIngredientManager()), BlockToBlock.ID);
-            registration.addRecipes(BlockToItem.getMutationRecipes(registration.getIngredientManager()), BlockToItem.ID);
-            registration.addRecipes(EntitytoEntity.getMutationRecipes(registration.getIngredientManager()), EntitytoEntity.ID);
+            registration.addRecipes(BlockToBlock.getMutationRecipes(registration.getIngredientManager()), BlockToBlock.ID);*/
+            registration.addRecipes(BlockToItem.getMutationRecipes(), BlockToItem.ID);
+            registration.addRecipes(EntityToEntity.getMutationRecipes(), EntityToEntity.ID);
             registration.addRecipes(ApiaryCategory.getHoneycombRecipes(registration.getIngredientManager()), ApiaryCategory.ID);
             registration.addRecipes(FlowersCategory.getFlowersRecipes(registration.getIngredientManager()), FlowersCategory.ID);
             registration.addRecipes(EntityFlowerCategory.getFlowersRecipes(registration.getIngredientManager()), EntityFlowerCategory.ID);
@@ -146,7 +148,7 @@ public class JEICompat implements IModPlugin {
 
             if (beeData.hasTraitNames()) {
                 StringJoiner traits = new StringJoiner(", ");
-                Arrays.stream(beeData.getTraitNames()).forEach(trait -> traits.add(WordUtils.capitalize(trait.replaceAll("_", " "))));
+                Arrays.stream(beeData.getTraitNames()).forEach(trait -> traits.add(WordUtils.capitalize(trait.replace("_", " "))));
                 stats.append(aqua).append(" Traits: ").append(purple).append(traits.toString()).append("\n");
             }
 

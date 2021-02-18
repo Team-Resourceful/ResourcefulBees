@@ -26,9 +26,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static com.resourcefulbees.resourcefulbees.ResourcefulBees.LOGGER;
-import static com.resourcefulbees.resourcefulbees.init.BeeSetup.*;
 
 public class ModSetup {
+
+    private ModSetup() {
+        throw new IllegalStateException("Utility Class");
+    }
 
     public static void initialize(){
         setupPaths();
@@ -43,38 +46,36 @@ public class ModSetup {
         Path rbTraitPath = Paths.get(configPath.toAbsolutePath().toString(), ResourcefulBees.MOD_ID, "bee_traits");
         Path rbAssetsPath = Paths.get(configPath.toAbsolutePath().toString(),ResourcefulBees.MOD_ID, "resources");
         Path rbHoneyPath = Paths.get(configPath.toAbsolutePath().toString(), ResourcefulBees.MOD_ID, "honey");
-        BEE_PATH = rbBeesPath;
-        RESOURCE_PATH = rbAssetsPath;
-        HONEY_PATH = rbHoneyPath;
+        BeeSetup.setBeePath(rbBeesPath);
+        BeeSetup.setResourcePath(rbAssetsPath);
+        BeeSetup.setHoneyPath(rbHoneyPath);
         BiomeDictionarySetup.DICTIONARY_PATH = rbBiomePath;
         TraitSetup.DICTIONARY_PATH = rbTraitPath;
 
         try { Files.createDirectories(rbBeesPath);
-        } catch (FileAlreadyExistsException ignored) {
+        } catch (FileAlreadyExistsException ignored) { //ignored
         } catch (IOException e) { LOGGER.error("failed to create \"bees\" directory");}
 
         try { Files.createDirectories(rbBiomePath);
-        } catch (FileAlreadyExistsException ignored) {
+        } catch (FileAlreadyExistsException ignored) { //ignored
         } catch (IOException e) { LOGGER.error("failed to create \"biome_dictionary\" directory");}
 
         try { Files.createDirectories(rbTraitPath);
-        } catch (FileAlreadyExistsException ignored) {
+        } catch (FileAlreadyExistsException ignored) { //ignored
         } catch (IOException e) { LOGGER.error("failed to create \"bee_traits\" directory");}
 
         try { Files.createDirectory(rbAssetsPath);
-        } catch (FileAlreadyExistsException ignored) {
+        } catch (FileAlreadyExistsException ignored) { //ignored
         } catch (IOException e) { LOGGER.error("Failed to create \"assets\" directory");}
 
         try { Files.createDirectories(rbHoneyPath);
-        } catch (FileAlreadyExistsException ignored) {
+        } catch (FileAlreadyExistsException ignored) { //ignored
         } catch (IOException e) { LOGGER.error("failed to create \"honey\" directory");}
 
-        try {
-            FileWriter file = new FileWriter(Paths.get(rbAssetsPath.toAbsolutePath().toString(), "pack.mcmeta").toFile());
+        try (FileWriter file = new FileWriter(Paths.get(rbAssetsPath.toAbsolutePath().toString(), "pack.mcmeta").toFile())) {
             String mcMetaContent = "{\"pack\":{\"pack_format\":6,\"description\":\"Resourceful Bees resource pack used for lang purposes for the user to add lang for bee/items.\"}}";
             file.write(mcMetaContent);
-            file.close();
-        } catch (FileAlreadyExistsException ignored){
+        } catch (FileAlreadyExistsException ignored) { //ignored
         } catch (IOException e) { LOGGER.error("Failed to create pack.mcmeta file for resource loading");}
     }
 
@@ -88,11 +89,11 @@ public class ModSetup {
     }
 
     public static void loadResources() {
-        Minecraft.getInstance().getResourcePackList().addPackFinder((p_230230_1_, factory) -> {
+        Minecraft.getInstance().getResourcePackList().addPackFinder((consumer, factory) -> {
             final ResourcePackInfo packInfo = ResourcePackInfo.createResourcePack(
                     ResourcefulBees.MOD_ID,
                     true,
-                    () -> new FolderPack(RESOURCE_PATH.toFile()),
+                    () -> new FolderPack(BeeSetup.getResourcePath().toFile()),
                     factory,
                     ResourcePackInfo.Priority.TOP,
                     IPackNameDecorator.method_29485()
@@ -101,7 +102,7 @@ public class ModSetup {
                 LOGGER.error("Failed to load resource pack, some things may not work.");
                 return;
             }
-            p_230230_1_.accept(packInfo);
+            consumer.accept(packInfo);
         });
     }
 }
