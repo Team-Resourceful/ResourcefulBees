@@ -176,8 +176,10 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
         switch (reason) {
             case NATURAL:
             case CHUNK_GENERATION:
-            case BREEDING:
                 if (spawnData.canSpawnInWorld()) {
+                    if (pos.getY() < spawnData.getMinYLevel() || pos.getY() > spawnData.getMaxYLevel()) {
+                        return false;
+                    }
                     switch (spawnData.getLightLevel()) {
                         case DAY:
                             return worldIn.getLight(pos) >= 8;
