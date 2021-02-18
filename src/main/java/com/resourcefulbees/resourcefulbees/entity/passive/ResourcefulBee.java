@@ -164,7 +164,7 @@ public class ResourcefulBee extends CustomBeeEntity {
     public void applyPollinationEffect() {
         MutationData mutationData = getBeeData().getMutationData();
         if (mutationData.hasMutation()) {
-            if (mutateEntity()) return;
+            if (mutationData.hasEntityMutations() && mutateEntity()) return;
 
             for (int i = 1; i <= 2; ++i) {
                 BlockPos beePosDown = this.getBlockPos().down(i);
