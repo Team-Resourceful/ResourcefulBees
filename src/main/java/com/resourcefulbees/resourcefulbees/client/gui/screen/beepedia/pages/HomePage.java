@@ -23,7 +23,7 @@ public class HomePage extends BeepediaPage {
     }
 
     @Override
-    public String getTranslation() {
+    public String getSearch() {
         return new TranslationTextComponent("gui.resourcefulbees.beepedia.home_button").getString();
     }
 }

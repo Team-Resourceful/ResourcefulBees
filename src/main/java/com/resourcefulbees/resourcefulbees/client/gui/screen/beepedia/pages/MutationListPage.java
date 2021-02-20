@@ -32,7 +32,7 @@ public class MutationListPage extends BeepediaPage {
     }
 
     @Override
-    public String getTranslation() {
+    public String getSearch() {
         return beeData.getTranslation().getString();
     }
 }

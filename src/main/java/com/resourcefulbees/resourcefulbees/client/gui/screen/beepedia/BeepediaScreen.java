@@ -81,7 +81,11 @@ public class BeepediaScreen extends ContainerScreen<BeepediaContainer> {
         buttons.clear();
         int i = this.guiLeft;
         int j = this.guiTop;
-        addButton(new Button(i + (xSize / 2) - 20, j + ySize - 25, 40, 20, new TranslationTextComponent("gui.resourcefulbees.beepedia.home_button"), onPress -> activePage = home));
+        addButton(new Button(i + (xSize / 2) - 20, j + ySize - 25, 40, 20, new TranslationTextComponent("gui.resourcefulbees.beepedia.home_button"), onPress -> {
+            activePage.closePage();
+            activePage = home;
+            activePage.openPage();
+        }));
         bees.forEach((s, b) -> addButton(b.listButton));
         traits.forEach((s, b) -> addButton(b.listButton));
         honey.forEach((s, b) -> addButton(b.listButton));
@@ -106,9 +110,9 @@ public class BeepediaScreen extends ContainerScreen<BeepediaContainer> {
         addButton(beesButton);
         addButton(traitsButton);
         addButton(honeyButton);
-        beesList = new ButtonList(i + 8, j + 22, 130, 100, 20, 100, beesButton, bees);
-        traitsList = new ButtonList(i + 8, j + 22, 130, 100, 20, 100, traitsButton, traits);
-        honeyList = new ButtonList(i + 8, j + 22, 130, 100, 20, 100, honeyButton, honey);
+        beesList = new ButtonList(i + 8, j + 30, 124, 100, 21, beesButton, bees);
+        traitsList = new ButtonList(i + 8, j + 30, 124, 100, 21, traitsButton, traits);
+        honeyList = new ButtonList(i + 8, j + 30, 124, 100, 21, honeyButton, honey);
         setActiveList(beesList);
     }
 
@@ -200,30 +204,29 @@ public class BeepediaScreen extends ContainerScreen<BeepediaContainer> {
         public int height;
         public int width;
         public int itemHeight;
-        public int itemWidth;
         public int scrollPos = 0;
         public TabButton button;
         public boolean active = false;
         Map<String, ? extends BeepediaPage> list;
         Map<String, BeepediaPage> reducedList = new HashMap<>();
 
-        public ButtonList(int xPos, int yPos, int height, int width, int itemHeight, int itemWidth, TabButton button, Map<String, ? extends BeepediaPage> list) {
+        public ButtonList(int xPos, int yPos, int height, int width, int itemHeight, TabButton button, Map<String, ? extends BeepediaPage> list) {
             this.xPos = xPos;
             this.yPos = yPos;
             this.height = height;
             this.width = width;
             this.itemHeight = itemHeight;
-            this.itemWidth = itemWidth;
             this.list = list;
             this.button = button;
             updateReducedList(null);
+            list.forEach((s, b) -> b.listButton.setParent(this));
         }
 
         public void updateReducedList(String search) {
             reducedList.clear();
             if (search != null && !search.isEmpty() && !search.equals("")) {
                 list.forEach((s, b) -> {
-                    if (s.contains(search.toLowerCase()) || b.getTranslation().toLowerCase().contains(search.toLowerCase())) {
+                    if (s.contains(search.toLowerCase()) || b.getSearch().toLowerCase().contains(search.toLowerCase())) {
                         reducedList.put(s, b);
                     }
                 });
@@ -235,9 +238,10 @@ public class BeepediaScreen extends ContainerScreen<BeepediaContainer> {
         public void updatePos(int newPos) {
             // update position of list
             if (height > reducedList.size() * 20) return;
-            scrollPos -= newPos;
+            scrollPos += newPos;
             if (scrollPos > 0) scrollPos = 0;
-            else if (scrollPos < -(reducedList.size() * 20 - height)) scrollPos = -(reducedList.size() * 20 - height);
+            else if (scrollPos < -(reducedList.size() * itemHeight - height))
+                scrollPos = -(reducedList.size() * itemHeight - height);
         }
 
         public void updateList() {

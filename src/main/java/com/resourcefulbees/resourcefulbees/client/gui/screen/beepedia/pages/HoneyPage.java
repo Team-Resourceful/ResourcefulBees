@@ -5,13 +5,16 @@ import com.resourcefulbees.resourcefulbees.api.beedata.DefaultHoneyBottleData;
 import com.resourcefulbees.resourcefulbees.api.beedata.HoneyBottleData;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
+import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.Color;
 import net.minecraft.util.text.TranslationTextComponent;
 
 public class HoneyPage extends BeepediaPage {
 
     private HoneyBottleData bottleData;
-    String translation;
+    String honey;
+    TranslationTextComponent text;
 
     public HoneyPage(BeepediaScreen beepedia, HoneyBottleData bottleData) {
         super(beepedia, BeepediaScreen.Page.HONEY);
@@ -23,27 +26,27 @@ public class HoneyPage extends BeepediaPage {
         } else {
             stack = new ItemStack(bottleData.getHoneyBottleRegistryObject().get());
         }
-
-        listButton = new ListButton(0, 0, 100, 20, 0, 0, 20, listImage, stack, 2, 2, new TranslationTextComponent(stack.getItem().getTranslationKey()), 20, 4, onPress -> {
-            beepedia.setActive(this);
-        });
+        this.text = new TranslationTextComponent(stack.getItem().getTranslationKey());
+        newListButton(stack, text);
     }
 
     private void initTranslation() {
-        translation = "";
+        honey = "";
         if (bottleData.getHoneyBottleRegistryObject() != null)
-            translation += " " + new TranslationTextComponent(bottleData.getHoneyBottleRegistryObject().get().getTranslationKey()).getString();
+            honey += " " + new TranslationTextComponent(bottleData.getHoneyBottleRegistryObject().get().getTranslationKey()).getString();
         if (bottleData.getHoneyFluidBlockRegistryObject() != null)
-            translation += " " + new TranslationTextComponent(bottleData.getHoneyFluidBlockRegistryObject().get().getTranslationKey()).getString();
+            honey += " " + new TranslationTextComponent(bottleData.getHoneyFluidBlockRegistryObject().get().getTranslationKey()).getString();
         if (bottleData.getHoneyBlockItemRegistryObject() != null)
-            translation += " " + new TranslationTextComponent(bottleData.getHoneyBlockItemRegistryObject().get().getTranslationKey()).getString();
+            honey += " " + new TranslationTextComponent(bottleData.getHoneyBlockItemRegistryObject().get().getTranslationKey()).getString();
         if (bottleData.getHoneyBucketItemRegistryObject() != null)
-            translation += " " + new TranslationTextComponent(bottleData.getHoneyBucketItemRegistryObject().get().getTranslationKey()).getString();
+            honey += " " + new TranslationTextComponent(bottleData.getHoneyBucketItemRegistryObject().get().getTranslationKey()).getString();
     }
 
     @Override
     public void renderBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
-
+        int left = beepedia.getGuiLeft();
+        int top = beepedia.getGuiTop();
+        Minecraft.getInstance().fontRenderer.draw(matrix, text, left + 120, top + 20, Color.parse("white").getRgb());
     }
 
     @Override
@@ -52,7 +55,7 @@ public class HoneyPage extends BeepediaPage {
     }
 
     @Override
-    public String getTranslation() {
-        return translation;
+    public String getSearch() {
+        return honey;
     }
 }

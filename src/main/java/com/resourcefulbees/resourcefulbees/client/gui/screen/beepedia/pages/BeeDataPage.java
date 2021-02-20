@@ -20,7 +20,7 @@ public abstract class BeeDataPage extends BeepediaPage {
     }
 
     @Override
-    public String getTranslation() {
+    public String getSearch() {
         return beeData.getTranslation().getString();
     }
 }

@@ -5,7 +5,9 @@ import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.resourcefulbees.resourcefulbees.item.BeeJar;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
+import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.Color;
 
 import java.util.List;
 
@@ -25,18 +27,21 @@ public class BeePage extends BeeDataPage {
         spawningPage = new SpawningPage(beepedia, beeData);
         breedingPage = new BreedingPage(beepedia, beeData);
 
-        int top = beepedia.getGuiTop();
-        int left = beepedia.getGuiLeft();
         ItemStack beeJar = new ItemStack(ModItems.BEE_JAR.get());
         BeeJar.fillJar(beeJar, beeData);
-        listButton = new ListButton(left + 8, top, 100, 20, 0, 0, 20, listImage, beeJar, 2, 2, beeData.getTranslation(), 20, 10, onPress -> {
-            beepedia.setActive(this);
-        });
+        newListButton(beeJar, beeData.getTranslation());
     }
 
     @Override
     public void renderBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
+        int left = beepedia.getGuiLeft();
+        int top = beepedia.getGuiTop();
+        Minecraft.getInstance().fontRenderer.draw(matrix, beeData.getTranslation(), left + 120, top + 20, Color.parse("white").getRgb());
 
+        // Display bee
+        // Show flower
+        // Show desc
+        // list buttons for spawning, breeding, traits, centrifuge, mutations
     }
 
     @Override
