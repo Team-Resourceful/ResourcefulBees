@@ -2,11 +2,13 @@ package com.resourcefulbees.resourcefulbees.item;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.ICustomBee;
+import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import com.resourcefulbees.resourcefulbees.utils.color.Color;
 import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -25,6 +27,7 @@ import net.minecraft.util.text.*;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.text.WordUtils;
 
 import javax.annotation.Nonnull;
@@ -120,6 +123,17 @@ public class BeeJar extends Item {
         CompoundNBT displayNBT = new CompoundNBT();
         displayNBT.putString("Name", ITextComponent.Serializer.toJson(bottleName));
         nbt.put("display", displayNBT);
+    }
+
+    public static void fillJar(ItemStack stack, CustomBeeData beeData) {
+        EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(beeData.getEntityTypeRegistryID());
+        World world = Minecraft.getInstance().world;
+        if (world == null) return;
+        Entity entity = entityType.create(world);
+        if (entity instanceof BeeEntity) {
+            stack.setTag(createTag((BeeEntity) entity));
+            renameJar(stack, (BeeEntity) entity);
+        }
     }
 
     @Nonnull

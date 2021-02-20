@@ -7,14 +7,11 @@ import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.item.Food;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.RegistryObject;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HoneyBottleData {
@@ -105,6 +102,21 @@ public class HoneyBottleData {
      * If the ResourcefulBees mod should handle the registration
      */
     public transient boolean shouldResourcefulBeesDoForgeRegistration;
+
+    public HoneyBottleData() {
+    }
+
+    public HoneyBottleData(String name, int hunger, float saturation, String honeyColor, boolean isRainbow, boolean generateHoneyBlock, boolean generateHoneyFluid, boolean honeyBlockRecipe, List<HoneyEffect> effects) {
+        this.name = name;
+        this.hunger = hunger;
+        this.saturation = saturation;
+        this.honeyColor = honeyColor;
+        this.isRainbow = isRainbow;
+        this.generateHoneyBlock = generateHoneyBlock;
+        this.generateHoneyFluid = generateHoneyFluid;
+        this.honeyBlockRecipe = honeyBlockRecipe;
+        this.effects = effects;
+    }
 
     public int getHoneyColorInt() {
         return com.resourcefulbees.resourcefulbees.utils.color.Color.parseInt(honeyColor);
@@ -235,42 +247,51 @@ public class HoneyBottleData {
         this.effects = effects;
     }
 
+    public static class Builder {
+        private String name = null;
+        private int hunger = 1;
+        private float saturation = 1.0f;
+        private String honeyColor = "#FFFFFF";
+        private boolean isRainbow = false;
+        private boolean generateHoneyBlock = true;
+        private boolean honeyBlockRecipe = true;
+        private boolean generateHoneyFluid = true;
+        private List<HoneyEffect> effects = new ArrayList<>();
 
-    /**
-     * effect : generated from the effect id
-     * instance : generated from the effect, duration and strength
-     * effectID : used to define the effect used
-     * duration : duration in ticks of the effect
-     * strength : strength of the potion effect
-     * chance : chance for effect to proc on drinking honey
-     */
-    public class HoneyEffect {
-        public String effectID;
-        public int duration = 60;
-        public int strength = 0;
-        public float chance = 1;
-        public transient Effect effect = null;
-
-        public EffectInstance getInstance() {
-            return new EffectInstance(getEffect(), duration, strength);
+        public Builder(String name, int hunger, float saturation, String honeyColor) {
+            this.name = name;
+            this.hunger = hunger;
+            this.saturation = saturation;
+            this.honeyColor = honeyColor;
         }
 
-        public boolean isEffectIDValid() {
-            return effectID != null && effectID.matches("([(a-z)(0-9)_-]*|[(a-z)(0-9)_-]*:[(a-z)(0-9)_-]*)");
+        public Builder setRainbow(boolean rainbow) {
+            isRainbow = rainbow;
+            return this;
         }
 
-        public Effect getEffect() {
-            if (effect != null) return effect;
-            ResourceLocation location = ResourceLocation.tryCreate(effectID);
-            return effectID == null || location == null ? null : ForgeRegistries.POTIONS.getValue(location);
+        public Builder setGenerateHoneyBlock(boolean generateHoneyBlock) {
+            this.generateHoneyBlock = generateHoneyBlock;
+            return this;
         }
 
-        public void setEffect(Effect effect) {
-            this.effect = effect;
+        public Builder setHoneyBlockRecipe(boolean honeyBlockRecipe) {
+            this.honeyBlockRecipe = honeyBlockRecipe;
+            return this;
         }
 
-        public String getEffectID() {
-            return effectID;
+        public Builder setGenerateHoneyFluid(boolean generateHoneyFluid) {
+            this.generateHoneyFluid = generateHoneyFluid;
+            return this;
+        }
+
+        public Builder addEffect(HoneyEffect effect) {
+            effects.add(effect);
+            return this;
+        }
+
+        public HoneyBottleData build() {
+            return new HoneyBottleData(name, hunger, saturation, honeyColor, isRainbow, generateHoneyBlock, generateHoneyFluid, honeyBlockRecipe, effects);
         }
     }
 }

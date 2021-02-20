@@ -2,7 +2,7 @@ package com.resourcefulbees.resourcefulbees.utils.validation;
 
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.api.beedata.HoneyBottleData;
-import com.resourcefulbees.resourcefulbees.effects.ModEffects;
+import com.resourcefulbees.resourcefulbees.api.beedata.HoneyEffect;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.potion.Effect;
@@ -19,11 +19,11 @@ public class SecondPhaseValidator {
     public static final Logger LOGGER = LogManager.getLogger();
 
     public static void validateHoneyEffects(HoneyBottleData honeyData) {
-        List<HoneyBottleData.HoneyEffect> honeyEffects = honeyData.getEffects();
+        List<HoneyEffect> honeyEffects = honeyData.getEffects();
         if (honeyEffects == null || honeyEffects.isEmpty()) return;
-        Iterator<HoneyBottleData.HoneyEffect> effectIterator = honeyEffects.iterator();
+        Iterator<HoneyEffect> effectIterator = honeyEffects.iterator();
         while (effectIterator.hasNext()) {
-            HoneyBottleData.HoneyEffect honeyEffect = effectIterator.next();
+            HoneyEffect honeyEffect = effectIterator.next();
             Effect effect = honeyEffect.getEffect();
             if (effect == null) {
                 LOGGER.warn(String.format("An effect for: $s could not be properly validated and was removed.", honeyData.getHoneyBottleRegistryObject().getId().toString()));

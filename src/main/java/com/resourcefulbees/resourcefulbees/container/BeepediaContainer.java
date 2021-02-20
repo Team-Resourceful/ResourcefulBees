@@ -1,14 +1,18 @@
 package com.resourcefulbees.resourcefulbees.container;
 
+import com.resourcefulbees.resourcefulbees.registry.ModContainers;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.item.ItemStack;
 
-public class BeepediaContainer extends Container {
+public class BeepediaContainer extends Container{
 
-    protected BeepediaContainer(@Nullable ContainerType<?> type, int id) {
-        super(type, id);
+    private ItemStack itemStack;
+
+    public BeepediaContainer(int id, PlayerInventory inventory) {
+        super(ModContainers.BEEPEDIA_CONTAINER.get(), id);
+        itemStack = inventory.getCurrentItem();
     }
 
     @Override

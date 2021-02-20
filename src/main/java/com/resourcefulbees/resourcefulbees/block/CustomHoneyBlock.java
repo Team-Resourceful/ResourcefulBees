@@ -57,6 +57,7 @@ public class CustomHoneyBlock extends BreakableBlock {
 
     public static int getItemColor(ItemStack stack, int tintIndex) {
         BlockItem blockItem = (BlockItem) stack.getItem();
+        if (!(blockItem.getBlock() instanceof CustomHoneyBlock)) return -1;
         CustomHoneyBlock honeycombBlock = (CustomHoneyBlock) blockItem.getBlock();
         return honeycombBlock.honeyData.isRainbow() ? RainbowColor.getRGB() : honeycombBlock.getHoneyColor();
     }

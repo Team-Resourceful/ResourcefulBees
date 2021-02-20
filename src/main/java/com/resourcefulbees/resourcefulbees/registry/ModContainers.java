@@ -33,4 +33,6 @@ public class ModContainers {
             .create((id, inv, c) -> new ApiaryBreederContainer(id, inv.player.world, c.readBlockPos(), inv)));
     public static final RegistryObject<ContainerType<EnderBeeconContainer>> ENDER_BEECON_CONTAINER = CONTAINER_TYPES.register("ender_beecon", () -> IForgeContainerType
             .create((id, inv, c) -> new EnderBeeconContainer(id, inv.player.world, c.readBlockPos(), inv)));
+    public static final RegistryObject<ContainerType<BeepediaContainer>> BEEPEDIA_CONTAINER = CONTAINER_TYPES.register("beepedia", () -> IForgeContainerType
+            .create((id, inv, c) -> new BeepediaContainer(id, inv)));
 }

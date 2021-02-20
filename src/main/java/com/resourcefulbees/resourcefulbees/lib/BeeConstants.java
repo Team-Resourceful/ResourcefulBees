@@ -1,8 +1,16 @@
 package com.resourcefulbees.resourcefulbees.lib;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
-import com.resourcefulbees.resourcefulbees.entity.passive.ResourcefulBee;
+import com.resourcefulbees.resourcefulbees.api.beedata.DefaultHoneyBottleData;
+import com.resourcefulbees.resourcefulbees.api.beedata.HoneyBottleData;
+import com.resourcefulbees.resourcefulbees.registry.ModFluids;
+import com.resourcefulbees.resourcefulbees.registry.ModItems;
+import net.minecraft.block.Blocks;
+import net.minecraft.item.Foods;
+import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class BeeConstants {
     public static final String FLOWER_TAG_ALL = "all";
@@ -35,4 +43,6 @@ public class BeeConstants {
     public static final int DEFAULT_ITEM_COLOR = -1;
     public static final ResourceLocation MISSING_TEXTURE = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/entity/missing_texture.png");
     public static final int MAX_BEES_BEE_BOX = 10;
+
+    public static final HoneyBottleData defaultHoney = new DefaultHoneyBottleData();;
 }

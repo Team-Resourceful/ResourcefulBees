@@ -71,6 +71,10 @@
 	"gui.resourcefulbees.ender_beecon": "Ender Beecon",
 	"gui.resourcefulbees.jei.category.bee_pollination_entity_flowers": "Bee Entity Flowers",
 
+    "item.resourcefulbees.bepedia": "Beepedia",
+	"gui.resourcefulbees.beepedia" : "Beepedia v1.0",
+	"gui.resourcefulbees.beepedia.home_button" : "HOME",
+
 	"block.resourcefulbees.t1_beehive": "Tier 1 Beehive",
 	"block.resourcefulbees.t2_beehive": "Tier 2 Beehive",
 	"block.resourcefulbees.t3_beehive": "Tier 3 Beehive",

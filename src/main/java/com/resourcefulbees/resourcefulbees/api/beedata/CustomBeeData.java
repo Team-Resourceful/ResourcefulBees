@@ -7,6 +7,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.RegistryObject;
 
 import java.util.HashMap;
@@ -327,6 +328,10 @@ public class CustomBeeData extends AbstractBeeData {
 
     public BaseModelTypes getBaseModelType() {
         return baseModelType == null ? BaseModelTypes.DEFAULT : baseModelType;
+    }
+
+    public TranslationTextComponent getTranslation() {
+        return new TranslationTextComponent("entity.resourcefulbees." + name + "_bee");
     }
 
     public static class Builder {

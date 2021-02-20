@@ -74,12 +74,16 @@ public class BeeSetup {
     }
 
     private static void parseBee(Reader reader, String name) {
-        name = name.toLowerCase().replace(" ", "_");
-        Gson gson = new Gson();
-        CustomBeeData bee = gson.fromJson(reader, CustomBeeData.class);
-        bee.setName(name);
-        bee.shouldResourcefulBeesDoForgeRegistration = true;
-        BeeRegistry.getRegistry().registerBee(name.toLowerCase(Locale.ENGLISH), bee);
+        try {
+            name = name.toLowerCase().replace(" ", "_");
+            Gson gson = new Gson();
+            CustomBeeData bee = gson.fromJson(reader, CustomBeeData.class);
+            bee.setName(name);
+            bee.shouldResourcefulBeesDoForgeRegistration = true;
+            BeeRegistry.getRegistry().registerBee(name.toLowerCase(Locale.ENGLISH), bee);
+        } catch (Exception e) {
+            LOGGER.error(String.format("\n---------[Registration Error]---------\nCould not validate %s bee's json file, Skipping.", name));
+        }
     }
 
     private static void parseHoney(File file) throws IOException {
@@ -102,12 +106,16 @@ public class BeeSetup {
     }
 
     private static void parseHoney(Reader reader, String name) {
-        name = name.toLowerCase().replace(" ", "_");
-        Gson gson = new Gson();
-        HoneyBottleData honey = gson.fromJson(reader, HoneyBottleData.class);
-        if (honey.getName() == null) honey.setName(name);
-        honey.shouldResourcefulBeesDoForgeRegistration = true;
-        BeeRegistry.getRegistry().registerHoney(honey.getName().toLowerCase(), honey);
+        try {
+            name = name.toLowerCase().replace(" ", "_");
+            Gson gson = new Gson();
+            HoneyBottleData honey = gson.fromJson(reader, HoneyBottleData.class);
+            if (honey.getName() == null) honey.setName(name);
+            honey.shouldResourcefulBeesDoForgeRegistration = true;
+            BeeRegistry.getRegistry().registerHoney(honey.getName().toLowerCase(), honey);
+        } catch (Exception e) {
+            LOGGER.error(String.format("\n---------[Registration Error]---------\nCould not validate %s honey's json file, Skipping.", name));
+        }
     }
 
     private static void addBees() {

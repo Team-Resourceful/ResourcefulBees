@@ -1,8 +1,8 @@
 package com.resourcefulbees.resourcefulbees.init;
 
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
-import com.resourcefulbees.resourcefulbees.block.EnderBeecon;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.*;
+import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.resourcefulbees.resourcefulbees.client.models.ModelHandler;
 import com.resourcefulbees.resourcefulbees.client.render.entity.CustomBeeRenderer;
 import com.resourcefulbees.resourcefulbees.client.render.fluid.FluidRender;
@@ -53,6 +53,7 @@ public class ClientEventHandlers {
         ScreenManager.registerFactory(ModContainers.APIARY_BREEDER_CONTAINER.get(), ApiaryBreederScreen::new);
         ScreenManager.registerFactory(ModContainers.HONEY_GENERATOR_CONTAINER.get(), HoneyGeneratorScreen::new);
         ScreenManager.registerFactory(ModContainers.ENDER_BEECON_CONTAINER.get(), EnderBeeconScreen::new);
+        ScreenManager.registerFactory(ModContainers.BEEPEDIA_CONTAINER.get(), BeepediaScreen::new);
         RenderTypeLookup.setRenderLayer(ModBlocks.GOLD_FLOWER.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(ModBlocks.PREVIEW_BLOCK.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(ModBlocks.ERRORED_PREVIEW_BLOCK.get(), RenderType.getCutout());

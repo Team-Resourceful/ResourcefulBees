@@ -2,6 +2,7 @@ package com.resourcefulbees.resourcefulbees.registry;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.config.Config;
+import com.resourcefulbees.resourcefulbees.entity.passive.KittenBee;
 import com.resourcefulbees.resourcefulbees.item.*;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.utils.TooltipBuilder;
@@ -43,24 +44,13 @@ public class ModItems {
             .rarity(Rarity.EPIC)));
 
     public static final RegistryObject<Item> CATNIP_HONEYCOMB = ITEMS.register("catnip_honeycomb", () -> new Item(new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES).rarity(Rarity.EPIC)));
-    public static final RegistryObject<Item> CATNIP_HONEY_BOTTLE = ITEMS.register("catnip_honey_bottle", () -> new HoneyBottleItem(new Item.Properties()
-            .group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)
-            .containerItem(Items.GLASS_BOTTLE)
-            .food(new Food.Builder()
-                    .hunger(8)
-                    .saturation(1.6f)
-                    .setAlwaysEdible()
-                    .effect(() -> new EffectInstance(Effects.SPEED, 2400, 2), 1)
-                    .effect(() -> new EffectInstance(Effects.NIGHT_VISION, 2400, 0), 1)
-                    .effect(() -> new EffectInstance(Effects.JUMP_BOOST, 2400, 1), 1)
-                    .build())
-            .maxStackSize(16)
-            .rarity(Rarity.EPIC)));
+    public static final RegistryObject<Item> CATNIP_HONEY_BOTTLE = ITEMS.register("catnip_honey_bottle", () -> new CustomHoneyBottleItem(KittenBee.getHoneyBottleData().getProperties().rarity(Rarity.EPIC), KittenBee.getHoneyBottleData()));
     public static final RegistryObject<Item> CATNIP_HONEYCOMB_BLOCK_ITEM = ITEMS.register("catnip_honeycomb_block", () -> new BlockItem(ModBlocks.CATNIP_HONEYCOMB_BLOCK.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES).rarity(Rarity.RARE)));
     public static final RegistryObject<Item> CATNIP_HONEY_BLOCK_ITEM = ITEMS.register("catnip_honey_block", () -> new BlockItem(ModBlocks.CATNIP_HONEY_BLOCK.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES).rarity(Rarity.RARE)));
-    public static final RegistryObject<Item> CATNIP_HONEY_FLUID_BUCKET = ITEMS.register("catnip_honey_fluid_bucket", () -> new BucketItem(ModFluids.CATNIP_HONEY_STILL, new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES).containerItem(net.minecraft.item.Items.BUCKET).maxStackSize(1).rarity(Rarity.RARE)));
+    public static final RegistryObject<Item> CATNIP_HONEY_FLUID_BUCKET = ITEMS.register("catnip_honey_fluid_bucket", () -> new CustomHoneyBucketItem(ModFluids.CATNIP_HONEY_STILL, new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES).containerItem(net.minecraft.item.Items.BUCKET).maxStackSize(1).rarity(Rarity.RARE), KittenBee.getHoneyBottleData()));
     public static final RegistryObject<Item> CRAFTING_BEE_BOX = ITEMS.register("crafting_bee_box", () -> new BeeBox(new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES).maxStackSize(1), true));
     public static final RegistryObject<Item> BEE_BOX = ITEMS.register("bee_box", () -> new BeeBox(new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES).maxStackSize(1), false));
+    public static final RegistryObject<Item> BEEPEDIA = ITEMS.register("beepedia", () -> new Beepedia(new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES).maxStackSize(1)));
 
 
     public static final RegistryObject<Item> T1_BEEHIVE_ITEM = ITEMS.register("t1_beehive", () -> new BlockItem(ModBlocks.T1_BEEHIVE.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
@@ -167,7 +157,6 @@ public class ModItems {
         }
     });
     public static final RegistryObject<Item> HONEY_FLUID_BUCKET = ITEMS.register("honey_fluid_bucket", () -> new BucketItem(ModFluids.HONEY_STILL, new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES).containerItem(net.minecraft.item.Items.BUCKET).maxStackSize(1)));
-
 
 
 }
