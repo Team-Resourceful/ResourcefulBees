@@ -296,7 +296,7 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
             if (!this.beamSegments.isEmpty() && !fluidTank.isEmpty()) {
                 AxisAlignedBB box = getEffectBox();
                 List<BeeEntity> bees = world.getEntitiesWithinAABB(BeeEntity.class, box);
-                bees.stream().filter(b -> b instanceof CustomBeeEntity).map(b -> (CustomBeeEntity) b).forEach(CustomBeeEntity::setHasDistrupterInRange);
+                bees.stream().filter(b -> b instanceof CustomBeeEntity).map(b -> (CustomBeeEntity) b).forEach(CustomBeeEntity::setHasDisruptorInRange);
                 this.addEffectsToBees(bees);
                 if (playSound) this.playSound(SoundEvents.BLOCK_BEACON_AMBIENT);
             }

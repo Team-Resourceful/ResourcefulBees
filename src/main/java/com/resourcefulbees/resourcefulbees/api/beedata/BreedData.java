@@ -4,7 +4,7 @@ import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 
 public class BreedData extends AbstractBeeData {
     /**
-     * If bee can be breeded from 2 parents.
+     * If bee can be bred from 2 parents.
      */
     private boolean isBreedable;
 
@@ -21,7 +21,8 @@ public class BreedData extends AbstractBeeData {
     /**
      * Strings of the parent bees needed to be breed.
      */
-    private final String parent1, parent2;
+    private final String parent1;
+    private final String parent2;
 
     /**
      * The item the parents need to be fed with for breeding.

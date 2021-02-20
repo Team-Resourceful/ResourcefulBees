@@ -1,7 +1,7 @@
 package com.resourcefulbees.resourcefulbees.item;
 
 import com.resourcefulbees.resourcefulbees.config.Config;
-import com.resourcefulbees.resourcefulbees.registry.ItemGroupResourcefulBees;
+import com.resourcefulbees.resourcefulbees.tileentity.TieredBeehiveTileEntity;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -10,10 +10,14 @@ import net.minecraft.entity.passive.BeeEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUseContext;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -22,9 +26,9 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.List;
 
 public class Smoker extends Item {
@@ -35,9 +39,27 @@ public class Smoker extends Item {
         super(properties);
     }
 
-    @Nonnull
-	public ActionResult<ItemStack> onItemRightClick(World world, @Nonnull PlayerEntity player, @Nonnull Hand hand) {
-	    if (!world.isRemote && !player.isSneaking()) {
+    @Override
+    public @NotNull ActionResultType onItemUse(ItemUseContext context) {
+        if (!context.getWorld().isRemote) {
+            if (context.getItem().getDamage() < context.getItem().getMaxDamage()) {
+                smokeHive(context.getPos(), context.getWorld());
+                return ActionResultType.PASS;
+            }
+        }
+        return super.onItemUse(context);
+    }
+
+    protected void smokeHive(BlockPos pos, World world) {
+        TileEntity blockEntity = world.getTileEntity(pos);
+        if (blockEntity instanceof TieredBeehiveTileEntity) {
+            ((TieredBeehiveTileEntity) blockEntity).smokeHive();
+        }
+    }
+
+    @Override
+	public @NotNull ActionResult<ItemStack> onItemRightClick(World world, @NotNull PlayerEntity player, @NotNull Hand hand) {
+	    if (!world.isRemote) {
 	        int damage = player.getHeldItem(hand).getDamage();
 	        int maxDamage = player.getHeldItem(hand).getMaxDamage();
 
@@ -75,7 +97,7 @@ public class Smoker extends Item {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void addInformation(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
+    public void addInformation(@NotNull ItemStack stack, @Nullable World worldIn, @NotNull List<ITextComponent> tooltip, @NotNull ITooltipFlag flagIn) {
         if(Screen.hasShiftDown()) {
             tooltip.add(new StringTextComponent(TextFormatting.GOLD + I18n.format("item.resourcefulbees.smoker.tooltip")));
             tooltip.add(new StringTextComponent(TextFormatting.GOLD + I18n.format("item.resourcefulbees.smoker.tooltip.1")));

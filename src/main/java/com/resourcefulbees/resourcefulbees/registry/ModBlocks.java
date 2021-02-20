@@ -74,6 +74,6 @@ public class ModBlocks {
     public static final RegistryObject<Block> NETHER_HONEY_TANK = BLOCKS.register("nether_honey_tank", () -> new HoneyTank(HoneyTank.PROPERTIES, HoneyTankTileEntity.TankTier.NETHER));
     public static final RegistryObject<Block> WOODEN_HONEY_TANK = BLOCKS.register("wooden_honey_tank", () -> new HoneyTank(HoneyTank.PROPERTIES, HoneyTankTileEntity.TankTier.WOODEN));
     public static final RegistryObject<Block> CATNIP_HONEYCOMB_BLOCK = BLOCKS.register("catnip_honeycomb_block", () -> new Block(Block.Properties.create(Material.CLAY).sound(SoundType.SNOW).hardnessAndResistance(0.3F)));
-    public static final RegistryObject<Block> CATNIP_HONEY_BLOCK = BLOCKS.register("catnip_honey_block", () -> new CatnipHoneyBlock());
+    public static final RegistryObject<Block> CATNIP_HONEY_BLOCK = BLOCKS.register("catnip_honey_block", CatnipHoneyBlock::new);
 
 }

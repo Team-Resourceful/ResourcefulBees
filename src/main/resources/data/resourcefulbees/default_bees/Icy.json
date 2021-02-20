@@ -12,10 +12,17 @@
   },
   "MutationData": {
     "hasMutation": true,
-    "mutationInput": "minecraft:water",
-    "mutationOutput": "minecraft:ice",
-    "mutationType": "FLUID_TO_BLOCK",
-    "mutationCount": 20
+    "mutations" : [
+      {
+        "type": "BLOCK",
+        "inputID": "minecraft:water",
+        "chance": 0.65,
+        "outputs": [
+          {"outputID": "minecraft:ice", "weight": 7},
+          {"outputID": "minecraft:packed_ice", "weight": 3}
+        ]
+      }
+    ]
   },
   "CentrifugeData": {
     "hasCentrifugeOutput": false

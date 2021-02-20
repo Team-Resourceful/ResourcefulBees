@@ -4,7 +4,11 @@ import com.resourcefulbees.resourcefulbees.lib.ModelTypes;
 
 import java.awt.*;
 
+@SuppressWarnings("unused")
 public class ColorData extends AbstractBeeData {
+
+    private static final String WHITE = "#ffffff";
+
     /**
      * The color the bee is primary tinted in.
      */
@@ -87,13 +91,13 @@ public class ColorData extends AbstractBeeData {
         this.modelType = modelType;
     }
 
-    public String getPrimaryColor() { return primaryColor == null ? "#ffffff" :  primaryColor; }
+    public String getPrimaryColor() { return primaryColor == null ? WHITE :  primaryColor; }
 
     public String getSecondaryColor() { return secondaryColor == null ? "#303030" : secondaryColor; }
 
-    public String getHoneycombColor() { return honeycombColor == null ? "#ffffff" : honeycombColor; }
+    public String getHoneycombColor() { return honeycombColor == null ? WHITE : honeycombColor; }
 
-    public String getGlowColor() { return glowColor == null ? "#ffffff" : glowColor; }
+    public String getGlowColor() { return glowColor == null ? WHITE : glowColor; }
 
     public String getPrimaryLayerTexture() { return primaryLayerTexture == null ? "custom/primary_layer" : primaryLayerTexture; }
 

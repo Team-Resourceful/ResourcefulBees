@@ -11,9 +11,16 @@
   },
   "MutationData": {
     "hasMutation": true,
-    "mutationInput": "minecraft:obsidian",
-    "mutationOutput": "minecraft:end_stone",
-    "mutationType": "BLOCK_TO_BLOCK"
+    "mutations" : [
+      {
+        "type": "BLOCK",
+        "inputID": "minecraft:obsidian",
+        "chance": 0.5,
+        "outputs": [
+          {"outputID": "minecraft:end_stone", "weight": 10}
+        ]
+      }
+    ]
   },
   "CentrifugeData": {
     "hasCentrifugeOutput": true,

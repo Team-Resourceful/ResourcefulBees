@@ -10,10 +10,8 @@ import com.resourcefulbees.resourcefulbees.client.render.items.ItemModelProperti
 import com.resourcefulbees.resourcefulbees.client.render.tileentity.RenderEnderBeecon;
 import com.resourcefulbees.resourcefulbees.client.render.tileentity.RenderHoneyGenerator;
 import com.resourcefulbees.resourcefulbees.client.render.tileentity.RenderHoneyTank;
-import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
-import com.resourcefulbees.resourcefulbees.registry.ModBlocks;
-import com.resourcefulbees.resourcefulbees.registry.ModContainers;
-import com.resourcefulbees.resourcefulbees.registry.ModTileEntityTypes;
+import com.resourcefulbees.resourcefulbees.lib.ModConstants;
+import com.resourcefulbees.resourcefulbees.registry.*;
 import com.resourcefulbees.resourcefulbees.utils.PreviewHandler;
 import com.resourcefulbees.resourcefulbees.utils.color.ColorHandler;
 import net.minecraft.client.gui.ScreenManager;
@@ -27,6 +25,10 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 public class ClientEventHandlers {
 
+    private ClientEventHandlers() {
+        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+    }
+
     public static void clientStuff() {
         MinecraftForge.EVENT_BUS.addListener(PreviewHandler::onWorldRenderLast);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ModelHandler::registerModels);
@@ -38,7 +40,7 @@ public class ClientEventHandlers {
     }
 
     private static void doClientStuff(final FMLClientSetupEvent event) {
-        BeeRegistry.MOD_BEES.forEach((s, customBee) -> RenderingRegistry.registerEntityRenderingHandler(customBee.get(), manager -> {
+        ModEntities.MOD_BEES.forEach((s, customBee) -> RenderingRegistry.registerEntityRenderingHandler(customBee.get(), manager -> {
             CustomBeeData data = BeeRegistry.getRegistry().getBeeData(s);
             CustomBeeRenderer renderer = new CustomBeeRenderer(data.getBaseModelType(), manager, data);
             return renderer;

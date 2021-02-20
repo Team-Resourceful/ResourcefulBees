@@ -10,9 +10,16 @@
   },
   "MutationData": {
     "hasMutation": true,
-    "mutationInput": "minecraft:lava",
-    "mutationOutput": "minecraft:water",
-    "mutationType": "FLUID_TO_FLUID"
+    "mutations" : [
+      {
+        "type": "BLOCK",
+        "inputID": "minecraft:lava",
+        "chance": 0.75,
+        "outputs": [
+          {"outputID": "minecraft:water", "weight": 10}
+        ]
+      }
+    ]
   },
   "CentrifugeData": {
     "hasCentrifugeOutput": true,

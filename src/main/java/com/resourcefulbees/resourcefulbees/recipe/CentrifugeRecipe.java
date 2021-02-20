@@ -25,6 +25,7 @@ import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -82,9 +83,7 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
     }
 
     @Override
-    @Nonnull
-    @Deprecated
-    public ItemStack getCraftingResult(@Nonnull IInventory inventory) {
+    public @NotNull ItemStack getCraftingResult(@NotNull IInventory inventory) {
         return ItemStack.EMPTY;
     }
 
@@ -100,26 +99,24 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
      * Get the result of this recipe, usually for display purposes (e.g. recipe book). If your recipe has more than one
      * possible result (e.g. it's dynamic and depends on its inputs), then return an empty stack.
      */
-    @Deprecated
     @Override
-    @Nonnull
-    public ItemStack getRecipeOutput() {
+    public @NotNull ItemStack getRecipeOutput() {
         return ItemStack.EMPTY;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public ResourceLocation getId() {
         return id;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public IRecipeSerializer<?> getSerializer() {
         return ModRecipeSerializers.CENTRIFUGE_RECIPE.get();
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public IRecipeType<?> getType() {
         return CENTRIFUGE_RECIPE_TYPE;
@@ -132,9 +129,8 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
             this.factory = factory;
         }
 
-        @Nonnull
         @Override
-        public T read(@Nonnull ResourceLocation id, @Nonnull JsonObject json) {
+        public @NotNull T read(@Nonnull ResourceLocation id, @NotNull JsonObject json) {
             Ingredient ingredient;
             if (JSONUtils.isJsonArray(json, "ingredient")) {
                 ingredient = Ingredient.deserialize(JSONUtils.getJsonArray(json, "ingredient"));
@@ -165,7 +161,7 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
                     ItemStack stack = new ItemStack(BeeInfoUtils.getItem(registryName), count);
 
                     // apply nbt
-                    if (nbt != null && !nbt.isEmpty()) stack.setTag(nbt);
+                    if (!nbt.isEmpty()) stack.setTag(nbt);
 
                     // collect and set potion
                     if (registryName.equals("minecraft:potion") && jsonObject.has("potion")) {
@@ -193,7 +189,7 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
             return this.factory.create(id, ingredient, outputs, fluidOutput, time, multiblockTime, multiblock, hasFluidOutput);
         }
 
-        public T read(@Nonnull ResourceLocation id, @Nonnull PacketBuffer buffer) {
+        public T read(@Nonnull ResourceLocation id, @NotNull PacketBuffer buffer) {
             Ingredient ingredient = Ingredient.read(buffer);
             List<Pair<ItemStack, Float>> itemOutputs = new ArrayList<>();
             List<Pair<FluidStack, Float>> fluidOutput = new ArrayList<>();
@@ -206,7 +202,7 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
             return this.factory.create(id, ingredient, itemOutputs, fluidOutput, time, multiblockTime, multiblock, hasFluidOutput);
         }
 
-        public void write(@Nonnull PacketBuffer buffer, T recipe) {
+        public void write(@NotNull PacketBuffer buffer, T recipe) {
             recipe.ingredient.write(buffer);
             buffer.writeInt(recipe.itemOutputs.size());
             recipe.itemOutputs.forEach(itemStackFloatPair -> {

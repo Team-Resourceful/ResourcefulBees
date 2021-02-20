@@ -10,10 +10,16 @@
   },
   "MutationData": {
     "hasMutation": true,
-    "mutationInput": "minecraft:honey_block",
-    "mutationOutput": "minecraft:slime_block",
-    "mutationType": "BLOCK_TO_BLOCK",
-    "mutationCount": 15
+    "mutations" : [
+      {
+        "type": "BLOCK",
+        "inputID": "minecraft:honey_block",
+        "chance": 0.8,
+        "outputs": [
+          {"outputID": "minecraft:slime_block", "weight": 10}
+        ]
+      }
+    ]
   },
   "BreedData": {
     "isBreedable": true,

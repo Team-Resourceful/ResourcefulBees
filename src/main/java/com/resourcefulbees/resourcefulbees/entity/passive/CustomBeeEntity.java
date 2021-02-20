@@ -30,7 +30,6 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -46,7 +45,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
     protected int flowerID;
     public BlockPos lastFlower;
     private boolean hasHiveInRange;
-    private int disrupterInRange;
+    private int disruptorInRange;
 
     public CustomBeeEntity(EntityType<? extends BeeEntity> type, World world, CustomBeeData beeData) {
         super(type, world);
@@ -143,7 +142,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
             }
             if (!hasCustomName()) {
                 if (this.ticksExisted % 100 == 0) {
-                    if (hasHiveInRange() || hasFlower() || isPassenger() || getLeashed() || hasNectar() || disrupterInRange > 0) {
+                    if (hasHiveInRange() || hasFlower() || isPassenger() || getLeashed() || hasNectar() || disruptorInRange > 0) {
                         timeWithoutHive = 0;
                     } else {
                         timeWithoutHive += 100;
@@ -153,8 +152,8 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
                 }
             }
             if (this.ticksExisted % 100 == 0) {
-                disrupterInRange--;
-                if (disrupterInRange < 0) disrupterInRange = 0;
+                disruptorInRange--;
+                if (disruptorInRange < 0) disruptorInRange = 0;
             }
         }
         super.livingTick();
@@ -272,7 +271,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
 
             if (this.isChild()) {
                 this.consumeItemFromStack(player, itemstack);
-                this.ageUp((int) ((-this.getGrowingAge() / 20) * 0.1F), true);
+                this.ageUp((int) ((-this.getGrowingAge() / 20D) * 0.1F), true);
                 return ActionResultType.PASS;
             }
         }
@@ -289,16 +288,6 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
     }
 
     @Override
-    public float getEyeHeight(@NotNull Pose p_213307_1_) {
-        return super.getEyeHeight(p_213307_1_);
-    }
-
-    @Override
-    public void notifyDataManagerChange(@Nonnull DataParameter<?> parameter) {
-        super.notifyDataManagerChange(parameter);
-    }
-
-    @Override
     protected void onGrowingAdult() {
         super.onGrowingAdult();
         if (!this.isChild()) {
@@ -307,13 +296,13 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
         }
     }
 
-    public void setHasDistrupterInRange() {
-        disrupterInRange += 2;
-        if (disrupterInRange > 10) disrupterInRange = 10;
+    public void setHasDisruptorInRange() {
+        disruptorInRange += 2;
+        if (disruptorInRange > 10) disruptorInRange = 10;
     }
 
-    public boolean isDisrupterInRange() {
-        return disrupterInRange > 0;
+    public boolean getDisruptorInRange() {
+        return disruptorInRange > 0;
     }
     //endregion
 }

@@ -26,8 +26,8 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -51,33 +51,28 @@ public class CentrifugeRecipeCategory implements IRecipeCategory<CentrifugeRecip
         this.multiblock = guiHelper.createDrawable(new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/icons.png"), 25, 0, 16, 16);
     }
 
-    @Nonnull
     @Override
-    public ResourceLocation getUid() {
+    public @NotNull ResourceLocation getUid() {
         return ID;
     }
 
-    @Nonnull
     @Override
-    public Class<? extends CentrifugeRecipe> getRecipeClass() {
+    public @NotNull Class<? extends CentrifugeRecipe> getRecipeClass() {
         return CentrifugeRecipe.class;
     }
 
-    @Nonnull
     @Override
-    public String getTitle() {
+    public @NotNull String getTitle() {
         return localizedName;
     }
 
-    @Nonnull
     @Override
-    public IDrawable getBackground() {
+    public @NotNull IDrawable getBackground() {
         return background;
     }
 
-    @Nonnull
     @Override
-    public IDrawable getIcon() {
+    public @NotNull IDrawable getIcon() {
         return icon;
     }
 
@@ -95,7 +90,6 @@ public class CentrifugeRecipeCategory implements IRecipeCategory<CentrifugeRecip
             List<FluidStack> fluids = new ArrayList<>();
             fluids.add(fluidOutput.get(0).getLeft().copy());
             iIngredients.setOutputs(VanillaTypes.FLUID, fluids);
-            System.out.println("test");
         } else {
             stacks.add(outputs.get(0).getLeft().copy());
             stacks.add(outputs.get(1).getLeft().copy());
@@ -105,7 +99,7 @@ public class CentrifugeRecipeCategory implements IRecipeCategory<CentrifugeRecip
     }
 
     @Override
-    public void setRecipe(IRecipeLayout iRecipeLayout, @Nonnull CentrifugeRecipe centrifugeRecipe, @Nonnull IIngredients iIngredients) {
+    public void setRecipe(IRecipeLayout iRecipeLayout, CentrifugeRecipe centrifugeRecipe, IIngredients iIngredients) {
         IGuiItemStackGroup guiItemStacks = iRecipeLayout.getItemStacks();
         IGuiFluidStackGroup guiFluidStacks = iRecipeLayout.getFluidStacks();
 
@@ -136,7 +130,7 @@ public class CentrifugeRecipeCategory implements IRecipeCategory<CentrifugeRecip
     }
 
     @Override
-    public void draw(CentrifugeRecipe recipe, @Nonnull MatrixStack matrix, double mouseX, double mouseY) {
+    public void draw(CentrifugeRecipe recipe, @NotNull MatrixStack matrix, double mouseX, double mouseY) {
         this.arrow.draw(matrix, 31, 14);
 
         final float beeOutput = recipe.itemOutputs.get(0).getRight();
@@ -161,9 +155,8 @@ public class CentrifugeRecipeCategory implements IRecipeCategory<CentrifugeRecip
 
     }
 
-    @Nonnull
     @Override
-    public List<ITextComponent> getTooltipStrings(@Nonnull CentrifugeRecipe recipe, double mouseX, double mouseY) {
+    public @NotNull List<ITextComponent> getTooltipStrings(@NotNull CentrifugeRecipe recipe, double mouseX, double mouseY) {
         if (mouseX >= 10 && mouseX <= 26 && mouseY >= 45 && mouseY <= 61) {
             return Collections.singletonList(new StringTextComponent("Multiblock only recipe."));
         }

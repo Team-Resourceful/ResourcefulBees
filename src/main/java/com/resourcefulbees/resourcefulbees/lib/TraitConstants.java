@@ -1,6 +1,11 @@
 package com.resourcefulbees.resourcefulbees.lib;
 
 public class TraitConstants {
+
+    private TraitConstants() {
+        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+    }
+
     public static final String WITHER = "wither";
     public static final String BLAZE = "blaze";
     public static final String CAN_SWIM = "can_swim";

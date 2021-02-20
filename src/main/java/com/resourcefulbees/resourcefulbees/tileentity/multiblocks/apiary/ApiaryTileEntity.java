@@ -207,7 +207,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
                 this.ageBee(apiaryBee.ticksInHive, vanillaBeeEntity);
 
                 if (exportBee) {
-                    export(vanillaBeeEntity);
+                    exportBee(vanillaBeeEntity);
                 } else {
                     BlockPos hivePos = this.getPos();
                     this.world.playSound(null, hivePos.getX(), hivePos.getY(), hivePos.getZ(), SoundEvents.BLOCK_BEEHIVE_EXIT, SoundCategory.BLOCKS, 1.0F, 1.0F);
@@ -539,8 +539,6 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     public void exportBee(ServerPlayerEntity player, String beeType) {
         boolean exported = false;
         ApiaryBee bee = this.BEES.get(beeType);
-        CompoundNBT data = bee.entityData;
-        State state = data.getBoolean("HasNectar") ? State.HONEY_DELIVERED : State.BEE_RELEASED;
 
         if (bee.isLocked && h.getStackInSlot(EXPORT).isEmpty() && !h.getStackInSlot(EMPTY_JAR).isEmpty()) {
             exported = releaseBee(this.getBlockState(), bee, true);
@@ -555,7 +553,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
         player.sendStatusMessage(new TranslationTextComponent("gui.resourcefulbees.apiary.export." + exported), true);
     }
 
-    public void export(BeeEntity beeEntity) {
+    public void exportBee(BeeEntity beeEntity) {
         ItemStack beeJar = new ItemStack(ModItems.BEE_JAR.get());
         beeJar.setTag(BeeJar.createTag(beeEntity));
         BeeJar.renameJar(beeJar, beeEntity);
@@ -708,10 +706,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
         if (world != null) {
             numPlayersUsing++;
             if (isValidApiary(true)) {
-                //this.isValidApiary = validateStructure(world, (ServerPlayerEntity) playerEntity);
-                //if (this.isValidApiary) {
                 return new ValidatedApiaryContainer(i, world, pos, playerInventory);
-                //}
             }
             return new UnvalidatedApiaryContainer(i, world, pos, playerInventory);
         }

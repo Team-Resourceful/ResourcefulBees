@@ -67,7 +67,7 @@ public class RegistryHandler {
     //Dynamic|Iterative Registration Stuff below this line
 
     public static void addEntityAttributes() {
-        BeeRegistry.MOD_BEES.forEach((s, customBee) -> GlobalEntityTypeAttributes.put(customBee.get(), BeeEntity.createBeeAttributes().build()));
+        ModEntities.MOD_BEES.forEach((s, customBee) -> GlobalEntityTypeAttributes.put(customBee.get(), BeeEntity.createBeeAttributes().build()));
     }
 
     public static void registerDynamicBees() {
@@ -156,7 +156,7 @@ public class RegistryHandler {
         final RegistryObject<Item> customBeeSpawnEgg = ModItems.ITEMS.register(name + "_bee_spawn_egg",
                 () -> new BeeSpawnEggItem(customBeeEntity, Color.parseInt(BeeConstants.VANILLA_BEE_COLOR), 0x303030, customBeeData.getColorData(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
 
-        BeeRegistry.MOD_BEES.put(name, customBeeEntity);
+        ModEntities.MOD_BEES.put(name, customBeeEntity);
         customBeeData.setEntityTypeRegistryID(customBeeEntity.getId());
         customBeeData.setSpawnEggItemRegistryObject(customBeeSpawnEgg);
     }

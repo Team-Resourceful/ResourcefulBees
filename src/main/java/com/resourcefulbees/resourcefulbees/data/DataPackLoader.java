@@ -2,6 +2,7 @@ package com.resourcefulbees.resourcefulbees.data;
 
 import com.google.common.collect.Lists;
 import com.resourcefulbees.resourcefulbees.init.BeeSetup;
+import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import net.minecraft.resources.FolderPack;
 import net.minecraft.resources.IPackNameDecorator;
 import net.minecraft.resources.ResourcePackInfo;
@@ -13,14 +14,19 @@ import java.io.File;
 import java.util.Collection;
 
 public class DataPackLoader {
+
+    private DataPackLoader() {
+        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+    }
+
     public static void serverStarting(FMLServerAboutToStartEvent event) {
         event.getServer().getResourcePacks().addPackFinder((packInfoConsumer, factory) -> {
-            File configDatapackFile = BeeSetup.RESOURCE_PATH.toFile();
-            if(configDatapackFile.exists() && configDatapackFile.isDirectory()) {
+            File configDataPackFile = BeeSetup.getResourcePath().toFile();
+            if(configDataPackFile.exists() && configDataPackFile.isDirectory()) {
                 ResourcePackInfo pack = ResourcePackInfo.createResourcePack(
                         "resourcefulbees:internals",
                         true,
-                        () -> new FolderPack(BeeSetup.RESOURCE_PATH.toFile()),
+                        () -> new FolderPack(BeeSetup.getResourcePath().toFile()),
                         factory,
                         ResourcePackInfo.Priority.BOTTOM,
                         IPackNameDecorator.method_29485()
