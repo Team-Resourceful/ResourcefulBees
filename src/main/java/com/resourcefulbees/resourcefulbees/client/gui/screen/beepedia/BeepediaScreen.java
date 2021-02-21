@@ -28,17 +28,14 @@ import net.minecraft.util.text.TranslationTextComponent;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class BeepediaScreen extends ContainerScreen<BeepediaContainer> {
 
-    public Map<String, BeePage> bees = new HashMap<>();
-    public Map<String, TraitPage> traits = new HashMap<>();
-    public Map<String, HoneyPage> honey = new HashMap<>();
+    public Map<String, BeePage> bees = new TreeMap<>();
+    public Map<String, TraitPage> traits = new TreeMap<>();
+    public Map<String, HoneyPage> honey = new TreeMap<>();
 
     ButtonList beesList;
     ButtonList traitsList;
@@ -136,7 +133,7 @@ public class BeepediaScreen extends ContainerScreen<BeepediaContainer> {
 
     public void initSidebar() {
         ItemStack beeItem = new ItemStack(Items.BEEHIVE);
-        ItemStack traitItem = new ItemStack(Items.ENDER_PEARL);
+        ItemStack traitItem = new ItemStack(Items.BLAZE_POWDER);
         ItemStack honeyItem = new ItemStack(Items.HONEY_BOTTLE);
         int x = this.guiLeft;
         int y = this.guiTop;
@@ -246,7 +243,7 @@ public class BeepediaScreen extends ContainerScreen<BeepediaContainer> {
         public TabButton button;
         public boolean active = false;
         Map<String, ? extends BeepediaPage> list;
-        Map<String, BeepediaPage> reducedList = new HashMap<>();
+        Map<String, BeepediaPage> reducedList = new TreeMap<>();
 
         public ButtonList(int xPos, int yPos, int height, int width, int itemHeight, TabButton button, Map<String, ? extends BeepediaPage> list) {
             this.xPos = xPos;

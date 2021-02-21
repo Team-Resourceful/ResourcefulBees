@@ -20,6 +20,7 @@ public class MutationData extends AbstractBeeData {
     public static final Logger LOGGER = LogManager.getLogger();
     /**
      * The Input that is getting mutated
+     *
      * @deprecated To be removed in 1.17
      */
     @Deprecated
@@ -27,6 +28,7 @@ public class MutationData extends AbstractBeeData {
 
     /**
      * The new muted output
+     *
      * @deprecated To be removed in 1.17
      */
     @Deprecated
@@ -34,6 +36,7 @@ public class MutationData extends AbstractBeeData {
 
     /**
      * What type of mutation it is
+     *
      * @deprecated To be removed in 1.17
      */
     @Deprecated
@@ -60,7 +63,7 @@ public class MutationData extends AbstractBeeData {
 
     private transient Map<EntityType<?>, Pair<Double, RandomCollection<EntityOutput>>> entityMutations;
 
-    private transient Map<Block, Pair<Double, RandomCollection<ItemOutput>>> blockItemMutations; //IN WORLD
+    private transient Map<Block, Pair<Double, RandomCollection<ItemOutput>>> itemMutations; //IN WORLD
     private transient Map<ITag<?>, Pair<Double, RandomCollection<ItemOutput>>> jeiBlockTagItemMutations; //JEI ONLY
     private transient Map<Block, Pair<Double, RandomCollection<ItemOutput>>> jeiItemMutations; //JEI ONLY
 
@@ -80,6 +83,12 @@ public class MutationData extends AbstractBeeData {
 
     public boolean hasMutation() {
         return hasMutation;
+    }
+
+    public boolean testMutations() {
+        return hasMutation && ((blockMutations != null && !blockMutations.isEmpty())
+                || (entityMutations != null && !entityMutations.isEmpty())
+                || (itemMutations != null && !itemMutations.isEmpty()));
     }
 
     public void setHasMutation(boolean hasMutation) {
@@ -107,7 +116,7 @@ public class MutationData extends AbstractBeeData {
         this.jeiBlockMutations = new HashMap<>();
         this.jeiBlockTagMutations = new HashMap<>();
         this.entityMutations = new HashMap<>();
-        this.blockItemMutations = new HashMap<>();
+        this.itemMutations = new HashMap<>();
         this.jeiBlockTagItemMutations = new HashMap<>();
         this.jeiItemMutations = new HashMap<>();
     }
@@ -116,19 +125,19 @@ public class MutationData extends AbstractBeeData {
         this.blockMutations.put(input, Pair.of(chance, outputs));
     }
 
-    public void addBlockTagMutation(ITag<?> input, RandomCollection<BlockOutput> outputs, double chance) {
-        this.jeiBlockTagMutations.put(input, Pair.of(chance, outputs));
-    }
-
     public void addEntityMutation(EntityType<?> input, RandomCollection<EntityOutput> outputs, double chance) {
         this.entityMutations.put(input, Pair.of(chance, outputs));
     }
 
-    public void addBlockItemMutation(Block input, RandomCollection<ItemOutput> outputs, double chance) {
-        this.blockItemMutations.put(input, Pair.of(chance, outputs));
+    public void addItemMutation(Block input, RandomCollection<ItemOutput> outputs, double chance) {
+        this.itemMutations.put(input, Pair.of(chance, outputs));
     }
 
-    public void addBlockTagItemMutation(ITag<?> input, RandomCollection<ItemOutput> outputs, double chance) {
+    public void addJeiBlockMutation(Block input, RandomCollection<BlockOutput> outputs, double chance) {
+        this.jeiBlockMutations.put(input, Pair.of(chance, outputs));
+    }
+
+    public void addJeiBlockTagItemMutation(ITag<?> input, RandomCollection<ItemOutput> outputs, double chance) {
         this.jeiBlockTagItemMutations.put(input, Pair.of(chance, outputs));
     }
 
@@ -136,9 +145,10 @@ public class MutationData extends AbstractBeeData {
         this.jeiItemMutations.put(input, Pair.of(chance, outputs));
     }
 
-    public void addJeiBlockMutation(Block input, RandomCollection<BlockOutput> outputs, double chance) {
-        this.jeiBlockMutations.put(input, Pair.of(chance, outputs));
+    public void addJeiBlockTagMutation(ITag<?> input, RandomCollection<BlockOutput> outputs, double chance) {
+        this.jeiBlockTagMutations.put(input, Pair.of(chance, outputs));
     }
+
 
     public boolean hasBlockMutations() {
         return !this.blockMutations.isEmpty();
@@ -152,11 +162,11 @@ public class MutationData extends AbstractBeeData {
         return !this.entityMutations.isEmpty();
     }
 
-    public boolean hasBlockItemMutations() {
-        return !this.blockItemMutations.isEmpty();
+    public boolean hasItemMutations() {
+        return !this.itemMutations.isEmpty();
     }
 
-    public boolean hasBlockTagItemMutations() {
+    public boolean hasJeiBlockTagItemMutations() {
         return !this.jeiBlockTagItemMutations.isEmpty();
     }
 
@@ -180,8 +190,8 @@ public class MutationData extends AbstractBeeData {
         return Collections.unmodifiableMap(this.entityMutations);
     }
 
-    public Map<Block, Pair<Double, RandomCollection<ItemOutput>>> getBlockItemMutations() {
-        return Collections.unmodifiableMap(this.blockItemMutations);
+    public Map<Block, Pair<Double, RandomCollection<ItemOutput>>> getItemMutations() {
+        return Collections.unmodifiableMap(this.itemMutations);
     }
 
     public Map<ITag<?>, Pair<Double, RandomCollection<ItemOutput>>> getJeiBlockTagItemMutations() {
@@ -225,8 +235,8 @@ public class MutationData extends AbstractBeeData {
         }
 
         /**
-         * @deprecated This method will change in 1.17 to match the removal of legacy mutation syntax
          * @return Builds the MutationData object
+         * @deprecated This method will change in 1.17 to match the removal of legacy mutation syntax
          */
         @Deprecated
         public MutationData createMutationData() {

@@ -58,7 +58,7 @@ public class BlockToItem implements IRecipeCategory<BlockToItem.Recipe> {
         BEE_REGISTRY.getBees().forEach(((s, beeData) -> {
             MutationData mutationData = beeData.getMutationData();
             if (mutationData.hasMutation()) {
-                if (mutationData.hasBlockTagItemMutations()) {
+                if (mutationData.hasJeiBlockTagItemMutations()) {
                     mutationData.getJeiBlockTagItemMutations()
                             .forEach((iTag, doubleRandomCollectionPair) -> doubleRandomCollectionPair.getRight()
                                     .forEach(itemOutput -> recipes.add(new Recipe(null, iTag, itemOutput, doubleRandomCollectionPair.getLeft(), RecipeUtils.getEffectiveWeight(doubleRandomCollectionPair.getRight(), itemOutput.getWeight()), s)))

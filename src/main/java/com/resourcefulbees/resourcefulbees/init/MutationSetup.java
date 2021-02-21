@@ -44,11 +44,9 @@ public class MutationSetup {
         MutationData mutationData = customBeeData.getMutationData();
         List<Mutation> mutations;
         //TODO remove legacy mutation hooks in 1.17
+        mutations = mutationData.getMutations() == null ? new LinkedList<>() : mutationData.getMutations();
         if (hasLegacyMutation(mutationData)) {
-            mutations = new LinkedList<>();
             mutations.add(new Mutation(mutationData.getMutationType(), mutationData.getMutationInput(), 1D, new MutationOutput(mutationData.getMutationOutput(), 1)));
-        } else {
-            mutations = mutationData.getMutations();
         }
         mutations.removeIf(mutation -> SecondPhaseValidator.validateMutation(customBeeData.getName(), mutation));
         mutationData.initializeMutations();
@@ -95,16 +93,16 @@ public class MutationSetup {
         if (input != null && !randomCollection.isEmpty() && mutation.getType() != MutationTypes.NONE) {
             input.values().forEach(o -> {
                 if (o instanceof Block) {
-                    mutationData.addBlockItemMutation((Block) o, randomCollection, mutation.getChance());
+                    mutationData.addItemMutation((Block) o, randomCollection, mutation.getChance());
                     return;
                 }
 
                 if (o instanceof Fluid) {
                     Block block = ((Fluid) o).getDefaultState().getBlockState().getBlock();
-                    mutationData.addBlockItemMutation(block, randomCollection, mutation.getChance());
+                    mutationData.addItemMutation(block, randomCollection, mutation.getChance());
                 }
             });
-            mutationData.addBlockTagItemMutation(input, randomCollection, mutation.getChance());
+            mutationData.addJeiBlockTagItemMutation(input, randomCollection, mutation.getChance());
         } else {
             logWarning(mutation);
         }
@@ -114,7 +112,7 @@ public class MutationSetup {
         Block input = BeeInfoUtils.getBlock(mutation.getInputID());
         RandomCollection<ItemOutput> randomCollection = createRandomItemCollection(mutation);
         if (input != Blocks.AIR && !randomCollection.isEmpty() && mutation.getType() != MutationTypes.NONE) {
-            mutationData.addBlockItemMutation(input, randomCollection, mutation.getChance());
+            mutationData.addItemMutation(input, randomCollection, mutation.getChance());
             mutationData.addJeiItemMutation(input, randomCollection, mutation.getChance());
         } else {
             logWarning(mutation);
@@ -154,7 +152,7 @@ public class MutationSetup {
                 }
             });
 
-            mutationData.addBlockTagMutation(input, randomCollection, mutation.getChance());
+            mutationData.addJeiBlockTagMutation(input, randomCollection, mutation.getChance());
         } else {
             logWarning(mutation);
         }

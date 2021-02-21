@@ -43,32 +43,44 @@ public class BeePage extends BeepediaPage {
         tabCounter = 0;
         beeInfoPage = Pair.of(
                 getTabButton(new ItemStack(Items.BOOK), onPress -> setSubPage(BeepediaScreen.PageType.INFO)),
-                new BeeInfoPage(beepedia, beeData, subX, subY, this));
-        mutations = Pair.of(
-                getTabButton(new ItemStack(Items.FERMENTED_SPIDER_EYE), onPress -> setSubPage(BeepediaScreen.PageType.MUTATIONS)),
-                new MutationListPage(beepedia, beeData, subX, subY, this));
-        traitListPage = Pair.of(
-                getTabButton(new ItemStack(Items.BLAZE_POWDER), onPress -> setSubPage(BeepediaScreen.PageType.TRAIT_LIST)),
-                new TraitListPage(beepedia, beeData, subX, subY, this)
-        );
-        centrifugePage = Pair.of(
-                getTabButton(new ItemStack(ModItems.CENTRIFUGE_ITEM.get()), onPress -> setSubPage(BeepediaScreen.PageType.CENTRIFUGE)),
-                new CentrifugePage(beepedia, beeData, subX, subY, this)
-        );
-        spawningPage = Pair.of(
-                getTabButton(new ItemStack(Items.SPAWNER), onPress -> setSubPage(BeepediaScreen.PageType.SPAWNING)),
-                new SpawningPage(beepedia, beeData, subX, subY, this)
-        );
-        breedingPage = Pair.of(
-                getTabButton(new ItemStack(ModItems.GOLD_FLOWER_ITEM.get()), onPress -> setSubPage(BeepediaScreen.PageType.BREEDING)),
-                new BreedingPage(beepedia, beeData, subX, subY, this)
+                new BeeInfoPage(beepedia, beeData, subX, subY, this)
         );
         tabs.add(beeInfoPage);
-        tabs.add(mutations);
-        tabs.add(traitListPage);
-        tabs.add(centrifugePage);
-        tabs.add(spawningPage);
-        tabs.add(breedingPage);
+        if (beeData.getMutationData().testMutations()) {
+            mutations = Pair.of(
+                    getTabButton(new ItemStack(Items.FERMENTED_SPIDER_EYE), onPress -> setSubPage(BeepediaScreen.PageType.MUTATIONS)),
+                    new MutationListPage(beepedia, beeData, subX, subY, this)
+            );
+            tabs.add(mutations);
+        }
+        if (beeData.getTraitData().hasTraits() && beeData.hasTraitNames()) {
+            traitListPage = Pair.of(
+                    getTabButton(new ItemStack(Items.BLAZE_POWDER), onPress -> setSubPage(BeepediaScreen.PageType.TRAIT_LIST)),
+                    new TraitListPage(beepedia, beeData, subX, subY, this)
+            );
+            tabs.add(traitListPage);
+        }
+        if (beeData.hasHoneycomb()) {
+            centrifugePage = Pair.of(
+                    getTabButton(new ItemStack(ModItems.CENTRIFUGE_ITEM.get()), onPress -> setSubPage(BeepediaScreen.PageType.CENTRIFUGE)),
+                    new CentrifugePage(beepedia, beeData, subX, subY, this)
+            );
+            tabs.add(centrifugePage);
+        }
+        if (beeData.getSpawnData().canSpawnInWorld()) {
+            spawningPage = Pair.of(
+                    getTabButton(new ItemStack(Items.SPAWNER), onPress -> setSubPage(BeepediaScreen.PageType.SPAWNING)),
+                    new SpawningPage(beepedia, beeData, subX, subY, this)
+            );
+            tabs.add(spawningPage);
+        }
+        if (beeData.getBreedData().isBreedable()) {
+            breedingPage = Pair.of(
+                    getTabButton(new ItemStack(ModItems.GOLD_FLOWER_ITEM.get()), onPress -> setSubPage(BeepediaScreen.PageType.BREEDING)),
+                    new BreedingPage(beepedia, beeData, subX, subY, this)
+            );
+            tabs.add(breedingPage);
+        }
 
         setSubPage(BeepediaScreen.PageType.INFO);
         ItemStack beeJar = new ItemStack(ModItems.BEE_JAR.get());
@@ -118,27 +130,28 @@ public class BeePage extends BeepediaPage {
                 setSubPage(beeInfoPage);
                 break;
             case BREEDING:
-                subPage = breedingPage;
+                setSubPage(breedingPage);
                 break;
             case SPAWNING:
-                subPage = spawningPage;
+                setSubPage(spawningPage);
                 break;
             case MUTATIONS:
-                subPage = mutations;
+                setSubPage(mutations);
                 break;
             case CENTRIFUGE:
-                subPage = centrifugePage;
+                setSubPage(centrifugePage);
                 break;
             case TRAIT_LIST:
-                subPage = traitListPage;
+                setSubPage(traitListPage);
                 break;
         }
         beepedia.getContainer().setBeeSubPageType(beeSubPage);
     }
 
-    private void setSubPage(Pair<BeepediaScreen.TabButton, BeeDataPage> beeInfoPage) {
+    private void setSubPage(Pair<BeepediaScreen.TabButton, BeeDataPage> beeDataPage) {
         if (subPage != null) subPage.getRight().closePage();
-        this.subPage = beeInfoPage;
+        if (beeDataPage == null) beeDataPage = this.beeInfoPage;
+        this.subPage = beeDataPage;
         subPage.getRight().openPage();
     }
 }

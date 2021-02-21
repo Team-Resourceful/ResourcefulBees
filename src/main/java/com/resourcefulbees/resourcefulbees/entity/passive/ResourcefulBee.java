@@ -16,7 +16,6 @@ import com.resourcefulbees.resourcefulbees.registry.ModPOIs;
 import com.resourcefulbees.resourcefulbees.tileentity.TieredBeehiveTileEntity;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
-import com.resourcefulbees.resourcefulbees.utils.LogTimer;
 import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
 import com.resourcefulbees.resourcefulbees.utils.validation.ValidatorUtils;
 import net.minecraft.block.Block;
@@ -209,8 +208,8 @@ public class ResourcefulBee extends CustomBeeEntity {
             return true;
         }
 
-        if (mutationData.getBlockItemMutations().containsKey(block)) {
-            mutateItem(mutationData.getBlockItemMutations().get(block), blockPos);
+        if (mutationData.getItemMutations().containsKey(block)) {
+            mutateItem(mutationData.getItemMutations().get(block), blockPos);
             addCropCounter();
             return true;
         }
@@ -542,7 +541,7 @@ public class ResourcefulBee extends CustomBeeEntity {
         public void tick() {
             if (ResourcefulBee.this.ticksExisted % 5 == 0) {
                 MutationData mutationData = getBeeData().getMutationData();
-                if (mutationData.hasMutation() && (mutationData.hasBlockMutations() || mutationData.hasBlockItemMutations() || mutationData.hasEntityMutations())) {
+                if (mutationData.hasMutation() && (mutationData.hasBlockMutations() || mutationData.hasItemMutations() || mutationData.hasEntityMutations())) {
                     applyPollinationEffect();
                 }
             }
