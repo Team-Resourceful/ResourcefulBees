@@ -6,8 +6,8 @@ import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaSc
 
 public class BreedingPage extends BeeDataPage {
 
-    public BreedingPage(BeepediaScreen beepedia, CustomBeeData beeData) {
-        super(beepedia, BeepediaScreen.Page.BREEDING, beeData);
+    public BreedingPage(BeepediaScreen beepedia, CustomBeeData beeData, int xPos, int yPos, BeePage parent) {
+        super(beepedia, beeData, xPos, yPos, parent);
     }
 
     @Override

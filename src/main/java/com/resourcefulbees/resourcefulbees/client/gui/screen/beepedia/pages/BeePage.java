@@ -1,51 +1,144 @@
 package com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
+import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.resourcefulbees.resourcefulbees.item.BeeJar;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.Color;
+import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class BeePage extends BeeDataPage {
+public class BeePage extends BeepediaPage {
 
-    MutationListPage mutations;
-    List<TraitPage> traitPageList;
-    CentrifugePage centrifugePage;
-    SpawningPage spawningPage;
-    BreedingPage breedingPage;
+    CustomBeeData beeData;
 
-    public BeePage(BeepediaScreen beepedia, CustomBeeData beeData) {
-        super(beepedia, BeepediaScreen.Page.BEE, beeData);
-        mutations = new MutationListPage(beepedia, beeData);
-        traitPageList = beepedia.getTraits(beeData);
-        centrifugePage = new CentrifugePage(beepedia, beeData);
-        spawningPage = new SpawningPage(beepedia, beeData);
-        breedingPage = new BreedingPage(beepedia, beeData);
+    public Pair<BeepediaScreen.TabButton, BeeDataPage> subPage;
+    Pair<BeepediaScreen.TabButton, BeeDataPage> beeInfoPage;
+    Pair<BeepediaScreen.TabButton, BeeDataPage> mutations;
+    Pair<BeepediaScreen.TabButton, BeeDataPage> traitListPage;
+    Pair<BeepediaScreen.TabButton, BeeDataPage> centrifugePage;
+    Pair<BeepediaScreen.TabButton, BeeDataPage> spawningPage;
+    Pair<BeepediaScreen.TabButton, BeeDataPage> breedingPage;
+    List<Pair<BeepediaScreen.TabButton, BeeDataPage>> tabs = new ArrayList<>();
+    ResourceLocation buttonImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/button.png");
 
+    private int tabCounter;
+
+    public BeePage(BeepediaScreen beepedia, CustomBeeData beeData, String id, int xPos, int yPos) {
+        super(beepedia, xPos, yPos, id);
+        this.beeData = beeData;
+        int subX = this.xPos;
+        int subY = this.yPos + 30;
+
+        tabCounter = 0;
+        beeInfoPage = Pair.of(
+                getTabButton(new ItemStack(Items.BOOK), onPress -> setSubPage(BeepediaScreen.PageType.INFO)),
+                new BeeInfoPage(beepedia, beeData, subX, subY, this));
+        mutations = Pair.of(
+                getTabButton(new ItemStack(Items.FERMENTED_SPIDER_EYE), onPress -> setSubPage(BeepediaScreen.PageType.MUTATIONS)),
+                new MutationListPage(beepedia, beeData, subX, subY, this));
+        traitListPage = Pair.of(
+                getTabButton(new ItemStack(Items.BLAZE_POWDER), onPress -> setSubPage(BeepediaScreen.PageType.TRAIT_LIST)),
+                new TraitListPage(beepedia, beeData, subX, subY, this)
+        );
+        centrifugePage = Pair.of(
+                getTabButton(new ItemStack(ModItems.CENTRIFUGE_ITEM.get()), onPress -> setSubPage(BeepediaScreen.PageType.CENTRIFUGE)),
+                new CentrifugePage(beepedia, beeData, subX, subY, this)
+        );
+        spawningPage = Pair.of(
+                getTabButton(new ItemStack(Items.SPAWNER), onPress -> setSubPage(BeepediaScreen.PageType.SPAWNING)),
+                new SpawningPage(beepedia, beeData, subX, subY, this)
+        );
+        breedingPage = Pair.of(
+                getTabButton(new ItemStack(ModItems.GOLD_FLOWER_ITEM.get()), onPress -> setSubPage(BeepediaScreen.PageType.BREEDING)),
+                new BreedingPage(beepedia, beeData, subX, subY, this)
+        );
+        tabs.add(beeInfoPage);
+        tabs.add(mutations);
+        tabs.add(traitListPage);
+        tabs.add(centrifugePage);
+        tabs.add(spawningPage);
+        tabs.add(breedingPage);
+
+        setSubPage(BeepediaScreen.PageType.INFO);
         ItemStack beeJar = new ItemStack(ModItems.BEE_JAR.get());
         BeeJar.fillJar(beeJar, beeData);
         newListButton(beeJar, beeData.getTranslation());
     }
 
+    public BeepediaScreen.TabButton getTabButton(ItemStack stack, Button.IPressable pressable) {
+        BeepediaScreen.TabButton button = new BeepediaScreen.TabButton(this.xPos + 4 + tabCounter * 20, this.yPos + 20, 20, 20, 0, 0, 20, buttonImage, stack, 2, 2, pressable);
+        beepedia.addButton(button);
+        button.visible = false;
+        tabCounter++;
+        return button;
+    }
+
     @Override
     public void renderBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
-        int left = beepedia.getGuiLeft();
-        int top = beepedia.getGuiTop();
-        Minecraft.getInstance().fontRenderer.draw(matrix, beeData.getTranslation(), left + 120, top + 20, Color.parse("white").getRgb());
+        Minecraft.getInstance().fontRenderer.draw(matrix, beeData.getTranslation(), xPos, yPos + 10, Color.parse("white").getRgb());
+        subPage.getRight().renderBackground(matrix, partialTick, mouseX, mouseY);
+    }
 
-        // Display bee
-        // Show flower
-        // Show desc
-        // list buttons for spawning, breeding, traits, centrifuge, mutations
+    @Override
+    public void openPage() {
+        super.openPage();
+        tabs.forEach(p -> p.getLeft().visible = true);
+    }
+
+    @Override
+    public void closePage() {
+        super.closePage();
+        tabs.forEach(p -> p.getLeft().visible = false);
     }
 
     @Override
     public void renderForeground(MatrixStack matrixStack, int mouseX, int mouseY) {
+        subPage.getRight().renderForeground(matrixStack, mouseX, mouseY);
+    }
 
+    @Override
+    public String getSearch() {
+        return beeData.getTranslation().getString();
+    }
+
+    public void setSubPage(BeepediaScreen.PageType beeSubPage) {
+        switch (beeSubPage) {
+            case INFO:
+                setSubPage(beeInfoPage);
+                break;
+            case BREEDING:
+                subPage = breedingPage;
+                break;
+            case SPAWNING:
+                subPage = spawningPage;
+                break;
+            case MUTATIONS:
+                subPage = mutations;
+                break;
+            case CENTRIFUGE:
+                subPage = centrifugePage;
+                break;
+            case TRAIT_LIST:
+                subPage = traitListPage;
+                break;
+        }
+        beepedia.getContainer().setBeeSubPageType(beeSubPage);
+    }
+
+    private void setSubPage(Pair<BeepediaScreen.TabButton, BeeDataPage> beeInfoPage) {
+        if (subPage != null) subPage.getRight().closePage();
+        this.subPage = beeInfoPage;
+        subPage.getRight().openPage();
     }
 }

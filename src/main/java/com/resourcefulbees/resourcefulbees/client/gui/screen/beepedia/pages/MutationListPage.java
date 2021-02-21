@@ -2,7 +2,6 @@ package com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
-import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.mutations.MutationPage;
 import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
@@ -11,13 +10,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MutationListPage extends BeepediaPage {
+public class MutationListPage extends BeeDataPage {
 
-    private CustomBeeData beeData;
     Map<MutationTypes, List<MutationPage>> mutations = new HashMap<>();
 
-    public MutationListPage(BeepediaScreen beepedia, CustomBeeData beeData) {
-        super(beepedia, BeepediaScreen.Page.MUTATION_LIST);
+    public MutationListPage(BeepediaScreen beepedia, CustomBeeData beeData, int xPos, int yPos, BeePage parent) {
+        super(beepedia, beeData, xPos, yPos, parent);
         this.beeData = beeData;
     }
 
@@ -29,10 +27,5 @@ public class MutationListPage extends BeepediaPage {
     @Override
     public void renderForeground(MatrixStack matrixStack, int mouseX, int mouseY) {
 
-    }
-
-    @Override
-    public String getSearch() {
-        return beeData.getTranslation().getString();
     }
 }

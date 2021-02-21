@@ -16,8 +16,8 @@ public class HoneyPage extends BeepediaPage {
     String honey;
     TranslationTextComponent text;
 
-    public HoneyPage(BeepediaScreen beepedia, HoneyBottleData bottleData) {
-        super(beepedia, BeepediaScreen.Page.HONEY);
+    public HoneyPage(BeepediaScreen beepedia, HoneyBottleData bottleData, String id, int left, int top) {
+        super(beepedia, left, top, id);
         this.bottleData = bottleData;
         initTranslation();
         ItemStack stack;
@@ -44,9 +44,7 @@ public class HoneyPage extends BeepediaPage {
 
     @Override
     public void renderBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
-        int left = beepedia.getGuiLeft();
-        int top = beepedia.getGuiTop();
-        Minecraft.getInstance().fontRenderer.draw(matrix, text, left + 120, top + 20, Color.parse("white").getRgb());
+        Minecraft.getInstance().fontRenderer.draw(matrix, text, xPos, yPos, Color.parse("white").getRgb());
     }
 
     @Override

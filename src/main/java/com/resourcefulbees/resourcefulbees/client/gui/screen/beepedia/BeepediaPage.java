@@ -17,16 +17,20 @@ import javax.annotation.Nonnull;
 
 public abstract class BeepediaPage {
 
-    public BeepediaScreen.Page pageType;
+    public final int yPos;
+    public final int xPos;
     public BeepediaScreen beepedia;
 
     public ListButton listButton = null;
 
     public ResourceLocation listImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/list_button.png");
+    public String id;
 
-    public BeepediaPage(BeepediaScreen beepedia, BeepediaScreen.Page pageType) {
-        this.pageType = pageType;
+    public BeepediaPage(BeepediaScreen beepedia, int xPos, int yPos, String id) {
         this.beepedia = beepedia;
+        this.yPos = yPos;
+        this.xPos = xPos;
+        this.id = id;
     }
 
     public void updateListPosition(int xPos, int yPos) {
@@ -37,9 +41,7 @@ public abstract class BeepediaPage {
 
     public void newListButton(ItemStack item, TextComponent text) {
         listButton = new ListButton(0, 0, 100, 20, 0, 0, 20, listImage, item, 2, 2, text, 22, 6, onPress -> {
-            beepedia.activePage.closePage();
             beepedia.setActive(this);
-            openPage();
         });
     }
 

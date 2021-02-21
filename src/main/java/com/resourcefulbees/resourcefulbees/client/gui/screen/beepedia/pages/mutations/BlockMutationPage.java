@@ -3,11 +3,12 @@ package com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.mut
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
+import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.BeePage;
 
 public class BlockMutationPage extends MutationPage {
 
-    public BlockMutationPage(BeepediaScreen beepedia, CustomBeeData beeData) {
-        super(beepedia, beeData);
+    public BlockMutationPage(BeepediaScreen beepedia, CustomBeeData beeData, int xPos, int yPos, BeePage parent) {
+        super(beepedia, beeData, xPos, yPos, parent);
     }
 
     @Override

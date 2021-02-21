@@ -3,12 +3,11 @@ package com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.mut
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.BeeDataPage;
+import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.BeePage;
 
 public abstract class MutationPage extends BeeDataPage {
 
-    private CustomBeeData beeData;
-
-    public MutationPage(BeepediaScreen beepedia, CustomBeeData beeData) {
-        super(beepedia, BeepediaScreen.Page.MUTATION, beeData);
+    public MutationPage(BeepediaScreen beepedia, CustomBeeData beeData, int xPos, int yPos, BeePage parent) {
+        super(beepedia, beeData, yPos, xPos, parent);
     }
 }

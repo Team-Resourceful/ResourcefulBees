@@ -16,6 +16,7 @@ import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.TraitRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
+import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
@@ -35,23 +36,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class BeepediaScreen extends ContainerScreen<BeepediaContainer> {
 
-
-    public enum Page {
-        HOME,
-        BEE,
-        CENTRIFUGE,
-        HONEY,
-        MUTATION,
-        SPAWNING,
-        MUTATION_LIST,
-        TRAIT,
-        BREEDING;
-    }
-
-    public static boolean initialised = false;
-    public static Map<String, BeePage> bees = new HashMap<>();
-    public static Map<String, TraitPage> traits = new HashMap<>();
-    public static Map<String, HoneyPage> honey = new HashMap<>();
+    public Map<String, BeePage> bees = new HashMap<>();
+    public Map<String, TraitPage> traits = new HashMap<>();
+    public Map<String, HoneyPage> honey = new HashMap<>();
 
     ButtonList beesList;
     ButtonList traitsList;
@@ -64,78 +51,122 @@ public class BeepediaScreen extends ContainerScreen<BeepediaContainer> {
     ResourceLocation background = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/screen.png");
     ResourceLocation buttonImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/button.png");
 
-    float listPos = 0;
-
     protected void preInit() {
         this.xSize = 286;
         this.ySize = 182;
     }
 
     public void setActive(BeepediaPage activePage) {
+        if (this.activePage != null) this.activePage.closePage();
         this.activePage = activePage;
+        this.activePage.openPage();
+        if (activePage instanceof BeePage) {
+            container.setPageType(PageType.BEE);
+            setActiveList(beesList);
+        }
+        if (activePage instanceof TraitPage) {
+            container.setPageType(PageType.TRAIT);
+            setActiveList(traitsList);
+        }
+        if (activePage instanceof HoneyPage) {
+            container.setPageType(PageType.HONEY);
+            setActiveList(honeyList);
+        }
+        container.setPageID(activePage.id);
     }
 
     @Override
     protected void init() {
         super.init();
         buttons.clear();
-        int i = this.guiLeft;
-        int j = this.guiTop;
-        addButton(new Button(i + (xSize / 2) - 20, j + ySize - 25, 40, 20, new TranslationTextComponent("gui.resourcefulbees.beepedia.home_button"), onPress -> {
-            activePage.closePage();
-            activePage = home;
-            activePage.openPage();
+        int x = this.guiLeft;
+        int y = this.guiTop;
+        int subX = x + 130;
+        int subY = y + 0;
+        honey.put("honey", new HoneyPage(this, BeeConstants.defaultHoney, "honey", subX, subY));
+        honey.put("catnip", new HoneyPage(this, KittenBee.getHoneyBottleData(), "catnip", subX, subY));
+        TraitRegistry.getRegistry().getTraits().forEach((s, b) -> traits.put(s, new TraitPage(this, b, s, subX, subY)));
+        BeeRegistry.getRegistry().getBees().forEach((s, b) -> bees.put(s, new BeePage(this, b, s, subX, subY)));
+        BeeRegistry.getRegistry().getHoneyBottles().forEach((s, h) -> honey.put(s, new HoneyPage(this, h, s, subX, subY)));
+        home = new HomePage(this, subX, subY);
+        addButton(new Button(x + (xSize / 2) - 20, y + ySize - 25, 40, 20, new TranslationTextComponent("gui.resourcefulbees.beepedia.home_button"), onPress -> {
+            setActive(home);
         }));
         bees.forEach((s, b) -> addButton(b.listButton));
         traits.forEach((s, b) -> addButton(b.listButton));
         honey.forEach((s, b) -> addButton(b.listButton));
         initSidebar();
+        returnState();
+    }
+
+    private void returnState() {
+        setActive(container.getPageType(), container.getPageID());
+        if (container.beesScroll != 0) beesList.setScrollPos(container.beesScroll);
+        if (container.honeyScroll != 0) honeyList.setScrollPos(container.honeyScroll);
+        if (container.traitScroll != 0) traitsList.setScrollPos(container.traitScroll);
+    }
+
+    private void setActive(BeepediaScreen.PageType pageType, String pageID) {
+        BeepediaPage page;
+        if (pageType == null || pageID == null) {
+            setActive(home);
+            return;
+        }
+        switch (pageType) {
+            case BEE:
+                page = bees.get(pageID);
+                setActiveList(beesList);
+                if (page instanceof BeePage) {
+                    ((BeePage) page).setSubPage(container.getBeeSubPageType());
+                }
+                break;
+            case HONEY:
+                page = honey.get(pageID);
+                setActiveList(honeyList);
+                break;
+            case TRAIT:
+                page = traits.get(pageID);
+                setActiveList(traitsList);
+                break;
+            default:
+                throw new IllegalStateException(String.format("How did you get this: %s? please contact an developer if you encounter this error.", pageType));
+        }
+        if (page != null) setActive(page);
     }
 
     public void initSidebar() {
         ItemStack beeItem = new ItemStack(Items.BEEHIVE);
         ItemStack traitItem = new ItemStack(Items.ENDER_PEARL);
         ItemStack honeyItem = new ItemStack(Items.HONEY_BOTTLE);
-        int i = this.guiLeft;
-        int j = this.guiTop;
-        TabButton beesButton = new TabButton(i + 0, j + 0, 20, 20, 0, 0, 20, buttonImage, beeItem, 2, 2, onPress -> {
+        int x = this.guiLeft;
+        int y = this.guiTop;
+        TabButton beesButton = new TabButton(x + 0, y + 0, 20, 20, 0, 0, 20, buttonImage, beeItem, 2, 2, onPress -> {
             setActiveList(beesList);
         });
-        TabButton traitsButton = new TabButton(i + 20, j + 0, 20, 20, 0, 0, 20, buttonImage, traitItem, 2, 2, onPress -> {
+        TabButton traitsButton = new TabButton(x + 20, y + 0, 20, 20, 0, 0, 20, buttonImage, traitItem, 2, 2, onPress -> {
             setActiveList(traitsList);
         });
-        TabButton honeyButton = new TabButton(i + 40, j + 0, 20, 20, 0, 0, 20, buttonImage, honeyItem, 2, 2, onPress -> {
+        TabButton honeyButton = new TabButton(x + 40, y + 0, 20, 20, 0, 0, 20, buttonImage, honeyItem, 2, 2, onPress -> {
             setActiveList(honeyList);
         });
         addButton(beesButton);
         addButton(traitsButton);
         addButton(honeyButton);
-        beesList = new ButtonList(i + 8, j + 30, 124, 100, 21, beesButton, bees);
-        traitsList = new ButtonList(i + 8, j + 30, 124, 100, 21, traitsButton, traits);
-        honeyList = new ButtonList(i + 8, j + 30, 124, 100, 21, honeyButton, honey);
+        beesList = new ButtonList(x + 8, y + 30, 124, 100, 21, beesButton, bees);
+        traitsList = new ButtonList(x + 8, y + 30, 124, 100, 21, traitsButton, traits);
+        honeyList = new ButtonList(x + 8, y + 30, 124, 100, 21, honeyButton, honey);
         setActiveList(beesList);
     }
 
     private void setActiveList(ButtonList buttonList) {
+        if (this.activeList != null) this.activeList.setActive(false);
         this.activeList = buttonList;
-        beesList.setActive(buttonList == beesList);
-        traitsList.setActive(buttonList == traitsList);
-        honeyList.setActive(buttonList == honeyList);
+        this.activeList.setActive(true);
     }
 
     public BeepediaScreen(BeepediaContainer beepediaContainer, PlayerInventory inventory, ITextComponent name) {
         super(beepediaContainer, inventory, name);
         preInit();
-        if (!initialised) {
-            honey.put("honey", new HoneyPage(this, BeeConstants.defaultHoney));
-            honey.put("catnip", new HoneyPage(this, KittenBee.getHoneyBottleData()));
-            TraitRegistry.getRegistry().getTraits().forEach((s, b) -> traits.put(s, new TraitPage(this, b, s)));
-            BeeRegistry.getRegistry().getBees().forEach((s, b) -> bees.put(s, new BeePage(this, b)));
-            BeeRegistry.getRegistry().getHoneyBottles().forEach((s, h) -> honey.put(s, new HoneyPage(this, h)));
-            initialised = true;
-        }
-        home = new HomePage(this);
-        activePage = home;
     }
 
     @Override
@@ -143,9 +174,9 @@ public class BeepediaScreen extends ContainerScreen<BeepediaContainer> {
         Minecraft client = this.client;
         if (client != null) {
             client.getTextureManager().bindTexture(background);
-            int i = this.guiLeft;
-            int j = this.guiTop;
-            drawTexture(matrix, i, j, 0, 0, this.getXSize(), this.getYSize(), 286, 182);
+            int x = this.guiLeft;
+            int y = this.guiTop;
+            drawTexture(matrix, x, y, 0, 0, this.getXSize(), this.getYSize(), 286, 182);
         }
         activePage.renderBackground(matrix, partialTick, mouseX, mouseY);
         activeList.updateList();
@@ -166,7 +197,11 @@ public class BeepediaScreen extends ContainerScreen<BeepediaContainer> {
         return pages;
     }
 
-    public class TabButton extends TabImageButton {
+    public Widget addButton(Widget button) {
+        return super.addButton(button);
+    }
+
+    public static class TabButton extends TabImageButton {
 
         public TabButton(int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int yDiffTextIn, ResourceLocation resourceLocationIn, @NotNull ItemStack displayItem, int itemX, int itemY, IPressable onPressIn) {
             super(xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, yDiffTextIn, resourceLocationIn, displayItem, itemX, itemY, onPressIn);
@@ -195,6 +230,9 @@ public class BeepediaScreen extends ContainerScreen<BeepediaContainer> {
         if (activeList != null) {
             activeList.updatePos((int) (scrollAmount * 8));
         }
+        container.beesScroll = beesList.scrollPos;
+        container.traitScroll = traitsList.scrollPos;
+        container.honeyScroll = honeyList.scrollPos;
         return super.mouseScrolled(mouseX, mouseY, scrollAmount);
     }
 
@@ -259,5 +297,26 @@ public class BeepediaScreen extends ContainerScreen<BeepediaContainer> {
                 if (b.listButton != null) b.listButton.visible = active;
             });
         }
+
+        public void setScrollPos(int scrollPos) {
+            this.scrollPos = scrollPos;
+        }
+    }
+
+    public enum PageType {
+
+        // main pages
+        BEE,
+        HONEY,
+        TRAIT,
+
+        // bee sub pages
+        INFO,
+        SPAWNING,
+        BREEDING,
+        MUTATIONS,
+        CENTRIFUGE,
+        TRAIT_LIST
+
     }
 }

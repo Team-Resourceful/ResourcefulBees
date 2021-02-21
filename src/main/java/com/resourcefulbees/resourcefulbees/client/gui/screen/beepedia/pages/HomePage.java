@@ -8,8 +8,8 @@ import net.minecraft.util.text.TranslationTextComponent;
 public class HomePage extends BeepediaPage {
 
 
-    public HomePage(BeepediaScreen beepedia) {
-        super(beepedia, BeepediaScreen.Page.HOME);
+    public HomePage(BeepediaScreen beepedia, int left, int top) {
+        super(beepedia, left, top, "home");
     }
 
     @Override

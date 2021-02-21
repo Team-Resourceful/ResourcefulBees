@@ -14,17 +14,15 @@ import java.util.stream.Collectors;
 
 public class TraitPage extends BeepediaPage {
 
-    private String traitName;
     private final BeeTrait trait;
     String translation;
 
-    public TraitPage(BeepediaScreen beepedia, BeeTrait trait, String traitName) {
-        super(beepedia, BeepediaScreen.Page.TRAIT);
+    public TraitPage(BeepediaScreen beepedia, BeeTrait trait, String id, int left, int top) {
+        super(beepedia, left, top, id);
         this.trait = trait;
-        this.traitName = traitName;
         initTranslation();
         ItemStack stack = new ItemStack(Items.BLAZE_POWDER);
-        newListButton(stack, new StringTextComponent(traitName));
+        newListButton(stack, new StringTextComponent(id));
     }
 
     private void initTranslation() {
@@ -40,7 +38,7 @@ public class TraitPage extends BeepediaPage {
     public void renderBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
         int left = beepedia.getGuiLeft();
         int top = beepedia.getGuiTop();
-        Minecraft.getInstance().fontRenderer.draw(matrix, new StringTextComponent(traitName), left + 120, top + 20, Color.parse("white").getRgb());
+        Minecraft.getInstance().fontRenderer.draw(matrix, new StringTextComponent(this.id), left + 120, top + 20, Color.parse("white").getRgb());
     }
 
     @Override

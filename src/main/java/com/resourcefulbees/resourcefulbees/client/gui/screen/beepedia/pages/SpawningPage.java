@@ -8,8 +8,8 @@ public class SpawningPage extends BeeDataPage {
 
     private CustomBeeData beeData;
 
-    public SpawningPage(BeepediaScreen beepedia, CustomBeeData beeData) {
-        super(beepedia, BeepediaScreen.Page.SPAWNING, beeData);
+    public SpawningPage(BeepediaScreen beepedia, CustomBeeData beeData, int xPos, int yPos, BeePage parent) {
+        super(beepedia, beeData, xPos, yPos, parent);
         this.beeData = beeData;
     }
 
