@@ -36,9 +36,7 @@ public class TraitPage extends BeepediaPage {
 
     @Override
     public void renderBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
-        int left = beepedia.getGuiLeft();
-        int top = beepedia.getGuiTop();
-        Minecraft.getInstance().fontRenderer.draw(matrix, new StringTextComponent(this.id), left + 120, top + 20, Color.parse("white").getRgb());
+        Minecraft.getInstance().fontRenderer.draw(matrix, new StringTextComponent(id), xPos, yPos + 10, Color.parse("white").getRgb());
     }
 
     @Override

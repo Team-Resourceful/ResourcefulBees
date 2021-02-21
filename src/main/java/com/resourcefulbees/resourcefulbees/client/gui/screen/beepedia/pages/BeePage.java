@@ -42,47 +42,47 @@ public class BeePage extends BeepediaPage {
 
         tabCounter = 0;
         beeInfoPage = Pair.of(
-                getTabButton(new ItemStack(Items.BOOK), onPress -> setSubPage(BeepediaScreen.PageType.INFO)),
+                getTabButton(new ItemStack(Items.BOOK), onPress -> setSubPage(SubPageType.INFO)),
                 new BeeInfoPage(beepedia, beeData, subX, subY, this)
         );
         tabs.add(beeInfoPage);
         if (beeData.getMutationData().testMutations()) {
             mutations = Pair.of(
-                    getTabButton(new ItemStack(Items.FERMENTED_SPIDER_EYE), onPress -> setSubPage(BeepediaScreen.PageType.MUTATIONS)),
+                    getTabButton(new ItemStack(Items.FERMENTED_SPIDER_EYE), onPress -> setSubPage(SubPageType.MUTATIONS)),
                     new MutationListPage(beepedia, beeData, subX, subY, this)
             );
             tabs.add(mutations);
         }
         if (beeData.getTraitData().hasTraits() && beeData.hasTraitNames()) {
             traitListPage = Pair.of(
-                    getTabButton(new ItemStack(Items.BLAZE_POWDER), onPress -> setSubPage(BeepediaScreen.PageType.TRAIT_LIST)),
+                    getTabButton(new ItemStack(Items.BLAZE_POWDER), onPress -> setSubPage(SubPageType.TRAIT_LIST)),
                     new TraitListPage(beepedia, beeData, subX, subY, this)
             );
             tabs.add(traitListPage);
         }
         if (beeData.hasHoneycomb()) {
             centrifugePage = Pair.of(
-                    getTabButton(new ItemStack(ModItems.CENTRIFUGE_ITEM.get()), onPress -> setSubPage(BeepediaScreen.PageType.CENTRIFUGE)),
+                    getTabButton(new ItemStack(ModItems.CENTRIFUGE_ITEM.get()), onPress -> setSubPage(SubPageType.CENTRIFUGE)),
                     new CentrifugePage(beepedia, beeData, subX, subY, this)
             );
             tabs.add(centrifugePage);
         }
         if (beeData.getSpawnData().canSpawnInWorld()) {
             spawningPage = Pair.of(
-                    getTabButton(new ItemStack(Items.SPAWNER), onPress -> setSubPage(BeepediaScreen.PageType.SPAWNING)),
+                    getTabButton(new ItemStack(Items.SPAWNER), onPress -> setSubPage(SubPageType.SPAWNING)),
                     new SpawningPage(beepedia, beeData, subX, subY, this)
             );
             tabs.add(spawningPage);
         }
         if (beeData.getBreedData().isBreedable()) {
             breedingPage = Pair.of(
-                    getTabButton(new ItemStack(ModItems.GOLD_FLOWER_ITEM.get()), onPress -> setSubPage(BeepediaScreen.PageType.BREEDING)),
+                    getTabButton(new ItemStack(ModItems.GOLD_FLOWER_ITEM.get()), onPress -> setSubPage(SubPageType.BREEDING)),
                     new BreedingPage(beepedia, beeData, subX, subY, this)
             );
             tabs.add(breedingPage);
         }
 
-        setSubPage(BeepediaScreen.PageType.INFO);
+        setSubPage(SubPageType.INFO);
         ItemStack beeJar = new ItemStack(ModItems.BEE_JAR.get());
         BeeJar.fillJar(beeJar, beeData);
         newListButton(beeJar, beeData.getTranslation());
@@ -124,7 +124,7 @@ public class BeePage extends BeepediaPage {
         return beeData.getTranslation().getString();
     }
 
-    public void setSubPage(BeepediaScreen.PageType beeSubPage) {
+    public void setSubPage(SubPageType beeSubPage) {
         switch (beeSubPage) {
             case INFO:
                 setSubPage(beeInfoPage);
@@ -145,7 +145,7 @@ public class BeePage extends BeepediaPage {
                 setSubPage(traitListPage);
                 break;
         }
-        beepedia.getContainer().setBeeSubPageType(beeSubPage);
+        BeepediaScreen.setBeeSubPage(beeSubPage);
     }
 
     private void setSubPage(Pair<BeepediaScreen.TabButton, BeeDataPage> beeDataPage) {
@@ -153,5 +153,14 @@ public class BeePage extends BeepediaPage {
         if (beeDataPage == null) beeDataPage = this.beeInfoPage;
         this.subPage = beeDataPage;
         subPage.getRight().openPage();
+    }
+
+    public enum SubPageType {
+        INFO,
+        SPAWNING,
+        BREEDING,
+        MUTATIONS,
+        CENTRIFUGE,
+        TRAIT_LIST
     }
 }

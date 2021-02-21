@@ -44,7 +44,7 @@ public class HoneyPage extends BeepediaPage {
 
     @Override
     public void renderBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
-        Minecraft.getInstance().fontRenderer.draw(matrix, text, xPos, yPos, Color.parse("white").getRgb());
+        Minecraft.getInstance().fontRenderer.draw(matrix, text, xPos, yPos + 10, Color.parse("white").getRgb());
     }
 
     @Override
