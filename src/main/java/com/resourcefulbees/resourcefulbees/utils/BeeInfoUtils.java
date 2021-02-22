@@ -9,6 +9,7 @@ import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
+import com.resourcefulbees.resourcefulbees.lib.LightLevels;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.utils.validation.ValidatorUtils;
 import net.minecraft.block.Block;
@@ -272,8 +273,19 @@ public class BeeInfoUtils {
     public static ITextComponent getYesNo(boolean bool) {
         if (bool) {
             return new TranslationTextComponent("gui.resourcefulbees.yes");
-        }else {
+        } else {
             return new TranslationTextComponent("gui.resourcefulbees.no");
+        }
+    }
+
+    public static TranslationTextComponent getLightName(LightLevels light) {
+        switch (light) {
+            case DAY:
+                return new TranslationTextComponent("gui.resourcefulbees.light.day");
+            case NIGHT:
+                return new TranslationTextComponent("gui.resourcefulbees.light.night");
+            default:
+                return new TranslationTextComponent("gui.resourcefulbees.light.any");
         }
     }
 }

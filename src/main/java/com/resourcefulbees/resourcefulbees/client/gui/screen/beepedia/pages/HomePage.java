@@ -36,4 +36,9 @@ public class HomePage extends BeepediaPage {
     public void drawTooltips(MatrixStack matrixStack, int mouseX, int mouseY) {
 
     }
+
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double scrollAmount) {
+        return false;
+    }
 }

@@ -127,7 +127,7 @@ public class BeePage extends BeepediaPage {
     @Override
     public void openPage() {
         super.openPage();
-        if (BeepediaScreen.getPageID() != null && BeepediaScreen.getPageID().equals(id)) {
+        if (BeepediaScreen.getPageID() != null) {
             setSubPage(BeepediaScreen.getBeeSubPage());
         } else {
             setSubPage(SubPageType.INFO);
@@ -160,6 +160,13 @@ public class BeePage extends BeepediaPage {
     public void drawTooltips(MatrixStack matrixStack, int mouseX, int mouseY) {
         subPage.getRight().drawTooltips(matrixStack, mouseX, mouseY);
         tabs.forEach(p -> p.getLeft().renderToolTip(matrixStack, mouseX, mouseY));
+    }
+
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double scrollAmount) {
+        boolean subScrolled = subPage.getRight().mouseScrolled(mouseX, mouseY, scrollAmount);
+        if (subScrolled) return true;
+        return false;
     }
 
     public void setSubPage(SubPageType beeSubPage) {

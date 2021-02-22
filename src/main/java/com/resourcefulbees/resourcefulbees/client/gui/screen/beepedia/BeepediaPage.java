@@ -65,6 +65,8 @@ public abstract class BeepediaPage {
 
     public abstract void drawTooltips(MatrixStack matrixStack, int mouseX, int mouseY);
 
+    public abstract boolean mouseScrolled(double mouseX, double mouseY, double scrollAmount);
+
     public class ListButton extends TabImageButton {
         private final TextComponent text;
         private final int textX;

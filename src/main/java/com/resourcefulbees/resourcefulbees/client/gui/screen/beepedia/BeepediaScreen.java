@@ -48,6 +48,8 @@ public class BeepediaScreen extends Screen {
     private static int beesScroll = 0;
     private static int honeyScroll = 0;
     private static int traitScroll = 0;
+    private static int subPageScroll = 0;
+    private static boolean biomesOpen = false;
 
     public int xSize;
     public int ySize;
@@ -82,6 +84,7 @@ public class BeepediaScreen extends Screen {
         this.xSize = 286;
         this.ySize = 182;
     }
+
 
     @Override
     protected void init() {
@@ -262,6 +265,9 @@ public class BeepediaScreen extends Screen {
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double scrollAmount) {
+        boolean subScrolled = activePage.mouseScrolled(mouseX, mouseY, scrollAmount);
+        if (subScrolled) return true;
+
         if (activeList != null) {
             activeList.updatePos((int) (scrollAmount * 8));
         }
@@ -331,6 +337,7 @@ public class BeepediaScreen extends Screen {
             renderTooltip(matrix, textComponent, mouseX, mouseY);
         };
     }
+
 
     public static class TabButton extends ImageButton {
         private final ItemStack displayItem;
@@ -469,6 +476,22 @@ public class BeepediaScreen extends Screen {
 
     public static void setBeeSubPage(BeePage.SubPageType beeSubPage) {
         BeepediaScreen.beeSubPage = beeSubPage;
+    }
+
+    public static boolean isBiomesOpen() {
+        return biomesOpen;
+    }
+
+    public static void setBiomesOpen(boolean b) {
+        BeepediaScreen.biomesOpen = b;
+    }
+
+    public static int getSubPageScroll() {
+        return subPageScroll;
+    }
+
+    public static void setSubPageScroll(int subPageScroll) {
+        BeepediaScreen.subPageScroll = subPageScroll;
     }
 
     public enum PageType {
