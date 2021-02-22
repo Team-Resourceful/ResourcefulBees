@@ -10,6 +10,8 @@ import com.resourcefulbees.resourcefulbees.mixin.AnimalEntityAccessor;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.passive.BeeEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -50,6 +52,11 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
     public CustomBeeEntity(EntityType<? extends BeeEntity> type, World world, CustomBeeData beeData) {
         super(type, world);
         this.beeData = beeData;
+    }
+
+    public static AttributeModifierMap.MutableAttribute createBeeAttributes(String key) {
+        CustomBeeData beeData = BeeRegistry.getRegistry().getBeeData(key);
+        return createMobAttributes().add(Attributes.GENERIC_MAX_HEALTH, beeData.getCombatData().getBaseHealth()).add(Attributes.GENERIC_FLYING_SPEED, 0.6F).add(Attributes.GENERIC_MOVEMENT_SPEED, 0.3F).add(Attributes.GENERIC_ATTACK_DAMAGE, beeData.getCombatData().getAttackDamage()).add(Attributes.GENERIC_FOLLOW_RANGE, 48.0D);
     }
 
     //region BEE INFO RELATED METHODS BELOW

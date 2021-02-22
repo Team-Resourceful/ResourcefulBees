@@ -15,6 +15,7 @@ import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.TraitRegistry;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.client.gui.widget.button.Button;
@@ -26,6 +27,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.BeeEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.Color;
@@ -69,6 +71,7 @@ public class BeepediaScreen extends Screen {
 
     ResourceLocation background = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/screen.png");
     ResourceLocation buttonImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/button.png");
+    ResourceLocation slotImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/slot.png");
 
     public BeepediaScreen(ITextComponent name, String pageID) {
         super(name);
@@ -79,25 +82,6 @@ public class BeepediaScreen extends Screen {
         }
         this.xSize = 286;
         this.ySize = 182;
-    }
-
-    public void setActive(BeepediaPage activePage) {
-        if (this.activePage != null) this.activePage.closePage();
-        this.activePage = activePage;
-        this.activePage.openPage();
-        if (activePage instanceof BeePage) {
-            setPageType(PageType.BEE);
-            setActiveList(beesList);
-        }
-        if (activePage instanceof TraitPage) {
-            setPageType(PageType.TRAIT);
-            setActiveList(traitsList);
-        }
-        if (activePage instanceof HoneyPage) {
-            setPageType(PageType.HONEY);
-            setActiveList(honeyList);
-        }
-        setPageID(activePage.id);
     }
 
     @Override
@@ -162,13 +146,38 @@ public class BeepediaScreen extends Screen {
         else setActive(home);
     }
 
+    public void setActive(BeepediaPage activePage) {
+        if (this.activePage != null) this.activePage.closePage();
+        this.activePage = activePage;
+        this.activePage.openPage();
+        if (activePage instanceof BeePage) {
+            setPageType(PageType.BEE);
+            setActiveList(beesList);
+        }
+        if (activePage instanceof TraitPage) {
+            setPageType(PageType.TRAIT);
+            setActiveList(traitsList);
+        }
+        if (activePage instanceof HoneyPage) {
+            setPageType(PageType.HONEY);
+            setActiveList(honeyList);
+        }
+        setPageID(activePage.id);
+    }
+
+    private void setActiveList(ButtonList buttonList) {
+        if (this.activeList != null) this.activeList.setActive(false);
+        this.activeList = buttonList;
+        this.activeList.setActive(true);
+    }
+
     public void initSidebar() {
         ItemStack beeItem = new ItemStack(Items.BEEHIVE);
         ItemStack traitItem = new ItemStack(Items.BLAZE_POWDER);
         ItemStack honeyItem = new ItemStack(Items.HONEY_BOTTLE);
         int x = this.guiLeft;
         int y = this.guiTop;
-        TabButton beesButton = new TabButton(x + 46, y + 8, 20, 20, 0, 0, 20, buttonImage, beeItem, 2, 2, onPress -> {
+        TabButton beesButton = new TabButton(x + 45, y + 8, 20, 20, 0, 0, 20, buttonImage, beeItem, 2, 2, onPress -> {
             setActiveList(beesList);
             activeListType = PageType.BEE;
         });
@@ -187,12 +196,6 @@ public class BeepediaScreen extends Screen {
         traitsList = new ButtonList(x + 8, y + 31, 123, 100, 21, traitsButton, traits);
         honeyList = new ButtonList(x + 8, y + 31, 123, 100, 21, honeyButton, honey);
         setActiveList(beesList);
-    }
-
-    private void setActiveList(ButtonList buttonList) {
-        if (this.activeList != null) this.activeList.setActive(false);
-        this.activeList = buttonList;
-        this.activeList.setActive(true);
     }
 
     @Override
@@ -249,39 +252,6 @@ public class BeepediaScreen extends Screen {
     }
 
     @Override
-    public boolean isPauseScreen() {
-        return false;
-    }
-
-    public Widget addButton(Widget button) {
-        return super.addButton(button);
-    }
-
-    public static class TabButton extends TabImageButton {
-
-        public TabButton(int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int yDiffTextIn, ResourceLocation resourceLocationIn, @NotNull ItemStack displayItem, int itemX, int itemY, IPressable onPressIn) {
-            super(xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, yDiffTextIn, resourceLocationIn, displayItem, itemX, itemY, onPressIn);
-        }
-
-        @Override
-        public void renderButton(@Nonnull MatrixStack matrix, int p_renderButton_1_, int p_renderButton_2_, float p_renderButton_3_) {
-            Minecraft minecraft = Minecraft.getInstance();
-            minecraft.getTextureManager().bindTexture(this.resourceLocation);
-            RenderSystem.disableDepthTest();
-            int i = this.yTexStart;
-            if (!this.active) {
-                i += yDiffText * 2;
-            } else if (this.isHovered()) {
-                i += this.yDiffText;
-            }
-            drawTexture(matrix, this.x, this.y, (float) this.xTexStart, (float) i, this.width, this.height, width, yDiffText * 3);
-            if (this.displayItem != null)
-                Minecraft.getInstance().getItemRenderer().renderItemAndEffectIntoGUI(this.displayItem, this.x + this.itemX, this.y + this.itemY);
-            RenderSystem.enableDepthTest();
-        }
-    }
-
-    @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double scrollAmount) {
         if (activeList != null) {
             activeList.updatePos((int) (scrollAmount * 8));
@@ -290,6 +260,25 @@ public class BeepediaScreen extends Screen {
         traitScroll = traitsList.scrollPos;
         honeyScroll = honeyList.scrollPos;
         return super.mouseScrolled(mouseX, mouseY, scrollAmount);
+    }
+
+    @Override
+    public boolean isPauseScreen() {
+        return false;
+    }
+
+    public Widget addButton(Widget button) {
+        return super.addButton(button);
+    }
+
+    public void drawSlot(MatrixStack matrix, IItemProvider item, int xPos, int yPos, int mouseX, int mouseY) {
+        getMinecraft().getTextureManager().bindTexture(slotImage);
+        ItemStack itemStack = new ItemStack(item);
+        drawTexture(matrix, xPos, yPos, 0, 0, 20, 20, 20, 20);
+        getMinecraft().getItemRenderer().renderInGui(itemStack, xPos + 2, yPos + 2);
+        if (mouseX >= xPos && mouseY >= yPos && mouseX <= xPos + 20 && mouseY <= yPos + 20) {
+            renderTooltip(matrix, itemStack, mouseX, mouseY);
+        }
     }
 
     public static void renderEntity(MatrixStack matrixStack, Entity entity, World world, float x, float y, float rotation, float renderScale) {
@@ -324,9 +313,32 @@ public class BeepediaScreen extends Screen {
         return initEntity(ForgeRegistries.ENTITIES.getValue(entityTypeRegistryID), getMinecraft().world);
     }
 
-
     public Entity initEntity(EntityType<?> left, ClientWorld world) {
         return left.create(world);
+    }
+
+    public static class TabButton extends TabImageButton {
+
+        public TabButton(int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int yDiffTextIn, ResourceLocation resourceLocationIn, @NotNull ItemStack displayItem, int itemX, int itemY, IPressable onPressIn) {
+            super(xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, yDiffTextIn, resourceLocationIn, displayItem, itemX, itemY, onPressIn);
+        }
+
+        @Override
+        public void renderButton(@Nonnull MatrixStack matrix, int p_renderButton_1_, int p_renderButton_2_, float p_renderButton_3_) {
+            Minecraft minecraft = Minecraft.getInstance();
+            minecraft.getTextureManager().bindTexture(this.resourceLocation);
+            RenderSystem.disableDepthTest();
+            int i = this.yTexStart;
+            if (!this.active) {
+                i += yDiffText * 2;
+            } else if (this.isHovered()) {
+                i += this.yDiffText;
+            }
+            drawTexture(matrix, this.x, this.y, (float) this.xTexStart, (float) i, this.width, this.height, width, yDiffText * 3);
+            if (this.displayItem != null)
+                Minecraft.getInstance().getItemRenderer().renderItemAndEffectIntoGUI(this.displayItem, this.x + this.itemX, this.y + this.itemY);
+            RenderSystem.enableDepthTest();
+        }
     }
 
     public class ButtonList {

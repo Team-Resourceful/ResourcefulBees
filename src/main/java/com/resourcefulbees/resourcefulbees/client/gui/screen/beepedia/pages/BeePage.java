@@ -41,8 +41,8 @@ public class BeePage extends BeepediaPage {
     public BeePage(BeepediaScreen beepedia, CustomBeeData beeData, String id, int xPos, int yPos) {
         super(beepedia, xPos, yPos, id);
         this.beeData = beeData;
-        int subX = this.xPos;
-        int subY = this.yPos + 30;
+        int subX = this.xPos + 1;
+        int subY = this.yPos + 50;
 
         tabCounter = 0;
         beeInfoPage = Pair.of(

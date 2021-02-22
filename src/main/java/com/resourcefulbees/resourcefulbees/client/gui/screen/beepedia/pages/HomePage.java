@@ -18,7 +18,7 @@ public class HomePage extends BeepediaPage {
     }
 
     @Override
-    public void renderForeground(MatrixStack matrixStack, int mouseX, int mouseY) {
+    public void renderForeground(MatrixStack matrix, int mouseX, int mouseY) {
 
     }
 

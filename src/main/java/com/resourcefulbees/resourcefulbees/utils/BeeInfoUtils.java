@@ -30,6 +30,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -266,5 +267,13 @@ public class BeeInfoUtils {
             flowers.add(getBlock(flower));
         }
         return flowers;
+    }
+
+    public static ITextComponent getYesNo(boolean bool) {
+        if (bool) {
+            return new TranslationTextComponent("gui.resourcefulbees.yes");
+        }else {
+            return new TranslationTextComponent("gui.resourcefulbees.no");
+        }
     }
 }

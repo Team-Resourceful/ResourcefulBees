@@ -1,40 +1,57 @@
 package com.resourcefulbees.resourcefulbees.api.beedata;
 
 public class CombatData extends AbstractBeeData {
+
+    private Float baseHealth;
     /**
      * The damage the bee makes.
      */
-    private final Float attackDamage;
+    private Float attackDamage;
 
     /**
      * If the bee gets tortured when it stings you.
      */
-    private final boolean removeStingerOnAttack;
+    private boolean removeStingerOnAttack;
 
     /**
      * If the bee is passive and doensn't attacks at all.
      */
-    private final boolean isPassive;
-    private final boolean inflictsPoison;
+    private boolean isPassive;
 
-    private CombatData(boolean isPassive, Float attackDamage, boolean removeStingerOnAttack, boolean inflictsPoison) {
+    private boolean inflictsPoison;
+
+    private CombatData(boolean isPassive, Float attackDamage, boolean removeStingerOnAttack, boolean inflictsPoison, Float baseHealth) {
         this.isPassive = isPassive;
         this.attackDamage = attackDamage;
         this.removeStingerOnAttack = removeStingerOnAttack;
         this.inflictsPoison = inflictsPoison;
+        this.baseHealth = baseHealth;
     }
 
-    public Float getAttackDamage() { return attackDamage == null ? 1.0f : attackDamage; }
+    public float getBaseHealth() {
+        return baseHealth == null ? 10.0f : baseHealth;
+    }
 
-    public boolean removeStingerOnAttack() { return removeStingerOnAttack; }
+    public float getAttackDamage() {
+        return attackDamage == null ? 1.0f : attackDamage;
+    }
 
-    public boolean isPassive() { return isPassive; }
+    public boolean removeStingerOnAttack() {
+        return removeStingerOnAttack;
+    }
 
-    public boolean inflictsPoison() { return inflictsPoison; }
+    public boolean isPassive() {
+        return isPassive;
+    }
+
+    public boolean inflictsPoison() {
+        return inflictsPoison;
+    }
 
     public static class Builder {
 
         private final boolean isPassive;
+        private Float baseHealth;
         private Float attackDamage;
         private boolean removeStingerOnAttack;
         private boolean inflictsPoison;
@@ -48,6 +65,11 @@ public class CombatData extends AbstractBeeData {
             return this;
         }
 
+        public Builder setBaseHealth(Float baseHealth) {
+            this.baseHealth = baseHealth;
+            return this;
+        }
+
         public Builder setRemoveStingerOnAttack(boolean removeStingerOnAttack) {
             this.removeStingerOnAttack = removeStingerOnAttack;
             return this;
@@ -58,10 +80,12 @@ public class CombatData extends AbstractBeeData {
             return this;
         }
 
-        public CombatData create() { return new CombatData(isPassive, attackDamage, removeStingerOnAttack, inflictsPoison); }
+        public CombatData create() {
+            return new CombatData(isPassive, attackDamage, removeStingerOnAttack, inflictsPoison, baseHealth);
+        }
     }
 
     public static CombatData createDefault() {
-        return new Builder(false).create();
+        return new Builder(false).setRemoveStingerOnAttack(true).setInflictsPoison(true).create();
     }
 }

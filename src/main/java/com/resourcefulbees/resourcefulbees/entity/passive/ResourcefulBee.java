@@ -21,6 +21,8 @@ import com.resourcefulbees.resourcefulbees.utils.validation.ValidatorUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.FollowParentGoal;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.item.ItemEntity;
@@ -244,6 +246,7 @@ public class ResourcefulBee extends CustomBeeEntity {
         }
     }
 
+
     private AxisAlignedBB getMutationBoundingBox() {
         return getBoundingBox().expand(new Vector3d(0, -2, 0));
     }
@@ -367,8 +370,9 @@ public class ResourcefulBee extends CustomBeeEntity {
 
     @Override
     public boolean attackEntityAsMob(@Nonnull Entity entityIn) {
+        float damage = (float)this.getAttributeValue(Attributes.GENERIC_ATTACK_DAMAGE);
         TraitData info = this.getBeeData().getTraitData();
-        boolean flag = entityIn.attackEntityFrom(DamageSource.sting(this), getBeeData().getCombatData().getAttackDamage());
+        boolean flag = entityIn.attackEntityFrom(DamageSource.sting(this), damage);
         if (flag && this.getBeeData().getCombatData().removeStingerOnAttack()) {
             this.applyEnchantments(this, entityIn);
             if (entityIn instanceof LivingEntity) {
@@ -404,7 +408,7 @@ public class ResourcefulBee extends CustomBeeEntity {
                     }
                 }
             }
-            if ((Config.BEES_INFLICT_POISON.get() || this.getBeeData().getCombatData().inflictsPoison()) && !info.hasDamagePotionEffects() && !info.hasDamageTypes())
+            if ((Config.BEES_INFLICT_POISON.get() && this.getBeeData().getCombatData().inflictsPoison()) && !info.hasDamagePotionEffects() && !info.hasDamageTypes())
                 ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.POISON, i * 20, 0));
         }
 

@@ -131,6 +131,7 @@ public class JEICompat implements IModPlugin {
             String purple = TextFormatting.DARK_PURPLE.toString();
 
 
+            stats.append(aqua).append(" Base Health: ").append(purple).append(beeData.getCombatData().getBaseHealth()).append("\n");
             stats.append(aqua).append(" Attack Damage: ").append(purple).append(beeData.getCombatData().getAttackDamage()).append("\n");
             stats.append(aqua).append(" Has Honeycomb: ").append(purple).append(StringUtils.capitalize(String.valueOf(beeData.hasHoneycomb()))).append("\n");
             stats.append(aqua).append(" Max Time in Hive: ").append(purple).append(beeData.getMaxTimeInHive()).append(" ticks\n");

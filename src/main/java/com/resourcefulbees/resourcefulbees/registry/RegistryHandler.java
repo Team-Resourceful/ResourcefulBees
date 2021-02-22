@@ -67,7 +67,7 @@ public class RegistryHandler {
     //Dynamic|Iterative Registration Stuff below this line
 
     public static void addEntityAttributes() {
-        ModEntities.MOD_BEES.forEach((s, customBee) -> GlobalEntityTypeAttributes.put(customBee.get(), BeeEntity.createBeeAttributes().build()));
+        ModEntities.MOD_BEES.forEach((s, customBee) -> GlobalEntityTypeAttributes.put(customBee.get(), CustomBeeEntity.createBeeAttributes(s).build()));
     }
 
     public static void registerDynamicBees() {

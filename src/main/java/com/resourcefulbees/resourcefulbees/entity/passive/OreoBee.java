@@ -23,6 +23,7 @@ public class OreoBee {
                 new CombatData.Builder(false)
                         .setAttackDamage(0f)
                         .setRemoveStingerOnAttack(false)
+                        .setBaseHealth(20f)
                         .create(),
                 CentrifugeData.createDefault(),
                 BreedData.createDefault(),

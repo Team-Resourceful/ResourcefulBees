@@ -26,6 +26,7 @@ public class KittenBee {
                 new CombatData.Builder(false)
                         .setAttackDamage(0f)
                         .setRemoveStingerOnAttack(false)
+                        .setBaseHealth(20f)
                         .create(),
                 new CentrifugeData.Builder(true, "minecraft:cat_spawn_egg")
                         .setBottleOutput("resourcefulbees:catnip_honey_bottle")

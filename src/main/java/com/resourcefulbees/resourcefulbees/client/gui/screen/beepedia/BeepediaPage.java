@@ -57,7 +57,7 @@ public abstract class BeepediaPage {
 
     public abstract void renderBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY);
 
-    public abstract void renderForeground(MatrixStack matrixStack, int mouseX, int mouseY);
+    public abstract void renderForeground(MatrixStack matrix, int mouseX, int mouseY);
 
     public abstract String getSearch();
 
