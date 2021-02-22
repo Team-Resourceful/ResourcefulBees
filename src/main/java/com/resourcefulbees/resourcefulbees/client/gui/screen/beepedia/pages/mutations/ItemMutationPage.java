@@ -26,4 +26,9 @@ public class ItemMutationPage extends MutationPage {
     public void tick(int ticksActive) {
 
     }
+
+    @Override
+    public void drawTooltips(MatrixStack matrixStack, int mouseX, int mouseY) {
+
+    }
 }

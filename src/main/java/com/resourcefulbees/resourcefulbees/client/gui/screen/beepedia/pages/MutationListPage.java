@@ -33,4 +33,9 @@ public class MutationListPage extends BeeDataPage {
     public void tick(int ticksActive) {
 
     }
+
+    @Override
+    public void drawTooltips(MatrixStack matrixStack, int mouseX, int mouseY) {
+
+    }
 }

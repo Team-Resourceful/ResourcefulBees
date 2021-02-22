@@ -63,6 +63,8 @@ public abstract class BeepediaPage {
 
     public abstract void tick(int ticksActive);
 
+    public abstract void drawTooltips(MatrixStack matrixStack, int mouseX, int mouseY);
+
     public class ListButton extends TabImageButton {
         private final TextComponent text;
         private final int textX;

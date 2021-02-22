@@ -79,4 +79,9 @@ public class BeeInfoPage extends BeeDataPage {
             }
         }
     }
+
+    @Override
+    public void drawTooltips(MatrixStack matrixStack, int mouseX, int mouseY) {
+
+    }
 }

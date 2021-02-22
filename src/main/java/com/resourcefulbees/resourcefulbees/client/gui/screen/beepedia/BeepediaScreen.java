@@ -8,17 +8,16 @@ import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.BeeP
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.HomePage;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.HoneyPage;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.TraitPage;
-import com.resourcefulbees.resourcefulbees.client.gui.widget.TabImageButton;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.entity.passive.KittenBee;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.TraitRegistry;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.client.gui.widget.button.ImageButton;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.world.ClientWorld;
@@ -180,15 +179,15 @@ public class BeepediaScreen extends Screen {
         TabButton beesButton = new TabButton(x + 45, y + 8, 20, 20, 0, 0, 20, buttonImage, beeItem, 2, 2, onPress -> {
             setActiveList(beesList);
             activeListType = PageType.BEE;
-        });
+        }, getTooltipProvider(new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.bees")));
         TabButton traitsButton = new TabButton(x + 66, y + 8, 20, 20, 0, 0, 20, buttonImage, traitItem, 2, 2, onPress -> {
             setActiveList(traitsList);
             activeListType = PageType.TRAIT;
-        });
+        }, getTooltipProvider(new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits")));
         TabButton honeyButton = new TabButton(x + 87, y + 8, 20, 20, 0, 0, 20, buttonImage, honeyItem, 2, 2, onPress -> {
             setActiveList(honeyList);
             activeListType = PageType.HONEY;
-        });
+        }, getTooltipProvider(new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.honey")));
         addButton(beesButton);
         addButton(traitsButton);
         addButton(honeyButton);
@@ -203,7 +202,9 @@ public class BeepediaScreen extends Screen {
         drawBackground(matrixStack, partialTick, mouseX, mouseY);
         super.render(matrixStack, mouseX, mouseY, partialTick);
         drawForeground(matrixStack, mouseX, mouseY);
+        drawTooltips(matrixStack, mouseX, mouseY);
     }
+
 
     protected void drawBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
         Minecraft client = this.client;
@@ -240,6 +241,14 @@ public class BeepediaScreen extends Screen {
                 break;
         }
         this.textRenderer.draw(matrixStack, title, this.guiLeft + 10, this.guiTop + 20, Color.parse("white").getRgb());
+    }
+
+
+    private void drawTooltips(MatrixStack matrixStack, int mouseX, int mouseY) {
+        activePage.drawTooltips(matrixStack, mouseX, mouseY);
+        beesList.button.renderToolTip(matrixStack, mouseX, mouseY);
+        traitsList.button.renderToolTip(matrixStack, mouseX, mouseY);
+        honeyList.button.renderToolTip(matrixStack, mouseX, mouseY);
     }
 
     public List<TraitPage> getTraits(CustomBeeData beeData) {
@@ -317,14 +326,36 @@ public class BeepediaScreen extends Screen {
         return left.create(world);
     }
 
-    public static class TabButton extends TabImageButton {
+    public Button.ITooltip getTooltipProvider(ITextComponent textComponent) {
+        return (button, matrix, mouseX, mouseY) -> {
+            renderTooltip(matrix, textComponent, mouseX, mouseY);
+        };
+    }
 
-        public TabButton(int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int yDiffTextIn, ResourceLocation resourceLocationIn, @NotNull ItemStack displayItem, int itemX, int itemY, IPressable onPressIn) {
-            super(xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, yDiffTextIn, resourceLocationIn, displayItem, itemX, itemY, onPressIn);
+    public static class TabButton extends ImageButton {
+        private final ItemStack displayItem;
+        private final ResourceLocation resourceLocation;
+        private final ITooltip tooltipProvider;
+        private final int xTexStart;
+        private final int yTexStart;
+        private final int yDiffText;
+        private final int itemX;
+        private final int itemY;
+
+        public TabButton(int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int yDiffTextIn, ResourceLocation resourceLocationIn, @NotNull ItemStack displayItem, int itemX, int itemY, IPressable onPressIn, ITooltip tooltipProvider) {
+            super(xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, yDiffTextIn, resourceLocationIn, itemX, itemY, onPressIn);
+            this.resourceLocation = resourceLocationIn;
+            this.displayItem = displayItem;
+            this.xTexStart = xTexStartIn;
+            this.yTexStart = yTexStartIn;
+            this.yDiffText = yDiffTextIn;
+            this.itemX = itemX;
+            this.itemY = itemY;
+            this.tooltipProvider = tooltipProvider;
         }
 
         @Override
-        public void renderButton(@Nonnull MatrixStack matrix, int p_renderButton_1_, int p_renderButton_2_, float p_renderButton_3_) {
+        public void renderButton(@Nonnull MatrixStack matrix, int mouseX, int mouseY, float partialTick) {
             Minecraft minecraft = Minecraft.getInstance();
             minecraft.getTextureManager().bindTexture(this.resourceLocation);
             RenderSystem.disableDepthTest();
@@ -338,6 +369,13 @@ public class BeepediaScreen extends Screen {
             if (this.displayItem != null)
                 Minecraft.getInstance().getItemRenderer().renderItemAndEffectIntoGUI(this.displayItem, this.x + this.itemX, this.y + this.itemY);
             RenderSystem.enableDepthTest();
+        }
+
+        @Override
+        public void renderToolTip(MatrixStack matrix, int mouseX, int mouseY) {
+            if (this.isHovered()) {
+                tooltipProvider.onTooltip(this, matrix, mouseX, mouseY);
+            }
         }
     }
 

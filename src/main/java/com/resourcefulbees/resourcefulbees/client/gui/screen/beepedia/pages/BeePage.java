@@ -14,6 +14,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.Color;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.opengl.GL11;
 
@@ -46,42 +48,48 @@ public class BeePage extends BeepediaPage {
 
         tabCounter = 0;
         beeInfoPage = Pair.of(
-                getTabButton(new ItemStack(Items.BOOK), onPress -> setSubPage(SubPageType.INFO)),
+                getTabButton(new ItemStack(Items.BOOK), onPress -> setSubPage(SubPageType.INFO),
+                        new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.info")),
                 new BeeInfoPage(beepedia, beeData, subX, subY, this)
         );
         subPage = beeInfoPage;
         tabs.add(beeInfoPage);
         if (beeData.getMutationData().testMutations()) {
             mutations = Pair.of(
-                    getTabButton(new ItemStack(Items.FERMENTED_SPIDER_EYE), onPress -> setSubPage(SubPageType.MUTATIONS)),
+                    getTabButton(new ItemStack(Items.FERMENTED_SPIDER_EYE), onPress -> setSubPage(SubPageType.MUTATIONS),
+                            new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.mutations")),
                     new MutationListPage(beepedia, beeData, subX, subY, this)
             );
             tabs.add(mutations);
         }
         if (beeData.getTraitData().hasTraits() && beeData.hasTraitNames()) {
             traitListPage = Pair.of(
-                    getTabButton(new ItemStack(Items.BLAZE_POWDER), onPress -> setSubPage(SubPageType.TRAIT_LIST)),
+                    getTabButton(new ItemStack(Items.BLAZE_POWDER), onPress -> setSubPage(SubPageType.TRAIT_LIST),
+                            new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.traits")),
                     new TraitListPage(beepedia, beeData, subX, subY, this)
             );
             tabs.add(traitListPage);
         }
         if (beeData.hasHoneycomb()) {
             centrifugePage = Pair.of(
-                    getTabButton(new ItemStack(ModItems.CENTRIFUGE_ITEM.get()), onPress -> setSubPage(SubPageType.CENTRIFUGE)),
+                    getTabButton(new ItemStack(ModItems.CENTRIFUGE_ITEM.get()), onPress -> setSubPage(SubPageType.CENTRIFUGE),
+                            new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.centrifuge")),
                     new CentrifugePage(beepedia, beeData, subX, subY, this)
             );
             tabs.add(centrifugePage);
         }
         if (beeData.getSpawnData().canSpawnInWorld()) {
             spawningPage = Pair.of(
-                    getTabButton(new ItemStack(Items.SPAWNER), onPress -> setSubPage(SubPageType.SPAWNING)),
+                    getTabButton(new ItemStack(Items.SPAWNER), onPress -> setSubPage(SubPageType.SPAWNING),
+                            new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.spawning")),
                     new SpawningPage(beepedia, beeData, subX, subY, this)
             );
             tabs.add(spawningPage);
         }
         if (beeData.getBreedData().isBreedable()) {
             breedingPage = Pair.of(
-                    getTabButton(new ItemStack(ModItems.GOLD_FLOWER_ITEM.get()), onPress -> setSubPage(SubPageType.BREEDING)),
+                    getTabButton(new ItemStack(ModItems.GOLD_FLOWER_ITEM.get()), onPress -> setSubPage(SubPageType.BREEDING),
+                            new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding")),
                     new BreedingPage(beepedia, beeData, subX, subY, this)
             );
             tabs.add(breedingPage);
@@ -92,8 +100,9 @@ public class BeePage extends BeepediaPage {
         newListButton(beeJar, beeData.getTranslation());
     }
 
-    public BeepediaScreen.TabButton getTabButton(ItemStack stack, Button.IPressable pressable) {
-        BeepediaScreen.TabButton button = new BeepediaScreen.TabButton(this.xPos + 40 + tabCounter * 21, this.yPos + 27, 20, 20, 0, 0, 20, buttonImage, stack, 2, 2, pressable);
+    public BeepediaScreen.TabButton getTabButton(ItemStack stack, Button.IPressable pressable, ITextComponent tooltip) {
+        BeepediaScreen.TabButton button = new BeepediaScreen.TabButton(this.xPos + 40 + tabCounter * 21, this.yPos + 27,
+                20, 20, 0, 0, 20, buttonImage, stack, 2, 2, pressable, beepedia.getTooltipProvider(tooltip));
         beepedia.addButton(button);
         button.visible = false;
         tabCounter++;
@@ -145,6 +154,12 @@ public class BeePage extends BeepediaPage {
     @Override
     public void tick(int ticksActive) {
         subPage.getRight().tick(ticksActive);
+    }
+
+    @Override
+    public void drawTooltips(MatrixStack matrixStack, int mouseX, int mouseY) {
+        subPage.getRight().drawTooltips(matrixStack, mouseX, mouseY);
+        tabs.forEach(p -> p.getLeft().renderToolTip(matrixStack, mouseX, mouseY));
     }
 
     public void setSubPage(SubPageType beeSubPage) {
