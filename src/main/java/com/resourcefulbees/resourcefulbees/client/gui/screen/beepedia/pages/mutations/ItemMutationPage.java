@@ -21,4 +21,9 @@ public class ItemMutationPage extends MutationPage {
     public void renderForeground(MatrixStack matrixStack, int mouseX, int mouseY) {
 
     }
+
+    @Override
+    public void tick(int ticksActive) {
+
+    }
 }

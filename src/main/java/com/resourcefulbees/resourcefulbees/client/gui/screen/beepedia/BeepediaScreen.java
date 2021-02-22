@@ -9,6 +9,7 @@ import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.Home
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.HoneyPage;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.TraitPage;
 import com.resourcefulbees.resourcefulbees.client.gui.widget.TabImageButton;
+import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.entity.passive.KittenBee;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
@@ -17,11 +18,21 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.passive.BeeEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.util.text.Color;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
@@ -41,6 +52,7 @@ public class BeepediaScreen extends Screen {
     public int ySize;
     public int guiLeft;
     public int guiTop;
+    public int ticksOpen = 0;
 
     public Map<String, BeePage> bees = new TreeMap<>();
     public Map<String, TraitPage> traits = new TreeMap<>();
@@ -52,6 +64,7 @@ public class BeepediaScreen extends Screen {
 
     BeepediaPage home;
     BeepediaPage activePage;
+    PageType activeListType = PageType.BEE;
     ButtonList activeList = null;
 
     ResourceLocation background = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/screen.png");
@@ -62,6 +75,7 @@ public class BeepediaScreen extends Screen {
         if (pageID != null) {
             setPageType(PageType.BEE);
             setPageID(pageID);
+            setBeeSubPage(BeePage.SubPageType.INFO);
         }
         this.xSize = 286;
         this.ySize = 182;
@@ -94,7 +108,7 @@ public class BeepediaScreen extends Screen {
         this.guiTop = (this.height - this.ySize) / 2;
         int x = this.guiLeft;
         int y = this.guiTop;
-        int subX = x + 130;
+        int subX = x + 112;
         int subY = y + 0;
         honey.put("honey", new HoneyPage(this, BeeConstants.defaultHoney, "honey", subX, subY));
         honey.put("catnip", new HoneyPage(this, KittenBee.getHoneyBottleData(), "catnip", subX, subY));
@@ -129,17 +143,17 @@ public class BeepediaScreen extends Screen {
             case BEE:
                 page = bees.get(pageID);
                 setActiveList(beesList);
-                if (page instanceof BeePage) {
-                    ((BeePage) page).setSubPage(getBeeSubPage());
-                }
+                activeListType = PageType.BEE;
                 break;
             case HONEY:
                 page = honey.get(pageID);
                 setActiveList(honeyList);
+                activeListType = PageType.HONEY;
                 break;
             case TRAIT:
                 page = traits.get(pageID);
                 setActiveList(traitsList);
+                activeListType = PageType.TRAIT;
                 break;
             default:
                 throw new IllegalStateException(String.format("How did you get this: %s? please contact an developer if you encounter this error.", pageType));
@@ -154,21 +168,24 @@ public class BeepediaScreen extends Screen {
         ItemStack honeyItem = new ItemStack(Items.HONEY_BOTTLE);
         int x = this.guiLeft;
         int y = this.guiTop;
-        TabButton beesButton = new TabButton(x + 0, y + 0, 20, 20, 0, 0, 20, buttonImage, beeItem, 2, 2, onPress -> {
+        TabButton beesButton = new TabButton(x + 46, y + 8, 20, 20, 0, 0, 20, buttonImage, beeItem, 2, 2, onPress -> {
             setActiveList(beesList);
+            activeListType = PageType.BEE;
         });
-        TabButton traitsButton = new TabButton(x + 20, y + 0, 20, 20, 0, 0, 20, buttonImage, traitItem, 2, 2, onPress -> {
+        TabButton traitsButton = new TabButton(x + 66, y + 8, 20, 20, 0, 0, 20, buttonImage, traitItem, 2, 2, onPress -> {
             setActiveList(traitsList);
+            activeListType = PageType.TRAIT;
         });
-        TabButton honeyButton = new TabButton(x + 40, y + 0, 20, 20, 0, 0, 20, buttonImage, honeyItem, 2, 2, onPress -> {
+        TabButton honeyButton = new TabButton(x + 87, y + 8, 20, 20, 0, 0, 20, buttonImage, honeyItem, 2, 2, onPress -> {
             setActiveList(honeyList);
+            activeListType = PageType.HONEY;
         });
         addButton(beesButton);
         addButton(traitsButton);
         addButton(honeyButton);
-        beesList = new ButtonList(x + 8, y + 30, 124, 100, 21, beesButton, bees);
-        traitsList = new ButtonList(x + 8, y + 30, 124, 100, 21, traitsButton, traits);
-        honeyList = new ButtonList(x + 8, y + 30, 124, 100, 21, honeyButton, honey);
+        beesList = new ButtonList(x + 8, y + 31, 123, 100, 21, beesButton, bees);
+        traitsList = new ButtonList(x + 8, y + 31, 123, 100, 21, traitsButton, traits);
+        honeyList = new ButtonList(x + 8, y + 31, 123, 100, 21, honeyButton, honey);
         setActiveList(beesList);
     }
 
@@ -197,9 +214,29 @@ public class BeepediaScreen extends Screen {
         activeList.updateList();
     }
 
+    @Override
+    public void tick() {
+        super.tick();
+        ticksOpen++;
+        activePage.tick(ticksOpen);
+    }
+
     protected void drawForeground(MatrixStack matrixStack, int mouseX, int mouseY) {
         this.textRenderer.draw(matrixStack, this.title, (float) this.guiLeft + 10, (float) this.guiTop + ySize - 20, 5592405);
         activePage.renderForeground(matrixStack, mouseX, mouseY);
+        TranslationTextComponent title;
+        switch (activeListType) {
+            case TRAIT:
+                title = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits");
+                break;
+            case HONEY:
+                title = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.honey");
+                break;
+            default:
+                title = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.bees");
+                break;
+        }
+        this.textRenderer.draw(matrixStack, title, this.guiLeft + 10, this.guiTop + 20, Color.parse("white").getRgb());
     }
 
     public List<TraitPage> getTraits(CustomBeeData beeData) {
@@ -237,7 +274,7 @@ public class BeepediaScreen extends Screen {
             } else if (this.isHovered()) {
                 i += this.yDiffText;
             }
-            drawTexture(matrix, this.x, this.y, (float) this.xTexStart, (float) i, this.width, this.height, 128, 128);
+            drawTexture(matrix, this.x, this.y, (float) this.xTexStart, (float) i, this.width, this.height, width, yDiffText * 3);
             if (this.displayItem != null)
                 Minecraft.getInstance().getItemRenderer().renderItemAndEffectIntoGUI(this.displayItem, this.x + this.itemX, this.y + this.itemY);
             RenderSystem.enableDepthTest();
@@ -253,6 +290,43 @@ public class BeepediaScreen extends Screen {
         traitScroll = traitsList.scrollPos;
         honeyScroll = honeyList.scrollPos;
         return super.mouseScrolled(mouseX, mouseY, scrollAmount);
+    }
+
+    public static void renderEntity(MatrixStack matrixStack, Entity entity, World world, float x, float y, float rotation, float renderScale) {
+        if (world != null) {
+            float scaledSize = 20 * renderScale;
+            Minecraft mc = Minecraft.getInstance();
+            if (entity instanceof BeeEntity) {
+                entity.ticksExisted = mc.player.ticksExisted;
+                ((BeeEntity) entity).renderYawOffset = rotation;
+                if (entity instanceof CustomBeeEntity) {
+                    scaledSize = 20 / ((CustomBeeEntity) entity).getBeeData().getSizeModifier() * renderScale;
+                }
+            }
+            if (mc.player != null) {
+                matrixStack.push();
+                matrixStack.translate(8, 14, 0.5D);
+                matrixStack.translate(x, y, 1);
+                matrixStack.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(180.0F));
+                matrixStack.translate(0.0F, -0.2F, 1);
+                matrixStack.scale(-scaledSize, scaledSize, 30);
+                matrixStack.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(270.0F));
+                EntityRendererManager entityrenderermanager = mc.getRenderManager();
+                IRenderTypeBuffer.Impl irendertypebuffer$impl = mc.getBufferBuilders().getEntityVertexConsumers();
+                entityrenderermanager.render(entity, 0, 0, 0.0D, mc.getRenderPartialTicks(), 1, matrixStack, irendertypebuffer$impl, 15728880);
+                irendertypebuffer$impl.draw();
+            }
+            matrixStack.pop();
+        }
+    }
+
+    public Entity initEntity(ResourceLocation entityTypeRegistryID) {
+        return initEntity(ForgeRegistries.ENTITIES.getValue(entityTypeRegistryID), getMinecraft().world);
+    }
+
+
+    public Entity initEntity(EntityType<?> left, ClientWorld world) {
+        return left.create(world);
     }
 
     public class ButtonList {
@@ -312,6 +386,7 @@ public class BeepediaScreen extends Screen {
 
         public void setActive(boolean active) {
             this.active = active;
+            button.active = !active;
             list.forEach((s, b) -> {
                 if (b.listButton != null) b.listButton.visible = active;
             });

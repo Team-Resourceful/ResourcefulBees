@@ -56,4 +56,9 @@ public class HoneyPage extends BeepediaPage {
     public String getSearch() {
         return honey;
     }
+
+    @Override
+    public void tick(int ticksActive) {
+
+    }
 }

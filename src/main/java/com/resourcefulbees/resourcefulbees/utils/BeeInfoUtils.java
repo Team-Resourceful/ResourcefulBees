@@ -30,6 +30,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
@@ -231,5 +232,39 @@ public class BeeInfoUtils {
     public static boolean isShiftPressed() {
         long windowID = Minecraft.getInstance().getWindow().getHandle();
         return InputMappings.isKeyDown(windowID, GLFW.GLFW_KEY_LEFT_SHIFT) || InputMappings.isKeyDown(windowID, GLFW.GLFW_KEY_RIGHT_SHIFT);
+    }
+
+    public static TranslationTextComponent getSizeName(float sizeModifier) {
+        if (sizeModifier < 0.75) {
+            return new TranslationTextComponent("bees.resourcefulbees.size.tiny");
+        } else if (sizeModifier < 1) {
+            return new TranslationTextComponent("bees.resourcefulbees.size.small");
+        } else if (sizeModifier == 1) {
+            return new TranslationTextComponent("bees.resourcefulbees.size.regular");
+        } else if (sizeModifier <= 1.5) {
+            return new TranslationTextComponent("bees.resourcefulbees.size.large");
+        } else {
+            return new TranslationTextComponent("bees.resourcefulbees.size.giant");
+        }
+    }
+
+    public static List<Block> getFlowers(String flower) {
+        List<Block> flowers = new LinkedList<>();
+        if (flower.equals(FLOWER_TAG_ALL)) {
+            ITag<Block> itemTag = BlockTags.FLOWERS;
+            if (itemTag != null) flowers.addAll(itemTag.values());
+        } else if (flower.equals(FLOWER_TAG_SMALL)) {
+            ITag<Block> itemTag = BlockTags.SMALL_FLOWERS;
+            if (itemTag != null) flowers.addAll(itemTag.values());
+        } else if (flower.equals(FLOWER_TAG_TALL)) {
+            ITag<Block> itemTag = BlockTags.TALL_FLOWERS;
+            if (itemTag != null) flowers.addAll(itemTag.values());
+        } else if (flower.startsWith(TAG_PREFIX)) {
+            ITag<Block> itemTag = BeeInfoUtils.getBlockTag(flower.replace(TAG_PREFIX, ""));
+            if (itemTag != null) flowers.addAll(itemTag.values());
+        } else {
+            flowers.add(getBlock(flower));
+        }
+        return flowers;
     }
 }

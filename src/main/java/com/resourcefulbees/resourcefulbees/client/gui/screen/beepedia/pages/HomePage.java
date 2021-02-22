@@ -26,4 +26,9 @@ public class HomePage extends BeepediaPage {
     public String getSearch() {
         return new TranslationTextComponent("gui.resourcefulbees.beepedia.home_button").getString();
     }
+
+    @Override
+    public void tick(int ticksActive) {
+        
+    }
 }

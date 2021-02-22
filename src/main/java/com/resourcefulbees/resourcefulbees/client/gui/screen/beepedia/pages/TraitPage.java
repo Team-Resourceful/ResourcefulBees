@@ -49,4 +49,9 @@ public class TraitPage extends BeepediaPage {
     public String getSearch() {
         return translation;
     }
+
+    @Override
+    public void tick(int ticksActive) {
+
+    }
 }

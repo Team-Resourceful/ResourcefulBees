@@ -61,6 +61,8 @@ public abstract class BeepediaPage {
 
     public abstract String getSearch();
 
+    public abstract void tick(int ticksActive);
+
     public class ListButton extends TabImageButton {
         private final TextComponent text;
         private final int textX;

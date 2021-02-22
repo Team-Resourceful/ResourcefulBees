@@ -71,6 +71,37 @@
     "item.resourcefulbees.bepedia": "Beepedia",
 	"gui.resourcefulbees.beepedia" : "Beepedia v1.0",
 	"gui.resourcefulbees.beepedia.home_button" : "HOME",
+	"gui.resourcefulbees.beepedia.tab.bees" : "Bees",
+	"gui.resourcefulbees.beepedia.tab.traits" : "Traits",
+	"gui.resourcefulbees.beepedia.tab.honey" : "Honey",
+
+	"gui.resourcefulbees.beepedia.bee_subtab.info" : "Info",
+	"gui.resourcefulbees.beepedia.bee_subtab.info.size" : "Size: ",
+	"gui.resourcefulbees.beepedia.bee_subtab.info.flower" : "Flower: ",
+	"gui.resourcefulbees.beepedia.bee_subtab.info.stinger" : "Can Lose Stinger?: ",
+	"gui.resourcefulbees.beepedia.bee_subtab.info.passive" : "Is Passive?: ",
+	"gui.resourcefulbees.beepedia.bee_subtab.info.damage" : "Attack Damage: ",
+	"gui.resourcefulbees.beepedia.bee_subtab.info.found" : "Found By: ",
+	"gui.resourcefulbees.beepedia.bee_subtab.info.description" : "Description: ",
+
+	"gui.resourcefulbees.beepedia.bee_subtab.mutations" : "Mutations",
+	"gui.resourcefulbees.beepedia.bee_subtab.spawning" : "Spawning",
+	"gui.resourcefulbees.beepedia.bee_subtab.spawning.weight" : "Spawn Weight: ",
+	"gui.resourcefulbees.beepedia.bee_subtab.spawning.height" : "Spawn Height: ",
+	"gui.resourcefulbees.beepedia.bee_subtab.spawning.group" : "Group Size: ",
+	"gui.resourcefulbees.beepedia.bee_subtab.spawning.light" : "Light Level: ",
+	"gui.resourcefulbees.beepedia.bee_subtab.spawning.biomes" : "Biomes: ",
+
+	"gui.resourcefulbees.beepedia.bee_subtab.breeding" : "Breeding",
+
+	"gui.resourcefulbees.beepedia.bee_subtab.traits" : "Traits",
+	"gui.resourcefulbees.beepedia.bee_subtab.centrifuge" : "Centrifuge",
+
+	"bees.resourcefulbees.size.tiny" : "Tiny",
+	"bees.resourcefulbees.size.small" : "Small",
+	"bees.resourcefulbees.size.regular" : "Regular",
+	"bees.resourcefulbees.size.large" : "Large",
+	"bees.resourcefulbees.size.giant" : "Giant",
 
 	"block.resourcefulbees.t1_beehive": "Tier 1 Beehive",
 	"block.resourcefulbees.t2_beehive": "Tier 2 Beehive",
