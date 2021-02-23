@@ -138,6 +138,7 @@ public class BeePage extends BeepediaPage {
     @Override
     public void closePage() {
         super.closePage();
+        if (subPage != null) this.subPage.getRight().closePage();
         tabs.forEach(p -> p.getLeft().visible = false);
     }
 
@@ -198,13 +199,17 @@ public class BeePage extends BeepediaPage {
 
     private void setSubPage(Pair<BeepediaScreen.TabButton, BeeDataPage> beeDataPage) {
         if (subPage != null) {
-            subPage.getRight().closePage();
+            this.subPage.getRight().closePage();
             this.subPage.getLeft().active = true;
         }
         if (beeDataPage == null) beeDataPage = this.beeInfoPage;
         this.subPage = beeDataPage;
+        if (!(subPage.getRight() instanceof SpawningPage)) {
+            beepedia.setBiomesOpen(false);
+            beepedia.setSpawningScroll(0);
+        }
         this.subPage.getLeft().active = false;
-        subPage.getRight().openPage();
+        this.subPage.getRight().openPage();
     }
 
     public enum SubPageType {

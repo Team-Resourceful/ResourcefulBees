@@ -98,6 +98,8 @@
 	"gui.resourcefulbees.beepedia.bee_subtab.spawning.group" : "Group Size: ",
 	"gui.resourcefulbees.beepedia.bee_subtab.spawning.light" : "Light Level: ",
 	"gui.resourcefulbees.beepedia.bee_subtab.spawning.biomes" : "Biomes: ",
+	"gui.resourcefulbees.beepedia.bee_subtab.spawning.biomes_button": "BIOMES",
+	"gui.resourcefulbees.beepedia.bee_subtab.spawning.back_button" : "BACK",
 
 	"gui.resourcefulbees.beepedia.bee_subtab.breeding" : "Breeding",
 

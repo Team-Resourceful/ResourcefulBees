@@ -48,7 +48,7 @@ public class BeepediaScreen extends Screen {
     private static int beesScroll = 0;
     private static int honeyScroll = 0;
     private static int traitScroll = 0;
-    private static int subPageScroll = 0;
+    private static int spawningScroll = 0;
     private static boolean biomesOpen = false;
 
     public int xSize;
@@ -425,7 +425,7 @@ public class BeepediaScreen extends Screen {
 
         public void updatePos(int newPos) {
             // update position of list
-            if (height > reducedList.size() * 20) return;
+            if (height > reducedList.size() * itemHeight) return;
             scrollPos += newPos;
             if (scrollPos > 0) scrollPos = 0;
             else if (scrollPos < -(reducedList.size() * itemHeight - height))
@@ -486,12 +486,12 @@ public class BeepediaScreen extends Screen {
         BeepediaScreen.biomesOpen = b;
     }
 
-    public static int getSubPageScroll() {
-        return subPageScroll;
+    public static int getSpawningScroll() {
+        return spawningScroll;
     }
 
-    public static void setSubPageScroll(int subPageScroll) {
-        BeepediaScreen.subPageScroll = subPageScroll;
+    public static void setSpawningScroll(int spawningScroll) {
+        BeepediaScreen.spawningScroll = spawningScroll;
     }
 
     public enum PageType {
