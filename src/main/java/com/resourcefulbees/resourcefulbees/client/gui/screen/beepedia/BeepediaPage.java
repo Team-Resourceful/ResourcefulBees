@@ -26,7 +26,7 @@ public abstract class BeepediaPage {
     public ResourceLocation listImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/list_button.png");
     public String id;
 
-    public BeepediaPage(BeepediaScreen beepedia, int xPos, int yPos, String id) {
+    protected BeepediaPage(BeepediaScreen beepedia, int xPos, int yPos, String id) {
         this.beepedia = beepedia;
         this.yPos = yPos;
         this.xPos = xPos;
@@ -88,9 +88,8 @@ public abstract class BeepediaPage {
 
         @Override
         public boolean mouseClicked(double mouseX, double mouseY, int button) {
-            if (parent != null) {
-                if (mouseX < parent.xPos || mouseY < parent.yPos || mouseX > parent.xPos + parent.width || mouseY > parent.yPos + parent.height)
-                    return false;
+            if (parent != null && (mouseX < parent.xPos || mouseY < parent.yPos || mouseX > parent.xPos + parent.width || mouseY > parent.yPos + parent.height)) {
+                return false;
             }
             return super.mouseClicked(mouseX, mouseY, button);
         }

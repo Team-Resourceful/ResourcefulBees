@@ -31,6 +31,10 @@ public class RandomCollection<E> {
         return map.higherEntry(value).getValue();
     }
 
+    public NavigableMap<Double, E> getMap(){
+        return map;
+    }
+
     public double getAdjustedWeight(double weight) {
         return weight / total;
     }

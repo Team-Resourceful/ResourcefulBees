@@ -159,4 +159,31 @@ public class BeeRegistry implements IBeeRegistry {
         if (parent1.equals(parent2)) return 1f;
         else return childData.getBreedData().getBreedChance();
     }
+
+    public Map<Pair<String, String>, RandomCollection<CustomBeeData>> getChildren(CustomBeeData beeData) {
+        Map<Pair<String, String>, RandomCollection<CustomBeeData>> children = new HashMap<>();
+        familyTree.forEach((p, b) -> {
+            if (BeeRegistry.getRegistry().getBees().containsKey(p.getLeft()) && BeeRegistry.getRegistry().getBees().containsKey(p.getLeft())) {
+                if (p.getRight().equals(beeData.getName()) || p.getLeft().equals(beeData.getName())) {
+                    children.put(p, b);
+                }
+            }
+        });
+        return children;
+    }
+
+    public Map<Pair<String, String>, CustomBeeData> getParents(CustomBeeData beeData) {
+        Map<Pair<String, String>, CustomBeeData> parents = new HashMap<>();
+        familyTree.forEach((p, b) -> {
+            if (BeeRegistry.getRegistry().getBees().containsKey(p.getLeft()) && BeeRegistry.getRegistry().getBees().containsKey(p.getLeft())) {
+                for (Map.Entry<Double, CustomBeeData> data : b.getMap().entrySet()) {
+                    if (data.getValue().getName().equals(beeData.getName())) {
+                        parents.put(p, beeData);
+                        break;
+                    }
+                }
+            }
+        });
+        return parents;
+    }
 }

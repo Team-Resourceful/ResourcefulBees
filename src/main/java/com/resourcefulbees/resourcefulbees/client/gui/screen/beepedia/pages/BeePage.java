@@ -37,6 +37,7 @@ public class BeePage extends BeepediaPage {
     Pair<BeepediaScreen.TabButton, BeeDataPage> breedingPage;
     List<Pair<BeepediaScreen.TabButton, BeeDataPage>> tabs = new ArrayList<>();
     ResourceLocation buttonImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/button.png");
+    ResourceLocation splitterImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/bee_splitter.png");
 
     private int tabCounter;
 
@@ -111,6 +112,8 @@ public class BeePage extends BeepediaPage {
 
     @Override
     public void renderBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
+        beepedia.getMinecraft().textureManager.bindTexture(splitterImage);
+        beepedia.drawTexture(matrix, xPos, yPos, 0, 0, 165, 100, 165, 100);
         if (bee == null) bee = beepedia.initEntity(beeData.getEntityTypeRegistryID());
         Minecraft.getInstance().fontRenderer.draw(matrix, beeData.getTranslation(), xPos + 40, yPos + 10, Color.parse("white").getRgb());
         subPage.getRight().renderBackground(matrix, partialTick, mouseX, mouseY);
@@ -171,11 +174,8 @@ public class BeePage extends BeepediaPage {
     }
 
     public void setSubPage(SubPageType beeSubPage) {
-        Pair<BeepediaScreen.TabButton, BeeDataPage> page = null;
+        Pair<BeepediaScreen.TabButton, BeeDataPage> page;
         switch (beeSubPage) {
-            case INFO:
-                page = beeInfoPage;
-                break;
             case BREEDING:
                 page = breedingPage;
                 break;
@@ -191,19 +191,16 @@ public class BeePage extends BeepediaPage {
             case TRAIT_LIST:
                 page = traitListPage;
                 break;
+            default:
+                page = beeInfoPage;
+                break;
         }
         if (page == null) page = beeInfoPage;
-        setSubPage(page);
-        BeepediaScreen.currScreenState.setBeeSubPage(beeSubPage);
-    }
-
-    private void setSubPage(Pair<BeepediaScreen.TabButton, BeeDataPage> beeDataPage) {
         if (subPage != null) {
             this.subPage.getRight().closePage();
             this.subPage.getLeft().active = true;
         }
-        if (beeDataPage == null) beeDataPage = this.beeInfoPage;
-        this.subPage = beeDataPage;
+        this.subPage = page;
         if (!(subPage.getRight() instanceof SpawningPage)) {
             beepedia.currScreenState.setBiomesOpen(false);
             beepedia.currScreenState.setSpawningScroll(0);
@@ -213,6 +210,8 @@ public class BeePage extends BeepediaPage {
         }
         this.subPage.getLeft().active = false;
         this.subPage.getRight().openPage();
+
+        BeepediaScreen.currScreenState.setBeeSubPage(beeSubPage);
     }
 
     public enum SubPageType {

@@ -60,6 +60,7 @@ public class TraitPage extends BeepediaPage {
 
     }
 
+
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double scrollAmount) {
         return false;

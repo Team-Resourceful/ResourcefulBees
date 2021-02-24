@@ -11,7 +11,7 @@ public abstract class BeeDataPage extends BeepediaPage {
     public final int subPageWidth = 169;
     public final int subPageHeight = 106;
 
-    public BeeDataPage(BeepediaScreen beepedia, CustomBeeData beeData, int xPos, int yPos, BeePage parent) {
+    protected BeeDataPage(BeepediaScreen beepedia, CustomBeeData beeData, int xPos, int yPos, BeePage parent) {
         super(beepedia, xPos, yPos, parent.id);
         this.parent = parent;
         this.beeData = beeData;

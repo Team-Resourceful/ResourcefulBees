@@ -97,7 +97,7 @@ public class BeepediaScreen extends Screen {
         int x = this.guiLeft;
         int y = this.guiTop;
         int subX = x + 112;
-        int subY = y + 0;
+        int subY = y;
         honey.put("honey", new HoneyPage(this, BeeConstants.defaultHoney, "honey", subX, subY));
         honey.put("catnip", new HoneyPage(this, KittenBee.getHoneyBottleData(), "catnip", subX, subY));
         TraitRegistry.getRegistry().getTraits().forEach((s, b) -> traits.put(s, new TraitPage(this, b, s, subX, subY)));
@@ -109,7 +109,7 @@ public class BeepediaScreen extends Screen {
         }));
         backButton = new Button(x + (xSize / 2) + 20, y + ySize - 25, 40, 20, new TranslationTextComponent("gui.resourcefulbees.beepedia.back_button"), onPress -> {
             if (pastStates.size() > 0) {
-                currScreenState = pastStates.pop();
+                goBackState();
                 returnState(true);
             }
         });
@@ -119,6 +119,10 @@ public class BeepediaScreen extends Screen {
         honey.forEach((s, b) -> addButton(b.listButton));
         initSidebar();
         returnState(false);
+    }
+
+    private static void goBackState() {
+        currScreenState = pastStates.pop();
     }
 
     private void returnState(boolean goingBack) {
@@ -169,7 +173,7 @@ public class BeepediaScreen extends Screen {
         if (this.activePage != null) {
             if (!this.activePage.getClass().equals(activePage.getClass()) && !(this.activePage instanceof HomePage) && !goingBack) {
                 pastStates.push(currScreenState);
-                currScreenState = new BeepediaScreenState();
+                resetScreenState();
             }
             this.activePage.closePage();
         }
@@ -188,6 +192,10 @@ public class BeepediaScreen extends Screen {
             setActiveList(honeyList);
         }
         currScreenState.setPageID(activePage.id);
+    }
+
+    public static void resetScreenState() {
+        currScreenState = new BeepediaScreenState();
     }
 
     private void setActiveList(ButtonList buttonList) {
@@ -295,10 +303,14 @@ public class BeepediaScreen extends Screen {
         if (activeList != null) {
             activeList.updatePos((int) (scrollAmount * 8));
         }
+        updateScrollPos(beesList, traitsList, honeyList);
+        return super.mouseScrolled(mouseX, mouseY, scrollAmount);
+    }
+
+    private static void updateScrollPos(ButtonList beesList, ButtonList traitsList, ButtonList honeyList) {
         beesScroll = beesList.scrollPos;
         traitScroll = traitsList.scrollPos;
         honeyScroll = honeyList.scrollPos;
-        return super.mouseScrolled(mouseX, mouseY, scrollAmount);
     }
 
     @Override
@@ -306,17 +318,21 @@ public class BeepediaScreen extends Screen {
         return false;
     }
 
+    @Override
     public Widget addButton(Widget button) {
         return super.addButton(button);
     }
 
     public void drawSlot(MatrixStack matrix, IItemProvider item, int xPos, int yPos, int mouseX, int mouseY) {
+        drawSlot(matrix, new ItemStack(item), xPos, yPos, mouseX, mouseY);
+    }
+
+    public void drawSlot(MatrixStack matrix, ItemStack item, int xPos, int yPos, int mouseX, int mouseY) {
         getMinecraft().getTextureManager().bindTexture(slotImage);
-        ItemStack itemStack = new ItemStack(item);
         drawTexture(matrix, xPos, yPos, 0, 0, 20, 20, 20, 20);
-        getMinecraft().getItemRenderer().renderInGui(itemStack, xPos + 2, yPos + 2);
+        getMinecraft().getItemRenderer().renderInGui(item, xPos + 2, yPos + 2);
         if (mouseX >= xPos && mouseY >= yPos && mouseX <= xPos + 20 && mouseY <= yPos + 20) {
-            renderTooltip(matrix, itemStack, mouseX, mouseY);
+            renderTooltip(matrix, item, mouseX, mouseY);
         }
     }
 
@@ -361,7 +377,6 @@ public class BeepediaScreen extends Screen {
             renderTooltip(matrix, textComponent, mouseX, mouseY);
         };
     }
-
 
     public static class TabButton extends ImageButton {
         private final ItemStack displayItem;
@@ -480,15 +495,7 @@ public class BeepediaScreen extends Screen {
     }
 
     public static class SubButtonList extends ButtonList {
-        public int xPos;
-        public int yPos;
-        public int height;
-        public int width;
-        public int itemHeight;
-        public int scrollPos = 0;
-        public TabButton button;
-        public boolean active = false;
-        Map<String, BeepediaPage.ListButton> list;
+        Map<String, BeepediaPage.ListButton> subList;
 
         public SubButtonList(int xPos, int yPos, int height, int width, int itemHeight, TabButton button, Map<String, BeepediaPage.ListButton> list) {
             super(xPos, yPos, height, width, itemHeight, null, null);
@@ -497,30 +504,32 @@ public class BeepediaScreen extends Screen {
             this.height = height;
             this.width = width;
             this.itemHeight = itemHeight;
-            this.list = list;
+            this.subList = list;
             this.button = button;
             list.forEach((s, b) -> b.setParent(this));
         }
 
+        @Override
         public void updateReducedList(String search) {
             if (reducedList == null) return;
             super.updateReducedList(search);
         }
 
+        @Override
         public void updatePos(int newPos) {
             // update position of list
-            if (height > list.size() * itemHeight) return;
+            if (height > subList.size() * itemHeight) return;
             scrollPos += newPos;
             if (scrollPos > 0) scrollPos = 0;
-            else if (scrollPos < -(list.size() * itemHeight - height))
-                scrollPos = -(list.size() * itemHeight - height);
+            else if (scrollPos < -(subList.size() * itemHeight - height))
+                scrollPos = -(subList.size() * itemHeight - height);
         }
 
         @Override
         public void updateList() {
             // update each button
             AtomicInteger counter = new AtomicInteger();
-            list.forEach((s, b) -> {
+            subList.forEach((s, b) -> {
                 if (b == null) return;
                 b.x = xPos;
                 b.y = yPos + scrollPos + counter.get() * itemHeight;
@@ -528,16 +537,13 @@ public class BeepediaScreen extends Screen {
             });
         }
 
+        @Override
         public void setActive(boolean active) {
             this.active = active;
             if (button != null) button.active = !active;
-            list.forEach((s, b) -> {
+            subList.forEach((s, b) -> {
                 if (b != null) b.visible = active;
             });
-        }
-
-        public void setScrollPos(int scrollPos) {
-            this.scrollPos = scrollPos;
         }
     }
 

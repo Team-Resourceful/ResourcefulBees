@@ -43,6 +43,7 @@ import org.lwjgl.glfw.GLFW;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.resourcefulbees.resourcefulbees.lib.BeeConstants.*;
 
@@ -287,5 +288,26 @@ public class BeeInfoUtils {
             default:
                 return new TranslationTextComponent("gui.resourcefulbees.light.any");
         }
+    }
+
+    public static List<ItemStack> getBreedItems(CustomBeeData parent1Data) {
+        String flower = parent1Data.getBreedData().getFeedItem();
+        List<Item> flowers = new LinkedList<>();
+        if (flower.equals(FLOWER_TAG_ALL)) {
+            ITag<Item> itemTag = ItemTags.FLOWERS;
+            if (itemTag != null) flowers.addAll(itemTag.values());
+        } else if (flower.equals(FLOWER_TAG_SMALL)) {
+            ITag<Item> itemTag = ItemTags.SMALL_FLOWERS;
+            if (itemTag != null) flowers.addAll(itemTag.values());
+        } else if (flower.equals(FLOWER_TAG_TALL)) {
+            ITag<Item> itemTag = ItemTags.TALL_FLOWERS;
+            if (itemTag != null) flowers.addAll(itemTag.values());
+        } else if (flower.startsWith(TAG_PREFIX)) {
+            ITag<Item> itemTag = BeeInfoUtils.getItemTag(flower.replace(TAG_PREFIX, ""));
+            if (itemTag != null) flowers.addAll(itemTag.values());
+        } else {
+            flowers.add(getItem(flower));
+        }
+        return flowers.stream().map(f -> new ItemStack(f, parent1Data.getBreedData().getFeedAmount())).collect(Collectors.toList());
     }
 }

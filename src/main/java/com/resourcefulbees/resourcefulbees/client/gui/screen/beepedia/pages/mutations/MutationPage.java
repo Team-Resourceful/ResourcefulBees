@@ -7,7 +7,7 @@ import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.BeeP
 
 public abstract class MutationPage extends BeeDataPage {
 
-    public MutationPage(BeepediaScreen beepedia, CustomBeeData beeData, int xPos, int yPos, BeePage parent) {
+    protected MutationPage(BeepediaScreen beepedia, CustomBeeData beeData, int xPos, int yPos, BeePage parent) {
         super(beepedia, beeData, yPos, xPos, parent);
     }
 }
