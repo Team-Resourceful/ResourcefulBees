@@ -37,19 +37,20 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class BeepediaScreen extends Screen {
 
-    private static PageType pageType = PageType.BEE;
-    private static String pageID = null;
-    private static BeePage.SubPageType beeSubPage = BeePage.SubPageType.INFO;
     private static int beesScroll = 0;
     private static int honeyScroll = 0;
     private static int traitScroll = 0;
-    private static int spawningScroll = 0;
-    private static boolean biomesOpen = false;
+
+    public static LinkedList<BeepediaScreenState> pastStates = new LinkedList<>();
+    public static BeepediaScreenState currScreenState = new BeepediaScreenState();
 
     public int xSize;
     public int ySize;
@@ -73,13 +74,14 @@ public class BeepediaScreen extends Screen {
     ResourceLocation background = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/screen.png");
     ResourceLocation buttonImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/button.png");
     ResourceLocation slotImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/slot.png");
+    private Button backButton;
 
     public BeepediaScreen(ITextComponent name, String pageID) {
         super(name);
         if (pageID != null) {
-            setPageType(PageType.BEE);
-            setPageID(pageID);
-            setBeeSubPage(BeePage.SubPageType.INFO);
+            currScreenState.setPageType(PageType.BEE);
+            currScreenState.setPageID(pageID);
+            currScreenState.setBeeSubPage(BeePage.SubPageType.INFO);
         }
         this.xSize = 286;
         this.ySize = 182;
@@ -105,21 +107,32 @@ public class BeepediaScreen extends Screen {
         addButton(new Button(x + (xSize / 2) - 20, y + ySize - 25, 40, 20, new TranslationTextComponent("gui.resourcefulbees.beepedia.home_button"), onPress -> {
             setActive(home);
         }));
+        backButton = new Button(x + (xSize / 2) + 20, y + ySize - 25, 40, 20, new TranslationTextComponent("gui.resourcefulbees.beepedia.back_button"), onPress -> {
+            if (pastStates.size() > 0) {
+                currScreenState = pastStates.pop();
+                returnState(true);
+            }
+        });
+        addButton(backButton);
         bees.forEach((s, b) -> addButton(b.listButton));
         traits.forEach((s, b) -> addButton(b.listButton));
         honey.forEach((s, b) -> addButton(b.listButton));
         initSidebar();
-        returnState();
+        returnState(false);
     }
 
-    private void returnState() {
-        setActive(getPageType(), getPageID());
+    private void returnState(boolean goingBack) {
+        setActive(currScreenState.getPageType(), currScreenState.getPageID(), goingBack);
         if (beesScroll != 0) beesList.setScrollPos(beesScroll);
         if (honeyScroll != 0) honeyList.setScrollPos(honeyScroll);
         if (traitScroll != 0) traitsList.setScrollPos(traitScroll);
     }
 
-    private void setActive(BeepediaScreen.PageType pageType, String pageID) {
+    public void setActive(PageType pageType, String pageID) {
+        setActive(pageType, pageID, false);
+    }
+
+    public void setActive(PageType pageType, String pageID, boolean goingBack) {
         if (pageID == null || pageType == null) {
             setActive(home);
             return;
@@ -144,27 +157,37 @@ public class BeepediaScreen extends Screen {
             default:
                 throw new IllegalStateException(String.format("How did you get this: %s? please contact an developer if you encounter this error.", pageType));
         }
-        if (page != null) setActive(page);
-        else setActive(home);
+        if (page != null) setActive(page, goingBack);
+        else setActive(home, goingBack);
     }
 
     public void setActive(BeepediaPage activePage) {
-        if (this.activePage != null) this.activePage.closePage();
+        setActive(activePage, false);
+    }
+
+    public void setActive(BeepediaPage activePage, boolean goingBack) {
+        if (this.activePage != null) {
+            if (!this.activePage.getClass().equals(activePage.getClass()) && !(this.activePage instanceof HomePage) && !goingBack) {
+                pastStates.push(currScreenState);
+                currScreenState = new BeepediaScreenState();
+            }
+            this.activePage.closePage();
+        }
         this.activePage = activePage;
         this.activePage.openPage();
         if (activePage instanceof BeePage) {
-            setPageType(PageType.BEE);
+            currScreenState.setPageType(PageType.BEE);
             setActiveList(beesList);
         }
         if (activePage instanceof TraitPage) {
-            setPageType(PageType.TRAIT);
+            currScreenState.setPageType(PageType.TRAIT);
             setActiveList(traitsList);
         }
         if (activePage instanceof HoneyPage) {
-            setPageType(PageType.HONEY);
+            currScreenState.setPageType(PageType.HONEY);
             setActiveList(honeyList);
         }
-        setPageID(activePage.id);
+        currScreenState.setPageID(activePage.id);
     }
 
     private void setActiveList(ButtonList buttonList) {
@@ -211,6 +234,7 @@ public class BeepediaScreen extends Screen {
 
     protected void drawBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
         Minecraft client = this.client;
+        backButton.active = !pastStates.isEmpty();
         if (client != null) {
             client.getTextureManager().bindTexture(background);
             int x = this.guiLeft;
@@ -254,11 +278,11 @@ public class BeepediaScreen extends Screen {
         honeyList.button.renderToolTip(matrixStack, mouseX, mouseY);
     }
 
-    public List<TraitPage> getTraits(CustomBeeData beeData) {
-        List<TraitPage> pages = new ArrayList<>();
+    public Map<String, TraitPage> getTraits(CustomBeeData beeData) {
+        Map<String, TraitPage> pages = new HashMap<>();
         if (beeData.getTraitNames() == null || beeData.getTraitNames().length == 0) return pages;
         for (String traitName : beeData.getTraitNames()) {
-            pages.add(traits.get(traitName));
+            if (traitName != null) pages.put(traitName, traits.get(traitName));
         }
         return pages;
     }
@@ -386,7 +410,7 @@ public class BeepediaScreen extends Screen {
         }
     }
 
-    public class ButtonList {
+    public static class ButtonList {
         public int xPos;
         public int yPos;
         public int height;
@@ -406,6 +430,7 @@ public class BeepediaScreen extends Screen {
             this.itemHeight = itemHeight;
             this.list = list;
             this.button = button;
+            if (this instanceof SubButtonList) return;
             updateReducedList(null);
             list.forEach((s, b) -> b.listButton.setParent(this));
         }
@@ -443,7 +468,7 @@ public class BeepediaScreen extends Screen {
 
         public void setActive(boolean active) {
             this.active = active;
-            button.active = !active;
+            if (button != null) button.active = !active;
             list.forEach((s, b) -> {
                 if (b.listButton != null) b.listButton.visible = active;
             });
@@ -454,44 +479,66 @@ public class BeepediaScreen extends Screen {
         }
     }
 
-    public static PageType getPageType() {
-        return pageType;
-    }
+    public static class SubButtonList extends ButtonList {
+        public int xPos;
+        public int yPos;
+        public int height;
+        public int width;
+        public int itemHeight;
+        public int scrollPos = 0;
+        public TabButton button;
+        public boolean active = false;
+        Map<String, BeepediaPage.ListButton> list;
 
-    public static void setPageType(PageType pageType) {
-        BeepediaScreen.pageType = pageType;
-    }
+        public SubButtonList(int xPos, int yPos, int height, int width, int itemHeight, TabButton button, Map<String, BeepediaPage.ListButton> list) {
+            super(xPos, yPos, height, width, itemHeight, null, null);
+            this.xPos = xPos;
+            this.yPos = yPos;
+            this.height = height;
+            this.width = width;
+            this.itemHeight = itemHeight;
+            this.list = list;
+            this.button = button;
+            list.forEach((s, b) -> b.setParent(this));
+        }
 
-    public static String getPageID() {
-        return pageID;
-    }
+        public void updateReducedList(String search) {
+            if (reducedList == null) return;
+            super.updateReducedList(search);
+        }
 
-    public static void setPageID(String pageID) {
-        BeepediaScreen.pageID = pageID;
-    }
+        public void updatePos(int newPos) {
+            // update position of list
+            if (height > list.size() * itemHeight) return;
+            scrollPos += newPos;
+            if (scrollPos > 0) scrollPos = 0;
+            else if (scrollPos < -(list.size() * itemHeight - height))
+                scrollPos = -(list.size() * itemHeight - height);
+        }
 
-    public static BeePage.SubPageType getBeeSubPage() {
-        return beeSubPage;
-    }
+        @Override
+        public void updateList() {
+            // update each button
+            AtomicInteger counter = new AtomicInteger();
+            list.forEach((s, b) -> {
+                if (b == null) return;
+                b.x = xPos;
+                b.y = yPos + scrollPos + counter.get() * itemHeight;
+                counter.getAndIncrement();
+            });
+        }
 
-    public static void setBeeSubPage(BeePage.SubPageType beeSubPage) {
-        BeepediaScreen.beeSubPage = beeSubPage;
-    }
+        public void setActive(boolean active) {
+            this.active = active;
+            if (button != null) button.active = !active;
+            list.forEach((s, b) -> {
+                if (b != null) b.visible = active;
+            });
+        }
 
-    public static boolean isBiomesOpen() {
-        return biomesOpen;
-    }
-
-    public static void setBiomesOpen(boolean b) {
-        BeepediaScreen.biomesOpen = b;
-    }
-
-    public static int getSpawningScroll() {
-        return spawningScroll;
-    }
-
-    public static void setSpawningScroll(int spawningScroll) {
-        BeepediaScreen.spawningScroll = spawningScroll;
+        public void setScrollPos(int scrollPos) {
+            this.scrollPos = scrollPos;
+        }
     }
 
     public enum PageType {

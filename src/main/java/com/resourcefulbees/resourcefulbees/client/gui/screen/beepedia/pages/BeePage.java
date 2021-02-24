@@ -127,8 +127,8 @@ public class BeePage extends BeepediaPage {
     @Override
     public void openPage() {
         super.openPage();
-        if (BeepediaScreen.getPageID() != null) {
-            setSubPage(BeepediaScreen.getBeeSubPage());
+        if (BeepediaScreen.currScreenState.getPageID() != null) {
+            setSubPage(BeepediaScreen.currScreenState.getBeeSubPage());
         } else {
             setSubPage(SubPageType.INFO);
         }
@@ -194,7 +194,7 @@ public class BeePage extends BeepediaPage {
         }
         if (page == null) page = beeInfoPage;
         setSubPage(page);
-        BeepediaScreen.setBeeSubPage(beeSubPage);
+        BeepediaScreen.currScreenState.setBeeSubPage(beeSubPage);
     }
 
     private void setSubPage(Pair<BeepediaScreen.TabButton, BeeDataPage> beeDataPage) {
@@ -205,8 +205,11 @@ public class BeePage extends BeepediaPage {
         if (beeDataPage == null) beeDataPage = this.beeInfoPage;
         this.subPage = beeDataPage;
         if (!(subPage.getRight() instanceof SpawningPage)) {
-            beepedia.setBiomesOpen(false);
-            beepedia.setSpawningScroll(0);
+            beepedia.currScreenState.setBiomesOpen(false);
+            beepedia.currScreenState.setSpawningScroll(0);
+        }
+        if (!(subPage.getRight() instanceof TraitListPage)) {
+            beepedia.currScreenState.setTraitsScroll(0);
         }
         this.subPage.getLeft().active = false;
         this.subPage.getRight().openPage();

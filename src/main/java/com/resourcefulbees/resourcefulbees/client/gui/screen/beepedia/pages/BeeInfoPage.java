@@ -39,8 +39,9 @@ public class BeeInfoPage extends BeeDataPage {
     @Override
     public void renderBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
         FontRenderer font = Minecraft.getInstance().fontRenderer;
+        TranslationTextComponent title = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.info");
         TranslationTextComponent sizeName = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.info.size");
-        TranslationTextComponent flowerName = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.info.flower");
+
         TranslationTextComponent healthName = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.info.health");
         TranslationTextComponent damageName = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.info.damage");
         TranslationTextComponent stingerName = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.info.stinger");
@@ -53,19 +54,23 @@ public class BeeInfoPage extends BeeDataPage {
         stingerName.append(BeeInfoUtils.getYesNo(beeData.getCombatData().removeStingerOnAttack()));
         passiveName.append(BeeInfoUtils.getYesNo(beeData.getCombatData().isPassive()));
         poisonName.append(BeeInfoUtils.getYesNo(beeData.getCombatData().inflictsPoison()));
-        font.draw(matrix, flowerName, xPos, yPos + 8, Color.parse("white").getRgb());
-        font.draw(matrix, sizeName, xPos, yPos + 26, Color.parse("white").getRgb());
-        font.draw(matrix, healthName, xPos, yPos + 38, Color.parse("white").getRgb());
-        font.draw(matrix, damageName, xPos + 84, yPos + 38, Color.parse("white").getRgb());
-        font.draw(matrix, passiveName, xPos, yPos + 50, Color.parse("white").getRgb());
-        font.draw(matrix, poisonName, xPos + 84, yPos + 50, Color.parse("white").getRgb());
-        font.draw(matrix, stingerName, xPos, yPos + 62, Color.parse("white").getRgb());
+
+        font.draw(matrix, title, xPos, yPos + 8, Color.parse("white").getRgb());
+        font.draw(matrix, sizeName, xPos, yPos + 22, Color.parse("gray").getRgb());
+        font.draw(matrix, healthName, xPos, yPos + 34, Color.parse("gray").getRgb());
+        font.draw(matrix, damageName, xPos + 84, yPos + 34, Color.parse("gray").getRgb());
+        font.draw(matrix, passiveName, xPos, yPos + 46, Color.parse("gray").getRgb());
+        font.draw(matrix, poisonName, xPos + 84, yPos + 46, Color.parse("gray").getRgb());
+        font.draw(matrix, stingerName, xPos, yPos + 58, Color.parse("gray").getRgb());
     }
 
     @Override
     public void renderForeground(MatrixStack matrix, int mouseX, int mouseY) {
+        FontRenderer font = Minecraft.getInstance().fontRenderer;
         if (!flowers.isEmpty()) {
-            beepedia.drawSlot(matrix, flowers.get(counter), xPos + 36, yPos + 2, mouseX, mouseY);
+            TranslationTextComponent flowerName = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.info.flower");
+            font.draw(matrix, flowerName, xPos, yPos + 75, Color.parse("gray").getRgb());
+            beepedia.drawSlot(matrix, flowers.get(counter), xPos + 36, yPos + 70, mouseX, mouseY);
         }
     }
 

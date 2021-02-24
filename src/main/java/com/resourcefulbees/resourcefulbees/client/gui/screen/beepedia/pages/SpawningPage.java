@@ -30,14 +30,14 @@ public class SpawningPage extends BeeDataPage {
         super(beepedia, beeData, xPos, yPos, parent);
         this.beeData = beeData;
         biomes = new Button(xPos + subPageWidth - 50, yPos, 46, 20, new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.spawning.biomes_button"), onPress -> {
-            beepedia.setBiomesOpen(true);
-            back.visible = beepedia.isBiomesOpen();
-            biomes.visible = !beepedia.isBiomesOpen();
+            beepedia.currScreenState.setBiomesOpen(true);
+            back.visible = beepedia.currScreenState.isBiomesOpen();
+            biomes.visible = !beepedia.currScreenState.isBiomesOpen();
         });
         back = new Button(xPos + subPageWidth - 50, yPos, 46, 20, new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.spawning.back_button"), onPress -> {
-            beepedia.setBiomesOpen(false);
-            back.visible = beepedia.isBiomesOpen();
-            biomes.visible = !beepedia.isBiomesOpen();
+            beepedia.currScreenState.setBiomesOpen(false);
+            back.visible = beepedia.currScreenState.isBiomesOpen();
+            biomes.visible = !beepedia.currScreenState.isBiomesOpen();
         });
         beepedia.addButton(back);
         beepedia.addButton(biomes);
@@ -49,7 +49,7 @@ public class SpawningPage extends BeeDataPage {
 
     @Override
     public void renderBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
-        if (beepedia.isBiomesOpen()) {
+        if (beepedia.currScreenState.isBiomesOpen()) {
             TranslationTextComponent biomesTitle = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.spawning.biomes");
 
             FontRenderer font = Minecraft.getInstance().fontRenderer;
@@ -65,6 +65,7 @@ public class SpawningPage extends BeeDataPage {
             GL11.glDisable(GL11.GL_SCISSOR_TEST);
         } else {
             FontRenderer font = beepedia.getMinecraft().fontRenderer;
+            TranslationTextComponent title = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.spawning");
             TranslationTextComponent groupName = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.spawning.group");
             TranslationTextComponent heightName = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.spawning.height");
             TranslationTextComponent weightName = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.spawning.weight");
@@ -73,10 +74,11 @@ public class SpawningPage extends BeeDataPage {
             heightName.append(new StringTextComponent(String.format("%d - %d", beeData.getSpawnData().getMinYLevel(), beeData.getSpawnData().getMaxYLevel())));
             weightName.append(new StringTextComponent(String.format("%d", beeData.getSpawnData().getSpawnWeight())));
             lightName.append(BeeInfoUtils.getLightName(beeData.getSpawnData().getLightLevel()));
-            font.draw(matrix, groupName, xPos, yPos + 6, Color.parse("white").getRgb());
-            font.draw(matrix, heightName, xPos, yPos + 18, Color.parse("white").getRgb());
-            font.draw(matrix, weightName, xPos, yPos + 30, Color.parse("white").getRgb());
-            font.draw(matrix, lightName, xPos, yPos + 42, Color.parse("white").getRgb());
+            font.draw(matrix, title, xPos, yPos + 8, Color.parse("white").getRgb());
+            font.draw(matrix, groupName, xPos, yPos + 22, Color.parse("gray").getRgb());
+            font.draw(matrix, heightName, xPos, yPos + 34, Color.parse("gray").getRgb());
+            font.draw(matrix, weightName, xPos, yPos + 46, Color.parse("gray").getRgb());
+            font.draw(matrix, lightName, xPos, yPos + 58, Color.parse("gray").getRgb());
         }
     }
 
@@ -97,7 +99,7 @@ public class SpawningPage extends BeeDataPage {
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double scrollAmount) {
-        if (!beepedia.isBiomesOpen()) return false;
+        if (!beepedia.currScreenState.isBiomesOpen()) return false;
         if (mouseX >= xPos && mouseY >= yPos + 22 && mouseX <= xPos + subPageWidth && mouseY <= yPos + subPageHeight) {
             int boxHeight = subPageHeight - 22;
             if (boxHeight > scrollHeight) {
@@ -108,7 +110,7 @@ public class SpawningPage extends BeeDataPage {
             else if (subScrollPos < -(scrollHeight - boxHeight)) {
                 subScrollPos = -(scrollHeight - boxHeight);
             }
-            beepedia.setSpawningScroll(subScrollPos);
+            beepedia.currScreenState.setSpawningScroll(subScrollPos);
             return true;
         }
         return false;
@@ -117,12 +119,12 @@ public class SpawningPage extends BeeDataPage {
     @Override
     public void openPage() {
         super.openPage();
-        back.visible = beepedia.isBiomesOpen();
-        biomes.visible = !beepedia.isBiomesOpen();
-        subScrollPos = beepedia.getSpawningScroll();
+        back.visible = beepedia.currScreenState.isBiomesOpen();
+        biomes.visible = !beepedia.currScreenState.isBiomesOpen();
+        subScrollPos = beepedia.currScreenState.getSpawningScroll();
         int boxHeight = subPageHeight - 22;
         if (boxHeight > scrollHeight) {
-            beepedia.setSpawningScroll(0);
+            beepedia.currScreenState.setSpawningScroll(0);
             subScrollPos = 0;
         }
     }
