@@ -21,14 +21,17 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.fml.RegistryObject;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 public class BeeSpawnEggItem extends SpawnEggItem {
 
+    protected static final List<BeeSpawnEggItem> eggsToAdd = new ArrayList<>();
 	private final Lazy<? extends EntityType<?>> entityType;
 	private final ColorData colorData;
 
@@ -36,11 +39,11 @@ public class BeeSpawnEggItem extends SpawnEggItem {
 		super(null, firstColor, secondColor, properties);
 		this.entityType = Lazy.of(entityTypeSupplier);
 		this.colorData = colorData;
+		eggsToAdd.add(this);
 	}
 
-    @Nonnull
 	@Override
-	public EntityType<?> getType(@Nullable final CompoundNBT nbt) {
+	public @NotNull EntityType<?> getType(@Nullable final CompoundNBT nbt) {
 		return entityType.get();
 	}
 
@@ -64,9 +67,15 @@ public class BeeSpawnEggItem extends SpawnEggItem {
         return tintIndex == 0 ? primaryColor : secondaryColor;
     }
 
-    @Nonnull
+    public static void initSpawnEggs() {
+        for (final SpawnEggItem spawnEgg : eggsToAdd) {
+            EGGS.put(spawnEgg.getType(null), spawnEgg);
+        }
+        eggsToAdd.clear();
+    }
+
     @Override
-    public ActionResultType onItemUse(ItemUseContext context) {
+    public @NotNull ActionResultType onItemUse(ItemUseContext context) {
         ItemStack itemstack = context.getItem();
         PlayerEntity player = context.getPlayer();
         if (player != null) {
@@ -96,9 +105,8 @@ public class BeeSpawnEggItem extends SpawnEggItem {
         return ActionResultType.SUCCESS;
     }
 
-    @Nonnull
     @Override
-    public Optional<MobEntity> spawnBaby(@Nonnull PlayerEntity playerEntity, @Nonnull MobEntity mobEntity, @Nonnull EntityType<? extends MobEntity> entityType, @Nonnull ServerWorld world, @Nonnull Vector3d vector3d, @Nonnull ItemStack stack) {
+    public @NotNull Optional<MobEntity> spawnBaby(@NotNull PlayerEntity playerEntity, @NotNull MobEntity mobEntity, @NotNull EntityType<? extends MobEntity> entityType, @NotNull ServerWorld world, @NotNull Vector3d vector3d, @NotNull ItemStack stack) {
         return Optional.empty();
     }
 }

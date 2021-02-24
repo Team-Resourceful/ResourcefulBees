@@ -16,10 +16,10 @@ import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.EntityType;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.item.SpawnEggItem;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.*;
@@ -28,6 +28,7 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class EntityToEntity implements IRecipeCategory<EntityToEntity.Recipe> {
@@ -42,12 +43,14 @@ public class EntityToEntity implements IRecipeCategory<EntityToEntity.Recipe> {
     private final IDrawable icon;
     private final IDrawable info;
     private final IDrawable beeHive;
+    private final IDrawable nonRegisteredEgg;
     private final String localizedName;
 
     public EntityToEntity(IGuiHelper guiHelper) {
         this.background = guiHelper.drawableBuilder(GUI_BACK, -12, 0, 99, 75).addPadding(0, 0, 0, 0).build();
         this.icon = guiHelper.createDrawable(ICONS, 0, 0, 16, 16);
         this.info = guiHelper.createDrawable(ICONS, 16, 0, 9, 9);
+        this.nonRegisteredEgg = guiHelper.createDrawable(ICONS, 41, 0, 16, 16);
         this.beeHive = guiHelper.createDrawableIngredient(new ItemStack(ModItems.T1_BEEHIVE_ITEM.get()));
         this.localizedName = I18n.format("gui.resourcefulbees.jei.category.entity_to_entity_mutation");
     }
@@ -59,23 +62,14 @@ public class EntityToEntity implements IRecipeCategory<EntityToEntity.Recipe> {
             MutationData mutationData = beeData.getMutationData();
             if (mutationData.hasMutation() && mutationData.hasEntityMutations()) {
                 beeData.getMutationData().getEntityMutations().forEach((entityType, doubleRandomCollectionPair) -> {
-                    ItemStack inputEgg = new ItemStack(Items.GHAST_SPAWN_EGG);
-                    IFormattableTextComponent inputName = entityType.getName().copy();
-                    inputName.setStyle(Style.EMPTY.withColor(Color.parse("gold")).withItalic(false));
-                    inputEgg.setDisplayName(inputName);
-
+                    SpawnEggItem inputSpawnEgg = SpawnEggItem.getEgg(entityType);
+                    ItemStack inputEgg = inputSpawnEgg != null ? new ItemStack(inputSpawnEgg) : null;
                     doubleRandomCollectionPair.getRight().forEach(entityOutput -> {
-                        ItemStack outputEgg = new ItemStack(Items.GHAST_SPAWN_EGG);
-                        CompoundNBT outputDisplay = new CompoundNBT();
-                        IFormattableTextComponent outputName = entityOutput.getEntityType().getName().copy();
-                        outputName.setStyle(Style.EMPTY.withColor(Color.parse("gold")).withBold(true).withItalic(false));
-                        outputDisplay.putString("Name", ITextComponent.Serializer.toJson(outputName));
-                        CompoundNBT outputTag = new CompoundNBT();
-                        outputTag.put("display", outputDisplay);
-                        outputEgg.setTag(outputTag);
+                        SpawnEggItem outputSpawnEgg = SpawnEggItem.getEgg(entityOutput.getEntityType());
+                        ItemStack outputEgg = outputSpawnEgg != null ? new ItemStack(outputSpawnEgg) : null;
 
                         double effectiveWeight = RecipeUtils.getEffectiveWeight(doubleRandomCollectionPair.getRight(), entityOutput.getWeight());
-                        recipes.add(new Recipe(entityType.getName().copy(), entityOutput.getEntityType().getName().copy(), inputEgg, outputEgg, entityOutput.getCompoundNBT(), beeData.getName(), effectiveWeight, doubleRandomCollectionPair.getLeft()));
+                        recipes.add(new Recipe(entityType, entityOutput.getEntityType(), inputEgg, outputEgg, entityOutput.getCompoundNBT(), beeData.getName(), effectiveWeight, doubleRandomCollectionPair.getLeft()));
                     });
                 });
             }
@@ -108,44 +102,94 @@ public class EntityToEntity implements IRecipeCategory<EntityToEntity.Recipe> {
         return this.icon;
     }
 
-
     @Override
-    public void setIngredients(Recipe recipe, IIngredients ingredients) {
-        ingredients.setInput(VanillaTypes.ITEM, recipe.input);
-        ingredients.setOutput(VanillaTypes.ITEM, recipe.output);
+    public void setIngredients(Recipe recipe, @NotNull IIngredients ingredients) {
+        if (recipe.input != null)
+            ingredients.setInput(VanillaTypes.ITEM, recipe.input);
+        if (recipe.output != null)
+            ingredients.setOutput(VanillaTypes.ITEM, recipe.output);
         ingredients.setInput(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(recipe.beeType, -45.0f));
     }
 
     @Override
     public @NotNull List<ITextComponent> getTooltipStrings(Recipe recipe, double mouseX, double mouseY) {
+        //HIVE INFO
         List<ITextComponent> list = RecipeUtils.getTooltipStrings(mouseX, mouseY, recipe.chance);
         if (!list.isEmpty()) {
             return list;
         }
+        //OUTPUT
+        if (recipe.output == null && mouseX > 64 && mouseX < 84 && mouseY > 47 && mouseY < 66){
+            if (recipe.outputNBT.isEmpty()) {
+                return Collections.singletonList(recipe.outputEntity.getName().copy());
+            } else {
+                List<ITextComponent> tooltip = new ArrayList<>();
+                tooltip.add(recipe.outputEntity.getName().copy());
+                if (recipe.outputEntity.getRegistryName() != null) {
+                    tooltip.add(new StringTextComponent(recipe.outputEntity.getRegistryName().toString()).formatted(TextFormatting.GRAY));
+                }
+                if (!recipe.outputNBT.isEmpty()) {
+                    if (BeeInfoUtils.isShiftPressed()) {
+                        List<String> lore = BeeInfoUtils.getLoreLines(recipe.outputNBT);
+                        lore.forEach(l -> tooltip.add(new StringTextComponent(l).fillStyle(Style.EMPTY.withColor(Color.parse("dark_purple")))));
+                    } else {
+                        tooltip.add(new TranslationTextComponent("gui.resourcefulbees.jei.tooltip.show_nbt").fillStyle(Style.EMPTY.withColor(Color.parse("dark_purple"))));
+                    }
+                }
+                return tooltip;
+            }
+        }
+
+        //INPUT
+        if (recipe.input == null && mouseX > 15 && mouseX < 32 && mouseY > 57 && mouseY < 74){
+            List<ITextComponent> tooltip = new ArrayList<>();
+            tooltip.add(recipe.inputEntity.getName().copy());
+            if (recipe.outputEntity.getRegistryName() != null) {
+                tooltip.add(new StringTextComponent(recipe.outputEntity.getRegistryName().toString()).formatted(TextFormatting.GRAY));
+            }
+            return tooltip;
+        }
+
         return IRecipeCategory.super.getTooltipStrings(recipe, mouseX, mouseY);
     }
 
     @Override
     public void setRecipe(@NotNull IRecipeLayout iRecipeLayout, @NotNull Recipe recipe, @NotNull IIngredients ingredients) {
-        IGuiItemStackGroup itemStacks = RecipeUtils.setGuiItemStacksGroup(iRecipeLayout, ingredients);
-        itemStacks.addTooltipCallback((slotIndex, isInputStack, stack, tooltip) -> {
-            if (Minecraft.getInstance().gameSettings.advancedItemTooltips) {
+        IGuiItemStackGroup itemStacks = iRecipeLayout.getItemStacks();
+        if (recipe.output != null) {
+            itemStacks.init(0, false, 65, 48);
+            itemStacks.set(0, ingredients.getOutputs(VanillaTypes.ITEM).get(0));
+            itemStacks.addTooltipCallback((slotIndex, isInputStack, stack, tooltip) -> {
+                if (slotIndex == 0) {
+                    tooltip.clear();
+                    tooltip.add(recipe.outputEntity.getName().copy());
+                    if (recipe.outputEntity.getRegistryName() != null) {
+                        tooltip.add(new StringTextComponent(recipe.outputEntity.getRegistryName().toString()).formatted(TextFormatting.GRAY));
+                    }
+                    if (!recipe.outputNBT.isEmpty()) {
+                        if (BeeInfoUtils.isShiftPressed()) {
+                            List<String> lore = BeeInfoUtils.getLoreLines(recipe.outputNBT);
+                            lore.forEach(l -> tooltip.add(new StringTextComponent(l).fillStyle(Style.EMPTY.withColor(Color.parse("dark_purple")))));
+                        } else {
+                            tooltip.add(new TranslationTextComponent("gui.resourcefulbees.jei.tooltip.show_nbt").fillStyle(Style.EMPTY.withColor(Color.parse("dark_purple"))));
+                        }
+                    }
+                }
+            });
+        }
+        if (recipe.input != null) {
+            itemStacks.init(1, true, 15, 57);
+            itemStacks.set(1, ingredients.getInputs(VanillaTypes.ITEM).get(0));
+            itemStacks.addTooltipCallback((slotIndex, isInputStack, stack, tooltip) -> {
                 if (slotIndex == 1) {
-                    tooltip.add(recipe.inputRegName.formatted(TextFormatting.DARK_GRAY));
-                } else {
-                    tooltip.add(recipe.outputRegName.formatted(TextFormatting.DARK_GRAY));
+                    tooltip.clear();
+                    tooltip.add(recipe.inputEntity.getName().copy());
+                    if (recipe.inputEntity.getRegistryName() != null) {
+                        tooltip.add(new StringTextComponent(recipe.inputEntity.getRegistryName().toString()).formatted(TextFormatting.GRAY));
+                    }
                 }
-            }
-            if (slotIndex == 0 && !recipe.outputNBT.isEmpty()) {
-                if (BeeInfoUtils.isShiftPressed()) {
-                    List<String> lore = BeeInfoUtils.getLoreLines(recipe.outputNBT);
-                    lore.forEach(l -> tooltip.add(new StringTextComponent(l).fillStyle(Style.EMPTY.withColor(Color.parse("dark_purple")))));
-                } else {
-                    tooltip.add(new TranslationTextComponent("gui.resourcefulbees.jei.tooltip.show_nbt").fillStyle(Style.EMPTY.withColor(Color.parse("dark_purple"))));
-                }
-            }
-        });
-
+            });
+        }
         IGuiIngredientGroup<EntityIngredient> ingredientStacks = iRecipeLayout.getIngredientsGroup(JEICompat.ENTITY_INGREDIENT);
         ingredientStacks.init(0, true, 16, 10);
         ingredientStacks.set(0, ingredients.getInputs(JEICompat.ENTITY_INGREDIENT).get(0));
@@ -154,11 +198,13 @@ public class EntityToEntity implements IRecipeCategory<EntityToEntity.Recipe> {
     @Override
     public void draw(@NotNull Recipe recipe, @NotNull MatrixStack stack, double mouseX, double mouseY) {
         RecipeUtils.drawMutationScreen(stack, this.beeHive, this.info, recipe.weight, recipe.chance);
+        if (recipe.output == null){ this.nonRegisteredEgg.draw(stack, 66, 49); }
+        if (recipe.input == null){ this.nonRegisteredEgg.draw(stack, 15, 57); }
     }
 
     public static class Recipe {
-        private final IFormattableTextComponent inputRegName;
-        private final IFormattableTextComponent outputRegName;
+        private final EntityType<?> inputEntity;
+        private final EntityType<?> outputEntity;
         private final ItemStack input;
         private final ItemStack output;
         private final String beeType;
@@ -168,9 +214,9 @@ public class EntityToEntity implements IRecipeCategory<EntityToEntity.Recipe> {
 
         public final CompoundNBT outputNBT;
 
-        public Recipe(IFormattableTextComponent inputRegName, IFormattableTextComponent outputRegName, ItemStack inputEgg, ItemStack outputEgg, CompoundNBT outputNBT, String beeType, double weight, double chance) {
-            this.inputRegName = inputRegName;
-            this.outputRegName = outputRegName;
+        public Recipe(EntityType<?> inputEntity, EntityType<?> outputEntity, ItemStack inputEgg, ItemStack outputEgg, CompoundNBT outputNBT, String beeType, double weight, double chance) {
+            this.inputEntity = inputEntity;
+            this.outputEntity = outputEntity;
             this.input = inputEgg;
             this.output = outputEgg;
             this.outputNBT = outputNBT;

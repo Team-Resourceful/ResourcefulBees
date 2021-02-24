@@ -163,9 +163,11 @@ public class MutationSetup {
 
         RandomCollection<EntityOutput> randomCollection = new RandomCollection<>();
         mutation.getOutputs().forEach(mutationOutput -> {
-            EntityType<?> output = BeeInfoUtils.getEntityType(mutationOutput.getOutputID());
-            if (output != null) {
-                randomCollection.add(mutationOutput.getWeight(), new EntityOutput(output, mutationOutput.getNbt(), mutationOutput.getWeight()));
+            if (mutationOutput.getOutputID() != null) {
+                EntityType<?> output = BeeInfoUtils.getEntityType(mutationOutput.getOutputID().replace(BeeConstants.ENTITY_PREFIX, ""));
+                if (output != null) {
+                    randomCollection.add(mutationOutput.getWeight(), new EntityOutput(output, mutationOutput.getNbt(), mutationOutput.getWeight()));
+                }
             }
         });
 

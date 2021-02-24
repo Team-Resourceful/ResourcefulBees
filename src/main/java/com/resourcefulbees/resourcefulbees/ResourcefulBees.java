@@ -8,6 +8,7 @@ import com.resourcefulbees.resourcefulbees.data.DataGen;
 import com.resourcefulbees.resourcefulbees.data.DataPackLoader;
 import com.resourcefulbees.resourcefulbees.data.RecipeBuilder;
 import com.resourcefulbees.resourcefulbees.init.*;
+import com.resourcefulbees.resourcefulbees.item.BeeSpawnEggItem;
 import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
 import com.resourcefulbees.resourcefulbees.registry.*;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
@@ -87,6 +88,7 @@ public class ResourcefulBees {
     private void serverLoaded(FMLServerStartedEvent event) {
         ModPotions.createMixes();
         MutationSetup.setupMutations();
+        FlowerSetup.setupFlowers();
     }
 
     public void trade(VillagerTradesEvent event) {
@@ -155,6 +157,7 @@ public class ResourcefulBees {
         TraitRegistry.setTraitRegistryClosed();
         TraitRegistry.applyBeeTraits();
         BeeSetup.registerBeePlacements();
+        BeeSpawnEggItem.initSpawnEggs();
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> DataGen::generateClientData);
         DataGen.generateCommonData();
     }
