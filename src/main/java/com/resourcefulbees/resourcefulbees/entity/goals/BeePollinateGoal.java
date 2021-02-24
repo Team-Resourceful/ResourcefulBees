@@ -4,6 +4,7 @@ import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.mixin.BeeEntityAccessor;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -178,7 +179,7 @@ public class BeePollinateGoal extends Goal {
         return ((double) bee.getRNG().nextFloat() * 2.0D - 1.0D) * 0.33333334D;
     }
 
-    public Optional<BlockPos> findFlower(double range, boolean isEntity, String entityRegistryName) {
+    public Optional<BlockPos> findFlower(double range, boolean isEntity, ResourceLocation entityRegistryName) {
         BlockPos blockpos = bee.getBlockPos();
 
         if (!isEntity) {
@@ -195,7 +196,7 @@ public class BeePollinateGoal extends Goal {
             return BlockPos.stream(box).filter(getFlowerBlockPredicate()).findFirst();
         } else {
             List<Entity> entityList = bee.world.getEntitiesInAABBexcluding(bee, (new AxisAlignedBB(bee.getBlockPos())).grow(range),
-                    entity -> entity.getEntityString() != null && entity.getEntityString().equals(entityRegistryName));
+                    entity -> entity.getEntityString() != null && entity.getEntityString().equals(entityRegistryName.toString()));
             if (!entityList.isEmpty()) {
                 Entity firstEntity = entityList.get(0);
                 bee.setFlowerEntityID(firstEntity.getEntityId());

@@ -164,6 +164,11 @@ public class BeeInfoUtils {
         return ForgeRegistries.ENTITIES.getValue(getResource(entityName));
     }
 
+    @Nullable
+    public static EntityType<?> getEntityType(ResourceLocation entityId) {
+        return ForgeRegistries.ENTITIES.getValue(entityId);
+    }
+
     public static ITag<Item> getItemTag(String itemTag) {
         return ItemTags.getCollection().get(getResource(itemTag));
     }

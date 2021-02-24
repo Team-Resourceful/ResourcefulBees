@@ -8,6 +8,7 @@ import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import net.minecraft.block.Block;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ITag;
+import net.minecraft.util.ResourceLocation;
 
 import static com.resourcefulbees.resourcefulbees.utils.validation.ValidatorUtils.ENTITY_RESOURCE_PATTERN;
 import static com.resourcefulbees.resourcefulbees.utils.validation.ValidatorUtils.TAG_RESOURCE_PATTERN;
@@ -25,7 +26,7 @@ public class FlowerSetup {
     private static void setupMutations(CustomBeeData customBeeData) {
         String flower = customBeeData.getFlower();
         if (ENTITY_RESOURCE_PATTERN.matcher(flower).matches()){
-            customBeeData.setEntityFlower(flower.replace(BeeConstants.ENTITY_PREFIX, ""));
+            customBeeData.setEntityFlower(new ResourceLocation(flower.replace(BeeConstants.ENTITY_PREFIX, "")));
         }else if (TAG_RESOURCE_PATTERN.matcher(flower).matches()){
             ITag<Block> blockTag = BeeInfoUtils.getBlockTag(flower.replace(BeeConstants.TAG_PREFIX, ""));
             if (blockTag != null){ blockTag.values().forEach(customBeeData::addBlockFlower); }

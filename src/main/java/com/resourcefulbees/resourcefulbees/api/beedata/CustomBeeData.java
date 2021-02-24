@@ -31,7 +31,7 @@ public class CustomBeeData extends AbstractBeeData {
     /**
      * List of all entity bees flowers
      */
-    private transient String entityFlower;
+    private transient ResourceLocation entityFlower;
 
     /**
      * The base texture the bee uses if it uses a custom texture.
@@ -191,15 +191,15 @@ public class CustomBeeData extends AbstractBeeData {
         return flower == null ? BeeConstants.FLOWER_TAG_ALL : flower.toLowerCase();
     }
 
-    public String getEntityFlower() {
+    public ResourceLocation getEntityFlower() {
         return this.entityFlower;
     }
 
     public boolean hasEntityFlower() {
-        return this.entityFlower != null && !this.entityFlower.isEmpty();
+        return this.entityFlower != null && !this.entityFlower.getNamespace().isEmpty() && !this.entityFlower.getPath().isEmpty();
     }
 
-    public void setEntityFlower(String entityID) {
+    public void setEntityFlower(ResourceLocation entityID) {
         this.entityFlower = entityID;
     }
 
