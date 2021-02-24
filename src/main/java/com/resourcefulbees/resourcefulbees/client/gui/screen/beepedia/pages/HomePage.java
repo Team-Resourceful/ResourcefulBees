@@ -14,12 +14,12 @@ public class HomePage extends BeepediaPage {
 
     @Override
     public void renderBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
-
+        //Does nothing to not call super.
     }
 
     @Override
     public void renderForeground(MatrixStack matrix, int mouseX, int mouseY) {
-
+        //Does nothing to not call super.
     }
 
     @Override
@@ -29,12 +29,12 @@ public class HomePage extends BeepediaPage {
 
     @Override
     public void tick(int ticksActive) {
-        
+        //Does nothing to not call super.
     }
 
     @Override
     public void drawTooltips(MatrixStack matrixStack, int mouseX, int mouseY) {
-
+        //Does nothing to not call super.
     }
 
     @Override

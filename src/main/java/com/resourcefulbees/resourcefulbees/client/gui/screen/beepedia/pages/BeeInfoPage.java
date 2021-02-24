@@ -7,10 +7,11 @@ import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.util.text.Color;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BeeInfoPage extends BeeDataPage {
@@ -21,19 +22,9 @@ public class BeeInfoPage extends BeeDataPage {
 
     public BeeInfoPage(BeepediaScreen beepedia, CustomBeeData beeData, int xPos, int yPos, BeePage parent) {
         super(beepedia, beeData, xPos, yPos, parent);
-        flowers = BeeInfoUtils.getFlowers(beeData.getFlower());
+        flowers = new ArrayList<>(beeData.getBlockFlowers());
         counter = 0;
         size = flowers.size();
-    }
-
-    @Override
-    public void openPage() {
-        super.openPage();
-    }
-
-    @Override
-    public void closePage() {
-        super.closePage();
     }
 
     @Override
@@ -55,13 +46,13 @@ public class BeeInfoPage extends BeeDataPage {
         passiveName.append(BeeInfoUtils.getYesNo(beeData.getCombatData().isPassive()));
         poisonName.append(BeeInfoUtils.getYesNo(beeData.getCombatData().inflictsPoison()));
 
-        font.draw(matrix, title, xPos, yPos + 8, Color.parse("white").getRgb());
-        font.draw(matrix, sizeName, xPos, yPos + 22, Color.parse("gray").getRgb());
-        font.draw(matrix, healthName, xPos, yPos + 34, Color.parse("gray").getRgb());
-        font.draw(matrix, damageName, xPos + 84, yPos + 34, Color.parse("gray").getRgb());
-        font.draw(matrix, passiveName, xPos, yPos + 46, Color.parse("gray").getRgb());
-        font.draw(matrix, poisonName, xPos + 84, yPos + 46, Color.parse("gray").getRgb());
-        font.draw(matrix, stingerName, xPos, yPos + 58, Color.parse("gray").getRgb());
+        font.draw(matrix, title, xPos, (float)yPos + 8, TextFormatting.WHITE.getColor());
+        font.draw(matrix, sizeName, xPos, (float)yPos + 22, TextFormatting.GRAY.getColor());
+        font.draw(matrix, healthName, xPos, (float)yPos + 34, TextFormatting.GRAY.getColor());
+        font.draw(matrix, damageName, (float)xPos + 84, (float)yPos + 34, TextFormatting.GRAY.getColor());
+        font.draw(matrix, passiveName, xPos, (float)yPos + 46, TextFormatting.GRAY.getColor());
+        font.draw(matrix, poisonName, (float)xPos + 84, (float)yPos + 46, TextFormatting.GRAY.getColor());
+        font.draw(matrix, stingerName, xPos, (float)yPos + 58, TextFormatting.GRAY.getColor());
     }
 
     @Override
@@ -69,7 +60,7 @@ public class BeeInfoPage extends BeeDataPage {
         FontRenderer font = Minecraft.getInstance().fontRenderer;
         if (!flowers.isEmpty()) {
             TranslationTextComponent flowerName = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.info.flower");
-            font.draw(matrix, flowerName, xPos, yPos + 75, Color.parse("gray").getRgb());
+            font.draw(matrix, flowerName, xPos, (float)yPos + 75,0xAAAAAA);
             beepedia.drawSlot(matrix, flowers.get(counter), xPos + 36, yPos + 70, mouseX, mouseY);
         }
     }
@@ -87,7 +78,7 @@ public class BeeInfoPage extends BeeDataPage {
 
     @Override
     public void drawTooltips(MatrixStack matrixStack, int mouseX, int mouseY) {
-
+        //Does nothing to not render multiple tooltips in super.
     }
 
     @Override

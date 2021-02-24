@@ -4,17 +4,17 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
-import com.resourcefulbees.resourcefulbees.item.Beepedia;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.Color;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
@@ -32,7 +32,7 @@ public class BreedingPage extends BeeDataPage {
 
     BreedingObject breeding = null;
 
-    private ResourceLocation breedingImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/breeding.png");
+    private final ResourceLocation breedingImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/breeding.png");
 
     public BreedingPage(BeepediaScreen beepedia, CustomBeeData beeData, int xPos, int yPos, BeePage parent) {
         super(beepedia, beeData, xPos, yPos, parent);
@@ -45,10 +45,10 @@ public class BreedingPage extends BeeDataPage {
     @Override
     public void renderBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
         Minecraft.getInstance().textureManager.bindTexture(breedingImage);
-        beepedia.drawTexture(matrix, xPos, yPos + 22, 0, 0, 128, 64, 128, 64);
+        AbstractGui.drawTexture(matrix, xPos, yPos + 22, 0, 0, 128, 64, 128, 64);
         FontRenderer font = Minecraft.getInstance().fontRenderer;
         TranslationTextComponent title = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding");
-        font.draw(matrix, title, xPos, yPos + 8, Color.parse("white").getRgb());
+        font.draw(matrix, title, xPos, (float)yPos + 8, TextFormatting.WHITE.getColor());
     }
 
     @Override
@@ -105,9 +105,7 @@ public class BreedingPage extends BeeDataPage {
 
         public BreedingObject(Pair<String, String> parents, RandomCollection<CustomBeeData> children) {
             initParents(parents);
-            children.getMap().forEach((weight, beeData) -> {
-                this.children.add(new Child(parents, beeData));
-            });
+            children.getMap().forEach((weight, beeData) -> this.children.add(new Child(parents, beeData)));
             isParent = true;
         }
 
@@ -118,21 +116,21 @@ public class BreedingPage extends BeeDataPage {
         }
 
         public void drawParent1(MatrixStack matrix) {
-            BeepediaScreen.renderEntity(matrix, breeding.parent1Entity, beepedia.getMinecraft().world, xPos + 6, yPos + 32, 225, 1);
+            BeepediaScreen.renderEntity(matrix, breeding.parent1Entity, beepedia.getMinecraft().world, (float)xPos + 6, (float)yPos + 32, 225, 1);
         }
 
         public void drawParent2(MatrixStack matrix) {
-            BeepediaScreen.renderEntity(matrix, breeding.parent2Entity, beepedia.getMinecraft().world, xPos + 60, yPos + 32, -45, 1);
+            BeepediaScreen.renderEntity(matrix, breeding.parent2Entity, beepedia.getMinecraft().world, (float)xPos + 60, (float)yPos + 32, -45, 1);
         }
 
         private void drawChild(MatrixStack matrix, int counter) {
             Child child = breeding.children.get(counter);
             FontRenderer font = beepedia.getMinecraft().fontRenderer;
-            BeepediaScreen.renderEntity(matrix, child.entity, beepedia.getMinecraft().world, xPos + 130, yPos + 42, 225, 1);
+            BeepediaScreen.renderEntity(matrix, child.entity, beepedia.getMinecraft().world, (float)xPos + 130, (float)yPos + 42, 225, 1);
 
             StringTextComponent text = new StringTextComponent(decimalFormat.format(child.weight));
             int padding = font.getWidth(text) / 2;
-            font.draw(matrix, text, xPos + 103 - padding, yPos + 56, Color.parse("gray").getRgb());
+            font.draw(matrix, text, (float)xPos + 103f - (float)padding, (float)yPos + 56, TextFormatting.GRAY.getColor());
         }
 
         public void drawParent1Item(MatrixStack matrix, int mouseX, int mouseY) {

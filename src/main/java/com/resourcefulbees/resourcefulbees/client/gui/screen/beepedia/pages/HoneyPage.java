@@ -7,7 +7,7 @@ import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaPa
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.Color;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
 public class HoneyPage extends BeepediaPage {
@@ -44,12 +44,12 @@ public class HoneyPage extends BeepediaPage {
 
     @Override
     public void renderBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
-        Minecraft.getInstance().fontRenderer.draw(matrix, text, xPos, yPos + 10, Color.parse("white").getRgb());
+        Minecraft.getInstance().fontRenderer.draw(matrix, text, xPos, (float)yPos + 10, TextFormatting.WHITE.getColor());
     }
 
     @Override
     public void renderForeground(MatrixStack matrix, int mouseX, int mouseY) {
-
+        //Does nothing to not call super.
     }
 
     @Override
@@ -59,12 +59,12 @@ public class HoneyPage extends BeepediaPage {
 
     @Override
     public void tick(int ticksActive) {
-
+        //Does nothing to not call super.
     }
 
     @Override
     public void drawTooltips(MatrixStack matrixStack, int mouseX, int mouseY) {
-
+        //Does nothing to not call super.
     }
 
     @Override

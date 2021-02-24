@@ -7,8 +7,9 @@ import com.resourcefulbees.resourcefulbees.data.BeeTrait;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.util.text.Color;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.stream.Collectors;
 
@@ -27,21 +28,21 @@ public class TraitPage extends BeepediaPage {
 
     private void initTranslation() {
         translation = "";
-        translation += String.join(" ", trait.getDamageImmunities().stream().map(damageSource -> damageSource.damageType).collect(Collectors.toList()));
+        translation += trait.getDamageImmunities().stream().map(damageSource -> damageSource.damageType).collect(Collectors.joining(" "));
         translation += String.join(" ", trait.getSpecialAbilities());
-        translation += String.join(" ", trait.getPotionImmunities().stream().map(effect -> effect.getDisplayName().getString()).collect(Collectors.toList()));
-        translation += String.join(" ", trait.getDamageTypes().stream().map(pair -> pair.getLeft()).collect(Collectors.toList()));
-        translation += String.join(" ", trait.getPotionDamageEffects().stream().map(pair -> pair.getLeft().getDisplayName().getString()).collect(Collectors.toList()));
+        translation += trait.getPotionImmunities().stream().map(effect -> effect.getDisplayName().getString()).collect(Collectors.joining(" "));
+        translation += trait.getDamageTypes().stream().map(Pair::getLeft).collect(Collectors.joining(" "));
+        translation += trait.getPotionDamageEffects().stream().map(pair -> pair.getLeft().getDisplayName().getString()).collect(Collectors.joining(" "));
     }
 
     @Override
     public void renderBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
-        Minecraft.getInstance().fontRenderer.draw(matrix, new StringTextComponent(id), xPos, yPos + 10, Color.parse("white").getRgb());
+        Minecraft.getInstance().fontRenderer.draw(matrix, new StringTextComponent(id), xPos, (float)yPos + 10f, TextFormatting.WHITE.getColor());
     }
 
     @Override
     public void renderForeground(MatrixStack matrix, int mouseX, int mouseY) {
-
+        //Does nothing to not call super.
     }
 
 
@@ -52,12 +53,12 @@ public class TraitPage extends BeepediaPage {
 
     @Override
     public void tick(int ticksActive) {
-
+        //Does nothing to not call super.
     }
 
     @Override
     public void drawTooltips(MatrixStack matrixStack, int mouseX, int mouseY) {
-
+        //Does nothing to not call super.
     }
 
 

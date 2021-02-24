@@ -8,8 +8,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.Color;
 import net.minecraft.util.text.TextComponent;
+import net.minecraft.util.text.TextFormatting;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.GL11;
 
@@ -23,7 +23,7 @@ public abstract class BeepediaPage {
 
     public ListButton listButton = null;
 
-    public ResourceLocation listImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/list_button.png");
+    public final ResourceLocation listImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/list_button.png");
     public String id;
 
     protected BeepediaPage(BeepediaScreen beepedia, int xPos, int yPos, String id) {
@@ -40,9 +40,7 @@ public abstract class BeepediaPage {
     }
 
     public void newListButton(ItemStack item, TextComponent text) {
-        listButton = new ListButton(0, 0, 100, 20, 0, 0, 20, listImage, item, 2, 2, text, 22, 6, onPress -> {
-            beepedia.setActive(this);
-        });
+        listButton = new ListButton(0, 0, 100, 20, 0, 0, 20, listImage, item, 2, 2, text, 22, 6, onPress -> beepedia.setActive(this));
     }
 
     public void openPage() {
@@ -95,7 +93,7 @@ public abstract class BeepediaPage {
         }
 
         @Override
-        public void renderButton(@Nonnull MatrixStack matrix, int p_renderButton_1_, int p_renderButton_2_, float p_renderButton_3_) {
+        public void renderButton(@Nonnull MatrixStack matrix, int prenderButton_1_, int p_renderButton_2_, float p_renderButton_3_) {
             Minecraft minecraft = Minecraft.getInstance();
             minecraft.getTextureManager().bindTexture(this.resourceLocation);
             RenderSystem.disableDepthTest();
@@ -119,8 +117,8 @@ public abstract class BeepediaPage {
 
         private void drawButton(@Nonnull MatrixStack matrix, float texYPos) {
             drawTexture(matrix, this.x, this.y, (float) this.xTexStart, texYPos, this.width, this.height, width, yDiffText * 3);
-            int color = this.active ? Color.parse("gray").getRgb() : Color.parse("white").getRgb();
-            fontRenderer.draw(matrix, text, this.x + textX, this.y + textY, color);
+            int color = this.active ? TextFormatting.GRAY.getColor() : TextFormatting.WHITE.getColor();
+            fontRenderer.draw(matrix, text, (float)(this.x + textX), (float)(this.y + textY), color);
             if (this.displayItem != null)
                 Minecraft.getInstance().getItemRenderer().renderItemAndEffectIntoGUI(this.displayItem, this.x + this.itemX, this.y + this.itemY);
             RenderSystem.enableDepthTest();

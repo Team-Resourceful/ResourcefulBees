@@ -29,7 +29,6 @@ import net.minecraft.item.Items;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.util.text.Color;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -37,10 +36,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class BeepediaScreen extends Screen {
@@ -49,18 +45,18 @@ public class BeepediaScreen extends Screen {
     private static int honeyScroll = 0;
     private static int traitScroll = 0;
 
-    public static LinkedList<BeepediaScreenState> pastStates = new LinkedList<>();
+    protected static final LinkedList<BeepediaScreenState> pastStates = new LinkedList<>();
     public static BeepediaScreenState currScreenState = new BeepediaScreenState();
 
-    public int xSize;
-    public int ySize;
-    public int guiLeft;
-    public int guiTop;
-    public int ticksOpen = 0;
+    protected int xSize;
+    protected int ySize;
+    protected int guiLeft;
+    protected int guiTop;
+    protected int ticksOpen = 0;
 
-    public Map<String, BeePage> bees = new TreeMap<>();
-    public Map<String, TraitPage> traits = new TreeMap<>();
-    public Map<String, HoneyPage> honey = new TreeMap<>();
+    protected Map<String, BeePage> bees = new TreeMap<>();
+    protected Map<String, TraitPage> traits = new TreeMap<>();
+    protected Map<String, HoneyPage> honey = new TreeMap<>();
 
     ButtonList beesList;
     ButtonList traitsList;
@@ -97,18 +93,15 @@ public class BeepediaScreen extends Screen {
         int x = this.guiLeft;
         int y = this.guiTop;
         int subX = x + 112;
-        int subY = y;
-        honey.put("honey", new HoneyPage(this, BeeConstants.defaultHoney, "honey", subX, subY));
-        honey.put("catnip", new HoneyPage(this, KittenBee.getHoneyBottleData(), "catnip", subX, subY));
-        TraitRegistry.getRegistry().getTraits().forEach((s, b) -> traits.put(s, new TraitPage(this, b, s, subX, subY)));
-        BeeRegistry.getRegistry().getBees().forEach((s, b) -> bees.put(s, new BeePage(this, b, s, subX, subY)));
-        BeeRegistry.getRegistry().getHoneyBottles().forEach((s, h) -> honey.put(s, new HoneyPage(this, h, s, subX, subY)));
-        home = new HomePage(this, subX, subY);
-        addButton(new Button(x + (xSize / 2) - 20, y + ySize - 25, 40, 20, new TranslationTextComponent("gui.resourcefulbees.beepedia.home_button"), onPress -> {
-            setActive(home);
-        }));
+        honey.put("honey", new HoneyPage(this, BeeConstants.defaultHoney, "honey", subX, y));
+        honey.put("catnip", new HoneyPage(this, KittenBee.getHoneyBottleData(), "catnip", subX, y));
+        TraitRegistry.getRegistry().getTraits().forEach((s, b) -> traits.put(s, new TraitPage(this, b, s, subX, y)));
+        BeeRegistry.getRegistry().getBees().forEach((s, b) -> bees.put(s, new BeePage(this, b, s, subX, y)));
+        BeeRegistry.getRegistry().getHoneyBottles().forEach((s, h) -> honey.put(s, new HoneyPage(this, h, s, subX, y)));
+        home = new HomePage(this, subX, y);
+        addButton(new Button(x + (xSize / 2) - 20, y + ySize - 25, 40, 20, new TranslationTextComponent("gui.resourcefulbees.beepedia.home_button"), onPress -> setActive(home)));
         backButton = new Button(x + (xSize / 2) + 20, y + ySize - 25, 40, 20, new TranslationTextComponent("gui.resourcefulbees.beepedia.back_button"), onPress -> {
-            if (pastStates.size() > 0) {
+            if (!pastStates.isEmpty()) {
                 goBackState();
                 returnState(true);
             }
@@ -232,7 +225,7 @@ public class BeepediaScreen extends Screen {
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTick) {
+    public void render(@NotNull MatrixStack matrixStack, int mouseX, int mouseY, float partialTick) {
         drawBackground(matrixStack, partialTick, mouseX, mouseY);
         super.render(matrixStack, mouseX, mouseY, partialTick);
         drawForeground(matrixStack, mouseX, mouseY);
@@ -275,7 +268,7 @@ public class BeepediaScreen extends Screen {
                 title = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.bees");
                 break;
         }
-        this.textRenderer.draw(matrixStack, title, this.guiLeft + 10, this.guiTop + 20, Color.parse("white").getRgb());
+        this.textRenderer.draw(matrixStack, title, (float)this.guiLeft + 10, (float)this.guiTop + 20, 0xffffff);
     }
 
 
@@ -318,11 +311,6 @@ public class BeepediaScreen extends Screen {
         return false;
     }
 
-    @Override
-    public Widget addButton(Widget button) {
-        return super.addButton(button);
-    }
-
     public void drawSlot(MatrixStack matrix, IItemProvider item, int xPos, int yPos, int mouseX, int mouseY) {
         drawSlot(matrix, new ItemStack(item), xPos, yPos, mouseX, mouseY);
     }
@@ -341,7 +329,8 @@ public class BeepediaScreen extends Screen {
             float scaledSize = 20 * renderScale;
             Minecraft mc = Minecraft.getInstance();
             if (entity instanceof BeeEntity) {
-                entity.ticksExisted = mc.player.ticksExisted;
+                if (mc.player != null)
+                    entity.ticksExisted = mc.player.ticksExisted;
                 ((BeeEntity) entity).renderYawOffset = rotation;
                 if (entity instanceof CustomBeeEntity) {
                     scaledSize = 20 / ((CustomBeeEntity) entity).getBeeData().getSizeModifier() * renderScale;
@@ -356,16 +345,23 @@ public class BeepediaScreen extends Screen {
                 matrixStack.scale(-scaledSize, scaledSize, 30);
                 matrixStack.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(270.0F));
                 EntityRendererManager entityrenderermanager = mc.getRenderManager();
-                IRenderTypeBuffer.Impl irendertypebuffer$impl = mc.getBufferBuilders().getEntityVertexConsumers();
-                entityrenderermanager.render(entity, 0, 0, 0.0D, mc.getRenderPartialTicks(), 1, matrixStack, irendertypebuffer$impl, 15728880);
-                irendertypebuffer$impl.draw();
+                IRenderTypeBuffer.Impl renderTypeBuffer = mc.getBufferBuilders().getEntityVertexConsumers();
+                entityrenderermanager.render(entity, 0, 0, 0.0D, mc.getRenderPartialTicks(), 1, matrixStack, renderTypeBuffer, 15728880);
+                renderTypeBuffer.draw();
             }
             matrixStack.pop();
         }
     }
 
+    @Override
+    public <T extends Widget> @NotNull T addButton(@NotNull T widget) {
+        return super.addButton(widget);
+    }
+
     public Entity initEntity(ResourceLocation entityTypeRegistryID) {
-        return initEntity(ForgeRegistries.ENTITIES.getValue(entityTypeRegistryID), getMinecraft().world);
+        EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(entityTypeRegistryID);
+        if (entityType == null) return null;
+        return initEntity(entityType, getMinecraft().world);
     }
 
     public Entity initEntity(EntityType<?> left, ClientWorld world) {
@@ -373,9 +369,7 @@ public class BeepediaScreen extends Screen {
     }
 
     public Button.ITooltip getTooltipProvider(ITextComponent textComponent) {
-        return (button, matrix, mouseX, mouseY) -> {
-            renderTooltip(matrix, textComponent, mouseX, mouseY);
-        };
+        return (button, matrix, mouseX, mouseY) -> renderTooltip(matrix, textComponent, mouseX, mouseY);
     }
 
     public static class TabButton extends ImageButton {
@@ -418,7 +412,7 @@ public class BeepediaScreen extends Screen {
         }
 
         @Override
-        public void renderToolTip(MatrixStack matrix, int mouseX, int mouseY) {
+        public void renderToolTip(@NotNull MatrixStack matrix, int mouseX, int mouseY) {
             if (this.isHovered()) {
                 tooltipProvider.onTooltip(this, matrix, mouseX, mouseY);
             }
@@ -426,14 +420,14 @@ public class BeepediaScreen extends Screen {
     }
 
     public static class ButtonList {
-        public int xPos;
-        public int yPos;
-        public int height;
-        public int width;
-        public int itemHeight;
-        public int scrollPos = 0;
-        public TabButton button;
-        public boolean active = false;
+        public final int xPos;
+        public final int yPos;
+        public final int height;
+        public final int width;
+        public final int itemHeight;
+        protected int scrollPos = 0;
+        public final TabButton button;
+        protected boolean active = false;
         Map<String, ? extends BeepediaPage> list;
         Map<String, BeepediaPage> reducedList = new TreeMap<>();
 
@@ -450,9 +444,11 @@ public class BeepediaScreen extends Screen {
             list.forEach((s, b) -> b.listButton.setParent(this));
         }
 
+        public int getScrollPos() { return scrollPos; }
+
         public void updateReducedList(String search) {
             reducedList.clear();
-            if (search != null && !search.isEmpty() && !search.equals("")) {
+            if (search != null && !search.isEmpty()) {
                 list.forEach((s, b) -> {
                     if (s.contains(search.toLowerCase()) || b.getSearch().toLowerCase().contains(search.toLowerCase())) {
                         reducedList.put(s, b);
@@ -498,14 +494,8 @@ public class BeepediaScreen extends Screen {
         Map<String, BeepediaPage.ListButton> subList;
 
         public SubButtonList(int xPos, int yPos, int height, int width, int itemHeight, TabButton button, Map<String, BeepediaPage.ListButton> list) {
-            super(xPos, yPos, height, width, itemHeight, null, null);
-            this.xPos = xPos;
-            this.yPos = yPos;
-            this.height = height;
-            this.width = width;
-            this.itemHeight = itemHeight;
+            super(xPos, yPos, height, width, itemHeight, button, null);
             this.subList = list;
-            this.button = button;
             list.forEach((s, b) -> b.setParent(this));
         }
 

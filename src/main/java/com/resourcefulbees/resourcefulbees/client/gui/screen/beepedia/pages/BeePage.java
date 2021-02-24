@@ -8,13 +8,14 @@ import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaSc
 import com.resourcefulbees.resourcefulbees.item.BeeJar;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.Color;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.opengl.GL11;
@@ -28,7 +29,7 @@ public class BeePage extends BeepediaPage {
 
 
     Entity bee = null;
-    public Pair<BeepediaScreen.TabButton, BeeDataPage> subPage;
+    protected Pair<BeepediaScreen.TabButton, BeeDataPage> subPage;
     Pair<BeepediaScreen.TabButton, BeeDataPage> beeInfoPage;
     Pair<BeepediaScreen.TabButton, BeeDataPage> mutations;
     Pair<BeepediaScreen.TabButton, BeeDataPage> traitListPage;
@@ -113,16 +114,17 @@ public class BeePage extends BeepediaPage {
     @Override
     public void renderBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
         beepedia.getMinecraft().textureManager.bindTexture(splitterImage);
-        beepedia.drawTexture(matrix, xPos, yPos, 0, 0, 165, 100, 165, 100);
+        AbstractGui.drawTexture(matrix, xPos, yPos, 0, 0, 165, 100, 165, 100);
         if (bee == null) bee = beepedia.initEntity(beeData.getEntityTypeRegistryID());
-        Minecraft.getInstance().fontRenderer.draw(matrix, beeData.getTranslation(), xPos + 40, yPos + 10, Color.parse("white").getRgb());
+        Minecraft.getInstance().fontRenderer.draw(matrix, beeData.getTranslation(), (float)xPos + 40, (float)yPos + 10, TextFormatting.WHITE.getColor());
         subPage.getRight().renderBackground(matrix, partialTick, mouseX, mouseY);
 
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
         double scale = beepedia.getMinecraft().getWindow().getGuiScaleFactor();
         int scissorY = (int) (beepedia.getMinecraft().getWindow().getFramebufferHeight() - (yPos + 9 + 38) * scale);
         GL11.glScissor((int) (xPos * scale), scissorY, (int) (38 * scale), (int) (38 * scale));
-        beepedia.renderEntity(matrix, bee, Minecraft.getInstance().world, xPos + 10, yPos + 32, -45, 2);
+        if (bee != null)
+            BeepediaScreen.renderEntity(matrix, bee, Minecraft.getInstance().world, (float)xPos + 10, (float)yPos + 32, -45, 2);
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
 
     }
@@ -168,9 +170,7 @@ public class BeePage extends BeepediaPage {
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double scrollAmount) {
-        boolean subScrolled = subPage.getRight().mouseScrolled(mouseX, mouseY, scrollAmount);
-        if (subScrolled) return true;
-        return false;
+        return subPage.getRight().mouseScrolled(mouseX, mouseY, scrollAmount);
     }
 
     public void setSubPage(SubPageType beeSubPage) {
@@ -202,11 +202,11 @@ public class BeePage extends BeepediaPage {
         }
         this.subPage = page;
         if (!(subPage.getRight() instanceof SpawningPage)) {
-            beepedia.currScreenState.setBiomesOpen(false);
-            beepedia.currScreenState.setSpawningScroll(0);
+            BeepediaScreen.currScreenState.setBiomesOpen(false);
+            BeepediaScreen.currScreenState.setSpawningScroll(0);
         }
         if (!(subPage.getRight() instanceof TraitListPage)) {
-            beepedia.currScreenState.setTraitsScroll(0);
+            BeepediaScreen.currScreenState.setTraitsScroll(0);
         }
         this.subPage.getLeft().active = false;
         this.subPage.getRight().openPage();

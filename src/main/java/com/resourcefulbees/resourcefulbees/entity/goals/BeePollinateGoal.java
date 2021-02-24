@@ -38,11 +38,10 @@ public class BeePollinateGoal extends Goal {
             return false;
         } else if (bee.getRNG().nextFloat() < 0.7F) {
             return false;
-        } else if (bee.ticksExisted % 5 == 0) {
+        } else if (bee.ticksExisted < 20 || bee.ticksExisted % 5 == 0) {
             Optional<BlockPos> optional = this.findFlower(5.0D, bee.getBeeData().hasEntityFlower(), bee.getBeeData().getEntityFlower());
             if (optional.isPresent()) {
                 bee.flowerPos = optional.get();
-                //bee.setLastFlower(bee.flowerPos);    <- commented out bc this is being set but never being checked meaning it's effectively useless.... why? -oreo
                 bee.getNavigator().tryMoveToXYZ((double) bee.flowerPos.getX() + 0.5D, (double) bee.flowerPos.getY() + 0.5D, (double) bee.flowerPos.getZ() + 0.5D, 1.2D);
                 return true;
             }
