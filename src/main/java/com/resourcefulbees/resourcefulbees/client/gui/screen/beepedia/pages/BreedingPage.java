@@ -132,7 +132,7 @@ public class BreedingPage extends BeeDataPage {
 
             StringTextComponent text = new StringTextComponent(decimalFormat.format(child.weight));
             int padding = font.getWidth(text) / 2;
-            font.draw(matrix, text, xPos + 120 - padding, yPos + 50, Color.parse("gray").getRgb());
+            font.draw(matrix, text, xPos + 103 - padding, yPos + 56, Color.parse("gray").getRgb());
         }
 
         public void drawParent1Item(MatrixStack matrix, int mouseX, int mouseY) {
