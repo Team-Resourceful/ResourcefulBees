@@ -9,19 +9,15 @@ import com.resourcefulbees.resourcefulbees.api.beedata.mutation.outputs.ItemOutp
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.effects.ModEffects;
 import com.resourcefulbees.resourcefulbees.entity.goals.*;
-import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.TraitConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.ModPOIs;
 import com.resourcefulbees.resourcefulbees.tileentity.TieredBeehiveTileEntity;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryTileEntity;
-import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
-import com.resourcefulbees.resourcefulbees.utils.validation.ValidatorUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.FollowParentGoal;
 import net.minecraft.entity.ai.goal.SwimGoal;
@@ -33,9 +29,7 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.tags.ITag;
 import net.minecraft.tileentity.BeehiveTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
@@ -55,8 +49,8 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
 import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
@@ -94,7 +88,7 @@ public class ResourcefulBee extends CustomBeeEntity {
             this.goalSelector.addGoal(3, new BeeTemptGoal(this, 1.25D, false));
             this.goalSelector.addGoal(5, new FollowParentGoal(this, 1.25D));
         }
-        this.beePollinateGoal = new BeePollinateGoal(this, customBeeData.getFlower());
+        this.beePollinateGoal = new BeePollinateGoal(this);
         this.goalSelector.addGoal(4, this.beePollinateGoal);
 
         this.pollinateGoal = new FakePollinateGoal();
@@ -252,26 +246,13 @@ public class ResourcefulBee extends CustomBeeEntity {
     }
 
     @Override
-    public boolean isFlowers(@Nonnull BlockPos pos) {
-        String flower = getBeeData().getFlower();
-
-        if (ValidatorUtils.TAG_RESOURCE_PATTERN.matcher(flower).matches()) {
-            ITag<Block> blockTag = BeeInfoUtils.getBlockTag(flower.replace(BeeConstants.TAG_PREFIX, ""));
-            return blockTag != null && this.world.getBlockState(pos).getBlock().isIn(blockTag);
-        } else if (ValidatorUtils.ENTITY_RESOURCE_PATTERN.matcher(flower).matches()) {
+    public boolean isFlowers(@NotNull BlockPos pos) {
+        if (getBeeData().hasEntityFlower()){
             return this.world.getEntityByID(this.getFlowerEntityID()) != null;
-        } else {
-            switch (flower) {
-                case BeeConstants.FLOWER_TAG_ALL:
-                    return this.world.isBlockPresent(pos) && this.world.getBlockState(pos).getBlock().isIn(BlockTags.FLOWERS);
-                case BeeConstants.FLOWER_TAG_SMALL:
-                    return this.world.isBlockPresent(pos) && this.world.getBlockState(pos).getBlock().isIn(BlockTags.SMALL_FLOWERS);
-                case BeeConstants.FLOWER_TAG_TALL:
-                    return this.world.isBlockPresent(pos) && this.world.getBlockState(pos).getBlock().isIn(BlockTags.TALL_FLOWERS);
-                default:
-                    return this.world.isBlockPresent(pos) && BeeInfoUtils.isValidBlock(BeeInfoUtils.getBlock(flower)) && this.world.getBlockState(pos).getBlock().equals(BeeInfoUtils.getBlock(flower));
-            }
+        }else if (getBeeData().hasBlockFlowers()) {
+            return this.world.isBlockPresent(pos) && getBeeData().getBlockFlowers().contains(this.world.getBlockState(pos).getBlock());
         }
+        return false;
     }
 
     @Override
@@ -369,7 +350,7 @@ public class ResourcefulBee extends CustomBeeEntity {
     }
 
     @Override
-    public boolean attackEntityAsMob(@Nonnull Entity entityIn) {
+    public boolean attackEntityAsMob(@NotNull Entity entityIn) {
         float damage = (float)this.getAttributeValue(Attributes.GENERIC_ATTACK_DAMAGE);
         TraitData info = this.getBeeData().getTraitData();
         boolean flag = entityIn.attackEntityFrom(DamageSource.sting(this), damage);
@@ -511,9 +492,8 @@ public class ResourcefulBee extends CustomBeeEntity {
             super();
         }
 
-        @Nonnull
         @Override
-        public List<BlockPos> getNearbyFreeHives() {
+        public @NotNull List<BlockPos> getNearbyFreeHives() {
             BlockPos blockpos = ResourcefulBee.this.getBlockPos();
             PointOfInterestManager pointofinterestmanager = ((ServerWorld) world).getPointOfInterestManager();
             Stream<PointOfInterest> stream = pointofinterestmanager.func_219146_b(pointOfInterestType ->

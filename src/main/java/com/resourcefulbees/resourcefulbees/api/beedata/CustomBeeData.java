@@ -10,7 +10,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.RegistryObject;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Supplier;
 
 public class CustomBeeData extends AbstractBeeData {
@@ -19,6 +22,16 @@ public class CustomBeeData extends AbstractBeeData {
      * Which flowers the bee pollinates.
      */
     private final String flower;
+
+    /**
+     * List of all block bees flowers
+     */
+    private transient HashSet<Block> blockFlowers;
+
+    /**
+     * List of all entity bees flowers
+     */
+    private transient String entityFlower;
 
     /**
      * The base texture the bee uses if it uses a custom texture.
@@ -176,6 +189,31 @@ public class CustomBeeData extends AbstractBeeData {
 
     public String getFlower() {
         return flower == null ? BeeConstants.FLOWER_TAG_ALL : flower.toLowerCase();
+    }
+
+    public String getEntityFlower() {
+        return this.entityFlower;
+    }
+
+    public boolean hasEntityFlower() {
+        return this.entityFlower != null && !this.entityFlower.isEmpty();
+    }
+
+    public void setEntityFlower(String entityID) {
+        this.entityFlower = entityID;
+    }
+
+    public Set<Block> getBlockFlowers() {
+        return Collections.unmodifiableSet(this.blockFlowers);
+    }
+
+    public boolean hasBlockFlowers() {
+        return this.blockFlowers != null && !this.blockFlowers.isEmpty();
+    }
+
+    public void addBlockFlower(Block block) {
+        if (this.blockFlowers == null) this.blockFlowers = new HashSet<>();
+        this.blockFlowers.add(block);
     }
 
     public String getCustomCombDrop() {
