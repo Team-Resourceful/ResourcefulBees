@@ -206,10 +206,10 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
             super(xPos, yPos, texture);
             this.effect = effect;
             this.effectSprite = Minecraft.getInstance().getPotionSpriteUploader().getSprite(effect);
-            this.textComponent = this.renderTooltip(effect);
+            this.textComponent = this.getTooltip(effect);
         }
 
-        private ITextComponent renderTooltip(Effect effect) {
+        private ITextComponent getTooltip(Effect effect) {
             IFormattableTextComponent iformattabletextcomponent = new TranslationTextComponent(effect.getName());
             return iformattabletextcomponent;
         }

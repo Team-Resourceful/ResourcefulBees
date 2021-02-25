@@ -9,7 +9,9 @@ public class BeepediaScreenState {
     private BeePage.SubPageType beeSubPage = BeePage.SubPageType.INFO;
     private int spawningScroll = 0;
     private int traitsScroll = 0;
+    private int breedingPage = 0;
     private boolean biomesOpen = false;
+    private boolean parentBreeding = true;
 
     public BeepediaScreen.PageType getPageType() {
         return pageType;
@@ -23,7 +25,8 @@ public class BeepediaScreenState {
         return pageID;
     }
 
-    public void setPageID(String pageID) {this.pageID = pageID;
+    public void setPageID(String pageID) {
+        this.pageID = pageID;
     }
 
     public BeePage.SubPageType getBeeSubPage() {
@@ -56,5 +59,21 @@ public class BeepediaScreenState {
 
     public void setTraitsScroll(int traitsScroll) {
         this.traitsScroll = traitsScroll;
+    }
+
+    public boolean isParentBreeding() {
+        return parentBreeding;
+    }
+
+    public void setParentBreeding(boolean parentBreeding) {
+        this.parentBreeding = parentBreeding;
+    }
+
+    public int getBreedingPage() {
+        return breedingPage;
+    }
+
+    public void setBreedingPage(int breedingPage) {
+        this.breedingPage = breedingPage;
     }
 }

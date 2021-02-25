@@ -10,6 +10,7 @@ import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -30,45 +31,129 @@ public class BreedingPage extends BeeDataPage {
     List<BreedingObject> parentBreeding = new LinkedList<>();
     List<BreedingObject> childrenBreeding = new LinkedList<>();
 
-    BreedingObject breeding = null;
+    Button leftArrow;
+    Button rightArrow;
+    Button parentsButton;
+    Button childrenButton;
 
     private final ResourceLocation breedingImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/breeding.png");
+    private List<BreedingObject> activeList = null;
+    private int activePage = 0;
 
     public BreedingPage(BeepediaScreen beepedia, CustomBeeData beeData, int xPos, int yPos, BeePage parent) {
         super(beepedia, beeData, xPos, yPos, parent);
         children = BeeRegistry.getRegistry().getChildren(beeData);
         parents = BeeRegistry.getRegistry().getParents(beeData);
-        children.forEach((b, p) -> childrenBreeding.add(new BreedingObject(b, p)));
-        parents.forEach((b, p) -> parentBreeding.add(new BreedingObject(b, p)));
+        children.forEach((p, l) -> l.getMap().forEach((w, b) -> childrenBreeding.add(new BreedingObject(p, b))));
+        parents.forEach((p, b) -> parentBreeding.add(new BreedingObject(p, b)));
+        leftArrow = new Button(xPos, yPos + subPageHeight - 20, 50, 20, new StringTextComponent("<"), button -> prevPage());
+        rightArrow = new Button(xPos + subPageWidth - 50, yPos + subPageHeight - 20, 50, 20, new StringTextComponent(">"), button -> nextPage());
+        parentsButton = new Button(xPos + subPageWidth - 50, yPos, 50, 20, new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding.children_button"), button -> {
+            setActiveList(true);
+        });
+        childrenButton = new Button(xPos + subPageWidth - 50, yPos, 50, 20, new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding.parents_button"), button -> {
+            setActiveList(false);
+        });
+        leftArrow.visible = false;
+        rightArrow.visible = false;
+        parentsButton.visible = false;
+        childrenButton.visible = false;
+        beepedia.addButton(leftArrow);
+        beepedia.addButton(rightArrow);
+        beepedia.addButton(parentsButton);
+        beepedia.addButton(childrenButton);
+    }
+
+    private void setActiveList(boolean parentsList) {
+        if (parentsList && !parentBreeding.isEmpty()) {
+            activeList = parentBreeding;
+        } else if (!parentsList && !childrenBreeding.isEmpty()) {
+            activeList = childrenBreeding;
+        } else {
+            activeList = null;
+        }
+        beepedia.currScreenState.setParentBreeding(parentsList);
+        activePage = beepedia.currScreenState.getBreedingPage();
+        if (activePage >= activeList.size()) activePage = 0;
+        beepedia.currScreenState.setBreedingPage(activePage);
+    }
+
+    private void nextPage() {
+        activePage++;
+        if (activePage >= activeList.size()) activePage = 0;
+        beepedia.currScreenState.setBreedingPage(activePage);
+    }
+
+    private void prevPage() {
+        activePage--;
+        if (activePage < 0) activePage = activeList.size() - 1;
+        beepedia.currScreenState.setBreedingPage(activePage);
+    }
+
+    @Override
+    public void openPage() {
+        super.openPage();
+        setActiveList(beepedia.currScreenState.isParentBreeding());
+    }
+
+    @Override
+    public void closePage() {
+        super.closePage();
+        leftArrow.visible = false;
+        rightArrow.visible = false;
+        parentsButton.visible = false;
+        childrenButton.visible = false;
     }
 
     @Override
     public void renderBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
+        showButtons();
         Minecraft.getInstance().textureManager.bindTexture(breedingImage);
         AbstractGui.drawTexture(matrix, xPos, yPos + 22, 0, 0, 128, 64, 128, 64);
         FontRenderer font = Minecraft.getInstance().fontRenderer;
         TranslationTextComponent title = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding");
-        font.draw(matrix, title, xPos, (float)yPos + 8, TextFormatting.WHITE.getColor());
+        if (activeList.size() > 1) {
+            StringTextComponent page = new StringTextComponent(String.format("%d / %d", activePage + 1, activeList.size()));
+            int padding = font.getWidth(page) / 2;
+            font.draw(matrix, page, xPos + (subPageWidth / 2) - padding, (float) yPos + subPageHeight - 14, TextFormatting.WHITE.getColor());
+        }
+        font.draw(matrix, title, xPos, (float) yPos + 8, TextFormatting.WHITE.getColor());
+    }
+
+    private void showButtons() {
+        parentsButton.visible = !beepedia.currScreenState.isParentBreeding() && !parentBreeding.isEmpty() && !baseOnly();
+        childrenButton.visible = beepedia.currScreenState.isParentBreeding() && !childrenBreeding.isEmpty() && !baseOnly();
+        leftArrow.visible = activeList.size() > 1;
+        rightArrow.visible = activeList.size() > 1;
+    }
+
+    private boolean baseOnly() {
+        if (parentBreeding.size() == 1 && childrenBreeding.size() == 1) {
+            if (parentBreeding.get(0).isBase && childrenBreeding.get(0).isBase) return true;
+        }
+        return false;
     }
 
     @Override
     public void renderForeground(MatrixStack matrix, int mouseX, int mouseY) {
-        if (!parentBreeding.isEmpty()) {
-            breeding = parentBreeding.get(0);
-            breeding.draw(matrix, mouseX, mouseY, 0);
+        if (activeList == null || activeList.isEmpty()) return;
+        if (!activeList.isEmpty()) {
+            activeList.get(activePage).draw(matrix, mouseX, mouseY);
         }
     }
 
     @Override
     public void tick(int ticksActive) {
-        if (breeding != null) {
-            breeding.tick(ticksActive);
+        if (activeList == null || activeList.isEmpty()) return;
+        if (activeList.get(activePage) != null) {
+            activeList.get(activePage).tick(ticksActive);
         }
     }
 
     @Override
     public void drawTooltips(MatrixStack matrixStack, int mouseX, int mouseY) {
-        breeding.drawTooltips(matrixStack, mouseX, mouseY, 0);
+        if (activeList == null || activeList.isEmpty()) return;
+        activeList.get(activePage).drawTooltips(matrixStack, mouseX, mouseY);
     }
 
     @Override
@@ -88,11 +173,13 @@ public class BreedingPage extends BeeDataPage {
         TranslationTextComponent parent2Name;
         int parent1Counter = 0;
         int parent2Counter = 0;
-        List<Child> children = new LinkedList<>();
+        Child child;
         boolean isParent;
         DecimalFormat decimalFormat = new DecimalFormat("##%");
+        public boolean isBase;
 
         private void initParents(Pair<String, String> parents) {
+            isBase = parents.getLeft().equals(parents.getRight());
             parent1Data = BeeRegistry.getRegistry().getBeeData(parents.getLeft());
             parent2Data = BeeRegistry.getRegistry().getBeeData(parents.getRight());
             parent1Entity = ForgeRegistries.ENTITIES.getValue(parent1Data.getEntityTypeRegistryID()).create(beepedia.getMinecraft().world);
@@ -103,34 +190,27 @@ public class BreedingPage extends BeeDataPage {
             parent2Items = BeeInfoUtils.getBreedItems(parent2Data);
         }
 
-        public BreedingObject(Pair<String, String> parents, RandomCollection<CustomBeeData> children) {
-            initParents(parents);
-            children.getMap().forEach((weight, beeData) -> this.children.add(new Child(parents, beeData)));
-            isParent = true;
-        }
-
         public BreedingObject(Pair<String, String> parents, CustomBeeData child) {
             initParents(parents);
-            this.children.add(new Child(parents, child));
+            this.child = new Child(parents, child);
             isParent = false;
         }
 
         public void drawParent1(MatrixStack matrix) {
-            BeepediaScreen.renderEntity(matrix, breeding.parent1Entity, beepedia.getMinecraft().world, (float)xPos + 6, (float)yPos + 32, 45, 1);
+            BeepediaScreen.renderEntity(matrix, parent1Entity, beepedia.getMinecraft().world, (float) xPos + 6, (float) yPos + 32, 45, 1);
         }
 
         public void drawParent2(MatrixStack matrix) {
-            BeepediaScreen.renderEntity(matrix, breeding.parent2Entity, beepedia.getMinecraft().world, (float)xPos + 60, (float)yPos + 32, -45, 1);
+            BeepediaScreen.renderEntity(matrix, parent2Entity, beepedia.getMinecraft().world, (float) xPos + 60, (float) yPos + 32, -45, 1);
         }
 
-        private void drawChild(MatrixStack matrix, int counter) {
-            Child child = breeding.children.get(counter);
+        private void drawChild(MatrixStack matrix) {
             FontRenderer font = beepedia.getMinecraft().fontRenderer;
-            BeepediaScreen.renderEntity(matrix, child.entity, beepedia.getMinecraft().world, (float)xPos + 130, (float)yPos + 42, -45, 1);
+            BeepediaScreen.renderEntity(matrix, child.entity, beepedia.getMinecraft().world, (float) xPos + 130, (float) yPos + 42, -45, 1);
 
             StringTextComponent text = new StringTextComponent(decimalFormat.format(child.weight));
             int padding = font.getWidth(text) / 2;
-            font.draw(matrix, text, (float)xPos + 103f - (float)padding, (float)yPos + 56, TextFormatting.GRAY.getColor());
+            font.draw(matrix, text, (float) xPos + 103f - (float) padding, (float) yPos + 56, TextFormatting.GRAY.getColor());
         }
 
         public void drawParent1Item(MatrixStack matrix, int mouseX, int mouseY) {
@@ -152,16 +232,16 @@ public class BreedingPage extends BeeDataPage {
             }
         }
 
-        public void drawTooltips(MatrixStack matrixStack, int mouseX, int mouseY, int counter) {
+        public void drawTooltips(MatrixStack matrixStack, int mouseX, int mouseY) {
             // todo this
         }
 
-        public void draw(MatrixStack matrix, int mouseX, int mouseY, int counter) {
-            breeding.drawParent1(matrix);
-            breeding.drawParent2(matrix);
-            breeding.drawChild(matrix, counter);
-            breeding.drawParent1Item(matrix, mouseX, mouseY);
-            breeding.drawParent2Item(matrix, mouseX, mouseY);
+        public void draw(MatrixStack matrix, int mouseX, int mouseY) {
+            drawParent1(matrix);
+            drawParent2(matrix);
+            drawChild(matrix);
+            drawParent1Item(matrix, mouseX, mouseY);
+            drawParent2Item(matrix, mouseX, mouseY);
         }
 
         public class Child {
