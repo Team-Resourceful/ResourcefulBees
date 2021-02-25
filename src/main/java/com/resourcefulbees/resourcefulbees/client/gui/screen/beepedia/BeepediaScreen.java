@@ -335,6 +335,8 @@ public class BeepediaScreen extends Screen {
                 if (mc.player != null) entity.ticksExisted = mc.player.ticksExisted;
                 if (entity instanceof CustomBeeEntity) {
                     scaledSize = 20 / ((CustomBeeEntity) entity).getBeeData().getSizeModifier();
+                } else {
+                    scaledSize = 20 / (entity.getWidth() > entity.getHeight() ? entity.getWidth() : entity.getHeight());
                 }
             }
             if (mc.player != null) {

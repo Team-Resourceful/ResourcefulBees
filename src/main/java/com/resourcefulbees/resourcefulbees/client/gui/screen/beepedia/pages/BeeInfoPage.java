@@ -78,7 +78,7 @@ public class BeeInfoPage extends BeeDataPage {
                 entityFlower = entityType.create(beepedia.getMinecraft().world);
             }
             font.draw(matrix, flowerName, xPos, yPos + 80, Color.parse("gray").getRgb());
-            BeepediaScreen.renderEntity(matrix, entityFlower, beepedia.getMinecraft().world, xPos + 36, yPos + 70, -45, 1);
+            BeepediaScreen.renderEntity(matrix, entityFlower, beepedia.getMinecraft().world, xPos + 45, yPos + 90, -45, 1.25f);
         }
     }
 
