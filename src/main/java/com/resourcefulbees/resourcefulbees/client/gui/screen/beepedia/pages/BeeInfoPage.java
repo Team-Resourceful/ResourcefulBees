@@ -7,22 +7,28 @@ import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.Color;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class BeeInfoPage extends BeeDataPage {
 
+    private Entity entityFlower = null;
     List<Block> flowers;
     int counter;
     int size;
 
     public BeeInfoPage(BeepediaScreen beepedia, CustomBeeData beeData, int xPos, int yPos, BeePage parent) {
         super(beepedia, beeData, xPos, yPos, parent);
-        flowers = new ArrayList<>(beeData.getBlockFlowers());
+        flowers = beeData.hasBlockFlowers() ? new ArrayList<>(beeData.getBlockFlowers()) : new ArrayList<>();
         counter = 0;
         size = flowers.size();
     }
@@ -58,10 +64,21 @@ public class BeeInfoPage extends BeeDataPage {
     @Override
     public void renderForeground(MatrixStack matrix, int mouseX, int mouseY) {
         FontRenderer font = Minecraft.getInstance().fontRenderer;
-        if (!flowers.isEmpty()) {
-            TranslationTextComponent flowerName = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.info.flower");
-            font.draw(matrix, flowerName, xPos, (float)yPos + 75,0xAAAAAA);
-            beepedia.drawSlot(matrix, flowers.get(counter), xPos + 36, yPos + 70, mouseX, mouseY);
+        TranslationTextComponent flowerName = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.info.flower");
+        if (beeData.hasBlockFlowers()) {
+            if (!flowers.isEmpty()) {
+                font.draw(matrix, flowerName, xPos, yPos + 75, Color.parse("gray").getRgb());
+                beepedia.drawSlot(matrix, flowers.get(counter), xPos + 36, yPos + 70, mouseX, mouseY);
+            }
+        } else if (beeData.hasEntityFlower()) {
+            if (entityFlower == null) {
+                EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(beeData.getEntityFlower());
+                // makes sure the entity is valid
+                if (entityType.equals(EntityType.PIG) && (!beeData.getEntityFlower().equals("minecraft:pig") || !beeData.getEntityFlower().equals("pig"))) return;
+                entityFlower = entityType.create(beepedia.getMinecraft().world);
+            }
+            font.draw(matrix, flowerName, xPos, yPos + 80, Color.parse("gray").getRgb());
+            BeepediaScreen.renderEntity(matrix, entityFlower, beepedia.getMinecraft().world, xPos + 36, yPos + 70, -45, 1);
         }
     }
 

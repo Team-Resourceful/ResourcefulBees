@@ -116,7 +116,7 @@ public class BreedingPage extends BeeDataPage {
         }
 
         public void drawParent1(MatrixStack matrix) {
-            BeepediaScreen.renderEntity(matrix, breeding.parent1Entity, beepedia.getMinecraft().world, (float)xPos + 6, (float)yPos + 32, 225, 1);
+            BeepediaScreen.renderEntity(matrix, breeding.parent1Entity, beepedia.getMinecraft().world, (float)xPos + 6, (float)yPos + 32, 45, 1);
         }
 
         public void drawParent2(MatrixStack matrix) {
@@ -126,7 +126,7 @@ public class BreedingPage extends BeeDataPage {
         private void drawChild(MatrixStack matrix, int counter) {
             Child child = breeding.children.get(counter);
             FontRenderer font = beepedia.getMinecraft().fontRenderer;
-            BeepediaScreen.renderEntity(matrix, child.entity, beepedia.getMinecraft().world, (float)xPos + 130, (float)yPos + 42, 225, 1);
+            BeepediaScreen.renderEntity(matrix, child.entity, beepedia.getMinecraft().world, (float)xPos + 130, (float)yPos + 42, -45, 1);
 
             StringTextComponent text = new StringTextComponent(decimalFormat.format(child.weight));
             int padding = font.getWidth(text) / 2;

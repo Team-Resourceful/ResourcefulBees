@@ -23,7 +23,7 @@ import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.passive.BeeEntity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.IItemProvider;
@@ -36,7 +36,10 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class BeepediaScreen extends Screen {
@@ -268,7 +271,7 @@ public class BeepediaScreen extends Screen {
                 title = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.bees");
                 break;
         }
-        this.textRenderer.draw(matrixStack, title, (float)this.guiLeft + 10, (float)this.guiTop + 20, 0xffffff);
+        this.textRenderer.draw(matrixStack, title, (float) this.guiLeft + 10, (float) this.guiTop + 20, 0xffffff);
     }
 
 
@@ -326,24 +329,22 @@ public class BeepediaScreen extends Screen {
 
     public static void renderEntity(MatrixStack matrixStack, Entity entity, World world, float x, float y, float rotation, float renderScale) {
         if (world != null) {
-            float scaledSize = 20 * renderScale;
+            float scaledSize = 20;
             Minecraft mc = Minecraft.getInstance();
-            if (entity instanceof BeeEntity) {
-                if (mc.player != null)
-                    entity.ticksExisted = mc.player.ticksExisted;
-                ((BeeEntity) entity).renderYawOffset = rotation;
+            if (entity instanceof LivingEntity) {
+                if (mc.player != null) entity.ticksExisted = mc.player.ticksExisted;
                 if (entity instanceof CustomBeeEntity) {
-                    scaledSize = 20 / ((CustomBeeEntity) entity).getBeeData().getSizeModifier() * renderScale;
+                    scaledSize = 20 / ((CustomBeeEntity) entity).getBeeData().getSizeModifier();
                 }
             }
             if (mc.player != null) {
                 matrixStack.push();
-                matrixStack.translate(8, 14, 0.5D);
+                matrixStack.translate(10, 10, 0.5);
                 matrixStack.translate(x, y, 1);
                 matrixStack.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(180.0F));
-                matrixStack.translate(0.0F, -0.2F, 1);
-                matrixStack.scale(-scaledSize, scaledSize, 30);
-                matrixStack.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(270.0F));
+                matrixStack.translate(0, 0, 1);
+                matrixStack.scale(-(scaledSize * renderScale), (scaledSize * renderScale), 30);
+                matrixStack.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(rotation));
                 EntityRendererManager entityrenderermanager = mc.getRenderManager();
                 IRenderTypeBuffer.Impl renderTypeBuffer = mc.getBufferBuilders().getEntityVertexConsumers();
                 entityrenderermanager.render(entity, 0, 0, 0.0D, mc.getRenderPartialTicks(), 1, matrixStack, renderTypeBuffer, 15728880);
@@ -444,7 +445,9 @@ public class BeepediaScreen extends Screen {
             list.forEach((s, b) -> b.listButton.setParent(this));
         }
 
-        public int getScrollPos() { return scrollPos; }
+        public int getScrollPos() {
+            return scrollPos;
+        }
 
         public void updateReducedList(String search) {
             reducedList.clear();
