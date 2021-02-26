@@ -137,7 +137,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
                         processRecipe(i);
                     }
                     if (processCompleted[i]) {
-                        processCompleted(i);
+                        completedProcess(i);
                     }
                 }
                 if (dirty) {
@@ -157,7 +157,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
     }
 
     //TODO see if this can be shortened and optimized further
-    protected void processCompleted(int i) {
+    protected void completedProcess(int i) {
         if (recipes.get(i) != null) {
             if (inventoryHasSpace(recipes.get(i))) {
                 consumeInput(i);

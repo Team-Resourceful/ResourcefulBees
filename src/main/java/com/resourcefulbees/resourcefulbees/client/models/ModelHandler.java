@@ -150,7 +150,7 @@ public class ModelHandler {
         IResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
 
         BeeRegistry.getRegistry().getBees().forEach((string, customBee) -> {
-            if (customBee.shouldResourcefulBeesDoForgeRegistration) {
+            if (customBee.shouldResourcefulBeesDoForgeRegistration()) {
 
                 if (customBee.hasHoneycomb() && !customBee.hasCustomDrop()) {
                     registerHoneycombBlockstate(customBee, resourceManager);

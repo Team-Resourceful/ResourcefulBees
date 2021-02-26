@@ -3,16 +3,14 @@ package com.resourcefulbees.resourcefulbees.lib;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.beedata.DefaultHoneyBottleData;
 import com.resourcefulbees.resourcefulbees.api.beedata.HoneyBottleData;
-import com.resourcefulbees.resourcefulbees.registry.ModFluids;
-import com.resourcefulbees.resourcefulbees.registry.ModItems;
-import net.minecraft.block.Blocks;
-import net.minecraft.item.Foods;
-import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.RegistryObject;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public class BeeConstants {
+
+    private BeeConstants() {
+        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+    }
+
     public static final String FLOWER_TAG_ALL = "all";
     public static final String FLOWER_TAG_SMALL = "small";
     public static final String FLOWER_TAG_TALL = "tall";

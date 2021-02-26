@@ -1,7 +1,6 @@
 package com.resourcefulbees.resourcefulbees.registry;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
-import com.resourcefulbees.resourcefulbees.effects.ModEffects;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

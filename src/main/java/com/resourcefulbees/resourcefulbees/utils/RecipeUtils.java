@@ -1,5 +1,6 @@
 package com.resourcefulbees.resourcefulbees.utils;
 
+import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -7,6 +8,9 @@ import net.minecraft.network.PacketBuffer;
 
 public class RecipeUtils {
 
+    private RecipeUtils() {
+        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+    }
 
     public static void writeItemStack(ItemStack stack, PacketBuffer buffer){
         if (stack.isEmpty()) {

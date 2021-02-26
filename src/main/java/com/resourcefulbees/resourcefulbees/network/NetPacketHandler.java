@@ -1,6 +1,7 @@
 package com.resourcefulbees.resourcefulbees.network;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
+import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.network.packets.*;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;
@@ -11,6 +12,10 @@ import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 
 public class NetPacketHandler {
+
+    private NetPacketHandler() {
+        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+    }
 
     private static int id = 0;
     private static final String PROTOCOL_VERSION = Integer.toString(1);
