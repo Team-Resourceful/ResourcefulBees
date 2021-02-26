@@ -18,10 +18,12 @@ public class BeeAngerGoal extends HurtByTargetGoal {
         bee = beeIn;
     }
 
+    @Override
     public boolean shouldContinueExecuting() {
         return bee.getAngerTime() > 0 && super.shouldContinueExecuting();
     }
 
+    @Override
     protected void setAttackTarget(@Nonnull MobEntity mobIn, @Nonnull LivingEntity targetIn) {
         if (mobIn instanceof BeeEntity && this.goalOwner.canEntityBeSeen(targetIn)) {
             mobIn.setAttackTarget(targetIn);

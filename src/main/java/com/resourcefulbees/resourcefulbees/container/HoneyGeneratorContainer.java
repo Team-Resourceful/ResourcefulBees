@@ -18,8 +18,8 @@ import javax.annotation.Nonnull;
 
 public class HoneyGeneratorContainer extends Container {
 
-    public HoneyGeneratorTileEntity honeyGeneratorTileEntity;
-    public PlayerEntity player;
+    private final HoneyGeneratorTileEntity honeyGeneratorTileEntity;
+    private final PlayerEntity player;
 
     public HoneyGeneratorContainer(int id, World world, BlockPos pos, PlayerInventory inv) {
         super(ModContainers.HONEY_GENERATOR_CONTAINER.get(), id);
@@ -49,13 +49,13 @@ public class HoneyGeneratorContainer extends Container {
         }
     }
 
-    public int getEnergy() { return honeyGeneratorTileEntity.getCapability(CapabilityEnergy.ENERGY).map(IEnergyStorage::getEnergyStored).orElse(0); }
+    public int getEnergy() { return getHoneyGeneratorTileEntity().getCapability(CapabilityEnergy.ENERGY).map(IEnergyStorage::getEnergyStored).orElse(0); }
     
-    public int getFluid() { return honeyGeneratorTileEntity.fluidTank.getFluidAmount(); }
+    public int getFluid() { return getHoneyGeneratorTileEntity().fluidTank.getFluidAmount(); }
     
-    public int getMaxEnergy() { return honeyGeneratorTileEntity.energyStorage.getMaxEnergyStored(); }
+    public int getMaxEnergy() { return getHoneyGeneratorTileEntity().energyStorage.getMaxEnergyStored(); }
 
-    public int getMaxFluid() { return honeyGeneratorTileEntity.fluidTank.getCapacity(); }
+    public int getMaxFluid() { return getHoneyGeneratorTileEntity().fluidTank.getCapacity(); }
 
     public int getTime() { return getHoneyGeneratorTileEntity().getFluidFilled(); }
 
@@ -95,12 +95,20 @@ public class HoneyGeneratorContainer extends Container {
     @Override
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
-        if (honeyGeneratorTileEntity == null) {
+        if (getHoneyGeneratorTileEntity() == null) {
             return;
         }
 
         for (IContainerListener listener : ((ContainerAccessor) this).getListeners()) {
-            honeyGeneratorTileEntity.sendGUINetworkPacket(listener);
+            getHoneyGeneratorTileEntity().sendGUINetworkPacket(listener);
         }
+    }
+
+    public HoneyGeneratorTileEntity getHoneyGeneratorTileEntity() {
+        return honeyGeneratorTileEntity;
+    }
+
+    public PlayerEntity getPlayer() {
+        return player;
     }
 }

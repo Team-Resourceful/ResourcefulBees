@@ -16,8 +16,8 @@ import javax.annotation.Nonnull;
 
 public class MechanicalCentrifugeContainer extends Container {
 
-    public MechanicalCentrifugeTileEntity centrifugeTileEntity;
-    public PlayerEntity player;
+    private final MechanicalCentrifugeTileEntity centrifugeTileEntity;
+    private final PlayerEntity player;
 
     public MechanicalCentrifugeContainer(int id, World world, BlockPos pos, PlayerInventory inv) {
         super(ModContainers.MECHANICAL_CENTRIFUGE_CONTAINER.get(), id);
@@ -90,5 +90,13 @@ public class MechanicalCentrifugeContainer extends Container {
             }
         }
         return itemstack;
+    }
+
+    public MechanicalCentrifugeTileEntity getCentrifugeTileEntity() {
+        return centrifugeTileEntity;
+    }
+
+    public PlayerEntity getPlayer() {
+        return player;
     }
 }

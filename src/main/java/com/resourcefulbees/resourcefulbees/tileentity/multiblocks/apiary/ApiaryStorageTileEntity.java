@@ -15,6 +15,7 @@ import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import com.resourcefulbees.resourcefulbees.registry.ModTileEntityTypes;
+import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.MathUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
@@ -240,7 +241,7 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
                 Entity entity = entityType.create(world);
                 if (entity != null) {
                     ICustomBee beeEntity = (ICustomBee) entity;
-                    CompoundNBT nbt = BeeJar.createTag((BeeEntity) beeEntity);
+                    CompoundNBT nbt = BeeInfoUtils.createJarBeeTag((BeeEntity) beeEntity, NBTConstants.NBT_ENTITY);
                     ItemStack beeJar = new ItemStack(ModItems.BEE_JAR.get());
                     ItemStack emptyBeeJar = new ItemStack(ModItems.BEE_JAR.get());
                     beeJar.setTag(nbt);
@@ -315,7 +316,7 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
             for (PlayerEntity playerentity : world.getEntitiesWithinAABB(PlayerEntity.class, new AxisAlignedBB(pos.getX() - f, pos.getY() - f, pos.getZ() - f, (pos.getX() + 1) + f, (pos.getY() + 1) + f, (pos.getZ() + 1) + f))) {
                 if (playerentity.openContainer instanceof ApiaryStorageContainer) {
                     ApiaryStorageContainer openContainer = (ApiaryStorageContainer) playerentity.openContainer;
-                    ApiaryStorageTileEntity apiaryStorageTileEntity1 = openContainer.apiaryStorageTileEntity;
+                    ApiaryStorageTileEntity apiaryStorageTileEntity1 = openContainer.getApiaryStorageTileEntity();
                     if (apiaryStorageTileEntity1 == this) {
                         openContainer.setupSlots(true);
                     }

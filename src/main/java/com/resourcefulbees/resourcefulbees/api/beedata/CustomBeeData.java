@@ -242,7 +242,10 @@ public class CustomBeeData extends AbstractBeeData {
     }
 
     public int getMaxTimeInHive() {
-        return maxTimeInHive < BeeConstants.MIN_HIVE_TIME ? maxTimeInHive == 0 ? BeeConstants.MAX_TIME_IN_HIVE : BeeConstants.MIN_HIVE_TIME : maxTimeInHive;
+        if (maxTimeInHive < BeeConstants.MIN_HIVE_TIME) {
+            return maxTimeInHive == 0 ? BeeConstants.MAX_TIME_IN_HIVE : BeeConstants.MIN_HIVE_TIME;
+        }
+        return maxTimeInHive;
     }
 
     public RegistryObject<Item> getCombRegistryObject() {

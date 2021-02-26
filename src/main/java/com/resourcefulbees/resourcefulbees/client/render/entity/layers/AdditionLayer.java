@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.apache.logging.log4j.LogManager;
 
 import javax.annotation.Nonnull;
 
@@ -36,7 +37,7 @@ public class AdditionLayer<T extends CustomBeeEntity> extends LayerRenderer<T, C
             this.angryTexture = baseTexture;
         }
         if (this.angryTexture == null || this.baseTexture == null) {
-            System.out.println("UCK");
+            LogManager.getLogger().warn("angry and base textures are null");
         }
     }
 

@@ -14,7 +14,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class EntityEventHandlers {
 
     public static void entityDies(LivingDeathEvent event) {
-        //TODO: move this to it's own class in the entity package - epic
         //TODO: enable WIP Pollen Feature.
 
         if (event.getEntity() instanceof ResourcefulBee) {

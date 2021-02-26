@@ -16,13 +16,13 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.potion.Effect;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.text.DecimalFormat;
@@ -31,11 +31,11 @@ import java.util.List;
 
 public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
 
-    private EnderBeeconTileEntity tileEntity;
+    private final EnderBeeconTileEntity tileEntity;
 
     public EnderBeeconScreen(EnderBeeconContainer screenContainer, PlayerInventory inventory, ITextComponent titleIn) {
         super(screenContainer, inventory, titleIn);
-        this.tileEntity = screenContainer.enderBeeconTileEntity;
+        this.tileEntity = screenContainer.getEnderBeeconTileEntity();
         preInit();
     }
 
@@ -102,10 +102,11 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
             //prep color
             int color = stack.getFluid().getAttributes().getColor();
             if (color == -1) color = 16751628;
-            float red = RenderCuboid.INSTANCE.getRed(color);
-            float green = RenderCuboid.INSTANCE.getGreen(color);
-            float blue = RenderCuboid.INSTANCE.getBlue(color);
+            float red = RenderCuboid.getRed(color);
+            float green = RenderCuboid.getGreen(color);
+            float blue = RenderCuboid.getBlue(color);
             float alpha = 1.0f;
+            //noinspection deprecation
             RenderSystem.color4f(red, green, blue, alpha);
             int tankPosX = this.guiLeft + 207;
             int tankPosY = this.guiTop + 92;
@@ -117,7 +118,8 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
         }
     }
 
-    protected void drawForeground(MatrixStack matrixStack, int mouseX, int mouseY) {
+    @Override
+    protected void drawForeground(@NotNull MatrixStack matrixStack, int mouseX, int mouseY) {
         super.drawForeground(matrixStack, mouseX, mouseY);
         int buttonX = 24 + 11;
         int buttonY = 36 + 25;
@@ -161,22 +163,24 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
     @OnlyIn(Dist.CLIENT)
     abstract static class Button extends AbstractButton {
         private boolean selected;
-        private ResourceLocation texture;
+        private final ResourceLocation texture;
 
         protected Button(int xPos, int yPos, ResourceLocation texture) {
             super(xPos, yPos, 22, 22, StringTextComponent.EMPTY);
             this.texture = texture;
         }
 
-        public void renderButton(MatrixStack matrixStack, int xPos, int yPos, float v) {
+        @Override
+        public void renderButton(@NotNull MatrixStack matrixStack, int xPos, int yPos, float v) {
             Minecraft.getInstance().getTextureManager().bindTexture(texture);
+            //noinspection deprecation
             RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
             int i = 0;
             int j = 0;
             if (!this.active) {
                 j += this.width * 2;
             } else if (this.selected) {
-                j += this.width * 1;
+                j += this.width;
             } else if (this.isHovered()) {
                 j += this.width * 3;
             }
@@ -185,14 +189,14 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
             this.renderExtra(matrixStack);
         }
 
-        protected abstract void renderExtra(MatrixStack p_230454_1_);
+        protected abstract void renderExtra(MatrixStack matrixStack);
 
         public boolean isSelected() {
             return this.selected;
         }
 
-        public void setSelected(boolean p_146140_1_) {
-            this.selected = p_146140_1_;
+        public void setSelected(boolean selected) {
+            this.selected = selected;
         }
     }
 
@@ -210,8 +214,7 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
         }
 
         private ITextComponent getTooltip(Effect effect) {
-            IFormattableTextComponent iformattabletextcomponent = new TranslationTextComponent(effect.getName());
-            return iformattabletextcomponent;
+            return new TranslationTextComponent(effect.getName());
         }
 
         public void onPress() {
@@ -222,7 +225,8 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
             EnderBeeconScreen.this.init();
         }
 
-        public void renderToolTip(MatrixStack matrixStack, int xPos, int yPos) {
+        @Override
+        public void renderToolTip(@NotNull MatrixStack matrixStack, int xPos, int yPos) {
             EnderBeeconScreen.this.renderTooltip(matrixStack, this.textComponent, xPos, yPos);
         }
 

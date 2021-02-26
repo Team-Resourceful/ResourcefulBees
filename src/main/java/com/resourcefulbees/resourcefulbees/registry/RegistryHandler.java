@@ -90,7 +90,7 @@ public class RegistryHandler {
 
     public static void registerDynamicHoney() {
         BeeRegistry.getRegistry().getHoneyBottles().forEach((name, honeyData) -> {
-            if (honeyData.shouldResourcefulBeesDoForgeRegistration) {
+            if (honeyData.shouldResourcefulBeesDoForgeRegistration()) {
                 registerHoneyBottle(name, honeyData);
             }
         });

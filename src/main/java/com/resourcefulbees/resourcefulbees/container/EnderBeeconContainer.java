@@ -16,8 +16,8 @@ import javax.annotation.Nonnull;
 
 public class EnderBeeconContainer extends Container {
 
-    public EnderBeeconTileEntity enderBeeconTileEntity;
-    public PlayerEntity player;
+    private final EnderBeeconTileEntity enderBeeconTileEntity;
+    private final PlayerEntity player;
 
     public EnderBeeconContainer(int id, World world, BlockPos pos, PlayerInventory inv) {
         super(ModContainers.ENDER_BEECON_CONTAINER.get(), id);
@@ -89,12 +89,20 @@ public class EnderBeeconContainer extends Container {
     @Override
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
-        if (enderBeeconTileEntity == null) {
+        if (getEnderBeeconTileEntity() == null) {
             return;
         }
 
         for (IContainerListener listener : ((ContainerAccessor) this).getListeners()) {
-            enderBeeconTileEntity.sendGUINetworkPacket(listener);
+            getEnderBeeconTileEntity().sendGUINetworkPacket(listener);
         }
+    }
+
+    public EnderBeeconTileEntity getEnderBeeconTileEntity() {
+        return enderBeeconTileEntity;
+    }
+
+    public PlayerEntity getPlayer() {
+        return player;
     }
 }

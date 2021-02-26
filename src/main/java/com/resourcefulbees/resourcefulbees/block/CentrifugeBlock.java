@@ -36,6 +36,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.stream.IntStream;
 
+@SuppressWarnings("deprecation")
 public class CentrifugeBlock extends Block {
     public static final BooleanProperty PROPERTY_ON = BooleanProperty.create("on");
 

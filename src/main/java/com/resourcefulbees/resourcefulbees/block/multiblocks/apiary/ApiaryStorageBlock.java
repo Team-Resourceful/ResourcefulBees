@@ -18,6 +18,7 @@ import net.minecraftforge.fml.network.NetworkHooks;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+@SuppressWarnings("deprecation")
 public class ApiaryStorageBlock extends Block {
     public ApiaryStorageBlock(Properties properties) {
         super(properties);

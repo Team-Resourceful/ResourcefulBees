@@ -60,7 +60,7 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
     protected void init() {
         super.init();
 
-        apiaryTileEntity = this.container.apiaryTileEntity;
+        apiaryTileEntity = this.container.getApiaryTileEntity();
 
         importButton = this.addButton(new Button(this.guiLeft + 73, this.guiTop + 10, 40, 20, new StringTextComponent(I18n.format("gui.resourcefulbees.apiary.button.import")), (onPress) -> this.importBee()));
         exportButton = this.addButton(new Button(this.guiLeft + 159, this.guiTop + 10, 40, 20, new StringTextComponent(I18n.format("gui.resourcefulbees.apiary.button.export")), (onPress) -> this.exportSelectedBee()));
@@ -76,7 +76,9 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
         int t = i + this.xSize - 25;
 
         this.addButton(new TabImageButton(t+1, j+17, 18, 18, 110, 0, 18, TABS_BG, new ItemStack(ModItems.BEE_JAR.get()), 1, 1,
-                (onPress) -> this.changeScreen(ApiaryTabs.MAIN)) {
+                onPress -> this.changeScreen(ApiaryTabs.MAIN)) {
+
+            @Override
             public void renderToolTip(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
                 StringTextComponent s = new StringTextComponent(I18n.format("gui.resourcefulbees.apiary.button.main_screen"));
                 ValidatedApiaryScreen.this.renderTooltip(matrix, s, mouseX, mouseY);
@@ -84,7 +86,9 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
         }).active = false;
 
         storageTabButton = this.addButton(new TabImageButton(t + 1, j + 37, 18, 18, 110, 0, 18, TABS_BG, new ItemStack(net.minecraft.item.Items.HONEYCOMB),2, 1,
-                (onPress) -> this.changeScreen(ApiaryTabs.STORAGE)) {
+                onPress -> this.changeScreen(ApiaryTabs.STORAGE)) {
+
+            @Override
             public void renderToolTip(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
                 StringTextComponent s = new StringTextComponent(I18n.format("gui.resourcefulbees.apiary.button.storage_screen"));
                 ValidatedApiaryScreen.this.renderTooltip(matrix, s, mouseX, mouseY);
@@ -92,7 +96,9 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
         });
 
         breedTabButton = this.addButton(new TabImageButton(t + 1, j + 57, 18, 18, 110, 0, 18, TABS_BG, new ItemStack(ModItems.GOLD_FLOWER_ITEM.get()), 1, 1,
-                (onPress) -> this.changeScreen(ApiaryTabs.BREED)) {
+                onPress -> this.changeScreen(ApiaryTabs.BREED)) {
+
+            @Override
             public void renderToolTip(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
                 StringTextComponent s = new StringTextComponent(I18n.format("gui.resourcefulbees.apiary.button.breed_screen"));
                 ValidatedApiaryScreen.this.renderTooltip(matrix, s, mouseX, mouseY);
@@ -116,7 +122,7 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
 
     private void exportSelectedBee() {
         if (apiaryTileEntity.getBeeCount() != 0) {
-            NetPacketHandler.sendToServer(new ExportBeeMessage(this.container.pos, this.container.beeList[this.container.getSelectedBee()]));
+            NetPacketHandler.sendToServer(new ExportBeeMessage(this.container.getPos(), this.container.getBeeList()[this.container.getSelectedBee()]));
             //beeIndexOffset--;
             // TODO this causes Array Out of Bounds exception.
             //  Not having it causes GUI to not update correctly when last bee in list is exported.
@@ -125,7 +131,7 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
     }
 
     private void importBee() {
-        NetPacketHandler.sendToServer(new ImportBeeMessage(this.container.pos));
+        NetPacketHandler.sendToServer(new ImportBeeMessage(this.container.getPos()));
     }
 
     @Override
@@ -263,6 +269,7 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
         return apiaryTileEntity.getBeeCount() > 7;
     }
 
+    @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double scrollAmount) {
         if (this.canScroll()) {
             int i = this.getHiddenRows();
@@ -274,7 +281,8 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
         return true;
     }
 
-    public boolean mouseDragged(double mouseX, double mouseY, int p_mouseDragged_5_, double p_mouseDragged_6_, double p_mouseDragged_8_) {
+    @Override
+    public boolean mouseDragged(double mouseX, double mouseY, int pMouseDragged5, double pMouseDragged6, double pMouseDragged8) {
         if (this.clickedOnScroll && this.canScroll()) {
             int i = this.guiTop + 14;
             int j = i + 101;
@@ -283,13 +291,14 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
             this.beeIndexOffset = (int) ((double) (this.sliderProgress * (float) this.getHiddenRows()) + 0.5D);
             return true;
         } else {
-            return super.mouseDragged(mouseX, mouseY, p_mouseDragged_5_, p_mouseDragged_6_, p_mouseDragged_8_);
+            return super.mouseDragged(mouseX, mouseY, pMouseDragged5, pMouseDragged6, pMouseDragged8);
         }
     }
 
     private int getHiddenRows() { return apiaryTileEntity.getBeeCount() - 7; }
 
-    public boolean mouseClicked(double mouseX, double mouseY, int p_mouseClicked_5_) {
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int pMouseClicked5) {
         this.clickedOnScroll = false;
         if (apiaryTileEntity.getBeeCount() > 0) {
             int i = this.guiLeft + 5;
@@ -318,6 +327,6 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
             }
         }
 
-        return super.mouseClicked(mouseX, mouseY, p_mouseClicked_5_);
+        return super.mouseClicked(mouseX, mouseY, pMouseClicked5);
     }
 }

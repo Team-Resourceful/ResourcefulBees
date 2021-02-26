@@ -36,6 +36,8 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
+
+@SuppressWarnings({"unused", "deprecation"})
 public class CustomHoneyBlock extends BreakableBlock {
 
     protected static final VoxelShape SHAPE = Block.makeCuboidShape(1.0D, 0.0D, 1.0D, 15.0D, 15.0D, 15.0D);
@@ -91,18 +93,21 @@ public class CustomHoneyBlock extends BreakableBlock {
         return entity instanceof LivingEntity || entity instanceof AbstractMinecartEntity || entity instanceof TNTEntity || entity instanceof BoatEntity;
     }
 
+    @Override
     @Nonnull
     public VoxelShape getCollisionShape(@NotNull BlockState blockState, @NotNull IBlockReader blockReader, @NotNull BlockPos blockPos, @NotNull ISelectionContext selectionContext) {
         return SHAPE;
     }
 
+
     /**
      * Block's chance to react to a living entity falling on it.
      */
+    @Override
     public void onFallenUpon(World world, @NotNull BlockPos blockPos, Entity entity, float distance) {
         entity.playSound(SoundEvents.BLOCK_HONEY_BLOCK_SLIDE, 1.0F, 1.0F);
         if (world.isRemote) {
-            addParticles(entity, 5);
+            addParticles(entity);
         }
 
         if (entity.handleFallDamage(distance, 0.2F)) {
@@ -111,6 +116,7 @@ public class CustomHoneyBlock extends BreakableBlock {
 
     }
 
+    @Override
     public void onEntityCollision(@NotNull BlockState state, @NotNull World world, @NotNull BlockPos blockPos, @NotNull Entity entity) {
         if (this.isSliding(blockPos, entity)) {
             this.triggerAdvancement(entity, blockPos);
@@ -160,16 +166,16 @@ public class CustomHoneyBlock extends BreakableBlock {
             }
 
             if (world.isRemote && world.rand.nextInt(5) == 0) {
-                addParticles(entity, 5);
+                addParticles(entity);
             }
         }
     }
 
     @OnlyIn(Dist.CLIENT)
-    private void addParticles(Entity entity, int amount) {
+    private void addParticles(Entity entity) {
         BlockState blockstate = honeyData.getHoneyBlockRegistryObject().get().getDefaultState();
 
-        for (int i = 0; i < amount; ++i) {
+        for (int i = 0; i < 5; ++i) {
             entity.world.addParticle(new BlockParticleData(ParticleTypes.BLOCK, blockstate), entity.getX(), entity.getY(), entity.getZ(), 0.0D, 0.0D, 0.0D);
         }
     }

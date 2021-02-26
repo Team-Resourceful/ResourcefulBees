@@ -263,60 +263,6 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
         this.getTime()[slot] = 0;
     }
 
-    private void rebuildOpenContainers() {
-        if (world != null) {
-            float f = 5.0F;
-            BlockPos pos = this.pos;
-
-            for (PlayerEntity playerentity : world.getEntitiesWithinAABB(PlayerEntity.class, new AxisAlignedBB(pos.getX() - f, pos.getY() - f, pos.getZ() - f, (pos.getX() + 1) + f, (pos.getY() + 1) + f, (pos.getZ() + 1) + f))) {
-                if (playerentity.openContainer instanceof ApiaryBreederContainer) {
-                    ApiaryBreederContainer openContainer = (ApiaryBreederContainer) playerentity.openContainer;
-                    ApiaryBreederTileEntity apiaryBreederTileEntity = openContainer.apiaryBreederTileEntity;
-                    if (apiaryBreederTileEntity == this) {
-                        openContainer.setupSlots(true);
-                    }
-                }
-            }
-        }
-    }
-
-    private void updateNumberOfBreeders() {
-        int count = 1;
-        for (int i = 0; i < 4; i++) {
-            if (!h.getStackInSlot(UPGRADE_SLOTS[i]).isEmpty()) {
-                ItemStack upgradeItem = h.getStackInSlot(UPGRADE_SLOTS[i]);
-                if (UpgradeItem.isUpgradeItem(upgradeItem)) {
-                    CompoundNBT data = UpgradeItem.getUpgradeData(upgradeItem);
-
-                    if (data != null && data.getString(NBTConstants.NBT_UPGRADE_TYPE).equals(NBTConstants.NBT_BREEDER_UPGRADE)) {
-                        count += (int) MathUtils.clamp(data.getFloat(NBTConstants.NBT_BREEDER_COUNT), 0F, 5);
-                    }
-                }
-            }
-        }
-
-        numberOfBreeders = count;
-        h.setMaxSlots(3 + numberOfBreeders * 5);
-    }
-
-    private void updateBreedTime() {
-        int totalTime = Config.APIARY_MAX_BREED_TIME.get();
-        for (int i = 0; i < 4; i++) {
-            if (!h.getStackInSlot(UPGRADE_SLOTS[i]).isEmpty()) {
-                ItemStack upgradeItem = h.getStackInSlot(UPGRADE_SLOTS[i]);
-                if (UpgradeItem.isUpgradeItem(upgradeItem)) {
-                    CompoundNBT data = UpgradeItem.getUpgradeData(upgradeItem);
-
-                    if (data != null && data.getString(NBTConstants.NBT_UPGRADE_TYPE).equals(NBTConstants.NBT_BREEDER_UPGRADE)) {
-                        totalTime -= (int) MathUtils.clamp(data.getFloat(NBTConstants.NBT_BREED_TIME), 100, 600);
-                    }
-                }
-            }
-        }
-
-        this.totalTime = MathUtils.clamp(totalTime, 300, 4800);
-    }
-
 
     @Override
     public void fromTag(@Nonnull BlockState state, @Nonnull CompoundNBT nbt) {
@@ -479,10 +425,10 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
             markDirty();
 
             for (int i = 0; i < 4; i++) {
-                if (slot == UPGRADE_SLOTS[i]) {
-                    updateNumberOfBreeders();
-                    rebuildOpenContainers();
-                    updateBreedTime();
+                if (slot == getUpgradeSlots()[i]) {
+                    tileStackHandler.updateNumberOfBreeders(this);
+                    tileStackHandler.rebuildOpenContainers();
+                    tileStackHandler.updateBreedTime(this);
                     break;
                 }
             }
@@ -566,6 +512,62 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
 
         private boolean isSlotVisible(int slot) {
             return slot <= maxSlots;
+        }
+
+        private void updateNumberOfBreeders(TileStackHandler tileStackHandler) {
+            int count = 1;
+            for (int i = 0; i < 4; i++) {
+                if (!tileStackHandler.getStackInSlot(getUpgradeSlots()[i]).isEmpty()) {
+                    ItemStack upgradeItem = tileStackHandler.getStackInSlot(getUpgradeSlots()[i]);
+                    if (UpgradeItem.isUpgradeItem(upgradeItem)) {
+                        CompoundNBT data = UpgradeItem.getUpgradeData(upgradeItem);
+
+                        if (data != null && data.getString(NBTConstants.NBT_UPGRADE_TYPE).equals(NBTConstants.NBT_BREEDER_UPGRADE)) {
+                            count += (int) MathUtils.clamp(data.getFloat(NBTConstants.NBT_BREEDER_COUNT), 0F, 5);
+                        }
+                    }
+                }
+            }
+
+            ApiaryBreederTileEntity.this.setNumberOfBreeders(count);
+            tileStackHandler.setMaxSlots(3 + ApiaryBreederTileEntity.this.getNumberOfBreeders() * 5);
+        }
+
+        private void updateBreedTime(TileStackHandler tileStackHandler) {
+            int newTotalTime = Config.APIARY_MAX_BREED_TIME.get();
+            for (int i = 0; i < 4; i++) {
+                if (!tileStackHandler.getStackInSlot(getUpgradeSlots()[i]).isEmpty()) {
+                    ItemStack upgradeItem = tileStackHandler.getStackInSlot(getUpgradeSlots()[i]);
+                    if (UpgradeItem.isUpgradeItem(upgradeItem)) {
+                        CompoundNBT data = UpgradeItem.getUpgradeData(upgradeItem);
+
+                        if (data != null && data.getString(NBTConstants.NBT_UPGRADE_TYPE).equals(NBTConstants.NBT_BREEDER_UPGRADE)) {
+                            newTotalTime -= (int) MathUtils.clamp(data.getFloat(NBTConstants.NBT_BREED_TIME), 100, 600);
+                        }
+                    }
+                }
+            }
+
+            ApiaryBreederTileEntity.this.setTotalTime(MathUtils.clamp(newTotalTime, 300, 4800));
+        }
+
+        private void rebuildOpenContainers() {
+            if (ApiaryBreederTileEntity.this.world != null) {
+                float f = 5.0F;
+                BlockPos pos = ApiaryBreederTileEntity.this.pos;
+
+                ApiaryBreederTileEntity.this.world.getEntitiesWithinAABB(PlayerEntity.class, new AxisAlignedBB(pos.getX() - f, pos.getY() - f, pos.getZ() - f, (pos.getX() + 1) + f, (pos.getY() + 1) + f, (pos.getZ() + 1) + f))
+                        .stream()
+                        .filter(playerEntity -> playerEntity.openContainer instanceof ApiaryBreederContainer)
+                        .filter(this::openContainerMatches)
+                        .forEach(playerEntity -> ((ApiaryBreederContainer) playerEntity.openContainer).setupSlots(true));
+            }
+        }
+
+        private boolean openContainerMatches(PlayerEntity playerEntity) {
+            ApiaryBreederContainer openContainer = (ApiaryBreederContainer) playerEntity.openContainer;
+            ApiaryBreederTileEntity apiaryBreederTileEntity = openContainer.getApiaryBreederTileEntity();
+            return  ApiaryBreederTileEntity.this == apiaryBreederTileEntity;
         }
     }
 }

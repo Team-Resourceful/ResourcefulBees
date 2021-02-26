@@ -48,30 +48,48 @@ public class TraitData extends AbstractBeeData {
 
     public void addTrait(BeeTrait trait){
         if (trait != null) {
-            if (trait.hasDamagePotionEffects())
-                if (!this.hasDamagePotionEffects())
+            if (trait.hasDamagePotionEffects()) {
+                if (!this.hasDamagePotionEffects()) {
                     this.potionDamageEffects = new ArrayList<>(trait.getPotionDamageEffects());
-                else this.potionDamageEffects.addAll(trait.getPotionDamageEffects());
-            if (trait.hasDamageImmunities())
-                if (!this.hasDamageImmunities())
+                } else {
+                    this.potionDamageEffects.addAll(trait.getPotionDamageEffects());
+                }
+            }
+            if (trait.hasDamageImmunities()) {
+                if (!this.hasDamageImmunities()) {
                     this.damageImmunities = new ArrayList<>(trait.getDamageImmunities());
-                else this.damageImmunities.addAll(trait.getDamageImmunities());
-            if (trait.hasPotionImmunities())
-                if (!this.hasPotionImmunities())
+                } else {
+                    this.damageImmunities.addAll(trait.getDamageImmunities());
+                }
+            }
+            if (trait.hasPotionImmunities()) {
+                if (!this.hasPotionImmunities()) {
                     this.potionImmunities = new ArrayList<>(trait.getPotionImmunities());
-                else this.potionImmunities.addAll(trait.getPotionImmunities());
-            if (trait.hasDamageTypes())
-                if (!this.hasDamageTypes())
+                } else {
+                    this.potionImmunities.addAll(trait.getPotionImmunities());
+                }
+            }
+            if (trait.hasDamageTypes()) {
+                if (!this.hasDamageTypes()) {
                     this.damageTypes = new ArrayList<>(trait.getDamageTypes());
-                else this.damageTypes.addAll(trait.getDamageTypes());
-            if (trait.hasSpecialAbilities())
-                if (!this.hasSpecialAbilities())
+                } else {
+                    this.damageTypes.addAll(trait.getDamageTypes());
+                }
+            }
+            if (trait.hasSpecialAbilities()) {
+                if (!this.hasSpecialAbilities()) {
                     this.specialAbilities = new ArrayList<>(trait.getSpecialAbilities());
-                else this.specialAbilities.addAll(trait.getSpecialAbilities());
-            if (trait.hasParticleEffect())
-                if (!this.hasParticleEffects())
+                } else {
+                    this.specialAbilities.addAll(trait.getSpecialAbilities());
+                }
+            }
+            if (trait.hasParticleEffect()) {
+                if (!this.hasParticleEffects()) {
                     this.particleEffects = Collections.singletonList(trait.getParticleEffect());
-                else this.particleEffects.add(trait.getParticleEffect());
+                } else {
+                    this.particleEffects.add(trait.getParticleEffect());
+                }
+            }
         }
     }
 

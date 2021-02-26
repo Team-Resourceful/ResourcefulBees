@@ -75,12 +75,16 @@ public class CentrifugeContainer extends Container {
             numInputs = centrifugeTileEntity.getNumberOfInputs();
 
             this.addSlot(new SlotItemHandlerUnconditioned(centrifugeTileEntity.getItemStackHandler(), CentrifugeTileEntity.BOTTLE_SLOT, 26, 8) {
+
+                @Override
                 public boolean isItemValid(ItemStack stack) { return stack.getItem().equals(Items.GLASS_BOTTLE); }
             });
 
             int x = inputXPos + 18;
             for (int i = 0; i < centrifugeTileEntity.getHoneycombSlots().length; i++) {
                 this.addSlot(new SlotItemHandlerUnconditioned(centrifugeTileEntity.getItemStackHandler(), centrifugeTileEntity.getHoneycombSlots()[i], x, 8) {
+
+                    @Override
                     public boolean isItemValid(ItemStack stack) { return !stack.getItem().equals(Items.GLASS_BOTTLE); }
                 });
                 x += 36;

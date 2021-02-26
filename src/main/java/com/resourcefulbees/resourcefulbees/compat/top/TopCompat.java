@@ -1,7 +1,6 @@
 package com.resourcefulbees.resourcefulbees.compat.top;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
-import com.resourcefulbees.resourcefulbees.block.TieredBeehiveBlock;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.tileentity.CentrifugeTileEntity;
 import com.resourcefulbees.resourcefulbees.tileentity.TieredBeehiveTileEntity;
@@ -9,6 +8,7 @@ import mcjty.theoneprobe.api.ElementAlignment;
 import mcjty.theoneprobe.api.IProbeInfo;
 import mcjty.theoneprobe.api.ITheOneProbe;
 import mcjty.theoneprobe.api.ProbeMode;
+import net.minecraft.block.BeehiveBlock;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -19,7 +19,9 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
@@ -35,7 +37,7 @@ public class TopCompat implements Function<ITheOneProbe, Void>
             TileEntity tileEntity = world.getTileEntity(data.getPos());
             if (tileEntity instanceof TieredBeehiveTileEntity) {
                 TieredBeehiveTileEntity beehiveTileEntity = (TieredBeehiveTileEntity) tileEntity;
-                int honeyLevel = beehiveTileEntity.getBlockState().get(TieredBeehiveBlock.HONEY_LEVEL);
+                int honeyLevel = beehiveTileEntity.getBlockState().get(BeehiveBlock.HONEY_LEVEL);
 
                 probeInfo.horizontal()
                         .item(new ItemStack(blockState.getBlock().asItem()))

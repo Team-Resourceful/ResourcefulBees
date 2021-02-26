@@ -99,6 +99,7 @@ public class BeePollinateGoal extends Goal {
         super.startExecuting();
     }
 
+    @Override
     public void resetTask() {
         if (this.completedPollination()) {
             bee.resetPollinationTicks();

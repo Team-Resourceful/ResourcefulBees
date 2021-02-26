@@ -18,7 +18,6 @@ import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import mezz.jei.api.runtime.IIngredientManager;
 import net.minecraft.block.Block;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.fluid.Fluid;
@@ -51,7 +50,7 @@ public class FlowersCategory implements IRecipeCategory<FlowersCategory.Recipe> 
         this.localizedName = I18n.format("gui.resourcefulbees.jei.category.bee_pollination_flowers");
     }
 
-    public static List<Recipe> getFlowersRecipes(IIngredientManager ingredientManager) {
+    public static List<Recipe> getFlowersRecipes() {
         List<Recipe> recipes = new ArrayList<>();
 
         BEE_REGISTRY.getBees().forEach(((s, beeData) -> {

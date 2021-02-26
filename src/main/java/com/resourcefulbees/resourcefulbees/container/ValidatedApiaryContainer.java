@@ -19,10 +19,10 @@ import javax.annotation.Nonnull;
 public class ValidatedApiaryContainer extends Container {
 
     private final IntReferenceHolder selectedBee = IntReferenceHolder.single();
-    public ApiaryTileEntity apiaryTileEntity;
-    public BlockPos pos;
-    public PlayerEntity player;
-    public String[] beeList;
+    private final ApiaryTileEntity apiaryTileEntity;
+    private final BlockPos pos;
+    private final PlayerEntity player;
+    private String[] beeList;
 
     public ValidatedApiaryContainer(int id, World world, BlockPos pos, PlayerInventory inv) {
         super(ModContainers.VALIDATED_APIARY_CONTAINER.get(), id);
@@ -38,6 +38,7 @@ public class ValidatedApiaryContainer extends Container {
                     return getApiaryTileEntity().getTileStackHandler().getSlotLimit(ApiaryTileEntity.IMPORT);
                 }
 
+                @Override
                 public boolean isItemValid(ItemStack stack) {
                     return getApiaryTileEntity().getTileStackHandler().isItemValid(ApiaryTileEntity.IMPORT, stack);
                 }
@@ -48,6 +49,7 @@ public class ValidatedApiaryContainer extends Container {
                     return getApiaryTileEntity().getTileStackHandler().getSlotLimit(ApiaryTileEntity.EMPTY_JAR);
                 }
 
+                @Override
                 public boolean isItemValid(ItemStack stack) {
                     return getApiaryTileEntity().getTileStackHandler().isItemValid(ApiaryTileEntity.EMPTY_JAR, stack);
                 }
@@ -77,7 +79,7 @@ public class ValidatedApiaryContainer extends Container {
 
     @Override
     public void onContainerClosed(@Nonnull PlayerEntity playerIn) {
-        World world = this.apiaryTileEntity.getWorld();
+        World world = this.getApiaryTileEntity().getWorld();
         if (world != null && !world.isRemote)
             this.getApiaryTileEntity().setNumPlayersUsing(this.getApiaryTileEntity().getNumPlayersUsing() - 1);
         super.onContainerClosed(playerIn);
@@ -109,15 +111,15 @@ public class ValidatedApiaryContainer extends Container {
     }
 
     public boolean selectBee(int id) {
-        if (id >= -1 && id < apiaryTileEntity.getBeeCount()) {
+        if (id >= -1 && id < getApiaryTileEntity().getBeeCount()) {
             this.selectedBee.set(id);
         }
         return true;
     }
 
     public boolean lockOrUnlockBee(int id) {
-        if (id >= 0 && id < apiaryTileEntity.getBeeCount()) {
-            NetPacketHandler.sendToServer(new LockBeeMessage(apiaryTileEntity.getPos(), beeList[id]));
+        if (id >= 0 && id < getApiaryTileEntity().getBeeCount()) {
+            NetPacketHandler.sendToServer(new LockBeeMessage(getApiaryTileEntity().getPos(), getBeeList()[id]));
         }
         return true;
     }
@@ -125,6 +127,26 @@ public class ValidatedApiaryContainer extends Container {
     public int getSelectedBee() { return this.selectedBee.get(); }
 
     public ApiaryTileEntity.ApiaryBee getApiaryBee(int i) {
-        return apiaryTileEntity.BEES.get(beeList[i]);
+        return getApiaryTileEntity().bees.get(getBeeList()[i]);
+    }
+
+    public ApiaryTileEntity getApiaryTileEntity() {
+        return apiaryTileEntity;
+    }
+
+    public BlockPos getPos() {
+        return pos;
+    }
+
+    public PlayerEntity getPlayer() {
+        return player;
+    }
+
+    public String[] getBeeList() {
+        return beeList;
+    }
+
+    public void setBeeList(String[] beeList) {
+        this.beeList = beeList;
     }
 }

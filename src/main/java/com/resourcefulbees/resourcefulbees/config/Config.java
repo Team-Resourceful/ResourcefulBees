@@ -7,6 +7,8 @@ import net.minecraftforge.common.ForgeConfigSpec.*;
 
 public class Config {
 
+    //TODO Rewrite config names in 1.17 to be more informative also update comments if needed
+
     private Config() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
@@ -231,7 +233,7 @@ public class Config {
             BEES_INFLICT_POISON = COMMON_BUILDER.comment("\nShould bees inflict poison damage?\nNote: Poison is only inflicted if a bee has not been given a trait with a special damage output.\nSet to false if you want to configure bees individually.")
                     .define("beesInflictPoison", true);
             BEES_DIE_IN_VOID = COMMON_BUILDER.comment("\nShould bees die when their Y-level is below 0?\nNote: If false, bees will get stuck just below y-0 and not move. **May not be useful with new AI**")
-                    .define("beeDiesInVoid", true);
+                    .define("beeDiesInVoid", true); //TODO 1.17 change to "beesDieInVoid" Also change comment above to reflect y level changes
             COMMON_BUILDER.pop();
 
             COMMON_BUILDER.push("Honeycomb Options");

@@ -39,6 +39,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.stream.IntStream;
 
+@SuppressWarnings("deprecation")
 public class HoneyGenerator extends Block {
     public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
     public static final BooleanProperty PROPERTY_ON = BooleanProperty.create("on");

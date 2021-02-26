@@ -44,35 +44,35 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
     public UnvalidatedApiaryScreen(UnvalidatedApiaryContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
         super(screenContainer, inv, titleIn);
         this.player = inv.player;
-        this.verticalOffset = screenContainer.apiaryTileEntity.verticalOffset;
-        this.horizontalOffset = screenContainer.apiaryTileEntity.horizontalOffset;
-        this.apiaryTileEntity = this.container.apiaryTileEntity;
+        this.verticalOffset = screenContainer.getApiaryTileEntity().getVerticalOffset();
+        this.horizontalOffset = screenContainer.getApiaryTileEntity().getHorizontalOffset();
+        this.apiaryTileEntity = this.container.getApiaryTileEntity();
     }
 
     @Override
     protected void init() {
         super.init();
-        this.addButton(new Button(getGuiLeft() + 116, getGuiTop() + 10, 50, 20, new StringTextComponent(I18n.format("gui.resourcefulbees.apiary.button.validate")), (onPress) -> this.validate()));
-        BuildButton buildStructureButton = this.addButton(new BuildButton(getGuiLeft() + 116, getGuiTop() + 35, 50, 20, new StringTextComponent(I18n.format("gui.resourcefulbees.apiary.button.build")), (onPress) -> this.build()));
+        this.addButton(new Button(getGuiLeft() + 116, getGuiTop() + 10, 50, 20, new StringTextComponent(I18n.format("gui.resourcefulbees.apiary.button.validate")), onPress -> this.validate()));
+        BuildButton buildStructureButton = this.addButton(new BuildButton(getGuiLeft() + 116, getGuiTop() + 35, 50, 20, new StringTextComponent(I18n.format("gui.resourcefulbees.apiary.button.build")), onPress -> this.build()));
         if (!this.player.isCreative()) {
             buildStructureButton.active = false;
         }
-        this.previewButton = this.addButton(new PreviewButton(getGuiLeft() + 22, getGuiTop() + 25, 12, 12, 0, 24, 12, arrowButtonTexture, this.container.apiaryTileEntity.previewed, (onPress) -> {
+        this.previewButton = this.addButton(new PreviewButton(getGuiLeft() + 22, getGuiTop() + 25, 12, 12, 0, 24, 12, arrowButtonTexture, this.container.getApiaryTileEntity().isPreviewed(), onPress -> {
             setPreviewToggle();
             previewSetToggle(this.previewButton.isTriggered());
         }));
         previewSetToggle(this.previewButton.isTriggered());
-        this.upButton = this.addButton(new ArrowButton(getGuiLeft() + 22, getGuiTop() + 12, 12, 12, 0, 0, 12, arrowButtonTexture, (onPress) -> this.offsetPosition(Direction.UP)));
-        this.downButton = this.addButton(new ArrowButton(getGuiLeft() + 22, getGuiTop() + 38, 12, 12, 12, 0, 12, arrowButtonTexture, (onPress) -> this.offsetPosition(Direction.DOWN)));
-        this.leftButton = this.addButton(new ArrowButton(getGuiLeft() + 9, getGuiTop() + 25, 12, 12, 24, 0, 12, arrowButtonTexture, (onPress) -> this.offsetPosition(Direction.LEFT)));
-        this.rightButton = this.addButton(new ArrowButton(getGuiLeft() + 35, getGuiTop() + 25, 12, 12, 36, 0, 12, arrowButtonTexture, (onPress) -> this.offsetPosition(Direction.RIGHT)));
+        this.upButton = this.addButton(new ArrowButton(getGuiLeft() + 22, getGuiTop() + 12, 12, 12, 0, 0, 12, arrowButtonTexture, onPress -> this.offsetPosition(Direction.UP)));
+        this.downButton = this.addButton(new ArrowButton(getGuiLeft() + 22, getGuiTop() + 38, 12, 12, 12, 0, 12, arrowButtonTexture, onPress -> this.offsetPosition(Direction.DOWN)));
+        this.leftButton = this.addButton(new ArrowButton(getGuiLeft() + 9, getGuiTop() + 25, 12, 12, 24, 0, 12, arrowButtonTexture, onPress -> this.offsetPosition(Direction.LEFT)));
+        this.rightButton = this.addButton(new ArrowButton(getGuiLeft() + 35, getGuiTop() + 25, 12, 12, 36, 0, 12, arrowButtonTexture, onPress -> this.offsetPosition(Direction.RIGHT)));
     }
 
     private void previewSetToggle(boolean toggled) {
         if (!toggled)
             this.previewButton.setTrigger(false);
 
-        PreviewHandler.setPreview(getContainer().pos, this.container.apiaryTileEntity.buildStructureBounds(this.horizontalOffset, this.verticalOffset), toggled);
+        PreviewHandler.setPreview(getContainer().getPos(), this.container.getApiaryTileEntity().buildStructureBounds(this.horizontalOffset, this.verticalOffset), toggled);
     }
 
     private void setPreviewToggle() {
@@ -105,7 +105,7 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
     private void build() {
         previewSetToggle(false);
         UnvalidatedApiaryContainer container = getContainer();
-        BlockPos pos = container.pos;
+        BlockPos pos = container.getPos();
         NetPacketHandler.sendToServer(new BuildApiaryMessage(pos, verticalOffset, horizontalOffset));
     }
 
@@ -123,7 +123,7 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
     private void validate() {
         previewSetToggle(false);
         UnvalidatedApiaryContainer container = getContainer();
-        BlockPos pos = container.pos;
+        BlockPos pos = container.getPos();
         NetPacketHandler.sendToServer(new ValidateApiaryMessage(pos, verticalOffset, horizontalOffset));
     }
 
@@ -199,7 +199,7 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
         }
 
         @Override
-        public void renderButton(@Nonnull MatrixStack matrix, int p_renderButton_1_, int p_renderButton_2_, float p_renderButton_3_) {
+        public void renderButton(@Nonnull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
             Minecraft minecraft = Minecraft.getInstance();
             minecraft.getTextureManager().bindTexture(this.resourceLocation);
             RenderSystem.disableDepthTest();
@@ -222,7 +222,7 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
         }
 
         @Override
-        public void renderToolTip(@Nonnull MatrixStack matrix, int p_renderToolTip_1_, int p_renderToolTip_2_) {
+        public void renderToolTip(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
             StringTextComponent s;
             if (!isTriggered()) {
                 s = new StringTextComponent(I18n.format("gui.resourcefulbees.apiary.button.preview.enable"));
@@ -230,11 +230,11 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
             else {
                 s = new StringTextComponent(I18n.format("gui.resourcefulbees.apiary.button.preview.disable"));
             }
-            UnvalidatedApiaryScreen.this.renderTooltip(matrix, s, p_renderToolTip_1_, p_renderToolTip_2_);
+            UnvalidatedApiaryScreen.this.renderTooltip(matrix, s, mouseX, mouseY);
         }
 
         public void setTrigger(boolean triggered) {
-            container.apiaryTileEntity.previewed = triggered;
+            container.getApiaryTileEntity().setPreviewed(triggered);
             this.triggered = triggered;
         }
 

@@ -12,7 +12,6 @@ import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import mezz.jei.api.runtime.IIngredientManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
@@ -36,7 +35,7 @@ public class BeeHiveCategory implements IRecipeCategory<BeeHiveCategory.Recipe> 
         this.localizedName = I18n.format("gui.resourcefulbees.jei.category.hive");
     }
 
-    public static List<Recipe> getHoneycombRecipes(IIngredientManager ingredientManager) {
+    public static List<Recipe> getHoneycombRecipes() {
         List<Recipe> recipes = new ArrayList<>();
         BeeRegistry.getRegistry().getBees().forEach(((s, customBeeData) -> {
             if (customBeeData.hasHoneycomb()) {

@@ -66,6 +66,7 @@ public class EnderBeecon extends HoneyTank {
 
     @Nonnull
     @Override
+    @Deprecated
     public ActionResultType onUse(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult blockRayTraceResult) {
 
         ItemStack heldItem = player.getHeldItem(hand);
@@ -76,27 +77,25 @@ public class EnderBeecon extends HoneyTank {
         boolean usingStick = heldItem.getItem() == Items.STICK;
         TileEntity tileEntity = world.getTileEntity(pos);
 
-        if (!world.isRemote) {
-            if (tileEntity instanceof EnderBeeconTileEntity) {
-                EnderBeeconTileEntity tank = (EnderBeeconTileEntity) tileEntity;
-                if (usingWool) {
-                  tank.toggleSound();
-                }else if (usingStick) {
-                    tank.toggleBeam();
-                } else if (usingBucket) {
-                    tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
-                            .ifPresent(iFluidHandler -> FluidUtil.interactWithFluidHandler(player, hand, world, pos, null));
-                } else if (usingBottle) {
-                    world.playSound(player, pos, SoundEvents.ITEM_BOTTLE_EMPTY, SoundCategory.PLAYERS, 1.0f, 1.0f);
-                    tank.fillBottle(player, hand);
-                } else if (usingHoney) {
-                    world.playSound(player, pos, SoundEvents.ITEM_BOTTLE_FILL, SoundCategory.PLAYERS, 1.0f, 1.0f);
-                    tank.emptyBottle(player, hand);
-                }else {
-                    NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, pos);
-                }
-                world.notifyBlockUpdate(pos, state, state, 2);
+        if (!world.isRemote && tileEntity instanceof EnderBeeconTileEntity) {
+            EnderBeeconTileEntity tank = (EnderBeeconTileEntity) tileEntity;
+            if (usingWool) {
+              tank.toggleSound();
+            }else if (usingStick) {
+                tank.toggleBeam();
+            } else if (usingBucket) {
+                tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+                        .ifPresent(iFluidHandler -> FluidUtil.interactWithFluidHandler(player, hand, world, pos, null));
+            } else if (usingBottle) {
+                world.playSound(player, pos, SoundEvents.ITEM_BOTTLE_EMPTY, SoundCategory.PLAYERS, 1.0f, 1.0f);
+                tank.fillBottle(player, hand);
+            } else if (usingHoney) {
+                world.playSound(player, pos, SoundEvents.ITEM_BOTTLE_FILL, SoundCategory.PLAYERS, 1.0f, 1.0f);
+                tank.emptyBottle(player, hand);
+            }else {
+                NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, pos);
             }
+            world.notifyBlockUpdate(pos, state, state, 2);
         }
         return ActionResultType.SUCCESS;
     }
@@ -109,6 +108,7 @@ public class EnderBeecon extends HoneyTank {
 
     @NotNull
     @Override
+    @Deprecated
     public VoxelShape getShape(@NotNull BlockState state, @NotNull IBlockReader worldIn, @NotNull BlockPos pos, @NotNull ISelectionContext context) {
         return VOXEL_SHAPE_TOP;
     }

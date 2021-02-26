@@ -4,6 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.util.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 import vazkii.patchouli.api.IComponentRenderContext;
 import vazkii.patchouli.api.ICustomComponent;
 import vazkii.patchouli.api.IVariable;
@@ -14,9 +15,9 @@ public class AnimatedImageComponent implements ICustomComponent {
 
     IVariable image;
 
-    IVariable ticks_per_frame;
-    IVariable texture_height;
-    IVariable texture_width;
+    IVariable ticksPerFrame;
+    IVariable texHeight;
+    IVariable texWidth;
     IVariable height;
     IVariable width;
     IVariable scale;
@@ -39,8 +40,8 @@ public class AnimatedImageComponent implements ICustomComponent {
     }
 
     @Override
-    public void render(MatrixStack matrixStack, IComponentRenderContext context, float v, int i, int i1) {
-        if (context.getTicksInBook() % ticks_per_frame.asNumber().intValue() == 0) {
+    public void render(@NotNull MatrixStack matrixStack, IComponentRenderContext context, float v, int i, int i1) {
+        if (context.getTicksInBook() % ticksPerFrame.asNumber().intValue() == 0) {
             currentFrame++;
         }
         if (currentFrame >= frames) {
@@ -55,12 +56,12 @@ public class AnimatedImageComponent implements ICustomComponent {
     public void onVariablesAvailable(UnaryOperator<IVariable> lookup) {
         image = lookup.apply(image);
         scale = lookup.apply(scale);
-        ticks_per_frame = lookup.apply(ticks_per_frame);
+        ticksPerFrame = lookup.apply(ticksPerFrame);
         this.animatedImage = new ResourceLocation(image.asString());
-        texture_height = lookup.apply(texture_height);
-        texture_width = lookup.apply(texture_width);
-        textureHeight = texture_height.asNumber().intValue();
-        textureWidth = texture_width.asNumber().intValue();
+        texHeight = lookup.apply(texHeight);
+        texWidth = lookup.apply(texWidth);
+        textureHeight = texHeight.asNumber().intValue();
+        textureWidth = texWidth.asNumber().intValue();
         imageScale = scale.asNumber().floatValue();
         imageHeight = height.asNumber().intValue();
         imageWidth = width.asNumber().intValue();

@@ -163,7 +163,7 @@ public class BeeRegistry implements IBeeRegistry {
     public Map<Pair<String, String>, RandomCollection<CustomBeeData>> getChildren(CustomBeeData beeData) {
         Map<Pair<String, String>, RandomCollection<CustomBeeData>> children = new HashMap<>();
         familyTree.forEach((p, b) -> {
-            if (BeeRegistry.getRegistry().getBees().containsKey(p.getLeft()) && BeeRegistry.getRegistry().getBees().containsKey(p.getLeft())) {
+            if (getBees().containsKey(p.getLeft()) && getBees().containsKey(p.getRight())) {
                 if (p.getRight().equals(beeData.getName()) || p.getLeft().equals(beeData.getName())) {
                     children.put(p, b);
                 }
@@ -175,7 +175,7 @@ public class BeeRegistry implements IBeeRegistry {
     public Map<Pair<String, String>, CustomBeeData> getParents(CustomBeeData beeData) {
         Map<Pair<String, String>, CustomBeeData> parents = new HashMap<>();
         familyTree.forEach((p, b) -> {
-            if (BeeRegistry.getRegistry().getBees().containsKey(p.getLeft()) && BeeRegistry.getRegistry().getBees().containsKey(p.getLeft())) {
+            if (getBees().containsKey(p.getLeft()) && getBees().containsKey(p.getRight())) {
                 for (Map.Entry<Double, CustomBeeData> data : b.getMap().entrySet()) {
                     if (data.getValue().getName().equals(beeData.getName())) {
                         parents.put(p, beeData);

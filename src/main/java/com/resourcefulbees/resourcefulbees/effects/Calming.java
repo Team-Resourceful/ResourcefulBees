@@ -14,8 +14,8 @@ public class Calming extends Effect {
     @Override
     public void performEffect(@NotNull LivingEntity entity, int level) {
         if (entity instanceof IAngerable) {
-            IAngerable angerable = (IAngerable) entity;
-            angerable.stopAnger();
+            IAngerable iAngerable = (IAngerable) entity;
+            iAngerable.stopAnger();
         }
         super.performEffect(entity, level);
     }

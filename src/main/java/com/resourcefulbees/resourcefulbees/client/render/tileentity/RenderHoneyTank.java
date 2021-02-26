@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
 
 public class RenderHoneyTank extends TileEntityRenderer<HoneyTankTileEntity> {
 
@@ -20,7 +21,7 @@ public class RenderHoneyTank extends TileEntityRenderer<HoneyTankTileEntity> {
     }
 
     @Override
-    public void render(HoneyTankTileEntity tile, float partialTick, MatrixStack matrix, IRenderTypeBuffer renderer, int light, int overlayLight) {
+    public void render(HoneyTankTileEntity tile, float partialTick, @NotNull MatrixStack matrix, @NotNull IRenderTypeBuffer renderer, int light, int overlayLight) {
         if (tile.getWorld() == null) return;
         FluidStack stack = tile.getFluidTank().getFluid();
         if (!stack.isEmpty()) {

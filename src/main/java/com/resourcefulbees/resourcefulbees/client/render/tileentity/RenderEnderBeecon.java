@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -25,14 +26,14 @@ public class RenderEnderBeecon extends TileEntityRenderer<EnderBeeconTileEntity>
     }
 
     @Override
-    public void render(EnderBeeconTileEntity tile, float partialTick, MatrixStack matrix, IRenderTypeBuffer renderer, int light, int overlayLight) {
+    public void render(EnderBeeconTileEntity tile, float partialTick, @NotNull MatrixStack matrix, @NotNull IRenderTypeBuffer renderer, int light, int overlayLight) {
         if (tile.getWorld() == null) return;
         FluidStack stack = tile.getFluidTank().getFluid();
         long gameTime = tile.getWorld().getGameTime();
         List<EnderBeeconTileEntity.BeamSegment> list = tile.getBeamSegments();
         int currentHeight = 0;
 
-        if (stack != null && !stack.isEmpty()) {
+        if (!stack.isEmpty()) {
             int level = tile.getLevel();
             int color = stack.getFluid().getAttributes().getColor();
             ResourceLocation stillTexture = stack.getFluid().getAttributes().getStillTexture();

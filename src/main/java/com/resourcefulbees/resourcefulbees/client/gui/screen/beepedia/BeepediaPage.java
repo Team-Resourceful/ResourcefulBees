@@ -93,7 +93,7 @@ public abstract class BeepediaPage {
         }
 
         @Override
-        public void renderButton(@Nonnull MatrixStack matrix, int prenderButton_1_, int p_renderButton_2_, float p_renderButton_3_) {
+        public void renderButton(@Nonnull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
             Minecraft minecraft = Minecraft.getInstance();
             minecraft.getTextureManager().bindTexture(this.resourceLocation);
             RenderSystem.disableDepthTest();

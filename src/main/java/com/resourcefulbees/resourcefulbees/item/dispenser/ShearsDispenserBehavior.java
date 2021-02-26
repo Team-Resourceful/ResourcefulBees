@@ -17,7 +17,15 @@ import javax.annotation.Nonnull;
 
 public class ShearsDispenserBehavior extends DefaultDispenseItemBehavior {
 
-    public static IDispenseItemBehavior DEFAULT_SHEARS_DISPENSE_BEHAVIOR;
+    private static IDispenseItemBehavior DEFAULT_SHEARS_DISPENSE_BEHAVIOR;
+
+    public static IDispenseItemBehavior getDefaultShearsDispenseBehavior() {
+        return DEFAULT_SHEARS_DISPENSE_BEHAVIOR;
+    }
+
+    public static void setDefaultShearsDispenseBehavior(IDispenseItemBehavior defaultShearsDispenseBehavior) {
+        DEFAULT_SHEARS_DISPENSE_BEHAVIOR = defaultShearsDispenseBehavior;
+    }
 
     @Nonnull
     @Override
@@ -38,7 +46,7 @@ public class ShearsDispenserBehavior extends DefaultDispenseItemBehavior {
                 }
             }
         } else {
-            return DEFAULT_SHEARS_DISPENSE_BEHAVIOR.dispense(source, stack);
+            return getDefaultShearsDispenseBehavior().dispense(source, stack);
         }
         return stack;
     }

@@ -37,7 +37,7 @@ public class UpdateBeeconMessage {
         context.get().enqueueWork(() -> {
             ServerPlayerEntity player = context.get().getSender();
             if (player != null) {
-                if (player.world.isBlockLoaded(message.blockPos)){
+                if (player.world.isBlockPresent(message.blockPos)){
                     TileEntity tileEntity = player.world.getTileEntity(message.blockPos);
                     if (tileEntity instanceof EnderBeeconTileEntity) {
                         EnderBeeconTileEntity beecon = (EnderBeeconTileEntity) tileEntity;

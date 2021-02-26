@@ -206,6 +206,7 @@ public class MutationData extends AbstractBeeData {
         return Collections.unmodifiableMap(this.jeiBlockMutations);
     }
 
+    @SuppressWarnings("unused")
     public static class Builder {
         private String mutationInput;
         private String mutationOutput;

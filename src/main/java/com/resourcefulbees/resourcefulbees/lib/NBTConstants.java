@@ -28,7 +28,7 @@ public class NBTConstants {
     public static final String NBT_FLOWER_POS = "FlowerPos";
     public static final String NBT_LOCKED = "Locked";
     public static final String NBT_SLOT_COUNT = "SlotCount";
-    public static final String NBT_SPAWN_EGG_DATA = "EntityData";
+    public static final String ENTITY_DATA = "EntityData";
     public static final String NBT_FEED_COUNT = "FeedCount";
     public static final String NBT_BREEDER_UPGRADE = "Breeder";
     public static final String NBT_BREEDER_COUNT = "BreederCount";

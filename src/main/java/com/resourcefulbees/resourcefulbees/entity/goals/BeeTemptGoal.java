@@ -1,18 +1,13 @@
 package com.resourcefulbees.resourcefulbees.entity.goals;
 
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
-import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
-import com.resourcefulbees.resourcefulbees.utils.validation.ValidatorUtils;
 import net.minecraft.entity.EntityPredicate;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.FlyingPathNavigator;
 import net.minecraft.pathfinding.GroundPathNavigator;
-import net.minecraft.tags.ITag;
-import net.minecraft.tags.ItemTags;
 
 import java.util.EnumSet;
 
@@ -20,7 +15,6 @@ public class BeeTemptGoal extends Goal {
     private static final EntityPredicate ENTITY_PREDICATE = (new EntityPredicate()).setDistance(10.0D).allowInvulnerable().allowFriendlyFire().setSkipAttackChecks().setLineOfSiteRequired();
     protected final CustomBeeEntity beeEntity;
     private final double speed;
-    //private final Ingredient temptItem;
     private final boolean scaredByPlayerMovement;
     protected PlayerEntity closestPlayer;
     private double targetX;
@@ -66,6 +60,7 @@ public class BeeTemptGoal extends Goal {
     /**
      * Returns whether an in-progress EntityAIBase should continue executing
      */
+    @Override
     public boolean shouldContinueExecuting() {
         if (this.isScaredByPlayerMovement()) {
             if (this.beeEntity.getDistanceSq(this.closestPlayer) < 36.0D) {
@@ -97,6 +92,7 @@ public class BeeTemptGoal extends Goal {
     /**
      * Execute a one shot task or start executing a continuous task
      */
+    @Override
     public void startExecuting() {
         this.targetX = this.closestPlayer.getX();
         this.targetY = this.closestPlayer.getY();
@@ -106,6 +102,7 @@ public class BeeTemptGoal extends Goal {
     /**
      * Reset the task's internal state. Called when this task is interrupted by another one
      */
+    @Override
     public void resetTask() {
         this.closestPlayer = null;
         this.beeEntity.getNavigator().clearPath();
@@ -115,6 +112,7 @@ public class BeeTemptGoal extends Goal {
     /**
      * Keep ticking a continuous task that has already been started
      */
+    @Override
     public void tick() {
         this.beeEntity.getLookController().setLookPositionWithEntity(this.closestPlayer, (float) (this.beeEntity.getHorizontalFaceSpeed() + 20), (float) this.beeEntity.getVerticalFaceSpeed());
         if (this.beeEntity.getDistanceSq(this.closestPlayer) < 6.25D) {

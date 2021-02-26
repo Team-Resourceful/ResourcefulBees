@@ -105,7 +105,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
 
         for (PlayerEntity playerentity : world.getEntitiesWithinAABB(PlayerEntity.class, new AxisAlignedBB(posX - f, posY - f, posZ - f, (posX + 1) + f, (posY + 1) + f, (posZ + 1) + f))) {
             if (playerentity.openContainer instanceof ValidatedApiaryContainer) {
-                ApiaryTileEntity apiaryTileEntity1 = ((ValidatedApiaryContainer) playerentity.openContainer).apiaryTileEntity;
+                ApiaryTileEntity apiaryTileEntity1 = ((ValidatedApiaryContainer) playerentity.openContainer).getApiaryTileEntity();
                 if (apiaryTileEntity1 == apiaryTileEntity) {
                     ++i;
                 }
@@ -538,7 +538,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
 
     public void exportBee(BeeEntity beeEntity) {
         ItemStack beeJar = new ItemStack(ModItems.BEE_JAR.get());
-        beeJar.setTag(BeeJar.createTag(beeEntity));
+        beeJar.setTag(BeeInfoUtils.createJarBeeTag(beeEntity, NBTConstants.NBT_ENTITY));
         BeeJar.renameJar(beeJar, beeEntity);
         this.getTileStackHandler().setStackInSlot(EXPORT, beeJar);
     }

@@ -28,7 +28,7 @@ public class ApiaryBreederScreen extends ContainerScreen<ApiaryBreederContainer>
     private static final ResourceLocation BACKGROUND = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/apiary/apiary_breeder_gui.png");
     private static final ResourceLocation TABS_BG = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/apiary/apiary_gui_tabs.png");
 
-    public ApiaryBreederTileEntity apiaryBreederTileEntity;
+    private ApiaryBreederTileEntity apiaryBreederTileEntity;
 
     private TabImageButton mainTabButton;
     private TabImageButton storageTabButton;
@@ -42,7 +42,7 @@ public class ApiaryBreederScreen extends ContainerScreen<ApiaryBreederContainer>
 
     protected void preInit(){
         this.xSize = 226;
-        this.ySize = 110 + this.container.numberOfBreeders * 20;
+        this.ySize = 110 + this.container.getNumberOfBreeders() * 20;
     }
 
     @Override
@@ -50,14 +50,16 @@ public class ApiaryBreederScreen extends ContainerScreen<ApiaryBreederContainer>
         super.init();
         this.buttons.clear();
 
-        apiaryBreederTileEntity = this.container.apiaryBreederTileEntity;
+        apiaryBreederTileEntity = this.container.getApiaryBreederTileEntity();
 
         int i = this.guiLeft;
         int j = this.guiTop;
         int t = i + this.xSize - 24;
 
         mainTabButton = this.addButton(new TabImageButton(t+1, j+17, 18, 18, 110, 0, 18, TABS_BG, new ItemStack(ModItems.BEE_JAR.get()), 1, 1,
-                (onPress) -> this.changeScreen(ApiaryTabs.MAIN)) {
+                onPress -> this.changeScreen(ApiaryTabs.MAIN)) {
+
+            @Override
             public void renderToolTip(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
                 StringTextComponent s = new StringTextComponent(I18n.format("gui.resourcefulbees.apiary.button.main_screen"));
                 ApiaryBreederScreen.this.renderTooltip(matrix, s, mouseX, mouseY);
@@ -65,7 +67,9 @@ public class ApiaryBreederScreen extends ContainerScreen<ApiaryBreederContainer>
         });
 
         storageTabButton = this.addButton(new TabImageButton(t + 1, j + 37, 18, 18, 110, 0, 18, TABS_BG, new ItemStack(Items.HONEYCOMB), 2, 1,
-                (onPress) -> this.changeScreen(ApiaryTabs.STORAGE)) {
+                onPress -> this.changeScreen(ApiaryTabs.STORAGE)) {
+
+            @Override
             public void renderToolTip(@Nonnull MatrixStack matrix,int mouseX, int mouseY) {
                 StringTextComponent s = new StringTextComponent(I18n.format("gui.resourcefulbees.apiary.button.storage_screen"));
                 ApiaryBreederScreen.this.renderTooltip(matrix, s, mouseX, mouseY);
@@ -73,8 +77,10 @@ public class ApiaryBreederScreen extends ContainerScreen<ApiaryBreederContainer>
         });
 
         this.addButton(new TabImageButton(t + 1, j + 57, 18, 18, 110, 0, 18, TABS_BG, new ItemStack(ModItems.GOLD_FLOWER_ITEM.get()), 1, 1,
-                (onPress) -> this.changeScreen(ApiaryTabs.BREED)) {
-            public void renderToolTip(@Nonnull MatrixStack matrix,int mouseX, int mouseY) {
+                onPress -> this.changeScreen(ApiaryTabs.BREED)) {
+
+            @Override
+            public void renderToolTip(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
                 StringTextComponent s = new StringTextComponent(I18n.format("gui.resourcefulbees.apiary.button.breed_screen"));
                 ApiaryBreederScreen.this.renderTooltip(matrix, s, mouseX, mouseY);
             }
@@ -87,11 +93,11 @@ public class ApiaryBreederScreen extends ContainerScreen<ApiaryBreederContainer>
                 break;
             case STORAGE:
                 if (storageTabButton.active)
-                    NetPacketHandler.sendToServer(new ApiaryTabMessage(apiaryBreederTileEntity.getPos(), ApiaryTabs.STORAGE));
+                    NetPacketHandler.sendToServer(new ApiaryTabMessage(getApiaryBreederTileEntity().getPos(), ApiaryTabs.STORAGE));
                 break;
             case MAIN:
                 if (mainTabButton.active)
-                    NetPacketHandler.sendToServer(new ApiaryTabMessage(apiaryBreederTileEntity.getPos(), ApiaryTabs.MAIN));
+                    NetPacketHandler.sendToServer(new ApiaryTabMessage(getApiaryBreederTileEntity().getPos(), ApiaryTabs.MAIN));
         }
     }
 
@@ -104,10 +110,10 @@ public class ApiaryBreederScreen extends ContainerScreen<ApiaryBreederContainer>
 
     @Override
     protected void drawBackground(@Nonnull MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
-        if (this.container.rebuild) {
+        if (this.container.isRebuild()) {
             preInit();
             init();
-            this.container.rebuild = false;
+            this.container.setRebuild(false);
         }
 
         mainTabButton.active = getApiaryBreederTileEntity().getApiary() != null;
@@ -125,16 +131,16 @@ public class ApiaryBreederScreen extends ContainerScreen<ApiaryBreederContainer>
             drawTexture(matrix, i+25, j, 25, 0, 176, 15);
             //slots
             int scaledprogress;
-            for (int z=0; z < this.container.numberOfBreeders; z++){
+            for (int z = 0; z < this.container.getNumberOfBreeders(); z++){
                 drawTexture(matrix, i+25, j+ 15 + (z*20), 25, 15, 176, 20);
             }
 
-            for (int k = 0; k < this.container.numberOfBreeders; k++) {
-                scaledprogress = MathUtils.clamp(118 * this.container.times.get(k) / this.container.apiaryBreederTileEntity.totalTime, 0, this.container.apiaryBreederTileEntity.totalTime);
+            for (int k = 0; k < this.container.getNumberOfBreeders(); k++) {
+                scaledprogress = MathUtils.clamp(118 * this.container.times.get(k) / this.container.getApiaryBreederTileEntity().getTotalTime(), 0, this.container.getApiaryBreederTileEntity().getTotalTime());
                 drawTexture(matrix, i+54, j + 21 + (k*20), 0, 246, scaledprogress, 10);
             }
 
-            drawTexture(matrix, i+25, j+15 + (20 * this.container.numberOfBreeders), 25, 95, 176, 95);
+            drawTexture(matrix, i+25, j+15 + (20 * this.container.getNumberOfBreeders()), 25, 95, 176, 95);
 
             int t = i + this.xSize - 24;
             this.client.getTextureManager().bindTexture(TABS_BG);
@@ -150,5 +156,9 @@ public class ApiaryBreederScreen extends ContainerScreen<ApiaryBreederContainer>
                 break;
             }
         }
+    }
+
+    public ApiaryBreederTileEntity getApiaryBreederTileEntity() {
+        return apiaryBreederTileEntity;
     }
 }

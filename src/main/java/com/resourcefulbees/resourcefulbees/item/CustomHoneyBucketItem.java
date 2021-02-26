@@ -36,10 +36,7 @@ public class CustomHoneyBucketItem extends BucketItem {
     }
 
     @Override
-    public net.minecraftforge.common.capabilities.ICapabilityProvider initCapabilities(ItemStack stack, @Nullable net.minecraft.nbt.CompoundNBT nbt) {
-        if (this instanceof BucketItem)
-            return new net.minecraftforge.fluids.capability.wrappers.FluidBucketWrapper(stack);
-        else
-            return super.initCapabilities(stack, nbt);
+    public ICapabilityProvider initCapabilities(@NotNull ItemStack stack, @Nullable CompoundNBT nbt) {
+        return new FluidBucketWrapper(stack);
     }
 }

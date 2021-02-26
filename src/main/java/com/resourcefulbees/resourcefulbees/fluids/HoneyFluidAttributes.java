@@ -1,7 +1,6 @@
 package com.resourcefulbees.resourcefulbees.fluids;
 
 import com.resourcefulbees.resourcefulbees.api.beedata.HoneyBottleData;
-import com.resourcefulbees.resourcefulbees.block.CustomHoneyFluidBlock;
 import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.util.ResourceLocation;
@@ -10,7 +9,6 @@ import net.minecraft.world.IBlockDisplayReader;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 
-import java.awt.*;
 import java.util.function.BiFunction;
 
 public class HoneyFluidAttributes extends FluidAttributes {

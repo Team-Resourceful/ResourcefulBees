@@ -1,7 +1,6 @@
 package com.resourcefulbees.resourcefulbees.entity.goals;
 
 import com.resourcefulbees.resourcefulbees.entity.passive.ModBeeEntity;
-import com.resourcefulbees.resourcefulbees.mixin.BeeEntityAccessor;
 import com.resourcefulbees.resourcefulbees.utils.RandomPositionGenerator;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.BlockPos;
@@ -30,6 +29,7 @@ public class BeeWanderGoal extends Goal {
     /**
      * Returns whether an in-progress EntityAIBase should continue executing
      */
+    @Override
     public boolean shouldContinueExecuting() {
         return modBeeEntity.getNavigator().isFollowingPath();
     }
@@ -37,6 +37,7 @@ public class BeeWanderGoal extends Goal {
     /**
      * Execute a one shot task or start executing a continuous task
      */
+    @Override
     public void startExecuting() {
         Vector3d vector3d = this.getRandomLocation();
         if (vector3d != null) {

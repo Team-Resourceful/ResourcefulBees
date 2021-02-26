@@ -24,6 +24,7 @@ import net.minecraftforge.fml.network.NetworkHooks;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+@SuppressWarnings("deprecation")
 public class CentrifugeCasingBlock extends Block {
     public CentrifugeCasingBlock(Properties properties) { super(properties); }
 

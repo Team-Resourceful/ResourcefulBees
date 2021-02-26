@@ -32,17 +32,19 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkHooks;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
+@SuppressWarnings("deprecation")
 public class ApiaryBlock extends Block {
 
   public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
   public static final BooleanProperty VALIDATED = BooleanProperty.create("validated");
 
-  private final int TIER;
+  private final int tier;
 
   public ApiaryBlock(final int tier, float hardness, float resistance) {
     super(AbstractBlock.Properties.create(Material.IRON).hardnessAndResistance(hardness, resistance).sound(SoundType.METAL));
@@ -50,8 +52,8 @@ public class ApiaryBlock extends Block {
     this.setDefaultState(this.stateContainer.getBaseState().with(VALIDATED, false).with(FACING, Direction.NORTH));
   }
 
-  @Nonnull
-  public ActionResultType onUse(@Nonnull BlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand handIn, @Nonnull BlockRayTraceResult hit) {
+  @Override
+  public @NotNull ActionResultType onUse(@Nonnull BlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand handIn, @Nonnull BlockRayTraceResult hit) {
     if (!world.isRemote) {
       INamedContainerProvider blockEntity = state.getContainer(world,pos);
       if (blockEntity != null) {
@@ -61,6 +63,7 @@ public class ApiaryBlock extends Block {
     return ActionResultType.SUCCESS;
   }
 
+  @Override
   public BlockState getStateForPlacement(BlockItemUseContext context) {
     if (context.getPlayer() != null && context.getPlayer().isSneaking()) {
       return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing());
@@ -68,6 +71,7 @@ public class ApiaryBlock extends Block {
     return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite());
   }
 
+  @Override
   protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
     builder.add(VALIDATED, FACING);
   }
@@ -94,7 +98,7 @@ public class ApiaryBlock extends Block {
     TileEntity tile = worldIn.getTileEntity(pos);
     if(tile instanceof ApiaryTileEntity) {
       ApiaryTileEntity apiaryTileEntity = (ApiaryTileEntity) tile;
-      apiaryTileEntity.setTier(TIER);
+      apiaryTileEntity.setTier(tier);
     }
   }
 
@@ -110,18 +114,18 @@ public class ApiaryBlock extends Block {
               .appendText( TextFormatting.GOLD + " Bees", TextFormatting.RESET)
               .applyStyle(TextFormatting.GOLD)
               .build());
-      if (TIER != 1) {
-        int time_reduction = (int)((0.1 + (TIER * .05)) * 100);
+      if (tier != 1) {
+        int timeReduction = (int)((0.1 + (tier * .05)) * 100);
         tooltip.addAll(new TooltipBuilder()
                 .addTip(I18n.format("block.resourcefulbees.beehive.tooltip.hive_time"))
-                .appendText(" -" + time_reduction + "%")
+                .appendText(" -" + timeReduction + "%")
                 .applyStyle(TextFormatting.GOLD)
                 .build());
       }
       ApiaryOutput outputTypeEnum;
       int outputQuantity;
 
-      switch (TIER) {
+      switch (tier) {
         case 8:
           outputTypeEnum = Config.T4_APIARY_OUTPUT.get();
           outputQuantity = Config.T4_APIARY_QUANTITY.get();

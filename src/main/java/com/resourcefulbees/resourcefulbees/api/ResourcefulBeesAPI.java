@@ -1,8 +1,13 @@
 package com.resourcefulbees.resourcefulbees.api;
 
+import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import net.minecraftforge.fml.ModLoadingContext;
 
 public class ResourcefulBeesAPI {
+
+    private ResourcefulBeesAPI() {
+        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+    }
 
     public static final String MOD_ID = "resourcefulbees";
     /**

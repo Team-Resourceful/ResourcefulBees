@@ -44,6 +44,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.List;
 
+@SuppressWarnings("deprecation")
 public class TieredBeehiveBlock extends BeehiveBlock {
 
     private static final String SHEARS_TAG = "forge:shears";

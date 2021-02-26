@@ -40,9 +40,9 @@ public class SpawnData extends AbstractBeeData {
      */
     private final LightLevels lightLevel;
 
-    private int minYLevel;
+    private final int minYLevel;
 
-    private int maxYLevel;
+    private final int maxYLevel;
 
     private SpawnData(boolean canSpawnInWorld, int spawnWeight, int minGroupSize, int maxGroupSize, String biomeWhitelist, String biomeBlacklist, LightLevels lightLevel, int minYLevel, int maxYLevel) {
         this.canSpawnInWorld = canSpawnInWorld;
@@ -83,6 +83,7 @@ public class SpawnData extends AbstractBeeData {
         return maxYLevel <= 0 ? 256 : maxYLevel;
     }
 
+    @SuppressWarnings("unused")
     public static class Builder {
         private final boolean canSpawnInWorld;
         private int spawnWeight;

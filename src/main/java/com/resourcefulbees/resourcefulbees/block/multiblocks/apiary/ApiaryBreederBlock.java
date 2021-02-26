@@ -28,6 +28,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
+@SuppressWarnings("deprecation")
 public class ApiaryBreederBlock extends Block{
 
     public ApiaryBreederBlock(Properties properties) {

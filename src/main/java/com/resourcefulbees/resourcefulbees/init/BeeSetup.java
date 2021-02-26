@@ -136,8 +136,8 @@ public class BeeSetup {
             Gson gson = new Gson();
             HoneyBottleData honey = gson.fromJson(reader, HoneyBottleData.class);
             if (honey.getName() == null) honey.setName(name);
-            honey.shouldResourcefulBeesDoForgeRegistration = true;
-            BeeRegistry.getRegistry().registerHoney(honey.getName().toLowerCase(), honey);
+            honey.setShouldResourcefulBeesDoForgeRegistration(true);
+            BeeRegistry.getRegistry().registerHoney(honey.getName(), honey);
         } catch (Exception e) {
             LOGGER.error("\n---------[Registration Error]---------\nCould not validate {} honey's json file, Skipping.", name);
         }

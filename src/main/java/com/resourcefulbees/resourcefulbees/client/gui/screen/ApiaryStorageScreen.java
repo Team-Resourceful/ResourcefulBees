@@ -31,9 +31,9 @@ public class ApiaryStorageScreen extends ContainerScreen<ApiaryStorageContainer>
     private static final ResourceLocation BACKGROUND_9X12 = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/apiary/apiary_storage_108.png");
     private static final ResourceLocation TABS_BG = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/apiary/apiary_gui_tabs.png");
 
-    public ApiaryStorageTileEntity apiaryStorageTileEntity;
+    private ApiaryStorageTileEntity apiaryStorageTileEntity;
 
-    public ResourceLocation background;
+    private ResourceLocation background;
 
     private TabImageButton mainTabButton;
     private TabImageButton breedTabButton;
@@ -47,7 +47,7 @@ public class ApiaryStorageScreen extends ContainerScreen<ApiaryStorageContainer>
     protected void preInit(){
         this.xSize = 226;
 
-        switch (this.container.numberOfSlots) {
+        switch (this.container.getNumberOfSlots()) {
             case 27:
                 this.ySize = 168;
                 background = BACKGROUND_3X9;
@@ -76,14 +76,16 @@ public class ApiaryStorageScreen extends ContainerScreen<ApiaryStorageContainer>
         super.init();
         this.buttons.clear();
 
-        apiaryStorageTileEntity = this.container.apiaryStorageTileEntity;
+        apiaryStorageTileEntity = this.container.getApiaryStorageTileEntity();
 
         int i = this.guiLeft;
         int j = this.guiTop;
         int t = i + this.xSize - 23;
 
         mainTabButton = this.addButton(new TabImageButton(t+1, j+17, 18, 18, 110, 0, 18, TABS_BG, new ItemStack(ModItems.BEE_JAR.get()), 1, 1,
-                (onPress) -> this.changeScreen(ApiaryTabs.MAIN)) {
+                onPress -> this.changeScreen(ApiaryTabs.MAIN)) {
+
+            @Override
             public void renderToolTip(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
                 StringTextComponent s = new StringTextComponent(I18n.format("gui.resourcefulbees.apiary.button.main_screen"));
                 ApiaryStorageScreen.this.renderTooltip(matrix, s, mouseX, mouseY);
@@ -91,7 +93,9 @@ public class ApiaryStorageScreen extends ContainerScreen<ApiaryStorageContainer>
         });
 
         this.addButton(new TabImageButton(t + 1, j + 37, 18, 18, 110, 0, 18, TABS_BG, new ItemStack(Items.HONEYCOMB), 2, 1,
-                (onPress) -> this.changeScreen(ApiaryTabs.STORAGE)) {
+                onPress -> this.changeScreen(ApiaryTabs.STORAGE)) {
+
+            @Override
             public void renderToolTip(@Nonnull MatrixStack matrix,int mouseX, int mouseY) {
                 StringTextComponent s = new StringTextComponent(I18n.format("gui.resourcefulbees.apiary.button.storage_screen"));
                 ApiaryStorageScreen.this.renderTooltip(matrix, s, mouseX, mouseY);
@@ -99,7 +103,9 @@ public class ApiaryStorageScreen extends ContainerScreen<ApiaryStorageContainer>
         }).active = false;
 
         breedTabButton = this.addButton(new TabImageButton(t + 1, j + 57, 18, 18, 110, 0, 18, TABS_BG, new ItemStack(ModItems.GOLD_FLOWER_ITEM.get()), 1, 1,
-                (onPress) -> this.changeScreen(ApiaryTabs.BREED)) {
+                onPress -> this.changeScreen(ApiaryTabs.BREED)) {
+
+            @Override
             public void renderToolTip(@Nonnull MatrixStack matrix,int mouseX, int mouseY) {
                 StringTextComponent s = new StringTextComponent(I18n.format("gui.resourcefulbees.apiary.button.breed_screen"));
                 ApiaryStorageScreen.this.renderTooltip(matrix, s, mouseX, mouseY);
@@ -111,13 +117,13 @@ public class ApiaryStorageScreen extends ContainerScreen<ApiaryStorageContainer>
         switch (tab) {
             case BREED:
                 if (breedTabButton.active)
-                    NetPacketHandler.sendToServer(new ApiaryTabMessage(apiaryStorageTileEntity.getPos(), ApiaryTabs.BREED));
+                    NetPacketHandler.sendToServer(new ApiaryTabMessage(getApiaryStorageTileEntity().getPos(), ApiaryTabs.BREED));
                 break;
             case STORAGE:
                 break;
             case MAIN:
                 if (mainTabButton.active)
-                    NetPacketHandler.sendToServer(new ApiaryTabMessage(apiaryStorageTileEntity.getPos(), ApiaryTabs.MAIN));
+                    NetPacketHandler.sendToServer(new ApiaryTabMessage(getApiaryStorageTileEntity().getPos(), ApiaryTabs.MAIN));
         }
     }
 
@@ -130,10 +136,10 @@ public class ApiaryStorageScreen extends ContainerScreen<ApiaryStorageContainer>
 
     @Override
     protected void drawBackground(@Nonnull MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
-        if (this.container.rebuild) {
+        if (this.container.isRebuild()) {
             preInit();
             init();
-            this.container.rebuild = false;
+            this.container.setRebuild(false);
         }
 
             mainTabButton.active = getApiaryStorageTileEntity().getApiary() != null;
@@ -141,7 +147,7 @@ public class ApiaryStorageScreen extends ContainerScreen<ApiaryStorageContainer>
 
         Minecraft client = this.client;
         if (client != null) {
-            this.client.getTextureManager().bindTexture(background);
+            this.client.getTextureManager().bindTexture(getBackground());
             int i = this.guiLeft;
             int j = this.guiTop;
             drawTexture(matrix, i + 26, j, 0, 0, this.xSize, this.ySize, 384, 384);
@@ -160,5 +166,13 @@ public class ApiaryStorageScreen extends ContainerScreen<ApiaryStorageContainer>
                 break;
             }
         }
+    }
+
+    public ApiaryStorageTileEntity getApiaryStorageTileEntity() {
+        return apiaryStorageTileEntity;
+    }
+
+    public ResourceLocation getBackground() {
+        return background;
     }
 }

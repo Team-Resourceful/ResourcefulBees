@@ -22,12 +22,14 @@ import java.util.List;
 
 public class Fertilizer extends Item {
 
+    //TODO - This system needs to be rewritten properly
+
     public Fertilizer(Properties properties) {
         super(properties);
     }
 
     @Override
-    public void addInformation(ItemStack stack, World world, List list, ITooltipFlag par4)
+    public void addInformation(ItemStack stack, World world, @NotNull List list, @NotNull ITooltipFlag par4)
     {
         if(stack.getTag() == null || !stack.getTag().contains("specific")) {
             list.add(new TooltipBuilder().addTip("Unknown Type").build().get(0));

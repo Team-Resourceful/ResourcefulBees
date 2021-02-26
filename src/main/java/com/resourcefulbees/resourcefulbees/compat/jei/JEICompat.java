@@ -11,6 +11,7 @@ import com.resourcefulbees.resourcefulbees.compat.jei.ingredients.EntityRenderer
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import mezz.jei.api.IModPlugin;
+import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.handlers.IGuiClickableArea;
 import mezz.jei.api.gui.handlers.IGuiContainerHandler;
@@ -34,7 +35,7 @@ import java.util.*;
 
 import static com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE;
 
-@mezz.jei.api.JeiPlugin
+@JeiPlugin
 public class JEICompat implements IModPlugin {
 
     public static final IIngredientType<EntityIngredient> ENTITY_INGREDIENT = () -> EntityIngredient.class;
@@ -48,10 +49,6 @@ public class JEICompat implements IModPlugin {
         registration.addRecipeCategories(new EntityFlowerCategory(helper));
         registration.addRecipeCategories(new CentrifugeRecipeCategory(helper));
         registration.addRecipeCategories(new BlockMutation(helper));
-        /*registration.addRecipeCategories(new FluidToFluid(helper));
-        registration.addRecipeCategories(new BlockToFluid(helper));
-        registration.addRecipeCategories(new FluidToBlock(helper));
-        registration.addRecipeCategories(new BlockToBlock(helper));*/
         registration.addRecipeCategories(new EntityToEntity(helper));
         registration.addRecipeCategories(new BlockToItem(helper));
         registration.addRecipeCategories(new ApiaryCategory(helper));
@@ -84,18 +81,14 @@ public class JEICompat implements IModPlugin {
         World clientWorld = Minecraft.getInstance().world;
         if (clientWorld != null) {
             RecipeManager recipeManager = Minecraft.getInstance().world.getRecipeManager();
-            registration.addRecipes(BeeHiveCategory.getHoneycombRecipes(registration.getIngredientManager()), BeeHiveCategory.ID);
+            registration.addRecipes(BeeHiveCategory.getHoneycombRecipes(), BeeHiveCategory.ID);
             registration.addRecipes(recipeManager.getRecipes(CENTRIFUGE_RECIPE_TYPE).values(), CentrifugeRecipeCategory.ID);
-            registration.addRecipes(BeeBreedingCategory.getBreedingRecipes(registration.getIngredientManager()), BeeBreedingCategory.ID);
+            registration.addRecipes(BeeBreedingCategory.getBreedingRecipes(), BeeBreedingCategory.ID);
             registration.addRecipes(BlockMutation.getMutationRecipes(), BlockMutation.ID);
-            /*registration.addRecipes(FluidToFluid.getMutationRecipes(registration.getIngredientManager()), FluidToFluid.ID);
-            registration.addRecipes(BlockToFluid.getMutationRecipes(registration.getIngredientManager()), BlockToFluid.ID);
-            registration.addRecipes(FluidToBlock.getMutationRecipes(registration.getIngredientManager()), FluidToBlock.ID);
-            registration.addRecipes(BlockToBlock.getMutationRecipes(registration.getIngredientManager()), BlockToBlock.ID);*/
             registration.addRecipes(BlockToItem.getMutationRecipes(), BlockToItem.ID);
             registration.addRecipes(EntityToEntity.getMutationRecipes(), EntityToEntity.ID);
-            registration.addRecipes(ApiaryCategory.getHoneycombRecipes(registration.getIngredientManager()), ApiaryCategory.ID);
-            registration.addRecipes(FlowersCategory.getFlowersRecipes(registration.getIngredientManager()), FlowersCategory.ID);
+            registration.addRecipes(ApiaryCategory.getHoneycombRecipes(), ApiaryCategory.ID);
+            registration.addRecipes(FlowersCategory.getFlowersRecipes(), FlowersCategory.ID);
             registration.addRecipes(EntityFlowerCategory.getFlowersRecipes(registration.getIngredientManager()), EntityFlowerCategory.ID);
             registerInfoDesc(registration);
         }
@@ -103,13 +96,12 @@ public class JEICompat implements IModPlugin {
 
     @Override
     public void registerGuiHandlers(IGuiHandlerRegistration registration) {
-        //registration.addRecipeClickArea(CentrifugeScreen.class, 80, 30, 18, 18, CentrifugeRecipeCategory.ID);
         registration.addRecipeClickArea(MechanicalCentrifugeScreen.class, 80, 30, 18, 18, CentrifugeRecipeCategory.ID);
-        //registration.addRecipeClickArea(CentrifugeMultiblockScreen.class, 88, 26, 18, 18, CentrifugeRecipeCategory.ID);
 
         registration.addGuiContainerHandler(CentrifugeScreen.class, new IGuiContainerHandler<CentrifugeScreen>() {
-            public @NotNull
-            Collection<IGuiClickableArea> getGuiClickableAreas(@NotNull CentrifugeScreen screen, double mouseX, double mouseY) {
+
+            @Override
+            public @NotNull Collection<IGuiClickableArea> getGuiClickableAreas(@NotNull CentrifugeScreen screen, double mouseX, double mouseY) {
                 IGuiClickableArea clickableArea = IGuiClickableArea.createBasic(screen.getXSize() - 25, 50, 18, 18, CentrifugeRecipeCategory.ID);
                 return Collections.singleton(clickableArea);
             }
@@ -149,6 +141,7 @@ public class JEICompat implements IModPlugin {
 
             if (beeData.hasTraitNames()) {
                 StringJoiner traits = new StringJoiner(", ");
+                //noinspection deprecation
                 Arrays.stream(beeData.getTraitNames()).forEach(trait -> traits.add(WordUtils.capitalize(trait.replace("_", " "))));
                 stats.append(aqua).append(" Traits: ").append(purple).append(traits.toString()).append("\n");
             }

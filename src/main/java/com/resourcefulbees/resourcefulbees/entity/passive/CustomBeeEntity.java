@@ -45,7 +45,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
     protected final CustomBeeData beeData;
     protected int timeWithoutHive;  //<- does not need to be initialized to 0 that is done by default - oreo
     protected int flowerID;
-    public BlockPos lastFlower;
+    private BlockPos lastFlower;
     private boolean hasHiveInRange;
     private int disruptorInRange;
 
@@ -147,16 +147,14 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
             if (Config.BEES_DIE_IN_VOID.get() && this.getPositionVec().y <= 0) {
                 this.remove();
             }
-            if (!hasCustomName()) {
-                if (this.ticksExisted % 100 == 0) {
-                    if (hasHiveInRange() || hasFlower() || isPassenger() || getLeashed() || hasNectar() || disruptorInRange > 0) {
-                        timeWithoutHive = 0;
-                    } else {
-                        timeWithoutHive += 100;
-                        if (timeWithoutHive >= 12000) this.remove();
-                    }
-                    hasHiveInRange = false;
+            if (!hasCustomName() && this.ticksExisted % 100 == 0) {
+                if (hasHiveInRange() || hasFlower() || isPassenger() || getLeashed() || hasNectar() || disruptorInRange > 0) {
+                    timeWithoutHive = 0;
+                } else {
+                    timeWithoutHive += 100;
+                    if (timeWithoutHive >= 12000) this.remove();
                 }
+                hasHiveInRange = false;
             }
             if (this.ticksExisted % 100 == 0) {
                 disruptorInRange--;

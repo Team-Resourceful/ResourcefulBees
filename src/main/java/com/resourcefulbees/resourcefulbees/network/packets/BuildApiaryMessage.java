@@ -35,7 +35,7 @@ public class BuildApiaryMessage {
         context.get().enqueueWork(() -> {
             ServerPlayerEntity player = context.get().getSender();
             if (player != null) {
-                if (player.world.isBlockLoaded(message.pos)) {
+                if (player.world.isBlockPresent(message.pos)) {
                     TileEntity tileEntity = player.world.getTileEntity(message.pos);
                     if (tileEntity instanceof ApiaryTileEntity) {
                         ApiaryTileEntity apiaryTileEntity = (ApiaryTileEntity) tileEntity;

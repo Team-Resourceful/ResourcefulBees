@@ -51,6 +51,7 @@ public class BeeTrait {
         return this.particleEffect;
     }
 
+    @SuppressWarnings("unused")
     public static class Builder {
         List<Pair<Effect, Integer>> potionDamageEffects = new ArrayList<>();
         List<DamageSource> damageImmunities = new ArrayList<>();

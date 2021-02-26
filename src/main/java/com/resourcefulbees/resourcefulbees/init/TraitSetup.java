@@ -81,27 +81,27 @@ public class TraitSetup {
                 builder.addDamageImmunity(source);
             }
         }
-        if (jsonTrait.damageTypes != null && !jsonTrait.damageTypes.isEmpty()){
+        if (jsonTrait.damageTypes != null && !jsonTrait.damageTypes.isEmpty()) {
             jsonTrait.damageTypes.forEach((damageType) -> builder.addDamageType(Pair.of(damageType.damageTypeName, damageType.amplifier)));
         }
-        if (jsonTrait.specialAbilities != null && jsonTrait.specialAbilities.length > 0){
+        if (jsonTrait.specialAbilities != null && jsonTrait.specialAbilities.length > 0) {
             for (String ability : jsonTrait.specialAbilities){
                 builder.addSpecialAbility(ability);
             }
         }
-        if (jsonTrait.particleName != null && !jsonTrait.particleName.isEmpty()) {
-            if (ForgeRegistries.PARTICLE_TYPES.getValue(new ResourceLocation(jsonTrait.particleName)) != null && ForgeRegistries.PARTICLE_TYPES.getValue(new ResourceLocation(jsonTrait.particleName)) instanceof BasicParticleType){
-                builder.setParticleEffect((BasicParticleType) ForgeRegistries.PARTICLE_TYPES.getValue(new ResourceLocation(jsonTrait.particleName)));
-            }
+        if (jsonTrait.particleName != null
+                && !jsonTrait.particleName.isEmpty()
+                && ForgeRegistries.PARTICLE_TYPES.getValue(new ResourceLocation(jsonTrait.particleName)) instanceof BasicParticleType){
+            builder.setParticleEffect((BasicParticleType) ForgeRegistries.PARTICLE_TYPES.getValue(new ResourceLocation(jsonTrait.particleName)));
         }
-        if (jsonTrait.potionImmunities != null && jsonTrait.potionImmunities.length > 0){
+        if (jsonTrait.potionImmunities != null && jsonTrait.potionImmunities.length > 0) {
             for (String immunity : jsonTrait.potionImmunities){
                 Effect potion = ForgeRegistries.POTIONS.getValue(new ResourceLocation(immunity));
                 if (potion != null)
                     builder.addPotionImmunity(potion);
             }
         }
-        if (jsonTrait.potionDamageEffects != null && !jsonTrait.potionDamageEffects.isEmpty()){
+        if (jsonTrait.potionDamageEffects != null && !jsonTrait.potionDamageEffects.isEmpty()) {
             jsonTrait.potionDamageEffects.forEach((traitPotionDamageEffect -> {
                 Effect potion = ForgeRegistries.POTIONS.getValue(new ResourceLocation(traitPotionDamageEffect.effectRegistryName));
                 if (potion != null)
@@ -148,7 +148,7 @@ public class TraitSetup {
                 }
             });
         } catch (IOException e) {
-            LOGGER.warn("Could not read ZipFile! ZipFile: " + file.getFileName());
+            LOGGER.warn("Could not read ZipFile! ZipFile: {}", file.getFileName());
         }
     }
 }
