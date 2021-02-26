@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableSet;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.block.TieredBeehiveBlock;
 import com.resourcefulbees.resourcefulbees.block.multiblocks.apiary.ApiaryBlock;
+import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import net.minecraft.block.BlockState;
 import net.minecraft.village.PointOfInterestType;
 import net.minecraftforge.fml.RegistryObject;
@@ -14,6 +15,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class ModPOIs {
+
+    private ModPOIs() {
+        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+    }
 
     public static final DeferredRegister<PointOfInterestType> POIS = DeferredRegister.create(ForgeRegistries.POI_TYPES, ResourcefulBees.MOD_ID);
 

@@ -81,7 +81,7 @@ public class BeeSetup {
 
     private static void parseBee(File file) throws IOException {
         String name = file.getName();
-        name = name.substring(0, name.indexOf('.')).toLowerCase();
+        name = name.substring(0, name.indexOf('.'));
 
         Reader r = Files.newBufferedReader(file.toPath());
 
@@ -100,14 +100,14 @@ public class BeeSetup {
 
     private static void parseBee(Reader reader, String name) {
         try {
-            name = name.toLowerCase().replace(" ", "_");
+            name = name.toLowerCase(Locale.ENGLISH).replace(" ", "_");
             Gson gson = new Gson();
             CustomBeeData bee = gson.fromJson(reader, CustomBeeData.class);
             bee.setName(name);
             bee.shouldResourcefulBeesDoForgeRegistration = true;
-            BeeRegistry.getRegistry().registerBee(name.toLowerCase(Locale.ENGLISH), bee);
+            BeeRegistry.getRegistry().registerBee(name, bee);
         } catch (Exception e) {
-            LOGGER.error(String.format("\n---------[Registration Error]---------\nCould not validate %s bee's json file, Skipping.", name));
+            LOGGER.error("\n---------[Registration Error]---------\nCould not validate {} bee's json file, Skipping.", name);
         }
     }
 
@@ -132,14 +132,14 @@ public class BeeSetup {
 
     private static void parseHoney(Reader reader, String name) {
         try {
-            name = name.toLowerCase().replace(" ", "_");
+            name = name.toLowerCase(Locale.ENGLISH).replace(" ", "_");
             Gson gson = new Gson();
             HoneyBottleData honey = gson.fromJson(reader, HoneyBottleData.class);
             if (honey.getName() == null) honey.setName(name);
             honey.shouldResourcefulBeesDoForgeRegistration = true;
             BeeRegistry.getRegistry().registerHoney(honey.getName().toLowerCase(), honey);
         } catch (Exception e) {
-            LOGGER.error(String.format("\n---------[Registration Error]---------\nCould not validate %s honey's json file, Skipping.", name));
+            LOGGER.error("\n---------[Registration Error]---------\nCould not validate {} honey's json file, Skipping.", name);
         }
     }
 
@@ -320,7 +320,7 @@ public class BeeSetup {
     }
 
     public static void registerBeePlacements() {
-        ModEntities.MOD_BEES.forEach((s, entityTypeRegistryObject) -> {
+        ModEntities.getModBees().forEach((s, entityTypeRegistryObject) -> {
             CustomBeeData beeData = BeeRegistry.getRegistry().getBeeData(s);
             if (beeData.getSpawnData().canSpawnInWorld()) {
                 EntitySpawnPlacementRegistry.register(entityTypeRegistryObject.get(),

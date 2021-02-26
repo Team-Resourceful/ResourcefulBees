@@ -3,6 +3,7 @@ package com.resourcefulbees.resourcefulbees.utils.validation;
 import com.google.common.base.Splitter;
 import com.resourcefulbees.resourcefulbees.api.beedata.*;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
+import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.utils.color.Color;
 
 import java.util.Iterator;
@@ -11,6 +12,10 @@ import static com.resourcefulbees.resourcefulbees.ResourcefulBees.LOGGER;
 import static com.resourcefulbees.resourcefulbees.utils.validation.ValidatorUtils.*;
 
 public class FirstPhaseValidator {
+
+    private FirstPhaseValidator() {
+        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+    }
 
     public static boolean validate(CustomBeeData bee) {
         validateHoneycombColor(bee.getColorData(), bee.getName());
@@ -137,7 +142,7 @@ public class FirstPhaseValidator {
     }
 
     private static void validateEffectValues(HoneyBottleData honeyData, String name) {
-        if (honeyData.getEffects() != null && honeyData.getEffects().size() != 0) {
+        if (honeyData.getEffects() != null && !honeyData.getEffects().isEmpty()) {
             honeyData.getEffects().forEach(honeyEffect -> {
                 if (!honeyEffect.isEffectIDValid()) {
                     logError(name);

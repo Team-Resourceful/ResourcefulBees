@@ -31,12 +31,10 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.network.NetworkHooks;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -49,7 +47,7 @@ public class EnderBeecon extends HoneyTank {
 
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
-    public static final AbstractBlock.Properties PROPERTIES = Block.Properties.create(Material.GLASS, MaterialColor.PURPLE)
+    public static final AbstractBlock.Properties PROPERTIES = AbstractBlock.Properties.create(Material.GLASS, MaterialColor.PURPLE)
             .requiresTool()
             .harvestTool(ToolType.PICKAXE)
             .hardnessAndResistance(5)

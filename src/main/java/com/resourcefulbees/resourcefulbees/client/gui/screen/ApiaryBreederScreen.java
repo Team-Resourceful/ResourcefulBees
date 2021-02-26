@@ -110,8 +110,8 @@ public class ApiaryBreederScreen extends ContainerScreen<ApiaryBreederContainer>
             this.container.rebuild = false;
         }
 
-        mainTabButton.active = apiaryBreederTileEntity.getApiary() != null;
-        storageTabButton.active = apiaryBreederTileEntity.getApiary() != null && apiaryBreederTileEntity.getApiary().storagePos != null;
+        mainTabButton.active = getApiaryBreederTileEntity().getApiary() != null;
+        storageTabButton.active = getApiaryBreederTileEntity().getApiary() != null && getApiaryBreederTileEntity().getApiary().getStoragePos() != null;
 
 
         Minecraft client = this.client;

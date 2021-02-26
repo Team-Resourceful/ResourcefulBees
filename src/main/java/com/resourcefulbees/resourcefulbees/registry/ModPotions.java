@@ -2,6 +2,7 @@ package com.resourcefulbees.resourcefulbees.registry;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.effects.ModEffects;
+import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -20,6 +21,11 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class ModPotions {
+
+    private ModPotions() {
+        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+    }
+
     public static final DeferredRegister<Potion> POTIONS = DeferredRegister.create(ForgeRegistries.POTION_TYPES, ResourcefulBees.MOD_ID);
 
     public static final RegistryObject<Potion> CALMING_POTION = POTIONS.register("calming", () -> new Potion(new EffectInstance(ModEffects.CALMING.get(), 6000)));

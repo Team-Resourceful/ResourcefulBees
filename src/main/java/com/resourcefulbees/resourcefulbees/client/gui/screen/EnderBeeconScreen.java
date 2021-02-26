@@ -85,19 +85,19 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
         int buttonStartX = buttonX;
         powerButtons.clear();
         for (EnderBeeconTileEntity.BeeconEffect effect : tileEntity.getEffects()) {
-            PowerButton button = this.addButton(new PowerButton(buttonStartX, buttonY, effect.effect, BUTTON_CALMING));
+            PowerButton button = this.addButton(new PowerButton(buttonStartX, buttonY, effect.getEffect(), BUTTON_CALMING));
             button.active = true;
-            button.setSelected(effect.active);
+            button.setSelected(effect.isActive());
             powerButtons.add(button);
             buttonStartX += buttonWidth + padding;
         }
     }
 
     private void drawFluidTank(MatrixStack matrix, int mouseX, int mouseY) {
-        if (!tileEntity.fluidTank.isEmpty()) {
+        if (!tileEntity.getFluidTank().isEmpty()) {
 
             //init stuff
-            FluidStack stack = tileEntity.fluidTank.getFluid();
+            FluidStack stack = tileEntity.getFluidTank().getFluid();
             this.client.getTextureManager().bindTexture(FLUID_TEXTURE);
             //prep color
             int color = stack.getFluid().getAttributes().getColor();
@@ -112,7 +112,7 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
             int tankHeight = 62;
             int tankWidth = 14;
 
-            int effectiveHeight = (int) (((float) stack.getAmount() / (float) tileEntity.fluidTank.getCapacity()) * tankHeight);
+            int effectiveHeight = (int) (((float) stack.getAmount() / (float) tileEntity.getFluidTank().getCapacity()) * tankHeight);
             this.drawTexture(matrix, tankPosX, tankPosY - effectiveHeight, 0, 0, tankWidth, effectiveHeight, tankWidth, tankHeight);
         }
     }
@@ -139,19 +139,19 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
         for (PowerButton widget : this.powerButtons) {
             EnderBeeconTileEntity.BeeconEffect effect = tileEntity.getEffect(widget.effect);
             if (Config.BEECON_DO_MULTIPLIER.get()) {
-                drawCenteredText(matrixStack, this.textRenderer, new StringTextComponent("x" + effect.value), buttonStartX, buttonY, 14737632);
+                drawCenteredText(matrixStack, this.textRenderer, new StringTextComponent("x" + effect.getValue()), buttonStartX, buttonY, 14737632);
             } else {
-                drawCenteredText(matrixStack, this.textRenderer, new StringTextComponent("+" + effect.value), buttonStartX, buttonY, 14737632);
+                drawCenteredText(matrixStack, this.textRenderer, new StringTextComponent("+" + effect.getValue()), buttonStartX, buttonY, 14737632);
             }
             buttonStartX += buttonWidth + padding;
             if (widget.isHovered()) widget.renderToolTip(matrixStack, mouseX - this.guiLeft, mouseY - this.guiTop);
         }
         StringTextComponent fluidCount;
         DecimalFormat decimalFormat = new DecimalFormat("##0.0");
-        if (tileEntity.fluidTank.getFluidAmount() < 1000f) {
-            fluidCount = new StringTextComponent(decimalFormat.format(tileEntity.fluidTank.getFluidAmount()) + " mb");
+        if (tileEntity.getFluidTank().getFluidAmount() < 1000f) {
+            fluidCount = new StringTextComponent(decimalFormat.format(tileEntity.getFluidTank().getFluidAmount()) + " mb");
         } else {
-            fluidCount = new StringTextComponent(decimalFormat.format(tileEntity.fluidTank.getFluidAmount() / 1000f) + " B");
+            fluidCount = new StringTextComponent(decimalFormat.format(tileEntity.getFluidTank().getFluidAmount() / 1000f) + " B");
         }
         if (mouseX >= this.guiLeft + 207 && mouseX <= this.guiLeft + 221 && mouseY >= this.guiTop + 30 && mouseY <= this.guiTop + 92) {
             renderTooltip(matrixStack, fluidCount, mouseX - this.guiLeft, mouseY - this.guiTop);

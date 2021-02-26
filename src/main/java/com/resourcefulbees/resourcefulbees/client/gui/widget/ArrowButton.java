@@ -8,6 +8,8 @@ import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nonnull;
 
+import net.minecraft.client.gui.widget.button.Button.IPressable;
+
 public class ArrowButton extends ImageButton {
 
     private final ResourceLocation resourceLocation;

@@ -7,7 +7,6 @@ import com.resourcefulbees.resourcefulbees.utils.CubeModel;
 import com.resourcefulbees.resourcefulbees.utils.RenderCuboid;
 import net.minecraft.client.renderer.Atlases;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.util.ResourceLocation;
@@ -23,8 +22,8 @@ public class RenderHoneyTank extends TileEntityRenderer<HoneyTankTileEntity> {
     @Override
     public void render(HoneyTankTileEntity tile, float partialTick, MatrixStack matrix, IRenderTypeBuffer renderer, int light, int overlayLight) {
         if (tile.getWorld() == null) return;
-        FluidStack stack = tile.fluidTank.getFluid();
-        if (stack != null && !stack.isEmpty()) {
+        FluidStack stack = tile.getFluidTank().getFluid();
+        if (!stack.isEmpty()) {
             int level = tile.getLevel();
             int color = stack.getFluid().getAttributes().getColor();
             ResourceLocation stillTexture = stack.getFluid().getAttributes().getStillTexture();

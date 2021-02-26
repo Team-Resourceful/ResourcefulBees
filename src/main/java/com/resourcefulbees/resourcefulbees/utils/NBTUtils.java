@@ -1,8 +1,13 @@
 package com.resourcefulbees.resourcefulbees.utils;
 
+import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import net.minecraft.nbt.CompoundNBT;
 
 public class NBTUtils {
+
+    private NBTUtils() {
+        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+    }
 
     public static CompoundNBT writeBooleans(boolean[] booleans) {
         CompoundNBT list = new CompoundNBT();

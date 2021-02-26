@@ -157,7 +157,7 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
             breedTabButton.active = apiaryTileEntity.getApiaryBreeder() != null;
             storageTabButton.active = apiaryTileEntity.getApiaryStorage() != null;
 
-            this.container.beeList = Arrays.copyOf(apiaryTileEntity.BEES.keySet().toArray(), apiaryTileEntity.getBeeCount(), String[].class);
+            this.container.setBeeList(Arrays.copyOf(apiaryTileEntity.bees.keySet().toArray(), apiaryTileEntity.getBeeCount(), String[].class));
             this.client.getTextureManager().bindTexture(VALIDATED_TEXTURE);
             int i = this.guiLeft;
             int j = this.guiTop;
@@ -201,7 +201,7 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
                 List<ITextComponent> beeInfo = new ArrayList<>();
                 ApiaryTileEntity.ApiaryBee apiaryBee = this.container.getApiaryBee(i);
 
-                int ticksInHive = apiaryBee.ticksInHive;
+                int ticksInHive = apiaryBee.getTicksInHive();
                 int minTicks = apiaryBee.minOccupationTicks;
                 int ticksLeft = Math.max(minTicks - ticksInHive, 0);
                 beeInfo.add(apiaryBee.displayName);
@@ -228,7 +228,7 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
             int l1 = 18;
             k = k + 18;
             j1 = this.ySize;
-            if (this.container.getApiaryBee(i).isLocked) {
+            if (this.container.getApiaryBee(i).isLocked()) {
                 l1 += 18;
             }
             if (mouseX >= k && mouseY >= i1 && mouseX < k + 16 && mouseY < i1 + 18) {

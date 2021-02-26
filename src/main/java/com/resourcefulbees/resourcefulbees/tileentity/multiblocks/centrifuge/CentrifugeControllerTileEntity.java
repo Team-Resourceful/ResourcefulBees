@@ -38,9 +38,11 @@ public class CentrifugeControllerTileEntity extends CentrifugeTileEntity {
 
     protected int validateTime = MathUtils.nextInt(10) + 10;
     protected boolean validStructure;
-    protected final List<BlockPos> STRUCTURE_BLOCKS = new ArrayList<>();
+    protected final List<BlockPos> structureBlocks = new ArrayList<>();
 
     private final IntArray times = new IntArray(4) {
+
+        @Override
         public int get(int index) {
             switch(index) {
                 case 0:
@@ -54,6 +56,7 @@ public class CentrifugeControllerTileEntity extends CentrifugeTileEntity {
             }
         }
 
+        @Override
         public void set(int index, int value) {
             switch(index) {
                 case 0:
@@ -64,10 +67,13 @@ public class CentrifugeControllerTileEntity extends CentrifugeTileEntity {
                     break;
                 case 2:
                     CentrifugeControllerTileEntity.this.time[2] = value;
+                    break;
+                default: //do nothing
             }
 
         }
 
+        @Override
         public int size() { return 3; }
     };
 
@@ -117,7 +123,9 @@ public class CentrifugeControllerTileEntity extends CentrifugeTileEntity {
     //endregion
 
     @Override
-    protected void setPoweredBlockState(boolean powered) { }
+    protected void setPoweredBlockState(boolean powered) {
+        //multiblock doesn't have a powered block state
+    }
 
     //region NBT
     @Nonnull
@@ -183,8 +191,8 @@ public class CentrifugeControllerTileEntity extends CentrifugeTileEntity {
 
     protected void validateStructure(World world, @Nullable ServerPlayerEntity player) {
         validateTime = 0;
-        buildStructureList(getBounds(), STRUCTURE_BLOCKS, blockPos -> true, this.getPos());
-        validStructure = MultiBlockHelper.validateStructure(STRUCTURE_BLOCKS, validBlocks(), numberOfCasingsRequired());
+        buildStructureList(getBounds(), structureBlocks, blockPos -> true, this.getPos());
+        validStructure = MultiBlockHelper.validateStructure(structureBlocks, validBlocks(), numberOfCasingsRequired());
         world.setBlockState(pos, getBlockState().with(CentrifugeControllerBlock.PROPERTY_VALID, validStructure));
 
         if (validStructure) {
@@ -196,7 +204,7 @@ public class CentrifugeControllerTileEntity extends CentrifugeTileEntity {
 
     protected void linkCasings(World world) {
         if (!world.isRemote) {
-            STRUCTURE_BLOCKS.stream()
+            structureBlocks.stream()
                     .map(world::getTileEntity)
                     .filter(tileEntity -> tileEntity instanceof CentrifugeCasingTileEntity)
                     .forEach(tileEntity -> ((CentrifugeCasingTileEntity) tileEntity).setControllerPos(this.pos));
@@ -205,7 +213,7 @@ public class CentrifugeControllerTileEntity extends CentrifugeTileEntity {
 
     protected void unlinkCasings(World world) {
         if (!world.isRemote) {
-            STRUCTURE_BLOCKS.stream()
+            structureBlocks.stream()
                     .map(world::getTileEntity)
                     .filter(tileEntity -> tileEntity instanceof CentrifugeCasingTileEntity)
                     .forEach(tileEntity -> ((CentrifugeCasingTileEntity) tileEntity).setControllerPos(null));

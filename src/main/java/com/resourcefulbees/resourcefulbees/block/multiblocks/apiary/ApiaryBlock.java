@@ -4,10 +4,7 @@ import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.lib.ApiaryOutput;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.TooltipBuilder;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.HorizontalBlock;
-import net.minecraft.block.SoundType;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resources.I18n;
@@ -48,8 +45,8 @@ public class ApiaryBlock extends Block {
   private final int TIER;
 
   public ApiaryBlock(final int tier, float hardness, float resistance) {
-    super(Block.Properties.create(Material.IRON).hardnessAndResistance(hardness, resistance).sound(SoundType.METAL));
-    TIER = tier;
+    super(AbstractBlock.Properties.create(Material.IRON).hardnessAndResistance(hardness, resistance).sound(SoundType.METAL));
+    this.tier = tier;
     this.setDefaultState(this.stateContainer.getBaseState().with(VALIDATED, false).with(FACING, Direction.NORTH));
   }
 

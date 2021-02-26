@@ -7,7 +7,6 @@ import com.resourcefulbees.resourcefulbees.utils.CubeModel;
 import com.resourcefulbees.resourcefulbees.utils.RenderCuboid;
 import net.minecraft.client.renderer.Atlases;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.tileentity.BeaconTileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
@@ -28,7 +27,7 @@ public class RenderEnderBeecon extends TileEntityRenderer<EnderBeeconTileEntity>
     @Override
     public void render(EnderBeeconTileEntity tile, float partialTick, MatrixStack matrix, IRenderTypeBuffer renderer, int light, int overlayLight) {
         if (tile.getWorld() == null) return;
-        FluidStack stack = tile.fluidTank.getFluid();
+        FluidStack stack = tile.getFluidTank().getFluid();
         long gameTime = tile.getWorld().getGameTime();
         List<EnderBeeconTileEntity.BeamSegment> list = tile.getBeamSegments();
         int currentHeight = 0;
@@ -43,11 +42,11 @@ public class RenderEnderBeecon extends TileEntityRenderer<EnderBeeconTileEntity>
             CubeModel model = new CubeModel(start, end);
             model.setTextures(stillTexture);
             RenderCuboid.INSTANCE.renderCube(model, matrix, builder, color, light, overlayLight);
-            if (!tile.showBeam) return;
-            float red = RenderCuboid.INSTANCE.getRed(color);
-            float green = RenderCuboid.INSTANCE.getGreen(color);
-            float blue = RenderCuboid.INSTANCE.getBlue(color);
-            float alpha = RenderCuboid.INSTANCE.getAlpha(color);
+            if (!tile.isShowBeam()) return;
+            float red = RenderCuboid.getRed(color);
+            float green = RenderCuboid.getGreen(color);
+            float blue = RenderCuboid.getBlue(color);
+            float alpha = RenderCuboid.getAlpha(color);
             float[] afloats = {red, green, blue, alpha};
             for (int k = 0; k < list.size(); ++k) {
                 EnderBeeconTileEntity.BeamSegment segment = list.get(k);

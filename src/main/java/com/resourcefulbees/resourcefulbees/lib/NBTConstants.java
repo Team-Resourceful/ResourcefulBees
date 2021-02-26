@@ -1,6 +1,11 @@
 package com.resourcefulbees.resourcefulbees.lib;
 
 public class NBTConstants {
+
+    private NBTConstants() {
+        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+    }
+
     public static final String NBT_ROOT = "ResourcefulBees";
     public static final String NBT_COLOR = "Color";
     public static final String NBT_BEE_TYPE = "BeeType";
@@ -32,4 +37,12 @@ public class NBTConstants {
     public static final String NBT_TANKS = "Tanks";
     public static final String NBT_RECIPES = "Recipes";
     public static final String NBT_ID = "id";
+    public static final String NBT_ENERGY = "energy";
+    public static final String NBT_FLUID = "fluid";
+    public static final String NBT_ENERGY_FILLED = "energyFilled";
+    public static final String NBT_FLUID_FILLED = "fluidFilled";
+    public static final String NBT_IS_PROCESSING = "isProcessing";
+    public static final String NBT_SHOW_BEAM = "showBeam";
+    public static final String NBT_CONTROLLER_POS = "controllerPos";
+    public static final String NBT_MUTATION_COUNT = "mutationCount";
 }

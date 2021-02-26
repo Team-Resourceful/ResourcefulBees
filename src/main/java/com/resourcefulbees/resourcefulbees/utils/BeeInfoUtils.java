@@ -16,7 +16,11 @@ import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.InputMappings;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.Pose;
+import net.minecraft.entity.passive.BeeEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.Item;
@@ -27,6 +31,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -48,6 +53,10 @@ import java.util.stream.Collectors;
 import static com.resourcefulbees.resourcefulbees.lib.BeeConstants.*;
 
 public class BeeInfoUtils {
+
+    private BeeInfoUtils() {
+        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+    }
 
     public static void buildFamilyTree(CustomBeeData bee) {
         if (bee.getBreedData().hasParents()) {
@@ -95,8 +104,8 @@ public class BeeInfoUtils {
                             .forEach(biomeRegistryKey -> biomeSet.add(biomeRegistryKey.getValue())));
         } else {
             Splitter.on(",").trimResults().split(list.replace(BeeConstants.TAG_PREFIX, "")).forEach(s -> {
-                if (com.resourcefulbees.resourcefulbees.registry.BiomeDictionary.TYPES.containsKey(s)) {
-                    biomeSet.addAll(com.resourcefulbees.resourcefulbees.registry.BiomeDictionary.TYPES.get(s));
+                if (com.resourcefulbees.resourcefulbees.registry.BiomeDictionary.getTypes().containsKey(s)) {
+                    biomeSet.addAll(com.resourcefulbees.resourcefulbees.registry.BiomeDictionary.getTypes().get(s));
                 }
             });
         }
@@ -223,9 +232,10 @@ public class BeeInfoUtils {
     public static void flagBeesInRange(BlockPos pos, World world) {
         MutableBoundingBox box = MutableBoundingBox.createProper(pos.getX() + 10, pos.getY() + 10, pos.getZ() + 10, pos.getX() - 10, pos.getY() - 10, pos.getZ() - 10);
         AxisAlignedBB aabb = AxisAlignedBB.func_216363_a(box);
-        assert world != null;
-        List<CustomBeeEntity> list = world.getEntitiesWithinAABB(CustomBeeEntity.class, aabb);
-        list.forEach(customBeeEntity -> customBeeEntity.setHasHiveInRange(true));
+        if (world != null) {
+            List<CustomBeeEntity> list = world.getEntitiesWithinAABB(CustomBeeEntity.class, aabb);
+            list.forEach(customBeeEntity -> customBeeEntity.setHasHiveInRange(true));
+        }
     }
 
     public static List<String> getLoreLines(CompoundNBT outputNBT) {

@@ -245,7 +245,8 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
             TextureAtlasSprite fluidSprite = RenderUtils.getStillFluidTexture(fluidStack);
             int scale = getScaledFluidAmount(tank);
             Color color = new Color(fluidStack.getFluid().getAttributes().getColor(fluidStack));
-            RenderSystem.color4f(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+            //noinspection deprecation
+            RenderSystem.color4f(color.getR(), color.getG(), color.getB(), color.getAlpha());
             RenderUtils.drawTiledSprite(matrix, x + 1, y + 1, 52, 16, scale, fluidSprite, 16, 16, getZOffset());
             RenderUtils.resetColor();
         }

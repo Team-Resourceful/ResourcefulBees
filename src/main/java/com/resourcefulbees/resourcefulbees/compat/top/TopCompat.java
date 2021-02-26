@@ -55,7 +55,7 @@ public class TopCompat implements Function<ITheOneProbe, Void>
                     if (beehiveTileEntity.hasCombs()) {
                         List<ItemStack> combs = new ArrayList<>();
 
-                        beehiveTileEntity.honeycombs.iterator().forEachRemaining(honeycomb -> {
+                        beehiveTileEntity.getHoneycombs().iterator().forEachRemaining(honeycomb -> {
                             Iterator<ItemStack> iterator = combs.iterator();
                             while (iterator.hasNext() && !honeycomb.isEmpty()) {
                                 ItemStack stackInList = iterator.next();

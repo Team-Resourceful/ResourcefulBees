@@ -9,6 +9,8 @@ import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nonnull;
 
+import net.minecraft.client.gui.widget.button.Button.IPressable;
+
 public class TabImageButton extends ImageButton {
 
     protected final ResourceLocation resourceLocation;

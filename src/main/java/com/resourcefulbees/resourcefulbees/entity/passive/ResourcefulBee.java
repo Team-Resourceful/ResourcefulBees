@@ -9,6 +9,7 @@ import com.resourcefulbees.resourcefulbees.api.beedata.mutation.outputs.ItemOutp
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.effects.ModEffects;
 import com.resourcefulbees.resourcefulbees.entity.goals.*;
+import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.lib.TraitConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.ModPOIs;
@@ -240,7 +241,6 @@ public class ResourcefulBee extends CustomBeeEntity {
         }
     }
 
-
     private AxisAlignedBB getMutationBoundingBox() {
         return getBoundingBox().expand(new Vector3d(0, -2, 0));
     }
@@ -428,6 +428,18 @@ public class ResourcefulBee extends CustomBeeEntity {
             this.world.addEntity(areaeffectcloudentity);
         }
 
+    }
+
+    @Override
+    public void readAdditional(@NotNull CompoundNBT compound) {
+        super.readAdditional(compound);
+        this.numberOfMutations = compound.getInt(NBTConstants.NBT_MUTATION_COUNT);
+    }
+
+    @Override
+    public void writeAdditional(@NotNull CompoundNBT compound) {
+        super.writeAdditional(compound);
+        compound.putInt(NBTConstants.NBT_MUTATION_COUNT, this.numberOfMutations);
     }
 
     public class EnterBeehiveGoal2 extends BeeEntity.EnterBeehiveGoal {

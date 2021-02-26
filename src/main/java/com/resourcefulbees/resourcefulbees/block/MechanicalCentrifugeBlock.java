@@ -59,7 +59,7 @@ public class MechanicalCentrifugeBlock extends Block {
             if (player.isSneaking() && !(player instanceof FakePlayer)) {
                 if (tile != null && tile.canProcess(tile.getRecipe())) {
                     player.addExhaustion(Config.PLAYER_EXHAUSTION.get().floatValue());
-                    tile.clicks++;
+                    tile.setClicks(tile.getClicks() + 1);
                     if (state.get(PROPERTY_ROTATION) == 7)
                         world.playSound(null, pos, SoundEvents.ITEM_LODESTONE_COMPASS_LOCK, SoundCategory.BLOCKS, 0.5F, 0.1F);
                     world.playSound(null, pos, SoundEvents.BLOCK_FENCE_GATE_CLOSE, SoundCategory.BLOCKS, 0.5F, 0.1F);
@@ -83,7 +83,7 @@ public class MechanicalCentrifugeBlock extends Block {
         TileEntity blockEntity = world.getTileEntity(pos);
         if (blockEntity instanceof MechanicalCentrifugeTileEntity && state.getBlock() != state1.getBlock()) {
             MechanicalCentrifugeTileEntity centrifugeTileEntity = (MechanicalCentrifugeTileEntity) blockEntity;
-            ItemStackHandler h = centrifugeTileEntity.h;
+            ItemStackHandler h = centrifugeTileEntity.getItemStackHandler();
             IntStream.range(0, h.getSlots()).mapToObj(h::getStackInSlot).filter(s -> !s.isEmpty()).forEach(stack -> InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack));
         }
         super.onReplaced(state1, world, pos, state, isMoving);

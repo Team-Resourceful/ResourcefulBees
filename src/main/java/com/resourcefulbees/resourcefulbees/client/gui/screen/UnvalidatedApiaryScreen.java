@@ -98,8 +98,8 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
         verticalOffset = MathUtils.clamp(verticalOffset, -1, 2);
         horizontalOffset = MathUtils.clamp(horizontalOffset, -2, 2);
 
-        apiaryTileEntity.verticalOffset = verticalOffset;
-        apiaryTileEntity.horizontalOffset = horizontalOffset;
+        apiaryTileEntity.setVerticalOffset(verticalOffset);
+        apiaryTileEntity.setHorizontalOffset(horizontalOffset);
     }
 
     private void build() {

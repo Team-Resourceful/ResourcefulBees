@@ -28,15 +28,15 @@ public final class MathUtils {
     }
 
     public static double clamp(double value, double lowerBound, double upperBound) {
-        return value < lowerBound ? lowerBound : value > upperBound ? upperBound : value;
+        return Math.max(lowerBound, Math.min(value, upperBound));  //edited by resourceful bees
     }
 
     public static float clamp(float value, float lowerBound, float upperBound) {
-        return value < lowerBound ? lowerBound : value > upperBound ? upperBound : value;
+        return Math.max(lowerBound, Math.min(value, upperBound));  //edited by resourceful bees
     }
 
     public static int clamp(int value, int lowerBound, int upperBound) {
-        return value < lowerBound ? lowerBound : value > upperBound ? upperBound : value;
+        return Math.max(lowerBound, Math.min(value, upperBound));  //edited by resourceful bees
     }
 
     /**
@@ -88,8 +88,8 @@ public final class MathUtils {
     }
 
     public static int min(final int a, final int b) {
-        return a < b ? a : b;
-    }
+        return Math.min(a, b);
+    } //edited by resourceful bees
 
     public static int min(int a, final int b, final int c) {
         if (b < a) a = b;
@@ -113,8 +113,8 @@ public final class MathUtils {
     }
 
     public static int max(final int a, final int b) {
-        return a > b ? a : b;
-    }
+        return Math.max(a, b);
+    } //edited by resourceful bees
 
     public static int max(int a, final int b, final int c) {
         if (b > a) a = b;

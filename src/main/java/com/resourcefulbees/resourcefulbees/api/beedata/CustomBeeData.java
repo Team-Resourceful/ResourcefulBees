@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Locale;
 import java.util.function.Supplier;
 
 public class CustomBeeData extends AbstractBeeData {
@@ -188,7 +189,7 @@ public class CustomBeeData extends AbstractBeeData {
     }
 
     public String getFlower() {
-        return flower == null ? BeeConstants.FLOWER_TAG_ALL : flower.toLowerCase();
+        return flower == null ? BeeConstants.FLOWER_TAG_ALL : flower.toLowerCase(Locale.ENGLISH);
     }
 
     public ResourceLocation getEntityFlower() {
@@ -237,7 +238,7 @@ public class CustomBeeData extends AbstractBeeData {
     }
 
     public String getBaseLayerTexture() {
-        return baseLayerTexture == null ? "custom/bee" : baseLayerTexture.toLowerCase();
+        return baseLayerTexture == null ? "custom/bee" : baseLayerTexture.toLowerCase(Locale.ENGLISH);
     }
 
     public int getMaxTimeInHive() {
@@ -285,7 +286,7 @@ public class CustomBeeData extends AbstractBeeData {
     }
 
     public void setName(String name) {
-        this.name = this.name == null ? name.toLowerCase() : this.name;
+        this.name = this.name == null ? name : this.name;
     }
 
     public float getSizeModifier() {
@@ -301,7 +302,7 @@ public class CustomBeeData extends AbstractBeeData {
     }
 
     public String getName() {
-        return name.toLowerCase();
+        return this.name;
     }
 
     public void addData(String key, AbstractBeeData data) {

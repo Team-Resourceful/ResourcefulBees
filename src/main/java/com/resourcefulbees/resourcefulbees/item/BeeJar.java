@@ -128,7 +128,7 @@ public class BeeJar extends Item {
     public static void fillJar(ItemStack stack, CustomBeeData beeData) {
         EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(beeData.getEntityTypeRegistryID());
         World world = Minecraft.getInstance().world;
-        if (world == null) return;
+        if (world == null || entityType == null) return;
         Entity entity = entityType.create(world);
         if (entity instanceof BeeEntity) {
             stack.setTag(createTag((BeeEntity) entity));
@@ -157,8 +157,8 @@ public class BeeJar extends Item {
             if (tag.contains(NBTConstants.NBT_BEE_TYPE)) {
                 String rbType = tag.getString(NBTConstants.NBT_BEE_TYPE);
                 tooltip.add(new StringTextComponent(I18n.format(ResourcefulBees.MOD_ID + ".information.bee_type.custom")
-                        + (I18n.hasKey("entity.resourcefulbees." + rbType.toLowerCase()) ? I18n.format("entity.resourcefulbees."
-                        + rbType.toLowerCase()) : WordUtils.capitalize(rbType.replace("_", " ")))).formatted(TextFormatting.WHITE));
+                        + (I18n.hasKey("entity.resourcefulbees." + rbType) ? I18n.format("entity.resourcefulbees."
+                        + rbType) : WordUtils.capitalize(rbType.replace("_", " ")))).formatted(TextFormatting.WHITE));
             } else if (type.equals(BeeConstants.VANILLA_BEE_ID)) {
                 tooltip.add(new TranslationTextComponent(ResourcefulBees.MOD_ID + ".information.bee_type.vanilla").formatted(TextFormatting.WHITE));
             } else {

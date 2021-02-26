@@ -2,6 +2,7 @@ package com.resourcefulbees.resourcefulbees.registry;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.ITraitRegistry;
+import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.data.BeeTrait;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.TraitConstants;
@@ -35,16 +36,12 @@ public class TraitRegistry implements ITraitRegistry {
      * @return Returns false if trait already exists in the registry.
      */
     public boolean register(String name, BeeTrait data) {
-        if (!closed) {
-            if (!TRAIT_REGISTRY.containsKey(name)) {
-                TRAIT_REGISTRY.put(name, data);
-                return true;
-            }
-            ResourcefulBees.LOGGER.error("Trait already Registered with that name: {}", name);
-            return false;
+        if (closed || TRAIT_REGISTRY.containsKey(name)) {
+                ResourcefulBees.LOGGER.error("Trait is already registered or registration is closed: {}", name);
+                return false;
         }
-        ResourcefulBees.LOGGER.warn("Trait Registration closed, trait not registered: {}", name);
-        return false;
+        TRAIT_REGISTRY.put(name, data);
+        return true;
     }
 
     /**
@@ -90,21 +87,20 @@ public class TraitRegistry implements ITraitRegistry {
     }
 
     public static void applyBeeTraits() {
-        BeeRegistry.getRegistry().getBees().forEach(((s, beeData) -> {
-            if (beeData.hasTraitNames()) {
-                for (String traitString : beeData.getTraitNames()) {
-                    BeeTrait trait = getRegistry().getTrait(traitString);
-                    if (trait != null) {
-                        if (beeData.getTraitData().hasTraits()) {
-                            beeData.getTraitData().addTrait(trait);
-                        } else {
-                            ResourcefulBees.LOGGER.warn("Traits provided but TraitData object does not exist or does not contain \"hasTraits: true\" for '{}'", s);
-                        }
-                    } else {
-                        ResourcefulBees.LOGGER.warn("Trait '{}' given to '{}' does not exist in trait registry.", traitString, s);
-                    }
-                }
-            }
-        }));
+        BeeRegistry.getRegistry().getBees().values().stream()
+                .filter(CustomBeeData::hasTraitNames)
+                .forEach((customBeeData -> Arrays.stream(customBeeData.getTraitNames())
+                        .forEach(traitString -> {
+                                BeeTrait trait = getRegistry().getTrait(traitString);
+                                if (trait != null) {
+                                    if (customBeeData.getTraitData().hasTraits()) {
+                                        customBeeData.getTraitData().addTrait(trait);
+                                    } else {
+                                        ResourcefulBees.LOGGER.warn("Traits provided but TraitData object does not exist or does not contain \"hasTraits: true\" for '{}'", customBeeData.getName());
+                                    }
+                                } else {
+                                    ResourcefulBees.LOGGER.warn("Trait '{}' given to '{}' does not exist in trait registry.", traitString, customBeeData.getName());
+                                }
+                })));
     }
 }

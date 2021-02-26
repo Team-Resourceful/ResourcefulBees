@@ -6,8 +6,8 @@ import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.container.AutomationSensitiveItemStackHandler;
 import com.resourcefulbees.resourcefulbees.container.HoneyGeneratorContainer;
 import com.resourcefulbees.resourcefulbees.item.CustomHoneyBottleItem;
-import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
+import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
 import com.resourcefulbees.resourcefulbees.network.packets.SyncGUIMessage;
 import com.resourcefulbees.resourcefulbees.registry.ModFluids;
@@ -67,21 +67,21 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
     public static final int MAX_TANK_STORAGE = Config.MAX_TANK_STORAGE.get();
 
     private static Predicate<FluidStack> honeyFluidPredicate() {
-        return fluidStack -> fluidStack.getFluid().isIn(BeeInfoUtils.getFluidTag("forge:honey"));
+        return fluidStack -> fluidStack.getFluid().isIn(HONEY_FLUID_TAG);
     }
 
-    public HoneyGeneratorTileEntity.TileStackHandler h = new HoneyGeneratorTileEntity.TileStackHandler(5, getAcceptor(), getRemover());
+    private final HoneyGeneratorTileEntity.TileStackHandler tileStackHandler = new HoneyGeneratorTileEntity.TileStackHandler(5, getAcceptor(), getRemover());
     public final InternalFluidTank fluidTank = new InternalFluidTank(MAX_TANK_STORAGE, honeyFluidPredicate());
     public final CustomEnergyStorage energyStorage = createEnergy();
     private final LazyOptional<IFluidHandler> fluidOptional = LazyOptional.of(() -> fluidTank);
-    private final LazyOptional<IItemHandler> lazyOptional = LazyOptional.of(() -> h);
+    private final LazyOptional<IItemHandler> lazyOptional = LazyOptional.of(this::getTileStackHandler);
     private final LazyOptional<IEnergyStorage> energyOptional = LazyOptional.of(() -> energyStorage);
 
-    public static ITag<Fluid> honeyFluidTag = BeeInfoUtils.getFluidTag("forge:honey");
-    public static ITag<Item> honeyBottleTag = BeeInfoUtils.getItemTag("forge:honey_bottle");
+    public static final ITag<Fluid> HONEY_FLUID_TAG = BeeInfoUtils.getFluidTag("forge:honey");
+    public static final ITag<Item> HONEY_BOTTLE_TAG = BeeInfoUtils.getItemTag("forge:honey_bottle");
 
-    public int fluidFilled;
-    public int energyFilled;
+    private int fluidFilled;
+    private int energyFilled;
     private boolean isProcessing;
     private boolean dirty;
 
@@ -137,8 +137,8 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
     }
 
     private boolean canStartFluidProcess() {
-        ItemStack stack = h.getStackInSlot(HONEY_BOTTLE_INPUT);
-        ItemStack output = h.getStackInSlot(BOTTLE_OUTPUT);
+        ItemStack stack = getTileStackHandler().getStackInSlot(HONEY_BOTTLE_INPUT);
+        ItemStack output = getTileStackHandler().getStackInSlot(BOTTLE_OUTPUT);
 
         boolean stackValid = false;
         boolean isBucket = false;
@@ -147,10 +147,10 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
         if (!stack.isEmpty()) {
             if (stack.getItem() instanceof BucketItem) {
                 BucketItem bucket = (BucketItem) stack.getItem();
-                stackValid = bucket.getFluid().isIn(honeyFluidTag);
+                stackValid = bucket.getFluid().isIn(HONEY_FLUID_TAG);
                 isBucket = true;
             } else {
-                stackValid = stack.getItem().isIn(honeyBottleTag);
+                stackValid = stack.getItem().isIn(HONEY_BOTTLE_TAG);
             }
         }
         if (!output.isEmpty()) {
@@ -169,14 +169,14 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
 
     private void processFluid() {
         if (canProcessFluid()) {
-            ItemStack stack = h.getStackInSlot(HONEY_BOTTLE_INPUT);
-            ItemStack output = h.getStackInSlot(BOTTLE_OUTPUT);
+            ItemStack stack = getTileStackHandler().getStackInSlot(HONEY_BOTTLE_INPUT);
+            ItemStack output = getTileStackHandler().getStackInSlot(BOTTLE_OUTPUT);
             if (stack.getItem() instanceof BucketItem) {
                 BucketItem bucket = (BucketItem) stack.getItem();
                 fluidTank.fill(new FluidStack(bucket.getFluid(), 1000), IFluidHandler.FluidAction.EXECUTE);
                 stack.shrink(1);
                 if (output.isEmpty()) {
-                    h.setStackInSlot(BOTTLE_OUTPUT, new ItemStack(Items.BUCKET));
+                    getTileStackHandler().setStackInSlot(BOTTLE_OUTPUT, new ItemStack(Items.BUCKET));
                 } else {
                     output.grow(1);
                 }
@@ -194,7 +194,7 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
                 }
                 stack.shrink(1);
                 if (output.isEmpty()) {
-                    h.setStackInSlot(BOTTLE_OUTPUT, new ItemStack(Items.GLASS_BOTTLE));
+                    getTileStackHandler().setStackInSlot(BOTTLE_OUTPUT, new ItemStack(Items.GLASS_BOTTLE));
                 } else {
                     output.grow(1);
                 }
@@ -205,7 +205,7 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
 
     private boolean canProcessFluid() {
         boolean spaceLeft;
-        ItemStack stack = h.getStackInSlot(HONEY_BOTTLE_INPUT);
+        ItemStack stack = getTileStackHandler().getStackInSlot(HONEY_BOTTLE_INPUT);
         Fluid fluid = ModFluids.HONEY_STILL.get();
         if (stack.getItem() instanceof BucketItem) {
             BucketItem item = (BucketItem) stack.getItem();
@@ -230,10 +230,9 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
     private void processEnergy() {
         if (this.canProcessEnergy()) {
             fluidTank.drain(HONEY_DRAIN_AMOUNT, IFluidHandler.FluidAction.EXECUTE);
-            //energyStorage.receiveEnergy(ENERGY_FILL_AMOUNT, true);
             energyStorage.addEnergy(ENERGY_FILL_AMOUNT);
-            energyFilled += ENERGY_FILL_AMOUNT;
-            if (energyFilled >= ENERGY_FILL_AMOUNT) energyFilled = 0;
+            setEnergyFilled(getEnergyFilled() + ENERGY_FILL_AMOUNT);
+            if (getEnergyFilled() >= ENERGY_FILL_AMOUNT) setEnergyFilled(0);
             assert world != null : "World is null?";
             world.setBlockState(pos, getBlockState().with(HoneyGenerator.PROPERTY_ON, true));
             this.dirty = true;
@@ -259,25 +258,25 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
     @Nonnull
     @Override
     public CompoundNBT write(CompoundNBT tag) {
-        CompoundNBT inv = this.h.serializeNBT();
-        tag.put("inv", inv);
-        tag.put("energy", energyStorage.serializeNBT());
-        tag.putInt("energyFilled", energyFilled);
-        tag.put("fluid", fluidTank.writeToNBT(new CompoundNBT()));
-        tag.putInt("bottleFilled", fluidFilled);
-        tag.putBoolean("isProcessing", isProcessing);
+        CompoundNBT inv = this.getTileStackHandler().serializeNBT();
+        tag.put(NBTConstants.NBT_INVENTORY, inv);
+        tag.put(NBTConstants.NBT_ENERGY, energyStorage.serializeNBT());
+        tag.put(NBTConstants.NBT_FLUID, fluidTank.writeToNBT(new CompoundNBT()));
+        tag.putInt(NBTConstants.NBT_ENERGY_FILLED, getEnergyFilled());
+        tag.putInt(NBTConstants.NBT_FLUID_FILLED, getFluidFilled());
+        tag.putBoolean(NBTConstants.NBT_IS_PROCESSING, isProcessing);
         return super.write(tag);
     } //TODO 1.17 - change "fluid" to tank
 
     @Override
     public void fromTag(@Nonnull BlockState state, CompoundNBT tag) {
-        CompoundNBT invTag = tag.getCompound("inv");
-        h.deserializeNBT(invTag);
-        energyStorage.deserializeNBT(tag.getCompound("energy"));
-        fluidTank.readFromNBT(tag.getCompound("fluid"));
-        if (tag.contains("energyFilled")) energyFilled = tag.getInt("energyFilled");
-        if (tag.contains("fluidFilled")) fluidFilled = tag.getInt("fluidFilled");
-        if (tag.contains("isProcessing")) isProcessing = tag.getBoolean("isProcessing");
+        CompoundNBT invTag = tag.getCompound(NBTConstants.NBT_INVENTORY);
+        getTileStackHandler().deserializeNBT(invTag);
+        energyStorage.deserializeNBT(tag.getCompound(NBTConstants.NBT_ENERGY));
+        fluidTank.readFromNBT(tag.getCompound(NBTConstants.NBT_FLUID));
+        if (tag.contains(NBTConstants.NBT_ENERGY_FILLED)) setEnergyFilled(tag.getInt(NBTConstants.NBT_ENERGY_FILLED));
+        if (tag.contains(NBTConstants.NBT_FLUID_FILLED)) setFluidFilled(tag.getInt(NBTConstants.NBT_FLUID_FILLED));
+        if (tag.contains(NBTConstants.NBT_IS_PROCESSING)) isProcessing = tag.getBoolean(NBTConstants.NBT_IS_PROCESSING);
         super.fromTag(state, tag);
     }
 
@@ -359,6 +358,26 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
         return (int) Math.ceil(fillPercentage * 100);
     }
 
+    public @NotNull TileStackHandler getTileStackHandler() {
+        return tileStackHandler;
+    }
+
+    public int getFluidFilled() {
+        return fluidFilled;
+    }
+
+    public void setFluidFilled(int fluidFilled) {
+        this.fluidFilled = fluidFilled;
+    }
+
+    public int getEnergyFilled() {
+        return energyFilled;
+    }
+
+    public void setEnergyFilled(int energyFilled) {
+        this.energyFilled = energyFilled;
+    }
+
     public class TileStackHandler extends AutomationSensitiveItemStackHandler {
         protected TileStackHandler(int slots, IAcceptor acceptor, IRemover remover) {
             super(slots, acceptor, remover);
@@ -368,9 +387,9 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
         public boolean isItemValid(int slot, @NotNull ItemStack stack) {
             if (stack.getItem() instanceof BucketItem) {
                 BucketItem bucket = (BucketItem) stack.getItem();
-                return bucket.getFluid().isIn(honeyFluidTag);
+                return bucket.getFluid().isIn(HONEY_FLUID_TAG);
             } else {
-                return stack.getItem().isIn(honeyBottleTag);
+                return stack.getItem().isIn(HONEY_BOTTLE_TAG);
             }
         }
 

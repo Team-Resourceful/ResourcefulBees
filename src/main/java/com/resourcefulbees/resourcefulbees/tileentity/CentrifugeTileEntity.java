@@ -161,7 +161,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
         if (recipes.get(i) != null) {
             if (inventoryHasSpace(recipes.get(i))) {
                 consumeInput(i);
-                ItemStack glass_bottle = itemStackHandler.getStackInSlot(BOTTLE_SLOT);
+                ItemStack glassBottle = itemStackHandler.getStackInSlot(BOTTLE_SLOT);
                 List<ItemStack> depositStacks = new ArrayList<>();
                 if (world != null) {
                     for (int j = 0; j < 3; j++) {
@@ -193,18 +193,20 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
                                 }
                                 break;
                             case 2:
-                                if (glass_bottle.isEmpty() || glass_bottle.getCount() < recipes.get(i).itemOutputs.get(j).getLeft().getCount()) {
+                                if (glassBottle.isEmpty() || glassBottle.getCount() < recipes.get(i).itemOutputs.get(j).getLeft().getCount()) {
                                     fluidTanks.fill(0, new FluidStack(ModFluids.HONEY_STILL.get(), ModConstants.HONEY_PER_BOTTLE), MultiFluidTank.FluidAction.EXECUTE);
                                     depositStacks.add(ItemStack.EMPTY);
                                 } else {
                                     chance = recipes.get(i).itemOutputs.get(j).getRight();
                                     if (chance >= nextFloat) {
-                                        glass_bottle.shrink(recipes.get(i).itemOutputs.get(j).getLeft().getCount());
+                                        glassBottle.shrink(recipes.get(i).itemOutputs.get(j).getLeft().getCount());
                                         depositStacks.add(recipes.get(i).itemOutputs.get(j).getLeft().copy());
                                     } else {
                                         depositStacks.add(ItemStack.EMPTY);
                                     }
                                 }
+                                break;
+                            default: //do nothing
                         }
                     }
                     if (!depositStacks.isEmpty()) {
@@ -237,14 +239,12 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
     }
 
     protected boolean canStartCentrifugeProcess(int i) {
-        if (!isProcessing[i] && !itemStackHandler.getStackInSlot(honeycombSlots[i]).isEmpty()) {
-            if (canProcessRecipe(i)) {
-                ItemStack combInput = itemStackHandler.getStackInSlot(honeycombSlots[i]);
-                JsonElement count = recipes.get(i).ingredient.serialize().getAsJsonObject().get(BeeConstants.INGREDIENT_COUNT);
-                int inputAmount = count != null ? count.getAsInt() : 1;
+        if (!isProcessing[i] && !itemStackHandler.getStackInSlot(honeycombSlots[i]).isEmpty() && canProcessRecipe(i)) {
+            ItemStack combInput = itemStackHandler.getStackInSlot(honeycombSlots[i]);
+            JsonElement count = recipes.get(i).ingredient.serialize().getAsJsonObject().get(BeeConstants.INGREDIENT_COUNT);
+            int inputAmount = count != null ? count.getAsInt() : 1;
 
-                return combInput.getCount() >= inputAmount ;
-            }
+            return combInput.getCount() >= inputAmount ;
         }
         return false;
     }
@@ -260,18 +260,17 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
 
     public CentrifugeRecipe getRecipe(int i) {
         ItemStack input = itemStackHandler.getStackInSlot(honeycombSlots[i]);
-        if (input.isEmpty() || input == failedMatch) return null;
-        if (world != null)
-            if (this.recipes.get(i) != null && this.recipes.get(i).matches(new RecipeWrapper(itemStackHandler), world)) return this.recipes.get(i);
-            else {
-                Inventory recipeInv = new Inventory(input);
-                CentrifugeRecipe rec = world.getRecipeManager().getRecipe(CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE, recipeInv, this.world).orElse(null);
-                if (rec == null) failedMatch = input;
-                else failedMatch = ItemStack.EMPTY;
-                this.recipes.set(i, rec);
-                return this.recipes.get(i);
-            }
-        return null;
+        if (input.isEmpty() || input == failedMatch || world == null) {
+            return null;
+        }
+        if (this.recipes.get(i) == null || !this.recipes.get(i).matches(new RecipeWrapper(itemStackHandler), world)) {
+            Inventory recipeInv = new Inventory(input);
+            CentrifugeRecipe rec = world.getRecipeManager().getRecipe(CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE, recipeInv, this.world).orElse(null);
+            if (rec == null) failedMatch = input;
+            else failedMatch = ItemStack.EMPTY;
+            this.recipes.set(i, rec);
+        }
+        return this.recipes.get(i);
     }
 
     public int getProcessTime(int i) { return time[i]; }

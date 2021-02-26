@@ -12,6 +12,8 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
+import net.minecraft.item.Item.Properties;
+
 public class Pollen extends Item {
 
     public CompoundNBT getPollenData() {

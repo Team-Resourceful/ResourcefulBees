@@ -9,7 +9,6 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -28,13 +27,15 @@ public class HoneyGeneratorContainer extends Container {
         this.player = inv.player;
         honeyGeneratorTileEntity = (HoneyGeneratorTileEntity) world.getTileEntity(pos);
 
-        if (honeyGeneratorTileEntity != null) {
-            this.addSlot(new SlotItemHandlerUnconditioned(honeyGeneratorTileEntity.h, HoneyGeneratorTileEntity.HONEY_BOTTLE_INPUT, 36, 20) {
+        if (getHoneyGeneratorTileEntity() != null) {
+            this.addSlot(new SlotItemHandlerUnconditioned(getHoneyGeneratorTileEntity().getTileStackHandler(), HoneyGeneratorTileEntity.HONEY_BOTTLE_INPUT, 36, 20) {
+
+                @Override
                 public boolean isItemValid(ItemStack stack) {
-                    return honeyGeneratorTileEntity.h.isItemValid(HoneyGeneratorTileEntity.HONEY_BOTTLE_INPUT, stack);
+                    return getHoneyGeneratorTileEntity().getTileStackHandler().isItemValid(HoneyGeneratorTileEntity.HONEY_BOTTLE_INPUT, stack);
                 }
             });
-            this.addSlot(new OutputSlot(honeyGeneratorTileEntity.h, HoneyGeneratorTileEntity.BOTTLE_OUTPUT, 36, 58));
+            this.addSlot(new OutputSlot(getHoneyGeneratorTileEntity().getTileStackHandler(), HoneyGeneratorTileEntity.BOTTLE_OUTPUT, 36, 58));
 
             for (int i = 0; i < 3; ++i) {
                 for (int j = 0; j < 9; ++j) {
@@ -56,9 +57,9 @@ public class HoneyGeneratorContainer extends Container {
 
     public int getMaxFluid() { return honeyGeneratorTileEntity.fluidTank.getCapacity(); }
 
-    public int getTime() { return honeyGeneratorTileEntity.fluidFilled; }
+    public int getTime() { return getHoneyGeneratorTileEntity().getFluidFilled(); }
 
-    public int getEnergyTime() { return honeyGeneratorTileEntity.energyFilled; }
+    public int getEnergyTime() { return getHoneyGeneratorTileEntity().getEnergyFilled(); }
 
     @Override
     public boolean canInteractWith(@Nonnull PlayerEntity player) {

@@ -26,6 +26,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
 import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -42,12 +43,12 @@ public class MechanicalCentrifugeTileEntity extends TileEntity implements ITicka
     public static final int OUTPUT1 = 3;
     public static final int OUTPUT2 = 4;
 
-    public AutomationSensitiveItemStackHandler h = new MechanicalCentrifugeTileEntity.TileStackHandler(5, getAcceptor(), getRemover());
-    private final LazyOptional<IItemHandler> lazyOptional = LazyOptional.of(() -> h);
-    public LazyOptional<IItemHandler> automationHandler = LazyOptional.of(() -> new AutomationSensitiveItemStackHandler(5, AutomationSensitiveItemStackHandler.ACCEPT_FALSE, AutomationSensitiveItemStackHandler.REMOVE_FALSE));
-    public int clicks = 0;
-    public CentrifugeRecipe recipe;
-    public ItemStack failedMatch = ItemStack.EMPTY;
+    private final AutomationSensitiveItemStackHandler itemStackHandler = new MechanicalCentrifugeTileEntity.TileStackHandler(5, getAcceptor(), getRemover());
+    private final LazyOptional<IItemHandler> lazyOptional = LazyOptional.of(this::getItemStackHandler);
+    private final LazyOptional<IItemHandler> automationHandler = LazyOptional.of(() -> new AutomationSensitiveItemStackHandler(5, AutomationSensitiveItemStackHandler.ACCEPT_FALSE, AutomationSensitiveItemStackHandler.REMOVE_FALSE));
+    private int clicks;
+    private CentrifugeRecipe recipe;
+    private ItemStack failedMatch = ItemStack.EMPTY;
 
     public MechanicalCentrifugeTileEntity() {
         super(ModTileEntityTypes.MECHANICAL_CENTRIFUGE_ENTITY.get());
@@ -59,19 +60,19 @@ public class MechanicalCentrifugeTileEntity extends TileEntity implements ITicka
         if (world != null && !world.isRemote) {
             boolean dirty = false;
             CentrifugeRecipe irecipe = getRecipe();
-            if (!h.getStackInSlot(HONEYCOMB_SLOT).isEmpty() && !h.getStackInSlot(BOTTLE_SLOT).isEmpty()) {
+            if (!getItemStackHandler().getStackInSlot(HONEYCOMB_SLOT).isEmpty() && !getItemStackHandler().getStackInSlot(BOTTLE_SLOT).isEmpty()) {
                 if (this.canProcess(irecipe)) {
-                    if (this.clicks > 0)
+                    if (this.getClicks() > 0)
                         world.setBlockState(pos,getBlockState().with(MechanicalCentrifugeBlock.PROPERTY_ON,true));
-                    if (this.clicks >= 8) {
-                        this.clicks = 0;
+                    if (this.getClicks() >= 8) {
+                        this.setClicks(0);
                         this.processItem(irecipe);
                         dirty = true;
                         world.setBlockState(pos,getBlockState().with(MechanicalCentrifugeBlock.PROPERTY_ON,false));
                     }
                 }
             } else {
-                clicks = 0;
+                setClicks(0);
                 world.setBlockState(pos,getBlockState().with(MechanicalCentrifugeBlock.PROPERTY_ON,false));
             }
             if (dirty) {
@@ -83,31 +84,35 @@ public class MechanicalCentrifugeTileEntity extends TileEntity implements ITicka
     public boolean canProcess(@Nullable CentrifugeRecipe recipe) {
         if (recipe != null && !recipe.multiblock) {
             List<Pair<ItemStack, Float>> outputs = recipe.itemOutputs;
-            ItemStack glass_bottle = h.getStackInSlot(BOTTLE_SLOT);
-            ItemStack combs = h.getStackInSlot(HONEYCOMB_SLOT);
+            ItemStack glassBottle = getItemStackHandler().getStackInSlot(BOTTLE_SLOT);
+            ItemStack combs = getItemStackHandler().getStackInSlot(HONEYCOMB_SLOT);
             JsonElement count = recipe.ingredient.serialize().getAsJsonObject().get(BeeConstants.INGREDIENT_COUNT);
             int inputAmount = count !=null ? count.getAsInt() : 1;
             List<ItemStack> outputSlots = new ArrayList<>(
                     Arrays.asList(
-                            h.getStackInSlot(OUTPUT1),
-                            h.getStackInSlot(OUTPUT2),
-                            h.getStackInSlot(HONEY_BOTTLE)
+                            getItemStackHandler().getStackInSlot(OUTPUT1),
+                            getItemStackHandler().getStackInSlot(OUTPUT2),
+                            getItemStackHandler().getStackInSlot(HONEY_BOTTLE)
                     )
             );
             int processScore = 0;
-            if (outputSlots.get(0).isEmpty() && outputSlots.get(1).isEmpty() && outputSlots.get(2).isEmpty() && glass_bottle.getItem() == Items.GLASS_BOTTLE && combs.getCount() >= inputAmount) return true;
+            if (outputSlots.get(0).isEmpty() && outputSlots.get(1).isEmpty() && outputSlots.get(2).isEmpty() && glassBottle.getItem() == Items.GLASS_BOTTLE && combs.getCount() >= inputAmount) return true;
             else {
-                for(int i=0;i<3;i++){
-                    if (outputSlots.get(i).isEmpty()) processScore++;
-                    else if (outputSlots.get(i).getItem() == outputs.get(i).getLeft().getItem()
-                            && outputSlots.get(i).getCount() + outputs.get(i).getLeft().getCount() <= outputSlots.get(i).getMaxStackSize())processScore++;
+                for(int i=0;i<3;i++) {
+                    if (outputSlots.get(i).isEmpty() || (outputSlots.get(i).getItem() == outputs.get(i).getLeft().getItem()
+                            && outputSlots.get(i).getCount() + outputs.get(i).getLeft().getCount() <= outputSlots.get(i).getMaxStackSize())) {
+                        processScore++;
+                    }
                 }
-                if (combs.getCount() >= inputAmount) processScore++;
-                if (processScore == 4 && glass_bottle.getItem() == Items.GLASS_BOTTLE)
+                if (combs.getCount() >= inputAmount) {
+                    processScore++;
+                }
+                if (processScore == 4 && glassBottle.getItem() == Items.GLASS_BOTTLE) {
                     return true;
-                else {
-                    if (world != null)
-                        world.setBlockState(pos,getBlockState().with(MechanicalCentrifugeBlock.PROPERTY_ON,false));
+                } else {
+                    if (world != null) {
+                        world.setBlockState(pos, getBlockState().with(MechanicalCentrifugeBlock.PROPERTY_ON, false));
+                    }
                     return false;
                 }
             }
@@ -119,13 +124,13 @@ public class MechanicalCentrifugeTileEntity extends TileEntity implements ITicka
         if (recipe != null && this.canProcess(recipe)) {
             JsonElement count = recipe.ingredient.serialize().getAsJsonObject().get(BeeConstants.INGREDIENT_COUNT);
             int inputAmount = count !=null ? count.getAsInt() : 1;
-            ItemStack comb = h.getStackInSlot(HONEYCOMB_SLOT);
-            ItemStack glass_bottle = h.getStackInSlot(BOTTLE_SLOT);
+            ItemStack comb = getItemStackHandler().getStackInSlot(HONEYCOMB_SLOT);
+            ItemStack glassBottle = getItemStackHandler().getStackInSlot(BOTTLE_SLOT);
             List<Pair<ItemStack, Integer>> slots = new ArrayList<>(
                     Arrays.asList(
-                            Pair.of(h.getStackInSlot(OUTPUT1),OUTPUT1),
-                            Pair.of(h.getStackInSlot(OUTPUT2),OUTPUT2),
-                            Pair.of(h.getStackInSlot(HONEY_BOTTLE),HONEY_BOTTLE)
+                            Pair.of(getItemStackHandler().getStackInSlot(OUTPUT1),OUTPUT1),
+                            Pair.of(getItemStackHandler().getStackInSlot(OUTPUT2),OUTPUT2),
+                            Pair.of(getItemStackHandler().getStackInSlot(HONEY_BOTTLE),HONEY_BOTTLE)
                     )
             );
             if (world != null)
@@ -133,46 +138,45 @@ public class MechanicalCentrifugeTileEntity extends TileEntity implements ITicka
                     Pair<ItemStack, Float> output = recipe.itemOutputs.get(i);
                     if (output.getRight() >= world.rand.nextDouble()) {
                         if (slots.get(i).getLeft().isEmpty()) {
-                            this.h.setStackInSlot(slots.get(i).getRight(), output.getLeft().copy());
+                            this.getItemStackHandler().setStackInSlot(slots.get(i).getRight(), output.getLeft().copy());
                         } else if (slots.get(i).getLeft().getItem() == output.getLeft().getItem()) {
                             slots.get(i).getLeft().grow(output.getLeft().getCount());
                         }
-                        if (slots.get(i).getRight().equals(HONEY_BOTTLE)) glass_bottle.shrink(1);
+                        if (slots.get(i).getRight().equals(HONEY_BOTTLE)) glassBottle.shrink(1);
                     }
                 }
             comb.shrink(inputAmount);
         }
-        clicks = 0;
+        setClicks(0);
     }
 
     public CentrifugeRecipe getRecipe() {
-        ItemStack input = h.getStackInSlot(HONEYCOMB_SLOT);
-        if (input.isEmpty() || input == failedMatch) return null;
-        if (world != null)
-            if (recipe != null && recipe.matches(new RecipeWrapper(h), world)) return recipe;
-            else {
-                CentrifugeRecipe rec = world.getRecipeManager().getRecipe(CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE, new RecipeWrapper(h), this.world).orElse(null);
-                if (rec == null) failedMatch = input;
-                else failedMatch = ItemStack.EMPTY;
-                return recipe = rec;
-            }
-        return null;
+        ItemStack input = getItemStackHandler().getStackInSlot(HONEYCOMB_SLOT);
+        if (input.isEmpty() || input == getFailedMatch() || world == null) {
+            return null;
+        }
+        if (recipe == null || !recipe.matches(new RecipeWrapper(getItemStackHandler()), world)) {
+            CentrifugeRecipe rec = world.getRecipeManager().getRecipe(CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE, new RecipeWrapper(getItemStackHandler()), this.world).orElse(null);
+            setFailedMatch(rec == null ? input : ItemStack.EMPTY);
+            recipe = rec;
+        }
+        return recipe;
     }
 
     @Nonnull
     @Override
     public CompoundNBT write(CompoundNBT tag) {
-        CompoundNBT inv = this.h.serializeNBT();
+        CompoundNBT inv = this.getItemStackHandler().serializeNBT();
         tag.put("inv", inv);
-        tag.putInt("clicks", clicks);
+        tag.putInt("clicks", getClicks());
         return super.write(tag);
     }
 
     @Override
     public void fromTag(@Nonnull BlockState state, CompoundNBT tag) {
         CompoundNBT invTag = tag.getCompound("inv");
-        h.deserializeNBT(invTag);
-        clicks = tag.getInt("clicks");
+        getItemStackHandler().deserializeNBT(invTag);
+        setClicks(tag.getInt("clicks"));
         super.fromTag(state, tag);
     }
 
@@ -190,7 +194,7 @@ public class MechanicalCentrifugeTileEntity extends TileEntity implements ITicka
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-        if (cap.equals(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)) return automationHandler.cast();
+        if (cap.equals(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)) return getAutomationHandler().cast();
         return super.getCapability(cap, side);
     }
 
@@ -218,6 +222,34 @@ public class MechanicalCentrifugeTileEntity extends TileEntity implements ITicka
     @Override
     public ITextComponent getDisplayName() {
         return new TranslationTextComponent("gui.resourcefulbees.mechanical_centrifuge");
+    }
+
+    public @NotNull AutomationSensitiveItemStackHandler getItemStackHandler() {
+        return itemStackHandler;
+    }
+
+    public LazyOptional<IItemHandler> getAutomationHandler() {
+        return automationHandler;
+    }
+
+    public int getClicks() {
+        return clicks;
+    }
+
+    public void setClicks(int clicks) {
+        this.clicks = clicks;
+    }
+
+    public void setRecipe(CentrifugeRecipe recipe) {
+        this.recipe = recipe;
+    }
+
+    public ItemStack getFailedMatch() {
+        return failedMatch;
+    }
+
+    public void setFailedMatch(ItemStack failedMatch) {
+        this.failedMatch = failedMatch;
     }
 
     protected class TileStackHandler extends AutomationSensitiveItemStackHandler {

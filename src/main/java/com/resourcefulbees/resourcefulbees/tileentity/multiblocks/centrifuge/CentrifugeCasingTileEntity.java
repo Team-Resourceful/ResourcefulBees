@@ -1,5 +1,6 @@
 package com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge;
 
+import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
@@ -63,14 +64,14 @@ public class CentrifugeCasingTileEntity extends TileEntity {
     @Override
     public CompoundNBT write(@Nonnull CompoundNBT tag) {
         if (isLinked())
-            tag.put("controllerPos", NBTUtil.writeBlockPos(controllerPos));
+            tag.put(NBTConstants.NBT_CONTROLLER_POS, NBTUtil.writeBlockPos(controllerPos));
         return super.write(tag);
     }
 
     @Override
     public void fromTag(@Nonnull BlockState state, CompoundNBT tag) {
-        if (tag.contains("controllerPos"))
-            controllerPos = NBTUtil.readBlockPos(tag.getCompound("controllerPos"));
+        if (tag.contains(NBTConstants.NBT_CONTROLLER_POS))
+            controllerPos = NBTUtil.readBlockPos(tag.getCompound(NBTConstants.NBT_CONTROLLER_POS));
         super.fromTag(state, tag);
     }
 

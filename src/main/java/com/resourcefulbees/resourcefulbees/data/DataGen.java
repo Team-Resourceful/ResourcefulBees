@@ -301,7 +301,7 @@ public class DataGen {
         builder.append("{\n");
         builder.append(REPLACE_FALSE);
         builder.append(VALUES);
-        ModEntities.MOD_BEES.forEach(((s, entityTypeRegistryObject) -> {
+        ModEntities.getModBees().forEach(((s, entityTypeRegistryObject) -> {
             builder.append("\"");
             builder.append(entityTypeRegistryObject.getId());
         builder.append(FINAL_COMMA);

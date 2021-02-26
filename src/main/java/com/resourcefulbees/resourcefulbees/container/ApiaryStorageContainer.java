@@ -44,8 +44,10 @@ public class ApiaryStorageContainer extends Container {
     public void setupSlots(boolean rebuild) {
         if (apiaryStorageTileEntity != null) {
             this.inventorySlots.clear();
-            numberOfSlots = apiaryStorageTileEntity.numberOfSlots;
-            this.addSlot(new SlotItemHandlerUnconditioned(apiaryStorageTileEntity.h, ApiaryStorageTileEntity.UPGRADE_SLOT, 7, 18) {
+            numberOfSlots = getApiaryStorageTileEntity().getNumberOfSlots();
+            this.addSlot(new SlotItemHandlerUnconditioned(getApiaryStorageTileEntity().getItemStackHandler(), ApiaryStorageTileEntity.UPGRADE_SLOT, 7, 18) {
+
+                @Override
                 public int getSlotStackLimit() { return 1; }
 
                 public boolean isItemValid(ItemStack stack) { return UpgradeItem.hasUpgradeData(stack) && (UpgradeItem.getUpgradeType(stack).contains(NBTConstants.NBT_STORAGE_UPGRADE)); }
@@ -53,8 +55,8 @@ public class ApiaryStorageContainer extends Container {
                 public boolean canTakeStack(PlayerEntity playerIn) {
                     boolean flag = true;
 
-                    for (int i = 10; i <= numberOfSlots; ++i) {
-                        if (!apiaryStorageTileEntity.h.getStackInSlot(i).isEmpty()) {
+                    for (int i = 10; i <= getNumberOfSlots(); ++i) {
+                        if (!getApiaryStorageTileEntity().getItemStackHandler().getStackInSlot(i).isEmpty()) {
                             flag = false;
                             break;
                         }
@@ -68,14 +70,14 @@ public class ApiaryStorageContainer extends Container {
                 rows = numberOfSlots / 9;
                 for (int r = 0; r < rows; ++r) {
                     for (int c = 0; c < 9; ++c) {
-                        this.addSlot(new OutputSlot(apiaryStorageTileEntity.h, c + r * 9 + 1, 26 + 8 + c * 18, 18 + r * 18));
+                        this.addSlot(new OutputSlot(getApiaryStorageTileEntity().getItemStackHandler(), c + r * 9 + 1, 26 + 8 + c * 18, 18 + r * 18));
                     }
                 }
             } else {
                 rows = 9;
                 for (int r = 0; r < 9; ++r) {
                     for (int c = 0; c < 12; ++c) {
-                        this.addSlot(new OutputSlot(apiaryStorageTileEntity.h, c + r * 12 + 1, 26 + 8 + c * 18, 18 + r * 18));
+                        this.addSlot(new OutputSlot(getApiaryStorageTileEntity().getItemStackHandler(), c + r * 12 + 1, 26 + 8 + c * 18, 18 + r * 18));
                     }
                 }
             }

@@ -1,6 +1,5 @@
 package com.resourcefulbees.resourcefulbees.mixin;
 
-import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.registry.ModPOIs;
 import com.resourcefulbees.resourcefulbees.tileentity.TieredBeehiveTileEntity;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryTileEntity;
@@ -39,10 +38,10 @@ public abstract class MixinBeeEntity extends AnimalEntity {
         super(entityType, world);
     }
 
-    @Shadow(aliases = "field_226369_bI_")
+    @Shadow(aliases = "hivePos")
     public BlockPos hivePos;
 
-    @Shadow(aliases = "func_226409_eA_()Z")
+    @Shadow(aliases = "hasHive()Z")
     public boolean hasHive() {
         return this.hivePos != null;
     }
@@ -56,6 +55,7 @@ public abstract class MixinBeeEntity extends AnimalEntity {
         }
     }
 
+    @Override
     public boolean isInvulnerableTo(@NotNull DamageSource damageSource) {
         if (getActivePotionEffect(Effects.WATER_BREATHING) != null && damageSource == DamageSource.DROWN) {
             return true;
@@ -132,7 +132,7 @@ public abstract class MixinBeeEntity extends AnimalEntity {
     }
 
     @Mixin(BeeEntity.UpdateBeehiveGoal.class)
-    public static abstract class MixinUpdateBeehiveGoal {
+    public abstract static class MixinUpdateBeehiveGoal {
 
         @Shadow(aliases = {"this$0"})
         private BeeEntity beeEntity;
@@ -152,7 +152,7 @@ public abstract class MixinBeeEntity extends AnimalEntity {
     }
 
     @Mixin(BeeEntity.FindBeehiveGoal.class)
-    public static abstract class MixinFindBeehiveGoal {
+    public abstract static class MixinFindBeehiveGoal {
 
         @Shadow(aliases = {"this$0"})
         private BeeEntity beeEntity;

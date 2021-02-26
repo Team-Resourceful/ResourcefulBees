@@ -13,6 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystem;
 import java.nio.file.*;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -52,8 +53,8 @@ public class BiomeDictionarySetup {
         Gson gson = new Gson();
         BiomeDictionary.BiomeType biomeType = gson.fromJson(reader, BiomeDictionary.BiomeType.class);
 
-        for (String biome: biomeType.biomes) {
-            BiomeDictionary.TYPES.computeIfAbsent(name.toLowerCase(), k -> new HashSet<>()).add(new ResourceLocation(biome.toLowerCase()));
+        for (String biome: biomeType.getBiomes()) {
+            BiomeDictionary.getTypes().computeIfAbsent(name.toLowerCase(Locale.ENGLISH), k -> new HashSet<>()).add(new ResourceLocation(biome.toLowerCase(Locale.ENGLISH)));
         }
     }
 

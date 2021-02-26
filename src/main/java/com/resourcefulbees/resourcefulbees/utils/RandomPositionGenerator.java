@@ -1,5 +1,6 @@
 package com.resourcefulbees.resourcefulbees.utils;
 
+import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.pathfinding.PathNodeType;
@@ -17,6 +18,10 @@ import java.util.function.ToDoubleFunction;
 import static com.resourcefulbees.resourcefulbees.utils.MathUtils.HALF_PI;
 
 public class RandomPositionGenerator {
+
+    private RandomPositionGenerator() {
+        throw new IllegalArgumentException(ModConstants.UTILITY_CLASS);
+    }
 
     //TODO clean up unnecessary logic from this class that isn't useful to the bee so it is more optimized and readable.
 
@@ -72,10 +77,10 @@ public class RandomPositionGenerator {
                     //flip a coin heads = check block above is air if so find valid position above else go below
                     if (random.nextBoolean() && bee.world.isAirBlock(bee.getBlockPos().up())) {
                         targetPos = findValidPositionAbove(targetPos, random.nextInt(3) + 1, bee.world.getHeight(),
-                                (pos) -> bee.world.getBlockState(pos).getMaterial().isSolid());
+                                pos -> bee.world.getBlockState(pos).getMaterial().isSolid());
                     } else {
                         targetPos = findValidPositionBelow(targetPos, random.nextInt(3) + 1,
-                                (pos) -> bee.world.getBlockState(pos).getMaterial().isSolid());
+                                pos -> bee.world.getBlockState(pos).getMaterial().isSolid());
                     }
 
                     // if can travel through water or target pos is not tagged as water
@@ -100,25 +105,25 @@ public class RandomPositionGenerator {
         return flag1 ? Vector3d.ofBottomCenter(beePos) : null;
     }
 
-    private static BlockPos getRandomOffset(Random random, int horizontalOffset, int verticalOffset, int minus_two, @Nullable Vector3d directionVec) {
+    private static BlockPos getRandomOffset(Random random, int horizontalOffset, int verticalOffset, int minusTwo, @Nullable Vector3d directionVec) {
         if (directionVec != null) {
             double d3 = MathHelper.atan2(directionVec.z, directionVec.x) - HALF_PI;
             double d4 = d3 + (2 * random.nextFloat() - 1) * HALF_PI;
             double d0 = Math.sqrt(random.nextDouble()) * MathHelper.SQRT_2 * horizontalOffset;
             double d1 = -d0 * Math.sin(d4);
             double d2 = d0 * Math.cos(d4);
-            if (!(Math.abs(d1) > horizontalOffset) && !(Math.abs(d2) > horizontalOffset)) {
+            if ((Math.abs(d1) <= horizontalOffset) && (Math.abs(d2) <= horizontalOffset)) {
                 //9 - 4 - 2  = 3 = -6
                 //15 - 7 - 0 = 8
                 //21 - 10 - 8 = 3 = -18
-                int l = random.nextInt(2 * verticalOffset + 1) - verticalOffset + minus_two;
+                int l = random.nextInt(2 * verticalOffset + 1) - verticalOffset + minusTwo;
                 return new BlockPos(d1, l, d2);
             } else {
                 return null;
             }
         } else {
             int i = random.nextInt(2 * horizontalOffset + 1) - horizontalOffset;
-            int j = random.nextInt(2 * verticalOffset + 1) - verticalOffset + minus_two;
+            int j = random.nextInt(2 * verticalOffset + 1) - verticalOffset + minusTwo;
             int k = random.nextInt(2 * horizontalOffset + 1) - horizontalOffset;
             return new BlockPos(i, j, k);
         }
@@ -132,6 +137,7 @@ public class RandomPositionGenerator {
         } else {
             BlockPos blockpos;
             for(blockpos = blockPos3.up(); blockpos.getY() < worldHeight && posPredicate.test(blockpos); blockpos = blockpos.up()) {
+                //do nothing
             }
 
             BlockPos blockpos1;
@@ -155,6 +161,7 @@ public class RandomPositionGenerator {
         } else {
             BlockPos blockpos;
             for(blockpos = blockPos3.down(); blockpos.getY() > 0 && posPredicate.test(blockpos); blockpos = blockpos.down()) {
+                //do nothing
             }
 
             BlockPos blockpos1;

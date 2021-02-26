@@ -37,7 +37,7 @@ public class UpdateClientApiaryMessage {
                     TileEntity tileEntity = player.world.getTileEntity(message.pos);
                     if (tileEntity instanceof ApiaryTileEntity) {
                         ApiaryTileEntity apiaryTileEntity = (ApiaryTileEntity) tileEntity;
-                        apiaryTileEntity.BEES.clear();
+                        apiaryTileEntity.bees.clear();
                         apiaryTileEntity.loadFromNBT(message.data);
                     }
                 }

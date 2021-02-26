@@ -2,7 +2,6 @@ package com.resourcefulbees.resourcefulbees.init;
 
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.*;
-import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.resourcefulbees.resourcefulbees.client.models.ModelHandler;
 import com.resourcefulbees.resourcefulbees.client.render.entity.CustomBeeRenderer;
 import com.resourcefulbees.resourcefulbees.client.render.fluid.FluidRender;
@@ -40,10 +39,9 @@ public class ClientEventHandlers {
     }
 
     private static void doClientStuff(final FMLClientSetupEvent event) {
-        ModEntities.MOD_BEES.forEach((s, customBee) -> RenderingRegistry.registerEntityRenderingHandler(customBee.get(), manager -> {
+        ModEntities.getModBees().forEach((s, customBee) -> RenderingRegistry.registerEntityRenderingHandler(customBee.get(), manager -> {
             CustomBeeData data = BeeRegistry.getRegistry().getBeeData(s);
-            CustomBeeRenderer renderer = new CustomBeeRenderer(data.getBaseModelType(), manager, data);
-            return renderer;
+            return new CustomBeeRenderer(data.getBaseModelType(), manager, data);
         }));
         ScreenManager.registerFactory(ModContainers.CENTRIFUGE_CONTAINER.get(), CentrifugeScreen::new);
         ScreenManager.registerFactory(ModContainers.MECHANICAL_CENTRIFUGE_CONTAINER.get(), MechanicalCentrifugeScreen::new);

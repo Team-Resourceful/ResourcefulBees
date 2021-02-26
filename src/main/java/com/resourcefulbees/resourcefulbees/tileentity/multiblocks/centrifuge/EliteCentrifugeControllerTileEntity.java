@@ -20,6 +20,8 @@ import java.util.function.Predicate;
 
 public class EliteCentrifugeControllerTileEntity extends CentrifugeControllerTileEntity {
     private final IntArray times = new IntArray(6) {
+
+        @Override
         public int get(int index) {
             switch(index) {
                 case 0:
@@ -39,6 +41,7 @@ public class EliteCentrifugeControllerTileEntity extends CentrifugeControllerTil
             }
         }
 
+        @Override
         public void set(int index, int value) {
             switch(index) {
                 case 0:
@@ -58,10 +61,13 @@ public class EliteCentrifugeControllerTileEntity extends CentrifugeControllerTil
                     break;
                 case 5:
                     EliteCentrifugeControllerTileEntity.this.time[5] = value;
+                    break;
+                default: //do nothing
             }
 
         }
 
+        @Override
         public int size() { return 6; }
     };
 

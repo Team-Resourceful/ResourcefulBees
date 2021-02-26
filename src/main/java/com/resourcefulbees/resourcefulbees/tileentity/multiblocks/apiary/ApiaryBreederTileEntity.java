@@ -11,7 +11,6 @@ import com.resourcefulbees.resourcefulbees.item.UpgradeItem;
 import com.resourcefulbees.resourcefulbees.lib.ApiaryTabs;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
-import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import com.resourcefulbees.resourcefulbees.registry.ModTileEntityTypes;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.MathUtils;
@@ -49,18 +48,18 @@ import static com.resourcefulbees.resourcefulbees.lib.NBTConstants.NBT_BREEDER_C
 
 public class ApiaryBreederTileEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider, IApiaryMultiblock {
 
-    public static final int[] UPGRADE_SLOTS = {0, 1, 2, 3};
-    public static final int[] PARENT_1_SLOTS = {4, 9, 14, 19, 24};
-    public static final int[] FEED_1_SLOTS = {5, 10, 15, 20, 25};
-    public static final int[] PARENT_2_SLOTS = {6, 11, 16, 21, 26};
-    public static final int[] FEED_2_SLOTS = {7, 12, 17, 22, 27};
-    public static final int[] EMPTY_JAR_SLOTS = {8, 13, 18, 23, 28};
+    private static final int[] UPGRADE_SLOTS = {0, 1, 2, 3};
+    private static final int[] PARENT_1_SLOTS = {4, 9, 14, 19, 24};
+    private static final int[] FEED_1_SLOTS = {5, 10, 15, 20, 25};
+    private static final int[] PARENT_2_SLOTS = {6, 11, 16, 21, 26};
+    private static final int[] FEED_2_SLOTS = {7, 12, 17, 22, 27};
+    private static final int[] EMPTY_JAR_SLOTS = {8, 13, 18, 23, 28};
 
-    public ApiaryBreederTileEntity.TileStackHandler h = new ApiaryBreederTileEntity.TileStackHandler(29);
-    private final LazyOptional<IItemHandler> lazyOptional = LazyOptional.of(() -> h);
-    public int[] time = {0, 0, 0, 0, 0};
-    public int totalTime = Config.APIARY_MAX_BREED_TIME.get();
-    public int numberOfBreeders = 1;
+    private final ApiaryBreederTileEntity.TileStackHandler tileStackHandler = new ApiaryBreederTileEntity.TileStackHandler(29);
+    private final LazyOptional<IItemHandler> lazyOptional = LazyOptional.of(this::getTileStackHandler);
+    private int[] time = {0, 0, 0, 0, 0};
+    private int totalTime = Config.APIARY_MAX_BREED_TIME.get();
+    private int numberOfBreeders = 1;
 
     private BlockPos apiaryPos;
     private ApiaryTileEntity apiary;
@@ -70,15 +69,15 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
         public int get(int index) {
             switch (index) {
                 case 0:
-                    return ApiaryBreederTileEntity.this.time[0];
+                    return ApiaryBreederTileEntity.this.getTime()[0];
                 case 1:
-                    return ApiaryBreederTileEntity.this.time[1];
+                    return ApiaryBreederTileEntity.this.getTime()[1];
                 case 2:
-                    return ApiaryBreederTileEntity.this.time[2];
+                    return ApiaryBreederTileEntity.this.getTime()[2];
                 case 3:
-                    return ApiaryBreederTileEntity.this.time[3];
+                    return ApiaryBreederTileEntity.this.getTime()[3];
                 case 4:
-                    return ApiaryBreederTileEntity.this.time[4];
+                    return ApiaryBreederTileEntity.this.getTime()[4];
                 default:
                     return 0;
             }
@@ -88,19 +87,21 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
         public void set(int index, int value) {
             switch (index) {
                 case 0:
-                    ApiaryBreederTileEntity.this.time[0] = value;
+                    ApiaryBreederTileEntity.this.getTime()[0] = value;
                     break;
                 case 1:
-                    ApiaryBreederTileEntity.this.time[1] = value;
+                    ApiaryBreederTileEntity.this.getTime()[1] = value;
                     break;
                 case 2:
-                    ApiaryBreederTileEntity.this.time[2] = value;
+                    ApiaryBreederTileEntity.this.getTime()[2] = value;
                     break;
                 case 3:
-                    ApiaryBreederTileEntity.this.time[3] = value;
+                    ApiaryBreederTileEntity.this.getTime()[3] = value;
                     break;
                 case 4:
-                    ApiaryBreederTileEntity.this.time[4] = value;
+                    ApiaryBreederTileEntity.this.getTime()[4] = value;
+                    break;
+                default: //do nothing
             }
         }
 
@@ -112,6 +113,30 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
 
     public ApiaryBreederTileEntity() {
         super(ModTileEntityTypes.APIARY_BREEDER_TILE_ENTITY.get());
+    }
+
+    public static int[] getUpgradeSlots() {
+        return UPGRADE_SLOTS;
+    }
+
+    public static int[] getParent1Slots() {
+        return PARENT_1_SLOTS;
+    }
+
+    public static int[] getFeed1Slots() {
+        return FEED_1_SLOTS;
+    }
+
+    public static int[] getParent2Slots() {
+        return PARENT_2_SLOTS;
+    }
+
+    public static int[] getFeed2Slots() {
+        return FEED_2_SLOTS;
+    }
+
+    public static int[] getEmptyJarSlots() {
+        return EMPTY_JAR_SLOTS;
     }
 
     public BlockPos getApiaryPos() {
@@ -134,7 +159,7 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
 
     public boolean validateApiaryLink() {
         apiary = getApiary();
-        if (apiary == null || apiary.breederPos == null || !apiary.breederPos.equals(this.getPos()) || !apiary.isValidApiary(false)) { //check apiary has storage location equal to this and apiary is valid
+        if (apiary == null || apiary.getBreederPos() == null || !apiary.getBreederPos().equals(this.getPos()) || !apiary.isValidApiary(false)) { //check apiary has storage location equal to this and apiary is valid
             apiaryPos = null; //if not set these to null
             return false;
         }
@@ -146,20 +171,20 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
         if (world != null && !world.isRemote) {
             validateApiaryLink();
             boolean dirty = false;
-            for (int i = 0; i < numberOfBreeders; i++) {
-                if (!h.getStackInSlot(PARENT_1_SLOTS[i]).isEmpty() && !h.getStackInSlot(FEED_1_SLOTS[i]).isEmpty()
-                        && !h.getStackInSlot(PARENT_2_SLOTS[i]).isEmpty() && !h.getStackInSlot(FEED_2_SLOTS[i]).isEmpty()
-                        && !h.getStackInSlot(EMPTY_JAR_SLOTS[i]).isEmpty()) {
+            for (int i = 0; i < getNumberOfBreeders(); i++) {
+                if (!getTileStackHandler().getStackInSlot(getParent1Slots()[i]).isEmpty() && !getTileStackHandler().getStackInSlot(getFeed1Slots()[i]).isEmpty()
+                        && !getTileStackHandler().getStackInSlot(getParent2Slots()[i]).isEmpty() && !getTileStackHandler().getStackInSlot(getFeed2Slots()[i]).isEmpty()
+                        && !getTileStackHandler().getStackInSlot(getEmptyJarSlots()[i]).isEmpty()) {
                     if (canProcess(i)) {
-                        ++this.time[i];
-                        if (this.time[i] >= this.totalTime) {
-                            this.time[i] = 0;
+                        ++this.getTime()[i];
+                        if (this.getTime()[i] >= this.getTotalTime()) {
+                            this.getTime()[i] = 0;
                             this.processBreed(i);
                             dirty = true;
                         }
                     }
                 } else {
-                    this.time[i] = 0;
+                    this.getTime()[i] = 0;
                 }
                 if (dirty) {
                     this.markDirty();
@@ -169,8 +194,8 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
     }
 
     protected boolean canProcess(int slot) {
-        ItemStack p1Stack = h.getStackInSlot(PARENT_1_SLOTS[slot]);
-        ItemStack p2Stack = h.getStackInSlot(PARENT_2_SLOTS[slot]);
+        ItemStack p1Stack = getTileStackHandler().getStackInSlot(getParent1Slots()[slot]);
+        ItemStack p2Stack = getTileStackHandler().getStackInSlot(getParent2Slots()[slot]);
         if (p1Stack.getItem() instanceof BeeJar && p2Stack.getItem() instanceof BeeJar) {
             BeeJar p1Jar = (BeeJar) p1Stack.getItem();
             BeeJar p2Jar = (BeeJar) p2Stack.getItem();
@@ -184,20 +209,20 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
 
                 boolean canBreed = BeeRegistry.getRegistry().canParentsBreed(p1Type, p2Type);
 
-                ItemStack f1Stack = h.getStackInSlot(FEED_1_SLOTS[slot]);
-                ItemStack f2Stack = h.getStackInSlot(FEED_2_SLOTS[slot]);
+                ItemStack f1Stack = getTileStackHandler().getStackInSlot(getFeed1Slots()[slot]);
+                ItemStack f2Stack = getTileStackHandler().getStackInSlot(getFeed2Slots()[slot]);
 
                 String p1FeedItem = ((CustomBeeEntity) p1Entity).getBeeData().getBreedData().getFeedItem();
                 String p2FeedItem = ((CustomBeeEntity) p2Entity).getBeeData().getBreedData().getFeedItem();
 
-                int f1StackCount = h.getStackInSlot(FEED_1_SLOTS[slot]).getCount();
-                int f2StackCount = h.getStackInSlot(FEED_2_SLOTS[slot]).getCount();
+                int f1StackCount = getTileStackHandler().getStackInSlot(getFeed1Slots()[slot]).getCount();
+                int f2StackCount = getTileStackHandler().getStackInSlot(getFeed2Slots()[slot]).getCount();
 
                 int p1FeedAmount = ((CustomBeeEntity) p1Entity).getBeeData().getBreedData().getFeedAmount();
                 int p2FeedAmount = ((CustomBeeEntity) p2Entity).getBeeData().getBreedData().getFeedAmount();
 
                 return (canBreed && BeeInfoUtils.isValidBreedItem(f1Stack, p1FeedItem) && BeeInfoUtils.isValidBreedItem(f2Stack, p2FeedItem)
-                        && f1StackCount >= p1FeedAmount && f2StackCount >= p2FeedAmount && !h.getStackInSlot(EMPTY_JAR_SLOTS[slot]).isEmpty());
+                        && f1StackCount >= p1FeedAmount && f2StackCount >= p2FeedAmount && !getTileStackHandler().getStackInSlot(getEmptyJarSlots()[slot]).isEmpty());
             }
         }
         return false;
@@ -205,8 +230,8 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
 
     private void processBreed(int slot) {
         if (canProcess(slot)) {
-            ItemStack p1Stack = h.getStackInSlot(PARENT_1_SLOTS[slot]);
-            ItemStack p2Stack = h.getStackInSlot(PARENT_2_SLOTS[slot]);
+            ItemStack p1Stack = getTileStackHandler().getStackInSlot(getParent1Slots()[slot]);
+            ItemStack p2Stack = getTileStackHandler().getStackInSlot(getParent2Slots()[slot]);
             if (p1Stack.getItem() instanceof BeeJar && p2Stack.getItem() instanceof BeeJar) {
                 BeeJar p1Jar = (BeeJar) p1Stack.getItem();
                 BeeJar p2Jar = (BeeJar) p2Stack.getItem();
@@ -222,20 +247,20 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
                     String p2Type = bee2.getBeeData().getName();
 
                     if (world != null && validateApiaryLink()) {
-                        TileEntity tile = world.getTileEntity(apiary.storagePos);
+                        TileEntity tile = world.getTileEntity(apiary.getStoragePos());
                         if (tile instanceof ApiaryStorageTileEntity) {
                             ApiaryStorageTileEntity apiaryStorage = (ApiaryStorageTileEntity) tile;
                             if (apiaryStorage.breedComplete(p1Type, p2Type)) {
-                                h.getStackInSlot(EMPTY_JAR_SLOTS[slot]).shrink(1);
-                                h.getStackInSlot(FEED_1_SLOTS[slot]).shrink(bee1.getBeeData().getBreedData().getFeedAmount());
-                                h.getStackInSlot(FEED_2_SLOTS[slot]).shrink(bee2.getBeeData().getBreedData().getFeedAmount());
+                                getTileStackHandler().getStackInSlot(getEmptyJarSlots()[slot]).shrink(1);
+                                getTileStackHandler().getStackInSlot(getFeed1Slots()[slot]).shrink(bee1.getBeeData().getBreedData().getFeedAmount());
+                                getTileStackHandler().getStackInSlot(getFeed2Slots()[slot]).shrink(bee2.getBeeData().getBreedData().getFeedAmount());
                             }
                         }
                     }
                 }
             }
         }
-        this.time[slot] = 0;
+        this.getTime()[slot] = 0;
     }
 
     private void rebuildOpenContainers() {
@@ -308,24 +333,24 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
 
     public void loadFromNBT(CompoundNBT nbt) {
         CompoundNBT invTag = nbt.getCompound(NBTConstants.NBT_INVENTORY);
-        h.deserializeNBT(invTag);
-        time = nbt.getIntArray("time");
-        totalTime = nbt.getInt("totalTime");
+        getTileStackHandler().deserializeNBT(invTag);
+        setTime(nbt.getIntArray("time"));
+        setTotalTime(nbt.getInt("totalTime"));
         if (nbt.contains(NBTConstants.NBT_APIARY_POS))
             apiaryPos = NBTUtil.readBlockPos(nbt.getCompound(NBTConstants.NBT_APIARY_POS));
         if (nbt.contains(NBT_BREEDER_COUNT))
-            this.numberOfBreeders = nbt.getInt(NBT_BREEDER_COUNT);
+            this.setNumberOfBreeders(nbt.getInt(NBT_BREEDER_COUNT));
     }
 
     public CompoundNBT saveToNBT(CompoundNBT nbt) {
-        CompoundNBT inv = this.h.serializeNBT();
+        CompoundNBT inv = this.getTileStackHandler().serializeNBT();
         nbt.put(NBTConstants.NBT_INVENTORY, inv);
-        nbt.putIntArray("time", time);
-        nbt.putInt("totalTime", totalTime);
+        nbt.putIntArray("time", getTime());
+        nbt.putInt("totalTime", getTotalTime());
         if (apiaryPos != null)
             nbt.put(NBTConstants.NBT_APIARY_POS, NBTUtil.writeBlockPos(apiaryPos));
-        if (numberOfBreeders != 1) {
-            nbt.putInt(NBT_BREEDER_COUNT, numberOfBreeders);
+        if (getNumberOfBreeders() != 1) {
+            nbt.putInt(NBT_BREEDER_COUNT, getNumberOfBreeders());
         }
         return nbt;
     }
@@ -392,10 +417,38 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
                 NetworkHooks.openGui(player, (INamedContainerProvider) tile, apiaryPos);
             }
             if (tab == ApiaryTabs.STORAGE) {
-                TileEntity tile = world.getTileEntity(apiary.storagePos);
-                NetworkHooks.openGui(player, (INamedContainerProvider) tile, apiary.storagePos);
+                TileEntity tile = world.getTileEntity(apiary.getStoragePos());
+                NetworkHooks.openGui(player, (INamedContainerProvider) tile, apiary.getStoragePos());
             }
         }
+    }
+
+    public int[] getTime() {
+        return time;
+    }
+
+    public void setTime(int[] time) {
+        this.time = time;
+    }
+
+    public int getTotalTime() {
+        return totalTime;
+    }
+
+    public void setTotalTime(int totalTime) {
+        this.totalTime = totalTime;
+    }
+
+    public int getNumberOfBreeders() {
+        return numberOfBreeders;
+    }
+
+    public void setNumberOfBreeders(int numberOfBreeders) {
+        this.numberOfBreeders = numberOfBreeders;
+    }
+
+    public @NotNull TileStackHandler getTileStackHandler() {
+        return tileStackHandler;
     }
 
     public class TileStackHandler extends AutomationSensitiveItemStackHandler {
@@ -460,7 +513,7 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
         }
 
         @Override
-        public boolean isItemValid(int slot, ItemStack stack) {
+        public boolean isItemValid(int slot, @NotNull ItemStack stack) {
             switch (slot) {
                 case 0:
                 case 1:
@@ -506,7 +559,7 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
                         return stack.getItem() instanceof BeeJar && !BeeJar.isFilled(stack);
                     } else return false;
                 default:
-                    System.out.println("defaulting" + slot);
+                    //do nothing
                     return false;
             }
         }
