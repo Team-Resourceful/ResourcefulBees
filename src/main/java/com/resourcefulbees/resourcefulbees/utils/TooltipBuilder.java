@@ -3,6 +3,7 @@ package com.resourcefulbees.resourcefulbees.utils;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,15 @@ public class TooltipBuilder {
 
     public TooltipBuilder addTip(String text, TextFormatting formatting) {
         tooltip.add(new StringTextComponent(formatting + text));
+        return this;
+    }
+
+    public TooltipBuilder addTranslatableTip(String key, TextFormatting formatting) {
+        tooltip.add(new TranslationTextComponent(key).formatted(formatting));
+        return this;
+    }
+    public TooltipBuilder addTranslatableTip(String key) {
+        tooltip.add(new TranslationTextComponent(key));
         return this;
     }
 
