@@ -23,6 +23,7 @@ public abstract class BeepediaPage {
 
     public ListButton listButton = null;
 
+    public final ResourceLocation arrowImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/arrows.png");
     public final ResourceLocation listImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/list_button.png");
     public String id;
 

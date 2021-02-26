@@ -103,8 +103,8 @@
 	"gui.resourcefulbees.beepedia.bee_subtab.spawning.back_button" : "BACK",
 
 	"gui.resourcefulbees.beepedia.bee_subtab.breeding" : "Breeding",
-	"gui.resourcefulbees.beepedia.bee_subtab.breeding.parents_button": "PARENTS",
-	"gui.resourcefulbees.beepedia.bee_subtab.breeding.children_button": "CHILDREN",
+	"gui.resourcefulbees.beepedia.bee_subtab.breeding.parents_title": "Parents",
+	"gui.resourcefulbees.beepedia.bee_subtab.breeding.children_title": "Children",
 
 	"gui.resourcefulbees.beepedia.bee_subtab.traits" : "Traits",
 	"gui.resourcefulbees.beepedia.bee_subtab.centrifuge" : "Centrifuge",

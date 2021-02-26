@@ -18,9 +18,9 @@ import java.util.Map;
 
 public class TraitListPage extends BeeDataPage {
 
-    Map<String, TraitPage> traitPages;
-    Map<String, ListButton> buttons;
-    BeepediaScreen.ButtonList list;
+    private Map<String, TraitPage> traitPages;
+    private Map<String, ListButton> buttons;
+    private BeepediaScreen.ButtonList list;
 
     public TraitListPage(BeepediaScreen beepedia, CustomBeeData beeData, int xPos, int yPos, BeePage parent) {
         super(beepedia, beeData, xPos, yPos, parent);
@@ -77,7 +77,7 @@ public class TraitListPage extends BeeDataPage {
     public void openPage() {
         super.openPage();
         list.setActive(true);
-        list.setScrollPos(beepedia.currScreenState.getTraitsScroll());
+        list.setScrollPos(BeepediaScreen.currScreenState.getTraitsScroll());
     }
 
     @Override

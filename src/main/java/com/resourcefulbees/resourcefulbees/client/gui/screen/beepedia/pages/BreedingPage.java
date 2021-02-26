@@ -11,6 +11,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.client.gui.widget.button.ImageButton;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -26,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 public class BreedingPage extends BeeDataPage {
+
     Map<Pair<String, String>, RandomCollection<CustomBeeData>> children;
     Map<Pair<String, String>, CustomBeeData> parents;
     List<BreedingObject> parentBreeding = new LinkedList<>();
@@ -37,6 +39,9 @@ public class BreedingPage extends BeeDataPage {
     Button childrenButton;
 
     private final ResourceLocation breedingImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/breeding.png");
+
+    private final TranslationTextComponent parentsTitle = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding.parents_title");
+    private final TranslationTextComponent childrenTitle = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding.children_title");
     private List<BreedingObject> activeList = null;
     private int activePage = 0;
 
@@ -46,14 +51,10 @@ public class BreedingPage extends BeeDataPage {
         parents = BeeRegistry.getRegistry().getParents(beeData);
         children.forEach((p, l) -> l.getMap().forEach((w, b) -> childrenBreeding.add(new BreedingObject(p, b))));
         parents.forEach((p, b) -> parentBreeding.add(new BreedingObject(p, b)));
-        leftArrow = new Button(xPos, yPos + subPageHeight - 20, 50, 20, new StringTextComponent("<"), button -> prevPage());
-        rightArrow = new Button(xPos + subPageWidth - 50, yPos + subPageHeight - 20, 50, 20, new StringTextComponent(">"), button -> nextPage());
-        parentsButton = new Button(xPos + subPageWidth - 50, yPos, 50, 20, new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding.children_button"), button -> {
-            setActiveList(true);
-        });
-        childrenButton = new Button(xPos + subPageWidth - 50, yPos, 50, 20, new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding.parents_button"), button -> {
-            setActiveList(false);
-        });
+        leftArrow = new ImageButton(xPos + (subPageWidth / 2) - 28, yPos + subPageHeight - 16, 8, 11, 0, 0, 11, arrowImage, 16, 33, button -> prevPage());
+        rightArrow = new ImageButton(xPos + (subPageWidth / 2) + 20, yPos + subPageHeight - 16, 8, 11, 8, 0, 11, arrowImage, 16, 33, button -> nextPage());
+        parentsButton = new ImageButton(xPos + (subPageWidth / 2) - 38, yPos + 6, 8, 11, 0, 0, 11, arrowImage, 16, 33, button -> toggleActiveList());
+        childrenButton = new ImageButton(xPos + (subPageWidth / 2) + 30, yPos + 6, 8, 11, 8, 0, 11, arrowImage, 16, 33, button -> toggleActiveList());
         leftArrow.visible = false;
         rightArrow.visible = false;
         parentsButton.visible = false;
@@ -62,9 +63,20 @@ public class BreedingPage extends BeeDataPage {
         beepedia.addButton(rightArrow);
         beepedia.addButton(parentsButton);
         beepedia.addButton(childrenButton);
+
+        parentBreeding.sort((o1, o2) -> {
+            if (o1.isBase) return 1;
+            else return -1;
+        });
+        childrenBreeding.sort((o1, o2) -> {
+            if (o1.isBase) return 1;
+            else return -1;
+        });
     }
 
-    private void setActiveList(boolean parentsList) {
+
+    private void toggleActiveList(boolean parentsList) {
+        BeepediaScreen.currScreenState.setParentBreeding(parentsList);
         if (parentsList && !parentBreeding.isEmpty()) {
             activeList = parentBreeding;
         } else if (!parentsList && !childrenBreeding.isEmpty()) {
@@ -72,29 +84,33 @@ public class BreedingPage extends BeeDataPage {
         } else {
             activeList = null;
         }
-        beepedia.currScreenState.setParentBreeding(parentsList);
-        activePage = beepedia.currScreenState.getBreedingPage();
+        activePage = BeepediaScreen.currScreenState.getBreedingPage();
         if (activePage >= activeList.size()) activePage = 0;
-        beepedia.currScreenState.setBreedingPage(activePage);
+        BeepediaScreen.currScreenState.setBreedingPage(activePage);
+    }
+
+    private void toggleActiveList() {
+        toggleActiveList(!BeepediaScreen.currScreenState.isParentBreeding());
     }
 
     private void nextPage() {
         activePage++;
         if (activePage >= activeList.size()) activePage = 0;
-        beepedia.currScreenState.setBreedingPage(activePage);
+        BeepediaScreen.currScreenState.setBreedingPage(activePage);
     }
 
     private void prevPage() {
         activePage--;
         if (activePage < 0) activePage = activeList.size() - 1;
-        beepedia.currScreenState.setBreedingPage(activePage);
+        BeepediaScreen.currScreenState.setBreedingPage(activePage);
     }
 
     @Override
     public void openPage() {
         super.openPage();
-        setActiveList(beepedia.currScreenState.isParentBreeding());
+        toggleActiveList(BeepediaScreen.currScreenState.isParentBreeding());
     }
+
 
     @Override
     public void closePage() {
@@ -111,18 +127,23 @@ public class BreedingPage extends BeeDataPage {
         Minecraft.getInstance().textureManager.bindTexture(breedingImage);
         AbstractGui.drawTexture(matrix, xPos, yPos + 22, 0, 0, 128, 64, 128, 64);
         FontRenderer font = Minecraft.getInstance().fontRenderer;
-        TranslationTextComponent title = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding");
+        TranslationTextComponent title = BeepediaScreen.currScreenState.isParentBreeding() ? parentsTitle : childrenTitle;
+        int padding = font.getWidth(title) / 2;
+        font.draw(matrix, title, xPos + (subPageWidth / 2) - padding, (float) yPos + 8, TextFormatting.WHITE.getColor());
         if (activeList.size() > 1) {
             StringTextComponent page = new StringTextComponent(String.format("%d / %d", activePage + 1, activeList.size()));
-            int padding = font.getWidth(page) / 2;
+            padding = font.getWidth(page) / 2;
             font.draw(matrix, page, xPos + (subPageWidth / 2) - padding, (float) yPos + subPageHeight - 14, TextFormatting.WHITE.getColor());
         }
-        font.draw(matrix, title, xPos, (float) yPos + 8, TextFormatting.WHITE.getColor());
+    }
+
+    private boolean shouldShowButtons() {
+        return (!parentBreeding.isEmpty() || !childrenBreeding.isEmpty()) && !baseOnly();
     }
 
     private void showButtons() {
-        parentsButton.visible = !beepedia.currScreenState.isParentBreeding() && !parentBreeding.isEmpty() && !baseOnly();
-        childrenButton.visible = beepedia.currScreenState.isParentBreeding() && !childrenBreeding.isEmpty() && !baseOnly();
+        parentsButton.visible = shouldShowButtons();
+        childrenButton.visible = shouldShowButtons();
         leftArrow.visible = activeList.size() > 1;
         rightArrow.visible = activeList.size() > 1;
     }
@@ -179,7 +200,6 @@ public class BreedingPage extends BeeDataPage {
         public boolean isBase;
 
         private void initParents(Pair<String, String> parents) {
-            isBase = parents.getLeft().equals(parents.getRight());
             parent1Data = BeeRegistry.getRegistry().getBeeData(parents.getLeft());
             parent2Data = BeeRegistry.getRegistry().getBeeData(parents.getRight());
             parent1Entity = ForgeRegistries.ENTITIES.getValue(parent1Data.getEntityTypeRegistryID()).create(beepedia.getMinecraft().world);
@@ -193,6 +213,7 @@ public class BreedingPage extends BeeDataPage {
         public BreedingObject(Pair<String, String> parents, CustomBeeData child) {
             initParents(parents);
             this.child = new Child(parents, child);
+            isBase = parents.getLeft().equals(parents.getRight()) && parents.getLeft().equals(child.getName());
             isParent = false;
         }
 
