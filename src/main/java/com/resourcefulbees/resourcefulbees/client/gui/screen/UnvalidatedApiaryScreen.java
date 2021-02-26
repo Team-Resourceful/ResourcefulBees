@@ -37,7 +37,10 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
     private final PlayerEntity player;
     private int verticalOffset;
     private int horizontalOffset;
-    private ArrowButton upButton, downButton, leftButton, rightButton;
+    private ArrowButton upButton;
+    private ArrowButton downButton;
+    private ArrowButton leftButton;
+    private ArrowButton rightButton;
     private PreviewButton previewButton;
 
 
