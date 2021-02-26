@@ -46,6 +46,8 @@ public class EntityToEntity implements IRecipeCategory<EntityToEntity.Recipe> {
     private final IDrawable nonRegisteredEgg;
     private final String localizedName;
 
+    private static final String DARK_PURPLE = "dark_purple";
+
     public EntityToEntity(IGuiHelper guiHelper) {
         this.background = guiHelper.drawableBuilder(GUI_BACK, -12, 0, 99, 75).addPadding(0, 0, 0, 0).build();
         this.icon = guiHelper.createDrawable(ICONS, 0, 0, 16, 16);
@@ -131,9 +133,9 @@ public class EntityToEntity implements IRecipeCategory<EntityToEntity.Recipe> {
                 if (!recipe.outputNBT.isEmpty()) {
                     if (BeeInfoUtils.isShiftPressed()) {
                         List<String> lore = BeeInfoUtils.getLoreLines(recipe.outputNBT);
-                        lore.forEach(l -> tooltip.add(new StringTextComponent(l).fillStyle(Style.EMPTY.withColor(Color.parse("dark_purple")))));
+                        lore.forEach(l -> tooltip.add(new StringTextComponent(l).fillStyle(Style.EMPTY.withColor(Color.parse(DARK_PURPLE)))));
                     } else {
-                        tooltip.add(new TranslationTextComponent("gui.resourcefulbees.jei.tooltip.show_nbt").fillStyle(Style.EMPTY.withColor(Color.parse("dark_purple"))));
+                        tooltip.add(new TranslationTextComponent("gui.resourcefulbees.jei.tooltip.show_nbt").fillStyle(Style.EMPTY.withColor(Color.parse(DARK_PURPLE))));
                     }
                 }
                 return tooltip;
@@ -169,9 +171,9 @@ public class EntityToEntity implements IRecipeCategory<EntityToEntity.Recipe> {
                     if (!recipe.outputNBT.isEmpty()) {
                         if (BeeInfoUtils.isShiftPressed()) {
                             List<String> lore = BeeInfoUtils.getLoreLines(recipe.outputNBT);
-                            lore.forEach(l -> tooltip.add(new StringTextComponent(l).fillStyle(Style.EMPTY.withColor(Color.parse("dark_purple")))));
+                            lore.forEach(l -> tooltip.add(new StringTextComponent(l).fillStyle(Style.EMPTY.withColor(Color.parse(DARK_PURPLE)))));
                         } else {
-                            tooltip.add(new TranslationTextComponent("gui.resourcefulbees.jei.tooltip.show_nbt").fillStyle(Style.EMPTY.withColor(Color.parse("dark_purple"))));
+                            tooltip.add(new TranslationTextComponent("gui.resourcefulbees.jei.tooltip.show_nbt").fillStyle(Style.EMPTY.withColor(Color.parse(DARK_PURPLE))));
                         }
                     }
                 }

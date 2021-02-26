@@ -27,7 +27,7 @@ public class TabToggleImageButton extends TabImageButton {
     public boolean isStateTriggered() { return this.stateTriggered; }
 
     @Override
-    public void renderButton(@Nonnull MatrixStack matrixStack, int p_230431_2_, int p_230431_3_, float p_230431_4_) {
+    public void renderButton(@Nonnull MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         Minecraft minecraft = Minecraft.getInstance();
         minecraft.getTextureManager().bindTexture(this.resourceLocation);
         RenderSystem.disableDepthTest();

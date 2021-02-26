@@ -1,7 +1,6 @@
 package com.resourcefulbees.resourcefulbees.block;
 
 import com.resourcefulbees.resourcefulbees.registry.ModBlocks;
-import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
@@ -11,8 +10,6 @@ import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.item.TNTEntity;
 import net.minecraft.entity.item.minecart.AbstractMinecartEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.ItemStack;
 import net.minecraft.particles.BlockParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.SoundEvents;
@@ -25,8 +22,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
 
 public class CatnipHoneyBlock extends HoneyBlock {
 
@@ -44,6 +39,7 @@ public class CatnipHoneyBlock extends HoneyBlock {
         return entity instanceof LivingEntity || entity instanceof AbstractMinecartEntity || entity instanceof TNTEntity || entity instanceof BoatEntity;
     }
 
+    @Override
     public @NotNull VoxelShape getCollisionShape(@NotNull BlockState blockState, @NotNull IBlockReader blockReader, @NotNull BlockPos blockPos, @NotNull ISelectionContext selectionContext) {
         return SHAPE;
     }
@@ -51,10 +47,11 @@ public class CatnipHoneyBlock extends HoneyBlock {
     /**
      * Block's chance to react to a living entity falling on it.
      */
+    @Override
     public void onFallenUpon(World world, @NotNull BlockPos blockPos, Entity entity, float distance) {
         entity.playSound(SoundEvents.BLOCK_HONEY_BLOCK_SLIDE, 1.0F, 1.0F);
         if (world.isRemote) {
-            addParticles(entity, 5);
+            addParticles(entity);
         }
 
         if (entity.handleFallDamage(distance, 0.2F)) {
@@ -63,16 +60,21 @@ public class CatnipHoneyBlock extends HoneyBlock {
 
     }
 
+    /**
+     * @deprecated whatever
+     */
+    @Override
+    @Deprecated
     public void onEntityCollision(@NotNull BlockState state, @NotNull World world, @NotNull BlockPos blockPos, @NotNull Entity entity) {
-        if (this.isSliding(blockPos, entity)) {
-            this.triggerAdvancement(entity, blockPos);
-            this.updateSlidingVelocity(entity);
-            this.addCollisionEffects(world, entity);
+        if (isSliding(blockPos, entity)) {
+            triggeradvancement(entity, blockPos);
+            updateSlidingVelocity(entity);
+            addcollisioneffects(world, entity);
         }
         super.onEntityCollision(state, world, blockPos, entity);
     }
 
-    private boolean isSliding(BlockPos blockPos, Entity entity) {
+    public static boolean isSliding(BlockPos blockPos, Entity entity) {
         if (entity.isOnGround()) {
             return false;
         } else if (entity.getY() > (double) blockPos.getY() + 0.9375D - 1.0E-7D) {
@@ -87,13 +89,13 @@ public class CatnipHoneyBlock extends HoneyBlock {
         }
     }
 
-    private void triggerAdvancement(Entity entity, BlockPos blockPos) {
+    private static void triggeradvancement(Entity entity, BlockPos blockPos) {
         if (entity instanceof ServerPlayerEntity && entity.world.getGameTime() % 20L == 0L) {
             CriteriaTriggers.SLIDE_DOWN_BLOCK.test((ServerPlayerEntity) entity, entity.world.getBlockState(blockPos));
         }
     }
 
-    private void updateSlidingVelocity(Entity entity) {
+    public static void updateSlidingVelocity(Entity entity) {
         Vector3d vector3d = entity.getMotion();
         if (vector3d.y < -0.13D) {
             double d0 = -0.05D / vector3d.y;
@@ -105,23 +107,23 @@ public class CatnipHoneyBlock extends HoneyBlock {
         entity.fallDistance = 0.0F;
     }
 
-    private void addCollisionEffects(World world, Entity entity) {
+    private static void addcollisioneffects(World world, Entity entity) {
         if (hasHoneyBlockEffects(entity)) {
             if (world.rand.nextInt(5) == 0) {
                 entity.playSound(SoundEvents.BLOCK_HONEY_BLOCK_SLIDE, 1.0F, 1.0F);
             }
 
             if (world.isRemote && world.rand.nextInt(5) == 0) {
-                addParticles(entity, 5);
+                addParticles(entity);
             }
         }
     }
 
     @OnlyIn(Dist.CLIENT)
-    private void addParticles(Entity entity, int amount) {
+    private static void addParticles(Entity entity) {
         BlockState blockstate = ModBlocks.CATNIP_HONEY_BLOCK.get().getDefaultState();
 
-        for (int i = 0; i < amount; ++i) {
+        for (int i = 0; i < 5; ++i) {
             entity.world.addParticle(new BlockParticleData(ParticleTypes.BLOCK, blockstate), entity.getX(), entity.getY(), entity.getZ(), 0.0D, 0.0D, 0.0D);
         }
     }

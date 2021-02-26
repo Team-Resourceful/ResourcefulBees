@@ -84,6 +84,6 @@ public class EntityIngredientHelper<T extends EntityIngredient> implements IIngr
     @Nonnull
     @Override
     public String getErrorInfo(@Nullable EntityIngredient entityIngredient) {
-        return null;
+        return "BEE INGREDIENT ERROR IN JEI";
     }
 }

@@ -49,8 +49,8 @@ public class ModSetup {
         BeeSetup.setBeePath(rbBeesPath);
         BeeSetup.setResourcePath(rbAssetsPath);
         BeeSetup.setHoneyPath(rbHoneyPath);
-        BiomeDictionarySetup.DICTIONARY_PATH = rbBiomePath;
-        TraitSetup.DICTIONARY_PATH = rbTraitPath;
+        BiomeDictionarySetup.setDictionaryPath(rbBiomePath);
+        TraitSetup.setDictionaryPath(rbTraitPath);
 
         try { Files.createDirectories(rbBeesPath);
         } catch (FileAlreadyExistsException ignored) { //ignored
@@ -80,8 +80,7 @@ public class ModSetup {
     }
 
     public static void registerDispenserBehaviors() {
-        ShearsDispenserBehavior.DEFAULT_SHEARS_DISPENSE_BEHAVIOR =
-                ((DispenserBlockInvoker) Blocks.DISPENSER).invokeGetBehaviorForItem(new ItemStack(Items.SHEARS));
+        ShearsDispenserBehavior.setDefaultShearsDispenseBehavior(((DispenserBlockInvoker) Blocks.DISPENSER).invokeGetBehavior(new ItemStack(Items.SHEARS)));
 
         DispenserBlock.registerDispenseBehavior(net.minecraft.item.Items.SHEARS.asItem(), new ShearsDispenserBehavior());
 

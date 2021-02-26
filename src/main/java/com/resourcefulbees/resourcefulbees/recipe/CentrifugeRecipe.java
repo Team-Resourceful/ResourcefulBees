@@ -11,6 +11,7 @@ import com.resourcefulbees.resourcefulbees.registry.ModRecipeSerializers;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.RecipeUtils;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -29,6 +30,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -45,6 +47,8 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
     public final int multiblockTime;
     public final boolean multiblock;
     public final boolean hasFluidOutput;
+
+    private static final String INGREDIENT_STRING = "ingredient";
 
     public CentrifugeRecipe(ResourceLocation id, Ingredient ingredient, List<Pair<ItemStack, Float>> itemOutputs, List<Pair<FluidStack, Float>> fluidOutput, int time, int multiblockTime, boolean multiblock, boolean hasFluidOutput) {
         this.id = id;
@@ -63,16 +67,9 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
         if (stack == ItemStack.EMPTY) return false;
         else {
             ItemStack[] matchingStacks = ingredient.getMatchingStacks();
-            if (matchingStacks.length == 0) return stack.isEmpty();
+            if (matchingStacks.length == 0) return false;
             else {
-                for (ItemStack itemstack : matchingStacks) {
-                    if (itemstack.getItem() == stack.getItem()) {
-                        if (itemstack.hasTag() && stack.hasTag()) {
-                            return itemstack.getTag().equals(stack.getTag());
-                        } else return !itemstack.hasTag() && !stack.hasTag();
-                    }
-                }
-                return false;
+                return Arrays.stream(matchingStacks).anyMatch(itemStack -> Container.areItemsAndTagsEqual(stack, itemStack));
             }
         }
     }
@@ -132,10 +129,10 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
         @Override
         public @NotNull T read(@Nonnull ResourceLocation id, @NotNull JsonObject json) {
             Ingredient ingredient;
-            if (JSONUtils.isJsonArray(json, "ingredient")) {
-                ingredient = Ingredient.deserialize(JSONUtils.getJsonArray(json, "ingredient"));
+            if (JSONUtils.isJsonArray(json, INGREDIENT_STRING)) {
+                ingredient = Ingredient.deserialize(JSONUtils.getJsonArray(json, INGREDIENT_STRING));
             } else {
-                ingredient = Ingredient.deserialize(JSONUtils.getJsonObject(json, "ingredient"));
+                ingredient = Ingredient.deserialize(JSONUtils.getJsonObject(json, INGREDIENT_STRING));
             }
 
             JsonArray jsonArray = JSONUtils.getJsonArray(json, "results");
@@ -154,7 +151,7 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
                     CompoundNBT nbt = new CompoundNBT();
                     if (jsonObject.has("nbtData")) {
                         JsonElement nbtData = JSONUtils.getJsonObject(jsonObject, "nbtData");
-                        nbt = CompoundNBT.CODEC.parse(JsonOps.INSTANCE, nbtData).resultOrPartial(e -> LOGGER.warn(String.format("Could not deserialize NBT: [%s]", nbtData.toString()))).get();
+                        nbt = CompoundNBT.CODEC.parse(JsonOps.INSTANCE, nbtData).resultOrPartial(e -> LOGGER.warn(String.format("Could not deserialize NBT: [%s]", nbtData.toString()))).orElse(nbt);
                     }
 
                     // create item stack

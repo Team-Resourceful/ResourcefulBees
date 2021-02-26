@@ -4,11 +4,11 @@ import com.google.common.base.Splitter;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
+import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.registry.BiomeDictionary;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.text.WordUtils;
 
 import java.util.*;
@@ -16,13 +16,17 @@ import java.util.stream.Collectors;
 
 public class BiomeParser {
 
+    private BiomeParser() {
+        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+    }
+
     public static String parseBiomes(CustomBeeData bee) {
         if (!bee.getSpawnData().getBiomeWhitelist().isEmpty()) {
             Set<ResourceLocation> whitelist = new HashSet<>(getBiomeSet(bee.getSpawnData().getBiomeWhitelist()));
             Set<ResourceLocation> blacklist = new HashSet<>();
             if (!bee.getSpawnData().getBiomeBlacklist().isEmpty())
                 blacklist = getBiomeSet(bee.getSpawnData().getBiomeBlacklist());
-            return buildReturnString(whitelist, blacklist, bee);
+            return buildReturnString(whitelist, blacklist);
         }
 
         return "null";
@@ -34,7 +38,7 @@ public class BiomeParser {
         Set<ResourceLocation> blackListBiomes = getBiomeSet(beeData.getSpawnData().getBiomeBlacklist());
 
         biomes.removeAll(blackListBiomes);
-        return biomes.stream().collect(Collectors.toList());
+        return new ArrayList<>(biomes);
     }
 
     private static Set<ResourceLocation> getBiomeSet(String list) {
@@ -55,8 +59,8 @@ public class BiomeParser {
                     biomeSet.addAll(getForgeBiomeLocations(type));
                 }
             } else {
-                if (BiomeDictionary.TYPES.containsKey(s)) {
-                    biomeSet.addAll(BiomeDictionary.TYPES.get(s));
+                if (BiomeDictionary.getTypes().containsKey(s)) {
+                    biomeSet.addAll(BiomeDictionary.getTypes().get(s));
                 }
             }
         });
@@ -70,11 +74,11 @@ public class BiomeParser {
         return biomeSet;
     }
 
-    private static String buildReturnString(Set<ResourceLocation> whitelist, Set<ResourceLocation> blacklist, CustomBeeData bee) {
+    private static String buildReturnString(Set<ResourceLocation> whitelist, Set<ResourceLocation> blacklist) {
         StringJoiner returnList = new StringJoiner(", ");
         whitelist.stream()
                 .filter(resourceLocation -> !blacklist.contains(resourceLocation))
-                .forEach(resourceLocation -> returnList.add(WordUtils.capitalize(resourceLocation.getPath().replaceAll("_", " "))));
+                .forEach(resourceLocation -> returnList.add(WordUtils.capitalize(resourceLocation.getPath().replace("_", " "))));
         return returnList.toString();
     }
 
@@ -83,8 +87,11 @@ public class BiomeParser {
 
     // TODO: 24/02/2021 Oreo pls look at the below and see if it can replace the above parsing
 
+    // WHY? where does List<String> whitelistStrings come from, how is it derived?
+    // Without more context to understand the need for the change it seems the change isn't worth doing
+
     private static List<ResourceLocation> getBiomesFromList(List<String> whitelistStrings) {
-        List<ResourceLocation> biomes = new ArrayList();
+        List<ResourceLocation> biomes = new ArrayList<>();
         for (String whitelistString : whitelistStrings) {
             if (whitelistString.startsWith(BeeConstants.TAG_PREFIX)) {
                 biomes.addAll(getBiomesFromTag(whitelistString.replace(BeeConstants.TAG_PREFIX, "")));
@@ -101,10 +108,10 @@ public class BiomeParser {
 
     private static List<ResourceLocation> getBiomesFromTag(String s) {
         if (Config.USE_FORGE_DICTIONARIES.get()) {
-            return getForgeBiomeLocations(getForgeType(s)).stream().collect(Collectors.toList());
+            return new ArrayList<>(getForgeBiomeLocations(getForgeType(s)));
         } else {
-            if (BiomeDictionary.TYPES.containsKey(s)) {
-                return BiomeDictionary.TYPES.get(s).stream().collect(Collectors.toList());
+            if (BiomeDictionary.getTypes().containsKey(s)) {
+                return new ArrayList<>(BiomeDictionary.getTypes().get(s));
             }
         }
         return new ArrayList<>();
@@ -122,7 +129,7 @@ public class BiomeParser {
     private static net.minecraftforge.common.BiomeDictionary.Type getForgeType(String s) {
         Collection<net.minecraftforge.common.BiomeDictionary.Type> forgeDict = net.minecraftforge.common.BiomeDictionary.Type.getAll();
         for (net.minecraftforge.common.BiomeDictionary.Type type : forgeDict) {
-            if (type.getName().toLowerCase().equals(s)) {
+            if (type.getName().equalsIgnoreCase(s)) {
                 return type;
             }
         }

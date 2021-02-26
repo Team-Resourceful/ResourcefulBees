@@ -39,6 +39,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.stream.IntStream;
 
+@SuppressWarnings("deprecation")
 public class HoneyGenerator extends Block {
     public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
     public static final BooleanProperty PROPERTY_ON = BooleanProperty.create("on");
@@ -79,7 +80,7 @@ public class HoneyGenerator extends Block {
         TileEntity blockEntity = world.getTileEntity(pos);
         if (blockEntity instanceof HoneyGeneratorTileEntity && state.getBlock() != state1.getBlock()) {
             HoneyGeneratorTileEntity honeyGeneratorTileEntity = (HoneyGeneratorTileEntity) blockEntity;
-            ItemStackHandler h = honeyGeneratorTileEntity.h;
+            ItemStackHandler h = honeyGeneratorTileEntity.getTileStackHandler();
             IntStream.range(0, h.getSlots()).mapToObj(h::getStackInSlot).filter(s -> !s.isEmpty()).forEach(stack -> InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack));
         }
         super.onReplaced(state1, world, pos, state, isMoving);

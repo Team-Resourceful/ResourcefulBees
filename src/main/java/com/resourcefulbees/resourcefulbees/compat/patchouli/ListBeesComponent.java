@@ -15,6 +15,7 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.NotNull;
 import vazkii.patchouli.api.IComponentRenderContext;
 import vazkii.patchouli.api.ICustomComponent;
 import vazkii.patchouli.api.IVariable;
@@ -47,7 +48,7 @@ public class ListBeesComponent implements ICustomComponent {
     }
 
     @Override
-    public void render(MatrixStack matrixStack, IComponentRenderContext context, float pticks, int mouseX, int mouseY) {
+    public void render(@NotNull MatrixStack matrixStack, @NotNull IComponentRenderContext context, float partialTicks, int mouseX, int mouseY) {
         prevPage.active = page != 0;
         nextPage.active = page != pageCount;
         renderEntity(matrixStack, context, page);
@@ -55,8 +56,9 @@ public class ListBeesComponent implements ICustomComponent {
 
     private void renderEntity(MatrixStack matrixStack, IComponentRenderContext context, int page) {
         Pair<EntityType<?>, Optional<Entity>> bee = bees.get(page);
-        if (bee.getRight().isPresent()) {
-            renderEntity(matrixStack, bee.getValue().get(), context.getGui().getMinecraft().world, xOffset, yOffset, this.defaultRotation, this.renderScale, this.offset);
+        Optional<Entity> entityOptional = bee.getRight();
+        if (entityOptional.isPresent()) {
+            renderEntity(matrixStack, entityOptional.get(), context.getGui().getMinecraft().world, xOffset, yOffset, this.defaultRotation, this.renderScale, this.offset);
         } else {
             Entity entity = initEntity(bee.getLeft(), context.getGui().getMinecraft().world);
             if (entity == null) {
@@ -107,7 +109,7 @@ public class ListBeesComponent implements ICustomComponent {
 
 
     @Override
-    public void onVariablesAvailable(UnaryOperator<IVariable> unaryOperator) {
-
+    public void onVariablesAvailable(@NotNull UnaryOperator<IVariable> unaryOperator) {
+        //not used
     }
 }

@@ -16,8 +16,8 @@ import javax.annotation.Nonnull;
 
 public class MechanicalCentrifugeContainer extends Container {
 
-    public MechanicalCentrifugeTileEntity centrifugeTileEntity;
-    public PlayerEntity player;
+    private final MechanicalCentrifugeTileEntity centrifugeTileEntity;
+    private final PlayerEntity player;
 
     public MechanicalCentrifugeContainer(int id, World world, BlockPos pos, PlayerInventory inv) {
         super(ModContainers.MECHANICAL_CENTRIFUGE_CONTAINER.get(), id);
@@ -26,21 +26,25 @@ public class MechanicalCentrifugeContainer extends Container {
 
         centrifugeTileEntity = (MechanicalCentrifugeTileEntity) world.getTileEntity(pos);
 
-        this.trackInt(new FunctionalIntReferenceHolder(() -> centrifugeTileEntity.clicks, v -> centrifugeTileEntity.clicks = v));
+        this.trackInt(new FunctionalIntReferenceHolder(() -> getCentrifugeTileEntity().getClicks(), v -> getCentrifugeTileEntity().setClicks(v)));
 
-        this.addSlot(new SlotItemHandlerUnconditioned(centrifugeTileEntity.h, MechanicalCentrifugeTileEntity.HONEYCOMB_SLOT, 30, 20){
+        this.addSlot(new SlotItemHandlerUnconditioned(getCentrifugeTileEntity().getItemStackHandler(), MechanicalCentrifugeTileEntity.HONEYCOMB_SLOT, 30, 20){
+
+            @Override
             public boolean isItemValid(ItemStack stack){
                 return !stack.getItem().equals(Items.GLASS_BOTTLE);
             }
         });
-        this.addSlot(new SlotItemHandlerUnconditioned(centrifugeTileEntity.h, MechanicalCentrifugeTileEntity.BOTTLE_SLOT, 30, 38){
+        this.addSlot(new SlotItemHandlerUnconditioned(getCentrifugeTileEntity().getItemStackHandler(), MechanicalCentrifugeTileEntity.BOTTLE_SLOT, 30, 38){
+
+            @Override
             public boolean isItemValid(ItemStack stack){
                 return stack.getItem().equals(Items.GLASS_BOTTLE);
             }
         });
-        this.addSlot(new OutputSlot(centrifugeTileEntity.h, MechanicalCentrifugeTileEntity.HONEY_BOTTLE, 80, 59));
-        this.addSlot(new OutputSlot(centrifugeTileEntity.h, MechanicalCentrifugeTileEntity.OUTPUT1, 129, 20));
-        this.addSlot(new OutputSlot(centrifugeTileEntity.h, MechanicalCentrifugeTileEntity.OUTPUT2, 129, 38));
+        this.addSlot(new OutputSlot(getCentrifugeTileEntity().getItemStackHandler(), MechanicalCentrifugeTileEntity.HONEY_BOTTLE, 80, 59));
+        this.addSlot(new OutputSlot(getCentrifugeTileEntity().getItemStackHandler(), MechanicalCentrifugeTileEntity.OUTPUT1, 129, 20));
+        this.addSlot(new OutputSlot(getCentrifugeTileEntity().getItemStackHandler(), MechanicalCentrifugeTileEntity.OUTPUT2, 129, 38));
 
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
@@ -86,5 +90,13 @@ public class MechanicalCentrifugeContainer extends Container {
             }
         }
         return itemstack;
+    }
+
+    public MechanicalCentrifugeTileEntity getCentrifugeTileEntity() {
+        return centrifugeTileEntity;
+    }
+
+    public PlayerEntity getPlayer() {
+        return player;
     }
 }

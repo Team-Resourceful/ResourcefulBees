@@ -2,6 +2,7 @@ package com.resourcefulbees.resourcefulbees.utils;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
@@ -16,7 +17,9 @@ import org.lwjgl.opengl.GL11;
 
 public class RenderUtils {
 
-    private RenderUtils(){}
+    private RenderUtils() {
+        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+    }
 
     public static TextureAtlasSprite getSprite(ResourceLocation spriteLocation) {
         return Minecraft.getInstance().getModelManager().method_24153(PlayerContainer.BLOCK_ATLAS_TEXTURE).getSprite(spriteLocation);
@@ -69,7 +72,7 @@ public class RenderUtils {
                 if (height == 0) {
                     break;
                 }
-                int y = yStart - ((yTile + 1) * textureHeight);
+                float y = yStart - ((yTile + 1F) * textureHeight);
                 int maskTop = textureHeight - height;
                 float vMaxLocal = vMax - (vDif * maskTop / textureHeight);
                 vertexBuffer.vertex(matrix4f, x, y + textureHeight, zLevel).texture(uMin, vMaxLocal).endVertex();

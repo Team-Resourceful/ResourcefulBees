@@ -26,6 +26,7 @@ import javax.annotation.Nonnull;
  * @author Shadows
  * Taken from Actually Additions owned by Ellpeck
  */
+@SuppressWarnings("unused")
 public class AutomationSensitiveItemStackHandler extends ItemStackHandler {
 
     public static final IAcceptor ACCEPT_TRUE = (a, b, c) -> true;

@@ -7,6 +7,7 @@ import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import com.resourcefulbees.resourcefulbees.registry.ModRecipeSerializers;
 import net.minecraft.block.BeehiveBlock;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -18,6 +19,7 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +31,7 @@ public class HiveUpgradeRecipe extends ShapedRecipe {
     }
 
     @Override
-    public NonNullList<ItemStack> getRemainingItems(CraftingInventory inventory) {
+    public @NotNull NonNullList<ItemStack> getRemainingItems(@NotNull CraftingInventory inventory) {
         List<ItemStack> stacks = getHives(inventory);
         NonNullList<ItemStack> remainingItems = super.getRemainingItems(inventory);
         ItemStack beeBox = new ItemStack(ModItems.CRAFTING_BEE_BOX.get());
@@ -61,7 +63,7 @@ public class HiveUpgradeRecipe extends ShapedRecipe {
         for (int i = 0; i < inventory.getSizeInventory(); i++) {
             ItemStack item = inventory.getStackInSlot(i);
             Block block = Block.getBlockFromItem(item.getItem());
-            if (block == null) continue;
+            if (block == Blocks.AIR) continue;
             if (block instanceof ApiaryBlock || block instanceof BeehiveBlock) {
                 stacks.add(item);
             }
@@ -70,21 +72,22 @@ public class HiveUpgradeRecipe extends ShapedRecipe {
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer() {
+    public @NotNull IRecipeSerializer<?> getSerializer() {
         return ModRecipeSerializers.APIARY_UPGRADE_RECIPE.get();
     }
 
     public static class Serializer extends ShapedRecipe.Serializer {
 
         @Override
-        public ShapedRecipe read(ResourceLocation recipeId, JsonObject json) {
+        public @NotNull ShapedRecipe read(@NotNull ResourceLocation recipeId, @NotNull JsonObject json) {
             ShapedRecipe recipe = super.read(recipeId, json);
             return new HiveUpgradeRecipe(recipeId, recipe.getIngredients(), recipe.getRecipeOutput());
         }
 
         @Override
-        public ShapedRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
+        public ShapedRecipe read(@NotNull ResourceLocation recipeId, @NotNull PacketBuffer buffer) {
             ShapedRecipe recipe = super.read(recipeId, buffer);
+            assert recipe != null : "why is recipe null?";
             return new HiveUpgradeRecipe(recipeId, recipe.getIngredients(), recipe.getRecipeOutput());
         }
     }

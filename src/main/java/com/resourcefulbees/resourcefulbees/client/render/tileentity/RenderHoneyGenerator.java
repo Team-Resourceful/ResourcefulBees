@@ -7,12 +7,12 @@ import com.resourcefulbees.resourcefulbees.utils.CubeModel;
 import com.resourcefulbees.resourcefulbees.utils.RenderCuboid;
 import net.minecraft.client.renderer.Atlases;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
 
 public class RenderHoneyGenerator extends TileEntityRenderer<HoneyGeneratorTileEntity> {
 
@@ -21,10 +21,10 @@ public class RenderHoneyGenerator extends TileEntityRenderer<HoneyGeneratorTileE
     }
 
     @Override
-    public void render(HoneyGeneratorTileEntity tile, float partialTick, MatrixStack matrix, IRenderTypeBuffer renderer, int light, int overlayLight) {
+    public void render(HoneyGeneratorTileEntity tile, float partialTick, @NotNull MatrixStack matrix, @NotNull IRenderTypeBuffer renderer, int light, int overlayLight) {
         if (tile.getWorld() == null) return;
         FluidStack stack = tile.fluidTank.getFluid();
-        if (stack != null && !stack.isEmpty()) {
+        if (!stack.isEmpty()) {
             int level = tile.getLevel();
             int color = stack.getFluid().getAttributes().getColor();
             ResourceLocation stillTexture = stack.getFluid().getAttributes().getStillTexture();

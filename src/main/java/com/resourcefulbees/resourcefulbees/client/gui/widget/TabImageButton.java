@@ -9,6 +9,8 @@ import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nonnull;
 
+import net.minecraft.client.gui.widget.button.Button.IPressable;
+
 public class TabImageButton extends ImageButton {
 
     protected final ResourceLocation resourceLocation;
@@ -31,7 +33,7 @@ public class TabImageButton extends ImageButton {
     }
 
     @Override
-    public void renderButton(@Nonnull MatrixStack matrix, int p_renderButton_1_, int p_renderButton_2_, float p_renderButton_3_) {
+    public void renderButton(@Nonnull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
         Minecraft minecraft = Minecraft.getInstance();
         minecraft.getTextureManager().bindTexture(this.resourceLocation);
         RenderSystem.disableDepthTest();

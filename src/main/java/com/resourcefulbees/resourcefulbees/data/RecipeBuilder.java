@@ -4,7 +4,7 @@ import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.IBeeRegistry;
 import com.resourcefulbees.resourcefulbees.api.beedata.CentrifugeData;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
-import com.resourcefulbees.resourcefulbees.api.beedata.HoneyBottleData;
+import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
@@ -29,6 +29,10 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
     private static RecipeManager recipeManager;
 
     private static final IBeeRegistry BEE_REGISTRY = BeeRegistry.getRegistry();
+
+    private static void setRecipeManager(RecipeManager recipeManager) {
+        RecipeBuilder.recipeManager = recipeManager;
+    }
 
     @Override
     public void onResourceManagerReload(@Nonnull IResourceManager resourceManager) {
@@ -65,22 +69,25 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
                     IRecipe<?> bucketToBottle = this.makeBucketToBottleRecipe(honeyData);
                     IRecipe<?> blockToBucket = this.makeBlockToBucketRecipe(honeyData);
                     IRecipe<?> bucketToBlock = this.makeBucketToBlockRecipe(honeyData);
-                    getRecipeManager().recipes.computeIfAbsent(honeyBlock.getType(), t -> new HashMap<>()).put(honeyBlock.getId(), honeyBlock);
-                    getRecipeManager().recipes.computeIfAbsent(honeyBottle.getType(), t -> new HashMap<>()).put(honeyBottle.getId(), honeyBottle);
-                    getRecipeManager().recipes.computeIfAbsent(bottleToBucket.getType(), t -> new HashMap<>()).put(bottleToBucket.getId(), bottleToBucket);
-                    getRecipeManager().recipes.computeIfAbsent(bucketToBottle.getType(), t -> new HashMap<>()).put(bucketToBottle.getId(), bucketToBottle);
-                    getRecipeManager().recipes.computeIfAbsent(blockToBucket.getType(), t -> new HashMap<>()).put(blockToBucket.getId(), blockToBucket);
-                    getRecipeManager().recipes.computeIfAbsent(bucketToBlock.getType(), t -> new HashMap<>()).put(bucketToBlock.getId(), bucketToBlock);
+                    getBottleRecipes(honeyBlock, honeyBottle, bottleToBucket);
+                    getBottleRecipes(bucketToBottle, blockToBucket, bucketToBlock);
                 }
             });
         }
+    }
+
+    //TODO simplify further
+    public void getBottleRecipes(IRecipe<?> recipe, IRecipe<?> recipe1, IRecipe<?> recipe2) {
+        getRecipeManager().recipes.computeIfAbsent(recipe.getType(), t -> new HashMap<>()).put(recipe.getId(), recipe);
+        getRecipeManager().recipes.computeIfAbsent(recipe1.getType(), t -> new HashMap<>()).put(recipe1.getId(), recipe1);
+        getRecipeManager().recipes.computeIfAbsent(recipe2.getType(), t -> new HashMap<>()).put(recipe2.getId(), recipe2);
     }
 
 
     @SubscribeEvent
     public void onAddReloadListeners(AddReloadListenerEvent event) {
         event.addListener(this);
-        recipeManager = event.getDataPackRegistries().getRecipeManager();
+        setRecipeManager(event.getDataPackRegistries().getRecipeManager());
     }
 
     private IRecipe<?> makeHoneycombRecipe(String beeType, CustomBeeData info) {

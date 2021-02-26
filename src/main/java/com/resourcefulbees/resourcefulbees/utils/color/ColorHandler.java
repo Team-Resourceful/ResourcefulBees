@@ -2,12 +2,10 @@ package com.resourcefulbees.resourcefulbees.utils.color;
 
 import com.resourcefulbees.resourcefulbees.api.IBeeRegistry;
 import com.resourcefulbees.resourcefulbees.block.CustomHoneyBlock;
-import com.resourcefulbees.resourcefulbees.block.HoneyTank;
 import com.resourcefulbees.resourcefulbees.block.HoneycombBlock;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.item.*;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
-import com.resourcefulbees.resourcefulbees.registry.ModBlocks;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.color.BlockColors;

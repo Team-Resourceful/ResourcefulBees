@@ -14,7 +14,6 @@ import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import mezz.jei.api.runtime.IIngredientManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -38,7 +37,7 @@ public class ApiaryCategory implements IRecipeCategory<ApiaryCategory.Recipe> {
         this.localizedName = I18n.format("gui.resourcefulbees.jei.category.apiary");
     }
 
-    public static List<Recipe> getHoneycombRecipes(IIngredientManager ingredientManager) {
+    public static List<Recipe> getHoneycombRecipes() {
         List<Recipe> recipes = new ArrayList<>();
         final List<ApiaryOutput> outputs = new ArrayList<>(Arrays.asList(Config.T1_APIARY_OUTPUT.get(), Config.T2_APIARY_OUTPUT.get(), Config.T3_APIARY_OUTPUT.get(), Config.T4_APIARY_OUTPUT.get()));
         final int[] outputQuantities = {Config.T1_APIARY_QUANTITY.get(), Config.T2_APIARY_QUANTITY.get(), Config.T3_APIARY_QUANTITY.get(), Config.T4_APIARY_QUANTITY.get()};

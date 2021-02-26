@@ -44,8 +44,6 @@ import java.util.List;
 
 @Mod("resourcefulbees")
 public class ResourcefulBees {
-    //TODO Test other mods can register their own bees (and pollen) with minimal issue
-    //TODO Weed out all possible NPE's
 
     public static final String MOD_ID = "resourcefulbees";
 

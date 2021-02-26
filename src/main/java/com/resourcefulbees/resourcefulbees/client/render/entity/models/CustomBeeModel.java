@@ -88,17 +88,14 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
         this.backLegs = new ModelRenderer(this);
 
 
-        switch (modelType) {
-            case KITTEN:
-                addKittenParts();
-                break;
-            case DEFAULT:
-                addDefaultParts();
-                break;
+        if (modelType.equals(BaseModelTypes.KITTEN)) {
+            addKittenParts();
+        } else if (modelType.equals(BaseModelTypes.DEFAULT)) {
+            addDefaultParts();
         }
     }
 
-
+    @Override
     public void setLivingAnimations(@Nonnull T entityIn, float limbSwing, float limbSwingAmount, float partialTick) {
         super.setLivingAnimations(entityIn, limbSwing, limbSwingAmount, partialTick);
         this.bodyPitch = entityIn.getBodyPitch(partialTick);

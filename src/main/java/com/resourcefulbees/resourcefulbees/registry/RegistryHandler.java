@@ -2,12 +2,11 @@ package com.resourcefulbees.resourcefulbees.registry;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
-import com.resourcefulbees.resourcefulbees.api.beedata.HoneyBottleData;
+import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
 import com.resourcefulbees.resourcefulbees.block.CustomHoneyBlock;
 import com.resourcefulbees.resourcefulbees.block.CustomHoneyFluidBlock;
 import com.resourcefulbees.resourcefulbees.block.HoneycombBlock;
 import com.resourcefulbees.resourcefulbees.config.Config;
-import com.resourcefulbees.resourcefulbees.effects.ModEffects;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.entity.passive.ResourcefulBee;
 import com.resourcefulbees.resourcefulbees.fluids.HoneyFlowingFluid;
@@ -17,7 +16,9 @@ import com.resourcefulbees.resourcefulbees.item.CustomHoneyBottleItem;
 import com.resourcefulbees.resourcefulbees.item.CustomHoneyBucketItem;
 import com.resourcefulbees.resourcefulbees.item.HoneycombItem;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
+import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.utils.color.Color;
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FlowingFluidBlock;
@@ -25,7 +26,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.attributes.GlobalEntityTypeAttributes;
-import net.minecraft.entity.passive.BeeEntity;
 import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -45,6 +45,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RegistryHandler {
+
+    private RegistryHandler() {
+        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+    }
 
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITIES, ResourcefulBees.MOD_ID);
 
@@ -67,12 +71,12 @@ public class RegistryHandler {
     //Dynamic|Iterative Registration Stuff below this line
 
     public static void addEntityAttributes() {
-        ModEntities.MOD_BEES.forEach((s, customBee) -> GlobalEntityTypeAttributes.put(customBee.get(), CustomBeeEntity.createBeeAttributes(s).build()));
+        ModEntities.getModBees().forEach((s, customBee) -> GlobalEntityTypeAttributes.put(customBee.get(), CustomBeeEntity.createBeeAttributes(s).build()));
     }
 
     public static void registerDynamicBees() {
         BeeRegistry.getRegistry().getBees().forEach((name, customBee) -> {
-            if (customBee.shouldResourcefulBeesDoForgeRegistration) {
+            if (customBee.shouldResourcefulBeesDoForgeRegistration()) {
                 if (customBee.hasHoneycomb() && !customBee.hasCustomDrop()) {
                     registerHoneycomb(name, customBee);
                 } else if (customBee.hasHoneycomb() && customBee.hasCustomDrop() && !customBee.isEasterEggBee()) {
@@ -85,16 +89,16 @@ public class RegistryHandler {
 
     public static void registerDynamicHoney() {
         BeeRegistry.getRegistry().getHoneyBottles().forEach((name, honeyData) -> {
-            if (honeyData.shouldResourcefulBeesDoForgeRegistration) {
+            if (honeyData.shouldResourcefulBeesDoForgeRegistration()) {
                 registerHoneyBottle(name, honeyData);
             }
         });
     }
 
-    private static Map<String, RegistryObject<FlowingFluid>> stillFluids = new HashMap<>();
-    private static Map<String, RegistryObject<FlowingFluid>> flowingFluids = new HashMap<>();
-    private static Map<String, RegistryObject<Item>> honeyBuckets = new HashMap<>();
-    private static Map<String, RegistryObject<FlowingFluidBlock>> fluidBlocks = new HashMap<>();
+    private static final Map<String, RegistryObject<FlowingFluid>> stillFluids = new HashMap<>();
+    private static final Map<String, RegistryObject<FlowingFluid>> flowingFluids = new HashMap<>();
+    private static final Map<String, RegistryObject<Item>> honeyBuckets = new HashMap<>();
+    private static final Map<String, RegistryObject<FlowingFluidBlock>> fluidBlocks = new HashMap<>();
 
     private static void registerHoneyBottle(String name, HoneyBottleData honeyData) {
         final RegistryObject<Item> customHoneyBottle = ModItems.ITEMS.register(name + "_honey_bottle", () -> new CustomHoneyBottleItem(honeyData.getProperties(), honeyData));
@@ -113,7 +117,7 @@ public class RegistryHandler {
             stillFluids.put(name, ModFluids.FLUIDS.register(name + "_honey", () -> new HoneyFlowingFluid.Source(makeProperties(name, honeyData), honeyData)));
             flowingFluids.put(name, ModFluids.FLUIDS.register(name + "_honey_flowing", () -> new HoneyFlowingFluid.Flowing(makeProperties(name, honeyData), honeyData)));
             honeyBuckets.put(name, ModItems.ITEMS.register(name + "_honey_fluid_bucket", () -> new CustomHoneyBucketItem(stillFluids.get(name), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES).containerItem(Items.BUCKET).maxStackSize(1), honeyData)));
-            fluidBlocks.put(name, ModBlocks.BLOCKS.register(name + "_honey", () -> new CustomHoneyFluidBlock(stillFluids.get(name), Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops(), honeyData)));
+            fluidBlocks.put(name, ModBlocks.BLOCKS.register(name + "_honey", () -> new CustomHoneyFluidBlock(stillFluids.get(name), AbstractBlock.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops(), honeyData)));
 
             honeyData.setHoneyStillFluidRegistryObject(stillFluids.get(name));
             honeyData.setHoneyFlowingFluidRegistryObject(flowingFluids.get(name));
@@ -138,7 +142,7 @@ public class RegistryHandler {
     }
 
     private static void registerHoneycomb(String name, CustomBeeData customBeeData) {
-        final RegistryObject<Block> customHoneycombBlock = ModBlocks.BLOCKS.register(name + "_honeycomb_block", () -> new HoneycombBlock(name, customBeeData.getColorData(), Block.Properties.from(Blocks.HONEYCOMB_BLOCK)));
+        final RegistryObject<Block> customHoneycombBlock = ModBlocks.BLOCKS.register(name + "_honeycomb_block", () -> new HoneycombBlock(name, customBeeData.getColorData(), AbstractBlock.Properties.from(Blocks.HONEYCOMB_BLOCK)));
         final RegistryObject<Item> customHoneycomb = ModItems.ITEMS.register(name + "_honeycomb", () -> new HoneycombItem(name, customBeeData.getColorData(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
         final RegistryObject<Item> customHoneycombBlockItem = ModItems.ITEMS.register(name + "_honeycomb_block", () -> new BlockItem(customHoneycombBlock.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
 
@@ -156,7 +160,7 @@ public class RegistryHandler {
         final RegistryObject<Item> customBeeSpawnEgg = ModItems.ITEMS.register(name + "_bee_spawn_egg",
                 () -> new BeeSpawnEggItem(customBeeEntity, Color.parseInt(BeeConstants.VANILLA_BEE_COLOR), 0x303030, customBeeData.getColorData(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
 
-        ModEntities.MOD_BEES.put(name, customBeeEntity);
+        ModEntities.getModBees().put(name, customBeeEntity);
         customBeeData.setEntityTypeRegistryID(customBeeEntity.getId());
         customBeeData.setSpawnEggItemRegistryObject(customBeeSpawnEgg);
     }

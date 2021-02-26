@@ -16,17 +16,15 @@ import javax.annotation.Nonnull;
 
 public class ApiaryStorageContainer extends Container {
 
-    public ApiaryStorageTileEntity apiaryStorageTileEntity;
-    public PlayerEntity player;
-    public PlayerInventory playerInventory;
-    public int numberOfSlots;
-    public boolean rebuild;
+    private final ApiaryStorageTileEntity apiaryStorageTileEntity;
+    private final PlayerInventory playerInventory;
+    private int numberOfSlots;
+    private boolean rebuild;
 
     public ApiaryStorageContainer(int id, World world, BlockPos pos, PlayerInventory inv) {
         super(ModContainers.APIARY_STORAGE_CONTAINER.get(), id);
-        this.player = inv.player;
         this.playerInventory = inv;
-        apiaryStorageTileEntity = (ApiaryStorageTileEntity) world.getTileEntity(pos);
+        this.apiaryStorageTileEntity = (ApiaryStorageTileEntity) world.getTileEntity(pos);
         setupSlots(false);
     }
 
@@ -42,19 +40,23 @@ public class ApiaryStorageContainer extends Container {
 
 
     public void setupSlots(boolean rebuild) {
-        if (apiaryStorageTileEntity != null) {
+        if (getApiaryStorageTileEntity() != null) {
             this.inventorySlots.clear();
-            numberOfSlots = apiaryStorageTileEntity.numberOfSlots;
-            this.addSlot(new SlotItemHandlerUnconditioned(apiaryStorageTileEntity.h, ApiaryStorageTileEntity.UPGRADE_SLOT, 7, 18) {
+            numberOfSlots = getApiaryStorageTileEntity().getNumberOfSlots();
+            this.addSlot(new SlotItemHandlerUnconditioned(getApiaryStorageTileEntity().getItemStackHandler(), ApiaryStorageTileEntity.UPGRADE_SLOT, 7, 18) {
+
+                @Override
                 public int getSlotStackLimit() { return 1; }
 
+                @Override
                 public boolean isItemValid(ItemStack stack) { return UpgradeItem.hasUpgradeData(stack) && (UpgradeItem.getUpgradeType(stack).contains(NBTConstants.NBT_STORAGE_UPGRADE)); }
 
+                @Override
                 public boolean canTakeStack(PlayerEntity playerIn) {
                     boolean flag = true;
 
-                    for (int i = 10; i <= numberOfSlots; ++i) {
-                        if (!apiaryStorageTileEntity.h.getStackInSlot(i).isEmpty()) {
+                    for (int i = 10; i <= getNumberOfSlots(); ++i) {
+                        if (!getApiaryStorageTileEntity().getItemStackHandler().getStackInSlot(i).isEmpty()) {
                             flag = false;
                             break;
                         }
@@ -64,35 +66,35 @@ public class ApiaryStorageContainer extends Container {
             });
 
             int rows;
-            if (numberOfSlots != 108) {
-                rows = numberOfSlots / 9;
+            if (getNumberOfSlots() != 108) {
+                rows = getNumberOfSlots() / 9;
                 for (int r = 0; r < rows; ++r) {
                     for (int c = 0; c < 9; ++c) {
-                        this.addSlot(new OutputSlot(apiaryStorageTileEntity.h, c + r * 9 + 1, 26 + 8 + c * 18, 18 + r * 18));
+                        this.addSlot(new OutputSlot(getApiaryStorageTileEntity().getItemStackHandler(), c + r * 9 + 1, 26 + 8 + c * 18, 18 + r * 18));
                     }
                 }
             } else {
                 rows = 9;
                 for (int r = 0; r < 9; ++r) {
                     for (int c = 0; c < 12; ++c) {
-                        this.addSlot(new OutputSlot(apiaryStorageTileEntity.h, c + r * 12 + 1, 26 + 8 + c * 18, 18 + r * 18));
+                        this.addSlot(new OutputSlot(getApiaryStorageTileEntity().getItemStackHandler(), c + r * 12 + 1, 26 + 8 + c * 18, 18 + r * 18));
                     }
                 }
             }
 
-            int invX = numberOfSlots == 108 ? 35 : 8;
+            int invX = getNumberOfSlots() == 108 ? 35 : 8;
 
             for (int i = 0; i < 3; ++i) {
                 for (int j = 0; j < 9; ++j) {
-                    this.addSlot(new Slot(playerInventory, j + i * 9 + 9, 26 + invX + j * 18, 32 + (rows * 18) + i * 18));
+                    this.addSlot(new Slot(getPlayerInventory(), j + i * 9 + 9, 26 + invX + j * 18, 32 + (rows * 18) + i * 18));
                 }
             }
 
             for (int k = 0; k < 9; ++k) {
-                this.addSlot(new Slot(playerInventory, k, 26 + invX + k * 18, 90 + rows * 18));
+                this.addSlot(new Slot(getPlayerInventory(), k, 26 + invX + k * 18, 90 + rows * 18));
             }
 
-            this.rebuild = rebuild;
+            this.setRebuild(rebuild);
         }
     }
 
@@ -107,8 +109,8 @@ public class ApiaryStorageContainer extends Container {
         if (slot != null && slot.getHasStack()) {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
-            if (index <= numberOfSlots) {
-                if (!this.mergeItemStack(itemstack1, numberOfSlots, inventorySlots.size(), true)) {
+            if (index <= getNumberOfSlots()) {
+                if (!this.mergeItemStack(itemstack1, getNumberOfSlots(), inventorySlots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
             } else if (!this.mergeItemStack(itemstack1, 0, 1, false)) {
@@ -122,5 +124,25 @@ public class ApiaryStorageContainer extends Container {
             }
         }
         return itemstack;
+    }
+
+    public PlayerInventory getPlayerInventory() {
+        return playerInventory;
+    }
+
+    public int getNumberOfSlots() {
+        return numberOfSlots;
+    }
+
+    public ApiaryStorageTileEntity getApiaryStorageTileEntity() {
+        return apiaryStorageTileEntity;
+    }
+
+    public boolean isRebuild() {
+        return rebuild;
+    }
+
+    public void setRebuild(boolean rebuild) {
+        this.rebuild = rebuild;
     }
 }

@@ -41,11 +41,9 @@ public class Smoker extends Item {
 
     @Override
     public @NotNull ActionResultType onItemUse(ItemUseContext context) {
-        if (!context.getWorld().isRemote) {
-            if (context.getItem().getDamage() < context.getItem().getMaxDamage()) {
-                smokeHive(context.getPos(), context.getWorld());
-                return ActionResultType.PASS;
-            }
+        if (!context.getWorld().isRemote && context.getItem().getDamage() < context.getItem().getMaxDamage()) {
+            smokeHive(context.getPos(), context.getWorld());
+            return ActionResultType.PASS;
         }
         return super.onItemUse(context);
     }

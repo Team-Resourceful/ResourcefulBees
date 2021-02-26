@@ -13,6 +13,8 @@ import java.util.Comparator;
 import java.util.Optional;
 import java.util.function.Predicate;
 
+import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
+
 public class MultiFluidTank implements IFluidHandler {
 
     protected FluidTank[] fluidTanks;

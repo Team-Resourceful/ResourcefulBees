@@ -1,9 +1,12 @@
 package com.resourcefulbees.resourcefulbees.entity.passive;
 
 import com.resourcefulbees.resourcefulbees.api.beedata.*;
+import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
+import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyEffect;
 import com.resourcefulbees.resourcefulbees.lib.BaseModelTypes;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.LightLevels;
+import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.ModBlocks;
 import com.resourcefulbees.resourcefulbees.registry.ModFluids;
@@ -11,6 +14,10 @@ import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import net.minecraft.potion.Effects;
 
 public class KittenBee {
+
+    private KittenBee() {
+        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+    }
 
     public static void register() {
         BeeRegistry.getRegistry().registerBee(BeeConstants.KITTEN_BEE, getKittenBeeData());
@@ -50,7 +57,7 @@ public class KittenBee {
                 .setTraits(new String[]{BeeConstants.KITTEN_BEE})
                 .createCustomBee();
 
-        data.shouldResourcefulBeesDoForgeRegistration = true;
+        data.setShouldResourcefulBeesDoForgeRegistration(true);
         data.setCombRegistryObject(ModItems.CATNIP_HONEYCOMB);
         data.setCombBlockItemRegistryObject(ModItems.CATNIP_HONEYCOMB_BLOCK_ITEM);
         data.setCombBlockRegistryObject(ModBlocks.CATNIP_HONEY_BLOCK);
@@ -64,9 +71,9 @@ public class KittenBee {
         if (honeyBottleData == null) {
             HoneyBottleData.Builder builder = new HoneyBottleData.Builder("catnip", 8, 1.6f, "#BD5331");
             HoneyEffect speed = new HoneyEffect(Effects.SPEED.getRegistryName().toString(), 2400, 2, 1);
-            HoneyEffect nightVistion = new HoneyEffect(Effects.NIGHT_VISION.getRegistryName().toString(), 2400, 0, 1);
+            HoneyEffect nightVision = new HoneyEffect(Effects.NIGHT_VISION.getRegistryName().toString(), 2400, 0, 1);
             HoneyEffect jump = new HoneyEffect(Effects.JUMP_BOOST.getRegistryName().toString(), 2400, 1, 1);
-            builder.addEffect(speed).addEffect(nightVistion).addEffect(jump);
+            builder.addEffect(speed).addEffect(nightVision).addEffect(jump);
             honeyBottleData = builder.build();
             honeyBottleData.setHoneyBlockRegistryObject(ModBlocks.CATNIP_HONEY_BLOCK);
             honeyBottleData.setHoneyStillFluidRegistryObject(ModFluids.CATNIP_HONEY_STILL);

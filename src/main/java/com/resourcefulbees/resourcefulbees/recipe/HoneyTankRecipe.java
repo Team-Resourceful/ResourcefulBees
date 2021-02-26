@@ -2,6 +2,7 @@ package com.resourcefulbees.resourcefulbees.recipe;
 
 import com.google.gson.JsonObject;
 import com.resourcefulbees.resourcefulbees.block.HoneyTank;
+import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.registry.ModRecipeSerializers;
 import com.resourcefulbees.resourcefulbees.tileentity.HoneyTankTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
@@ -34,34 +35,34 @@ public class HoneyTankRecipe extends ShapedRecipe {
     }
 
     @Override
-    public ItemStack getCraftingResult(CraftingInventory inventory) {
+    public @NotNull ItemStack getCraftingResult(@NotNull CraftingInventory inventory) {
         List<ItemStack> stacks = getTanks(inventory);
         CompoundNBT tag = new CompoundNBT();
         HoneyTankTileEntity.TankTier tier = HoneyTankTileEntity.TankTier.getTier(result.getItem());
         for (ItemStack stack : stacks) {
-            if (!stack.hasTag() || stack.getTag() == null || stack.getTag().isEmpty() || !stack.getTag().contains("fluid")) {
+            if (!stack.hasTag() || stack.getTag() == null || stack.getTag().isEmpty() || !stack.getTag().contains(NBTConstants.NBT_FLUID)) {
                 continue;
             }
-            CompoundNBT fluid = stack.getTag().getCompound("fluid");
-            if (tag.contains("fluid")) {
+            CompoundNBT fluid = stack.getTag().getCompound(NBTConstants.NBT_FLUID);
+            if (tag.contains(NBTConstants.NBT_FLUID)) {
                 FluidTank mainStack = new FluidTank(tier.getMaxFillAmount(), honeyFluidPredicate());
-                mainStack.readFromNBT(tag.getCompound("fluid"));
+                mainStack.readFromNBT(tag.getCompound(NBTConstants.NBT_FLUID));
                 FluidStack fluidStack = FluidStack.loadFluidStackFromNBT(fluid);
                 if (mainStack.getFluid().containsFluid(fluidStack)) {
                     mainStack.fill(fluidStack, IFluidHandler.FluidAction.EXECUTE);
-                    tag.put("fluid", mainStack.writeToNBT(new CompoundNBT()));
+                    tag.put(NBTConstants.NBT_FLUID, mainStack.writeToNBT(new CompoundNBT()));
                 }
             } else {
-                tag.put("fluid", fluid);
+                tag.put(NBTConstants.NBT_FLUID, fluid);
             }
         }
         if (tag.isEmpty()) {
             return this.result;
         } else {
             tag.putInt("tier", tier.getTier());
-            ItemStack result = this.result.copy();
-            result.setTag(tag);
-            return result;
+            ItemStack resultCopy = this.result.copy();
+            resultCopy.setTag(tag);
+            return resultCopy;
         }
     }
 
@@ -81,21 +82,22 @@ public class HoneyTankRecipe extends ShapedRecipe {
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer() {
+    public @NotNull IRecipeSerializer<?> getSerializer() {
         return ModRecipeSerializers.HONEY_TANK_RECIPE.get();
     }
 
     public static class Serializer extends ShapedRecipe.Serializer {
 
         @Override
-        public ShapedRecipe read(ResourceLocation recipeId, JsonObject json) {
+        public @NotNull ShapedRecipe read(@NotNull ResourceLocation recipeId, @NotNull JsonObject json) {
             ShapedRecipe recipe = super.read(recipeId, json);
             return new HoneyTankRecipe(recipeId, recipe.getIngredients(), recipe.getRecipeOutput());
         }
 
         @Override
-        public ShapedRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
+        public ShapedRecipe read(@NotNull ResourceLocation recipeId, @NotNull PacketBuffer buffer) {
             ShapedRecipe recipe = super.read(recipeId, buffer);
+            assert recipe != null;
             return new HoneyTankRecipe(recipeId, recipe.getIngredients(), recipe.getRecipeOutput());
         }
     }

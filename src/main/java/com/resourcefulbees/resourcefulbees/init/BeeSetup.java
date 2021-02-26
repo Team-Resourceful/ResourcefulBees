@@ -3,7 +3,7 @@ package com.resourcefulbees.resourcefulbees.init;
 import com.google.gson.Gson;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
-import com.resourcefulbees.resourcefulbees.api.beedata.HoneyBottleData;
+import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.entity.passive.KittenBee;
@@ -81,7 +81,7 @@ public class BeeSetup {
 
     private static void parseBee(File file) throws IOException {
         String name = file.getName();
-        name = name.substring(0, name.indexOf('.')).toLowerCase();
+        name = name.substring(0, name.indexOf('.'));
 
         Reader r = Files.newBufferedReader(file.toPath());
 
@@ -100,14 +100,14 @@ public class BeeSetup {
 
     private static void parseBee(Reader reader, String name) {
         try {
-            name = name.toLowerCase().replace(" ", "_");
+            name = name.toLowerCase(Locale.ENGLISH).replace(" ", "_");
             Gson gson = new Gson();
             CustomBeeData bee = gson.fromJson(reader, CustomBeeData.class);
             bee.setName(name);
-            bee.shouldResourcefulBeesDoForgeRegistration = true;
-            BeeRegistry.getRegistry().registerBee(name.toLowerCase(Locale.ENGLISH), bee);
+            bee.setShouldResourcefulBeesDoForgeRegistration(true);
+            BeeRegistry.getRegistry().registerBee(name, bee);
         } catch (Exception e) {
-            LOGGER.error(String.format("\n---------[Registration Error]---------\nCould not validate %s bee's json file, Skipping.", name));
+            LOGGER.error("\n---------[Registration Error]---------\nCould not validate {} bee's json file, Skipping.", name);
         }
     }
 
@@ -132,14 +132,14 @@ public class BeeSetup {
 
     private static void parseHoney(Reader reader, String name) {
         try {
-            name = name.toLowerCase().replace(" ", "_");
+            name = name.toLowerCase(Locale.ENGLISH).replace(" ", "_");
             Gson gson = new Gson();
             HoneyBottleData honey = gson.fromJson(reader, HoneyBottleData.class);
             if (honey.getName() == null) honey.setName(name);
-            honey.shouldResourcefulBeesDoForgeRegistration = true;
-            BeeRegistry.getRegistry().registerHoney(honey.getName().toLowerCase(), honey);
+            honey.setShouldResourcefulBeesDoForgeRegistration(true);
+            BeeRegistry.getRegistry().registerHoney(honey.getName(), honey);
         } catch (Exception e) {
-            LOGGER.error(String.format("\n---------[Registration Error]---------\nCould not validate %s honey's json file, Skipping.", name));
+            LOGGER.error("\n---------[Registration Error]---------\nCould not validate {} honey's json file, Skipping.", name);
         }
     }
 
@@ -149,7 +149,7 @@ public class BeeSetup {
             zipStream.filter(f -> f.getFileName().toString().endsWith(ZIP)).forEach(BeeSetup::addZippedBee);
             jsonStream.filter(f -> f.getFileName().toString().endsWith(JSON)).forEach(BeeSetup::addBee);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("Could not stream bees!!", e);
         }
     }
 
@@ -159,7 +159,7 @@ public class BeeSetup {
             zipStream.filter(f -> f.getFileName().toString().endsWith(ZIP)).forEach(BeeSetup::addZippedHoney);
             jsonStream.filter(f -> f.getFileName().toString().endsWith(JSON)).forEach(BeeSetup::addHoney);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("Could not stream honey!!", e);
         }
     }
 
@@ -229,7 +229,7 @@ public class BeeSetup {
                 copyDefaultBees(Paths.get(source.toString(), "/data/resourcefulbees/default_bees"));
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("Could not setup default bees!!", e);
         }
     }
 
@@ -244,7 +244,7 @@ public class BeeSetup {
                 copyDefaultHoney(Paths.get(source.toString(), "/data/resourcefulbees/default_honey"));
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("Could not setup default honey!!", e);
         }
     }
 
@@ -256,11 +256,11 @@ public class BeeSetup {
                 try {
                     Files.copy(path, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    LOGGER.error("Could not copy default honey!!", e);
                 }
             });
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("Could not stream honey!!", e);
         }
     }
 
@@ -281,11 +281,11 @@ public class BeeSetup {
                 try {
                     Files.copy(path, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    LOGGER.error("Could not copy default bees!!", e);
                 }
             });
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("Could not stream bees!!", e);
         }
     }
 
@@ -320,7 +320,7 @@ public class BeeSetup {
     }
 
     public static void registerBeePlacements() {
-        ModEntities.MOD_BEES.forEach((s, entityTypeRegistryObject) -> {
+        ModEntities.getModBees().forEach((s, entityTypeRegistryObject) -> {
             CustomBeeData beeData = BeeRegistry.getRegistry().getBeeData(s);
             if (beeData.getSpawnData().canSpawnInWorld()) {
                 EntitySpawnPlacementRegistry.register(entityTypeRegistryObject.get(),

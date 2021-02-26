@@ -1,11 +1,15 @@
 package com.resourcefulbees.resourcefulbees.item;
 
-import com.resourcefulbees.resourcefulbees.api.beedata.HoneyBottleData;
+import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.BucketItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.fluids.capability.wrappers.FluidBucketWrapper;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
@@ -32,10 +36,7 @@ public class CustomHoneyBucketItem extends BucketItem {
     }
 
     @Override
-    public net.minecraftforge.common.capabilities.ICapabilityProvider initCapabilities(ItemStack stack, @Nullable net.minecraft.nbt.CompoundNBT nbt) {
-        if (this instanceof BucketItem)
-            return new net.minecraftforge.fluids.capability.wrappers.FluidBucketWrapper(stack);
-        else
-            return super.initCapabilities(stack, nbt);
+    public ICapabilityProvider initCapabilities(@NotNull ItemStack stack, @Nullable CompoundNBT nbt) {
+        return new FluidBucketWrapper(stack);
     }
 }

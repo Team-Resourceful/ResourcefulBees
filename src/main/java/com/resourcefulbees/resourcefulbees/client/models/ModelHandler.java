@@ -4,7 +4,7 @@ import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
-import com.resourcefulbees.resourcefulbees.api.beedata.HoneyBottleData;
+import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import net.minecraft.block.Block;
@@ -150,7 +150,7 @@ public class ModelHandler {
         IResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
 
         BeeRegistry.getRegistry().getBees().forEach((string, customBee) -> {
-            if (customBee.shouldResourcefulBeesDoForgeRegistration) {
+            if (customBee.shouldResourcefulBeesDoForgeRegistration()) {
 
                 if (customBee.hasHoneycomb() && !customBee.hasCustomDrop()) {
                     registerHoneycombBlockstate(customBee, resourceManager);
@@ -162,7 +162,7 @@ public class ModelHandler {
         });
 
         BeeRegistry.getRegistry().getHoneyBottles().forEach((string, honeyData) -> {
-            if (honeyData.shouldResourcefulBeesDoForgeRegistration) {
+            if (honeyData.shouldResourcefulBeesDoForgeRegistration()) {
                 registerHoneyFluid(honeyData);
 
 

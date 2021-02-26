@@ -1,6 +1,5 @@
 package com.resourcefulbees.resourcefulbees.network.packets;
 
-import com.resourcefulbees.resourcefulbees.block.EnderBeecon;
 import com.resourcefulbees.resourcefulbees.tileentity.EnderBeeconTileEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
@@ -37,7 +36,7 @@ public class UpdateBeeconMessage {
         context.get().enqueueWork(() -> {
             ServerPlayerEntity player = context.get().getSender();
             if (player != null) {
-                if (player.world.isBlockLoaded(message.blockPos)){
+                if (player.world.isBlockPresent(message.blockPos)){
                     TileEntity tileEntity = player.world.getTileEntity(message.blockPos);
                     if (tileEntity instanceof EnderBeeconTileEntity) {
                         EnderBeeconTileEntity beecon = (EnderBeeconTileEntity) tileEntity;

@@ -1,23 +1,20 @@
 package com.resourcefulbees.resourcefulbees.item;
 
-import com.resourcefulbees.resourcefulbees.registry.ModBlocks;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.TooltipBuilder;
 import net.minecraft.block.Block;
-import net.minecraft.block.FlowerBlock;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.*;
-import net.minecraft.particles.BasicParticleType;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUseContext;
+import net.minecraft.item.Items;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -25,12 +22,14 @@ import java.util.List;
 
 public class Fertilizer extends Item {
 
+    //TODO - This system needs to be rewritten properly
+
     public Fertilizer(Properties properties) {
         super(properties);
     }
 
     @Override
-    public void addInformation(ItemStack stack, World world, List list, ITooltipFlag par4)
+    public void addInformation(ItemStack stack, World world, @NotNull List list, @NotNull ITooltipFlag par4)
     {
         if(stack.getTag() == null || !stack.getTag().contains("specific")) {
             list.add(new TooltipBuilder().addTip("Unknown Type").build().get(0));

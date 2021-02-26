@@ -1,10 +1,10 @@
 package com.resourcefulbees.resourcefulbees.item;
 
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
-import com.resourcefulbees.resourcefulbees.registry.ItemGroupResourcefulBees;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import org.jetbrains.annotations.NotNull;
 
 public class UpgradeItem extends Item {
 
@@ -29,14 +29,13 @@ public class UpgradeItem extends Item {
     }
 
     public static CompoundNBT getUpgradeData(ItemStack stack) {
-        CompoundNBT data = stack.getChildTag("UpgradeData");
-        if (data == null && isUpgradeItem(stack)) {
+        if (stack.getChildTag("UpgradeData") == null && isUpgradeItem(stack)) {
            return ((UpgradeItem) stack.getItem()).getUpgradeData();
         }
-        return data;
+        return new CompoundNBT();
     }
 
-    public static String getUpgradeType(ItemStack stack) {
+    public static String getUpgradeType(@NotNull ItemStack stack) {
         return getUpgradeData(stack).getString(NBTConstants.NBT_UPGRADE_TYPE);
     }
 

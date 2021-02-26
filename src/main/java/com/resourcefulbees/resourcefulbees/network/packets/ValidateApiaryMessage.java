@@ -35,12 +35,12 @@ public class ValidateApiaryMessage {
         context.get().enqueueWork(() -> {
             ServerPlayerEntity player = context.get().getSender();
             if (player != null) {
-                if (player.world.isBlockLoaded(message.pos)) {
+                if (player.world.isBlockPresent(message.pos)) {
                     TileEntity tileEntity = player.world.getTileEntity(message.pos);
                     if (tileEntity instanceof ApiaryTileEntity) {
                         ApiaryTileEntity apiaryTileEntity = (ApiaryTileEntity) tileEntity;
-                        apiaryTileEntity.verticalOffset = message.verticalOffset;
-                        apiaryTileEntity.horizontalOffset = message.horizontalOffset;
+                        apiaryTileEntity.setVerticalOffset(message.verticalOffset);
+                        apiaryTileEntity.setHorizontalOffset(message.horizontalOffset);
                         apiaryTileEntity.runStructureValidation(player);
                     }
                 }

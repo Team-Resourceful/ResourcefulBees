@@ -2,8 +2,6 @@ package com.resourcefulbees.resourcefulbees.utils;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Direction.Axis;
@@ -17,11 +15,6 @@ import java.util.Arrays;
 public class RenderCuboid {
     public static final RenderCuboid INSTANCE = new RenderCuboid();
     private static final Vector3f VEC_ZERO = new Vector3f(0.0F, 0.0F, 0.0F);
-    private static final int U_MIN = 0;
-    private static final int U_MAX = 1;
-    private static final int V_MIN = 2;
-    private static final int V_MAX = 3;
-    protected EntityRendererManager manager = Minecraft.getInstance().getRenderManager();
 
 
     private static Vector3f withValue(Vector3f vector, Axis axis, float value) {
@@ -32,7 +25,7 @@ public class RenderCuboid {
         } else if (axis == Axis.Z) {
             return new Vector3f(vector.getX(), vector.getY(), value);
         } else {
-            throw new RuntimeException("Was given a null axis! That was probably not intentional, consider this a bug! (Vector = " + vector + ")");
+            throw new CustomException("Was given a null axis! That was probably not intentional, consider this a bug! (Vector = " + vector + ")");
         }
     }
 
@@ -44,7 +37,7 @@ public class RenderCuboid {
         } else if (axis == Axis.Z) {
             return vector.getZ();
         } else {
-            throw new RuntimeException("Was given a null axis! That was probably not intentional, consider this a bug! (Vector = " + vector + ")");
+            throw new CustomException("Was given a null axis! That was probably not intentional, consider this a bug! (Vector = " + vector + ")");
         }
     }
 
@@ -71,14 +64,14 @@ public class RenderCuboid {
         float alpha = getAlpha(argb);
         Vector3f size = cube.getSize();
         matrix.push();
-        matrix.translate(cube.start.getX(), cube.start.getY(), cube.start.getZ());
+        matrix.translate(cube.getStart().getX(), cube.getStart().getY(), cube.getStart().getZ());
         MatrixStack.Entry lastMatrix = matrix.peek();
         Matrix4f matrix4f = lastMatrix.getModel();
         Matrix3f normal = lastMatrix.getNormal();
         Direction[] directions = Direction.values();
 
-        for (int i = 0; i < directions.length; ++i) {
-            Direction face = directions[i];
+        for (Direction direction : directions) {
+            Direction face = direction;
             int ordinal = face.ordinal();
             TextureAtlasSprite sprite = cube.sprites[ordinal];
             if (sprite != null) {
@@ -125,16 +118,22 @@ public class RenderCuboid {
     }
 
     private void renderPoint(Matrix4f matrix4f, Matrix3f normal, IVertexBuilder buffer, Direction face, Axis u, Axis v, float other, float[] uv, float[] xyz, boolean minU, boolean minV, float red, float green, float blue, float alpha, int light, int overlay) {
-        int U_ARRAY = minU ? 0 : 1;
-        int V_ARRAY = minV ? 2 : 3;
-        Vector3f vertex = withValue(VEC_ZERO, u, xyz[U_ARRAY]);
-        vertex = withValue(vertex, v, xyz[V_ARRAY]);
+        int uArray = minU ? 0 : 1;
+        int vArray = minV ? 2 : 3;
+        Vector3f vertex = withValue(VEC_ZERO, u, xyz[uArray]);
+        vertex = withValue(vertex, v, xyz[vArray]);
         vertex = withValue(vertex, face.getAxis(), other);
         Vector3i normalForFace = face.getDirectionVec();
         float adjustment = 2.5F;
         Vector3f norm = new Vector3f((float) normalForFace.getX() + adjustment, (float) normalForFace.getY() + adjustment, (float) normalForFace.getZ() + adjustment);
         norm.normalize();
-        buffer.vertex(matrix4f, vertex.getX(), vertex.getY(), vertex.getZ()).color(red, green, blue, alpha).texture(uv[U_ARRAY], uv[V_ARRAY]).overlay(overlay).light(light).normal(normal, norm.getX(), norm.getY(), norm.getZ()).endVertex();
+        buffer.vertex(matrix4f, vertex.getX(), vertex.getY(), vertex.getZ()).color(red, green, blue, alpha).texture(uv[uArray], uv[vArray]).overlay(overlay).light(light).normal(normal, norm.getX(), norm.getY(), norm.getZ()).endVertex();
+    }
+
+    private static class CustomException extends RuntimeException {
+        public CustomException(String message) {
+            super(message);
+        }
     }
 }
 

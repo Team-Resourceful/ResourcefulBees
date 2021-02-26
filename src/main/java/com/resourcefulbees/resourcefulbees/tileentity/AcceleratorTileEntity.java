@@ -1,7 +1,6 @@
 package com.resourcefulbees.resourcefulbees.tileentity;
 
 import com.resourcefulbees.resourcefulbees.registry.ModTileEntityTypes;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -27,13 +26,10 @@ public class AcceleratorTileEntity extends TileEntity implements ITickableTileEn
 
     public static void accelerateTick(World world, BlockPos pos) {
         BlockState blockState = world.getBlockState(pos);
-        Block block = blockState.getBlock();
-        if(!world.isRemote && world instanceof ServerWorld){
-            if (block.ticksRandomly(blockState) && world.getRandom().nextInt(40) == 0) {
-                block.randomTick(blockState, (ServerWorld) world, pos, world.getRandom());
-            }
+        if(!world.isRemote && world instanceof ServerWorld && blockState.ticksRandomly() && world.getRandom().nextInt(40) == 0) {
+            blockState.randomTick((ServerWorld) world, pos, world.getRandom());
         }
-        if (block.hasTileEntity(blockState)) {
+        if (blockState.hasTileEntity()) {
             TileEntity tileEntity = world.getTileEntity(pos);
             if (tileEntity != null && !tileEntity.isRemoved() && tileEntity instanceof ITickableTileEntity && !(tileEntity instanceof AcceleratorTileEntity)) {
                 for (int i = 0; i < 384; i++) {

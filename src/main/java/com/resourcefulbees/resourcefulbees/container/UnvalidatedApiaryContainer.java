@@ -12,13 +12,13 @@ import javax.annotation.Nonnull;
 
 public class UnvalidatedApiaryContainer extends Container {
 
-    public ApiaryTileEntity apiaryTileEntity;
-    public BlockPos pos;
+    private final ApiaryTileEntity apiaryTileEntity;
+    private final BlockPos pos;
 
     public UnvalidatedApiaryContainer(int id, World world, BlockPos pos, PlayerInventory inv) {
         super(ModContainers.UNVALIDATED_APIARY_CONTAINER.get(), id);
         this.pos = pos;
-        this.apiaryTileEntity = (ApiaryTileEntity)world.getTileEntity(pos);
+        this.apiaryTileEntity =(ApiaryTileEntity)world.getTileEntity(pos);
     }
 
     @Override
@@ -27,4 +27,11 @@ public class UnvalidatedApiaryContainer extends Container {
     }
 
 
+    public ApiaryTileEntity getApiaryTileEntity() {
+        return apiaryTileEntity;
+    }
+
+    public BlockPos getPos() {
+        return pos;
+    }
 }

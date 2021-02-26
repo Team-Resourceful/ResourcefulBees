@@ -1,10 +1,11 @@
 package com.resourcefulbees.resourcefulbees.fluids;
 
-import com.resourcefulbees.resourcefulbees.api.beedata.HoneyBottleData;
+import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.state.StateContainer;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class HoneyFlowingFluid extends ForgeFlowingFluid {
 
@@ -26,7 +27,8 @@ public abstract class HoneyFlowingFluid extends ForgeFlowingFluid {
             setDefaultState(getStateContainer().getBaseState().with(LEVEL_1_8, 7));
         }
 
-        protected void fillStateContainer(StateContainer.Builder<Fluid, FluidState> builder) {
+        @Override
+        protected void fillStateContainer(@NotNull StateContainer.Builder<Fluid, FluidState> builder) {
             super.fillStateContainer(builder);
             builder.add(LEVEL_1_8);
         }
@@ -35,7 +37,7 @@ public abstract class HoneyFlowingFluid extends ForgeFlowingFluid {
             return state.get(LEVEL_1_8);
         }
 
-        public boolean isSource(FluidState state) {
+        public boolean isSource(@NotNull FluidState state) {
             return false;
         }
     }
@@ -46,11 +48,11 @@ public abstract class HoneyFlowingFluid extends ForgeFlowingFluid {
             super(properties, honeyData);
         }
 
-        public int getLevel(FluidState state) {
+        public int getLevel(@NotNull FluidState state) {
             return 8;
         }
 
-        public boolean isSource(FluidState state) {
+        public boolean isSource(@NotNull FluidState state) {
             return true;
         }
     }

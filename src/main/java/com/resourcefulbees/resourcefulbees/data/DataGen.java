@@ -1,7 +1,7 @@
 package com.resourcefulbees.resourcefulbees.data;
 
 import com.resourcefulbees.resourcefulbees.api.IBeeRegistry;
-import com.resourcefulbees.resourcefulbees.api.beedata.HoneyBottleData;
+import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.init.BeeSetup;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
@@ -59,7 +59,7 @@ public class DataGen {
         try (FileWriter writer = new FileWriter(Paths.get(path, file).toFile())) {
             writer.write(data);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("context", e);
         }
     }
 
@@ -301,7 +301,7 @@ public class DataGen {
         builder.append("{\n");
         builder.append(REPLACE_FALSE);
         builder.append(VALUES);
-        ModEntities.MOD_BEES.forEach(((s, entityTypeRegistryObject) -> {
+        ModEntities.getModBees().forEach(((s, entityTypeRegistryObject) -> {
             builder.append("\"");
             builder.append(entityTypeRegistryObject.getId());
         builder.append(FINAL_COMMA);

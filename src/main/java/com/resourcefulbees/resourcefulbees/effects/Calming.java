@@ -7,15 +7,15 @@ import net.minecraft.potion.EffectType;
 import org.jetbrains.annotations.NotNull;
 
 public class Calming extends Effect {
-    protected Calming(EffectType beneficial, int color) {
+    public Calming(EffectType beneficial, int color) {
         super(beneficial, color);
     }
 
     @Override
     public void performEffect(@NotNull LivingEntity entity, int level) {
         if (entity instanceof IAngerable) {
-            IAngerable angerable = (IAngerable) entity;
-            angerable.stopAnger();
+            IAngerable iAngerable = (IAngerable) entity;
+            iAngerable.stopAnger();
         }
         super.performEffect(entity, level);
     }

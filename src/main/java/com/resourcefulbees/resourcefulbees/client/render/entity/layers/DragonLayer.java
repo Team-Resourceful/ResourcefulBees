@@ -22,8 +22,8 @@ public class DragonLayer <T extends CustomBeeEntity> extends LayerRenderer<T, Cu
 
     private final EntityModel<T> dragonModel = new CustomBeeModel<>(ModelTypes.DRAGON);
 
-    public DragonLayer(IEntityRenderer<T, CustomBeeModel<T>> p_i50926_1_) {
-        super(p_i50926_1_);
+    public DragonLayer(IEntityRenderer<T, CustomBeeModel<T>> renderer) {
+        super(renderer);
     }
 
     @Override

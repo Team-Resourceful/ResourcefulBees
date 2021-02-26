@@ -2,6 +2,8 @@ package com.resourcefulbees.resourcefulbees.api.beedata;
 
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 
+import java.util.Locale;
+
 public class BreedData extends AbstractBeeData {
     /**
      * If bee can be bred from 2 parents.
@@ -44,7 +46,8 @@ public class BreedData extends AbstractBeeData {
      */
     private final int breedDelay;
 
-    private BreedData(boolean isBreedable, double breedWeight, float breedChance, String parent1, String parent2, String feedItem, int feedAmount, int childGrowthDelay, int breedDelay) {
+    private BreedData( boolean isBreedable, double breedWeight, float breedChance, String parent1, String parent2, String feedItem, int feedAmount, int childGrowthDelay, int breedDelay) {
+        super("BreedData");
         this.isBreedable = isBreedable;
         this.breedWeight = breedWeight;
         this.breedChance = breedChance;
@@ -73,15 +76,15 @@ public class BreedData extends AbstractBeeData {
     }
 
     public String getParent1() {
-        return parent1 != null ? parent1.toLowerCase() : "";
+        return parent1 != null ? parent1.toLowerCase(Locale.ENGLISH) : "";
     }
 
     public String getParent2() {
-        return parent2 != null ? parent2.toLowerCase() : "";
+        return parent2 != null ? parent2.toLowerCase(Locale.ENGLISH) : "";
     }
 
     public String getFeedItem() {
-        return feedItem != null ? feedItem.toLowerCase() : BeeConstants.FLOWER_TAG_ALL;
+        return feedItem != null ? feedItem.toLowerCase(Locale.ENGLISH) : BeeConstants.FLOWER_TAG_ALL;
     }
 
     public int getFeedAmount() {

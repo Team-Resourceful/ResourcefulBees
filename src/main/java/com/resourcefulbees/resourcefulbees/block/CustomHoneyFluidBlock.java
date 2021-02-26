@@ -1,7 +1,7 @@
 
 package com.resourcefulbees.resourcefulbees.block;
 
-import com.resourcefulbees.resourcefulbees.api.beedata.HoneyBottleData;
+import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
 import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FlowingFluidBlock;

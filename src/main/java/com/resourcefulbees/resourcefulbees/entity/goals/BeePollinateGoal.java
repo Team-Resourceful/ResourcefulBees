@@ -40,9 +40,15 @@ public class BeePollinateGoal extends Goal {
         } else if (bee.getRNG().nextFloat() < 0.7F) {
             return false;
         } else if (bee.ticksExisted < 20 || bee.ticksExisted % 5 == 0) {
-            Optional<BlockPos> optional = this.findFlower(5.0D, bee.getBeeData().hasEntityFlower(), bee.getBeeData().getEntityFlower());
-            if (optional.isPresent()) {
-                bee.flowerPos = optional.get();
+            if (bee.flowerPos == null) {
+                Optional<BlockPos> optional = this.findFlower(5.0D, bee.getBeeData().hasEntityFlower(), bee.getBeeData().getEntityFlower());
+                if (optional.isPresent()) {
+                    bee.flowerPos = optional.get();
+                    bee.getNavigator().tryMoveToXYZ((double) bee.flowerPos.getX() + 0.5D, (double) bee.flowerPos.getY() + 0.5D, (double) bee.flowerPos.getZ() + 0.5D, 1.2D);
+                    return true;
+                }
+            }else {
+                System.out.println("using earlier flower");
                 bee.getNavigator().tryMoveToXYZ((double) bee.flowerPos.getX() + 0.5D, (double) bee.flowerPos.getY() + 0.5D, (double) bee.flowerPos.getZ() + 0.5D, 1.2D);
                 return true;
             }
@@ -99,6 +105,7 @@ public class BeePollinateGoal extends Goal {
         super.startExecuting();
     }
 
+    @Override
     public void resetTask() {
         if (this.completedPollination()) {
             bee.resetPollinationTicks();
@@ -116,6 +123,7 @@ public class BeePollinateGoal extends Goal {
         boundingBox = null;
     }
 
+    @Override
     public void tick() {
         ++this.ticks;
         if (this.ticks > 600) {
@@ -193,7 +201,7 @@ public class BeePollinateGoal extends Goal {
                 box.minY = blockpos.getY() - 5;
                 box.minZ = blockpos.getZ() - 5;
             }
-            return BlockPos.stream(box).filter(getFlowerBlockPredicate()).findFirst();
+            return BlockPos.stream(box).filter(getFlowerBlockPredicate()).findAny();
         } else {
             List<Entity> entityList = bee.world.getEntitiesInAABBexcluding(bee, (new AxisAlignedBB(bee.getBlockPos())).grow(range),
                     entity -> entity.getEntityString() != null && entity.getEntityString().equals(entityRegistryName.toString()));

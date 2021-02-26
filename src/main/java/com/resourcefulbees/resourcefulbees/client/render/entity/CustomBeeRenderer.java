@@ -53,8 +53,7 @@ public class CustomBeeRenderer extends MobRenderer<CustomBeeEntity, CustomBeeMod
 
     @Nonnull
     public ResourceLocation getEntityTexture(CustomBeeEntity entity) {
-        ResourceLocation texture = entity.hasAngerTime() ? angryTexture : baseTexture;
-        return texture;
+        return entity.hasAngerTime() ? angryTexture : baseTexture;
     }
 
     public enum LayerType {

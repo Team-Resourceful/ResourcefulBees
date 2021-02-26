@@ -1,7 +1,7 @@
 package com.resourcefulbees.resourcefulbees.api;
 
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
-import com.resourcefulbees.resourcefulbees.api.beedata.HoneyBottleData;
+import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
 
 import java.util.Map;
 

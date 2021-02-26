@@ -30,12 +30,29 @@ import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.fml.RegistryObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.function.Predicate;
 
 public class HoneyTankTileEntity extends TileEntity {
+
+    public @NotNull FluidTank getFluidTank() {
+        return fluidTank;
+    }
+
+    public void setFluidTank(FluidTank fluidTank) {
+        this.fluidTank = fluidTank;
+    }
+
+    public TankTier getTier() {
+        return tier;
+    }
+
+    public void setTier(TankTier tier) {
+        this.tier = tier;
+    }
 
     public enum TankTier {
         PURPUR(3, 64000, ModBlocks.PURPUR_HONEY_TANK, ModItems.PURPUR_HONEY_TANK_ITEM),
@@ -87,23 +104,23 @@ public class HoneyTankTileEntity extends TileEntity {
 
     public static final Logger LOGGER = LogManager.getLogger();
 
-    public FluidTank fluidTank;
+    private FluidTank fluidTank;
     public final LazyOptional<IFluidHandler> fluidOptional;
     public static final FluidStack HONEY_BOTTLE_FLUID_STACK = new FluidStack(ModFluids.HONEY_STILL.get(), ModConstants.HONEY_PER_BOTTLE);
-    public TankTier tier;
+    private TankTier tier;
 
     public HoneyTankTileEntity(TankTier tier) {
         super(ModTileEntityTypes.HONEY_TANK_TILE_ENTITY.get());
-        fluidTank = new InternalFluidTank(tier.maxFillAmount, honeyFluidPredicate());
-        fluidOptional = LazyOptional.of(() -> fluidTank);
-        this.tier = tier;
+        setFluidTank(new InternalFluidTank(tier.maxFillAmount, honeyFluidPredicate()));
+        fluidOptional = LazyOptional.of(this::getFluidTank);
+        this.setTier(tier);
     }
 
     public HoneyTankTileEntity(TileEntityType<?> tileEntityType, TankTier tier) {
         super(tileEntityType);
-        this.fluidTank = new InternalFluidTank(tier.maxFillAmount, honeyFluidPredicate());
-        fluidOptional = LazyOptional.of(() -> fluidTank);
-        this.tier = tier;
+        this.setFluidTank(new InternalFluidTank(tier.maxFillAmount, honeyFluidPredicate()));
+        fluidOptional = LazyOptional.of(this::getFluidTank);
+        this.setTier(tier);
     }
 
 
@@ -146,18 +163,18 @@ public class HoneyTankTileEntity extends TileEntity {
     }
 
     public CompoundNBT writeNBT(CompoundNBT tag) {
-        tag.putInt("tier", tier.tier);
-        if (fluidTank.isEmpty()) return tag;
-        tag.put("fluid", fluidTank.writeToNBT(new CompoundNBT()));
+        tag.putInt("tier", getTier().tier);
+        if (getFluidTank().isEmpty()) return tag;
+        tag.put("fluid", getFluidTank().writeToNBT(new CompoundNBT()));
         return tag;
     }
 
     public void readNBT(CompoundNBT tag) {
-        fluidTank.readFromNBT(tag.getCompound("fluid"));
-        tier = TankTier.getTier(tag.getInt("tier"));
-        if (fluidTank.getTankCapacity(0) != tier.maxFillAmount) fluidTank.setCapacity(tier.maxFillAmount);
-        if (fluidTank.getFluidAmount() > fluidTank.getTankCapacity(0))
-            fluidTank.getFluid().setAmount(fluidTank.getTankCapacity(0));
+        getFluidTank().readFromNBT(tag.getCompound("fluid"));
+        setTier(TankTier.getTier(tag.getInt("tier")));
+        if (getFluidTank().getTankCapacity(0) != getTier().maxFillAmount) getFluidTank().setCapacity(getTier().maxFillAmount);
+        if (getFluidTank().getFluidAmount() > getFluidTank().getTankCapacity(0))
+            getFluidTank().getFluid().setAmount(getFluidTank().getTankCapacity(0));
     }
 
 
@@ -187,7 +204,7 @@ public class HoneyTankTileEntity extends TileEntity {
     }
 
     public void fillBottle(PlayerEntity player, Hand hand) {
-        FluidStack fluidStack = fluidTank.getFluid();
+        FluidStack fluidStack = getFluidTank().getFluid();
         ItemStack itemStack;
         if (fluidStack.getFluid() instanceof HoneyFlowingFluid) {
             HoneyFlowingFluid fluid = (HoneyFlowingFluid) fluidStack.getFluid();
@@ -202,9 +219,9 @@ public class HoneyTankTileEntity extends TileEntity {
                 fluidStack = new FluidStack(ModFluids.HONEY_STILL.get(), ModConstants.HONEY_PER_BOTTLE);
             }
         }
-        if (fluidTank.isEmpty()) return;
-        if (fluidTank.getFluidAmount() >= ModConstants.HONEY_PER_BOTTLE) {
-            fluidTank.drain(fluidStack, IFluidHandler.FluidAction.EXECUTE);
+        if (getFluidTank().isEmpty()) return;
+        if (getFluidTank().getFluidAmount() >= ModConstants.HONEY_PER_BOTTLE) {
+            getFluidTank().drain(fluidStack, IFluidHandler.FluidAction.EXECUTE);
             ItemStack stack = player.getHeldItem(hand);
             if (stack.getCount() > 1) {
                 stack.setCount(stack.getCount() - 1);
@@ -228,11 +245,11 @@ public class HoneyTankTileEntity extends TileEntity {
                 fluidStack = HONEY_BOTTLE_FLUID_STACK;
             }
         }
-        if (!fluidTank.getFluid().isFluidEqual(fluidStack) && !fluidTank.isEmpty()) {
+        if (!getFluidTank().getFluid().isFluidEqual(fluidStack) && !getFluidTank().isEmpty()) {
             return;
         }
-        if (fluidTank.getFluidAmount() + ModConstants.HONEY_PER_BOTTLE <= fluidTank.getTankCapacity(0)) {
-            fluidTank.fill(fluidStack, IFluidHandler.FluidAction.EXECUTE);
+        if (getFluidTank().getFluidAmount() + ModConstants.HONEY_PER_BOTTLE <= getFluidTank().getTankCapacity(0)) {
+            getFluidTank().fill(fluidStack, IFluidHandler.FluidAction.EXECUTE);
             ItemStack stack = player.getHeldItem(hand);
             if (stack.getCount() > 1) {
                 stack.setCount(stack.getCount() - 1);
@@ -244,21 +261,17 @@ public class HoneyTankTileEntity extends TileEntity {
         playSound(SoundEvents.ITEM_BOTTLE_EMPTY);
     }
 
-    public void playSound(SoundEvent p_205736_1_) {
+    public void playSound(SoundEvent soundEvent) {
         assert this.world != null;
-        this.world.playSound(null, this.pos, p_205736_1_, SoundCategory.BLOCKS, 1.0F, 1.0F);
+        this.world.playSound(null, this.pos, soundEvent, SoundCategory.BLOCKS, 1.0F, 1.0F);
     }
 
     public int getLevel() {
-        float fillPercentage = ((float) fluidTank.getFluidAmount()) / ((float) fluidTank.getTankCapacity(0));
+        float fillPercentage = ((float) getFluidTank().getFluidAmount()) / ((float) getFluidTank().getTankCapacity(0));
         return (int) Math.ceil(fillPercentage * 100);
     }
 
     public class InternalFluidTank extends FluidTank {
-
-        public InternalFluidTank(int capacity) {
-            super(capacity);
-        }
 
         public InternalFluidTank(int capacity, Predicate<FluidStack> validator) {
             super(capacity, validator);

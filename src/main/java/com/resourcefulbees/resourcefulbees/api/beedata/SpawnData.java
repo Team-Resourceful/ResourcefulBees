@@ -2,6 +2,8 @@ package com.resourcefulbees.resourcefulbees.api.beedata;
 
 import com.resourcefulbees.resourcefulbees.lib.LightLevels;
 
+import java.util.Locale;
+
 public class SpawnData extends AbstractBeeData {
     /**
      * If the bee can spawn naturally
@@ -38,11 +40,12 @@ public class SpawnData extends AbstractBeeData {
      */
     private final LightLevels lightLevel;
 
-    private int minYLevel;
+    private final int minYLevel;
 
-    private int maxYLevel;
+    private final int maxYLevel;
 
     private SpawnData(boolean canSpawnInWorld, int spawnWeight, int minGroupSize, int maxGroupSize, String biomeWhitelist, String biomeBlacklist, LightLevels lightLevel, int minYLevel, int maxYLevel) {
+        super("SpawnData");
         this.canSpawnInWorld = canSpawnInWorld;
         this.spawnWeight = spawnWeight;
         this.minGroupSize = minGroupSize;
@@ -62,9 +65,14 @@ public class SpawnData extends AbstractBeeData {
 
     public int getMaxGroupSize() { return maxGroupSize <= 0 ? 3 : maxGroupSize; }
 
-    public String getBiomeWhitelist() { return biomeWhitelist != null ? biomeWhitelist.toLowerCase() : "tag:overworld"; }
+    public String getBiomeWhitelist() { return biomeWhitelist != null ? biomeWhitelist.toLowerCase(Locale.ENGLISH) : "tag:overworld"; }
 
-    public String getBiomeBlacklist() { return biomeBlacklist != null ? biomeBlacklist.toLowerCase() : biomeWhitelist.equals("tag:ocean") ? "" : "tag:ocean"; }
+    public String getBiomeBlacklist() {
+        if (biomeBlacklist != null) {
+            return biomeBlacklist.toLowerCase(Locale.ENGLISH);
+        }
+        return biomeWhitelist.equals("tag:ocean") ? "" : "tag:ocean";
+    }
 
     public LightLevels getLightLevel() { return lightLevel != null ? lightLevel : LightLevels.ANY; }
 
@@ -76,6 +84,7 @@ public class SpawnData extends AbstractBeeData {
         return maxYLevel <= 0 ? 256 : maxYLevel;
     }
 
+    @SuppressWarnings("unused")
     public static class Builder {
         private final boolean canSpawnInWorld;
         private int spawnWeight;

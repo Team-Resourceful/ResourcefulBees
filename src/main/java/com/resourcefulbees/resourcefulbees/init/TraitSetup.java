@@ -3,7 +3,7 @@ package com.resourcefulbees.resourcefulbees.init;
 import com.google.gson.Gson;
 import com.resourcefulbees.resourcefulbees.data.BeeTrait;
 import com.resourcefulbees.resourcefulbees.data.JsonBeeTrait;
-import com.resourcefulbees.resourcefulbees.registry.BiomeDictionary;
+import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.registry.TraitRegistry;
 import net.minecraft.particles.BasicParticleType;
 import net.minecraft.potion.Effect;
@@ -17,6 +17,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -24,7 +25,11 @@ import static com.resourcefulbees.resourcefulbees.ResourcefulBees.LOGGER;
 
 public class TraitSetup {
 
-    public static Path DICTIONARY_PATH;
+    private TraitSetup() {
+        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+    }
+
+    private static Path dictionaryPath;
 
     public static void buildCustomTraits() {
         addTraits();
@@ -81,27 +86,27 @@ public class TraitSetup {
                 builder.addDamageImmunity(source);
             }
         }
-        if (jsonTrait.damageTypes != null && !jsonTrait.damageTypes.isEmpty()){
+        if (jsonTrait.damageTypes != null && !jsonTrait.damageTypes.isEmpty()) {
             jsonTrait.damageTypes.forEach((damageType) -> builder.addDamageType(Pair.of(damageType.damageTypeName, damageType.amplifier)));
         }
-        if (jsonTrait.specialAbilities != null && jsonTrait.specialAbilities.length > 0){
+        if (jsonTrait.specialAbilities != null && jsonTrait.specialAbilities.length > 0) {
             for (String ability : jsonTrait.specialAbilities){
                 builder.addSpecialAbility(ability);
             }
         }
-        if (jsonTrait.particleName != null && !jsonTrait.particleName.isEmpty()) {
-            if (ForgeRegistries.PARTICLE_TYPES.getValue(new ResourceLocation(jsonTrait.particleName)) != null && ForgeRegistries.PARTICLE_TYPES.getValue(new ResourceLocation(jsonTrait.particleName)) instanceof BasicParticleType){
-                builder.setParticleEffect((BasicParticleType) ForgeRegistries.PARTICLE_TYPES.getValue(new ResourceLocation(jsonTrait.particleName)));
-            }
+        if (jsonTrait.particleName != null
+                && !jsonTrait.particleName.isEmpty()
+                && ForgeRegistries.PARTICLE_TYPES.getValue(new ResourceLocation(jsonTrait.particleName)) instanceof BasicParticleType){
+            builder.setParticleEffect((BasicParticleType) ForgeRegistries.PARTICLE_TYPES.getValue(new ResourceLocation(jsonTrait.particleName)));
         }
-        if (jsonTrait.potionImmunities != null && jsonTrait.potionImmunities.length > 0){
+        if (jsonTrait.potionImmunities != null && jsonTrait.potionImmunities.length > 0) {
             for (String immunity : jsonTrait.potionImmunities){
                 Effect potion = ForgeRegistries.POTIONS.getValue(new ResourceLocation(immunity));
                 if (potion != null)
                     builder.addPotionImmunity(potion);
             }
         }
-        if (jsonTrait.potionDamageEffects != null && !jsonTrait.potionDamageEffects.isEmpty()){
+        if (jsonTrait.potionDamageEffects != null && !jsonTrait.potionDamageEffects.isEmpty()) {
             jsonTrait.potionDamageEffects.forEach((traitPotionDamageEffect -> {
                 Effect potion = ForgeRegistries.POTIONS.getValue(new ResourceLocation(traitPotionDamageEffect.effectRegistryName));
                 if (potion != null)
@@ -112,15 +117,14 @@ public class TraitSetup {
     }
 
     private static void addTraits() {
-        try {
-            Files.walk(DICTIONARY_PATH)
-                    .filter(f -> f.getFileName().toString().endsWith(".zip"))
+        try (Stream<Path> zipStream = Files.walk(dictionaryPath);
+             Stream<Path> jsonStream = Files.walk(dictionaryPath)) {
+            zipStream.filter(f -> f.getFileName().toString().endsWith(".zip"))
                     .forEach(TraitSetup::addZippedType);
-            Files.walk(DICTIONARY_PATH)
-                    .filter(f -> f.getFileName().toString().endsWith(".json"))
+            jsonStream.filter(f -> f.getFileName().toString().endsWith(".json"))
                     .forEach(TraitSetup::addType);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("Could not stream custom traits!!", e);
         }
     }
 
@@ -134,8 +138,7 @@ public class TraitSetup {
     }
 
     private static void addZippedType(Path file) {
-        try {
-            ZipFile zf = new ZipFile(file.toString());
+        try (ZipFile zf = new ZipFile(file.toString())) {
             zf.stream().forEach(zipEntry -> {
                 if (zipEntry.getName().endsWith(".json")) {
                     try {
@@ -148,7 +151,11 @@ public class TraitSetup {
                 }
             });
         } catch (IOException e) {
-            LOGGER.warn("Could not read ZipFile! ZipFile: " + file.getFileName());
+            LOGGER.warn("Could not read ZipFile! ZipFile: {}", file.getFileName());
         }
+    }
+
+    public static void setDictionaryPath(Path dictionaryPath) {
+        TraitSetup.dictionaryPath = dictionaryPath;
     }
 }

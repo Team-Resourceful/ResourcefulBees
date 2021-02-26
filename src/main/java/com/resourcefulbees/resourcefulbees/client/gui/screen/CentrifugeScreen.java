@@ -80,6 +80,8 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
 
         redstoneButton = this.addButton(new TabToggleImageButton(buttonX, top + 4, SLOT_WD, SLOT_HT, 25, 220, 18, 18,
                 this.container.getRequiresRedstone(), BACKGROUND, new ItemStack(Items.REDSTONE), new ItemStack(Items.REDSTONE), onPress -> this.setRedstoneControl()) {
+
+            @Override
             public void renderToolTip(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
                 TranslationTextComponent s = new TranslationTextComponent("gui.resourcefulbees.centrifuge.button.redstone." + stateTriggered);
                 CentrifugeScreen.this.renderTooltip(matrix, s, mouseX, mouseY);
@@ -87,12 +89,14 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
         });
         fluidDispButton = this.addButton(new TabToggleImageButton(buttonX, top + 24, SLOT_WD, SLOT_HT, 25, 220, 0, 18,
                 this.container.shouldDisplayFluids(), BACKGROUND, new ItemStack(Items.WATER_BUCKET), new ItemStack(Items.HONEYCOMB), onPress -> this.displayFluids()) {
+
+            @Override
             public void renderToolTip(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
                 TranslationTextComponent s = new TranslationTextComponent("gui.resourcefulbees.centrifuge.button.fluid_display." + stateTriggered);
                 CentrifugeScreen.this.renderTooltip(matrix, s, mouseX, mouseY);
             }
         });
-        this.addButton(new ImageButton(buttonX - 1, top + 44, 20, 18, 0, 0, 19, RECIPE_BUTTON_TEXTURE, (button) -> {}));
+        this.addButton(new ImageButton(buttonX - 1, top + 44, 20, 18, 0, 0, 19, RECIPE_BUTTON_TEXTURE, button -> {}));
     }
 
     private void displayFluids() {
@@ -245,7 +249,8 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
             TextureAtlasSprite fluidSprite = RenderUtils.getStillFluidTexture(fluidStack);
             int scale = getScaledFluidAmount(tank);
             Color color = new Color(fluidStack.getFluid().getAttributes().getColor(fluidStack));
-            RenderSystem.color4f(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+            //noinspection deprecation
+            RenderSystem.color4f(color.getR(), color.getG(), color.getB(), color.getAlpha());
             RenderUtils.drawTiledSprite(matrix, x + 1, y + 1, 52, 16, scale, fluidSprite, 16, 16, getZOffset());
             RenderUtils.resetColor();
         }
@@ -261,15 +266,15 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
         if (Screen.hasControlDown() && this.container.shouldDisplayFluids()) {
-            int x = this.guiLeft + L_BDR_WD + SLOT_WD;
-            int y = this.guiTop + TOP_PAD + DBL_SLOT_HT;
+            double x = (double) this.guiLeft + L_BDR_WD + SLOT_WD;
+            double y = (double) this.guiTop + TOP_PAD + DBL_SLOT_HT;
 
             if (MathUtils.inRangeInclusive(mouseX, x, x + SLOT_WD) && MathUtils.inRangeInclusive(mouseY, y, y + 54)) {
                 NetPacketHandler.sendToServer(new DrainCentrifugeTankMessage(this.container.getCentrifugeTileEntity().getPos(), CentrifugeTileEntity.BOTTLE_SLOT));
                 return true;
             } else {
                 for (int i = 0; i < numInputs; i++) {
-                    x = this.guiLeft + outputStartX + SLOT_WD + 9 + (i * DBL_SLOT_WD);
+                    x = this.guiLeft + outputStartX + SLOT_WD + 9D + (i * DBL_SLOT_WD);
                     if (MathUtils.inRangeInclusive(mouseX, x, x + SLOT_WD) && MathUtils.inRangeInclusive(mouseY, y, y + 54)) {
                         NetPacketHandler.sendToServer(new DrainCentrifugeTankMessage(this.container.getCentrifugeTileEntity().getPos(), i + 1));
                         return true;
@@ -296,6 +301,7 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
     }
 
     public String getFluidNamespace(@Nonnull Fluid fluid) {
+        //noinspection deprecation
         return WordUtils.capitalize(Objects.requireNonNull(fluid.getRegistryName()).getNamespace());
     }
 }

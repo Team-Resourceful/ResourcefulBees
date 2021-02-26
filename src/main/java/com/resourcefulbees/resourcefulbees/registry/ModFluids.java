@@ -1,6 +1,7 @@
 package com.resourcefulbees.resourcefulbees.registry;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
+import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Rarity;
@@ -13,6 +14,10 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class ModFluids {
+
+    private ModFluids() {
+        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+    }
 
     public static final DeferredRegister<Fluid> FLUIDS = DeferredRegister.create(ForgeRegistries.FLUIDS, ResourcefulBees.MOD_ID);
 
@@ -42,18 +47,18 @@ public class ModFluids {
                 .bucket(ModItems.CATNIP_HONEY_FLUID_BUCKET).block(ModBlocks.CATNIP_HONEY_FLUID_BLOCK).tickRate(20);
     }
 
-    public static RegistryObject<FlowingFluid> HONEY_STILL = FLUIDS.register("honey", () ->
+    public static final RegistryObject<FlowingFluid> HONEY_STILL = FLUIDS.register("honey", () ->
             new ForgeFlowingFluid.Source(makeProperties())
     );
-    public static RegistryObject<FlowingFluid> HONEY_FLOWING = FLUIDS.register("honey_flowing", () ->
+    public static final RegistryObject<FlowingFluid> HONEY_FLOWING = FLUIDS.register("honey_flowing", () ->
             new ForgeFlowingFluid.Flowing(makeProperties())
     );
 
-    public static RegistryObject<FlowingFluid> CATNIP_HONEY_STILL = FLUIDS.register("catnip_honey", () ->
+    public static final RegistryObject<FlowingFluid> CATNIP_HONEY_STILL = FLUIDS.register("catnip_honey", () ->
             new ForgeFlowingFluid.Source(makeCatnipProperties())
     );
 
-    public static RegistryObject<FlowingFluid> CATNIP_HONEY_FLOWING = FLUIDS.register("catnip_honey_flowing", () ->
+    public static final RegistryObject<FlowingFluid> CATNIP_HONEY_FLOWING = FLUIDS.register("catnip_honey_flowing", () ->
             new ForgeFlowingFluid.Flowing(makeCatnipProperties())
     );
 }

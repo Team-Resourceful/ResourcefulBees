@@ -1,4 +1,4 @@
-package com.resourcefulbees.resourcefulbees.api.beedata;
+package com.resourcefulbees.resourcefulbees.api.honeydata;
 
 import com.resourcefulbees.resourcefulbees.registry.ItemGroupResourcefulBees;
 import net.minecraft.block.Block;
@@ -98,10 +98,7 @@ public class HoneyBottleData {
      */
     private transient RegistryObject<FlowingFluidBlock> honeyFluidBlockRegistryObject;
 
-    /**
-     * If the ResourcefulBees mod should handle the registration
-     */
-    public transient boolean shouldResourcefulBeesDoForgeRegistration;
+    private transient boolean shouldResourcefulBeesDoForgeRegistration;
 
     public HoneyBottleData() {
     }
@@ -221,7 +218,7 @@ public class HoneyBottleData {
         Food.Builder builder = new Food.Builder().hunger(hunger).saturation(saturation);
         if (hasEffects()) {
             for (HoneyEffect honeyEffect : effects) {
-                builder.effect(() -> honeyEffect.getInstance(), honeyEffect.chance);
+                builder.effect(honeyEffect::getInstance, honeyEffect.chance);
             }
         }
         return builder.build();
@@ -247,16 +244,27 @@ public class HoneyBottleData {
         this.effects = effects;
     }
 
+    /**
+     * If the ResourcefulBees mod should handle the registration
+     */
+    public boolean shouldResourcefulBeesDoForgeRegistration() {
+        return shouldResourcefulBeesDoForgeRegistration;
+    }
+
+    public void setShouldResourcefulBeesDoForgeRegistration(boolean shouldResourcefulBeesDoForgeRegistration) {
+        this.shouldResourcefulBeesDoForgeRegistration = shouldResourcefulBeesDoForgeRegistration;
+    }
+
     public static class Builder {
-        private String name = null;
-        private int hunger = 1;
-        private float saturation = 1.0f;
-        private String honeyColor = "#FFFFFF";
+        private String name;
+        private int hunger;
+        private float saturation;
+        private String honeyColor;
         private boolean isRainbow = false;
         private boolean generateHoneyBlock = true;
         private boolean honeyBlockRecipe = true;
         private boolean generateHoneyFluid = true;
-        private List<HoneyEffect> effects = new ArrayList<>();
+        private final List<HoneyEffect> effects = new ArrayList<>();
 
         public Builder(String name, int hunger, float saturation, String honeyColor) {
             this.name = name;

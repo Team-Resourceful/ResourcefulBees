@@ -1,8 +1,8 @@
 package com.resourcefulbees.resourcefulbees.utils.validation;
 
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
-import com.resourcefulbees.resourcefulbees.api.beedata.HoneyBottleData;
-import com.resourcefulbees.resourcefulbees.api.beedata.HoneyEffect;
+import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
+import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyEffect;
 import com.resourcefulbees.resourcefulbees.api.beedata.mutation.Mutation;
 import com.resourcefulbees.resourcefulbees.api.beedata.mutation.MutationOutput;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;

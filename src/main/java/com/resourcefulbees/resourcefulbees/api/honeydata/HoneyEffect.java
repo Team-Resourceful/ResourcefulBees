@@ -1,5 +1,6 @@
-package com.resourcefulbees.resourcefulbees.api.beedata;
+package com.resourcefulbees.resourcefulbees.api.honeydata;
 
+import com.resourcefulbees.resourcefulbees.utils.validation.ValidatorUtils;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.ResourceLocation;
@@ -40,7 +41,7 @@ public class HoneyEffect {
     }
 
     public boolean isEffectIDValid() {
-        return effectID != null && effectID.matches("([(a-z)(0-9)_-]*|[(a-z)(0-9)_-]*:[(a-z)(0-9)_-]*)");
+        return effectID != null && effectID.matches(ValidatorUtils.SINGLE_RESOURCE_PATTERN.pattern());
     }
 
     public Effect getEffect() {

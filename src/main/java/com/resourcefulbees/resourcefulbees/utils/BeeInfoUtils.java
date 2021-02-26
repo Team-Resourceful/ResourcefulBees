@@ -5,18 +5,25 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import com.resourcefulbees.resourcefulbees.api.ICustomBee;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.LightLevels;
+import com.resourcefulbees.resourcefulbees.lib.ModConstants;
+import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.utils.validation.ValidatorUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.InputMappings;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.Pose;
+import net.minecraft.entity.passive.BeeEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.Item;
@@ -27,6 +34,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -38,6 +46,7 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.NotNull;
 import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.Nonnull;
@@ -48,6 +57,10 @@ import java.util.stream.Collectors;
 import static com.resourcefulbees.resourcefulbees.lib.BeeConstants.*;
 
 public class BeeInfoUtils {
+
+    private BeeInfoUtils() {
+        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+    }
 
     public static void buildFamilyTree(CustomBeeData bee) {
         if (bee.getBreedData().hasParents()) {
@@ -95,8 +108,8 @@ public class BeeInfoUtils {
                             .forEach(biomeRegistryKey -> biomeSet.add(biomeRegistryKey.getValue())));
         } else {
             Splitter.on(",").trimResults().split(list.replace(BeeConstants.TAG_PREFIX, "")).forEach(s -> {
-                if (com.resourcefulbees.resourcefulbees.registry.BiomeDictionary.TYPES.containsKey(s)) {
-                    biomeSet.addAll(com.resourcefulbees.resourcefulbees.registry.BiomeDictionary.TYPES.get(s));
+                if (com.resourcefulbees.resourcefulbees.registry.BiomeDictionary.getTypes().containsKey(s)) {
+                    biomeSet.addAll(com.resourcefulbees.resourcefulbees.registry.BiomeDictionary.getTypes().get(s));
                 }
             });
         }
@@ -223,9 +236,10 @@ public class BeeInfoUtils {
     public static void flagBeesInRange(BlockPos pos, World world) {
         MutableBoundingBox box = MutableBoundingBox.createProper(pos.getX() + 10, pos.getY() + 10, pos.getZ() + 10, pos.getX() - 10, pos.getY() - 10, pos.getZ() - 10);
         AxisAlignedBB aabb = AxisAlignedBB.func_216363_a(box);
-        assert world != null;
-        List<CustomBeeEntity> list = world.getEntitiesWithinAABB(CustomBeeEntity.class, aabb);
-        list.forEach(customBeeEntity -> customBeeEntity.setHasHiveInRange(true));
+        if (world != null) {
+            List<CustomBeeEntity> list = world.getEntitiesWithinAABB(CustomBeeEntity.class, aabb);
+            list.forEach(customBeeEntity -> customBeeEntity.setHasHiveInRange(true));
+        }
     }
 
     public static List<String> getLoreLines(CompoundNBT outputNBT) {
@@ -314,5 +328,56 @@ public class BeeInfoUtils {
             flowers.add(getItem(flower));
         }
         return flowers.stream().map(f -> new ItemStack(f, parent1Data.getBreedData().getFeedAmount())).collect(Collectors.toList());
+    }
+
+    public static void ageBee(int ticksInHive, BeeEntity beeEntity) {
+        int i = beeEntity.getGrowingAge();
+        if (i < 0) {
+            beeEntity.setGrowingAge(Math.min(0, i + ticksInHive));
+        } else if (i > 0) {
+            beeEntity.setGrowingAge(Math.max(0, i - ticksInHive));
+        }
+
+        if (beeEntity instanceof CustomBeeEntity) {
+            ((CustomBeeEntity) beeEntity).setLoveTime(Math.max(0, beeEntity.getLoveTicks() - ticksInHive));
+        } else {
+            beeEntity.setInLove(Math.max(0, beeEntity.getLoveTicks() - ticksInHive));
+        }
+        beeEntity.resetPollinationTicks();
+    }
+
+    public static void setEntityLocationAndAngle(BlockPos blockpos, Direction direction, Entity entity) {
+        EntitySize size = entity.getSize(Pose.STANDING);
+        double d0 = 0.65D + size.width / 2.0F;
+        double d1 = blockpos.getX() + 0.5D + d0 * direction.getXOffset();
+        double d2 = blockpos.getY() + Math.max(0.5D - (size.height / 2.0F), 0);
+        double d3 = blockpos.getZ() + 0.5D + d0 * direction.getZOffset();
+        entity.setLocationAndAngles(d1, d2, d3, entity.rotationYaw, entity.rotationPitch);
+    }
+
+    public static @NotNull CompoundNBT createJarBeeTag(BeeEntity beeEntity, String nbtTagID) {
+        String type = EntityType.getKey(beeEntity.getType()).toString();
+        CompoundNBT nbt = new CompoundNBT();
+        nbt.putString(nbtTagID, type);
+
+        beeEntity.writeWithoutTypeId(nbt);
+
+        String beeColor = VANILLA_BEE_COLOR;
+
+        if (beeEntity instanceof ICustomBee) {
+            ICustomBee iCustomBee = (ICustomBee) beeEntity;
+            nbt.putString(NBTConstants.NBT_BEE_TYPE, iCustomBee.getBeeType());
+            if (iCustomBee.getBeeData().getColorData().hasPrimaryColor()) {
+                beeColor = iCustomBee.getBeeData().getColorData().getPrimaryColor();
+            } else if (iCustomBee.getBeeData().getColorData().isRainbowBee()) {
+                beeColor = RAINBOW_COLOR;
+            } else if (iCustomBee.getBeeData().getColorData().hasHoneycombColor()) {
+                beeColor = iCustomBee.getBeeData().getColorData().getHoneycombColor();
+            }
+        }
+
+        nbt.putString(NBTConstants.NBT_COLOR, beeColor);
+
+        return nbt;
     }
 }

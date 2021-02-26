@@ -5,7 +5,6 @@ import com.resourcefulbees.resourcefulbees.tileentity.HoneyTankTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.TooltipBuilder;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
@@ -17,7 +16,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tileentity.BeaconTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
@@ -44,13 +42,14 @@ import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Random;
 
+@SuppressWarnings("deprecation")
 public class HoneyTank extends Block {
 
     protected static final VoxelShape VOXEL_SHAPE = Block.makeCuboidShape(1.0D, 0.0D, 1.0D, 15.0D, 16.0D, 15.0D);
 
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
-    public static final AbstractBlock.Properties PROPERTIES = Block.Properties.create(Material.GLASS)
+    public static final AbstractBlock.Properties PROPERTIES = AbstractBlock.Properties.create(Material.GLASS)
             .sound(SoundType.GLASS)
             .harvestTool(ToolType.PICKAXE)
             .hardnessAndResistance(1)
@@ -62,7 +61,7 @@ public class HoneyTank extends Block {
         super(properties);
         this.tier = tier;
         BlockState defaultState = this.stateContainer.getBaseState()
-                .with(WATERLOGGED, false);
+                .with(BlockStateProperties.WATERLOGGED, false);
         this.setDefaultState(defaultState);
     }
 
@@ -80,8 +79,8 @@ public class HoneyTank extends Block {
         if (tank == null) {
             return;
         }
-        if (tank.fluidTank.getFluid().getFluid() instanceof HoneyFlowingFluid) {
-            HoneyFlowingFluid fluid = (HoneyFlowingFluid) tank.fluidTank.getFluid().getFluid();
+        if (tank.getFluidTank().getFluid().getFluid() instanceof HoneyFlowingFluid) {
+            HoneyFlowingFluid fluid = (HoneyFlowingFluid) tank.getFluidTank().getFluid().getFluid();
             if (fluid.getHoneyData().isRainbow()) {
                 world.notifyBlockUpdate(pos, stateIn, stateIn, 2);
             }
@@ -110,19 +109,17 @@ public class HoneyTank extends Block {
         boolean usingBucket = heldItem.getItem() instanceof BucketItem;
         TileEntity tileEntity = world.getTileEntity(pos);
 
-        if (!world.isRemote) {
-            if (tileEntity instanceof HoneyTankTileEntity) {
-                HoneyTankTileEntity tank = (HoneyTankTileEntity) tileEntity;
-                if (usingBucket) {
-                    tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
-                            .ifPresent(iFluidHandler -> FluidUtil.interactWithFluidHandler(player, hand, world, pos, null));
-                } else if (usingBottle) {
-                    tank.fillBottle(player, hand);
-                } else if (usingHoney) {
-                    tank.emptyBottle(player, hand);
-                }
-                world.notifyBlockUpdate(pos, state, state, 2);
+        if (!world.isRemote && tileEntity instanceof HoneyTankTileEntity) {
+            HoneyTankTileEntity tank = (HoneyTankTileEntity) tileEntity;
+            if (usingBucket) {
+                tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+                        .ifPresent(iFluidHandler -> FluidUtil.interactWithFluidHandler(player, hand, world, pos, null));
+            } else if (usingBottle) {
+                tank.fillBottle(player, hand);
+            } else if (usingHoney) {
+                tank.emptyBottle(player, hand);
             }
+            world.notifyBlockUpdate(pos, state, state, 2);
         }
         if (usingBottle || usingBucket || usingHoney) {
             return ActionResultType.SUCCESS;
@@ -133,12 +130,11 @@ public class HoneyTank extends Block {
     @Nonnull
     @Override
     public FluidState getFluidState(BlockState state) {
-        return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : Fluids.EMPTY.getDefaultState();
+        return state.get(BlockStateProperties.WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : Fluids.EMPTY.getDefaultState();
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context) {
-        FluidState fluidState = context.getWorld().getFluidState(context.getPos());
+    public BlockState getStateForPlacement(@NotNull BlockItemUseContext context) {
         return this.getDefaultState();
     }
 
@@ -156,20 +152,10 @@ public class HoneyTank extends Block {
     @Nonnull
     @Override
     public BlockState updatePostPlacement(BlockState stateIn, @NotNull Direction facing, @NotNull BlockState facingState, @NotNull IWorld world, @NotNull BlockPos currentPos, @NotNull BlockPos facingPos) {
-        if (stateIn.get(WATERLOGGED)) {
+        if (stateIn.get(BlockStateProperties.WATERLOGGED)) {
             world.getPendingFluidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickRate(world));
         }
         return stateIn;
-    }
-
-    private int getLevel(IWorld world, BlockPos currentPos) {
-        TileEntity tileEntity = world.getTileEntity(currentPos);
-        if (tileEntity instanceof HoneyTankTileEntity) {
-            HoneyTankTileEntity tank = (HoneyTankTileEntity) tileEntity;
-            float fillPercentage = ((float) tank.fluidTank.getFluidAmount()) / ((float) tank.fluidTank.getTankCapacity(0));
-            return (int) Math.ceil(fillPercentage * 14);
-        }
-        return 0;
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -177,8 +163,8 @@ public class HoneyTank extends Block {
     public void addInformation(@Nonnull ItemStack stack, @javax.annotation.Nullable IBlockReader worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
         if (!stack.hasTag() || stack.getTag() == null || stack.getTag().isEmpty() || !stack.getTag().contains("fluid"))
             return;
-        HoneyTankTileEntity.TankTier tier = HoneyTankTileEntity.TankTier.getTier(stack.getTag().getInt("tier"));
-        FluidTank tank = new FluidTank(tier.getMaxFillAmount()).readFromNBT(stack.getTag().getCompound("fluid"));
+        HoneyTankTileEntity.TankTier tankTier = HoneyTankTileEntity.TankTier.getTier(stack.getTag().getInt("tier"));
+        FluidTank tank = new FluidTank(tankTier.getMaxFillAmount()).readFromNBT(stack.getTag().getCompound("fluid"));
         FluidStack fluid = tank.getFluid();
         if (!fluid.isEmpty()) {
             tooltip.addAll(new TooltipBuilder()
@@ -213,7 +199,7 @@ public class HoneyTank extends Block {
     }
 
     @Override
-    public BlockRenderType getRenderType(BlockState blockState) {
+    public BlockRenderType getRenderType(@NotNull BlockState blockState) {
         return BlockRenderType.MODEL;
     }
 }

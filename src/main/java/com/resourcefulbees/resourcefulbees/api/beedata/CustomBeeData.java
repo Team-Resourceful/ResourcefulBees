@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Locale;
 import java.util.function.Supplier;
 
 public class CustomBeeData extends AbstractBeeData {
@@ -85,10 +86,7 @@ public class CustomBeeData extends AbstractBeeData {
      */
     private final int[] apiaryOutputAmounts;
 
-    /**
-     * If the ResourcefulBees mod should handle the registration
-     */
-    public transient boolean shouldResourcefulBeesDoForgeRegistration;
+    private transient boolean shouldResourcefulBeesDoForgeRegistration;
 
     /**
      * Additional Data added by a Mod Author
@@ -164,6 +162,7 @@ public class CustomBeeData extends AbstractBeeData {
     private final transient boolean isEasterEggBee;
 
     private CustomBeeData(String flower, String baseLayerTexture, BaseModelTypes baseModelType, int maxTimeInHive, float sizeModifier, String[] traits, int[] apiaryOutputAmounts, String name, boolean hasHoneycomb, MutationData mutationData, ColorData colorData, CombatData CombatData, CentrifugeData centrifugeData, BreedData breedData, SpawnData spawnData, TraitData traitData, boolean isEasterEggBee) {
+        super("CustomBeeData");
         this.flower = flower;
         this.baseLayerTexture = baseLayerTexture;
         this.baseModelType = baseModelType;
@@ -188,7 +187,7 @@ public class CustomBeeData extends AbstractBeeData {
     }
 
     public String getFlower() {
-        return flower == null ? BeeConstants.FLOWER_TAG_ALL : flower.toLowerCase();
+        return flower == null ? BeeConstants.FLOWER_TAG_ALL : flower.toLowerCase(Locale.ENGLISH);
     }
 
     public ResourceLocation getEntityFlower() {
@@ -237,11 +236,14 @@ public class CustomBeeData extends AbstractBeeData {
     }
 
     public String getBaseLayerTexture() {
-        return baseLayerTexture == null ? "custom/bee" : baseLayerTexture.toLowerCase();
+        return baseLayerTexture == null ? "custom/bee" : baseLayerTexture.toLowerCase(Locale.ENGLISH);
     }
 
     public int getMaxTimeInHive() {
-        return maxTimeInHive < BeeConstants.MIN_HIVE_TIME ? maxTimeInHive == 0 ? BeeConstants.MAX_TIME_IN_HIVE : BeeConstants.MIN_HIVE_TIME : maxTimeInHive;
+        if (maxTimeInHive < BeeConstants.MIN_HIVE_TIME) {
+            return maxTimeInHive == 0 ? BeeConstants.MAX_TIME_IN_HIVE : BeeConstants.MIN_HIVE_TIME;
+        }
+        return maxTimeInHive;
     }
 
     public RegistryObject<Item> getCombRegistryObject() {
@@ -285,7 +287,7 @@ public class CustomBeeData extends AbstractBeeData {
     }
 
     public void setName(String name) {
-        this.name = this.name == null ? name.toLowerCase() : this.name;
+        this.name = this.name == null ? name : this.name;
     }
 
     public float getSizeModifier() {
@@ -301,7 +303,7 @@ public class CustomBeeData extends AbstractBeeData {
     }
 
     public String getName() {
-        return name.toLowerCase();
+        return this.name;
     }
 
     public void addData(String key, AbstractBeeData data) {
@@ -370,6 +372,17 @@ public class CustomBeeData extends AbstractBeeData {
 
     public TranslationTextComponent getTranslation() {
         return new TranslationTextComponent("entity.resourcefulbees." + name + "_bee");
+    }
+
+    /**
+     * If the ResourcefulBees mod should handle the registration
+     */
+    public boolean shouldResourcefulBeesDoForgeRegistration() {
+        return shouldResourcefulBeesDoForgeRegistration;
+    }
+
+    public void setShouldResourcefulBeesDoForgeRegistration(boolean shouldResourcefulBeesDoForgeRegistration) {
+        this.shouldResourcefulBeesDoForgeRegistration = shouldResourcefulBeesDoForgeRegistration;
     }
 
     public static class Builder {

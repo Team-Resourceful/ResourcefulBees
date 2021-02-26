@@ -3,11 +3,15 @@ package com.resourcefulbees.resourcefulbees.entity.passive;
 import com.resourcefulbees.resourcefulbees.api.beedata.*;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.LightLevels;
-import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
+import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 
 public class OreoBee {
+
+    private OreoBee() {
+        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+    }
 
     public static void register() {
         BeeRegistry.getRegistry().registerBee(BeeConstants.OREO_BEE, getOreoBeeData());
@@ -43,7 +47,7 @@ public class OreoBee {
                 .setApiaryOutputAmounts(new int[]{1, 2, 3, 4})
                 .createCustomBee();
 
-        data.shouldResourcefulBeesDoForgeRegistration = true;
+        data.setShouldResourcefulBeesDoForgeRegistration(true);
         data.setCombRegistryObject(ModItems.OREO_COOKIE);
         data.setCombBlockItemRegistryObject(ModItems.OREO_COOKIE);
 

@@ -46,9 +46,9 @@ public class EntityRenderer implements IIngredientRenderer<EntityIngredient> {
                         matrixStack.scale(-scaledSize, scaledSize, 30);
                         matrixStack.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(270.0F));
                         EntityRendererManager entityrenderermanager = mc.getRenderManager();
-                        IRenderTypeBuffer.Impl irendertypebuffer$impl = mc.getBufferBuilders().getEntityVertexConsumers();
-                        entityrenderermanager.render(beeEntity, 0, 0, 0.0D, mc.getRenderPartialTicks(), 1, matrixStack, irendertypebuffer$impl, 15728880);
-                        irendertypebuffer$impl.draw();
+                        IRenderTypeBuffer.Impl typeBuffer = mc.getBufferBuilders().getEntityVertexConsumers();
+                        entityrenderermanager.render(beeEntity, 0, 0, 0.0D, mc.getRenderPartialTicks(), 1, matrixStack, typeBuffer, 15728880);
+                        typeBuffer.draw();
                     }
                     matrixStack.pop();
                 }

@@ -2,29 +2,20 @@ package com.resourcefulbees.resourcefulbees.entity.goals;
 
 import com.resourcefulbees.resourcefulbees.api.ICustomBee;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
-import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
-import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.ai.goal.BreedGoal;
-import net.minecraft.entity.ai.goal.TradeWithPlayerGoal;
 import net.minecraft.entity.item.ExperienceOrbEntity;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.particles.IParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.stats.Stats;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.extensions.IForgeWorldServer;
 import net.minecraftforge.event.entity.living.BabyEntitySpawnEvent;
 
 public class BeeBreedGoal extends BreedGoal {
@@ -62,10 +53,10 @@ public class BeeBreedGoal extends BreedGoal {
         final boolean cancelled = MinecraftForge.EVENT_BUS.post(event);
         ageableentity = event.getChild();
         if (cancelled) {
-            int p1_breedDelay = ((ICustomBee)this.animal).getBeeData().getBreedData().getBreedDelay();
-            int p2_breedDelay = ((ICustomBee)this.field_75391_e).getBeeData().getBreedData().getBreedDelay();
+            int p1BreedDelay = ((ICustomBee)this.animal).getBeeData().getBreedData().getBreedDelay();
+            int p2BreedDelay = ((ICustomBee)this.field_75391_e).getBeeData().getBreedData().getBreedDelay();
 
-            resetBreed(p1_breedDelay, p2_breedDelay);
+            resetBreed(p1BreedDelay, p2BreedDelay);
             return;
         }
         if (ageableentity != null) {
@@ -78,9 +69,9 @@ public class BeeBreedGoal extends BreedGoal {
                 serverplayerentity.addStat(Stats.ANIMALS_BRED);
                 CriteriaTriggers.BRED_ANIMALS.trigger(serverplayerentity, this.animal, this.field_75391_e, ageableentity);
             }
-            int p1_breedDelay = ((ICustomBee)this.animal).getBeeData().getBreedData().getBreedDelay();
-            int p2_breedDelay = ((ICustomBee)this.field_75391_e).getBeeData().getBreedData().getBreedDelay();
-            resetBreed(p1_breedDelay, p2_breedDelay);
+            int p1BreedDelay = ((ICustomBee)this.animal).getBeeData().getBreedData().getBreedDelay();
+            int p2BreedDelay = ((ICustomBee)this.field_75391_e).getBeeData().getBreedData().getBreedDelay();
+            resetBreed(p1BreedDelay, p2BreedDelay);
 
 
             float nextFloat = world.rand.nextFloat();
@@ -94,19 +85,19 @@ public class BeeBreedGoal extends BreedGoal {
                 }
             }else {
                 this.animal.playSound(SoundEvents.ENTITY_BEE_HURT, 2.0f, 1.0f);
-                spawnParticles(ParticleTypes.ANGRY_VILLAGER);
+                spawnParticles();
             }
         }
     }
 
-    protected void spawnParticles(IParticleData p_213718_1_) {
+    protected void spawnParticles() {
         if (!world.isRemote()) {
             ServerWorld worldServer = (ServerWorld)world;
             for(int i = 0; i < 5; ++i) {
                 double d0 = world.rand.nextGaussian() * 0.02D;
                 double d1 = world.rand.nextGaussian() * 0.02D;
                 double d2 = world.rand.nextGaussian() * 0.02D;
-                worldServer.spawnParticle(p_213718_1_,
+                worldServer.spawnParticle((IParticleData) ParticleTypes.ANGRY_VILLAGER,
                         this.animal.getParticleX(1.0D),
                         this.animal.getRandomBodyY(),
                         this.animal.getParticleZ(1.0D),
@@ -115,8 +106,8 @@ public class BeeBreedGoal extends BreedGoal {
         }
     }
 
-    private void resetBreed(int p1_breedDelay, int p2BreedDelay) {
-        this.animal.setGrowingAge(p1_breedDelay);
+    private void resetBreed(int p1BreedDelay, int p2BreedDelay) {
+        this.animal.setGrowingAge(p1BreedDelay);
         this.field_75391_e.setGrowingAge(p2BreedDelay);
         this.animal.resetInLove();
         this.field_75391_e.resetInLove();

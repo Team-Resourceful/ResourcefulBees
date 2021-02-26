@@ -1,6 +1,7 @@
 package com.resourcefulbees.resourcefulbees.registry;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
+import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
@@ -8,26 +9,13 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 
-public class ItemGroupResourcefulBees{
+public class ItemGroupResourcefulBees {
+
+	private ItemGroupResourcefulBees() {
+		throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+	}
 
 	public static final ItemGroup RESOURCEFUL_BEES = (new ItemGroup(ResourcefulBees.MOD_ID) {
-
-/*		@Override
-		@OnlyIn(Dist.CLIENT)
-		public void fill(@Nonnull NonNullList<ItemStack> items) {
-			BeeRegistry.getRegistry().getBees().forEach(((s, customBeeData) -> {
-					final ItemStack eggStack = new ItemStack(customBeeData.getSpawnEggItemRegistryObject().get());
-					items.add(eggStack);
-					if (customBeeData.hasHoneycomb()) {
-						final ItemStack combStack = new ItemStack(customBeeData.getCombRegistryObject().get());
-						items.add(combStack);
-
-						final ItemStack combBlockStack = new ItemStack(customBeeData.getCombBlockItemRegistryObject().get());
-						items.add(combBlockStack);
-					}
-			}));
-			super.fill(items);
-		}*/
 
 		@Override
 		@Nonnull

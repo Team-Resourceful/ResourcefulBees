@@ -9,10 +9,10 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.potion.Effect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.Color;
-import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.NotNull;
 import vazkii.patchouli.api.IComponentRenderContext;
 import vazkii.patchouli.api.ICustomComponent;
 import vazkii.patchouli.api.IVariable;
@@ -36,12 +36,11 @@ public class EffectComponent implements ICustomComponent {
     }
 
     private ITextComponent getEffectName(Effect effect) {
-        IFormattableTextComponent iformattabletextcomponent = new TranslationTextComponent(effect.getName());
-        return iformattabletextcomponent;
+        return new TranslationTextComponent(effect.getName());
     }
 
     @Override
-    public void render(MatrixStack matrixStack, IComponentRenderContext context, float pticks, int mouseX, int mouseY) {
+    public void render(@NotNull MatrixStack matrixStack, @NotNull IComponentRenderContext context, float pticks, int mouseX, int mouseY) {
         FontRenderer text = Minecraft.getInstance().fontRenderer;
         TextureManager manager = Minecraft.getInstance().getTextureManager();
         float width = text.getWidth(effectName);

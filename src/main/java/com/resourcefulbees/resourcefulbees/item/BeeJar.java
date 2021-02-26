@@ -1,11 +1,11 @@
 package com.resourcefulbees.resourcefulbees.item;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
-import com.resourcefulbees.resourcefulbees.api.ICustomBee;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
+import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.color.Color;
 import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
 import net.minecraft.client.Minecraft;
@@ -98,14 +98,14 @@ public class BeeJar extends Item {
 
         if (stack.getCount() > 1) {
             ItemStack newJar = new ItemStack(ModItems.BEE_JAR.get());
-            newJar.setTag(createTag(target));
+            newJar.setTag(BeeInfoUtils.createJarBeeTag(target, NBTConstants.NBT_ENTITY));
             stack.shrink(1);
             renameJar(newJar, target);
             if (!player.addItemStackToInventory(newJar)) {
                 player.dropItem(newJar, false);
             }
         } else {
-            stack.setTag(createTag(target));
+            stack.setTag(BeeInfoUtils.createJarBeeTag(target, NBTConstants.NBT_ENTITY));
             renameJar(stack, target);
         }
         player.setHeldItem(hand, stack);
@@ -128,10 +128,10 @@ public class BeeJar extends Item {
     public static void fillJar(ItemStack stack, CustomBeeData beeData) {
         EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(beeData.getEntityTypeRegistryID());
         World world = Minecraft.getInstance().world;
-        if (world == null) return;
+        if (world == null || entityType == null) return;
         Entity entity = entityType.create(world);
         if (entity instanceof BeeEntity) {
-            stack.setTag(createTag((BeeEntity) entity));
+            stack.setTag(BeeInfoUtils.createJarBeeTag((BeeEntity) entity, NBTConstants.NBT_ENTITY));
             renameJar(stack, (BeeEntity) entity);
         }
     }
@@ -157,38 +157,13 @@ public class BeeJar extends Item {
             if (tag.contains(NBTConstants.NBT_BEE_TYPE)) {
                 String rbType = tag.getString(NBTConstants.NBT_BEE_TYPE);
                 tooltip.add(new StringTextComponent(I18n.format(ResourcefulBees.MOD_ID + ".information.bee_type.custom")
-                        + (I18n.hasKey("entity.resourcefulbees." + rbType.toLowerCase()) ? I18n.format("entity.resourcefulbees."
-                        + rbType.toLowerCase()) : WordUtils.capitalize(rbType.replace("_", " ")))).formatted(TextFormatting.WHITE));
+                        + (I18n.hasKey("entity.resourcefulbees." + rbType) ? I18n.format("entity.resourcefulbees."
+                        + rbType) : WordUtils.capitalize(rbType.replace("_", " ")))).formatted(TextFormatting.WHITE));
             } else if (type.equals(BeeConstants.VANILLA_BEE_ID)) {
                 tooltip.add(new TranslationTextComponent(ResourcefulBees.MOD_ID + ".information.bee_type.vanilla").formatted(TextFormatting.WHITE));
             } else {
                 tooltip.add(new TranslationTextComponent(ResourcefulBees.MOD_ID + ".information.bee_type.unknown"));
             }
         }
-    }
-
-    public static CompoundNBT createTag(BeeEntity beeEntity) {
-        String type = EntityType.getKey(beeEntity.getType()).toString();
-        CompoundNBT nbt = new CompoundNBT();
-        nbt.putString(NBTConstants.NBT_ENTITY, type);
-        beeEntity.writeWithoutTypeId(nbt);
-
-        String beeColor = BeeConstants.VANILLA_BEE_COLOR;
-
-        if (beeEntity instanceof ICustomBee) {
-            ICustomBee iCustomBee = (ICustomBee) beeEntity;
-            nbt.putString(NBTConstants.NBT_BEE_TYPE, iCustomBee.getBeeType());
-            if (iCustomBee.getBeeData().getColorData().hasPrimaryColor()) {
-                beeColor = iCustomBee.getBeeData().getColorData().getPrimaryColor();
-            } else if (iCustomBee.getBeeData().getColorData().isRainbowBee()) {
-                beeColor = BeeConstants.RAINBOW_COLOR;
-            } else if (iCustomBee.getBeeData().getColorData().hasHoneycombColor()) {
-                beeColor = iCustomBee.getBeeData().getColorData().getHoneycombColor();
-            }
-        }
-
-        nbt.putString(NBTConstants.NBT_COLOR, beeColor);
-
-        return nbt;
     }
 }

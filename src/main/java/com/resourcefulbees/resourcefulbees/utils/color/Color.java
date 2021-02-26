@@ -27,7 +27,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-@SuppressWarnings({"unused", "MagicNumber", "SpellCheckingInspection"})
+@SuppressWarnings({"unused", "MagicNumber"})
 public class Color {
     private static final Map<String, Color> NAMED_MAP = new HashMap<>();
     private static final Pattern PATTERN_LEADING_JUNK = Pattern.compile("(#|0x)", Pattern.CASE_INSENSITIVE);
@@ -186,39 +186,39 @@ public class Color {
     public static final Color YELLOWGREEN = named("YellowGreen", 0x9ACD32);
     //endregion
 
-    private final int color;
-    private final int red;
-    private final int green;
-    private final int blue;
+    private final int c;
+    private final int r;
+    private final int g;
+    private final int b;
     private final int alpha;
 
-    public Color(int color) {
-        this.red = (color >> 16) & 0xFF;
-        this.green = (color >> 8) & 0xFF;
-        this.blue = color & 0xFF;
-        int a = (color >> 24) & 0xFF;
+    public Color(int c) {
+        this.r = (c >> 16) & 0xFF;
+        this.g = (c >> 8) & 0xFF;
+        this.b = c & 0xFF;
+        int a = (c >> 24) & 0xFF;
         this.alpha = a > 0 ? a : 0xFF;
-        this.color = (this.alpha << 24) | (color & 0xFFFFFF);
+        this.c = (this.alpha << 24) | (c & 0xFFFFFF);
     }
 
-    public Color(int red, int green, int blue) {
-        this(red, green, blue, 255);
+    public Color(int r, int g, int b) {
+        this(r, g, b, 255);
     }
 
-    public Color(int red, int green, int blue, int alpha) {
+    public Color(int r, int g, int b, int alpha) {
         this.alpha = alpha > 0 ? alpha : 0xFF;
-        this.red = red;
-        this.green = green;
-        this.blue = blue;
-        this.color = (this.alpha << 24) | (this.red << 16) | (this.green << 8) | this.blue;
+        this.r = r;
+        this.g = g;
+        this.b = b;
+        this.c = (this.alpha << 24) | (this.r << 16) | (this.g << 8) | this.b;
     }
 
-    public Color(float red, float green, float blue) {
-        this(red, green, blue, 1f);
+    public Color(float r, float g, float b) {
+        this(r, g, b, 1f);
     }
 
-    public Color(float red, float green, float blue, float alpha) {
-        this((int) (red * 255), (int) (green * 255), (int) (blue * 255), (int) (alpha * 255));
+    public Color(float r, float g, float b, float alpha) {
+        this((int) (r * 255), (int) (g * 255), (int) (b * 255), (int) (alpha * 255));
     }
 
     private static Color named(String name, int color) {
@@ -296,7 +296,7 @@ public class Color {
     public static int parseInt(String str) {
         // Named color?
         str = str.toLowerCase(Locale.ROOT);
-        if (NAMED_MAP.containsKey(str)) return NAMED_MAP.get(str).getColor();
+        if (NAMED_MAP.containsKey(str)) return NAMED_MAP.get(str).getC();
 
         // Hex code
         str = PATTERN_LEADING_JUNK.matcher(str).replaceFirst("");
@@ -333,10 +333,8 @@ public class Color {
     }
 
     public static Color blend(Color color1, Color color2, float ratio) {
-        int i1 = color1.color;
-        int i2 = color2.color;
 
-        int color = blend(i1, i2, ratio);
+        int color = blend(color1.c, color2.c, ratio);
         return new Color(color);
     }
 
@@ -366,20 +364,20 @@ public class Color {
         return a << 24 | r << 16 | g << 8 | b;
     }
 
-    public int getColor() {
-        return color;
+    public int getC() {
+        return c;
     }
 
-    public float getRed() {
-        return red / 255f;
+    public float getR() {
+        return r / 255f;
     }
 
-    public float getGreen() {
-        return green / 255f;
+    public float getG() {
+        return g / 255f;
     }
 
-    public float getBlue() {
-        return blue / 255f;
+    public float getB() {
+        return b / 255f;
     }
 
     public float getAlpha() {
@@ -387,15 +385,15 @@ public class Color {
     }
 
     public int getRedInt() {
-        return red;
+        return r;
     }
 
     public int getGreenInt() {
-        return green;
+        return g;
     }
 
     public int getBlueInt() {
-        return blue;
+        return b;
     }
 
     public int getAlphaInt() {
