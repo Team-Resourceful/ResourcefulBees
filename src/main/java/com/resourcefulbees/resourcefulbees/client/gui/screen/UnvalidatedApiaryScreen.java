@@ -173,10 +173,10 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
         }
 
         @Override
-        public void renderToolTip(@Nonnull MatrixStack matrix, int p_renderToolTip_1_, int p_renderToolTip_2_) {
+        public void renderToolTip(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
             if (!this.active) {
                 StringTextComponent s = new StringTextComponent(I18n.format("gui.resourcefulbees.apiary.button.build.creative"));
-                UnvalidatedApiaryScreen.this.renderTooltip(matrix, s, p_renderToolTip_1_, p_renderToolTip_2_);
+                UnvalidatedApiaryScreen.this.renderTooltip(matrix, s, mouseX, mouseY);
             }
         }
     }

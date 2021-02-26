@@ -123,7 +123,7 @@ public class FlowersCategory implements IRecipeCategory<FlowersCategory.Recipe> 
     }
 
     @Override
-    public void setIngredients(FlowersCategory.Recipe recipe,@Nonnull IIngredients ingredients) {
+    public void setIngredients(Recipe recipe,@Nonnull IIngredients ingredients) {
         if (recipe.isAcceptsAny()) {
             if (recipe.recipeType == RecipeTypes.ITEM) {
                 List<Ingredient> list = new ArrayList<>();
@@ -135,18 +135,18 @@ public class FlowersCategory implements IRecipeCategory<FlowersCategory.Recipe> 
                     FluidStack fluid = new FluidStack(element, 1000);
                     fluids.add(fluid);
                 }
-                List<List<FluidStack>> fluid_fluids = new ArrayList<>();
-                fluid_fluids.add(fluids);
-                ingredients.setInputLists(VanillaTypes.FLUID, fluid_fluids);
+                List<List<FluidStack>> fluidFluids = new ArrayList<>();
+                fluidFluids.add(fluids);
+                ingredients.setInputLists(VanillaTypes.FLUID, fluidFluids);
             } else if (recipe.recipeType == RecipeTypes.BLOCK) {
                 List<ItemStack> itemStacks = new ArrayList<>();
                 for (Block element: recipe.blockTag.values() ) {
                     ItemStack item = new ItemStack(element.asItem());
                     itemStacks.add(item);
                 }
-                List<List<ItemStack>> item_items = new ArrayList<>();
-                item_items.add(itemStacks);
-                ingredients.setInputLists(VanillaTypes.ITEM, item_items);
+                List<List<ItemStack>> itemItems = new ArrayList<>();
+                itemItems.add(itemStacks);
+                ingredients.setInputLists(VanillaTypes.ITEM, itemItems);
             }
         } else if (recipe.itemIn != null) {
             ingredients.setInput(VanillaTypes.ITEM, recipe.itemIn);
@@ -211,7 +211,6 @@ public class FlowersCategory implements IRecipeCategory<FlowersCategory.Recipe> 
         }
 
         public boolean isAcceptsAny() { return acceptsAny; }
-        public ITag<?> getItemITag() { return itemITag; }
         public String getBeeType() { return this.beeType; }
     }
 }

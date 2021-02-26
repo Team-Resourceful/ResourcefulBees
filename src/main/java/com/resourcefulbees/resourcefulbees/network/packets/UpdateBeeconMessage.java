@@ -1,6 +1,5 @@
 package com.resourcefulbees.resourcefulbees.network.packets;
 
-import com.resourcefulbees.resourcefulbees.block.EnderBeecon;
 import com.resourcefulbees.resourcefulbees.tileentity.EnderBeeconTileEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
