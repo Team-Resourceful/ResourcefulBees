@@ -117,6 +117,7 @@ public class BeePollinateGoal extends Goal {
         boundingBox = null;
     }
 
+    @Override
     public void tick() {
         ++this.ticks;
         if (this.ticks > 600) {

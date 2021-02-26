@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.container.AutomationSensitiveItemStackHandler;
 import com.resourcefulbees.resourcefulbees.container.EnderBeeconContainer;
-import com.resourcefulbees.resourcefulbees.effects.ModEffects;
+import com.resourcefulbees.resourcefulbees.registry.ModEffects;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.item.CustomHoneyBottleItem;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;

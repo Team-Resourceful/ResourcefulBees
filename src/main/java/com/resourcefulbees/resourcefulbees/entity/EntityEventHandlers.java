@@ -1,6 +1,7 @@
 package com.resourcefulbees.resourcefulbees.entity;
 
 import com.resourcefulbees.resourcefulbees.entity.passive.ResourcefulBee;
+import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.item.ItemEntity;
@@ -12,6 +13,10 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class EntityEventHandlers {
+
+    private EntityEventHandlers() {
+        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+    }
 
     public static void entityDies(LivingDeathEvent event) {
         //TODO: enable WIP Pollen Feature.

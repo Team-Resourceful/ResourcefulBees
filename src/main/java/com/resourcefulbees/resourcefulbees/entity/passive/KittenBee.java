@@ -55,7 +55,7 @@ public class KittenBee {
                 .setTraits(new String[]{BeeConstants.KITTEN_BEE})
                 .createCustomBee();
 
-        data.shouldResourcefulBeesDoForgeRegistration = true;
+        data.setShouldResourcefulBeesDoForgeRegistration(true);
         data.setCombRegistryObject(ModItems.CATNIP_HONEYCOMB);
         data.setCombBlockItemRegistryObject(ModItems.CATNIP_HONEYCOMB_BLOCK_ITEM);
         data.setCombBlockRegistryObject(ModBlocks.CATNIP_HONEY_BLOCK);

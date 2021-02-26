@@ -2,6 +2,7 @@ package com.resourcefulbees.resourcefulbees.client.render.fluid;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
+import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.registry.ModBlocks;
 import com.resourcefulbees.resourcefulbees.registry.ModFluids;
 import net.minecraft.client.Minecraft;
@@ -15,6 +16,10 @@ import net.minecraftforge.client.event.RenderBlockOverlayEvent;
 
 @OnlyIn(Dist.CLIENT)
 public class FluidRender {
+
+    private FluidRender() {
+        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+    }
 
     private static final ResourceLocation HONEY_UNDERWATER = new ResourceLocation(ResourcefulBees.MOD_ID + ":textures/block/honey/honey_underwater.png");
 

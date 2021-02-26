@@ -86,10 +86,7 @@ public class CustomBeeData extends AbstractBeeData {
      */
     private final int[] apiaryOutputAmounts;
 
-    /**
-     * If the ResourcefulBees mod should handle the registration
-     */
-    public transient boolean shouldResourcefulBeesDoForgeRegistration;
+    private transient boolean shouldResourcefulBeesDoForgeRegistration;
 
     /**
      * Additional Data added by a Mod Author
@@ -374,6 +371,17 @@ public class CustomBeeData extends AbstractBeeData {
 
     public TranslationTextComponent getTranslation() {
         return new TranslationTextComponent("entity.resourcefulbees." + name + "_bee");
+    }
+
+    /**
+     * If the ResourcefulBees mod should handle the registration
+     */
+    public boolean shouldResourcefulBeesDoForgeRegistration() {
+        return shouldResourcefulBeesDoForgeRegistration;
+    }
+
+    public void setShouldResourcefulBeesDoForgeRegistration(boolean shouldResourcefulBeesDoForgeRegistration) {
+        this.shouldResourcefulBeesDoForgeRegistration = shouldResourcefulBeesDoForgeRegistration;
     }
 
     public static class Builder {

@@ -104,7 +104,7 @@ public class BeeSetup {
             Gson gson = new Gson();
             CustomBeeData bee = gson.fromJson(reader, CustomBeeData.class);
             bee.setName(name);
-            bee.shouldResourcefulBeesDoForgeRegistration = true;
+            bee.setShouldResourcefulBeesDoForgeRegistration(true);
             BeeRegistry.getRegistry().registerBee(name, bee);
         } catch (Exception e) {
             LOGGER.error("\n---------[Registration Error]---------\nCould not validate {} bee's json file, Skipping.", name);

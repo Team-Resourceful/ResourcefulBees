@@ -7,7 +7,6 @@ import com.resourcefulbees.resourcefulbees.block.CustomHoneyBlock;
 import com.resourcefulbees.resourcefulbees.block.CustomHoneyFluidBlock;
 import com.resourcefulbees.resourcefulbees.block.HoneycombBlock;
 import com.resourcefulbees.resourcefulbees.config.Config;
-import com.resourcefulbees.resourcefulbees.effects.ModEffects;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.entity.passive.ResourcefulBee;
 import com.resourcefulbees.resourcefulbees.fluids.HoneyFlowingFluid;
@@ -77,7 +76,7 @@ public class RegistryHandler {
 
     public static void registerDynamicBees() {
         BeeRegistry.getRegistry().getBees().forEach((name, customBee) -> {
-            if (customBee.shouldResourcefulBeesDoForgeRegistration) {
+            if (customBee.shouldResourcefulBeesDoForgeRegistration()) {
                 if (customBee.hasHoneycomb() && !customBee.hasCustomDrop()) {
                     registerHoneycomb(name, customBee);
                 } else if (customBee.hasHoneycomb() && customBee.hasCustomDrop() && !customBee.isEasterEggBee()) {
