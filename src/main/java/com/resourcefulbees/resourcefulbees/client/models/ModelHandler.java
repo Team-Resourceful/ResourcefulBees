@@ -162,7 +162,7 @@ public class ModelHandler {
         });
 
         BeeRegistry.getRegistry().getHoneyBottles().forEach((string, honeyData) -> {
-            if (honeyData.shouldResourcefulBeesDoForgeRegistration) {
+            if (honeyData.shouldResourcefulBeesDoForgeRegistration()) {
                 registerHoneyFluid(honeyData);
 
 
