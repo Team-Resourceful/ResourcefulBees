@@ -259,7 +259,7 @@ public class ResourcefulBee extends CustomBeeEntity {
     protected void updateAITasks() {
         TraitData info = getBeeData().getTraitData();
 
-        if (info.hasSpecialAbilities()) {
+        if (info.hasTraits() && info.hasSpecialAbilities()) {
             info.getSpecialAbilities().forEach(ability -> {
                 switch (ability) {
                     case TraitConstants.TELEPORT:
@@ -375,21 +375,19 @@ public class ResourcefulBee extends CustomBeeEntity {
                 default:
                     //do nothing
             }
-            if (info.hasDamageTypes()) {
-                for (Pair<String, Integer> damageType : info.getDamageTypes()) {
-                    if (damageType.getLeft().equals(TraitConstants.SET_ON_FIRE))
-                        entityIn.setFire(i * damageType.getRight());
-                    if (damageType.getLeft().equals(TraitConstants.EXPLOSIVE)) this.explode(i / damageType.getRight());
-                }
+            if (info.hasTraits() && info.hasDamageTypes()) {
+                int finalI1 = i;
+                info.getDamageTypes().forEach(stringIntegerPair -> {
+                    if (stringIntegerPair.getLeft().equals(TraitConstants.SET_ON_FIRE))
+                        entityIn.setFire(finalI1 * stringIntegerPair.getRight());
+                    if (stringIntegerPair.getLeft().equals(TraitConstants.EXPLOSIVE)) this.explode(finalI1 / stringIntegerPair.getRight());
+                });
             }
-            if (info.hasDamagePotionEffects()) {
-                if (i > 0) {
-                    for (Pair<Effect, Integer> effect : info.getPotionDamageEffects()) {
-                        ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(effect.getLeft(), i * 20, effect.getRight()));
-                    }
-                }
+            if (i > 0 && info.hasTraits() && info.hasDamagePotionEffects()) {
+                int finalI = i;
+                info.getPotionDamageEffects().forEach(effectIntegerPair -> ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(effectIntegerPair.getLeft(), finalI * 20, effectIntegerPair.getRight())));
             }
-            if ((Config.BEES_INFLICT_POISON.get() && this.getBeeData().getCombatData().inflictsPoison()) && !info.hasDamagePotionEffects() && !info.hasDamageTypes())
+            if (canPoison(info))
                 ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.POISON, i * 20, 0));
         }
 
@@ -399,6 +397,10 @@ public class ResourcefulBee extends CustomBeeEntity {
         this.playSound(SoundEvents.ENTITY_BEE_STING, 1.0F, 1.0F);
 
         return flag;
+    }
+
+    private boolean canPoison(TraitData info) {
+        return (Config.BEES_INFLICT_POISON.get() && this.getBeeData().getCombatData().inflictsPoison()) && info.hasTraits() && !info.hasDamagePotionEffects() && !info.hasDamageTypes();
     }
 
     private void explode(int radius) {

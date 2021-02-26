@@ -109,22 +109,20 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
         if (source.equals(DamageSource.SWEET_BERRY_BUSH)) {
             return true;
         }
-        if (info.hasDamageImmunities()) {
-            for (DamageSource damage : info.getDamageImmunities())
-                if (source.equals(damage)) return true;
+        if (info.hasTraits() && info.hasDamageImmunities()) {
+            return info.getDamageImmunities().stream().anyMatch(source::equals);
         }
         return super.isInvulnerableTo(source);
     }
 
     @Override
-    public boolean isPotionApplicable(@Nonnull EffectInstance potioneffectIn) {
+    public boolean isPotionApplicable(@Nonnull EffectInstance effectInstance) {
         TraitData info = getBeeData().getTraitData();
-        if (info.hasPotionImmunities()) {
-            for (Effect potion : info.getPotionImmunities()) {
-                if (potion.equals(potioneffectIn.getPotion())) return false;
-            }
+        if (info.hasTraits() && info.hasPotionImmunities()) {
+            Effect potionEffect = effectInstance.getPotion();
+            return info.getPotionImmunities().stream().noneMatch(potionEffect::equals);
         }
-        return super.isPotionApplicable(potioneffectIn);
+        return super.isPotionApplicable(effectInstance);
     }
 
     @Override
@@ -132,15 +130,15 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
         if (this.world.isRemote) {
             if (this.ticksExisted % 40 == 0) {
                 TraitData info = getBeeData().getTraitData();
-                if (info.hasParticleEffects()) {
-                    for (BasicParticleType particle : info.getParticleEffects()) {
+                if (info.hasTraits() && info.hasParticleEffects()) {
+                    info.getParticleEffects().forEach(basicParticleType -> {
                         for (int i = 0; i < 10; ++i) {
-                            this.world.addParticle(particle, this.getParticleX(0.5D),
+                            this.world.addParticle(basicParticleType, this.getParticleX(0.5D),
                                     this.getRandomBodyY() - 0.25D, this.getParticleZ(0.5D),
                                     (this.rand.nextDouble() - 0.5D) * 2.0D, -this.rand.nextDouble(),
                                     (this.rand.nextDouble() - 0.5D) * 2.0D);
                         }
-                    }
+                    });
                 }
             }
         } else {
