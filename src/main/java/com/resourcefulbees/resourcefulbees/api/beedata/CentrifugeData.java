@@ -70,15 +70,15 @@ public class CentrifugeData extends AbstractBeeData {
 
     private final JsonElement mainNBTData;
 
-    private transient CompoundNBT mainNBT = null;
+    private transient CompoundNBT mainNBT;
 
     private final JsonElement secondaryNBTData;
 
-    private transient CompoundNBT secondaryNBT = null;
+    private transient CompoundNBT secondaryNBT;
 
     private final JsonElement bottleNBTData;
 
-    private transient CompoundNBT bottleNBT = null;
+    private transient CompoundNBT bottleNBT;
 
 
     /**
@@ -175,35 +175,25 @@ public class CentrifugeData extends AbstractBeeData {
     }
 
     public CompoundNBT getMainNBT() {
-        if (mainNBTData != null && mainNBT == null) {
-            mainNBT = CompoundNBT.CODEC.parse(JsonOps.INSTANCE, mainNBTData).resultOrPartial(e -> LOGGER.warn(String.format("Could not deserialize NBT: [%s]", mainNBTData.toString()))).get();
-        }else if (mainNBTData == null && mainNBT == null){
-            mainNBT = new CompoundNBT();
-        }
-        if (bottleNBT == null || mainNBT.isEmpty()) return null;
+        mainNBT = mainNBTData == null ? new CompoundNBT() : CompoundNBT.CODEC.parse(JsonOps.INSTANCE, mainNBTData).resultOrPartial(e -> logWarning(mainNBTData)).orElse(new CompoundNBT());
         return mainNBT;
     }
 
     public CompoundNBT getSecondaryNBT() {
-        if (secondaryNBTData != null && secondaryNBT == null) {
-            secondaryNBT = CompoundNBT.CODEC.parse(JsonOps.INSTANCE, secondaryNBTData).resultOrPartial(e -> LOGGER.warn(String.format("Could not deserialize NBT: [%s]", secondaryNBTData.toString()))).get();
-        }else if (mainNBTData == null && secondaryNBT == null){
-            secondaryNBT = new CompoundNBT();
-        }
-        if (secondaryNBT == null || secondaryNBT.isEmpty()) return null;
+        secondaryNBT = secondaryNBTData == null ? new CompoundNBT() : CompoundNBT.CODEC.parse(JsonOps.INSTANCE, secondaryNBTData).resultOrPartial(e -> logWarning(secondaryNBTData)).orElse(new CompoundNBT());
         return secondaryNBT;
     }
 
     public CompoundNBT getBottleNBT() {
-        if (bottleNBTData != null && bottleNBT == null) {
-            bottleNBT = CompoundNBT.CODEC.parse(JsonOps.INSTANCE, bottleNBTData).resultOrPartial(e -> LOGGER.warn(String.format("Could not deserialize NBT: [%s]", bottleNBTData.toString()))).get();
-        }else if (bottleNBTData == null && bottleNBT == null){
-            bottleNBT = new CompoundNBT();
-        }
-        if (bottleNBT == null || bottleNBT.isEmpty()) return null;
+        bottleNBT = bottleNBTData == null ? new CompoundNBT() : CompoundNBT.CODEC.parse(JsonOps.INSTANCE, bottleNBTData).resultOrPartial(e -> logWarning(bottleNBTData)).orElse(new CompoundNBT());
         return bottleNBT;
     }
 
+    private static void logWarning(JsonElement tag) {
+        LOGGER.warn("Could not deserialize NBT: {}", tag);
+    }
+
+    @SuppressWarnings("unused")
     public static class Builder {
         private final String mainOutput;
         private String secondaryOutput;

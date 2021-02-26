@@ -3,7 +3,7 @@ package com.resourcefulbees.resourcefulbees.init;
 import com.google.gson.Gson;
 import com.resourcefulbees.resourcefulbees.data.BeeTrait;
 import com.resourcefulbees.resourcefulbees.data.JsonBeeTrait;
-import com.resourcefulbees.resourcefulbees.registry.BiomeDictionary;
+import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.registry.TraitRegistry;
 import net.minecraft.particles.BasicParticleType;
 import net.minecraft.potion.Effect;
@@ -17,6 +17,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -24,7 +25,11 @@ import static com.resourcefulbees.resourcefulbees.ResourcefulBees.LOGGER;
 
 public class TraitSetup {
 
-    public static Path DICTIONARY_PATH;
+    private TraitSetup() {
+        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+    }
+
+    private static Path dictionaryPath;
 
     public static void buildCustomTraits() {
         addTraits();
@@ -112,15 +117,14 @@ public class TraitSetup {
     }
 
     private static void addTraits() {
-        try {
-            Files.walk(DICTIONARY_PATH)
-                    .filter(f -> f.getFileName().toString().endsWith(".zip"))
+        try (Stream<Path> zipStream = Files.walk(dictionaryPath);
+             Stream<Path> jsonStream = Files.walk(dictionaryPath)) {
+            zipStream.filter(f -> f.getFileName().toString().endsWith(".zip"))
                     .forEach(TraitSetup::addZippedType);
-            Files.walk(DICTIONARY_PATH)
-                    .filter(f -> f.getFileName().toString().endsWith(".json"))
+            jsonStream.filter(f -> f.getFileName().toString().endsWith(".json"))
                     .forEach(TraitSetup::addType);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("Could not stream custom traits!!", e);
         }
     }
 
@@ -134,8 +138,7 @@ public class TraitSetup {
     }
 
     private static void addZippedType(Path file) {
-        try {
-            ZipFile zf = new ZipFile(file.toString());
+        try (ZipFile zf = new ZipFile(file.toString())) {
             zf.stream().forEach(zipEntry -> {
                 if (zipEntry.getName().endsWith(".json")) {
                     try {
@@ -150,5 +153,9 @@ public class TraitSetup {
         } catch (IOException e) {
             LOGGER.warn("Could not read ZipFile! ZipFile: {}", file.getFileName());
         }
+    }
+
+    public static void setDictionaryPath(Path dictionaryPath) {
+        TraitSetup.dictionaryPath = dictionaryPath;
     }
 }

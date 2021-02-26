@@ -49,8 +49,8 @@ public class ModSetup {
         BeeSetup.setBeePath(rbBeesPath);
         BeeSetup.setResourcePath(rbAssetsPath);
         BeeSetup.setHoneyPath(rbHoneyPath);
-        BiomeDictionarySetup.DICTIONARY_PATH = rbBiomePath;
-        TraitSetup.DICTIONARY_PATH = rbTraitPath;
+        BiomeDictionarySetup.setDictionaryPath(rbBiomePath);
+        TraitSetup.setDictionaryPath(rbTraitPath);
 
         try { Files.createDirectories(rbBeesPath);
         } catch (FileAlreadyExistsException ignored) { //ignored

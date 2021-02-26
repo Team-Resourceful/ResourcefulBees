@@ -127,18 +127,7 @@ public class CustomHoneyBlock extends BreakableBlock {
     }
 
     private boolean isSliding(BlockPos blockPos, Entity entity) {
-        if (entity.isOnGround()) {
-            return false;
-        } else if (entity.getY() > (double) blockPos.getY() + 0.9375D - 1.0E-7D) {
-            return false;
-        } else if (entity.getMotion().y >= -0.08D) {
-            return false;
-        } else {
-            double d0 = Math.abs((double) blockPos.getX() + 0.5D - entity.getX());
-            double d1 = Math.abs((double) blockPos.getZ() + 0.5D - entity.getZ());
-            double d2 = 0.4375D + (double) (entity.getWidth() / 2.0F);
-            return d0 + 1.0E-7D > d2 || d1 + 1.0E-7D > d2;
-        }
+        return isSliding(blockPos, entity);
     }
 
     private void triggerAdvancement(Entity entity, BlockPos blockPos) {
@@ -148,15 +137,7 @@ public class CustomHoneyBlock extends BreakableBlock {
     }
 
     private void updateSlidingVelocity(Entity entity) {
-        Vector3d vector3d = entity.getMotion();
-        if (vector3d.y < -0.13D) {
-            double d0 = -0.05D / vector3d.y;
-            entity.setMotion(new Vector3d(vector3d.x * d0, -0.05D, vector3d.z * d0));
-        } else {
-            entity.setMotion(new Vector3d(vector3d.x, -0.05D, vector3d.z));
-        }
-
-        entity.fallDistance = 0.0F;
+        CatnipHoneyBlock.updateSlidingVelocity(entity);
     }
 
     private void addCollisionEffects(World world, Entity entity) {

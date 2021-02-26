@@ -49,7 +49,7 @@ public class AnimatedImageComponent implements ICustomComponent {
         }
         Minecraft.getInstance().getTextureManager().bindTexture(animatedImage);
 
-        AbstractGui.drawTexture(matrixStack, xOffset, yOffset, 0, imageHeight * currentFrame, (int) (imageWidth * imageScale), (int) (imageHeight * imageScale), textureWidth, textureHeight);
+        AbstractGui.drawTexture(matrixStack, xOffset, yOffset, 0, (float) imageHeight * currentFrame, (int) (imageWidth * imageScale), (int) (imageHeight * imageScale), textureWidth, textureHeight);
     }
 
     @Override

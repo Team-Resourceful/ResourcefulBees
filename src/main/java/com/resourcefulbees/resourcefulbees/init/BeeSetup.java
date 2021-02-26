@@ -149,7 +149,7 @@ public class BeeSetup {
             zipStream.filter(f -> f.getFileName().toString().endsWith(ZIP)).forEach(BeeSetup::addZippedBee);
             jsonStream.filter(f -> f.getFileName().toString().endsWith(JSON)).forEach(BeeSetup::addBee);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("Could not stream bees!!", e);
         }
     }
 
@@ -159,7 +159,7 @@ public class BeeSetup {
             zipStream.filter(f -> f.getFileName().toString().endsWith(ZIP)).forEach(BeeSetup::addZippedHoney);
             jsonStream.filter(f -> f.getFileName().toString().endsWith(JSON)).forEach(BeeSetup::addHoney);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("Could not stream honey!!", e);
         }
     }
 
@@ -229,7 +229,7 @@ public class BeeSetup {
                 copyDefaultBees(Paths.get(source.toString(), "/data/resourcefulbees/default_bees"));
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("Could not setup default bees!!", e);
         }
     }
 
@@ -244,7 +244,7 @@ public class BeeSetup {
                 copyDefaultHoney(Paths.get(source.toString(), "/data/resourcefulbees/default_honey"));
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("Could not setup default honey!!", e);
         }
     }
 
@@ -256,11 +256,11 @@ public class BeeSetup {
                 try {
                     Files.copy(path, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    LOGGER.error("Could not copy default honey!!", e);
                 }
             });
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("Could not stream honey!!", e);;
         }
     }
 
@@ -281,11 +281,11 @@ public class BeeSetup {
                 try {
                     Files.copy(path, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    LOGGER.error("Could not copy default bees!!", e);
                 }
             });
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("Could not stream bees!!", e);
         }
     }
 

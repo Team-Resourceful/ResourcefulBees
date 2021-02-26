@@ -59,7 +59,7 @@ public class DataGen {
         try (FileWriter writer = new FileWriter(Paths.get(path, file).toFile())) {
             writer.write(data);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("context", e);
         }
     }
 

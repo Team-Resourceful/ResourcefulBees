@@ -31,7 +31,7 @@ public class BeeLayer extends LayerRenderer<CustomBeeEntity, CustomBeeModel<Cust
 
     private static final String PNG_SUFFIX = ".png";
     private static final String ANGRY_PNG_SUFFIX = "_angry.png";
-    private static final Logger LOGGER = LogManager.getLogger();
+    //private static final Logger LOGGER = LogManager.getLogger();
 
     private final boolean isEmissive;
     private final int glowingPulse;
@@ -101,8 +101,8 @@ public class BeeLayer extends LayerRenderer<CustomBeeEntity, CustomBeeModel<Cust
 
         if (isEmissive) {
             if (isEnchanted) {
-                if (texture == null) LOGGER.error("enchanted: texture is null");
-                if (matrixStackIn == null) LOGGER.error("enchanted: matrix is null");
+                /*if (texture == null) LOGGER.error("enchanted: texture is null");
+                if (matrixStackIn == null) LOGGER.error("enchanted: matrix is null");*/
                 this.getEntityModel().render(matrixStackIn, bufferIn.getBuffer(RenderType.getEntityGlint()), packedLightIn, OverlayTexture.DEFAULT_UV, 0.0F, 0.0F, 0.0F, 0.0F);
                 if (additionModel != null) {
                     additionModel.render(matrixStackIn, bufferIn.getBuffer(RenderType.getEntityGlint()), packedLightIn, LivingRenderer.getOverlay(customBeeEntity, 0.0F), 0.0F, 0.0F, 0.0F, 0.0F);
@@ -110,9 +110,9 @@ public class BeeLayer extends LayerRenderer<CustomBeeEntity, CustomBeeModel<Cust
             } else {
                 IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.getEyes(texture));
                 if (glowingPulse == 0 || customBeeEntity.ticksExisted / 5 % glowingPulse == 0) {
-                    if (texture == null) LOGGER.error("glowing: texture is null");
+                    /*if (texture == null) LOGGER.error("glowing: texture is null");
                     if (matrixStackIn == null) LOGGER.error("glowing: matrix is null");
-                    if (ivertexbuilder == null) LOGGER.error("glowing: vertex builder is null");
+                    if (ivertexbuilder == null) LOGGER.error("glowing: vertex builder is null");*/
                     this.getEntityModel().render(matrixStackIn, ivertexbuilder, 15728640, OverlayTexture.DEFAULT_UV, color[0], color[1], color[2], 1.0F);
                     if (additionModel != null) {
                         additionModel.render(matrixStackIn, ivertexbuilder, 15728640, LivingRenderer.getOverlay(customBeeEntity, 0.0F), color[0], color[1], color[2], 1.0F);
@@ -120,14 +120,14 @@ public class BeeLayer extends LayerRenderer<CustomBeeEntity, CustomBeeModel<Cust
                 }
             }
         } else {
-            if (texture == null) LOGGER.error("base: texture is null");
+            /*if (texture == null) LOGGER.error("base: texture is null");
             if (matrixStackIn == null) LOGGER.error("base: matrix is null");
             if (bufferIn == null) LOGGER.error("base: buffer is null");
-            if (customBeeEntity == null) LOGGER.error("base: entity is null");
+            if (customBeeEntity == null) LOGGER.error("base: entity is null");*/
             renderModel(this.getEntityModel(), texture, matrixStackIn, bufferIn, packedLightIn, customBeeEntity, color[0], color[1], color[2]);
             if (additionModel != null) {
                 IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.getEntityTranslucent(texture));
-                if (ivertexbuilder == null) LOGGER.error("base: vertex builder is null");
+                /*if (ivertexbuilder == null) LOGGER.error("base: vertex builder is null");*/
                 additionModel.render(matrixStackIn, ivertexbuilder, packedLightIn, LivingRenderer.getOverlay(customBeeEntity, 0.0F), color[0], color[1], color[2], 1.0F);
             }
         }

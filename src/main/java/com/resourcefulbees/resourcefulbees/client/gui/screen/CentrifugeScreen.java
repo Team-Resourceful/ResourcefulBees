@@ -266,15 +266,15 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
         if (Screen.hasControlDown() && this.container.shouldDisplayFluids()) {
-            int x = this.guiLeft + L_BDR_WD + SLOT_WD;
-            int y = this.guiTop + TOP_PAD + DBL_SLOT_HT;
+            double x = (double) this.guiLeft + L_BDR_WD + SLOT_WD;
+            double y = (double) this.guiTop + TOP_PAD + DBL_SLOT_HT;
 
             if (MathUtils.inRangeInclusive(mouseX, x, x + SLOT_WD) && MathUtils.inRangeInclusive(mouseY, y, y + 54)) {
                 NetPacketHandler.sendToServer(new DrainCentrifugeTankMessage(this.container.getCentrifugeTileEntity().getPos(), CentrifugeTileEntity.BOTTLE_SLOT));
                 return true;
             } else {
                 for (int i = 0; i < numInputs; i++) {
-                    x = this.guiLeft + outputStartX + SLOT_WD + 9 + (i * DBL_SLOT_WD);
+                    x = this.guiLeft + outputStartX + SLOT_WD + 9D + (i * DBL_SLOT_WD);
                     if (MathUtils.inRangeInclusive(mouseX, x, x + SLOT_WD) && MathUtils.inRangeInclusive(mouseY, y, y + 54)) {
                         NetPacketHandler.sendToServer(new DrainCentrifugeTankMessage(this.container.getCentrifugeTileEntity().getPos(), i + 1));
                         return true;

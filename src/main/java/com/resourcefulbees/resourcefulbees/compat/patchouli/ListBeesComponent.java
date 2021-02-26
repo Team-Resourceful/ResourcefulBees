@@ -56,8 +56,9 @@ public class ListBeesComponent implements ICustomComponent {
 
     private void renderEntity(MatrixStack matrixStack, IComponentRenderContext context, int page) {
         Pair<EntityType<?>, Optional<Entity>> bee = bees.get(page);
-        if (bee.getRight().isPresent()) {
-            renderEntity(matrixStack, bee.getRight().get(), context.getGui().getMinecraft().world, xOffset, yOffset, this.defaultRotation, this.renderScale, this.offset);
+        Optional<Entity> entityOptional = bee.getRight();
+        if (entityOptional.isPresent()) {
+            renderEntity(matrixStack, entityOptional.get(), context.getGui().getMinecraft().world, xOffset, yOffset, this.defaultRotation, this.renderScale, this.offset);
         } else {
             Entity entity = initEntity(bee.getLeft(), context.getGui().getMinecraft().world);
             if (entity == null) {
