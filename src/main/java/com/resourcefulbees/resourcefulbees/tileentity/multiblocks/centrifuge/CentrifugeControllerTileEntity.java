@@ -12,7 +12,6 @@ import com.resourcefulbees.resourcefulbees.utils.MathUtils;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
@@ -21,7 +20,6 @@ import net.minecraft.util.IntArray;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
@@ -83,26 +81,30 @@ public class CentrifugeControllerTileEntity extends CentrifugeTileEntity {
     @Override
     public int getNumberOfInputs() { return 3; }
 
+    public void checkHoneycombSlots(){
+        for (int i = 0; i < honeycombSlots.length; i++) {
+            recipes.set(i, getRecipe(i));
+            if (canStartCentrifugeProcess(i)) {
+                isProcessing[i] = true;
+            }
+            if (isProcessing[i] && !processCompleted[i]) {
+                processRecipe(i);
+            }
+            if (processCompleted[i]) {
+                completedProcess(i);
+            }
+        }
+    }
+
     @Override
     public void tick() {
         if (world != null && !world.isRemote()) {
             if (isValidStructure() && (!requiresRedstone || isPoweredByRedstone)) {
-                for (int i = 0; i < honeycombSlots.length; i++) {
-                    recipes.set(i, getRecipe(i));
-                    if (canStartCentrifugeProcess(i)) {
-                        isProcessing[i] = true;
-                    }
-                    if (isProcessing[i] && !processCompleted[i]) {
-                        processRecipe(i);
-                    }
-                    if (processCompleted[i]) {
-                        completedProcess(i);
-                    }
-                }
+                checkHoneycombSlots();
             }
             validateTime++;
             if (validateTime >= 20) {
-                validateStructure(this.world, null);
+                validateStructure(this.world);
             }
             if (dirty) {
                 this.dirty = false;
@@ -187,26 +189,22 @@ public class CentrifugeControllerTileEntity extends CentrifugeTileEntity {
         };
     }
 
-    protected int numberOfCasingsRequired() { return 35; }
-
-    protected void validateStructure(World world, @Nullable ServerPlayerEntity player) {
+    protected void validateStructure(World world) {
         validateTime = 0;
         buildStructureList(getBounds(), structureBlocks, blockPos -> true, this.getPos());
-        validStructure = MultiBlockHelper.validateStructure(structureBlocks, validBlocks(), numberOfCasingsRequired());
+        validStructure = MultiBlockHelper.validateStructure(structureBlocks, validBlocks(), 35);
         world.setBlockState(pos, getBlockState().with(CentrifugeControllerBlock.PROPERTY_VALID, validStructure));
 
         if (validStructure) {
             linkCasings(world);
-        } else if (player != null) {
-            player.sendStatusMessage(new StringTextComponent("Centrifuge MultiBlock is Invalid"), false);
-        } //TODO make a translation text component for this
+        }
     }
 
     protected void linkCasings(World world) {
         if (!world.isRemote) {
             structureBlocks.stream()
                     .map(world::getTileEntity)
-                    .filter(tileEntity -> tileEntity instanceof CentrifugeCasingTileEntity)
+                    .filter(CentrifugeCasingTileEntity.class::isInstance)
                     .forEach(tileEntity -> ((CentrifugeCasingTileEntity) tileEntity).setControllerPos(this.pos));
         }
     }
@@ -215,7 +213,7 @@ public class CentrifugeControllerTileEntity extends CentrifugeTileEntity {
         if (!world.isRemote) {
             structureBlocks.stream()
                     .map(world::getTileEntity)
-                    .filter(tileEntity -> tileEntity instanceof CentrifugeCasingTileEntity)
+                    .filter(CentrifugeCasingTileEntity.class::isInstance)
                     .forEach(tileEntity -> ((CentrifugeCasingTileEntity) tileEntity).setControllerPos(null));
         }
     }

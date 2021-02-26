@@ -62,8 +62,8 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
 
         apiaryTileEntity = this.container.getApiaryTileEntity();
 
-        importButton = this.addButton(new Button(this.guiLeft + 73, this.guiTop + 10, 40, 20, new StringTextComponent(I18n.format("gui.resourcefulbees.apiary.button.import")), (onPress) -> this.importBee()));
-        exportButton = this.addButton(new Button(this.guiLeft + 159, this.guiTop + 10, 40, 20, new StringTextComponent(I18n.format("gui.resourcefulbees.apiary.button.export")), (onPress) -> this.exportSelectedBee()));
+        importButton = this.addButton(new Button(this.guiLeft + 73, this.guiTop + 10, 40, 20, new StringTextComponent(I18n.format("gui.resourcefulbees.apiary.button.import")), onPress -> this.importBee()));
+        exportButton = this.addButton(new Button(this.guiLeft + 159, this.guiTop + 10, 40, 20, new StringTextComponent(I18n.format("gui.resourcefulbees.apiary.button.export")), onPress -> this.exportSelectedBee()));
 
         addTabButtons();
 

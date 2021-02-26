@@ -260,7 +260,7 @@ public class BeeSetup {
                 }
             });
         } catch (IOException e) {
-            LOGGER.error("Could not stream honey!!", e);;
+            LOGGER.error("Could not stream honey!!", e);
         }
     }
 
