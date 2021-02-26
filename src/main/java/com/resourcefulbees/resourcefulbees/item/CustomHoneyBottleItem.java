@@ -1,13 +1,11 @@
 package com.resourcefulbees.resourcefulbees.item;
 
-import com.resourcefulbees.resourcefulbees.api.beedata.HoneyBottleData;
+import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
 import net.minecraft.item.Food;
 import net.minecraft.item.HoneyBottleItem;
 import net.minecraft.item.ItemStack;
-
-import net.minecraft.item.Item.Properties;
 
 public class CustomHoneyBottleItem extends HoneyBottleItem {
 

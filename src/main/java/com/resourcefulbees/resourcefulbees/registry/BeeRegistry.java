@@ -2,7 +2,7 @@ package com.resourcefulbees.resourcefulbees.registry;
 
 import com.resourcefulbees.resourcefulbees.api.IBeeRegistry;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
-import com.resourcefulbees.resourcefulbees.api.beedata.HoneyBottleData;
+import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
 import com.resourcefulbees.resourcefulbees.utils.validation.FirstPhaseValidator;

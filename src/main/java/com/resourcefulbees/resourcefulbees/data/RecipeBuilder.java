@@ -4,7 +4,7 @@ import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.IBeeRegistry;
 import com.resourcefulbees.resourcefulbees.api.beedata.CentrifugeData;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
-import com.resourcefulbees.resourcefulbees.api.beedata.HoneyBottleData;
+import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;

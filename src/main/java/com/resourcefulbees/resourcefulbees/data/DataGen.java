@@ -1,7 +1,7 @@
 package com.resourcefulbees.resourcefulbees.data;
 
 import com.resourcefulbees.resourcefulbees.api.IBeeRegistry;
-import com.resourcefulbees.resourcefulbees.api.beedata.HoneyBottleData;
+import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.init.BeeSetup;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;

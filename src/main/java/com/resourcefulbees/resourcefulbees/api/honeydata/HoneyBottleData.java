@@ -1,4 +1,4 @@
-package com.resourcefulbees.resourcefulbees.api.beedata;
+package com.resourcefulbees.resourcefulbees.api.honeydata;
 
 import com.resourcefulbees.resourcefulbees.registry.ItemGroupResourcefulBees;
 import net.minecraft.block.Block;

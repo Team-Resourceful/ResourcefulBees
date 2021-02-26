@@ -1,8 +1,8 @@
 package com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.resourcefulbees.resourcefulbees.api.beedata.DefaultHoneyBottleData;
-import com.resourcefulbees.resourcefulbees.api.beedata.HoneyBottleData;
+import com.resourcefulbees.resourcefulbees.api.honeydata.DefaultHoneyBottleData;
+import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import net.minecraft.client.Minecraft;

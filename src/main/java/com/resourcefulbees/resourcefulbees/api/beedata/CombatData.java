@@ -21,6 +21,7 @@ public class CombatData extends AbstractBeeData {
     private boolean inflictsPoison;
 
     private CombatData(boolean isPassive, Float attackDamage, boolean removeStingerOnAttack, boolean inflictsPoison, Float baseHealth) {
+        super("CombatData");
         this.isPassive = isPassive;
         this.attackDamage = attackDamage;
         this.removeStingerOnAttack = removeStingerOnAttack;

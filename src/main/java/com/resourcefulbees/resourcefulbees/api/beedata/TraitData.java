@@ -41,6 +41,7 @@ public class TraitData extends AbstractBeeData {
     private final boolean hasTraits;
 
     public TraitData(boolean hasTraits) {
+        super("TraitData");
         this.hasTraits = hasTraits;
     }
 
@@ -78,12 +79,12 @@ public class TraitData extends AbstractBeeData {
 
     public boolean hasTraits() { return this.hasTraits; }
 
-    public boolean hasDamagePotionEffects() { return !this.potionDamageEffects.isEmpty(); }
-    public boolean hasDamageImmunities() { return !this.damageImmunities.isEmpty(); }
-    public boolean hasPotionImmunities() { return !this.potionImmunities.isEmpty(); }
-    public boolean hasDamageTypes() { return !this.damageTypes.isEmpty(); }
-    public boolean hasSpecialAbilities() { return !this.specialAbilities.isEmpty(); }
-    public boolean hasParticleEffects() { return !this.particleEffects.isEmpty(); }
+    public boolean hasDamagePotionEffects() { return this.hasTraits && !this.potionDamageEffects.isEmpty(); }
+    public boolean hasDamageImmunities() { return this.hasTraits &&  !this.damageImmunities.isEmpty(); }
+    public boolean hasPotionImmunities() { return this.hasTraits && !this.potionImmunities.isEmpty(); }
+    public boolean hasDamageTypes() { return this.hasTraits && !this.damageTypes.isEmpty(); }
+    public boolean hasSpecialAbilities() { return this.hasTraits && !this.specialAbilities.isEmpty(); }
+    public boolean hasParticleEffects() { return this.hasTraits && !this.particleEffects.isEmpty(); }
 
     public Set<Pair<Effect, Integer>> getPotionDamageEffects(){
         return potionDamageEffects;

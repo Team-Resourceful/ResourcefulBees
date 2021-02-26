@@ -2,7 +2,7 @@ package com.resourcefulbees.resourcefulbees.registry;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
-import com.resourcefulbees.resourcefulbees.api.beedata.HoneyBottleData;
+import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
 import com.resourcefulbees.resourcefulbees.block.CustomHoneyBlock;
 import com.resourcefulbees.resourcefulbees.block.CustomHoneyFluidBlock;
 import com.resourcefulbees.resourcefulbees.block.HoneycombBlock;

@@ -46,7 +46,8 @@ public class BreedData extends AbstractBeeData {
      */
     private final int breedDelay;
 
-    private BreedData(boolean isBreedable, double breedWeight, float breedChance, String parent1, String parent2, String feedItem, int feedAmount, int childGrowthDelay, int breedDelay) {
+    private BreedData( boolean isBreedable, double breedWeight, float breedChance, String parent1, String parent2, String feedItem, int feedAmount, int childGrowthDelay, int breedDelay) {
+        super("BreedData");
         this.isBreedable = isBreedable;
         this.breedWeight = breedWeight;
         this.breedChance = breedChance;

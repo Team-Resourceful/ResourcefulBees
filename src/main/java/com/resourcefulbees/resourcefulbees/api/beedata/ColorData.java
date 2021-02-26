@@ -75,6 +75,7 @@ public class ColorData extends AbstractBeeData {
     private final ModelTypes modelType;
 
     private ColorData(String primaryColor, String secondaryColor, String honeycombColor, String primaryLayerTexture, String secondaryLayerTexture, String emissiveLayerTexture, String gelLayerTexture, boolean isBeeColored, boolean isRainbowBee, boolean isGlowing, String glowColor, boolean isEnchanted, int glowingPulse, ModelTypes modelType) {
+        super("ColorData");
         this.primaryColor = primaryColor;
         this.secondaryColor = secondaryColor;
         this.honeycombColor = honeycombColor;

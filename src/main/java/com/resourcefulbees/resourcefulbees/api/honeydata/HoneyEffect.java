@@ -1,4 +1,4 @@
-package com.resourcefulbees.resourcefulbees.api.beedata;
+package com.resourcefulbees.resourcefulbees.api.honeydata;
 
 import com.resourcefulbees.resourcefulbees.utils.validation.ValidatorUtils;
 import net.minecraft.potion.Effect;

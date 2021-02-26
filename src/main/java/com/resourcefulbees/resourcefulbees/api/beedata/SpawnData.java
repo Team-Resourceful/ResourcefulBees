@@ -45,6 +45,7 @@ public class SpawnData extends AbstractBeeData {
     private final int maxYLevel;
 
     private SpawnData(boolean canSpawnInWorld, int spawnWeight, int minGroupSize, int maxGroupSize, String biomeWhitelist, String biomeBlacklist, LightLevels lightLevel, int minYLevel, int maxYLevel) {
+        super("SpawnData");
         this.canSpawnInWorld = canSpawnInWorld;
         this.spawnWeight = spawnWeight;
         this.minGroupSize = minGroupSize;

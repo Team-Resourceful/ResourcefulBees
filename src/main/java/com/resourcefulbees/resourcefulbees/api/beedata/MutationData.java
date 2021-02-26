@@ -69,6 +69,7 @@ public class MutationData extends AbstractBeeData {
 
 
     private MutationData(String mutationInput, String mutationOutput, int mutationCount, boolean hasMutation, MutationTypes mutationType, List<Mutation> mutations) {
+        super("MutationData");
         this.mutationInput = mutationInput;
         this.mutationOutput = mutationOutput;
         this.mutationCount = mutationCount;
