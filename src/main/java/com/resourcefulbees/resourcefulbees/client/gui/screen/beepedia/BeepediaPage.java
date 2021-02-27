@@ -19,13 +19,13 @@ public abstract class BeepediaPage {
 
     public final int yPos;
     public final int xPos;
-    public BeepediaScreen beepedia;
+    public final BeepediaScreen beepedia;
 
     public ListButton listButton = null;
 
     public final ResourceLocation arrowImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/arrows.png");
     public final ResourceLocation listImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/list_button.png");
-    public String id;
+    public final String id;
 
     protected BeepediaPage(BeepediaScreen beepedia, int xPos, int yPos, String id) {
         this.beepedia = beepedia;
@@ -56,15 +56,29 @@ public abstract class BeepediaPage {
 
     public abstract void renderBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY);
 
-    public abstract void renderForeground(MatrixStack matrix, int mouseX, int mouseY);
+    public void renderForeground(MatrixStack matrix, int mouseX, int mouseY) {
+        // override to implement
+    }
 
     public abstract String getSearch();
 
-    public abstract void tick(int ticksActive);
+    public void tick(int ticksActive) {
+        // override to implement
+    }
 
-    public abstract void drawTooltips(MatrixStack matrixStack, int mouseX, int mouseY);
+    public void drawTooltips(MatrixStack matrixStack, int mouseX, int mouseY) {
+        // override to implement
+    }
 
-    public abstract boolean mouseScrolled(double mouseX, double mouseY, double scrollAmount);
+    public boolean mouseScrolled(double mouseX, double mouseY, double scrollAmount) {
+        // override to implement
+        return false;
+    }
+
+    public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
+        // override to implement
+        return false;
+    }
 
     public class ListButton extends TabImageButton {
         private final TextComponent text;
@@ -119,7 +133,7 @@ public abstract class BeepediaPage {
         private void drawButton(@Nonnull MatrixStack matrix, float texYPos) {
             drawTexture(matrix, this.x, this.y, (float) this.xTexStart, texYPos, this.width, this.height, width, yDiffText * 3);
             int color = this.active ? TextFormatting.GRAY.getColor() : TextFormatting.WHITE.getColor();
-            fontRenderer.draw(matrix, text, (float)(this.x + textX), (float)(this.y + textY), color);
+            fontRenderer.draw(matrix, text, (float) (this.x + textX), (float) (this.y + textY), color);
             if (this.displayItem != null)
                 Minecraft.getInstance().getItemRenderer().renderItemAndEffectIntoGUI(this.displayItem, this.x + this.itemX, this.y + this.itemY);
             RenderSystem.enableDepthTest();

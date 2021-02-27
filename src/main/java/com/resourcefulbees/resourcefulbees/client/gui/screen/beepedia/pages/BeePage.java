@@ -124,7 +124,7 @@ public class BeePage extends BeepediaPage {
         int scissorY = (int) (beepedia.getMinecraft().getWindow().getFramebufferHeight() - (yPos + 9 + 38) * scale);
         GL11.glScissor((int) (xPos * scale), scissorY, (int) (38 * scale), (int) (38 * scale));
         if (bee != null)
-            BeepediaScreen.renderEntity(matrix, bee, Minecraft.getInstance().world, (float)xPos + 10, (float)yPos + 32, -45, 2);
+            BeepediaScreen.renderEntity(matrix, bee, Minecraft.getInstance().world, (float)xPos + 10, (float)yPos + 2, -45, 2);
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
 
     }
@@ -171,6 +171,11 @@ public class BeePage extends BeepediaPage {
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double scrollAmount) {
         return subPage.getRight().mouseScrolled(mouseX, mouseY, scrollAmount);
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
+        return subPage.getRight().mouseClicked(mouseX, mouseY, mouseButton);
     }
 
     public void setSubPage(SubPageType beeSubPage) {

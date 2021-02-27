@@ -83,21 +83,6 @@ public class SpawningPage extends BeeDataPage {
     }
 
     @Override
-    public void renderForeground(MatrixStack matrix, int mouseX, int mouseY) {
-        //Does nothing to not call super.
-    }
-
-    @Override
-    public void tick(int ticksActive) {
-        //Does nothing to not call super.
-    }
-
-    @Override
-    public void drawTooltips(MatrixStack matrixStack, int mouseX, int mouseY) {
-        //Does nothing to not call super.
-    }
-
-    @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double scrollAmount) {
         if (!BeepediaScreen.currScreenState.isBiomesOpen()) return false;
         if (mouseX >= xPos && mouseY >= yPos + 22 && mouseX <= xPos + subPageWidth && mouseY <= yPos + subPageHeight) {

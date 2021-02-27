@@ -30,23 +30,4 @@ public class MutationListPage extends BeeDataPage {
         font.draw(matrix, title, xPos, (float)yPos + 8f, TextFormatting.WHITE.getColor());
     }
 
-    @Override
-    public void renderForeground(MatrixStack matrix, int mouseX, int mouseY) {
-        //Does nothing to not call super.
-    }
-
-    @Override
-    public void tick(int ticksActive) {
-        //Does nothing to not call super.
-    }
-
-    @Override
-    public void drawTooltips(MatrixStack matrixStack, int mouseX, int mouseY) {
-        //Does nothing to not call super.
-    }
-
-    @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double scrollAmount) {
-        return false;
-    }
 }

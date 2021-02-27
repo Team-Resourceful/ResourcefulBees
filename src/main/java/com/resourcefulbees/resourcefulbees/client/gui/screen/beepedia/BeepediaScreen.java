@@ -14,6 +14,7 @@ import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.TraitRegistry;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.client.gui.widget.button.Button;
@@ -28,18 +29,17 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class BeepediaScreen extends Screen {
@@ -85,6 +85,7 @@ public class BeepediaScreen extends Screen {
         this.xSize = 286;
         this.ySize = 182;
     }
+
 
 
     @Override
@@ -168,7 +169,6 @@ public class BeepediaScreen extends Screen {
     public void setActive(BeepediaPage activePage, boolean goingBack) {
         if (this.activePage != null) {
             if (!this.activePage.getClass().equals(activePage.getClass()) && !(this.activePage instanceof HomePage) && !goingBack) {
-                pastStates.push(currScreenState);
                 resetScreenState();
             }
             this.activePage.closePage();
@@ -191,6 +191,7 @@ public class BeepediaScreen extends Screen {
     }
 
     public static void resetScreenState() {
+        pastStates.push(currScreenState);
         currScreenState = new BeepediaScreenState();
     }
 
@@ -303,6 +304,15 @@ public class BeepediaScreen extends Screen {
         return super.mouseScrolled(mouseX, mouseY, scrollAmount);
     }
 
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
+        if (activePage.mouseClicked(mouseX, mouseY, mouseButton)) {
+            Minecraft.getInstance().getSoundHandler().play(SimpleSound.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+            return true;
+        }
+        return super.mouseClicked(mouseX, mouseY, mouseButton);
+    }
+
     private static void updateScrollPos(ButtonList beesList, ButtonList traitsList, ButtonList honeyList) {
         beesScroll = beesList.scrollPos;
         traitScroll = traitsList.scrollPos;
@@ -312,6 +322,10 @@ public class BeepediaScreen extends Screen {
     @Override
     public boolean isPauseScreen() {
         return false;
+    }
+
+    public static boolean mouseHovering(float x, float y, int width, int height, int mouseX, int mouseY) {
+        return mouseX > x && mouseY > y && mouseX < x + width && mouseY < y + height;
     }
 
     public void drawSlot(MatrixStack matrix, IItemProvider item, int xPos, int yPos, int mouseX, int mouseY) {
@@ -341,7 +355,7 @@ public class BeepediaScreen extends Screen {
             }
             if (mc.player != null) {
                 matrixStack.push();
-                matrixStack.translate(10, 10, 0.5);
+                matrixStack.translate(10, 20 * renderScale, 0.5);
                 matrixStack.translate(x, y, 1);
                 matrixStack.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(180.0F));
                 matrixStack.translate(0, 0, 1);

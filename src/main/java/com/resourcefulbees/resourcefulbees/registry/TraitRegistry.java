@@ -87,15 +87,13 @@ public class TraitRegistry implements ITraitRegistry {
     }
 
     public static void applyBeeTraits() {
-        BeeRegistry.getRegistry().getBees().values().stream()
-                .filter(CustomBeeData::hasTraitNames)
-                .forEach(TraitRegistry::buildTraitData);
-    }
-
-    private static void buildTraitData(CustomBeeData customBeeData) {
-        customBeeData.getTraitData().initializeTraitSets();
-        Arrays.stream(customBeeData.getTraitNames())
-                .forEach(traitString -> addTrait(customBeeData, traitString));
+        BeeRegistry.getRegistry().getBees().values().stream().forEach(beeData -> {
+            beeData.getTraitData().initializeTraitSets();
+            if (beeData.hasTraitNames()) {
+                Arrays.stream(beeData.getTraitNames())
+                        .forEach(traitString -> addTrait(beeData, traitString));
+            }
+        });
     }
 
     private static void addTrait(CustomBeeData customBeeData, String traitString) {

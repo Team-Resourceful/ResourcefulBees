@@ -18,23 +18,8 @@ public class HomePage extends BeepediaPage {
     }
 
     @Override
-    public void renderForeground(MatrixStack matrix, int mouseX, int mouseY) {
-        //Does nothing to not call super.
-    }
-
-    @Override
     public String getSearch() {
         return new TranslationTextComponent("gui.resourcefulbees.beepedia.home_button").getString();
-    }
-
-    @Override
-    public void tick(int ticksActive) {
-        //Does nothing to not call super.
-    }
-
-    @Override
-    public void drawTooltips(MatrixStack matrixStack, int mouseX, int mouseY) {
-        //Does nothing to not call super.
     }
 
     @Override

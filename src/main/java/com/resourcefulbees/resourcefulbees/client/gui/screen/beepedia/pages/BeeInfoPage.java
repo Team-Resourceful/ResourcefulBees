@@ -9,7 +9,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.Color;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -78,7 +77,7 @@ public class BeeInfoPage extends BeeDataPage {
                 entityFlower = entityType.create(beepedia.getMinecraft().world);
             }
             font.draw(matrix, flowerName, xPos, yPos + 80, Color.parse("gray").getRgb());
-            BeepediaScreen.renderEntity(matrix, entityFlower, beepedia.getMinecraft().world, xPos + 45, yPos + 90, -45, 1.25f);
+            BeepediaScreen.renderEntity(matrix, entityFlower, beepedia.getMinecraft().world, xPos + 45, yPos + 80, -45, 1.25f);
         }
     }
 
@@ -91,15 +90,5 @@ public class BeeInfoPage extends BeeDataPage {
                 counter = 0;
             }
         }
-    }
-
-    @Override
-    public void drawTooltips(MatrixStack matrixStack, int mouseX, int mouseY) {
-        //Does nothing to not render multiple tooltips in super.
-    }
-
-    @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double scrollAmount) {
-        return false;
     }
 }

@@ -14,26 +14,6 @@ public class EntityMutationPage extends MutationPage {
 
     @Override
     public void renderBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
-
-    }
-
-    @Override
-    public void renderForeground(MatrixStack matrix, int mouseX, int mouseY) {
-
-    }
-
-    @Override
-    public void tick(int ticksActive) {
-
-    }
-
-    @Override
-    public void drawTooltips(MatrixStack matrixStack, int mouseX, int mouseY) {
-
-    }
-
-    @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double scrollAmount) {
-        return false;
+        // to implement later
     }
 }
