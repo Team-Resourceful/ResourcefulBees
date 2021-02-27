@@ -5,6 +5,7 @@ import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
+import com.resourcefulbees.resourcefulbees.client.gui.widget.TabImageButton;
 import com.resourcefulbees.resourcefulbees.item.BeeJar;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import net.minecraft.client.Minecraft;
@@ -29,14 +30,14 @@ public class BeePage extends BeepediaPage {
 
 
     Entity bee = null;
-    protected Pair<BeepediaScreen.TabButton, BeeDataPage> subPage;
-    Pair<BeepediaScreen.TabButton, BeeDataPage> beeInfoPage;
-    Pair<BeepediaScreen.TabButton, BeeDataPage> mutations;
-    Pair<BeepediaScreen.TabButton, BeeDataPage> traitListPage;
-    Pair<BeepediaScreen.TabButton, BeeDataPage> centrifugePage;
-    Pair<BeepediaScreen.TabButton, BeeDataPage> spawningPage;
-    Pair<BeepediaScreen.TabButton, BeeDataPage> breedingPage;
-    List<Pair<BeepediaScreen.TabButton, BeeDataPage>> tabs = new ArrayList<>();
+    protected Pair<TabImageButton, BeeDataPage> subPage;
+    Pair<TabImageButton, BeeDataPage> beeInfoPage;
+    Pair<TabImageButton, BeeDataPage> mutations;
+    Pair<TabImageButton, BeeDataPage> traitListPage;
+    Pair<TabImageButton, BeeDataPage> centrifugePage;
+    Pair<TabImageButton, BeeDataPage> spawningPage;
+    Pair<TabImageButton, BeeDataPage> breedingPage;
+    List<Pair<TabImageButton, BeeDataPage>> tabs = new ArrayList<>();
     ResourceLocation buttonImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/button.png");
     ResourceLocation splitterImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/bee_splitter.png");
 
@@ -102,8 +103,8 @@ public class BeePage extends BeepediaPage {
         newListButton(beeJar, beeData.getTranslation());
     }
 
-    public BeepediaScreen.TabButton getTabButton(ItemStack stack, Button.IPressable pressable, ITextComponent tooltip) {
-        BeepediaScreen.TabButton button = new BeepediaScreen.TabButton(this.xPos + 40 + tabCounter * 21, this.yPos + 27,
+    public TabImageButton getTabButton(ItemStack stack, Button.IPressable pressable, ITextComponent tooltip) {
+        TabImageButton button = new TabImageButton(this.xPos + 40 + tabCounter * 21, this.yPos + 27,
                 20, 20, 0, 0, 20, buttonImage, stack, 2, 2, pressable, beepedia.getTooltipProvider(tooltip));
         beepedia.addButton(button);
         button.visible = false;
@@ -179,7 +180,7 @@ public class BeePage extends BeepediaPage {
     }
 
     public void setSubPage(SubPageType beeSubPage) {
-        Pair<BeepediaScreen.TabButton, BeeDataPage> page;
+        Pair<TabImageButton, BeeDataPage> page;
         switch (beeSubPage) {
             case BREEDING:
                 page = breedingPage;

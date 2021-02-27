@@ -1,13 +1,15 @@
 package com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.BeePage;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.HomePage;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.HoneyPage;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.TraitPage;
+import com.resourcefulbees.resourcefulbees.client.gui.widget.ButtonList;
+import com.resourcefulbees.resourcefulbees.client.gui.widget.ImageButton;
+import com.resourcefulbees.resourcefulbees.client.gui.widget.TabImageButton;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.entity.passive.KittenBee;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
@@ -18,7 +20,6 @@ import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.gui.widget.button.ImageButton;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.world.ClientWorld;
@@ -32,15 +33,15 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
-import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class BeepediaScreen extends Screen {
 
@@ -74,6 +75,7 @@ public class BeepediaScreen extends Screen {
     ResourceLocation buttonImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/button.png");
     ResourceLocation slotImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/slot.png");
     private Button backButton;
+    private ResourceLocation home_buttons = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/home_buttons.png");
 
     public BeepediaScreen(ITextComponent name, String pageID) {
         super(name);
@@ -85,7 +87,6 @@ public class BeepediaScreen extends Screen {
         this.xSize = 286;
         this.ySize = 182;
     }
-
 
 
     @Override
@@ -103,13 +104,14 @@ public class BeepediaScreen extends Screen {
         BeeRegistry.getRegistry().getBees().forEach((s, b) -> bees.put(s, new BeePage(this, b, s, subX, y)));
         BeeRegistry.getRegistry().getHoneyBottles().forEach((s, h) -> honey.put(s, new HoneyPage(this, h, s, subX, y)));
         home = new HomePage(this, subX, y);
-        addButton(new Button(x + (xSize / 2) - 20, y + ySize - 25, 40, 20, new TranslationTextComponent("gui.resourcefulbees.beepedia.home_button"), onPress -> setActive(home)));
-        backButton = new Button(x + (xSize / 2) + 20, y + ySize - 25, 40, 20, new TranslationTextComponent("gui.resourcefulbees.beepedia.back_button"), onPress -> {
+        addButton(new ImageButton(x + (xSize / 2) - 10, y + ySize - 25, 20, 20, 20, 0, 20, home_buttons, 60, 60, onPress -> setActive(home)));
+        backButton = new ImageButton(x + (xSize / 2) + 20, y + ySize - 25, 20, 20, 40, 0, 20, home_buttons, 60, 60, onPress -> {
             if (!pastStates.isEmpty()) {
                 goBackState();
                 returnState(true);
             }
         });
+        backButton.active = false;
         addButton(backButton);
         bees.forEach((s, b) -> addButton(b.listButton));
         traits.forEach((s, b) -> addButton(b.listButton));
@@ -207,15 +209,15 @@ public class BeepediaScreen extends Screen {
         ItemStack honeyItem = new ItemStack(Items.HONEY_BOTTLE);
         int x = this.guiLeft;
         int y = this.guiTop;
-        TabButton beesButton = new TabButton(x + 45, y + 8, 20, 20, 0, 0, 20, buttonImage, beeItem, 2, 2, onPress -> {
+        TabImageButton beesButton = new TabImageButton(x + 45, y + 8, 20, 20, 0, 0, 20, buttonImage, beeItem, 2, 2, onPress -> {
             setActiveList(beesList);
             activeListType = PageType.BEE;
         }, getTooltipProvider(new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.bees")));
-        TabButton traitsButton = new TabButton(x + 66, y + 8, 20, 20, 0, 0, 20, buttonImage, traitItem, 2, 2, onPress -> {
+        TabImageButton traitsButton = new TabImageButton(x + 66, y + 8, 20, 20, 0, 0, 20, buttonImage, traitItem, 2, 2, onPress -> {
             setActiveList(traitsList);
             activeListType = PageType.TRAIT;
         }, getTooltipProvider(new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits")));
-        TabButton honeyButton = new TabButton(x + 87, y + 8, 20, 20, 0, 0, 20, buttonImage, honeyItem, 2, 2, onPress -> {
+        TabImageButton honeyButton = new TabImageButton(x + 87, y + 8, 20, 20, 0, 0, 20, buttonImage, honeyItem, 2, 2, onPress -> {
             setActiveList(honeyList);
             activeListType = PageType.HONEY;
         }, getTooltipProvider(new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.honey")));
@@ -387,173 +389,6 @@ public class BeepediaScreen extends Screen {
 
     public Button.ITooltip getTooltipProvider(ITextComponent textComponent) {
         return (button, matrix, mouseX, mouseY) -> renderTooltip(matrix, textComponent, mouseX, mouseY);
-    }
-
-    public static class TabButton extends ImageButton {
-        private final ItemStack displayItem;
-        private final ResourceLocation resourceLocation;
-        private final ITooltip tooltipProvider;
-        private final int xTexStart;
-        private final int yTexStart;
-        private final int yDiffText;
-        private final int itemX;
-        private final int itemY;
-
-        public TabButton(int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int yDiffTextIn, ResourceLocation resourceLocationIn, @NotNull ItemStack displayItem, int itemX, int itemY, IPressable onPressIn, ITooltip tooltipProvider) {
-            super(xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, yDiffTextIn, resourceLocationIn, itemX, itemY, onPressIn);
-            this.resourceLocation = resourceLocationIn;
-            this.displayItem = displayItem;
-            this.xTexStart = xTexStartIn;
-            this.yTexStart = yTexStartIn;
-            this.yDiffText = yDiffTextIn;
-            this.itemX = itemX;
-            this.itemY = itemY;
-            this.tooltipProvider = tooltipProvider;
-        }
-
-        @Override
-        public void renderButton(@Nonnull MatrixStack matrix, int mouseX, int mouseY, float partialTick) {
-            Minecraft minecraft = Minecraft.getInstance();
-            minecraft.getTextureManager().bindTexture(this.resourceLocation);
-            RenderSystem.disableDepthTest();
-            int i = this.yTexStart;
-            if (!this.active) {
-                i += yDiffText * 2;
-            } else if (this.isHovered()) {
-                i += this.yDiffText;
-            }
-            drawTexture(matrix, this.x, this.y, (float) this.xTexStart, (float) i, this.width, this.height, width, yDiffText * 3);
-            if (this.displayItem != null)
-                Minecraft.getInstance().getItemRenderer().renderItemAndEffectIntoGUI(this.displayItem, this.x + this.itemX, this.y + this.itemY);
-            RenderSystem.enableDepthTest();
-        }
-
-        @Override
-        public void renderToolTip(@NotNull MatrixStack matrix, int mouseX, int mouseY) {
-            if (this.isHovered()) {
-                tooltipProvider.onTooltip(this, matrix, mouseX, mouseY);
-            }
-        }
-    }
-
-    public static class ButtonList {
-        public final int xPos;
-        public final int yPos;
-        public final int height;
-        public final int width;
-        public final int itemHeight;
-        protected int scrollPos = 0;
-        public final TabButton button;
-        protected boolean active = false;
-        Map<String, ? extends BeepediaPage> list;
-        Map<String, BeepediaPage> reducedList = new TreeMap<>();
-
-        public ButtonList(int xPos, int yPos, int height, int width, int itemHeight, TabButton button, Map<String, ? extends BeepediaPage> list) {
-            this.xPos = xPos;
-            this.yPos = yPos;
-            this.height = height;
-            this.width = width;
-            this.itemHeight = itemHeight;
-            this.list = list;
-            this.button = button;
-            if (this instanceof SubButtonList) return;
-            updateReducedList(null);
-            list.forEach((s, b) -> b.listButton.setParent(this));
-        }
-
-        public int getScrollPos() {
-            return scrollPos;
-        }
-
-        public void updateReducedList(String search) {
-            reducedList.clear();
-            if (search != null && !search.isEmpty()) {
-                list.forEach((s, b) -> {
-                    if (s.contains(search.toLowerCase()) || b.getSearch().toLowerCase().contains(search.toLowerCase())) {
-                        reducedList.put(s, b);
-                    }
-                });
-            } else {
-                reducedList = new HashMap<>(list);
-            }
-        }
-
-        public void updatePos(int newPos) {
-            // update position of list
-            if (height > reducedList.size() * itemHeight) return;
-            scrollPos += newPos;
-            if (scrollPos > 0) scrollPos = 0;
-            else if (scrollPos < -(reducedList.size() * itemHeight - height))
-                scrollPos = -(reducedList.size() * itemHeight - height);
-        }
-
-        public void updateList() {
-            // update each button
-            AtomicInteger counter = new AtomicInteger();
-            reducedList.forEach((s, b) -> {
-                b.updateListPosition(xPos, (yPos + scrollPos + counter.get() * itemHeight));
-                counter.getAndIncrement();
-            });
-        }
-
-        public void setActive(boolean active) {
-            this.active = active;
-            if (button != null) button.active = !active;
-            list.forEach((s, b) -> {
-                if (b.listButton != null) b.listButton.visible = active;
-            });
-        }
-
-        public void setScrollPos(int scrollPos) {
-            this.scrollPos = scrollPos;
-        }
-    }
-
-    public static class SubButtonList extends ButtonList {
-        Map<String, BeepediaPage.ListButton> subList;
-
-        public SubButtonList(int xPos, int yPos, int height, int width, int itemHeight, TabButton button, Map<String, BeepediaPage.ListButton> list) {
-            super(xPos, yPos, height, width, itemHeight, button, null);
-            this.subList = list;
-            list.forEach((s, b) -> b.setParent(this));
-        }
-
-        @Override
-        public void updateReducedList(String search) {
-            if (reducedList == null) return;
-            super.updateReducedList(search);
-        }
-
-        @Override
-        public void updatePos(int newPos) {
-            // update position of list
-            if (height > subList.size() * itemHeight) return;
-            scrollPos += newPos;
-            if (scrollPos > 0) scrollPos = 0;
-            else if (scrollPos < -(subList.size() * itemHeight - height))
-                scrollPos = -(subList.size() * itemHeight - height);
-        }
-
-        @Override
-        public void updateList() {
-            // update each button
-            AtomicInteger counter = new AtomicInteger();
-            subList.forEach((s, b) -> {
-                if (b == null) return;
-                b.x = xPos;
-                b.y = yPos + scrollPos + counter.get() * itemHeight;
-                counter.getAndIncrement();
-            });
-        }
-
-        @Override
-        public void setActive(boolean active) {
-            this.active = active;
-            if (button != null) button.active = !active;
-            subList.forEach((s, b) -> {
-                if (b != null) b.visible = active;
-            });
-        }
     }
 
     public enum PageType {

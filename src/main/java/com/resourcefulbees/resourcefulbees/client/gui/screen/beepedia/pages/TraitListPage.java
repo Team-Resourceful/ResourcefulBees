@@ -3,6 +3,9 @@ package com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
+import com.resourcefulbees.resourcefulbees.client.gui.widget.ButtonList;
+import com.resourcefulbees.resourcefulbees.client.gui.widget.ListButton;
+import com.resourcefulbees.resourcefulbees.client.gui.widget.SubButtonList;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.widget.button.Button;
@@ -20,7 +23,7 @@ public class TraitListPage extends BeeDataPage {
 
     private Map<String, TraitPage> traitPages;
     private Map<String, ListButton> buttons;
-    private BeepediaScreen.ButtonList list;
+    private ButtonList list;
 
     public TraitListPage(BeepediaScreen beepedia, CustomBeeData beeData, int xPos, int yPos, BeePage parent) {
         super(beepedia, beeData, xPos, yPos, parent);
@@ -36,7 +39,7 @@ public class TraitListPage extends BeeDataPage {
             button.visible = false;
             buttons.put(e.getKey(), button);
         }
-        list = new BeepediaScreen.SubButtonList(xPos, yPos + 22, subPageWidth, subPageHeight - 22, 21, null, buttons);
+        list = new SubButtonList(xPos, yPos + 22, subPageWidth, subPageHeight - 22, 21, null, buttons);
         list.setActive(false);
     }
 
