@@ -38,7 +38,7 @@ public class KittenBee {
                 new CentrifugeData.Builder(true, "minecraft:cat_spawn_egg")
                         .setBottleOutput("resourcefulbees:catnip_honey_bottle")
                         .setBottleOutputWeight(0.1f)
-                        .setMainOutputWeight(0.005f)
+                        .setMainOutputWeight(0.01f)
                         .createCentrifugeData(),
                 BreedData.createDefault(),
                 new SpawnData.Builder(true)
