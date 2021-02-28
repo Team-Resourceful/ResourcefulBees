@@ -364,11 +364,11 @@ public class BeepediaScreen extends Screen {
         this.client.getTextureManager().bindTexture(sprite.getAtlas().getId());
         drawSprite(matrix, xPos + 2, yPos + 2, this.getZOffset(), 16, 16, sprite);
         if (mouseX >= xPos && mouseY >= yPos && mouseX <= xPos + 20 && mouseY <= yPos + 20) {
-            renderTooltip(matrix, fluidStack, mouseX, mouseY, showAmount);
+            renderFluidTooltip(matrix, fluidStack, mouseX, mouseY, showAmount);
         }
     }
 
-    private void renderTooltip(MatrixStack matrix, FluidStack fluidStack, int mouseX, int mouseY, boolean showAmount) {
+    private void renderFluidTooltip(MatrixStack matrix, FluidStack fluidStack, int mouseX, int mouseY, boolean showAmount) {
         List<ITextComponent> tooltip = new ArrayList<>();
         tooltip.add(fluidStack.getDisplayName());
         if (showAmount) {
