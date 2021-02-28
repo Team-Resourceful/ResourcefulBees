@@ -1,7 +1,6 @@
 package com.resourcefulbees.resourcefulbees.client.gui.widget;
 
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
-import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,19 +10,22 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class ButtonList {
     public final int xPos;
     public final int yPos;
-    public final int height;
+    public int defaultHeight;
+    public int height;
     public final int width;
     public final int itemHeight;
     public int scrollPos = 0;
     public final TabImageButton button;
     protected boolean active = false;
+    private String lastSearch;
     Map<String, ? extends BeepediaPage> list;
     Map<String, BeepediaPage> reducedList = new TreeMap<>();
 
     public ButtonList(int xPos, int yPos, int height, int width, int itemHeight, TabImageButton button, Map<String, ? extends BeepediaPage> list) {
         this.xPos = xPos;
         this.yPos = yPos;
-        this.height = height;
+        this.defaultHeight = height;
+        this.height = defaultHeight;
         this.width = width;
         this.itemHeight = itemHeight;
         this.list = list;
@@ -33,21 +35,35 @@ public class ButtonList {
         list.forEach((s, b) -> b.listButton.setParent(this));
     }
 
+    public void setSearchHeight() {
+        this.height = defaultHeight - 12;
+    }
+
+    public void resetHeight() {
+        this.height = defaultHeight;
+    }
+
     public int getScrollPos() {
         return scrollPos;
     }
 
     public void updateReducedList(String search) {
+        scrollPos = 0;
         reducedList.clear();
         if (search != null && !search.isEmpty()) {
             list.forEach((s, b) -> {
                 if (s.contains(search.toLowerCase()) || b.getSearch().toLowerCase().contains(search.toLowerCase())) {
                     reducedList.put(s, b);
+                    if (active) b.listButton.visible = true;
+                } else {
+                    if (active) b.listButton.visible = false;
                 }
             });
         } else {
+            if (active) list.forEach((s, b) -> b.listButton.visible = true);
             reducedList = new HashMap<>(list);
         }
+        lastSearch = search;
     }
 
     public void updatePos(int newPos) {
@@ -74,6 +90,7 @@ public class ButtonList {
         list.forEach((s, b) -> {
             if (b.listButton != null) b.listButton.visible = active;
         });
+        if (active) updateReducedList(lastSearch);
     }
 
     public void setScrollPos(int scrollPos) {

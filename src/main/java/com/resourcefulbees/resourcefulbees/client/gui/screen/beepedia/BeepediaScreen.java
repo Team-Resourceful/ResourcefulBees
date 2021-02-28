@@ -1,7 +1,6 @@
 package com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.BeePage;
@@ -11,38 +10,30 @@ import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.Trai
 import com.resourcefulbees.resourcefulbees.client.gui.widget.ButtonList;
 import com.resourcefulbees.resourcefulbees.client.gui.widget.ImageButton;
 import com.resourcefulbees.resourcefulbees.client.gui.widget.TabImageButton;
-import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.entity.passive.KittenBee;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.TraitRegistry;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
-import com.resourcefulbees.resourcefulbees.utils.RenderCuboid;
 import com.resourcefulbees.resourcefulbees.utils.RenderUtils;
 import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
@@ -55,9 +46,15 @@ public class BeepediaScreen extends Screen {
     private static int beesScroll = 0;
     private static int honeyScroll = 0;
     private static int traitScroll = 0;
+    private static boolean searchVisible = false;
+    private static String search = null;
+    private static String lastSearch = null;
 
     protected static final LinkedList<BeepediaScreenState> pastStates = new LinkedList<>();
     public static BeepediaScreenState currScreenState = new BeepediaScreenState();
+
+
+    TextFieldWidget searchBox;
 
     protected int xSize;
     protected int ySize;
@@ -117,14 +114,25 @@ public class BeepediaScreen extends Screen {
                 returnState(true);
             }
         });
+        addButton(new ImageButton(x + (xSize / 2) - 40, y + ySize - 25, 20, 20, 0, 0, 20, home_buttons, 60, 60, onPress -> {
+            searchBox.visible = !searchBox.visible;
+            setSearchVisible(searchBox.visible);
+            updateSearch(beesList);
+            updateSearch(traitsList);
+            updateSearch(honeyList);
+        }));
         backButton.active = false;
         addButton(backButton);
         bees.forEach((s, b) -> addButton(b.listButton));
         traits.forEach((s, b) -> addButton(b.listButton));
         honey.forEach((s, b) -> addButton(b.listButton));
+        searchBox = new TextFieldWidget(Minecraft.getInstance().fontRenderer, x + 10, y + 143, 98, 10, new TranslationTextComponent("gui.resourcefulbees.beepedia.search"));
+        searchBox.visible = false;
+        addChild(searchBox);
         initSidebar();
         returnState(false);
     }
+
 
     private static void goBackState() {
         currScreenState = pastStates.pop();
@@ -132,6 +140,7 @@ public class BeepediaScreen extends Screen {
 
     private void returnState(boolean goingBack) {
         setActive(currScreenState.getPageType(), currScreenState.getPageID(), goingBack);
+        searchBox.visible = isSearchVisible();
         if (beesScroll != 0) beesList.setScrollPos(beesScroll);
         if (honeyScroll != 0) honeyList.setScrollPos(honeyScroll);
         if (traitScroll != 0) traitsList.setScrollPos(traitScroll);
@@ -239,11 +248,12 @@ public class BeepediaScreen extends Screen {
     @Override
     public void render(@NotNull MatrixStack matrixStack, int mouseX, int mouseY, float partialTick) {
         drawBackground(matrixStack, partialTick, mouseX, mouseY);
+        updateSearch();
         super.render(matrixStack, mouseX, mouseY, partialTick);
+        searchBox.render(matrixStack, mouseX, mouseY, partialTick);
         drawForeground(matrixStack, mouseX, mouseY);
         drawTooltips(matrixStack, mouseX, mouseY);
     }
-
 
     protected void drawBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
         Minecraft client = this.client;
@@ -256,6 +266,46 @@ public class BeepediaScreen extends Screen {
         }
         activePage.renderBackground(matrix, partialTick, mouseX, mouseY);
         activeList.updateList();
+        if (searchBox.visible) activeList.setSearchHeight();
+        else activeList.resetHeight();
+    }
+
+    private void updateSearch() {
+        //todo figure out how to force focus...
+        if (searchBox.visible) {
+            setFocused(searchBox);
+            searchBox.setFocused2(true);
+        }
+        if (searchBox.isFocused()) {
+            String text = searchBox.getText();
+            if (text == null || text.isEmpty()) {
+                setSearch(null);
+            } else {
+                setSearch(text);
+            }
+        }
+        updateSearch(beesList);
+        updateSearch(honeyList);
+        updateSearch(traitsList);
+    }
+
+    private void updateSearch(ButtonList list) {
+        if (!searchUpdated()) return;
+        if (isSearchVisible()) {
+            if (getSearch() != null) {
+                searchBox.setText(getSearch());
+                list.updateReducedList(searchBox.getText());
+            } else {
+                list.updateReducedList(null);
+            }
+        } else {
+            list.updateReducedList(null);
+        }
+    }
+
+    private static boolean searchUpdated() {
+        if (lastSearch == null) return search != null;
+        return !lastSearch.equals(search);
     }
 
     @Override
@@ -318,13 +368,31 @@ public class BeepediaScreen extends Screen {
             Minecraft.getInstance().getSoundHandler().play(SimpleSound.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
             return true;
         }
-        return super.mouseClicked(mouseX, mouseY, mouseButton);
+        boolean toReturn = super.mouseClicked(mouseX, mouseY, mouseButton);
+        return toReturn;
     }
 
     private static void updateScrollPos(ButtonList beesList, ButtonList traitsList, ButtonList honeyList) {
         beesScroll = beesList.scrollPos;
         traitScroll = traitsList.scrollPos;
         honeyScroll = honeyList.scrollPos;
+    }
+
+    private static void setSearch(String search) {
+        BeepediaScreen.lastSearch = BeepediaScreen.search;
+        BeepediaScreen.search = search;
+    }
+
+    private static String getSearch() {
+        return search;
+    }
+
+    private static void setSearchVisible(boolean visible) {
+        BeepediaScreen.searchVisible = visible;
+    }
+
+    public static boolean isSearchVisible() {
+        return searchVisible;
     }
 
     @Override

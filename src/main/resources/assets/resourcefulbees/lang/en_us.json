@@ -76,11 +76,13 @@
 
     "item.resourcefulbees.bepedia": "Beepedia",
 	"gui.resourcefulbees.beepedia" : "Beepedia v1.0",
+	"gui.resourcefulbees.beepedia.search" : "Search",
 	"gui.resourcefulbees.beepedia.home_button" : "HOME",
 	"gui.resourcefulbees.beepedia.back_button" : "BACK",
 	"gui.resourcefulbees.beepedia.tab.bees" : "Bees",
 	"gui.resourcefulbees.beepedia.tab.traits" : "Traits",
 	"gui.resourcefulbees.beepedia.tab.honey" : "Honey",
+
 
 	"gui.resourcefulbees.beepedia.bee_subtab.info" : "Info",
 	"gui.resourcefulbees.beepedia.bee_subtab.info.size" : "Size: ",
