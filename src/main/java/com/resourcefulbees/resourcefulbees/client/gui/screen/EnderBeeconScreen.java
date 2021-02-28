@@ -9,11 +9,13 @@ import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
 import com.resourcefulbees.resourcefulbees.network.packets.UpdateBeeconMessage;
 import com.resourcefulbees.resourcefulbees.tileentity.EnderBeeconTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.RenderCuboid;
+import com.resourcefulbees.resourcefulbees.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.widget.button.AbstractButton;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.potion.Effect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -95,26 +97,12 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
 
     private void drawFluidTank(MatrixStack matrix, int mouseX, int mouseY) {
         if (!tileEntity.getFluidTank().isEmpty()) {
-
             //init stuff
-            FluidStack stack = tileEntity.getFluidTank().getFluid();
-            this.client.getTextureManager().bindTexture(FLUID_TEXTURE);
-            //prep color
-            int color = stack.getFluid().getAttributes().getColor();
-            if (color == -1) color = 16751628;
-            float red = RenderCuboid.getRed(color);
-            float green = RenderCuboid.getGreen(color);
-            float blue = RenderCuboid.getBlue(color);
-            float alpha = 1.0f;
-            //noinspection deprecation
-            RenderSystem.color4f(red, green, blue, alpha);
             int tankPosX = this.guiLeft + 207;
-            int tankPosY = this.guiTop + 92;
+            int tankPosY = this.guiTop + 30;
             int tankHeight = 62;
             int tankWidth = 14;
-
-            int effectiveHeight = (int) (((float) stack.getAmount() / (float) tileEntity.getFluidTank().getCapacity()) * tankHeight);
-            this.drawTexture(matrix, tankPosX, tankPosY - effectiveHeight, 0, 0, tankWidth, effectiveHeight, tankWidth, tankHeight);
+            RenderUtils.renderFluid(matrix, tileEntity.getFluidTank(), tankPosX, tankPosY, tankWidth, tankHeight, getZOffset());
         }
     }
 

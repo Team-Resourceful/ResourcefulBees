@@ -7,6 +7,7 @@ import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaSc
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
+import com.resourcefulbees.resourcefulbees.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.FontRenderer;
@@ -229,16 +230,16 @@ public class BreedingPage extends BeeDataPage {
         }
 
         public void drawParent1(MatrixStack matrix) {
-            BeepediaScreen.renderEntity(matrix, parent1Entity, beepedia.getMinecraft().world, parent1Pos.x, parent1Pos.y, 45, 1);
+            RenderUtils.renderEntity(matrix, parent1Entity, beepedia.getMinecraft().world, parent1Pos.x, parent1Pos.y, 45, 1);
         }
 
         public void drawParent2(MatrixStack matrix) {
-            BeepediaScreen.renderEntity(matrix, parent2Entity, beepedia.getMinecraft().world, parent2Pos.x, parent2Pos.y, -45, 1);
+            RenderUtils.renderEntity(matrix, parent2Entity, beepedia.getMinecraft().world, parent2Pos.x, parent2Pos.y, -45, 1);
         }
 
         private void drawChild(MatrixStack matrix) {
             FontRenderer font = beepedia.getMinecraft().fontRenderer;
-            BeepediaScreen.renderEntity(matrix, child.entity, beepedia.getMinecraft().world, childPos.x, childPos.y, -45, 1);
+            RenderUtils.renderEntity(matrix, child.entity, beepedia.getMinecraft().world, childPos.x, childPos.y, -45, 1);
 
             if (child.chance < 1 && !isBase) {
                 StringTextComponent text = new StringTextComponent(decimalFormat.format(child.chance));

@@ -4,6 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
+import com.resourcefulbees.resourcefulbees.utils.RenderUtils;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -77,7 +78,7 @@ public class BeeInfoPage extends BeeDataPage {
                 entityFlower = entityType.create(beepedia.getMinecraft().world);
             }
             font.draw(matrix, flowerName, xPos, yPos + 80, Color.parse("gray").getRgb());
-            BeepediaScreen.renderEntity(matrix, entityFlower, beepedia.getMinecraft().world, xPos + 45, yPos + 75, -45, 1.25f);
+            RenderUtils.renderEntity(matrix, entityFlower, beepedia.getMinecraft().world, xPos + 45, yPos + 75, -45, 1.25f);
         }
     }
 

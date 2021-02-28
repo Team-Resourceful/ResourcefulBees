@@ -8,6 +8,7 @@ import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaSc
 import com.resourcefulbees.resourcefulbees.client.gui.widget.TabImageButton;
 import com.resourcefulbees.resourcefulbees.item.BeeJar;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
+import com.resourcefulbees.resourcefulbees.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.widget.button.Button;
@@ -125,7 +126,7 @@ public class BeePage extends BeepediaPage {
         int scissorY = (int) (beepedia.getMinecraft().getWindow().getFramebufferHeight() - (yPos + 9 + 38) * scale);
         GL11.glScissor((int) (xPos * scale), scissorY, (int) (38 * scale), (int) (38 * scale));
         if (bee != null)
-            BeepediaScreen.renderEntity(matrix, bee, Minecraft.getInstance().world, (float)xPos + 10, (float)yPos + 2, -45, 2);
+            RenderUtils.renderEntity(matrix, bee, Minecraft.getInstance().world, (float)xPos + 10, (float)yPos + 2, -45, 2);
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
 
     }
