@@ -117,9 +117,9 @@ public class BeepediaScreen extends Screen {
         addButton(new ImageButton(x + (xSize / 2) - 40, y + ySize - 25, 20, 20, 0, 0, 20, home_buttons, 60, 60, onPress -> {
             searchBox.visible = !searchBox.visible;
             setSearchVisible(searchBox.visible);
-            updateSearch(beesList);
-            updateSearch(traitsList);
-            updateSearch(honeyList);
+            updateSearch(beesList, true);
+            updateSearch(traitsList, true);
+            updateSearch(honeyList, true);
         }));
         backButton.active = false;
         addButton(backButton);
@@ -271,7 +271,6 @@ public class BeepediaScreen extends Screen {
     }
 
     private void updateSearch() {
-        //todo figure out how to force focus...
         if (searchBox.visible) {
             setFocused(searchBox);
             searchBox.setFocused2(true);
@@ -284,13 +283,13 @@ public class BeepediaScreen extends Screen {
                 setSearch(text);
             }
         }
-        updateSearch(beesList);
-        updateSearch(honeyList);
-        updateSearch(traitsList);
+        updateSearch(beesList, false);
+        updateSearch(honeyList, false);
+        updateSearch(traitsList, false);
     }
 
-    private void updateSearch(ButtonList list) {
-        if (!searchUpdated()) return;
+    private void updateSearch(ButtonList list, boolean isToggled) {
+        if (!searchUpdated() && !isToggled) return;
         if (isSearchVisible()) {
             if (getSearch() != null) {
                 searchBox.setText(getSearch());
@@ -372,22 +371,22 @@ public class BeepediaScreen extends Screen {
         return toReturn;
     }
 
-    private static void updateScrollPos(ButtonList beesList, ButtonList traitsList, ButtonList honeyList) {
+    public static void updateScrollPos(ButtonList beesList, ButtonList traitsList, ButtonList honeyList) {
         beesScroll = beesList.scrollPos;
         traitScroll = traitsList.scrollPos;
         honeyScroll = honeyList.scrollPos;
     }
 
-    private static void setSearch(String search) {
+    public static void setSearch(String search) {
         BeepediaScreen.lastSearch = BeepediaScreen.search;
         BeepediaScreen.search = search;
     }
 
-    private static String getSearch() {
+    public static String getSearch() {
         return search;
     }
 
-    private static void setSearchVisible(boolean visible) {
+    public static void setSearchVisible(boolean visible) {
         BeepediaScreen.searchVisible = visible;
     }
 
