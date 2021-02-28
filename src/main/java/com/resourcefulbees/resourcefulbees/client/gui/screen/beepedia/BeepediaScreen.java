@@ -1,6 +1,7 @@
 package com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.BeePage;
@@ -15,6 +16,9 @@ import com.resourcefulbees.resourcefulbees.entity.passive.KittenBee;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.TraitRegistry;
+import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
+import com.resourcefulbees.resourcefulbees.utils.RenderCuboid;
+import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.client.gui.screen.Screen;
@@ -22,10 +26,11 @@ import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.world.ClientWorld;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.IItemProvider;
@@ -33,15 +38,15 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 public class BeepediaScreen extends Screen {
 
@@ -87,7 +92,6 @@ public class BeepediaScreen extends Screen {
         this.xSize = 286;
         this.ySize = 182;
     }
-
 
     @Override
     protected void init() {
@@ -330,8 +334,49 @@ public class BeepediaScreen extends Screen {
         return mouseX > x && mouseY > y && mouseX < x + width && mouseY < y + height;
     }
 
+    public void drawSlot(MatrixStack matrix, IItemProvider item, int amount, int xPos, int yPos, int mouseX, int mouseY) {
+        if (item instanceof FlowingFluidBlock) {
+            drawFluidSlot(matrix, new FluidStack(((FlowingFluidBlock) item).getFluid().getStillFluid(), amount), xPos, yPos, mouseX, mouseY, true);
+        } else {
+            drawSlot(matrix, new ItemStack(item, amount), xPos, yPos, mouseX, mouseY);
+        }
+    }
+
     public void drawSlot(MatrixStack matrix, IItemProvider item, int xPos, int yPos, int mouseX, int mouseY) {
-        drawSlot(matrix, new ItemStack(item), xPos, yPos, mouseX, mouseY);
+        if (item instanceof FlowingFluidBlock) {
+            drawFluidSlot(matrix, new FluidStack(((FlowingFluidBlock) item).getFluid().getStillFluid(), 1000), xPos, yPos, mouseX, mouseY, false);
+        } else {
+            drawSlot(matrix, new ItemStack(item), xPos, yPos, mouseX, mouseY);
+        }
+    }
+
+    private void drawFluidSlot(MatrixStack matrix, FluidStack fluidStack, int xPos, int yPos, int mouseX, int mouseY, boolean showAmount) {
+        getMinecraft().getTextureManager().bindTexture(slotImage);
+        drawTexture(matrix, xPos, yPos, 0, 0, 20, 20, 20, 20);
+        TextureAtlasSprite sprite = Minecraft.getInstance().getSpriteAtlas(PlayerContainer.BLOCK_ATLAS_TEXTURE).apply(fluidStack.getFluid().getAttributes().getStillTexture());
+        int color = fluidStack.getFluid().getAttributes().getColor();
+        float red = RenderCuboid.getRed(color);
+        float green = RenderCuboid.getGreen(color);
+        float blue = RenderCuboid.getBlue(color);
+        float alpha = RenderCuboid.getAlpha(color);
+        //noinspection deprecation
+        RenderSystem.color4f(red, green, blue, alpha);
+        this.client.getTextureManager().bindTexture(sprite.getAtlas().getId());
+        drawSprite(matrix, xPos + 2, yPos + 2, this.getZOffset(), 16, 16, sprite);
+        if (mouseX >= xPos && mouseY >= yPos && mouseX <= xPos + 20 && mouseY <= yPos + 20) {
+            renderTooltip(matrix, fluidStack, mouseX, mouseY, showAmount);
+        }
+    }
+
+    private void renderTooltip(MatrixStack matrix, FluidStack fluidStack, int mouseX, int mouseY, boolean showAmount) {
+        List<ITextComponent> tooltip = new ArrayList<>();
+        tooltip.add(fluidStack.getDisplayName());
+        if (showAmount) {
+            String amount = fluidStack.getAmount() < 500 || BeeInfoUtils.isShiftPressed() ? fluidStack.getAmount() + " mb" : (float) fluidStack.getAmount() / 1000 + " B";
+            tooltip.add(new StringTextComponent(amount));
+        }
+        tooltip.add(new StringTextComponent(fluidStack.getFluid().getRegistryName().toString()).formatted(TextFormatting.DARK_GRAY));
+        renderTooltip(matrix, tooltip, mouseX, mouseY);
     }
 
     public void drawSlot(MatrixStack matrix, ItemStack item, int xPos, int yPos, int mouseX, int mouseY) {
@@ -344,32 +389,31 @@ public class BeepediaScreen extends Screen {
     }
 
     public static void renderEntity(MatrixStack matrixStack, Entity entity, World world, float x, float y, float rotation, float renderScale) {
-        if (world != null) {
-            float scaledSize = 20;
-            Minecraft mc = Minecraft.getInstance();
-            if (entity instanceof LivingEntity) {
-                if (mc.player != null) entity.ticksExisted = mc.player.ticksExisted;
-                if (entity instanceof CustomBeeEntity) {
-                    scaledSize = 20 / ((CustomBeeEntity) entity).getBeeData().getSizeModifier();
-                } else {
-                    scaledSize = 20 / (entity.getWidth() > entity.getHeight() ? entity.getWidth() : entity.getHeight());
-                }
+        if (world == null) return;
+        float scaledSize = 20;
+        Minecraft mc = Minecraft.getInstance();
+        if (entity instanceof LivingEntity) {
+            if (mc.player != null) entity.ticksExisted = mc.player.ticksExisted;
+            if (entity instanceof CustomBeeEntity) {
+                scaledSize = 20 / ((CustomBeeEntity) entity).getBeeData().getSizeModifier();
+            } else {
+                scaledSize = 20 / (entity.getWidth() > entity.getHeight() ? entity.getWidth() : entity.getHeight());
             }
-            if (mc.player != null) {
-                matrixStack.push();
-                matrixStack.translate(10, 20 * renderScale, 0.5);
-                matrixStack.translate(x, y, 1);
-                matrixStack.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(180.0F));
-                matrixStack.translate(0, 0, 1);
-                matrixStack.scale(-(scaledSize * renderScale), (scaledSize * renderScale), 30);
-                matrixStack.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(rotation));
-                EntityRendererManager entityrenderermanager = mc.getRenderManager();
-                IRenderTypeBuffer.Impl renderTypeBuffer = mc.getBufferBuilders().getEntityVertexConsumers();
-                entityrenderermanager.render(entity, 0, 0, 0.0D, mc.getRenderPartialTicks(), 1, matrixStack, renderTypeBuffer, 15728880);
-                renderTypeBuffer.draw();
-            }
-            matrixStack.pop();
         }
+        if (mc.player != null) {
+            matrixStack.push();
+            matrixStack.translate(10, 20 * renderScale, 0.5);
+            matrixStack.translate(x, y, 1);
+            matrixStack.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(180.0F));
+            matrixStack.translate(0, 0, 1);
+            matrixStack.scale(-(scaledSize * renderScale), (scaledSize * renderScale), 30);
+            matrixStack.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(rotation));
+            EntityRendererManager entityrenderermanager = mc.getRenderManager();
+            IRenderTypeBuffer.Impl renderTypeBuffer = mc.getBufferBuilders().getEntityVertexConsumers();
+            entityrenderermanager.render(entity, 0, 0, 0.0D, mc.getRenderPartialTicks(), 1, matrixStack, renderTypeBuffer, 15728880);
+            renderTypeBuffer.draw();
+        }
+        matrixStack.pop();
     }
 
     @Override
@@ -380,11 +424,7 @@ public class BeepediaScreen extends Screen {
     public Entity initEntity(ResourceLocation entityTypeRegistryID) {
         EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(entityTypeRegistryID);
         if (entityType == null) return null;
-        return initEntity(entityType, getMinecraft().world);
-    }
-
-    public Entity initEntity(EntityType<?> left, ClientWorld world) {
-        return left.create(world);
+        return entityType.create(getMinecraft().world);
     }
 
     public Button.ITooltip getTooltipProvider(ITextComponent textComponent) {
