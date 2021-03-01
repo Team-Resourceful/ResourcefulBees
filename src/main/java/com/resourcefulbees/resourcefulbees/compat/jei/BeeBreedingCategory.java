@@ -204,8 +204,12 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
 
         itemStacks.init(0, true, 6, 32);
         itemStacks.init(1, true, 60, 32);
-        itemStacks.set(0, ingredients.getInputs(VanillaTypes.ITEM).get(0));
-        itemStacks.set(1, ingredients.getInputs(VanillaTypes.ITEM).get(1));
+        if (ingredients.getInputs(VanillaTypes.ITEM).size() > 0) {
+            itemStacks.set(0, ingredients.getInputs(VanillaTypes.ITEM).get(0));
+        }
+        if (ingredients.getInputs(VanillaTypes.ITEM).size() > 1) {
+            itemStacks.set(1, ingredients.getInputs(VanillaTypes.ITEM).get(1));
+        }
     }
 
     @Override

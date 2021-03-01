@@ -78,7 +78,7 @@ public class BeepediaScreen extends Screen {
     ResourceLocation buttonImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/button.png");
     ResourceLocation slotImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/slot.png");
     private Button backButton;
-    private ResourceLocation home_buttons = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/home_buttons.png");
+    private ResourceLocation homeButtons = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/home_buttons.png");
     private List<ItemTooltip> itemTooltips;
     private List<FluidTooltip> fluidTooltips;
 
@@ -112,14 +112,14 @@ public class BeepediaScreen extends Screen {
         BeeRegistry.getRegistry().getBees().forEach((s, b) -> bees.put(s, new BeePage(this, b, s, subX, y)));
         BeeRegistry.getRegistry().getHoneyBottles().forEach((s, h) -> honey.put(s, new HoneyPage(this, h, s, subX, y)));
         home = new HomePage(this, subX, y);
-        addButton(new ImageButton(x + (xSize / 2) - 10, y + ySize - 25, 20, 20, 20, 0, 20, home_buttons, 60, 60, onPress -> selectPage(home)));
-        backButton = new ImageButton(x + (xSize / 2) + 20, y + ySize - 25, 20, 20, 40, 0, 20, home_buttons, 60, 60, onPress -> {
+        addButton(new ImageButton(x + (xSize / 2) - 10, y + ySize - 25, 20, 20, 20, 0, 20, homeButtons, 60, 60, onPress -> selectPage(home)));
+        backButton = new ImageButton(x + (xSize / 2) + 20, y + ySize - 25, 20, 20, 40, 0, 20, homeButtons, 60, 60, onPress -> {
             if (!pastStates.isEmpty()) {
                 goBackState();
                 returnState(true);
             }
         });
-        addButton(new ImageButton(x + (xSize / 2) - 40, y + ySize - 25, 20, 20, 0, 0, 20, home_buttons, 60, 60, onPress -> {
+        addButton(new ImageButton(x + (xSize / 2) - 40, y + ySize - 25, 20, 20, 0, 0, 20, homeButtons, 60, 60, onPress -> {
             searchBox.visible = !searchBox.visible;
             setSearchVisible(searchBox.visible);
             updateSearch(beesList, true);
@@ -215,6 +215,7 @@ public class BeepediaScreen extends Screen {
             }
             this.activePage.closePage();
         }
+        if (page == null) page = home;
 
         // set current state
         currScreenState.setPageType(type);
@@ -501,8 +502,7 @@ public class BeepediaScreen extends Screen {
         // main pages
         BEE,
         HONEY,
-        TRAIT,
-        HOME;
+        TRAIT;
     }
 
     private class ItemTooltip {
