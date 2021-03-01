@@ -286,6 +286,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
     public EntitySize getSize(@Nonnull Pose poseIn) {
         float scale = beeData.getSizeModifier();
         scale = this.isChild() ? scale * Config.CHILD_SIZE_MODIFIER.get().floatValue() : scale;
+        scale = Math.max(scale, 0.75f);
         return super.getSize(poseIn).scale(scale);
     }
 
