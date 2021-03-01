@@ -5,18 +5,23 @@ import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.resourcefulbees.resourcefulbees.config.Config;
+import com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -32,6 +37,12 @@ public class HoneycombPage extends BeeDataPage {
     private ItemStack apiary2Output;
     private ItemStack apiary3Output;
     private ItemStack apiary4Output;
+
+    CentrifugeRecipe combRecipe;
+    CentrifugeRecipe combBlockRecipe;
+    CentrifugeRecipe combNoBottleRecipe;
+    CentrifugeRecipe combBlockNoBottleRecipe;
+    List<CentrifugeRecipe> recipes = new ArrayList<>();
 
     List<Item> hives = BeeInfoUtils.getItemTag("minecraft:beehives").values();
     ItemStack apiary1 = new ItemStack(ModItems.T1_APIARY_ITEM.get());
@@ -61,12 +72,23 @@ public class HoneycombPage extends BeeDataPage {
         max = hives.size();
 
         int[] apiaryAmounts = beeData.getApiaryOutputAmounts();
-        if (apiaryAmounts == null) apiaryAmounts = new int[]{Config.T1_APIARY_QUANTITY.get(), Config.T2_APIARY_QUANTITY.get(), Config.T3_APIARY_QUANTITY.get(), Config.T4_APIARY_QUANTITY.get()};
+        if (apiaryAmounts == null)
+            apiaryAmounts = new int[]{Config.T1_APIARY_QUANTITY.get(), Config.T2_APIARY_QUANTITY.get(), Config.T3_APIARY_QUANTITY.get(), Config.T4_APIARY_QUANTITY.get()};
         hiveOutput = new ItemStack(beeData.getCombRegistryObject().get(), 1);
         apiary1Output = new ItemStack(beeData.getCombRegistryObject().get(), apiaryAmounts[0]);
         apiary2Output = new ItemStack(beeData.getCombRegistryObject().get(), apiaryAmounts[1]);
         apiary3Output = new ItemStack(beeData.getCombBlockItemRegistryObject().get(), apiaryAmounts[2]);
         apiary4Output = new ItemStack(beeData.getCombBlockItemRegistryObject().get(), apiaryAmounts[3]);
+
+        ClientWorld world = beepedia.getMinecraft().world;
+        combRecipe = world.getRecipeManager().getRecipe(CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE, new Inventory(beeData.getCombStack(), new ItemStack(Items.GLASS_BOTTLE)), world).orElse(null);
+        combBlockRecipe = world.getRecipeManager().getRecipe(CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE, new Inventory(beeData.getCombBlockItemStack(), new ItemStack(Items.GLASS_BOTTLE)), world).orElse(null);
+        combNoBottleRecipe = world.getRecipeManager().getRecipe(CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE, new Inventory(beeData.getCombStack()), world).orElse(null);
+        combBlockNoBottleRecipe = world.getRecipeManager().getRecipe(CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE, new Inventory(beeData.getCombBlockItemStack()), world).orElse(null);
+        if (combRecipe != null) recipes.add(combRecipe);
+        if (combBlockRecipe != null) recipes.add(combBlockRecipe);
+        if (combNoBottleRecipe != null) recipes.add(combNoBottleRecipe);
+        if (combBlockNoBottleRecipe != null) recipes.add(combBlockNoBottleRecipe);
     }
 
     @Override
