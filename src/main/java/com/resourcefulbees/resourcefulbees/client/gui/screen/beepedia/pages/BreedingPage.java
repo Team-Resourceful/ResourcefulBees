@@ -255,12 +255,12 @@ public class BreedingPage extends BeeDataPage {
 
         public void drawParent1Item(MatrixStack matrix, int mouseX, int mouseY) {
             if (parent1Items.isEmpty()) return;
-            beepedia.drawSlot(matrix, parent1Items.get(parent1Counter), xPos + 5, yPos + 53, mouseX, mouseY);
+            beepedia.drawSlot(matrix, parent1Items.get(parent1Counter), xPos + 5, yPos + 53);
         }
 
         public void drawParent2Item(MatrixStack matrix, int mouseX, int mouseY) {
             if (parent1Items.isEmpty()) return;
-            beepedia.drawSlot(matrix, parent2Items.get(parent2Counter), xPos + 59, yPos + 53, mouseX, mouseY);
+            beepedia.drawSlot(matrix, parent2Items.get(parent2Counter), xPos + 59, yPos + 53);
         }
 
         public void tick(int ticksActive) {

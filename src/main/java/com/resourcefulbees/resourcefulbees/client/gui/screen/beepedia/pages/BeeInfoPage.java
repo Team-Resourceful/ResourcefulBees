@@ -68,7 +68,7 @@ public class BeeInfoPage extends BeeDataPage {
         if (beeData.hasBlockFlowers()) {
             if (!flowers.isEmpty()) {
                 font.draw(matrix, flowerName, xPos, yPos + 75, Color.parse("gray").getRgb());
-                beepedia.drawSlot(matrix, flowers.get(counter), xPos + 36, yPos + 70, mouseX, mouseY);
+                beepedia.drawSlot(matrix, flowers.get(counter), xPos + 36, yPos + 70);
             }
         } else if (beeData.hasEntityFlower()) {
             if (entityFlower == null) {

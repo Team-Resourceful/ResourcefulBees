@@ -76,9 +76,9 @@ public class BeePage extends BeepediaPage {
         }
         if (beeData.hasHoneycomb()) {
             centrifugePage = Pair.of(
-                    getTabButton(new ItemStack(ModItems.CENTRIFUGE_ITEM.get()), onPress -> setSubPage(SubPageType.CENTRIFUGE),
-                            new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.centrifuge")),
-                    new CentrifugePage(beepedia, beeData, subX, subY, this)
+                    getTabButton(new ItemStack(Items.HONEYCOMB), onPress -> setSubPage(SubPageType.HONEYCOMB),
+                            new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.honeycombs")),
+                    new HoneycombPage(beepedia, beeData, subX, subY, this)
             );
             tabs.add(centrifugePage);
         }
@@ -192,7 +192,7 @@ public class BeePage extends BeepediaPage {
             case MUTATIONS:
                 page = mutations;
                 break;
-            case CENTRIFUGE:
+            case HONEYCOMB:
                 page = centrifugePage;
                 break;
             case TRAIT_LIST:
@@ -226,7 +226,7 @@ public class BeePage extends BeepediaPage {
         SPAWNING,
         BREEDING,
         MUTATIONS,
-        CENTRIFUGE,
+        HONEYCOMB,
         TRAIT_LIST
     }
 }

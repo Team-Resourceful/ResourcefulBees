@@ -74,7 +74,7 @@
 	"gui.resourcefulbees.ender_beecon": "Ender Beecon",
 	"gui.resourcefulbees.jei.category.bee_pollination_entity_flowers": "Bee Entity Flowers",
 
-    "item.resourcefulbees.bepedia": "Beepedia",
+    "item.resourcefulbees.beepedia": "Beepedia",
 	"gui.resourcefulbees.beepedia" : "Beepedia v1.0",
 	"gui.resourcefulbees.beepedia.search" : "Search",
 	"gui.resourcefulbees.beepedia.home_button" : "HOME",
@@ -109,7 +109,11 @@
 	"gui.resourcefulbees.beepedia.bee_subtab.breeding.children_title": "Children",
 
 	"gui.resourcefulbees.beepedia.bee_subtab.traits" : "Traits",
+	"gui.resourcefulbees.beepedia.bee_subtab.honeycombs" : "Honeycombs",
 	"gui.resourcefulbees.beepedia.bee_subtab.centrifuge" : "Centrifuge",
+	"gui.resourcefulbees.beepedia.bee_subtab.honeycombs.honeycombs_button": "HONEYCOMBS",
+	"gui.resourcefulbees.beepedia.bee_subtab.honeycombs.centrifuge_button": "CENTRIFUGE",
+
 
 	"bees.resourcefulbees.size.tiny" : "Tiny",
 	"bees.resourcefulbees.size.small" : "Small",

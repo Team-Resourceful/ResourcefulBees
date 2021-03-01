@@ -1,21 +1,11 @@
 package com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
-import com.resourcefulbees.resourcefulbees.client.gui.widget.ButtonList;
 import com.resourcefulbees.resourcefulbees.client.gui.widget.ListButton;
-import com.resourcefulbees.resourcefulbees.client.gui.widget.TabImageButton;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponent;
-import net.minecraft.util.text.TextFormatting;
-import org.jetbrains.annotations.NotNull;
-import org.lwjgl.opengl.GL11;
-
-import javax.annotation.Nonnull;
 
 public abstract class BeepediaPage {
 
@@ -43,7 +33,7 @@ public abstract class BeepediaPage {
     }
 
     public void newListButton(ItemStack item, TextComponent text) {
-        listButton = new ListButton(0, 0, 100, 20, 0, 0, 20, listImage, item, 2, 2, text, 22, 6, onPress -> beepedia.setActive(this));
+        listButton = new ListButton(0, 0, 100, 20, 0, 0, 20, listImage, item, 2, 2, text, 22, 6, onPress -> beepedia.selectPage(this));
     }
 
     public void openPage() {

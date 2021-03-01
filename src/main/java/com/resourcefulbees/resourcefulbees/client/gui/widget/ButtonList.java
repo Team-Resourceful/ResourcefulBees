@@ -1,6 +1,7 @@
 package com.resourcefulbees.resourcefulbees.client.gui.widget;
 
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
+import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -87,10 +88,13 @@ public class ButtonList {
     public void setActive(boolean active) {
         this.active = active;
         if (button != null) button.active = !active;
+        if (!BeepediaScreen.listChanged()) return;
         list.forEach((s, b) -> {
             if (b.listButton != null) b.listButton.visible = active;
         });
-        if (active) updateReducedList(lastSearch);
+        boolean searchVisible = BeepediaScreen.isSearchVisible();
+        boolean doUpdateList = active && searchVisible;
+        if (doUpdateList) updateReducedList(BeepediaScreen.getSearch());
     }
 
     public void setScrollPos(int scrollPos) {

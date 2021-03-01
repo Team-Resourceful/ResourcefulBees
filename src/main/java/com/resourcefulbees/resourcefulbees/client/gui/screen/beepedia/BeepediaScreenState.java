@@ -5,6 +5,7 @@ import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.BeeP
 public class BeepediaScreenState {
 
     private BeepediaScreen.PageType pageType = BeepediaScreen.PageType.BEE;
+    private BeepediaScreen.PageType lastType = null;
     private String pageID = null;
     private BeePage.SubPageType beeSubPage = BeePage.SubPageType.INFO;
     private int spawningScroll = 0;
@@ -12,12 +13,14 @@ public class BeepediaScreenState {
     private int breedingPage = 0;
     private boolean biomesOpen = false;
     private boolean parentBreeding = true;
+    private boolean centrifugeOpen = false;
 
     public BeepediaScreen.PageType getPageType() {
         return pageType;
     }
 
     public void setPageType(BeepediaScreen.PageType pageType) {
+        this.lastType = this.pageType;
         this.pageType = pageType;
     }
 
@@ -75,5 +78,21 @@ public class BeepediaScreenState {
 
     public void setBreedingPage(int breedingPage) {
         this.breedingPage = breedingPage;
+    }
+
+    public BeepediaScreen.PageType getLastType() {
+        return lastType;
+    }
+
+    public boolean pageChanged() {
+        return lastType == null || !lastType.equals(pageType);
+    }
+
+    public void setCentrifugeOpen(boolean b) {
+        centrifugeOpen = b;
+    }
+
+    public boolean isCentrifugeOpen() {
+        return centrifugeOpen;
     }
 }
