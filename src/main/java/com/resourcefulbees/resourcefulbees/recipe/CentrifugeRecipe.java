@@ -13,6 +13,7 @@ import com.resourcefulbees.resourcefulbees.utils.RecipeUtils;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
@@ -47,6 +48,7 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
     public final int multiblockTime;
     public final boolean multiblock;
     public final boolean hasFluidOutput;
+    public boolean noBottleInput;
 
     private static final String INGREDIENT_STRING = "ingredient";
 
@@ -59,11 +61,33 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
         this.multiblockTime = multiblockTime;
         this.multiblock = multiblock;
         this.hasFluidOutput = hasFluidOutput;
+        this.noBottleInput = false;
+    }
+
+    public CentrifugeRecipe(ResourceLocation id, Ingredient ingredient, List<Pair<ItemStack, Float>> itemOutputs, List<Pair<FluidStack, Float>> fluidOutput, int time, int multiblockTime, boolean multiblock, boolean hasFluidOutput, boolean noBottleInput) {
+        this.id = id;
+        this.ingredient = ingredient;
+        this.itemOutputs = itemOutputs;
+        this.fluidOutput = fluidOutput;
+        this.time = time;
+        this.multiblockTime = multiblockTime;
+        this.multiblock = multiblock;
+        this.hasFluidOutput = hasFluidOutput;
+        this.noBottleInput = noBottleInput;
     }
 
     @Override
     public boolean matches(IInventory inventory, @Nonnull World world) {
         ItemStack stack = inventory.getStackInSlot(0);
+        ItemStack bottle = inventory.getStackInSlot(1);
+
+        boolean noBottle = bottle.isEmpty() || bottle.getItem() == Items.AIR || bottle.getCount() == 0;
+
+        // fail to get recipe if does not have enough bottles
+        if (!noBottleInput && noBottle || (itemOutputs.size() > 2 && bottle.getCount() < itemOutputs.get(2).getLeft().getCount()))
+            return false;
+        // fail to get recipe if is honey fluid output and there are more than 0 bottles
+        if (noBottleInput && bottle.getCount() > 0) return false;
         if (stack == ItemStack.EMPTY) return false;
         else {
             ItemStack[] matchingStacks = ingredient.getMatchingStacks();
@@ -139,6 +163,11 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
             List<Pair<ItemStack, Float>> outputs = new ArrayList<>();
             List<Pair<FluidStack, Float>> fluidOutput = new ArrayList<>();
 
+            boolean hasFluidOutput = JSONUtils.getBoolean(json, "hasFluidOutput", false);
+            if (!hasFluidOutput) {
+                fluidOutput.add(Pair.of(FluidStack.EMPTY, 1f));
+            }
+
             jsonArray.forEach(jsonElement -> {
                 JsonObject jsonObject = jsonElement.getAsJsonObject();
                 if (jsonObject.has("item")) {
@@ -167,13 +196,11 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
                     }
                     // add outputs
                     outputs.add(Pair.of(stack, chance));
-                    fluidOutput.add(Pair.of(FluidStack.EMPTY, chance));
                 } else if (jsonObject.has("fluid")) {
                     String fluid = JSONUtils.getString(jsonObject, "fluid");
                     int amount = JSONUtils.getInt(jsonObject, "amount", 1);
                     Float chance = JSONUtils.getFloat(jsonObject, "chance", 1);
                     FluidStack stack = new FluidStack(BeeInfoUtils.getFluid(fluid), amount);
-                    outputs.add(Pair.of(ItemStack.EMPTY, 0f));
                     fluidOutput.add(Pair.of(stack, chance));
                 }
             });
@@ -181,9 +208,9 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
             int time = JSONUtils.getInt(json, "time", Config.GLOBAL_CENTRIFUGE_RECIPE_TIME.get());
             int multiblockTime = JSONUtils.getInt(json, "multiblockTime", time - Config.MULTIBLOCK_RECIPE_TIME_REDUCTION.get());
             boolean multiblock = JSONUtils.getBoolean(json, "multiblock", false);
-            boolean hasFluidOutput = JSONUtils.getBoolean(json, "hasFluidOutput", false);
+            boolean noBottle = JSONUtils.getBoolean(json, "noBottleInput", false);
 
-            return this.factory.create(id, ingredient, outputs, fluidOutput, time, multiblockTime, multiblock, hasFluidOutput);
+            return this.factory.create(id, ingredient, outputs, fluidOutput, time, multiblockTime, multiblock, hasFluidOutput, noBottle);
         }
 
         public T read(@Nonnull ResourceLocation id, @NotNull PacketBuffer buffer) {
@@ -196,7 +223,8 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
             int multiblockTime = buffer.readInt();
             boolean multiblock = buffer.readBoolean();
             boolean hasFluidOutput = buffer.readBoolean();
-            return this.factory.create(id, ingredient, itemOutputs, fluidOutput, time, multiblockTime, multiblock, hasFluidOutput);
+            boolean noBottle = buffer.readBoolean();
+            return this.factory.create(id, ingredient, itemOutputs, fluidOutput, time, multiblockTime, multiblock, hasFluidOutput, noBottle);
         }
 
         public void write(@NotNull PacketBuffer buffer, T recipe) {
@@ -217,10 +245,11 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
             buffer.writeInt(recipe.multiblockTime);
             buffer.writeBoolean(recipe.multiblock);
             buffer.writeBoolean(recipe.hasFluidOutput);
+            buffer.writeBoolean(recipe.noBottleInput);
         }
 
         public interface IRecipeFactory<T extends CentrifugeRecipe> {
-            T create(ResourceLocation id, Ingredient input, List<Pair<ItemStack, Float>> itemOutputs, List<Pair<FluidStack, Float>> fluidOutputs, int time, int multiblockTime, boolean multiblock, boolean hasFluidOutput);
+            T create(ResourceLocation id, Ingredient input, List<Pair<ItemStack, Float>> itemOutputs, List<Pair<FluidStack, Float>> fluidOutputs, int time, int multiblockTime, boolean multiblock, boolean hasFluidOutput, boolean noBottleInput);
         }
     }
 }

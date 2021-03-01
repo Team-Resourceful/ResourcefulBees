@@ -60,7 +60,7 @@ public class KittenBee {
         data.setShouldResourcefulBeesDoForgeRegistration(true);
         data.setCombRegistryObject(ModItems.CATNIP_HONEYCOMB);
         data.setCombBlockItemRegistryObject(ModItems.CATNIP_HONEYCOMB_BLOCK_ITEM);
-        data.setCombBlockRegistryObject(ModBlocks.CATNIP_HONEY_BLOCK);
+        data.setCombBlockRegistryObject(ModBlocks.CATNIP_HONEYCOMB_BLOCK);
 
         return data;
     }

@@ -9,11 +9,14 @@ import com.resourcefulbees.resourcefulbees.api.ICustomBee;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
+import com.resourcefulbees.resourcefulbees.item.CustomHoneyBottleItem;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.LightLevels;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
+import com.resourcefulbees.resourcefulbees.registry.ModFluids;
+import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import com.resourcefulbees.resourcefulbees.utils.validation.ValidatorUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -44,6 +47,8 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
@@ -379,5 +384,18 @@ public class BeeInfoUtils {
         nbt.putString(NBTConstants.NBT_COLOR, beeColor);
 
         return nbt;
+    }
+
+    public static Fluid getFluidFromBottle(ItemStack bottleOutput) {
+        Item item = bottleOutput.getItem();
+        if (item == Items.HONEY_BOTTLE) {
+            return ModFluids.HONEY_STILL.get().getStillFluid();
+        }else if (item == ModItems.CATNIP_HONEY_BOTTLE.get()) {
+            return ModFluids.CATNIP_HONEY_STILL.get().getStillFluid();
+        } else if (item instanceof CustomHoneyBottleItem) {
+            CustomHoneyBottleItem honey = (CustomHoneyBottleItem) item;
+            return honey.getHoneyData().getHoneyStillFluidRegistryObject().get().getStillFluid();
+        }
+        return Fluids.EMPTY;
     }
 }

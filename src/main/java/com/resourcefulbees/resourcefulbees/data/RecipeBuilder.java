@@ -6,6 +6,7 @@ import com.resourcefulbees.resourcefulbees.api.beedata.CentrifugeData;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
 import com.resourcefulbees.resourcefulbees.config.Config;
+import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
@@ -39,15 +40,22 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
         BEE_REGISTRY.getBees().forEach(((s, customBeeData) -> {
             if (customBeeData.hasHoneycomb()) {
                 CentrifugeData centrifugeData = customBeeData.getCentrifugeData();
+                centrifugeData.init();
 
                 if (centrifugeData.hasCentrifugeOutput() && Config.CENTRIFUGE_RECIPES.get()) {
                     SecondPhaseValidator.validateCentrifugeOutputs(customBeeData);
 
                     if (centrifugeData.hasCentrifugeOutput()) {
-                        IRecipe<?> honeycombCentrifuge = this.centrifugeRecipe(s, customBeeData);
-                        IRecipe<?> honeycombBlockCentrifuge = this.centrifugeHoneyCombBlockRecipe(s, customBeeData);
+                        IRecipe<?> honeycombCentrifuge = this.centrifugeRecipe(s, customBeeData, 1);
+                        IRecipe<?> honeycombBlockCentrifuge = this.centrifugeRecipe(s, customBeeData, 9);
+                        IRecipe<?> honeycombCentrifugeNoBottle = this.centrifugeRecipeNoBottle(s, customBeeData, 1);
+                        IRecipe<?> honeycombBlockCentrifugeNoBottle = this.centrifugeRecipeNoBottle(s, customBeeData, 9);
                         getRecipeManager().recipes.computeIfAbsent(honeycombCentrifuge.getType(), t -> new HashMap<>()).put(honeycombCentrifuge.getId(), honeycombCentrifuge);
                         getRecipeManager().recipes.computeIfAbsent(honeycombBlockCentrifuge.getType(), t -> new HashMap<>()).put(honeycombBlockCentrifuge.getId(), honeycombBlockCentrifuge);
+                        if (honeycombBlockCentrifugeNoBottle != null && honeycombCentrifugeNoBottle != null) {
+                            getRecipeManager().recipes.computeIfAbsent(honeycombCentrifugeNoBottle.getType(), t -> new HashMap<>()).put(honeycombCentrifugeNoBottle.getId(), honeycombCentrifugeNoBottle);
+                            getRecipeManager().recipes.computeIfAbsent(honeycombBlockCentrifugeNoBottle.getType(), t -> new HashMap<>()).put(honeycombBlockCentrifugeNoBottle.getId(), honeycombBlockCentrifugeNoBottle);
+                        }
                     }
                 }
 
@@ -191,21 +199,69 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
         );
     }
 
-    private IRecipe<?> centrifugeRecipe(String beeType, CustomBeeData info) {
+    private IRecipe<?> centrifugeRecipeNoBottle(String beeType, CustomBeeData info, int multiplier) {
         CentrifugeData data = info.getCentrifugeData();
+        boolean isBlockRecipe = multiplier > 1;
 
-        ItemStack mainOutput = data.hasFluidoutput() ? ItemStack.EMPTY : new ItemStack(BeeInfoUtils.getItem(data.getMainOutput()), data.getMainOutputCount());
-        FluidStack fluidOutput = data.hasFluidoutput() ? new FluidStack(BeeInfoUtils.getFluid(data.getMainOutput()), data.getMainOutputCount()) : FluidStack.EMPTY;
-        ItemStack secondaryOutput = new ItemStack(BeeInfoUtils.getItem(data.getSecondaryOutput()), data.getSecondaryOutputCount());
-        ItemStack bottleOutput = new ItemStack(BeeInfoUtils.getItem(data.getBottleOutput()), data.getBottleOutputCount());
+        ItemStack mainOutput = data.isMainIsFluidOutput() ? ItemStack.EMPTY : new ItemStack(BeeInfoUtils.getItem(data.getMainOutput()), data.getMainOutputCount() * multiplier);
+        ItemStack secondaryOutput = new ItemStack(BeeInfoUtils.getItem(data.getSecondaryOutput()), data.getSecondaryOutputCount() * multiplier);
+        ItemStack bottleOutput = new ItemStack(BeeInfoUtils.getItem(data.getBottleOutput()), data.getBottleOutputCount() * multiplier);
 
-        if (!data.hasFluidoutput()) mainOutput.setTag(data.getMainNBT());
+        FluidStack fluidOutput = data.hasFluidOutput() ? new FluidStack(BeeInfoUtils.getFluid(data.getFluidOutput()), data.getFluidOutputCount() * multiplier) : FluidStack.EMPTY;
+
+        mainOutput.setTag(data.getMainNBT());
         secondaryOutput.setTag(data.getSecondaryNBT());
         bottleOutput.setTag(data.getBottleNBT());
 
+        FluidStack bottleFluid = new FluidStack(BeeInfoUtils.getFluidFromBottle(bottleOutput), ModConstants.HONEY_PER_BOTTLE * multiplier);
+
+        ResourceLocation recipeLoc = isBlockRecipe ? new ResourceLocation(ResourcefulBees.MOD_ID, beeType + "_honeycomb_block_centrifuge_no_bottle")
+                : new ResourceLocation(ResourcefulBees.MOD_ID, beeType + "_honeycomb_centrifuge_no_bottle");
+
+        if (bottleFluid.isEmpty()) return null;
+
         return new CentrifugeRecipe(
-                new ResourceLocation(ResourcefulBees.MOD_ID, beeType + "_honeycomb_centrifuge"),
-                Ingredient.fromStacks(new ItemStack(info.getCombRegistryObject().get(), data.getMainInputCount())),
+                recipeLoc,
+                isBlockRecipe ? Ingredient.fromStacks(new ItemStack(info.getCombBlockRegistryObject().get(), data.getMainInputCount())) :
+                        Ingredient.fromStacks(new ItemStack(info.getCombRegistryObject().get(), data.getMainInputCount())),
+                NonNullList.from(
+                        Pair.of(ItemStack.EMPTY, 0f),
+                        Pair.of(mainOutput, data.getMainOutputWeight()),
+                        Pair.of(secondaryOutput, data.getSecondaryOutputWeight())
+                ),
+                NonNullList.from(
+                        Pair.of(FluidStack.EMPTY, 0f),
+                        Pair.of(fluidOutput, data.getFluidOutputWeight()),
+                        Pair.of(bottleFluid, data.getBottleOutputWeight())
+                ),
+                data.getRecipeTime(),
+                data.getRecipeTime() - Config.MULTIBLOCK_RECIPE_TIME_REDUCTION.get(),
+                false,
+                data.hasFluidOutput(), true
+        );
+    }
+
+    private IRecipe<?> centrifugeRecipe(String beeType, CustomBeeData info, int multiplier) {
+        CentrifugeData data = info.getCentrifugeData();
+        boolean isBlockRecipe = multiplier > 1;
+
+        ItemStack mainOutput = data.isMainIsFluidOutput() ? ItemStack.EMPTY : new ItemStack(BeeInfoUtils.getItem(data.getMainOutput()), data.getMainOutputCount() * multiplier);
+        ItemStack secondaryOutput = new ItemStack(BeeInfoUtils.getItem(data.getSecondaryOutput()), data.getSecondaryOutputCount() * multiplier);
+        ItemStack bottleOutput = new ItemStack(BeeInfoUtils.getItem(data.getBottleOutput()), data.getBottleOutputCount() * multiplier);
+
+        FluidStack fluidOutput = data.hasFluidOutput() ? new FluidStack(BeeInfoUtils.getFluid(data.getFluidOutput()), data.getFluidOutputCount() * multiplier) : FluidStack.EMPTY;
+
+        mainOutput.setTag(data.getMainNBT());
+        secondaryOutput.setTag(data.getSecondaryNBT());
+        bottleOutput.setTag(data.getBottleNBT());
+
+        ResourceLocation recipeLoc = isBlockRecipe ? new ResourceLocation(ResourcefulBees.MOD_ID, beeType + "_honeycomb_block_centrifuge")
+                : new ResourceLocation(ResourcefulBees.MOD_ID, beeType + "_honeycomb_centrifuge");
+
+        return new CentrifugeRecipe(
+                recipeLoc,
+                isBlockRecipe ? Ingredient.fromStacks(new ItemStack(info.getCombBlockRegistryObject().get(), data.getMainInputCount())) :
+                        Ingredient.fromStacks(new ItemStack(info.getCombRegistryObject().get(), data.getMainInputCount())),
                 NonNullList.from(
                         Pair.of(ItemStack.EMPTY, 0f),
                         Pair.of(mainOutput, data.getMainOutputWeight()),
@@ -214,44 +270,11 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
                 ),
                 NonNullList.from(
                         Pair.of(FluidStack.EMPTY, 0f),
-                        Pair.of(fluidOutput, data.getMainOutputWeight())
-                ),
+                        Pair.of(fluidOutput, data.getFluidOutputWeight())),
                 data.getRecipeTime(),
                 data.getRecipeTime() - Config.MULTIBLOCK_RECIPE_TIME_REDUCTION.get(),
                 false,
-                data.hasFluidoutput()
-        );
-    }
-
-    private IRecipe<?> centrifugeHoneyCombBlockRecipe(String beeType, CustomBeeData info) {
-        CentrifugeData data = info.getCentrifugeData();
-
-        ItemStack mainOutput = data.hasFluidoutput() ? ItemStack.EMPTY : new ItemStack(BeeInfoUtils.getItem(data.getMainOutput()), data.getMainOutputCount() * 9);
-        FluidStack fluidOutput = data.hasFluidoutput() ? new FluidStack(BeeInfoUtils.getFluid(data.getMainOutput()), data.getMainOutputCount() * 9) : FluidStack.EMPTY;
-        ItemStack secondaryOutput = new ItemStack(BeeInfoUtils.getItem(data.getSecondaryOutput()), data.getSecondaryOutputCount() * 9);
-        ItemStack bottleOutput = new ItemStack(BeeInfoUtils.getItem(data.getBottleOutput()), data.getBottleOutputCount() * 9);
-
-        if (!data.hasFluidoutput()) mainOutput.setTag(data.getMainNBT());
-        secondaryOutput.setTag(data.getSecondaryNBT());
-        bottleOutput.setTag(data.getBottleNBT());
-
-        return new CentrifugeRecipe(
-                new ResourceLocation(ResourcefulBees.MOD_ID, beeType + "_honeycomb_block_centrifuge"),
-                Ingredient.fromStacks(new ItemStack(info.getCombBlockItemRegistryObject().get(), data.getMainInputCount())),
-                NonNullList.from(
-                        Pair.of(ItemStack.EMPTY, 0.0f),
-                        Pair.of(mainOutput, data.getMainOutputWeight()),
-                        Pair.of(secondaryOutput, data.getSecondaryOutputWeight()),
-                        Pair.of(bottleOutput, data.getBottleOutputWeight())
-                ),
-                NonNullList.from(
-                        Pair.of(FluidStack.EMPTY, 0f),
-                        Pair.of(fluidOutput, data.getMainOutputWeight())
-                ),
-                data.getRecipeTime(),
-                (data.getRecipeTime() - Config.MULTIBLOCK_RECIPE_TIME_REDUCTION.get()) * 3,
-                true,
-                data.hasFluidoutput()
+                data.hasFluidOutput(), false
         );
     }
 
