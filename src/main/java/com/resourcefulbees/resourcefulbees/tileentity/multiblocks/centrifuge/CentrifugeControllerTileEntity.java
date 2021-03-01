@@ -91,7 +91,7 @@ public class CentrifugeControllerTileEntity extends CentrifugeTileEntity {
                 processRecipe(i);
             }
             if (processCompleted[i]) {
-                completedProcess(i);
+                completeProcess(i);
             }
         }
     }

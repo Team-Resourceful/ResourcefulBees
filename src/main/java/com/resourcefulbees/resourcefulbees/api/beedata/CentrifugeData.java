@@ -125,6 +125,7 @@ public class CentrifugeData extends AbstractBeeData {
                            int secondaryOutputCount, int bottleOutputCount, int fluidOutputCount, int mainInputCount,
                            CompoundNBT mainNBT, CompoundNBT secondaryNBT, CompoundNBT bottleNBT,
                            boolean hasCentrifugeOutput, int recipeTime, boolean hasFluidOutput) {
+        super("CentrifugeData");
         this.mainOutput = mainOutput;
         this.secondaryOutput = secondaryOutput;
         this.bottleOutput = bottleOutput;

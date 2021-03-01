@@ -145,7 +145,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
                         processRecipe(i);
                     }
                     if (processCompleted[i]) {
-                        completedProcess(i);
+                        completeProcess(i);
                     }
                 }
                 if (dirty) {
@@ -164,7 +164,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
         setPoweredBlockState(false);
     }
 
-    protected void processCompleted(int i) {
+    protected void completeProcess(int i) {
         if (recipes.get(i) == null) {
             resetProcess(i);
             return;
