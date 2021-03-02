@@ -157,7 +157,7 @@ public class HoneycombPage extends BeeDataPage {
             if (recipes.size() > 1) {
                 StringTextComponent page = new StringTextComponent(String.format("%d / %d", activePage + 1, recipes.size()));
                 int padding = font.getWidth(page) / 2;
-                font.draw(matrix, page, xPos + (subPageWidth / 2) - padding, (float) yPos + subPageHeight - 14, TextFormatting.WHITE.getColor());
+                font.draw(matrix, page, (float) xPos + ((float) subPageWidth / 2) - padding, (float) yPos + subPageHeight - 14, TextFormatting.WHITE.getColor());
             }
         } else {
             manager.bindTexture(honeycombsImage);
@@ -307,11 +307,11 @@ public class HoneycombPage extends BeeDataPage {
             DecimalFormat decimalFormat = new DecimalFormat("##%");
             StringTextComponent text = new StringTextComponent(decimalFormat.format(right));
             int padding = font.getWidth(text) / 2;
-            font.draw(matrix, text, xPos - padding, yPos, TextFormatting.GRAY.getColor());
+            font.draw(matrix, text, (float) xPos - padding, yPos, TextFormatting.GRAY.getColor());
         }
 
         public void drawTooltip(MatrixStack matrix, int mouseX, int mouseY) {
-            if (BeepediaScreen.mouseHovering(xPos + 28, yPos + 67, 20, 20, mouseX, mouseY)) {
+            if (BeepediaScreen.mouseHovering((float) xPos + 28, (float) yPos + 67, 20, 20, mouseX, mouseY)) {
                 beepedia.renderTooltip(matrix, new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.centrifuge.requires_multiblock"), mouseX, mouseY);
             }
         }

@@ -133,11 +133,11 @@ public class BreedingPage extends BeeDataPage {
         FontRenderer font = Minecraft.getInstance().fontRenderer;
         TranslationTextComponent title = BeepediaScreen.currScreenState.isParentBreeding() && !baseOnly() ? parentsTitle : childrenTitle;
         int padding = font.getWidth(title) / 2;
-        font.draw(matrix, title, xPos + (subPageWidth / 2) - padding, (float) yPos + 8, TextFormatting.WHITE.getColor());
+        font.draw(matrix, title, (float) xPos + ((float) subPageWidth / 2) - padding, (float) yPos + 8, TextFormatting.WHITE.getColor());
         if (activeList.size() > 1) {
             StringTextComponent page = new StringTextComponent(String.format("%d / %d", activePage + 1, activeList.size()));
             padding = font.getWidth(page) / 2;
-            font.draw(matrix, page, xPos + (subPageWidth / 2) - padding, (float) yPos + subPageHeight - 14, TextFormatting.WHITE.getColor());
+            font.draw(matrix, page, (float) xPos + ((float) subPageWidth / 2) - padding, (float) yPos + subPageHeight - 14, TextFormatting.WHITE.getColor());
         }
     }
 
@@ -213,10 +213,10 @@ public class BreedingPage extends BeeDataPage {
             parent2Name = parent2Data.getTranslation();
             parent1Items = BeeInfoUtils.getBreedItems(parent1Data);
             parent2Items = BeeInfoUtils.getBreedItems(parent2Data);
-            parent1Pos = new Vector2f(xPos + 6, yPos + 22);
-            parent2Pos = new Vector2f(xPos + 60, yPos + 22);
-            childPos = new Vector2f(xPos + 130, yPos + 32);
-            chancePos = new Vector2f(xPos + subPageWidth - 17, yPos + 20);
+            parent1Pos = new Vector2f((float) xPos + 6, (float) yPos + 22);
+            parent2Pos = new Vector2f((float) xPos + 60, (float) yPos + 22);
+            childPos = new Vector2f((float) xPos + 130, (float) yPos + 32);
+            chancePos = new Vector2f((float) xPos + subPageWidth - 17, (float) yPos + 20);
         }
 
         public BreedingObject(Pair<String, String> parents, CustomBeeData child) {
