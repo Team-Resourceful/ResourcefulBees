@@ -101,7 +101,8 @@ public class CentrifugeRecipeCategory implements IRecipeCategory<CentrifugeRecip
             fluids.add(fluidOutput.get(1).getLeft().copy());
         } else {
             stacks.add(outputs.get(2).getLeft().copy());
-            iIngredients.setInputIngredients(Lists.newArrayList(recipe.ingredient, Ingredient.fromItems(Items.GLASS_BOTTLE)));
+            ItemStack bottleStack = new ItemStack(Items.GLASS_BOTTLE, outputs.get(2).getLeft().getCount());
+            iIngredients.setInputIngredients(Lists.newArrayList(recipe.ingredient, Ingredient.fromStacks(bottleStack)));
         }
 
         iIngredients.setOutputs(VanillaTypes.ITEM, stacks);

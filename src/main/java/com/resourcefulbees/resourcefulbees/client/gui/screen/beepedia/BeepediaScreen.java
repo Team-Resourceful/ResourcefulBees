@@ -448,7 +448,12 @@ public class BeepediaScreen extends Screen {
         }
     }
 
-    private void drawFluidSlot(MatrixStack matrix, FluidStack fluidStack, int xPos, int yPos, boolean showAmount) {
+    public void drawFluidSlot(MatrixStack matrix, FluidStack fluidStack, int xPos, int yPos) {
+        drawFluidSlot(matrix, fluidStack, xPos, yPos, true);
+    }
+
+    public void drawFluidSlot(MatrixStack matrix, FluidStack fluidStack, int xPos, int yPos, boolean showAmount) {
+        if (fluidStack.isEmpty()) return;
         getMinecraft().getTextureManager().bindTexture(slotImage);
         drawTexture(matrix, xPos, yPos, 0, 0, 20, 20, 20, 20);
         RenderUtils.renderFluid(matrix, fluidStack, xPos + 2, yPos + 2, this.getZOffset());
@@ -456,6 +461,7 @@ public class BeepediaScreen extends Screen {
     }
 
     public void drawSlot(MatrixStack matrix, ItemStack item, int xPos, int yPos) {
+        if (item.isEmpty()) return;
         getMinecraft().getTextureManager().bindTexture(slotImage);
         drawTexture(matrix, xPos, yPos, 0, 0, 20, 20, 20, 20);
         getMinecraft().getItemRenderer().renderItemIntoGUI(item, xPos + 2, yPos + 2);
@@ -463,12 +469,17 @@ public class BeepediaScreen extends Screen {
         registerItemTooltip(item, xPos, yPos);
     }
 
+    public void drawEmptySlot(MatrixStack matrix, int xPos, int yPos) {
+        getMinecraft().getTextureManager().bindTexture(slotImage);
+        drawTexture(matrix, xPos, yPos, 0, 0, 20, 20, 20, 20);
+    }
+
     private void renderFluidTooltip(MatrixStack matrix, FluidStack fluidStack, int mouseX, int mouseY, boolean showAmount) {
         List<ITextComponent> tooltip = new ArrayList<>();
         tooltip.add(fluidStack.getDisplayName());
         if (showAmount) {
             DecimalFormat decimalFormat = new DecimalFormat("##0.0");
-            String amount = fluidStack.getAmount() < 500 || BeeInfoUtils.isShiftPressed() ? decimalFormat.format(fluidStack.getAmount()) + " mb" : decimalFormat.format((float) fluidStack.getAmount() / 1000) + " B";
+            String amount = fluidStack.getAmount() < 500 || BeeInfoUtils.isShiftPressed() ? String.format("%,d", fluidStack.getAmount()) + " mb" : decimalFormat.format((float) fluidStack.getAmount() / 1000) + " B";
             tooltip.add(new StringTextComponent(amount));
         }
         tooltip.add(new StringTextComponent(fluidStack.getFluid().getRegistryName().toString()).formatted(TextFormatting.DARK_GRAY));

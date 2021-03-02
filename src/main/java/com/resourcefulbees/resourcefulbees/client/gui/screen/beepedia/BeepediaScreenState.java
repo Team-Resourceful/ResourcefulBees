@@ -14,6 +14,7 @@ public class BeepediaScreenState {
     private boolean biomesOpen = false;
     private boolean parentBreeding = true;
     private boolean centrifugeOpen = false;
+    private int centrifugePage = 0;
 
     public BeepediaScreen.PageType getPageType() {
         return pageType;
@@ -94,5 +95,13 @@ public class BeepediaScreenState {
 
     public boolean isCentrifugeOpen() {
         return centrifugeOpen;
+    }
+
+    public void setCentrifugePage(int activePage) {
+        centrifugePage = activePage;
+    }
+
+    public int getCentrifugePage() {
+        return centrifugePage;
     }
 }
