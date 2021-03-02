@@ -5,7 +5,10 @@ import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.resourcefulbees.resourcefulbees.config.Config;
+import com.resourcefulbees.resourcefulbees.fluids.HoneyFlowingFluid;
+import com.resourcefulbees.resourcefulbees.item.CustomHoneyBottleItem;
 import com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe;
+import com.resourcefulbees.resourcefulbees.registry.ModFluids;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import net.minecraft.client.Minecraft;
@@ -259,6 +262,28 @@ public class HoneycombPage extends BeeDataPage {
         }
 
         public boolean onMouseClick(double mouseX, double mouseY, int button) {
+            String pageID = null;
+            if (hasBottle) {
+                Item bottle = outputItems.get(2).getLeft().getItem();
+                if (bottle == Items.HONEY_BOTTLE) {
+                    pageID = "honey";
+                } else if (bottle instanceof CustomHoneyBottleItem) {
+                    pageID = ((CustomHoneyBottleItem) bottle).honeyBottleData.getName();
+                }
+            } else {
+                FluidStack fluidStack = outputFluids.get(1).getLeft();
+                if (fluidStack.getFluid() == ModFluids.HONEY_STILL.get()) {
+                    pageID = "honey";
+                } else if (fluidStack.getFluid() instanceof HoneyFlowingFluid) {
+                    HoneyFlowingFluid fluid = (HoneyFlowingFluid) fluidStack.getFluid();
+                    pageID = fluid.getHoneyData().getName();
+                }
+            }
+            if (pageID != null && BeepediaScreen.mouseHovering(xPos + 75, yPos + 65, 20, 20, (int) mouseX, (int) mouseY)) {
+                BeepediaScreen.saveScreenState();
+                beepedia.setActive(BeepediaScreen.PageType.HONEY, pageID);
+                return true;
+            }
             return false;
         }
     }

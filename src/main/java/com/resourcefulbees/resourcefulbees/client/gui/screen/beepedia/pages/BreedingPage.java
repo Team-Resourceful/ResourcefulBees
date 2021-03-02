@@ -316,7 +316,7 @@ public class BreedingPage extends BeeDataPage {
 
         private boolean openBeePage(CustomBeeData beeData) {
             if (beeData.getName().equals(id)) return false;
-            BeepediaScreen.resetScreenState();
+            BeepediaScreen.saveScreenState();
             beepedia.setActive(BeepediaScreen.PageType.BEE, beeData.getName());
             return true;
         }

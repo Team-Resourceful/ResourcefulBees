@@ -9,7 +9,7 @@ import net.minecraft.item.ItemStack;
 
 public class CustomHoneyBottleItem extends HoneyBottleItem {
 
-    private final HoneyBottleData honeyBottleData;
+    public final HoneyBottleData honeyBottleData;
     private Food food = null;
 
     public CustomHoneyBottleItem(Properties properties, HoneyBottleData honeyBottleData) {

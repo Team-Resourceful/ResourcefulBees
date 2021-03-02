@@ -33,7 +33,10 @@ public class TraitListPage extends BeeDataPage {
             ItemStack stack = new ItemStack(Items.BLAZE_POWDER);
             ResourceLocation image = listImage;
             StringTextComponent text = new StringTextComponent(e.getKey());
-            Button.IPressable onPress = button -> beepedia.setActive(BeepediaScreen.PageType.TRAIT, e.getKey());
+            Button.IPressable onPress = button -> {
+                BeepediaScreen.saveScreenState();
+                beepedia.setActive(BeepediaScreen.PageType.TRAIT, e.getKey());
+            };
             ListButton button = new ListButton(0, 0, 100, 20, 0, 0, 20, image, stack, 2, 2, text, 22, 6, onPress);
             beepedia.addButton(button);
             button.visible = false;

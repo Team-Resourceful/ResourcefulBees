@@ -211,7 +211,7 @@ public class BeepediaScreen extends Screen {
         // close active page and reset screen state
         if (this.activePage != null) {
             if (!this.activePage.getClass().equals(activePage.getClass()) && !(this.activePage instanceof HomePage) && !goingBack) {
-                resetScreenState();
+                saveScreenState();
             }
             this.activePage.closePage();
         }
@@ -222,18 +222,19 @@ public class BeepediaScreen extends Screen {
         currScreenState.setPageID(page.id);
 
         // update list
-        if (currScreenState.pageChanged()) {
-            if (this.activeList != null) this.activeList.setActive(false);
+        if (currScreenState.pageChanged() || goingBack) {
+            if (this.activeList != null) this.activeList.setActive(false, goingBack);
             this.activeList = list;
-            this.activeList.setActive(true);
+            this.activeList.setActive(true, goingBack);
             this.activeListType = type;
+            if (BeepediaScreen.searchVisible && goingBack) this.activeList.updateReducedList(BeepediaScreen.getSearch());
         }
         // open page
         this.activePage = page;
         this.activePage.openPage();
     }
 
-    public static void resetScreenState() {
+    public static void saveScreenState() {
         pastStates.push(currScreenState);
         currScreenState = new BeepediaScreenState();
     }

@@ -107,6 +107,8 @@ public class RenderUtils {
         //noinspection deprecation
         RenderSystem.color4f(red, green, blue, alpha);
         RenderUtils.drawTiledSprite(matrix, xPos, yPos, height, width, effectiveHeight, sprite, 16, 16, zOffset);
+        //noinspection deprecation
+        RenderSystem.clearCurrentColor();
     }
 
     public static void renderFluid(MatrixStack matrix, FluidTank fluidTank, int xPos, int yPos, int width, int height, int zOffset) {
@@ -123,6 +125,8 @@ public class RenderUtils {
         //noinspection deprecation
         RenderSystem.color4f(red, green, blue, alpha);
         RenderUtils.drawTiledSprite(matrix, xPos, yPos, height, width, height, sprite, 16, 16, zOffset);
+        //noinspection deprecation
+        RenderSystem.clearCurrentColor();
     }
 
     public static void renderFluid(MatrixStack matrix, FluidStack fluidStack, int xPos, int yPos, int zOffset) {
