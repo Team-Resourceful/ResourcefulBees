@@ -2,12 +2,14 @@ package com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.mut
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
+import com.resourcefulbees.resourcefulbees.api.beedata.mutation.outputs.BlockOutput;
 import com.resourcefulbees.resourcefulbees.api.beedata.mutation.outputs.ItemOutput;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
 import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tags.ITag;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -36,7 +38,8 @@ public class ItemMutationPage extends MutationsPage {
 
     private void initOutputs(Pair<Double, RandomCollection<ItemOutput>> outputs) {
         outputChance = outputs.getKey();
-        outputs.getRight().getMap().forEach((b, m) -> this.outputs.add(Pair.of(b, m)));
+        RandomCollection<ItemOutput> collection = outputs.getRight();
+        collection.getMap().forEach((b, m) -> this.outputs.add(Pair.of(collection.getAdjustedWeight(m.getWeight()), m)));
     }
 
     @Override
@@ -51,8 +54,14 @@ public class ItemMutationPage extends MutationsPage {
 
     @Override
     public void draw(MatrixStack matrix, int xPos, int yPos) {
-        beepedia.drawSlot(matrix, inputs.get(inputCounter), xPos, yPos);
-        beepedia.drawSlot(matrix, outputs.get(outputCounter).getRight().getItem(), xPos + 40, yPos);
+        beepedia.drawSlot(matrix, inputs.get(inputCounter), xPos + 32, yPos + 32);
+        ItemOutput output = outputs.get(outputCounter).getRight();
+        ItemStack item = new ItemStack(output.getItem());
+        if (!output.getCompoundNBT().isEmpty()) {
+            item.setTag(output.getCompoundNBT());
+        }
+        beepedia.drawSlot(matrix, item, xPos + 112, yPos + 32);
+        drawWeight(matrix, outputs.get(outputCounter).getLeft(), xPos + 122, yPos + 54);
     }
 
     @Override
@@ -61,7 +70,7 @@ public class ItemMutationPage extends MutationsPage {
     }
 
     @Override
-    public void drawTooltips(MatrixStack matrix, int mouseX, int mouseY) {
-
+    public void drawTooltips(MatrixStack matrix, int xPos, int yPos, int mouseX, int mouseY) {
+        // is not used
     }
 }

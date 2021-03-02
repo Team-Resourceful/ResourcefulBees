@@ -26,8 +26,6 @@ import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.fluid.FlowingFluid;
-import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.IItemProvider;
@@ -472,21 +470,39 @@ public class BeepediaScreen extends Screen {
         drawFluidSlot(matrix, fluidStack, xPos, yPos, true);
     }
 
+
     public void drawFluidSlot(MatrixStack matrix, FluidStack fluidStack, int xPos, int yPos, boolean showAmount) {
+        if (fluidStack.isEmpty()) return;
+        drawFluidSlotNoToolTip(matrix, fluidStack, xPos, yPos);
+        registerFluidTooltip(fluidStack, xPos, yPos, showAmount);
+    }
+
+    public void drawFluidSlotNoToolTip(MatrixStack matrix, FluidStack fluidStack, int xPos, int yPos) {
         if (fluidStack.isEmpty()) return;
         getMinecraft().getTextureManager().bindTexture(slotImage);
         drawTexture(matrix, xPos, yPos, 0, 0, 20, 20, 20, 20);
         RenderUtils.renderFluid(matrix, fluidStack, xPos + 2, yPos + 2, this.getZOffset());
-        registerFluidTooltip(fluidStack, xPos, yPos, showAmount);
     }
 
     public void drawSlot(MatrixStack matrix, ItemStack item, int xPos, int yPos) {
+        drawSlotNoToolTip(matrix, item, xPos, yPos);
+        registerItemTooltip(item, xPos, yPos);
+    }
+
+    public void drawSlotNoToolTip(MatrixStack matrix, IItemProvider item, int xPos, int yPos) {
+        if (item instanceof FlowingFluidBlock) {
+            drawFluidSlotNoToolTip(matrix, new FluidStack(((FlowingFluidBlock) item).getFluid().getStillFluid(), 1000), xPos, yPos);
+        } else {
+            drawSlotNoToolTip(matrix, new ItemStack(item), xPos, yPos);
+        }
+    }
+
+    public void drawSlotNoToolTip(MatrixStack matrix, ItemStack item, int xPos, int yPos) {
         if (item.isEmpty()) return;
         getMinecraft().getTextureManager().bindTexture(slotImage);
         drawTexture(matrix, xPos, yPos, 0, 0, 20, 20, 20, 20);
         getMinecraft().getItemRenderer().renderItemIntoGUI(item, xPos + 2, yPos + 2);
         getMinecraft().getItemRenderer().renderItemOverlays(client.fontRenderer, item, xPos + 2, yPos + 2);
-        registerItemTooltip(item, xPos, yPos);
     }
 
     public void drawEmptySlot(MatrixStack matrix, int xPos, int yPos) {

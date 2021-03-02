@@ -2,20 +2,22 @@ package com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.mut
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
-import com.resourcefulbees.resourcefulbees.api.beedata.mutation.MutationOutput;
 import com.resourcefulbees.resourcefulbees.api.beedata.mutation.outputs.BlockOutput;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
 import net.minecraft.block.Block;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.tags.ITag;
+import net.minecraft.util.text.*;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class BlockMutationPage extends MutationsPage {
 
@@ -25,7 +27,11 @@ public class BlockMutationPage extends MutationsPage {
 
     public BlockMutationPage(ITag<?> blocks, Pair<Double, RandomCollection<BlockOutput>> outputs, MutationTypes type, CustomBeeData beeData, BeepediaScreen beepedia) {
         super(type, beeData, beepedia);
-        inputs = (List<Block>) blocks.values();
+        if (blocks.values().get(0) instanceof Fluid) {
+            inputs = blocks.values().stream().map(f -> ((Fluid) f).getDefaultState().getBlockState().getBlock()).distinct().collect(Collectors.toList());
+        } else {
+            inputs = (List<Block>) blocks.values();
+        }
         initOutputs(outputs);
     }
 
@@ -37,7 +43,8 @@ public class BlockMutationPage extends MutationsPage {
 
     private void initOutputs(Pair<Double, RandomCollection<BlockOutput>> outputs) {
         outputChance = outputs.getKey();
-        outputs.getRight().getMap().forEach((b, m) -> this.outputs.add(Pair.of(b, m)));
+        RandomCollection<BlockOutput> collection = outputs.getRight();
+        collection.getMap().forEach((b, m) -> this.outputs.add(Pair.of(collection.getAdjustedWeight(m.getWeight()), m)));
     }
 
     @Override
@@ -52,8 +59,9 @@ public class BlockMutationPage extends MutationsPage {
 
     @Override
     public void draw(MatrixStack matrix, int xPos, int yPos) {
-        beepedia.drawSlot(matrix, inputs.get(inputCounter), xPos, yPos);
-        beepedia.drawSlot(matrix, outputs.get(outputCounter).getRight().getBlock(), xPos + 40, yPos);
+        beepedia.drawSlot(matrix, inputs.get(inputCounter), xPos + 32, yPos + 32);
+        beepedia.drawSlotNoToolTip(matrix, outputs.get(outputCounter).getRight().getBlock(), xPos + 112, yPos + 32);
+        drawWeight(matrix, outputs.get(outputCounter).getLeft(), xPos + 122, yPos + 54);
     }
 
     @Override
@@ -62,7 +70,23 @@ public class BlockMutationPage extends MutationsPage {
     }
 
     @Override
-    public void drawTooltips(MatrixStack matrix, int mouseX, int mouseY) {
-
+    public void drawTooltips(MatrixStack matrix, int xPos, int yPos, int mouseX, int mouseY) {
+        if (BeepediaScreen.mouseHovering(xPos + 112, yPos + 32, 20, 20, mouseX, mouseY)) {
+            BlockOutput output = outputs.get(outputCounter).getRight();
+            List<ITextComponent> tooltip = new ArrayList<>();
+            IFormattableTextComponent name = output.getBlock().getName();
+            IFormattableTextComponent id = new StringTextComponent(output.getBlock().getRegistryName().toString()).formatted(TextFormatting.DARK_GRAY);
+            tooltip.add(name);
+            tooltip.add(id);
+            if (!output.getCompoundNBT().isEmpty()) {
+                if (BeeInfoUtils.isShiftPressed()) {
+                    List<String> lore = BeeInfoUtils.getLoreLines(output.getCompoundNBT());
+                    lore.forEach(l -> tooltip.add(new StringTextComponent(l).fillStyle(Style.EMPTY.withColor(Color.parse("dark_purple")))));
+                } else {
+                    tooltip.add(new TranslationTextComponent("gui.resourcefulbees.jei.tooltip.show_nbt").fillStyle(Style.EMPTY.withColor(Color.parse("dark_purple"))));
+                }
+            }
+            beepedia.renderTooltip(matrix, tooltip, mouseX, mouseY);
+        }
     }
 }
