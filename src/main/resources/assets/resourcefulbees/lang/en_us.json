@@ -83,7 +83,6 @@
 	"gui.resourcefulbees.beepedia.tab.traits" : "Traits",
 	"gui.resourcefulbees.beepedia.tab.honey" : "Honey",
 
-
 	"gui.resourcefulbees.beepedia.bee_subtab.info" : "Info",
 	"gui.resourcefulbees.beepedia.bee_subtab.info.size" : "Size: ",
 	"gui.resourcefulbees.beepedia.bee_subtab.info.flower" : "Flower: ",
@@ -111,6 +110,7 @@
 	"gui.resourcefulbees.beepedia.bee_subtab.traits" : "Traits",
 	"gui.resourcefulbees.beepedia.bee_subtab.honeycombs" : "Honeycombs",
 	"gui.resourcefulbees.beepedia.bee_subtab.centrifuge" : "Centrifuge",
+	"gui.resourcefulbees.beepedia.bee_subtab.centrifuge.requires_multiblock" : "Multiblock centrifuge required for this recipe.",
 	"gui.resourcefulbees.beepedia.bee_subtab.honeycombs.honeycombs_button": "HONEYCOMBS",
 	"gui.resourcefulbees.beepedia.bee_subtab.honeycombs.centrifuge_button": "CENTRIFUGE",
 

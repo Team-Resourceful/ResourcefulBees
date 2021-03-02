@@ -184,6 +184,11 @@ public class HoneycombPage extends BeeDataPage {
         }
     }
 
+    @Override
+    public void drawTooltips(MatrixStack matrix, int mouseX, int mouseY) {
+        if (!recipes.isEmpty()) recipes.get(activePage).drawTooltip(matrix, mouseX, mouseY);
+    }
+
     private class RecipeObject {
         boolean isBlock;
         boolean hasBottle;
@@ -303,6 +308,12 @@ public class HoneycombPage extends BeeDataPage {
             StringTextComponent text = new StringTextComponent(decimalFormat.format(right));
             int padding = font.getWidth(text) / 2;
             font.draw(matrix, text, xPos - padding, yPos, TextFormatting.GRAY.getColor());
+        }
+
+        public void drawTooltip(MatrixStack matrix, int mouseX, int mouseY) {
+            if (BeepediaScreen.mouseHovering(xPos + 28, yPos + 67, 20, 20, mouseX, mouseY)) {
+                beepedia.renderTooltip(matrix, new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.centrifuge.requires_multiblock"), mouseX, mouseY);
+            }
         }
     }
 }
