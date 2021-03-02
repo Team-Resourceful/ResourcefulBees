@@ -32,6 +32,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 
 public class HoneycombPage extends BeeDataPage {
@@ -57,11 +58,13 @@ public class HoneycombPage extends BeeDataPage {
 
     ResourceLocation honeycombsImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/honeycombs.png");
     ResourceLocation centrifugeImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/centrifuge.png");
+    ResourceLocation multiblockOnlyImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/multiblock_only.png");
 
     Button leftArrow;
     Button rightArrow;
 
     int activePage = 0;
+
 
     public HoneycombPage(BeepediaScreen beepedia, CustomBeeData beeData, int xPos, int yPos, BeePage parent) {
         super(beepedia, beeData, xPos, yPos, parent);
@@ -150,7 +153,7 @@ public class HoneycombPage extends BeeDataPage {
         if (BeepediaScreen.currScreenState.isCentrifugeOpen() && !recipes.isEmpty()) {
             manager.bindTexture(centrifugeImage);
             AbstractGui.drawTexture(matrix, xPos, yPos + 22, 0, 0, 169, 84, 169, 84);
-            recipes.get(activePage).draw(matrix, xPos, yPos + 22);
+            recipes.get(activePage).draw(matrix, xPos, yPos + 22, mouseX, mouseY);
             if (recipes.size() > 1) {
                 StringTextComponent page = new StringTextComponent(String.format("%d / %d", activePage + 1, recipes.size()));
                 int padding = font.getWidth(page) / 2;
@@ -179,12 +182,6 @@ public class HoneycombPage extends BeeDataPage {
             counter++;
             if (counter >= max) counter = 0;
         }
-    }
-
-    @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
-        if (!recipes.isEmpty() && recipes.get(activePage).onMouseClick(mouseX, mouseY)) return true;
-        return false;
     }
 
     private class RecipeObject {
@@ -221,7 +218,7 @@ public class HoneycombPage extends BeeDataPage {
             }
         }
 
-        public void draw(MatrixStack matrix, int xPos, int yPos) {
+        public void draw(MatrixStack matrix, int xPos, int yPos, int mouseX, int mouseY) {
             beepedia.drawSlot(matrix, inputItem, xPos + 25, yPos + 3);
             if (bottleItem.isEmpty()) beepedia.drawEmptySlot(matrix, xPos + 25, yPos + 23);
             else beepedia.drawSlot(matrix, bottleItem, xPos + 25, yPos + 23);
@@ -239,15 +236,64 @@ public class HoneycombPage extends BeeDataPage {
                 beepedia.drawSlot(matrix, outputItems.get(0).getLeft(), xPos + 124, yPos + 3);
                 drawWeight(matrix, outputItems.get(0).getRight(), xPos + 112, yPos + 9);
             }
-            if (hasBottle) {
-                beepedia.drawSlot(matrix, outputItems.get(2).getLeft(), xPos + 75, yPos + 43);
-                drawWeight(matrix, outputItems.get(2).getRight(), xPos + 64, yPos + 49);
-            } else {
-                beepedia.drawFluidSlot(matrix, outputFluids.get(1).getLeft(), xPos + 75, yPos + 43);
-                drawWeight(matrix, outputFluids.get(1).getRight(), xPos + 64, yPos + 49);
-            }
             beepedia.drawSlot(matrix, outputItems.get(1).getLeft(), xPos + 124, yPos + 23);
             drawWeight(matrix, outputItems.get(1).getRight(), xPos + 112, yPos + 30);
+            if (isBlock || Config.MULTIBLOCK_RECIPES_ONLY.get()) {
+                Minecraft.getInstance().getTextureManager().bindTexture(multiblockOnlyImage);
+                AbstractGui.drawTexture(matrix, xPos + 28, yPos + 45, 0, 0, 16, 16, 16, 16);
+            }
+            if (hasBottle) {
+                drawHoneyBottle(matrix, xPos, yPos, mouseX, mouseY);
+            } else {
+                drawHoneyFluid(matrix, xPos, yPos, mouseX, mouseY);
+            }
+        }
+
+        private void drawHoneyBottle(MatrixStack matrix, int xPos, int yPos, int mouseX, int mouseY) {
+            Item bottle = outputItems.get(2).getLeft().getItem();
+            String pageID = null;
+            if (bottle == Items.HONEY_BOTTLE) {
+                pageID = "honey";
+            } else if (bottle instanceof CustomHoneyBottleItem) {
+                pageID = ((CustomHoneyBottleItem) bottle).honeyBottleData.getName();
+            }
+
+            if (pageID != null) {
+                String finalPageID = pageID;
+                Supplier<Boolean> supplier = () -> {
+                    BeepediaScreen.saveScreenState();
+                    beepedia.setActive(BeepediaScreen.PageType.HONEY, finalPageID);
+                    return true;
+                };
+                beepedia.drawInteractiveSlot(matrix, outputItems.get(2).getLeft(), xPos + 75, yPos + 43, mouseX, mouseY, supplier);
+            } else {
+                beepedia.drawSlot(matrix, outputItems.get(2).getLeft(), xPos + 75, yPos + 43);
+            }
+            drawWeight(matrix, outputItems.get(2).getRight(), xPos + 64, yPos + 49);
+        }
+
+        private void drawHoneyFluid(MatrixStack matrix, int xPos, int yPos, int mouseX, int mouseY) {
+            FluidStack fluidStack = outputFluids.get(1).getLeft();
+            String pageID = null;
+            if (fluidStack.getFluid() == ModFluids.HONEY_STILL.get()) {
+                pageID = "honey";
+            } else if (fluidStack.getFluid() instanceof HoneyFlowingFluid) {
+                HoneyFlowingFluid fluid = (HoneyFlowingFluid) fluidStack.getFluid();
+                pageID = fluid.getHoneyData().getName();
+            }
+
+            if (pageID != null) {
+                String finalPageID = pageID;
+                Supplier<Boolean> supplier = () -> {
+                    BeepediaScreen.saveScreenState();
+                    beepedia.setActive(BeepediaScreen.PageType.HONEY, finalPageID);
+                    return true;
+                };
+                beepedia.drawInteractiveFluidSlot(matrix, outputFluids.get(1).getLeft(), xPos + 75, yPos + 43, mouseX, mouseY, supplier);
+            } else {
+                beepedia.drawFluidSlot(matrix, outputFluids.get(1).getLeft(), xPos + 75, yPos + 43);
+            }
+            drawWeight(matrix, outputFluids.get(1).getRight(), xPos + 64, yPos + 49);
         }
 
         private void drawWeight(MatrixStack matrix, Float right, int xPos, int yPos) {
@@ -257,32 +303,6 @@ public class HoneycombPage extends BeeDataPage {
             StringTextComponent text = new StringTextComponent(decimalFormat.format(right));
             int padding = font.getWidth(text) / 2;
             font.draw(matrix, text, xPos - padding, yPos, TextFormatting.GRAY.getColor());
-        }
-
-        public boolean onMouseClick(double mouseX, double mouseY) {
-            String pageID = null;
-            if (hasBottle) {
-                Item bottle = outputItems.get(2).getLeft().getItem();
-                if (bottle == Items.HONEY_BOTTLE) {
-                    pageID = "honey";
-                } else if (bottle instanceof CustomHoneyBottleItem) {
-                    pageID = ((CustomHoneyBottleItem) bottle).honeyBottleData.getName();
-                }
-            } else {
-                FluidStack fluidStack = outputFluids.get(1).getLeft();
-                if (fluidStack.getFluid() == ModFluids.HONEY_STILL.get()) {
-                    pageID = "honey";
-                } else if (fluidStack.getFluid() instanceof HoneyFlowingFluid) {
-                    HoneyFlowingFluid fluid = (HoneyFlowingFluid) fluidStack.getFluid();
-                    pageID = fluid.getHoneyData().getName();
-                }
-            }
-            if (pageID != null && BeepediaScreen.mouseHovering(xPos + 75, yPos + 65, 20, 20, (int) mouseX, (int) mouseY)) {
-                BeepediaScreen.saveScreenState();
-                beepedia.setActive(BeepediaScreen.PageType.HONEY, pageID);
-                return true;
-            }
-            return false;
         }
     }
 }

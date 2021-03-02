@@ -40,6 +40,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.text.DecimalFormat;
 import java.util.*;
+import java.util.function.Supplier;
 
 public class BeepediaScreen extends Screen {
 
@@ -79,8 +80,9 @@ public class BeepediaScreen extends Screen {
     ResourceLocation slotImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/slot.png");
     private Button backButton;
     private ResourceLocation homeButtons = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/home_buttons.png");
-    private List<ItemTooltip> itemTooltips;
-    private List<FluidTooltip> fluidTooltips;
+    private List<ItemTooltip> itemTooltips = new LinkedList<>();
+    private List<FluidTooltip> fluidTooltips = new LinkedList<>();
+    private List<Interaction> interactions = new LinkedList<>();
 
     public BeepediaScreen(ITextComponent name, String pageID) {
         super(name);
@@ -227,7 +229,8 @@ public class BeepediaScreen extends Screen {
             this.activeList = list;
             this.activeList.setActive(true, goingBack);
             this.activeListType = type;
-            if (BeepediaScreen.searchVisible && goingBack) this.activeList.updateReducedList(BeepediaScreen.getSearch());
+            if (BeepediaScreen.searchVisible && goingBack)
+                this.activeList.updateReducedList(BeepediaScreen.getSearch());
         }
         // open page
         this.activePage = page;
@@ -273,8 +276,9 @@ public class BeepediaScreen extends Screen {
 
     @Override
     public void render(@NotNull MatrixStack matrixStack, int mouseX, int mouseY, float partialTick) {
-        itemTooltips = new LinkedList<>();
-        fluidTooltips = new LinkedList<>();
+        itemTooltips.clear();
+        fluidTooltips.clear();
+        interactions.clear();
         drawBackground(matrixStack, partialTick, mouseX, mouseY);
         updateSearch();
         super.render(matrixStack, mouseX, mouseY, partialTick);
@@ -397,8 +401,12 @@ public class BeepediaScreen extends Screen {
             Minecraft.getInstance().getSoundHandler().play(SimpleSound.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
             return true;
         }
-        boolean toReturn = super.mouseClicked(mouseX, mouseY, mouseButton);
-        return toReturn;
+        interactions.forEach(b -> {
+            if (b.onMouseClick((int) mouseX, (int) mouseY)) {
+                Minecraft.getInstance().getSoundHandler().play(SimpleSound.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+            }
+        });
+        return super.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
     public static void updateScrollPos(ButtonList beesList, ButtonList traitsList, ButtonList honeyList) {
@@ -495,6 +503,10 @@ public class BeepediaScreen extends Screen {
         fluidTooltips.add(new FluidTooltip(fluid, xPos, yPos, drawAmount));
     }
 
+    private void registerInteraction(int xPos, int yPos, Supplier<Boolean> supplier) {
+        interactions.add(new Interaction(xPos, yPos, supplier));
+    }
+
     @Override
     public <T extends Widget> @NotNull T addButton(@NotNull T widget) {
         return super.addButton(widget);
@@ -508,6 +520,38 @@ public class BeepediaScreen extends Screen {
 
     public Button.ITooltip getTooltipProvider(ITextComponent textComponent) {
         return (button, matrix, mouseX, mouseY) -> renderTooltip(matrix, textComponent, mouseX, mouseY);
+    }
+
+
+    public void drawInteractiveFluidSlot(MatrixStack matrix, FluidStack fluidStack, int xPos, int yPos, int mouseX, int mouseY, Supplier<Boolean> supplier) {
+        drawInteractiveFluidSlot(matrix, fluidStack, xPos, yPos, mouseX, mouseY, true, supplier);
+    }
+
+    public void drawInteractiveFluidSlot(MatrixStack matrix, FluidStack fluidStack, int xPos, int yPos, int mouseX, int mouseY, boolean showAmount, Supplier<Boolean> supplier) {
+        if (fluidStack.isEmpty()) return;
+        registerInteraction(xPos, yPos, supplier);
+        getMinecraft().getTextureManager().bindTexture(buttonImage);
+        if (mouseHovering(xPos, yPos, 20, 20, mouseX, mouseY)) {
+            drawTexture(matrix, xPos, yPos, 0, 20, 20, 20, 20, 60);
+        } else {
+            drawTexture(matrix, xPos, yPos, 0, 0, 20, 20, 20, 60);
+        }
+        RenderUtils.renderFluid(matrix, fluidStack, xPos + 2, yPos + 2, this.getZOffset());
+        registerFluidTooltip(fluidStack, xPos, yPos, showAmount);
+    }
+
+    public void drawInteractiveSlot(MatrixStack matrix, ItemStack item, int xPos, int yPos, int mouseX, int mouseY, Supplier<Boolean> supplier) {
+        if (item.isEmpty()) return;
+        registerInteraction(xPos, yPos, supplier);
+        getMinecraft().getTextureManager().bindTexture(buttonImage);
+        if (mouseHovering(xPos, yPos, 20, 20, mouseX, mouseY)) {
+            drawTexture(matrix, xPos, yPos, 0, 20, 20, 20, 20, 60);
+        } else {
+            drawTexture(matrix, xPos, yPos, 0, 0, 20, 20, 20, 60);
+        }
+        getMinecraft().getItemRenderer().renderItemIntoGUI(item, xPos + 2, yPos + 2);
+        getMinecraft().getItemRenderer().renderItemOverlays(client.fontRenderer, item, xPos + 2, yPos + 2);
+        registerItemTooltip(item, xPos, yPos);
     }
 
     public enum PageType {
@@ -552,6 +596,25 @@ public class BeepediaScreen extends Screen {
             if (mouseX >= xPos && mouseY >= yPos && mouseX <= xPos + 20 && mouseY <= yPos + 20) {
                 renderFluidTooltip(matrix, fluid, mouseX, mouseY, showAmount);
             }
+        }
+    }
+
+    private class Interaction {
+        int xPos;
+        int yPos;
+        Supplier<Boolean> supplier;
+
+        public Interaction(int xPos, int yPos, Supplier<Boolean> supplier) {
+            this.xPos = xPos;
+            this.yPos = yPos;
+            this.supplier = supplier;
+        }
+
+        public boolean onMouseClick(int mouseX, int mouseY) {
+            if (mouseX >= xPos && mouseY >= yPos && mouseX <= xPos + 20 && mouseY <= yPos + 20) {
+                return supplier.get();
+            }
+            return false;
         }
     }
 }
