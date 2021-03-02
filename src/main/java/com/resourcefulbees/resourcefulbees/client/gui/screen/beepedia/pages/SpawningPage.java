@@ -8,6 +8,7 @@ import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.client.gui.widget.button.ImageButton;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -23,37 +24,34 @@ public class SpawningPage extends BeeDataPage {
 
     List<ResourceLocation> biomeList;
 
-    private Button biomes;
-    private Button back;
+    private Button prevTab;
+    private Button nextTab;
 
     public SpawningPage(BeepediaScreen beepedia, CustomBeeData beeData, int xPos, int yPos, BeePage parent) {
         super(beepedia, beeData, xPos, yPos, parent);
         this.beeData = beeData;
-        biomes = new Button(xPos + subPageWidth - 50, yPos, 46, 20, new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.spawning.biomes_button"), onPress -> {
-            BeepediaScreen.currScreenState.setBiomesOpen(true);
-            back.visible = BeepediaScreen.currScreenState.isBiomesOpen();
-            biomes.visible = !BeepediaScreen.currScreenState.isBiomesOpen();
-        });
-        back = new Button(xPos + subPageWidth - 50, yPos, 46, 20, new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.spawning.back_button"), onPress -> {
-            BeepediaScreen.currScreenState.setBiomesOpen(false);
-            back.visible = BeepediaScreen.currScreenState.isBiomesOpen();
-            biomes.visible = !BeepediaScreen.currScreenState.isBiomesOpen();
-        });
-        beepedia.addButton(back);
-        beepedia.addButton(biomes);
-        back.visible = false;
-        biomes.visible = false;
+        prevTab = new ImageButton(xPos + (subPageWidth / 2) - 48, yPos + 6, 8, 11, 0, 0, 11, arrowImage, 16, 33, button -> toggleTab());
+        nextTab = new ImageButton(xPos + (subPageWidth / 2) + 40, yPos + 6, 8, 11, 8, 0, 11, arrowImage, 16, 33, button -> toggleTab());
+        beepedia.addButton(nextTab);
+        beepedia.addButton(prevTab);
+        nextTab.visible = false;
+        prevTab.visible = false;
         biomeList = BiomeParser.getBiomes(beeData);
         scrollHeight = biomeList.size() * 12;
     }
 
+    private void toggleTab() {
+        BeepediaScreen.currScreenState.setBiomesOpen(!BeepediaScreen.currScreenState.isBiomesOpen());
+    }
+
     @Override
     public void renderBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
-        if (BeepediaScreen.currScreenState.isBiomesOpen()) {
-            TranslationTextComponent biomesTitle = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.spawning.biomes");
+        FontRenderer font = Minecraft.getInstance().fontRenderer;
+        TranslationTextComponent title = new TranslationTextComponent(BeepediaScreen.currScreenState.isBiomesOpen() ? "gui.resourcefulbees.beepedia.bee_subtab.spawning.biomes" : "gui.resourcefulbees.beepedia.bee_subtab.spawning");
+        int padding = font.getWidth(title) / 2;
+        font.draw(matrix, title, (float) xPos + ((float) subPageWidth / 2) - padding, (float) yPos + 8, TextFormatting.WHITE.getColor());
 
-            FontRenderer font = Minecraft.getInstance().fontRenderer;
-            font.draw(matrix, biomesTitle, xPos, (float)yPos + 8, TextFormatting.WHITE.getColor());
+        if (BeepediaScreen.currScreenState.isBiomesOpen()) {
             GL11.glEnable(GL11.GL_SCISSOR_TEST);
             double scale = beepedia.getMinecraft().getWindow().getGuiScaleFactor();
             int scissorY = (int) (beepedia.getMinecraft().getWindow().getFramebufferHeight() - (yPos + subPageHeight) * scale);
@@ -64,8 +62,6 @@ public class SpawningPage extends BeeDataPage {
             }
             GL11.glDisable(GL11.GL_SCISSOR_TEST);
         } else {
-            FontRenderer font = beepedia.getMinecraft().fontRenderer;
-            TranslationTextComponent title = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.spawning");
             TranslationTextComponent groupName = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.spawning.group");
             TranslationTextComponent heightName = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.spawning.height");
             TranslationTextComponent weightName = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.spawning.weight");
@@ -74,7 +70,6 @@ public class SpawningPage extends BeeDataPage {
             heightName.append(new StringTextComponent(String.format("%d - %d", beeData.getSpawnData().getMinYLevel(), beeData.getSpawnData().getMaxYLevel())));
             weightName.append(new StringTextComponent(String.format("%d", beeData.getSpawnData().getSpawnWeight())));
             lightName.append(BeeInfoUtils.getLightName(beeData.getSpawnData().getLightLevel()));
-            font.draw(matrix, title, xPos, (float)yPos + 8f, TextFormatting.WHITE.getColor());
             font.draw(matrix, groupName, xPos, (float)yPos + 22f, TextFormatting.GRAY.getColor());
             font.draw(matrix, heightName, xPos, (float)yPos + 34f, TextFormatting.GRAY.getColor());
             font.draw(matrix, weightName, xPos, (float)yPos + 46f, TextFormatting.GRAY.getColor());
@@ -104,8 +99,8 @@ public class SpawningPage extends BeeDataPage {
     @Override
     public void openPage() {
         super.openPage();
-        back.visible = BeepediaScreen.currScreenState.isBiomesOpen();
-        biomes.visible = !BeepediaScreen.currScreenState.isBiomesOpen();
+        nextTab.visible = true;
+        prevTab.visible = true;
         subScrollPos = BeepediaScreen.currScreenState.getSpawningScroll();
         int boxHeight = subPageHeight - 22;
         if (boxHeight > scrollHeight) {
@@ -116,8 +111,8 @@ public class SpawningPage extends BeeDataPage {
 
     @Override
     public void closePage() {
-        back.visible = false;
-        biomes.visible = false;
+        nextTab.visible = false;
+        prevTab.visible = false;
         super.closePage();
     }
 }

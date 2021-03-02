@@ -170,11 +170,13 @@ public class CentrifugeRecipeCategory implements IRecipeCategory<CentrifugeRecip
         int beeswaxOffset = fontRenderer.getStringWidth(beeswaxString) / 2;
         int fluidOffset = fontRenderer.getStringWidth(fluidString) / 2;
 
-        if (beeOutput < 1.0) fontRenderer.draw(matrix, beeOutputString, 95 - beeOutputOffset, 10, 0xff808080);
-        if (beeswax < 1.0) fontRenderer.draw(matrix, beeswaxString, 95 - beeswaxOffset, 30, 0xff808080);
+        if (beeOutput < 1.0)
+            fontRenderer.draw(matrix, beeOutputString, (float) 95 - beeOutputOffset, (float) 10, 0xff808080);
+        if (beeswax < 1.0) fontRenderer.draw(matrix, beeswaxString, (float) 95 - beeswaxOffset, (float) 30, 0xff808080);
         if (fluid < 1.0 && !(recipe.hasFluidOutput && recipe.itemOutputs.get(0).getLeft().isEmpty()))
-            fontRenderer.draw(matrix, fluidString, 95 - fluidOffset, 46, 0xff808080);
-        if (honeyBottle < 1.0) fontRenderer.draw(matrix, honeyBottleString, 45 - honeyBottleOffset, 49, 0xff808080);
+            fontRenderer.draw(matrix, fluidString, (float) 95 - fluidOffset, (float) 46, 0xff808080);
+        if (honeyBottle < 1.0)
+            fontRenderer.draw(matrix, honeyBottleString, (float) 45 - honeyBottleOffset, (float) 49, 0xff808080);
         if (recipe.multiblock) {
             multiblock.draw(matrix, 10, 45);
         }

@@ -77,8 +77,6 @@
     "item.resourcefulbees.beepedia": "Beepedia",
 	"gui.resourcefulbees.beepedia" : "Beepedia v1.0",
 	"gui.resourcefulbees.beepedia.search" : "Search",
-	"gui.resourcefulbees.beepedia.home_button" : "HOME",
-	"gui.resourcefulbees.beepedia.back_button" : "BACK",
 	"gui.resourcefulbees.beepedia.tab.bees" : "Bees",
 	"gui.resourcefulbees.beepedia.tab.traits" : "Traits",
 	"gui.resourcefulbees.beepedia.tab.honey" : "Honey",
@@ -100,20 +98,15 @@
 	"gui.resourcefulbees.beepedia.bee_subtab.spawning.group" : "Group Size: ",
 	"gui.resourcefulbees.beepedia.bee_subtab.spawning.light" : "Light Level: ",
 	"gui.resourcefulbees.beepedia.bee_subtab.spawning.biomes" : "Biomes",
-	"gui.resourcefulbees.beepedia.bee_subtab.spawning.biomes_button": "BIOMES",
-	"gui.resourcefulbees.beepedia.bee_subtab.spawning.back_button" : "BACK",
 
 	"gui.resourcefulbees.beepedia.bee_subtab.breeding" : "Breeding",
 	"gui.resourcefulbees.beepedia.bee_subtab.breeding.parents_title": "Parents",
 	"gui.resourcefulbees.beepedia.bee_subtab.breeding.children_title": "Children",
 
 	"gui.resourcefulbees.beepedia.bee_subtab.traits" : "Traits",
-	"gui.resourcefulbees.beepedia.bee_subtab.honeycombs" : "Honeycombs",
+	"gui.resourcefulbees.beepedia.bee_subtab.honeycombs" : "Honeycomb",
 	"gui.resourcefulbees.beepedia.bee_subtab.centrifuge" : "Centrifuge",
 	"gui.resourcefulbees.beepedia.bee_subtab.centrifuge.requires_multiblock" : "Multiblock centrifuge required for this recipe.",
-	"gui.resourcefulbees.beepedia.bee_subtab.honeycombs.honeycombs_button": "HONEYCOMBS",
-	"gui.resourcefulbees.beepedia.bee_subtab.honeycombs.centrifuge_button": "CENTRIFUGE",
-
 
 	"bees.resourcefulbees.size.tiny" : "Tiny",
 	"bees.resourcefulbees.size.small" : "Small",

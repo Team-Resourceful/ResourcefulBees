@@ -37,8 +37,8 @@ import java.util.function.Supplier;
 
 public class HoneycombPage extends BeeDataPage {
 
-    Button centrifuge;
-    Button honeycombs;
+    Button prevTab;
+    Button nextTab;
     private int counter;
     private int max;
 
@@ -68,18 +68,12 @@ public class HoneycombPage extends BeeDataPage {
 
     public HoneycombPage(BeepediaScreen beepedia, CustomBeeData beeData, int xPos, int yPos, BeePage parent) {
         super(beepedia, beeData, xPos, yPos, parent);
-        centrifuge = new Button(xPos + subPageWidth - 74, yPos, 70, 20, new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.honeycombs.centrifuge_button"), onPress -> {
-            BeepediaScreen.currScreenState.setCentrifugeOpen(true);
-            updateButtonVisibility();
-        });
-        honeycombs = new Button(xPos + subPageWidth - 74, yPos, 70, 20, new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.honeycombs.honeycombs_button"), onPress -> {
-            BeepediaScreen.currScreenState.setCentrifugeOpen(false);
-            updateButtonVisibility();
-        });
-        beepedia.addButton(honeycombs);
-        beepedia.addButton(centrifuge);
-        honeycombs.visible = false;
-        centrifuge.visible = false;
+        prevTab = new ImageButton(xPos + (subPageWidth / 2) - 48, yPos + 6, 8, 11, 0, 0, 11, arrowImage, 16, 33, button -> toggleTab());
+        nextTab = new ImageButton(xPos + (subPageWidth / 2) + 40, yPos + 6, 8, 11, 8, 0, 11, arrowImage, 16, 33, button -> toggleTab());
+        beepedia.addButton(nextTab);
+        beepedia.addButton(prevTab);
+        nextTab.visible = false;
+        prevTab.visible = false;
         counter = 0;
         max = hives.size();
 
@@ -107,6 +101,11 @@ public class HoneycombPage extends BeeDataPage {
         rightArrow.visible = false;
     }
 
+    private void toggleTab() {
+        BeepediaScreen.currScreenState.setCentrifugeOpen(!BeepediaScreen.currScreenState.isCentrifugeOpen());
+        updateButtonVisibility();
+    }
+
     private void nextPage() {
         activePage++;
         if (activePage >= recipes.size()) activePage = 0;
@@ -129,8 +128,8 @@ public class HoneycombPage extends BeeDataPage {
     }
 
     private void updateButtonVisibility() {
-        honeycombs.visible = BeepediaScreen.currScreenState.isCentrifugeOpen() && !recipes.isEmpty();
-        centrifuge.visible = !BeepediaScreen.currScreenState.isCentrifugeOpen() && !recipes.isEmpty();
+        nextTab.visible = !recipes.isEmpty();
+        prevTab.visible = !recipes.isEmpty();
         rightArrow.visible = BeepediaScreen.currScreenState.isCentrifugeOpen() && !recipes.isEmpty();
         leftArrow.visible = BeepediaScreen.currScreenState.isCentrifugeOpen() && !recipes.isEmpty();
     }
@@ -138,8 +137,8 @@ public class HoneycombPage extends BeeDataPage {
     @Override
     public void closePage() {
         super.closePage();
-        honeycombs.visible = false;
-        centrifuge.visible = false;
+        nextTab.visible = false;
+        prevTab.visible = false;
         rightArrow.visible = false;
         leftArrow.visible = false;
     }
@@ -148,15 +147,16 @@ public class HoneycombPage extends BeeDataPage {
     public void renderBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
         FontRenderer font = Minecraft.getInstance().fontRenderer;
         TextureManager manager = Minecraft.getInstance().getTextureManager();
-        String title = BeepediaScreen.currScreenState.isCentrifugeOpen() ? "gui.resourcefulbees.beepedia.bee_subtab.centrifuge" : "gui.resourcefulbees.beepedia.bee_subtab.honeycombs";
-        font.draw(matrix, new TranslationTextComponent(title), xPos, (float) yPos + 8, TextFormatting.WHITE.getColor());
+        TranslationTextComponent title = new TranslationTextComponent(BeepediaScreen.currScreenState.isCentrifugeOpen() ? "gui.resourcefulbees.beepedia.bee_subtab.centrifuge" : "gui.resourcefulbees.beepedia.bee_subtab.honeycombs");
+        int padding = font.getWidth(title) / 2;
+        font.draw(matrix, title, (float) xPos + ((float) subPageWidth / 2) - padding, (float) yPos + 8, TextFormatting.WHITE.getColor());
         if (BeepediaScreen.currScreenState.isCentrifugeOpen() && !recipes.isEmpty()) {
             manager.bindTexture(centrifugeImage);
             AbstractGui.drawTexture(matrix, xPos, yPos + 22, 0, 0, 169, 84, 169, 84);
             recipes.get(activePage).draw(matrix, xPos, yPos + 22, mouseX, mouseY);
             if (recipes.size() > 1) {
                 StringTextComponent page = new StringTextComponent(String.format("%d / %d", activePage + 1, recipes.size()));
-                int padding = font.getWidth(page) / 2;
+                padding = font.getWidth(page) / 2;
                 font.draw(matrix, page, (float) xPos + ((float) subPageWidth / 2) - padding, (float) yPos + subPageHeight - 14, TextFormatting.WHITE.getColor());
             }
         } else {

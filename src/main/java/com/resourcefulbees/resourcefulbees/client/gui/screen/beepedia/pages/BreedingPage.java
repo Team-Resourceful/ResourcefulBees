@@ -39,8 +39,8 @@ public class BreedingPage extends BeeDataPage {
 
     Button leftArrow;
     Button rightArrow;
-    Button parentsButton;
-    Button childrenButton;
+    Button prevTab;
+    Button nextTab;
 
     private final ResourceLocation breedingImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/breeding.png");
     private final ResourceLocation infoIcon = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/icons.png");
@@ -58,16 +58,16 @@ public class BreedingPage extends BeeDataPage {
         parents.forEach((p, b) -> parentBreeding.add(new BreedingObject(p, b)));
         leftArrow = new ImageButton(xPos + (subPageWidth / 2) - 28, yPos + subPageHeight - 16, 8, 11, 0, 0, 11, arrowImage, 16, 33, button -> prevPage());
         rightArrow = new ImageButton(xPos + (subPageWidth / 2) + 20, yPos + subPageHeight - 16, 8, 11, 8, 0, 11, arrowImage, 16, 33, button -> nextPage());
-        parentsButton = new ImageButton(xPos + (subPageWidth / 2) - 38, yPos + 6, 8, 11, 0, 0, 11, arrowImage, 16, 33, button -> toggleActiveList());
-        childrenButton = new ImageButton(xPos + (subPageWidth / 2) + 30, yPos + 6, 8, 11, 8, 0, 11, arrowImage, 16, 33, button -> toggleActiveList());
+        prevTab = new ImageButton(xPos + (subPageWidth / 2) - 48, yPos + 6, 8, 11, 0, 0, 11, arrowImage, 16, 33, button -> toggleActiveList());
+        nextTab = new ImageButton(xPos + (subPageWidth / 2) + 40, yPos + 6, 8, 11, 8, 0, 11, arrowImage, 16, 33, button -> toggleActiveList());
         leftArrow.visible = false;
         rightArrow.visible = false;
-        parentsButton.visible = false;
-        childrenButton.visible = false;
+        prevTab.visible = false;
+        nextTab.visible = false;
         beepedia.addButton(leftArrow);
         beepedia.addButton(rightArrow);
-        beepedia.addButton(parentsButton);
-        beepedia.addButton(childrenButton);
+        beepedia.addButton(prevTab);
+        beepedia.addButton(nextTab);
 
         parentBreeding.sort((o1, o2) -> {
             if (o1.isBase) return 1;
@@ -121,8 +121,8 @@ public class BreedingPage extends BeeDataPage {
         super.closePage();
         leftArrow.visible = false;
         rightArrow.visible = false;
-        parentsButton.visible = false;
-        childrenButton.visible = false;
+        prevTab.visible = false;
+        nextTab.visible = false;
     }
 
     @Override
@@ -146,8 +146,8 @@ public class BreedingPage extends BeeDataPage {
     }
 
     private void showButtons() {
-        parentsButton.visible = shouldShowButtons();
-        childrenButton.visible = shouldShowButtons();
+        prevTab.visible = shouldShowButtons();
+        nextTab.visible = shouldShowButtons();
         leftArrow.visible = activeList.size() > 1;
         rightArrow.visible = activeList.size() > 1;
     }
