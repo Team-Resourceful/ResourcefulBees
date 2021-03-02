@@ -1,6 +1,7 @@
 package com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia;
 
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.BeePage;
+import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
 
 public class BeepediaScreenState {
 
@@ -15,6 +16,8 @@ public class BeepediaScreenState {
     private boolean parentBreeding = true;
     private boolean centrifugeOpen = false;
     private int centrifugePage = 0;
+    private int currentMutationType = 0;
+    private int mutationsPage = 0;
 
     public BeepediaScreen.PageType getPageType() {
         return pageType;
@@ -103,5 +106,21 @@ public class BeepediaScreenState {
 
     public int getCentrifugePage() {
         return centrifugePage;
+    }
+
+    public void setMutationsPage(int page) {
+        this.mutationsPage = page;
+    }
+
+    public int getCurrentMutationTab() {
+        return currentMutationType;
+    }
+
+    public void setCurrentMutationTab(int currentMutationType) {
+        this.currentMutationType = currentMutationType;
+    }
+
+    public int getMutationsPage() {
+        return mutationsPage;
     }
 }

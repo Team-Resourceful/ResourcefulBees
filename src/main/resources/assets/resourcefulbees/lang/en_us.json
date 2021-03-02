@@ -92,6 +92,9 @@
 	"gui.resourcefulbees.beepedia.bee_subtab.info.found" : "Found By: ",
 
 	"gui.resourcefulbees.beepedia.bee_subtab.mutations" : "Mutations",
+	"gui.resourcefulbees.beepedia.bee_subtab.mutations.block": "Block Mutations",
+	"gui.resourcefulbees.beepedia.bee_subtab.mutations.item": "Item Mutations",
+	"gui.resourcefulbees.beepedia.bee_subtab.mutations.entity": "Entity Mutations",
 	"gui.resourcefulbees.beepedia.bee_subtab.spawning" : "Spawning",
 	"gui.resourcefulbees.beepedia.bee_subtab.spawning.weight" : "Spawn Weight: ",
 	"gui.resourcefulbees.beepedia.bee_subtab.spawning.height" : "Spawn Height: ",

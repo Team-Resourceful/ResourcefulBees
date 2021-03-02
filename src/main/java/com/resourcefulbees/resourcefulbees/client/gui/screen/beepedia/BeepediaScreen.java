@@ -16,6 +16,7 @@ import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.TraitRegistry;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.RenderUtils;
+import net.minecraft.block.Block;
 import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SimpleSound;
@@ -25,6 +26,8 @@ import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.fluid.FlowingFluid;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.IItemProvider;
@@ -449,6 +452,14 @@ public class BeepediaScreen extends Screen {
         }
     }
 
+    public void drawSlot(MatrixStack matrix, Block item, int xPos, int yPos) {
+        if (item instanceof FlowingFluidBlock) {
+            drawFluidSlot(matrix, new FluidStack(((FlowingFluidBlock) item).getFluid().getStillFluid(), 1000), xPos, yPos, false);
+        } else {
+            drawSlot(matrix, new ItemStack(item), xPos, yPos);
+        }
+    }
+
     public void drawSlot(MatrixStack matrix, IItemProvider item, int xPos, int yPos) {
         if (item instanceof FlowingFluidBlock) {
             drawFluidSlot(matrix, new FluidStack(((FlowingFluidBlock) item).getFluid().getStillFluid(), 1000), xPos, yPos, false);
@@ -553,6 +564,7 @@ public class BeepediaScreen extends Screen {
         getMinecraft().getItemRenderer().renderItemOverlays(client.fontRenderer, item, xPos + 2, yPos + 2);
         registerItemTooltip(item, xPos, yPos);
     }
+
 
     public enum PageType {
         // main pages

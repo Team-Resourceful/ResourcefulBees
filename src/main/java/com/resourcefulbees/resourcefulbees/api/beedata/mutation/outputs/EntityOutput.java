@@ -1,5 +1,7 @@
 package com.resourcefulbees.resourcefulbees.api.beedata.mutation.outputs;
 
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.nbt.CompoundNBT;
 
@@ -7,6 +9,7 @@ public class EntityOutput {
     private final EntityType<?> entityType;
     private final CompoundNBT compoundNBT;
     private final double weight;
+    private Entity guiEntity = null;
 
     public EntityOutput(EntityType<?> entityType, CompoundNBT compoundNBT, double weight) {
         this.entityType = entityType;
@@ -24,5 +27,10 @@ public class EntityOutput {
 
     public double getWeight() {
         return weight;
+    }
+
+    public Entity getGuiEntity(ClientWorld world) {
+        if (guiEntity == null) guiEntity = entityType.create(world);
+        return guiEntity;
     }
 }

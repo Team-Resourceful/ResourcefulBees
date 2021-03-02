@@ -3,31 +3,167 @@ package com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
-import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.mutations.MutationPage;
+import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.mutations.BlockMutationPage;
+import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.mutations.EntityMutationPage;
+import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.mutations.ItemMutationPage;
+import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.mutations.MutationsPage;
 import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.client.gui.widget.button.ImageButton;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
+import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.EnumMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class MutationListPage extends BeeDataPage {
 
-    Map<MutationTypes, List<MutationPage>> mutations = new EnumMap<>(MutationTypes.class);
+    List<Pair<MutationTypes, List<MutationsPage>>> mutations = new ArrayList<>();
+
+    private List<MutationsPage> activeList = null;
+    int tab;
+    private int page;
+    private MutationsPage activePage = null;
+
+    Button prevTab;
+    Button nextTab;
+    Button leftArrow;
+    Button rightArrow;
 
     public MutationListPage(BeepediaScreen beepedia, CustomBeeData beeData, int xPos, int yPos, BeePage parent) {
         super(beepedia, beeData, xPos, yPos, parent);
-        this.beeData = beeData;
+        prevTab = new ImageButton(xPos + (subPageWidth / 2) - 48, yPos + 6, 8, 11, 0, 0, 11, arrowImage, 16, 33, button -> prevTab());
+        nextTab = new ImageButton(xPos + (subPageWidth / 2) + 40, yPos + 6, 8, 11, 8, 0, 11, arrowImage, 16, 33, button -> nextTab());
+        leftArrow = new ImageButton(xPos + (subPageWidth / 2) - 28, yPos + subPageHeight - 16, 8, 11, 0, 0, 11, arrowImage, 16, 33, button -> prevPage());
+        rightArrow = new ImageButton(xPos + (subPageWidth / 2) + 20, yPos + subPageHeight - 16, 8, 11, 8, 0, 11, arrowImage, 16, 33, button -> nextPage());
+        beepedia.addButton(prevTab);
+        beepedia.addButton(nextTab);
+        beepedia.addButton(leftArrow);
+        beepedia.addButton(rightArrow);
+        prevTab.visible = false;
+        nextTab.visible = false;
+        leftArrow.visible = false;
+        rightArrow.visible = false;
+        List<MutationsPage> blockMutations = new ArrayList<>();
+        List<MutationsPage> itemMutations = new ArrayList<>();
+        List<MutationsPage> entityMutations = new ArrayList<>();
+        if (beeData.getMutationData().hasBlockMutations()) {
+            beeData.getMutationData().getJeiBlockMutations().forEach((b, m) -> blockMutations.add(new BlockMutationPage(b, m, MutationTypes.BLOCK, beeData, beepedia)));
+            beeData.getMutationData().getJeiBlockTagMutations().forEach((b, m) -> blockMutations.add(new BlockMutationPage(b, m, MutationTypes.BLOCK, beeData, beepedia)));
+        }
+        if (beeData.getMutationData().hasItemMutations()) {
+            beeData.getMutationData().getJeiItemMutations().forEach((b, m) -> itemMutations.add(new ItemMutationPage(b, m, MutationTypes.ITEM, beeData, beepedia)));
+            beeData.getMutationData().getJeiBlockTagItemMutations().forEach((b, m) -> itemMutations.add(new ItemMutationPage(b, m, MutationTypes.ITEM, beeData, beepedia)));
+        }
+        if (beeData.getMutationData().hasEntityMutations()) {
+            beeData.getMutationData().getEntityMutations().forEach((b, m) -> entityMutations.add(new EntityMutationPage(b, m, MutationTypes.ITEM, beeData, beepedia)));
+        }
+        if (!blockMutations.isEmpty()) {
+            mutations.add(Pair.of(MutationTypes.BLOCK, blockMutations));
+        }
+        if (!itemMutations.isEmpty()) {
+            mutations.add(Pair.of(MutationTypes.ITEM, itemMutations));
+        }
+        if (!entityMutations.isEmpty()) {
+            mutations.add(Pair.of(MutationTypes.ENTITY, entityMutations));
+        }
+    }
+
+    private void nextPage() {
+        if (activeList == null) return;
+        page++;
+        if (page >= activeList.size()) page = 0;
+        BeepediaScreen.currScreenState.setMutationsPage(page);
+    }
+
+    private void prevPage() {
+        if (activeList == null) return;
+        page--;
+        if (page < 0) page = activeList.size() - 1;
+        BeepediaScreen.currScreenState.setMutationsPage(page);
+    }
+
+    private void nextTab() {
+        tab++;
+        if (tab >= mutations.size()) tab = 0;
+        BeepediaScreen.currScreenState.setCurrentMutationTab(tab);
+    }
+
+    private void prevTab() {
+        tab--;
+        if (tab < 0) tab = mutations.size() - 1;
+        BeepediaScreen.currScreenState.setCurrentMutationTab(tab);
     }
 
     @Override
     public void renderBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
         FontRenderer font = Minecraft.getInstance().fontRenderer;
-        TranslationTextComponent title = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.mutations");
-        font.draw(matrix, title, xPos, (float)yPos + 8f, TextFormatting.WHITE.getColor());
+        TranslationTextComponent title;
+        switch (mutations.get(BeepediaScreen.currScreenState.getCurrentMutationTab()).getLeft()) {
+            case BLOCK:
+                title = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.mutations.block");
+                break;
+            case ENTITY:
+                title = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.mutations.entity");
+                break;
+            case ITEM:
+                title = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.mutations.item");
+                break;
+            default:
+                throw new UnsupportedOperationException(String.format("found a legacy mutation. %s", BeepediaScreen.currScreenState.getCurrentMutationTab()));
+        }
+        font.draw(matrix, title, xPos, (float) yPos + 8f, TextFormatting.WHITE.getColor());
+        if (activePage != null) activePage.draw(matrix, xPos, yPos + 22);
     }
 
+    @Override
+    public void openPage() {
+        super.openPage();
+        // get current Tab
+        tab = BeepediaScreen.currScreenState.getCurrentMutationTab();
+        if (tab >= mutations.size()) tab = 0;
+        BeepediaScreen.currScreenState.setCurrentMutationTab(tab);
+        activeList = mutations.get(tab).getRight();
+
+        // get current page
+        if (activeList != null) {
+            page = BeepediaScreen.currScreenState.getMutationsPage();
+            if (page >= activeList.size()) page = 0;
+            if (activeList.isEmpty()) activePage = null;
+            else activePage = activeList.get(page);
+            BeepediaScreen.currScreenState.setMutationsPage(page);
+            leftArrow.visible = activeList.size() > 1;
+            rightArrow.visible = activeList.size() > 1;
+        }
+        prevTab.visible = mutations.size() > 1;
+        nextTab.visible = mutations.size() > 1;
+    }
+
+    @Override
+    public void closePage() {
+        super.closePage();
+        prevTab.visible = false;
+        nextTab.visible = false;
+        leftArrow.visible = false;
+        rightArrow.visible = false;
+    }
+
+    @Override
+    public void tick(int ticksActive) {
+        if (activePage != null) activePage.tick(ticksActive);
+    }
+
+    @Override
+    public void drawTooltips(MatrixStack matrix, int mouseX, int mouseY) {
+        if (activePage != null) activePage.drawTooltips(matrix, mouseX, mouseY);
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
+        if (activePage != null) return activePage.mouseClick(xPos, yPos + 22, (int) mouseX, (int) mouseY);
+        return false;
+    }
 }
