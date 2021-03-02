@@ -133,26 +133,25 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
 
     @Override
     public void tick() {
-        if (world != null && !world.isRemote()) {
-            if (!requiresRedstone || isPoweredByRedstone) {
-                for (int i = 0; i < honeycombSlots.length; i++) {
-                    recipes.set(i, getRecipe(i));
-                    if (canStartCentrifugeProcess(i)) {
-                        isProcessing[i] = true;
-                        setPoweredBlockState(true);
-                    }
-                    if (isProcessing[i] && !processCompleted[i]) {
-                        processRecipe(i);
-                    }
-                    if (processCompleted[i]) {
-                        completeProcess(i);
-                    }
-                }
-                if (dirty) {
-                    this.dirty = false;
-                    this.markDirty();
-                }
+        boolean redstoneCheck = requiresRedstone && !isPoweredByRedstone;
+        boolean worldCheck = world == null || world.isRemote();
+        if (worldCheck || redstoneCheck) return;
+        for (int i = 0; i < honeycombSlots.length; i++) {
+            recipes.set(i, getRecipe(i));
+            if (canStartCentrifugeProcess(i)) {
+                isProcessing[i] = true;
+                setPoweredBlockState(true);
             }
+            if (isProcessing[i] && !processCompleted[i]) {
+                processRecipe(i);
+            }
+            if (processCompleted[i]) {
+                completeProcess(i);
+            }
+        }
+        if (dirty) {
+            this.dirty = false;
+            this.markDirty();
         }
     }
 
@@ -254,7 +253,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
             JsonElement count = recipes.get(i).ingredient.serialize().getAsJsonObject().get(BeeConstants.INGREDIENT_COUNT);
             int inputAmount = count != null ? count.getAsInt() : 1;
 
-            return combInput.getCount() >= inputAmount;    
+            return combInput.getCount() >= inputAmount;
         }
         return false;
     }
@@ -269,7 +268,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
 
     //TODO Should MainOutput Fluids not be voided?
     protected boolean canProcessFluid(int i) {
-        return true;
+        return tanksHasSpace(recipes.get(i));
     }
 
     protected boolean canProcessEnergy() {
