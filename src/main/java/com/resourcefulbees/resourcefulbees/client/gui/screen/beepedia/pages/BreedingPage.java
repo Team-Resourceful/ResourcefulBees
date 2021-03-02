@@ -89,7 +89,7 @@ public class BreedingPage extends BeeDataPage {
             activeList = null;
         }
         activePage = BeepediaScreen.currScreenState.getBreedingPage();
-        if (activePage >= activeList.size()) activePage = 0;
+        if (activeList == null || activePage >= activeList.size()) activePage = 0;
         BeepediaScreen.currScreenState.setBreedingPage(activePage);
     }
 
@@ -153,17 +153,14 @@ public class BreedingPage extends BeeDataPage {
     }
 
     private boolean baseOnly() {
-        if (parentBreeding.size() == 1 && childrenBreeding.size() == 1) {
-            if (parentBreeding.get(0).isBase && childrenBreeding.get(0).isBase) return true;
-        }
-        return false;
+        return (parentBreeding.size() == 1 && childrenBreeding.size() == 1 && parentBreeding.get(0).isBase && childrenBreeding.get(0).isBase);
     }
 
     @Override
     public void renderForeground(MatrixStack matrix, int mouseX, int mouseY) {
         if (activeList == null || activeList.isEmpty()) return;
         if (!activeList.isEmpty()) {
-            activeList.get(activePage).draw(matrix, mouseX, mouseY);
+            activeList.get(activePage).draw(matrix);
         }
     }
 
@@ -184,7 +181,7 @@ public class BreedingPage extends BeeDataPage {
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
         if (activeList == null || activeList.isEmpty()) return false;
-        return activeList.get(activePage).mouseClicked(mouseX, mouseY, mouseButton);
+        return activeList.get(activePage).mouseClicked(mouseX, mouseY);
     }
 
     public class BreedingObject {
@@ -253,12 +250,12 @@ public class BreedingPage extends BeeDataPage {
             font.draw(matrix, text, (float) xPos + 103f - (float) padding, (float) yPos + 56, TextFormatting.GRAY.getColor());
         }
 
-        public void drawParent1Item(MatrixStack matrix, int mouseX, int mouseY) {
+        public void drawParent1Item(MatrixStack matrix) {
             if (parent1Items.isEmpty()) return;
             beepedia.drawSlot(matrix, parent1Items.get(parent1Counter), xPos + 5, yPos + 53);
         }
 
-        public void drawParent2Item(MatrixStack matrix, int mouseX, int mouseY) {
+        public void drawParent2Item(MatrixStack matrix) {
             if (parent1Items.isEmpty()) return;
             beepedia.drawSlot(matrix, parent2Items.get(parent2Counter), xPos + 59, yPos + 53);
         }
@@ -294,15 +291,15 @@ public class BreedingPage extends BeeDataPage {
             beepedia.renderTooltip(matrixStack, tooltip, mouseX, mouseY);
         }
 
-        public void draw(MatrixStack matrix, int mouseX, int mouseY) {
+        public void draw(MatrixStack matrix) {
             drawParent1(matrix);
             drawParent2(matrix);
             drawChild(matrix);
-            drawParent1Item(matrix, mouseX, mouseY);
-            drawParent2Item(matrix, mouseX, mouseY);
+            drawParent1Item(matrix);
+            drawParent2Item(matrix);
         }
 
-        public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
+        public boolean mouseClicked(double mouseX, double mouseY) {
             if (BeepediaScreen.mouseHovering(parent1Pos.x, parent1Pos.y, 20, 20, (int) mouseX, (int) mouseY)) {
                 return openBeePage(parent1Data);
             } else if (BeepediaScreen.mouseHovering(parent2Pos.x, parent2Pos.y, 20, 20, (int) mouseX, (int) mouseY)) {

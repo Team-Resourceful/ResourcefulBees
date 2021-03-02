@@ -183,9 +183,7 @@ public class HoneycombPage extends BeeDataPage {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
-        if (!recipes.isEmpty()) {
-            if (recipes.get(activePage).onMouseClick(mouseX, mouseY, mouseButton)) return true;
-        }
+        if (!recipes.isEmpty() && recipes.get(activePage).onMouseClick(mouseX, mouseY)) return true;
         return false;
     }
 
@@ -261,7 +259,7 @@ public class HoneycombPage extends BeeDataPage {
             font.draw(matrix, text, xPos - padding, yPos, TextFormatting.GRAY.getColor());
         }
 
-        public boolean onMouseClick(double mouseX, double mouseY, int button) {
+        public boolean onMouseClick(double mouseX, double mouseY) {
             String pageID = null;
             if (hasBottle) {
                 Item bottle = outputItems.get(2).getLeft().getItem();

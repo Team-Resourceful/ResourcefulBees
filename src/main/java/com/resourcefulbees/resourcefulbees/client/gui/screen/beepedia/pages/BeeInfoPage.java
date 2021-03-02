@@ -10,6 +10,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.Color;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -74,7 +75,7 @@ public class BeeInfoPage extends BeeDataPage {
             if (entityFlower == null) {
                 EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(beeData.getEntityFlower());
                 // makes sure the entity is valid
-                if (entityType.equals(EntityType.PIG) && (!beeData.getEntityFlower().equals("minecraft:pig") || !beeData.getEntityFlower().equals("pig"))) return;
+                if (entityType.equals(EntityType.PIG) && (!beeData.getEntityFlower().equals(new ResourceLocation("minecraft:pig")))) return;
                 entityFlower = entityType.create(beepedia.getMinecraft().world);
             }
             font.draw(matrix, flowerName, xPos, yPos + 80, Color.parse("gray").getRgb());

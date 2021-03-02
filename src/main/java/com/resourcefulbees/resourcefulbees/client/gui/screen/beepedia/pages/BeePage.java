@@ -186,6 +186,9 @@ public class BeePage extends BeepediaPage {
             case BREEDING:
                 page = breedingPage;
                 break;
+            case INFO:
+                page = beeInfoPage;
+                break;
             case SPAWNING:
                 page = spawningPage;
                 break;
@@ -199,10 +202,8 @@ public class BeePage extends BeepediaPage {
                 page = traitListPage;
                 break;
             default:
-                page = beeInfoPage;
-                break;
+                throw new IllegalStateException("Unexpected value: " + beeSubPage);
         }
-        if (page == null) page = beeInfoPage;
         if (subPage != null) {
             this.subPage.getRight().closePage();
             this.subPage.getLeft().active = true;
