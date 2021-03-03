@@ -5,6 +5,7 @@ import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.api.beedata.mutation.outputs.EntityOutput;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.BeeDataPage;
+import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
@@ -66,6 +67,23 @@ public class EntityMutationPage extends MutationsPage {
 
     @Override
     public boolean mouseClick(int xPos, int yPos, int mouseX, int mouseY) {
+        if (input instanceof CustomBeeEntity) {
+            CustomBeeEntity beeEntity = (CustomBeeEntity) input;
+            if (BeepediaScreen.mouseHovering(xPos + 22, yPos + 27, 30, 30, mouseX, mouseY)) {
+                BeepediaScreen.saveScreenState();
+                beepedia.setActive(BeepediaScreen.PageType.BEE, beeEntity.getBeeData().getName());
+                return true;
+            }
+        }
+        Entity output = outputs.get(outputCounter).getRight().getGuiEntity(beepedia.getMinecraft().world);
+        if (output instanceof CustomBeeEntity) {
+            CustomBeeEntity beeEntity = (CustomBeeEntity) output;
+            if (BeepediaScreen.mouseHovering(xPos + 112, yPos + 27, 30, 30, mouseX, mouseY)) {
+                BeepediaScreen.saveScreenState();
+                beepedia.setActive(BeepediaScreen.PageType.BEE, beeEntity.getBeeData().getName());
+                return true;
+            }
+        }
         return false;
     }
 

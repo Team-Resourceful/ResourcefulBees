@@ -87,10 +87,10 @@ public class HoneycombPage extends BeeDataPage {
         apiary4Output = new ItemStack(beeData.getCombBlockItemRegistryObject().get(), apiaryAmounts[3]);
 
         ClientWorld world = beepedia.getMinecraft().world;
-        recipes.add(new RecipeObject(true, true, beeData, world));
         recipes.add(new RecipeObject(false, true, beeData, world));
-        recipes.add(new RecipeObject(true, false, beeData, world));
         recipes.add(new RecipeObject(false, false, beeData, world));
+        recipes.add(new RecipeObject(true, true, beeData, world));
+        recipes.add(new RecipeObject(true, false, beeData, world));
         recipes.removeIf(b -> b.recipe == null);
 
         leftArrow = new ImageButton(xPos + (SUB_PAGE_WIDTH / 2) - 28, yPos + SUB_PAGE_HEIGHT - 16, 8, 11, 0, 0, 11, arrowImage, 16, 33, button -> prevPage());

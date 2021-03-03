@@ -82,6 +82,7 @@ public class MutationListPage extends BeeDataPage {
         if (activeList == null) return;
         page++;
         if (page >= activeList.size()) page = 0;
+        activePage = activeList.get(page);
         BeepediaScreen.currScreenState.setMutationsPage(page);
     }
 
@@ -89,6 +90,7 @@ public class MutationListPage extends BeeDataPage {
         if (activeList == null) return;
         page--;
         if (page < 0) page = activeList.size() - 1;
+        activePage = activeList.get(page);
         BeepediaScreen.currScreenState.setMutationsPage(page);
     }
 
