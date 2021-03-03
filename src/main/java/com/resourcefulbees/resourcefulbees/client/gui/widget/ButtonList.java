@@ -89,10 +89,10 @@ public class ButtonList {
         setActive(active, false);
     }
 
-    public void setActive(boolean active, boolean goingBack) {
+    public void setActive(boolean active, boolean forceRedraw) {
         this.active = active;
         if (button != null) button.active = !active;
-        if (!BeepediaScreen.listChanged() && !goingBack) return;
+        if (!BeepediaScreen.listChanged() && !forceRedraw) return;
         list.forEach((s, b) -> {
             if (b.listButton != null) b.listButton.visible = active;
         });

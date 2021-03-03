@@ -189,17 +189,28 @@ public class BeepediaScreen extends Screen {
             activatePage(PageType.BEE, home, beesList, goingBack);
             return;
         }
+        BeepediaPage page = null;
+        ButtonList list = null;
         switch (pageType) {
             case BEE:
-                activatePage(pageType, bees.get(pageID), beesList, goingBack);
+                page = bees.get(pageID);
+                list = beesList;
                 break;
             case HONEY:
-                activatePage(pageType, honey.get(pageID), honeyList, goingBack);
+                page = honey.get(pageID);
+                list = honeyList;
                 break;
             case TRAIT:
-                activatePage(pageType, traits.get(pageID), traitsList, goingBack);
+                page = traits.get(pageID);
+                list = traitsList;
                 break;
         }
+        // collect page if page does not match active list type.
+        // this can be inaccurate as some pages may share IDs
+        if (page == null) page = bees.get(pageID);
+        if (page == null) page = honey.get(pageID);
+        if (page == null) page = traits.get(pageID);
+        activatePage(pageType, page, list, goingBack);
     }
 
     /***
@@ -211,6 +222,7 @@ public class BeepediaScreen extends Screen {
      * @param goingBack whether it is loading from a previous state
      */
     private void activatePage(PageType type, BeepediaPage page, ButtonList list, boolean goingBack) {
+        if (list == null) throw new IllegalStateException("IF THIS SOMEHOW HAPPENS YOU BROKE THE GAME");
         // close active page and reset screen state
         if (this.activePage != null) {
             if (!this.activePage.getClass().equals(activePage.getClass()) && !(this.activePage instanceof HomePage) && !goingBack) {
@@ -221,7 +233,7 @@ public class BeepediaScreen extends Screen {
         if (page == null) page = home;
 
         // set current state
-        currScreenState.setPageType(type);
+        if (currScreenState.getPageType() == null) currScreenState.setPageType(type);
         currScreenState.setPageID(page.id);
 
         // update list
@@ -246,9 +258,9 @@ public class BeepediaScreen extends Screen {
     private void setActiveList(ButtonList buttonList, PageType type) {
         currScreenState.setPageType(type);
         activeListType = type;
-        if (this.activeList != null) this.activeList.setActive(false);
+        if (this.activeList != null) this.activeList.setActive(false, true);
         this.activeList = buttonList;
-        this.activeList.setActive(true);
+        this.activeList.setActive(true, true);
     }
 
     public void initSidebar() {
@@ -272,7 +284,6 @@ public class BeepediaScreen extends Screen {
         beesList = new ButtonList(x + 8, y + 31, 123, 100, 21, beesButton, bees);
         traitsList = new ButtonList(x + 8, y + 31, 123, 100, 21, traitsButton, traits);
         honeyList = new ButtonList(x + 8, y + 31, 123, 100, 21, honeyButton, honey);
-        setActiveList(beesList, PageType.BEE);
     }
 
     @Override

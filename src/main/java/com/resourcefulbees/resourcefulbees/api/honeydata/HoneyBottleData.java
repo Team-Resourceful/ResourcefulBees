@@ -7,6 +7,7 @@ import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.item.Food;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.RegistryObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -148,7 +149,7 @@ public class HoneyBottleData {
     }
 
     public List<HoneyEffect> getEffects() {
-        return effects;
+        return effects == null ? new ArrayList<>() : effects;
     }
 
     public void setHoneyBottleRegistryObject(RegistryObject<Item> honeyBottleRegistryObject) {
@@ -253,6 +254,22 @@ public class HoneyBottleData {
 
     public void setShouldResourcefulBeesDoForgeRegistration(boolean shouldResourcefulBeesDoForgeRegistration) {
         this.shouldResourcefulBeesDoForgeRegistration = shouldResourcefulBeesDoForgeRegistration;
+    }
+
+    public TranslationTextComponent getFluidTranslation() {
+        return new TranslationTextComponent(String.format("fluid.resourcefulbees.%s_honey", name));
+    }
+
+    public TranslationTextComponent getBottleTranslation() {
+        return new TranslationTextComponent(String.format("item.resourcefulbees.%s_honey_bottle", name));
+    }
+
+    public TranslationTextComponent getBlockTranslation() {
+        return new TranslationTextComponent(String.format("block.resourcefulbees.%s_honey_block", name));
+    }
+
+    public TranslationTextComponent getBucketTranslation() {
+        return new TranslationTextComponent(String.format("item.resourcefulbees.%s_honey_fluid_bucket", name));
     }
 
     public static class Builder {
