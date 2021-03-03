@@ -30,8 +30,8 @@ public class SpawningPage extends BeeDataPage {
     public SpawningPage(BeepediaScreen beepedia, CustomBeeData beeData, int xPos, int yPos, BeePage parent) {
         super(beepedia, beeData, xPos, yPos, parent);
         this.beeData = beeData;
-        prevTab = new ImageButton(xPos + (subPageWidth / 2) - 48, yPos + 6, 8, 11, 0, 0, 11, arrowImage, 16, 33, button -> toggleTab());
-        nextTab = new ImageButton(xPos + (subPageWidth / 2) + 40, yPos + 6, 8, 11, 8, 0, 11, arrowImage, 16, 33, button -> toggleTab());
+        prevTab = new ImageButton(xPos + (SUB_PAGE_WIDTH / 2) - 48, yPos + 6, 8, 11, 0, 0, 11, arrowImage, 16, 33, button -> toggleTab());
+        nextTab = new ImageButton(xPos + (SUB_PAGE_WIDTH / 2) + 40, yPos + 6, 8, 11, 8, 0, 11, arrowImage, 16, 33, button -> toggleTab());
         beepedia.addButton(nextTab);
         beepedia.addButton(prevTab);
         nextTab.visible = false;
@@ -49,13 +49,13 @@ public class SpawningPage extends BeeDataPage {
         FontRenderer font = Minecraft.getInstance().fontRenderer;
         TranslationTextComponent title = new TranslationTextComponent(BeepediaScreen.currScreenState.isBiomesOpen() ? "gui.resourcefulbees.beepedia.bee_subtab.spawning.biomes" : "gui.resourcefulbees.beepedia.bee_subtab.spawning");
         int padding = font.getWidth(title) / 2;
-        font.draw(matrix, title, (float) xPos + ((float) subPageWidth / 2) - padding, (float) yPos + 8, TextFormatting.WHITE.getColor());
+        font.draw(matrix, title, (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, TextFormatting.WHITE.getColor());
 
         if (BeepediaScreen.currScreenState.isBiomesOpen()) {
             GL11.glEnable(GL11.GL_SCISSOR_TEST);
             double scale = beepedia.getMinecraft().getWindow().getGuiScaleFactor();
-            int scissorY = (int) (beepedia.getMinecraft().getWindow().getFramebufferHeight() - (yPos + subPageHeight) * scale);
-            GL11.glScissor((int) (xPos * scale), scissorY, (int) (subPageWidth * scale), (int) ((subPageHeight - 22) * scale));
+            int scissorY = (int) (beepedia.getMinecraft().getWindow().getFramebufferHeight() - (yPos + SUB_PAGE_HEIGHT) * scale);
+            GL11.glScissor((int) (xPos * scale), scissorY, (int) (SUB_PAGE_WIDTH * scale), (int) ((SUB_PAGE_HEIGHT - 22) * scale));
             for (int i = 0; i < biomeList.size(); i++) {
                 TranslationTextComponent text = new TranslationTextComponent(String.format("biome.%s.%s", biomeList.get(i).getNamespace(), biomeList.get(i).getPath()));
                 font.draw(matrix, text, xPos, (float)yPos + 22f + (float)subScrollPos + (float)i * 12f, TextFormatting.GRAY.getColor());
@@ -80,8 +80,8 @@ public class SpawningPage extends BeeDataPage {
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double scrollAmount) {
         if (!BeepediaScreen.currScreenState.isBiomesOpen()) return false;
-        if (mouseX >= xPos && mouseY >= yPos + 22 && mouseX <= xPos + subPageWidth && mouseY <= yPos + subPageHeight) {
-            int boxHeight = subPageHeight - 22;
+        if (mouseX >= xPos && mouseY >= yPos + 22 && mouseX <= xPos + SUB_PAGE_WIDTH && mouseY <= yPos + SUB_PAGE_HEIGHT) {
+            int boxHeight = SUB_PAGE_HEIGHT - 22;
             if (boxHeight > scrollHeight) {
                 return true;
             }
@@ -102,7 +102,7 @@ public class SpawningPage extends BeeDataPage {
         nextTab.visible = true;
         prevTab.visible = true;
         subScrollPos = BeepediaScreen.currScreenState.getSpawningScroll();
-        int boxHeight = subPageHeight - 22;
+        int boxHeight = SUB_PAGE_HEIGHT - 22;
         if (boxHeight > scrollHeight) {
             BeepediaScreen.currScreenState.setSpawningScroll(0);
             subScrollPos = 0;

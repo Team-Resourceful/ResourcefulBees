@@ -2,13 +2,14 @@ package com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.mut
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
-import com.resourcefulbees.resourcefulbees.api.beedata.mutation.outputs.BlockOutput;
 import com.resourcefulbees.resourcefulbees.api.beedata.mutation.outputs.EntityOutput;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
+import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.BeeDataPage;
 import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
 import com.resourcefulbees.resourcefulbees.utils.RenderUtils;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.nbt.CompoundNBT;
@@ -56,6 +57,11 @@ public class EntityMutationPage extends MutationsPage {
         }
         RenderUtils.renderEntity(matrix, entity, beepedia.getMinecraft().world, (float) xPos + 117, (float) yPos + 32, -45, 1.25f);
         drawWeight(matrix, outputs.get(outputCounter).getLeft(), xPos + 127, yPos + 59);
+        if (outputChance < 1){
+            Minecraft.getInstance().getTextureManager().bindTexture(infoIcon);
+            beepedia.drawTexture(matrix,  xPos + BeeDataPage.SUB_PAGE_WIDTH / 2 - 20, yPos + 51, 16, 0, 9, 9);
+            drawChance(matrix, outputChance,xPos + BeeDataPage.SUB_PAGE_WIDTH / 2 , yPos + 52);
+        }
     }
 
     @Override
@@ -88,6 +94,9 @@ public class EntityMutationPage extends MutationsPage {
                 }
             }
             beepedia.renderTooltip(matrix, tooltip, mouseX, mouseY);
+        }
+        if (outputChance < 1 && BeepediaScreen.mouseHovering(xPos + BeeDataPage.SUB_PAGE_WIDTH / 2 - 20, yPos + 51, 8, 8, mouseX, mouseY)) {
+            beepedia.renderTooltip(matrix, new TranslationTextComponent("gui.resourcefulbees.jei.category.mutation_chance.info"), mouseX, mouseY);
         }
     }
 }

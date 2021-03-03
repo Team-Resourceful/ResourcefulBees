@@ -277,6 +277,7 @@ public class BeepediaScreen extends Screen {
 
     @Override
     public void render(@NotNull MatrixStack matrixStack, int mouseX, int mouseY, float partialTick) {
+        renderBackground(matrixStack, 0);
         itemTooltips.clear();
         fluidTooltips.clear();
         interactions.clear();

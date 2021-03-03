@@ -68,8 +68,8 @@ public class HoneycombPage extends BeeDataPage {
 
     public HoneycombPage(BeepediaScreen beepedia, CustomBeeData beeData, int xPos, int yPos, BeePage parent) {
         super(beepedia, beeData, xPos, yPos, parent);
-        prevTab = new ImageButton(xPos + (subPageWidth / 2) - 48, yPos + 6, 8, 11, 0, 0, 11, arrowImage, 16, 33, button -> toggleTab());
-        nextTab = new ImageButton(xPos + (subPageWidth / 2) + 40, yPos + 6, 8, 11, 8, 0, 11, arrowImage, 16, 33, button -> toggleTab());
+        prevTab = new ImageButton(xPos + (SUB_PAGE_WIDTH / 2) - 48, yPos + 6, 8, 11, 0, 0, 11, arrowImage, 16, 33, button -> toggleTab());
+        nextTab = new ImageButton(xPos + (SUB_PAGE_WIDTH / 2) + 40, yPos + 6, 8, 11, 8, 0, 11, arrowImage, 16, 33, button -> toggleTab());
         beepedia.addButton(nextTab);
         beepedia.addButton(prevTab);
         nextTab.visible = false;
@@ -93,8 +93,8 @@ public class HoneycombPage extends BeeDataPage {
         recipes.add(new RecipeObject(false, false, beeData, world));
         recipes.removeIf(b -> b.recipe == null);
 
-        leftArrow = new ImageButton(xPos + (subPageWidth / 2) - 28, yPos + subPageHeight - 16, 8, 11, 0, 0, 11, arrowImage, 16, 33, button -> prevPage());
-        rightArrow = new ImageButton(xPos + (subPageWidth / 2) + 20, yPos + subPageHeight - 16, 8, 11, 8, 0, 11, arrowImage, 16, 33, button -> nextPage());
+        leftArrow = new ImageButton(xPos + (SUB_PAGE_WIDTH / 2) - 28, yPos + SUB_PAGE_HEIGHT - 16, 8, 11, 0, 0, 11, arrowImage, 16, 33, button -> prevPage());
+        rightArrow = new ImageButton(xPos + (SUB_PAGE_WIDTH / 2) + 20, yPos + SUB_PAGE_HEIGHT - 16, 8, 11, 8, 0, 11, arrowImage, 16, 33, button -> nextPage());
         beepedia.addButton(leftArrow);
         beepedia.addButton(rightArrow);
         leftArrow.visible = false;
@@ -149,7 +149,7 @@ public class HoneycombPage extends BeeDataPage {
         TextureManager manager = Minecraft.getInstance().getTextureManager();
         TranslationTextComponent title = new TranslationTextComponent(BeepediaScreen.currScreenState.isCentrifugeOpen() ? "gui.resourcefulbees.beepedia.bee_subtab.centrifuge" : "gui.resourcefulbees.beepedia.bee_subtab.honeycombs");
         int padding = font.getWidth(title) / 2;
-        font.draw(matrix, title, (float) xPos + ((float) subPageWidth / 2) - padding, (float) yPos + 8, TextFormatting.WHITE.getColor());
+        font.draw(matrix, title, (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, TextFormatting.WHITE.getColor());
         if (BeepediaScreen.currScreenState.isCentrifugeOpen() && !recipes.isEmpty()) {
             manager.bindTexture(centrifugeImage);
             AbstractGui.drawTexture(matrix, xPos, yPos + 22, 0, 0, 169, 84, 169, 84);
@@ -157,7 +157,7 @@ public class HoneycombPage extends BeeDataPage {
             if (recipes.size() > 1) {
                 StringTextComponent page = new StringTextComponent(String.format("%d / %d", activePage + 1, recipes.size()));
                 padding = font.getWidth(page) / 2;
-                font.draw(matrix, page, (float) xPos + ((float) subPageWidth / 2) - padding, (float) yPos + subPageHeight - 14, TextFormatting.WHITE.getColor());
+                font.draw(matrix, page, (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + SUB_PAGE_HEIGHT - 14, TextFormatting.WHITE.getColor());
             }
         } else {
             manager.bindTexture(honeycombsImage);

@@ -1,11 +1,13 @@
 package com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.mutations;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 
@@ -17,6 +19,7 @@ public abstract class MutationsPage {
     CustomBeeData beeData;
     protected int inputCounter;
     protected int outputCounter;
+    protected final ResourceLocation infoIcon = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/icons.png");
 
     public MutationsPage(MutationTypes type, CustomBeeData beeData, BeepediaScreen beepedia) {
         this.type = type;

@@ -56,10 +56,10 @@ public class BreedingPage extends BeeDataPage {
         parents = BeeRegistry.getRegistry().getParents(beeData);
         children.forEach((p, l) -> l.getMap().forEach((w, b) -> childrenBreeding.add(new BreedingObject(p, b))));
         parents.forEach((p, b) -> parentBreeding.add(new BreedingObject(p, b)));
-        leftArrow = new ImageButton(xPos + (subPageWidth / 2) - 28, yPos + subPageHeight - 16, 8, 11, 0, 0, 11, arrowImage, 16, 33, button -> prevPage());
-        rightArrow = new ImageButton(xPos + (subPageWidth / 2) + 20, yPos + subPageHeight - 16, 8, 11, 8, 0, 11, arrowImage, 16, 33, button -> nextPage());
-        prevTab = new ImageButton(xPos + (subPageWidth / 2) - 48, yPos + 6, 8, 11, 0, 0, 11, arrowImage, 16, 33, button -> toggleActiveList());
-        nextTab = new ImageButton(xPos + (subPageWidth / 2) + 40, yPos + 6, 8, 11, 8, 0, 11, arrowImage, 16, 33, button -> toggleActiveList());
+        leftArrow = new ImageButton(xPos + (SUB_PAGE_WIDTH / 2) - 28, yPos + SUB_PAGE_HEIGHT - 16, 8, 11, 0, 0, 11, arrowImage, 16, 33, button -> prevPage());
+        rightArrow = new ImageButton(xPos + (SUB_PAGE_WIDTH / 2) + 20, yPos + SUB_PAGE_HEIGHT - 16, 8, 11, 8, 0, 11, arrowImage, 16, 33, button -> nextPage());
+        prevTab = new ImageButton(xPos + (SUB_PAGE_WIDTH / 2) - 48, yPos + 6, 8, 11, 0, 0, 11, arrowImage, 16, 33, button -> toggleActiveList());
+        nextTab = new ImageButton(xPos + (SUB_PAGE_WIDTH / 2) + 40, yPos + 6, 8, 11, 8, 0, 11, arrowImage, 16, 33, button -> toggleActiveList());
         leftArrow.visible = false;
         rightArrow.visible = false;
         prevTab.visible = false;
@@ -133,11 +133,11 @@ public class BreedingPage extends BeeDataPage {
         FontRenderer font = Minecraft.getInstance().fontRenderer;
         TranslationTextComponent title = BeepediaScreen.currScreenState.isParentBreeding() && !baseOnly() ? parentsTitle : childrenTitle;
         int padding = font.getWidth(title) / 2;
-        font.draw(matrix, title, (float) xPos + ((float) subPageWidth / 2) - padding, (float) yPos + 8, TextFormatting.WHITE.getColor());
+        font.draw(matrix, title, (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, TextFormatting.WHITE.getColor());
         if (activeList.size() > 1) {
             StringTextComponent page = new StringTextComponent(String.format("%d / %d", activePage + 1, activeList.size()));
             padding = font.getWidth(page) / 2;
-            font.draw(matrix, page, (float) xPos + ((float) subPageWidth / 2) - padding, (float) yPos + subPageHeight - 14, TextFormatting.WHITE.getColor());
+            font.draw(matrix, page, (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + SUB_PAGE_HEIGHT - 14, TextFormatting.WHITE.getColor());
         }
     }
 
@@ -216,7 +216,7 @@ public class BreedingPage extends BeeDataPage {
             parent1Pos = new Vector2f((float) xPos + 6, (float) yPos + 22);
             parent2Pos = new Vector2f((float) xPos + 60, (float) yPos + 22);
             childPos = new Vector2f((float) xPos + 130, (float) yPos + 32);
-            chancePos = new Vector2f((float) xPos + subPageWidth - 17, (float) yPos + 20);
+            chancePos = new Vector2f((float) xPos + SUB_PAGE_WIDTH - 17, (float) yPos + 20);
         }
 
         public BreedingObject(Pair<String, String> parents, CustomBeeData child) {

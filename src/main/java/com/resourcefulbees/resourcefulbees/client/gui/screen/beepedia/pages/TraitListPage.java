@@ -42,7 +42,7 @@ public class TraitListPage extends BeeDataPage {
             button.visible = false;
             buttons.put(e.getKey(), button);
         }
-        list = new SubButtonList(xPos, yPos + 22, subPageWidth, subPageHeight - 22, 21, null, buttons);
+        list = new SubButtonList(xPos, yPos + 22, SUB_PAGE_WIDTH, SUB_PAGE_HEIGHT - 22, 21, null, buttons);
         list.setActive(false);
     }
 
@@ -56,7 +56,7 @@ public class TraitListPage extends BeeDataPage {
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double scrollAmount) {
-        if (mouseX >= xPos && mouseY >= yPos + 22 && mouseX <= xPos + subPageWidth && mouseY <= yPos + subPageHeight) {
+        if (mouseX >= xPos && mouseY >= yPos + 22 && mouseX <= xPos + SUB_PAGE_WIDTH && mouseY <= yPos + SUB_PAGE_HEIGHT) {
             list.updatePos((int) (scrollAmount * 8));
             BeepediaScreen.currScreenState.setTraitsScroll(list.getScrollPos());
             return true;

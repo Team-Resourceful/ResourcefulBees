@@ -4,10 +4,12 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.api.beedata.mutation.outputs.BlockOutput;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
+import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.BeeDataPage;
 import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.tags.ITag;
 import net.minecraft.util.text.*;
@@ -62,6 +64,11 @@ public class BlockMutationPage extends MutationsPage {
         beepedia.drawSlot(matrix, inputs.get(inputCounter), xPos + 32, yPos + 32);
         beepedia.drawSlotNoToolTip(matrix, outputs.get(outputCounter).getRight().getBlock(), xPos + 112, yPos + 32);
         drawWeight(matrix, outputs.get(outputCounter).getLeft(), xPos + 122, yPos + 54);
+        if (outputChance < 1){
+            Minecraft.getInstance().getTextureManager().bindTexture(infoIcon);
+            beepedia.drawTexture(matrix,  xPos + BeeDataPage.SUB_PAGE_WIDTH / 2 - 20, yPos + 51, 16, 0, 9, 9);
+            drawChance(matrix, outputChance,xPos + BeeDataPage.SUB_PAGE_WIDTH / 2 , yPos + 52);
+        }
     }
 
     @Override
@@ -87,6 +94,9 @@ public class BlockMutationPage extends MutationsPage {
                 }
             }
             beepedia.renderTooltip(matrix, tooltip, mouseX, mouseY);
+        }
+        if (outputChance < 1 && BeepediaScreen.mouseHovering(xPos + BeeDataPage.SUB_PAGE_WIDTH / 2 - 20, yPos + 51, 8, 8, mouseX, mouseY)) {
+            beepedia.renderTooltip(matrix, new TranslationTextComponent("gui.resourcefulbees.jei.category.mutation_chance.info"), mouseX, mouseY);
         }
     }
 }
