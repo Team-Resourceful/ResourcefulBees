@@ -78,7 +78,7 @@ public class ItemMutationPage extends MutationsPage {
 
     @Override
     public void drawTooltips(MatrixStack matrix, int xPos, int yPos, int mouseX, int mouseY) {
-        if (outputChance < 1 && BeepediaScreen.mouseHovering(xPos + BeeDataPage.SUB_PAGE_WIDTH / 2 - 20, yPos + 51, 8, 8, mouseX, mouseY)) {
+        if (outputChance < 1 && BeepediaScreen.mouseHovering((float) xPos + ((float) BeeDataPage.SUB_PAGE_WIDTH / 2) - 20, (float) yPos + 51, 8, 8, mouseX, mouseY)) {
             beepedia.renderTooltip(matrix, new TranslationTextComponent("gui.resourcefulbees.jei.category.mutation_chance.info"), mouseX, mouseY);
         }
     }

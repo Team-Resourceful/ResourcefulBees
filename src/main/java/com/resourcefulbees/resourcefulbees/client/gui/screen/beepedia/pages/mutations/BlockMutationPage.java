@@ -78,7 +78,7 @@ public class BlockMutationPage extends MutationsPage {
 
     @Override
     public void drawTooltips(MatrixStack matrix, int xPos, int yPos, int mouseX, int mouseY) {
-        if (BeepediaScreen.mouseHovering(xPos + 112, yPos + 32, 20, 20, mouseX, mouseY)) {
+        if (BeepediaScreen.mouseHovering((float) xPos + 112, (float) yPos + 32, 20, 20, mouseX, mouseY)) {
             BlockOutput output = outputs.get(outputCounter).getRight();
             List<ITextComponent> tooltip = new ArrayList<>();
             IFormattableTextComponent name = output.getBlock().getName();
@@ -95,7 +95,7 @@ public class BlockMutationPage extends MutationsPage {
             }
             beepedia.renderTooltip(matrix, tooltip, mouseX, mouseY);
         }
-        if (outputChance < 1 && BeepediaScreen.mouseHovering(xPos + BeeDataPage.SUB_PAGE_WIDTH / 2 - 20, yPos + 51, 8, 8, mouseX, mouseY)) {
+        if (outputChance < 1 && BeepediaScreen.mouseHovering((float) xPos + ((float)BeeDataPage.SUB_PAGE_WIDTH / 2) - 20, (float) yPos + 51, 8, 8, mouseX, mouseY)) {
             beepedia.renderTooltip(matrix, new TranslationTextComponent("gui.resourcefulbees.jei.category.mutation_chance.info"), mouseX, mouseY);
         }
     }

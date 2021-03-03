@@ -58,10 +58,10 @@ public class EntityMutationPage extends MutationsPage {
         }
         RenderUtils.renderEntity(matrix, entity, beepedia.getMinecraft().world, (float) xPos + 117, (float) yPos + 32, -45, 1.25f);
         drawWeight(matrix, outputs.get(outputCounter).getLeft(), xPos + 127, yPos + 59);
-        if (outputChance < 1){
+        if (outputChance < 1) {
             Minecraft.getInstance().getTextureManager().bindTexture(infoIcon);
-            beepedia.drawTexture(matrix,  xPos + BeeDataPage.SUB_PAGE_WIDTH / 2 - 20, yPos + 51, 16, 0, 9, 9);
-            drawChance(matrix, outputChance,xPos + BeeDataPage.SUB_PAGE_WIDTH / 2 , yPos + 52);
+            beepedia.drawTexture(matrix, xPos + BeeDataPage.SUB_PAGE_WIDTH / 2 - 20, yPos + 51, 16, 0, 9, 9);
+            drawChance(matrix, outputChance, xPos + BeeDataPage.SUB_PAGE_WIDTH / 2, yPos + 52);
         }
     }
 
@@ -69,7 +69,7 @@ public class EntityMutationPage extends MutationsPage {
     public boolean mouseClick(int xPos, int yPos, int mouseX, int mouseY) {
         if (input instanceof CustomBeeEntity) {
             CustomBeeEntity beeEntity = (CustomBeeEntity) input;
-            if (BeepediaScreen.mouseHovering(xPos + 22, yPos + 27, 30, 30, mouseX, mouseY)) {
+            if (BeepediaScreen.mouseHovering((float) xPos + 22, (float) yPos + 27, 30, 30, mouseX, mouseY)) {
                 BeepediaScreen.saveScreenState();
                 beepedia.setActive(BeepediaScreen.PageType.BEE, beeEntity.getBeeData().getName());
                 return true;
@@ -78,7 +78,7 @@ public class EntityMutationPage extends MutationsPage {
         Entity output = outputs.get(outputCounter).getRight().getGuiEntity(beepedia.getMinecraft().world);
         if (output instanceof CustomBeeEntity) {
             CustomBeeEntity beeEntity = (CustomBeeEntity) output;
-            if (BeepediaScreen.mouseHovering(xPos + 112, yPos + 27, 30, 30, mouseX, mouseY)) {
+            if (BeepediaScreen.mouseHovering((float) xPos + 112, (float) yPos + 27, 30, 30, mouseX, mouseY)) {
                 BeepediaScreen.saveScreenState();
                 beepedia.setActive(BeepediaScreen.PageType.BEE, beeEntity.getBeeData().getName());
                 return true;
@@ -89,14 +89,14 @@ public class EntityMutationPage extends MutationsPage {
 
     @Override
     public void drawTooltips(MatrixStack matrix, int xPos, int yPos, int mouseX, int mouseY) {
-        if (BeepediaScreen.mouseHovering(xPos + 22, yPos + 27, 30, 30, mouseX, mouseY)) {
+        if (BeepediaScreen.mouseHovering((float) xPos + 22, (float) yPos + 27, 30, 30, mouseX, mouseY)) {
             List<ITextComponent> tooltip = new ArrayList<>();
             IFormattableTextComponent name = input.getName().copy();
             IFormattableTextComponent id = new StringTextComponent(input.getEntityString()).formatted(TextFormatting.DARK_GRAY);
             tooltip.add(name);
             tooltip.add(id);
             beepedia.renderTooltip(matrix, tooltip, mouseX, mouseY);
-        } else if (BeepediaScreen.mouseHovering(xPos + 112, yPos + 27, 30, 30, mouseX, mouseY)) {
+        } else if (BeepediaScreen.mouseHovering((float) xPos + 112, (float) yPos + 27, 30, 30, mouseX, mouseY)) {
             EntityOutput output = outputs.get(outputCounter).getRight();
             List<ITextComponent> tooltip = new ArrayList<>();
             IFormattableTextComponent name = output.getEntityType().getName().copy();
@@ -113,7 +113,7 @@ public class EntityMutationPage extends MutationsPage {
             }
             beepedia.renderTooltip(matrix, tooltip, mouseX, mouseY);
         }
-        if (outputChance < 1 && BeepediaScreen.mouseHovering(xPos + BeeDataPage.SUB_PAGE_WIDTH / 2 - 20, yPos + 51, 8, 8, mouseX, mouseY)) {
+        if (outputChance < 1 && BeepediaScreen.mouseHovering((float) xPos + ((float) BeeDataPage.SUB_PAGE_WIDTH / 2) - 20, (float) yPos + 51, 8, 8, mouseX, mouseY)) {
             beepedia.renderTooltip(matrix, new TranslationTextComponent("gui.resourcefulbees.jei.category.mutation_chance.info"), mouseX, mouseY);
         }
     }
