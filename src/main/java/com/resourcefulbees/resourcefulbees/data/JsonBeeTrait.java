@@ -12,7 +12,9 @@ public class JsonBeeTrait {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
 
+    @SuppressWarnings("unused")
     public static class JsonTrait {
+        public String beepediaItemID;
         public List<PotionDamageEffect> potionDamageEffects;
         public String[] damageImmunities;
         public String[] potionImmunities;
@@ -21,13 +23,35 @@ public class JsonBeeTrait {
         public String particleName;
     }
 
+    @SuppressWarnings("unused")
     public static class PotionDamageEffect {
-        public String effectID;
-        public int strength;
+        private String effectID;
+        private int strength;
+        @Deprecated
+        private String effectRegistryName;
+        @Deprecated
+        private int amplifier;
+
+        public String getEffectID() {
+            return effectRegistryName != null && !effectRegistryName.isEmpty() ? effectRegistryName : effectID;
+        }
+
+        public int getStrength() {
+            return amplifier > 0 ? amplifier : strength;
+        }
     }
 
+    @SuppressWarnings("unused")
     public static class DamageType {
-        public String damageType;
-        public int duration;
+        private String damageTypeName;
+        private int amplifier;
+
+        public String getDamageType() {
+            return damageTypeName;
+        }
+
+        public int getAmplifier() {
+            return amplifier;
+        }
     }
 }

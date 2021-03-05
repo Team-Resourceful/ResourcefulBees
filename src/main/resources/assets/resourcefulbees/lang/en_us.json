@@ -85,7 +85,6 @@
 	"gui.resourcefulbees.beepedia.tab.honey.effects_list" : "Effects",
 	"gui.resourcefulbees.beepedia.tab.honey.bees_list" : "Bees",
 
-
 	"gui.resourcefulbees.beepedia.bee_subtab.info" : "Info",
 	"gui.resourcefulbees.beepedia.bee_subtab.info.size" : "Size: ",
 	"gui.resourcefulbees.beepedia.bee_subtab.info.flower" : "Flower: ",
@@ -303,6 +302,25 @@
 	"entity.resourcefulbees.icy_bee": "Icy Bee",
 	"entity.resourcefulbees.kitten_bee": "Kitten Bee",
 	"entity.resourcefulbees.dragon_bee": "Dragon Bee",
+
+	"trait.resourcefulbees.wither": "Wither",
+	"trait.resourcefulbees.blaze": "Blaze",
+	"trait.resourcefulbees.can_swim": "Can Swim",
+	"trait.resourcefulbees.creeper": "Creeper",
+	"trait.resourcefulbees.zombie": "Zombie",
+	"trait.resourcefulbees.pigman": "Pigman",
+	"trait.resourcefulbees.ender": "Ender",
+	"trait.resourcefulbees.nether": "Nether",
+	"trait.resourcefulbees.oreo": "Oreo",
+	"trait.resourcefulbees.kitten": "Kitten",
+	"trait.resourcefulbees.slimy": "Slimy",
+	"trait.resourcefulbees.desert": "Desert",
+	"trait.resourcefulbees.angry": "Angry",
+
+	"trait.resourcefulbees.special.teleport" : "todo",
+	"trait.resourcefulbees.special.flammable" : "todo",
+	"trait.resourcefulbees.special.angry" : "todo",
+	"trait.resourcefulbees.special.slimy" : "todo",
 
 	"entity.minecraft.villager.resourcefulbees.beekeeper": "Beekeeper",
 	"block.resourcefulbees.mech_centrifuge.tooltip.info": "Hold SHIFT & right-click block to process honeycombs.",

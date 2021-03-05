@@ -7,6 +7,7 @@ import com.resourcefulbees.resourcefulbees.init.BeeSetup;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.ModEntities;
+import com.resourcefulbees.resourcefulbees.registry.TraitRegistry;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
 
@@ -131,6 +132,11 @@ public class DataGen {
                 builder.append(" Honey\",\n");
             }
         });
+        TraitRegistry.getRegistry().getTraits().forEach((name, trait) -> {
+            String displayName = StringUtils.replace(name, "_", " ");
+            displayName = WordUtils.capitalizeFully(displayName);
+            builder.append(String.format("\"%s\" : \"%s\",\n", trait.getTranslationKey(), displayName));
+        });
         builder.deleteCharAt(builder.lastIndexOf(","));
         builder.append("}");
 
@@ -217,7 +223,7 @@ public class DataGen {
     private static void generateHoneyBottleTags() {
         StringBuilder builder = new StringBuilder();
         builder.append("{\n");
-    builder.append(REPLACE_FALSE);
+        builder.append(REPLACE_FALSE);
         builder.append(VALUES);
         Map<String, HoneyBottleData> honey = BEE_REGISTRY.getHoneyBottles();
         if (honey.size() != 0) {
@@ -304,7 +310,7 @@ public class DataGen {
         ModEntities.getModBees().forEach(((s, entityTypeRegistryObject) -> {
             builder.append("\"");
             builder.append(entityTypeRegistryObject.getId());
-        builder.append(FINAL_COMMA);
+            builder.append(FINAL_COMMA);
         }));
         builder.deleteCharAt(builder.lastIndexOf(","));
         builder.append("]\n}");

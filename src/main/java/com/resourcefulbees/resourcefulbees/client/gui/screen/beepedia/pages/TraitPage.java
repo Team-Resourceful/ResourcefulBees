@@ -9,13 +9,17 @@ import com.resourcefulbees.resourcefulbees.data.BeeTrait;
 import com.resourcefulbees.resourcefulbees.item.BeeJar;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.AbstractGui;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.client.gui.widget.button.ImageButton;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Map;
@@ -25,18 +29,31 @@ import java.util.stream.Collectors;
 
 public class TraitPage extends BeepediaPage {
 
-    private final BeeTrait trait;
-    private Map<String, BeePage> beePages;
-    private TreeMap<String, ListButton> buttons;
+    public final BeeTrait trait;
+    private final ImageButton prevTab;
+    private final ImageButton nextTab;
     String translation;
     private SubButtonList list;
+    TranslationTextComponent text;
 
     public TraitPage(BeepediaScreen beepedia, BeeTrait trait, String id, int left, int top) {
         super(beepedia, left, top, id);
         this.trait = trait;
         initTranslation();
-        ItemStack stack = new ItemStack(Items.BLAZE_POWDER);
-        newListButton(stack, new StringTextComponent(id));
+        text = new TranslationTextComponent(trait.getTranslationKey());
+        ItemStack stack = new ItemStack(trait.getBeepediaItem());
+        newListButton(stack, text);
+        prevTab = new ImageButton(xPos + (SUB_PAGE_WIDTH / 2) - 48, yPos + 40, 8, 11, 0, 0, 11, arrowImage, 16, 33, button -> toggleTab());
+        nextTab = new ImageButton(xPos + (SUB_PAGE_WIDTH / 2) + 40, yPos + 40, 8, 11, 8, 0, 11, arrowImage, 16, 33, button -> toggleTab());
+        beepedia.addButton(nextTab);
+        beepedia.addButton(prevTab);
+        nextTab.visible = false;
+        prevTab.visible = false;
+    }
+
+    private void toggleTab() {
+        BeepediaScreen.currScreenState.setTraitsEffectsActive(!BeepediaScreen.currScreenState.isTraitsEffectsActive());
+        list.setActive(!BeepediaScreen.currScreenState.isTraitsEffectsActive());
     }
 
     private void initTranslation() {
@@ -51,7 +68,33 @@ public class TraitPage extends BeepediaPage {
     @Override
     public void renderBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
         if (list == null) return;
-        Minecraft.getInstance().fontRenderer.draw(matrix, new StringTextComponent(id), xPos, (float) yPos + 10f, TextFormatting.WHITE.getColor());
+        list.updateList();
+        beepedia.drawSlotNoToolTip(matrix, trait.getBeepediaItem(), xPos, yPos + 10);
+        beepedia.getMinecraft().textureManager.bindTexture(splitterImage);
+        AbstractGui.drawTexture(matrix, xPos, yPos - 14, 0, 0, 165, 100, 165, 100);
+        FontRenderer font = Minecraft.getInstance().fontRenderer;
+        StringTextComponent key = new StringTextComponent(id);
+        font.draw(matrix, text, (float) xPos + 24, (float) yPos + 12, TextFormatting.WHITE.getColor());
+        font.draw(matrix, key, (float) xPos + 24, (float) yPos + 22, TextFormatting.DARK_GRAY.getColor());
+        if (BeepediaScreen.currScreenState.isTraitsEffectsActive()) {
+            drawEffectsList(matrix, xPos, yPos + 34);
+        } else {
+            drawBeesList(matrix, xPos, yPos + 34);
+        }
+    }
+
+    private void drawBeesList(MatrixStack matrix, int xPos, int yPos) {
+        FontRenderer font = Minecraft.getInstance().fontRenderer;
+        TranslationTextComponent title = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits.bees_list");
+        int padding = font.getWidth(title) / 2;
+        font.draw(matrix, title, (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, TextFormatting.WHITE.getColor());
+    }
+
+    private void drawEffectsList(MatrixStack matrix, int xPos, int yPos) {
+        FontRenderer font = Minecraft.getInstance().fontRenderer;
+        TranslationTextComponent title = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits.effects_list");
+        int padding = font.getWidth(title) / 2;
+        font.draw(matrix, title, (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, TextFormatting.WHITE.getColor());
     }
 
     private void initList() {
@@ -84,10 +127,42 @@ public class TraitPage extends BeepediaPage {
     public void openPage() {
         super.openPage();
         if (list == null) initList();
+        list.setActive(!BeepediaScreen.currScreenState.isTraitsEffectsActive());
+        list.setScrollPos(BeepediaScreen.currScreenState.getTraitBeeListPos());
+        nextTab.visible = true;
+        prevTab.visible = true;
     }
 
     @Override
     public void closePage() {
         super.closePage();
+        list.setActive(false);
+        nextTab.visible = false;
+        prevTab.visible = false;
+    }
+
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double scrollAmount) {
+        int height = 102;
+        int startPos = 54;
+
+        if (mouseX >= xPos && mouseY >= yPos + startPos && mouseX <= xPos + SUB_PAGE_WIDTH && mouseY <= yPos + startPos + height) {
+            if (!BeepediaScreen.currScreenState.isTraitsEffectsActive()) {
+                list.updatePos((int) (scrollAmount * 8));
+                BeepediaScreen.currScreenState.setTraitBeeListPos(list.getScrollPos());
+            } else {
+//                int scrollPos = BeepediaScreen.currScreenState.getTraitEffectsListPos();
+//                int iconHeight = 21;
+//                int listHeight = effects.size() * iconHeight;
+//                if (height > listHeight) return false;
+//                scrollPos += scrollAmount * 8;
+//                if (scrollPos > 0) scrollPos = 0;
+//                else if (scrollPos < -(listHeight - height))
+//                    scrollPos = -(listHeight - height);
+//                BeepediaScreen.currScreenState.setTraitEffectsListPos(scrollPos);
+            }
+            return true;
+        }
+        return false;
     }
 }

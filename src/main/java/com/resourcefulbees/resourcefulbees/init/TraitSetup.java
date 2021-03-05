@@ -5,6 +5,7 @@ import com.resourcefulbees.resourcefulbees.data.BeeTrait;
 import com.resourcefulbees.resourcefulbees.data.JsonBeeTrait;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.registry.TraitRegistry;
+import net.minecraft.item.Item;
 import net.minecraft.particles.BasicParticleType;
 import net.minecraft.potion.Effect;
 import net.minecraft.util.DamageSource;
@@ -57,50 +58,89 @@ public class TraitSetup {
     private static void parseType(Reader reader, String name) {
         Gson gson = new Gson();
         JsonBeeTrait.JsonTrait jsonTrait = gson.fromJson(reader, JsonBeeTrait.JsonTrait.class);
-        BeeTrait.Builder builder = new BeeTrait.Builder();
-        if (jsonTrait.damageImmunities != null && jsonTrait.damageImmunities.length > 0){
-            for (String damageImmunity : jsonTrait.damageImmunities){
+        BeeTrait.Builder builder = new BeeTrait.Builder(name);
+        if (jsonTrait.damageImmunities != null && jsonTrait.damageImmunities.length > 0) {
+            for (String damageImmunity : jsonTrait.damageImmunities) {
                 DamageSource source;
-                switch (damageImmunity){
-                    case "inFire": source = DamageSource.IN_FIRE; break;
-                    case "lightningBolt": source = DamageSource.LIGHTNING_BOLT; break;
-                    case "onFire": source = DamageSource.ON_FIRE; break;
-                    case "lava": source = DamageSource.LAVA; break;
-                    case "hotFloor": source = DamageSource.HOT_FLOOR; break;
-                    case "inWall": source = DamageSource.IN_WALL; break;
-                    case "cramming": source = DamageSource.CRAMMING; break;
-                    case "drown": source = DamageSource.DROWN; break;
-                    case "starve": source = DamageSource.STARVE; break;
-                    case "cactus": source = DamageSource.CACTUS; break;
-                    case "fall": source = DamageSource.FALL; break;
-                    case "flyIntoWall": source = DamageSource.FLY_INTO_WALL; break;
-                    case "generic": source = DamageSource.GENERIC; break;
-                    case "magic": source = DamageSource.MAGIC; break;
-                    case "wither": source = DamageSource.WITHER; break;
-                    case "anvil": source = DamageSource.ANVIL; break;
-                    case "fallingBlock": source = DamageSource.FALLING_BLOCK; break;
-                    case "dragonBreath": source = DamageSource.DRAGON_BREATH; break;
-                    case "dryout": source = DamageSource.DRYOUT; break;
-                    default: throw new IllegalArgumentException("Damage Source supplied not valid.");
+                switch (damageImmunity) {
+                    case "inFire":
+                        source = DamageSource.IN_FIRE;
+                        break;
+                    case "lightningBolt":
+                        source = DamageSource.LIGHTNING_BOLT;
+                        break;
+                    case "onFire":
+                        source = DamageSource.ON_FIRE;
+                        break;
+                    case "lava":
+                        source = DamageSource.LAVA;
+                        break;
+                    case "hotFloor":
+                        source = DamageSource.HOT_FLOOR;
+                        break;
+                    case "inWall":
+                        source = DamageSource.IN_WALL;
+                        break;
+                    case "cramming":
+                        source = DamageSource.CRAMMING;
+                        break;
+                    case "drown":
+                        source = DamageSource.DROWN;
+                        break;
+                    case "starve":
+                        source = DamageSource.STARVE;
+                        break;
+                    case "cactus":
+                        source = DamageSource.CACTUS;
+                        break;
+                    case "fall":
+                        source = DamageSource.FALL;
+                        break;
+                    case "flyIntoWall":
+                        source = DamageSource.FLY_INTO_WALL;
+                        break;
+                    case "generic":
+                        source = DamageSource.GENERIC;
+                        break;
+                    case "magic":
+                        source = DamageSource.MAGIC;
+                        break;
+                    case "wither":
+                        source = DamageSource.WITHER;
+                        break;
+                    case "anvil":
+                        source = DamageSource.ANVIL;
+                        break;
+                    case "fallingBlock":
+                        source = DamageSource.FALLING_BLOCK;
+                        break;
+                    case "dragonBreath":
+                        source = DamageSource.DRAGON_BREATH;
+                        break;
+                    case "dryout":
+                        source = DamageSource.DRYOUT;
+                        break;
+                    default:
+                        throw new IllegalArgumentException("Damage Source supplied not valid.");
                 }
                 builder.addDamageImmunity(source);
             }
         }
         if (jsonTrait.damageTypes != null && !jsonTrait.damageTypes.isEmpty()) {
-            jsonTrait.damageTypes.forEach((damageType) -> builder.addDamageType(Pair.of(damageType.damageType, damageType.duration)));
+            jsonTrait.damageTypes.forEach((damageType) -> builder.addDamageType(Pair.of(damageType.getDamageType(), damageType.getAmplifier())));
         }
         if (jsonTrait.specialAbilities != null && jsonTrait.specialAbilities.length > 0) {
-            for (String ability : jsonTrait.specialAbilities){
+            for (String ability : jsonTrait.specialAbilities) {
                 builder.addSpecialAbility(ability);
             }
         }
         if (jsonTrait.particleName != null
                 && !jsonTrait.particleName.isEmpty()
-                && ForgeRegistries.PARTICLE_TYPES.getValue(new ResourceLocation(jsonTrait.particleName)) instanceof BasicParticleType){
+                && ForgeRegistries.PARTICLE_TYPES.getValue(new ResourceLocation(jsonTrait.particleName)) instanceof BasicParticleType) {
             builder.setParticleEffect((BasicParticleType) ForgeRegistries.PARTICLE_TYPES.getValue(new ResourceLocation(jsonTrait.particleName)));
         }
         if (jsonTrait.potionImmunities != null && jsonTrait.potionImmunities.length > 0) {
-            for (String immunity : jsonTrait.potionImmunities){
+            for (String immunity : jsonTrait.potionImmunities) {
                 Effect potion = ForgeRegistries.POTIONS.getValue(new ResourceLocation(immunity));
                 if (potion != null)
                     builder.addPotionImmunity(potion);
@@ -108,10 +148,16 @@ public class TraitSetup {
         }
         if (jsonTrait.potionDamageEffects != null && !jsonTrait.potionDamageEffects.isEmpty()) {
             jsonTrait.potionDamageEffects.forEach((traitPotionDamageEffect -> {
-                Effect potion = ForgeRegistries.POTIONS.getValue(new ResourceLocation(traitPotionDamageEffect.effectID));
+                Effect potion = ForgeRegistries.POTIONS.getValue(new ResourceLocation(traitPotionDamageEffect.getEffectID()));
                 if (potion != null)
-                    builder.addDamagePotionEffect(Pair.of(potion, MathHelper.clamp(traitPotionDamageEffect.strength, 0, 255)));
+                    builder.addDamagePotionEffect(Pair.of(potion, MathHelper.clamp(traitPotionDamageEffect.getStrength(), 0, 255)));
             }));
+        }
+        if (jsonTrait.beepediaItemID != null && !jsonTrait.beepediaItemID.isEmpty()) {
+            Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(jsonTrait.beepediaItemID));
+            if (item != null) {
+                builder.setBeepediaItem(item);
+            }
         }
         TraitRegistry.getRegistry().register(name, builder.build());
     }

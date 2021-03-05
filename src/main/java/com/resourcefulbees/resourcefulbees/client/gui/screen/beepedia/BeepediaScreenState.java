@@ -1,7 +1,6 @@
 package com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia;
 
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.BeePage;
-import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
 
 public class BeepediaScreenState {
 
@@ -16,12 +15,14 @@ public class BeepediaScreenState {
     private boolean parentBreeding = true;
     private boolean centrifugeOpen = false;
     private int centrifugePage = 0;
-    private int currentMutationType = 0;
+    private int currentMutationTab = 0;
     private int mutationsPage = 0;
     private boolean honeyEffectsActive = true;
     private boolean traitsEffectsActive = true;
     private int honeyBeeListPos = 0;
     private int honeyEffectsListPos = 0;
+    private int traitBeeListPos = 0;
+    private int traitEffectsListPos = 0;
 
     public BeepediaScreen.PageType getPageType() {
         return pageType;
@@ -117,11 +118,11 @@ public class BeepediaScreenState {
     }
 
     public int getCurrentMutationTab() {
-        return currentMutationType;
+        return currentMutationTab;
     }
 
     public void setCurrentMutationTab(int currentMutationType) {
-        this.currentMutationType = currentMutationType;
+        this.currentMutationTab = currentMutationType;
     }
 
     public int getMutationsPage() {
@@ -158,5 +159,21 @@ public class BeepediaScreenState {
 
     public int getHoneyEffectsListPos() {
         return honeyEffectsListPos;
+    }
+
+    public void setTraitBeeListPos(int scrollPos) {
+        this.traitBeeListPos = scrollPos;
+    }
+
+    public int getTraitBeeListPos() {
+        return traitBeeListPos;
+    }
+
+    public int getTraitEffectsListPos() {
+        return traitEffectsListPos;
+    }
+
+    public void setTraitEffectsListPos(int traitEffectsListPos) {
+        this.traitEffectsListPos = traitEffectsListPos;
     }
 }

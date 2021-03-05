@@ -42,9 +42,9 @@ public class TraitListPage extends BeeDataPage {
         traitPages = beepedia.getTraits(beeData);
         buttons = new TreeMap<>();
         for (Map.Entry<String, TraitPage> e : traitPages.entrySet()) {
-            ItemStack stack = new ItemStack(Items.BLAZE_POWDER);
+            ItemStack stack = new ItemStack(e.getValue().trait.getBeepediaItem());
             ResourceLocation image = listImage;
-            StringTextComponent text = new StringTextComponent(e.getKey());
+            TranslationTextComponent text = new TranslationTextComponent(e.getValue().trait.getTranslationKey());
             Button.IPressable onPress = button -> {
                 BeepediaScreen.saveScreenState();
                 beepedia.setActive(BeepediaScreen.PageType.TRAIT, e.getKey());
