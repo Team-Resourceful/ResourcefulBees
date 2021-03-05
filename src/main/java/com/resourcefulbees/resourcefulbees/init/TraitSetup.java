@@ -87,7 +87,7 @@ public class TraitSetup {
             }
         }
         if (jsonTrait.damageTypes != null && !jsonTrait.damageTypes.isEmpty()) {
-            jsonTrait.damageTypes.forEach((damageType) -> builder.addDamageType(Pair.of(damageType.damageTypeName, damageType.amplifier)));
+            jsonTrait.damageTypes.forEach((damageType) -> builder.addDamageType(Pair.of(damageType.damageType, damageType.duration)));
         }
         if (jsonTrait.specialAbilities != null && jsonTrait.specialAbilities.length > 0) {
             for (String ability : jsonTrait.specialAbilities){
@@ -110,7 +110,7 @@ public class TraitSetup {
             jsonTrait.potionDamageEffects.forEach((traitPotionDamageEffect -> {
                 Effect potion = ForgeRegistries.POTIONS.getValue(new ResourceLocation(traitPotionDamageEffect.effectRegistryName));
                 if (potion != null)
-                    builder.addDamagePotionEffect(Pair.of(potion, MathHelper.clamp(traitPotionDamageEffect.amplifier, 0, 255)));
+                    builder.addDamagePotionEffect(Pair.of(potion, MathHelper.clamp(traitPotionDamageEffect.strength, 0, 255)));
             }));
         }
         TraitRegistry.getRegistry().register(name, builder.build());

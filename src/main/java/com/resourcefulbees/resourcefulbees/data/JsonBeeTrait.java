@@ -13,21 +13,21 @@ public class JsonBeeTrait {
     }
 
     public static class jsonTrait {
-        public List<traitPotionDamageEffect> potionDamageEffects;
+        public List<PotionDamageEffect> potionDamageEffects;
         public String[] damageImmunities;
         public String[] potionImmunities;
-        public List<traitDamageType> damageTypes;
+        public List<DamageType> damageTypes;
         public String[] specialAbilities;
         public String particleName;
     }
 
-    public static class traitPotionDamageEffect {
-        public String effectRegistryName;
-        public int amplifier;
+    public static class PotionDamageEffect {
+        public String effectID;
+        public int strength;
     }
 
-    public static class traitDamageType {
-        public String damageTypeName;
-        public int amplifier;
+    public static class DamageType {
+        public String damageType;
+        public int duration;
     }
 }
