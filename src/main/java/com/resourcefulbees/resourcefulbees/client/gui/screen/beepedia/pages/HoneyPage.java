@@ -99,6 +99,7 @@ public class HoneyPage extends BeepediaPage {
     @Override
     public void renderBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
         if (beeList == null) return;
+        beeList.updateList();
         beepedia.drawSlotNoToolTip(matrix, bottle, xPos, yPos + 10);
         beepedia.getMinecraft().textureManager.bindTexture(splitterImage);
         AbstractGui.drawTexture(matrix, xPos, yPos - 14, 0, 0, 165, 100, 165, 100);
@@ -138,7 +139,6 @@ public class HoneyPage extends BeepediaPage {
         TranslationTextComponent title = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.honey.bees_list");
         int padding = font.getWidth(title) / 2;
         font.draw(matrix, title, (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, TextFormatting.WHITE.getColor());
-        beeList.updateList();
     }
 
     private void drawEffectsList(MatrixStack matrix, int xPos, int yPos) {

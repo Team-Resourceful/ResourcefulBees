@@ -49,4 +49,13 @@ public class SubButtonList extends ButtonList {
             if (b != null) b.visible = active;
         });
     }
+
+    @Override
+    public void setScrollPos(int scrollPos) {
+        if (height > subList.size() * itemHeight) return;
+        this.scrollPos = scrollPos;
+        if (this.scrollPos > 0) this.scrollPos = 0;
+        else if (this.scrollPos < -(subList.size() * itemHeight - height))
+            this.scrollPos = -(subList.size() * itemHeight - height);
+    }
 }
