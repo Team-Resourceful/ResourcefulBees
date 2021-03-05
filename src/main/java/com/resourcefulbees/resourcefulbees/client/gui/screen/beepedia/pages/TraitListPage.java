@@ -3,7 +3,6 @@ package com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
-import com.resourcefulbees.resourcefulbees.client.gui.widget.ButtonList;
 import com.resourcefulbees.resourcefulbees.client.gui.widget.ListButton;
 import com.resourcefulbees.resourcefulbees.client.gui.widget.SubButtonList;
 import net.minecraft.client.Minecraft;
@@ -16,19 +15,32 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 public class TraitListPage extends BeeDataPage {
 
     private Map<String, TraitPage> traitPages;
-    private Map<String, ListButton> buttons;
-    private ButtonList list;
+    private SortedMap<String, ListButton> buttons;
+    private SubButtonList list = null;
 
     public TraitListPage(BeepediaScreen beepedia, CustomBeeData beeData, int xPos, int yPos, BeePage parent) {
         super(beepedia, beeData, xPos, yPos, parent);
+    }
+
+    @Override
+    public void renderBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
+        if (list == null) return;
+        TranslationTextComponent title = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.traits");
+        FontRenderer font = Minecraft.getInstance().fontRenderer;
+        font.draw(matrix, title, xPos, (float) yPos + 8, TextFormatting.WHITE.getColor());
+        list.updateList();
+    }
+
+    private void initList() {
         traitPages = beepedia.getTraits(beeData);
-        buttons = new HashMap<>();
+        buttons = new TreeMap<>();
         for (Map.Entry<String, TraitPage> e : traitPages.entrySet()) {
             ItemStack stack = new ItemStack(Items.BLAZE_POWDER);
             ResourceLocation image = listImage;
@@ -47,14 +59,6 @@ public class TraitListPage extends BeeDataPage {
     }
 
     @Override
-    public void renderBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
-        TranslationTextComponent title = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.traits");
-        FontRenderer font = Minecraft.getInstance().fontRenderer;
-        font.draw(matrix, title, xPos, (float) yPos + 8, TextFormatting.WHITE.getColor());
-        list.updateList();
-    }
-
-    @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double scrollAmount) {
         if (mouseX >= xPos && mouseY >= yPos + 22 && mouseX <= xPos + SUB_PAGE_WIDTH && mouseY <= yPos + SUB_PAGE_HEIGHT) {
             list.updatePos((int) (scrollAmount * 8));
@@ -67,6 +71,7 @@ public class TraitListPage extends BeeDataPage {
     @Override
     public void openPage() {
         super.openPage();
+        if (list == null) initList();
         list.setActive(true);
         list.setScrollPos(BeepediaScreen.currScreenState.getTraitsScroll());
     }
@@ -74,6 +79,6 @@ public class TraitListPage extends BeeDataPage {
     @Override
     public void closePage() {
         super.closePage();
-        list.setActive(false);
+        if (list != null) list.setActive(false);
     }
 }

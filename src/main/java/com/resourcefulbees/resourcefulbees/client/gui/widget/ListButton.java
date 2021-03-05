@@ -7,6 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponent;
 import net.minecraft.util.text.TextFormatting;
 import org.jetbrains.annotations.NotNull;
@@ -15,13 +16,13 @@ import org.lwjgl.opengl.GL11;
 import javax.annotation.Nonnull;
 
 public class ListButton extends TabImageButton {
-    private final TextComponent text;
+    private final ITextComponent text;
     private final int textX;
     private final int textY;
     private FontRenderer fontRenderer;
     private ButtonList parent = null;
 
-    public ListButton(int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int yDiffTextIn, ResourceLocation resourceLocationIn, @NotNull ItemStack displayItem, int itemX, int itemY, TextComponent text, int textX, int textY, IPressable onPressIn) {
+    public ListButton(int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int yDiffTextIn, ResourceLocation resourceLocationIn, @NotNull ItemStack displayItem, int itemX, int itemY, ITextComponent text, int textX, int textY, IPressable onPressIn) {
         super(xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, yDiffTextIn, resourceLocationIn, displayItem, itemX, itemY, onPressIn);
         this.text = text;
         this.textX = textX;

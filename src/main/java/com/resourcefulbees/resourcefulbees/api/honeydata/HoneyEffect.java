@@ -24,7 +24,7 @@ public class HoneyEffect {
     public int duration = 60;
     public int strength = 0;
     public float chance = 1;
-    public transient Effect effect = null;
+    private transient Effect effect = null;
 
     public HoneyEffect() {
     }

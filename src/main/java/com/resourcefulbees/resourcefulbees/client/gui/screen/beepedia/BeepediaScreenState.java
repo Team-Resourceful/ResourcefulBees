@@ -18,6 +18,10 @@ public class BeepediaScreenState {
     private int centrifugePage = 0;
     private int currentMutationType = 0;
     private int mutationsPage = 0;
+    private boolean honeyEffectsActive = true;
+    private boolean traitsEffectsActive = true;
+    private int honeyBeeListPos = 0;
+    private int honeyEffectsListPos = 0;
 
     public BeepediaScreen.PageType getPageType() {
         return pageType;
@@ -122,5 +126,37 @@ public class BeepediaScreenState {
 
     public int getMutationsPage() {
         return mutationsPage;
+    }
+
+    public boolean isHoneyEffectsActive() {
+        return honeyEffectsActive;
+    }
+
+    public void setHoneyEffectsActive(boolean honeyEffectsActive) {
+        this.honeyEffectsActive = honeyEffectsActive;
+    }
+
+    public boolean isTraitsEffectsActive() {
+        return traitsEffectsActive;
+    }
+
+    public void setTraitsEffectsActive(boolean traitsEffectsActive) {
+        this.traitsEffectsActive = traitsEffectsActive;
+    }
+
+    public void setHoneyBeeListPos(int scrollPos) {
+        this.honeyBeeListPos = scrollPos;
+    }
+
+    public int getHoneyBeeListPos() {
+        return honeyBeeListPos;
+    }
+
+    public void setHoneyEffectsListPos(int scrollPos) {
+        this.honeyEffectsListPos = scrollPos;
+    }
+
+    public int getHoneyEffectsListPos() {
+        return honeyEffectsListPos;
     }
 }

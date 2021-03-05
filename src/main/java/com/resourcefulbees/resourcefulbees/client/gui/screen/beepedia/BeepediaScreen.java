@@ -3,6 +3,7 @@ package com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
+import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.BeePage;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.HomePage;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.HoneyPage;
@@ -26,6 +27,7 @@ import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.IItemProvider;
@@ -109,10 +111,10 @@ public class BeepediaScreen extends Screen {
         int x = this.guiLeft;
         int y = this.guiTop;
         int subX = x + 112;
+        BeeRegistry.getRegistry().getBees().forEach((s, b) -> bees.put(s, new BeePage(this, b, s, subX, y)));
+        TraitRegistry.getRegistry().getTraits().forEach((s, b) -> traits.put(s, new TraitPage(this, b, s, subX, y)));
         honey.put("honey", new HoneyPage(this, BeeConstants.defaultHoney, "honey", subX, y));
         honey.put("catnip", new HoneyPage(this, KittenBee.getHoneyBottleData(), "catnip", subX, y));
-        TraitRegistry.getRegistry().getTraits().forEach((s, b) -> traits.put(s, new TraitPage(this, b, s, subX, y)));
-        BeeRegistry.getRegistry().getBees().forEach((s, b) -> bees.put(s, new BeePage(this, b, s, subX, y)));
         BeeRegistry.getRegistry().getHoneyBottles().forEach((s, h) -> honey.put(s, new HoneyPage(this, h, s, subX, y)));
         home = new HomePage(this, subX, y);
         addButton(new ImageButton(x + (xSize / 2) - 10, y + ySize - 25, 20, 20, 20, 0, 20, homeButtons, 60, 60, onPress -> selectPage(home)));
@@ -281,9 +283,9 @@ public class BeepediaScreen extends Screen {
         addButton(beesButton);
         addButton(traitsButton);
         addButton(honeyButton);
-        beesList = new ButtonList(x + 8, y + 31, 123, 100, 21, beesButton, bees);
-        traitsList = new ButtonList(x + 8, y + 31, 123, 100, 21, traitsButton, traits);
-        honeyList = new ButtonList(x + 8, y + 31, 123, 100, 21, honeyButton, honey);
+        beesList = new ButtonList(x + 8, y + 31, 100, 123, 21, beesButton, bees);
+        traitsList = new ButtonList(x + 8, y + 31, 100, 123, 21, traitsButton, traits);
+        honeyList = new ButtonList(x + 8, y + 31, 100, 123, 21, honeyButton, honey);
     }
 
     @Override
@@ -591,6 +593,30 @@ public class BeepediaScreen extends Screen {
         getMinecraft().getItemRenderer().renderItemIntoGUI(item, xPos + 2, yPos + 2);
         getMinecraft().getItemRenderer().renderItemOverlays(client.fontRenderer, item, xPos + 2, yPos + 2);
         registerItemTooltip(item, xPos, yPos);
+    }
+
+    public Map<String, BeePage> getBees(ItemStack bottleData) {
+        Map<String, BeePage> list = new HashMap<>();
+        bees.forEach((s, b) -> {
+            Item beeBottle = BeeInfoUtils.getItem(b.beeData.getCentrifugeData().getBottleOutput());
+            if (beeBottle == bottleData.getItem()) {
+                list.put(s, b);
+            }
+        });
+        return list;
+    }
+
+    public Map<String, BeePage> getBees(String traitName) {
+        Map<String, BeePage> list = new HashMap<>();
+        bees.forEach((s, b) -> {
+            if (b.beeData.hasTraitNames()) {
+                List<String> traits = new ArrayList<>(Arrays.asList(b.beeData.getTraitNames()));
+                if (traits.contains(traitName)) {
+                    list.put(s, b);
+                }
+            }
+        });
+        return list;
     }
 
 

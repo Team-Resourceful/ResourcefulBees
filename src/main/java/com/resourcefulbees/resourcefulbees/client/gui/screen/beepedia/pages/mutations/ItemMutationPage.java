@@ -3,6 +3,7 @@ package com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.mut
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.api.beedata.mutation.outputs.ItemOutput;
+import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.BeeDataPage;
 import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
@@ -66,8 +67,8 @@ public class ItemMutationPage extends MutationsPage {
         drawWeight(matrix, outputs.get(outputCounter).getLeft(), xPos + 122, yPos + 54);
         if (outputChance < 1){
             Minecraft.getInstance().getTextureManager().bindTexture(infoIcon);
-            beepedia.drawTexture(matrix,  xPos + BeeDataPage.SUB_PAGE_WIDTH / 2 - 20, yPos + 51, 16, 0, 9, 9);
-            drawChance(matrix, outputChance,xPos + BeeDataPage.SUB_PAGE_WIDTH / 2 , yPos + 52);
+            beepedia.drawTexture(matrix,  xPos + BeepediaPage.SUB_PAGE_WIDTH / 2 - 20, yPos + 51, 16, 0, 9, 9);
+            drawChance(matrix, outputChance,xPos + BeepediaPage.SUB_PAGE_WIDTH / 2 , yPos + 52);
         }
     }
 

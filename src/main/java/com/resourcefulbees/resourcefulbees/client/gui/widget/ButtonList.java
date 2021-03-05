@@ -3,8 +3,8 @@ package com.resourcefulbees.resourcefulbees.client.gui.widget;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -20,9 +20,9 @@ public class ButtonList {
     protected boolean active = false;
     private String lastSearch;
     Map<String, ? extends BeepediaPage> list;
-    Map<String, BeepediaPage> reducedList = new TreeMap<>();
+    SortedMap<String, BeepediaPage> reducedList = new TreeMap<>();
 
-    public ButtonList(int xPos, int yPos, int height, int width, int itemHeight, TabImageButton button, Map<String, ? extends BeepediaPage> list) {
+    public ButtonList(int xPos, int yPos, int width, int height, int itemHeight, TabImageButton button, Map<String, ? extends BeepediaPage> list) {
         this.xPos = xPos;
         this.yPos = yPos;
         this.defaultHeight = height;
@@ -62,7 +62,7 @@ public class ButtonList {
             });
         } else {
             if (active) list.forEach((s, b) -> b.listButton.visible = true);
-            reducedList = new HashMap<>(list);
+            reducedList = new TreeMap<>(list);
         }
         lastSearch = search;
     }
@@ -102,6 +102,10 @@ public class ButtonList {
     }
 
     public void setScrollPos(int scrollPos) {
+        if (height > reducedList.size() * itemHeight) return;
         this.scrollPos = scrollPos;
+        if (this.scrollPos > 0) this.scrollPos = 0;
+        else if (this.scrollPos < -(reducedList.size() * itemHeight - height))
+            this.scrollPos = -(reducedList.size() * itemHeight - height);
     }
 }

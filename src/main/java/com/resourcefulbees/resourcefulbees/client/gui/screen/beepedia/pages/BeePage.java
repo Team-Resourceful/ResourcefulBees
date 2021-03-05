@@ -27,7 +27,7 @@ import java.util.List;
 
 public class BeePage extends BeepediaPage {
 
-    CustomBeeData beeData;
+    public CustomBeeData beeData;
 
 
     Entity bee = null;
@@ -40,7 +40,7 @@ public class BeePage extends BeepediaPage {
     Pair<TabImageButton, BeeDataPage> breedingPage;
     List<Pair<TabImageButton, BeeDataPage>> tabs = new ArrayList<>();
     ResourceLocation buttonImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/button.png");
-    ResourceLocation splitterImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/bee_splitter.png");
+
 
     private int tabCounter;
 

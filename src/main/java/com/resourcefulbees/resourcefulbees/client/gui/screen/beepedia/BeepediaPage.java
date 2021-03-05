@@ -12,11 +12,14 @@ public abstract class BeepediaPage {
     public final int yPos;
     public final int xPos;
     public final BeepediaScreen beepedia;
+    public static final int SUB_PAGE_WIDTH = 169;
+    public static final int SUB_PAGE_HEIGHT = 106;
 
     public ListButton listButton = null;
 
     public final ResourceLocation arrowImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/arrows.png");
     public final ResourceLocation listImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/list_button.png");
+    public final ResourceLocation splitterImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/bee_splitter.png");
     public final String id;
 
     protected BeepediaPage(BeepediaScreen beepedia, int xPos, int yPos, String id) {
