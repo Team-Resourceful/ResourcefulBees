@@ -12,7 +12,7 @@ public class JsonBeeTrait {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
 
-    public static class jsonTrait {
+    public static class JsonTrait {
         public List<PotionDamageEffect> potionDamageEffects;
         public String[] damageImmunities;
         public String[] potionImmunities;

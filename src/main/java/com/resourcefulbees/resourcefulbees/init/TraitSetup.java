@@ -56,7 +56,7 @@ public class TraitSetup {
 
     private static void parseType(Reader reader, String name) {
         Gson gson = new Gson();
-        JsonBeeTrait.jsonTrait jsonTrait = gson.fromJson(reader, JsonBeeTrait.jsonTrait.class);
+        JsonBeeTrait.JsonTrait jsonTrait = gson.fromJson(reader, JsonBeeTrait.JsonTrait.class);
         BeeTrait.Builder builder = new BeeTrait.Builder();
         if (jsonTrait.damageImmunities != null && jsonTrait.damageImmunities.length > 0){
             for (String damageImmunity : jsonTrait.damageImmunities){
@@ -108,7 +108,7 @@ public class TraitSetup {
         }
         if (jsonTrait.potionDamageEffects != null && !jsonTrait.potionDamageEffects.isEmpty()) {
             jsonTrait.potionDamageEffects.forEach((traitPotionDamageEffect -> {
-                Effect potion = ForgeRegistries.POTIONS.getValue(new ResourceLocation(traitPotionDamageEffect.effectRegistryName));
+                Effect potion = ForgeRegistries.POTIONS.getValue(new ResourceLocation(traitPotionDamageEffect.effectID));
                 if (potion != null)
                     builder.addDamagePotionEffect(Pair.of(potion, MathHelper.clamp(traitPotionDamageEffect.strength, 0, 255)));
             }));
