@@ -235,7 +235,9 @@ public class CentrifugeData extends AbstractBeeData {
     private CompoundNBT getNBT(JsonElement nbtData, CompoundNBT nbt) {
         if (nbt == null) {
             nbt = CompoundNBT.CODEC.parse(JsonOps.INSTANCE, nbtData)
-                    .resultOrPartial(e -> LOGGER.warn("Could not deserialize NBT: [{}]", nbtData))
+                    .resultOrPartial(e -> {
+                        if (nbtData != null) LOGGER.warn("Could not deserialize NBT: [{}]", nbtData);
+                    })
                     .orElse(new CompoundNBT());
         }
         if (nbt.isEmpty()) return null;

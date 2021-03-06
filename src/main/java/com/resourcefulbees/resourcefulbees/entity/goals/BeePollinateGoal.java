@@ -48,7 +48,6 @@ public class BeePollinateGoal extends Goal {
                     return true;
                 }
             }else {
-                System.out.println("using earlier flower");
                 bee.getNavigator().tryMoveToXYZ((double) bee.flowerPos.getX() + 0.5D, (double) bee.flowerPos.getY() + 0.5D, (double) bee.flowerPos.getZ() + 0.5D, 1.2D);
                 return true;
             }
