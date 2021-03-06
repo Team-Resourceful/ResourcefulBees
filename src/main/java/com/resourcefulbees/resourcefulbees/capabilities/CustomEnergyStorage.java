@@ -13,7 +13,7 @@ public class CustomEnergyStorage extends EnergyStorage implements INBTSerializab
     }
 
     protected void onEnergyChanged() {
-
+        //inherit
     }
 
     public void setEnergy(int energy) {

@@ -21,7 +21,7 @@ public abstract class MutationsPage {
     protected int outputCounter;
     protected final ResourceLocation infoIcon = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/icons.png");
 
-    public MutationsPage(MutationTypes type, CustomBeeData beeData, BeepediaScreen beepedia) {
+    protected MutationsPage(MutationTypes type, CustomBeeData beeData, BeepediaScreen beepedia) {
         this.type = type;
         this.beeData = beeData;
         this.beepedia = beepedia;
@@ -40,7 +40,7 @@ public abstract class MutationsPage {
         DecimalFormat decimalFormat = new DecimalFormat("##%");
         StringTextComponent text = new StringTextComponent(decimalFormat.format(right));
         int padding = font.getWidth(text) / 2;
-        font.draw(matrix, text, (float) xPos - padding, yPos, TextFormatting.GRAY.getColor());
+        font.draw(matrix, text.formatted(TextFormatting.GRAY), (float) xPos - padding, yPos, 0);
     }
     protected void drawChance(MatrixStack matrix, Double right, int xPos, int yPos) {
         if (right >= 1) return;

@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 
-public class TabImageButton extends ImageButton {
+public class TabImageButton extends ModImageButton {
 
     protected final ITooltip tooltipProvider;
     protected final ItemStack displayItem;

@@ -42,7 +42,7 @@ public class TraitPage extends BeepediaPage {
     TranslationTextComponent text;
     private final List<TraitSection> traitSections = new LinkedList<>();
 
-    private final int listHeight = 102;
+    private static final int LIST_HEIGHT = 102;
 
     public TraitPage(BeepediaScreen beepedia, BeeTrait trait, String id, int left, int top) {
         super(beepedia, left, top, id);
@@ -249,10 +249,10 @@ public class TraitPage extends BeepediaPage {
         nextTab.visible = true;
         prevTab.visible = true;
         int effectsHeight = traitSections.stream().mapToInt(TraitSection::getHeight).sum();
-        if (effectsHeight < listHeight) {
+        if (effectsHeight < LIST_HEIGHT) {
             BeepediaScreen.currScreenState.setTraitEffectsListPos(0);
-        } else if (BeepediaScreen.currScreenState.getTraitEffectsListPos() > effectsHeight - listHeight) {
-            BeepediaScreen.currScreenState.setTraitEffectsListPos(effectsHeight - listHeight);
+        } else if (BeepediaScreen.currScreenState.getTraitEffectsListPos() > effectsHeight - LIST_HEIGHT) {
+            BeepediaScreen.currScreenState.setTraitEffectsListPos(effectsHeight - LIST_HEIGHT);
         }
     }
 
@@ -267,7 +267,7 @@ public class TraitPage extends BeepediaPage {
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double scrollAmount) {
         int startPos = 54;
-        if (mouseX >= xPos && mouseY >= yPos + startPos && mouseX <= xPos + SUB_PAGE_WIDTH && mouseY <= yPos + startPos + listHeight) {
+        if (mouseX >= xPos && mouseY >= yPos + startPos && mouseX <= xPos + SUB_PAGE_WIDTH && mouseY <= yPos + startPos + LIST_HEIGHT) {
             if (!BeepediaScreen.currScreenState.isTraitsEffectsActive()) {
                 list.updatePos((int) (scrollAmount * 8));
                 BeepediaScreen.currScreenState.setTraitBeeListPos(list.getScrollPos());
@@ -282,11 +282,11 @@ public class TraitPage extends BeepediaPage {
     private boolean addScrollPos(double v) {
         int scrollPos = BeepediaScreen.currScreenState.getTraitEffectsListPos();
         int effectsHeight = traitSections.stream().mapToInt(TraitSection::getHeight).sum();
-        if (effectsHeight < listHeight) return false;
+        if (effectsHeight < LIST_HEIGHT) return false;
         scrollPos += v;
         if (scrollPos > 0) scrollPos = 0;
-        else if (scrollPos < -(effectsHeight - listHeight))
-            scrollPos = -(effectsHeight - listHeight);
+        else if (scrollPos < -(effectsHeight - LIST_HEIGHT))
+            scrollPos = -(effectsHeight - LIST_HEIGHT);
         BeepediaScreen.currScreenState.setTraitEffectsListPos(scrollPos);
         return true;
     }

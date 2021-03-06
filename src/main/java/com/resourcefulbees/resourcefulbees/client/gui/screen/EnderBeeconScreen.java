@@ -11,6 +11,7 @@ import com.resourcefulbees.resourcefulbees.tileentity.EnderBeeconTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.RenderCuboid;
 import com.resourcefulbees.resourcefulbees.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.widget.button.AbstractButton;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -173,7 +174,7 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
                 j += this.width * 3;
             }
 
-            this.drawTexture(matrixStack, this.x, this.y, j, i, this.width, this.height, 22 * 4, 22);
+            drawTexture(matrixStack, this.x, this.y, j, i, this.width, this.height, 22 * 4, 22);
             this.renderExtra(matrixStack);
         }
 

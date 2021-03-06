@@ -45,7 +45,7 @@ public class HoneyPage extends BeepediaPage {
     private final ItemStack bottle;
     private List<HoneyEffect> effects = new ArrayList<>();
 
-    private final int listHeight = 102;
+    private static final int LIST_HEIGHT = 102;
 
     ResourceLocation hungerBar = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/hunger_bar.png");
     ResourceLocation hungerIcons = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/hunger.png");
@@ -215,10 +215,10 @@ public class HoneyPage extends BeepediaPage {
         beeList.setScrollPos(BeepediaScreen.currScreenState.getHoneyBeeListPos());
         int iconHeight = 21;
         int effectsHeight = effects.size() * iconHeight;
-        if (effectsHeight < listHeight) {
+        if (effectsHeight < LIST_HEIGHT) {
             BeepediaScreen.currScreenState.setHoneyEffectsListPos(0);
-        } else if (BeepediaScreen.currScreenState.getHoneyEffectsListPos() > effectsHeight - listHeight) {
-            BeepediaScreen.currScreenState.setHoneyEffectsListPos(effectsHeight - listHeight);
+        } else if (BeepediaScreen.currScreenState.getHoneyEffectsListPos() > effectsHeight - LIST_HEIGHT) {
+            BeepediaScreen.currScreenState.setHoneyEffectsListPos(effectsHeight - LIST_HEIGHT);
         }
     }
 
@@ -233,7 +233,7 @@ public class HoneyPage extends BeepediaPage {
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double scrollAmount) {
         int startPos = 54;
-        if (mouseX >= xPos && mouseY >= yPos + startPos && mouseX <= xPos + SUB_PAGE_WIDTH && mouseY <= yPos + startPos + listHeight) {
+        if (mouseX >= xPos && mouseY >= yPos + startPos && mouseX <= xPos + SUB_PAGE_WIDTH && mouseY <= yPos + startPos + LIST_HEIGHT) {
             if (effects.isEmpty() || !BeepediaScreen.currScreenState.isHoneyEffectsActive()) {
                 beeList.updatePos((int) (scrollAmount * 8));
                 BeepediaScreen.currScreenState.setHoneyBeeListPos(beeList.getScrollPos());
@@ -241,11 +241,11 @@ public class HoneyPage extends BeepediaPage {
                 int scrollPos = BeepediaScreen.currScreenState.getHoneyEffectsListPos();
                 int iconHeight = 21;
                 int effectsHeight = effects.size() * iconHeight;
-                if (effectsHeight < listHeight) return false;
+                if (effectsHeight < LIST_HEIGHT) return false;
                 scrollPos += scrollAmount * 8;
                 if (scrollPos > 0) scrollPos = 0;
-                else if (scrollPos < -(effectsHeight - listHeight))
-                    scrollPos = -(effectsHeight - listHeight);
+                else if (scrollPos < -(effectsHeight - LIST_HEIGHT))
+                    scrollPos = -(effectsHeight - LIST_HEIGHT);
                 BeepediaScreen.currScreenState.setHoneyEffectsListPos(scrollPos);
             }
             return true;

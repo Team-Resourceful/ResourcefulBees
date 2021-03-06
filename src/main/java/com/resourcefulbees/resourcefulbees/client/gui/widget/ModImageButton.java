@@ -3,11 +3,12 @@ package com.resourcefulbees.resourcefulbees.client.gui.widget;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.widget.button.ImageButton;
 import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nonnull;
 
-public class ImageButton extends net.minecraft.client.gui.widget.button.ImageButton {
+public class ModImageButton extends ImageButton {
 
     protected final ResourceLocation resourceLocation;
     protected final int xTexStart;
@@ -16,7 +17,7 @@ public class ImageButton extends net.minecraft.client.gui.widget.button.ImageBut
     protected final int imageWidth;
     protected final int imageHeight;
 
-    public ImageButton(int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int yDiffTextIn, ResourceLocation resourceLocationIn, int imageHeight, int imageWidth, IPressable onPressIn) {
+    public ModImageButton(int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int yDiffTextIn, ResourceLocation resourceLocationIn, int imageHeight, int imageWidth, IPressable onPressIn) {
         super(xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, yDiffTextIn, resourceLocationIn, imageWidth, imageHeight, onPressIn);
         this.resourceLocation = resourceLocationIn;
         this.xTexStart = xTexStartIn;
@@ -26,7 +27,7 @@ public class ImageButton extends net.minecraft.client.gui.widget.button.ImageBut
         this.imageHeight = imageHeight;
     }
 
-    public ImageButton(int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int yDiffTextIn, ResourceLocation resourceLocationIn, IPressable onPressIn) {
+    public ModImageButton(int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int yDiffTextIn, ResourceLocation resourceLocationIn, IPressable onPressIn) {
         this(xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, yDiffTextIn, resourceLocationIn, widthIn, yDiffTextIn * 3, onPressIn);
     }
 
