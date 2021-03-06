@@ -65,7 +65,7 @@ public class BeepediaScreen extends Screen {
     protected int guiTop;
     protected int ticksOpen = 0;
 
-    protected Map<String, BeePage> bees = new TreeMap<>();
+    public Map<String, BeePage> bees = new TreeMap<>();
     protected Map<String, TraitPage> traits = new TreeMap<>();
     protected Map<String, HoneyPage> honey = new TreeMap<>();
 

@@ -23,6 +23,7 @@ public class BeepediaScreenState {
     private int honeyEffectsListPos = 0;
     private int traitBeeListPos = 0;
     private int traitEffectsListPos = 0;
+    private int homeCounter = 0;
 
     public BeepediaScreen.PageType getPageType() {
         return pageType;
@@ -175,5 +176,13 @@ public class BeepediaScreenState {
 
     public void setTraitEffectsListPos(int traitEffectsListPos) {
         this.traitEffectsListPos = traitEffectsListPos;
+    }
+
+    public void setHomeCounter(int counter) {
+        homeCounter = counter;
+    }
+
+    public int getHomeCounter() {
+        return homeCounter;
     }
 }

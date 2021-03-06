@@ -1,12 +1,14 @@
 package com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.resourcefulbees.resourcefulbees.client.gui.widget.ListButton;
 import com.resourcefulbees.resourcefulbees.client.gui.widget.SubButtonList;
 import com.resourcefulbees.resourcefulbees.data.BeeTrait;
 import com.resourcefulbees.resourcefulbees.item.BeeJar;
+import com.resourcefulbees.resourcefulbees.lib.TraitConstants;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
@@ -15,16 +17,20 @@ import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.gui.widget.button.ImageButton;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.potion.Effect;
+import net.minecraft.potion.PotionUtils;
+import net.minecraft.potion.Potions;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.IReorderingProcessor;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import org.apache.commons.lang3.tuple.Pair;
+import org.lwjgl.opengl.GL11;
 
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class TraitPage extends BeepediaPage {
@@ -35,6 +41,9 @@ public class TraitPage extends BeepediaPage {
     String translation;
     private SubButtonList list;
     TranslationTextComponent text;
+    private List<TraitSection> traitSections = new LinkedList<>();
+
+    private int listHeight = 102;
 
     public TraitPage(BeepediaScreen beepedia, BeeTrait trait, String id, int left, int top) {
         super(beepedia, left, top, id);
@@ -49,6 +58,102 @@ public class TraitPage extends BeepediaPage {
         beepedia.addButton(prevTab);
         nextTab.visible = false;
         prevTab.visible = false;
+        addSpecialAbilities();
+        addDamageImmunities();
+        addPotionImmunities();
+        addPotionDamageEffects();
+        addDamageTypes();
+        addParticle();
+    }
+
+    private void addParticle() {
+        if (trait.hasParticleEffect()) {
+            TranslationTextComponent title = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits.particle");
+            StringTextComponent text = new StringTextComponent(trait.getParticleEffect().getParameters());
+            traitSections.add(new TraitSection(title, new ItemStack(Items.FIREWORK_ROCKET), text));
+        }
+    }
+
+    private void addDamageTypes() {
+        if (trait.hasDamageTypes()) {
+            TranslationTextComponent title = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits.damageTypes");
+            StringTextComponent text = new StringTextComponent("");
+            for (int i = 0; i < trait.getDamageTypes().size(); i++) {
+                Pair<String, Integer> damage = trait.getDamageTypes().get(i);
+                text.append(damage.getKey() + " ");
+                text.append(new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits.amplifier"));
+                text.append(damage.getRight().toString());
+                if (i != trait.getPotionDamageEffects().size() - 1) {
+                    text.append(", ");
+                }
+            }
+            traitSections.add(new TraitSection(title, new ItemStack(Items.IRON_SWORD), text));
+        }
+    }
+
+    private void addPotionDamageEffects() {
+        if (trait.hasDamagePotionEffects()) {
+            TranslationTextComponent title = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits.potion_damage_effects");
+            StringTextComponent text = new StringTextComponent("");
+            for (int i = 0; i < trait.getPotionDamageEffects().size(); i++) {
+                Pair<Effect, Integer> effect = trait.getPotionDamageEffects().get(i);
+                text.append(effect.getKey().getDisplayName());
+                text.append(" ");
+                text.append(new TranslationTextComponent("potion.potency." + effect.getRight()));
+                if (i != trait.getPotionDamageEffects().size() - 1) {
+                    text.append(", ");
+                }
+            }
+            traitSections.add(new TraitSection(title, PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.HARMING), text));
+        }
+    }
+
+    private void addDamageImmunities() {
+        if (trait.hasDamageImmunities()) {
+            TranslationTextComponent title = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits.damage_immunities");
+            String typeList = String.join(", ", trait.getDamageImmunities().stream().map(DamageSource::getDamageType).collect(Collectors.toList()));
+            traitSections.add(new TraitSection(title, new ItemStack(Items.IRON_CHESTPLATE), new StringTextComponent(typeList)));
+        }
+    }
+
+    private void addPotionImmunities() {
+        if (trait.hasPotionImmunities()) {
+            TranslationTextComponent title = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits.potion_immunities");
+            List<ITextComponent> effectNames = trait.getPotionImmunities().stream().map(Effect::getDisplayName).collect(Collectors.toList());
+            StringTextComponent text = new StringTextComponent("");
+            for (int i = 0; i < effectNames.size(); i++) {
+                text.append(effectNames.get(i));
+                if (i != effectNames.size() - 1) {
+                    text.append(", ");
+                }
+            }
+            traitSections.add(new TraitSection(title, new ItemStack(Items.MILK_BUCKET), text));
+        }
+    }
+
+    private void addSpecialAbilities() {
+        if (trait.hasSpecialAbilities()) {
+            trait.getSpecialAbilities().forEach(s -> {
+                TranslationTextComponent title = new TranslationTextComponent(String.format("trait.%s.%s", ResourcefulBees.MOD_ID, s));
+                TranslationTextComponent text = new TranslationTextComponent(String.format("trait.%s.special.%s", ResourcefulBees.MOD_ID, s));
+                ItemStack item;
+                switch (s) {
+                    case TraitConstants.FLAMMABLE:
+                        item = new ItemStack(Items.FIRE_CHARGE);
+                        break;
+                    case TraitConstants.SLIMY:
+                        item = new ItemStack(Items.SLIME_BALL);
+                        break;
+                    case TraitConstants.ANGRY:
+                        item = new ItemStack(Items.BLAZE_POWDER);
+                        break;
+                    default:
+                        item = new ItemStack(Items.ENDER_PEARL);
+                        break;
+                }
+                traitSections.add(new TraitSection(title, item, text));
+            });
+        }
     }
 
     private void toggleTab() {
@@ -95,6 +200,20 @@ public class TraitPage extends BeepediaPage {
         TranslationTextComponent title = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits.effects_list");
         int padding = font.getWidth(title) / 2;
         font.draw(matrix, title, (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, TextFormatting.WHITE.getColor());
+
+        GL11.glEnable(GL11.GL_SCISSOR_TEST);
+        double scale = beepedia.getMinecraft().getWindow().getGuiScaleFactor();
+        int scissorY = (int) (beepedia.getMinecraft().getWindow().getFramebufferHeight() - (this.yPos + 156) * scale);
+        GL11.glScissor((int) (this.xPos * scale), scissorY, (int) (SUB_PAGE_WIDTH * scale), (int) ((102) * scale));
+
+        int sectionPos = yPos + 20;
+        for (int i = 0; i < traitSections.size(); i++) {
+            if (i > 0) {
+                sectionPos += traitSections.get(i - 1).getHeight();
+            }
+            traitSections.get(i).draw(matrix, xPos, sectionPos, BeepediaScreen.currScreenState.getTraitEffectsListPos());
+        }
+        GL11.glDisable(GL11.GL_SCISSOR_TEST);
     }
 
     private void initList() {
@@ -131,6 +250,12 @@ public class TraitPage extends BeepediaPage {
         list.setScrollPos(BeepediaScreen.currScreenState.getTraitBeeListPos());
         nextTab.visible = true;
         prevTab.visible = true;
+        int effectsHeight = traitSections.stream().mapToInt(TraitSection::getHeight).sum();
+        if (effectsHeight < listHeight) {
+            BeepediaScreen.currScreenState.setTraitEffectsListPos(0);
+        } else if (BeepediaScreen.currScreenState.getTraitEffectsListPos() > effectsHeight - listHeight) {
+            BeepediaScreen.currScreenState.setTraitEffectsListPos(effectsHeight - listHeight);
+        }
     }
 
     @Override
@@ -143,26 +268,58 @@ public class TraitPage extends BeepediaPage {
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double scrollAmount) {
-        int height = 102;
         int startPos = 54;
-
-        if (mouseX >= xPos && mouseY >= yPos + startPos && mouseX <= xPos + SUB_PAGE_WIDTH && mouseY <= yPos + startPos + height) {
+        if (mouseX >= xPos && mouseY >= yPos + startPos && mouseX <= xPos + SUB_PAGE_WIDTH && mouseY <= yPos + startPos + listHeight) {
             if (!BeepediaScreen.currScreenState.isTraitsEffectsActive()) {
                 list.updatePos((int) (scrollAmount * 8));
                 BeepediaScreen.currScreenState.setTraitBeeListPos(list.getScrollPos());
             } else {
-//                int scrollPos = BeepediaScreen.currScreenState.getTraitEffectsListPos();
-//                int iconHeight = 21;
-//                int listHeight = effects.size() * iconHeight;
-//                if (height > listHeight) return false;
-//                scrollPos += scrollAmount * 8;
-//                if (scrollPos > 0) scrollPos = 0;
-//                else if (scrollPos < -(listHeight - height))
-//                    scrollPos = -(listHeight - height);
-//                BeepediaScreen.currScreenState.setTraitEffectsListPos(scrollPos);
+                return addScrollPos(scrollAmount * 8);
             }
             return true;
         }
         return false;
     }
+
+    private boolean addScrollPos(double v) {
+        int scrollPos = BeepediaScreen.currScreenState.getTraitEffectsListPos();
+        int effectsHeight = traitSections.stream().mapToInt(TraitSection::getHeight).sum();
+        if (effectsHeight < listHeight) return false;
+        scrollPos += v;
+        if (scrollPos > 0) scrollPos = 0;
+        else if (scrollPos < -(effectsHeight - listHeight))
+            scrollPos = -(effectsHeight - listHeight);
+        BeepediaScreen.currScreenState.setTraitEffectsListPos(scrollPos);
+        return true;
+    }
+
+    private class TraitSection {
+        FontRenderer font;
+        ITextComponent title;
+        ItemStack displaySlot;
+        ITextComponent text;
+        int width = BeepediaPage.SUB_PAGE_WIDTH;
+
+        public TraitSection(ITextComponent title, ItemStack displaySlot, ITextComponent text) {
+            this.title = title;
+            this.displaySlot = displaySlot;
+            this.text = text;
+            font = Minecraft.getInstance().fontRenderer;
+        }
+
+        public void draw(MatrixStack matrix, int xPos, int yPos, int scrollPos) {
+            beepedia.drawSlotNoToolTip(matrix, displaySlot, xPos, yPos + scrollPos);
+            font.draw(matrix, title, xPos + 24, yPos + 6 + scrollPos, TextFormatting.WHITE.getColor());
+            List<IReorderingProcessor> lines = font.wrapLines(text, width);
+            for (int i = 0; i < lines.size(); i++) {
+                IReorderingProcessor line = lines.get(i);
+                font.draw(matrix, line, xPos, yPos + 24 + i * font.FONT_HEIGHT + scrollPos, TextFormatting.GRAY.getColor());
+            }
+        }
+
+        public int getHeight() {
+            return font.getWordWrappedHeight(text.getString(), width) + 30;
+        }
+    }
+
 }

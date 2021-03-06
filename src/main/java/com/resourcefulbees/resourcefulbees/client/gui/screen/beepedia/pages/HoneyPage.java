@@ -45,6 +45,8 @@ public class HoneyPage extends BeepediaPage {
     private ItemStack bottle;
     private List<HoneyEffect> effects = new ArrayList<>();
 
+    private int listHeight = 102;
+
     ResourceLocation hungerBar = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/hunger_bar.png");
     ResourceLocation hungerIcons = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/hunger.png");
     ResourceLocation saturationIcons = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/saturation.png");
@@ -212,6 +214,13 @@ public class HoneyPage extends BeepediaPage {
         prevTab.visible = !effects.isEmpty();
         beeList.setActive(effects.isEmpty() || !BeepediaScreen.currScreenState.isHoneyEffectsActive());
         beeList.setScrollPos(BeepediaScreen.currScreenState.getHoneyBeeListPos());
+        int iconHeight = 21;
+        int effectsHeight = effects.size() * iconHeight;
+        if (effectsHeight < listHeight) {
+            BeepediaScreen.currScreenState.setHoneyEffectsListPos(0);
+        } else if (BeepediaScreen.currScreenState.getHoneyEffectsListPos() > effectsHeight - listHeight) {
+            BeepediaScreen.currScreenState.setHoneyEffectsListPos(effectsHeight - listHeight);
+        }
     }
 
     @Override
@@ -224,22 +233,20 @@ public class HoneyPage extends BeepediaPage {
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double scrollAmount) {
-        int height = 102;
         int startPos = 54;
-
-        if (mouseX >= xPos && mouseY >= yPos + startPos && mouseX <= xPos + SUB_PAGE_WIDTH && mouseY <= yPos + startPos + height) {
+        if (mouseX >= xPos && mouseY >= yPos + startPos && mouseX <= xPos + SUB_PAGE_WIDTH && mouseY <= yPos + startPos + listHeight) {
             if (effects.isEmpty() || !BeepediaScreen.currScreenState.isHoneyEffectsActive()) {
                 beeList.updatePos((int) (scrollAmount * 8));
                 BeepediaScreen.currScreenState.setHoneyBeeListPos(beeList.getScrollPos());
             } else {
                 int scrollPos = BeepediaScreen.currScreenState.getHoneyEffectsListPos();
                 int iconHeight = 21;
-                int listHeight = effects.size() * iconHeight;
-                if (height > listHeight) return false;
+                int effectsHeight = effects.size() * iconHeight;
+                if (effectsHeight < listHeight) return false;
                 scrollPos += scrollAmount * 8;
                 if (scrollPos > 0) scrollPos = 0;
-                else if (scrollPos < -(listHeight - height))
-                    scrollPos = -(listHeight - height);
+                else if (scrollPos < -(effectsHeight - listHeight))
+                    scrollPos = -(effectsHeight - listHeight);
                 BeepediaScreen.currScreenState.setHoneyEffectsListPos(scrollPos);
             }
             return true;
