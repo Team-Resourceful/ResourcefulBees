@@ -36,16 +36,16 @@ public class HoneyPage extends BeepediaPage {
     private final ImageButton prevTab;
     private final ImageButton nextTab;
     private SubButtonList beeList = null;
-    private HoneyBottleData bottleData;
+    private final HoneyBottleData bottleData;
     private String honeySearch;
-    private TranslationTextComponent text;
+    private final TranslationTextComponent text;
 
-    private int hunger;
-    private float saturation;
-    private ItemStack bottle;
+    private final int hunger;
+    private final float saturation;
+    private final ItemStack bottle;
     private List<HoneyEffect> effects = new ArrayList<>();
 
-    private int listHeight = 102;
+    private final int listHeight = 102;
 
     ResourceLocation hungerBar = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/hunger_bar.png");
     ResourceLocation hungerIcons = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/hunger.png");
@@ -106,7 +106,7 @@ public class HoneyPage extends BeepediaPage {
         beepedia.getMinecraft().textureManager.bindTexture(splitterImage);
         AbstractGui.drawTexture(matrix, xPos, yPos - 14, 0, 0, 165, 100, 165, 100);
         FontRenderer font = Minecraft.getInstance().fontRenderer;
-        font.draw(matrix, text, (float) xPos + 24, (float) yPos + 12, TextFormatting.WHITE.getColor());
+        font.draw(matrix, text.formatted(TextFormatting.WHITE), (float) xPos + 24, (float) yPos + 12, 0);
         drawHungerBar(matrix);
         if (BeepediaScreen.currScreenState.isHoneyEffectsActive() && !effects.isEmpty()) {
             drawEffectsList(matrix, xPos, yPos + 34);
@@ -121,13 +121,12 @@ public class HoneyPage extends BeepediaPage {
         for (Map.Entry<String, BeePage> e : beePages.entrySet()) {
             ItemStack stack = new ItemStack(ModItems.BEE_JAR.get());
             BeeJar.fillJar(stack, e.getValue().beeData);
-            ResourceLocation image = listImage;
             ITextComponent translation = e.getValue().beeData.getTranslation();
             Button.IPressable onPress = button -> {
                 BeepediaScreen.saveScreenState();
                 beepedia.setActive(BeepediaScreen.PageType.BEE, e.getKey());
             };
-            ListButton button = new ListButton(0, 0, 100, 20, 0, 0, 20, image, stack, 2, 2, translation, 22, 6, onPress);
+            ListButton button = new ListButton(0, 0, 100, 20, 0, 0, 20, listImage, stack, 2, 2, translation, 22, 6, onPress);
             beepedia.addButton(button);
             button.visible = false;
             buttons.put(e.getKey(), button);
@@ -140,14 +139,14 @@ public class HoneyPage extends BeepediaPage {
         FontRenderer font = Minecraft.getInstance().fontRenderer;
         TranslationTextComponent title = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.honey.bees_list");
         int padding = font.getWidth(title) / 2;
-        font.draw(matrix, title, (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, TextFormatting.WHITE.getColor());
+        font.draw(matrix, title.formatted(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, 0);
     }
 
     private void drawEffectsList(MatrixStack matrix, int xPos, int yPos) {
         FontRenderer font = Minecraft.getInstance().fontRenderer;
         TranslationTextComponent title = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.honey.effects_list");
         int padding = font.getWidth(title) / 2;
-        font.draw(matrix, title, (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, TextFormatting.WHITE.getColor());
+        font.draw(matrix, title.formatted(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, 0);
         for (int i = 0; i < effects.size(); i++) {
 
             // init effect
@@ -171,9 +170,9 @@ public class HoneyPage extends BeepediaPage {
             Minecraft.getInstance().getTextureManager().bindTexture(sprite.getAtlas().getId());
             AbstractGui.drawSprite(matrix, xPos + 1, pos + 1, beepedia.getZOffset(), 18, 18, sprite);
             // draw text
-            font.draw(matrix, name, (float) xPos + 22, (float) pos + 1, effect.isBeneficial() ? TextFormatting.BLUE.getColor() : TextFormatting.RED.getColor());
+            font.draw(matrix, name.formatted(effect.isBeneficial() ? TextFormatting.BLUE : TextFormatting.RED), (float) xPos + 22, (float) pos + 1, 0);
             if (effects.get(i).chance < 1) {
-                font.draw(matrix, chance, (float) xPos + 22, (float) pos + 11, TextFormatting.DARK_GRAY.getColor());
+                font.draw(matrix, chance.formatted(TextFormatting.DARK_GRAY), (float) xPos + 22, (float) pos + 11, 0);
             }
             GL11.glDisable(GL11.GL_SCISSOR_TEST);
         }

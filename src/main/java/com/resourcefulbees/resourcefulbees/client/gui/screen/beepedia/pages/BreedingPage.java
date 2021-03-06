@@ -133,11 +133,11 @@ public class BreedingPage extends BeeDataPage {
         FontRenderer font = Minecraft.getInstance().fontRenderer;
         TranslationTextComponent title = BeepediaScreen.currScreenState.isParentBreeding() && !baseOnly() ? parentsTitle : childrenTitle;
         int padding = font.getWidth(title) / 2;
-        font.draw(matrix, title, (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, TextFormatting.WHITE.getColor());
+        font.draw(matrix, title.formatted(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, 0);
         if (activeList.size() > 1) {
             StringTextComponent page = new StringTextComponent(String.format("%d / %d", activePage + 1, activeList.size()));
             padding = font.getWidth(page) / 2;
-            font.draw(matrix, page, (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + SUB_PAGE_HEIGHT - 14, TextFormatting.WHITE.getColor());
+            font.draw(matrix, page.formatted(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + SUB_PAGE_HEIGHT - 14, 0);
         }
     }
 
@@ -243,11 +243,11 @@ public class BreedingPage extends BeeDataPage {
                 int padding = font.getWidth(text) / 2;
                 Minecraft.getInstance().textureManager.bindTexture(infoIcon);
                 beepedia.drawTexture(matrix, (int) chancePos.x, (int) chancePos.y, 16, 0, 9, 9);
-                font.draw(matrix, text, (float) xPos + 140 - (float) padding, (float) yPos + 21, TextFormatting.GRAY.getColor());
+                font.draw(matrix, text.formatted(TextFormatting.GRAY), (float) xPos + 140 - (float) padding, (float) yPos + 21, 0);
             }
             StringTextComponent text = new StringTextComponent(decimalFormat.format(child.weight));
             int padding = font.getWidth(text) / 2;
-            font.draw(matrix, text, (float) xPos + 103f - (float) padding, (float) yPos + 56, TextFormatting.GRAY.getColor());
+            font.draw(matrix, text.formatted(TextFormatting.GRAY), (float) xPos + 103f - (float) padding, (float) yPos + 56, 0);
         }
 
         public void drawParent1Item(MatrixStack matrix) {

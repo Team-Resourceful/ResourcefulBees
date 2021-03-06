@@ -9,9 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -34,7 +32,7 @@ public class TraitListPage extends BeeDataPage {
         if (list == null) return;
         TranslationTextComponent title = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.traits");
         FontRenderer font = Minecraft.getInstance().fontRenderer;
-        font.draw(matrix, title, xPos, (float) yPos + 8, TextFormatting.WHITE.getColor());
+        font.draw(matrix, title.formatted(TextFormatting.WHITE), xPos, (float) yPos + 8, 0);
         list.updateList();
     }
 

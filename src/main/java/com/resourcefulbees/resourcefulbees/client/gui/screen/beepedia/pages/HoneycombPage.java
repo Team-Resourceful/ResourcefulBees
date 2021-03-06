@@ -40,13 +40,13 @@ public class HoneycombPage extends BeeDataPage {
     Button prevTab;
     Button nextTab;
     private int counter;
-    private int max;
+    private final int max;
 
-    private ItemStack hiveOutput;
-    private ItemStack apiary1Output;
-    private ItemStack apiary2Output;
-    private ItemStack apiary3Output;
-    private ItemStack apiary4Output;
+    private final ItemStack hiveOutput;
+    private final ItemStack apiary1Output;
+    private final ItemStack apiary2Output;
+    private final ItemStack apiary3Output;
+    private final ItemStack apiary4Output;
 
     List<RecipeObject> recipes = new ArrayList<>();
 
@@ -149,7 +149,7 @@ public class HoneycombPage extends BeeDataPage {
         TextureManager manager = Minecraft.getInstance().getTextureManager();
         TranslationTextComponent title = new TranslationTextComponent(BeepediaScreen.currScreenState.isCentrifugeOpen() ? "gui.resourcefulbees.beepedia.bee_subtab.centrifuge" : "gui.resourcefulbees.beepedia.bee_subtab.honeycombs");
         int padding = font.getWidth(title) / 2;
-        font.draw(matrix, title, (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, TextFormatting.WHITE.getColor());
+        font.draw(matrix, title.formatted(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, 0);
         if (BeepediaScreen.currScreenState.isCentrifugeOpen() && !recipes.isEmpty()) {
             manager.bindTexture(centrifugeImage);
             AbstractGui.drawTexture(matrix, xPos, yPos + 22, 0, 0, 169, 84, 169, 84);
@@ -157,7 +157,7 @@ public class HoneycombPage extends BeeDataPage {
             if (recipes.size() > 1) {
                 StringTextComponent page = new StringTextComponent(String.format("%d / %d", activePage + 1, recipes.size()));
                 padding = font.getWidth(page) / 2;
-                font.draw(matrix, page, (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + SUB_PAGE_HEIGHT - 14, TextFormatting.WHITE.getColor());
+                font.draw(matrix, page.formatted(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + SUB_PAGE_HEIGHT - 14, 0);
             }
         } else {
             manager.bindTexture(honeycombsImage);
@@ -307,7 +307,7 @@ public class HoneycombPage extends BeeDataPage {
             DecimalFormat decimalFormat = new DecimalFormat("##%");
             StringTextComponent text = new StringTextComponent(decimalFormat.format(right));
             int padding = font.getWidth(text) / 2;
-            font.draw(matrix, text, (float) xPos - padding, yPos, TextFormatting.GRAY.getColor());
+            font.draw(matrix, text.formatted(TextFormatting.GRAY), (float) xPos - padding, yPos, 0);
         }
 
         public void drawTooltip(MatrixStack matrix, int mouseX, int mouseY) {
