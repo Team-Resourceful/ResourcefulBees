@@ -29,14 +29,19 @@ repositories {
     maven { url "https://dvs1.progwml6.com/files/maven/" }
     maven { url "https://modmaven.k-4u.nl" }
     maven { url 'https://modmaven.dev/' }
+
     //flatDir { dirs 'C:\\Users\\James\\Documents\\Minecraft Modding\\Test Mods'}
 }
 
 version = "${mod_version}"
-group = "io.github.resourceful-bees" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+group = "com.resourcefulbees" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "${modid}"
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+
+def releasesRepoUrl = "https://nexus.resourcefulbees.com/repository/maven-releases/"
+def snapshotsRepoUrl = "https://nexus.resourcefulbees.com/repository/maven-snapshots/"
+def ENV = System.getenv()
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
@@ -128,12 +133,6 @@ artifacts {
     archives sourcesJar
 }
 
-// Signing and upload
-signing {
-    required { gradle.taskGraph.hasTask("uploadArchives") }
-    sign configurations.archives
-}
-
 mixin {
     add sourceSets.main, "${modid}.refmap.json"
 }
@@ -162,11 +161,11 @@ jar {
     manifest {
         attributes([
                 "Specification-Title": "resourcefulbees",
-                "Specification-Vendor": "examplemodsareus",
+                "Specification-Vendor": "resourcefulbees",
                 "Specification-Version": "1", // We are version 1 of ourselves
                 "Implementation-Title": project.name,
                 "Implementation-Version": "${version}",
-                "Implementation-Vendor" :"examplemodsareus",
+                "Implementation-Vendor" :"resourcefulbees",
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
                 "MixinConfigs": "${modid}.mixins.json"
         ])
@@ -178,64 +177,65 @@ def reobfArtifact = artifacts.add('default', reobfFile) {
     type 'jar'
     builtBy 'reobfJar'
 }
+
+
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
             artifact reobfArtifact
-        }
-    }
-    repositories {
-        maven {
-            url "file:///${project.projectDir}/mcmodsrepo"
-        }
-    }
-}
 
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-
-            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-                authentication(userName: findProperty('ossrhUsername'), password: findProperty('ossrhPassword'))
-            }
-
-            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-                authentication(userName: findProperty('ossrhUsername'), password: findProperty('ossrhPassword'))
-            }
-
-            pom.project {
-                name 'ResourcefulBees'
-                packaging 'jar'
-                // optionally artifactId can be defined here
-                description 'A mod for minecraft to add own bees to minecraft through a powerfull api.'
-                url 'https://github.com/Resourceful-Bees/ResourcefulBees'
+            pom {
+                name = 'ResourcefulBees'
+                description = 'A mod for minecraft to add own bees to minecraft through a powerfull api.'
+                url = 'https://github.com/Resourceful-Bees/ResourcefulBees'
 
                 scm {
-                    connection 'git:https://github.com/Resourceful-Bees/ResourcefulBees.git'
-                    developerConnection 'git:https://github.com/Resourceful-Bees/ResourcefulBees.git'
-                    url 'https://github.com/Resourceful-Bees/ResourcefulBees/'
+                    connection = 'git:https://github.com/Resourceful-Bees/ResourcefulBees.git'
+                    developerConnection = 'git:https://github.com/Resourceful-Bees/ResourcefulBees.git'
+                    url = 'https://github.com/Resourceful-Bees/ResourcefulBees/'
                 }
 
                 licenses {
                     license {
-                        name 'GNU General Public License v3.0'
-                        url 'https://raw.githubusercontent.com/Resourceful-Bees/ResourcefulBees/master/LICENSE'
+                        name = 'GNU General Public License v3.0'
+                        url = 'https://raw.githubusercontent.com/Resourceful-Bees/ResourcefulBees/master/LICENSE'
                     }
                 }
 
                 developers {
                     developer {
-                        id 'epic428'
-                        name 'Epic_Oreo'
-                        email 'epic_oreo@n.o'
+                        id = 'epic428'
+                        name = 'Epic_Oreo'
+                        email = 'admin@resourcefulbees.com'
                     }
                     developer {
-                        id 'Waterdev'
-                        name 'Waterdev Valentin'
-                        email 'waterdev@galaxycrow.net'
+                        id = 'thatgravyboat'
+                        name = 'ThatGravyBoat'
+                        email = 'admin@resourcefulbees.com'
+                    }
+                    developer {
+                        id = 'dawn_felstar'
+                        name = 'Dawn Felstar'
+                        email = 'admin@resourcefulbees.com'
+                    }
+                    developer {
+                        id = 'vikthoor'
+                        name = 'Vik'
+                        email = 'admin@resourcefulbees.com'
                     }
                 }
+            }
+
+        }
+    }
+
+    repositories {
+        maven {
+            url = rootProject.version.endsWith("-SNAPSHOT") ? snapshotsRepoUrl : releasesRepoUrl
+            credentials {
+                username ENV.MAVEN_USER
+                password ENV.MAVEN_PASS
             }
         }
     }
