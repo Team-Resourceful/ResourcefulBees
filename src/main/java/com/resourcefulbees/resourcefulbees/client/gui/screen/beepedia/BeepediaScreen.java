@@ -3,7 +3,6 @@ package com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
-import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.BeePage;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.HomePage;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.HoneyPage;
@@ -239,10 +238,11 @@ public class BeepediaScreen extends Screen {
         currScreenState.setPageID(page.id);
 
         // update list
-        if (currScreenState.pageChanged() || goingBack) {
+        boolean forceUpdate = this.activeList == null;
+        if (currScreenState.pageChanged() || goingBack || forceUpdate) {
             if (this.activeList != null) this.activeList.setActive(false, goingBack);
             this.activeList = list;
-            this.activeList.setActive(true, goingBack);
+            this.activeList.setActive(true, goingBack || forceUpdate);
             this.activeListType = type;
             if (BeepediaScreen.searchVisible && goingBack)
                 this.activeList.updateReducedList(BeepediaScreen.getSearch());

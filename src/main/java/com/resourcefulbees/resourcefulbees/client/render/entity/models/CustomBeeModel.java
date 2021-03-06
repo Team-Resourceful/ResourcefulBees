@@ -66,11 +66,16 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
             case MUSHROOM:
                 addMushrooms();
                 break;
+            case ARMORED:
+                addArmor();
+                break;
+            case CROP:
+                addCrops();
+                break;
             case DEFAULT:
                 addDefaultParts();
         }
     }
-
 
     public CustomBeeModel(BaseModelTypes modelType) {
         super(false, 24.0F, 0.0F);
@@ -362,6 +367,45 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
         backMushroom1.addChild(backMushroom2);
         setRotationAngle(backMushroom2, 0.0F, -1.5708F, 0.0F);
         backMushroom2.setTextureOffset(0, 48).addCuboid(-8.0F, -14.0F, -2.0F, 16.0F, 16.0F, 0.0F, -2.0F, false);
+    }
+
+    private void addCrops() {
+        ModelRenderer crop = new ModelRenderer(this);
+        crop.setRotationPoint(0.0F, 0.0F, 0.0F);
+        body.addChild(crop);
+        crop.setTextureOffset(0, 25).addCuboid(-3.5F, -4.0F, -5.0F, 7.0F, 7.0F, 10.0F, 0.4F, false);
+
+        ModelRenderer crop2 = new ModelRenderer(this);
+        crop2.setRotationPoint(-1.6F, -4.0F, 1.5F);
+        crop.addChild(crop2);
+
+
+        ModelRenderer crop3 = new ModelRenderer(this);
+        crop3.setRotationPoint(0.0F, -9.0F, -2.0F);
+        crop2.addChild(crop3);
+        setRotationAngle(crop3, 0.0F, -1.5708F, 0.0F);
+        crop3.setTextureOffset(0, 46).addCuboid(-8.3F, -3.9F, -7.9F, 18.0F, 18.0F, 0.0F, -4.0F, true);
+        crop3.setTextureOffset(0, 46).addCuboid(-8.3F, -3.9F, -3.4F, 18.0F, 18.0F, 0.0F, -4.0F, true);
+
+        ModelRenderer crop4 = new ModelRenderer(this);
+        crop4.setRotationPoint(2.5F, 5.1F, -1.625F);
+        crop3.addChild(crop4);
+        setRotationAngle(crop4, 0.0F, -1.5708F, 0.0F);
+        crop4.setTextureOffset(0, 46).addCuboid(-9.0F, -9.0F, 0.0F, 18.0F, 18.0F, 0.0F, -4.0F, true);
+
+        ModelRenderer crop5 = new ModelRenderer(this);
+        crop5.setRotationPoint(6.85F, 5.1F, -1.625F);
+        crop3.addChild(crop5);
+        setRotationAngle(crop5, 0.0F, -1.5708F, 0.0F);
+        crop5.setTextureOffset(0, 46).addCuboid(-9.0F, -9.0F, 0.0F, 18.0F, 18.0F, 0.0F, -4.0F, true);
+    }
+
+    private void addArmor() {
+        ModelRenderer armored = new ModelRenderer(this);
+        armored.setRotationPoint(0.0F, 0.0F, 0.0F);
+        body.addChild(armored);
+        armored.setTextureOffset(34, 3).addCuboid(-3.5F, -4.0F, -5.0F, 7.0F, 7.0F, 7.0F, 0.6F, false);
+        armored.setTextureOffset(0, 25).addCuboid(-3.5F, -4.0F, -5.0F, 7.0F, 7.0F, 10.0F, 0.25F, false);
     }
 
     public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {

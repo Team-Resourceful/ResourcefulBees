@@ -124,8 +124,7 @@ public class BeePage extends BeepediaPage {
         double scale = beepedia.getMinecraft().getWindow().getGuiScaleFactor();
         int scissorY = (int) (beepedia.getMinecraft().getWindow().getFramebufferHeight() - (yPos + 9 + 38) * scale);
         GL11.glScissor((int) (xPos * scale), scissorY, (int) (38 * scale), (int) (38 * scale));
-        if (bee != null)
-            RenderUtils.renderEntity(matrix, getBee(), Minecraft.getInstance().world, (float) xPos + 10, (float) yPos + 2, -45, 2);
+        RenderUtils.renderEntity(matrix, getBee(), Minecraft.getInstance().world, (float) xPos + 10, (float) yPos + 2, -45, 2);
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
 
     }
