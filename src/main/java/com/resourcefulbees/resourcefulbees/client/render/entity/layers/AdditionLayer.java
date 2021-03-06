@@ -14,7 +14,6 @@ import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.apache.logging.log4j.LogManager;
 
 import javax.annotation.Nonnull;
 
@@ -34,10 +33,7 @@ public class AdditionLayer<T extends CustomBeeEntity> extends LayerRenderer<T, C
             this.baseTexture = BeeConstants.MISSING_TEXTURE;
         }
         if (!BeeLayer.textureExists(angryTexture) || angryTexture == null) {
-            this.angryTexture = baseTexture;
-        }
-        if (this.angryTexture == null || this.baseTexture == null) {
-            LogManager.getLogger().warn("angry and base textures are null");
+            this.angryTexture = this.baseTexture;
         }
     }
 
