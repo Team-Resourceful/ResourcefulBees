@@ -6,6 +6,7 @@ import com.resourcefulbees.resourcefulbees.client.models.ModelHandler;
 import com.resourcefulbees.resourcefulbees.client.render.entity.CustomBeeRenderer;
 import com.resourcefulbees.resourcefulbees.client.render.fluid.FluidRender;
 import com.resourcefulbees.resourcefulbees.client.render.items.ItemModelPropertiesHandler;
+import com.resourcefulbees.resourcefulbees.client.render.patreon.BeeRewardRender;
 import com.resourcefulbees.resourcefulbees.client.render.tileentity.RenderEnderBeecon;
 import com.resourcefulbees.resourcefulbees.client.render.tileentity.RenderHoneyGenerator;
 import com.resourcefulbees.resourcefulbees.client.render.tileentity.RenderHoneyTank;
@@ -13,9 +14,11 @@ import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.registry.*;
 import com.resourcefulbees.resourcefulbees.utils.PreviewHandler;
 import com.resourcefulbees.resourcefulbees.utils.color.ColorHandler;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -36,6 +39,12 @@ public class ClientEventHandlers {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ColorHandler::onItemColors);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ColorHandler::onBlockColors);
         MinecraftForge.EVENT_BUS.addListener(FluidRender::honeyOverlay);
+    }
+
+    public static void registerPatreonRender() {
+        EntityRendererManager manager =  Minecraft.getInstance().getRenderManager();
+        manager.getSkinMap().get("default").addLayer(new BeeRewardRender(manager.playerRenderer));
+        manager.getSkinMap().get("slim").addLayer(new BeeRewardRender(manager.playerRenderer));
     }
 
     private static void doClientStuff(final FMLClientSetupEvent event) {
