@@ -40,7 +40,7 @@ public class HomePage extends BeepediaPage {
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
 
         FontRenderer font = Minecraft.getInstance().fontRenderer;
-        font.draw(matrix, new TranslationTextComponent("itemGroup.resourcefulbees").formatted(TextFormatting.GRAY), xPos + 30F, yPos + 81F, 0);
+        font.draw(matrix, new TranslationTextComponent("itemGroup.resourcefulbees").formatted(TextFormatting.GRAY), xPos + 30F, yPos + 81F, -1);
         Minecraft.getInstance().getTextureManager().bindTexture(logo);
         AbstractGui.drawTexture(matrix, xPos + (SUB_PAGE_WIDTH / 2) - 54, yPos + 90, 0, 0, 104, 16, 104, 16);
     }

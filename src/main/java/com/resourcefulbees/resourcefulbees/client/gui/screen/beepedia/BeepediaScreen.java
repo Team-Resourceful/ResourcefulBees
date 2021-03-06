@@ -376,7 +376,7 @@ public class BeepediaScreen extends Screen {
                 title = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.bees");
                 break;
         }
-        this.textRenderer.draw(matrixStack, title, (float) this.guiLeft + 10, (float) this.guiTop + 20, 0xffffff);
+        this.textRenderer.draw(matrixStack, title.formatted(TextFormatting.WHITE), (float) this.guiLeft + 10, (float) this.guiTop + 20, -1);
     }
 
 

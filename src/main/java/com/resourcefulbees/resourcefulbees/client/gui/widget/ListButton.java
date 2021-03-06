@@ -2,13 +2,11 @@ package com.resourcefulbees.resourcefulbees.client.gui.widget;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponent;
 import net.minecraft.util.text.TextFormatting;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.GL11;
@@ -19,7 +17,7 @@ public class ListButton extends TabImageButton {
     private final ITextComponent text;
     private final int textX;
     private final int textY;
-    private FontRenderer fontRenderer;
+    private final FontRenderer fontRenderer;
     private ButtonList parent = null;
 
     public ListButton(int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int yDiffTextIn, ResourceLocation resourceLocationIn, @NotNull ItemStack displayItem, int itemX, int itemY, ITextComponent text, int textX, int textY, IPressable onPressIn) {
@@ -67,8 +65,7 @@ public class ListButton extends TabImageButton {
 
     private void drawButton(@Nonnull MatrixStack matrix, float texYPos) {
         drawTexture(matrix, this.x, this.y, (float) this.xTexStart, texYPos, this.width, this.height, width, yDiffText * 3);
-        int color = this.active ? TextFormatting.GRAY.getColor() : TextFormatting.WHITE.getColor();
-        fontRenderer.draw(matrix, text, (float) (this.x + textX), (float) (this.y + textY), color);
+        fontRenderer.draw(matrix, text.shallowCopy().formatted(this.active ? TextFormatting.GRAY : TextFormatting.WHITE), (float) (this.x + textX), (float) (this.y + textY), -1);
         if (this.displayItem != null)
             Minecraft.getInstance().getItemRenderer().renderItemAndEffectIntoGUI(this.displayItem, this.x + this.itemX, this.y + this.itemY);
         RenderSystem.enableDepthTest();

@@ -52,13 +52,13 @@ public class BeeInfoPage extends BeeDataPage {
         passiveName.append(BeeInfoUtils.getYesNo(beeData.getCombatData().isPassive()));
         poisonName.append(BeeInfoUtils.getYesNo(beeData.getCombatData().inflictsPoison()));
 
-        font.draw(matrix, title.formatted(TextFormatting.WHITE), xPos, (float) yPos + 8, 0);
-        font.draw(matrix, sizeName.formatted(TextFormatting.GRAY), xPos, (float) yPos + 22, 0);
-        font.draw(matrix, healthName.formatted(TextFormatting.GRAY), xPos, (float) yPos + 34, 0);
-        font.draw(matrix, damageName.formatted(TextFormatting.GRAY), (float) xPos + 84, (float) yPos + 34, 0);
-        font.draw(matrix, passiveName.formatted(TextFormatting.GRAY), xPos, (float) yPos + 46, 0);
-        font.draw(matrix, poisonName.formatted(TextFormatting.GRAY), (float) xPos + 84, (float) yPos + 46, 0);
-        font.draw(matrix, stingerName.formatted(TextFormatting.GRAY), xPos, (float) yPos + 58, 0);
+        font.draw(matrix, title.formatted(TextFormatting.WHITE), xPos, (float) yPos + 8, -1);
+        font.draw(matrix, sizeName.formatted(TextFormatting.GRAY), xPos, (float) yPos + 22, -1);
+        font.draw(matrix, healthName.formatted(TextFormatting.GRAY), xPos, (float) yPos + 34, -1);
+        font.draw(matrix, damageName.formatted(TextFormatting.GRAY), (float) xPos + 84, (float) yPos + 34, -1);
+        font.draw(matrix, passiveName.formatted(TextFormatting.GRAY), xPos, (float) yPos + 46, -1);
+        font.draw(matrix, poisonName.formatted(TextFormatting.GRAY), (float) xPos + 84, (float) yPos + 46, -1);
+        font.draw(matrix, stingerName.formatted(TextFormatting.GRAY), xPos, (float) yPos + 58, -1);
     }
 
     @Override
@@ -67,7 +67,7 @@ public class BeeInfoPage extends BeeDataPage {
         TranslationTextComponent flowerName = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.info.flower");
         if (beeData.hasBlockFlowers()) {
             if (!flowers.isEmpty()) {
-                font.draw(matrix, flowerName.formatted(TextFormatting.GRAY), (float) xPos, (float) yPos + 75, 0);
+                font.draw(matrix, flowerName.formatted(TextFormatting.GRAY), (float) xPos, (float) yPos + 75, -1);
                 beepedia.drawSlot(matrix, flowers.get(counter), xPos + 36, yPos + 70);
             }
         } else if (beeData.hasEntityFlower()) {
@@ -78,7 +78,7 @@ public class BeeInfoPage extends BeeDataPage {
                     return;
                 entityFlower = entityType.create(beepedia.getMinecraft().world);
             }
-            font.draw(matrix, flowerName.formatted(TextFormatting.GRAY), (float) xPos, (float) yPos + 80, 0);
+            font.draw(matrix, flowerName.formatted(TextFormatting.GRAY), (float) xPos, (float) yPos + 80, -1);
             RenderUtils.renderEntity(matrix, entityFlower, beepedia.getMinecraft().world, (float) xPos + 45, (float) yPos + 75, -45, 1.25f);
         }
     }

@@ -32,7 +32,7 @@ public class TraitListPage extends BeeDataPage {
         if (list == null) return;
         TranslationTextComponent title = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.traits");
         FontRenderer font = Minecraft.getInstance().fontRenderer;
-        font.draw(matrix, title.formatted(TextFormatting.WHITE), xPos, (float) yPos + 8, 0);
+        font.draw(matrix, title.formatted(TextFormatting.WHITE), xPos, (float) yPos + 8, -1);
         list.updateList();
     }
 

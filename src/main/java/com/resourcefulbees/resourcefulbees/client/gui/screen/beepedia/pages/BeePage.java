@@ -117,8 +117,7 @@ public class BeePage extends BeepediaPage {
     public void renderBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
         beepedia.getMinecraft().textureManager.bindTexture(splitterImage);
         AbstractGui.drawTexture(matrix, xPos, yPos, 0, 0, 165, 100, 165, 100);
-        //noinspection ConstantConditions
-        Minecraft.getInstance().fontRenderer.draw(matrix, beeData.getTranslation(), (float) xPos + 40, (float) yPos + 10, TextFormatting.WHITE.getColor());
+        Minecraft.getInstance().fontRenderer.draw(matrix, beeData.getTranslation().formatted(TextFormatting.WHITE), (float) xPos + 40, (float) yPos + 10, -1);
         subPage.getRight().renderBackground(matrix, partialTick, mouseX, mouseY);
 
         GL11.glEnable(GL11.GL_SCISSOR_TEST);

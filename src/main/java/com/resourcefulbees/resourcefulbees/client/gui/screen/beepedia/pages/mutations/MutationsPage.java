@@ -40,7 +40,7 @@ public abstract class MutationsPage {
         DecimalFormat decimalFormat = new DecimalFormat("##%");
         StringTextComponent text = new StringTextComponent(decimalFormat.format(right));
         int padding = font.getWidth(text) / 2;
-        font.draw(matrix, text.formatted(TextFormatting.GRAY), (float) xPos - padding, yPos, 0);
+        font.draw(matrix, text.formatted(TextFormatting.GRAY), (float) xPos - padding, yPos, -1);
     }
     protected void drawChance(MatrixStack matrix, Double right, int xPos, int yPos) {
         if (right >= 1) return;

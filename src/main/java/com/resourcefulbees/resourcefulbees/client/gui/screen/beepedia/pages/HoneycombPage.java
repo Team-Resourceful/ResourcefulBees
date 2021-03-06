@@ -149,7 +149,7 @@ public class HoneycombPage extends BeeDataPage {
         TextureManager manager = Minecraft.getInstance().getTextureManager();
         TranslationTextComponent title = new TranslationTextComponent(BeepediaScreen.currScreenState.isCentrifugeOpen() ? "gui.resourcefulbees.beepedia.bee_subtab.centrifuge" : "gui.resourcefulbees.beepedia.bee_subtab.honeycombs");
         int padding = font.getWidth(title) / 2;
-        font.draw(matrix, title.formatted(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, 0);
+        font.draw(matrix, title.formatted(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, -1);
         if (BeepediaScreen.currScreenState.isCentrifugeOpen() && !recipes.isEmpty()) {
             manager.bindTexture(centrifugeImage);
             AbstractGui.drawTexture(matrix, xPos, yPos + 22, 0, 0, 169, 84, 169, 84);
@@ -157,7 +157,7 @@ public class HoneycombPage extends BeeDataPage {
             if (recipes.size() > 1) {
                 StringTextComponent page = new StringTextComponent(String.format("%d / %d", activePage + 1, recipes.size()));
                 padding = font.getWidth(page) / 2;
-                font.draw(matrix, page.formatted(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + SUB_PAGE_HEIGHT - 14, 0);
+                font.draw(matrix, page.formatted(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + SUB_PAGE_HEIGHT - 14, -1);
             }
         } else {
             manager.bindTexture(honeycombsImage);
@@ -307,7 +307,7 @@ public class HoneycombPage extends BeeDataPage {
             DecimalFormat decimalFormat = new DecimalFormat("##%");
             StringTextComponent text = new StringTextComponent(decimalFormat.format(right));
             int padding = font.getWidth(text) / 2;
-            font.draw(matrix, text.formatted(TextFormatting.GRAY), (float) xPos - padding, yPos, 0);
+            font.draw(matrix, text.formatted(TextFormatting.GRAY), (float) xPos - padding, yPos, -1);
         }
 
         public void drawTooltip(MatrixStack matrix, int mouseX, int mouseY) {

@@ -10,6 +10,7 @@ import net.minecraft.potion.Effect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.Color;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
@@ -44,7 +45,7 @@ public class EffectComponent implements ICustomComponent {
         FontRenderer text = Minecraft.getInstance().fontRenderer;
         TextureManager manager = Minecraft.getInstance().getTextureManager();
         float width = text.getWidth(effectName);
-        text.draw(matrixStack, effectName, xOffset - width / 2, yOffset, Color.parse("black").getRgb());
+        text.draw(matrixStack, effectName.shallowCopy().formatted(TextFormatting.BLACK), xOffset - width / 2, yOffset, -1);
         manager.bindTexture(EFFECT_BACKGROUND);
         AbstractGui.drawTexture(matrixStack, xOffset - 32, yOffset + 6, 1, 99, 64, 32, 128, 256);
         manager.bindTexture(this.effectSprite.getAtlas().getId());

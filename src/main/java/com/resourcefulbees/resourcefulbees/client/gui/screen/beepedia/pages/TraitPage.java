@@ -98,7 +98,8 @@ public class TraitPage extends BeepediaPage {
                 Pair<Effect, Integer> effect = trait.getPotionDamageEffects().get(i);
                 text.append(effect.getKey().getDisplayName());
                 text.append(" ");
-                text.append(new TranslationTextComponent("potion.potency." + effect.getRight()));
+
+                if (effect.getRight() > 0) text.append(new StringTextComponent(effect.getRight().toString()));
                 if (i != trait.getPotionDamageEffects().size() - 1) {
                     text.append(", ");
                 }
@@ -146,8 +147,11 @@ public class TraitPage extends BeepediaPage {
                     case TraitConstants.ANGRY:
                         item = new ItemStack(Items.BLAZE_POWDER);
                         break;
-                    default:
+                    case TraitConstants.TELEPORT:
                         item = new ItemStack(Items.ENDER_PEARL);
+                        break;
+                    default:
+                        item = new ItemStack(Items.BARRIER);
                         break;
                 }
                 traitSections.add(new TraitSection(title, item, text));
@@ -178,8 +182,8 @@ public class TraitPage extends BeepediaPage {
         AbstractGui.drawTexture(matrix, xPos, yPos - 14, 0, 0, 165, 100, 165, 100);
         FontRenderer font = Minecraft.getInstance().fontRenderer;
         StringTextComponent key = new StringTextComponent(id);
-        font.draw(matrix, text.formatted(TextFormatting.WHITE), (float) xPos + 24, (float) yPos + 12, 0);
-        font.draw(matrix, key.formatted(TextFormatting.DARK_GRAY), (float) xPos + 24, (float) yPos + 22, 0);
+        font.draw(matrix, text.formatted(TextFormatting.WHITE), (float) xPos + 24, (float) yPos + 12, -1);
+        font.draw(matrix, key.formatted(TextFormatting.DARK_GRAY), (float) xPos + 24, (float) yPos + 22, -1);
         if (BeepediaScreen.currScreenState.isTraitsEffectsActive()) {
             drawEffectsList(matrix, xPos, yPos + 34);
         } else {
@@ -191,14 +195,14 @@ public class TraitPage extends BeepediaPage {
         FontRenderer font = Minecraft.getInstance().fontRenderer;
         TranslationTextComponent title = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits.bees_list");
         int padding = font.getWidth(title) / 2;
-        font.draw(matrix, title.formatted(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, 0);
+        font.draw(matrix, title.formatted(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, -1);
     }
 
     private void drawEffectsList(MatrixStack matrix, int xPos, int yPos) {
         FontRenderer font = Minecraft.getInstance().fontRenderer;
         TranslationTextComponent title = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits.effects_list");
         int padding = font.getWidth(title) / 2;
-        font.draw(matrix, title.formatted(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, 0);
+        font.draw(matrix, title.formatted(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, -1);
 
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
         double scale = beepedia.getMinecraft().getWindow().getGuiScaleFactor();
@@ -307,11 +311,11 @@ public class TraitPage extends BeepediaPage {
 
         public void draw(MatrixStack matrix, int xPos, int yPos, int scrollPos) {
             beepedia.drawSlotNoToolTip(matrix, displaySlot, xPos, yPos + scrollPos);
-            font.draw(matrix, title, xPos + 24F, yPos + 6F + scrollPos, 0);
+            font.draw(matrix, title, xPos + 24F, yPos + 6F + scrollPos, -1);
             List<IReorderingProcessor> lines = font.wrapLines(text, width);
             for (int i = 0; i < lines.size(); i++) {
                 IReorderingProcessor line = lines.get(i);
-                font.draw(matrix, line, xPos, yPos + 24F + i * font.FONT_HEIGHT + scrollPos, 0);
+                font.draw(matrix, line, xPos, yPos + 24F + i * font.FONT_HEIGHT + scrollPos, -1);
             }
         }
 
