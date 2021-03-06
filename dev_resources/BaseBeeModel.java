@@ -33,6 +33,9 @@ public class BaseBeeModel extends EntityModel<Entity> {
 	private final ModelRenderer crop;
 	private final ModelRenderer crop2;
 	private final ModelRenderer crop3;
+	private final ModelRenderer crop3_r1;
+	private final ModelRenderer crop3_r2;
+	private final ModelRenderer armored;
 
 	public BaseBeeModel() {
 		textureWidth = 64;
@@ -198,15 +201,32 @@ public class BaseBeeModel extends EntityModel<Entity> {
 		crop2 = new ModelRenderer(this);
 		crop2.setRotationPoint(-1.6F, -4.0F, 1.5F);
 		crop.addChild(crop2);
+		
 
 		crop3 = new ModelRenderer(this);
 		crop3.setRotationPoint(0.0F, -9.0F, -2.0F);
 		crop2.addChild(crop3);
 		setRotationAngle(crop3, 0.0F, -1.5708F, 0.0F);
-		crop3.setTextureOffset(0, 28).addBox(6.85F, -3.9F, -10.625F, 0.0F, 18.0F, 18.0F, -4.0F, true);
-		crop3.setTextureOffset(0, 28).addBox(2.5F, -3.9F, -10.625F, 0.0F, 18.0F, 18.0F, -4.0F, true);
 		crop3.setTextureOffset(0, 46).addBox(-8.3F, -3.9F, -7.9F, 18.0F, 18.0F, 0.0F, -4.0F, true);
 		crop3.setTextureOffset(0, 46).addBox(-8.3F, -3.9F, -3.4F, 18.0F, 18.0F, 0.0F, -4.0F, true);
+
+		crop3_r1 = new ModelRenderer(this);
+		crop3_r1.setRotationPoint(2.5F, 5.1F, -1.625F);
+		crop3.addChild(crop3_r1);
+		setRotationAngle(crop3_r1, 0.0F, -1.5708F, 0.0F);
+		crop3_r1.setTextureOffset(0, 46).addBox(-9.0F, -9.0F, 0.0F, 18.0F, 18.0F, 0.0F, -4.0F, true);
+
+		crop3_r2 = new ModelRenderer(this);
+		crop3_r2.setRotationPoint(6.85F, 5.1F, -1.625F);
+		crop3.addChild(crop3_r2);
+		setRotationAngle(crop3_r2, 0.0F, -1.5708F, 0.0F);
+		crop3_r2.setTextureOffset(0, 46).addBox(-9.0F, -9.0F, 0.0F, 18.0F, 18.0F, 0.0F, -4.0F, true);
+
+		armored = new ModelRenderer(this);
+		armored.setRotationPoint(0.0F, 0.0F, 0.0F);
+		body.addChild(armored);
+		armored.setTextureOffset(34, 3).addBox(-3.5F, -4.0F, -5.0F, 7.0F, 7.0F, 7.0F, 0.75F, false);
+		armored.setTextureOffset(0, 25).addBox(-3.5F, -4.0F, -5.0F, 7.0F, 7.0F, 10.0F, 0.25F, false);
 	}
 
 	@Override

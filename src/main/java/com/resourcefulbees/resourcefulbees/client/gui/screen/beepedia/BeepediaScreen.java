@@ -238,10 +238,11 @@ public class BeepediaScreen extends Screen {
         currScreenState.setPageID(page.id);
 
         // update list
-        if (currScreenState.pageChanged() || goingBack) {
+        boolean forceUpdate = this.activeList == null;
+        if (currScreenState.pageChanged() || goingBack || forceUpdate) {
             if (this.activeList != null) this.activeList.setActive(false, goingBack);
             this.activeList = list;
-            this.activeList.setActive(true, goingBack);
+            this.activeList.setActive(true, goingBack || forceUpdate);
             this.activeListType = type;
             if (BeepediaScreen.searchVisible && goingBack)
                 this.activeList.updateReducedList(BeepediaScreen.getSearch());

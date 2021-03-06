@@ -7,5 +7,7 @@ public enum ModelTypes {
     DRAGON,
     QUEEN,
     VILLAGER,
-    MUSHROOM
+    MUSHROOM,
+    CROP,
+    ARMORED;
 }
