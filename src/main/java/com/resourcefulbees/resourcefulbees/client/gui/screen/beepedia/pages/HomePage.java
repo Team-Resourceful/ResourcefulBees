@@ -36,11 +36,11 @@ public class HomePage extends BeepediaPage {
         double scale = beepedia.getMinecraft().getWindow().getGuiScaleFactor();
         int scissorY = (int) (beepedia.getMinecraft().getWindow().getFramebufferHeight() - (this.yPos + 80) * scale);
         GL11.glScissor((int) (this.xPos * scale), scissorY, (int) (SUB_PAGE_WIDTH * scale), (int) ((73) * scale));
-        RenderUtils.renderEntity(matrix, bees.get(counter).getBee(), beepedia.getMinecraft().world, xPos + (SUB_PAGE_WIDTH / 2) - 12, yPos + 10, -45, 3);
+        RenderUtils.renderEntity(matrix, bees.get(counter).getBee(), beepedia.getMinecraft().world, xPos + (SUB_PAGE_WIDTH / 2F) - 12F, yPos + 10f, -45, 3);
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
 
         FontRenderer font = Minecraft.getInstance().fontRenderer;
-        font.draw(matrix, new TranslationTextComponent("itemGroup.resourcefulbees"), xPos + 30, yPos + 81, TextFormatting.GRAY.getColor());
+        font.draw(matrix, new TranslationTextComponent("itemGroup.resourcefulbees").formatted(TextFormatting.GRAY), xPos + 30F, yPos + 81F, 0);
         Minecraft.getInstance().getTextureManager().bindTexture(logo);
         AbstractGui.drawTexture(matrix, xPos + (SUB_PAGE_WIDTH / 2) - 54, yPos + 90, 0, 0, 104, 16, 104, 16);
     }

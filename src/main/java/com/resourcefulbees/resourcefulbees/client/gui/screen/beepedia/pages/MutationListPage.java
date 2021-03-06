@@ -37,7 +37,7 @@ public class MutationListPage extends BeeDataPage {
     Button nextTab;
     Button leftArrow;
     Button rightArrow;
-    private ResourceLocation mutationChanceImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/mutation_sparkles.png");
+    private final ResourceLocation mutationChanceImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/mutation_sparkles.png");
 
     public MutationListPage(BeepediaScreen beepedia, CustomBeeData beeData, int xPos, int yPos, BeePage parent) {
         super(beepedia, beeData, xPos, yPos, parent);
@@ -130,9 +130,9 @@ public class MutationListPage extends BeeDataPage {
 
         if (activePage != null) {
             int padding = font.getWidth(title) / 2;
-            font.draw(matrix, title, (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, TextFormatting.WHITE.getColor());
+            font.draw(matrix, title.formatted(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, 0);
             StringTextComponent mutationCount = new StringTextComponent("x " + beeData.getMutationData().getMutationCount());
-            font.draw(matrix, mutationCount, (float) xPos + 20, (float) yPos + 26, TextFormatting.GRAY.getColor());
+            font.draw(matrix, mutationCount.formatted(TextFormatting.GRAY), (float) xPos + 20, (float) yPos + 26, 0);
             Minecraft.getInstance().getTextureManager().bindTexture(mutationImage);
             AbstractGui.drawTexture(matrix, xPos, yPos + 22, 0, 0, 169, 84, 169, 84);
             Minecraft.getInstance().getTextureManager().bindTexture(mutationChanceImage);
@@ -142,7 +142,7 @@ public class MutationListPage extends BeeDataPage {
             if (activeList.size() > 1) {
                 StringTextComponent pageInfo = new StringTextComponent(String.format("%d / %d", this.page + 1, activeList.size()));
                 padding = font.getWidth(pageInfo) / 2;
-                font.draw(matrix, pageInfo, (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + SUB_PAGE_HEIGHT - 14, TextFormatting.WHITE.getColor());
+                font.draw(matrix, pageInfo.formatted(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + SUB_PAGE_HEIGHT - 14, 0);
             }
         }
     }

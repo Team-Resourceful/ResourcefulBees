@@ -164,7 +164,8 @@ public class CentrifugeData extends AbstractBeeData {
 
     public String getFluidOutput() {
         if (mainIsFluidOutput) return getMainOutput();
-        return fluidOutput != null ? fluidOutput : Objects.requireNonNull(Fluids.EMPTY.getRegistryName().toString());
+        //noinspection ConstantConditions
+        return fluidOutput != null ? fluidOutput : Fluids.EMPTY.getRegistryName().toString();
     }
 
     public float getMainOutputWeight() {
@@ -217,33 +218,28 @@ public class CentrifugeData extends AbstractBeeData {
     }
 
     public CompoundNBT getMainNBT() {
-        if (mainNBTData != null && mainNBT == null) {
-            mainNBT = CompoundNBT.CODEC.parse(JsonOps.INSTANCE, mainNBTData).resultOrPartial(e -> LOGGER.warn(String.format("Could not deserialize NBT: [%s]", mainNBTData.toString()))).get();
-        } else if (mainNBTData == null && mainNBT == null) {
-            mainNBT = new CompoundNBT();
-        }
-        if (bottleNBT == null || mainNBT.isEmpty()) return null;
+        mainNBT = getNBT(mainNBTData, mainNBT);
         return mainNBT;
     }
 
     public CompoundNBT getSecondaryNBT() {
-        if (secondaryNBTData != null && secondaryNBT == null) {
-            secondaryNBT = CompoundNBT.CODEC.parse(JsonOps.INSTANCE, secondaryNBTData).resultOrPartial(e -> LOGGER.warn(String.format("Could not deserialize NBT: [%s]", secondaryNBTData.toString()))).get();
-        } else if (mainNBTData == null && secondaryNBT == null) {
-            secondaryNBT = new CompoundNBT();
-        }
-        if (secondaryNBT == null || secondaryNBT.isEmpty()) return null;
+        secondaryNBT = getNBT(secondaryNBTData, secondaryNBT);
         return secondaryNBT;
     }
 
     public CompoundNBT getBottleNBT() {
-        if (bottleNBTData != null && bottleNBT == null) {
-            bottleNBT = CompoundNBT.CODEC.parse(JsonOps.INSTANCE, bottleNBTData).resultOrPartial(e -> LOGGER.warn(String.format("Could not deserialize NBT: [%s]", bottleNBTData.toString()))).get();
-        } else if (bottleNBTData == null && bottleNBT == null) {
-            bottleNBT = new CompoundNBT();
-        }
-        if (bottleNBT == null || bottleNBT.isEmpty()) return null;
+        bottleNBT = getNBT(bottleNBTData, bottleNBT);
         return bottleNBT;
+    }
+
+    private CompoundNBT getNBT(JsonElement nbtData, CompoundNBT nbt) {
+        if (nbt == null) {
+            nbt = CompoundNBT.CODEC.parse(JsonOps.INSTANCE, nbtData)
+                    .resultOrPartial(e -> LOGGER.warn("Could not deserialize NBT: [{}]", nbtData))
+                    .orElse(new CompoundNBT());
+        }
+        if (nbt.isEmpty()) return null;
+        return nbt;
     }
 
     public void init() {
@@ -258,6 +254,7 @@ public class CentrifugeData extends AbstractBeeData {
     }
 
 
+    @SuppressWarnings("unused")
     public static class Builder {
         private final String mainOutput;
         private String secondaryOutput;

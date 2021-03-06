@@ -22,7 +22,6 @@ import net.minecraft.potion.PotionUtils;
 import net.minecraft.potion.Potions;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.IReorderingProcessor;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -41,9 +40,9 @@ public class TraitPage extends BeepediaPage {
     String translation;
     private SubButtonList list;
     TranslationTextComponent text;
-    private List<TraitSection> traitSections = new LinkedList<>();
+    private final List<TraitSection> traitSections = new LinkedList<>();
 
-    private int listHeight = 102;
+    private final int listHeight = 102;
 
     public TraitPage(BeepediaScreen beepedia, BeeTrait trait, String id, int left, int top) {
         super(beepedia, left, top, id);
@@ -111,7 +110,7 @@ public class TraitPage extends BeepediaPage {
     private void addDamageImmunities() {
         if (trait.hasDamageImmunities()) {
             TranslationTextComponent title = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits.damage_immunities");
-            String typeList = String.join(", ", trait.getDamageImmunities().stream().map(DamageSource::getDamageType).collect(Collectors.toList()));
+            String typeList = trait.getDamageImmunities().stream().map(DamageSource::getDamageType).collect(Collectors.joining(", "));
             traitSections.add(new TraitSection(title, new ItemStack(Items.IRON_CHESTPLATE), new StringTextComponent(typeList)));
         }
     }
@@ -179,8 +178,8 @@ public class TraitPage extends BeepediaPage {
         AbstractGui.drawTexture(matrix, xPos, yPos - 14, 0, 0, 165, 100, 165, 100);
         FontRenderer font = Minecraft.getInstance().fontRenderer;
         StringTextComponent key = new StringTextComponent(id);
-        font.draw(matrix, text, (float) xPos + 24, (float) yPos + 12, TextFormatting.WHITE.getColor());
-        font.draw(matrix, key, (float) xPos + 24, (float) yPos + 22, TextFormatting.DARK_GRAY.getColor());
+        font.draw(matrix, text.formatted(TextFormatting.WHITE), (float) xPos + 24, (float) yPos + 12, 0);
+        font.draw(matrix, key.formatted(TextFormatting.DARK_GRAY), (float) xPos + 24, (float) yPos + 22, 0);
         if (BeepediaScreen.currScreenState.isTraitsEffectsActive()) {
             drawEffectsList(matrix, xPos, yPos + 34);
         } else {
@@ -192,14 +191,14 @@ public class TraitPage extends BeepediaPage {
         FontRenderer font = Minecraft.getInstance().fontRenderer;
         TranslationTextComponent title = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits.bees_list");
         int padding = font.getWidth(title) / 2;
-        font.draw(matrix, title, (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, TextFormatting.WHITE.getColor());
+        font.draw(matrix, title.formatted(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, 0);
     }
 
     private void drawEffectsList(MatrixStack matrix, int xPos, int yPos) {
         FontRenderer font = Minecraft.getInstance().fontRenderer;
         TranslationTextComponent title = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits.effects_list");
         int padding = font.getWidth(title) / 2;
-        font.draw(matrix, title, (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, TextFormatting.WHITE.getColor());
+        font.draw(matrix, title.formatted(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, 0);
 
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
         double scale = beepedia.getMinecraft().getWindow().getGuiScaleFactor();
@@ -222,13 +221,12 @@ public class TraitPage extends BeepediaPage {
         for (Map.Entry<String, BeePage> e : beePages.entrySet()) {
             ItemStack stack = new ItemStack(ModItems.BEE_JAR.get());
             BeeJar.fillJar(stack, e.getValue().beeData);
-            ResourceLocation image = listImage;
             ITextComponent translation = e.getValue().beeData.getTranslation();
             Button.IPressable onPress = button -> {
                 BeepediaScreen.saveScreenState();
                 beepedia.setActive(BeepediaScreen.PageType.BEE, e.getKey());
             };
-            ListButton button = new ListButton(0, 0, 100, 20, 0, 0, 20, image, stack, 2, 2, translation, 22, 6, onPress);
+            ListButton button = new ListButton(0, 0, 100, 20, 0, 0, 20, listImage, stack, 2, 2, translation, 22, 6, onPress);
             beepedia.addButton(button);
             button.visible = false;
             buttons.put(e.getKey(), button);
@@ -301,19 +299,19 @@ public class TraitPage extends BeepediaPage {
         int width = BeepediaPage.SUB_PAGE_WIDTH;
 
         public TraitSection(ITextComponent title, ItemStack displaySlot, ITextComponent text) {
-            this.title = title;
+            this.title = new StringTextComponent(title.getString()).formatted(TextFormatting.WHITE);
             this.displaySlot = displaySlot;
-            this.text = text;
+            this.text = new StringTextComponent(text.getString()).formatted(TextFormatting.GRAY);
             font = Minecraft.getInstance().fontRenderer;
         }
 
         public void draw(MatrixStack matrix, int xPos, int yPos, int scrollPos) {
             beepedia.drawSlotNoToolTip(matrix, displaySlot, xPos, yPos + scrollPos);
-            font.draw(matrix, title, xPos + 24, yPos + 6 + scrollPos, TextFormatting.WHITE.getColor());
+            font.draw(matrix, title, xPos + 24F, yPos + 6F + scrollPos, 0);
             List<IReorderingProcessor> lines = font.wrapLines(text, width);
             for (int i = 0; i < lines.size(); i++) {
                 IReorderingProcessor line = lines.get(i);
-                font.draw(matrix, line, xPos, yPos + 24 + i * font.FONT_HEIGHT + scrollPos, TextFormatting.GRAY.getColor());
+                font.draw(matrix, line, xPos, yPos + 24F + i * font.FONT_HEIGHT + scrollPos, 0);
             }
         }
 

@@ -20,12 +20,12 @@ import java.util.List;
 public class SpawningPage extends BeeDataPage {
 
     private int subScrollPos;
-    private int scrollHeight;
+    private final int scrollHeight;
 
     List<ResourceLocation> biomeList;
 
-    private Button prevTab;
-    private Button nextTab;
+    private final Button prevTab;
+    private final Button nextTab;
 
     public SpawningPage(BeepediaScreen beepedia, CustomBeeData beeData, int xPos, int yPos, BeePage parent) {
         super(beepedia, beeData, xPos, yPos, parent);
@@ -49,7 +49,7 @@ public class SpawningPage extends BeeDataPage {
         FontRenderer font = Minecraft.getInstance().fontRenderer;
         TranslationTextComponent title = new TranslationTextComponent(BeepediaScreen.currScreenState.isBiomesOpen() ? "gui.resourcefulbees.beepedia.bee_subtab.spawning.biomes" : "gui.resourcefulbees.beepedia.bee_subtab.spawning");
         int padding = font.getWidth(title) / 2;
-        font.draw(matrix, title, (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, TextFormatting.WHITE.getColor());
+    font.draw(matrix, title.formatted(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, 0);
 
         if (BeepediaScreen.currScreenState.isBiomesOpen()) {
             GL11.glEnable(GL11.GL_SCISSOR_TEST);
@@ -58,7 +58,7 @@ public class SpawningPage extends BeeDataPage {
             GL11.glScissor((int) (xPos * scale), scissorY, (int) (SUB_PAGE_WIDTH * scale), (int) ((SUB_PAGE_HEIGHT - 22) * scale));
             for (int i = 0; i < biomeList.size(); i++) {
                 TranslationTextComponent text = new TranslationTextComponent(String.format("biome.%s.%s", biomeList.get(i).getNamespace(), biomeList.get(i).getPath()));
-                font.draw(matrix, text, xPos, (float)yPos + 22f + (float)subScrollPos + (float)i * 12f, TextFormatting.GRAY.getColor());
+                font.draw(matrix, text.formatted(TextFormatting.GRAY), xPos, (float)yPos + 22f + (float)subScrollPos + (float)i * 12f, 0);
             }
             GL11.glDisable(GL11.GL_SCISSOR_TEST);
         } else {
@@ -70,10 +70,10 @@ public class SpawningPage extends BeeDataPage {
             heightName.append(new StringTextComponent(String.format("%d - %d", beeData.getSpawnData().getMinYLevel(), beeData.getSpawnData().getMaxYLevel())));
             weightName.append(new StringTextComponent(String.format("%d", beeData.getSpawnData().getSpawnWeight())));
             lightName.append(BeeInfoUtils.getLightName(beeData.getSpawnData().getLightLevel()));
-            font.draw(matrix, groupName, xPos, (float)yPos + 22f, TextFormatting.GRAY.getColor());
-            font.draw(matrix, heightName, xPos, (float)yPos + 34f, TextFormatting.GRAY.getColor());
-            font.draw(matrix, weightName, xPos, (float)yPos + 46f, TextFormatting.GRAY.getColor());
-            font.draw(matrix, lightName, xPos, (float)yPos + 58f, TextFormatting.GRAY.getColor());
+            font.draw(matrix, groupName.formatted(TextFormatting.GRAY), xPos, (float)yPos + 22f, 0);
+            font.draw(matrix, heightName.formatted(TextFormatting.GRAY), xPos, (float)yPos + 34f, 0);
+            font.draw(matrix, weightName.formatted(TextFormatting.GRAY), xPos, (float)yPos + 46f, 0);
+            font.draw(matrix, lightName.formatted(TextFormatting.GRAY), xPos, (float)yPos + 58f, 0);
         }
     }
 

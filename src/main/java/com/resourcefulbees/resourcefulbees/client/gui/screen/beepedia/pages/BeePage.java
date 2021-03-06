@@ -117,6 +117,7 @@ public class BeePage extends BeepediaPage {
     public void renderBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
         beepedia.getMinecraft().textureManager.bindTexture(splitterImage);
         AbstractGui.drawTexture(matrix, xPos, yPos, 0, 0, 165, 100, 165, 100);
+        //noinspection ConstantConditions
         Minecraft.getInstance().fontRenderer.draw(matrix, beeData.getTranslation(), (float) xPos + 40, (float) yPos + 10, TextFormatting.WHITE.getColor());
         subPage.getRight().renderBackground(matrix, partialTick, mouseX, mouseY);
 
@@ -208,15 +209,17 @@ public class BeePage extends BeepediaPage {
             this.subPage.getLeft().active = true;
         }
         this.subPage = page == null ? beeInfoPage : page;
-        if (!(subPage.getRight() instanceof SpawningPage)) {
-            BeepediaScreen.currScreenState.setBiomesOpen(false);
-            BeepediaScreen.currScreenState.setSpawningScroll(0);
+        if(subPage != null) {
+            if (!(subPage.getRight() instanceof SpawningPage)) {
+                BeepediaScreen.currScreenState.setBiomesOpen(false);
+                BeepediaScreen.currScreenState.setSpawningScroll(0);
+            }
+            if (!(subPage.getRight() instanceof TraitListPage)) {
+                BeepediaScreen.currScreenState.setTraitsScroll(0);
+            }
+            this.subPage.getLeft().active = false;
+            this.subPage.getRight().openPage();
         }
-        if (!(subPage.getRight() instanceof TraitListPage)) {
-            BeepediaScreen.currScreenState.setTraitsScroll(0);
-        }
-        this.subPage.getLeft().active = false;
-        this.subPage.getRight().openPage();
 
         BeepediaScreen.currScreenState.setBeeSubPage(beeSubPage);
     }
