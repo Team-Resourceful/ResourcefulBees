@@ -68,6 +68,7 @@ public class ResourcefulBees {
         RegistryHandler.registerDynamicBees();
         RegistryHandler.registerDynamicHoney();
 
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(RegistryHandler::addEntityAttributes);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(EventPriority.LOW, this::setup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onInterModEnqueue);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::loadComplete);
@@ -138,7 +139,6 @@ public class ResourcefulBees {
 
         NetPacketHandler.init();
 
-        event.enqueueWork(RegistryHandler::addEntityAttributes);
         MinecraftForge.EVENT_BUS.register(new RecipeBuilder());
 
         ModFeatures.ConfiguredFeatures.registerConfiguredFeatures();

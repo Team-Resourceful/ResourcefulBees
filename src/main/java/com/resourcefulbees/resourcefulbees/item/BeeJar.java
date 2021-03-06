@@ -63,6 +63,9 @@ public class BeeJar extends Item {
             BlockPos pos = context.getPos();
             Entity entity = getEntityFromStack(stack, worldIn, true);
             if (entity != null) {
+                if (entity instanceof BeeEntity) {
+                    resetBee((BeeEntity) entity);
+                }
                 BlockPos blockPos = pos.offset(context.getFace());
                 entity.setPositionAndRotation(blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5, 0, 0);
                 worldIn.addEntity(entity);
@@ -71,6 +74,11 @@ public class BeeJar extends Item {
             return ActionResultType.SUCCESS;
         }
         return ActionResultType.FAIL;
+    }
+
+    private void resetBee(BeeEntity beeEntity) {
+        beeEntity.flowerPos = null;
+        beeEntity.hivePos = null;
     }
 
     @Nullable

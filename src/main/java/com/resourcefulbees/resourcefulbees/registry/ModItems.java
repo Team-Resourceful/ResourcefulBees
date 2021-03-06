@@ -33,6 +33,7 @@ public class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, ResourcefulBees.MOD_ID);
 
 
+    @SuppressWarnings("deprecation")
     public static final RegistryObject<Item> OREO_COOKIE = ITEMS.register("oreo_cookie", () -> new Item(new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES).food(new Food.Builder()
             .effect(new EffectInstance(Effects.REGENERATION, 600, 1), 1)
             .effect(new EffectInstance(Effects.ABSORPTION, 2400, 3), 1)
@@ -56,7 +57,7 @@ public class ModItems {
     public static final RegistryObject<Item> CRAFTING_BEE_BOX = ITEMS.register("crafting_bee_box", () -> new BeeBox(new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES).maxStackSize(1), true));
     public static final RegistryObject<Item> BEE_BOX = ITEMS.register("bee_box", () -> new BeeBox(new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES).maxStackSize(1), false));
     public static final RegistryObject<Item> BEEPEDIA = ITEMS.register("beepedia", () -> new Beepedia(new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES).maxStackSize(1)));
-
+    public static final RegistryObject<Item> HONEY_DIPPER = ITEMS.register("honey_dipper", () -> new HoneyDipper(new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES).maxStackSize(1)));
 
     public static final RegistryObject<Item> T1_BEEHIVE_ITEM = ITEMS.register("t1_beehive", () -> new BlockItem(ModBlocks.T1_BEEHIVE.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
     public static final RegistryObject<Item> T2_BEEHIVE_ITEM = ITEMS.register("t2_beehive", () -> new BlockItem(ModBlocks.T2_BEEHIVE.get(), new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));

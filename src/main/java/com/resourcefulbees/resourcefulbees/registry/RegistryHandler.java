@@ -33,6 +33,7 @@ import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvents;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
@@ -70,8 +71,8 @@ public class RegistryHandler {
 
     //Dynamic|Iterative Registration Stuff below this line
 
-    public static void addEntityAttributes() {
-        ModEntities.getModBees().forEach((s, customBee) -> GlobalEntityTypeAttributes.put(customBee.get(), CustomBeeEntity.createBeeAttributes(s).build()));
+    public static void addEntityAttributes(EntityAttributeCreationEvent event) {
+        ModEntities.getModBees().forEach((s, customBee) -> event.put(customBee.get(), CustomBeeEntity.createBeeAttributes(s).build()));
     }
 
     public static void registerDynamicBees() {

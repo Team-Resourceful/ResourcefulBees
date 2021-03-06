@@ -148,7 +148,7 @@ public class BeePollinateGoal extends Goal {
                     }
 
                     boolean closeToTarget = bee.getPositionVec().distanceTo(this.nextTarget) <= 0.1D;
-                    boolean shouldMoveToNewTraget = true;
+                    boolean shouldMoveToNewTarget = true;
                     if (!closeToTarget && this.ticks > 600) {
                         this.clearTask();
                     } else {
@@ -157,13 +157,13 @@ public class BeePollinateGoal extends Goal {
                                 this.nextTarget = new Vector3d(vector3d.getX() + this.getRandomOffset(), vector3d.getY(), vector3d.getZ() + this.getRandomOffset());
                                 bee.getNavigator().clearPath();
                             } else {
-                                shouldMoveToNewTraget = false;
+                                shouldMoveToNewTarget = false;
                             }
 
                             bee.getLookController().setLookPosition(vector3d.getX(), vector3d.getY(), vector3d.getZ());
                         }
 
-                        if (shouldMoveToNewTraget) {
+                        if (shouldMoveToNewTarget) {
                             this.moveToNextTarget();
                         }
 

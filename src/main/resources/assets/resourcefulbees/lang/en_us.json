@@ -185,6 +185,8 @@
 	"block.resourcefulbees.nether_honey_tank": "Nether Honey Tank",
 	"block.resourcefulbees.wooden_honey_tank": "Wooden Honey Tank",
 
+	"item.resourcefulbees.honey_dipper": "Honey Dipper",
+	"item.resourcefulbees.honey_dipper.tooltip": "Selected Bee: ",
 	"item.resourcefulbees.smoker_can": "Smoker Canister",
 	"item.resourcefulbees.smoker": "Bee Smoker",
 	"item.resourcefulbees.bellow": "Bellow",
@@ -476,6 +478,14 @@
 	"book.resourcefulbees.ender_beecon_category.options.show_beam" : "Toggling the Beam",
 	"book.resourcefulbees.ender_beecon_category.options.muting" :  "Muting the Beecon",
 	"book.resourcefulbees.ender_beecon_category.options.1" : "The Ender Beecon's beam will change color based on the type of honey that is inside the internal tank.$(br2)Default honey and Catnip honey will leave the Beecon beam white if you don't want to stand out.$(br2)Rainbow colored honey will make the beam rainbow too.",
-	"book.resourcefulbees.ender_beecon_category.options.2" : "If you want to hide the Ender Beecon's beam all you need to do is right click the Beecon with a stick.$(br2)Now you can hide your Beecons without them beeing seen.",
-	"book.resourcefulbees.ender_beecon_category.options.3" : "If you can't stand the noise the Ender Beecon makes you can suppress it by simply right clicking it with some wool.$(br2)If you want to hear your Beecon again simply right click it again."
+	"book.resourcefulbees.ender_beecon_category.options.2" : "If you want to hide the Ender Beecon's beam all you need to do is right click the Beecon with a stick.$(br2)Now you can hide your Beecons without them bee-ing seen.",
+	"book.resourcefulbees.ender_beecon_category.options.3" : "If you can't stand the noise the Ender Beecon makes you can suppress it by simply right clicking it with some wool.$(br2)If you want to hear your Beecon again simply right click it again.",
+	"book.resourcefulbees.ess_tools_category" : "Essential Tools",
+	"book.resourcefulbees.ess_tools_category.desc": "There are some tools that a beekeeper just can't do without.",
+	"book.resourcefulbees.ess_tools_category.honey_dipper": "Honey Dipper",
+	"book.resourcefulbees.ess_tools_category.honey_dipper.1": "Right-click a bee to select it. Right-click an appropriate flower to set its flower position or right-click a hive to set its hive position.$(br2)Shift + right-click to clear selected bee. Setting a bees position will also clear the selected bee.",
+	"book.resourcefulbees.ess_tools_category.honey_dipper.2": "More uses for the Honey Dipper are planned :)",
+	"book.resourcefulbees.ess_tools_category.bee_jar": "Bee Jar",
+	"book.resourcefulbees.ess_tools_category.bee_jar.1": "The Bee Jar is used for capturing and transporting bees. When releasing a bee from the jar, the flower and hive positions will be cleared while the rest of a bees memories and data are retained.",
+	"book.resourcefulbees.ess_tools_category.bee_jar.2": "Bee Jars are reusable!"
 }
