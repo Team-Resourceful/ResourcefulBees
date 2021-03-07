@@ -17,7 +17,7 @@ public class ModImageButton extends ImageButton {
     protected final int imageWidth;
     protected final int imageHeight;
 
-    public ModImageButton(int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int yDiffTextIn, ResourceLocation resourceLocationIn, int imageHeight, int imageWidth, IPressable onPressIn) {
+    public ModImageButton(int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int yDiffTextIn, ResourceLocation resourceLocationIn, int imageWidth, int imageHeight, IPressable onPressIn) {
         super(xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, yDiffTextIn, resourceLocationIn, imageWidth, imageHeight, onPressIn);
         this.resourceLocation = resourceLocationIn;
         this.xTexStart = xTexStartIn;
@@ -28,7 +28,7 @@ public class ModImageButton extends ImageButton {
     }
 
     public ModImageButton(int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int yDiffTextIn, ResourceLocation resourceLocationIn, IPressable onPressIn) {
-        this(xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, yDiffTextIn, resourceLocationIn, widthIn, yDiffTextIn * 3, onPressIn);
+        this(xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, yDiffTextIn, resourceLocationIn, widthIn, yDiffTextIn * 3,  onPressIn);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class ModImageButton extends ImageButton {
         } else if (this.isHovered()) {
             i += this.yDiffText;
         }
-        drawTexture(matrix, this.x, this.y, (float) this.xTexStart, (float) i, this.width, this.height, imageHeight, imageWidth);
+        drawTexture(matrix, this.x, this.y, (float) this.xTexStart, (float) i, this.width, this.height, imageWidth, imageHeight);
         RenderSystem.enableDepthTest();
     }
 }

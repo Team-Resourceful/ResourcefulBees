@@ -138,7 +138,7 @@ public class MutationListPage extends BeeDataPage {
             Minecraft.getInstance().getTextureManager().bindTexture(mutationChanceImage);
             AbstractGui.drawTexture(matrix, xPos, yPos + 22, 0, 0, 16, 16, 16, 16);
             activePage.draw(matrix, xPos, yPos + 22);
-            RenderUtils.renderEntity(matrix, parent.bee, beepedia.getMinecraft().world, (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - 15, (float) yPos + 28, 45, 1.25f);
+            RenderUtils.renderEntity(matrix, parent.getBee(), beepedia.getMinecraft().world, (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - 15, (float) yPos + 28, 45, 1.25f);
             if (activeList.size() > 1) {
                 StringTextComponent pageInfo = new StringTextComponent(String.format("%d / %d", this.page + 1, activeList.size()));
                 padding = font.getWidth(pageInfo) / 2;
@@ -193,8 +193,8 @@ public class MutationListPage extends BeeDataPage {
         if (activePage != null) activePage.drawTooltips(matrix, xPos, yPos + 22, mouseX, mouseY);
         if (BeepediaScreen.mouseHovering((float) xPos + ((float) SUB_PAGE_WIDTH / 2) - 20, (float) yPos + 28, 30, 30, mouseX, mouseY)) {
             List<ITextComponent> tooltip = new ArrayList<>();
-            IFormattableTextComponent name = parent.bee.getName().copy();
-            IFormattableTextComponent id = new StringTextComponent(parent.bee.getEntityString()).formatted(TextFormatting.DARK_GRAY);
+            IFormattableTextComponent name = parent.getBee().getName().copy();
+            IFormattableTextComponent id = new StringTextComponent(parent.getBee().getEntityString()).formatted(TextFormatting.DARK_GRAY);
             tooltip.add(name);
             tooltip.add(id);
             beepedia.renderTooltip(matrix, tooltip, mouseX, mouseY);
