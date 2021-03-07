@@ -89,7 +89,7 @@ public class JEICompat implements IModPlugin {
             registration.addRecipes(EntityToEntity.getMutationRecipes(), EntityToEntity.ID);
             registration.addRecipes(ApiaryCategory.getHoneycombRecipes(), ApiaryCategory.ID);
             registration.addRecipes(FlowersCategory.getFlowersRecipes(), FlowersCategory.ID);
-            registration.addRecipes(EntityFlowerCategory.getFlowersRecipes(registration.getIngredientManager()), EntityFlowerCategory.ID);
+            registration.addRecipes(EntityFlowerCategory.getFlowersRecipes(), EntityFlowerCategory.ID);
             registerInfoDesc(registration);
         }
     }
@@ -111,7 +111,7 @@ public class JEICompat implements IModPlugin {
     @Override
     public void registerIngredients(IModIngredientRegistration registration) {
         List<EntityIngredient> entityIngredients = EntityIngredientFactory.create();
-        registration.register(ENTITY_INGREDIENT, entityIngredients, new EntityIngredientHelper<>(), new EntityRenderer());
+        registration.register(ENTITY_INGREDIENT, entityIngredients, new EntityIngredientHelper(), new EntityRenderer());
     }
 
     public void registerInfoDesc(IRecipeRegistration registration) {

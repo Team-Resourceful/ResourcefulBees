@@ -47,7 +47,7 @@ public class EntityFlowerCategory implements IRecipeCategory<EntityFlowerCategor
         this.localizedName = I18n.format("gui.resourcefulbees.jei.category.bee_pollination_entity_flowers");
     }
 
-    public static List<EntityFlowerCategory.Recipe> getFlowersRecipes(IIngredientManager ingredientManager) {
+    public static List<EntityFlowerCategory.Recipe> getFlowersRecipes() {
         List<EntityFlowerCategory.Recipe> recipes = new ArrayList<>();
         BEE_REGISTRY.getBees().forEach(((s, beeData) -> {
             if (beeData.hasEntityFlower()) {

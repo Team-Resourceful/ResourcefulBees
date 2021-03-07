@@ -127,7 +127,7 @@ public class TraitSetup {
             }
         }
         if (jsonTrait.damageTypes != null && !jsonTrait.damageTypes.isEmpty()) {
-            jsonTrait.damageTypes.forEach((damageType) -> builder.addDamageType(Pair.of(damageType.getDamageType(), damageType.getAmplifier())));
+            jsonTrait.damageTypes.forEach(damageType -> builder.addDamageType(Pair.of(damageType.getDamageType(), damageType.getAmplifier())));
         }
         if (jsonTrait.specialAbilities != null && jsonTrait.specialAbilities.length > 0) {
             for (String ability : jsonTrait.specialAbilities) {

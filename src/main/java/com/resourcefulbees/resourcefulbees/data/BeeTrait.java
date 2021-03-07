@@ -6,7 +6,6 @@ import net.minecraft.item.Items;
 import net.minecraft.particles.BasicParticleType;
 import net.minecraft.potion.Effect;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.text.TranslationTextComponent;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;

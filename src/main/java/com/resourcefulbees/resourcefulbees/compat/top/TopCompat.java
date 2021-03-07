@@ -53,42 +53,40 @@ public class TopCompat implements Function<ITheOneProbe, Void>
                             .progress((int) Math.floor(beehiveTileEntity.getTicksSmoked() / 20.0), 30);
                 }
 
-                if (mode.equals(ProbeMode.EXTENDED)) {
-                    if (beehiveTileEntity.hasCombs()) {
-                        List<ItemStack> combs = new ArrayList<>();
+                if (mode.equals(ProbeMode.EXTENDED) && beehiveTileEntity.hasCombs()) {
+                    List<ItemStack> combs = new ArrayList<>();
 
-                        beehiveTileEntity.getHoneycombs().iterator().forEachRemaining(honeycomb -> {
-                            Iterator<ItemStack> iterator = combs.iterator();
-                            while (iterator.hasNext() && !honeycomb.isEmpty()) {
-                                ItemStack stackInList = iterator.next();
-                                if (Container.areItemsAndTagsEqual(honeycomb, stackInList)) {
-                                    combs.get(combs.indexOf(stackInList)).grow(1);
-                                    honeycomb.setCount(0);
-                                }
+                    beehiveTileEntity.getHoneycombs().iterator().forEachRemaining(honeycomb -> {
+                        Iterator<ItemStack> iterator = combs.iterator();
+                        while (iterator.hasNext() && !honeycomb.isEmpty()) {
+                            ItemStack stackInList = iterator.next();
+                            if (Container.areItemsAndTagsEqual(honeycomb, stackInList)) {
+                                combs.get(combs.indexOf(stackInList)).grow(1);
+                                honeycomb.setCount(0);
                             }
-
-                            if (!honeycomb.isEmpty()) combs.add(honeycomb);
-                        });
-
-                        IProbeInfo vertical = probeInfo.vertical(probeInfo.defaultLayoutStyle().borderColor(0xff006699).spacing(0));
-                        AtomicReference<IProbeInfo> horizontal = new AtomicReference<>(vertical.horizontal(probeInfo.defaultLayoutStyle().spacing(10).alignment(ElementAlignment.ALIGN_CENTER)));
-
-                        if (combs.size() <= 4) {
-                            combs.forEach(honeycomb -> {
-                                horizontal.set(vertical.horizontal(probeInfo.defaultLayoutStyle().spacing(10).alignment(ElementAlignment.ALIGN_CENTER)));
-                                horizontal.get().item(honeycomb).text(honeycomb.getDisplayName());
-                            });
-                        } else {
-                            AtomicInteger columnCount = new AtomicInteger();
-                            combs.forEach(honeycomb -> {
-                                if (columnCount.get() == 7) {
-                                    horizontal.set(vertical.horizontal(probeInfo.defaultLayoutStyle().spacing(10).alignment(ElementAlignment.ALIGN_CENTER)));
-                                    columnCount.set(0);
-                                }
-                                horizontal.get().item(honeycomb);
-                                columnCount.incrementAndGet();
-                            });
                         }
+
+                        if (!honeycomb.isEmpty()) combs.add(honeycomb);
+                    });
+
+                    IProbeInfo vertical = probeInfo.vertical(probeInfo.defaultLayoutStyle().borderColor(0xff006699).spacing(0));
+                    AtomicReference<IProbeInfo> horizontal = new AtomicReference<>(vertical.horizontal(probeInfo.defaultLayoutStyle().spacing(10).alignment(ElementAlignment.ALIGN_CENTER)));
+
+                    if (combs.size() <= 4) {
+                        combs.forEach(honeycomb -> {
+                            horizontal.set(vertical.horizontal(probeInfo.defaultLayoutStyle().spacing(10).alignment(ElementAlignment.ALIGN_CENTER)));
+                            horizontal.get().item(honeycomb).text(honeycomb.getDisplayName());
+                        });
+                    } else {
+                        AtomicInteger columnCount = new AtomicInteger();
+                        combs.forEach(honeycomb -> {
+                            if (columnCount.get() == 7) {
+                                horizontal.set(vertical.horizontal(probeInfo.defaultLayoutStyle().spacing(10).alignment(ElementAlignment.ALIGN_CENTER)));
+                                columnCount.set(0);
+                            }
+                            horizontal.get().item(honeycomb);
+                            columnCount.incrementAndGet();
+                        });
                     }
                 }
                 return true;
@@ -106,15 +104,13 @@ public class TopCompat implements Function<ITheOneProbe, Void>
                 }
             }
             ResourceLocation registryName = blockState.getBlock().getRegistryName();
-            if (registryName != null ) {
-                if (registryName.getNamespace().equals(ResourcefulBees.MOD_ID)) {
-                    probeInfo.horizontal()
-                            .item(new ItemStack(blockState.getBlock().asItem()))
-                            .vertical()
-                            .itemLabel(new ItemStack(blockState.getBlock().asItem()))
-                            .text(formattedName);
-                    return true;
-                }
+            if (registryName != null && registryName.getNamespace().equals(ResourcefulBees.MOD_ID)) {
+                probeInfo.horizontal()
+                        .item(new ItemStack(blockState.getBlock().asItem()))
+                        .vertical()
+                        .itemLabel(new ItemStack(blockState.getBlock().asItem()))
+                        .text(formattedName);
+                return true;
             }
             return false;
         });
