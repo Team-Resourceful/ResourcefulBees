@@ -1,0 +1,37 @@
+{
+  "parent": "resourcefulbees:resourcefulbees/root",
+  "display": {
+    "icon": {
+      "item": "patchouli:guide_book",
+      "nbt": "{\"patchouli:book\":\"resourcefulbees:fifty_shades_of_bees\"}"
+    },
+    "title": {
+      "translate": "advancements.resourcefulbees.fifty_shades_of_bees.title"
+    },
+    "description": {
+      "translate": "advancements.resourcefulbees.fifty_shades_of_bees.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "fifty_shades_of_bees": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "patchouli:guide_book",
+            "nbt": "{\"patchouli:book\":\"resourcefulbees:fifty_shades_of_bees\"}"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "fifty_shades_of_bees"
+    ]
+  ]
+}

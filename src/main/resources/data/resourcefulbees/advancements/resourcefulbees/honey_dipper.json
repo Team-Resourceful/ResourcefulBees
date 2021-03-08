@@ -1,0 +1,35 @@
+{
+  "parent": "resourcefulbees:resourcefulbees/root",
+  "display": {
+    "icon": {
+      "item": "resourcefulbees:honey_dipper"
+    },
+    "title": {
+      "translate": "advancements.resourcefulbees.honey_dipper.title"
+    },
+    "description": {
+      "translate": "advancements.resourcefulbees.honey_dipper.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "honey_dipper": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "resourcefulbees:honey_dipper"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "honey_dipper"
+    ]
+  ]
+}
