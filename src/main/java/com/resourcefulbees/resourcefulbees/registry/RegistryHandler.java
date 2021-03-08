@@ -18,7 +18,6 @@ import com.resourcefulbees.resourcefulbees.item.HoneycombItem;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.utils.color.Color;
-import net.minecraft.advancements.Advancement;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -173,7 +172,6 @@ public class RegistryHandler {
         customBeeData.setCombRegistryObject(customComb);
         customBeeData.setCombBlockItemRegistryObject(customCombBlock);
     }
-
 
     @SubscribeEvent
     public void onRegisterBlocks(RegistryEvent.Register<Block> event) {
