@@ -76,7 +76,7 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
         int t = i + this.xSize - 25;
 
         this.addButton(new TabImageButton(t+1, j+17, 18, 18, 110, 0, 18, TABS_BG, new ItemStack(ModItems.BEE_JAR.get()), 1, 1,
-                onPress -> this.changeScreen(ApiaryTabs.MAIN)) {
+                onPress -> this.changeScreen(ApiaryTabs.MAIN), 128, 128) {
 
             @Override
             public void renderToolTip(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
@@ -86,7 +86,7 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
         }).active = false;
 
         storageTabButton = this.addButton(new TabImageButton(t + 1, j + 37, 18, 18, 110, 0, 18, TABS_BG, new ItemStack(net.minecraft.item.Items.HONEYCOMB),2, 1,
-                onPress -> this.changeScreen(ApiaryTabs.STORAGE)) {
+                onPress -> this.changeScreen(ApiaryTabs.STORAGE), 128, 128) {
 
             @Override
             public void renderToolTip(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
@@ -96,7 +96,7 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
         });
 
         breedTabButton = this.addButton(new TabImageButton(t + 1, j + 57, 18, 18, 110, 0, 18, TABS_BG, new ItemStack(ModItems.GOLD_FLOWER_ITEM.get()), 1, 1,
-                onPress -> this.changeScreen(ApiaryTabs.BREED)) {
+                onPress -> this.changeScreen(ApiaryTabs.BREED), 128, 128) {
 
             @Override
             public void renderToolTip(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {

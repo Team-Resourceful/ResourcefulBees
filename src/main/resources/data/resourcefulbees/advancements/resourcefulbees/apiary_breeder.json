@@ -1,0 +1,35 @@
+{
+  "parent": "resourcefulbees:resourcefulbees/t4_beehive",
+  "display": {
+    "icon": {
+      "item": "resourcefulbees:apiary_breeder"
+    },
+    "title": {
+      "translate": "advancements.resourcefulbees.apiary_breeder.title"
+    },
+    "description": {
+      "translate": "advancements.resourcefulbees.apiary_breeder.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "apiary_breeder": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "resourcefulbees:apiary_breeder"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "apiary_breeder"
+    ]
+  ]
+}

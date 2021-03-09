@@ -39,7 +39,7 @@ public class TraitPage extends BeepediaPage {
     private final ImageButton nextTab;
     String translation;
     private SubButtonList list;
-    TranslationTextComponent text;
+    TranslationTextComponent name;
     private final List<TraitSection> traitSections = new LinkedList<>();
 
     private static final int LIST_HEIGHT = 102;
@@ -48,9 +48,9 @@ public class TraitPage extends BeepediaPage {
         super(beepedia, left, top, id);
         this.trait = trait;
         initTranslation();
-        text = new TranslationTextComponent(trait.getTranslationKey());
+        name = new TranslationTextComponent(trait.getTranslationKey());
         ItemStack stack = new ItemStack(trait.getBeepediaItem());
-        newListButton(stack, text);
+        newListButton(stack, name);
         prevTab = new ImageButton(xPos + (SUB_PAGE_WIDTH / 2) - 48, yPos + 40, 8, 11, 0, 0, 11, arrowImage, 16, 33, button -> toggleTab());
         nextTab = new ImageButton(xPos + (SUB_PAGE_WIDTH / 2) + 40, yPos + 40, 8, 11, 8, 0, 11, arrowImage, 16, 33, button -> toggleTab());
         beepedia.addButton(nextTab);
@@ -182,7 +182,7 @@ public class TraitPage extends BeepediaPage {
         AbstractGui.drawTexture(matrix, xPos, yPos - 14, 0, 0, 165, 100, 165, 100);
         FontRenderer font = Minecraft.getInstance().fontRenderer;
         StringTextComponent key = new StringTextComponent(id);
-        font.draw(matrix, text.formatted(TextFormatting.WHITE), (float) xPos + 24, (float) yPos + 12, -1);
+        font.draw(matrix, name.formatted(TextFormatting.WHITE), (float) xPos + 24, (float) yPos + 12, -1);
         font.draw(matrix, key.formatted(TextFormatting.DARK_GRAY), (float) xPos + 24, (float) yPos + 22, -1);
         if (BeepediaScreen.currScreenState.isTraitsEffectsActive()) {
             drawEffectsList(matrix, xPos, yPos + 34);

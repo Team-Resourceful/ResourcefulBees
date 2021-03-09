@@ -30,7 +30,7 @@ public class BeePage extends BeepediaPage {
     public CustomBeeData beeData;
 
 
-    Entity bee = null;
+    private Entity bee = null;
     protected Pair<TabImageButton, BeeDataPage> subPage;
     Pair<TabImageButton, BeeDataPage> beeInfoPage;
     Pair<TabImageButton, BeeDataPage> mutations;

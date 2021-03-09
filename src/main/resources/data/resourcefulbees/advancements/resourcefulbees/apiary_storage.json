@@ -1,0 +1,35 @@
+{
+  "parent": "resourcefulbees:resourcefulbees/t4_beehive",
+  "display": {
+    "icon": {
+      "item": "resourcefulbees:apiary_storage"
+    },
+    "title": {
+      "translate": "advancements.resourcefulbees.apiary_storage.title"
+    },
+    "description": {
+      "translate": "advancements.resourcefulbees.apiary_storage.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "apiary_storage": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "resourcefulbees:apiary_storage"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "apiary_storage"
+    ]
+  ]
+}

@@ -89,7 +89,7 @@ public class JEICompat implements IModPlugin {
             registration.addRecipes(EntityToEntity.getMutationRecipes(), EntityToEntity.ID);
             registration.addRecipes(ApiaryCategory.getHoneycombRecipes(), ApiaryCategory.ID);
             registration.addRecipes(FlowersCategory.getFlowersRecipes(), FlowersCategory.ID);
-            registration.addRecipes(EntityFlowerCategory.getFlowersRecipes(registration.getIngredientManager()), EntityFlowerCategory.ID);
+            registration.addRecipes(EntityFlowerCategory.getFlowersRecipes(), EntityFlowerCategory.ID);
             registerInfoDesc(registration);
         }
     }

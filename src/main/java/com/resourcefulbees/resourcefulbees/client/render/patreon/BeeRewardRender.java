@@ -93,7 +93,7 @@ public class BeeRewardRender extends LayerRenderer<AbstractClientPlayerEntity, P
         modelRenderer.rotateAngleZ = 0f;
     }
 
-    private void updateAngles(int ticks){
+    private void updateAngles(float ticks){
         this.leftAntenna.rotateAngleX = 0.0F;
         this.rightAntenna.rotateAngleX = 0.0F;
         this.body.rotateAngleX = 0.0F;
@@ -108,20 +108,20 @@ public class BeeRewardRender extends LayerRenderer<AbstractClientPlayerEntity, P
         this.backLegs.rotateAngleX = ((float) Math.PI / 4F);
         setRotationAngle(body, 0);
 
-        float f1 = MathHelper.cos(ticks * 0.18F);
+        float f1 = MathHelper.cos(ticks % 1143333 * 0.18F);
         this.body.rotateAngleX = 0.1F + f1 * (float) Math.PI * 0.025F;
         this.leftAntenna.rotateAngleX = f1 * (float) Math.PI * 0.03F;
         this.rightAntenna.rotateAngleX = f1 * (float) Math.PI * 0.03F;
         this.frontLegs.rotateAngleX = -f1 * (float) Math.PI * 0.1F + ((float) Math.PI / 8F);
         this.backLegs.rotateAngleX = -f1 * (float) Math.PI * 0.05F + ((float) Math.PI / 4F);
-        this.body.rotationPointY = 19.0F - MathHelper.cos(ticks % 98000 * 0.18F) * 0.9F;
+        this.body.rotationPointY = 19.0F - MathHelper.cos(ticks % 1143333 * 0.18F) * 0.9F;
     }
 
     @Override
     public void render(@NotNull MatrixStack stack, @NotNull IRenderTypeBuffer buffer, int packedLightIn, @NotNull AbstractClientPlayerEntity playerEntity,  float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         if (!PatreonInfo.isPatreon(playerEntity.getUniqueID())) return;
         BeeRewardData data = PatreonInfo.getPatreon(playerEntity.getUniqueID());
-        updateAngles((int)ageInTicks);
+        updateAngles(ageInTicks);
         stack.push();
 
         stack.scale(0.25f,0.25f,0.25f);
