@@ -12,7 +12,8 @@
     "MixinBeeEntity",
     "MixinBeeEntity$MixinEnterBeehiveGoal",
     "MixinBeeEntity$MixinFindBeehiveGoal",
-    "MixinBeeEntity$MixinUpdateBeehiveGoal"
+    "MixinBeeEntity$MixinUpdateBeehiveGoal",
+    "MixinMinecraftServer"
   ],
   "minVersion": "0.8.1"
 }
