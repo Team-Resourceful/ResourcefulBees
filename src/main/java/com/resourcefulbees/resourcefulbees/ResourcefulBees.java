@@ -5,7 +5,6 @@ import com.resourcefulbees.resourcefulbees.compat.top.TopCompat;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.config.ConfigLoader;
 import com.resourcefulbees.resourcefulbees.data.DataGen;
-import com.resourcefulbees.resourcefulbees.data.DataPackLoader;
 import com.resourcefulbees.resourcefulbees.data.RecipeBuilder;
 import com.resourcefulbees.resourcefulbees.init.*;
 import com.resourcefulbees.resourcefulbees.item.BeeSpawnEggItem;
@@ -23,6 +22,7 @@ import net.minecraft.tileentity.BannerPattern;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.RecipesUpdatedEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -74,8 +74,8 @@ public class ResourcefulBees {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onInterModEnqueue);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::loadComplete);
         MinecraftForge.EVENT_BUS.addListener(BeeSetup::onBiomeLoad);
-        MinecraftForge.EVENT_BUS.addListener(DataPackLoader::serverStarting);
         MinecraftForge.EVENT_BUS.addListener(this::serverLoaded);
+        MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, this::recipesLoaded);
 
         MinecraftForge.EVENT_BUS.addListener(this::trade);
         //MinecraftForge.EVENT_BUS.addListener(EntityEventHandlers::entityDies);
@@ -85,10 +85,13 @@ public class ResourcefulBees {
         MinecraftForge.EVENT_BUS.register(this);
     }
 
-    private void serverLoaded(FMLServerStartedEvent event) {
-        ModPotions.createMixes();
+    private void recipesLoaded(RecipesUpdatedEvent event){
         MutationSetup.setupMutations();
         FlowerSetup.setupFlowers();
+    }
+
+    private void serverLoaded(FMLServerStartedEvent event) {
+        ModPotions.createMixes();
     }
 
     public void trade(VillagerTradesEvent event) {
