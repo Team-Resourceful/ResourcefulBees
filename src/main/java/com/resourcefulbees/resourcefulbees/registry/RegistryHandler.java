@@ -43,6 +43,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class RegistryHandler {
 
@@ -51,6 +52,8 @@ public class RegistryHandler {
     }
 
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITIES, ResourcefulBees.MOD_ID);
+
+    private static final Pattern CUSTOM_DROP_REGEX = Pattern.compile("^(\\w+)_honeycomb(_block)?$");
 
     public static void init() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -77,7 +80,7 @@ public class RegistryHandler {
     public static void registerDynamicBees() {
         BeeRegistry.getRegistry().getBees().forEach((name, customBee) -> {
             if (customBee.shouldResourcefulBeesDoForgeRegistration()) {
-                if (customBee.hasHoneycomb() && !customBee.hasCustomDrop()) {
+                if (customBee.hasHoneycomb() && checkCustomDrops(customBee)) {
                     registerHoneycomb(name, customBee);
                 } else if (customBee.hasHoneycomb() && customBee.hasCustomDrop() && !customBee.isEasterEggBee()) {
                     fillCustomDrops(customBee);
@@ -85,6 +88,21 @@ public class RegistryHandler {
                 registerBee(name, customBee);
             }
         });
+    }
+
+    private static boolean checkCustomDrops(CustomBeeData customBee) {
+        if (!customBee.hasCustomDrop()) {
+            return true;
+        }
+
+        //TEMPORARY DISABLING OF CODE - epic
+        //need to write new parsing system first
+
+        //if (customBee.getCustomCombDrop() == null || customBee.getCustomCombBlockDrop() == null) {
+            return false;
+        //}
+
+        //return CUSTOM_DROP_REGEX.matcher(customBee.getCustomCombDrop()).matches() || CUSTOM_DROP_REGEX.matcher(customBee.getCustomCombBlockDrop()).matches();
     }
 
     public static void registerDynamicHoney() {

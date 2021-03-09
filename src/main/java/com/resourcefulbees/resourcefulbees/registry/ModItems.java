@@ -164,5 +164,61 @@ public class ModItems {
     });
     public static final RegistryObject<Item> HONEY_FLUID_BUCKET = ITEMS.register("honey_fluid_bucket", () -> new BucketItem(ModFluids.HONEY_STILL, new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES).containerItem(net.minecraft.item.Items.BUCKET).maxStackSize(1)));
 
+    public static final RegistryObject<Item> T1_HIVE_UPGRADE = ITEMS.register("t1_hive_upgrade", () -> new UpgradeItem(new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES).maxDamage(0).maxStackSize(16),
+            UpgradeItem.builder()
+                    .upgradeType(NBTConstants.NBT_HIVE_UPGRADE)
+                    .upgradeModification(NBTConstants.NBT_TIER, 1f)
+                    .upgradeModification(NBTConstants.NBT_TIER_MODIFIER, 1f)
+                    .build()) {
+        @Override
+        public void addInformation(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
+            tooltip.addAll(new TooltipBuilder()
+                    .addTranslatableTip(ModConstants.HIVE_UPGRADE_TOOLTIP, TextFormatting.GOLD)
+                    .build());
+            super.addInformation(stack, worldIn, tooltip, flagIn);
+        }
+    });
+    public static final RegistryObject<Item> T2_HIVE_UPGRADE = ITEMS.register("t2_hive_upgrade", () -> new UpgradeItem(new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES).maxDamage(0).maxStackSize(16),
+            UpgradeItem.builder()
+                    .upgradeType(NBTConstants.NBT_HIVE_UPGRADE)
+                    .upgradeModification(NBTConstants.NBT_TIER, 2f)
+                    .upgradeModification(NBTConstants.NBT_TIER_MODIFIER, 1.5f)
+                    .build()) {
+        @Override
+        public void addInformation(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
+            tooltip.addAll(new TooltipBuilder()
+                    .addTranslatableTip(ModConstants.HIVE_UPGRADE_TOOLTIP, TextFormatting.GOLD)
+                    .build());
+            super.addInformation(stack, worldIn, tooltip, flagIn);
+        }
+    });
+    public static final RegistryObject<Item> T3_HIVE_UPGRADE = ITEMS.register("t3_hive_upgrade", () -> new UpgradeItem(new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES).maxDamage(0).maxStackSize(16),
+            UpgradeItem.builder()
+                    .upgradeType(NBTConstants.NBT_HIVE_UPGRADE)
+                    .upgradeModification(NBTConstants.NBT_TIER, 3f)
+                    .upgradeModification(NBTConstants.NBT_TIER_MODIFIER, 2f)
+                    .build()) {
+        @Override
+        public void addInformation(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
+            tooltip.addAll(new TooltipBuilder()
+                    .addTranslatableTip(ModConstants.HIVE_UPGRADE_TOOLTIP, TextFormatting.GOLD)
+                    .build());
+            super.addInformation(stack, worldIn, tooltip, flagIn);
+        }
+    });
+    public static final RegistryObject<Item> T4_HIVE_UPGRADE = ITEMS.register("t4_hive_upgrade", () -> new UpgradeItem(new Item.Properties().group(ItemGroupResourcefulBees.RESOURCEFUL_BEES).maxDamage(0).maxStackSize(16),
+            UpgradeItem.builder()
+                    .upgradeType(NBTConstants.NBT_HIVE_UPGRADE)
+                    .upgradeModification(NBTConstants.NBT_TIER, 4f)
+                    .upgradeModification(NBTConstants.NBT_TIER_MODIFIER, 4f)
+                    .build()) {
+        @Override
+        public void addInformation(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
+            tooltip.addAll(new TooltipBuilder()
+                    .addTranslatableTip(ModConstants.HIVE_UPGRADE_TOOLTIP, TextFormatting.GOLD)
+                    .build());
+            super.addInformation(stack, worldIn, tooltip, flagIn);
+        }
+    });
 
 }

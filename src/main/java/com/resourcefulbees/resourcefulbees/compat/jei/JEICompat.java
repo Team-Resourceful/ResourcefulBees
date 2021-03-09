@@ -111,7 +111,7 @@ public class JEICompat implements IModPlugin {
     @Override
     public void registerIngredients(IModIngredientRegistration registration) {
         List<EntityIngredient> entityIngredients = EntityIngredientFactory.create();
-        registration.register(ENTITY_INGREDIENT, entityIngredients, new EntityIngredientHelper<>(), new EntityRenderer());
+        registration.register(ENTITY_INGREDIENT, entityIngredients, new EntityIngredientHelper(), new EntityRenderer());
     }
 
     public void registerInfoDesc(IRecipeRegistration registration) {

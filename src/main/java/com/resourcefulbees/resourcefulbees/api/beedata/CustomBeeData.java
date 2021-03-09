@@ -161,7 +161,7 @@ public class CustomBeeData extends AbstractBeeData {
      */
     private final transient boolean isEasterEggBee;
 
-    private CustomBeeData(String flower, String baseLayerTexture, BaseModelTypes baseModelType, int maxTimeInHive, float sizeModifier, String[] traits, int[] apiaryOutputAmounts, String name, boolean hasHoneycomb, MutationData mutationData, ColorData colorData, CombatData CombatData, CentrifugeData centrifugeData, BreedData breedData, SpawnData spawnData, TraitData traitData, boolean isEasterEggBee) {
+    private CustomBeeData(String flower, String baseLayerTexture, BaseModelTypes baseModelType, int maxTimeInHive, float sizeModifier, String[] traits, int[] apiaryOutputAmounts, String name, boolean hasHoneycomb, MutationData mutationData, ColorData colorData, CombatData combatData, CentrifugeData centrifugeData, BreedData breedData, SpawnData spawnData, TraitData traitData, boolean isEasterEggBee) {
         super("CustomBeeData");
         this.flower = flower;
         this.baseLayerTexture = baseLayerTexture;
@@ -178,7 +178,7 @@ public class CustomBeeData extends AbstractBeeData {
         this.MutationData = mutationData;
         this.SpawnData = spawnData;
         this.TraitData = traitData;
-        this.CombatData = CombatData;
+        this.CombatData = combatData;
         this.isEasterEggBee = isEasterEggBee;
     }
 

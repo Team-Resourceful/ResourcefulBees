@@ -46,7 +46,7 @@ public class MutationSetup {
         //TODO remove legacy mutation hooks in 1.17
         mutations = mutationData.getMutations() == null ? new LinkedList<>() : mutationData.getMutations();
         if (hasLegacyMutation(mutationData)) {
-            mutations.add(new Mutation(mutationData.getMutationType(), mutationData.getMutationInput(), 1D, new MutationOutput(mutationData.getMutationOutput(), 1)));
+            mutations.add(new Mutation(mutationData.getMutationType(), mutationData.getMutationInput(), 1D, new MutationOutput(mutationData.getMutationOutput(), 1, null)));
         }
         mutations.removeIf(mutation -> SecondPhaseValidator.validateMutation(customBeeData.getName(), mutation));
         mutationData.initializeMutations();

@@ -14,7 +14,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Iterator;
 
-public class EntityIngredientHelper<T extends EntityIngredient> implements IIngredientHelper<EntityIngredient> {
+public class EntityIngredientHelper implements IIngredientHelper<EntityIngredient> {
 
     @Nonnull
     @Override

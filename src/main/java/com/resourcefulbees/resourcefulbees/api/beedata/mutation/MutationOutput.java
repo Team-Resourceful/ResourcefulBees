@@ -14,9 +14,10 @@ public class MutationOutput {
     private transient CompoundNBT nbt;
     private final double weight;
 
-    public MutationOutput(String outputID, double weight) {
+    public MutationOutput(String outputID, double weight, CompoundNBT nbt) {
         this.outputID = outputID;
         this.weight = weight;
+        this.nbt = nbt;
     }
 
     public CompoundNBT getNbt() {

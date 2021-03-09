@@ -12,6 +12,7 @@ public class NBTConstants {
     public static final String NBT_HONEYCOMBS_TE = "Honeycombs";
     public static final String NBT_SMOKED_TE = "Smoked";
     public static final String NBT_ENTITY = "Entity";
+    public static final String NBT_HIVE_UPGRADE = "hiveUpgrade";
     public static final String NBT_SLOT_UPGRADE = "NumSlots";
     public static final String NBT_STORAGE_UPGRADE = "Storage";
     public static final String NBT_UPGRADE_TYPE = "UpgradeType";

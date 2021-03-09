@@ -65,6 +65,14 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
 
     public int getMaxBees() { return Math.round((float) Config.HIVE_MAX_BEES.get() * getTierModifier()); }
 
+    public void recalculateHoneyLevel() {
+        float combsInHive = this.getHoneycombs().size();
+        float percentValue = (combsInHive / getMaxCombs()) * 100;
+        int newState = (int) MathUtils.clamp((percentValue - (percentValue % 20)) / 20, 0, 5) ;
+        assert this.world != null;
+        this.world.setBlockState(this.getPos(), this.getBlockState().with(BeehiveBlock.HONEY_LEVEL, newState));
+    }
+
     public void smokeHive() {
         this.isSmoked = true;
         ticksSmoked = ticksSmoked == -1 ? 0 : ticksSmoked;
@@ -112,10 +120,7 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
 
                                 if (!honeycomb.isEmpty()) this.getHoneycombs().add(0, honeycomb);
 
-                                float combsInHive = this.getHoneycombs().size();
-                                float percentValue = (combsInHive / getMaxCombs()) * 100;
-                                int newState = (int) MathUtils.clamp((percentValue - (percentValue % 20)) / 20, 0, 5) ;
-                                this.world.setBlockState(this.getPos(), state.with(BeehiveBlock.HONEY_LEVEL, newState));
+                                recalculateHoneyLevel();
                             }
                         }
 

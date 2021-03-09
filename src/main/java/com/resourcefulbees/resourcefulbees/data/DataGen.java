@@ -135,7 +135,7 @@ public class DataGen {
         TraitRegistry.getRegistry().getTraits().forEach((name, trait) -> {
             String displayName = StringUtils.replace(name, "_", " ");
             displayName = WordUtils.capitalizeFully(displayName);
-            builder.append(String.format("\"%s\" : \"%s\",\n", trait.getTranslationKey(), displayName));
+            builder.append(String.format("\"%s\" : \"%s\",%n", trait.getTranslationKey(), displayName));
         });
         builder.deleteCharAt(builder.lastIndexOf(","));
         builder.append("}");

@@ -1,5 +1,5 @@
 package com.resourcefulbees.resourcefulbees.entity;
-
+/*
 import com.resourcefulbees.resourcefulbees.entity.passive.ResourcefulBee;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
@@ -62,4 +62,4 @@ public class EntityEventHandlers {
 
     }
 
-}
+}*/
