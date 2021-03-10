@@ -8,17 +8,14 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Pose;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.BeeEntity;
-import net.minecraft.potion.Effects;
 import net.minecraft.tileentity.BeehiveTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.village.PointOfInterest;
 import net.minecraft.village.PointOfInterestManager;
 import net.minecraft.village.PointOfInterestType;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -55,17 +52,9 @@ public abstract class MixinBeeEntity extends AnimalEntity {
         }
     }
 
-    @Override
-    public boolean isInvulnerableTo(@NotNull DamageSource damageSource) {
-        if (getActivePotionEffect(Effects.WATER_BREATHING) != null && damageSource == DamageSource.DROWN) {
-            return true;
-        }
-        return super.isInvulnerableTo(damageSource);
-    }
-
-    @Override
-    protected float getStandingEyeHeight(@NotNull Pose pose, @NotNull EntitySize size) {
-        return this.isChild() ? size.height * 0.25F : size.height * 0.5F;
+    @Inject(at = @At("HEAD"), method = "getStandingEyeHeight(Lnet/minecraft/entity/Pose;Lnet/minecraft/entity/EntitySize;)F", cancellable = true)
+    public void getStandingEyeHeight(Pose pose, EntitySize size, CallbackInfoReturnable<Float> callback) {
+        callback.setReturnValue(this.isChild() ? size.height * 0.25F : size.height * 0.5F);
     }
 
     @Inject(at = @At("HEAD"), method = "isHiveValid()Z", cancellable = true)
