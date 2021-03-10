@@ -6,7 +6,8 @@
   "baseLayerTexture": "slime/slime_bee",
   "ColorData": {
     "modelType": "GELATINOUS",
-    "gelLayerTexture": "/slime/slime_gel_Layer"
+    "gelLayerTexture": "/slime/slime_gel_Layer",
+    "honeycombColor": "#62B64A"
   },
   "MutationData": {
     "hasMutation": true,
