@@ -23,6 +23,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
@@ -105,6 +106,9 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
     @Override
     public boolean isInvulnerableTo(@Nonnull DamageSource source) {
         TraitData info = getBeeData().getTraitData();
+        if (getActivePotionEffect(Effects.WATER_BREATHING) != null && source == DamageSource.DROWN) {
+            return true;
+        }
         if (source.equals(DamageSource.SWEET_BERRY_BUSH)) {
             return true;
         }
