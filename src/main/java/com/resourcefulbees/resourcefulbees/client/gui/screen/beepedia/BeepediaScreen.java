@@ -88,6 +88,7 @@ public class BeepediaScreen extends Screen {
     private List<ItemTooltip> itemTooltips = new LinkedList<>();
     private List<FluidTooltip> fluidTooltips = new LinkedList<>();
     private List<Interaction> interactions = new LinkedList<>();
+    private ModImageButton homeButton;
 
     @OnlyIn(Dist.CLIENT)
     public BeepediaScreen(String pageID) {
@@ -120,13 +121,14 @@ public class BeepediaScreen extends Screen {
         honey.put("catnip", new HoneyPage(this, KittenBee.getHoneyBottleData(), "catnip", subX, y));
         BeeRegistry.getRegistry().getHoneyBottles().forEach((s, h) -> honey.put(s, new HoneyPage(this, h, s, subX, y)));
         home = new HomePage(this, subX, y);
-        addButton(new ModImageButton(x + (xSize / 2) - 10, y + ySize - 25, 20, 20, 20, 0, 20, homeButtons, 60, 60, onPress -> selectPage(home)));
+        homeButton = new ModImageButton(x + (xSize / 2) - 10, y + ySize - 25, 20, 20, 20, 0, 20, homeButtons, 60, 60, onPress -> selectPage(home));
         backButton = new ModImageButton(x + (xSize / 2) + 20, y + ySize - 25, 20, 20, 40, 0, 20, homeButtons, 60, 60, onPress -> {
             if (!pastStates.isEmpty()) {
                 goBackState();
                 returnState(true);
             }
         });
+        addButton(homeButton);
         addButton(new ModImageButton(x + (xSize / 2) - 40, y + ySize - 25, 20, 20, 0, 0, 20, homeButtons, 60, 60, onPress -> {
             searchBox.visible = !searchBox.visible;
             setSearchVisible(searchBox.visible);
@@ -307,6 +309,7 @@ public class BeepediaScreen extends Screen {
     }
 
     protected void drawBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
+        homeButton.active = activePage != home;
         Minecraft client = this.client;
         backButton.active = !pastStates.isEmpty();
         if (client != null) {
