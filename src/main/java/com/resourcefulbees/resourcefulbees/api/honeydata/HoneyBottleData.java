@@ -210,13 +210,13 @@ public class HoneyBottleData {
 
     public Item.Properties getProperties() {
         return new Item.Properties()
-                .group(ItemGroupResourcefulBees.RESOURCEFUL_BEES)
-                .containerItem(Items.GLASS_BOTTLE)
-                .maxStackSize(16);
+                .tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES)
+                .craftRemainder(Items.GLASS_BOTTLE)
+                .stacksTo(16);
     }
 
     public Food getFood() {
-        Food.Builder builder = new Food.Builder().hunger(hunger).saturation(saturation);
+        Food.Builder builder = new Food.Builder().nutrition(hunger).saturationMod(saturation);
         if (hasEffects()) {
             for (HoneyEffect honeyEffect : effects) {
                 builder.effect(honeyEffect::getInstance, honeyEffect.chance);

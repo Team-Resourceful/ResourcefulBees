@@ -17,19 +17,19 @@ public class ScraperDispenserBehavior extends DefaultDispenseItemBehavior {
 
     @Nonnull
     @Override
-    protected ItemStack dispenseStack(@Nonnull IBlockSource source, @Nonnull ItemStack stack) {
-        ServerWorld world = source.getWorld();
-        BlockPos blockpos = source.getBlockPos().offset(source.getBlockState().get(DispenserBlock.FACING));
+    protected ItemStack execute(@Nonnull IBlockSource source, @Nonnull ItemStack stack) {
+        ServerWorld world = source.getLevel();
+        BlockPos blockpos = source.getPos().relative(source.getBlockState().getValue(DispenserBlock.FACING));
         BlockState blockstate = world.getBlockState(blockpos);
         if (blockstate.getBlock() instanceof TieredBeehiveBlock) {
-            int i = blockstate.get(BeehiveBlock.HONEY_LEVEL);
+            int i = blockstate.getValue(BeehiveBlock.HONEY_LEVEL);
             if (i >= 5) {
-                if (stack.attemptDamageItem(1, world.rand, null)) {
+                if (stack.hurt(1, world.random, null)) {
                     stack.setCount(0);
                 }
 
                 if (TieredBeehiveBlock.dropResourceHoneycomb((TieredBeehiveBlock) blockstate.getBlock(), world, blockpos, true)) {
-                    ((BeehiveBlock) blockstate.getBlock()).takeHoney(world, blockstate, blockpos, null, BeehiveTileEntity.State.BEE_RELEASED);
+                    ((BeehiveBlock) blockstate.getBlock()).releaseBeesAndResetHoneyLevel(world, blockstate, blockpos, null, BeehiveTileEntity.State.BEE_RELEASED);
                 }
             }
         }

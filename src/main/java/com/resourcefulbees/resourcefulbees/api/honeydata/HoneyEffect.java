@@ -46,7 +46,7 @@ public class HoneyEffect {
 
     public Effect getEffect() {
         if (effect != null) return effect;
-        ResourceLocation location = ResourceLocation.tryCreate(effectID);
+        ResourceLocation location = ResourceLocation.tryParse(effectID);
         return effectID == null || location == null ? null : ForgeRegistries.POTIONS.getValue(location);
     }
 

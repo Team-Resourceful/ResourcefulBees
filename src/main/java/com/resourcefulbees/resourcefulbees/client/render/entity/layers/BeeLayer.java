@@ -52,20 +52,20 @@ public class BeeLayer extends LayerRenderer<CustomBeeEntity, CustomBeeModel<Cust
         switch (layerType) {
             case PRIMARY:
                 this.isEmissive = false;
-                this.layerTexture = ResourceLocation.tryCreate(ResourcefulBees.MOD_ID + ":" + BeeConstants.ENTITY_TEXTURES_DIR + colorData.getPrimaryLayerTexture() + PNG_SUFFIX);
-                this.angerLayerTexture = ResourceLocation.tryCreate(ResourcefulBees.MOD_ID + ":" + BeeConstants.ENTITY_TEXTURES_DIR + colorData.getPrimaryLayerTexture() + ANGRY_PNG_SUFFIX);
+                this.layerTexture = ResourceLocation.tryParse(ResourcefulBees.MOD_ID + ":" + BeeConstants.ENTITY_TEXTURES_DIR + colorData.getPrimaryLayerTexture() + PNG_SUFFIX);
+                this.angerLayerTexture = ResourceLocation.tryParse(ResourcefulBees.MOD_ID + ":" + BeeConstants.ENTITY_TEXTURES_DIR + colorData.getPrimaryLayerTexture() + ANGRY_PNG_SUFFIX);
                 this.color = isRainbowBee ? RainbowColor.getColorFloats() : colorData.getPrimaryColorFloats();
                 break;
             case SECONDARY:
                 this.isEmissive = false;
-                this.layerTexture = ResourceLocation.tryCreate(ResourcefulBees.MOD_ID + ":" + BeeConstants.ENTITY_TEXTURES_DIR + colorData.getSecondaryLayerTexture() + PNG_SUFFIX);
-                this.angerLayerTexture = ResourceLocation.tryCreate(ResourcefulBees.MOD_ID + ":" + BeeConstants.ENTITY_TEXTURES_DIR + colorData.getSecondaryLayerTexture() + ANGRY_PNG_SUFFIX);
+                this.layerTexture = ResourceLocation.tryParse(ResourcefulBees.MOD_ID + ":" + BeeConstants.ENTITY_TEXTURES_DIR + colorData.getSecondaryLayerTexture() + PNG_SUFFIX);
+                this.angerLayerTexture = ResourceLocation.tryParse(ResourcefulBees.MOD_ID + ":" + BeeConstants.ENTITY_TEXTURES_DIR + colorData.getSecondaryLayerTexture() + ANGRY_PNG_SUFFIX);
                 this.color = isRainbowBee ? RainbowColor.getColorFloats() : colorData.getSecondaryColorFloats();
                 break;
             case EMISSIVE:
                 this.isEmissive = true;
-                this.layerTexture = ResourceLocation.tryCreate(ResourcefulBees.MOD_ID + ":" + BeeConstants.ENTITY_TEXTURES_DIR + colorData.getEmissiveLayerTexture() + PNG_SUFFIX);
-                this.angerLayerTexture = ResourceLocation.tryCreate(ResourcefulBees.MOD_ID + ":" + BeeConstants.ENTITY_TEXTURES_DIR + colorData.getEmissiveLayerTexture() + ANGRY_PNG_SUFFIX);
+                this.layerTexture = ResourceLocation.tryParse(ResourcefulBees.MOD_ID + ":" + BeeConstants.ENTITY_TEXTURES_DIR + colorData.getEmissiveLayerTexture() + PNG_SUFFIX);
+                this.angerLayerTexture = ResourceLocation.tryParse(ResourcefulBees.MOD_ID + ":" + BeeConstants.ENTITY_TEXTURES_DIR + colorData.getEmissiveLayerTexture() + ANGRY_PNG_SUFFIX);
                 this.color = isRainbowBee ? RainbowColor.getColorFloats() : colorData.getGlowColorFloats();
                 break;
             default:
@@ -91,34 +91,34 @@ public class BeeLayer extends LayerRenderer<CustomBeeEntity, CustomBeeModel<Cust
     @Override
     public void render(@Nonnull MatrixStack matrixStackIn, @Nonnull IRenderTypeBuffer bufferIn, int packedLightIn, @Nonnull CustomBeeEntity customBeeEntity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         if (isRainbowBee) color = RainbowColor.getColorFloats();
-        ResourceLocation texture = customBeeEntity.hasAngerTime() ? angerLayerTexture : layerTexture;
+        ResourceLocation texture = customBeeEntity.isAngry() ? angerLayerTexture : layerTexture;
 
         if (additionModel != null) {
-            this.getEntityModel().setModelAttributes(additionModel);
-            additionModel.setLivingAnimations(customBeeEntity, limbSwing, limbSwingAmount, partialTicks);
-            additionModel.setAngles(customBeeEntity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+            this.getParentModel().copyPropertiesTo(additionModel);
+            additionModel.prepareMobModel(customBeeEntity, limbSwing, limbSwingAmount, partialTicks);
+            additionModel.setupAnim(customBeeEntity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
         }
 
         if (isEmissive) {
             if (isEnchanted) {
-                this.getEntityModel().render(matrixStackIn, bufferIn.getBuffer(RenderType.getEntityGlint()), packedLightIn, OverlayTexture.DEFAULT_UV, 0.0F, 0.0F, 0.0F, 0.0F);
+                this.getParentModel().renderToBuffer(matrixStackIn, bufferIn.getBuffer(RenderType.entityGlint()), packedLightIn, OverlayTexture.NO_OVERLAY, 0.0F, 0.0F, 0.0F, 0.0F);
                 if (additionModel != null) {
-                    additionModel.render(matrixStackIn, bufferIn.getBuffer(RenderType.getEntityGlint()), packedLightIn, LivingRenderer.getOverlay(customBeeEntity, 0.0F), 0.0F, 0.0F, 0.0F, 0.0F);
+                    additionModel.renderToBuffer(matrixStackIn, bufferIn.getBuffer(RenderType.entityGlint()), packedLightIn, LivingRenderer.getOverlayCoords(customBeeEntity, 0.0F), 0.0F, 0.0F, 0.0F, 0.0F);
                 }
             } else {
-                IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.getEyes(texture));
-                if (glowingPulse == 0 || customBeeEntity.ticksExisted / 5 % glowingPulse == 0) {
-                    this.getEntityModel().render(matrixStackIn, ivertexbuilder, 15728640, OverlayTexture.DEFAULT_UV, color[0], color[1], color[2], 1.0F);
+                IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.eyes(texture));
+                if (glowingPulse == 0 || customBeeEntity.tickCount / 5 % glowingPulse == 0) {
+                    this.getParentModel().renderToBuffer(matrixStackIn, ivertexbuilder, 15728640, OverlayTexture.NO_OVERLAY, color[0], color[1], color[2], 1.0F);
                     if (additionModel != null) {
-                        additionModel.render(matrixStackIn, ivertexbuilder, 15728640, LivingRenderer.getOverlay(customBeeEntity, 0.0F), color[0], color[1], color[2], 1.0F);
+                        additionModel.renderToBuffer(matrixStackIn, ivertexbuilder, 15728640, LivingRenderer.getOverlayCoords(customBeeEntity, 0.0F), color[0], color[1], color[2], 1.0F);
                     }
                 }
             }
         } else {
-            renderModel(this.getEntityModel(), texture, matrixStackIn, bufferIn, packedLightIn, customBeeEntity, color[0], color[1], color[2]);
+            renderColoredCutoutModel(this.getParentModel(), texture, matrixStackIn, bufferIn, packedLightIn, customBeeEntity, color[0], color[1], color[2]);
             if (additionModel != null) {
-                IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.getEntityTranslucent(texture));
-                additionModel.render(matrixStackIn, ivertexbuilder, packedLightIn, LivingRenderer.getOverlay(customBeeEntity, 0.0F), color[0], color[1], color[2], 1.0F);
+                IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.entityTranslucent(texture));
+                additionModel.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, LivingRenderer.getOverlayCoords(customBeeEntity, 0.0F), color[0], color[1], color[2], 1.0F);
             }
         }
     }

@@ -118,7 +118,7 @@ public class TraitSetup {
                         source = DamageSource.DRAGON_BREATH;
                         break;
                     case "dryout":
-                        source = DamageSource.DRYOUT;
+                        source = DamageSource.DRY_OUT;
                         break;
                     default:
                         throw new IllegalArgumentException("Damage Source supplied not valid.");

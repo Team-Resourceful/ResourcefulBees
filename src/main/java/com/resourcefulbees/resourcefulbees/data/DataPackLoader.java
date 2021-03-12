@@ -20,16 +20,16 @@ public class DataPackLoader {
     }
 
     public static void serverStarting(FMLServerAboutToStartEvent event) {
-        event.getServer().getResourcePacks().addPackFinder((packInfoConsumer, factory) -> {
+        event.getServer().getPackRepository().addPackFinder((packInfoConsumer, factory) -> {
             File configDataPackFile = BeeSetup.getResourcePath().toFile();
             if(configDataPackFile.exists() && configDataPackFile.isDirectory()) {
-                ResourcePackInfo pack = ResourcePackInfo.createResourcePack(
+                ResourcePackInfo pack = ResourcePackInfo.create(
                         "resourcefulbees:internals",
                         true,
                         () -> new FolderPack(BeeSetup.getResourcePath().toFile()),
                         factory,
                         ResourcePackInfo.Priority.BOTTOM,
-                        IPackNameDecorator.method_29485()
+                        IPackNameDecorator.passThrough()
                 );
                 if (pack != null) packInfoConsumer.accept(pack);
             }
@@ -37,17 +37,17 @@ public class DataPackLoader {
 
 
 
-        ResourcePackList packs = event.getServer().getResourcePacks();
-        packs.reloadPacksFromFinders();
+        ResourcePackList packs = event.getServer().getPackRepository();
+        packs.reload();
 
-        event.getServer().reloadResources(getDataPacks(packs, event.getServer().getSaveProperties(), packs.getEnabledNames())).exceptionally(exception -> null);
+        event.getServer().reloadResources(getDataPacks(packs, event.getServer().getWorldData(), packs.getSelectedIds())).exceptionally(exception -> null);
     }
 
     private static Collection<String> getDataPacks(ResourcePackList packs, IServerConfiguration serverConf, Collection<String> existingPacks) {
         Collection<String> collection = Lists.newArrayList(existingPacks);
-        Collection<String> collection1 = serverConf.getDataPackSettings().getDisabled();
+        Collection<String> collection1 = serverConf.getDataPackConfig().getDisabled();
 
-        for (String s : packs.getNames()) {
+        for (String s : packs.getAvailableIds()) {
             if (!collection1.contains(s) && !collection.contains(s)) {
                 collection.add(s);
             }

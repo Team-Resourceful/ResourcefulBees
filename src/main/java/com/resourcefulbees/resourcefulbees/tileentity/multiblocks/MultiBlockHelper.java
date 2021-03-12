@@ -37,10 +37,10 @@ public class MultiBlockHelper {
 
     public static void buildStructureList(MutableBoundingBox box, List<BlockPos> list, Predicate<BlockPos> predicate, BlockPos validatorPosition) {
         list.clear();
-        BlockPos.stream(box)
+        BlockPos.betweenClosedStream(box)
                 .filter(blockPos -> !blockPos.equals(validatorPosition))
                 .filter(predicate)
-                .forEach(blockPos -> list.add(blockPos.toImmutable()));
+                .forEach(blockPos -> list.add(blockPos.immutable()));
     }
 
     public static boolean validateStructure(List<BlockPos> list, Predicate<BlockPos> predicate, int totalBlocks) {

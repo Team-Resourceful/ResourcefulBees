@@ -49,7 +49,7 @@ public class CentrifugeRecipeCategory implements IRecipeCategory<CentrifugeRecip
         this.background = guiHelper.createDrawable(BACKGROUND_IMAGE, 0, 0, 133, 65);
         this.icon = guiHelper.createDrawableIngredient(new ItemStack(ModItems.CENTRIFUGE_ITEM.get()));
         this.fluidHider = guiHelper.createDrawable(BACKGROUND_IMAGE, 9, 41, 18, 18);
-        this.localizedName = I18n.format("gui.resourcefulbees.jei.category.centrifuge");
+        this.localizedName = I18n.get("gui.resourcefulbees.jei.category.centrifuge");
         this.arrow = guiHelper.drawableBuilder(new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/centrifuge.png"), 0, 66, 73, 30)
                 .buildAnimated(200, IDrawableAnimated.StartDirection.LEFT, false);
         this.multiblock = guiHelper.createDrawable(new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/icons.png"), 25, 0, 16, 16);
@@ -102,7 +102,7 @@ public class CentrifugeRecipeCategory implements IRecipeCategory<CentrifugeRecip
         } else {
             stacks.add(outputs.get(2).getLeft().copy());
             ItemStack bottleStack = new ItemStack(Items.GLASS_BOTTLE, outputs.get(2).getLeft().getCount());
-            iIngredients.setInputIngredients(Lists.newArrayList(recipe.ingredient, Ingredient.fromStacks(bottleStack)));
+            iIngredients.setInputIngredients(Lists.newArrayList(recipe.ingredient, Ingredient.of(bottleStack)));
         }
 
         iIngredients.setOutputs(VanillaTypes.ITEM, stacks);
@@ -164,11 +164,11 @@ public class CentrifugeRecipeCategory implements IRecipeCategory<CentrifugeRecip
         String fluidString = decimalFormat.format(fluid);
 
         Minecraft minecraft = Minecraft.getInstance();
-        FontRenderer fontRenderer = minecraft.fontRenderer;
-        int honeyBottleOffset = fontRenderer.getStringWidth(honeyBottleString) / 2;
-        int beeOutputOffset = fontRenderer.getStringWidth(beeOutputString) / 2;
-        int beeswaxOffset = fontRenderer.getStringWidth(beeswaxString) / 2;
-        int fluidOffset = fontRenderer.getStringWidth(fluidString) / 2;
+        FontRenderer fontRenderer = minecraft.font;
+        int honeyBottleOffset = fontRenderer.width(honeyBottleString) / 2;
+        int beeOutputOffset = fontRenderer.width(beeOutputString) / 2;
+        int beeswaxOffset = fontRenderer.width(beeswaxString) / 2;
+        int fluidOffset = fontRenderer.width(fluidString) / 2;
 
         if (beeOutput < 1.0)
             fontRenderer.draw(matrix, beeOutputString, (float) 95 - beeOutputOffset, (float) 10, 0xff808080);

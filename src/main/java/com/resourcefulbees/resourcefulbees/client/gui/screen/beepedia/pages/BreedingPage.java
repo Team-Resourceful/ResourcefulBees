@@ -128,16 +128,16 @@ public class BreedingPage extends BeeDataPage {
     @Override
     public void renderBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
         showButtons();
-        Minecraft.getInstance().textureManager.bindTexture(breedingImage);
-        AbstractGui.drawTexture(matrix, xPos, yPos + 22, 0, 0, 128, 64, 128, 64);
-        FontRenderer font = Minecraft.getInstance().fontRenderer;
+        Minecraft.getInstance().textureManager.bind(breedingImage);
+        AbstractGui.blit(matrix, xPos, yPos + 22, 0, 0, 128, 64, 128, 64);
+        FontRenderer font = Minecraft.getInstance().font;
         TranslationTextComponent title = BeepediaScreen.currScreenState.isParentBreeding() && !baseOnly() ? parentsTitle : childrenTitle;
-        int padding = font.getWidth(title) / 2;
-        font.draw(matrix, title.formatted(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, -1);
+        int padding = font.width(title) / 2;
+        font.draw(matrix, title.withStyle(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, -1);
         if (activeList.size() > 1) {
             StringTextComponent page = new StringTextComponent(String.format("%d / %d", activePage + 1, activeList.size()));
-            padding = font.getWidth(page) / 2;
-            font.draw(matrix, page.formatted(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + SUB_PAGE_HEIGHT - 14, -1);
+            padding = font.width(page) / 2;
+            font.draw(matrix, page.withStyle(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + SUB_PAGE_HEIGHT - 14, -1);
         }
     }
 
@@ -207,9 +207,9 @@ public class BreedingPage extends BeeDataPage {
         private void initParents(Pair<String, String> parents) {
             parent1Data = BeeRegistry.getRegistry().getBeeData(parents.getLeft());
             parent2Data = BeeRegistry.getRegistry().getBeeData(parents.getRight());
-            parent1Entity = ForgeRegistries.ENTITIES.getValue(parent1Data.getEntityTypeRegistryID()).create(beepedia.getMinecraft().world);
+            parent1Entity = ForgeRegistries.ENTITIES.getValue(parent1Data.getEntityTypeRegistryID()).create(beepedia.getMinecraft().level);
             parent1Name = parent1Data.getTranslation();
-            parent2Entity = ForgeRegistries.ENTITIES.getValue(parent2Data.getEntityTypeRegistryID()).create(beepedia.getMinecraft().world);
+            parent2Entity = ForgeRegistries.ENTITIES.getValue(parent2Data.getEntityTypeRegistryID()).create(beepedia.getMinecraft().level);
             parent2Name = parent2Data.getTranslation();
             parent1Items = BeeInfoUtils.getBreedItems(parent1Data);
             parent2Items = BeeInfoUtils.getBreedItems(parent2Data);
@@ -227,27 +227,27 @@ public class BreedingPage extends BeeDataPage {
         }
 
         public void drawParent1(MatrixStack matrix) {
-            RenderUtils.renderEntity(matrix, parent1Entity, beepedia.getMinecraft().world, parent1Pos.x, parent1Pos.y, 45, 1);
+            RenderUtils.renderEntity(matrix, parent1Entity, beepedia.getMinecraft().level, parent1Pos.x, parent1Pos.y, 45, 1);
         }
 
         public void drawParent2(MatrixStack matrix) {
-            RenderUtils.renderEntity(matrix, parent2Entity, beepedia.getMinecraft().world, parent2Pos.x, parent2Pos.y, -45, 1);
+            RenderUtils.renderEntity(matrix, parent2Entity, beepedia.getMinecraft().level, parent2Pos.x, parent2Pos.y, -45, 1);
         }
 
         private void drawChild(MatrixStack matrix) {
-            FontRenderer font = beepedia.getMinecraft().fontRenderer;
-            RenderUtils.renderEntity(matrix, child.entity, beepedia.getMinecraft().world, childPos.x, childPos.y, -45, 1);
+            FontRenderer font = beepedia.getMinecraft().font;
+            RenderUtils.renderEntity(matrix, child.entity, beepedia.getMinecraft().level, childPos.x, childPos.y, -45, 1);
 
             if (child.chance < 1 && !isBase) {
                 StringTextComponent text = new StringTextComponent(decimalFormat.format(child.chance));
-                int padding = font.getWidth(text) / 2;
-                Minecraft.getInstance().textureManager.bindTexture(infoIcon);
-                beepedia.drawTexture(matrix, (int) chancePos.x, (int) chancePos.y, 16, 0, 9, 9);
-                font.draw(matrix, text.formatted(TextFormatting.GRAY), (float) xPos + 140 - (float) padding, (float) yPos + 21, -1);
+                int padding = font.width(text) / 2;
+                Minecraft.getInstance().textureManager.bind(infoIcon);
+                beepedia.blit(matrix, (int) chancePos.x, (int) chancePos.y, 16, 0, 9, 9);
+                font.draw(matrix, text.withStyle(TextFormatting.GRAY), (float) xPos + 140 - (float) padding, (float) yPos + 21, -1);
             }
             StringTextComponent text = new StringTextComponent(decimalFormat.format(child.weight));
-            int padding = font.getWidth(text) / 2;
-            font.draw(matrix, text.formatted(TextFormatting.GRAY), (float) xPos + 103f - (float) padding, (float) yPos + 56, -1);
+            int padding = font.width(text) / 2;
+            font.draw(matrix, text.withStyle(TextFormatting.GRAY), (float) xPos + 103f - (float) padding, (float) yPos + 56, -1);
         }
 
         public void drawParent1Item(MatrixStack matrix) {
@@ -287,8 +287,8 @@ public class BreedingPage extends BeeDataPage {
         private void drawTooltip(MatrixStack matrixStack, CustomBeeData beeData, int mouseX, int mouseY) {
             List<ITextComponent> tooltip = new ArrayList<>();
             tooltip.add(beeData.getTranslation());
-            tooltip.add(new StringTextComponent(beeData.getEntityTypeRegistryID().toString()).formatted(TextFormatting.DARK_GRAY));
-            beepedia.renderTooltip(matrixStack, tooltip, mouseX, mouseY);
+            tooltip.add(new StringTextComponent(beeData.getEntityTypeRegistryID().toString()).withStyle(TextFormatting.DARK_GRAY));
+            beepedia.renderComponentTooltip(matrixStack, tooltip, mouseX, mouseY);
         }
 
         public void draw(MatrixStack matrix) {
@@ -326,7 +326,7 @@ public class BreedingPage extends BeeDataPage {
             CustomBeeData beeData;
 
             public Child(Pair<String, String> parents, CustomBeeData beeData) {
-                entity = ForgeRegistries.ENTITIES.getValue(beeData.getEntityTypeRegistryID()).create(beepedia.getMinecraft().world);
+                entity = ForgeRegistries.ENTITIES.getValue(beeData.getEntityTypeRegistryID()).create(beepedia.getMinecraft().level);
                 name = beeData.getTranslation();
                 weight = BeeRegistry.getRegistry().getAdjustedWeightForChild(beeData, parents.getLeft(), parents.getRight());
                 chance = beeData.getBreedData().getBreedChance();

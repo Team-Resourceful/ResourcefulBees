@@ -106,7 +106,7 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
         }
 
         @Override
-        public int size() {
+        public int getCount() {
             return 5;
         }
     };
@@ -148,8 +148,8 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
     }
 
     public ApiaryTileEntity getApiary() {
-        if (apiaryPos != null && world != null) {  //validate apiary first
-            TileEntity tile = world.getTileEntity(apiaryPos); //get apiary pos
+        if (apiaryPos != null && level != null) {  //validate apiary first
+            TileEntity tile = level.getBlockEntity(apiaryPos); //get apiary pos
             if (tile instanceof ApiaryTileEntity) { //check tile is an apiary tile
                 return (ApiaryTileEntity) tile;
             }
@@ -159,7 +159,7 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
 
     public boolean validateApiaryLink() {
         apiary = getApiary();
-        if (apiary == null || apiary.getBreederPos() == null || !apiary.getBreederPos().equals(this.getPos()) || !apiary.isValidApiary(false)) { //check apiary has storage location equal to this and apiary is valid
+        if (apiary == null || apiary.getBreederPos() == null || !apiary.getBreederPos().equals(this.getBlockPos()) || !apiary.isValidApiary(false)) { //check apiary has storage location equal to this and apiary is valid
             apiaryPos = null; //if not set these to null
             return false;
         }
@@ -168,7 +168,7 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
 
     @Override
     public void tick() {
-        if (world != null && !world.isRemote) {
+        if (level != null && !level.isClientSide) {
             validateApiaryLink();
             boolean dirty = false;
             for (int i = 0; i < getNumberOfBreeders(); i++) {
@@ -187,7 +187,7 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
                     this.getTime()[i] = 0;
                 }
                 if (dirty) {
-                    this.markDirty();
+                    this.setChanged();
                 }
             }
         }
@@ -200,8 +200,8 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
             BeeJar p1Jar = (BeeJar) p1Stack.getItem();
             BeeJar p2Jar = (BeeJar) p2Stack.getItem();
 
-            Entity p1Entity = p1Jar.getEntityFromStack(p1Stack, world, true);
-            Entity p2Entity = p2Jar.getEntityFromStack(p2Stack, world, true);
+            Entity p1Entity = p1Jar.getEntityFromStack(p1Stack, level, true);
+            Entity p2Entity = p2Jar.getEntityFromStack(p2Stack, level, true);
 
             if (p1Entity instanceof CustomBeeEntity && p2Entity instanceof CustomBeeEntity) {
                 String p1Type = ((CustomBeeEntity) p1Entity).getBeeData().getName();
@@ -236,8 +236,8 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
                 BeeJar p1Jar = (BeeJar) p1Stack.getItem();
                 BeeJar p2Jar = (BeeJar) p2Stack.getItem();
 
-                Entity p1Entity = p1Jar.getEntityFromStack(p1Stack, world, true);
-                Entity p2Entity = p2Jar.getEntityFromStack(p2Stack, world, true);
+                Entity p1Entity = p1Jar.getEntityFromStack(p1Stack, level, true);
+                Entity p2Entity = p2Jar.getEntityFromStack(p2Stack, level, true);
 
                 if (p1Entity instanceof ICustomBee && p2Entity instanceof ICustomBee) {
                     ICustomBee bee1 = (ICustomBee) p1Entity;
@@ -246,8 +246,8 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
                     String p1Type = bee1.getBeeData().getName();
                     String p2Type = bee2.getBeeData().getName();
 
-                    if (world != null && validateApiaryLink()) {
-                        TileEntity tile = world.getTileEntity(apiary.getStoragePos());
+                    if (level != null && validateApiaryLink()) {
+                        TileEntity tile = level.getBlockEntity(apiary.getStoragePos());
                         if (tile instanceof ApiaryStorageTileEntity) {
                             ApiaryStorageTileEntity apiaryStorage = (ApiaryStorageTileEntity) tile;
                             if (apiaryStorage.breedComplete(p1Type, p2Type)) {
@@ -265,15 +265,15 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
 
 
     @Override
-    public void fromTag(@Nonnull BlockState state, @Nonnull CompoundNBT nbt) {
-        super.fromTag(state, nbt);
+    public void load(@Nonnull BlockState state, @Nonnull CompoundNBT nbt) {
+        super.load(state, nbt);
         this.loadFromNBT(nbt);
     }
 
     @Nonnull
     @Override
-    public CompoundNBT write(@Nonnull CompoundNBT nbt) {
-        super.write(nbt);
+    public CompoundNBT save(@Nonnull CompoundNBT nbt) {
+        super.save(nbt);
         return this.saveToNBT(nbt);
     }
 
@@ -305,25 +305,25 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
     @Override
     public CompoundNBT getUpdateTag() {
         CompoundNBT nbtTagCompound = new CompoundNBT();
-        write(nbtTagCompound);
+        save(nbtTagCompound);
         return nbtTagCompound;
     }
 
     @Override
     public void handleUpdateTag(@Nonnull BlockState state, CompoundNBT tag) {
-        this.fromTag(state, tag);
+        this.load(state, tag);
     }
 
     @Nullable
     @Override
     public SUpdateTileEntityPacket getUpdatePacket() {
         CompoundNBT nbt = new CompoundNBT();
-        return new SUpdateTileEntityPacket(pos, 0, saveToNBT(nbt));
+        return new SUpdateTileEntityPacket(worldPosition, 0, saveToNBT(nbt));
     }
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-        CompoundNBT nbt = pkt.getNbtCompound();
+        CompoundNBT nbt = pkt.getTag();
         loadFromNBT(nbt);
     }
 
@@ -346,7 +346,7 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
     @Override
     public Container createMenu(int id, @Nonnull PlayerInventory playerInventory, @Nonnull PlayerEntity playerEntity) {
         //noinspection ConstantConditions
-        return new ApiaryBreederContainer(id, world, pos, playerInventory, times);
+        return new ApiaryBreederContainer(id, level, worldPosition, playerInventory, times);
     }
 
     @Nonnull
@@ -357,13 +357,13 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
 
     @Override
     public void switchTab(ServerPlayerEntity player, ApiaryTabs tab) {
-        if (world != null && apiaryPos != null) {
+        if (level != null && apiaryPos != null) {
             if (tab == ApiaryTabs.MAIN) {
-                TileEntity tile = world.getTileEntity(apiaryPos);
+                TileEntity tile = level.getBlockEntity(apiaryPos);
                 NetworkHooks.openGui(player, (INamedContainerProvider) tile, apiaryPos);
             }
             if (tab == ApiaryTabs.STORAGE) {
-                TileEntity tile = world.getTileEntity(apiary.getStoragePos());
+                TileEntity tile = level.getBlockEntity(apiary.getStoragePos());
                 NetworkHooks.openGui(player, (INamedContainerProvider) tile, apiary.getStoragePos());
             }
         }
@@ -422,7 +422,7 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
         @Override
         protected void onContentsChanged(int slot) {
             super.onContentsChanged(slot);
-            markDirty();
+            setChanged();
 
             for (int i = 0; i < 4; i++) {
                 if (slot == getUpgradeSlots()[i]) {
@@ -552,20 +552,20 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
         }
 
         private void rebuildOpenContainers() {
-            if (ApiaryBreederTileEntity.this.world != null) {
+            if (ApiaryBreederTileEntity.this.level != null) {
                 float f = 5.0F;
-                BlockPos pos = ApiaryBreederTileEntity.this.pos;
+                BlockPos pos = ApiaryBreederTileEntity.this.worldPosition;
 
-                ApiaryBreederTileEntity.this.world.getEntitiesWithinAABB(PlayerEntity.class, new AxisAlignedBB(pos.getX() - f, pos.getY() - f, pos.getZ() - f, (pos.getX() + 1) + f, (pos.getY() + 1) + f, (pos.getZ() + 1) + f))
+                ApiaryBreederTileEntity.this.level.getEntitiesOfClass(PlayerEntity.class, new AxisAlignedBB(pos.getX() - f, pos.getY() - f, pos.getZ() - f, (pos.getX() + 1) + f, (pos.getY() + 1) + f, (pos.getZ() + 1) + f))
                         .stream()
-                        .filter(playerEntity -> playerEntity.openContainer instanceof ApiaryBreederContainer)
+                        .filter(playerEntity -> playerEntity.containerMenu instanceof ApiaryBreederContainer)
                         .filter(this::openContainerMatches)
-                        .forEach(playerEntity -> ((ApiaryBreederContainer) playerEntity.openContainer).setupSlots(true));
+                        .forEach(playerEntity -> ((ApiaryBreederContainer) playerEntity.containerMenu).setupSlots(true));
             }
         }
 
         private boolean openContainerMatches(PlayerEntity playerEntity) {
-            ApiaryBreederContainer openContainer = (ApiaryBreederContainer) playerEntity.openContainer;
+            ApiaryBreederContainer openContainer = (ApiaryBreederContainer) playerEntity.containerMenu;
             ApiaryBreederTileEntity apiaryBreederTileEntity = openContainer.getApiaryBreederTileEntity();
             return  ApiaryBreederTileEntity.this == apiaryBreederTileEntity;
         }

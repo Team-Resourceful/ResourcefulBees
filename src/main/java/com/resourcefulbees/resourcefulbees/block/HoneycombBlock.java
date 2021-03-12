@@ -59,7 +59,7 @@ public class HoneycombBlock extends Block {
     @Override
     public void animateTick(@Nonnull BlockState stateIn, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull Random rand) {
         if (colorData.isRainbowBee())
-            world.notifyBlockUpdate(pos, stateIn, stateIn, 2);
+            world.sendBlockUpdated(pos, stateIn, stateIn, 2);
         super.animateTick(stateIn, world, pos, rand);
     }
 

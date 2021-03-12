@@ -21,19 +21,19 @@ public class ExportBeeMessage {
 
     public static void encode(ExportBeeMessage message, PacketBuffer buffer){
         buffer.writeBlockPos(message.pos);
-        buffer.writeString(message.beeType);
+        buffer.writeUtf(message.beeType);
     }
 
     public static ExportBeeMessage decode(PacketBuffer buffer){
-        return new ExportBeeMessage(buffer.readBlockPos(), buffer.readString(100));
+        return new ExportBeeMessage(buffer.readBlockPos(), buffer.readUtf(100));
     }
 
     public static void handle(ExportBeeMessage message, Supplier<NetworkEvent.Context> context){
         context.get().enqueueWork(() -> {
             ServerPlayerEntity player = context.get().getSender();
             if (player != null) {
-                if (player.world.isBlockPresent(message.pos)) {
-                    TileEntity tileEntity = player.world.getTileEntity(message.pos);
+                if (player.level.isLoaded(message.pos)) {
+                    TileEntity tileEntity = player.level.getBlockEntity(message.pos);
                     if (tileEntity instanceof ApiaryTileEntity) {
                         ApiaryTileEntity apiaryTileEntity = (ApiaryTileEntity) tileEntity;
                         apiaryTileEntity.exportBee(player, message.beeType);

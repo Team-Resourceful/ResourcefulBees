@@ -44,7 +44,7 @@ public class EntityFlowerCategory implements IRecipeCategory<EntityFlowerCategor
         this.background = guiHelper.drawableBuilder(GUI_BACK, 0, 0, 100, 75).addPadding(0, 0, 0, 0).build();
         this.icon = guiHelper.createDrawableIngredient(new ItemStack(ModBlocks.GOLD_FLOWER.get()));
         this.nonRegisteredEgg = guiHelper.createDrawable(ICONS, 41, 0, 16, 16);
-        this.localizedName = I18n.format("gui.resourcefulbees.jei.category.bee_pollination_entity_flowers");
+        this.localizedName = I18n.get("gui.resourcefulbees.jei.category.bee_pollination_entity_flowers");
     }
 
     public static List<EntityFlowerCategory.Recipe> getFlowersRecipes() {
@@ -53,7 +53,7 @@ public class EntityFlowerCategory implements IRecipeCategory<EntityFlowerCategor
             if (beeData.hasEntityFlower()) {
                 EntityType<?> entityType = BeeInfoUtils.getEntityType(beeData.getEntityFlower());
                 if (entityType != null) {
-                    Item spawnEggItem = SpawnEggItem.getEgg(entityType);
+                    Item spawnEggItem = SpawnEggItem.byId(entityType);
                     recipes.add(new Recipe(beeData.getName(), entityType, spawnEggItem != null ? new ItemStack(spawnEggItem) : null));
                 }
             }
@@ -101,9 +101,9 @@ public class EntityFlowerCategory implements IRecipeCategory<EntityFlowerCategor
             itemStacks.addTooltipCallback((slotIndex, isInputStack, stack, tooltip) -> {
                 if (slotIndex == 0) {
                     tooltip.clear();
-                    tooltip.add(recipe.entityType.getName().copy());
+                    tooltip.add(recipe.entityType.getDescription().plainCopy());
                     if (recipe.entityType.getRegistryName() != null) {
-                        tooltip.add(new StringTextComponent(recipe.entityType.getRegistryName().toString()).formatted(TextFormatting.GRAY));
+                        tooltip.add(new StringTextComponent(recipe.entityType.getRegistryName().toString()).withStyle(TextFormatting.GRAY));
                     }
                 }
             });
@@ -118,9 +118,9 @@ public class EntityFlowerCategory implements IRecipeCategory<EntityFlowerCategor
     public @NotNull List<ITextComponent> getTooltipStrings(@NotNull Recipe recipe, double mouseX, double mouseY) {
         if (recipe.spawnEgg == null && mouseX > 41 && mouseX < 57 && mouseY > 55 && mouseY < 71){
             List<ITextComponent> tooltip = new ArrayList<>();
-            tooltip.add(recipe.entityType.getName().copy());
+            tooltip.add(recipe.entityType.getDescription().plainCopy());
             if (recipe.entityType.getRegistryName() != null) {
-                tooltip.add(new StringTextComponent(recipe.entityType.getRegistryName().toString()).formatted(TextFormatting.GRAY));
+                tooltip.add(new StringTextComponent(recipe.entityType.getRegistryName().toString()).withStyle(TextFormatting.GRAY));
             }
             return tooltip;
         }

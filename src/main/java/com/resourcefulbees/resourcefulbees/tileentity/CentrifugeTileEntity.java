@@ -55,7 +55,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static net.minecraft.inventory.container.Container.areItemsAndTagsEqual;
+import static net.minecraft.inventory.container.Container.consideredTheSameItem;
 
 public class CentrifugeTileEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider {
 
@@ -134,7 +134,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
     @Override
     public void tick() {
         boolean redstoneCheck = requiresRedstone && !isPoweredByRedstone;
-        boolean worldCheck = world == null || world.isRemote();
+        boolean worldCheck = level == null || level.isClientSide();
         if (worldCheck || redstoneCheck) return;
         for (int i = 0; i < honeycombSlots.length; i++) {
             recipes.set(i, getRecipe(i));
@@ -151,7 +151,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
         }
         if (dirty) {
             this.dirty = false;
-            this.markDirty();
+            this.setChanged();
         }
     }
 
@@ -177,7 +177,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
         consumeInput(i);
         ItemStack glass_bottle = itemStackHandler.getStackInSlot(BOTTLE_SLOT);
         List<ItemStack> depositStacks = new ArrayList<>();
-        if (world == null) {
+        if (level == null) {
             resetProcess(i);
             return;
         }
@@ -185,7 +185,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
 
         for (int j = 0; j < recipe.itemOutputs.size(); j++) {
             float chance = recipe.itemOutputs.get(j).getRight();
-            if (chance >= world.rand.nextFloat()) {
+            if (chance >= level.random.nextFloat()) {
                 depositStacks.add(recipe.itemOutputs.get(j).getLeft().copy());
                 if (j == 2 && !recipe.noBottleInput) {
                     glass_bottle.shrink(recipes.get(i).itemOutputs.get(2).getLeft().getCount());
@@ -194,7 +194,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
         }
         for (Pair<FluidStack, Float> fluidOutput : recipe.fluidOutput) {
             float chance = fluidOutput.getRight();
-            if (chance >= world.rand.nextFloat()) {
+            if (chance >= level.random.nextFloat()) {
                 FluidStack fluid = fluidOutput.getLeft().copy();
                 int tank = getValidTank(fluid);
                 fluidTanks.fill(tank, fluid, IFluidHandler.FluidAction.EXECUTE);
@@ -242,7 +242,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
 
     protected void consumeInput(int i) {
         ItemStack combInput = itemStackHandler.getStackInSlot(honeycombSlots[i]);
-        JsonElement count = recipes.get(i).ingredient.serialize().getAsJsonObject().get(BeeConstants.INGREDIENT_COUNT);
+        JsonElement count = recipes.get(i).ingredient.toJson().getAsJsonObject().get(BeeConstants.INGREDIENT_COUNT);
         int inputAmount = count != null ? count.getAsInt() : 1;
         combInput.shrink(inputAmount);
     }
@@ -250,7 +250,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
     protected boolean canStartCentrifugeProcess(int i) {
         if (!isProcessing[i] && !itemStackHandler.getStackInSlot(honeycombSlots[i]).isEmpty() && canProcessRecipe(i)) {
             ItemStack combInput = itemStackHandler.getStackInSlot(honeycombSlots[i]);
-            JsonElement count = recipes.get(i).ingredient.serialize().getAsJsonObject().get(BeeConstants.INGREDIENT_COUNT);
+            JsonElement count = recipes.get(i).ingredient.toJson().getAsJsonObject().get(BeeConstants.INGREDIENT_COUNT);
             int inputAmount = count != null ? count.getAsInt() : 1;
 
             return combInput.getCount() >= inputAmount;
@@ -279,11 +279,11 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
         ItemStack input = itemStackHandler.getStackInSlot(honeycombSlots[i]);
         Inventory recipeInv = new Inventory(input, itemStackHandler.getStackInSlot(BOTTLE_SLOT));
         if (input.isEmpty() || input == failedMatch) return null;
-        if (world != null) {
+        if (level != null) {
             boolean matches = this.recipes.get(i) == null;
-            if (!matches) matches = !this.recipes.get(i).matches(recipeInv, world);
+            if (!matches) matches = !this.recipes.get(i).matches(recipeInv, level);
             if (matches) {
-                CentrifugeRecipe rec = world.getRecipeManager().getRecipe(CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE, recipeInv, this.world).orElse(null);
+                CentrifugeRecipe rec = level.getRecipeManager().getRecipeFor(CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE, recipeInv, this.level).orElse(null);
                 if (rec == null) failedMatch = input;
                 else failedMatch = ItemStack.EMPTY;
                 this.recipes.set(i, rec);
@@ -329,7 +329,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
 
                 if (slotStack.isEmpty()) {
                     itemStackHandler.setStackInSlot(slotIndex, itemStack.split(itemMaxStackSize));
-                } else if (areItemsAndTagsEqual(itemStack, slotStack) && slotStack.getCount() != itemMaxStackSize) {
+                } else if (consideredTheSameItem(itemStack, slotStack) && slotStack.getCount() != itemMaxStackSize) {
                     int combinedCount = itemStack.getCount() + slotStack.getCount();
                     if (combinedCount <= itemMaxStackSize) {
                         itemStack.setCount(0);
@@ -369,7 +369,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
                     if (slotStack.isEmpty() && emptySlots != 0) {
                         count -= Math.min(count, output.getMaxStackSize());
                         emptySlots--;
-                    } else if (areItemsAndTagsEqual(output, slotStack) && slotStack.getCount() != output.getMaxStackSize()) {
+                    } else if (consideredTheSameItem(output, slotStack) && slotStack.getCount() != output.getMaxStackSize()) {
                         count -= Math.min(count, output.getMaxStackSize() - slotStack.getCount());
                     }
 
@@ -405,14 +405,14 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
     }
 
     protected void setPoweredBlockState(boolean powered) {
-        if (world != null) world.setBlockState(pos, getBlockState().with(CentrifugeBlock.PROPERTY_ON, powered));
+        if (level != null) level.setBlockAndUpdate(worldPosition, getBlockState().setValue(CentrifugeBlock.PROPERTY_ON, powered));
     }
 
     //region NBT
     @Nonnull
     @Override
-    public CompoundNBT write(@Nonnull CompoundNBT tag) {
-        super.write(tag);
+    public CompoundNBT save(@Nonnull CompoundNBT tag) {
+        super.save(tag);
         return saveToNBT(tag);
     }
 
@@ -440,33 +440,33 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
     }
 
     @Override
-    public void fromTag(@Nonnull BlockState state, @Nonnull CompoundNBT tag) {
+    public void load(@Nonnull BlockState state, @Nonnull CompoundNBT tag) {
         this.loadFromNBT(tag);
-        super.fromTag(state, tag);
+        super.load(state, tag);
     }
 
     @Nonnull
     @Override
     public CompoundNBT getUpdateTag() {
         CompoundNBT nbtTagCompound = new CompoundNBT();
-        write(nbtTagCompound);
+        save(nbtTagCompound);
         return nbtTagCompound;
     }
 
     @Override
     public void handleUpdateTag(@Nonnull BlockState state, CompoundNBT tag) {
-        this.fromTag(state, tag);
+        this.load(state, tag);
     }
 
     @Nullable
     @Override
     public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(pos, 0, saveToNBT(new CompoundNBT()));
+        return new SUpdateTileEntityPacket(worldPosition, 0, saveToNBT(new CompoundNBT()));
     }
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-        CompoundNBT nbt = pkt.getNbtCompound();
+        CompoundNBT nbt = pkt.getTag();
         loadFromNBT(nbt);
     }
     //endregion
@@ -504,8 +504,8 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
     @Nullable
     @Override
     public Container createMenu(int id, @Nonnull PlayerInventory playerInventory, @Nonnull PlayerEntity playerEntity) {
-        assert world != null;
-        return new CentrifugeContainer(ModContainers.CENTRIFUGE_CONTAINER.get(), id, world, pos, playerInventory, times);
+        assert level != null;
+        return new CentrifugeContainer(ModContainers.CENTRIFUGE_CONTAINER.get(), id, level, worldPosition, playerInventory, times);
     }
 
     @Nonnull
@@ -518,7 +518,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
         return new CustomEnergyStorage(Config.MAX_CENTRIFUGE_RF.get(), Config.MAX_CENTRIFUGE_RECEIVE_RATE.get(), 0) {
             @Override
             protected void onEnergyChanged() {
-                markDirty();
+                setChanged();
             }
         };
     }
@@ -533,7 +533,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
 
             buffer.writeInt(energyStorage.getEnergyStored());
 
-            NetPacketHandler.sendToPlayer(new SyncGUIMessage(this.pos, buffer), (ServerPlayerEntity) player);
+            NetPacketHandler.sendToPlayer(new SyncGUIMessage(this.worldPosition, buffer), (ServerPlayerEntity) player);
         }
     }
 
@@ -562,7 +562,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
         @Override
         protected void onContentsChanged(int slot) {
             super.onContentsChanged(slot);
-            markDirty();
+            setChanged();
         }
     }
 }

@@ -22,19 +22,19 @@ public class UpdateClientApiaryMessage {
 
     public static void encode(UpdateClientApiaryMessage message, PacketBuffer buffer){
         buffer.writeBlockPos(message.pos);
-        buffer.writeCompoundTag(message.data);
+        buffer.writeNbt(message.data);
     }
 
     public static UpdateClientApiaryMessage decode(PacketBuffer buffer){
-        return new UpdateClientApiaryMessage(buffer.readBlockPos(), buffer.readCompoundTag());
+        return new UpdateClientApiaryMessage(buffer.readBlockPos(), buffer.readNbt());
     }
 
     public static void handle(UpdateClientApiaryMessage message, Supplier<NetworkEvent.Context> context){
         context.get().enqueueWork(() -> {
             ClientPlayerEntity player = Minecraft.getInstance().player;
             if (player != null) {
-                if (player.world.isBlockPresent(message.pos)) {
-                    TileEntity tileEntity = player.world.getTileEntity(message.pos);
+                if (player.level.isLoaded(message.pos)) {
+                    TileEntity tileEntity = player.level.getBlockEntity(message.pos);
                     if (tileEntity instanceof ApiaryTileEntity) {
                         ApiaryTileEntity apiaryTileEntity = (ApiaryTileEntity) tileEntity;
                         apiaryTileEntity.bees.clear();

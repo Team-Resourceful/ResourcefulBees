@@ -18,18 +18,20 @@ import net.minecraftforge.fml.network.NetworkHooks;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 @SuppressWarnings("deprecation")
 public class ApiaryStorageBlock extends Block {
     public ApiaryStorageBlock(Properties properties) {
         super(properties);
-        this.setDefaultState(this.stateContainer.getBaseState());
+        this.registerDefaultState(this.stateDefinition.any());
     }
 
     @Nonnull
     @Override
-    public ActionResultType onUse(@Nonnull BlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand handIn, @Nonnull BlockRayTraceResult hit) {
-        if (!world.isRemote) {
-            INamedContainerProvider blockEntity = state.getContainer(world,pos);
+    public ActionResultType use(@Nonnull BlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand handIn, @Nonnull BlockRayTraceResult hit) {
+        if (!world.isClientSide) {
+            INamedContainerProvider blockEntity = state.getMenuProvider(world,pos);
             if (blockEntity != null) {
                 NetworkHooks.openGui((ServerPlayerEntity) player, blockEntity, pos);
             }
@@ -39,8 +41,8 @@ public class ApiaryStorageBlock extends Block {
 
     @Nullable
     @Override
-    public INamedContainerProvider getContainer(@Nonnull BlockState state, World worldIn, @Nonnull BlockPos pos) {
-        return (INamedContainerProvider)worldIn.getTileEntity(pos);
+    public INamedContainerProvider getMenuProvider(@Nonnull BlockState state, World worldIn, @Nonnull BlockPos pos) {
+        return (INamedContainerProvider)worldIn.getBlockEntity(pos);
     }
 
     @Override

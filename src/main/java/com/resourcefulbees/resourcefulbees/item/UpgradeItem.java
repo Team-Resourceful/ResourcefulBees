@@ -29,7 +29,7 @@ public class UpgradeItem extends Item {
     }
 
     public static CompoundNBT getUpgradeData(ItemStack stack) {
-        if (stack.getChildTag("UpgradeData") == null && isUpgradeItem(stack)) {
+        if (stack.getTagElement("UpgradeData") == null && isUpgradeItem(stack)) {
            return ((UpgradeItem) stack.getItem()).getUpgradeData();
         }
         return new CompoundNBT();

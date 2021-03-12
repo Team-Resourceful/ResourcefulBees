@@ -32,13 +32,13 @@ public class EntityIngredient {
     public List<ITextComponent> getTooltip() {
         List<ITextComponent> tooltip = new ArrayList<>();
 
-        String desc = I18n.format("tooltip.resourcefulbees.jei.click_bee_info");
+        String desc = I18n.get("tooltip.resourcefulbees.jei.click_bee_info");
         String[] descTooltip = desc.split("\\r?\\n");
         for (String s : descTooltip) {
-            tooltip.add(new StringTextComponent(s).formatted(TextFormatting.GOLD));
+            tooltip.add(new StringTextComponent(s).withStyle(TextFormatting.GOLD));
         }
-        if (Minecraft.getInstance().gameSettings.advancedItemTooltips) {
-            tooltip.add(new StringTextComponent("resourcefulbees:" + beeType + "_bee").formatted(TextFormatting.DARK_GRAY));
+        if (Minecraft.getInstance().options.advancedItemTooltips) {
+            tooltip.add(new StringTextComponent("resourcefulbees:" + beeType + "_bee").withStyle(TextFormatting.DARK_GRAY));
         }
         return tooltip;
     }

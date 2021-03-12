@@ -13,6 +13,6 @@ public class ModBeeEntity extends BeeEntity {
     }
 
     public boolean checkIsWithinDistance(@Nonnull BlockPos hivePos, int i) {
-        return hivePos.withinDistance(this.getBlockPos(), i);
+        return hivePos.closerThan(this.blockPosition(), i);
     }
 }

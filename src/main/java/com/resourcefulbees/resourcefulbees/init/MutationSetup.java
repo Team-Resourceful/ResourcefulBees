@@ -91,14 +91,14 @@ public class MutationSetup {
         RandomCollection<ItemOutput> randomCollection = createRandomItemCollection(mutation);
 
         if (input != null && !randomCollection.isEmpty() && mutation.getType() != MutationTypes.NONE) {
-            input.values().forEach(o -> {
+            input.getValues().forEach(o -> {
                 if (o instanceof Block) {
                     mutationData.addItemMutation((Block) o, randomCollection, mutation.getChance());
                     return;
                 }
 
                 if (o instanceof Fluid) {
-                    Block block = ((Fluid) o).getDefaultState().getBlockState().getBlock();
+                    Block block = ((Fluid) o).defaultFluidState().createLegacyBlock().getBlock();
                     mutationData.addItemMutation(block, randomCollection, mutation.getChance());
                 }
             });
@@ -140,14 +140,14 @@ public class MutationSetup {
         RandomCollection<BlockOutput> randomCollection = createRandomBlockCollection(mutation);
 
         if (input != null && !randomCollection.isEmpty() && mutation.getType() != MutationTypes.NONE) {
-            input.values().forEach(o -> {
+            input.getValues().forEach(o -> {
                 if (o instanceof Block) {
                     mutationData.addBlockMutation((Block) o, randomCollection, mutation.getChance()); //needs testing
                     return;
                 }
 
                 if (o instanceof Fluid) {
-                    Block block = ((Fluid) o).getDefaultState().getBlockState().getBlock();
+                    Block block = ((Fluid) o).defaultFluidState().createLegacyBlock().getBlock();
                     mutationData.addBlockMutation(block, randomCollection, mutation.getChance());
                 }
             });

@@ -35,7 +35,7 @@ public class HoneyTankRecipe extends ShapedRecipe {
     }
 
     @Override
-    public @NotNull ItemStack getCraftingResult(@NotNull CraftingInventory inventory) {
+    public @NotNull ItemStack assemble(@NotNull CraftingInventory inventory) {
         List<ItemStack> stacks = getTanks(inventory);
         CompoundNBT tag = new CompoundNBT();
         HoneyTankTileEntity.TankTier tier = HoneyTankTileEntity.TankTier.getTier(result.getItem());
@@ -67,14 +67,14 @@ public class HoneyTankRecipe extends ShapedRecipe {
     }
 
     protected static Predicate<FluidStack> honeyFluidPredicate() {
-        return fluidStack -> fluidStack.getFluid().isIn(BeeInfoUtils.getFluidTag("forge:honey"));
+        return fluidStack -> fluidStack.getFluid().is(BeeInfoUtils.getFluidTag("forge:honey"));
     }
 
     public List<ItemStack> getTanks(CraftingInventory inventory) {
         List<ItemStack> stacks = new ArrayList<>();
-        for (int i = 0; i < inventory.getSizeInventory(); i++) {
-            ItemStack item = inventory.getStackInSlot(i);
-            if (Block.getBlockFromItem(item.getItem()) instanceof HoneyTank) {
+        for (int i = 0; i < inventory.getContainerSize(); i++) {
+            ItemStack item = inventory.getItem(i);
+            if (Block.byItem(item.getItem()) instanceof HoneyTank) {
                 stacks.add(item);
             }
         }
@@ -89,16 +89,16 @@ public class HoneyTankRecipe extends ShapedRecipe {
     public static class Serializer extends ShapedRecipe.Serializer {
 
         @Override
-        public @NotNull ShapedRecipe read(@NotNull ResourceLocation recipeId, @NotNull JsonObject json) {
-            ShapedRecipe recipe = super.read(recipeId, json);
-            return new HoneyTankRecipe(recipeId, recipe.getIngredients(), recipe.getRecipeOutput());
+        public @NotNull ShapedRecipe fromJson(@NotNull ResourceLocation recipeId, @NotNull JsonObject json) {
+            ShapedRecipe recipe = super.fromJson(recipeId, json);
+            return new HoneyTankRecipe(recipeId, recipe.getIngredients(), recipe.getResultItem());
         }
 
         @Override
-        public ShapedRecipe read(@NotNull ResourceLocation recipeId, @NotNull PacketBuffer buffer) {
-            ShapedRecipe recipe = super.read(recipeId, buffer);
+        public ShapedRecipe fromNetwork(@NotNull ResourceLocation recipeId, @NotNull PacketBuffer buffer) {
+            ShapedRecipe recipe = super.fromNetwork(recipeId, buffer);
             assert recipe != null;
-            return new HoneyTankRecipe(recipeId, recipe.getIngredients(), recipe.getRecipeOutput());
+            return new HoneyTankRecipe(recipeId, recipe.getIngredients(), recipe.getResultItem());
         }
     }
 }

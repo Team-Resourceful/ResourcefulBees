@@ -8,6 +8,8 @@ import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nonnull;
 
+import net.minecraft.client.gui.widget.button.Button.IPressable;
+
 public class ModImageButton extends ImageButton {
 
     protected final ResourceLocation resourceLocation;
@@ -34,7 +36,7 @@ public class ModImageButton extends ImageButton {
     @Override
     public void renderButton(@Nonnull MatrixStack matrix, int mouseX, int mouseY, float partialTick) {
         Minecraft minecraft = Minecraft.getInstance();
-        minecraft.getTextureManager().bindTexture(this.resourceLocation);
+        minecraft.getTextureManager().bind(this.resourceLocation);
         RenderSystem.disableDepthTest();
         int i = this.yTexStart;
         if (!this.active) {
@@ -42,7 +44,7 @@ public class ModImageButton extends ImageButton {
         } else if (this.isHovered()) {
             i += this.yDiffText;
         }
-        drawTexture(matrix, this.x, this.y, (float) this.xTexStart, (float) i, this.width, this.height, imageWidth, imageHeight);
+        blit(matrix, this.x, this.y, (float) this.xTexStart, (float) i, this.width, this.height, imageWidth, imageHeight);
         RenderSystem.enableDepthTest();
     }
 }

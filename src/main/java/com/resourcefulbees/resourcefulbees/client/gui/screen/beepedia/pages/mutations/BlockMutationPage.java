@@ -30,10 +30,10 @@ public class BlockMutationPage extends MutationsPage {
 
     public BlockMutationPage(ITag<?> blocks, Pair<Double, RandomCollection<BlockOutput>> outputs, MutationTypes type, CustomBeeData beeData, BeepediaScreen beepedia) {
         super(type, beeData, beepedia);
-        if (blocks.values().get(0) instanceof Fluid) {
-            inputs = blocks.values().stream().map(f -> ((Fluid) f).getDefaultState().getBlockState().getBlock()).distinct().collect(Collectors.toList());
+        if (blocks.getValues().get(0) instanceof Fluid) {
+            inputs = blocks.getValues().stream().map(f -> ((Fluid) f).defaultFluidState().createLegacyBlock().getBlock()).distinct().collect(Collectors.toList());
         } else {
-            inputs = (List<Block>) blocks.values();
+            inputs = (List<Block>) blocks.getValues();
         }
         initOutputs(outputs);
     }
@@ -66,8 +66,8 @@ public class BlockMutationPage extends MutationsPage {
         beepedia.drawSlotNoToolTip(matrix, outputs.get(outputCounter).getRight().getBlock(), xPos + 112, yPos + 32);
         drawWeight(matrix, outputs.get(outputCounter).getLeft(), xPos + 122, yPos + 54);
         if (outputChance < 1){
-            Minecraft.getInstance().getTextureManager().bindTexture(infoIcon);
-            beepedia.drawTexture(matrix,  xPos + SUB_PAGE_WIDTH / 2 - 20, yPos + 51, 16, 0, 9, 9);
+            Minecraft.getInstance().getTextureManager().bind(infoIcon);
+            beepedia.blit(matrix,  xPos + SUB_PAGE_WIDTH / 2 - 20, yPos + 51, 16, 0, 9, 9);
             drawChance(matrix, outputChance,xPos + SUB_PAGE_WIDTH / 2 , yPos + 52);
         }
     }
@@ -83,18 +83,18 @@ public class BlockMutationPage extends MutationsPage {
             BlockOutput output = outputs.get(outputCounter).getRight();
             List<ITextComponent> tooltip = new ArrayList<>();
             IFormattableTextComponent name = output.getBlock().getName();
-            IFormattableTextComponent id = new StringTextComponent(output.getBlock().getRegistryName().toString()).formatted(TextFormatting.DARK_GRAY);
+            IFormattableTextComponent id = new StringTextComponent(output.getBlock().getRegistryName().toString()).withStyle(TextFormatting.DARK_GRAY);
             tooltip.add(name);
             tooltip.add(id);
             if (!output.getCompoundNBT().isEmpty()) {
                 if (BeeInfoUtils.isShiftPressed()) {
                     List<String> lore = BeeInfoUtils.getLoreLines(output.getCompoundNBT());
-                    lore.forEach(l -> tooltip.add(new StringTextComponent(l).fillStyle(Style.EMPTY.withColor(Color.parse("dark_purple")))));
+                    lore.forEach(l -> tooltip.add(new StringTextComponent(l).withStyle(Style.EMPTY.withColor(Color.parseColor("dark_purple")))));
                 } else {
-                    tooltip.add(new TranslationTextComponent("gui.resourcefulbees.jei.tooltip.show_nbt").fillStyle(Style.EMPTY.withColor(Color.parse("dark_purple"))));
+                    tooltip.add(new TranslationTextComponent("gui.resourcefulbees.jei.tooltip.show_nbt").withStyle(Style.EMPTY.withColor(Color.parseColor("dark_purple"))));
                 }
             }
-            beepedia.renderTooltip(matrix, tooltip, mouseX, mouseY);
+            beepedia.renderComponentTooltip(matrix, tooltip, mouseX, mouseY);
         }
         if (outputChance < 1 && BeepediaScreen.mouseHovering((float) xPos + ((float) SUB_PAGE_WIDTH / 2) - 20, (float) yPos + 51, 8, 8, mouseX, mouseY)) {
             beepedia.renderTooltip(matrix, new TranslationTextComponent("gui.resourcefulbees.jei.category.mutation_chance.info"), mouseX, mouseY);

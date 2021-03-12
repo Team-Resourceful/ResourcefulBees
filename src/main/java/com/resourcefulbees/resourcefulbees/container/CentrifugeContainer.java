@@ -50,9 +50,9 @@ public class CentrifugeContainer extends Container {
         initialize();
         this.inv = inv;
         this.times = times;
-        centrifugeTileEntity = (CentrifugeTileEntity) world.getTileEntity(pos);
-        this.trackIntArray(times);
-        this.trackInt(requiresRedstone);
+        centrifugeTileEntity = (CentrifugeTileEntity) world.getBlockEntity(pos);
+        this.addDataSlots(times);
+        this.addDataSlot(requiresRedstone);
         setupSlots();
     }
 
@@ -71,13 +71,13 @@ public class CentrifugeContainer extends Container {
 
     public void setupSlots() {
         if (centrifugeTileEntity != null) {
-            this.inventorySlots.clear();
+            this.slots.clear();
             numInputs = centrifugeTileEntity.getNumberOfInputs();
 
             this.addSlot(new SlotItemHandlerUnconditioned(centrifugeTileEntity.getItemStackHandler(), CentrifugeTileEntity.BOTTLE_SLOT, 26, 8) {
 
                 @Override
-                public boolean isItemValid(ItemStack stack) { return stack.getItem().equals(Items.GLASS_BOTTLE); }
+                public boolean mayPlace(ItemStack stack) { return stack.getItem().equals(Items.GLASS_BOTTLE); }
             });
 
             int x = inputXPos + 18;
@@ -85,7 +85,7 @@ public class CentrifugeContainer extends Container {
                 this.addSlot(new SlotItemHandlerUnconditioned(centrifugeTileEntity.getItemStackHandler(), centrifugeTileEntity.getHoneycombSlots()[i], x, 8) {
 
                     @Override
-                    public boolean isItemValid(ItemStack stack) { return !stack.getItem().equals(Items.GLASS_BOTTLE); }
+                    public boolean mayPlace(ItemStack stack) { return !stack.getItem().equals(Items.GLASS_BOTTLE); }
                 });
                 x += 36;
             }
@@ -93,19 +93,19 @@ public class CentrifugeContainer extends Container {
                 x = 18 + outputXPos + i * 18;
                 this.addSlot(new OutputSlot(centrifugeTileEntity.getItemStackHandler(), centrifugeTileEntity.getOutputSlots()[i], x, 44) {
                     @Override
-                    public boolean isEnabled() {
+                    public boolean isActive() {
                         return !displayFluids;
                     }
                 });
                 this.addSlot(new OutputSlot(centrifugeTileEntity.getItemStackHandler(), centrifugeTileEntity.getOutputSlots()[i + (numInputs * 2)], x, 62) {
                     @Override
-                    public boolean isEnabled() {
+                    public boolean isActive() {
                         return !displayFluids;
                     }
                 });
                 this.addSlot(new OutputSlot(centrifugeTileEntity.getItemStackHandler(), centrifugeTileEntity.getOutputSlots()[i + (numInputs * 4)], x, 80) {
                     @Override
-                    public boolean isEnabled() {
+                    public boolean isActive() {
                         return !displayFluids;
                     }
                 });
@@ -165,31 +165,31 @@ public class CentrifugeContainer extends Container {
      * @param player the player
      */
     @Override
-    public boolean canInteractWith(@Nonnull PlayerEntity player) { return true; }
+    public boolean stillValid(@Nonnull PlayerEntity player) { return true; }
 
     @Nonnull
     @Override
-    public ItemStack transferStackInSlot(@Nonnull PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(@Nonnull PlayerEntity playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = this.inventorySlots.get(index);
+        Slot slot = this.slots.get(index);
         int totalSlots = centrifugeTileEntity.getTotalSlots();
         int totalInputs = 1 + centrifugeTileEntity.getNumberOfInputs();
 
-        if (slot != null && slot.getHasStack()) {
-            ItemStack slotStack = slot.getStack();
+        if (slot != null && slot.hasItem()) {
+            ItemStack slotStack = slot.getItem();
             itemstack = slotStack.copy();
             if (index < totalSlots) {
-                if (!this.mergeItemStack(slotStack, totalSlots, inventorySlots.size(), true)) {
+                if (!this.moveItemStackTo(slotStack, totalSlots, slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.mergeItemStack(slotStack, 0, totalInputs, false)) {
+            } else if (!this.moveItemStackTo(slotStack, 0, totalInputs, false)) {
                 return ItemStack.EMPTY;
             }
 
             if (slotStack.isEmpty()) {
-                slot.putStack(ItemStack.EMPTY);
+                slot.set(ItemStack.EMPTY);
             } else {
-                slot.onSlotChanged();
+                slot.setChanged();
             }
         }
         return itemstack;
@@ -197,8 +197,8 @@ public class CentrifugeContainer extends Container {
 
 
     @Override
-    public void detectAndSendChanges() {
-        super.detectAndSendChanges();
+    public void broadcastChanges() {
+        super.broadcastChanges();
         if (centrifugeTileEntity == null) {
             return;
         }

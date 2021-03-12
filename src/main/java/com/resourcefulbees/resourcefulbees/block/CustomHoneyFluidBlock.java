@@ -15,6 +15,8 @@ import javax.annotation.Nullable;
 import java.util.Random;
 import java.util.function.Supplier;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class CustomHoneyFluidBlock extends FlowingFluidBlock {
 
     public final HoneyBottleData honeyData;
@@ -36,7 +38,7 @@ public class CustomHoneyFluidBlock extends FlowingFluidBlock {
     @Override
     public void animateTick(@Nonnull BlockState stateIn, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull Random rand) {
         if (honeyData.isRainbow())
-            world.notifyBlockUpdate(pos, stateIn, stateIn, 2);
+            world.sendBlockUpdated(pos, stateIn, stateIn, 2);
         super.animateTick(stateIn, world, pos, rand);
     }
 }

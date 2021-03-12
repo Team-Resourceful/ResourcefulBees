@@ -12,16 +12,16 @@ public class Calming extends Effect {
     }
 
     @Override
-    public void performEffect(@NotNull LivingEntity entity, int level) {
+    public void applyEffectTick(@NotNull LivingEntity entity, int level) {
         if (entity instanceof IAngerable) {
             IAngerable iAngerable = (IAngerable) entity;
-            iAngerable.stopAnger();
+            iAngerable.stopBeingAngry();
         }
-        super.performEffect(entity, level);
+        super.applyEffectTick(entity, level);
     }
 
     @Override
-    public boolean isReady(int duration, int level) {
+    public boolean isDurationEffectTick(int duration, int level) {
         return duration % 5 == 0;
     }
 }

@@ -125,7 +125,7 @@ public class HoneyTankTileEntity extends TileEntity {
 
 
     protected static Predicate<FluidStack> honeyFluidPredicate() {
-        return fluidStack -> fluidStack.getFluid().isIn(BeeInfoUtils.getFluidTag("forge:honey"));
+        return fluidStack -> fluidStack.getFluid().is(BeeInfoUtils.getFluidTag("forge:honey"));
     }
 
     @Nonnull
@@ -137,7 +137,7 @@ public class HoneyTankTileEntity extends TileEntity {
 
     @Override
     public AxisAlignedBB getRenderBoundingBox() {
-        return new AxisAlignedBB(this.getPos().down().south().west(), this.getPos().up().north().east());
+        return new AxisAlignedBB(this.getBlockPos().below().south().west(), this.getBlockPos().above().north().east());
     }
 
     @Override
@@ -148,16 +148,16 @@ public class HoneyTankTileEntity extends TileEntity {
 
     // read from tag
     @Override
-    public void fromTag(@Nonnull BlockState state, @Nonnull CompoundNBT tag) {
-        super.fromTag(state, tag);
+    public void load(@Nonnull BlockState state, @Nonnull CompoundNBT tag) {
+        super.load(state, tag);
         readNBT(tag);
     }
 
     // write to tag
     @Nonnull
     @Override
-    public CompoundNBT write(@Nonnull CompoundNBT tag) {
-        super.write(tag);
+    public CompoundNBT save(@Nonnull CompoundNBT tag) {
+        super.save(tag);
         writeNBT(tag);
         return tag;
     }
@@ -181,12 +181,12 @@ public class HoneyTankTileEntity extends TileEntity {
     @Nullable
     @Override
     public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(pos, 0, writeNBT(new CompoundNBT()));
+        return new SUpdateTileEntityPacket(worldPosition, 0, writeNBT(new CompoundNBT()));
     }
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-        CompoundNBT nbt = pkt.getNbtCompound();
+        CompoundNBT nbt = pkt.getTag();
         readNBT(nbt);
     }
 
@@ -222,24 +222,24 @@ public class HoneyTankTileEntity extends TileEntity {
         if (getFluidTank().isEmpty()) return;
         if (getFluidTank().getFluidAmount() >= ModConstants.HONEY_PER_BOTTLE) {
             getFluidTank().drain(fluidStack, IFluidHandler.FluidAction.EXECUTE);
-            ItemStack stack = player.getHeldItem(hand);
+            ItemStack stack = player.getItemInHand(hand);
             if (stack.getCount() > 1) {
                 stack.setCount(stack.getCount() - 1);
-                player.addItemStackToInventory(itemStack);
+                player.addItem(itemStack);
             } else {
-                player.setHeldItem(hand, itemStack);
+                player.setItemInHand(hand, itemStack);
             }
         }
-        playSound(SoundEvents.ITEM_BOTTLE_FILL);
+        playSound(SoundEvents.BOTTLE_FILL);
     }
 
     public void emptyBottle(PlayerEntity player, Hand hand) {
         FluidStack fluidStack;
-        if (player.getHeldItem(hand).getItem() instanceof CustomHoneyBottleItem) {
-            CustomHoneyBottleItem item = (CustomHoneyBottleItem) player.getHeldItem(hand).getItem();
+        if (player.getItemInHand(hand).getItem() instanceof CustomHoneyBottleItem) {
+            CustomHoneyBottleItem item = (CustomHoneyBottleItem) player.getItemInHand(hand).getItem();
             fluidStack = new FluidStack(item.getHoneyData().getHoneyStillFluidRegistryObject().get(), ModConstants.HONEY_PER_BOTTLE);
         } else {
-            if (player.getHeldItem(hand).getItem() == ModItems.CATNIP_HONEY_BOTTLE.get()) {
+            if (player.getItemInHand(hand).getItem() == ModItems.CATNIP_HONEY_BOTTLE.get()) {
                 fluidStack = new FluidStack(ModFluids.CATNIP_HONEY_STILL.get(), ModConstants.HONEY_PER_BOTTLE);
             } else {
                 fluidStack = HONEY_BOTTLE_FLUID_STACK;
@@ -250,23 +250,23 @@ public class HoneyTankTileEntity extends TileEntity {
         }
         if (getFluidTank().getFluidAmount() + ModConstants.HONEY_PER_BOTTLE <= getFluidTank().getTankCapacity(0)) {
             getFluidTank().fill(fluidStack, IFluidHandler.FluidAction.EXECUTE);
-            ItemStack stack = player.getHeldItem(hand);
+            ItemStack stack = player.getItemInHand(hand);
             if (stack.getCount() > 1) {
                 stack.setCount(stack.getCount() - 1);
-                player.addItemStackToInventory(new ItemStack(Items.GLASS_BOTTLE, 1));
+                player.addItem(new ItemStack(Items.GLASS_BOTTLE, 1));
             } else {
-                player.setHeldItem(hand, new ItemStack(Items.GLASS_BOTTLE, 1));
+                player.setItemInHand(hand, new ItemStack(Items.GLASS_BOTTLE, 1));
             }
         }
-        playSound(SoundEvents.ITEM_BOTTLE_EMPTY);
+        playSound(SoundEvents.BOTTLE_EMPTY);
     }
 
     public void playSound(SoundEvent soundEvent) {
-        assert this.world != null;
-        this.world.playSound(null, this.pos, soundEvent, SoundCategory.BLOCKS, 1.0F, 1.0F);
+        assert this.level != null;
+        this.level.playSound(null, this.worldPosition, soundEvent, SoundCategory.BLOCKS, 1.0F, 1.0F);
     }
 
-    public int getLevel() {
+    public int getFluidLevel() {
         float fillPercentage = ((float) getFluidTank().getFluidAmount()) / ((float) getFluidTank().getTankCapacity(0));
         return (int) Math.ceil(fillPercentage * 100);
     }
@@ -280,9 +280,9 @@ public class HoneyTankTileEntity extends TileEntity {
         @Override
         protected void onContentsChanged() {
             super.onContentsChanged();
-            if (world != null) {
-                BlockState state = world.getBlockState(pos);
-                world.notifyBlockUpdate(pos, state, state, 2);
+            if (level != null) {
+                BlockState state = level.getBlockState(worldPosition);
+                level.sendBlockUpdated(worldPosition, state, state, 2);
             }
         }
     }

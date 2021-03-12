@@ -135,9 +135,9 @@ public class BeepediaScreen extends Screen {
         bees.forEach((s, b) -> addButton(b.listButton));
         traits.forEach((s, b) -> addButton(b.listButton));
         honey.forEach((s, b) -> addButton(b.listButton));
-        searchBox = new TextFieldWidget(Minecraft.getInstance().fontRenderer, x + 10, y + 143, 98, 10, new TranslationTextComponent("gui.resourcefulbees.beepedia.search"));
+        searchBox = new TextFieldWidget(Minecraft.getInstance().font, x + 10, y + 143, 98, 10, new TranslationTextComponent("gui.resourcefulbees.beepedia.search"));
         searchBox.visible = false;
-        addChild(searchBox);
+        addWidget(searchBox);
         initSidebar();
         returnState(false);
     }
@@ -303,13 +303,13 @@ public class BeepediaScreen extends Screen {
     }
 
     protected void drawBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
-        Minecraft client = this.client;
+        Minecraft client = this.minecraft;
         backButton.active = !pastStates.isEmpty();
         if (client != null) {
-            client.getTextureManager().bindTexture(background);
+            client.getTextureManager().bind(background);
             int x = this.guiLeft;
             int y = this.guiTop;
-            drawTexture(matrix, x, y, 0, 0, this.xSize, this.ySize, 286, 182);
+            blit(matrix, x, y, 0, 0, this.xSize, this.ySize, 286, 182);
         }
         activePage.renderBackground(matrix, partialTick, mouseX, mouseY);
         activeList.updateList();
@@ -320,10 +320,10 @@ public class BeepediaScreen extends Screen {
     private void updateSearch() {
         if (searchBox.visible) {
             setFocused(searchBox);
-            searchBox.setFocused2(true);
+            searchBox.setFocus(true);
         }
         if (searchBox.isFocused()) {
-            String text = searchBox.getText();
+            String text = searchBox.getValue();
             if (text == null || text.isEmpty()) {
                 setSearch(null);
             } else {
@@ -339,8 +339,8 @@ public class BeepediaScreen extends Screen {
         if (!searchUpdated() && !isToggled) return;
         if (isSearchVisible()) {
             if (getSearch() != null) {
-                searchBox.setText(getSearch());
-                list.updateReducedList(searchBox.getText());
+                searchBox.setValue(getSearch());
+                list.updateReducedList(searchBox.getValue());
             } else {
                 list.updateReducedList(null);
             }
@@ -362,7 +362,7 @@ public class BeepediaScreen extends Screen {
     }
 
     protected void drawForeground(MatrixStack matrixStack, int mouseX, int mouseY) {
-        this.textRenderer.draw(matrixStack, this.title, (float) this.guiLeft + 10, (float) this.guiTop + ySize - 20, 5592405);
+        this.font.draw(matrixStack, this.title, (float) this.guiLeft + 10, (float) this.guiTop + ySize - 20, 5592405);
         activePage.renderForeground(matrixStack, mouseX, mouseY);
         TranslationTextComponent title;
         switch (activeListType) {
@@ -376,7 +376,7 @@ public class BeepediaScreen extends Screen {
                 title = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.bees");
                 break;
         }
-        this.textRenderer.draw(matrixStack, title.formatted(TextFormatting.WHITE), (float) this.guiLeft + 10, (float) this.guiTop + 20, -1);
+        this.font.draw(matrixStack, title.withStyle(TextFormatting.WHITE), (float) this.guiLeft + 10, (float) this.guiTop + 20, -1);
     }
 
 
@@ -413,12 +413,12 @@ public class BeepediaScreen extends Screen {
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
         if (activePage.mouseClicked(mouseX, mouseY, mouseButton)) {
-            Minecraft.getInstance().getSoundHandler().play(SimpleSound.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+            Minecraft.getInstance().getSoundManager().play(SimpleSound.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
             return true;
         }
         interactions.forEach(b -> {
             if (b.onMouseClick((int) mouseX, (int) mouseY)) {
-                Minecraft.getInstance().getSoundHandler().play(SimpleSound.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+                Minecraft.getInstance().getSoundManager().play(SimpleSound.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
             }
         });
         return super.mouseClicked(mouseX, mouseY, mouseButton);
@@ -458,7 +458,7 @@ public class BeepediaScreen extends Screen {
 
     public void drawSlot(MatrixStack matrix, IItemProvider item, int amount, int xPos, int yPos) {
         if (item instanceof FlowingFluidBlock) {
-            drawFluidSlot(matrix, new FluidStack(((FlowingFluidBlock) item).getFluid().getStillFluid(), amount), xPos, yPos, true);
+            drawFluidSlot(matrix, new FluidStack(((FlowingFluidBlock) item).getFluid().getSource(), amount), xPos, yPos, true);
         } else {
             drawSlot(matrix, new ItemStack(item, amount), xPos, yPos);
         }
@@ -466,7 +466,7 @@ public class BeepediaScreen extends Screen {
 
     public void drawSlot(MatrixStack matrix, Block item, int xPos, int yPos) {
         if (item instanceof FlowingFluidBlock) {
-            drawFluidSlot(matrix, new FluidStack(((FlowingFluidBlock) item).getFluid().getStillFluid(), 1000), xPos, yPos, false);
+            drawFluidSlot(matrix, new FluidStack(((FlowingFluidBlock) item).getFluid().getSource(), 1000), xPos, yPos, false);
         } else {
             drawSlot(matrix, new ItemStack(item), xPos, yPos);
         }
@@ -474,7 +474,7 @@ public class BeepediaScreen extends Screen {
 
     public void drawSlot(MatrixStack matrix, IItemProvider item, int xPos, int yPos) {
         if (item instanceof FlowingFluidBlock) {
-            drawFluidSlot(matrix, new FluidStack(((FlowingFluidBlock) item).getFluid().getStillFluid(), 1000), xPos, yPos, false);
+            drawFluidSlot(matrix, new FluidStack(((FlowingFluidBlock) item).getFluid().getSource(), 1000), xPos, yPos, false);
         } else {
             drawSlot(matrix, new ItemStack(item), xPos, yPos);
         }
@@ -493,9 +493,9 @@ public class BeepediaScreen extends Screen {
 
     public void drawFluidSlotNoToolTip(MatrixStack matrix, FluidStack fluidStack, int xPos, int yPos) {
         if (fluidStack.isEmpty()) return;
-        getMinecraft().getTextureManager().bindTexture(slotImage);
-        drawTexture(matrix, xPos, yPos, 0, 0, 20, 20, 20, 20);
-        RenderUtils.renderFluid(matrix, fluidStack, xPos + 2, yPos + 2, this.getZOffset());
+        getMinecraft().getTextureManager().bind(slotImage);
+        blit(matrix, xPos, yPos, 0, 0, 20, 20, 20, 20);
+        RenderUtils.renderFluid(matrix, fluidStack, xPos + 2, yPos + 2, this.getBlitOffset());
     }
 
     public void drawSlot(MatrixStack matrix, ItemStack item, int xPos, int yPos) {
@@ -505,7 +505,7 @@ public class BeepediaScreen extends Screen {
 
     public void drawSlotNoToolTip(MatrixStack matrix, IItemProvider item, int xPos, int yPos) {
         if (item instanceof FlowingFluidBlock) {
-            drawFluidSlotNoToolTip(matrix, new FluidStack(((FlowingFluidBlock) item).getFluid().getStillFluid(), 1000), xPos, yPos);
+            drawFluidSlotNoToolTip(matrix, new FluidStack(((FlowingFluidBlock) item).getFluid().getSource(), 1000), xPos, yPos);
         } else {
             drawSlotNoToolTip(matrix, new ItemStack(item), xPos, yPos);
         }
@@ -513,15 +513,15 @@ public class BeepediaScreen extends Screen {
 
     public void drawSlotNoToolTip(MatrixStack matrix, ItemStack item, int xPos, int yPos) {
         if (item.isEmpty()) return;
-        getMinecraft().getTextureManager().bindTexture(slotImage);
-        drawTexture(matrix, xPos, yPos, 0, 0, 20, 20, 20, 20);
-        getMinecraft().getItemRenderer().renderItemIntoGUI(item, xPos + 2, yPos + 2);
-        getMinecraft().getItemRenderer().renderItemOverlays(client.fontRenderer, item, xPos + 2, yPos + 2);
+        getMinecraft().getTextureManager().bind(slotImage);
+        blit(matrix, xPos, yPos, 0, 0, 20, 20, 20, 20);
+        getMinecraft().getItemRenderer().renderGuiItem(item, xPos + 2, yPos + 2);
+        getMinecraft().getItemRenderer().renderGuiItemDecorations(minecraft.font, item, xPos + 2, yPos + 2);
     }
 
     public void drawEmptySlot(MatrixStack matrix, int xPos, int yPos) {
-        getMinecraft().getTextureManager().bindTexture(slotImage);
-        drawTexture(matrix, xPos, yPos, 0, 0, 20, 20, 20, 20);
+        getMinecraft().getTextureManager().bind(slotImage);
+        blit(matrix, xPos, yPos, 0, 0, 20, 20, 20, 20);
     }
 
     private void renderFluidTooltip(MatrixStack matrix, FluidStack fluidStack, int mouseX, int mouseY, boolean showAmount) {
@@ -532,8 +532,8 @@ public class BeepediaScreen extends Screen {
             String amount = fluidStack.getAmount() < 500 || BeeInfoUtils.isShiftPressed() ? String.format("%,d", fluidStack.getAmount()) + " mb" : decimalFormat.format((float) fluidStack.getAmount() / 1000) + " B";
             tooltip.add(new StringTextComponent(amount));
         }
-        tooltip.add(new StringTextComponent(fluidStack.getFluid().getRegistryName().toString()).formatted(TextFormatting.DARK_GRAY));
-        renderTooltip(matrix, tooltip, mouseX, mouseY);
+        tooltip.add(new StringTextComponent(fluidStack.getFluid().getRegistryName().toString()).withStyle(TextFormatting.DARK_GRAY));
+        renderComponentTooltip(matrix, tooltip, mouseX, mouseY);
     }
 
     private void registerItemTooltip(ItemStack item, int xPos, int yPos) {
@@ -556,7 +556,7 @@ public class BeepediaScreen extends Screen {
     public Entity initEntity(ResourceLocation entityTypeRegistryID) {
         EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(entityTypeRegistryID);
         if (entityType == null) return null;
-        return entityType.create(getMinecraft().world);
+        return entityType.create(getMinecraft().level);
     }
 
     public Button.ITooltip getTooltipProvider(ITextComponent textComponent) {
@@ -571,27 +571,27 @@ public class BeepediaScreen extends Screen {
     public void drawInteractiveFluidSlot(MatrixStack matrix, FluidStack fluidStack, int xPos, int yPos, int mouseX, int mouseY, boolean showAmount, Supplier<Boolean> supplier) {
         if (fluidStack.isEmpty()) return;
         registerInteraction(xPos, yPos, supplier);
-        getMinecraft().getTextureManager().bindTexture(buttonImage);
+        getMinecraft().getTextureManager().bind(buttonImage);
         if (mouseHovering(xPos, yPos, 20, 20, mouseX, mouseY)) {
-            drawTexture(matrix, xPos, yPos, 0, 20, 20, 20, 20, 60);
+            blit(matrix, xPos, yPos, 0, 20, 20, 20, 20, 60);
         } else {
-            drawTexture(matrix, xPos, yPos, 0, 0, 20, 20, 20, 60);
+            blit(matrix, xPos, yPos, 0, 0, 20, 20, 20, 60);
         }
-        RenderUtils.renderFluid(matrix, fluidStack, xPos + 2, yPos + 2, this.getZOffset());
+        RenderUtils.renderFluid(matrix, fluidStack, xPos + 2, yPos + 2, this.getBlitOffset());
         registerFluidTooltip(fluidStack, xPos, yPos, showAmount);
     }
 
     public void drawInteractiveSlot(MatrixStack matrix, ItemStack item, int xPos, int yPos, int mouseX, int mouseY, Supplier<Boolean> supplier) {
         if (item.isEmpty()) return;
         registerInteraction(xPos, yPos, supplier);
-        getMinecraft().getTextureManager().bindTexture(buttonImage);
+        getMinecraft().getTextureManager().bind(buttonImage);
         if (mouseHovering(xPos, yPos, 20, 20, mouseX, mouseY)) {
-            drawTexture(matrix, xPos, yPos, 0, 20, 20, 20, 20, 60);
+            blit(matrix, xPos, yPos, 0, 20, 20, 20, 20, 60);
         } else {
-            drawTexture(matrix, xPos, yPos, 0, 0, 20, 20, 20, 60);
+            blit(matrix, xPos, yPos, 0, 0, 20, 20, 20, 60);
         }
-        getMinecraft().getItemRenderer().renderItemIntoGUI(item, xPos + 2, yPos + 2);
-        getMinecraft().getItemRenderer().renderItemOverlays(client.fontRenderer, item, xPos + 2, yPos + 2);
+        getMinecraft().getItemRenderer().renderGuiItem(item, xPos + 2, yPos + 2);
+        getMinecraft().getItemRenderer().renderGuiItemDecorations(minecraft.font, item, xPos + 2, yPos + 2);
         registerItemTooltip(item, xPos, yPos);
     }
 

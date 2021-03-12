@@ -35,14 +35,14 @@ public class ModFluids {
 
     private static ForgeFlowingFluid.Properties makeProperties() {
         return new ForgeFlowingFluid.Properties(HONEY_STILL, HONEY_FLOWING,
-                FluidAttributes.builder(FLUID_STILL, FLUID_FLOWING).sound(SoundEvents.ITEM_BUCKET_FILL, SoundEvents.ITEM_BUCKET_EMPTY)
+                FluidAttributes.builder(FLUID_STILL, FLUID_FLOWING).sound(SoundEvents.BUCKET_FILL, SoundEvents.BUCKET_EMPTY)
                         .overlay(FLUID_OVERLAY).density(1300).temperature(300).viscosity(1800).rarity(Rarity.COMMON))
                 .bucket(ModItems.HONEY_FLUID_BUCKET).block(ModBlocks.HONEY_FLUID_BLOCK).tickRate(20);
     }
 
     private static ForgeFlowingFluid.Properties makeCatnipProperties() {
         return new ForgeFlowingFluid.Properties(CATNIP_HONEY_STILL, CATNIP_HONEY_FLOWING,
-                FluidAttributes.builder(CATNIP_FLUID_STILL, CATNIP_FLUID_FLOWING).sound(SoundEvents.ITEM_BUCKET_FILL, SoundEvents.ITEM_BUCKET_EMPTY)
+                FluidAttributes.builder(CATNIP_FLUID_STILL, CATNIP_FLUID_FLOWING).sound(SoundEvents.BUCKET_FILL, SoundEvents.BUCKET_EMPTY)
                         .overlay(CATNIP_FLUID_OVERLAY).density(1300).temperature(300).viscosity(1800).rarity(Rarity.COMMON))
                 .bucket(ModItems.CATNIP_HONEY_FLUID_BUCKET).block(ModBlocks.CATNIP_HONEY_FLUID_BLOCK).tickRate(20);
     }

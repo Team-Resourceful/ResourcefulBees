@@ -36,11 +36,11 @@ public abstract class MutationsPage {
     public abstract void drawTooltips(MatrixStack matrix, int xPos, int yPos, int mouseX, int mouseY);
 
     protected void drawWeight(MatrixStack matrix, Double right, int xPos, int yPos) {
-        FontRenderer font = Minecraft.getInstance().fontRenderer;
+        FontRenderer font = Minecraft.getInstance().font;
         DecimalFormat decimalFormat = new DecimalFormat("##%");
         StringTextComponent text = new StringTextComponent(decimalFormat.format(right));
-        int padding = font.getWidth(text) / 2;
-        font.draw(matrix, text.formatted(TextFormatting.GRAY), (float) xPos - padding, yPos, -1);
+        int padding = font.width(text) / 2;
+        font.draw(matrix, text.withStyle(TextFormatting.GRAY), (float) xPos - padding, yPos, -1);
     }
     protected void drawChance(MatrixStack matrix, Double right, int xPos, int yPos) {
         if (right >= 1) return;

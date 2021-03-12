@@ -20,6 +20,8 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.item.Item.Properties;
+
 public class Fertilizer extends Item {
 
     //TODO - This system needs to be rewritten properly
@@ -29,26 +31,26 @@ public class Fertilizer extends Item {
     }
 
     @Override
-    public void addInformation(ItemStack stack, World world, @NotNull List list, @NotNull ITooltipFlag par4)
+    public void appendHoverText(ItemStack stack, World world, @NotNull List list, @NotNull ITooltipFlag par4)
     {
         if(stack.getTag() == null || !stack.getTag().contains("specific")) {
             list.add(new TooltipBuilder().addTip("Unknown Type").build().get(0));
         } else {
-            list.add(BeeInfoUtils.getItem(stack.getTag().getString("specific")).getName());
+            list.add(BeeInfoUtils.getItem(stack.getTag().getString("specific")).getDescription());
         }
     }
 
     @Nonnull
     @Override
-    public ActionResultType onItemUse(ItemUseContext context) {
+    public ActionResultType useOn(ItemUseContext context) {
 
-        World world = context.getWorld();
-        BlockPos position = context.getPos();
+        World world = context.getLevel();
+        BlockPos position = context.getClickedPos();
 
         //TODO: Add Fertilizer range in config
         final int range = 4;
 
-        if(!world.isRemote) {
+        if(!world.isClientSide) {
             List<BlockPos> validCoords = new ArrayList<>();
 
             //Checks every block in range
@@ -57,10 +59,10 @@ public class Fertilizer extends Item {
 
                     //Shifts y a bit up and down
                     for (int y = -2; y <= 2; y++) {
-                        BlockPos pos = position.add(x + 1, y + 1, z + 1);
-                        BlockPos dirt = position.add(x + 1, y, z + 1);
-                        if (world.isAirBlock(pos) && pos.getY() < 255
-                                && (world.getBlockState(dirt).getMaterial() == Material.EARTH || world.getBlockState(dirt).getMaterial() == Material.ORGANIC)) {
+                        BlockPos pos = position.offset(x + 1, y + 1, z + 1);
+                        BlockPos dirt = position.offset(x + 1, y, z + 1);
+                        if (world.isEmptyBlock(pos) && pos.getY() < 255
+                                && (world.getBlockState(dirt).getMaterial() == Material.DIRT || world.getBlockState(dirt).getMaterial() == Material.GRASS)) {
                             validCoords.add(pos);
                         }
                     }
@@ -72,14 +74,14 @@ public class Fertilizer extends Item {
             if(flowerCount > 0) {
 
                 //Getting ItemStack to see what Type the fertilizer is.
-                ItemStack itemStack = context.getItem();
+                ItemStack itemStack = context.getItemInHand();
 
                 List<Item> flowers;
 
                 if (itemStack.getTag() == null || !itemStack.getTag().contains("specific")) {
                     //Getting flowers
                     ResourceLocation tagId = new ResourceLocation("minecraft", "small_flowers");
-                    List<Item> temp = ItemTags.getCollection().getTagOrEmpty(tagId).values();
+                    List<Item> temp = ItemTags.getAllTags().getTagOrEmpty(tagId).getValues();
 
                     //We need somehow to copy it to a new array list. If we remove this, it breaks *shrugs* // Actually it is because of the way java works. It copies the direct reference to the list and that is unchangeable
                     flowers = new ArrayList<>(temp);
@@ -95,14 +97,14 @@ public class Fertilizer extends Item {
 
                 for (int i = 0; i < flowerCount; i++) {
 
-                    BlockPos coords = validCoords.get(world.rand.nextInt(validCoords.size()));
+                    BlockPos coords = validCoords.get(world.random.nextInt(validCoords.size()));
                     validCoords.remove(coords);
 
                     //Getting random flower from the small_flowers tag
-                    world.setBlockState(coords, Block.getBlockFromItem(flowers.get(world.rand.nextInt(flowers.size()))).getDefaultState());
+                    world.setBlockAndUpdate(coords, Block.byItem(flowers.get(world.random.nextInt(flowers.size()))).defaultBlockState());
                 }
 
-                context.getItem().shrink(1);
+                context.getItemInHand().shrink(1);
             }
         }
 

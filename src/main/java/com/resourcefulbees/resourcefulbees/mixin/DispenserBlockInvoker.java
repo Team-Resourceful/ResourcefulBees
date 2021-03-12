@@ -9,6 +9,6 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 @Mixin(DispenserBlock.class)
 public interface DispenserBlockInvoker {
 
-    @Invoker("getBehavior")
+    @Invoker("getDispenseMethod")
     IDispenseItemBehavior invokeGetBehavior(ItemStack stack);
 }

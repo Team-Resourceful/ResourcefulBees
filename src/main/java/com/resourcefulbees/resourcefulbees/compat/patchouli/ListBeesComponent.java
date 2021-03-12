@@ -58,9 +58,9 @@ public class ListBeesComponent implements ICustomComponent {
         Pair<EntityType<?>, Optional<Entity>> bee = bees.get(page);
         Optional<Entity> entityOptional = bee.getRight();
         if (entityOptional.isPresent()) {
-            renderEntity(matrixStack, entityOptional.get(), context.getGui().getMinecraft().world, xOffset, yOffset, this.defaultRotation, this.renderScale, this.offset);
+            renderEntity(matrixStack, entityOptional.get(), context.getGui().getMinecraft().level, xOffset, yOffset, this.defaultRotation, this.renderScale, this.offset);
         } else {
-            Entity entity = initEntity(bee.getLeft(), context.getGui().getMinecraft().world);
+            Entity entity = initEntity(bee.getLeft(), context.getGui().getMinecraft().level);
             if (entity == null) {
                 bees.remove(page);
                 pageCount = bees.size();
@@ -71,20 +71,20 @@ public class ListBeesComponent implements ICustomComponent {
     }
 
     public static void renderEntity(MatrixStack ms, Entity entity, World world, float x, float y, float rotation, float renderScale, float offset) {
-        entity.world = world;
-        ms.push();
+        entity.level = world;
+        ms.pushPose();
         ms.translate(x, y, 50.0D);
         ms.scale(renderScale, renderScale, renderScale);
         ms.translate(0.0D, offset, 0.0D);
-        ms.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(180.0F));
-        ms.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(rotation));
-        EntityRendererManager erd = Minecraft.getInstance().getRenderManager();
-        IRenderTypeBuffer.Impl immediate = Minecraft.getInstance().getBufferBuilders().getEntityVertexConsumers();
+        ms.mulPose(Vector3f.ZP.rotationDegrees(180.0F));
+        ms.mulPose(Vector3f.YP.rotationDegrees(rotation));
+        EntityRendererManager erd = Minecraft.getInstance().getEntityRenderDispatcher();
+        IRenderTypeBuffer.Impl immediate = Minecraft.getInstance().renderBuffers().bufferSource();
         erd.setRenderShadow(false);
         erd.render(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, ms, immediate, 15728880);
         erd.setRenderShadow(true);
-        immediate.draw();
-        ms.pop();
+        immediate.endBatch();
+        ms.popPose();
     }
 
     private Entity initEntity(EntityType<?> left, ClientWorld world) {

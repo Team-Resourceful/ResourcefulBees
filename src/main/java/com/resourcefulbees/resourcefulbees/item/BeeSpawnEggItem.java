@@ -71,29 +71,29 @@ public class BeeSpawnEggItem extends SpawnEggItem {
 
     public static void initSpawnEggs() {
         for (final SpawnEggItem spawnEgg : eggsToAdd) {
-            EGGS.put(spawnEgg.getType(null), spawnEgg);
+            BY_ID.put(spawnEgg.getType(null), spawnEgg);
         }
         eggsToAdd.clear();
     }
 
     @Override
-    public @NotNull ActionResultType onItemUse(ItemUseContext context) {
-        ItemStack itemstack = context.getItem();
+    public @NotNull ActionResultType useOn(ItemUseContext context) {
+        ItemStack itemstack = context.getItemInHand();
         PlayerEntity player = context.getPlayer();
         if (player != null) {
-            World world = context.getWorld();
-            if (world.isRemote) {
+            World world = context.getLevel();
+            if (world.isClientSide) {
                 return ActionResultType.SUCCESS;
             } else {
-                BlockPos blockpos = context.getPos();
-                Direction direction = context.getFace();
+                BlockPos blockpos = context.getClickedPos();
+                Direction direction = context.getClickedFace();
                 BlockState blockstate = world.getBlockState(blockpos);
 
                 BlockPos blockpos1;
                 if (blockstate.getCollisionShape(world, blockpos).isEmpty()) {
                     blockpos1 = blockpos;
                 } else {
-                    blockpos1 = blockpos.offset(direction);
+                    blockpos1 = blockpos.relative(direction);
                 }
 
                 EntityType<?> entitytype = this.getType(itemstack.getTag());
@@ -108,7 +108,7 @@ public class BeeSpawnEggItem extends SpawnEggItem {
     }
 
     @Override
-    public @NotNull Optional<MobEntity> spawnBaby(@NotNull PlayerEntity playerEntity, @NotNull MobEntity mobEntity, @NotNull EntityType<? extends MobEntity> entityType, @NotNull ServerWorld world, @NotNull Vector3d vector3d, @NotNull ItemStack stack) {
+    public @NotNull Optional<MobEntity> spawnOffspringFromSpawnEgg(@NotNull PlayerEntity playerEntity, @NotNull MobEntity mobEntity, @NotNull EntityType<? extends MobEntity> entityType, @NotNull ServerWorld world, @NotNull Vector3d vector3d, @NotNull ItemStack stack) {
         return Optional.empty();
     }
 }

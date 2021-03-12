@@ -70,9 +70,9 @@ public class KittenBee {
     public static HoneyBottleData getHoneyBottleData() {
         if (honeyBottleData == null) {
             HoneyBottleData.Builder builder = new HoneyBottleData.Builder("catnip", 8, 0.9f, "#BD5331");
-            HoneyEffect speed = new HoneyEffect(Effects.SPEED.getRegistryName().toString(), 2400, 2, 1);
+            HoneyEffect speed = new HoneyEffect(Effects.MOVEMENT_SPEED.getRegistryName().toString(), 2400, 2, 1);
             HoneyEffect nightVision = new HoneyEffect(Effects.NIGHT_VISION.getRegistryName().toString(), 2400, 0, 1);
-            HoneyEffect jump = new HoneyEffect(Effects.JUMP_BOOST.getRegistryName().toString(), 2400, 1, 1);
+            HoneyEffect jump = new HoneyEffect(Effects.JUMP.getRegistryName().toString(), 2400, 1, 1);
             builder.addEffect(speed).addEffect(nightVision).addEffect(jump);
             honeyBottleData = builder.build();
             honeyBottleData.setHoneyBlockRegistryObject(ModBlocks.CATNIP_HONEY_BLOCK);

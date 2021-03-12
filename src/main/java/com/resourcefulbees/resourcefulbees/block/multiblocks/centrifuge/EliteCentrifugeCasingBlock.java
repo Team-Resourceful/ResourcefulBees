@@ -11,6 +11,8 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class EliteCentrifugeCasingBlock extends CentrifugeCasingBlock {
     public EliteCentrifugeCasingBlock(Properties properties) { super(properties); }
 
@@ -25,7 +27,7 @@ public class EliteCentrifugeCasingBlock extends CentrifugeCasingBlock {
 
     @Override
     protected CentrifugeControllerTileEntity getControllerEntity(World world, BlockPos pos) {
-        TileEntity tileEntity = world.getTileEntity(pos);
+        TileEntity tileEntity = world.getBlockEntity(pos);
         if (tileEntity instanceof EliteCentrifugeCasingTileEntity) {
             return ((EliteCentrifugeCasingTileEntity) tileEntity).getController();
         }

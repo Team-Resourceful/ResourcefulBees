@@ -33,6 +33,16 @@
                       "source": "Bees",
                       "target": "BlockEntityTag.Bees",
                       "op": "replace"
+                    },
+                    {
+                      "source": "Tier",
+                      "target": "BlockEntityTag.Tier",
+                      "op": "replace"
+                    },
+                    {
+                      "source": "TierModifier",
+                      "target": "BlockEntityTag.TierModifier",
+                      "op": "replace"
                     }
                   ]
                 },
@@ -48,6 +58,24 @@
             },
             {
               "type": "minecraft:item",
+              "functions": [
+                {
+                  "function": "minecraft:copy_nbt",
+                  "source": "block_entity",
+                  "ops": [
+                    {
+                      "source": "Tier",
+                      "target": "BlockEntityTag.Tier",
+                      "op": "replace"
+                    },
+                    {
+                      "source": "TierModifier",
+                      "target": "BlockEntityTag.TierModifier",
+                      "op": "replace"
+                    }
+                  ]
+                }
+              ],
               "name": "resourcefulbees:crimson_bee_nest"
             }
           ]

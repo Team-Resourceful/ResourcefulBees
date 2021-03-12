@@ -15,33 +15,33 @@ public class BeeWanderGoal extends Goal {
 
     public BeeWanderGoal(ModBeeEntity modBeeEntity) {
         this.modBeeEntity = modBeeEntity;
-        this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE));
+        this.setFlags(EnumSet.of(Goal.Flag.MOVE));
     }
 
     /**
      * Returns whether execution should begin. You can also read and cache any state necessary for execution in this
      * method as well.
      */
-    public boolean shouldExecute() {
-        return modBeeEntity.getNavigator().noPath() && modBeeEntity.getRNG().nextInt(10) == 0;
+    public boolean canUse() {
+        return modBeeEntity.getNavigation().isDone() && modBeeEntity.getRandom().nextInt(10) == 0;
     }
 
     /**
      * Returns whether an in-progress EntityAIBase should continue executing
      */
     @Override
-    public boolean shouldContinueExecuting() {
-        return modBeeEntity.getNavigator().isFollowingPath();
+    public boolean canContinueToUse() {
+        return modBeeEntity.getNavigation().isInProgress();
     }
 
     /**
      * Execute a one shot task or start executing a continuous task
      */
     @Override
-    public void startExecuting() {
+    public void start() {
         Vector3d vector3d = this.getRandomLocation();
         if (vector3d != null) {
-            modBeeEntity.getNavigator().setPath(modBeeEntity.getNavigator().getPathToPos(new BlockPos(vector3d), 1), 1.0D);
+            modBeeEntity.getNavigation().moveTo(modBeeEntity.getNavigation().createPath(new BlockPos(vector3d), 1), 1.0D);
         }
 
     }
@@ -50,13 +50,13 @@ public class BeeWanderGoal extends Goal {
     private Vector3d getRandomLocation() {
         Vector3d vector3d;
         if (modBeeEntity.isHiveValid() && !modBeeEntity.checkIsWithinDistance(Objects.requireNonNull(modBeeEntity.hivePos), 22)) {
-            Vector3d vector3d1 = Vector3d.ofCenter(modBeeEntity.hivePos);
-            vector3d = vector3d1.subtract(modBeeEntity.getPositionVec()).normalize();
+            Vector3d vector3d1 = Vector3d.atCenterOf(modBeeEntity.hivePos);
+            vector3d = vector3d1.subtract(modBeeEntity.position()).normalize();
         } else {
-            vector3d = modBeeEntity.getLook(0.0F);
+            vector3d = modBeeEntity.getViewVector(0.0F);
         }
 
-        int randHorz = modBeeEntity.getRNG().nextInt(8) + 8;
+        int randHorz = modBeeEntity.getRandom().nextInt(8) + 8;
 
         Vector3d vector3d2 = RandomPositionGenerator.findAirTarget(modBeeEntity, randHorz, 7, vector3d);
         return vector3d2 != null ? vector3d2 : RandomPositionGenerator.findGroundTarget(modBeeEntity, randHorz, 6, -4, vector3d);

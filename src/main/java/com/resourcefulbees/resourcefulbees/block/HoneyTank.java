@@ -42,31 +42,33 @@ import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 @SuppressWarnings("deprecation")
 public class HoneyTank extends Block {
 
-    protected static final VoxelShape VOXEL_SHAPE = Block.makeCuboidShape(1.0D, 0.0D, 1.0D, 15.0D, 16.0D, 15.0D);
+    protected static final VoxelShape VOXEL_SHAPE = Block.box(1.0D, 0.0D, 1.0D, 15.0D, 16.0D, 15.0D);
 
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
-    public static final AbstractBlock.Properties PROPERTIES = AbstractBlock.Properties.create(Material.GLASS)
+    public static final AbstractBlock.Properties PROPERTIES = AbstractBlock.Properties.of(Material.GLASS)
             .sound(SoundType.GLASS)
             .harvestTool(ToolType.PICKAXE)
-            .hardnessAndResistance(1)
-            .nonOpaque();
+            .strength(1)
+            .noOcclusion();
 
     public final HoneyTankTileEntity.TankTier tier;
 
     public HoneyTank(Properties properties, HoneyTankTileEntity.TankTier tier) {
         super(properties);
         this.tier = tier;
-        BlockState defaultState = this.stateContainer.getBaseState()
-                .with(BlockStateProperties.WATERLOGGED, false);
-        this.setDefaultState(defaultState);
+        BlockState defaultState = this.stateDefinition.any()
+                .setValue(BlockStateProperties.WATERLOGGED, false);
+        this.registerDefaultState(defaultState);
     }
 
     private static HoneyTankTileEntity getTileEntity(@Nonnull IBlockReader world, @Nonnull BlockPos pos) {
-        TileEntity entity = world.getTileEntity(pos);
+        TileEntity entity = world.getBlockEntity(pos);
         if (entity instanceof HoneyTankTileEntity) {
             return (HoneyTankTileEntity) entity;
         }
@@ -82,7 +84,7 @@ public class HoneyTank extends Block {
         if (tank.getFluidTank().getFluid().getFluid() instanceof HoneyFlowingFluid) {
             HoneyFlowingFluid fluid = (HoneyFlowingFluid) tank.getFluidTank().getFluid().getFluid();
             if (fluid.getHoneyData().isRainbow()) {
-                world.notifyBlockUpdate(pos, stateIn, stateIn, 2);
+                world.sendBlockUpdated(pos, stateIn, stateIn, 2);
             }
         }
         super.animateTick(stateIn, world, pos, rand);
@@ -101,15 +103,15 @@ public class HoneyTank extends Block {
 
     @Nonnull
     @Override
-    public ActionResultType onUse(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult blockRayTraceResult) {
+    public ActionResultType use(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult blockRayTraceResult) {
 
-        ItemStack heldItem = player.getHeldItem(hand);
+        ItemStack heldItem = player.getItemInHand(hand);
         boolean usingHoney = heldItem.getItem() instanceof HoneyBottleItem;
         boolean usingBottle = heldItem.getItem() instanceof GlassBottleItem;
         boolean usingBucket = heldItem.getItem() instanceof BucketItem;
-        TileEntity tileEntity = world.getTileEntity(pos);
+        TileEntity tileEntity = world.getBlockEntity(pos);
 
-        if (!world.isRemote && tileEntity instanceof HoneyTankTileEntity) {
+        if (!world.isClientSide && tileEntity instanceof HoneyTankTileEntity) {
             HoneyTankTileEntity tank = (HoneyTankTileEntity) tileEntity;
             if (usingBucket) {
                 tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
@@ -119,7 +121,7 @@ public class HoneyTank extends Block {
             } else if (usingHoney) {
                 tank.emptyBottle(player, hand);
             }
-            world.notifyBlockUpdate(pos, state, state, 2);
+            world.sendBlockUpdated(pos, state, state, 2);
         }
         if (usingBottle || usingBucket || usingHoney) {
             return ActionResultType.SUCCESS;
@@ -130,16 +132,16 @@ public class HoneyTank extends Block {
     @Nonnull
     @Override
     public FluidState getFluidState(BlockState state) {
-        return state.get(BlockStateProperties.WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : Fluids.EMPTY.getDefaultState();
+        return state.getValue(BlockStateProperties.WATERLOGGED) ? Fluids.WATER.getSource(false) : Fluids.EMPTY.defaultFluidState();
     }
 
     @Override
     public BlockState getStateForPlacement(@NotNull BlockItemUseContext context) {
-        return this.getDefaultState();
+        return this.defaultBlockState();
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(WATERLOGGED);
     }
 
@@ -151,16 +153,16 @@ public class HoneyTank extends Block {
 
     @Nonnull
     @Override
-    public BlockState updatePostPlacement(BlockState stateIn, @NotNull Direction facing, @NotNull BlockState facingState, @NotNull IWorld world, @NotNull BlockPos currentPos, @NotNull BlockPos facingPos) {
-        if (stateIn.get(BlockStateProperties.WATERLOGGED)) {
-            world.getPendingFluidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+    public BlockState updateShape(BlockState stateIn, @NotNull Direction facing, @NotNull BlockState facingState, @NotNull IWorld world, @NotNull BlockPos currentPos, @NotNull BlockPos facingPos) {
+        if (stateIn.getValue(BlockStateProperties.WATERLOGGED)) {
+            world.getLiquidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(world));
         }
         return stateIn;
     }
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void addInformation(@Nonnull ItemStack stack, @javax.annotation.Nullable IBlockReader worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
+    public void appendHoverText(@Nonnull ItemStack stack, @javax.annotation.Nullable IBlockReader worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
         if (!stack.hasTag() || stack.getTag() == null || stack.getTag().isEmpty() || !stack.getTag().contains("fluid"))
             return;
         HoneyTankTileEntity.TankTier tankTier = HoneyTankTileEntity.TankTier.getTier(stack.getTag().getInt("tier"));
@@ -168,16 +170,16 @@ public class HoneyTank extends Block {
         FluidStack fluid = tank.getFluid();
         if (!fluid.isEmpty()) {
             tooltip.addAll(new TooltipBuilder()
-                    .addTip(I18n.format(fluid.getTranslationKey()))
+                    .addTip(I18n.get(fluid.getTranslationKey()))
                     .appendText(": [" + tank.getFluidAmount() + "/" + tank.getCapacity() + "]")
                     .applyStyle(TextFormatting.GOLD).build());
         }
-        super.addInformation(stack, worldIn, tooltip, flagIn);
+        super.appendHoverText(stack, worldIn, tooltip, flagIn);
     }
 
     @Override
-    public void onBlockPlacedBy(World world, @NotNull BlockPos pos, @NotNull BlockState blockState, @Nullable LivingEntity livingEntity, @NotNull ItemStack itemStack) {
-        TileEntity tileEntity = world.getTileEntity(pos);
+    public void setPlacedBy(World world, @NotNull BlockPos pos, @NotNull BlockState blockState, @Nullable LivingEntity livingEntity, @NotNull ItemStack itemStack) {
+        TileEntity tileEntity = world.getBlockEntity(pos);
         if (tileEntity instanceof HoneyTankTileEntity) {
             HoneyTankTileEntity tank = (HoneyTankTileEntity) tileEntity;
             if (itemStack.getTag() != null) {
@@ -188,7 +190,7 @@ public class HoneyTank extends Block {
 
     @Override
     public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
-        TileEntity tileEntity = world.getTileEntity(pos);
+        TileEntity tileEntity = world.getBlockEntity(pos);
         if (tileEntity instanceof HoneyTankTileEntity) {
             HoneyTankTileEntity tank = (HoneyTankTileEntity) tileEntity;
             ItemStack stack = new ItemStack(state.getBlock().asItem());
@@ -199,7 +201,7 @@ public class HoneyTank extends Block {
     }
 
     @Override
-    public BlockRenderType getRenderType(@NotNull BlockState blockState) {
+    public BlockRenderType getRenderShape(@NotNull BlockState blockState) {
         return BlockRenderType.MODEL;
     }
 }

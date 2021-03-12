@@ -82,7 +82,7 @@ public class AutomationSensitiveItemStackHandler extends ItemStackHandler {
 
             if (slot >= 0 && slot < stacks.size())
             {
-                stacks.set(slot, ItemStack.read(itemTags));
+                stacks.set(slot, ItemStack.of(itemTags));
             }
         }
         onLoad();

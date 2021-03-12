@@ -22,13 +22,13 @@ public class RenderHoneyTank extends TileEntityRenderer<HoneyTankTileEntity> {
 
     @Override
     public void render(HoneyTankTileEntity tile, float partialTick, @NotNull MatrixStack matrix, @NotNull IRenderTypeBuffer renderer, int light, int overlayLight) {
-        if (tile.getWorld() == null) return;
+        if (tile.getLevel() == null) return;
         FluidStack stack = tile.getFluidTank().getFluid();
         if (!stack.isEmpty()) {
-            int level = tile.getLevel();
+            int level = tile.getFluidLevel();
             int color = stack.getFluid().getAttributes().getColor();
             ResourceLocation stillTexture = stack.getFluid().getAttributes().getStillTexture();
-            IVertexBuilder builder = renderer.getBuffer(Atlases.getEntityTranslucentCull());
+            IVertexBuilder builder = renderer.getBuffer(Atlases.translucentCullBlockSheet());
             Vector3f start = new Vector3f(0.1875f, 0.0625f, 0.1875f);
             Vector3f end = new Vector3f(0.8125f, 0.0625f + ((float) level / 100.0F) * 0.875f, 0.8125f);
             CubeModel model = new CubeModel(start, end);

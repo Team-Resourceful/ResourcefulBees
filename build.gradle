@@ -6,7 +6,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
         classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
     }
 }
@@ -35,7 +35,6 @@ repositories {
 
 version = "${mod_version}"
 group = "com.resourcefulbees" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "${modid}"
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
@@ -47,15 +46,6 @@ tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
 
-// Create Jar Files
-
-//Creates the JavaDoc (useful for modders) https://en.wikipedia.org/wiki/Javadoc
-//task javadocJar(type: Jar) {
-//    classifier = 'javadoc'
-//    from javadoc
-//}
-
-//Packages a jar with the source files of the mod
 task sourcesJar(type: Jar) {
     classifier = 'sources'
     from sourceSets.main.allSource
@@ -70,26 +60,19 @@ sonarqube {
 }
 
 minecraft {
-    // The mappings can be changed at any time, and must be in the following format.
-    // snapshot_YYYYMMDD   Snapshot are built nightly.
-    // stable_#            Stables are built at the discretion of the MCP team.
-    // Use non-default mappings at your own risk. they may not always work.
-    // Simply re-run your setup task after changing the mappings to update your workspace.
-    mappings channel: "snapshot", version: "${mapping}"
-    // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
+    mappings channel: "official", version: "${mapping}"
 
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
-    // Default run configurations.
-    // These can be tweaked, removed, or duplicated as needed.
     runs {
         client {
             workingDirectory project.file('run')
             arg "-mixin.config=resourcefulbees.mixins.json"
 
-            // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
-            properties 'mixin.env.disableRefMap': 'true'
+            //property 'mixin.env.disableRefMap', 'true'
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
             property 'fml.earlyprogresswindow','false'
 
             mods {
@@ -103,9 +86,8 @@ minecraft {
             workingDirectory project.file('run')
             arg "-mixin.config=resourcefulbees.mixins.json"
 
-            // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
-            property 'mixin.env.disableRefMap', 'true'
+            //property 'mixin.env.disableRefMap', 'true'
             property 'fml.earlyprogresswindow','false'
 
             mods {
@@ -144,7 +126,7 @@ dependencies {
     runtimeOnly fg.deobf("mezz.jei:jei-1.16.4:${jei_version}")
 
     compileOnly fg.deobf ("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}:api")
-    runtime fg.deobf ("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}")
+    runtimeOnly fg.deobf ("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}")
 
     compileOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}:api")
     runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
@@ -155,6 +137,7 @@ dependencies {
     runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:generators")// Mekanism: Generators
     runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:tools")// Mekanism: Tools
     compileOnly 'org.jetbrains:annotations:20.1.0'
+    annotationProcessor 'org.spongepowered:mixin:0.8:processor'
 }
 
 jar {
@@ -164,7 +147,7 @@ jar {
                 "Specification-Vendor": "resourcefulbees",
                 "Specification-Version": "1", // We are version 1 of ourselves
                 "Implementation-Title": project.name,
-                "Implementation-Version": "${version}",
+                "Implementation-Version": "${archiveVersion}",
                 "Implementation-Vendor" :"resourcefulbees",
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
                 "MixinConfigs": "${modid}.mixins.json"
@@ -177,8 +160,6 @@ def reobfArtifact = artifacts.add('default', reobfFile) {
     type 'jar'
     builtBy 'reobfJar'
 }
-
-
 
 publishing {
     publications {

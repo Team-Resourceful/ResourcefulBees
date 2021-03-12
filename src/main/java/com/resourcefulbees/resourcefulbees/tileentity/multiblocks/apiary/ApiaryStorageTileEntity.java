@@ -51,7 +51,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import static net.minecraft.inventory.container.Container.areItemsAndTagsEqual;
+import static net.minecraft.inventory.container.Container.consideredTheSameItem;
 
 public class ApiaryStorageTileEntity extends TileEntity implements INamedContainerProvider, ITickableTileEntity, IApiaryMultiblock {
 
@@ -85,21 +85,21 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
     @Nullable
     @Override
     public Container createMenu(int i, @Nonnull PlayerInventory playerInventory, @Nonnull PlayerEntity playerEntity) {
-        if (world != null)
-            return new ApiaryStorageContainer(i, world, pos, playerInventory);
+        if (level != null)
+            return new ApiaryStorageContainer(i, level, worldPosition, playerInventory);
         return null;
     }
 
     @Override
     public void tick() {
-        if (world != null && !world.isRemote) {
+        if (level != null && !level.isClientSide) {
             validateApiaryLink();
         }
     }
 
     public ApiaryTileEntity getApiary() {
-        if (apiaryPos != null && world != null) {  //validate apiary first
-            TileEntity tile = world.getTileEntity(apiaryPos); //get apiary pos
+        if (apiaryPos != null && level != null) {  //validate apiary first
+            TileEntity tile = level.getBlockEntity(apiaryPos); //get apiary pos
             if (tile instanceof ApiaryTileEntity) { //check tile is an apiary tile
                 return (ApiaryTileEntity) tile;
             }
@@ -110,7 +110,7 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
     @SuppressWarnings("UnusedReturnValue")
     public boolean validateApiaryLink() {
         apiary = getApiary();
-        if (apiary == null || apiary.getStoragePos() == null || !apiary.getStoragePos().equals(this.getPos()) || !apiary.isValidApiary(false)) { //check apiary has storage location equal to this and apiary is valid
+        if (apiary == null || apiary.getStoragePos() == null || !apiary.getStoragePos().equals(this.getBlockPos()) || !apiary.isValidApiary(false)) { //check apiary has storage location equal to this and apiary is valid
             apiaryPos = null; //if not set these to null
             return false;
         }
@@ -134,15 +134,15 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
     }
 
     @Override
-    public void fromTag(@Nonnull BlockState state, @Nonnull CompoundNBT nbt) {
-        super.fromTag(state, nbt);
+    public void load(@Nonnull BlockState state, @Nonnull CompoundNBT nbt) {
+        super.load(state, nbt);
         this.loadFromNBT(nbt);
     }
 
     @Nonnull
     @Override
-    public CompoundNBT write(@Nonnull CompoundNBT nbt) {
-        super.write(nbt);
+    public CompoundNBT save(@Nonnull CompoundNBT nbt) {
+        super.save(nbt);
         return this.saveToNBT(nbt);
     }
 
@@ -170,13 +170,13 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
     @Override
     public CompoundNBT getUpdateTag() {
         CompoundNBT nbtTagCompound = new CompoundNBT();
-        write(nbtTagCompound);
+        save(nbtTagCompound);
         return nbtTagCompound;
     }
 
     @Override
     public void handleUpdateTag(@Nonnull BlockState state, CompoundNBT tag) {
-        this.fromTag(state, tag);
+        this.load(state, tag);
     }
 
     @Nullable
@@ -185,12 +185,12 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
         CompoundNBT nbt = new CompoundNBT();
         if (apiaryPos != null)
             nbt.put(NBTConstants.NBT_APIARY_POS, NBTUtil.writeBlockPos(apiaryPos));
-        return new SUpdateTileEntityPacket(pos, 0, nbt);
+        return new SUpdateTileEntityPacket(worldPosition, 0, nbt);
     }
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-        CompoundNBT nbt = pkt.getNbtCompound();
+        CompoundNBT nbt = pkt.getTag();
         if (nbt.contains(NBTConstants.NBT_APIARY_POS))
             apiaryPos = NBTUtil.readBlockPos(nbt.getCompound(NBTConstants.NBT_APIARY_POS));
     }
@@ -237,8 +237,8 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
             float breedChance = BeeRegistry.getRegistry().getBreedChance(p1, p2, childBeeData);
             EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(childBeeData.getEntityTypeRegistryID());
 
-            if (world != null && entityType != null) {
-                Entity entity = entityType.create(world);
+            if (level != null && entityType != null) {
+                Entity entity = entityType.create(level);
                 if (entity != null) {
                     ICustomBee beeEntity = (ICustomBee) entity;
                     CompoundNBT nbt = BeeInfoUtils.createJarBeeTag((BeeEntity) beeEntity, NBTConstants.NBT_ENTITY);
@@ -247,7 +247,7 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
                     beeJar.setTag(nbt);
                     BeeJar.renameJar(beeJar, (BeeEntity) beeEntity);
                     // if failed, will deposit empty bee jar
-                    float nextFloat = world.rand.nextFloat();
+                    float nextFloat = level.random.nextFloat();
                     if (breedChance >= nextFloat) {
                         return depositItemStack(beeJar);
                     } else {
@@ -289,7 +289,7 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
                     itemstack.setCount(0);
                 }
                 getItemStackHandler().setStackInSlot(slotIndex, slotStack);
-            } else if (areItemsAndTagsEqual(itemstack, slotStack)) {
+            } else if (consideredTheSameItem(itemstack, slotStack)) {
                 int j = itemstack.getCount() + slotStack.getCount();
                 if (j <= maxStackSize) {
                     itemstack.setCount(0);
@@ -309,13 +309,13 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
     }
 
     public void rebuildOpenContainers() {
-        if (world != null) {
+        if (level != null) {
             float f = 5.0F;
-            BlockPos pos = this.pos;
+            BlockPos pos = this.worldPosition;
 
-            for (PlayerEntity playerentity : world.getEntitiesWithinAABB(PlayerEntity.class, new AxisAlignedBB(pos.getX() - f, pos.getY() - f, pos.getZ() - f, (pos.getX() + 1) + f, (pos.getY() + 1) + f, (pos.getZ() + 1) + f))) {
-                if (playerentity.openContainer instanceof ApiaryStorageContainer) {
-                    ApiaryStorageContainer openContainer = (ApiaryStorageContainer) playerentity.openContainer;
+            for (PlayerEntity playerentity : level.getEntitiesOfClass(PlayerEntity.class, new AxisAlignedBB(pos.getX() - f, pos.getY() - f, pos.getZ() - f, (pos.getX() + 1) + f, (pos.getY() + 1) + f, (pos.getZ() + 1) + f))) {
+                if (playerentity.containerMenu instanceof ApiaryStorageContainer) {
+                    ApiaryStorageContainer openContainer = (ApiaryStorageContainer) playerentity.containerMenu;
                     ApiaryStorageTileEntity apiaryStorageTileEntity1 = openContainer.getApiaryStorageTileEntity();
                     if (apiaryStorageTileEntity1 == this) {
                         openContainer.setupSlots(true);
@@ -356,12 +356,12 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
 
     @Override
     public void switchTab(ServerPlayerEntity player, ApiaryTabs tab) {
-        if (world != null && apiaryPos != null) {
+        if (level != null && apiaryPos != null) {
             if (tab == ApiaryTabs.MAIN) {
-                TileEntity tile = world.getTileEntity(apiaryPos);
+                TileEntity tile = level.getBlockEntity(apiaryPos);
                 NetworkHooks.openGui(player, (INamedContainerProvider) tile, apiaryPos);
             } else if (tab == ApiaryTabs.BREED) {
-                TileEntity tile = world.getTileEntity(apiary.getBreederPos());
+                TileEntity tile = level.getBlockEntity(apiary.getBreederPos());
                 NetworkHooks.openGui(player, (INamedContainerProvider) tile, apiary.getBreederPos());
             }
         }
@@ -402,7 +402,7 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
         @Override
         protected void onContentsChanged(int slot) {
             super.onContentsChanged(slot);
-            markDirty();
+            setChanged();
             if (slot == 0) {
                 updateNumberOfSlots();
                 rebuildOpenContainers();

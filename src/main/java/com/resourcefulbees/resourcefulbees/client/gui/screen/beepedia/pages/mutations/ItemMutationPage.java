@@ -29,7 +29,7 @@ public class ItemMutationPage extends MutationsPage {
 
     public ItemMutationPage(ITag<?> blocks, Pair<Double, RandomCollection<ItemOutput>> outputs, MutationTypes type, CustomBeeData beeData, BeepediaScreen beepedia) {
         super(type, beeData, beepedia);
-        inputs = (List<Block>) blocks.values();
+        inputs = (List<Block>) blocks.getValues();
         initOutputs(outputs);
     }
 
@@ -66,8 +66,8 @@ public class ItemMutationPage extends MutationsPage {
         beepedia.drawSlot(matrix, item, xPos + 112, yPos + 32);
         drawWeight(matrix, outputs.get(outputCounter).getLeft(), xPos + 122, yPos + 54);
         if (outputChance < 1){
-            Minecraft.getInstance().getTextureManager().bindTexture(infoIcon);
-            beepedia.drawTexture(matrix,  xPos + SUB_PAGE_WIDTH / 2 - 20, yPos + 51, 16, 0, 9, 9);
+            Minecraft.getInstance().getTextureManager().bind(infoIcon);
+            beepedia.blit(matrix,  xPos + SUB_PAGE_WIDTH / 2 - 20, yPos + 51, 16, 0, 9, 9);
             drawChance(matrix, outputChance,xPos + SUB_PAGE_WIDTH / 2 , yPos + 52);
         }
     }

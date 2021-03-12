@@ -39,11 +39,11 @@ import java.util.Random;
 @SuppressWarnings({"unused", "deprecation"})
 public class CustomHoneyBlock extends BreakableBlock {
 
-    protected static final VoxelShape SHAPE = Block.makeCuboidShape(1.0D, 0.0D, 1.0D, 15.0D, 15.0D, 15.0D);
+    protected static final VoxelShape SHAPE = Block.box(1.0D, 0.0D, 1.0D, 15.0D, 15.0D, 15.0D);
     protected final HoneyBottleData honeyData;
 
     public CustomHoneyBlock(HoneyBottleData honeyData) {
-        super(AbstractBlock.Properties.create(Material.CLAY).velocityMultiplier(0.4F).jumpVelocityMultiplier(0.5F).nonOpaque().sound(SoundType.HONEY));
+        super(AbstractBlock.Properties.of(Material.CLAY).speedFactor(0.4F).jumpFactor(0.5F).noOcclusion().sound(SoundType.HONEY_BLOCK));
         this.honeyData = honeyData;
     }
 
@@ -74,7 +74,7 @@ public class CustomHoneyBlock extends BreakableBlock {
     @Override
     public void animateTick(@Nonnull BlockState stateIn, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull Random rand) {
         if (honeyData.isRainbow())
-            world.notifyBlockUpdate(pos, stateIn, stateIn, 2);
+            world.sendBlockUpdated(pos, stateIn, stateIn, 2);
         super.animateTick(stateIn, world, pos, rand);
     }
 
@@ -103,26 +103,26 @@ public class CustomHoneyBlock extends BreakableBlock {
      * Block's chance to react to a living entity falling on it.
      */
     @Override
-    public void onFallenUpon(World world, @NotNull BlockPos blockPos, Entity entity, float distance) {
-        entity.playSound(SoundEvents.BLOCK_HONEY_BLOCK_SLIDE, 1.0F, 1.0F);
-        if (world.isRemote) {
+    public void fallOn(World world, @NotNull BlockPos blockPos, Entity entity, float distance) {
+        entity.playSound(SoundEvents.HONEY_BLOCK_SLIDE, 1.0F, 1.0F);
+        if (world.isClientSide) {
             addParticles(entity);
         }
 
-        if (entity.handleFallDamage(distance, 0.2F)) {
+        if (entity.causeFallDamage(distance, 0.2F)) {
             entity.playSound(this.soundType.getFallSound(), this.soundType.getVolume() * 0.5F, this.soundType.getPitch() * 0.75F);
         }
 
     }
 
     @Override
-    public void onEntityCollision(@NotNull BlockState state, @NotNull World world, @NotNull BlockPos blockPos, @NotNull Entity entity) {
+    public void entityInside(@NotNull BlockState state, @NotNull World world, @NotNull BlockPos blockPos, @NotNull Entity entity) {
         if (this.isSliding(blockPos, entity)) {
             this.triggerAdvancement(entity, blockPos);
             this.updateSlidingVelocity(entity);
             this.addCollisionEffects(world, entity);
         }
-        super.onEntityCollision(state, world, blockPos, entity);
+        super.entityInside(state, world, blockPos, entity);
     }
 
     private boolean isSliding(BlockPos blockPos, Entity entity) {
@@ -130,8 +130,8 @@ public class CustomHoneyBlock extends BreakableBlock {
     }
 
     private void triggerAdvancement(Entity entity, BlockPos blockPos) {
-        if (entity instanceof ServerPlayerEntity && entity.world.getGameTime() % 20L == 0L) {
-            CriteriaTriggers.SLIDE_DOWN_BLOCK.test((ServerPlayerEntity) entity, entity.world.getBlockState(blockPos));
+        if (entity instanceof ServerPlayerEntity && entity.level.getGameTime() % 20L == 0L) {
+            CriteriaTriggers.HONEY_BLOCK_SLIDE.trigger((ServerPlayerEntity) entity, entity.level.getBlockState(blockPos));
         }
     }
 
@@ -141,11 +141,11 @@ public class CustomHoneyBlock extends BreakableBlock {
 
     private void addCollisionEffects(World world, Entity entity) {
         if (hasHoneyBlockEffects(entity)) {
-            if (world.rand.nextInt(5) == 0) {
-                entity.playSound(SoundEvents.BLOCK_HONEY_BLOCK_SLIDE, 1.0F, 1.0F);
+            if (world.random.nextInt(5) == 0) {
+                entity.playSound(SoundEvents.HONEY_BLOCK_SLIDE, 1.0F, 1.0F);
             }
 
-            if (world.isRemote && world.rand.nextInt(5) == 0) {
+            if (world.isClientSide && world.random.nextInt(5) == 0) {
                 addParticles(entity);
             }
         }
@@ -153,10 +153,10 @@ public class CustomHoneyBlock extends BreakableBlock {
 
     @OnlyIn(Dist.CLIENT)
     private void addParticles(Entity entity) {
-        BlockState blockstate = honeyData.getHoneyBlockRegistryObject().get().getDefaultState();
+        BlockState blockstate = honeyData.getHoneyBlockRegistryObject().get().defaultBlockState();
 
         for (int i = 0; i < 5; ++i) {
-            entity.world.addParticle(new BlockParticleData(ParticleTypes.BLOCK, blockstate), entity.getX(), entity.getY(), entity.getZ(), 0.0D, 0.0D, 0.0D);
+            entity.level.addParticle(new BlockParticleData(ParticleTypes.BLOCK, blockstate), entity.getX(), entity.getY(), entity.getZ(), 0.0D, 0.0D, 0.0D);
         }
     }
 }

@@ -100,10 +100,10 @@ public class ResourcefulBees {
 
         if (event.getType() == ModVillagerProfessions.BEEKEEPER.get()) {
             ItemStack queenBeeBanner = new ItemStack(net.minecraft.item.Items.BLACK_BANNER);
-            CompoundNBT compoundnbt = queenBeeBanner.getOrCreateChildTag("BlockEntityTag");
-            ListNBT listnbt = (new BannerPattern.Builder()).func_222477_a(BannerPattern.RHOMBUS_MIDDLE, DyeColor.LIGHT_BLUE).func_222477_a(BannerPattern.STRIPE_DOWNRIGHT, DyeColor.YELLOW).func_222477_a(BannerPattern.STRIPE_DOWNLEFT, DyeColor.YELLOW).func_222477_a(BannerPattern.STRIPE_BOTTOM, DyeColor.YELLOW).func_222477_a(BannerPattern.TRIANGLE_TOP, DyeColor.YELLOW).func_222477_a(BannerPattern.CURLY_BORDER, DyeColor.YELLOW).func_222476_a();
+            CompoundNBT compoundnbt = queenBeeBanner.getOrCreateTagElement("BlockEntityTag");
+            ListNBT listnbt = (new BannerPattern.Builder()).addPattern(BannerPattern.RHOMBUS_MIDDLE, DyeColor.LIGHT_BLUE).addPattern(BannerPattern.STRIPE_DOWNRIGHT, DyeColor.YELLOW).addPattern(BannerPattern.STRIPE_DOWNLEFT, DyeColor.YELLOW).addPattern(BannerPattern.STRIPE_BOTTOM, DyeColor.YELLOW).addPattern(BannerPattern.TRIANGLE_TOP, DyeColor.YELLOW).addPattern(BannerPattern.CURLY_BORDER, DyeColor.YELLOW).toListTag();
             compoundnbt.put("Patterns", listnbt);
-            queenBeeBanner.setDisplayName(new TranslationTextComponent("block.resourcefulbees.queen_bee_banner").formatted(TextFormatting.GOLD));
+            queenBeeBanner.setHoverName(new TranslationTextComponent("block.resourcefulbees.queen_bee_banner").withStyle(TextFormatting.GOLD));
             queenBeeBanner.setCount(1);
 
             level1.add((entity, rand) -> new MerchantOffer(

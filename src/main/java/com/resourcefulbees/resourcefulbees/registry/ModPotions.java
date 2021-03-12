@@ -33,20 +33,20 @@ public class ModPotions {
     private static final ITag<Item> HONEY_BOTTLE_TAG = ItemTags.createOptional(new ResourceLocation("forge", "honey_bottle"));
 
     public static void createMixes() {
-        addMix(Potions.AWKWARD, Ingredient.fromTag(HONEY_BOTTLE_TAG), CALMING_POTION.get());
-        addMix(CALMING_POTION.get(), Ingredient.fromItems(Items.GLOWSTONE_DUST), LONG_CALMING_POTION.get());
+        addMix(Potions.AWKWARD, Ingredient.of(HONEY_BOTTLE_TAG), CALMING_POTION.get());
+        addMix(CALMING_POTION.get(), Ingredient.of(Items.GLOWSTONE_DUST), LONG_CALMING_POTION.get());
     }
 
     private static void addMix(Potion basePotion, Ingredient fromTag, Potion outputPotion) {
         ItemStack splashPotion = new ItemStack(Items.SPLASH_POTION);
         ItemStack lingeringPotion = new ItemStack(Items.LINGERING_POTION);
-        Ingredient gunpowder = Ingredient.fromTag(Tags.Items.GUNPOWDER);
-        Ingredient dragonBreath = Ingredient.fromItems(Items.DRAGON_BREATH);
-        Ingredient baseIngredient = Ingredient.fromStacks(PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), basePotion));
-        ItemStack outputStack = PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), outputPotion);
-        Ingredient potionIngredient = Ingredient.fromStacks(outputStack);
+        Ingredient gunpowder = Ingredient.of(Tags.Items.GUNPOWDER);
+        Ingredient dragonBreath = Ingredient.of(Items.DRAGON_BREATH);
+        Ingredient baseIngredient = Ingredient.of(PotionUtils.setPotion(new ItemStack(Items.POTION), basePotion));
+        ItemStack outputStack = PotionUtils.setPotion(new ItemStack(Items.POTION), outputPotion);
+        Ingredient potionIngredient = Ingredient.of(outputStack);
         BrewingRecipeRegistry.addRecipe(baseIngredient, fromTag, outputStack);
-        BrewingRecipeRegistry.addRecipe(potionIngredient, gunpowder, PotionUtils.addPotionToItemStack(splashPotion, outputPotion));
-        BrewingRecipeRegistry.addRecipe(potionIngredient, dragonBreath, PotionUtils.addPotionToItemStack(lingeringPotion, outputPotion));
+        BrewingRecipeRegistry.addRecipe(potionIngredient, gunpowder, PotionUtils.setPotion(splashPotion, outputPotion));
+        BrewingRecipeRegistry.addRecipe(potionIngredient, dragonBreath, PotionUtils.setPotion(lingeringPotion, outputPotion));
     }
 }

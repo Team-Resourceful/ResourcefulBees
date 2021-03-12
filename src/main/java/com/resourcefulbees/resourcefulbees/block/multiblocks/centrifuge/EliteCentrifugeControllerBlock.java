@@ -8,6 +8,8 @@ import net.minecraft.world.IBlockReader;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class EliteCentrifugeControllerBlock extends CentrifugeControllerBlock {
     public EliteCentrifugeControllerBlock(Properties properties) { super(properties); }
 

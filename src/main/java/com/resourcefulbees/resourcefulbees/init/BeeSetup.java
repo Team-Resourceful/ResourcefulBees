@@ -311,11 +311,11 @@ public class BeeSetup {
     private static void addNestFeature(BiomeLoadingEvent event) {
         Biome.Category category = event.getCategory();
         if (category == Biome.Category.NETHER) {
-            event.getGeneration().feature(GenerationStage.Decoration.VEGETAL_DECORATION, ModFeatures.ConfiguredFeatures.NETHER_NESTS);
+            event.getGeneration().addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, ModFeatures.ConfiguredFeatures.NETHER_NESTS);
         } else if (category == Biome.Category.THEEND) {
-            event.getGeneration().feature(GenerationStage.Decoration.VEGETAL_DECORATION, ModFeatures.ConfiguredFeatures.THE_END_NESTS);
+            event.getGeneration().addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, ModFeatures.ConfiguredFeatures.THE_END_NESTS);
         } else {
-            event.getGeneration().feature(GenerationStage.Decoration.VEGETAL_DECORATION, ModFeatures.ConfiguredFeatures.OVERWORLD_NESTS);
+            event.getGeneration().addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, ModFeatures.ConfiguredFeatures.OVERWORLD_NESTS);
         }
     }
 

@@ -29,7 +29,7 @@ public class TabToggleImageButton extends TabImageButton {
     @Override
     public void renderButton(@Nonnull MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         Minecraft minecraft = Minecraft.getInstance();
-        minecraft.getTextureManager().bindTexture(this.resourceLocation);
+        minecraft.getTextureManager().bind(this.resourceLocation);
         RenderSystem.disableDepthTest();
         int i = this.xTexStart;
         int j = this.yTexStart;
@@ -41,11 +41,11 @@ public class TabToggleImageButton extends TabImageButton {
             j += this.yDiffText;
         }
 
-        this.drawTexture(matrixStack, this.x, this.y, i, j, this.width, this.height);
+        this.blit(matrixStack, this.x, this.y, i, j, this.width, this.height);
         if (this.displayItem != null && !this.stateTriggered) {
-            Minecraft.getInstance().getItemRenderer().renderItemAndEffectIntoGUI(this.displayItem, this.x + 1, this.y + 1);
+            Minecraft.getInstance().getItemRenderer().renderAndDecorateItem(this.displayItem, this.x + 1, this.y + 1);
         } else if (toggledItem != null && this.stateTriggered) {
-            Minecraft.getInstance().getItemRenderer().renderItemAndEffectIntoGUI(this.toggledItem, this.x + 1, this.y + 1);
+            Minecraft.getInstance().getItemRenderer().renderAndDecorateItem(this.toggledItem, this.x + 1, this.y + 1);
         }
         RenderSystem.enableDepthTest();
     }

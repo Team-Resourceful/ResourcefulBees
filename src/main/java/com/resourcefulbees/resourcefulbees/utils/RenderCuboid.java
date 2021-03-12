@@ -19,11 +19,11 @@ public class RenderCuboid {
 
     private static Vector3f withValue(Vector3f vector, Axis axis, float value) {
         if (axis == Axis.X) {
-            return new Vector3f(value, vector.getY(), vector.getZ());
+            return new Vector3f(value, vector.y(), vector.z());
         } else if (axis == Axis.Y) {
-            return new Vector3f(vector.getX(), value, vector.getZ());
+            return new Vector3f(vector.x(), value, vector.z());
         } else if (axis == Axis.Z) {
-            return new Vector3f(vector.getX(), vector.getY(), value);
+            return new Vector3f(vector.x(), vector.y(), value);
         } else {
             throw new CustomException("Was given a null axis! That was probably not intentional, consider this a bug! (Vector = " + vector + ")");
         }
@@ -31,11 +31,11 @@ public class RenderCuboid {
 
     public static double getValue(Vector3f vector, Axis axis) {
         if (axis == Axis.X) {
-            return vector.getX();
+            return vector.x();
         } else if (axis == Axis.Y) {
-            return vector.getY();
+            return vector.y();
         } else if (axis == Axis.Z) {
-            return vector.getZ();
+            return vector.z();
         } else {
             throw new CustomException("Was given a null axis! That was probably not intentional, consider this a bug! (Vector = " + vector + ")");
         }
@@ -63,11 +63,11 @@ public class RenderCuboid {
         float blue = getBlue(argb);
         float alpha = getAlpha(argb);
         Vector3f size = cube.getSize();
-        matrix.push();
-        matrix.translate(cube.getStart().getX(), cube.getStart().getY(), cube.getStart().getZ());
-        MatrixStack.Entry lastMatrix = matrix.peek();
-        Matrix4f matrix4f = lastMatrix.getModel();
-        Matrix3f normal = lastMatrix.getNormal();
+        matrix.pushPose();
+        matrix.translate(cube.getStart().x(), cube.getStart().y(), cube.getStart().z());
+        MatrixStack.Entry lastMatrix = matrix.last();
+        Matrix4f matrix4f = lastMatrix.pose();
+        Matrix3f normal = lastMatrix.normal();
         Direction[] directions = Direction.values();
 
         for (Direction direction : directions) {
@@ -80,10 +80,10 @@ public class RenderCuboid {
                 float other = face.getAxisDirection() == Direction.AxisDirection.POSITIVE ? (float) getValue(size, face.getAxis()) : 0.0F;
                 face = face.getAxisDirection() == Direction.AxisDirection.NEGATIVE ? face : face.getOpposite();
                 Direction opposite = face.getOpposite();
-                float minU = sprite.getMinU();
-                float maxU = sprite.getMaxU();
-                float minV = sprite.getMaxV();
-                float maxV = sprite.getMinV();
+                float minU = sprite.getU0();
+                float maxU = sprite.getU1();
+                float minV = sprite.getV1();
+                float maxV = sprite.getV0();
                 double sizeU = getValue(size, u);
                 double sizeV = getValue(size, v);
                 for (int uIndex = 0; (double) uIndex < sizeU; ++uIndex) {
@@ -114,7 +114,7 @@ public class RenderCuboid {
             }
         }
 
-        matrix.pop();
+        matrix.popPose();
     }
 
     private void renderPoint(Matrix4f matrix4f, Matrix3f normal, IVertexBuilder buffer, Direction face, Axis u, Axis v, float other, float[] uv, float[] xyz, boolean minU, boolean minV, float red, float green, float blue, float alpha, int light, int overlay) {
@@ -123,11 +123,11 @@ public class RenderCuboid {
         Vector3f vertex = withValue(VEC_ZERO, u, xyz[uArray]);
         vertex = withValue(vertex, v, xyz[vArray]);
         vertex = withValue(vertex, face.getAxis(), other);
-        Vector3i normalForFace = face.getDirectionVec();
+        Vector3i normalForFace = face.getNormal();
         float adjustment = 2.5F;
         Vector3f norm = new Vector3f((float) normalForFace.getX() + adjustment, (float) normalForFace.getY() + adjustment, (float) normalForFace.getZ() + adjustment);
         norm.normalize();
-        buffer.vertex(matrix4f, vertex.getX(), vertex.getY(), vertex.getZ()).color(red, green, blue, alpha).texture(uv[uArray], uv[vArray]).overlay(overlay).light(light).normal(normal, norm.getX(), norm.getY(), norm.getZ()).endVertex();
+        buffer.vertex(matrix4f, vertex.x(), vertex.y(), vertex.z()).color(red, green, blue, alpha).uv(uv[uArray], uv[vArray]).overlayCoords(overlay).uv2(light).normal(normal, norm.x(), norm.y(), norm.z()).endVertex();
     }
 
     private static class CustomException extends RuntimeException {

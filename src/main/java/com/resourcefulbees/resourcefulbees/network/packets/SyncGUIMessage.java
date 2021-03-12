@@ -33,8 +33,8 @@ public class SyncGUIMessage {
         context.get().enqueueWork(() -> {
             ClientPlayerEntity player = Minecraft.getInstance().player;
             if (player != null) {
-                if (player.world.isBlockPresent(message.pos)) {
-                    TileEntity tileEntity = player.world.getTileEntity(message.pos);
+                if (player.level.isLoaded(message.pos)) {
+                    TileEntity tileEntity = player.level.getBlockEntity(message.pos);
                     if (tileEntity instanceof CentrifugeTileEntity) {
                         ((CentrifugeTileEntity) tileEntity).handleGUINetworkPacket(message.buffer);
                     }

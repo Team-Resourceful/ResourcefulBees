@@ -29,6 +29,8 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.item.Item.Properties;
+
 public class BeeBox extends Item {
 
     private static final String ITEM_DOT = "item.";
@@ -41,25 +43,25 @@ public class BeeBox extends Item {
     }
 
     @Override
-    public @NotNull ActionResultType onItemUse(ItemUseContext context) {
+    public @NotNull ActionResultType useOn(ItemUseContext context) {
         PlayerEntity player = context.getPlayer();
         if (player != null) {
-            World playerWorld = context.getPlayer().getEntityWorld();
-            ItemStack stack = context.getItem();
-            if (!context.getPlayer().isSneaking()) return ActionResultType.FAIL;
-            if (playerWorld.isRemote() || !isFilled(stack)) return ActionResultType.FAIL;
-            World worldIn = context.getWorld();
-            BlockPos pos = context.getPos();
+            World playerWorld = context.getPlayer().getCommandSenderWorld();
+            ItemStack stack = context.getItemInHand();
+            if (!context.getPlayer().isShiftKeyDown()) return ActionResultType.FAIL;
+            if (playerWorld.isClientSide() || !isFilled(stack)) return ActionResultType.FAIL;
+            World worldIn = context.getLevel();
+            BlockPos pos = context.getClickedPos();
             List<Entity> entities = getEntitiesFromStack(stack, worldIn, true);
             for (Entity entity : entities) {
                 if (entity != null) {
-                    BlockPos blockPos = pos.offset(context.getFace());
-                    entity.setPositionAndRotation(blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5, 0, 0);
-                    worldIn.addEntity(entity);
+                    BlockPos blockPos = pos.relative(context.getClickedFace());
+                    entity.absMoveTo(blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5, 0, 0);
+                    worldIn.addFreshEntity(entity);
                     if (entity instanceof BeeEntity) {
                         BeeEntity beeEntity = (BeeEntity) entity;
                         beeEntity.hivePos = null;
-                        beeEntity.flowerPos = null;
+                        beeEntity.savedFlowerPos = null;
                     }
                 }
             }
@@ -78,10 +80,10 @@ public class BeeBox extends Item {
             bees.stream()
                     .map(CompoundNBT.class::cast)
                     .forEach(compoundNBT -> {
-                        EntityType<?> type = EntityType.byKey(compoundNBT.getCompound(NBTConstants.ENTITY_DATA).getString("id")).orElse(null);
+                        EntityType<?> type = EntityType.byString(compoundNBT.getCompound(NBTConstants.ENTITY_DATA).getString("id")).orElse(null);
                         if (type != null) {
                             Entity entity = type.create(world);
-                            if (entity != null && withInfo) entity.read(stack.getTag());
+                            if (entity != null && withInfo) entity.load(stack.getTag());
                             entities.add(entity);
                         }
                     });
@@ -91,8 +93,8 @@ public class BeeBox extends Item {
 
     @Nonnull
     @Override
-    public ActionResultType itemInteractionForEntity(@Nonnull ItemStack stack, @Nonnull PlayerEntity player, LivingEntity targetIn, @Nonnull Hand hand) {
-        if (targetIn.getEntityWorld().isRemote() || (!(targetIn instanceof BeeEntity) || !targetIn.isAlive())) {
+    public ActionResultType interactLivingEntity(@Nonnull ItemStack stack, @Nonnull PlayerEntity player, LivingEntity targetIn, @Nonnull Hand hand) {
+        if (targetIn.getCommandSenderWorld().isClientSide() || (!(targetIn instanceof BeeEntity) || !targetIn.isAlive())) {
             return ActionResultType.FAIL;
         }
         if (isTemp) return ActionResultType.FAIL;
@@ -111,8 +113,8 @@ public class BeeBox extends Item {
         bees.add(entityData);
         tag.put(NBTConstants.NBT_BEES, bees);
         stack.setTag(tag);
-        player.setHeldItem(hand, stack);
-        player.swingArm(hand);
+        player.setItemInHand(hand, stack);
+        player.swing(hand);
         target.remove(true);
         return ActionResultType.PASS;
     }
@@ -122,15 +124,15 @@ public class BeeBox extends Item {
     }
 
     @Override
-    public void addInformation(@NotNull ItemStack stack, @org.jetbrains.annotations.Nullable World world, @NotNull List<ITextComponent> tooltip, @NotNull ITooltipFlag tooltipFlag) {
-        super.addInformation(stack, world, tooltip, tooltipFlag);
+    public void appendHoverText(@NotNull ItemStack stack, @org.jetbrains.annotations.Nullable World world, @NotNull List<ITextComponent> tooltip, @NotNull ITooltipFlag tooltipFlag) {
+        super.appendHoverText(stack, world, tooltip, tooltipFlag);
         if (isTemp) {
-            tooltip.add(new TranslationTextComponent(ITEM_DOT + ResourcefulBees.MOD_ID + ".information.bee_box.temp_info").formatted(TextFormatting.GOLD));
+            tooltip.add(new TranslationTextComponent(ITEM_DOT + ResourcefulBees.MOD_ID + ".information.bee_box.temp_info").withStyle(TextFormatting.GOLD));
         } else {
-            tooltip.add(new TranslationTextComponent(ITEM_DOT + ResourcefulBees.MOD_ID + ".information.bee_box.info").formatted(TextFormatting.GOLD));
+            tooltip.add(new TranslationTextComponent(ITEM_DOT + ResourcefulBees.MOD_ID + ".information.bee_box.info").withStyle(TextFormatting.GOLD));
         }
         if (BeeInfoUtils.isShiftPressed() && isFilled(stack)) {
-            tooltip.add(new TranslationTextComponent(ITEM_DOT + ResourcefulBees.MOD_ID + ".information.bee_box.bees").formatted(TextFormatting.YELLOW));
+            tooltip.add(new TranslationTextComponent(ITEM_DOT + ResourcefulBees.MOD_ID + ".information.bee_box.bees").withStyle(TextFormatting.YELLOW));
 
             //noinspection ConstantConditions
             stack.getTag().getList(NBTConstants.NBT_BEES, 10).stream()
@@ -138,11 +140,11 @@ public class BeeBox extends Item {
                     .forEach(compoundNBT -> {
                         String id = compoundNBT.getCompound(NBTConstants.ENTITY_DATA).getString("id");
                         EntityType<?> entityType = BeeInfoUtils.getEntityType(id);
-                        ITextComponent name = entityType == null ? new TranslationTextComponent("NULL_NAME") : entityType.getName();
-                        tooltip.add(new StringTextComponent("  - ").append(name).formatted(TextFormatting.WHITE));
+                        ITextComponent name = entityType == null ? new TranslationTextComponent("NULL_NAME") : entityType.getDescription();
+                        tooltip.add(new StringTextComponent("  - ").append(name).withStyle(TextFormatting.WHITE));
                     });
         } else if (isFilled(stack)) {
-            tooltip.add(new TranslationTextComponent(ITEM_DOT + ResourcefulBees.MOD_ID + ".information.bee_box.more_info").formatted(TextFormatting.YELLOW));
+            tooltip.add(new TranslationTextComponent(ITEM_DOT + ResourcefulBees.MOD_ID + ".information.bee_box.more_info").withStyle(TextFormatting.YELLOW));
         }
     }
 }

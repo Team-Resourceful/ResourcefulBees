@@ -115,16 +115,16 @@ public class BeePage extends BeepediaPage {
 
     @Override
     public void renderBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
-        beepedia.getMinecraft().textureManager.bindTexture(splitterImage);
-        AbstractGui.drawTexture(matrix, xPos, yPos, 0, 0, 165, 100, 165, 100);
-        Minecraft.getInstance().fontRenderer.draw(matrix, beeData.getTranslation().formatted(TextFormatting.WHITE), (float) xPos + 40, (float) yPos + 10, -1);
+        beepedia.getMinecraft().textureManager.bind(splitterImage);
+        AbstractGui.blit(matrix, xPos, yPos, 0, 0, 165, 100, 165, 100);
+        Minecraft.getInstance().font.draw(matrix, beeData.getTranslation().withStyle(TextFormatting.WHITE), (float) xPos + 40, (float) yPos + 10, -1);
         subPage.getRight().renderBackground(matrix, partialTick, mouseX, mouseY);
 
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
-        double scale = beepedia.getMinecraft().getWindow().getGuiScaleFactor();
-        int scissorY = (int) (beepedia.getMinecraft().getWindow().getFramebufferHeight() - (yPos + 9 + 38) * scale);
+        double scale = beepedia.getMinecraft().getWindow().getGuiScale();
+        int scissorY = (int) (beepedia.getMinecraft().getWindow().getHeight() - (yPos + 9 + 38) * scale);
         GL11.glScissor((int) (xPos * scale), scissorY, (int) (38 * scale), (int) (38 * scale));
-        RenderUtils.renderEntity(matrix, getBee(), Minecraft.getInstance().world, (float) xPos + 10, (float) yPos + 2, -45, 2);
+        RenderUtils.renderEntity(matrix, getBee(), Minecraft.getInstance().level, (float) xPos + 10, (float) yPos + 2, -45, 2);
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
 
     }

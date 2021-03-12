@@ -30,6 +30,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+import net.minecraft.item.Item.Properties;
+
 public class HoneyDipper extends Item {
 
     private @Nullable BeeEntity selectedBee;
@@ -39,9 +41,9 @@ public class HoneyDipper extends Item {
     }
 
     @Override
-    public @NotNull ActionResultType onItemUse(@NotNull ItemUseContext useContext) {
-        if (!useContext.getWorld().isRemote()) {
-            Block clickedBlock = useContext.getWorld().getBlockState(useContext.getPos()).getBlock();
+    public @NotNull ActionResultType useOn(@NotNull ItemUseContext useContext) {
+        if (!useContext.getLevel().isClientSide()) {
+            Block clickedBlock = useContext.getLevel().getBlockState(useContext.getClickedPos()).getBlock();
 
             if (selectedBee instanceof CustomBeeEntity) {
                 CustomBeeData beeData = ((CustomBeeEntity) selectedBee).getBeeData();
@@ -49,29 +51,29 @@ public class HoneyDipper extends Item {
                     setFlowerPosition(useContext);
                     return ActionResultType.SUCCESS;
                 }
-            } else if (selectedBee != null && clickedBlock.isIn(BlockTags.FLOWERS)) {
+            } else if (selectedBee != null && clickedBlock.is(BlockTags.FLOWERS)) {
                 setFlowerPosition(useContext);
                 return ActionResultType.SUCCESS;
             }
 
-            TileEntity clickedTile = useContext.getWorld().getTileEntity(useContext.getPos());
+            TileEntity clickedTile = useContext.getLevel().getBlockEntity(useContext.getClickedPos());
             if (selectedBee != null && (clickedTile instanceof BeehiveTileEntity || clickedTile instanceof ApiaryTileEntity)) {
-                selectedBee.hivePos = useContext.getPos();
-                sendMessageToPlayer(useContext.getPlayer(), MessageTypes.HIVE, useContext.getPos());
+                selectedBee.hivePos = useContext.getClickedPos();
+                sendMessageToPlayer(useContext.getPlayer(), MessageTypes.HIVE, useContext.getClickedPos());
                 selectedBee = null;
                 return ActionResultType.SUCCESS;
             }
         }
-        return super.onItemUse(useContext);
+        return super.useOn(useContext);
     }
 
     private void setFlowerPosition(ItemUseContext useContext) {
         assert selectedBee != null : "setFlowerPos method called when selected bee was null";
-        if (selectedBee.pollinateGoal.isRunning()) {
-            selectedBee.pollinateGoal.cancel();
+        if (selectedBee.beePollinateGoal.isPollinating()) {
+            selectedBee.beePollinateGoal.stopPollinating();
         }
-        selectedBee.setFlowerPos(useContext.getPos());
-        sendMessageToPlayer(useContext.getPlayer(), MessageTypes.FLOWER, useContext.getPos());
+        selectedBee.setSavedFlowerPos(useContext.getClickedPos());
+        sendMessageToPlayer(useContext.getPlayer(), MessageTypes.FLOWER, useContext.getClickedPos());
         selectedBee = null;
     }
 
@@ -79,24 +81,24 @@ public class HoneyDipper extends Item {
         assert selectedBee != null : "bee went null before message was sent to player";
         switch (messageTypes) {
             case HIVE:
-                playerEntity.sendStatusMessage(new StringTextComponent(String.format("Hive position for [%1$s] has been set to %2$s", selectedBee.getDisplayName().getString(), NBTUtil.writeBlockPos(pos))), false);
+                playerEntity.displayClientMessage(new StringTextComponent(String.format("Hive position for [%1$s] has been set to %2$s", selectedBee.getDisplayName().getString(), NBTUtil.writeBlockPos(pos))), false);
                 break;
             case FLOWER:
-                playerEntity.sendStatusMessage(new StringTextComponent(String.format("Flower position for [%1$s] has been set to %2$s", selectedBee.getDisplayName().getString(), NBTUtil.writeBlockPos(pos))), false);
+                playerEntity.displayClientMessage(new StringTextComponent(String.format("Flower position for [%1$s] has been set to %2$s", selectedBee.getDisplayName().getString(), NBTUtil.writeBlockPos(pos))), false);
                 break;
             case BEE_CLEARED:
-                playerEntity.sendStatusMessage(new StringTextComponent("Bee Selection Cleared!"), false);
+                playerEntity.displayClientMessage(new StringTextComponent("Bee Selection Cleared!"), false);
                 break;
             case BEE_SELECTED:
-                playerEntity.sendStatusMessage(new StringTextComponent(String.format("[%1$s] has been selected!", selectedBee.getDisplayName().getString())), false);
+                playerEntity.displayClientMessage(new StringTextComponent(String.format("[%1$s] has been selected!", selectedBee.getDisplayName().getString())), false);
                 break;
             default: //Do Nothing
         }
     }
 
     @Override
-    public @NotNull ActionResultType itemInteractionForEntity(@NotNull ItemStack stack, @NotNull PlayerEntity player, @NotNull LivingEntity entity, @NotNull Hand hand) {
-        if (!player.world.isRemote()) {
+    public @NotNull ActionResultType interactLivingEntity(@NotNull ItemStack stack, @NotNull PlayerEntity player, @NotNull LivingEntity entity, @NotNull Hand hand) {
+        if (!player.level.isClientSide()) {
             if (entity instanceof BeeEntity && selectedBee == null) {
                 selectedBee = (BeeEntity) entity;
                 sendMessageToPlayer(player, MessageTypes.BEE_SELECTED, null);
@@ -107,7 +109,7 @@ public class HoneyDipper extends Item {
                 return ActionResultType.SUCCESS;
             }
         }
-        return super.itemInteractionForEntity(stack, player, entity, hand);
+        return super.interactLivingEntity(stack, player, entity, hand);
     }
 
     private boolean setEntityFlowerPos(PlayerEntity player, LivingEntity entity) {
@@ -116,9 +118,9 @@ public class HoneyDipper extends Item {
             if (customBee.getBeeData().hasEntityFlower()) {
                 ResourceLocation resourceLocation = customBee.getBeeData().getEntityFlower();
                 if (entity.getType().getRegistryName() != null && entity.getType().getRegistryName().equals(resourceLocation)) {
-                    customBee.setFlowerEntityID(entity.getEntityId());
-                    customBee.setFlowerPos(entity.getBlockPos());
-                    sendMessageToPlayer(player, MessageTypes.FLOWER, entity.getBlockPos());
+                    customBee.setFlowerEntityID(entity.getId());
+                    customBee.setSavedFlowerPos(entity.blockPosition());
+                    sendMessageToPlayer(player, MessageTypes.FLOWER, entity.blockPosition());
                     selectedBee = null;
                     return true;
                 }
@@ -128,20 +130,20 @@ public class HoneyDipper extends Item {
     }
 
     @Override
-    public @NotNull ActionResult<ItemStack> onItemRightClick(@NotNull World world, @NotNull PlayerEntity player, @NotNull Hand hand) {
-        if (!world.isRemote() && player.isSneaking() && selectedBee != null) {
+    public @NotNull ActionResult<ItemStack> use(@NotNull World world, @NotNull PlayerEntity player, @NotNull Hand hand) {
+        if (!world.isClientSide() && player.isShiftKeyDown() && selectedBee != null) {
             selectedBee = null;
             sendMessageToPlayer(player, MessageTypes.BEE_CLEARED, null);
         }
-        return super.onItemRightClick(world, player, hand);
+        return super.use(world, player, hand);
     }
 
     @Override
-    public void addInformation(@NotNull ItemStack stack, @Nullable World world, @NotNull List<ITextComponent> textComponents, @NotNull ITooltipFlag flag) {
+    public void appendHoverText(@NotNull ItemStack stack, @Nullable World world, @NotNull List<ITextComponent> textComponents, @NotNull ITooltipFlag flag) {
         if (selectedBee != null) {
             textComponents.add(new TranslationTextComponent("item.resourcefulbees.honey_dipper.tooltip")
                     .append(new StringTextComponent(selectedBee.getDisplayName().getString()))
-                    .formatted(TextFormatting.GOLD));
+                    .withStyle(TextFormatting.GOLD));
         }
     }
 

@@ -34,7 +34,7 @@ public class ApiaryCategory implements IRecipeCategory<ApiaryCategory.Recipe> {
     public ApiaryCategory(IGuiHelper guiHelper) {
         this.background = guiHelper.drawableBuilder(GUI_BACK, 0, 0, 160, 26).addPadding(0, 0, 0, 0).build();
         this.icon = guiHelper.createDrawableIngredient(new ItemStack(ModItems.T1_APIARY_ITEM.get()));
-        this.localizedName = I18n.format("gui.resourcefulbees.jei.category.apiary");
+        this.localizedName = I18n.get("gui.resourcefulbees.jei.category.apiary");
     }
 
     public static List<Recipe> getHoneycombRecipes() {

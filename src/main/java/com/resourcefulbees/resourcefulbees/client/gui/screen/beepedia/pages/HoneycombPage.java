@@ -50,7 +50,7 @@ public class HoneycombPage extends BeeDataPage {
 
     List<RecipeObject> recipes = new ArrayList<>();
 
-    List<Item> hives = BeeInfoUtils.getItemTag("minecraft:beehives").values();
+    List<Item> hives = BeeInfoUtils.getItemTag("minecraft:beehives").getValues();
     ItemStack apiary1 = new ItemStack(ModItems.T1_APIARY_ITEM.get());
     ItemStack apiary2 = new ItemStack(ModItems.T2_APIARY_ITEM.get());
     ItemStack apiary3 = new ItemStack(ModItems.T3_APIARY_ITEM.get());
@@ -86,7 +86,7 @@ public class HoneycombPage extends BeeDataPage {
         apiary3Output = new ItemStack(beeData.getCombBlockItemRegistryObject().get(), apiaryAmounts[2]);
         apiary4Output = new ItemStack(beeData.getCombBlockItemRegistryObject().get(), apiaryAmounts[3]);
 
-        ClientWorld world = beepedia.getMinecraft().world;
+        ClientWorld world = beepedia.getMinecraft().level;
         recipes.add(new RecipeObject(false, true, beeData, world));
         recipes.add(new RecipeObject(false, false, beeData, world));
         recipes.add(new RecipeObject(true, true, beeData, world));
@@ -145,23 +145,23 @@ public class HoneycombPage extends BeeDataPage {
 
     @Override
     public void renderBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
-        FontRenderer font = Minecraft.getInstance().fontRenderer;
+        FontRenderer font = Minecraft.getInstance().font;
         TextureManager manager = Minecraft.getInstance().getTextureManager();
         TranslationTextComponent title = new TranslationTextComponent(BeepediaScreen.currScreenState.isCentrifugeOpen() ? "gui.resourcefulbees.beepedia.bee_subtab.centrifuge" : "gui.resourcefulbees.beepedia.bee_subtab.honeycombs");
-        int padding = font.getWidth(title) / 2;
-        font.draw(matrix, title.formatted(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, -1);
+        int padding = font.width(title) / 2;
+        font.draw(matrix, title.withStyle(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, -1);
         if (BeepediaScreen.currScreenState.isCentrifugeOpen() && !recipes.isEmpty()) {
-            manager.bindTexture(centrifugeImage);
-            AbstractGui.drawTexture(matrix, xPos, yPos + 22, 0, 0, 169, 84, 169, 84);
+            manager.bind(centrifugeImage);
+            AbstractGui.blit(matrix, xPos, yPos + 22, 0, 0, 169, 84, 169, 84);
             recipes.get(activePage).draw(matrix, xPos, yPos + 22, mouseX, mouseY);
             if (recipes.size() > 1) {
                 StringTextComponent page = new StringTextComponent(String.format("%d / %d", activePage + 1, recipes.size()));
-                padding = font.getWidth(page) / 2;
-                font.draw(matrix, page.formatted(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + SUB_PAGE_HEIGHT - 14, -1);
+                padding = font.width(page) / 2;
+                font.draw(matrix, page.withStyle(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + SUB_PAGE_HEIGHT - 14, -1);
             }
         } else {
-            manager.bindTexture(honeycombsImage);
-            AbstractGui.drawTexture(matrix, xPos, yPos + 22, 0, 0, 169, 84, 169, 84);
+            manager.bind(honeycombsImage);
+            AbstractGui.blit(matrix, xPos, yPos + 22, 0, 0, 169, 84, 169, 84);
             beepedia.drawSlot(matrix, hives.get(counter), xPos + 14, yPos + 23);
             beepedia.drawSlot(matrix, apiary1, xPos + 43, yPos + 23);
             beepedia.drawSlot(matrix, apiary2, xPos + 72, yPos + 23);
@@ -216,7 +216,7 @@ public class HoneycombPage extends BeeDataPage {
                 }
             }
             Inventory inventory = new Inventory(inputItem, bottleItem);
-            recipe = world.getRecipeManager().getRecipe(CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE, inventory, world).orElse(null);
+            recipe = world.getRecipeManager().getRecipeFor(CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE, inventory, world).orElse(null);
             if (recipe != null) {
                 outputItems = recipe.itemOutputs;
                 outputFluids = recipe.fluidOutput;
@@ -244,8 +244,8 @@ public class HoneycombPage extends BeeDataPage {
             beepedia.drawSlot(matrix, outputItems.get(1).getLeft(), xPos + 124, yPos + 23);
             drawWeight(matrix, outputItems.get(1).getRight(), xPos + 112, yPos + 30);
             if (isBlock || Config.MULTIBLOCK_RECIPES_ONLY.get()) {
-                Minecraft.getInstance().getTextureManager().bindTexture(multiblockOnlyImage);
-                AbstractGui.drawTexture(matrix, xPos + 28, yPos + 45, 0, 0, 16, 16, 16, 16);
+                Minecraft.getInstance().getTextureManager().bind(multiblockOnlyImage);
+                AbstractGui.blit(matrix, xPos + 28, yPos + 45, 0, 0, 16, 16, 16, 16);
             }
             if (hasBottle) {
                 drawHoneyBottle(matrix, xPos, yPos, mouseX, mouseY);
@@ -303,11 +303,11 @@ public class HoneycombPage extends BeeDataPage {
 
         private void drawWeight(MatrixStack matrix, Float right, int xPos, int yPos) {
             if (right == 1) return;
-            FontRenderer font = Minecraft.getInstance().fontRenderer;
+            FontRenderer font = Minecraft.getInstance().font;
             DecimalFormat decimalFormat = new DecimalFormat("##%");
             StringTextComponent text = new StringTextComponent(decimalFormat.format(right));
-            int padding = font.getWidth(text) / 2;
-            font.draw(matrix, text.formatted(TextFormatting.GRAY), (float) xPos - padding, yPos, -1);
+            int padding = font.width(text) / 2;
+            font.draw(matrix, text.withStyle(TextFormatting.GRAY), (float) xPos - padding, yPos, -1);
         }
 
         public void drawTooltip(MatrixStack matrix, int mouseX, int mouseY) {

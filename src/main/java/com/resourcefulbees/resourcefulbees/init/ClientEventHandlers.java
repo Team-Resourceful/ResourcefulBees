@@ -42,9 +42,9 @@ public class ClientEventHandlers {
     }
 
     public static void registerPatreonRender() {
-        EntityRendererManager manager =  Minecraft.getInstance().getRenderManager();
-        manager.getSkinMap().get("default").addLayer(new BeeRewardRender(manager.playerRenderer));
-        manager.getSkinMap().get("slim").addLayer(new BeeRewardRender(manager.playerRenderer));
+        EntityRendererManager manager =  Minecraft.getInstance().getEntityRenderDispatcher();
+        manager.getSkinMap().get("default").addLayer(new BeeRewardRender(manager.defaultPlayerRenderer));
+        manager.getSkinMap().get("slim").addLayer(new BeeRewardRender(manager.defaultPlayerRenderer));
     }
 
     private static void doClientStuff(final FMLClientSetupEvent event) {
@@ -52,24 +52,24 @@ public class ClientEventHandlers {
             CustomBeeData data = BeeRegistry.getRegistry().getBeeData(s);
             return new CustomBeeRenderer(data.getBaseModelType(), manager, data);
         }));
-        ScreenManager.registerFactory(ModContainers.CENTRIFUGE_CONTAINER.get(), CentrifugeScreen::new);
-        ScreenManager.registerFactory(ModContainers.MECHANICAL_CENTRIFUGE_CONTAINER.get(), MechanicalCentrifugeScreen::new);
-        ScreenManager.registerFactory(ModContainers.CENTRIFUGE_MULTIBLOCK_CONTAINER.get(), CentrifugeMultiblockScreen::new);
-        ScreenManager.registerFactory(ModContainers.ELITE_CENTRIFUGE_MULTIBLOCK_CONTAINER.get(), CentrifugeMultiblockScreen::new);
-        ScreenManager.registerFactory(ModContainers.UNVALIDATED_APIARY_CONTAINER.get(), UnvalidatedApiaryScreen::new);
-        ScreenManager.registerFactory(ModContainers.VALIDATED_APIARY_CONTAINER.get(), ValidatedApiaryScreen::new);
-        ScreenManager.registerFactory(ModContainers.APIARY_STORAGE_CONTAINER.get(), ApiaryStorageScreen::new);
-        ScreenManager.registerFactory(ModContainers.APIARY_BREEDER_CONTAINER.get(), ApiaryBreederScreen::new);
-        ScreenManager.registerFactory(ModContainers.HONEY_GENERATOR_CONTAINER.get(), HoneyGeneratorScreen::new);
-        ScreenManager.registerFactory(ModContainers.ENDER_BEECON_CONTAINER.get(), EnderBeeconScreen::new);
-        RenderTypeLookup.setRenderLayer(ModBlocks.GOLD_FLOWER.get(), RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(ModBlocks.PREVIEW_BLOCK.get(), RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(ModBlocks.ERRORED_PREVIEW_BLOCK.get(), RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(ModBlocks.ENDER_BEECON.get(), RenderType.getTranslucent());
-        RenderTypeLookup.setRenderLayer(ModBlocks.PURPUR_HONEY_TANK.get(), RenderType.getTranslucent());
-        RenderTypeLookup.setRenderLayer(ModBlocks.NETHER_HONEY_TANK.get(), RenderType.getTranslucent());
-        RenderTypeLookup.setRenderLayer(ModBlocks.WOODEN_HONEY_TANK.get(), RenderType.getTranslucent());
-        RenderTypeLookup.setRenderLayer(ModBlocks.HONEY_GENERATOR.get(), RenderType.getTranslucent());
+        ScreenManager.register(ModContainers.CENTRIFUGE_CONTAINER.get(), CentrifugeScreen::new);
+        ScreenManager.register(ModContainers.MECHANICAL_CENTRIFUGE_CONTAINER.get(), MechanicalCentrifugeScreen::new);
+        ScreenManager.register(ModContainers.CENTRIFUGE_MULTIBLOCK_CONTAINER.get(), CentrifugeMultiblockScreen::new);
+        ScreenManager.register(ModContainers.ELITE_CENTRIFUGE_MULTIBLOCK_CONTAINER.get(), CentrifugeMultiblockScreen::new);
+        ScreenManager.register(ModContainers.UNVALIDATED_APIARY_CONTAINER.get(), UnvalidatedApiaryScreen::new);
+        ScreenManager.register(ModContainers.VALIDATED_APIARY_CONTAINER.get(), ValidatedApiaryScreen::new);
+        ScreenManager.register(ModContainers.APIARY_STORAGE_CONTAINER.get(), ApiaryStorageScreen::new);
+        ScreenManager.register(ModContainers.APIARY_BREEDER_CONTAINER.get(), ApiaryBreederScreen::new);
+        ScreenManager.register(ModContainers.HONEY_GENERATOR_CONTAINER.get(), HoneyGeneratorScreen::new);
+        ScreenManager.register(ModContainers.ENDER_BEECON_CONTAINER.get(), EnderBeeconScreen::new);
+        RenderTypeLookup.setRenderLayer(ModBlocks.GOLD_FLOWER.get(), RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(ModBlocks.PREVIEW_BLOCK.get(), RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(ModBlocks.ERRORED_PREVIEW_BLOCK.get(), RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(ModBlocks.ENDER_BEECON.get(), RenderType.translucent());
+        RenderTypeLookup.setRenderLayer(ModBlocks.PURPUR_HONEY_TANK.get(), RenderType.translucent());
+        RenderTypeLookup.setRenderLayer(ModBlocks.NETHER_HONEY_TANK.get(), RenderType.translucent());
+        RenderTypeLookup.setRenderLayer(ModBlocks.WOODEN_HONEY_TANK.get(), RenderType.translucent());
+        RenderTypeLookup.setRenderLayer(ModBlocks.HONEY_GENERATOR.get(), RenderType.translucent());
 
         ItemModelPropertiesHandler.registerProperties();
         ClientRegistry.bindTileEntityRenderer(ModTileEntityTypes.HONEY_TANK_TILE_ENTITY.get(), RenderHoneyTank::new);

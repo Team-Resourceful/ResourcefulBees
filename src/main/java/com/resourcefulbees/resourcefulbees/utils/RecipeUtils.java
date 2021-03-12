@@ -18,14 +18,14 @@ public class RecipeUtils {
         } else {
             buffer.writeBoolean(true);
             Item item = stack.getItem();
-            buffer.writeVarInt(Item.getIdFromItem(item));
+            buffer.writeVarInt(Item.getId(item));
             buffer.writeInt(stack.getCount());
             CompoundNBT compoundnbt = null;
-            if (item.isDamageable() || item.shouldSyncTag()) {
+            if (item.canBeDepleted() || item.shouldOverrideMultiplayerNbt()) {
                 compoundnbt = stack.getShareTag();
             }
 
-            buffer.writeCompoundTag(compoundnbt);
+            buffer.writeNbt(compoundnbt);
         }
     }
 
@@ -35,8 +35,8 @@ public class RecipeUtils {
         } else {
             int itemId = buffer.readVarInt();
             int count = buffer.readInt();
-            ItemStack itemstack = new ItemStack(Item.getItemById(itemId), count);
-            itemstack.readShareTag(buffer.readCompoundTag());
+            ItemStack itemstack = new ItemStack(Item.byId(itemId), count);
+            itemstack.readShareTag(buffer.readNbt());
             return itemstack;
         }
     }

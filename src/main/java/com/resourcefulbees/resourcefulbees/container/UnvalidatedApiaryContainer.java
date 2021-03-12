@@ -18,11 +18,11 @@ public class UnvalidatedApiaryContainer extends Container {
     public UnvalidatedApiaryContainer(int id, World world, BlockPos pos, PlayerInventory inv) {
         super(ModContainers.UNVALIDATED_APIARY_CONTAINER.get(), id);
         this.pos = pos;
-        this.apiaryTileEntity =(ApiaryTileEntity)world.getTileEntity(pos);
+        this.apiaryTileEntity =(ApiaryTileEntity)world.getBlockEntity(pos);
     }
 
     @Override
-    public boolean canInteractWith(@Nonnull PlayerEntity playerIn) {
+    public boolean stillValid(@Nonnull PlayerEntity playerIn) {
         return true;
     }
 

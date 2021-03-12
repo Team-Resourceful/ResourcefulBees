@@ -60,9 +60,9 @@ public class HiveUpgradeRecipe extends ShapedRecipe {
 
     public List<ItemStack> getHives(CraftingInventory inventory) {
         List<ItemStack> stacks = new ArrayList<>();
-        for (int i = 0; i < inventory.getSizeInventory(); i++) {
-            ItemStack item = inventory.getStackInSlot(i);
-            Block block = Block.getBlockFromItem(item.getItem());
+        for (int i = 0; i < inventory.getContainerSize(); i++) {
+            ItemStack item = inventory.getItem(i);
+            Block block = Block.byItem(item.getItem());
             if (block == Blocks.AIR) continue;
             if (block instanceof ApiaryBlock || block instanceof BeehiveBlock) {
                 stacks.add(item);
@@ -79,16 +79,16 @@ public class HiveUpgradeRecipe extends ShapedRecipe {
     public static class Serializer extends ShapedRecipe.Serializer {
 
         @Override
-        public @NotNull ShapedRecipe read(@NotNull ResourceLocation recipeId, @NotNull JsonObject json) {
-            ShapedRecipe recipe = super.read(recipeId, json);
-            return new HiveUpgradeRecipe(recipeId, recipe.getIngredients(), recipe.getRecipeOutput());
+        public @NotNull ShapedRecipe fromJson(@NotNull ResourceLocation recipeId, @NotNull JsonObject json) {
+            ShapedRecipe recipe = super.fromJson(recipeId, json);
+            return new HiveUpgradeRecipe(recipeId, recipe.getIngredients(), recipe.getResultItem());
         }
 
         @Override
-        public ShapedRecipe read(@NotNull ResourceLocation recipeId, @NotNull PacketBuffer buffer) {
-            ShapedRecipe recipe = super.read(recipeId, buffer);
+        public ShapedRecipe fromNetwork(@NotNull ResourceLocation recipeId, @NotNull PacketBuffer buffer) {
+            ShapedRecipe recipe = super.fromNetwork(recipeId, buffer);
             assert recipe != null : "why is recipe null?";
-            return new HiveUpgradeRecipe(recipeId, recipe.getIngredients(), recipe.getRecipeOutput());
+            return new HiveUpgradeRecipe(recipeId, recipe.getIngredients(), recipe.getResultItem());
         }
     }
 }

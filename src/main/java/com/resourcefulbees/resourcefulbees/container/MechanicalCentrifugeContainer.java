@@ -24,21 +24,21 @@ public class MechanicalCentrifugeContainer extends Container {
 
         this.player = inv.player;
 
-        centrifugeTileEntity = (MechanicalCentrifugeTileEntity) world.getTileEntity(pos);
+        centrifugeTileEntity = (MechanicalCentrifugeTileEntity) world.getBlockEntity(pos);
 
-        this.trackInt(new FunctionalIntReferenceHolder(() -> getCentrifugeTileEntity().getClicks(), v -> getCentrifugeTileEntity().setClicks(v)));
+        this.addDataSlot(new FunctionalIntReferenceHolder(() -> getCentrifugeTileEntity().getClicks(), v -> getCentrifugeTileEntity().setClicks(v)));
 
         this.addSlot(new SlotItemHandlerUnconditioned(getCentrifugeTileEntity().getItemStackHandler(), MechanicalCentrifugeTileEntity.HONEYCOMB_SLOT, 30, 20){
 
             @Override
-            public boolean isItemValid(ItemStack stack){
+            public boolean mayPlace(ItemStack stack){
                 return !stack.getItem().equals(Items.GLASS_BOTTLE);
             }
         });
         this.addSlot(new SlotItemHandlerUnconditioned(getCentrifugeTileEntity().getItemStackHandler(), MechanicalCentrifugeTileEntity.BOTTLE_SLOT, 30, 38){
 
             @Override
-            public boolean isItemValid(ItemStack stack){
+            public boolean mayPlace(ItemStack stack){
                 return stack.getItem().equals(Items.GLASS_BOTTLE);
             }
         });
@@ -63,30 +63,30 @@ public class MechanicalCentrifugeContainer extends Container {
      * @param player the player
      */
     @Override
-    public boolean canInteractWith(@Nonnull PlayerEntity player) {
+    public boolean stillValid(@Nonnull PlayerEntity player) {
         return true;
     }
 
     @Nonnull
     @Override
-    public ItemStack transferStackInSlot(@Nonnull PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(@Nonnull PlayerEntity playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = this.inventorySlots.get(index);
-        if (slot != null && slot.getHasStack()) {
-            ItemStack itemstack1 = slot.getStack();
+        Slot slot = this.slots.get(index);
+        if (slot != null && slot.hasItem()) {
+            ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
             if (index <= 4) {
-                if (!this.mergeItemStack(itemstack1, 5, inventorySlots.size(), true)) {
+                if (!this.moveItemStackTo(itemstack1, 5, slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.mergeItemStack(itemstack1, 0, 2, false)) {
+            } else if (!this.moveItemStackTo(itemstack1, 0, 2, false)) {
                 return ItemStack.EMPTY;
             }
 
             if (itemstack1.isEmpty()) {
-                slot.putStack(ItemStack.EMPTY);
+                slot.set(ItemStack.EMPTY);
             } else {
-                slot.onSlotChanged();
+                slot.setChanged();
             }
         }
         return itemstack;

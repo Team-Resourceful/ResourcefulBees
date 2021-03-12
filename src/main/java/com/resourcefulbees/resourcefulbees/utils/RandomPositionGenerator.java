@@ -27,26 +27,26 @@ public class RandomPositionGenerator {
 
     @Nullable
     public static Vector3d findAirTarget(CreatureEntity creatureEntity, int i, int i1, Vector3d vector3d) {
-        return findTarget(creatureEntity, i, i1, 0, vector3d, false, creatureEntity::getBlockPathWeight);
+        return findTarget(creatureEntity, i, i1, 0, vector3d, false, creatureEntity::getWalkTargetValue);
     }
 
     @Nullable
     public static Vector3d findGroundTarget(CreatureEntity creatureEntity, int i, int i1, int i2, @Nullable Vector3d vector3d) {
-        return findTarget(creatureEntity, i, i1, i2, vector3d, true, creatureEntity::getBlockPathWeight);
+        return findTarget(creatureEntity, i, i1, i2, vector3d, true, creatureEntity::getWalkTargetValue);
     }
 
     @Nullable
     private static Vector3d findTarget(CreatureEntity bee, int horizontalOffset, int verticalOffset, int zero, @Nullable Vector3d vector3d, boolean pathOnWater, ToDoubleFunction<BlockPos> blockWeightOfBeePOS) {
-        PathNavigator pathnavigator = bee.getNavigator();
-        Random random = bee.getRNG();
+        PathNavigator pathnavigator = bee.getNavigation();
+        Random random = bee.getRandom();
 
 
         //is bee within distance of home position?
-        boolean inDistanceOfHome = bee.detachHome() && bee.getHomePosition().withinDistance(bee.getPositionVec(), (bee.getMaximumHomeDistance() + horizontalOffset) + 1.0D);
+        boolean inDistanceOfHome = bee.hasRestriction() && bee.getRestrictCenter().closerThan(bee.position(), (bee.getRestrictRadius() + horizontalOffset) + 1.0D);
 
         boolean flag1 = false;
         double d0 = Double.NEGATIVE_INFINITY;
-        BlockPos beePos = bee.getBlockPos();
+        BlockPos beePos = bee.blockPosition();
 
         //loop 10 times getting the best valid path as far from the entities current position as possible
         for(int i = 0; i < 10; ++i) {
@@ -56,8 +56,8 @@ public class RandomPositionGenerator {
                 int rndPosY = randomBlockpos.getY();
                 int rndPosZ = randomBlockpos.getZ();
 
-                if (bee.detachHome() && horizontalOffset > 1) { //if bee has a home && horizontal offset is greater than 1
-                    BlockPos beeHomePosition = bee.getHomePosition(); //get home position
+                if (bee.hasRestriction() && horizontalOffset > 1) { //if bee has a home && horizontal offset is greater than 1
+                    BlockPos beeHomePosition = bee.getRestrictCenter(); //get home position
 
                     //checks if bee is east of home and sets position closer based on direction
                     int nextInt = random.nextInt(horizontalOffset / 2);
@@ -72,22 +72,22 @@ public class RandomPositionGenerator {
                 BlockPos targetPos = new BlockPos(rndPosX + bee.getX(), rndPosY + bee.getY(), rndPosZ + bee.getZ());
 
                 //if target Y is between 0 and world height AND (is not in Distance of home OR target pos is in distance of home) AND entity can stand on target pos
-                if (MathUtils.inRangeInclusive(targetPos.getY(), 0, bee.world.getHeight()) && (!inDistanceOfHome || bee.isWithinHomeDistanceFromPosition(targetPos)) && pathnavigator.canEntityStandOnPos(targetPos)) {
+                if (MathUtils.inRangeInclusive(targetPos.getY(), 0, bee.level.getMaxBuildHeight()) && (!inDistanceOfHome || bee.isWithinRestriction(targetPos)) && pathnavigator.isStableDestination(targetPos)) {
 
                     //flip a coin heads = check block above is air if so find valid position above else go below
-                    if (random.nextBoolean() && bee.world.isAirBlock(bee.getBlockPos().up())) {
-                        targetPos = findValidPositionAbove(targetPos, random.nextInt(3) + 1, bee.world.getHeight(),
-                                pos -> bee.world.getBlockState(pos).getMaterial().isSolid());
+                    if (random.nextBoolean() && bee.level.isEmptyBlock(bee.blockPosition().above())) {
+                        targetPos = findValidPositionAbove(targetPos, random.nextInt(3) + 1, bee.level.getMaxBuildHeight(),
+                                pos -> bee.level.getBlockState(pos).getMaterial().isSolid());
                     } else {
                         targetPos = findValidPositionBelow(targetPos, random.nextInt(3) + 1,
-                                pos -> bee.world.getBlockState(pos).getMaterial().isSolid());
+                                pos -> bee.level.getBlockState(pos).getMaterial().isSolid());
                     }
 
                     // if can travel through water or target pos is not tagged as water
-                    if (pathOnWater || !bee.world.getFluidState(targetPos).isTagged(FluidTags.WATER)) {
+                    if (pathOnWater || !bee.level.getFluidState(targetPos).is(FluidTags.WATER)) {
                         //set path node type based on target position
-                        PathNodeType pathnodetype = WalkNodeProcessor.getLandNodeType(bee.world, targetPos.mutableCopy());
-                        if (bee.getPathPriority(pathnodetype) == 0.0F) {
+                        PathNodeType pathnodetype = WalkNodeProcessor.getBlockPathTypeStatic(bee.level, targetPos.mutable());
+                        if (bee.getPathfindingMalus(pathnodetype) == 0.0F) {
                             //calculate if weight of new target position is better than previous target position
                             double d1 = blockWeightOfBeePOS.applyAsDouble(targetPos);
                             if (d1 > d0) {
@@ -102,14 +102,14 @@ public class RandomPositionGenerator {
         }
 
         //if target position is not equal to negative infinity then return center of target pos otherwise null
-        return flag1 ? Vector3d.ofBottomCenter(beePos) : null;
+        return flag1 ? Vector3d.atBottomCenterOf(beePos) : null;
     }
 
     private static BlockPos getRandomOffset(Random random, int horizontalOffset, int verticalOffset, int minusTwo, @Nullable Vector3d directionVec) {
         if (directionVec != null) {
             double d3 = MathHelper.atan2(directionVec.z, directionVec.x) - HALF_PI;
             double d4 = d3 + (2 * random.nextFloat() - 1) * HALF_PI;
-            double d0 = Math.sqrt(random.nextDouble()) * MathHelper.SQRT_2 * horizontalOffset;
+            double d0 = Math.sqrt(random.nextDouble()) * MathHelper.SQRT_OF_TWO * horizontalOffset;
             double d1 = -d0 * Math.sin(d4);
             double d2 = d0 * Math.cos(d4);
             if ((Math.abs(d1) <= horizontalOffset) && (Math.abs(d2) <= horizontalOffset)) {
@@ -136,14 +136,14 @@ public class RandomPositionGenerator {
             return blockPos3;
         } else {
             BlockPos blockpos;
-            for(blockpos = blockPos3.up(); blockpos.getY() < worldHeight && posPredicate.test(blockpos); blockpos = blockpos.up()) {
+            for(blockpos = blockPos3.above(); blockpos.getY() < worldHeight && posPredicate.test(blockpos); blockpos = blockpos.above()) {
                 //do nothing
             }
 
             BlockPos blockpos1;
             BlockPos blockpos2;
             for(blockpos1 = blockpos; blockpos1.getY() < worldHeight && blockpos1.getY() - blockpos.getY() < randInt3; blockpos1 = blockpos2) {
-                blockpos2 = blockpos1.up();
+                blockpos2 = blockpos1.above();
                 if (posPredicate.test(blockpos2)) {
                     break;
                 }
@@ -160,14 +160,14 @@ public class RandomPositionGenerator {
             return blockPos3;
         } else {
             BlockPos blockpos;
-            for(blockpos = blockPos3.down(); blockpos.getY() > 0 && posPredicate.test(blockpos); blockpos = blockpos.down()) {
+            for(blockpos = blockPos3.below(); blockpos.getY() > 0 && posPredicate.test(blockpos); blockpos = blockpos.below()) {
                 //do nothing
             }
 
             BlockPos blockpos1;
             BlockPos blockpos2;
             for(blockpos1 = blockpos; blockpos1.getY() > 0 && blockpos.getY() - blockpos1.getY() < randInt3; blockpos1 = blockpos2) {
-                blockpos2 = blockpos1.down();
+                blockpos2 = blockpos1.below();
                 if (posPredicate.test(blockpos2)) {
                     break;
                 }

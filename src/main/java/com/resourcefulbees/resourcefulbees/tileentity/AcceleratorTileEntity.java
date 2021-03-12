@@ -15,22 +15,22 @@ public class AcceleratorTileEntity extends TileEntity implements ITickableTileEn
 
     @Override
     public void tick() {
-        assert world != null : "World is null?!?!?";
-        accelerateTick(world, pos.down());
-        accelerateTick(world, pos.up());
-        accelerateTick(world, pos.north());
-        accelerateTick(world, pos.south());
-        accelerateTick(world, pos.east());
-        accelerateTick(world, pos.west());
+        assert level != null : "World is null?!?!?";
+        accelerateTick(level, worldPosition.below());
+        accelerateTick(level, worldPosition.above());
+        accelerateTick(level, worldPosition.north());
+        accelerateTick(level, worldPosition.south());
+        accelerateTick(level, worldPosition.east());
+        accelerateTick(level, worldPosition.west());
     }
 
     public static void accelerateTick(World world, BlockPos pos) {
         BlockState blockState = world.getBlockState(pos);
-        if(!world.isRemote && world instanceof ServerWorld && blockState.ticksRandomly() && world.getRandom().nextInt(40) == 0) {
+        if(!world.isClientSide && world instanceof ServerWorld && blockState.isRandomlyTicking() && world.getRandom().nextInt(40) == 0) {
             blockState.randomTick((ServerWorld) world, pos, world.getRandom());
         }
         if (blockState.hasTileEntity()) {
-            TileEntity tileEntity = world.getTileEntity(pos);
+            TileEntity tileEntity = world.getBlockEntity(pos);
             if (tileEntity != null && !tileEntity.isRemoved() && tileEntity instanceof ITickableTileEntity && !(tileEntity instanceof AcceleratorTileEntity)) {
                 for (int i = 0; i < 384; i++) {
                     ((ITickableTileEntity) tileEntity).tick();

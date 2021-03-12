@@ -38,11 +38,11 @@ public class AdditionLayer<T extends CustomBeeEntity> extends LayerRenderer<T, C
     }
 
     public void render(@Nonnull MatrixStack matrixStackIn, @Nonnull IRenderTypeBuffer bufferIn, int packedLightIn, @Nonnull T customBeeEntity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        ResourceLocation texture = customBeeEntity.hasAngerTime() ? angryTexture : baseTexture;
-        this.getEntityModel().setModelAttributes(this.additionModel);
-        this.additionModel.setLivingAnimations(customBeeEntity, limbSwing, limbSwingAmount, partialTicks);
-        this.additionModel.setAngles(customBeeEntity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
-        IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.getEntityTranslucent(texture));
-        this.additionModel.render(matrixStackIn, ivertexbuilder, packedLightIn, LivingRenderer.getOverlay(customBeeEntity, 0.0F), 1.0F, 1.0F, 1.0F, 1.0F);
+        ResourceLocation texture = customBeeEntity.isAngry() ? angryTexture : baseTexture;
+        this.getParentModel().copyPropertiesTo(this.additionModel);
+        this.additionModel.prepareMobModel(customBeeEntity, limbSwing, limbSwingAmount, partialTicks);
+        this.additionModel.setupAnim(customBeeEntity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+        IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.entityTranslucent(texture));
+        this.additionModel.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, LivingRenderer.getOverlayCoords(customBeeEntity, 0.0F), 1.0F, 1.0F, 1.0F, 1.0F);
     }
 }

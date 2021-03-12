@@ -78,8 +78,8 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
 
     @Override
     public boolean matches(IInventory inventory, @Nonnull World world) {
-        ItemStack stack = inventory.getStackInSlot(0);
-        ItemStack bottle = inventory.getStackInSlot(1);
+        ItemStack stack = inventory.getItem(0);
+        ItemStack bottle = inventory.getItem(1);
 
         boolean noBottle = bottle.isEmpty() || bottle.getItem() == Items.AIR || bottle.getCount() == 0;
 
@@ -90,21 +90,21 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
         if (noBottleInput && bottle.getCount() > 0) return false;
         if (stack == ItemStack.EMPTY) return false;
         else {
-            ItemStack[] matchingStacks = ingredient.getMatchingStacks();
+            ItemStack[] matchingStacks = ingredient.getItems();
             if (matchingStacks.length == 0) return false;
             else {
-                return Arrays.stream(matchingStacks).anyMatch(itemStack -> Container.areItemsAndTagsEqual(stack, itemStack));
+                return Arrays.stream(matchingStacks).anyMatch(itemStack -> Container.consideredTheSameItem(stack, itemStack));
             }
         }
     }
 
     @Override
-    public boolean isDynamic() {
+    public boolean isSpecial() {
         return true;
     }
 
     @Override
-    public @NotNull ItemStack getCraftingResult(@NotNull IInventory inventory) {
+    public @NotNull ItemStack assemble(@NotNull IInventory inventory) {
         return ItemStack.EMPTY;
     }
 
@@ -112,7 +112,7 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
      * Used to determine if this recipe can fit in a grid of the given width/height
      */
     @Override
-    public boolean canFit(int width, int height) {
+    public boolean canCraftInDimensions(int width, int height) {
         return true;
     }
 
@@ -121,7 +121,7 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
      * possible result (e.g. it's dynamic and depends on its inputs), then return an empty stack.
      */
     @Override
-    public @NotNull ItemStack getRecipeOutput() {
+    public @NotNull ItemStack getResultItem() {
         return ItemStack.EMPTY;
     }
 
@@ -151,19 +151,19 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
         }
 
         @Override
-        public @NotNull T read(@Nonnull ResourceLocation id, @NotNull JsonObject json) {
+        public @NotNull T fromJson(@Nonnull ResourceLocation id, @NotNull JsonObject json) {
             Ingredient ingredient;
-            if (JSONUtils.isJsonArray(json, INGREDIENT_STRING)) {
-                ingredient = Ingredient.deserialize(JSONUtils.getJsonArray(json, INGREDIENT_STRING));
+            if (JSONUtils.isArrayNode(json, INGREDIENT_STRING)) {
+                ingredient = Ingredient.fromJson(JSONUtils.getAsJsonArray(json, INGREDIENT_STRING));
             } else {
-                ingredient = Ingredient.deserialize(JSONUtils.getJsonObject(json, INGREDIENT_STRING));
+                ingredient = Ingredient.fromJson(JSONUtils.getAsJsonObject(json, INGREDIENT_STRING));
             }
 
-            JsonArray jsonArray = JSONUtils.getJsonArray(json, "results");
+            JsonArray jsonArray = JSONUtils.getAsJsonArray(json, "results");
             List<Pair<ItemStack, Float>> outputs = new ArrayList<>();
             List<Pair<FluidStack, Float>> fluidOutput = new ArrayList<>();
 
-            boolean hasFluidOutput = JSONUtils.getBoolean(json, "hasFluidOutput", false);
+            boolean hasFluidOutput = JSONUtils.getAsBoolean(json, "hasFluidOutput", false);
             if (!hasFluidOutput) {
                 fluidOutput.add(Pair.of(FluidStack.EMPTY, 1f));
             }
@@ -172,14 +172,14 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
                 JsonObject jsonObject = jsonElement.getAsJsonObject();
                 if (jsonObject.has("item")) {
                     // collect data
-                    String registryName = JSONUtils.getString(jsonObject, "item");
-                    int count = JSONUtils.getInt(jsonObject, "count", 1);
-                    Float chance = JSONUtils.getFloat(jsonObject, "chance", 1);
+                    String registryName = JSONUtils.getAsString(jsonObject, "item");
+                    int count = JSONUtils.getAsInt(jsonObject, "count", 1);
+                    Float chance = JSONUtils.getAsFloat(jsonObject, "chance", 1);
 
                     // collect nbt
                     CompoundNBT nbt = new CompoundNBT();
                     if (jsonObject.has("nbtData")) {
-                        JsonElement nbtData = JSONUtils.getJsonObject(jsonObject, "nbtData");
+                        JsonElement nbtData = JSONUtils.getAsJsonObject(jsonObject, "nbtData");
                         nbt = CompoundNBT.CODEC.parse(JsonOps.INSTANCE, nbtData).resultOrPartial(e -> LOGGER.warn(String.format("Could not deserialize NBT: [%s]", nbtData.toString()))).orElse(nbt);
                     }
 
@@ -192,29 +192,29 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
                     // collect and set potion
                     if (registryName.equals("minecraft:potion") && jsonObject.has("potion")) {
                         stack.getOrCreateTag()
-                                .putString("Potion", JSONUtils.getString(jsonObject, "potion"));
+                                .putString("Potion", JSONUtils.getAsString(jsonObject, "potion"));
                     }
                     // add outputs
                     outputs.add(Pair.of(stack, chance));
                 } else if (jsonObject.has("fluid")) {
-                    String fluid = JSONUtils.getString(jsonObject, "fluid");
-                    int amount = JSONUtils.getInt(jsonObject, "amount", 1);
-                    Float chance = JSONUtils.getFloat(jsonObject, "chance", 1);
+                    String fluid = JSONUtils.getAsString(jsonObject, "fluid");
+                    int amount = JSONUtils.getAsInt(jsonObject, "amount", 1);
+                    Float chance = JSONUtils.getAsFloat(jsonObject, "chance", 1);
                     FluidStack stack = new FluidStack(BeeInfoUtils.getFluid(fluid), amount);
                     fluidOutput.add(Pair.of(stack, chance));
                 }
             });
 
-            int time = JSONUtils.getInt(json, "time", Config.GLOBAL_CENTRIFUGE_RECIPE_TIME.get());
-            int multiblockTime = JSONUtils.getInt(json, "multiblockTime", time - Config.MULTIBLOCK_RECIPE_TIME_REDUCTION.get());
-            boolean multiblock = JSONUtils.getBoolean(json, "multiblock", false);
-            boolean noBottle = JSONUtils.getBoolean(json, "noBottleInput", false);
+            int time = JSONUtils.getAsInt(json, "time", Config.GLOBAL_CENTRIFUGE_RECIPE_TIME.get());
+            int multiblockTime = JSONUtils.getAsInt(json, "multiblockTime", time - Config.MULTIBLOCK_RECIPE_TIME_REDUCTION.get());
+            boolean multiblock = JSONUtils.getAsBoolean(json, "multiblock", false);
+            boolean noBottle = JSONUtils.getAsBoolean(json, "noBottleInput", false);
 
             return this.factory.create(id, ingredient, outputs, fluidOutput, time, multiblockTime, multiblock, hasFluidOutput, noBottle);
         }
 
-        public T read(@Nonnull ResourceLocation id, @NotNull PacketBuffer buffer) {
-            Ingredient ingredient = Ingredient.read(buffer);
+        public T fromNetwork(@Nonnull ResourceLocation id, @NotNull PacketBuffer buffer) {
+            Ingredient ingredient = Ingredient.fromNetwork(buffer);
             List<Pair<ItemStack, Float>> itemOutputs = new ArrayList<>();
             List<Pair<FluidStack, Float>> fluidOutput = new ArrayList<>();
             IntStream.range(0, buffer.readInt()).forEach(i -> itemOutputs.add(Pair.of(RecipeUtils.readItemStack(buffer), buffer.readFloat())));
@@ -227,8 +227,8 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
             return this.factory.create(id, ingredient, itemOutputs, fluidOutput, time, multiblockTime, multiblock, hasFluidOutput, noBottle);
         }
 
-        public void write(@NotNull PacketBuffer buffer, T recipe) {
-            recipe.ingredient.write(buffer);
+        public void toNetwork(@NotNull PacketBuffer buffer, T recipe) {
+            recipe.ingredient.toNetwork(buffer);
             buffer.writeInt(recipe.itemOutputs.size());
             recipe.itemOutputs.forEach(itemStackFloatPair -> {
                 ItemStack stack = itemStackFloatPair.getLeft();

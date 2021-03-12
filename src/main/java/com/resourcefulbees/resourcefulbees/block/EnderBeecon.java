@@ -40,43 +40,45 @@ import org.jetbrains.annotations.Nullable;
 import javax.annotation.Nonnull;
 import java.util.List;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class EnderBeecon extends HoneyTank {
 
-    protected static final VoxelShape VOXEL_SHAPE_TOP = Block.makeCuboidShape(2.0D, 0.0D, 2.0D, 14.0D, 13.0D, 14.0D);
+    protected static final VoxelShape VOXEL_SHAPE_TOP = Block.box(2.0D, 0.0D, 2.0D, 14.0D, 13.0D, 14.0D);
 
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
-    public static final AbstractBlock.Properties PROPERTIES = AbstractBlock.Properties.create(Material.GLASS, MaterialColor.PURPLE)
-            .requiresTool()
+    public static final AbstractBlock.Properties PROPERTIES = AbstractBlock.Properties.of(Material.GLASS, MaterialColor.COLOR_PURPLE)
+            .requiresCorrectToolForDrops()
             .harvestTool(ToolType.PICKAXE)
-            .hardnessAndResistance(5)
+            .strength(5)
             .harvestLevel(2)
             .sound(SoundType.LODESTONE)
-            .luminance(luminance -> 15)
-            .nonOpaque()
-            .variableOpacity();
+            .lightLevel(luminance -> 15)
+            .noOcclusion()
+            .dynamicShape();
 
     public EnderBeecon(Properties properties) {
         super(properties, HoneyTankTileEntity.TankTier.NETHER);
-        BlockState defaultState = this.stateContainer.getBaseState()
-                .with(WATERLOGGED, false);
-        this.setDefaultState(defaultState);
+        BlockState defaultState = this.stateDefinition.any()
+                .setValue(WATERLOGGED, false);
+        this.registerDefaultState(defaultState);
     }
 
     @Nonnull
     @Override
     @Deprecated
-    public ActionResultType onUse(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult blockRayTraceResult) {
+    public ActionResultType use(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult blockRayTraceResult) {
 
-        ItemStack heldItem = player.getHeldItem(hand);
+        ItemStack heldItem = player.getItemInHand(hand);
         boolean usingHoney = heldItem.getItem() instanceof HoneyBottleItem;
         boolean usingBottle = heldItem.getItem() instanceof GlassBottleItem;
         boolean usingBucket = heldItem.getItem() instanceof BucketItem;
-        boolean usingWool = heldItem.getItem().isIn(ItemTags.createOptional(new ResourceLocation("minecraft", "wool")));
+        boolean usingWool = heldItem.getItem().is(ItemTags.createOptional(new ResourceLocation("minecraft", "wool")));
         boolean usingStick = heldItem.getItem() == Items.STICK;
-        TileEntity tileEntity = world.getTileEntity(pos);
+        TileEntity tileEntity = world.getBlockEntity(pos);
 
-        if (!world.isRemote && tileEntity instanceof EnderBeeconTileEntity) {
+        if (!world.isClientSide && tileEntity instanceof EnderBeeconTileEntity) {
             EnderBeeconTileEntity tank = (EnderBeeconTileEntity) tileEntity;
             if (usingWool) {
               tank.toggleSound();
@@ -86,15 +88,15 @@ public class EnderBeecon extends HoneyTank {
                 tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
                         .ifPresent(iFluidHandler -> FluidUtil.interactWithFluidHandler(player, hand, world, pos, null));
             } else if (usingBottle) {
-                world.playSound(player, pos, SoundEvents.ITEM_BOTTLE_EMPTY, SoundCategory.PLAYERS, 1.0f, 1.0f);
+                world.playSound(player, pos, SoundEvents.BOTTLE_EMPTY, SoundCategory.PLAYERS, 1.0f, 1.0f);
                 tank.fillBottle(player, hand);
             } else if (usingHoney) {
-                world.playSound(player, pos, SoundEvents.ITEM_BOTTLE_FILL, SoundCategory.PLAYERS, 1.0f, 1.0f);
+                world.playSound(player, pos, SoundEvents.BOTTLE_FILL, SoundCategory.PLAYERS, 1.0f, 1.0f);
                 tank.emptyBottle(player, hand);
             }else {
                 NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, pos);
             }
-            world.notifyBlockUpdate(pos, state, state, 2);
+            world.sendBlockUpdated(pos, state, state, 2);
         }
         return ActionResultType.SUCCESS;
     }
@@ -114,11 +116,11 @@ public class EnderBeecon extends HoneyTank {
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void addInformation(@Nonnull ItemStack stack, @javax.annotation.Nullable IBlockReader worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
+    public void appendHoverText(@Nonnull ItemStack stack, @javax.annotation.Nullable IBlockReader worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
         tooltip.addAll(new TooltipBuilder()
                 .addTranslatableTip("block.resourcefulbees.beecon.tooltip.info", TextFormatting.LIGHT_PURPLE)
                 .addTranslatableTip("block.resourcefulbees.beecon.tooltip.info.1", TextFormatting.LIGHT_PURPLE)
                 .build());
-        super.addInformation(stack, worldIn, tooltip, flagIn);
+        super.appendHoverText(stack, worldIn, tooltip, flagIn);
     }
 }

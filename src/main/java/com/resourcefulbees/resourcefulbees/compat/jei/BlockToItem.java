@@ -49,7 +49,7 @@ public class BlockToItem implements IRecipeCategory<BlockToItem.Recipe> {
         this.icon = guiHelper.createDrawable(ICONS, 0, 0, 16, 16);
         this.info = guiHelper.createDrawable(ICONS, 16, 0, 9, 9);
         this.beeHive = guiHelper.createDrawableIngredient(new ItemStack(ModItems.T1_BEEHIVE_ITEM.get()));
-        this.localizedName = I18n.format("gui.resourcefulbees.jei.category.block_to_item_mutation");
+        this.localizedName = I18n.get("gui.resourcefulbees.jei.category.block_to_item_mutation");
     }
 
     public static List<Recipe> getMutationRecipes() {
@@ -102,7 +102,7 @@ public class BlockToItem implements IRecipeCategory<BlockToItem.Recipe> {
 
     @Override
     public void setIngredients(BlockToItem.Recipe recipe, @NotNull IIngredients ingredients) {
-        if (recipe.tagInput != null && recipe.tagInput.values().get(0) instanceof Fluid) {
+        if (recipe.tagInput != null && recipe.tagInput.getValues().get(0) instanceof Fluid) {
             RecipeUtils.setFluidInput(ingredients, recipe.tagInput, recipe.blockInput);
         } else {
             RecipeUtils.setBlockInput(ingredients, recipe.tagInput, recipe.blockInput);

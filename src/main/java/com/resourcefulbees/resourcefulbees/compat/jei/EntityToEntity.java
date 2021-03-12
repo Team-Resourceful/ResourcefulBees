@@ -54,7 +54,7 @@ public class EntityToEntity implements IRecipeCategory<EntityToEntity.Recipe> {
         this.info = guiHelper.createDrawable(ICONS, 16, 0, 9, 9);
         this.nonRegisteredEgg = guiHelper.createDrawable(ICONS, 41, 0, 16, 16);
         this.beeHive = guiHelper.createDrawableIngredient(new ItemStack(ModItems.T1_BEEHIVE_ITEM.get()));
-        this.localizedName = I18n.format("gui.resourcefulbees.jei.category.entity_to_entity_mutation");
+        this.localizedName = I18n.get("gui.resourcefulbees.jei.category.entity_to_entity_mutation");
     }
 
     public static List<Recipe> getMutationRecipes() {
@@ -64,10 +64,10 @@ public class EntityToEntity implements IRecipeCategory<EntityToEntity.Recipe> {
             MutationData mutationData = beeData.getMutationData();
             if (mutationData.hasMutation() && mutationData.hasEntityMutations()) {
                 beeData.getMutationData().getEntityMutations().forEach((entityType, doubleRandomCollectionPair) -> {
-                    SpawnEggItem inputSpawnEgg = SpawnEggItem.getEgg(entityType);
+                    SpawnEggItem inputSpawnEgg = SpawnEggItem.byId(entityType);
                     ItemStack inputEgg = inputSpawnEgg != null ? new ItemStack(inputSpawnEgg) : null;
                     doubleRandomCollectionPair.getRight().forEach(entityOutput -> {
-                        SpawnEggItem outputSpawnEgg = SpawnEggItem.getEgg(entityOutput.getEntityType());
+                        SpawnEggItem outputSpawnEgg = SpawnEggItem.byId(entityOutput.getEntityType());
                         ItemStack outputEgg = outputSpawnEgg != null ? new ItemStack(outputSpawnEgg) : null;
 
                         double effectiveWeight = RecipeUtils.getEffectiveWeight(doubleRandomCollectionPair.getRight(), entityOutput.getWeight());
@@ -123,19 +123,19 @@ public class EntityToEntity implements IRecipeCategory<EntityToEntity.Recipe> {
         //OUTPUT
         if (recipe.output == null && mouseX > 64 && mouseX < 84 && mouseY > 47 && mouseY < 66){
             if (recipe.outputNBT.isEmpty()) {
-                return Collections.singletonList(recipe.outputEntity.getName().copy());
+                return Collections.singletonList(recipe.outputEntity.getDescription().plainCopy());
             } else {
                 List<ITextComponent> tooltip = new ArrayList<>();
-                tooltip.add(recipe.outputEntity.getName().copy());
+                tooltip.add(recipe.outputEntity.getDescription().plainCopy());
                 if (recipe.outputEntity.getRegistryName() != null) {
-                    tooltip.add(new StringTextComponent(recipe.outputEntity.getRegistryName().toString()).formatted(TextFormatting.GRAY));
+                    tooltip.add(new StringTextComponent(recipe.outputEntity.getRegistryName().toString()).withStyle(TextFormatting.GRAY));
                 }
                 if (!recipe.outputNBT.isEmpty()) {
                     if (BeeInfoUtils.isShiftPressed()) {
                         List<String> lore = BeeInfoUtils.getLoreLines(recipe.outputNBT);
-                        lore.forEach(l -> tooltip.add(new StringTextComponent(l).fillStyle(Style.EMPTY.withColor(Color.parse(DARK_PURPLE)))));
+                        lore.forEach(l -> tooltip.add(new StringTextComponent(l).withStyle(Style.EMPTY.withColor(Color.parseColor(DARK_PURPLE)))));
                     } else {
-                        tooltip.add(new TranslationTextComponent("gui.resourcefulbees.jei.tooltip.show_nbt").fillStyle(Style.EMPTY.withColor(Color.parse(DARK_PURPLE))));
+                        tooltip.add(new TranslationTextComponent("gui.resourcefulbees.jei.tooltip.show_nbt").withStyle(Style.EMPTY.withColor(Color.parseColor(DARK_PURPLE))));
                     }
                 }
                 return tooltip;
@@ -145,9 +145,9 @@ public class EntityToEntity implements IRecipeCategory<EntityToEntity.Recipe> {
         //INPUT
         if (recipe.input == null && mouseX > 15 && mouseX < 32 && mouseY > 57 && mouseY < 74){
             List<ITextComponent> tooltip = new ArrayList<>();
-            tooltip.add(recipe.inputEntity.getName().copy());
+            tooltip.add(recipe.inputEntity.getDescription().plainCopy());
             if (recipe.outputEntity.getRegistryName() != null) {
-                tooltip.add(new StringTextComponent(recipe.outputEntity.getRegistryName().toString()).formatted(TextFormatting.GRAY));
+                tooltip.add(new StringTextComponent(recipe.outputEntity.getRegistryName().toString()).withStyle(TextFormatting.GRAY));
             }
             return tooltip;
         }
@@ -164,16 +164,16 @@ public class EntityToEntity implements IRecipeCategory<EntityToEntity.Recipe> {
             itemStacks.addTooltipCallback((slotIndex, isInputStack, stack, tooltip) -> {
                 if (slotIndex == 0) {
                     tooltip.clear();
-                    tooltip.add(recipe.outputEntity.getName().copy());
+                    tooltip.add(recipe.outputEntity.getDescription().plainCopy());
                     if (recipe.outputEntity.getRegistryName() != null) {
-                        tooltip.add(new StringTextComponent(recipe.outputEntity.getRegistryName().toString()).formatted(TextFormatting.GRAY));
+                        tooltip.add(new StringTextComponent(recipe.outputEntity.getRegistryName().toString()).withStyle(TextFormatting.GRAY));
                     }
                     if (!recipe.outputNBT.isEmpty()) {
                         if (BeeInfoUtils.isShiftPressed()) {
                             List<String> lore = BeeInfoUtils.getLoreLines(recipe.outputNBT);
-                            lore.forEach(l -> tooltip.add(new StringTextComponent(l).fillStyle(Style.EMPTY.withColor(Color.parse(DARK_PURPLE)))));
+                            lore.forEach(l -> tooltip.add(new StringTextComponent(l).withStyle(Style.EMPTY.withColor(Color.parseColor(DARK_PURPLE)))));
                         } else {
-                            tooltip.add(new TranslationTextComponent("gui.resourcefulbees.jei.tooltip.show_nbt").fillStyle(Style.EMPTY.withColor(Color.parse(DARK_PURPLE))));
+                            tooltip.add(new TranslationTextComponent("gui.resourcefulbees.jei.tooltip.show_nbt").withStyle(Style.EMPTY.withColor(Color.parseColor(DARK_PURPLE))));
                         }
                     }
                 }
@@ -185,9 +185,9 @@ public class EntityToEntity implements IRecipeCategory<EntityToEntity.Recipe> {
             itemStacks.addTooltipCallback((slotIndex, isInputStack, stack, tooltip) -> {
                 if (slotIndex == 1) {
                     tooltip.clear();
-                    tooltip.add(recipe.inputEntity.getName().copy());
+                    tooltip.add(recipe.inputEntity.getDescription().plainCopy());
                     if (recipe.inputEntity.getRegistryName() != null) {
-                        tooltip.add(new StringTextComponent(recipe.inputEntity.getRegistryName().toString()).formatted(TextFormatting.GRAY));
+                        tooltip.add(new StringTextComponent(recipe.inputEntity.getRegistryName().toString()).withStyle(TextFormatting.GRAY));
                     }
                 }
             });

@@ -13,6 +13,8 @@ import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nonnull;
 
+import net.minecraft.client.gui.widget.button.Button.IPressable;
+
 public class ListButton extends TabImageButton {
     private final ITextComponent text;
     private final int textX;
@@ -25,7 +27,7 @@ public class ListButton extends TabImageButton {
         this.text = text;
         this.textX = textX;
         this.textY = textY;
-        this.fontRenderer = Minecraft.getInstance().fontRenderer;
+        this.fontRenderer = Minecraft.getInstance().font;
     }
 
     public void setParent(ButtonList parent) {
@@ -43,7 +45,7 @@ public class ListButton extends TabImageButton {
     @Override
     public void renderButton(@Nonnull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
         Minecraft minecraft = Minecraft.getInstance();
-        minecraft.getTextureManager().bindTexture(this.resourceLocation);
+        minecraft.getTextureManager().bind(this.resourceLocation);
         RenderSystem.disableDepthTest();
         float i = this.yTexStart;
         if (!this.active) {
@@ -53,8 +55,8 @@ public class ListButton extends TabImageButton {
         }
         if (parent != null) {
             GL11.glEnable(GL11.GL_SCISSOR_TEST);
-            double scale = minecraft.getWindow().getGuiScaleFactor();
-            int bottom = (int) (minecraft.getWindow().getFramebufferHeight() - (parent.yPos + parent.height) * scale);
+            double scale = minecraft.getWindow().getGuiScale();
+            int bottom = (int) (minecraft.getWindow().getHeight() - (parent.yPos + parent.height) * scale);
             GL11.glScissor((int) (parent.xPos * scale), bottom, (int) (parent.width * scale), (int) (parent.height * scale));
             drawButton(matrix, i);
             GL11.glDisable(GL11.GL_SCISSOR_TEST);
@@ -64,10 +66,10 @@ public class ListButton extends TabImageButton {
     }
 
     private void drawButton(@Nonnull MatrixStack matrix, float texYPos) {
-        drawTexture(matrix, this.x, this.y, (float) this.xTexStart, texYPos, this.width, this.height, width, yDiffText * 3);
-        fontRenderer.draw(matrix, text.shallowCopy().formatted(this.active ? TextFormatting.GRAY : TextFormatting.WHITE), (float) (this.x + textX), (float) (this.y + textY), -1);
+        blit(matrix, this.x, this.y, (float) this.xTexStart, texYPos, this.width, this.height, width, yDiffText * 3);
+        fontRenderer.draw(matrix, text.copy().withStyle(this.active ? TextFormatting.GRAY : TextFormatting.WHITE), (float) (this.x + textX), (float) (this.y + textY), -1);
         if (this.displayItem != null)
-            Minecraft.getInstance().getItemRenderer().renderItemAndEffectIntoGUI(this.displayItem, this.x + this.itemX, this.y + this.itemY);
+            Minecraft.getInstance().getItemRenderer().renderAndDecorateItem(this.displayItem, this.x + this.itemX, this.y + this.itemY);
         RenderSystem.enableDepthTest();
     }
 }

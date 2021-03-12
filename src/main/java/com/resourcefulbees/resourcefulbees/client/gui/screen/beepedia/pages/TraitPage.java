@@ -68,7 +68,7 @@ public class TraitPage extends BeepediaPage {
     private void addParticle() {
         if (trait.hasParticleEffect()) {
             TranslationTextComponent title = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits.particle");
-            StringTextComponent text = new StringTextComponent(trait.getParticleEffect().getParameters());
+            StringTextComponent text = new StringTextComponent(trait.getParticleEffect().writeToString());
             traitSections.add(new TraitSection(title, new ItemStack(Items.FIREWORK_ROCKET), text));
         }
     }
@@ -104,14 +104,14 @@ public class TraitPage extends BeepediaPage {
                     text.append(", ");
                 }
             }
-            traitSections.add(new TraitSection(title, PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.HARMING), text));
+            traitSections.add(new TraitSection(title, PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.HARMING), text));
         }
     }
 
     private void addDamageImmunities() {
         if (trait.hasDamageImmunities()) {
             TranslationTextComponent title = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits.damage_immunities");
-            String typeList = trait.getDamageImmunities().stream().map(DamageSource::getDamageType).collect(Collectors.joining(", "));
+            String typeList = trait.getDamageImmunities().stream().map(DamageSource::getMsgId).collect(Collectors.joining(", "));
             traitSections.add(new TraitSection(title, new ItemStack(Items.IRON_CHESTPLATE), new StringTextComponent(typeList)));
         }
     }
@@ -166,7 +166,7 @@ public class TraitPage extends BeepediaPage {
 
     private void initTranslation() {
         translation = "";
-        translation += trait.getDamageImmunities().stream().map(damageSource -> damageSource.damageType).collect(Collectors.joining(" "));
+        translation += trait.getDamageImmunities().stream().map(damageSource -> damageSource.msgId).collect(Collectors.joining(" "));
         translation += String.join(" ", trait.getSpecialAbilities());
         translation += trait.getPotionImmunities().stream().map(effect -> effect.getDisplayName().getString()).collect(Collectors.joining(" "));
         translation += trait.getDamageTypes().stream().map(Pair::getLeft).collect(Collectors.joining(" "));
@@ -178,12 +178,12 @@ public class TraitPage extends BeepediaPage {
         if (list == null) return;
         list.updateList();
         beepedia.drawSlotNoToolTip(matrix, trait.getBeepediaItem(), xPos, yPos + 10);
-        beepedia.getMinecraft().textureManager.bindTexture(splitterImage);
-        AbstractGui.drawTexture(matrix, xPos, yPos - 14, 0, 0, 165, 100, 165, 100);
-        FontRenderer font = Minecraft.getInstance().fontRenderer;
+        beepedia.getMinecraft().textureManager.bind(splitterImage);
+        AbstractGui.blit(matrix, xPos, yPos - 14, 0, 0, 165, 100, 165, 100);
+        FontRenderer font = Minecraft.getInstance().font;
         StringTextComponent key = new StringTextComponent(id);
-        font.draw(matrix, name.formatted(TextFormatting.WHITE), (float) xPos + 24, (float) yPos + 12, -1);
-        font.draw(matrix, key.formatted(TextFormatting.DARK_GRAY), (float) xPos + 24, (float) yPos + 22, -1);
+        font.draw(matrix, name.withStyle(TextFormatting.WHITE), (float) xPos + 24, (float) yPos + 12, -1);
+        font.draw(matrix, key.withStyle(TextFormatting.DARK_GRAY), (float) xPos + 24, (float) yPos + 22, -1);
         if (BeepediaScreen.currScreenState.isTraitsEffectsActive()) {
             drawEffectsList(matrix, xPos, yPos + 34);
         } else {
@@ -192,21 +192,21 @@ public class TraitPage extends BeepediaPage {
     }
 
     private void drawBeesList(MatrixStack matrix, int xPos, int yPos) {
-        FontRenderer font = Minecraft.getInstance().fontRenderer;
+        FontRenderer font = Minecraft.getInstance().font;
         TranslationTextComponent title = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits.bees_list");
-        int padding = font.getWidth(title) / 2;
-        font.draw(matrix, title.formatted(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, -1);
+        int padding = font.width(title) / 2;
+        font.draw(matrix, title.withStyle(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, -1);
     }
 
     private void drawEffectsList(MatrixStack matrix, int xPos, int yPos) {
-        FontRenderer font = Minecraft.getInstance().fontRenderer;
+        FontRenderer font = Minecraft.getInstance().font;
         TranslationTextComponent title = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits.effects_list");
-        int padding = font.getWidth(title) / 2;
-        font.draw(matrix, title.formatted(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, -1);
+        int padding = font.width(title) / 2;
+        font.draw(matrix, title.withStyle(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, -1);
 
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
-        double scale = beepedia.getMinecraft().getWindow().getGuiScaleFactor();
-        int scissorY = (int) (beepedia.getMinecraft().getWindow().getFramebufferHeight() - (this.yPos + 156) * scale);
+        double scale = beepedia.getMinecraft().getWindow().getGuiScale();
+        int scissorY = (int) (beepedia.getMinecraft().getWindow().getHeight() - (this.yPos + 156) * scale);
         GL11.glScissor((int) (this.xPos * scale), scissorY, (int) (SUB_PAGE_WIDTH * scale), (int) ((102) * scale));
 
         int sectionPos = yPos + 20;
@@ -303,24 +303,24 @@ public class TraitPage extends BeepediaPage {
         int width = BeepediaPage.SUB_PAGE_WIDTH;
 
         public TraitSection(ITextComponent title, ItemStack displaySlot, ITextComponent text) {
-            this.title = new StringTextComponent(title.getString()).formatted(TextFormatting.WHITE);
+            this.title = new StringTextComponent(title.getString()).withStyle(TextFormatting.WHITE);
             this.displaySlot = displaySlot;
-            this.text = new StringTextComponent(text.getString()).formatted(TextFormatting.GRAY);
-            font = Minecraft.getInstance().fontRenderer;
+            this.text = new StringTextComponent(text.getString()).withStyle(TextFormatting.GRAY);
+            font = Minecraft.getInstance().font;
         }
 
         public void draw(MatrixStack matrix, int xPos, int yPos, int scrollPos) {
             beepedia.drawSlotNoToolTip(matrix, displaySlot, xPos, yPos + scrollPos);
             font.draw(matrix, title, xPos + 24F, yPos + 6F + scrollPos, -1);
-            List<IReorderingProcessor> lines = font.wrapLines(text, width);
+            List<IReorderingProcessor> lines = font.split(text, width);
             for (int i = 0; i < lines.size(); i++) {
                 IReorderingProcessor line = lines.get(i);
-                font.draw(matrix, line, xPos, yPos + 24F + i * font.FONT_HEIGHT + scrollPos, -1);
+                font.draw(matrix, line, xPos, yPos + 24F + i * font.lineHeight + scrollPos, -1);
             }
         }
 
         public int getHeight() {
-            return font.getWordWrappedHeight(text.getString(), width) + 30;
+            return font.wordWrapHeight(text.getString(), width) + 30;
         }
     }
 

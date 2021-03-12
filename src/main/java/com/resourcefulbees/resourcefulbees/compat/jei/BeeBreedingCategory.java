@@ -57,7 +57,7 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
         this.background = guiHelper.drawableBuilder(GUI_BACK, 0, 0, 160, 60).addPadding(0, 0, 0, 0).build();
         this.icon = guiHelper.createDrawableIngredient(new ItemStack(ModBlocks.GOLD_FLOWER.get()));
         this.info = guiHelper.createDrawable(ICONS, 16, 0, 9, 9);
-        this.localizedName = I18n.format("gui.resourcefulbees.jei.category.breeding");
+        this.localizedName = I18n.get("gui.resourcefulbees.jei.category.breeding");
     }
 
     public static List<Recipe> getBreedingRecipes() {
@@ -81,8 +81,8 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
                             String p1FeedItemS = finalizeFeedItem(p1Data.getBreedData().getFeedItem());
                             String p2FeedItemS = finalizeFeedItem(p2Data.getBreedData().getFeedItem());
 
-                            ITag<Item> p1FeedTag = TagCollectionManager.getTagManager().getItems().get(new ResourceLocation(p1FeedItemS));
-                            ITag<Item> p2FeedTag = TagCollectionManager.getTagManager().getItems().get(new ResourceLocation(p2FeedItemS));
+                            ITag<Item> p1FeedTag = TagCollectionManager.getInstance().getItems().getTag(new ResourceLocation(p1FeedItemS));
+                            ITag<Item> p2FeedTag = TagCollectionManager.getInstance().getItems().getTag(new ResourceLocation(p2FeedItemS));
 
                             Item p1FeedItem = BeeInfoUtils.getItem(p1FeedItemS);
                             Item p2FeedItem = BeeInfoUtils.getItem(p2FeedItemS);
@@ -100,7 +100,7 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
                 int feedAmount = beeData.getBreedData().getFeedAmount();
                 String feedItemS = finalizeFeedItem(beeData.getBreedData().getFeedItem());
 
-                ITag<Item> feedTag = TagCollectionManager.getTagManager().getItems().get(new ResourceLocation(feedItemS));
+                ITag<Item> feedTag = TagCollectionManager.getInstance().getItems().getTag(new ResourceLocation(feedItemS));
                 Item feedItem = BeeInfoUtils.getItem(feedItemS);
 
                 if (BeeInfoUtils.isTag(beeData.getBreedData().getFeedItem())) feedItem = null;
@@ -164,7 +164,7 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
             list.add(stackList);
         }
         if (recipe.p1FeedTag != null) {
-            List<ItemStack> stackList = (List<ItemStack>) new Ingredient.TagList(recipe.p1FeedTag).getStacks();
+            List<ItemStack> stackList = (List<ItemStack>) new Ingredient.TagList(recipe.p1FeedTag).getItems();
             stackList.forEach(itemStack -> itemStack.setCount(recipe.p1FeedAmount));
             list.add(stackList);
         }
@@ -174,7 +174,7 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
             list.add(stackList);
         }
         if (recipe.p2FeedTag != null) {
-            List<ItemStack> stackList = (List<ItemStack>) new Ingredient.TagList(recipe.p2FeedTag).getStacks();
+            List<ItemStack> stackList = (List<ItemStack>) new Ingredient.TagList(recipe.p2FeedTag).getItems();
             stackList.forEach(itemStack -> itemStack.setCount(recipe.p2FeedAmount));
             list.add(stackList);
         }
@@ -215,7 +215,7 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
     @Override
     public void draw(Recipe recipe, @Nonnull MatrixStack matrix, double mouseX, double mouseY) {
         Minecraft minecraft = Minecraft.getInstance();
-        FontRenderer fontRenderer = minecraft.fontRenderer;
+        FontRenderer fontRenderer = minecraft.font;
         DecimalFormat decimalFormat = new DecimalFormat("##%");
         fontRenderer.draw(matrix, decimalFormat.format(beeRegistry.getAdjustedWeightForChild(beeRegistry.getBeeData(recipe.child), recipe.parent1, recipe.parent2)), 90, 35, 0xff808080);
         if (recipe.chance < 1) {
@@ -230,7 +230,7 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
         double infoX = 115D;
         double infoY = 40D;
         if (mouseX >= infoX && mouseX <= infoX + 9D && mouseY >= infoY && mouseY <= infoY + 9D && recipe.chance < 1) {
-            return Collections.singletonList(new StringTextComponent(I18n.format("gui." + ResourcefulBees.MOD_ID + ".jei.category.breed_chance.info")));
+            return Collections.singletonList(new StringTextComponent(I18n.get("gui." + ResourcefulBees.MOD_ID + ".jei.category.breed_chance.info")));
         }
         return IRecipeCategory.super.getTooltipStrings(recipe, mouseX, mouseY);
     }

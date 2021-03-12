@@ -52,10 +52,10 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
     List<PowerButton> powerButtons = new LinkedList<>();
 
     private void preInit() {
-        this.xSize = 230;
-        this.ySize = 200;
-        this.playerInventoryTitleX = 36;
-        this.playerInventoryTitleY = 106;
+        this.imageWidth = 230;
+        this.imageHeight = 200;
+        this.inventoryLabelX = 36;
+        this.inventoryLabelY = 106;
     }
 
     @Override
@@ -65,22 +65,22 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
     }
 
     @Override
-    protected void drawBackground(@Nonnull MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
+    protected void renderBg(@Nonnull MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
         ResourceLocation texture = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/ender_beecon/ender_beecon.png");
-        Minecraft client = this.client;
+        Minecraft client = this.minecraft;
         if (client != null) {
-            client.getTextureManager().bindTexture(texture);
-            int i = this.guiLeft;
-            int j = this.guiTop;
-            this.drawTexture(matrix, i, j, 0, 0, this.xSize, this.ySize);
+            client.getTextureManager().bind(texture);
+            int i = this.leftPos;
+            int j = this.topPos;
+            this.blit(matrix, i, j, 0, 0, this.imageWidth, this.imageHeight);
         }
         drawFluidTank(matrix, mouseX, mouseY);
         drawButtons();
     }
 
     private void drawButtons() {
-        int i = this.guiLeft;
-        int j = this.guiTop;
+        int i = this.leftPos;
+        int j = this.topPos;
         int buttonX = i + 24;
         int buttonY = j + 36;
         int buttonWidth = 22;
@@ -99,43 +99,43 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
     private void drawFluidTank(MatrixStack matrix, int mouseX, int mouseY) {
         if (!tileEntity.getFluidTank().isEmpty()) {
             //init stuff
-            int tankPosX = this.guiLeft + 207;
-            int tankPosY = this.guiTop + 30;
+            int tankPosX = this.leftPos + 207;
+            int tankPosY = this.topPos + 30;
             int tankHeight = 62;
             int tankWidth = 14;
-            RenderUtils.renderFluid(matrix, tileEntity.getFluidTank(), tankPosX, tankPosY, tankWidth, tankHeight, getZOffset());
+            RenderUtils.renderFluid(matrix, tileEntity.getFluidTank(), tankPosX, tankPosY, tankWidth, tankHeight, getBlitOffset());
         }
     }
 
     @Override
-    protected void drawForeground(@NotNull MatrixStack matrixStack, int mouseX, int mouseY) {
-        super.drawForeground(matrixStack, mouseX, mouseY);
+    protected void renderLabels(@NotNull MatrixStack matrixStack, int mouseX, int mouseY) {
+        super.renderLabels(matrixStack, mouseX, mouseY);
         int buttonX = 24 + 11;
         int buttonY = 36 + 25;
         int buttonWidth = 22;
         int padding = 16;
         int buttonStartX = buttonX;
-        drawCenteredText(matrixStack, this.textRenderer, primaryLabel, 92, 24, 14737632);
-        this.textRenderer.draw(matrixStack, drainLabel, 13, 90, 14737632);
-        this.textRenderer.draw(matrixStack, tileEntity.getDrain() + " mb/t", 44, 90, 16751628);
-        this.textRenderer.draw(matrixStack, rangeLabel, 90, 90, 14737632);
-        this.textRenderer.draw(matrixStack, tileEntity.getRange() + " blocks", 125, 90, 34815);
-        this.textRenderer.draw(matrixStack, activeLabel, 13, 78, 14737632);
+        drawCenteredString(matrixStack, this.font, primaryLabel, 92, 24, 14737632);
+        this.font.draw(matrixStack, drainLabel, 13, 90, 14737632);
+        this.font.draw(matrixStack, tileEntity.getDrain() + " mb/t", 44, 90, 16751628);
+        this.font.draw(matrixStack, rangeLabel, 90, 90, 14737632);
+        this.font.draw(matrixStack, tileEntity.getRange() + " blocks", 125, 90, 34815);
+        this.font.draw(matrixStack, activeLabel, 13, 78, 14737632);
         if (tileEntity.doEffects()) {
-            this.textRenderer.draw(matrixStack, "Yes", 63, 78, 47104);
+            this.font.draw(matrixStack, "Yes", 63, 78, 47104);
         } else {
-            this.textRenderer.draw(matrixStack, "No", 63, 78, 12320768);
+            this.font.draw(matrixStack, "No", 63, 78, 12320768);
         }
 
         for (PowerButton widget : this.powerButtons) {
             EnderBeeconTileEntity.BeeconEffect effect = tileEntity.getEffect(widget.effect);
             if (Config.BEECON_DO_MULTIPLIER.get()) {
-                drawCenteredText(matrixStack, this.textRenderer, new StringTextComponent("x" + effect.getValue()), buttonStartX, buttonY, 14737632);
+                drawCenteredString(matrixStack, this.font, new StringTextComponent("x" + effect.getValue()), buttonStartX, buttonY, 14737632);
             } else {
-                drawCenteredText(matrixStack, this.textRenderer, new StringTextComponent("+" + effect.getValue()), buttonStartX, buttonY, 14737632);
+                drawCenteredString(matrixStack, this.font, new StringTextComponent("+" + effect.getValue()), buttonStartX, buttonY, 14737632);
             }
             buttonStartX += buttonWidth + padding;
-            if (widget.isHovered()) widget.renderToolTip(matrixStack, mouseX - this.guiLeft, mouseY - this.guiTop);
+            if (widget.isHovered()) widget.renderToolTip(matrixStack, mouseX - this.leftPos, mouseY - this.topPos);
         }
         StringTextComponent fluidCount;
         DecimalFormat decimalFormat = new DecimalFormat("##0.0");
@@ -144,8 +144,8 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
         } else {
             fluidCount = new StringTextComponent(decimalFormat.format(tileEntity.getFluidTank().getFluidAmount() / 1000f) + " B");
         }
-        if (mouseX >= this.guiLeft + 207 && mouseX <= this.guiLeft + 221 && mouseY >= this.guiTop + 30 && mouseY <= this.guiTop + 92) {
-            renderTooltip(matrixStack, fluidCount, mouseX - this.guiLeft, mouseY - this.guiTop);
+        if (mouseX >= this.leftPos + 207 && mouseX <= this.leftPos + 221 && mouseY >= this.topPos + 30 && mouseY <= this.topPos + 92) {
+            renderTooltip(matrixStack, fluidCount, mouseX - this.leftPos, mouseY - this.topPos);
         }
     }
 
@@ -161,7 +161,7 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
 
         @Override
         public void renderButton(@NotNull MatrixStack matrixStack, int xPos, int yPos, float v) {
-            Minecraft.getInstance().getTextureManager().bindTexture(texture);
+            Minecraft.getInstance().getTextureManager().bind(texture);
             //noinspection deprecation
             RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
             int i = 0;
@@ -174,7 +174,7 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
                 j += this.width * 3;
             }
 
-            drawTexture(matrixStack, this.x, this.y, j, i, this.width, this.height, 22 * 4, 22);
+            blit(matrixStack, this.x, this.y, j, i, this.width, this.height, 22 * 4, 22);
             this.renderExtra(matrixStack);
         }
 
@@ -198,16 +198,16 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
         public PowerButton(int xPos, int yPos, Effect effect, ResourceLocation texture) {
             super(xPos, yPos, texture);
             this.effect = effect;
-            this.effectSprite = Minecraft.getInstance().getPotionSpriteUploader().getSprite(effect);
+            this.effectSprite = Minecraft.getInstance().getMobEffectTextures().get(effect);
             this.textComponent = this.getTooltip(effect);
         }
 
         private ITextComponent getTooltip(Effect effect) {
-            return new TranslationTextComponent(effect.getName());
+            return new TranslationTextComponent(effect.getDescriptionId());
         }
 
         public void onPress() {
-            NetPacketHandler.sendToServer(new UpdateBeeconMessage(effect.getRegistryName(), !this.isSelected(), tileEntity.getPos()));
+            NetPacketHandler.sendToServer(new UpdateBeeconMessage(effect.getRegistryName(), !this.isSelected(), tileEntity.getBlockPos()));
             this.setSelected(!this.isSelected());
 
             EnderBeeconScreen.this.tick();
@@ -220,8 +220,8 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
         }
 
         protected void renderExtra(MatrixStack matrixStack) {
-            Minecraft.getInstance().getTextureManager().bindTexture(this.effectSprite.getAtlas().getId());
-            drawSprite(matrixStack, this.x + 2, this.y + 2, this.getZOffset(), 18, 18, this.effectSprite);
+            Minecraft.getInstance().getTextureManager().bind(this.effectSprite.atlas().location());
+            blit(matrixStack, this.x + 2, this.y + 2, this.getBlitOffset(), 18, 18, this.effectSprite);
         }
     }
 

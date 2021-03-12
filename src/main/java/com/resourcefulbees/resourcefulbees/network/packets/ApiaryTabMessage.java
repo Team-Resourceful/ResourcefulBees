@@ -22,19 +22,19 @@ public class ApiaryTabMessage {
 
         public static void encode(ApiaryTabMessage message, PacketBuffer buffer){
             buffer.writeBlockPos(message.pos);
-            buffer.writeEnumValue(message.tab);
+            buffer.writeEnum(message.tab);
         }
 
         public static ApiaryTabMessage decode(PacketBuffer buffer){
-            return new ApiaryTabMessage(buffer.readBlockPos(), buffer.readEnumValue(ApiaryTabs.class));
+            return new ApiaryTabMessage(buffer.readBlockPos(), buffer.readEnum(ApiaryTabs.class));
         }
 
         public static void handle(ApiaryTabMessage message, Supplier<NetworkEvent.Context> context){
             context.get().enqueueWork(() -> {
                 ServerPlayerEntity player = context.get().getSender();
                 if (player != null) {
-                    if (player.world.isBlockPresent(message.pos)) {
-                        TileEntity tileEntity = player.world.getTileEntity(message.pos);
+                    if (player.level.isLoaded(message.pos)) {
+                        TileEntity tileEntity = player.level.getBlockEntity(message.pos);
                         if (tileEntity instanceof IApiaryMultiblock) {
                             ((IApiaryMultiblock) tileEntity).switchTab(player, message.tab);
                         }

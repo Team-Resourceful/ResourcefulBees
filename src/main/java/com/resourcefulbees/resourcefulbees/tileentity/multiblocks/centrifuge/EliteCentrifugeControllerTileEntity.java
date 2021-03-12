@@ -68,7 +68,7 @@ public class EliteCentrifugeControllerTileEntity extends CentrifugeControllerTil
         }
 
         @Override
-        public int size() { return 6; }
+        public int getCount() { return 6; }
     };
 
     public EliteCentrifugeControllerTileEntity(TileEntityType<?> tileEntityType) { super(tileEntityType); }
@@ -86,16 +86,16 @@ public class EliteCentrifugeControllerTileEntity extends CentrifugeControllerTil
     protected CustomEnergyStorage createEnergy() {
         return new CustomEnergyStorage(Config.MAX_CENTRIFUGE_RF.get() * 10, 1000, 0) {
             @Override
-            protected void onEnergyChanged() { markDirty(); }
+            protected void onEnergyChanged() { setChanged(); }
         };
     }
 
     @Override
     protected Predicate<BlockPos> validBlocks() {
         return blockPos -> {
-            assert world != null : "Validating Centrifuge - How is world null??";
-            Block block = world.getBlockState(blockPos).getBlock();
-            TileEntity tileEntity = world.getTileEntity(blockPos);
+            assert level != null : "Validating Centrifuge - How is world null??";
+            Block block = level.getBlockState(blockPos).getBlock();
+            TileEntity tileEntity = level.getBlockEntity(blockPos);
             if (block instanceof EliteCentrifugeCasingBlock && tileEntity instanceof EliteCentrifugeCasingTileEntity) {
                 EliteCentrifugeCasingTileEntity casing = (EliteCentrifugeCasingTileEntity) tileEntity;
                 return !casing.isLinked() || (casing.getController() != null && casing.getController().equals(this));
@@ -107,7 +107,7 @@ public class EliteCentrifugeControllerTileEntity extends CentrifugeControllerTil
     @Nullable
     @Override
     public Container createMenu(int id, @Nonnull PlayerInventory playerInventory, @Nonnull PlayerEntity playerEntity) {
-        assert world != null;
-        return new EliteCentrifugeMultiblockContainer(ModContainers.ELITE_CENTRIFUGE_MULTIBLOCK_CONTAINER.get(), id, world, pos, playerInventory, times);
+        assert level != null;
+        return new EliteCentrifugeMultiblockContainer(ModContainers.ELITE_CENTRIFUGE_MULTIBLOCK_CONTAINER.get(), id, level, worldPosition, playerInventory, times);
     }
 }

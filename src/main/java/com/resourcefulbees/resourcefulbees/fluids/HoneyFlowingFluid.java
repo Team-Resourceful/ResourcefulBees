@@ -7,6 +7,8 @@ import net.minecraft.state.StateContainer;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 import org.jetbrains.annotations.NotNull;
 
+import net.minecraftforge.fluids.ForgeFlowingFluid.Properties;
+
 public abstract class HoneyFlowingFluid extends ForgeFlowingFluid {
 
     private final HoneyBottleData honeyData;
@@ -24,17 +26,17 @@ public abstract class HoneyFlowingFluid extends ForgeFlowingFluid {
 
         public Flowing(Properties properties, HoneyBottleData honeyData) {
             super(properties, honeyData);
-            setDefaultState(getStateContainer().getBaseState().with(LEVEL_1_8, 7));
+            registerDefaultState(getStateDefinition().any().setValue(LEVEL, 7));
         }
 
         @Override
-        protected void fillStateContainer(@NotNull StateContainer.Builder<Fluid, FluidState> builder) {
-            super.fillStateContainer(builder);
-            builder.add(LEVEL_1_8);
+        protected void createFluidStateDefinition(@NotNull StateContainer.Builder<Fluid, FluidState> builder) {
+            super.createFluidStateDefinition(builder);
+            builder.add(LEVEL);
         }
 
-        public int getLevel(FluidState state) {
-            return state.get(LEVEL_1_8);
+        public int getAmount(FluidState state) {
+            return state.getValue(LEVEL);
         }
 
         public boolean isSource(@NotNull FluidState state) {
@@ -48,7 +50,7 @@ public abstract class HoneyFlowingFluid extends ForgeFlowingFluid {
             super(properties, honeyData);
         }
 
-        public int getLevel(@NotNull FluidState state) {
+        public int getAmount(@NotNull FluidState state) {
             return 8;
         }
 

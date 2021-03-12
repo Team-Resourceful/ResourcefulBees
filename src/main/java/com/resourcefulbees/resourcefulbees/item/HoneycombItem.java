@@ -31,17 +31,17 @@ public class HoneycombItem extends Item {
     public String getBeeType() { return beeType; }
 
     @Override
-    public boolean isFood() {
+    public boolean isEdible() {
         return true;
     }
 
     @Nullable
     @Override
-    public Food getFood() {
+    public Food getFoodProperties() {
         return new Food.Builder()
-                .hunger(Config.HONEYCOMB_HUNGER.get())
-                .saturation(Config.HONEYCOMB_SATURATION.get().floatValue())
-                .fastToEat()
+                .nutrition(Config.HONEYCOMB_HUNGER.get())
+                .saturationMod(Config.HONEYCOMB_SATURATION.get().floatValue())
+                .fast()
                 .build();
     }
 }

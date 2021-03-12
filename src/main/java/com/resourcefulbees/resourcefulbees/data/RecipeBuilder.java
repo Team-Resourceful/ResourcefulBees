@@ -99,13 +99,13 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
     }
 
     private IRecipe<?> makeHoneycombRecipe(String beeType, CustomBeeData info) {
-        Ingredient honeycombItem = Ingredient.fromItems(info.getCombRegistryObject().get());
+        Ingredient honeycombItem = Ingredient.of(info.getCombRegistryObject().get());
         return new ShapedRecipe(
                 new ResourceLocation(ResourcefulBees.MOD_ID, beeType + "_honeycomb_block"),
                 "",
                 3,
                 3,
-                NonNullList.from(Ingredient.EMPTY,
+                NonNullList.of(Ingredient.EMPTY,
                         honeycombItem, honeycombItem, honeycombItem,
                         honeycombItem, honeycombItem, honeycombItem,
                         honeycombItem, honeycombItem, honeycombItem
@@ -115,13 +115,13 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
     }
 
     private IRecipe<?> makeHoneyBlockRecipe(HoneyBottleData info) {
-        Ingredient honeyBottleItem = Ingredient.fromItems(info.getHoneyBottleRegistryObject().get());
+        Ingredient honeyBottleItem = Ingredient.of(info.getHoneyBottleRegistryObject().get());
         return new ShapedRecipe(
                 new ResourceLocation(ResourcefulBees.MOD_ID, info.getName() + "_honey_block"),
                 "",
                 2,
                 2,
-                NonNullList.from(Ingredient.EMPTY,
+                NonNullList.of(Ingredient.EMPTY,
                         honeyBottleItem, honeyBottleItem,
                         honeyBottleItem, honeyBottleItem
                 ),
@@ -130,13 +130,13 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
     }
 
     private IRecipe<?> makeBottleToBucketRecipe(HoneyBottleData info) {
-        Ingredient honeyBottleItem = Ingredient.fromItems(info.getHoneyBottleRegistryObject().get());
-        Ingredient bucketItem = Ingredient.fromItems(Items.BUCKET);
+        Ingredient honeyBottleItem = Ingredient.of(info.getHoneyBottleRegistryObject().get());
+        Ingredient bucketItem = Ingredient.of(Items.BUCKET);
         return new ShapelessRecipe(
                 new ResourceLocation(ResourcefulBees.MOD_ID, info.getName() + "_bottle_to_bucket"),
                 "",
                 new ItemStack(info.getHoneyBucketItemRegistryObject().get()),
-                NonNullList.from(Ingredient.EMPTY,
+                NonNullList.of(Ingredient.EMPTY,
                         bucketItem, honeyBottleItem,
                         honeyBottleItem, honeyBottleItem,
                         honeyBottleItem
@@ -145,13 +145,13 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
     }
 
     private IRecipe<?> makeBucketToBottleRecipe(HoneyBottleData info) {
-        Ingredient honeyBucketItem = Ingredient.fromItems(info.getHoneyBucketItemRegistryObject().get());
-        Ingredient bottleItem = Ingredient.fromItems(Items.GLASS_BOTTLE);
+        Ingredient honeyBucketItem = Ingredient.of(info.getHoneyBucketItemRegistryObject().get());
+        Ingredient bottleItem = Ingredient.of(Items.GLASS_BOTTLE);
         return new ShapelessRecipe(
                 new ResourceLocation(ResourcefulBees.MOD_ID, info.getName() + "_bucket_to_bottle"),
                 "",
                 new ItemStack(info.getHoneyBottleRegistryObject().get(), 4),
-                NonNullList.from(Ingredient.EMPTY,
+                NonNullList.of(Ingredient.EMPTY,
                         bottleItem, bottleItem,
                         bottleItem, bottleItem,
                         honeyBucketItem
@@ -160,38 +160,38 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
     }
 
     private IRecipe<?> makeBlockToBucketRecipe(HoneyBottleData info) {
-        Ingredient honeyBlockItem = Ingredient.fromItems(info.getHoneyBlockItemRegistryObject().get());
-        Ingredient bucketItem = Ingredient.fromItems(Items.BUCKET);
+        Ingredient honeyBlockItem = Ingredient.of(info.getHoneyBlockItemRegistryObject().get());
+        Ingredient bucketItem = Ingredient.of(Items.BUCKET);
         return new ShapelessRecipe(
                 new ResourceLocation(ResourcefulBees.MOD_ID, info.getName() + "_block_to_bucket"),
                 "",
                 new ItemStack(info.getHoneyBucketItemRegistryObject().get()),
-                NonNullList.from(Ingredient.EMPTY,
+                NonNullList.of(Ingredient.EMPTY,
                         honeyBlockItem, bucketItem
                 )
         );
     }
 
     private IRecipe<?> makeBucketToBlockRecipe(HoneyBottleData info) {
-        Ingredient honeyBucketItem = Ingredient.fromItems(info.getHoneyBucketItemRegistryObject().get());
+        Ingredient honeyBucketItem = Ingredient.of(info.getHoneyBucketItemRegistryObject().get());
         return new ShapelessRecipe(
                 new ResourceLocation(ResourcefulBees.MOD_ID, info.getName() + "_bucket_to_block"),
                 "",
                 new ItemStack(info.getHoneyBlockItemRegistryObject().get()),
-                NonNullList.from(Ingredient.EMPTY,
+                NonNullList.of(Ingredient.EMPTY,
                         honeyBucketItem
                 )
         );
     }
 
     private IRecipe<?> makeHoneyBottleRecipe(HoneyBottleData info) {
-        Ingredient honeyBlockItem = Ingredient.fromItems(info.getHoneyBlockItemRegistryObject().get());
-        Ingredient bottleItem = Ingredient.fromItems(Items.GLASS_BOTTLE);
+        Ingredient honeyBlockItem = Ingredient.of(info.getHoneyBlockItemRegistryObject().get());
+        Ingredient bottleItem = Ingredient.of(Items.GLASS_BOTTLE);
         return new ShapelessRecipe(
                 new ResourceLocation(ResourcefulBees.MOD_ID, info.getName() + "_honey_bottle"),
                 "",
                 new ItemStack(info.getHoneyBottleRegistryObject().get(), 4),
-                NonNullList.from(Ingredient.EMPTY,
+                NonNullList.of(Ingredient.EMPTY,
                         honeyBlockItem, bottleItem,
                         bottleItem, bottleItem,
                         bottleItem
@@ -222,14 +222,14 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
 
         return new CentrifugeRecipe(
                 recipeLoc,
-                isBlockRecipe ? Ingredient.fromStacks(new ItemStack(info.getCombBlockRegistryObject().get(), data.getMainInputCount())) :
-                        Ingredient.fromStacks(new ItemStack(info.getCombRegistryObject().get(), data.getMainInputCount())),
-                NonNullList.from(
+                isBlockRecipe ? Ingredient.of(new ItemStack(info.getCombBlockRegistryObject().get(), data.getMainInputCount())) :
+                        Ingredient.of(new ItemStack(info.getCombRegistryObject().get(), data.getMainInputCount())),
+                NonNullList.of(
                         Pair.of(ItemStack.EMPTY, 0f),
                         Pair.of(mainOutput, data.getMainOutputWeight()),
                         Pair.of(secondaryOutput, data.getSecondaryOutputWeight())
                 ),
-                NonNullList.from(
+                NonNullList.of(
                         Pair.of(FluidStack.EMPTY, 0f),
                         Pair.of(fluidOutput, data.getFluidOutputWeight()),
                         Pair.of(bottleFluid, data.getBottleOutputWeight())
@@ -260,15 +260,15 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
 
         return new CentrifugeRecipe(
                 recipeLoc,
-                isBlockRecipe ? Ingredient.fromStacks(new ItemStack(info.getCombBlockRegistryObject().get(), data.getMainInputCount())) :
-                        Ingredient.fromStacks(new ItemStack(info.getCombRegistryObject().get(), data.getMainInputCount())),
-                NonNullList.from(
+                isBlockRecipe ? Ingredient.of(new ItemStack(info.getCombBlockRegistryObject().get(), data.getMainInputCount())) :
+                        Ingredient.of(new ItemStack(info.getCombRegistryObject().get(), data.getMainInputCount())),
+                NonNullList.of(
                         Pair.of(ItemStack.EMPTY, 0f),
                         Pair.of(mainOutput, data.getMainOutputWeight()),
                         Pair.of(secondaryOutput, data.getSecondaryOutputWeight()),
                         Pair.of(bottleOutput, data.getBottleOutputWeight())
                 ),
-                NonNullList.from(
+                NonNullList.of(
                         Pair.of(FluidStack.EMPTY, 0f),
                         Pair.of(fluidOutput, data.getFluidOutputWeight())),
                 data.getRecipeTime(),
@@ -283,7 +283,7 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
                 new ResourceLocation(ResourcefulBees.MOD_ID, beeType + "_block_to_honeycomb"),
                 "",
                 new ItemStack(info.getCombRegistryObject().get(), 9),
-                NonNullList.from(Ingredient.EMPTY, Ingredient.fromStacks(new ItemStack(info.getCombBlockItemRegistryObject().get())))
+                NonNullList.of(Ingredient.EMPTY, Ingredient.of(new ItemStack(info.getCombBlockItemRegistryObject().get())))
         );
     }
 

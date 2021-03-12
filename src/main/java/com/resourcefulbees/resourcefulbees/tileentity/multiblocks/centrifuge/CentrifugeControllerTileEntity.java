@@ -72,7 +72,7 @@ public class CentrifugeControllerTileEntity extends CentrifugeTileEntity {
         }
 
         @Override
-        public int size() { return 3; }
+        public int getCount() { return 3; }
     };
 
 
@@ -98,17 +98,17 @@ public class CentrifugeControllerTileEntity extends CentrifugeTileEntity {
 
     @Override
     public void tick() {
-        if (world != null && !world.isRemote()) {
+        if (level != null && !level.isClientSide()) {
             if (isValidStructure() && (!requiresRedstone || isPoweredByRedstone)) {
                 checkHoneycombSlots();
             }
             validateTime++;
             if (validateTime >= 20) {
-                validateStructure(this.world);
+                validateStructure(this.level);
             }
             if (dirty) {
                 this.dirty = false;
-                this.markDirty();
+                this.setChanged();
             }
         }
     }
@@ -132,8 +132,8 @@ public class CentrifugeControllerTileEntity extends CentrifugeTileEntity {
     //region NBT
     @Nonnull
     @Override
-    public CompoundNBT write(@Nonnull CompoundNBT tag) {
-        super.write(tag);
+    public CompoundNBT save(@Nonnull CompoundNBT tag) {
+        super.save(tag);
         return saveToNBT(tag);
     }
 
@@ -153,8 +153,8 @@ public class CentrifugeControllerTileEntity extends CentrifugeTileEntity {
     @Nullable
     @Override
     public Container createMenu(int id, @Nonnull PlayerInventory playerInventory, @Nonnull PlayerEntity playerEntity) {
-        assert world != null;
-        return new CentrifugeMultiblockContainer(ModContainers.CENTRIFUGE_MULTIBLOCK_CONTAINER.get(), id, world, pos, playerInventory, times);
+        assert level != null;
+        return new CentrifugeMultiblockContainer(ModContainers.CENTRIFUGE_MULTIBLOCK_CONTAINER.get(), id, level, worldPosition, playerInventory, times);
     }
 
     @Nonnull
@@ -165,7 +165,7 @@ public class CentrifugeControllerTileEntity extends CentrifugeTileEntity {
     protected CustomEnergyStorage createEnergy() {
         return new CustomEnergyStorage(Config.MAX_CENTRIFUGE_RF.get() * 5, 500, 0) {
             @Override
-            protected void onEnergyChanged() { markDirty(); }
+            protected void onEnergyChanged() { setChanged(); }
         };
     }
 
@@ -173,14 +173,14 @@ public class CentrifugeControllerTileEntity extends CentrifugeTileEntity {
     //region STRUCTURE VALIDATION
 
     protected MutableBoundingBox getBounds() {
-        return buildStructureBounds(this.getPos(), 3, 4, 3, -1, -1, -2, this.getBlockState().get(CentrifugeControllerBlock.FACING));
+        return buildStructureBounds(this.getBlockPos(), 3, 4, 3, -1, -1, -2, this.getBlockState().getValue(CentrifugeControllerBlock.FACING));
     }
 
     protected Predicate<BlockPos> validBlocks() {
         return blockPos -> {
-            assert world != null : "Validating Centrifuge - How is world null??";
-            Block block = world.getBlockState(blockPos).getBlock();
-            TileEntity tileEntity = world.getTileEntity(blockPos);
+            assert level != null : "Validating Centrifuge - How is world null??";
+            Block block = level.getBlockState(blockPos).getBlock();
+            TileEntity tileEntity = level.getBlockEntity(blockPos);
             if (block instanceof CentrifugeCasingBlock && tileEntity instanceof CentrifugeCasingTileEntity) {
                 CentrifugeCasingTileEntity casing = (CentrifugeCasingTileEntity) tileEntity;
                 return !casing.isLinked() || (casing.getController() != null && casing.getController().equals(this));
@@ -191,9 +191,9 @@ public class CentrifugeControllerTileEntity extends CentrifugeTileEntity {
 
     protected void validateStructure(World world) {
         validateTime = 0;
-        buildStructureList(getBounds(), structureBlocks, blockPos -> true, this.getPos());
+        buildStructureList(getBounds(), structureBlocks, blockPos -> true, this.getBlockPos());
         validStructure = MultiBlockHelper.validateStructure(structureBlocks, validBlocks(), 35);
-        world.setBlockState(pos, getBlockState().with(CentrifugeControllerBlock.PROPERTY_VALID, validStructure));
+        world.setBlockAndUpdate(worldPosition, getBlockState().setValue(CentrifugeControllerBlock.PROPERTY_VALID, validStructure));
 
         if (validStructure) {
             linkCasings(world);
@@ -201,36 +201,36 @@ public class CentrifugeControllerTileEntity extends CentrifugeTileEntity {
     }
 
     protected void linkCasings(World world) {
-        if (!world.isRemote) {
+        if (!world.isClientSide) {
             structureBlocks.stream()
-                    .map(world::getTileEntity)
+                    .map(world::getBlockEntity)
                     .filter(CentrifugeCasingTileEntity.class::isInstance)
-                    .forEach(tileEntity -> ((CentrifugeCasingTileEntity) tileEntity).setControllerPos(this.pos));
+                    .forEach(tileEntity -> ((CentrifugeCasingTileEntity) tileEntity).setControllerPos(this.worldPosition));
         }
     }
 
     protected void unlinkCasings(World world) {
-        if (!world.isRemote) {
+        if (!world.isClientSide) {
             structureBlocks.stream()
-                    .map(world::getTileEntity)
+                    .map(world::getBlockEntity)
                     .filter(CentrifugeCasingTileEntity.class::isInstance)
                     .forEach(tileEntity -> ((CentrifugeCasingTileEntity) tileEntity).setControllerPos(null));
         }
     }
 
     public void invalidateStructure() {
-        assert world != null;
+        assert level != null;
         this.validStructure = false;
-        unlinkCasings(world);
+        unlinkCasings(level);
     }
 
     public boolean isValidStructure() { return this.validStructure; }
 
     @Override
-    public void remove() {
-        assert world != null;
-        unlinkCasings(world);
-        super.remove();
+    public void setRemoved() {
+        assert level != null;
+        unlinkCasings(level);
+        super.setRemoved();
     }
 
     //endregion

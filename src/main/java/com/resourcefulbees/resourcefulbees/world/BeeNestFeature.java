@@ -51,37 +51,37 @@ public class BeeNestFeature extends Feature<NoFeatureConfig> {
     public BeeNestFeature(Codec<NoFeatureConfig> configFactoryIn) { super(configFactoryIn); }
 
     private void generateHivePlatform(ISeedReader worldIn, BlockPos hivePos, BlockState platformBlock, Direction direction, Block blockToReplace){
-        if (platformBlock == null) platformBlock = Blocks.OAK_WOOD.getDefaultState();
+        if (platformBlock == null) platformBlock = Blocks.OAK_WOOD.defaultBlockState();
 
-        BlockPos posBlockPos = hivePos.add(direction.getDirectionVec());
-        BlockPos negBlockPos = hivePos.add(direction.getOpposite().getDirectionVec());
+        BlockPos posBlockPos = hivePos.offset(direction.getNormal());
+        BlockPos negBlockPos = hivePos.offset(direction.getOpposite().getNormal());
 
         if (worldIn.getBlockState(posBlockPos).getBlock().equals(blockToReplace))
-            worldIn.setBlockState(posBlockPos, platformBlock, 1);
+            worldIn.setBlock(posBlockPos, platformBlock, 1);
 
         if (worldIn.getBlockState(negBlockPos).getBlock().equals(blockToReplace))
-            worldIn.setBlockState(negBlockPos, platformBlock, 1);
+            worldIn.setBlock(negBlockPos, platformBlock, 1);
 
-        worldIn.setBlockState(hivePos, platformBlock, 1);
+        worldIn.setBlock(hivePos, platformBlock, 1);
     }
 
     private BlockPos getYPos(ISeedReader worldIn, Random rand, Biome.Category category, BlockPos initPos){
         BlockPos newPos;
-        if (category == Biome.Category.NETHER || worldIn.getDimension().hasCeiling()) {
-            int ceilHeight = worldIn.getDimensionHeight();
+        if (category == Biome.Category.NETHER || worldIn.dimensionType().hasCeiling()) {
+            int ceilHeight = worldIn.getHeight();
             newPos = new BlockPos(initPos.getX(), MathUtils.nextIntInclusive(32, ceilHeight), initPos.getZ())
                     .south(rand.nextInt(15))
                     .east(rand.nextInt(15));
-            while (worldIn.isAirBlock(newPos.down())) {
-                newPos = newPos.down();
+            while (worldIn.isEmptyBlock(newPos.below())) {
+                newPos = newPos.below();
             }
-            while (!worldIn.isAirBlock(newPos)) {
-                newPos = newPos.up();
+            while (!worldIn.isEmptyBlock(newPos)) {
+                newPos = newPos.above();
             }
             if (newPos.getY() >= ceilHeight) {
                 return new BlockPos(0,0,0);
             }
-            if (worldIn.getBlockState(newPos.down()).getBlock().equals(net.minecraft.block.Blocks.LAVA) &&
+            if (worldIn.getBlockState(newPos.below()).getBlock().equals(net.minecraft.block.Blocks.LAVA) &&
                     rand.nextInt(10) != 0
             ){
                 return new BlockPos(0,0,0);
@@ -115,35 +115,35 @@ public class BeeNestFeature extends Feature<NoFeatureConfig> {
         if (biomeKey != null && Config.SHOW_DEBUG_INFO.get()) {
             ResourcefulBees.LOGGER.warn("*****************************************************");
             ResourcefulBees.LOGGER.warn("Could not load bees into nest during chunk generation");
-            ResourcefulBees.LOGGER.warn("Biome: {}", biomeKey.getValue());
+            ResourcefulBees.LOGGER.warn("Biome: {}", biomeKey.location());
             ResourcefulBees.LOGGER.warn("*****************************************************");
         }
     }
 
     private void addBeeToNest(@Nullable EntityType<?> entityType, ISeedReader worldIn, BlockPos nestPos, CustomBeeData data, Random rand, TieredBeehiveTileEntity nest){
         if (entityType != null) {
-            Entity bee = entityType.create(worldIn.getWorld());
+            Entity bee = entityType.create(worldIn.getLevel());
             if (bee != null) {
-                bee.setPosition(nestPos.getX(), nestPos.getY(), nestPos.getZ());
+                bee.setPos(nestPos.getX(), nestPos.getY(), nestPos.getZ());
                 CompoundNBT compoundNBT = new CompoundNBT();
-                bee.writeUnlessPassenger(compoundNBT);
+                bee.save(compoundNBT);
                 int timeInHive = rand.nextInt(data.getMaxTimeInHive());
                 BeehiveTileEntity.Bee beehiveTileEntityBee = new BeehiveTileEntity.Bee(compoundNBT, 0, timeInHive);
-                nest.bees.add(beehiveTileEntityBee);
+                nest.stored.add(beehiveTileEntityBee);
             }
         }
     }
 
     private void setNestBees(BlockPos nestPos, @Nullable RegistryKey<Biome> biomeKey, ISeedReader worldIn, Random rand){
-        TileEntity tileEntity = worldIn.getTileEntity(nestPos);
+        TileEntity tileEntity = worldIn.getBlockEntity(nestPos);
 
         if (tileEntity instanceof TieredBeehiveTileEntity) {
             TieredBeehiveTileEntity nestTE = (TieredBeehiveTileEntity) tileEntity;
             int maxBees = Math.round(Config.HIVE_MAX_BEES.get() * 0.5f);
 
             for (int i = rand.nextInt(maxBees); i < maxBees ; i++) {
-                if (biomeKey != null && BeeRegistry.getSpawnableBiomes().containsKey(biomeKey.getValue())) {
-                    CustomBeeData beeData = BeeRegistry.getSpawnableBiomes().get(biomeKey.getValue()).next();
+                if (biomeKey != null && BeeRegistry.getSpawnableBiomes().containsKey(biomeKey.location())) {
+                    CustomBeeData beeData = BeeRegistry.getSpawnableBiomes().get(biomeKey.location()).next();
                     EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(beeData.getEntityTypeRegistryID());
                     addBeeToNest(entityType, worldIn, nestPos, beeData, rand, nestTE);
                 } else logMissingBiome(biomeKey);
@@ -153,14 +153,14 @@ public class BeeNestFeature extends Feature<NoFeatureConfig> {
 
 
     @Override
-    public boolean generate(@NotNull ISeedReader worldIn, @NotNull ChunkGenerator generator, @NotNull Random rand, @NotNull BlockPos pos, @NotNull NoFeatureConfig config) {
+    public boolean place(@NotNull ISeedReader worldIn, @NotNull ChunkGenerator generator, @NotNull Random rand, @NotNull BlockPos pos, @NotNull NoFeatureConfig config) {
         if(!Config.GENERATE_BEE_NESTS.get()) {
             return false;
         }
 
         Biome biome = worldIn.getBiome(pos);
-        Optional<RegistryKey<Biome>> biomeKey = worldIn.method_31081(pos);
-        Biome.Category category = biome.getCategory();
+        Optional<RegistryKey<Biome>> biomeKey = worldIn.getBiomeName(pos);
+        Biome.Category category = biome.getBiomeCategory();
 
         boolean headsOrTails = rand.nextBoolean();
         BlockPos newPos = getYPos(worldIn, rand, category, pos);
@@ -171,9 +171,9 @@ public class BeeNestFeature extends Feature<NoFeatureConfig> {
 
         Direction direction;
 
-        BlockPos finalNewPos = newPos.mutableCopy();
+        BlockPos finalNewPos = newPos.mutable();
         List<Direction> possibleDirections = ALLOWED_DIRECTIONS.stream()
-                .filter(dir -> worldIn.isAirBlock(finalNewPos.offset(dir, 1)))
+                .filter(dir -> worldIn.isEmptyBlock(finalNewPos.relative(dir, 1)))
                 .collect(Collectors.toList());
 
         if(!possibleDirections.isEmpty()) {
@@ -191,7 +191,7 @@ public class BeeNestFeature extends Feature<NoFeatureConfig> {
                 break;
             case NETHER:
                 nest = getNetherNest(headsOrTails, biomeKey.orElse(null));
-                platformBlockState = Blocks.OBSIDIAN.getDefaultState();
+                platformBlockState = Blocks.OBSIDIAN.defaultBlockState();
                 break;
             case SAVANNA:
             case DESERT:
@@ -205,11 +205,11 @@ public class BeeNestFeature extends Feature<NoFeatureConfig> {
             case OCEAN:
                 nest = ModBlocks.PRISMARINE_BEE_NEST.get();
                     platformBlockState = isFrozenBiome(biomeKey.orElse(null)) ?
-                            Blocks.PACKED_ICE.getDefaultState() : Blocks.STRIPPED_OAK_WOOD.getDefaultState();
+                            Blocks.PACKED_ICE.defaultBlockState() : Blocks.STRIPPED_OAK_WOOD.defaultBlockState();
                 break;
             case ICY:
             case TAIGA:
-                platformBlockState = Blocks.PACKED_ICE.getDefaultState();
+                platformBlockState = Blocks.PACKED_ICE.defaultBlockState();
                 nest = ModBlocks.SPRUCE_BEE_NEST.get();
                 break;
             case MUSHROOM:
@@ -217,22 +217,22 @@ public class BeeNestFeature extends Feature<NoFeatureConfig> {
                 break;
             case SWAMP:
                 nest = ModBlocks.OAK_BEE_NEST.get();
-                platformBlockState = Blocks.STRIPPED_SPRUCE_WOOD.getDefaultState();
+                platformBlockState = Blocks.STRIPPED_SPRUCE_WOOD.defaultBlockState();
                 break;
             case FOREST:
                 nest = selectNest(headsOrTails, ModBlocks.BIRCH_BEE_NEST.get(), ModBlocks.DARK_OAK_BEE_NEST.get());
                 break;
             case RIVER:
-                platformBlockState = isFrozenBiome(biomeKey.orElse(null)) ? Blocks.PACKED_ICE.getDefaultState() : Blocks.OAK_WOOD.getDefaultState();
+                platformBlockState = isFrozenBiome(biomeKey.orElse(null)) ? Blocks.PACKED_ICE.defaultBlockState() : Blocks.OAK_WOOD.defaultBlockState();
                 nest = overworldBlocks.next();
                 break;
             default:
-                platformBlockState = Blocks.OAK_WOOD.getDefaultState();
+                platformBlockState = Blocks.OAK_WOOD.defaultBlockState();
                 nest = overworldBlocks.next();
         }
-        BlockState newState = nest.getDefaultState().with(BeehiveBlock.FACING, direction);
+        BlockState newState = nest.defaultBlockState().setValue(BeehiveBlock.FACING, direction);
 
-        BlockPos belowHive = newPos.add(0,-1,0);
+        BlockPos belowHive = newPos.offset(0,-1,0);
         if (worldIn.getBlockState(belowHive).getBlock().equals(Blocks.WATER)) {
             generateHivePlatform(worldIn, belowHive, platformBlockState, direction, Blocks.WATER);
         }
@@ -240,7 +240,7 @@ public class BeeNestFeature extends Feature<NoFeatureConfig> {
             generateHivePlatform(worldIn, belowHive, platformBlockState, direction, Blocks.LAVA);
         }
 
-        worldIn.setBlockState(newPos, newState, 1);
+        worldIn.setBlock(newPos, newState, 1);
 
         setNestBees(newPos, biomeKey.orElse(null), worldIn, rand);
         return true;

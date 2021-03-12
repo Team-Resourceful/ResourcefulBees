@@ -30,7 +30,7 @@ public class RenderUtils {
     }
 
     public static TextureAtlasSprite getSprite(ResourceLocation spriteLocation) {
-        return Minecraft.getInstance().getModelManager().method_24153(PlayerContainer.BLOCK_ATLAS_TEXTURE).getSprite(spriteLocation);
+        return Minecraft.getInstance().getModelManager().getAtlas(PlayerContainer.BLOCK_ATLAS).getSprite(spriteLocation);
     }
 
     public static TextureAtlasSprite getStillFluidTexture(FluidStack fluidStack) {
@@ -49,23 +49,23 @@ public class RenderUtils {
         if (desiredWidth == 0 || desiredHeight == 0 || textureWidth == 0 || textureHeight == 0) {
             return;
         }
-        Minecraft.getInstance().textureManager.bindTexture(PlayerContainer.BLOCK_ATLAS_TEXTURE);
+        Minecraft.getInstance().textureManager.bind(PlayerContainer.BLOCK_ATLAS);
         int xTileCount = desiredWidth / textureWidth;
         int xRemainder = desiredWidth - (xTileCount * textureWidth);
         int yTileCount = desiredHeight / textureHeight;
         int yRemainder = desiredHeight - (yTileCount * textureHeight);
         int yStart = yPosition + yOffset;
-        float uMin = sprite.getMinU();
-        float uMax = sprite.getMaxU();
-        float vMin = sprite.getMinV();
-        float vMax = sprite.getMaxV();
+        float uMin = sprite.getU0();
+        float uMax = sprite.getU1();
+        float vMin = sprite.getV0();
+        float vMax = sprite.getV1();
         float uDif = uMax - uMin;
         float vDif = vMax - vMin;
         RenderSystem.enableBlend();
         RenderSystem.enableAlphaTest();
-        BufferBuilder vertexBuffer = Tessellator.getInstance().getBuffer();
+        BufferBuilder vertexBuffer = Tessellator.getInstance().getBuilder();
         vertexBuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-        Matrix4f matrix4f = matrix.peek().getModel();
+        Matrix4f matrix4f = matrix.last().pose();
         for (int xTile = 0; xTile <= xTileCount; xTile++) {
             int width = (xTile == xTileCount) ? xRemainder : textureWidth;
             if (width == 0) {
@@ -83,21 +83,21 @@ public class RenderUtils {
                 float y = yStart - ((yTile + 1F) * textureHeight);
                 int maskTop = textureHeight - height;
                 float vMaxLocal = vMax - (vDif * maskTop / textureHeight);
-                vertexBuffer.vertex(matrix4f, x, y + textureHeight, zLevel).texture(uMin, vMaxLocal).endVertex();
-                vertexBuffer.vertex(matrix4f, shiftedX, y + textureHeight, zLevel).texture(uMaxLocal, vMaxLocal).endVertex();
-                vertexBuffer.vertex(matrix4f, shiftedX, y + maskTop, zLevel).texture(uMaxLocal, vMin).endVertex();
-                vertexBuffer.vertex(matrix4f, x, y + maskTop, zLevel).texture(uMin, vMin).endVertex();
+                vertexBuffer.vertex(matrix4f, x, y + textureHeight, zLevel).uv(uMin, vMaxLocal).endVertex();
+                vertexBuffer.vertex(matrix4f, shiftedX, y + textureHeight, zLevel).uv(uMaxLocal, vMaxLocal).endVertex();
+                vertexBuffer.vertex(matrix4f, shiftedX, y + maskTop, zLevel).uv(uMaxLocal, vMin).endVertex();
+                vertexBuffer.vertex(matrix4f, x, y + maskTop, zLevel).uv(uMin, vMin).endVertex();
             }
         }
-        vertexBuffer.finishDrawing();
-        WorldVertexBufferUploader.draw(vertexBuffer);
+        vertexBuffer.end();
+        WorldVertexBufferUploader.end(vertexBuffer);
         RenderSystem.disableAlphaTest();
         RenderSystem.disableBlend();
     }
 
     public static void renderFluid(MatrixStack matrix, FluidTank fluidTank, int tankNumber, int xPos, int yPos, int width, int height, int zOffset) {
         FluidStack stack = fluidTank.getFluidInTank(tankNumber);
-        TextureAtlasSprite sprite = Minecraft.getInstance().getSpriteAtlas(PlayerContainer.BLOCK_ATLAS_TEXTURE).apply(stack.getFluid().getAttributes().getStillTexture());
+        TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(PlayerContainer.BLOCK_ATLAS).apply(stack.getFluid().getAttributes().getStillTexture());
         int color = stack.getFluid().getAttributes().getColor();
         float red = RenderCuboid.getRed(color);
         float green = RenderCuboid.getGreen(color);
@@ -116,7 +116,7 @@ public class RenderUtils {
     }
 
     public static void renderFluid(MatrixStack matrix, FluidStack fluidStack, int xPos, int yPos, int width, int height, int zOffset) {
-        TextureAtlasSprite sprite = Minecraft.getInstance().getSpriteAtlas(PlayerContainer.BLOCK_ATLAS_TEXTURE).apply(fluidStack.getFluid().getAttributes().getStillTexture());
+        TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(PlayerContainer.BLOCK_ATLAS).apply(fluidStack.getFluid().getAttributes().getStillTexture());
         int color = fluidStack.getFluid().getAttributes().getColor();
         float red = RenderCuboid.getRed(color);
         float green = RenderCuboid.getGreen(color);
@@ -138,26 +138,26 @@ public class RenderUtils {
         float scaledSize = 20;
         Minecraft mc = Minecraft.getInstance();
         if (entity instanceof LivingEntity) {
-            if (mc.player != null) entity.ticksExisted = mc.player.ticksExisted;
+            if (mc.player != null) entity.tickCount = mc.player.tickCount;
             if (entity instanceof CustomBeeEntity) {
                 scaledSize = 20 / ((CustomBeeEntity) entity).getBeeData().getSizeModifier();
             } else {
-                scaledSize = 20 / (entity.getWidth() > entity.getHeight() ? entity.getWidth() : entity.getHeight());
+                scaledSize = 20 / (entity.getBbWidth() > entity.getBbHeight() ? entity.getBbWidth() : entity.getBbHeight());
             }
         }
         if (mc.player != null) {
-            matrixStack.push();
+            matrixStack.pushPose();
             matrixStack.translate(10, 20 * renderScale, 0.5);
             matrixStack.translate(x, y, 1);
-            matrixStack.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(180.0F));
+            matrixStack.mulPose(Vector3f.ZP.rotationDegrees(180.0F));
             matrixStack.translate(0, 0, 1);
             matrixStack.scale(-(scaledSize * renderScale), (scaledSize * renderScale), 30);
-            matrixStack.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(rotation));
-            EntityRendererManager entityrenderermanager = mc.getRenderManager();
-            IRenderTypeBuffer.Impl renderTypeBuffer = mc.getBufferBuilders().getEntityVertexConsumers();
-            entityrenderermanager.render(entity, 0, 0, 0.0D, mc.getRenderPartialTicks(), 1, matrixStack, renderTypeBuffer, 15728880);
-            renderTypeBuffer.draw();
+            matrixStack.mulPose(Vector3f.YP.rotationDegrees(rotation));
+            EntityRendererManager entityrenderermanager = mc.getEntityRenderDispatcher();
+            IRenderTypeBuffer.Impl renderTypeBuffer = mc.renderBuffers().bufferSource();
+            entityrenderermanager.render(entity, 0, 0, 0.0D, mc.getFrameTime(), 1, matrixStack, renderTypeBuffer, 15728880);
+            renderTypeBuffer.endBatch();
         }
-        matrixStack.pop();
+        matrixStack.popPose();
     }
 }

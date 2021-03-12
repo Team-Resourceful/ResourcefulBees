@@ -27,17 +27,17 @@ public class RenderEnderBeecon extends TileEntityRenderer<EnderBeeconTileEntity>
 
     @Override
     public void render(EnderBeeconTileEntity tile, float partialTick, @NotNull MatrixStack matrix, @NotNull IRenderTypeBuffer renderer, int light, int overlayLight) {
-        if (tile.getWorld() == null) return;
+        if (tile.getLevel() == null) return;
         FluidStack stack = tile.getFluidTank().getFluid();
-        long gameTime = tile.getWorld().getGameTime();
+        long gameTime = tile.getLevel().getGameTime();
         List<EnderBeeconTileEntity.BeamSegment> list = tile.getBeamSegments();
         int currentHeight = 0;
 
         if (!stack.isEmpty()) {
-            int level = tile.getLevel();
+            int level = tile.getFluidLevel();
             int color = stack.getFluid().getAttributes().getColor();
             ResourceLocation stillTexture = stack.getFluid().getAttributes().getStillTexture();
-            IVertexBuilder builder = renderer.getBuffer(Atlases.getEntityTranslucentCull());
+            IVertexBuilder builder = renderer.getBuffer(Atlases.translucentCullBlockSheet());
             Vector3f start = new Vector3f(0.26f, 0.25f, 0.26f);
             Vector3f end = new Vector3f(0.74f, 0.25f + ((float) level / 100.0F) * 0.375f, 0.74f);
             CubeModel model = new CubeModel(start, end);
@@ -51,7 +51,7 @@ public class RenderEnderBeecon extends TileEntityRenderer<EnderBeeconTileEntity>
             float[] afloats = {red, green, blue, alpha};
             for (int k = 0; k < list.size(); ++k) {
                 EnderBeeconTileEntity.BeamSegment segment = list.get(k);
-                BeaconTileEntityRenderer.renderLightBeam(matrix, renderer, TEXTURE_BEACON_BEAM, partialTick, 1.0F, gameTime, currentHeight, k == list.size() - 1 ? 1024 : segment.getHeight(), afloats, 0.2F, 0.25F);
+                BeaconTileEntityRenderer.renderBeaconBeam(matrix, renderer, TEXTURE_BEACON_BEAM, partialTick, 1.0F, gameTime, currentHeight, k == list.size() - 1 ? 1024 : segment.getHeight(), afloats, 0.2F, 0.25F);
                 currentHeight += segment.getHeight();
             }
         }

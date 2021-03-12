@@ -112,7 +112,7 @@ public class MutationListPage extends BeeDataPage {
 
     @Override
     public void renderBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
-        FontRenderer font = Minecraft.getInstance().fontRenderer;
+        FontRenderer font = Minecraft.getInstance().font;
         TranslationTextComponent title;
         switch (mutations.get(BeepediaScreen.currScreenState.getCurrentMutationTab()).getLeft()) {
             case BLOCK:
@@ -129,20 +129,20 @@ public class MutationListPage extends BeeDataPage {
         }
 
         if (activePage != null) {
-            int padding = font.getWidth(title) / 2;
-            font.draw(matrix, title.formatted(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, -1);
+            int padding = font.width(title) / 2;
+            font.draw(matrix, title.withStyle(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, -1);
             StringTextComponent mutationCount = new StringTextComponent("x " + beeData.getMutationData().getMutationCount());
-            font.draw(matrix, mutationCount.formatted(TextFormatting.GRAY), (float) xPos + 20, (float) yPos + 26, -1);
-            Minecraft.getInstance().getTextureManager().bindTexture(mutationImage);
-            AbstractGui.drawTexture(matrix, xPos, yPos + 22, 0, 0, 169, 84, 169, 84);
-            Minecraft.getInstance().getTextureManager().bindTexture(mutationChanceImage);
-            AbstractGui.drawTexture(matrix, xPos, yPos + 22, 0, 0, 16, 16, 16, 16);
+            font.draw(matrix, mutationCount.withStyle(TextFormatting.GRAY), (float) xPos + 20, (float) yPos + 26, -1);
+            Minecraft.getInstance().getTextureManager().bind(mutationImage);
+            AbstractGui.blit(matrix, xPos, yPos + 22, 0, 0, 169, 84, 169, 84);
+            Minecraft.getInstance().getTextureManager().bind(mutationChanceImage);
+            AbstractGui.blit(matrix, xPos, yPos + 22, 0, 0, 16, 16, 16, 16);
             activePage.draw(matrix, xPos, yPos + 22);
-            RenderUtils.renderEntity(matrix, parent.getBee(), beepedia.getMinecraft().world, (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - 15, (float) yPos + 28, 45, 1.25f);
+            RenderUtils.renderEntity(matrix, parent.getBee(), beepedia.getMinecraft().level, (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - 15, (float) yPos + 28, 45, 1.25f);
             if (activeList.size() > 1) {
                 StringTextComponent pageInfo = new StringTextComponent(String.format("%d / %d", this.page + 1, activeList.size()));
-                padding = font.getWidth(pageInfo) / 2;
-                font.draw(matrix, pageInfo.formatted(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + SUB_PAGE_HEIGHT - 14, -1);
+                padding = font.width(pageInfo) / 2;
+                font.draw(matrix, pageInfo.withStyle(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + SUB_PAGE_HEIGHT - 14, -1);
             }
         }
     }
@@ -193,11 +193,11 @@ public class MutationListPage extends BeeDataPage {
         if (activePage != null) activePage.drawTooltips(matrix, xPos, yPos + 22, mouseX, mouseY);
         if (BeepediaScreen.mouseHovering((float) xPos + ((float) SUB_PAGE_WIDTH / 2) - 20, (float) yPos + 28, 30, 30, mouseX, mouseY)) {
             List<ITextComponent> tooltip = new ArrayList<>();
-            IFormattableTextComponent name = parent.getBee().getName().copy();
-            IFormattableTextComponent id = new StringTextComponent(parent.getBee().getEntityString()).formatted(TextFormatting.DARK_GRAY);
+            IFormattableTextComponent name = parent.getBee().getName().plainCopy();
+            IFormattableTextComponent id = new StringTextComponent(parent.getBee().getEncodeId()).withStyle(TextFormatting.DARK_GRAY);
             tooltip.add(name);
             tooltip.add(id);
-            beepedia.renderTooltip(matrix, tooltip, mouseX, mouseY);
+            beepedia.renderComponentTooltip(matrix, tooltip, mouseX, mouseY);
         }
         if (BeepediaScreen.mouseHovering(xPos, (float) yPos + 22, 16, 16, mouseX, mouseY)) {
             TranslationTextComponent text = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.mutations.mutation_count.tooltip");

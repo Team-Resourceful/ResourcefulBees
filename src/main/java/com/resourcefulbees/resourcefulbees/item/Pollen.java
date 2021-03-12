@@ -12,6 +12,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+import net.minecraft.item.Item.Properties;
+
 public class Pollen extends Item {
 
     public CompoundNBT getPollenData() {
@@ -34,12 +36,12 @@ public class Pollen extends Item {
     }
 
     @Override
-    public void addInformation(ItemStack stack, World world, @NotNull List list, @NotNull ITooltipFlag par4)
+    public void appendHoverText(ItemStack stack, World world, @NotNull List list, @NotNull ITooltipFlag par4)
     {
         if(stack.getTag() == null || !stack.getTag().contains("specific")) {
             list.add(new TranslationTextComponent(ResourcefulBees.MOD_ID + ".information.unknown_type"));
         } else {
-            list.add(BeeInfoUtils.getItem(stack.getTag().getString("specific")).getName());
+            list.add(BeeInfoUtils.getItem(stack.getTag().getString("specific")).getDescription());
         }
     }
 

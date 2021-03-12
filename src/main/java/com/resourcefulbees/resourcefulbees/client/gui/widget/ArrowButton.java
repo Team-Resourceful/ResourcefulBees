@@ -28,16 +28,16 @@ public class ArrowButton extends ImageButton {
     @Override
     public void renderButton(@Nonnull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
         Minecraft minecraft = Minecraft.getInstance();
-        minecraft.getTextureManager().bindTexture(this.resourceLocation);
+        minecraft.getTextureManager().bind(this.resourceLocation);
         RenderSystem.disableDepthTest();
         int i = this.yTexStart;
         if (this.active) {
             if (this.isHovered()) {
                 i += this.yDiffText;
             }
-            drawTexture(matrix, this.x, this.y, (float)this.xTexStart, (float)i, this.width, this.height, 64, 64);
+            blit(matrix, this.x, this.y, (float)this.xTexStart, (float)i, this.width, this.height, 64, 64);
         } else {
-            drawTexture(matrix, this.x, this.y, (float)48, (float)i, this.width, this.height, 64, 64);
+            blit(matrix, this.x, this.y, (float)48, (float)i, this.width, this.height, 64, 64);
         }
 
         RenderSystem.enableDepthTest();

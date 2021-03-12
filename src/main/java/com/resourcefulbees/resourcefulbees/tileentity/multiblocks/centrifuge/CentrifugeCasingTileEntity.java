@@ -28,17 +28,17 @@ public class CentrifugeCasingTileEntity extends TileEntity {
     }
 
     @Override
-    public void remove() {
+    public void setRemoved() {
         CentrifugeControllerTileEntity controller = getController();
         if (controller != null) {
             controller.invalidateStructure();
         }
-        super.remove();
+        super.setRemoved();
     }
 
     public CentrifugeControllerTileEntity getController() {
-        if (isLinked() && this.world != null) {
-            TileEntity tileEntity = this.world.getTileEntity(controllerPos);
+        if (isLinked() && this.level != null) {
+            TileEntity tileEntity = this.level.getBlockEntity(controllerPos);
             if (tileEntity instanceof CentrifugeControllerTileEntity) {
                 return (CentrifugeControllerTileEntity) tileEntity;
             } else {
@@ -51,7 +51,7 @@ public class CentrifugeCasingTileEntity extends TileEntity {
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-        if (isLinked() && this.world != null) {
+        if (isLinked() && this.level != null) {
             CentrifugeControllerTileEntity controller = getController();
             if (controller != null && controller.isValidStructure()) {
                 return controller.getCapability(cap, side);
@@ -62,30 +62,30 @@ public class CentrifugeCasingTileEntity extends TileEntity {
 
     @Nonnull
     @Override
-    public CompoundNBT write(@Nonnull CompoundNBT tag) {
+    public CompoundNBT save(@Nonnull CompoundNBT tag) {
         if (isLinked())
             tag.put(NBTConstants.NBT_CONTROLLER_POS, NBTUtil.writeBlockPos(controllerPos));
-        return super.write(tag);
+        return super.save(tag);
     }
 
     @Override
-    public void fromTag(@Nonnull BlockState state, CompoundNBT tag) {
+    public void load(@Nonnull BlockState state, CompoundNBT tag) {
         if (tag.contains(NBTConstants.NBT_CONTROLLER_POS))
             controllerPos = NBTUtil.readBlockPos(tag.getCompound(NBTConstants.NBT_CONTROLLER_POS));
-        super.fromTag(state, tag);
+        super.load(state, tag);
     }
 
     @Nonnull
     @Override
     public CompoundNBT getUpdateTag() {
         CompoundNBT nbtTagCompound = new CompoundNBT();
-        write(nbtTagCompound);
+        save(nbtTagCompound);
         return nbtTagCompound;
     }
 
     @Override
     public void handleUpdateTag(@Nonnull BlockState state, CompoundNBT tag) {
-        this.fromTag(state, tag);
+        this.load(state, tag);
     }
 
 

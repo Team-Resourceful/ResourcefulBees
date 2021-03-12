@@ -42,7 +42,7 @@ public class EntityIngredientHelper implements IIngredientHelper<EntityIngredien
     @Nonnull
     @Override
     public String getDisplayName(EntityIngredient entityIngredient) {
-        return I18n.format("entity.resourcefulbees." + entityIngredient.getBeeType());
+        return I18n.get("entity.resourcefulbees." + entityIngredient.getBeeType());
     }
 
     @Nonnull

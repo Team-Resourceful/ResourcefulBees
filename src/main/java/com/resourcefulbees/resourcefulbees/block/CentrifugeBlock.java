@@ -36,22 +36,24 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.stream.IntStream;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 @SuppressWarnings("deprecation")
 public class CentrifugeBlock extends Block {
     public static final BooleanProperty PROPERTY_ON = BooleanProperty.create("on");
 
     public CentrifugeBlock(Properties properties) {
         super(properties);
-        setDefaultState(getDefaultState().with(PROPERTY_ON,false));
+        registerDefaultState(defaultBlockState().setValue(PROPERTY_ON,false));
     }
 
     @Nonnull
     @Override
-    public ActionResultType onUse(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult blockRayTraceResult) {
-        if (!world.isRemote) {
-            ItemStack heldItem = player.getHeldItem(hand);
+    public ActionResultType use(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult blockRayTraceResult) {
+        if (!world.isClientSide) {
+            ItemStack heldItem = player.getItemInHand(hand);
             boolean usingBucket = heldItem.getItem() instanceof BucketItem;
-            TileEntity tileEntity = world.getTileEntity(pos);
+            TileEntity tileEntity = world.getBlockEntity(pos);
 
             if (tileEntity instanceof CentrifugeTileEntity) {
                 if (usingBucket) {
@@ -67,28 +69,28 @@ public class CentrifugeBlock extends Block {
 
     @Override
     public void neighborChanged(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull Block changedBlock, @Nonnull BlockPos changedBlockPos, boolean bool) {
-        TileEntity tileEntity = world.getTileEntity(pos);
+        TileEntity tileEntity = world.getBlockEntity(pos);
         if (tileEntity instanceof CentrifugeTileEntity) {
             CentrifugeTileEntity centrifugeTileEntity = (CentrifugeTileEntity) tileEntity;
-            centrifugeTileEntity.setIsPoweredByRedstone(world.isBlockPowered(pos));
+            centrifugeTileEntity.setIsPoweredByRedstone(world.hasNeighborSignal(pos));
         }
     }
 
     @Nullable
     @Override
-    public INamedContainerProvider getContainer(@Nonnull BlockState state, World worldIn, @Nonnull BlockPos pos) {
-        return (INamedContainerProvider)worldIn.getTileEntity(pos);
+    public INamedContainerProvider getMenuProvider(@Nonnull BlockState state, World worldIn, @Nonnull BlockPos pos) {
+        return (INamedContainerProvider)worldIn.getBlockEntity(pos);
     }
 
     @Override
-    public void onReplaced(@Nonnull BlockState state1, World world, @Nonnull BlockPos pos, @Nonnull BlockState state, boolean isMoving) {
-        TileEntity blockEntity = world.getTileEntity(pos);
+    public void onRemove(@Nonnull BlockState state1, World world, @Nonnull BlockPos pos, @Nonnull BlockState state, boolean isMoving) {
+        TileEntity blockEntity = world.getBlockEntity(pos);
         if (blockEntity instanceof CentrifugeTileEntity && state.getBlock() != state1.getBlock()){
             CentrifugeTileEntity centrifugeTileEntity = (CentrifugeTileEntity)blockEntity;
             ItemStackHandler h = centrifugeTileEntity.getItemStackHandler();
-            IntStream.range(0, h.getSlots()).mapToObj(h::getStackInSlot).filter(s -> !s.isEmpty()).forEach(stack -> InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack));
+            IntStream.range(0, h.getSlots()).mapToObj(h::getStackInSlot).filter(s -> !s.isEmpty()).forEach(stack -> InventoryHelper.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack));
         }
-        super.onReplaced(state1, world, pos, state, isMoving);
+        super.onRemove(state1, world, pos, state, isMoving);
     }
 
     @Override
@@ -103,17 +105,17 @@ public class CentrifugeBlock extends Block {
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(PROPERTY_ON);
     }
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void addInformation(@Nonnull ItemStack stack, @Nullable IBlockReader worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
+    public void appendHoverText(@Nonnull ItemStack stack, @Nullable IBlockReader worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
             tooltip.addAll(new TooltipBuilder()
-                    .addTip(I18n.format("block.resourcefulbees.centrifuge.tooltip.info"), TextFormatting.GOLD)
+                    .addTip(I18n.get("block.resourcefulbees.centrifuge.tooltip.info"), TextFormatting.GOLD)
                     .build());
-        super.addInformation(stack, worldIn, tooltip, flagIn);
+        super.appendHoverText(stack, worldIn, tooltip, flagIn);
     }
 }
 

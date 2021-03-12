@@ -25,13 +25,13 @@ public class HoneyGeneratorContainer extends Container {
         super(ModContainers.HONEY_GENERATOR_CONTAINER.get(), id);
 
         this.player = inv.player;
-        honeyGeneratorTileEntity = (HoneyGeneratorTileEntity) world.getTileEntity(pos);
+        honeyGeneratorTileEntity = (HoneyGeneratorTileEntity) world.getBlockEntity(pos);
 
         if (getHoneyGeneratorTileEntity() != null) {
             this.addSlot(new SlotItemHandlerUnconditioned(getHoneyGeneratorTileEntity().getTileStackHandler(), HoneyGeneratorTileEntity.HONEY_BOTTLE_INPUT, 36, 20) {
 
                 @Override
-                public boolean isItemValid(ItemStack stack) {
+                public boolean mayPlace(ItemStack stack) {
                     return getHoneyGeneratorTileEntity().getTileStackHandler().isItemValid(HoneyGeneratorTileEntity.HONEY_BOTTLE_INPUT, stack);
                 }
             });
@@ -62,39 +62,39 @@ public class HoneyGeneratorContainer extends Container {
     public int getEnergyTime() { return getHoneyGeneratorTileEntity().getEnergyFilled(); }
 
     @Override
-    public boolean canInteractWith(@Nonnull PlayerEntity player) {
+    public boolean stillValid(@Nonnull PlayerEntity player) {
         return true;
     }
 
     @Nonnull
     @Override
-    public ItemStack transferStackInSlot(@Nonnull PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(@Nonnull PlayerEntity playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = this.inventorySlots.get(index);
-        if (slot != null && slot.getHasStack()) {
-            ItemStack itemstack1 = slot.getStack();
+        Slot slot = this.slots.get(index);
+        if (slot != null && slot.hasItem()) {
+            ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
 
             if (index <= 1) {
-                if (!this.mergeItemStack(itemstack1, 2, inventorySlots.size(), true)) {
+                if (!this.moveItemStackTo(itemstack1, 2, slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.mergeItemStack(itemstack1, 0, 1, false)) {
+            } else if (!this.moveItemStackTo(itemstack1, 0, 1, false)) {
                 return ItemStack.EMPTY;
             }
 
             if (itemstack1.isEmpty()) {
-                slot.putStack(ItemStack.EMPTY);
+                slot.set(ItemStack.EMPTY);
             } else {
-                slot.onSlotChanged();
+                slot.setChanged();
             }
         }
         return itemstack;
     }
 
     @Override
-    public void detectAndSendChanges() {
-        super.detectAndSendChanges();
+    public void broadcastChanges() {
+        super.broadcastChanges();
         if (getHoneyGeneratorTileEntity() == null) {
             return;
         }

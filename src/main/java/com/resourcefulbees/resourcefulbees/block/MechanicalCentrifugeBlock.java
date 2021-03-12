@@ -40,31 +40,33 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.stream.IntStream;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 @SuppressWarnings("deprecation")
 public class MechanicalCentrifugeBlock extends Block {
-    public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
+    public static final DirectionProperty FACING = HorizontalBlock.FACING;
     public static final BooleanProperty PROPERTY_ON = BooleanProperty.create("on");
     public static final IntegerProperty PROPERTY_ROTATION = IntegerProperty.create("rotations", 0, 7);
 
     public MechanicalCentrifugeBlock(Properties properties) {
         super(properties);
-        setDefaultState(getDefaultState().with(PROPERTY_ON, false).with(PROPERTY_ROTATION, 0));
+        registerDefaultState(defaultBlockState().setValue(PROPERTY_ON, false).setValue(PROPERTY_ROTATION, 0));
     }
 
     @Nonnull
     @Override
-    public ActionResultType onUse(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult blockRayTraceResult) {
-        if (!world.isRemote) {
-            INamedContainerProvider blockEntity = state.getContainer(world, pos);
-            MechanicalCentrifugeTileEntity tile = (MechanicalCentrifugeTileEntity)world.getTileEntity(pos);
-            if (player.isSneaking() && !(player instanceof FakePlayer)) {
+    public ActionResultType use(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult blockRayTraceResult) {
+        if (!world.isClientSide) {
+            INamedContainerProvider blockEntity = state.getMenuProvider(world, pos);
+            MechanicalCentrifugeTileEntity tile = (MechanicalCentrifugeTileEntity)world.getBlockEntity(pos);
+            if (player.isShiftKeyDown() && !(player instanceof FakePlayer)) {
                 if (tile != null && tile.canProcess(tile.getRecipe())) {
-                    player.addExhaustion(Config.PLAYER_EXHAUSTION.get().floatValue());
+                    player.causeFoodExhaustion(Config.PLAYER_EXHAUSTION.get().floatValue());
                     tile.setClicks(tile.getClicks() + 1);
-                    if (state.get(PROPERTY_ROTATION) == 7)
-                        world.playSound(null, pos, SoundEvents.ITEM_LODESTONE_COMPASS_LOCK, SoundCategory.BLOCKS, 0.5F, 0.1F);
-                    world.playSound(null, pos, SoundEvents.BLOCK_FENCE_GATE_CLOSE, SoundCategory.BLOCKS, 0.5F, 0.1F);
-                    world.setBlockState(pos, state.with(PROPERTY_ROTATION, state.get(PROPERTY_ROTATION) == 7 ? 0 : state.get(PROPERTY_ROTATION) + 1), 3);
+                    if (state.getValue(PROPERTY_ROTATION) == 7)
+                        world.playSound(null, pos, SoundEvents.LODESTONE_COMPASS_LOCK, SoundCategory.BLOCKS, 0.5F, 0.1F);
+                    world.playSound(null, pos, SoundEvents.FENCE_GATE_CLOSE, SoundCategory.BLOCKS, 0.5F, 0.1F);
+                    world.setBlock(pos, state.setValue(PROPERTY_ROTATION, state.getValue(PROPERTY_ROTATION) == 7 ? 0 : state.getValue(PROPERTY_ROTATION) + 1), 3);
                 }
             } else if (blockEntity != null) {
                 NetworkHooks.openGui((ServerPlayerEntity) player, blockEntity, pos);
@@ -75,19 +77,19 @@ public class MechanicalCentrifugeBlock extends Block {
 
     @Nullable
     @Override
-    public INamedContainerProvider getContainer(@Nonnull BlockState state, World worldIn, @Nonnull BlockPos pos) {
-        return (INamedContainerProvider) worldIn.getTileEntity(pos);
+    public INamedContainerProvider getMenuProvider(@Nonnull BlockState state, World worldIn, @Nonnull BlockPos pos) {
+        return (INamedContainerProvider) worldIn.getBlockEntity(pos);
     }
 
     @Override
-    public void onReplaced(@Nonnull BlockState state1, World world, @Nonnull BlockPos pos, @Nonnull BlockState state, boolean isMoving) {
-        TileEntity blockEntity = world.getTileEntity(pos);
+    public void onRemove(@Nonnull BlockState state1, World world, @Nonnull BlockPos pos, @Nonnull BlockState state, boolean isMoving) {
+        TileEntity blockEntity = world.getBlockEntity(pos);
         if (blockEntity instanceof MechanicalCentrifugeTileEntity && state.getBlock() != state1.getBlock()) {
             MechanicalCentrifugeTileEntity centrifugeTileEntity = (MechanicalCentrifugeTileEntity) blockEntity;
             ItemStackHandler h = centrifugeTileEntity.getItemStackHandler();
-            IntStream.range(0, h.getSlots()).mapToObj(h::getStackInSlot).filter(s -> !s.isEmpty()).forEach(stack -> InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack));
+            IntStream.range(0, h.getSlots()).mapToObj(h::getStackInSlot).filter(s -> !s.isEmpty()).forEach(stack -> InventoryHelper.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack));
         }
-        super.onReplaced(state1, world, pos, state, isMoving);
+        super.onRemove(state1, world, pos, state, isMoving);
     }
 
     @Override
@@ -97,7 +99,7 @@ public class MechanicalCentrifugeBlock extends Block {
 
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite());
+        return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
     }
 
     @Nullable
@@ -107,16 +109,16 @@ public class MechanicalCentrifugeBlock extends Block {
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(PROPERTY_ON, PROPERTY_ROTATION, FACING);
     }
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void addInformation(@Nonnull ItemStack stack, @Nullable IBlockReader worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
+    public void appendHoverText(@Nonnull ItemStack stack, @Nullable IBlockReader worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
             tooltip.addAll(new TooltipBuilder()
-                    .addTip(I18n.format("block.resourcefulbees.mech_centrifuge.tooltip.info"), TextFormatting.GOLD)
+                    .addTip(I18n.get("block.resourcefulbees.mech_centrifuge.tooltip.info"), TextFormatting.GOLD)
                     .build());
-        super.addInformation(stack, worldIn, tooltip, flagIn);
+        super.appendHoverText(stack, worldIn, tooltip, flagIn);
     }
 }

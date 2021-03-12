@@ -53,22 +53,22 @@ public class BeeJar extends Item {
 
     @Nonnull
     @Override
-    public ActionResultType onItemUse(ItemUseContext context) {
+    public ActionResultType useOn(ItemUseContext context) {
         PlayerEntity player = context.getPlayer();
         if (player != null) {
-            World playerWorld = context.getPlayer().getEntityWorld();
-            ItemStack stack = context.getItem();
-            if (playerWorld.isRemote() || !isFilled(stack)) return ActionResultType.FAIL;
-            World worldIn = context.getWorld();
-            BlockPos pos = context.getPos();
+            World playerWorld = context.getPlayer().getCommandSenderWorld();
+            ItemStack stack = context.getItemInHand();
+            if (playerWorld.isClientSide() || !isFilled(stack)) return ActionResultType.FAIL;
+            World worldIn = context.getLevel();
+            BlockPos pos = context.getClickedPos();
             Entity entity = getEntityFromStack(stack, worldIn, true);
             if (entity != null) {
                 if (entity instanceof BeeEntity) {
                     resetBee((BeeEntity) entity);
                 }
-                BlockPos blockPos = pos.offset(context.getFace());
-                entity.setPositionAndRotation(blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5, 0, 0);
-                worldIn.addEntity(entity);
+                BlockPos blockPos = pos.relative(context.getClickedFace());
+                entity.absMoveTo(blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5, 0, 0);
+                worldIn.addFreshEntity(entity);
             }
             stack.setTag(null);
             return ActionResultType.SUCCESS;
@@ -77,7 +77,7 @@ public class BeeJar extends Item {
     }
 
     private void resetBee(BeeEntity beeEntity) {
-        beeEntity.flowerPos = null;
+        beeEntity.savedFlowerPos = null;
         beeEntity.hivePos = null;
     }
 
@@ -85,10 +85,10 @@ public class BeeJar extends Item {
     public Entity getEntityFromStack(ItemStack stack, World world, boolean withInfo) {
         CompoundNBT tag = stack.getTag();
         if (tag != null) {
-            EntityType<?> type = EntityType.byKey(tag.getString(NBTConstants.NBT_ENTITY)).orElse(null);
+            EntityType<?> type = EntityType.byString(tag.getString(NBTConstants.NBT_ENTITY)).orElse(null);
             if (type != null) {
                 Entity entity = type.create(world);
-                if (entity != null && withInfo) entity.read(stack.getTag());
+                if (entity != null && withInfo) entity.load(stack.getTag());
                 return entity;
             }
         }
@@ -97,8 +97,8 @@ public class BeeJar extends Item {
 
     @Nonnull
     @Override
-    public ActionResultType itemInteractionForEntity(@Nonnull ItemStack stack, @Nonnull PlayerEntity player, LivingEntity targetIn, @Nonnull Hand hand) {
-        if (targetIn.getEntityWorld().isRemote() || (!(targetIn instanceof BeeEntity) || !targetIn.isAlive()) || (isFilled(stack))) {
+    public ActionResultType interactLivingEntity(@Nonnull ItemStack stack, @Nonnull PlayerEntity player, LivingEntity targetIn, @Nonnull Hand hand) {
+        if (targetIn.getCommandSenderWorld().isClientSide() || (!(targetIn instanceof BeeEntity) || !targetIn.isAlive()) || (isFilled(stack))) {
             return ActionResultType.FAIL;
         }
 
@@ -109,15 +109,15 @@ public class BeeJar extends Item {
             newJar.setTag(BeeInfoUtils.createJarBeeTag(target, NBTConstants.NBT_ENTITY));
             stack.shrink(1);
             renameJar(newJar, target);
-            if (!player.addItemStackToInventory(newJar)) {
-                player.dropItem(newJar, false);
+            if (!player.addItem(newJar)) {
+                player.drop(newJar, false);
             }
         } else {
             stack.setTag(BeeInfoUtils.createJarBeeTag(target, NBTConstants.NBT_ENTITY));
             renameJar(stack, target);
         }
-        player.setHeldItem(hand, stack);
-        player.swingArm(hand);
+        player.setItemInHand(hand, stack);
+        player.swing(hand);
         target.remove(true);
         return ActionResultType.PASS;
     }
@@ -125,7 +125,7 @@ public class BeeJar extends Item {
     public static void renameJar(ItemStack stack, BeeEntity target) {
         CompoundNBT nbt = stack.getOrCreateTag();
         ITextComponent beeName = target.getName();
-        TranslationTextComponent bottleName = new TranslationTextComponent(stack.getItem().getTranslationKey(stack));
+        TranslationTextComponent bottleName = new TranslationTextComponent(stack.getItem().getDescriptionId(stack));
         bottleName.append(" - ").append(beeName);
         bottleName.setStyle(Style.EMPTY.withItalic(false));
         CompoundNBT displayNBT = new CompoundNBT();
@@ -135,7 +135,7 @@ public class BeeJar extends Item {
 
     public static void fillJar(ItemStack stack, CustomBeeData beeData) {
         EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(beeData.getEntityTypeRegistryID());
-        World world = Minecraft.getInstance().world;
+        World world = Minecraft.getInstance().level;
         if (world == null || entityType == null) return;
         Entity entity = entityType.create(world);
         if (entity instanceof BeeEntity) {
@@ -146,7 +146,7 @@ public class BeeJar extends Item {
 
     @Nonnull
     @Override
-    public String getTranslationKey(@Nonnull ItemStack stack) {
+    public String getDescriptionId(@Nonnull ItemStack stack) {
         String name;
         if (isFilled(stack)) {
             name = "item." + ResourcefulBees.MOD_ID + ".bee_jar_filled";
@@ -157,18 +157,18 @@ public class BeeJar extends Item {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void addInformation(@Nonnull ItemStack stack, @Nullable World world, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flag) {
-        super.addInformation(stack, world, tooltip, flag);
+    public void appendHoverText(@Nonnull ItemStack stack, @Nullable World world, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flag) {
+        super.appendHoverText(stack, world, tooltip, flag);
         CompoundNBT tag = stack.getTag();
         if (tag != null && isFilled(stack)) {
             String type = tag.getString(NBTConstants.NBT_ENTITY);
             if (tag.contains(NBTConstants.NBT_BEE_TYPE)) {
                 String rbType = tag.getString(NBTConstants.NBT_BEE_TYPE);
-                tooltip.add(new StringTextComponent(I18n.format(ResourcefulBees.MOD_ID + ".information.bee_type.custom")
-                        + (I18n.hasKey("entity.resourcefulbees." + rbType) ? I18n.format("entity.resourcefulbees."
-                        + rbType) : WordUtils.capitalize(rbType.replace("_", " ")))).formatted(TextFormatting.WHITE));
+                tooltip.add(new StringTextComponent(I18n.get(ResourcefulBees.MOD_ID + ".information.bee_type.custom")
+                        + (I18n.exists("entity.resourcefulbees." + rbType) ? I18n.get("entity.resourcefulbees."
+                        + rbType) : WordUtils.capitalize(rbType.replace("_", " ")))).withStyle(TextFormatting.WHITE));
             } else if (type.equals(BeeConstants.VANILLA_BEE_ID)) {
-                tooltip.add(new TranslationTextComponent(ResourcefulBees.MOD_ID + ".information.bee_type.vanilla").formatted(TextFormatting.WHITE));
+                tooltip.add(new TranslationTextComponent(ResourcefulBees.MOD_ID + ".information.bee_type.vanilla").withStyle(TextFormatting.WHITE));
             } else {
                 tooltip.add(new TranslationTextComponent(ResourcefulBees.MOD_ID + ".information.bee_type.unknown"));
             }

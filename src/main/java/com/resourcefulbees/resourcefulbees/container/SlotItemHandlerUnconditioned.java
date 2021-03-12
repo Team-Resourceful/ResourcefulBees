@@ -29,7 +29,7 @@ public class SlotItemHandlerUnconditioned extends SlotItemHandler {
   }
 
   @Override
-  public boolean isItemValid(ItemStack stack) {
+  public boolean mayPlace(ItemStack stack) {
     if (!stack.isEmpty() || this.inv.canAccept(this.getSlotIndex(), stack, false)) {
       ItemStack currentStack = this.inv.getStackInSlot(this.getSlotIndex());
       this.inv.setStackInSlot(this.getSlotIndex(), ItemStack.EMPTY);
@@ -45,18 +45,18 @@ public class SlotItemHandlerUnconditioned extends SlotItemHandler {
    */
   @Override
   @Nonnull
-  public ItemStack getStack() {
+  public ItemStack getItem() {
     return this.inv.getStackInSlot(this.getSlotIndex());
   }
 
   @Override
-  public void putStack(@Nonnull ItemStack stack) {
+  public void set(@Nonnull ItemStack stack) {
     this.inv.setStackInSlot(this.getSlotIndex(), stack);
-    this.onSlotChanged();
+    this.setChanged();
   }
 
   @Override
-  public int getItemStackLimit(ItemStack stack) {
+  public int getMaxStackSize(ItemStack stack) {
     ItemStack maxAdd = stack.copy();
     maxAdd.setCount(stack.getMaxStackSize());
     ItemStack currentStack = this.inv.getStackInSlot(this.getSlotIndex());
@@ -67,13 +67,13 @@ public class SlotItemHandlerUnconditioned extends SlotItemHandler {
   }
 
   @Override
-  public boolean canTakeStack(PlayerEntity playerIn) {
+  public boolean mayPickup(PlayerEntity playerIn) {
     return !this.inv.extractItem(this.getSlotIndex(), 1, true, false).isEmpty();
   }
 
   @Nonnull
   @Override
-  public ItemStack decrStackSize(int amount) {
+  public ItemStack remove(int amount) {
     return this.inv.extractItem(this.getSlotIndex(), amount, false, false);
   }
 

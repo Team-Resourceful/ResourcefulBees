@@ -58,8 +58,8 @@ public class HoneyPage extends BeepediaPage {
         if (bottleData instanceof DefaultHoneyBottleData) {
             DefaultHoneyBottleData data = (DefaultHoneyBottleData) bottleData;
             this.bottle = new ItemStack(data.bottle);
-            this.hunger = Foods.HONEY_BOTTLE.getHealing();
-            this.saturation = Foods.HONEY_BOTTLE.getSaturation();
+            this.hunger = Foods.HONEY_BOTTLE.getNutrition();
+            this.saturation = Foods.HONEY_BOTTLE.getSaturationModifier();
             this.text = new TranslationTextComponent("fluid.resourcefulbees.honey");
         } else {
             this.bottle = new ItemStack(bottleData.getHoneyBottleRegistryObject().get());
@@ -89,13 +89,13 @@ public class HoneyPage extends BeepediaPage {
     private void initSearch() {
         honeySearch = "";
         if (bottleData.getHoneyBottleRegistryObject() != null)
-            honeySearch += " " + new TranslationTextComponent(bottleData.getHoneyBottleRegistryObject().get().getTranslationKey()).getString();
+            honeySearch += " " + new TranslationTextComponent(bottleData.getHoneyBottleRegistryObject().get().getDescriptionId()).getString();
         if (bottleData.getHoneyFluidBlockRegistryObject() != null)
-            honeySearch += " " + new TranslationTextComponent(bottleData.getHoneyFluidBlockRegistryObject().get().getTranslationKey()).getString();
+            honeySearch += " " + new TranslationTextComponent(bottleData.getHoneyFluidBlockRegistryObject().get().getDescriptionId()).getString();
         if (bottleData.getHoneyBlockItemRegistryObject() != null)
-            honeySearch += " " + new TranslationTextComponent(bottleData.getHoneyBlockItemRegistryObject().get().getTranslationKey()).getString();
+            honeySearch += " " + new TranslationTextComponent(bottleData.getHoneyBlockItemRegistryObject().get().getDescriptionId()).getString();
         if (bottleData.getHoneyBucketItemRegistryObject() != null)
-            honeySearch += " " + new TranslationTextComponent(bottleData.getHoneyBucketItemRegistryObject().get().getTranslationKey()).getString();
+            honeySearch += " " + new TranslationTextComponent(bottleData.getHoneyBucketItemRegistryObject().get().getDescriptionId()).getString();
     }
 
     @Override
@@ -103,10 +103,10 @@ public class HoneyPage extends BeepediaPage {
         if (beeList == null) return;
         beeList.updateList();
         beepedia.drawSlotNoToolTip(matrix, bottle, xPos, yPos + 10);
-        beepedia.getMinecraft().textureManager.bindTexture(splitterImage);
-        AbstractGui.drawTexture(matrix, xPos, yPos - 14, 0, 0, 165, 100, 165, 100);
-        FontRenderer font = Minecraft.getInstance().fontRenderer;
-        font.draw(matrix, text.formatted(TextFormatting.WHITE), (float) xPos + 24, (float) yPos + 12, -1);
+        beepedia.getMinecraft().textureManager.bind(splitterImage);
+        AbstractGui.blit(matrix, xPos, yPos - 14, 0, 0, 165, 100, 165, 100);
+        FontRenderer font = Minecraft.getInstance().font;
+        font.draw(matrix, text.withStyle(TextFormatting.WHITE), (float) xPos + 24, (float) yPos + 12, -1);
         drawHungerBar(matrix);
         if (BeepediaScreen.currScreenState.isHoneyEffectsActive() && !effects.isEmpty()) {
             drawEffectsList(matrix, xPos, yPos + 34);
@@ -136,22 +136,22 @@ public class HoneyPage extends BeepediaPage {
     }
 
     private void drawBeesList(MatrixStack matrix, int xPos, int yPos) {
-        FontRenderer font = Minecraft.getInstance().fontRenderer;
+        FontRenderer font = Minecraft.getInstance().font;
         TranslationTextComponent title = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.honey.bees_list");
-        int padding = font.getWidth(title) / 2;
-        font.draw(matrix, title.formatted(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, -1);
+        int padding = font.width(title) / 2;
+        font.draw(matrix, title.withStyle(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, -1);
     }
 
     private void drawEffectsList(MatrixStack matrix, int xPos, int yPos) {
-        FontRenderer font = Minecraft.getInstance().fontRenderer;
+        FontRenderer font = Minecraft.getInstance().font;
         TranslationTextComponent title = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.honey.effects_list");
-        int padding = font.getWidth(title) / 2;
-        font.draw(matrix, title.formatted(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, -1);
+        int padding = font.width(title) / 2;
+        font.draw(matrix, title.withStyle(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, -1);
         for (int i = 0; i < effects.size(); i++) {
 
             // init effect
             Effect effect = effects.get(i).getEffect();
-            TranslationTextComponent name = new TranslationTextComponent(effect.getName());
+            TranslationTextComponent name = new TranslationTextComponent(effect.getDescriptionId());
             int duration = effects.get(i).duration;
             name.append(new StringTextComponent(String.format(" (%02d:%02d)", (duration / 20) / 60, (duration / 20) % 60)));
             StringTextComponent chance = new StringTextComponent(new DecimalFormat("##%").format(effects.get(i).chance));
@@ -159,20 +159,20 @@ public class HoneyPage extends BeepediaPage {
 
             // create culling mask
             GL11.glEnable(GL11.GL_SCISSOR_TEST);
-            double scale = beepedia.getMinecraft().getWindow().getGuiScaleFactor();
-            int scissorY = (int) (beepedia.getMinecraft().getWindow().getFramebufferHeight() - (this.yPos + 156) * scale);
+            double scale = beepedia.getMinecraft().getWindow().getGuiScale();
+            int scissorY = (int) (beepedia.getMinecraft().getWindow().getHeight() - (this.yPos + 156) * scale);
             GL11.glScissor((int) (this.xPos * scale), scissorY, (int) (SUB_PAGE_WIDTH * scale), (int) ((102) * scale));
 
             // draw slot
             beepedia.drawEmptySlot(matrix, xPos, pos);
             // draw effect icon
-            TextureAtlasSprite sprite = Minecraft.getInstance().getPotionSpriteUploader().getSprite(effect);
-            Minecraft.getInstance().getTextureManager().bindTexture(sprite.getAtlas().getId());
-            AbstractGui.drawSprite(matrix, xPos + 1, pos + 1, beepedia.getZOffset(), 18, 18, sprite);
+            TextureAtlasSprite sprite = Minecraft.getInstance().getMobEffectTextures().get(effect);
+            Minecraft.getInstance().getTextureManager().bind(sprite.atlas().location());
+            AbstractGui.blit(matrix, xPos + 1, pos + 1, beepedia.getBlitOffset(), 18, 18, sprite);
             // draw text
-            font.draw(matrix, name.formatted(effect.isBeneficial() ? TextFormatting.BLUE : TextFormatting.RED), (float) xPos + 22, (float) pos + 1, -1);
+            font.draw(matrix, name.withStyle(effect.isBeneficial() ? TextFormatting.BLUE : TextFormatting.RED), (float) xPos + 22, (float) pos + 1, -1);
             if (effects.get(i).chance < 1) {
-                font.draw(matrix, chance.formatted(TextFormatting.DARK_GRAY), (float) xPos + 22, (float) pos + 11, -1);
+                font.draw(matrix, chance.withStyle(TextFormatting.DARK_GRAY), (float) xPos + 22, (float) pos + 11, -1);
             }
             GL11.glDisable(GL11.GL_SCISSOR_TEST);
         }
@@ -180,24 +180,24 @@ public class HoneyPage extends BeepediaPage {
 
     private void drawHungerBar(MatrixStack matrix) {
         TextureManager manager = Minecraft.getInstance().getTextureManager();
-        manager.bindTexture(hungerBar);
-        AbstractGui.drawTexture(matrix, xPos + 23, yPos + 21, 0, 0, 90, 9, 90, 9);
+        manager.bind(hungerBar);
+        AbstractGui.blit(matrix, xPos + 23, yPos + 21, 0, 0, 90, 9, 90, 9);
         int pipPosition = 105;
         int pipCounter = Math.min(hunger, 20);
-        manager.bindTexture(hungerIcons);
+        manager.bind(hungerIcons);
         while (pipCounter > 1) {
-            AbstractGui.drawTexture(matrix, xPos + pipPosition, yPos + 21, 0, 0, 9, 9, 9, 18);
+            AbstractGui.blit(matrix, xPos + pipPosition, yPos + 21, 0, 0, 9, 9, 9, 18);
             pipCounter -= 2;
             pipPosition -= 9;
         }
         if (pipCounter == 1) {
-            AbstractGui.drawTexture(matrix, xPos + pipPosition, yPos + 21, 0, 9, 9, 9, 9, 18);
+            AbstractGui.blit(matrix, xPos + pipPosition, yPos + 21, 0, 9, 9, 9, 9, 18);
         }
         float saturationWidth = Math.min(saturation * 90, 90);
         float saturationRemainder = 90 - saturationWidth;
         float saturationStart = 24 + saturationRemainder;
-        manager.bindTexture(saturationIcons);
-        AbstractGui.drawTexture(matrix, xPos + (int) saturationStart, yPos + 21, saturationRemainder, 0, (int) saturationWidth, 9, 90, 9);
+        manager.bind(saturationIcons);
+        AbstractGui.blit(matrix, xPos + (int) saturationStart, yPos + 21, saturationRemainder, 0, (int) saturationWidth, 9, 90, 9);
     }
 
     @Override

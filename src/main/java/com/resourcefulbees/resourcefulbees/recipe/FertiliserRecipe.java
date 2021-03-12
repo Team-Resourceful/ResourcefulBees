@@ -35,22 +35,22 @@ public class FertiliserRecipe extends ShapelessRecipe {
      * recipe, but with radius NBT equal to smallest among inputs + 1
      */
     @Override
-    public ItemStack getCraftingResult(CraftingInventory craftingSlots)
+    public ItemStack assemble(CraftingInventory craftingSlots)
     {
         List<ItemStack> stacks = new ArrayList<>();
-        int slotCount = craftingSlots.getSizeInventory();
+        int slotCount = craftingSlots.getContainerSize();
         for (int i=0; i<slotCount; i++)
         {
-            ItemStack stack = craftingSlots.getStackInSlot(i);
+            ItemStack stack = craftingSlots.getItem(i);
             if(stack.getItem().equals(ModItems.POLLEN.get())) {
-                stacks.add(craftingSlots.getStackInSlot(i));
+                stacks.add(craftingSlots.getItem(i));
             }
         }
         return this.getActualOutput(stacks);
     }
 
     public ItemStack getActualOutput(List<ItemStack> stacks) {
-        ItemStack result = this.getRecipeOutput().copy();
+        ItemStack result = this.getResultItem().copy();
 
         if(stacksAreCustom(stacks)) {
             if(stacks.size() == 3 &&
@@ -77,9 +77,9 @@ public class FertiliserRecipe extends ShapelessRecipe {
 
     @Override
     public @Nonnull NonNullList<ItemStack> getRemainingItems(final CraftingInventory inv) {
-        final NonNullList<ItemStack> remainingItems = NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
+        final NonNullList<ItemStack> remainingItems = NonNullList.withSize(inv.getContainerSize(), ItemStack.EMPTY);
         for (int i = 0; i < remainingItems.size(); ++i) {
-            ItemStack itemstack = inv.getStackInSlot(i);
+            ItemStack itemstack = inv.getItem(i);
             if (!itemstack.isEmpty() && itemstack.getItem().equals(Items.BOWL)) {
                 remainingItems.set(i, itemstack.getContainerItem());
             }
@@ -90,19 +90,19 @@ public class FertiliserRecipe extends ShapelessRecipe {
     public static class Serializer extends ShapelessRecipe.Serializer
     {
         @Override
-        public ShapelessRecipe read(ResourceLocation recipeId, JsonObject json)
+        public ShapelessRecipe fromJson(ResourceLocation recipeId, JsonObject json)
         {
-            ShapelessRecipe recipe = super.read(recipeId, json);
+            ShapelessRecipe recipe = super.fromJson(recipeId, json);
 
-            return new FertiliserRecipe(recipeId, recipe.getGroup(), recipe.getRecipeOutput(), recipe.getIngredients());
+            return new FertiliserRecipe(recipeId, recipe.getGroup(), recipe.getResultItem(), recipe.getIngredients());
         }
 
         @Override
-        public ShapelessRecipe read(ResourceLocation recipeId, PacketBuffer buffer)
+        public ShapelessRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer)
         {
-            ShapelessRecipe recipe = super.read(recipeId, buffer);
+            ShapelessRecipe recipe = super.fromNetwork(recipeId, buffer);
 
-            return new FertiliserRecipe(recipeId, recipe.getGroup(), recipe.getRecipeOutput(), recipe.getIngredients());
+            return new FertiliserRecipe(recipeId, recipe.getGroup(), recipe.getResultItem(), recipe.getIngredients());
         }
     }
 }

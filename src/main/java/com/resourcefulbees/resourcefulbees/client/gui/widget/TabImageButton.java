@@ -9,6 +9,9 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 
+import net.minecraft.client.gui.widget.button.Button.IPressable;
+import net.minecraft.client.gui.widget.button.Button.ITooltip;
+
 public class TabImageButton extends ModImageButton {
 
     protected final ITooltip tooltipProvider;
@@ -40,7 +43,7 @@ public class TabImageButton extends ModImageButton {
     public void renderButton(@Nonnull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
         super.renderButton(matrix, mouseX, mouseY, partialTicks);
         if (this.displayItem != null)
-            Minecraft.getInstance().getItemRenderer().renderItemAndEffectIntoGUI(this.displayItem, this.x + this.itemX, this.y + this.itemY);
+            Minecraft.getInstance().getItemRenderer().renderAndDecorateItem(this.displayItem, this.x + this.itemX, this.y + this.itemY);
         RenderSystem.enableDepthTest();
     }
 

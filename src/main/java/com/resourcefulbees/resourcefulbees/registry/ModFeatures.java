@@ -31,25 +31,25 @@ public class ModFeatures {
         }
 
         public static final ConfiguredFeature<?, ?> OVERWORLD_NESTS = BEE_NEST_FEATURE.get()
-                .configure(IFeatureConfig.NO_FEATURE_CONFIG)
-                .decorate(Placement.HEIGHTMAP_WORLD_SURFACE.configure(NoPlacementConfig.INSTANCE))
-                .applyChance(Config.OVERWORLD_NEST_GENERATION_CHANCE.get())
-                .spreadHorizontally()
-                .repeatRandomly(3);
+                .configured(IFeatureConfig.NONE)
+                .decorated(Placement.HEIGHTMAP_WORLD_SURFACE.configured(NoPlacementConfig.INSTANCE))
+                .chance(Config.OVERWORLD_NEST_GENERATION_CHANCE.get())
+                .squared()
+                .countRandom(3);
 
         public static final ConfiguredFeature<?, ?> THE_END_NESTS = BEE_NEST_FEATURE.get()
-                .configure(IFeatureConfig.NO_FEATURE_CONFIG)
-                .decorate(Placement.HEIGHTMAP_WORLD_SURFACE.configure(NoPlacementConfig.INSTANCE))
-                .applyChance(Config.END_NEST_GENERATION_CHANCE.get())
-                .spreadHorizontally()
-                .repeatRandomly(2);
+                .configured(IFeatureConfig.NONE)
+                .decorated(Placement.HEIGHTMAP_WORLD_SURFACE.configured(NoPlacementConfig.INSTANCE))
+                .chance(Config.END_NEST_GENERATION_CHANCE.get())
+                .squared()
+                .countRandom(2);
 
         public static final ConfiguredFeature<?, ?> NETHER_NESTS = BEE_NEST_FEATURE.get()
-                .configure(IFeatureConfig.NO_FEATURE_CONFIG)
-                .decorate(Features.Placements.NETHER_ORE)
-                .applyChance(Config.NETHER_NEST_GENERATION_CHANCE.get())
-                .spreadHorizontally()
-                .repeatRandomly(4);
+                .configured(IFeatureConfig.NONE)
+                .decorated(Features.Placements.RANGE_10_20_ROOFED)
+                .chance(Config.NETHER_NEST_GENERATION_CHANCE.get())
+                .squared()
+                .countRandom(4);
 
         public static void registerConfiguredFeatures() {
             Registry<ConfiguredFeature<?, ?>> registry = WorldGenRegistries.CONFIGURED_FEATURE;

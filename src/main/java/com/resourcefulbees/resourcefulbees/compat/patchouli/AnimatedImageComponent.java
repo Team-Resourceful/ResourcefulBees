@@ -47,9 +47,9 @@ public class AnimatedImageComponent implements ICustomComponent {
         if (currentFrame >= frames) {
             currentFrame = 0;
         }
-        Minecraft.getInstance().getTextureManager().bindTexture(animatedImage);
+        Minecraft.getInstance().getTextureManager().bind(animatedImage);
 
-        AbstractGui.drawTexture(matrixStack, xOffset, yOffset, 0, (float) imageHeight * currentFrame, (int) (imageWidth * imageScale), (int) (imageHeight * imageScale), textureWidth, textureHeight);
+        AbstractGui.blit(matrixStack, xOffset, yOffset, 0, (float) imageHeight * currentFrame, (int) (imageWidth * imageScale), (int) (imageHeight * imageScale), textureWidth, textureHeight);
     }
 
     @Override

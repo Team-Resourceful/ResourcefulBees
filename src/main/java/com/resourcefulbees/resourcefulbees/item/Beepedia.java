@@ -14,6 +14,8 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
+import net.minecraft.item.Item.Properties;
+
 public class Beepedia extends Item {
 
     TranslationTextComponent containerName = new TranslationTextComponent("gui.resourcefulbees.beepedia");
@@ -23,20 +25,20 @@ public class Beepedia extends Item {
     }
 
     @Override
-    public @NotNull ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity playerEntity, @NotNull Hand hand) {
-        ItemStack itemstack = playerEntity.getHeldItem(hand);
-        if (world.isRemote){
-            Minecraft.getInstance().displayGuiScreen(new BeepediaScreen(containerName, null));
+    public @NotNull ActionResult<ItemStack> use(World world, PlayerEntity playerEntity, @NotNull Hand hand) {
+        ItemStack itemstack = playerEntity.getItemInHand(hand);
+        if (world.isClientSide){
+            Minecraft.getInstance().setScreen(new BeepediaScreen(containerName, null));
         }
-        return ActionResult.success(itemstack, world.isRemote());
+        return ActionResult.sidedSuccess(itemstack, world.isClientSide());
     }
 
     @Override
-    public @NotNull ActionResultType itemInteractionForEntity(@NotNull ItemStack stack, PlayerEntity player, @NotNull LivingEntity entity, @NotNull Hand hand) {
-        if (player.world.isRemote && entity instanceof CustomBeeEntity) {
-            Minecraft.getInstance().displayGuiScreen(new BeepediaScreen(containerName, ((CustomBeeEntity) entity).getBeeType()));
+    public @NotNull ActionResultType interactLivingEntity(@NotNull ItemStack stack, PlayerEntity player, @NotNull LivingEntity entity, @NotNull Hand hand) {
+        if (player.level.isClientSide && entity instanceof CustomBeeEntity) {
+            Minecraft.getInstance().setScreen(new BeepediaScreen(containerName, ((CustomBeeEntity) entity).getBeeType()));
             return ActionResultType.SUCCESS;
         }
-        return super.itemInteractionForEntity(stack, player, entity, hand);
+        return super.interactLivingEntity(stack, player, entity, hand);
     }
 }

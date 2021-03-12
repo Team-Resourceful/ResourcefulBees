@@ -37,26 +37,26 @@ public class EffectComponent implements ICustomComponent {
     }
 
     private ITextComponent getEffectName(Effect effect) {
-        return new TranslationTextComponent(effect.getName());
+        return new TranslationTextComponent(effect.getDescriptionId());
     }
 
     @Override
     public void render(@NotNull MatrixStack matrixStack, @NotNull IComponentRenderContext context, float pticks, int mouseX, int mouseY) {
-        FontRenderer text = Minecraft.getInstance().fontRenderer;
+        FontRenderer text = Minecraft.getInstance().font;
         TextureManager manager = Minecraft.getInstance().getTextureManager();
-        float width = text.getWidth(effectName);
-        text.draw(matrixStack, effectName.shallowCopy().formatted(TextFormatting.BLACK), xOffset - width / 2, yOffset, -1);
-        manager.bindTexture(EFFECT_BACKGROUND);
-        AbstractGui.drawTexture(matrixStack, xOffset - 32, yOffset + 6, 1, 99, 64, 32, 128, 256);
-        manager.bindTexture(this.effectSprite.getAtlas().getId());
-        AbstractGui.drawSprite(matrixStack, xOffset - 9, yOffset + 13, 1, 18, 18, this.effectSprite);
+        float width = text.width(effectName);
+        text.draw(matrixStack, effectName.copy().withStyle(TextFormatting.BLACK), xOffset - width / 2, yOffset, -1);
+        manager.bind(EFFECT_BACKGROUND);
+        AbstractGui.blit(matrixStack, xOffset - 32, yOffset + 6, 1, 99, 64, 32, 128, 256);
+        manager.bind(this.effectSprite.atlas().location());
+        AbstractGui.blit(matrixStack, xOffset - 9, yOffset + 13, 1, 18, 18, this.effectSprite);
     }
 
     @Override
     public void onVariablesAvailable(UnaryOperator<IVariable> lookup) {
         effectID = lookup.apply(effectID);
         this.effect = ForgeRegistries.POTIONS.getValue(new ResourceLocation(effectID.asString()));
-        this.effectSprite = Minecraft.getInstance().getPotionSpriteUploader().getSprite(effect);
+        this.effectSprite = Minecraft.getInstance().getMobEffectTextures().get(effect);
         this.effectName = getEffectName(this.effect);
     }
 }

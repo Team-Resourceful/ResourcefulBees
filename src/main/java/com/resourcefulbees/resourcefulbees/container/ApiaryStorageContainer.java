@@ -24,7 +24,7 @@ public class ApiaryStorageContainer extends Container {
     public ApiaryStorageContainer(int id, World world, BlockPos pos, PlayerInventory inv) {
         super(ModContainers.APIARY_STORAGE_CONTAINER.get(), id);
         this.playerInventory = inv;
-        this.apiaryStorageTileEntity = (ApiaryStorageTileEntity) world.getTileEntity(pos);
+        this.apiaryStorageTileEntity = (ApiaryStorageTileEntity) world.getBlockEntity(pos);
         setupSlots(false);
     }
 
@@ -34,25 +34,25 @@ public class ApiaryStorageContainer extends Container {
      * @param player the player
      */
     @Override
-    public boolean canInteractWith(@Nonnull PlayerEntity player) {
+    public boolean stillValid(@Nonnull PlayerEntity player) {
         return true;
     }
 
 
     public void setupSlots(boolean rebuild) {
         if (getApiaryStorageTileEntity() != null) {
-            this.inventorySlots.clear();
+            this.slots.clear();
             numberOfSlots = getApiaryStorageTileEntity().getNumberOfSlots();
             this.addSlot(new SlotItemHandlerUnconditioned(getApiaryStorageTileEntity().getItemStackHandler(), ApiaryStorageTileEntity.UPGRADE_SLOT, 7, 18) {
 
                 @Override
-                public int getSlotStackLimit() { return 1; }
+                public int getMaxStackSize() { return 1; }
 
                 @Override
-                public boolean isItemValid(ItemStack stack) { return UpgradeItem.hasUpgradeData(stack) && (UpgradeItem.getUpgradeType(stack).contains(NBTConstants.NBT_STORAGE_UPGRADE)); }
+                public boolean mayPlace(ItemStack stack) { return UpgradeItem.hasUpgradeData(stack) && (UpgradeItem.getUpgradeType(stack).contains(NBTConstants.NBT_STORAGE_UPGRADE)); }
 
                 @Override
-                public boolean canTakeStack(PlayerEntity playerIn) {
+                public boolean mayPickup(PlayerEntity playerIn) {
                     boolean flag = true;
 
                     for (int i = 10; i <= getNumberOfSlots(); ++i) {
@@ -103,24 +103,24 @@ public class ApiaryStorageContainer extends Container {
 
     @Nonnull
     @Override
-    public ItemStack transferStackInSlot(@Nonnull PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(@Nonnull PlayerEntity playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = this.inventorySlots.get(index);
-        if (slot != null && slot.getHasStack()) {
-            ItemStack itemstack1 = slot.getStack();
+        Slot slot = this.slots.get(index);
+        if (slot != null && slot.hasItem()) {
+            ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
             if (index <= getNumberOfSlots()) {
-                if (!this.mergeItemStack(itemstack1, getNumberOfSlots(), inventorySlots.size(), true)) {
+                if (!this.moveItemStackTo(itemstack1, getNumberOfSlots(), slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.mergeItemStack(itemstack1, 0, 1, false)) {
+            } else if (!this.moveItemStackTo(itemstack1, 0, 1, false)) {
                 return ItemStack.EMPTY;
             }
 
             if (itemstack1.isEmpty()) {
-                slot.putStack(ItemStack.EMPTY);
+                slot.set(ItemStack.EMPTY);
             } else {
-                slot.onSlotChanged();
+                slot.setChanged();
             }
         }
         return itemstack;

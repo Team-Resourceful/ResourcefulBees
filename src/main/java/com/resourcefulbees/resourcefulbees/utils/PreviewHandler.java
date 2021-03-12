@@ -35,10 +35,10 @@ public class PreviewHandler {
         STRUCTURE_PREVIEW_POS.clear();
         if (enabled) {
             PreviewHandler.apiaryPos = apiary;
-            BlockPos.stream(box).forEach((blockPos -> {
-                if (   (blockPos.getX() == box.minX || blockPos.getX() == box.maxX ||
-                        blockPos.getY() == box.minY || blockPos.getY() == box.maxY ||
-                        blockPos.getZ() == box.minZ || blockPos.getZ() == box.maxZ  ) && !apiary.equals(blockPos.toImmutable())) {
+            BlockPos.betweenClosedStream(box).forEach((blockPos -> {
+                if (   (blockPos.getX() == box.x0 || blockPos.getX() == box.x1 ||
+                        blockPos.getY() == box.y0 || blockPos.getY() == box.y1 ||
+                        blockPos.getZ() == box.z0 || blockPos.getZ() == box.z1  ) && !apiary.equals(blockPos.immutable())) {
 
                     BlockPos savedPos = new BlockPos(blockPos.getX(), blockPos.getY(), blockPos.getZ());
                     STRUCTURE_PREVIEW_POS.add(savedPos);
@@ -50,24 +50,24 @@ public class PreviewHandler {
     }
 
     public static void onWorldRenderLast(RenderWorldLastEvent event) {
-        World world = Minecraft.getInstance().world;
+        World world = Minecraft.getInstance().level;
         MatrixStack ms = event.getMatrixStack();
 
-        IRenderTypeBuffer.Impl buffers = Minecraft.getInstance().getBufferBuilders().getEntityVertexConsumers();
-        IVertexBuilder buffer = buffers.getBuffer(RenderType.getTranslucent());
+        IRenderTypeBuffer.Impl buffers = Minecraft.getInstance().renderBuffers().bufferSource();
+        IVertexBuilder buffer = buffers.getBuffer(RenderType.translucent());
 
         if (apiaryPos != null && enabled) {
             if (world != null && world.getBlockState(apiaryPos).getBlock() instanceof ApiaryBlock) {
-                if (world.getTileEntity(apiaryPos) instanceof ApiaryTileEntity) {
-                    ApiaryTileEntity apiaryTE = (ApiaryTileEntity) world.getTileEntity(apiaryPos);
+                if (world.getBlockEntity(apiaryPos) instanceof ApiaryTileEntity) {
+                    ApiaryTileEntity apiaryTE = (ApiaryTileEntity) world.getBlockEntity(apiaryPos);
                     if (apiaryTE != null && apiaryTE.isPreviewed())
                         for (BlockPos pos : STRUCTURE_PREVIEW_POS) {
-                            if (world.getBlockState(pos).equals(net.minecraft.block.Blocks.AIR.getDefaultState()))
-                                renderBlockAt(ms, buffer, ModBlocks.PREVIEW_BLOCK.get().getDefaultState(), pos);
+                            if (world.getBlockState(pos).equals(net.minecraft.block.Blocks.AIR.defaultBlockState()))
+                                renderBlockAt(ms, buffer, ModBlocks.PREVIEW_BLOCK.get().defaultBlockState(), pos);
                             else {
                                 if (BeeInfoUtils.getBlockTag("resourcefulbees:valid_apiary") != null
-                                        && !world.getBlockState(pos).isIn(BeeInfoUtils.getBlockTag("resourcefulbees:valid_apiary"))) {
-                                    renderBlockAt(ms, buffer, ModBlocks.ERRORED_PREVIEW_BLOCK.get().getDefaultState(), pos);
+                                        && !world.getBlockState(pos).is(BeeInfoUtils.getBlockTag("resourcefulbees:valid_apiary"))) {
+                                    renderBlockAt(ms, buffer, ModBlocks.ERRORED_PREVIEW_BLOCK.get().defaultBlockState(), pos);
                                 }
                             }
                         }
@@ -79,26 +79,26 @@ public class PreviewHandler {
             }
         }
 
-        buffers.draw(RenderType.getTranslucent());
+        buffers.endBatch(RenderType.translucent());
     }
 
     private static void renderBlockAt(MatrixStack ms, IVertexBuilder buffer, BlockState state, BlockPos pos) {
-        double renderPosX = Minecraft.getInstance().getRenderManager().info.getProjectedView().getX();
-        double renderPosY = Minecraft.getInstance().getRenderManager().info.getProjectedView().getY();
-        double renderPosZ = Minecraft.getInstance().getRenderManager().info.getProjectedView().getZ();
+        double renderPosX = Minecraft.getInstance().getEntityRenderDispatcher().camera.getPosition().x();
+        double renderPosY = Minecraft.getInstance().getEntityRenderDispatcher().camera.getPosition().y();
+        double renderPosZ = Minecraft.getInstance().getEntityRenderDispatcher().camera.getPosition().z();
 
-        ms.push();
+        ms.pushPose();
         ms.translate(-renderPosX, -renderPosY, -renderPosZ);
 
-        BlockRendererDispatcher brd = Minecraft.getInstance().getBlockRendererDispatcher();
+        BlockRendererDispatcher brd = Minecraft.getInstance().getBlockRenderer();
         ms.translate(pos.getX(), pos.getY(), pos.getZ());
-        IBakedModel model = brd.getModelForState(state);
+        IBakedModel model = brd.getBlockModel(state);
         int color = Minecraft.getInstance().getBlockColors().getColor(state, null, null, 0);
         float r = (float) (color >> 16 & 255) / 255.0F;
         float g = (float) (color >> 8 & 255) / 255.0F;
         float b = (float) (color & 255) / 255.0F;
-        brd.getBlockModelRenderer().renderModel(ms.peek(), buffer, state, model, r, g, b, 16777215, OverlayTexture.DEFAULT_UV, EmptyModelData.INSTANCE);
+        brd.getModelRenderer().renderModel(ms.last(), buffer, state, model, r, g, b, 16777215, OverlayTexture.NO_OVERLAY, EmptyModelData.INSTANCE);
 
-        ms.pop();
+        ms.popPose();
     }
 }

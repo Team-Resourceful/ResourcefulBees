@@ -41,21 +41,21 @@ import java.util.List;
 @SuppressWarnings("deprecation")
 public class ApiaryBlock extends Block {
 
-  public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
+  public static final DirectionProperty FACING = HorizontalBlock.FACING;
   public static final BooleanProperty VALIDATED = BooleanProperty.create("validated");
 
   private final int tier;
 
   public ApiaryBlock(final int tier, float hardness, float resistance) {
-    super(AbstractBlock.Properties.create(Material.IRON).hardnessAndResistance(hardness, resistance).sound(SoundType.METAL));
+    super(AbstractBlock.Properties.of(Material.METAL).strength(hardness, resistance).sound(SoundType.METAL));
     this.tier = tier;
-    this.setDefaultState(this.stateContainer.getBaseState().with(VALIDATED, false).with(FACING, Direction.NORTH));
+    this.registerDefaultState(this.stateDefinition.any().setValue(VALIDATED, false).setValue(FACING, Direction.NORTH));
   }
 
   @Override
-  public @NotNull ActionResultType onUse(@Nonnull BlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand handIn, @Nonnull BlockRayTraceResult hit) {
-    if (!world.isRemote) {
-      INamedContainerProvider blockEntity = state.getContainer(world,pos);
+  public @NotNull ActionResultType use(@Nonnull BlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand handIn, @Nonnull BlockRayTraceResult hit) {
+    if (!world.isClientSide) {
+      INamedContainerProvider blockEntity = state.getMenuProvider(world,pos);
       if (blockEntity != null) {
         NetworkHooks.openGui((ServerPlayerEntity) player, blockEntity, pos);
       }
@@ -65,21 +65,21 @@ public class ApiaryBlock extends Block {
 
   @Override
   public BlockState getStateForPlacement(BlockItemUseContext context) {
-    if (context.getPlayer() != null && context.getPlayer().isSneaking()) {
-      return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing());
+    if (context.getPlayer() != null && context.getPlayer().isShiftKeyDown()) {
+      return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection());
     }
-    return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite());
+    return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
   }
 
   @Override
-  protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+  protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
     builder.add(VALIDATED, FACING);
   }
 
   @Nullable
   @Override
-  public INamedContainerProvider getContainer(@Nonnull BlockState state, World worldIn, @Nonnull BlockPos pos) {
-    return (INamedContainerProvider)worldIn.getTileEntity(pos);
+  public INamedContainerProvider getMenuProvider(@Nonnull BlockState state, World worldIn, @Nonnull BlockPos pos) {
+    return (INamedContainerProvider)worldIn.getBlockEntity(pos);
   }
 
   @Override
@@ -94,8 +94,8 @@ public class ApiaryBlock extends Block {
   }
 
   @Override
-  public void onBlockPlacedBy(World worldIn, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nullable LivingEntity placer, @Nonnull ItemStack stack) {
-    TileEntity tile = worldIn.getTileEntity(pos);
+  public void setPlacedBy(World worldIn, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nullable LivingEntity placer, @Nonnull ItemStack stack) {
+    TileEntity tile = worldIn.getBlockEntity(pos);
     if(tile instanceof ApiaryTileEntity) {
       ApiaryTileEntity apiaryTileEntity = (ApiaryTileEntity) tile;
       apiaryTileEntity.setTier(tier);
@@ -104,20 +104,20 @@ public class ApiaryBlock extends Block {
 
   @OnlyIn(Dist.CLIENT)
   @Override
-  public void addInformation(@Nonnull ItemStack stack, @Nullable IBlockReader worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
+  public void appendHoverText(@Nonnull ItemStack stack, @Nullable IBlockReader worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
     if(Screen.hasShiftDown())
     {
       tooltip.addAll(new TooltipBuilder()
-              .addTip(I18n.format("block.resourcefulbees.beehive.tooltip.max_bees"))
+              .addTip(I18n.get("block.resourcefulbees.beehive.tooltip.max_bees"))
               .appendText(" " + Config.APIARY_MAX_BEES.get())
-              .appendText(" " + I18n.format("block.resourcefulbees.beehive.tooltip.unique_bees"), TextFormatting.BOLD)
+              .appendText(" " + I18n.get("block.resourcefulbees.beehive.tooltip.unique_bees"), TextFormatting.BOLD)
               .appendText( TextFormatting.GOLD + " Bees", TextFormatting.RESET)
               .applyStyle(TextFormatting.GOLD)
               .build());
       if (tier != 1) {
         int timeReduction = (int)((0.1 + (tier * .05)) * 100);
         tooltip.addAll(new TooltipBuilder()
-                .addTip(I18n.format("block.resourcefulbees.beehive.tooltip.hive_time"))
+                .addTip(I18n.get("block.resourcefulbees.beehive.tooltip.hive_time"))
                 .appendText(" -" + timeReduction + "%")
                 .applyStyle(TextFormatting.GOLD)
                 .build());
@@ -143,34 +143,34 @@ public class ApiaryBlock extends Block {
           outputQuantity = Config.T1_APIARY_QUANTITY.get();
       }
 
-      String outputType = outputTypeEnum.equals(ApiaryOutput.COMB) ? I18n.format("honeycomb.resourcefulbees") : I18n.format("honeycomb_block.resourcefulbees");
+      String outputType = outputTypeEnum.equals(ApiaryOutput.COMB) ? I18n.get("honeycomb.resourcefulbees") : I18n.get("honeycomb_block.resourcefulbees");
 
       tooltip.addAll(new TooltipBuilder()
-              .addTip(I18n.format("block.resourcefulbees.apiary.tooltip.output_type"))
+              .addTip(I18n.get("block.resourcefulbees.apiary.tooltip.output_type"))
               .appendText(" " + outputType)
               .applyStyle(TextFormatting.GOLD)
-              .addTip(I18n.format("block.resourcefulbees.apiary.tooltip.output_quantity"))
+              .addTip(I18n.get("block.resourcefulbees.apiary.tooltip.output_quantity"))
               .appendText(" " + outputQuantity)
               .applyStyle(TextFormatting.GOLD)
               .build());
     }
     else if (Screen.hasControlDown()){
       tooltip.addAll(new TooltipBuilder()
-              .addTip(I18n.format("block.resourcefulbees.apiary.tooltip.structure_size"), TextFormatting.AQUA)
-              .addTip(I18n.format("block.resourcefulbees.apiary.tooltip.requisites"), TextFormatting.AQUA)
-              .addTip(I18n.format("block.resourcefulbees.apiary.tooltip.drops"), TextFormatting.AQUA)
-              .addTip(I18n.format("block.resourcefulbees.apiary.tooltip.tags"), TextFormatting.AQUA)
-              .addTip(I18n.format("block.resourcefulbees.apiary.tooltip.offset"), TextFormatting.AQUA)
-              .addTip(I18n.format("block.resourcefulbees.apiary.tooltip.lock"), TextFormatting.AQUA)
-              .addTip(I18n.format("block.resourcefulbees.apiary.tooltip.lock_2"), TextFormatting.AQUA)
+              .addTip(I18n.get("block.resourcefulbees.apiary.tooltip.structure_size"), TextFormatting.AQUA)
+              .addTip(I18n.get("block.resourcefulbees.apiary.tooltip.requisites"), TextFormatting.AQUA)
+              .addTip(I18n.get("block.resourcefulbees.apiary.tooltip.drops"), TextFormatting.AQUA)
+              .addTip(I18n.get("block.resourcefulbees.apiary.tooltip.tags"), TextFormatting.AQUA)
+              .addTip(I18n.get("block.resourcefulbees.apiary.tooltip.offset"), TextFormatting.AQUA)
+              .addTip(I18n.get("block.resourcefulbees.apiary.tooltip.lock"), TextFormatting.AQUA)
+              .addTip(I18n.get("block.resourcefulbees.apiary.tooltip.lock_2"), TextFormatting.AQUA)
               .build());
     }
     else
     {
-      tooltip.add(new StringTextComponent(TextFormatting.YELLOW + I18n.format("resourcefulbees.shift_info")));
-      tooltip.add(new StringTextComponent(TextFormatting.AQUA + I18n.format("resourcefulbees.ctrl_info")));
+      tooltip.add(new StringTextComponent(TextFormatting.YELLOW + I18n.get("resourcefulbees.shift_info")));
+      tooltip.add(new StringTextComponent(TextFormatting.AQUA + I18n.get("resourcefulbees.ctrl_info")));
     }
 
-    super.addInformation(stack, worldIn, tooltip, flagIn);
+    super.appendHoverText(stack, worldIn, tooltip, flagIn);
   }
 }

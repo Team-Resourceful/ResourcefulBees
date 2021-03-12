@@ -39,23 +39,25 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.stream.IntStream;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 @SuppressWarnings("deprecation")
 public class HoneyGenerator extends Block {
-    public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
+    public static final DirectionProperty FACING = HorizontalBlock.FACING;
     public static final BooleanProperty PROPERTY_ON = BooleanProperty.create("on");
 
     public HoneyGenerator(Properties properties) {
         super(properties);
-        setDefaultState(getDefaultState().with(PROPERTY_ON, false).with(FACING, Direction.NORTH));
+        registerDefaultState(defaultBlockState().setValue(PROPERTY_ON, false).setValue(FACING, Direction.NORTH));
     }
 
     @Nonnull
     @Override
-    public ActionResultType onUse(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult blockRayTraceResult) {
-        if (!world.isRemote) {
-            ItemStack heldItem = player.getHeldItem(hand);
+    public ActionResultType use(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult blockRayTraceResult) {
+        if (!world.isClientSide) {
+            ItemStack heldItem = player.getItemInHand(hand);
             boolean usingBucket = heldItem.getItem() instanceof BucketItem;
-            TileEntity tileEntity = world.getTileEntity(pos);
+            TileEntity tileEntity = world.getBlockEntity(pos);
 
             if (tileEntity instanceof HoneyGeneratorTileEntity) {
                 if (usingBucket) {
@@ -71,19 +73,19 @@ public class HoneyGenerator extends Block {
 
     @Nullable
     @Override
-    public INamedContainerProvider getContainer(@Nonnull BlockState state, World worldIn, @Nonnull BlockPos pos) {
-        return (INamedContainerProvider) worldIn.getTileEntity(pos);
+    public INamedContainerProvider getMenuProvider(@Nonnull BlockState state, World worldIn, @Nonnull BlockPos pos) {
+        return (INamedContainerProvider) worldIn.getBlockEntity(pos);
     }
 
     @Override
-    public void onReplaced(@Nonnull BlockState state1, World world, @Nonnull BlockPos pos, @Nonnull BlockState state, boolean isMoving) {
-        TileEntity blockEntity = world.getTileEntity(pos);
+    public void onRemove(@Nonnull BlockState state1, World world, @Nonnull BlockPos pos, @Nonnull BlockState state, boolean isMoving) {
+        TileEntity blockEntity = world.getBlockEntity(pos);
         if (blockEntity instanceof HoneyGeneratorTileEntity && state.getBlock() != state1.getBlock()) {
             HoneyGeneratorTileEntity honeyGeneratorTileEntity = (HoneyGeneratorTileEntity) blockEntity;
             ItemStackHandler h = honeyGeneratorTileEntity.getTileStackHandler();
-            IntStream.range(0, h.getSlots()).mapToObj(h::getStackInSlot).filter(s -> !s.isEmpty()).forEach(stack -> InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack));
+            IntStream.range(0, h.getSlots()).mapToObj(h::getStackInSlot).filter(s -> !s.isEmpty()).forEach(stack -> InventoryHelper.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack));
         }
-        super.onReplaced(state1, world, pos, state, isMoving);
+        super.onRemove(state1, world, pos, state, isMoving);
     }
 
     @Override
@@ -93,7 +95,7 @@ public class HoneyGenerator extends Block {
 
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite());
+        return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
     }
 
     @Nullable
@@ -103,16 +105,16 @@ public class HoneyGenerator extends Block {
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(PROPERTY_ON, FACING);
     }
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void addInformation(@Nonnull ItemStack stack, @Nullable IBlockReader worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
+    public void appendHoverText(@Nonnull ItemStack stack, @Nullable IBlockReader worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
         tooltip.addAll(new TooltipBuilder()
-                .addTip(I18n.format("block.resourcefulbees.generator.tooltip.info"), TextFormatting.GOLD)
+                .addTip(I18n.get("block.resourcefulbees.generator.tooltip.info"), TextFormatting.GOLD)
                 .build());
-        super.addInformation(stack, worldIn, tooltip, flagIn);
+        super.appendHoverText(stack, worldIn, tooltip, flagIn);
     }
 }

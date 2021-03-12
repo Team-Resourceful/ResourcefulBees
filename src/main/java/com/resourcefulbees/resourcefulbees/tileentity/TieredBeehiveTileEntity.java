@@ -39,6 +39,8 @@ import java.util.List;
 import static com.resourcefulbees.resourcefulbees.lib.BeeConstants.MIN_HIVE_TIME;
 import static com.resourcefulbees.resourcefulbees.lib.BeeConstants.SMOKE_TIME;
 
+import net.minecraft.tileentity.BeehiveTileEntity.State;
+
 public class TieredBeehiveTileEntity extends BeehiveTileEntity {
 
     protected int tier;
@@ -46,8 +48,17 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
 
     private List<ItemStack> honeycombs = new LinkedList<>();
     protected boolean isSmoked = false;
-    protected int ticksSmoked = 0;
+    protected int ticksSmoked = -1;
     protected int ticksSinceBeesFlagged;
+
+    public TieredBeehiveTileEntity() {
+        super();
+    }
+    public TieredBeehiveTileEntity(int tier, float tierModifier) {
+        super();
+        this.tier = tier;
+        this.tierModifier = tierModifier;
+    }
 
     @Nonnull
     @Override
@@ -69,8 +80,8 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
         float combsInHive = this.getHoneycombs().size();
         float percentValue = (combsInHive / getMaxCombs()) * 100;
         int newState = (int) MathUtils.clamp((percentValue - (percentValue % 20)) / 20, 0, 5) ;
-        assert this.world != null;
-        this.world.setBlockState(this.getPos(), this.getBlockState().with(BeehiveBlock.HONEY_LEVEL, newState));
+        assert this.level != null;
+        this.level.setBlockAndUpdate(this.getBlockPos(), this.getBlockState().setValue(BeehiveBlock.HONEY_LEVEL, newState));
     }
 
     public void smokeHive() {
@@ -81,8 +92,8 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
     public int getTicksSmoked() { return ticksSmoked; }
 
     @Override
-    public boolean releaseBee(@Nonnull BlockState state, @Nonnull BeehiveTileEntity.Bee tileBee, @Nullable List<Entity> entities, @Nonnull BeehiveTileEntity.State beehiveState) {
-        BlockPos blockpos = this.getPos();
+    public boolean releaseOccupant(@Nonnull BlockState state, @Nonnull BeehiveTileEntity.Bee tileBee, @Nullable List<Entity> entities, @Nonnull BeehiveTileEntity.State beehiveState) {
+        BlockPos blockpos = this.getBlockPos();
         if (shouldStayInHive(beehiveState)) {
             return false;
         } else {
@@ -90,15 +101,15 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
             nbt.remove("Passengers");
             nbt.remove("Leash");
             nbt.remove("UUID");
-            Direction direction = state.get(BeehiveBlock.FACING);
-            BlockPos blockpos1 = blockpos.offset(direction);
-            if (world == null) {
+            Direction direction = state.getValue(BeehiveBlock.FACING);
+            BlockPos blockpos1 = blockpos.relative(direction);
+            if (level == null) {
                 return false;
             } else {
-                if (!this.world.getBlockState(blockpos1).getCollisionShape(this.world, blockpos1).isEmpty() && beehiveState != State.EMERGENCY) {
+                if (!this.level.getBlockState(blockpos1).getCollisionShape(this.level, blockpos1).isEmpty() && beehiveState != State.EMERGENCY) {
                     return false;
                 }
-                Entity entity = EntityType.func_220335_a(nbt, this.world, entity1 -> entity1);
+                Entity entity = EntityType.loadEntityRecursive(nbt, this.level, entity1 -> entity1);
                 if (entity != null) {
                     BeeInfoUtils.setEntityLocationAndAngle(blockpos, direction, entity);
 
@@ -106,12 +117,12 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
                         BeeEntity vanillaBeeEntity = (BeeEntity) entity;
                         ItemStack honeycomb = new ItemStack(Items.HONEYCOMB);
 
-                        if (vanillaBeeEntity.hasFlower() && this.world.rand.nextFloat() > 0.9F) {
-                            vanillaBeeEntity.flowerPos = null;
+                        if (vanillaBeeEntity.hasSavedFlowerPos() && this.level.random.nextFloat() > 0.9F) {
+                            vanillaBeeEntity.savedFlowerPos = null;
                         }
 
                         if (beehiveState == State.HONEY_DELIVERED) {
-                            vanillaBeeEntity.onHoneyDelivered();
+                            vanillaBeeEntity.dropOffNectar();
                             int i = getHoneyLevel(state);
                             if (i < 5) {
                                 if (entity instanceof ICustomBee && ((ICustomBee)entity).getBeeData().hasHoneycomb()) {
@@ -127,9 +138,9 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
                         BeeInfoUtils.ageBee(((BTEBeeAccessor) tileBee).getTicksInHive(), vanillaBeeEntity);
                         if (entities != null) entities.add(entity);
                     }
-                    BlockPos hivePos = this.getPos();
-                    this.world.playSound(null, hivePos.getX(), hivePos.getY(),  hivePos.getZ(), SoundEvents.BLOCK_BEEHIVE_EXIT, SoundCategory.BLOCKS, 1.0F, 1.0F);
-                    return this.world.addEntity(entity);
+                    BlockPos hivePos = this.getBlockPos();
+                    this.level.playSound(null, hivePos.getX(), hivePos.getY(),  hivePos.getZ(), SoundEvents.BEEHIVE_EXIT, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                    return this.level.addFreshEntity(entity);
                 } else {
                     return true;
                 }
@@ -138,17 +149,17 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
     }
 
     @Override
-    public void tryEnterHive(@Nonnull Entity bee, boolean hasNectar, int ticksInHive) {
-        if (this.bees.size() < getMaxBees()) {
-            bee.removePassengers();
+    public void addOccupantWithPresetTicks(@Nonnull Entity bee, boolean hasNectar, int ticksInHive) {
+        if (this.stored.size() < getMaxBees()) {
+            bee.ejectPassengers();
             CompoundNBT nbt = new CompoundNBT();
-            bee.writeUnlessPassenger(nbt);
+            bee.save(nbt);
 
-            if (this.world != null && bee instanceof BeeEntity) {
+            if (this.level != null && bee instanceof BeeEntity) {
                 int maxTimeInHive = getMaxTimeInHive(bee instanceof ICustomBee ? ((ICustomBee) bee).getBeeData().getMaxTimeInHive() : BeeConstants.MAX_TIME_IN_HIVE);
-                this.bees.add(new BeehiveTileEntity.Bee(nbt, ticksInHive,  hasNectar ? maxTimeInHive : MIN_HIVE_TIME));
-                BlockPos pos = this.getPos();
-                this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BLOCK_BEEHIVE_ENTER, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                this.stored.add(new BeehiveTileEntity.Bee(nbt, ticksInHive,  hasNectar ? maxTimeInHive : MIN_HIVE_TIME));
+                BlockPos pos = this.getBlockPos();
+                this.level.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BEEHIVE_ENTER, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 bee.remove();
             }
         }
@@ -166,14 +177,14 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
     }
 
     @Override
-    public boolean isSmoked() {
-        assert this.world != null;
-        return isSmoked || CampfireBlock.isLitCampfireInRange(this.world, this.getPos());
+    public boolean isSedated() {
+        assert this.level != null;
+        return isSmoked || CampfireBlock.isSmokeyPos(this.level, this.getBlockPos());
     }
 
     @Override
     public void tick() {
-        if (world != null && !world.isRemote) {
+        if (level != null && !level.isClientSide) {
             if (isSmoked) {
                 if (MathUtils.inRangeInclusive(ticksSmoked, 0, SMOKE_TIME)) {
                     ticksSmoked++;
@@ -185,7 +196,7 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
 
             ticksSinceBeesFlagged++;
             if (ticksSinceBeesFlagged == 80) {
-                BeeInfoUtils.flagBeesInRange(pos, world);
+                BeeInfoUtils.flagBeesInRange(worldPosition, level);
                 ticksSinceBeesFlagged = 0;
             }
         }
@@ -193,13 +204,13 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
     }
 
     public boolean shouldStayInHive(State beehiveState){
-        return (world != null && (this.world.isNight() || this.world.isRaining())) && beehiveState != BeehiveTileEntity.State.EMERGENCY;
+        return (level != null && (this.level.isNight() || this.level.isRaining())) && beehiveState != BeehiveTileEntity.State.EMERGENCY;
     }
 
     @Override
-    public boolean isFullOfBees() { return bees.size() >= getMaxBees(); }
+    public boolean isFull() { return stored.size() >= getMaxBees(); }
 
-    public boolean hasBees() { return !bees.isEmpty(); }
+    public boolean hasBees() { return !stored.isEmpty(); }
 
     public ItemStack getResourceHoneycomb(){ return getHoneycombs().remove(0); }
 
@@ -213,8 +224,8 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
     }
 
     @Override
-    public void fromTag(@Nonnull BlockState state, @Nonnull CompoundNBT nbt) {
-        super.fromTag(state, nbt);
+    public void load(@Nonnull BlockState state, @Nonnull CompoundNBT nbt) {
+        super.load(state, nbt);
         if (nbt.contains(NBTConstants.NBT_HONEYCOMBS_TE)) honeycombs = getHoneycombs(nbt);
         if (nbt.contains(NBTConstants.NBT_SMOKED_TE)) this.isSmoked = nbt.getBoolean(NBTConstants.NBT_SMOKED_TE);
         if (nbt.contains(NBTConstants.NBT_TIER)) setTier(nbt.getInt(NBTConstants.NBT_TIER));
@@ -223,8 +234,8 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
 
     @Nonnull
     @Override
-    public CompoundNBT write(@Nonnull CompoundNBT nbt) {
-        super.write(nbt);
+    public CompoundNBT save(@Nonnull CompoundNBT nbt) {
+        super.save(nbt);
         if (!getHoneycombs().isEmpty()) nbt.put(NBTConstants.NBT_HONEYCOMBS_TE, writeHoneycombs());
         nbt.putBoolean(NBTConstants.NBT_SMOKED_TE, isSmoked);
         nbt.putInt(NBTConstants.NBT_TIER, getTier());
@@ -241,7 +252,7 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
         for (int i = 0; i < numberOfCombs(); i++) {
             CompoundNBT itemTag = new CompoundNBT();
             itemTag.putInt(String.valueOf(i), i);
-            getHoneycombs().get(i).write(itemTag);
+            getHoneycombs().get(i).save(itemTag);
             nbtTagList.add(itemTag);
         }
         return nbtTagList;
@@ -250,7 +261,7 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
     public List<ItemStack> getHoneycombs(CompoundNBT nbt) {
         List<ItemStack> itemStacks = new LinkedList<>();
         ListNBT tagList = nbt.getList(NBTConstants.NBT_HONEYCOMBS_TE, Constants.NBT.TAG_COMPOUND);
-        tagList.forEach(compound -> itemStacks.add(0, ItemStack.read((CompoundNBT) compound)));
+        tagList.forEach(compound -> itemStacks.add(0, ItemStack.of((CompoundNBT) compound)));
         return itemStacks;
     }
 

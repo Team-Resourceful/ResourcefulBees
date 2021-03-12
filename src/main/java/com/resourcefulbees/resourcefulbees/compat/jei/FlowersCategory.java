@@ -47,7 +47,7 @@ public class FlowersCategory implements IRecipeCategory<FlowersCategory.Recipe> 
     public FlowersCategory(IGuiHelper guiHelper) {
         this.background = guiHelper.drawableBuilder(GUI_BACK, 0, 0, 24, 75).addPadding(0, 0, 0, 0).build();
         this.icon = guiHelper.createDrawableIngredient(new ItemStack(ModBlocks.GOLD_FLOWER.get()));
-        this.localizedName = I18n.format("gui.resourcefulbees.jei.category.bee_pollination_flowers");
+        this.localizedName = I18n.get("gui.resourcefulbees.jei.category.bee_pollination_flowers");
     }
 
     public static List<Recipe> getFlowersRecipes() {
@@ -127,11 +127,11 @@ public class FlowersCategory implements IRecipeCategory<FlowersCategory.Recipe> 
         if (recipe.isAcceptsAny()) {
             if (recipe.recipeType == RecipeTypes.ITEM) {
                 List<Ingredient> list = new ArrayList<>();
-                list.add(Ingredient.fromTag(recipe.itemITag));
+                list.add(Ingredient.of(recipe.itemITag));
                 ingredients.setInputIngredients(list);
             } else if (recipe.recipeType == RecipeTypes.FLUID) {
                 List<FluidStack> fluids = new ArrayList<>();
-                for (Fluid element: recipe.fluidITag.values() ) {
+                for (Fluid element: recipe.fluidITag.getValues() ) {
                     FluidStack fluid = new FluidStack(element, 1000);
                     fluids.add(fluid);
                 }
@@ -140,7 +140,7 @@ public class FlowersCategory implements IRecipeCategory<FlowersCategory.Recipe> 
                 ingredients.setInputLists(VanillaTypes.FLUID, fluidFluids);
             } else if (recipe.recipeType == RecipeTypes.BLOCK) {
                 List<ItemStack> itemStacks = new ArrayList<>();
-                for (Block element: recipe.blockTag.values() ) {
+                for (Block element: recipe.blockTag.getValues() ) {
                     ItemStack item = new ItemStack(element.asItem());
                     itemStacks.add(item);
                 }

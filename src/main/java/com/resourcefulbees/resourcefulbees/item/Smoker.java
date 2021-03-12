@@ -40,52 +40,52 @@ public class Smoker extends Item {
     }
 
     @Override
-    public @NotNull ActionResultType onItemUse(ItemUseContext context) {
-        if (!context.getWorld().isRemote && context.getItem().getDamage() < context.getItem().getMaxDamage()) {
-            smokeHive(context.getPos(), context.getWorld());
+    public @NotNull ActionResultType useOn(ItemUseContext context) {
+        if (!context.getLevel().isClientSide && context.getItemInHand().getDamageValue() < context.getItemInHand().getMaxDamage()) {
+            smokeHive(context.getClickedPos(), context.getLevel());
             return ActionResultType.PASS;
         }
-        return super.onItemUse(context);
+        return super.useOn(context);
     }
 
     protected void smokeHive(BlockPos pos, World world) {
-        TileEntity blockEntity = world.getTileEntity(pos);
+        TileEntity blockEntity = world.getBlockEntity(pos);
         if (blockEntity instanceof TieredBeehiveTileEntity) {
             ((TieredBeehiveTileEntity) blockEntity).smokeHive();
         }
     }
 
     @Override
-	public @NotNull ActionResult<ItemStack> onItemRightClick(World world, @NotNull PlayerEntity player, @NotNull Hand hand) {
-	    if (!world.isRemote) {
-	        int damage = player.getHeldItem(hand).getDamage();
-	        int maxDamage = player.getHeldItem(hand).getMaxDamage();
+	public @NotNull ActionResult<ItemStack> use(World world, @NotNull PlayerEntity player, @NotNull Hand hand) {
+	    if (!world.isClientSide) {
+	        int damage = player.getItemInHand(hand).getDamageValue();
+	        int maxDamage = player.getItemInHand(hand).getMaxDamage();
 
 	        if (flag == 1 && damage < maxDamage) {
-                player.getHeldItem(hand).damageItem(1, player, player1 -> player1.sendBreakAnimation(hand));
+                player.getItemInHand(hand).hurtAndBreak(1, player, player1 -> player1.broadcastBreakEvent(hand));
                 flag = 0;
             } else {
 	            flag++;
             }
 
-	        Vector3d vec3d = player.getLookVec();
+	        Vector3d vec3d = player.getLookAngle();
 			double x = player.getX() + vec3d.x * 2;
 			double y = player.getY() + vec3d.y * 2;
 			double z = player.getZ() + vec3d.z * 2;
 
             AxisAlignedBB axisalignedbb = new AxisAlignedBB((player.getX() + vec3d.x) - 2.5D, (player.getY() + vec3d.y) - 2D, (player.getZ() + vec3d.z) - 2.5D, (player.getX() + vec3d.x) + 2.5D, (player.getY() + vec3d.y) + 2D, (player.getZ() + vec3d.z) + 2.5D);
-            List<MobEntity> list = world.getEntitiesIncludingUngeneratedChunks(BeeEntity.class, axisalignedbb);
+            List<MobEntity> list = world.getLoadedEntitiesOfClass(BeeEntity.class, axisalignedbb);
             list.stream()
-                    .filter(mobEntity -> mobEntity instanceof BeeEntity && ((BeeEntity) mobEntity).hasAngerTime())
+                    .filter(mobEntity -> mobEntity instanceof BeeEntity && ((BeeEntity) mobEntity).isAngry())
                     .forEach(mobEntity -> {
-                        ((BeeEntity) mobEntity).setAngerTime(0);
-                        mobEntity.setRevengeTarget(null);
+                        ((BeeEntity) mobEntity).setRemainingPersistentAngerTime(0);
+                        mobEntity.setLastHurtByMob(null);
                     });
 
 			ServerWorld worldServer = (ServerWorld)world;
-			worldServer.spawnParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, x, y + 1.3D, z, 50, 0, 0, 0, 0.01F);
+			worldServer.sendParticles(ParticleTypes.CAMPFIRE_COSY_SMOKE, x, y + 1.3D, z, 50, 0, 0, 0, 0.01F);
 	    }
-		return super.onItemRightClick(world, player, hand);
+		return super.use(world, player, hand);
 	}
 
     @Override
@@ -95,12 +95,12 @@ public class Smoker extends Item {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void addInformation(@NotNull ItemStack stack, @Nullable World worldIn, @NotNull List<ITextComponent> tooltip, @NotNull ITooltipFlag flagIn) {
+    public void appendHoverText(@NotNull ItemStack stack, @Nullable World worldIn, @NotNull List<ITextComponent> tooltip, @NotNull ITooltipFlag flagIn) {
         if(Screen.hasShiftDown()) {
-            tooltip.add(new StringTextComponent(TextFormatting.GOLD + I18n.format("item.resourcefulbees.smoker.tooltip")));
-            tooltip.add(new StringTextComponent(TextFormatting.GOLD + I18n.format("item.resourcefulbees.smoker.tooltip.1")));
+            tooltip.add(new StringTextComponent(TextFormatting.GOLD + I18n.get("item.resourcefulbees.smoker.tooltip")));
+            tooltip.add(new StringTextComponent(TextFormatting.GOLD + I18n.get("item.resourcefulbees.smoker.tooltip.1")));
         } else {
-            tooltip.add(new StringTextComponent(TextFormatting.YELLOW + I18n.format("resourcefulbees.shift_info")));
+            tooltip.add(new StringTextComponent(TextFormatting.YELLOW + I18n.get("resourcefulbees.shift_info")));
         }
     }
 }

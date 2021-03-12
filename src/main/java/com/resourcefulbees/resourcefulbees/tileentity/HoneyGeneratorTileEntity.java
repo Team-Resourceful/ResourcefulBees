@@ -55,6 +55,9 @@ import javax.annotation.Nullable;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 
+import com.resourcefulbees.resourcefulbees.container.AutomationSensitiveItemStackHandler.IAcceptor;
+import com.resourcefulbees.resourcefulbees.container.AutomationSensitiveItemStackHandler.IRemover;
+
 public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider {
 
     public static final int HONEY_BOTTLE_INPUT = 0;
@@ -67,7 +70,7 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
     public static final int MAX_TANK_STORAGE = Config.MAX_TANK_STORAGE.get();
 
     private static Predicate<FluidStack> honeyFluidPredicate() {
-        return fluidStack -> fluidStack.getFluid().isIn(HONEY_FLUID_TAG);
+        return fluidStack -> fluidStack.getFluid().is(HONEY_FLUID_TAG);
     }
 
     private final HoneyGeneratorTileEntity.TileStackHandler tileStackHandler = new HoneyGeneratorTileEntity.TileStackHandler(5, getAcceptor(), getRemover());
@@ -91,7 +94,7 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
 
     @Override
     public void tick() {
-        if (world != null && !world.isRemote) {
+        if (level != null && !level.isClientSide) {
             if (canStartFluidProcess()) {
                 processFluid();
             }
@@ -99,11 +102,11 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
                 this.processEnergy();
             }
             if (!isProcessing && !this.canProcessEnergy()) {
-                world.setBlockState(pos, getBlockState().with(HoneyGenerator.PROPERTY_ON, false));
+                level.setBlockAndUpdate(worldPosition, getBlockState().setValue(HoneyGenerator.PROPERTY_ON, false));
             }
             if (dirty) {
                 this.dirty = false;
-                this.markDirty();
+                this.setChanged();
             }
         }
         sendOutPower();
@@ -113,15 +116,15 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
         AtomicInteger capacity = new AtomicInteger(energyStorage.getEnergyStored());
         if (capacity.get() > 0) {
             for (Direction direction : Direction.values()) {
-                if (world != null) {
-                    TileEntity te = world.getTileEntity(pos.offset(direction));
+                if (level != null) {
+                    TileEntity te = level.getBlockEntity(worldPosition.relative(direction));
                     if (te != null) {
                         boolean doContinue = te.getCapability(CapabilityEnergy.ENERGY, direction).map(handler -> {
                             if (handler.canReceive()) {
                                 int received = handler.receiveEnergy(Math.min(capacity.get(), ENERGY_TRANSFER_AMOUNT), false);
                                 capacity.addAndGet(-received);
                                 energyStorage.consumeEnergy(received);
-                                markDirty();
+                                setChanged();
                                 return capacity.get() > 0;
                             } else {
                                 return true;
@@ -147,10 +150,10 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
         if (!stack.isEmpty()) {
             if (stack.getItem() instanceof BucketItem) {
                 BucketItem bucket = (BucketItem) stack.getItem();
-                stackValid = bucket.getFluid().isIn(HONEY_FLUID_TAG);
+                stackValid = bucket.getFluid().is(HONEY_FLUID_TAG);
                 isBucket = true;
             } else {
-                stackValid = stack.getItem().isIn(HONEY_BOTTLE_TAG);
+                stackValid = stack.getItem().is(HONEY_BOTTLE_TAG);
             }
         }
         if (!output.isEmpty()) {
@@ -183,7 +186,7 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
             } else {
                 if (stack.getItem() instanceof CustomHoneyBottleItem) {
                     CustomHoneyBottleItem item = (CustomHoneyBottleItem) stack.getItem();
-                    FluidStack fluid = new FluidStack(item.getHoneyData().getHoneyStillFluidRegistryObject().get().getStillFluid(), HONEY_FILL_AMOUNT);
+                    FluidStack fluid = new FluidStack(item.getHoneyData().getHoneyStillFluidRegistryObject().get().getSource(), HONEY_FILL_AMOUNT);
                     fluidTank.fill(fluid, IFluidHandler.FluidAction.EXECUTE);
                 } else if (stack.getItem() == ModItems.CATNIP_HONEY_BOTTLE.get()) {
                     FluidStack fluid = new FluidStack(ModFluids.CATNIP_HONEY_STILL.get(), HONEY_FILL_AMOUNT);
@@ -215,7 +218,7 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
             spaceLeft = (fluidTank.getFluidAmount() + HONEY_FILL_AMOUNT) <= fluidTank.getCapacity();
             if (stack.getItem() instanceof CustomHoneyBottleItem) {
                 CustomHoneyBottleItem item = (CustomHoneyBottleItem) stack.getItem();
-                fluid = item.getHoneyData().getHoneyStillFluidRegistryObject().get().getStillFluid();
+                fluid = item.getHoneyData().getHoneyStillFluidRegistryObject().get().getSource();
             } else if (stack.getItem() == ModItems.CATNIP_HONEY_BOTTLE.get()) {
                 fluid = ModFluids.CATNIP_HONEY_STILL.get();
             }
@@ -233,8 +236,8 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
             energyStorage.addEnergy(ENERGY_FILL_AMOUNT);
             setEnergyFilled(getEnergyFilled() + ENERGY_FILL_AMOUNT);
             if (getEnergyFilled() >= ENERGY_FILL_AMOUNT) setEnergyFilled(0);
-            assert world != null : "World is null?";
-            world.setBlockState(pos, getBlockState().with(HoneyGenerator.PROPERTY_ON, true));
+            assert level != null : "World is null?";
+            level.setBlockAndUpdate(worldPosition, getBlockState().setValue(HoneyGenerator.PROPERTY_ON, true));
             this.dirty = true;
         }
     }
@@ -245,19 +248,19 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
         CompoundNBT nbt = new CompoundNBT();
         nbt.put("tank", fluidTank.writeToNBT(new CompoundNBT()));
         nbt.put("power", energyStorage.serializeNBT());
-        return new SUpdateTileEntityPacket(pos, 0, nbt);
+        return new SUpdateTileEntityPacket(worldPosition, 0, nbt);
     }
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-        CompoundNBT nbt = pkt.getNbtCompound();
+        CompoundNBT nbt = pkt.getTag();
         fluidTank.readFromNBT(nbt.getCompound("tank"));
         energyStorage.deserializeNBT(nbt.getCompound("power"));
     }
 
     @Nonnull
     @Override
-    public CompoundNBT write(CompoundNBT tag) {
+    public CompoundNBT save(CompoundNBT tag) {
         CompoundNBT inv = this.getTileStackHandler().serializeNBT();
         tag.put(NBTConstants.NBT_INVENTORY, inv);
         tag.put(NBTConstants.NBT_ENERGY, energyStorage.serializeNBT());
@@ -265,11 +268,11 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
         tag.putInt(NBTConstants.NBT_ENERGY_FILLED, getEnergyFilled());
         tag.putInt(NBTConstants.NBT_FLUID_FILLED, getFluidFilled());
         tag.putBoolean(NBTConstants.NBT_IS_PROCESSING, isProcessing);
-        return super.write(tag);
+        return super.save(tag);
     } //TODO 1.17 - change "fluid" to tank
 
     @Override
-    public void fromTag(@Nonnull BlockState state, CompoundNBT tag) {
+    public void load(@Nonnull BlockState state, CompoundNBT tag) {
         CompoundNBT invTag = tag.getCompound(NBTConstants.NBT_INVENTORY);
         getTileStackHandler().deserializeNBT(invTag);
         energyStorage.deserializeNBT(tag.getCompound(NBTConstants.NBT_ENERGY));
@@ -277,20 +280,20 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
         if (tag.contains(NBTConstants.NBT_ENERGY_FILLED)) setEnergyFilled(tag.getInt(NBTConstants.NBT_ENERGY_FILLED));
         if (tag.contains(NBTConstants.NBT_FLUID_FILLED)) setFluidFilled(tag.getInt(NBTConstants.NBT_FLUID_FILLED));
         if (tag.contains(NBTConstants.NBT_IS_PROCESSING)) isProcessing = tag.getBoolean(NBTConstants.NBT_IS_PROCESSING);
-        super.fromTag(state, tag);
+        super.load(state, tag);
     }
 
     @Nonnull
     @Override
     public CompoundNBT getUpdateTag() {
         CompoundNBT nbtTagCompound = new CompoundNBT();
-        write(nbtTagCompound);
+        save(nbtTagCompound);
         return nbtTagCompound;
     }
 
     @Override
     public void handleUpdateTag(@Nonnull BlockState state, CompoundNBT tag) {
-        this.fromTag(state, tag);
+        this.load(state, tag);
     }
 
     @Nonnull
@@ -321,7 +324,7 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
     @Override
     public Container createMenu(int id, @Nonnull PlayerInventory playerInventory, @Nonnull PlayerEntity playerEntity) {
         //noinspection ConstantConditions
-        return new HoneyGeneratorContainer(id, world, pos, playerInventory);
+        return new HoneyGeneratorContainer(id, level, worldPosition, playerInventory);
     }
 
     @Nonnull
@@ -334,7 +337,7 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
         return new CustomEnergyStorage(MAX_ENERGY_CAPACITY, 0, ENERGY_TRANSFER_AMOUNT) {
             @Override
             protected void onEnergyChanged() {
-                markDirty();
+                setChanged();
             }
         };
     }
@@ -344,7 +347,7 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
             PacketBuffer buffer = new PacketBuffer(Unpooled.buffer());
             buffer.writeFluidStack(fluidTank.getFluid());
             buffer.writeInt(energyStorage.getEnergyStored());
-            NetPacketHandler.sendToPlayer(new SyncGUIMessage(this.pos, buffer), (ServerPlayerEntity) player);
+            NetPacketHandler.sendToPlayer(new SyncGUIMessage(this.worldPosition, buffer), (ServerPlayerEntity) player);
         }
     }
 
@@ -353,7 +356,7 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
         energyStorage.setEnergy(buffer.readInt());
     }
 
-    public int getLevel() {
+    public int getFluidLevel() {
         float fillPercentage = ((float) fluidTank.getFluidAmount()) / ((float) fluidTank.getTankCapacity(0));
         return (int) Math.ceil(fillPercentage * 100);
     }
@@ -387,16 +390,16 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
         public boolean isItemValid(int slot, @NotNull ItemStack stack) {
             if (stack.getItem() instanceof BucketItem) {
                 BucketItem bucket = (BucketItem) stack.getItem();
-                return bucket.getFluid().isIn(HONEY_FLUID_TAG);
+                return bucket.getFluid().is(HONEY_FLUID_TAG);
             } else {
-                return stack.getItem().isIn(HONEY_BOTTLE_TAG);
+                return stack.getItem().is(HONEY_BOTTLE_TAG);
             }
         }
 
         @Override
         protected void onContentsChanged(int slot) {
             super.onContentsChanged(slot);
-            markDirty();
+            setChanged();
         }
     }
 
@@ -409,9 +412,9 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
         @Override
         protected void onContentsChanged() {
             super.onContentsChanged();
-            if (world != null) {
-                BlockState state = world.getBlockState(pos);
-                world.notifyBlockUpdate(pos, state, state, 2);
+            if (level != null) {
+                BlockState state = level.getBlockState(worldPosition);
+                level.sendBlockUpdated(worldPosition, state, state, 2);
             }
         }
     }

@@ -14,6 +14,8 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
+import net.minecraft.item.Item.Properties;
+
 public class CustomHoneyBucketItem extends BucketItem {
 
     private final HoneyBottleData honeyBottleData;

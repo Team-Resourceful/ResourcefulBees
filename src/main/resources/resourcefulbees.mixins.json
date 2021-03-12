@@ -10,9 +10,12 @@
     "ContainerAccessor",
     "DispenserBlockInvoker",
     "MixinBeeEntity",
-    "MixinBeeEntity$MixinEnterBeehiveGoal",
-    "MixinBeeEntity$MixinFindBeehiveGoal",
-    "MixinBeeEntity$MixinUpdateBeehiveGoal"
+    "MixinEnterBeehiveGoal",
+    "MixinFindBeehiveGoal",
+    "MixinUpdateBeehiveGoal",
+    "MixinEnterBeehiveGoal",
+    "MixinFindBeehiveGoal",
+    "MixinUpdateBeehiveGoal"
   ],
   "minVersion": "0.8.1"
 }

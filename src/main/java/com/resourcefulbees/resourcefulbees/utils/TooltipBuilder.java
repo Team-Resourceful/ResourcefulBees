@@ -23,7 +23,7 @@ public class TooltipBuilder {
     }
 
     public TooltipBuilder addTranslatableTip(String key, TextFormatting formatting) {
-        tooltip.add(new TranslationTextComponent(key).formatted(formatting));
+        tooltip.add(new TranslationTextComponent(key).withStyle(formatting));
         return this;
     }
     public TooltipBuilder addTranslatableTip(String key) {

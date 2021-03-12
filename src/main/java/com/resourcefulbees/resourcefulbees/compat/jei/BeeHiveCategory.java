@@ -32,7 +32,7 @@ public class BeeHiveCategory implements IRecipeCategory<BeeHiveCategory.Recipe> 
     public BeeHiveCategory(IGuiHelper guiHelper) {
         this.background = guiHelper.drawableBuilder(GUI_BACK, 0, 0, 160, 26).addPadding(0, 0, 0, 0).build();
         this.icon = guiHelper.createDrawableIngredient(new ItemStack(ModItems.T1_BEEHIVE_ITEM.get()));
-        this.localizedName = I18n.format("gui.resourcefulbees.jei.category.hive");
+        this.localizedName = I18n.get("gui.resourcefulbees.jei.category.hive");
     }
 
     public static List<Recipe> getHoneycombRecipes() {
@@ -78,7 +78,7 @@ public class BeeHiveCategory implements IRecipeCategory<BeeHiveCategory.Recipe> 
 
     @Override
     public void setIngredients(Recipe recipe, IIngredients ingredients) {
-        List<Ingredient> list = new ArrayList<>(Collections.singletonList(Ingredient.fromItems(ModItems.T1_BEEHIVE_ITEM.get(), ModItems.T2_BEEHIVE_ITEM.get(), ModItems.T3_BEEHIVE_ITEM.get(), ModItems.T4_BEEHIVE_ITEM.get())));
+        List<Ingredient> list = new ArrayList<>(Collections.singletonList(Ingredient.of(ModItems.T1_BEEHIVE_ITEM.get(), ModItems.T2_BEEHIVE_ITEM.get(), ModItems.T3_BEEHIVE_ITEM.get(), ModItems.T4_BEEHIVE_ITEM.get())));
         ingredients.setOutput(VanillaTypes.ITEM, recipe.getComb());
         ingredients.setInputIngredients(list);
         ingredients.setInput(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(recipe.beeType, -45.0f));

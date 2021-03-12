@@ -52,7 +52,7 @@ public class BlockMutation implements IRecipeCategory<BlockMutation.Recipe> {
         this.icon = guiHelper.createDrawable(ICONS, 0, 0, 16, 16);
         this.info = guiHelper.createDrawable(ICONS, 16, 0, 9, 9);
         this.beeHive = guiHelper.createDrawableIngredient(new ItemStack(ModItems.T1_BEEHIVE_ITEM.get()));
-        this.localizedName = I18n.format("gui.resourcefulbees.jei.category.block_mutation");
+        this.localizedName = I18n.get("gui.resourcefulbees.jei.category.block_mutation");
     }
 
     public static List<Recipe> getMutationRecipes() {
@@ -103,7 +103,7 @@ public class BlockMutation implements IRecipeCategory<BlockMutation.Recipe> {
 
     @Override
     public void setIngredients(Recipe recipe, @NotNull IIngredients ingredients) {
-        if (recipe.blockInput instanceof FlowingFluidBlock || (recipe.tagInput != null && recipe.tagInput.values().get(0) instanceof Fluid)) {
+        if (recipe.blockInput instanceof FlowingFluidBlock || (recipe.tagInput != null && recipe.tagInput.getValues().get(0) instanceof Fluid)) {
             RecipeUtils.setFluidInput(ingredients, recipe.tagInput, recipe.blockInput);
         } else {
             RecipeUtils.setBlockInput(ingredients, recipe.tagInput, recipe.blockInput);
@@ -126,7 +126,7 @@ public class BlockMutation implements IRecipeCategory<BlockMutation.Recipe> {
 
     @Override
     public void setRecipe(@NotNull IRecipeLayout iRecipeLayout, Recipe recipe, @NotNull IIngredients ingredients) {
-        if (recipe.blockInput instanceof FlowingFluidBlock || (recipe.tagInput != null && recipe.tagInput.values().get(0) instanceof Fluid)) {
+        if (recipe.blockInput instanceof FlowingFluidBlock || (recipe.tagInput != null && recipe.tagInput.getValues().get(0) instanceof Fluid)) {
             if (recipe.blockOutput.getBlock() instanceof FlowingFluidBlock) {
                 setFluidToFluidRecipe(iRecipeLayout, recipe, ingredients);
             } else {

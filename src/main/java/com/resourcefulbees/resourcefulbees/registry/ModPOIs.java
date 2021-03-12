@@ -31,8 +31,8 @@ public class ModPOIs {
         ModBlocks.BLOCKS.getEntries().stream()
                 .filter(blockRegistryObject -> blockRegistryObject.get() instanceof TieredBeehiveBlock || blockRegistryObject.get() instanceof ApiaryBlock)
                 .forEach((blockRegistryObject -> states.addAll(blockRegistryObject.get()
-                        .getStateContainer()
-                        .getValidStates())));
+                        .getStateDefinition()
+                        .getPossibleStates())));
         return states;
     }
 }

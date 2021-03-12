@@ -25,13 +25,13 @@ public class BeeBreedGoal extends BreedGoal {
     }
 
     @Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
         if (!this.animal.isInLove()) {
             return false;
         } else {
-            this.field_75391_e = this.getNearbyMate();
-            if (field_75391_e instanceof ICustomBee){
-                ICustomBee parent1 = ((ICustomBee) field_75391_e);
+            this.partner = this.getFreePartner();
+            if (partner instanceof ICustomBee){
+                ICustomBee parent1 = ((ICustomBee) partner);
                 ICustomBee parent2 = ((ICustomBee) animal);
                 return BeeRegistry.getRegistry().canParentsBreed(parent1.getBeeType(), parent2.getBeeType());
             }
@@ -41,75 +41,75 @@ public class BeeBreedGoal extends BreedGoal {
     }
 
     @Override
-    protected void spawnBaby() {
+    protected void breed() {
         ICustomBee bee = (ICustomBee)this.animal;
-        String parent1 = ((ICustomBee)this.field_75391_e).getBeeType();
+        String parent1 = ((ICustomBee)this.partner).getBeeType();
         String parent2 = ((ICustomBee)this.animal).getBeeType();
         CustomBeeData childData = BeeRegistry.getRegistry().getWeightedChild(parent1, parent2);
         float breedChance = BeeRegistry.getRegistry().getBreedChance(parent1, parent2, childData);
         AgeableEntity ageableentity = bee.createSelectedChild(childData);
 
-        final BabyEntitySpawnEvent event = new BabyEntitySpawnEvent(animal, field_75391_e, ageableentity);
+        final BabyEntitySpawnEvent event = new BabyEntitySpawnEvent(animal, partner, ageableentity);
         final boolean cancelled = MinecraftForge.EVENT_BUS.post(event);
         ageableentity = event.getChild();
         if (cancelled) {
             int p1BreedDelay = ((ICustomBee)this.animal).getBeeData().getBreedData().getBreedDelay();
-            int p2BreedDelay = ((ICustomBee)this.field_75391_e).getBeeData().getBreedData().getBreedDelay();
+            int p2BreedDelay = ((ICustomBee)this.partner).getBeeData().getBreedData().getBreedDelay();
 
             resetBreed(p1BreedDelay, p2BreedDelay);
             return;
         }
         if (ageableentity != null) {
             ServerPlayerEntity serverplayerentity = this.animal.getLoveCause();
-            if (serverplayerentity == null && this.field_75391_e.getLoveCause() != null) {
-                serverplayerentity = this.field_75391_e.getLoveCause();
+            if (serverplayerentity == null && this.partner.getLoveCause() != null) {
+                serverplayerentity = this.partner.getLoveCause();
             }
 
             if (serverplayerentity != null) {
-                serverplayerentity.addStat(Stats.ANIMALS_BRED);
-                CriteriaTriggers.BRED_ANIMALS.trigger(serverplayerentity, this.animal, this.field_75391_e, ageableentity);
+                serverplayerentity.awardStat(Stats.ANIMALS_BRED);
+                CriteriaTriggers.BRED_ANIMALS.trigger(serverplayerentity, this.animal, this.partner, ageableentity);
             }
             int p1BreedDelay = ((ICustomBee)this.animal).getBeeData().getBreedData().getBreedDelay();
-            int p2BreedDelay = ((ICustomBee)this.field_75391_e).getBeeData().getBreedData().getBreedDelay();
+            int p2BreedDelay = ((ICustomBee)this.partner).getBeeData().getBreedData().getBreedDelay();
             resetBreed(p1BreedDelay, p2BreedDelay);
 
 
-            float nextFloat = world.rand.nextFloat();
+            float nextFloat = level.random.nextFloat();
             if (breedChance >= nextFloat) {
-                ageableentity.setGrowingAge(childData.getBreedData().getChildGrowthDelay());
-                ageableentity.setLocationAndAngles(this.animal.getX(), this.animal.getY(), this.animal.getZ(), 0.0F, 0.0F);
-                this.world.addEntity(ageableentity);
-                this.world.setEntityState(this.animal, (byte)18);
-                if (this.world.getGameRules().getBoolean(GameRules.DO_MOB_LOOT)) {
-                    this.world.addEntity(new ExperienceOrbEntity(this.world, this.animal.getX(), this.animal.getY(), this.animal.getZ(), this.animal.getRNG().nextInt(7) + 1));
+                ageableentity.setAge(childData.getBreedData().getChildGrowthDelay());
+                ageableentity.moveTo(this.animal.getX(), this.animal.getY(), this.animal.getZ(), 0.0F, 0.0F);
+                this.level.addFreshEntity(ageableentity);
+                this.level.broadcastEntityEvent(this.animal, (byte)18);
+                if (this.level.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
+                    this.level.addFreshEntity(new ExperienceOrbEntity(this.level, this.animal.getX(), this.animal.getY(), this.animal.getZ(), this.animal.getRandom().nextInt(7) + 1));
                 }
             }else {
-                this.animal.playSound(SoundEvents.ENTITY_BEE_HURT, 2.0f, 1.0f);
+                this.animal.playSound(SoundEvents.BEE_HURT, 2.0f, 1.0f);
                 spawnParticles();
             }
         }
     }
 
     protected void spawnParticles() {
-        if (!world.isRemote()) {
-            ServerWorld worldServer = (ServerWorld)world;
+        if (!level.isClientSide()) {
+            ServerWorld worldServer = (ServerWorld)level;
             for(int i = 0; i < 5; ++i) {
-                double d0 = world.rand.nextGaussian() * 0.02D;
-                double d1 = world.rand.nextGaussian() * 0.02D;
-                double d2 = world.rand.nextGaussian() * 0.02D;
-                worldServer.spawnParticle((IParticleData) ParticleTypes.ANGRY_VILLAGER,
-                        this.animal.getParticleX(1.0D),
-                        this.animal.getRandomBodyY(),
-                        this.animal.getParticleZ(1.0D),
+                double d0 = level.random.nextGaussian() * 0.02D;
+                double d1 = level.random.nextGaussian() * 0.02D;
+                double d2 = level.random.nextGaussian() * 0.02D;
+                worldServer.sendParticles((IParticleData) ParticleTypes.ANGRY_VILLAGER,
+                        this.animal.getRandomX(1.0D),
+                        this.animal.getRandomY(),
+                        this.animal.getRandomZ(1.0D),
                         50, d0, d1, d2, 0.1f);
             }
         }
     }
 
     private void resetBreed(int p1BreedDelay, int p2BreedDelay) {
-        this.animal.setGrowingAge(p1BreedDelay);
-        this.field_75391_e.setGrowingAge(p2BreedDelay);
-        this.animal.resetInLove();
-        this.field_75391_e.resetInLove();
+        this.animal.setAge(p1BreedDelay);
+        this.partner.setAge(p2BreedDelay);
+        this.animal.resetLove();
+        this.partner.resetLove();
     }
 }

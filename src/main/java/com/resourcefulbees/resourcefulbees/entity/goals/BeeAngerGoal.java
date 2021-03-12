@@ -19,25 +19,25 @@ public class BeeAngerGoal extends HurtByTargetGoal {
     }
 
     @Override
-    public boolean shouldContinueExecuting() {
-        return bee.getAngerTime() > 0 && super.shouldContinueExecuting();
+    public boolean canContinueToUse() {
+        return bee.getRemainingPersistentAngerTime() > 0 && super.canContinueToUse();
     }
 
     @Override
-    protected void setAttackTarget(@Nonnull MobEntity mobIn, @Nonnull LivingEntity targetIn) {
-        if (mobIn instanceof BeeEntity && this.goalOwner.canEntityBeSeen(targetIn)) {
-            mobIn.setAttackTarget(targetIn);
+    protected void alertOther(@Nonnull MobEntity mobIn, @Nonnull LivingEntity targetIn) {
+        if (mobIn instanceof BeeEntity && this.mob.canSee(targetIn)) {
+            mobIn.setTarget(targetIn);
         }
     }
 
     @Override
     protected void alertOthers() {
-        double d0 = this.getTargetDistance();
-        AxisAlignedBB axisalignedbb = AxisAlignedBB.method_29968(this.goalOwner.getPositionVec()).grow(d0, 10.0D, d0);
-        List<BeeEntity> list = this.goalOwner.world.getEntitiesIncludingUngeneratedChunks(BeeEntity.class, axisalignedbb);
+        double d0 = this.getFollowDistance();
+        AxisAlignedBB axisalignedbb = AxisAlignedBB.unitCubeFromLowerCorner(this.mob.position()).inflate(d0, 10.0D, d0);
+        List<BeeEntity> list = this.mob.level.getLoadedEntitiesOfClass(BeeEntity.class, axisalignedbb);
         list.forEach(beeEntity -> {
-            if (this.goalOwner.getRevengeTarget() != null)
-                this.setAttackTarget(beeEntity, this.goalOwner.getRevengeTarget());
+            if (this.mob.getLastHurtByMob() != null)
+                this.alertOther(beeEntity, this.mob.getLastHurtByMob());
         });
     }
 }

@@ -24,6 +24,8 @@ import net.minecraftforge.fml.network.NetworkHooks;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 @SuppressWarnings("deprecation")
 public class CentrifugeCasingBlock extends Block {
     public CentrifugeCasingBlock(Properties properties) { super(properties); }
@@ -38,7 +40,7 @@ public class CentrifugeCasingBlock extends Block {
     }
 
     protected CentrifugeControllerTileEntity getControllerEntity(World world, BlockPos pos) {
-        TileEntity tileEntity = world.getTileEntity(pos);
+        TileEntity tileEntity = world.getBlockEntity(pos);
         if (tileEntity instanceof CentrifugeCasingTileEntity) {
             return ((CentrifugeCasingTileEntity) tileEntity).getController();
         }
@@ -51,15 +53,15 @@ public class CentrifugeCasingBlock extends Block {
     public void neighborChanged(@Nonnull BlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull Block changedBlock, @Nonnull BlockPos changedBlockPos, boolean bool) {
         CentrifugeControllerTileEntity centrifugeControllerTileEntity = getControllerEntity(world, pos);
         if (centrifugeControllerTileEntity != null) {
-            centrifugeControllerTileEntity.setIsPoweredByRedstone(world.isBlockPowered(pos));
+            centrifugeControllerTileEntity.setIsPoweredByRedstone(world.hasNeighborSignal(pos));
         }
     }
 
     @Nonnull
     @Override
-    public ActionResultType onUse(@Nonnull BlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult rayTraceResult) {
-        if (!world.isRemote) {
-            ItemStack heldItem = player.getHeldItem(hand);
+    public ActionResultType use(@Nonnull BlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult rayTraceResult) {
+        if (!world.isClientSide) {
+            ItemStack heldItem = player.getItemInHand(hand);
             boolean usingBucket = heldItem.getItem() instanceof BucketItem;
             CentrifugeControllerTileEntity controller = getControllerEntity(world, pos);
 
@@ -67,8 +69,8 @@ public class CentrifugeCasingBlock extends Block {
                     if (usingBucket) {
                         controller.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
                                 .ifPresent(iFluidHandler -> FluidUtil.interactWithFluidHandler(player, hand, world, pos, null));
-                    } else if(!player.isSneaking()) {
-                        NetworkHooks.openGui((ServerPlayerEntity) player, controller, controller.getPos());
+                    } else if(!player.isShiftKeyDown()) {
+                        NetworkHooks.openGui((ServerPlayerEntity) player, controller, controller.getBlockPos());
                     }
                 }
                 else

@@ -47,105 +47,105 @@ public class BeeRewardRender extends LayerRenderer<AbstractClientPlayerEntity, P
 
 
 
-        this.body.setRotationPoint(0.0F, 19.0F, 0.0F);
-        torso.setRotationPoint(0.0F, 0.0F, 0.0F);
+        this.body.setPos(0.0F, 19.0F, 0.0F);
+        torso.setPos(0.0F, 0.0F, 0.0F);
         this.body.addChild(torso);
-        torso.setTextureOffset(0, 0).addCuboid(-3.5F, -4.0F, -5.0F, 7.0F, 7.0F, 10.0F, 0.0F);
+        torso.texOffs(0, 0).addBox(-3.5F, -4.0F, -5.0F, 7.0F, 7.0F, 10.0F, 0.0F);
 
-        stinger.addCuboid(0.0F, -1.0F, 5.0F, 0.0F, 1.0F, 2.0F, 0.0F);
+        stinger.addBox(0.0F, -1.0F, 5.0F, 0.0F, 1.0F, 2.0F, 0.0F);
         torso.addChild(stinger);
 
-        this.leftAntenna.setRotationPoint(0.0F, -2.0F, -5.0F);
-        this.leftAntenna.addCuboid(1.5F, -2.0F, -3.0F, 1.0F, 2.0F, 3.0F, 0.0F);
+        this.leftAntenna.setPos(0.0F, -2.0F, -5.0F);
+        this.leftAntenna.addBox(1.5F, -2.0F, -3.0F, 1.0F, 2.0F, 3.0F, 0.0F);
 
-        this.rightAntenna.setRotationPoint(0.0F, -2.0F, -5.0F);
-        this.rightAntenna.addCuboid(-2.5F, -2.0F, -3.0F, 1.0F, 2.0F, 3.0F, 0.0F);
+        this.rightAntenna.setPos(0.0F, -2.0F, -5.0F);
+        this.rightAntenna.addBox(-2.5F, -2.0F, -3.0F, 1.0F, 2.0F, 3.0F, 0.0F);
         torso.addChild(this.leftAntenna);
         torso.addChild(this.rightAntenna);
 
-        this.rightWing.setRotationPoint(-1.5F, -4.0F, -3.0F);
+        this.rightWing.setPos(-1.5F, -4.0F, -3.0F);
         this.setRotationAngle(rightWing, -0.2618F);
         this.body.addChild(this.rightWing);
-        this.rightWing.addCuboid(-9.0F, 0.0F, 0.0F, 9.0F, 0.0F, 6.0F, 0.001F);
+        this.rightWing.addBox(-9.0F, 0.0F, 0.0F, 9.0F, 0.0F, 6.0F, 0.001F);
 
-        this.leftWing.setRotationPoint(1.5F, -4.0F, -3.0F);
+        this.leftWing.setPos(1.5F, -4.0F, -3.0F);
         this.setRotationAngle(leftWing, 0.2618F);
         this.leftWing.mirror = true;
         this.body.addChild(this.leftWing);
-        this.leftWing.addCuboid(0.0F, 0.0F, 0.0F, 9.0F, 0.0F, 6.0F, 0.001F);
+        this.leftWing.addBox(0.0F, 0.0F, 0.0F, 9.0F, 0.0F, 6.0F, 0.001F);
 
-        this.frontLegs.setRotationPoint(1.5F, 3.0F, -2.0F);
+        this.frontLegs.setPos(1.5F, 3.0F, -2.0F);
         this.body.addChild(this.frontLegs);
-        this.frontLegs.func_217178_a("frontLegBox", -5.0F, 0.0F, 0.0F, 7, 2, 0, 0.0F, 26, 1);
+        this.frontLegs.addBox("frontLegBox", -5.0F, 0.0F, 0.0F, 7, 2, 0, 0.0F, 26, 1);
 
-        this.middleLegs.setRotationPoint(1.5F, 3.0F, 0.0F);
+        this.middleLegs.setPos(1.5F, 3.0F, 0.0F);
         this.body.addChild(this.middleLegs);
-        this.middleLegs.func_217178_a("midLegBox", -5.0F, 0.0F, 0.0F, 7, 2, 0, 0.0F, 26, 3);
+        this.middleLegs.addBox("midLegBox", -5.0F, 0.0F, 0.0F, 7, 2, 0, 0.0F, 26, 3);
 
-        this.backLegs.setRotationPoint(1.5F, 3.0F, 2.0F);
+        this.backLegs.setPos(1.5F, 3.0F, 2.0F);
         this.body.addChild(this.backLegs);
-        this.backLegs.func_217178_a("backLegBox", -5.0F, 0.0F, 0.0F, 7, 2, 0, 0.0F, 26, 5);
+        this.backLegs.addBox("backLegBox", -5.0F, 0.0F, 0.0F, 7, 2, 0, 0.0F, 26, 5);
     }
 
     private void setRotationAngle(ModelRenderer modelRenderer, float y) {
-        modelRenderer.rotateAngleX = 0f;
-        modelRenderer.rotateAngleY = y;
-        modelRenderer.rotateAngleZ = 0f;
+        modelRenderer.xRot = 0f;
+        modelRenderer.yRot = y;
+        modelRenderer.zRot = 0f;
     }
 
     private void updateAngles(float ticks){
-        this.leftAntenna.rotateAngleX = 0.0F;
-        this.rightAntenna.rotateAngleX = 0.0F;
-        this.body.rotateAngleX = 0.0F;
-        this.body.rotationPointY = 19.0F;
-        this.rightWing.rotateAngleY = 0.0F;
-        this.rightWing.rotateAngleZ = MathHelper.cos((ticks % 98000 * 2.1F)) * (float) Math.PI * 0.15F;
-        this.leftWing.rotateAngleX = this.rightWing.rotateAngleX;
-        this.leftWing.rotateAngleY = this.rightWing.rotateAngleY;
-        this.leftWing.rotateAngleZ = -this.rightWing.rotateAngleZ;
-        this.frontLegs.rotateAngleX = ((float) Math.PI / 4F);
-        this.middleLegs.rotateAngleX = ((float) Math.PI / 4F);
-        this.backLegs.rotateAngleX = ((float) Math.PI / 4F);
+        this.leftAntenna.xRot = 0.0F;
+        this.rightAntenna.xRot = 0.0F;
+        this.body.xRot = 0.0F;
+        this.body.y = 19.0F;
+        this.rightWing.yRot = 0.0F;
+        this.rightWing.zRot = MathHelper.cos((ticks % 98000 * 2.1F)) * (float) Math.PI * 0.15F;
+        this.leftWing.xRot = this.rightWing.xRot;
+        this.leftWing.yRot = this.rightWing.yRot;
+        this.leftWing.zRot = -this.rightWing.zRot;
+        this.frontLegs.xRot = ((float) Math.PI / 4F);
+        this.middleLegs.xRot = ((float) Math.PI / 4F);
+        this.backLegs.xRot = ((float) Math.PI / 4F);
         setRotationAngle(body, 0);
 
         float f1 = MathHelper.cos(ticks % 1143333 * 0.18F);
-        this.body.rotateAngleX = 0.1F + f1 * (float) Math.PI * 0.025F;
-        this.leftAntenna.rotateAngleX = f1 * (float) Math.PI * 0.03F;
-        this.rightAntenna.rotateAngleX = f1 * (float) Math.PI * 0.03F;
-        this.frontLegs.rotateAngleX = -f1 * (float) Math.PI * 0.1F + ((float) Math.PI / 8F);
-        this.backLegs.rotateAngleX = -f1 * (float) Math.PI * 0.05F + ((float) Math.PI / 4F);
-        this.body.rotationPointY = 19.0F - MathHelper.cos(ticks % 1143333 * 0.18F) * 0.9F;
+        this.body.xRot = 0.1F + f1 * (float) Math.PI * 0.025F;
+        this.leftAntenna.xRot = f1 * (float) Math.PI * 0.03F;
+        this.rightAntenna.xRot = f1 * (float) Math.PI * 0.03F;
+        this.frontLegs.xRot = -f1 * (float) Math.PI * 0.1F + ((float) Math.PI / 8F);
+        this.backLegs.xRot = -f1 * (float) Math.PI * 0.05F + ((float) Math.PI / 4F);
+        this.body.y = 19.0F - MathHelper.cos(ticks % 1143333 * 0.18F) * 0.9F;
     }
 
     @Override
     public void render(@NotNull MatrixStack stack, @NotNull IRenderTypeBuffer buffer, int packedLightIn, @NotNull AbstractClientPlayerEntity playerEntity,  float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        if (!PatreonInfo.isPatreon(playerEntity.getUniqueID())) return;
-        BeeRewardData data = PatreonInfo.getPatreon(playerEntity.getUniqueID());
+        if (!PatreonInfo.isPatreon(playerEntity.getUUID())) return;
+        BeeRewardData data = PatreonInfo.getPatreon(playerEntity.getUUID());
         updateAngles(ageInTicks);
-        stack.push();
+        stack.pushPose();
 
         stack.scale(0.25f,0.25f,0.25f);
-        stack.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion((ageInTicks * 0.01F /2f)* 360f));
+        stack.mulPose(Vector3f.YP.rotationDegrees((ageInTicks * 0.01F /2f)* 360f));
         stack.translate(0f,(1.5 * MathHelper.sin(ageInTicks/10 - 30f)),3f);
-        stack.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(-90));
+        stack.mulPose(Vector3f.YP.rotationDegrees(-90));
 
 
-        stack.push();
-        IVertexBuilder ivertexbuilder = buffer.getBuffer(RenderType.getEntityCutoutNoCull(data.getTextures().getResourceLocation()));
-        body.render(stack, ivertexbuilder, packedLightIn, OverlayTexture.DEFAULT_UV);
-        stack.pop();
+        stack.pushPose();
+        IVertexBuilder ivertexbuilder = buffer.getBuffer(RenderType.entityCutoutNoCull(data.getTextures().getResourceLocation()));
+        body.render(stack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY);
+        stack.popPose();
 
         if (data.getTextures().hasSecondaryLayer()) {
-            stack.push();
-            IVertexBuilder ivertexbuilder2 = buffer.getBuffer(RenderType.getEntityCutoutNoCull(data.getTextures().getSecondaryResourceLocation()));
+            stack.pushPose();
+            IVertexBuilder ivertexbuilder2 = buffer.getBuffer(RenderType.entityCutoutNoCull(data.getTextures().getSecondaryResourceLocation()));
             float r = data.isRainbow() ? RainbowColor.getColorFloats()[0] : data.getColor().getR();
             float g = data.isRainbow() ? RainbowColor.getColorFloats()[1] : data.getColor().getG();
             float b = data.isRainbow() ? RainbowColor.getColorFloats()[2] : data.getColor().getB();
-            body.render(stack, ivertexbuilder2, packedLightIn, LivingRenderer.getOverlay(playerEntity, 0.0F), r, g, b, 1.0f);
-            stack.pop();
+            body.render(stack, ivertexbuilder2, packedLightIn, LivingRenderer.getOverlayCoords(playerEntity, 0.0F), r, g, b, 1.0f);
+            stack.popPose();
         }
 
 
-        stack.pop();
+        stack.popPose();
     }
 }

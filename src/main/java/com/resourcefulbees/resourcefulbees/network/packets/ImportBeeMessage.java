@@ -29,8 +29,8 @@ public class ImportBeeMessage {
         context.get().enqueueWork(() -> {
             ServerPlayerEntity player = context.get().getSender();
             if (player != null) {
-                if (player.world.isBlockPresent(message.pos)) {
-                    TileEntity tileEntity = player.world.getTileEntity(message.pos);
+                if (player.level.isLoaded(message.pos)) {
+                    TileEntity tileEntity = player.level.getBlockEntity(message.pos);
                     if (tileEntity instanceof ApiaryTileEntity) {
                         ApiaryTileEntity apiaryTileEntity = (ApiaryTileEntity) tileEntity;
                         apiaryTileEntity.importBee(player);

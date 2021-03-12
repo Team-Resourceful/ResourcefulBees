@@ -28,11 +28,11 @@ public class CubeModel {
     }
 
     public static TextureAtlasSprite getSprite(ResourceLocation spriteLocation) {
-        return Minecraft.getInstance().getSpriteAtlas(PlayerContainer.BLOCK_ATLAS_TEXTURE).apply(spriteLocation);
+        return Minecraft.getInstance().getTextureAtlas(PlayerContainer.BLOCK_ATLAS).apply(spriteLocation);
     }
 
     public Vector3f getSize() {
-        return new Vector3f(this.getEnd().getX()- this.getStart().getX(), this.getEnd().getY()- this.getStart().getY(), this.getEnd().getZ()- this.getStart().getZ());
+        return new Vector3f(this.getEnd().x()- this.getStart().x(), this.getEnd().y()- this.getStart().y(), this.getEnd().z()- this.getStart().z());
     }
 
     public Vector3f getStart() {

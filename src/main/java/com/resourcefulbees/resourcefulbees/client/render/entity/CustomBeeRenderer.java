@@ -27,8 +27,8 @@ public class CustomBeeRenderer extends MobRenderer<CustomBeeEntity, CustomBeeMod
     public CustomBeeRenderer(BaseModelTypes modelType, EntityRendererManager manager, CustomBeeData beeData) {
         super(manager, new CustomBeeModel<>(modelType), 0.4F);
 
-        angryTexture = ResourceLocation.tryCreate(ResourcefulBees.MOD_ID + ":" + BeeConstants.ENTITY_TEXTURES_DIR + beeData.getBaseLayerTexture() + "_angry.png");
-        baseTexture = ResourceLocation.tryCreate(ResourcefulBees.MOD_ID + ":" + BeeConstants.ENTITY_TEXTURES_DIR + beeData.getBaseLayerTexture() + ".png");
+        angryTexture = ResourceLocation.tryParse(ResourcefulBees.MOD_ID + ":" + BeeConstants.ENTITY_TEXTURES_DIR + beeData.getBaseLayerTexture() + "_angry.png");
+        baseTexture = ResourceLocation.tryParse(ResourcefulBees.MOD_ID + ":" + BeeConstants.ENTITY_TEXTURES_DIR + beeData.getBaseLayerTexture() + ".png");
 
 
         if (beeData.getColorData().isBeeColored()) {
@@ -52,8 +52,8 @@ public class CustomBeeRenderer extends MobRenderer<CustomBeeEntity, CustomBeeMod
     }
 
     @Nonnull
-    public ResourceLocation getEntityTexture(CustomBeeEntity entity) {
-        return entity.hasAngerTime() ? angryTexture : baseTexture;
+    public ResourceLocation getTextureLocation(CustomBeeEntity entity) {
+        return entity.isAngry() ? angryTexture : baseTexture;
     }
 
     public enum LayerType {

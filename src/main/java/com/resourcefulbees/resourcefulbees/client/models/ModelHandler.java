@@ -43,8 +43,8 @@ public class ModelHandler {
     private static void registerHoneycombBlockstate(@NotNull CustomBeeData customBeeData, IResourceManager resourceManager){
         Block honeycombBlock = customBeeData.getCombBlockRegistryObject() != null ? customBeeData.getCombBlockRegistryObject().get() : null;
         if (honeycombBlock != null && honeycombBlock.getRegistryName() != null && !resourceManager.hasResource(new ResourceLocation(ResourcefulBees.MOD_ID, "blockstates/" + honeycombBlock.getRegistryName().getPath() + JSON_FILE_EXTENSION))) {
-            honeycombBlock.getStateContainer().getValidStates().forEach(state -> {
-                String propertyMapString = BlockModelShapes.getPropertyMapString(state.getValues());
+            honeycombBlock.getStateDefinition().getPossibleStates().forEach(state -> {
+                String propertyMapString = BlockModelShapes.statePropertiesToString(state.getValues());
                 ModelResourceLocation defaultModelLocation = new ModelResourceLocation(ResourcefulBees.MOD_ID + ":honeycomb_block", propertyMapString);
                 ModelLoader.addSpecialModel(defaultModelLocation);
                 MODEL_MAP.put(defaultModelLocation, new ModelResourceLocation(honeycombBlock.getRegistryName(), propertyMapString));
@@ -115,10 +115,10 @@ public class ModelHandler {
     private static void registerHoneyBlock(@NotNull HoneyBottleData honeyBottleData, IResourceManager resourceManager){
         Block honeyBlock = honeyBottleData.getHoneyBlockRegistryObject() != null ? honeyBottleData.getHoneyBlockRegistryObject().get() : null;
         if (honeyBlock != null) {
-            RenderTypeLookup.setRenderLayer(honeyBlock, RenderType.getTranslucent());
+            RenderTypeLookup.setRenderLayer(honeyBlock, RenderType.translucent());
             if (honeyBlock.getRegistryName() != null && !resourceManager.hasResource(new ResourceLocation(ResourcefulBees.MOD_ID, "blockstates/" + honeyBlock.getRegistryName().getPath() + JSON_FILE_EXTENSION))) {
-                honeyBlock.getStateContainer().getValidStates().forEach(state -> {
-                    String propertyMapString = BlockModelShapes.getPropertyMapString(state.getValues());
+                honeyBlock.getStateDefinition().getPossibleStates().forEach(state -> {
+                    String propertyMapString = BlockModelShapes.statePropertiesToString(state.getValues());
                     ModelResourceLocation defaultModelLocation = new ModelResourceLocation(
                             ResourcefulBees.MOD_ID + ":honey_block", propertyMapString);
                     ModelLoader.addSpecialModel(defaultModelLocation);
@@ -134,13 +134,13 @@ public class ModelHandler {
         FlowingFluid honeyFlowingFluid = honeyBottleData.getHoneyFlowingFluidRegistryObject() != null ? honeyBottleData.getHoneyFlowingFluidRegistryObject().get() : null;
 
         if (honeyStillFluid != null) {
-            RenderTypeLookup.setRenderLayer(honeyStillFluid, RenderType.getTranslucent());
+            RenderTypeLookup.setRenderLayer(honeyStillFluid, RenderType.translucent());
         }
         if (honeyFlowingFluid != null) {
-            RenderTypeLookup.setRenderLayer(honeyFlowingFluid, RenderType.getTranslucent());
+            RenderTypeLookup.setRenderLayer(honeyFlowingFluid, RenderType.translucent());
         }
         if (honeyFluidBlock != null) {
-            RenderTypeLookup.setRenderLayer(honeyFluidBlock, RenderType.getTranslucent());
+            RenderTypeLookup.setRenderLayer(honeyFluidBlock, RenderType.translucent());
         }
     }
     //endregion
@@ -176,7 +176,7 @@ public class ModelHandler {
 
     public static void onModelBake(ModelBakeEvent event) {
         Map<ResourceLocation, IBakedModel> modelRegistry = event.getModelRegistry();
-        IBakedModel missingModel = modelRegistry.get(ModelBakery.MODEL_MISSING);
+        IBakedModel missingModel = modelRegistry.get(ModelBakery.MISSING_MODEL_LOCATION);
         MODEL_MAP.asMap().forEach(((resourceLocation, resourceLocations) -> {
             IBakedModel defaultModel = modelRegistry.getOrDefault(resourceLocation, missingModel);
             resourceLocations.forEach(modelLocation -> modelRegistry.put(modelLocation, defaultModel));

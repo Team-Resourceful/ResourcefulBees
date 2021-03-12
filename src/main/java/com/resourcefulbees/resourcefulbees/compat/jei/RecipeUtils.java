@@ -42,7 +42,7 @@ public class RecipeUtils {
         if (tagInput != null) {
             List<List<FluidStack>> list = new ArrayList<>();
             List<FluidStack> ingredientList = new ArrayList<>();
-            tagInput.values().stream()
+            tagInput.getValues().stream()
                     .filter(Fluid.class::isInstance)
                     .map(Fluid.class::cast)
                     .forEach(fluid -> ingredientList.add(new FluidStack(fluid, 1000)));
@@ -58,7 +58,7 @@ public class RecipeUtils {
         if (tagInput != null) {
             List<List<ItemStack>> list = new ArrayList<>();
             List<ItemStack> ingredientList = new ArrayList<>();
-            tagInput.values().stream()
+            tagInput.getValues().stream()
                     .filter(Block.class::isInstance)
                     .map(Block.class::cast)
                     .forEach(block -> ingredientList.add(new ItemStack(block)));
@@ -98,9 +98,9 @@ public class RecipeUtils {
         if (slotIndex == 0 && !recipe.getBlockOutput().getCompoundNBT().isEmpty()) {
             if (BeeInfoUtils.isShiftPressed()) {
                 List<String> lore = BeeInfoUtils.getLoreLines(recipe.getBlockOutput().getCompoundNBT());
-                lore.forEach(l -> tooltip.add(new StringTextComponent(l).fillStyle(Style.EMPTY.withColor(Color.parse("dark_purple")))));
+                lore.forEach(l -> tooltip.add(new StringTextComponent(l).withStyle(Style.EMPTY.withColor(Color.parseColor("dark_purple")))));
             } else {
-                tooltip.add(new TranslationTextComponent("gui.resourcefulbees.jei.tooltip.show_nbt").fillStyle(Style.EMPTY.withColor(Color.parse("dark_purple"))));
+                tooltip.add(new TranslationTextComponent("gui.resourcefulbees.jei.tooltip.show_nbt").withStyle(Style.EMPTY.withColor(Color.parseColor("dark_purple"))));
             }
         }
     }
@@ -118,12 +118,12 @@ public class RecipeUtils {
         double infoX = 63D;
         double infoY = 8D;
         if (mouseX >= infoX && mouseX <= infoX + 9D && mouseY >= infoY && mouseY <= infoY + 9D) {
-            return Collections.singletonList(new StringTextComponent(I18n.format("gui." + ResourcefulBees.MOD_ID + ".jei.category.mutation.info")));
+            return Collections.singletonList(new StringTextComponent(I18n.get("gui." + ResourcefulBees.MOD_ID + ".jei.category.mutation.info")));
         }
         double info2X = 54;
         double info2Y = 34;
         if (mouseX >= info2X && mouseX <= info2X + 9D && mouseY >= info2Y && mouseY <= info2Y + 9D && chance < 1) {
-            return Collections.singletonList(new StringTextComponent(I18n.format("gui." + ResourcefulBees.MOD_ID + ".jei.category.mutation_chance.info")));
+            return Collections.singletonList(new StringTextComponent(I18n.get("gui." + ResourcefulBees.MOD_ID + ".jei.category.mutation_chance.info")));
         }
         return Collections.emptyList();
     }
@@ -135,17 +135,17 @@ public class RecipeUtils {
             return;
         }
         Minecraft minecraft = Minecraft.getInstance();
-        FontRenderer fontRenderer = minecraft.fontRenderer;
+        FontRenderer fontRenderer = minecraft.font;
         DecimalFormat decimalFormat = new DecimalFormat("##%");
         if (chance < 1) {
             String chanceString = decimalFormat.format(chance);
-            int padding2 = fontRenderer.getStringWidth(chanceString) / 2;
+            int padding2 = fontRenderer.width(chanceString) / 2;
             info.draw(stack, 54, 34);
             fontRenderer.draw(stack, chanceString, 76F - padding2, 35, 0xff808080);
         }
         if (weight < 1) {
             String weightString = decimalFormat.format(weight);
-            int padding = fontRenderer.getStringWidth(weightString) / 2;
+            int padding = fontRenderer.width(weightString) / 2;
             fontRenderer.draw(stack, weightString, 48F - padding, 66, 0xff808080);
         }
     }

@@ -108,7 +108,7 @@ public class BeeInfoUtils {
         if (Config.USE_FORGE_DICTIONARIES.get()) {
             Splitter.on(",").trimResults().split(list.replace(BeeConstants.TAG_PREFIX, ""))
                     .forEach(s -> BiomeDictionary.getBiomes(BiomeDictionary.Type.getType(s))
-                            .forEach(biomeRegistryKey -> biomeSet.add(biomeRegistryKey.getValue())));
+                            .forEach(biomeRegistryKey -> biomeSet.add(biomeRegistryKey.location())));
         } else {
             Splitter.on(",").trimResults().split(list.replace(BeeConstants.TAG_PREFIX, "")).forEach(s -> {
                 if (com.resourcefulbees.resourcefulbees.registry.BiomeDictionary.getTypes().containsKey(s)) {
@@ -186,23 +186,23 @@ public class BeeInfoUtils {
     }
 
     public static ITag<Item> getItemTag(String itemTag) {
-        return ItemTags.getCollection().get(getResource(itemTag));
+        return ItemTags.getAllTags().getTag(getResource(itemTag));
     }
 
     public static ITag<Fluid> getFluidTag(String fluidTag) {
-        return FluidTags.func_226157_a_().get(getResource(fluidTag));
+        return FluidTags.getAllTags().getTag(getResource(fluidTag));
     }
 
     public static ITag<Block> getBlockTag(String blockTag) {
-        return BlockTags.getCollection().get(getResource(blockTag));
+        return BlockTags.getAllTags().getTag(getResource(blockTag));
     }
 
     public static ITag<Block> getValidApiaryTag() {
-        return BlockTags.getCollection().get(VALID_APIARY);
+        return BlockTags.getAllTags().getTag(VALID_APIARY);
     }
 
     public static void makeValidApiaryTag() {
-        BlockTags.makeWrapperTag("resourcefulbees:valid_apiary");
+        BlockTags.bind("resourcefulbees:valid_apiary");
     }
 
     private static final ResourceLocation VALID_APIARY = new ResourceLocation("resourcefulbees:valid_apiary");
@@ -220,15 +220,15 @@ public class BeeInfoUtils {
     public static boolean isValidBreedItem(@Nonnull ItemStack stack, String validBreedItem) {
         if (ValidatorUtils.TAG_RESOURCE_PATTERN.matcher(validBreedItem).matches()) {
             ITag<Item> itemTag = getItemTag(validBreedItem.replace(TAG_PREFIX, ""));
-            return itemTag != null && stack.getItem().isIn(itemTag);
+            return itemTag != null && stack.getItem().is(itemTag);
         } else {
             switch (validBreedItem) {
                 case FLOWER_TAG_ALL:
-                    return stack.getItem().isIn(ItemTags.FLOWERS);
+                    return stack.getItem().is(ItemTags.FLOWERS);
                 case FLOWER_TAG_SMALL:
-                    return stack.getItem().isIn(ItemTags.SMALL_FLOWERS);
+                    return stack.getItem().is(ItemTags.SMALL_FLOWERS);
                 case FLOWER_TAG_TALL:
-                    return stack.getItem().isIn(ItemTags.TALL_FLOWERS);
+                    return stack.getItem().is(ItemTags.TALL_FLOWERS);
                 default:
                     return stack.getItem().equals(getItem(validBreedItem));
             }
@@ -238,9 +238,9 @@ public class BeeInfoUtils {
 
     public static void flagBeesInRange(BlockPos pos, World world) {
         MutableBoundingBox box = MutableBoundingBox.createProper(pos.getX() + 10, pos.getY() + 10, pos.getZ() + 10, pos.getX() - 10, pos.getY() - 10, pos.getZ() - 10);
-        AxisAlignedBB aabb = AxisAlignedBB.func_216363_a(box);
+        AxisAlignedBB aabb = AxisAlignedBB.of(box);
         if (world != null) {
-            List<CustomBeeEntity> list = world.getEntitiesWithinAABB(CustomBeeEntity.class, aabb);
+            List<CustomBeeEntity> list = world.getEntitiesOfClass(CustomBeeEntity.class, aabb);
             list.forEach(customBeeEntity -> customBeeEntity.setHasHiveInRange(true));
         }
     }
@@ -255,7 +255,7 @@ public class BeeInfoUtils {
     }
 
     public static boolean isShiftPressed() {
-        long windowID = Minecraft.getInstance().getWindow().getHandle();
+        long windowID = Minecraft.getInstance().getWindow().getWindow();
         return InputMappings.isKeyDown(windowID, GLFW.GLFW_KEY_LEFT_SHIFT) || InputMappings.isKeyDown(windowID, GLFW.GLFW_KEY_RIGHT_SHIFT);
     }
 
@@ -277,16 +277,16 @@ public class BeeInfoUtils {
         List<Block> flowers = new LinkedList<>();
         if (flower.equals(FLOWER_TAG_ALL)) {
             ITag<Block> itemTag = BlockTags.FLOWERS;
-            if (itemTag != null) flowers.addAll(itemTag.values());
+            if (itemTag != null) flowers.addAll(itemTag.getValues());
         } else if (flower.equals(FLOWER_TAG_SMALL)) {
             ITag<Block> itemTag = BlockTags.SMALL_FLOWERS;
-            if (itemTag != null) flowers.addAll(itemTag.values());
+            if (itemTag != null) flowers.addAll(itemTag.getValues());
         } else if (flower.equals(FLOWER_TAG_TALL)) {
             ITag<Block> itemTag = BlockTags.TALL_FLOWERS;
-            if (itemTag != null) flowers.addAll(itemTag.values());
+            if (itemTag != null) flowers.addAll(itemTag.getValues());
         } else if (flower.startsWith(TAG_PREFIX)) {
             ITag<Block> itemTag = BeeInfoUtils.getBlockTag(flower.replace(TAG_PREFIX, ""));
-            if (itemTag != null) flowers.addAll(itemTag.values());
+            if (itemTag != null) flowers.addAll(itemTag.getValues());
         } else {
             flowers.add(getBlock(flower));
         }
@@ -317,16 +317,16 @@ public class BeeInfoUtils {
         List<Item> flowers = new LinkedList<>();
         if (flower.equals(FLOWER_TAG_ALL)) {
             ITag<Item> itemTag = ItemTags.FLOWERS;
-            if (itemTag != null) flowers.addAll(itemTag.values());
+            if (itemTag != null) flowers.addAll(itemTag.getValues());
         } else if (flower.equals(FLOWER_TAG_SMALL)) {
             ITag<Item> itemTag = ItemTags.SMALL_FLOWERS;
-            if (itemTag != null) flowers.addAll(itemTag.values());
+            if (itemTag != null) flowers.addAll(itemTag.getValues());
         } else if (flower.equals(FLOWER_TAG_TALL)) {
             ITag<Item> itemTag = ItemTags.TALL_FLOWERS;
-            if (itemTag != null) flowers.addAll(itemTag.values());
+            if (itemTag != null) flowers.addAll(itemTag.getValues());
         } else if (flower.startsWith(TAG_PREFIX)) {
             ITag<Item> itemTag = BeeInfoUtils.getItemTag(flower.replace(TAG_PREFIX, ""));
-            if (itemTag != null) flowers.addAll(itemTag.values());
+            if (itemTag != null) flowers.addAll(itemTag.getValues());
         } else {
             flowers.add(getItem(flower));
         }
@@ -334,28 +334,28 @@ public class BeeInfoUtils {
     }
 
     public static void ageBee(int ticksInHive, BeeEntity beeEntity) {
-        int i = beeEntity.getGrowingAge();
+        int i = beeEntity.getAge();
         if (i < 0) {
-            beeEntity.setGrowingAge(Math.min(0, i + ticksInHive));
+            beeEntity.setAge(Math.min(0, i + ticksInHive));
         } else if (i > 0) {
-            beeEntity.setGrowingAge(Math.max(0, i - ticksInHive));
+            beeEntity.setAge(Math.max(0, i - ticksInHive));
         }
 
         if (beeEntity instanceof CustomBeeEntity) {
-            ((CustomBeeEntity) beeEntity).setLoveTime(Math.max(0, beeEntity.getLoveTicks() - ticksInHive));
+            ((CustomBeeEntity) beeEntity).setLoveTime(Math.max(0, beeEntity.getInLoveTime() - ticksInHive));
         } else {
-            beeEntity.setInLove(Math.max(0, beeEntity.getLoveTicks() - ticksInHive));
+            beeEntity.setInLoveTime(Math.max(0, beeEntity.getInLoveTime() - ticksInHive));
         }
-        beeEntity.resetPollinationTicks();
+        beeEntity.resetTicksWithoutNectarSinceExitingHive();
     }
 
     public static void setEntityLocationAndAngle(BlockPos blockpos, Direction direction, Entity entity) {
-        EntitySize size = entity.getSize(Pose.STANDING);
+        EntitySize size = entity.getDimensions(Pose.STANDING);
         double d0 = 0.65D + size.width / 2.0F;
-        double d1 = blockpos.getX() + 0.5D + d0 * direction.getXOffset();
+        double d1 = blockpos.getX() + 0.5D + d0 * direction.getStepX();
         double d2 = blockpos.getY() + Math.max(0.5D - (size.height / 2.0F), 0);
-        double d3 = blockpos.getZ() + 0.5D + d0 * direction.getZOffset();
-        entity.setLocationAndAngles(d1, d2, d3, entity.rotationYaw, entity.rotationPitch);
+        double d3 = blockpos.getZ() + 0.5D + d0 * direction.getStepZ();
+        entity.moveTo(d1, d2, d3, entity.yRot, entity.xRot);
     }
 
     public static @NotNull CompoundNBT createJarBeeTag(BeeEntity beeEntity, String nbtTagID) {
@@ -363,7 +363,7 @@ public class BeeInfoUtils {
         CompoundNBT nbt = new CompoundNBT();
         nbt.putString(nbtTagID, type);
 
-        beeEntity.writeWithoutTypeId(nbt);
+        beeEntity.saveWithoutId(nbt);
 
         String beeColor = VANILLA_BEE_COLOR;
 
@@ -387,12 +387,12 @@ public class BeeInfoUtils {
     public static Fluid getFluidFromBottle(ItemStack bottleOutput) {
         Item item = bottleOutput.getItem();
         if (item == Items.HONEY_BOTTLE) {
-            return ModFluids.HONEY_STILL.get().getStillFluid();
+            return ModFluids.HONEY_STILL.get().getSource();
         }else if (item == ModItems.CATNIP_HONEY_BOTTLE.get()) {
-            return ModFluids.CATNIP_HONEY_STILL.get().getStillFluid();
+            return ModFluids.CATNIP_HONEY_STILL.get().getSource();
         } else if (item instanceof CustomHoneyBottleItem) {
             CustomHoneyBottleItem honey = (CustomHoneyBottleItem) item;
-            return honey.getHoneyData().getHoneyStillFluidRegistryObject().get().getStillFluid();
+            return honey.getHoneyData().getHoneyStillFluidRegistryObject().get().getSource();
         }
         return Fluids.EMPTY;
     }

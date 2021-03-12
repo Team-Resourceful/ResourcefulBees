@@ -35,9 +35,9 @@ public class CreativeGenTileEntity extends TileEntity implements ITickableTileEn
     }
 
     private void sendOutPower() {
-        if (world != null && !world.isRemote) {
+        if (level != null && !level.isClientSide) {
             Arrays.stream(Direction.values())
-                    .map(direction -> world.getTileEntity(pos.offset(direction)))
+                    .map(direction -> level.getBlockEntity(worldPosition.relative(direction)))
                     .filter(Objects::nonNull)
                     .forEach(tileEntity -> tileEntity.getCapability(CapabilityEnergy.ENERGY)
                             .map(iEnergyStorage -> {
@@ -52,13 +52,13 @@ public class CreativeGenTileEntity extends TileEntity implements ITickableTileEn
     private CustomEnergyStorage createEnergy() {
         return new CustomEnergyStorage(Integer.MAX_VALUE, 0, Integer.MAX_VALUE) {
             @Override
-            protected void onEnergyChanged() { markDirty(); }
+            protected void onEnergyChanged() { setChanged(); }
         };
     }
 
     @Override
     public void tick() {
-        if (world != null && !world.isRemote) {
+        if (level != null && !level.isClientSide) {
             energyStorage.setEnergy(Integer.MAX_VALUE);
             sendOutPower();
         }

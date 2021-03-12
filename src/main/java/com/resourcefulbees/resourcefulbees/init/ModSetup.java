@@ -82,20 +82,20 @@ public class ModSetup {
     public static void registerDispenserBehaviors() {
         ShearsDispenserBehavior.setDefaultShearsDispenseBehavior(((DispenserBlockInvoker) Blocks.DISPENSER).invokeGetBehavior(new ItemStack(Items.SHEARS)));
 
-        DispenserBlock.registerDispenseBehavior(net.minecraft.item.Items.SHEARS.asItem(), new ShearsDispenserBehavior());
+        DispenserBlock.registerBehavior(net.minecraft.item.Items.SHEARS.asItem(), new ShearsDispenserBehavior());
 
-        DispenserBlock.registerDispenseBehavior(ModItems.SCRAPER.get().asItem(), new ScraperDispenserBehavior());
+        DispenserBlock.registerBehavior(ModItems.SCRAPER.get().asItem(), new ScraperDispenserBehavior());
     }
 
     public static void loadResources() {
-        Minecraft.getInstance().getResourcePackList().addPackFinder((consumer, factory) -> {
-            final ResourcePackInfo packInfo = ResourcePackInfo.createResourcePack(
+        Minecraft.getInstance().getResourcePackRepository().addPackFinder((consumer, factory) -> {
+            final ResourcePackInfo packInfo = ResourcePackInfo.create(
                     ResourcefulBees.MOD_ID,
                     true,
                     () -> new FolderPack(BeeSetup.getResourcePath().toFile()),
                     factory,
                     ResourcePackInfo.Priority.TOP,
-                    IPackNameDecorator.method_29485()
+                    IPackNameDecorator.passThrough()
             );
             if (packInfo == null) {
                 LOGGER.error("Failed to load resource pack, some things may not work.");

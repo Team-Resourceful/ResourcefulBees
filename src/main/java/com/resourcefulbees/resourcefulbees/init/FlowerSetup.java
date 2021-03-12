@@ -29,17 +29,17 @@ public class FlowerSetup {
             customBeeData.setEntityFlower(new ResourceLocation(flower.replace(BeeConstants.ENTITY_PREFIX, "")));
         }else if (TAG_RESOURCE_PATTERN.matcher(flower).matches()){
             ITag<Block> blockTag = BeeInfoUtils.getBlockTag(flower.replace(BeeConstants.TAG_PREFIX, ""));
-            if (blockTag != null){ blockTag.values().forEach(customBeeData::addBlockFlower); }
+            if (blockTag != null){ blockTag.getValues().forEach(customBeeData::addBlockFlower); }
         }else {
             switch (flower){
                 case BeeConstants.FLOWER_TAG_ALL:
-                    BlockTags.FLOWERS.values().forEach(customBeeData::addBlockFlower);
+                    BlockTags.FLOWERS.getValues().forEach(customBeeData::addBlockFlower);
                     break;
                 case BeeConstants.FLOWER_TAG_SMALL:
-                    BlockTags.SMALL_FLOWERS.values().forEach(customBeeData::addBlockFlower);
+                    BlockTags.SMALL_FLOWERS.getValues().forEach(customBeeData::addBlockFlower);
                     break;
                 case BeeConstants.FLOWER_TAG_TALL:
-                    BlockTags.TALL_FLOWERS.values().forEach(customBeeData::addBlockFlower);
+                    BlockTags.TALL_FLOWERS.getValues().forEach(customBeeData::addBlockFlower);
                     break;
                 default:
                     Block block = BeeInfoUtils.getBlock(flower);

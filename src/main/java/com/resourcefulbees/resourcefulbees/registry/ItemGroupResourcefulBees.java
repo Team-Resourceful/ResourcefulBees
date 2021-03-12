@@ -20,7 +20,7 @@ public class ItemGroupResourcefulBees {
 		@Override
 		@Nonnull
 		@OnlyIn(Dist.CLIENT)
-		public ItemStack createIcon() {
+		public ItemStack makeIcon() {
 			return new ItemStack(ModItems.T1_BEEHIVE_ITEM.get());
 		}
 	});

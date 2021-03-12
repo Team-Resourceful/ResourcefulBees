@@ -28,21 +28,23 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 @SuppressWarnings("deprecation")
 public class ApiaryBreederBlock extends Block{
 
     public ApiaryBreederBlock(Properties properties) {
         super(properties);
-        this.setDefaultState(this.stateContainer.getBaseState());
+        this.registerDefaultState(this.stateDefinition.any());
     }
 
 
 
     @Nonnull
     @Override
-    public ActionResultType onUse(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult blockRayTraceResult) {
-        if (!world.isRemote) {
-            INamedContainerProvider blockEntity = state.getContainer(world,pos);
+    public ActionResultType use(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult blockRayTraceResult) {
+        if (!world.isClientSide) {
+            INamedContainerProvider blockEntity = state.getMenuProvider(world,pos);
             if (blockEntity != null) {
                 NetworkHooks.openGui((ServerPlayerEntity) player, blockEntity, pos);
             }
@@ -53,8 +55,8 @@ public class ApiaryBreederBlock extends Block{
 
     @Nullable
     @Override
-    public INamedContainerProvider getContainer(@Nonnull BlockState state, World worldIn, @Nonnull BlockPos pos) {
-        return (INamedContainerProvider)worldIn.getTileEntity(pos);
+    public INamedContainerProvider getMenuProvider(@Nonnull BlockState state, World worldIn, @Nonnull BlockPos pos) {
+        return (INamedContainerProvider)worldIn.getBlockEntity(pos);
     }
 
     @Override
@@ -70,13 +72,13 @@ public class ApiaryBreederBlock extends Block{
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void addInformation(@Nonnull ItemStack stack, @Nullable IBlockReader worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
+    public void appendHoverText(@Nonnull ItemStack stack, @Nullable IBlockReader worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
         tooltip.addAll(new TooltipBuilder()
-                .addTip(I18n.format("block.resourcefulbees.apiary_breeder.tooltip.info"), TextFormatting.GOLD)
-                .addTip(I18n.format("block.resourcefulbees.apiary_breeder.tooltip.info1"), TextFormatting.GOLD)
+                .addTip(I18n.get("block.resourcefulbees.apiary_breeder.tooltip.info"), TextFormatting.GOLD)
+                .addTip(I18n.get("block.resourcefulbees.apiary_breeder.tooltip.info1"), TextFormatting.GOLD)
                 .appendText(String.format("%1$s ticks", Config.APIARY_MAX_BREED_TIME.get()), TextFormatting.GOLD)
-                .addTip(I18n.format("block.resourcefulbees.apiary_breeder.tooltip.info2"), TextFormatting.GOLD)
+                .addTip(I18n.get("block.resourcefulbees.apiary_breeder.tooltip.info2"), TextFormatting.GOLD)
                 .build());
-        super.addInformation(stack, worldIn, tooltip, flagIn);
+        super.appendHoverText(stack, worldIn, tooltip, flagIn);
     }
 }

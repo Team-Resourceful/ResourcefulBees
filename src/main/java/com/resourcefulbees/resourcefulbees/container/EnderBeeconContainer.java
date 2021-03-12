@@ -23,13 +23,13 @@ public class EnderBeeconContainer extends Container {
         super(ModContainers.ENDER_BEECON_CONTAINER.get(), id);
 
         this.player = inv.player;
-        enderBeeconTileEntity = (EnderBeeconTileEntity) world.getTileEntity(pos);
+        enderBeeconTileEntity = (EnderBeeconTileEntity) world.getBlockEntity(pos);
 
         if (getEnderBeeconTileEntity() != null) {
             this.addSlot(new SlotItemHandlerUnconditioned(getEnderBeeconTileEntity().getTileStackHandler(), EnderBeeconTileEntity.HONEY_BOTTLE_INPUT, 184, 34) {
 
                 @Override
-                public boolean isItemValid(ItemStack stack) {
+                public boolean mayPlace(ItemStack stack) {
                     return EnderBeeconTileEntity.isItemValid(stack);
                 }
             });
@@ -48,31 +48,31 @@ public class EnderBeeconContainer extends Container {
     }
 
     @Override
-    public boolean canInteractWith(@Nonnull PlayerEntity player) {
+    public boolean stillValid(@Nonnull PlayerEntity player) {
         return true;
     }
 
     @Nonnull
     @Override
-    public ItemStack transferStackInSlot(@Nonnull PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(@Nonnull PlayerEntity playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = this.inventorySlots.get(index);
-        if (slot != null && slot.getHasStack()) {
-            ItemStack itemstack1 = slot.getStack();
+        Slot slot = this.slots.get(index);
+        if (slot != null && slot.hasItem()) {
+            ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
 
             if (index <= 1) {
-                if (!this.mergeItemStack(itemstack1, 2, inventorySlots.size(), true)) {
+                if (!this.moveItemStackTo(itemstack1, 2, slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.mergeItemStack(itemstack1, 0, 1, false)) {
+            } else if (!this.moveItemStackTo(itemstack1, 0, 1, false)) {
                 return ItemStack.EMPTY;
             }
 
             if (itemstack1.isEmpty()) {
-                slot.putStack(ItemStack.EMPTY);
+                slot.set(ItemStack.EMPTY);
             } else {
-                slot.onSlotChanged();
+                slot.setChanged();
             }
         }
         return itemstack;
@@ -87,8 +87,8 @@ public class EnderBeeconContainer extends Container {
     } // TODO Unused?
 
     @Override
-    public void detectAndSendChanges() {
-        super.detectAndSendChanges();
+    public void broadcastChanges() {
+        super.broadcastChanges();
         if (getEnderBeeconTileEntity() == null) {
             return;
         }

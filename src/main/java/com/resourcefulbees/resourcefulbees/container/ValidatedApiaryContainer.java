@@ -18,7 +18,7 @@ import javax.annotation.Nonnull;
 
 public class ValidatedApiaryContainer extends Container {
 
-    private final IntReferenceHolder selectedBee = IntReferenceHolder.single();
+    private final IntReferenceHolder selectedBee = IntReferenceHolder.standalone();
     private final ApiaryTileEntity apiaryTileEntity;
     private final BlockPos pos;
     private final PlayerEntity player;
@@ -29,33 +29,33 @@ public class ValidatedApiaryContainer extends Container {
 
         this.player = inv.player;
         this.pos = pos;
-        this.apiaryTileEntity = (ApiaryTileEntity) world.getTileEntity(pos);
+        this.apiaryTileEntity = (ApiaryTileEntity) world.getBlockEntity(pos);
 
         if (getApiaryTileEntity() != null) {
             this.addSlot(new SlotItemHandlerUnconditioned(getApiaryTileEntity().getTileStackHandler(), ApiaryTileEntity.IMPORT, 74, 37) {
                 @Override
-                public int getSlotStackLimit() {
+                public int getMaxStackSize() {
                     return getApiaryTileEntity().getTileStackHandler().getSlotLimit(ApiaryTileEntity.IMPORT);
                 }
 
                 @Override
-                public boolean isItemValid(ItemStack stack) {
+                public boolean mayPlace(ItemStack stack) {
                     return getApiaryTileEntity().getTileStackHandler().isItemValid(ApiaryTileEntity.IMPORT, stack);
                 }
             });
             this.addSlot(new SlotItemHandlerUnconditioned(getApiaryTileEntity().getTileStackHandler(), ApiaryTileEntity.EMPTY_JAR, 128, 37) {
                 @Override
-                public int getSlotStackLimit() {
+                public int getMaxStackSize() {
                     return getApiaryTileEntity().getTileStackHandler().getSlotLimit(ApiaryTileEntity.EMPTY_JAR);
                 }
 
                 @Override
-                public boolean isItemValid(ItemStack stack) {
+                public boolean mayPlace(ItemStack stack) {
                     return getApiaryTileEntity().getTileStackHandler().isItemValid(ApiaryTileEntity.EMPTY_JAR, stack);
                 }
             });
             this.addSlot(new OutputSlot(getApiaryTileEntity().getTileStackHandler(), ApiaryTileEntity.EXPORT, 182, 37));
-            if (!world.isRemote) {
+            if (!world.isClientSide) {
                 this.getApiaryTileEntity().setNumPlayersUsing(this.getApiaryTileEntity().getNumPlayersUsing() + 1);
                 ApiaryTileEntity.syncApiaryToPlayersUsing(world, pos, this.getApiaryTileEntity().saveToNBT(new CompoundNBT()));
             }
@@ -73,38 +73,38 @@ public class ValidatedApiaryContainer extends Container {
     }
 
     @Override
-    public boolean canInteractWith(@Nonnull PlayerEntity playerIn) {
+    public boolean stillValid(@Nonnull PlayerEntity playerIn) {
         return true;
     }
 
     @Override
-    public void onContainerClosed(@Nonnull PlayerEntity playerIn) {
-        World world = this.getApiaryTileEntity().getWorld();
-        if (world != null && !world.isRemote)
+    public void removed(@Nonnull PlayerEntity playerIn) {
+        World world = this.getApiaryTileEntity().getLevel();
+        if (world != null && !world.isClientSide)
             this.getApiaryTileEntity().setNumPlayersUsing(this.getApiaryTileEntity().getNumPlayersUsing() - 1);
-        super.onContainerClosed(playerIn);
+        super.removed(playerIn);
     }
 
     @Nonnull
     @Override
-    public ItemStack transferStackInSlot(@Nonnull PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(@Nonnull PlayerEntity playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = this.inventorySlots.get(index);
-        if (slot != null && slot.getHasStack()) {
-            ItemStack itemstack1 = slot.getStack();
+        Slot slot = this.slots.get(index);
+        if (slot != null && slot.hasItem()) {
+            ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
             if (index <= 1) {
-                if (!this.mergeItemStack(itemstack1, 2, inventorySlots.size(), true)) {
+                if (!this.moveItemStackTo(itemstack1, 2, slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.mergeItemStack(itemstack1, 0, 2, false)) {
+            } else if (!this.moveItemStackTo(itemstack1, 0, 2, false)) {
                 return ItemStack.EMPTY;
             }
 
             if (itemstack1.isEmpty()) {
-                slot.putStack(ItemStack.EMPTY);
+                slot.set(ItemStack.EMPTY);
             } else {
-                slot.onSlotChanged();
+                slot.setChanged();
             }
         }
         return itemstack;
@@ -119,7 +119,7 @@ public class ValidatedApiaryContainer extends Container {
 
     public boolean lockOrUnlockBee(int id) {
         if (id >= 0 && id < getApiaryTileEntity().getBeeCount()) {
-            NetPacketHandler.sendToServer(new LockBeeMessage(getApiaryTileEntity().getPos(), getBeeList()[id]));
+            NetPacketHandler.sendToServer(new LockBeeMessage(getApiaryTileEntity().getBlockPos(), getBeeList()[id]));
         }
         return true;
     }
