@@ -30,7 +30,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.IItemProvider;
-import net.minecraft.util.IReorderingProcessor;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.ITextComponent;
@@ -46,6 +45,7 @@ import org.jetbrains.annotations.NotNull;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 
 public class BeepediaScreen extends Screen {
@@ -85,10 +85,10 @@ public class BeepediaScreen extends Screen {
     ResourceLocation buttonImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/button.png");
     ResourceLocation slotImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/slot.png");
     private Button backButton;
-    private ResourceLocation homeButtons = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/home_buttons.png");
-    private List<ItemTooltip> itemTooltips = new LinkedList<>();
-    private List<FluidTooltip> fluidTooltips = new LinkedList<>();
-    private List<Interaction> interactions = new LinkedList<>();
+    private final ResourceLocation homeButtons = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/home_buttons.png");
+    private final List<ItemTooltip> itemTooltips = new LinkedList<>();
+    private final List<FluidTooltip> fluidTooltips = new LinkedList<>();
+    private final List<Interaction> interactions = new LinkedList<>();
     private ModImageButton homeButton;
 
     @OnlyIn(Dist.CLIENT)
@@ -332,7 +332,7 @@ public class BeepediaScreen extends Screen {
         }
         if (searchBox.isFocused()) {
             String text = searchBox.getValue();
-            if (text == null || text.isEmpty()) {
+            if (text.isEmpty()) {
                 setSearch(null);
             } else {
                 setSearch(text);
@@ -473,11 +473,7 @@ public class BeepediaScreen extends Screen {
     }
 
     public void drawSlot(MatrixStack matrix, Block item, int xPos, int yPos) {
-        if (item instanceof FlowingFluidBlock) {
-            drawFluidSlot(matrix, new FluidStack(((FlowingFluidBlock) item).getFluid().getSource(), 1000), xPos, yPos, false);
-        } else {
-            drawSlot(matrix, new ItemStack(item), xPos, yPos);
-        }
+        drawSlot(matrix, item, 1000, xPos, yPos);
     }
 
     public void drawSlot(MatrixStack matrix, IItemProvider item, int xPos, int yPos) {
@@ -524,7 +520,7 @@ public class BeepediaScreen extends Screen {
         getMinecraft().getTextureManager().bind(slotImage);
         blit(matrix, xPos, yPos, 0, 0, 20, 20, 20, 20);
         getMinecraft().getItemRenderer().renderGuiItem(item, xPos + 2, yPos + 2);
-        getMinecraft().getItemRenderer().renderGuiItemDecorations(minecraft.font, item, xPos + 2, yPos + 2);
+        getMinecraft().getItemRenderer().renderGuiItemDecorations(font, item, xPos + 2, yPos + 2);
     }
 
     public void drawEmptySlot(MatrixStack matrix, int xPos, int yPos) {
@@ -599,32 +595,30 @@ public class BeepediaScreen extends Screen {
             blit(matrix, xPos, yPos, 0, 0, 20, 20, 20, 60);
         }
         getMinecraft().getItemRenderer().renderGuiItem(item, xPos + 2, yPos + 2);
-        getMinecraft().getItemRenderer().renderGuiItemDecorations(minecraft.font, item, xPos + 2, yPos + 2);
+        getMinecraft().getItemRenderer().renderGuiItemDecorations(font, item, xPos + 2, yPos + 2);
         registerItemTooltip(item, xPos, yPos);
     }
 
     public Map<String, BeePage> getBees(ItemStack bottleData) {
-        Map<String, BeePage> list = new HashMap<>();
-        bees.forEach((s, b) -> {
-            Item beeBottle = BeeInfoUtils.getItem(b.beeData.getCentrifugeData().getBottleOutput());
-            if (beeBottle == bottleData.getItem()) {
-                list.put(s, b);
-            }
-        });
-        return list;
+        return bees.entrySet().stream()
+                .filter(entrySet -> mapContainsBottle(entrySet.getValue(), bottleData))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
+    private boolean mapContainsBottle(BeePage page, ItemStack bottleData) {
+        Item beeBottle = BeeInfoUtils.getItem(page.beeData.getCentrifugeData().getBottleOutput());
+        return beeBottle == bottleData.getItem();
+    }
+
+
     public Map<String, BeePage> getBees(String traitName) {
-        Map<String, BeePage> list = new HashMap<>();
-        bees.forEach((s, b) -> {
-            if (b.beeData.hasTraitNames()) {
-                List<String> traits = new ArrayList<>(Arrays.asList(b.beeData.getTraitNames()));
-                if (traits.contains(traitName)) {
-                    list.put(s, b);
-                }
-            }
-        });
-        return list;
+        return bees.entrySet().stream()
+                .filter(entrySet -> mapContainsTraitName(entrySet.getValue(), traitName))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
+    private boolean mapContainsTraitName(BeePage page, String traitName) {
+        return page.beeData.hasTraitNames() && Arrays.asList(page.beeData.getTraitNames()).contains(traitName);
     }
 
 
@@ -636,9 +630,9 @@ public class BeepediaScreen extends Screen {
     }
 
     private class ItemTooltip {
-        private ItemStack item;
-        private int xPos;
-        private int yPos;
+        private final ItemStack item;
+        private final int xPos;
+        private final int yPos;
 
         public ItemTooltip(ItemStack item, int xPos, int yPos) {
             this.item = item;
@@ -654,10 +648,10 @@ public class BeepediaScreen extends Screen {
     }
 
     private class FluidTooltip {
-        private FluidStack fluid;
-        private int xPos;
-        private int yPos;
-        private boolean showAmount;
+        private final FluidStack fluid;
+        private final int xPos;
+        private final int yPos;
+        private final boolean showAmount;
 
         public FluidTooltip(FluidStack fluid, int xPos, int yPos, boolean showAmount) {
             this.fluid = fluid;
@@ -673,7 +667,7 @@ public class BeepediaScreen extends Screen {
         }
     }
 
-    private class Interaction {
+    private static class Interaction {
         int xPos;
         int yPos;
         Supplier<Boolean> supplier;
