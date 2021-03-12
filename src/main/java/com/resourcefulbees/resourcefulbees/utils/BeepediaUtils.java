@@ -12,11 +12,11 @@ public class BeepediaUtils {
 
     @OnlyIn(Dist.CLIENT)
     public static void loadBeepedia(){
-        Minecraft.getInstance().displayGuiScreen(new BeepediaScreen( null));
+        Minecraft.getInstance().setScreen(new BeepediaScreen( null));
     }
 
     @OnlyIn(Dist.CLIENT)
     public static void loadBeepedia(Entity entity){
-        Minecraft.getInstance().displayGuiScreen(new BeepediaScreen( ((CustomBeeEntity) entity).getBeeType()));
+        Minecraft.getInstance().setScreen(new BeepediaScreen( ((CustomBeeEntity) entity).getBeeType()));
     }
 }

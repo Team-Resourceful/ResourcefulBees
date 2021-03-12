@@ -2,14 +2,14 @@ package com.resourcefulbees.resourcefulbees.mixin;
 
 import com.resourcefulbees.resourcefulbees.tileentity.TieredBeehiveTileEntity;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryTileEntity;
+import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.Pose;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.BeeEntity;
-import net.minecraft.tileentity.BeehiveTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -42,7 +42,7 @@ public abstract class MixinBeeEntity extends AnimalEntity {
 
     @Inject(at = @At("HEAD"), method = "getStandingEyeHeight(Lnet/minecraft/entity/Pose;Lnet/minecraft/entity/EntitySize;)F", cancellable = true)
     public void getStandingEyeHeight(Pose pose, EntitySize size, CallbackInfoReturnable<Float> callback) {
-        callback.setReturnValue(this.isChild() ? size.height * 0.25F : size.height * 0.5F);
+        callback.setReturnValue(this.isBaby() ? size.height * 0.25F : size.height * 0.5F);
     }
 
     @Inject(at = @At("HEAD"), method = "isHiveValid()Z", cancellable = true)

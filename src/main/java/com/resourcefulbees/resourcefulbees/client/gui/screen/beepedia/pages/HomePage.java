@@ -39,13 +39,13 @@ public class HomePage extends BeepediaPage {
         bees = new LinkedList<>();
         beepedia.bees.forEach((s, b) -> bees.add(b));
         discord = new ModImageButton(xPos + 148, yPos + 138, 16, 16, 0, 0, 16, discordButton, onPress -> {
-            Util.getOSType().openURI("https://discord.resourcefulbees.com");
+            Util.getPlatform().openUri("https://discord.resourcefulbees.com");
         });
         patreon = new ModImageButton(xPos + 132, yPos + 138, 16, 16, 0, 0, 16, patreonButton, onPress -> {
-            Util.getOSType().openURI("https://patreon.resourcefulbees.com");
+            Util.getPlatform().openUri("https://patreon.resourcefulbees.com");
         });
         wiki = new ModImageButton(xPos + 116, yPos + 138, 16, 16, 0, 0, 16, wikiButton, onPress -> {
-            Util.getOSType().openURI("https://wiki.resourcefulbees.com");
+            Util.getPlatform().openUri("https://wiki.resourcefulbees.com");
         });
         beepedia.addButton(discord);
         discord.visible = false;

@@ -10,7 +10,7 @@
     "ContainerAccessor",
     "DispenserBlockInvoker",
     "MixinBeeEntity",
-    "MixinMinecraftServer"
+    "MixinMinecraftServer",
     "MixinEnterBeehiveGoal",
     "MixinFindBeehiveGoal",
     "MixinUpdateBeehiveGoal"

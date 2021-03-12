@@ -75,7 +75,7 @@ public class ResourcefulBees {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::loadComplete);
         MinecraftForge.EVENT_BUS.addListener(BeeSetup::onBiomeLoad);
         MinecraftForge.EVENT_BUS.addListener(this::serverLoaded);
-        MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, this::recipesLoaded);
+        MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, this::recipesLoaded);
 
         MinecraftForge.EVENT_BUS.addListener(this::trade);
         //MinecraftForge.EVENT_BUS.addListener(EntityEventHandlers::entityDies);
@@ -91,6 +91,10 @@ public class ResourcefulBees {
     }
 
     private void serverLoaded(FMLServerStartedEvent event) {
+        if (event.getServer().isDedicatedServer()){
+            MutationSetup.setupMutations();
+            FlowerSetup.setupFlowers();
+        }
         ModPotions.createMixes();
     }
 

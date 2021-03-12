@@ -152,31 +152,31 @@ public class MutationData extends AbstractBeeData {
 
 
     public boolean hasBlockMutations() {
-        return !this.blockMutations.isEmpty();
+        return this.blockMutations != null && !this.blockMutations.isEmpty();
     }
 
     public boolean hasBlockTagMutations() {
-        return !this.jeiBlockTagMutations.isEmpty();
+        return this.jeiBlockTagMutations != null && !this.jeiBlockTagMutations.isEmpty();
     }
 
     public boolean hasEntityMutations() {
-        return !this.entityMutations.isEmpty();
+        return this.entityMutations != null && !this.entityMutations.isEmpty();
     }
 
     public boolean hasItemMutations() {
-        return !this.itemMutations.isEmpty();
+        return this.itemMutations != null && !this.itemMutations.isEmpty();
     }
 
     public boolean hasJeiBlockTagItemMutations() {
-        return !this.jeiBlockTagItemMutations.isEmpty();
+        return this.jeiBlockTagItemMutations != null && !this.jeiBlockTagItemMutations.isEmpty();
     }
 
     public boolean hasJeiItemMutations() {
-        return !this.jeiItemMutations.isEmpty();
+        return this.jeiItemMutations != null && !this.jeiItemMutations.isEmpty();
     }
 
     public boolean hasJeiBlockMutations() {
-        return !this.jeiBlockMutations.isEmpty();
+        return this.jeiBlockMutations != null && !this.jeiBlockMutations.isEmpty();
     }
 
     public Map<ITag<?>, Pair<Double, RandomCollection<BlockOutput>>> getJeiBlockTagMutations() {

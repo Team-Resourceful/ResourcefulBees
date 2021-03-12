@@ -35,10 +35,17 @@ public class MutationSetup {
     }
 
     public static void setupMutations() {
-        BeeRegistry.getRegistry().getBees().values().stream()
-                .filter(MutationSetup::hasMutation)
-                .forEach(MutationSetup::setupMutations);
+        BeeRegistry.getRegistry().getBees().values()
+                .forEach(MutationSetup::initMutationData);
     }
+
+    private static void initMutationData(CustomBeeData beeData) {
+        beeData.getMutationData().initializeMutations();
+        if (beeData.getMutationData().hasMutation()) {
+            setupMutations(beeData);
+        }
+    }
+
 
     private static void setupMutations(CustomBeeData customBeeData) {
         MutationData mutationData = customBeeData.getMutationData();
