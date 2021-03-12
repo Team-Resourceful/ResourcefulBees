@@ -66,7 +66,7 @@ public class MechanicalCentrifugeBlock extends Block {
                     if (state.getValue(PROPERTY_ROTATION) == 7)
                         world.playSound(null, pos, SoundEvents.LODESTONE_COMPASS_LOCK, SoundCategory.BLOCKS, 0.5F, 0.1F);
                     world.playSound(null, pos, SoundEvents.FENCE_GATE_CLOSE, SoundCategory.BLOCKS, 0.5F, 0.1F);
-                    world.setBlock(pos, state.setValue(PROPERTY_ROTATION, state.getValue(PROPERTY_ROTATION) == 7 ? 0 : state.getValue(PROPERTY_ROTATION) + 1), 3);
+                    world.setBlock(pos, state.cycle(PROPERTY_ROTATION), 3);
                 }
             } else if (blockEntity != null) {
                 NetworkHooks.openGui((ServerPlayerEntity) player, blockEntity, pos);
