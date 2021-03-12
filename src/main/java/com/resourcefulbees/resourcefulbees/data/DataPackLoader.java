@@ -15,7 +15,7 @@ public class DataPackLoader implements IPackFinder {
     public static final DataPackLoader INSTANCE = new DataPackLoader();
 
     @Override
-    public void loadPacks(@NotNull Consumer<ResourcePackInfo> packList, ResourcePackInfo.@NotNull IFactory factory) {
+    public void loadPacks(@NotNull Consumer<ResourcePackInfo> packList, @NotNull ResourcePackInfo.IFactory factory) {
         File configDataPackFile = BeeSetup.getResourcePath().toFile();
         if(configDataPackFile.exists() && configDataPackFile.isDirectory()) {
             ResourcePackInfo pack = ResourcePackInfo.create(
