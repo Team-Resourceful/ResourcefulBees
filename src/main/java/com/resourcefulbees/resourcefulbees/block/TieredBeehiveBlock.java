@@ -14,7 +14,6 @@ import net.minecraft.block.HorizontalBlock;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.BeeEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
@@ -33,7 +32,10 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.text.*;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -46,8 +48,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.List;
-
-import net.minecraft.block.AbstractBlock.Properties;
 
 @SuppressWarnings("deprecation")
 public class TieredBeehiveBlock extends BeehiveBlock {
@@ -296,14 +296,4 @@ public class TieredBeehiveBlock extends BeehiveBlock {
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
         return new TieredBeehiveTileEntity(tier, tierModifier);
     }
-
-    /*@Override
-    public void onBlockPlacedBy(World worldIn, @NotNull BlockPos pos, @NotNull BlockState state, @Nullable LivingEntity placer, @NotNull ItemStack stack) {
-        TileEntity tile = worldIn.getTileEntity(pos);
-        if (tile instanceof TieredBeehiveTileEntity) {
-            TieredBeehiveTileEntity tieredBeehiveTileEntity = (TieredBeehiveTileEntity) tile;
-            tieredBeehiveTileEntity.setTier(tier);
-            tieredBeehiveTileEntity.setTierModifier(tierModifier);
-        }
-    }*/
 }

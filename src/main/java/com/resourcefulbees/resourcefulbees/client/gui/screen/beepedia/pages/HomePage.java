@@ -21,10 +21,10 @@ import java.util.List;
 
 public class HomePage extends BeepediaPage {
 
-    private final ResourceLocation discordButton = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/discord.png");
-    private final ResourceLocation patreonButton = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/patreon.png");
-    private final ResourceLocation issuesButton = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/issues.png");
-    private final ResourceLocation wikiButton = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/wiki.png");
+    private static final ResourceLocation discordButton = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/discord.png");
+    private static final ResourceLocation patreonButton = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/patreon.png");
+    private static final ResourceLocation issuesButton = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/issues.png");
+    private static final ResourceLocation wikiButton = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/wiki.png");
 
 
     int counter = 0;
@@ -40,18 +40,14 @@ public class HomePage extends BeepediaPage {
         super(beepedia, left, top, "home");
         bees = new LinkedList<>();
         beepedia.bees.forEach((s, b) -> bees.add(b));
-        discord = new ModImageButton(xPos + 139, yPos + 129, 25, 25, 0, 0, 25, discordButton, onPress -> {
-            Util.getPlatform().openUri("https://discord.resourcefulbees.com");
-        });
-        patreon = new ModImageButton(xPos + 114, yPos + 129, 25, 25, 0, 0, 25, patreonButton, onPress -> {
-            Util.getPlatform().openUri("https://patreon.resourcefulbees.com");
-        });
-        issues = new ModImageButton(xPos + 89, yPos + 129, 25, 25, 0, 0, 25, issuesButton, onPress -> {
-            Util.getPlatform().openUri("https://issues.resourcefulbees.com");
-        });
-        wiki = new ModImageButton(xPos + 64, yPos + 129, 25, 25, 0, 0, 25, wikiButton, onPress -> {
-            Util.getPlatform().openUri("https://wiki.resourcefulbees.com");
-        });
+        discord = new ModImageButton(xPos + 139, yPos + 129, 25, 25, 0, 0, 25, discordButton,
+                onPress -> Util.getPlatform().openUri("https://discord.resourcefulbees.com"));
+        patreon = new ModImageButton(xPos + 114, yPos + 129, 25, 25, 0, 0, 25, patreonButton,
+                onPress -> Util.getPlatform().openUri("https://patreon.resourcefulbees.com"));
+        issues = new ModImageButton(xPos + 89, yPos + 129, 25, 25, 0, 0, 25, issuesButton,
+                onPress -> Util.getPlatform().openUri("https://issues.resourcefulbees.com"));
+        wiki = new ModImageButton(xPos + 64, yPos + 129, 25, 25, 0, 0, 25, wikiButton,
+                onPress -> Util.getPlatform().openUri("https://wiki.resourcefulbees.com"));
         beepedia.addButton(discord);
         discord.visible = false;
         beepedia.addButton(patreon);
@@ -93,16 +89,16 @@ public class HomePage extends BeepediaPage {
 
     @Override
     public void drawTooltips(MatrixStack matrixStack, int mouseX, int mouseY) {
-        if (BeepediaScreen.mouseHovering(xPos + 139, yPos + 129, 25, 25, mouseX, mouseY)) {
+        if (BeepediaScreen.mouseHovering(xPos + 139f, yPos + 129f, 25, 25, mouseX, mouseY)) {
             beepedia.renderTooltip(matrixStack, new TranslationTextComponent("gui.resourcefulbees.beepedia.home.discord"), mouseX, mouseY);
         }
-        if (BeepediaScreen.mouseHovering(xPos + 114, yPos + 129, 25, 25, mouseX, mouseY)) {
+        if (BeepediaScreen.mouseHovering(xPos + 114f, yPos + 129f, 25, 25, mouseX, mouseY)) {
             beepedia.renderTooltip(matrixStack, new TranslationTextComponent("gui.resourcefulbees.beepedia.home.patreon"), mouseX, mouseY);
         }
-        if (BeepediaScreen.mouseHovering(xPos + 89, yPos + 129, 25, 25, mouseX, mouseY)) {
+        if (BeepediaScreen.mouseHovering(xPos + 89f, yPos + 129f, 25, 25, mouseX, mouseY)) {
             beepedia.renderTooltip(matrixStack, new TranslationTextComponent("gui.resourcefulbees.beepedia.home.issues"), mouseX, mouseY);
         }
-        if (BeepediaScreen.mouseHovering(xPos + 64, yPos + 129, 25, 25, mouseX, mouseY)) {
+        if (BeepediaScreen.mouseHovering(xPos + 64f, yPos + 129f, 25, 25, mouseX, mouseY)) {
             beepedia.renderTooltip(matrixStack, new TranslationTextComponent("gui.resourcefulbees.beepedia.home.wiki"), mouseX, mouseY);
         }
     }

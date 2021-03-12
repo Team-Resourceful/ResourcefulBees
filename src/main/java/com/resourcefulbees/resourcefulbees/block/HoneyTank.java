@@ -42,8 +42,6 @@ import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.AbstractBlock.Properties;
-
 @SuppressWarnings("deprecation")
 public class HoneyTank extends Block {
 
@@ -108,31 +106,35 @@ public class HoneyTank extends Block {
         ItemStack heldItem = player.getItemInHand(hand);
         boolean usingHoney = heldItem.getItem() instanceof HoneyBottleItem;
         boolean usingBottle = heldItem.getItem() instanceof GlassBottleItem;
-        boolean usingBucket = heldItem.getItem() instanceof BucketItem;
+        boolean hasCapability = heldItem.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent();
         TileEntity tileEntity = world.getBlockEntity(pos);
 
         if (!world.isClientSide && tileEntity instanceof HoneyTankTileEntity) {
             HoneyTankTileEntity tank = (HoneyTankTileEntity) tileEntity;
-            if (usingBucket) {
-                tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
-                        .ifPresent(iFluidHandler -> FluidUtil.interactWithFluidHandler(player, hand, world, pos, null));
-            } else if (usingBottle) {
+            if (usingBottle) {
                 tank.fillBottle(player, hand);
             } else if (usingHoney) {
                 tank.emptyBottle(player, hand);
+            } else if (hasCapability) {
+                tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+                        .ifPresent(iFluidHandler -> FluidUtil.interactWithFluidHandler(player, hand, world, pos, null));
+            } else {
+                return super.use(state, world, pos, player, hand, blockRayTraceResult);
             }
             world.sendBlockUpdated(pos, state, state, 2);
         }
-        if (usingBottle || usingBucket || usingHoney) {
+
+        if (usingBottle || hasCapability || usingHoney) {
             return ActionResultType.SUCCESS;
         }
-        return ActionResultType.FAIL;
+
+        return super.use(state, world, pos, player, hand, blockRayTraceResult);
     }
 
     @Nonnull
     @Override
     public FluidState getFluidState(BlockState state) {
-        return state.getValue(BlockStateProperties.WATERLOGGED) ? Fluids.WATER.getSource(false) : Fluids.EMPTY.defaultFluidState();
+        return Boolean.TRUE.equals(state.getValue(BlockStateProperties.WATERLOGGED)) ? Fluids.WATER.getSource(false) : Fluids.EMPTY.defaultFluidState();
     }
 
     @Override
@@ -154,7 +156,7 @@ public class HoneyTank extends Block {
     @Nonnull
     @Override
     public BlockState updateShape(BlockState stateIn, @NotNull Direction facing, @NotNull BlockState facingState, @NotNull IWorld world, @NotNull BlockPos currentPos, @NotNull BlockPos facingPos) {
-        if (stateIn.getValue(BlockStateProperties.WATERLOGGED)) {
+        if (Boolean.TRUE.equals(stateIn.getValue(BlockStateProperties.WATERLOGGED))) {
             world.getLiquidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(world));
         }
         return stateIn;
@@ -201,7 +203,7 @@ public class HoneyTank extends Block {
     }
 
     @Override
-    public BlockRenderType getRenderShape(@NotNull BlockState blockState) {
+    public @NotNull BlockRenderType getRenderShape(@NotNull BlockState blockState) {
         return BlockRenderType.MODEL;
     }
 }
