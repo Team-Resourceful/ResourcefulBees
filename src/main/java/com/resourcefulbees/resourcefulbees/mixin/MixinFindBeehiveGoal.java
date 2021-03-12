@@ -1,6 +1,5 @@
 package com.resourcefulbees.resourcefulbees.mixin;
 
-import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.passive.BeeEntity;
 import net.minecraft.util.math.BlockPos;
 import org.spongepowered.asm.mixin.Dynamic;
