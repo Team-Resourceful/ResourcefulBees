@@ -8,7 +8,9 @@ import com.resourcefulbees.resourcefulbees.tileentity.TieredBeehiveTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.TooltipBuilder;
 import net.minecraft.block.BeehiveBlock;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.HorizontalBlock;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -19,6 +21,9 @@ import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.state.DirectionProperty;
+import net.minecraft.state.IntegerProperty;
+import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.BeehiveTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
@@ -48,6 +53,7 @@ import net.minecraft.block.AbstractBlock.Properties;
 public class TieredBeehiveBlock extends BeehiveBlock {
 
     private static final String SHEARS_TAG = "forge:shears";
+    public static final IntegerProperty TIER = IntegerProperty.create("tier", 0, 4);
     private final int tier;
     private final float tierModifier;
 
@@ -73,9 +79,9 @@ public class TieredBeehiveBlock extends BeehiveBlock {
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
         if (context.getPlayer() != null && context.getPlayer().isShiftKeyDown()) {
-            return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection());
+            return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection()).setValue(TIER, tier);
         }
-        return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
+        return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite()).setValue(TIER, tier);
     }
 
     @Nullable
@@ -219,6 +225,11 @@ public class TieredBeehiveBlock extends BeehiveBlock {
             tooltip.add(new TranslationTextComponent("block.resourcefulbees.beehive.tooltip.honeycombs")
                     .withStyle(TextFormatting.AQUA, TextFormatting.RESET));
         }
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> p_206840_1_) {
+        p_206840_1_.add(HONEY_LEVEL, FACING, TIER);
     }
 
     private void createHoneycombsTooltip(@NotNull List<ITextComponent> tooltip, CompoundNBT blockEntityTag) {

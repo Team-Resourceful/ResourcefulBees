@@ -71,6 +71,26 @@ public class ClientEventHandlers {
         RenderTypeLookup.setRenderLayer(ModBlocks.WOODEN_HONEY_TANK.get(), RenderType.translucent());
         RenderTypeLookup.setRenderLayer(ModBlocks.HONEY_GENERATOR.get(), RenderType.translucent());
 
+        // bee nests need transparency for overlay
+        RenderTypeLookup.setRenderLayer(ModBlocks.OAK_BEE_NEST.get(), RenderType.translucent());
+        RenderTypeLookup.setRenderLayer(ModBlocks.SPRUCE_BEE_NEST.get(), RenderType.translucent());
+        RenderTypeLookup.setRenderLayer(ModBlocks.BIRCH_BEE_NEST.get(), RenderType.translucent());
+        RenderTypeLookup.setRenderLayer(ModBlocks.BROWN_MUSHROOM_BEE_NEST.get(), RenderType.translucent());
+        RenderTypeLookup.setRenderLayer(ModBlocks.CRIMSON_BEE_NEST.get(), RenderType.translucent());
+        RenderTypeLookup.setRenderLayer(ModBlocks.CRIMSON_NYLIUM_BEE_NEST.get(), RenderType.translucent());
+        RenderTypeLookup.setRenderLayer(ModBlocks.DARK_OAK_BEE_NEST.get(), RenderType.translucent());
+        RenderTypeLookup.setRenderLayer(ModBlocks.RED_MUSHROOM_BEE_NEST.get(), RenderType.translucent());
+        RenderTypeLookup.setRenderLayer(ModBlocks.WARPED_BEE_NEST.get(), RenderType.translucent());
+        RenderTypeLookup.setRenderLayer(ModBlocks.WARPED_NYLIUM_BEE_NEST.get(), RenderType.translucent());
+        RenderTypeLookup.setRenderLayer(ModBlocks.ACACIA_BEE_NEST.get(), RenderType.translucent());
+        RenderTypeLookup.setRenderLayer(ModBlocks.GRASS_BEE_NEST.get(), RenderType.translucent());
+        RenderTypeLookup.setRenderLayer(ModBlocks.JUNGLE_BEE_NEST.get(), RenderType.translucent());
+        RenderTypeLookup.setRenderLayer(ModBlocks.NETHER_BEE_NEST.get(), RenderType.translucent());
+        RenderTypeLookup.setRenderLayer(ModBlocks.PRISMARINE_BEE_NEST.get(), RenderType.translucent());
+        RenderTypeLookup.setRenderLayer(ModBlocks.PURPUR_BEE_NEST.get(), RenderType.translucent());
+        RenderTypeLookup.setRenderLayer(ModBlocks.WITHER_BEE_NEST.get(), RenderType.translucent());
+
+
         ItemModelPropertiesHandler.registerProperties();
         ClientRegistry.bindTileEntityRenderer(ModTileEntityTypes.HONEY_TANK_TILE_ENTITY.get(), RenderHoneyTank::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityTypes.HONEY_GENERATOR_ENTITY.get(), RenderHoneyGenerator::new);
