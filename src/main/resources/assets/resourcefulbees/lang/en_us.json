@@ -78,6 +78,9 @@
 
     "item.resourcefulbees.beepedia": "Beepedia",
 	"gui.resourcefulbees.beepedia" : "Beepedia v1.0",
+	"gui.resourcefulbees.beepedia.home.discord" : "Join us on Discord!",
+	"gui.resourcefulbees.beepedia.home.patreon" : "Support us on Patreon!",
+	"gui.resourcefulbees.beepedia.home.wiki" : "Browse the wiki.",
 	"gui.resourcefulbees.beepedia.search" : "Search",
 	"gui.resourcefulbees.beepedia.tab.bees" : "Bees",
 	"gui.resourcefulbees.beepedia.tab.traits" : "Traits",
@@ -294,6 +297,8 @@
 	"item.resourcefulbees.icy_bee_spawn_egg": "Icy Bee Spawn Egg",
 	"item.resourcefulbees.kitten_bee_spawn_egg": "Kitten Bee Spawn Egg",
 	"item.resourcefulbees.dragon_bee_spawn_egg": "Dragon Bee Spawn Egg",
+	"item.resourcefulbees.dungeon_bee_spawn_egg": "Dungeon Bee Spawn Egg",
+
 
 
 	"entity.resourcefulbees.gold_bee": "Gold Bee",
@@ -317,6 +322,8 @@
 	"entity.resourcefulbees.icy_bee": "Icy Bee",
 	"entity.resourcefulbees.kitten_bee": "Kitten Bee",
 	"entity.resourcefulbees.dragon_bee": "Dragon Bee",
+	"entity.resourcefulbees.dungeon_bee": "Dungeon Bee",
+
 
 	"trait.resourcefulbees.wither": "Wither",
 	"trait.resourcefulbees.blaze": "Blaze",

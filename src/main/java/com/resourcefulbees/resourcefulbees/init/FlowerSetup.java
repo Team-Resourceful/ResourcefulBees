@@ -20,10 +20,10 @@ public class FlowerSetup {
     }
 
     public static void setupFlowers() {
-        BeeRegistry.getRegistry().getBees().values().forEach(FlowerSetup::setupMutations);
+        BeeRegistry.getRegistry().getBees().values().forEach(FlowerSetup::setupFlowers);
     }
 
-    private static void setupMutations(CustomBeeData customBeeData) {
+    private static void setupFlowers(CustomBeeData customBeeData) {
         String flower = customBeeData.getFlower();
         if (ENTITY_RESOURCE_PATTERN.matcher(flower).matches()){
             customBeeData.setEntityFlower(new ResourceLocation(flower.replace(BeeConstants.ENTITY_PREFIX, "")));

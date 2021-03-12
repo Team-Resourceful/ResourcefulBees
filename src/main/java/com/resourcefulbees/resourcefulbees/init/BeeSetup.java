@@ -267,8 +267,12 @@ public class BeeSetup {
     private static void createFileSystem(Path source) throws IOException {
         try (FileSystem fileSystem = FileSystems.newFileSystem(source, null)) {
             Path defaultBees = fileSystem.getPath("/data/resourcefulbees/default_bees");
+            Path defaultHoney = fileSystem.getPath("/data/resourcefulbees/default_honey");
             if (Files.exists(defaultBees)) {
                 copyDefaultBees(defaultBees);
+            }
+            if (Files.exists(defaultHoney)) {
+                copyDefaultHoney(defaultHoney);
             }
         }
     }

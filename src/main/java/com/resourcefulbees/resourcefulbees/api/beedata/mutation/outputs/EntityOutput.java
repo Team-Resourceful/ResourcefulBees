@@ -4,6 +4,8 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class EntityOutput {
     private final EntityType<?> entityType;
@@ -29,6 +31,7 @@ public class EntityOutput {
         return weight;
     }
 
+    @OnlyIn(Dist.CLIENT)
     public Entity getGuiEntity(ClientWorld world) {
         if (guiEntity == null) guiEntity = entityType.create(world);
         return guiEntity;

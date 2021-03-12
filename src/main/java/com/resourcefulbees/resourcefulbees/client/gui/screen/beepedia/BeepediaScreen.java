@@ -36,6 +36,8 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
@@ -43,6 +45,7 @@ import org.jetbrains.annotations.NotNull;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.util.function.Supplier;
+
 
 public class BeepediaScreen extends Screen {
 
@@ -85,9 +88,11 @@ public class BeepediaScreen extends Screen {
     private List<ItemTooltip> itemTooltips = new LinkedList<>();
     private List<FluidTooltip> fluidTooltips = new LinkedList<>();
     private List<Interaction> interactions = new LinkedList<>();
+    private ModImageButton homeButton;
 
-    public BeepediaScreen(ITextComponent name, String pageID) {
-        super(name);
+    @OnlyIn(Dist.CLIENT)
+    public BeepediaScreen(String pageID) {
+        super(new TranslationTextComponent("gui.resourcefulbees.beepedia"));
         if (pageID != null) {
             currScreenState.setPageType(PageType.BEE);
             currScreenState.setPageID(pageID);
@@ -116,13 +121,14 @@ public class BeepediaScreen extends Screen {
         honey.put("catnip", new HoneyPage(this, KittenBee.getHoneyBottleData(), "catnip", subX, y));
         BeeRegistry.getRegistry().getHoneyBottles().forEach((s, h) -> honey.put(s, new HoneyPage(this, h, s, subX, y)));
         home = new HomePage(this, subX, y);
-        addButton(new ModImageButton(x + (xSize / 2) - 10, y + ySize - 25, 20, 20, 20, 0, 20, homeButtons, 60, 60, onPress -> selectPage(home)));
+        homeButton = new ModImageButton(x + (xSize / 2) - 10, y + ySize - 25, 20, 20, 20, 0, 20, homeButtons, 60, 60, onPress -> selectPage(home));
         backButton = new ModImageButton(x + (xSize / 2) + 20, y + ySize - 25, 20, 20, 40, 0, 20, homeButtons, 60, 60, onPress -> {
             if (!pastStates.isEmpty()) {
                 goBackState();
                 returnState(true);
             }
         });
+        addButton(homeButton);
         addButton(new ModImageButton(x + (xSize / 2) - 40, y + ySize - 25, 20, 20, 0, 0, 20, homeButtons, 60, 60, onPress -> {
             searchBox.visible = !searchBox.visible;
             setSearchVisible(searchBox.visible);
@@ -304,6 +310,7 @@ public class BeepediaScreen extends Screen {
 
     protected void drawBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
         Minecraft client = this.minecraft;
+        homeButton.active = activePage != home;
         backButton.active = !pastStates.isEmpty();
         if (client != null) {
             client.getTextureManager().bind(background);

@@ -133,6 +133,7 @@ public class BeeJar extends Item {
         nbt.put("display", displayNBT);
     }
 
+    @OnlyIn(Dist.CLIENT)
     public static void fillJar(ItemStack stack, CustomBeeData beeData) {
         EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(beeData.getEntityTypeRegistryID());
         World world = Minecraft.getInstance().level;
