@@ -60,10 +60,6 @@ public class MutationSetup {
         addMutations(customBeeData.getMutationData(), mutations);
     }
 
-    private static boolean hasMutation(CustomBeeData customBeeData) {
-        return customBeeData.getMutationData().hasMutation();
-    }
-
     private static boolean hasLegacyMutation(MutationData mutationData) {
         return !mutationData.getMutationInput().isEmpty() && !mutationData.getMutationOutput().isEmpty() && !mutationData.getMutationType().equals(MutationTypes.NONE);
     }

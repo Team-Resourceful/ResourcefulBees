@@ -46,4 +46,5 @@ public class NBTConstants {
     public static final String NBT_SHOW_BEAM = "showBeam";
     public static final String NBT_CONTROLLER_POS = "controllerPos";
     public static final String NBT_MUTATION_COUNT = "mutationCount";
+    public static final String NBT_BLOCK_ENTITY_TAG = "BlockEntityTag";
 }

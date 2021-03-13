@@ -1,9 +1,6 @@
 package com.resourcefulbees.resourcefulbees.utils;
 
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,14 +35,14 @@ public class TooltipBuilder {
     }
 
     public TooltipBuilder appendText(String text) {
-        StringTextComponent textComponent = (StringTextComponent) tooltip.remove(tooltip.size() - 1);
+        IFormattableTextComponent textComponent = (IFormattableTextComponent) tooltip.remove(tooltip.size() - 1);
         textComponent.append(text);
         tooltip.add(textComponent);
         return this;
     }
 
     public TooltipBuilder appendText(String text, TextFormatting formatting) {
-        StringTextComponent textComponent = (StringTextComponent) tooltip.remove(tooltip.size() - 1);
+        IFormattableTextComponent textComponent = (IFormattableTextComponent) tooltip.remove(tooltip.size() - 1);
         textComponent.append(formatting + text);
         tooltip.add(textComponent);
         return this;
