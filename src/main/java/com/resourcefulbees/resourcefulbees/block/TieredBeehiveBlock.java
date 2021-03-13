@@ -5,30 +5,27 @@ import com.resourcefulbees.resourcefulbees.item.UpgradeItem;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import com.resourcefulbees.resourcefulbees.tileentity.TieredBeehiveTileEntity;
+import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.TooltipBuilder;
 import net.minecraft.block.BeehiveBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.HorizontalBlock;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.BeeEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
-import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.BeehiveTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -46,6 +43,7 @@ import org.apache.commons.lang3.text.WordUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.List;
 
@@ -53,7 +51,7 @@ import java.util.List;
 public class TieredBeehiveBlock extends BeehiveBlock {
 
     private static final String SHEARS_TAG = "forge:shears";
-    public static final IntegerProperty TIER = IntegerProperty.create("tier", 0, 4);
+    public static final IntegerProperty TIER_PROPERTY = IntegerProperty.create("tier", 0, 4);
     private final int tier;
     private final float tierModifier;
 
@@ -61,6 +59,7 @@ public class TieredBeehiveBlock extends BeehiveBlock {
         super(properties);
         this.tier = tier;
         this.tierModifier = tierModifier;
+        this.registerDefaultState(this.stateDefinition.any().setValue(HONEY_LEVEL, 0).setValue(FACING, Direction.NORTH).setValue(TIER_PROPERTY, tier));
     }
 
     /**
@@ -79,14 +78,25 @@ public class TieredBeehiveBlock extends BeehiveBlock {
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
         if (context.getPlayer() != null && context.getPlayer().isShiftKeyDown()) {
-            return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection()).setValue(TIER, tier);
+            return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection());
         }
-        return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite()).setValue(TIER, tier);
+        return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
+    }
+
+    @Override
+    public void setPlacedBy(World worldIn, @Nonnull BlockPos pos, @Nonnull BlockState state, @javax.annotation.Nullable LivingEntity placer, @Nonnull ItemStack stack) {
+        TileEntity tile = worldIn.getBlockEntity(pos);
+        if(tile instanceof TieredBeehiveTileEntity) {
+            TieredBeehiveTileEntity apiaryTileEntity = (TieredBeehiveTileEntity) tile;
+            apiaryTileEntity.setTier(tier);
+        }
     }
 
     @Nullable
     @Override
-    public TileEntity newBlockEntity(@NotNull IBlockReader reader) { return null; }
+    public TileEntity newBlockEntity(@NotNull IBlockReader reader) {
+        return null;
+    }
 
     public boolean isHiveSmoked(BlockPos pos, World world) {
         TileEntity tileEntity = world.getBlockEntity(pos);
@@ -108,25 +118,30 @@ public class TieredBeehiveBlock extends BeehiveBlock {
         }
 
         if (UpgradeItem.isUpgradeItem(itemstack) && UpgradeItem.getUpgradeType(itemstack).equals(NBTConstants.NBT_HIVE_UPGRADE)) {
-            ActionResultType success = performHiveUpgrade(world, pos, itemstack);
-            if (success != null) return success;
+            ActionResultType success = performHiveUpgrade(state, world, pos, itemstack);
+            if (success != null) {
+                return success;
+            }
         }
 
         return ActionResultType.PASS;
     }
 
     @Nullable
-    private ActionResultType performHiveUpgrade(@NotNull World world, @NotNull BlockPos pos, ItemStack itemstack) {
+    private ActionResultType performHiveUpgrade(@NotNull BlockState state, @NotNull World world, @NotNull BlockPos pos, ItemStack itemstack) {
         CompoundNBT data = ((UpgradeItem) itemstack.getItem()).getUpgradeData();
         TileEntity tileEntity = world.getBlockEntity(pos);
         if (tileEntity instanceof TieredBeehiveTileEntity) {
             TieredBeehiveTileEntity beehiveTileEntity = (TieredBeehiveTileEntity) tileEntity;
 
             if (1 + beehiveTileEntity.getTier() == data.getInt(NBTConstants.NBT_TIER)) {
-                beehiveTileEntity.setTier(data.getInt(NBTConstants.NBT_TIER));
+                int newTier = data.getInt(NBTConstants.NBT_TIER);
+                beehiveTileEntity.setTier(newTier);
                 beehiveTileEntity.setTierModifier(data.getInt(NBTConstants.NBT_TIER_MODIFIER));
                 beehiveTileEntity.recalculateHoneyLevel();
                 itemstack.shrink(1);
+                state = state.setValue(TIER_PROPERTY, newTier);
+                world.setBlockAndUpdate(pos, state);
                 return ActionResultType.SUCCESS;
             }
         }
@@ -229,7 +244,7 @@ public class TieredBeehiveBlock extends BeehiveBlock {
 
     @Override
     protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> p_206840_1_) {
-        p_206840_1_.add(HONEY_LEVEL, FACING, TIER);
+        p_206840_1_.add(HONEY_LEVEL, FACING, TIER_PROPERTY);
     }
 
     private void createHoneycombsTooltip(@NotNull List<ITextComponent> tooltip, CompoundNBT blockEntityTag) {
