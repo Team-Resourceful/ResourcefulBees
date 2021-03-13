@@ -23,10 +23,7 @@ import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.BeehiveTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -59,6 +56,7 @@ public class TieredBeehiveBlock extends BeehiveBlock {
         super(properties);
         this.tier = tier;
         this.tierModifier = tierModifier;
+        this.registerDefaultState(this.stateDefinition.any().setValue(HONEY_LEVEL, 0).setValue(FACING, Direction.NORTH).setValue(TIER_PROPERTY, tier));
     }
 
     /**
@@ -76,15 +74,18 @@ public class TieredBeehiveBlock extends BeehiveBlock {
 
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        if (context.getPlayer() != null && context.getPlayer().isShiftKeyDown()) {
-            return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection()).setValue(TIER_PROPERTY, tier);
+        Direction direction = context.getPlayer() != null && context.getPlayer().isShiftKeyDown() ? context.getHorizontalDirection() : context.getHorizontalDirection().getOpposite();
+        if (context.getItemInHand().getTag() != null){
+            return this.defaultBlockState().setValue(FACING, direction).setValue(TIER_PROPERTY, context.getItemInHand().getTag().getCompound(NBTConstants.NBT_BLOCK_ENTITY_TAG).getInt(NBTConstants.NBT_TIER));
         }
-        return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite()).setValue(TIER_PROPERTY, tier);
+        return this.defaultBlockState().setValue(FACING, direction).setValue(TIER_PROPERTY, tier);
     }
 
     @Nullable
     @Override
-    public TileEntity newBlockEntity(@NotNull IBlockReader reader) { return null; }
+    public TileEntity newBlockEntity(@NotNull IBlockReader reader) {
+        return null;
+    }
 
     public boolean isHiveSmoked(BlockPos pos, World world) {
         TileEntity tileEntity = world.getBlockEntity(pos);
@@ -106,25 +107,30 @@ public class TieredBeehiveBlock extends BeehiveBlock {
         }
 
         if (UpgradeItem.isUpgradeItem(itemstack) && UpgradeItem.getUpgradeType(itemstack).equals(NBTConstants.NBT_HIVE_UPGRADE)) {
-            ActionResultType success = performHiveUpgrade(world, pos, itemstack);
-            if (success != null) return success;
+            ActionResultType success = performHiveUpgrade(state, world, pos, itemstack);
+            if (success != null) {
+                return success;
+            }
         }
 
         return ActionResultType.PASS;
     }
 
     @Nullable
-    private ActionResultType performHiveUpgrade(@NotNull World world, @NotNull BlockPos pos, ItemStack itemstack) {
+    private ActionResultType performHiveUpgrade(@NotNull BlockState state, @NotNull World world, @NotNull BlockPos pos, ItemStack itemstack) {
         CompoundNBT data = ((UpgradeItem) itemstack.getItem()).getUpgradeData();
         TileEntity tileEntity = world.getBlockEntity(pos);
         if (tileEntity instanceof TieredBeehiveTileEntity) {
             TieredBeehiveTileEntity beehiveTileEntity = (TieredBeehiveTileEntity) tileEntity;
 
             if (1 + beehiveTileEntity.getTier() == data.getInt(NBTConstants.NBT_TIER)) {
-                beehiveTileEntity.setTier(data.getInt(NBTConstants.NBT_TIER));
+                int newTier = data.getInt(NBTConstants.NBT_TIER);
+                beehiveTileEntity.setTier(newTier);
                 beehiveTileEntity.setTierModifier(data.getInt(NBTConstants.NBT_TIER_MODIFIER));
                 beehiveTileEntity.recalculateHoneyLevel();
                 itemstack.shrink(1);
+                state = state.setValue(TIER_PROPERTY, newTier);
+                world.setBlockAndUpdate(pos, state);
                 return ActionResultType.SUCCESS;
             }
         }
@@ -242,8 +248,8 @@ public class TieredBeehiveBlock extends BeehiveBlock {
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> stateBuilder) {
-        stateBuilder.add(HONEY_LEVEL, FACING, TIER_PROPERTY);
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+        builder.add(HONEY_LEVEL, FACING, TIER_PROPERTY);
     }
 
     private void createHoneycombsTooltip(@NotNull List<ITextComponent> tooltip, CompoundNBT blockEntityTag) {

@@ -1,14 +1,14 @@
 {
-  "parent": "resourcefulbees:resourcefulbees/obtain_bee_nest",
+  "parent": "resourcefulbees:resourcefulbees/root",
   "display": {
     "icon": {
-      "item": "resourcefulbees:t1_beehive"
+      "item": "minecraft:bee_nest"
     },
     "title": {
-      "translate": "advancements.resourcefulbees.t1_beehive.title"
+      "translate": "advancements.resourcefulbees.obtain_bee_nest.title"
     },
     "description": {
-      "translate": "advancements.resourcefulbees.t1_beehive.description"
+      "translate": "advancements.resourcefulbees.obtain_bee_nest.description"
     },
     "frame": "task",
     "show_toast": true,
@@ -16,12 +16,12 @@
     "hidden": false
   },
   "criteria": {
-    "t1_beehive": {
+    "obtain_bee_nest": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "resourcefulbees:t1_beehive"
+            "tag": "minecraft:beehives"
           }
         ]
       }
@@ -29,7 +29,7 @@
   },
   "requirements": [
     [
-      "t1_beehive"
+      "obtain_bee_nest"
     ]
   ]
 }
