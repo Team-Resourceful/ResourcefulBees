@@ -118,7 +118,7 @@ public class BeeRegistry implements IBeeRegistry {
 
     /**
      * Returns an unmodifiable copy of the Bee Registry.
-     * This is useful for iterating over all bees without worry of changing data
+     * This is useful for iterating over all bees without worry of changing registry data
      *
      * @return Returns unmodifiable copy of bee registry.
      */
@@ -126,10 +126,14 @@ public class BeeRegistry implements IBeeRegistry {
         return Collections.unmodifiableMap(beeInfo);
     }
 
+    /**
+     * Returns a set containing all registered CustomBeeData.
+     * This is useful for iterating over all bees without worry of changing registry data
+     *
+     *  @return Returns a set containing all registered CustomBeeData.
+     */
     public Set<CustomBeeData> getSetOfBees() {
-        Set<CustomBeeData> beeDataSet = new HashSet<>();
-        beeInfo.forEach((s, customBeeData) -> beeDataSet.add(customBeeData));
-        return beeDataSet;
+        return Collections.unmodifiableSet((Set<CustomBeeData>) beeInfo.values());
     }
 
     /**
