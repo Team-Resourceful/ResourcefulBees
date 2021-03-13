@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CHC",
+    "HBH",
+    "CHC"
+  ],
+  "key": {
+    "H": { "item": "minecraft:honey_block" },
+    "B": { "tag": "minecraft:planks" },
+    "C": { "tag": "resourcefulbees:resourceful_honeycomb_block"}
+  },
+  "result": {
+    "item": "resourcefulbees:t4_hive_upgrade"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "HWH",
+    "WBW",
+    "HWH"
+  ],
+  "key": {
+    "W": { "item": "resourcefulbees:wax_block" },
+    "B": { "tag": "minecraft:planks" },
+    "H": { "tag": "resourcefulbees:resourceful_honeycomb_block"}
+  },
+  "result": {
+    "item": "resourcefulbees:t3_hive_upgrade"
+  }
+}
