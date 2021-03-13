@@ -22,6 +22,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
@@ -100,25 +101,29 @@ public class BeeLayer extends LayerRenderer<CustomBeeEntity, CustomBeeModel<Cust
         }
 
         if (isEmissive) {
-            if (isEnchanted) {
-                this.getParentModel().renderToBuffer(matrixStackIn, bufferIn.getBuffer(RenderType.entityGlint()), packedLightIn, OverlayTexture.NO_OVERLAY, 0.0F, 0.0F, 0.0F, 0.0F);
-                if (additionModel != null) {
-                    additionModel.renderToBuffer(matrixStackIn, bufferIn.getBuffer(RenderType.entityGlint()), packedLightIn, LivingRenderer.getOverlayCoords(customBeeEntity, 0.0F), 0.0F, 0.0F, 0.0F, 0.0F);
-                }
-            } else {
-                IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.eyes(texture));
-                if (glowingPulse == 0 || customBeeEntity.tickCount / 5 % glowingPulse == 0) {
-                    this.getParentModel().renderToBuffer(matrixStackIn, ivertexbuilder, 15728640, OverlayTexture.NO_OVERLAY, color[0], color[1], color[2], 1.0F);
-                    if (additionModel != null) {
-                        additionModel.renderToBuffer(matrixStackIn, ivertexbuilder, 15728640, LivingRenderer.getOverlayCoords(customBeeEntity, 0.0F), color[0], color[1], color[2], 1.0F);
-                    }
-                }
-            }
+            renderGlowingLayer(matrixStackIn, bufferIn, packedLightIn, customBeeEntity, texture);
         } else {
             renderColoredCutoutModel(this.getParentModel(), texture, matrixStackIn, bufferIn, packedLightIn, customBeeEntity, color[0], color[1], color[2]);
             if (additionModel != null) {
                 IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.entityTranslucent(texture));
                 additionModel.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, LivingRenderer.getOverlayCoords(customBeeEntity, 0.0F), color[0], color[1], color[2], 1.0F);
+            }
+        }
+    }
+
+    private void renderGlowingLayer(@NotNull MatrixStack matrixStackIn, @NotNull IRenderTypeBuffer bufferIn, int packedLightIn, @NotNull CustomBeeEntity customBeeEntity, ResourceLocation texture) {
+        if (isEnchanted) {
+            this.getParentModel().renderToBuffer(matrixStackIn, bufferIn.getBuffer(RenderType.entityGlint()), packedLightIn, OverlayTexture.NO_OVERLAY, 0.0F, 0.0F, 0.0F, 0.0F);
+            if (additionModel != null) {
+                additionModel.renderToBuffer(matrixStackIn, bufferIn.getBuffer(RenderType.entityGlint()), packedLightIn, LivingRenderer.getOverlayCoords(customBeeEntity, 0.0F), 0.0F, 0.0F, 0.0F, 0.0F);
+            }
+        } else {
+            IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.eyes(texture));
+            if (glowingPulse == 0 || customBeeEntity.tickCount / 5 % glowingPulse == 0) {
+                this.getParentModel().renderToBuffer(matrixStackIn, ivertexbuilder, 15728640, OverlayTexture.NO_OVERLAY, color[0], color[1], color[2], 1.0F);
+                if (additionModel != null) {
+                    additionModel.renderToBuffer(matrixStackIn, ivertexbuilder, 15728640, LivingRenderer.getOverlayCoords(customBeeEntity, 0.0F), color[0], color[1], color[2], 1.0F);
+                }
             }
         }
     }

@@ -29,6 +29,7 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.text.WordUtils;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -152,16 +153,22 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
         }
 
         if (this.menu.shouldDisplayFluids()) {
-            x = this.leftPos + L_BDR_WD + SLOT_WD;
-            y = this.topPos + TOP_PAD + DBL_SLOT_HT;
-            if (MathUtils.inRangeInclusive(mouseX, x, x + SLOT_WD) && MathUtils.inRangeInclusive(mouseY, y, y + 54)) {
-                renderFluidToolTip(matrix, mouseX, mouseY, this.menu.getFluidInTank(CentrifugeTileEntity.BOTTLE_SLOT));
-            } else {
-                for (int i = 0; i < numInputs; i++) {
-                    x = this.leftPos + outputStartX + SLOT_WD + 9 + (i * DBL_SLOT_WD);
-                    if (MathUtils.inRangeInclusive(mouseX, x, x + SLOT_WD) && MathUtils.inRangeInclusive(mouseY, y, y + 54)) {
-                        renderFluidToolTip(matrix, mouseX, mouseY, this.menu.getFluidInTank(i + 1));
-                    }
+            displayFluids(matrix, mouseX, mouseY);
+        }
+    }
+
+    private void displayFluids(@NotNull MatrixStack matrix, int mouseX, int mouseY) {
+        int y;
+        int x;
+        x = this.leftPos + L_BDR_WD + SLOT_WD;
+        y = this.topPos + TOP_PAD + DBL_SLOT_HT;
+        if (MathUtils.inRangeInclusive(mouseX, x, x + SLOT_WD) && MathUtils.inRangeInclusive(mouseY, y, y + 54)) {
+            renderFluidToolTip(matrix, mouseX, mouseY, this.menu.getFluidInTank(CentrifugeTileEntity.BOTTLE_SLOT));
+        } else {
+            for (int i = 0; i < numInputs; i++) {
+                x = this.leftPos + outputStartX + SLOT_WD + 9 + (i * DBL_SLOT_WD);
+                if (MathUtils.inRangeInclusive(mouseX, x, x + SLOT_WD) && MathUtils.inRangeInclusive(mouseY, y, y + 54)) {
+                    renderFluidToolTip(matrix, mouseX, mouseY, this.menu.getFluidInTank(i + 1));
                 }
             }
         }

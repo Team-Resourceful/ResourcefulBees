@@ -4,6 +4,7 @@ import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
 
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Interface for custom Bee registration.
@@ -66,6 +67,14 @@ public interface IBeeRegistry {
      *  @return Returns unmodifiable copy of bee registry.
      */
     Map<String, CustomBeeData> getBees();
+
+    /**
+     * Returns a set containing all registered CustomBeeData.
+     * This is useful for iterating over all bees without worry of changing registry data
+     *
+     *  @return Returns a set containing all registered CustomBeeData.
+     */
+    Set<CustomBeeData> getSetOfBees();
 
     /**
      * Returns an unmodifiable copy of the Honey Registry.

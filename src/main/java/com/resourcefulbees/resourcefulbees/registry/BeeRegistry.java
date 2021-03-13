@@ -9,10 +9,7 @@ import com.resourcefulbees.resourcefulbees.utils.validation.FirstPhaseValidator;
 import net.minecraft.util.ResourceLocation;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 public class BeeRegistry implements IBeeRegistry {
 
@@ -29,8 +26,8 @@ public class BeeRegistry implements IBeeRegistry {
         return INSTANCE;
     }
 
-    private final LinkedHashMap<String, CustomBeeData> beeInfo = new LinkedHashMap<>();
-    private final LinkedHashMap<String, HoneyBottleData> honeyInfo = new LinkedHashMap<>();
+    private final Map<String, CustomBeeData> beeInfo = new LinkedHashMap<>();
+    private final Map<String, HoneyBottleData> honeyInfo = new LinkedHashMap<>();
     public final Map<Pair<String, String>, RandomCollection<CustomBeeData>> familyTree = new HashMap<>();
 
     private boolean allowRegistration;
@@ -127,6 +124,12 @@ public class BeeRegistry implements IBeeRegistry {
      */
     public Map<String, CustomBeeData> getBees() {
         return Collections.unmodifiableMap(beeInfo);
+    }
+
+    public Set<CustomBeeData> getSetOfBees() {
+        Set<CustomBeeData> beeDataSet = new HashSet<>();
+        beeInfo.forEach((s, customBeeData) -> beeDataSet.add(customBeeData));
+        return beeDataSet;
     }
 
     /**

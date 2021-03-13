@@ -13,6 +13,7 @@ import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IGuiIngredientGroup;
 import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
+import mezz.jei.api.gui.ingredient.ITooltipCallback;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
@@ -126,18 +127,7 @@ public class EntityToEntity implements IRecipeCategory<EntityToEntity.Recipe> {
                 return Collections.singletonList(recipe.outputEntity.getDescription().plainCopy());
             } else {
                 List<ITextComponent> tooltip = new ArrayList<>();
-                tooltip.add(recipe.outputEntity.getDescription().plainCopy());
-                if (recipe.outputEntity.getRegistryName() != null) {
-                    tooltip.add(new StringTextComponent(recipe.outputEntity.getRegistryName().toString()).withStyle(TextFormatting.GRAY));
-                }
-                if (!recipe.outputNBT.isEmpty()) {
-                    if (BeeInfoUtils.isShiftPressed()) {
-                        List<String> lore = BeeInfoUtils.getLoreLines(recipe.outputNBT);
-                        lore.forEach(l -> tooltip.add(new StringTextComponent(l).withStyle(Style.EMPTY.withColor(Color.parseColor(DARK_PURPLE)))));
-                    } else {
-                        tooltip.add(new TranslationTextComponent("gui.resourcefulbees.jei.tooltip.show_nbt").withStyle(Style.EMPTY.withColor(Color.parseColor(DARK_PURPLE))));
-                    }
-                }
+                addTooltip(recipe, tooltip);
                 return tooltip;
             }
         }
@@ -161,40 +151,41 @@ public class EntityToEntity implements IRecipeCategory<EntityToEntity.Recipe> {
         if (recipe.output != null) {
             itemStacks.init(0, false, 65, 48);
             itemStacks.set(0, ingredients.getOutputs(VanillaTypes.ITEM).get(0));
-            itemStacks.addTooltipCallback((slotIndex, isInputStack, stack, tooltip) -> {
-                if (slotIndex == 0) {
-                    tooltip.clear();
-                    tooltip.add(recipe.outputEntity.getDescription().plainCopy());
-                    if (recipe.outputEntity.getRegistryName() != null) {
-                        tooltip.add(new StringTextComponent(recipe.outputEntity.getRegistryName().toString()).withStyle(TextFormatting.GRAY));
-                    }
-                    if (!recipe.outputNBT.isEmpty()) {
-                        if (BeeInfoUtils.isShiftPressed()) {
-                            List<String> lore = BeeInfoUtils.getLoreLines(recipe.outputNBT);
-                            lore.forEach(l -> tooltip.add(new StringTextComponent(l).withStyle(Style.EMPTY.withColor(Color.parseColor(DARK_PURPLE)))));
-                        } else {
-                            tooltip.add(new TranslationTextComponent("gui.resourcefulbees.jei.tooltip.show_nbt").withStyle(Style.EMPTY.withColor(Color.parseColor(DARK_PURPLE))));
-                        }
-                    }
-                }
-            });
+            itemStacks.addTooltipCallback(getItemStackTooltipCallback(recipe));
         }
         if (recipe.input != null) {
             itemStacks.init(1, true, 15, 57);
             itemStacks.set(1, ingredients.getInputs(VanillaTypes.ITEM).get(0));
-            itemStacks.addTooltipCallback((slotIndex, isInputStack, stack, tooltip) -> {
-                if (slotIndex == 1) {
-                    tooltip.clear();
-                    tooltip.add(recipe.inputEntity.getDescription().plainCopy());
-                    if (recipe.inputEntity.getRegistryName() != null) {
-                        tooltip.add(new StringTextComponent(recipe.inputEntity.getRegistryName().toString()).withStyle(TextFormatting.GRAY));
-                    }
-                }
-            });
+            itemStacks.addTooltipCallback(getItemStackTooltipCallback(recipe));
         }
         IGuiIngredientGroup<EntityIngredient> ingredientStacks = iRecipeLayout.getIngredientsGroup(JEICompat.ENTITY_INGREDIENT);
         ingredientStacks.init(0, true, 16, 10);
         ingredientStacks.set(0, ingredients.getInputs(JEICompat.ENTITY_INGREDIENT).get(0));
+    }
+
+    @NotNull
+    private ITooltipCallback<ItemStack> getItemStackTooltipCallback(@NotNull Recipe recipe) {
+        return (slotIndex, isInputStack, stack, tooltip) -> {
+            if (slotIndex == 0) {
+                tooltip.clear();
+                addTooltip(recipe, tooltip); //TODO NEEDS CONFIRMATION OF REFACTOR WORKING
+            }
+        };
+    }
+
+    private void addTooltip(@NotNull Recipe recipe, List<ITextComponent> tooltip) {
+        tooltip.add(recipe.outputEntity.getDescription().plainCopy());
+        if (recipe.outputEntity.getRegistryName() != null) {
+            tooltip.add(new StringTextComponent(recipe.outputEntity.getRegistryName().toString()).withStyle(TextFormatting.GRAY));
+        }
+        if (!recipe.outputNBT.isEmpty()) {
+            if (BeeInfoUtils.isShiftPressed()) {
+                List<String> lore = BeeInfoUtils.getLoreLines(recipe.outputNBT);
+                lore.forEach(l -> tooltip.add(new StringTextComponent(l).withStyle(Style.EMPTY.withColor(Color.parseColor(DARK_PURPLE)))));
+            } else {
+                tooltip.add(new TranslationTextComponent("gui.resourcefulbees.jei.tooltip.show_nbt").withStyle(Style.EMPTY.withColor(Color.parseColor(DARK_PURPLE))));
+            }
+        }
     }
 
     @Override

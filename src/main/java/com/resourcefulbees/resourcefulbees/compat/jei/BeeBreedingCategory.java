@@ -62,53 +62,75 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
 
     public static List<Recipe> getBreedingRecipes() {
         List<Recipe> recipes = new ArrayList<>();
+        beeRegistry.getSetOfBees().stream()
+                .filter(BeeBreedingCategory::isBreedable)
+                .forEach(beeData -> {
+                    if (beeHasParents(beeData)) {
 
-        beeRegistry.getBees().forEach(((s, beeData) -> {
-            if (beeData.getBreedData().isBreedable()) {
-                if (beeData.getBreedData().hasParents()) {
+                        Iterator<String> parent1 = Splitter.on(",").trimResults().split(beeData.getBreedData().getParent1()).iterator();
+                        Iterator<String> parent2 = Splitter.on(",").trimResults().split(beeData.getBreedData().getParent2()).iterator();
 
-                    Iterator<String> parent1 = Splitter.on(",").trimResults().split(beeData.getBreedData().getParent1()).iterator();
-                    Iterator<String> parent2 = Splitter.on(",").trimResults().split(beeData.getBreedData().getParent2()).iterator();
-
-                    while (parent1.hasNext() && parent2.hasNext()) {
-                        String p1 = parent1.next();
-                        String p2 = parent2.next();
-
-                        if (beeRegistry.getBees().containsKey(p1) && beeRegistry.getBees().containsKey(p2)) {
-                            CustomBeeData p1Data = beeRegistry.getBeeData(p1);
-                            CustomBeeData p2Data = beeRegistry.getBeeData(p2);
-
-                            String p1FeedItemS = finalizeFeedItem(p1Data.getBreedData().getFeedItem());
-                            String p2FeedItemS = finalizeFeedItem(p2Data.getBreedData().getFeedItem());
-
-                            ITag<Item> p1FeedTag = TagCollectionManager.getInstance().getItems().getTag(new ResourceLocation(p1FeedItemS));
-                            ITag<Item> p2FeedTag = TagCollectionManager.getInstance().getItems().getTag(new ResourceLocation(p2FeedItemS));
-
-                            Item p1FeedItem = BeeInfoUtils.getItem(p1FeedItemS);
-                            Item p2FeedItem = BeeInfoUtils.getItem(p2FeedItemS);
-
-                            if (BeeInfoUtils.isTag(p1Data.getBreedData().getFeedItem())) p1FeedItem = null;
-                            if (BeeInfoUtils.isTag(p2Data.getBreedData().getFeedItem())) p2FeedItem = null;
-
-                            recipes.add(new Recipe(
-                                    p1Data.getName(), p1FeedTag, p1FeedItem, p1Data.getBreedData().getFeedAmount(),
-                                    p2Data.getName(), p2FeedTag, p2FeedItem, p2Data.getBreedData().getFeedAmount(),
-                                    beeData.getName(), beeData.getBreedData().getBreedChance()));
+                        while (parent1.hasNext() && parent2.hasNext()) {
+                            Recipe parentsRecipe = getParentsRecipe(beeData, parent1, parent2);
+                            if (parentsRecipe != null) {
+                                recipes.add(parentsRecipe);
+                            }
                         }
                     }
-                }
-                int feedAmount = beeData.getBreedData().getFeedAmount();
-                String feedItemS = finalizeFeedItem(beeData.getBreedData().getFeedItem());
 
-                ITag<Item> feedTag = TagCollectionManager.getInstance().getItems().getTag(new ResourceLocation(feedItemS));
-                Item feedItem = BeeInfoUtils.getItem(feedItemS);
 
-                if (BeeInfoUtils.isTag(beeData.getBreedData().getFeedItem())) feedItem = null;
-
-                recipes.add(new Recipe(beeData.getName(), feedTag, feedItem, feedAmount, beeData.getName(), feedTag, feedItem, feedAmount, beeData.getName(), 1));
-            }
-        }));
+                    recipes.add(getSelfRecipe(beeData));
+                });
         return recipes;
+    }
+
+    private static boolean beeHasParents(CustomBeeData beeData) {
+        return beeData.getBreedData().hasParents();
+    }
+
+    private static boolean isBreedable(CustomBeeData beeData) {
+        return beeData.getBreedData().isBreedable();
+    }
+
+    private static Recipe getSelfRecipe(CustomBeeData beeData) {
+        int feedAmount = beeData.getBreedData().getFeedAmount();
+        String feedItemS = finalizeFeedItem(beeData.getBreedData().getFeedItem());
+
+        ITag<Item> feedTag = TagCollectionManager.getInstance().getItems().getTag(new ResourceLocation(feedItemS));
+        Item feedItem = BeeInfoUtils.getItem(feedItemS);
+
+        if (BeeInfoUtils.isTag(beeData.getBreedData().getFeedItem())) feedItem = null;
+
+        return new Recipe(beeData.getName(), feedTag, feedItem, feedAmount, beeData.getName(), feedTag, feedItem, feedAmount, beeData.getName(), 1);
+    }
+
+    private static Recipe getParentsRecipe(CustomBeeData beeData, Iterator<String> parent1, Iterator<String> parent2) {
+        String p1 = parent1.next();
+        String p2 = parent2.next();
+
+        if (beeRegistry.getBees().containsKey(p1) && beeRegistry.getBees().containsKey(p2)) {
+            CustomBeeData p1Data = beeRegistry.getBeeData(p1);
+            CustomBeeData p2Data = beeRegistry.getBeeData(p2);
+
+            String p1FeedItemS = finalizeFeedItem(p1Data.getBreedData().getFeedItem());
+            String p2FeedItemS = finalizeFeedItem(p2Data.getBreedData().getFeedItem());
+
+            ITag<Item> p1FeedTag = TagCollectionManager.getInstance().getItems().getTag(new ResourceLocation(p1FeedItemS));
+            ITag<Item> p2FeedTag = TagCollectionManager.getInstance().getItems().getTag(new ResourceLocation(p2FeedItemS));
+
+            Item p1FeedItem = BeeInfoUtils.getItem(p1FeedItemS);
+            Item p2FeedItem = BeeInfoUtils.getItem(p2FeedItemS);
+
+            if (BeeInfoUtils.isTag(p1Data.getBreedData().getFeedItem())) p1FeedItem = null;
+            if (BeeInfoUtils.isTag(p2Data.getBreedData().getFeedItem())) p2FeedItem = null;
+
+            return new Recipe(
+                    p1Data.getName(), p1FeedTag, p1FeedItem, p1Data.getBreedData().getFeedAmount(),
+                    p2Data.getName(), p2FeedTag, p2FeedItem, p2Data.getBreedData().getFeedAmount(),
+                    beeData.getName(), beeData.getBreedData().getBreedChance());
+        }
+
+        return null;
     }
 
     private static String finalizeFeedItem(String feedItem) {

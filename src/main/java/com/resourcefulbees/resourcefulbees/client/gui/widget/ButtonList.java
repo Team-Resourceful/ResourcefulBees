@@ -52,19 +52,21 @@ public class ButtonList {
         scrollPos = 0;
         reducedList.clear();
         if (search != null && !search.isEmpty()) {
-            list.forEach((s, b) -> {
-                if (s.contains(search.toLowerCase()) || b.getSearch().toLowerCase().contains(search.toLowerCase())) {
-                    reducedList.put(s, b);
-                    if (active) b.listButton.visible = true;
-                } else {
-                    if (active) b.listButton.visible = false;
-                }
-            });
+            list.forEach((s, b) -> reduceList(search, s, b));
         } else {
             if (active) list.forEach((s, b) -> b.listButton.visible = true);
             reducedList = new TreeMap<>(list);
         }
         lastSearch = search;
+    }
+
+    private void reduceList(String search, String s, BeepediaPage b) {
+        if (s.contains(search.toLowerCase()) || b.getSearch().toLowerCase().contains(search.toLowerCase())) {
+            reducedList.put(s, b);
+            if (active) b.listButton.visible = true;
+        } else {
+            if (active) b.listButton.visible = false;
+        }
     }
 
     public void updatePos(int newPos) {
