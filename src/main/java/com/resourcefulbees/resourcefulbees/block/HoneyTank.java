@@ -5,6 +5,7 @@ import com.resourcefulbees.resourcefulbees.tileentity.HoneyTankTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.TooltipBuilder;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.material.MaterialColor;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
@@ -49,11 +50,25 @@ public class HoneyTank extends Block {
 
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
-    public static final AbstractBlock.Properties PROPERTIES = AbstractBlock.Properties.of(Material.GLASS)
+    public static final AbstractBlock.Properties WOODEN = AbstractBlock.Properties.of(Material.GLASS)
+            .sound(SoundType.GLASS)
+            .harvestTool(ToolType.AXE)
+            .strength(1.0f)
+            .noOcclusion();
+
+    public static final AbstractBlock.Properties PURPUR = AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_MAGENTA)
             .sound(SoundType.GLASS)
             .harvestTool(ToolType.PICKAXE)
-            .strength(1)
-            .noOcclusion();
+            .strength(1.5f)
+            .noOcclusion()
+            .requiresCorrectToolForDrops();
+
+    public static final AbstractBlock.Properties NETHER = AbstractBlock.Properties.of(Material.STONE, MaterialColor.NETHER)
+            .sound(SoundType.GLASS)
+            .harvestTool(ToolType.PICKAXE)
+            .strength(1.5f)
+            .noOcclusion()
+            .requiresCorrectToolForDrops();
 
     public final HoneyTankTileEntity.TankTier tier;
 
