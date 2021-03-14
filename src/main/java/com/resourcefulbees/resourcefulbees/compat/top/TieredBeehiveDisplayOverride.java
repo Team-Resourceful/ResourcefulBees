@@ -39,9 +39,9 @@ public class TieredBeehiveDisplayOverride implements IBlockDisplayOverride {
                 .vertical()
                 .text(new TranslationTextComponent("gui.resourcefulbees.beehive.tier").append(getHiveTier(tileEntity)))
                 .text(new TranslationTextComponent("gui.resourcefulbees.beehive.bees")
+                        .append(getHiveBeeCount(tileEntity))
                         .append(" / ")
-                        .append(getHiveMaxBees(tileEntity))
-                        .append(new StringTextComponent(getHiveBeeCount(tileEntity))))
+                        .append(getHiveMaxBees(tileEntity)))
                 .text(new TranslationTextComponent("gui.resourcefulbees.beehive.honeylevel").append(getHoneyLevel(tileEntity)))
                 .text(new TranslationTextComponent("gui.resourcefulbees.beehive.smoked").append(getSmokedStatus(tileEntity)));
 
