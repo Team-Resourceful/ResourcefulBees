@@ -1,6 +1,7 @@
 package com.resourcefulbees.resourcefulbees;
 
 import com.resourcefulbees.resourcefulbees.api.ResourcefulBeesAPI;
+import com.resourcefulbees.resourcefulbees.client.gui.IncompatibleModWarning;
 import com.resourcefulbees.resourcefulbees.compat.top.TopCompat;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.config.ConfigLoader;
@@ -12,7 +13,6 @@ import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
 import com.resourcefulbees.resourcefulbees.patreon.PatreonDataLoader;
 import com.resourcefulbees.resourcefulbees.registry.*;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
-import com.resourcefulbees.resourcefulbees.utils.RenderUtils;
 import net.minecraft.entity.merchant.villager.VillagerTrades;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
@@ -63,7 +63,9 @@ public class ResourcefulBees {
 
         ConfigLoader.load(Config.CommonConfig.COMMON_CONFIG, "resourcefulbees/common.toml");
 
-        checkForIncompatibleMods();
+        //checkForIncompatibleMods();
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> IncompatibleModWarning::init);
+
 
         BiomeDictionarySetup.buildDictionary();
         BeeSetup.setupBees();
