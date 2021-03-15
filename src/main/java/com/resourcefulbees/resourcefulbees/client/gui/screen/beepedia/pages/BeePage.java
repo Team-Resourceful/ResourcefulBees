@@ -101,7 +101,7 @@ public class BeePage extends BeepediaPage {
 
         ItemStack beeJar = new ItemStack(ModItems.BEE_JAR.get());
         BeeJar.fillJar(beeJar, beeData);
-        IFormattableTextComponent star = new StringTextComponent(beeUnlocked ? "★ " : "");
+        IFormattableTextComponent star = new StringTextComponent(beeUnlocked ? TextFormatting.GREEN + "✦ " + TextFormatting.RESET : "✧ ");
         star.append(beeData.getTranslation());
         label = star;
         newListButton(beeJar, label);
