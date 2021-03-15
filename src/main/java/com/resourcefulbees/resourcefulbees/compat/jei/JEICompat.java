@@ -8,6 +8,7 @@ import com.resourcefulbees.resourcefulbees.compat.jei.ingredients.EntityIngredie
 import com.resourcefulbees.resourcefulbees.compat.jei.ingredients.EntityIngredientFactory;
 import com.resourcefulbees.resourcefulbees.compat.jei.ingredients.EntityIngredientHelper;
 import com.resourcefulbees.resourcefulbees.compat.jei.ingredients.EntityRenderer;
+import com.resourcefulbees.resourcefulbees.item.Beepedia;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import mezz.jei.api.IModPlugin;
@@ -112,6 +113,11 @@ public class JEICompat implements IModPlugin {
     public void registerIngredients(IModIngredientRegistration registration) {
         List<EntityIngredient> entityIngredients = EntityIngredientFactory.create();
         registration.register(ENTITY_INGREDIENT, entityIngredients, new EntityIngredientHelper(), new EntityRenderer());
+    }
+
+    @Override
+    public void registerItemSubtypes(ISubtypeRegistration registration) {
+        registration.registerSubtypeInterpreter(ModItems.BEEPEDIA.get(), (itemStack) -> itemStack.hasTag() && itemStack.getTag().contains(Beepedia.CREATIVE_TAG) ? "creative.beepedia" : "");
     }
 
     public void registerInfoDesc(IRecipeRegistration registration) {
