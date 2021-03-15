@@ -2,10 +2,12 @@ package com.resourcefulbees.resourcefulbees.config;
 
 import com.resourcefulbees.resourcefulbees.lib.ApiaryOutput;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
+import com.resourcefulbees.resourcefulbees.utils.FunctionalIntReferenceHolder;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.*;
 
 public class Config {
+
 
     //TODO Rewrite config names in 1.17 to be more informative also update comments if needed
 
@@ -89,6 +91,7 @@ public class Config {
     public static IntValue BEECON_PULL_AMOUNT;
 
     public static BooleanValue BYPASS_PERFORMANT_CHECK;
+    public static BooleanValue BEEPEDIA_HIDE_LOCKED;
 
     //CLIENT
 
@@ -118,6 +121,8 @@ public class Config {
                     .define("enableEasterEggBees", true);
             SMOKER_DURABILITY = COMMON_BUILDER.comment("\nSets the max durability for the smoker")
                     .defineInRange("smokerDurability", 1000, 100, 5000);
+            BEEPEDIA_HIDE_LOCKED = COMMON_BUILDER.comment("\nSet to true to hide certain data in the Beepedia until the player has unlocked the bee. [true/false]")
+                    .define("beepediaHideLocked", false);
             COMMON_BUILDER.pop();
 
             COMMON_BUILDER.push("Recipe Options");
@@ -268,7 +273,6 @@ public class Config {
         }
 
         public static ForgeConfigSpec CLIENT_CONFIG;
-
 
 
         static {
