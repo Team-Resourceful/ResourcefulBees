@@ -16,6 +16,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import org.lwjgl.opengl.GL11;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class SpawningPage extends BeeDataPage {
 
@@ -49,7 +50,7 @@ public class SpawningPage extends BeeDataPage {
         FontRenderer font = Minecraft.getInstance().font;
         TranslationTextComponent title = new TranslationTextComponent(BeepediaScreen.currScreenState.isBiomesOpen() ? "gui.resourcefulbees.beepedia.bee_subtab.spawning.biomes" : "gui.resourcefulbees.beepedia.bee_subtab.spawning");
         int padding = font.width(title) / 2;
-    font.draw(matrix, title.withStyle(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, -1);
+        font.draw(matrix, title.withStyle(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, -1);
 
         if (BeepediaScreen.currScreenState.isBiomesOpen()) {
             GL11.glEnable(GL11.GL_SCISSOR_TEST);
@@ -58,7 +59,7 @@ public class SpawningPage extends BeeDataPage {
             GL11.glScissor((int) (xPos * scale), scissorY, (int) (SUB_PAGE_WIDTH * scale), (int) ((SUB_PAGE_HEIGHT - 22) * scale));
             for (int i = 0; i < biomeList.size(); i++) {
                 TranslationTextComponent text = new TranslationTextComponent(String.format("biome.%s.%s", biomeList.get(i).getNamespace(), biomeList.get(i).getPath()));
-                font.draw(matrix, text.withStyle(TextFormatting.GRAY), xPos, (float)yPos + 22f + (float)subScrollPos + (float)i * 12f, -1);
+                font.draw(matrix, text.withStyle(TextFormatting.GRAY), xPos, (float) yPos + 22f + (float) subScrollPos + (float) i * 12f, -1);
             }
             GL11.glDisable(GL11.GL_SCISSOR_TEST);
         } else {
@@ -70,11 +71,18 @@ public class SpawningPage extends BeeDataPage {
             heightName.append(new StringTextComponent(String.format("%d - %d", beeData.getSpawnData().getMinYLevel(), beeData.getSpawnData().getMaxYLevel())));
             weightName.append(new StringTextComponent(String.format("%d", beeData.getSpawnData().getSpawnWeight())));
             lightName.append(BeeInfoUtils.getLightName(beeData.getSpawnData().getLightLevel()));
-            font.draw(matrix, groupName.withStyle(TextFormatting.GRAY), xPos, (float)yPos + 22f, -1);
-            font.draw(matrix, heightName.withStyle(TextFormatting.GRAY), xPos, (float)yPos + 34f, -1);
-            font.draw(matrix, weightName.withStyle(TextFormatting.GRAY), xPos, (float)yPos + 46f, -1);
-            font.draw(matrix, lightName.withStyle(TextFormatting.GRAY), xPos, (float)yPos + 58f, -1);
+            font.draw(matrix, groupName.withStyle(TextFormatting.GRAY), xPos, (float) yPos + 22f, -1);
+            font.draw(matrix, heightName.withStyle(TextFormatting.GRAY), xPos, (float) yPos + 34f, -1);
+            font.draw(matrix, weightName.withStyle(TextFormatting.GRAY), xPos, (float) yPos + 46f, -1);
+            font.draw(matrix, lightName.withStyle(TextFormatting.GRAY), xPos, (float) yPos + 58f, -1);
         }
+    }
+
+    @Override
+    public String getSearch() {
+        return String.format("%s %s",
+                biomeList.stream().map(b -> new TranslationTextComponent(String.format("biome.%s.%s", b.getNamespace(), b.getPath())).getString()).collect(Collectors.joining(" ")),
+                BeeInfoUtils.getLightName(beeData.getSpawnData().getLightLevel()).getString());
     }
 
     @Override

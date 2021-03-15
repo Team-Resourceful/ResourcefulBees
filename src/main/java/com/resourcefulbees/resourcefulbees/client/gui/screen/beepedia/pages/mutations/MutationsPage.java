@@ -48,4 +48,5 @@ public abstract class MutationsPage {
     }
 
 
+    public abstract String getSearch();
 }

@@ -162,6 +162,7 @@ public class BeepediaScreen extends Screen {
     private void returnState(boolean goingBack) {
         setActive(currScreenState.getPageType(), currScreenState.getPageID(), goingBack);
         searchBox.visible = isSearchVisible();
+        searchBox.setValue(getSearch() != null ? getSearch() : "");
         if (beesScroll != 0) beesList.setScrollPos(beesScroll);
         if (honeyScroll != 0) honeyList.setScrollPos(honeyScroll);
         if (traitScroll != 0) traitsList.setScrollPos(traitScroll);
@@ -257,7 +258,7 @@ public class BeepediaScreen extends Screen {
             this.activeList.setActive(true, goingBack || forceUpdate);
             this.activeListType = type;
             if (BeepediaScreen.searchVisible && goingBack)
-                this.activeList.updateReducedList(BeepediaScreen.getSearch());
+                this.activeList.updateReducedList(BeepediaScreen.getSearch(), true);
         }
         // open page
         this.activePage = page;
@@ -348,21 +349,20 @@ public class BeepediaScreen extends Screen {
         updateSearch(traitsList, false);
     }
 
-    private void updateSearch(ButtonList list, boolean isToggled) {
-        if (!searchUpdated() && !isToggled) return;
+    private void updateSearch(ButtonList list, boolean isSearchToggled) {
+        if (!searchUpdated() && !isSearchToggled) return;
         if (isSearchVisible()) {
             if (getSearch() != null) {
-                searchBox.setValue(getSearch());
-                list.updateReducedList(searchBox.getValue());
+                list.updateReducedList(searchBox.getValue(), true);
             } else {
-                list.updateReducedList(null);
+                list.updateReducedList(null, true);
             }
         } else {
-            list.updateReducedList(null);
+            list.updateReducedList(null, true);
         }
     }
 
-    private static boolean searchUpdated() {
+    public static boolean searchUpdated() {
         if (lastSearch == null) return search != null;
         return !lastSearch.equals(search);
     }

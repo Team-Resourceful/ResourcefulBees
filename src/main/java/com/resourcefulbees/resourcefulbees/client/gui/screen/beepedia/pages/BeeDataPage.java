@@ -15,9 +15,4 @@ public abstract class BeeDataPage extends BeepediaPage {
         this.parent = parent;
         this.beeData = beeData;
     }
-
-    @Override
-    public String getSearch() {
-        return beeData.getTranslation().getString();
-    }
 }

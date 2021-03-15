@@ -32,7 +32,7 @@ public class ButtonList {
         this.list = list;
         this.button = button;
         if (this instanceof SubButtonList) return;
-        updateReducedList(null);
+        updateReducedList(null, true);
         list.forEach((s, b) -> b.listButton.setParent(this));
     }
 
@@ -48,8 +48,8 @@ public class ButtonList {
         return scrollPos;
     }
 
-    public void updateReducedList(String search) {
-        scrollPos = 0;
+    public void updateReducedList(String search, boolean resetHeight) {
+        if (resetHeight) scrollPos = 0;
         reducedList.clear();
         if (search != null && !search.isEmpty()) {
             list.forEach((s, b) -> reduceList(search, s, b));
@@ -100,7 +100,7 @@ public class ButtonList {
         });
         boolean searchVisible = BeepediaScreen.isSearchVisible();
         boolean doUpdateList = active && searchVisible;
-        if (doUpdateList) updateReducedList(BeepediaScreen.getSearch());
+        if (doUpdateList) updateReducedList(BeepediaScreen.getSearch(), BeepediaScreen.searchUpdated());
     }
 
     public void setScrollPos(int scrollPos) {

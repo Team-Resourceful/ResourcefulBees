@@ -65,10 +65,10 @@ public class BlockMutationPage extends MutationsPage {
         beepedia.drawSlot(matrix, inputs.get(inputCounter), xPos + 32, yPos + 32);
         beepedia.drawSlotNoToolTip(matrix, outputs.get(outputCounter).getRight().getBlock(), xPos + 112, yPos + 32);
         drawWeight(matrix, outputs.get(outputCounter).getLeft(), xPos + 122, yPos + 54);
-        if (outputChance < 1){
+        if (outputChance < 1) {
             Minecraft.getInstance().getTextureManager().bind(infoIcon);
-            beepedia.blit(matrix,  xPos + SUB_PAGE_WIDTH / 2 - 20, yPos + 51, 16, 0, 9, 9);
-            drawChance(matrix, outputChance,xPos + SUB_PAGE_WIDTH / 2 , yPos + 52);
+            beepedia.blit(matrix, xPos + SUB_PAGE_WIDTH / 2 - 20, yPos + 51, 16, 0, 9, 9);
+            drawChance(matrix, outputChance, xPos + SUB_PAGE_WIDTH / 2, yPos + 52);
         }
     }
 
@@ -99,5 +99,17 @@ public class BlockMutationPage extends MutationsPage {
         if (outputChance < 1 && BeepediaScreen.mouseHovering((float) xPos + ((float) SUB_PAGE_WIDTH / 2) - 20, (float) yPos + 51, 8, 8, mouseX, mouseY)) {
             beepedia.renderTooltip(matrix, new TranslationTextComponent("gui.resourcefulbees.jei.category.mutation_chance.info"), mouseX, mouseY);
         }
+    }
+
+    @Override
+    public String getSearch() {
+        String search = "";
+        for (Block input : inputs) {
+            search = String.format("%s %s", search, input.getName().getString());
+        }
+        for (Pair<Double, BlockOutput> output : outputs) {
+            search = String.format("%s %s", search, output.getRight().getBlock().getName().getString());
+        }
+        return search;
     }
 }

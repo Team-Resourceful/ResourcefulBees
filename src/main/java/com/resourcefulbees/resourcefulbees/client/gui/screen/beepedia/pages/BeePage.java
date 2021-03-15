@@ -42,6 +42,7 @@ public class BeePage extends BeepediaPage {
     private int tabCounter;
     IFormattableTextComponent label;
     public boolean beeUnlocked;
+    private String search = null;
 
     public BeePage(BeepediaScreen beepedia, CustomBeeData beeData, String id, int xPos, int yPos) {
         super(beepedia, xPos, yPos, id);
@@ -157,7 +158,13 @@ public class BeePage extends BeepediaPage {
 
     @Override
     public String getSearch() {
-        return beeData.getTranslation().getString();
+        if (search == null) {
+            search = beeData.getTranslation().getString();
+            for (Pair<TabImageButton, BeeDataPage> tab : tabs) {
+                search = String.format("%s %s", search, tab.getRight().getSearch());
+            }
+        }
+        return search;
     }
 
     @Override

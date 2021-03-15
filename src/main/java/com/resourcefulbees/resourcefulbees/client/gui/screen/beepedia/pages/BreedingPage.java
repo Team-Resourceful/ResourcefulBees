@@ -159,9 +159,27 @@ public class BreedingPage extends BeeDataPage {
     @Override
     public void renderForeground(MatrixStack matrix, int mouseX, int mouseY) {
         if (activeList == null || activeList.isEmpty()) return;
-        if (!activeList.isEmpty()) {
-            activeList.get(activePage).draw(matrix);
+        activeList.get(activePage).draw(matrix);
+    }
+
+    @Override
+    public String getSearch() {
+        String search = "";
+        for (BreedingObject breedingObject : childrenBreeding) {
+            search = String.format("%s %s %s %s",
+                    search,
+                    breedingObject.child.name.getString(),
+                    breedingObject.parent1Name.getString(),
+                    breedingObject.parent2Name.getString());
         }
+        for (BreedingObject breedingObject : parentBreeding) {
+            search = String.format("%s %s %s %s",
+                    search,
+                    breedingObject.child.name.getString(),
+                    breedingObject.parent1Name.getString(),
+                    breedingObject.parent2Name.getString());
+        }
+        return search;
     }
 
     @Override
