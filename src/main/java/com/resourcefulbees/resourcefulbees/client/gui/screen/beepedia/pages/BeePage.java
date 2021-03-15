@@ -41,7 +41,7 @@ public class BeePage extends BeepediaPage {
 
     private int tabCounter;
     IFormattableTextComponent label;
-    boolean beeUnlocked;
+    public boolean beeUnlocked;
 
     public BeePage(BeepediaScreen beepedia, CustomBeeData beeData, String id, int xPos, int yPos) {
         super(beepedia, xPos, yPos, id);
