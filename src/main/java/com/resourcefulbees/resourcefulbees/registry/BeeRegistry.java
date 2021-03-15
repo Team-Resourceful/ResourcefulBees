@@ -133,7 +133,7 @@ public class BeeRegistry implements IBeeRegistry {
      *  @return Returns a set containing all registered CustomBeeData.
      */
     public Set<CustomBeeData> getSetOfBees() {
-        return Collections.unmodifiableSet((Set<CustomBeeData>) beeInfo.values());
+        return Collections.unmodifiableSet(new HashSet<>(beeInfo.values()));
     }
 
     /**
