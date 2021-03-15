@@ -154,6 +154,7 @@ public class BeeRegistry implements IBeeRegistry {
      * @param honeyData HoneyData of the honey being registered
      * @return Returns false if bee already exists in the registry.
      */
+    @SuppressWarnings("UnusedReturnValue")
     public boolean registerHoney(String honeyType, HoneyBottleData honeyData) {
         if (allowRegistration && !honeyInfo.containsKey(honeyType) && FirstPhaseValidator.validate(honeyData)) {
             honeyInfo.put(honeyType, honeyData);
