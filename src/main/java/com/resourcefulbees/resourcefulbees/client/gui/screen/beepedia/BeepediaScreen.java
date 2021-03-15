@@ -59,6 +59,8 @@ public class BeepediaScreen extends Screen {
 
     protected static final LinkedList<BeepediaScreenState> pastStates = new LinkedList<>();
     public static BeepediaScreenState currScreenState = new BeepediaScreenState();
+    public final List<String> itemBees;
+    public final boolean complete;
 
     TextFieldWidget searchBox;
 
@@ -92,13 +94,15 @@ public class BeepediaScreen extends Screen {
     private ModImageButton homeButton;
 
     @OnlyIn(Dist.CLIENT)
-    public BeepediaScreen(String pageID) {
+    public BeepediaScreen(String pageID, List<String> bees, boolean complete) {
         super(new TranslationTextComponent("gui.resourcefulbees.beepedia"));
         if (pageID != null) {
             currScreenState.setPageType(PageType.BEE);
             currScreenState.setPageID(pageID);
             currScreenState.setBeeSubPage(BeePage.SubPageType.INFO);
         }
+        this.itemBees = bees;
+        this.complete = complete;
         this.xSize = 286;
         this.ySize = 182;
     }
@@ -473,7 +477,7 @@ public class BeepediaScreen extends Screen {
     }
 
     public void drawSlot(MatrixStack matrix, Block item, int xPos, int yPos) {
-        drawSlot(matrix, item, 1000, xPos, yPos);
+        drawSlot(matrix, item, 1, xPos, yPos);
     }
 
     public void drawSlot(MatrixStack matrix, IItemProvider item, int xPos, int yPos) {

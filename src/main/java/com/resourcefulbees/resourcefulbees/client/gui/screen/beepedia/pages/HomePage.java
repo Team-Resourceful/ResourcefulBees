@@ -12,8 +12,7 @@ import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.*;
 import org.lwjgl.opengl.GL11;
 
 import java.util.LinkedList;
@@ -68,9 +67,19 @@ public class HomePage extends BeepediaPage {
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
 
         FontRenderer font = Minecraft.getInstance().font;
-        font.draw(matrix, new TranslationTextComponent("itemGroup.resourcefulbees").withStyle(TextFormatting.GRAY), xPos + 30F, yPos + 81F, -1);
+        IFormattableTextComponent completeStatus = getProgress();
+        int padding = font.width(completeStatus) / 2;
+        font.draw(matrix, completeStatus, xPos + (SUB_PAGE_WIDTH / 2F) - padding, yPos + 115F, -1);
+        font.draw(matrix, new TranslationTextComponent("itemGroup.resourcefulbees").withStyle(TextFormatting.GRAY), xPos + 32F, yPos + 81F, -1);
         Minecraft.getInstance().getTextureManager().bind(logo);
-        AbstractGui.blit(matrix, xPos + (SUB_PAGE_WIDTH / 2) - 54, yPos + 90, 0, 0, 104, 16, 104, 16);
+        AbstractGui.blit(matrix, xPos + (SUB_PAGE_WIDTH / 2) - 52, yPos + 90, 0, 0, 104, 16, 104, 16);
+    }
+
+    private IFormattableTextComponent getProgress() {
+        TranslationTextComponent prefix = new TranslationTextComponent("gui.resourcefulbees.beepedia.home.progress");
+        prefix.append(String.format("%d / %d", beepedia.complete ? beepedia.bees.size() : beepedia.itemBees.size(), beepedia.bees.size()));
+        prefix.withStyle(TextFormatting.GRAY);
+        return prefix;
     }
 
     @Override

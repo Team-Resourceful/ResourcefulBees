@@ -16,9 +16,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.*;
 import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.opengl.GL11;
 
@@ -28,7 +26,6 @@ import java.util.List;
 public class BeePage extends BeepediaPage {
 
     public CustomBeeData beeData;
-
 
     private Entity bee = null;
     protected Pair<TabImageButton, BeeDataPage> subPage;
@@ -41,8 +38,8 @@ public class BeePage extends BeepediaPage {
     List<Pair<TabImageButton, BeeDataPage>> tabs = new ArrayList<>();
     ResourceLocation buttonImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/button.png");
 
-
     private int tabCounter;
+    IFormattableTextComponent label;
 
     public BeePage(BeepediaScreen beepedia, CustomBeeData beeData, String id, int xPos, int yPos) {
         super(beepedia, xPos, yPos, id);
@@ -101,7 +98,10 @@ public class BeePage extends BeepediaPage {
 
         ItemStack beeJar = new ItemStack(ModItems.BEE_JAR.get());
         BeeJar.fillJar(beeJar, beeData);
-        newListButton(beeJar, beeData.getTranslation());
+        IFormattableTextComponent star = new StringTextComponent(beepedia.itemBees.contains(id) || beepedia.complete ? "★ " : "");
+        star.append(beeData.getTranslation());
+        label = star;
+        newListButton(beeJar, label);
     }
 
     public TabImageButton getTabButton(ItemStack stack, Button.IPressable pressable, ITextComponent tooltip) {
@@ -117,7 +117,7 @@ public class BeePage extends BeepediaPage {
     public void renderBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
         beepedia.getMinecraft().textureManager.bind(splitterImage);
         AbstractGui.blit(matrix, xPos, yPos, 0, 0, 165, 100, 165, 100);
-        Minecraft.getInstance().font.draw(matrix, beeData.getTranslation().withStyle(TextFormatting.WHITE), (float) xPos + 40, (float) yPos + 10, -1);
+        Minecraft.getInstance().font.draw(matrix, label.withStyle(TextFormatting.WHITE), (float) xPos + 40, (float) yPos + 10, -1);
         subPage.getRight().renderBackground(matrix, partialTick, mouseX, mouseY);
 
         GL11.glEnable(GL11.GL_SCISSOR_TEST);

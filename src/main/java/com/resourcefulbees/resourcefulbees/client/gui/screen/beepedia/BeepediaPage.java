@@ -5,6 +5,7 @@ import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.client.gui.widget.ListButton;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponent;
 
 public abstract class BeepediaPage {
@@ -35,7 +36,7 @@ public abstract class BeepediaPage {
         listButton.y = yPos;
     }
 
-    public void newListButton(ItemStack item, TextComponent text) {
+    public void newListButton(ItemStack item, ITextComponent text) {
         listButton = new ListButton(0, 0, 100, 20, 0, 0, 20, listImage, item, 2, 2, text, 22, 6, onPress -> beepedia.selectPage(this));
     }
 
