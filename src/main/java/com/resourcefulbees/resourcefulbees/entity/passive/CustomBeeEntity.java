@@ -265,7 +265,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
             super.mobInteract(player, hand);
         }
         if (this.isFood(itemstack)) {
-            if (!this.level.isClientSide && this.getAge() == 0 && this.canBreed()) {
+            if (!this.level.isClientSide && this.getAge() == 0 && !this.isInLove()) {
                 this.usePlayerItem(player, itemstack);
                 this.addFeedCount();
                 if (this.getFeedCount() >= this.getBeeData().getBreedData().getFeedAmount()) {

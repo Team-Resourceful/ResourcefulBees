@@ -128,6 +128,9 @@ dependencies {
     compileOnly fg.deobf ("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}:api")
     runtimeOnly fg.deobf ("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}")
 
+    compileOnly fg.deobf ("team.chisel.ctm:CTM:MC1.16.1-1.1.2.6")
+    runtimeOnly fg.deobf ("team.chisel.ctm:CTM:MC1.16.1-1.1.2.6")
+
     compileOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}:api")
     runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
 
@@ -168,7 +171,7 @@ publishing {
 
             pom {
                 name = 'ResourcefulBees'
-                description = 'A mod for minecraft to add own bees to minecraft through a powerfull api.'
+                description = 'A mod for minecraft to add own bees to minecraft through a powerful api.'
                 url = 'https://github.com/Resourceful-Bees/ResourcefulBees'
 
                 scm {

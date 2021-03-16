@@ -125,12 +125,12 @@ public class ResourcefulBee extends CustomBeeEntity {
         }
     }
 
-    public boolean doesHiveHaveSpace(BlockPos pos) {
+/*    public boolean doesHiveHaveSpace(BlockPos pos) {
         TileEntity blockEntity = this.level.getBlockEntity(pos);
         return (blockEntity instanceof TieredBeehiveTileEntity && !((TieredBeehiveTileEntity) blockEntity).isFull())
                 || (blockEntity instanceof ApiaryTileEntity && !((ApiaryTileEntity) blockEntity).isFullOfBees())
                 || (blockEntity instanceof BeehiveTileEntity && !((BeehiveTileEntity) blockEntity).isFull());
-    }
+    }*/
 
     @Override
     public void dropOffNectar() {

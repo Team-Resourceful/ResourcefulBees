@@ -10,6 +10,10 @@ import net.minecraft.util.ResourceLocation;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
+import java.util.function.Function;
+import java.util.function.UnaryOperator;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class BeeRegistry implements IBeeRegistry {
 
@@ -164,34 +168,28 @@ public class BeeRegistry implements IBeeRegistry {
     }
 
     public float getBreedChance(String parent1, String parent2, CustomBeeData childData) {
-        if (parent1.equals(parent2)) return 1f;
-        else return childData.getBreedData().getBreedChance();
+        return parent1.equals(parent2) ? 1F : childData.getBreedData().getBreedChance();
     }
 
-    public Map<Pair<String, String>, RandomCollection<CustomBeeData>> getChildren(CustomBeeData beeData) {
-        Map<Pair<String, String>, RandomCollection<CustomBeeData>> children = new HashMap<>();
-        familyTree.forEach((p, b) -> {
-            if (getBees().containsKey(p.getLeft()) && getBees().containsKey(p.getRight())) {
-                if (p.getRight().equals(beeData.getName()) || p.getLeft().equals(beeData.getName())) {
-                    children.put(p, b);
-                }
-            }
-        });
-        return children;
+    public Map<Pair<String, String>, RandomCollection<CustomBeeData>> getChildren(CustomBeeData parent) {
+        return familyTree.entrySet().stream()
+                .filter(this::registryContainsParents)
+                .filter(mapEntry -> parentMatchesBee(mapEntry.getKey(), parent))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
-    public Map<Pair<String, String>, CustomBeeData> getParents(CustomBeeData beeData) {
-        Map<Pair<String, String>, CustomBeeData> parents = new HashMap<>();
-        familyTree.forEach((p, b) -> {
-            if (getBees().containsKey(p.getLeft()) && getBees().containsKey(p.getRight())) {
-                for (Map.Entry<Double, CustomBeeData> data : b.getMap().entrySet()) {
-                    if (data.getValue().getName().equals(beeData.getName())) {
-                        parents.put(p, beeData);
-                        break;
-                    }
-                }
-            }
-        });
-        return parents;
+    private boolean registryContainsParents(Map.Entry<Pair<String, String>, RandomCollection<CustomBeeData>> mapEntry) {
+        return getBees().containsKey(mapEntry.getKey().getLeft()) && getBees().containsKey(mapEntry.getKey().getRight());
+    }
+
+    private boolean parentMatchesBee(Pair<String, String> parents, CustomBeeData beeData) {
+        return parents.getRight().equals(beeData.getName()) || parents.getLeft().equals(beeData.getName());
+    }
+
+    public Map<Pair<String, String>, CustomBeeData> getParents(CustomBeeData child) {
+        return familyTree.entrySet().stream()
+                .filter(this::registryContainsParents)
+                .filter(entry -> entry.getValue().getMap().containsValue(child))
+                .collect(Collectors.toMap(Map.Entry::getKey, o -> child));
     }
 }

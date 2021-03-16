@@ -7,6 +7,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Pose;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.BeeEntity;
+import net.minecraft.tileentity.BeehiveTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -35,15 +36,17 @@ public abstract class MixinBeeEntity extends AnimalEntity {
     private void doesHiveHaveSpace(BlockPos pos, CallbackInfoReturnable<Boolean> callback) {
         TileEntity tileentity = this.level.getBlockEntity(pos);
         if ((tileentity instanceof TieredBeehiveTileEntity && !((TieredBeehiveTileEntity) tileentity).isFull())
-                || (tileentity instanceof ApiaryTileEntity && !((ApiaryTileEntity) tileentity).isFullOfBees())) {
+                || (tileentity instanceof ApiaryTileEntity && !((ApiaryTileEntity) tileentity).isFullOfBees())
+                || (tileentity instanceof BeehiveTileEntity && !((BeehiveTileEntity) tileentity).isFull())) {
             callback.setReturnValue(true);
         }
     }
 
-    @Inject(at = @At("HEAD"), method = "getStandingEyeHeight(Lnet/minecraft/entity/Pose;Lnet/minecraft/entity/EntitySize;)F", cancellable = true)
+    //Leaving this here for now - oreo
+    /*@Inject(at = @At("HEAD"), method = "getStandingEyeHeight(Lnet/minecraft/entity/Pose;Lnet/minecraft/entity/EntitySize;)F", cancellable = true)
     public void getStandingEyeHeight(Pose pose, EntitySize size, CallbackInfoReturnable<Float> callback) {
         callback.setReturnValue(this.isBaby() ? size.height * 0.25F : size.height * 0.5F);
-    }
+    }*/
 
     @Inject(at = @At("HEAD"), method = "isHiveValid()Z", cancellable = true)
     public void isHiveValid(CallbackInfoReturnable<Boolean> callback) {
