@@ -5,14 +5,17 @@ import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.block.TieredBeehiveBlock;
 import com.resourcefulbees.resourcefulbees.block.multiblocks.apiary.ApiaryBlock;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.village.PointOfInterestType;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Consumer;
 
 public class ModPOIs {
 
@@ -28,11 +31,18 @@ public class ModPOIs {
     private static Set<BlockState> getPOIBlockStates() {
         Set<BlockState> states = new HashSet<>();
 
-        ModBlocks.BLOCKS.getEntries().stream()
-                .filter(blockRegistryObject -> blockRegistryObject.get() instanceof TieredBeehiveBlock || blockRegistryObject.get() instanceof ApiaryBlock)
-                .forEach((blockRegistryObject -> states.addAll(blockRegistryObject.get()
-                        .getStateDefinition()
-                        .getPossibleStates())));
+        ForgeRegistries.BLOCKS.getValues().stream()
+                .filter(ModPOIs::isTieredHiveOrApiary)
+                .forEach(addAllBlockStates(states));
         return states;
+    }
+
+    @NotNull
+    private static Consumer<Block> addAllBlockStates(Set<BlockState> states) {
+        return block -> states.addAll(block.getStateDefinition().getPossibleStates());
+    }
+
+    private static boolean isTieredHiveOrApiary(Block block) {
+        return block instanceof TieredBeehiveBlock || block instanceof ApiaryBlock;
     }
 }
