@@ -53,7 +53,7 @@ public class HoneyGenerator extends Block {
 
     @Nonnull
     @Override
-    public ActionResultType use(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult blockRayTraceResult) {
+    public ActionResultType use(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult rayTraceResult) {
         if (!world.isClientSide) {
             ItemStack heldItem = player.getItemInHand(hand);
             boolean usingBucket = heldItem.getItem() instanceof BucketItem;
@@ -68,7 +68,7 @@ public class HoneyGenerator extends Block {
                 }
             }
         }
-        return ActionResultType.SUCCESS;
+        return super.use(state, world, pos, player, hand, rayTraceResult);
     }
 
     @Nullable

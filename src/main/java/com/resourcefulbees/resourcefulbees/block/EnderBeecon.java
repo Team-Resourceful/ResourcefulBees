@@ -68,7 +68,7 @@ public class EnderBeecon extends HoneyTank {
     @Nonnull
     @Override
     @Deprecated
-    public ActionResultType use(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult blockRayTraceResult) {
+    public ActionResultType use(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult rayTraceResult) {
 
         ItemStack heldItem = player.getItemInHand(hand);
         boolean usingHoney = heldItem.getItem() instanceof HoneyBottleItem;
@@ -98,7 +98,7 @@ public class EnderBeecon extends HoneyTank {
             }
             world.sendBlockUpdated(pos, state, state, 2);
         }
-        return ActionResultType.SUCCESS;
+        return super.use(state, world, pos, player, hand, rayTraceResult);
     }
 
     @Nullable

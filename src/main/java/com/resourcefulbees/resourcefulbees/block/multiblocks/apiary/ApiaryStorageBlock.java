@@ -36,7 +36,7 @@ public class ApiaryStorageBlock extends Block {
                 NetworkHooks.openGui((ServerPlayerEntity) player, blockEntity, pos);
             }
         }
-        return ActionResultType.SUCCESS;
+        return super.use(state, world, pos, player, handIn, hit);
     }
 
     @Nullable

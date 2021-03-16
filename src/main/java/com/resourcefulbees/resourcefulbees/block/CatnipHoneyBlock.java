@@ -67,9 +67,9 @@ public class CatnipHoneyBlock extends HoneyBlock {
     @Deprecated
     public void entityInside(@NotNull BlockState state, @NotNull World world, @NotNull BlockPos blockPos, @NotNull Entity entity) {
         if (isSliding(blockPos, entity)) {
-            triggeradvancement(entity, blockPos);
+            triggerAdvancement(entity, blockPos);
             updateSlidingVelocity(entity);
-            addcollisioneffects(world, entity);
+            addCollisionEffects(world, entity);
         }
         super.entityInside(state, world, blockPos, entity);
     }
@@ -89,7 +89,7 @@ public class CatnipHoneyBlock extends HoneyBlock {
         }
     }
 
-    private static void triggeradvancement(Entity entity, BlockPos blockPos) {
+    private static void triggerAdvancement(Entity entity, BlockPos blockPos) {
         if (entity instanceof ServerPlayerEntity && entity.level.getGameTime() % 20L == 0L) {
             CriteriaTriggers.HONEY_BLOCK_SLIDE.trigger((ServerPlayerEntity) entity, entity.level.getBlockState(blockPos));
         }
@@ -107,7 +107,7 @@ public class CatnipHoneyBlock extends HoneyBlock {
         entity.fallDistance = 0.0F;
     }
 
-    private static void addcollisioneffects(World world, Entity entity) {
+    private static void addCollisionEffects(World world, Entity entity) {
         if (hasHoneyBlockEffects(entity)) {
             if (world.random.nextInt(5) == 0) {
                 entity.playSound(SoundEvents.HONEY_BLOCK_SLIDE, 1.0F, 1.0F);

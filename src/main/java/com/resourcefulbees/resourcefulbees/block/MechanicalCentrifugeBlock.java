@@ -55,7 +55,7 @@ public class MechanicalCentrifugeBlock extends Block {
 
     @Nonnull
     @Override
-    public ActionResultType use(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult blockRayTraceResult) {
+    public ActionResultType use(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult rayTraceResult) {
         if (!world.isClientSide) {
             INamedContainerProvider blockEntity = state.getMenuProvider(world, pos);
             MechanicalCentrifugeTileEntity tile = (MechanicalCentrifugeTileEntity)world.getBlockEntity(pos);
@@ -72,7 +72,7 @@ public class MechanicalCentrifugeBlock extends Block {
                 NetworkHooks.openGui((ServerPlayerEntity) player, blockEntity, pos);
             }
         }
-        return ActionResultType.SUCCESS;
+        return super.use(state, world, pos, player, hand, rayTraceResult);
     }
 
     @Nullable

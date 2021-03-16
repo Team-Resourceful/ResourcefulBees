@@ -10,10 +10,7 @@ import net.minecraft.util.ResourceLocation;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
-import java.util.function.Function;
-import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class BeeRegistry implements IBeeRegistry {
 

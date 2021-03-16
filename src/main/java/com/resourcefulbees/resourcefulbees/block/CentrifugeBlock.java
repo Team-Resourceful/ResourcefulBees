@@ -36,8 +36,6 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import net.minecraft.block.AbstractBlock.Properties;
-
 @SuppressWarnings("deprecation")
 public class CentrifugeBlock extends Block {
     public static final BooleanProperty PROPERTY_ON = BooleanProperty.create("on");
@@ -49,7 +47,7 @@ public class CentrifugeBlock extends Block {
 
     @Nonnull
     @Override
-    public ActionResultType use(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult blockRayTraceResult) {
+    public ActionResultType use(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult rayTraceResult) {
         if (!world.isClientSide) {
             ItemStack heldItem = player.getItemInHand(hand);
             boolean usingBucket = heldItem.getItem() instanceof BucketItem;
@@ -64,7 +62,7 @@ public class CentrifugeBlock extends Block {
                 }
             }
         }
-        return ActionResultType.SUCCESS;
+        return super.use(state, world, pos, player, hand, rayTraceResult);
     }
 
     @Override

@@ -82,7 +82,7 @@ public class CentrifugeControllerBlock extends Block {
             }
         }
 
-        return ActionResultType.SUCCESS;
+        return super.use(state, world, pos, player, hand, rayTraceResult);
     }
 
     @Override

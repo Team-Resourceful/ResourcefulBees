@@ -2,9 +2,7 @@ package com.resourcefulbees.resourcefulbees.mixin;
 
 import com.resourcefulbees.resourcefulbees.tileentity.TieredBeehiveTileEntity;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryTileEntity;
-import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Pose;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.BeeEntity;
 import net.minecraft.tileentity.BeehiveTileEntity;
