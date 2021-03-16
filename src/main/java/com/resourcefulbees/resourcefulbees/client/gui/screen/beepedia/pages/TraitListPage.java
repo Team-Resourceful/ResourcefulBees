@@ -36,6 +36,11 @@ public class TraitListPage extends BeeDataPage {
         list.updateList();
     }
 
+    @Override
+    public String getSearch() {
+        return String.join(" ", beeData.getTraitNames());
+    }
+
     private void initList() {
         traitPages = beepedia.getTraits(beeData);
         buttons = new TreeMap<>();

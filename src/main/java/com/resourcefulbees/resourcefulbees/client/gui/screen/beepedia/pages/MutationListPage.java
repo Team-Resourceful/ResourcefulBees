@@ -148,6 +148,18 @@ public class MutationListPage extends BeeDataPage {
     }
 
     @Override
+    public String getSearch() {
+        String search = "";
+        for (Pair<MutationTypes, List<MutationsPage>> mutation : mutations) {
+            search = String.format("%s %s", search, mutation.getLeft());
+            for (MutationsPage mutationsPage : mutation.getRight()) {
+                search = String.format("%s %s", search, mutationsPage.getSearch());
+            }
+        }
+        return search;
+    }
+
+    @Override
     public void openPage() {
         super.openPage();
         // get current Tab

@@ -177,6 +177,20 @@ public class HoneycombPage extends BeeDataPage {
     }
 
     @Override
+    public String getSearch() {
+        String search = "";
+        for (RecipeObject recipe : recipes) {
+            for (Pair<FluidStack, Float> outputFluid : recipe.outputFluids) {
+                search = String.format("%s %s", search, outputFluid.getLeft().getDisplayName().getString());
+            }
+            for (Pair<ItemStack, Float> outputItem : recipe.outputItems) {
+                search = String.format("%s %s", search, outputItem.getLeft().getDisplayName().getString());
+            }
+        }
+        return search;
+    }
+
+    @Override
     public void tick(int ticksActive) {
         if (ticksActive % 20 == 0 && !BeeInfoUtils.isShiftPressed()) {
             counter++;

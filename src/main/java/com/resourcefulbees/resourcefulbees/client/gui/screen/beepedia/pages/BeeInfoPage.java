@@ -84,6 +84,16 @@ public class BeeInfoPage extends BeeDataPage {
     }
 
     @Override
+    public String getSearch() {
+        return String.format("%s %s %s %s %s",
+                BeeInfoUtils.getSizeName(beeData.getSizeModifier()).getString(),
+                beeData.getFlower(),
+                beeData.getCombatData().isPassive() ? "passive" : "",
+                beeData.getCombatData().inflictsPoison() ? "poison" : "",
+                beeData.getCombatData().removeStingerOnAttack() ? "stinger" : "");
+    }
+
+    @Override
     public void tick(int ticksActive) {
         if (BeeInfoUtils.isShiftPressed()) return;
         if (ticksActive % 20 == 0) {

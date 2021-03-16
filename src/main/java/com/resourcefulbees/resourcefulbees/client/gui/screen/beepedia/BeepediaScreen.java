@@ -10,6 +10,7 @@ import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.Trai
 import com.resourcefulbees.resourcefulbees.client.gui.widget.ButtonList;
 import com.resourcefulbees.resourcefulbees.client.gui.widget.ModImageButton;
 import com.resourcefulbees.resourcefulbees.client.gui.widget.TabImageButton;
+import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.entity.passive.KittenBee;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
@@ -59,6 +60,8 @@ public class BeepediaScreen extends Screen {
 
     protected static final LinkedList<BeepediaScreenState> pastStates = new LinkedList<>();
     public static BeepediaScreenState currScreenState = new BeepediaScreenState();
+    public final List<String> itemBees;
+    public final boolean complete;
 
     TextFieldWidget searchBox;
 
@@ -92,13 +95,15 @@ public class BeepediaScreen extends Screen {
     private ModImageButton homeButton;
 
     @OnlyIn(Dist.CLIENT)
-    public BeepediaScreen(String pageID) {
+    public BeepediaScreen(String pageID, List<String> bees, boolean complete) {
         super(new TranslationTextComponent("gui.resourcefulbees.beepedia"));
         if (pageID != null) {
             currScreenState.setPageType(PageType.BEE);
             currScreenState.setPageID(pageID);
             currScreenState.setBeeSubPage(BeePage.SubPageType.INFO);
         }
+        this.itemBees = bees;
+        this.complete = complete;
         this.xSize = 286;
         this.ySize = 182;
     }
@@ -157,6 +162,7 @@ public class BeepediaScreen extends Screen {
     private void returnState(boolean goingBack) {
         setActive(currScreenState.getPageType(), currScreenState.getPageID(), goingBack);
         searchBox.visible = isSearchVisible();
+        searchBox.setValue(getSearch() != null ? getSearch() : "");
         if (beesScroll != 0) beesList.setScrollPos(beesScroll);
         if (honeyScroll != 0) honeyList.setScrollPos(honeyScroll);
         if (traitScroll != 0) traitsList.setScrollPos(traitScroll);
@@ -252,7 +258,7 @@ public class BeepediaScreen extends Screen {
             this.activeList.setActive(true, goingBack || forceUpdate);
             this.activeListType = type;
             if (BeepediaScreen.searchVisible && goingBack)
-                this.activeList.updateReducedList(BeepediaScreen.getSearch());
+                this.activeList.updateReducedList(BeepediaScreen.getSearch(), true);
         }
         // open page
         this.activePage = page;
@@ -343,21 +349,20 @@ public class BeepediaScreen extends Screen {
         updateSearch(traitsList, false);
     }
 
-    private void updateSearch(ButtonList list, boolean isToggled) {
-        if (!searchUpdated() && !isToggled) return;
+    private void updateSearch(ButtonList list, boolean isSearchToggled) {
+        if (!searchUpdated() && !isSearchToggled) return;
         if (isSearchVisible()) {
             if (getSearch() != null) {
-                searchBox.setValue(getSearch());
-                list.updateReducedList(searchBox.getValue());
+                list.updateReducedList(searchBox.getValue(), true);
             } else {
-                list.updateReducedList(null);
+                list.updateReducedList(null, true);
             }
         } else {
-            list.updateReducedList(null);
+            list.updateReducedList(null, true);
         }
     }
 
-    private static boolean searchUpdated() {
+    public static boolean searchUpdated() {
         if (lastSearch == null) return search != null;
         return !lastSearch.equals(search);
     }
@@ -473,7 +478,7 @@ public class BeepediaScreen extends Screen {
     }
 
     public void drawSlot(MatrixStack matrix, Block item, int xPos, int yPos) {
-        drawSlot(matrix, item, 1000, xPos, yPos);
+        drawSlot(matrix, item, 1, xPos, yPos);
     }
 
     public void drawSlot(MatrixStack matrix, IItemProvider item, int xPos, int yPos) {
@@ -601,7 +606,7 @@ public class BeepediaScreen extends Screen {
 
     public Map<String, BeePage> getBees(ItemStack bottleData) {
         return bees.entrySet().stream()
-                .filter(entrySet -> mapContainsBottle(entrySet.getValue(), bottleData))
+                .filter(entrySet -> mapContainsBottle(entrySet.getValue(), bottleData) && (!Config.BEEPEDIA_HIDE_LOCKED.get() || entrySet.getValue().beeUnlocked))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
@@ -613,7 +618,7 @@ public class BeepediaScreen extends Screen {
 
     public Map<String, BeePage> getBees(String traitName) {
         return bees.entrySet().stream()
-                .filter(entrySet -> mapContainsTraitName(entrySet.getValue(), traitName))
+                .filter(entrySet -> mapContainsTraitName(entrySet.getValue(), traitName) && (!Config.BEEPEDIA_HIDE_LOCKED.get() || entrySet.getValue().beeUnlocked))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 

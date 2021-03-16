@@ -14,9 +14,9 @@ public class SubButtonList extends ButtonList {
     }
 
     @Override
-    public void updateReducedList(String search) {
+    public void updateReducedList(String search, boolean resetHeight) {
         if (reducedList == null) return;
-        super.updateReducedList(search);
+        super.updateReducedList(search, resetHeight);
     }
 
     @Override
