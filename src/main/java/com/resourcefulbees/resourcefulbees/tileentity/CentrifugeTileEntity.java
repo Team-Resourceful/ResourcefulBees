@@ -207,6 +207,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
     }
 
     private boolean tanksHasSpace(CentrifugeRecipe centrifugeRecipe) {
+        if (centrifugeRecipe == null) return false;
         for (Pair<FluidStack, Float> f : centrifugeRecipe.fluidOutput) {
             if (f.getLeft().isEmpty()) continue;
             if (getValidTank(f.getKey()) < 0) {
