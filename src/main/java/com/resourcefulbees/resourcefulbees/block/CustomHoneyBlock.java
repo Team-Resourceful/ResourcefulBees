@@ -3,6 +3,7 @@ package com.resourcefulbees.resourcefulbees.block;
 
 import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
+import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.*;
@@ -117,16 +118,12 @@ public class CustomHoneyBlock extends BreakableBlock {
 
     @Override
     public void entityInside(@NotNull BlockState state, @NotNull World world, @NotNull BlockPos blockPos, @NotNull Entity entity) {
-        if (this.isSliding(blockPos, entity)) {
+        if (BeeInfoUtils.isSliding(blockPos, entity)) {
             this.triggerAdvancement(entity, blockPos);
             this.updateSlidingVelocity(entity);
             this.addCollisionEffects(world, entity);
         }
         super.entityInside(state, world, blockPos, entity);
-    }
-
-    private boolean isSliding(BlockPos blockPos, Entity entity) {
-        return isSliding(blockPos, entity);
     }
 
     private void triggerAdvancement(Entity entity, BlockPos blockPos) {

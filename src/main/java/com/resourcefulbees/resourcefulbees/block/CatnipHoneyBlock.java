@@ -1,6 +1,7 @@
 package com.resourcefulbees.resourcefulbees.block;
 
 import com.resourcefulbees.resourcefulbees.registry.ModBlocks;
+import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
@@ -66,27 +67,12 @@ public class CatnipHoneyBlock extends HoneyBlock {
     @Override
     @Deprecated
     public void entityInside(@NotNull BlockState state, @NotNull World world, @NotNull BlockPos blockPos, @NotNull Entity entity) {
-        if (isSliding(blockPos, entity)) {
+        if (BeeInfoUtils.isSliding(blockPos, entity)) {
             triggerAdvancement(entity, blockPos);
             updateSlidingVelocity(entity);
             addCollisionEffects(world, entity);
         }
         super.entityInside(state, world, blockPos, entity);
-    }
-
-    public static boolean isSliding(BlockPos blockPos, Entity entity) {
-        if (entity.isOnGround()) {
-            return false;
-        } else if (entity.getY() > (double) blockPos.getY() + 0.9375D - 1.0E-7D) {
-            return false;
-        } else if (entity.getDeltaMovement().y >= -0.08D) {
-            return false;
-        } else {
-            double d0 = Math.abs((double) blockPos.getX() + 0.5D - entity.getX());
-            double d1 = Math.abs((double) blockPos.getZ() + 0.5D - entity.getZ());
-            double d2 = 0.4375D + (double) (entity.getBbWidth() / 2.0F);
-            return d0 + 1.0E-7D > d2 || d1 + 1.0E-7D > d2;
-        }
     }
 
     private static void triggerAdvancement(Entity entity, BlockPos blockPos) {
@@ -127,4 +113,6 @@ public class CatnipHoneyBlock extends HoneyBlock {
             entity.level.addParticle(new BlockParticleData(ParticleTypes.BLOCK, blockstate), entity.getX(), entity.getY(), entity.getZ(), 0.0D, 0.0D, 0.0D);
         }
     }
+
+
 }
