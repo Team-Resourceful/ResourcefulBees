@@ -1,3 +1,7 @@
+# ----- [0.6.1b] -----
+
+- fixed jar manifest
+
 # ----- [0.6.0b] -----
 
 ##IMPORTANT INFO FOR PACK DEVS:
