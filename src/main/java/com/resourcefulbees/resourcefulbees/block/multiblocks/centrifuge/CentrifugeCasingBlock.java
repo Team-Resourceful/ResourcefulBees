@@ -60,25 +60,18 @@ public class CentrifugeCasingBlock extends Block {
     @Nonnull
     @Override
     public ActionResultType use(@Nonnull BlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult rayTraceResult) {
-        if (!world.isClientSide) {
-            ItemStack heldItem = player.getItemInHand(hand);
-            boolean usingBucket = heldItem.getItem() instanceof BucketItem;
-            CentrifugeControllerTileEntity controller = getControllerEntity(world, pos);
-
-                if (controller != null && controller.isValidStructure()) {
-                    if (usingBucket) {
-                        controller.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
-                                .ifPresent(iFluidHandler -> FluidUtil.interactWithFluidHandler(player, hand, world, pos, null));
-                    } else if(!player.isShiftKeyDown()) {
-                        NetworkHooks.openGui((ServerPlayerEntity) player, controller, controller.getBlockPos());
-                    }
-                }
-                else
-                {
-                    return ActionResultType.PASS;
-                }
+        ItemStack heldItem = player.getItemInHand(hand);
+        boolean usingBucket = heldItem.getItem() instanceof BucketItem;
+        CentrifugeControllerTileEntity controller = getControllerEntity(world, pos);
+        if (controller != null && controller.isValidStructure()) {
+            if (usingBucket) {
+                controller.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+                        .ifPresent(iFluidHandler -> FluidUtil.interactWithFluidHandler(player, hand, world, pos, null));
+            } else if(!player.isShiftKeyDown() && !world.isClientSide) {
+                NetworkHooks.openGui((ServerPlayerEntity) player, controller, controller.getBlockPos());
+            }
+            return ActionResultType.SUCCESS;
         }
-
         return super.use(state, world, pos, player, hand, rayTraceResult);
     }
 }

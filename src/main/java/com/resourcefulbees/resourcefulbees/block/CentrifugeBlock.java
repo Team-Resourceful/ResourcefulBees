@@ -48,19 +48,18 @@ public class CentrifugeBlock extends Block {
     @Nonnull
     @Override
     public ActionResultType use(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult rayTraceResult) {
-        if (!world.isClientSide) {
-            ItemStack heldItem = player.getItemInHand(hand);
-            boolean usingBucket = heldItem.getItem() instanceof BucketItem;
-            TileEntity tileEntity = world.getBlockEntity(pos);
+        ItemStack heldItem = player.getItemInHand(hand);
+        boolean usingBucket = heldItem.getItem() instanceof BucketItem;
+        TileEntity tileEntity = world.getBlockEntity(pos);
 
-            if (tileEntity instanceof CentrifugeTileEntity) {
-                if (usingBucket) {
-                    tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
-                            .ifPresent(iFluidHandler -> FluidUtil.interactWithFluidHandler(player, hand, world, pos, null));
-                } else {
-                    NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, pos);
-                }
+        if (tileEntity instanceof CentrifugeTileEntity) {
+            if (usingBucket) {
+                tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+                        .ifPresent(iFluidHandler -> FluidUtil.interactWithFluidHandler(player, hand, world, pos, null));
+            } else if (!player.isShiftKeyDown() && !world.isClientSide) {
+                NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, pos);
             }
+            return ActionResultType.SUCCESS;
         }
         return super.use(state, world, pos, player, hand, rayTraceResult);
     }

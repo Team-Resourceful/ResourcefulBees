@@ -41,6 +41,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 import net.minecraft.block.AbstractBlock.Properties;
+import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("deprecation")
 public class MechanicalCentrifugeBlock extends Block {
@@ -55,24 +56,21 @@ public class MechanicalCentrifugeBlock extends Block {
 
     @Nonnull
     @Override
-    public ActionResultType use(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult rayTraceResult) {
-        if (!world.isClientSide) {
-            INamedContainerProvider blockEntity = state.getMenuProvider(world, pos);
-            MechanicalCentrifugeTileEntity tile = (MechanicalCentrifugeTileEntity)world.getBlockEntity(pos);
-            if (player.isShiftKeyDown() && !(player instanceof FakePlayer)) {
-                if (tile != null && tile.canProcess(tile.getRecipe())) {
-                    player.causeFoodExhaustion(Config.PLAYER_EXHAUSTION.get().floatValue());
-                    tile.setClicks(tile.getClicks() + 1);
-                    if (state.getValue(PROPERTY_ROTATION) == 7)
-                        world.playSound(null, pos, SoundEvents.LODESTONE_COMPASS_LOCK, SoundCategory.BLOCKS, 0.5F, 0.1F);
-                    world.playSound(null, pos, SoundEvents.FENCE_GATE_CLOSE, SoundCategory.BLOCKS, 0.5F, 0.1F);
-                    world.setBlock(pos, state.cycle(PROPERTY_ROTATION), 3);
-                }
-            } else if (blockEntity != null) {
-                NetworkHooks.openGui((ServerPlayerEntity) player, blockEntity, pos);
+    public ActionResultType use(@Nonnull BlockState state, @NotNull World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult rayTraceResult) {
+        MechanicalCentrifugeTileEntity tile = (MechanicalCentrifugeTileEntity) world.getBlockEntity(pos);
+        if (player.isShiftKeyDown() && !(player instanceof FakePlayer)) {
+            if (!world.isClientSide && tile != null && tile.canProcess(tile.getRecipe())) {
+                player.causeFoodExhaustion(Config.PLAYER_EXHAUSTION.get().floatValue());
+                tile.setClicks(tile.getClicks() + 1);
+                if (state.getValue(PROPERTY_ROTATION) == 7)
+                    world.playSound(null, pos, SoundEvents.LODESTONE_COMPASS_LOCK, SoundCategory.BLOCKS, 0.5F, 0.1F);
+                world.playSound(null, pos, SoundEvents.FENCE_GATE_CLOSE, SoundCategory.BLOCKS, 0.5F, 0.1F);
+                world.setBlock(pos, state.cycle(PROPERTY_ROTATION), 3);
             }
+        } else if (!player.isShiftKeyDown() && !world.isClientSide) {
+            NetworkHooks.openGui((ServerPlayerEntity) player, tile, pos);
         }
-        return super.use(state, world, pos, player, hand, rayTraceResult);
+        return ActionResultType.SUCCESS;
     }
 
     @Nullable

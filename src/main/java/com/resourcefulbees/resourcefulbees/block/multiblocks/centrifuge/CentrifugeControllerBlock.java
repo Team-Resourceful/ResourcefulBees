@@ -41,6 +41,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 import net.minecraft.block.AbstractBlock.Properties;
+import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("deprecation")
 public class CentrifugeControllerBlock extends Block {
@@ -62,24 +63,19 @@ public class CentrifugeControllerBlock extends Block {
 
     @Nonnull
     @Override
-    public ActionResultType use(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult rayTraceResult) {
-        if (!world.isClientSide) {
-            ItemStack heldItem = player.getItemInHand(hand);
-            boolean usingBucket = heldItem.getItem() instanceof BucketItem;
-            CentrifugeControllerTileEntity controller = getControllerEntity(world, pos);
+    public ActionResultType use(@Nonnull BlockState state, @NotNull World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult rayTraceResult) {
+        ItemStack heldItem = player.getItemInHand(hand);
+        boolean usingBucket = heldItem.getItem() instanceof BucketItem;
+        CentrifugeControllerTileEntity controller = getControllerEntity(world, pos);
 
-            if (controller != null && controller.isValidStructure()) {
-                if (usingBucket) {
-                    controller.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
-                            .ifPresent(iFluidHandler -> FluidUtil.interactWithFluidHandler(player, hand, world, pos, null));
-                } else if (!player.isShiftKeyDown()) {
-                    NetworkHooks.openGui((ServerPlayerEntity) player, controller, pos);
-                }
+        if (controller != null && controller.isValidStructure()) {
+            if (usingBucket) {
+                controller.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+                        .ifPresent(iFluidHandler -> FluidUtil.interactWithFluidHandler(player, hand, world, pos, null));
+            } else if (!player.isShiftKeyDown() && !world.isClientSide) {
+                NetworkHooks.openGui((ServerPlayerEntity) player, controller, pos);
             }
-            else
-            {
-                return ActionResultType.PASS;
-            }
+            return ActionResultType.SUCCESS;
         }
 
         return super.use(state, world, pos, player, hand, rayTraceResult);

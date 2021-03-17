@@ -29,6 +29,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 import net.minecraft.block.AbstractBlock.Properties;
+import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("deprecation")
 public class ApiaryBreederBlock extends Block{
@@ -42,14 +43,12 @@ public class ApiaryBreederBlock extends Block{
 
     @Nonnull
     @Override
-    public ActionResultType use(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult blockRayTraceResult) {
-        if (!world.isClientSide) {
+    public ActionResultType use(@Nonnull BlockState state, @NotNull World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult blockRayTraceResult) {
+        if (!player.isShiftKeyDown() && !world.isClientSide) {
             INamedContainerProvider blockEntity = state.getMenuProvider(world,pos);
-            if (blockEntity != null) {
-                NetworkHooks.openGui((ServerPlayerEntity) player, blockEntity, pos);
-            }
+            NetworkHooks.openGui((ServerPlayerEntity) player, blockEntity, pos);
         }
-        return super.use(state, world, pos, player, hand, blockRayTraceResult);
+        return ActionResultType.SUCCESS;
     }
 
 

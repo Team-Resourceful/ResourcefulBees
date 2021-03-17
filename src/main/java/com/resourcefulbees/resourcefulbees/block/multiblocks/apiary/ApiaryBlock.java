@@ -54,13 +54,11 @@ public class ApiaryBlock extends Block {
 
   @Override
   public @NotNull ActionResultType use(@Nonnull BlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand handIn, @Nonnull BlockRayTraceResult hit) {
-    if (!world.isClientSide) {
+    if (!player.isShiftKeyDown() && !world.isClientSide) {
       INamedContainerProvider blockEntity = state.getMenuProvider(world,pos);
-      if (blockEntity != null) {
-        NetworkHooks.openGui((ServerPlayerEntity) player, blockEntity, pos);
-      }
+      NetworkHooks.openGui((ServerPlayerEntity) player, blockEntity, pos);
     }
-    return super.use(state, world, pos, player, handIn, hit);
+    return ActionResultType.SUCCESS;
   }
 
   @Override
