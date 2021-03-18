@@ -2,6 +2,7 @@
 - fixed bee box not properly supplying bee with data upon release
 - updated patchouli (note: beecon gif doesn't work but doesn't crash now)
 - mutation validation logging now displays bee name
+- fixed named colors in bee jsons causing crashes
 
 # ----- [0.6.3b] -----
 - fixed fluid crashes in centrifuge
