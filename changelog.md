@@ -1,3 +1,10 @@
+# ----- [0.6.3b] -----
+- fixed fluid crashes in centrifuge
+- changed how bee is accessed from its goals to eliminate possible mixin crashes
+
+# ----- [0.6.2b] -----
+- fixed stack overflow error caused by custom honey block
+
 # ----- [0.6.1b] -----
 
 - fixed jar manifest
