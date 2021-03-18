@@ -35,13 +35,11 @@ public class UpdateBeeconMessage {
     public static void handle(UpdateBeeconMessage message, Supplier<NetworkEvent.Context> context) {
         context.get().enqueueWork(() -> {
             ServerPlayerEntity player = context.get().getSender();
-            if (player != null) {
-                if (player.level.isLoaded(message.blockPos)){
-                    TileEntity tileEntity = player.level.getBlockEntity(message.blockPos);
-                    if (tileEntity instanceof EnderBeeconTileEntity) {
-                        EnderBeeconTileEntity beecon = (EnderBeeconTileEntity) tileEntity;
-                        beecon.updateBeeconEffect(message.effectLocation, message.active);
-                    }
+            if (player != null && player.level.isLoaded(message.blockPos)){
+                TileEntity tileEntity = player.level.getBlockEntity(message.blockPos);
+                if (tileEntity instanceof EnderBeeconTileEntity) {
+                    EnderBeeconTileEntity beecon = (EnderBeeconTileEntity) tileEntity;
+                    beecon.updateBeeconEffect(message.effectLocation, message.active);
                 }
             }
         });

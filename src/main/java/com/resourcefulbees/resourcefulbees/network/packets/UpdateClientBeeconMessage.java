@@ -32,13 +32,11 @@ public class UpdateClientBeeconMessage {
     public static void handle(UpdateClientBeeconMessage message, Supplier<NetworkEvent.Context> context){
         context.get().enqueueWork(() -> {
             ClientPlayerEntity player = Minecraft.getInstance().player;
-            if (player != null) {
-                if (player.level.isLoaded(message.pos)) {
-                    TileEntity tileEntity = player.level.getBlockEntity(message.pos);
-                    if (tileEntity instanceof EnderBeeconTileEntity) {
-                        EnderBeeconTileEntity beeconTileEntity = (EnderBeeconTileEntity) tileEntity;
-                        beeconTileEntity.readNBT(message.data);
-                    }
+            if (player != null && player.level.isLoaded(message.pos)) {
+                TileEntity tileEntity = player.level.getBlockEntity(message.pos);
+                if (tileEntity instanceof EnderBeeconTileEntity) {
+                    EnderBeeconTileEntity beeconTileEntity = (EnderBeeconTileEntity) tileEntity;
+                    beeconTileEntity.readNBT(message.data);
                 }
             }
         });

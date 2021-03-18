@@ -32,14 +32,12 @@ public class UpdateClientApiaryMessage {
     public static void handle(UpdateClientApiaryMessage message, Supplier<NetworkEvent.Context> context){
         context.get().enqueueWork(() -> {
             ClientPlayerEntity player = Minecraft.getInstance().player;
-            if (player != null) {
-                if (player.level.isLoaded(message.pos)) {
-                    TileEntity tileEntity = player.level.getBlockEntity(message.pos);
-                    if (tileEntity instanceof ApiaryTileEntity) {
-                        ApiaryTileEntity apiaryTileEntity = (ApiaryTileEntity) tileEntity;
-                        apiaryTileEntity.bees.clear();
-                        apiaryTileEntity.loadFromNBT(message.data);
-                    }
+            if (player != null && player.level.isLoaded(message.pos)) {
+                TileEntity tileEntity = player.level.getBlockEntity(message.pos);
+                if (tileEntity instanceof ApiaryTileEntity) {
+                    ApiaryTileEntity apiaryTileEntity = (ApiaryTileEntity) tileEntity;
+                    apiaryTileEntity.bees.clear();
+                    apiaryTileEntity.loadFromNBT(message.data);
                 }
             }
         });

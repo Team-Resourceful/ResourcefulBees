@@ -8,15 +8,13 @@ import com.resourcefulbees.resourcefulbees.container.EnderBeeconContainer;
 import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
 import com.resourcefulbees.resourcefulbees.network.packets.UpdateBeeconMessage;
 import com.resourcefulbees.resourcefulbees.tileentity.EnderBeeconTileEntity;
-import com.resourcefulbees.resourcefulbees.utils.RenderCuboid;
 import com.resourcefulbees.resourcefulbees.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.widget.button.AbstractButton;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.potion.Effect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -24,7 +22,6 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
@@ -47,7 +44,6 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
     private static final ITextComponent rangeLabel = new TranslationTextComponent("block.resourcefulbees.ender_beecon.range");
     private static final ITextComponent activeLabel = new TranslationTextComponent("block.resourcefulbees.ender_beecon.is_active");
     private static final ResourceLocation BUTTON_CALMING = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/ender_beecon/calming_button.png");
-    private static final ResourceLocation FLUID_TEXTURE = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/ender_beecon/fluid.png");
 
     List<PowerButton> powerButtons = new LinkedList<>();
 
@@ -67,14 +63,13 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
     @Override
     protected void renderBg(@Nonnull MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
         ResourceLocation texture = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/ender_beecon/ender_beecon.png");
-        Minecraft client = this.minecraft;
-        if (client != null) {
-            client.getTextureManager().bind(texture);
+        if (minecraft != null) {
+            minecraft.getTextureManager().bind(texture);
             int i = this.leftPos;
             int j = this.topPos;
             this.blit(matrix, i, j, 0, 0, this.imageWidth, this.imageHeight);
         }
-        drawFluidTank(matrix, mouseX, mouseY);
+        drawFluidTank(matrix);
         drawButtons();
     }
 
@@ -96,7 +91,7 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
         }
     }
 
-    private void drawFluidTank(MatrixStack matrix, int mouseX, int mouseY) {
+    private void drawFluidTank(MatrixStack matrix) {
         if (!tileEntity.getFluidTank().isEmpty()) {
             //init stuff
             int tankPosX = this.leftPos + 207;
@@ -139,7 +134,7 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
         }
         StringTextComponent fluidCount;
         DecimalFormat decimalFormat = new DecimalFormat("##0.0");
-        if (tileEntity.getFluidTank().getFluidAmount() < 1000f) {
+        if (tileEntity.getFluidTank().getFluidAmount() < 1000f || Screen.hasShiftDown()) {
             fluidCount = new StringTextComponent(decimalFormat.format(tileEntity.getFluidTank().getFluidAmount()) + " mb");
         } else {
             fluidCount = new StringTextComponent(decimalFormat.format(tileEntity.getFluidTank().getFluidAmount() / 1000f) + " B");

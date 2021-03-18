@@ -28,13 +28,11 @@ public class ImportBeeMessage {
     public static void handle(ImportBeeMessage message, Supplier<NetworkEvent.Context> context){
         context.get().enqueueWork(() -> {
             ServerPlayerEntity player = context.get().getSender();
-            if (player != null) {
-                if (player.level.isLoaded(message.pos)) {
-                    TileEntity tileEntity = player.level.getBlockEntity(message.pos);
-                    if (tileEntity instanceof ApiaryTileEntity) {
-                        ApiaryTileEntity apiaryTileEntity = (ApiaryTileEntity) tileEntity;
-                        apiaryTileEntity.importBee(player);
-                    }
+            if (player != null && player.level.isLoaded(message.pos)) {
+                TileEntity tileEntity = player.level.getBlockEntity(message.pos);
+                if (tileEntity instanceof ApiaryTileEntity) {
+                    ApiaryTileEntity apiaryTileEntity = (ApiaryTileEntity) tileEntity;
+                    apiaryTileEntity.importBee(player);
                 }
             }
         });

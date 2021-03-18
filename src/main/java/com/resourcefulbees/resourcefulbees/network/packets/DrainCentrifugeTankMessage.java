@@ -30,12 +30,10 @@ public class DrainCentrifugeTankMessage {
     public static void handle(DrainCentrifugeTankMessage message, Supplier<NetworkEvent.Context> context){
         context.get().enqueueWork(() -> {
             ServerPlayerEntity player = context.get().getSender();
-            if (player != null) {
-                if (player.level.isLoaded(message.pos)) {
-                    TileEntity tileEntity = player.level.getBlockEntity(message.pos);
-                    if (tileEntity instanceof CentrifugeTileEntity) {
-                        ((CentrifugeTileEntity) tileEntity).drainFluidInTank(message.tank);
-                    }
+            if (player != null && player.level.isLoaded(message.pos)) {
+                TileEntity tileEntity = player.level.getBlockEntity(message.pos);
+                if (tileEntity instanceof CentrifugeTileEntity) {
+                    ((CentrifugeTileEntity) tileEntity).drainFluidInTank(message.tank);
                 }
             }
         });

@@ -28,12 +28,10 @@ public class UpdateRedstoneReqMessage {
     public static void handle(UpdateRedstoneReqMessage message, Supplier<NetworkEvent.Context> context){
         context.get().enqueueWork(() -> {
             ServerPlayerEntity player = context.get().getSender();
-            if (player != null) {
-                if (player.level.isLoaded(message.pos)) {
-                    TileEntity tileEntity = player.level.getBlockEntity(message.pos);
-                    if (tileEntity instanceof CentrifugeTileEntity) {
-                        ((CentrifugeTileEntity) tileEntity).updateRequiresRedstone();
-                    }
+            if (player != null && player.level.isLoaded(message.pos)) {
+                TileEntity tileEntity = player.level.getBlockEntity(message.pos);
+                if (tileEntity instanceof CentrifugeTileEntity) {
+                    ((CentrifugeTileEntity) tileEntity).updateRequiresRedstone();
                 }
             }
         });

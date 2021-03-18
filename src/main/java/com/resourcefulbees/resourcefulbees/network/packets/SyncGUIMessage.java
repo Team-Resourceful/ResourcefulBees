@@ -32,15 +32,13 @@ public class SyncGUIMessage {
     public static void handle(SyncGUIMessage message, Supplier<NetworkEvent.Context> context){
         context.get().enqueueWork(() -> {
             ClientPlayerEntity player = Minecraft.getInstance().player;
-            if (player != null) {
-                if (player.level.isLoaded(message.pos)) {
-                    TileEntity tileEntity = player.level.getBlockEntity(message.pos);
-                    if (tileEntity instanceof CentrifugeTileEntity) {
-                        ((CentrifugeTileEntity) tileEntity).handleGUINetworkPacket(message.buffer);
-                    }
-                    if (tileEntity instanceof HoneyGeneratorTileEntity) {
-                        ((HoneyGeneratorTileEntity) tileEntity).handleGUINetworkPacket(message.buffer);
-                    }
+            if (player != null && player.level.isLoaded(message.pos)) {
+                TileEntity tileEntity = player.level.getBlockEntity(message.pos);
+                if (tileEntity instanceof CentrifugeTileEntity) {
+                    ((CentrifugeTileEntity) tileEntity).handleGUINetworkPacket(message.buffer);
+                }
+                if (tileEntity instanceof HoneyGeneratorTileEntity) {
+                    ((HoneyGeneratorTileEntity) tileEntity).handleGUINetworkPacket(message.buffer);
                 }
             }
         });

@@ -31,13 +31,11 @@ public class LockBeeMessage {
     public static void handle(LockBeeMessage message, Supplier<NetworkEvent.Context> context){
         context.get().enqueueWork(() -> {
             ServerPlayerEntity player = context.get().getSender();
-            if (player != null) {
-                if (player.level.isLoaded(message.pos)) {
-                    TileEntity tileEntity = player.level.getBlockEntity(message.pos);
-                    if (tileEntity instanceof ApiaryTileEntity) {
-                        ApiaryTileEntity apiaryTileEntity = (ApiaryTileEntity) tileEntity;
-                        apiaryTileEntity.lockOrUnlockBee(message.beeType);
-                    }
+            if (player != null && player.level.isLoaded(message.pos)) {
+                TileEntity tileEntity = player.level.getBlockEntity(message.pos);
+                if (tileEntity instanceof ApiaryTileEntity) {
+                    ApiaryTileEntity apiaryTileEntity = (ApiaryTileEntity) tileEntity;
+                    apiaryTileEntity.lockOrUnlockBee(message.beeType);
                 }
             }
         });

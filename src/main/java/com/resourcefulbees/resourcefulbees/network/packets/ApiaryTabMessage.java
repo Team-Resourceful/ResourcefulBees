@@ -32,12 +32,10 @@ public class ApiaryTabMessage {
         public static void handle(ApiaryTabMessage message, Supplier<NetworkEvent.Context> context){
             context.get().enqueueWork(() -> {
                 ServerPlayerEntity player = context.get().getSender();
-                if (player != null) {
-                    if (player.level.isLoaded(message.pos)) {
-                        TileEntity tileEntity = player.level.getBlockEntity(message.pos);
-                        if (tileEntity instanceof IApiaryMultiblock) {
-                            ((IApiaryMultiblock) tileEntity).switchTab(player, message.tab);
-                        }
+                if (player != null && player.level.isLoaded(message.pos)) {
+                    TileEntity tileEntity = player.level.getBlockEntity(message.pos);
+                    if (tileEntity instanceof IApiaryMultiblock) {
+                        ((IApiaryMultiblock) tileEntity).switchTab(player, message.tab);
                     }
                 }
             });

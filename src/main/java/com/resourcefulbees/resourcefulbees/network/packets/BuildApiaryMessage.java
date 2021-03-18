@@ -34,15 +34,13 @@ public class BuildApiaryMessage {
     public static void handle(BuildApiaryMessage message, Supplier<NetworkEvent.Context> context){
         context.get().enqueueWork(() -> {
             ServerPlayerEntity player = context.get().getSender();
-            if (player != null) {
-                if (player.level.isLoaded(message.pos)) {
-                    TileEntity tileEntity = player.level.getBlockEntity(message.pos);
-                    if (tileEntity instanceof ApiaryTileEntity) {
-                        ApiaryTileEntity apiaryTileEntity = (ApiaryTileEntity) tileEntity;
-                        apiaryTileEntity.setVerticalOffset(message.verticalOffset);
-                        apiaryTileEntity.setHorizontalOffset(message.horizontalOffset);
-                        apiaryTileEntity.runCreativeBuild(player);
-                    }
+            if (player != null && player.level.isLoaded(message.pos)) {
+                TileEntity tileEntity = player.level.getBlockEntity(message.pos);
+                if (tileEntity instanceof ApiaryTileEntity) {
+                    ApiaryTileEntity apiaryTileEntity = (ApiaryTileEntity) tileEntity;
+                    apiaryTileEntity.setVerticalOffset(message.verticalOffset);
+                    apiaryTileEntity.setHorizontalOffset(message.horizontalOffset);
+                    apiaryTileEntity.runCreativeBuild(player);
                 }
             }
         });

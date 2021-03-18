@@ -63,7 +63,6 @@ public class ResourcefulBees {
 
         ConfigLoader.load(Config.CommonConfig.COMMON_CONFIG, "resourcefulbees/common.toml");
 
-        //checkForIncompatibleMods();
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> IncompatibleModWarning::init);
 
 
@@ -171,23 +170,5 @@ public class ResourcefulBees {
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ClientEventHandlers::registerPatreonRender);
         DataGen.generateCommonData();
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> PatreonDataLoader::loadAPI);
-    }
-
-    private void checkForIncompatibleMods() {
-        if(Config.BYPASS_PERFORMANT_CHECK.get()) {
-            LOGGER.warn("Performant check bypassed");
-            LOGGER.warn("Performant {} present", (FMLLoader.getLoadingModList().getModFileById("performant") != null ? "is" : "is not"));
-        } else {
-            if (FMLLoader.getLoadingModList().getModFileById("performant") != null) {
-                throw new IllegalStateException("" +
-                        "Performant is incompatible with Resourceful Bees\n" +
-                        "This is a known issue with performant and it breaking other mods, the author does not care\n" +
-                        "GitHub issue on the matter: https://github.com/someaddons/performant_issues/issues/70\n" +
-                        "To bypass this check set \"bypassPerformantCheck: true\" in your Resourceful Bees common.toml config\n" +
-                        "If you bypass this check we will not provide any support for any issues related to Resourceful Bees or the mods that use it\n" +
-                        "If you believe your issue is unrelated, disable performant and reproduce it\n" +
-                        "By choosing to bypass this check you understand that here there be dragons");
-            }
-        }
     }
 }
