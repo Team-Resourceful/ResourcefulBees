@@ -12,7 +12,6 @@ import com.resourcefulbees.resourcefulbees.entity.goals.*;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.lib.TraitConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
-import com.resourcefulbees.resourcefulbees.registry.ModPOIs;
 import com.resourcefulbees.resourcefulbees.tileentity.TieredBeehiveTileEntity;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
@@ -40,9 +39,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.village.PointOfInterest;
-import net.minecraft.village.PointOfInterestManager;
-import net.minecraft.village.PointOfInterestType;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
@@ -52,17 +48,15 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class ResourcefulBee extends CustomBeeEntity {
 
     private boolean wasColliding;
     private int numberOfMutations;
     private BeePollinateGoal pollinateGoal;
+    private int explosiveCooldown = 0;
 
     public ResourcefulBee(EntityType<? extends BeeEntity> type, World world, CustomBeeData beeData) {
         super(type, world, beeData);
@@ -125,7 +119,17 @@ public class ResourcefulBee extends CustomBeeEntity {
         }
     }
 
-/*    public boolean doesHiveHaveSpace(BlockPos pos) {
+    @Override
+    public void tick() {
+        super.tick();
+        if (explosiveCooldown > 0) explosiveCooldown--;
+    }
+
+    public void setExplosiveCooldown(int cooldown){
+        this.explosiveCooldown = cooldown;
+    }
+
+    /*    public boolean doesHiveHaveSpace(BlockPos pos) {
         TileEntity blockEntity = this.level.getBlockEntity(pos);
         return (blockEntity instanceof TieredBeehiveTileEntity && !((TieredBeehiveTileEntity) blockEntity).isFull())
                 || (blockEntity instanceof ApiaryTileEntity && !((ApiaryTileEntity) blockEntity).isFullOfBees())
@@ -407,7 +411,7 @@ public class ResourcefulBee extends CustomBeeEntity {
         if (!this.level.isClientSide) {
             Explosion.Mode mode = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.level, this) ? Explosion.Mode.BREAK : Explosion.Mode.NONE;
             this.dead = true;
-            this.level.explode(this, this.getX(), this.getY(), this.getZ(), random.nextFloat() * radius, mode);
+            this.level.explode(this, this.getX(), this.getY(), this.getZ(), random.nextFloat() * radius, explosiveCooldown > 0 ? Explosion.Mode.NONE : mode);
             this.remove();
             this.spawnLingeringCloud();
         }
