@@ -11,7 +11,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.BucketItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
@@ -49,18 +48,25 @@ public class CentrifugeBlock extends Block {
     @Override
     public ActionResultType use(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult rayTraceResult) {
         ItemStack heldItem = player.getItemInHand(hand);
-        boolean usingBucket = heldItem.getItem() instanceof BucketItem;
+        boolean hasCapability = heldItem.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent();
         TileEntity tileEntity = world.getBlockEntity(pos);
 
-        if (tileEntity instanceof CentrifugeTileEntity) {
-            if (usingBucket) {
+        if (!world.isClientSide && tileEntity instanceof CentrifugeTileEntity) {
+            if (hasCapability) {
                 tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
                         .ifPresent(iFluidHandler -> FluidUtil.interactWithFluidHandler(player, hand, world, pos, null));
-            } else if (!player.isShiftKeyDown() && !world.isClientSide) {
+            } else if (!player.isShiftKeyDown()) {
                 NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, pos);
+            } else {
+                return super.use(state, world, pos, player, hand, rayTraceResult);
             }
+            world.sendBlockUpdated(pos, state, state, 2);
+        }
+
+        if (hasCapability) {
             return ActionResultType.SUCCESS;
         }
+
         return super.use(state, world, pos, player, hand, rayTraceResult);
     }
 
