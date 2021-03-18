@@ -1,0 +1,17 @@
+{
+    "name": "book.resourcefulbees.ess_tools_category.bee_box",
+    "icon": "resourcefulbees:bee_box",
+    "category": "resourcefulbees:essential_tools",
+    "sortnum": 2,
+    "pages": [
+        {
+            "type": "text",
+            "text": "book.resourcefulbees.ess_tools_category.bee_box.1"
+        },
+        {
+            "type": "crafting",
+            "recipe": "resourcefulbees:bee_box",
+            "text": "book.resourcefulbees.ess_tools_category.bee_box.2"
+        }
+    ]
+}

@@ -20,11 +20,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.network.NetworkHooks;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import net.minecraft.block.AbstractBlock.Properties;
 
 @SuppressWarnings("deprecation")
 public class CentrifugeCasingBlock extends Block {
@@ -57,9 +56,8 @@ public class CentrifugeCasingBlock extends Block {
         }
     }
 
-    @Nonnull
     @Override
-    public ActionResultType use(@Nonnull BlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult rayTraceResult) {
+    public @NotNull ActionResultType use(@NotNull BlockState state, @NotNull World world, @NotNull BlockPos pos, @NotNull PlayerEntity player, @NotNull Hand hand, @NotNull BlockRayTraceResult rayTraceResult) {
         ItemStack heldItem = player.getItemInHand(hand);
         boolean usingBucket = heldItem.getItem() instanceof BucketItem;
         CentrifugeControllerTileEntity controller = getControllerEntity(world, pos);

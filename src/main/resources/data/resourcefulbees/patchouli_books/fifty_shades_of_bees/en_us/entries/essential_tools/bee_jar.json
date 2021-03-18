@@ -10,7 +10,7 @@
         },
         {
             "type": "crafting",
-            "recipe": "resourcefulbees:bee_jar",
+            "recipe": "resourcefulbees:jar",
             "text": "book.resourcefulbees.ess_tools_category.bee_jar.2"
         }
     ]

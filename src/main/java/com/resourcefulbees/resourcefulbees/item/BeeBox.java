@@ -29,8 +29,6 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.item.Item.Properties;
-
 public class BeeBox extends Item {
 
     private static final String ITEM_DOT = "item.";
@@ -99,14 +97,15 @@ public class BeeBox extends Item {
         }
         if (isTemp) return ActionResultType.FAIL;
         BeeEntity target = (BeeEntity) targetIn;
-        CompoundNBT tag = stack.getTag();
-        if (tag == null) tag = new CompoundNBT();
-        ListNBT bees;
-        if (tag.contains(NBTConstants.NBT_BEES)) {
-            bees = tag.getList(NBTConstants.NBT_BEES, 10);
-        } else {
-            bees = new ListNBT();
-        }
+
+        CompoundNBT tag = stack.getTag() == null
+                ? new CompoundNBT()
+                : stack.getTag();
+
+        ListNBT bees = tag.contains(NBTConstants.NBT_BEES)
+                ? tag.getList(NBTConstants.NBT_BEES, 10)
+                : new ListNBT();
+
         if (bees.size() == BeeConstants.MAX_BEES_BEE_BOX) return ActionResultType.FAIL;
         CompoundNBT entityData = new CompoundNBT();
         entityData.put(NBTConstants.ENTITY_DATA, BeeInfoUtils.createJarBeeTag(target, NBTConstants.NBT_ID));

@@ -40,8 +40,8 @@ public class AnimatedImageComponent implements ICustomComponent {
     }
 
     @Override
-    public void render(@NotNull MatrixStack matrixStack, IComponentRenderContext context, float v, int i, int i1) {
-        if (context.getTicksInBook() % ticksPerFrame.asNumber().intValue() == 0) {
+    public void render(@NotNull MatrixStack matrixStack, @NotNull IComponentRenderContext context, float v, int i, int i1) {
+        if (context.getTicksInBook() % 2 == 0) {
             currentFrame++;
         }
         if (currentFrame >= frames) {

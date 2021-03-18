@@ -2,7 +2,7 @@
     "name": "book.resourcefulbees.ess_tools_category.honey_dipper",
     "icon": "resourcefulbees:honey_dipper",
     "category": "resourcefulbees:essential_tools",
-    "sortnum": 2,
+    "sortnum": 3,
     "pages": [
         {
             "type": "text",

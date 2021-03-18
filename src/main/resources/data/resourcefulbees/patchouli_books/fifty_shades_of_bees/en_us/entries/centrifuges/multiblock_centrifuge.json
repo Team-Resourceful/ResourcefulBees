@@ -35,6 +35,11 @@
       "type": "crafting",
       "recipe": "resourcefulbees:centrifuge_controller",
       "recipe2": "resourcefulbees:centrifuge_casing"
+    },
+    {
+      "type": "crafting",
+      "recipe": "resourcefulbees:elite_centrifuge_controller",
+      "recipe2": "resourcefulbees:elite_centrifuge_casing"
     }
   ]
 }
