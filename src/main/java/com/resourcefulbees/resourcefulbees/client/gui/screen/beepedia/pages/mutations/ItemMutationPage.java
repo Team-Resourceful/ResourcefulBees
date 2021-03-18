@@ -2,7 +2,6 @@ package com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.mut
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
-import com.resourcefulbees.resourcefulbees.api.beedata.mutation.outputs.BlockOutput;
 import com.resourcefulbees.resourcefulbees.api.beedata.mutation.outputs.ItemOutput;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
