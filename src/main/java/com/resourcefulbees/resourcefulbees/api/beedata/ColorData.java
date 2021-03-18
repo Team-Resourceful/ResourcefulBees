@@ -132,21 +132,20 @@ public class ColorData extends AbstractBeeData {
 
     public int getHoneycombColorInt() { return com.resourcefulbees.resourcefulbees.utils.color.Color.parseInt(getHoneycombColor()); }
 
+    public int getGlowColorInt() { return com.resourcefulbees.resourcefulbees.utils.color.Color.parseInt(getGlowColor()); }
+
     public ModelTypes getModelType() { return modelType != null ? modelType : ModelTypes.DEFAULT; }
 
-    public float[] getPrimaryColorFloats(){
-        Color tempColor = Color.decode(getPrimaryColor());
-        return tempColor.getComponents(null);
+    public float[] getPrimaryColorFloats() {
+        return new Color(getPrimaryColorInt()).getComponents(null);
     }
 
-    public float[] getSecondaryColorFloats(){
-        Color tempColor = Color.decode(getSecondaryColor());
-        return tempColor.getComponents(null);
+    public float[] getSecondaryColorFloats() {
+        return new Color(getSecondaryColorInt()).getComponents(null);
     }
 
-    public float[] getGlowColorFloats(){
-        Color tempColor = Color.decode(getGlowColor());
-        return tempColor.getComponents(null);
+    public float[] getGlowColorFloats() {
+        return new Color(getGlowColorInt()).getComponents(null);
     }
 
     public static class Builder {
