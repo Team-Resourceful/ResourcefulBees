@@ -1,3 +1,8 @@
+# ----- [0.6.4b] -----
+- fixed bee box not properly supplying bee with data upon release
+- updated patchouli (note: beecon gif doesn't work but doesn't crash now)
+- mutation validation logging now displays bee name
+
 # ----- [0.6.3b] -----
 - fixed fluid crashes in centrifuge
 - changed how bee is accessed from its goals to eliminate possible mixin crashes

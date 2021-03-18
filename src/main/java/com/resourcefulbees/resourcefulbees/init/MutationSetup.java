@@ -57,34 +57,34 @@ public class MutationSetup {
         }
         mutations.removeIf(mutation -> SecondPhaseValidator.validateMutation(customBeeData.getName(), mutation));
         mutationData.initializeMutations();
-        addMutations(customBeeData.getMutationData(), mutations);
+        addMutations(customBeeData.getMutationData(), mutations, customBeeData.getName());
     }
 
     private static boolean hasLegacyMutation(MutationData mutationData) {
         return !mutationData.getMutationInput().isEmpty() && !mutationData.getMutationOutput().isEmpty() && !mutationData.getMutationType().equals(MutationTypes.NONE);
     }
 
-    private static void addMutations(MutationData mutationData, List<Mutation> mutations) {
+    private static void addMutations(MutationData mutationData, List<Mutation> mutations, String name) {
         mutations.stream()
                 .filter(mutation -> !mutation.getType().equals(MutationTypes.NONE))
                 .forEach(mutation -> {
                     if (mutation.isTag()) {
                         if (mutation.getType().equals(MutationTypes.BLOCK_TO_ITEM) || mutation.getType().equals(MutationTypes.ITEM)) {
-                            addBlockItemTagMutation(mutationData, mutation);
+                            addBlockItemTagMutation(mutationData, mutation, name);
                         } else {
-                            addBlockTagMutation(mutationData, mutation);
+                            addBlockTagMutation(mutationData, mutation, name);
                         }
                     } else if (mutation.getType().equals(MutationTypes.ENTITY_TO_ENTITY) || mutation.getType().equals(MutationTypes.ENTITY)) {
-                        addEntityMutation(mutationData, mutation);
+                        addEntityMutation(mutationData, mutation, name);
                     } else if (mutation.getType().equals(MutationTypes.BLOCK_TO_ITEM) || mutation.getType().equals(MutationTypes.ITEM)) {
-                        addBlockItemMutation(mutationData, mutation);
+                        addBlockItemMutation(mutationData, mutation, name);
                     } else {
-                        addBlockMutation(mutationData, mutation);
+                        addBlockMutation(mutationData, mutation, name);
                     }
                 });
     }
 
-    private static void addBlockItemTagMutation(MutationData mutationData, Mutation mutation) {
+    private static void addBlockItemTagMutation(MutationData mutationData, Mutation mutation, String name) {
         String tag = mutation.getInputID().replace(BeeConstants.TAG_PREFIX, "");
         ITag<?> input = BeeInfoUtils.getBlockTag(tag);
         if (input == null) {
@@ -107,33 +107,33 @@ public class MutationSetup {
             });
             mutationData.addJeiBlockTagItemMutation(input, randomCollection, mutation.getChance());
         } else {
-            logWarning(mutation);
+            logWarning(mutation, name);
         }
     }
 
-    private static void addBlockItemMutation(MutationData mutationData, Mutation mutation) {
+    private static void addBlockItemMutation(MutationData mutationData, Mutation mutation, String name) {
         Block input = BeeInfoUtils.getBlock(mutation.getInputID());
         RandomCollection<ItemOutput> randomCollection = createRandomItemCollection(mutation);
         if (input != Blocks.AIR && !randomCollection.isEmpty() && mutation.getType() != MutationTypes.NONE) {
             mutationData.addItemMutation(input, randomCollection, mutation.getChance());
             mutationData.addJeiItemMutation(input, randomCollection, mutation.getChance());
         } else {
-            logWarning(mutation);
+            logWarning(mutation, name);
         }
     }
 
-    private static void addBlockMutation(MutationData mutationData, Mutation mutation) {
+    private static void addBlockMutation(MutationData mutationData, Mutation mutation, String name) {
         Block input = BeeInfoUtils.getBlock(mutation.getInputID());
         RandomCollection<BlockOutput> randomCollection = createRandomBlockCollection(mutation);
         if (input != Blocks.AIR && !randomCollection.isEmpty() && mutation.getType() != MutationTypes.NONE) {
             mutationData.addBlockMutation(input, randomCollection, mutation.getChance());
             mutationData.addJeiBlockMutation(input, randomCollection, mutation.getChance());
         } else {
-            logWarning(mutation);
+            logWarning(mutation, name);
         }
     }
 
-    private static void addBlockTagMutation(MutationData mutationData, Mutation mutation) {
+    private static void addBlockTagMutation(MutationData mutationData, Mutation mutation, String name) {
         String tag = mutation.getInputID().replace(BeeConstants.TAG_PREFIX, "");
         ITag<?> input = BeeInfoUtils.getBlockTag(tag);
         if (input == null) {
@@ -157,11 +157,11 @@ public class MutationSetup {
 
             mutationData.addJeiBlockTagMutation(input, randomCollection, mutation.getChance());
         } else {
-            logWarning(mutation);
+            logWarning(mutation, name);
         }
     }
 
-    private static void addEntityMutation(MutationData mutationData, Mutation mutation) {
+    private static void addEntityMutation(MutationData mutationData, Mutation mutation, String name) {
         EntityType<?> input = BeeInfoUtils.getEntityType(mutation.getInputID().replace(BeeConstants.ENTITY_PREFIX, ""));
 
         RandomCollection<EntityOutput> randomCollection = new RandomCollection<>();
@@ -177,7 +177,7 @@ public class MutationSetup {
         if (input != null && !randomCollection.isEmpty() && mutation.getType() != MutationTypes.NONE) {
             mutationData.addEntityMutation(input, randomCollection, mutation.getChance());
         } else {
-            logWarning(mutation);
+            logWarning(mutation, name);
         }
     }
 
@@ -205,7 +205,7 @@ public class MutationSetup {
         return randomCollection;
     }
 
-    private static void logWarning(Mutation mutation) {
-        LOGGER.warn("Could not validate mutation: {}", mutation);
+    private static void logWarning(Mutation mutation, String name) {
+        LOGGER.warn("Could not validate mutation for: {}   mutation: {}", name, mutation);
     }
 }
