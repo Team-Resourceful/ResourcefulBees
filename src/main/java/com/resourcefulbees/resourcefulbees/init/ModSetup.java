@@ -92,10 +92,15 @@ public class ModSetup {
             final ResourcePackInfo packInfo = ResourcePackInfo.create(
                     ResourcefulBees.MOD_ID,
                     true,
-                    () -> new FolderPack(BeeSetup.getResourcePath().toFile()),
+                    () -> new FolderPack(BeeSetup.getResourcePath().toFile()) {
+                        @Override
+                        public boolean isHidden() {
+                            return true;
+                        }
+                    },
                     factory,
                     ResourcePackInfo.Priority.TOP,
-                    IPackNameDecorator.passThrough()
+                    IPackNameDecorator.BUILT_IN
             );
             if (packInfo == null) {
                 LOGGER.error("Failed to load resource pack, some things may not work.");
