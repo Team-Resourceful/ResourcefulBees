@@ -284,15 +284,13 @@ public class BeepediaScreen extends Screen {
         ItemStack honeyItem = new ItemStack(Items.HONEY_BOTTLE);
         int x = this.guiLeft;
         int y = this.guiTop;
-        TabImageButton beesButton = new TabImageButton(x + 45, y + 8, 20, 20, 0, 0, 20, buttonImage, beeItem, 2, 2, onPress -> {
-            setActiveList(beesList, PageType.BEE);
-        }, getTooltipProvider(new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.bees")));
-        TabImageButton traitsButton = new TabImageButton(x + 66, y + 8, 20, 20, 0, 0, 20, buttonImage, traitItem, 2, 2, onPress -> {
-            setActiveList(traitsList, PageType.TRAIT);
-        }, getTooltipProvider(new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits")));
-        TabImageButton honeyButton = new TabImageButton(x + 87, y + 8, 20, 20, 0, 0, 20, buttonImage, honeyItem, 2, 2, onPress -> {
-            setActiveList(honeyList, PageType.HONEY);
-        }, getTooltipProvider(new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.honey")));
+        TabImageButton beesButton = new TabImageButton(x + 45, y + 8, 20, 20, 0, 0, 20, buttonImage, beeItem, 2, 2, onPress ->
+            setActiveList(beesList, PageType.BEE), getTooltipProvider(new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.bees")));
+        TabImageButton traitsButton = new TabImageButton(x + 66, y + 8, 20, 20, 0, 0, 20, buttonImage, traitItem, 2, 2, onPress ->
+            setActiveList(traitsList, PageType.TRAIT), getTooltipProvider(new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits")));
+        TabImageButton honeyButton = new TabImageButton(x + 87, y + 8, 20, 20, 0, 0, 20, buttonImage, honeyItem, 2, 2, onPress ->
+            setActiveList(honeyList, PageType.HONEY), getTooltipProvider(new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.honey")));
+
         addButton(beesButton);
         addButton(traitsButton);
         addButton(honeyButton);

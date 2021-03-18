@@ -6,7 +6,6 @@ import com.resourcefulbees.resourcefulbees.client.gui.widget.ListButton;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponent;
 
 public abstract class BeepediaPage {
 

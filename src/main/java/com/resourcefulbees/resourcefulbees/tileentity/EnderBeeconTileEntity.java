@@ -120,7 +120,7 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
     public CompoundNBT writeNBT(CompoundNBT tag) {
         tag.putInt("tier", TankTier.NETHER.getTier());
         tag.putBoolean(NBTConstants.NBT_SHOW_BEAM, isShowBeam());
-        tag.putBoolean("playSound", playSound);
+        tag.putBoolean(NBTConstants.NBT_PLAY_SOUND, playSound);
         if (effects != null && !effects.isEmpty()) {
             tag.put("active_effects", writeEffectsToNBT(new CompoundNBT()));
         }
@@ -135,7 +135,7 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
         getFluidTank().readFromNBT(tag.getCompound(NBTConstants.NBT_FLUID));
         effects = readEffectsFromNBT(tag.getCompound("active_effects"));
         if (tag.contains(NBTConstants.NBT_SHOW_BEAM)) setShowBeam(tag.getBoolean(NBTConstants.NBT_SHOW_BEAM));
-        if (tag.contains("playSound")) playSound = tag.getBoolean("playSound");
+        if (tag.contains(NBTConstants.NBT_PLAY_SOUND)) playSound = tag.getBoolean(NBTConstants.NBT_PLAY_SOUND);
         setTier(TankTier.NETHER);
         if (getFluidTank().getTankCapacity(0) != getTier().maxFillAmount) getFluidTank().setCapacity(getTier().maxFillAmount);
         if (getFluidTank().getFluidAmount() > getFluidTank().getTankCapacity(0))
