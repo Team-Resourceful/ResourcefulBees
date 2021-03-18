@@ -2,8 +2,11 @@ package com.resourcefulbees.resourcefulbees.item;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
+import com.resourcefulbees.resourcefulbees.api.beedata.TraitData;
+import com.resourcefulbees.resourcefulbees.entity.passive.ResourcefulBee;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
+import com.resourcefulbees.resourcefulbees.lib.TraitConstants;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.color.Color;
@@ -64,7 +67,9 @@ public class BeeJar extends Item {
             Entity entity = getEntityFromStack(stack, worldIn, true);
             if (entity != null) {
                 if (entity instanceof BeeEntity) {
-                    resetBee((BeeEntity) entity);
+                    BeeEntity beeEntity = (BeeEntity) entity;
+                    resetBee(beeEntity);
+                    setBeeAngry(beeEntity, player);
                 }
                 BlockPos blockPos = pos.relative(context.getClickedFace());
                 entity.absMoveTo(blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5, 0, 0);
@@ -76,7 +81,20 @@ public class BeeJar extends Item {
         return ActionResultType.FAIL;
     }
 
-    private void resetBee(BeeEntity beeEntity) {
+    public static void setBeeAngry(BeeEntity beeEntity, PlayerEntity player){
+        if (beeEntity.isAngry()){
+            beeEntity.setTarget(player);
+            if (beeEntity instanceof ResourcefulBee){
+                ResourcefulBee customBee = (ResourcefulBee) beeEntity;
+                TraitData traitData = customBee.getBeeData().getTraitData();
+                if (traitData.hasDamageTypes() && traitData.getDamageTypes().stream().anyMatch(t -> t.getLeft().equals(TraitConstants.EXPLOSIVE))) {
+                    customBee.setExplosiveCooldown(60);
+                }
+            }
+        }
+    }
+
+    public static void resetBee(BeeEntity beeEntity) {
         beeEntity.savedFlowerPos = null;
         beeEntity.hivePos = null;
     }
