@@ -396,19 +396,4 @@ public class BeeInfoUtils {
         }
         return Fluids.EMPTY;
     }
-
-    public static boolean isSliding(BlockPos blockPos, Entity entity) {
-        if (entity.isOnGround()) {
-            return false;
-        } else if (entity.getY() > (double) blockPos.getY() + 0.9375D - 1.0E-7D) {
-            return false;
-        } else if (entity.getDeltaMovement().y >= -0.08D) {
-            return false;
-        } else {
-            double d0 = Math.abs((double) blockPos.getX() + 0.5D - entity.getX());
-            double d1 = Math.abs((double) blockPos.getZ() + 0.5D - entity.getZ());
-            double d2 = 0.4375D + (double) (entity.getBbWidth() / 2.0F);
-            return d0 + 1.0E-7D > d2 || d1 + 1.0E-7D > d2;
-        }
-    }
 }

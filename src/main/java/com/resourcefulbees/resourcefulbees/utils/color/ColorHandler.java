@@ -1,7 +1,7 @@
 package com.resourcefulbees.resourcefulbees.utils.color;
 
 import com.resourcefulbees.resourcefulbees.api.IBeeRegistry;
-import com.resourcefulbees.resourcefulbees.block.CustomHoneyBlock;
+import com.resourcefulbees.resourcefulbees.block.ColoredHoneyBlock;
 import com.resourcefulbees.resourcefulbees.block.HoneycombBlock;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.item.*;
@@ -36,7 +36,7 @@ public final class ColorHandler {
         BEE_REGISTRY.getHoneyBottles().forEach((h, honeyData) -> {
             registerItems(colors, CustomHoneyBottleItem::getColor, honeyData.getHoneyBottleRegistryObject().get());
             if (Config.HONEY_GENERATE_BLOCKS.get() && honeyData.doGenerateHoneyBlock()) {
-                registerItems(colors, CustomHoneyBlock::getItemColor, honeyData.getHoneyBlockItemRegistryObject().get());
+                registerItems(colors, ColoredHoneyBlock::getItemColor, honeyData.getHoneyBlockItemRegistryObject().get());
             }
             if (Config.HONEY_GENERATE_FLUIDS.get() && honeyData.doGenerateHoneyFluid()) {
                 registerItems(colors, CustomHoneyBucketItem::getColor, honeyData.getHoneyBucketItemRegistryObject().get());
@@ -54,7 +54,7 @@ public final class ColorHandler {
         }));
         BEE_REGISTRY.getHoneyBottles().forEach((h, honeyData) -> {
             if (Config.HONEY_GENERATE_BLOCKS.get() && honeyData.doGenerateHoneyBlock()) {
-                registerBlocks(colors, CustomHoneyBlock::getBlockColor, honeyData.getHoneyBlockRegistryObject().get());
+                registerBlocks(colors, ColoredHoneyBlock::getBlockColor, honeyData.getHoneyBlockRegistryObject().get());
             }
         });
     }

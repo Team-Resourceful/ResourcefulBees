@@ -3,7 +3,7 @@ package com.resourcefulbees.resourcefulbees.registry;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
-import com.resourcefulbees.resourcefulbees.block.CustomHoneyBlock;
+import com.resourcefulbees.resourcefulbees.block.ColoredHoneyBlock;
 import com.resourcefulbees.resourcefulbees.block.CustomHoneyFluidBlock;
 import com.resourcefulbees.resourcefulbees.block.HoneycombBlock;
 import com.resourcefulbees.resourcefulbees.config.Config;
@@ -124,7 +124,7 @@ public class RegistryHandler {
         honeyData.setHoneyBottleRegistryObject(customHoneyBottle);
 
         if (Config.HONEY_GENERATE_BLOCKS.get() && honeyData.doGenerateHoneyBlock()) {
-            final RegistryObject<Block> customHoneyBlock = ModBlocks.BLOCKS.register(name + "_honey_block", () -> new CustomHoneyBlock(honeyData));
+            final RegistryObject<Block> customHoneyBlock = ModBlocks.BLOCKS.register(name + "_honey_block", () -> new ColoredHoneyBlock(honeyData.getHoneyColorInt(), honeyData.isRainbow()));
             final RegistryObject<Item> customHoneyBlockItem = ModItems.ITEMS.register(name + "_honey_block", () -> new BlockItem(customHoneyBlock.get(), new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
 
             honeyData.setHoneyBlockRegistryObject(customHoneyBlock);
