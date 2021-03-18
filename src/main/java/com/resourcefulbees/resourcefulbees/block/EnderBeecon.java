@@ -73,36 +73,28 @@ public class EnderBeecon extends HoneyTank {
         ItemStack heldItem = player.getItemInHand(hand);
         boolean usingHoney = heldItem.getItem() instanceof HoneyBottleItem;
         boolean usingBottle = heldItem.getItem() instanceof GlassBottleItem;
-        boolean usingBucket = heldItem.getItem() instanceof BucketItem;
+        boolean hasCapability = heldItem.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent();
         boolean usingWool = heldItem.getItem().is(ItemTags.createOptional(new ResourceLocation("minecraft", "wool")));
         boolean usingStick = heldItem.getItem() == Items.STICK;
         TileEntity tileEntity = world.getBlockEntity(pos);
 
         if (tileEntity instanceof EnderBeeconTileEntity) {
-            EnderBeeconTileEntity tank = (EnderBeeconTileEntity) tileEntity;
-            if (!heldItem.isEmpty()) {
+            EnderBeeconTileEntity beecon = (EnderBeeconTileEntity) tileEntity;
+            if (!world.isClientSide) {
                 if (usingWool) {
-                    tank.toggleSound();
-                    world.sendBlockUpdated(pos, state, state, 2);
+                    beecon.toggleSound();
                 } else if (usingStick) {
-                    tank.toggleBeam();
-                    world.sendBlockUpdated(pos, state, state, 2);
-                } else if (usingBucket) {
+                    beecon.toggleBeam();
+                } else if (hasCapability) {
                     tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
                             .ifPresent(iFluidHandler -> FluidUtil.interactWithFluidHandler(player, hand, world, pos, null));
                 } else if (usingBottle) {
-                    world.playSound(player, pos, SoundEvents.BOTTLE_EMPTY, SoundCategory.PLAYERS, 1.0f, 1.0f);
-                    tank.fillBottle(player, hand);
-                    world.sendBlockUpdated(pos, state, state, 2);
+                    beecon.fillBottle(player, hand);
                 } else if (usingHoney) {
-                    world.playSound(player, pos, SoundEvents.BOTTLE_FILL, SoundCategory.PLAYERS, 1.0f, 1.0f);
-                    tank.emptyBottle(player, hand);
-                    world.sendBlockUpdated(pos, state, state, 2);
-                } else {
-                    return super.use(state, world, pos, player, hand, rayTraceResult);
+                    beecon.emptyBottle(player, hand);
+                } else if (!player.isShiftKeyDown()) {
+                    NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, pos);
                 }
-            } else if (!player.isShiftKeyDown() && !world.isClientSide) {
-                NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, pos);
             }
             return ActionResultType.SUCCESS;
         }

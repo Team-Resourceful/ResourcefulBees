@@ -51,19 +51,14 @@ public class CentrifugeBlock extends Block {
         boolean hasCapability = heldItem.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent();
         TileEntity tileEntity = world.getBlockEntity(pos);
 
-        if (!world.isClientSide && tileEntity instanceof CentrifugeTileEntity) {
+        if (tileEntity instanceof CentrifugeTileEntity) {
             if (hasCapability) {
                 tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
                         .ifPresent(iFluidHandler -> FluidUtil.interactWithFluidHandler(player, hand, world, pos, null));
-            } else if (!player.isShiftKeyDown()) {
+            } else if (!player.isShiftKeyDown() && !world.isClientSide) {
                 NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, pos);
-            } else {
-                return super.use(state, world, pos, player, hand, rayTraceResult);
             }
-            world.sendBlockUpdated(pos, state, state, 2);
-        }
 
-        if (hasCapability) {
             return ActionResultType.SUCCESS;
         }
 
