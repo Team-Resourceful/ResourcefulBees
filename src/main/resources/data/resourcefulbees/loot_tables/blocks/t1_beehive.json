@@ -53,6 +53,24 @@
             },
             {
               "type": "minecraft:item",
+              "functions": [
+                {
+                  "function": "minecraft:copy_nbt",
+                  "source": "block_entity",
+                  "ops": [
+                    {
+                      "source": "Tier",
+                      "target": "BlockEntityTag.Tier",
+                      "op": "replace"
+                    },
+                    {
+                      "source": "TierModifier",
+                      "target": "BlockEntityTag.TierModifier",
+                      "op": "replace"
+                    }
+                  ]
+                }
+              ],
               "name": "resourcefulbees:t1_beehive"
             }
           ]

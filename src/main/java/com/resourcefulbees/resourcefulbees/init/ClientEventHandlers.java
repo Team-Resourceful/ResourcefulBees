@@ -90,6 +90,10 @@ public class ClientEventHandlers {
         RenderTypeLookup.setRenderLayer(ModBlocks.PURPUR_BEE_NEST.get(), RenderType.translucent());
         RenderTypeLookup.setRenderLayer(ModBlocks.WITHER_BEE_NEST.get(), RenderType.translucent());
 
+        RenderTypeLookup.setRenderLayer(ModBlocks.T1_BEEHIVE.get(), RenderType.translucent());
+        RenderTypeLookup.setRenderLayer(ModBlocks.T2_BEEHIVE.get(), RenderType.translucent());
+        RenderTypeLookup.setRenderLayer(ModBlocks.T3_BEEHIVE.get(), RenderType.translucent());
+        RenderTypeLookup.setRenderLayer(ModBlocks.T4_BEEHIVE.get(), RenderType.translucent());
 
         ItemModelPropertiesHandler.registerProperties();
         ClientRegistry.bindTileEntityRenderer(ModTileEntityTypes.HONEY_TANK_TILE_ENTITY.get(), RenderHoneyTank::new);
