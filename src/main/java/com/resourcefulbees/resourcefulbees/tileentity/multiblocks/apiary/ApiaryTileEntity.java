@@ -38,6 +38,7 @@ import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
@@ -88,6 +89,10 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
 
     public ApiaryTileEntity() {
         super(ModTileEntityTypes.APIARY_TILE_ENTITY.get());
+    }
+
+    public ApiaryTileEntity(TileEntityType<?> tileEntityType) {
+        super(tileEntityType);
     }
 
     //region PLAYER SYNCING

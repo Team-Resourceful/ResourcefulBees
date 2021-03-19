@@ -65,11 +65,11 @@ public class CentrifugeControllerBlock extends Block {
     @Override
     public ActionResultType use(@Nonnull BlockState state, @NotNull World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult rayTraceResult) {
         ItemStack heldItem = player.getItemInHand(hand);
-        boolean usingBucket = heldItem.getItem() instanceof BucketItem;
+        boolean hasCapability = heldItem.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent();
         CentrifugeControllerTileEntity controller = getControllerEntity(world, pos);
 
         if (controller != null && controller.isValidStructure()) {
-            if (usingBucket) {
+            if (hasCapability) {
                 controller.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
                         .ifPresent(iFluidHandler -> FluidUtil.interactWithFluidHandler(player, hand, world, pos, null));
             } else if (!player.isShiftKeyDown() && !world.isClientSide) {
