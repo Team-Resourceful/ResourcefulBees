@@ -15,13 +15,37 @@ public class JsonBeeTrait {
 
     @SuppressWarnings("unused")
     public static class JsonTrait {
-        public String beepediaItemID;
-        public List<PotionDamageEffect> potionDamageEffects;
-        public String[] damageImmunities;
-        public String[] potionImmunities;
-        public List<DamageType> damageTypes;
-        public String[] specialAbilities;
-        public String particleName;
+        private final String beepediaItemID;
+        private final List<PotionDamageEffect> potionDamageEffects;
+        private final String[] damageImmunities;
+        private final String[] potionImmunities;
+        private final List<DamageType> damageTypes;
+        private final String[] specialAbilities;
+        private final String particleName;
+
+        public JsonTrait(String beepediaItemID, List<PotionDamageEffect> potionDamageEffects, String[] damageImmunities, String[] potionImmunities, List<DamageType> damageTypes, String[] specialAbilities, String particleName) {
+            this.beepediaItemID = beepediaItemID;
+            this.potionDamageEffects = potionDamageEffects;
+            this.damageImmunities = damageImmunities;
+            this.potionImmunities = potionImmunities;
+            this.damageTypes = damageTypes;
+            this.specialAbilities = specialAbilities;
+            this.particleName = particleName;
+        }
+
+        public String getBeepediaItemID() { return beepediaItemID; }
+
+        public List<PotionDamageEffect> getPotionDamageEffects() { return potionDamageEffects; }
+
+        public String[] getDamageImmunities() { return damageImmunities; }
+
+        public String[] getPotionImmunities() { return potionImmunities; }
+
+        public List<DamageType> getDamageTypes() { return damageTypes; }
+
+        public String[] getSpecialAbilities() { return specialAbilities; }
+
+        public String getParticleName() { return particleName; }
     }
 
     @SuppressWarnings("unused")
