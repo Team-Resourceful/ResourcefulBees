@@ -8,33 +8,31 @@ import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
-import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IGuiIngredientGroup;
 import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ApiaryCategory implements IRecipeCategory<ApiaryCategory.Recipe> {
+public class ApiaryCategory extends BaseCategory<ApiaryCategory.Recipe> {
     public static final ResourceLocation GUI_BACK = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/beehive.png");
     public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "apiary");
-    private final IDrawable background;
-    private final IDrawable icon;
-    private final String localizedName;
 
     public ApiaryCategory(IGuiHelper guiHelper) {
-        this.background = guiHelper.drawableBuilder(GUI_BACK, 0, 0, 160, 26).addPadding(0, 0, 0, 0).build();
-        this.icon = guiHelper.createDrawableIngredient(new ItemStack(ModItems.T1_APIARY_ITEM.get()));
-        this.localizedName = I18n.get("gui.resourcefulbees.jei.category.apiary");
+        super(guiHelper, ID,
+            I18n.get("gui.resourcefulbees.jei.category.apiary"),
+            guiHelper.drawableBuilder(GUI_BACK, 0, 0, 160, 26).addPadding(0, 0, 0, 0).build(),
+            guiHelper.createDrawableIngredient(new ItemStack(ModItems.T1_APIARY_ITEM.get())),
+            ApiaryCategory.Recipe.class);
     }
 
     public static List<Recipe> getHoneycombRecipes() {
@@ -56,35 +54,15 @@ public class ApiaryCategory implements IRecipeCategory<ApiaryCategory.Recipe> {
         return recipes;
     }
 
-    @Nonnull
     @Override
-    public ResourceLocation getUid() { return ID; }
-
-    @Nonnull
-    @Override
-    public Class<? extends Recipe> getRecipeClass() { return Recipe.class; }
-
-    @Nonnull
-    @Override
-    public String getTitle() { return this.localizedName; }
-
-    @Nonnull
-    @Override
-    public IDrawable getBackground() { return this.background; }
-
-    @Nonnull
-    @Override
-    public IDrawable getIcon() { return this.icon; }
-
-    @Override
-    public void setIngredients(Recipe recipe, IIngredients ingredients) {
+    public void setIngredients(@NotNull Recipe recipe, @NotNull IIngredients ingredients) {
         ingredients.setOutput(VanillaTypes.ITEM, recipe.getComb());
         ingredients.setInput(VanillaTypes.ITEM, recipe.apiary);
         ingredients.setInput(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(recipe.beeType, -45.0f));
     }
 
     @Override
-    public void setRecipe(IRecipeLayout iRecipeLayout, @Nonnull Recipe recipe, @Nonnull IIngredients ingredients) {
+    public void setRecipe(@NotNull IRecipeLayout iRecipeLayout, @Nonnull Recipe recipe, @Nonnull IIngredients ingredients) {
         IGuiItemStackGroup itemStacks = iRecipeLayout.getItemStacks();
         itemStacks.init(0, false, 138, 4);
         itemStacks.init(1, true, 62, 4);

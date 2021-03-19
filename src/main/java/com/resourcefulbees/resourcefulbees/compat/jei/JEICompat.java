@@ -117,7 +117,7 @@ public class JEICompat implements IModPlugin {
 
     @Override
     public void registerItemSubtypes(ISubtypeRegistration registration) {
-        registration.registerSubtypeInterpreter(ModItems.BEEPEDIA.get(), (itemStack) -> itemStack.hasTag() && itemStack.getTag().contains(Beepedia.CREATIVE_TAG) ? "creative.beepedia" : "");
+        registration.registerSubtypeInterpreter(ModItems.BEEPEDIA.get(), itemStack -> itemStack.hasTag() && itemStack.getTag().contains(Beepedia.CREATIVE_TAG) ? "creative.beepedia" : "");
     }
 
     public void registerInfoDesc(IRecipeRegistration registration) {

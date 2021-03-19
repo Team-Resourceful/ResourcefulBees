@@ -59,8 +59,19 @@ public class TraitSetup {
         Gson gson = new Gson();
         JsonBeeTrait.JsonTrait jsonTrait = gson.fromJson(reader, JsonBeeTrait.JsonTrait.class);
         BeeTrait.Builder builder = new BeeTrait.Builder(name);
-        if (jsonTrait.damageImmunities != null && jsonTrait.damageImmunities.length > 0) {
-            for (String damageImmunity : jsonTrait.damageImmunities) {
+        parseDamageImmunities(jsonTrait, builder);
+        parseDamageTypes(jsonTrait, builder);
+        parseSpecialAbilities(jsonTrait, builder);
+        parseParticle(jsonTrait, builder);
+        parsePotionImmunities(jsonTrait, builder);
+        parsePotionDamageEffects(jsonTrait, builder);
+        parseBeepediaItem(jsonTrait, builder);
+        TraitRegistry.getRegistry().register(name, builder.build());
+    }
+
+    private static void parseDamageImmunities(JsonBeeTrait.JsonTrait jsonTrait, BeeTrait.Builder builder){
+        if (jsonTrait.getDamageImmunities() != null && jsonTrait.getDamageImmunities().length > 0) {
+            for (String damageImmunity : jsonTrait.getDamageImmunities()) {
                 DamageSource source;
                 switch (damageImmunity) {
                     case "inFire":
@@ -126,40 +137,58 @@ public class TraitSetup {
                 builder.addDamageImmunity(source);
             }
         }
-        if (jsonTrait.damageTypes != null && !jsonTrait.damageTypes.isEmpty()) {
-            jsonTrait.damageTypes.forEach(damageType -> builder.addDamageType(Pair.of(damageType.getDamageType(), damageType.getAmplifier())));
+    }
+
+    private static void parseDamageTypes(JsonBeeTrait.JsonTrait jsonTrait, BeeTrait.Builder builder){
+        if (jsonTrait.getDamageTypes() != null && !jsonTrait.getDamageTypes().isEmpty()) {
+            jsonTrait.getDamageTypes().forEach(damageType ->
+                    builder.addDamageType(Pair.of(damageType.getDamageType(), damageType.getAmplifier())));
         }
-        if (jsonTrait.specialAbilities != null && jsonTrait.specialAbilities.length > 0) {
-            for (String ability : jsonTrait.specialAbilities) {
+    }
+
+    private static void parseSpecialAbilities(JsonBeeTrait.JsonTrait jsonTrait, BeeTrait.Builder builder){
+        if (jsonTrait.getSpecialAbilities() != null && jsonTrait.getSpecialAbilities().length > 0) {
+            for (String ability : jsonTrait.getSpecialAbilities()) {
                 builder.addSpecialAbility(ability);
             }
         }
-        if (jsonTrait.particleName != null
-                && !jsonTrait.particleName.isEmpty()
-                && ForgeRegistries.PARTICLE_TYPES.getValue(new ResourceLocation(jsonTrait.particleName)) instanceof BasicParticleType) {
-            builder.setParticleEffect((BasicParticleType) ForgeRegistries.PARTICLE_TYPES.getValue(new ResourceLocation(jsonTrait.particleName)));
+    }
+
+    private static void parseParticle(JsonBeeTrait.JsonTrait jsonTrait, BeeTrait.Builder builder){
+        if (jsonTrait.getParticleName() != null
+                && !jsonTrait.getParticleName().isEmpty()
+                && ForgeRegistries.PARTICLE_TYPES.getValue(new ResourceLocation(jsonTrait.getParticleName())) instanceof BasicParticleType) {
+            builder.setParticleEffect((BasicParticleType) ForgeRegistries.PARTICLE_TYPES.getValue(new ResourceLocation(jsonTrait.getParticleName())));
         }
-        if (jsonTrait.potionImmunities != null && jsonTrait.potionImmunities.length > 0) {
-            for (String immunity : jsonTrait.potionImmunities) {
+    }
+
+    private static void parsePotionImmunities(JsonBeeTrait.JsonTrait jsonTrait, BeeTrait.Builder builder){
+        if (jsonTrait.getPotionImmunities() != null && jsonTrait.getPotionImmunities().length > 0) {
+            for (String immunity : jsonTrait.getPotionImmunities()) {
                 Effect potion = ForgeRegistries.POTIONS.getValue(new ResourceLocation(immunity));
                 if (potion != null)
                     builder.addPotionImmunity(potion);
             }
         }
-        if (jsonTrait.potionDamageEffects != null && !jsonTrait.potionDamageEffects.isEmpty()) {
-            jsonTrait.potionDamageEffects.forEach((traitPotionDamageEffect -> {
+    }
+
+    private static void parsePotionDamageEffects(JsonBeeTrait.JsonTrait jsonTrait, BeeTrait.Builder builder){
+        if (jsonTrait.getPotionDamageEffects() != null && !jsonTrait.getPotionDamageEffects().isEmpty()) {
+            jsonTrait.getPotionDamageEffects().forEach((traitPotionDamageEffect -> {
                 Effect potion = ForgeRegistries.POTIONS.getValue(new ResourceLocation(traitPotionDamageEffect.getEffectID()));
                 if (potion != null)
                     builder.addDamagePotionEffect(Pair.of(potion, MathHelper.clamp(traitPotionDamageEffect.getStrength(), 0, 255)));
             }));
         }
-        if (jsonTrait.beepediaItemID != null && !jsonTrait.beepediaItemID.isEmpty()) {
-            Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(jsonTrait.beepediaItemID));
+    }
+
+    private static void parseBeepediaItem(JsonBeeTrait.JsonTrait jsonTrait, BeeTrait.Builder builder){
+        if (jsonTrait.getBeepediaItemID() != null && !jsonTrait.getBeepediaItemID().isEmpty()) {
+            Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(jsonTrait.getBeepediaItemID()));
             if (item != null) {
                 builder.setBeepediaItem(item);
             }
         }
-        TraitRegistry.getRegistry().register(name, builder.build());
     }
 
     private static void addTraits() {

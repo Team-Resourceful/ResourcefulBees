@@ -11,14 +11,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class ButtonList {
     public final int xPos;
     public final int yPos;
-    public int defaultHeight;
-    public int height;
+    private final int defaultHeight;
+    protected int height;
     public final int width;
     public final int itemHeight;
-    public int scrollPos = 0;
+    protected int scrollPos = 0;
     public final TabImageButton button;
     protected boolean active = false;
-    private String lastSearch;
     Map<String, ? extends BeepediaPage> list;
     SortedMap<String, BeepediaPage> reducedList = new TreeMap<>();
 
@@ -57,7 +56,6 @@ public class ButtonList {
             if (active) list.forEach((s, b) -> b.listButton.visible = true);
             reducedList = new TreeMap<>(list);
         }
-        lastSearch = search;
     }
 
     private void reduceList(String search, String s, BeepediaPage b) {

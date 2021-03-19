@@ -175,7 +175,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
             return;
         }
         consumeInput(i);
-        ItemStack glass_bottle = itemStackHandler.getStackInSlot(BOTTLE_SLOT);
+        ItemStack glassBottle = itemStackHandler.getStackInSlot(BOTTLE_SLOT);
         List<ItemStack> depositStacks = new ArrayList<>();
         if (level == null) {
             resetProcess(i);
@@ -188,7 +188,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
             if (chance >= level.random.nextFloat()) {
                 depositStacks.add(recipe.itemOutputs.get(j).getLeft().copy());
                 if (j == 2 && !recipe.noBottleInput) {
-                    glass_bottle.shrink(recipes.get(i).itemOutputs.get(2).getLeft().getCount());
+                    glassBottle.shrink(recipes.get(i).itemOutputs.get(2).getLeft().getCount());
                 }
             }
         }

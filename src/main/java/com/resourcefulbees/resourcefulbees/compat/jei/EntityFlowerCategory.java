@@ -14,7 +14,6 @@ import mezz.jei.api.gui.ingredient.IGuiIngredientGroup;
 import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
@@ -29,21 +28,19 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EntityFlowerCategory implements IRecipeCategory<EntityFlowerCategory.Recipe> {
+public class EntityFlowerCategory extends BaseCategory<EntityFlowerCategory.Recipe> {
     public static final ResourceLocation GUI_BACK = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/beeentityflowers.png");
     public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "bee_pollination_entity_flowers");
-    public static final ResourceLocation ICONS = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/icons.png");
     private static final IBeeRegistry BEE_REGISTRY = BeeRegistry.getRegistry();
-    private final IDrawable background;
-    private final IDrawable icon;
     private final IDrawable nonRegisteredEgg;
-    private final String localizedName;
 
     public EntityFlowerCategory(IGuiHelper guiHelper){
-        this.background = guiHelper.drawableBuilder(GUI_BACK, 0, 0, 100, 75).addPadding(0, 0, 0, 0).build();
-        this.icon = guiHelper.createDrawableIngredient(new ItemStack(ModBlocks.GOLD_FLOWER.get()));
+        super(guiHelper, ID,
+                I18n.get("gui.resourcefulbees.jei.category.bee_pollination_entity_flowers"),
+                guiHelper.drawableBuilder(GUI_BACK, 0, 0, 100, 75).addPadding(0, 0, 0, 0).build(),
+                guiHelper.createDrawableIngredient(new ItemStack(ModBlocks.GOLD_FLOWER.get())),
+                EntityFlowerCategory.Recipe.class);
         this.nonRegisteredEgg = guiHelper.createDrawable(ICONS, 41, 0, 16, 16);
-        this.localizedName = I18n.get("gui.resourcefulbees.jei.category.bee_pollination_entity_flowers");
     }
 
     public static List<EntityFlowerCategory.Recipe> getFlowersRecipes() {
@@ -58,31 +55,6 @@ public class EntityFlowerCategory implements IRecipeCategory<EntityFlowerCategor
             }
         }));
         return recipes;
-    }
-
-    @Override
-    public @NotNull ResourceLocation getUid() {
-        return ID;
-    }
-
-    @Override
-    public @NotNull Class<? extends Recipe> getRecipeClass() {
-        return Recipe.class;
-    }
-
-    @Override
-    public @NotNull String getTitle() {
-        return this.localizedName;
-    }
-
-    @Override
-    public @NotNull IDrawable getBackground() {
-        return this.background;
-    }
-
-    @Override
-    public @NotNull IDrawable getIcon() {
-        return this.icon;
     }
 
     @Override
@@ -123,7 +95,7 @@ public class EntityFlowerCategory implements IRecipeCategory<EntityFlowerCategor
             }
             return tooltip;
         }
-        return IRecipeCategory.super.getTooltipStrings(recipe, mouseX, mouseY);
+        return super.getTooltipStrings(recipe, mouseX, mouseY);
     }
 
     @Override

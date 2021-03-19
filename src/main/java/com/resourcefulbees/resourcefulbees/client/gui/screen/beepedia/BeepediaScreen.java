@@ -436,9 +436,9 @@ public class BeepediaScreen extends Screen {
     }
 
     public static void updateScrollPos(ButtonList beesList, ButtonList traitsList, ButtonList honeyList) {
-        beesScroll = beesList.scrollPos;
-        traitScroll = traitsList.scrollPos;
-        honeyScroll = honeyList.scrollPos;
+        beesScroll = beesList.getScrollPos();
+        traitScroll = traitsList.getScrollPos();
+        honeyScroll = honeyList.getScrollPos();
     }
 
     public static void setSearch(String search) {

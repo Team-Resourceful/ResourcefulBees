@@ -14,7 +14,6 @@ import mezz.jei.api.gui.ingredient.IGuiFluidStackGroup;
 import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.resources.I18n;
@@ -33,55 +32,30 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class CentrifugeRecipeCategory implements IRecipeCategory<CentrifugeRecipe> {
+public class CentrifugeRecipeCategory extends BaseCategory<CentrifugeRecipe> {
 
     public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "centrifuge");
     protected final IDrawableAnimated arrow;
-    private final IDrawable icon;
-    private final IDrawable background;
     private final IDrawable fluidHider;
     private final IDrawable multiblock;
-    private final String localizedName;
 
     private static final ResourceLocation BACKGROUND_IMAGE = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/centrifuge.png");
 
     public CentrifugeRecipeCategory(IGuiHelper guiHelper) {
-        this.background = guiHelper.createDrawable(BACKGROUND_IMAGE, 0, 0, 133, 65);
-        this.icon = guiHelper.createDrawableIngredient(new ItemStack(ModItems.CENTRIFUGE_ITEM.get()));
+        super(guiHelper, ID,
+                I18n.get("gui.resourcefulbees.jei.category.centrifuge"),
+                guiHelper.createDrawable(BACKGROUND_IMAGE, 0, 0, 133, 65),
+                guiHelper.createDrawableIngredient(new ItemStack(ModItems.CENTRIFUGE_ITEM.get())),
+                CentrifugeRecipe.class);
+
         this.fluidHider = guiHelper.createDrawable(BACKGROUND_IMAGE, 9, 41, 18, 18);
-        this.localizedName = I18n.get("gui.resourcefulbees.jei.category.centrifuge");
         this.arrow = guiHelper.drawableBuilder(new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/centrifuge.png"), 0, 66, 73, 30)
                 .buildAnimated(200, IDrawableAnimated.StartDirection.LEFT, false);
         this.multiblock = guiHelper.createDrawable(new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/icons.png"), 25, 0, 16, 16);
     }
 
     @Override
-    public @NotNull ResourceLocation getUid() {
-        return ID;
-    }
-
-    @Override
-    public @NotNull Class<? extends CentrifugeRecipe> getRecipeClass() {
-        return CentrifugeRecipe.class;
-    }
-
-    @Override
-    public @NotNull String getTitle() {
-        return localizedName;
-    }
-
-    @Override
-    public @NotNull IDrawable getBackground() {
-        return background;
-    }
-
-    @Override
-    public @NotNull IDrawable getIcon() {
-        return icon;
-    }
-
-    @Override
-    public void setIngredients(CentrifugeRecipe recipe, IIngredients iIngredients) {
+    public void setIngredients(CentrifugeRecipe recipe, @NotNull IIngredients iIngredients) {
         List<Pair<ItemStack, Float>> outputs = recipe.itemOutputs;
         List<Pair<FluidStack, Float>> fluidOutput = recipe.fluidOutput;
         List<ItemStack> stacks = new ArrayList<>();
@@ -190,6 +164,6 @@ public class CentrifugeRecipeCategory implements IRecipeCategory<CentrifugeRecip
         if (mouseX >= 10 && mouseX <= 26 && mouseY >= 45 && mouseY <= 61) {
             return Collections.singletonList(new StringTextComponent("Multiblock only recipe."));
         }
-        return IRecipeCategory.super.getTooltipStrings(recipe, mouseX, mouseY);
+        return super.getTooltipStrings(recipe, mouseX, mouseY);
     }
 }
