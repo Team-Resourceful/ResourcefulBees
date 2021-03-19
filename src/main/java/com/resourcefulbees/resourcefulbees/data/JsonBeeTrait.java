@@ -1,5 +1,6 @@
 package com.resourcefulbees.resourcefulbees.data;
 
+import com.google.gson.annotations.SerializedName;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 
 import java.util.List;
@@ -25,19 +26,17 @@ public class JsonBeeTrait {
 
     @SuppressWarnings("unused")
     public static class PotionDamageEffect {
+        @SerializedName(value="effectID", alternate={"effectRegistryName"})
         private String effectID;
+        @SerializedName(value="strength", alternate={"amplifier"})
         private int strength;
-        @Deprecated
-        private String effectRegistryName;
-        @Deprecated
-        private int amplifier;
 
         public String getEffectID() {
-            return effectRegistryName != null && !effectRegistryName.isEmpty() ? effectRegistryName : effectID;
+            return effectID;
         }
 
         public int getStrength() {
-            return amplifier > 0 ? amplifier : strength;
+            return strength;
         }
     }
 
