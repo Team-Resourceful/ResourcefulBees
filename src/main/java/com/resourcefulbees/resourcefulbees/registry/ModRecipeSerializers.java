@@ -18,7 +18,7 @@ public class ModRecipeSerializers {
 
 
     public static final RegistryObject<IRecipeSerializer<?>> CENTRIFUGE_RECIPE = RECIPE_SERIALIZERS.register("centrifuge",
-            () -> new CentrifugeRecipe.Serializer<>((id, ingredient, itemOutputs, fluidOutput, time, multiblockTime, multiblock, hasFluidOutput, noBottleInput) -> new CentrifugeRecipe(id, ingredient, itemOutputs, fluidOutput, time, multiblockTime, multiblock, hasFluidOutput, noBottleInput)));
+            () -> new CentrifugeRecipe.Serializer<>(CentrifugeRecipe::new));
 
     public static final RegistryObject<IRecipeSerializer<?>> FERTILIZER_RECIPE = RECIPE_SERIALIZERS.register("fertilizer_crafting",
             FertiliserRecipe.Serializer::new);
