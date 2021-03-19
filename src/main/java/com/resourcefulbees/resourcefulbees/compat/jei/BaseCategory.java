@@ -15,7 +15,7 @@ public class BaseCategory<T> implements IRecipeCategory<T> {
 
     public static final ResourceLocation ICONS = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/icons.png");
 
-    private final ResourceLocation ID;
+    private final ResourceLocation categoryId;
     private final String localizedName;
     private final IDrawable background;
     private final IDrawable icon;
@@ -25,8 +25,8 @@ public class BaseCategory<T> implements IRecipeCategory<T> {
     public final IDrawable beeHive;
 
 
-    public BaseCategory(IGuiHelper guiHelper, ResourceLocation ID, String localizedName, IDrawable background, IDrawable icon, Class<? extends T> recipeClass) {
-        this.ID = ID;
+    public BaseCategory(IGuiHelper guiHelper, ResourceLocation categoryId, String localizedName, IDrawable background, IDrawable icon, Class<? extends T> recipeClass) {
+        this.categoryId = categoryId;
         this.localizedName = localizedName;
         this.background = background;
         this.icon = icon;
@@ -38,7 +38,7 @@ public class BaseCategory<T> implements IRecipeCategory<T> {
 
     @Override
     public @NotNull ResourceLocation getUid() {
-        return ID;
+        return categoryId;
     }
 
     @Override
@@ -63,11 +63,11 @@ public class BaseCategory<T> implements IRecipeCategory<T> {
 
     @Override
     public void setIngredients(@NotNull T t, @NotNull IIngredients iIngredients) {
-
+        //required for the implementation and needed for the children.
     }
 
     @Override
     public void setRecipe(@NotNull IRecipeLayout iRecipeLayout, @NotNull T t, @NotNull IIngredients iIngredients) {
-
+        //required for the implementation and needed for the children.
     }
 }
