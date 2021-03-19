@@ -124,25 +124,20 @@ public class HoneyTank extends Block {
         boolean hasCapability = heldItem.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent();
         TileEntity tileEntity = world.getBlockEntity(pos);
 
-        if (!world.isClientSide && tileEntity instanceof HoneyTankTileEntity) {
+        if (tileEntity instanceof HoneyTankTileEntity) {
             HoneyTankTileEntity tank = (HoneyTankTileEntity) tileEntity;
-            if (usingBottle) {
-                tank.fillBottle(player, hand);
-            } else if (usingHoney) {
-                tank.emptyBottle(player, hand);
-            } else if (hasCapability) {
-                tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
-                        .ifPresent(iFluidHandler -> FluidUtil.interactWithFluidHandler(player, hand, world, pos, null));
-            } else {
-                return super.use(state, world, pos, player, hand, blockRayTraceResult);
+            if (!world.isClientSide) {
+                if (usingBottle) {
+                    tank.fillBottle(player, hand);
+                } else if (usingHoney) {
+                    tank.emptyBottle(player, hand);
+                } else if (hasCapability) {
+                    tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+                            .ifPresent(iFluidHandler -> FluidUtil.interactWithFluidHandler(player, hand, world, pos, null));
+                }
             }
-            world.sendBlockUpdated(pos, state, state, 2);
-        }
-
-        if (usingBottle || hasCapability || usingHoney) {
             return ActionResultType.SUCCESS;
         }
-
         return super.use(state, world, pos, player, hand, blockRayTraceResult);
     }
 

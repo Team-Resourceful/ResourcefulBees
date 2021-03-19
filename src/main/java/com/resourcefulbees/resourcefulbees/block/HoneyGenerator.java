@@ -55,11 +55,11 @@ public class HoneyGenerator extends Block {
     @Override
     public ActionResultType use(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult rayTraceResult) {
         ItemStack heldItem = player.getItemInHand(hand);
-        boolean usingBucket = heldItem.getItem() instanceof BucketItem;
+        boolean hasCapability = heldItem.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent();
         TileEntity tileEntity = world.getBlockEntity(pos);
 
         if (tileEntity instanceof HoneyGeneratorTileEntity) {
-            if (usingBucket) {
+            if (hasCapability) {
                 tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
                         .ifPresent(iFluidHandler -> FluidUtil.interactWithFluidHandler(player, hand, world, pos, null));
             } else if (!player.isShiftKeyDown() && !world.isClientSide) {
