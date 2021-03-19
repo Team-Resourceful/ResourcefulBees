@@ -9,7 +9,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -19,8 +18,6 @@ import java.util.TreeMap;
 
 public class TraitListPage extends BeeDataPage {
 
-    private Map<String, TraitPage> traitPages;
-    private SortedMap<String, ListButton> buttons;
     private SubButtonList list = null;
 
     public TraitListPage(BeepediaScreen beepedia, CustomBeeData beeData, int xPos, int yPos, BeePage parent) {
@@ -42,17 +39,16 @@ public class TraitListPage extends BeeDataPage {
     }
 
     private void initList() {
-        traitPages = beepedia.getTraits(beeData);
-        buttons = new TreeMap<>();
+        Map<String, TraitPage> traitPages = beepedia.getTraits(beeData);
+        SortedMap<String, ListButton> buttons = new TreeMap<>();
         for (Map.Entry<String, TraitPage> e : traitPages.entrySet()) {
             ItemStack stack = new ItemStack(e.getValue().trait.getBeepediaItem());
-            ResourceLocation image = listImage;
             TranslationTextComponent text = new TranslationTextComponent(e.getValue().trait.getTranslationKey());
             Button.IPressable onPress = button -> {
                 BeepediaScreen.saveScreenState();
                 beepedia.setActive(BeepediaScreen.PageType.TRAIT, e.getKey());
             };
-            ListButton button = new ListButton(0, 0, 100, 20, 0, 0, 20, image, stack, 2, 2, text, 22, 6, onPress);
+            ListButton button = new ListButton(0, 0, 100, 20, 0, 0, 20, listImage, stack, 2, 2, text, 22, 6, onPress);
             beepedia.addButton(button);
             button.visible = false;
             buttons.put(e.getKey(), button);

@@ -23,7 +23,6 @@ public class EffectComponent implements ICustomComponent {
 
     IVariable effectID;
     private transient TextureAtlasSprite effectSprite;
-    private transient Effect effect;
     private transient static final ResourceLocation EFFECT_BACKGROUND = new ResourceLocation("patchouli", "textures/gui/crafting.png");
     private transient int xOffset;
     private transient int yOffset;
@@ -54,8 +53,8 @@ public class EffectComponent implements ICustomComponent {
     @Override
     public void onVariablesAvailable(UnaryOperator<IVariable> lookup) {
         effectID = lookup.apply(effectID);
-        this.effect = ForgeRegistries.POTIONS.getValue(new ResourceLocation(effectID.asString()));
+        Effect effect = ForgeRegistries.POTIONS.getValue(new ResourceLocation(effectID.asString()));
         this.effectSprite = Minecraft.getInstance().getMobEffectTextures().get(effect);
-        this.effectName = getEffectName(this.effect);
+        this.effectName = getEffectName(effect);
     }
 }
