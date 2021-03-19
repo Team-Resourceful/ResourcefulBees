@@ -156,11 +156,9 @@ public class ColoredHoneyBlock extends BreakableBlock {
     }
 
     private void addCollisionEffects(World world, Entity entity) {
-        if (hasHoneyBlockEffects(entity)) {
-            if (world.random.nextInt(5) == 0) {
-                entity.playSound(SoundEvents.HONEY_BLOCK_SLIDE, 1.0F, 1.0F);
-                if (world.isClientSide) addParticles(entity);
-            }
+        if (world.random.nextInt(5) == 0 && hasHoneyBlockEffects(entity)) {
+            entity.playSound(SoundEvents.HONEY_BLOCK_SLIDE, 1.0F, 1.0F);
+            if (world.isClientSide) addParticles(entity);
         }
     }
 

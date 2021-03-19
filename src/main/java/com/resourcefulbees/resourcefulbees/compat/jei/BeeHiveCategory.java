@@ -6,12 +6,10 @@ import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
-import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IGuiIngredientGroup;
 import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
@@ -22,17 +20,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class BeeHiveCategory implements IRecipeCategory<BeeHiveCategory.Recipe> {
+public class BeeHiveCategory extends BaseCategory<BeeHiveCategory.Recipe> {
     public static final ResourceLocation GUI_BACK = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/beehive.png");
     public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "hive");
-    private final IDrawable background;
-    private final IDrawable icon;
-    private final String localizedName;
 
     public BeeHiveCategory(IGuiHelper guiHelper) {
-        this.background = guiHelper.drawableBuilder(GUI_BACK, 0, 0, 160, 26).addPadding(0, 0, 0, 0).build();
-        this.icon = guiHelper.createDrawableIngredient(new ItemStack(ModItems.T1_BEEHIVE_ITEM.get()));
-        this.localizedName = I18n.get("gui.resourcefulbees.jei.category.hive");
+        super(guiHelper, ID,
+                I18n.get("gui.resourcefulbees.jei.category.hive"),
+                guiHelper.drawableBuilder(GUI_BACK, 0, 0, 160, 26).addPadding(0, 0, 0, 0).build(),
+                guiHelper.createDrawableIngredient(new ItemStack(ModItems.T1_BEEHIVE_ITEM.get())),
+                BeeHiveCategory.Recipe.class);
     }
 
     public static List<Recipe> getHoneycombRecipes() {
@@ -44,36 +41,6 @@ public class BeeHiveCategory implements IRecipeCategory<BeeHiveCategory.Recipe> 
             }
         }));
         return recipes;
-    }
-
-    @Nonnull
-    @Override
-    public ResourceLocation getUid() {
-        return ID;
-    }
-
-    @Nonnull
-    @Override
-    public Class<? extends Recipe> getRecipeClass() {
-        return Recipe.class;
-    }
-
-    @Nonnull
-    @Override
-    public String getTitle() {
-        return this.localizedName;
-    }
-
-    @Nonnull
-    @Override
-    public IDrawable getBackground() {
-        return this.background;
-    }
-
-    @Nonnull
-    @Override
-    public IDrawable getIcon() {
-        return this.icon;
     }
 
     @Override

@@ -13,12 +13,10 @@ import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.validation.ValidatorUtils;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
-import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IGuiIngredientGroup;
 import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.resources.I18n;
@@ -42,22 +40,18 @@ import java.util.List;
 
 import static com.resourcefulbees.resourcefulbees.lib.BeeConstants.*;
 
-public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.Recipe> {
+public class BeeBreedingCategory extends BaseCategory<BeeBreedingCategory.Recipe> {
     public static final ResourceLocation GUI_BACK = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/breeding.png");
-    public static final ResourceLocation ICONS = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/icons.png");
     public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "breeding");
-    private final IDrawable background;
-    private final IDrawable icon;
-    private final IDrawable info;
-    private final String localizedName;
     private static final IBeeRegistry beeRegistry = BeeRegistry.getRegistry();
 
 
     public BeeBreedingCategory(IGuiHelper guiHelper) {
-        this.background = guiHelper.drawableBuilder(GUI_BACK, 0, 0, 160, 60).addPadding(0, 0, 0, 0).build();
-        this.icon = guiHelper.createDrawableIngredient(new ItemStack(ModBlocks.GOLD_FLOWER.get()));
-        this.info = guiHelper.createDrawable(ICONS, 16, 0, 9, 9);
-        this.localizedName = I18n.get("gui.resourcefulbees.jei.category.breeding");
+        super(guiHelper, ID,
+                I18n.get("gui.resourcefulbees.jei.category.breeding"),
+                guiHelper.drawableBuilder(GUI_BACK, 0, 0, 160, 60).addPadding(0, 0, 0, 0).build(),
+                guiHelper.createDrawableIngredient(new ItemStack(ModBlocks.GOLD_FLOWER.get())),
+                BeeBreedingCategory.Recipe.class);
     }
 
     public static List<Recipe> getBreedingRecipes() {
@@ -146,36 +140,6 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
         return feedItem;
     }
 
-    @Nonnull
-    @Override
-    public ResourceLocation getUid() {
-        return ID;
-    }
-
-    @Nonnull
-    @Override
-    public Class<? extends Recipe> getRecipeClass() {
-        return Recipe.class;
-    }
-
-    @Nonnull
-    @Override
-    public String getTitle() {
-        return this.localizedName;
-    }
-
-    @Nonnull
-    @Override
-    public IDrawable getBackground() {
-        return this.background;
-    }
-
-    @Nonnull
-    @Override
-    public IDrawable getIcon() {
-        return this.icon;
-    }
-
     @Override
     public void setIngredients(@Nonnull Recipe recipe, @Nonnull IIngredients ingredients) {
         List<List<ItemStack>> list = new ArrayList<>();
@@ -254,7 +218,7 @@ public class BeeBreedingCategory implements IRecipeCategory<BeeBreedingCategory.
         if (mouseX >= infoX && mouseX <= infoX + 9D && mouseY >= infoY && mouseY <= infoY + 9D && recipe.chance < 1) {
             return Collections.singletonList(new StringTextComponent(I18n.get("gui." + ResourcefulBees.MOD_ID + ".jei.category.breed_chance.info")));
         }
-        return IRecipeCategory.super.getTooltipStrings(recipe, mouseX, mouseY);
+        return super.getTooltipStrings(recipe, mouseX, mouseY);
     }
 
     public static class Recipe {
