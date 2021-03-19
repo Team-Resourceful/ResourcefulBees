@@ -197,7 +197,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
             if (chance >= level.random.nextFloat()) {
                 FluidStack fluid = fluidOutput.getLeft().copy();
                 int tank = getValidTank(fluid);
-                fluidTanks.fill(tank, fluid, IFluidHandler.FluidAction.EXECUTE);
+                if (tank != -1) fluidTanks.fill(tank, fluid, IFluidHandler.FluidAction.EXECUTE);
             }
         }
         if (!depositStacks.isEmpty()) {
