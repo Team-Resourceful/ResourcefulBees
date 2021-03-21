@@ -15,6 +15,10 @@ loom {
     useFabricMixin = true
 }
 
+def releasesRepoUrl = "https://nexus.resourcefulbees.com/repository/maven-releases/"
+def snapshotsRepoUrl = "https://nexus.resourcefulbees.com/repository/maven-snapshots/"
+def ENV = System.getenv()
+
 dependencies {
     forge "net.minecraftforge:forge:${rootProject.minecraft_version}-${rootProject.forge_version}"
     // Remove the next line if you don't want to depend on the API
@@ -29,6 +33,18 @@ dependencies {
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) {
         transitive = false
     }
+
+    compileOnly "mezz.jei:jei-1.16.4:${rootProject.jei_version}:api"
+    runtimeOnly "mezz.jei:jei-1.16.4:${rootProject.jei_version}"
+
+    compileOnly "mcjty.theoneprobe:TheOneProbe-1.16:${rootProject.top_version}:api"
+    runtimeOnly "mcjty.theoneprobe:TheOneProbe-1.16:${rootProject.top_version}"
+
+    compileOnly "team.chisel.ctm:CTM:MC1.16.1-1.1.2.6"
+    runtimeOnly "team.chisel.ctm:CTM:MC1.16.1-1.1.2.6"
+
+    compileOnly "vazkii.patchouli:Patchouli:${rootProject.patchouli_version}:api"
+    runtimeOnly "vazkii.patchouli:Patchouli:${rootProject.patchouli_version}"
 }
 
 processResources {
@@ -54,6 +70,19 @@ remapJar {
 
 jar {
     classifier "dev"
+
+    manifest {
+        attributes([
+                "Specification-Title": "resourcefulbees",
+                "Specification-Vendor": "resourcefulbees",
+                "Specification-Version": "1", // We are version 1 of ourselves
+                "Implementation-Title": project.name,
+                "Implementation-Version": project.version,
+                "Implementation-Vendor" :"resourcefulbees",
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                "MixinConfigs": "${rootProject.archives_base_name}.mixins.json"
+        ])
+    }
 }
 
 java {
@@ -77,11 +106,59 @@ publishing {
             artifact(sourcesJar) {
                 builtBy remapSourcesJar
             }
+
+            pom {
+                name = 'ResourcefulBees'
+                description = 'A mod for minecraft players to add their own bees through a powerful api.'
+                url = 'https://github.com/Resourceful-Bees/ResourcefulBees'
+
+                scm {
+                    connection = 'git:https://github.com/Resourceful-Bees/ResourcefulBees.git'
+                    developerConnection = 'git:https://github.com/Resourceful-Bees/ResourcefulBees.git'
+                    url = 'https://github.com/Resourceful-Bees/ResourcefulBees/'
+                }
+
+                licenses {
+                    license {
+                        name = 'GNU General Public License v3.0'
+                        url = 'https://raw.githubusercontent.com/Resourceful-Bees/ResourcefulBees/master/LICENSE'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = 'epic428'
+                        name = 'Epic_Oreo'
+                        email = 'admin@resourcefulbees.com'
+                    }
+                    developer {
+                        id = 'thatgravyboat'
+                        name = 'ThatGravyBoat'
+                        email = 'admin@resourcefulbees.com'
+                    }
+                    developer {
+                        id = 'dawn_felstar'
+                        name = 'Dawn Felstar'
+                        email = 'admin@resourcefulbees.com'
+                    }
+                    developer {
+                        id = 'vikthoor'
+                        name = 'Vik'
+                        email = 'admin@resourcefulbees.com'
+                    }
+                }
+            }
         }
     }
 
     // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
     repositories {
-        // Add repositories to publish to here.
+        maven {
+            url = rootProject.version.endsWith("-SNAPSHOT") ? snapshotsRepoUrl : releasesRepoUrl
+            credentials {
+                username ENV.MAVEN_USER
+                password ENV.MAVEN_PASS
+            }
+        }
     }
 }

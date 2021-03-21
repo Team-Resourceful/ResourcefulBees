@@ -1,6 +1,8 @@
 plugins {
     id "architectury-plugin" version "3.0-SNAPSHOT"
     id "forgified-fabric-loom" version "0.6-SNAPSHOT" apply false
+    id "org.sonarqube" version "3.1.1"
+    id "com.matthewprenger.cursegradle" version "1.1.0"
 }
 
 architectury {
@@ -20,6 +22,9 @@ subprojects {
         mappings loom.officialMojangMappings()
         // The following line declares the yarn mappings you may select this one as well.
         // mappings "net.fabricmc:yarn:1.16.5+build.4"
+
+        compileOnly 'org.jetbrains:annotations:20.1.0'
+        annotationProcessor 'org.spongepowered:mixin:0.8:processor'
     }
 }
 
@@ -33,11 +38,11 @@ allprojects {
     group = rootProject.maven_group
 
     repositories {
-        // Add repositories to retrieve artifacts from in here.
-        // You should only use this when depending on other mods because
-        // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
-        // See https://docs.gradle.org/current/userguide/declaring_repositories.html
-        // for more information about repositories.
+        maven { url "https://maven.tterrag.com/" }
+        maven { url "https://maven.blamejared.com" }
+        maven { url "https://dvs1.progwml6.com/files/maven/" }
+        maven { url "https://modmaven.k-4u.nl" }
+        maven { url 'https://modmaven.dev/' }
     }
 
     tasks.withType(JavaCompile) {
@@ -55,4 +60,15 @@ allprojects {
     java {
         withSourcesJar()
     }
+
+    sonarqube {
+        properties {
+            property "sonar.projectKey", "Resourceful-Bees_ResourcefulBees"
+            property "sonar.organization", "resourceful-bees"
+            property "sonar.host.url", "https://sonarcloud.io"
+        }
+    }
+
+
+
 }
