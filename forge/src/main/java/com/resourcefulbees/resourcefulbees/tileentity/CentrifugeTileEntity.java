@@ -16,27 +16,27 @@ import com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe;
 import com.resourcefulbees.resourcefulbees.registry.ModContainers;
 import com.resourcefulbees.resourcefulbees.utils.NBTUtils;
 import io.netty.buffer.Unpooled;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.IContainerListener;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IntArray;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerListener;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.TickableBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.LazyOptional;
@@ -55,9 +55,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static net.minecraft.inventory.container.Container.consideredTheSameItem;
+import static net.minecraft.world.inventory.AbstractContainerMenu.consideredTheSameItem;
 
-public class CentrifugeTileEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider {
+public class CentrifugeTileEntity extends BlockEntity implements TickableBlockEntity, MenuProvider {
 
     public static final int BOTTLE_SLOT = 0;
     public static final int HONEYCOMB_SLOT = 1;
@@ -83,7 +83,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
     protected boolean isPoweredByRedstone;
     protected boolean requiresRedstone;
 
-    private final IntArray times = new IntArray(1) {
+    private final SimpleContainerData times = new SimpleContainerData(1) {
         @Override
         public int get(int i) {
             return time[0];
@@ -95,7 +95,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
         }
     };
 
-    public CentrifugeTileEntity(TileEntityType<?> tileEntityType) {
+    public CentrifugeTileEntity(BlockEntityType<?> tileEntityType) {
         super(tileEntityType);
         initializeInputsAndOutputs();
         itemStackHandler = new CentrifugeTileEntity.TileStackHandler(getTotalSlots());
@@ -278,7 +278,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
 
     public CentrifugeRecipe getRecipe(int i) {
         ItemStack input = itemStackHandler.getStackInSlot(honeycombSlots[i]);
-        Inventory recipeInv = new Inventory(input, itemStackHandler.getStackInSlot(BOTTLE_SLOT));
+        SimpleContainer recipeInv = new SimpleContainer(input, itemStackHandler.getStackInSlot(BOTTLE_SLOT));
         if (input.isEmpty() || input == failedMatch) return null;
         if (level != null) {
             boolean matches = this.recipes.get(i) == null;
@@ -412,12 +412,12 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
     //region NBT
     @Nonnull
     @Override
-    public CompoundNBT save(@Nonnull CompoundNBT tag) {
+    public CompoundTag save(@Nonnull CompoundTag tag) {
         super.save(tag);
         return saveToNBT(tag);
     }
 
-    protected CompoundNBT saveToNBT(CompoundNBT tag) {
+    protected CompoundTag saveToNBT(CompoundTag tag) {
         tag.put(NBTConstants.NBT_INVENTORY, itemStackHandler.serializeNBT());
         tag.putIntArray("time", time);
         tag.put("energy", energyStorage.serializeNBT());
@@ -429,7 +429,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
         return tag;
     }
 
-    protected void loadFromNBT(CompoundNBT tag) {
+    protected void loadFromNBT(CompoundTag tag) {
         itemStackHandler.deserializeNBTWithoutCheckingSize(tag.getCompound(NBTConstants.NBT_INVENTORY));
         time = NBTUtils.getFallbackIntArray("time", tag, getNumberOfInputs());
         energyStorage.deserializeNBT(tag.getCompound("energy"));
@@ -441,33 +441,33 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
     }
 
     @Override
-    public void load(@Nonnull BlockState state, @Nonnull CompoundNBT tag) {
+    public void load(@Nonnull BlockState state, @Nonnull CompoundTag tag) {
         this.loadFromNBT(tag);
         super.load(state, tag);
     }
 
     @Nonnull
     @Override
-    public CompoundNBT getUpdateTag() {
-        CompoundNBT nbtTagCompound = new CompoundNBT();
+    public CompoundTag getUpdateTag() {
+        CompoundTag nbtTagCompound = new CompoundTag();
         save(nbtTagCompound);
         return nbtTagCompound;
     }
 
     @Override
-    public void handleUpdateTag(@Nonnull BlockState state, CompoundNBT tag) {
+    public void handleUpdateTag(@Nonnull BlockState state, CompoundTag tag) {
         this.load(state, tag);
     }
 
     @Nullable
     @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(worldPosition, 0, saveToNBT(new CompoundNBT()));
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return new ClientboundBlockEntityDataPacket(worldPosition, 0, saveToNBT(new CompoundTag()));
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-        CompoundNBT nbt = pkt.getTag();
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
+        CompoundTag nbt = pkt.getTag();
         loadFromNBT(nbt);
     }
     //endregion
@@ -504,15 +504,15 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
 
     @Nullable
     @Override
-    public Container createMenu(int id, @Nonnull PlayerInventory playerInventory, @Nonnull PlayerEntity playerEntity) {
+    public AbstractContainerMenu createMenu(int id, @Nonnull Inventory playerInventory, @Nonnull Player playerEntity) {
         assert level != null;
         return new CentrifugeContainer(ModContainers.CENTRIFUGE_CONTAINER.get(), id, level, worldPosition, playerInventory, times);
     }
 
     @Nonnull
     @Override
-    public ITextComponent getDisplayName() {
-        return new TranslationTextComponent("gui.resourcefulbees.centrifuge");
+    public Component getDisplayName() {
+        return new TranslatableComponent("gui.resourcefulbees.centrifuge");
     }
 
     protected CustomEnergyStorage createEnergy() {
@@ -524,9 +524,9 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
         };
     }
 
-    public void sendGUINetworkPacket(IContainerListener player) {
-        if (player instanceof ServerPlayerEntity && (!(player instanceof FakePlayer))) {
-            PacketBuffer buffer = new PacketBuffer(Unpooled.buffer());
+    public void sendGUINetworkPacket(ContainerListener player) {
+        if (player instanceof ServerPlayer && (!(player instanceof FakePlayer))) {
+            FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer());
 
             for (int i = 0; i < fluidTanks.getTanks(); i++) {
                 buffer.writeFluidStack(fluidTanks.getFluidInTank(i));
@@ -534,11 +534,11 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
 
             buffer.writeInt(energyStorage.getEnergyStored());
 
-            NetPacketHandler.sendToPlayer(new SyncGUIMessage(this.worldPosition, buffer), (ServerPlayerEntity) player);
+            NetPacketHandler.sendToPlayer(new SyncGUIMessage(this.worldPosition, buffer), (ServerPlayer) player);
         }
     }
 
-    public void handleGUINetworkPacket(PacketBuffer buffer) {
+    public void handleGUINetworkPacket(FriendlyByteBuf buffer) {
         for (int i = 0; i < fluidTanks.getTanks(); i++) {
             fluidTanks.setFluidInTank(i, buffer.readFluidStack());
         }

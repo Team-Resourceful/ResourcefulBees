@@ -29,6 +29,8 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nonnull;
@@ -41,7 +43,7 @@ import static com.resourcefulbees.resourcefulbees.lib.BeeConstants.SMOKE_TIME;
 
 import net.minecraft.tileentity.BeehiveTileEntity.State;
 
-public class TieredBeehiveTileEntity extends BeehiveTileEntity {
+public class TieredBeehiveTileEntity extends BeehiveBlockEntity {
 
     protected int tier;
     protected float tierModifier;
@@ -62,7 +64,7 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
 
     @Nonnull
     @Override
-    public TileEntityType<?> getType() { return ModTileEntityTypes.TIERED_BEEHIVE_TILE_ENTITY.get(); }
+    public BlockEntityType<?> getType() { return ModTileEntityTypes.TIERED_BEEHIVE_TILE_ENTITY.get(); }
 
     public int getTier() { return tier; }
 

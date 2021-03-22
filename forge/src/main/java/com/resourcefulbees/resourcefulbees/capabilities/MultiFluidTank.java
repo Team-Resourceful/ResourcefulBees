@@ -2,7 +2,9 @@ package com.resourcefulbees.resourcefulbees.capabilities;
 
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.Tag;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
@@ -12,8 +14,6 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.function.Predicate;
-
-import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 
 public class MultiFluidTank implements IFluidHandler {
 
@@ -119,7 +119,7 @@ public class MultiFluidTank implements IFluidHandler {
         return FluidStack.EMPTY;
     }
 
-    public void readFromNBT(CompoundNBT nbt) {
+    public void readFromNBT(CompoundTag nbt) {
         ListNBT listNBT = nbt.getList(NBTConstants.NBT_TANKS, 10);
 
         if (!listNBT.isEmpty()) {
@@ -130,7 +130,7 @@ public class MultiFluidTank implements IFluidHandler {
         }
     }
 
-    public ListNBT writeToNBT() {
+    public Tag writeToNBT() {
         ListNBT listNBT = new ListNBT();
         int i = 0;
         for (FluidTank fluidTank : fluidTanks) {

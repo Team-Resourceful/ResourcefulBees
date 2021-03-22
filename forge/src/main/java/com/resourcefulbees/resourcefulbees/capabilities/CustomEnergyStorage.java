@@ -1,12 +1,13 @@
 package com.resourcefulbees.resourcefulbees.capabilities;
 
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.Tag;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.energy.EnergyStorage;
 
 //TODO 1.17 Do we need a Custom class for this and if not lets remove the custom class
 
-public class CustomEnergyStorage extends EnergyStorage implements INBTSerializable<CompoundNBT> {
+public class CustomEnergyStorage extends EnergyStorage implements INBTSerializable<Tag> {
 
     public CustomEnergyStorage(int capacity, int maxRecieve, int maxTransfer) {
         super(capacity, maxRecieve, maxTransfer);
@@ -38,14 +39,14 @@ public class CustomEnergyStorage extends EnergyStorage implements INBTSerializab
     }
 
     @Override
-    public CompoundNBT serializeNBT() {
-        CompoundNBT tag = new CompoundNBT();
+    public Tag serializeNBT() {
+        Tag tag = new CompoundNBT();
         tag.putInt("energy", getEnergyStored());
         return tag;
     }
 
     @Override
-    public void deserializeNBT(CompoundNBT nbt) {
+    public void deserializeNBT(Tag nbt) {
         setEnergy(nbt.getInt("energy"));
     }
 }

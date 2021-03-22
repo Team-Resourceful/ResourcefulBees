@@ -13,10 +13,14 @@
  */
 package com.resourcefulbees.resourcefulbees.container;
 
+import net.minecraft.core.NonNullList;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.util.NonNullList;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -72,12 +76,12 @@ public class AutomationSensitiveItemStackHandler extends ItemStackHandler {
         return stack;
     }
 
-    public void deserializeNBTWithoutCheckingSize(CompoundNBT nbt)
+    public void deserializeNBTWithoutCheckingSize(CompoundTag nbt)
     {
-        ListNBT tagList = nbt.getList("Items", Constants.NBT.TAG_COMPOUND);
+        ListTag tagList = nbt.getList("Items", Constants.NBT.TAG_COMPOUND);
         for (int i = 0; i < tagList.size(); i++)
         {
-            CompoundNBT itemTags = tagList.getCompound(i);
+            CompoundTag itemTags = tagList.getCompound(i);
             int slot = itemTags.getInt("Slot");
 
             if (slot >= 0 && slot < stacks.size())
