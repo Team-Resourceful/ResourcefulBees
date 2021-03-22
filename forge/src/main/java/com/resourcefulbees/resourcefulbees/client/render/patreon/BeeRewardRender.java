@@ -1,49 +1,49 @@
 package com.resourcefulbees.resourcefulbees.client.render.patreon;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Vector3f;
 import com.resourcefulbees.resourcefulbees.patreon.BeeRewardData;
 import com.resourcefulbees.resourcefulbees.patreon.PatreonInfo;
 import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
-import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.model.PlayerModel;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.IEntityRenderer;
-import net.minecraft.client.renderer.entity.LivingRenderer;
-import net.minecraft.client.renderer.entity.layers.LayerRenderer;
-import net.minecraft.client.renderer.entity.model.PlayerModel;
-import net.minecraft.client.renderer.model.ModelRenderer;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.client.renderer.entity.RenderLayerParent;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
 
 
 
-public class BeeRewardRender extends LayerRenderer<AbstractClientPlayerEntity, PlayerModel<AbstractClientPlayerEntity>> {
+public class BeeRewardRender extends RenderLayer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> {
 
-    private final ModelRenderer body;
-    private final ModelRenderer leftAntenna;
-    private final ModelRenderer rightAntenna;
-    private final ModelRenderer rightWing;
-    private final ModelRenderer leftWing;
-    private final ModelRenderer frontLegs;
-    private final ModelRenderer middleLegs;
-    private final ModelRenderer backLegs;
+    private final ModelPart body;
+    private final ModelPart leftAntenna;
+    private final ModelPart rightAntenna;
+    private final ModelPart rightWing;
+    private final ModelPart leftWing;
+    private final ModelPart frontLegs;
+    private final ModelPart middleLegs;
+    private final ModelPart backLegs;
 
 
-    public BeeRewardRender(IEntityRenderer<AbstractClientPlayerEntity, PlayerModel<AbstractClientPlayerEntity>> entityRenderer) {
+    public BeeRewardRender(RenderLayerParent<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> entityRenderer) {
         super(entityRenderer);
-        this.body = new ModelRenderer(64,64,0,0);
-        ModelRenderer torso = new ModelRenderer(64, 64, 0, 0);
-        ModelRenderer stinger = new ModelRenderer(64, 64, 26, 7);
-        this.leftAntenna = new ModelRenderer(64,64, 2, 0);
-        this.rightAntenna = new ModelRenderer(64,64, 2, 3);
-        this.rightWing = new ModelRenderer(64,64, 0, 18);
-        this.leftWing = new ModelRenderer(64,64, 0, 18);
-        this.frontLegs = new ModelRenderer(64,64,0,0);
-        this.middleLegs = new ModelRenderer(64,64,0,0);
-        this.backLegs = new ModelRenderer(64,64,0,0);
+        this.body = new ModelPart(64,64,0,0);
+        ModelPart torso = new ModelPart(64, 64, 0, 0);
+        ModelPart stinger = new ModelPart(64, 64, 26, 7);
+        this.leftAntenna = new ModelPart(64,64, 2, 0);
+        this.rightAntenna = new ModelPart(64,64, 2, 3);
+        this.rightWing = new ModelPart(64,64, 0, 18);
+        this.leftWing = new ModelPart(64,64, 0, 18);
+        this.frontLegs = new ModelPart(64,64,0,0);
+        this.middleLegs = new ModelPart(64,64,0,0);
+        this.backLegs = new ModelPart(64,64,0,0);
 
 
 
@@ -87,10 +87,10 @@ public class BeeRewardRender extends LayerRenderer<AbstractClientPlayerEntity, P
         this.backLegs.addBox("backLegBox", -5.0F, 0.0F, 0.0F, 7, 2, 0, 0.0F, 26, 5);
     }
 
-    private void setRotationAngle(ModelRenderer modelRenderer, float y) {
-        modelRenderer.xRot = 0f;
-        modelRenderer.yRot = y;
-        modelRenderer.zRot = 0f;
+    private void setRotationAngle(ModelPart ModelPart, float y) {
+        ModelPart.xRot = 0f;
+        ModelPart.yRot = y;
+        ModelPart.zRot = 0f;
     }
 
     private void updateAngles(float ticks){
@@ -99,7 +99,7 @@ public class BeeRewardRender extends LayerRenderer<AbstractClientPlayerEntity, P
         this.body.xRot = 0.0F;
         this.body.y = 19.0F;
         this.rightWing.yRot = 0.0F;
-        this.rightWing.zRot = MathHelper.cos((ticks % 98000 * 2.1F)) * (float) Math.PI * 0.15F;
+        this.rightWing.zRot = Mth.cos((ticks % 98000 * 2.1F)) * (float) Math.PI * 0.15F;
         this.leftWing.xRot = this.rightWing.xRot;
         this.leftWing.yRot = this.rightWing.yRot;
         this.leftWing.zRot = -this.rightWing.zRot;
@@ -108,17 +108,17 @@ public class BeeRewardRender extends LayerRenderer<AbstractClientPlayerEntity, P
         this.backLegs.xRot = ((float) Math.PI / 4F);
         setRotationAngle(body, 0);
 
-        float f1 = MathHelper.cos(ticks % 1143333 * 0.18F);
+        float f1 = Mth.cos(ticks % 1143333 * 0.18F);
         this.body.xRot = 0.1F + f1 * (float) Math.PI * 0.025F;
         this.leftAntenna.xRot = f1 * (float) Math.PI * 0.03F;
         this.rightAntenna.xRot = f1 * (float) Math.PI * 0.03F;
         this.frontLegs.xRot = -f1 * (float) Math.PI * 0.1F + ((float) Math.PI / 8F);
         this.backLegs.xRot = -f1 * (float) Math.PI * 0.05F + ((float) Math.PI / 4F);
-        this.body.y = 19.0F - MathHelper.cos(ticks % 1143333 * 0.18F) * 0.9F;
+        this.body.y = 19.0F - Mth.cos(ticks % 1143333 * 0.18F) * 0.9F;
     }
 
     @Override
-    public void render(@NotNull MatrixStack stack, @NotNull IRenderTypeBuffer buffer, int packedLightIn, @NotNull AbstractClientPlayerEntity playerEntity,  float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void render(@NotNull PoseStack stack, @NotNull MultiBufferSource buffer, int packedLightIn, @NotNull AbstractClientPlayer playerEntity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         if (!PatreonInfo.isPatreon(playerEntity.getUUID())) return;
         BeeRewardData data = PatreonInfo.getPatreon(playerEntity.getUUID());
         updateAngles(ageInTicks);
@@ -126,22 +126,22 @@ public class BeeRewardRender extends LayerRenderer<AbstractClientPlayerEntity, P
 
         stack.scale(0.25f,0.25f,0.25f);
         stack.mulPose(Vector3f.YP.rotationDegrees((ageInTicks * 0.01F /2f)* 360f));
-        stack.translate(0f,(1.5 * MathHelper.sin(ageInTicks/10 - 30f)),3f);
+        stack.translate(0f,(1.5 * Mth.sin(ageInTicks/10 - 30f)),3f);
         stack.mulPose(Vector3f.YP.rotationDegrees(-90));
 
 
         stack.pushPose();
-        IVertexBuilder ivertexbuilder = buffer.getBuffer(RenderType.entityCutoutNoCull(data.getTextures().getResourceLocation()));
+        VertexConsumer ivertexbuilder = buffer.getBuffer(RenderType.entityCutoutNoCull(data.getTextures().getResourceLocation()));
         body.render(stack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY);
         stack.popPose();
 
         if (data.getTextures().hasSecondaryLayer()) {
             stack.pushPose();
-            IVertexBuilder ivertexbuilder2 = buffer.getBuffer(RenderType.entityCutoutNoCull(data.getTextures().getSecondaryResourceLocation()));
+            VertexConsumer ivertexbuilder2 = buffer.getBuffer(RenderType.entityCutoutNoCull(data.getTextures().getSecondaryResourceLocation()));
             float r = data.isRainbow() ? RainbowColor.getColorFloats()[0] : data.getColor().getR();
             float g = data.isRainbow() ? RainbowColor.getColorFloats()[1] : data.getColor().getG();
             float b = data.isRainbow() ? RainbowColor.getColorFloats()[2] : data.getColor().getB();
-            body.render(stack, ivertexbuilder2, packedLightIn, LivingRenderer.getOverlayCoords(playerEntity, 0.0F), r, g, b, 1.0f);
+            body.render(stack, ivertexbuilder2, packedLightIn, LivingEntityRenderer.getOverlayCoords(playerEntity, 0.0F), r, g, b, 1.0f);
             stack.popPose();
         }
 

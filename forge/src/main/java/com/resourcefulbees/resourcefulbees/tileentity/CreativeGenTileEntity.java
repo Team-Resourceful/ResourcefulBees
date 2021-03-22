@@ -1,10 +1,10 @@
 package com.resourcefulbees.resourcefulbees.tileentity;
 
 import com.resourcefulbees.resourcefulbees.capabilities.CustomEnergyStorage;
-import com.resourcefulbees.resourcefulbees.registry.ModTileEntityTypes;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
+import com.resourcefulbees.resourcefulbees.registry.ModBlockEntityTypes;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.TickableBlockEntity;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -15,12 +15,12 @@ import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class CreativeGenTileEntity extends TileEntity implements ITickableTileEntity {
+public class CreativeGenTileEntity extends BlockEntity implements TickableBlockEntity {
 
     public final CustomEnergyStorage energyStorage = createEnergy();
     private final LazyOptional<IEnergyStorage> energyOptional = LazyOptional.of(() -> energyStorage);
 
-    public CreativeGenTileEntity() { super(ModTileEntityTypes.CREATIVE_GEN_ENTITY.get()); }
+    public CreativeGenTileEntity() { super(ModBlockEntityTypes.CREATIVE_GEN_ENTITY.get()); }
 
     @Nonnull
     @Override

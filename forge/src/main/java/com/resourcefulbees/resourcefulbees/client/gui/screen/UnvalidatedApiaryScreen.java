@@ -1,7 +1,7 @@
 package com.resourcefulbees.resourcefulbees.client.gui.screen;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.client.gui.widget.ArrowButton;
 import com.resourcefulbees.resourcefulbees.container.UnvalidatedApiaryContainer;
@@ -12,31 +12,28 @@ import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryT
 import com.resourcefulbees.resourcefulbees.utils.MathUtils;
 import com.resourcefulbees.resourcefulbees.utils.PreviewHandler;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.client.gui.widget.Widget;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.gui.widget.button.ImageButton;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.ImageButton;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.client.gui.widget.button.Button.IPressable;
-
-public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryContainer> {
+public class UnvalidatedApiaryScreen extends AbstractContainerScreen<UnvalidatedApiaryContainer> {
 
     private static final ResourceLocation unvalidatedTexture = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/apiary/unvalidated.png");
     private static final ResourceLocation arrowButtonTexture = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/apiary/arrow_button.png");
     private final ApiaryTileEntity apiaryTileEntity;
-    private final PlayerEntity player;
+    private final Player player;
     private int verticalOffset;
     private int horizontalOffset;
     private ArrowButton upButton;
@@ -46,7 +43,7 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
     private PreviewButton previewButton;
 
 
-    public UnvalidatedApiaryScreen(UnvalidatedApiaryContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
+    public UnvalidatedApiaryScreen(UnvalidatedApiaryContainer screenContainer, Inventory inv, Component titleIn) {
         super(screenContainer, inv, titleIn);
         this.player = inv.player;
         this.verticalOffset = screenContainer.getApiaryTileEntity().getVerticalOffset();
@@ -57,8 +54,8 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
     @Override
     protected void init() {
         super.init();
-        this.addButton(new Button(getGuiLeft() + 116, getGuiTop() + 10, 50, 20, new StringTextComponent(I18n.get("gui.resourcefulbees.apiary.button.validate")), onPress -> this.validate()));
-        BuildButton buildStructureButton = this.addButton(new BuildButton(getGuiLeft() + 116, getGuiTop() + 35, 50, 20, new StringTextComponent(I18n.get("gui.resourcefulbees.apiary.button.build")), onPress -> this.build()));
+        this.addButton(new Button(getGuiLeft() + 116, getGuiTop() + 10, 50, 20, new TranslatableComponent("gui.resourcefulbees.apiary.button.validate"), onPress -> this.validate()));
+        BuildButton buildStructureButton = this.addButton(new BuildButton(getGuiLeft() + 116, getGuiTop() + 35, 50, 20, new TranslatableComponent("gui.resourcefulbees.apiary.button.build"), onPress -> this.build()));
         if (!this.player.isCreative()) {
             buildStructureButton.active = false;
         }
@@ -115,7 +112,7 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
     }
 
     @Override
-    public void render(@Nonnull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
+    public void render(@Nonnull PoseStack matrix, int mouseX, int mouseY, float partialTicks) {
         this.upButton.active = verticalOffset != 2;
         this.downButton.active = verticalOffset != -1;
         this.leftButton.active = horizontalOffset != -2;
@@ -133,7 +130,7 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
     }
 
     @Override
-    protected void renderBg(@Nonnull MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
+    protected void renderBg(@Nonnull PoseStack matrix, float partialTicks, int mouseX, int mouseY) {
         Minecraft client = this.minecraft;
         if (client != null) {
             this.minecraft.getTextureManager().bind(unvalidatedTexture);
@@ -144,14 +141,14 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
     }
 
     @Override
-    protected void renderLabels(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
+    protected void renderLabels(@Nonnull PoseStack matrix, int mouseX, int mouseY) {
         this.font.draw(matrix,  "Offset", 65, 13, 0x404040);
         this.font.draw(matrix, "Vert.", 75, 26, 0x404040);
         this.font.draw(matrix, "Horiz.", 75, 39, 0x404040);
         this.drawRightAlignedString(matrix, font, String.valueOf(verticalOffset), 70, 26, 0x404040);
         this.drawRightAlignedString(matrix, font, String.valueOf(horizontalOffset), 70, 39, 0x404040);
 
-        for (Widget widget : this.buttons) {
+        for (AbstractWidget widget : this.buttons) {
             if (widget.isHovered()) {
                 widget.renderToolTip(matrix, mouseX - this.leftPos, mouseY - this.topPos);
                 break;
@@ -160,7 +157,7 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
     }
 
 
-    public void drawRightAlignedString(@Nonnull MatrixStack matrix, FontRenderer fontRenderer, @Nonnull String s, int posX, int posY, int color) {
+    public void drawRightAlignedString(@Nonnull PoseStack matrix, Font fontRenderer, @Nonnull String s, int posX, int posY, int color) {
         fontRenderer.draw(matrix, s, (float) (posX - fontRenderer.width(s)), (float) posY, color);
     }
 
@@ -173,14 +170,14 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
 
     @OnlyIn(Dist.CLIENT)
     public class BuildButton extends Button {
-        public BuildButton(int widthIn, int heightIn, int width, int height, StringTextComponent text, IPressable onPress) {
+        public BuildButton(int widthIn, int heightIn, int width, int height, TranslatableComponent text, OnPress onPress) {
             super(widthIn, heightIn, width, height, text, onPress);
         }
 
         @Override
-        public void renderToolTip(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
+        public void renderToolTip(@Nonnull PoseStack matrix, int mouseX, int mouseY) {
             if (!this.active) {
-                StringTextComponent s = new StringTextComponent(I18n.get("gui.resourcefulbees.apiary.button.build.creative"));
+                TranslatableComponent s = new TranslatableComponent("gui.resourcefulbees.apiary.button.build.creative");
                 UnvalidatedApiaryScreen.this.renderTooltip(matrix, s, mouseX, mouseY);
             }
         }
@@ -194,7 +191,7 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
         private final int yDiffText;
         private boolean triggered;
 
-        public PreviewButton(int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int yDiffTextIn, ResourceLocation resourceLocationIn, boolean triggered, IPressable onPressIn) {
+        public PreviewButton(int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int yDiffTextIn, ResourceLocation resourceLocationIn, boolean triggered, OnPress onPressIn) {
             super(xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, yDiffTextIn, resourceLocationIn, onPressIn);
             this.triggered = triggered;
             this.xTexStart = xTexStartIn;
@@ -204,7 +201,7 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
         }
 
         @Override
-        public void renderButton(@Nonnull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
+        public void renderButton(@Nonnull PoseStack matrix, int mouseX, int mouseY, float partialTicks) {
             Minecraft minecraft = Minecraft.getInstance();
             minecraft.getTextureManager().bind(this.resourceLocation);
             RenderSystem.disableDepthTest();
@@ -227,13 +224,13 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
         }
 
         @Override
-        public void renderToolTip(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
-            StringTextComponent s;
+        public void renderToolTip(@Nonnull PoseStack matrix, int mouseX, int mouseY) {
+            TranslatableComponent s;
             if (!isTriggered()) {
-                s = new StringTextComponent(I18n.get("gui.resourcefulbees.apiary.button.preview.enable"));
+                s = new TranslatableComponent("gui.resourcefulbees.apiary.button.preview.enable");
             }
             else {
-                s = new StringTextComponent(I18n.get("gui.resourcefulbees.apiary.button.preview.disable"));
+                s = new TranslatableComponent("gui.resourcefulbees.apiary.button.preview.disable");
             }
             UnvalidatedApiaryScreen.this.renderTooltip(matrix, s, mouseX, mouseY);
         }

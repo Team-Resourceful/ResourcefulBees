@@ -1,18 +1,19 @@
 package com.resourcefulbees.resourcefulbees.api.beedata;
 
 import com.resourcefulbees.resourcefulbees.data.BeeTrait;
-import net.minecraft.particles.BasicParticleType;
-import net.minecraft.potion.Effect;
-import net.minecraft.util.DamageSource;
+import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffect;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 public class TraitData extends AbstractBeeData {
     /**
      * A list of Potion Effects and their strength.
      */
-    private transient Set<Pair<Effect, Integer>> potionDamageEffects;
+    private transient Set<Pair<MobEffect, Integer>> potionDamageEffects;
 
     /**
      * A list of damage sources the bee is immune to
@@ -22,7 +23,7 @@ public class TraitData extends AbstractBeeData {
     /**
      * A list of effects the bee is immune to
      */
-    private transient Set<Effect> potionImmunities;
+    private transient Set<MobEffect> potionImmunities;
 
     /**
      * A list of damage types and their strength.
@@ -33,7 +34,7 @@ public class TraitData extends AbstractBeeData {
      * A list of special abilities the bee has
      */
     private transient Set<String> specialAbilities;
-    private transient Set<BasicParticleType> particleEffects;
+    private transient Set<SimpleParticleType> particleEffects;
 
     /**
      * If the bee has traits
@@ -86,13 +87,13 @@ public class TraitData extends AbstractBeeData {
     public boolean hasSpecialAbilities() { return this.hasTraits && !this.specialAbilities.isEmpty(); }
     public boolean hasParticleEffects() { return this.hasTraits && !this.particleEffects.isEmpty(); }
 
-    public Set<Pair<Effect, Integer>> getPotionDamageEffects(){
+    public Set<Pair<MobEffect, Integer>> getPotionDamageEffects(){
         return potionDamageEffects;
     }
     public Set<DamageSource> getDamageImmunities(){
         return damageImmunities;
     }
-    public Set<Effect> getPotionImmunities(){
+    public Set<MobEffect> getPotionImmunities(){
         return potionImmunities;
     }
     public Set<Pair<String, Integer>> getDamageTypes(){
@@ -101,7 +102,7 @@ public class TraitData extends AbstractBeeData {
     public Set<String> getSpecialAbilities(){
         return specialAbilities;
     }
-    public Set<BasicParticleType> getParticleEffects(){
+    public Set<SimpleParticleType> getParticleEffects(){
         return particleEffects;
     }
 

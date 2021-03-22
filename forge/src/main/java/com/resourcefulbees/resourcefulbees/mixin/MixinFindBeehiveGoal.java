@@ -1,22 +1,22 @@
 package com.resourcefulbees.resourcefulbees.mixin;
 
-import net.minecraft.entity.passive.BeeEntity;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.animal.Bee;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(BeeEntity.FindBeehiveGoal.class)
+@Mixin(Bee.BeeLocateHiveGoal.class)
 public abstract class MixinFindBeehiveGoal {
 
     @Unique
-    private BeeEntity beeEntity;
+    private Bee beeEntity;
 
     @SuppressWarnings("UnresolvedMixinReference")
-    @Inject(method = "<init>(Lnet/minecraft/entity/passive/BeeEntity;)V", at = @At(value = "RETURN"))
-    private void init(BeeEntity beeEntity, CallbackInfo ci) {
+    @Inject(method = "<init>(Lnet/minecraft/world/entity/animal/Bee;)V", at = @At(value = "RETURN"))
+    private void init(Bee beeEntity, CallbackInfo ci) {
         this.beeEntity = beeEntity;
     }
 

@@ -6,9 +6,9 @@ import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.material.Fluids;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -86,15 +86,15 @@ public class CentrifugeData extends AbstractBeeData {
 
     private final JsonElement mainNBTData;
 
-    private transient CompoundNBT mainNBT;
+    private transient CompoundTag mainNBT;
 
     private final JsonElement secondaryNBTData;
 
-    private transient CompoundNBT secondaryNBT;
+    private transient CompoundTag secondaryNBT;
 
     private final JsonElement bottleNBTData;
 
-    private transient CompoundNBT bottleNBT;
+    private transient CompoundTag bottleNBT;
 
 
     /**
@@ -123,7 +123,7 @@ public class CentrifugeData extends AbstractBeeData {
     private CentrifugeData(String mainOutput, String secondaryOutput, String bottleOutput, String fluidOutput,
                            float mainOutputWeight, float secondaryOutputWeight, float bottleOutputWeight, float fluidOutputWeight, int mainOutputCount,
                            int secondaryOutputCount, int bottleOutputCount, int fluidOutputCount, int mainInputCount,
-                           CompoundNBT mainNBT, CompoundNBT secondaryNBT, CompoundNBT bottleNBT,
+                           CompoundTag mainNBT, CompoundTag secondaryNBT, CompoundTag bottleNBT,
                            boolean hasCentrifugeOutput, int recipeTime, boolean hasFluidOutput) {
         super("CentrifugeData");
         this.mainOutput = mainOutput;
@@ -217,28 +217,28 @@ public class CentrifugeData extends AbstractBeeData {
         return hasFluidOutput;
     }
 
-    public CompoundNBT getMainNBT() {
+    public CompoundTag getMainNBT() {
         mainNBT = getNBT(mainNBTData, mainNBT);
         return mainNBT;
     }
 
-    public CompoundNBT getSecondaryNBT() {
+    public CompoundTag getSecondaryNBT() {
         secondaryNBT = getNBT(secondaryNBTData, secondaryNBT);
         return secondaryNBT;
     }
 
-    public CompoundNBT getBottleNBT() {
+    public CompoundTag getBottleNBT() {
         bottleNBT = getNBT(bottleNBTData, bottleNBT);
         return bottleNBT;
     }
 
-    private CompoundNBT getNBT(JsonElement nbtData, CompoundNBT nbt) {
+    private CompoundTag getNBT(JsonElement nbtData, CompoundTag nbt) {
         if (nbt == null) {
-            nbt = CompoundNBT.CODEC.parse(JsonOps.INSTANCE, nbtData)
+            nbt = CompoundTag.CODEC.parse(JsonOps.INSTANCE, nbtData)
                     .resultOrPartial(e -> {
                         if (nbtData != null) LOGGER.warn("Could not deserialize NBT: [{}]", nbtData);
                     })
-                    .orElse(new CompoundNBT());
+                    .orElse(new CompoundTag());
         }
         if (nbt.isEmpty()) return null;
         return nbt;
@@ -271,25 +271,25 @@ public class CentrifugeData extends AbstractBeeData {
         private int bottleOutputCount;
         private int mainInputCount;
         private int fluidOutputCount;
-        private CompoundNBT mainNBT;
-        private CompoundNBT secondaryNBT;
-        private CompoundNBT bottleNBT;
+        private CompoundTag mainNBT;
+        private CompoundTag secondaryNBT;
+        private CompoundTag bottleNBT;
         private final boolean hasCentrifugeOutput;
         private int recipeTime;
         private boolean hasFluidOutput;
 
 
-        public Builder setMainNBT(CompoundNBT mainNBT) {
+        public Builder setMainNBT(CompoundTag mainNBT) {
             this.mainNBT = mainNBT;
             return this;
         }
 
-        public Builder setSecondaryNBT(CompoundNBT secondaryNBT) {
+        public Builder setSecondaryNBT(CompoundTag secondaryNBT) {
             this.secondaryNBT = secondaryNBT;
             return this;
         }
 
-        public Builder setBottleNBT(CompoundNBT bottleNBT) {
+        public Builder setBottleNBT(CompoundTag bottleNBT) {
             this.bottleNBT = bottleNBT;
             return this;
         }

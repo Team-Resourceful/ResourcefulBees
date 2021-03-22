@@ -3,23 +3,25 @@ package com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge;
 import com.resourcefulbees.resourcefulbees.block.multiblocks.centrifuge.EliteCentrifugeCasingBlock;
 import com.resourcefulbees.resourcefulbees.capabilities.CustomEnergyStorage;
 import com.resourcefulbees.resourcefulbees.config.Config;
+import com.resourcefulbees.resourcefulbees.container.CentrifugeContainer;
+import com.resourcefulbees.resourcefulbees.container.CentrifugeMultiblockContainer;
 import com.resourcefulbees.resourcefulbees.container.EliteCentrifugeMultiblockContainer;
 import com.resourcefulbees.resourcefulbees.registry.ModContainers;
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.IntArray;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.function.Predicate;
 
 public class EliteCentrifugeControllerTileEntity extends CentrifugeControllerTileEntity {
-    private final IntArray times = new IntArray(6) {
+    private final ContainerData times = new SimpleContainerData(6) {
 
         @Override
         public int get(int index) {
@@ -71,7 +73,7 @@ public class EliteCentrifugeControllerTileEntity extends CentrifugeControllerTil
         public int getCount() { return 6; }
     };
 
-    public EliteCentrifugeControllerTileEntity(TileEntityType<?> tileEntityType) { super(tileEntityType); }
+    public EliteCentrifugeControllerTileEntity(BlockEntityType<?> tileEntityType) { super(tileEntityType); }
 
     @Override
     public int getNumberOfInputs() { return 6; }
@@ -95,7 +97,7 @@ public class EliteCentrifugeControllerTileEntity extends CentrifugeControllerTil
         return blockPos -> {
             assert level != null : "Validating Centrifuge - How is world null??";
             Block block = level.getBlockState(blockPos).getBlock();
-            TileEntity tileEntity = level.getBlockEntity(blockPos);
+            BlockEntity tileEntity = level.getBlockEntity(blockPos);
             if (block instanceof EliteCentrifugeCasingBlock && tileEntity instanceof EliteCentrifugeCasingTileEntity) {
                 EliteCentrifugeCasingTileEntity casing = (EliteCentrifugeCasingTileEntity) tileEntity;
                 return !casing.isLinked() || (casing.getController() != null && casing.getController().equals(this));
@@ -106,7 +108,7 @@ public class EliteCentrifugeControllerTileEntity extends CentrifugeControllerTil
 
     @Nullable
     @Override
-    public Container createMenu(int id, @Nonnull PlayerInventory playerInventory, @Nonnull PlayerEntity playerEntity) {
+    public CentrifugeContainer createMenu(int id, @Nonnull Inventory playerInventory, @Nonnull Player playerEntity) {
         assert level != null;
         return new EliteCentrifugeMultiblockContainer(ModContainers.ELITE_CENTRIFUGE_MULTIBLOCK_CONTAINER.get(), id, level, worldPosition, playerInventory, times);
     }

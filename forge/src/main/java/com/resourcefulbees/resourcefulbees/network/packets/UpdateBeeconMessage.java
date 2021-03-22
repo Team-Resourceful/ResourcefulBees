@@ -1,11 +1,11 @@
 package com.resourcefulbees.resourcefulbees.network.packets;
 
 import com.resourcefulbees.resourcefulbees.tileentity.EnderBeeconTileEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
@@ -22,21 +22,21 @@ public class UpdateBeeconMessage {
         this.blockPos = blockPos;
     }
 
-    public static void encode(UpdateBeeconMessage message, PacketBuffer buffer) {
+    public static void encode(UpdateBeeconMessage message, FriendlyByteBuf buffer) {
         buffer.writeResourceLocation(message.effectLocation);
         buffer.writeBoolean(message.active);
         buffer.writeBlockPos(message.blockPos);
     }
 
-    public static UpdateBeeconMessage decode(PacketBuffer buffer) {
+    public static UpdateBeeconMessage decode(FriendlyByteBuf buffer) {
         return new UpdateBeeconMessage(buffer.readResourceLocation(), buffer.readBoolean(), buffer.readBlockPos());
     }
 
     public static void handle(UpdateBeeconMessage message, Supplier<NetworkEvent.Context> context) {
         context.get().enqueueWork(() -> {
-            ServerPlayerEntity player = context.get().getSender();
+            ServerPlayer player = context.get().getSender();
             if (player != null && player.level.isLoaded(message.blockPos)){
-                TileEntity tileEntity = player.level.getBlockEntity(message.blockPos);
+                BlockEntity tileEntity = player.level.getBlockEntity(message.blockPos);
                 if (tileEntity instanceof EnderBeeconTileEntity) {
                     EnderBeeconTileEntity beecon = (EnderBeeconTileEntity) tileEntity;
                     beecon.updateBeeconEffect(message.effectLocation, message.active);

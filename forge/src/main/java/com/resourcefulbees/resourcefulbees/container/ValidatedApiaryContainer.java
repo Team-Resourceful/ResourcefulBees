@@ -4,27 +4,27 @@ import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
 import com.resourcefulbees.resourcefulbees.network.packets.LockBeeMessage;
 import com.resourcefulbees.resourcefulbees.registry.ModContainers;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryTileEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.IntReferenceHolder;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.DataSlot;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nonnull;
 
-public class ValidatedApiaryContainer extends Container {
+public class ValidatedApiaryContainer extends AbstractContainerMenu {
 
-    private final IntReferenceHolder selectedBee = IntReferenceHolder.standalone();
+    private final DataSlot selectedBee = DataSlot.standalone();
     private final ApiaryTileEntity apiaryTileEntity;
     private final BlockPos pos;
-    private final PlayerEntity player;
+    private final Player player;
     private String[] beeList;
 
-    public ValidatedApiaryContainer(int id, World world, BlockPos pos, PlayerInventory inv) {
+    public ValidatedApiaryContainer(int id, Level world, BlockPos pos, Inventory inv) {
         super(ModContainers.VALIDATED_APIARY_CONTAINER.get(), id);
 
         this.player = inv.player;
@@ -57,7 +57,7 @@ public class ValidatedApiaryContainer extends Container {
             this.addSlot(new OutputSlot(getApiaryTileEntity().getTileStackHandler(), ApiaryTileEntity.EXPORT, 182, 37));
             if (!world.isClientSide) {
                 this.getApiaryTileEntity().setNumPlayersUsing(this.getApiaryTileEntity().getNumPlayersUsing() + 1);
-                ApiaryTileEntity.syncApiaryToPlayersUsing(world, pos, this.getApiaryTileEntity().saveToNBT(new CompoundNBT()));
+                ApiaryTileEntity.syncApiaryToPlayersUsing(world, pos, this.getApiaryTileEntity().saveToNBT(new CompoundTag()));
             }
         }
 
@@ -73,13 +73,13 @@ public class ValidatedApiaryContainer extends Container {
     }
 
     @Override
-    public boolean stillValid(@Nonnull PlayerEntity playerIn) {
+    public boolean stillValid(@Nonnull Player playerIn) {
         return true;
     }
 
     @Override
-    public void removed(@Nonnull PlayerEntity playerIn) {
-        World world = this.getApiaryTileEntity().getLevel();
+    public void removed(@Nonnull Player playerIn) {
+        Level world = this.getApiaryTileEntity().getLevel();
         if (world != null && !world.isClientSide)
             this.getApiaryTileEntity().setNumPlayersUsing(this.getApiaryTileEntity().getNumPlayersUsing() - 1);
         super.removed(playerIn);
@@ -87,7 +87,7 @@ public class ValidatedApiaryContainer extends Container {
 
     @Nonnull
     @Override
-    public ItemStack quickMoveStack(@Nonnull PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(@Nonnull Player playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         if (slot != null && slot.hasItem()) {
@@ -138,7 +138,7 @@ public class ValidatedApiaryContainer extends Container {
         return pos;
     }
 
-    public PlayerEntity getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 

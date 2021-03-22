@@ -1,6 +1,6 @@
 package com.resourcefulbees.resourcefulbees.compat.jei;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.IBeeRegistry;
 import com.resourcefulbees.resourcefulbees.api.beedata.MutationData;
@@ -14,13 +14,13 @@ import mezz.jei.api.gui.ingredient.IGuiIngredientGroup;
 import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
-import net.minecraft.block.Block;
-import net.minecraft.block.FlowingFluidBlock;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.material.Fluid;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -64,13 +64,13 @@ public class BlockMutation extends BaseCategory<BlockMutation.Recipe> {
 
     @Override
     public void setIngredients(Recipe recipe, @NotNull IIngredients ingredients) {
-        if (recipe.blockInput instanceof FlowingFluidBlock || (recipe.tagInput != null && recipe.tagInput.getValues().get(0) instanceof Fluid)) {
+        if (recipe.blockInput instanceof LiquidBlock || (recipe.tagInput != null && recipe.tagInput.getValues().get(0) instanceof Fluid)) {
             RecipeUtils.setFluidInput(ingredients, recipe.tagInput, recipe.blockInput);
         } else {
             RecipeUtils.setBlockInput(ingredients, recipe.tagInput, recipe.blockInput);
         }
 
-        if (recipe.blockOutput.getBlock() instanceof FlowingFluidBlock) {
+        if (recipe.blockOutput.getBlock() instanceof LiquidBlock) {
             RecipeUtils.setFluidOutput(recipe.blockOutput.getBlock(), recipe.blockOutput.getCompoundNBT(), ingredients);
         } else {
             RecipeUtils.setBlockOutput(recipe.blockOutput.getBlock(), recipe.blockOutput.getCompoundNBT(), ingredients);
@@ -80,21 +80,21 @@ public class BlockMutation extends BaseCategory<BlockMutation.Recipe> {
     }
 
     @Override
-    public @NotNull List<ITextComponent> getTooltipStrings(Recipe recipe, double mouseX, double mouseY) {
-        List<ITextComponent> list = RecipeUtils.getTooltipStrings(mouseX, mouseY, recipe.chance);
+    public @NotNull List<Component> getTooltipStrings(Recipe recipe, double mouseX, double mouseY) {
+        List<Component> list = RecipeUtils.getTooltipStrings(mouseX, mouseY, recipe.chance);
         return list.isEmpty() ? super.getTooltipStrings(recipe, mouseX, mouseY) : list;
     }
 
     @Override
     public void setRecipe(@NotNull IRecipeLayout iRecipeLayout, Recipe recipe, @NotNull IIngredients ingredients) {
-        if (recipe.blockInput instanceof FlowingFluidBlock || (recipe.tagInput != null && recipe.tagInput.getValues().get(0) instanceof Fluid)) {
-            if (recipe.blockOutput.getBlock() instanceof FlowingFluidBlock) {
+        if (recipe.blockInput instanceof LiquidBlock || (recipe.tagInput != null && recipe.tagInput.getValues().get(0) instanceof Fluid)) {
+            if (recipe.blockOutput.getBlock() instanceof LiquidBlock) {
                 setFluidToFluidRecipe(iRecipeLayout, recipe, ingredients);
             } else {
                 setFluidToBlockRecipe(iRecipeLayout, recipe, ingredients);
             }
         } else {
-            if (recipe.blockOutput.getBlock() instanceof FlowingFluidBlock) {
+            if (recipe.blockOutput.getBlock() instanceof LiquidBlock) {
                 setBlockToFluidRecipe(iRecipeLayout, recipe, ingredients);
             } else {
                 setBlockToBlockRecipe(iRecipeLayout, recipe, ingredients);
@@ -153,19 +153,19 @@ public class BlockMutation extends BaseCategory<BlockMutation.Recipe> {
     }
 
     @Override
-    public void draw(Recipe recipe, @NotNull MatrixStack stack, double mouseX, double mouseY) {
+    public void draw(Recipe recipe, @NotNull PoseStack stack, double mouseX, double mouseY) {
         RecipeUtils.drawMutationScreen(stack, this.beeHive, this.info, recipe.weight, recipe.chance);
     }
 
     protected static class Recipe {
         private final @Nullable Block blockInput;
-        private final @Nullable ITag<?> tagInput;
+        private final @Nullable Tag<?> tagInput;
         private final @NotNull BlockOutput blockOutput;
         private final double chance;
         private final double weight;
         private final @NotNull String beeType;
 
-        public Recipe(@Nullable Block blockInput, @Nullable ITag<?> tagInput, @NotNull BlockOutput blockOutput, double chance, double weight, @NotNull String beeType) {
+        public Recipe(@Nullable Block blockInput, @Nullable Tag<?> tagInput, @NotNull BlockOutput blockOutput, double chance, double weight, @NotNull String beeType) {
             this.blockInput = blockInput;
             this.tagInput = tagInput;
             this.blockOutput = blockOutput;

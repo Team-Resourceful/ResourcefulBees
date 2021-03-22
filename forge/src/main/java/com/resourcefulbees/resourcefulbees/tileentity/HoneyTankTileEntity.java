@@ -3,24 +3,28 @@ package com.resourcefulbees.resourcefulbees.tileentity;
 import com.resourcefulbees.resourcefulbees.fluids.HoneyFlowingFluid;
 import com.resourcefulbees.resourcefulbees.item.CustomHoneyBottleItem;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
+import com.resourcefulbees.resourcefulbees.registry.ModBlockEntityTypes;
 import com.resourcefulbees.resourcefulbees.registry.ModBlocks;
 import com.resourcefulbees.resourcefulbees.registry.ModFluids;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
-import com.resourcefulbees.resourcefulbees.registry.ModTileEntityTypes;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.*;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
@@ -36,7 +40,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.function.Predicate;
 
-public class HoneyTankTileEntity extends TileEntity {
+public class HoneyTankTileEntity extends BlockEntity {
 
     public @NotNull FluidTank getFluidTank() {
         return fluidTank;
@@ -110,13 +114,13 @@ public class HoneyTankTileEntity extends TileEntity {
     private TankTier tier;
 
     public HoneyTankTileEntity(TankTier tier) {
-        super(ModTileEntityTypes.HONEY_TANK_TILE_ENTITY.get());
+        super(ModBlockEntityTypes.HONEY_TANK_TILE_ENTITY.get());
         setFluidTank(new InternalFluidTank(tier.maxFillAmount, honeyFluidPredicate()));
         fluidOptional = LazyOptional.of(this::getFluidTank);
         this.setTier(tier);
     }
 
-    public HoneyTankTileEntity(TileEntityType<?> tileEntityType, TankTier tier) {
+    public HoneyTankTileEntity(BlockEntityType<?> tileEntityType, TankTier tier) {
         super(tileEntityType);
         this.setFluidTank(new InternalFluidTank(tier.maxFillAmount, honeyFluidPredicate()));
         fluidOptional = LazyOptional.of(this::getFluidTank);
@@ -136,8 +140,8 @@ public class HoneyTankTileEntity extends TileEntity {
     }
 
     @Override
-    public AxisAlignedBB getRenderBoundingBox() {
-        return new AxisAlignedBB(this.getBlockPos().below().south().west(), this.getBlockPos().above().north().east());
+    public AABB getRenderBoundingBox() {
+        return new AABB(this.getBlockPos().below().south().west(), this.getBlockPos().above().north().east());
     }
 
     @Override
@@ -148,7 +152,7 @@ public class HoneyTankTileEntity extends TileEntity {
 
     // read from tag
     @Override
-    public void load(@Nonnull BlockState state, @Nonnull CompoundNBT tag) {
+    public void load(@Nonnull BlockState state, @Nonnull CompoundTag tag) {
         super.load(state, tag);
         readNBT(tag);
     }
@@ -156,20 +160,20 @@ public class HoneyTankTileEntity extends TileEntity {
     // write to tag
     @Nonnull
     @Override
-    public CompoundNBT save(@Nonnull CompoundNBT tag) {
+    public CompoundTag save(@Nonnull CompoundTag tag) {
         super.save(tag);
         writeNBT(tag);
         return tag;
     }
 
-    public CompoundNBT writeNBT(CompoundNBT tag) {
+    public CompoundTag writeNBT(CompoundTag tag) {
         tag.putInt("tier", getTier().tier);
         if (getFluidTank().isEmpty()) return tag;
-        tag.put("fluid", getFluidTank().writeToNBT(new CompoundNBT()));
+        tag.put("fluid", getFluidTank().writeToNBT(new CompoundTag()));
         return tag;
     }
 
-    public void readNBT(CompoundNBT tag) {
+    public void readNBT(CompoundTag tag) {
         getFluidTank().readFromNBT(tag.getCompound("fluid"));
         setTier(TankTier.getTier(tag.getInt("tier")));
         if (getFluidTank().getTankCapacity(0) != getTier().maxFillAmount) getFluidTank().setCapacity(getTier().maxFillAmount);
@@ -180,30 +184,30 @@ public class HoneyTankTileEntity extends TileEntity {
 
     @Nullable
     @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(worldPosition, 0, writeNBT(new CompoundNBT()));
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return new ClientboundBlockEntityDataPacket(worldPosition, 0, writeNBT(new CompoundTag()));
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-        CompoundNBT nbt = pkt.getTag();
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
+        CompoundTag nbt = pkt.getTag();
         readNBT(nbt);
     }
 
     @Nonnull
     @Override
-    public CompoundNBT getUpdateTag() {
-        CompoundNBT nbt = super.getUpdateTag();
+    public CompoundTag getUpdateTag() {
+        CompoundTag nbt = super.getUpdateTag();
         return writeNBT(nbt);
     }
 
     @Override
-    public void handleUpdateTag(BlockState state, CompoundNBT tag) {
+    public void handleUpdateTag(BlockState state, CompoundTag tag) {
         super.handleUpdateTag(state, tag);
         readNBT(tag);
     }
 
-    public void fillBottle(PlayerEntity player, Hand hand) {
+    public void fillBottle(Player player, InteractionHand hand) {
         FluidStack fluidStack = getFluidTank().getFluid();
         ItemStack itemStack;
         if (fluidStack.getFluid() instanceof HoneyFlowingFluid) {
@@ -233,7 +237,7 @@ public class HoneyTankTileEntity extends TileEntity {
         playSound(SoundEvents.BOTTLE_FILL);
     }
 
-    public void emptyBottle(PlayerEntity player, Hand hand) {
+    public void emptyBottle(Player player, InteractionHand hand) {
         FluidStack fluidStack;
         if (player.getItemInHand(hand).getItem() instanceof CustomHoneyBottleItem) {
             CustomHoneyBottleItem item = (CustomHoneyBottleItem) player.getItemInHand(hand).getItem();
@@ -263,7 +267,7 @@ public class HoneyTankTileEntity extends TileEntity {
 
     public void playSound(SoundEvent soundEvent) {
         assert this.level != null;
-        this.level.playSound(null, this.worldPosition, soundEvent, SoundCategory.BLOCKS, 1.0F, 1.0F);
+        this.level.playSound(null, this.worldPosition, soundEvent, SoundSource.BLOCKS, 1.0F, 1.0F);
     }
 
     public int getFluidLevel() {

@@ -3,16 +3,15 @@ package com.resourcefulbees.resourcefulbees.item;
 import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
-import net.minecraft.item.Food;
-import net.minecraft.item.HoneyBottleItem;
-import net.minecraft.item.ItemStack;
 
-import net.minecraft.item.Item.Properties;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.HoneyBottleItem;
+import net.minecraft.world.item.ItemStack;
 
 public class CustomHoneyBottleItem extends HoneyBottleItem {
 
     public final HoneyBottleData honeyBottleData;
-    private Food food = null;
+    private FoodProperties food = null;
 
     public CustomHoneyBottleItem(Properties properties, HoneyBottleData honeyBottleData) {
         super(properties);
@@ -28,7 +27,7 @@ public class CustomHoneyBottleItem extends HoneyBottleItem {
     }
 
     @Override
-    public Food getFoodProperties() {
+    public FoodProperties getFoodProperties() {
         if (food == null) food = honeyBottleData.getFood();
         return food;
     }

@@ -7,19 +7,19 @@ import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
-import net.minecraft.block.Block;
-import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BlockModelShapes;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.RenderTypeLookup;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.ModelBakery;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.fluid.FlowingFluid;
-import net.minecraft.item.Item;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.block.BlockModelShaper;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.ModelBakery;
+import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
@@ -40,11 +40,11 @@ public class ModelHandler {
     }
 
     //region Bee Model Registries
-    private static void registerHoneycombBlockstate(@NotNull CustomBeeData customBeeData, IResourceManager resourceManager){
+    private static void registerHoneycombBlockstate(@NotNull CustomBeeData customBeeData, ResourceManager resourceManager){
         Block honeycombBlock = customBeeData.getCombBlockRegistryObject() != null ? customBeeData.getCombBlockRegistryObject().get() : null;
         if (honeycombBlock != null && honeycombBlock.getRegistryName() != null && !resourceManager.hasResource(new ResourceLocation(ResourcefulBees.MOD_ID, "blockstates/" + honeycombBlock.getRegistryName().getPath() + JSON_FILE_EXTENSION))) {
             honeycombBlock.getStateDefinition().getPossibleStates().forEach(state -> {
-                String propertyMapString = BlockModelShapes.statePropertiesToString(state.getValues());
+                String propertyMapString = BlockModelShaper.statePropertiesToString(state.getValues());
                 ModelResourceLocation defaultModelLocation = new ModelResourceLocation(ResourcefulBees.MOD_ID + ":honeycomb_block", propertyMapString);
                 ModelLoader.addSpecialModel(defaultModelLocation);
                 MODEL_MAP.put(defaultModelLocation, new ModelResourceLocation(honeycombBlock.getRegistryName(), propertyMapString));
@@ -52,7 +52,7 @@ public class ModelHandler {
         }
     }
 
-    private static void registerHoneycombBlockItem(@NotNull CustomBeeData customBeeData, IResourceManager resourceManager){
+    private static void registerHoneycombBlockItem(@NotNull CustomBeeData customBeeData, ResourceManager resourceManager){
         Item honeycombBlockItem = customBeeData.getCombBlockItemRegistryObject() != null ? customBeeData.getCombBlockItemRegistryObject().get() : null;
         if (honeycombBlockItem != null && honeycombBlockItem.getRegistryName() != null && !resourceManager.hasResource(new ResourceLocation(ResourcefulBees.MOD_ID, ITEM_MODEL_PATH + honeycombBlockItem.getRegistryName().getPath() + JSON_FILE_EXTENSION))) {
             ModelResourceLocation defaultModelLocation = new ModelResourceLocation(ResourcefulBees.MOD_ID + ":honeycomb_block", MODEL_INVENTORY_TAG);
@@ -61,7 +61,7 @@ public class ModelHandler {
         }
     }
 
-    private static void registerHoneycombItem(@NotNull CustomBeeData customBeeData, IResourceManager resourceManager){
+    private static void registerHoneycombItem(@NotNull CustomBeeData customBeeData, ResourceManager resourceManager){
         Item honeycomb = customBeeData.getCombRegistryObject() != null ? customBeeData.getCombRegistryObject().get() : null;
         if (honeycomb != null && honeycomb.getRegistryName() != null && !resourceManager.hasResource(new ResourceLocation(ResourcefulBees.MOD_ID, ITEM_MODEL_PATH + honeycomb.getRegistryName().getPath() + JSON_FILE_EXTENSION))) {
             ModelResourceLocation defaultModelLocation = new ModelResourceLocation(ResourcefulBees.MOD_ID + ":honeycomb", MODEL_INVENTORY_TAG);
@@ -70,7 +70,7 @@ public class ModelHandler {
         }
     }
 
-    private static void registerBeeSpawnegg(@NotNull CustomBeeData customBeeData, IResourceManager resourceManager){
+    private static void registerBeeSpawnegg(@NotNull CustomBeeData customBeeData, ResourceManager resourceManager){
         Item spawnEgg = customBeeData.getSpawnEggItemRegistryObject() != null ? customBeeData.getSpawnEggItemRegistryObject().get() : null;
         if (spawnEgg != null && spawnEgg.getRegistryName() != null && !resourceManager.hasResource(new ResourceLocation(ResourcefulBees.MOD_ID, ITEM_MODEL_PATH + spawnEgg.getRegistryName().getPath() + JSON_FILE_EXTENSION))) {
             ModelResourceLocation defaultModelLocation = new ModelResourceLocation(
@@ -83,7 +83,7 @@ public class ModelHandler {
     //endregion
 
     //region Honey Model Registries
-    private static void registerHoneyBottleItem(@NotNull HoneyBottleData honeyBottleData, IResourceManager resourceManager){
+    private static void registerHoneyBottleItem(@NotNull HoneyBottleData honeyBottleData, ResourceManager resourceManager){
         Item honeyBottleItem = honeyBottleData.getHoneyBottleRegistryObject() != null ? honeyBottleData.getHoneyBottleRegistryObject().get() : null;
         if (honeyBottleItem != null && honeyBottleItem.getRegistryName() != null && !resourceManager.hasResource(new ResourceLocation(ResourcefulBees.MOD_ID, ITEM_MODEL_PATH + honeyBottleItem.getRegistryName().getPath() + JSON_FILE_EXTENSION))) {
             ModelResourceLocation defaultModelLocation = new ModelResourceLocation(ResourcefulBees.MOD_ID + ":honey_bottle", MODEL_INVENTORY_TAG);
@@ -92,7 +92,7 @@ public class ModelHandler {
         }
     }
 
-    private static void registerHoneyBlockItem(@NotNull HoneyBottleData honeyBottleData, IResourceManager resourceManager){
+    private static void registerHoneyBlockItem(@NotNull HoneyBottleData honeyBottleData, ResourceManager resourceManager){
         Item honeyBlockItem = honeyBottleData.getHoneyBlockItemRegistryObject() != null ? honeyBottleData.getHoneyBlockItemRegistryObject().get() : null;
         if (honeyBlockItem != null && honeyBlockItem.getRegistryName() != null && !resourceManager.hasResource(new ResourceLocation(ResourcefulBees.MOD_ID, ITEM_MODEL_PATH + honeyBlockItem.getRegistryName().getPath() + JSON_FILE_EXTENSION))) {
             ModelResourceLocation defaultModelLocation = new ModelResourceLocation(
@@ -102,7 +102,7 @@ public class ModelHandler {
         }
     }
 
-    private static void registerHoneyBucketItem(@NotNull HoneyBottleData honeyBottleData, IResourceManager resourceManager){
+    private static void registerHoneyBucketItem(@NotNull HoneyBottleData honeyBottleData, ResourceManager resourceManager){
         Item honeyBucketItem = honeyBottleData.getHoneyBucketItemRegistryObject() != null ? honeyBottleData.getHoneyBucketItemRegistryObject().get() : null;
         if (honeyBucketItem != null && honeyBucketItem.getRegistryName() != null && !resourceManager.hasResource(new ResourceLocation(ResourcefulBees.MOD_ID, ITEM_MODEL_PATH + honeyBucketItem.getRegistryName().getPath() + JSON_FILE_EXTENSION))) {
             ModelResourceLocation defaultModelLocation = new ModelResourceLocation(
@@ -112,13 +112,13 @@ public class ModelHandler {
         }
     }
 
-    private static void registerHoneyBlock(@NotNull HoneyBottleData honeyBottleData, IResourceManager resourceManager){
+    private static void registerHoneyBlock(@NotNull HoneyBottleData honeyBottleData, ResourceManager resourceManager){
         Block honeyBlock = honeyBottleData.getHoneyBlockRegistryObject() != null ? honeyBottleData.getHoneyBlockRegistryObject().get() : null;
         if (honeyBlock != null) {
-            RenderTypeLookup.setRenderLayer(honeyBlock, RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(honeyBlock, RenderType.translucent());
             if (honeyBlock.getRegistryName() != null && !resourceManager.hasResource(new ResourceLocation(ResourcefulBees.MOD_ID, "blockstates/" + honeyBlock.getRegistryName().getPath() + JSON_FILE_EXTENSION))) {
                 honeyBlock.getStateDefinition().getPossibleStates().forEach(state -> {
-                    String propertyMapString = BlockModelShapes.statePropertiesToString(state.getValues());
+                    String propertyMapString = BlockModelShaper.statePropertiesToString(state.getValues());
                     ModelResourceLocation defaultModelLocation = new ModelResourceLocation(
                             ResourcefulBees.MOD_ID + ":honey_block", propertyMapString);
                     ModelLoader.addSpecialModel(defaultModelLocation);
@@ -129,25 +129,25 @@ public class ModelHandler {
     }
 
     private static void registerHoneyFluid(@NotNull HoneyBottleData honeyBottleData){
-        FlowingFluidBlock honeyFluidBlock = honeyBottleData.getHoneyFluidBlockRegistryObject() != null ? honeyBottleData.getHoneyFluidBlockRegistryObject().get() : null;
+        LiquidBlock honeyFluidBlock = honeyBottleData.getHoneyFluidBlockRegistryObject() != null ? honeyBottleData.getHoneyFluidBlockRegistryObject().get() : null;
         FlowingFluid honeyStillFluid = honeyBottleData.getHoneyStillFluidRegistryObject() != null ? honeyBottleData.getHoneyStillFluidRegistryObject().get() : null;
         FlowingFluid honeyFlowingFluid = honeyBottleData.getHoneyFlowingFluidRegistryObject() != null ? honeyBottleData.getHoneyFlowingFluidRegistryObject().get() : null;
 
         if (honeyStillFluid != null) {
-            RenderTypeLookup.setRenderLayer(honeyStillFluid, RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(honeyStillFluid, RenderType.translucent());
         }
         if (honeyFlowingFluid != null) {
-            RenderTypeLookup.setRenderLayer(honeyFlowingFluid, RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(honeyFlowingFluid, RenderType.translucent());
         }
         if (honeyFluidBlock != null) {
-            RenderTypeLookup.setRenderLayer(honeyFluidBlock, RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(honeyFluidBlock, RenderType.translucent());
         }
     }
     //endregion
 
 
     public static void registerModels(ModelRegistryEvent event) {
-        IResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
+        ResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
 
         BeeRegistry.getRegistry().getBees().forEach((string, customBee) -> {
             if (customBee.shouldResourcefulBeesDoForgeRegistration()) {
@@ -175,10 +175,10 @@ public class ModelHandler {
     }
 
     public static void onModelBake(ModelBakeEvent event) {
-        Map<ResourceLocation, IBakedModel> modelRegistry = event.getModelRegistry();
-        IBakedModel missingModel = modelRegistry.get(ModelBakery.MISSING_MODEL_LOCATION);
+        Map<ResourceLocation, BakedModel> modelRegistry = event.getModelRegistry();
+        BakedModel missingModel = modelRegistry.get(ModelBakery.MISSING_MODEL_LOCATION);
         MODEL_MAP.asMap().forEach(((resourceLocation, resourceLocations) -> {
-            IBakedModel defaultModel = modelRegistry.getOrDefault(resourceLocation, missingModel);
+            BakedModel defaultModel = modelRegistry.getOrDefault(resourceLocation, missingModel);
             resourceLocations.forEach(modelLocation -> modelRegistry.put(modelLocation, defaultModel));
         }));
     }

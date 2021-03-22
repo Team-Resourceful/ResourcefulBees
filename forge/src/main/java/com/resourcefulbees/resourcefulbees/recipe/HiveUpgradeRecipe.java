@@ -5,20 +5,20 @@ import com.resourcefulbees.resourcefulbees.block.multiblocks.apiary.ApiaryBlock;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import com.resourcefulbees.resourcefulbees.registry.ModRecipeSerializers;
-import net.minecraft.block.BeehiveBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.ShapedRecipe;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.ShapedRecipe;
+import net.minecraft.world.level.block.BeehiveBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -31,16 +31,16 @@ public class HiveUpgradeRecipe extends ShapedRecipe {
     }
 
     @Override
-    public @NotNull NonNullList<ItemStack> getRemainingItems(@NotNull CraftingInventory inventory) {
+    public @NotNull NonNullList<ItemStack> getRemainingItems(@NotNull CraftingContainer inventory) {
         List<ItemStack> stacks = getHives(inventory);
         NonNullList<ItemStack> remainingItems = super.getRemainingItems(inventory);
         ItemStack beeBox = new ItemStack(ModItems.CRAFTING_BEE_BOX.get());
-        CompoundNBT tag = new CompoundNBT();
-        ListNBT allBees = new ListNBT();
+        CompoundTag tag = new CompoundTag();
+        ListTag allBees = new ListTag();
         for (ItemStack stack : stacks) {
             if (!stack.hasTag() || stack.getTag() == null || stack.getTag().isEmpty() || !stack.getTag().contains("BlockEntityTag"))
                 return remainingItems;
-            ListNBT list = stack.getTag().getCompound("BlockEntityTag").getList(NBTConstants.NBT_BEES, 10);
+            ListTag list = stack.getTag().getCompound("BlockEntityTag").getList(NBTConstants.NBT_BEES, 10);
             if (!list.isEmpty()) {
                 allBees.addAll(list);
             }
@@ -58,7 +58,7 @@ public class HiveUpgradeRecipe extends ShapedRecipe {
         return remainingItems;
     }
 
-    public List<ItemStack> getHives(CraftingInventory inventory) {
+    public List<ItemStack> getHives(CraftingContainer inventory) {
         List<ItemStack> stacks = new ArrayList<>();
         for (int i = 0; i < inventory.getContainerSize(); i++) {
             ItemStack item = inventory.getItem(i);
@@ -72,7 +72,7 @@ public class HiveUpgradeRecipe extends ShapedRecipe {
     }
 
     @Override
-    public @NotNull IRecipeSerializer<?> getSerializer() {
+    public @NotNull RecipeSerializer<?> getSerializer() {
         return ModRecipeSerializers.APIARY_UPGRADE_RECIPE.get();
     }
 
@@ -85,7 +85,7 @@ public class HiveUpgradeRecipe extends ShapedRecipe {
         }
 
         @Override
-        public ShapedRecipe fromNetwork(@NotNull ResourceLocation recipeId, @NotNull PacketBuffer buffer) {
+        public ShapedRecipe fromNetwork(@NotNull ResourceLocation recipeId, @NotNull FriendlyByteBuf buffer) {
             ShapedRecipe recipe = super.fromNetwork(recipeId, buffer);
             assert recipe != null : "why is recipe null?";
             return new HiveUpgradeRecipe(recipeId, recipe.getIngredients(), recipe.getResultItem());

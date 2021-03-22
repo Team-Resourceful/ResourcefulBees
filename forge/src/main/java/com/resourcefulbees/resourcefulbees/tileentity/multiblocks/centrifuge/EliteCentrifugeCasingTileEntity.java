@@ -1,8 +1,8 @@
 package com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge;
 
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 
 public class EliteCentrifugeCasingTileEntity extends CentrifugeCasingTileEntity {
 
-    public EliteCentrifugeCasingTileEntity(TileEntityType<?> tileEntityType) { super(tileEntityType); }
+    public EliteCentrifugeCasingTileEntity(BlockEntityType<?> tileEntityType) { super(tileEntityType); }
 }

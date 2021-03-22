@@ -1,6 +1,6 @@
 package com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.mutations;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.api.beedata.mutation.outputs.EntityOutput;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
@@ -9,11 +9,12 @@ import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
 import com.resourcefulbees.resourcefulbees.utils.RenderUtils;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.text.*;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
@@ -48,12 +49,12 @@ public class EntityMutationPage extends MutationsPage {
     }
 
     @Override
-    public void draw(MatrixStack matrix, int xPos, int yPos) {
+    public void draw(PoseStack matrix, int xPos, int yPos) {
         RenderUtils.renderEntity(matrix, input, beepedia.getMinecraft().level, (float) xPos + 27, (float) yPos + 32, 45, 1.25f);
         EntityOutput output = outputs.get(outputCounter).getRight();
         Entity entity = output.getGuiEntity(beepedia.getMinecraft().level);
         if (!output.getCompoundNBT().isEmpty()) {
-            CompoundNBT nbt = entity.saveWithoutId(new CompoundNBT());
+            CompoundTag nbt = entity.saveWithoutId(new CompoundTag());
             nbt.merge(output.getCompoundNBT());
             entity.load(nbt);
         }
@@ -89,33 +90,33 @@ public class EntityMutationPage extends MutationsPage {
     }
 
     @Override
-    public void drawTooltips(MatrixStack matrix, int xPos, int yPos, int mouseX, int mouseY) {
+    public void drawTooltips(PoseStack matrix, int xPos, int yPos, int mouseX, int mouseY) {
         if (BeepediaScreen.mouseHovering((float) xPos + 22, (float) yPos + 27, 30, 30, mouseX, mouseY)) {
-            List<ITextComponent> tooltip = new ArrayList<>();
-            IFormattableTextComponent name = input.getName().plainCopy();
-            IFormattableTextComponent id = new StringTextComponent(input.getEncodeId()).withStyle(TextFormatting.DARK_GRAY);
+            List<Component> tooltip = new ArrayList<>();
+            MutableComponent name = input.getName().plainCopy();
+            MutableComponent id = new TextComponent(input.getEncodeId()).withStyle(ChatFormatting.DARK_GRAY);
             tooltip.add(name);
             tooltip.add(id);
             beepedia.renderComponentTooltip(matrix, tooltip, mouseX, mouseY);
         } else if (BeepediaScreen.mouseHovering((float) xPos + 112, (float) yPos + 27, 30, 30, mouseX, mouseY)) {
             EntityOutput output = outputs.get(outputCounter).getRight();
-            List<ITextComponent> tooltip = new ArrayList<>();
-            IFormattableTextComponent name = output.getEntityType().getDescription().plainCopy();
-            IFormattableTextComponent id = new StringTextComponent(output.getEntityType().getRegistryName().toString()).withStyle(TextFormatting.DARK_GRAY);
+            List<Component> tooltip = new ArrayList<>();
+            MutableComponent name = output.getEntityType().getDescription().plainCopy();
+            MutableComponent id = new TextComponent(output.getEntityType().getRegistryName().toString()).withStyle(ChatFormatting.DARK_GRAY);
             tooltip.add(name);
             tooltip.add(id);
             if (!output.getCompoundNBT().isEmpty()) {
                 if (BeeInfoUtils.isShiftPressed()) {
                     List<String> lore = BeeInfoUtils.getLoreLines(output.getCompoundNBT());
-                    lore.forEach(l -> tooltip.add(new StringTextComponent(l).withStyle(Style.EMPTY.withColor(Color.parseColor("dark_purple")))));
+                    lore.forEach(l -> tooltip.add(new TextComponent(l).withStyle(Style.EMPTY.withColor(TextColor.parseColor("dark_purple")))));
                 } else {
-                    tooltip.add(new TranslationTextComponent("gui.resourcefulbees.jei.tooltip.show_nbt").withStyle(Style.EMPTY.withColor(Color.parseColor("dark_purple"))));
+                    tooltip.add(new TranslatableComponent("gui.resourcefulbees.jei.tooltip.show_nbt").withStyle(Style.EMPTY.withColor(TextColor.parseColor("dark_purple"))));
                 }
             }
             beepedia.renderComponentTooltip(matrix, tooltip, mouseX, mouseY);
         }
         if (outputChance < 1 && BeepediaScreen.mouseHovering((float) xPos + ((float) SUB_PAGE_WIDTH / 2) - 20, (float) yPos + 51, 8, 8, mouseX, mouseY)) {
-            beepedia.renderTooltip(matrix, new TranslationTextComponent("gui.resourcefulbees.jei.category.mutation_chance.info"), mouseX, mouseY);
+            beepedia.renderTooltip(matrix, new TranslatableComponent("gui.resourcefulbees.jei.category.mutation_chance.info"), mouseX, mouseY);
         }
     }
 

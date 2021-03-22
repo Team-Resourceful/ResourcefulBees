@@ -2,25 +2,23 @@ package com.resourcefulbees.resourcefulbees.item;
 
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.TooltipBuilder;
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.item.Items;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.material.Material;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
-
-import net.minecraft.item.Item.Properties;
 
 public class Fertilizer extends Item {
 
@@ -31,7 +29,7 @@ public class Fertilizer extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, World world, @NotNull List list, @NotNull ITooltipFlag par4)
+    public void appendHoverText(ItemStack stack, Level world, @NotNull List list, @NotNull TooltipFlag par4)
     {
         if(stack.getTag() == null || !stack.getTag().contains("specific")) {
             list.add(new TooltipBuilder().addTip("Unknown Type").build().get(0));
@@ -42,9 +40,9 @@ public class Fertilizer extends Item {
 
     @Nonnull
     @Override
-    public ActionResultType useOn(ItemUseContext context) {
+    public InteractionResult useOn(UseOnContext context) {
 
-        World world = context.getLevel();
+        Level world = context.getLevel();
         BlockPos position = context.getClickedPos();
 
         //TODO: Add Fertilizer range in config
@@ -108,7 +106,7 @@ public class Fertilizer extends Item {
             }
         }
 
-        return ActionResultType.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
 }

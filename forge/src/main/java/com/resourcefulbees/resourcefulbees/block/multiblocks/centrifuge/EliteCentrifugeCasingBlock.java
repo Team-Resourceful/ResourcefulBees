@@ -1,17 +1,16 @@
 package com.resourcefulbees.resourcefulbees.block.multiblocks.centrifuge;
 
-import com.resourcefulbees.resourcefulbees.registry.ModTileEntityTypes;
+import com.resourcefulbees.resourcefulbees.registry.ModBlockEntityTypes;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.CentrifugeControllerTileEntity;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.EliteCentrifugeCasingTileEntity;
-import net.minecraft.block.BlockState;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.AbstractBlock.Properties;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class EliteCentrifugeCasingBlock extends CentrifugeCasingBlock {
     public EliteCentrifugeCasingBlock(Properties properties) { super(properties); }
@@ -21,13 +20,13 @@ public class EliteCentrifugeCasingBlock extends CentrifugeCasingBlock {
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new EliteCentrifugeCasingTileEntity(ModTileEntityTypes.ELITE_CENTRIFUGE_CASING_ENTITY.get());
+    public BlockEntity createTileEntity(BlockState state, BlockGetter world) {
+        return new EliteCentrifugeCasingTileEntity(ModBlockEntityTypes.ELITE_CENTRIFUGE_CASING_ENTITY.get());
     }
 
     @Override
-    protected CentrifugeControllerTileEntity getControllerEntity(World world, BlockPos pos) {
-        TileEntity tileEntity = world.getBlockEntity(pos);
+    protected CentrifugeControllerTileEntity getControllerEntity(Level world, BlockPos pos) {
+        BlockEntity tileEntity = world.getBlockEntity(pos);
         if (tileEntity instanceof EliteCentrifugeCasingTileEntity) {
             return ((EliteCentrifugeCasingTileEntity) tileEntity).getController();
         }

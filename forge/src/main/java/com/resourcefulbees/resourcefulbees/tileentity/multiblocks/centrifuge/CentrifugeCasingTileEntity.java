@@ -1,23 +1,23 @@
 package com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge;
 
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class CentrifugeCasingTileEntity extends TileEntity {
+public class CentrifugeCasingTileEntity extends BlockEntity {
     private BlockPos controllerPos;
 
-    public CentrifugeCasingTileEntity(TileEntityType<?> tileEntityType) { super(tileEntityType); }
+    public CentrifugeCasingTileEntity(BlockEntityType<?> tileEntityType) { super(tileEntityType); }
 
     public void setControllerPos(@Nullable BlockPos controllerPos) {
         this.controllerPos = controllerPos;
@@ -38,7 +38,7 @@ public class CentrifugeCasingTileEntity extends TileEntity {
 
     public CentrifugeControllerTileEntity getController() {
         if (isLinked() && this.level != null) {
-            TileEntity tileEntity = this.level.getBlockEntity(controllerPos);
+            BlockEntity tileEntity = this.level.getBlockEntity(controllerPos);
             if (tileEntity instanceof CentrifugeControllerTileEntity) {
                 return (CentrifugeControllerTileEntity) tileEntity;
             } else {
@@ -62,29 +62,29 @@ public class CentrifugeCasingTileEntity extends TileEntity {
 
     @Nonnull
     @Override
-    public CompoundNBT save(@Nonnull CompoundNBT tag) {
+    public CompoundTag save(@Nonnull CompoundTag tag) {
         if (isLinked())
-            tag.put(NBTConstants.NBT_CONTROLLER_POS, NBTUtil.writeBlockPos(controllerPos));
+            tag.put(NBTConstants.NBT_CONTROLLER_POS, NbtUtils.writeBlockPos(controllerPos));
         return super.save(tag);
     }
 
     @Override
-    public void load(@Nonnull BlockState state, CompoundNBT tag) {
+    public void load(@Nonnull BlockState state, CompoundTag tag) {
         if (tag.contains(NBTConstants.NBT_CONTROLLER_POS))
-            controllerPos = NBTUtil.readBlockPos(tag.getCompound(NBTConstants.NBT_CONTROLLER_POS));
+            controllerPos = NbtUtils.readBlockPos(tag.getCompound(NBTConstants.NBT_CONTROLLER_POS));
         super.load(state, tag);
     }
 
     @Nonnull
     @Override
-    public CompoundNBT getUpdateTag() {
-        CompoundNBT nbtTagCompound = new CompoundNBT();
+    public CompoundTag getUpdateTag() {
+        CompoundTag nbtTagCompound = new CompoundTag();
         save(nbtTagCompound);
         return nbtTagCompound;
     }
 
     @Override
-    public void handleUpdateTag(@Nonnull BlockState state, CompoundNBT tag) {
+    public void handleUpdateTag(@Nonnull BlockState state, CompoundTag tag) {
         this.load(state, tag);
     }
 

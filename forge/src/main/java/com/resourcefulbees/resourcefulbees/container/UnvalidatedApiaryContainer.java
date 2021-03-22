@@ -2,27 +2,27 @@ package com.resourcefulbees.resourcefulbees.container;
 
 import com.resourcefulbees.resourcefulbees.registry.ModContainers;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryTileEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nonnull;
 
-public class UnvalidatedApiaryContainer extends Container {
+public class UnvalidatedApiaryContainer extends AbstractContainerMenu {
 
     private final ApiaryTileEntity apiaryTileEntity;
     private final BlockPos pos;
 
-    public UnvalidatedApiaryContainer(int id, World world, BlockPos pos, PlayerInventory inv) {
+    public UnvalidatedApiaryContainer(int id, Level world, BlockPos pos, Inventory inv) {
         super(ModContainers.UNVALIDATED_APIARY_CONTAINER.get(), id);
         this.pos = pos;
-        this.apiaryTileEntity =(ApiaryTileEntity)world.getBlockEntity(pos);
+        this.apiaryTileEntity = (ApiaryTileEntity)world.getBlockEntity(pos);
     }
 
     @Override
-    public boolean stillValid(@Nonnull PlayerEntity playerIn) {
+    public boolean stillValid(@Nonnull Player playerIn) {
         return true;
     }
 

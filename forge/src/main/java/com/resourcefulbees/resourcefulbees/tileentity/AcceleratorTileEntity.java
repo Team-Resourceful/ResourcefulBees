@@ -1,16 +1,16 @@
 package com.resourcefulbees.resourcefulbees.tileentity;
 
-import com.resourcefulbees.resourcefulbees.registry.ModTileEntityTypes;
-import net.minecraft.block.BlockState;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import com.resourcefulbees.resourcefulbees.registry.ModBlockEntityTypes;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.TickableBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
-public class AcceleratorTileEntity extends TileEntity implements ITickableTileEntity {
+public class AcceleratorTileEntity extends BlockEntity implements TickableBlockEntity {
     public AcceleratorTileEntity() {
-        super(ModTileEntityTypes.ACCELERATOR_TILE_ENTITY.get());
+        super(ModBlockEntityTypes.ACCELERATOR_TILE_ENTITY.get());
     }
 
     @Override
@@ -24,16 +24,16 @@ public class AcceleratorTileEntity extends TileEntity implements ITickableTileEn
         accelerateTick(level, worldPosition.west());
     }
 
-    public static void accelerateTick(World world, BlockPos pos) {
+    public static void accelerateTick(Level world, BlockPos pos) {
         BlockState blockState = world.getBlockState(pos);
-        if(!world.isClientSide && world instanceof ServerWorld && blockState.isRandomlyTicking() && world.getRandom().nextInt(40) == 0) {
-            blockState.randomTick((ServerWorld) world, pos, world.getRandom());
+        if(!world.isClientSide && world instanceof ServerLevel && blockState.isRandomlyTicking() && world.getRandom().nextInt(40) == 0) {
+            blockState.randomTick((ServerLevel) world, pos, world.getRandom());
         }
         if (blockState.hasTileEntity()) {
-            TileEntity tileEntity = world.getBlockEntity(pos);
-            if (tileEntity != null && !tileEntity.isRemoved() && tileEntity instanceof ITickableTileEntity && !(tileEntity instanceof AcceleratorTileEntity)) {
+            BlockEntity tileEntity = world.getBlockEntity(pos);
+            if (tileEntity != null && !tileEntity.isRemoved() && tileEntity instanceof TickableBlockEntity && !(tileEntity instanceof AcceleratorTileEntity)) {
                 for (int i = 0; i < 384; i++) {
-                    ((ITickableTileEntity) tileEntity).tick();
+                    ((TickableBlockEntity) tileEntity).tick();
                 }
             }
         }

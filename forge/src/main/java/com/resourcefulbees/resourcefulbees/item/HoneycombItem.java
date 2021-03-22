@@ -3,9 +3,9 @@ package com.resourcefulbees.resourcefulbees.item;
 import com.resourcefulbees.resourcefulbees.api.beedata.ColorData;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
-import net.minecraft.item.Food;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
 
@@ -37,8 +37,8 @@ public class HoneycombItem extends Item {
 
     @Nullable
     @Override
-    public Food getFoodProperties() {
-        return new Food.Builder()
+    public FoodProperties getFoodProperties() {
+        return new FoodProperties.Builder()
                 .nutrition(Config.HONEYCOMB_HUNGER.get())
                 .saturationMod(Config.HONEYCOMB_SATURATION.get().floatValue())
                 .fast()

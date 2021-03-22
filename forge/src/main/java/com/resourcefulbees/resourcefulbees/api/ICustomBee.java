@@ -1,7 +1,7 @@
 package com.resourcefulbees.resourcefulbees.api;
 
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
-import net.minecraft.entity.AgeableEntity;
+import net.minecraft.world.entity.AgableMob;
 
 /**
  * Implemented in CustomBeeEntity and ResourcefulBee
@@ -41,5 +41,5 @@ public interface ICustomBee {
      */
     void addFeedCount();
 
-    AgeableEntity createSelectedChild(CustomBeeData beeType);
+    AgableMob createSelectedChild(CustomBeeData beeType);
 }

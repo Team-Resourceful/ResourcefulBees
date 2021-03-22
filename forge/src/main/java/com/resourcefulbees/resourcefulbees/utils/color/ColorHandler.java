@@ -7,12 +7,12 @@ import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.item.*;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
-import net.minecraft.block.Block;
-import net.minecraft.client.renderer.color.BlockColors;
-import net.minecraft.client.renderer.color.IBlockColor;
-import net.minecraft.client.renderer.color.IItemColor;
-import net.minecraft.client.renderer.color.ItemColors;
-import net.minecraft.util.IItemProvider;
+import net.minecraft.client.color.block.BlockColor;
+import net.minecraft.client.color.block.BlockColors;
+import net.minecraft.client.color.item.ItemColor;
+import net.minecraft.client.color.item.ItemColors;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 
 import static com.resourcefulbees.resourcefulbees.ResourcefulBees.LOGGER;
@@ -59,7 +59,7 @@ public final class ColorHandler {
         });
     }
 
-    private static void registerItems(ItemColors handler, IItemColor itemColor, IItemProvider... items) {
+    private static void registerItems(ItemColors handler, ItemColor itemColor, ItemLike... items) {
         try {
             handler.register(itemColor, items);
         } catch (NullPointerException ex) {
@@ -67,7 +67,7 @@ public final class ColorHandler {
         }
     }
 
-    private static void registerBlocks(BlockColors handler, IBlockColor blockColor, Block... blocks) {
+    private static void registerBlocks(BlockColors handler, BlockColor blockColor, Block... blocks) {
         try {
             handler.register(blockColor, blocks);
         } catch (NullPointerException ex) {

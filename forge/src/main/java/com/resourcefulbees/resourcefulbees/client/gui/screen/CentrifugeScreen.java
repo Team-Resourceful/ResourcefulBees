@@ -1,7 +1,7 @@
 package com.resourcefulbees.resourcefulbees.client.gui.screen;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.client.gui.widget.TabToggleImageButton;
 import com.resourcefulbees.resourcefulbees.container.CentrifugeContainer;
@@ -14,19 +14,19 @@ import com.resourcefulbees.resourcefulbees.utils.MathUtils;
 import com.resourcefulbees.resourcefulbees.utils.RenderUtils;
 import com.resourcefulbees.resourcefulbees.utils.color.Color;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.client.gui.widget.Widget;
-import net.minecraft.client.gui.widget.button.ImageButton;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.ImageButton;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.text.WordUtils;
 import org.jetbrains.annotations.NotNull;
@@ -37,7 +37,7 @@ import java.util.List;
 import java.util.Objects;
 
 //TODO can aspects of this class be extracted and put into a super class that other screens can pull from?
-public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
+public class CentrifugeScreen extends AbstractContainerScreen<CentrifugeContainer> {
 
     // drawTexture(matrix, x, y, textureX, textureY, textWidth, textHeight)
     private static final ResourceLocation BACKGROUND = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/centrifuges/centrifuge_gui.png");
@@ -63,7 +63,7 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
     private TabToggleImageButton redstoneButton;
     private TabToggleImageButton fluidDispButton;
 
-    public CentrifugeScreen(CentrifugeContainer screenContainer, PlayerInventory inventory, ITextComponent titleIn) {
+    public CentrifugeScreen(CentrifugeContainer screenContainer, Inventory inventory, Component titleIn) {
         super(screenContainer, inventory, titleIn);
         numInputs = screenContainer.getCentrifugeTileEntity().getNumberOfInputs();
         initializeData();
@@ -83,8 +83,8 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
                 this.menu.getRequiresRedstone(), BACKGROUND, new ItemStack(Items.REDSTONE), new ItemStack(Items.REDSTONE), onPress -> this.setRedstoneControl()) {
 
             @Override
-            public void renderToolTip(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
-                TranslationTextComponent s = new TranslationTextComponent("gui.resourcefulbees.centrifuge.button.redstone." + stateTriggered);
+            public void renderToolTip(@Nonnull PoseStack matrix, int mouseX, int mouseY) {
+                TranslatableComponent s = new TranslatableComponent("gui.resourcefulbees.centrifuge.button.redstone." + stateTriggered);
                 CentrifugeScreen.this.renderTooltip(matrix, s, mouseX, mouseY);
             }
         });
@@ -92,8 +92,8 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
                 this.menu.shouldDisplayFluids(), BACKGROUND, new ItemStack(Items.WATER_BUCKET), new ItemStack(Items.HONEYCOMB), onPress -> this.displayFluids()) {
 
             @Override
-            public void renderToolTip(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
-                TranslationTextComponent s = new TranslationTextComponent("gui.resourcefulbees.centrifuge.button.fluid_display." + stateTriggered);
+            public void renderToolTip(@Nonnull PoseStack matrix, int mouseX, int mouseY) {
+                TranslatableComponent s = new TranslatableComponent("gui.resourcefulbees.centrifuge.button.fluid_display." + stateTriggered);
                 CentrifugeScreen.this.renderTooltip(matrix, s, mouseX, mouseY);
             }
         });
@@ -118,7 +118,7 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
     }
 
     @Override
-    protected void renderBg(@Nonnull MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
+    protected void renderBg(@Nonnull PoseStack matrix, float partialTicks, int mouseX, int mouseY) {
         Minecraft client = this.minecraft;
         if (client != null) {
             client.getTextureManager().bind(BACKGROUND);
@@ -138,7 +138,7 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
     }
 
     @Override
-    public void render(@Nonnull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
+    public void render(@Nonnull PoseStack matrix, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrix);
         this.redstoneButton.render(matrix, mouseX, mouseY, partialTicks);
         this.fluidDispButton.render(matrix, mouseX, mouseY, partialTicks);
@@ -148,8 +148,8 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
         int x = this.leftPos + 10;
         int y = this.topPos + 38;
         if (MathUtils.inRangeInclusive(mouseX, x, x + 12) && MathUtils.inRangeInclusive(mouseY, y, y + 58)){
-            if (Screen.hasShiftDown() || this.menu.getEnergy() < 500) this.renderTooltip(matrix, new StringTextComponent(this.menu.getEnergy() + " RF"), mouseX, mouseY);
-            else this.renderTooltip(matrix, new StringTextComponent(ModConstants.DECIMAL_FORMAT.format(this.menu.getEnergy() / 1000) + " kRF"), mouseX, mouseY);
+            if (Screen.hasShiftDown() || this.menu.getEnergy() < 500) this.renderTooltip(matrix, new TextComponent(this.menu.getEnergy() + " RF"), mouseX, mouseY);
+            else this.renderTooltip(matrix, new TextComponent(ModConstants.DECIMAL_FORMAT.format(this.menu.getEnergy() / 1000) + " kRF"), mouseX, mouseY);
         }
 
         if (this.menu.shouldDisplayFluids()) {
@@ -157,7 +157,7 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
         }
     }
 
-    private void displayFluids(@NotNull MatrixStack matrix, int mouseX, int mouseY) {
+    private void displayFluids(@NotNull PoseStack matrix, int mouseX, int mouseY) {
         int y;
         int x;
         x = this.leftPos + L_BDR_WD + SLOT_WD;
@@ -175,8 +175,8 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
     }
 
     @Override
-    public void renderLabels(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
-        for (Widget widget : this.buttons) {
+    public void renderLabels(@Nonnull PoseStack matrix, int mouseX, int mouseY) {
+        for (AbstractWidget widget : this.buttons) {
             if (widget.isHovered()) {
                 widget.renderToolTip(matrix, mouseX - this.leftPos, mouseY - this.topPos);
                 break;
@@ -184,7 +184,7 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
         }
     }
 
-    private void drawBackground(MatrixStack matrix, int left, int top) {
+    private void drawBackground(PoseStack matrix, int left, int top) {
         this.blit(matrix, left, top, 0, 0, L_BDR_WD, imageHeight);
         for (int i = 0; i < bgRpt; i++) {
             this.blit(matrix, left + L_BDR_WD + (i * BG_FILL_WD), top, L_BDR_WD, 0, BG_FILL_WD, imageHeight);
@@ -194,7 +194,7 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
         this.blit(matrix, x + L_BDR_WD, top + 5, 0, 188, 25, 68);
     }
 
-    private void drawInputSlots(MatrixStack matrix, int left, int top) {
+    private void drawInputSlots(PoseStack matrix, int left, int top) {
         this.blit(matrix, left + L_BDR_WD + SLOT_WD, top + TOP_PAD, 62, 0, 18, 18); //draw bottle slot
         for (int i = 0; i < numInputs; i++) {
             int x = left + inputStartX + SLOT_WD + (i * DBL_SLOT_WD);
@@ -206,7 +206,7 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
         }
     }
 
-    private void drawOutputSlots(MatrixStack matrix, int left, int top) {
+    private void drawOutputSlots(PoseStack matrix, int left, int top) {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < numInputs * 2; j++) {
                 int x = left + outputStartX + SLOT_WD + (j * SLOT_WD);
@@ -216,13 +216,13 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
         }
     }
 
-    private void drawPowerBar(MatrixStack matrix, int left, int top) {
+    private void drawPowerBar(PoseStack matrix, int left, int top) {
         this.blit(matrix, left + 9, top + 37, L_BDR_WD + BG_FILL_WD + R_BDR_WD, 0, 14, 60);
         int scaledRF = 58 * this.menu.getEnergy() / this.menu.getMaxEnergy();
         this.blit(matrix, left + 10, top + 38 + (58 - scaledRF), 32, 58 - scaledRF, 12, scaledRF);
     }
 
-    private void drawInventorySlots(MatrixStack matrix, int left, int top) {
+    private void drawInventorySlots(PoseStack matrix, int left, int top) {
         int xStart = left + (int) (screenWidth * 0.5) - 82;
 
         for (int i = 0; i < 3; ++i) {
@@ -236,7 +236,7 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
         }
     }
 
-    private void drawFluidTanks(MatrixStack matrix, int left, int top) {
+    private void drawFluidTanks(PoseStack matrix, int left, int top) {
         if (minecraft != null) {
             int x = left + L_BDR_WD + SLOT_WD;
             int y = top + TOP_PAD + DBL_SLOT_HT;
@@ -249,7 +249,7 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
         }
     }
 
-    private void drawFluid(int tank, int x, int y, MatrixStack matrix, Minecraft client) {
+    private void drawFluid(int tank, int x, int y, PoseStack matrix, Minecraft client) {
         blit(matrix, x, y, 44, 0, 18, 54);
         FluidStack fluidStack = this.menu.getFluidInTank(tank);
         if (fluidStack != FluidStack.EMPTY) {
@@ -293,12 +293,12 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
     }
 
     //TODO methods below can probably be converted to utility methods and used elsewhere.
-    public void renderFluidToolTip(MatrixStack matrix, int mouseX, int mouseY, FluidStack fluidStack) {
+    public void renderFluidToolTip(PoseStack matrix, int mouseX, int mouseY, FluidStack fluidStack) {
         if (!fluidStack.isEmpty()) {
-            List<ITextComponent> componentList = new ArrayList<>();
-            componentList.add(new StringTextComponent(formatFluidAmount(fluidStack.getAmount())));
+            List<Component> componentList = new ArrayList<>();
+            componentList.add(new TextComponent(formatFluidAmount(fluidStack.getAmount())));
             componentList.add(fluidStack.getDisplayName());
-            componentList.add(new StringTextComponent(ModConstants.NAMESPACE_FORMATTING + getFluidNamespace(fluidStack.getFluid())));
+            componentList.add(new TextComponent(ModConstants.NAMESPACE_FORMATTING + getFluidNamespace(fluidStack.getFluid())));
             this.renderComponentTooltip(matrix, componentList, mouseX, mouseY);
         }
     }

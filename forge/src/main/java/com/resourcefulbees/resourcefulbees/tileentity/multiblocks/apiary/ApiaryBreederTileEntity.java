@@ -11,29 +11,30 @@ import com.resourcefulbees.resourcefulbees.item.UpgradeItem;
 import com.resourcefulbees.resourcefulbees.lib.ApiaryTabs;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
-import com.resourcefulbees.resourcefulbees.registry.ModTileEntityTypes;
+import com.resourcefulbees.resourcefulbees.registry.ModBlockEntityTypes;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.MathUtils;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.network.Connection;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.TickableBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -46,7 +47,7 @@ import javax.annotation.Nullable;
 
 import static com.resourcefulbees.resourcefulbees.lib.NBTConstants.NBT_BREEDER_COUNT;
 
-public class ApiaryBreederTileEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider, IApiaryMultiblock {
+public class ApiaryBreederTileEntity extends BlockEntity implements TickableBlockEntity, MenuProvider, IApiaryMultiblock {
 
     private static final int[] UPGRADE_SLOTS = {0, 1, 2, 3};
     private static final int[] PARENT_1_SLOTS = {4, 9, 14, 19, 24};
@@ -64,7 +65,7 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
     private BlockPos apiaryPos;
     private ApiaryTileEntity apiary;
 
-    protected final IIntArray times = new IIntArray() {
+    protected final ContainerData times = new SimpleContainerData(5) {
         @Override
         public int get(int index) {
             switch (index) {
@@ -112,7 +113,7 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
     };
 
     public ApiaryBreederTileEntity() {
-        super(ModTileEntityTypes.APIARY_BREEDER_TILE_ENTITY.get());
+        super(ModBlockEntityTypes.APIARY_BREEDER_TILE_ENTITY.get());
     }
 
     public static int[] getUpgradeSlots() {
@@ -149,7 +150,7 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
 
     public ApiaryTileEntity getApiary() {
         if (apiaryPos != null && level != null) {  //validate apiary first
-            TileEntity tile = level.getBlockEntity(apiaryPos); //get apiary pos
+            BlockEntity tile = level.getBlockEntity(apiaryPos); //get apiary pos
             if (tile instanceof ApiaryTileEntity) { //check tile is an apiary tile
                 return (ApiaryTileEntity) tile;
             }
@@ -247,7 +248,7 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
                     String p2Type = bee2.getBeeData().getName();
 
                     if (level != null && validateApiaryLink()) {
-                        TileEntity tile = level.getBlockEntity(apiary.getStoragePos());
+                        BlockEntity tile = level.getBlockEntity(apiary.getStoragePos());
                         if (tile instanceof ApiaryStorageTileEntity) {
                             ApiaryStorageTileEntity apiaryStorage = (ApiaryStorageTileEntity) tile;
                             if (apiaryStorage.breedComplete(p1Type, p2Type)) {
@@ -265,36 +266,36 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
 
 
     @Override
-    public void load(@Nonnull BlockState state, @Nonnull CompoundNBT nbt) {
+    public void load(@Nonnull BlockState state, @Nonnull CompoundTag nbt) {
         super.load(state, nbt);
         this.loadFromNBT(nbt);
     }
 
     @Nonnull
     @Override
-    public CompoundNBT save(@Nonnull CompoundNBT nbt) {
+    public CompoundTag save(@Nonnull CompoundTag nbt) {
         super.save(nbt);
         return this.saveToNBT(nbt);
     }
 
-    public void loadFromNBT(CompoundNBT nbt) {
-        CompoundNBT invTag = nbt.getCompound(NBTConstants.NBT_INVENTORY);
+    public void loadFromNBT(CompoundTag nbt) {
+        CompoundTag invTag = nbt.getCompound(NBTConstants.NBT_INVENTORY);
         getTileStackHandler().deserializeNBT(invTag);
         setTime(nbt.getIntArray("time"));
         setTotalTime(nbt.getInt("totalTime"));
         if (nbt.contains(NBTConstants.NBT_APIARY_POS))
-            apiaryPos = NBTUtil.readBlockPos(nbt.getCompound(NBTConstants.NBT_APIARY_POS));
+            apiaryPos = NbtUtils.readBlockPos(nbt.getCompound(NBTConstants.NBT_APIARY_POS));
         if (nbt.contains(NBT_BREEDER_COUNT))
             this.setNumberOfBreeders(nbt.getInt(NBT_BREEDER_COUNT));
     }
 
-    public CompoundNBT saveToNBT(CompoundNBT nbt) {
-        CompoundNBT inv = this.getTileStackHandler().serializeNBT();
+    public CompoundTag saveToNBT(CompoundTag nbt) {
+        CompoundTag inv = this.getTileStackHandler().serializeNBT();
         nbt.put(NBTConstants.NBT_INVENTORY, inv);
         nbt.putIntArray("time", getTime());
         nbt.putInt("totalTime", getTotalTime());
         if (apiaryPos != null)
-            nbt.put(NBTConstants.NBT_APIARY_POS, NBTUtil.writeBlockPos(apiaryPos));
+            nbt.put(NBTConstants.NBT_APIARY_POS, NbtUtils.writeBlockPos(apiaryPos));
         if (getNumberOfBreeders() != 1) {
             nbt.putInt(NBT_BREEDER_COUNT, getNumberOfBreeders());
         }
@@ -303,27 +304,29 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
 
     @Nonnull
     @Override
-    public CompoundNBT getUpdateTag() {
-        CompoundNBT nbtTagCompound = new CompoundNBT();
+    public CompoundTag getUpdateTag() {
+        CompoundTag nbtTagCompound = new CompoundTag();
         save(nbtTagCompound);
         return nbtTagCompound;
     }
 
     @Override
-    public void handleUpdateTag(@Nonnull BlockState state, CompoundNBT tag) {
+    public void handleUpdateTag(@Nonnull BlockState state, CompoundTag tag) {
         this.load(state, tag);
     }
 
+
+
     @Nullable
     @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
-        CompoundNBT nbt = new CompoundNBT();
-        return new SUpdateTileEntityPacket(worldPosition, 0, saveToNBT(nbt));
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        CompoundTag nbt = new CompoundTag();
+        return new ClientboundBlockEntityDataPacket(worldPosition, 0, saveToNBT(nbt));
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-        CompoundNBT nbt = pkt.getTag();
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
+        CompoundTag nbt = pkt.getTag();
         loadFromNBT(nbt);
     }
 
@@ -342,29 +345,31 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
         return (slot, automation) -> !automation || slot > 3;
     }
 
+
+
     @Nullable
     @Override
-    public Container createMenu(int id, @Nonnull PlayerInventory playerInventory, @Nonnull PlayerEntity playerEntity) {
+    public AbstractContainerMenu createMenu(int id, @Nonnull Inventory playerInventory, @Nonnull Player playerEntity) {
         //noinspection ConstantConditions
         return new ApiaryBreederContainer(id, level, worldPosition, playerInventory, times);
     }
 
     @Nonnull
     @Override
-    public ITextComponent getDisplayName() {
-        return new TranslationTextComponent("gui.resourcefulbees.apiary_breeder");
+    public Component getDisplayName() {
+        return new TranslatableComponent("gui.resourcefulbees.apiary_breeder");
     }
 
     @Override
-    public void switchTab(ServerPlayerEntity player, ApiaryTabs tab) {
+    public void switchTab(ServerPlayer player, ApiaryTabs tab) {
         if (level != null && apiaryPos != null) {
             if (tab == ApiaryTabs.MAIN) {
-                TileEntity tile = level.getBlockEntity(apiaryPos);
-                NetworkHooks.openGui(player, (INamedContainerProvider) tile, apiaryPos);
+                BlockEntity tile = level.getBlockEntity(apiaryPos);
+                NetworkHooks.openGui(player, (MenuProvider) tile, apiaryPos);
             }
             if (tab == ApiaryTabs.STORAGE) {
-                TileEntity tile = level.getBlockEntity(apiary.getStoragePos());
-                NetworkHooks.openGui(player, (INamedContainerProvider) tile, apiary.getStoragePos());
+                BlockEntity tile = level.getBlockEntity(apiary.getStoragePos());
+                NetworkHooks.openGui(player, (MenuProvider) tile, apiary.getStoragePos());
             }
         }
     }
@@ -520,7 +525,7 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
                 if (!tileStackHandler.getStackInSlot(getUpgradeSlots()[i]).isEmpty()) {
                     ItemStack upgradeItem = tileStackHandler.getStackInSlot(getUpgradeSlots()[i]);
                     if (UpgradeItem.isUpgradeItem(upgradeItem)) {
-                        CompoundNBT data = UpgradeItem.getUpgradeData(upgradeItem);
+                        CompoundTag data = UpgradeItem.getUpgradeData(upgradeItem);
 
                         if (data != null && data.getString(NBTConstants.NBT_UPGRADE_TYPE).equals(NBTConstants.NBT_BREEDER_UPGRADE)) {
                             count += (int) MathUtils.clamp(data.getFloat(NBTConstants.NBT_BREEDER_COUNT), 0F, 5);
@@ -539,7 +544,7 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
                 if (!tileStackHandler.getStackInSlot(getUpgradeSlots()[i]).isEmpty()) {
                     ItemStack upgradeItem = tileStackHandler.getStackInSlot(getUpgradeSlots()[i]);
                     if (UpgradeItem.isUpgradeItem(upgradeItem)) {
-                        CompoundNBT data = UpgradeItem.getUpgradeData(upgradeItem);
+                        CompoundTag data = UpgradeItem.getUpgradeData(upgradeItem);
 
                         if (data != null && data.getString(NBTConstants.NBT_UPGRADE_TYPE).equals(NBTConstants.NBT_BREEDER_UPGRADE)) {
                             newTotalTime -= (int) MathUtils.clamp(data.getFloat(NBTConstants.NBT_BREED_TIME), 100, 600);
@@ -556,7 +561,7 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
                 float f = 5.0F;
                 BlockPos pos = ApiaryBreederTileEntity.this.worldPosition;
 
-                ApiaryBreederTileEntity.this.level.getEntitiesOfClass(PlayerEntity.class, new AxisAlignedBB(pos.getX() - f, pos.getY() - f, pos.getZ() - f, (pos.getX() + 1) + f, (pos.getY() + 1) + f, (pos.getZ() + 1) + f))
+                ApiaryBreederTileEntity.this.level.getEntitiesOfClass(Player.class, new AABB(pos.getX() - f, pos.getY() - f, pos.getZ() - f, (pos.getX() + 1) + f, (pos.getY() + 1) + f, (pos.getZ() + 1) + f))
                         .stream()
                         .filter(playerEntity -> playerEntity.containerMenu instanceof ApiaryBreederContainer)
                         .filter(this::openContainerMatches)
@@ -564,7 +569,7 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
             }
         }
 
-        private boolean openContainerMatches(PlayerEntity playerEntity) {
+        private boolean openContainerMatches(Player playerEntity) {
             ApiaryBreederContainer openContainer = (ApiaryBreederContainer) playerEntity.containerMenu;
             ApiaryBreederTileEntity apiaryBreederTileEntity = openContainer.getApiaryBreederTileEntity();
             return  ApiaryBreederTileEntity.this == apiaryBreederTileEntity;

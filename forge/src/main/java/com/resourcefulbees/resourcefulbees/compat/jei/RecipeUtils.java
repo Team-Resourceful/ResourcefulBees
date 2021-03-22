@@ -1,6 +1,6 @@
 package com.resourcefulbees.resourcefulbees.compat.jei;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
@@ -11,16 +11,15 @@ import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IGuiFluidStackGroup;
 import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.ingredients.IIngredients;
-import net.minecraft.block.Block;
-import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.text.*;
+import net.minecraft.client.gui.Font;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.*;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.text.DecimalFormat;
@@ -38,7 +37,7 @@ public class RecipeUtils {
         return randomCollection.getAdjustedWeight(weight);
     }
 
-    public static void setFluidInput(IIngredients ingredients, ITag<?> tagInput, Block blockInput) {
+    public static void setFluidInput(IIngredients ingredients, Tag<?> tagInput, Block blockInput) {
         if (tagInput != null) {
             List<List<FluidStack>> list = new ArrayList<>();
             List<FluidStack> ingredientList = new ArrayList<>();
@@ -48,13 +47,13 @@ public class RecipeUtils {
                     .forEach(fluid -> ingredientList.add(new FluidStack(fluid, 1000)));
             list.add(ingredientList);
             ingredients.setInputLists(VanillaTypes.FLUID, list);
-        } else if (blockInput instanceof FlowingFluidBlock) {
-            FluidStack fluidStack = new FluidStack(((FlowingFluidBlock) blockInput).getFluid(), 1000);
+        } else if (blockInput instanceof LiquidBlock) {
+            FluidStack fluidStack = new FluidStack(((LiquidBlock) blockInput).getFluid(), 1000);
             ingredients.setInput(VanillaTypes.FLUID, fluidStack);
         }
     }
 
-    public static void setBlockInput(IIngredients ingredients, ITag<?> tagInput, Block blockInput) {
+    public static void setBlockInput(IIngredients ingredients, Tag<?> tagInput, Block blockInput) {
         if (tagInput != null) {
             List<List<ItemStack>> list = new ArrayList<>();
             List<ItemStack> ingredientList = new ArrayList<>();
@@ -70,7 +69,7 @@ public class RecipeUtils {
         }
     }
 
-    public static void setBlockOutput(Block block, CompoundNBT nbt, IIngredients ingredients) {
+    public static void setBlockOutput(Block block, CompoundTag nbt, IIngredients ingredients) {
         ItemStack itemStack = new ItemStack(block);
         if (!nbt.isEmpty()) {
             itemStack.setTag(nbt);
@@ -78,8 +77,8 @@ public class RecipeUtils {
         ingredients.setOutput(VanillaTypes.ITEM, itemStack);
     }
 
-    public static void setFluidOutput(Block block, CompoundNBT nbt, IIngredients ingredients) {
-        FluidStack fluidStack = new FluidStack(((FlowingFluidBlock) block).getFluid(), 1000);
+    public static void setFluidOutput(Block block, CompoundTag nbt, IIngredients ingredients) {
+        FluidStack fluidStack = new FluidStack(((LiquidBlock) block).getFluid(), 1000);
         if (!nbt.isEmpty()) {
             fluidStack.setTag(nbt);
         }
@@ -94,13 +93,13 @@ public class RecipeUtils {
         fluidStacks.addTooltipCallback((slotIndex, isInputStack, stack, tooltip) -> addMutationToolTip(slotIndex, recipe, tooltip));
     }
 
-    private static void addMutationToolTip(int slotIndex, BlockMutation.Recipe recipe, List<ITextComponent> tooltip) {
+    private static void addMutationToolTip(int slotIndex, BlockMutation.Recipe recipe, List<Component> tooltip) {
         if (slotIndex == 0 && !recipe.getBlockOutput().getCompoundNBT().isEmpty()) {
             if (BeeInfoUtils.isShiftPressed()) {
                 List<String> lore = BeeInfoUtils.getLoreLines(recipe.getBlockOutput().getCompoundNBT());
-                lore.forEach(l -> tooltip.add(new StringTextComponent(l).withStyle(Style.EMPTY.withColor(Color.parseColor("dark_purple")))));
+                lore.forEach(l -> tooltip.add(new TextComponent(l).withStyle(Style.EMPTY.withColor(TextColor.parseColor("dark_purple")))));
             } else {
-                tooltip.add(new TranslationTextComponent("gui.resourcefulbees.jei.tooltip.show_nbt").withStyle(Style.EMPTY.withColor(Color.parseColor("dark_purple"))));
+                tooltip.add(new TranslatableComponent("gui.resourcefulbees.jei.tooltip.show_nbt").withStyle(Style.EMPTY.withColor(TextColor.parseColor("dark_purple"))));
             }
         }
     }
@@ -114,28 +113,28 @@ public class RecipeUtils {
         return itemStacks;
     }
 
-    public static List<ITextComponent> getTooltipStrings(double mouseX, double mouseY, double chance) {
+    public static List<Component> getTooltipStrings(double mouseX, double mouseY, double chance) {
         double infoX = 63D;
         double infoY = 8D;
         if (mouseX >= infoX && mouseX <= infoX + 9D && mouseY >= infoY && mouseY <= infoY + 9D) {
-            return Collections.singletonList(new StringTextComponent(I18n.get("gui." + ResourcefulBees.MOD_ID + ".jei.category.mutation.info")));
+            return Collections.singletonList(new TranslatableComponent("gui." + ResourcefulBees.MOD_ID + ".jei.category.mutation.info"));
         }
         double info2X = 54;
         double info2Y = 34;
         if (mouseX >= info2X && mouseX <= info2X + 9D && mouseY >= info2Y && mouseY <= info2Y + 9D && chance < 1) {
-            return Collections.singletonList(new StringTextComponent(I18n.get("gui." + ResourcefulBees.MOD_ID + ".jei.category.mutation_chance.info")));
+            return Collections.singletonList(new TranslatableComponent("gui." + ResourcefulBees.MOD_ID + ".jei.category.mutation_chance.info"));
         }
         return Collections.emptyList();
     }
 
-    public static void drawMutationScreen(MatrixStack stack, IDrawable beeHive, IDrawable info, double weight, double chance) {
+    public static void drawMutationScreen(PoseStack stack, IDrawable beeHive, IDrawable info, double weight, double chance) {
         beeHive.draw(stack, 65, 10);
         info.draw(stack, 63, 8);
         if (weight == 1 && chance == 1) {
             return;
         }
         Minecraft minecraft = Minecraft.getInstance();
-        FontRenderer fontRenderer = minecraft.font;
+        Font fontRenderer = minecraft.font;
         DecimalFormat decimalFormat = new DecimalFormat("##%");
         if (chance < 1) {
             String chanceString = decimalFormat.format(chance);

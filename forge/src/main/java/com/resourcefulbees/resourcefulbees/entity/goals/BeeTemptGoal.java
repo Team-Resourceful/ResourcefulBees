@@ -2,21 +2,21 @@ package com.resourcefulbees.resourcefulbees.entity.goals;
 
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
-import net.minecraft.entity.EntityPredicate;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.pathfinding.FlyingPathNavigator;
-import net.minecraft.pathfinding.GroundPathNavigator;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
+import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.EnumSet;
 
 public class BeeTemptGoal extends Goal {
-    private static final EntityPredicate ENTITY_PREDICATE = (new EntityPredicate()).range(10.0D).allowInvulnerable().allowSameTeam().allowNonAttackable().allowUnseeable();
+    private static final TargetingConditions ENTITY_PREDICATE = (new TargetingConditions()).range(10.0D).allowInvulnerable().allowSameTeam().allowNonAttackable().allowUnseeable();
     protected final CustomBeeEntity beeEntity;
     private final double speed;
     private final boolean scaredByPlayerMovement;
-    protected PlayerEntity closestPlayer;
+    protected Player closestPlayer;
     private double targetX;
     private double targetY;
     private double targetZ;
@@ -30,7 +30,7 @@ public class BeeTemptGoal extends Goal {
         this.speed = speedIn;
         this.scaredByPlayerMovement = scaredByPlayerMovementIn;
         this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
-        if (!(beeEntity.getNavigation() instanceof GroundPathNavigator) && !(beeEntity.getNavigation() instanceof FlyingPathNavigator)) {
+        if (!(beeEntity.getNavigation() instanceof GroundPathNavigation) && !(beeEntity.getNavigation() instanceof FlyingPathNavigation)) {
             throw new IllegalArgumentException("Unsupported mob type for TemptGoal");
         }
     }

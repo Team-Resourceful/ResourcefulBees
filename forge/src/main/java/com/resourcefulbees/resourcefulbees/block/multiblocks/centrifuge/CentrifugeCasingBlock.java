@@ -1,22 +1,21 @@
 package com.resourcefulbees.resourcefulbees.block.multiblocks.centrifuge;
 
 
-import com.resourcefulbees.resourcefulbees.registry.ModTileEntityTypes;
+import com.resourcefulbees.resourcefulbees.registry.ModBlockEntityTypes;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.CentrifugeCasingTileEntity;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.CentrifugeControllerTileEntity;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.BucketItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -34,12 +33,12 @@ public class CentrifugeCasingBlock extends Block {
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new CentrifugeCasingTileEntity(ModTileEntityTypes.CENTRIFUGE_CASING_ENTITY.get());
+    public BlockEntity createTileEntity(BlockState state, BlockGetter world) {
+        return new CentrifugeCasingTileEntity(ModBlockEntityTypes.CENTRIFUGE_CASING_ENTITY.get());
     }
 
-    protected CentrifugeControllerTileEntity getControllerEntity(World world, BlockPos pos) {
-        TileEntity tileEntity = world.getBlockEntity(pos);
+    protected CentrifugeControllerTileEntity getControllerEntity(Level world, BlockPos pos) {
+        BlockEntity tileEntity = world.getBlockEntity(pos);
         if (tileEntity instanceof CentrifugeCasingTileEntity) {
             return ((CentrifugeCasingTileEntity) tileEntity).getController();
         }
@@ -49,7 +48,7 @@ public class CentrifugeCasingBlock extends Block {
     //TODO this can break if other casings are powered need to find an alternative solution.
     // may have to loop through every casing and check if any are still powered.
     @Override
-    public void neighborChanged(@Nonnull BlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull Block changedBlock, @Nonnull BlockPos changedBlockPos, boolean bool) {
+    public void neighborChanged(@Nonnull BlockState state, @Nonnull Level world, @Nonnull BlockPos pos, @Nonnull Block changedBlock, @Nonnull BlockPos changedBlockPos, boolean bool) {
         CentrifugeControllerTileEntity centrifugeControllerTileEntity = getControllerEntity(world, pos);
         if (centrifugeControllerTileEntity != null) {
             centrifugeControllerTileEntity.setIsPoweredByRedstone(world.hasNeighborSignal(pos));
@@ -57,7 +56,7 @@ public class CentrifugeCasingBlock extends Block {
     }
 
     @Override
-    public @NotNull ActionResultType use(@NotNull BlockState state, @NotNull World world, @NotNull BlockPos pos, @NotNull PlayerEntity player, @NotNull Hand hand, @NotNull BlockRayTraceResult rayTraceResult) {
+    public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level world, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult rayTraceResult) {
         ItemStack heldItem = player.getItemInHand(hand);
         boolean hasCapability = heldItem.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent();
         CentrifugeControllerTileEntity controller = getControllerEntity(world, pos);
@@ -66,9 +65,9 @@ public class CentrifugeCasingBlock extends Block {
                 controller.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
                         .ifPresent(iFluidHandler -> FluidUtil.interactWithFluidHandler(player, hand, world, pos, null));
             } else if(!player.isShiftKeyDown() && !world.isClientSide) {
-                NetworkHooks.openGui((ServerPlayerEntity) player, controller, controller.getBlockPos());
+                NetworkHooks.openGui((ServerPlayer) player, controller, controller.getBlockPos());
             }
-            return ActionResultType.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
         return super.use(state, world, pos, player, hand, rayTraceResult);
     }

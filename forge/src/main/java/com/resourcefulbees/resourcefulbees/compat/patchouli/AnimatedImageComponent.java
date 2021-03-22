@@ -1,9 +1,9 @@
 package com.resourcefulbees.resourcefulbees.compat.patchouli;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import vazkii.patchouli.api.IComponentRenderContext;
 import vazkii.patchouli.api.ICustomComponent;
@@ -40,7 +40,7 @@ public class AnimatedImageComponent implements ICustomComponent {
     }
 
     @Override
-    public void render(@NotNull MatrixStack matrixStack, @NotNull IComponentRenderContext context, float v, int i, int i1) {
+    public void render(@NotNull PoseStack matrixStack, @NotNull IComponentRenderContext context, float v, int i, int i1) {
         if (context.getTicksInBook() % 2 == 0) {
             currentFrame++;
         }
@@ -49,7 +49,7 @@ public class AnimatedImageComponent implements ICustomComponent {
         }
         Minecraft.getInstance().getTextureManager().bind(animatedImage);
 
-        AbstractGui.blit(matrixStack, xOffset, yOffset, 0, (float) imageHeight * currentFrame, (int) (imageWidth * imageScale), (int) (imageHeight * imageScale), textureWidth, textureHeight);
+        GuiComponent.blit(matrixStack, xOffset, yOffset, 0, (float) imageHeight * currentFrame, (int) (imageWidth * imageScale), (int) (imageHeight * imageScale), textureWidth, textureHeight);
     }
 
     @Override

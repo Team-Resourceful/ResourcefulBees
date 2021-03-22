@@ -1,10 +1,10 @@
 package com.resourcefulbees.resourcefulbees.mixin;
 
-import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.world.entity.animal.Animal;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-@Mixin(AnimalEntity.class)
+@Mixin(Animal.class)
 public interface AnimalEntityAccessor {
 
     @Accessor("inLove")

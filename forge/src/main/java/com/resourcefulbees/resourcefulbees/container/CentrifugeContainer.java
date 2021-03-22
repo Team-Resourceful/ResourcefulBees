@@ -5,18 +5,13 @@ import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.mixin.ContainerAccessor;
 import com.resourcefulbees.resourcefulbees.registry.ModContainers;
 import com.resourcefulbees.resourcefulbees.tileentity.CentrifugeTileEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.inventory.container.IContainerListener;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.IntArray;
-import net.minecraft.util.IntReferenceHolder;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.*;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.FluidStack;
@@ -24,16 +19,16 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 import javax.annotation.Nonnull;
 
-public class CentrifugeContainer extends Container {
+public class CentrifugeContainer extends AbstractContainerMenu {
 
     protected final CentrifugeTileEntity centrifugeTileEntity;
-    private final PlayerInventory inv;
-    private final IntArray times;
+    private final Inventory inv;
+    private final ContainerData times;
     private int numInputs;
     private boolean displayFluids;
     protected int inputXPos;
     protected int outputXPos;
-    protected IntReferenceHolder requiresRedstone = new IntReferenceHolder() {
+    protected DataSlot requiresRedstone = new DataSlot() {
         @Override
         public int get() { return centrifugeTileEntity.getRequiresRedstone() ? 1 : 0; }
 
@@ -41,11 +36,11 @@ public class CentrifugeContainer extends Container {
         public void set(int value) { centrifugeTileEntity.setRequiresRedstone(value == 1); }
     };
 
-    public CentrifugeContainer(int id, World world, BlockPos pos, PlayerInventory inv) {
-        this(ModContainers.CENTRIFUGE_CONTAINER.get(), id, world, pos, inv, new IntArray(1));
+    public CentrifugeContainer(int id, Level world, BlockPos pos, Inventory inv) {
+        this(ModContainers.CENTRIFUGE_CONTAINER.get(), id, world, pos, inv, new SimpleContainerData(1));
     }
 
-    public CentrifugeContainer(ContainerType<?> containerType, int id, World world, BlockPos pos, PlayerInventory inv, IntArray times) {
+    public CentrifugeContainer(MenuType<?> containerType, int id, Level world, BlockPos pos, Inventory inv, ContainerData times) {
         super(containerType, id);
         initialize();
         this.inv = inv;
@@ -165,11 +160,11 @@ public class CentrifugeContainer extends Container {
      * @param player the player
      */
     @Override
-    public boolean stillValid(@Nonnull PlayerEntity player) { return true; }
+    public boolean stillValid(@Nonnull Player player) { return true; }
 
     @Nonnull
     @Override
-    public ItemStack quickMoveStack(@Nonnull PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(@Nonnull Player playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         int totalSlots = centrifugeTileEntity.getTotalSlots();
@@ -203,7 +198,7 @@ public class CentrifugeContainer extends Container {
             return;
         }
 
-        for (IContainerListener listener : ((ContainerAccessor) this).getListeners()) {
+        for (ContainerListener listener : ((ContainerAccessor) this).getListeners()) {
             centrifugeTileEntity.sendGUINetworkPacket(listener);
         }
     }

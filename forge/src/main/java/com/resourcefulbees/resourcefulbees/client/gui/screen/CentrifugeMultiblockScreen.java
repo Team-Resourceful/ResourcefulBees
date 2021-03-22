@@ -1,12 +1,12 @@
 package com.resourcefulbees.resourcefulbees.client.gui.screen;
 
 import com.resourcefulbees.resourcefulbees.container.CentrifugeContainer;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Inventory;
 
 public class CentrifugeMultiblockScreen extends CentrifugeScreen {
 
-    public CentrifugeMultiblockScreen(CentrifugeContainer screenContainer, PlayerInventory inventory, ITextComponent titleIn) {
+    public CentrifugeMultiblockScreen(CentrifugeContainer screenContainer, Inventory inventory, Component titleIn) {
         super(screenContainer, inventory, titleIn);
     }
 

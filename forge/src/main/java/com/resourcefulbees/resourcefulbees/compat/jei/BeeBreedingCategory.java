@@ -1,7 +1,7 @@
 package com.resourcefulbees.resourcefulbees.compat.jei;
 
 import com.google.common.base.Splitter;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.IBeeRegistry;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
@@ -18,17 +18,17 @@ import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.tags.ITag;
-import net.minecraft.tags.TagCollectionManager;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.SerializationTags;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
@@ -90,7 +90,7 @@ public class BeeBreedingCategory extends BaseCategory<BeeBreedingCategory.Recipe
         int feedAmount = beeData.getBreedData().getFeedAmount();
         String feedItemS = finalizeFeedItem(beeData.getBreedData().getFeedItem());
 
-        ITag<Item> feedTag = TagCollectionManager.getInstance().getItems().getTag(new ResourceLocation(feedItemS));
+        Tag<Item> feedTag = SerializationTags.getInstance().getItems().getTag(new ResourceLocation(feedItemS));
         Item feedItem = BeeInfoUtils.getItem(feedItemS);
 
         if (BeeInfoUtils.isTag(beeData.getBreedData().getFeedItem())) feedItem = null;
@@ -109,8 +109,8 @@ public class BeeBreedingCategory extends BaseCategory<BeeBreedingCategory.Recipe
             String p1FeedItemS = finalizeFeedItem(p1Data.getBreedData().getFeedItem());
             String p2FeedItemS = finalizeFeedItem(p2Data.getBreedData().getFeedItem());
 
-            ITag<Item> p1FeedTag = TagCollectionManager.getInstance().getItems().getTag(new ResourceLocation(p1FeedItemS));
-            ITag<Item> p2FeedTag = TagCollectionManager.getInstance().getItems().getTag(new ResourceLocation(p2FeedItemS));
+            Tag<Item> p1FeedTag = SerializationTags.getInstance().getItems().getTag(new ResourceLocation(p1FeedItemS));
+            Tag<Item> p2FeedTag = SerializationTags.getInstance().getItems().getTag(new ResourceLocation(p2FeedItemS));
 
             Item p1FeedItem = BeeInfoUtils.getItem(p1FeedItemS);
             Item p2FeedItem = BeeInfoUtils.getItem(p2FeedItemS);
@@ -150,7 +150,7 @@ public class BeeBreedingCategory extends BaseCategory<BeeBreedingCategory.Recipe
             list.add(stackList);
         }
         if (recipe.p1FeedTag != null) {
-            List<ItemStack> stackList = (List<ItemStack>) new Ingredient.TagList(recipe.p1FeedTag).getItems();
+            List<ItemStack> stackList = (List<ItemStack>) new Ingredient.TagValue(recipe.p1FeedTag).getItems();
             stackList.forEach(itemStack -> itemStack.setCount(recipe.p1FeedAmount));
             list.add(stackList);
         }
@@ -160,7 +160,7 @@ public class BeeBreedingCategory extends BaseCategory<BeeBreedingCategory.Recipe
             list.add(stackList);
         }
         if (recipe.p2FeedTag != null) {
-            List<ItemStack> stackList = (List<ItemStack>) new Ingredient.TagList(recipe.p2FeedTag).getItems();
+            List<ItemStack> stackList = (List<ItemStack>) new Ingredient.TagValue(recipe.p2FeedTag).getItems();
             stackList.forEach(itemStack -> itemStack.setCount(recipe.p2FeedAmount));
             list.add(stackList);
         }
@@ -199,9 +199,9 @@ public class BeeBreedingCategory extends BaseCategory<BeeBreedingCategory.Recipe
     }
 
     @Override
-    public void draw(Recipe recipe, @Nonnull MatrixStack matrix, double mouseX, double mouseY) {
+    public void draw(Recipe recipe, @Nonnull PoseStack matrix, double mouseX, double mouseY) {
         Minecraft minecraft = Minecraft.getInstance();
-        FontRenderer fontRenderer = minecraft.font;
+        Font fontRenderer = minecraft.font;
         DecimalFormat decimalFormat = new DecimalFormat("##%");
         fontRenderer.draw(matrix, decimalFormat.format(beeRegistry.getAdjustedWeightForChild(beeRegistry.getBeeData(recipe.child), recipe.parent1, recipe.parent2)), 90, 35, 0xff808080);
         if (recipe.chance < 1) {
@@ -212,11 +212,11 @@ public class BeeBreedingCategory extends BaseCategory<BeeBreedingCategory.Recipe
 
     @NotNull
     @Override
-    public List<ITextComponent> getTooltipStrings(@NotNull Recipe recipe, double mouseX, double mouseY) {
+    public List<Component> getTooltipStrings(@NotNull Recipe recipe, double mouseX, double mouseY) {
         double infoX = 115D;
         double infoY = 40D;
         if (mouseX >= infoX && mouseX <= infoX + 9D && mouseY >= infoY && mouseY <= infoY + 9D && recipe.chance < 1) {
-            return Collections.singletonList(new StringTextComponent(I18n.get("gui." + ResourcefulBees.MOD_ID + ".jei.category.breed_chance.info")));
+            return Collections.singletonList(new TextComponent(I18n.get("gui." + ResourcefulBees.MOD_ID + ".jei.category.breed_chance.info")));
         }
         return super.getTooltipStrings(recipe, mouseX, mouseY);
     }
@@ -227,16 +227,16 @@ public class BeeBreedingCategory extends BaseCategory<BeeBreedingCategory.Recipe
         private final String child;
         private final float chance;
 
-        private final ITag<Item> p1FeedTag;
+        private final Tag<Item> p1FeedTag;
         private final Item p1FeedItem;
 
-        private final ITag<Item> p2FeedTag;
+        private final Tag<Item> p2FeedTag;
         private final Item p2FeedItem;
 
         private final int p1FeedAmount;
         private final int p2FeedAmount;
 
-        public Recipe(String parent1, ITag<Item> p1FeedTag, Item p1FeedItem, int p1FeedAmount, String parent2, ITag<Item> p2FeedTag, Item p2FeedItem, int p2FeedAmount, String child, float chance) {
+        public Recipe(String parent1, Tag<Item> p1FeedTag, Item p1FeedItem, int p1FeedAmount, String parent2, Tag<Item> p2FeedTag, Item p2FeedItem, int p2FeedAmount, String child, float chance) {
             this.parent1 = parent1;
             this.parent2 = parent2;
             this.child = child;

@@ -3,32 +3,41 @@ package com.resourcefulbees.resourcefulbees.block;
 import com.resourcefulbees.resourcefulbees.fluids.HoneyFlowingFluid;
 import com.resourcefulbees.resourcefulbees.tileentity.HoneyTankTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.TooltipBuilder;
-import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.material.MaterialColor;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.*;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BottleItem;
+import net.minecraft.world.item.HoneyBottleItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ToolType;
@@ -50,20 +59,20 @@ public class HoneyTank extends Block {
 
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
-    public static final AbstractBlock.Properties WOODEN = AbstractBlock.Properties.of(Material.GLASS)
+    public static final BlockBehaviour.Properties WOODEN = BlockBehaviour.Properties.of(Material.GLASS)
             .sound(SoundType.GLASS)
             .harvestTool(ToolType.AXE)
             .strength(1.0f)
             .noOcclusion();
 
-    public static final AbstractBlock.Properties PURPUR = AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_MAGENTA)
+    public static final BlockBehaviour.Properties PURPUR = BlockBehaviour.Properties.of(Material.STONE, MaterialColor.COLOR_MAGENTA)
             .sound(SoundType.GLASS)
             .harvestTool(ToolType.PICKAXE)
             .strength(1.5f)
             .noOcclusion()
             .requiresCorrectToolForDrops();
 
-    public static final AbstractBlock.Properties NETHER = AbstractBlock.Properties.of(Material.STONE, MaterialColor.NETHER)
+    public static final BlockBehaviour.Properties NETHER = BlockBehaviour.Properties.of(Material.STONE, MaterialColor.NETHER)
             .sound(SoundType.GLASS)
             .harvestTool(ToolType.PICKAXE)
             .strength(1.5f)
@@ -80,8 +89,8 @@ public class HoneyTank extends Block {
         this.registerDefaultState(defaultState);
     }
 
-    private static HoneyTankTileEntity getTileEntity(@Nonnull IBlockReader world, @Nonnull BlockPos pos) {
-        TileEntity entity = world.getBlockEntity(pos);
+    private static HoneyTankTileEntity getTileEntity(@Nonnull BlockGetter world, @Nonnull BlockPos pos) {
+        BlockEntity entity = world.getBlockEntity(pos);
         if (entity instanceof HoneyTankTileEntity) {
             return (HoneyTankTileEntity) entity;
         }
@@ -89,7 +98,7 @@ public class HoneyTank extends Block {
     }
 
     @Override
-    public void animateTick(@Nonnull BlockState stateIn, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull Random rand) {
+    public void animateTick(@Nonnull BlockState stateIn, @Nonnull Level world, @Nonnull BlockPos pos, @Nonnull Random rand) {
         HoneyTankTileEntity tank = getTileEntity(world, pos);
         if (tank == null) {
             return;
@@ -105,7 +114,7 @@ public class HoneyTank extends Block {
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+    public BlockEntity createTileEntity(BlockState state, BlockGetter world) {
         return new HoneyTankTileEntity(tier);
     }
 
@@ -116,13 +125,13 @@ public class HoneyTank extends Block {
 
     @Nonnull
     @Override
-    public ActionResultType use(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult blockRayTraceResult) {
+    public InteractionResult use(@Nonnull BlockState state, Level world, @Nonnull BlockPos pos, @Nonnull Player player, @Nonnull InteractionHand hand, @Nonnull BlockHitResult blockRayTraceResult) {
 
         ItemStack heldItem = player.getItemInHand(hand);
         boolean usingHoney = heldItem.getItem() instanceof HoneyBottleItem;
-        boolean usingBottle = heldItem.getItem() instanceof GlassBottleItem;
+        boolean usingBottle = heldItem.getItem() instanceof BottleItem;
         boolean hasCapability = heldItem.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent();
-        TileEntity tileEntity = world.getBlockEntity(pos);
+        BlockEntity tileEntity = world.getBlockEntity(pos);
 
         if (tileEntity instanceof HoneyTankTileEntity) {
             HoneyTankTileEntity tank = (HoneyTankTileEntity) tileEntity;
@@ -136,7 +145,7 @@ public class HoneyTank extends Block {
                             .ifPresent(iFluidHandler -> FluidUtil.interactWithFluidHandler(player, hand, world, pos, null));
                 }
             }
-            return ActionResultType.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
         return super.use(state, world, pos, player, hand, blockRayTraceResult);
     }
@@ -148,24 +157,24 @@ public class HoneyTank extends Block {
     }
 
     @Override
-    public BlockState getStateForPlacement(@NotNull BlockItemUseContext context) {
+    public BlockState getStateForPlacement(@NotNull BlockPlaceContext context) {
         return this.defaultBlockState();
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(WATERLOGGED);
     }
 
     @Nonnull
     @Override
-    public VoxelShape getShape(@NotNull BlockState state, @NotNull IBlockReader worldIn, @NotNull BlockPos pos, @NotNull ISelectionContext context) {
+    public VoxelShape getShape(@NotNull BlockState state, @NotNull BlockGetter worldIn, @NotNull BlockPos pos, @NotNull CollisionContext context) {
         return VOXEL_SHAPE;
     }
 
     @Nonnull
     @Override
-    public BlockState updateShape(BlockState stateIn, @NotNull Direction facing, @NotNull BlockState facingState, @NotNull IWorld world, @NotNull BlockPos currentPos, @NotNull BlockPos facingPos) {
+    public BlockState updateShape(BlockState stateIn, @NotNull Direction facing, @NotNull BlockState facingState, @NotNull LevelAccessor world, @NotNull BlockPos currentPos, @NotNull BlockPos facingPos) {
         if (Boolean.TRUE.equals(stateIn.getValue(BlockStateProperties.WATERLOGGED))) {
             world.getLiquidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(world));
         }
@@ -174,7 +183,7 @@ public class HoneyTank extends Block {
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void appendHoverText(@Nonnull ItemStack stack, @javax.annotation.Nullable IBlockReader worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
+    public void appendHoverText(@Nonnull ItemStack stack, @javax.annotation.Nullable BlockGetter worldIn, @Nonnull List<Component> tooltip, @Nonnull TooltipFlag flagIn) {
         if (!stack.hasTag() || stack.getTag() == null || stack.getTag().isEmpty() || !stack.getTag().contains("fluid"))
             return;
         HoneyTankTileEntity.TankTier tankTier = HoneyTankTileEntity.TankTier.getTier(stack.getTag().getInt("tier"));
@@ -184,14 +193,14 @@ public class HoneyTank extends Block {
             tooltip.addAll(new TooltipBuilder()
                     .addTip(I18n.get(fluid.getTranslationKey()))
                     .appendText(": [" + tank.getFluidAmount() + "/" + tank.getCapacity() + "]")
-                    .applyStyle(TextFormatting.GOLD).build());
+                    .applyStyle(ChatFormatting.GOLD).build());
         }
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
     }
 
     @Override
-    public void setPlacedBy(World world, @NotNull BlockPos pos, @NotNull BlockState blockState, @Nullable LivingEntity livingEntity, @NotNull ItemStack itemStack) {
-        TileEntity tileEntity = world.getBlockEntity(pos);
+    public void setPlacedBy(Level world, @NotNull BlockPos pos, @NotNull BlockState blockState, @Nullable LivingEntity livingEntity, @NotNull ItemStack itemStack) {
+        BlockEntity tileEntity = world.getBlockEntity(pos);
         if (tileEntity instanceof HoneyTankTileEntity) {
             HoneyTankTileEntity tank = (HoneyTankTileEntity) tileEntity;
             if (itemStack.getTag() != null) {
@@ -201,19 +210,19 @@ public class HoneyTank extends Block {
     }
 
     @Override
-    public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
-        TileEntity tileEntity = world.getBlockEntity(pos);
+    public ItemStack getPickBlock(BlockState state, HitResult target, BlockGetter world, BlockPos pos, Player player) {
+        BlockEntity tileEntity = world.getBlockEntity(pos);
         if (tileEntity instanceof HoneyTankTileEntity) {
             HoneyTankTileEntity tank = (HoneyTankTileEntity) tileEntity;
             ItemStack stack = new ItemStack(state.getBlock().asItem());
-            stack.setTag(tank.writeNBT(new CompoundNBT()));
+            stack.setTag(tank.writeNBT(new CompoundTag()));
             return stack;
         }
         return tier.getTankItem().get().getDefaultInstance();
     }
 
     @Override
-    public @NotNull BlockRenderType getRenderShape(@NotNull BlockState blockState) {
-        return BlockRenderType.MODEL;
+    public RenderShape getRenderShape(BlockState p_149645_1_) {
+        return RenderShape.MODEL;
     }
 }

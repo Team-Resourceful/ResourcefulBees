@@ -1,30 +1,30 @@
 package com.resourcefulbees.resourcefulbees.data;
 
 import com.resourcefulbees.resourcefulbees.init.BeeSetup;
-import net.minecraft.resources.FolderPack;
-import net.minecraft.resources.IPackFinder;
-import net.minecraft.resources.IPackNameDecorator;
-import net.minecraft.resources.ResourcePackInfo;
+import net.minecraft.server.packs.FolderPackResources;
+import net.minecraft.server.packs.repository.Pack;
+import net.minecraft.server.packs.repository.PackSource;
+import net.minecraft.server.packs.repository.RepositorySource;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.function.Consumer;
 
-public class DataPackLoader implements IPackFinder {
+public class DataPackLoader implements RepositorySource {
 
     public static final DataPackLoader INSTANCE = new DataPackLoader();
 
     @Override
-    public void loadPacks(@NotNull Consumer<ResourcePackInfo> packList, @NotNull ResourcePackInfo.IFactory factory) {
+    public void loadPacks(@NotNull Consumer<Pack> packList, @NotNull Pack.PackConstructor factory) {
         File configDataPackFile = BeeSetup.getResourcePath().toFile();
         if(configDataPackFile.exists() && configDataPackFile.isDirectory()) {
-            ResourcePackInfo pack = ResourcePackInfo.create(
+            Pack pack = Pack.create(
                     "resourcefulbees:internals",
                     true,
-                    () -> new FolderPack(BeeSetup.getResourcePath().toFile()),
+                    () -> new FolderPackResources(BeeSetup.getResourcePath().toFile()),
                     factory,
-                    ResourcePackInfo.Priority.BOTTOM,
-                    IPackNameDecorator.BUILT_IN
+                    Pack.Position.BOTTOM,
+                    PackSource.BUILT_IN
             );
             if (pack != null) packList.accept(pack);
         }

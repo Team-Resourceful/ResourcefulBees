@@ -7,6 +7,7 @@ import com.mojang.math.Vector3f;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -128,7 +129,7 @@ public class RenderUtils {
         renderFluid(matrix, fluidStack, xPos, yPos, 16, 16, zOffset);
     }
 
-    public static void renderEntity(PoseStack matrixStack, Entity entity, Level world, float x, float y, float rotation, float renderScale) {
+    public static void renderEntity(PoseStack matrixStack, Entity entity, ClientLevel world, float x, float y, float rotation, float renderScale) {
         if (world == null) return;
         float scaledSize = 20;
         Minecraft mc = Minecraft.getInstance();

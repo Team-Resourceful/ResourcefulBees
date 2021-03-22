@@ -1,10 +1,10 @@
 package com.resourcefulbees.resourcefulbees.network.packets;
 
 import com.resourcefulbees.resourcefulbees.tileentity.CentrifugeTileEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
@@ -18,20 +18,20 @@ public class DrainCentrifugeTankMessage {
         this.tank = tank;
     }
 
-    public static void encode(DrainCentrifugeTankMessage message, PacketBuffer buffer){
+    public static void encode(DrainCentrifugeTankMessage message, FriendlyByteBuf buffer){
         buffer.writeBlockPos(message.pos);
         buffer.writeInt(message.tank);
     }
 
-    public static DrainCentrifugeTankMessage decode(PacketBuffer buffer){
+    public static DrainCentrifugeTankMessage decode(FriendlyByteBuf buffer){
         return new DrainCentrifugeTankMessage(buffer.readBlockPos(), buffer.readInt());
     }
 
     public static void handle(DrainCentrifugeTankMessage message, Supplier<NetworkEvent.Context> context){
         context.get().enqueueWork(() -> {
-            ServerPlayerEntity player = context.get().getSender();
+            ServerPlayer player = context.get().getSender();
             if (player != null && player.level.isLoaded(message.pos)) {
-                TileEntity tileEntity = player.level.getBlockEntity(message.pos);
+                BlockEntity tileEntity = player.level.getBlockEntity(message.pos);
                 if (tileEntity instanceof CentrifugeTileEntity) {
                     ((CentrifugeTileEntity) tileEntity).drainFluidInTank(message.tank);
                 }

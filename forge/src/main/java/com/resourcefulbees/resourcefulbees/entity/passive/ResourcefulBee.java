@@ -15,33 +15,33 @@ import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.tileentity.TieredBeehiveTileEntity;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.FollowParentGoal;
-import net.minecraft.entity.ai.goal.SwimGoal;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.passive.BeeEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.tileentity.BeehiveTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Direction;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.Explosion;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.FollowParentGoal;
+import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
 import org.apache.commons.lang3.tuple.Pair;
@@ -58,7 +58,7 @@ public class ResourcefulBee extends CustomBeeEntity {
     private BeePollinateGoal pollinateGoal;
     private int explosiveCooldown = 0;
 
-    public ResourcefulBee(EntityType<? extends BeeEntity> type, World world, CustomBeeData beeData) {
+    public ResourcefulBee(EntityType<? extends Bee> type, Level world, CustomBeeData beeData) {
         super(type, world, beeData);
     }
 
@@ -72,9 +72,9 @@ public class ResourcefulBee extends CustomBeeEntity {
         CustomBeeData customBeeData = BeeRegistry.getRegistry().getBeeData(beeType);
 
         if (!customBeeData.getCombatData().isPassive()) {
-            this.goalSelector.addGoal(0, new BeeEntity.StingGoal(this, 1.4, true));
+            this.goalSelector.addGoal(0, new Bee.BeeAttackGoal(this, 1.4, true));
             this.targetSelector.addGoal(1, (new BeeAngerGoal(this)).setAlertOthers());
-            this.targetSelector.addGoal(2, new BeeEntity.AttackPlayerGoal(this));
+            this.targetSelector.addGoal(2, new Bee.BeeBecomeAngryTargetGoal(this));
         }
         this.goalSelector.addGoal(1, new EnterBeehiveGoal2());
 
@@ -83,24 +83,24 @@ public class ResourcefulBee extends CustomBeeEntity {
             this.goalSelector.addGoal(3, new BeeTemptGoal(this, 1.25D, false));
             this.goalSelector.addGoal(5, new FollowParentGoal(this, 1.25D));
         }
-        this.pollinateGoal = new BeePollinateGoal(this);
+        this.pollinateGoal = new BeePollinateGoal();
         this.goalSelector.addGoal(4, this.pollinateGoal);
 
         this.beePollinateGoal = new FakePollinateGoal();
 
-        this.goalSelector.addGoal(5, new BeeEntity.UpdateBeehiveGoal());
+        this.goalSelector.addGoal(5, new Bee.BeeLocateHiveGoal());
 
         this.goToHiveGoal = new ResourcefulBee.FindBeehiveGoal2();
         this.goalSelector.addGoal(5, this.goToHiveGoal);
 
-        this.goToKnownFlowerGoal = new BeeEntity.FindFlowerGoal();
+        this.goToKnownFlowerGoal = new Bee.BeeGoToKnownFlowerGoal();
         this.goalSelector.addGoal(6, this.goToKnownFlowerGoal);
 
         if (customBeeData.getMutationData().hasMutation()) {
             this.goalSelector.addGoal(7, new ResourcefulBee.FindPollinationTargetGoal2());
         }
-        this.goalSelector.addGoal(8, new BeeWanderGoal(this));
-        this.goalSelector.addGoal(9, new SwimGoal(this));
+        this.goalSelector.addGoal(8, new BeeWanderGoal2(this));
+        this.goalSelector.addGoal(9, new FloatGoal(this));
     }
 
     @Override
@@ -110,10 +110,10 @@ public class ResourcefulBee extends CustomBeeEntity {
         } else {
             BlockPos pos = this.hivePos;
             if (pos != null) {
-                TileEntity blockEntity = this.level.getBlockEntity(this.hivePos);
+                BlockEntity blockEntity = this.level.getBlockEntity(this.hivePos);
                 return blockEntity instanceof TieredBeehiveTileEntity && ((TieredBeehiveTileEntity) blockEntity).isAllowedBee()
                         || blockEntity instanceof ApiaryTileEntity && ((ApiaryTileEntity) blockEntity).isAllowedBee()
-                        || blockEntity instanceof BeehiveTileEntity;
+                        || blockEntity instanceof BeehiveBlockEntity;
             } else
                 return false;
         }
@@ -144,7 +144,7 @@ public class ResourcefulBee extends CustomBeeEntity {
 
     @Override
     public boolean wantsToEnterHive() {
-        if (this.stayOutOfHiveCountdown <= 0 && !this.pollinateGoal.isRunning() && !this.hasStung() && this.getTarget() == null) {
+        if (this.stayOutOfHiveCountdown <= 0 && !this.pollinateGoal.isPollinating() && !this.hasStung() && this.getTarget() == null) {
             boolean flag = this.isTiredOfLookingForNectar() || this.hasNectar();
             return flag && !this.isHiveNearFire();
         } else {
@@ -178,7 +178,7 @@ public class ResourcefulBee extends CustomBeeEntity {
     }
 
     public boolean mutateEntity() {
-        AxisAlignedBB box = this.getMutationBoundingBox();
+        AABB box = this.getMutationBoundingBox();
         List<Entity> entityList = this.level.getEntities(this, box, entity ->
                 getBeeData().getMutationData().getEntityMutations().get(entity.getType()) != null);
         if (!entityList.isEmpty()) {
@@ -188,9 +188,9 @@ public class ResourcefulBee extends CustomBeeEntity {
             if (output != null) {
                 if (output.getLeft() >= level.random.nextFloat()) {
                     EntityOutput entityOutput = output.getRight().next();
-                    CompoundNBT nbt = new CompoundNBT();
+                    CompoundTag nbt = new CompoundTag();
                     nbt.put("EntityTag", entityOutput.getCompoundNBT());
-                    entityOutput.getEntityType().spawn((ServerWorld) level, nbt, null, null, entityList.get(0).blockPosition(), SpawnReason.NATURAL, false, false);
+                    entityOutput.getEntityType().spawn((ServerLevel) level, nbt, null, null, entityList.get(0).blockPosition(), MobSpawnType.NATURAL, false, false);
                     entityList.get(0).remove();
                     level.levelEvent(2005, this.blockPosition().below(1), 0);
                 }
@@ -222,8 +222,8 @@ public class ResourcefulBee extends CustomBeeEntity {
             BlockOutput blockOutput = output.getRight().next();
             level.setBlockAndUpdate(blockPos, blockOutput.getBlock().defaultBlockState());
             if (!blockOutput.getCompoundNBT().isEmpty()) {
-                TileEntity tile = level.getBlockEntity(blockPos);
-                CompoundNBT nbt = blockOutput.getCompoundNBT();
+                BlockEntity tile = level.getBlockEntity(blockPos);
+                CompoundTag nbt = blockOutput.getCompoundNBT();
                 if (tile != null) {
                     nbt.putInt("x", blockPos.getX());
                     nbt.putInt("y", blockPos.getY());
@@ -245,8 +245,8 @@ public class ResourcefulBee extends CustomBeeEntity {
         }
     }
 
-    private AxisAlignedBB getMutationBoundingBox() {
-        return getBoundingBox().expandTowards(new Vector3d(0, -2, 0));
+    private AABB getMutationBoundingBox() {
+        return getBoundingBox().expandTowards(new Vec3(0, -2, 0));
     }
 
     @Override
@@ -309,8 +309,8 @@ public class ResourcefulBee extends CustomBeeEntity {
             for (int j = 0; j < 8; ++j) {
                 float f = this.random.nextFloat() * ((float) Math.PI * 2F);
                 float f1 = this.random.nextFloat() * 0.5F + 0.5F;
-                float f2 = MathHelper.sin(f) * 1 * 0.5F * f1;
-                float f3 = MathHelper.cos(f) * 1 * 0.5F * f1;
+                float f2 = Mth.sin(f) * 1 * 0.5F * f1;
+                float f3 = Mth.cos(f) * 1 * 0.5F * f1;
                 this.level.addParticle(ParticleTypes.ITEM_SLIME, this.getX() + (double) f2, this.getY(), this.getZ() + (double) f3, 0.0D, 0.0D, 0.0D);
             }
 
@@ -320,7 +320,7 @@ public class ResourcefulBee extends CustomBeeEntity {
     }
 
     private boolean canTeleport() {
-        return !hasCustomName() && this.tickCount % 150 == 0 && this.level.isDay() && !this.pollinateGoal.isRunning();
+        return !hasCustomName() && this.tickCount % 150 == 0 && this.level.isDay() && !this.pollinateGoal.isPollinating();
     }
 
     protected void teleportRandomly() {
@@ -333,7 +333,7 @@ public class ResourcefulBee extends CustomBeeEntity {
     }
 
     private void teleportToPos(double x, double y, double z) {
-        BlockPos.Mutable blockPos = new BlockPos.Mutable(x, y, z);
+        BlockPos.MutableBlockPos blockPos = new BlockPos.MutableBlockPos(x, y, z);
 
         while (blockPos.getY() > 0 && !this.level.getBlockState(blockPos).getMaterial().blocksMotion()) {
             blockPos.move(Direction.DOWN);
@@ -389,10 +389,10 @@ public class ResourcefulBee extends CustomBeeEntity {
             }
             if (i > 0 && info.hasTraits() && info.hasDamagePotionEffects()) {
                 int finalI = i;
-                info.getPotionDamageEffects().forEach(effectIntegerPair -> ((LivingEntity) entityIn).addEffect(new EffectInstance(effectIntegerPair.getLeft(), finalI * 20, effectIntegerPair.getRight())));
+                info.getPotionDamageEffects().forEach(effectIntegerPair -> ((LivingEntity) entityIn).addEffect(new MobEffectInstance(effectIntegerPair.getLeft(), finalI * 20, effectIntegerPair.getRight())));
             }
             if (canPoison(info))
-                ((LivingEntity) entityIn).addEffect(new EffectInstance(Effects.POISON, i * 20, 0));
+                ((LivingEntity) entityIn).addEffect(new MobEffectInstance(MobEffects.POISON, i * 20, 0));
         }
 
         this.setTarget(null);
@@ -409,26 +409,26 @@ public class ResourcefulBee extends CustomBeeEntity {
 
     private void explode(int radius) {
         if (!this.level.isClientSide) {
-            Explosion.Mode mode = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.level, this) ? Explosion.Mode.BREAK : Explosion.Mode.NONE;
+            Explosion.BlockInteraction mode = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.level, this) ? Explosion.BlockInteraction.BREAK : Explosion.BlockInteraction.NONE;
             this.dead = true;
-            this.level.explode(this, this.getX(), this.getY(), this.getZ(), random.nextFloat() * radius, explosiveCooldown > 0 ? Explosion.Mode.NONE : mode);
+            this.level.explode(this, this.getX(), this.getY(), this.getZ(), random.nextFloat() * radius, explosiveCooldown > 0 ? Explosion.BlockInteraction.NONE : mode);
             this.remove();
             this.spawnLingeringCloud();
         }
     }
 
     private void spawnLingeringCloud() {
-        Collection<EffectInstance> collection = this.getActiveEffects();
+        Collection<MobEffectInstance> collection = this.getActiveEffects();
         if (!collection.isEmpty()) {
-            AreaEffectCloudEntity areaeffectcloudentity = new AreaEffectCloudEntity(this.level, this.getX(), this.getY(), this.getZ());
+            AreaEffectCloud areaeffectcloudentity = new AreaEffectCloud(this.level, this.getX(), this.getY(), this.getZ());
             areaeffectcloudentity.setRadius(2.5F);
             areaeffectcloudentity.setRadiusOnUse(-0.5F);
             areaeffectcloudentity.setWaitTime(10);
             areaeffectcloudentity.setDuration(areaeffectcloudentity.getDuration() / 2);
             areaeffectcloudentity.setRadiusPerTick(-areaeffectcloudentity.getRadius() / (float) areaeffectcloudentity.getDuration());
 
-            for (EffectInstance effectinstance : collection) {
-                areaeffectcloudentity.addEffect(new EffectInstance(effectinstance));
+            for (MobEffectInstance effectinstance : collection) {
+                areaeffectcloudentity.addEffect(new MobEffectInstance(effectinstance));
             }
 
             this.level.addFreshEntity(areaeffectcloudentity);
@@ -437,18 +437,18 @@ public class ResourcefulBee extends CustomBeeEntity {
     }
 
     @Override
-    public void readAdditionalSaveData(@NotNull CompoundNBT compound) {
+    public void readAdditionalSaveData(@NotNull CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.numberOfMutations = compound.getInt(NBTConstants.NBT_MUTATION_COUNT);
     }
 
     @Override
-    public void addAdditionalSaveData(@NotNull CompoundNBT compound) {
+    public void addAdditionalSaveData(@NotNull CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt(NBTConstants.NBT_MUTATION_COUNT, this.numberOfMutations);
     }
 
-    public class EnterBeehiveGoal2 extends BeeEntity.EnterBeehiveGoal {
+    public class EnterBeehiveGoal2 extends Bee.BeeEnterHiveGoal {
         public EnterBeehiveGoal2() {
             //constructor
         }
@@ -456,9 +456,9 @@ public class ResourcefulBee extends CustomBeeEntity {
         @Override
         public boolean canBeeUse() {
             if (ResourcefulBee.this.hasHive() && ResourcefulBee.this.wantsToEnterHive() && ResourcefulBee.this.hivePos != null && ResourcefulBee.this.hivePos.closerThan(ResourcefulBee.this.position(), 2.0D)) {
-                TileEntity tileentity = ResourcefulBee.this.level.getBlockEntity(ResourcefulBee.this.hivePos);
-                if (tileentity instanceof BeehiveTileEntity) {
-                    BeehiveTileEntity beehivetileentity = (BeehiveTileEntity) tileentity;
+                BlockEntity tileentity = ResourcefulBee.this.level.getBlockEntity(ResourcefulBee.this.hivePos);
+                if (tileentity instanceof BeehiveBlockEntity) {
+                    BeehiveBlockEntity beehivetileentity = (BeehiveBlockEntity) tileentity;
                     if (!beehivetileentity.isFull()) {
                         return true;
                     }
@@ -485,10 +485,10 @@ public class ResourcefulBee extends CustomBeeEntity {
         @Override
         public void start() {
             if (ResourcefulBee.this.hivePos != null) {
-                TileEntity tileentity = ResourcefulBee.this.level.getBlockEntity(ResourcefulBee.this.hivePos);
+                BlockEntity tileentity = ResourcefulBee.this.level.getBlockEntity(ResourcefulBee.this.hivePos);
                 if (tileentity != null) {
-                    if (tileentity instanceof BeehiveTileEntity) {
-                        BeehiveTileEntity beehivetileentity = (BeehiveTileEntity) tileentity;
+                    if (tileentity instanceof BeehiveBlockEntity) {
+                        BeehiveBlockEntity beehivetileentity = (BeehiveBlockEntity) tileentity;
                         beehivetileentity.addOccupant(ResourcefulBee.this, ResourcefulBee.this.hasNectar());
                     } else if (tileentity instanceof ApiaryTileEntity) {
                         ApiaryTileEntity beehivetileentity = (ApiaryTileEntity) tileentity;
@@ -500,7 +500,7 @@ public class ResourcefulBee extends CustomBeeEntity {
     }
 
     @Override
-    public ItemStack getPickedResult(RayTraceResult target) {
+    public ItemStack getPickedResult(HitResult target) {
         return new ItemStack(beeData.getSpawnEggItemRegistryObject().get());
     }
 
@@ -522,7 +522,7 @@ public class ResourcefulBee extends CustomBeeEntity {
         }
     }*/
 
-    protected class FindPollinationTargetGoal2 extends BeeEntity.FindPollinationTargetGoal {
+    protected class FindPollinationTargetGoal2 extends Bee.BeeGrowCropGoal {
 
         public FindPollinationTargetGoal2() {
             super();
@@ -550,7 +550,7 @@ public class ResourcefulBee extends CustomBeeEntity {
         }
     }
 
-    public class FindBeehiveGoal2 extends BeeEntity.FindBeehiveGoal {
+    public class FindBeehiveGoal2 extends Bee.BeeGoToHiveGoal {
 
         public FindBeehiveGoal2() {
             super();
@@ -562,19 +562,19 @@ public class ResourcefulBee extends CustomBeeEntity {
         }
     }
 
-    public class FakePollinateGoal extends BeeEntity.PollinateGoal {
+    public class FakePollinateGoal extends Bee.BeePollinateGoal {
         public FakePollinateGoal() {
             super();
         }
 
         @Override
         public boolean isPollinating() {
-            return pollinateGoal.isRunning();
+            return pollinateGoal.isPollinating();
         }
 
         @Override
         public void stopPollinating() {
-            pollinateGoal.cancel();
+            pollinateGoal.stopPollinating();
         }
     }
 

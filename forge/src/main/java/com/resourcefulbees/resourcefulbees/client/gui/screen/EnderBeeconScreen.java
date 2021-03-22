@@ -1,7 +1,7 @@
 package com.resourcefulbees.resourcefulbees.client.gui.screen;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.container.EnderBeeconContainer;
@@ -10,16 +10,16 @@ import com.resourcefulbees.resourcefulbees.network.packets.UpdateBeeconMessage;
 import com.resourcefulbees.resourcefulbees.tileentity.EnderBeeconTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.client.gui.widget.button.AbstractButton;
+import net.minecraft.client.gui.components.AbstractButton;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.potion.Effect;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
@@ -29,20 +29,20 @@ import java.text.DecimalFormat;
 import java.util.LinkedList;
 import java.util.List;
 
-public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
+public class EnderBeeconScreen extends AbstractContainerScreen<EnderBeeconContainer> {
 
     private final EnderBeeconTileEntity tileEntity;
 
-    public EnderBeeconScreen(EnderBeeconContainer screenContainer, PlayerInventory inventory, ITextComponent titleIn) {
+    public EnderBeeconScreen(EnderBeeconContainer screenContainer, Inventory inventory, Component titleIn) {
         super(screenContainer, inventory, titleIn);
         this.tileEntity = screenContainer.getEnderBeeconTileEntity();
         preInit();
     }
 
-    private static final ITextComponent primaryLabel = new TranslationTextComponent("block.resourcefulbees.ender_beecon.primary");
-    private static final ITextComponent drainLabel = new TranslationTextComponent("block.resourcefulbees.ender_beecon.drain");
-    private static final ITextComponent rangeLabel = new TranslationTextComponent("block.resourcefulbees.ender_beecon.range");
-    private static final ITextComponent activeLabel = new TranslationTextComponent("block.resourcefulbees.ender_beecon.is_active");
+    private static final Component primaryLabel = new TranslatableComponent("block.resourcefulbees.ender_beecon.primary");
+    private static final Component drainLabel = new TranslatableComponent("block.resourcefulbees.ender_beecon.drain");
+    private static final Component rangeLabel = new TranslatableComponent("block.resourcefulbees.ender_beecon.range");
+    private static final Component activeLabel = new TranslatableComponent("block.resourcefulbees.ender_beecon.is_active");
     private static final ResourceLocation BUTTON_CALMING = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/ender_beecon/calming_button.png");
 
     List<PowerButton> powerButtons = new LinkedList<>();
@@ -61,7 +61,7 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
     }
 
     @Override
-    protected void renderBg(@Nonnull MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
+    protected void renderBg(@Nonnull PoseStack matrix, float partialTicks, int mouseX, int mouseY) {
         ResourceLocation texture = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/ender_beecon/ender_beecon.png");
         if (minecraft != null) {
             minecraft.getTextureManager().bind(texture);
@@ -91,7 +91,7 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
         }
     }
 
-    private void drawFluidTank(MatrixStack matrix) {
+    private void drawFluidTank(PoseStack matrix) {
         if (!tileEntity.getFluidTank().isEmpty()) {
             //init stuff
             int tankPosX = this.leftPos + 207;
@@ -103,7 +103,7 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
     }
 
     @Override
-    protected void renderLabels(@NotNull MatrixStack matrixStack, int mouseX, int mouseY) {
+    protected void renderLabels(@NotNull PoseStack matrixStack, int mouseX, int mouseY) {
         super.renderLabels(matrixStack, mouseX, mouseY);
         int buttonX = 24 + 11;
         int buttonY = 36 + 25;
@@ -125,19 +125,19 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
         for (PowerButton widget : this.powerButtons) {
             EnderBeeconTileEntity.BeeconEffect effect = tileEntity.getEffect(widget.effect);
             if (Config.BEECON_DO_MULTIPLIER.get()) {
-                drawCenteredString(matrixStack, this.font, new StringTextComponent("x" + effect.getValue()), buttonStartX, buttonY, 14737632);
+                drawCenteredString(matrixStack, this.font, new TextComponent("x" + effect.getValue()), buttonStartX, buttonY, 14737632);
             } else {
-                drawCenteredString(matrixStack, this.font, new StringTextComponent("+" + effect.getValue()), buttonStartX, buttonY, 14737632);
+                drawCenteredString(matrixStack, this.font, new TextComponent("+" + effect.getValue()), buttonStartX, buttonY, 14737632);
             }
             buttonStartX += buttonWidth + padding;
             if (widget.isHovered()) widget.renderToolTip(matrixStack, mouseX - this.leftPos, mouseY - this.topPos);
         }
-        StringTextComponent fluidCount;
+        TextComponent fluidCount;
         DecimalFormat decimalFormat = new DecimalFormat("##0.0");
         if (tileEntity.getFluidTank().getFluidAmount() < 1000f || Screen.hasShiftDown()) {
-            fluidCount = new StringTextComponent(decimalFormat.format(tileEntity.getFluidTank().getFluidAmount()) + " mb");
+            fluidCount = new TextComponent(decimalFormat.format(tileEntity.getFluidTank().getFluidAmount()) + " mb");
         } else {
-            fluidCount = new StringTextComponent(decimalFormat.format(tileEntity.getFluidTank().getFluidAmount() / 1000f) + " B");
+            fluidCount = new TextComponent(decimalFormat.format(tileEntity.getFluidTank().getFluidAmount() / 1000f) + " B");
         }
         if (mouseX >= this.leftPos + 207 && mouseX <= this.leftPos + 221 && mouseY >= this.topPos + 30 && mouseY <= this.topPos + 92) {
             renderTooltip(matrixStack, fluidCount, mouseX - this.leftPos, mouseY - this.topPos);
@@ -150,12 +150,12 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
         private final ResourceLocation texture;
 
         protected Button(int xPos, int yPos, ResourceLocation texture) {
-            super(xPos, yPos, 22, 22, StringTextComponent.EMPTY);
+            super(xPos, yPos, 22, 22, TextComponent.EMPTY);
             this.texture = texture;
         }
 
         @Override
-        public void renderButton(@NotNull MatrixStack matrixStack, int xPos, int yPos, float v) {
+        public void renderButton(@NotNull PoseStack matrixStack, int xPos, int yPos, float v) {
             Minecraft.getInstance().getTextureManager().bind(texture);
             //noinspection deprecation
             RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -173,7 +173,7 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
             this.renderExtra(matrixStack);
         }
 
-        protected abstract void renderExtra(MatrixStack matrixStack);
+        protected abstract void renderExtra(PoseStack matrixStack);
 
         public boolean isSelected() {
             return this.selected;
@@ -186,19 +186,19 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
 
     @OnlyIn(Dist.CLIENT)
     class PowerButton extends EnderBeeconScreen.Button {
-        private final Effect effect;
+        private final MobEffect effect;
         private final TextureAtlasSprite effectSprite;
-        private final ITextComponent textComponent;
+        private final Component textComponent;
 
-        public PowerButton(int xPos, int yPos, Effect effect, ResourceLocation texture) {
+        public PowerButton(int xPos, int yPos, MobEffect effect, ResourceLocation texture) {
             super(xPos, yPos, texture);
             this.effect = effect;
             this.effectSprite = Minecraft.getInstance().getMobEffectTextures().get(effect);
             this.textComponent = this.getTooltip(effect);
         }
 
-        private ITextComponent getTooltip(Effect effect) {
-            return new TranslationTextComponent(effect.getDescriptionId());
+        private Component getTooltip(MobEffect effect) {
+            return new TranslatableComponent(effect.getDescriptionId());
         }
 
         public void onPress() {
@@ -210,18 +210,18 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
         }
 
         @Override
-        public void renderToolTip(@NotNull MatrixStack matrixStack, int xPos, int yPos) {
+        public void renderToolTip(@NotNull PoseStack matrixStack, int xPos, int yPos) {
             EnderBeeconScreen.this.renderTooltip(matrixStack, this.textComponent, xPos, yPos);
         }
 
-        protected void renderExtra(MatrixStack matrixStack) {
+        protected void renderExtra(PoseStack matrixStack) {
             Minecraft.getInstance().getTextureManager().bind(this.effectSprite.atlas().location());
             blit(matrixStack, this.x + 2, this.y + 2, this.getBlitOffset(), 18, 18, this.effectSprite);
         }
     }
 
     @Override
-    public void render(@Nonnull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
+    public void render(@Nonnull PoseStack matrix, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrix);
         super.render(matrix, mouseX, mouseY, partialTicks);
     }

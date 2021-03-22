@@ -1,11 +1,11 @@
 package com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.client.gui.widget.ListButton;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 
 public abstract class BeepediaPage {
 
@@ -35,7 +35,7 @@ public abstract class BeepediaPage {
         listButton.y = yPos;
     }
 
-    public void newListButton(ItemStack item, ITextComponent text) {
+    public void newListButton(ItemStack item, Component text) {
         listButton = new ListButton(0, 0, 100, 20, 0, 0, 20, listImage, item, 2, 2, text, 22, 6, onPress -> beepedia.selectPage(this));
     }
 
@@ -49,9 +49,9 @@ public abstract class BeepediaPage {
         listButton.active = true;
     }
 
-    public abstract void renderBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY);
+    public abstract void renderBackground(PoseStack matrix, float partialTick, int mouseX, int mouseY);
 
-    public void renderForeground(MatrixStack matrix, int mouseX, int mouseY) {
+    public void renderForeground(PoseStack matrix, int mouseX, int mouseY) {
         // override to implement
     }
 
@@ -61,7 +61,7 @@ public abstract class BeepediaPage {
         // override to implement
     }
 
-    public void drawTooltips(MatrixStack matrixStack, int mouseX, int mouseY) {
+    public void drawTooltips(PoseStack matrixStack, int mouseX, int mouseY) {
         // override to implement
     }
 

@@ -2,28 +2,32 @@ package com.resourcefulbees.resourcefulbees.block;
 
 import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.item.BoatEntity;
-import net.minecraft.entity.item.TNTEntity;
-import net.minecraft.entity.item.minecart.AbstractMinecartEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
-import net.minecraft.particles.BlockParticleData;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.PrimedTnt;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.vehicle.AbstractMinecart;
+import net.minecraft.world.entity.vehicle.Boat;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.HalfTransparentBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
@@ -34,14 +38,14 @@ import java.util.List;
 import java.util.Random;
 
 @SuppressWarnings({"unused", "deprecation"})
-public class ColoredHoneyBlock extends BreakableBlock {
+public class ColoredHoneyBlock extends HalfTransparentBlock {
 
     protected static final VoxelShape SHAPE = Block.box(1.0D, 0.0D, 1.0D, 15.0D, 15.0D, 15.0D);
     protected final int color;
     protected final boolean isRainbow;
 
     public ColoredHoneyBlock(int color, boolean isRainbow) {
-        super(AbstractBlock.Properties.of(Material.CLAY).speedFactor(0.4F).jumpFactor(0.5F).noOcclusion().sound(SoundType.HONEY_BLOCK));
+        super(BlockBehaviour.Properties.of(Material.CLAY).speedFactor(0.4F).jumpFactor(0.5F).noOcclusion().sound(SoundType.HONEY_BLOCK));
         this.color = color;
         this.isRainbow = isRainbow;
     }
@@ -52,7 +56,7 @@ public class ColoredHoneyBlock extends BreakableBlock {
         return color;
     }
 
-    public static int getBlockColor(BlockState state, @Nullable IBlockReader world, @Nullable BlockPos pos, int tintIndex) {
+    public static int getBlockColor(BlockState state, @Nullable BlockGetter world, @Nullable BlockPos pos, int tintIndex) {
         ColoredHoneyBlock honeycombBlock = ((ColoredHoneyBlock) state.getBlock());
         return honeycombBlock.isRainbow ? RainbowColor.getRGB() : honeycombBlock.getHoneyColor();
     }
@@ -65,7 +69,7 @@ public class ColoredHoneyBlock extends BreakableBlock {
     }
 
     @Override
-    public void animateTick(@NotNull BlockState stateIn, @NotNull World world, @NotNull BlockPos pos, @NotNull Random rand) {
+    public void animateTick(@NotNull BlockState stateIn, @NotNull Level world, @NotNull BlockPos pos, @NotNull Random rand) {
         if (isRainbow) world.sendBlockUpdated(pos, stateIn, stateIn, 2);
         super.animateTick(stateIn, world, pos, rand);
     }
@@ -76,27 +80,26 @@ public class ColoredHoneyBlock extends BreakableBlock {
     //region Item stuff
     @NotNull
     @Override
-    public List<ItemStack> getDrops(@NotNull BlockState state, @NotNull LootContext.Builder builder) {
+    public List<ItemStack> getDrops(BlockState p_220076_1_, LootContext.Builder p_220076_2_) {
         return Collections.singletonList(this.asItem().getDefaultInstance());
     }
 
     @Override
-    public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
+    public ItemStack getPickBlock(BlockState state, HitResult target, BlockGetter world, BlockPos pos, Player player) {
         return this.asItem().getDefaultInstance();
     }
 
     //endregion
-
     @Override
     @NotNull
-    public VoxelShape getCollisionShape(@NotNull BlockState blockState, @NotNull IBlockReader blockReader, @NotNull BlockPos blockPos, @NotNull ISelectionContext selectionContext) {
+    public VoxelShape getCollisionShape(@NotNull BlockState blockState, @NotNull BlockGetter blockReader, @NotNull BlockPos blockPos, @NotNull CollisionContext selectionContext) {
         return SHAPE;
     }
 
     //region Sliding Stuff
 
     @Override
-    public void fallOn(World world, @NotNull BlockPos blockPos, Entity entity, float distance) {
+    public void fallOn(Level world, @NotNull BlockPos blockPos, Entity entity, float distance) {
         entity.playSound(SoundEvents.HONEY_BLOCK_SLIDE, 1.0F, 1.0F);
         if (world.isClientSide) {
             addParticles(entity);
@@ -124,7 +127,7 @@ public class ColoredHoneyBlock extends BreakableBlock {
     }
 
     @Override
-    public void entityInside(@NotNull BlockState state, @NotNull World world, @NotNull BlockPos blockPos, @NotNull Entity entity) {
+    public void entityInside(@NotNull BlockState state, @NotNull Level world, @NotNull BlockPos blockPos, @NotNull Entity entity) {
         if (isSliding(blockPos, entity)) {
             this.triggerAdvancement(entity, blockPos);
             this.updateSlidingVelocity(entity);
@@ -134,28 +137,28 @@ public class ColoredHoneyBlock extends BreakableBlock {
     }
 
     private void triggerAdvancement(Entity entity, BlockPos blockPos) {
-        if (entity instanceof ServerPlayerEntity && entity.level.getGameTime() % 20L == 0L) {
-            CriteriaTriggers.HONEY_BLOCK_SLIDE.trigger((ServerPlayerEntity) entity, entity.level.getBlockState(blockPos));
+        if (entity instanceof ServerPlayer && entity.level.getGameTime() % 20L == 0L) {
+            CriteriaTriggers.HONEY_BLOCK_SLIDE.trigger((ServerPlayer) entity, entity.level.getBlockState(blockPos));
         }
     }
 
     private void updateSlidingVelocity(Entity entity) {
-        Vector3d vector3d = entity.getDeltaMovement();
+        Vec3 vector3d = entity.getDeltaMovement();
         if (vector3d.y < -0.13D) {
             double d0 = -0.05D / vector3d.y;
-            entity.setDeltaMovement(new Vector3d(vector3d.x * d0, -0.05D, vector3d.z * d0));
+            entity.setDeltaMovement(new Vec3(vector3d.x * d0, -0.05D, vector3d.z * d0));
         } else {
-            entity.setDeltaMovement(new Vector3d(vector3d.x, -0.05D, vector3d.z));
+            entity.setDeltaMovement(new Vec3(vector3d.x, -0.05D, vector3d.z));
         }
 
         entity.fallDistance = 0.0F;
     }
 
     private static boolean hasHoneyBlockEffects(Entity entity) {
-        return entity instanceof LivingEntity || entity instanceof AbstractMinecartEntity || entity instanceof TNTEntity || entity instanceof BoatEntity;
+        return entity instanceof LivingEntity || entity instanceof AbstractMinecart || entity instanceof PrimedTnt || entity instanceof Boat;
     }
 
-    private void addCollisionEffects(World world, Entity entity) {
+    private void addCollisionEffects(Level world, Entity entity) {
         if (world.random.nextInt(5) == 0 && hasHoneyBlockEffects(entity)) {
             entity.playSound(SoundEvents.HONEY_BLOCK_SLIDE, 1.0F, 1.0F);
             if (world.isClientSide) addParticles(entity);
@@ -166,7 +169,7 @@ public class ColoredHoneyBlock extends BreakableBlock {
 
     @OnlyIn(Dist.CLIENT)
     private void addParticles(Entity entity) {
-        BlockParticleData particleData = new BlockParticleData(ParticleTypes.BLOCK, this.getBlock().defaultBlockState());
+        BlockParticleOption particleData = new BlockParticleOption(ParticleTypes.BLOCK, this.getBlock().defaultBlockState());
         for (int i = 0; i < 5; ++i) {
             entity.level.addParticle(particleData, entity.getX(), entity.getY(), entity.getZ(), 0.0D, 0.0D, 0.0D);
         }

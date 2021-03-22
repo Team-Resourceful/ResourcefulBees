@@ -1,16 +1,16 @@
 package com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.resourcefulbees.resourcefulbees.client.gui.widget.ListButton;
 import com.resourcefulbees.resourcefulbees.client.gui.widget.SubButtonList;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.Map;
 import java.util.SortedMap;
@@ -25,11 +25,11 @@ public class TraitListPage extends BeeDataPage {
     }
 
     @Override
-    public void renderBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
+    public void renderBackground(PoseStack matrix, float partialTick, int mouseX, int mouseY) {
         if (list == null) return;
-        TranslationTextComponent title = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.traits");
-        FontRenderer font = Minecraft.getInstance().font;
-        font.draw(matrix, title.withStyle(TextFormatting.WHITE), xPos, (float) yPos + 8, -1);
+        TranslatableComponent title = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.traits");
+        Font font = Minecraft.getInstance().font;
+        font.draw(matrix, title.withStyle(ChatFormatting.WHITE), xPos, (float) yPos + 8, -1);
         list.updateList();
     }
 
@@ -43,8 +43,8 @@ public class TraitListPage extends BeeDataPage {
         SortedMap<String, ListButton> buttons = new TreeMap<>();
         for (Map.Entry<String, TraitPage> e : traitPages.entrySet()) {
             ItemStack stack = new ItemStack(e.getValue().trait.getBeepediaItem());
-            TranslationTextComponent text = new TranslationTextComponent(e.getValue().trait.getTranslationKey());
-            Button.IPressable onPress = button -> {
+            TranslatableComponent text = new TranslatableComponent(e.getValue().trait.getTranslationKey());
+            Button.OnPress onPress = button -> {
                 BeepediaScreen.saveScreenState();
                 beepedia.setActive(BeepediaScreen.PageType.TRAIT, e.getKey());
             };

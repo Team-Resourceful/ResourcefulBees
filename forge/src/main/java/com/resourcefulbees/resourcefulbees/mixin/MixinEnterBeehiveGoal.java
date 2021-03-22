@@ -1,16 +1,16 @@
 package com.resourcefulbees.resourcefulbees.mixin;
 
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryTileEntity;
-import net.minecraft.entity.passive.BeeEntity;
-import net.minecraft.tileentity.BeehiveTileEntity;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(BeeEntity.EnterBeehiveGoal.class)
+@Mixin(Bee.BeeLocateHiveGoal.class)
 public class MixinEnterBeehiveGoal {
 
     /*@Dynamic
@@ -19,20 +19,20 @@ public class MixinEnterBeehiveGoal {
     private BeeEntity this$0;*/
 
     @Unique
-    private BeeEntity beeEntity;
+    private Bee beeEntity;
 
     @SuppressWarnings("UnresolvedMixinReference")
-    @Inject(method = "<init>(Lnet/minecraft/entity/passive/BeeEntity;)V", at = @At(value = "RETURN"))
-    private void init(BeeEntity beeEntity, CallbackInfo ci) {
+    @Inject(method = "<init>(Lnet/minecraft/world/entity/animal/Bee;)V", at = @At(value = "RETURN"))
+    private void init(Bee beeEntity, CallbackInfo ci) {
         this.beeEntity = beeEntity;
     }
 
     @Inject(at = @At("HEAD"), method = "canBeeUse()Z", cancellable = true)
     public void canBeeStart(CallbackInfoReturnable<Boolean> cir) {
         if (beeEntity.hasHive() && beeEntity.wantsToEnterHive() && beeEntity.hivePos != null && beeEntity.hivePos.closerThan(beeEntity.position(), 2.0D)) {
-            TileEntity tileentity = beeEntity.level.getBlockEntity(beeEntity.hivePos);
-            if (tileentity instanceof BeehiveTileEntity) {
-                BeehiveTileEntity beehivetileentity = (BeehiveTileEntity) tileentity;
+            BlockEntity tileentity = beeEntity.level.getBlockEntity(beeEntity.hivePos);
+            if (tileentity instanceof BeehiveBlockEntity) {
+                BeehiveBlockEntity beehivetileentity = (BeehiveBlockEntity) tileentity;
                 if (!beehivetileentity.isFull()) {
                     cir.setReturnValue(true);
                 } else {
@@ -56,10 +56,10 @@ public class MixinEnterBeehiveGoal {
     @Overwrite()
     public void start() {
         if (beeEntity.hivePos != null) {
-            TileEntity tileentity = beeEntity.level.getBlockEntity(beeEntity.hivePos);
+            BlockEntity tileentity = beeEntity.level.getBlockEntity(beeEntity.hivePos);
             if (tileentity != null) {
-                if (tileentity instanceof BeehiveTileEntity) {
-                    BeehiveTileEntity beehivetileentity = (BeehiveTileEntity) tileentity;
+                if (tileentity instanceof BeehiveBlockEntity) {
+                    BeehiveBlockEntity beehivetileentity = (BeehiveBlockEntity) tileentity;
                     beehivetileentity.addOccupant(beeEntity, beeEntity.hasNectar());
                 } else if (tileentity instanceof ApiaryTileEntity) {
                     ApiaryTileEntity apiaryTileEntity = (ApiaryTileEntity) tileentity;

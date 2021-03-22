@@ -15,10 +15,10 @@ import com.resourcefulbees.resourcefulbees.registry.*;
 import com.resourcefulbees.resourcefulbees.utils.PreviewHandler;
 import com.resourcefulbees.resourcefulbees.utils.color.ColorHandler;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.RenderTypeLookup;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -42,7 +42,7 @@ public class ClientEventHandlers {
     }
 
     public static void registerPatreonRender() {
-        EntityRendererManager manager =  Minecraft.getInstance().getEntityRenderDispatcher();
+        EntityRenderDispatcher manager =  Minecraft.getInstance().getEntityRenderDispatcher();
         manager.getSkinMap().get("default").addLayer(new BeeRewardRender(manager.defaultPlayerRenderer));
         manager.getSkinMap().get("slim").addLayer(new BeeRewardRender(manager.defaultPlayerRenderer));
     }
@@ -52,53 +52,53 @@ public class ClientEventHandlers {
             CustomBeeData data = BeeRegistry.getRegistry().getBeeData(s);
             return new CustomBeeRenderer(data.getBaseModelType(), manager, data);
         }));
-        ScreenManager.register(ModContainers.CENTRIFUGE_CONTAINER.get(), CentrifugeScreen::new);
-        ScreenManager.register(ModContainers.MECHANICAL_CENTRIFUGE_CONTAINER.get(), MechanicalCentrifugeScreen::new);
-        ScreenManager.register(ModContainers.CENTRIFUGE_MULTIBLOCK_CONTAINER.get(), CentrifugeMultiblockScreen::new);
-        ScreenManager.register(ModContainers.ELITE_CENTRIFUGE_MULTIBLOCK_CONTAINER.get(), CentrifugeMultiblockScreen::new);
-        ScreenManager.register(ModContainers.UNVALIDATED_APIARY_CONTAINER.get(), UnvalidatedApiaryScreen::new);
-        ScreenManager.register(ModContainers.VALIDATED_APIARY_CONTAINER.get(), ValidatedApiaryScreen::new);
-        ScreenManager.register(ModContainers.APIARY_STORAGE_CONTAINER.get(), ApiaryStorageScreen::new);
-        ScreenManager.register(ModContainers.APIARY_BREEDER_CONTAINER.get(), ApiaryBreederScreen::new);
-        ScreenManager.register(ModContainers.HONEY_GENERATOR_CONTAINER.get(), HoneyGeneratorScreen::new);
-        ScreenManager.register(ModContainers.ENDER_BEECON_CONTAINER.get(), EnderBeeconScreen::new);
-        RenderTypeLookup.setRenderLayer(ModBlocks.GOLD_FLOWER.get(), RenderType.cutout());
-        RenderTypeLookup.setRenderLayer(ModBlocks.PREVIEW_BLOCK.get(), RenderType.cutout());
-        RenderTypeLookup.setRenderLayer(ModBlocks.ERRORED_PREVIEW_BLOCK.get(), RenderType.cutout());
-        RenderTypeLookup.setRenderLayer(ModBlocks.ENDER_BEECON.get(), RenderType.translucent());
-        RenderTypeLookup.setRenderLayer(ModBlocks.PURPUR_HONEY_TANK.get(), RenderType.translucent());
-        RenderTypeLookup.setRenderLayer(ModBlocks.NETHER_HONEY_TANK.get(), RenderType.translucent());
-        RenderTypeLookup.setRenderLayer(ModBlocks.WOODEN_HONEY_TANK.get(), RenderType.translucent());
-        RenderTypeLookup.setRenderLayer(ModBlocks.HONEY_GENERATOR.get(), RenderType.translucent());
+        MenuScreens.register(ModContainers.CENTRIFUGE_CONTAINER.get(), CentrifugeScreen::new);
+        MenuScreens.register(ModContainers.MECHANICAL_CENTRIFUGE_CONTAINER.get(), MechanicalCentrifugeScreen::new);
+        MenuScreens.register(ModContainers.CENTRIFUGE_MULTIBLOCK_CONTAINER.get(), CentrifugeMultiblockScreen::new);
+        MenuScreens.register(ModContainers.ELITE_CENTRIFUGE_MULTIBLOCK_CONTAINER.get(), CentrifugeMultiblockScreen::new);
+        MenuScreens.register(ModContainers.UNVALIDATED_APIARY_CONTAINER.get(), UnvalidatedApiaryScreen::new);
+        MenuScreens.register(ModContainers.VALIDATED_APIARY_CONTAINER.get(), ValidatedApiaryScreen::new);
+        MenuScreens.register(ModContainers.APIARY_STORAGE_CONTAINER.get(), ApiaryStorageScreen::new);
+        MenuScreens.register(ModContainers.APIARY_BREEDER_CONTAINER.get(), ApiaryBreederScreen::new);
+        MenuScreens.register(ModContainers.HONEY_GENERATOR_CONTAINER.get(), HoneyGeneratorScreen::new);
+        MenuScreens.register(ModContainers.ENDER_BEECON_CONTAINER.get(), EnderBeeconScreen::new);
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.GOLD_FLOWER.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.PREVIEW_BLOCK.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.ERRORED_PREVIEW_BLOCK.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.ENDER_BEECON.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.PURPUR_HONEY_TANK.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.NETHER_HONEY_TANK.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.WOODEN_HONEY_TANK.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.HONEY_GENERATOR.get(), RenderType.translucent());
 
         // bee nests need transparency for overlay
-        RenderTypeLookup.setRenderLayer(ModBlocks.OAK_BEE_NEST.get(), RenderType.translucent());
-        RenderTypeLookup.setRenderLayer(ModBlocks.SPRUCE_BEE_NEST.get(), RenderType.translucent());
-        RenderTypeLookup.setRenderLayer(ModBlocks.BIRCH_BEE_NEST.get(), RenderType.translucent());
-        RenderTypeLookup.setRenderLayer(ModBlocks.BROWN_MUSHROOM_BEE_NEST.get(), RenderType.translucent());
-        RenderTypeLookup.setRenderLayer(ModBlocks.CRIMSON_BEE_NEST.get(), RenderType.translucent());
-        RenderTypeLookup.setRenderLayer(ModBlocks.CRIMSON_NYLIUM_BEE_NEST.get(), RenderType.translucent());
-        RenderTypeLookup.setRenderLayer(ModBlocks.DARK_OAK_BEE_NEST.get(), RenderType.translucent());
-        RenderTypeLookup.setRenderLayer(ModBlocks.RED_MUSHROOM_BEE_NEST.get(), RenderType.translucent());
-        RenderTypeLookup.setRenderLayer(ModBlocks.WARPED_BEE_NEST.get(), RenderType.translucent());
-        RenderTypeLookup.setRenderLayer(ModBlocks.WARPED_NYLIUM_BEE_NEST.get(), RenderType.translucent());
-        RenderTypeLookup.setRenderLayer(ModBlocks.ACACIA_BEE_NEST.get(), RenderType.translucent());
-        RenderTypeLookup.setRenderLayer(ModBlocks.GRASS_BEE_NEST.get(), RenderType.translucent());
-        RenderTypeLookup.setRenderLayer(ModBlocks.JUNGLE_BEE_NEST.get(), RenderType.translucent());
-        RenderTypeLookup.setRenderLayer(ModBlocks.NETHER_BEE_NEST.get(), RenderType.translucent());
-        RenderTypeLookup.setRenderLayer(ModBlocks.PRISMARINE_BEE_NEST.get(), RenderType.translucent());
-        RenderTypeLookup.setRenderLayer(ModBlocks.PURPUR_BEE_NEST.get(), RenderType.translucent());
-        RenderTypeLookup.setRenderLayer(ModBlocks.WITHER_BEE_NEST.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.OAK_BEE_NEST.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.SPRUCE_BEE_NEST.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.BIRCH_BEE_NEST.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.BROWN_MUSHROOM_BEE_NEST.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.CRIMSON_BEE_NEST.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.CRIMSON_NYLIUM_BEE_NEST.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.DARK_OAK_BEE_NEST.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.RED_MUSHROOM_BEE_NEST.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.WARPED_BEE_NEST.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.WARPED_NYLIUM_BEE_NEST.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.ACACIA_BEE_NEST.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.GRASS_BEE_NEST.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.JUNGLE_BEE_NEST.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.NETHER_BEE_NEST.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.PRISMARINE_BEE_NEST.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.PURPUR_BEE_NEST.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.WITHER_BEE_NEST.get(), RenderType.translucent());
 
-        RenderTypeLookup.setRenderLayer(ModBlocks.T1_BEEHIVE.get(), RenderType.translucent());
-        RenderTypeLookup.setRenderLayer(ModBlocks.T2_BEEHIVE.get(), RenderType.translucent());
-        RenderTypeLookup.setRenderLayer(ModBlocks.T3_BEEHIVE.get(), RenderType.translucent());
-        RenderTypeLookup.setRenderLayer(ModBlocks.T4_BEEHIVE.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.T1_BEEHIVE.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.T2_BEEHIVE.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.T3_BEEHIVE.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.T4_BEEHIVE.get(), RenderType.translucent());
 
         ItemModelPropertiesHandler.registerProperties();
-        ClientRegistry.bindTileEntityRenderer(ModTileEntityTypes.HONEY_TANK_TILE_ENTITY.get(), RenderHoneyTank::new);
-        ClientRegistry.bindTileEntityRenderer(ModTileEntityTypes.HONEY_GENERATOR_ENTITY.get(), RenderHoneyGenerator::new);
-        ClientRegistry.bindTileEntityRenderer(ModTileEntityTypes.ENDER_BEECON_TILE_ENTITY.get(), RenderEnderBeecon::new);
+        ClientRegistry.bindTileEntityRenderer(ModBlockEntityTypes.HONEY_TANK_TILE_ENTITY.get(), RenderHoneyTank::new);
+        ClientRegistry.bindTileEntityRenderer(ModBlockEntityTypes.HONEY_GENERATOR_ENTITY.get(), RenderHoneyGenerator::new);
+        ClientRegistry.bindTileEntityRenderer(ModBlockEntityTypes.ENDER_BEECON_TILE_ENTITY.get(), RenderEnderBeecon::new);
         event.enqueueWork(FluidRender::setHoneyRenderType);
     }
 }

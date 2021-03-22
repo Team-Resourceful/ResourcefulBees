@@ -1,14 +1,13 @@
 package com.resourcefulbees.resourcefulbees.block.multiblocks.centrifuge;
 
-import com.resourcefulbees.resourcefulbees.registry.ModTileEntityTypes;
+import com.resourcefulbees.resourcefulbees.registry.ModBlockEntityTypes;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.EliteCentrifugeControllerTileEntity;
-import net.minecraft.block.BlockState;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.IBlockReader;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.AbstractBlock.Properties;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class EliteCentrifugeControllerBlock extends CentrifugeControllerBlock {
     public EliteCentrifugeControllerBlock(Properties properties) { super(properties); }
@@ -18,7 +17,7 @@ public class EliteCentrifugeControllerBlock extends CentrifugeControllerBlock {
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) { return new EliteCentrifugeControllerTileEntity(ModTileEntityTypes.ELITE_CENTRIFUGE_CONTROLLER_ENTITY.get()); }
+    public BlockEntity createTileEntity(BlockState state, BlockGetter world) { return new EliteCentrifugeControllerTileEntity(ModBlockEntityTypes.ELITE_CENTRIFUGE_CONTROLLER_ENTITY.get()); }
 }
 
 

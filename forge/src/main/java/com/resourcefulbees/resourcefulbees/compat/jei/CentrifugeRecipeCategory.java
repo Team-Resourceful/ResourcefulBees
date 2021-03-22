@@ -1,7 +1,7 @@
 package com.resourcefulbees.resourcefulbees.compat.jei;
 
 import com.google.common.collect.Lists;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
@@ -15,14 +15,14 @@ import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
@@ -122,7 +122,7 @@ public class CentrifugeRecipeCategory extends BaseCategory<CentrifugeRecipe> {
     }
 
     @Override
-    public void draw(CentrifugeRecipe recipe, @NotNull MatrixStack matrix, double mouseX, double mouseY) {
+    public void draw(CentrifugeRecipe recipe, @NotNull PoseStack matrix, double mouseX, double mouseY) {
         this.arrow.draw(matrix, 31, 14);
 
         final float beeOutput = recipe.itemOutputs.get(0).getRight();
@@ -138,7 +138,7 @@ public class CentrifugeRecipeCategory extends BaseCategory<CentrifugeRecipe> {
         String fluidString = decimalFormat.format(fluid);
 
         Minecraft minecraft = Minecraft.getInstance();
-        FontRenderer fontRenderer = minecraft.font;
+        Font fontRenderer = minecraft.font;
         int honeyBottleOffset = fontRenderer.width(honeyBottleString) / 2;
         int beeOutputOffset = fontRenderer.width(beeOutputString) / 2;
         int beeswaxOffset = fontRenderer.width(beeswaxString) / 2;
@@ -160,9 +160,9 @@ public class CentrifugeRecipeCategory extends BaseCategory<CentrifugeRecipe> {
     }
 
     @Override
-    public @NotNull List<ITextComponent> getTooltipStrings(@NotNull CentrifugeRecipe recipe, double mouseX, double mouseY) {
+    public @NotNull List<Component> getTooltipStrings(@NotNull CentrifugeRecipe recipe, double mouseX, double mouseY) {
         if (mouseX >= 10 && mouseX <= 26 && mouseY >= 45 && mouseY <= 61) {
-            return Collections.singletonList(new StringTextComponent("Multiblock only recipe."));
+            return Collections.singletonList(new TextComponent("Multiblock only recipe."));
         }
         return super.getTooltipStrings(recipe, mouseX, mouseY);
     }

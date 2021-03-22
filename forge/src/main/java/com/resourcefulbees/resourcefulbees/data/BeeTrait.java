@@ -1,11 +1,11 @@
 package com.resourcefulbees.resourcefulbees.data;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.particles.BasicParticleType;
-import net.minecraft.potion.Effect;
-import net.minecraft.util.DamageSource;
+import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
@@ -13,15 +13,15 @@ import java.util.List;
 
 public class BeeTrait {
     private final Item beepediaItem;
-    private final List<Pair<Effect, Integer>> potionDamageEffects;
+    private final List<Pair<MobEffect, Integer>> potionDamageEffects;
     private final List<DamageSource> damageImmunities;
-    private final List<Effect> potionImmunities;
+    private final List<MobEffect> potionImmunities;
     private final List<Pair<String, Integer>> damageTypes;
     private final List<String> specialAbilities;
-    private final BasicParticleType particleEffect;
+    private final SimpleParticleType particleEffect;
     private final String name;
 
-    private BeeTrait(String name, Item beepediaItem, List<Pair<Effect, Integer>> potionDamageEffects, List<DamageSource> damageImmunities, List<Effect> potionImmunities, List<Pair<String, Integer>> damageTypes, List<String> specialAbilities, BasicParticleType particleEffect) {
+    private BeeTrait(String name, Item beepediaItem, List<Pair<MobEffect, Integer>> potionDamageEffects, List<DamageSource> damageImmunities, List<MobEffect> potionImmunities, List<Pair<String, Integer>> damageTypes, List<String> specialAbilities, SimpleParticleType particleEffect) {
         this.name = name;
         this.beepediaItem = beepediaItem;
         this.potionDamageEffects = potionDamageEffects;
@@ -56,7 +56,7 @@ public class BeeTrait {
         return this.particleEffect != null;
     }
 
-    public List<Pair<Effect, Integer>> getPotionDamageEffects() {
+    public List<Pair<MobEffect, Integer>> getPotionDamageEffects() {
         return this.potionDamageEffects;
     }
 
@@ -64,7 +64,7 @@ public class BeeTrait {
         return this.damageImmunities;
     }
 
-    public List<Effect> getPotionImmunities() {
+    public List<MobEffect> getPotionImmunities() {
         return this.potionImmunities;
     }
 
@@ -76,7 +76,7 @@ public class BeeTrait {
         return this.specialAbilities;
     }
 
-    public BasicParticleType getParticleEffect() {
+    public SimpleParticleType getParticleEffect() {
         return this.particleEffect;
     }
 
@@ -92,12 +92,12 @@ public class BeeTrait {
     public static class Builder {
         String name;
         Item beepediaItem;
-        List<Pair<Effect, Integer>> potionDamageEffects = new ArrayList<>();
+        List<Pair<MobEffect, Integer>> potionDamageEffects = new ArrayList<>();
         List<DamageSource> damageImmunities = new ArrayList<>();
-        List<Effect> potionImmunities = new ArrayList<>();
+        List<MobEffect> potionImmunities = new ArrayList<>();
         List<Pair<String, Integer>> damageTypes = new ArrayList<>();
         List<String> specialAbilities = new ArrayList<>();
-        BasicParticleType particleEffect;
+        SimpleParticleType particleEffect;
 
         public Builder(String name) {
             this.name = name;
@@ -108,12 +108,12 @@ public class BeeTrait {
             return this;
         }
 
-        public Builder addDamagePotionEffects(List<Pair<Effect, Integer>> potionDamageEffects) {
+        public Builder addDamagePotionEffects(List<Pair<MobEffect, Integer>> potionDamageEffects) {
             this.potionDamageEffects.addAll(potionDamageEffects);
             return this;
         }
 
-        public Builder addDamagePotionEffect(Pair<Effect, Integer> potionDamageEffect) {
+        public Builder addDamagePotionEffect(Pair<MobEffect, Integer> potionDamageEffect) {
             this.potionDamageEffects.add(potionDamageEffect);
             return this;
         }
@@ -128,12 +128,12 @@ public class BeeTrait {
             return this;
         }
 
-        public Builder addPotionImmunities(List<Effect> potionImmunities) {
+        public Builder addPotionImmunities(List<MobEffect> potionImmunities) {
             this.potionImmunities.addAll(potionImmunities);
             return this;
         }
 
-        public Builder addPotionImmunity(Effect potionImmunity) {
+        public Builder addPotionImmunity(MobEffect potionImmunity) {
             this.potionImmunities.add(potionImmunity);
             return this;
         }
@@ -158,7 +158,7 @@ public class BeeTrait {
             return this;
         }
 
-        public Builder setParticleEffect(BasicParticleType particleEffect) {
+        public Builder setParticleEffect(SimpleParticleType particleEffect) {
             this.particleEffect = particleEffect;
             return this;
         }

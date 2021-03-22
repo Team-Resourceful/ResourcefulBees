@@ -1,21 +1,22 @@
 package com.resourcefulbees.resourcefulbees.utils;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.resourcefulbees.resourcefulbees.block.multiblocks.apiary.ApiaryBlock;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.registry.ModBlocks;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryTileEntity;
-import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BlockRendererDispatcher;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.world.World;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.model.data.EmptyModelData;
 
@@ -31,7 +32,7 @@ public class PreviewHandler {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
 
-    public static void setPreview(BlockPos apiary, MutableBoundingBox box, boolean enabled){
+    public static void setPreview(BlockPos apiary, BoundingBox box, boolean enabled){
         STRUCTURE_PREVIEW_POS.clear();
         if (enabled) {
             PreviewHandler.apiaryPos = apiary;
@@ -50,11 +51,11 @@ public class PreviewHandler {
     }
 
     public static void onWorldRenderLast(RenderWorldLastEvent event) {
-        World world = Minecraft.getInstance().level;
-        MatrixStack ms = event.getMatrixStack();
+        Level world = Minecraft.getInstance().level;
+        PoseStack ms = event.getMatrixStack();
 
-        IRenderTypeBuffer.Impl buffers = Minecraft.getInstance().renderBuffers().bufferSource();
-        IVertexBuilder buffer = buffers.getBuffer(RenderType.translucent());
+        MultiBufferSource.BufferSource buffers = Minecraft.getInstance().renderBuffers().bufferSource();
+        VertexConsumer buffer = buffers.getBuffer(RenderType.translucent());
 
         if (apiaryPos != null && enabled) {
             if (world != null && world.getBlockState(apiaryPos).getBlock() instanceof ApiaryBlock) {
@@ -62,7 +63,7 @@ public class PreviewHandler {
                     ApiaryTileEntity apiaryTE = (ApiaryTileEntity) world.getBlockEntity(apiaryPos);
                     if (apiaryTE != null && apiaryTE.isPreviewed())
                         for (BlockPos pos : STRUCTURE_PREVIEW_POS) {
-                            if (world.getBlockState(pos).equals(net.minecraft.block.Blocks.AIR.defaultBlockState()))
+                            if (world.getBlockState(pos).equals(Blocks.AIR.defaultBlockState()))
                                 renderBlockAt(ms, buffer, ModBlocks.PREVIEW_BLOCK.get().defaultBlockState(), pos);
                             else {
                                 if (BeeInfoUtils.getBlockTag("resourcefulbees:valid_apiary") != null
@@ -82,7 +83,7 @@ public class PreviewHandler {
         buffers.endBatch(RenderType.translucent());
     }
 
-    private static void renderBlockAt(MatrixStack ms, IVertexBuilder buffer, BlockState state, BlockPos pos) {
+    private static void renderBlockAt(PoseStack ms, VertexConsumer buffer, BlockState state, BlockPos pos) {
         double renderPosX = Minecraft.getInstance().getEntityRenderDispatcher().camera.getPosition().x();
         double renderPosY = Minecraft.getInstance().getEntityRenderDispatcher().camera.getPosition().y();
         double renderPosZ = Minecraft.getInstance().getEntityRenderDispatcher().camera.getPosition().z();
@@ -90,9 +91,9 @@ public class PreviewHandler {
         ms.pushPose();
         ms.translate(-renderPosX, -renderPosY, -renderPosZ);
 
-        BlockRendererDispatcher brd = Minecraft.getInstance().getBlockRenderer();
+        BlockRenderDispatcher brd = Minecraft.getInstance().getBlockRenderer();
         ms.translate(pos.getX(), pos.getY(), pos.getZ());
-        IBakedModel model = brd.getBlockModel(state);
+        BakedModel model = brd.getBlockModel(state);
         int color = Minecraft.getInstance().getBlockColors().getColor(state, null, null, 0);
         float r = (float) (color >> 16 & 255) / 255.0F;
         float g = (float) (color >> 8 & 255) / 255.0F;

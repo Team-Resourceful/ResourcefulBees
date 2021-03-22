@@ -6,20 +6,20 @@ import com.resourcefulbees.resourcefulbees.container.AutomationSensitiveItemStac
 import com.resourcefulbees.resourcefulbees.container.MechanicalCentrifugeContainer;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe;
-import com.resourcefulbees.resourcefulbees.registry.ModTileEntityTypes;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import com.resourcefulbees.resourcefulbees.registry.ModBlockEntityTypes;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.TickableBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -34,10 +34,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.resourcefulbees.resourcefulbees.container.AutomationSensitiveItemStackHandler.IAcceptor;
-import com.resourcefulbees.resourcefulbees.container.AutomationSensitiveItemStackHandler.IRemover;
-
-public class MechanicalCentrifugeTileEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider {
+public class MechanicalCentrifugeTileEntity extends BlockEntity implements TickableBlockEntity, MenuProvider {
 
     public static final int HONEYCOMB_SLOT = 0;
     public static final int BOTTLE_SLOT = 1;
@@ -54,7 +51,7 @@ public class MechanicalCentrifugeTileEntity extends TileEntity implements ITicka
     private ItemStack failedMatch = ItemStack.EMPTY;
 
     public MechanicalCentrifugeTileEntity() {
-        super(ModTileEntityTypes.MECHANICAL_CENTRIFUGE_ENTITY.get());
+        super(ModBlockEntityTypes.MECHANICAL_CENTRIFUGE_ENTITY.get());
     }
 
 
@@ -168,16 +165,16 @@ public class MechanicalCentrifugeTileEntity extends TileEntity implements ITicka
 
     @Nonnull
     @Override
-    public CompoundNBT save(CompoundNBT tag) {
-        CompoundNBT inv = this.getItemStackHandler().serializeNBT();
+    public CompoundTag save(CompoundTag tag) {
+        CompoundTag inv = this.getItemStackHandler().serializeNBT();
         tag.put("inv", inv);
         tag.putInt("clicks", getClicks());
         return super.save(tag);
     }
 
     @Override
-    public void load(@Nonnull BlockState state, CompoundNBT tag) {
-        CompoundNBT invTag = tag.getCompound("inv");
+    public void load(@Nonnull BlockState state, CompoundTag tag) {
+        CompoundTag invTag = tag.getCompound("inv");
         getItemStackHandler().deserializeNBT(invTag);
         setClicks(tag.getInt("clicks"));
         super.load(state, tag);
@@ -185,14 +182,14 @@ public class MechanicalCentrifugeTileEntity extends TileEntity implements ITicka
 
     @Nonnull
     @Override
-    public CompoundNBT getUpdateTag() {
-        CompoundNBT nbtTagCompound = new CompoundNBT();
+    public CompoundTag getUpdateTag() {
+        CompoundTag nbtTagCompound = new CompoundTag();
         save(nbtTagCompound);
         return nbtTagCompound;
     }
 
     @Override
-    public void handleUpdateTag(@Nonnull BlockState state, CompoundNBT tag) { this.load(state, tag); }
+    public void handleUpdateTag(@Nonnull BlockState state, CompoundTag tag) { this.load(state, tag); }
 
     @Nonnull
     @Override
@@ -216,15 +213,15 @@ public class MechanicalCentrifugeTileEntity extends TileEntity implements ITicka
 
     @Nullable
     @Override
-    public Container createMenu(int id, @Nonnull PlayerInventory playerInventory, @Nonnull PlayerEntity playerEntity) {
+    public AbstractContainerMenu createMenu(int id, @Nonnull Inventory playerInventory, @Nonnull Player playerEntity) {
         //noinspection ConstantConditions
         return new MechanicalCentrifugeContainer(id, level, worldPosition, playerInventory);
     }
 
     @Nonnull
     @Override
-    public ITextComponent getDisplayName() {
-        return new TranslationTextComponent("gui.resourcefulbees.mechanical_centrifuge");
+    public Component getDisplayName() {
+        return new TranslatableComponent("gui.resourcefulbees.mechanical_centrifuge");
     }
 
     public @NotNull AutomationSensitiveItemStackHandler getItemStackHandler() {

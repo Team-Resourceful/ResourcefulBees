@@ -21,12 +21,12 @@ import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.registration.*;
 import mezz.jei.api.runtime.IIngredientManager;
 import mezz.jei.api.runtime.IJeiRuntime;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.RecipeManager;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.level.Level;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
 import org.jetbrains.annotations.NotNull;
@@ -79,7 +79,7 @@ public class JEICompat implements IModPlugin {
 
     @Override
     public void registerRecipes(@Nonnull IRecipeRegistration registration) {
-        World clientWorld = Minecraft.getInstance().level;
+        Level clientWorld = Minecraft.getInstance().level;
         if (clientWorld != null) {
             RecipeManager recipeManager = Minecraft.getInstance().level.getRecipeManager();
             registration.addRecipes(BeeHiveCategory.getHoneycombRecipes(), BeeHiveCategory.ID);
@@ -125,8 +125,8 @@ public class JEICompat implements IModPlugin {
             CustomBeeData beeData = BeeRegistry.getRegistry().getBeeData(bee.getBeeType());
 
             StringBuilder stats = new StringBuilder();
-            String aqua = TextFormatting.DARK_AQUA.toString();
-            String purple = TextFormatting.DARK_PURPLE.toString();
+            String aqua = ChatFormatting.DARK_AQUA.toString();
+            String purple = ChatFormatting.DARK_PURPLE.toString();
 
 
             stats.append(aqua).append(" Base Health: ").append(purple).append(beeData.getCombatData().getBaseHealth()).append("\n");

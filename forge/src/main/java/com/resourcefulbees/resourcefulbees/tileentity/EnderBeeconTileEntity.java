@@ -16,39 +16,39 @@ import com.resourcefulbees.resourcefulbees.registry.ModFluids;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import io.netty.buffer.Unpooled;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.passive.BeeEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.IContainerListener;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.BucketItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.tags.ITag;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
-import net.minecraft.world.gen.Heightmap;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerListener;
+import net.minecraft.world.item.BucketItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.TickableBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
@@ -62,7 +62,6 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
@@ -70,15 +69,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Predicate;
 
-import com.resourcefulbees.resourcefulbees.container.AutomationSensitiveItemStackHandler.IAcceptor;
-import com.resourcefulbees.resourcefulbees.container.AutomationSensitiveItemStackHandler.IRemover;
-import com.resourcefulbees.resourcefulbees.tileentity.HoneyTankTileEntity.TankTier;
-
-public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITickableTileEntity, INamedContainerProvider {
+public class EnderBeeconTileEntity extends HoneyTankTileEntity implements TickableBlockEntity, MenuProvider {
     //TODO see about trimming the duplicate code if possible - epic
 
-    public static final ITag<Fluid> HONEY_FLUID_TAG = BeeInfoUtils.getFluidTag("forge:honey"); //DUPLICATE
-    public static final ITag<Item> HONEY_BOTTLE_TAG = BeeInfoUtils.getItemTag("forge:honey_bottle"); //DUPLICATE
+    public static final Tag<Fluid> HONEY_FLUID_TAG = BeeInfoUtils.getFluidTag("forge:honey"); //DUPLICATE
+    public static final Tag<Item> HONEY_BOTTLE_TAG = BeeInfoUtils.getItemTag("forge:honey_bottle"); //DUPLICATE
     private List<BeamSegment> beamSegments = Lists.newArrayList();
     private List<BeamSegment> beams = Lists.newArrayList();
     private int worldHeight = -1;
@@ -97,41 +92,40 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
 
     private List<BeeconEffect> effects;
 
-    public EnderBeeconTileEntity(TileEntityType<?> tileEntityType) {
+    public EnderBeeconTileEntity(BlockEntityType<?> tileEntityType) {
         super(tileEntityType, TankTier.NETHER);
         setFluidTank(new InternalFluidTank(getTier().maxFillAmount, honeyFluidPredicate()));
-        effects = readEffectsFromNBT(new CompoundNBT());
+        effects = readEffectsFromNBT(new CompoundTag());
     }
 
     @Nonnull
     @Override
-    public ITextComponent getDisplayName() {
-        return new TranslationTextComponent("gui.resourcefulbees.ender_beecon");
+    public Component getDisplayName() {
+        return new TranslatableComponent("gui.resourcefulbees.ender_beecon");
     }
 
-    @Nullable
     @Override
-    public Container createMenu(int id, @NotNull PlayerInventory playerInventory, @NotNull PlayerEntity playerEntity) {
+    public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player playerEntity) {
         assert level != null;
         return new EnderBeeconContainer(id, level, worldPosition, playerInventory);
     }
 
     @Override
-    public CompoundNBT writeNBT(CompoundNBT tag) {
+    public CompoundTag writeNBT(CompoundTag tag) {
         tag.putInt("tier", TankTier.NETHER.getTier());
         tag.putBoolean(NBTConstants.NBT_SHOW_BEAM, isShowBeam());
         tag.putBoolean(NBTConstants.NBT_PLAY_SOUND, playSound);
         if (effects != null && !effects.isEmpty()) {
-            tag.put("active_effects", writeEffectsToNBT(new CompoundNBT()));
+            tag.put("active_effects", writeEffectsToNBT(new CompoundTag()));
         }
         if (!getFluidTank().isEmpty()) {
-            tag.put(NBTConstants.NBT_FLUID, getFluidTank().writeToNBT(new CompoundNBT()));
+            tag.put(NBTConstants.NBT_FLUID, getFluidTank().writeToNBT(new CompoundTag()));
         }
         return tag;
     }
 
     @Override
-    public void readNBT(CompoundNBT tag) {
+    public void readNBT(CompoundTag tag) {
         getFluidTank().readFromNBT(tag.getCompound(NBTConstants.NBT_FLUID));
         effects = readEffectsFromNBT(tag.getCompound("active_effects"));
         if (tag.contains(NBTConstants.NBT_SHOW_BEAM)) setShowBeam(tag.getBoolean(NBTConstants.NBT_SHOW_BEAM));
@@ -267,7 +261,7 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
 
         BeamSegment segment = this.beams.isEmpty() ? null : this.beams.get(this.beams.size() - 1);
         assert this.level != null; //will fix later - epic
-        int l = this.level.getHeight(Heightmap.Type.WORLD_SURFACE, i, k);
+        int l = this.level.getHeight(Heightmap.Types.WORLD_SURFACE, i, k);
 
         for (int i1 = 0; i1 < 10 && blockpos.getY() <= l; ++i1) {
             BlockState blockstate = this.level.getBlockState(blockpos);
@@ -298,8 +292,8 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
 
 
         if (this.level.getGameTime() % 80L == 0L && !this.beamSegments.isEmpty() && !getFluidTank().isEmpty()) {
-            AxisAlignedBB box = getEffectBox();
-            List<BeeEntity> bees = level.getEntitiesOfClass(BeeEntity.class, box);
+            AABB box = getEffectBox();
+            List<Bee> bees = level.getEntitiesOfClass(Bee.class, box);
             bees.stream()
                     .filter(CustomBeeEntity.class::isInstance)
                     .map(CustomBeeEntity.class::cast)
@@ -350,7 +344,7 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
 
     private void doPullProcess() {
         assert level != null; //will fix later - epic
-        TileEntity tileEntity = level.getBlockEntity(worldPosition.below());
+        BlockEntity tileEntity = level.getBlockEntity(worldPosition.below());
         if (tileEntity == null) return;
         LazyOptional<IFluidHandler> fluidCap = tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, Direction.UP);
         fluidCap.map(iFluidHandler -> {
@@ -373,8 +367,8 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
     }
 
     @Override
-    public AxisAlignedBB getRenderBoundingBox() {
-        return new AxisAlignedBB(worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), worldPosition.getX(), worldPosition.getY() + 255D, worldPosition.getZ());
+    public AABB getRenderBoundingBox() {
+        return new AABB(worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), worldPosition.getX(), worldPosition.getY() + 255D, worldPosition.getZ());
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -383,15 +377,15 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
         return 256.0D;
     }
 
-    public void sendGUINetworkPacket(IContainerListener player) {
-        if (player instanceof ServerPlayerEntity && (!(player instanceof FakePlayer))) {
-            PacketBuffer buffer = new PacketBuffer(Unpooled.buffer());
+    public void sendGUINetworkPacket(ContainerListener player) {
+        if (player instanceof ServerPlayer && (!(player instanceof FakePlayer))) {
+            FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer());
             buffer.writeFluidStack(getFluidTank().getFluid());
-            NetPacketHandler.sendToPlayer(new SyncGUIMessage(this.worldPosition, buffer), (ServerPlayerEntity) player);
+            NetPacketHandler.sendToPlayer(new SyncGUIMessage(this.worldPosition, buffer), (ServerPlayer) player);
         }
     }
 
-    public static void syncApiaryToPlayersUsing(World world, BlockPos pos, CompoundNBT data) {
+    public static void syncApiaryToPlayersUsing(Level world, BlockPos pos, CompoundTag data) {
         NetPacketHandler.sendToAllLoaded(new UpdateClientBeeconMessage(pos, data), world, pos);
     }
 
@@ -405,14 +399,14 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
         return effects;
     }
 
-    public AxisAlignedBB getEffectBox() {
+    public AABB getEffectBox() {
         assert this.level != null;
-        return (new AxisAlignedBB(this.worldPosition)).inflate(getRange()).expandTowards(0.0D, this.level.getMaxBuildHeight(), 0.0D);
+        return (new AABB(this.worldPosition)).inflate(getRange()).expandTowards(0.0D, this.level.getMaxBuildHeight(), 0.0D);
     }
 
     public void toggleBeam() {
         setShowBeam(!isShowBeam());
-        syncApiaryToPlayersUsing(this.level, this.getBlockPos(), this.writeNBT(new CompoundNBT()));
+        syncApiaryToPlayersUsing(this.level, this.getBlockPos(), this.writeNBT(new CompoundTag()));
     }
 
     public boolean isShowBeam() {
@@ -479,13 +473,13 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
         }
     }
 
-    private void addEffectsToBees(List<BeeEntity> bees) {
+    private void addEffectsToBees(List<Bee> bees) {
         assert this.level != null;
         if (!this.level.isClientSide && doEffects()) {
-            for (BeeEntity mob : bees) {
+            for (Bee mob : bees) {
                 for (BeeconEffect effect : effects) {
                     if (!effect.isActive()) continue;
-                    mob.addEffect(new EffectInstance(effect.getEffect(), 120, 0, true, true));
+                    mob.addEffect(new MobEffectInstance(effect.getEffect(), 120, 0, true, true));
                 }
             }
         }
@@ -508,13 +502,13 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
     }
 
     public void updateBeeconEffect(ResourceLocation effectLocation, boolean active) {
-        Effect effect = ForgeRegistries.POTIONS.getValue(effectLocation);
+        MobEffect effect = ForgeRegistries.POTIONS.getValue(effectLocation);
         for (BeeconEffect e : effects) {
             if (e.getEffect() == effect) {
                 e.setActive(active);
             }
         }
-        syncApiaryToPlayersUsing(this.level, this.getBlockPos(), this.writeNBT(new CompoundNBT()));
+        syncApiaryToPlayersUsing(this.level, this.getBlockPos(), this.writeNBT(new CompoundTag()));
     }
 
     public int getDrain() {
@@ -529,32 +523,32 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
         return (int) Math.ceil(base);
     }
 
-    public boolean getEffectActive(Effect effect) {
+    public boolean getEffectActive(MobEffect effect) {
         BeeconEffect e = getEffect(effect);
         return e != null && e.isActive();
     }
 
-    public BeeconEffect getEffect(Effect effect) {
+    public BeeconEffect getEffect(MobEffect effect) {
         for (BeeconEffect e : effects) {
             if (e.getEffect() == effect) return e;
         }
         return null;
     }
 
-    public CompoundNBT writeEffectsToNBT(CompoundNBT nbt) {
+    public CompoundTag writeEffectsToNBT(CompoundTag nbt) {
         nbt.putBoolean("calming", getEffectActive(ModEffects.CALMING.get()));
-        nbt.putBoolean("water_breathing", getEffectActive(Effects.WATER_BREATHING));
-        nbt.putBoolean("fire_resistance", getEffectActive(Effects.FIRE_RESISTANCE));
-        nbt.putBoolean("regeneration", getEffectActive(Effects.REGENERATION));
+        nbt.putBoolean("water_breathing", getEffectActive(MobEffects.WATER_BREATHING));
+        nbt.putBoolean("fire_resistance", getEffectActive(MobEffects.FIRE_RESISTANCE));
+        nbt.putBoolean("regeneration", getEffectActive(MobEffects.REGENERATION));
         return nbt;
     }
 
-    public List<BeeconEffect> readEffectsFromNBT(CompoundNBT nbt) {
+    public List<BeeconEffect> readEffectsFromNBT(CompoundTag nbt) {
         List<BeeconEffect> beeconEffects = new LinkedList<>();
         beeconEffects.add(new BeeconEffect(ModEffects.CALMING.get(), Config.BEECON_CALMING_VALUE.get(), nbt.getBoolean("calming")));
-        beeconEffects.add(new BeeconEffect(Effects.WATER_BREATHING, Config.BEECON_WATER_BREATHING_VALUE.get(), nbt.getBoolean("water_breathing")));
-        beeconEffects.add(new BeeconEffect(Effects.FIRE_RESISTANCE, Config.BEECON_FIRE_RESISTANCE_VALUE.get(), nbt.getBoolean("fire_resistance")));
-        beeconEffects.add(new BeeconEffect(Effects.REGENERATION, Config.BEECON_REGENERATION_VALUE.get(), nbt.getBoolean("regeneration")));
+        beeconEffects.add(new BeeconEffect(MobEffects.WATER_BREATHING, Config.BEECON_WATER_BREATHING_VALUE.get(), nbt.getBoolean("water_breathing")));
+        beeconEffects.add(new BeeconEffect(MobEffects.FIRE_RESISTANCE, Config.BEECON_FIRE_RESISTANCE_VALUE.get(), nbt.getBoolean("fire_resistance")));
+        beeconEffects.add(new BeeconEffect(MobEffects.REGENERATION, Config.BEECON_REGENERATION_VALUE.get(), nbt.getBoolean("regeneration")));
         return beeconEffects;
     }
 
@@ -568,21 +562,21 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
     }
 
     public static class BeeconEffect {
-        private Effect effect;
+        private MobEffect effect;
         private double value;
         private boolean active;
 
-        public BeeconEffect(Effect effect, double multiplier, boolean active) {
+        public BeeconEffect(MobEffect effect, double multiplier, boolean active) {
             this.setEffect(effect);
             this.setValue(multiplier);
             this.setActive(active);
         }
 
-        public Effect getEffect() {
+        public MobEffect getEffect() {
             return effect;
         }
 
-        public void setEffect(Effect effect) {
+        public void setEffect(MobEffect effect) {
             this.effect = effect;
         }
 

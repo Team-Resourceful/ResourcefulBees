@@ -1,9 +1,9 @@
 package com.resourcefulbees.resourcefulbees.api.honeydata;
 
 import com.resourcefulbees.resourcefulbees.utils.validation.ValidatorUtils;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,7 +24,7 @@ public class HoneyEffect {
     public int duration = 60;
     public int strength = 0;
     public float chance = 1;
-    private transient Effect effect = null;
+    private transient MobEffect effect = null;
 
     public HoneyEffect() {
     }
@@ -36,21 +36,21 @@ public class HoneyEffect {
         this.chance = chance;
     }
 
-    public EffectInstance getInstance() {
-        return new EffectInstance(getEffect(), duration, strength);
+    public MobEffectInstance getInstance() {
+        return new MobEffectInstance(getEffect(), duration, strength);
     }
 
     public boolean isEffectIDValid() {
         return effectID != null && effectID.matches(ValidatorUtils.SINGLE_RESOURCE_PATTERN.pattern());
     }
 
-    public Effect getEffect() {
+    public MobEffect getEffect() {
         if (effect != null) return effect;
         ResourceLocation location = ResourceLocation.tryParse(effectID);
         return effectID == null || location == null ? null : ForgeRegistries.POTIONS.getValue(location);
     }
 
-    public void setEffect(Effect effect) {
+    public void setEffect(MobEffect effect) {
         this.effect = effect;
     }
 

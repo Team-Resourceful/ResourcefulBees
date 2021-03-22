@@ -1,6 +1,6 @@
 package com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.honeydata.DefaultHoneyBottleData;
 import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
@@ -11,21 +11,21 @@ import com.resourcefulbees.resourcefulbees.client.gui.widget.ListButton;
 import com.resourcefulbees.resourcefulbees.client.gui.widget.SubButtonList;
 import com.resourcefulbees.resourcefulbees.item.BeeJar;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.gui.widget.button.ImageButton;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.item.Foods;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Effect;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.food.Foods;
+import net.minecraft.world.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 
 import java.text.DecimalFormat;
@@ -38,7 +38,7 @@ public class HoneyPage extends BeepediaPage {
     private SubButtonList beeList = null;
     private final HoneyBottleData bottleData;
     private String honeySearch;
-    private final TranslationTextComponent text;
+    private final TranslatableComponent text;
 
     private final int hunger;
     private final float saturation;
@@ -60,7 +60,7 @@ public class HoneyPage extends BeepediaPage {
             this.bottle = new ItemStack(data.bottle);
             this.hunger = Foods.HONEY_BOTTLE.getNutrition();
             this.saturation = Foods.HONEY_BOTTLE.getSaturationModifier();
-            this.text = new TranslationTextComponent("fluid.resourcefulbees.honey");
+            this.text = new TranslatableComponent("fluid.resourcefulbees.honey");
         } else {
             this.bottle = new ItemStack(bottleData.getHoneyBottleRegistryObject().get());
             this.hunger = bottleData.getHunger();
@@ -89,24 +89,24 @@ public class HoneyPage extends BeepediaPage {
     private void initSearch() {
         honeySearch = "";
         if (bottleData.getHoneyBottleRegistryObject() != null)
-            honeySearch += " " + new TranslationTextComponent(bottleData.getHoneyBottleRegistryObject().get().getDescriptionId()).getString();
+            honeySearch += " " + new TranslatableComponent(bottleData.getHoneyBottleRegistryObject().get().getDescriptionId()).getString();
         if (bottleData.getHoneyFluidBlockRegistryObject() != null)
-            honeySearch += " " + new TranslationTextComponent(bottleData.getHoneyFluidBlockRegistryObject().get().getDescriptionId()).getString();
+            honeySearch += " " + new TranslatableComponent(bottleData.getHoneyFluidBlockRegistryObject().get().getDescriptionId()).getString();
         if (bottleData.getHoneyBlockItemRegistryObject() != null)
-            honeySearch += " " + new TranslationTextComponent(bottleData.getHoneyBlockItemRegistryObject().get().getDescriptionId()).getString();
+            honeySearch += " " + new TranslatableComponent(bottleData.getHoneyBlockItemRegistryObject().get().getDescriptionId()).getString();
         if (bottleData.getHoneyBucketItemRegistryObject() != null)
-            honeySearch += " " + new TranslationTextComponent(bottleData.getHoneyBucketItemRegistryObject().get().getDescriptionId()).getString();
+            honeySearch += " " + new TranslatableComponent(bottleData.getHoneyBucketItemRegistryObject().get().getDescriptionId()).getString();
     }
 
     @Override
-    public void renderBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
+    public void renderBackground(PoseStack matrix, float partialTick, int mouseX, int mouseY) {
         if (beeList == null) return;
         beeList.updateList();
         beepedia.drawSlotNoToolTip(matrix, bottle, xPos, yPos + 10);
         beepedia.getMinecraft().textureManager.bind(splitterImage);
-        AbstractGui.blit(matrix, xPos, yPos - 14, 0, 0, 165, 100, 165, 100);
-        FontRenderer font = Minecraft.getInstance().font;
-        font.draw(matrix, text.withStyle(TextFormatting.WHITE), (float) xPos + 24, (float) yPos + 12, -1);
+        GuiComponent.blit(matrix, xPos, yPos - 14, 0, 0, 165, 100, 165, 100);
+        Font font = Minecraft.getInstance().font;
+        font.draw(matrix, text.withStyle(ChatFormatting.WHITE), (float) xPos + 24, (float) yPos + 12, -1);
         drawHungerBar(matrix);
         if (BeepediaScreen.currScreenState.isHoneyEffectsActive() && !effects.isEmpty()) {
             drawEffectsList(matrix, xPos, yPos + 34);
@@ -121,8 +121,8 @@ public class HoneyPage extends BeepediaPage {
         for (Map.Entry<String, BeePage> e : beePages.entrySet()) {
             ItemStack stack = new ItemStack(ModItems.BEE_JAR.get());
             BeeJar.fillJar(stack, e.getValue().beeData);
-            ITextComponent translation = e.getValue().beeData.getTranslation();
-            Button.IPressable onPress = button -> {
+            Component translation = e.getValue().beeData.getTranslation();
+            Button.OnPress onPress = button -> {
                 BeepediaScreen.saveScreenState();
                 beepedia.setActive(BeepediaScreen.PageType.BEE, e.getKey());
             };
@@ -135,26 +135,26 @@ public class HoneyPage extends BeepediaPage {
         beeList.setActive(false);
     }
 
-    private void drawBeesList(MatrixStack matrix, int xPos, int yPos) {
-        FontRenderer font = Minecraft.getInstance().font;
-        TranslationTextComponent title = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.honey.bees_list");
+    private void drawBeesList(PoseStack matrix, int xPos, int yPos) {
+        Font font = Minecraft.getInstance().font;
+        TranslatableComponent title = new TranslatableComponent("gui.resourcefulbees.beepedia.tab.honey.bees_list");
         int padding = font.width(title) / 2;
-        font.draw(matrix, title.withStyle(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, -1);
+        font.draw(matrix, title.withStyle(ChatFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, -1);
     }
 
-    private void drawEffectsList(MatrixStack matrix, int xPos, int yPos) {
-        FontRenderer font = Minecraft.getInstance().font;
-        TranslationTextComponent title = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.honey.effects_list");
+    private void drawEffectsList(PoseStack matrix, int xPos, int yPos) {
+        Font font = Minecraft.getInstance().font;
+        TranslatableComponent title = new TranslatableComponent("gui.resourcefulbees.beepedia.tab.honey.effects_list");
         int padding = font.width(title) / 2;
-        font.draw(matrix, title.withStyle(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, -1);
+        font.draw(matrix, title.withStyle(ChatFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, -1);
         for (int i = 0; i < effects.size(); i++) {
 
             // init effect
-            Effect effect = effects.get(i).getEffect();
-            TranslationTextComponent name = new TranslationTextComponent(effect.getDescriptionId());
+            MobEffect effect = effects.get(i).getEffect();
+            TranslatableComponent name = new TranslatableComponent(effect.getDescriptionId());
             int duration = effects.get(i).duration;
-            name.append(new StringTextComponent(String.format(" (%02d:%02d)", (duration / 20) / 60, (duration / 20) % 60)));
-            StringTextComponent chance = new StringTextComponent(new DecimalFormat("##%").format(effects.get(i).chance));
+            name.append(new TextComponent(String.format(" (%02d:%02d)", (duration / 20) / 60, (duration / 20) % 60)));
+            TextComponent chance = new TextComponent(new DecimalFormat("##%").format(effects.get(i).chance));
             int pos = yPos + 20 + (i * 21) + BeepediaScreen.currScreenState.getHoneyEffectsListPos();
 
             // create culling mask
@@ -168,36 +168,36 @@ public class HoneyPage extends BeepediaPage {
             // draw effect icon
             TextureAtlasSprite sprite = Minecraft.getInstance().getMobEffectTextures().get(effect);
             Minecraft.getInstance().getTextureManager().bind(sprite.atlas().location());
-            AbstractGui.blit(matrix, xPos + 1, pos + 1, beepedia.getBlitOffset(), 18, 18, sprite);
+            GuiComponent.blit(matrix, xPos + 1, pos + 1, beepedia.getBlitOffset(), 18, 18, sprite);
             // draw text
-            font.draw(matrix, name.withStyle(effect.isBeneficial() ? TextFormatting.BLUE : TextFormatting.RED), (float) xPos + 22, (float) pos + 1, -1);
+            font.draw(matrix, name.withStyle(effect.isBeneficial() ? ChatFormatting.BLUE : ChatFormatting.RED), (float) xPos + 22, (float) pos + 1, -1);
             if (effects.get(i).chance < 1) {
-                font.draw(matrix, chance.withStyle(TextFormatting.DARK_GRAY), (float) xPos + 22, (float) pos + 11, -1);
+                font.draw(matrix, chance.withStyle(ChatFormatting.DARK_GRAY), (float) xPos + 22, (float) pos + 11, -1);
             }
             GL11.glDisable(GL11.GL_SCISSOR_TEST);
         }
     }
 
-    private void drawHungerBar(MatrixStack matrix) {
+    private void drawHungerBar(PoseStack matrix) {
         TextureManager manager = Minecraft.getInstance().getTextureManager();
         manager.bind(hungerBar);
-        AbstractGui.blit(matrix, xPos + 23, yPos + 21, 0, 0, 90, 9, 90, 9);
+        GuiComponent.blit(matrix, xPos + 23, yPos + 21, 0, 0, 90, 9, 90, 9);
         int pipPosition = 105;
         int pipCounter = Math.min(hunger, 20);
         manager.bind(hungerIcons);
         while (pipCounter > 1) {
-            AbstractGui.blit(matrix, xPos + pipPosition, yPos + 21, 0, 0, 9, 9, 9, 18);
+            GuiComponent.blit(matrix, xPos + pipPosition, yPos + 21, 0, 0, 9, 9, 9, 18);
             pipCounter -= 2;
             pipPosition -= 9;
         }
         if (pipCounter == 1) {
-            AbstractGui.blit(matrix, xPos + pipPosition, yPos + 21, 0, 9, 9, 9, 9, 18);
+            GuiComponent.blit(matrix, xPos + pipPosition, yPos + 21, 0, 9, 9, 9, 9, 18);
         }
         float saturationWidth = Math.min(saturation * 90, 90);
         float saturationRemainder = 90 - saturationWidth;
         float saturationStart = 24 + saturationRemainder;
         manager.bind(saturationIcons);
-        AbstractGui.blit(matrix, xPos + (int) saturationStart, yPos + 21, saturationRemainder, 0, (int) saturationWidth, 9, 90, 9);
+        GuiComponent.blit(matrix, xPos + (int) saturationStart, yPos + 21, saturationRemainder, 0, (int) saturationWidth, 9, 90, 9);
     }
 
     @Override

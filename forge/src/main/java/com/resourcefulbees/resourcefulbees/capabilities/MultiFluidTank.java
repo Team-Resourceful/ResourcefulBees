@@ -1,9 +1,8 @@
 package com.resourcefulbees.resourcefulbees.capabilities;
 
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -120,21 +119,21 @@ public class MultiFluidTank implements IFluidHandler {
     }
 
     public void readFromNBT(CompoundTag nbt) {
-        ListNBT listNBT = nbt.getList(NBTConstants.NBT_TANKS, 10);
+        ListTag listNBT = nbt.getList(NBTConstants.NBT_TANKS, 10);
 
         if (!listNBT.isEmpty()) {
             for (int i = 0; i < listNBT.size(); i++) {
-                CompoundNBT tank = listNBT.getCompound(i);
+                CompoundTag tank = listNBT.getCompound(i);
                 fluidTanks[i].readFromNBT(tank);
             }
         }
     }
 
     public Tag writeToNBT() {
-        ListNBT listNBT = new ListNBT();
+        ListTag listNBT = new ListTag();
         int i = 0;
         for (FluidTank fluidTank : fluidTanks) {
-            listNBT.add(i++, fluidTank.writeToNBT(new CompoundNBT()));
+            listNBT.add(i++, fluidTank.writeToNBT(new CompoundTag()));
         }
         return listNBT;
     }

@@ -5,12 +5,12 @@ import com.resourcefulbees.resourcefulbees.data.BeeTrait;
 import com.resourcefulbees.resourcefulbees.data.JsonBeeTrait;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.registry.TraitRegistry;
-import net.minecraft.item.Item;
-import net.minecraft.particles.BasicParticleType;
-import net.minecraft.potion.Effect;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -157,15 +157,15 @@ public class TraitSetup {
     private static void parseParticle(JsonBeeTrait.JsonTrait jsonTrait, BeeTrait.Builder builder){
         if (jsonTrait.getParticleName() != null
                 && !jsonTrait.getParticleName().isEmpty()
-                && ForgeRegistries.PARTICLE_TYPES.getValue(new ResourceLocation(jsonTrait.getParticleName())) instanceof BasicParticleType) {
-            builder.setParticleEffect((BasicParticleType) ForgeRegistries.PARTICLE_TYPES.getValue(new ResourceLocation(jsonTrait.getParticleName())));
+                && ForgeRegistries.PARTICLE_TYPES.getValue(new ResourceLocation(jsonTrait.getParticleName())) instanceof SimpleParticleType) {
+            builder.setParticleEffect((SimpleParticleType) ForgeRegistries.PARTICLE_TYPES.getValue(new ResourceLocation(jsonTrait.getParticleName())));
         }
     }
 
     private static void parsePotionImmunities(JsonBeeTrait.JsonTrait jsonTrait, BeeTrait.Builder builder){
         if (jsonTrait.getPotionImmunities() != null && jsonTrait.getPotionImmunities().length > 0) {
             for (String immunity : jsonTrait.getPotionImmunities()) {
-                Effect potion = ForgeRegistries.POTIONS.getValue(new ResourceLocation(immunity));
+                MobEffect potion = ForgeRegistries.POTIONS.getValue(new ResourceLocation(immunity));
                 if (potion != null)
                     builder.addPotionImmunity(potion);
             }
@@ -175,9 +175,9 @@ public class TraitSetup {
     private static void parsePotionDamageEffects(JsonBeeTrait.JsonTrait jsonTrait, BeeTrait.Builder builder){
         if (jsonTrait.getPotionDamageEffects() != null && !jsonTrait.getPotionDamageEffects().isEmpty()) {
             jsonTrait.getPotionDamageEffects().forEach((traitPotionDamageEffect -> {
-                Effect potion = ForgeRegistries.POTIONS.getValue(new ResourceLocation(traitPotionDamageEffect.getEffectID()));
+                MobEffect potion = ForgeRegistries.POTIONS.getValue(new ResourceLocation(traitPotionDamageEffect.getEffectID()));
                 if (potion != null)
-                    builder.addDamagePotionEffect(Pair.of(potion, MathHelper.clamp(traitPotionDamageEffect.getStrength(), 0, 255)));
+                    builder.addDamagePotionEffect(Pair.of(potion, Mth.clamp(traitPotionDamageEffect.getStrength(), 0, 255)));
             }));
         }
     }

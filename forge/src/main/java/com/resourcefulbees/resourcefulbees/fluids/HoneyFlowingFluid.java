@@ -1,13 +1,11 @@
 package com.resourcefulbees.resourcefulbees.fluids;
 
 import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.state.StateContainer;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 import org.jetbrains.annotations.NotNull;
-
-import net.minecraftforge.fluids.ForgeFlowingFluid.Properties;
 
 public abstract class HoneyFlowingFluid extends ForgeFlowingFluid {
 
@@ -30,7 +28,7 @@ public abstract class HoneyFlowingFluid extends ForgeFlowingFluid {
         }
 
         @Override
-        protected void createFluidStateDefinition(@NotNull StateContainer.Builder<Fluid, FluidState> builder) {
+        protected void createFluidStateDefinition(@NotNull StateDefinition.Builder<Fluid, FluidState> builder) {
             super.createFluidStateDefinition(builder);
             builder.add(LEVEL);
         }

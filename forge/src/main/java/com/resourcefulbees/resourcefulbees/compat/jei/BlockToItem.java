@@ -1,6 +1,6 @@
 package com.resourcefulbees.resourcefulbees.compat.jei;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.IBeeRegistry;
 import com.resourcefulbees.resourcefulbees.api.beedata.MutationData;
@@ -12,13 +12,13 @@ import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.ingredient.IGuiIngredientGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
-import net.minecraft.block.Block;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.material.Fluid;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -79,8 +79,8 @@ public class BlockToItem extends BaseCategory<BlockToItem.Recipe> {
     }
 
     @Override
-    public @NotNull List<ITextComponent> getTooltipStrings(Recipe recipe, double mouseX, double mouseY) {
-        List<ITextComponent> list = RecipeUtils.getTooltipStrings(mouseX, mouseY, recipe.chance);
+    public @NotNull List<Component> getTooltipStrings(Recipe recipe, double mouseX, double mouseY) {
+        List<Component> list = RecipeUtils.getTooltipStrings(mouseX, mouseY, recipe.chance);
         return list.isEmpty() ? super.getTooltipStrings(recipe, mouseX, mouseY) : list;
     }
 
@@ -94,19 +94,19 @@ public class BlockToItem extends BaseCategory<BlockToItem.Recipe> {
     }
 
     @Override
-    public void draw(Recipe recipe, @NotNull MatrixStack stack, double mouseX, double mouseY) {
+    public void draw(Recipe recipe, @NotNull PoseStack stack, double mouseX, double mouseY) {
         RecipeUtils.drawMutationScreen(stack, this.beeHive, this.info, recipe.weight, recipe.chance);
     }
 
     protected static class Recipe {
         private final @Nullable Block blockInput;
-        private final @Nullable ITag<?> tagInput;
+        private final @Nullable Tag<?> tagInput;
         private final @NotNull ItemOutput itemOutput;
         private final double chance;
         private final double weight;
         private final @NotNull String beeType;
 
-        public Recipe(@Nullable Block blockInput, @Nullable ITag<?> tagInput, @NotNull ItemOutput itemOutput, double chance, double weight, @NotNull String beeType) {
+        public Recipe(@Nullable Block blockInput, @Nullable Tag<?> tagInput, @NotNull ItemOutput itemOutput, double chance, double weight, @NotNull String beeType) {
             this.blockInput = blockInput;
             this.tagInput = tagInput;
             this.itemOutput = itemOutput;

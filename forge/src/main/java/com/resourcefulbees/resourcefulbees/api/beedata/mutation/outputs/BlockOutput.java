@@ -1,21 +1,21 @@
 package com.resourcefulbees.resourcefulbees.api.beedata.mutation.outputs;
 
-import net.minecraft.block.Block;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.Block;
 
 public class BlockOutput {
 
     private final Block block;
-    private final CompoundNBT compoundNBT;
+    private final CompoundTag compoundNBT;
     private final double weight;
 
-    public BlockOutput(Block block, CompoundNBT compoundNBT, double weight) {
+    public BlockOutput(Block block, CompoundTag compoundNBT, double weight) {
         this.block = block;
         this.compoundNBT = compoundNBT;
         this.weight = weight;
     }
 
-    public CompoundNBT getCompoundNBT() {
+    public CompoundTag getCompoundNBT() {
         return compoundNBT;
     }
 

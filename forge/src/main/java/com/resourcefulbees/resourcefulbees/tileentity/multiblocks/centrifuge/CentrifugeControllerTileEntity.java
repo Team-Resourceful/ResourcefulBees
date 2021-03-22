@@ -4,24 +4,25 @@ import com.resourcefulbees.resourcefulbees.block.multiblocks.centrifuge.Centrifu
 import com.resourcefulbees.resourcefulbees.block.multiblocks.centrifuge.CentrifugeControllerBlock;
 import com.resourcefulbees.resourcefulbees.capabilities.CustomEnergyStorage;
 import com.resourcefulbees.resourcefulbees.config.Config;
+import com.resourcefulbees.resourcefulbees.container.CentrifugeContainer;
 import com.resourcefulbees.resourcefulbees.container.CentrifugeMultiblockContainer;
 import com.resourcefulbees.resourcefulbees.registry.ModContainers;
 import com.resourcefulbees.resourcefulbees.tileentity.CentrifugeTileEntity;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.MultiBlockHelper;
 import com.resourcefulbees.resourcefulbees.utils.MathUtils;
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.IntArray;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -38,7 +39,7 @@ public class CentrifugeControllerTileEntity extends CentrifugeTileEntity {
     protected boolean validStructure;
     protected final List<BlockPos> structureBlocks = new ArrayList<>();
 
-    private final IntArray times = new IntArray(4) {
+    private final ContainerData times = new SimpleContainerData(4) {
 
         @Override
         public int get(int index) {
@@ -76,7 +77,7 @@ public class CentrifugeControllerTileEntity extends CentrifugeTileEntity {
     };
 
 
-    public CentrifugeControllerTileEntity(TileEntityType<?> tileEntityType) { super(tileEntityType); }
+    public CentrifugeControllerTileEntity(BlockEntityType<?> tileEntityType) { super(tileEntityType); }
 
     @Override
     public int getNumberOfInputs() { return 3; }
@@ -132,19 +133,19 @@ public class CentrifugeControllerTileEntity extends CentrifugeTileEntity {
     //region NBT
     @Nonnull
     @Override
-    public CompoundNBT save(@Nonnull CompoundNBT tag) {
+    public CompoundTag save(@Nonnull CompoundTag tag) {
         super.save(tag);
         return saveToNBT(tag);
     }
 
     @Override
-    protected CompoundNBT saveToNBT(CompoundNBT tag) {
+    protected CompoundTag saveToNBT(CompoundTag tag) {
         tag.putBoolean("valid", validStructure);
         return super.saveToNBT(tag);
     }
 
     @Override
-    protected void loadFromNBT(CompoundNBT tag) {
+    protected void loadFromNBT(CompoundTag tag) {
         validStructure = tag.getBoolean("valid");
         super.loadFromNBT(tag);
     }
@@ -152,14 +153,14 @@ public class CentrifugeControllerTileEntity extends CentrifugeTileEntity {
 
     @Nullable
     @Override
-    public Container createMenu(int id, @Nonnull PlayerInventory playerInventory, @Nonnull PlayerEntity playerEntity) {
+    public CentrifugeContainer createMenu(int id, @Nonnull Inventory playerInventory, @Nonnull Player playerEntity) {
         assert level != null;
         return new CentrifugeMultiblockContainer(ModContainers.CENTRIFUGE_MULTIBLOCK_CONTAINER.get(), id, level, worldPosition, playerInventory, times);
     }
 
     @Nonnull
     @Override
-    public ITextComponent getDisplayName() { return new TranslationTextComponent("gui.resourcefulbees.centrifuge"); }
+    public Component getDisplayName() { return new TranslatableComponent("gui.resourcefulbees.centrifuge"); }
 
     @Override
     protected CustomEnergyStorage createEnergy() {
@@ -172,7 +173,7 @@ public class CentrifugeControllerTileEntity extends CentrifugeTileEntity {
 
     //region STRUCTURE VALIDATION
 
-    protected MutableBoundingBox getBounds() {
+    protected BoundingBox getBounds() {
         return buildStructureBounds(this.getBlockPos(), 3, 4, 3, -1, -1, -2, this.getBlockState().getValue(CentrifugeControllerBlock.FACING));
     }
 
@@ -180,7 +181,7 @@ public class CentrifugeControllerTileEntity extends CentrifugeTileEntity {
         return blockPos -> {
             assert level != null : "Validating Centrifuge - How is world null??";
             Block block = level.getBlockState(blockPos).getBlock();
-            TileEntity tileEntity = level.getBlockEntity(blockPos);
+            BlockEntity tileEntity = level.getBlockEntity(blockPos);
             if (block instanceof CentrifugeCasingBlock && tileEntity instanceof CentrifugeCasingTileEntity) {
                 CentrifugeCasingTileEntity casing = (CentrifugeCasingTileEntity) tileEntity;
                 return !casing.isLinked() || (casing.getController() != null && casing.getController().equals(this));
@@ -189,7 +190,7 @@ public class CentrifugeControllerTileEntity extends CentrifugeTileEntity {
         };
     }
 
-    protected void validateStructure(World world) {
+    protected void validateStructure(Level world) {
         validateTime = 0;
         buildStructureList(getBounds(), structureBlocks, blockPos -> true, this.getBlockPos());
         validStructure = MultiBlockHelper.validateStructure(structureBlocks, validBlocks(), 35);
@@ -200,7 +201,7 @@ public class CentrifugeControllerTileEntity extends CentrifugeTileEntity {
         }
     }
 
-    protected void linkCasings(World world) {
+    protected void linkCasings(Level world) {
         if (!world.isClientSide) {
             structureBlocks.stream()
                     .map(world::getBlockEntity)
@@ -209,7 +210,7 @@ public class CentrifugeControllerTileEntity extends CentrifugeTileEntity {
         }
     }
 
-    protected void unlinkCasings(World world) {
+    protected void unlinkCasings(Level world) {
         if (!world.isClientSide) {
             structureBlocks.stream()
                     .map(world::getBlockEntity)

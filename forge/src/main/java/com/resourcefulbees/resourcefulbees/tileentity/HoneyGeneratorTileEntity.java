@@ -10,33 +10,33 @@ import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
 import com.resourcefulbees.resourcefulbees.network.packets.SyncGUIMessage;
+import com.resourcefulbees.resourcefulbees.registry.ModBlockEntityTypes;
 import com.resourcefulbees.resourcefulbees.registry.ModFluids;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
-import com.resourcefulbees.resourcefulbees.registry.ModTileEntityTypes;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import io.netty.buffer.Unpooled;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.IContainerListener;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.BucketItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tags.ITag;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerListener;
+import net.minecraft.world.item.BucketItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.TickableBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.LazyOptional;
@@ -55,10 +55,7 @@ import javax.annotation.Nullable;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 
-import com.resourcefulbees.resourcefulbees.container.AutomationSensitiveItemStackHandler.IAcceptor;
-import com.resourcefulbees.resourcefulbees.container.AutomationSensitiveItemStackHandler.IRemover;
-
-public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider {
+public class HoneyGeneratorTileEntity extends BlockEntity implements TickableBlockEntity, MenuProvider {
 
     public static final int HONEY_BOTTLE_INPUT = 0;
     public static final int BOTTLE_OUTPUT = 1;
@@ -80,8 +77,8 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
     private final LazyOptional<IItemHandler> lazyOptional = LazyOptional.of(this::getTileStackHandler);
     private final LazyOptional<IEnergyStorage> energyOptional = LazyOptional.of(() -> energyStorage);
 
-    public static final ITag<Fluid> HONEY_FLUID_TAG = BeeInfoUtils.getFluidTag("forge:honey");
-    public static final ITag<Item> HONEY_BOTTLE_TAG = BeeInfoUtils.getItemTag("forge:honey_bottle");
+    public static final Tag<Fluid> HONEY_FLUID_TAG = BeeInfoUtils.getFluidTag("forge:honey");
+    public static final Tag<Item> HONEY_BOTTLE_TAG = BeeInfoUtils.getItemTag("forge:honey_bottle");
 
     private int fluidFilled;
     private int energyFilled;
@@ -89,7 +86,7 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
     private boolean dirty;
 
     public HoneyGeneratorTileEntity() {
-        super(ModTileEntityTypes.HONEY_GENERATOR_ENTITY.get());
+        super(ModBlockEntityTypes.HONEY_GENERATOR_ENTITY.get());
     }
 
     @Override
@@ -117,7 +114,7 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
         if (capacity.get() > 0) {
             for (Direction direction : Direction.values()) {
                 if (level != null) {
-                    TileEntity te = level.getBlockEntity(worldPosition.relative(direction));
+                    BlockEntity te = level.getBlockEntity(worldPosition.relative(direction));
                     if (te != null) {
                         boolean doContinue = te.getCapability(CapabilityEnergy.ENERGY, direction).map(handler -> {
                             if (handler.canReceive()) {
@@ -244,27 +241,27 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
 
     @Nullable
     @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
-        CompoundNBT nbt = new CompoundNBT();
-        nbt.put("tank", fluidTank.writeToNBT(new CompoundNBT()));
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        CompoundTag nbt = new CompoundTag();
+        nbt.put("tank", fluidTank.writeToNBT(new CompoundTag()));
         nbt.put("power", energyStorage.serializeNBT());
-        return new SUpdateTileEntityPacket(worldPosition, 0, nbt);
+        return new ClientboundBlockEntityDataPacket(worldPosition, 0, nbt);
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-        CompoundNBT nbt = pkt.getTag();
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
+        CompoundTag nbt = pkt.getTag();
         fluidTank.readFromNBT(nbt.getCompound("tank"));
         energyStorage.deserializeNBT(nbt.getCompound("power"));
     }
 
     @Nonnull
     @Override
-    public CompoundNBT save(CompoundNBT tag) {
-        CompoundNBT inv = this.getTileStackHandler().serializeNBT();
+    public CompoundTag save(CompoundTag tag) {
+        CompoundTag inv = this.getTileStackHandler().serializeNBT();
         tag.put(NBTConstants.NBT_INVENTORY, inv);
         tag.put(NBTConstants.NBT_ENERGY, energyStorage.serializeNBT());
-        tag.put(NBTConstants.NBT_FLUID, fluidTank.writeToNBT(new CompoundNBT()));
+        tag.put(NBTConstants.NBT_FLUID, fluidTank.writeToNBT(new CompoundTag()));
         tag.putInt(NBTConstants.NBT_ENERGY_FILLED, getEnergyFilled());
         tag.putInt(NBTConstants.NBT_FLUID_FILLED, getFluidFilled());
         tag.putBoolean(NBTConstants.NBT_IS_PROCESSING, isProcessing);
@@ -272,8 +269,8 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
     } //TODO 1.17 - change "fluid" to tank
 
     @Override
-    public void load(@Nonnull BlockState state, CompoundNBT tag) {
-        CompoundNBT invTag = tag.getCompound(NBTConstants.NBT_INVENTORY);
+    public void load(@Nonnull BlockState state, CompoundTag tag) {
+        CompoundTag invTag = tag.getCompound(NBTConstants.NBT_INVENTORY);
         getTileStackHandler().deserializeNBT(invTag);
         energyStorage.deserializeNBT(tag.getCompound(NBTConstants.NBT_ENERGY));
         fluidTank.readFromNBT(tag.getCompound(NBTConstants.NBT_FLUID));
@@ -285,14 +282,14 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
 
     @Nonnull
     @Override
-    public CompoundNBT getUpdateTag() {
-        CompoundNBT nbtTagCompound = new CompoundNBT();
+    public CompoundTag getUpdateTag() {
+        CompoundTag nbtTagCompound = new CompoundTag();
         save(nbtTagCompound);
         return nbtTagCompound;
     }
 
     @Override
-    public void handleUpdateTag(@Nonnull BlockState state, CompoundNBT tag) {
+    public void handleUpdateTag(@Nonnull BlockState state, CompoundTag tag) {
         this.load(state, tag);
     }
 
@@ -322,15 +319,15 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
 
     @Nullable
     @Override
-    public Container createMenu(int id, @Nonnull PlayerInventory playerInventory, @Nonnull PlayerEntity playerEntity) {
+    public AbstractContainerMenu createMenu(int id, @Nonnull Inventory playerInventory, @Nonnull Player playerEntity) {
         //noinspection ConstantConditions
         return new HoneyGeneratorContainer(id, level, worldPosition, playerInventory);
     }
 
     @Nonnull
     @Override
-    public ITextComponent getDisplayName() {
-        return new TranslationTextComponent("gui.resourcefulbees.honey_generator");
+    public Component getDisplayName() {
+        return new TranslatableComponent("gui.resourcefulbees.honey_generator");
     }
 
     private CustomEnergyStorage createEnergy() {
@@ -342,16 +339,16 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
         };
     }
 
-    public void sendGUINetworkPacket(IContainerListener player) {
-        if (player instanceof ServerPlayerEntity && (!(player instanceof FakePlayer))) {
-            PacketBuffer buffer = new PacketBuffer(Unpooled.buffer());
+    public void sendGUINetworkPacket(ContainerListener player) {
+        if (player instanceof ServerPlayer && (!(player instanceof FakePlayer))) {
+            FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer());
             buffer.writeFluidStack(fluidTank.getFluid());
             buffer.writeInt(energyStorage.getEnergyStored());
-            NetPacketHandler.sendToPlayer(new SyncGUIMessage(this.worldPosition, buffer), (ServerPlayerEntity) player);
+            NetPacketHandler.sendToPlayer(new SyncGUIMessage(this.worldPosition, buffer), (ServerPlayer) player);
         }
     }
 
-    public void handleGUINetworkPacket(PacketBuffer buffer) {
+    public void handleGUINetworkPacket(FriendlyByteBuf buffer) {
         fluidTank.setFluid(buffer.readFluidStack());
         energyStorage.setEnergy(buffer.readInt());
     }

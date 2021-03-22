@@ -1,7 +1,6 @@
 package com.resourcefulbees.resourcefulbees.utils;
 
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 
@@ -12,7 +11,7 @@ public class NBTUtils {
     }
 
     public static Tag writeBooleans(boolean[] booleans) {
-        CompoundNBT list = new CompoundNBT();
+        CompoundTag list = new CompoundTag();
         int i = 0;
         for (boolean bool : booleans) {
             list.putBoolean(String.valueOf(i), bool);

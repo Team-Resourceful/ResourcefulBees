@@ -9,27 +9,27 @@ import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.mixin.AnimalEntityAccessor;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.passive.BeeEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.NameTagItem;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.NameTagItem;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -40,7 +40,7 @@ import java.util.Random;
 
 public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
 
-    private static final DataParameter<Integer> FEED_COUNT = EntityDataManager.defineId(CustomBeeEntity.class, DataSerializers.INT);
+    private static final EntityDataAccessor<Integer> FEED_COUNT = SynchedEntityData.defineId(CustomBeeEntity.class, EntityDataSerializers.INT);
 
     protected final CustomBeeData beeData;
     protected int timeWithoutHive;  //<- does not need to be initialized to 0 that is done by default - oreo
@@ -49,12 +49,12 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
     private boolean hasHiveInRange;
     private int disruptorInRange;
 
-    public CustomBeeEntity(EntityType<? extends BeeEntity> type, World world, CustomBeeData beeData) {
+    public CustomBeeEntity(EntityType<? extends Bee> type, Level world, CustomBeeData beeData) {
         super(type, world);
         this.beeData = beeData;
     }
 
-    public static AttributeModifierMap.MutableAttribute createBeeAttributes(String key) {
+    public static AttributeSupplier.Builder createBeeAttributes(String key) {
         CustomBeeData beeData = BeeRegistry.getRegistry().getBeeData(key);
         return createMobAttributes().add(Attributes.MAX_HEALTH, beeData.getCombatData().getBaseHealth()).add(Attributes.FLYING_SPEED, 0.6F).add(Attributes.MOVEMENT_SPEED, 0.3F).add(Attributes.ATTACK_DAMAGE, beeData.getCombatData().getAttackDamage()).add(Attributes.FOLLOW_RANGE, 48.0D);
     }
@@ -106,7 +106,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
     @Override
     public boolean isInvulnerableTo(@Nonnull DamageSource source) {
         TraitData info = getBeeData().getTraitData();
-        if (hasEffect(Effects.WATER_BREATHING) && source == DamageSource.DROWN) {
+        if (hasEffect(MobEffects.WATER_BREATHING) && source == DamageSource.DROWN) {
             return true;
         }
         if (source.equals(DamageSource.SWEET_BERRY_BUSH)) {
@@ -119,10 +119,10 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
     }
 
     @Override
-    public boolean canBeAffected(@Nonnull EffectInstance effectInstance) {
+    public boolean canBeAffected(@Nonnull MobEffectInstance effectInstance) {
         TraitData info = getBeeData().getTraitData();
         if (info.hasTraits() && info.hasPotionImmunities()) {
-            Effect potionEffect = effectInstance.getEffect();
+            MobEffect potionEffect = effectInstance.getEffect();
             return info.getPotionImmunities().stream().noneMatch(potionEffect::equals);
         }
         return super.canBeAffected(effectInstance);
@@ -173,7 +173,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
         this.hasHiveInRange = hasHiveInRange;
     }
 
-    public static boolean canBeeSpawn(EntityType<? extends AgeableEntity> typeIn, IWorld worldIn, SpawnReason reason, BlockPos pos, Random randomIn) {
+    public static boolean canBeeSpawn(EntityType<? extends AgableMob> typeIn, LevelReader worldIn, MobSpawnType reason, BlockPos pos, Random randomIn) {
         String namespaceID = EntityType.getKey(typeIn).toString();
         String beeType = namespaceID.substring(namespaceID.lastIndexOf(":") + 1, namespaceID.length() - 4);
         SpawnData spawnData = BeeRegistry.getRegistry().getBeeData(beeType).getSpawnData();
@@ -209,27 +209,27 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
     }
 
     @Override
-    public void readAdditionalSaveData(@Nonnull CompoundNBT compound) {
+    public void readAdditionalSaveData(@Nonnull CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.entityData.set(FEED_COUNT, compound.getInt(NBTConstants.NBT_FEED_COUNT));
     }
 
     @Override
-    public void addAdditionalSaveData(@Nonnull CompoundNBT compound) {
+    public void addAdditionalSaveData(@Nonnull CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putString(NBTConstants.NBT_BEE_TYPE, this.getBeeType());
         compound.putInt(NBTConstants.NBT_FEED_COUNT, this.getFeedCount());
     }
 
-    public AgeableEntity createSelectedChild(CustomBeeData customBeeData) {
+    public AgableMob createSelectedChild(CustomBeeData customBeeData) {
         EntityType<?> entityType = Objects.requireNonNull(ForgeRegistries.ENTITIES.getValue(customBeeData.getEntityTypeRegistryID()));
         Entity entity = entityType.create(level);
-        return (AgeableEntity) entity;
+        return (AgableMob) entity;
     }
 
     //This is because we don't want IF being able to breed our animals
     @Override
-    public void setInLove(@Nullable PlayerEntity player) {
+    public void setInLove(@Nullable Player player) {
         if (player != null && !(player instanceof FakePlayer))
             super.setInLove(player);
     }
@@ -258,7 +258,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
 
     @Nonnull
     @Override
-    public ActionResultType mobInteract(PlayerEntity player, @Nonnull Hand hand) {
+    public InteractionResult mobInteract(Player player, @Nonnull InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         Item item = itemstack.getItem();
         if (item instanceof NameTagItem) {
@@ -272,22 +272,22 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
                     this.setInLove(player);
                 }
                 player.swing(hand, true);
-                return ActionResultType.PASS;
+                return InteractionResult.PASS;
             }
 
             if (this.isBaby()) {
                 this.usePlayerItem(player, itemstack);
                 this.ageUp((int) ((-this.getAge() / 20D) * 0.1F), true);
-                return ActionResultType.PASS;
+                return InteractionResult.PASS;
             }
         }
-        return ActionResultType.FAIL;
+        return InteractionResult.FAIL;
     }
 
 
     @Nonnull
     @Override
-    public EntitySize getDimensions(@Nonnull Pose poseIn) {
+    public EntityDimensions getDimensions(@Nonnull Pose poseIn) {
         float scale = beeData.getSizeModifier();
         scale = this.isBaby() ? scale * Config.CHILD_SIZE_MODIFIER.get().floatValue() : scale;
         scale = Math.max(scale, 0.75f);

@@ -12,12 +12,12 @@ import mezz.jei.api.gui.ingredient.IGuiIngredientGroup;
 import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
-import net.minecraft.block.FlowingFluidBlock;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -46,8 +46,8 @@ public class FlowersCategory extends BaseCategory<FlowersCategory.Recipe> {
 
         BEE_REGISTRY.getBees().forEach(((s, beeData) -> {
             if (beeData.hasBlockFlowers()) {
-                if (beeData.getBlockFlowers().stream().allMatch(FlowingFluidBlock.class::isInstance)){
-                    Set<Fluid> fluids = beeData.getBlockFlowers().stream().map(b -> ((FlowingFluidBlock) b).getFluid().getSource()).collect(Collectors.toSet());
+                if (beeData.getBlockFlowers().stream().allMatch(LiquidBlock.class::isInstance)){
+                    Set<Fluid> fluids = beeData.getBlockFlowers().stream().map(b -> ((LiquidBlock) b).getFluid().getSource()).collect(Collectors.toSet());
                     recipes.add(new Recipe(fluids, null, beeData.getName()));
                 }else {
                     List<ItemStack> items = beeData.getBlockFlowers().stream()

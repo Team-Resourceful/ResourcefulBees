@@ -3,23 +3,23 @@ package com.resourcefulbees.resourcefulbees.container;
 import com.resourcefulbees.resourcefulbees.mixin.ContainerAccessor;
 import com.resourcefulbees.resourcefulbees.registry.ModContainers;
 import com.resourcefulbees.resourcefulbees.tileentity.EnderBeeconTileEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.IContainerListener;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerListener;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nonnull;
 
-public class EnderBeeconContainer extends Container {
+public class EnderBeeconContainer extends AbstractContainerMenu {
 
     private final EnderBeeconTileEntity enderBeeconTileEntity;
-    private final PlayerEntity player;
+    private final Player player;
 
-    public EnderBeeconContainer(int id, World world, BlockPos pos, PlayerInventory inv) {
+    public EnderBeeconContainer(int id, Level world, BlockPos pos, Inventory inv) {
         super(ModContainers.ENDER_BEECON_CONTAINER.get(), id);
 
         this.player = inv.player;
@@ -48,13 +48,13 @@ public class EnderBeeconContainer extends Container {
     }
 
     @Override
-    public boolean stillValid(@Nonnull PlayerEntity player) {
+    public boolean stillValid(@Nonnull Player player) {
         return true;
     }
 
     @Nonnull
     @Override
-    public ItemStack quickMoveStack(@Nonnull PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(@Nonnull Player playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         if (slot != null && slot.hasItem()) {
@@ -93,7 +93,7 @@ public class EnderBeeconContainer extends Container {
             return;
         }
 
-        for (IContainerListener listener : ((ContainerAccessor) this).getListeners()) {
+        for (ContainerListener listener : ((ContainerAccessor) this).getListeners()) {
             getEnderBeeconTileEntity().sendGUINetworkPacket(listener);
         }
     }
@@ -102,7 +102,7 @@ public class EnderBeeconContainer extends Container {
         return enderBeeconTileEntity;
     }
 
-    public PlayerEntity getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 }

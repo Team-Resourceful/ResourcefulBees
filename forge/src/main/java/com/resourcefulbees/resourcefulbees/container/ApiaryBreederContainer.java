@@ -5,35 +5,36 @@ import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.registry.ModContainers;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryBreederTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.MathUtils;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.IntArray;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 
 import static com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryBreederTileEntity.*;
 
-public class ApiaryBreederContainer extends Container {
+public class ApiaryBreederContainer extends AbstractContainerMenu {
 
     private final ApiaryBreederTileEntity apiaryBreederTileEntity;
-    private final PlayerInventory playerInventory;
+    private final Inventory playerInventory;
     private int numberOfBreeders;
     private boolean rebuild;
 
-    public final IIntArray times;
+    public final ContainerData times;
 
-    public ApiaryBreederContainer(int id, World world, BlockPos pos, PlayerInventory inv) {
-        this(id, world, pos, inv, new IntArray(5));
+    public ApiaryBreederContainer(int id, Level world, BlockPos pos, Inventory inv) {
+        this(id, world, pos, inv, new SimpleContainerData(5));
     }
 
-    public ApiaryBreederContainer(int id, World world, BlockPos pos, PlayerInventory inv, IIntArray times) {
+    public ApiaryBreederContainer(int id, Level world, BlockPos pos, Inventory inv, ContainerData times) {
         super(ModContainers.APIARY_BREEDER_CONTAINER.get(), id);
         this.playerInventory = inv;
         apiaryBreederTileEntity = (ApiaryBreederTileEntity) world.getBlockEntity(pos);
@@ -43,7 +44,7 @@ public class ApiaryBreederContainer extends Container {
     }
 
     @Override
-    public boolean stillValid(@Nonnull PlayerEntity player) {
+    public boolean stillValid(@Nonnull Player player) {
         return true;
     }
 
@@ -67,11 +68,11 @@ public class ApiaryBreederContainer extends Container {
                     }
 
                     @Override
-                    public boolean mayPickup(PlayerEntity playerIn) {
+                    public boolean mayPickup(Player playerIn) {
                         boolean flag = true;
                         int count;
                         ItemStack upgradeItem = getItem();
-                        CompoundNBT data = UpgradeItem.getUpgradeData(upgradeItem);
+                        CompoundTag data = UpgradeItem.getUpgradeData(upgradeItem);
                         if (data != null && data.getString(NBTConstants.NBT_UPGRADE_TYPE).equals(NBTConstants.NBT_BREEDER_UPGRADE) && data.contains(NBTConstants.NBT_BREEDER_COUNT)) {
                             count = (int) MathUtils.clamp(data.getFloat(NBTConstants.NBT_BREEDER_COUNT), 1F, 5);
                             int numBreeders = getApiaryBreederTileEntity().getNumberOfBreeders();
@@ -106,14 +107,14 @@ public class ApiaryBreederContainer extends Container {
                     }
 
                     @Override
-                    public boolean mayPlace(ItemStack stack) {
+                    public boolean mayPlace(@NotNull ItemStack stack) {
                         return getApiaryBreederTileEntity().getTileStackHandler().isItemValid(getParent1Slots()[finalI], stack);
                     }
                 });
                 this.addSlot(new SlotItemHandlerUnconditioned(getApiaryBreederTileEntity().getTileStackHandler(), getFeed1Slots()[i], 69, 18 +(i*20)){
 
                     @Override
-                    public boolean mayPlace(ItemStack stack) {
+                    public boolean mayPlace(@NotNull ItemStack stack) {
                         return getApiaryBreederTileEntity().getTileStackHandler().isItemValid(getFeed1Slots()[finalI], stack);
                     }
                 });
@@ -125,14 +126,14 @@ public class ApiaryBreederContainer extends Container {
                     }
 
                     @Override
-                    public boolean mayPlace(ItemStack stack) {
+                    public boolean mayPlace(@NotNull ItemStack stack) {
                         return getApiaryBreederTileEntity().getTileStackHandler().isItemValid(getParent2Slots()[finalI], stack);
                     }
                 });
                 this.addSlot(new SlotItemHandlerUnconditioned(getApiaryBreederTileEntity().getTileStackHandler(), getFeed2Slots()[i], 141, 18 +(i*20)){
 
                     @Override
-                    public boolean mayPlace(ItemStack stack) {
+                    public boolean mayPlace(@NotNull ItemStack stack) {
                         return getApiaryBreederTileEntity().getTileStackHandler().isItemValid(getFeed2Slots()[finalI], stack);
                     }
                 });
@@ -144,7 +145,7 @@ public class ApiaryBreederContainer extends Container {
                     }
 
                     @Override
-                    public boolean mayPlace(ItemStack stack) {
+                    public boolean mayPlace(@NotNull ItemStack stack) {
                         return getApiaryBreederTileEntity().getTileStackHandler().isItemValid(getEmptyJarSlots()[finalI], stack);
                     }
                 });
@@ -166,7 +167,7 @@ public class ApiaryBreederContainer extends Container {
 
     @Nonnull
     @Override
-    public ItemStack quickMoveStack(@Nonnull PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(@Nonnull Player playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         if (slot != null && slot.hasItem()) {
@@ -193,7 +194,7 @@ public class ApiaryBreederContainer extends Container {
         return apiaryBreederTileEntity;
     }
 
-    public PlayerInventory getPlayerInventory() {
+    public Inventory getPlayerInventory() {
         return playerInventory;
     }
 

@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import com.mojang.blaze3d.platform.InputConstants;
 import com.resourcefulbees.resourcefulbees.api.ICustomBee;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.config.Config;
@@ -18,34 +19,33 @@ import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.ModFluids;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import com.resourcefulbees.resourcefulbees.utils.validation.ValidatorUtils;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.util.InputMappings;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Pose;
-import net.minecraft.entity.passive.BeeEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
@@ -185,19 +185,19 @@ public class BeeInfoUtils {
         return ForgeRegistries.ENTITIES.getValue(entityId);
     }
 
-    public static ITag<Item> getItemTag(String itemTag) {
+    public static Tag<Item> getItemTag(String itemTag) {
         return ItemTags.getAllTags().getTag(getResource(itemTag));
     }
 
-    public static ITag<Fluid> getFluidTag(String fluidTag) {
-        return FluidTags.getAllTags().getTag(getResource(fluidTag));
+    public static Tag<Fluid> getFluidTag(String fluidTag) {
+        return FluidTags.func_226157_a_().getTag(getResource(fluidTag));
     }
 
-    public static ITag<Block> getBlockTag(String blockTag) {
+    public static Tag<Block> getBlockTag(String blockTag) {
         return BlockTags.getAllTags().getTag(getResource(blockTag));
     }
 
-    public static ITag<Block> getValidApiaryTag() {
+    public static Tag<Block> getValidApiaryTag() {
         return BlockTags.getAllTags().getTag(VALID_APIARY);
     }
 
@@ -219,7 +219,7 @@ public class BeeInfoUtils {
 
     public static boolean isValidBreedItem(@Nonnull ItemStack stack, String validBreedItem) {
         if (ValidatorUtils.TAG_RESOURCE_PATTERN.matcher(validBreedItem).matches()) {
-            ITag<Item> itemTag = getItemTag(validBreedItem.replace(TAG_PREFIX, ""));
+            Tag<Item> itemTag = getItemTag(validBreedItem.replace(TAG_PREFIX, ""));
             return itemTag != null && stack.getItem().is(itemTag);
         } else {
             switch (validBreedItem) {
@@ -236,16 +236,16 @@ public class BeeInfoUtils {
     }
 
 
-    public static void flagBeesInRange(BlockPos pos, World world) {
-        MutableBoundingBox box = MutableBoundingBox.createProper(pos.getX() + 10, pos.getY() + 10, pos.getZ() + 10, pos.getX() - 10, pos.getY() - 10, pos.getZ() - 10);
-        AxisAlignedBB aabb = AxisAlignedBB.of(box);
+    public static void flagBeesInRange(BlockPos pos, Level world) {
+        BoundingBox box = BoundingBox.createProper(pos.getX() + 10, pos.getY() + 10, pos.getZ() + 10, pos.getX() - 10, pos.getY() - 10, pos.getZ() - 10);
+        AABB aabb = AABB.of(box);
         if (world != null) {
             List<CustomBeeEntity> list = world.getEntitiesOfClass(CustomBeeEntity.class, aabb);
             list.forEach(customBeeEntity -> customBeeEntity.setHasHiveInRange(true));
         }
     }
 
-    public static List<String> getLoreLines(CompoundNBT outputNBT) {
+    public static List<String> getLoreLines(CompoundTag outputNBT) {
         if (outputNBT.isEmpty()) return new LinkedList<>();
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         JsonParser jp = new JsonParser();
@@ -256,36 +256,36 @@ public class BeeInfoUtils {
 
     public static boolean isShiftPressed() {
         long windowID = Minecraft.getInstance().getWindow().getWindow();
-        return InputMappings.isKeyDown(windowID, GLFW.GLFW_KEY_LEFT_SHIFT) || InputMappings.isKeyDown(windowID, GLFW.GLFW_KEY_RIGHT_SHIFT);
+        return InputConstants.isKeyDown(windowID, GLFW.GLFW_KEY_LEFT_SHIFT) || InputConstants.isKeyDown(windowID, GLFW.GLFW_KEY_RIGHT_SHIFT);
     }
 
-    public static TranslationTextComponent getSizeName(float sizeModifier) {
+    public static TranslatableComponent getSizeName(float sizeModifier) {
         if (sizeModifier < 0.75) {
-            return new TranslationTextComponent("bees.resourcefulbees.size.tiny");
+            return new TranslatableComponent("bees.resourcefulbees.size.tiny");
         } else if (sizeModifier < 1) {
-            return new TranslationTextComponent("bees.resourcefulbees.size.small");
+            return new TranslatableComponent("bees.resourcefulbees.size.small");
         } else if (sizeModifier == 1) {
-            return new TranslationTextComponent("bees.resourcefulbees.size.regular");
+            return new TranslatableComponent("bees.resourcefulbees.size.regular");
         } else if (sizeModifier <= 1.5) {
-            return new TranslationTextComponent("bees.resourcefulbees.size.large");
+            return new TranslatableComponent("bees.resourcefulbees.size.large");
         } else {
-            return new TranslationTextComponent("bees.resourcefulbees.size.giant");
+            return new TranslatableComponent("bees.resourcefulbees.size.giant");
         }
     }
 
     public static List<Block> getFlowers(String flower) {
         List<Block> flowers = new LinkedList<>();
         if (flower.equals(FLOWER_TAG_ALL)) {
-            ITag<Block> itemTag = BlockTags.FLOWERS;
+            Tag<Block> itemTag = BlockTags.FLOWERS;
             if (itemTag != null) flowers.addAll(itemTag.getValues());
         } else if (flower.equals(FLOWER_TAG_SMALL)) {
-            ITag<Block> itemTag = BlockTags.SMALL_FLOWERS;
+            Tag<Block> itemTag = BlockTags.SMALL_FLOWERS;
             if (itemTag != null) flowers.addAll(itemTag.getValues());
         } else if (flower.equals(FLOWER_TAG_TALL)) {
-            ITag<Block> itemTag = BlockTags.TALL_FLOWERS;
+            Tag<Block> itemTag = BlockTags.TALL_FLOWERS;
             if (itemTag != null) flowers.addAll(itemTag.getValues());
         } else if (flower.startsWith(TAG_PREFIX)) {
-            ITag<Block> itemTag = BeeInfoUtils.getBlockTag(flower.replace(TAG_PREFIX, ""));
+            Tag<Block> itemTag = BeeInfoUtils.getBlockTag(flower.replace(TAG_PREFIX, ""));
             if (itemTag != null) flowers.addAll(itemTag.getValues());
         } else {
             flowers.add(getBlock(flower));
@@ -293,22 +293,22 @@ public class BeeInfoUtils {
         return flowers;
     }
 
-    public static ITextComponent getYesNo(boolean bool) {
+    public static Component getYesNo(boolean bool) {
         if (bool) {
-            return new TranslationTextComponent("gui.resourcefulbees.yes");
+            return new TranslatableComponent("gui.resourcefulbees.yes");
         } else {
-            return new TranslationTextComponent("gui.resourcefulbees.no");
+            return new TranslatableComponent("gui.resourcefulbees.no");
         }
     }
 
-    public static TranslationTextComponent getLightName(LightLevels light) {
+    public static TranslatableComponent getLightName(LightLevels light) {
         switch (light) {
             case DAY:
-                return new TranslationTextComponent("gui.resourcefulbees.light.day");
+                return new TranslatableComponent("gui.resourcefulbees.light.day");
             case NIGHT:
-                return new TranslationTextComponent("gui.resourcefulbees.light.night");
+                return new TranslatableComponent("gui.resourcefulbees.light.night");
             default:
-                return new TranslationTextComponent("gui.resourcefulbees.light.any");
+                return new TranslatableComponent("gui.resourcefulbees.light.any");
         }
     }
 
@@ -316,16 +316,16 @@ public class BeeInfoUtils {
         String flower = parent1Data.getBreedData().getFeedItem();
         List<Item> flowers = new LinkedList<>();
         if (flower.equals(FLOWER_TAG_ALL)) {
-            ITag<Item> itemTag = ItemTags.FLOWERS;
+            Tag<Item> itemTag = ItemTags.FLOWERS;
             if (itemTag != null) flowers.addAll(itemTag.getValues());
         } else if (flower.equals(FLOWER_TAG_SMALL)) {
-            ITag<Item> itemTag = ItemTags.SMALL_FLOWERS;
+            Tag<Item> itemTag = ItemTags.SMALL_FLOWERS;
             if (itemTag != null) flowers.addAll(itemTag.getValues());
         } else if (flower.equals(FLOWER_TAG_TALL)) {
-            ITag<Item> itemTag = ItemTags.TALL_FLOWERS;
+            Tag<Item> itemTag = ItemTags.TALL_FLOWERS;
             if (itemTag != null) flowers.addAll(itemTag.getValues());
         } else if (flower.startsWith(TAG_PREFIX)) {
-            ITag<Item> itemTag = BeeInfoUtils.getItemTag(flower.replace(TAG_PREFIX, ""));
+            Tag<Item> itemTag = BeeInfoUtils.getItemTag(flower.replace(TAG_PREFIX, ""));
             if (itemTag != null) flowers.addAll(itemTag.getValues());
         } else {
             flowers.add(getItem(flower));
@@ -333,7 +333,7 @@ public class BeeInfoUtils {
         return flowers.stream().map(f -> new ItemStack(f, parent1Data.getBreedData().getFeedAmount())).collect(Collectors.toList());
     }
 
-    public static void ageBee(int ticksInHive, BeeEntity beeEntity) {
+    public static void ageBee(int ticksInHive, Bee beeEntity) {
         int i = beeEntity.getAge();
         if (i < 0) {
             beeEntity.setAge(Math.min(0, i + ticksInHive));
@@ -350,7 +350,7 @@ public class BeeInfoUtils {
     }
 
     public static void setEntityLocationAndAngle(BlockPos blockpos, Direction direction, Entity entity) {
-        EntitySize size = entity.getDimensions(Pose.STANDING);
+        EntityDimensions size = entity.getDimensions(Pose.STANDING);
         double d0 = 0.65D + size.width / 2.0F;
         double d1 = blockpos.getX() + 0.5D + d0 * direction.getStepX();
         double d2 = blockpos.getY() + Math.max(0.5D - (size.height / 2.0F), 0);
@@ -358,9 +358,9 @@ public class BeeInfoUtils {
         entity.moveTo(d1, d2, d3, entity.yRot, entity.xRot);
     }
 
-    public static @NotNull CompoundNBT createJarBeeTag(BeeEntity beeEntity, String nbtTagID) {
+    public static @NotNull CompoundTag createJarBeeTag(Bee beeEntity, String nbtTagID) {
         String type = EntityType.getKey(beeEntity.getType()).toString();
-        CompoundNBT nbt = new CompoundNBT();
+        CompoundTag nbt = new CompoundTag();
         nbt.putString(nbtTagID, type);
 
         beeEntity.saveWithoutId(nbt);

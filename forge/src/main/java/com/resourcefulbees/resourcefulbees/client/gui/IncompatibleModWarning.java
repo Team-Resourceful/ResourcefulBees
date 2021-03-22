@@ -1,13 +1,13 @@
 package com.resourcefulbees.resourcefulbees.client.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.MultiplayerScreen;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.WorldSelectionScreen;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
+import net.minecraft.client.gui.screens.worldselection.SelectWorldScreen;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.loading.FMLLoader;
@@ -30,7 +30,7 @@ public class IncompatibleModWarning {
 
     private static void guiOpened(GuiOpenEvent event) {
         Screen curr = event.getGui();
-        if (isPerformantLoaded && !hasBeenShownOnce && (curr instanceof WorldSelectionScreen || curr instanceof MultiplayerScreen) && !Config.BYPASS_PERFORMANT_CHECK.get()) {
+        if (isPerformantLoaded && !hasBeenShownOnce && (curr instanceof SelectWorldScreen || curr instanceof JoinMultiplayerScreen) && !Config.BYPASS_PERFORMANT_CHECK.get()) {
             event.setGui(new ModWarningScreen(curr));
             hasBeenShownOnce = true;
         }
@@ -41,7 +41,7 @@ public class IncompatibleModWarning {
         private int ticksElapsed = 0;
 
         protected ModWarningScreen(Screen parent) {
-            super(new StringTextComponent(""));
+            super(new TextComponent(""));
             this.parent = parent;
         }
 
@@ -57,7 +57,7 @@ public class IncompatibleModWarning {
         }
 
         @Override
-        public void render(@NotNull MatrixStack stack, int mx, int my, float partialTicks) {
+        public void render(@NotNull PoseStack stack, int mx, int my, float partialTicks) {
             super.render(stack, mx, my, partialTicks);
 
             renderDirtBackground(0);

@@ -6,9 +6,9 @@ import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.registry.BiomeDictionary;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.biome.Biome;
 import org.apache.commons.lang3.text.WordUtils;
 
 import java.util.*;
@@ -118,12 +118,12 @@ public class BiomeParser {
     }
 
 
-    private static Set<RegistryKey<Biome>> getForgeBiomes(net.minecraftforge.common.BiomeDictionary.Type type) {
+    private static Set<ResourceKey<Biome>> getForgeBiomes(net.minecraftforge.common.BiomeDictionary.Type type) {
         return net.minecraftforge.common.BiomeDictionary.getBiomes(type);
     }
 
     private static Collection<? extends ResourceLocation> getForgeBiomeLocations(net.minecraftforge.common.BiomeDictionary.Type type) {
-        return getForgeBiomes(type).stream().map(RegistryKey::location).collect(Collectors.toList());
+        return getForgeBiomes(type).stream().map(ResourceKey::location).collect(Collectors.toList());
     }
 
     private static net.minecraftforge.common.BiomeDictionary.Type getForgeType(String s) {

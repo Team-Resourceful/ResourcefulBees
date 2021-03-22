@@ -18,19 +18,19 @@ import com.resourcefulbees.resourcefulbees.item.HoneycombItem;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.utils.color.Color;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.FlowingFluidBlock;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.EntityClassification;
-import net.minecraft.entity.EntityType;
-import net.minecraft.fluid.FlowingFluid;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.FlowingFluid;
+import net.minecraft.world.level.material.Material;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -62,7 +62,7 @@ public class RegistryHandler {
         ModBlocks.BLOCKS.register(bus);
         ModFluids.FLUIDS.register(bus);
         ENTITY_TYPES.register(bus);
-        ModTileEntityTypes.TILE_ENTITY_TYPES.register(bus);
+        ModBlockEntityTypes.TILE_ENTITY_TYPES.register(bus);
         ModPOIs.POIS.register(bus);
         ModPotions.POTIONS.register(bus);
         ModContainers.CONTAINER_TYPES.register(bus);
@@ -116,7 +116,7 @@ public class RegistryHandler {
     private static final Map<String, RegistryObject<FlowingFluid>> stillFluids = new HashMap<>();
     private static final Map<String, RegistryObject<FlowingFluid>> flowingFluids = new HashMap<>();
     private static final Map<String, RegistryObject<Item>> honeyBuckets = new HashMap<>();
-    private static final Map<String, RegistryObject<FlowingFluidBlock>> fluidBlocks = new HashMap<>();
+    private static final Map<String, RegistryObject<LiquidBlock>> fluidBlocks = new HashMap<>();
 
     private static void registerHoneyBottle(String name, HoneyBottleData honeyData) {
         final RegistryObject<Item> customHoneyBottle = ModItems.ITEMS.register(name + "_honey_bottle", () -> new CustomHoneyBottleItem(honeyData.getProperties(), honeyData));
@@ -135,7 +135,7 @@ public class RegistryHandler {
             stillFluids.put(name, ModFluids.FLUIDS.register(name + "_honey", () -> new HoneyFlowingFluid.Source(makeProperties(name, honeyData), honeyData)));
             flowingFluids.put(name, ModFluids.FLUIDS.register(name + "_honey_flowing", () -> new HoneyFlowingFluid.Flowing(makeProperties(name, honeyData), honeyData)));
             honeyBuckets.put(name, ModItems.ITEMS.register(name + "_honey_fluid_bucket", () -> new CustomHoneyBucketItem(stillFluids.get(name), new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES).craftRemainder(Items.BUCKET).stacksTo(1), honeyData)));
-            fluidBlocks.put(name, ModBlocks.BLOCKS.register(name + "_honey", () -> new CustomHoneyFluidBlock(stillFluids.get(name), AbstractBlock.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops(), honeyData)));
+            fluidBlocks.put(name, ModBlocks.BLOCKS.register(name + "_honey", () -> new CustomHoneyFluidBlock(stillFluids.get(name), BlockBehaviour.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops(), honeyData)));
 
             honeyData.setHoneyStillFluidRegistryObject(stillFluids.get(name));
             honeyData.setHoneyFlowingFluidRegistryObject(flowingFluids.get(name));
@@ -160,7 +160,7 @@ public class RegistryHandler {
     }
 
     private static void registerHoneycomb(String name, CustomBeeData customBeeData) {
-        final RegistryObject<Block> customHoneycombBlock = ModBlocks.BLOCKS.register(name + "_honeycomb_block", () -> new HoneycombBlock(name, customBeeData.getColorData(), AbstractBlock.Properties.copy(Blocks.HONEYCOMB_BLOCK)));
+        final RegistryObject<Block> customHoneycombBlock = ModBlocks.BLOCKS.register(name + "_honeycomb_block", () -> new HoneycombBlock(name, customBeeData.getColorData(), BlockBehaviour.Properties.copy(Blocks.HONEYCOMB_BLOCK)));
         final RegistryObject<Item> customHoneycomb = ModItems.ITEMS.register(name + "_honeycomb", () -> new HoneycombItem(name, customBeeData.getColorData(), new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
         final RegistryObject<Item> customHoneycombBlockItem = ModItems.ITEMS.register(name + "_honeycomb_block", () -> new BlockItem(customHoneycombBlock.get(), new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
 
@@ -171,7 +171,7 @@ public class RegistryHandler {
 
     private static void registerBee(String name, CustomBeeData customBeeData) {
         final RegistryObject<EntityType<? extends CustomBeeEntity>> customBeeEntity = ENTITY_TYPES.register(name + "_bee", () -> EntityType.Builder
-                .<ResourcefulBee>of((type, world) -> new ResourcefulBee(type, world, customBeeData), EntityClassification.CREATURE)
+                .<ResourcefulBee>of((type, world) -> new ResourcefulBee(type, world, customBeeData), MobCategory.CREATURE)
                 .sized(0.7F, 0.6F)
                 .build(name + "_bee"));
 

@@ -4,22 +4,22 @@ import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.utils.BeepediaUtils;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.StringNBT;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.ChatFormatting;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.StringTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
@@ -39,20 +39,20 @@ public class Beepedia extends Item {
     }
 
     public void checkAndAddBees(ItemStack stack, CustomBeeEntity entity) {
-        CompoundNBT nbt = stack.hasTag() && stack.getTag() != null ? stack.getTag() : new CompoundNBT();
-        ListNBT listNBT;
+        CompoundTag nbt = stack.hasTag() && stack.getTag() != null ? stack.getTag() : new CompoundTag();
+        ListTag listNBT;
         if (nbt.getBoolean(CREATIVE_TAG)) return;
         if (nbt.contains(NBTConstants.NBT_BEES)) {
             listNBT = nbt.getList(NBTConstants.NBT_BEES, 8).copy();
         } else {
-            listNBT = new ListNBT();
+            listNBT = new ListTag();
         }
         if (entity != null) {
-            if (!listNBT.contains(StringNBT.valueOf(entity.getBeeType()))) {
-                listNBT.add(StringNBT.valueOf(entity.getBeeType()));
+            if (!listNBT.contains(StringTag.valueOf(entity.getBeeType()))) {
+                listNBT.add(StringTag.valueOf(entity.getBeeType()));
             }
             listNBT.removeIf(b -> BeeRegistry.getRegistry().getBeeData(b.getAsString()) == null);
-            listNBT = listNBT.stream().distinct().collect(Collectors.toCollection(ListNBT::new));
+            listNBT = listNBT.stream().distinct().collect(Collectors.toCollection(ListTag::new));
             nbt.putBoolean(COMPLETE_TAG, listNBT.size() == BeeRegistry.getRegistry().getBees().size());
             nbt.put(NBTConstants.NBT_BEES, listNBT);
             stack.setTag(nbt);
@@ -60,46 +60,46 @@ public class Beepedia extends Item {
     }
 
     @Override
-    public @NotNull ActionResult<ItemStack> use(World world, PlayerEntity playerEntity, @NotNull Hand hand) {
+    public InteractionResultHolder<ItemStack> use(Level world, Player playerEntity, InteractionHand hand) {
         ItemStack itemstack = playerEntity.getItemInHand(hand);
         checkAndAddBees(itemstack, null);
         if (world.isClientSide) {
             BeepediaUtils.loadBeepedia(itemstack, null);
         }
-        return ActionResult.sidedSuccess(itemstack, world.isClientSide());
+        return InteractionResultHolder.sidedSuccess(itemstack, world.isClientSide());
     }
 
     @Override
-    public @NotNull ActionResultType interactLivingEntity(@NotNull ItemStack stack, PlayerEntity player, @NotNull LivingEntity entity, @NotNull Hand hand) {
+    public @NotNull InteractionResult interactLivingEntity(@NotNull ItemStack stack, Player player, @NotNull LivingEntity entity, @NotNull InteractionHand hand) {
         if (entity instanceof CustomBeeEntity) {
             checkAndAddBees(stack, (CustomBeeEntity) entity);
             if (player.level.isClientSide) BeepediaUtils.loadBeepedia(stack, entity);
             player.setItemInHand(hand, stack);
-            return ActionResultType.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
         return super.interactLivingEntity(stack, player, entity, hand);
     }
 
     @Override
-    public ITextComponent getName(ItemStack stack) {
+    public Component getName(ItemStack stack) {
         if (stack.hasTag() && stack.getTag() != null && !stack.getTag().isEmpty()) {
-            if (stack.getTag().getBoolean(CREATIVE_TAG)) return new TranslationTextComponent("item.resourcefulbees.creative_beepedia").withStyle(TextFormatting.LIGHT_PURPLE);
-            if (stack.getTag().getBoolean(COMPLETE_TAG)) return new StringTextComponent("✦ ").withStyle(TextFormatting.GREEN).append(super.getName(stack).copy().withStyle(TextFormatting.WHITE));
+            if (stack.getTag().getBoolean(CREATIVE_TAG)) return new TranslatableComponent("item.resourcefulbees.creative_beepedia").withStyle(ChatFormatting.LIGHT_PURPLE);
+            if (stack.getTag().getBoolean(COMPLETE_TAG)) return new TextComponent("✦ ").withStyle(ChatFormatting.GREEN).append(super.getName(stack).copy().withStyle(ChatFormatting.WHITE));
         }
         return super.getName(stack);
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(@Nonnull ItemStack stack, @Nullable World world, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flag) {
+    public void appendHoverText(@Nonnull ItemStack stack, @Nullable Level world, @Nonnull List<Component> tooltip, @Nonnull TooltipFlag flag) {
         super.appendHoverText(stack, world, tooltip, flag);
-        tooltip.add(new TranslationTextComponent("item.resourcefulbees.information.beepedia").withStyle(TextFormatting.GREEN));
+        tooltip.add(new TranslatableComponent("item.resourcefulbees.information.beepedia").withStyle(ChatFormatting.GREEN));
         if (stack.hasTag() && stack.getTag() != null && !stack.getTag().isEmpty()) {
             boolean complete = stack.getTag().getBoolean(COMPLETE_TAG) || stack.getTag().getBoolean(CREATIVE_TAG);
             int total = BeeRegistry.getRegistry().getBees().size();
             int count = stack.getTag().getList(NBTConstants.NBT_BEES, 8).size();
-            tooltip.add(new TranslationTextComponent("gui.resourcefulbees.beepedia.home.progress").withStyle(TextFormatting.GRAY)
-                    .append(String.format("%d / %d", complete? total : count, total)).withStyle(TextFormatting.GOLD));
+            tooltip.add(new TranslatableComponent("gui.resourcefulbees.beepedia.home.progress").withStyle(ChatFormatting.GRAY)
+                    .append(String.format("%d / %d", complete? total : count, total)).withStyle(ChatFormatting.GOLD));
         }
 
     }

@@ -1,7 +1,7 @@
 package com.resourcefulbees.resourcefulbees.patreon;
 
 import com.resourcefulbees.resourcefulbees.utils.color.Color;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.Locale;
 

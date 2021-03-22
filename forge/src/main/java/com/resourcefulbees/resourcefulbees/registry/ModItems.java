@@ -7,24 +7,14 @@ import com.resourcefulbees.resourcefulbees.item.*;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.utils.TooltipBuilder;
-import mezz.jei.api.gui.ingredient.ITooltipCallback;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.client.resources.language.I18n;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.*;
-import net.minecraft.network.chat.BaseComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Rarity;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
@@ -44,7 +34,7 @@ public class ModItems {
 
 
     @SuppressWarnings("deprecation")
-    public static final RegistryObject<Item> OREO_COOKIE = ITEMS.register("oreo_cookie", () -> new Item(new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES).food(new Food.Builder()
+    public static final RegistryObject<Item> OREO_COOKIE = ITEMS.register("oreo_cookie", () -> new Item(new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES).food(new FoodProperties.Builder()
             .effect(new MobEffectInstance(MobEffects.REGENERATION, 600, 1), 1)
             .effect(new MobEffectInstance(MobEffects.ABSORPTION, 2400, 3), 1)
             .effect(new MobEffectInstance(MobEffects.SATURATION, 2400, 1), 1)
@@ -63,7 +53,7 @@ public class ModItems {
     public static final RegistryObject<Item> CATNIP_HONEY_BOTTLE = ITEMS.register("catnip_honey_bottle", () -> new CustomHoneyBottleItem(KittenBee.getHoneyBottleData().getProperties().rarity(Rarity.EPIC), KittenBee.getHoneyBottleData()));
     public static final RegistryObject<Item> CATNIP_HONEYCOMB_BLOCK_ITEM = ITEMS.register("catnip_honeycomb_block", () -> new BlockItem(ModBlocks.CATNIP_HONEYCOMB_BLOCK.get(), new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES).rarity(Rarity.RARE)));
     public static final RegistryObject<Item> CATNIP_HONEY_BLOCK_ITEM = ITEMS.register("catnip_honey_block", () -> new BlockItem(ModBlocks.CATNIP_HONEY_BLOCK.get(), new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES).rarity(Rarity.RARE)));
-    public static final RegistryObject<Item> CATNIP_HONEY_FLUID_BUCKET = ITEMS.register("catnip_honey_fluid_bucket", () -> new CustomHoneyBucketItem(ModFluids.CATNIP_HONEY_STILL, new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES).craftRemainder(net.minecraft.item.Items.BUCKET).stacksTo(1).rarity(Rarity.RARE), KittenBee.getHoneyBottleData()));
+    public static final RegistryObject<Item> CATNIP_HONEY_FLUID_BUCKET = ITEMS.register("catnip_honey_fluid_bucket", () -> new CustomHoneyBucketItem(ModFluids.CATNIP_HONEY_STILL, new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES).craftRemainder(Items.BUCKET).stacksTo(1).rarity(Rarity.RARE), KittenBee.getHoneyBottleData()));
     public static final RegistryObject<Item> CRAFTING_BEE_BOX = ITEMS.register("crafting_bee_box", () -> new BeeBox(new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES).stacksTo(1), true));
     public static final RegistryObject<Item> BEE_BOX = ITEMS.register("bee_box", () -> new BeeBox(new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES).stacksTo(1), false));
     public static final RegistryObject<Item> BEEPEDIA = ITEMS.register("beepedia", () -> new Beepedia(new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES).stacksTo(1)));
@@ -75,7 +65,7 @@ public class ModItems {
     public static final RegistryObject<Item> T4_BEEHIVE_ITEM = ITEMS.register("t4_beehive", () -> new BlockItem(ModBlocks.T4_BEEHIVE.get(), new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
     public static final RegistryObject<Item> SCRAPER = ITEMS.register("scraper", () -> new Item(new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES).stacksTo(1)) {
         @Override
-        public void appendHoverText(@Nonnull ItemStack stack, @Nullable Level worldIn, @Nonnull List<BaseComponent> tooltip, @Nonnull ITooltipCallback flagIn) {
+        public void appendHoverText(@Nonnull ItemStack stack, @Nullable Level worldIn, @Nonnull List<Component> tooltip, @Nonnull TooltipFlag flagIn) {
             tooltip.add(new TextComponent(ChatFormatting.GOLD + I18n.get("item.resourcefulbees.scraper.tooltip")));
             tooltip.add(new TextComponent(ChatFormatting.GOLD + I18n.get("item.resourcefulbees.scraper.tooltip.1")));
             super.appendHoverText(stack, worldIn, tooltip, flagIn);
@@ -162,9 +152,9 @@ public class ModItems {
                     .upgradeModification(NBTConstants.NBT_BREEDER_COUNT, 1)
                     .build()) {
         @Override
-        public void appendHoverText(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
+        public void appendHoverText(@Nonnull ItemStack stack, @Nullable Level worldIn, @Nonnull List<Component> tooltip, @Nonnull TooltipFlag flagIn) {
             tooltip.addAll(new TooltipBuilder()
-                    .addTip(I18n.get("item.resourcefulbees.apiary_breeder_upgrade.tooltip.info"), TextFormatting.GOLD)
+                    .addTip(I18n.get("item.resourcefulbees.apiary_breeder_upgrade.tooltip.info"), ChatFormatting.GOLD)
                     .build());
             super.appendHoverText(stack, worldIn, tooltip, flagIn);
         }
@@ -175,14 +165,14 @@ public class ModItems {
                     .upgradeModification(NBTConstants.NBT_BREED_TIME, 300)
                     .build()) {
         @Override
-        public void appendHoverText(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
+        public void appendHoverText(@Nonnull ItemStack stack, @Nullable Level worldIn, @Nonnull List<Component> tooltip, @Nonnull TooltipFlag flagIn) {
             tooltip.addAll(new TooltipBuilder()
-                    .addTip(I18n.get("item.resourcefulbees.apiary_breed_time_upgrade.tooltip.info"), TextFormatting.GOLD)
+                    .addTip(I18n.get("item.resourcefulbees.apiary_breed_time_upgrade.tooltip.info"), ChatFormatting.GOLD)
                     .build());
             super.appendHoverText(stack, worldIn, tooltip, flagIn);
         }
     });
-    public static final RegistryObject<Item> HONEY_FLUID_BUCKET = ITEMS.register("honey_fluid_bucket", () -> new BucketItem(ModFluids.HONEY_STILL, new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES).craftRemainder(net.minecraft.item.Items.BUCKET).stacksTo(1)));
+    public static final RegistryObject<Item> HONEY_FLUID_BUCKET = ITEMS.register("honey_fluid_bucket", () -> new BucketItem(ModFluids.HONEY_STILL, new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES).craftRemainder(Items.BUCKET).stacksTo(1)));
 
     public static final RegistryObject<Item> T1_HIVE_UPGRADE = ITEMS.register("t1_hive_upgrade", () -> new UpgradeItem(new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES).durability(0).stacksTo(16),
             UpgradeItem.builder()
@@ -191,9 +181,9 @@ public class ModItems {
                     .upgradeModification(NBTConstants.NBT_TIER_MODIFIER, 1f)
                     .build()) {
         @Override
-        public void appendHoverText(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
+        public void appendHoverText(@Nonnull ItemStack stack, @Nullable Level worldIn, @Nonnull List<Component> tooltip, @Nonnull TooltipFlag flagIn) {
             tooltip.addAll(new TooltipBuilder()
-                    .addTranslatableTip(ModConstants.HIVE_UPGRADE_TOOLTIP, TextFormatting.GOLD)
+                    .addTranslatableTip(ModConstants.HIVE_UPGRADE_TOOLTIP, ChatFormatting.GOLD)
                     .build());
             super.appendHoverText(stack, worldIn, tooltip, flagIn);
         }
@@ -205,9 +195,9 @@ public class ModItems {
                     .upgradeModification(NBTConstants.NBT_TIER_MODIFIER, 1.5f)
                     .build()) {
         @Override
-        public void appendHoverText(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
+        public void appendHoverText(@Nonnull ItemStack stack, @Nullable Level worldIn, @Nonnull List<Component> tooltip, @Nonnull TooltipFlag flagIn) {
             tooltip.addAll(new TooltipBuilder()
-                    .addTranslatableTip(ModConstants.HIVE_UPGRADE_TOOLTIP, TextFormatting.GOLD)
+                    .addTranslatableTip(ModConstants.HIVE_UPGRADE_TOOLTIP, ChatFormatting.GOLD)
                     .build());
             super.appendHoverText(stack, worldIn, tooltip, flagIn);
         }
@@ -219,9 +209,9 @@ public class ModItems {
                     .upgradeModification(NBTConstants.NBT_TIER_MODIFIER, 2f)
                     .build()) {
         @Override
-        public void appendHoverText(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
+        public void appendHoverText(@Nonnull ItemStack stack, @Nullable Level worldIn, @Nonnull List<Component> tooltip, @Nonnull TooltipFlag flagIn) {
             tooltip.addAll(new TooltipBuilder()
-                    .addTranslatableTip(ModConstants.HIVE_UPGRADE_TOOLTIP, TextFormatting.GOLD)
+                    .addTranslatableTip(ModConstants.HIVE_UPGRADE_TOOLTIP, ChatFormatting.GOLD)
                     .build());
             super.appendHoverText(stack, worldIn, tooltip, flagIn);
         }
@@ -233,9 +223,9 @@ public class ModItems {
                     .upgradeModification(NBTConstants.NBT_TIER_MODIFIER, 4f)
                     .build()) {
         @Override
-        public void appendHoverText(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
+        public void appendHoverText(@Nonnull ItemStack stack, @Nullable Level worldIn, @Nonnull List<Component> tooltip, @Nonnull TooltipFlag flagIn) {
             tooltip.addAll(new TooltipBuilder()
-                    .addTranslatableTip(ModConstants.HIVE_UPGRADE_TOOLTIP, TextFormatting.GOLD)
+                    .addTranslatableTip(ModConstants.HIVE_UPGRADE_TOOLTIP, ChatFormatting.GOLD)
                     .build());
             super.appendHoverText(stack, worldIn, tooltip, flagIn);
         }

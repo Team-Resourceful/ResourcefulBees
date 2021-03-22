@@ -11,13 +11,13 @@ import com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.validation.SecondPhaseValidator;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.*;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.resources.IResourceManagerReloadListener;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.*;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidStack;
@@ -26,7 +26,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import javax.annotation.Nonnull;
 import java.util.HashMap;
 
-public class RecipeBuilder implements IResourceManagerReloadListener {
+public class RecipeBuilder implements ResourceManagerReloadListener {
     private static RecipeManager recipeManager;
 
     private static final IBeeRegistry BEE_REGISTRY = BeeRegistry.getRegistry();
@@ -36,7 +36,7 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
     }
 
     @Override
-    public void onResourceManagerReload(@Nonnull IResourceManager resourceManager) {
+    public void onResourceManagerReload(@Nonnull ResourceManager resourceManager) {
         BEE_REGISTRY.getBees().forEach(((s, customBeeData) -> {
             if (customBeeData.hasHoneycomb()) {
                 CentrifugeData centrifugeData = customBeeData.getCentrifugeData();
@@ -46,10 +46,10 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
                     SecondPhaseValidator.validateCentrifugeOutputs(customBeeData);
 
                     if (centrifugeData.hasCentrifugeOutput()) {
-                        IRecipe<?> honeycombCentrifuge = this.centrifugeRecipe(s, customBeeData, 1);
-                        IRecipe<?> honeycombBlockCentrifuge = this.centrifugeRecipe(s, customBeeData, 9);
-                        IRecipe<?> honeycombCentrifugeNoBottle = this.centrifugeRecipeNoBottle(s, customBeeData, 1);
-                        IRecipe<?> honeycombBlockCentrifugeNoBottle = this.centrifugeRecipeNoBottle(s, customBeeData, 9);
+                        Recipe<?> honeycombCentrifuge = this.centrifugeRecipe(s, customBeeData, 1);
+                        Recipe<?> honeycombBlockCentrifuge = this.centrifugeRecipe(s, customBeeData, 9);
+                        Recipe<?> honeycombCentrifugeNoBottle = this.centrifugeRecipeNoBottle(s, customBeeData, 1);
+                        Recipe<?> honeycombBlockCentrifugeNoBottle = this.centrifugeRecipeNoBottle(s, customBeeData, 9);
                         getRecipeManager().recipes.computeIfAbsent(honeycombCentrifuge.getType(), t -> new HashMap<>()).put(honeycombCentrifuge.getId(), honeycombCentrifuge);
                         getRecipeManager().recipes.computeIfAbsent(honeycombBlockCentrifuge.getType(), t -> new HashMap<>()).put(honeycombBlockCentrifuge.getId(), honeycombBlockCentrifuge);
                         if (honeycombBlockCentrifugeNoBottle != null && honeycombCentrifugeNoBottle != null) {
@@ -60,8 +60,8 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
                 }
 
                 if (Config.HONEYCOMB_BLOCK_RECIPES.get() && !customBeeData.hasCustomDrop()) {
-                    IRecipe<?> honeycombBlock = this.makeHoneycombRecipe(s, customBeeData);
-                    IRecipe<?> honeycomb = this.combBlockToCombRecipe(s, customBeeData);
+                    Recipe<?> honeycombBlock = this.makeHoneycombRecipe(s, customBeeData);
+                    Recipe<?> honeycomb = this.combBlockToCombRecipe(s, customBeeData);
                     getRecipeManager().recipes.computeIfAbsent(honeycombBlock.getType(), t -> new HashMap<>()).put(honeycombBlock.getId(), honeycombBlock);
                     getRecipeManager().recipes.computeIfAbsent(honeycomb.getType(), t -> new HashMap<>()).put(honeycomb.getId(), honeycomb);
                 }
@@ -71,12 +71,12 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
             BEE_REGISTRY.getHoneyBottles().forEach((s, honeyData) -> {
                 SecondPhaseValidator.validateHoneyEffects(honeyData);
                 if (honeyData.doGenerateHoneyBlock() && honeyData.doHoneyBlockRecipe()) {
-                    IRecipe<?> honeyBlock = this.makeHoneyBlockRecipe(honeyData);
-                    IRecipe<?> honeyBottle = this.makeHoneyBottleRecipe(honeyData);
-                    IRecipe<?> bottleToBucket = this.makeBottleToBucketRecipe(honeyData);
-                    IRecipe<?> bucketToBottle = this.makeBucketToBottleRecipe(honeyData);
-                    IRecipe<?> blockToBucket = this.makeBlockToBucketRecipe(honeyData);
-                    IRecipe<?> bucketToBlock = this.makeBucketToBlockRecipe(honeyData);
+                    Recipe<?> honeyBlock = this.makeHoneyBlockRecipe(honeyData);
+                    Recipe<?> honeyBottle = this.makeHoneyBottleRecipe(honeyData);
+                    Recipe<?> bottleToBucket = this.makeBottleToBucketRecipe(honeyData);
+                    Recipe<?> bucketToBottle = this.makeBucketToBottleRecipe(honeyData);
+                    Recipe<?> blockToBucket = this.makeBlockToBucketRecipe(honeyData);
+                    Recipe<?> bucketToBlock = this.makeBucketToBlockRecipe(honeyData);
                     getBottleRecipes(honeyBlock, honeyBottle, bottleToBucket);
                     getBottleRecipes(bucketToBottle, blockToBucket, bucketToBlock);
                 }
@@ -85,7 +85,7 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
     }
 
     //TODO simplify further
-    public void getBottleRecipes(IRecipe<?> recipe, IRecipe<?> recipe1, IRecipe<?> recipe2) {
+    public void getBottleRecipes(Recipe<?> recipe, Recipe<?> recipe1, Recipe<?> recipe2) {
         getRecipeManager().recipes.computeIfAbsent(recipe.getType(), t -> new HashMap<>()).put(recipe.getId(), recipe);
         getRecipeManager().recipes.computeIfAbsent(recipe1.getType(), t -> new HashMap<>()).put(recipe1.getId(), recipe1);
         getRecipeManager().recipes.computeIfAbsent(recipe2.getType(), t -> new HashMap<>()).put(recipe2.getId(), recipe2);
@@ -98,7 +98,7 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
         setRecipeManager(event.getDataPackRegistries().getRecipeManager());
     }
 
-    private IRecipe<?> makeHoneycombRecipe(String beeType, CustomBeeData info) {
+    private Recipe<?> makeHoneycombRecipe(String beeType, CustomBeeData info) {
         Ingredient honeycombItem = Ingredient.of(info.getCombRegistryObject().get());
         return new ShapedRecipe(
                 new ResourceLocation(ResourcefulBees.MOD_ID, beeType + "_honeycomb_block"),
@@ -114,7 +114,7 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
         );
     }
 
-    private IRecipe<?> makeHoneyBlockRecipe(HoneyBottleData info) {
+    private Recipe<?> makeHoneyBlockRecipe(HoneyBottleData info) {
         Ingredient honeyBottleItem = Ingredient.of(info.getHoneyBottleRegistryObject().get());
         return new ShapedRecipe(
                 new ResourceLocation(ResourcefulBees.MOD_ID, info.getName() + "_honey_block"),
@@ -129,7 +129,7 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
         );
     }
 
-    private IRecipe<?> makeBottleToBucketRecipe(HoneyBottleData info) {
+    private Recipe<?> makeBottleToBucketRecipe(HoneyBottleData info) {
         Ingredient honeyBottleItem = Ingredient.of(info.getHoneyBottleRegistryObject().get());
         Ingredient bucketItem = Ingredient.of(Items.BUCKET);
         return new ShapelessRecipe(
@@ -144,7 +144,7 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
         );
     }
 
-    private IRecipe<?> makeBucketToBottleRecipe(HoneyBottleData info) {
+    private Recipe<?> makeBucketToBottleRecipe(HoneyBottleData info) {
         Ingredient honeyBucketItem = Ingredient.of(info.getHoneyBucketItemRegistryObject().get());
         Ingredient bottleItem = Ingredient.of(Items.GLASS_BOTTLE);
         return new ShapelessRecipe(
@@ -159,7 +159,7 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
         );
     }
 
-    private IRecipe<?> makeBlockToBucketRecipe(HoneyBottleData info) {
+    private Recipe<?> makeBlockToBucketRecipe(HoneyBottleData info) {
         Ingredient honeyBlockItem = Ingredient.of(info.getHoneyBlockItemRegistryObject().get());
         Ingredient bucketItem = Ingredient.of(Items.BUCKET);
         return new ShapelessRecipe(
@@ -172,7 +172,7 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
         );
     }
 
-    private IRecipe<?> makeBucketToBlockRecipe(HoneyBottleData info) {
+    private Recipe<?> makeBucketToBlockRecipe(HoneyBottleData info) {
         Ingredient honeyBucketItem = Ingredient.of(info.getHoneyBucketItemRegistryObject().get());
         return new ShapelessRecipe(
                 new ResourceLocation(ResourcefulBees.MOD_ID, info.getName() + "_bucket_to_block"),
@@ -184,7 +184,7 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
         );
     }
 
-    private IRecipe<?> makeHoneyBottleRecipe(HoneyBottleData info) {
+    private Recipe<?> makeHoneyBottleRecipe(HoneyBottleData info) {
         Ingredient honeyBlockItem = Ingredient.of(info.getHoneyBlockItemRegistryObject().get());
         Ingredient bottleItem = Ingredient.of(Items.GLASS_BOTTLE);
         return new ShapelessRecipe(
@@ -199,7 +199,7 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
         );
     }
 
-    private IRecipe<?> centrifugeRecipeNoBottle(String beeType, CustomBeeData info, int multiplier) {
+    private Recipe<?> centrifugeRecipeNoBottle(String beeType, CustomBeeData info, int multiplier) {
         CentrifugeData data = info.getCentrifugeData();
         boolean isBlockRecipe = multiplier > 1;
 
@@ -241,7 +241,7 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
         );
     }
 
-    private IRecipe<?> centrifugeRecipe(String beeType, CustomBeeData info, int multiplier) {
+    private Recipe<?> centrifugeRecipe(String beeType, CustomBeeData info, int multiplier) {
         CentrifugeData data = info.getCentrifugeData();
         boolean isBlockRecipe = multiplier > 1;
 
@@ -278,7 +278,7 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
         );
     }
 
-    private IRecipe<?> combBlockToCombRecipe(String beeType, CustomBeeData info) {
+    private Recipe<?> combBlockToCombRecipe(String beeType, CustomBeeData info) {
         return new ShapelessRecipe(
                 new ResourceLocation(ResourcefulBees.MOD_ID, beeType + "_block_to_honeycomb"),
                 "",

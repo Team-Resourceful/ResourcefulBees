@@ -3,21 +3,21 @@ package com.resourcefulbees.resourcefulbees.compat.top;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.tileentity.CentrifugeTileEntity;
 import mcjty.theoneprobe.api.*;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class CentrifugeDisplayOverride implements IBlockDisplayOverride {
 
     @Override
-    public boolean overrideStandardInfo(ProbeMode probeMode, IProbeInfo iProbeInfo, PlayerEntity playerEntity, World world, BlockState blockState, IProbeHitData iProbeHitData) {
-        TileEntity tileEntity = world.getBlockEntity(iProbeHitData.getPos());
+    public boolean overrideStandardInfo(ProbeMode probeMode, IProbeInfo iProbeInfo, Player playerEntity, Level world, BlockState blockState, IProbeHitData iProbeHitData) {
+        BlockEntity tileEntity = world.getBlockEntity(iProbeHitData.getPos());
         return tileEntity instanceof CentrifugeTileEntity && createCentrifugeProbeData(iProbeInfo, blockState, (CentrifugeTileEntity) tileEntity);
     }
 
-    private boolean createCentrifugeProbeData(IProbeInfo probeInfo, net.minecraft.block.BlockState blockState, CentrifugeTileEntity tileEntity) {
+    private boolean createCentrifugeProbeData(IProbeInfo probeInfo, BlockState blockState, CentrifugeTileEntity tileEntity) {
         probeInfo.horizontal()
                 .item(new ItemStack(blockState.getBlock().asItem()))
                 .vertical()

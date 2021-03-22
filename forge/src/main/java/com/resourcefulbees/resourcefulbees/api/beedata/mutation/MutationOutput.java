@@ -3,7 +3,7 @@ package com.resourcefulbees.resourcefulbees.api.beedata.mutation;
 import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
 import com.resourcefulbees.resourcefulbees.api.beedata.MutationData;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Locale;
@@ -11,21 +11,21 @@ import java.util.Locale;
 public class MutationOutput {
     private final String outputID;
     private JsonElement nbtData;
-    private transient CompoundNBT nbt;
+    private transient CompoundTag nbt;
     private final double weight;
 
-    public MutationOutput(String outputID, double weight, CompoundNBT nbt) {
+    public MutationOutput(String outputID, double weight, CompoundTag nbt) {
         this.outputID = outputID;
         this.weight = weight;
         this.nbt = nbt;
     }
 
-    public CompoundNBT getNbt() {
+    public CompoundTag getNbt() {
         return nbt == null ? initNbt() : nbt;
     }
 
-    private CompoundNBT initNbt() {
-        nbt = nbtData == null ? new CompoundNBT() : CompoundNBT.CODEC.parse(JsonOps.INSTANCE, nbtData).resultOrPartial(e -> MutationData.LOGGER.warn("Could not deserialize NBT: [{}]", nbtData)).orElse(new CompoundNBT());
+    private CompoundTag initNbt() {
+        nbt = nbtData == null ? new CompoundTag() : CompoundTag.CODEC.parse(JsonOps.INSTANCE, nbtData).resultOrPartial(e -> MutationData.LOGGER.warn("Could not deserialize NBT: [{}]", nbtData)).orElse(new CompoundTag());
         return nbt;
     }
 

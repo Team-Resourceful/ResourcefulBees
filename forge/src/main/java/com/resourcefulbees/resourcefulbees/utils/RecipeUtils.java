@@ -1,10 +1,10 @@
 package com.resourcefulbees.resourcefulbees.utils;
 
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 public class RecipeUtils {
 
@@ -12,7 +12,7 @@ public class RecipeUtils {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
 
-    public static void writeItemStack(ItemStack stack, PacketBuffer buffer){
+    public static void writeItemStack(ItemStack stack, FriendlyByteBuf buffer){
         if (stack.isEmpty()) {
             buffer.writeBoolean(false);
         } else {
@@ -20,7 +20,7 @@ public class RecipeUtils {
             Item item = stack.getItem();
             buffer.writeVarInt(Item.getId(item));
             buffer.writeInt(stack.getCount());
-            CompoundNBT compoundnbt = null;
+            CompoundTag compoundnbt = null;
             if (item.canBeDepleted() || item.shouldOverrideMultiplayerNbt()) {
                 compoundnbt = stack.getShareTag();
             }
@@ -29,7 +29,7 @@ public class RecipeUtils {
         }
     }
 
-    public static ItemStack readItemStack(PacketBuffer buffer){
+    public static ItemStack readItemStack(FriendlyByteBuf buffer){
         if (!buffer.readBoolean()) {
             return ItemStack.EMPTY;
         } else {

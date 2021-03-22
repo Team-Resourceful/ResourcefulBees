@@ -4,31 +4,35 @@ import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.lib.ApiaryOutput;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.TooltipBuilder;
-import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.DirectionProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -41,28 +45,28 @@ import java.util.List;
 @SuppressWarnings("deprecation")
 public class ApiaryBlock extends Block {
 
-  public static final DirectionProperty FACING = HorizontalBlock.FACING;
+  public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
   public static final BooleanProperty VALIDATED = BooleanProperty.create("validated");
 
   private final int tier;
 
   public ApiaryBlock(final int tier, float hardness, float resistance) {
-    super(AbstractBlock.Properties.of(Material.METAL).strength(hardness, resistance).sound(SoundType.METAL));
+    super(BlockBehaviour.Properties.of(Material.METAL).strength(hardness, resistance).sound(SoundType.METAL));
     this.tier = tier;
     this.registerDefaultState(this.stateDefinition.any().setValue(VALIDATED, false).setValue(FACING, Direction.NORTH));
   }
 
   @Override
-  public @NotNull ActionResultType use(@Nonnull BlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand handIn, @Nonnull BlockRayTraceResult hit) {
+  public @NotNull InteractionResult use(@Nonnull BlockState state, @Nonnull Level world, @Nonnull BlockPos pos, @Nonnull Player player, @Nonnull InteractionHand handIn, @Nonnull BlockHitResult hit) {
     if (!player.isShiftKeyDown() && !world.isClientSide) {
-      INamedContainerProvider blockEntity = state.getMenuProvider(world,pos);
-      NetworkHooks.openGui((ServerPlayerEntity) player, blockEntity, pos);
+      MenuProvider blockEntity = state.getMenuProvider(world,pos);
+      NetworkHooks.openGui((ServerPlayer) player, blockEntity, pos);
     }
-    return ActionResultType.SUCCESS;
+    return InteractionResult.SUCCESS;
   }
 
   @Override
-  public BlockState getStateForPlacement(BlockItemUseContext context) {
+  public BlockState getStateForPlacement(BlockPlaceContext context) {
     if (context.getPlayer() != null && context.getPlayer().isShiftKeyDown()) {
       return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection());
     }
@@ -70,14 +74,14 @@ public class ApiaryBlock extends Block {
   }
 
   @Override
-  protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+  protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
     builder.add(VALIDATED, FACING);
   }
 
   @Nullable
   @Override
-  public INamedContainerProvider getMenuProvider(@Nonnull BlockState state, World worldIn, @Nonnull BlockPos pos) {
-    return (INamedContainerProvider)worldIn.getBlockEntity(pos);
+  public MenuProvider getMenuProvider(@Nonnull BlockState state, Level worldIn, @Nonnull BlockPos pos) {
+    return (MenuProvider)worldIn.getBlockEntity(pos);
   }
 
   @Override
@@ -87,13 +91,13 @@ public class ApiaryBlock extends Block {
 
   @Nullable
   @Override
-  public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+  public BlockEntity createTileEntity(BlockState state, BlockGetter world) {
     return new ApiaryTileEntity();
   }
 
   @Override
-  public void setPlacedBy(World worldIn, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nullable LivingEntity placer, @Nonnull ItemStack stack) {
-    TileEntity tile = worldIn.getBlockEntity(pos);
+  public void setPlacedBy(Level worldIn, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nullable LivingEntity placer, @Nonnull ItemStack stack) {
+    BlockEntity tile = worldIn.getBlockEntity(pos);
     if(tile instanceof ApiaryTileEntity) {
       ApiaryTileEntity apiaryTileEntity = (ApiaryTileEntity) tile;
       apiaryTileEntity.setTier(tier);
@@ -102,22 +106,22 @@ public class ApiaryBlock extends Block {
 
   @OnlyIn(Dist.CLIENT)
   @Override
-  public void appendHoverText(@Nonnull ItemStack stack, @Nullable IBlockReader worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
+  public void appendHoverText(@Nonnull ItemStack stack, @Nullable BlockGetter worldIn, @Nonnull List<Component> tooltip, @Nonnull TooltipFlag flagIn) {
     if(Screen.hasShiftDown())
     {
       tooltip.addAll(new TooltipBuilder()
               .addTip(I18n.get("block.resourcefulbees.beehive.tooltip.max_bees"))
               .appendText(" " + Config.APIARY_MAX_BEES.get())
-              .appendText(" " + I18n.get("block.resourcefulbees.beehive.tooltip.unique_bees"), TextFormatting.BOLD)
-              .appendText( TextFormatting.GOLD + " Bees", TextFormatting.RESET)
-              .applyStyle(TextFormatting.GOLD)
+              .appendText(" " + I18n.get("block.resourcefulbees.beehive.tooltip.unique_bees"), ChatFormatting.BOLD)
+              .appendText( ChatFormatting.GOLD + " Bees", ChatFormatting.RESET)
+              .applyStyle(ChatFormatting.GOLD)
               .build());
       if (tier != 1) {
         int timeReduction = (int)((0.1 + (tier * .05)) * 100);
         tooltip.addAll(new TooltipBuilder()
                 .addTip(I18n.get("block.resourcefulbees.beehive.tooltip.hive_time"))
                 .appendText(" -" + timeReduction + "%")
-                .applyStyle(TextFormatting.GOLD)
+                .applyStyle(ChatFormatting.GOLD)
                 .build());
       }
       ApiaryOutput outputTypeEnum;
@@ -146,27 +150,27 @@ public class ApiaryBlock extends Block {
       tooltip.addAll(new TooltipBuilder()
               .addTip(I18n.get("block.resourcefulbees.apiary.tooltip.output_type"))
               .appendText(" " + outputType)
-              .applyStyle(TextFormatting.GOLD)
+              .applyStyle(ChatFormatting.GOLD)
               .addTip(I18n.get("block.resourcefulbees.apiary.tooltip.output_quantity"))
               .appendText(" " + outputQuantity)
-              .applyStyle(TextFormatting.GOLD)
+              .applyStyle(ChatFormatting.GOLD)
               .build());
     }
     else if (Screen.hasControlDown()){
       tooltip.addAll(new TooltipBuilder()
-              .addTip(I18n.get("block.resourcefulbees.apiary.tooltip.structure_size"), TextFormatting.AQUA)
-              .addTip(I18n.get("block.resourcefulbees.apiary.tooltip.requisites"), TextFormatting.AQUA)
-              .addTip(I18n.get("block.resourcefulbees.apiary.tooltip.drops"), TextFormatting.AQUA)
-              .addTip(I18n.get("block.resourcefulbees.apiary.tooltip.tags"), TextFormatting.AQUA)
-              .addTip(I18n.get("block.resourcefulbees.apiary.tooltip.offset"), TextFormatting.AQUA)
-              .addTip(I18n.get("block.resourcefulbees.apiary.tooltip.lock"), TextFormatting.AQUA)
-              .addTip(I18n.get("block.resourcefulbees.apiary.tooltip.lock_2"), TextFormatting.AQUA)
+              .addTip(I18n.get("block.resourcefulbees.apiary.tooltip.structure_size"), ChatFormatting.AQUA)
+              .addTip(I18n.get("block.resourcefulbees.apiary.tooltip.requisites"), ChatFormatting.AQUA)
+              .addTip(I18n.get("block.resourcefulbees.apiary.tooltip.drops"), ChatFormatting.AQUA)
+              .addTip(I18n.get("block.resourcefulbees.apiary.tooltip.tags"), ChatFormatting.AQUA)
+              .addTip(I18n.get("block.resourcefulbees.apiary.tooltip.offset"), ChatFormatting.AQUA)
+              .addTip(I18n.get("block.resourcefulbees.apiary.tooltip.lock"), ChatFormatting.AQUA)
+              .addTip(I18n.get("block.resourcefulbees.apiary.tooltip.lock_2"), ChatFormatting.AQUA)
               .build());
     }
     else
     {
-      tooltip.add(new StringTextComponent(TextFormatting.YELLOW + I18n.get("resourcefulbees.shift_info")));
-      tooltip.add(new StringTextComponent(TextFormatting.AQUA + I18n.get("resourcefulbees.ctrl_info")));
+      tooltip.add(new TextComponent(ChatFormatting.YELLOW + I18n.get("resourcefulbees.shift_info")));
+      tooltip.add(new TextComponent(ChatFormatting.AQUA + I18n.get("resourcefulbees.ctrl_info")));
     }
 
     super.appendHoverText(stack, worldIn, tooltip, flagIn);

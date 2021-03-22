@@ -2,23 +2,23 @@ package com.resourcefulbees.resourcefulbees.mixin;
 
 import com.resourcefulbees.resourcefulbees.tileentity.TieredBeehiveTileEntity;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryTileEntity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.passive.BeeEntity;
-import net.minecraft.tileentity.BeehiveTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(BeeEntity.class)
-public abstract class MixinBeeEntity extends AnimalEntity {
+@Mixin(Bee.class)
+public abstract class MixinBeeEntity extends Animal {
 
-    protected MixinBeeEntity(EntityType<? extends AnimalEntity> entityType, World world) {
+    protected MixinBeeEntity(EntityType<? extends Animal> entityType, Level world) {
         super(entityType, world);
     }
 
@@ -30,12 +30,12 @@ public abstract class MixinBeeEntity extends AnimalEntity {
         return this.hivePos != null;
     }
 
-    @Inject(at = @At("HEAD"), method = "doesHiveHaveSpace(Lnet/minecraft/util/math/BlockPos;)Z", cancellable = true)
+    @Inject(at = @At("HEAD"), method = "doesHiveHaveSpace(Lnet/minecraft/core/BlockPos;)Z", cancellable = true)
     private void doesHiveHaveSpace(BlockPos pos, CallbackInfoReturnable<Boolean> callback) {
-        TileEntity tileentity = this.level.getBlockEntity(pos);
+        BlockEntity tileentity = this.level.getBlockEntity(pos);
         if ((tileentity instanceof TieredBeehiveTileEntity && !((TieredBeehiveTileEntity) tileentity).isFull())
                 || (tileentity instanceof ApiaryTileEntity && !((ApiaryTileEntity) tileentity).isFullOfBees())
-                || (tileentity instanceof BeehiveTileEntity && !((BeehiveTileEntity) tileentity).isFull())) {
+                || (tileentity instanceof BeehiveBlockEntity && !((BeehiveBlockEntity) tileentity).isFull())) {
             callback.setReturnValue(true);
         }
     }
@@ -51,7 +51,7 @@ public abstract class MixinBeeEntity extends AnimalEntity {
         if (this.hasHive()) {
             BlockPos pos = this.hivePos;
             if (pos != null) {
-                TileEntity blockEntity = this.level.getBlockEntity(this.hivePos);
+                BlockEntity blockEntity = this.level.getBlockEntity(this.hivePos);
                 if ((blockEntity instanceof TieredBeehiveTileEntity && ((TieredBeehiveTileEntity) blockEntity).isAllowedBee())
                         || (blockEntity instanceof ApiaryTileEntity && ((ApiaryTileEntity) blockEntity).isAllowedBee())) {
                     callback.setReturnValue(true);

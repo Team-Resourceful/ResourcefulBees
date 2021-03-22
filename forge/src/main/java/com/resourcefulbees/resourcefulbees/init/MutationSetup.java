@@ -14,14 +14,14 @@ import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
 import com.resourcefulbees.resourcefulbees.utils.validation.SecondPhaseValidator;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.EntityType;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tags.ITag;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.material.Fluid;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -86,7 +86,7 @@ public class MutationSetup {
 
     private static void addBlockItemTagMutation(MutationData mutationData, Mutation mutation, String name) {
         String tag = mutation.getInputID().replace(BeeConstants.TAG_PREFIX, "");
-        ITag<?> input = BeeInfoUtils.getBlockTag(tag);
+        Tag<?> input = BeeInfoUtils.getBlockTag(tag);
         if (input == null) {
             input = BeeInfoUtils.getFluidTag(tag);
         }
@@ -135,7 +135,7 @@ public class MutationSetup {
 
     private static void addBlockTagMutation(MutationData mutationData, Mutation mutation, String name) {
         String tag = mutation.getInputID().replace(BeeConstants.TAG_PREFIX, "");
-        ITag<?> input = BeeInfoUtils.getBlockTag(tag);
+        Tag<?> input = BeeInfoUtils.getBlockTag(tag);
         if (input == null) {
             input = BeeInfoUtils.getFluidTag(tag);
         }
@@ -185,7 +185,7 @@ public class MutationSetup {
         RandomCollection<ItemOutput> randomCollection = new RandomCollection<>();
         mutation.getOutputs().forEach(mutationOutput -> {
             Item output = BeeInfoUtils.getItem(mutationOutput.getOutputID());
-            CompoundNBT compoundNBT = mutationOutput.getNbt();
+            CompoundTag compoundNBT = mutationOutput.getNbt();
             if (!output.equals(Items.AIR)) {
                 randomCollection.add(mutationOutput.getWeight(), new ItemOutput(output, compoundNBT, mutationOutput.getWeight()));
             }
@@ -197,7 +197,7 @@ public class MutationSetup {
         RandomCollection<BlockOutput> randomCollection = new RandomCollection<>();
         mutation.getOutputs().forEach(mutationOutput -> {
             Block output = BeeInfoUtils.getBlock(mutationOutput.getOutputID());
-            CompoundNBT compoundNBT = mutationOutput.getNbt();
+            CompoundTag compoundNBT = mutationOutput.getNbt();
             if (!output.equals(Blocks.AIR)) {
                 randomCollection.add(mutationOutput.getWeight(), new BlockOutput(output, compoundNBT, mutationOutput.getWeight()));
             }

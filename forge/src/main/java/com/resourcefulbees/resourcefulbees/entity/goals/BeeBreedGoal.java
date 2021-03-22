@@ -4,23 +4,23 @@ import com.resourcefulbees.resourcefulbees.api.ICustomBee;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.entity.AgeableEntity;
-import net.minecraft.entity.ai.goal.BreedGoal;
-import net.minecraft.entity.item.ExperienceOrbEntity;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.particles.IParticleData;
-import net.minecraft.particles.ParticleTypes;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.world.GameRules;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.AgableMob;
+import net.minecraft.world.entity.ExperienceOrb;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.level.GameRules;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.BabyEntitySpawnEvent;
 
 public class BeeBreedGoal extends BreedGoal {
 
-    public BeeBreedGoal(AnimalEntity animal, double speedIn) {
+    public BeeBreedGoal(Animal animal, double speedIn) {
         super(animal, speedIn);
     }
 
@@ -47,7 +47,7 @@ public class BeeBreedGoal extends BreedGoal {
         String parent2 = ((ICustomBee)this.animal).getBeeType();
         CustomBeeData childData = BeeRegistry.getRegistry().getWeightedChild(parent1, parent2);
         float breedChance = BeeRegistry.getRegistry().getBreedChance(parent1, parent2, childData);
-        AgeableEntity ageableentity = bee.createSelectedChild(childData);
+        AgableMob ageableentity = bee.createSelectedChild(childData);
 
         final BabyEntitySpawnEvent event = new BabyEntitySpawnEvent(animal, partner, ageableentity);
         final boolean cancelled = MinecraftForge.EVENT_BUS.post(event);
@@ -60,7 +60,7 @@ public class BeeBreedGoal extends BreedGoal {
             return;
         }
         if (ageableentity != null) {
-            ServerPlayerEntity serverplayerentity = this.animal.getLoveCause();
+            ServerPlayer serverplayerentity = this.animal.getLoveCause();
             if (serverplayerentity == null && this.partner.getLoveCause() != null) {
                 serverplayerentity = this.partner.getLoveCause();
             }
@@ -81,7 +81,7 @@ public class BeeBreedGoal extends BreedGoal {
                 this.level.addFreshEntity(ageableentity);
                 this.level.broadcastEntityEvent(this.animal, (byte)18);
                 if (this.level.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
-                    this.level.addFreshEntity(new ExperienceOrbEntity(this.level, this.animal.getX(), this.animal.getY(), this.animal.getZ(), this.animal.getRandom().nextInt(7) + 1));
+                    this.level.addFreshEntity(new ExperienceOrb(this.level, this.animal.getX(), this.animal.getY(), this.animal.getZ(), this.animal.getRandom().nextInt(7) + 1));
                 }
             }else {
                 this.animal.playSound(SoundEvents.BEE_HURT, 2.0f, 1.0f);
@@ -92,12 +92,12 @@ public class BeeBreedGoal extends BreedGoal {
 
     protected void spawnParticles() {
         if (!level.isClientSide()) {
-            ServerWorld worldServer = (ServerWorld)level;
+            ServerLevel worldServer = (ServerLevel)level;
             for(int i = 0; i < 5; ++i) {
                 double d0 = level.random.nextGaussian() * 0.02D;
                 double d1 = level.random.nextGaussian() * 0.02D;
                 double d2 = level.random.nextGaussian() * 0.02D;
-                worldServer.sendParticles((IParticleData) ParticleTypes.ANGRY_VILLAGER,
+                worldServer.sendParticles((ParticleOptions) ParticleTypes.ANGRY_VILLAGER,
                         this.animal.getRandomX(1.0D),
                         this.animal.getRandomY(),
                         this.animal.getRandomZ(1.0D),

@@ -3,45 +3,43 @@ package com.resourcefulbees.resourcefulbees.item;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryTileEntity;
-import net.minecraft.block.Block;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.passive.BeeEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.nbt.NBTUtil;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tileentity.BeehiveTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-import net.minecraft.item.Item.Properties;
-
 public class HoneyDipper extends Item {
 
-    private @Nullable BeeEntity selectedBee;
+    private @Nullable Bee selectedBee;
 
     public HoneyDipper(Properties properties) {
         super(properties);
     }
 
     @Override
-    public @NotNull ActionResultType useOn(@NotNull ItemUseContext useContext) {
+    public @NotNull InteractionResult useOn(@NotNull UseOnContext useContext) {
         if (!useContext.getLevel().isClientSide()) {
             Block clickedBlock = useContext.getLevel().getBlockState(useContext.getClickedPos()).getBlock();
 
@@ -49,25 +47,25 @@ public class HoneyDipper extends Item {
                 CustomBeeData beeData = ((CustomBeeEntity) selectedBee).getBeeData();
                 if (beeData.hasBlockFlowers() && beeData.getBlockFlowers().contains(clickedBlock)) {
                     setFlowerPosition(useContext);
-                    return ActionResultType.SUCCESS;
+                    return InteractionResult.SUCCESS;
                 }
             } else if (selectedBee != null && clickedBlock.is(BlockTags.FLOWERS)) {
                 setFlowerPosition(useContext);
-                return ActionResultType.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
 
-            TileEntity clickedTile = useContext.getLevel().getBlockEntity(useContext.getClickedPos());
-            if (selectedBee != null && (clickedTile instanceof BeehiveTileEntity || clickedTile instanceof ApiaryTileEntity)) {
+            BlockEntity clickedTile = useContext.getLevel().getBlockEntity(useContext.getClickedPos());
+            if (selectedBee != null && (clickedTile instanceof BeehiveBlockEntity || clickedTile instanceof ApiaryTileEntity)) {
                 selectedBee.hivePos = useContext.getClickedPos();
                 sendMessageToPlayer(useContext.getPlayer(), MessageTypes.HIVE, useContext.getClickedPos());
                 selectedBee = null;
-                return ActionResultType.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
         }
         return super.useOn(useContext);
     }
 
-    private void setFlowerPosition(ItemUseContext useContext) {
+    private void setFlowerPosition(UseOnContext useContext) {
         assert selectedBee != null : "setFlowerPos method called when selected bee was null";
         if (selectedBee.beePollinateGoal.isPollinating()) {
             selectedBee.beePollinateGoal.stopPollinating();
@@ -77,42 +75,42 @@ public class HoneyDipper extends Item {
         selectedBee = null;
     }
 
-    private void sendMessageToPlayer(PlayerEntity playerEntity, MessageTypes messageTypes, BlockPos pos) {
+    private void sendMessageToPlayer(Player playerEntity, MessageTypes messageTypes, BlockPos pos) {
         assert selectedBee != null : "bee went null before message was sent to player";
         switch (messageTypes) {
             case HIVE:
-                playerEntity.displayClientMessage(new StringTextComponent(String.format("Hive position for [%1$s] has been set to %2$s", selectedBee.getDisplayName().getString(), NBTUtil.writeBlockPos(pos))), false);
+                playerEntity.displayClientMessage(new TextComponent(String.format("Hive position for [%1$s] has been set to %2$s", selectedBee.getDisplayName().getString(), NbtUtils.writeBlockPos(pos))), false);
                 break;
             case FLOWER:
-                playerEntity.displayClientMessage(new StringTextComponent(String.format("Flower position for [%1$s] has been set to %2$s", selectedBee.getDisplayName().getString(), NBTUtil.writeBlockPos(pos))), false);
+                playerEntity.displayClientMessage(new TextComponent(String.format("Flower position for [%1$s] has been set to %2$s", selectedBee.getDisplayName().getString(), NbtUtils.writeBlockPos(pos))), false);
                 break;
             case BEE_CLEARED:
-                playerEntity.displayClientMessage(new StringTextComponent("Bee Selection Cleared!"), false);
+                playerEntity.displayClientMessage(new TextComponent("Bee Selection Cleared!"), false);
                 break;
             case BEE_SELECTED:
-                playerEntity.displayClientMessage(new StringTextComponent(String.format("[%1$s] has been selected!", selectedBee.getDisplayName().getString())), false);
+                playerEntity.displayClientMessage(new TextComponent(String.format("[%1$s] has been selected!", selectedBee.getDisplayName().getString())), false);
                 break;
             default: //Do Nothing
         }
     }
 
     @Override
-    public @NotNull ActionResultType interactLivingEntity(@NotNull ItemStack stack, @NotNull PlayerEntity player, @NotNull LivingEntity entity, @NotNull Hand hand) {
+    public @NotNull InteractionResult interactLivingEntity(@NotNull ItemStack stack, @NotNull Player player, @NotNull LivingEntity entity, @NotNull InteractionHand hand) {
         if (!player.level.isClientSide()) {
-            if (entity instanceof BeeEntity && selectedBee == null) {
-                selectedBee = (BeeEntity) entity;
+            if (entity instanceof Bee && selectedBee == null) {
+                selectedBee = (Bee) entity;
                 sendMessageToPlayer(player, MessageTypes.BEE_SELECTED, null);
-                return ActionResultType.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
 
             if (setEntityFlowerPos(player, entity)) {
-                return ActionResultType.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
         }
         return super.interactLivingEntity(stack, player, entity, hand);
     }
 
-    private boolean setEntityFlowerPos(PlayerEntity player, LivingEntity entity) {
+    private boolean setEntityFlowerPos(Player player, LivingEntity entity) {
         if (selectedBee instanceof CustomBeeEntity) {
             CustomBeeEntity customBee = (CustomBeeEntity) selectedBee;
             if (customBee.getBeeData().hasEntityFlower()) {
@@ -130,7 +128,7 @@ public class HoneyDipper extends Item {
     }
 
     @Override
-    public @NotNull ActionResult<ItemStack> use(@NotNull World world, @NotNull PlayerEntity player, @NotNull Hand hand) {
+    public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level world, @NotNull Player player, @NotNull InteractionHand hand) {
         if (!world.isClientSide() && player.isShiftKeyDown() && selectedBee != null) {
             selectedBee = null;
             sendMessageToPlayer(player, MessageTypes.BEE_CLEARED, null);
@@ -139,11 +137,11 @@ public class HoneyDipper extends Item {
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable World world, @NotNull List<ITextComponent> textComponents, @NotNull ITooltipFlag flag) {
+    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level world, @NotNull List<Component> textComponents, @NotNull TooltipFlag flag) {
         if (selectedBee != null) {
-            textComponents.add(new TranslationTextComponent("item.resourcefulbees.honey_dipper.tooltip")
-                    .append(new StringTextComponent(selectedBee.getDisplayName().getString()))
-                    .withStyle(TextFormatting.GOLD));
+            textComponents.add(new TranslatableComponent("item.resourcefulbees.honey_dipper.tooltip")
+                    .append(new TextComponent(selectedBee.getDisplayName().getString()))
+                    .withStyle(ChatFormatting.GOLD));
         }
     }
 

@@ -1,13 +1,13 @@
 package com.resourcefulbees.resourcefulbees.api.honeydata;
 
 import com.resourcefulbees.resourcefulbees.registry.ItemGroupResourcefulBees;
-import net.minecraft.block.Block;
-import net.minecraft.block.FlowingFluidBlock;
-import net.minecraft.fluid.FlowingFluid;
-import net.minecraft.item.Food;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraftforge.fml.RegistryObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -97,7 +97,7 @@ public class HoneyBottleData {
     /**
      * The RegistryObject of the Honey Flowing Block
      */
-    private transient RegistryObject<FlowingFluidBlock> honeyFluidBlockRegistryObject;
+    private transient RegistryObject<LiquidBlock> honeyFluidBlockRegistryObject;
 
     private transient boolean shouldResourcefulBeesDoForgeRegistration;
 
@@ -176,7 +176,7 @@ public class HoneyBottleData {
         this.honeyBucketItemRegistryObject = this.honeyBucketItemRegistryObject == null ? honeyBucketItemRegistryObject : this.honeyBucketItemRegistryObject;
     }
 
-    public void setHoneyFluidBlockRegistryObject(RegistryObject<FlowingFluidBlock> honeyFluidBlockRegistryObject) {
+    public void setHoneyFluidBlockRegistryObject(RegistryObject<LiquidBlock> honeyFluidBlockRegistryObject) {
         this.honeyFluidBlockRegistryObject = this.honeyFluidBlockRegistryObject == null ? honeyFluidBlockRegistryObject : this.honeyFluidBlockRegistryObject;
     }
 
@@ -204,7 +204,7 @@ public class HoneyBottleData {
         return honeyBucketItemRegistryObject;
     }
 
-    public RegistryObject<FlowingFluidBlock> getHoneyFluidBlockRegistryObject() {
+    public RegistryObject<LiquidBlock> getHoneyFluidBlockRegistryObject() {
         return honeyFluidBlockRegistryObject;
     }
 
@@ -215,8 +215,8 @@ public class HoneyBottleData {
                 .stacksTo(16);
     }
 
-    public Food getFood() {
-        Food.Builder builder = new Food.Builder().nutrition(hunger).saturationMod(saturation);
+    public FoodProperties getFood() {
+        FoodProperties.Builder builder = new FoodProperties.Builder().nutrition(hunger).saturationMod(saturation);
         if (hasEffects()) {
             for (HoneyEffect honeyEffect : effects) {
                 builder.effect(honeyEffect::getInstance, honeyEffect.chance);
@@ -256,20 +256,20 @@ public class HoneyBottleData {
         this.shouldResourcefulBeesDoForgeRegistration = shouldResourcefulBeesDoForgeRegistration;
     }
 
-    public TranslationTextComponent getFluidTranslation() {
-        return new TranslationTextComponent(String.format("fluid.resourcefulbees.%s_honey", name));
+    public TranslatableComponent getFluidTranslation() {
+        return new TranslatableComponent(String.format("fluid.resourcefulbees.%s_honey", name));
     }
 
-    public TranslationTextComponent getBottleTranslation() {
-        return new TranslationTextComponent(String.format("item.resourcefulbees.%s_honey_bottle", name));
+    public TranslatableComponent getBottleTranslation() {
+        return new TranslatableComponent(String.format("item.resourcefulbees.%s_honey_bottle", name));
     }
 
-    public TranslationTextComponent getBlockTranslation() {
-        return new TranslationTextComponent(String.format("block.resourcefulbees.%s_honey_block", name));
+    public TranslatableComponent getBlockTranslation() {
+        return new TranslatableComponent(String.format("block.resourcefulbees.%s_honey_block", name));
     }
 
-    public TranslationTextComponent getBucketTranslation() {
-        return new TranslationTextComponent(String.format("item.resourcefulbees.%s_honey_fluid_bucket", name));
+    public TranslatableComponent getBucketTranslation() {
+        return new TranslatableComponent(String.format("item.resourcefulbees.%s_honey_fluid_bucket", name));
     }
 
     public static class Builder {

@@ -2,44 +2,42 @@ package com.resourcefulbees.resourcefulbees.item;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-import net.minecraft.item.Item.Properties;
-
 public class Pollen extends Item {
 
-    public CompoundNBT getPollenData() {
+    public CompoundTag getPollenData() {
         return pollenData;
     }
 
-    public void setPollenData(CompoundNBT pollenData) {
+    public void setPollenData(CompoundTag pollenData) {
         this.pollenData = pollenData;
     }
 
-    private CompoundNBT pollenData = new CompoundNBT();
+    private CompoundTag pollenData = new CompoundTag();
 
     public Pollen(Properties properties) {
         super(properties);
     }
 
-    public Pollen(Properties properties, CompoundNBT compountNBT) {
+    public Pollen(Properties properties, CompoundTag compountNBT) {
         super(properties);
         setPollenData(compountNBT);
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, World world, @NotNull List list, @NotNull ITooltipFlag par4)
+    public void appendHoverText(ItemStack stack, Level world, @NotNull List list, @NotNull TooltipFlag par4)
     {
         if(stack.getTag() == null || !stack.getTag().contains("specific")) {
-            list.add(new TranslationTextComponent(ResourcefulBees.MOD_ID + ".information.unknown_type"));
+            list.add(new TranslatableComponent(ResourcefulBees.MOD_ID + ".information.unknown_type"));
         } else {
             list.add(BeeInfoUtils.getItem(stack.getTag().getString("specific")).getDescription());
         }

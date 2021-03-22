@@ -1,6 +1,6 @@
 package com.resourcefulbees.resourcefulbees.compat.jei;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.IBeeRegistry;
 import com.resourcefulbees.resourcefulbees.compat.jei.ingredients.EntityIngredient;
@@ -14,15 +14,15 @@ import mezz.jei.api.gui.ingredient.IGuiIngredientGroup;
 import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.SpawnEggItem;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.SpawnEggItem;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -74,7 +74,7 @@ public class EntityFlowerCategory extends BaseCategory<EntityFlowerCategory.Reci
                     tooltip.clear();
                     tooltip.add(recipe.entityType.getDescription().plainCopy());
                     if (recipe.entityType.getRegistryName() != null) {
-                        tooltip.add(new StringTextComponent(recipe.entityType.getRegistryName().toString()).withStyle(TextFormatting.GRAY));
+                        tooltip.add(new TextComponent(recipe.entityType.getRegistryName().toString()).withStyle(ChatFormatting.GRAY));
                     }
                 }
             });
@@ -86,12 +86,12 @@ public class EntityFlowerCategory extends BaseCategory<EntityFlowerCategory.Reci
     }
 
     @Override
-    public @NotNull List<ITextComponent> getTooltipStrings(@NotNull Recipe recipe, double mouseX, double mouseY) {
+    public @NotNull List<Component> getTooltipStrings(@NotNull Recipe recipe, double mouseX, double mouseY) {
         if (recipe.spawnEgg == null && mouseX > 41 && mouseX < 57 && mouseY > 55 && mouseY < 71){
-            List<ITextComponent> tooltip = new ArrayList<>();
+            List<Component> tooltip = new ArrayList<>();
             tooltip.add(recipe.entityType.getDescription().plainCopy());
             if (recipe.entityType.getRegistryName() != null) {
-                tooltip.add(new StringTextComponent(recipe.entityType.getRegistryName().toString()).withStyle(TextFormatting.GRAY));
+                tooltip.add(new TextComponent(recipe.entityType.getRegistryName().toString()).withStyle(ChatFormatting.GRAY));
             }
             return tooltip;
         }
@@ -99,7 +99,7 @@ public class EntityFlowerCategory extends BaseCategory<EntityFlowerCategory.Reci
     }
 
     @Override
-    public void draw(@NotNull Recipe recipe, @NotNull MatrixStack stack, double mouseX, double mouseY) {
+    public void draw(@NotNull Recipe recipe, @NotNull PoseStack stack, double mouseX, double mouseY) {
         if (recipe.spawnEgg == null){
             nonRegisteredEgg.draw(stack, 42, 56);
         }

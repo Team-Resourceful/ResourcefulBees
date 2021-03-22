@@ -6,16 +6,16 @@ import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.registry.ModRecipeSerializers;
 import com.resourcefulbees.resourcefulbees.tileentity.HoneyTankTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
-import net.minecraft.block.Block;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.ShapedRecipe;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.ShapedRecipe;
+import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -35,22 +35,22 @@ public class HoneyTankRecipe extends ShapedRecipe {
     }
 
     @Override
-    public @NotNull ItemStack assemble(@NotNull CraftingInventory inventory) {
+    public @NotNull ItemStack assemble(@NotNull CraftingContainer inventory) {
         List<ItemStack> stacks = getTanks(inventory);
-        CompoundNBT tag = new CompoundNBT();
+        CompoundTag tag = new CompoundTag();
         HoneyTankTileEntity.TankTier tier = HoneyTankTileEntity.TankTier.getTier(result.getItem());
         for (ItemStack stack : stacks) {
             if (!stack.hasTag() || stack.getTag() == null || stack.getTag().isEmpty() || !stack.getTag().contains(NBTConstants.NBT_FLUID)) {
                 continue;
             }
-            CompoundNBT fluid = stack.getTag().getCompound(NBTConstants.NBT_FLUID);
+            CompoundTag fluid = stack.getTag().getCompound(NBTConstants.NBT_FLUID);
             if (tag.contains(NBTConstants.NBT_FLUID)) {
                 FluidTank mainStack = new FluidTank(tier.getMaxFillAmount(), honeyFluidPredicate());
                 mainStack.readFromNBT(tag.getCompound(NBTConstants.NBT_FLUID));
                 FluidStack fluidStack = FluidStack.loadFluidStackFromNBT(fluid);
                 if (mainStack.getFluid().containsFluid(fluidStack)) {
                     mainStack.fill(fluidStack, IFluidHandler.FluidAction.EXECUTE);
-                    tag.put(NBTConstants.NBT_FLUID, mainStack.writeToNBT(new CompoundNBT()));
+                    tag.put(NBTConstants.NBT_FLUID, mainStack.writeToNBT(new CompoundTag()));
                 }
             } else {
                 tag.put(NBTConstants.NBT_FLUID, fluid);
@@ -70,7 +70,7 @@ public class HoneyTankRecipe extends ShapedRecipe {
         return fluidStack -> fluidStack.getFluid().is(BeeInfoUtils.getFluidTag("forge:honey"));
     }
 
-    public List<ItemStack> getTanks(CraftingInventory inventory) {
+    public List<ItemStack> getTanks(CraftingContainer inventory) {
         List<ItemStack> stacks = new ArrayList<>();
         for (int i = 0; i < inventory.getContainerSize(); i++) {
             ItemStack item = inventory.getItem(i);
@@ -82,7 +82,7 @@ public class HoneyTankRecipe extends ShapedRecipe {
     }
 
     @Override
-    public @NotNull IRecipeSerializer<?> getSerializer() {
+    public @NotNull RecipeSerializer<?> getSerializer() {
         return ModRecipeSerializers.HONEY_TANK_RECIPE.get();
     }
 
@@ -95,7 +95,7 @@ public class HoneyTankRecipe extends ShapedRecipe {
         }
 
         @Override
-        public ShapedRecipe fromNetwork(@NotNull ResourceLocation recipeId, @NotNull PacketBuffer buffer) {
+        public ShapedRecipe fromNetwork(@NotNull ResourceLocation recipeId, @NotNull FriendlyByteBuf buffer) {
             ShapedRecipe recipe = super.fromNetwork(recipeId, buffer);
             assert recipe != null;
             return new HoneyTankRecipe(recipeId, recipe.getIngredients(), recipe.getResultItem());

@@ -1,14 +1,14 @@
 package com.resourcefulbees.resourcefulbees.utils;
 
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.pathfinding.PathNavigator;
-import net.minecraft.pathfinding.PathNodeType;
-import net.minecraft.pathfinding.WalkNodeProcessor;
+import net.minecraft.core.BlockPos;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -26,18 +26,18 @@ public class RandomPositionGenerator {
     //TODO clean up unnecessary logic from this class that isn't useful to the bee so it is more optimized and readable.
 
     @Nullable
-    public static Vector3d findAirTarget(CreatureEntity creatureEntity, int i, int i1, Vector3d vector3d) {
+    public static Vec3 findAirTarget(PathfinderMob creatureEntity, int i, int i1, Vec3 vector3d) {
         return findTarget(creatureEntity, i, i1, 0, vector3d, false, creatureEntity::getWalkTargetValue);
     }
 
     @Nullable
-    public static Vector3d findGroundTarget(CreatureEntity creatureEntity, int i, int i1, int i2, @Nullable Vector3d vector3d) {
+    public static Vec3 findGroundTarget(PathfinderMob creatureEntity, int i, int i1, int i2, @Nullable Vec3 vector3d) {
         return findTarget(creatureEntity, i, i1, i2, vector3d, true, creatureEntity::getWalkTargetValue);
     }
 
     @Nullable
-    private static Vector3d findTarget(CreatureEntity bee, int horizontalOffset, int verticalOffset, int zero, @Nullable Vector3d vector3d, boolean pathOnWater, ToDoubleFunction<BlockPos> blockWeightOfBeePOS) {
-        PathNavigator pathnavigator = bee.getNavigation();
+    private static Vec3 findTarget(PathfinderMob bee, int horizontalOffset, int verticalOffset, int zero, @Nullable Vec3 vector3d, boolean pathOnWater, ToDoubleFunction<BlockPos> blockWeightOfBeePOS) {
+        PathNavigation pathnavigator = bee.getNavigation();
         Random random = bee.getRandom();
 
 
@@ -86,7 +86,7 @@ public class RandomPositionGenerator {
                     // if can travel through water or target pos is not tagged as water
                     if (pathOnWater || !bee.level.getFluidState(targetPos).is(FluidTags.WATER)) {
                         //set path node type based on target position
-                        PathNodeType pathnodetype = WalkNodeProcessor.getBlockPathTypeStatic(bee.level, targetPos.mutable());
+                        BlockPathTypes pathnodetype = WalkNodeEvaluator.getBlockPathTypeStatic(bee.level, targetPos.mutable());
                         if (bee.getPathfindingMalus(pathnodetype) == 0.0F) {
                             //calculate if weight of new target position is better than previous target position
                             double d1 = blockWeightOfBeePOS.applyAsDouble(targetPos);
@@ -102,14 +102,14 @@ public class RandomPositionGenerator {
         }
 
         //if target position is not equal to negative infinity then return center of target pos otherwise null
-        return flag1 ? Vector3d.atBottomCenterOf(beePos) : null;
+        return flag1 ? Vec3.atBottomCenterOf(beePos) : null;
     }
 
-    private static BlockPos getRandomOffset(Random random, int horizontalOffset, int verticalOffset, int minusTwo, @Nullable Vector3d directionVec) {
+    private static BlockPos getRandomOffset(Random random, int horizontalOffset, int verticalOffset, int minusTwo, @Nullable Vec3 directionVec) {
         if (directionVec != null) {
-            double d3 = MathHelper.atan2(directionVec.z, directionVec.x) - HALF_PI;
+            double d3 = Mth.atan2(directionVec.z, directionVec.x) - HALF_PI;
             double d4 = d3 + (2 * random.nextFloat() - 1) * HALF_PI;
-            double d0 = Math.sqrt(random.nextDouble()) * MathHelper.SQRT_OF_TWO * horizontalOffset;
+            double d0 = Math.sqrt(random.nextDouble()) * Mth.SQRT_OF_TWO * horizontalOffset;
             double d1 = -d0 * Math.sin(d4);
             double d2 = d0 * Math.cos(d4);
             if ((Math.abs(d1) <= horizontalOffset) && (Math.abs(d2) <= horizontalOffset)) {

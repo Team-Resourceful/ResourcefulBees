@@ -4,24 +4,25 @@ import com.resourcefulbees.resourcefulbees.item.UpgradeItem;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.registry.ModContainers;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryStorageTileEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 
-public class ApiaryStorageContainer extends Container {
+public class ApiaryStorageContainer extends AbstractContainerMenu {
 
     private final ApiaryStorageTileEntity apiaryStorageTileEntity;
-    private final PlayerInventory playerInventory;
+    private final Inventory playerInventory;
     private int numberOfSlots;
     private boolean rebuild;
 
-    public ApiaryStorageContainer(int id, World world, BlockPos pos, PlayerInventory inv) {
+    public ApiaryStorageContainer(int id, Level world, BlockPos pos, Inventory inv) {
         super(ModContainers.APIARY_STORAGE_CONTAINER.get(), id);
         this.playerInventory = inv;
         this.apiaryStorageTileEntity = (ApiaryStorageTileEntity) world.getBlockEntity(pos);
@@ -34,7 +35,7 @@ public class ApiaryStorageContainer extends Container {
      * @param player the player
      */
     @Override
-    public boolean stillValid(@Nonnull PlayerEntity player) {
+    public boolean stillValid(@Nonnull Player player) {
         return true;
     }
 
@@ -49,10 +50,10 @@ public class ApiaryStorageContainer extends Container {
                 public int getMaxStackSize() { return 1; }
 
                 @Override
-                public boolean mayPlace(ItemStack stack) { return UpgradeItem.hasUpgradeData(stack) && (UpgradeItem.getUpgradeType(stack).contains(NBTConstants.NBT_STORAGE_UPGRADE)); }
+                public boolean mayPlace(@NotNull ItemStack stack) { return UpgradeItem.hasUpgradeData(stack) && (UpgradeItem.getUpgradeType(stack).contains(NBTConstants.NBT_STORAGE_UPGRADE)); }
 
                 @Override
-                public boolean mayPickup(PlayerEntity playerIn) {
+                public boolean mayPickup(Player playerIn) {
                     boolean flag = true;
 
                     for (int i = 10; i <= getNumberOfSlots(); ++i) {
@@ -103,7 +104,7 @@ public class ApiaryStorageContainer extends Container {
 
     @Nonnull
     @Override
-    public ItemStack quickMoveStack(@Nonnull PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(@Nonnull Player playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         if (slot != null && slot.hasItem()) {
@@ -126,7 +127,7 @@ public class ApiaryStorageContainer extends Container {
         return itemstack;
     }
 
-    public PlayerInventory getPlayerInventory() {
+    public Inventory getPlayerInventory() {
         return playerInventory;
     }
 

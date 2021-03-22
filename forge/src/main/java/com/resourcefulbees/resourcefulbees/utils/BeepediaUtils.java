@@ -6,10 +6,10 @@ import com.resourcefulbees.resourcefulbees.item.Beepedia;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -32,9 +32,9 @@ public class BeepediaUtils {
         Minecraft.getInstance().setScreen(new BeepediaScreen(entity == null ? null : ((CustomBeeEntity) entity).getBeeType(), bees, complete));
     }
 
-    private static List<String> getBees(CompoundNBT tag) {
+    private static List<String> getBees(CompoundTag tag) {
         if (tag.contains(NBTConstants.NBT_BEES)) {
-            return tag.getList(NBTConstants.NBT_BEES, 8).copy().stream().map(INBT::getAsString).collect(Collectors.toList());
+            return tag.getList(NBTConstants.NBT_BEES, 8).copy().stream().map(Tag::getAsString).collect(Collectors.toList());
         } else {
             return new LinkedList<>();
         }

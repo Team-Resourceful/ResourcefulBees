@@ -3,18 +3,14 @@ package com.resourcefulbees.resourcefulbees.api.beedata;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.lib.BaseModelTypes;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.fml.RegistryObject;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Locale;
+import java.util.*;
 import java.util.function.Supplier;
 
 public class CustomBeeData extends AbstractBeeData {
@@ -370,8 +366,8 @@ public class CustomBeeData extends AbstractBeeData {
         return baseModelType == null ? BaseModelTypes.DEFAULT : baseModelType;
     }
 
-    public TranslationTextComponent getTranslation() {
-        return new TranslationTextComponent("entity.resourcefulbees." + name + "_bee");
+    public TranslatableComponent getTranslation() {
+        return new TranslatableComponent("entity.resourcefulbees." + name + "_bee");
     }
 
     /**

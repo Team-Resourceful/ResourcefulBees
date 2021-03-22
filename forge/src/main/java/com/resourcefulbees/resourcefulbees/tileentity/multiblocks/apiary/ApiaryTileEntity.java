@@ -15,40 +15,41 @@ import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
 import com.resourcefulbees.resourcefulbees.network.packets.UpdateClientApiaryMessage;
+import com.resourcefulbees.resourcefulbees.registry.ModBlockEntityTypes;
 import com.resourcefulbees.resourcefulbees.registry.ModBlocks;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
-import com.resourcefulbees.resourcefulbees.registry.ModTileEntityTypes;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.MultiBlockHelper;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
-import net.minecraft.block.BeehiveBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.passive.BeeEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BeehiveBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.TickableBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -64,7 +65,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static com.resourcefulbees.resourcefulbees.lib.BeeConstants.MIN_HIVE_TIME;
 import static com.resourcefulbees.resourcefulbees.lib.BeeConstants.RAINBOW_COLOR;
 
-public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider, IApiaryMultiblock {
+public class ApiaryTileEntity extends BlockEntity implements TickableBlockEntity, MenuProvider, IApiaryMultiblock {
     public static final int IMPORT = 0;
     public static final int EXPORT = 2;
     public static final int EMPTY_JAR = 1;
@@ -88,15 +89,15 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
 
 
     public ApiaryTileEntity() {
-        super(ModTileEntityTypes.APIARY_TILE_ENTITY.get());
+        super(ModBlockEntityTypes.APIARY_TILE_ENTITY.get());
     }
 
-    public ApiaryTileEntity(TileEntityType<?> tileEntityType) {
+    public ApiaryTileEntity(BlockEntityType<?> tileEntityType) {
         super(tileEntityType);
     }
 
     //region PLAYER SYNCING
-    public static int calculatePlayersUsingSync(World world, ApiaryTileEntity apiaryTileEntity, int ticksSinceSync, int posX, int posY, int posZ, int numPlayersUsing) {
+    public static int calculatePlayersUsingSync(Level world, ApiaryTileEntity apiaryTileEntity, int ticksSinceSync, int posX, int posY, int posZ, int numPlayersUsing) {
         if (!world.isClientSide && numPlayersUsing != 0 && (ticksSinceSync + posX + posY + posZ) % 200 == 0) {
             numPlayersUsing = calculatePlayersUsing(world, apiaryTileEntity, posX, posY, posZ);
         }
@@ -104,11 +105,11 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
         return numPlayersUsing;
     }
 
-    public static int calculatePlayersUsing(World world, ApiaryTileEntity apiaryTileEntity, int posX, int posY, int posZ) {
+    public static int calculatePlayersUsing(Level world, ApiaryTileEntity apiaryTileEntity, int posX, int posY, int posZ) {
         int i = 0;
         float f = 5.0F;
 
-        for (PlayerEntity playerentity : world.getEntitiesOfClass(PlayerEntity.class, new AxisAlignedBB(posX - f, posY - f, posZ - f, (posX + 1) + f, (posY + 1) + f, (posZ + 1) + f))) {
+        for (Player playerentity : world.getEntitiesOfClass(Player.class, new AABB(posX - f, posY - f, posZ - f, (posX + 1) + f, (posY + 1) + f, (posZ + 1) + f))) {
             if (playerentity.containerMenu instanceof ValidatedApiaryContainer) {
                 ApiaryTileEntity apiaryTileEntity1 = ((ValidatedApiaryContainer) playerentity.containerMenu).getApiaryTileEntity();
                 if (apiaryTileEntity1 == apiaryTileEntity) {
@@ -120,7 +121,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
         return i;
     }
 
-    public static void syncApiaryToPlayersUsing(World world, BlockPos pos, CompoundNBT data) {
+    public static void syncApiaryToPlayersUsing(Level world, BlockPos pos, CompoundTag data) {
         NetPacketHandler.sendToAllLoaded(new UpdateClientApiaryMessage(pos, data), world, pos);
     }
     //endregion
@@ -146,7 +147,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
 
     public ApiaryStorageTileEntity getApiaryStorage() {
         if (level != null && getStoragePos() != null) {
-            TileEntity tile = level.getBlockEntity(getStoragePos());
+            BlockEntity tile = level.getBlockEntity(getStoragePos());
             if (tile instanceof ApiaryStorageTileEntity) {
                 return (ApiaryStorageTileEntity) tile;
             }
@@ -157,7 +158,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
 
     public ApiaryBreederTileEntity getApiaryBreeder() {
         if (level != null && getBreederPos() != null) {
-            TileEntity tile = level.getBlockEntity(getBreederPos());
+            BlockEntity tile = level.getBlockEntity(getBreederPos());
             if (tile instanceof ApiaryBreederTileEntity) {
                 return (ApiaryBreederTileEntity) tile;
             }
@@ -175,7 +176,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
         BlockPos blockPos = this.getBlockPos();
         Direction direction = state.getValue(BeehiveBlock.FACING);
         BlockPos blockPos1 = blockPos.relative(direction);
-        CompoundNBT nbt = apiaryBee.entityData;
+        CompoundTag nbt = apiaryBee.entityData;
 
         if (level != null && this.level.getBlockState(blockPos1).getCollisionShape(this.level, blockPos1).isEmpty()) {
             nbt.remove("Passengers");
@@ -185,8 +186,8 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
             if (entity == null) return true;
             BeeInfoUtils.setEntityLocationAndAngle(blockPos, direction, entity);
 
-            if (entity instanceof BeeEntity) {
-                BeeEntity vanillaBeeEntity = (BeeEntity) entity;
+            if (entity instanceof Bee) {
+                Bee vanillaBeeEntity = (Bee) entity;
 
                 BlockPos flowerPos = apiaryBee.savedFlowerPos;
                 if (flowerPos != null && !vanillaBeeEntity.hasSavedFlowerPos() && this.level.random.nextFloat() < 0.9F) {
@@ -197,7 +198,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
                     vanillaBeeEntity.dropOffNectar();
 
                     if (!exportBee && isValidApiary(true)) {
-                        getApiaryStorage().deliverHoneycomb(((BeeEntity) entity), getTier());
+                        getApiaryStorage().deliverHoneycomb(((Bee) entity), getTier());
                     }
                 }
 
@@ -207,7 +208,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
                     exportBee(vanillaBeeEntity);
                 } else {
                     BlockPos hivePos = this.getBlockPos();
-                    this.level.playSound(null, hivePos.getX(), hivePos.getY(), hivePos.getZ(), SoundEvents.BEEHIVE_EXIT, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                    this.level.playSound(null, hivePos.getX(), hivePos.getY(), hivePos.getZ(), SoundEvents.BEEHIVE_EXIT, SoundSource.BLOCKS, 1.0F, 1.0F);
                     this.level.addFreshEntity(entity);
                 }
             }
@@ -216,7 +217,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
         return false;
     }
 
-    private void ageBee(int ticksInHive, BeeEntity beeEntity) {
+    private void ageBee(int ticksInHive, Bee beeEntity) {
         BeeInfoUtils.ageBee(ticksInHive, beeEntity);
     }
 
@@ -227,8 +228,8 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     }
 
     public boolean tryEnterHive(@Nonnull Entity bee, boolean hasNectar, int ticksInHive, boolean imported) {
-        if (this.level != null && bee instanceof BeeEntity) {
-            BeeEntity beeEntity = (BeeEntity) bee;
+        if (this.level != null && bee instanceof Bee) {
+            Bee beeEntity = (Bee) bee;
             String type = BeeConstants.VANILLA_BEE_TYPE;
             String beeColor = BeeConstants.VANILLA_BEE_COLOR;
 
@@ -238,7 +239,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
 
             if (!this.bees.containsKey(type) && this.bees.size() < getMaxBees()) {
                 bee.ejectPassengers();
-                CompoundNBT nbt = new CompoundNBT();
+                CompoundTag nbt = new CompoundTag();
                 bee.save(nbt);
 
                 int maxTimeInHive = getMaxTimeInHive(BeeConstants.MAX_TIME_IN_HIVE);
@@ -260,18 +261,18 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
 
                 String finalBeeColor = beeColor;
 
-                ITextComponent displayName = bee.getName();
+                Component displayName = bee.getName();
 
                 this.bees.computeIfAbsent(finalType, k -> new ApiaryBee(nbt, ticksInHive, hasNectar ? finalMaxTimeInHive : MIN_HIVE_TIME, beeEntity.getSavedFlowerPos(), finalType, finalBeeColor, displayName));
                 BlockPos pos = this.getBlockPos();
-                this.level.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BEEHIVE_ENTER, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                this.level.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BEEHIVE_ENTER, SoundSource.BLOCKS, 1.0F, 1.0F);
 
                 if (imported) {
                     this.bees.get(type).setLocked(true);
                 }
 
                 if (this.getNumPlayersUsing() > 0)
-                    syncApiaryToPlayersUsing(this.level, this.getBlockPos(), this.saveToNBT(new CompoundNBT()));
+                    syncApiaryToPlayersUsing(this.level, this.getBlockPos(), this.saveToNBT(new CompoundTag()));
 
                 bee.remove();
                 return true;
@@ -311,7 +312,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
                     double d0 = blockpos.getX() + 0.5D;
                     double d1 = blockpos.getY();
                     double d2 = blockpos.getZ() + 0.5D;
-                    this.level.playSound(null, d0, d1, d2, SoundEvents.BEEHIVE_WORK, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                    this.level.playSound(null, d0, d1, d2, SoundEvents.BEEHIVE_WORK, SoundSource.BLOCKS, 1.0F, 1.0F);
                 }
 
                 ticksSinceBeesFlagged++;
@@ -337,7 +338,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
                     if (this.releaseBee(blockstate, apiaryBee, false)) {
                         iterator.remove();
                         if (this.getNumPlayersUsing() > 0 && !this.level.isClientSide)
-                            syncApiaryToPlayersUsing(this.level, this.getBlockPos(), this.saveToNBT(new CompoundNBT()));
+                            syncApiaryToPlayersUsing(this.level, this.getBlockPos(), this.saveToNBT(new CompoundTag()));
                     }
                 } else {
                     apiaryBee.setTicksInHive(apiaryBee.getTicksInHive() + 1);
@@ -358,28 +359,28 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
 
     public void lockOrUnlockBee(String beeType) {
         this.bees.get(beeType).setLocked(!this.bees.get(beeType).isLocked());
-        syncApiaryToPlayersUsing(this.level, this.getBlockPos(), this.saveToNBT(new CompoundNBT()));
+        syncApiaryToPlayersUsing(this.level, this.getBlockPos(), this.saveToNBT(new CompoundTag()));
     }
     //endregion
 
     //region NBT HANDLING
 
     @Nonnull
-    public ListNBT writeBees() {
-        ListNBT listnbt = new ListNBT();
+    public ListTag writeBees() {
+        ListTag listnbt = new ListTag();
 
         this.bees.forEach((key, apiaryBee) -> {
             apiaryBee.entityData.remove("UUID");
-            CompoundNBT compoundnbt = new CompoundNBT();
+            CompoundTag compoundnbt = new CompoundTag();
             compoundnbt.put("EntityData", apiaryBee.entityData);
             compoundnbt.putInt("TicksInHive", apiaryBee.getTicksInHive());
             compoundnbt.putInt("MinOccupationTicks", apiaryBee.minOccupationTicks);
             compoundnbt.putBoolean(NBTConstants.NBT_LOCKED, apiaryBee.isLocked());
             compoundnbt.putString(NBTConstants.NBT_BEE_TYPE, apiaryBee.beeType);
             compoundnbt.putString(NBTConstants.NBT_COLOR, apiaryBee.beeColor);
-            compoundnbt.putString(NBTConstants.NBT_BEE_NAME, ITextComponent.Serializer.toJson(apiaryBee.displayName));
+            compoundnbt.putString(NBTConstants.NBT_BEE_NAME, Component.Serializer.toJson(apiaryBee.displayName));
             if (apiaryBee.savedFlowerPos != null) {
-                compoundnbt.put(NBTConstants.NBT_FLOWER_POS, NBTUtil.writeBlockPos(apiaryBee.savedFlowerPos));
+                compoundnbt.put(NBTConstants.NBT_FLOWER_POS, NbtUtils.writeBlockPos(apiaryBee.savedFlowerPos));
             }
             listnbt.add(compoundnbt);
         });
@@ -387,17 +388,17 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
         return listnbt;
     }
 
-    public void loadBees(CompoundNBT nbt) {
-        ListNBT listnbt = nbt.getList(NBTConstants.NBT_BEES, 10);
+    public void loadBees(CompoundTag nbt) {
+        ListTag listnbt = nbt.getList(NBTConstants.NBT_BEES, 10);
 
         if (!listnbt.isEmpty()) {
             for (int i = 0; i < listnbt.size(); ++i) {
-                CompoundNBT data = listnbt.getCompound(i);
+                CompoundTag data = listnbt.getCompound(i);
 
-                BlockPos savedFlowerPos = data.contains(NBTConstants.NBT_FLOWER_POS) ? NBTUtil.readBlockPos(data.getCompound(NBTConstants.NBT_FLOWER_POS)) : null;
+                BlockPos savedFlowerPos = data.contains(NBTConstants.NBT_FLOWER_POS) ? NbtUtils.readBlockPos(data.getCompound(NBTConstants.NBT_FLOWER_POS)) : null;
                 String beeType = data.getString(NBTConstants.NBT_BEE_TYPE);
                 String beeColor = data.contains(NBTConstants.NBT_COLOR) ? data.getString(NBTConstants.NBT_COLOR) : BeeConstants.VANILLA_BEE_COLOR;
-                ITextComponent displayName = data.contains(NBTConstants.NBT_BEE_NAME) ? ITextComponent.Serializer.fromJson(data.getString(NBTConstants.NBT_BEE_NAME)) : new StringTextComponent("Temp Bee Name");
+                Component displayName = data.contains(NBTConstants.NBT_BEE_NAME) ? Component.Serializer.fromJson(data.getString(NBTConstants.NBT_BEE_NAME)) : new TextComponent("Temp Bee Name");
 
                 this.bees.computeIfAbsent(data.getString(NBTConstants.NBT_BEE_TYPE), k -> new ApiaryBee(
                         data.getCompound("EntityData"),
@@ -414,19 +415,19 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     }
 
     @Override
-    public void load(@Nonnull BlockState state, @Nonnull CompoundNBT nbt) {
+    public void load(@Nonnull BlockState state, @Nonnull CompoundTag nbt) {
         super.load(state, nbt);
         this.loadFromNBT(nbt);
     }
 
     @Nonnull
     @Override
-    public CompoundNBT save(@Nonnull CompoundNBT nbt) {
+    public CompoundTag save(@Nonnull CompoundTag nbt) {
         super.save(nbt);
         return this.saveToNBT(nbt);
     }
 
-    public void loadFromNBT(CompoundNBT nbt) {
+    public void loadFromNBT(CompoundTag nbt) {
         loadBees(nbt);
 
         if (nbt.contains(NBTConstants.NBT_VALID_APIARY))
@@ -435,13 +436,13 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
             this.setVerticalOffset(nbt.getInt(NBTConstants.NBT_VERT_OFFSET));
         if (nbt.contains(NBTConstants.NBT_HOR_OFFSET))
             this.setHorizontalOffset(nbt.getInt(NBTConstants.NBT_HOR_OFFSET));
-        CompoundNBT invTag = nbt.getCompound(NBTConstants.NBT_INVENTORY);
+        CompoundTag invTag = nbt.getCompound(NBTConstants.NBT_INVENTORY);
         getTileStackHandler().deserializeNBT(invTag);
 
         if (nbt.contains(NBTConstants.NBT_STORAGE_POS))
-            setStoragePos(NBTUtil.readBlockPos(nbt.getCompound(NBTConstants.NBT_STORAGE_POS)));
+            setStoragePos(NbtUtils.readBlockPos(nbt.getCompound(NBTConstants.NBT_STORAGE_POS)));
         if (nbt.contains(NBTConstants.NBT_BREEDER_POS))
-            setBreederPos(NBTUtil.readBlockPos(nbt.getCompound(NBTConstants.NBT_BREEDER_POS)));
+            setBreederPos(NbtUtils.readBlockPos(nbt.getCompound(NBTConstants.NBT_BREEDER_POS)));
         if (nbt.contains(NBTConstants.NBT_TIER)) {
             setTier(nbt.getInt(NBTConstants.NBT_TIER));
         }
@@ -457,44 +458,44 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
         });
     }
 
-    public CompoundNBT saveToNBT(CompoundNBT nbt) {
-        CompoundNBT inv = this.getTileStackHandler().serializeNBT();
+    public CompoundTag saveToNBT(CompoundTag nbt) {
+        CompoundTag inv = this.getTileStackHandler().serializeNBT();
         nbt.put(NBTConstants.NBT_INVENTORY, inv);
         nbt.put(NBTConstants.NBT_BEES, this.writeBees());
         nbt.putBoolean(NBTConstants.NBT_VALID_APIARY, isValidApiary);
         nbt.putInt(NBTConstants.NBT_VERT_OFFSET, getVerticalOffset());
         nbt.putInt(NBTConstants.NBT_HOR_OFFSET, getHorizontalOffset());
         if (getStoragePos() != null)
-            nbt.put(NBTConstants.NBT_STORAGE_POS, NBTUtil.writeBlockPos(getStoragePos()));
+            nbt.put(NBTConstants.NBT_STORAGE_POS, NbtUtils.writeBlockPos(getStoragePos()));
         if (getBreederPos() != null)
-            nbt.put(NBTConstants.NBT_BREEDER_POS, NBTUtil.writeBlockPos(getBreederPos()));
+            nbt.put(NBTConstants.NBT_BREEDER_POS, NbtUtils.writeBlockPos(getBreederPos()));
         nbt.putInt(NBTConstants.NBT_TIER, getTier());
         return nbt;
     }
 
     @Nonnull
     @Override
-    public CompoundNBT getUpdateTag() {
-        CompoundNBT nbtTagCompound = new CompoundNBT();
+    public CompoundTag getUpdateTag() {
+        CompoundTag nbtTagCompound = new CompoundTag();
         save(nbtTagCompound);
         return nbtTagCompound;
     }
 
     @Override
-    public void handleUpdateTag(@Nonnull BlockState state, CompoundNBT tag) {
+    public void handleUpdateTag(@Nonnull BlockState state, CompoundTag tag) {
         this.load(state, tag);
     }
 
     @Nullable
     @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
         return super.getUpdatePacket();
     }
     //endregion
 
     //region IMPORT/EXPORT
-    public void importBee(ServerPlayerEntity player) {
-        World world = this.level;
+    public void importBee(ServerPlayer player) {
+        Level world = this.level;
         boolean imported = false;
 
         if (world != null && !this.getTileStackHandler().getStackInSlot(IMPORT).isEmpty() && this.getTileStackHandler().getStackInSlot(EMPTY_JAR).getCount() < 16) {
@@ -505,8 +506,8 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
                 BeeJar jarItem = (BeeJar) filledJar.getItem();
                 Entity entity = jarItem.getEntityFromStack(filledJar, world, true);
 
-                if (entity instanceof BeeEntity) {
-                    BeeEntity beeEntity = (BeeEntity) entity;
+                if (entity instanceof Bee) {
+                    Bee beeEntity = (Bee) entity;
                     imported = tryEnterHive(beeEntity, beeEntity.hasNectar(), true);
 
                     if (imported) {
@@ -521,10 +522,10 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
             }
         }
 
-        player.displayClientMessage(new TranslationTextComponent("gui.resourcefulbees.apiary.import." + imported), true);
+        player.displayClientMessage(new TranslatableComponent("gui.resourcefulbees.apiary.import." + imported), true);
     }
 
-    public void exportBee(ServerPlayerEntity player, String beeType) {
+    public void exportBee(ServerPlayer player, String beeType) {
         boolean exported = false;
         ApiaryBee bee = this.bees.get(beeType);
 
@@ -535,13 +536,13 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
             this.bees.remove(beeType);
             this.getTileStackHandler().getStackInSlot(EMPTY_JAR).shrink(1);
             if (this.getNumPlayersUsing() > 0 && this.level != null && !this.level.isClientSide)
-                syncApiaryToPlayersUsing(this.level, this.getBlockPos(), this.saveToNBT(new CompoundNBT()));
+                syncApiaryToPlayersUsing(this.level, this.getBlockPos(), this.saveToNBT(new CompoundTag()));
         }
 
-        player.displayClientMessage(new TranslationTextComponent("gui.resourcefulbees.apiary.export." + exported), true);
+        player.displayClientMessage(new TranslatableComponent("gui.resourcefulbees.apiary.export." + exported), true);
     }
 
-    public void exportBee(BeeEntity beeEntity) {
+    public void exportBee(Bee beeEntity) {
         ItemStack beeJar = new ItemStack(ModItems.BEE_JAR.get());
         beeJar.setTag(BeeInfoUtils.createJarBeeTag(beeEntity, NBTConstants.NBT_ENTITY));
         BeeJar.renameJar(beeJar, beeEntity);
@@ -550,7 +551,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     //endregion
 
     //region STRUCTURE VALIDATION
-    public void runStructureValidation(@Nullable ServerPlayerEntity validatingPlayer) {
+    public void runStructureValidation(@Nullable ServerPlayer validatingPlayer) {
         if (this.level != null && !this.level.isClientSide()) {
             if (!this.isValidApiary || structureBlocks.isEmpty())
                 buildStructureBlockList();
@@ -563,7 +564,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
         }
     }
 
-    public boolean validateStructure(World worldIn, @Nullable ServerPlayerEntity validatingPlayer) {
+    public boolean validateStructure(Level worldIn, @Nullable ServerPlayer validatingPlayer) {
         AtomicBoolean isStructureValid = new AtomicBoolean(true);
         this.apiaryStorage = getApiaryStorage();
         this.apiaryBreeder = getApiaryBreeder();
@@ -573,26 +574,26 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
         if (apiaryStorage == null) {
             isStructureValid.set(false);
             if (validatingPlayer != null) {
-                validatingPlayer.displayClientMessage(new StringTextComponent("Missing Apiary Storage Block!"), false);
+                validatingPlayer.displayClientMessage(new TextComponent("Missing Apiary Storage Block!"), false);
             }
         }
 
         if (validatingPlayer != null) {
-            validatingPlayer.displayClientMessage(new TranslationTextComponent("gui.resourcefulbees.apiary.validated." + isStructureValid.get()), true);
+            validatingPlayer.displayClientMessage(new TranslatableComponent("gui.resourcefulbees.apiary.validated." + isStructureValid.get()), true);
         }
         return isStructureValid.get();
     }
 
-    private boolean validateBlocks(AtomicBoolean isStructureValid, World worldIn, @Nullable ServerPlayerEntity validatingPlayer) {
+    private boolean validateBlocks(AtomicBoolean isStructureValid, Level worldIn, @Nullable ServerPlayer validatingPlayer) {
         structureBlocks.forEach(pos -> {
             Block block = worldIn.getBlockState(pos).getBlock();
             if (block.is(BeeInfoUtils.getValidApiaryTag()) || block instanceof ApiaryBreederBlock || block instanceof ApiaryStorageBlock || block instanceof ApiaryBlock) {
-                TileEntity tile = worldIn.getBlockEntity(pos);
+                BlockEntity tile = worldIn.getBlockEntity(pos);
                 linkStorageAndBreeder(tile);
             } else {
                 isStructureValid.set(false);
                 if (validatingPlayer != null)
-                    validatingPlayer.displayClientMessage(new StringTextComponent(String.format("Block at position (X: %1$s Y: %2$s Z: %3$s) is invalid!", pos.getX(), pos.getY(), pos.getZ())), false);
+                    validatingPlayer.displayClientMessage(new TextComponent(String.format("Block at position (X: %1$s Y: %2$s Z: %3$s) is invalid!", pos.getX(), pos.getY(), pos.getZ())), false);
             }
         });
 
@@ -600,13 +601,13 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     }
 
 
-    public MutableBoundingBox buildStructureBounds(int horizontalOffset, int verticalOffset) {
+    public BoundingBox buildStructureBounds(int horizontalOffset, int verticalOffset) {
         return MultiBlockHelper.buildStructureBounds(this.getBlockPos(), 7, 6, 7, -horizontalOffset - 3, -verticalOffset - 2, 0, this.getBlockState().getValue(ApiaryBlock.FACING));
     }
 
     private void buildStructureBlockList() {
         if (this.level != null) {
-            MutableBoundingBox box = buildStructureBounds(this.getHorizontalOffset(), this.getVerticalOffset());
+            BoundingBox box = buildStructureBounds(this.getHorizontalOffset(), this.getVerticalOffset());
             structureBlocks.clear();
             BlockPos.betweenClosedStream(box).forEach((blockPos -> {
                 if (blockPos.getX() == box.x0 || blockPos.getX() == box.x1 ||
@@ -619,7 +620,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
         }
     }
 
-    public void runCreativeBuild(ServerPlayerEntity player) {
+    public void runCreativeBuild(ServerPlayer player) {
         if (this.level != null) {
             buildStructureBlockList();
             boolean addedStorage = false;
@@ -627,7 +628,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
                 Block block = this.level.getBlockState(pos).getBlock();
                 if (!(block instanceof ApiaryBlock)) {
                     if (addedStorage) {
-                        this.level.setBlockAndUpdate(pos, net.minecraft.block.Blocks.GLASS.defaultBlockState());
+                        this.level.setBlockAndUpdate(pos, Blocks.GLASS.defaultBlockState());
                     } else {
                         this.level.setBlockAndUpdate(pos, ModBlocks.APIARY_STORAGE_BLOCK.get().defaultBlockState());
                         addedStorage = true;
@@ -639,7 +640,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     }
 
     @SuppressWarnings("UnusedReturnValue")
-    public boolean linkStorageAndBreeder(TileEntity tile) {
+    public boolean linkStorageAndBreeder(BlockEntity tile) {
         if (tile instanceof ApiaryStorageTileEntity && apiaryStorage == null && ((ApiaryStorageTileEntity) tile).getApiaryPos() == null) {
             apiaryStorage = (ApiaryStorageTileEntity) tile;
             setStoragePos(apiaryStorage.getBlockPos());
@@ -690,7 +691,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     //region SCREEN HANDLING
     @Nullable
     @Override
-    public Container createMenu(int i, @Nonnull PlayerInventory playerInventory, @Nonnull PlayerEntity playerEntity) {
+    public AbstractContainerMenu createMenu(int i, @Nonnull Inventory playerInventory, @Nonnull Player playerEntity) {
         if (level != null) {
             setNumPlayersUsing(getNumPlayersUsing() + 1);
             if (isValidApiary(true)) {
@@ -702,7 +703,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     }
 
     @Override
-    public void switchTab(ServerPlayerEntity player, ApiaryTabs tab) {
+    public void switchTab(ServerPlayer player, ApiaryTabs tab) {
         if (level != null) {
             if (tab == ApiaryTabs.STORAGE) {
                 NetworkHooks.openGui(player, getApiaryStorage(), getStoragePos());
@@ -732,8 +733,8 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
 
     @Nonnull
     @Override
-    public ITextComponent getDisplayName() {
-        return new TranslationTextComponent("gui.resourcefulbees.apiary");
+    public Component getDisplayName() {
+        return new TranslatableComponent("gui.resourcefulbees.apiary");
     }
 
     public boolean isPreviewed() {
@@ -799,16 +800,16 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     }
 
     public static class ApiaryBee {
-        public final CompoundNBT entityData;
+        public final CompoundTag entityData;
         public final int minOccupationTicks;
         public final BlockPos savedFlowerPos;
         public final String beeType;
         private int ticksInHive;
         private boolean isLocked = false;
         public final String beeColor;
-        public final ITextComponent displayName;
+        public final Component displayName;
 
-        public ApiaryBee(CompoundNBT nbt, int ticksInHive, int minOccupationTicks, @Nullable BlockPos flowerPos, String beeType, String beeColor, ITextComponent displayName) {
+        public ApiaryBee(CompoundTag nbt, int ticksInHive, int minOccupationTicks, @Nullable BlockPos flowerPos, String beeType, String beeColor, Component displayName) {
             nbt.remove("UUID");
             this.entityData = nbt;
             this.setTicksInHive(ticksInHive);

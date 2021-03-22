@@ -3,23 +3,24 @@ package com.resourcefulbees.resourcefulbees.container;
 import com.resourcefulbees.resourcefulbees.registry.ModContainers;
 import com.resourcefulbees.resourcefulbees.tileentity.MechanicalCentrifugeTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.FunctionalIntReferenceHolder;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 
-public class MechanicalCentrifugeContainer extends Container {
+public class MechanicalCentrifugeContainer extends AbstractContainerMenu {
 
     private final MechanicalCentrifugeTileEntity centrifugeTileEntity;
-    private final PlayerEntity player;
+    private final Player player;
 
-    public MechanicalCentrifugeContainer(int id, World world, BlockPos pos, PlayerInventory inv) {
+    public MechanicalCentrifugeContainer(int id, Level world, BlockPos pos, Inventory inv) {
         super(ModContainers.MECHANICAL_CENTRIFUGE_CONTAINER.get(), id);
 
         this.player = inv.player;
@@ -31,14 +32,14 @@ public class MechanicalCentrifugeContainer extends Container {
         this.addSlot(new SlotItemHandlerUnconditioned(getCentrifugeTileEntity().getItemStackHandler(), MechanicalCentrifugeTileEntity.HONEYCOMB_SLOT, 30, 20){
 
             @Override
-            public boolean mayPlace(ItemStack stack){
+            public boolean mayPlace(@NotNull ItemStack stack){
                 return !stack.getItem().equals(Items.GLASS_BOTTLE);
             }
         });
         this.addSlot(new SlotItemHandlerUnconditioned(getCentrifugeTileEntity().getItemStackHandler(), MechanicalCentrifugeTileEntity.BOTTLE_SLOT, 30, 38){
 
             @Override
-            public boolean mayPlace(ItemStack stack){
+            public boolean mayPlace(@NotNull ItemStack stack){
                 return stack.getItem().equals(Items.GLASS_BOTTLE);
             }
         });
@@ -63,13 +64,13 @@ public class MechanicalCentrifugeContainer extends Container {
      * @param player the player
      */
     @Override
-    public boolean stillValid(@Nonnull PlayerEntity player) {
+    public boolean stillValid(@Nonnull Player player) {
         return true;
     }
 
     @Nonnull
     @Override
-    public ItemStack quickMoveStack(@Nonnull PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(@Nonnull Player playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         if (slot != null && slot.hasItem()) {
@@ -96,7 +97,7 @@ public class MechanicalCentrifugeContainer extends Container {
         return centrifugeTileEntity;
     }
 
-    public PlayerEntity getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 }

@@ -2,10 +2,10 @@ package com.resourcefulbees.resourcefulbees.fluids;
 
 import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
 import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockDisplayReader;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -27,7 +27,7 @@ public class HoneyFluidAttributes extends FluidAttributes {
     }
 
     @Override
-    public int getColor(IBlockDisplayReader world, BlockPos pos) {
+    public int getColor(BlockAndTintGetter world, BlockPos pos) {
         return getColor();
     }
 

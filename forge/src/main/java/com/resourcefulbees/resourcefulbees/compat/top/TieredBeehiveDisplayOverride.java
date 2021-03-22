@@ -3,15 +3,15 @@ package com.resourcefulbees.resourcefulbees.compat.top;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.tileentity.TieredBeehiveTileEntity;
 import mcjty.theoneprobe.api.*;
-import net.minecraft.block.BeehiveBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BeehiveBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -23,12 +23,12 @@ import java.util.concurrent.atomic.AtomicReference;
 public class TieredBeehiveDisplayOverride implements IBlockDisplayOverride {
 
     @Override
-    public boolean overrideStandardInfo(ProbeMode probeMode, IProbeInfo iProbeInfo, PlayerEntity playerEntity, World world, BlockState blockState, IProbeHitData iProbeHitData) {
-        TileEntity tileEntity = world.getBlockEntity(iProbeHitData.getPos());
+    public boolean overrideStandardInfo(ProbeMode probeMode, IProbeInfo iProbeInfo, Player playerEntity, Level world, BlockState blockState, IProbeHitData iProbeHitData) {
+        BlockEntity tileEntity = world.getBlockEntity(iProbeHitData.getPos());
         return tileEntity instanceof TieredBeehiveTileEntity && createHiveProbeData(probeMode, iProbeInfo, blockState, (TieredBeehiveTileEntity) tileEntity);
     }
 
-    private boolean createHiveProbeData(ProbeMode mode, IProbeInfo probeInfo, net.minecraft.block.BlockState blockState, TieredBeehiveTileEntity tileEntity) {
+    private boolean createHiveProbeData(ProbeMode mode, IProbeInfo probeInfo, BlockState blockState, TieredBeehiveTileEntity tileEntity) {
         probeInfo.horizontal()
                 .item(new ItemStack(blockState.getBlock().asItem()))
                 .vertical()
@@ -37,13 +37,13 @@ public class TieredBeehiveDisplayOverride implements IBlockDisplayOverride {
 
         probeInfo.horizontal()
                 .vertical()
-                .text(new TranslationTextComponent("gui.resourcefulbees.beehive.tier").append(getHiveTier(tileEntity)))
-                .text(new TranslationTextComponent("gui.resourcefulbees.beehive.bees")
+                .text(new TranslatableComponent("gui.resourcefulbees.beehive.tier").append(getHiveTier(tileEntity)))
+                .text(new TranslatableComponent("gui.resourcefulbees.beehive.bees")
                         .append(getHiveBeeCount(tileEntity))
                         .append(" / ")
                         .append(getHiveMaxBees(tileEntity)))
-                .text(new TranslationTextComponent("gui.resourcefulbees.beehive.honeylevel").append(getHoneyLevel(tileEntity)))
-                .text(new TranslationTextComponent("gui.resourcefulbees.beehive.smoked").append(getSmokedStatus(tileEntity)));
+                .text(new TranslatableComponent("gui.resourcefulbees.beehive.honeylevel").append(getHoneyLevel(tileEntity)))
+                .text(new TranslatableComponent("gui.resourcefulbees.beehive.smoked").append(getSmokedStatus(tileEntity)));
 
         createSmokedProbeData(probeInfo, tileEntity);
 
@@ -111,7 +111,7 @@ public class TieredBeehiveDisplayOverride implements IBlockDisplayOverride {
             Iterator<ItemStack> iterator = combs.iterator();
             while (iterator.hasNext() && !honeycomb.isEmpty()) {
                 ItemStack stackInList = iterator.next();
-                if (Container.consideredTheSameItem(honeycomb, stackInList)) {
+                if (AbstractContainerMenu.consideredTheSameItem(honeycomb, stackInList)) {
                     combs.get(combs.indexOf(stackInList)).grow(1);
                     honeycomb.setCount(0);
                 }
@@ -124,7 +124,7 @@ public class TieredBeehiveDisplayOverride implements IBlockDisplayOverride {
     private void createSmokedProbeData(IProbeInfo probeInfo, TieredBeehiveTileEntity tileEntity) {
         if (tileEntity.getTicksSmoked() != -1) {
             probeInfo.horizontal().vertical()
-                    .text(new StringTextComponent(new TranslationTextComponent("gui.resourcefulbees.beehive.smoke_time").getString()))
+                    .text(new TextComponent(new TranslatableComponent("gui.resourcefulbees.beehive.smoke_time").getString()))
                     .progress((int) Math.floor(tileEntity.getTicksSmoked() / 20.0), 30);
         }
     }

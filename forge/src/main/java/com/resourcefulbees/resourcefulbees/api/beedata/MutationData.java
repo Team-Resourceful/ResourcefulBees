@@ -6,9 +6,9 @@ import com.resourcefulbees.resourcefulbees.api.beedata.mutation.outputs.EntityOu
 import com.resourcefulbees.resourcefulbees.api.beedata.mutation.outputs.ItemOutput;
 import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
 import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
-import net.minecraft.block.Block;
-import net.minecraft.entity.EntityType;
-import net.minecraft.tags.ITag;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.block.Block;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -58,13 +58,13 @@ public class MutationData extends AbstractBeeData {
     private final List<Mutation> mutations;
 
     private transient Map<Block, Pair<Double, RandomCollection<BlockOutput>>> blockMutations; //IN WORLD
-    private transient Map<ITag<?>, Pair<Double, RandomCollection<BlockOutput>>> jeiBlockTagMutations; // JEI ONLY
+    private transient Map<Tag<?>, Pair<Double, RandomCollection<BlockOutput>>> jeiBlockTagMutations; // JEI ONLY
     private transient Map<Block, Pair<Double, RandomCollection<BlockOutput>>> jeiBlockMutations; //JEI ONLY
 
     private transient Map<EntityType<?>, Pair<Double, RandomCollection<EntityOutput>>> entityMutations;
 
     private transient Map<Block, Pair<Double, RandomCollection<ItemOutput>>> itemMutations; //IN WORLD
-    private transient Map<ITag<?>, Pair<Double, RandomCollection<ItemOutput>>> jeiBlockTagItemMutations; //JEI ONLY
+    private transient Map<Tag<?>, Pair<Double, RandomCollection<ItemOutput>>> jeiBlockTagItemMutations; //JEI ONLY
     private transient Map<Block, Pair<Double, RandomCollection<ItemOutput>>> jeiItemMutations; //JEI ONLY
 
 
@@ -138,7 +138,7 @@ public class MutationData extends AbstractBeeData {
         this.jeiBlockMutations.put(input, Pair.of(chance, outputs));
     }
 
-    public void addJeiBlockTagItemMutation(ITag<?> input, RandomCollection<ItemOutput> outputs, double chance) {
+    public void addJeiBlockTagItemMutation(Tag<?> input, RandomCollection<ItemOutput> outputs, double chance) {
         this.jeiBlockTagItemMutations.put(input, Pair.of(chance, outputs));
     }
 
@@ -146,7 +146,7 @@ public class MutationData extends AbstractBeeData {
         this.jeiItemMutations.put(input, Pair.of(chance, outputs));
     }
 
-    public void addJeiBlockTagMutation(ITag<?> input, RandomCollection<BlockOutput> outputs, double chance) {
+    public void addJeiBlockTagMutation(Tag<?> input, RandomCollection<BlockOutput> outputs, double chance) {
         this.jeiBlockTagMutations.put(input, Pair.of(chance, outputs));
     }
 
@@ -179,7 +179,7 @@ public class MutationData extends AbstractBeeData {
         return this.jeiBlockMutations != null && !this.jeiBlockMutations.isEmpty();
     }
 
-    public Map<ITag<?>, Pair<Double, RandomCollection<BlockOutput>>> getJeiBlockTagMutations() {
+    public Map<Tag<?>, Pair<Double, RandomCollection<BlockOutput>>> getJeiBlockTagMutations() {
         return Collections.unmodifiableMap(this.jeiBlockTagMutations);
     }
 
@@ -195,7 +195,7 @@ public class MutationData extends AbstractBeeData {
         return Collections.unmodifiableMap(this.itemMutations);
     }
 
-    public Map<ITag<?>, Pair<Double, RandomCollection<ItemOutput>>> getJeiBlockTagItemMutations() {
+    public Map<Tag<?>, Pair<Double, RandomCollection<ItemOutput>>> getJeiBlockTagItemMutations() {
         return Collections.unmodifiableMap(this.jeiBlockTagItemMutations);
     }
 

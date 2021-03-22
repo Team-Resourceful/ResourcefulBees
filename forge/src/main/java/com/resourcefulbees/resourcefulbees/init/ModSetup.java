@@ -6,14 +6,14 @@ import com.resourcefulbees.resourcefulbees.item.dispenser.ShearsDispenserBehavio
 import com.resourcefulbees.resourcefulbees.mixin.DispenserBlockInvoker;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.DispenserBlock;
 import net.minecraft.client.Minecraft;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.resources.FolderPack;
-import net.minecraft.resources.IPackNameDecorator;
-import net.minecraft.resources.ResourcePackInfo;
+import net.minecraft.server.packs.FolderPackResources;
+import net.minecraft.server.packs.repository.Pack;
+import net.minecraft.server.packs.repository.PackSource;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.loading.FMLPaths;
@@ -82,25 +82,25 @@ public class ModSetup {
     public static void registerDispenserBehaviors() {
         ShearsDispenserBehavior.setDefaultShearsDispenseBehavior(((DispenserBlockInvoker) Blocks.DISPENSER).invokeGetBehavior(new ItemStack(Items.SHEARS)));
 
-        DispenserBlock.registerBehavior(net.minecraft.item.Items.SHEARS.asItem(), new ShearsDispenserBehavior());
+        DispenserBlock.registerBehavior(Items.SHEARS.asItem(), new ShearsDispenserBehavior());
 
         DispenserBlock.registerBehavior(ModItems.SCRAPER.get().asItem(), new ScraperDispenserBehavior());
     }
 
     public static void loadResources() {
         Minecraft.getInstance().getResourcePackRepository().addPackFinder((consumer, factory) -> {
-            final ResourcePackInfo packInfo = ResourcePackInfo.create(
+            final Pack packInfo = Pack.create(
                     ResourcefulBees.MOD_ID,
                     true,
-                    () -> new FolderPack(BeeSetup.getResourcePath().toFile()) {
+                    () -> new FolderPackResources(BeeSetup.getResourcePath().toFile()) {
                         @Override
                         public boolean isHidden() {
                             return true;
                         }
                     },
                     factory,
-                    ResourcePackInfo.Priority.TOP,
-                    IPackNameDecorator.BUILT_IN
+                    Pack.Position.TOP,
+                    PackSource.BUILT_IN
             );
             if (packInfo == null) {
                 LOGGER.error("Failed to load resource pack, some things may not work.");
