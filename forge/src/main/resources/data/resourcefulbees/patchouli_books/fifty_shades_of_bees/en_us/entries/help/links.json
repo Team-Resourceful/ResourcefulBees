@@ -1,0 +1,16 @@
+{
+    "name": "book.resourcefulbees.help_category.links",
+    "icon": "minecraft:chain",
+    "category": "resourcefulbees:help",
+    "sortnum": 1,
+    "pages": [
+        {
+            "type": "text",
+            "text": "book.resourcefulbees.help_category.links.1"
+        },
+        {
+            "type": "text",
+            "text": "book.resourcefulbees.help_category.links.2"
+        }
+    ]
+}

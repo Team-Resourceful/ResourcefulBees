@@ -1,0 +1,17 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "IRI",
+        "IGI",
+        "IHI"
+    ],
+    "key": {
+        "I": { "tag": "forge:ingots/iron" },
+        "G": { "tag": "forge:glass" },
+        "H": { "tag": "forge:honey_bottle" },
+        "R": { "tag": "forge:dusts/redstone" }
+    },
+    "result": {
+        "item": "resourcefulbees:beepedia"
+    }
+}

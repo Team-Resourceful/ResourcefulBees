@@ -1,0 +1,40 @@
+{
+  "name": "book.resourcefulbees.ender_beecon_category.effects",
+  "icon": "minecraft:honey_bottle",
+  "category": "resourcefulbees:ender_beecon",
+  "sortnum": 4,
+  "pages": [
+    {
+      "type": "image",
+      "images": [
+        "resourcefulbees:textures/gui/patchouli/ender_beecon_effects.png"
+      ],
+      "title": "book.resourcefulbees.ender_beecon_category.effects",
+      "border" : true
+    },
+    {
+      "type" : "text",
+      "text" : "book.resourcefulbees.ender_beecon_category.effects.1"
+    },
+    {
+      "type": "resourcefulbees:effect",
+      "id": "resourcefulbees:calming",
+      "text": "book.resourcefulbees.ender_beecon_category.effects.calming"
+    },
+    {
+      "type": "resourcefulbees:effect",
+      "id": "minecraft:water_breathing",
+      "text": "book.resourcefulbees.ender_beecon_category.effects.water_breathing"
+    },
+    {
+      "type": "resourcefulbees:effect",
+      "id": "minecraft:fire_resistance",
+      "text": "book.resourcefulbees.ender_beecon_category.effects.fire_resistance"
+    },
+    {
+      "type": "resourcefulbees:effect",
+      "id": "minecraft:regeneration",
+      "text": "book.resourcefulbees.ender_beecon_category.effects.regeneration"
+    }
+  ]
+}

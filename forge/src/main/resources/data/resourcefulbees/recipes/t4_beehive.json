@@ -1,0 +1,16 @@
+{
+  "type": "resourcefulbees:hive_upgrade_recipe",
+  "pattern": [
+    "CHC",
+    "HBH",
+    "CHC"
+  ],
+  "key": {
+    "H": { "item": "minecraft:honey_block" },
+    "B": { "item": "resourcefulbees:t3_beehive" },
+    "C": { "tag": "resourcefulbees:resourceful_honeycomb_block"}
+  },
+  "result": {
+    "item": "resourcefulbees:t4_beehive"
+  }
+}

@@ -1,0 +1,54 @@
+{
+    "name": "book.resourcefulbees.apiary_category.multiblock",
+    "icon": "resourcefulbees:t1_apiary",
+    "category": "resourcefulbees:apiary",
+    "sortnum": 1,
+    "pages": [
+        {
+            "type": "text",
+            "text": "book.resourcefulbees.apiary_category.multiblock.1"
+        },
+        {
+            "type": "text",
+            "text": "book.resourcefulbees.apiary_category.multiblock.2"
+        },
+        {
+            "type": "text",
+            "text": "book.resourcefulbees.apiary_category.multiblock.3"
+        },
+        {
+            "type": "text",
+            "text": "book.resourcefulbees.apiary_category.multiblock.4"
+        },
+        {
+            "type": "multiblock",
+            "multiblock": {
+                "mapping": {
+                    "A": "resourcefulbees:t1_apiary[facing=east]",
+                    "S": "resourcefulbees:apiary_storage",
+                    "B": "resourcefulbees:apiary_breeder",
+                    "V": "#resourcefulbees:valid_apiary"
+                },
+                "pattern": [
+                    ["VVVVVVV", "VVVVVVV", "VVVVVVV", "VVVVVVV", "VVVVVVV", "VVVVVVV", "VVVVVVV"],
+                    ["VVVVVVV", "V     V", "V     V", "V     V", "V     V", "V     V", "VVVVVVV"],
+                    ["VVVVVVV", "V     V", "V     V", "V     V", "V     V", "V     V", "VVVVVVV"],
+                    ["VVVABVV", "V     V", "V     V", "V     V", "V     V", "V     V", "VVVVVVV"],
+                    ["VVVVVVV", "V     V", "V     V", "V  0  V", "V     V", "V     V", "VVVVVVV"],
+                    ["SVVVVVV", "VVVVVVV", "VVVVVVV", "VVVVVVV", "VVVVVVV", "VVVVVVV", "VVVVVVV"]
+                ],
+                "symmetrical": true
+            },
+            "enable_visualize": true,
+            "text": "book.resourcefulbees.apiary_category.multiblock.5"
+        },
+        {
+            "type": "text",
+            "text": "book.resourcefulbees.apiary_category.multiblock.6"
+        },
+        {
+            "type": "text",
+            "text": "book.resourcefulbees.apiary_category.multiblock.7"
+        }
+    ]
+}

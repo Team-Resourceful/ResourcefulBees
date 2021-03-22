@@ -1,0 +1,20 @@
+{
+    "name": "book.resourcefulbees.bee_category.mutation",
+    "icon": "minecraft:diamond_ore",
+    "category": "resourcefulbees:bee_guide",
+    "sortnum": 1,
+    "pages": [
+        {
+            "type": "text",
+            "text": "book.resourcefulbees.bee_category.mutation.1"
+        },
+        {
+            "type": "text",
+            "text": "book.resourcefulbees.bee_category.mutation.2"
+        },
+        {
+            "type": "text",
+            "text": "book.resourcefulbees.bee_category.mutation.3"
+        }
+    ]
+}

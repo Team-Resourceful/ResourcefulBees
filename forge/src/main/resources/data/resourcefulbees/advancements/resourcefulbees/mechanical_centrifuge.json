@@ -1,0 +1,35 @@
+{
+  "parent": "resourcefulbees:resourcefulbees/root",
+  "display": {
+    "icon": {
+      "item": "resourcefulbees:mechanical_centrifuge"
+    },
+    "title": {
+      "translate": "advancements.resourcefulbees.mechanical_centrifuge.title"
+    },
+    "description": {
+      "translate": "advancements.resourcefulbees.mechanical_centrifuge.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "mechanical_centrifuge": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "resourcefulbees:mechanical_centrifuge"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "mechanical_centrifuge"
+    ]
+  ]
+}

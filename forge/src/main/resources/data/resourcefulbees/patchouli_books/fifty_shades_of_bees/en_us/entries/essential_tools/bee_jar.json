@@ -1,0 +1,17 @@
+{
+    "name": "book.resourcefulbees.ess_tools_category.bee_jar",
+    "icon": "resourcefulbees:bee_jar",
+    "category": "resourcefulbees:essential_tools",
+    "sortnum": 1,
+    "pages": [
+        {
+            "type": "text",
+            "text": "book.resourcefulbees.ess_tools_category.bee_jar.1"
+        },
+        {
+            "type": "crafting",
+            "recipe": "resourcefulbees:jar",
+            "text": "book.resourcefulbees.ess_tools_category.bee_jar.2"
+        }
+    ]
+}
