@@ -1,35 +1,27 @@
-modLoader = "javafml"
-loaderVersion = "[35,)"
-#issueTrackerURL = ""
-license = "Insert License Here"
-
+modLoader="javafml"
+loaderVersion="[36,)"
+license="https://www.gnu.org/licenses/gpl-3.0.en.html"
+issueTrackerURL="https://github.com/Resourceful-Bees/ResourcefulBees/issues/new/choose"
 [[mods]]
-modId = "examplemod"
-version = "${version}"
-displayName = "Example Mod"
-authors = "Me!"
-description = '''
-This is an example description! Tell everyone what your mod is about!
-'''
-#logoFile = ""
+modId="resourcefulbees"
+version="${file.jarVersion}"
+displayName="Resourceful Bees"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/resourceful-bees"
+logoFile="logo.png"
+credits="Thanks to Tfarcenim for making Beesourceful which this mod is heavily based on."
+authors="Epic_Oreo, ThatGravyBoat, Dawn Felstar, (Textures) Vik, (Textures) QBert"
+description="This mod provides pack makers with useful capabilities for creating custom Resource Bee Types. \n-Special Thanks- \nThanks to the MMD Discord peeps for all of their assistance. \nThanks to Silentchaos512 for his Color Utility."
 
-[[dependencies.examplemod]]
-modId = "forge"
-mandatory = true
-versionRange = "[35,)"
-ordering = "NONE"
-side = "BOTH"
+[[dependencies.resourcefulbees]]
+    modId="forge"
+    mandatory=true
+    versionRange="[36.1.0,)"
+    ordering="NONE"
+    side="BOTH"
 
-[[dependencies.examplemod]]
-modId = "minecraft"
-mandatory = true
-versionRange = "[1.16.2,)"
-ordering = "NONE"
-side = "BOTH"
-
-[[dependencies.examplemod]]
-modId = "architectury"
-mandatory = true
-versionRange = "[1.1.55,)"
-ordering = "AFTER"
-side = "BOTH"
+[[dependencies.resourcefulbees]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.16.5,)"
+    ordering="NONE"
+    side="BOTH"

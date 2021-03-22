@@ -34,17 +34,17 @@ dependencies {
         transitive = false
     }
 
-    compileOnly "mezz.jei:jei-1.16.4:${rootProject.jei_version}:api"
-    runtimeOnly "mezz.jei:jei-1.16.4:${rootProject.jei_version}"
+    modImplementation "mezz.jei:jei-1.16.4:${rootProject.jei_version}:api"
+    modRuntime "mezz.jei:jei-1.16.4:${rootProject.jei_version}"
 
-    compileOnly "mcjty.theoneprobe:TheOneProbe-1.16:${rootProject.top_version}:api"
-    runtimeOnly "mcjty.theoneprobe:TheOneProbe-1.16:${rootProject.top_version}"
+    modImplementation "mcjty.theoneprobe:TheOneProbe-1.16:${rootProject.top_version}:api"
+    modRuntime "mcjty.theoneprobe:TheOneProbe-1.16:${rootProject.top_version}"
 
-    compileOnly "team.chisel.ctm:CTM:MC1.16.1-1.1.2.6"
-    runtimeOnly "team.chisel.ctm:CTM:MC1.16.1-1.1.2.6"
+    modImplementation "team.chisel.ctm:CTM:MC1.16.1-1.1.2.6"
+    modRuntime "team.chisel.ctm:CTM:MC1.16.1-1.1.2.6"
 
-    compileOnly "vazkii.patchouli:Patchouli:${rootProject.patchouli_version}:api"
-    runtimeOnly "vazkii.patchouli:Patchouli:${rootProject.patchouli_version}"
+    modImplementation "vazkii.patchouli:Patchouli:${rootProject.patchouli_version}:api"
+    modRuntime "vazkii.patchouli:Patchouli:${rootProject.patchouli_version}"
 }
 
 processResources {
