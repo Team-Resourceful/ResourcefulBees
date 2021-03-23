@@ -12,7 +12,7 @@ architectury {
 }
 
 loom {
-    useFabricMixin = true
+    mixinConfig "resourcefulbees.mixins.json"
 }
 
 def releasesRepoUrl = "https://nexus.resourcefulbees.com/repository/maven-releases/"

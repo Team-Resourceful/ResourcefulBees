@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(Bee.BeeLocateHiveGoal.class)
+@Mixin(Bee.BeeEnterHiveGoal.class)
 public class MixinEnterBeehiveGoal {
 
     /*@Dynamic
