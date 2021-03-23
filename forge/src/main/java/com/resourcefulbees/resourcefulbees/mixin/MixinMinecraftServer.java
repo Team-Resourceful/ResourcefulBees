@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class MixinMinecraftServer {
 
     @Inject(method = "configurePackRepository", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/resources/ResourcePackList;reload()V",
+            target = "Lnet/minecraft/server/packs/repository/PackRepository;reload()V",
             shift = At.Shift.BEFORE))
     private static void onReloadDatapacks(PackRepository resourcePacks, DataPackConfig codec, boolean forceVanilla, CallbackInfoReturnable<DataPackConfig> info) {
         resourcePacks.addPackFinder(DataPackLoader.INSTANCE);
