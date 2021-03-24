@@ -370,6 +370,7 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
 
     public void toggleSound() {
         playSound = !playSound;
+        dirty = true;
     }
 
     @Override
@@ -412,7 +413,7 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
 
     public void toggleBeam() {
         setShowBeam(!isShowBeam());
-        syncApiaryToPlayersUsing(this.level, this.getBlockPos(), this.writeNBT(new CompoundNBT()));
+        dirty = true;
     }
 
     public boolean isShowBeam() {
