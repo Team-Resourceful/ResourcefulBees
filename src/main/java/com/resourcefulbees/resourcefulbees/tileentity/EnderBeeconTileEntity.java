@@ -370,6 +370,10 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
 
     public void toggleSound() {
         playSound = !playSound;
+        if (level != null) {
+            BlockState state = level.getBlockState(worldPosition);
+            level.sendBlockUpdated(worldPosition, state, state, 2);
+        }
         dirty = true;
     }
 
@@ -413,6 +417,10 @@ public class EnderBeeconTileEntity extends HoneyTankTileEntity implements ITicka
 
     public void toggleBeam() {
         setShowBeam(!isShowBeam());
+        if (level != null) {
+            BlockState state = level.getBlockState(worldPosition);
+            level.sendBlockUpdated(worldPosition, state, state, 2);
+        }
         dirty = true;
     }
 
