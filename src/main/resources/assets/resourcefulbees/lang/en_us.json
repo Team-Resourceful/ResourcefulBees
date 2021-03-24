@@ -73,6 +73,7 @@
 	"gui.resourcefulbees.apiary.button.storage_screen": "Apiary Storage",
 	"gui.resourcefulbees.mechanical_centrifuge": "Mechanical Centrifuge",
 	"gui.resourcefulbees.honey_generator": "Generator",
+	"gui.resourcefulbees.honey_bottler": "Bottler",
 	"gui.resourcefulbees.ender_beecon": "Ender Beecon",
 	"gui.resourcefulbees.jei.category.bee_pollination_entity_flowers": "Bee Entity Flowers",
 
@@ -172,6 +173,7 @@
 	"block.resourcefulbees.apiary_storage": "Apiary Storage",
 	"block.resourcefulbees.apiary_breeder": "Apiary Breeder",
 	"block.resourcefulbees.honey_generator": "Honey Generator",
+	"block.resourcefulbees.honey_bottler": "Honey Bottler",
 	"block.resourcefulbees.beehive.tooltip.max_bees": "Max Bees:",
 	"block.resourcefulbees.beehive.tooltip.max_combs": "Max Honeycombs:",
 	"block.resourcefulbees.beehive.tooltip.hive_time": "Hive Time Modification:",

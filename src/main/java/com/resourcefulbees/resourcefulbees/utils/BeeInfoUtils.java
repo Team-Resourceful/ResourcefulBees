@@ -9,6 +9,7 @@ import com.resourcefulbees.resourcefulbees.api.ICustomBee;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
+import com.resourcefulbees.resourcefulbees.fluids.HoneyFlowingFluid;
 import com.resourcefulbees.resourcefulbees.item.CustomHoneyBottleItem;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.LightLevels;
@@ -388,12 +389,23 @@ public class BeeInfoUtils {
         Item item = bottleOutput.getItem();
         if (item == Items.HONEY_BOTTLE) {
             return ModFluids.HONEY_STILL.get().getSource();
-        }else if (item == ModItems.CATNIP_HONEY_BOTTLE.get()) {
+        } else if (item == ModItems.CATNIP_HONEY_BOTTLE.get()) {
             return ModFluids.CATNIP_HONEY_STILL.get().getSource();
         } else if (item instanceof CustomHoneyBottleItem) {
             CustomHoneyBottleItem honey = (CustomHoneyBottleItem) item;
             return honey.getHoneyData().getHoneyStillFluidRegistryObject().get().getSource();
         }
         return Fluids.EMPTY;
+    }
+
+    public static Item getHoneyBottle(Fluid fluid) {
+        if (fluid == ModFluids.CATNIP_HONEY_STILL.get()) {
+            return ModItems.CATNIP_HONEY_BOTTLE.get();
+        } else if (fluid instanceof HoneyFlowingFluid) {
+            HoneyFlowingFluid customfluid = (HoneyFlowingFluid) fluid;
+            return customfluid.getHoneyData().getHoneyBottleRegistryObject().get();
+        } else {
+            return Items.HONEY_BOTTLE;
+        }
     }
 }

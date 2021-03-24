@@ -59,13 +59,15 @@ public class HoneyTank extends Block {
     public static final AbstractBlock.Properties PURPUR = AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_MAGENTA)
             .sound(SoundType.GLASS)
             .harvestTool(ToolType.PICKAXE)
-            .strength(1.5f)
+            .harvestLevel(1)
+            .strength(2f)
             .noOcclusion()
             .requiresCorrectToolForDrops();
 
     public static final AbstractBlock.Properties NETHER = AbstractBlock.Properties.of(Material.STONE, MaterialColor.NETHER)
             .sound(SoundType.GLASS)
             .harvestTool(ToolType.PICKAXE)
+            .harvestLevel(1)
             .strength(1.5f)
             .noOcclusion()
             .requiresCorrectToolForDrops();

@@ -34,7 +34,7 @@ public class HoneyGeneratorScreen extends ContainerScreen<HoneyGeneratorContaine
             this.blit(matrix, i, j, 0, 0, this.imageWidth, this.imageHeight);
             int scaledRF = 62 * this.menu.getEnergy() / Math.max(this.menu.getMaxEnergy(),1);
             this.blit(matrix, i + 130, j + 12 + (62-scaledRF), 215, (62-scaledRF), 11, scaledRF);
-            int scaledTank = 62 * this.menu.getFluid() / Math.max(this.menu.getMaxFluid(),1);
+            int scaledTank = 62 * this.menu.getFluidAmount() / Math.max(this.menu.getMaxFluid(),1);
             this.blit(matrix, i + 83, j + 12 + (62-scaledTank), 226, (62-scaledTank), 14, scaledTank);
             int scaledProgressX = 21 * this.menu.getTime() / Math.max(ModConstants.HONEY_PER_BOTTLE,1);
             int scaledProgressY = 20 * this.menu.getTime() / Math.max(ModConstants.HONEY_PER_BOTTLE,1);
@@ -52,8 +52,8 @@ public class HoneyGeneratorScreen extends ContainerScreen<HoneyGeneratorContaine
         this.renderTooltip(matrix, mouseX, mouseY);
         DecimalFormat decimalFormat = new DecimalFormat("##0.0");
         if (mouseX >= this.leftPos + 83 && mouseX <= this.leftPos + 97 && mouseY >= this.topPos + 12 && mouseY <= this.topPos + 74){
-            if (Screen.hasShiftDown() || this.menu.getFluid() < 500) this.renderTooltip(matrix, new StringTextComponent(this.menu.getFluid() + " MB"), mouseX, mouseY);
-            else this.renderTooltip(matrix, new StringTextComponent(decimalFormat.format((double)this.menu.getFluid() / 1000) + " Buckets"), mouseX, mouseY);
+            if (Screen.hasShiftDown() || this.menu.getFluidAmount() < 500) this.renderTooltip(matrix, new StringTextComponent(this.menu.getFluidAmount() + " MB"), mouseX, mouseY);
+            else this.renderTooltip(matrix, new StringTextComponent(decimalFormat.format((double)this.menu.getFluidAmount() / 1000) + " Buckets"), mouseX, mouseY);
         }
         if (mouseX >= this.leftPos + 130 && mouseX <= this.leftPos + 141 && mouseY >= this.topPos + 12 && mouseY <= this.topPos + 74){
             if (Screen.hasShiftDown() || this.menu.getEnergy() < 500) this.renderTooltip(matrix, new StringTextComponent(this.menu.getEnergy() + " RF"), mouseX, mouseY);

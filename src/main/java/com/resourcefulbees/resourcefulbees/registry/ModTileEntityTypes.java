@@ -10,6 +10,7 @@ import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.Cen
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.CentrifugeControllerTileEntity;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.EliteCentrifugeCasingTileEntity;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.EliteCentrifugeControllerTileEntity;
+import com.resourcefulbees.resourcefulbees.utils.FunctionalIntReferenceHolder;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
@@ -70,5 +71,8 @@ public class ModTileEntityTypes {
             .build(null));
     public static final RegistryObject<TileEntityType<HoneyTankTileEntity>> HONEY_TANK_TILE_ENTITY = TILE_ENTITY_TYPES.register("honey_tank", () -> TileEntityType.Builder
             .of(() -> new HoneyTankTileEntity(HoneyTankTileEntity.TankTier.WOODEN), ModBlocks.PURPUR_HONEY_TANK.get(), ModBlocks.NETHER_HONEY_TANK.get(), ModBlocks.WOODEN_HONEY_TANK.get())
+            .build(null));
+    public static final RegistryObject<TileEntityType<HoneyBottlerTileEntity>> HONEY_BOTTLER_TILE_ENTITY = TILE_ENTITY_TYPES.register("honey_bottler", () -> TileEntityType.Builder
+            .of(HoneyBottlerTileEntity::new, ModBlocks.HONEY_BOTTLER.get())
             .build(null));
 }

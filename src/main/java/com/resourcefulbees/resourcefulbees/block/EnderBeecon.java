@@ -10,11 +10,14 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.*;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tags.ItemTags;
@@ -22,6 +25,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.text.ITextComponent;
@@ -31,8 +35,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ToolType;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.fml.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -121,6 +127,38 @@ public class EnderBeecon extends HoneyTank {
                 .addTranslatableTip("block.resourcefulbees.beecon.tooltip.info", TextFormatting.LIGHT_PURPLE)
                 .addTranslatableTip("block.resourcefulbees.beecon.tooltip.info.1", TextFormatting.LIGHT_PURPLE)
                 .build());
-        super.appendHoverText(stack, worldIn, tooltip, flagIn);
+        if (!stack.hasTag() || stack.getTag() == null || stack.getTag().isEmpty() || !stack.getTag().contains("fluid"))
+            return;
+        FluidTank tank = new FluidTank(16000).readFromNBT(stack.getTag().getCompound("fluid"));
+        FluidStack fluid = tank.getFluid();
+        if (!fluid.isEmpty()) {
+            tooltip.addAll(new TooltipBuilder()
+                    .addTip(I18n.get(fluid.getTranslationKey()))
+                    .appendText(": [" + tank.getFluidAmount() + "/" + tank.getCapacity() + "]")
+                    .applyStyle(TextFormatting.GOLD).build());
+        }
+    }
+
+    @Override
+    public void setPlacedBy(World world, @NotNull BlockPos pos, @NotNull BlockState blockState, @Nullable LivingEntity livingEntity, @NotNull ItemStack itemStack) {
+        TileEntity tileEntity = world.getBlockEntity(pos);
+        if (tileEntity instanceof EnderBeeconTileEntity) {
+            EnderBeeconTileEntity tank = (EnderBeeconTileEntity) tileEntity;
+            if (itemStack.getTag() != null) {
+                tank.readNBT(itemStack.getTag());
+            }
+        }
+    }
+
+    @Override
+    public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
+        TileEntity tileEntity = world.getBlockEntity(pos);
+        if (tileEntity instanceof EnderBeeconTileEntity) {
+            EnderBeeconTileEntity tank = (EnderBeeconTileEntity) tileEntity;
+            ItemStack stack = new ItemStack(state.getBlock().asItem());
+            stack.setTag(tank.writeNBT(new CompoundNBT()));
+            return stack;
+        }
+        return new ItemStack(state.getBlock().asItem());
     }
 }

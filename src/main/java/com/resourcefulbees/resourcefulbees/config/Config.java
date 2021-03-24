@@ -2,6 +2,7 @@ package com.resourcefulbees.resourcefulbees.config;
 
 import com.resourcefulbees.resourcefulbees.lib.ApiaryOutput;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
+import com.resourcefulbees.resourcefulbees.utils.FunctionalIntReferenceHolder;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.*;
 
@@ -55,6 +56,7 @@ public class Config {
 
     public static IntValue HONEY_FILL_AMOUNT;
     public static IntValue HONEY_DRAIN_AMOUNT;
+    public static IntValue HONEY_PROCEESS_TIME;
     public static IntValue ENERGY_FILL_AMOUNT;
     public static IntValue ENERGY_TRANSFER_AMOUNT;
     public static IntValue MAX_ENERGY_CAPACITY;
@@ -122,6 +124,8 @@ public class Config {
                     .defineInRange("smokerDurability", 1000, 100, 5000);
             BEEPEDIA_HIDE_LOCKED = COMMON_BUILDER.comment("\nSet to true to hide certain data in the Beepedia until the player has unlocked the bee. [true/false]")
                     .define("beepediaHideLocked", false);
+            HONEY_PROCEESS_TIME = COMMON_BUILDER.comment("\nAmount of time in ticks required to finish processing a honey bottle.")
+                    .defineInRange("honeyProcessTime", 5, 0, 2400);
             COMMON_BUILDER.pop();
 
             COMMON_BUILDER.push("Recipe Options");
