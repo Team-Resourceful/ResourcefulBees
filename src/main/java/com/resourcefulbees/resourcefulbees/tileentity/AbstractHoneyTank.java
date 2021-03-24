@@ -154,8 +154,8 @@ public class AbstractHoneyTank extends TileEntity {
             } else {
                 player.setItemInHand(hand, itemStack);
             }
+            playSound(SoundEvents.BOTTLE_FILL);
         }
-        playSound(SoundEvents.BOTTLE_FILL);
     }
 
     public void emptyBottle(PlayerEntity player, Hand hand) {
@@ -172,8 +172,8 @@ public class AbstractHoneyTank extends TileEntity {
             } else {
                 player.setItemInHand(hand, new ItemStack(Items.GLASS_BOTTLE, 1));
             }
+            playSound(SoundEvents.BOTTLE_EMPTY);
         }
-        playSound(SoundEvents.BOTTLE_EMPTY);
     }
 
 }
