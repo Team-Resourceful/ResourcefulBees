@@ -3,6 +3,7 @@ package com.resourcefulbees.resourcefulbees.registry;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.container.*;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
+import com.resourcefulbees.resourcefulbees.utils.FunctionalIntReferenceHolder;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.fml.RegistryObject;
@@ -10,6 +11,8 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class ModContainers {
+
+
 
     private ModContainers() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
@@ -38,4 +41,6 @@ public class ModContainers {
             .create((id, inv, c) -> new ApiaryBreederContainer(id, inv.player.level, c.readBlockPos(), inv)));
     public static final RegistryObject<ContainerType<EnderBeeconContainer>> ENDER_BEECON_CONTAINER = CONTAINER_TYPES.register("ender_beecon", () -> IForgeContainerType
             .create((id, inv, c) -> new EnderBeeconContainer(id, inv.player.level, c.readBlockPos(), inv)));
+    public static final RegistryObject<ContainerType<HoneyBottlerContainer>> HONEY_BOTTLER_CONTAINER = CONTAINER_TYPES.register("honey_bottler", () -> IForgeContainerType
+            .create((id, inv, c) -> new HoneyBottlerContainer(id, inv.player.level, c.readBlockPos(), inv)));
 }

@@ -1,6 +1,7 @@
 package com.resourcefulbees.resourcefulbees.network.packets;
 
 import com.resourcefulbees.resourcefulbees.tileentity.CentrifugeTileEntity;
+import com.resourcefulbees.resourcefulbees.tileentity.HoneyBottlerTileEntity;
 import com.resourcefulbees.resourcefulbees.tileentity.HoneyGeneratorTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
@@ -15,21 +16,21 @@ public class SyncGUIMessage {
     private final BlockPos pos;
     private final PacketBuffer buffer;
 
-    public SyncGUIMessage(BlockPos pos, PacketBuffer buffer){
+    public SyncGUIMessage(BlockPos pos, PacketBuffer buffer) {
         this.pos = pos;
         this.buffer = buffer;
     }
 
-    public static void encode(SyncGUIMessage message, PacketBuffer buffer){
+    public static void encode(SyncGUIMessage message, PacketBuffer buffer) {
         buffer.writeBlockPos(message.pos);
         buffer.writeBytes(message.buffer);
     }
 
-    public static SyncGUIMessage decode(PacketBuffer buffer){
+    public static SyncGUIMessage decode(PacketBuffer buffer) {
         return new SyncGUIMessage(buffer.readBlockPos(), buffer);
     }
 
-    public static void handle(SyncGUIMessage message, Supplier<NetworkEvent.Context> context){
+    public static void handle(SyncGUIMessage message, Supplier<NetworkEvent.Context> context) {
         context.get().enqueueWork(() -> {
             ClientPlayerEntity player = Minecraft.getInstance().player;
             if (player != null && player.level.isLoaded(message.pos)) {
@@ -39,6 +40,9 @@ public class SyncGUIMessage {
                 }
                 if (tileEntity instanceof HoneyGeneratorTileEntity) {
                     ((HoneyGeneratorTileEntity) tileEntity).handleGUINetworkPacket(message.buffer);
+                }
+                if (tileEntity instanceof HoneyBottlerTileEntity) {
+                    ((HoneyBottlerTileEntity) tileEntity).handleGUINetworkPacket(message.buffer);
                 }
             }
         });

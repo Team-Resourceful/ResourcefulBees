@@ -2,40 +2,38 @@ package com.resourcefulbees.resourcefulbees.container;
 
 import com.resourcefulbees.resourcefulbees.mixin.ContainerAccessor;
 import com.resourcefulbees.resourcefulbees.registry.ModContainers;
-import com.resourcefulbees.resourcefulbees.tileentity.HoneyGeneratorTileEntity;
+import com.resourcefulbees.resourcefulbees.tileentity.HoneyBottlerTileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.energy.IEnergyStorage;
 
 import javax.annotation.Nonnull;
 
-public class HoneyGeneratorContainer extends Container {
+public class HoneyBottlerContainer extends Container {
 
-    private final HoneyGeneratorTileEntity honeyGeneratorTileEntity;
+    private final HoneyBottlerTileEntity honeyBottlerTileEntity;
     private final PlayerEntity player;
 
-    public HoneyGeneratorContainer(int id, World world, BlockPos pos, PlayerInventory inv) {
-        super(ModContainers.HONEY_GENERATOR_CONTAINER.get(), id);
+    public HoneyBottlerContainer(int id, World world, BlockPos pos, PlayerInventory inv) {
+        super(ModContainers.HONEY_BOTTLER_CONTAINER.get(), id);
 
         this.player = inv.player;
-        honeyGeneratorTileEntity = (HoneyGeneratorTileEntity) world.getBlockEntity(pos);
+        honeyBottlerTileEntity = (HoneyBottlerTileEntity) world.getBlockEntity(pos);
 
-        if (getHoneyGeneratorTileEntity() != null) {
-            this.addSlot(new SlotItemHandlerUnconditioned(getHoneyGeneratorTileEntity().getTileStackHandler(), HoneyGeneratorTileEntity.HONEY_BOTTLE_INPUT, 36, 20) {
-
+        if (getHoneyBottlerTileEntity() != null) {
+            this.addSlot(new SlotItemHandlerUnconditioned(getHoneyBottlerTileEntity().getTileStackHandler(), HoneyBottlerTileEntity.BOTTLE_INPUT, 93, 16) {
                 @Override
                 public boolean mayPlace(ItemStack stack) {
-                    return getHoneyGeneratorTileEntity().getTileStackHandler().isItemValid(HoneyGeneratorTileEntity.HONEY_BOTTLE_INPUT, stack);
+                    return stack.getItem() == Items.GLASS_BOTTLE;
                 }
             });
-            this.addSlot(new OutputSlot(getHoneyGeneratorTileEntity().getTileStackHandler(), HoneyGeneratorTileEntity.BOTTLE_OUTPUT, 36, 58));
+            this.addSlot(new OutputSlot(getHoneyBottlerTileEntity().getTileStackHandler(), HoneyBottlerTileEntity.BOTTLE_OUTPUT, 93, 54));
 
             for (int i = 0; i < 3; ++i) {
                 for (int j = 0; j < 9; ++j) {
@@ -47,23 +45,6 @@ public class HoneyGeneratorContainer extends Container {
                 this.addSlot(new Slot(inv, k, 8 + k * 18, 142));
             }
         }
-    }
-
-    public int getEnergy() { return getHoneyGeneratorTileEntity().getCapability(CapabilityEnergy.ENERGY).map(IEnergyStorage::getEnergyStored).orElse(0); }
-    
-    public int getFluidAmount() { return getHoneyGeneratorTileEntity().getFluidTank().getFluidAmount(); }
-    
-    public int getMaxEnergy() { return getHoneyGeneratorTileEntity().energyStorage.getMaxEnergyStored(); }
-
-    public int getMaxFluid() { return getHoneyGeneratorTileEntity().getFluidTank().getCapacity(); }
-
-    public int getTime() { return getHoneyGeneratorTileEntity().getFluidFilled(); }
-
-    public int getEnergyTime() { return getHoneyGeneratorTileEntity().getEnergyFilled(); }
-
-    @Override
-    public boolean stillValid(@Nonnull PlayerEntity player) {
-        return true;
     }
 
     @Nonnull
@@ -95,20 +76,21 @@ public class HoneyGeneratorContainer extends Container {
     @Override
     public void broadcastChanges() {
         super.broadcastChanges();
-        if (getHoneyGeneratorTileEntity() == null) {
+        if (getHoneyBottlerTileEntity() == null) {
             return;
         }
 
         for (IContainerListener listener : ((ContainerAccessor) this).getListeners()) {
-            getHoneyGeneratorTileEntity().sendGUINetworkPacket(listener);
+            getHoneyBottlerTileEntity().sendGUINetworkPacket(listener);
         }
     }
 
-    public HoneyGeneratorTileEntity getHoneyGeneratorTileEntity() {
-        return honeyGeneratorTileEntity;
+    @Override
+    public boolean stillValid(@Nonnull PlayerEntity player) {
+        return true;
     }
 
-    public PlayerEntity getPlayer() {
-        return player;
+    public HoneyBottlerTileEntity getHoneyBottlerTileEntity() {
+        return honeyBottlerTileEntity;
     }
 }

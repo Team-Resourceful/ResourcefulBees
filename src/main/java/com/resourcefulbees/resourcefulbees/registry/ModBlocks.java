@@ -11,15 +11,19 @@ import com.resourcefulbees.resourcefulbees.block.multiblocks.centrifuge.EliteCen
 import com.resourcefulbees.resourcefulbees.block.multiblocks.centrifuge.EliteCentrifugeControllerBlock;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.tileentity.HoneyTankTileEntity;
+import com.resourcefulbees.resourcefulbees.utils.FunctionalIntReferenceHolder;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
 import net.minecraft.potion.Effects;
+import net.minecraftforge.common.ToolType;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class ModBlocks {
+
+
 
     private ModBlocks() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
@@ -83,6 +87,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> PURPUR_HONEY_TANK = BLOCKS.register("purpur_honey_tank", () -> new HoneyTank(HoneyTank.PURPUR, HoneyTankTileEntity.TankTier.PURPUR));
     public static final RegistryObject<Block> NETHER_HONEY_TANK = BLOCKS.register("nether_honey_tank", () -> new HoneyTank(HoneyTank.NETHER, HoneyTankTileEntity.TankTier.NETHER));
     public static final RegistryObject<Block> WOODEN_HONEY_TANK = BLOCKS.register("wooden_honey_tank", () -> new HoneyTank(HoneyTank.WOODEN, HoneyTankTileEntity.TankTier.WOODEN));
+    public static final RegistryObject<Block> HONEY_BOTTLER = BLOCKS.register("honey_bottler", ()-> new HoneyBottler(AbstractBlock.Properties.of(Material.STONE).sound(SoundType.GLASS).strength(1.5f).requiresCorrectToolForDrops().harvestTool(ToolType.PICKAXE).harvestLevel(1)));
     public static final RegistryObject<Block> CATNIP_HONEYCOMB_BLOCK = BLOCKS.register("catnip_honeycomb_block", () -> new Block(AbstractBlock.Properties.of(Material.CLAY).sound(SoundType.SNOW).strength(0.3F)));
     public static final RegistryObject<Block> CATNIP_HONEY_BLOCK = BLOCKS.register("catnip_honey_block", () -> new ColoredHoneyBlock(-1, false)); //Dont care about color as we dont use it for this hardcoded block.
 
