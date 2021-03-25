@@ -99,16 +99,12 @@ public class BeeSetup {
     }
 
     private static void parseBee(Reader reader, String name) {
-        try {
-            name = name.toLowerCase(Locale.ENGLISH).replace(" ", "_");
-            Gson gson = new Gson();
-            CustomBeeData bee = gson.fromJson(reader, CustomBeeData.class);
-            bee.setName(name);
-            bee.setShouldResourcefulBeesDoForgeRegistration(true);
-            BeeRegistry.getRegistry().registerBee(name, bee);
-        } catch (Exception e) {
-            LOGGER.error("\n---------[Registration Error]---------\nCould not validate {} bee's json file, Skipping.", name);
-        }
+        name = name.toLowerCase(Locale.ENGLISH).replace(" ", "_");
+        Gson gson = new Gson();
+        CustomBeeData bee = gson.fromJson(reader, CustomBeeData.class);
+        bee.setName(name);
+        bee.setShouldResourcefulBeesDoForgeRegistration(true);
+        BeeRegistry.getRegistry().registerBee(name, bee);
     }
 
     private static void parseHoney(File file) throws IOException {
@@ -131,16 +127,12 @@ public class BeeSetup {
     }
 
     private static void parseHoney(Reader reader, String name) {
-        try {
-            name = name.toLowerCase(Locale.ENGLISH).replace(" ", "_");
-            Gson gson = new Gson();
-            HoneyBottleData honey = gson.fromJson(reader, HoneyBottleData.class);
-            if (honey.getName() == null) honey.setName(name);
-            honey.setShouldResourcefulBeesDoForgeRegistration(true);
-            BeeRegistry.getRegistry().registerHoney(honey.getName(), honey);
-        } catch (Exception e) {
-            LOGGER.error("\n---------[Registration Error]---------\nCould not validate {} honey's json file, Skipping.", name);
-        }
+        name = name.toLowerCase(Locale.ENGLISH).replace(" ", "_");
+        Gson gson = new Gson();
+        HoneyBottleData honey = gson.fromJson(reader, HoneyBottleData.class);
+        if (honey.getName() == null) honey.setName(name);
+        honey.setShouldResourcefulBeesDoForgeRegistration(true);
+        BeeRegistry.getRegistry().registerHoney(honey.getName(), honey);
     }
 
     private static void addBees() {

@@ -1,8 +1,12 @@
 # ----- [0.6.4b] -----
 - fixed bee box not properly supplying bee with data upon release
-- updated patchouli (note: beecon gif doesn't work but doesn't crash now)
+- updated patchouli (#188) (note: beecon gif doesn't work but doesn't crash now)
 - mutation validation logging now displays bee name
 - fixed named colors in bee jsons causing crashes
+- reworked some block interactions
+- hid resource pack from pack selection screen
+- fixed tiered hives not upgrading properly (#189)
+- general code cleanup
 
 # ----- [0.6.3b] -----
 - fixed fluid crashes in centrifuge
