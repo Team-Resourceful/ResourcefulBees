@@ -1,6 +1,7 @@
 package com.resourcefulbees.resourcefulbees.init;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.resourcefulbees.resourcefulbees.data.BeeTrait;
 import com.resourcefulbees.resourcefulbees.data.JsonBeeTrait;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
@@ -18,6 +19,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Locale;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -57,16 +59,22 @@ public class TraitSetup {
 
     private static void parseType(Reader reader, String name) {
         Gson gson = new Gson();
-        JsonBeeTrait.JsonTrait jsonTrait = gson.fromJson(reader, JsonBeeTrait.JsonTrait.class);
-        BeeTrait.Builder builder = new BeeTrait.Builder(name);
-        parseDamageImmunities(jsonTrait, builder);
-        parseDamageTypes(jsonTrait, builder);
-        parseSpecialAbilities(jsonTrait, builder);
-        parseParticle(jsonTrait, builder);
-        parsePotionImmunities(jsonTrait, builder);
-        parsePotionDamageEffects(jsonTrait, builder);
-        parseBeepediaItem(jsonTrait, builder);
-        TraitRegistry.getRegistry().register(name, builder.build());
+        name = name.toLowerCase(Locale.ENGLISH).replace(" ", "_");
+        try {
+            JsonBeeTrait.JsonTrait jsonTrait = gson.fromJson(reader, JsonBeeTrait.JsonTrait.class);
+            BeeTrait.Builder builder = new BeeTrait.Builder(name);
+            parseDamageImmunities(jsonTrait, builder);
+            parseDamageTypes(jsonTrait, builder);
+            parseSpecialAbilities(jsonTrait, builder);
+            parseParticle(jsonTrait, builder);
+            parsePotionImmunities(jsonTrait, builder);
+            parsePotionDamageEffects(jsonTrait, builder);
+            parseBeepediaItem(jsonTrait, builder);
+            TraitRegistry.getRegistry().register(name, builder.build());
+        }catch (JsonSyntaxException e) {
+            String exception = String.format("Error was found trying to parse trait: %s. Json is invalid, validate it here : https://jsonlint.com/", name);
+            throw new JsonSyntaxException(exception);
+        }
     }
 
     private static void parseDamageImmunities(JsonBeeTrait.JsonTrait jsonTrait, BeeTrait.Builder builder){
