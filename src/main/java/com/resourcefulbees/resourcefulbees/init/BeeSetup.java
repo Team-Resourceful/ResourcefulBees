@@ -1,6 +1,8 @@
 package com.resourcefulbees.resourcefulbees.init;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.stream.MalformedJsonException;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
@@ -101,10 +103,15 @@ public class BeeSetup {
     private static void parseBee(Reader reader, String name) {
         name = name.toLowerCase(Locale.ENGLISH).replace(" ", "_");
         Gson gson = new Gson();
-        CustomBeeData bee = gson.fromJson(reader, CustomBeeData.class);
-        bee.setName(name);
-        bee.setShouldResourcefulBeesDoForgeRegistration(true);
-        BeeRegistry.getRegistry().registerBee(name, bee);
+        try {
+            CustomBeeData bee = gson.fromJson(reader, CustomBeeData.class);
+            bee.setName(name);
+            bee.setShouldResourcefulBeesDoForgeRegistration(true);
+            BeeRegistry.getRegistry().registerBee(name, bee);
+        } catch (JsonSyntaxException e) {
+            String exception = String.format("Error was found trying to parse bee: %s. Json is invalid, validate it here : https://jsonlint.com/", name);
+            throw new JsonSyntaxException(exception);
+        }
     }
 
     private static void parseHoney(File file) throws IOException {
@@ -129,10 +136,15 @@ public class BeeSetup {
     private static void parseHoney(Reader reader, String name) {
         name = name.toLowerCase(Locale.ENGLISH).replace(" ", "_");
         Gson gson = new Gson();
-        HoneyBottleData honey = gson.fromJson(reader, HoneyBottleData.class);
-        if (honey.getName() == null) honey.setName(name);
-        honey.setShouldResourcefulBeesDoForgeRegistration(true);
-        BeeRegistry.getRegistry().registerHoney(honey.getName(), honey);
+        try {
+            HoneyBottleData honey = gson.fromJson(reader, HoneyBottleData.class);
+            if (honey.getName() == null) honey.setName(name);
+            honey.setShouldResourcefulBeesDoForgeRegistration(true);
+            BeeRegistry.getRegistry().registerHoney(honey.getName(), honey);
+        } catch (JsonSyntaxException e) {
+            String exception = String.format("Error was found trying to parse honey: %s. Json is invalid, validate it here : https://jsonlint.com/", name);
+            throw new JsonSyntaxException(exception);
+        }
     }
 
     private static void addBees() {
@@ -205,7 +217,7 @@ public class BeeSetup {
                 }
             });
         } catch (IOException e) {
-            LOGGER.warn("Could not read ZipFile! ZipFile: {}",  file.getFileName());
+            LOGGER.warn("Could not read ZipFile! ZipFile: {}", file.getFileName());
         }
     }
 
@@ -243,14 +255,14 @@ public class BeeSetup {
     private static void copyDefaultHoney(Path source) throws IOException {
         try (Stream<Path> sourceStream = Files.walk(source)) {
             sourceStream.filter(f -> f.getFileName().toString().endsWith(JSON))
-            .forEach(path -> {
-                File targetFile = new File(String.valueOf(Paths.get(honeyPath.toString(), "/", path.getFileName().toString())));
-                try {
-                    Files.copy(path, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                } catch (IOException e) {
-                    LOGGER.error("Could not copy default honey!!", e);
-                }
-            });
+                    .forEach(path -> {
+                        File targetFile = new File(String.valueOf(Paths.get(honeyPath.toString(), "/", path.getFileName().toString())));
+                        try {
+                            Files.copy(path, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                        } catch (IOException e) {
+                            LOGGER.error("Could not copy default honey!!", e);
+                        }
+                    });
         } catch (IOException e) {
             LOGGER.error("Could not stream honey!!", e);
         }
@@ -272,14 +284,14 @@ public class BeeSetup {
     private static void copyDefaultBees(Path source) {
         try (Stream<Path> sourceStream = Files.walk(source)) {
             sourceStream.filter(f -> f.getFileName().toString().endsWith(JSON))
-            .forEach(path -> {
-                File targetFile = new File(String.valueOf(Paths.get(beePath.toString(), "/", path.getFileName().toString())));
-                try {
-                    Files.copy(path, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                } catch (IOException e) {
-                    LOGGER.error("Could not copy default bees!!", e);
-                }
-            });
+                    .forEach(path -> {
+                        File targetFile = new File(String.valueOf(Paths.get(beePath.toString(), "/", path.getFileName().toString())));
+                        try {
+                            Files.copy(path, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                        } catch (IOException e) {
+                            LOGGER.error("Could not copy default bees!!", e);
+                        }
+                    });
         } catch (IOException e) {
             LOGGER.error("Could not stream bees!!", e);
         }
