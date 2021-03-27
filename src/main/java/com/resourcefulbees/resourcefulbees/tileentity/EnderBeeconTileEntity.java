@@ -2,19 +2,13 @@ package com.resourcefulbees.resourcefulbees.tileentity;
 
 import com.google.common.collect.Lists;
 import com.resourcefulbees.resourcefulbees.config.Config;
-import com.resourcefulbees.resourcefulbees.container.AutomationSensitiveItemStackHandler;
 import com.resourcefulbees.resourcefulbees.container.EnderBeeconContainer;
-import com.resourcefulbees.resourcefulbees.registry.ModEffects;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
-import com.resourcefulbees.resourcefulbees.item.CustomHoneyBottleItem;
-import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
 import com.resourcefulbees.resourcefulbees.network.packets.SyncGUIMessage;
 import com.resourcefulbees.resourcefulbees.network.packets.UpdateClientBeeconMessage;
-import com.resourcefulbees.resourcefulbees.registry.ModFluids;
-import com.resourcefulbees.resourcefulbees.registry.ModItems;
-import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
+import com.resourcefulbees.resourcefulbees.registry.ModEffects;
 import io.netty.buffer.Unpooled;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -27,16 +21,11 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.BucketItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
-import net.minecraft.tags.ITag;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
@@ -51,28 +40,19 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Predicate;
-
-import com.resourcefulbees.resourcefulbees.container.AutomationSensitiveItemStackHandler.IAcceptor;
-import com.resourcefulbees.resourcefulbees.container.AutomationSensitiveItemStackHandler.IRemover;
-import com.resourcefulbees.resourcefulbees.tileentity.HoneyTankTileEntity.TankTier;
 
 public class EnderBeeconTileEntity extends AbstractHoneyTankContainer implements ITickableTileEntity, INamedContainerProvider {
     //TODO see about trimming the duplicate code if possible - epic

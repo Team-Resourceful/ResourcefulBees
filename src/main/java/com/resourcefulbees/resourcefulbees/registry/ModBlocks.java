@@ -11,7 +11,6 @@ import com.resourcefulbees.resourcefulbees.block.multiblocks.centrifuge.EliteCen
 import com.resourcefulbees.resourcefulbees.block.multiblocks.centrifuge.EliteCentrifugeControllerBlock;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.tileentity.HoneyTankTileEntity;
-import com.resourcefulbees.resourcefulbees.utils.FunctionalIntReferenceHolder;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;

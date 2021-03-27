@@ -6,14 +6,12 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
-
 import org.jetbrains.annotations.NotNull;
+
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.function.Predicate;
-
-import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 
 public class MultiFluidTank implements IFluidHandler {
 

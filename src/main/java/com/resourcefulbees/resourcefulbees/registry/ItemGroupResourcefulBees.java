@@ -9,7 +9,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
 import org.jetbrains.annotations.NotNull;
 
 public class ItemGroupResourcefulBees {

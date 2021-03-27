@@ -3,7 +3,6 @@ package com.resourcefulbees.resourcefulbees.registry;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.container.*;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
-import com.resourcefulbees.resourcefulbees.utils.FunctionalIntReferenceHolder;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.fml.RegistryObject;

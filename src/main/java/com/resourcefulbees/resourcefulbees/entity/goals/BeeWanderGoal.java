@@ -5,8 +5,8 @@ import com.resourcefulbees.resourcefulbees.utils.RandomPositionGenerator;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.util.EnumSet;
 import java.util.Objects;
 

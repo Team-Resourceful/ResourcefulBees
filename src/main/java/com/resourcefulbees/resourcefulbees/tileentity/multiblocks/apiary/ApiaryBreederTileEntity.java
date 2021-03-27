@@ -40,8 +40,6 @@ import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
-
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import static com.resourcefulbees.resourcefulbees.lib.NBTConstants.NBT_BREEDER_COUNT;

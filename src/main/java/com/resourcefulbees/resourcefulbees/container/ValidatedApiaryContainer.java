@@ -13,7 +13,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.IntReferenceHolder;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
 import org.jetbrains.annotations.NotNull;
 
 public class ValidatedApiaryContainer extends Container {

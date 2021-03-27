@@ -6,7 +6,6 @@ import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
 import net.minecraft.item.Food;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-
 import org.jetbrains.annotations.Nullable;
 
 public class HoneycombItem extends Item {

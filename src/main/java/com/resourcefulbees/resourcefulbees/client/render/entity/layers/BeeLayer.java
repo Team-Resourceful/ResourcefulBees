@@ -20,11 +20,8 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
-import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 
 @OnlyIn(Dist.CLIENT)

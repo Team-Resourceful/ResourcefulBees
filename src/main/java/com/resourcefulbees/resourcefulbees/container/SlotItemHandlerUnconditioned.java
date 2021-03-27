@@ -13,7 +13,6 @@ package com.resourcefulbees.resourcefulbees.container;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.SlotItemHandler;
-
 import org.jetbrains.annotations.NotNull;
 
 /**

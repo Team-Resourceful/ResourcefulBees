@@ -6,10 +6,8 @@ import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.ResourceLocation;
-
-import org.jetbrains.annotations.NotNull;
-
 import net.minecraft.util.text.StringTextComponent;
+import org.jetbrains.annotations.NotNull;
 
 public class ArrowButton extends Button {
 

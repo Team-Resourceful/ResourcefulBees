@@ -25,7 +25,6 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
-import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 

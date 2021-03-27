@@ -13,7 +13,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
-
 import org.jetbrains.annotations.NotNull;
 
 public class HoneyGeneratorContainer extends Container {

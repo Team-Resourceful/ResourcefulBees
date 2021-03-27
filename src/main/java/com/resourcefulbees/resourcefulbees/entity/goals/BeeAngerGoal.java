@@ -6,8 +6,8 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.HurtByTargetGoal;
 import net.minecraft.entity.passive.BeeEntity;
 import net.minecraft.util.math.AxisAlignedBB;
-
 import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 public class BeeAngerGoal extends HurtByTargetGoal {

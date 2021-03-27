@@ -7,11 +7,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
-import org.jetbrains.annotations.NotNull;
-
-import net.minecraft.client.gui.widget.button.Button.IPressable;
-import net.minecraft.client.gui.widget.button.Button.ITooltip;
-
 public class TabImageButton extends ModImageButton {
 
     protected final ITooltip tooltipProvider;

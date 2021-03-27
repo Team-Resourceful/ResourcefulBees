@@ -16,7 +16,6 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.BucketItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -35,8 +34,6 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import org.jetbrains.annotations.NotNull;
 
 public class HoneyBottlerTileEntity extends AbstractHoneyTank implements ITickableTileEntity, INamedContainerProvider {
 

@@ -4,7 +4,6 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.BeeEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
 import org.jetbrains.annotations.NotNull;
 
 public class ModBeeEntity extends BeeEntity {

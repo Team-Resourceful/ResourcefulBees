@@ -23,13 +23,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkHooks;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import java.util.List;
 
-import net.minecraft.block.AbstractBlock.Properties;
-import org.jetbrains.annotations.NotNull;
+import java.util.List;
 
 @SuppressWarnings("deprecation")
 public class ApiaryBreederBlock extends Block{

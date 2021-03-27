@@ -6,7 +6,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-
 import org.jetbrains.annotations.NotNull;
 
 public class TabToggleImageButton extends TabImageButton {

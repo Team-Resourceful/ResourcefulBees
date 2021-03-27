@@ -22,8 +22,8 @@ import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
-
 import org.jetbrains.annotations.NotNull;
+
 import java.util.HashMap;
 
 public class RecipeBuilder implements IResourceManagerReloadListener {

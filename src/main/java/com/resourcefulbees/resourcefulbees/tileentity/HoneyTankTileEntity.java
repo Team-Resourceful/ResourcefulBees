@@ -1,6 +1,5 @@
 package com.resourcefulbees.resourcefulbees.tileentity;
 
-import com.resourcefulbees.resourcefulbees.container.HoneyBottlerContainer;
 import com.resourcefulbees.resourcefulbees.container.HoneyTankContainer;
 import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
 import com.resourcefulbees.resourcefulbees.network.packets.SyncGUIMessage;

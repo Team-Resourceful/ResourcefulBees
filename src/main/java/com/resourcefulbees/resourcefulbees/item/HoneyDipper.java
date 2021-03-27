@@ -30,8 +30,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-import net.minecraft.item.Item.Properties;
-
 public class HoneyDipper extends Item {
 
     private @Nullable BeeEntity selectedBee;

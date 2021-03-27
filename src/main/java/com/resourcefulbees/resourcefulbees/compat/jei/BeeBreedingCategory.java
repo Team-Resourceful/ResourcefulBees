@@ -31,7 +31,6 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import org.jetbrains.annotations.NotNull;
 
-import org.jetbrains.annotations.NotNull;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;

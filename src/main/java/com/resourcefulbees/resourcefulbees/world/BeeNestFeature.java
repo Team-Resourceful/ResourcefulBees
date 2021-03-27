@@ -9,7 +9,10 @@ import com.resourcefulbees.resourcefulbees.registry.ModBlocks;
 import com.resourcefulbees.resourcefulbees.tileentity.TieredBeehiveTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.MathUtils;
 import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
-import net.minecraft.block.*;
+import net.minecraft.block.BeehiveBlock;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.nbt.CompoundNBT;
@@ -29,7 +32,10 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 public class BeeNestFeature extends Feature<NoFeatureConfig> {

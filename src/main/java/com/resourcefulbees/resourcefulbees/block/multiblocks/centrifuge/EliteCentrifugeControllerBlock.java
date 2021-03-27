@@ -5,10 +5,7 @@ import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.Eli
 import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockReader;
-
 import org.jetbrains.annotations.Nullable;
-
-import net.minecraft.block.AbstractBlock.Properties;
 
 public class EliteCentrifugeControllerBlock extends CentrifugeControllerBlock {
     public EliteCentrifugeControllerBlock(Properties properties) { super(properties); }

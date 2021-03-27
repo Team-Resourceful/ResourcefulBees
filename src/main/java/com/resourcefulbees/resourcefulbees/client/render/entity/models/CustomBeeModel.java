@@ -13,7 +13,6 @@ import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
 import org.jetbrains.annotations.NotNull;
 
 @OnlyIn(Dist.CLIENT)

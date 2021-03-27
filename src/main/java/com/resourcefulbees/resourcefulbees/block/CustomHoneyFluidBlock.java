@@ -9,13 +9,11 @@ import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import java.util.Random;
 import java.util.function.Supplier;
-
-import net.minecraft.block.AbstractBlock.Properties;
 
 public class CustomHoneyFluidBlock extends FlowingFluidBlock {
 

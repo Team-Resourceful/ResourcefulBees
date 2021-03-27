@@ -20,7 +20,6 @@ import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
-
 import org.jetbrains.annotations.NotNull;
 
 public class ApiaryBreederScreen extends ContainerScreen<ApiaryBreederContainer> {

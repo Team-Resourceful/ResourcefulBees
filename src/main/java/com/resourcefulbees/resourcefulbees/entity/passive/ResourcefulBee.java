@@ -7,11 +7,11 @@ import com.resourcefulbees.resourcefulbees.api.beedata.mutation.outputs.BlockOut
 import com.resourcefulbees.resourcefulbees.api.beedata.mutation.outputs.EntityOutput;
 import com.resourcefulbees.resourcefulbees.api.beedata.mutation.outputs.ItemOutput;
 import com.resourcefulbees.resourcefulbees.config.Config;
-import com.resourcefulbees.resourcefulbees.registry.ModEffects;
 import com.resourcefulbees.resourcefulbees.entity.goals.*;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.lib.TraitConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
+import com.resourcefulbees.resourcefulbees.registry.ModEffects;
 import com.resourcefulbees.resourcefulbees.tileentity.TieredBeehiveTileEntity;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.RandomCollection;

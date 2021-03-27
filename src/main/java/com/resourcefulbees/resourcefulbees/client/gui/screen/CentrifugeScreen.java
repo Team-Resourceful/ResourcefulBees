@@ -31,7 +31,6 @@ import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.text.WordUtils;
 import org.jetbrains.annotations.NotNull;
 
-import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;

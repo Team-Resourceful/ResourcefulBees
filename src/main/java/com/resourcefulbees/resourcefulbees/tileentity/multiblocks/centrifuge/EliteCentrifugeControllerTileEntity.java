@@ -13,9 +13,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.IntArray;
 import net.minecraft.util.math.BlockPos;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import java.util.function.Predicate;
 
 public class EliteCentrifugeControllerTileEntity extends CentrifugeControllerTileEntity {

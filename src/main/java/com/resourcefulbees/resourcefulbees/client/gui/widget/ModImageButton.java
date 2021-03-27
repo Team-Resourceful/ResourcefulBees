@@ -5,10 +5,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.ImageButton;
 import net.minecraft.util.ResourceLocation;
-
 import org.jetbrains.annotations.NotNull;
-
-import net.minecraft.client.gui.widget.button.Button.IPressable;
 
 public class ModImageButton extends ImageButton {
 

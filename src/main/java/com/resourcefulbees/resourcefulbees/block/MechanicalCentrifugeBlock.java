@@ -34,14 +34,11 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.ItemStackHandler;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
 import java.util.stream.IntStream;
-
-import net.minecraft.block.AbstractBlock.Properties;
-import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("deprecation")
 public class MechanicalCentrifugeBlock extends Block {

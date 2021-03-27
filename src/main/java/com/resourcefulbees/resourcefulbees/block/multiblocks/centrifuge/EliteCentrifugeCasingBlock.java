@@ -8,10 +8,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-
 import org.jetbrains.annotations.Nullable;
-
-import net.minecraft.block.AbstractBlock.Properties;
 
 public class EliteCentrifugeCasingBlock extends CentrifugeCasingBlock {
     public EliteCentrifugeCasingBlock(Properties properties) { super(properties); }

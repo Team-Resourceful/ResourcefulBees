@@ -10,7 +10,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.BeehiveTileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.server.ServerWorld;
-
 import org.jetbrains.annotations.NotNull;
 
 public class ScraperDispenserBehavior extends DefaultDispenseItemBehavior {

@@ -30,16 +30,14 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.util.Constants;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import java.util.LinkedList;
 import java.util.List;
 
 import static com.resourcefulbees.resourcefulbees.lib.BeeConstants.MIN_HIVE_TIME;
 import static com.resourcefulbees.resourcefulbees.lib.BeeConstants.SMOKE_TIME;
-
-import net.minecraft.tileentity.BeehiveTileEntity.State;
 
 public class TieredBeehiveTileEntity extends BeehiveTileEntity {
 

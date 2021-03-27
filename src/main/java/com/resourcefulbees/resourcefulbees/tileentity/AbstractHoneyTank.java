@@ -1,9 +1,6 @@
 package com.resourcefulbees.resourcefulbees.tileentity;
 
-import com.resourcefulbees.resourcefulbees.fluids.HoneyFlowingFluid;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
-import com.resourcefulbees.resourcefulbees.registry.ModFluids;
-import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -22,9 +19,8 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import org.jetbrains.annotations.NotNull;
-
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import java.util.function.Predicate;
 
 public class AbstractHoneyTank extends TileEntity {

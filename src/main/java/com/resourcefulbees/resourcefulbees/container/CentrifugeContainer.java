@@ -21,7 +21,6 @@ import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-
 import org.jetbrains.annotations.NotNull;
 
 public class CentrifugeContainer extends Container {

@@ -22,9 +22,9 @@ import net.minecraftforge.fml.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import org.jetbrains.annotations.NotNull;
 import java.util.Random;
 
+@SuppressWarnings("deprecation")
 public class HoneyBottler extends Block {
 
     protected static final VoxelShape VOXEL_SHAPE = Block.box(1.0D, 0.0D, 1.0D, 15.0D, 16.0D, 15.0D);

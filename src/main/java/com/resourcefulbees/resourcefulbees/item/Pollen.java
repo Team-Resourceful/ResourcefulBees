@@ -12,8 +12,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-import net.minecraft.item.Item.Properties;
-
 public class Pollen extends Item {
 
     public CompoundNBT getPollenData() {

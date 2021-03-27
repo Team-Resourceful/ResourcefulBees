@@ -42,9 +42,8 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
-
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class HoneyGeneratorTileEntity extends AbstractHoneyTankContainer implements ITickableTileEntity, INamedContainerProvider {

@@ -11,10 +11,6 @@ import net.minecraft.util.text.TextFormatting;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.GL11;
 
-import org.jetbrains.annotations.NotNull;
-
-import net.minecraft.client.gui.widget.button.Button.IPressable;
-
 public class ListButton extends TabImageButton {
     private final ITextComponent text;
     private final int textX;

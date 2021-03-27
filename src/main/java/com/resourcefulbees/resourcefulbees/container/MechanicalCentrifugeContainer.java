@@ -11,7 +11,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
 import org.jetbrains.annotations.NotNull;
 
 public class MechanicalCentrifugeContainer extends Container {

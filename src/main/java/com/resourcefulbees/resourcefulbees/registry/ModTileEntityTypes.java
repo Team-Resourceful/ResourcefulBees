@@ -10,7 +10,6 @@ import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.Cen
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.CentrifugeControllerTileEntity;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.EliteCentrifugeCasingTileEntity;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.EliteCentrifugeControllerTileEntity;
-import com.resourcefulbees.resourcefulbees.utils.FunctionalIntReferenceHolder;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;

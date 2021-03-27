@@ -27,15 +27,11 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
-
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import com.resourcefulbees.resourcefulbees.container.AutomationSensitiveItemStackHandler.IAcceptor;
-import com.resourcefulbees.resourcefulbees.container.AutomationSensitiveItemStackHandler.IRemover;
 
 public class MechanicalCentrifugeTileEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider {
 

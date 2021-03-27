@@ -6,7 +6,8 @@ import net.minecraft.potion.Effect;
 import net.minecraft.util.DamageSource;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 public class TraitData extends AbstractBeeData {
     /**

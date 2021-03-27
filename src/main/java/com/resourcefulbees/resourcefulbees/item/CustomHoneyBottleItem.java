@@ -7,8 +7,6 @@ import net.minecraft.item.Food;
 import net.minecraft.item.HoneyBottleItem;
 import net.minecraft.item.ItemStack;
 
-import net.minecraft.item.Item.Properties;
-
 public class CustomHoneyBottleItem extends HoneyBottleItem {
 
     public final HoneyBottleData honeyBottleData;

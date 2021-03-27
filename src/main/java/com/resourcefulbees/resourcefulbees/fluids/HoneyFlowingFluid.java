@@ -7,8 +7,6 @@ import net.minecraft.state.StateContainer;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 import org.jetbrains.annotations.NotNull;
 
-import net.minecraftforge.fluids.ForgeFlowingFluid.Properties;
-
 public abstract class HoneyFlowingFluid extends ForgeFlowingFluid {
 
     private final HoneyBottleData honeyData;

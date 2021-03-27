@@ -14,11 +14,8 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import net.minecraft.block.AbstractBlock.Properties;
 
 @SuppressWarnings("deprecation")
 public class ApiaryStorageBlock extends Block {

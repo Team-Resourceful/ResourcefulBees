@@ -9,9 +9,9 @@ import mezz.jei.api.recipe.IFocusFactory;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import java.util.Iterator;
 
 public class EntityIngredientHelper implements IIngredientHelper<EntityIngredient> {

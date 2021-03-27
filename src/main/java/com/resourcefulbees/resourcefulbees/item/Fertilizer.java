@@ -16,11 +16,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
-import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
-
-import net.minecraft.item.Item.Properties;
 
 public class Fertilizer extends Item {
 

@@ -29,8 +29,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import net.minecraft.item.Item.Properties;
-
 public class BeeSpawnEggItem extends SpawnEggItem {
 
     protected static final List<BeeSpawnEggItem> eggsToAdd = new ArrayList<>();

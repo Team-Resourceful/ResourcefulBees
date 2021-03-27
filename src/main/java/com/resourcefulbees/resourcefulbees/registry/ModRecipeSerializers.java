@@ -2,7 +2,10 @@ package com.resourcefulbees.resourcefulbees.registry;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
-import com.resourcefulbees.resourcefulbees.recipe.*;
+import com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe;
+import com.resourcefulbees.resourcefulbees.recipe.FertiliserRecipe;
+import com.resourcefulbees.resourcefulbees.recipe.HiveUpgradeRecipe;
+import com.resourcefulbees.resourcefulbees.recipe.HoneyTankRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;

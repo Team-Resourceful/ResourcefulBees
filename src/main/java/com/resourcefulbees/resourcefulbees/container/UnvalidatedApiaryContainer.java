@@ -7,7 +7,6 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
 import org.jetbrains.annotations.NotNull;
 
 public class UnvalidatedApiaryContainer extends Container {

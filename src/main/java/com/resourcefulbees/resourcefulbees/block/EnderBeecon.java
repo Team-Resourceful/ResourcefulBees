@@ -16,13 +16,18 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.*;
+import net.minecraft.item.GlassBottleItem;
+import net.minecraft.item.HoneyBottleItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
@@ -43,11 +48,9 @@ import net.minecraftforge.fml.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
-import net.minecraft.block.AbstractBlock.Properties;
-
+@SuppressWarnings("deprecation")
 public class EnderBeecon extends HoneyTank {
 
     protected static final VoxelShape VOXEL_SHAPE_TOP = Block.box(2.0D, 0.0D, 2.0D, 14.0D, 13.0D, 14.0D);
@@ -73,7 +76,6 @@ public class EnderBeecon extends HoneyTank {
 
     @NotNull
     @Override
-    @Deprecated
     public ActionResultType use(@NotNull BlockState state, World world, @NotNull BlockPos pos, @NotNull PlayerEntity player, @NotNull Hand hand, @NotNull BlockRayTraceResult rayTraceResult) {
 
         ItemStack heldItem = player.getItemInHand(hand);
@@ -115,7 +117,6 @@ public class EnderBeecon extends HoneyTank {
 
     @NotNull
     @Override
-    @Deprecated
     public VoxelShape getShape(@NotNull BlockState state, @NotNull IBlockReader worldIn, @NotNull BlockPos pos, @NotNull ISelectionContext context) {
         return VOXEL_SHAPE_TOP;
     }
