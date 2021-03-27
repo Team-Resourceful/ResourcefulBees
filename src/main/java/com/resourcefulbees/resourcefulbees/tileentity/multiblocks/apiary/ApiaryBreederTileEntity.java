@@ -261,29 +261,11 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
         this.getTime()[slot] = 0;
     }
 
-
-    @Override
-    public void load(@NotNull BlockState state, @NotNull CompoundNBT nbt) {
-        super.load(state, nbt);
-        this.loadFromNBT(nbt);
-    }
-
     @NotNull
     @Override
     public CompoundNBT save(@NotNull CompoundNBT nbt) {
         super.save(nbt);
         return this.saveToNBT(nbt);
-    }
-
-    public void loadFromNBT(CompoundNBT nbt) {
-        CompoundNBT invTag = nbt.getCompound(NBTConstants.NBT_INVENTORY);
-        getTileStackHandler().deserializeNBT(invTag);
-        setTime(nbt.getIntArray("time"));
-        setTotalTime(nbt.getInt("totalTime"));
-        if (nbt.contains(NBTConstants.NBT_APIARY_POS))
-            apiaryPos = NBTUtil.readBlockPos(nbt.getCompound(NBTConstants.NBT_APIARY_POS));
-        if (nbt.contains(NBT_BREEDER_COUNT))
-            this.setNumberOfBreeders(nbt.getInt(NBT_BREEDER_COUNT));
     }
 
     public CompoundNBT saveToNBT(CompoundNBT nbt) {
@@ -305,6 +287,23 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
         CompoundNBT nbtTagCompound = new CompoundNBT();
         save(nbtTagCompound);
         return nbtTagCompound;
+    }
+
+    @Override
+    public void load(@NotNull BlockState state, @NotNull CompoundNBT nbt) {
+        super.load(state, nbt);
+        this.loadFromNBT(nbt);
+    }
+
+    public void loadFromNBT(CompoundNBT nbt) {
+        CompoundNBT invTag = nbt.getCompound(NBTConstants.NBT_INVENTORY);
+        getTileStackHandler().deserializeNBT(invTag);
+        setTime(nbt.getIntArray("time"));
+        setTotalTime(nbt.getInt("totalTime"));
+        if (nbt.contains(NBTConstants.NBT_APIARY_POS))
+            apiaryPos = NBTUtil.readBlockPos(nbt.getCompound(NBTConstants.NBT_APIARY_POS));
+        if (nbt.contains(NBT_BREEDER_COUNT))
+            this.setNumberOfBreeders(nbt.getInt(NBT_BREEDER_COUNT));
     }
 
     @Override

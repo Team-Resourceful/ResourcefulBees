@@ -137,13 +137,6 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
         this.loadFromNBT(nbt);
     }
 
-    @NotNull
-    @Override
-    public CompoundNBT save(@NotNull CompoundNBT nbt) {
-        super.save(nbt);
-        return this.saveToNBT(nbt);
-    }
-
     public void loadFromNBT(CompoundNBT nbt) {
         CompoundNBT invTag = nbt.getCompound(NBTConstants.NBT_INVENTORY);
         getItemStackHandler().deserializeNBT(invTag);
@@ -151,6 +144,18 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
             apiaryPos = NBTUtil.readBlockPos(nbt.getCompound(NBTConstants.NBT_APIARY_POS));
         if (nbt.contains(NBTConstants.NBT_SLOT_COUNT))
             this.setNumberOfSlots(nbt.getInt(NBTConstants.NBT_SLOT_COUNT));
+    }
+
+    @Override
+    public void handleUpdateTag(@NotNull BlockState state, CompoundNBT tag) {
+        this.load(state, tag);
+    }
+
+    @NotNull
+    @Override
+    public CompoundNBT save(@NotNull CompoundNBT nbt) {
+        super.save(nbt);
+        return this.saveToNBT(nbt);
     }
 
     public CompoundNBT saveToNBT(CompoundNBT nbt) {
@@ -170,11 +175,6 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
         CompoundNBT nbtTagCompound = new CompoundNBT();
         save(nbtTagCompound);
         return nbtTagCompound;
-    }
-
-    @Override
-    public void handleUpdateTag(@NotNull BlockState state, CompoundNBT tag) {
-        this.load(state, tag);
     }
 
     @Nullable

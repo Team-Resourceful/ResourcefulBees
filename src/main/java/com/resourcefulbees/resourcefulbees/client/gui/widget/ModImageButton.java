@@ -3,11 +3,12 @@ package com.resourcefulbees.resourcefulbees.client.gui.widget;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.widget.button.ImageButton;
+import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.StringTextComponent;
 import org.jetbrains.annotations.NotNull;
 
-public class ModImageButton extends ImageButton {
+public class ModImageButton extends Button {
 
     protected final ResourceLocation resourceLocation;
     protected final int xTexStart;
@@ -17,7 +18,7 @@ public class ModImageButton extends ImageButton {
     protected final int imageHeight;
 
     public ModImageButton(int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int yDiffTextIn, ResourceLocation resourceLocationIn, int imageWidth, int imageHeight, IPressable onPressIn) {
-        super(xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, yDiffTextIn, resourceLocationIn, imageWidth, imageHeight, onPressIn);
+        super(xIn, yIn, widthIn, heightIn, StringTextComponent.EMPTY, onPressIn);
         this.resourceLocation = resourceLocationIn;
         this.xTexStart = xTexStartIn;
         this.yTexStart = yTexStartIn;

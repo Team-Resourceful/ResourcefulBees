@@ -162,6 +162,14 @@ public class MechanicalCentrifugeTileEntity extends TileEntity implements ITicka
         return recipe;
     }
 
+    @Override
+    public void load(@NotNull BlockState state, CompoundNBT tag) {
+        CompoundNBT invTag = tag.getCompound("inv");
+        getItemStackHandler().deserializeNBT(invTag);
+        setClicks(tag.getInt("clicks"));
+        super.load(state, tag);
+    }
+
     @NotNull
     @Override
     public CompoundNBT save(CompoundNBT tag) {
@@ -169,14 +177,6 @@ public class MechanicalCentrifugeTileEntity extends TileEntity implements ITicka
         tag.put("inv", inv);
         tag.putInt("clicks", getClicks());
         return super.save(tag);
-    }
-
-    @Override
-    public void load(@NotNull BlockState state, CompoundNBT tag) {
-        CompoundNBT invTag = tag.getCompound("inv");
-        getItemStackHandler().deserializeNBT(invTag);
-        setClicks(tag.getInt("clicks"));
-        super.load(state, tag);
     }
 
     @NotNull

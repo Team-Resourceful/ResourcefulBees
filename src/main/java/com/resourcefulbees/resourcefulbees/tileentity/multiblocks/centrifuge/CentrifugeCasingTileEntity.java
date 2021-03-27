@@ -74,17 +74,17 @@ public class CentrifugeCasingTileEntity extends TileEntity {
         super.load(state, tag);
     }
 
+    @Override
+    public void handleUpdateTag(@NotNull BlockState state, CompoundNBT tag) {
+        this.load(state, tag);
+    }
+
     @NotNull
     @Override
     public CompoundNBT getUpdateTag() {
         CompoundNBT nbtTagCompound = new CompoundNBT();
         save(nbtTagCompound);
         return nbtTagCompound;
-    }
-
-    @Override
-    public void handleUpdateTag(@NotNull BlockState state, CompoundNBT tag) {
-        this.load(state, tag);
     }
 
 

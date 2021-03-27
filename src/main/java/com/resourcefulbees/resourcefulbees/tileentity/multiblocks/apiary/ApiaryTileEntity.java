@@ -471,6 +471,12 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
         return nbt;
     }
 
+    @Nullable
+    @Override
+    public SUpdateTileEntityPacket getUpdatePacket() {
+        return super.getUpdatePacket();
+    }
+
     @NotNull
     @Override
     public CompoundNBT getUpdateTag() {
@@ -482,12 +488,6 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     @Override
     public void handleUpdateTag(@NotNull BlockState state, CompoundNBT tag) {
         this.load(state, tag);
-    }
-
-    @Nullable
-    @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
-        return super.getUpdatePacket();
     }
     //endregion
 

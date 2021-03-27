@@ -151,6 +151,14 @@ public class HoneyGeneratorTileEntity extends AbstractHoneyTankContainer impleme
         return super.save(tag);
     } //TODO 1.17 - change "fluid" to tank
 
+    @NotNull
+    @Override
+    public CompoundNBT getUpdateTag() {
+        CompoundNBT nbtTagCompound = new CompoundNBT();
+        save(nbtTagCompound);
+        return nbtTagCompound;
+    }
+
     @Override
     public void load(@NotNull BlockState state, CompoundNBT tag) {
         CompoundNBT invTag = tag.getCompound(NBTConstants.NBT_INVENTORY);
@@ -161,14 +169,6 @@ public class HoneyGeneratorTileEntity extends AbstractHoneyTankContainer impleme
         if (tag.contains(NBTConstants.NBT_FLUID_FILLED)) setFluidFilled(tag.getInt(NBTConstants.NBT_FLUID_FILLED));
         if (tag.contains(NBTConstants.NBT_IS_PROCESSING)) isProcessing = tag.getBoolean(NBTConstants.NBT_IS_PROCESSING);
         super.load(state, tag);
-    }
-
-    @NotNull
-    @Override
-    public CompoundNBT getUpdateTag() {
-        CompoundNBT nbtTagCompound = new CompoundNBT();
-        save(nbtTagCompound);
-        return nbtTagCompound;
     }
 
     @Override
