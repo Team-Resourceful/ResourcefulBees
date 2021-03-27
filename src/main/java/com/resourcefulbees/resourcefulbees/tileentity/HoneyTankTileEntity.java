@@ -6,7 +6,6 @@ import com.resourcefulbees.resourcefulbees.registry.ModTileEntityTypes;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.RegistryObject;
 import org.apache.logging.log4j.LogManager;
@@ -84,12 +83,14 @@ public class HoneyTankTileEntity extends AbstractHoneyTank {
         return new AxisAlignedBB(this.getBlockPos().below().south().west(), this.getBlockPos().above().north().east());
     }
 
+    @Override
     public CompoundNBT writeNBT(CompoundNBT tag) {
         tag.putInt("tier", getTier().tier);
         if (getFluidTank().isEmpty()) return tag;
         return super.writeNBT(tag);
     }
 
+    @Override
     public void readNBT(CompoundNBT tag) {
         super.readNBT(tag);
         setTier(TankTier.getTier(tag.getInt("tier")));

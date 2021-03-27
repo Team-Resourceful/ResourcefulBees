@@ -90,26 +90,18 @@ public class HoneyGeneratorTileEntity extends AbstractHoneyTankContainer impleme
 
     private void sendOutPower() {
         AtomicInteger capacity = new AtomicInteger(energyStorage.getEnergyStored());
-        if (capacity.get() > 0) {
+        if (capacity.get() > 0 && level != null) {
             for (Direction direction : Direction.values()) {
-                if (level != null) {
-                    TileEntity te = level.getBlockEntity(worldPosition.relative(direction));
-                    if (te != null) {
-                        boolean doContinue = te.getCapability(CapabilityEnergy.ENERGY, direction).map(handler -> {
-                            if (handler.canReceive()) {
-                                int received = handler.receiveEnergy(Math.min(capacity.get(), ENERGY_TRANSFER_AMOUNT), false);
-                                capacity.addAndGet(-received);
-                                energyStorage.consumeEnergy(received);
-                                setChanged();
-                                return capacity.get() > 0;
-                            } else {
-                                return true;
-                            }
-                        }).orElse(true);
-                        if (!doContinue) {
-                            return;
+                TileEntity te = level.getBlockEntity(worldPosition.relative(direction));
+                if (capacity.get() > 0 && te != null) {
+                    te.getCapability(CapabilityEnergy.ENERGY, direction).ifPresent(handler -> {
+                        if (handler.canReceive()) {
+                            int received = handler.receiveEnergy(Math.min(capacity.get(), ENERGY_TRANSFER_AMOUNT), false);
+                            capacity.addAndGet(-received);
+                            energyStorage.consumeEnergy(received);
+                            setChanged();
                         }
-                    }
+                    });
                 }
             }
         }
@@ -237,6 +229,9 @@ public class HoneyGeneratorTileEntity extends AbstractHoneyTankContainer impleme
         energyStorage.setEnergy(buffer.readInt());
     }
 
+
+
+    @Override
     public @NotNull TileStackHandler getTileStackHandler() {
         return tileStackHandler;
     }
