@@ -10,8 +10,8 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -22,9 +22,9 @@ public class CreativeGenTileEntity extends TileEntity implements ITickableTileEn
 
     public CreativeGenTileEntity() { super(ModTileEntityTypes.CREATIVE_GEN_ENTITY.get()); }
 
-    @Nonnull
+    @NotNull
     @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
         if (cap.equals(CapabilityEnergy.ENERGY)) return energyOptional.cast();
         return super.getCapability(cap, side);
     }

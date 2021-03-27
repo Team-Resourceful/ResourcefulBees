@@ -18,7 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -62,7 +62,7 @@ public class ApiaryCategory extends BaseCategory<ApiaryCategory.Recipe> {
     }
 
     @Override
-    public void setRecipe(@NotNull IRecipeLayout iRecipeLayout, @Nonnull Recipe recipe, @Nonnull IIngredients ingredients) {
+    public void setRecipe(@NotNull IRecipeLayout iRecipeLayout, @NotNull Recipe recipe, @NotNull IIngredients ingredients) {
         IGuiItemStackGroup itemStacks = iRecipeLayout.getItemStacks();
         itemStacks.init(0, false, 138, 4);
         itemStacks.init(1, true, 62, 4);

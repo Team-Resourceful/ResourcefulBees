@@ -64,7 +64,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -98,7 +98,7 @@ public class EnderBeeconTileEntity extends AbstractHoneyTankContainer implements
         effects = readEffectsFromNBT(new CompoundNBT());
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public ITextComponent getDisplayName() {
         return new TranslationTextComponent("gui.resourcefulbees.ender_beecon");

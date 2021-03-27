@@ -22,7 +22,7 @@ import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 public class CentrifugeContainer extends Container {
 
@@ -165,11 +165,11 @@ public class CentrifugeContainer extends Container {
      * @param player the player
      */
     @Override
-    public boolean stillValid(@Nonnull PlayerEntity player) { return true; }
+    public boolean stillValid(@NotNull PlayerEntity player) { return true; }
 
-    @Nonnull
+    @NotNull
     @Override
-    public ItemStack quickMoveStack(@Nonnull PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(@NotNull PlayerEntity playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         int totalSlots = centrifugeTileEntity.getTotalSlots();

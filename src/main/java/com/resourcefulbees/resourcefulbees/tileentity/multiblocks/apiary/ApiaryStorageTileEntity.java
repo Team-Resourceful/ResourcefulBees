@@ -48,8 +48,8 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import static net.minecraft.inventory.container.Container.consideredTheSameItem;
 
@@ -70,13 +70,13 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
         super(ModTileEntityTypes.APIARY_STORAGE_TILE_ENTITY.get());
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public TileEntityType<?> getType() {
         return ModTileEntityTypes.APIARY_STORAGE_TILE_ENTITY.get();
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public ITextComponent getDisplayName() {
         return new TranslationTextComponent("gui.resourcefulbees.apiary_storage");
@@ -84,7 +84,7 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
 
     @Nullable
     @Override
-    public Container createMenu(int i, @Nonnull PlayerInventory playerInventory, @Nonnull PlayerEntity playerEntity) {
+    public Container createMenu(int i, @NotNull PlayerInventory playerInventory, @NotNull PlayerEntity playerEntity) {
         if (level != null)
             return new ApiaryStorageContainer(i, level, worldPosition, playerInventory);
         return null;
@@ -134,14 +134,14 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
     }
 
     @Override
-    public void load(@Nonnull BlockState state, @Nonnull CompoundNBT nbt) {
+    public void load(@NotNull BlockState state, @NotNull CompoundNBT nbt) {
         super.load(state, nbt);
         this.loadFromNBT(nbt);
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public CompoundNBT save(@Nonnull CompoundNBT nbt) {
+    public CompoundNBT save(@NotNull CompoundNBT nbt) {
         super.save(nbt);
         return this.saveToNBT(nbt);
     }
@@ -166,7 +166,7 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
         return nbt;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public CompoundNBT getUpdateTag() {
         CompoundNBT nbtTagCompound = new CompoundNBT();
@@ -175,7 +175,7 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
     }
 
     @Override
-    public void handleUpdateTag(@Nonnull BlockState state, CompoundNBT tag) {
+    public void handleUpdateTag(@NotNull BlockState state, CompoundNBT tag) {
         this.load(state, tag);
     }
 
@@ -339,9 +339,9 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
         this.apiaryPos = apiaryPos;
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
         return cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? getLazyOptional().cast() :
                 super.getCapability(cap, side);
     }

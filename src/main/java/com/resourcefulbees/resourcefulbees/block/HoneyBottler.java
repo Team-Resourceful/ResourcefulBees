@@ -22,7 +22,7 @@ import net.minecraftforge.fml.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 import java.util.Random;
 
 public class HoneyBottler extends Block {
@@ -33,7 +33,7 @@ public class HoneyBottler extends Block {
         super(properties);
     }
 
-    private static HoneyBottlerTileEntity getTileEntity(@Nonnull IBlockReader world, @Nonnull BlockPos pos) {
+    private static HoneyBottlerTileEntity getTileEntity(@NotNull IBlockReader world, @NotNull BlockPos pos) {
         TileEntity entity = world.getBlockEntity(pos);
         if (entity instanceof HoneyBottlerTileEntity) {
             return (HoneyBottlerTileEntity) entity;
@@ -42,7 +42,7 @@ public class HoneyBottler extends Block {
     }
 
     @Override
-    public ActionResultType use(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult blockRayTraceResult) {
+    public ActionResultType use(@NotNull BlockState state, World world, @NotNull BlockPos pos, @NotNull PlayerEntity player, @NotNull Hand hand, @NotNull BlockRayTraceResult blockRayTraceResult) {
         TileEntity tileEntity = world.getBlockEntity(pos);
         ItemStack heldItem = player.getItemInHand(hand);
         boolean hasCapability = heldItem.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent();
@@ -63,7 +63,7 @@ public class HoneyBottler extends Block {
     }
 
     @Override
-    public void animateTick(@Nonnull BlockState stateIn, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull Random rand) {
+    public void animateTick(@NotNull BlockState stateIn, @NotNull World world, @NotNull BlockPos pos, @NotNull Random rand) {
         HoneyBottlerTileEntity tank = getTileEntity(world, pos);
         if (tank == null) {
             return;
@@ -88,7 +88,7 @@ public class HoneyBottler extends Block {
         return true;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public VoxelShape getShape(@NotNull BlockState state, @NotNull IBlockReader worldIn, @NotNull BlockPos pos, @NotNull ISelectionContext context) {
         return VOXEL_SHAPE;

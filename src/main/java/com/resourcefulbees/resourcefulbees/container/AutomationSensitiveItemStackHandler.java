@@ -20,7 +20,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.items.ItemStackHandler;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Shadows
@@ -61,9 +61,9 @@ public class AutomationSensitiveItemStackHandler extends ItemStackHandler {
         return this.stacks;
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
+    public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
         return this.insertItem(slot, stack, simulate, true);
     }
 
@@ -88,7 +88,7 @@ public class AutomationSensitiveItemStackHandler extends ItemStackHandler {
         onLoad();
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public ItemStack extractItem(int slot, int amount, boolean simulate) {
         return this.extractItem(slot, amount, simulate, true);

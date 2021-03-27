@@ -16,15 +16,15 @@ import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class EntityRenderer implements IIngredientRenderer<EntityIngredient> {
 
     @Override
-    public void render(@Nonnull MatrixStack matrixStack, int x, int y, @Nullable EntityIngredient entityIngredient) {
+    public void render(@NotNull MatrixStack matrixStack, int x, int y, @Nullable EntityIngredient entityIngredient) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.level != null && entityIngredient != null && mc.player != null) {
             CustomBeeData beeData = BeeRegistry.getRegistry().getBeeData(entityIngredient.getBeeType());
@@ -54,9 +54,9 @@ public class EntityRenderer implements IIngredientRenderer<EntityIngredient> {
         }
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public List<ITextComponent> getTooltip(EntityIngredient entityIngredient, @Nonnull ITooltipFlag iTooltipFlag) {
+    public List<ITextComponent> getTooltip(EntityIngredient entityIngredient, @NotNull ITooltipFlag iTooltipFlag) {
         List<ITextComponent> tooltip = new ArrayList<>();
         tooltip.add(entityIngredient.getDisplayName());
         List<ITextComponent> desc = entityIngredient.getTooltip();

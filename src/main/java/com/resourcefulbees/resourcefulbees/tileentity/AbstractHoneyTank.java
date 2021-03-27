@@ -23,8 +23,8 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.function.Predicate;
 
 public class AbstractHoneyTank extends TileEntity {
@@ -72,9 +72,9 @@ public class AbstractHoneyTank extends TileEntity {
         this.level.playSound(null, this.worldPosition, soundEvent, SoundCategory.BLOCKS, 1.0F, 1.0F);
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
         if (cap.equals(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)) return getFluidOptional().cast();
         return super.getCapability(cap, side);
     }
@@ -86,15 +86,15 @@ public class AbstractHoneyTank extends TileEntity {
 
     // read from tag
     @Override
-    public void load(@Nonnull BlockState state, @Nonnull CompoundNBT tag) {
+    public void load(@NotNull BlockState state, @NotNull CompoundNBT tag) {
         super.load(state, tag);
         readNBT(tag);
     }
 
     // write to tag
-    @Nonnull
+    @NotNull
     @Override
-    public CompoundNBT save(@Nonnull CompoundNBT tag) {
+    public CompoundNBT save(@NotNull CompoundNBT tag) {
         super.save(tag);
         writeNBT(tag);
         return tag;
@@ -128,7 +128,7 @@ public class AbstractHoneyTank extends TileEntity {
         readNBT(nbt);
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public CompoundNBT getUpdateTag() {
         CompoundNBT nbt = super.getUpdateTag();

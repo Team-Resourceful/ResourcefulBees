@@ -8,7 +8,7 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 public class UnvalidatedApiaryContainer extends Container {
 
@@ -22,7 +22,7 @@ public class UnvalidatedApiaryContainer extends Container {
     }
 
     @Override
-    public boolean stillValid(@Nonnull PlayerEntity playerIn) {
+    public boolean stillValid(@NotNull PlayerEntity playerIn) {
         return true;
     }
 

@@ -24,8 +24,8 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 import net.minecraft.block.AbstractBlock.Properties;
@@ -41,9 +41,9 @@ public class ApiaryBreederBlock extends Block{
 
 
 
-    @Nonnull
+    @NotNull
     @Override
-    public ActionResultType use(@Nonnull BlockState state, @NotNull World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult blockRayTraceResult) {
+    public ActionResultType use(@NotNull BlockState state, @NotNull World world, @NotNull BlockPos pos, @NotNull PlayerEntity player, @NotNull Hand hand, @NotNull BlockRayTraceResult blockRayTraceResult) {
         if (!player.isShiftKeyDown() && !world.isClientSide) {
             INamedContainerProvider blockEntity = state.getMenuProvider(world,pos);
             NetworkHooks.openGui((ServerPlayerEntity) player, blockEntity, pos);
@@ -54,7 +54,7 @@ public class ApiaryBreederBlock extends Block{
 
     @Nullable
     @Override
-    public INamedContainerProvider getMenuProvider(@Nonnull BlockState state, World worldIn, @Nonnull BlockPos pos) {
+    public INamedContainerProvider getMenuProvider(@NotNull BlockState state, World worldIn, @NotNull BlockPos pos) {
         return (INamedContainerProvider)worldIn.getBlockEntity(pos);
     }
 
@@ -71,7 +71,7 @@ public class ApiaryBreederBlock extends Block{
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void appendHoverText(@Nonnull ItemStack stack, @Nullable IBlockReader worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
+    public void appendHoverText(@NotNull ItemStack stack, @Nullable IBlockReader worldIn, @NotNull List<ITextComponent> tooltip, @NotNull ITooltipFlag flagIn) {
         tooltip.addAll(new TooltipBuilder()
                 .addTip(I18n.get("block.resourcefulbees.apiary_breeder.tooltip.info"), TextFormatting.GOLD)
                 .addTip(I18n.get("block.resourcefulbees.apiary_breeder.tooltip.info1"), TextFormatting.GOLD)

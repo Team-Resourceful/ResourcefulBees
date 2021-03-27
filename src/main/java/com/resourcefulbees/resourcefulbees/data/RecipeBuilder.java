@@ -23,7 +23,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 
 public class RecipeBuilder implements IResourceManagerReloadListener {
@@ -36,7 +36,7 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
     }
 
     @Override
-    public void onResourceManagerReload(@Nonnull IResourceManager resourceManager) {
+    public void onResourceManagerReload(@NotNull IResourceManager resourceManager) {
         BEE_REGISTRY.getBees().forEach(((s, customBeeData) -> {
             if (customBeeData.hasHoneycomb()) {
                 CentrifugeData centrifugeData = customBeeData.getCentrifugeData();

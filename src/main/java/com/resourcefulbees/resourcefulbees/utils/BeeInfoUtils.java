@@ -53,8 +53,8 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.glfw.GLFW;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -218,7 +218,7 @@ public class BeeInfoUtils {
         } else return input.equals(FLOWER_TAG_ALL);
     }
 
-    public static boolean isValidBreedItem(@Nonnull ItemStack stack, String validBreedItem) {
+    public static boolean isValidBreedItem(@NotNull ItemStack stack, String validBreedItem) {
         if (ValidatorUtils.TAG_RESOURCE_PATTERN.matcher(validBreedItem).matches()) {
             ITag<Item> itemTag = getItemTag(validBreedItem.replace(TAG_PREFIX, ""));
             return itemTag != null && stack.getItem().is(itemTag);

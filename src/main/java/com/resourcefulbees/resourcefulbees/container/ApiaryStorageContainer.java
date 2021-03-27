@@ -12,7 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 public class ApiaryStorageContainer extends Container {
 
@@ -34,7 +34,7 @@ public class ApiaryStorageContainer extends Container {
      * @param player the player
      */
     @Override
-    public boolean stillValid(@Nonnull PlayerEntity player) {
+    public boolean stillValid(@NotNull PlayerEntity player) {
         return true;
     }
 
@@ -101,9 +101,9 @@ public class ApiaryStorageContainer extends Container {
 
 
 
-    @Nonnull
+    @NotNull
     @Override
-    public ItemStack quickMoveStack(@Nonnull PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(@NotNull PlayerEntity playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         if (slot != null && slot.hasItem()) {

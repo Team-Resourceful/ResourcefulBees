@@ -56,8 +56,8 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -171,7 +171,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     }
 
     //region BEE HANDLING
-    public boolean releaseBee(@Nonnull BlockState state, ApiaryBee apiaryBee, boolean exportBee) {
+    public boolean releaseBee(@NotNull BlockState state, ApiaryBee apiaryBee, boolean exportBee) {
         BlockPos blockPos = this.getBlockPos();
         Direction direction = state.getValue(BeehiveBlock.FACING);
         BlockPos blockPos1 = blockPos.relative(direction);
@@ -226,7 +226,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
         return false;
     }
 
-    public boolean tryEnterHive(@Nonnull Entity bee, boolean hasNectar, int ticksInHive, boolean imported) {
+    public boolean tryEnterHive(@NotNull Entity bee, boolean hasNectar, int ticksInHive, boolean imported) {
         if (this.level != null && bee instanceof BeeEntity) {
             BeeEntity beeEntity = (BeeEntity) bee;
             String type = BeeConstants.VANILLA_BEE_TYPE;
@@ -364,7 +364,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
 
     //region NBT HANDLING
 
-    @Nonnull
+    @NotNull
     public ListNBT writeBees() {
         ListNBT listnbt = new ListNBT();
 
@@ -414,14 +414,14 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     }
 
     @Override
-    public void load(@Nonnull BlockState state, @Nonnull CompoundNBT nbt) {
+    public void load(@NotNull BlockState state, @NotNull CompoundNBT nbt) {
         super.load(state, nbt);
         this.loadFromNBT(nbt);
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public CompoundNBT save(@Nonnull CompoundNBT nbt) {
+    public CompoundNBT save(@NotNull CompoundNBT nbt) {
         super.save(nbt);
         return this.saveToNBT(nbt);
     }
@@ -472,7 +472,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
         return nbt;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public CompoundNBT getUpdateTag() {
         CompoundNBT nbtTagCompound = new CompoundNBT();
@@ -481,7 +481,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     }
 
     @Override
-    public void handleUpdateTag(@Nonnull BlockState state, CompoundNBT tag) {
+    public void handleUpdateTag(@NotNull BlockState state, CompoundNBT tag) {
         this.load(state, tag);
     }
 
@@ -690,7 +690,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     //region SCREEN HANDLING
     @Nullable
     @Override
-    public Container createMenu(int i, @Nonnull PlayerInventory playerInventory, @Nonnull PlayerEntity playerEntity) {
+    public Container createMenu(int i, @NotNull PlayerInventory playerInventory, @NotNull PlayerEntity playerEntity) {
         if (level != null) {
             setNumPlayersUsing(getNumPlayersUsing() + 1);
             if (isValidApiary(true)) {
@@ -715,9 +715,9 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
 
     //endregion
 
-    @Nonnull
+    @NotNull
     @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
         return cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? getLazyOptional().cast() :
                 super.getCapability(cap, side);
     }
@@ -730,7 +730,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
         return (slot, automation) -> !automation || slot == 1 || slot == 2;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public ITextComponent getDisplayName() {
         return new TranslationTextComponent("gui.resourcefulbees.apiary");

@@ -14,7 +14,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 @OnlyIn(Dist.CLIENT)
 public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
@@ -101,7 +101,7 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
     }
 
     @Override
-    public void prepareMobModel(@Nonnull T entityIn, float limbSwing, float limbSwingAmount, float partialTick) {
+    public void prepareMobModel(@NotNull T entityIn, float limbSwing, float limbSwingAmount, float partialTick) {
         super.prepareMobModel(entityIn, limbSwing, limbSwingAmount, partialTick);
         this.bodyPitch = entityIn.getRollAmount(partialTick);
         this.stinger.visible = !entityIn.hasStung();
@@ -143,18 +143,18 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
         if (young) beeSize *= Config.CHILD_SIZE_MODIFIER.get();
     }
 
-    @Nonnull
+    @NotNull
     protected Iterable<ModelRenderer> headParts() {
         return ImmutableList.of();
     }
 
-    @Nonnull
+    @NotNull
     protected Iterable<ModelRenderer> bodyParts() {
         return ImmutableList.of(this.body);
     }
 
     @Override
-    public void renderToBuffer(@Nonnull MatrixStack matrixStackIn, @Nonnull IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+    public void renderToBuffer(@NotNull MatrixStack matrixStackIn, @NotNull IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
         matrixStackIn.pushPose();
         matrixStackIn.translate(0, 1.5 - beeSize * 1.5, 0);
         matrixStackIn.scale(beeSize, beeSize, beeSize);

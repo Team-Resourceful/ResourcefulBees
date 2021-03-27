@@ -36,7 +36,7 @@ import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 public class HoneyBottlerTileEntity extends AbstractHoneyTank implements ITickableTileEntity, INamedContainerProvider {
 
@@ -134,9 +134,9 @@ public class HoneyBottlerTileEntity extends AbstractHoneyTank implements ITickab
         }
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @javax.annotation.Nullable Direction side) {
+    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @org.jetbrains.annotations.Nullable Direction side) {
         return cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? lazyOptional.cast() :
                 super.getCapability(cap, side);
     }

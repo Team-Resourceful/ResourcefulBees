@@ -11,13 +11,13 @@ import net.minecraft.tileentity.BeehiveTileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.server.ServerWorld;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 public class ScraperDispenserBehavior extends DefaultDispenseItemBehavior {
 
-    @Nonnull
+    @NotNull
     @Override
-    protected ItemStack execute(@Nonnull IBlockSource source, @Nonnull ItemStack stack) {
+    protected ItemStack execute(@NotNull IBlockSource source, @NotNull ItemStack stack) {
         ServerWorld world = source.getLevel();
         BlockPos blockpos = source.getPos().relative(source.getBlockState().getValue(DispenserBlock.FACING));
         BlockState blockstate = world.getBlockState(blockpos);

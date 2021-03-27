@@ -27,7 +27,7 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryContainer> {
 
@@ -113,7 +113,7 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
     }
 
     @Override
-    public void render(@Nonnull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
+    public void render(@NotNull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
         this.upButton.active = verticalOffset != 2;
         this.downButton.active = verticalOffset != -1;
         this.leftButton.active = horizontalOffset != -2;
@@ -131,7 +131,7 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
     }
 
     @Override
-    protected void renderBg(@Nonnull MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
+    protected void renderBg(@NotNull MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
         Minecraft client = this.minecraft;
         if (client != null) {
             this.minecraft.getTextureManager().bind(unvalidatedTexture);
@@ -142,7 +142,7 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
     }
 
     @Override
-    protected void renderLabels(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
+    protected void renderLabels(@NotNull MatrixStack matrix, int mouseX, int mouseY) {
         this.font.draw(matrix,  "Offset", 65, 13, 0x404040);
         this.font.draw(matrix, "Vert.", 75, 26, 0x404040);
         this.font.draw(matrix, "Horiz.", 75, 39, 0x404040);
@@ -158,7 +158,7 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
     }
 
 
-    public void drawRightAlignedString(@Nonnull MatrixStack matrix, FontRenderer fontRenderer, @Nonnull String s, int posX, int posY, int color) {
+    public void drawRightAlignedString(@NotNull MatrixStack matrix, FontRenderer fontRenderer, @NotNull String s, int posX, int posY, int color) {
         fontRenderer.draw(matrix, s, (float) (posX - fontRenderer.width(s)), (float) posY, color);
     }
 
@@ -176,7 +176,7 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
         }
 
         @Override
-        public void renderToolTip(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
+        public void renderToolTip(@NotNull MatrixStack matrix, int mouseX, int mouseY) {
             if (!this.active) {
                 StringTextComponent s = new StringTextComponent(I18n.get("gui.resourcefulbees.apiary.button.build.creative"));
                 UnvalidatedApiaryScreen.this.renderTooltip(matrix, s, mouseX, mouseY);
@@ -202,7 +202,7 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
         }
 
         @Override
-        public void renderButton(@Nonnull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
+        public void renderButton(@NotNull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
             Minecraft minecraft = Minecraft.getInstance();
             minecraft.getTextureManager().bind(this.resourceLocation);
             RenderSystem.disableDepthTest();
@@ -225,7 +225,7 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
         }
 
         @Override
-        public void renderToolTip(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
+        public void renderToolTip(@NotNull MatrixStack matrix, int mouseX, int mouseY) {
             StringTextComponent s;
             if (!isTriggered()) {
                 s = new StringTextComponent(I18n.get("gui.resourcefulbees.apiary.button.preview.enable"));

@@ -21,7 +21,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 public class ApiaryBreederScreen extends ContainerScreen<ApiaryBreederContainer> {
 
@@ -60,7 +60,7 @@ public class ApiaryBreederScreen extends ContainerScreen<ApiaryBreederContainer>
                 onPress -> this.changeScreen(ApiaryTabs.MAIN), 128, 128) {
 
             @Override
-            public void renderToolTip(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
+            public void renderToolTip(@NotNull MatrixStack matrix, int mouseX, int mouseY) {
                 StringTextComponent s = new StringTextComponent(I18n.get("gui.resourcefulbees.apiary.button.main_screen"));
                 ApiaryBreederScreen.this.renderTooltip(matrix, s, mouseX, mouseY);
             }
@@ -70,7 +70,7 @@ public class ApiaryBreederScreen extends ContainerScreen<ApiaryBreederContainer>
                 onPress -> this.changeScreen(ApiaryTabs.STORAGE), 128, 128) {
 
             @Override
-            public void renderToolTip(@Nonnull MatrixStack matrix,int mouseX, int mouseY) {
+            public void renderToolTip(@NotNull MatrixStack matrix,int mouseX, int mouseY) {
                 StringTextComponent s = new StringTextComponent(I18n.get("gui.resourcefulbees.apiary.button.storage_screen"));
                 ApiaryBreederScreen.this.renderTooltip(matrix, s, mouseX, mouseY);
             }
@@ -80,7 +80,7 @@ public class ApiaryBreederScreen extends ContainerScreen<ApiaryBreederContainer>
                 onPress -> this.changeScreen(ApiaryTabs.BREED), 128, 128) {
 
             @Override
-            public void renderToolTip(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
+            public void renderToolTip(@NotNull MatrixStack matrix, int mouseX, int mouseY) {
                 StringTextComponent s = new StringTextComponent(I18n.get("gui.resourcefulbees.apiary.button.breed_screen"));
                 ApiaryBreederScreen.this.renderTooltip(matrix, s, mouseX, mouseY);
             }
@@ -102,14 +102,14 @@ public class ApiaryBreederScreen extends ContainerScreen<ApiaryBreederContainer>
     }
 
     @Override
-    public void render(@Nonnull MatrixStack matrix,int mouseX, int mouseY, float partialTicks) {
+    public void render(@NotNull MatrixStack matrix,int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrix);
         super.render(matrix, mouseX, mouseY, partialTicks);
         this.renderTooltip(matrix, mouseX, mouseY);
     }
 
     @Override
-    protected void renderBg(@Nonnull MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
+    protected void renderBg(@NotNull MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
         if (this.menu.isRebuild()) {
             preInit();
             init();
@@ -149,7 +149,7 @@ public class ApiaryBreederScreen extends ContainerScreen<ApiaryBreederContainer>
     }
 
     @Override
-    protected void renderLabels(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
+    protected void renderLabels(@NotNull MatrixStack matrix, int mouseX, int mouseY) {
         for (Widget widget : this.buttons) {
             if (widget.isHovered()) {
                 widget.renderToolTip(matrix, mouseX - this.leftPos, mouseY - this.topPos);

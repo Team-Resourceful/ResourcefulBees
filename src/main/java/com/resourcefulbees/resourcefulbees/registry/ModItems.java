@@ -20,8 +20,8 @@ import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class ModItems {
@@ -65,7 +65,7 @@ public class ModItems {
     public static final RegistryObject<Item> T4_BEEHIVE_ITEM = ITEMS.register("t4_beehive", () -> new BlockItem(ModBlocks.T4_BEEHIVE.get(), new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
     public static final RegistryObject<Item> SCRAPER = ITEMS.register("scraper", () -> new Item(new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES).stacksTo(1)) {
         @Override
-        public void appendHoverText(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
+        public void appendHoverText(@NotNull ItemStack stack, @Nullable World worldIn, @NotNull List<ITextComponent> tooltip, @NotNull ITooltipFlag flagIn) {
             tooltip.add(new StringTextComponent(TextFormatting.GOLD + I18n.get("item.resourcefulbees.scraper.tooltip")));
             tooltip.add(new StringTextComponent(TextFormatting.GOLD + I18n.get("item.resourcefulbees.scraper.tooltip.1")));
             super.appendHoverText(stack, worldIn, tooltip, flagIn);
@@ -153,7 +153,7 @@ public class ModItems {
                     .upgradeModification(NBTConstants.NBT_BREEDER_COUNT, 1)
                     .build()) {
         @Override
-        public void appendHoverText(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
+        public void appendHoverText(@NotNull ItemStack stack, @Nullable World worldIn, @NotNull List<ITextComponent> tooltip, @NotNull ITooltipFlag flagIn) {
             tooltip.addAll(new TooltipBuilder()
                     .addTip(I18n.get("item.resourcefulbees.apiary_breeder_upgrade.tooltip.info"), TextFormatting.GOLD)
                     .build());
@@ -166,7 +166,7 @@ public class ModItems {
                     .upgradeModification(NBTConstants.NBT_BREED_TIME, 300)
                     .build()) {
         @Override
-        public void appendHoverText(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
+        public void appendHoverText(@NotNull ItemStack stack, @Nullable World worldIn, @NotNull List<ITextComponent> tooltip, @NotNull ITooltipFlag flagIn) {
             tooltip.addAll(new TooltipBuilder()
                     .addTip(I18n.get("item.resourcefulbees.apiary_breed_time_upgrade.tooltip.info"), TextFormatting.GOLD)
                     .build());
@@ -182,7 +182,7 @@ public class ModItems {
                     .upgradeModification(NBTConstants.NBT_TIER_MODIFIER, 1f)
                     .build()) {
         @Override
-        public void appendHoverText(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
+        public void appendHoverText(@NotNull ItemStack stack, @Nullable World worldIn, @NotNull List<ITextComponent> tooltip, @NotNull ITooltipFlag flagIn) {
             tooltip.addAll(new TooltipBuilder()
                     .addTranslatableTip(ModConstants.HIVE_UPGRADE_TOOLTIP, TextFormatting.GOLD)
                     .build());
@@ -196,7 +196,7 @@ public class ModItems {
                     .upgradeModification(NBTConstants.NBT_TIER_MODIFIER, 1.5f)
                     .build()) {
         @Override
-        public void appendHoverText(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
+        public void appendHoverText(@NotNull ItemStack stack, @Nullable World worldIn, @NotNull List<ITextComponent> tooltip, @NotNull ITooltipFlag flagIn) {
             tooltip.addAll(new TooltipBuilder()
                     .addTranslatableTip(ModConstants.HIVE_UPGRADE_TOOLTIP, TextFormatting.GOLD)
                     .build());
@@ -210,7 +210,7 @@ public class ModItems {
                     .upgradeModification(NBTConstants.NBT_TIER_MODIFIER, 2f)
                     .build()) {
         @Override
-        public void appendHoverText(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
+        public void appendHoverText(@NotNull ItemStack stack, @Nullable World worldIn, @NotNull List<ITextComponent> tooltip, @NotNull ITooltipFlag flagIn) {
             tooltip.addAll(new TooltipBuilder()
                     .addTranslatableTip(ModConstants.HIVE_UPGRADE_TOOLTIP, TextFormatting.GOLD)
                     .build());
@@ -224,7 +224,7 @@ public class ModItems {
                     .upgradeModification(NBTConstants.NBT_TIER_MODIFIER, 4f)
                     .build()) {
         @Override
-        public void appendHoverText(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
+        public void appendHoverText(@NotNull ItemStack stack, @Nullable World worldIn, @NotNull List<ITextComponent> tooltip, @NotNull ITooltipFlag flagIn) {
             tooltip.addAll(new TooltipBuilder()
                     .addTranslatableTip(ModConstants.HIVE_UPGRADE_TOOLTIP, TextFormatting.GOLD)
                     .build());

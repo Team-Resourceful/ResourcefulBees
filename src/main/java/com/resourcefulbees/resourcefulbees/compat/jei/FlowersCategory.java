@@ -21,8 +21,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -61,7 +61,7 @@ public class FlowersCategory extends BaseCategory<FlowersCategory.Recipe> {
     }
 
     @Override
-    public void setIngredients(@NotNull Recipe recipe, @Nonnull @NotNull IIngredients ingredients) {
+    public void setIngredients(@NotNull Recipe recipe, @NotNull IIngredients ingredients) {
         if (recipe.flowerItems != null){
             List<List<ItemStack>> items = new ArrayList<>();
             items.add(recipe.flowerItems);
@@ -80,7 +80,7 @@ public class FlowersCategory extends BaseCategory<FlowersCategory.Recipe> {
     }
 
     @Override
-    public void setRecipe(@Nonnull @NotNull IRecipeLayout iRecipeLayout, @Nonnull Recipe recipe, @Nonnull IIngredients ingredients) {
+    public void setRecipe(@NotNull IRecipeLayout iRecipeLayout, @NotNull Recipe recipe, @NotNull IIngredients ingredients) {
         if (recipe.flowerFluids != null){
             IGuiFluidStackGroup fluidStacks = iRecipeLayout.getFluidStacks();
             fluidStacks.init(1,true,4,58);

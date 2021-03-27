@@ -14,7 +14,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.SlotItemHandler;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Ellpeck
@@ -44,13 +44,13 @@ public class SlotItemHandlerUnconditioned extends SlotItemHandler {
    * Helper fnct to get the stack in the slot.
    */
   @Override
-  @Nonnull
+  @NotNull
   public ItemStack getItem() {
     return this.inv.getStackInSlot(this.getSlotIndex());
   }
 
   @Override
-  public void set(@Nonnull ItemStack stack) {
+  public void set(@NotNull ItemStack stack) {
     this.inv.setStackInSlot(this.getSlotIndex(), stack);
     this.setChanged();
   }
@@ -71,7 +71,7 @@ public class SlotItemHandlerUnconditioned extends SlotItemHandler {
     return !this.inv.extractItem(this.getSlotIndex(), 1, true, false).isEmpty();
   }
 
-  @Nonnull
+  @NotNull
   @Override
   public ItemStack remove(int amount) {
     return this.inv.extractItem(this.getSlotIndex(), amount, false, false);

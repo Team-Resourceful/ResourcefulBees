@@ -4,7 +4,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 public class OutputSlot extends SlotItemHandler {
     public OutputSlot(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
@@ -12,7 +12,7 @@ public class OutputSlot extends SlotItemHandler {
     }
 
     @Override
-    public boolean mayPlace(@Nonnull ItemStack stack) {
+    public boolean mayPlace(@NotNull ItemStack stack) {
         return false;
     }
 }

@@ -31,7 +31,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
 import static com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE;
@@ -55,7 +55,7 @@ public class JEICompat implements IModPlugin {
         registration.addRecipeCategories(new ApiaryCategory(helper));
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public ResourceLocation getPluginUid() {
         return new ResourceLocation(ResourcefulBees.MOD_ID, "jei");
@@ -78,7 +78,7 @@ public class JEICompat implements IModPlugin {
     }
 
     @Override
-    public void registerRecipes(@Nonnull IRecipeRegistration registration) {
+    public void registerRecipes(@NotNull IRecipeRegistration registration) {
         World clientWorld = Minecraft.getInstance().level;
         if (clientWorld != null) {
             RecipeManager recipeManager = Minecraft.getInstance().level.getRecipeManager();

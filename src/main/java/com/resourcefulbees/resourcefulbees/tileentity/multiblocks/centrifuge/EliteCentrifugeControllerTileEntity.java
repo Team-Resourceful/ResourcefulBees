@@ -14,8 +14,8 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.IntArray;
 import net.minecraft.util.math.BlockPos;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.function.Predicate;
 
 public class EliteCentrifugeControllerTileEntity extends CentrifugeControllerTileEntity {
@@ -106,7 +106,7 @@ public class EliteCentrifugeControllerTileEntity extends CentrifugeControllerTil
 
     @Nullable
     @Override
-    public Container createMenu(int id, @Nonnull PlayerInventory playerInventory, @Nonnull PlayerEntity playerEntity) {
+    public Container createMenu(int id, @NotNull PlayerInventory playerInventory, @NotNull PlayerEntity playerEntity) {
         assert level != null;
         return new EliteCentrifugeMultiblockContainer(ModContainers.ELITE_CENTRIFUGE_MULTIBLOCK_CONTAINER.get(), id, level, worldPosition, playerInventory, times);
     }

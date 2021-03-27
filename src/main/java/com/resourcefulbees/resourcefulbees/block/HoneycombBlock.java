@@ -16,8 +16,8 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Random;
 
@@ -48,16 +48,16 @@ public class HoneycombBlock extends Block {
         return honeycombBlock.colorData.isRainbowBee() ? RainbowColor.getRGB() : honeycombBlock.getHoneycombColor();
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public List<ItemStack> getDrops(@Nonnull BlockState state, @Nonnull LootContext.Builder builder) {
+    public List<ItemStack> getDrops(@NotNull BlockState state, @NotNull LootContext.Builder builder) {
         List<ItemStack> drops = super.getDrops(state, builder);
         drops.add(BeeRegistry.getRegistry().getBeeData(beeType).getCombBlockItemRegistryObject().get().getDefaultInstance());
         return drops;
     }
 
     @Override
-    public void animateTick(@Nonnull BlockState stateIn, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull Random rand) {
+    public void animateTick(@NotNull BlockState stateIn, @NotNull World world, @NotNull BlockPos pos, @NotNull Random rand) {
         if (colorData.isRainbowBee())
             world.sendBlockUpdated(pos, stateIn, stateIn, 2);
         super.animateTick(stateIn, world, pos, rand);

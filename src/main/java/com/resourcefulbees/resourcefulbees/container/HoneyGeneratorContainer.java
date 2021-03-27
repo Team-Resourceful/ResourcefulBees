@@ -14,7 +14,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 public class HoneyGeneratorContainer extends Container {
 
@@ -62,13 +62,13 @@ public class HoneyGeneratorContainer extends Container {
     public int getEnergyTime() { return getHoneyGeneratorTileEntity().getEnergyFilled(); }
 
     @Override
-    public boolean stillValid(@Nonnull PlayerEntity player) {
+    public boolean stillValid(@NotNull PlayerEntity player) {
         return true;
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public ItemStack quickMoveStack(@Nonnull PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(@NotNull PlayerEntity playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         if (slot != null && slot.hasItem()) {

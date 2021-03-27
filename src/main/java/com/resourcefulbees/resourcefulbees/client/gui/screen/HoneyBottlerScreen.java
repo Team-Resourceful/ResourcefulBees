@@ -13,7 +13,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 import java.text.DecimalFormat;
 
 
@@ -27,7 +27,7 @@ public class HoneyBottlerScreen extends ContainerScreen<HoneyBottlerContainer> {
     }
 
     @Override
-    protected void renderBg(@Nonnull MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
+    protected void renderBg(@NotNull MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
         ResourceLocation texture = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/bottler/honey_bottler.png");
         Minecraft client = this.minecraft;
         if (client != null) {
@@ -40,7 +40,7 @@ public class HoneyBottlerScreen extends ContainerScreen<HoneyBottlerContainer> {
     }
 
     @Override
-    public void render(@Nonnull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
+    public void render(@NotNull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrix);
         super.render(matrix, mouseX, mouseY, partialTicks);
         this.renderTooltip(matrix, mouseX, mouseY);

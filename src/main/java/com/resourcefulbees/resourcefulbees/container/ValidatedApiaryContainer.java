@@ -14,7 +14,7 @@ import net.minecraft.util.IntReferenceHolder;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 public class ValidatedApiaryContainer extends Container {
 
@@ -73,21 +73,21 @@ public class ValidatedApiaryContainer extends Container {
     }
 
     @Override
-    public boolean stillValid(@Nonnull PlayerEntity playerIn) {
+    public boolean stillValid(@NotNull PlayerEntity playerIn) {
         return true;
     }
 
     @Override
-    public void removed(@Nonnull PlayerEntity playerIn) {
+    public void removed(@NotNull PlayerEntity playerIn) {
         World world = this.getApiaryTileEntity().getLevel();
         if (world != null && !world.isClientSide)
             this.getApiaryTileEntity().setNumPlayersUsing(this.getApiaryTileEntity().getNumPlayersUsing() - 1);
         super.removed(playerIn);
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public ItemStack quickMoveStack(@Nonnull PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(@NotNull PlayerEntity playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         if (slot != null && slot.hasItem()) {

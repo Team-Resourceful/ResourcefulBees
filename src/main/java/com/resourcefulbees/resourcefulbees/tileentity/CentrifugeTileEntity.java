@@ -49,8 +49,8 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import org.apache.commons.lang3.tuple.Pair;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -410,9 +410,9 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
     }
 
     //region NBT
-    @Nonnull
+    @NotNull
     @Override
-    public CompoundNBT save(@Nonnull CompoundNBT tag) {
+    public CompoundNBT save(@NotNull CompoundNBT tag) {
         super.save(tag);
         return saveToNBT(tag);
     }
@@ -441,12 +441,12 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
     }
 
     @Override
-    public void load(@Nonnull BlockState state, @Nonnull CompoundNBT tag) {
+    public void load(@NotNull BlockState state, @NotNull CompoundNBT tag) {
         this.loadFromNBT(tag);
         super.load(state, tag);
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public CompoundNBT getUpdateTag() {
         CompoundNBT nbtTagCompound = new CompoundNBT();
@@ -455,7 +455,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
     }
 
     @Override
-    public void handleUpdateTag(@Nonnull BlockState state, CompoundNBT tag) {
+    public void handleUpdateTag(@NotNull BlockState state, CompoundNBT tag) {
         this.load(state, tag);
     }
 
@@ -473,9 +473,9 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
     //endregion
 
     //region Capabilities
-    @Nonnull
+    @NotNull
     @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
         if (cap.equals(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)) return lazyOptional.cast();
         if (cap.equals(CapabilityEnergy.ENERGY)) return energyOptional.cast();
         if (cap.equals(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)) return fluidOptional.cast();
@@ -504,12 +504,12 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
 
     @Nullable
     @Override
-    public Container createMenu(int id, @Nonnull PlayerInventory playerInventory, @Nonnull PlayerEntity playerEntity) {
+    public Container createMenu(int id, @NotNull PlayerInventory playerInventory, @NotNull PlayerEntity playerEntity) {
         assert level != null;
         return new CentrifugeContainer(ModContainers.CENTRIFUGE_CONTAINER.get(), id, level, worldPosition, playerInventory, times);
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public ITextComponent getDisplayName() {
         return new TranslationTextComponent("gui.resourcefulbees.centrifuge");

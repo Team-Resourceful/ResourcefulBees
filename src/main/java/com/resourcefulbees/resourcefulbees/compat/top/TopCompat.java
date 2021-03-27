@@ -3,7 +3,7 @@ package com.resourcefulbees.resourcefulbees.compat.top;
 import mcjty.theoneprobe.api.IBlockDisplayOverride;
 import mcjty.theoneprobe.api.ITheOneProbe;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.function.Function;
 
 public class TopCompat implements Function<ITheOneProbe, Void> {

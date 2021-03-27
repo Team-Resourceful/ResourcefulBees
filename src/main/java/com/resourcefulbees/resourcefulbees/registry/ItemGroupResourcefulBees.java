@@ -10,7 +10,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 public class ItemGroupResourcefulBees {
 
@@ -21,14 +21,14 @@ public class ItemGroupResourcefulBees {
     public static final ItemGroup RESOURCEFUL_BEES = (new ItemGroup(ResourcefulBees.MOD_ID) {
 
         @Override
-        @Nonnull
+        @NotNull
         @OnlyIn(Dist.CLIENT)
         public ItemStack makeIcon() {
             return new ItemStack(ModItems.T1_BEEHIVE_ITEM.get());
         }
 
         @Override
-        public void fillItemList(@Nonnull NonNullList<ItemStack> itemstacks) {
+        public void fillItemList(@NotNull NonNullList<ItemStack> itemstacks) {
             super.fillItemList(itemstacks);
             ItemStack creativeBeepedia = new ItemStack(ModItems.BEEPEDIA.get());
             CompoundNBT tag = new CompoundNBT();

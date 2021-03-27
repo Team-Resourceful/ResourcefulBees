@@ -14,7 +14,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +24,7 @@ public class FertiliserRecipe extends ShapelessRecipe {
         super(id, group, recipeOut, recipeIngredients);
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public IRecipeSerializer<?> getSerializer() {
         return ModRecipeSerializers.FERTILIZER_RECIPE.get();
@@ -76,7 +76,7 @@ public class FertiliserRecipe extends ShapelessRecipe {
     }
 
     @Override
-    public @Nonnull NonNullList<ItemStack> getRemainingItems(final CraftingInventory inv) {
+    public @NotNull NonNullList<ItemStack> getRemainingItems(final CraftingInventory inv) {
         final NonNullList<ItemStack> remainingItems = NonNullList.withSize(inv.getContainerSize(), ItemStack.EMPTY);
         for (int i = 0; i < remainingItems.size(); ++i) {
             ItemStack itemstack = inv.getItem(i);

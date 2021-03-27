@@ -11,8 +11,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class CentrifugeCasingTileEntity extends TileEntity {
     private BlockPos controllerPos;
@@ -48,9 +48,9 @@ public class CentrifugeCasingTileEntity extends TileEntity {
         return null;
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
         if (isLinked() && this.level != null) {
             CentrifugeControllerTileEntity controller = getController();
             if (controller != null && controller.isValidStructure()) {
@@ -60,22 +60,22 @@ public class CentrifugeCasingTileEntity extends TileEntity {
         return super.getCapability(cap, side);
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public CompoundNBT save(@Nonnull CompoundNBT tag) {
+    public CompoundNBT save(@NotNull CompoundNBT tag) {
         if (isLinked())
             tag.put(NBTConstants.NBT_CONTROLLER_POS, NBTUtil.writeBlockPos(controllerPos));
         return super.save(tag);
     }
 
     @Override
-    public void load(@Nonnull BlockState state, CompoundNBT tag) {
+    public void load(@NotNull BlockState state, CompoundNBT tag) {
         if (tag.contains(NBTConstants.NBT_CONTROLLER_POS))
             controllerPos = NBTUtil.readBlockPos(tag.getCompound(NBTConstants.NBT_CONTROLLER_POS));
         super.load(state, tag);
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public CompoundNBT getUpdateTag() {
         CompoundNBT nbtTagCompound = new CompoundNBT();
@@ -84,7 +84,7 @@ public class CentrifugeCasingTileEntity extends TileEntity {
     }
 
     @Override
-    public void handleUpdateTag(@Nonnull BlockState state, CompoundNBT tag) {
+    public void handleUpdateTag(@NotNull BlockState state, CompoundNBT tag) {
         this.load(state, tag);
     }
 

@@ -15,7 +15,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 @OnlyIn(Dist.CLIENT)
 public class AdditionLayer<T extends CustomBeeEntity> extends LayerRenderer<T, CustomBeeModel<T>> {
@@ -37,7 +37,7 @@ public class AdditionLayer<T extends CustomBeeEntity> extends LayerRenderer<T, C
         }
     }
 
-    public void render(@Nonnull MatrixStack matrixStackIn, @Nonnull IRenderTypeBuffer bufferIn, int packedLightIn, @Nonnull T customBeeEntity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void render(@NotNull MatrixStack matrixStackIn, @NotNull IRenderTypeBuffer bufferIn, int packedLightIn, @NotNull T customBeeEntity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         ResourceLocation texture = customBeeEntity.isAngry() ? angryTexture : baseTexture;
         this.getParentModel().copyPropertiesTo(this.additionModel);
         this.additionModel.prepareMobModel(customBeeEntity, limbSwing, limbSwingAmount, partialTicks);

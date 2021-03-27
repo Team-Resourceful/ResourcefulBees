@@ -15,8 +15,8 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.block.AbstractBlock.Properties;
 
@@ -27,9 +27,9 @@ public class ApiaryStorageBlock extends Block {
         this.registerDefaultState(this.stateDefinition.any());
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public ActionResultType use(@Nonnull BlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand handIn, @Nonnull BlockRayTraceResult hit) {
+    public ActionResultType use(@NotNull BlockState state, @NotNull World world, @NotNull BlockPos pos, @NotNull PlayerEntity player, @NotNull Hand handIn, @NotNull BlockRayTraceResult hit) {
         if (!player.isShiftKeyDown() && !world.isClientSide) {
             INamedContainerProvider blockEntity = state.getMenuProvider(world,pos);
             NetworkHooks.openGui((ServerPlayerEntity) player, blockEntity, pos);
@@ -39,7 +39,7 @@ public class ApiaryStorageBlock extends Block {
 
     @Nullable
     @Override
-    public INamedContainerProvider getMenuProvider(@Nonnull BlockState state, World worldIn, @Nonnull BlockPos pos) {
+    public INamedContainerProvider getMenuProvider(@NotNull BlockState state, World worldIn, @NotNull BlockPos pos) {
         return (INamedContainerProvider)worldIn.getBlockEntity(pos);
     }
 

@@ -23,8 +23,8 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
@@ -130,9 +130,9 @@ public class CentrifugeControllerTileEntity extends CentrifugeTileEntity {
     }
 
     //region NBT
-    @Nonnull
+    @NotNull
     @Override
-    public CompoundNBT save(@Nonnull CompoundNBT tag) {
+    public CompoundNBT save(@NotNull CompoundNBT tag) {
         super.save(tag);
         return saveToNBT(tag);
     }
@@ -152,12 +152,12 @@ public class CentrifugeControllerTileEntity extends CentrifugeTileEntity {
 
     @Nullable
     @Override
-    public Container createMenu(int id, @Nonnull PlayerInventory playerInventory, @Nonnull PlayerEntity playerEntity) {
+    public Container createMenu(int id, @NotNull PlayerInventory playerInventory, @NotNull PlayerEntity playerEntity) {
         assert level != null;
         return new CentrifugeMultiblockContainer(ModContainers.CENTRIFUGE_MULTIBLOCK_CONTAINER.get(), id, level, worldPosition, playerInventory, times);
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public ITextComponent getDisplayName() { return new TranslationTextComponent("gui.resourcefulbees.centrifuge"); }
 

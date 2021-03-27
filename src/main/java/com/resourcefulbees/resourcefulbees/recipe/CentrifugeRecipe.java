@@ -29,7 +29,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -77,7 +77,7 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
     }
 
     @Override
-    public boolean matches(IInventory inventory, @Nonnull World world) {
+    public boolean matches(IInventory inventory, @NotNull World world) {
         ItemStack stack = inventory.getItem(0);
         ItemStack bottle = inventory.getItem(1);
 
@@ -151,7 +151,7 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
         }
 
         @Override
-        public @NotNull T fromJson(@Nonnull ResourceLocation id, @NotNull JsonObject json) {
+        public @NotNull T fromJson(@NotNull ResourceLocation id, @NotNull JsonObject json) {
             Ingredient ingredient;
             if (JSONUtils.isArrayNode(json, INGREDIENT_STRING)) {
                 ingredient = Ingredient.fromJson(JSONUtils.getAsJsonArray(json, INGREDIENT_STRING));
@@ -213,7 +213,7 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
             return this.factory.create(id, ingredient, outputs, fluidOutput, time, multiblockTime, multiblock, hasFluidOutput, noBottle);
         }
 
-        public T fromNetwork(@Nonnull ResourceLocation id, @NotNull PacketBuffer buffer) {
+        public T fromNetwork(@NotNull ResourceLocation id, @NotNull PacketBuffer buffer) {
             Ingredient ingredient = Ingredient.fromNetwork(buffer);
             List<Pair<ItemStack, Float>> itemOutputs = new ArrayList<>();
             List<Pair<FluidStack, Float>> fluidOutput = new ArrayList<>();

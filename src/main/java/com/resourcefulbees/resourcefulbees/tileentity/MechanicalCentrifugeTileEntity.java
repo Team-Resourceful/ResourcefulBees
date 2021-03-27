@@ -28,8 +28,8 @@ import net.minecraftforge.items.wrapper.RecipeWrapper;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -166,7 +166,7 @@ public class MechanicalCentrifugeTileEntity extends TileEntity implements ITicka
         return recipe;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public CompoundNBT save(CompoundNBT tag) {
         CompoundNBT inv = this.getItemStackHandler().serializeNBT();
@@ -176,14 +176,14 @@ public class MechanicalCentrifugeTileEntity extends TileEntity implements ITicka
     }
 
     @Override
-    public void load(@Nonnull BlockState state, CompoundNBT tag) {
+    public void load(@NotNull BlockState state, CompoundNBT tag) {
         CompoundNBT invTag = tag.getCompound("inv");
         getItemStackHandler().deserializeNBT(invTag);
         setClicks(tag.getInt("clicks"));
         super.load(state, tag);
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public CompoundNBT getUpdateTag() {
         CompoundNBT nbtTagCompound = new CompoundNBT();
@@ -192,11 +192,11 @@ public class MechanicalCentrifugeTileEntity extends TileEntity implements ITicka
     }
 
     @Override
-    public void handleUpdateTag(@Nonnull BlockState state, CompoundNBT tag) { this.load(state, tag); }
+    public void handleUpdateTag(@NotNull BlockState state, CompoundNBT tag) { this.load(state, tag); }
 
-    @Nonnull
+    @NotNull
     @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
         if (cap.equals(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)) return getAutomationHandler().cast();
         return super.getCapability(cap, side);
     }
@@ -216,12 +216,12 @@ public class MechanicalCentrifugeTileEntity extends TileEntity implements ITicka
 
     @Nullable
     @Override
-    public Container createMenu(int id, @Nonnull PlayerInventory playerInventory, @Nonnull PlayerEntity playerEntity) {
+    public Container createMenu(int id, @NotNull PlayerInventory playerInventory, @NotNull PlayerEntity playerEntity) {
         //noinspection ConstantConditions
         return new MechanicalCentrifugeContainer(id, level, worldPosition, playerInventory);
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public ITextComponent getDisplayName() {
         return new TranslationTextComponent("gui.resourcefulbees.mechanical_centrifuge");

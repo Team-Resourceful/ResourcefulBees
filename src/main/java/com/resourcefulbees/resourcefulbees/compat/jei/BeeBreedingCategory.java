@@ -31,7 +31,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -141,7 +141,7 @@ public class BeeBreedingCategory extends BaseCategory<BeeBreedingCategory.Recipe
     }
 
     @Override
-    public void setIngredients(@Nonnull Recipe recipe, @Nonnull IIngredients ingredients) {
+    public void setIngredients(@NotNull Recipe recipe, @NotNull IIngredients ingredients) {
         List<List<ItemStack>> list = new ArrayList<>();
 
         if (recipe.p1FeedItem != null && recipe.p1FeedItem != Items.AIR) {
@@ -176,7 +176,7 @@ public class BeeBreedingCategory extends BaseCategory<BeeBreedingCategory.Recipe
     }
 
     @Override
-    public void setRecipe(@Nonnull IRecipeLayout iRecipeLayout, @Nonnull Recipe recipe, @Nonnull IIngredients ingredients) {
+    public void setRecipe(@NotNull IRecipeLayout iRecipeLayout, @NotNull Recipe recipe, @NotNull IIngredients ingredients) {
         IGuiIngredientGroup<EntityIngredient> ingredientStacks = iRecipeLayout.getIngredientsGroup(JEICompat.ENTITY_INGREDIENT);
 
         ingredientStacks.init(0, true, 6, 6);
@@ -199,7 +199,7 @@ public class BeeBreedingCategory extends BaseCategory<BeeBreedingCategory.Recipe
     }
 
     @Override
-    public void draw(Recipe recipe, @Nonnull MatrixStack matrix, double mouseX, double mouseY) {
+    public void draw(Recipe recipe, @NotNull MatrixStack matrix, double mouseX, double mouseY) {
         Minecraft minecraft = Minecraft.getInstance();
         FontRenderer fontRenderer = minecraft.font;
         DecimalFormat decimalFormat = new DecimalFormat("##%");

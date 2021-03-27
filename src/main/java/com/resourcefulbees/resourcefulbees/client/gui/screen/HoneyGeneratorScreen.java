@@ -13,7 +13,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 import java.text.DecimalFormat;
 
 public class HoneyGeneratorScreen extends ContainerScreen<HoneyGeneratorContainer> {
@@ -24,7 +24,7 @@ public class HoneyGeneratorScreen extends ContainerScreen<HoneyGeneratorContaine
     }
 
     @Override
-    protected void renderBg(@Nonnull MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
+    protected void renderBg(@NotNull MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
         ResourceLocation texture = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/gui/generator/honey_gen.png");
         Minecraft client = this.minecraft;
         if (client != null) {
@@ -46,7 +46,7 @@ public class HoneyGeneratorScreen extends ContainerScreen<HoneyGeneratorContaine
     }
 
     @Override
-    public void render(@Nonnull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
+    public void render(@NotNull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrix);
         super.render(matrix, mouseX, mouseY, partialTicks);
         this.renderTooltip(matrix, mouseX, mouseY);
@@ -62,7 +62,7 @@ public class HoneyGeneratorScreen extends ContainerScreen<HoneyGeneratorContaine
     }
 
     @Override
-    protected void renderLabels(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
+    protected void renderLabels(@NotNull MatrixStack matrix, int mouseX, int mouseY) {
         this.font.draw(matrix, this.title.getString(), 8, 5, 0x404040);
     }
 }

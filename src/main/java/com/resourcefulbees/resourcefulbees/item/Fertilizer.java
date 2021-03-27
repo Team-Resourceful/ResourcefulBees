@@ -16,7 +16,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +40,7 @@ public class Fertilizer extends Item {
         }
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public ActionResultType useOn(ItemUseContext context) {
 

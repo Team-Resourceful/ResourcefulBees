@@ -31,7 +31,7 @@ import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.text.WordUtils;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -83,7 +83,7 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
                 this.menu.getRequiresRedstone(), BACKGROUND, new ItemStack(Items.REDSTONE), new ItemStack(Items.REDSTONE), onPress -> this.setRedstoneControl()) {
 
             @Override
-            public void renderToolTip(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
+            public void renderToolTip(@NotNull MatrixStack matrix, int mouseX, int mouseY) {
                 TranslationTextComponent s = new TranslationTextComponent("gui.resourcefulbees.centrifuge.button.redstone." + stateTriggered);
                 CentrifugeScreen.this.renderTooltip(matrix, s, mouseX, mouseY);
             }
@@ -92,7 +92,7 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
                 this.menu.shouldDisplayFluids(), BACKGROUND, new ItemStack(Items.WATER_BUCKET), new ItemStack(Items.HONEYCOMB), onPress -> this.displayFluids()) {
 
             @Override
-            public void renderToolTip(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
+            public void renderToolTip(@NotNull MatrixStack matrix, int mouseX, int mouseY) {
                 TranslationTextComponent s = new TranslationTextComponent("gui.resourcefulbees.centrifuge.button.fluid_display." + stateTriggered);
                 CentrifugeScreen.this.renderTooltip(matrix, s, mouseX, mouseY);
             }
@@ -118,7 +118,7 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
     }
 
     @Override
-    protected void renderBg(@Nonnull MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
+    protected void renderBg(@NotNull MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
         Minecraft client = this.minecraft;
         if (client != null) {
             client.getTextureManager().bind(BACKGROUND);
@@ -138,7 +138,7 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
     }
 
     @Override
-    public void render(@Nonnull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
+    public void render(@NotNull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrix);
         this.redstoneButton.render(matrix, mouseX, mouseY, partialTicks);
         this.fluidDispButton.render(matrix, mouseX, mouseY, partialTicks);
@@ -175,7 +175,7 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
     }
 
     @Override
-    public void renderLabels(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
+    public void renderLabels(@NotNull MatrixStack matrix, int mouseX, int mouseY) {
         for (Widget widget : this.buttons) {
             if (widget.isHovered()) {
                 widget.renderToolTip(matrix, mouseX - this.leftPos, mouseY - this.topPos);
@@ -307,7 +307,7 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
         return Screen.hasShiftDown() || amount < 500f ? amount + "mb" : ModConstants.DECIMAL_FORMAT.format((float) amount / 1000f) + "B";
     }
 
-    public String getFluidNamespace(@Nonnull Fluid fluid) {
+    public String getFluidNamespace(@NotNull Fluid fluid) {
         //noinspection deprecation
         return WordUtils.capitalize(Objects.requireNonNull(fluid.getRegistryName()).getNamespace());
     }

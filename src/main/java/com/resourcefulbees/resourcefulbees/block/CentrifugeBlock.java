@@ -30,8 +30,8 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.ItemStackHandler;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -44,9 +44,9 @@ public class CentrifugeBlock extends Block {
         registerDefaultState(defaultBlockState().setValue(PROPERTY_ON,false));
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public ActionResultType use(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult rayTraceResult) {
+    public ActionResultType use(@NotNull BlockState state, World world, @NotNull BlockPos pos, @NotNull PlayerEntity player, @NotNull Hand hand, @NotNull BlockRayTraceResult rayTraceResult) {
         ItemStack heldItem = player.getItemInHand(hand);
         boolean hasCapability = heldItem.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent();
         TileEntity tileEntity = world.getBlockEntity(pos);
@@ -66,7 +66,7 @@ public class CentrifugeBlock extends Block {
     }
 
     @Override
-    public void neighborChanged(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull Block changedBlock, @Nonnull BlockPos changedBlockPos, boolean bool) {
+    public void neighborChanged(@NotNull BlockState state, World world, @NotNull BlockPos pos, @NotNull Block changedBlock, @NotNull BlockPos changedBlockPos, boolean bool) {
         TileEntity tileEntity = world.getBlockEntity(pos);
         if (tileEntity instanceof CentrifugeTileEntity) {
             CentrifugeTileEntity centrifugeTileEntity = (CentrifugeTileEntity) tileEntity;
@@ -76,12 +76,12 @@ public class CentrifugeBlock extends Block {
 
     @Nullable
     @Override
-    public INamedContainerProvider getMenuProvider(@Nonnull BlockState state, World worldIn, @Nonnull BlockPos pos) {
+    public INamedContainerProvider getMenuProvider(@NotNull BlockState state, World worldIn, @NotNull BlockPos pos) {
         return (INamedContainerProvider)worldIn.getBlockEntity(pos);
     }
 
     @Override
-    public void onRemove(@Nonnull BlockState state1, World world, @Nonnull BlockPos pos, @Nonnull BlockState state, boolean isMoving) {
+    public void onRemove(@NotNull BlockState state1, World world, @NotNull BlockPos pos, @NotNull BlockState state, boolean isMoving) {
         TileEntity blockEntity = world.getBlockEntity(pos);
         if (blockEntity instanceof CentrifugeTileEntity && state.getBlock() != state1.getBlock()){
             CentrifugeTileEntity centrifugeTileEntity = (CentrifugeTileEntity)blockEntity;
@@ -109,7 +109,7 @@ public class CentrifugeBlock extends Block {
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void appendHoverText(@Nonnull ItemStack stack, @Nullable IBlockReader worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
+    public void appendHoverText(@NotNull ItemStack stack, @Nullable IBlockReader worldIn, @NotNull List<ITextComponent> tooltip, @NotNull ITooltipFlag flagIn) {
             tooltip.addAll(new TooltipBuilder()
                     .addTip(I18n.get("block.resourcefulbees.centrifuge.tooltip.info"), TextFormatting.GOLD)
                     .build());

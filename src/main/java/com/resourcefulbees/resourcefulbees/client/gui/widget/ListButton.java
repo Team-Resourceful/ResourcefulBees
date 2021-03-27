@@ -11,7 +11,7 @@ import net.minecraft.util.text.TextFormatting;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.GL11;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.client.gui.widget.button.Button.IPressable;
 
@@ -43,7 +43,7 @@ public class ListButton extends TabImageButton {
     }
 
     @Override
-    public void renderButton(@Nonnull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
+    public void renderButton(@NotNull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
         Minecraft minecraft = Minecraft.getInstance();
         minecraft.getTextureManager().bind(this.resourceLocation);
         RenderSystem.disableDepthTest();
@@ -65,7 +65,7 @@ public class ListButton extends TabImageButton {
         }
     }
 
-    private void drawButton(@Nonnull MatrixStack matrix, float texYPos) {
+    private void drawButton(@NotNull MatrixStack matrix, float texYPos) {
         blit(matrix, this.x, this.y, (float) this.xTexStart, texYPos, this.width, this.height, width, yDiffText * 3);
         fontRenderer.draw(matrix, text.copy().withStyle(this.active ? TextFormatting.GRAY : TextFormatting.WHITE), (float) (this.x + textX), (float) (this.y + textY), -1);
         if (this.displayItem != null)

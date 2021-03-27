@@ -33,8 +33,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 import java.util.Random;
 
@@ -104,7 +104,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
     //region CUSTOM BEE RELATED METHODS BELOW
 
     @Override
-    public boolean isInvulnerableTo(@Nonnull DamageSource source) {
+    public boolean isInvulnerableTo(@NotNull DamageSource source) {
         TraitData info = getBeeData().getTraitData();
         if (hasEffect(Effects.WATER_BREATHING) && source == DamageSource.DROWN) {
             return true;
@@ -119,7 +119,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
     }
 
     @Override
-    public boolean canBeAffected(@Nonnull EffectInstance effectInstance) {
+    public boolean canBeAffected(@NotNull EffectInstance effectInstance) {
         TraitData info = getBeeData().getTraitData();
         if (info.hasTraits() && info.hasPotionImmunities()) {
             Effect potionEffect = effectInstance.getEffect();
@@ -209,13 +209,13 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
     }
 
     @Override
-    public void readAdditionalSaveData(@Nonnull CompoundNBT compound) {
+    public void readAdditionalSaveData(@NotNull CompoundNBT compound) {
         super.readAdditionalSaveData(compound);
         this.entityData.set(FEED_COUNT, compound.getInt(NBTConstants.NBT_FEED_COUNT));
     }
 
     @Override
-    public void addAdditionalSaveData(@Nonnull CompoundNBT compound) {
+    public void addAdditionalSaveData(@NotNull CompoundNBT compound) {
         super.addAdditionalSaveData(compound);
         compound.putString(NBTConstants.NBT_BEE_TYPE, this.getBeeType());
         compound.putInt(NBTConstants.NBT_FEED_COUNT, this.getFeedCount());
@@ -252,13 +252,13 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
     }
 
     @Override
-    public boolean isFood(@Nonnull ItemStack stack) {
+    public boolean isFood(@NotNull ItemStack stack) {
         return BeeInfoUtils.isValidBreedItem(stack, this.getBeeData().getBreedData().getFeedItem());
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public ActionResultType mobInteract(PlayerEntity player, @Nonnull Hand hand) {
+    public ActionResultType mobInteract(PlayerEntity player, @NotNull Hand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         Item item = itemstack.getItem();
         if (item instanceof NameTagItem) {
@@ -285,9 +285,9 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
     }
 
 
-    @Nonnull
+    @NotNull
     @Override
-    public EntitySize getDimensions(@Nonnull Pose poseIn) {
+    public EntitySize getDimensions(@NotNull Pose poseIn) {
         float scale = beeData.getSizeModifier();
         scale = this.isBaby() ? scale * Config.CHILD_SIZE_MODIFIER.get().floatValue() : scale;
         scale = Math.max(scale, 0.75f);

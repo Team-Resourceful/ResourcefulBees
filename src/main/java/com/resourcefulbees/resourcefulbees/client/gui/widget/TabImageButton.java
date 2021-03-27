@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.client.gui.widget.button.Button.IPressable;
 import net.minecraft.client.gui.widget.button.Button.ITooltip;
@@ -40,7 +40,7 @@ public class TabImageButton extends ModImageButton {
     }
 
     @Override
-    public void renderButton(@Nonnull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
+    public void renderButton(@NotNull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
         super.renderButton(matrix, mouseX, mouseY, partialTicks);
         if (this.displayItem != null)
             Minecraft.getInstance().getItemRenderer().renderAndDecorateItem(this.displayItem, this.x + this.itemX, this.y + this.itemY);

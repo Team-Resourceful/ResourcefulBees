@@ -31,8 +31,8 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.util.Constants;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -60,7 +60,7 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
         this.tierModifier = tierModifier;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public TileEntityType<?> getType() { return ModTileEntityTypes.TIERED_BEEHIVE_TILE_ENTITY.get(); }
 
@@ -92,7 +92,7 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
     public int getTicksSmoked() { return ticksSmoked; }
 
     @Override
-    public boolean releaseOccupant(@Nonnull BlockState state, @Nonnull BeehiveTileEntity.Bee tileBee, @Nullable List<Entity> entities, @Nonnull BeehiveTileEntity.State beehiveState) {
+    public boolean releaseOccupant(@NotNull BlockState state, @NotNull BeehiveTileEntity.Bee tileBee, @Nullable List<Entity> entities, @NotNull BeehiveTileEntity.State beehiveState) {
         BlockPos blockpos = this.getBlockPos();
         if (shouldStayInHive(beehiveState)) {
             return false;
@@ -149,7 +149,7 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
     }
 
     @Override
-    public void addOccupantWithPresetTicks(@Nonnull Entity bee, boolean hasNectar, int ticksInHive) {
+    public void addOccupantWithPresetTicks(@NotNull Entity bee, boolean hasNectar, int ticksInHive) {
         if (this.stored.size() < getMaxBees()) {
             bee.ejectPassengers();
             CompoundNBT nbt = new CompoundNBT();
@@ -224,7 +224,7 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
     }
 
     @Override
-    public void load(@Nonnull BlockState state, @Nonnull CompoundNBT nbt) {
+    public void load(@NotNull BlockState state, @NotNull CompoundNBT nbt) {
         super.load(state, nbt);
         if (nbt.contains(NBTConstants.NBT_HONEYCOMBS_TE)) honeycombs = getHoneycombs(nbt);
         if (nbt.contains(NBTConstants.NBT_SMOKED_TE)) this.isSmoked = nbt.getBoolean(NBTConstants.NBT_SMOKED_TE);
@@ -232,9 +232,9 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
         if (nbt.contains(NBTConstants.NBT_TIER_MODIFIER)) setTierModifier(nbt.getFloat(NBTConstants.NBT_TIER_MODIFIER));
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public CompoundNBT save(@Nonnull CompoundNBT nbt) {
+    public CompoundNBT save(@NotNull CompoundNBT nbt) {
         super.save(nbt);
         if (!getHoneycombs().isEmpty()) nbt.put(NBTConstants.NBT_HONEYCOMBS_TE, writeHoneycombs());
         nbt.putBoolean(NBTConstants.NBT_SMOKED_TE, isSmoked);

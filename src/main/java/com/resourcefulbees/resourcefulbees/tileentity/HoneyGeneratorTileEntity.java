@@ -43,8 +43,8 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class HoneyGeneratorTileEntity extends AbstractHoneyTankContainer implements ITickableTileEntity, INamedContainerProvider {
@@ -139,7 +139,7 @@ public class HoneyGeneratorTileEntity extends AbstractHoneyTankContainer impleme
         energyStorage.deserializeNBT(nbt.getCompound("power"));
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public CompoundNBT save(CompoundNBT tag) {
         CompoundNBT inv = this.getTileStackHandler().serializeNBT();
@@ -153,7 +153,7 @@ public class HoneyGeneratorTileEntity extends AbstractHoneyTankContainer impleme
     } //TODO 1.17 - change "fluid" to tank
 
     @Override
-    public void load(@Nonnull BlockState state, CompoundNBT tag) {
+    public void load(@NotNull BlockState state, CompoundNBT tag) {
         CompoundNBT invTag = tag.getCompound(NBTConstants.NBT_INVENTORY);
         getTileStackHandler().deserializeNBT(invTag);
         energyStorage.deserializeNBT(tag.getCompound(NBTConstants.NBT_ENERGY));
@@ -164,7 +164,7 @@ public class HoneyGeneratorTileEntity extends AbstractHoneyTankContainer impleme
         super.load(state, tag);
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public CompoundNBT getUpdateTag() {
         CompoundNBT nbtTagCompound = new CompoundNBT();
@@ -173,13 +173,13 @@ public class HoneyGeneratorTileEntity extends AbstractHoneyTankContainer impleme
     }
 
     @Override
-    public void handleUpdateTag(@Nonnull BlockState state, CompoundNBT tag) {
+    public void handleUpdateTag(@NotNull BlockState state, CompoundNBT tag) {
         this.load(state, tag);
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
         if (cap.equals(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)) return lazyOptional.cast();
         if (cap.equals(CapabilityEnergy.ENERGY)) return energyOptional.cast();
         if (cap.equals(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)) return getFluidOptional().cast();
@@ -195,12 +195,12 @@ public class HoneyGeneratorTileEntity extends AbstractHoneyTankContainer impleme
 
     @Nullable
     @Override
-    public Container createMenu(int id, @Nonnull PlayerInventory playerInventory, @Nonnull PlayerEntity playerEntity) {
+    public Container createMenu(int id, @NotNull PlayerInventory playerInventory, @NotNull PlayerEntity playerEntity) {
         //noinspection ConstantConditions
         return new HoneyGeneratorContainer(id, level, worldPosition, playerInventory);
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public ITextComponent getDisplayName() {
         return new TranslationTextComponent("gui.resourcefulbees.honey_generator");

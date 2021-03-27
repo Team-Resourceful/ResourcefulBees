@@ -15,7 +15,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 
 @OnlyIn(Dist.CLIENT)
@@ -51,7 +51,7 @@ public class CustomBeeRenderer extends MobRenderer<CustomBeeEntity, CustomBeeMod
         }
     }
 
-    @Nonnull
+    @NotNull
     public ResourceLocation getTextureLocation(CustomBeeEntity entity) {
         return entity.isAngry() ? angryTexture : baseTexture;
     }

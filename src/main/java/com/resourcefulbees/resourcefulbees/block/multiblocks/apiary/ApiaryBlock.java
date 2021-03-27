@@ -34,8 +34,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 @SuppressWarnings("deprecation")
@@ -53,7 +53,7 @@ public class ApiaryBlock extends Block {
   }
 
   @Override
-  public @NotNull ActionResultType use(@Nonnull BlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand handIn, @Nonnull BlockRayTraceResult hit) {
+  public @NotNull ActionResultType use(@NotNull BlockState state, @NotNull World world, @NotNull BlockPos pos, @NotNull PlayerEntity player, @NotNull Hand handIn, @NotNull BlockRayTraceResult hit) {
     if (!player.isShiftKeyDown() && !world.isClientSide) {
       INamedContainerProvider blockEntity = state.getMenuProvider(world,pos);
       NetworkHooks.openGui((ServerPlayerEntity) player, blockEntity, pos);
@@ -76,7 +76,7 @@ public class ApiaryBlock extends Block {
 
   @Nullable
   @Override
-  public INamedContainerProvider getMenuProvider(@Nonnull BlockState state, World worldIn, @Nonnull BlockPos pos) {
+  public INamedContainerProvider getMenuProvider(@NotNull BlockState state, World worldIn, @NotNull BlockPos pos) {
     return (INamedContainerProvider)worldIn.getBlockEntity(pos);
   }
 
@@ -92,7 +92,7 @@ public class ApiaryBlock extends Block {
   }
 
   @Override
-  public void setPlacedBy(World worldIn, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nullable LivingEntity placer, @Nonnull ItemStack stack) {
+  public void setPlacedBy(World worldIn, @NotNull BlockPos pos, @NotNull BlockState state, @Nullable LivingEntity placer, @NotNull ItemStack stack) {
     TileEntity tile = worldIn.getBlockEntity(pos);
     if(tile instanceof ApiaryTileEntity) {
       ApiaryTileEntity apiaryTileEntity = (ApiaryTileEntity) tile;
@@ -102,7 +102,7 @@ public class ApiaryBlock extends Block {
 
   @OnlyIn(Dist.CLIENT)
   @Override
-  public void appendHoverText(@Nonnull ItemStack stack, @Nullable IBlockReader worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
+  public void appendHoverText(@NotNull ItemStack stack, @Nullable IBlockReader worldIn, @NotNull List<ITextComponent> tooltip, @NotNull ITooltipFlag flagIn) {
     if(Screen.hasShiftDown())
     {
       tooltip.addAll(new TooltipBuilder()

@@ -7,7 +7,7 @@ import net.minecraft.entity.ai.goal.HurtByTargetGoal;
 import net.minecraft.entity.passive.BeeEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class BeeAngerGoal extends HurtByTargetGoal {
@@ -24,7 +24,7 @@ public class BeeAngerGoal extends HurtByTargetGoal {
     }
 
     @Override
-    protected void alertOther(@Nonnull MobEntity mobIn, @Nonnull LivingEntity targetIn) {
+    protected void alertOther(@NotNull MobEntity mobIn, @NotNull LivingEntity targetIn) {
         if (mobIn instanceof BeeEntity && this.mob.canSee(targetIn)) {
             mobIn.setTarget(targetIn);
         }

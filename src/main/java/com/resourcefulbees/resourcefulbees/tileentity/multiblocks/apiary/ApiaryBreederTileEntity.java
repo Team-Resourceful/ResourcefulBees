@@ -41,8 +41,8 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import static com.resourcefulbees.resourcefulbees.lib.NBTConstants.NBT_BREEDER_COUNT;
 
@@ -265,14 +265,14 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
 
 
     @Override
-    public void load(@Nonnull BlockState state, @Nonnull CompoundNBT nbt) {
+    public void load(@NotNull BlockState state, @NotNull CompoundNBT nbt) {
         super.load(state, nbt);
         this.loadFromNBT(nbt);
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public CompoundNBT save(@Nonnull CompoundNBT nbt) {
+    public CompoundNBT save(@NotNull CompoundNBT nbt) {
         super.save(nbt);
         return this.saveToNBT(nbt);
     }
@@ -301,7 +301,7 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
         return nbt;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public CompoundNBT getUpdateTag() {
         CompoundNBT nbtTagCompound = new CompoundNBT();
@@ -310,7 +310,7 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
     }
 
     @Override
-    public void handleUpdateTag(@Nonnull BlockState state, CompoundNBT tag) {
+    public void handleUpdateTag(@NotNull BlockState state, CompoundNBT tag) {
         this.load(state, tag);
     }
 
@@ -327,9 +327,9 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
         loadFromNBT(nbt);
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
         if (cap.equals(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)) return lazyOptional.cast();
         return super.getCapability(cap, side);
     }
@@ -344,12 +344,12 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
 
     @Nullable
     @Override
-    public Container createMenu(int id, @Nonnull PlayerInventory playerInventory, @Nonnull PlayerEntity playerEntity) {
+    public Container createMenu(int id, @NotNull PlayerInventory playerInventory, @NotNull PlayerEntity playerEntity) {
         //noinspection ConstantConditions
         return new ApiaryBreederContainer(id, level, worldPosition, playerInventory, times);
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public ITextComponent getDisplayName() {
         return new TranslationTextComponent("gui.resourcefulbees.apiary_breeder");
