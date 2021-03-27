@@ -13,6 +13,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class ModContainers {
 
 
+    ;
 
     private ModContainers() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
@@ -43,4 +44,6 @@ public class ModContainers {
             .create((id, inv, c) -> new EnderBeeconContainer(id, inv.player.level, c.readBlockPos(), inv)));
     public static final RegistryObject<ContainerType<HoneyBottlerContainer>> HONEY_BOTTLER_CONTAINER = CONTAINER_TYPES.register("honey_bottler", () -> IForgeContainerType
             .create((id, inv, c) -> new HoneyBottlerContainer(id, inv.player.level, c.readBlockPos(), inv)));
+    public static final RegistryObject<ContainerType<HoneyTankContainer>> HONEY_TANK_CONTAINER = CONTAINER_TYPES.register("honey_tank", () -> IForgeContainerType
+            .create((id, inv, c) -> new HoneyTankContainer(id, inv.player.level, c.readBlockPos(), inv)));
 }

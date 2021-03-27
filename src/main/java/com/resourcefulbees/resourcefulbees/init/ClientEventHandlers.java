@@ -64,6 +64,7 @@ public class ClientEventHandlers {
         ScreenManager.register(ModContainers.HONEY_GENERATOR_CONTAINER.get(), HoneyGeneratorScreen::new);
         ScreenManager.register(ModContainers.ENDER_BEECON_CONTAINER.get(), EnderBeeconScreen::new);
         ScreenManager.register(ModContainers.HONEY_BOTTLER_CONTAINER.get(), HoneyBottlerScreen::new);
+        ScreenManager.register(ModContainers.HONEY_TANK_CONTAINER.get(), HoneyTankScreen::new);
         RenderTypeLookup.setRenderLayer(ModBlocks.GOLD_FLOWER.get(), RenderType.cutout());
         RenderTypeLookup.setRenderLayer(ModBlocks.PREVIEW_BLOCK.get(), RenderType.cutout());
         RenderTypeLookup.setRenderLayer(ModBlocks.ERRORED_PREVIEW_BLOCK.get(), RenderType.cutout());
