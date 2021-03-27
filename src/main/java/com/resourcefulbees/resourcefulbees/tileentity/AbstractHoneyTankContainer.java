@@ -113,7 +113,7 @@ public abstract class AbstractHoneyTankContainer extends AbstractHoneyTank imple
     public boolean canProcessFluid() {
         boolean spaceLeft;
         ItemStack stack = getTileStackHandler().getStackInSlot(HONEY_BOTTLE_INPUT);
-        if (stack.isEmpty()) return false;
+        if (!canStartFluidProcess()) return false;
         Fluid fluid;
         if (stack.getItem() instanceof BucketItem) {
             BucketItem item = (BucketItem) stack.getItem();
