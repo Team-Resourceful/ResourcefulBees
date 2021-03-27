@@ -99,12 +99,14 @@ public class HoneyTankTileEntity extends AbstractHoneyTankContainer {
         return new AxisAlignedBB(this.getBlockPos().below().south().west(), this.getBlockPos().above().north().east());
     }
 
+    @Override
     public CompoundNBT writeNBT(CompoundNBT tag) {
         tag.putInt("tier", getTier().tier);
         if (getFluidTank().isEmpty()) return tag;
         return super.writeNBT(tag);
     }
 
+    @Override
     public void readNBT(CompoundNBT tag) {
         super.readNBT(tag);
         setTier(TankTier.getTier(tag.getInt("tier")));

@@ -29,8 +29,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.client.gui.widget.button.Button.IPressable;
-
 public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryContainer> {
 
     private static final ResourceLocation unvalidatedTexture = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/apiary/unvalidated.png");
@@ -67,10 +65,10 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
             previewSetToggle(this.previewButton.isTriggered());
         }));
         previewSetToggle(this.previewButton.isTriggered());
-        this.upButton = this.addButton(new ArrowButton(getGuiLeft() + 22, getGuiTop() + 12, 12, 12, 0, 0, 12, arrowButtonTexture, onPress -> this.offsetPosition(Direction.UP)));
-        this.downButton = this.addButton(new ArrowButton(getGuiLeft() + 22, getGuiTop() + 38, 12, 12, 12, 0, 12, arrowButtonTexture, onPress -> this.offsetPosition(Direction.DOWN)));
-        this.leftButton = this.addButton(new ArrowButton(getGuiLeft() + 9, getGuiTop() + 25, 12, 12, 24, 0, 12, arrowButtonTexture, onPress -> this.offsetPosition(Direction.LEFT)));
-        this.rightButton = this.addButton(new ArrowButton(getGuiLeft() + 35, getGuiTop() + 25, 12, 12, 36, 0, 12, arrowButtonTexture, onPress -> this.offsetPosition(Direction.RIGHT)));
+        this.upButton = this.addButton(new ArrowButton(getGuiLeft() + 22, getGuiTop() + 12, ArrowButton.Direction.UP, onPress -> this.offsetPosition(Direction.UP)));
+        this.downButton = this.addButton(new ArrowButton(getGuiLeft() + 22, getGuiTop() + 38, ArrowButton.Direction.DOWN, onPress -> this.offsetPosition(Direction.DOWN)));
+        this.leftButton = this.addButton(new ArrowButton(getGuiLeft() + 9, getGuiTop() + 25, ArrowButton.Direction.LEFT, onPress -> this.offsetPosition(Direction.LEFT)));
+        this.rightButton = this.addButton(new ArrowButton(getGuiLeft() + 35, getGuiTop() + 25, ArrowButton.Direction.RIGHT, onPress -> this.offsetPosition(Direction.RIGHT)));
     }
 
     private void previewSetToggle(boolean toggled) {

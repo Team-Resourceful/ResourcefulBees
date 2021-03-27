@@ -19,7 +19,7 @@ public class PatreonInfo {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
 
-    public static void addPatreon(String uuid, BeeRewardData data){
+    protected static void addPatreon(String uuid, BeeRewardData data){
         if (data != null) {
             try {
                 patreons.put(UUID.fromString(uuid), data);
