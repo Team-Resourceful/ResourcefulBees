@@ -75,7 +75,7 @@ public class BeePage extends BeepediaPage {
             );
             tabs.add(traitListPage);
         }
-        if (beeData.hasHoneycomb() && (!Config.BEEPEDIA_HIDE_LOCKED.get() || beeUnlocked)) {
+        if (beeData.hasHoneycomb() && (!Config.BEEPEDIA_HIDE_LOCKED.get() || beeUnlocked) && beeData.getCombRegistryObject().isPresent()) {
             centrifugePage = Pair.of(
                     getTabButton(new ItemStack(Items.HONEYCOMB), onPress -> setSubPage(SubPageType.HONEYCOMB),
                             new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.honeycombs")),
