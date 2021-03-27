@@ -23,52 +23,15 @@ public class EliteCentrifugeControllerTileEntity extends CentrifugeControllerTil
 
         @Override
         public int get(int index) {
-            switch(index) {
-                case 0:
-                    return EliteCentrifugeControllerTileEntity.this.time[0];
-                case 1:
-                    return EliteCentrifugeControllerTileEntity.this.time[1];
-                case 2:
-                    return EliteCentrifugeControllerTileEntity.this.time[2];
-                case 3:
-                    return EliteCentrifugeControllerTileEntity.this.time[3];
-                case 4:
-                    return EliteCentrifugeControllerTileEntity.this.time[4];
-                case 5:
-                    return EliteCentrifugeControllerTileEntity.this.time[5];
-                default:
-                    return 0;
-            }
+            if (index > this.getCount() - 1 || index < 0) return 0;
+            return EliteCentrifugeControllerTileEntity.this.time[index];
         }
 
         @Override
         public void set(int index, int value) {
-            switch(index) {
-                case 0:
-                    EliteCentrifugeControllerTileEntity.this.time[0] = value;
-                    break;
-                case 1:
-                    EliteCentrifugeControllerTileEntity.this.time[1] = value;
-                    break;
-                case 2:
-                    EliteCentrifugeControllerTileEntity.this.time[2] = value;
-                    break;
-                case 3:
-                    EliteCentrifugeControllerTileEntity.this.time[3] = value;
-                    break;
-                case 4:
-                    EliteCentrifugeControllerTileEntity.this.time[4] = value;
-                    break;
-                case 5:
-                    EliteCentrifugeControllerTileEntity.this.time[5] = value;
-                    break;
-                default: //do nothing
-            }
-
+            if (index > this.getCount() - 1 || index < 0) return;
+            EliteCentrifugeControllerTileEntity.this.time[index] = value;
         }
-
-        @Override
-        public int getCount() { return 6; }
     };
 
     public EliteCentrifugeControllerTileEntity(TileEntityType<?> tileEntityType) { super(tileEntityType); }

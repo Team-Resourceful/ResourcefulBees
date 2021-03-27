@@ -127,13 +127,6 @@ public class ApiaryStorageScreen extends ContainerScreen<ApiaryStorageContainer>
     }
 
     @Override
-    public void render(@NotNull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(matrix);
-        super.render(matrix, mouseX, mouseY, partialTicks);
-        this.renderTooltip(matrix, mouseX, mouseY);
-    }
-
-    @Override
     protected void renderBg(@NotNull MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
         if (this.menu.isRebuild()) {
             preInit();
@@ -141,8 +134,8 @@ public class ApiaryStorageScreen extends ContainerScreen<ApiaryStorageContainer>
             this.menu.setRebuild(false);
         }
 
-            mainTabButton.active = getApiaryStorageTileEntity().getApiary() != null;
-            breedTabButton.active = getApiaryStorageTileEntity().getApiary() != null && getApiaryStorageTileEntity().getApiary().getBreederPos() != null;
+        mainTabButton.active = getApiaryStorageTileEntity().getApiary() != null;
+        breedTabButton.active = getApiaryStorageTileEntity().getApiary() != null && getApiaryStorageTileEntity().getApiary().getBreederPos() != null;
 
         Minecraft client = this.minecraft;
         if (client != null) {
@@ -155,6 +148,13 @@ public class ApiaryStorageScreen extends ContainerScreen<ApiaryStorageContainer>
             this.minecraft.getTextureManager().bind(TABS_BG);
             blit(matrix, t -1, j + 12, 0,0, 25, 68, 128, 128);
         }
+    }
+
+    @Override
+    public void render(@NotNull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
+        this.renderBackground(matrix);
+        super.render(matrix, mouseX, mouseY, partialTicks);
+        this.renderTooltip(matrix, mouseX, mouseY);
     }
 
     @Override

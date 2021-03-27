@@ -55,16 +55,18 @@ public class ApiaryBreederBlock extends Block{
         return (INamedContainerProvider)worldIn.getBlockEntity(pos);
     }
 
-    @Override
-    public boolean hasTileEntity(BlockState state) {
-        return true;
-    }
-
     @Nullable
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
         return new ApiaryBreederTileEntity();
     }
+
+
+    @Override
+    public boolean hasTileEntity(BlockState state) {
+        return true;
+    }
+
 
     @OnlyIn(Dist.CLIENT)
     @Override

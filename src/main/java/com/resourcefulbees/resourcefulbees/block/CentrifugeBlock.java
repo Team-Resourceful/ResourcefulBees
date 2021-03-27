@@ -65,6 +65,12 @@ public class CentrifugeBlock extends Block {
         return super.use(state, world, pos, player, hand, rayTraceResult);
     }
 
+    @Nullable
+    @Override
+    public INamedContainerProvider getMenuProvider(@NotNull BlockState state, World worldIn, @NotNull BlockPos pos) {
+        return (INamedContainerProvider)worldIn.getBlockEntity(pos);
+    }
+
     @Override
     public void neighborChanged(@NotNull BlockState state, World world, @NotNull BlockPos pos, @NotNull Block changedBlock, @NotNull BlockPos changedBlockPos, boolean bool) {
         TileEntity tileEntity = world.getBlockEntity(pos);
@@ -72,12 +78,6 @@ public class CentrifugeBlock extends Block {
             CentrifugeTileEntity centrifugeTileEntity = (CentrifugeTileEntity) tileEntity;
             centrifugeTileEntity.setIsPoweredByRedstone(world.hasNeighborSignal(pos));
         }
-    }
-
-    @Nullable
-    @Override
-    public INamedContainerProvider getMenuProvider(@NotNull BlockState state, World worldIn, @NotNull BlockPos pos) {
-        return (INamedContainerProvider)worldIn.getBlockEntity(pos);
     }
 
     @Override

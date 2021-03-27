@@ -73,12 +73,6 @@ public class ApiaryBlock extends Block {
     builder.add(VALIDATED, FACING);
   }
 
-  @Nullable
-  @Override
-  public INamedContainerProvider getMenuProvider(@NotNull BlockState state, World worldIn, @NotNull BlockPos pos) {
-    return (INamedContainerProvider)worldIn.getBlockEntity(pos);
-  }
-
   @Override
   public boolean hasTileEntity(BlockState state) {
     return true;
@@ -88,6 +82,12 @@ public class ApiaryBlock extends Block {
   @Override
   public TileEntity createTileEntity(BlockState state, IBlockReader world) {
     return new ApiaryTileEntity();
+  }
+
+  @Nullable
+  @Override
+  public INamedContainerProvider getMenuProvider(@NotNull BlockState state, World worldIn, @NotNull BlockPos pos) {
+    return (INamedContainerProvider)worldIn.getBlockEntity(pos);
   }
 
   @Override
