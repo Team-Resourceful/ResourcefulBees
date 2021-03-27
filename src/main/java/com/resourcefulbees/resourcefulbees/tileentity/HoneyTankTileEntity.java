@@ -23,7 +23,10 @@ import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.RegistryObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
 
 public class HoneyTankTileEntity extends AbstractHoneyTankContainer {
 
@@ -36,6 +39,7 @@ public class HoneyTankTileEntity extends AbstractHoneyTankContainer {
     }
 
     @Override
+    @NotNull
     public ITextComponent getDisplayName() {
         return new TranslationTextComponent("gui.resourcefulbees.honey_tank");
     }
@@ -43,7 +47,8 @@ public class HoneyTankTileEntity extends AbstractHoneyTankContainer {
 
     @Nullable
     @Override
-    public Container createMenu(int id, PlayerInventory inventory, PlayerEntity player) {
+    public Container createMenu(int id, @NotNull PlayerInventory inventory, @NotNull PlayerEntity player) {
+        if (level == null) return null;
         return new HoneyTankContainer(id, level, worldPosition, inventory);
     }
 
@@ -132,7 +137,8 @@ public class HoneyTankTileEntity extends AbstractHoneyTankContainer {
     public void readNBT(CompoundNBT tag) {
         super.readNBT(tag);
         setTier(TankTier.getTier(tag.getInt("tier")));
-        if (getFluidTank().getTankCapacity(0) != getTier().maxFillAmount) getFluidTank().setCapacity(getTier().maxFillAmount);
+        if (getFluidTank().getTankCapacity(0) != getTier().maxFillAmount)
+            getFluidTank().setCapacity(getTier().maxFillAmount);
         if (getFluidTank().getFluidAmount() > getFluidTank().getTankCapacity(0))
             getFluidTank().getFluid().setAmount(getFluidTank().getTankCapacity(0));
     }

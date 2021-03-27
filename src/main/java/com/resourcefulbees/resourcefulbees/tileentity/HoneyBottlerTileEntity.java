@@ -56,13 +56,15 @@ public class HoneyBottlerTileEntity extends AbstractHoneyTank implements ITickab
     }
 
     @Override
+    @NotNull
     public ITextComponent getDisplayName() {
         return new TranslationTextComponent("gui.resourcefulbees.honey_bottler");
     }
 
     @Nullable
     @Override
-    public Container createMenu(int id, PlayerInventory inventory, PlayerEntity playerEntity) {
+    public Container createMenu(int id, @NotNull PlayerInventory inventory, @NotNull PlayerEntity playerEntity) {
+        if (level == null) return null;
         return new HoneyBottlerContainer(id, level, worldPosition, inventory);
     }
 
