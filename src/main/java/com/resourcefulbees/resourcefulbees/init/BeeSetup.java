@@ -2,7 +2,6 @@ package com.resourcefulbees.resourcefulbees.init;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import com.google.gson.stream.MalformedJsonException;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
@@ -252,7 +251,7 @@ public class BeeSetup {
         }
     }
 
-    private static void copyDefaultHoney(Path source) throws IOException {
+    private static void copyDefaultHoney(Path source) {
         try (Stream<Path> sourceStream = Files.walk(source)) {
             sourceStream.filter(f -> f.getFileName().toString().endsWith(JSON))
                     .forEach(path -> {
