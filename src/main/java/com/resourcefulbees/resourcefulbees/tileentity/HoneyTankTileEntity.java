@@ -1,11 +1,16 @@
 package com.resourcefulbees.resourcefulbees.tileentity;
 
+import com.resourcefulbees.resourcefulbees.config.Config;
+import com.resourcefulbees.resourcefulbees.container.AutomationSensitiveItemStackHandler;
 import com.resourcefulbees.resourcefulbees.container.HoneyTankContainer;
+import com.resourcefulbees.resourcefulbees.fluids.HoneyFlowingFluid;
+import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
 import com.resourcefulbees.resourcefulbees.network.packets.SyncGUIMessage;
 import com.resourcefulbees.resourcefulbees.registry.ModBlocks;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import com.resourcefulbees.resourcefulbees.registry.ModTileEntityTypes;
+import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import io.netty.buffer.Unpooled;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
@@ -14,43 +19,28 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.RegistryObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
-
 public class HoneyTankTileEntity extends AbstractHoneyTankContainer {
 
-    public TankTier getTier() {
-        return tier;
-    }
+    public static final int BOTTLE_INPUT_FILL = 2;
+    public static final int BOTTLE_OUTPUT_FILL = 3;
 
-    public void setTier(TankTier tier) {
-        this.tier = tier;
-    }
-
-    @Override
-    @NotNull
-    public ITextComponent getDisplayName() {
-        return new TranslationTextComponent("gui.resourcefulbees.honey_tank");
-    }
-
-
-    @Nullable
-    @Override
-    public Container createMenu(int id, @NotNull PlayerInventory inventory, @NotNull PlayerEntity player) {
-        if (level == null) return null;
-        return new HoneyTankContainer(id, level, worldPosition, inventory);
-    }
+    private int processingFill = 0;
 
     public enum TankTier {
         PURPUR(3, 128000, ModBlocks.PURPUR_HONEY_TANK, ModItems.PURPUR_HONEY_TANK_ITEM),
@@ -107,6 +97,88 @@ public class HoneyTankTileEntity extends AbstractHoneyTankContainer {
     public HoneyTankTileEntity(TankTier tier) {
         super(ModTileEntityTypes.HONEY_TANK_TILE_ENTITY.get(), tier.maxFillAmount);
         this.setTier(tier);
+        setTileStackHandler(new TileStackHandler(4, getAcceptor(), getRemover()));
+    }
+
+    public TankTier getTier() {
+        return tier;
+    }
+
+    public void setTier(TankTier tier) {
+        this.tier = tier;
+    }
+
+    public float getProcessFillPercent() {
+        if (processingFill == Config.HONEY_PROCEESS_TIME.get()) return 1;
+        return processingFill / (float) Config.HONEY_PROCEESS_TIME.get();
+    }
+
+    @Override
+    @NotNull
+    public ITextComponent getDisplayName() {
+        return new TranslationTextComponent("gui.resourcefulbees.honey_tank");
+    }
+
+
+    @Override
+    @Nullable
+    public Container createMenu(int id, @NotNull PlayerInventory inventory, @NotNull PlayerEntity player) {
+        if (level == null) return null;
+        return new HoneyTankContainer(id, level, worldPosition, inventory);
+    }
+
+    public boolean canProcessFill() {
+        ItemStack stack = getTileStackHandler().getStackInSlot(BOTTLE_INPUT_FILL);
+        FluidStack fluidStack = getFluidTank().getFluid();
+        ItemStack outputStack = getTileStackHandler().getStackInSlot(BOTTLE_OUTPUT_FILL);
+
+        boolean isBottle = stack.getItem() == Items.GLASS_BOTTLE;
+
+        Item outputItem = isBottle ? BeeInfoUtils.getHoneyBottle(fluidStack.getFluid()) : BeeInfoUtils.getHoneyBucket(fluidStack.getFluid());
+
+        boolean isTankReady = !fluidStack.isEmpty() && getFluidTank().getFluidAmount() >= (isBottle ? ModConstants.HONEY_PER_BOTTLE : 1000);
+        boolean hasInput = !stack.isEmpty();
+        boolean canOutput = outputStack.isEmpty() || outputStack.getItem() == outputItem && outputStack.getCount() < outputStack.getMaxStackSize();
+
+        return isTankReady && hasInput && canOutput;
+    }
+
+    public void processFill() {
+        ItemStack inputStack = getTileStackHandler().getStackInSlot(BOTTLE_INPUT_FILL);
+        boolean isBottle = true;
+        if (inputStack.getItem() == Items.BUCKET) isBottle = false;
+        inputStack.shrink(1);
+        FluidStack fluidStack = new FluidStack(getFluidTank().getFluid(), isBottle ? ModConstants.HONEY_PER_BOTTLE : 1000);
+        getTileStackHandler().setStackInSlot(BOTTLE_INPUT_FILL, inputStack);
+        ItemStack outputStack = getTileStackHandler().getStackInSlot(BOTTLE_OUTPUT_FILL);
+        if (outputStack.isEmpty()) {
+            outputStack = isBottle ? new ItemStack(BeeInfoUtils.getHoneyBottle(fluidStack.getFluid())) :
+                    new ItemStack(BeeInfoUtils.getHoneyBucket(fluidStack.getFluid()));
+        } else outputStack.grow(1);
+        getTileStackHandler().setStackInSlot(BOTTLE_OUTPUT_FILL, outputStack);
+        getFluidTank().drain(fluidStack, IFluidHandler.FluidAction.EXECUTE);
+    }
+
+    @Override
+    public AutomationSensitiveItemStackHandler.IAcceptor getAcceptor() {
+        return (slot, stack, automation) -> !automation || (slot == 0 || slot == 2);
+    }
+
+    @Override
+    public AutomationSensitiveItemStackHandler.IRemover getRemover() {
+        return (slot, automation) -> !automation || (slot == 1 || slot == 3);
+    }
+
+    @Override
+    public void tick() {
+        if (canProcessFill()) {
+            if (processingFill >= Config.HONEY_PROCEESS_TIME.get()) {
+                processFill();
+                processingFill = 0;
+            }
+            processingFill++;
+        }
+        super.tick();
     }
 
     @Override
@@ -141,5 +213,24 @@ public class HoneyTankTileEntity extends AbstractHoneyTankContainer {
             getFluidTank().setCapacity(getTier().maxFillAmount);
         if (getFluidTank().getFluidAmount() > getFluidTank().getTankCapacity(0))
             getFluidTank().getFluid().setAmount(getFluidTank().getTankCapacity(0));
+    }
+
+    protected class TileStackHandler extends AutomationSensitiveItemStackHandler {
+        protected TileStackHandler(int slots, IAcceptor acceptor, IRemover remover) {
+            super(slots, acceptor, remover);
+        }
+
+        @Override
+        protected void onContentsChanged(int slot) {
+            super.onContentsChanged(slot);
+            setChanged();
+        }
+
+        @Override
+        public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+            boolean slot0Valid = slot == 0 && AbstractHoneyTankContainer.isItemValid(stack);
+            boolean slot2Valid = slot == 2 && (stack.getItem() == Items.GLASS_BOTTLE || stack.getItem() == Items.BUCKET);
+            return slot0Valid || slot2Valid;
+        }
     }
 }

@@ -407,4 +407,15 @@ public class BeeInfoUtils {
             return Items.HONEY_BOTTLE;
         }
     }
+
+    public static Item getHoneyBucket(Fluid fluid) {
+        if (fluid == ModFluids.CATNIP_HONEY_STILL.get()) {
+            return ModItems.CATNIP_HONEY_FLUID_BUCKET.get();
+        } else if (fluid instanceof HoneyFlowingFluid) {
+            HoneyFlowingFluid customfluid = (HoneyFlowingFluid) fluid;
+            return customfluid.getHoneyData().getHoneyBucketItemRegistryObject().get();
+        } else {
+            return ModItems.HONEY_FLUID_BUCKET.get();
+        }
+    }
 }

@@ -13,27 +13,36 @@ import net.minecraft.item.Items;
 import net.minecraft.tags.ITag;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.Direction;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class AbstractHoneyTankContainer extends AbstractHoneyTank implements ITickableTileEntity, INamedContainerProvider {
 
     public static final ITag<Fluid> HONEY_FLUID_TAG = BeeInfoUtils.getFluidTag("forge:honey");
     public static final ITag<Item> HONEY_BOTTLE_TAG = BeeInfoUtils.getItemTag("forge:honey_bottle");
-    public static final int HONEY_BOTTLE_INPUT = 0;
-    public static final int BOTTLE_OUTPUT = 1;
+    public static final int BOTTLE_INPUT_EMPTY = 0;
+    public static final int BOTTLE_OUTPUT_EMPTY = 1;
     public static final int HONEY_FILL_AMOUNT = ModConstants.HONEY_PER_BOTTLE;
-    private final AutomationSensitiveItemStackHandler tileStackHandler = new EnderBeeconTileEntity.TileStackHandler(2, getAcceptor(), getRemover());
-    private final LazyOptional<IItemHandler> lazyOptional = LazyOptional.of(this::getTileStackHandler);
+    private AutomationSensitiveItemStackHandler tileStackHandler = new EnderBeeconTileEntity.TileStackHandler(2, getAcceptor(), getRemover());
+    private LazyOptional<IItemHandler> lazyOptional = LazyOptional.of(this::getTileStackHandler);
     private boolean dirty;
-    private int processing;
+    private int processingEmpty;
 
-    public float getProcessPercent() {
-        if (processing == Config.HONEY_PROCEESS_TIME.get()) return 1;
-        return processing / (float) Config.HONEY_PROCEESS_TIME.get();
+    public float getProcessEmptyPercent() {
+        if (processingEmpty == Config.HONEY_PROCEESS_TIME.get()) return 1;
+        return processingEmpty / (float) Config.HONEY_PROCEESS_TIME.get();
+    }
+
+    public void setTileStackHandler(AutomationSensitiveItemStackHandler tileStackHandler) {
+        this.tileStackHandler = tileStackHandler;
+        lazyOptional = LazyOptional.of(this::getTileStackHandler);
     }
 
     public boolean isDirty() {
@@ -53,8 +62,8 @@ public abstract class AbstractHoneyTankContainer extends AbstractHoneyTank imple
     }
 
     public boolean canStartFluidProcess() {
-        ItemStack stack = getTileStackHandler().getStackInSlot(HONEY_BOTTLE_INPUT);
-        ItemStack output = getTileStackHandler().getStackInSlot(BOTTLE_OUTPUT);
+        ItemStack stack = getTileStackHandler().getStackInSlot(BOTTLE_INPUT_EMPTY);
+        ItemStack output = getTileStackHandler().getStackInSlot(BOTTLE_OUTPUT_EMPTY);
 
         boolean stackValid = false;
         boolean isBucket = false;
@@ -85,14 +94,14 @@ public abstract class AbstractHoneyTankContainer extends AbstractHoneyTank imple
 
     public void processFluid() {
         if (canProcessFluid()) {
-            ItemStack stack = getTileStackHandler().getStackInSlot(HONEY_BOTTLE_INPUT);
-            ItemStack output = getTileStackHandler().getStackInSlot(BOTTLE_OUTPUT);
+            ItemStack stack = getTileStackHandler().getStackInSlot(BOTTLE_INPUT_EMPTY);
+            ItemStack output = getTileStackHandler().getStackInSlot(BOTTLE_OUTPUT_EMPTY);
             if (stack.getItem() instanceof BucketItem) {
                 BucketItem bucket = (BucketItem) stack.getItem();
                 getFluidTank().fill(new FluidStack(bucket.getFluid(), 1000), IFluidHandler.FluidAction.EXECUTE);
                 stack.shrink(1);
                 if (output.isEmpty()) {
-                    getTileStackHandler().setStackInSlot(BOTTLE_OUTPUT, new ItemStack(Items.BUCKET));
+                    getTileStackHandler().setStackInSlot(BOTTLE_OUTPUT_EMPTY, new ItemStack(Items.BUCKET));
                 } else {
                     output.grow(1);
                 }
@@ -101,7 +110,7 @@ public abstract class AbstractHoneyTankContainer extends AbstractHoneyTank imple
                 if (!fluidStack.isEmpty()) getFluidTank().fill(fluidStack, IFluidHandler.FluidAction.EXECUTE);
                 stack.shrink(1);
                 if (output.isEmpty()) {
-                    getTileStackHandler().setStackInSlot(BOTTLE_OUTPUT, new ItemStack(Items.GLASS_BOTTLE));
+                    getTileStackHandler().setStackInSlot(BOTTLE_OUTPUT_EMPTY, new ItemStack(Items.GLASS_BOTTLE));
                 } else {
                     output.grow(1);
                 }
@@ -112,7 +121,7 @@ public abstract class AbstractHoneyTankContainer extends AbstractHoneyTank imple
 
     public boolean canProcessFluid() {
         boolean spaceLeft;
-        ItemStack stack = getTileStackHandler().getStackInSlot(HONEY_BOTTLE_INPUT);
+        ItemStack stack = getTileStackHandler().getStackInSlot(BOTTLE_INPUT_EMPTY);
         if (!canStartFluidProcess()) return false;
         Fluid fluid;
         if (stack.getItem() instanceof BucketItem) {
@@ -150,17 +159,23 @@ public abstract class AbstractHoneyTankContainer extends AbstractHoneyTank imple
     @Override
     public void tick() {
         if (canProcessFluid()) {
-            if (processing >= Config.HONEY_PROCEESS_TIME.get()) {
+            if (processingEmpty >= Config.HONEY_PROCEESS_TIME.get()) {
                 processFluid();
-                processing = 0;
+                processingEmpty = 0;
             }
-            processing++;
+            processingEmpty++;
         }
 
         if (dirty) {
             this.dirty = false;
             this.setChanged();
         }
+    }
+
+    @Override
+    public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
+        if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) return lazyOptional.cast();
+        return super.getCapability(cap, side);
     }
 
     protected class TileStackHandler extends AutomationSensitiveItemStackHandler {

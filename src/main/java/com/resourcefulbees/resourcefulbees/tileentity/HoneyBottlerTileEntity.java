@@ -44,15 +44,15 @@ public class HoneyBottlerTileEntity extends AbstractHoneyTank implements ITickab
     private final AutomationSensitiveItemStackHandler tileStackHandler = new TileStackHandler(2, getAcceptor(), getRemover());
     private final LazyOptional<IItemHandler> lazyOptional = LazyOptional.of(this::getTileStackHandler);
     private boolean dirty;
-    private int processing;
+    private int processingFill;
 
     public HoneyBottlerTileEntity() {
         super(ModTileEntityTypes.HONEY_BOTTLER_TILE_ENTITY.get(), 16000);
     }
 
     public float getProcessPercent() {
-        if (processing == Config.HONEY_PROCEESS_TIME.get()) return 1;
-        return processing / (float) Config.HONEY_PROCEESS_TIME.get();
+        if (processingFill == Config.HONEY_PROCEESS_TIME.get()) return 1;
+        return processingFill / (float) Config.HONEY_PROCEESS_TIME.get();
     }
 
     @Override
@@ -68,7 +68,7 @@ public class HoneyBottlerTileEntity extends AbstractHoneyTank implements ITickab
         return new HoneyBottlerContainer(id, level, worldPosition, inventory);
     }
 
-    public boolean canProcessFluid() {
+    public boolean canProcessFill() {
         ItemStack stack = getTileStackHandler().getStackInSlot(BOTTLE_INPUT);
         FluidStack fluidStack = getFluidTank().getFluid();
         ItemStack outputStack = getTileStackHandler().getStackInSlot(BOTTLE_OUTPUT);
@@ -81,7 +81,7 @@ public class HoneyBottlerTileEntity extends AbstractHoneyTank implements ITickab
         return isTankReady && hasBottles && canOutput;
     }
 
-    public void processFluid() {
+    public void processFill() {
         ItemStack inputStack = getTileStackHandler().getStackInSlot(BOTTLE_INPUT);
         inputStack.shrink(1);
         FluidStack fluidStack = new FluidStack(getFluidTank().getFluid(), ModConstants.HONEY_PER_BOTTLE);
@@ -119,12 +119,12 @@ public class HoneyBottlerTileEntity extends AbstractHoneyTank implements ITickab
 
     @Override
     public void tick() {
-        if (canProcessFluid()) {
-            if (processing >= Config.HONEY_PROCEESS_TIME.get()) {
-                processFluid();
-                processing = 0;
+        if (canProcessFill()) {
+            if (processingFill >= Config.HONEY_PROCEESS_TIME.get()) {
+                processFill();
+                processingFill = 0;
             }
-            processing++;
+            processingFill++;
         }
 
         if (dirty) {

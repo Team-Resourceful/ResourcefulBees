@@ -25,14 +25,14 @@ public class EnderBeeconContainer extends Container {
         enderBeeconTileEntity = (EnderBeeconTileEntity) world.getBlockEntity(pos);
 
         if (getEnderBeeconTileEntity() != null) {
-            this.addSlot(new SlotItemHandlerUnconditioned(getEnderBeeconTileEntity().getTileStackHandler(), EnderBeeconTileEntity.HONEY_BOTTLE_INPUT, 184, 34) {
+            this.addSlot(new SlotItemHandlerUnconditioned(getEnderBeeconTileEntity().getTileStackHandler(), EnderBeeconTileEntity.BOTTLE_INPUT_EMPTY, 184, 34) {
 
                 @Override
                 public boolean mayPlace(ItemStack stack) {
                     return EnderBeeconTileEntity.isItemValid(stack);
                 }
             });
-            this.addSlot(new OutputSlot(getEnderBeeconTileEntity().getTileStackHandler(), EnderBeeconTileEntity.BOTTLE_OUTPUT, 184, 72));
+            this.addSlot(new OutputSlot(getEnderBeeconTileEntity().getTileStackHandler(), EnderBeeconTileEntity.BOTTLE_OUTPUT_EMPTY, 184, 72));
 
             for (int i = 0; i < 3; ++i) {
                 for (int j = 0; j < 9; ++j) {

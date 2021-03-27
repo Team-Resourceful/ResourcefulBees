@@ -3,7 +3,6 @@ package com.resourcefulbees.resourcefulbees.container;
 import com.resourcefulbees.resourcefulbees.mixin.ContainerAccessor;
 import com.resourcefulbees.resourcefulbees.registry.ModContainers;
 import com.resourcefulbees.resourcefulbees.tileentity.AbstractHoneyTankContainer;
-import com.resourcefulbees.resourcefulbees.tileentity.HoneyBottlerTileEntity;
 import com.resourcefulbees.resourcefulbees.tileentity.HoneyTankTileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -11,6 +10,7 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
@@ -27,13 +27,23 @@ public class HoneyTankContainer extends Container {
         honeyTankTileEntity = (HoneyTankTileEntity) world.getBlockEntity(pos);
 
         if (getHoneyTankTileEntity() != null) {
-            this.addSlot(new SlotItemHandlerUnconditioned(getHoneyTankTileEntity().getTileStackHandler(), HoneyBottlerTileEntity.BOTTLE_INPUT, 67, 16) {
+            this.addSlot(new SlotItemHandlerUnconditioned(getHoneyTankTileEntity().getTileStackHandler(), AbstractHoneyTankContainer.BOTTLE_INPUT_EMPTY, 53, 16) {
                 @Override
                 public boolean mayPlace(ItemStack stack) {
                     return AbstractHoneyTankContainer.isItemValid(stack);
                 }
             });
-            this.addSlot(new OutputSlot(getHoneyTankTileEntity().getTileStackHandler(), HoneyBottlerTileEntity.BOTTLE_OUTPUT, 67, 54));
+            this.addSlot(new OutputSlot(getHoneyTankTileEntity().getTileStackHandler(), AbstractHoneyTankContainer.BOTTLE_OUTPUT_EMPTY, 53, 54));
+
+            this.addSlot(new SlotItemHandlerUnconditioned(getHoneyTankTileEntity().getTileStackHandler(), HoneyTankTileEntity.BOTTLE_INPUT_FILL, 107, 16) {
+                @Override
+                public boolean mayPlace(ItemStack stack) {
+                    boolean isBucket = stack.getItem() == Items.BUCKET;
+                    boolean isBottle = stack.getItem() == Items.GLASS_BOTTLE;
+                    return isBottle || isBucket;
+                }
+            });
+            this.addSlot(new OutputSlot(getHoneyTankTileEntity().getTileStackHandler(), HoneyTankTileEntity.BOTTLE_OUTPUT_FILL, 107, 54));
 
             for (int i = 0; i < 3; ++i) {
                 for (int j = 0; j < 9; ++j) {
@@ -57,11 +67,11 @@ public class HoneyTankContainer extends Container {
             ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
 
-            if (index <= 1) {
-                if (!this.moveItemStackTo(itemstack1, 2, slots.size(), true)) {
+            if (index <= 3) {
+                if (!this.moveItemStackTo(itemstack1, 4, slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.moveItemStackTo(itemstack1, 0, 1, false)) {
+            } else if (!this.moveItemStackTo(itemstack1, 0, 3, false)) {
                 return ItemStack.EMPTY;
             }
 

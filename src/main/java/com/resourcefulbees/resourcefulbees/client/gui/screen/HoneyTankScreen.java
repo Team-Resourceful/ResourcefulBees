@@ -35,7 +35,7 @@ public class HoneyTankScreen extends ContainerScreen<HoneyTankContainer> {
             int i = this.leftPos;
             int j = this.topPos;
             this.blit(matrix, i, j, 0, 0, this.imageWidth, this.imageHeight);
-            RenderUtils.renderFluid(matrix, tileEntity.getFluidTank(), i + 95, j + 12, 14, 62, getBlitOffset());
+            RenderUtils.renderFluid(matrix, tileEntity.getFluidTank(), i + 81, j + 12, 14, 62, getBlitOffset());
         }
     }
 
@@ -45,7 +45,7 @@ public class HoneyTankScreen extends ContainerScreen<HoneyTankContainer> {
         super.render(matrix, mouseX, mouseY, partialTicks);
         this.renderTooltip(matrix, mouseX, mouseY);
         DecimalFormat decimalFormat = new DecimalFormat("##0.0");
-        if (mouseX >= this.leftPos + 95 && mouseX <= this.leftPos + 107 && mouseY >= this.topPos + 12 && mouseY <= this.topPos + 74) {
+        if (mouseX >= this.leftPos + 81 && mouseX <= this.leftPos + 93 && mouseY >= this.topPos + 12 && mouseY <= this.topPos + 74) {
             if (Screen.hasShiftDown() || tileEntity.getFluidTank().getFluidAmount() < 500) {
                 this.renderTooltip(matrix, new StringTextComponent(tileEntity.getFluidTank().getFluidAmount() + " MB"), mouseX, mouseY);
             } else {
