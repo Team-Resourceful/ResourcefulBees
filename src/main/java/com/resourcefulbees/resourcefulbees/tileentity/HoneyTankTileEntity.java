@@ -3,7 +3,6 @@ package com.resourcefulbees.resourcefulbees.tileentity;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.container.AutomationSensitiveItemStackHandler;
 import com.resourcefulbees.resourcefulbees.container.HoneyTankContainer;
-import com.resourcefulbees.resourcefulbees.fluids.HoneyFlowingFluid;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
 import com.resourcefulbees.resourcefulbees.network.packets.SyncGUIMessage;

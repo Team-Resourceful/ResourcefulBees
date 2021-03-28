@@ -11,8 +11,8 @@ import org.jetbrains.annotations.Nullable;
 public abstract class ContainerWithStackMove extends Container {
 
 
-    protected ContainerWithStackMove(@Nullable ContainerType<?> p_i50105_1_, int p_i50105_2_) {
-        super(p_i50105_1_, p_i50105_2_);
+    protected ContainerWithStackMove(@Nullable ContainerType<?> type, int id) {
+        super(type, id);
     }
 
     public abstract int getContainerInputEnd();

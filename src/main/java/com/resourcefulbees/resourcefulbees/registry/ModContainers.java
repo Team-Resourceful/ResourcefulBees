@@ -11,9 +11,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class ModContainers {
 
-
-    ;
-
     private ModContainers() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }

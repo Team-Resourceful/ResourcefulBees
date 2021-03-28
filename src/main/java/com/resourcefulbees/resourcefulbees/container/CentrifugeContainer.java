@@ -7,7 +7,6 @@ import com.resourcefulbees.resourcefulbees.registry.ModContainers;
 import com.resourcefulbees.resourcefulbees.tileentity.CentrifugeTileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.inventory.container.Slot;

@@ -23,7 +23,7 @@ public class EffectComponent implements ICustomComponent {
 
     IVariable effectID;
     private transient TextureAtlasSprite effectSprite;
-    private static transient final ResourceLocation EFFECT_BACKGROUND = new ResourceLocation("patchouli", "textures/gui/crafting.png");
+    private static final transient ResourceLocation EFFECT_BACKGROUND = new ResourceLocation("patchouli", "textures/gui/crafting.png");
     private transient int xOffset;
     private transient int yOffset;
     private transient ITextComponent effectName;
