@@ -28,7 +28,7 @@ public class DataGen {
 
     private static final IBeeRegistry BEE_REGISTRY = BeeRegistry.getRegistry();
 
-    private static final String ITEM_RESOURCEFULBEES = "\"item.resourcefulbees.";
+    private static final String ITEM_RESOURCEFULBEES = "item.resourcefulbees.";
     private static final String DATA_RESOURCEFULBEES_TAGS_ITEMS = "/data/resourcefulbees/tags/items";
     private static final String REPLACE_FALSE = "\"replace\": false,\n";
     private static final String VALUES = "\"values\": [\n";
@@ -72,64 +72,36 @@ public class DataGen {
             displayName = WordUtils.capitalizeFully(displayName);
 
             //block
-            builder.append("\"block.resourcefulbees.");
-            builder.append(name);
-            builder.append("_honeycomb_block\" : \"");
-            builder.append(displayName);
-            builder.append(" Honeycomb Block\",\n");
+            generateLangEntry(builder, "block.resourcefulbees.", name, "_honeycomb_block", displayName, "Honeycomb Block");
+
             //comb
-            builder.append(ITEM_RESOURCEFULBEES);
-            builder.append(name);
-            builder.append("_honeycomb\" : \"");
-            builder.append(displayName);
-            builder.append(" Honeycomb\",\n");
+            generateLangEntry(builder, ITEM_RESOURCEFULBEES, name, "_honeycomb", displayName, "Honeycomb");
+
             //spawn egg
-            builder.append(ITEM_RESOURCEFULBEES);
-            builder.append(name);
-            builder.append("_bee_spawn_egg\" : \"");
-            builder.append(displayName);
-            builder.append(" Bee Spawn Egg\",\n");
+            generateLangEntry(builder, ITEM_RESOURCEFULBEES, name, "_bee_spawn_egg", displayName, "Bee Spawn Egg");
+
             //entity
-            builder.append("\"entity.resourcefulbees.");
-            builder.append(name);
-            builder.append("_bee\" : \"");
-            builder.append(displayName);
-            builder.append(" Bee\",\n");
+            generateLangEntry(builder, "entity.resourcefulbees.", name, "_bee", displayName, "Bee");
+
         }));
         BEE_REGISTRY.getHoneyBottles().forEach((name, honeyData) -> {
             String displayName = StringUtils.replace(name, "_", " ");
             displayName = WordUtils.capitalizeFully(displayName);
 
             //honey bottle
-            builder.append(ITEM_RESOURCEFULBEES);
-            builder.append(name);
-            builder.append("_honey_bottle\": \"");
-            builder.append(displayName);
-            builder.append(" Honey Bottle\",\n");
+            generateLangEntry(builder, ITEM_RESOURCEFULBEES, name, "_honey_bottle", displayName, "Honey Bottle");
 
             //honey block
             if (Boolean.TRUE.equals(Config.HONEY_GENERATE_BLOCKS.get()) && honeyData.doGenerateHoneyBlock()) {
-                builder.append("\"block.resourcefulbees.");
-                builder.append(name);
-                builder.append("_honey_block\" : \"");
-                builder.append(displayName);
-                builder.append(" Honey Block\",\n");
+                generateLangEntry(builder, "block.resourcefulbees.", name, "_honey_block", displayName, "Honey Block");
             }
 
             if (Boolean.TRUE.equals(Config.HONEY_GENERATE_FLUIDS.get()) && honeyData.doGenerateHoneyFluid()) {
                 //honey bucket
-                builder.append(ITEM_RESOURCEFULBEES);
-                builder.append(name);
-                builder.append("_honey_fluid_bucket\": \"");
-                builder.append(displayName);
-                builder.append(" Honey Bucket\",\n");
+                generateLangEntry(builder, ITEM_RESOURCEFULBEES, name, "_honey_fluid_bucket", displayName, "Honey Bucket");
 
                 //honey fluid
-                builder.append("\"fluid.resourcefulbees.");
-                builder.append(name);
-                builder.append("_honey\": \"");
-                builder.append(displayName);
-                builder.append(" Honey\",\n");
+                generateLangEntry(builder, "fluid.resourcefulbees.", name, "_honey", displayName, "Honey");
             }
         });
         TraitRegistry.getRegistry().getTraits().forEach((name, trait) -> {
@@ -148,6 +120,18 @@ public class DataGen {
         } catch (IOException e) {
             LOGGER.error("Could not generate language file!");
         }
+    }
+
+    private static void generateLangEntry(StringBuilder builder, String prefix, String name, String suffix, String displayName, String displaySuffix){
+        builder.append("\"");
+        builder.append(prefix);
+        builder.append(name);
+        builder.append(suffix);
+        builder.append("\": \"");
+        builder.append(displayName);
+        builder.append(" ");
+        builder.append(displaySuffix);
+        builder.append("\",\n");
     }
 
 
