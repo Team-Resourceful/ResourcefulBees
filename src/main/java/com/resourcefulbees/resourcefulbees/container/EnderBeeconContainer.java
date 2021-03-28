@@ -2,6 +2,7 @@ package com.resourcefulbees.resourcefulbees.container;
 
 import com.resourcefulbees.resourcefulbees.mixin.ContainerAccessor;
 import com.resourcefulbees.resourcefulbees.registry.ModContainers;
+import com.resourcefulbees.resourcefulbees.tileentity.AbstractHoneyTankContainer;
 import com.resourcefulbees.resourcefulbees.tileentity.EnderBeeconTileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -24,14 +25,14 @@ public class EnderBeeconContainer extends ContainerWithStackMove {
         enderBeeconTileEntity = (EnderBeeconTileEntity) world.getBlockEntity(pos);
 
         if (getEnderBeeconTileEntity() != null) {
-            this.addSlot(new SlotItemHandlerUnconditioned(getEnderBeeconTileEntity().getTileStackHandler(), EnderBeeconTileEntity.BOTTLE_INPUT_EMPTY, 184, 34) {
+            this.addSlot(new SlotItemHandlerUnconditioned(getEnderBeeconTileEntity().getTileStackHandler(), AbstractHoneyTankContainer.BOTTLE_INPUT_EMPTY, 184, 34) {
 
                 @Override
                 public boolean mayPlace(ItemStack stack) {
-                    return EnderBeeconTileEntity.isItemValid(stack);
+                    return AbstractHoneyTankContainer.isItemValid(stack);
                 }
             });
-            this.addSlot(new OutputSlot(getEnderBeeconTileEntity().getTileStackHandler(), EnderBeeconTileEntity.BOTTLE_OUTPUT_EMPTY, 184, 72));
+            this.addSlot(new OutputSlot(getEnderBeeconTileEntity().getTileStackHandler(), AbstractHoneyTankContainer.BOTTLE_OUTPUT_EMPTY, 184, 72));
 
             for (int i = 0; i < 3; ++i) {
                 for (int j = 0; j < 9; ++j) {

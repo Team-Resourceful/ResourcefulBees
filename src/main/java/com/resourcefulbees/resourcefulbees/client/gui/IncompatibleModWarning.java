@@ -30,7 +30,7 @@ public class IncompatibleModWarning {
 
     private static void guiOpened(GuiOpenEvent event) {
         Screen curr = event.getGui();
-        if (isPerformantLoaded && !hasBeenShownOnce && (curr instanceof WorldSelectionScreen || curr instanceof MultiplayerScreen) && !Config.BYPASS_PERFORMANT_CHECK.get()) {
+        if (isPerformantLoaded && !hasBeenShownOnce && (curr instanceof WorldSelectionScreen || curr instanceof MultiplayerScreen) && Boolean.FALSE.equals(Config.BYPASS_PERFORMANT_CHECK.get())) {
             event.setGui(new ModWarningScreen(curr));
             hasBeenShownOnce = true;
         }

@@ -9,14 +9,13 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.moddiscovery.ModFileInfo;
 
-import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.FileSystem;
+import java.io.File;
+import java.io.IOException;
+import java.io.Reader;
 import java.nio.file.*;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.stream.Stream;
-import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import static com.resourcefulbees.resourcefulbees.ResourcefulBees.LOGGER;
@@ -37,25 +36,6 @@ public class BiomeDictionarySetup {
             setupDefaultTypes();
         }
         addBiomeTypes();
-    }
-
-    private static void parseType(File file) throws IOException {
-        String name = file.getName();
-        name = name.substring(0, name.indexOf('.'));
-
-        Reader r = Files.newBufferedReader(file.toPath());
-
-        parseType(r, name);
-    }
-
-    private static void parseType(ZipFile zf, ZipEntry zipEntry) throws IOException {
-        String name = zipEntry.getName();
-        name = name.substring(name.lastIndexOf("/") + 1, name.indexOf('.'));
-
-        InputStream input = zf.getInputStream(zipEntry);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(input, StandardCharsets.UTF_8));
-
-        parseType(reader, name);
     }
 
     private static void parseType(Reader reader, String name) {
@@ -82,7 +62,7 @@ public class BiomeDictionarySetup {
     private static void addType(Path file) {
         File f = file.toFile();
         try {
-            parseType(f);
+            ModSetup.parseType(f, BiomeDictionarySetup::parseType);
         } catch (IOException e) {
             LOGGER.error("File not found when parsing biome types");
         }
@@ -93,7 +73,7 @@ public class BiomeDictionarySetup {
             zf.stream().forEach(zipEntry -> {
                 if (zipEntry.getName().endsWith(JSON)) {
                     try {
-                        parseType(zf, zipEntry);
+                        ModSetup.parseType(zf, zipEntry, BiomeDictionarySetup::parseType);
                     } catch (IOException e) {
                         String name = zipEntry.getName();
                         name = name.substring(name.lastIndexOf("/") + 1, name.indexOf('.'));
@@ -131,7 +111,7 @@ public class BiomeDictionarySetup {
         }
     }
 
-    private static void copyDefaultTypes(Path source) throws IOException {
+    private static void copyDefaultTypes(Path source) {
         try (Stream<Path> sourceStream = Files.walk(source)) {
             sourceStream.filter(f -> f.getFileName().toString().endsWith(JSON))
                     .forEach(path -> {

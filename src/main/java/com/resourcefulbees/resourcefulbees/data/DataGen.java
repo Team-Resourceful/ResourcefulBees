@@ -33,9 +33,6 @@ public class DataGen {
 
     private static final String ITEM_RESOURCEFULBEES = "item.resourcefulbees.";
     private static final String DATA_RESOURCEFULBEES_TAGS_ITEMS = "/data/resourcefulbees/tags/items";
-    private static final String REPLACE_FALSE = "\"replace\": false,\n";
-    private static final String VALUES = "\"values\": [\n";
-    private static final String FINAL_COMMA = "\",\n";
 
     public static void generateClientData() {
         if (Config.GENERATE_ENGLISH_LANG.get().equals(Boolean.TRUE)) generateEnglishLang();
@@ -280,12 +277,12 @@ public class DataGen {
 
     private static void generateTagEntry(StringBuilder builder, Set<ResourceLocation> values){
         builder.append("{\n");
-        builder.append(REPLACE_FALSE);
-        builder.append(VALUES);
+        builder.append("\"replace\": false,\n");
+        builder.append("\"values\": [\n");
         values.forEach(resourceLocation -> {
             builder.append("\"");
             builder.append(resourceLocation);
-            builder.append(FINAL_COMMA);
+            builder.append("\",\n");
         });
         if (!values.isEmpty()) builder.deleteCharAt(builder.lastIndexOf(","));
         builder.append("]\n}");
