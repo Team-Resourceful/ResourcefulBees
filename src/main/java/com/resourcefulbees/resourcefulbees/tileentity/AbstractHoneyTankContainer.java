@@ -1,15 +1,14 @@
 package com.resourcefulbees.resourcefulbees.tileentity;
 
+import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
+import com.resourcefulbees.resourcefulbees.block.ColoredHoneyBlock;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.container.AutomationSensitiveItemStackHandler;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.BucketItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.item.*;
 import net.minecraft.tags.ITag;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntityType;
@@ -36,6 +35,7 @@ public abstract class AbstractHoneyTankContainer extends AbstractHoneyTank imple
     private int processingEmpty;
 
     public float getProcessEmptyPercent() {
+        if (!canProcessFluid()) return 0;
         if (processingEmpty == Config.HONEY_PROCEESS_TIME.get()) return 1;
         return processingEmpty / (float) Config.HONEY_PROCEESS_TIME.get();
     }
@@ -67,10 +67,18 @@ public abstract class AbstractHoneyTankContainer extends AbstractHoneyTank imple
 
         boolean stackValid = false;
         boolean isBucket = false;
+        boolean isBlock = false;
         boolean outputValid;
         boolean hasRoom;
         if (!stack.isEmpty()) {
-            if (stack.getItem() instanceof BucketItem) {
+            BlockItem blockItem = null;
+            if (stack.getItem() instanceof BlockItem){
+                blockItem = (BlockItem) stack.getItem();
+            }
+            if (blockItem != null && blockItem.getBlock() instanceof ColoredHoneyBlock) {
+                stackValid = ((ColoredHoneyBlock) blockItem.getBlock()).getData().doGenerateHoneyFluid();
+                isBlock = true;
+            } else if (stack.getItem() instanceof BucketItem) {
                 BucketItem bucket = (BucketItem) stack.getItem();
                 stackValid = bucket.getFluid().is(HONEY_FLUID_TAG);
                 isBucket = true;
@@ -78,7 +86,7 @@ public abstract class AbstractHoneyTankContainer extends AbstractHoneyTank imple
                 stackValid = stack.getItem().is(HONEY_BOTTLE_TAG);
             }
         }
-        if (!output.isEmpty()) {
+        if (!output.isEmpty() && !isBlock) {
             if (isBucket) {
                 outputValid = output.getItem() == Items.BUCKET;
             } else {
@@ -96,7 +104,15 @@ public abstract class AbstractHoneyTankContainer extends AbstractHoneyTank imple
         if (canProcessFluid()) {
             ItemStack stack = getTileStackHandler().getStackInSlot(BOTTLE_INPUT_EMPTY);
             ItemStack output = getTileStackHandler().getStackInSlot(BOTTLE_OUTPUT_EMPTY);
-            if (stack.getItem() instanceof BucketItem) {
+            BlockItem blockItem = null;
+            if (stack.getItem() instanceof BlockItem){
+                blockItem = (BlockItem) stack.getItem();
+            }
+            if (blockItem != null && blockItem.getBlock() instanceof ColoredHoneyBlock) {
+                stack.shrink(1);
+                HoneyBottleData data = ((ColoredHoneyBlock) blockItem.getBlock()).getData();
+                getFluidTank().fill(new FluidStack(data.getHoneyStillFluidRegistryObject().get(), 1000), IFluidHandler.FluidAction.EXECUTE);
+            } else if (stack.getItem() instanceof BucketItem) {
                 BucketItem bucket = (BucketItem) stack.getItem();
                 getFluidTank().fill(new FluidStack(bucket.getFluid(), 1000), IFluidHandler.FluidAction.EXECUTE);
                 stack.shrink(1);
@@ -124,7 +140,15 @@ public abstract class AbstractHoneyTankContainer extends AbstractHoneyTank imple
         ItemStack stack = getTileStackHandler().getStackInSlot(BOTTLE_INPUT_EMPTY);
         if (!canStartFluidProcess()) return false;
         Fluid fluid;
-        if (stack.getItem() instanceof BucketItem) {
+        BlockItem blockItem = null;
+        if (stack.getItem() instanceof BlockItem){
+            blockItem = (BlockItem) stack.getItem();
+        }
+        if (blockItem != null && blockItem.getBlock() instanceof ColoredHoneyBlock) {
+            HoneyBottleData item = ((ColoredHoneyBlock) blockItem.getBlock()).getData();
+            spaceLeft = (getFluidTank().getFluidAmount() + 1000) <= getFluidTank().getCapacity();
+            fluid = item.getHoneyStillFluidRegistryObject().get();
+        } else if (stack.getItem() instanceof BucketItem) {
             BucketItem item = (BucketItem) stack.getItem();
             spaceLeft = (getFluidTank().getFluidAmount() + 1000) <= getFluidTank().getCapacity();
             fluid = item.getFluid();
@@ -140,7 +164,14 @@ public abstract class AbstractHoneyTankContainer extends AbstractHoneyTank imple
     }
 
     public static boolean isItemValid(ItemStack stack) {
-        if (stack.getItem() instanceof BucketItem) {
+        BlockItem blockItem = null;
+        if (stack.getItem() instanceof BlockItem){
+            blockItem = (BlockItem) stack.getItem();
+        }
+        if (blockItem != null && blockItem.getBlock() instanceof ColoredHoneyBlock) {
+            ColoredHoneyBlock block = (ColoredHoneyBlock) blockItem.getBlock();
+            return block.getData().doGenerateHoneyFluid();
+        } else if (stack.getItem() instanceof BucketItem) {
             BucketItem bucket = (BucketItem) stack.getItem();
             return bucket.getFluid().is(HONEY_FLUID_TAG);
         } else {

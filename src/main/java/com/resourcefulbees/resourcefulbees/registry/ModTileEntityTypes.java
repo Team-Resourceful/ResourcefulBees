@@ -71,7 +71,7 @@ public class ModTileEntityTypes {
     public static final RegistryObject<TileEntityType<HoneyTankTileEntity>> HONEY_TANK_TILE_ENTITY = TILE_ENTITY_TYPES.register("honey_tank", () -> TileEntityType.Builder
             .of(() -> new HoneyTankTileEntity(HoneyTankTileEntity.TankTier.WOODEN), ModBlocks.PURPUR_HONEY_TANK.get(), ModBlocks.NETHER_HONEY_TANK.get(), ModBlocks.WOODEN_HONEY_TANK.get())
             .build(null));
-    public static final RegistryObject<TileEntityType<HoneyBottlerTileEntity>> HONEY_BOTTLER_TILE_ENTITY = TILE_ENTITY_TYPES.register("honey_bottler", () -> TileEntityType.Builder
-            .of(HoneyBottlerTileEntity::new, ModBlocks.HONEY_BOTTLER.get())
+    public static final RegistryObject<TileEntityType<HoneyCongealerTileEntity>> HONEY_CONGEALER_TILE_ENTITY = TILE_ENTITY_TYPES.register("honey_congealer", () -> TileEntityType.Builder
+            .of(HoneyCongealerTileEntity::new, ModBlocks.HONEY_CONGEALER.get())
             .build(null));
 }

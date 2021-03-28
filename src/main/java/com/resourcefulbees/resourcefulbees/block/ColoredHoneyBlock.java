@@ -1,5 +1,6 @@
 package com.resourcefulbees.resourcefulbees.block;
 
+import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
 import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.*;
@@ -39,13 +40,18 @@ public class ColoredHoneyBlock extends BreakableBlock {
     protected static final VoxelShape SHAPE = Block.box(1.0D, 0.0D, 1.0D, 15.0D, 15.0D, 15.0D);
     protected final int color;
     protected final boolean isRainbow;
+    protected final HoneyBottleData data;
 
-    public ColoredHoneyBlock(int color, boolean isRainbow) {
+    public ColoredHoneyBlock(HoneyBottleData honeyData) {
         super(AbstractBlock.Properties.of(Material.CLAY).speedFactor(0.4F).jumpFactor(0.5F).noOcclusion().sound(SoundType.HONEY_BLOCK));
-        this.color = color;
-        this.isRainbow = isRainbow;
+        this.color = honeyData.getHoneyColorInt();
+        this.isRainbow = honeyData.isRainbow();
+        this.data = honeyData;
     }
 
+    public HoneyBottleData getData() {
+        return data;
+    }
 
     //region Color stuff
     public int getHoneyColor() {
@@ -108,7 +114,7 @@ public class ColoredHoneyBlock extends BreakableBlock {
 
     }
 
-    private boolean isSliding(BlockPos pos, Entity entity){
+    private boolean isSliding(BlockPos pos, Entity entity) {
         if (entity.isOnGround()) {
             return false;
         } else if (entity.getY() > (double) pos.getY() + 0.9375D - 1.0E-7D) {

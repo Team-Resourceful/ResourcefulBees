@@ -1,7 +1,7 @@
 package com.resourcefulbees.resourcefulbees.block;
 
 import com.resourcefulbees.resourcefulbees.fluids.HoneyFlowingFluid;
-import com.resourcefulbees.resourcefulbees.tileentity.HoneyBottlerTileEntity;
+import com.resourcefulbees.resourcefulbees.tileentity.HoneyCongealerTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -20,18 +20,18 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Random;
 
 @SuppressWarnings("deprecation")
-public class HoneyBottler extends Block {
+public class HoneyCongealer extends Block {
 
     protected static final VoxelShape VOXEL_SHAPE = Block.box(1.0D, 0.0D, 1.0D, 15.0D, 16.0D, 15.0D);
 
-    public HoneyBottler(Properties properties) {
+    public HoneyCongealer(Properties properties) {
         super(properties);
     }
 
-    private static HoneyBottlerTileEntity getTileEntity(@NotNull IBlockReader world, @NotNull BlockPos pos) {
+    private static HoneyCongealerTileEntity getTileEntity(@NotNull IBlockReader world, @NotNull BlockPos pos) {
         TileEntity entity = world.getBlockEntity(pos);
-        if (entity instanceof HoneyBottlerTileEntity) {
-            return (HoneyBottlerTileEntity) entity;
+        if (entity instanceof HoneyCongealerTileEntity) {
+            return (HoneyCongealerTileEntity) entity;
         }
         return null;
     }
@@ -40,7 +40,7 @@ public class HoneyBottler extends Block {
     public @NotNull ActionResultType use(@NotNull BlockState state, World world, @NotNull BlockPos pos, @NotNull PlayerEntity player, @NotNull Hand hand, @NotNull BlockRayTraceResult blockRayTraceResult) {
         TileEntity tileEntity = world.getBlockEntity(pos);
 
-        if (tileEntity instanceof HoneyBottlerTileEntity) {
+        if (tileEntity instanceof HoneyCongealerTileEntity) {
             if (!world.isClientSide) {
                 CentrifugeBlock.capabilityOrGuiUse(tileEntity, player, world, pos, hand);
             }
@@ -51,7 +51,7 @@ public class HoneyBottler extends Block {
 
     @Override
     public void animateTick(@NotNull BlockState stateIn, @NotNull World world, @NotNull BlockPos pos, @NotNull Random rand) {
-        HoneyBottlerTileEntity tank = getTileEntity(world, pos);
+        HoneyCongealerTileEntity tank = getTileEntity(world, pos);
         if (tank == null) {
             return;
         }
@@ -67,7 +67,7 @@ public class HoneyBottler extends Block {
     @Nullable
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new HoneyBottlerTileEntity();
+        return new HoneyCongealerTileEntity();
     }
 
     @Override

@@ -38,8 +38,8 @@ public class ModContainers {
             .create((id, inv, c) -> new ApiaryBreederContainer(id, inv.player.level, c.readBlockPos(), inv)));
     public static final RegistryObject<ContainerType<EnderBeeconContainer>> ENDER_BEECON_CONTAINER = CONTAINER_TYPES.register("ender_beecon", () -> IForgeContainerType
             .create((id, inv, c) -> new EnderBeeconContainer(id, inv.player.level, c.readBlockPos(), inv)));
-    public static final RegistryObject<ContainerType<HoneyBottlerContainer>> HONEY_BOTTLER_CONTAINER = CONTAINER_TYPES.register("honey_bottler", () -> IForgeContainerType
-            .create((id, inv, c) -> new HoneyBottlerContainer(id, inv.player.level, c.readBlockPos(), inv)));
+    public static final RegistryObject<ContainerType<HoneyCongealerContainer>> HONEY_CONGEALER_CONTAINER = CONTAINER_TYPES.register("honey_congealer", () -> IForgeContainerType
+            .create((id, inv, c) -> new HoneyCongealerContainer(id, inv.player.level, c.readBlockPos(), inv)));
     public static final RegistryObject<ContainerType<HoneyTankContainer>> HONEY_TANK_CONTAINER = CONTAINER_TYPES.register("honey_tank", () -> IForgeContainerType
             .create((id, inv, c) -> new HoneyTankContainer(id, inv.player.level, c.readBlockPos(), inv)));
 }

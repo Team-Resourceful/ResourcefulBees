@@ -1,7 +1,7 @@
 package com.resourcefulbees.resourcefulbees.network.packets;
 
 import com.resourcefulbees.resourcefulbees.tileentity.CentrifugeTileEntity;
-import com.resourcefulbees.resourcefulbees.tileentity.HoneyBottlerTileEntity;
+import com.resourcefulbees.resourcefulbees.tileentity.HoneyCongealerTileEntity;
 import com.resourcefulbees.resourcefulbees.tileentity.HoneyGeneratorTileEntity;
 import com.resourcefulbees.resourcefulbees.tileentity.HoneyTankTileEntity;
 import net.minecraft.client.Minecraft;
@@ -42,8 +42,8 @@ public class SyncGUIMessage {
                 if (tileEntity instanceof HoneyGeneratorTileEntity) {
                     ((HoneyGeneratorTileEntity) tileEntity).handleGUINetworkPacket(message.buffer);
                 }
-                if (tileEntity instanceof HoneyBottlerTileEntity) {
-                    ((HoneyBottlerTileEntity) tileEntity).handleGUINetworkPacket(message.buffer);
+                if (tileEntity instanceof HoneyCongealerTileEntity) {
+                    ((HoneyCongealerTileEntity) tileEntity).handleGUINetworkPacket(message.buffer);
                 }
                 if (tileEntity instanceof HoneyTankTileEntity) {
                     ((HoneyTankTileEntity) tileEntity).handleGUINetworkPacket(message.buffer);

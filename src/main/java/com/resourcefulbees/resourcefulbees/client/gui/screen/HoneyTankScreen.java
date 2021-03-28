@@ -39,10 +39,23 @@ public class HoneyTankScreen extends ContainerScreen<HoneyTankContainer> {
         }
     }
 
+    private void renderProgressBar(MatrixStack matrix) {
+        ResourceLocation texture = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/honey_tank/honey_tank.png");
+        Minecraft client = this.minecraft;
+        if (client != null) {
+            client.getTextureManager().bind(texture);
+            int i = this.leftPos;
+            int j = this.topPos;
+            this.blit(matrix, i + 52, j + 35, 176, 0, 28, (int) (16 * tileEntity.getProcessEmptyPercent()));
+            this.blit(matrix, i + 96, j + 35, 176, 16, 28, (int) (16 * tileEntity.getProcessFillPercent()));
+        }
+    }
+
     @Override
     public void render(@NotNull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrix);
         super.render(matrix, mouseX, mouseY, partialTicks);
+        this.renderProgressBar(matrix);
         this.renderTooltip(matrix, mouseX, mouseY);
         DecimalFormat decimalFormat = new DecimalFormat("##0.0");
         if (mouseX >= this.leftPos + 81 && mouseX <= this.leftPos + 93 && mouseY >= this.topPos + 12 && mouseY <= this.topPos + 74) {

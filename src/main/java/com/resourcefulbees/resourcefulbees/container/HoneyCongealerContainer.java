@@ -2,7 +2,7 @@ package com.resourcefulbees.resourcefulbees.container;
 
 import com.resourcefulbees.resourcefulbees.mixin.ContainerAccessor;
 import com.resourcefulbees.resourcefulbees.registry.ModContainers;
-import com.resourcefulbees.resourcefulbees.tileentity.HoneyBottlerTileEntity;
+import com.resourcefulbees.resourcefulbees.tileentity.HoneyCongealerTileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.IContainerListener;
@@ -13,25 +13,19 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
-public class HoneyBottlerContainer extends ContainerWithStackMove {
+public class HoneyCongealerContainer extends ContainerWithStackMove {
 
-    private final HoneyBottlerTileEntity honeyBottlerTileEntity;
+    private final HoneyCongealerTileEntity honeyCongealerTileEntity;
     private final PlayerEntity player;
 
-    public HoneyBottlerContainer(int id, World world, BlockPos pos, PlayerInventory inv) {
-        super(ModContainers.HONEY_BOTTLER_CONTAINER.get(), id);
+    public HoneyCongealerContainer(int id, World world, BlockPos pos, PlayerInventory inv) {
+        super(ModContainers.HONEY_CONGEALER_CONTAINER.get(), id);
 
         this.player = inv.player;
-        honeyBottlerTileEntity = (HoneyBottlerTileEntity) world.getBlockEntity(pos);
+        honeyCongealerTileEntity = (HoneyCongealerTileEntity) world.getBlockEntity(pos);
 
-        if (getHoneyBottlerTileEntity() != null) {
-            this.addSlot(new SlotItemHandlerUnconditioned(getHoneyBottlerTileEntity().getTileStackHandler(), HoneyBottlerTileEntity.BOTTLE_INPUT, 93, 16) {
-                @Override
-                public boolean mayPlace(ItemStack stack) {
-                    return stack.getItem() == Items.GLASS_BOTTLE;
-                }
-            });
-            this.addSlot(new OutputSlot(getHoneyBottlerTileEntity().getTileStackHandler(), HoneyBottlerTileEntity.BOTTLE_OUTPUT, 93, 54));
+        if (getHoneyCongealerTileEntity() != null) {
+            this.addSlot(new OutputSlot(getHoneyCongealerTileEntity().getTileStackHandler(), HoneyCongealerTileEntity.BOTTLE_OUTPUT, 93, 54));
 
             for (int i = 0; i < 3; ++i) {
                 for (int j = 0; j < 9; ++j) {
@@ -52,18 +46,18 @@ public class HoneyBottlerContainer extends ContainerWithStackMove {
 
     @Override
     public int getInventoryStart() {
-        return 2;
+        return 1;
     }
 
     @Override
     public void broadcastChanges() {
         super.broadcastChanges();
-        if (getHoneyBottlerTileEntity() == null) {
+        if (getHoneyCongealerTileEntity() == null) {
             return;
         }
 
         for (IContainerListener listener : ((ContainerAccessor) this).getListeners()) {
-            getHoneyBottlerTileEntity().sendGUINetworkPacket(listener);
+            getHoneyCongealerTileEntity().sendGUINetworkPacket(listener);
         }
     }
 
@@ -72,7 +66,7 @@ public class HoneyBottlerContainer extends ContainerWithStackMove {
         return true;
     }
 
-    public HoneyBottlerTileEntity getHoneyBottlerTileEntity() {
-        return honeyBottlerTileEntity;
+    public HoneyCongealerTileEntity getHoneyCongealerTileEntity() {
+        return honeyCongealerTileEntity;
     }
 }

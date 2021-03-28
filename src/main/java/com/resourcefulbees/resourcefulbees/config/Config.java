@@ -2,10 +2,12 @@ package com.resourcefulbees.resourcefulbees.config;
 
 import com.resourcefulbees.resourcefulbees.lib.ApiaryOutput;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
+import com.resourcefulbees.resourcefulbees.utils.FunctionalIntReferenceHolder;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.*;
 
 public class Config {
+
 
 
     //TODO Rewrite config names in 1.17 to be more informative also update comments if needed
@@ -56,6 +58,7 @@ public class Config {
     public static IntValue HONEY_FILL_AMOUNT;
     public static IntValue HONEY_DRAIN_AMOUNT;
     public static IntValue HONEY_PROCEESS_TIME;
+    public static IntValue CONGEALER_TIME_MODIFIER;
     public static IntValue ENERGY_FILL_AMOUNT;
     public static IntValue ENERGY_TRANSFER_AMOUNT;
     public static IntValue MAX_ENERGY_CAPACITY;
@@ -125,6 +128,9 @@ public class Config {
                     .define("beepediaHideLocked", false);
             HONEY_PROCEESS_TIME = COMMON_BUILDER.comment("\nAmount of time in ticks required to finish processing a honey bottle.")
                     .defineInRange("honeyProcessTime", 5, 0, 2400);
+            CONGEALER_TIME_MODIFIER = COMMON_BUILDER.comment("\nMultiplier to the amount of ticks needed to process honey into honey blocks in the congealer." +
+                    "\nThis value is multiplying the honeyProcessTime.")
+                    .defineInRange("congealerTimeMultiplier", 4, 1, 16);
             COMMON_BUILDER.pop();
 
             COMMON_BUILDER.push("Recipe Options");

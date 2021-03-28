@@ -4,6 +4,7 @@ import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.container.AutomationSensitiveItemStackHandler;
 import com.resourcefulbees.resourcefulbees.container.HoneyTankContainer;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
+import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
 import com.resourcefulbees.resourcefulbees.network.packets.SyncGUIMessage;
 import com.resourcefulbees.resourcefulbees.registry.ModBlocks;
@@ -108,6 +109,7 @@ public class HoneyTankTileEntity extends AbstractHoneyTankContainer {
     }
 
     public float getProcessFillPercent() {
+        if (!canProcessFill()) return 0;
         if (processingFill == Config.HONEY_PROCEESS_TIME.get()) return 1;
         return processingFill / (float) Config.HONEY_PROCEESS_TIME.get();
     }
@@ -199,6 +201,8 @@ public class HoneyTankTileEntity extends AbstractHoneyTankContainer {
 
     @Override
     public CompoundNBT writeNBT(CompoundNBT tag) {
+        CompoundNBT inv = this.getTileStackHandler().serializeNBT();
+        tag.put(NBTConstants.NBT_INVENTORY, inv);
         tag.putInt("tier", getTier().tier);
         if (getFluidTank().isEmpty()) return tag;
         return super.writeNBT(tag);
@@ -207,6 +211,8 @@ public class HoneyTankTileEntity extends AbstractHoneyTankContainer {
     @Override
     public void readNBT(CompoundNBT tag) {
         super.readNBT(tag);
+        CompoundNBT invTag = tag.getCompound(NBTConstants.NBT_INVENTORY);
+        getTileStackHandler().deserializeNBT(invTag);
         setTier(TankTier.getTier(tag.getInt("tier")));
         if (getFluidTank().getTankCapacity(0) != getTier().maxFillAmount)
             getFluidTank().setCapacity(getTier().maxFillAmount);

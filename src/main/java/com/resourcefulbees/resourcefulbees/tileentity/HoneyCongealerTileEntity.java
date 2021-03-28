@@ -2,8 +2,9 @@ package com.resourcefulbees.resourcefulbees.tileentity;
 
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.container.AutomationSensitiveItemStackHandler;
-import com.resourcefulbees.resourcefulbees.container.HoneyBottlerContainer;
+import com.resourcefulbees.resourcefulbees.container.HoneyCongealerContainer;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
+import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
 import com.resourcefulbees.resourcefulbees.network.packets.SyncGUIMessage;
 import com.resourcefulbees.resourcefulbees.registry.ModTileEntityTypes;
@@ -19,6 +20,7 @@ import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tags.ITag;
 import net.minecraft.tileentity.ITickableTileEntity;
@@ -35,59 +37,53 @@ import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class HoneyBottlerTileEntity extends AbstractHoneyTank implements ITickableTileEntity, INamedContainerProvider {
+public class HoneyCongealerTileEntity extends AbstractHoneyTank implements ITickableTileEntity, INamedContainerProvider {
 
-    public static final ITag<Fluid> HONEY_FLUID_TAG = BeeInfoUtils.getFluidTag("forge:honey");
-    public static final ITag<Item> HONEY_BOTTLE_TAG = BeeInfoUtils.getItemTag("forge:honey_bottle");
-    public static final int BOTTLE_INPUT = 0;
-    public static final int BOTTLE_OUTPUT = 1;
+    public static final int BOTTLE_OUTPUT = 0;
     private final AutomationSensitiveItemStackHandler tileStackHandler = new TileStackHandler(2, getAcceptor(), getRemover());
     private final LazyOptional<IItemHandler> lazyOptional = LazyOptional.of(this::getTileStackHandler);
     private boolean dirty;
     private int processingFill;
 
-    public HoneyBottlerTileEntity() {
-        super(ModTileEntityTypes.HONEY_BOTTLER_TILE_ENTITY.get(), 16000);
+    public HoneyCongealerTileEntity() {
+        super(ModTileEntityTypes.HONEY_CONGEALER_TILE_ENTITY.get(), 16000);
     }
 
     public float getProcessPercent() {
-        if (processingFill == Config.HONEY_PROCEESS_TIME.get()) return 1;
-        return processingFill / (float) Config.HONEY_PROCEESS_TIME.get();
+        if (!canProcessFill()) return 0;
+        if (processingFill == Config.HONEY_PROCEESS_TIME.get() * Config.CONGEALER_TIME_MODIFIER.get()) return 1;
+        return processingFill / ((float) Config.HONEY_PROCEESS_TIME.get() * Config.CONGEALER_TIME_MODIFIER.get());
     }
 
     @Override
     @NotNull
     public ITextComponent getDisplayName() {
-        return new TranslationTextComponent("gui.resourcefulbees.honey_bottler");
+        return new TranslationTextComponent("gui.resourcefulbees.honey_congealer");
     }
 
     @Nullable
     @Override
     public Container createMenu(int id, @NotNull PlayerInventory inventory, @NotNull PlayerEntity playerEntity) {
         if (level == null) return null;
-        return new HoneyBottlerContainer(id, level, worldPosition, inventory);
+        return new HoneyCongealerContainer(id, level, worldPosition, inventory);
     }
 
     public boolean canProcessFill() {
-        ItemStack stack = getTileStackHandler().getStackInSlot(BOTTLE_INPUT);
         FluidStack fluidStack = getFluidTank().getFluid();
         ItemStack outputStack = getTileStackHandler().getStackInSlot(BOTTLE_OUTPUT);
-        Item outputHoney = BeeInfoUtils.getHoneyBottle(fluidStack.getFluid());
+        Item outputHoney = BeeInfoUtils.getHoneyBlock(fluidStack.getFluid());
 
-        boolean isTankReady = !fluidStack.isEmpty() && getFluidTank().getFluidAmount() >= ModConstants.HONEY_PER_BOTTLE;
-        boolean hasBottles = !stack.isEmpty();
+        boolean isTankReady = !fluidStack.isEmpty() && getFluidTank().getFluidAmount() >= 1000;
+        boolean hasHoneyBlock = outputHoney != Items.AIR;
         boolean canOutput = outputStack.isEmpty() || outputStack.getItem() == outputHoney && outputStack.getCount() < outputStack.getMaxStackSize();
 
-        return isTankReady && hasBottles && canOutput;
+        return isTankReady && hasHoneyBlock && canOutput;
     }
 
     public void processFill() {
-        ItemStack inputStack = getTileStackHandler().getStackInSlot(BOTTLE_INPUT);
-        inputStack.shrink(1);
-        FluidStack fluidStack = new FluidStack(getFluidTank().getFluid(), ModConstants.HONEY_PER_BOTTLE);
-        getTileStackHandler().setStackInSlot(BOTTLE_INPUT, inputStack);
+        FluidStack fluidStack = new FluidStack(getFluidTank().getFluid(), 1000);
         ItemStack outputStack = getTileStackHandler().getStackInSlot(BOTTLE_OUTPUT);
-        if (outputStack.isEmpty()) outputStack = new ItemStack(BeeInfoUtils.getHoneyBottle(fluidStack.getFluid()));
+        if (outputStack.isEmpty()) outputStack = new ItemStack(BeeInfoUtils.getHoneyBlock(fluidStack.getFluid()));
         else outputStack.grow(1);
         getTileStackHandler().setStackInSlot(BOTTLE_OUTPUT, outputStack);
         getFluidTank().drain(fluidStack, IFluidHandler.FluidAction.EXECUTE);
@@ -98,7 +94,7 @@ public class HoneyBottlerTileEntity extends AbstractHoneyTank implements ITickab
     }
 
     public AutomationSensitiveItemStackHandler.IAcceptor getAcceptor() {
-        return (slot, stack, automation) -> !automation || slot == BOTTLE_INPUT;
+        return (slot, stack, automation) -> false;
     }
 
     public AutomationSensitiveItemStackHandler.IRemover getRemover() {
@@ -120,7 +116,7 @@ public class HoneyBottlerTileEntity extends AbstractHoneyTank implements ITickab
     @Override
     public void tick() {
         if (canProcessFill()) {
-            if (processingFill >= Config.HONEY_PROCEESS_TIME.get()) {
+            if (processingFill >= Config.HONEY_PROCEESS_TIME.get() * Config.CONGEALER_TIME_MODIFIER.get()) {
                 processFill();
                 processingFill = 0;
             }
@@ -138,6 +134,20 @@ public class HoneyBottlerTileEntity extends AbstractHoneyTank implements ITickab
     public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @org.jetbrains.annotations.Nullable Direction side) {
         return cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? lazyOptional.cast() :
                 super.getCapability(cap, side);
+    }
+
+    @Override
+    public CompoundNBT writeNBT(CompoundNBT tag) {
+        CompoundNBT inv = this.getTileStackHandler().serializeNBT();
+        tag.put(NBTConstants.NBT_INVENTORY, inv);
+        return super.writeNBT(tag);
+    }
+
+    @Override
+    public void readNBT(CompoundNBT tag) {
+        super.readNBT(tag);
+        CompoundNBT invTag = tag.getCompound(NBTConstants.NBT_INVENTORY);
+        getTileStackHandler().deserializeNBT(invTag);
     }
 
     protected class TileStackHandler extends AutomationSensitiveItemStackHandler {

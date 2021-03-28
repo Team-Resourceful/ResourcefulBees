@@ -2,7 +2,7 @@ package com.resourcefulbees.resourcefulbees.client.render.tileentity;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-import com.resourcefulbees.resourcefulbees.tileentity.HoneyBottlerTileEntity;
+import com.resourcefulbees.resourcefulbees.tileentity.HoneyCongealerTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.CubeModel;
 import com.resourcefulbees.resourcefulbees.utils.RenderCuboid;
 import net.minecraft.client.renderer.Atlases;
@@ -14,14 +14,14 @@ import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
-public class RenderHoneyBottler extends TileEntityRenderer<HoneyBottlerTileEntity> {
+public class RenderHoneyCongealer extends TileEntityRenderer<HoneyCongealerTileEntity> {
 
-    public RenderHoneyBottler(TileEntityRendererDispatcher renderer) {
+    public RenderHoneyCongealer(TileEntityRendererDispatcher renderer) {
         super(renderer);
     }
 
     @Override
-    public void render(HoneyBottlerTileEntity tile, float partialTick, @NotNull MatrixStack matrix, @NotNull IRenderTypeBuffer renderer, int light, int overlayLight) {
+    public void render(HoneyCongealerTileEntity tile, float partialTick, @NotNull MatrixStack matrix, @NotNull IRenderTypeBuffer renderer, int light, int overlayLight) {
         if (tile.getLevel() == null) return;
         FluidStack stack = tile.getFluidTank().getFluid();
         if (!stack.isEmpty()) {

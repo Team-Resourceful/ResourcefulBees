@@ -39,6 +39,7 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.Direction;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -416,6 +417,18 @@ public class BeeInfoUtils {
             return customfluid.getHoneyData().getHoneyBucketItemRegistryObject().get();
         } else {
             return ModItems.HONEY_FLUID_BUCKET.get();
+        }
+    }
+
+    public static Item getHoneyBlock(Fluid fluid) {
+        if (fluid == ModFluids.CATNIP_HONEY_STILL.get()) {
+            return ModItems.CATNIP_HONEY_BLOCK_ITEM.get();
+        } else if (fluid instanceof HoneyFlowingFluid) {
+            HoneyFlowingFluid customfluid = (HoneyFlowingFluid) fluid;
+            if (!customfluid.getHoneyData().doGenerateHoneyBlock()) return Items.AIR;
+            return customfluid.getHoneyData().getHoneyBlockItemRegistryObject().get();
+        } else {
+            return Items.HONEY_BLOCK;
         }
     }
 }

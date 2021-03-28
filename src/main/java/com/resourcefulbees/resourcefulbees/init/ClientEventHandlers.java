@@ -8,7 +8,7 @@ import com.resourcefulbees.resourcefulbees.client.render.fluid.FluidRender;
 import com.resourcefulbees.resourcefulbees.client.render.items.ItemModelPropertiesHandler;
 import com.resourcefulbees.resourcefulbees.client.render.patreon.BeeRewardRender;
 import com.resourcefulbees.resourcefulbees.client.render.tileentity.RenderEnderBeecon;
-import com.resourcefulbees.resourcefulbees.client.render.tileentity.RenderHoneyBottler;
+import com.resourcefulbees.resourcefulbees.client.render.tileentity.RenderHoneyCongealer;
 import com.resourcefulbees.resourcefulbees.client.render.tileentity.RenderHoneyGenerator;
 import com.resourcefulbees.resourcefulbees.client.render.tileentity.RenderHoneyTank;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
@@ -63,13 +63,13 @@ public class ClientEventHandlers {
         ScreenManager.register(ModContainers.APIARY_BREEDER_CONTAINER.get(), ApiaryBreederScreen::new);
         ScreenManager.register(ModContainers.HONEY_GENERATOR_CONTAINER.get(), HoneyGeneratorScreen::new);
         ScreenManager.register(ModContainers.ENDER_BEECON_CONTAINER.get(), EnderBeeconScreen::new);
-        ScreenManager.register(ModContainers.HONEY_BOTTLER_CONTAINER.get(), HoneyBottlerScreen::new);
+        ScreenManager.register(ModContainers.HONEY_CONGEALER_CONTAINER.get(), HoneyCongealerScreen::new);
         ScreenManager.register(ModContainers.HONEY_TANK_CONTAINER.get(), HoneyTankScreen::new);
         RenderTypeLookup.setRenderLayer(ModBlocks.GOLD_FLOWER.get(), RenderType.cutout());
         RenderTypeLookup.setRenderLayer(ModBlocks.PREVIEW_BLOCK.get(), RenderType.cutout());
         RenderTypeLookup.setRenderLayer(ModBlocks.ERRORED_PREVIEW_BLOCK.get(), RenderType.cutout());
         RenderTypeLookup.setRenderLayer(ModBlocks.ENDER_BEECON.get(), RenderType.translucent());
-        RenderTypeLookup.setRenderLayer(ModBlocks.HONEY_BOTTLER.get(), RenderType.translucent());
+        RenderTypeLookup.setRenderLayer(ModBlocks.HONEY_CONGEALER.get(), RenderType.translucent());
         RenderTypeLookup.setRenderLayer(ModBlocks.PURPUR_HONEY_TANK.get(), RenderType.translucent());
         RenderTypeLookup.setRenderLayer(ModBlocks.NETHER_HONEY_TANK.get(), RenderType.translucent());
         RenderTypeLookup.setRenderLayer(ModBlocks.WOODEN_HONEY_TANK.get(), RenderType.translucent());
@@ -102,7 +102,7 @@ public class ClientEventHandlers {
         ItemModelPropertiesHandler.registerProperties();
         ClientRegistry.bindTileEntityRenderer(ModTileEntityTypes.HONEY_TANK_TILE_ENTITY.get(), RenderHoneyTank::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityTypes.HONEY_GENERATOR_ENTITY.get(), RenderHoneyGenerator::new);
-        ClientRegistry.bindTileEntityRenderer(ModTileEntityTypes.HONEY_BOTTLER_TILE_ENTITY.get(), RenderHoneyBottler::new);
+        ClientRegistry.bindTileEntityRenderer(ModTileEntityTypes.HONEY_CONGEALER_TILE_ENTITY.get(), RenderHoneyCongealer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityTypes.ENDER_BEECON_TILE_ENTITY.get(), RenderEnderBeecon::new);
         event.enqueueWork(FluidRender::setHoneyRenderType);
     }

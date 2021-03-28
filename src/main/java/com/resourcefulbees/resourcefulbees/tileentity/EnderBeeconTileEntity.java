@@ -93,6 +93,8 @@ public class EnderBeeconTileEntity extends AbstractHoneyTankContainer implements
 
     @Override
     public CompoundNBT writeNBT(CompoundNBT tag) {
+        CompoundNBT inv = this.getTileStackHandler().serializeNBT();
+        tag.put(NBTConstants.NBT_INVENTORY, inv);
         tag.putBoolean(NBTConstants.NBT_SHOW_BEAM, isShowBeam());
         tag.putBoolean(NBTConstants.NBT_PLAY_SOUND, playSound);
         if (effects != null && !effects.isEmpty()) {
@@ -103,6 +105,8 @@ public class EnderBeeconTileEntity extends AbstractHoneyTankContainer implements
 
     @Override
     public void readNBT(CompoundNBT tag) {
+        CompoundNBT invTag = tag.getCompound(NBTConstants.NBT_INVENTORY);
+        getTileStackHandler().deserializeNBT(invTag);
         getFluidTank().readFromNBT(tag.getCompound(NBTConstants.NBT_FLUID));
         effects = readEffectsFromNBT(tag.getCompound("active_effects"));
         if (tag.contains(NBTConstants.NBT_SHOW_BEAM)) setShowBeam(tag.getBoolean(NBTConstants.NBT_SHOW_BEAM));
