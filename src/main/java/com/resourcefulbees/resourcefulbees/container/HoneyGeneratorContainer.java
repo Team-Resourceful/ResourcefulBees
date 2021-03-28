@@ -5,7 +5,6 @@ import com.resourcefulbees.resourcefulbees.registry.ModContainers;
 import com.resourcefulbees.resourcefulbees.tileentity.HoneyGeneratorTileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
@@ -15,7 +14,7 @@ import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import org.jetbrains.annotations.NotNull;
 
-public class HoneyGeneratorContainer extends Container {
+public class HoneyGeneratorContainer extends ContainerWithStackMove {
 
     private final HoneyGeneratorTileEntity honeyGeneratorTileEntity;
     private final PlayerEntity player;
@@ -65,30 +64,14 @@ public class HoneyGeneratorContainer extends Container {
         return true;
     }
 
-    @NotNull
     @Override
-    public ItemStack quickMoveStack(@NotNull PlayerEntity playerIn, int index) {
-        ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = this.slots.get(index);
-        if (slot != null && slot.hasItem()) {
-            ItemStack itemstack1 = slot.getItem();
-            itemstack = itemstack1.copy();
+    public int getContainerInputEnd() {
+        return 1;
+    }
 
-            if (index <= 1) {
-                if (!this.moveItemStackTo(itemstack1, 2, slots.size(), true)) {
-                    return ItemStack.EMPTY;
-                }
-            } else if (!this.moveItemStackTo(itemstack1, 0, 1, false)) {
-                return ItemStack.EMPTY;
-            }
-
-            if (itemstack1.isEmpty()) {
-                slot.set(ItemStack.EMPTY);
-            } else {
-                slot.setChanged();
-            }
-        }
-        return itemstack;
+    @Override
+    public int getInventoryStart() {
+        return 2;
     }
 
     @Override

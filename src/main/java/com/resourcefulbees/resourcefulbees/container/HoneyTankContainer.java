@@ -6,7 +6,6 @@ import com.resourcefulbees.resourcefulbees.tileentity.AbstractHoneyTankContainer
 import com.resourcefulbees.resourcefulbees.tileentity.HoneyTankTileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
@@ -15,7 +14,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
-public class HoneyTankContainer extends Container {
+public class HoneyTankContainer extends ContainerWithStackMove {
 
     private final HoneyTankTileEntity honeyTankTileEntity;
     private final PlayerEntity player;
@@ -58,30 +57,14 @@ public class HoneyTankContainer extends Container {
     }
 
 
-    @NotNull
     @Override
-    public ItemStack quickMoveStack(@NotNull PlayerEntity playerIn, int index) {
-        ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = this.slots.get(index);
-        if (slot != null && slot.hasItem()) {
-            ItemStack itemstack1 = slot.getItem();
-            itemstack = itemstack1.copy();
+    public int getContainerInputEnd() {
+        return 3;
+    }
 
-            if (index <= 3) {
-                if (!this.moveItemStackTo(itemstack1, 4, slots.size(), true)) {
-                    return ItemStack.EMPTY;
-                }
-            } else if (!this.moveItemStackTo(itemstack1, 0, 3, false)) {
-                return ItemStack.EMPTY;
-            }
-
-            if (itemstack1.isEmpty()) {
-                slot.set(ItemStack.EMPTY);
-            } else {
-                slot.setChanged();
-            }
-        }
-        return itemstack;
+    @Override
+    public int getInventoryStart() {
+        return 4;
     }
 
     @Override

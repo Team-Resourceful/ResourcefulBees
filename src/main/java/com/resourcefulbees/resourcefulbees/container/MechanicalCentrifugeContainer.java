@@ -5,7 +5,6 @@ import com.resourcefulbees.resourcefulbees.tileentity.MechanicalCentrifugeTileEn
 import com.resourcefulbees.resourcefulbees.utils.FunctionalIntReferenceHolder;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -13,7 +12,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
-public class MechanicalCentrifugeContainer extends Container {
+public class MechanicalCentrifugeContainer extends ContainerWithStackMove {
 
     private final MechanicalCentrifugeTileEntity centrifugeTileEntity;
     private final PlayerEntity player;
@@ -66,29 +65,14 @@ public class MechanicalCentrifugeContainer extends Container {
         return true;
     }
 
-    @NotNull
     @Override
-    public ItemStack quickMoveStack(@NotNull PlayerEntity playerIn, int index) {
-        ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = this.slots.get(index);
-        if (slot != null && slot.hasItem()) {
-            ItemStack itemstack1 = slot.getItem();
-            itemstack = itemstack1.copy();
-            if (index <= 4) {
-                if (!this.moveItemStackTo(itemstack1, 5, slots.size(), true)) {
-                    return ItemStack.EMPTY;
-                }
-            } else if (!this.moveItemStackTo(itemstack1, 0, 2, false)) {
-                return ItemStack.EMPTY;
-            }
+    public int getContainerInputEnd() {
+        return 2;
+    }
 
-            if (itemstack1.isEmpty()) {
-                slot.set(ItemStack.EMPTY);
-            } else {
-                slot.setChanged();
-            }
-        }
-        return itemstack;
+    @Override
+    public int getInventoryStart() {
+        return 5;
     }
 
     public MechanicalCentrifugeTileEntity getCentrifugeTileEntity() {

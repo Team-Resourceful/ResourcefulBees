@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryBreederTileEntity.*;
 
-public class ApiaryBreederContainer extends Container {
+public class ApiaryBreederContainer extends ContainerWithStackMove {
 
     private final ApiaryBreederTileEntity apiaryBreederTileEntity;
     private final PlayerInventory playerInventory;
@@ -163,29 +163,14 @@ public class ApiaryBreederContainer extends Container {
         }
     }
 
-    @NotNull
     @Override
-    public ItemStack quickMoveStack(@NotNull PlayerEntity playerIn, int index) {
-        ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = this.slots.get(index);
-        if (slot != null && slot.hasItem()) {
-            ItemStack itemstack1 = slot.getItem();
-            itemstack = itemstack1.copy();
-            if (index < 4 + getNumberOfBreeders() * 5) {
-                if (!this.moveItemStackTo(itemstack1, 4 + getNumberOfBreeders() * 5, slots.size(), true)) {
-                    return ItemStack.EMPTY;
-                }
-            } else if (!this.moveItemStackTo(itemstack1, 0, 4 + getNumberOfBreeders() * 5, false)) {
-                return ItemStack.EMPTY;
-            }
+    public int getContainerInputEnd() {
+        return 4 + getNumberOfBreeders() * 5;
+    }
 
-            if (itemstack1.isEmpty()) {
-                slot.set(ItemStack.EMPTY);
-            } else {
-                slot.setChanged();
-            }
-        }
-        return itemstack;
+    @Override
+    public int getInventoryStart() {
+        return 4 + getNumberOfBreeders() * 5;
     }
 
     public ApiaryBreederTileEntity getApiaryBreederTileEntity() {

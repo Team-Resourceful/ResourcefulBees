@@ -23,7 +23,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import org.jetbrains.annotations.NotNull;
 
-public class CentrifugeContainer extends Container {
+public class CentrifugeContainer extends ContainerWithStackMove {
 
     protected final CentrifugeTileEntity centrifugeTileEntity;
     private final PlayerInventory inv;
@@ -166,34 +166,15 @@ public class CentrifugeContainer extends Container {
     @Override
     public boolean stillValid(@NotNull PlayerEntity player) { return true; }
 
-    @NotNull
     @Override
-    public ItemStack quickMoveStack(@NotNull PlayerEntity playerIn, int index) {
-        ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = this.slots.get(index);
-        int totalSlots = centrifugeTileEntity.getTotalSlots();
-        int totalInputs = 1 + centrifugeTileEntity.getNumberOfInputs();
-
-        if (slot != null && slot.hasItem()) {
-            ItemStack slotStack = slot.getItem();
-            itemstack = slotStack.copy();
-            if (index < totalSlots) {
-                if (!this.moveItemStackTo(slotStack, totalSlots, slots.size(), true)) {
-                    return ItemStack.EMPTY;
-                }
-            } else if (!this.moveItemStackTo(slotStack, 0, totalInputs, false)) {
-                return ItemStack.EMPTY;
-            }
-
-            if (slotStack.isEmpty()) {
-                slot.set(ItemStack.EMPTY);
-            } else {
-                slot.setChanged();
-            }
-        }
-        return itemstack;
+    public int getContainerInputEnd() {
+        return 1 + centrifugeTileEntity.getNumberOfInputs();
     }
 
+    @Override
+    public int getInventoryStart() {
+        return centrifugeTileEntity.getTotalSlots();
+    }
 
     @Override
     public void broadcastChanges() {

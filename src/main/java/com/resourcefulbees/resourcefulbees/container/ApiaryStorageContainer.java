@@ -13,7 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
-public class ApiaryStorageContainer extends Container {
+public class ApiaryStorageContainer extends ContainerWithStackMove {
 
     private final ApiaryStorageTileEntity apiaryStorageTileEntity;
     private final PlayerInventory playerInventory;
@@ -98,31 +98,14 @@ public class ApiaryStorageContainer extends Container {
     }
 
 
-
-
-    @NotNull
     @Override
-    public ItemStack quickMoveStack(@NotNull PlayerEntity playerIn, int index) {
-        ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = this.slots.get(index);
-        if (slot != null && slot.hasItem()) {
-            ItemStack itemstack1 = slot.getItem();
-            itemstack = itemstack1.copy();
-            if (index <= getNumberOfSlots()) {
-                if (!this.moveItemStackTo(itemstack1, getNumberOfSlots(), slots.size(), true)) {
-                    return ItemStack.EMPTY;
-                }
-            } else if (!this.moveItemStackTo(itemstack1, 0, 1, false)) {
-                return ItemStack.EMPTY;
-            }
+    public int getContainerInputEnd() {
+        return 1;
+    }
 
-            if (itemstack1.isEmpty()) {
-                slot.set(ItemStack.EMPTY);
-            } else {
-                slot.setChanged();
-            }
-        }
-        return itemstack;
+    @Override
+    public int getInventoryStart() {
+        return 1 + getNumberOfSlots();
     }
 
     public PlayerInventory getPlayerInventory() {
