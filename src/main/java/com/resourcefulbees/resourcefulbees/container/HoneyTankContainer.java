@@ -56,15 +56,14 @@ public class HoneyTankContainer extends ContainerWithStackMove {
         }
     }
 
+    @Override
+    public int getInventoryStart() {
+        return 4;
+    }
 
     @Override
     public int getContainerInputEnd() {
         return 3;
-    }
-
-    @Override
-    public int getInventoryStart() {
-        return 4;
     }
 
     @Override

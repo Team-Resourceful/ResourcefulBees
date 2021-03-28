@@ -55,16 +55,6 @@ public class MechanicalCentrifugeContainer extends ContainerWithStackMove {
         }
     }
 
-    /**
-     * Determines whether supplied player can use this container
-     *
-     * @param player the player
-     */
-    @Override
-    public boolean stillValid(@NotNull PlayerEntity player) {
-        return true;
-    }
-
     @Override
     public int getContainerInputEnd() {
         return 2;
@@ -73,6 +63,16 @@ public class MechanicalCentrifugeContainer extends ContainerWithStackMove {
     @Override
     public int getInventoryStart() {
         return 5;
+    }
+
+    /**
+     * Determines whether supplied player can use this container
+     *
+     * @param player the player
+     */
+    @Override
+    public boolean stillValid(@NotNull PlayerEntity player) {
+        return true;
     }
 
     public MechanicalCentrifugeTileEntity getCentrifugeTileEntity() {

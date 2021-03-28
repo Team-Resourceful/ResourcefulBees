@@ -51,13 +51,13 @@ public class EnderBeeconContainer extends ContainerWithStackMove {
     }
 
     @Override
-    public int getContainerInputEnd() {
-        return 1;
+    public int getInventoryStart() {
+        return 2;
     }
 
     @Override
-    public int getInventoryStart() {
-        return 2;
+    public int getContainerInputEnd() {
+        return 1;
     }
 
     public int getFluid() {
