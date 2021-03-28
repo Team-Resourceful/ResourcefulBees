@@ -51,17 +51,10 @@ public class HoneyGenerator extends Block {
     @NotNull
     @Override
     public ActionResultType use(@NotNull BlockState state, World world, @NotNull BlockPos pos, @NotNull PlayerEntity player, @NotNull Hand hand, @NotNull BlockRayTraceResult rayTraceResult) {
-        ItemStack heldItem = player.getItemInHand(hand);
-        boolean hasCapability = heldItem.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent();
         TileEntity tileEntity = world.getBlockEntity(pos);
 
         if (tileEntity instanceof HoneyGeneratorTileEntity) {
-            if (hasCapability) {
-                tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
-                        .ifPresent(iFluidHandler -> FluidUtil.interactWithFluidHandler(player, hand, world, pos, null));
-            } else if (!player.isShiftKeyDown() && !world.isClientSide) {
-                NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, pos);
-            }
+            CentrifugeBlock.capabilityOrGuiUse(tileEntity, player, world, pos, hand);
             return ActionResultType.SUCCESS;
         }
         return super.use(state, world, pos, player, hand, rayTraceResult);

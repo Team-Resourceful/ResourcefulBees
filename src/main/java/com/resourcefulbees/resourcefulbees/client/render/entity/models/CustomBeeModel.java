@@ -32,19 +32,7 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
     private float beeSize = 0;
 
     public CustomBeeModel(ModelTypes modelType) {
-        super(false, 24.0F, 0.0F);
-        this.texWidth = 64;
-        this.texHeight = 64;
-        this.body = new ModelRenderer(this);
-        this.torso = new ModelRenderer(this);
-        this.stinger = new ModelRenderer(this, 26, 7);
-        this.leftAntenna = new ModelRenderer(this, 2, 0);
-        this.rightAntenna = new ModelRenderer(this, 2, 3);
-        this.rightWing = new ModelRenderer(this, 0, 18);
-        this.leftWing = new ModelRenderer(this, 0, 18);
-        this.frontLegs = new ModelRenderer(this);
-        this.middleLegs = new ModelRenderer(this);
-        this.backLegs = new ModelRenderer(this);
+        this();
 
         switch (modelType) {
             case GELATINOUS:
@@ -77,6 +65,17 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
     }
 
     public CustomBeeModel(BaseModelTypes modelType) {
+        this();
+
+
+        if (modelType.equals(BaseModelTypes.KITTEN)) {
+            addKittenParts();
+        } else if (modelType.equals(BaseModelTypes.DEFAULT)) {
+            addDefaultParts();
+        }
+    }
+
+    public CustomBeeModel() {
         super(false, 24.0F, 0.0F);
         this.texWidth = 64;
         this.texHeight = 64;
@@ -90,13 +89,6 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
         this.frontLegs = new ModelRenderer(this);
         this.middleLegs = new ModelRenderer(this);
         this.backLegs = new ModelRenderer(this);
-
-
-        if (modelType.equals(BaseModelTypes.KITTEN)) {
-            addKittenParts();
-        } else if (modelType.equals(BaseModelTypes.DEFAULT)) {
-            addDefaultParts();
-        }
     }
 
     @Override

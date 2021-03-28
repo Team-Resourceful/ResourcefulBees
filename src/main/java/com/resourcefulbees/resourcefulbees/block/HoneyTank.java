@@ -130,7 +130,6 @@ public class HoneyTank extends Block {
         ItemStack heldItem = player.getItemInHand(hand);
         boolean usingHoney = heldItem.getItem() instanceof HoneyBottleItem;
         boolean usingBottle = heldItem.getItem() instanceof GlassBottleItem;
-        boolean hasCapability = heldItem.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent();
         TileEntity tileEntity = world.getBlockEntity(pos);
 
         if (tileEntity instanceof HoneyTankTileEntity) {
@@ -140,11 +139,8 @@ public class HoneyTank extends Block {
                     tank.fillBottle(player, hand);
                 } else if (usingHoney) {
                     tank.emptyBottle(player, hand);
-                } else if (hasCapability) {
-                    tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
-                            .ifPresent(iFluidHandler -> FluidUtil.interactWithFluidHandler(player, hand, world, pos, null));
-                }else {
-                    NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, pos);
+                } else {
+                    CentrifugeBlock.capabilityOrGuiUse(tileEntity, player, world, pos, hand);
                 }
             }
             return ActionResultType.SUCCESS;

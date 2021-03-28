@@ -42,20 +42,12 @@ public class HoneyBottler extends Block {
     }
 
     @Override
-    public ActionResultType use(@NotNull BlockState state, World world, @NotNull BlockPos pos, @NotNull PlayerEntity player, @NotNull Hand hand, @NotNull BlockRayTraceResult blockRayTraceResult) {
+    public @NotNull ActionResultType use(@NotNull BlockState state, World world, @NotNull BlockPos pos, @NotNull PlayerEntity player, @NotNull Hand hand, @NotNull BlockRayTraceResult blockRayTraceResult) {
         TileEntity tileEntity = world.getBlockEntity(pos);
-        ItemStack heldItem = player.getItemInHand(hand);
-        boolean hasCapability = heldItem.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent();
 
         if (tileEntity instanceof HoneyBottlerTileEntity) {
-            HoneyBottlerTileEntity bottler = (HoneyBottlerTileEntity) tileEntity;
             if (!world.isClientSide) {
-                if (hasCapability) {
-                    tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
-                            .ifPresent(iFluidHandler -> FluidUtil.interactWithFluidHandler(player, hand, world, pos, null));
-                } else {
-                    NetworkHooks.openGui((ServerPlayerEntity) player, bottler, pos);
-                }
+                CentrifugeBlock.capabilityOrGuiUse(tileEntity, player, world, pos, hand);
             }
             return ActionResultType.SUCCESS;
         }
