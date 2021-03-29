@@ -19,6 +19,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.resourcefulbees.resourcefulbees.ResourcefulBees.LOGGER;
 
@@ -258,10 +259,8 @@ public class DataGen {
 
         Set<ResourceLocation> objects = BEE_REGISTRY.getHoneyBottles().values().stream()
                 .filter(HoneyBottleData::doGenerateHoneyFluid)
-                .map(h -> h.getHoneyStillFluidRegistryObject().getId()).collect(Collectors.toSet());
-        objects.addAll(BEE_REGISTRY.getHoneyBottles().values().stream()
-                .filter(HoneyBottleData::doGenerateHoneyFluid)
-                .map(h -> h.getHoneyFlowingFluidRegistryObject().getId()).collect(Collectors.toSet()));
+                .flatMap(hbd -> Stream.of(hbd.getHoneyFlowingFluidRegistryObject().getId(), hbd.getHoneyStillFluidRegistryObject().getId()))
+                .collect(Collectors.toSet());
 
         generateTagEntry(builder, objects);
 

@@ -115,10 +115,6 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
                         BeeEntity vanillaBeeEntity = (BeeEntity) entity;
                         ItemStack honeycomb = new ItemStack(Items.HONEYCOMB);
 
-                        if (vanillaBeeEntity.hasSavedFlowerPos() && this.level.random.nextFloat() > 0.9F) {
-                            vanillaBeeEntity.savedFlowerPos = null;
-                        }
-
                         if (beehiveState == State.HONEY_DELIVERED) {
                             vanillaBeeEntity.dropOffNectar();
                             int i = getHoneyLevel(state);

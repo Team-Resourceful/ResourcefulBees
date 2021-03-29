@@ -187,11 +187,6 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
             if (entity instanceof BeeEntity) {
                 BeeEntity vanillaBeeEntity = (BeeEntity) entity;
 
-                BlockPos flowerPos = apiaryBee.savedFlowerPos;
-                if (flowerPos != null && !vanillaBeeEntity.hasSavedFlowerPos() && this.level.random.nextFloat() < 0.9F) {
-                    vanillaBeeEntity.setSavedFlowerPos(flowerPos);
-                }
-
                 if (nbt.getBoolean("HasNectar")) {
                     vanillaBeeEntity.dropOffNectar();
 
@@ -227,7 +222,6 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
 
     public boolean tryEnterHive(@NotNull Entity bee, boolean hasNectar, int ticksInHive, boolean imported) {
         if (this.level != null && bee instanceof BeeEntity) {
-            BeeEntity beeEntity = (BeeEntity) bee;
             String type = BeeConstants.VANILLA_BEE_TYPE;
             String beeColor = BeeConstants.VANILLA_BEE_COLOR;
 
@@ -261,7 +255,7 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
 
                 ITextComponent displayName = bee.getName();
 
-                this.bees.computeIfAbsent(finalType, k -> new ApiaryBee(nbt, ticksInHive, hasNectar ? finalMaxTimeInHive : MIN_HIVE_TIME, beeEntity.getSavedFlowerPos(), finalType, finalBeeColor, displayName));
+                this.bees.computeIfAbsent(finalType, k -> new ApiaryBee(nbt, ticksInHive, hasNectar ? finalMaxTimeInHive : MIN_HIVE_TIME, finalType, finalBeeColor, displayName));
                 BlockPos pos = this.getBlockPos();
                 this.level.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BEEHIVE_ENTER, SoundCategory.BLOCKS, 1.0F, 1.0F);
 
@@ -377,9 +371,6 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
             compoundnbt.putString(NBTConstants.NBT_BEE_TYPE, apiaryBee.beeType);
             compoundnbt.putString(NBTConstants.NBT_COLOR, apiaryBee.beeColor);
             compoundnbt.putString(NBTConstants.NBT_BEE_NAME, ITextComponent.Serializer.toJson(apiaryBee.displayName));
-            if (apiaryBee.savedFlowerPos != null) {
-                compoundnbt.put(NBTConstants.NBT_FLOWER_POS, NBTUtil.writeBlockPos(apiaryBee.savedFlowerPos));
-            }
             listnbt.add(compoundnbt);
         });
 
@@ -393,7 +384,6 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
             for (int i = 0; i < listnbt.size(); ++i) {
                 CompoundNBT data = listnbt.getCompound(i);
 
-                BlockPos savedFlowerPos = data.contains(NBTConstants.NBT_FLOWER_POS) ? NBTUtil.readBlockPos(data.getCompound(NBTConstants.NBT_FLOWER_POS)) : null;
                 String beeType = data.getString(NBTConstants.NBT_BEE_TYPE);
                 String beeColor = data.contains(NBTConstants.NBT_COLOR) ? data.getString(NBTConstants.NBT_COLOR) : BeeConstants.VANILLA_BEE_COLOR;
                 ITextComponent displayName = data.contains(NBTConstants.NBT_BEE_NAME) ? ITextComponent.Serializer.fromJson(data.getString(NBTConstants.NBT_BEE_NAME)) : new StringTextComponent("Temp Bee Name");
@@ -402,7 +392,6 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
                         data.getCompound("EntityData"),
                         data.getInt("TicksInHive"),
                         data.getInt("MinOccupationTicks"),
-                        savedFlowerPos,
                         beeType,
                         beeColor,
                         displayName));
@@ -800,19 +789,17 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
     public static class ApiaryBee {
         public final CompoundNBT entityData;
         public final int minOccupationTicks;
-        public final BlockPos savedFlowerPos;
         public final String beeType;
         private int ticksInHive;
         private boolean isLocked = false;
         public final String beeColor;
         public final ITextComponent displayName;
 
-        public ApiaryBee(CompoundNBT nbt, int ticksInHive, int minOccupationTicks, @Nullable BlockPos flowerPos, String beeType, String beeColor, ITextComponent displayName) {
+        public ApiaryBee(CompoundNBT nbt, int ticksInHive, int minOccupationTicks, String beeType, String beeColor, ITextComponent displayName) {
             nbt.remove("UUID");
             this.entityData = nbt;
             this.setTicksInHive(ticksInHive);
             this.minOccupationTicks = minOccupationTicks;
-            this.savedFlowerPos = flowerPos;
             this.beeType = beeType;
             this.beeColor = beeColor;
             this.displayName = displayName;

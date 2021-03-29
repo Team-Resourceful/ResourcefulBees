@@ -51,7 +51,7 @@ public class HoneyGeneratorContainer extends ContainerWithStackMove {
     
     public int getFluidAmount() { return getHoneyGeneratorTileEntity().getFluidTank().getFluidAmount(); }
     
-    public int getMaxEnergy() { return getHoneyGeneratorTileEntity().energyStorage.getMaxEnergyStored(); }
+    public int getMaxEnergy() { return getHoneyGeneratorTileEntity().getEnergyStorage().getMaxEnergyStored(); }
 
     public int getMaxFluid() { return getHoneyGeneratorTileEntity().getFluidTank().getCapacity(); }
 

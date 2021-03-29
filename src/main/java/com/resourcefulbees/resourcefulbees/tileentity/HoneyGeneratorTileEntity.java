@@ -44,7 +44,8 @@ import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.Arrays;
+import java.util.Objects;
 
 public class HoneyGeneratorTileEntity extends AbstractHoneyTankContainer implements ITickableTileEntity, INamedContainerProvider {
 
@@ -58,7 +59,7 @@ public class HoneyGeneratorTileEntity extends AbstractHoneyTankContainer impleme
 
 
     private final HoneyGeneratorTileEntity.TileStackHandler tileStackHandler = new HoneyGeneratorTileEntity.TileStackHandler(5, getAcceptor(), getRemover());
-    public final CustomEnergyStorage energyStorage = createEnergy();
+    private final CustomEnergyStorage energyStorage = createEnergy();
     private final LazyOptional<IItemHandler> lazyOptional = LazyOptional.of(this::getTileStackHandler);
     private final LazyOptional<IEnergyStorage> energyOptional = LazyOptional.of(() -> energyStorage);
 
@@ -88,26 +89,33 @@ public class HoneyGeneratorTileEntity extends AbstractHoneyTankContainer impleme
     }
 
     private void sendOutPower() {
-        AtomicInteger capacity = new AtomicInteger(energyStorage.getEnergyStored());
-        if (capacity.get() > 0 && level != null) {
-            for (Direction direction : Direction.values()) {
-                TileEntity te = level.getBlockEntity(worldPosition.relative(direction));
-                if (capacity.get() > 0 && te != null) {
-                    te.getCapability(CapabilityEnergy.ENERGY, direction).ifPresent(handler -> {
-                        if (handler.canReceive()) {
-                            int received = handler.receiveEnergy(Math.min(capacity.get(), ENERGY_TRANSFER_AMOUNT), false);
-                            capacity.addAndGet(-received);
-                            energyStorage.consumeEnergy(received);
-                            setChanged();
-                        }
-                    });
-                }
-            }
+        if (getStoredEnergy() > 0 && level != null) {
+            Arrays.stream(Direction.values())
+                    .map(direction -> level.getBlockEntity(worldPosition.relative(direction)))
+                    .filter(Objects::nonNull)
+                    .forEach(this::transferEnergy);
         }
     }
 
+    private void transferEnergy(TileEntity tileEntity) {
+        tileEntity.getCapability(CapabilityEnergy.ENERGY)
+                .filter(IEnergyStorage::canReceive)
+                .ifPresent(this::transferEnergy);
+    }
+
+    private void transferEnergy(IEnergyStorage handler) {
+        if (getStoredEnergy() > 0) {
+            int received = handler.receiveEnergy(Math.min(getStoredEnergy(), ENERGY_TRANSFER_AMOUNT), false);
+            energyStorage.consumeEnergy(received);
+        }
+    }
+
+    private int getStoredEnergy() {
+        return energyStorage.getEnergyStored();
+    }
+
     public boolean canProcessEnergy() {
-        return energyStorage.getEnergyStored() + ENERGY_FILL_AMOUNT <= energyStorage.getMaxEnergyStored() && getFluidTank().getFluidAmount() >= HONEY_DRAIN_AMOUNT;
+        return getStoredEnergy() + ENERGY_FILL_AMOUNT <= energyStorage.getMaxEnergyStored() && getFluidTank().getFluidAmount() >= HONEY_DRAIN_AMOUNT;
     }
 
     private void processEnergy() {
@@ -249,6 +257,10 @@ public class HoneyGeneratorTileEntity extends AbstractHoneyTankContainer impleme
 
     public void setEnergyFilled(int energyFilled) {
         this.energyFilled = energyFilled;
+    }
+
+    public CustomEnergyStorage getEnergyStorage() {
+        return energyStorage;
     }
 
     public class TileStackHandler extends AutomationSensitiveItemStackHandler {
