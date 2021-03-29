@@ -1,19 +1,25 @@
 package com.resourcefulbees.resourcefulbees.block;
 
+import com.resourcefulbees.resourcefulbees.tileentity.HoneyPipeTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.World;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -81,14 +87,36 @@ public class HoneyPipe extends Block {
         return VoxelShapes.or(VOXEL_SHAPE_CENTER, shapes.toArray(new VoxelShape[0]));
     }
 
-
     @Override
     @NotNull
     public BlockState updateShape(@NotNull BlockState stateIn, @NotNull Direction facing, @NotNull BlockState facingState, @NotNull IWorld world, @NotNull BlockPos currentPos, @NotNull BlockPos facingPos) {
-        return updateState(stateIn, facingPos, world, getState(facing), facing);
+        updateNetwork();
+        return updateState(stateIn, facingPos, world, getState(facing), facing.getOpposite());
     }
 
-    private EnumProperty<PipeState> getState(Direction facing) {
+    private void updateNetwork() {
+        // todo get all connected pipes, collect outputs and send update to input pipes.
+    }
+
+    @Override
+    @NotNull
+    public ActionResultType use(@NotNull BlockState blockState, @NotNull World world, @NotNull BlockPos blockPos, @NotNull PlayerEntity playerEntity, @NotNull Hand hand, @NotNull BlockRayTraceResult blockRayTraceResult) {
+        // todo allow user to switch state of pipe, from input and output (if tank connected) or none, limit to one input per pipe
+        return super.use(blockState, world, blockPos, playerEntity, hand, blockRayTraceResult);
+    }
+
+    @Nullable
+    @Override
+    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+        return new HoneyPipeTileEntity();
+    }
+
+    @Override
+    public boolean hasTileEntity(BlockState state) {
+        return true;
+    }
+
+    public static EnumProperty<PipeState> getState(Direction facing) {
         switch (facing) {
             case UP:
                 return UP;
@@ -125,12 +153,12 @@ public class HoneyPipe extends Block {
     }
 
     private BlockState updateBlockState(IWorld world, BlockState stateIn, BlockPos currentPos) {
-        stateIn = updateState(stateIn, currentPos.above(), world, UP, Direction.UP);
-        stateIn = updateState(stateIn, currentPos.below(), world, DOWN, Direction.DOWN);
-        stateIn = updateState(stateIn, currentPos.east(), world, EAST, Direction.EAST);
-        stateIn = updateState(stateIn, currentPos.west(), world, WEST, Direction.WEST);
-        stateIn = updateState(stateIn, currentPos.south(), world, SOUTH, Direction.SOUTH);
-        stateIn = updateState(stateIn, currentPos.north(), world, NORTH, Direction.NORTH);
+        stateIn = updateState(stateIn, currentPos.above(), world, UP, Direction.DOWN);
+        stateIn = updateState(stateIn, currentPos.below(), world, DOWN, Direction.UP);
+        stateIn = updateState(stateIn, currentPos.east(), world, EAST, Direction.WEST);
+        stateIn = updateState(stateIn, currentPos.west(), world, WEST, Direction.EAST);
+        stateIn = updateState(stateIn, currentPos.south(), world, SOUTH, Direction.NORTH);
+        stateIn = updateState(stateIn, currentPos.north(), world, NORTH, Direction.SOUTH);
         return stateIn;
     }
 
