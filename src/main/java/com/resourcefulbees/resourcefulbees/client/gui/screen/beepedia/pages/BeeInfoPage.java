@@ -44,6 +44,7 @@ public class BeeInfoPage extends BeeDataPage {
         TranslationTextComponent stingerName = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.info.stinger");
         TranslationTextComponent passiveName = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.info.passive");
         TranslationTextComponent poisonName = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.info.poison");
+        TranslationTextComponent timeName = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.info.time");
 
         sizeName.append(BeeInfoUtils.getSizeName(beeData.getSizeModifier()));
         damageName.append(new StringTextComponent("" + (int) beeData.getCombatData().getAttackDamage()));
@@ -51,13 +52,15 @@ public class BeeInfoPage extends BeeDataPage {
         stingerName.append(BeeInfoUtils.getYesNo(beeData.getCombatData().removeStingerOnAttack()));
         passiveName.append(BeeInfoUtils.getYesNo(beeData.getCombatData().isPassive()));
         poisonName.append(BeeInfoUtils.getYesNo(beeData.getCombatData().inflictsPoison()));
+        timeName.append(beeData.getMaxTimeInHive() / 20 + "s");
 
         font.draw(matrix, title.withStyle(TextFormatting.WHITE), xPos, (float) yPos + 8, -1);
         font.draw(matrix, sizeName.withStyle(TextFormatting.GRAY), xPos, (float) yPos + 22, -1);
+        font.draw(matrix, timeName.withStyle(TextFormatting.GRAY), (float) xPos + 76, (float) yPos + 22, -1);
         font.draw(matrix, healthName.withStyle(TextFormatting.GRAY), xPos, (float) yPos + 34, -1);
-        font.draw(matrix, damageName.withStyle(TextFormatting.GRAY), (float) xPos + 84, (float) yPos + 34, -1);
+        font.draw(matrix, damageName.withStyle(TextFormatting.GRAY), (float) xPos + 76, (float) yPos + 34, -1);
         font.draw(matrix, passiveName.withStyle(TextFormatting.GRAY), xPos, (float) yPos + 46, -1);
-        font.draw(matrix, poisonName.withStyle(TextFormatting.GRAY), (float) xPos + 84, (float) yPos + 46, -1);
+        font.draw(matrix, poisonName.withStyle(TextFormatting.GRAY), (float) xPos + 76, (float) yPos + 46, -1);
         font.draw(matrix, stingerName.withStyle(TextFormatting.GRAY), xPos, (float) yPos + 58, -1);
     }
 

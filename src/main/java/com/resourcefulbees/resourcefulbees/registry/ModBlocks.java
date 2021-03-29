@@ -24,7 +24,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class ModBlocks {
 
 
-
     private ModBlocks() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
@@ -36,7 +35,7 @@ public class ModBlocks {
     private static final AbstractBlock.Properties HIVE_PROPERTIES = AbstractBlock.Properties.of(Material.WOOD).strength(2).sound(SoundType.WOOD);
     private static final AbstractBlock.Properties NEST_PROPERTIES = AbstractBlock.Properties.of(Material.WOOD).strength(1F).sound(SoundType.WOOD);
 
-    private static AbstractBlock.Properties makeNestProperty(Material material, MaterialColor color, SoundType soundType){
+    private static AbstractBlock.Properties makeNestProperty(Material material, MaterialColor color, SoundType soundType) {
         return AbstractBlock.Properties.of(material, color).strength(1.0F).sound(soundType);
     }
 
@@ -87,8 +86,8 @@ public class ModBlocks {
     public static final RegistryObject<Block> PURPUR_HONEY_TANK = BLOCKS.register("purpur_honey_tank", () -> new HoneyTank(HoneyTank.PURPUR, HoneyTankTileEntity.TankTier.PURPUR));
     public static final RegistryObject<Block> NETHER_HONEY_TANK = BLOCKS.register("nether_honey_tank", () -> new HoneyTank(HoneyTank.NETHER, HoneyTankTileEntity.TankTier.NETHER));
     public static final RegistryObject<Block> WOODEN_HONEY_TANK = BLOCKS.register("wooden_honey_tank", () -> new HoneyTank(HoneyTank.WOODEN, HoneyTankTileEntity.TankTier.WOODEN));
-    public static final RegistryObject<Block> HONEY_CONGEALER = BLOCKS.register("honey_congealer", ()-> new HoneyCongealer(AbstractBlock.Properties.of(Material.STONE).sound(SoundType.GLASS).strength(1.5f).requiresCorrectToolForDrops().harvestTool(ToolType.PICKAXE).harvestLevel(1)));
+    public static final RegistryObject<Block> HONEY_CONGEALER = BLOCKS.register("honey_congealer", () -> new HoneyCongealer(AbstractBlock.Properties.of(Material.STONE).sound(SoundType.GLASS).strength(1.5f).requiresCorrectToolForDrops().harvestTool(ToolType.PICKAXE).harvestLevel(1)));
     public static final RegistryObject<Block> CATNIP_HONEYCOMB_BLOCK = BLOCKS.register("catnip_honeycomb_block", () -> new Block(AbstractBlock.Properties.of(Material.CLAY).sound(SoundType.SNOW).strength(0.3F)));
     public static final RegistryObject<Block> CATNIP_HONEY_BLOCK = BLOCKS.register("catnip_honey_block", () -> new ColoredHoneyBlock(KittenBee.getHoneyBottleData())); //Dont care about color as we dont use it for this hardcoded block.
-
+    public static final RegistryObject<Block> HONEY_PIPE = BLOCKS.register("honey_pipe", () -> new HoneyPipe(AbstractBlock.Properties.of(Material.METAL).sound(SoundType.METAL).strength(1.5f).requiresCorrectToolForDrops().harvestTool(ToolType.PICKAXE).harvestLevel(1)));
 }

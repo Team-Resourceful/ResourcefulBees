@@ -112,6 +112,7 @@
  	"gui.resourcefulbees.beepedia.bee_subtab.info.damage" : "Damage: ",
 	"gui.resourcefulbees.beepedia.bee_subtab.info.poison" : "Poisonous: ",
 	"gui.resourcefulbees.beepedia.bee_subtab.info.found" : "Found By: ",
+	"gui.resourcefulbees.beepedia.bee_subtab.info.time" : "Time In Hive: ",
 
 	"gui.resourcefulbees.beepedia.bee_subtab.mutations" : "Mutations",
 	"gui.resourcefulbees.beepedia.bee_subtab.mutations.block": "Block Mutations",
