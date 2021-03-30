@@ -1,3 +1,24 @@
+# ----- [0.6.6a] -----
+- Added Honey Congealer (honey goes in, blocks come out)
+- added an interface to all honey tanks, you can now input and output honey bottles from the interface
+- doubled the capactity of all honey tanks
+- fixed a bug causing beecons to not save their inventory properly
+- added an extra check to hopefully stop the beepedia from crashing if for SOME reason the comb of a bee suddenly decides to stop existing.
+- added missing angry textures for armoured and crop bees.
+- added kitten bee base texture for use with patreon bees
+- when a bee file breaks it will now crash again, this time with a more detailed crash report stating exactly which bee/honey/trait broke
+- fixed a crash when attempting to toggle a beecon's beam/sound on multiplayer
+- fixed Hive not getting Tier Modifier as a float preventing T2 Hive from having the correct number of combs and bees.
+- fixes for interfaces to hopefully stop them from moving items to other slots in their interfaces when shift clicking an item.
+- baby bees are now immune to despawning
+
+Alpha Features
+- Honey pipes exist in code but do not work and are purely cosmetic in this patch.
+
+# ----- [0.6.5b] -----
+- fixed a crash related to centrifuges when it can't find a valid tank
+- cleaned up patchouli effects page
+
 # ----- [0.6.4b] -----
 - fixed bee box not properly supplying bee with data upon release
 - updated patchouli (#188) (note: beecon gif doesn't work but doesn't crash now)
@@ -27,16 +48,16 @@
 - old mutation types will still work for the time being but when 1.17 hits those old types will be removed.
 
 ```json
-{
-    "type": "BLOCK",
-    "inputID" : "minecraft:stone",
-    "chance": 0.25,
-    "outputs": [
-        {"outputID" : "minecraft:iron_ore", "weight": 20},
-        {"outputID" : "minecraft:gold_ore", "weight": 10},
-        {"outputID" : "minecraft:diamond_ore"}
-    ]
-}
+{  
+    "type": "BLOCK",  
+    "inputID" : "minecraft:stone",  
+    "chance": 0.25,  
+    "outputs": [  
+        {"outputID" : "minecraft:iron_ore", "weight": 20},  
+        {"outputID" : "minecraft:gold_ore", "weight": 10},  
+        {"outputID" : "minecraft:diamond_ore"}  
+    ]  
+}  
 ```
 
 ###Additions:
