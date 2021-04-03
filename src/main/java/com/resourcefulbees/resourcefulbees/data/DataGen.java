@@ -1,5 +1,6 @@
 package com.resourcefulbees.resourcefulbees.data;
 
+import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.IBeeRegistry;
 import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
 import com.resourcefulbees.resourcefulbees.config.Config;
@@ -17,7 +18,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -33,10 +34,15 @@ public class DataGen {
     private static final IBeeRegistry BEE_REGISTRY = BeeRegistry.getRegistry();
 
     private static final String ITEM_RESOURCEFULBEES = "item.resourcefulbees.";
-    private static final String DATA_RESOURCEFULBEES_TAGS_ITEMS = "/data/resourcefulbees/tags/items";
+
+    private static final Map<ResourceLocation, Set<ResourceLocation>> TAGS = new HashMap<>();
 
     public static void generateClientData() {
         if (Config.GENERATE_ENGLISH_LANG.get().equals(Boolean.TRUE)) generateEnglishLang();
+    }
+
+    public static Map<ResourceLocation, Set<ResourceLocation>> getTags() {
+        return Collections.unmodifiableMap(TAGS);
     }
 
     public static void generateCommonData() {
@@ -137,154 +143,59 @@ public class DataGen {
 
 
     private static void generateCombItemTags() {
-        StringBuilder builder = new StringBuilder();
-
-        generateTagEntry(builder, BEE_REGISTRY.getBees().values().stream()
-                .filter(bee -> bee.hasHoneycomb() && !bee.hasCustomDrop())
-                .map(bee -> bee.getCombRegistryObject().getId()).collect(Collectors.toSet()));
-
-        String combTagPath = BeeSetup.getResourcePath().toString() + DATA_RESOURCEFULBEES_TAGS_ITEMS;
-        String combTagFile = "resourceful_honeycomb.json";
-        try {
-            writeFile(combTagPath, combTagFile, builder.toString());
-            LOGGER.info("Resourceful Honeycomb Tag Generated!");
-        } catch (IOException e) {
-            LOGGER.error("Could not generate resourceful honeycomb tag!");
-        }
+        TAGS.put(new ResourceLocation(ResourcefulBees.MOD_ID, "tags/items/resourceful_honeycomb.json"),
+                BEE_REGISTRY.getBees().values().stream()
+                        .filter(bee -> bee.hasHoneycomb() && !bee.hasCustomDrop())
+                        .map(bee -> bee.getCombRegistryObject().getId()).collect(Collectors.toSet()));
     }
 
     private static void generateCombBlockItemTags() {
-        StringBuilder builder = new StringBuilder();
-
-        generateTagEntry(builder, BEE_REGISTRY.getBees().values().stream()
-                .filter(bee -> bee.hasHoneycomb() && !bee.hasCustomDrop())
-                .map(bee -> bee.getCombBlockItemRegistryObject().getId()).collect(Collectors.toSet()));
-
-        String combTagPath = BeeSetup.getResourcePath().toString() + DATA_RESOURCEFULBEES_TAGS_ITEMS;
-        String combTagFile = "resourceful_honeycomb_block.json";
-        try {
-            writeFile(combTagPath, combTagFile, builder.toString());
-            LOGGER.info("Resourceful Honeycomb Block Item Tag Generated!");
-        } catch (IOException e) {
-            LOGGER.error("Could not generate resourceful honeycomb block item tag!");
-        }
+        TAGS.put(new ResourceLocation(ResourcefulBees.MOD_ID, "tags/items/resourceful_honeycomb_block.json"),
+                BEE_REGISTRY.getBees().values().stream()
+                        .filter(bee -> bee.hasHoneycomb() && !bee.hasCustomDrop())
+                        .map(bee -> bee.getCombBlockItemRegistryObject().getId()).collect(Collectors.toSet()));
     }
 
     private static void generateCombBlockTags() {
-        StringBuilder builder = new StringBuilder();
-
-        generateTagEntry(builder, BEE_REGISTRY.getBees().values().stream()
+        TAGS.put(new ResourceLocation(ResourcefulBees.MOD_ID, "tags/blocks/resourceful_honeycomb_block.json"),
+                BEE_REGISTRY.getBees().values().stream()
                 .filter(bee -> bee.hasHoneycomb() && !bee.hasCustomDrop())
                 .map(bee -> bee.getCombBlockRegistryObject().getId()).collect(Collectors.toSet()));
-
-        String combTagPath = BeeSetup.getResourcePath().toString() + "/data/resourcefulbees/tags/blocks";
-        String combTagFile = "resourceful_honeycomb_block.json";
-        try {
-            writeFile(combTagPath, combTagFile, builder.toString());
-            LOGGER.info("Resourceful Honeycomb Block Tag Generated!");
-        } catch (IOException e) {
-            LOGGER.error("Could not generate resourceful honeycomb block tag!");
-        }
     }
 
     private static void generateHoneyBottleTags() {
-        StringBuilder builder = new StringBuilder();
-
-        generateTagEntry(builder, BEE_REGISTRY.getHoneyBottles().values().stream()
-                .filter(HoneyBottleData::doGenerateHoneyBlock)
-                .map(h -> h.getHoneyBottleRegistryObject().getId()).collect(Collectors.toSet()));
-
-        String combTagPath = BeeSetup.getResourcePath().toString() + "/data/forge/tags/items";
-        String combTagFile = "honey_bottle.json";
-        try {
-            writeFile(combTagPath, combTagFile, builder.toString());
-            LOGGER.info("Honey Bottle Item Tag Generated!");
-        } catch (IOException e) {
-            LOGGER.error("Could not generate resourceful honey bottle item tag!");
-        }
+        TAGS.put(new ResourceLocation("forge", "tags/items/honey_bottle.json"),
+                BEE_REGISTRY.getHoneyBottles().values().stream()
+                        .filter(HoneyBottleData::doGenerateHoneyBlock)
+                        .map(honey -> honey.getHoneyBottleRegistryObject().getId()).collect(Collectors.toSet()));
     }
 
     private static void generateHoneyBlockTags() {
-        StringBuilder builder = new StringBuilder();
-
-        generateTagEntry(builder, BEE_REGISTRY.getHoneyBottles().values().stream()
-                .filter(HoneyBottleData::doGenerateHoneyBlock)
-                .map(h -> h.getHoneyBlockRegistryObject().getId()).collect(Collectors.toSet()));
-
-        String combTagPath = BeeSetup.getResourcePath().toString() + "/data/resourcefulbees/tags/blocks";
-        String combTagFile = "resourceful_honey_block.json";
-        try {
-            writeFile(combTagPath, combTagFile, builder.toString());
-            LOGGER.info("Resourceful Honey Block Tag Generated!");
-        } catch (IOException e) {
-            LOGGER.error("Could not generate resourceful honey block tag!");
-        }
+        TAGS.put(new ResourceLocation(ResourcefulBees.MOD_ID, "tags/blocks/resourceful_honey_block.json"),
+                BEE_REGISTRY.getHoneyBottles().values().stream()
+                        .filter(HoneyBottleData::doGenerateHoneyBlock)
+                        .map(honey -> honey.getHoneyBlockRegistryObject().getId()).collect(Collectors.toSet()));
     }
 
     private static void generateHoneyBlockItemTags() {
-        StringBuilder builder = new StringBuilder();
-
-        generateTagEntry(builder, BEE_REGISTRY.getHoneyBottles().values().stream()
-                .filter(HoneyBottleData::doGenerateHoneyBlock)
-                .map(h -> h.getHoneyBlockItemRegistryObject().getId()).collect(Collectors.toSet()));
-
-        String combTagPath = BeeSetup.getResourcePath().toString() + DATA_RESOURCEFULBEES_TAGS_ITEMS;
-        String combTagFile = "resourceful_honey_block.json";
-        try {
-            writeFile(combTagPath, combTagFile, builder.toString());
-            LOGGER.info("Resourceful Honey Bottle Item Tag Generated!");
-        } catch (IOException e) {
-            LOGGER.error("Could not generate resourceful honey bottle item tag!");
-        }
+        TAGS.put(new ResourceLocation(ResourcefulBees.MOD_ID, "tags/items/resourceful_honey_block.json"),
+                BEE_REGISTRY.getHoneyBottles().values().stream()
+                        .filter(HoneyBottleData::doGenerateHoneyBlock)
+                        .map(honey -> honey.getHoneyBlockItemRegistryObject().getId()).collect(Collectors.toSet()));
     }
 
     private static void generateBeeTags() {
-        StringBuilder builder = new StringBuilder();
-
-        generateTagEntry(builder, ModEntities.getModBees().values().stream()
-                .map(RegistryObject::getId).collect(Collectors.toSet()));
-
-        String entityTagPath = BeeSetup.getResourcePath().toString() + "/data/minecraft/tags/entity_types";
-        String entityTagFile = "beehive_inhabitors.json";
-        try {
-            writeFile(entityTagPath, entityTagFile, builder.toString());
-            LOGGER.info("Beehive Inhabitor Tag Generated!");
-        } catch (IOException e) {
-            LOGGER.error("Could not generate beehive inhabitor tag!");
-        }
+        TAGS.put(new ResourceLocation("minecraft", "tags/entity_types/beehive_inhabitors.json"),
+                ModEntities.getModBees().values().stream()
+                        .map(RegistryObject::getId).collect(Collectors.toSet()));
     }
 
     private static void generateHoneyTags() {
-        StringBuilder builder = new StringBuilder();
-
-        Set<ResourceLocation> objects = BEE_REGISTRY.getHoneyBottles().values().stream()
-                .filter(HoneyBottleData::doGenerateHoneyFluid)
-                .flatMap(hbd -> Stream.of(hbd.getHoneyFlowingFluidRegistryObject().getId(), hbd.getHoneyStillFluidRegistryObject().getId()))
-                .collect(Collectors.toSet());
-
-        generateTagEntry(builder, objects);
-
-        String honeyTagPath = BeeSetup.getResourcePath().toString() + "/data/forge/tags/fluids";
-        String honeyTagFile = "honey.json";
-        try {
-            writeFile(honeyTagPath, honeyTagFile, builder.toString());
-            LOGGER.info("Resourceful Honey Fluid Tag Generated!");
-        } catch (IOException e) {
-            LOGGER.error("Could not generate Honey Fluid Tag!");
-        }
-    }
-
-    private static void generateTagEntry(StringBuilder builder, Set<ResourceLocation> values){
-        builder.append("{\n");
-        builder.append("\"replace\": false,\n");
-        builder.append("\"values\": [\n");
-        values.forEach(resourceLocation -> {
-            builder.append("\"");
-            builder.append(resourceLocation);
-            builder.append("\",\n");
-        });
-        if (!values.isEmpty()) builder.deleteCharAt(builder.lastIndexOf(","));
-        builder.append("]\n}");
+        TAGS.put(new ResourceLocation("forge", "tags/fluids/honey.json"),
+                BEE_REGISTRY.getHoneyBottles().values().stream()
+                        .filter(HoneyBottleData::doGenerateHoneyFluid)
+                        .flatMap(hbd -> Stream.of(hbd.getHoneyFlowingFluidRegistryObject().getId(), hbd.getHoneyStillFluidRegistryObject().getId()))
+                        .collect(Collectors.toSet()));
     }
 
 }
