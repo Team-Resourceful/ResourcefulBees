@@ -29,14 +29,12 @@ public class CustomBeeRenderer extends MobRenderer<CustomBeeEntity, CustomBeeMod
         angryTexture = ResourceLocation.tryParse(ResourcefulBees.MOD_ID + ":" + BeeConstants.ENTITY_TEXTURES_DIR + beeData.getBaseLayerTexture() + "_angry.png");
         baseTexture = ResourceLocation.tryParse(ResourcefulBees.MOD_ID + ":" + BeeConstants.ENTITY_TEXTURES_DIR + beeData.getBaseLayerTexture() + ".png");
 
-
+        if (beeData.getColorData().getModelType() != ModelTypes.DEFAULT) {
+            addLayer(new AdditionLayer<>(this, beeData.getColorData().getModelType(), angryTexture, baseTexture));
+        }
         if (beeData.getColorData().isBeeColored()) {
             addLayer(new BeeLayer(this, LayerType.PRIMARY, beeData.getColorData().getModelType(), beeData.getColorData()));
             addLayer(new BeeLayer(this, LayerType.SECONDARY, beeData.getColorData().getModelType(), beeData.getColorData()));
-        } else {
-            if (beeData.getColorData().getModelType() != ModelTypes.DEFAULT) {
-                addLayer(new AdditionLayer<>(this, beeData.getColorData().getModelType(), angryTexture, baseTexture));
-            }
         }
         if (beeData.getColorData().isGlowing() || beeData.getColorData().isEnchanted()) {
             addLayer(new BeeLayer(this, LayerType.EMISSIVE, beeData.getColorData().getModelType(), beeData.getColorData()));
