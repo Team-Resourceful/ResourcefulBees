@@ -190,7 +190,7 @@ public class ResourcefulBee extends CustomBeeEntity {
                     EntityOutput entityOutput = output.getRight().next();
                     CompoundNBT nbt = new CompoundNBT();
                     nbt.put("EntityTag", entityOutput.getCompoundNBT());
-                    entityOutput.getEntityType().spawn((ServerWorld) level, nbt, null, null, entityList.get(0).blockPosition(), SpawnReason.NATURAL, false, false);
+                    entityOutput.getEntityType().spawn((ServerWorld) level, nbt, null, null, entityList.get(0).blockPosition(), SpawnReason.CONVERSION, false, false);
                     entityList.get(0).remove();
                     level.levelEvent(2005, this.blockPosition().below(1), 0);
                 }
