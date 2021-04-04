@@ -1,7 +1,6 @@
 package com.resourcefulbees.resourcefulbees.data;
 
 import com.google.gson.*;
-import com.resourcefulbees.resourcefulbees.init.BeeSetup;
 import net.minecraft.resources.*;
 import net.minecraft.resources.data.IMetadataSectionSerializer;
 import net.minecraft.tags.ITag;
@@ -19,29 +18,28 @@ import java.util.stream.Collectors;
 
 public class DataPackLoader implements IPackFinder {
 
+    private static final String DATAPACK_NAME = "resourcefulbees:internals";
     public static final DataPackLoader INSTANCE = new DataPackLoader();
     private static final Gson GSON = new Gson();
 
     @Override
     public void loadPacks(@NotNull Consumer<ResourcePackInfo> packList, @NotNull ResourcePackInfo.IFactory factory) {
-        File configDataPackFile = BeeSetup.getResourcePath().toFile();
-        MemoryDataPack dataPack = new MemoryDataPack();
-        DataGen.getTags().forEach((location, resourceLocations) -> {
-            ITag.Builder builder = ITag.Builder.tag();
-            resourceLocations.forEach(t -> builder.addElement(t, "resourcefulbees:internals"));
-            dataPack.putJson(ResourcePackType.SERVER_DATA, location, builder.serializeToJson());
-        });
+        try (MemoryDataPack dataPack = new MemoryDataPack()) {
+            DataGen.getTags().forEach((location, resourceLocations) -> {
+                ITag.Builder builder = ITag.Builder.tag();
+                resourceLocations.forEach(t -> builder.addElement(t, DATAPACK_NAME));
+                dataPack.putJson(ResourcePackType.SERVER_DATA, location, builder.serializeToJson());
+            });
 
-        if(configDataPackFile.exists() && configDataPackFile.isDirectory()) {
             ResourcePackInfo pack = ResourcePackInfo.create(
-                    "resourcefulbees:internals",
+                    DATAPACK_NAME,
                     true,
                     () -> dataPack,
                     factory,
                     ResourcePackInfo.Priority.BOTTOM,
                     IPackNameDecorator.BUILT_IN
             );
-            if (pack != null) packList.accept(pack);
+            packList.accept(pack);
         }
     }
 
@@ -122,7 +120,7 @@ public class DataPackLoader implements IPackFinder {
 
         @Override
         public @NotNull String getName() {
-            return "resourcefulbees:internals";
+            return DATAPACK_NAME;
         }
 
         @Override
@@ -131,6 +129,8 @@ public class DataPackLoader implements IPackFinder {
         }
 
         @Override
-        public void close() {}
+        public void close() {
+            //Does nothing
+        }
     }
 }
