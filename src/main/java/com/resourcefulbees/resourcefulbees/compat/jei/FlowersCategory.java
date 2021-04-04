@@ -12,12 +12,14 @@ import mezz.jei.api.gui.ingredient.IGuiIngredientGroup;
 import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
+import net.minecraft.block.Block;
 import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -40,6 +42,10 @@ public class FlowersCategory extends BaseCategory<FlowersCategory.Recipe> {
             FlowersCategory.Recipe.class);
     }
 
+    private static ItemStack getErrorItem(Block block){
+        return new ItemStack(Items.BARRIER).setHoverName(new StringTextComponent(block.getRegistryName() != null ? block.getRegistryName().toString() : "Unknown Block ID"));
+    }
+
     public static List<Recipe> getFlowersRecipes() {
         List<Recipe> recipes = new ArrayList<>();
 
@@ -50,8 +56,7 @@ public class FlowersCategory extends BaseCategory<FlowersCategory.Recipe> {
                     recipes.add(new Recipe(fluids, null, beeData.getName()));
                 }else {
                     List<ItemStack> items = beeData.getBlockFlowers().stream()
-                            .filter(b -> b.asItem() != Items.AIR)
-                            .map(b ->new ItemStack(b.asItem())).collect(Collectors.toList());
+                            .map(b -> b.asItem() != Items.AIR ? new ItemStack(b.asItem()) : getErrorItem(b)).collect(Collectors.toList());
                     recipes.add(new Recipe(null, items, beeData.getName()));
                 }
             }
