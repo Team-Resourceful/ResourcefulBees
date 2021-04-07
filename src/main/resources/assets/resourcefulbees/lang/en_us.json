@@ -112,6 +112,7 @@
  	"gui.resourcefulbees.beepedia.bee_subtab.info.damage" : "Damage: ",
 	"gui.resourcefulbees.beepedia.bee_subtab.info.poison" : "Poisonous: ",
 	"gui.resourcefulbees.beepedia.bee_subtab.info.found" : "Found By: ",
+	"gui.resourcefulbees.beepedia.bee_subtab.info.time" : "Time In Hive: ",
 
 	"gui.resourcefulbees.beepedia.bee_subtab.mutations" : "Mutations",
 	"gui.resourcefulbees.beepedia.bee_subtab.mutations.block": "Block Mutations",
@@ -203,6 +204,7 @@
 	"block.resourcefulbees.purpur_honey_tank": "Purpur Honey Tank",
 	"block.resourcefulbees.nether_honey_tank": "Nether Honey Tank",
 	"block.resourcefulbees.wooden_honey_tank": "Wooden Honey Tank",
+	"block.resourcefulbees.honey_pipe": "Honey Pipe",
 
 	"item.resourcefulbees.t1_hive_upgrade": "Tier 1 Hive upgrade",
 	"item.resourcefulbees.t2_hive_upgrade": "Tier 2 Hive upgrade",

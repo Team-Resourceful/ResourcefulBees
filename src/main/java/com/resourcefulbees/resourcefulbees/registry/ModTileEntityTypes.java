@@ -74,4 +74,7 @@ public class ModTileEntityTypes {
     public static final RegistryObject<TileEntityType<HoneyCongealerTileEntity>> HONEY_CONGEALER_TILE_ENTITY = TILE_ENTITY_TYPES.register("honey_congealer", () -> TileEntityType.Builder
             .of(HoneyCongealerTileEntity::new, ModBlocks.HONEY_CONGEALER.get())
             .build(null));
+    public static final RegistryObject<TileEntityType<?>> HONEY_PIPE_TILE_ENTITY = TILE_ENTITY_TYPES.register("honey_pipe", () -> TileEntityType.Builder
+            .of(HoneyPipeTileEntity::new, ModBlocks.HONEY_PIPE.get())
+            .build(null));
 }

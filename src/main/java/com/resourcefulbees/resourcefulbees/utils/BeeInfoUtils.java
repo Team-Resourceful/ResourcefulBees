@@ -49,6 +49,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
@@ -56,6 +57,7 @@ import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static com.resourcefulbees.resourcefulbees.lib.BeeConstants.*;
@@ -430,5 +432,9 @@ public class BeeInfoUtils {
         } else {
             return Items.HONEY_BLOCK;
         }
+    }
+
+    public static Predicate<FluidStack> getHoneyPredicate() {
+        return fluidStack -> fluidStack.getFluid().is(BeeInfoUtils.getFluidTag("forge:honey"));
     }
 }

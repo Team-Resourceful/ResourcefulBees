@@ -1,0 +1,79 @@
+{
+  "multipart": [
+    {
+      "apply": { "model": "resourcefulbees:block/honey_pipe/honey_pipe_centre" }
+    },
+    {
+      "when": { "east": "input" },
+      "apply": { "model": "resourcefulbees:block/honey_pipe/honey_pipe_input", "uvlock": false }
+    },
+    {
+      "when": { "east": "output" },
+      "apply": { "model": "resourcefulbees:block/honey_pipe/honey_pipe_output", "uvlock": false }
+    },
+    {
+      "when": { "east": "connected" },
+      "apply": { "model": "resourcefulbees:block/honey_pipe/honey_pipe", "uvlock": false }
+    },
+    {
+      "when": { "west": "input" },
+      "apply": { "model": "resourcefulbees:block/honey_pipe/honey_pipe_input", "y": 180, "uvlock": false }
+    },
+    {
+      "when": { "west": "output" },
+      "apply": { "model": "resourcefulbees:block/honey_pipe/honey_pipe_output", "y": 180, "uvlock": false }
+    },
+    {
+      "when": { "west": "connected" },
+      "apply": { "model": "resourcefulbees:block/honey_pipe/honey_pipe", "y": 180, "uvlock": false }
+    },
+    {
+      "when": { "south": "input" },
+      "apply": { "model": "resourcefulbees:block/honey_pipe/honey_pipe_input", "y": 90, "uvlock": false }
+    },
+    {
+      "when": { "south": "output" },
+      "apply": { "model": "resourcefulbees:block/honey_pipe/honey_pipe_output", "y": 90, "uvlock": false}
+    },
+    {
+      "when": { "south": "connected" },
+      "apply": { "model": "resourcefulbees:block/honey_pipe/honey_pipe", "y": 90, "uvlock": false }
+    },
+    {
+      "when": { "north": "input" },
+      "apply": { "model": "resourcefulbees:block/honey_pipe/honey_pipe_input", "y": 270, "uvlock": false }
+    },
+    {
+      "when": { "north": "output" },
+      "apply": { "model": "resourcefulbees:block/honey_pipe/honey_pipe_output", "y": 270, "uvlock": false }
+    },
+    {
+      "when": { "north": "connected" },
+      "apply": { "model": "resourcefulbees:block/honey_pipe/honey_pipe", "y": 270, "uvlock": false }
+    },
+    {
+      "when": { "up": "input" },
+      "apply": { "model": "resourcefulbees:block/honey_pipe/honey_pipe_input_up", "uvlock": false }
+    },
+    {
+      "when": { "up": "output" },
+      "apply": { "model": "resourcefulbees:block/honey_pipe/honey_pipe_output_up", "uvlock": false  }
+    },
+    {
+      "when": { "up": "connected" },
+      "apply": { "model": "resourcefulbees:block/honey_pipe/honey_pipe_up", "uvlock": false }
+    },
+    {
+      "when": { "down": "input" },
+      "apply": { "model": "resourcefulbees:block/honey_pipe/honey_pipe_input_down", "uvlock": false }
+    },
+    {
+      "when": { "down": "output" },
+      "apply": { "model": "resourcefulbees:block/honey_pipe/honey_pipe_output_down", "uvlock": false }
+    },
+    {
+      "when": { "down": "connected" },
+      "apply": { "model": "resourcefulbees:block/honey_pipe/honey_pipe_down", "uvlock": false }
+    }
+  ]
+}

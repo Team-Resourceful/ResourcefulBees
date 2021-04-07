@@ -59,6 +59,7 @@ public class Config {
     public static IntValue HONEY_DRAIN_AMOUNT;
     public static IntValue HONEY_PROCEESS_TIME;
     public static IntValue CONGEALER_TIME_MODIFIER;
+    public static IntValue MAX_PIPE_FLOW;
     public static IntValue ENERGY_FILL_AMOUNT;
     public static IntValue ENERGY_TRANSFER_AMOUNT;
     public static IntValue MAX_ENERGY_CAPACITY;
@@ -131,6 +132,8 @@ public class Config {
             CONGEALER_TIME_MODIFIER = COMMON_BUILDER.comment("\nMultiplier to the amount of ticks needed to process honey into honey blocks in the congealer." +
                     "\nThis value is multiplying the honeyProcessTime.")
                     .defineInRange("congealerTimeMultiplier", 4, 1, 16);
+            MAX_PIPE_FLOW = COMMON_BUILDER.comment("\nAmount of honey Honey Pipes can transfer per tick.")
+                    .defineInRange("maxHoneyPipeFlow", 250, 10, 16000);
             COMMON_BUILDER.pop();
 
             COMMON_BUILDER.push("Recipe Options");

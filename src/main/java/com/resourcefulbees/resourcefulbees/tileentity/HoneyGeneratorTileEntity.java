@@ -41,11 +41,11 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
+import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
-import java.util.Objects;
 
 public class HoneyGeneratorTileEntity extends AbstractHoneyTankContainer implements ITickableTileEntity, INamedContainerProvider {
 
@@ -91,14 +91,14 @@ public class HoneyGeneratorTileEntity extends AbstractHoneyTankContainer impleme
     private void sendOutPower() {
         if (getStoredEnergy() > 0 && level != null) {
             Arrays.stream(Direction.values())
-                    .map(direction -> level.getBlockEntity(worldPosition.relative(direction)))
-                    .filter(Objects::nonNull)
+                    .map(direction -> Pair.of(level.getBlockEntity(worldPosition.relative(direction)), direction))
+                    .filter(pair -> pair.getLeft() != null && pair.getRight() != null)
                     .forEach(this::transferEnergy);
         }
     }
 
-    private void transferEnergy(TileEntity tileEntity) {
-        tileEntity.getCapability(CapabilityEnergy.ENERGY)
+    private void transferEnergy(Pair<TileEntity, Direction> tileEntityDirectionPair) {
+        tileEntityDirectionPair.getLeft().getCapability(CapabilityEnergy.ENERGY, tileEntityDirectionPair.getRight().getOpposite())
                 .filter(IEnergyStorage::canReceive)
                 .ifPresent(this::transferEnergy);
     }
