@@ -1,5 +1,5 @@
 {
-  "flower": "ALL",
+  "flower": "tag:forge:storage_blocks/lapis",
   "maxTimeInHive": 600,
   "hasHoneycomb": true,
   "baseLayerTexture": "ores/lapis/lapis_bee",

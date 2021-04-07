@@ -1,5 +1,5 @@
 {
-  "flower": "ALL",
+  "flower": "tag:forge:storage_blocks/iron",
   "hasHoneycomb": true,
   "maxTimeInHive": 600,
   "baseLayerTexture": "ores/iron/iron_bee",

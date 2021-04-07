@@ -1,5 +1,5 @@
 {
-  "flower": "ALL",
+  "flower": "tag:forge:storage_blocks/emerald",
   "hasHoneycomb": true,
   "baseLayerTexture": "ores/emerald/emerald_bee",
   "ColorData": {
