@@ -207,22 +207,23 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
         ItemStack comb = beeType.equals(BeeConstants.VANILLA_BEE_TYPE) ? new ItemStack(Items.HONEYCOMB) : ((ICustomBee) entity).getBeeData().getCombStack();
         ItemStack combBlock = beeType.equals(BeeConstants.VANILLA_BEE_TYPE) ? new ItemStack(Items.HONEYCOMB_BLOCK) : ((ICustomBee) entity).getBeeData().getCombBlockItemStack();
         int[] outputAmounts = beeType.equals(BeeConstants.VANILLA_BEE_TYPE) ? null : BEE_REGISTRY.getBeeData(beeType).getApiaryOutputAmounts();
+        ApiaryOutput[] outputTypes = !beeType.equals(BeeConstants.VANILLA_BEE_TYPE) ? BEE_REGISTRY.getBeeData(beeType).getApiaryOutputsTypes() : BeeInfoUtils.getDefaultApiaryTypes();
 
         switch (apiaryTier) {
             case 8:
-                itemstack = (Config.T4_APIARY_OUTPUT.get() == ApiaryOutput.BLOCK) ? combBlock.copy() : comb.copy();
+                itemstack = (outputTypes[3] == ApiaryOutput.BLOCK) ? combBlock.copy() : comb.copy();
                 itemstack.setCount(outputAmounts != null && outputAmounts[3] != -1 ? outputAmounts[3] : Config.T4_APIARY_QUANTITY.get());
                 break;
             case 7:
-                itemstack = (Config.T3_APIARY_OUTPUT.get() == ApiaryOutput.BLOCK) ? combBlock.copy() : comb.copy();
+                itemstack = (outputTypes[2] == ApiaryOutput.BLOCK) ? combBlock.copy() : comb.copy();
                 itemstack.setCount(outputAmounts != null && outputAmounts[2] != -1 ? outputAmounts[2] : Config.T3_APIARY_QUANTITY.get());
                 break;
             case 6:
-                itemstack = (Config.T2_APIARY_OUTPUT.get() == ApiaryOutput.BLOCK) ? combBlock.copy() : comb.copy();
+                itemstack = (outputTypes[1] == ApiaryOutput.BLOCK) ? combBlock.copy() : comb.copy();
                 itemstack.setCount(outputAmounts != null && outputAmounts[1] != -1 ? outputAmounts[1] : Config.T2_APIARY_QUANTITY.get());
                 break;
             default:
-                itemstack = (Config.T1_APIARY_OUTPUT.get() == ApiaryOutput.BLOCK) ? combBlock.copy() : comb.copy();
+                itemstack = (outputTypes[0] == ApiaryOutput.BLOCK) ? combBlock.copy() : comb.copy();
                 itemstack.setCount(outputAmounts != null && outputAmounts[0] != -1 ? outputAmounts[0] : Config.T1_APIARY_QUANTITY.get());
                 break;
         }
