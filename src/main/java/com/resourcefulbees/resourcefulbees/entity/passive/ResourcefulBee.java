@@ -17,6 +17,7 @@ import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryT
 import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.FollowParentGoal;
@@ -125,7 +126,7 @@ public class ResourcefulBee extends CustomBeeEntity {
         if (explosiveCooldown > 0) explosiveCooldown--;
     }
 
-    public void setExplosiveCooldown(int cooldown){
+    public void setExplosiveCooldown(int cooldown) {
         this.explosiveCooldown = cooldown;
     }
 
@@ -251,12 +252,20 @@ public class ResourcefulBee extends CustomBeeEntity {
 
     @Override
     public boolean isFlowerValid(@NotNull BlockPos pos) {
-        if (getBeeData().hasEntityFlower()){
+        if (getBeeData().hasEntityFlower()) {
             return this.level.getEntity(this.getFlowerEntityID()) != null;
-        }else if (getBeeData().hasBlockFlowers()) {
+        } else if (getBeeData().hasBlockFlowers()) {
             return this.level.isLoaded(pos) && getBeeData().getBlockFlowers().contains(this.level.getBlockState(pos).getBlock());
         }
         return false;
+    }
+
+    @Override
+    public void makeStuckInBlock(BlockState state, @NotNull Vector3d vector) {
+        TraitData info = getBeeData().getTraitData();
+        boolean isSpider = info.hasSpecialAbilities() && info.getSpecialAbilities().contains(TraitConstants.SPIDER);
+        if (state.is(Blocks.COBWEB) && isSpider) return;
+        super.makeStuckInBlock(state, vector);
     }
 
     @Override
@@ -355,7 +364,7 @@ public class ResourcefulBee extends CustomBeeEntity {
 
     @Override
     public boolean doHurtTarget(@NotNull Entity entityIn) {
-        float damage = (float)this.getAttributeValue(Attributes.ATTACK_DAMAGE);
+        float damage = (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE);
         TraitData info = this.getBeeData().getTraitData();
         boolean flag = entityIn.hurt(DamageSource.sting(this), damage);
         if (flag && this.getBeeData().getCombatData().removeStingerOnAttack()) {
@@ -384,7 +393,8 @@ public class ResourcefulBee extends CustomBeeEntity {
                 info.getDamageTypes().forEach(stringIntegerPair -> {
                     if (stringIntegerPair.getLeft().equals(TraitConstants.SET_ON_FIRE))
                         entityIn.setSecondsOnFire(finalI1 * stringIntegerPair.getRight());
-                    if (stringIntegerPair.getLeft().equals(TraitConstants.EXPLOSIVE)) this.explode(finalI1 / stringIntegerPair.getRight());
+                    if (stringIntegerPair.getLeft().equals(TraitConstants.EXPLOSIVE))
+                        this.explode(finalI1 / stringIntegerPair.getRight());
                 });
             }
             if (i > 0 && info.hasTraits() && info.hasDamagePotionEffects()) {

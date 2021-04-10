@@ -1,5 +1,5 @@
 {
-  "flower": "ALL",
+  "flower": "tag:forge:storage_blocks/gold",
   "hasHoneycomb": true,
   "maxTimeInHive": 800,
   "baseLayerTexture": "ores/gold/gold_bee",

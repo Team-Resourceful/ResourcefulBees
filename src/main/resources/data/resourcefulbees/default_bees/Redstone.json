@@ -1,5 +1,5 @@
 {
-  "flower": "ALL",
+  "flower": "tag:forge:storage_blocks/redstone",
   "maxTimeInHive": 800,
   "hasHoneycomb": true,
   "baseLayerTexture": "ores/redstone/redstone_bee",

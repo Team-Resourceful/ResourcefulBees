@@ -1,5 +1,5 @@
 {
-  "flower": "small",
+  "flower": "minecraft:bone_block",
   "maxTimeInHive": 600,
   "hasHoneycomb": true,
   "baseLayerTexture": "skeleton/skeleton_bee",

@@ -38,7 +38,8 @@ public class BeeRewardData {
         CREEPER(new ResourceLocation("resourcefulbees:textures/entity/creeper/creeper_bee.png")),
         VANILLA(new ResourceLocation("minecraft:textures/entity/bee/bee.png")),
         BASE(new ResourceLocation("resourcefulbees:textures/entity/custom/bee.png"),
-                new ResourceLocation("resourcefulbees:textures/entity/custom/primary_layer.png"));
+                new ResourceLocation("resourcefulbees:textures/entity/custom/primary_layer.png")),
+        KITTEN(new ResourceLocation("resourcefulbees:textures/entity/kitten/kitten_base.png"));
 
         ResourceLocation resourceLocation;
         ResourceLocation secondaryResourceLocation;

@@ -36,15 +36,15 @@ public class ApiaryCategory extends BaseCategory<ApiaryCategory.Recipe> {
 
     public static List<Recipe> getHoneycombRecipes() {
         List<Recipe> recipes = new ArrayList<>();
-        final List<ApiaryOutput> outputs = new ArrayList<>(Arrays.asList(Config.T1_APIARY_OUTPUT.get(), Config.T2_APIARY_OUTPUT.get(), Config.T3_APIARY_OUTPUT.get(), Config.T4_APIARY_OUTPUT.get()));
         final int[] outputQuantities = {Config.T1_APIARY_QUANTITY.get(), Config.T2_APIARY_QUANTITY.get(), Config.T3_APIARY_QUANTITY.get(), Config.T4_APIARY_QUANTITY.get()};
         final List<Item> apiaryTiers = new ArrayList<>(Arrays.asList(ModItems.T1_APIARY_ITEM.get(), ModItems.T2_APIARY_ITEM.get(), ModItems.T3_APIARY_ITEM.get(), ModItems.T4_APIARY_ITEM.get()));
 
         BeeRegistry.getRegistry().getBees().forEach(((s, customBeeData) -> {
+            ApiaryOutput[] outputs = customBeeData.getApiaryOutputsTypes();
             int[] customAmounts = customBeeData.getApiaryOutputAmounts();
             if (customBeeData.hasHoneycomb()) {
                 for (int i = 0; i < 4; i++){
-                    Item outputItem = outputs.get(i).equals(ApiaryOutput.COMB) ? customBeeData.getCombRegistryObject().get() : customBeeData.getCombBlockItemRegistryObject().get();
+                    Item outputItem = outputs[i].equals(ApiaryOutput.COMB) ? customBeeData.getCombRegistryObject().get() : customBeeData.getCombBlockItemRegistryObject().get();
                     ItemStack outputStack = new ItemStack(outputItem, customAmounts != null && customAmounts[i] > 0 ? customAmounts[i] :  outputQuantities[i]);
                     recipes.add(new Recipe(outputStack, customBeeData.getName(), new ItemStack(apiaryTiers.get(i))));
                 }

@@ -38,8 +38,8 @@ public class TraitRegistry implements ITraitRegistry {
      */
     public boolean register(String name, BeeTrait data) {
         if (closed || TRAIT_REGISTRY.containsKey(name)) {
-                ResourcefulBees.LOGGER.error("Trait is already registered or registration is closed: {}", name);
-                return false;
+            ResourcefulBees.LOGGER.error("Trait is already registered or registration is closed: {}", name);
+            return false;
         }
         TRAIT_REGISTRY.put(name, data);
         return true;
@@ -85,6 +85,7 @@ public class TraitRegistry implements ITraitRegistry {
         getRegistry().register(TraitConstants.SLIMY, new BeeTrait.Builder(TraitConstants.SLIMY).addSpecialAbility(TraitConstants.SLIMY).setBeepediaItem(Items.SLIME_BALL).build());
         getRegistry().register(TraitConstants.DESERT, new BeeTrait.Builder(TraitConstants.DESERT).addDamageImmunity(DamageSource.CACTUS).setBeepediaItem(Items.CACTUS).build());
         getRegistry().register(TraitConstants.ANGRY, new BeeTrait.Builder(TraitConstants.ANGRY).addSpecialAbility(TraitConstants.ANGRY).build());
+        getRegistry().register(TraitConstants.SPIDER, new BeeTrait.Builder(TraitConstants.SPIDER).addSpecialAbility(TraitConstants.SPIDER).setBeepediaItem(Items.COBWEB).build());
     }
 
     public static void applyBeeTraits() {
