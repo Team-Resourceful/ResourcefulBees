@@ -235,8 +235,8 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
                         Pair.of(bottleFluid, data.getBottleOutputWeight())
                 ),
                 data.getRecipeTime(),
-                data.getRecipeTime() - Config.MULTIBLOCK_RECIPE_TIME_REDUCTION.get(),
-                false,
+                (data.getRecipeTime() - Config.MULTIBLOCK_RECIPE_TIME_REDUCTION.get()) * (isBlockRecipe ? 3 : 1),
+                isBlockRecipe,
                 data.hasFluidOutput(), true
         );
     }
@@ -272,8 +272,8 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
                         Pair.of(FluidStack.EMPTY, 0f),
                         Pair.of(fluidOutput, data.getFluidOutputWeight())),
                 data.getRecipeTime(),
-                data.getRecipeTime() - Config.MULTIBLOCK_RECIPE_TIME_REDUCTION.get(),
-                false,
+                (data.getRecipeTime() - Config.MULTIBLOCK_RECIPE_TIME_REDUCTION.get()) * (isBlockRecipe ? 3 : 1),
+                isBlockRecipe,
                 data.hasFluidOutput(), false
         );
     }

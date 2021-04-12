@@ -9,7 +9,6 @@ import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.HoneyBottleItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.DirectionProperty;
-import net.minecraft.state.Property;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
