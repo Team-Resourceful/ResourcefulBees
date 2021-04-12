@@ -87,12 +87,14 @@ public class ResourcefulBees {
     }
 
     private void recipesLoaded(RecipesUpdatedEvent event){
+        LOGGER.info("Loading Flower and Mutation Recipes: RecipesUpdatedEvent");
         MutationSetup.setupMutations();
         FlowerSetup.setupFlowers();
     }
 
     private void serverLoaded(FMLServerStartedEvent event) {
         if (event.getServer().isDedicatedServer()){
+            LOGGER.info("Loading Flower and Mutation Recipes: FMLServerStartedEvent");
             MutationSetup.setupMutations();
             FlowerSetup.setupFlowers();
         }
