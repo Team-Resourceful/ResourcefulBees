@@ -19,9 +19,12 @@ import net.minecraft.resources.IResourceManagerReloadListener;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.AddReloadListenerEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -31,12 +34,15 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
 
     private static final IBeeRegistry BEE_REGISTRY = BeeRegistry.getRegistry();
 
+    public static final Logger LOGGER = LogManager.getLogger();
+
     private static void setRecipeManager(RecipeManager recipeManager) {
         RecipeBuilder.recipeManager = recipeManager;
     }
 
     @Override
     public void onResourceManagerReload(@NotNull IResourceManager resourceManager) {
+        LOGGER.debug("Registering comb recipes for {} bees", BEE_REGISTRY.getBees().size());
         BEE_REGISTRY.getBees().forEach(((s, customBeeData) -> {
             if (customBeeData.hasHoneycomb()) {
                 CentrifugeData centrifugeData = customBeeData.getCentrifugeData();
@@ -46,6 +52,7 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
                     SecondPhaseValidator.validateCentrifugeOutputs(customBeeData);
 
                     if (centrifugeData.hasCentrifugeOutput()) {
+                        LOGGER.debug("Starting recipe registration for bee: {}", customBeeData.getName());
                         IRecipe<?> honeycombCentrifuge = this.centrifugeRecipe(s, customBeeData, 1);
                         IRecipe<?> honeycombBlockCentrifuge = this.centrifugeRecipe(s, customBeeData, 9);
                         IRecipe<?> honeycombCentrifugeNoBottle = this.centrifugeRecipeNoBottle(s, customBeeData, 1);
@@ -92,10 +99,11 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
     }
 
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGH)
     public void onAddReloadListeners(AddReloadListenerEvent event) {
         event.addListener(this);
         setRecipeManager(event.getDataPackRegistries().getRecipeManager());
+        LOGGER.info("Adding Reload Listener: 'resourcefulbees recipe manager'");
     }
 
     private IRecipe<?> makeHoneycombRecipe(String beeType, CustomBeeData info) {
