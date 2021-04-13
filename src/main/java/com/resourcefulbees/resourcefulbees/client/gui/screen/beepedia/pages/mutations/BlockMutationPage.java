@@ -7,7 +7,6 @@ import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaSc
 import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
-import com.resourcefulbees.resourcefulbees.utils.RenderUtils;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -26,7 +25,6 @@ import static com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.Bee
 
 public class BlockMutationPage extends MutationsPage {
 
-    Entity parent;
     List<Block> inputs;
     double outputChance;
     List<Pair<Double, BlockOutput>> outputs = new ArrayList<>();

@@ -2,6 +2,7 @@ package com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary;
 
 import com.resourcefulbees.resourcefulbees.api.IBeeRegistry;
 import com.resourcefulbees.resourcefulbees.api.ICustomBee;
+import com.resourcefulbees.resourcefulbees.api.beedata.BreedData;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.container.ApiaryStorageContainer;
@@ -26,6 +27,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
@@ -236,6 +238,12 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
             float breedChance = BeeRegistry.getRegistry().getBreedChance(p1, p2, childBeeData);
             EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(childBeeData.getEntityTypeRegistryID());
 
+            BreedData p1BreedData = BEE_REGISTRY.getBeeData(p1).getBreedData();
+            BreedData p2BreedData = BEE_REGISTRY.getBeeData(p2).getBreedData();
+            
+            Item p1Returnable = BeeInfoUtils.getItem(p1BreedData.getFeedReturnItem());
+            Item p2Returnable = BeeInfoUtils.getItem(p2BreedData.getFeedReturnItem());
+
             if (level != null && entityType != null) {
                 Entity entity = entityType.create(level);
                 if (entity != null) {
@@ -245,6 +253,8 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
                     ItemStack emptyBeeJar = new ItemStack(ModItems.BEE_JAR.get());
                     beeJar.setTag(nbt);
                     BeeJar.renameJar(beeJar, (BeeEntity) beeEntity);
+                    depositItemStack(new ItemStack(p1Returnable, p1BreedData.getFeedAmount()));
+                    depositItemStack(new ItemStack(p2Returnable, p2BreedData.getFeedAmount()));
                     // if failed, will deposit empty bee jar
                     float nextFloat = level.random.nextFloat();
                     if (breedChance >= nextFloat) {

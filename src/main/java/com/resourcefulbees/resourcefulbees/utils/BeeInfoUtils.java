@@ -5,11 +5,14 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.ICustomBee;
+import com.resourcefulbees.resourcefulbees.api.beedata.BreedData;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.fluids.HoneyFlowingFluid;
+import com.resourcefulbees.resourcefulbees.item.BeeJar;
 import com.resourcefulbees.resourcefulbees.item.CustomHoneyBottleItem;
 import com.resourcefulbees.resourcefulbees.lib.*;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
@@ -36,7 +39,6 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.Direction;
-import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -217,22 +219,8 @@ public class BeeInfoUtils {
         } else return input.equals(FLOWER_TAG_ALL);
     }
 
-    public static boolean isValidBreedItem(@NotNull ItemStack stack, String validBreedItem) {
-        if (ValidatorUtils.TAG_RESOURCE_PATTERN.matcher(validBreedItem).matches()) {
-            ITag<Item> itemTag = getItemTag(validBreedItem.replace(TAG_PREFIX, ""));
-            return itemTag != null && stack.getItem().is(itemTag);
-        } else {
-            switch (validBreedItem) {
-                case FLOWER_TAG_ALL:
-                    return stack.getItem().is(ItemTags.FLOWERS);
-                case FLOWER_TAG_SMALL:
-                    return stack.getItem().is(ItemTags.SMALL_FLOWERS);
-                case FLOWER_TAG_TALL:
-                    return stack.getItem().is(ItemTags.TALL_FLOWERS);
-                default:
-                    return stack.getItem().equals(getItem(validBreedItem));
-            }
-        }
+    public static boolean isValidBreedItem(@NotNull ItemStack stack, BreedData breedData) {
+        return breedData.getFeedItems().contains(stack.getItem());
     }
 
 
@@ -313,24 +301,8 @@ public class BeeInfoUtils {
     }
 
     public static List<ItemStack> getBreedItems(CustomBeeData parent1Data) {
-        String flower = parent1Data.getBreedData().getFeedItem();
-        List<Item> flowers = new LinkedList<>();
-        if (flower.equals(FLOWER_TAG_ALL)) {
-            ITag<Item> itemTag = ItemTags.FLOWERS;
-            if (itemTag != null) flowers.addAll(itemTag.getValues());
-        } else if (flower.equals(FLOWER_TAG_SMALL)) {
-            ITag<Item> itemTag = ItemTags.SMALL_FLOWERS;
-            if (itemTag != null) flowers.addAll(itemTag.getValues());
-        } else if (flower.equals(FLOWER_TAG_TALL)) {
-            ITag<Item> itemTag = ItemTags.TALL_FLOWERS;
-            if (itemTag != null) flowers.addAll(itemTag.getValues());
-        } else if (flower.startsWith(TAG_PREFIX)) {
-            ITag<Item> itemTag = BeeInfoUtils.getItemTag(flower.replace(TAG_PREFIX, ""));
-            if (itemTag != null) flowers.addAll(itemTag.getValues());
-        } else {
-            flowers.add(getItem(flower));
-        }
-        return flowers.stream().map(f -> new ItemStack(f, parent1Data.getBreedData().getFeedAmount())).collect(Collectors.toList());
+        if (!parent1Data.getBreedData().hasFeedItems()) return Collections.emptyList();
+        return parent1Data.getBreedData().getFeedItems().stream().map(f -> new ItemStack(f, parent1Data.getBreedData().getFeedAmount())).collect(Collectors.toList());
     }
 
     public static void ageBee(int ticksInHive, BeeEntity beeEntity) {
@@ -382,6 +354,10 @@ public class BeeInfoUtils {
         nbt.putString(NBTConstants.NBT_COLOR, beeColor);
 
         return nbt;
+    }
+
+    public static boolean isBeeInJarOurs(@NotNull ItemStack stack) {
+        return stack.getItem() instanceof BeeJar && BeeJar.isFilled(stack) && stack.getTag().getString(NBTConstants.NBT_ENTITY).startsWith(ResourcefulBees.MOD_ID);
     }
 
     public static Fluid getFluidFromBottle(ItemStack bottleOutput) {

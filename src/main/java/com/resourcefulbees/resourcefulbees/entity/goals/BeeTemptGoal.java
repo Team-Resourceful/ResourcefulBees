@@ -15,20 +15,13 @@ public class BeeTemptGoal extends Goal {
     private static final EntityPredicate ENTITY_PREDICATE = (new EntityPredicate()).range(10.0D).allowInvulnerable().allowSameTeam().allowNonAttackable().allowUnseeable();
     protected final CustomBeeEntity beeEntity;
     private final double speed;
-    private final boolean scaredByPlayerMovement;
     protected PlayerEntity closestPlayer;
-    private double targetX;
-    private double targetY;
-    private double targetZ;
-    private double pitch;
-    private double yaw;
     private int delayTemptCounter;
 
 
-    public BeeTemptGoal(CustomBeeEntity beeEntity, double speedIn, boolean scaredByPlayerMovementIn) {
+    public BeeTemptGoal(CustomBeeEntity beeEntity, double speedIn) {
         this.beeEntity = beeEntity;
         this.speed = speedIn;
-        this.scaredByPlayerMovement = scaredByPlayerMovementIn;
         this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
         if (!(beeEntity.getNavigation() instanceof GroundPathNavigator) && !(beeEntity.getNavigation() instanceof FlyingPathNavigator)) {
             throw new IllegalArgumentException("Unsupported mob type for TemptGoal");
@@ -54,7 +47,7 @@ public class BeeTemptGoal extends Goal {
     }
 
     protected boolean isTempting(ItemStack stack) {
-        return BeeInfoUtils.isValidBreedItem(stack, this.beeEntity.getBeeData().getBreedData().getFeedItem());
+        return BeeInfoUtils.isValidBreedItem(stack, this.beeEntity.getBeeData().getBreedData());
     }
 
     /**
@@ -62,41 +55,7 @@ public class BeeTemptGoal extends Goal {
      */
     @Override
     public boolean canContinueToUse() {
-        if (this.isScaredByPlayerMovement()) {
-            if (this.beeEntity.distanceToSqr(this.closestPlayer) < 36.0D) {
-                if (this.closestPlayer.distanceToSqr(this.targetX, this.targetY, this.targetZ) > 0.010000000000000002D) {
-                    return false;
-                }
-
-                if (Math.abs((double) this.closestPlayer.xRot - this.pitch) > 5.0D || Math.abs((double) this.closestPlayer.yRot - this.yaw) > 5.0D) {
-                    return false;
-                }
-            } else {
-                this.targetX = this.closestPlayer.getX();
-                this.targetY = this.closestPlayer.getY();
-                this.targetZ = this.closestPlayer.getZ();
-            }
-
-
-            this.pitch = this.closestPlayer.xRot;
-            this.yaw = this.closestPlayer.yRot;
-        }
-
         return this.canUse();
-    }
-
-    protected boolean isScaredByPlayerMovement() {
-        return this.scaredByPlayerMovement;
-    }
-
-    /**
-     * Execute a one shot task or start executing a continuous task
-     */
-    @Override
-    public void start() {
-        this.targetX = this.closestPlayer.getX();
-        this.targetY = this.closestPlayer.getY();
-        this.targetZ = this.closestPlayer.getZ();
     }
 
     /**

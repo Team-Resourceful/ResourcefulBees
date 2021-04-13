@@ -81,7 +81,7 @@ public class ResourcefulBee extends CustomBeeEntity {
 
         if (customBeeData.getBreedData().isBreedable()) {
             this.goalSelector.addGoal(2, new BeeBreedGoal(this, 1.0D));
-            this.goalSelector.addGoal(3, new BeeTemptGoal(this, 1.25D, false));
+            this.goalSelector.addGoal(3, new BeeTemptGoal(this, 1.25D));
             this.goalSelector.addGoal(5, new FollowParentGoal(this, 1.25D));
         }
         this.pollinateGoal = new BeePollinateGoal(this);

@@ -3,7 +3,6 @@ package com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.mut
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.api.beedata.mutation.outputs.EntityOutput;
-import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
@@ -25,7 +24,6 @@ import static com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.Bee
 
 public class EntityMutationPage extends MutationsPage {
 
-    Entity parent;
     Entity input;
     List<Pair<Double, EntityOutput>> outputs = new ArrayList<>();
     private Double outputChance;
