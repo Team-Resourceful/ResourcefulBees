@@ -72,6 +72,7 @@ public class DataGen {
     }
 
     private static void generateEnglishLang() {
+        LOGGER.info("Generating English Lang...");
         StringBuilder builder = new StringBuilder();
         builder.append("{\n");
         BEE_REGISTRY.getBees().forEach(((name, customBeeData) -> {

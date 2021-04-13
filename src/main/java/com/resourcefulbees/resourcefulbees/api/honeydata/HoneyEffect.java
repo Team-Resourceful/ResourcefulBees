@@ -1,6 +1,5 @@
 package com.resourcefulbees.resourcefulbees.api.honeydata;
 
-import com.resourcefulbees.resourcefulbees.utils.validation.ValidatorUtils;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.ResourceLocation;
@@ -41,7 +40,7 @@ public class HoneyEffect {
     }
 
     public boolean isEffectIDValid() {
-        return effectID != null && effectID.matches(ValidatorUtils.SINGLE_RESOURCE_PATTERN.pattern());
+        return ResourceLocation.tryParse(effectID) != null;
     }
 
     public Effect getEffect() {

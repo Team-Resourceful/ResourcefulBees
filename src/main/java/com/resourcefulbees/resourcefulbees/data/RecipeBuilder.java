@@ -23,18 +23,16 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
+
+import static com.resourcefulbees.resourcefulbees.ResourcefulBees.LOGGER;
 
 public class RecipeBuilder implements IResourceManagerReloadListener {
     private static RecipeManager recipeManager;
 
     private static final IBeeRegistry BEE_REGISTRY = BeeRegistry.getRegistry();
-
-    public static final Logger LOGGER = LogManager.getLogger();
 
     private static void setRecipeManager(RecipeManager recipeManager) {
         RecipeBuilder.recipeManager = recipeManager;
@@ -42,7 +40,7 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
 
     @Override
     public void onResourceManagerReload(@NotNull IResourceManager resourceManager) {
-        LOGGER.debug("Registering comb recipes for {} bees", BEE_REGISTRY.getBees().size());
+        LOGGER.info("Loading comb recipes for {} bees...", BEE_REGISTRY.getBees().size());
         BEE_REGISTRY.getBees().forEach(((s, customBeeData) -> {
             if (customBeeData.hasHoneycomb()) {
                 CentrifugeData centrifugeData = customBeeData.getCentrifugeData();

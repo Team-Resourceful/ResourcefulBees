@@ -24,7 +24,7 @@ public class CustomBeeRenderer extends MobRenderer<CustomBeeEntity, CustomBeeMod
     private ResourceLocation baseTexture;
 
     public CustomBeeRenderer(BaseModelTypes modelType, EntityRendererManager manager, CustomBeeData beeData) {
-        super(manager, new CustomBeeModel<>(modelType), 0.4F);
+        super(manager, new CustomBeeModel<>(modelType), 0.4F * beeData.getSizeModifier());
 
         angryTexture = ResourceLocation.tryParse(ResourcefulBees.MOD_ID + ":" + BeeConstants.ENTITY_TEXTURES_DIR + beeData.getBaseLayerTexture() + "_angry.png");
         baseTexture = ResourceLocation.tryParse(ResourcefulBees.MOD_ID + ":" + BeeConstants.ENTITY_TEXTURES_DIR + beeData.getBaseLayerTexture() + ".png");

@@ -14,6 +14,7 @@ import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
 import com.resourcefulbees.resourcefulbees.network.packets.SyncGUIMessage;
 import com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe;
 import com.resourcefulbees.resourcefulbees.registry.ModContainers;
+import com.resourcefulbees.resourcefulbees.utils.MathUtils;
 import com.resourcefulbees.resourcefulbees.utils.NBTUtils;
 import io.netty.buffer.Unpooled;
 import net.minecraft.block.BlockState;
@@ -21,6 +22,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.inventory.container.INamedContainerProvider;
@@ -34,9 +36,11 @@ import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
-import net.minecraft.util.IntArray;
+import net.minecraft.util.IIntArray;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.LazyOptional;
@@ -54,6 +58,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import static net.minecraft.inventory.container.Container.consideredTheSameItem;
 
@@ -64,6 +69,8 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
     public static final int OUTPUT1 = 2;
     public static final int OUTPUT2 = 3;
     public static final int HONEY_BOTTLE = 4;
+    private static final int INPUTS = 1;
+    private static final int TANK_CAPACITY = 5000;
 
     protected int[] honeycombSlots;
     protected int[] outputSlots;
@@ -83,17 +90,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
     protected boolean isPoweredByRedstone;
     protected boolean requiresRedstone;
 
-    private final IntArray times = new IntArray(1) {
-        @Override
-        public int get(int i) {
-            return time[0];
-        }
-
-        @Override
-        public void set(int i, int i1) {
-            time[0] = i1;
-        }
-    };
+    private final IIntArray times = new TimesArray(1);
 
     public CentrifugeTileEntity(TileEntityType<?> tileEntityType) {
         super(tileEntityType);
@@ -304,7 +301,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
 
     //Override this for subclasses
     public int getNumberOfInputs() {
-        return 1;
+        return INPUTS;
     }
 
     public int getTotalTanks() {
@@ -312,7 +309,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
     }
 
     public int getMaxTankCapacity() {
-        return 5000;
+        return TANK_CAPACITY;
     }
 
     public int getRecipeTime(int i) {
@@ -470,6 +467,13 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
         CompoundNBT nbt = pkt.getTag();
         loadFromNBT(nbt);
     }
+
+    public void dropInventory(World world, @NotNull BlockPos pos) {
+        IntStream.range(0, this.itemStackHandler.getSlots())
+                .mapToObj(this.itemStackHandler::getStackInSlot)
+                .filter(s -> !s.isEmpty())
+                .forEach(stack -> InventoryHelper.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack));
+    }
     //endregion
 
     //region Capabilities
@@ -564,6 +568,32 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
         protected void onContentsChanged(int slot) {
             super.onContentsChanged(slot);
             setChanged();
+        }
+    }
+
+    protected class TimesArray implements IIntArray {
+        private final int count;
+
+        public TimesArray(int count) {
+            this.count = count;
+        }
+
+        @Override
+        public int get(int index) {
+            return MathUtils.inRangeExclusive(index, -1, this.getCount())
+                    ? CentrifugeTileEntity.this.time[index]
+                    : 0;
+        }
+
+        @Override
+        public void set(int index, int value) {
+            if (!MathUtils.inRangeExclusive(index, -1, this.getCount())) return;
+            CentrifugeTileEntity.this.time[index] = value;
+        }
+
+        @Override
+        public int getCount() {
+            return count;
         }
     }
 }

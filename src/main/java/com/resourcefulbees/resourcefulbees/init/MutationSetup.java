@@ -35,6 +35,7 @@ public class MutationSetup {
     }
 
     public static void setupMutations() {
+        LOGGER.info("Validating Mutations...");
         BeeRegistry.getRegistry().getBees().values()
                 .forEach(MutationSetup::initMutationData);
     }

@@ -1,6 +1,7 @@
 package com.resourcefulbees.resourcefulbees.mixin;
 
 import com.resourcefulbees.resourcefulbees.data.DataPackLoader;
+import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import net.minecraft.resources.ResourcePackList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.datafix.codec.DatapackCodec;
@@ -10,7 +11,10 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(MinecraftServer.class)
-public class MixinMinecraftServer {
+public abstract class MixinMinecraftServer {
+    private MixinMinecraftServer() {
+        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+    }
 
     @Inject(method = "configurePackRepository", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/resources/ResourcePackList;reload()V",

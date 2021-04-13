@@ -36,13 +36,14 @@ public class ModSetup {
         throw new IllegalStateException("Utility Class");
     }
 
-    public static void initialize(){
+    public static void initialize() {
         setupPaths();
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ModSetup::loadResources);
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> RainbowColor::init);
     }
 
-    private static void setupPaths(){
+    private static void setupPaths() {
+        LOGGER.info("Setting up config paths...");
         Path configPath = FMLPaths.CONFIGDIR.get();
         Path rbBeesPath = Paths.get(configPath.toAbsolutePath().toString(), ResourcefulBees.MOD_ID, "bees");
         Path rbBiomePath = Paths.get(configPath.toAbsolutePath().toString(), ResourcefulBees.MOD_ID, "biome_dictionary");

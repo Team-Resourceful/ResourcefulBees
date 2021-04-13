@@ -16,6 +16,8 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.resourcefulbees.resourcefulbees.ResourcefulBees.LOGGER;
+
 public class BeeRegistry implements IBeeRegistry {
 
     private static final Map<ResourceLocation, RandomCollection<CustomBeeData>> spawnableBiomes = new HashMap<>();
@@ -43,10 +45,12 @@ public class BeeRegistry implements IBeeRegistry {
 
     public void allowRegistration() {
         this.allowRegistration = true;
+        LOGGER.info("Bee Registration Enabled...");
     }
 
     public void denyRegistration() {
         this.allowRegistration = false;
+        LOGGER.info("Bee Registration Disabled...");
     }
 
     /**

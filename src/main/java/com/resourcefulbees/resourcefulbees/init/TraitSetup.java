@@ -16,8 +16,10 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.*;
+import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.stream.Stream;
 import java.util.zip.ZipFile;
@@ -33,6 +35,7 @@ public class TraitSetup {
     private static Path dictionaryPath;
 
     public static void buildCustomTraits() {
+        LOGGER.info("Registering Custom Traits...");
         addTraits();
     }
 
@@ -50,90 +53,42 @@ public class TraitSetup {
             parsePotionDamageEffects(jsonTrait, builder);
             parseBeepediaItem(jsonTrait, builder);
             TraitRegistry.getRegistry().register(name, builder.build());
-        }catch (JsonSyntaxException e) {
+        } catch (JsonSyntaxException e) {
             String exception = String.format("Error was found trying to parse trait: %s. Json is invalid, validate it here : https://jsonlint.com/", name);
             throw new JsonSyntaxException(exception);
         }
     }
 
-    private static void parseDamageImmunities(JsonBeeTrait.JsonTrait jsonTrait, BeeTrait.Builder builder){
+    private static void parseDamageImmunities(JsonBeeTrait.JsonTrait jsonTrait, BeeTrait.Builder builder) {
         if (jsonTrait.getDamageImmunities() != null && jsonTrait.getDamageImmunities().length > 0) {
-            for (String damageImmunity : jsonTrait.getDamageImmunities()) {
-                DamageSource source;
-                switch (damageImmunity) {
-                    case "inFire":
-                        source = DamageSource.IN_FIRE;
-                        break;
-                    case "lightningBolt":
-                        source = DamageSource.LIGHTNING_BOLT;
-                        break;
-                    case "onFire":
-                        source = DamageSource.ON_FIRE;
-                        break;
-                    case "lava":
-                        source = DamageSource.LAVA;
-                        break;
-                    case "hotFloor":
-                        source = DamageSource.HOT_FLOOR;
-                        break;
-                    case "inWall":
-                        source = DamageSource.IN_WALL;
-                        break;
-                    case "cramming":
-                        source = DamageSource.CRAMMING;
-                        break;
-                    case "drown":
-                        source = DamageSource.DROWN;
-                        break;
-                    case "starve":
-                        source = DamageSource.STARVE;
-                        break;
-                    case "cactus":
-                        source = DamageSource.CACTUS;
-                        break;
-                    case "fall":
-                        source = DamageSource.FALL;
-                        break;
-                    case "flyIntoWall":
-                        source = DamageSource.FLY_INTO_WALL;
-                        break;
-                    case "generic":
-                        source = DamageSource.GENERIC;
-                        break;
-                    case "magic":
-                        source = DamageSource.MAGIC;
-                        break;
-                    case "wither":
-                        source = DamageSource.WITHER;
-                        break;
-                    case "anvil":
-                        source = DamageSource.ANVIL;
-                        break;
-                    case "fallingBlock":
-                        source = DamageSource.FALLING_BLOCK;
-                        break;
-                    case "dragonBreath":
-                        source = DamageSource.DRAGON_BREATH;
-                        break;
-                    case "dryout":
-                        source = DamageSource.DRY_OUT;
-                        break;
-                    default:
-                        throw new IllegalArgumentException("Damage Source supplied not valid.");
+            Arrays.stream(jsonTrait.getDamageImmunities()).forEach(s -> {
+                String source;
+                if (Character.isLowerCase(s.charAt(0))) {
+                    String[] split = s.split("(?=\\p{Upper})");
+                    source = split.length > 1 ? String.join("_", split).toUpperCase(Locale.ENGLISH) : s.toUpperCase(Locale.ENGLISH);
+                } else {
+                    source = s.toUpperCase(Locale.ENGLISH);
                 }
-                builder.addDamageImmunity(source);
-            }
+
+                try {
+                    Field f = DamageSource.class.getField(source);
+                    builder.addDamageImmunity((DamageSource) f.get(null));
+                } catch (NoSuchFieldException | IllegalAccessException e) {
+                    LOGGER.error("Could not parse Damage Immunities");
+                    e.printStackTrace();
+                }
+            });
         }
     }
 
-    private static void parseDamageTypes(JsonBeeTrait.JsonTrait jsonTrait, BeeTrait.Builder builder){
+    private static void parseDamageTypes(JsonBeeTrait.JsonTrait jsonTrait, BeeTrait.Builder builder) {
         if (jsonTrait.getDamageTypes() != null && !jsonTrait.getDamageTypes().isEmpty()) {
             jsonTrait.getDamageTypes().forEach(damageType ->
                     builder.addDamageType(Pair.of(damageType.getDamageType(), damageType.getAmplifier())));
         }
     }
 
-    private static void parseSpecialAbilities(JsonBeeTrait.JsonTrait jsonTrait, BeeTrait.Builder builder){
+    private static void parseSpecialAbilities(JsonBeeTrait.JsonTrait jsonTrait, BeeTrait.Builder builder) {
         if (jsonTrait.getSpecialAbilities() != null && jsonTrait.getSpecialAbilities().length > 0) {
             for (String ability : jsonTrait.getSpecialAbilities()) {
                 builder.addSpecialAbility(ability);
@@ -141,7 +96,7 @@ public class TraitSetup {
         }
     }
 
-    private static void parseParticle(JsonBeeTrait.JsonTrait jsonTrait, BeeTrait.Builder builder){
+    private static void parseParticle(JsonBeeTrait.JsonTrait jsonTrait, BeeTrait.Builder builder) {
         if (jsonTrait.getParticleName() != null
                 && !jsonTrait.getParticleName().isEmpty()
                 && ForgeRegistries.PARTICLE_TYPES.getValue(new ResourceLocation(jsonTrait.getParticleName())) instanceof BasicParticleType) {
@@ -149,7 +104,7 @@ public class TraitSetup {
         }
     }
 
-    private static void parsePotionImmunities(JsonBeeTrait.JsonTrait jsonTrait, BeeTrait.Builder builder){
+    private static void parsePotionImmunities(JsonBeeTrait.JsonTrait jsonTrait, BeeTrait.Builder builder) {
         if (jsonTrait.getPotionImmunities() != null && jsonTrait.getPotionImmunities().length > 0) {
             for (String immunity : jsonTrait.getPotionImmunities()) {
                 Effect potion = ForgeRegistries.POTIONS.getValue(new ResourceLocation(immunity));
@@ -159,7 +114,7 @@ public class TraitSetup {
         }
     }
 
-    private static void parsePotionDamageEffects(JsonBeeTrait.JsonTrait jsonTrait, BeeTrait.Builder builder){
+    private static void parsePotionDamageEffects(JsonBeeTrait.JsonTrait jsonTrait, BeeTrait.Builder builder) {
         if (jsonTrait.getPotionDamageEffects() != null && !jsonTrait.getPotionDamageEffects().isEmpty()) {
             jsonTrait.getPotionDamageEffects().forEach((traitPotionDamageEffect -> {
                 Effect potion = ForgeRegistries.POTIONS.getValue(new ResourceLocation(traitPotionDamageEffect.getEffectID()));
@@ -169,7 +124,7 @@ public class TraitSetup {
         }
     }
 
-    private static void parseBeepediaItem(JsonBeeTrait.JsonTrait jsonTrait, BeeTrait.Builder builder){
+    private static void parseBeepediaItem(JsonBeeTrait.JsonTrait jsonTrait, BeeTrait.Builder builder) {
         if (jsonTrait.getBeepediaItemID() != null && !jsonTrait.getBeepediaItemID().isEmpty()) {
             Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(jsonTrait.getBeepediaItemID()));
             if (item != null) {

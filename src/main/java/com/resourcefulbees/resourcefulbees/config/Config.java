@@ -2,7 +2,6 @@ package com.resourcefulbees.resourcefulbees.config;
 
 import com.resourcefulbees.resourcefulbees.lib.ApiaryOutput;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
-import com.resourcefulbees.resourcefulbees.utils.FunctionalIntReferenceHolder;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.*;
 
@@ -96,6 +95,8 @@ public class Config {
 
     public static BooleanValue BYPASS_PERFORMANT_CHECK;
     public static BooleanValue BEEPEDIA_HIDE_LOCKED;
+
+    public static BooleanValue MANUAL_MODE;
 
     //CLIENT
 
@@ -250,6 +251,10 @@ public class Config {
                     .define("beesInflictPoison", true);
             BEES_DIE_IN_VOID = COMMON_BUILDER.comment("\nShould bees die when their Y-level is below 0?\nNote: If false, bees will get stuck just below y-0 and not move. **May not be useful with new AI**")
                     .define("beeDiesInVoid", true); //TODO 1.17 change to "beesDieInVoid" Also change comment above to reflect y level changes
+            MANUAL_MODE = COMMON_BUILDER.comment("\nThis is an experimental setting. Using this setting means bees will need to be told by the player which flower and hive to use.",
+                    "Bees will not scan surroundings for flowers or hives and will instead go to their designated spot until changed.",
+                    "WARNING: For now, this will prevent bees from having their wander goal attached which effectively makes them dumb (seriously, they'll just hover in one spot), however it would also significantly improve performance until pathfinding can be optimized.")
+                    .define("use_experimental_manual_mode", false);
             COMMON_BUILDER.pop();
 
             COMMON_BUILDER.push("Honeycomb Options");

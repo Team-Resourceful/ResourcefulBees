@@ -9,7 +9,6 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.BooleanProperty;
@@ -28,12 +27,10 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.network.NetworkHooks;
-import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.stream.IntStream;
 
 @SuppressWarnings("deprecation")
 public class CentrifugeBlock extends Block {
@@ -85,9 +82,7 @@ public class CentrifugeBlock extends Block {
     public void onRemove(@NotNull BlockState state1, World world, @NotNull BlockPos pos, @NotNull BlockState state, boolean isMoving) {
         TileEntity blockEntity = world.getBlockEntity(pos);
         if (blockEntity instanceof CentrifugeTileEntity && state.getBlock() != state1.getBlock()){
-            CentrifugeTileEntity centrifugeTileEntity = (CentrifugeTileEntity)blockEntity;
-            ItemStackHandler h = centrifugeTileEntity.getItemStackHandler();
-            IntStream.range(0, h.getSlots()).mapToObj(h::getStackInSlot).filter(s -> !s.isEmpty()).forEach(stack -> InventoryHelper.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack));
+            ((CentrifugeTileEntity) blockEntity).dropInventory(world, pos);
         }
         super.onRemove(state1, world, pos, state, isMoving);
     }

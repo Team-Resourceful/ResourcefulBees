@@ -284,16 +284,6 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
         return ActionResultType.FAIL;
     }
 
-
-    @NotNull
-    @Override
-    public EntitySize getDimensions(@NotNull Pose poseIn) {
-        float scale = beeData.getSizeModifier();
-        scale = this.isBaby() ? scale * Config.CHILD_SIZE_MODIFIER.get().floatValue() : scale;
-        scale = Math.max(scale, 0.75f);
-        return super.getDimensions(poseIn).scale(scale);
-    }
-
     @Override
     protected void ageBoundaryReached() {
         super.ageBoundaryReached();
