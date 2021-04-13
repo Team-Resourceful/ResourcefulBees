@@ -1,5 +1,6 @@
 package com.resourcefulbees.resourcefulbees.entity.goals;
 
+import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.mixin.BeeEntityAccessor;
 import net.minecraft.entity.Entity;
@@ -18,11 +19,11 @@ import java.util.function.Predicate;
 
 public class BeePollinateGoal extends Goal {
 
-    private int pollinationTicks = 0;
-    private int lastPollinationTick = 0;
+    private int pollinationTicks;
+    private int lastPollinationTick;
     private boolean running;
     private Vector3d nextTarget;
-    private int ticks = 0;
+    private int ticks;
     private final CustomBeeEntity bee;
     private Vector3d boundingBox;
     private MutableBoundingBox box = null;
@@ -39,18 +40,18 @@ public class BeePollinateGoal extends Goal {
             return false;
         } else if (bee.getRandom().nextFloat() < 0.7F) {
             return false;
-        } else if (bee.tickCount < 20 || bee.tickCount % 5 == 0) {
-            if (bee.savedFlowerPos == null) {
-                Optional<BlockPos> optional = this.findFlower(5.0D, bee.getBeeData().hasEntityFlower(), bee.getBeeData().getEntityFlower());
-                if (optional.isPresent()) {
-                    bee.savedFlowerPos = optional.get();
-                    bee.getNavigation().moveTo((double) bee.savedFlowerPos.getX() + 0.5D, (double) bee.savedFlowerPos.getY() + 0.5D, (double) bee.savedFlowerPos.getZ() + 0.5D, 1.2D);
-                    return true;
-                }
-            }else {
-                bee.getNavigation().moveTo((double) bee.savedFlowerPos.getX() + 0.5D, (double) bee.savedFlowerPos.getY() + 0.5D, (double) bee.savedFlowerPos.getZ() + 0.5D, 1.2D);
+        } else if ((!Config.MANUAL_MODE.get() || bee.getBeeData().hasEntityFlower()) && bee.savedFlowerPos == null && (bee.tickCount < 20 || bee.tickCount % 5 == 0)) {
+            Optional<BlockPos> optional = this.findFlower(5.0D, bee.getBeeData().hasEntityFlower(), bee.getBeeData().getEntityFlower());
+            if (optional.isPresent()) {
+                bee.savedFlowerPos = optional.get();
+                bee.getNavigation().moveTo(bee.savedFlowerPos.getX() + 0.5D, bee.savedFlowerPos.getY() + 0.5D, bee.savedFlowerPos.getZ() + 0.5D, 1.2D);
                 return true;
+            } else {
+                bee.remainingCooldownBeforeLocatingNewFlower = 600;
             }
+        } else if (bee.savedFlowerPos != null) {
+            bee.getNavigation().moveTo(bee.savedFlowerPos.getX() + 0.5D, bee.savedFlowerPos.getY() + 0.5D, bee.savedFlowerPos.getZ() + 0.5D, 1.2D);
+            return true;
         }
         return false;
     }
@@ -117,9 +118,11 @@ public class BeePollinateGoal extends Goal {
     }
 
     public void clearTask() {
-        bee.savedFlowerPos = null;
-        bee.setFlowerEntityID(-1);
-        boundingBox = null;
+        if (!Config.MANUAL_MODE.get()) {
+            bee.savedFlowerPos = null;
+            bee.setFlowerEntityID(-1);
+            boundingBox = null;
+        }
     }
 
     @Override
@@ -138,7 +141,7 @@ public class BeePollinateGoal extends Goal {
             if (bee.savedFlowerPos != null) {
                 Vector3d vector3d = Vector3d.atBottomCenterOf(bee.savedFlowerPos).add(0.0D, 0.6F, 0.0D);
                 if (boundingBox != null) vector3d = boundingBox.add(0.0D, 0.4F, 0.0D);
-                if (vector3d.distanceTo(bee.position()) > 0.5D) {
+                if (vector3d.distanceTo(bee.position()) > 1D) {
                     this.nextTarget = vector3d;
                     this.moveToNextTarget();
                 } else {

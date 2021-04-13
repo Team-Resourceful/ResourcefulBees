@@ -29,7 +29,7 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
     private final ModelRenderer rightAntenna;
     private float bodyPitch;
 
-    private float beeSize = 0;
+    private float sizeModifier = 0;
 
     public CustomBeeModel(ModelTypes modelType) {
         this();
@@ -130,8 +130,8 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
             this.body.xRot = ModelUtils.rotlerpRad(this.body.xRot, 3.0915928F, this.bodyPitch);
         }
 
-        beeSize = entityIn.getBeeData().getSizeModifier();
-        if (young) beeSize *= Config.CHILD_SIZE_MODIFIER.get();
+        sizeModifier = entityIn.getBeeData().getSizeModifier();
+        if (young) sizeModifier *= Config.CHILD_SIZE_MODIFIER.get();
     }
 
     @NotNull
@@ -147,8 +147,8 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
     @Override
     public void renderToBuffer(@NotNull MatrixStack matrixStackIn, @NotNull IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
         matrixStackIn.pushPose();
-        matrixStackIn.translate(0, 1.5 - beeSize * 1.5, 0);
-        matrixStackIn.scale(beeSize, beeSize, beeSize);
+        matrixStackIn.translate(0, 1.5 - sizeModifier * 1.5, 0);
+        matrixStackIn.scale(sizeModifier, sizeModifier, sizeModifier);
         super.renderToBuffer(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
         matrixStackIn.popPose();
     }

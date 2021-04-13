@@ -172,7 +172,7 @@ public class RegistryHandler {
     private static void registerBee(String name, CustomBeeData customBeeData) {
         final RegistryObject<EntityType<? extends CustomBeeEntity>> customBeeEntity = ENTITY_TYPES.register(name + "_bee", () -> EntityType.Builder
                 .<ResourcefulBee>of((type, world) -> new ResourcefulBee(type, world, customBeeData), EntityClassification.CREATURE)
-                .sized(0.7F, 0.6F)
+                .sized(0.7F * customBeeData.getSizeModifier(), 0.6F * customBeeData.getSizeModifier())
                 .build(name + "_bee"));
 
         final RegistryObject<Item> customBeeSpawnEgg = ModItems.ITEMS.register(name + "_bee_spawn_egg",

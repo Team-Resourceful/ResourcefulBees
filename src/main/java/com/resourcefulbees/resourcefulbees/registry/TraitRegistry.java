@@ -70,6 +70,7 @@ public class TraitRegistry implements ITraitRegistry {
     }
 
     public static void registerDefaultTraits() {
+        ResourcefulBees.LOGGER.info("Registering Default Bee Traits...");
         getRegistry().register(TraitConstants.WITHER, new BeeTrait.Builder(TraitConstants.WITHER).addPotionImmunity(Effects.WITHER).addDamagePotionEffect(Pair.of(Effects.WITHER, 1)).setBeepediaItem(Items.WITHER_ROSE).build());
         getRegistry().register(TraitConstants.BLAZE, new BeeTrait.Builder(TraitConstants.BLAZE)
                 .addDamageImmunities(Arrays.asList(DamageSource.LAVA, DamageSource.IN_FIRE, DamageSource.ON_FIRE, DamageSource.HOT_FLOOR))
@@ -89,7 +90,8 @@ public class TraitRegistry implements ITraitRegistry {
     }
 
     public static void applyBeeTraits() {
-        BeeRegistry.getRegistry().getBees().values().stream().forEach(beeData -> {
+        //oreo reminder make method for BeeRegistry.getRegistry().getBees().values()
+        BeeRegistry.getRegistry().getBees().values().forEach(beeData -> {
             beeData.getTraitData().initializeTraitSets();
             if (beeData.hasTraitNames()) {
                 Arrays.stream(beeData.getTraitNames())

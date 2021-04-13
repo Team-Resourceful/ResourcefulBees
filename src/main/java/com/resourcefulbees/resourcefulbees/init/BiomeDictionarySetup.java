@@ -32,6 +32,7 @@ public class BiomeDictionarySetup {
     private static Path dictionaryPath;
 
     public static void buildDictionary() {
+        LOGGER.info("Building Biome Dictionary...");
         if (Config.GENERATE_BIOME_DICTIONARIES.get()) {
             setupDefaultTypes();
         }

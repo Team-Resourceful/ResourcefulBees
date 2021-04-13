@@ -2,6 +2,7 @@
 package com.resourcefulbees.resourcefulbees.tileentity;
 
 
+import com.google.common.collect.ImmutableList;
 import com.resourcefulbees.resourcefulbees.api.ICustomBee;
 import com.resourcefulbees.resourcefulbees.block.TieredBeehiveBlock;
 import com.resourcefulbees.resourcefulbees.config.Config;
@@ -33,6 +34,7 @@ import net.minecraftforge.common.util.Constants;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -123,7 +125,7 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
                                     honeycomb = ((ICustomBee)entity).getBeeData().getCombStack();
                                 }
 
-                                if (!honeycomb.isEmpty()) this.getHoneycombs().add(0, honeycomb);
+                                if (!honeycomb.isEmpty()) this.honeycombs.add(0, honeycomb);
 
                                 recalculateHoneyLevel();
                             }
@@ -206,7 +208,7 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
 
     public boolean hasBees() { return !stored.isEmpty(); }
 
-    public ItemStack getResourceHoneycomb(){ return getHoneycombs().remove(0); }
+    public ItemStack getResourceHoneycomb(){ return honeycombs.remove(0); }
 
     public boolean hasCombs(){ return numberOfCombs() > 0; }
 
@@ -260,6 +262,6 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
     }
 
     public List<ItemStack> getHoneycombs() {
-        return honeycombs;
+        return Collections.unmodifiableList(honeycombs);
     }
 }

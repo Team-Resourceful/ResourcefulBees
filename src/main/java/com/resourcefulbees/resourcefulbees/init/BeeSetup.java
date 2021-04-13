@@ -118,7 +118,6 @@ public class BeeSetup {
         name = name.substring(0, name.indexOf('.'));
 
         Reader r = Files.newBufferedReader(file.toPath());
-
         parseHoney(r, name);
     }
 
@@ -147,6 +146,7 @@ public class BeeSetup {
     }
 
     private static void addBees() {
+        LOGGER.info("Registering Custom Bees...");
         try (Stream<Path> zipStream = Files.walk(beePath);
              Stream<Path> jsonStream = Files.walk(beePath)) {
             zipStream.filter(f -> f.getFileName().toString().endsWith(ZIP)).forEach(BeeSetup::addZippedBee);
@@ -157,6 +157,7 @@ public class BeeSetup {
     }
 
     private static void addHoney() {
+        LOGGER.info("Registering Custom Honeys..");
         try (Stream<Path> zipStream = Files.walk(honeyPath);
              Stream<Path> jsonStream = Files.walk(honeyPath)) {
             zipStream.filter(f -> f.getFileName().toString().endsWith(ZIP)).forEach(BeeSetup::addZippedHoney);

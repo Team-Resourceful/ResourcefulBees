@@ -37,6 +37,7 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
 
     @Override
     public void onResourceManagerReload(@NotNull IResourceManager resourceManager) {
+        ResourcefulBees.LOGGER.info("Loading Recipes...");
         BEE_REGISTRY.getBees().forEach(((s, customBeeData) -> {
             if (customBeeData.hasHoneycomb()) {
                 CentrifugeData centrifugeData = customBeeData.getCentrifugeData();

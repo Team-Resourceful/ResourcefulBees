@@ -13,13 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(BeeEntity.EnterBeehiveGoal.class)
-public class MixinEnterBeehiveGoal {
-
-    /*@Dynamic
-    @Final
-    @Shadow(aliases = {"BeeEntity$EnterBeehiveGoal.this$0", "this$0", "..."})
-    private BeeEntity this$0;*/
-
+public abstract class MixinEnterBeehiveGoal {
     @Unique
     private BeeEntity beeEntity;
 

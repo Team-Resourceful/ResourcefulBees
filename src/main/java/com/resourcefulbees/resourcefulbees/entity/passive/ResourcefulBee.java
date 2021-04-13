@@ -89,7 +89,7 @@ public class ResourcefulBee extends CustomBeeEntity {
 
         this.beePollinateGoal = new FakePollinateGoal();
 
-        this.goalSelector.addGoal(5, new BeeEntity.UpdateBeehiveGoal());
+        this.goalSelector.addGoal(5, new ResourcefulBee.UpdateBeehiveGoal2());
 
         this.goToHiveGoal = new ResourcefulBee.FindBeehiveGoal2();
         this.goalSelector.addGoal(5, this.goToHiveGoal);
@@ -100,7 +100,7 @@ public class ResourcefulBee extends CustomBeeEntity {
         if (customBeeData.getMutationData().hasMutation()) {
             this.goalSelector.addGoal(7, new ResourcefulBee.FindPollinationTargetGoal2());
         }
-        this.goalSelector.addGoal(8, new BeeWanderGoal(this));
+        //this.goalSelector.addGoal(8, new BeeWanderGoal(this));
         this.goalSelector.addGoal(9, new SwimGoal(this));
     }
 
@@ -129,13 +129,6 @@ public class ResourcefulBee extends CustomBeeEntity {
     public void setExplosiveCooldown(int cooldown) {
         this.explosiveCooldown = cooldown;
     }
-
-    /*    public boolean doesHiveHaveSpace(BlockPos pos) {
-        TileEntity blockEntity = this.level.getBlockEntity(pos);
-        return (blockEntity instanceof TieredBeehiveTileEntity && !((TieredBeehiveTileEntity) blockEntity).isFull())
-                || (blockEntity instanceof ApiaryTileEntity && !((ApiaryTileEntity) blockEntity).isFullOfBees())
-                || (blockEntity instanceof BeehiveTileEntity && !((BeehiveTileEntity) blockEntity).isFull());
-    }*/
 
     @Override
     public void dropOffNectar() {
@@ -374,32 +367,17 @@ public class ResourcefulBee extends CustomBeeEntity {
             }
         }
         if (entityIn instanceof LivingEntity) {
-            int i = 0;
-            switch (this.level.getDifficulty()) {
-                case EASY:
-                    i = 5;
-                    break;
-                case NORMAL:
-                    i = 10;
-                    break;
-                case HARD:
-                    i = 18;
-                    break;
-                default:
-                    //do nothing
-            }
+            int i = getDifficultyModifier();
             if (info.hasTraits() && info.hasDamageTypes()) {
-                int finalI1 = i;
                 info.getDamageTypes().forEach(stringIntegerPair -> {
                     if (stringIntegerPair.getLeft().equals(TraitConstants.SET_ON_FIRE))
-                        entityIn.setSecondsOnFire(finalI1 * stringIntegerPair.getRight());
+                        entityIn.setSecondsOnFire(i * stringIntegerPair.getRight());
                     if (stringIntegerPair.getLeft().equals(TraitConstants.EXPLOSIVE))
-                        this.explode(finalI1 / stringIntegerPair.getRight());
+                        this.explode(i / stringIntegerPair.getRight());
                 });
             }
             if (i > 0 && info.hasTraits() && info.hasDamagePotionEffects()) {
-                int finalI = i;
-                info.getPotionDamageEffects().forEach(effectIntegerPair -> ((LivingEntity) entityIn).addEffect(new EffectInstance(effectIntegerPair.getLeft(), finalI * 20, effectIntegerPair.getRight())));
+                info.getPotionDamageEffects().forEach(effectIntegerPair -> ((LivingEntity) entityIn).addEffect(new EffectInstance(effectIntegerPair.getLeft(), i * 20, effectIntegerPair.getRight())));
             }
             if (canPoison(info))
                 ((LivingEntity) entityIn).addEffect(new EffectInstance(Effects.POISON, i * 20, 0));
@@ -411,6 +389,19 @@ public class ResourcefulBee extends CustomBeeEntity {
         this.playSound(SoundEvents.BEE_STING, 1.0F, 1.0F);
 
         return flag;
+    }
+
+    private int getDifficultyModifier() {
+        switch (this.level.getDifficulty()) {
+            case EASY:
+                return 5;
+            case NORMAL:
+                return 10;
+            case HARD:
+                return 18;
+            default:
+                return 0;
+        }
     }
 
     private boolean canPoison(TraitData info) {
@@ -514,24 +505,6 @@ public class ResourcefulBee extends CustomBeeEntity {
         return new ItemStack(beeData.getSpawnEggItemRegistryObject().get());
     }
 
-/*    protected class UpdateBeehiveGoal2 extends BeeEntity.UpdateBeehiveGoal {
-
-        public UpdateBeehiveGoal2() {
-            super();
-        }
-
-        @Override
-        public @NotNull List<BlockPos> findNearbyHivesWithSpace() {
-            BlockPos blockpos = ResourcefulBee.this.blockPosition();
-            PointOfInterestManager pointofinterestmanager = ((ServerWorld) level).getPoiManager();
-            Stream<PointOfInterest> stream = pointofinterestmanager.getInRange(pointOfInterestType ->
-                            pointOfInterestType == ModPOIs.TIERED_BEEHIVE_POI.get() || pointOfInterestType == PointOfInterestType.BEE_NEST || pointOfInterestType == PointOfInterestType.BEEHIVE, blockpos,
-                    20, PointOfInterestManager.Status.ANY);
-            return stream.map(PointOfInterest::getPos).filter(ResourcefulBee.this::doesHiveHaveSpace)
-                    .sorted(Comparator.comparingDouble(pos -> pos.distSqr(blockpos))).collect(Collectors.toList());
-        }
-    }*/
-
     protected class FindPollinationTargetGoal2 extends BeeEntity.FindPollinationTargetGoal {
 
         public FindPollinationTargetGoal2() {
@@ -570,6 +543,13 @@ public class ResourcefulBee extends CustomBeeEntity {
         public boolean canBeeUse() {
             return hivePos != null && !hasRestriction() && wantsToEnterHive() && !this.hasReachedTarget(hivePos) && isHiveValid();
         }
+
+        @Override
+        public void dropHive() {
+            if (!Config.MANUAL_MODE.get()) {
+                super.dropHive();
+            }  // double check blacklist as it may need to be cleared - epic
+        }
     }
 
     public class FakePollinateGoal extends BeeEntity.PollinateGoal {
@@ -588,4 +568,17 @@ public class ResourcefulBee extends CustomBeeEntity {
         }
     }
 
+    public class UpdateBeehiveGoal2 extends BeeEntity.UpdateBeehiveGoal {
+        public UpdateBeehiveGoal2() {
+            super();
+        }
+
+        @Override
+        public boolean canBeeUse() {
+            if (!Config.MANUAL_MODE.get()) {
+                return super.canBeeUse();
+            }
+            return false;
+        }
+    }
 }
