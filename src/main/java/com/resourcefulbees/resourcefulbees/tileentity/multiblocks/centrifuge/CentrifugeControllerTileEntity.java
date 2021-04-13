@@ -148,6 +148,12 @@ public class CentrifugeControllerTileEntity extends CentrifugeTileEntity {
         validStructure = tag.getBoolean("valid");
         super.loadFromNBT(tag);
     }
+
+    @Override
+    public void dropInventory(World world, @NotNull BlockPos pos) {
+        //do nothing
+    }
+
     //endregion
 
     @Nullable
