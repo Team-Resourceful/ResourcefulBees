@@ -16,7 +16,7 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.IntArray;
+import net.minecraft.util.IIntArray;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.util.text.ITextComponent;
@@ -34,52 +34,18 @@ import static com.resourcefulbees.resourcefulbees.tileentity.multiblocks.MultiBl
 
 public class CentrifugeControllerTileEntity extends CentrifugeTileEntity {
 
+    private static final int TANK_CAPACITY = 10000;
+    private static final int INPUTS = 3;
     protected int validateTime = MathUtils.nextInt(10) + 10;
     protected boolean validStructure;
     protected final List<BlockPos> structureBlocks = new ArrayList<>();
 
-    private final IntArray times = new IntArray(4) {
-
-        @Override
-        public int get(int index) {
-            switch(index) {
-                case 0:
-                    return CentrifugeControllerTileEntity.this.time[0];
-                case 1:
-                    return CentrifugeControllerTileEntity.this.time[1];
-                case 2:
-                    return CentrifugeControllerTileEntity.this.time[2];
-                default:
-                    return 0;
-            }
-        }
-
-        @Override
-        public void set(int index, int value) {
-            switch(index) {
-                case 0:
-                    CentrifugeControllerTileEntity.this.time[0] = value;
-                    break;
-                case 1:
-                    CentrifugeControllerTileEntity.this.time[1] = value;
-                    break;
-                case 2:
-                    CentrifugeControllerTileEntity.this.time[2] = value;
-                    break;
-                default: //do nothing
-            }
-
-        }
-
-        @Override
-        public int getCount() { return 3; }
-    };
-
+    private final IIntArray times = new TimesArray(3);
 
     public CentrifugeControllerTileEntity(TileEntityType<?> tileEntityType) { super(tileEntityType); }
 
     @Override
-    public int getNumberOfInputs() { return 3; }
+    public int getNumberOfInputs() { return INPUTS; }
 
     public void checkHoneycombSlots(){
         for (int i = 0; i < honeycombSlots.length; i++) {
@@ -114,7 +80,7 @@ public class CentrifugeControllerTileEntity extends CentrifugeTileEntity {
     }
 
     @Override
-    public int getMaxTankCapacity() { return 10000; }
+    public int getMaxTankCapacity() { return TANK_CAPACITY; }
 
     @Override
     public int getRecipeTime(int i) { return getRecipe(i) != null ? Math.max(5, getRecipe(i).multiblockTime) : Config.GLOBAL_CENTRIFUGE_RECIPE_TIME.get(); }

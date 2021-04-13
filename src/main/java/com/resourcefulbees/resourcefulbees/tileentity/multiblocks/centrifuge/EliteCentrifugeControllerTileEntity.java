@@ -11,7 +11,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.IntArray;
+import net.minecraft.util.IIntArray;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -19,28 +19,17 @@ import org.jetbrains.annotations.Nullable;
 import java.util.function.Predicate;
 
 public class EliteCentrifugeControllerTileEntity extends CentrifugeControllerTileEntity {
-    private final IntArray times = new IntArray(6) {
-
-        @Override
-        public int get(int index) {
-            if (index > this.getCount() - 1 || index < 0) return 0;
-            return EliteCentrifugeControllerTileEntity.this.time[index];
-        }
-
-        @Override
-        public void set(int index, int value) {
-            if (index > this.getCount() - 1 || index < 0) return;
-            EliteCentrifugeControllerTileEntity.this.time[index] = value;
-        }
-    };
+    private static final int INPUTS = 6;
+    private static final int TANK_CAPACITY = 50000;
+    private final IIntArray times = new TimesArray(6);
 
     public EliteCentrifugeControllerTileEntity(TileEntityType<?> tileEntityType) { super(tileEntityType); }
 
     @Override
-    public int getNumberOfInputs() { return 6; }
+    public int getNumberOfInputs() { return INPUTS; }
 
     @Override
-    public int getMaxTankCapacity() { return 50000; }
+    public int getMaxTankCapacity() { return TANK_CAPACITY; }
 
     @Override
     public int getRecipeTime(int i) { return getRecipe(i) != null ? Math.max(5, (int)(getRecipe(i).multiblockTime * 0.5)) : Config.GLOBAL_CENTRIFUGE_RECIPE_TIME.get(); }

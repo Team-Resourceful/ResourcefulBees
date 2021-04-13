@@ -12,6 +12,7 @@ import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.util.IIntArray;
 import net.minecraft.util.IntArray;
 import net.minecraft.util.IntReferenceHolder;
 import net.minecraft.util.math.BlockPos;
@@ -26,7 +27,7 @@ public class CentrifugeContainer extends ContainerWithStackMove {
 
     protected final CentrifugeTileEntity centrifugeTileEntity;
     private final PlayerInventory inv;
-    private final IntArray times;
+    private final IIntArray times;
     private int numInputs;
     private boolean displayFluids;
     protected int inputXPos;
@@ -43,7 +44,7 @@ public class CentrifugeContainer extends ContainerWithStackMove {
         this(ModContainers.CENTRIFUGE_CONTAINER.get(), id, world, pos, inv, new IntArray(1));
     }
 
-    public CentrifugeContainer(ContainerType<?> containerType, int id, World world, BlockPos pos, PlayerInventory inv, IntArray times) {
+    public CentrifugeContainer(ContainerType<?> containerType, int id, World world, BlockPos pos, PlayerInventory inv, IIntArray times) {
         super(containerType, id);
         initialize();
         this.inv = inv;
