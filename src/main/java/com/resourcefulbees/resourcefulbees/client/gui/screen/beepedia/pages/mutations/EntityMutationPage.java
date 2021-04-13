@@ -3,6 +3,7 @@ package com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.mut
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.api.beedata.mutation.outputs.EntityOutput;
+import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
@@ -18,20 +19,27 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaPage.SUB_PAGE_WIDTH;
 
 public class EntityMutationPage extends MutationsPage {
 
+    Entity parent;
     Entity input;
     List<Pair<Double, EntityOutput>> outputs = new ArrayList<>();
     private Double outputChance;
 
-    public EntityMutationPage(EntityType<?> entity, Pair<Double, RandomCollection<EntityOutput>> outputs, MutationTypes type, CustomBeeData beeData, BeepediaScreen beepedia) {
-        super(type, beeData, beepedia);
+    public EntityMutationPage(EntityType<?> parentEntity, EntityType<?> entity, Pair<Double, RandomCollection<EntityOutput>> outputs, MutationTypes type, CustomBeeData beeData, BeepediaScreen beepedia) {
+        this(parentEntity.create(Objects.requireNonNull(beepedia.getMinecraft().level)), entity, outputs, type, beeData, beepedia);
+    }
+
+    public EntityMutationPage(Entity parentEntity, EntityType<?> entity, Pair<Double, RandomCollection<EntityOutput>> outputs, MutationTypes type, CustomBeeData beeData, BeepediaScreen beepedia) {
+        super(parentEntity, type, beeData, beepedia);
         input = entity.create(beepedia.getMinecraft().level);
         initOutputs(outputs);
     }
+
 
     private void initOutputs(Pair<Double, RandomCollection<EntityOutput>> outputs) {
         outputChance = outputs.getKey();
@@ -49,6 +57,7 @@ public class EntityMutationPage extends MutationsPage {
 
     @Override
     public void draw(MatrixStack matrix, int xPos, int yPos) {
+        super.draw(matrix, xPos, yPos);
         RenderUtils.renderEntity(matrix, input, beepedia.getMinecraft().level, (float) xPos + 27, (float) yPos + 32, 45, 1.25f);
         EntityOutput output = outputs.get(outputCounter).getRight();
         Entity entity = output.getGuiEntity(beepedia.getMinecraft().level);
@@ -68,9 +77,11 @@ public class EntityMutationPage extends MutationsPage {
 
     @Override
     public boolean mouseClick(int xPos, int yPos, int mouseX, int mouseY) {
+        if (super.mouseClick(xPos, yPos, mouseX, mouseY)) return true;
         if (input instanceof CustomBeeEntity) {
             CustomBeeEntity beeEntity = (CustomBeeEntity) input;
             if (BeepediaScreen.mouseHovering((float) xPos + 22, (float) yPos + 27, 30, 30, mouseX, mouseY)) {
+                if (BeepediaScreen.currScreenState.getPageID().equals((beeEntity.getBeeData().getName()))) return false;
                 BeepediaScreen.saveScreenState();
                 beepedia.setActive(BeepediaScreen.PageType.BEE, beeEntity.getBeeData().getName());
                 return true;
@@ -80,6 +91,7 @@ public class EntityMutationPage extends MutationsPage {
         if (output instanceof CustomBeeEntity) {
             CustomBeeEntity beeEntity = (CustomBeeEntity) output;
             if (BeepediaScreen.mouseHovering((float) xPos + 112, (float) yPos + 27, 30, 30, mouseX, mouseY)) {
+                if (BeepediaScreen.currScreenState.getPageID().equals((beeEntity.getBeeData().getName()))) return false;
                 BeepediaScreen.saveScreenState();
                 beepedia.setActive(BeepediaScreen.PageType.BEE, beeEntity.getBeeData().getName());
                 return true;
@@ -90,6 +102,7 @@ public class EntityMutationPage extends MutationsPage {
 
     @Override
     public void drawTooltips(MatrixStack matrix, int xPos, int yPos, int mouseX, int mouseY) {
+        super.drawTooltips(matrix, xPos, yPos, mouseX, mouseY);
         if (BeepediaScreen.mouseHovering((float) xPos + 22, (float) yPos + 27, 30, 30, mouseX, mouseY)) {
             List<ITextComponent> tooltip = new ArrayList<>();
             IFormattableTextComponent name = input.getName().plainCopy();

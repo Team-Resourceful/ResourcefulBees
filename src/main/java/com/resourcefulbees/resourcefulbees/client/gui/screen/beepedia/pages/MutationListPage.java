@@ -57,15 +57,15 @@ public class MutationListPage extends BeeDataPage {
         List<MutationsPage> itemMutations = new ArrayList<>();
         List<MutationsPage> entityMutations = new ArrayList<>();
         if (beeData.getMutationData().hasBlockMutations()) {
-            beeData.getMutationData().getJeiBlockMutations().forEach((b, m) -> blockMutations.add(new BlockMutationPage(b, m, MutationTypes.BLOCK, beeData, beepedia)));
-            beeData.getMutationData().getJeiBlockTagMutations().forEach((b, m) -> blockMutations.add(new BlockMutationPage(b, m, MutationTypes.BLOCK, beeData, beepedia)));
+            beeData.getMutationData().getJeiBlockMutations().forEach((b, m) -> blockMutations.add(new BlockMutationPage(parent.getBee(), b, m, MutationTypes.BLOCK, beeData, beepedia)));
+            beeData.getMutationData().getJeiBlockTagMutations().forEach((b, m) -> blockMutations.add(new BlockMutationPage(parent.getBee(), b, m, MutationTypes.BLOCK, beeData, beepedia)));
         }
         if (beeData.getMutationData().hasItemMutations()) {
-            beeData.getMutationData().getJeiItemMutations().forEach((b, m) -> itemMutations.add(new ItemMutationPage(b, m, MutationTypes.ITEM, beeData, beepedia)));
-            beeData.getMutationData().getJeiBlockTagItemMutations().forEach((b, m) -> itemMutations.add(new ItemMutationPage(b, m, MutationTypes.ITEM, beeData, beepedia)));
+            beeData.getMutationData().getJeiItemMutations().forEach((b, m) -> itemMutations.add(new ItemMutationPage(parent.getBee(), b, m, MutationTypes.ITEM, beeData, beepedia)));
+            beeData.getMutationData().getJeiBlockTagItemMutations().forEach((b, m) -> itemMutations.add(new ItemMutationPage(parent.getBee(), b, m, MutationTypes.ITEM, beeData, beepedia)));
         }
         if (beeData.getMutationData().hasEntityMutations()) {
-            beeData.getMutationData().getEntityMutations().forEach((b, m) -> entityMutations.add(new EntityMutationPage(b, m, MutationTypes.ITEM, beeData, beepedia)));
+            beeData.getMutationData().getEntityMutations().forEach((b, m) -> entityMutations.add(new EntityMutationPage(parent.getBee(), b, m, MutationTypes.ENTITY, beeData, beepedia)));
         }
         if (!blockMutations.isEmpty()) {
             mutations.add(Pair.of(MutationTypes.BLOCK, blockMutations));
@@ -138,7 +138,6 @@ public class MutationListPage extends BeeDataPage {
             Minecraft.getInstance().getTextureManager().bind(mutationChanceImage);
             AbstractGui.blit(matrix, xPos, yPos + 22, 0, 0, 16, 16, 16, 16);
             activePage.draw(matrix, xPos, yPos + 22);
-            RenderUtils.renderEntity(matrix, parent.getBee(), beepedia.getMinecraft().level, (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - 15, (float) yPos + 28, 45, 1.25f);
             if (activeList.size() > 1) {
                 StringTextComponent pageInfo = new StringTextComponent(String.format("%d / %d", this.page + 1, activeList.size()));
                 padding = font.width(pageInfo) / 2;
@@ -203,14 +202,6 @@ public class MutationListPage extends BeeDataPage {
     @Override
     public void drawTooltips(MatrixStack matrix, int mouseX, int mouseY) {
         if (activePage != null) activePage.drawTooltips(matrix, xPos, yPos + 22, mouseX, mouseY);
-        if (BeepediaScreen.mouseHovering((float) xPos + ((float) SUB_PAGE_WIDTH / 2) - 20, (float) yPos + 28, 30, 30, mouseX, mouseY)) {
-            List<ITextComponent> tooltip = new ArrayList<>();
-            IFormattableTextComponent name = parent.getBee().getName().plainCopy();
-            IFormattableTextComponent id = new StringTextComponent(parent.getBee().getEncodeId()).withStyle(TextFormatting.DARK_GRAY);
-            tooltip.add(name);
-            tooltip.add(id);
-            beepedia.renderComponentTooltip(matrix, tooltip, mouseX, mouseY);
-        }
         if (BeepediaScreen.mouseHovering(xPos, (float) yPos + 22, 16, 16, mouseX, mouseY)) {
             TranslationTextComponent text = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.mutations.mutation_count.tooltip");
             beepedia.renderTooltip(matrix, text, mouseX, mouseY);

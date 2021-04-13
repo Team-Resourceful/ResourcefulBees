@@ -7,8 +7,10 @@ import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaSc
 import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
+import com.resourcefulbees.resourcefulbees.utils.RenderUtils;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tags.ITag;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -23,18 +25,19 @@ import static com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.Bee
 
 public class ItemMutationPage extends MutationsPage {
 
+    Entity parent;
     List<Block> inputs;
     List<Pair<Double, ItemOutput>> outputs = new ArrayList<>();
     private Double outputChance;
 
-    public ItemMutationPage(ITag<?> blocks, Pair<Double, RandomCollection<ItemOutput>> outputs, MutationTypes type, CustomBeeData beeData, BeepediaScreen beepedia) {
-        super(type, beeData, beepedia);
+    public ItemMutationPage(Entity bee, ITag<?> blocks, Pair<Double, RandomCollection<ItemOutput>> outputs, MutationTypes type, CustomBeeData beeData, BeepediaScreen beepedia) {
+        super(bee, type, beeData, beepedia);
         inputs = (List<Block>) blocks.getValues();
         initOutputs(outputs);
     }
 
-    public ItemMutationPage(Block block, Pair<Double, RandomCollection<ItemOutput>> outputs, MutationTypes type, CustomBeeData beeData, BeepediaScreen beepedia) {
-        super(type, beeData, beepedia);
+    public ItemMutationPage(Entity bee, Block block, Pair<Double, RandomCollection<ItemOutput>> outputs, MutationTypes type, CustomBeeData beeData, BeepediaScreen beepedia) {
+        super(bee, type, beeData, beepedia);
         inputs = new LinkedList<>(Collections.singleton(block));
         initOutputs(outputs);
     }
@@ -57,6 +60,7 @@ public class ItemMutationPage extends MutationsPage {
 
     @Override
     public void draw(MatrixStack matrix, int xPos, int yPos) {
+        super.draw(matrix, xPos, yPos);
         beepedia.drawSlot(matrix, inputs.get(inputCounter), xPos + 32, yPos + 32);
         ItemOutput output = outputs.get(outputCounter).getRight();
         ItemStack item = new ItemStack(output.getItem());
@@ -74,11 +78,12 @@ public class ItemMutationPage extends MutationsPage {
 
     @Override
     public boolean mouseClick(int xPos, int yPos, int mouseX, int mouseY) {
-        return false;
+        return super.mouseClick(xPos, yPos, mouseX, mouseY);
     }
 
     @Override
     public void drawTooltips(MatrixStack matrix, int xPos, int yPos, int mouseX, int mouseY) {
+        super.drawTooltips(matrix, xPos, yPos, mouseX, mouseY);
         if (outputChance < 1 && BeepediaScreen.mouseHovering((float) xPos + ((float) SUB_PAGE_WIDTH / 2) - 20, (float) yPos + 51, 8, 8, mouseX, mouseY)) {
             beepedia.renderTooltip(matrix, new TranslationTextComponent("gui.resourcefulbees.jei.category.mutation_chance.info"), mouseX, mouseY);
         }

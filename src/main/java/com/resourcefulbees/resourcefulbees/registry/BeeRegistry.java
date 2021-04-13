@@ -2,10 +2,14 @@ package com.resourcefulbees.resourcefulbees.registry;
 
 import com.resourcefulbees.resourcefulbees.api.IBeeRegistry;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
+import com.resourcefulbees.resourcefulbees.api.beedata.mutation.EntityMutation;
+import com.resourcefulbees.resourcefulbees.api.beedata.mutation.outputs.EntityOutput;
 import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
+import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
 import com.resourcefulbees.resourcefulbees.utils.validation.FirstPhaseValidator;
+import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -188,5 +192,21 @@ public class BeeRegistry implements IBeeRegistry {
                 .filter(this::registryContainsParents)
                 .filter(entry -> entry.getValue().getMap().containsValue(child))
                 .collect(Collectors.toMap(Map.Entry::getKey, o -> child));
+    }
+
+    public List<EntityMutation> getMutationsContaining(CustomBeeData beeData) {
+        List<EntityMutation> mutations = new LinkedList<>();
+        INSTANCE.getBees().forEach((s, beeData1) -> beeData1.getMutationData().getEntityMutations().forEach((entityType, pair) -> {
+            if (entityType.getRegistryName() != null && entityType.getRegistryName().equals(beeData.getEntityTypeRegistryID())) {
+                mutations.add(new EntityMutation(BeeInfoUtils.getEntityType(beeData1.getEntityTypeRegistryID()), entityType, pair));
+            }else {
+                pair.getRight().forEach(entityOutput -> {
+                    if (entityOutput.getEntityType().getRegistryName() != null && entityOutput.getEntityType().getRegistryName().equals(beeData.getEntityTypeRegistryID())) {
+                        mutations.add(new EntityMutation(BeeInfoUtils.getEntityType(beeData1.getEntityTypeRegistryID()), entityType, pair));
+                    }
+                });
+            }
+        }));
+        return mutations;
     }
 }

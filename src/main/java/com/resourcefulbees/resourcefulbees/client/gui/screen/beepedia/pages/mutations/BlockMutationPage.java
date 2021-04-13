@@ -7,8 +7,10 @@ import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaSc
 import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
+import com.resourcefulbees.resourcefulbees.utils.RenderUtils;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.tags.ITag;
 import net.minecraft.util.text.*;
@@ -24,12 +26,13 @@ import static com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.Bee
 
 public class BlockMutationPage extends MutationsPage {
 
+    Entity parent;
     List<Block> inputs;
     double outputChance;
     List<Pair<Double, BlockOutput>> outputs = new ArrayList<>();
 
-    public BlockMutationPage(ITag<?> blocks, Pair<Double, RandomCollection<BlockOutput>> outputs, MutationTypes type, CustomBeeData beeData, BeepediaScreen beepedia) {
-        super(type, beeData, beepedia);
+    public BlockMutationPage(Entity bee, ITag<?> blocks, Pair<Double, RandomCollection<BlockOutput>> outputs, MutationTypes type, CustomBeeData beeData, BeepediaScreen beepedia) {
+        super(bee, type, beeData, beepedia);
         if (blocks.getValues().get(0) instanceof Fluid) {
             inputs = blocks.getValues().stream().map(f -> ((Fluid) f).defaultFluidState().createLegacyBlock().getBlock()).distinct().collect(Collectors.toList());
         } else {
@@ -38,8 +41,8 @@ public class BlockMutationPage extends MutationsPage {
         initOutputs(outputs);
     }
 
-    public BlockMutationPage(Block block, Pair<Double, RandomCollection<BlockOutput>> outputs, MutationTypes type, CustomBeeData beeData, BeepediaScreen beepedia) {
-        super(type, beeData, beepedia);
+    public BlockMutationPage(Entity bee, Block block, Pair<Double, RandomCollection<BlockOutput>> outputs, MutationTypes type, CustomBeeData beeData, BeepediaScreen beepedia) {
+        super(bee, type, beeData, beepedia);
         inputs = new LinkedList<>(Collections.singleton(block));
         initOutputs(outputs);
     }
@@ -62,6 +65,7 @@ public class BlockMutationPage extends MutationsPage {
 
     @Override
     public void draw(MatrixStack matrix, int xPos, int yPos) {
+        super.draw(matrix, xPos, yPos);
         beepedia.drawSlot(matrix, inputs.get(inputCounter), xPos + 32, yPos + 32);
         beepedia.drawSlotNoToolTip(matrix, outputs.get(outputCounter).getRight().getBlock(), xPos + 112, yPos + 32);
         drawWeight(matrix, outputs.get(outputCounter).getLeft(), xPos + 122, yPos + 54);
@@ -74,11 +78,12 @@ public class BlockMutationPage extends MutationsPage {
 
     @Override
     public boolean mouseClick(int xPos, int yPos, int mouseX, int mouseY) {
-        return false;
+        return super.mouseClick(xPos, yPos, mouseX, mouseY);
     }
 
     @Override
     public void drawTooltips(MatrixStack matrix, int xPos, int yPos, int mouseX, int mouseY) {
+        super.drawTooltips(matrix, xPos, yPos, mouseX, mouseY);
         if (BeepediaScreen.mouseHovering((float) xPos + 112, (float) yPos + 32, 20, 20, mouseX, mouseY)) {
             BlockOutput output = outputs.get(outputCounter).getRight();
             List<ITextComponent> tooltip = new ArrayList<>();
