@@ -19,12 +19,15 @@ import net.minecraft.resources.IResourceManagerReloadListener;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.AddReloadListenerEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
+
+import static com.resourcefulbees.resourcefulbees.ResourcefulBees.LOGGER;
 
 public class RecipeBuilder implements IResourceManagerReloadListener {
     private static RecipeManager recipeManager;
@@ -37,7 +40,7 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
 
     @Override
     public void onResourceManagerReload(@NotNull IResourceManager resourceManager) {
-        ResourcefulBees.LOGGER.info("Loading Recipes...");
+        LOGGER.info("Loading comb recipes for {} bees...", BEE_REGISTRY.getBees().size());
         BEE_REGISTRY.getBees().forEach(((s, customBeeData) -> {
             if (customBeeData.hasHoneycomb()) {
                 CentrifugeData centrifugeData = customBeeData.getCentrifugeData();
@@ -47,6 +50,7 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
                     SecondPhaseValidator.validateCentrifugeOutputs(customBeeData);
 
                     if (centrifugeData.hasCentrifugeOutput()) {
+                        LOGGER.debug("Starting recipe registration for bee: {}", customBeeData.getName());
                         IRecipe<?> honeycombCentrifuge = this.centrifugeRecipe(s, customBeeData, 1);
                         IRecipe<?> honeycombBlockCentrifuge = this.centrifugeRecipe(s, customBeeData, 9);
                         IRecipe<?> honeycombCentrifugeNoBottle = this.centrifugeRecipeNoBottle(s, customBeeData, 1);
@@ -93,10 +97,11 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
     }
 
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGH)
     public void onAddReloadListeners(AddReloadListenerEvent event) {
         event.addListener(this);
         setRecipeManager(event.getDataPackRegistries().getRecipeManager());
+        LOGGER.info("Adding Reload Listener: 'resourcefulbees recipe manager'");
     }
 
     private IRecipe<?> makeHoneycombRecipe(String beeType, CustomBeeData info) {
@@ -236,8 +241,8 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
                         Pair.of(bottleFluid, data.getBottleOutputWeight())
                 ),
                 data.getRecipeTime(),
-                data.getRecipeTime() - Config.MULTIBLOCK_RECIPE_TIME_REDUCTION.get(),
-                false,
+                (data.getRecipeTime() - Config.MULTIBLOCK_RECIPE_TIME_REDUCTION.get()) * (isBlockRecipe ? 3 : 1),
+                isBlockRecipe,
                 data.hasFluidOutput(), true
         );
     }
@@ -273,8 +278,8 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
                         Pair.of(FluidStack.EMPTY, 0f),
                         Pair.of(fluidOutput, data.getFluidOutputWeight())),
                 data.getRecipeTime(),
-                data.getRecipeTime() - Config.MULTIBLOCK_RECIPE_TIME_REDUCTION.get(),
-                false,
+                (data.getRecipeTime() - Config.MULTIBLOCK_RECIPE_TIME_REDUCTION.get()) * (isBlockRecipe ? 3 : 1),
+                isBlockRecipe,
                 data.hasFluidOutput(), false
         );
     }

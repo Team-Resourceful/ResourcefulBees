@@ -237,7 +237,6 @@ public class HoneyGeneratorTileEntity extends AbstractHoneyTankContainer impleme
     }
 
 
-
     @Override
     public @NotNull TileStackHandler getTileStackHandler() {
         return tileStackHandler;

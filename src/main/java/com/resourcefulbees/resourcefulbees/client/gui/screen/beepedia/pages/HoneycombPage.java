@@ -2,11 +2,13 @@ package com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
+import com.resourcefulbees.resourcefulbees.api.beedata.CentrifugeData;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.fluids.HoneyFlowingFluid;
 import com.resourcefulbees.resourcefulbees.item.CustomHoneyBottleItem;
+import com.resourcefulbees.resourcefulbees.lib.ApiaryOutput;
 import com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe;
 import com.resourcefulbees.resourcefulbees.registry.ModFluids;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
@@ -81,10 +83,10 @@ public class HoneycombPage extends BeeDataPage {
         if (apiaryAmounts == null)
             apiaryAmounts = new int[]{Config.T1_APIARY_QUANTITY.get(), Config.T2_APIARY_QUANTITY.get(), Config.T3_APIARY_QUANTITY.get(), Config.T4_APIARY_QUANTITY.get()};
         hiveOutput = new ItemStack(beeData.getCombRegistryObject().get(), 1);
-        apiary1Output = new ItemStack(beeData.getCombRegistryObject().get(), apiaryAmounts[0]);
-        apiary2Output = new ItemStack(beeData.getCombRegistryObject().get(), apiaryAmounts[1]);
-        apiary3Output = new ItemStack(beeData.getCombBlockItemRegistryObject().get(), apiaryAmounts[2]);
-        apiary4Output = new ItemStack(beeData.getCombBlockItemRegistryObject().get(), apiaryAmounts[3]);
+        apiary1Output = new ItemStack(beeData.getApiaryOutputsTypes()[0] == ApiaryOutput.COMB ? beeData.getCombRegistryObject().get() : beeData.getCombBlockItemRegistryObject().get(), apiaryAmounts[0]);
+        apiary2Output = new ItemStack(beeData.getApiaryOutputsTypes()[1] == ApiaryOutput.COMB ? beeData.getCombRegistryObject().get() : beeData.getCombBlockItemRegistryObject().get(), apiaryAmounts[1]);
+        apiary3Output = new ItemStack(beeData.getApiaryOutputsTypes()[2] == ApiaryOutput.COMB ? beeData.getCombRegistryObject().get() : beeData.getCombBlockItemRegistryObject().get(), apiaryAmounts[2]);
+        apiary4Output = new ItemStack(beeData.getApiaryOutputsTypes()[3] == ApiaryOutput.COMB ? beeData.getCombRegistryObject().get() : beeData.getCombBlockItemRegistryObject().get(), apiaryAmounts[3]);
 
         ClientWorld world = beepedia.getMinecraft().level;
         recipes.add(new RecipeObject(false, true, beeData, world));

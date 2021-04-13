@@ -3,15 +3,17 @@ package com.resourcefulbees.resourcefulbees.entity.goals;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.mixin.BeeEntityAccessor;
+import com.resourcefulbees.resourcefulbees.utils.MathUtils;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.util.math.vector.Vector3d;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
@@ -26,7 +28,19 @@ public class BeePollinateGoal extends Goal {
     private int ticks;
     private final CustomBeeEntity bee;
     private Vector3d boundingBox;
-    private MutableBoundingBox box = null;
+    private static final ArrayList<BlockPos> positionOffsets = new ArrayList<>();
+
+    static {
+        for(int i = 0; (double)i <= 5; i = i > 0 ? -i : 1 - i) {
+            for(int j = 0; (double)j < 5; ++j) {
+                for(int k = 0; k <= j; k = k > 0 ? -k : 1 - k) {
+                    for(int l = k < j && k > -j ? j : 0; l <= j; l = l > 0 ? -l : 1 - l) {
+                        positionOffsets.add(new BlockPos(k,i-1, l));
+                    }
+                }
+            }
+        }
+    }
 
     public BeePollinateGoal(CustomBeeEntity beeEntity) {
         this.setFlags(EnumSet.of(Goal.Flag.MOVE));
@@ -190,20 +204,16 @@ public class BeePollinateGoal extends Goal {
     }
 
     public Optional<BlockPos> findFlower(double range, boolean isEntity, ResourceLocation entityRegistryName) {
-        BlockPos blockpos = bee.blockPosition();
-
+        BlockPos beePos = bee.blockPosition();
         if (!isEntity) {
-            if (box == null)
-                box = MutableBoundingBox.createProper(blockpos.getX() + 5, blockpos.getY() + 5, blockpos.getZ() + 5, blockpos.getX() - 5, blockpos.getY() - 5, blockpos.getZ() - 5);
-            else {
-                box.x1 = blockpos.getX() + 5;
-                box.y1 = blockpos.getY() + 5;
-                box.z1 = blockpos.getZ() + 5;
-                box.x0 = blockpos.getX() - 5;
-                box.y0 = blockpos.getY() - 5;
-                box.z0 = blockpos.getZ() - 5;
+            BlockPos.Mutable flowerPos = beePos.mutable();
+            for (BlockPos blockPos : positionOffsets){
+                flowerPos.setWithOffset(beePos, blockPos.getX(), blockPos.getY(), blockPos.getZ());
+                if (getFlowerBlockPredicate().test(flowerPos)){
+                    return Optional.of(flowerPos);
+                }
             }
-            return BlockPos.betweenClosedStream(box).filter(getFlowerBlockPredicate()).findAny();
+            return Optional.empty();
         } else {
             List<Entity> entityList = bee.level.getEntities(bee, (new AxisAlignedBB(bee.blockPosition())).inflate(range),
                     entity -> entity.getEncodeId() != null && entity.getEncodeId().equals(entityRegistryName.toString()));
@@ -220,7 +230,10 @@ public class BeePollinateGoal extends Goal {
     public Predicate<BlockPos> getFlowerBlockPredicate() {
         return pos -> {
             if (bee.level != null && bee.getBeeData().hasBlockFlowers()){
-                return bee.getBeeData().getBlockFlowers().contains(bee.level.getBlockState(pos).getBlock());
+                if (!MathUtils.inRangeInclusive(pos.getY(), 0, 256)) return false;
+                BlockState state = bee.level.getBlockState(pos);
+                if (state.isAir()) return false;
+                return bee.getBeeData().getBlockFlowers().contains(state.getBlock());
             }
             return false;
         };

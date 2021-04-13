@@ -17,6 +17,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class ModTileEntityTypes {
 
+
     private ModTileEntityTypes() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
@@ -77,4 +78,8 @@ public class ModTileEntityTypes {
     public static final RegistryObject<TileEntityType<?>> HONEY_PIPE_TILE_ENTITY = TILE_ENTITY_TYPES.register("honey_pipe", () -> TileEntityType.Builder
             .of(HoneyPipeTileEntity::new, ModBlocks.HONEY_PIPE.get())
             .build(null));
+    public static final RegistryObject<TileEntityType<?>> BOTTOMLESS_HONEY_POT_TILE_ENTITY = TILE_ENTITY_TYPES.register("bottomless_honey_pot", () -> TileEntityType.Builder
+            .of(BottomlessHoneyPotTileEntity::new, ModBlocks.BOTTOMLESS_HONEY_POT.get())
+            .build(null));
+
 }
