@@ -100,7 +100,7 @@ public class ResourcefulBee extends CustomBeeEntity {
         if (customBeeData.getMutationData().hasMutation()) {
             this.goalSelector.addGoal(7, new ResourcefulBee.FindPollinationTargetGoal2());
         }
-        //this.goalSelector.addGoal(8, new BeeWanderGoal(this));
+        if (!Config.MANUAL_MODE.get()) this.goalSelector.addGoal(8, new BeeWanderGoal(this));
         this.goalSelector.addGoal(9, new SwimGoal(this));
     }
 
