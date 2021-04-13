@@ -1,6 +1,7 @@
 package com.resourcefulbees.resourcefulbees.api.beedata;
 
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
+import com.sun.javafx.collections.UnmodifiableListSet;
 import net.minecraft.item.Item;
 import org.jetbrains.annotations.Nullable;
 
@@ -106,7 +107,7 @@ public class BreedData extends AbstractBeeData {
     }
 
     public Set<Item> getFeedItems() {
-        return Collections.unmodifiableSet(this.feedingItems);
+        return this.feedingItems != null ? Collections.unmodifiableSet(this.feedingItems) : new HashSet<>();
     }
 
     public boolean hasFeedItems() {

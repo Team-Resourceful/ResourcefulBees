@@ -81,6 +81,8 @@ public class BreedingPage extends BeeDataPage {
         beepedia.addButton(prevTab);
         beepedia.addButton(nextTab);
 
+        if (!notBaseBreed()) childrenBreeding = new LinkedList<>();
+
         if (!parentBreeding.isEmpty()) subPages.add(BreedingPageType.PARENTS);
         if (!childrenBreeding.isEmpty()) subPages.add(BreedingPageType.CHILDREN);
         if (!mutationBreeding.isEmpty()) subPages.add(BreedingPageType.MUTATIONS);
@@ -214,7 +216,7 @@ public class BreedingPage extends BeeDataPage {
     }
 
     private boolean shouldShowButtons() {
-        return (!parentBreeding.isEmpty() || !childrenBreeding.isEmpty()) && (notBaseBreed() || !mutationBreeding.isEmpty());
+        return subPages.size() > 1;
     }
 
     private void showButtons() {
