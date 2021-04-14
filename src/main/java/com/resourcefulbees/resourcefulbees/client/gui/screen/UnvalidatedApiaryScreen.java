@@ -113,13 +113,15 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
 
     @Override
     public void render(@NotNull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
-        this.upButton.active = verticalOffset != 2;
-        this.downButton.active = verticalOffset != -1;
-        this.leftButton.active = horizontalOffset != -2;
-        this.rightButton.active = horizontalOffset != 2;
-        this.renderBackground(matrix);
-        super.render(matrix, mouseX, mouseY, partialTicks);
-        this.renderTooltip(matrix, mouseX, mouseY);
+        if (apiaryTileEntity != null) {
+            this.upButton.active = verticalOffset != 2;
+            this.downButton.active = verticalOffset != -1;
+            this.leftButton.active = horizontalOffset != -2;
+            this.rightButton.active = horizontalOffset != 2;
+            this.renderBackground(matrix);
+            super.render(matrix, mouseX, mouseY, partialTicks);
+            this.renderTooltip(matrix, mouseX, mouseY);
+        }
     }
 
     private void validate() {

@@ -5,6 +5,7 @@ import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.container.HoneyGeneratorContainer;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.tileentity.HoneyGeneratorTileEntity;
+import com.resourcefulbees.resourcefulbees.utils.MathUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -47,17 +48,31 @@ public class HoneyGeneratorScreen extends ContainerScreen<HoneyGeneratorContaine
 
     @Override
     public void render(@NotNull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(matrix);
-        super.render(matrix, mouseX, mouseY, partialTicks);
-        this.renderTooltip(matrix, mouseX, mouseY);
-        DecimalFormat decimalFormat = new DecimalFormat("##0.0");
-        if (mouseX >= this.leftPos + 83 && mouseX <= this.leftPos + 97 && mouseY >= this.topPos + 12 && mouseY <= this.topPos + 74){
-            if (Screen.hasShiftDown() || this.menu.getFluidAmount() < 500) this.renderTooltip(matrix, new StringTextComponent(this.menu.getFluidAmount() + " MB"), mouseX, mouseY);
-            else this.renderTooltip(matrix, new StringTextComponent(decimalFormat.format((double)this.menu.getFluidAmount() / 1000) + " Buckets"), mouseX, mouseY);
+        if (this.menu.getHoneyGeneratorTileEntity() != null) {
+            this.renderBackground(matrix);
+            super.render(matrix, mouseX, mouseY, partialTicks);
+            this.renderTooltip(matrix, mouseX, mouseY);
+            DecimalFormat decimalFormat = new DecimalFormat("##0.0");
+            renderFluidTooltip(matrix, mouseX, mouseY, decimalFormat);
+            renderEnergyTooltip(matrix, mouseX, mouseY, decimalFormat);
         }
-        if (mouseX >= this.leftPos + 130 && mouseX <= this.leftPos + 141 && mouseY >= this.topPos + 12 && mouseY <= this.topPos + 74){
-            if (Screen.hasShiftDown() || this.menu.getEnergy() < 500) this.renderTooltip(matrix, new StringTextComponent(this.menu.getEnergy() + " RF"), mouseX, mouseY);
-            else this.renderTooltip(matrix, new StringTextComponent(decimalFormat.format((double)this.menu.getEnergy() / 1000) + " kRF"), mouseX, mouseY);
+    }
+
+    public void renderEnergyTooltip(@NotNull MatrixStack matrix, int mouseX, int mouseY, DecimalFormat decimalFormat) {
+        if (MathUtils.inRangeInclusive(mouseX, this.leftPos + 130, this.leftPos + 141) && MathUtils.inRangeInclusive(mouseY, this.topPos + 12, this.topPos + 74)) {
+            if (Screen.hasShiftDown() || this.menu.getEnergy() < 500)
+                this.renderTooltip(matrix, new StringTextComponent(this.menu.getEnergy() + " RF"), mouseX, mouseY);
+            else
+                this.renderTooltip(matrix, new StringTextComponent(decimalFormat.format((double) this.menu.getEnergy() / 1000) + " kRF"), mouseX, mouseY);
+        }
+    }
+
+    public void renderFluidTooltip(@NotNull MatrixStack matrix, int mouseX, int mouseY, DecimalFormat decimalFormat) {
+        if (MathUtils.inRangeInclusive(mouseX, this.leftPos + 83, this.leftPos + 97) && MathUtils.inRangeInclusive(mouseY, this.topPos + 12, this.topPos + 74)) {
+            if (Screen.hasShiftDown() || this.menu.getFluidAmount() < 500)
+                this.renderTooltip(matrix, new StringTextComponent(this.menu.getFluidAmount() + " MB"), mouseX, mouseY);
+            else
+                this.renderTooltip(matrix, new StringTextComponent(decimalFormat.format((double) this.menu.getFluidAmount() / 1000) + " Buckets"), mouseX, mouseY);
         }
     }
 

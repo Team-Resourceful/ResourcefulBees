@@ -20,6 +20,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class ApiaryStorageScreen extends ContainerScreen<ApiaryStorageContainer> {
 
@@ -30,7 +31,7 @@ public class ApiaryStorageScreen extends ContainerScreen<ApiaryStorageContainer>
     private static final ResourceLocation BACKGROUND_9X12 = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/apiary/apiary_storage_108.png");
     private static final ResourceLocation TABS_BG = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/apiary/apiary_gui_tabs.png");
 
-    private ApiaryStorageTileEntity apiaryStorageTileEntity;
+    private final ApiaryStorageTileEntity apiaryStorageTileEntity;
 
     private ResourceLocation background;
 
@@ -39,7 +40,7 @@ public class ApiaryStorageScreen extends ContainerScreen<ApiaryStorageContainer>
 
     public ApiaryStorageScreen(ApiaryStorageContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
         super(screenContainer, inv, titleIn);
-
+        apiaryStorageTileEntity = this.menu.getApiaryStorageTileEntity();
         preInit();
     }
 
@@ -74,8 +75,6 @@ public class ApiaryStorageScreen extends ContainerScreen<ApiaryStorageContainer>
     protected void init() {
         super.init();
         this.buttons.clear();
-
-        apiaryStorageTileEntity = this.menu.getApiaryStorageTileEntity();
 
         int i = this.leftPos;
         int j = this.topPos;
@@ -152,9 +151,11 @@ public class ApiaryStorageScreen extends ContainerScreen<ApiaryStorageContainer>
 
     @Override
     public void render(@NotNull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(matrix);
-        super.render(matrix, mouseX, mouseY, partialTicks);
-        this.renderTooltip(matrix, mouseX, mouseY);
+        if (getApiaryStorageTileEntity() != null) {
+            this.renderBackground(matrix);
+            super.render(matrix, mouseX, mouseY, partialTicks);
+            this.renderTooltip(matrix, mouseX, mouseY);
+        }
     }
 
     @Override

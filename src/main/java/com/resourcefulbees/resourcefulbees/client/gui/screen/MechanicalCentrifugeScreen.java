@@ -31,9 +31,11 @@ public class MechanicalCentrifugeScreen extends ContainerScreen<MechanicalCentri
 
     @Override
     public void render(@NotNull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(matrix);
-        super.render(matrix, mouseX, mouseY, partialTicks);
-        this.renderTooltip(matrix, mouseX, mouseY);
+        if (this.menu.getCentrifugeTileEntity() != null) {
+            this.renderBackground(matrix);
+            super.render(matrix, mouseX, mouseY, partialTicks);
+            this.renderTooltip(matrix, mouseX, mouseY);
+        }
     }
 
     @Override
