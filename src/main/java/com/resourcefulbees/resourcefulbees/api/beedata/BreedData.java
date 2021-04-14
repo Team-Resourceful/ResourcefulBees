@@ -1,7 +1,6 @@
 package com.resourcefulbees.resourcefulbees.api.beedata;
 
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
-import com.sun.javafx.collections.UnmodifiableListSet;
 import net.minecraft.item.Item;
 import org.jetbrains.annotations.Nullable;
 
