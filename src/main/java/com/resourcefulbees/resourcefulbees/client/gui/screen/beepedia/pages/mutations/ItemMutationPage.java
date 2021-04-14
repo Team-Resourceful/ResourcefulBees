@@ -28,14 +28,14 @@ public class ItemMutationPage extends MutationsPage {
     List<Pair<Double, ItemOutput>> outputs = new ArrayList<>();
     private Double outputChance;
 
-    public ItemMutationPage(Entity bee, ITag<?> blocks, Pair<Double, RandomCollection<ItemOutput>> outputs, MutationTypes type, CustomBeeData beeData, BeepediaScreen beepedia) {
-        super(bee, type, beeData, beepedia);
+    public ItemMutationPage(Entity bee, ITag<?> blocks, Pair<Double, RandomCollection<ItemOutput>> outputs, MutationTypes type, int mutationCount, BeepediaScreen beepedia) {
+        super(bee, type, mutationCount, beepedia);
         inputs = (List<Block>) blocks.getValues();
         initOutputs(outputs);
     }
 
-    public ItemMutationPage(Entity bee, Block block, Pair<Double, RandomCollection<ItemOutput>> outputs, MutationTypes type, CustomBeeData beeData, BeepediaScreen beepedia) {
-        super(bee, type, beeData, beepedia);
+    public ItemMutationPage(Entity bee, Block block, Pair<Double, RandomCollection<ItemOutput>> outputs, MutationTypes type, int mutationCount, BeepediaScreen beepedia) {
+        super(bee, type, mutationCount, beepedia);
         inputs = new LinkedList<>(Collections.singleton(block));
         initOutputs(outputs);
     }

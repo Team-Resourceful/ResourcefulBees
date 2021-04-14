@@ -9,13 +9,11 @@ import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
 import com.resourcefulbees.resourcefulbees.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.*;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -24,6 +22,7 @@ import java.util.List;
 import static com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaPage.SUB_PAGE_WIDTH;
 
 public abstract class MutationsPage {
+    int mutationCount;
     protected final BeepediaScreen beepedia;
     Entity parent;
     MutationTypes type;
@@ -31,17 +30,27 @@ public abstract class MutationsPage {
     protected int inputCounter;
     protected int outputCounter;
     protected final ResourceLocation infoIcon = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/icons.png");
+    protected final ResourceLocation mutationImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/mutate.png");
+    protected final ResourceLocation mutationChanceImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/mutation_sparkles.png");
 
-    protected MutationsPage(Entity parent, MutationTypes type, CustomBeeData beeData, BeepediaScreen beepedia) {
+
+    protected MutationsPage(Entity parent, MutationTypes type, int mutationCount, BeepediaScreen beepedia) {
         this.parent = parent;
         this.type = type;
-        this.beeData = beeData;
+        this.mutationCount = mutationCount;
         this.beepedia = beepedia;
     }
 
     public abstract void tick(int ticksActive);
 
     public void draw(MatrixStack matrix, int xPos, int yPos) {
+        FontRenderer font = Minecraft.getInstance().font;
+        StringTextComponent mutationCountString = new StringTextComponent("x " + mutationCount);
+        font.draw(matrix, mutationCountString.withStyle(TextFormatting.GRAY), (float) xPos + 20, (float) yPos + 4, -1);
+        Minecraft.getInstance().getTextureManager().bind(mutationImage);
+        AbstractGui.blit(matrix, xPos, yPos, 0, 0, 169, 84, 169, 84);
+        Minecraft.getInstance().getTextureManager().bind(mutationChanceImage);
+        AbstractGui.blit(matrix, xPos, yPos, 0, 0, 16, 16, 16, 16);
         RenderUtils.renderEntity(matrix, parent, beepedia.getMinecraft().level, (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - 15, (float) yPos + 6, 45, 1.25f);
     }
 
@@ -66,6 +75,10 @@ public abstract class MutationsPage {
             tooltip.add(name);
             tooltip.add(id);
             beepedia.renderComponentTooltip(matrix, tooltip, mouseX, mouseY);
+        }
+        if (BeepediaScreen.mouseHovering(xPos, yPos, 16, 16, mouseX, mouseY)) {
+            TranslationTextComponent text = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.mutations.mutation_count.tooltip");
+            beepedia.renderTooltip(matrix, text, mouseX, mouseY);
         }
     }
 

@@ -9,11 +9,13 @@ public class EntityMutation {
     EntityType<?> parent;
     EntityType<?> input;
     Pair<Double, RandomCollection<EntityOutput>> outputs;
+    private int mutationCount;
 
-    public EntityMutation(EntityType<?> parent, EntityType<?> input, Pair<Double, RandomCollection<EntityOutput>> outputs) {
+    public EntityMutation(EntityType<?> parent, EntityType<?> input, Pair<Double, RandomCollection<EntityOutput>> outputs, int mutationCount) {
         this.parent = parent;
         this.input = input;
         this.outputs = outputs;
+        this.mutationCount = mutationCount;
     }
 
     public EntityType<?> getParent() {
@@ -26,5 +28,9 @@ public class EntityMutation {
 
     public Pair<Double, RandomCollection<EntityOutput>> getOutputs() {
         return outputs;
+    }
+
+    public int getMutaionCount() {
+        return mutationCount;
     }
 }

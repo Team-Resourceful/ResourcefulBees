@@ -202,11 +202,11 @@ public class BeeRegistry implements IBeeRegistry {
         List<EntityMutation> mutations = new LinkedList<>();
         INSTANCE.getBees().forEach((s, beeData1) -> beeData1.getMutationData().getEntityMutations().forEach((entityType, pair) -> {
             if (entityType.getRegistryName() != null && entityType.getRegistryName().equals(beeData.getEntityTypeRegistryID())) {
-                mutations.add(new EntityMutation(BeeInfoUtils.getEntityType(beeData1.getEntityTypeRegistryID()), entityType, pair));
+                mutations.add(new EntityMutation(BeeInfoUtils.getEntityType(beeData1.getEntityTypeRegistryID()), entityType, pair, beeData1.getMutationData().getMutationCount()));
             }else {
                 pair.getRight().forEach(entityOutput -> {
                     if (entityOutput.getEntityType().getRegistryName() != null && entityOutput.getEntityType().getRegistryName().equals(beeData.getEntityTypeRegistryID())) {
-                        mutations.add(new EntityMutation(BeeInfoUtils.getEntityType(beeData1.getEntityTypeRegistryID()), entityType, pair));
+                        mutations.add(new EntityMutation(BeeInfoUtils.getEntityType(beeData1.getEntityTypeRegistryID()), entityType, pair, beeData1.getMutationData().getMutationCount()));
                     }
                 });
             }

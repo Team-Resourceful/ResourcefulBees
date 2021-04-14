@@ -67,7 +67,7 @@ public class BreedingPage extends BeeDataPage {
         parents = BeeRegistry.getRegistry().getParents(beeData);
         children.forEach((p, l) -> l.getMap().forEach((w, b) -> childrenBreeding.add(new BreedingObject(p, b))));
         parents.forEach((p, b) -> parentBreeding.add(new BreedingObject(p, b)));
-        mutations.forEach(b -> mutationBreeding.add(new EntityMutationPage(b.getParent(), b.getInput(), b.getOutputs(), MutationTypes.ITEM, beeData, beepedia)));
+        mutations.forEach(b -> mutationBreeding.add(new EntityMutationPage(b.getParent(), b.getInput(), b.getOutputs(), MutationTypes.ITEM, b.getMutaionCount(), beepedia)));
         leftArrow = new ImageButton(xPos + (SUB_PAGE_WIDTH / 2) - 28, yPos + SUB_PAGE_HEIGHT - 16, 8, 11, 0, 0, 11, arrowImage, 16, 33, button -> prevPage());
         rightArrow = new ImageButton(xPos + (SUB_PAGE_WIDTH / 2) + 20, yPos + SUB_PAGE_HEIGHT - 16, 8, 11, 8, 0, 11, arrowImage, 16, 33, button -> nextPage());
         prevTab = new ImageButton(xPos + (SUB_PAGE_WIDTH / 2) - 48, yPos + 6, 8, 11, 0, 0, 11, arrowImage, 16, 33, button -> prevTab());
@@ -191,18 +191,12 @@ public class BreedingPage extends BeeDataPage {
         TranslationTextComponent title;
         switch (activeSubPage) {
             case CHILDREN:
-                Minecraft.getInstance().textureManager.bind(breedingImage);
-                AbstractGui.blit(matrix, xPos, yPos + 22, 0, 0, 128, 64, 128, 64);
                 title = childrenTitle;
                 break;
             case MUTATIONS:
-                Minecraft.getInstance().getTextureManager().bind(mutationsImage);
-                AbstractGui.blit(matrix, xPos, yPos + 22, 0, 0, 169, 84, 169, 84);
                 title = mutationsTitle;
                 break;
             default:
-                Minecraft.getInstance().textureManager.bind(breedingImage);
-                AbstractGui.blit(matrix, xPos, yPos + 22, 0, 0, 128, 64, 128, 64);
                 title = parentsTitle;
                 break;
         }
@@ -426,6 +420,8 @@ public class BreedingPage extends BeeDataPage {
         }
 
         public void draw(MatrixStack matrix) {
+            Minecraft.getInstance().textureManager.bind(breedingImage);
+            AbstractGui.blit(matrix, xPos, yPos + 22, 0, 0, 128, 64, 128, 64);
             drawParent1(matrix);
             drawParent2(matrix);
             drawChild(matrix);
