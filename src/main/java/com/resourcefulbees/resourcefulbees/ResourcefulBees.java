@@ -13,7 +13,6 @@ import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
 import com.resourcefulbees.resourcefulbees.patreon.PatreonDataLoader;
 import com.resourcefulbees.resourcefulbees.registry.*;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.merchant.villager.VillagerTrades;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
@@ -24,9 +23,7 @@ import net.minecraft.tileentity.BannerPattern;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RecipesUpdatedEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.TagsUpdatedEvent;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.fml.DistExecutor;
@@ -78,8 +75,6 @@ public class ResourcefulBees {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::loadComplete);
         MinecraftForge.EVENT_BUS.addListener(BeeSetup::onBiomeLoad);
         MinecraftForge.EVENT_BUS.addListener(this::serverLoaded);
-        MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, this::recipesLoaded);
-        MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, this::onTagsUpdated);
 
 
         MinecraftForge.EVENT_BUS.addListener(this::trade);
@@ -88,22 +83,6 @@ public class ResourcefulBees {
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ClientEventHandlers::clientStuff);
 
         MinecraftForge.EVENT_BUS.register(this);
-    }
-
-    private void recipesLoaded(RecipesUpdatedEvent event){
-        if (Minecraft.getInstance().isLocalServer()) {
-            MutationSetup.setupMutations();
-            FlowerSetup.setupFlowers();
-            BreedingSetup.setupFeedItems();
-        }
-    }
-
-    private void onTagsUpdated(TagsUpdatedEvent.CustomTagTypes event){
-        if (!Minecraft.getInstance().isLocalServer()) {
-            MutationSetup.setupMutations();
-            FlowerSetup.setupFlowers();
-            BreedingSetup.setupFeedItems();
-        }
     }
 
     private void serverLoaded(FMLServerStartedEvent event) {
