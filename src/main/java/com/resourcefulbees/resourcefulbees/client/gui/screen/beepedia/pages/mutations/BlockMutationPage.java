@@ -29,8 +29,8 @@ public class BlockMutationPage extends MutationsPage {
     double outputChance;
     List<Pair<Double, BlockOutput>> outputs = new ArrayList<>();
 
-    public BlockMutationPage(Entity bee, ITag<?> blocks, Pair<Double, RandomCollection<BlockOutput>> outputs, MutationTypes type, CustomBeeData beeData, BeepediaScreen beepedia) {
-        super(bee, type, beeData, beepedia);
+    public BlockMutationPage(Entity bee, ITag<?> blocks, Pair<Double, RandomCollection<BlockOutput>> outputs, MutationTypes type, int mutationCount, BeepediaScreen beepedia) {
+        super(bee, type, mutationCount, beepedia);
         if (blocks.getValues().get(0) instanceof Fluid) {
             inputs = blocks.getValues().stream().map(f -> ((Fluid) f).defaultFluidState().createLegacyBlock().getBlock()).distinct().collect(Collectors.toList());
         } else {
@@ -39,8 +39,8 @@ public class BlockMutationPage extends MutationsPage {
         initOutputs(outputs);
     }
 
-    public BlockMutationPage(Entity bee, Block block, Pair<Double, RandomCollection<BlockOutput>> outputs, MutationTypes type, CustomBeeData beeData, BeepediaScreen beepedia) {
-        super(bee, type, beeData, beepedia);
+    public BlockMutationPage(Entity bee, Block block, Pair<Double, RandomCollection<BlockOutput>> outputs, MutationTypes type, int mutationCount, BeepediaScreen beepedia) {
+        super(bee, type, mutationCount, beepedia);
         inputs = new LinkedList<>(Collections.singleton(block));
         initOutputs(outputs);
     }

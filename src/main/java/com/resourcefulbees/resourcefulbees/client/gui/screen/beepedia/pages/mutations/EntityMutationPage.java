@@ -28,12 +28,12 @@ public class EntityMutationPage extends MutationsPage {
     List<Pair<Double, EntityOutput>> outputs = new ArrayList<>();
     private Double outputChance;
 
-    public EntityMutationPage(EntityType<?> parentEntity, EntityType<?> entity, Pair<Double, RandomCollection<EntityOutput>> outputs, MutationTypes type, CustomBeeData beeData, BeepediaScreen beepedia) {
-        this(parentEntity.create(Objects.requireNonNull(beepedia.getMinecraft().level)), entity, outputs, type, beeData, beepedia);
+    public EntityMutationPage(EntityType<?> parentEntity, EntityType<?> entity, Pair<Double, RandomCollection<EntityOutput>> outputs, MutationTypes type, int mutationCount, BeepediaScreen beepedia) {
+        this(parentEntity.create(Objects.requireNonNull(beepedia.getMinecraft().level)), entity, outputs, type, mutationCount, beepedia);
     }
 
-    public EntityMutationPage(Entity parentEntity, EntityType<?> entity, Pair<Double, RandomCollection<EntityOutput>> outputs, MutationTypes type, CustomBeeData beeData, BeepediaScreen beepedia) {
-        super(parentEntity, type, beeData, beepedia);
+    public EntityMutationPage(Entity parentEntity, EntityType<?> entity, Pair<Double, RandomCollection<EntityOutput>> outputs, MutationTypes type, int mutationCount, BeepediaScreen beepedia) {
+        super(parentEntity, type, mutationCount, beepedia);
         input = entity.create(beepedia.getMinecraft().level);
         initOutputs(outputs);
     }

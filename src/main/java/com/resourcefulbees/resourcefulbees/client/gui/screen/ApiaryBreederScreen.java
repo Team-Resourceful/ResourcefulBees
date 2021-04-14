@@ -21,13 +21,14 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class ApiaryBreederScreen extends ContainerScreen<ApiaryBreederContainer> {
 
     private static final ResourceLocation BACKGROUND = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/apiary/apiary_breeder_gui.png");
     private static final ResourceLocation TABS_BG = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/apiary/apiary_gui_tabs.png");
 
-    private ApiaryBreederTileEntity apiaryBreederTileEntity;
+    private final ApiaryBreederTileEntity apiaryBreederTileEntity;
 
     private TabImageButton mainTabButton;
     private TabImageButton storageTabButton;
@@ -35,7 +36,7 @@ public class ApiaryBreederScreen extends ContainerScreen<ApiaryBreederContainer>
 
     public ApiaryBreederScreen(ApiaryBreederContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
         super(screenContainer, inv, titleIn);
-
+        apiaryBreederTileEntity = this.menu.getApiaryBreederTileEntity();
         preInit();
     }
 
@@ -48,8 +49,6 @@ public class ApiaryBreederScreen extends ContainerScreen<ApiaryBreederContainer>
     protected void init() {
         super.init();
         this.buttons.clear();
-
-        apiaryBreederTileEntity = this.menu.getApiaryBreederTileEntity();
 
         int i = this.leftPos;
         int j = this.topPos;
@@ -91,20 +90,22 @@ public class ApiaryBreederScreen extends ContainerScreen<ApiaryBreederContainer>
             case BREED:
                 break;
             case STORAGE:
-                if (storageTabButton.active)
+                if (storageTabButton.active && getApiaryBreederTileEntity() != null)
                     NetPacketHandler.sendToServer(new ApiaryTabMessage(getApiaryBreederTileEntity().getBlockPos(), ApiaryTabs.STORAGE));
                 break;
             case MAIN:
-                if (mainTabButton.active)
+                if (mainTabButton.active && getApiaryBreederTileEntity() != null)
                     NetPacketHandler.sendToServer(new ApiaryTabMessage(getApiaryBreederTileEntity().getBlockPos(), ApiaryTabs.MAIN));
         }
     }
 
     @Override
     public void render(@NotNull MatrixStack matrix,int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(matrix);
-        super.render(matrix, mouseX, mouseY, partialTicks);
-        this.renderTooltip(matrix, mouseX, mouseY);
+        if (getApiaryBreederTileEntity() != null) {
+            this.renderBackground(matrix);
+            super.render(matrix, mouseX, mouseY, partialTicks);
+            this.renderTooltip(matrix, mouseX, mouseY);
+        }
     }
 
     @Override

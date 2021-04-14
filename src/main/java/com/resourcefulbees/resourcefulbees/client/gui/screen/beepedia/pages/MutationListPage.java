@@ -31,13 +31,10 @@ public class MutationListPage extends BeeDataPage {
     private int page;
     private MutationsPage activePage = null;
 
-    protected final ResourceLocation mutationImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/mutate.png");
-
     Button prevTab;
     Button nextTab;
     Button leftArrow;
     Button rightArrow;
-    private final ResourceLocation mutationChanceImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/mutation_sparkles.png");
 
     public MutationListPage(BeepediaScreen beepedia, CustomBeeData beeData, int xPos, int yPos, BeePage parent) {
         super(beepedia, beeData, xPos, yPos, parent);
@@ -57,15 +54,15 @@ public class MutationListPage extends BeeDataPage {
         List<MutationsPage> itemMutations = new ArrayList<>();
         List<MutationsPage> entityMutations = new ArrayList<>();
         if (beeData.getMutationData().hasBlockMutations()) {
-            beeData.getMutationData().getJeiBlockMutations().forEach((b, m) -> blockMutations.add(new BlockMutationPage(parent.getBee(), b, m, MutationTypes.BLOCK, beeData, beepedia)));
-            beeData.getMutationData().getJeiBlockTagMutations().forEach((b, m) -> blockMutations.add(new BlockMutationPage(parent.getBee(), b, m, MutationTypes.BLOCK, beeData, beepedia)));
+            beeData.getMutationData().getJeiBlockMutations().forEach((b, m) -> blockMutations.add(new BlockMutationPage(parent.getBee(), b, m, MutationTypes.BLOCK, beeData.getMutationData().getMutationCount(), beepedia)));
+            beeData.getMutationData().getJeiBlockTagMutations().forEach((b, m) -> blockMutations.add(new BlockMutationPage(parent.getBee(), b, m, MutationTypes.BLOCK, beeData.getMutationData().getMutationCount(), beepedia)));
         }
         if (beeData.getMutationData().hasItemMutations()) {
-            beeData.getMutationData().getJeiItemMutations().forEach((b, m) -> itemMutations.add(new ItemMutationPage(parent.getBee(), b, m, MutationTypes.ITEM, beeData, beepedia)));
-            beeData.getMutationData().getJeiBlockTagItemMutations().forEach((b, m) -> itemMutations.add(new ItemMutationPage(parent.getBee(), b, m, MutationTypes.ITEM, beeData, beepedia)));
+            beeData.getMutationData().getJeiItemMutations().forEach((b, m) -> itemMutations.add(new ItemMutationPage(parent.getBee(), b, m, MutationTypes.ITEM, beeData.getMutationData().getMutationCount(), beepedia)));
+            beeData.getMutationData().getJeiBlockTagItemMutations().forEach((b, m) -> itemMutations.add(new ItemMutationPage(parent.getBee(), b, m, MutationTypes.ITEM, beeData.getMutationData().getMutationCount(), beepedia)));
         }
         if (beeData.getMutationData().hasEntityMutations()) {
-            beeData.getMutationData().getEntityMutations().forEach((b, m) -> entityMutations.add(new EntityMutationPage(parent.getBee(), b, m, MutationTypes.ENTITY, beeData, beepedia)));
+            beeData.getMutationData().getEntityMutations().forEach((b, m) -> entityMutations.add(new EntityMutationPage(parent.getBee(), b, m, MutationTypes.ENTITY, beeData.getMutationData().getMutationCount(), beepedia)));
         }
         if (!blockMutations.isEmpty()) {
             mutations.add(Pair.of(MutationTypes.BLOCK, blockMutations));
@@ -131,12 +128,6 @@ public class MutationListPage extends BeeDataPage {
         if (activePage != null) {
             int padding = font.width(title) / 2;
             font.draw(matrix, title.withStyle(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, -1);
-            StringTextComponent mutationCount = new StringTextComponent("x " + beeData.getMutationData().getMutationCount());
-            font.draw(matrix, mutationCount.withStyle(TextFormatting.GRAY), (float) xPos + 20, (float) yPos + 26, -1);
-            Minecraft.getInstance().getTextureManager().bind(mutationImage);
-            AbstractGui.blit(matrix, xPos, yPos + 22, 0, 0, 169, 84, 169, 84);
-            Minecraft.getInstance().getTextureManager().bind(mutationChanceImage);
-            AbstractGui.blit(matrix, xPos, yPos + 22, 0, 0, 16, 16, 16, 16);
             activePage.draw(matrix, xPos, yPos + 22);
             if (activeList.size() > 1) {
                 StringTextComponent pageInfo = new StringTextComponent(String.format("%d / %d", this.page + 1, activeList.size()));
@@ -202,10 +193,6 @@ public class MutationListPage extends BeeDataPage {
     @Override
     public void drawTooltips(MatrixStack matrix, int mouseX, int mouseY) {
         if (activePage != null) activePage.drawTooltips(matrix, xPos, yPos + 22, mouseX, mouseY);
-        if (BeepediaScreen.mouseHovering(xPos, (float) yPos + 22, 16, 16, mouseX, mouseY)) {
-            TranslationTextComponent text = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.mutations.mutation_count.tooltip");
-            beepedia.renderTooltip(matrix, text, mouseX, mouseY);
-        }
     }
 
     @Override

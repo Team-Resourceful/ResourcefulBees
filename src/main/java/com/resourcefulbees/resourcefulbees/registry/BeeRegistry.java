@@ -3,6 +3,7 @@ package com.resourcefulbees.resourcefulbees.registry;
 import com.resourcefulbees.resourcefulbees.api.IBeeRegistry;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.api.beedata.mutation.EntityMutation;
+import com.resourcefulbees.resourcefulbees.api.beedata.mutation.ItemMutation;
 import com.resourcefulbees.resourcefulbees.api.beedata.mutation.outputs.EntityOutput;
 import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
@@ -139,7 +140,7 @@ public class BeeRegistry implements IBeeRegistry {
      * Returns a set containing all registered CustomBeeData.
      * This is useful for iterating over all bees without worry of changing registry data
      *
-     *  @return Returns a set containing all registered CustomBeeData.
+     * @return Returns a set containing all registered CustomBeeData.
      */
     public Set<CustomBeeData> getSetOfBees() {
         return Collections.unmodifiableSet(new HashSet<>(beeInfo.values()));
@@ -202,15 +203,32 @@ public class BeeRegistry implements IBeeRegistry {
         List<EntityMutation> mutations = new LinkedList<>();
         INSTANCE.getBees().forEach((s, beeData1) -> beeData1.getMutationData().getEntityMutations().forEach((entityType, pair) -> {
             if (entityType.getRegistryName() != null && entityType.getRegistryName().equals(beeData.getEntityTypeRegistryID())) {
-                mutations.add(new EntityMutation(BeeInfoUtils.getEntityType(beeData1.getEntityTypeRegistryID()), entityType, pair));
-            }else {
+                mutations.add(new EntityMutation(BeeInfoUtils.getEntityType(beeData1.getEntityTypeRegistryID()), entityType, pair, beeData1.getMutationData().getMutationCount()));
+            } else {
                 pair.getRight().forEach(entityOutput -> {
                     if (entityOutput.getEntityType().getRegistryName() != null && entityOutput.getEntityType().getRegistryName().equals(beeData.getEntityTypeRegistryID())) {
-                        mutations.add(new EntityMutation(BeeInfoUtils.getEntityType(beeData1.getEntityTypeRegistryID()), entityType, pair));
+                        mutations.add(new EntityMutation(BeeInfoUtils.getEntityType(beeData1.getEntityTypeRegistryID()), entityType, pair, beeData1.getMutationData().getMutationCount()));
                     }
                 });
             }
         }));
+        return mutations;
+    }
+
+    public List<ItemMutation> getItemMutationsContaining(CustomBeeData beeData) {
+        List<ItemMutation> mutations = new LinkedList<>();
+        INSTANCE.getBees().forEach((s, beeData1) -> {
+            beeData1.getMutationData().getJeiItemMutations().forEach((block, pair) -> pair.getRight().forEach(itemOutput -> {
+                if (itemOutput.getItem() == beeData.getSpawnEggItemRegistryObject().get()) {
+                    mutations.add(new ItemMutation(BeeInfoUtils.getEntityType(beeData1.getEntityTypeRegistryID()), block, pair, beeData1.getMutationData().getMutationCount()));
+                }
+            }));
+            beeData1.getMutationData().getJeiBlockTagItemMutations().forEach((tag, pair) -> pair.getRight().forEach(itemOutput -> {
+                if (itemOutput.getItem() == beeData.getSpawnEggItemRegistryObject().get()) {
+                    mutations.add(new ItemMutation(BeeInfoUtils.getEntityType(beeData1.getEntityTypeRegistryID()), tag, pair, beeData1.getMutationData().getMutationCount()));
+                }
+            }));
+        });
         return mutations;
     }
 }

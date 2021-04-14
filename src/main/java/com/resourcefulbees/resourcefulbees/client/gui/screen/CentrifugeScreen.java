@@ -138,21 +138,25 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
 
     @Override
     public void render(@NotNull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(matrix);
-        this.redstoneButton.render(matrix, mouseX, mouseY, partialTicks);
-        this.fluidDispButton.render(matrix, mouseX, mouseY, partialTicks);
-        super.render(matrix, mouseX, mouseY, partialTicks);
-        this.renderTooltip(matrix, mouseX, mouseY);
-        //TODO see if the rest of this method can be condensed a bit further
-        int x = this.leftPos + 10;
-        int y = this.topPos + 38;
-        if (MathUtils.inRangeInclusive(mouseX, x, x + 12) && MathUtils.inRangeInclusive(mouseY, y, y + 58)){
-            if (Screen.hasShiftDown() || this.menu.getEnergy() < 500) this.renderTooltip(matrix, new StringTextComponent(this.menu.getEnergy() + " RF"), mouseX, mouseY);
-            else this.renderTooltip(matrix, new StringTextComponent(ModConstants.DECIMAL_FORMAT.format(this.menu.getEnergy() / 1000) + " kRF"), mouseX, mouseY);
-        }
+        if (this.menu.getCentrifugeTileEntity() != null) {
+            this.renderBackground(matrix);
+            this.redstoneButton.render(matrix, mouseX, mouseY, partialTicks);
+            this.fluidDispButton.render(matrix, mouseX, mouseY, partialTicks);
+            super.render(matrix, mouseX, mouseY, partialTicks);
+            this.renderTooltip(matrix, mouseX, mouseY);
+            //TODO see if the rest of this method can be condensed a bit further
+            int x = this.leftPos + 10;
+            int y = this.topPos + 38;
+            if (MathUtils.inRangeInclusive(mouseX, x, x + 12) && MathUtils.inRangeInclusive(mouseY, y, y + 58)) {
+                if (Screen.hasShiftDown() || this.menu.getEnergy() < 500)
+                    this.renderTooltip(matrix, new StringTextComponent(this.menu.getEnergy() + " RF"), mouseX, mouseY);
+                else
+                    this.renderTooltip(matrix, new StringTextComponent(ModConstants.DECIMAL_FORMAT.format(this.menu.getEnergy() / 1000) + " kRF"), mouseX, mouseY);
+            }
 
-        if (this.menu.shouldDisplayFluids()) {
-            displayFluids(matrix, mouseX, mouseY);
+            if (this.menu.shouldDisplayFluids()) {
+                displayFluids(matrix, mouseX, mouseY);
+            }
         }
     }
 

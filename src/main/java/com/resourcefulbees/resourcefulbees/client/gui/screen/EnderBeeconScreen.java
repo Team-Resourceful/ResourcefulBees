@@ -62,7 +62,7 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
     @Override
     protected void renderBg(@NotNull MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
         ResourceLocation texture = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/ender_beecon/ender_beecon.png");
-        if (minecraft != null) {
+        if (minecraft != null && tileEntity != null) {
             minecraft.getTextureManager().bind(texture);
             int i = this.leftPos;
             int j = this.topPos;
@@ -221,7 +221,9 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
 
     @Override
     public void render(@NotNull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(matrix);
-        super.render(matrix, mouseX, mouseY, partialTicks);
+        if (this.menu.getEnderBeeconTileEntity() != null) {
+            this.renderBackground(matrix);
+            super.render(matrix, mouseX, mouseY, partialTicks);
+        }
     }
 }

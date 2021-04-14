@@ -4,21 +4,22 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.api.beedata.mutation.outputs.ItemOutput;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
+import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
+import com.resourcefulbees.resourcefulbees.item.BeeSpawnEggItem;
 import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tags.ITag;
 import net.minecraft.util.text.TranslationTextComponent;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaPage.SUB_PAGE_WIDTH;
 
@@ -28,17 +29,24 @@ public class ItemMutationPage extends MutationsPage {
     List<Pair<Double, ItemOutput>> outputs = new ArrayList<>();
     private Double outputChance;
 
-    public ItemMutationPage(Entity bee, ITag<?> blocks, Pair<Double, RandomCollection<ItemOutput>> outputs, MutationTypes type, CustomBeeData beeData, BeepediaScreen beepedia) {
-        super(bee, type, beeData, beepedia);
+    public ItemMutationPage(EntityType<?> bee, List<Block> blocks, Pair<Double, RandomCollection<ItemOutput>> outputs, MutationTypes type, int mutationCount, BeepediaScreen beepedia) {
+        super(bee.create(Objects.requireNonNull(beepedia.getMinecraft().level)), type, mutationCount, beepedia);
+        inputs = blocks;
+        initOutputs(outputs);
+    }
+
+    public ItemMutationPage(Entity bee, ITag<?> blocks, Pair<Double, RandomCollection<ItemOutput>> outputs, MutationTypes type, int mutationCount, BeepediaScreen beepedia) {
+        super(bee, type, mutationCount, beepedia);
         inputs = (List<Block>) blocks.getValues();
         initOutputs(outputs);
     }
 
-    public ItemMutationPage(Entity bee, Block block, Pair<Double, RandomCollection<ItemOutput>> outputs, MutationTypes type, CustomBeeData beeData, BeepediaScreen beepedia) {
-        super(bee, type, beeData, beepedia);
+    public ItemMutationPage(Entity bee, Block block, Pair<Double, RandomCollection<ItemOutput>> outputs, MutationTypes type, int mutationCount, BeepediaScreen beepedia) {
+        super(bee, type, mutationCount, beepedia);
         inputs = new LinkedList<>(Collections.singleton(block));
         initOutputs(outputs);
     }
+
 
     private void initOutputs(Pair<Double, RandomCollection<ItemOutput>> outputs) {
         outputChance = outputs.getKey();
@@ -76,7 +84,18 @@ public class ItemMutationPage extends MutationsPage {
 
     @Override
     public boolean mouseClick(int xPos, int yPos, int mouseX, int mouseY) {
-        return super.mouseClick(xPos, yPos, mouseX, mouseY);
+        if (super.mouseClick(xPos, yPos, mouseX, mouseY)) return true;
+        Item output = outputs.get(outputCounter).getRight().getItem();
+        if (output instanceof BeeSpawnEggItem) {
+            BeeSpawnEggItem beeEgg = (BeeSpawnEggItem) output;
+            if (BeepediaScreen.mouseHovering((float) xPos + 112, (float) yPos + 27, 30, 30, mouseX, mouseY)) {
+                if (BeepediaScreen.currScreenState.getPageID().equals((beeEgg.getBeeData().getName()))) return false;
+                BeepediaScreen.saveScreenState();
+                beepedia.setActive(BeepediaScreen.PageType.BEE, beeEgg.getBeeData().getName());
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
