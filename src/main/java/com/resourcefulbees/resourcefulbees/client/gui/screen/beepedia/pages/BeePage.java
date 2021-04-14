@@ -4,6 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.api.beedata.mutation.EntityMutation;
+import com.resourcefulbees.resourcefulbees.api.beedata.mutation.ItemMutation;
 import com.resourcefulbees.resourcefulbees.api.beedata.mutation.MutationOutput;
 import com.resourcefulbees.resourcefulbees.api.beedata.mutation.outputs.EntityOutput;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
@@ -99,11 +100,12 @@ public class BeePage extends BeepediaPage {
             tabs.add(spawningPage);
         }
         List<EntityMutation> breedMutations = BeeRegistry.getRegistry().getMutationsContaining(beeData);
-        if (beeData.getBreedData().isBreedable() || !breedMutations.isEmpty()) {
+        List<ItemMutation> itemBreedMutation = BeeRegistry.getRegistry().getItemMutationsContaining(beeData);
+        if (beeData.getBreedData().isBreedable() || !breedMutations.isEmpty() || !itemBreedMutation.isEmpty()) {
             breedingPage = Pair.of(
                     getTabButton(new ItemStack(ModItems.GOLD_FLOWER_ITEM.get()), onPress -> setSubPage(SubPageType.BREEDING),
                             new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding")),
-                    new BreedingPage(beepedia, beeData, subX, subY, breedMutations, this)
+                    new BreedingPage(beepedia, beeData, subX, subY, breedMutations, itemBreedMutation, this)
             );
             tabs.add(breedingPage);
         }
