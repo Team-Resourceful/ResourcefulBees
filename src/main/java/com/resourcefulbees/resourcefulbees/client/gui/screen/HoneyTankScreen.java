@@ -4,6 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.container.HoneyTankContainer;
 import com.resourcefulbees.resourcefulbees.tileentity.HoneyTankTileEntity;
+import com.resourcefulbees.resourcefulbees.utils.MathUtils;
 import com.resourcefulbees.resourcefulbees.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
@@ -30,7 +31,7 @@ public class HoneyTankScreen extends ContainerScreen<HoneyTankContainer> {
     protected void renderBg(@NotNull MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
         ResourceLocation texture = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/honey_tank/honey_tank.png");
         Minecraft client = this.minecraft;
-        if (client != null) {
+        if (client != null && tileEntity != null) {
             client.getTextureManager().bind(texture);
             int i = this.leftPos;
             int j = this.topPos;
@@ -53,16 +54,18 @@ public class HoneyTankScreen extends ContainerScreen<HoneyTankContainer> {
 
     @Override
     public void render(@NotNull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(matrix);
-        super.render(matrix, mouseX, mouseY, partialTicks);
-        this.renderProgressBar(matrix);
-        this.renderTooltip(matrix, mouseX, mouseY);
-        DecimalFormat decimalFormat = new DecimalFormat("##0.0");
-        if (mouseX >= this.leftPos + 81 && mouseX <= this.leftPos + 93 && mouseY >= this.topPos + 12 && mouseY <= this.topPos + 74) {
-            if (Screen.hasShiftDown() || tileEntity.getFluidTank().getFluidAmount() < 500) {
-                this.renderTooltip(matrix, new StringTextComponent(tileEntity.getFluidTank().getFluidAmount() + " MB"), mouseX, mouseY);
-            } else {
-                this.renderTooltip(matrix, new StringTextComponent(decimalFormat.format((double) tileEntity.getFluidTank().getFluidAmount() / 1000) + " Buckets"), mouseX, mouseY);
+        if (this.tileEntity != null) {
+            this.renderBackground(matrix);
+            super.render(matrix, mouseX, mouseY, partialTicks);
+            this.renderProgressBar(matrix);
+            this.renderTooltip(matrix, mouseX, mouseY);
+            DecimalFormat decimalFormat = new DecimalFormat("##0.0");
+            if (tileEntity != null && MathUtils.inRangeInclusive(mouseX, this.leftPos + 81, this.leftPos + 93) && MathUtils.inRangeInclusive(mouseY, this.topPos + 12, this.topPos + 74)) {
+                if (Screen.hasShiftDown() || tileEntity.getFluidTank().getFluidAmount() < 500) {
+                    this.renderTooltip(matrix, new StringTextComponent(tileEntity.getFluidTank().getFluidAmount() + " MB"), mouseX, mouseY);
+                } else {
+                    this.renderTooltip(matrix, new StringTextComponent(decimalFormat.format((double) tileEntity.getFluidTank().getFluidAmount() / 1000) + " Buckets"), mouseX, mouseY);
+                }
             }
         }
     }

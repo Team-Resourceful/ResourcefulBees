@@ -13,6 +13,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class HoneyGeneratorContainer extends ContainerWithStackMove {
 
@@ -23,17 +24,17 @@ public class HoneyGeneratorContainer extends ContainerWithStackMove {
         super(ModContainers.HONEY_GENERATOR_CONTAINER.get(), id);
 
         this.player = inv.player;
-        honeyGeneratorTileEntity = (HoneyGeneratorTileEntity) world.getBlockEntity(pos);
 
-        if (getHoneyGeneratorTileEntity() != null) {
-            this.addSlot(new SlotItemHandlerUnconditioned(getHoneyGeneratorTileEntity().getTileStackHandler(), HoneyGeneratorTileEntity.HONEY_BOTTLE_INPUT, 36, 20) {
+        honeyGeneratorTileEntity = (HoneyGeneratorTileEntity) world.getBlockEntity(pos);
+        if (honeyGeneratorTileEntity != null) {
+            this.addSlot(new SlotItemHandlerUnconditioned(honeyGeneratorTileEntity.getTileStackHandler(), HoneyGeneratorTileEntity.HONEY_BOTTLE_INPUT, 36, 20) {
 
                 @Override
                 public boolean mayPlace(ItemStack stack) {
-                    return getHoneyGeneratorTileEntity().getTileStackHandler().isItemValid(HoneyGeneratorTileEntity.HONEY_BOTTLE_INPUT, stack);
+                    return honeyGeneratorTileEntity.getTileStackHandler().isItemValid(HoneyGeneratorTileEntity.HONEY_BOTTLE_INPUT, stack);
                 }
             });
-            this.addSlot(new OutputSlot(getHoneyGeneratorTileEntity().getTileStackHandler(), HoneyGeneratorTileEntity.BOTTLE_OUTPUT, 36, 58));
+            this.addSlot(new OutputSlot(honeyGeneratorTileEntity.getTileStackHandler(), HoneyGeneratorTileEntity.BOTTLE_OUTPUT, 36, 58));
 
             for (int i = 0; i < 3; ++i) {
                 for (int j = 0; j < 9; ++j) {

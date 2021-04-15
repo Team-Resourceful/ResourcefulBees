@@ -54,13 +54,12 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
         super(screenContainer, inv, titleIn);
         this.imageWidth = 250;
         this.imageHeight = 152;
+        apiaryTileEntity = this.menu.getApiaryTileEntity();
     }
 
     @Override
     protected void init() {
         super.init();
-
-        apiaryTileEntity = this.menu.getApiaryTileEntity();
 
         importButton = this.addButton(new Button(this.leftPos + 73, this.topPos + 10, 40, 20, new StringTextComponent(I18n.get("gui.resourcefulbees.apiary.button.import")), onPress -> this.importBee()));
         exportButton = this.addButton(new Button(this.leftPos + 159, this.topPos + 10, 40, 20, new StringTextComponent(I18n.get("gui.resourcefulbees.apiary.button.export")), onPress -> this.exportSelectedBee()));
@@ -136,21 +135,23 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
 
     @Override
     public void render(@NotNull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(matrix);
-        super.render(matrix, mouseX, mouseY, partialTicks);
-        this.renderTooltip(matrix, mouseX, mouseY);
+        if (apiaryTileEntity != null) {
+            this.renderBackground(matrix);
+            super.render(matrix, mouseX, mouseY, partialTicks);
+            this.renderTooltip(matrix, mouseX, mouseY);
 
-        int l = this.leftPos + 5;
-        int i1 = this.topPos + 18;
-        int j1 = this.beeIndexOffset + 7;
+            int l = this.leftPos + 5;
+            int i1 = this.topPos + 18;
+            int j1 = this.beeIndexOffset + 7;
 
-        renderBeeToolTip(matrix, mouseX, mouseY, l, i1, j1);
+            renderBeeToolTip(matrix, mouseX, mouseY, l, i1, j1);
+        }
     }
 
     @Override
     protected void renderBg(@NotNull MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
         Minecraft client = this.minecraft;
-        if (client != null) {
+        if (client != null && apiaryTileEntity != null) {
             if (this.menu.getSelectedBee() > apiaryTileEntity.getBeeCount() - 1) {
                 this.menu.selectBee(apiaryTileEntity.getBeeCount() - 1);
             }

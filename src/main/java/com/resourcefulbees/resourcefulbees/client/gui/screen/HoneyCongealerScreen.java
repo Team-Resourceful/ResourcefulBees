@@ -19,7 +19,7 @@ import java.text.DecimalFormat;
 
 public class HoneyCongealerScreen extends ContainerScreen<HoneyCongealerContainer> {
 
-    HoneyCongealerTileEntity tileEntity;
+    private final HoneyCongealerTileEntity tileEntity;
 
     public HoneyCongealerScreen(HoneyCongealerContainer container, PlayerInventory inventory, ITextComponent displayName) {
         super(container, inventory, displayName);
@@ -30,7 +30,7 @@ public class HoneyCongealerScreen extends ContainerScreen<HoneyCongealerContaine
     protected void renderBg(@NotNull MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
         ResourceLocation texture = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/congealer/honey_congealer.png");
         Minecraft client = this.minecraft;
-        if (client != null) {
+        if (client != null && tileEntity != null) {
             client.getTextureManager().bind(texture);
             int i = this.leftPos;
             int j = this.topPos;
@@ -52,16 +52,18 @@ public class HoneyCongealerScreen extends ContainerScreen<HoneyCongealerContaine
 
     @Override
     public void render(@NotNull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(matrix);
-        super.render(matrix, mouseX, mouseY, partialTicks);
-        this.renderProgressBar(matrix);
-        this.renderTooltip(matrix, mouseX, mouseY);
-        DecimalFormat decimalFormat = new DecimalFormat("##0.0");
-        if (mouseX >= this.leftPos + 67 && mouseX <= this.leftPos + 81 && mouseY >= this.topPos + 12 && mouseY <= this.topPos + 74) {
-            if (Screen.hasShiftDown() || tileEntity.getFluidTank().getFluidAmount() < 500) {
-                this.renderTooltip(matrix, new StringTextComponent(tileEntity.getFluidTank().getFluidAmount() + " MB"), mouseX, mouseY);
-            } else {
-                this.renderTooltip(matrix, new StringTextComponent(decimalFormat.format((double) tileEntity.getFluidTank().getFluidAmount() / 1000) + " Buckets"), mouseX, mouseY);
+        if (this.tileEntity != null) {
+            this.renderBackground(matrix);
+            super.render(matrix, mouseX, mouseY, partialTicks);
+            this.renderProgressBar(matrix);
+            this.renderTooltip(matrix, mouseX, mouseY);
+            DecimalFormat decimalFormat = new DecimalFormat("##0.0");
+            if (mouseX >= this.leftPos + 67 && mouseX <= this.leftPos + 81 && mouseY >= this.topPos + 12 && mouseY <= this.topPos + 74) {
+                if (Screen.hasShiftDown() || tileEntity.getFluidTank().getFluidAmount() < 500) {
+                    this.renderTooltip(matrix, new StringTextComponent(tileEntity.getFluidTank().getFluidAmount() + " MB"), mouseX, mouseY);
+                } else {
+                    this.renderTooltip(matrix, new StringTextComponent(decimalFormat.format((double) tileEntity.getFluidTank().getFluidAmount() / 1000) + " Buckets"), mouseX, mouseY);
+                }
             }
         }
     }
