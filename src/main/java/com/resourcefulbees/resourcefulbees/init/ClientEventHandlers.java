@@ -1,5 +1,6 @@
 package com.resourcefulbees.resourcefulbees.init;
 
+import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.*;
 import com.resourcefulbees.resourcefulbees.client.models.ModelHandler;
@@ -20,7 +21,10 @@ import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraftforge.client.event.RecipesUpdatedEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.TagsUpdatedEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -32,6 +36,8 @@ public class ClientEventHandlers {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
 
+    private static boolean setupsDone = false;
+
     public static void clientStuff() {
         MinecraftForge.EVENT_BUS.addListener(PreviewHandler::onWorldRenderLast);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ModelHandler::registerModels);
@@ -40,6 +46,29 @@ public class ClientEventHandlers {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ColorHandler::onItemColors);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ColorHandler::onBlockColors);
         MinecraftForge.EVENT_BUS.addListener(FluidRender::honeyOverlay);
+        MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, ClientEventHandlers::recipesLoaded);
+        MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, ClientEventHandlers::onTagsUpdated);
+    }
+
+    public static void recipesLoaded(RecipesUpdatedEvent event){
+        if (Minecraft.getInstance().isLocalServer()) {
+            startSetups();
+        }
+    }
+
+    public static void onTagsUpdated(TagsUpdatedEvent.CustomTagTypes event){
+        if (!Minecraft.getInstance().isLocalServer()) {
+            startSetups();
+        }
+    }
+
+    private static void startSetups() {
+        if (!setupsDone) {
+            setupsDone = true;
+            MutationSetup.setupMutations();
+            FlowerSetup.setupFlowers();
+            BreedingSetup.setupFeedItems();
+        }
     }
 
     public static void registerPatreonRender() {

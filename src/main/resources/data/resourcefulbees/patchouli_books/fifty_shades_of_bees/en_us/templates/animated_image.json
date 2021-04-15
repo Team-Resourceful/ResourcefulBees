@@ -14,10 +14,10 @@
       "image": "#image",
       "width": 100,
       "height": 100,
-      "texture_width": 100,
-      "texture_height": 32100,
+      "texWidth": 100,
+      "texHeight": 32100,
       "scale": 1,
-      "ticks_per_frame": 4
+      "ticksPerFrame": 4
     },
     {
       "x": -1,
