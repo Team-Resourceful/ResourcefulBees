@@ -39,7 +39,13 @@ public class BeeRewardData {
         VANILLA(new ResourceLocation("minecraft:textures/entity/bee/bee.png")),
         BASE(new ResourceLocation("resourcefulbees:textures/entity/custom/bee.png"),
                 new ResourceLocation("resourcefulbees:textures/entity/custom/primary_layer.png")),
-        KITTEN(new ResourceLocation("resourcefulbees:textures/entity/kitten/kitten_base.png"));
+        KITTEN(new ResourceLocation("resourcefulbees:textures/entity/kitten/kitten_base.png")),
+        GILDED(new ResourceLocation("resourcefulbees:textures/entity/gilded/gilded_alchemist_bee.png")),
+        GOLDEN(new ResourceLocation("resourcefulbees:textures/entity/gilded/golden_flower_bee.png")),
+        NETHER(new ResourceLocation("resourcefulbees:textures/entity/mushroom/nether_wart_bee.png")),
+        CRIMSON(new ResourceLocation("resourcefulbees:textures/entity/mushroom/crimson_alchemist_bee.png")),
+        WARPED(new ResourceLocation("resourcefulbees:textures/entity/mushroom/warped_alchemist_bee.png")),
+        GHAST(new ResourceLocation("resourcefulbees:textures/entity/ghast/ghast_bee.png"));
 
         ResourceLocation resourceLocation;
         ResourceLocation secondaryResourceLocation;
