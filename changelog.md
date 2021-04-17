@@ -1,3 +1,6 @@
+# ----- [0.6.7_1b] -----
+- Fixed a crash when attempting to breed bees with no feed return item
+
 # ----- [0.6.7b] -----
 
 - Added Spider trait, this trait allows bees to pass through spider webs without being slowed.
