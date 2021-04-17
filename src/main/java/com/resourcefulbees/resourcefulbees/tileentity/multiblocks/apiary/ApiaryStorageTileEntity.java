@@ -241,8 +241,8 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
             BreedData p1BreedData = BEE_REGISTRY.getBeeData(p1).getBreedData();
             BreedData p2BreedData = BEE_REGISTRY.getBeeData(p2).getBreedData();
             
-            Item p1Returnable = BeeInfoUtils.getItem(p1BreedData.getFeedReturnItem());
-            Item p2Returnable = BeeInfoUtils.getItem(p2BreedData.getFeedReturnItem());
+            Item p1Returnable = p1BreedData.getFeedReturnItem();
+            Item p2Returnable = p2BreedData.getFeedReturnItem();
 
             if (level != null && entityType != null) {
                 Entity entity = entityType.create(level);

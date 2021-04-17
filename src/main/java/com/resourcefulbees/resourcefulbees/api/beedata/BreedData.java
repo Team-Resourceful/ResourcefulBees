@@ -1,8 +1,9 @@
 package com.resourcefulbees.resourcefulbees.api.beedata;
 
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
+import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import net.minecraft.item.Item;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.item.Items;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -113,9 +114,11 @@ public class BreedData extends AbstractBeeData {
         return this.feedingItems != null && !this.feedingItems.isEmpty();
     }
 
-    @Nullable
-    public String getFeedReturnItem() {
-        return feedReturnItem != null ? feedReturnItem.toLowerCase(Locale.ENGLISH) : null;
+    public Item getFeedReturnItem() {
+        if (feedReturnItem == null) return Items.AIR;
+        Item item = BeeInfoUtils.getItem(feedReturnItem.toLowerCase(Locale.ENGLISH));
+        if (item == null) return Items.AIR;
+        else return item;
     }
 
     public int getFeedAmount() {
