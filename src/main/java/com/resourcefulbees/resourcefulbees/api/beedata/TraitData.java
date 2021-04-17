@@ -3,7 +3,6 @@ package com.resourcefulbees.resourcefulbees.api.beedata;
 import com.resourcefulbees.resourcefulbees.data.BeeTrait;
 import net.minecraft.particles.BasicParticleType;
 import net.minecraft.potion.Effect;
-import net.minecraft.util.DamageSource;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.HashSet;
@@ -18,7 +17,7 @@ public class TraitData extends AbstractBeeData {
     /**
      * A list of damage sources the bee is immune to
      */
-    private transient Set<DamageSource> damageImmunities;
+    private transient Set<String> damageImmunities;
 
     /**
      * A list of effects the bee is immune to
@@ -90,7 +89,7 @@ public class TraitData extends AbstractBeeData {
     public Set<Pair<Effect, Integer>> getPotionDamageEffects(){
         return potionDamageEffects;
     }
-    public Set<DamageSource> getDamageImmunities(){
+    public Set<String> getDamageImmunities(){
         return damageImmunities;
     }
     public Set<Effect> getPotionImmunities(){

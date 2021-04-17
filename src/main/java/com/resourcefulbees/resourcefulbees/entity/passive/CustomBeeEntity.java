@@ -113,7 +113,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
             return true;
         }
         if (info.hasTraits() && info.hasDamageImmunities()) {
-            return info.getDamageImmunities().stream().anyMatch(source::equals);
+            return info.getDamageImmunities().stream().anyMatch(source.msgId::equalsIgnoreCase);
         }
         return super.isInvulnerableTo(source);
     }
