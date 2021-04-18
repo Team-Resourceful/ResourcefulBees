@@ -20,7 +20,6 @@ import net.minecraft.item.Items;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.potion.Potions;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.IReorderingProcessor;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -111,7 +110,7 @@ public class TraitPage extends BeepediaPage {
     private void addDamageImmunities() {
         if (trait.hasDamageImmunities()) {
             TranslationTextComponent title = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits.damage_immunities");
-            String typeList = trait.getDamageImmunities().stream().map(DamageSource::getMsgId).collect(Collectors.joining(", "));
+            String typeList = String.join(", ", trait.getDamageImmunities());
             traitSections.add(new TraitSection(title, new ItemStack(Items.IRON_CHESTPLATE), new StringTextComponent(typeList)));
         }
     }
@@ -166,7 +165,7 @@ public class TraitPage extends BeepediaPage {
 
     private void initTranslation() {
         translation = "";
-        translation += trait.getDamageImmunities().stream().map(damageSource -> damageSource.msgId).collect(Collectors.joining(" "));
+        translation += String.join(" ", trait.getDamageImmunities());
         translation += String.join(" ", trait.getSpecialAbilities());
         translation += trait.getPotionImmunities().stream().map(effect -> effect.getDisplayName().getString()).collect(Collectors.joining(" "));
         translation += trait.getDamageTypes().stream().map(Pair::getLeft).collect(Collectors.joining(" "));

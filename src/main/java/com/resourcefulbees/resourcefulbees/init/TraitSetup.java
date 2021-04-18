@@ -9,14 +9,12 @@ import com.resourcefulbees.resourcefulbees.registry.TraitRegistry;
 import net.minecraft.item.Item;
 import net.minecraft.particles.BasicParticleType;
 import net.minecraft.potion.Effect;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.*;
-import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -61,23 +59,7 @@ public class TraitSetup {
 
     private static void parseDamageImmunities(JsonBeeTrait.JsonTrait jsonTrait, BeeTrait.Builder builder) {
         if (jsonTrait.getDamageImmunities() != null && jsonTrait.getDamageImmunities().length > 0) {
-            Arrays.stream(jsonTrait.getDamageImmunities()).forEach(s -> {
-                String source;
-                if (Character.isLowerCase(s.charAt(0))) {
-                    String[] split = s.split("(?=\\p{Upper})");
-                    source = split.length > 1 ? String.join("_", split).toUpperCase(Locale.ENGLISH) : s.toUpperCase(Locale.ENGLISH);
-                } else {
-                    source = s.toUpperCase(Locale.ENGLISH);
-                }
-
-                try {
-                    Field f = DamageSource.class.getField(source);
-                    builder.addDamageImmunity((DamageSource) f.get(null));
-                } catch (NoSuchFieldException | IllegalAccessException e) {
-                    LOGGER.error("Could not parse Damage Immunities");
-                    e.printStackTrace();
-                }
-            });
+            Arrays.stream(jsonTrait.getDamageImmunities()).forEach(builder::addDamageImmunity);
         }
     }
 

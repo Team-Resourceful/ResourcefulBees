@@ -1,3 +1,34 @@
+# ----- [0.6.7_1b] -----
+- Fixed a crash when attempting to breed bees with no feed return item
+
+# ----- [0.6.7b] -----
+
+- Added Spider trait, this trait allows bees to pass through spider webs without being slowed.
+- Changed default bees to use various types of flowers
+- Updated chinese translation
+- Added Bottomless Honey Pot, this block allows for voiding of honey with ease.
+- Added 7 more patreon reward textures.
+- Added the ability for each bee to have their apiary output types set individually 
+  (e.g. `"apiaryOutputTypes" : ["COMB", "COMB", "BLOCK", "COMB"],`)
+- Mutations that result or use a bee will now show up in the beepedia breeding tab of that bee
+- Spawn egg item mutations will now show up in the beepedia breeding tab of that bee
+- Added flower and hive positions for bees to TOP display 
+
+- Fixed base layer textures not showing up on additions if the bee had custom colors.
+- Fixed honey generator not sending power to immersive engineering wires.
+- Fixed the NBT tag persistanceRequired not being respected with bee despawning rules.
+- Fixed blocks without items not showing as bee flowers.
+- Fixed entity mutations not working when natural spawns are turned off.
+- Made optimisations for bees finding their flowers.
+- Fixed comb blocks being able to be centrifuged in non multiblock centrifuges.
+- Fixed comb block centrifuge timing.
+- Fixed custom honey/comb recipes not showing up on multiplayer in some cases.
+- Fixed Bees reappearing out of hive makes honeycomb count decrease to miminum of 2.
+- Fixed bee shadows not changing with bee size
+- Fixed a duplication bug
+- Fixed Ender beecon options page in Fifty Shades of Bees not showing up properly
+- Disabled an experimental item.
+
 # ----- [0.6.6a] -----
 - Added Honey Congealer (honey goes in, blocks come out)
 - added an interface to all honey tanks, you can now input and output honey bottles from the interface

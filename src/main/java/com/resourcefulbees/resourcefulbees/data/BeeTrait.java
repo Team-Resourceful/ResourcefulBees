@@ -5,7 +5,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.particles.BasicParticleType;
 import net.minecraft.potion.Effect;
-import net.minecraft.util.DamageSource;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
@@ -14,14 +13,14 @@ import java.util.List;
 public class BeeTrait {
     private final Item beepediaItem;
     private final List<Pair<Effect, Integer>> potionDamageEffects;
-    private final List<DamageSource> damageImmunities;
+    private final List<String> damageImmunities;
     private final List<Effect> potionImmunities;
     private final List<Pair<String, Integer>> damageTypes;
     private final List<String> specialAbilities;
     private final BasicParticleType particleEffect;
     private final String name;
 
-    private BeeTrait(String name, Item beepediaItem, List<Pair<Effect, Integer>> potionDamageEffects, List<DamageSource> damageImmunities, List<Effect> potionImmunities, List<Pair<String, Integer>> damageTypes, List<String> specialAbilities, BasicParticleType particleEffect) {
+    private BeeTrait(String name, Item beepediaItem, List<Pair<Effect, Integer>> potionDamageEffects, List<String> damageImmunities, List<Effect> potionImmunities, List<Pair<String, Integer>> damageTypes, List<String> specialAbilities, BasicParticleType particleEffect) {
         this.name = name;
         this.beepediaItem = beepediaItem;
         this.potionDamageEffects = potionDamageEffects;
@@ -60,7 +59,7 @@ public class BeeTrait {
         return this.potionDamageEffects;
     }
 
-    public List<DamageSource> getDamageImmunities() {
+    public List<String> getDamageImmunities() {
         return this.damageImmunities;
     }
 
@@ -93,7 +92,7 @@ public class BeeTrait {
         String name;
         Item beepediaItem;
         List<Pair<Effect, Integer>> potionDamageEffects = new ArrayList<>();
-        List<DamageSource> damageImmunities = new ArrayList<>();
+        List<String> damageImmunities = new ArrayList<>();
         List<Effect> potionImmunities = new ArrayList<>();
         List<Pair<String, Integer>> damageTypes = new ArrayList<>();
         List<String> specialAbilities = new ArrayList<>();
@@ -118,12 +117,12 @@ public class BeeTrait {
             return this;
         }
 
-        public Builder addDamageImmunities(List<DamageSource> damageImmunities) {
+        public Builder addDamageImmunities(List<String> damageImmunities) {
             this.damageImmunities.addAll(damageImmunities);
             return this;
         }
 
-        public Builder addDamageImmunity(DamageSource damageImmunity) {
+        public Builder addDamageImmunity(String damageImmunity) {
             this.damageImmunities.add(damageImmunity);
             return this;
         }
