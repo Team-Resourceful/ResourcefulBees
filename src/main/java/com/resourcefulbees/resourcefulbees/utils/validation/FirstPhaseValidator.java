@@ -49,7 +49,7 @@ public class FirstPhaseValidator {
     private static void validateColorData(String color, String name, String colorType) {
         if (!Color.validate(color)) {
             logError(name);
-            throw new IllegalArgumentException(String.format("%1$s Color: %2$s is not valid!!", colorType, color));
+            throw new IllegalArgumentException(String.format("%1$s Color for %2$s: %3$s is not valid!!", colorType, name, color));
         }
     }
 

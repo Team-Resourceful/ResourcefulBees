@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:honey_block",
+    "resourcefulbees:catnip_honeycomb_block"
+  ]
+}
