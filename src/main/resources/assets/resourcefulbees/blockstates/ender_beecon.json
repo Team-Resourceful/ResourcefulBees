@@ -1,9 +1,0 @@
-{
-  "multipart": [
-    {
-      "apply": {
-        "model": "resourcefulbees:block/ender_beecon"
-      }
-    }
-  ]
-}
