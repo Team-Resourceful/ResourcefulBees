@@ -1,0 +1,10 @@
+{
+  "parent": "block/orientable_with_bottom",
+  "textures": {
+    "particle": "block/iron_block",
+    "bottom": "resourcefulbees:block/centrifuge_casing",
+    "top": "resourcefulbees:block/centrifuge_casing",
+    "front": "resourcefulbees:block/centrifuge_controller",
+    "side": "resourcefulbees:block/centrifuge_casing"
+  }
+}

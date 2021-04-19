@@ -1,0 +1,38 @@
+{
+  "flower": "tag:forge:storage_blocks/lapis",
+  "maxTimeInHive": 600,
+  "hasHoneycomb": true,
+  "baseLayerTexture": "ores/lapis/lapis_bee",
+  "ColorData": {
+    "isBeeColored": false,
+    "honeycombColor": "#345ec3",
+    "modelType": "ORE"
+  },
+  "MutationData": {
+    "hasMutation": true,
+    "mutations" : [
+      {
+        "type": "BLOCK",
+        "inputID": "minecraft:stone",
+        "outputs": [
+          {"outputID": "minecraft:lapis_ore", "weight": 10},
+          {"outputID": "minecraft:cobblestone", "weight": 10}
+        ]
+      }
+    ]
+  },
+  "CentrifugeData": {
+    "hasCentrifugeOutput": true,
+    "mainOutput": "minecraft:lapis_lazuli",
+    "mainOutputCount": 8
+  },
+  "SpawnData": {
+    "canSpawnInWorld": true,
+    "biomeWhitelist": "tag:OVERWORLD",
+    "biomeBlacklist": "tag:ocean"
+  },
+  "BreedData": {
+    "isBreedable": true
+  },
+  "TraitData": {}
+}

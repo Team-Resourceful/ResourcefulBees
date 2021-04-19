@@ -1,0 +1,164 @@
+plugins {
+    id "com.github.johnrengelman.shadow" version "5.0.0"
+}
+
+configurations {
+    shadowCommon // Don't use shadow from the shadow plugin because we don't want IDEA to index this.
+}
+
+architectury {
+    platformSetupLoomIde()
+    forge()
+}
+
+loom {
+    mixinConfig "resourcefulbees.mixins.json"
+}
+
+def releasesRepoUrl = "https://nexus.resourcefulbees.com/repository/maven-releases/"
+def snapshotsRepoUrl = "https://nexus.resourcefulbees.com/repository/maven-snapshots/"
+def ENV = System.getenv()
+
+dependencies {
+    forge "net.minecraftforge:forge:${rootProject.minecraft_version}-${rootProject.forge_version}"
+    // Remove the next line if you don't want to depend on the API
+    modApi "me.shedaniel:architectury-forge:${rootProject.architectury_version}"
+
+    implementation(project(path: ":common")) {
+        transitive = false
+    }
+    developmentForge(project(path: ":common")) {
+        transitive = false
+    }
+    shadowCommon(project(path: ":common", configuration: "transformProductionForge")) {
+        transitive = false
+    }
+
+    modImplementation "mezz.jei:jei-1.16.4:${rootProject.jei_version}:api"
+    modRuntime "mezz.jei:jei-1.16.4:${rootProject.jei_version}"
+
+    modImplementation "mcjty.theoneprobe:TheOneProbe-1.16:${rootProject.top_version}:api"
+    modRuntime "mcjty.theoneprobe:TheOneProbe-1.16:${rootProject.top_version}"
+
+    modImplementation "team.chisel.ctm:CTM:MC1.16.1-1.1.2.6"
+    modRuntime "team.chisel.ctm:CTM:MC1.16.1-1.1.2.6"
+
+    modImplementation "vazkii.patchouli:Patchouli:${rootProject.patchouli_version}:api"
+    modRuntime "vazkii.patchouli:Patchouli:${rootProject.patchouli_version}"
+}
+
+processResources {
+    inputs.property "version", project.version
+
+    filesMatching("META-INF/mods.toml") {
+        expand "version": project.version
+    }
+}
+
+shadowJar {
+    exclude "fabric.mod.json"
+
+    configurations = [project.configurations.shadowCommon]
+    classifier "dev-shadow"
+}
+
+remapJar {
+    input.set shadowJar.archiveFile
+    dependsOn shadowJar
+    classifier "forge"
+}
+
+jar {
+    classifier "dev"
+
+    manifest {
+        attributes([
+                "Specification-Title": "resourcefulbees",
+                "Specification-Vendor": "resourcefulbees",
+                "Specification-Version": "1", // We are version 1 of ourselves
+                "Implementation-Title": project.name,
+                "Implementation-Version": project.version,
+                "Implementation-Vendor" :"resourcefulbees",
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                "MixinConfigs": "${rootProject.archives_base_name}.mixins.json"
+        ])
+    }
+}
+
+java {
+    withSourcesJar()
+}
+
+sourcesJar {
+    def commonSources = project(":common").remapSourcesJar
+    dependsOn commonSources
+    from zipTree(commonSources.output)
+}
+
+publishing {
+    publications {
+        mavenForge(MavenPublication) {
+            artifactId = rootProject.archives_base_name + "-" + project.name
+            // add all the jars that should be included when publishing to maven
+            artifact(remapJar) {
+                classifier null
+            }
+            artifact(sourcesJar) {
+                builtBy remapSourcesJar
+            }
+
+            pom {
+                name = 'ResourcefulBees'
+                description = 'A mod for minecraft players to add their own bees through a powerful api.'
+                url = 'https://github.com/Resourceful-Bees/ResourcefulBees'
+
+                scm {
+                    connection = 'git:https://github.com/Resourceful-Bees/ResourcefulBees.git'
+                    developerConnection = 'git:https://github.com/Resourceful-Bees/ResourcefulBees.git'
+                    url = 'https://github.com/Resourceful-Bees/ResourcefulBees/'
+                }
+
+                licenses {
+                    license {
+                        name = 'GNU General Public License v3.0'
+                        url = 'https://raw.githubusercontent.com/Resourceful-Bees/ResourcefulBees/master/LICENSE'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = 'epic428'
+                        name = 'Epic_Oreo'
+                        email = 'admin@resourcefulbees.com'
+                    }
+                    developer {
+                        id = 'thatgravyboat'
+                        name = 'ThatGravyBoat'
+                        email = 'admin@resourcefulbees.com'
+                    }
+                    developer {
+                        id = 'dawn_felstar'
+                        name = 'Dawn Felstar'
+                        email = 'admin@resourcefulbees.com'
+                    }
+                    developer {
+                        id = 'vikthoor'
+                        name = 'Vik'
+                        email = 'admin@resourcefulbees.com'
+                    }
+                }
+            }
+        }
+    }
+
+    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
+    repositories {
+        maven {
+            url = rootProject.version.endsWith("-SNAPSHOT") ? snapshotsRepoUrl : releasesRepoUrl
+            credentials {
+                username ENV.MAVEN_USER
+                password ENV.MAVEN_PASS
+            }
+        }
+    }
+}

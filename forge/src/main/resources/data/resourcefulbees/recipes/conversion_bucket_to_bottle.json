@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    { "item": "resourcefulbees:honey_fluid_bucket" },
+    { "item": "minecraft:glass_bottle" },
+    { "item": "minecraft:glass_bottle" },
+    { "item": "minecraft:glass_bottle" },
+    { "item": "minecraft:glass_bottle" }
+    
+  ],
+  "result": {
+    "item": "minecraft:honey_bottle",
+    "count": 4
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "parent": "block/orientable_with_bottom",
+  "textures": {
+      "bottom": "minecraft:block/beehive_end",
+      "top": "minecraft:block/beehive_end",
+      "front": "resourcefulbees:block/apiary_breeder_side",
+      "side": "resourcefulbees:block/apiary_breeder_side"
+  }
+}

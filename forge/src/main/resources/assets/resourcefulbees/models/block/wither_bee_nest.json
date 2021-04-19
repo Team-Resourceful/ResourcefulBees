@@ -1,0 +1,10 @@
+{
+  "parent": "block/orientable_with_bottom",
+  "textures": {
+    "particle": "resourcefulbees:block/bee_nest/wither_nest",
+    "bottom": "resourcefulbees:block/bee_nest/wither_nest_bottom",
+    "top": "resourcefulbees:block/bee_nest/wither_nest_top",
+    "front": "resourcefulbees:block/bee_nest/wither_nest_front",
+    "side": "resourcefulbees:block/bee_nest/wither_nest"
+  }
+}

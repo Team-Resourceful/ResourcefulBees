@@ -1,0 +1,34 @@
+{
+    "name": "book.resourcefulbees.apiary_category.apiary_basics",
+    "icon": "resourcefulbees:t1_apiary",
+    "category": "resourcefulbees:apiary",
+    "sortnum": 2,
+    "pages": [
+        {
+            "type": "text",
+            "text": "book.resourcefulbees.apiary_category.apiary_basics.1"
+        },
+        {
+            "type": "text",
+            "text": "book.resourcefulbees.apiary_category.apiary_basics.2"
+        },
+        {
+            "type": "text",
+            "text": "book.resourcefulbees.apiary_category.apiary_basics.3"
+        },
+        {
+            "type": "text",
+            "text": "book.resourcefulbees.apiary_category.apiary_basics.4"
+        },
+        {
+            "type": "crafting",
+            "recipe": "resourcefulbees:t1_apiary",
+            "recipe2": "resourcefulbees:t2_apiary"
+        },
+        {
+            "type": "crafting",
+            "recipe": "resourcefulbees:t3_apiary",
+            "recipe2": "resourcefulbees:t4_apiary"
+        }
+    ]
+}

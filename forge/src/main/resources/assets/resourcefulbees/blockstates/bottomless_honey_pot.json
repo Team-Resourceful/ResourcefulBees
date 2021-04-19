@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "resourcefulbees:block/honey_pot",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "resourcefulbees:block/honey_pot"
+    },
+    "facing=south": {
+      "model": "resourcefulbees:block/honey_pot",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "resourcefulbees:block/honey_pot",
+      "y": 270
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "JFJ",
+    "FIF",
+    "JFJ"
+  ],
+  "key": {
+    "I": { "item": "resourcefulbees:gold_storage_upgrade" },
+    "J": { "item": "resourcefulbees:bee_jar" },
+    "F": { "tag": "minecraft:flowers"}
+  },
+  "result": {
+    "item": "resourcefulbees:apiary_breeder_upgrade"
+  }
+}

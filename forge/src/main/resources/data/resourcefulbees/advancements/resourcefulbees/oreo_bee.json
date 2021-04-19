@@ -1,0 +1,37 @@
+{
+  "parent": "resourcefulbees:resourcefulbees/collect_bee",
+  "display": {
+    "icon": {
+      "item": "resourcefulbees:bee_jar",
+      "nbt": "{Entity:\"resourcefulbees:oreo_bee\", Color:\"#442920\"}"
+    },
+    "title": {
+      "translate": "advancements.resourcefulbees.oreo_bee.title"
+    },
+    "description": {
+      "translate": "advancements.resourcefulbees.oreo_bee.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": true
+  },
+  "criteria": {
+    "oreo_bee": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "resourcefulbees:bee_jar",
+            "nbt": "{Entity:\"resourcefulbees:oreo_bee\"}"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "oreo_bee"
+    ]
+  ]
+}

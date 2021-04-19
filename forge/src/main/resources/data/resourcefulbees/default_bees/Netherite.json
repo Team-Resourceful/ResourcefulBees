@@ -1,0 +1,42 @@
+{
+  "flower": "tag:forge:storage_blocks/netherite",
+  "maxTimeInHive": 600,
+  "hasHoneycomb": true,
+  "baseLayerTexture": "ores/netherite/netherite_bee",
+  "traits": ["nether", "wither"],
+  "ColorData": {
+    "isBeeColored": false,
+    "honeycombColor": "#654740"
+  },
+  "MutationData": {
+    "hasMutation": true,
+    "mutations" : [
+      {
+        "type": "BLOCK",
+        "inputID": "minecraft:blackstone",
+        "outputs": [
+          {"outputID": "minecraft:gilded_blackstone", "weight": 10},
+          {"outputID": "minecraft:netherrack", "weight": 10}
+        ]
+      }
+    ]
+  },
+  "CentrifugeData": {
+    "hasCentrifugeOutput": true,
+    "mainOutput": "minecraft:netherite_ingot",
+    "mainOutputWeight": 0.05
+  },
+  "SpawnData": {
+    "canSpawnInWorld": true,
+    "biomeWhitelist": "tag:nether",
+    "lightLevel": "NIGHT"
+  },
+  "BreedData": {
+    "isBreedable": true,
+    "parent1": "Wither",
+    "parent2": "Diamond"
+  },
+  "TraitData": {
+    "hasTraits": true
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " CW",
+    " SC",
+    "S  "
+  ],
+  "key": {
+    "C": { "tag": "resourcefulbees:resourceful_honeycomb" },
+    "S": { "tag": "forge:rods/wooden" },
+    "W": { "tag": "forge:wax" }
+  },
+  "result": {
+    "item": "resourcefulbees:honey_dipper"
+  }
+}

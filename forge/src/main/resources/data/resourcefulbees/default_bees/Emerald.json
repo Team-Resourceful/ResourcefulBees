@@ -1,0 +1,36 @@
+{
+  "flower": "tag:forge:storage_blocks/emerald",
+  "hasHoneycomb": true,
+  "baseLayerTexture": "ores/emerald/emerald_bee",
+  "ColorData": {
+    "isBeeColored": false,
+    "honeycombColor": "#18eb09",
+    "modelType": "ORE"
+  },
+  "MutationData": {
+    "hasMutation": true,
+    "mutations" : [
+      {
+        "type": "BLOCK",
+        "inputID": "minecraft:stone",
+        "chance": 0.75,
+        "outputs": [
+          {"outputID": "minecraft:lava", "weight": 10}
+        ]
+      }
+    ]
+  },
+  "CentrifugeData": {
+    "hasCentrifugeOutput": true,
+    "mainOutput": "minecraft:emerald"
+  },
+  "SpawnData": {
+    "canSpawnInWorld": true,
+    "biomeWhitelist": "TAG:Mountain,Hills"
+  },
+  "BreedData": {
+    "isBreedable": true,
+    "spawnWeight": 4
+  },
+  "TraitData": {}
+}
