@@ -155,7 +155,6 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
     }
 
 
-
     @Override
     public boolean place(@NotNull WorldGenLevel worldIn, @NotNull ChunkGenerator generator, @NotNull Random rand, @NotNull BlockPos pos, @NotNull NoneFeatureConfiguration config) {
         if(!Config.GENERATE_BEE_NESTS.get()) {

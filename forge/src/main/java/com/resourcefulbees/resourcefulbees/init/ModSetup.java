@@ -18,12 +18,15 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.loading.FMLPaths;
 
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.function.BiConsumer;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import static com.resourcefulbees.resourcefulbees.ResourcefulBees.LOGGER;
 
@@ -33,13 +36,14 @@ public class ModSetup {
         throw new IllegalStateException("Utility Class");
     }
 
-    public static void initialize(){
+    public static void initialize() {
         setupPaths();
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ModSetup::loadResources);
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> RainbowColor::init);
     }
 
-    private static void setupPaths(){
+    private static void setupPaths() {
+        LOGGER.info("Setting up config paths...");
         Path configPath = FMLPaths.CONFIGDIR.get();
         Path rbBeesPath = Paths.get(configPath.toAbsolutePath().toString(), ResourcefulBees.MOD_ID, "bees");
         Path rbBiomePath = Paths.get(configPath.toAbsolutePath().toString(), ResourcefulBees.MOD_ID, "biome_dictionary");
@@ -108,5 +112,24 @@ public class ModSetup {
             }
             consumer.accept(packInfo);
         });
+    }
+
+    public static void parseType(File file, BiConsumer<Reader, String> consumer) throws IOException {
+        String name = file.getName();
+        name = name.substring(0, name.indexOf('.'));
+
+        Reader r = Files.newBufferedReader(file.toPath());
+
+        consumer.accept(r, name);
+    }
+
+    public static void parseType(ZipFile zf, ZipEntry zipEntry, BiConsumer<Reader, String> consumer) throws IOException {
+        String name = zipEntry.getName();
+        name = name.substring(name.lastIndexOf("/") + 1, name.indexOf('.'));
+
+        InputStream input = zf.getInputStream(zipEntry);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(input, StandardCharsets.UTF_8));
+
+        consumer.accept(reader, name);
     }
 }

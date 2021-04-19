@@ -1,5 +1,5 @@
 {
-  "flower": "all",
+  "flower": "tag:forge:mushrooms",
   "hasHoneycomb": false,
   "traits": ["slimy"],
   "maxTimeInHive": 1200,

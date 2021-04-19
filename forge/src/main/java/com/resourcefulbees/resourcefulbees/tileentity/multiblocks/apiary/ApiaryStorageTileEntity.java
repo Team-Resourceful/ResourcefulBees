@@ -2,6 +2,7 @@ package com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary;
 
 import com.resourcefulbees.resourcefulbees.api.IBeeRegistry;
 import com.resourcefulbees.resourcefulbees.api.ICustomBee;
+import com.resourcefulbees.resourcefulbees.api.beedata.BreedData;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.container.ApiaryStorageContainer;
@@ -33,6 +34,7 @@ import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -51,6 +53,8 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import static net.minecraft.world.inventory.AbstractContainerMenu.consideredTheSameItem;
+
 public class ApiaryStorageTileEntity extends BlockEntity implements MenuProvider, TickableBlockEntity, IApiaryMultiblock {
 
     public static final int UPGRADE_SLOT = 0;
@@ -68,13 +72,13 @@ public class ApiaryStorageTileEntity extends BlockEntity implements MenuProvider
         super(ModBlockEntityTypes.APIARY_STORAGE_TILE_ENTITY.get());
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public BlockEntityType<?> getType() {
         return ModBlockEntityTypes.APIARY_STORAGE_TILE_ENTITY.get();
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public Component getDisplayName() {
         return new TranslatableComponent("gui.resourcefulbees.apiary_storage");
@@ -82,7 +86,7 @@ public class ApiaryStorageTileEntity extends BlockEntity implements MenuProvider
 
     @Nullable
     @Override
-    public ApiaryStorageContainer createMenu(int i, @Nonnull Inventory playerInventory, @Nonnull Player playerEntity) {
+    public ApiaryStorageContainer createMenu(int i, @NotNull Inventory playerInventory, @NotNull Player playerEntity) {
         if (level != null)
             return new ApiaryStorageContainer(i, level, worldPosition, playerInventory);
         return null;
@@ -132,16 +136,9 @@ public class ApiaryStorageTileEntity extends BlockEntity implements MenuProvider
     }
 
     @Override
-    public void load(@Nonnull BlockState state, @Nonnull CompoundTag nbt) {
+    public void load(@NotNull BlockState state, @NotNull CompoundTag nbt) {
         super.load(state, nbt);
         this.loadFromNBT(nbt);
-    }
-
-    @Nonnull
-    @Override
-    public CompoundTag save(@Nonnull CompoundTag nbt) {
-        super.save(nbt);
-        return this.saveToNBT(nbt);
     }
 
     public void loadFromNBT(CompoundTag nbt) {
@@ -151,6 +148,18 @@ public class ApiaryStorageTileEntity extends BlockEntity implements MenuProvider
             apiaryPos = NbtUtils.readBlockPos(nbt.getCompound(NBTConstants.NBT_APIARY_POS));
         if (nbt.contains(NBTConstants.NBT_SLOT_COUNT))
             this.setNumberOfSlots(nbt.getInt(NBTConstants.NBT_SLOT_COUNT));
+    }
+
+    @Override
+    public void handleUpdateTag(@NotNull BlockState state, CompoundTag tag) {
+        this.load(state, tag);
+    }
+
+    @NotNull
+    @Override
+    public CompoundTag save(@NotNull CompoundTag nbt) {
+        super.save(nbt);
+        return this.saveToNBT(nbt);
     }
 
     public CompoundTag saveToNBT(CompoundTag nbt) {
@@ -164,17 +173,12 @@ public class ApiaryStorageTileEntity extends BlockEntity implements MenuProvider
         return nbt;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public CompoundTag getUpdateTag() {
         CompoundTag nbtTagCompound = new CompoundTag();
         save(nbtTagCompound);
         return nbtTagCompound;
-    }
-
-    @Override
-    public void handleUpdateTag(@Nonnull BlockState state, CompoundTag tag) {
-        this.load(state, tag);
     }
 
     @Nullable
@@ -207,22 +211,23 @@ public class ApiaryStorageTileEntity extends BlockEntity implements MenuProvider
         ItemStack comb = beeType.equals(BeeConstants.VANILLA_BEE_TYPE) ? new ItemStack(Items.HONEYCOMB) : ((ICustomBee) entity).getBeeData().getCombStack();
         ItemStack combBlock = beeType.equals(BeeConstants.VANILLA_BEE_TYPE) ? new ItemStack(Items.HONEYCOMB_BLOCK) : ((ICustomBee) entity).getBeeData().getCombBlockItemStack();
         int[] outputAmounts = beeType.equals(BeeConstants.VANILLA_BEE_TYPE) ? null : BEE_REGISTRY.getBeeData(beeType).getApiaryOutputAmounts();
+        ApiaryOutput[] outputTypes = !beeType.equals(BeeConstants.VANILLA_BEE_TYPE) ? BEE_REGISTRY.getBeeData(beeType).getApiaryOutputsTypes() : BeeInfoUtils.getDefaultApiaryTypes();
 
         switch (apiaryTier) {
             case 8:
-                itemstack = (Config.T4_APIARY_OUTPUT.get() == ApiaryOutput.BLOCK) ? combBlock.copy() : comb.copy();
+                itemstack = (outputTypes[3] == ApiaryOutput.BLOCK) ? combBlock.copy() : comb.copy();
                 itemstack.setCount(outputAmounts != null && outputAmounts[3] != -1 ? outputAmounts[3] : Config.T4_APIARY_QUANTITY.get());
                 break;
             case 7:
-                itemstack = (Config.T3_APIARY_OUTPUT.get() == ApiaryOutput.BLOCK) ? combBlock.copy() : comb.copy();
+                itemstack = (outputTypes[2] == ApiaryOutput.BLOCK) ? combBlock.copy() : comb.copy();
                 itemstack.setCount(outputAmounts != null && outputAmounts[2] != -1 ? outputAmounts[2] : Config.T3_APIARY_QUANTITY.get());
                 break;
             case 6:
-                itemstack = (Config.T2_APIARY_OUTPUT.get() == ApiaryOutput.BLOCK) ? combBlock.copy() : comb.copy();
+                itemstack = (outputTypes[1] == ApiaryOutput.BLOCK) ? combBlock.copy() : comb.copy();
                 itemstack.setCount(outputAmounts != null && outputAmounts[1] != -1 ? outputAmounts[1] : Config.T2_APIARY_QUANTITY.get());
                 break;
             default:
-                itemstack = (Config.T1_APIARY_OUTPUT.get() == ApiaryOutput.BLOCK) ? combBlock.copy() : comb.copy();
+                itemstack = (outputTypes[0] == ApiaryOutput.BLOCK) ? combBlock.copy() : comb.copy();
                 itemstack.setCount(outputAmounts != null && outputAmounts[0] != -1 ? outputAmounts[0] : Config.T1_APIARY_QUANTITY.get());
                 break;
         }
@@ -235,6 +240,12 @@ public class ApiaryStorageTileEntity extends BlockEntity implements MenuProvider
             float breedChance = BeeRegistry.getRegistry().getBreedChance(p1, p2, childBeeData);
             EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(childBeeData.getEntityTypeRegistryID());
 
+            BreedData p1BreedData = BEE_REGISTRY.getBeeData(p1).getBreedData();
+            BreedData p2BreedData = BEE_REGISTRY.getBeeData(p2).getBreedData();
+            
+            Item p1Returnable = p1BreedData.getFeedReturnItem();
+            Item p2Returnable = p2BreedData.getFeedReturnItem();
+
             if (level != null && entityType != null) {
                 Entity entity = entityType.create(level);
                 if (entity != null) {
@@ -244,6 +255,8 @@ public class ApiaryStorageTileEntity extends BlockEntity implements MenuProvider
                     ItemStack emptyBeeJar = new ItemStack(ModItems.BEE_JAR.get());
                     beeJar.setTag(nbt);
                     BeeJar.renameJar(beeJar, (Bee) beeEntity);
+                    depositItemStack(new ItemStack(p1Returnable, p1BreedData.getFeedAmount()));
+                    depositItemStack(new ItemStack(p2Returnable, p2BreedData.getFeedAmount()));
                     // if failed, will deposit empty bee jar
                     float nextFloat = level.random.nextFloat();
                     if (breedChance >= nextFloat) {
@@ -287,7 +300,7 @@ public class ApiaryStorageTileEntity extends BlockEntity implements MenuProvider
                     itemstack.setCount(0);
                 }
                 getItemStackHandler().setStackInSlot(slotIndex, slotStack);
-            } else if (AbstractContainerMenu.consideredTheSameItem(itemstack, slotStack)) {
+            } else if (consideredTheSameItem(itemstack, slotStack)) {
                 int j = itemstack.getCount() + slotStack.getCount();
                 if (j <= maxStackSize) {
                     itemstack.setCount(0);
@@ -337,9 +350,9 @@ public class ApiaryStorageTileEntity extends BlockEntity implements MenuProvider
         this.apiaryPos = apiaryPos;
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
         return cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? getLazyOptional().cast() :
                 super.getCapability(cap, side);
     }

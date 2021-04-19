@@ -9,6 +9,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -22,9 +23,9 @@ public class CreativeGenTileEntity extends BlockEntity implements TickableBlockE
 
     public CreativeGenTileEntity() { super(ModBlockEntityTypes.CREATIVE_GEN_ENTITY.get()); }
 
-    @Nonnull
+    @NotNull
     @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
         if (cap.equals(CapabilityEnergy.ENERGY)) return energyOptional.cast();
         return super.getCapability(cap, side);
     }

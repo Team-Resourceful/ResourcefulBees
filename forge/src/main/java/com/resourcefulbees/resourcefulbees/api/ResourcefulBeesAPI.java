@@ -1,5 +1,6 @@
 package com.resourcefulbees.resourcefulbees.api;
 
+import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import net.minecraftforge.fml.ModLoadingContext;
 
@@ -23,12 +24,14 @@ public class ResourcefulBeesAPI {
     public static void setBeeRegistry(IBeeRegistry beeRegistry) {
         if (ResourcefulBeesAPI.beeRegistry == null && ModLoadingContext.get().getActiveContainer().getModId().equals(MOD_ID)) {
             ResourcefulBeesAPI.beeRegistry = beeRegistry;
+            ResourcefulBees.LOGGER.info("Bee Registry Initialized...");
         }
     }
 
     public static void setTraitRegistry(ITraitRegistry traitRegistry) {
         if (ResourcefulBeesAPI.traitRegistry == null && ModLoadingContext.get().getActiveContainer().getModId().equals(MOD_ID)) {
             ResourcefulBeesAPI.traitRegistry = traitRegistry;
+            ResourcefulBees.LOGGER.info("Trait Registry Initialized...");
         }
     }
 

@@ -13,15 +13,16 @@ import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +42,10 @@ public class FlowersCategory extends BaseCategory<FlowersCategory.Recipe> {
             FlowersCategory.Recipe.class);
     }
 
+    private static ItemStack getErrorItem(Block block){
+        return new ItemStack(Items.BARRIER).setHoverName(new TextComponent(block.getRegistryName() != null ? block.getRegistryName().toString() : "Unknown Block ID"));
+    }
+
     public static List<Recipe> getFlowersRecipes() {
         List<Recipe> recipes = new ArrayList<>();
 
@@ -51,8 +56,7 @@ public class FlowersCategory extends BaseCategory<FlowersCategory.Recipe> {
                     recipes.add(new Recipe(fluids, null, beeData.getName()));
                 }else {
                     List<ItemStack> items = beeData.getBlockFlowers().stream()
-                            .filter(b -> b.asItem() != Items.AIR)
-                            .map(b ->new ItemStack(b.asItem())).collect(Collectors.toList());
+                            .map(b -> b.asItem() != Items.AIR ? new ItemStack(b.asItem()) : getErrorItem(b)).collect(Collectors.toList());
                     recipes.add(new Recipe(null, items, beeData.getName()));
                 }
             }
@@ -61,7 +65,7 @@ public class FlowersCategory extends BaseCategory<FlowersCategory.Recipe> {
     }
 
     @Override
-    public void setIngredients(@NotNull Recipe recipe, @Nonnull @NotNull IIngredients ingredients) {
+    public void setIngredients(@NotNull Recipe recipe, @NotNull IIngredients ingredients) {
         if (recipe.flowerItems != null){
             List<List<ItemStack>> items = new ArrayList<>();
             items.add(recipe.flowerItems);
@@ -80,7 +84,7 @@ public class FlowersCategory extends BaseCategory<FlowersCategory.Recipe> {
     }
 
     @Override
-    public void setRecipe(@Nonnull @NotNull IRecipeLayout iRecipeLayout, @Nonnull Recipe recipe, @Nonnull IIngredients ingredients) {
+    public void setRecipe(@NotNull IRecipeLayout iRecipeLayout, @NotNull Recipe recipe, @NotNull IIngredients ingredients) {
         if (recipe.flowerFluids != null){
             IGuiFluidStackGroup fluidStacks = iRecipeLayout.getFluidStacks();
             fluidStacks.init(1,true,4,58);

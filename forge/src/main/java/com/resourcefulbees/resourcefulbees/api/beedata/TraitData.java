@@ -18,7 +18,7 @@ public class TraitData extends AbstractBeeData {
     /**
      * A list of damage sources the bee is immune to
      */
-    private transient Set<DamageSource> damageImmunities;
+    private transient Set<String> damageImmunities;
 
     /**
      * A list of effects the bee is immune to
@@ -90,7 +90,7 @@ public class TraitData extends AbstractBeeData {
     public Set<Pair<MobEffect, Integer>> getPotionDamageEffects(){
         return potionDamageEffects;
     }
-    public Set<DamageSource> getDamageImmunities(){
+    public Set<String> getDamageImmunities(){
         return damageImmunities;
     }
     public Set<MobEffect> getPotionImmunities(){

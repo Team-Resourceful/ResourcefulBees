@@ -17,6 +17,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class ModBlockEntityTypes {
 
+
     private ModBlockEntityTypes() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
@@ -71,4 +72,14 @@ public class ModBlockEntityTypes {
     public static final RegistryObject<BlockEntityType<HoneyTankTileEntity>> HONEY_TANK_TILE_ENTITY = TILE_ENTITY_TYPES.register("honey_tank", () -> BlockEntityType.Builder
             .of(() -> new HoneyTankTileEntity(HoneyTankTileEntity.TankTier.WOODEN), ModBlocks.PURPUR_HONEY_TANK.get(), ModBlocks.NETHER_HONEY_TANK.get(), ModBlocks.WOODEN_HONEY_TANK.get())
             .build(null));
+    public static final RegistryObject<BlockEntityType<HoneyCongealerTileEntity>> HONEY_CONGEALER_TILE_ENTITY = TILE_ENTITY_TYPES.register("honey_congealer", () -> BlockEntityType.Builder
+            .of(HoneyCongealerTileEntity::new, ModBlocks.HONEY_CONGEALER.get())
+            .build(null));
+    public static final RegistryObject<BlockEntityType<?>> HONEY_PIPE_TILE_ENTITY = TILE_ENTITY_TYPES.register("honey_pipe", () -> BlockEntityType.Builder
+            .of(HoneyPipeTileEntity::new, ModBlocks.HONEY_PIPE.get())
+            .build(null));
+    public static final RegistryObject<BlockEntityType<?>> BOTTOMLESS_HONEY_POT_TILE_ENTITY = TILE_ENTITY_TYPES.register("bottomless_honey_pot", () -> BlockEntityType.Builder
+            .of(BottomlessHoneyPotTileEntity::new, ModBlocks.BOTTOMLESS_HONEY_POT.get())
+            .build(null));
+
 }

@@ -7,8 +7,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
-
 public class TabImageButton extends ModImageButton {
 
     protected final OnTooltip tooltipProvider;
@@ -37,7 +35,7 @@ public class TabImageButton extends ModImageButton {
     }
 
     @Override
-    public void renderButton(@Nonnull PoseStack matrix, int mouseX, int mouseY, float partialTicks) {
+    public void renderButton(@NotNull PoseStack matrix, int mouseX, int mouseY, float partialTicks) {
         super.renderButton(matrix, mouseX, mouseY, partialTicks);
         if (this.displayItem != null)
             Minecraft.getInstance().getItemRenderer().renderAndDecorateItem(this.displayItem, this.x + this.itemX, this.y + this.itemY);

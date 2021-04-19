@@ -2,6 +2,7 @@ package com.resourcefulbees.resourcefulbees.container;
 
 import com.resourcefulbees.resourcefulbees.mixin.ContainerAccessor;
 import com.resourcefulbees.resourcefulbees.registry.ModContainers;
+import com.resourcefulbees.resourcefulbees.tileentity.AbstractHoneyTankContainer;
 import com.resourcefulbees.resourcefulbees.tileentity.EnderBeeconTileEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Inventory;
@@ -11,10 +12,9 @@ import net.minecraft.world.inventory.ContainerListener;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
-
-public class EnderBeeconContainer extends AbstractContainerMenu {
+public class EnderBeeconContainer extends ContainerWithStackMove {
 
     private final EnderBeeconTileEntity enderBeeconTileEntity;
     private final Player player;
@@ -26,14 +26,14 @@ public class EnderBeeconContainer extends AbstractContainerMenu {
         enderBeeconTileEntity = (EnderBeeconTileEntity) world.getBlockEntity(pos);
 
         if (getEnderBeeconTileEntity() != null) {
-            this.addSlot(new SlotItemHandlerUnconditioned(getEnderBeeconTileEntity().getTileStackHandler(), EnderBeeconTileEntity.HONEY_BOTTLE_INPUT, 184, 34) {
+            this.addSlot(new SlotItemHandlerUnconditioned(getEnderBeeconTileEntity().getTileStackHandler(), AbstractHoneyTankContainer.BOTTLE_INPUT_EMPTY, 184, 34) {
 
                 @Override
                 public boolean mayPlace(ItemStack stack) {
-                    return EnderBeeconTileEntity.isItemValid(stack);
+                    return AbstractHoneyTankContainer.isItemValid(stack);
                 }
             });
-            this.addSlot(new OutputSlot(getEnderBeeconTileEntity().getTileStackHandler(), EnderBeeconTileEntity.BOTTLE_OUTPUT, 184, 72));
+            this.addSlot(new OutputSlot(getEnderBeeconTileEntity().getTileStackHandler(), AbstractHoneyTankContainer.BOTTLE_OUTPUT_EMPTY, 184, 72));
 
             for (int i = 0; i < 3; ++i) {
                 for (int j = 0; j < 9; ++j) {
@@ -48,34 +48,18 @@ public class EnderBeeconContainer extends AbstractContainerMenu {
     }
 
     @Override
-    public boolean stillValid(@Nonnull Player player) {
+    public boolean stillValid(@NotNull Player player) {
         return true;
     }
 
-    @Nonnull
     @Override
-    public ItemStack quickMoveStack(@Nonnull Player playerIn, int index) {
-        ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = this.slots.get(index);
-        if (slot != null && slot.hasItem()) {
-            ItemStack itemstack1 = slot.getItem();
-            itemstack = itemstack1.copy();
+    public int getInventoryStart() {
+        return 2;
+    }
 
-            if (index <= 1) {
-                if (!this.moveItemStackTo(itemstack1, 2, slots.size(), true)) {
-                    return ItemStack.EMPTY;
-                }
-            } else if (!this.moveItemStackTo(itemstack1, 0, 1, false)) {
-                return ItemStack.EMPTY;
-            }
-
-            if (itemstack1.isEmpty()) {
-                slot.set(ItemStack.EMPTY);
-            } else {
-                slot.setChanged();
-            }
-        }
-        return itemstack;
+    @Override
+    public int getContainerInputEnd() {
+        return 1;
     }
 
     public int getFluid() {

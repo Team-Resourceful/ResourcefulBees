@@ -16,10 +16,9 @@ import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
-
-public class CentrifugeContainer extends AbstractContainerMenu {
+public class CentrifugeContainer extends ContainerWithStackMove {
 
     protected final CentrifugeTileEntity centrifugeTileEntity;
     private final Inventory inv;
@@ -160,36 +159,17 @@ public class CentrifugeContainer extends AbstractContainerMenu {
      * @param player the player
      */
     @Override
-    public boolean stillValid(@Nonnull Player player) { return true; }
+    public boolean stillValid(@NotNull Player player) { return true; }
 
-    @Nonnull
     @Override
-    public ItemStack quickMoveStack(@Nonnull Player playerIn, int index) {
-        ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = this.slots.get(index);
-        int totalSlots = centrifugeTileEntity.getTotalSlots();
-        int totalInputs = 1 + centrifugeTileEntity.getNumberOfInputs();
-
-        if (slot != null && slot.hasItem()) {
-            ItemStack slotStack = slot.getItem();
-            itemstack = slotStack.copy();
-            if (index < totalSlots) {
-                if (!this.moveItemStackTo(slotStack, totalSlots, slots.size(), true)) {
-                    return ItemStack.EMPTY;
-                }
-            } else if (!this.moveItemStackTo(slotStack, 0, totalInputs, false)) {
-                return ItemStack.EMPTY;
-            }
-
-            if (slotStack.isEmpty()) {
-                slot.set(ItemStack.EMPTY);
-            } else {
-                slot.setChanged();
-            }
-        }
-        return itemstack;
+    public int getContainerInputEnd() {
+        return 1 + centrifugeTileEntity.getNumberOfInputs();
     }
 
+    @Override
+    public int getInventoryStart() {
+        return centrifugeTileEntity.getTotalSlots();
+    }
 
     @Override
     public void broadcastChanges() {

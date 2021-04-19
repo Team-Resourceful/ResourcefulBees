@@ -15,6 +15,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -24,7 +25,7 @@ import java.util.List;
 public class EntityRenderer implements IIngredientRenderer<EntityIngredient> {
 
     @Override
-    public void render(@Nonnull PoseStack matrixStack, int x, int y, @Nullable EntityIngredient entityIngredient) {
+    public void render(@NotNull PoseStack matrixStack, int x, int y, @Nullable EntityIngredient entityIngredient) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.level != null && entityIngredient != null && mc.player != null) {
             CustomBeeData beeData = BeeRegistry.getRegistry().getBeeData(entityIngredient.getBeeType());
@@ -54,7 +55,7 @@ public class EntityRenderer implements IIngredientRenderer<EntityIngredient> {
         }
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public List<Component> getTooltip(EntityIngredient entityIngredient, @Nonnull TooltipFlag iTooltipFlag) {
         List<Component> tooltip = new ArrayList<>();

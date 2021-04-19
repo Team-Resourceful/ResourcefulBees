@@ -4,7 +4,6 @@ import com.resourcefulbees.resourcefulbees.block.multiblocks.centrifuge.Centrifu
 import com.resourcefulbees.resourcefulbees.block.multiblocks.centrifuge.CentrifugeControllerBlock;
 import com.resourcefulbees.resourcefulbees.capabilities.CustomEnergyStorage;
 import com.resourcefulbees.resourcefulbees.config.Config;
-import com.resourcefulbees.resourcefulbees.container.CentrifugeContainer;
 import com.resourcefulbees.resourcefulbees.container.CentrifugeMultiblockContainer;
 import com.resourcefulbees.resourcefulbees.registry.ModContainers;
 import com.resourcefulbees.resourcefulbees.tileentity.CentrifugeTileEntity;
@@ -16,16 +15,16 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
@@ -35,52 +34,18 @@ import static com.resourcefulbees.resourcefulbees.tileentity.multiblocks.MultiBl
 
 public class CentrifugeControllerTileEntity extends CentrifugeTileEntity {
 
+    private static final int TANK_CAPACITY = 10000;
+    private static final int INPUTS = 3;
     protected int validateTime = MathUtils.nextInt(10) + 10;
     protected boolean validStructure;
     protected final List<BlockPos> structureBlocks = new ArrayList<>();
 
-    private final ContainerData times = new SimpleContainerData(4) {
-
-        @Override
-        public int get(int index) {
-            switch(index) {
-                case 0:
-                    return CentrifugeControllerTileEntity.this.time[0];
-                case 1:
-                    return CentrifugeControllerTileEntity.this.time[1];
-                case 2:
-                    return CentrifugeControllerTileEntity.this.time[2];
-                default:
-                    return 0;
-            }
-        }
-
-        @Override
-        public void set(int index, int value) {
-            switch(index) {
-                case 0:
-                    CentrifugeControllerTileEntity.this.time[0] = value;
-                    break;
-                case 1:
-                    CentrifugeControllerTileEntity.this.time[1] = value;
-                    break;
-                case 2:
-                    CentrifugeControllerTileEntity.this.time[2] = value;
-                    break;
-                default: //do nothing
-            }
-
-        }
-
-        @Override
-        public int getCount() { return 3; }
-    };
-
+    private final ContainerData times = new TimesArray(3);
 
     public CentrifugeControllerTileEntity(BlockEntityType<?> tileEntityType) { super(tileEntityType); }
 
     @Override
-    public int getNumberOfInputs() { return 3; }
+    public int getNumberOfInputs() { return INPUTS; }
 
     public void checkHoneycombSlots(){
         for (int i = 0; i < honeycombSlots.length; i++) {
@@ -115,7 +80,7 @@ public class CentrifugeControllerTileEntity extends CentrifugeTileEntity {
     }
 
     @Override
-    public int getMaxTankCapacity() { return 10000; }
+    public int getMaxTankCapacity() { return TANK_CAPACITY; }
 
     @Override
     public int getRecipeTime(int i) { return getRecipe(i) != null ? Math.max(5, getRecipe(i).multiblockTime) : Config.GLOBAL_CENTRIFUGE_RECIPE_TIME.get(); }
@@ -131,9 +96,9 @@ public class CentrifugeControllerTileEntity extends CentrifugeTileEntity {
     }
 
     //region NBT
-    @Nonnull
+    @NotNull
     @Override
-    public CompoundTag save(@Nonnull CompoundTag tag) {
+    public CompoundTag save(@NotNull CompoundTag tag) {
         super.save(tag);
         return saveToNBT(tag);
     }
@@ -149,16 +114,22 @@ public class CentrifugeControllerTileEntity extends CentrifugeTileEntity {
         validStructure = tag.getBoolean("valid");
         super.loadFromNBT(tag);
     }
+
+    @Override
+    public void dropInventory(Level world, @NotNull BlockPos pos) {
+        //do nothing
+    }
+
     //endregion
 
     @Nullable
     @Override
-    public CentrifugeContainer createMenu(int id, @Nonnull Inventory playerInventory, @Nonnull Player playerEntity) {
+    public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player playerEntity) {
         assert level != null;
         return new CentrifugeMultiblockContainer(ModContainers.CENTRIFUGE_MULTIBLOCK_CONTAINER.get(), id, level, worldPosition, playerInventory, times);
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public Component getDisplayName() { return new TranslatableComponent("gui.resourcefulbees.centrifuge"); }
 

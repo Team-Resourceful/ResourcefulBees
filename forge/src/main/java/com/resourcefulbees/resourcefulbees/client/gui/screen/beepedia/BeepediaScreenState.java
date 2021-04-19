@@ -12,7 +12,7 @@ public class BeepediaScreenState {
     private int traitsScroll = 0;
     private int breedingPage = 0;
     private boolean biomesOpen = false;
-    private boolean parentBreeding = true;
+    private int breedingTab = 0;
     private boolean centrifugeOpen = false;
     private int centrifugePage = 0;
     private int currentMutationTab = 0;
@@ -74,20 +74,20 @@ public class BeepediaScreenState {
         this.traitsScroll = traitsScroll;
     }
 
-    public boolean isParentBreeding() {
-        return parentBreeding;
-    }
-
-    public void setParentBreeding(boolean parentBreeding) {
-        this.parentBreeding = parentBreeding;
-    }
-
     public int getBreedingPage() {
         return breedingPage;
     }
 
     public void setBreedingPage(int breedingPage) {
         this.breedingPage = breedingPage;
+    }
+
+    public int getBreedingTab() {
+        return breedingTab;
+    }
+
+    public void setBreedingTab(int breedingTab) {
+        this.breedingTab = breedingTab;
     }
 
     public BeepediaScreen.PageType getLastType() {

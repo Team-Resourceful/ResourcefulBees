@@ -6,11 +6,8 @@ import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.IBeeRegistry;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.compat.jei.ingredients.EntityIngredient;
-import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.ModBlocks;
-import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
-import com.resourcefulbees.resourcefulbees.utils.validation.ValidatorUtils;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.ingredient.IGuiIngredientGroup;
@@ -23,22 +20,13 @@ import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.SerializationTags;
-import net.minecraft.tags.Tag;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.Ingredient;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-
-import static com.resourcefulbees.resourcefulbees.lib.BeeConstants.*;
+import java.util.*;
 
 public class BeeBreedingCategory extends BaseCategory<BeeBreedingCategory.Recipe> {
     public static final ResourceLocation GUI_BACK = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/breeding.png");
@@ -87,15 +75,7 @@ public class BeeBreedingCategory extends BaseCategory<BeeBreedingCategory.Recipe
     }
 
     private static Recipe getSelfRecipe(CustomBeeData beeData) {
-        int feedAmount = beeData.getBreedData().getFeedAmount();
-        String feedItemS = finalizeFeedItem(beeData.getBreedData().getFeedItem());
-
-        Tag<Item> feedTag = SerializationTags.getInstance().getItems().getTag(new ResourceLocation(feedItemS));
-        Item feedItem = BeeInfoUtils.getItem(feedItemS);
-
-        if (BeeInfoUtils.isTag(beeData.getBreedData().getFeedItem())) feedItem = null;
-
-        return new Recipe(beeData.getName(), feedTag, feedItem, feedAmount, beeData.getName(), feedTag, feedItem, feedAmount, beeData.getName(), 1);
+        return new Recipe(beeData);
     }
 
     private static Recipe getParentsRecipe(CustomBeeData beeData, Iterator<String> parent1, Iterator<String> parent2) {
@@ -106,62 +86,24 @@ public class BeeBreedingCategory extends BaseCategory<BeeBreedingCategory.Recipe
             CustomBeeData p1Data = beeRegistry.getBeeData(p1);
             CustomBeeData p2Data = beeRegistry.getBeeData(p2);
 
-            String p1FeedItemS = finalizeFeedItem(p1Data.getBreedData().getFeedItem());
-            String p2FeedItemS = finalizeFeedItem(p2Data.getBreedData().getFeedItem());
-
-            Tag<Item> p1FeedTag = SerializationTags.getInstance().getItems().getTag(new ResourceLocation(p1FeedItemS));
-            Tag<Item> p2FeedTag = SerializationTags.getInstance().getItems().getTag(new ResourceLocation(p2FeedItemS));
-
-            Item p1FeedItem = BeeInfoUtils.getItem(p1FeedItemS);
-            Item p2FeedItem = BeeInfoUtils.getItem(p2FeedItemS);
-
-            if (BeeInfoUtils.isTag(p1Data.getBreedData().getFeedItem())) p1FeedItem = null;
-            if (BeeInfoUtils.isTag(p2Data.getBreedData().getFeedItem())) p2FeedItem = null;
-
-            return new Recipe(
-                    p1Data.getName(), p1FeedTag, p1FeedItem, p1Data.getBreedData().getFeedAmount(),
-                    p2Data.getName(), p2FeedTag, p2FeedItem, p2Data.getBreedData().getFeedAmount(),
-                    beeData.getName(), beeData.getBreedData().getBreedChance());
+            return new Recipe(p1Data, p2Data, beeData);
         }
 
         return null;
     }
 
-    private static String finalizeFeedItem(String feedItem) {
-        if (ValidatorUtils.TAG_RESOURCE_PATTERN.matcher(feedItem).matches()) {
-            return feedItem.replace(BeeConstants.TAG_PREFIX, "");
-        } else if (feedItem.equals(FLOWER_TAG_TALL)) {
-            return "minecraft:tall_flowers";
-        } else if (feedItem.equals(FLOWER_TAG_SMALL)) {
-            return "minecraft:small_flowers";
-        } else if (feedItem.equals(FLOWER_TAG_ALL)) {
-            return "minecraft:flowers";
-        }
-        return feedItem;
-    }
-
     @Override
-    public void setIngredients(@Nonnull Recipe recipe, @Nonnull IIngredients ingredients) {
+    public void setIngredients(@NotNull Recipe recipe, @NotNull IIngredients ingredients) {
         List<List<ItemStack>> list = new ArrayList<>();
 
-        if (recipe.p1FeedItem != null && recipe.p1FeedItem != Items.AIR) {
+        if (recipe.p1FeedItems != null) {
             List<ItemStack> stackList = new ArrayList<>();
-            stackList.add(new ItemStack(recipe.p1FeedItem, recipe.p1FeedAmount));
+            recipe.p1FeedItems.forEach(item -> stackList.add(new ItemStack(item, recipe.p1FeedAmount)));
             list.add(stackList);
         }
-        if (recipe.p1FeedTag != null) {
-            List<ItemStack> stackList = (List<ItemStack>) new Ingredient.TagValue(recipe.p1FeedTag).getItems();
-            stackList.forEach(itemStack -> itemStack.setCount(recipe.p1FeedAmount));
-            list.add(stackList);
-        }
-        if (recipe.p2FeedItem != null && recipe.p2FeedItem != Items.AIR) {
+        if (recipe.p2FeedItems != null) {
             List<ItemStack> stackList = new ArrayList<>();
-            stackList.add(new ItemStack(recipe.p2FeedItem, recipe.p2FeedAmount));
-            list.add(stackList);
-        }
-        if (recipe.p2FeedTag != null) {
-            List<ItemStack> stackList = (List<ItemStack>) new Ingredient.TagValue(recipe.p2FeedTag).getItems();
-            stackList.forEach(itemStack -> itemStack.setCount(recipe.p2FeedAmount));
+            recipe.p2FeedItems.forEach(item -> stackList.add(new ItemStack(item, recipe.p2FeedAmount)));
             list.add(stackList);
         }
 
@@ -176,7 +118,7 @@ public class BeeBreedingCategory extends BaseCategory<BeeBreedingCategory.Recipe
     }
 
     @Override
-    public void setRecipe(@Nonnull IRecipeLayout iRecipeLayout, @Nonnull Recipe recipe, @Nonnull IIngredients ingredients) {
+    public void setRecipe(@NotNull IRecipeLayout iRecipeLayout, @NotNull Recipe recipe, @NotNull IIngredients ingredients) {
         IGuiIngredientGroup<EntityIngredient> ingredientStacks = iRecipeLayout.getIngredientsGroup(JEICompat.ENTITY_INGREDIENT);
 
         ingredientStacks.init(0, true, 6, 6);
@@ -227,26 +169,25 @@ public class BeeBreedingCategory extends BaseCategory<BeeBreedingCategory.Recipe
         private final String child;
         private final float chance;
 
-        private final Tag<Item> p1FeedTag;
-        private final Item p1FeedItem;
-
-        private final Tag<Item> p2FeedTag;
-        private final Item p2FeedItem;
+        private final Set<Item> p1FeedItems;
+        private final Set<Item> p2FeedItems;
 
         private final int p1FeedAmount;
         private final int p2FeedAmount;
 
-        public Recipe(String parent1, Tag<Item> p1FeedTag, Item p1FeedItem, int p1FeedAmount, String parent2, Tag<Item> p2FeedTag, Item p2FeedItem, int p2FeedAmount, String child, float chance) {
-            this.parent1 = parent1;
-            this.parent2 = parent2;
-            this.child = child;
-            this.chance = chance;
-            this.p1FeedItem = p1FeedItem;
-            this.p2FeedItem = p2FeedItem;
-            this.p1FeedTag = p1FeedTag;
-            this.p2FeedTag = p2FeedTag;
-            this.p1FeedAmount = p1FeedAmount;
-            this.p2FeedAmount = p2FeedAmount;
+        public Recipe(CustomBeeData data){
+            this(data, data, data);
+        }
+
+        public Recipe(CustomBeeData parent1, CustomBeeData parent2, CustomBeeData child) {
+            this.parent1 = parent1.getName();
+            this.parent2 = parent2.getName();
+            this.child = child.getName();
+            this.chance = child.getBreedData().getBreedChance();
+            this.p1FeedItems = parent1.getBreedData().hasFeedItems() ? parent1.getBreedData().getFeedItems() : null;
+            this.p2FeedItems = parent2.getBreedData().hasFeedItems() ? parent2.getBreedData().getFeedItems() : null;
+            this.p1FeedAmount = parent1.getBreedData().getFeedAmount();
+            this.p2FeedAmount = parent2.getBreedData().getFeedAmount();
         }
     }
 }

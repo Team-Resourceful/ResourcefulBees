@@ -27,6 +27,7 @@ public class SecondPhaseValidator {
     }
 
     public static void validateHoneyEffects(HoneyBottleData honeyData) {
+        LOGGER.info("Validating Honey Effects...");
         List<HoneyEffect> honeyEffects = honeyData.getEffects();
         if (honeyEffects == null || honeyEffects.isEmpty()) return;
         Iterator<HoneyEffect> effectIterator = honeyEffects.iterator();

@@ -37,9 +37,8 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.List;
 
 @SuppressWarnings("deprecation")
@@ -57,7 +56,7 @@ public class ApiaryBlock extends Block {
   }
 
   @Override
-  public @NotNull InteractionResult use(@Nonnull BlockState state, @Nonnull Level world, @Nonnull BlockPos pos, @Nonnull Player player, @Nonnull InteractionHand handIn, @Nonnull BlockHitResult hit) {
+  public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level world, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand handIn, @NotNull BlockHitResult hit) {
     if (!player.isShiftKeyDown() && !world.isClientSide) {
       MenuProvider blockEntity = state.getMenuProvider(world,pos);
       NetworkHooks.openGui((ServerPlayer) player, blockEntity, pos);
@@ -78,12 +77,6 @@ public class ApiaryBlock extends Block {
     builder.add(VALIDATED, FACING);
   }
 
-  @Nullable
-  @Override
-  public MenuProvider getMenuProvider(@Nonnull BlockState state, Level worldIn, @Nonnull BlockPos pos) {
-    return (MenuProvider)worldIn.getBlockEntity(pos);
-  }
-
   @Override
   public boolean hasTileEntity(BlockState state) {
     return true;
@@ -95,8 +88,14 @@ public class ApiaryBlock extends Block {
     return new ApiaryTileEntity();
   }
 
+  @Nullable
   @Override
-  public void setPlacedBy(Level worldIn, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nullable LivingEntity placer, @Nonnull ItemStack stack) {
+  public MenuProvider getMenuProvider(@NotNull BlockState state, Level worldIn, @NotNull BlockPos pos) {
+    return (MenuProvider)worldIn.getBlockEntity(pos);
+  }
+
+  @Override
+  public void setPlacedBy(Level worldIn, @NotNull BlockPos pos, @NotNull BlockState state, @Nullable LivingEntity placer, @NotNull ItemStack stack) {
     BlockEntity tile = worldIn.getBlockEntity(pos);
     if(tile instanceof ApiaryTileEntity) {
       ApiaryTileEntity apiaryTileEntity = (ApiaryTileEntity) tile;
@@ -106,7 +105,7 @@ public class ApiaryBlock extends Block {
 
   @OnlyIn(Dist.CLIENT)
   @Override
-  public void appendHoverText(@Nonnull ItemStack stack, @Nullable BlockGetter worldIn, @Nonnull List<Component> tooltip, @Nonnull TooltipFlag flagIn) {
+  public void appendHoverText(@NotNull ItemStack stack, @Nullable BlockGetter worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
     if(Screen.hasShiftDown())
     {
       tooltip.addAll(new TooltipBuilder()

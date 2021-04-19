@@ -24,13 +24,12 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.List;
 
 @SuppressWarnings("deprecation")
-public class ApiaryBreederBlock extends Block {
+public class ApiaryBreederBlock extends Block{
 
     public ApiaryBreederBlock(Properties properties) {
         super(properties);
@@ -39,9 +38,9 @@ public class ApiaryBreederBlock extends Block {
 
 
 
-    @Nonnull
+    @NotNull
     @Override
-    public InteractionResult use(@Nonnull BlockState state, @NotNull Level world, @Nonnull BlockPos pos, @Nonnull Player player, @Nonnull InteractionHand hand, @Nonnull BlockHitResult blockRayTraceResult) {
+    public InteractionResult use(@NotNull BlockState state, @NotNull Level world, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult blockRayTraceResult) {
         if (!player.isShiftKeyDown() && !world.isClientSide) {
             MenuProvider blockEntity = state.getMenuProvider(world,pos);
             NetworkHooks.openGui((ServerPlayer) player, blockEntity, pos);
@@ -52,13 +51,8 @@ public class ApiaryBreederBlock extends Block {
 
     @Nullable
     @Override
-    public MenuProvider getMenuProvider(@Nonnull BlockState state, Level worldIn, @Nonnull BlockPos pos) {
+    public MenuProvider getMenuProvider(@NotNull BlockState state, Level worldIn, @NotNull BlockPos pos) {
         return (MenuProvider)worldIn.getBlockEntity(pos);
-    }
-
-    @Override
-    public boolean hasTileEntity(BlockState state) {
-        return true;
     }
 
     @Nullable
@@ -67,9 +61,16 @@ public class ApiaryBreederBlock extends Block {
         return new ApiaryBreederTileEntity();
     }
 
+
+    @Override
+    public boolean hasTileEntity(BlockState state) {
+        return true;
+    }
+
+
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void appendHoverText(@Nonnull ItemStack stack, @Nullable BlockGetter worldIn, @Nonnull List<Component> tooltip, @Nonnull TooltipFlag flagIn) {
+    public void appendHoverText(@NotNull ItemStack stack, @Nullable BlockGetter worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         tooltip.addAll(new TooltipBuilder()
                 .addTip(I18n.get("block.resourcefulbees.apiary_breeder.tooltip.info"), ChatFormatting.GOLD)
                 .addTip(I18n.get("block.resourcefulbees.apiary_breeder.tooltip.info1"), ChatFormatting.GOLD)

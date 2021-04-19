@@ -18,8 +18,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 public class ApiaryStorageScreen extends AbstractContainerScreen<ApiaryStorageContainer> {
 
@@ -30,7 +29,7 @@ public class ApiaryStorageScreen extends AbstractContainerScreen<ApiaryStorageCo
     private static final ResourceLocation BACKGROUND_9X12 = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/apiary/apiary_storage_108.png");
     private static final ResourceLocation TABS_BG = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/apiary/apiary_gui_tabs.png");
 
-    private ApiaryStorageTileEntity apiaryStorageTileEntity;
+    private final ApiaryStorageTileEntity apiaryStorageTileEntity;
 
     private ResourceLocation background;
 
@@ -39,7 +38,7 @@ public class ApiaryStorageScreen extends AbstractContainerScreen<ApiaryStorageCo
 
     public ApiaryStorageScreen(ApiaryStorageContainer screenContainer, Inventory inv, Component titleIn) {
         super(screenContainer, inv, titleIn);
-
+        apiaryStorageTileEntity = this.menu.getApiaryStorageTileEntity();
         preInit();
     }
 
@@ -75,8 +74,6 @@ public class ApiaryStorageScreen extends AbstractContainerScreen<ApiaryStorageCo
         super.init();
         this.buttons.clear();
 
-        apiaryStorageTileEntity = this.menu.getApiaryStorageTileEntity();
-
         int i = this.leftPos;
         int j = this.topPos;
         int t = i + this.imageWidth - 23;
@@ -85,7 +82,7 @@ public class ApiaryStorageScreen extends AbstractContainerScreen<ApiaryStorageCo
                 onPress -> this.changeScreen(ApiaryTabs.MAIN), 128, 128) {
 
             @Override
-            public void renderToolTip(@Nonnull PoseStack matrix, int mouseX, int mouseY) {
+            public void renderToolTip(@NotNull PoseStack matrix, int mouseX, int mouseY) {
                 TranslatableComponent s = new TranslatableComponent("gui.resourcefulbees.apiary.button.main_screen");
                 ApiaryStorageScreen.this.renderTooltip(matrix, s, mouseX, mouseY);
             }
@@ -95,7 +92,7 @@ public class ApiaryStorageScreen extends AbstractContainerScreen<ApiaryStorageCo
                 onPress -> this.changeScreen(ApiaryTabs.STORAGE), 128, 128) {
 
             @Override
-            public void renderToolTip(@Nonnull PoseStack matrix, int mouseX, int mouseY) {
+            public void renderToolTip(@NotNull PoseStack matrix,int mouseX, int mouseY) {
                 TranslatableComponent s = new TranslatableComponent("gui.resourcefulbees.apiary.button.storage_screen");
                 ApiaryStorageScreen.this.renderTooltip(matrix, s, mouseX, mouseY);
             }
@@ -105,7 +102,7 @@ public class ApiaryStorageScreen extends AbstractContainerScreen<ApiaryStorageCo
                 onPress -> this.changeScreen(ApiaryTabs.BREED), 128, 128) {
 
             @Override
-            public void renderToolTip(@Nonnull PoseStack matrix,int mouseX, int mouseY) {
+            public void renderToolTip(@NotNull PoseStack matrix,int mouseX, int mouseY) {
                 TranslatableComponent s = new TranslatableComponent("gui.resourcefulbees.apiary.button.breed_screen");
                 ApiaryStorageScreen.this.renderTooltip(matrix, s, mouseX, mouseY);
             }
@@ -127,22 +124,15 @@ public class ApiaryStorageScreen extends AbstractContainerScreen<ApiaryStorageCo
     }
 
     @Override
-    public void render(@Nonnull PoseStack matrix, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(matrix);
-        super.render(matrix, mouseX, mouseY, partialTicks);
-        this.renderTooltip(matrix, mouseX, mouseY);
-    }
-
-    @Override
-    protected void renderBg(@Nonnull PoseStack matrix, float partialTicks, int mouseX, int mouseY) {
+    protected void renderBg(@NotNull PoseStack matrix, float partialTicks, int mouseX, int mouseY) {
         if (this.menu.isRebuild()) {
             preInit();
             init();
             this.menu.setRebuild(false);
         }
 
-            mainTabButton.active = getApiaryStorageTileEntity().getApiary() != null;
-            breedTabButton.active = getApiaryStorageTileEntity().getApiary() != null && getApiaryStorageTileEntity().getApiary().getBreederPos() != null;
+        mainTabButton.active = getApiaryStorageTileEntity().getApiary() != null;
+        breedTabButton.active = getApiaryStorageTileEntity().getApiary() != null && getApiaryStorageTileEntity().getApiary().getBreederPos() != null;
 
         Minecraft client = this.minecraft;
         if (client != null) {
@@ -158,7 +148,16 @@ public class ApiaryStorageScreen extends AbstractContainerScreen<ApiaryStorageCo
     }
 
     @Override
-    protected void renderLabels(@Nonnull PoseStack matrix, int mouseX, int mouseY) {
+    public void render(@NotNull PoseStack matrix, int mouseX, int mouseY, float partialTicks) {
+        if (getApiaryStorageTileEntity() != null) {
+            this.renderBackground(matrix);
+            super.render(matrix, mouseX, mouseY, partialTicks);
+            this.renderTooltip(matrix, mouseX, mouseY);
+        }
+    }
+
+    @Override
+    protected void renderLabels(@NotNull PoseStack matrix, int mouseX, int mouseY) {
         for (AbstractWidget widget : this.buttons) {
             if (widget.isHovered()) {
                 widget.renderToolTip(matrix, mouseX - this.leftPos, mouseY - this.topPos);

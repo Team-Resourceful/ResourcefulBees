@@ -36,7 +36,7 @@ public class EffectComponent implements ICustomComponent {
     }
 
     private Component getEffectName(MobEffect effect) {
-        return effect != null ? new TranslatableComponent(effect.getDescriptionId()) : TextComponent.EMPTY;
+        return new TranslatableComponent(effect.getDescriptionId());
     }
 
     @Override

@@ -88,7 +88,7 @@ public class BeeLayer extends RenderLayer<CustomBeeEntity, CustomBeeModel<Custom
     }
 
     @Override
-    public void render(@Nonnull PoseStack matrixStackIn, @Nonnull MultiBufferSource bufferIn, int packedLightIn, @Nonnull CustomBeeEntity customBeeEntity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void render(@NotNull PoseStack matrixStackIn, @NotNull MultiBufferSource bufferIn, int packedLightIn, @NotNull CustomBeeEntity customBeeEntity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         if (isRainbowBee) color = RainbowColor.getColorFloats();
         ResourceLocation texture = customBeeEntity.isAngry() ? angerLayerTexture : layerTexture;
 

@@ -1,6 +1,7 @@
 package com.resourcefulbees.resourcefulbees.item;
 
 import com.resourcefulbees.resourcefulbees.api.beedata.ColorData;
+import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.utils.color.Color;
 import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
@@ -34,11 +35,13 @@ public class BeeSpawnEggItem extends SpawnEggItem {
     protected static final List<BeeSpawnEggItem> eggsToAdd = new ArrayList<>();
 	private final Lazy<? extends EntityType<?>> entityType;
 	private final ColorData colorData;
+	private final CustomBeeData beeData;
 
-	public BeeSpawnEggItem(RegistryObject<? extends EntityType<?>> entityTypeSupplier, int firstColor, int secondColor, ColorData colorData, Properties properties) {
+	public BeeSpawnEggItem(RegistryObject<? extends EntityType<?>> entityTypeSupplier, int firstColor, int secondColor, CustomBeeData beeData, Properties properties) {
 		super(null, firstColor, secondColor, properties);
+		this.beeData = beeData;
 		this.entityType = Lazy.of(entityTypeSupplier);
-		this.colorData = colorData;
+		this.colorData = beeData.getColorData();
 		eggsToAdd.add(this);
 	}
 
@@ -47,6 +50,9 @@ public class BeeSpawnEggItem extends SpawnEggItem {
 		return entityType.get();
 	}
 
+    public CustomBeeData getBeeData() {
+        return beeData;
+    }
 
     public static int getColor(ItemStack stack, int tintIndex) {
 	    ColorData colorData = ((BeeSpawnEggItem)stack.getItem()).colorData;

@@ -1,0 +1,15 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "BWB",
+        "BWB",
+        " B "
+    ],
+    "key": {
+        "B": { "item": "minecraft:brick" },
+        "W": { "tag": "forge:wax" }
+    },
+    "result": {
+        "item": "resourcefulbees:bottomless_honey_pot"
+    }
+}

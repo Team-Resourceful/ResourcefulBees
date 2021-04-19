@@ -23,7 +23,7 @@ public class RenderHoneyGenerator extends BlockEntityRenderer<HoneyGeneratorTile
     @Override
     public void render(HoneyGeneratorTileEntity tile, float partialTick, @NotNull PoseStack matrix, @NotNull MultiBufferSource renderer, int light, int overlayLight) {
         if (tile.getLevel() == null) return;
-        FluidStack stack = tile.fluidTank.getFluid();
+        FluidStack stack = tile.getFluidTank().getFluid();
         if (!stack.isEmpty()) {
             int level = tile.getFluidLevel();
             int color = stack.getFluid().getAttributes().getColor();

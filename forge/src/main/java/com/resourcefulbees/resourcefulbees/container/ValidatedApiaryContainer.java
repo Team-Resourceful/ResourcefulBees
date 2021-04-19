@@ -13,10 +13,9 @@ import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
-
-public class ValidatedApiaryContainer extends AbstractContainerMenu {
+public class ValidatedApiaryContainer extends ContainerWithStackMove {
 
     private final DataSlot selectedBee = DataSlot.standalone();
     private final ApiaryTileEntity apiaryTileEntity;
@@ -73,41 +72,26 @@ public class ValidatedApiaryContainer extends AbstractContainerMenu {
     }
 
     @Override
-    public boolean stillValid(@Nonnull Player playerIn) {
+    public boolean stillValid(@NotNull Player playerIn) {
         return true;
     }
 
     @Override
-    public void removed(@Nonnull Player playerIn) {
+    public void removed(@NotNull Player playerIn) {
         Level world = this.getApiaryTileEntity().getLevel();
         if (world != null && !world.isClientSide)
             this.getApiaryTileEntity().setNumPlayersUsing(this.getApiaryTileEntity().getNumPlayersUsing() - 1);
         super.removed(playerIn);
     }
 
-    @Nonnull
     @Override
-    public ItemStack quickMoveStack(@Nonnull Player playerIn, int index) {
-        ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = this.slots.get(index);
-        if (slot != null && slot.hasItem()) {
-            ItemStack itemstack1 = slot.getItem();
-            itemstack = itemstack1.copy();
-            if (index <= 1) {
-                if (!this.moveItemStackTo(itemstack1, 2, slots.size(), true)) {
-                    return ItemStack.EMPTY;
-                }
-            } else if (!this.moveItemStackTo(itemstack1, 0, 2, false)) {
-                return ItemStack.EMPTY;
-            }
+    public int getContainerInputEnd() {
+        return 2;
+    }
 
-            if (itemstack1.isEmpty()) {
-                slot.set(ItemStack.EMPTY);
-            } else {
-                slot.setChanged();
-            }
-        }
-        return itemstack;
+    @Override
+    public int getInventoryStart() {
+        return 3;
     }
 
     public boolean selectBee(int id) {

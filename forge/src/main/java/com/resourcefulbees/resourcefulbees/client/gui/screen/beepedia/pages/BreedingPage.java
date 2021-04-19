@@ -3,7 +3,12 @@ package com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
+import com.resourcefulbees.resourcefulbees.api.beedata.mutation.EntityMutation;
+import com.resourcefulbees.resourcefulbees.api.beedata.mutation.ItemMutation;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
+import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.mutations.EntityMutationPage;
+import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.mutations.ItemMutationPage;
+import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
@@ -36,6 +41,12 @@ public class BreedingPage extends BeeDataPage {
     Map<Pair<String, String>, CustomBeeData> parents;
     List<BreedingObject> parentBreeding = new LinkedList<>();
     List<BreedingObject> childrenBreeding = new LinkedList<>();
+    List<EntityMutationPage> entityMutationBreeding = new LinkedList<>();
+    List<ItemMutationPage> itemMutationBreeding = new LinkedList<>();
+
+    List<BreedingPageType> subPages = new LinkedList<>();
+
+    BreedingPageType activeSubPage;
 
     Button leftArrow;
     Button rightArrow;
@@ -47,19 +58,22 @@ public class BreedingPage extends BeeDataPage {
 
     private final TranslatableComponent parentsTitle = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding.parents_title");
     private final TranslatableComponent childrenTitle = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding.children_title");
-    private List<BreedingObject> activeList = null;
+    private final TranslatableComponent entityMutationsTitle = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding.entity_mutations_title");
+    private final TranslatableComponent itemMutationsTitle = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding.item_mutations_title");
     private int activePage = 0;
 
-    public BreedingPage(BeepediaScreen beepedia, CustomBeeData beeData, int xPos, int yPos, BeePage parent) {
+    public BreedingPage(BeepediaScreen beepedia, CustomBeeData beeData, int xPos, int yPos, List<EntityMutation> mutations, List<ItemMutation> itemBreedMutation, BeePage parent) {
         super(beepedia, beeData, xPos, yPos, parent);
         children = BeeRegistry.getRegistry().getChildren(beeData);
         parents = BeeRegistry.getRegistry().getParents(beeData);
         children.forEach((p, l) -> l.getMap().forEach((w, b) -> childrenBreeding.add(new BreedingObject(p, b))));
         parents.forEach((p, b) -> parentBreeding.add(new BreedingObject(p, b)));
+        mutations.forEach(b -> entityMutationBreeding.add(new EntityMutationPage(b.getParent(), b.getInput(), b.getOutputs(), MutationTypes.ENTITY, b.getMutaionCount(), beepedia)));
+        itemBreedMutation.forEach(b -> itemMutationBreeding.add(new ItemMutationPage(b.getParent(), b.getInputs(), b.getOutputs(), MutationTypes.ITEM, b.getMutationCount(), beepedia)));
         leftArrow = new ImageButton(xPos + (SUB_PAGE_WIDTH / 2) - 28, yPos + SUB_PAGE_HEIGHT - 16, 8, 11, 0, 0, 11, arrowImage, 16, 33, button -> prevPage());
         rightArrow = new ImageButton(xPos + (SUB_PAGE_WIDTH / 2) + 20, yPos + SUB_PAGE_HEIGHT - 16, 8, 11, 8, 0, 11, arrowImage, 16, 33, button -> nextPage());
-        prevTab = new ImageButton(xPos + (SUB_PAGE_WIDTH / 2) - 48, yPos + 6, 8, 11, 0, 0, 11, arrowImage, 16, 33, button -> toggleActiveList());
-        nextTab = new ImageButton(xPos + (SUB_PAGE_WIDTH / 2) + 40, yPos + 6, 8, 11, 8, 0, 11, arrowImage, 16, 33, button -> toggleActiveList());
+        prevTab = new ImageButton(xPos + (SUB_PAGE_WIDTH / 2) - 48, yPos + 6, 8, 11, 0, 0, 11, arrowImage, 16, 33, button -> prevTab());
+        nextTab = new ImageButton(xPos + (SUB_PAGE_WIDTH / 2) + 40, yPos + 6, 8, 11, 8, 0, 11, arrowImage, 16, 33, button -> nextTab());
         leftArrow.visible = false;
         rightArrow.visible = false;
         prevTab.visible = false;
@@ -68,6 +82,18 @@ public class BreedingPage extends BeeDataPage {
         beepedia.addButton(rightArrow);
         beepedia.addButton(prevTab);
         beepedia.addButton(nextTab);
+
+        if (!notBaseBreed()) childrenBreeding = new LinkedList<>();
+
+        if (!parentBreeding.isEmpty()) subPages.add(BreedingPageType.PARENTS);
+        if (!childrenBreeding.isEmpty()) subPages.add(BreedingPageType.CHILDREN);
+        if (!entityMutationBreeding.isEmpty()) subPages.add(BreedingPageType.ENTITY_MUTATIONS);
+        if (!itemMutationBreeding.isEmpty()) subPages.add(BreedingPageType.ITEM_MUTATIONS);
+
+        if (BeepediaScreen.currScreenState.getBreedingTab() >= subPages.size())
+            BeepediaScreen.currScreenState.setBreedingTab(subPages.size() - 1);
+
+        activeSubPage = subPages.get(BeepediaScreen.currScreenState.getBreedingTab());
 
         parentBreeding.sort((o1, o2) -> {
             if (o1.isBase) return 1;
@@ -79,40 +105,68 @@ public class BreedingPage extends BeeDataPage {
         });
     }
 
-    private void toggleActiveList(boolean parentsList) {
-        BeepediaScreen.currScreenState.setParentBreeding(parentsList);
-        if (parentsList && !parentBreeding.isEmpty()) {
-            activeList = parentBreeding;
-        } else if (!parentsList && !childrenBreeding.isEmpty()) {
-            activeList = childrenBreeding;
-        } else {
-            activeList = null;
-        }
-        activePage = BeepediaScreen.currScreenState.getBreedingPage();
-        if (activeList == null || activePage >= activeList.size()) activePage = 0;
-        BeepediaScreen.currScreenState.setBreedingPage(activePage);
+    private void nextTab() {
+        int tab = BeepediaScreen.currScreenState.getBreedingTab();
+        tab++;
+        if (tab >= subPages.size()) tab = 0;
+        BeepediaScreen.currScreenState.setBreedingTab(tab);
+        updatePagePosition();
     }
 
-    private void toggleActiveList() {
-        toggleActiveList(!BeepediaScreen.currScreenState.isParentBreeding());
+    private void prevTab() {
+        int tab = BeepediaScreen.currScreenState.getBreedingTab();
+        tab--;
+        if (tab < 0) tab = subPages.size() - 1;
+        BeepediaScreen.currScreenState.setBreedingTab(tab);
+        updatePagePosition();
+    }
+
+    private void updatePagePosition() {
+        switch (subPages.get(BeepediaScreen.currScreenState.getBreedingTab())) {
+            case PARENTS:
+                if (activePage < 0) activePage = parentBreeding.size() - 1;
+                else if (activePage >= parentBreeding.size()) activePage = 0;
+                activeSubPage = BreedingPageType.PARENTS;
+                break;
+            case CHILDREN:
+                if (activePage < 0) activePage = childrenBreeding.size() - 1;
+                else if (activePage >= childrenBreeding.size()) activePage = 0;
+                activeSubPage = BreedingPageType.CHILDREN;
+                break;
+            case ITEM_MUTATIONS:
+                if (activePage < 0) activePage = itemMutationBreeding.size() - 1;
+                else if (activePage >= itemMutationBreeding.size()) activePage = 0;
+                activeSubPage = BreedingPageType.ITEM_MUTATIONS;
+                break;
+            case ENTITY_MUTATIONS:
+                if (activePage < 0) activePage = entityMutationBreeding.size() - 1;
+                else if (activePage >= entityMutationBreeding.size()) activePage = 0;
+                activeSubPage = BreedingPageType.ENTITY_MUTATIONS;
+                break;
+            default:
+                activePage = 0;
+        }
     }
 
     private void nextPage() {
         activePage++;
-        if (activePage >= activeList.size()) activePage = 0;
+        updatePagePosition();
         BeepediaScreen.currScreenState.setBreedingPage(activePage);
     }
 
     private void prevPage() {
         activePage--;
-        if (activePage < 0) activePage = activeList.size() - 1;
+        updatePagePosition();
         BeepediaScreen.currScreenState.setBreedingPage(activePage);
     }
 
     @Override
     public void openPage() {
         super.openPage();
-        toggleActiveList(BeepediaScreen.currScreenState.isParentBreeding());
+        int tab = BeepediaScreen.currScreenState.getBreedingTab();
+        if (tab >= subPages.size()) tab = subPages.size() - 1;
+        BeepediaScreen.currScreenState.setBreedingTab(tab);
+        activeSubPage = subPages.get(tab);
     }
 
 
@@ -125,41 +179,83 @@ public class BreedingPage extends BeeDataPage {
         nextTab.visible = false;
     }
 
+    private int getCurrentListSize() {
+        switch (activeSubPage) {
+            case ENTITY_MUTATIONS:
+                return entityMutationBreeding.size();
+            case ITEM_MUTATIONS:
+                return itemMutationBreeding.size();
+            case CHILDREN:
+                return childrenBreeding.size();
+            case PARENTS:
+                return parentBreeding.size();
+            default:
+                return 0;
+        }
+    }
+
     @Override
     public void renderBackground(PoseStack matrix, float partialTick, int mouseX, int mouseY) {
         showButtons();
-        Minecraft.getInstance().textureManager.bind(breedingImage);
-        GuiComponent.blit(matrix, xPos, yPos + 22, 0, 0, 128, 64, 128, 64);
         Font font = Minecraft.getInstance().font;
-        TranslatableComponent title = BeepediaScreen.currScreenState.isParentBreeding() && !baseOnly() ? parentsTitle : childrenTitle;
+        TranslatableComponent title;
+        switch (activeSubPage) {
+            case CHILDREN:
+                title = childrenTitle;
+                break;
+            case ITEM_MUTATIONS:
+                title = itemMutationsTitle;
+                break;
+            case ENTITY_MUTATIONS:
+                title = entityMutationsTitle;
+                break;
+            default:
+                title = parentsTitle;
+                break;
+        }
         int padding = font.width(title) / 2;
         font.draw(matrix, title.withStyle(ChatFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, -1);
-        if (activeList.size() > 1) {
-            TextComponent page = new TextComponent(String.format("%d / %d", activePage + 1, activeList.size()));
+        if (getCurrentListSize() > 1) {
+            TextComponent page = new TextComponent(String.format("%d / %d", activePage + 1, getCurrentListSize()));
             padding = font.width(page) / 2;
             font.draw(matrix, page.withStyle(ChatFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + SUB_PAGE_HEIGHT - 14, -1);
         }
     }
 
     private boolean shouldShowButtons() {
-        return (!parentBreeding.isEmpty() || !childrenBreeding.isEmpty()) && !baseOnly();
+        return subPages.size() > 1;
     }
 
     private void showButtons() {
         prevTab.visible = shouldShowButtons();
         nextTab.visible = shouldShowButtons();
-        leftArrow.visible = activeList.size() > 1;
-        rightArrow.visible = activeList.size() > 1;
+        leftArrow.visible = getCurrentListSize() > 1;
+        rightArrow.visible = getCurrentListSize() > 1;
     }
 
-    private boolean baseOnly() {
-        return (parentBreeding.size() == 1 && childrenBreeding.size() == 1 && parentBreeding.get(0).isBase && childrenBreeding.get(0).isBase);
+    private boolean notBaseBreed() {
+        return (parentBreeding.size() != 1 || childrenBreeding.size() != 1 || !parentBreeding.get(0).isBase || !childrenBreeding.get(0).isBase);
     }
 
     @Override
     public void renderForeground(PoseStack matrix, int mouseX, int mouseY) {
-        if (activeList == null || activeList.isEmpty()) return;
-        activeList.get(activePage).draw(matrix);
+        switch (activeSubPage) {
+            case CHILDREN:
+                childrenBreeding.get(activePage).draw(matrix);
+                break;
+            case ENTITY_MUTATIONS:
+                entityMutationBreeding.get(activePage).draw(matrix, xPos, yPos + 22);
+                break;
+            case ITEM_MUTATIONS:
+                itemMutationBreeding.get(activePage).draw(matrix, xPos, yPos + 22);
+                break;
+            case PARENTS:
+                parentBreeding.get(activePage).draw(matrix);
+                break;
+            default:
+                // do nothing this should never happen
+                break;
+        }
     }
 
     @Override
@@ -184,22 +280,60 @@ public class BreedingPage extends BeeDataPage {
 
     @Override
     public void tick(int ticksActive) {
-        if (activeList == null || activeList.isEmpty()) return;
-        if (activeList.get(activePage) != null) {
-            activeList.get(activePage).tick(ticksActive);
+        switch (activeSubPage) {
+            case CHILDREN:
+                childrenBreeding.get(activePage).tick(ticksActive);
+                break;
+            case ENTITY_MUTATIONS:
+                entityMutationBreeding.get(activePage).tick(ticksActive);
+                break;
+            case ITEM_MUTATIONS:
+                itemMutationBreeding.get(activePage).tick(ticksActive);
+                break;
+            case PARENTS:
+                parentBreeding.get(activePage).tick(ticksActive);
+                break;
+            default:
+                // do nothing this should never happen
+                break;
         }
     }
 
     @Override
     public void drawTooltips(PoseStack matrixStack, int mouseX, int mouseY) {
-        if (activeList == null || activeList.isEmpty()) return;
-        activeList.get(activePage).drawTooltips(matrixStack, mouseX, mouseY);
+        switch (activeSubPage) {
+            case CHILDREN:
+                childrenBreeding.get(activePage).drawTooltips(matrixStack, mouseX, mouseY);
+                break;
+            case ENTITY_MUTATIONS:
+                entityMutationBreeding.get(activePage).drawTooltips(matrixStack, xPos, yPos + 22, mouseX, mouseY);
+                break;
+            case ITEM_MUTATIONS:
+                itemMutationBreeding.get(activePage).drawTooltips(matrixStack, xPos, yPos + 22, mouseX, mouseY);
+                break;
+            case PARENTS:
+                parentBreeding.get(activePage).drawTooltips(matrixStack, mouseX, mouseY);
+                break;
+            default:
+                // do nothing this should never happen
+                break;
+        }
     }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
-        if (activeList == null || activeList.isEmpty()) return false;
-        return activeList.get(activePage).mouseClicked(mouseX, mouseY);
+        switch (activeSubPage) {
+            case CHILDREN:
+                return childrenBreeding.get(activePage).mouseClicked(mouseX, mouseY);
+            case ENTITY_MUTATIONS:
+                return entityMutationBreeding.get(activePage).mouseClick(xPos, yPos + 22, (int) mouseX, (int) mouseY);
+            case ITEM_MUTATIONS:
+                return itemMutationBreeding.get(activePage).mouseClick(xPos, yPos + 22, (int) mouseX, (int) mouseY);
+            case PARENTS:
+                return parentBreeding.get(activePage).mouseClicked(mouseX, mouseY);
+            default:
+                return false;
+        }
     }
 
     public class BreedingObject {
@@ -310,6 +444,8 @@ public class BreedingPage extends BeeDataPage {
         }
 
         public void draw(PoseStack matrix) {
+            Minecraft.getInstance().textureManager.bind(breedingImage);
+            GuiComponent.blit(matrix, xPos, yPos + 22, 0, 0, 128, 64, 128, 64);
             drawParent1(matrix);
             drawParent2(matrix);
             drawChild(matrix);
@@ -351,5 +487,12 @@ public class BreedingPage extends BeeDataPage {
                 this.beeData = beeData;
             }
         }
+    }
+
+    private enum BreedingPageType {
+        PARENTS,
+        CHILDREN,
+        ENTITY_MUTATIONS,
+        ITEM_MUTATIONS;
     }
 }

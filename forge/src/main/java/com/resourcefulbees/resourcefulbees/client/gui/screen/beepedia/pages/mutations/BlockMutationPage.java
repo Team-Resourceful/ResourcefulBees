@@ -11,6 +11,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.*;
 import net.minecraft.tags.Tag;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
 import org.apache.commons.lang3.tuple.Pair;
@@ -29,8 +30,8 @@ public class BlockMutationPage extends MutationsPage {
     double outputChance;
     List<Pair<Double, BlockOutput>> outputs = new ArrayList<>();
 
-    public BlockMutationPage(Tag<?> blocks, Pair<Double, RandomCollection<BlockOutput>> outputs, MutationTypes type, CustomBeeData beeData, BeepediaScreen beepedia) {
-        super(type, beeData, beepedia);
+    public BlockMutationPage(Entity bee, Tag<?> blocks, Pair<Double, RandomCollection<BlockOutput>> outputs, MutationTypes type, int mutationCount, BeepediaScreen beepedia) {
+        super(bee, type, mutationCount, beepedia);
         if (blocks.getValues().get(0) instanceof Fluid) {
             inputs = blocks.getValues().stream().map(f -> ((Fluid) f).defaultFluidState().createLegacyBlock().getBlock()).distinct().collect(Collectors.toList());
         } else {
@@ -39,8 +40,8 @@ public class BlockMutationPage extends MutationsPage {
         initOutputs(outputs);
     }
 
-    public BlockMutationPage(Block block, Pair<Double, RandomCollection<BlockOutput>> outputs, MutationTypes type, CustomBeeData beeData, BeepediaScreen beepedia) {
-        super(type, beeData, beepedia);
+    public BlockMutationPage(Entity bee, Block block, Pair<Double, RandomCollection<BlockOutput>> outputs, MutationTypes type, int mutationCount, BeepediaScreen beepedia) {
+        super(bee, type, mutationCount, beepedia);
         inputs = new LinkedList<>(Collections.singleton(block));
         initOutputs(outputs);
     }
@@ -63,6 +64,7 @@ public class BlockMutationPage extends MutationsPage {
 
     @Override
     public void draw(PoseStack matrix, int xPos, int yPos) {
+        super.draw(matrix, xPos, yPos);
         beepedia.drawSlot(matrix, inputs.get(inputCounter), xPos + 32, yPos + 32);
         beepedia.drawSlotNoToolTip(matrix, outputs.get(outputCounter).getRight().getBlock(), xPos + 112, yPos + 32);
         drawWeight(matrix, outputs.get(outputCounter).getLeft(), xPos + 122, yPos + 54);
@@ -75,11 +77,12 @@ public class BlockMutationPage extends MutationsPage {
 
     @Override
     public boolean mouseClick(int xPos, int yPos, int mouseX, int mouseY) {
-        return false;
+        return super.mouseClick(xPos, yPos, mouseX, mouseY);
     }
 
     @Override
     public void drawTooltips(PoseStack matrix, int xPos, int yPos, int mouseX, int mouseY) {
+        super.drawTooltips(matrix, xPos, yPos, mouseX, mouseY);
         if (BeepediaScreen.mouseHovering((float) xPos + 112, (float) yPos + 32, 20, 20, mouseX, mouseY)) {
             BlockOutput output = outputs.get(outputCounter).getRight();
             List<Component> tooltip = new ArrayList<>();

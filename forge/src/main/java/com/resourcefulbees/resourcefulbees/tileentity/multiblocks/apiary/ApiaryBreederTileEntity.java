@@ -1,7 +1,7 @@
 package com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary;
 
-import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.ICustomBee;
+import com.resourcefulbees.resourcefulbees.api.beedata.BreedData;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.container.ApiaryBreederContainer;
 import com.resourcefulbees.resourcefulbees.container.AutomationSensitiveItemStackHandler;
@@ -29,7 +29,6 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.TickableBlockEntity;
@@ -41,9 +40,7 @@ import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import static com.resourcefulbees.resourcefulbees.lib.NBTConstants.NBT_BREEDER_COUNT;
 
@@ -65,46 +62,19 @@ public class ApiaryBreederTileEntity extends BlockEntity implements TickableBloc
     private BlockPos apiaryPos;
     private ApiaryTileEntity apiary;
 
-    protected final ContainerData times = new SimpleContainerData(5) {
+    protected final ContainerData times = new ContainerData() {
         @Override
         public int get(int index) {
-            switch (index) {
-                case 0:
-                    return ApiaryBreederTileEntity.this.getTime()[0];
-                case 1:
-                    return ApiaryBreederTileEntity.this.getTime()[1];
-                case 2:
-                    return ApiaryBreederTileEntity.this.getTime()[2];
-                case 3:
-                    return ApiaryBreederTileEntity.this.getTime()[3];
-                case 4:
-                    return ApiaryBreederTileEntity.this.getTime()[4];
-                default:
-                    return 0;
-            }
+            return MathUtils.inRangeExclusive(index, -1, 5)
+                    ? ApiaryBreederTileEntity.this.getTime()[index]
+                    : 0;
         }
 
         @Override
         public void set(int index, int value) {
-            switch (index) {
-                case 0:
-                    ApiaryBreederTileEntity.this.getTime()[0] = value;
-                    break;
-                case 1:
-                    ApiaryBreederTileEntity.this.getTime()[1] = value;
-                    break;
-                case 2:
-                    ApiaryBreederTileEntity.this.getTime()[2] = value;
-                    break;
-                case 3:
-                    ApiaryBreederTileEntity.this.getTime()[3] = value;
-                    break;
-                case 4:
-                    ApiaryBreederTileEntity.this.getTime()[4] = value;
-                    break;
-                default: //do nothing
-            }
-        }
+            if (!MathUtils.inRangeExclusive(index, -1, 5)) return;
+            ApiaryBreederTileEntity.this.getTime()[index] = value;
+         }
 
         @Override
         public int getCount() {
@@ -213,8 +183,8 @@ public class ApiaryBreederTileEntity extends BlockEntity implements TickableBloc
                 ItemStack f1Stack = getTileStackHandler().getStackInSlot(getFeed1Slots()[slot]);
                 ItemStack f2Stack = getTileStackHandler().getStackInSlot(getFeed2Slots()[slot]);
 
-                String p1FeedItem = ((CustomBeeEntity) p1Entity).getBeeData().getBreedData().getFeedItem();
-                String p2FeedItem = ((CustomBeeEntity) p2Entity).getBeeData().getBreedData().getFeedItem();
+                BreedData p1BreedData = ((CustomBeeEntity) p1Entity).getBeeData().getBreedData();
+                BreedData p2BreedData = ((CustomBeeEntity) p2Entity).getBeeData().getBreedData();
 
                 int f1StackCount = getTileStackHandler().getStackInSlot(getFeed1Slots()[slot]).getCount();
                 int f2StackCount = getTileStackHandler().getStackInSlot(getFeed2Slots()[slot]).getCount();
@@ -222,7 +192,7 @@ public class ApiaryBreederTileEntity extends BlockEntity implements TickableBloc
                 int p1FeedAmount = ((CustomBeeEntity) p1Entity).getBeeData().getBreedData().getFeedAmount();
                 int p2FeedAmount = ((CustomBeeEntity) p2Entity).getBeeData().getBreedData().getFeedAmount();
 
-                return (canBreed && BeeInfoUtils.isValidBreedItem(f1Stack, p1FeedItem) && BeeInfoUtils.isValidBreedItem(f2Stack, p2FeedItem)
+                return (canBreed && BeeInfoUtils.isValidBreedItem(f1Stack, p1BreedData) && BeeInfoUtils.isValidBreedItem(f2Stack, p2BreedData)
                         && f1StackCount >= p1FeedAmount && f2StackCount >= p2FeedAmount && !getTileStackHandler().getStackInSlot(getEmptyJarSlots()[slot]).isEmpty());
             }
         }
@@ -264,29 +234,11 @@ public class ApiaryBreederTileEntity extends BlockEntity implements TickableBloc
         this.getTime()[slot] = 0;
     }
 
-
+    @NotNull
     @Override
-    public void load(@Nonnull BlockState state, @Nonnull CompoundTag nbt) {
-        super.load(state, nbt);
-        this.loadFromNBT(nbt);
-    }
-
-    @Nonnull
-    @Override
-    public CompoundTag save(@Nonnull CompoundTag nbt) {
+    public CompoundTag save(@NotNull CompoundTag nbt) {
         super.save(nbt);
         return this.saveToNBT(nbt);
-    }
-
-    public void loadFromNBT(CompoundTag nbt) {
-        CompoundTag invTag = nbt.getCompound(NBTConstants.NBT_INVENTORY);
-        getTileStackHandler().deserializeNBT(invTag);
-        setTime(nbt.getIntArray("time"));
-        setTotalTime(nbt.getInt("totalTime"));
-        if (nbt.contains(NBTConstants.NBT_APIARY_POS))
-            apiaryPos = NbtUtils.readBlockPos(nbt.getCompound(NBTConstants.NBT_APIARY_POS));
-        if (nbt.contains(NBT_BREEDER_COUNT))
-            this.setNumberOfBreeders(nbt.getInt(NBT_BREEDER_COUNT));
     }
 
     public CompoundTag saveToNBT(CompoundTag nbt) {
@@ -302,7 +254,7 @@ public class ApiaryBreederTileEntity extends BlockEntity implements TickableBloc
         return nbt;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public CompoundTag getUpdateTag() {
         CompoundTag nbtTagCompound = new CompoundTag();
@@ -311,11 +263,26 @@ public class ApiaryBreederTileEntity extends BlockEntity implements TickableBloc
     }
 
     @Override
-    public void handleUpdateTag(@Nonnull BlockState state, CompoundTag tag) {
-        this.load(state, tag);
+    public void load(@NotNull BlockState state, @NotNull CompoundTag nbt) {
+        super.load(state, nbt);
+        this.loadFromNBT(nbt);
     }
 
+    public void loadFromNBT(CompoundTag nbt) {
+        CompoundTag invTag = nbt.getCompound(NBTConstants.NBT_INVENTORY);
+        getTileStackHandler().deserializeNBT(invTag);
+        setTime(nbt.getIntArray("time"));
+        setTotalTime(nbt.getInt("totalTime"));
+        if (nbt.contains(NBTConstants.NBT_APIARY_POS))
+            apiaryPos = NbtUtils.readBlockPos(nbt.getCompound(NBTConstants.NBT_APIARY_POS));
+        if (nbt.contains(NBT_BREEDER_COUNT))
+            this.setNumberOfBreeders(nbt.getInt(NBT_BREEDER_COUNT));
+    }
 
+    @Override
+    public void handleUpdateTag(@NotNull BlockState state, CompoundTag tag) {
+        this.load(state, tag);
+    }
 
     @Nullable
     @Override
@@ -330,9 +297,9 @@ public class ApiaryBreederTileEntity extends BlockEntity implements TickableBloc
         loadFromNBT(nbt);
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
         if (cap.equals(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)) return lazyOptional.cast();
         return super.getCapability(cap, side);
     }
@@ -345,16 +312,14 @@ public class ApiaryBreederTileEntity extends BlockEntity implements TickableBloc
         return (slot, automation) -> !automation || slot > 3;
     }
 
-
-
     @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int id, @Nonnull Inventory playerInventory, @Nonnull Player playerEntity) {
+    public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player playerEntity) {
         //noinspection ConstantConditions
         return new ApiaryBreederContainer(id, level, worldPosition, playerInventory, times);
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public Component getDisplayName() {
         return new TranslatableComponent("gui.resourcefulbees.apiary_breeder");
@@ -472,43 +437,41 @@ public class ApiaryBreederTileEntity extends BlockEntity implements TickableBloc
                 case 3:
                     // upgrade slots
                     return UpgradeItem.hasUpgradeData(stack) && (UpgradeItem.getUpgradeType(stack).contains(NBTConstants.NBT_BREEDER_UPGRADE));
+                //Parent 1 Bee jars
                 case 4:
                 case 9:
                 case 14:
                 case 19:
                 case 24:
+                //Parent 2 Bee jars
                 case 6:
                 case 11:
                 case 16:
                 case 21:
                 case 26:
                     //parent slots
-                    if (isSlotVisible(slot)) {
-                        return stack.getItem() instanceof BeeJar && BeeJar.isFilled(stack) && stack.getTag().getString(NBTConstants.NBT_ENTITY).startsWith(ResourcefulBees.MOD_ID);
-                    } else return false;
+                    return isSlotVisible(slot) && BeeInfoUtils.isBeeInJarOurs(stack);
+                //Parent 1 Feed Items
                 case 5:
                 case 10:
                 case 15:
                 case 20:
                 case 25:
+                //Parent 2 Feed Items
                 case 7:
                 case 12:
                 case 17:
                 case 22:
                 case 27:
                     // feed slots
-                    if (isSlotVisible(slot)) {
-                        return !(stack.getItem() instanceof BeeJar);
-                    } else return false;
+                    return isSlotVisible(slot) && !(stack.getItem() instanceof BeeJar);
                 case 8:
                 case 13:
                 case 18:
                 case 23:
                 case 28:
                     // jar slots
-                    if (isSlotVisible(slot)) {
-                        return stack.getItem() instanceof BeeJar && !BeeJar.isFilled(stack);
-                    } else return false;
+                    return isSlotVisible(slot) && stack.getItem() instanceof BeeJar && !BeeJar.isFilled(stack);
                 default:
                     //do nothing
                     return false;

@@ -68,13 +68,15 @@ public class HoneyTank extends Block {
     public static final BlockBehaviour.Properties PURPUR = BlockBehaviour.Properties.of(Material.STONE, MaterialColor.COLOR_MAGENTA)
             .sound(SoundType.GLASS)
             .harvestTool(ToolType.PICKAXE)
-            .strength(1.5f)
+            .harvestLevel(1)
+            .strength(2f)
             .noOcclusion()
             .requiresCorrectToolForDrops();
 
     public static final BlockBehaviour.Properties NETHER = BlockBehaviour.Properties.of(Material.STONE, MaterialColor.NETHER)
             .sound(SoundType.GLASS)
             .harvestTool(ToolType.PICKAXE)
+            .harvestLevel(1)
             .strength(1.5f)
             .noOcclusion()
             .requiresCorrectToolForDrops();
@@ -98,7 +100,7 @@ public class HoneyTank extends Block {
     }
 
     @Override
-    public void animateTick(@Nonnull BlockState stateIn, @Nonnull Level world, @Nonnull BlockPos pos, @Nonnull Random rand) {
+    public void animateTick(@NotNull BlockState stateIn, @NotNull Level world, @NotNull BlockPos pos, @NotNull Random rand) {
         HoneyTankTileEntity tank = getTileEntity(world, pos);
         if (tank == null) {
             return;
@@ -123,14 +125,13 @@ public class HoneyTank extends Block {
         return true;
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public InteractionResult use(@Nonnull BlockState state, Level world, @Nonnull BlockPos pos, @Nonnull Player player, @Nonnull InteractionHand hand, @Nonnull BlockHitResult blockRayTraceResult) {
+    public InteractionResult use(@NotNull BlockState state, Level world, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult blockRayTraceResult) {
 
         ItemStack heldItem = player.getItemInHand(hand);
         boolean usingHoney = heldItem.getItem() instanceof HoneyBottleItem;
         boolean usingBottle = heldItem.getItem() instanceof BottleItem;
-        boolean hasCapability = heldItem.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent();
         BlockEntity tileEntity = world.getBlockEntity(pos);
 
         if (tileEntity instanceof HoneyTankTileEntity) {
@@ -140,9 +141,8 @@ public class HoneyTank extends Block {
                     tank.fillBottle(player, hand);
                 } else if (usingHoney) {
                     tank.emptyBottle(player, hand);
-                } else if (hasCapability) {
-                    tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
-                            .ifPresent(iFluidHandler -> FluidUtil.interactWithFluidHandler(player, hand, world, pos, null));
+                } else {
+                    CentrifugeBlock.capabilityOrGuiUse(tileEntity, player, world, pos, hand);
                 }
             }
             return InteractionResult.SUCCESS;
@@ -150,7 +150,7 @@ public class HoneyTank extends Block {
         return super.use(state, world, pos, player, hand, blockRayTraceResult);
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public FluidState getFluidState(BlockState state) {
         return Boolean.TRUE.equals(state.getValue(BlockStateProperties.WATERLOGGED)) ? Fluids.WATER.getSource(false) : Fluids.EMPTY.defaultFluidState();
@@ -166,13 +166,13 @@ public class HoneyTank extends Block {
         builder.add(WATERLOGGED);
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public VoxelShape getShape(@NotNull BlockState state, @NotNull BlockGetter worldIn, @NotNull BlockPos pos, @NotNull CollisionContext context) {
         return VOXEL_SHAPE;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public BlockState updateShape(BlockState stateIn, @NotNull Direction facing, @NotNull BlockState facingState, @NotNull LevelAccessor world, @NotNull BlockPos currentPos, @NotNull BlockPos facingPos) {
         if (Boolean.TRUE.equals(stateIn.getValue(BlockStateProperties.WATERLOGGED))) {
@@ -183,7 +183,7 @@ public class HoneyTank extends Block {
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void appendHoverText(@Nonnull ItemStack stack, @javax.annotation.Nullable BlockGetter worldIn, @Nonnull List<Component> tooltip, @Nonnull TooltipFlag flagIn) {
+    public void appendHoverText(@NotNull ItemStack stack, @Nullable BlockGetter worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         if (!stack.hasTag() || stack.getTag() == null || stack.getTag().isEmpty() || !stack.getTag().contains("fluid"))
             return;
         HoneyTankTileEntity.TankTier tankTier = HoneyTankTileEntity.TankTier.getTier(stack.getTag().getInt("tier"));
@@ -222,7 +222,7 @@ public class HoneyTank extends Block {
     }
 
     @Override
-    public RenderShape getRenderShape(BlockState p_149645_1_) {
+    public @NotNull RenderShape getRenderShape(BlockState blockState) {
         return RenderShape.MODEL;
     }
 }

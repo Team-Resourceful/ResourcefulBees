@@ -30,9 +30,10 @@ import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.util.Constants;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -58,7 +59,7 @@ public class TieredBeehiveTileEntity extends BeehiveBlockEntity {
         this.tierModifier = tierModifier;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public BlockEntityType<?> getType() { return ModBlockEntityTypes.TIERED_BEEHIVE_TILE_ENTITY.get(); }
 
@@ -90,7 +91,7 @@ public class TieredBeehiveTileEntity extends BeehiveBlockEntity {
     public int getTicksSmoked() { return ticksSmoked; }
 
     @Override
-    public boolean releaseOccupant(@Nonnull BlockState state, @Nonnull BeehiveBlockEntity.BeeData tileBee, @Nullable List<Entity> entities, @Nonnull BeehiveBlockEntity.BeeReleaseStatus beehiveState) {
+    public boolean releaseOccupant(@NotNull BlockState state, @NotNull BeehiveBlockEntity.BeeData tileBee, @Nullable List<Entity> entities, @NotNull BeehiveBlockEntity.BeeReleaseStatus beehiveState) {
         BlockPos blockpos = this.getBlockPos();
         if (shouldStayInHive(beehiveState)) {
             return false;
@@ -115,10 +116,6 @@ public class TieredBeehiveTileEntity extends BeehiveBlockEntity {
                         Bee vanillaBeeEntity = (Bee) entity;
                         ItemStack honeycomb = new ItemStack(Items.HONEYCOMB);
 
-                        if (vanillaBeeEntity.hasSavedFlowerPos() && this.level.random.nextFloat() > 0.9F) {
-                            vanillaBeeEntity.savedFlowerPos = null;
-                        }
-
                         if (beehiveState == BeeReleaseStatus.HONEY_DELIVERED) {
                             vanillaBeeEntity.dropOffNectar();
                             int i = getHoneyLevel(state);
@@ -127,7 +124,7 @@ public class TieredBeehiveTileEntity extends BeehiveBlockEntity {
                                     honeycomb = ((ICustomBee)entity).getBeeData().getCombStack();
                                 }
 
-                                if (!honeycomb.isEmpty()) this.getHoneycombs().add(0, honeycomb);
+                                if (!honeycomb.isEmpty()) this.honeycombs.add(0, honeycomb);
 
                                 recalculateHoneyLevel();
                             }
@@ -147,7 +144,7 @@ public class TieredBeehiveTileEntity extends BeehiveBlockEntity {
     }
 
     @Override
-    public void addOccupantWithPresetTicks(@Nonnull Entity bee, boolean hasNectar, int ticksInHive) {
+    public void addOccupantWithPresetTicks(@NotNull Entity bee, boolean hasNectar, int ticksInHive) {
         if (this.stored.size() < getMaxBees()) {
             bee.ejectPassengers();
             CompoundTag nbt = new CompoundTag();
@@ -210,7 +207,7 @@ public class TieredBeehiveTileEntity extends BeehiveBlockEntity {
 
     public boolean hasBees() { return !stored.isEmpty(); }
 
-    public ItemStack getResourceHoneycomb(){ return getHoneycombs().remove(0); }
+    public ItemStack getResourceHoneycomb(){ return honeycombs.remove(0); }
 
     public boolean hasCombs(){ return numberOfCombs() > 0; }
 
@@ -222,7 +219,7 @@ public class TieredBeehiveTileEntity extends BeehiveBlockEntity {
     }
 
     @Override
-    public void load(@Nonnull BlockState state, @Nonnull CompoundTag nbt) {
+    public void load(@NotNull BlockState state, @NotNull CompoundTag nbt) {
         super.load(state, nbt);
         if (nbt.contains(NBTConstants.NBT_HONEYCOMBS_TE)) honeycombs = getHoneycombs(nbt);
         if (nbt.contains(NBTConstants.NBT_SMOKED_TE)) this.isSmoked = nbt.getBoolean(NBTConstants.NBT_SMOKED_TE);
@@ -230,9 +227,9 @@ public class TieredBeehiveTileEntity extends BeehiveBlockEntity {
         if (nbt.contains(NBTConstants.NBT_TIER_MODIFIER)) setTierModifier(nbt.getFloat(NBTConstants.NBT_TIER_MODIFIER));
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public CompoundTag save(@Nonnull CompoundTag nbt) {
+    public CompoundTag save(@NotNull CompoundTag nbt) {
         super.save(nbt);
         if (!getHoneycombs().isEmpty()) nbt.put(NBTConstants.NBT_HONEYCOMBS_TE, writeHoneycombs());
         nbt.putBoolean(NBTConstants.NBT_SMOKED_TE, isSmoked);
@@ -264,6 +261,6 @@ public class TieredBeehiveTileEntity extends BeehiveBlockEntity {
     }
 
     public List<ItemStack> getHoneycombs() {
-        return honeycombs;
+        return Collections.unmodifiableList(honeycombs);
     }
 }

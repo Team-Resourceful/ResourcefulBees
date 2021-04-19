@@ -1,7 +1,10 @@
 package com.resourcefulbees.resourcefulbees.utils.validation;
 
 import com.google.common.base.Splitter;
-import com.resourcefulbees.resourcefulbees.api.beedata.*;
+import com.resourcefulbees.resourcefulbees.api.beedata.BreedData;
+import com.resourcefulbees.resourcefulbees.api.beedata.CentrifugeData;
+import com.resourcefulbees.resourcefulbees.api.beedata.ColorData;
+import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
@@ -10,7 +13,8 @@ import com.resourcefulbees.resourcefulbees.utils.color.Color;
 import java.util.Iterator;
 
 import static com.resourcefulbees.resourcefulbees.ResourcefulBees.LOGGER;
-import static com.resourcefulbees.resourcefulbees.utils.validation.ValidatorUtils.*;
+import static com.resourcefulbees.resourcefulbees.utils.validation.ValidatorUtils.ENTITY_RESOURCE_PATTERN;
+import static com.resourcefulbees.resourcefulbees.utils.validation.ValidatorUtils.TAG_RESOURCE_PATTERN;
 
 public class FirstPhaseValidator {
 
@@ -19,10 +23,7 @@ public class FirstPhaseValidator {
     }
 
     public static boolean validate(CustomBeeData bee) {
-        validateHoneycombColor(bee.getColorData(), bee.getName());
-        validatePrimaryColor(bee.getColorData(), bee.getName());
-        validateSecondaryColor(bee.getColorData(), bee.getName());
-        validateGlowColor(bee.getColorData(), bee.getName());
+        validateColorData(bee.getColorData(), bee.getName());
         validateCentrifugeData(bee.getCentrifugeData(), bee.getName());
         validateBreeding(bee.getBreedData(), bee.getName());
         validateFlower(bee, bee.getName());
@@ -36,73 +37,48 @@ public class FirstPhaseValidator {
         return true;
     }
 
-
-    private static void validateHoneycombColor(ColorData colorData, String name) {
-        if (colorData != null && colorData.hasHoneycombColor() && !Color.validate(colorData.getHoneycombColor())) {
-            logError(name);
-            throw new IllegalArgumentException(String.format("Honeycomb Color: %1$s is not valid!!", colorData.getHoneycombColor()));
+    private static void validateColorData(ColorData colorData, String name) {
+        if (colorData != null) {
+            if (colorData.hasHoneycombColor()) validateColorData(colorData.getHoneycombColor(), name, "Honeycomb");
+            if (colorData.hasPrimaryColor()) validateColorData(colorData.getHoneycombColor(), name, "Primary");
+            if (colorData.hasSecondaryColor()) validateColorData(colorData.getHoneycombColor(), name, "Secondary");
+            if (colorData.hasGlowColor()) validateColorData(colorData.getHoneycombColor(), name, "Glow");
         }
     }
 
-    private static void validatePrimaryColor(ColorData colorData, String name) {
-        if (colorData != null && colorData.hasPrimaryColor() && !Color.validate(colorData.getPrimaryColor())) {
+    private static void validateColorData(String color, String name, String colorType) {
+        if (!Color.validate(color)) {
             logError(name);
-            throw new IllegalArgumentException(String.format("Primary Color: %1$s is not valid!!", colorData.getPrimaryColor()));
-        }
-    }
-
-    private static void validateSecondaryColor(ColorData colorData, String name) {
-        if (colorData != null && colorData.hasSecondaryColor() && !Color.validate(colorData.getSecondaryColor())) {
-            logError(name);
-            throw new IllegalArgumentException(String.format("Secondary Color: %1$s is not valid!!", colorData.getSecondaryColor()));
-        }
-    }
-
-    private static void validateGlowColor(ColorData colorData, String name) {
-        if (colorData != null && colorData.hasGlowColor() && !Color.validate(colorData.getGlowColor())) {
-            logError(name);
-            throw new IllegalArgumentException(String.format("Glow Color: %1$s is not valid!!", colorData.getGlowColor()));
+            throw new IllegalArgumentException(String.format("%1$s Color: %2$s is not valid!!", colorType, color));
         }
     }
 
     private static void validateHoneyBottleColor(HoneyBottleData honeyBottleData, String name) {
-        if (honeyBottleData != null && honeyBottleData.hasHoneyColor() && !Color.validate(honeyBottleData.getHoneyColor())) {
-            logError(name);
-            throw new IllegalArgumentException(String.format("Honey Bottle Color: %1$s is not valid!!", honeyBottleData.getHoneyColor()));
+        if (honeyBottleData != null && honeyBottleData.hasHoneyColor()) {
+            validateColorData(honeyBottleData.getHoneyColor(), name, "Honey Bottle");
         }
     }
 
     private static void validateCentrifugeData(CentrifugeData centrifugeData, String name) {
         if (centrifugeData != null && centrifugeData.hasCentrifugeOutput()) {
-            if (centrifugeData.getMainOutput().isEmpty() || !SINGLE_RESOURCE_PATTERN.matcher(centrifugeData.getMainOutput()).matches()) {
-                logError(name);
-                throw new IllegalArgumentException(String.format("Centrifuge Main Output: %1$s has invalid syntax!!", centrifugeData.getMainOutput()));
-            }
-            if (!centrifugeData.getSecondaryOutput().isEmpty() && !SINGLE_RESOURCE_PATTERN.matcher(centrifugeData.getMainOutput()).matches()) {
-                logError(name);
-                throw new IllegalArgumentException(String.format("Centrifuge Secondary Output: %1$s has invalid syntax!!", centrifugeData.getSecondaryOutput()));
-            }
-            if (!centrifugeData.getBottleOutput().isEmpty() && !SINGLE_RESOURCE_PATTERN.matcher(centrifugeData.getMainOutput()).matches()) {
-                logError(name);
-                throw new IllegalArgumentException(String.format("Centrifuge Bottle Output: %1$s has invalid syntax!!", centrifugeData.getBottleOutput()));
-            }
-            if (!centrifugeData.getFluidOutput().isEmpty() && !SINGLE_RESOURCE_PATTERN.matcher(centrifugeData.getMainOutput()).matches()) {
-                logError(name);
-                throw new IllegalArgumentException(String.format("Centrifuge Fluid Output: %1$s has invalid syntax!!", centrifugeData.getFluidOutput()));
-            }
+            validateCentrifugeData(centrifugeData.getMainOutput(), name, "Main Output");
+            validateCentrifugeData(centrifugeData.getSecondaryOutput(), name, "Secondary Output");
+            validateCentrifugeData(centrifugeData.getBottleOutput(), name, "Bottle Output");
+            validateCentrifugeData(centrifugeData.getFluidOutput(), name, "Fluid Output");
+        }
+    }
+
+    private static void validateCentrifugeData(String data, String name, String dataType) {
+        if (!data.isEmpty() && ValidatorUtils.isInvalidLocation(data)) {
+            logError(name);
+            throw new IllegalArgumentException(String.format("Centrifuge %1$s: %2$s has invalid syntax!!", dataType, data));
         }
     }
 
     private static void validateBreeding(BreedData breedData, String name) {
         if (breedData != null && breedData.isBreedable()) {
-            if (breedData.getParent1().isEmpty() && !breedData.getParent2().isEmpty()) {
-                logError(name);
-                throw new IllegalArgumentException("Parent 1 is empty while Parent 2 is not!!");
-            }
-            if (!breedData.getParent1().isEmpty() && breedData.getParent2().isEmpty()) {
-                logError(name);
-                throw new IllegalArgumentException("Parent 2 is empty while Parent 1 is not!!");
-            }
+            validateParents(breedData.getParent1(), breedData.getParent2(), name, "1", "2");
+            validateParents(breedData.getParent2(), breedData.getParent1(), name, "2", "1");
 
             if (breedData.hasParents()) {
                 Iterator<String> parent1 = Splitter.on(",").trimResults().split(breedData.getParent1()).iterator();
@@ -120,6 +96,14 @@ public class FirstPhaseValidator {
         }
     }
 
+    //parameter names are shit
+    private static void validateParents(String p1, String p2, String name, String type1, String type2) {
+        if (!p1.isEmpty() && p2.isEmpty()) {
+            logError(name);
+            throw new IllegalArgumentException(String.format("Parent %1$s is empty while Parent %2$s is not!!", type1, type2));
+        }
+    }
+
     private static void validateFlower(CustomBeeData beeData, String name) {
         if (beeData.getFlower() == null) {
             logError(name);
@@ -127,7 +111,7 @@ public class FirstPhaseValidator {
         }
 
         if (!(TAG_RESOURCE_PATTERN.matcher(beeData.getFlower()).matches()
-                || SINGLE_RESOURCE_PATTERN.matcher(beeData.getFlower()).matches()
+                || !ValidatorUtils.isInvalidLocation(beeData.getFlower())
                 || ENTITY_RESOURCE_PATTERN.matcher(beeData.getFlower()).matches()
                 || beeData.getFlower().equals(BeeConstants.FLOWER_TAG_ALL)
                 || beeData.getFlower().equals(BeeConstants.FLOWER_TAG_SMALL)

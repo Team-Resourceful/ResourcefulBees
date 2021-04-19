@@ -124,7 +124,7 @@ public class RegistryHandler {
         honeyData.setHoneyBottleRegistryObject(customHoneyBottle);
 
         if (Config.HONEY_GENERATE_BLOCKS.get() && honeyData.doGenerateHoneyBlock()) {
-            final RegistryObject<Block> customHoneyBlock = ModBlocks.BLOCKS.register(name + "_honey_block", () -> new ColoredHoneyBlock(honeyData.getHoneyColorInt(), honeyData.isRainbow()));
+            final RegistryObject<Block> customHoneyBlock = ModBlocks.BLOCKS.register(name + "_honey_block", () -> new ColoredHoneyBlock(honeyData));
             final RegistryObject<Item> customHoneyBlockItem = ModItems.ITEMS.register(name + "_honey_block", () -> new BlockItem(customHoneyBlock.get(), new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
 
             honeyData.setHoneyBlockRegistryObject(customHoneyBlock);
@@ -172,11 +172,11 @@ public class RegistryHandler {
     private static void registerBee(String name, CustomBeeData customBeeData) {
         final RegistryObject<EntityType<? extends CustomBeeEntity>> customBeeEntity = ENTITY_TYPES.register(name + "_bee", () -> EntityType.Builder
                 .<ResourcefulBee>of((type, world) -> new ResourcefulBee(type, world, customBeeData), MobCategory.CREATURE)
-                .sized(0.7F, 0.6F)
+                .sized(0.7F * customBeeData.getSizeModifier(), 0.6F * customBeeData.getSizeModifier())
                 .build(name + "_bee"));
 
         final RegistryObject<Item> customBeeSpawnEgg = ModItems.ITEMS.register(name + "_bee_spawn_egg",
-                () -> new BeeSpawnEggItem(customBeeEntity, Color.parseInt(BeeConstants.VANILLA_BEE_COLOR), 0x303030, customBeeData.getColorData(), new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
+                () -> new BeeSpawnEggItem(customBeeEntity, Color.parseInt(BeeConstants.VANILLA_BEE_COLOR), 0x303030, customBeeData, new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
 
         ModEntities.getModBees().put(name, customBeeEntity);
         customBeeData.setEntityTypeRegistryID(customBeeEntity.getId());

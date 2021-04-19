@@ -20,9 +20,7 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("deprecation")
 public class CentrifugeCasingBlock extends Block {
@@ -48,7 +46,7 @@ public class CentrifugeCasingBlock extends Block {
     //TODO this can break if other casings are powered need to find an alternative solution.
     // may have to loop through every casing and check if any are still powered.
     @Override
-    public void neighborChanged(@Nonnull BlockState state, @Nonnull Level world, @Nonnull BlockPos pos, @Nonnull Block changedBlock, @Nonnull BlockPos changedBlockPos, boolean bool) {
+    public void neighborChanged(@NotNull BlockState state, @NotNull Level world, @NotNull BlockPos pos, @NotNull Block changedBlock, @NotNull BlockPos changedBlockPos, boolean bool) {
         CentrifugeControllerTileEntity centrifugeControllerTileEntity = getControllerEntity(world, pos);
         if (centrifugeControllerTileEntity != null) {
             centrifugeControllerTileEntity.setIsPoweredByRedstone(world.hasNeighborSignal(pos));

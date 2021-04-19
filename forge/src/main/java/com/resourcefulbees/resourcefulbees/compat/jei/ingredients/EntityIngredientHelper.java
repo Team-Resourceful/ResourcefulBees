@@ -9,6 +9,7 @@ import mezz.jei.api.recipe.IFocusFactory;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -16,15 +17,15 @@ import java.util.Iterator;
 
 public class EntityIngredientHelper implements IIngredientHelper<EntityIngredient> {
 
-    @Nonnull
+    @NotNull
     @Override
-    public IFocus<?> translateFocus(@Nonnull IFocus<EntityIngredient> focus, @Nonnull IFocusFactory focusFactory) {
+    public IFocus<?> translateFocus(@NotNull IFocus<EntityIngredient> focus, @NotNull IFocusFactory focusFactory) {
         return focus;
     }
 
     @Nullable
     @Override
-    public EntityIngredient getMatch(Iterable<EntityIngredient> iterable, @Nonnull EntityIngredient entityIngredient) {
+    public EntityIngredient getMatch(Iterable<EntityIngredient> iterable, @NotNull EntityIngredient entityIngredient) {
         Iterator<EntityIngredient> var3 = iterable.iterator();
 
         EntityIngredient entity;
@@ -39,49 +40,49 @@ public class EntityIngredientHelper implements IIngredientHelper<EntityIngredien
         return entity;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public String getDisplayName(EntityIngredient entityIngredient) {
         return I18n.get("entity.resourcefulbees." + entityIngredient.getBeeType());
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public ItemStack getCheatItemStack(EntityIngredient ingredient) {
         return ingredient.getBeeType().equals(BeeConstants.VANILLA_BEE_TYPE) ? new ItemStack(Items.BEE_SPAWN_EGG) : new ItemStack(BeeRegistry.getRegistry().getBeeData(ingredient.getBeeType()).getSpawnEggItemRegistryObject().get());
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public String getUniqueId(EntityIngredient entityIngredient) {
         return "bee:" + entityIngredient.getBeeType();
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public String getWildcardId(@Nonnull EntityIngredient entityIngredient) {
+    public String getWildcardId(@NotNull EntityIngredient entityIngredient) {
         return this.getUniqueId(entityIngredient);
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public String getModId(@Nonnull EntityIngredient entityIngredient) {
+    public String getModId(@NotNull EntityIngredient entityIngredient) {
         return ResourcefulBees.MOD_ID;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public String getResourceId(EntityIngredient entityIngredient) {
         return entityIngredient.getBeeType();
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public EntityIngredient copyIngredient(@Nonnull EntityIngredient entityIngredient) {
+    public EntityIngredient copyIngredient(@NotNull EntityIngredient entityIngredient) {
         return entityIngredient;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public String getErrorInfo(@Nullable EntityIngredient entityIngredient) {
         return "BEE INGREDIENT ERROR IN JEI";

@@ -1,5 +1,5 @@
 {
-  "flower": "minecraft:wither_rose",
+  "flower": "tag:forge:storage_blocks/netherite",
   "maxTimeInHive": 600,
   "hasHoneycomb": true,
   "baseLayerTexture": "ores/netherite/netherite_bee",

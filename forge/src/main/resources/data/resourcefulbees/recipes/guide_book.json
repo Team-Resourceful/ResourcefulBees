@@ -1,5 +1,11 @@
 {
     "type": "minecraft:crafting_shapeless",
+    "conditions": [
+        {
+            "type": "forge:mod_loaded",
+            "modid": "patchouli"
+        }
+    ],
     "ingredients": [
         {
             "tag": "resourcefulbees:resourceful_honeycomb"

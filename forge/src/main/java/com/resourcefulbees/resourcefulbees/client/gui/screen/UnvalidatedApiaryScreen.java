@@ -25,8 +25,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 public class UnvalidatedApiaryScreen extends AbstractContainerScreen<UnvalidatedApiaryContainer> {
 
@@ -64,10 +63,10 @@ public class UnvalidatedApiaryScreen extends AbstractContainerScreen<Unvalidated
             previewSetToggle(this.previewButton.isTriggered());
         }));
         previewSetToggle(this.previewButton.isTriggered());
-        this.upButton = this.addButton(new ArrowButton(getGuiLeft() + 22, getGuiTop() + 12, 12, 12, 0, 0, 12, arrowButtonTexture, onPress -> this.offsetPosition(Direction.UP)));
-        this.downButton = this.addButton(new ArrowButton(getGuiLeft() + 22, getGuiTop() + 38, 12, 12, 12, 0, 12, arrowButtonTexture, onPress -> this.offsetPosition(Direction.DOWN)));
-        this.leftButton = this.addButton(new ArrowButton(getGuiLeft() + 9, getGuiTop() + 25, 12, 12, 24, 0, 12, arrowButtonTexture, onPress -> this.offsetPosition(Direction.LEFT)));
-        this.rightButton = this.addButton(new ArrowButton(getGuiLeft() + 35, getGuiTop() + 25, 12, 12, 36, 0, 12, arrowButtonTexture, onPress -> this.offsetPosition(Direction.RIGHT)));
+        this.upButton = this.addButton(new ArrowButton(getGuiLeft() + 22, getGuiTop() + 12, ArrowButton.Direction.UP, onPress -> this.offsetPosition(Direction.UP)));
+        this.downButton = this.addButton(new ArrowButton(getGuiLeft() + 22, getGuiTop() + 38, ArrowButton.Direction.DOWN, onPress -> this.offsetPosition(Direction.DOWN)));
+        this.leftButton = this.addButton(new ArrowButton(getGuiLeft() + 9, getGuiTop() + 25, ArrowButton.Direction.LEFT, onPress -> this.offsetPosition(Direction.LEFT)));
+        this.rightButton = this.addButton(new ArrowButton(getGuiLeft() + 35, getGuiTop() + 25, ArrowButton.Direction.RIGHT, onPress -> this.offsetPosition(Direction.RIGHT)));
     }
 
     private void previewSetToggle(boolean toggled) {
@@ -112,14 +111,16 @@ public class UnvalidatedApiaryScreen extends AbstractContainerScreen<Unvalidated
     }
 
     @Override
-    public void render(@Nonnull PoseStack matrix, int mouseX, int mouseY, float partialTicks) {
-        this.upButton.active = verticalOffset != 2;
-        this.downButton.active = verticalOffset != -1;
-        this.leftButton.active = horizontalOffset != -2;
-        this.rightButton.active = horizontalOffset != 2;
-        this.renderBackground(matrix);
-        super.render(matrix, mouseX, mouseY, partialTicks);
-        this.renderTooltip(matrix, mouseX, mouseY);
+    public void render(@NotNull PoseStack matrix, int mouseX, int mouseY, float partialTicks) {
+        if (apiaryTileEntity != null) {
+            this.upButton.active = verticalOffset != 2;
+            this.downButton.active = verticalOffset != -1;
+            this.leftButton.active = horizontalOffset != -2;
+            this.rightButton.active = horizontalOffset != 2;
+            this.renderBackground(matrix);
+            super.render(matrix, mouseX, mouseY, partialTicks);
+            this.renderTooltip(matrix, mouseX, mouseY);
+        }
     }
 
     private void validate() {
@@ -130,7 +131,7 @@ public class UnvalidatedApiaryScreen extends AbstractContainerScreen<Unvalidated
     }
 
     @Override
-    protected void renderBg(@Nonnull PoseStack matrix, float partialTicks, int mouseX, int mouseY) {
+    protected void renderBg(@NotNull PoseStack matrix, float partialTicks, int mouseX, int mouseY) {
         Minecraft client = this.minecraft;
         if (client != null) {
             this.minecraft.getTextureManager().bind(unvalidatedTexture);
@@ -141,7 +142,7 @@ public class UnvalidatedApiaryScreen extends AbstractContainerScreen<Unvalidated
     }
 
     @Override
-    protected void renderLabels(@Nonnull PoseStack matrix, int mouseX, int mouseY) {
+    protected void renderLabels(@NotNull PoseStack matrix, int mouseX, int mouseY) {
         this.font.draw(matrix,  "Offset", 65, 13, 0x404040);
         this.font.draw(matrix, "Vert.", 75, 26, 0x404040);
         this.font.draw(matrix, "Horiz.", 75, 39, 0x404040);
@@ -157,7 +158,7 @@ public class UnvalidatedApiaryScreen extends AbstractContainerScreen<Unvalidated
     }
 
 
-    public void drawRightAlignedString(@Nonnull PoseStack matrix, Font fontRenderer, @Nonnull String s, int posX, int posY, int color) {
+    public void drawRightAlignedString(@NotNull PoseStack matrix, Font fontRenderer, @NotNull String s, int posX, int posY, int color) {
         fontRenderer.draw(matrix, s, (float) (posX - fontRenderer.width(s)), (float) posY, color);
     }
 
@@ -175,7 +176,7 @@ public class UnvalidatedApiaryScreen extends AbstractContainerScreen<Unvalidated
         }
 
         @Override
-        public void renderToolTip(@Nonnull PoseStack matrix, int mouseX, int mouseY) {
+        public void renderToolTip(@NotNull PoseStack matrix, int mouseX, int mouseY) {
             if (!this.active) {
                 TranslatableComponent s = new TranslatableComponent("gui.resourcefulbees.apiary.button.build.creative");
                 UnvalidatedApiaryScreen.this.renderTooltip(matrix, s, mouseX, mouseY);
@@ -201,7 +202,7 @@ public class UnvalidatedApiaryScreen extends AbstractContainerScreen<Unvalidated
         }
 
         @Override
-        public void renderButton(@Nonnull PoseStack matrix, int mouseX, int mouseY, float partialTicks) {
+        public void renderButton(@NotNull PoseStack matrix, int mouseX, int mouseY, float partialTicks) {
             Minecraft minecraft = Minecraft.getInstance();
             minecraft.getTextureManager().bind(this.resourceLocation);
             RenderSystem.disableDepthTest();
@@ -224,7 +225,7 @@ public class UnvalidatedApiaryScreen extends AbstractContainerScreen<Unvalidated
         }
 
         @Override
-        public void renderToolTip(@Nonnull PoseStack matrix, int mouseX, int mouseY) {
+        public void renderToolTip(@NotNull PoseStack matrix, int mouseX, int mouseY) {
             TranslatableComponent s;
             if (!isTriggered()) {
                 s = new TranslatableComponent("gui.resourcefulbees.apiary.button.preview.enable");

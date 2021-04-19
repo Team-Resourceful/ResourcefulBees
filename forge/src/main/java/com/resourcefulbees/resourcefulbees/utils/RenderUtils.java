@@ -19,8 +19,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import org.lwjgl.opengl.GL11;
 
-import java.util.logging.Level;
-
 public class RenderUtils {
 
     private RenderUtils() {
@@ -122,6 +120,7 @@ public class RenderUtils {
         //noinspection deprecation
         RenderSystem.color4f(red, green, blue, alpha);
         RenderUtils.drawTiledSprite(matrix, xPos, yPos, height, width, height, sprite, 16, 16, zOffset);
+        //noinspection deprecation
         resetColor();
     }
 

@@ -130,7 +130,7 @@ public class TieredBeehiveBlock extends BeehiveBlock {
             if (1 + beehiveTileEntity.getTier() == data.getInt(NBTConstants.NBT_TIER)) {
                 int newTier = data.getInt(NBTConstants.NBT_TIER);
                 beehiveTileEntity.setTier(newTier);
-                beehiveTileEntity.setTierModifier(data.getInt(NBTConstants.NBT_TIER_MODIFIER));
+                beehiveTileEntity.setTierModifier(data.getFloat(NBTConstants.NBT_TIER_MODIFIER));
                 beehiveTileEntity.recalculateHoneyLevel();
                 itemstack.shrink(1);
                 state = state.setValue(TIER_PROPERTY, newTier);

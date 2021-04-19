@@ -6,15 +6,16 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.mojang.blaze3d.platform.InputConstants;
+import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.ICustomBee;
+import com.resourcefulbees.resourcefulbees.api.beedata.BreedData;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
+import com.resourcefulbees.resourcefulbees.fluids.HoneyFlowingFluid;
+import com.resourcefulbees.resourcefulbees.item.BeeJar;
 import com.resourcefulbees.resourcefulbees.item.CustomHoneyBottleItem;
-import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
-import com.resourcefulbees.resourcefulbees.lib.LightLevels;
-import com.resourcefulbees.resourcefulbees.lib.ModConstants;
-import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
+import com.resourcefulbees.resourcefulbees.lib.*;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.ModFluids;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
@@ -47,6 +48,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
@@ -55,6 +57,7 @@ import org.lwjgl.glfw.GLFW;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static com.resourcefulbees.resourcefulbees.lib.BeeConstants.*;
@@ -217,22 +220,8 @@ public class BeeInfoUtils {
         } else return input.equals(FLOWER_TAG_ALL);
     }
 
-    public static boolean isValidBreedItem(@Nonnull ItemStack stack, String validBreedItem) {
-        if (ValidatorUtils.TAG_RESOURCE_PATTERN.matcher(validBreedItem).matches()) {
-            Tag<Item> itemTag = getItemTag(validBreedItem.replace(TAG_PREFIX, ""));
-            return itemTag != null && stack.getItem().is(itemTag);
-        } else {
-            switch (validBreedItem) {
-                case FLOWER_TAG_ALL:
-                    return stack.getItem().is(ItemTags.FLOWERS);
-                case FLOWER_TAG_SMALL:
-                    return stack.getItem().is(ItemTags.SMALL_FLOWERS);
-                case FLOWER_TAG_TALL:
-                    return stack.getItem().is(ItemTags.TALL_FLOWERS);
-                default:
-                    return stack.getItem().equals(getItem(validBreedItem));
-            }
-        }
+    public static boolean isValidBreedItem(@NotNull ItemStack stack, BreedData breedData) {
+        return breedData.getFeedItems().contains(stack.getItem());
     }
 
 
@@ -313,24 +302,8 @@ public class BeeInfoUtils {
     }
 
     public static List<ItemStack> getBreedItems(CustomBeeData parent1Data) {
-        String flower = parent1Data.getBreedData().getFeedItem();
-        List<Item> flowers = new LinkedList<>();
-        if (flower.equals(FLOWER_TAG_ALL)) {
-            Tag<Item> itemTag = ItemTags.FLOWERS;
-            if (itemTag != null) flowers.addAll(itemTag.getValues());
-        } else if (flower.equals(FLOWER_TAG_SMALL)) {
-            Tag<Item> itemTag = ItemTags.SMALL_FLOWERS;
-            if (itemTag != null) flowers.addAll(itemTag.getValues());
-        } else if (flower.equals(FLOWER_TAG_TALL)) {
-            Tag<Item> itemTag = ItemTags.TALL_FLOWERS;
-            if (itemTag != null) flowers.addAll(itemTag.getValues());
-        } else if (flower.startsWith(TAG_PREFIX)) {
-            Tag<Item> itemTag = BeeInfoUtils.getItemTag(flower.replace(TAG_PREFIX, ""));
-            if (itemTag != null) flowers.addAll(itemTag.getValues());
-        } else {
-            flowers.add(getItem(flower));
-        }
-        return flowers.stream().map(f -> new ItemStack(f, parent1Data.getBreedData().getFeedAmount())).collect(Collectors.toList());
+        if (!parent1Data.getBreedData().hasFeedItems()) return Collections.emptyList();
+        return parent1Data.getBreedData().getFeedItems().stream().map(f -> new ItemStack(f, parent1Data.getBreedData().getFeedAmount())).collect(Collectors.toList());
     }
 
     public static void ageBee(int ticksInHive, Bee beeEntity) {
@@ -384,16 +357,62 @@ public class BeeInfoUtils {
         return nbt;
     }
 
+    public static boolean isBeeInJarOurs(@NotNull ItemStack stack) {
+        return stack.getItem() instanceof BeeJar && BeeJar.isFilled(stack) && stack.getTag().getString(NBTConstants.NBT_ENTITY).startsWith(ResourcefulBees.MOD_ID);
+    }
+
     public static Fluid getFluidFromBottle(ItemStack bottleOutput) {
         Item item = bottleOutput.getItem();
         if (item == Items.HONEY_BOTTLE) {
             return ModFluids.HONEY_STILL.get().getSource();
-        }else if (item == ModItems.CATNIP_HONEY_BOTTLE.get()) {
+        } else if (item == ModItems.CATNIP_HONEY_BOTTLE.get()) {
             return ModFluids.CATNIP_HONEY_STILL.get().getSource();
         } else if (item instanceof CustomHoneyBottleItem) {
             CustomHoneyBottleItem honey = (CustomHoneyBottleItem) item;
             return honey.getHoneyData().getHoneyStillFluidRegistryObject().get().getSource();
         }
         return Fluids.EMPTY;
+    }
+
+    public static Item getHoneyBottle(Fluid fluid) {
+        if (fluid == ModFluids.CATNIP_HONEY_STILL.get()) {
+            return ModItems.CATNIP_HONEY_BOTTLE.get();
+        } else if (fluid instanceof HoneyFlowingFluid) {
+            HoneyFlowingFluid customfluid = (HoneyFlowingFluid) fluid;
+            return customfluid.getHoneyData().getHoneyBottleRegistryObject().get();
+        } else {
+            return Items.HONEY_BOTTLE;
+        }
+    }
+
+    public static Item getHoneyBucket(Fluid fluid) {
+        if (fluid == ModFluids.CATNIP_HONEY_STILL.get()) {
+            return ModItems.CATNIP_HONEY_FLUID_BUCKET.get();
+        } else if (fluid instanceof HoneyFlowingFluid) {
+            HoneyFlowingFluid customfluid = (HoneyFlowingFluid) fluid;
+            return customfluid.getHoneyData().getHoneyBucketItemRegistryObject().get();
+        } else {
+            return ModItems.HONEY_FLUID_BUCKET.get();
+        }
+    }
+
+    public static Item getHoneyBlock(Fluid fluid) {
+        if (fluid == ModFluids.CATNIP_HONEY_STILL.get()) {
+            return ModItems.CATNIP_HONEY_BLOCK_ITEM.get();
+        } else if (fluid instanceof HoneyFlowingFluid) {
+            HoneyFlowingFluid customfluid = (HoneyFlowingFluid) fluid;
+            if (!customfluid.getHoneyData().doGenerateHoneyBlock()) return Items.AIR;
+            return customfluid.getHoneyData().getHoneyBlockItemRegistryObject().get();
+        } else {
+            return Items.HONEY_BLOCK;
+        }
+    }
+
+    public static Predicate<FluidStack> getHoneyPredicate() {
+        return fluidStack -> fluidStack.getFluid().is(BeeInfoUtils.getFluidTag("forge:honey"));
+    }
+
+    public static ApiaryOutput[] getDefaultApiaryTypes() {
+        return new ApiaryOutput[]{Config.T1_APIARY_OUTPUT.get(), Config.T2_APIARY_OUTPUT.get(), Config.T3_APIARY_OUTPUT.get(), Config.T4_APIARY_OUTPUT.get()};
     }
 }

@@ -1,5 +1,5 @@
 {
-  "flower": "minecraft:nether_wart",
+  "flower": "tag:forge:storage_blocks/quartz",
   "maxTimeInHive": 1000,
   "hasHoneycomb": true,
   "traits": ["nether"],

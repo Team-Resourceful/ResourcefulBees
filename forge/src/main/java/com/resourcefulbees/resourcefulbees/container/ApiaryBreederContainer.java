@@ -21,7 +21,7 @@ import javax.annotation.Nonnull;
 
 import static com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryBreederTileEntity.*;
 
-public class ApiaryBreederContainer extends AbstractContainerMenu {
+public class ApiaryBreederContainer extends ContainerWithStackMove {
 
     private final ApiaryBreederTileEntity apiaryBreederTileEntity;
     private final Inventory playerInventory;
@@ -107,14 +107,14 @@ public class ApiaryBreederContainer extends AbstractContainerMenu {
                     }
 
                     @Override
-                    public boolean mayPlace(@NotNull ItemStack stack) {
+                    public boolean mayPlace(ItemStack stack) {
                         return getApiaryBreederTileEntity().getTileStackHandler().isItemValid(getParent1Slots()[finalI], stack);
                     }
                 });
                 this.addSlot(new SlotItemHandlerUnconditioned(getApiaryBreederTileEntity().getTileStackHandler(), getFeed1Slots()[i], 69, 18 +(i*20)){
 
                     @Override
-                    public boolean mayPlace(@NotNull ItemStack stack) {
+                    public boolean mayPlace(ItemStack stack) {
                         return getApiaryBreederTileEntity().getTileStackHandler().isItemValid(getFeed1Slots()[finalI], stack);
                     }
                 });
@@ -126,14 +126,14 @@ public class ApiaryBreederContainer extends AbstractContainerMenu {
                     }
 
                     @Override
-                    public boolean mayPlace(@NotNull ItemStack stack) {
+                    public boolean mayPlace(ItemStack stack) {
                         return getApiaryBreederTileEntity().getTileStackHandler().isItemValid(getParent2Slots()[finalI], stack);
                     }
                 });
                 this.addSlot(new SlotItemHandlerUnconditioned(getApiaryBreederTileEntity().getTileStackHandler(), getFeed2Slots()[i], 141, 18 +(i*20)){
 
                     @Override
-                    public boolean mayPlace(@NotNull ItemStack stack) {
+                    public boolean mayPlace(ItemStack stack) {
                         return getApiaryBreederTileEntity().getTileStackHandler().isItemValid(getFeed2Slots()[finalI], stack);
                     }
                 });
@@ -145,7 +145,7 @@ public class ApiaryBreederContainer extends AbstractContainerMenu {
                     }
 
                     @Override
-                    public boolean mayPlace(@NotNull ItemStack stack) {
+                    public boolean mayPlace(ItemStack stack) {
                         return getApiaryBreederTileEntity().getTileStackHandler().isItemValid(getEmptyJarSlots()[finalI], stack);
                     }
                 });
@@ -165,29 +165,14 @@ public class ApiaryBreederContainer extends AbstractContainerMenu {
         }
     }
 
-    @Nonnull
     @Override
-    public ItemStack quickMoveStack(@Nonnull Player playerIn, int index) {
-        ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = this.slots.get(index);
-        if (slot != null && slot.hasItem()) {
-            ItemStack itemstack1 = slot.getItem();
-            itemstack = itemstack1.copy();
-            if (index < 4 + getNumberOfBreeders() * 5) {
-                if (!this.moveItemStackTo(itemstack1, 4 + getNumberOfBreeders() * 5, slots.size(), true)) {
-                    return ItemStack.EMPTY;
-                }
-            } else if (!this.moveItemStackTo(itemstack1, 0, 4 + getNumberOfBreeders() * 5, false)) {
-                return ItemStack.EMPTY;
-            }
+    public int getContainerInputEnd() {
+        return 4 + getNumberOfBreeders() * 5;
+    }
 
-            if (itemstack1.isEmpty()) {
-                slot.set(ItemStack.EMPTY);
-            } else {
-                slot.setChanged();
-            }
-        }
-        return itemstack;
+    @Override
+    public int getInventoryStart() {
+        return 4 + getNumberOfBreeders() * 5;
     }
 
     public ApiaryBreederTileEntity getApiaryBreederTileEntity() {

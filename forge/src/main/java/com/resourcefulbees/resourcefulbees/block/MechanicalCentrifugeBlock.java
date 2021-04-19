@@ -34,13 +34,11 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.ItemStackHandler;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.stream.IntStream;
-
-import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("deprecation")
 public class MechanicalCentrifugeBlock extends Block {
@@ -53,9 +51,9 @@ public class MechanicalCentrifugeBlock extends Block {
         registerDefaultState(defaultBlockState().setValue(PROPERTY_ON, false).setValue(PROPERTY_ROTATION, 0));
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public InteractionResult use(@Nonnull BlockState state, @NotNull Level world, @Nonnull BlockPos pos, @Nonnull Player player, @Nonnull InteractionHand hand, @Nonnull BlockHitResult rayTraceResult) {
+    public InteractionResult use(@NotNull BlockState state, @NotNull Level world, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult rayTraceResult) {
         MechanicalCentrifugeTileEntity tile = (MechanicalCentrifugeTileEntity) world.getBlockEntity(pos);
         if (player.isShiftKeyDown() && !(player instanceof FakePlayer)) {
             if (!world.isClientSide && tile != null && tile.canProcess(tile.getRecipe())) {
@@ -74,12 +72,12 @@ public class MechanicalCentrifugeBlock extends Block {
 
     @Nullable
     @Override
-    public MenuProvider getMenuProvider(@Nonnull BlockState state, Level worldIn, @Nonnull BlockPos pos) {
+    public MenuProvider getMenuProvider(@NotNull BlockState state, Level worldIn, @NotNull BlockPos pos) {
         return (MenuProvider) worldIn.getBlockEntity(pos);
     }
 
     @Override
-    public void onRemove(@Nonnull BlockState state1, Level world, @Nonnull BlockPos pos, @Nonnull BlockState state, boolean isMoving) {
+    public void onRemove(@NotNull BlockState state1, Level world, @NotNull BlockPos pos, @NotNull BlockState state, boolean isMoving) {
         BlockEntity blockEntity = world.getBlockEntity(pos);
         if (blockEntity instanceof MechanicalCentrifugeTileEntity && state.getBlock() != state1.getBlock()) {
             MechanicalCentrifugeTileEntity centrifugeTileEntity = (MechanicalCentrifugeTileEntity) blockEntity;
@@ -112,7 +110,7 @@ public class MechanicalCentrifugeBlock extends Block {
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void appendHoverText(@Nonnull ItemStack stack, @Nullable BlockGetter worldIn, @Nonnull List<Component> tooltip, @Nonnull TooltipFlag flagIn) {
+    public void appendHoverText(@NotNull ItemStack stack, @Nullable BlockGetter worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
             tooltip.addAll(new TooltipBuilder()
                     .addTip(I18n.get("block.resourcefulbees.mech_centrifuge.tooltip.info"), ChatFormatting.GOLD)
                     .build());

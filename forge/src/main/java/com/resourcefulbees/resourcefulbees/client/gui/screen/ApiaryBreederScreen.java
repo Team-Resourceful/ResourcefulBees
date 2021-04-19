@@ -20,6 +20,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 
@@ -28,7 +29,7 @@ public class ApiaryBreederScreen extends AbstractContainerScreen<ApiaryBreederCo
     private static final ResourceLocation BACKGROUND = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/apiary/apiary_breeder_gui.png");
     private static final ResourceLocation TABS_BG = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/apiary/apiary_gui_tabs.png");
 
-    private ApiaryBreederTileEntity apiaryBreederTileEntity;
+    private final ApiaryBreederTileEntity apiaryBreederTileEntity;
 
     private TabImageButton mainTabButton;
     private TabImageButton storageTabButton;
@@ -36,7 +37,7 @@ public class ApiaryBreederScreen extends AbstractContainerScreen<ApiaryBreederCo
 
     public ApiaryBreederScreen(ApiaryBreederContainer screenContainer, Inventory inv, Component titleIn) {
         super(screenContainer, inv, titleIn);
-
+        apiaryBreederTileEntity = this.menu.getApiaryBreederTileEntity();
         preInit();
     }
 
@@ -50,8 +51,6 @@ public class ApiaryBreederScreen extends AbstractContainerScreen<ApiaryBreederCo
         super.init();
         this.buttons.clear();
 
-        apiaryBreederTileEntity = this.menu.getApiaryBreederTileEntity();
-
         int i = this.leftPos;
         int j = this.topPos;
         int t = i + this.imageWidth - 24;
@@ -60,7 +59,7 @@ public class ApiaryBreederScreen extends AbstractContainerScreen<ApiaryBreederCo
                 onPress -> this.changeScreen(ApiaryTabs.MAIN), 128, 128) {
 
             @Override
-            public void renderToolTip(@Nonnull PoseStack matrix, int mouseX, int mouseY) {
+            public void renderToolTip(@NotNull PoseStack matrix, int mouseX, int mouseY) {
                 TranslatableComponent s = new TranslatableComponent("gui.resourcefulbees.apiary.button.main_screen");
                 ApiaryBreederScreen.this.renderTooltip(matrix, s, mouseX, mouseY);
             }
@@ -70,7 +69,7 @@ public class ApiaryBreederScreen extends AbstractContainerScreen<ApiaryBreederCo
                 onPress -> this.changeScreen(ApiaryTabs.STORAGE), 128, 128) {
 
             @Override
-            public void renderToolTip(@Nonnull PoseStack matrix,int mouseX, int mouseY) {
+            public void renderToolTip(@NotNull PoseStack matrix,int mouseX, int mouseY) {
                 TranslatableComponent s = new TranslatableComponent("gui.resourcefulbees.apiary.button.storage_screen");
                 ApiaryBreederScreen.this.renderTooltip(matrix, s, mouseX, mouseY);
             }
@@ -80,7 +79,7 @@ public class ApiaryBreederScreen extends AbstractContainerScreen<ApiaryBreederCo
                 onPress -> this.changeScreen(ApiaryTabs.BREED), 128, 128) {
 
             @Override
-            public void renderToolTip(@Nonnull PoseStack matrix, int mouseX, int mouseY) {
+            public void renderToolTip(@NotNull PoseStack matrix, int mouseX, int mouseY) {
                 TranslatableComponent s = new TranslatableComponent("gui.resourcefulbees.apiary.button.breed_screen");
                 ApiaryBreederScreen.this.renderTooltip(matrix, s, mouseX, mouseY);
             }
@@ -92,24 +91,26 @@ public class ApiaryBreederScreen extends AbstractContainerScreen<ApiaryBreederCo
             case BREED:
                 break;
             case STORAGE:
-                if (storageTabButton.active)
+                if (storageTabButton.active && getApiaryBreederTileEntity() != null)
                     NetPacketHandler.sendToServer(new ApiaryTabMessage(getApiaryBreederTileEntity().getBlockPos(), ApiaryTabs.STORAGE));
                 break;
             case MAIN:
-                if (mainTabButton.active)
+                if (mainTabButton.active && getApiaryBreederTileEntity() != null)
                     NetPacketHandler.sendToServer(new ApiaryTabMessage(getApiaryBreederTileEntity().getBlockPos(), ApiaryTabs.MAIN));
         }
     }
 
     @Override
-    public void render(@Nonnull PoseStack matrix,int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(matrix);
-        super.render(matrix, mouseX, mouseY, partialTicks);
-        this.renderTooltip(matrix, mouseX, mouseY);
+    public void render(@NotNull PoseStack matrix,int mouseX, int mouseY, float partialTicks) {
+        if (getApiaryBreederTileEntity() != null) {
+            this.renderBackground(matrix);
+            super.render(matrix, mouseX, mouseY, partialTicks);
+            this.renderTooltip(matrix, mouseX, mouseY);
+        }
     }
 
     @Override
-    protected void renderBg(@Nonnull PoseStack matrix, float partialTicks, int mouseX, int mouseY) {
+    protected void renderBg(@NotNull PoseStack matrix, float partialTicks, int mouseX, int mouseY) {
         if (this.menu.isRebuild()) {
             preInit();
             init();
@@ -149,7 +150,7 @@ public class ApiaryBreederScreen extends AbstractContainerScreen<ApiaryBreederCo
     }
 
     @Override
-    protected void renderLabels(@Nonnull PoseStack matrix, int mouseX, int mouseY) {
+    protected void renderLabels(@NotNull PoseStack matrix, int mouseX, int mouseY) {
         for (AbstractWidget widget : this.buttons) {
             if (widget.isHovered()) {
                 widget.renderToolTip(matrix, mouseX - this.leftPos, mouseY - this.topPos);

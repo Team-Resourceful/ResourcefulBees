@@ -13,10 +13,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
-
-public class HoneyGeneratorContainer extends AbstractContainerMenu {
+public class HoneyGeneratorContainer extends ContainerWithStackMove {
 
     private final HoneyGeneratorTileEntity honeyGeneratorTileEntity;
     private final Player player;
@@ -25,17 +24,17 @@ public class HoneyGeneratorContainer extends AbstractContainerMenu {
         super(ModContainers.HONEY_GENERATOR_CONTAINER.get(), id);
 
         this.player = inv.player;
-        honeyGeneratorTileEntity = (HoneyGeneratorTileEntity) world.getBlockEntity(pos);
 
-        if (getHoneyGeneratorTileEntity() != null) {
-            this.addSlot(new SlotItemHandlerUnconditioned(getHoneyGeneratorTileEntity().getTileStackHandler(), HoneyGeneratorTileEntity.HONEY_BOTTLE_INPUT, 36, 20) {
+        honeyGeneratorTileEntity = (HoneyGeneratorTileEntity) world.getBlockEntity(pos);
+        if (honeyGeneratorTileEntity != null) {
+            this.addSlot(new SlotItemHandlerUnconditioned(honeyGeneratorTileEntity.getTileStackHandler(), HoneyGeneratorTileEntity.HONEY_BOTTLE_INPUT, 36, 20) {
 
                 @Override
                 public boolean mayPlace(ItemStack stack) {
-                    return getHoneyGeneratorTileEntity().getTileStackHandler().isItemValid(HoneyGeneratorTileEntity.HONEY_BOTTLE_INPUT, stack);
+                    return honeyGeneratorTileEntity.getTileStackHandler().isItemValid(HoneyGeneratorTileEntity.HONEY_BOTTLE_INPUT, stack);
                 }
             });
-            this.addSlot(new OutputSlot(getHoneyGeneratorTileEntity().getTileStackHandler(), HoneyGeneratorTileEntity.BOTTLE_OUTPUT, 36, 58));
+            this.addSlot(new OutputSlot(honeyGeneratorTileEntity.getTileStackHandler(), HoneyGeneratorTileEntity.BOTTLE_OUTPUT, 36, 58));
 
             for (int i = 0; i < 3; ++i) {
                 for (int j = 0; j < 9; ++j) {
@@ -51,45 +50,29 @@ public class HoneyGeneratorContainer extends AbstractContainerMenu {
 
     public int getEnergy() { return getHoneyGeneratorTileEntity().getCapability(CapabilityEnergy.ENERGY).map(IEnergyStorage::getEnergyStored).orElse(0); }
     
-    public int getFluid() { return getHoneyGeneratorTileEntity().fluidTank.getFluidAmount(); }
+    public int getFluidAmount() { return getHoneyGeneratorTileEntity().getFluidTank().getFluidAmount(); }
     
-    public int getMaxEnergy() { return getHoneyGeneratorTileEntity().energyStorage.getMaxEnergyStored(); }
+    public int getMaxEnergy() { return getHoneyGeneratorTileEntity().getEnergyStorage().getMaxEnergyStored(); }
 
-    public int getMaxFluid() { return getHoneyGeneratorTileEntity().fluidTank.getCapacity(); }
+    public int getMaxFluid() { return getHoneyGeneratorTileEntity().getFluidTank().getCapacity(); }
 
     public int getTime() { return getHoneyGeneratorTileEntity().getFluidFilled(); }
 
     public int getEnergyTime() { return getHoneyGeneratorTileEntity().getEnergyFilled(); }
 
     @Override
-    public boolean stillValid(@Nonnull Player player) {
+    public boolean stillValid(@NotNull Player player) {
         return true;
     }
 
-    @Nonnull
     @Override
-    public ItemStack quickMoveStack(@Nonnull Player playerIn, int index) {
-        ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = this.slots.get(index);
-        if (slot != null && slot.hasItem()) {
-            ItemStack itemstack1 = slot.getItem();
-            itemstack = itemstack1.copy();
+    public int getContainerInputEnd() {
+        return 1;
+    }
 
-            if (index <= 1) {
-                if (!this.moveItemStackTo(itemstack1, 2, slots.size(), true)) {
-                    return ItemStack.EMPTY;
-                }
-            } else if (!this.moveItemStackTo(itemstack1, 0, 1, false)) {
-                return ItemStack.EMPTY;
-            }
-
-            if (itemstack1.isEmpty()) {
-                slot.set(ItemStack.EMPTY);
-            } else {
-                slot.setChanged();
-            }
-        }
-        return itemstack;
+    @Override
+    public int getInventoryStart() {
+        return 2;
     }
 
     @Override

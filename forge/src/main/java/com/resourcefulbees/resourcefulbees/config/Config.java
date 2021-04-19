@@ -8,6 +8,7 @@ import net.minecraftforge.common.ForgeConfigSpec.*;
 public class Config {
 
 
+
     //TODO Rewrite config names in 1.17 to be more informative also update comments if needed
 
     private Config() {
@@ -55,6 +56,9 @@ public class Config {
 
     public static IntValue HONEY_FILL_AMOUNT;
     public static IntValue HONEY_DRAIN_AMOUNT;
+    public static IntValue HONEY_PROCEESS_TIME;
+    public static IntValue CONGEALER_TIME_MODIFIER;
+    public static IntValue MAX_PIPE_FLOW;
     public static IntValue ENERGY_FILL_AMOUNT;
     public static IntValue ENERGY_TRANSFER_AMOUNT;
     public static IntValue MAX_ENERGY_CAPACITY;
@@ -92,6 +96,8 @@ public class Config {
     public static BooleanValue BYPASS_PERFORMANT_CHECK;
     public static BooleanValue BEEPEDIA_HIDE_LOCKED;
 
+    public static BooleanValue MANUAL_MODE;
+
     //CLIENT
 
     public static BooleanValue GENERATE_ENGLISH_LANG;
@@ -122,6 +128,13 @@ public class Config {
                     .defineInRange("smokerDurability", 1000, 100, 5000);
             BEEPEDIA_HIDE_LOCKED = COMMON_BUILDER.comment("\nSet to true to hide certain data in the Beepedia until the player has unlocked the bee. [true/false]")
                     .define("beepediaHideLocked", false);
+            HONEY_PROCEESS_TIME = COMMON_BUILDER.comment("\nAmount of time in ticks required to finish processing a honey bottle.")
+                    .defineInRange("honeyProcessTime", 5, 0, 2400);
+            CONGEALER_TIME_MODIFIER = COMMON_BUILDER.comment("\nMultiplier to the amount of ticks needed to process honey into honey blocks in the congealer." +
+                    "\nThis value is multiplying the honeyProcessTime.")
+                    .defineInRange("congealerTimeMultiplier", 4, 1, 16);
+            MAX_PIPE_FLOW = COMMON_BUILDER.comment("\nAmount of honey Honey Pipes can transfer per tick.")
+                    .defineInRange("maxHoneyPipeFlow", 250, 10, 16000);
             COMMON_BUILDER.pop();
 
             COMMON_BUILDER.push("Recipe Options");
@@ -238,6 +251,10 @@ public class Config {
                     .define("beesInflictPoison", true);
             BEES_DIE_IN_VOID = COMMON_BUILDER.comment("\nShould bees die when their Y-level is below 0?\nNote: If false, bees will get stuck just below y-0 and not move. **May not be useful with new AI**")
                     .define("beeDiesInVoid", true); //TODO 1.17 change to "beesDieInVoid" Also change comment above to reflect y level changes
+            MANUAL_MODE = COMMON_BUILDER.comment("\nThis is an experimental setting. Using this setting means bees will need to be told by the player which flower and hive to use.",
+                    "Bees will not scan surroundings for flowers or hives and will instead go to their designated spot until changed.",
+                    "WARNING: For now, this will prevent bees from having their wander goal attached which effectively makes them dumb (seriously, they'll just hover in one spot), however it would also significantly improve performance until pathfinding can be optimized.")
+                    .define("use_experimental_manual_mode", false);
             COMMON_BUILDER.pop();
 
             COMMON_BUILDER.push("Honeycomb Options");

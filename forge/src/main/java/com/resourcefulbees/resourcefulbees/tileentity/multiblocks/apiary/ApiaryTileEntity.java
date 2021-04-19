@@ -172,7 +172,7 @@ public class ApiaryTileEntity extends BlockEntity implements TickableBlockEntity
     }
 
     //region BEE HANDLING
-    public boolean releaseBee(@Nonnull BlockState state, ApiaryBee apiaryBee, boolean exportBee) {
+    public boolean releaseBee(@NotNull BlockState state, ApiaryBee apiaryBee, boolean exportBee) {
         BlockPos blockPos = this.getBlockPos();
         Direction direction = state.getValue(BeehiveBlock.FACING);
         BlockPos blockPos1 = blockPos.relative(direction);
@@ -188,11 +188,6 @@ public class ApiaryTileEntity extends BlockEntity implements TickableBlockEntity
 
             if (entity instanceof Bee) {
                 Bee vanillaBeeEntity = (Bee) entity;
-
-                BlockPos flowerPos = apiaryBee.savedFlowerPos;
-                if (flowerPos != null && !vanillaBeeEntity.hasSavedFlowerPos() && this.level.random.nextFloat() < 0.9F) {
-                    vanillaBeeEntity.setSavedFlowerPos(flowerPos);
-                }
 
                 if (nbt.getBoolean("HasNectar")) {
                     vanillaBeeEntity.dropOffNectar();
@@ -227,9 +222,8 @@ public class ApiaryTileEntity extends BlockEntity implements TickableBlockEntity
         return false;
     }
 
-    public boolean tryEnterHive(@Nonnull Entity bee, boolean hasNectar, int ticksInHive, boolean imported) {
+    public boolean tryEnterHive(@NotNull Entity bee, boolean hasNectar, int ticksInHive, boolean imported) {
         if (this.level != null && bee instanceof Bee) {
-            Bee beeEntity = (Bee) bee;
             String type = BeeConstants.VANILLA_BEE_TYPE;
             String beeColor = BeeConstants.VANILLA_BEE_COLOR;
 
@@ -263,7 +257,7 @@ public class ApiaryTileEntity extends BlockEntity implements TickableBlockEntity
 
                 Component displayName = bee.getName();
 
-                this.bees.computeIfAbsent(finalType, k -> new ApiaryBee(nbt, ticksInHive, hasNectar ? finalMaxTimeInHive : MIN_HIVE_TIME, beeEntity.getSavedFlowerPos(), finalType, finalBeeColor, displayName));
+                this.bees.computeIfAbsent(finalType, k -> new ApiaryBee(nbt, ticksInHive, hasNectar ? finalMaxTimeInHive : MIN_HIVE_TIME, finalType, finalBeeColor, displayName));
                 BlockPos pos = this.getBlockPos();
                 this.level.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BEEHIVE_ENTER, SoundSource.BLOCKS, 1.0F, 1.0F);
 
@@ -379,9 +373,6 @@ public class ApiaryTileEntity extends BlockEntity implements TickableBlockEntity
             compoundnbt.putString(NBTConstants.NBT_BEE_TYPE, apiaryBee.beeType);
             compoundnbt.putString(NBTConstants.NBT_COLOR, apiaryBee.beeColor);
             compoundnbt.putString(NBTConstants.NBT_BEE_NAME, Component.Serializer.toJson(apiaryBee.displayName));
-            if (apiaryBee.savedFlowerPos != null) {
-                compoundnbt.put(NBTConstants.NBT_FLOWER_POS, NbtUtils.writeBlockPos(apiaryBee.savedFlowerPos));
-            }
             listnbt.add(compoundnbt);
         });
 
@@ -395,7 +386,6 @@ public class ApiaryTileEntity extends BlockEntity implements TickableBlockEntity
             for (int i = 0; i < listnbt.size(); ++i) {
                 CompoundTag data = listnbt.getCompound(i);
 
-                BlockPos savedFlowerPos = data.contains(NBTConstants.NBT_FLOWER_POS) ? NbtUtils.readBlockPos(data.getCompound(NBTConstants.NBT_FLOWER_POS)) : null;
                 String beeType = data.getString(NBTConstants.NBT_BEE_TYPE);
                 String beeColor = data.contains(NBTConstants.NBT_COLOR) ? data.getString(NBTConstants.NBT_COLOR) : BeeConstants.VANILLA_BEE_COLOR;
                 Component displayName = data.contains(NBTConstants.NBT_BEE_NAME) ? Component.Serializer.fromJson(data.getString(NBTConstants.NBT_BEE_NAME)) : new TextComponent("Temp Bee Name");
@@ -404,7 +394,6 @@ public class ApiaryTileEntity extends BlockEntity implements TickableBlockEntity
                         data.getCompound("EntityData"),
                         data.getInt("TicksInHive"),
                         data.getInt("MinOccupationTicks"),
-                        savedFlowerPos,
                         beeType,
                         beeColor,
                         displayName));
@@ -420,7 +409,7 @@ public class ApiaryTileEntity extends BlockEntity implements TickableBlockEntity
         this.loadFromNBT(nbt);
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public CompoundTag save(@Nonnull CompoundTag nbt) {
         super.save(nbt);
@@ -473,7 +462,13 @@ public class ApiaryTileEntity extends BlockEntity implements TickableBlockEntity
         return nbt;
     }
 
-    @Nonnull
+    @Nullable
+    @Override
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return super.getUpdatePacket();
+    }
+
+    @NotNull
     @Override
     public CompoundTag getUpdateTag() {
         CompoundTag nbtTagCompound = new CompoundTag();
@@ -482,14 +477,8 @@ public class ApiaryTileEntity extends BlockEntity implements TickableBlockEntity
     }
 
     @Override
-    public void handleUpdateTag(@Nonnull BlockState state, CompoundTag tag) {
+    public void handleUpdateTag(@NotNull BlockState state, CompoundTag tag) {
         this.load(state, tag);
-    }
-
-    @Nullable
-    @Override
-    public ClientboundBlockEntityDataPacket getUpdatePacket() {
-        return super.getUpdatePacket();
     }
     //endregion
 
@@ -691,7 +680,7 @@ public class ApiaryTileEntity extends BlockEntity implements TickableBlockEntity
     //region SCREEN HANDLING
     @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int i, @Nonnull Inventory playerInventory, @Nonnull Player playerEntity) {
+    public AbstractContainerMenu createMenu(int i, @NotNull Inventory playerInventory, @NotNull Player playerEntity) {
         if (level != null) {
             setNumPlayersUsing(getNumPlayersUsing() + 1);
             if (isValidApiary(true)) {
@@ -716,9 +705,9 @@ public class ApiaryTileEntity extends BlockEntity implements TickableBlockEntity
 
     //endregion
 
-    @Nonnull
+    @NotNull
     @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
         return cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? getLazyOptional().cast() :
                 super.getCapability(cap, side);
     }
@@ -731,7 +720,7 @@ public class ApiaryTileEntity extends BlockEntity implements TickableBlockEntity
         return (slot, automation) -> !automation || slot == 1 || slot == 2;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public Component getDisplayName() {
         return new TranslatableComponent("gui.resourcefulbees.apiary");
@@ -802,19 +791,17 @@ public class ApiaryTileEntity extends BlockEntity implements TickableBlockEntity
     public static class ApiaryBee {
         public final CompoundTag entityData;
         public final int minOccupationTicks;
-        public final BlockPos savedFlowerPos;
         public final String beeType;
         private int ticksInHive;
         private boolean isLocked = false;
         public final String beeColor;
         public final Component displayName;
 
-        public ApiaryBee(CompoundTag nbt, int ticksInHive, int minOccupationTicks, @Nullable BlockPos flowerPos, String beeType, String beeColor, Component displayName) {
+        public ApiaryBee(CompoundTag nbt, int ticksInHive, int minOccupationTicks, String beeType, String beeColor, Component displayName) {
             nbt.remove("UUID");
             this.entityData = nbt;
             this.setTicksInHive(ticksInHive);
             this.minOccupationTicks = minOccupationTicks;
-            this.savedFlowerPos = flowerPos;
             this.beeType = beeType;
             this.beeColor = beeColor;
             this.displayName = displayName;

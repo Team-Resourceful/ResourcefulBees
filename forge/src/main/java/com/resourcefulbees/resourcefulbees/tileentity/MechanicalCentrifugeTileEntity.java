@@ -28,7 +28,6 @@ import net.minecraftforge.items.wrapper.RecipeWrapper;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -163,7 +162,15 @@ public class MechanicalCentrifugeTileEntity extends BlockEntity implements Ticka
         return recipe;
     }
 
-    @Nonnull
+    @Override
+    public void load(@NotNull BlockState state, CompoundTag tag) {
+        CompoundTag invTag = tag.getCompound("inv");
+        getItemStackHandler().deserializeNBT(invTag);
+        setClicks(tag.getInt("clicks"));
+        super.load(state, tag);
+    }
+
+    @NotNull
     @Override
     public CompoundTag save(CompoundTag tag) {
         CompoundTag inv = this.getItemStackHandler().serializeNBT();
@@ -172,15 +179,7 @@ public class MechanicalCentrifugeTileEntity extends BlockEntity implements Ticka
         return super.save(tag);
     }
 
-    @Override
-    public void load(@Nonnull BlockState state, CompoundTag tag) {
-        CompoundTag invTag = tag.getCompound("inv");
-        getItemStackHandler().deserializeNBT(invTag);
-        setClicks(tag.getInt("clicks"));
-        super.load(state, tag);
-    }
-
-    @Nonnull
+    @NotNull
     @Override
     public CompoundTag getUpdateTag() {
         CompoundTag nbtTagCompound = new CompoundTag();
@@ -189,11 +188,11 @@ public class MechanicalCentrifugeTileEntity extends BlockEntity implements Ticka
     }
 
     @Override
-    public void handleUpdateTag(@Nonnull BlockState state, CompoundTag tag) { this.load(state, tag); }
+    public void handleUpdateTag(@NotNull BlockState state, CompoundTag tag) { this.load(state, tag); }
 
-    @Nonnull
+    @NotNull
     @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
         if (cap.equals(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)) return getAutomationHandler().cast();
         return super.getCapability(cap, side);
     }
@@ -213,12 +212,12 @@ public class MechanicalCentrifugeTileEntity extends BlockEntity implements Ticka
 
     @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int id, @Nonnull Inventory playerInventory, @Nonnull Player playerEntity) {
+    public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player playerEntity) {
         //noinspection ConstantConditions
         return new MechanicalCentrifugeContainer(id, level, worldPosition, playerInventory);
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public Component getDisplayName() {
         return new TranslatableComponent("gui.resourcefulbees.mechanical_centrifuge");

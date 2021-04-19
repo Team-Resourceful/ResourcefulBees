@@ -12,9 +12,6 @@ import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.GL11;
 
-import javax.annotation.Nonnull;
-
-
 public class ListButton extends TabImageButton {
     private final Component text;
     private final int textX;
@@ -43,7 +40,7 @@ public class ListButton extends TabImageButton {
     }
 
     @Override
-    public void renderButton(@Nonnull PoseStack matrix, int mouseX, int mouseY, float partialTicks) {
+    public void renderButton(@NotNull PoseStack matrix, int mouseX, int mouseY, float partialTicks) {
         Minecraft minecraft = Minecraft.getInstance();
         minecraft.getTextureManager().bind(this.resourceLocation);
         RenderSystem.disableDepthTest();
@@ -65,7 +62,7 @@ public class ListButton extends TabImageButton {
         }
     }
 
-    private void drawButton(@Nonnull PoseStack matrix, float texYPos) {
+    private void drawButton(@NotNull PoseStack matrix, float texYPos) {
         blit(matrix, this.x, this.y, (float) this.xTexStart, texYPos, this.width, this.height, width, yDiffText * 3);
         fontRenderer.draw(matrix, text.copy().withStyle(this.active ? ChatFormatting.GRAY : ChatFormatting.WHITE), (float) (this.x + textX), (float) (this.y + textY), -1);
         if (this.displayItem != null)

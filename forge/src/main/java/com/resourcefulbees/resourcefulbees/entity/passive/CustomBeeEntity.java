@@ -32,9 +32,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.Random;
 
@@ -104,7 +104,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
     //region CUSTOM BEE RELATED METHODS BELOW
 
     @Override
-    public boolean isInvulnerableTo(@Nonnull DamageSource source) {
+    public boolean isInvulnerableTo(@NotNull DamageSource source) {
         TraitData info = getBeeData().getTraitData();
         if (hasEffect(MobEffects.WATER_BREATHING) && source == DamageSource.DROWN) {
             return true;
@@ -113,13 +113,13 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
             return true;
         }
         if (info.hasTraits() && info.hasDamageImmunities()) {
-            return info.getDamageImmunities().stream().anyMatch(source::equals);
+            return info.getDamageImmunities().stream().anyMatch(source.msgId::equalsIgnoreCase);
         }
         return super.isInvulnerableTo(source);
     }
 
     @Override
-    public boolean canBeAffected(@Nonnull MobEffectInstance effectInstance) {
+    public boolean canBeAffected(@NotNull MobEffectInstance effectInstance) {
         TraitData info = getBeeData().getTraitData();
         if (info.hasTraits() && info.hasPotionImmunities()) {
             MobEffect potionEffect = effectInstance.getEffect();
@@ -149,7 +149,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
                 this.remove();
             }
             if (!hasCustomName() && this.tickCount % 100 == 0) {
-                if (hasHiveInRange() || hasSavedFlowerPos() || isPassenger() || isLeashed() || hasNectar() || disruptorInRange > 0) {
+                if (hasHiveInRange() || hasSavedFlowerPos() || isPassenger() || isPersistenceRequired() || isLeashed() || hasNectar() || disruptorInRange > 0 || isBaby()) {
                     timeWithoutHive = 0;
                 } else {
                     timeWithoutHive += 100;
@@ -209,13 +209,13 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
     }
 
     @Override
-    public void readAdditionalSaveData(@Nonnull CompoundTag compound) {
+    public void readAdditionalSaveData(@NotNull CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.entityData.set(FEED_COUNT, compound.getInt(NBTConstants.NBT_FEED_COUNT));
     }
 
     @Override
-    public void addAdditionalSaveData(@Nonnull CompoundTag compound) {
+    public void addAdditionalSaveData(@NotNull CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putString(NBTConstants.NBT_BEE_TYPE, this.getBeeType());
         compound.putInt(NBTConstants.NBT_FEED_COUNT, this.getFeedCount());
@@ -252,13 +252,13 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
     }
 
     @Override
-    public boolean isFood(@Nonnull ItemStack stack) {
-        return BeeInfoUtils.isValidBreedItem(stack, this.getBeeData().getBreedData().getFeedItem());
+    public boolean isFood(@NotNull ItemStack stack) {
+        return BeeInfoUtils.isValidBreedItem(stack, this.getBeeData().getBreedData());
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public InteractionResult mobInteract(Player player, @Nonnull InteractionHand hand) {
+    public InteractionResult mobInteract(Player player, @NotNull InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         Item item = itemstack.getItem();
         if (item instanceof NameTagItem) {
@@ -267,6 +267,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
         if (this.isFood(itemstack)) {
             if (!this.level.isClientSide && this.getAge() == 0 && !this.isInLove()) {
                 this.usePlayerItem(player, itemstack);
+                player.addItem(new ItemStack(this.beeData.getBreedData().getFeedReturnItem()));
                 this.addFeedCount();
                 if (this.getFeedCount() >= this.getBeeData().getBreedData().getFeedAmount()) {
                     this.setInLove(player);
@@ -282,16 +283,6 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
             }
         }
         return InteractionResult.FAIL;
-    }
-
-
-    @Nonnull
-    @Override
-    public EntityDimensions getDimensions(@Nonnull Pose poseIn) {
-        float scale = beeData.getSizeModifier();
-        scale = this.isBaby() ? scale * Config.CHILD_SIZE_MODIFIER.get().floatValue() : scale;
-        scale = Math.max(scale, 0.75f);
-        return super.getDimensions(poseIn).scale(scale);
     }
 
     @Override

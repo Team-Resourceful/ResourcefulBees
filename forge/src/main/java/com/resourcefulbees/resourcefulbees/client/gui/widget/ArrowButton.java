@@ -2,40 +2,52 @@ package com.resourcefulbees.resourcefulbees.client.gui.widget;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ImageButton;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
+public class ArrowButton extends Button {
 
-public class ArrowButton extends ImageButton {
+    public enum Direction {
+        UP,
+        DOWN,
+        LEFT,
+        RIGHT
+    }
 
-    private final ResourceLocation resourceLocation;
+    private static final ResourceLocation arrowButtonTexture = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/apiary/arrow_button.png");
     private final int xTexStart;
-    private final int yTexStart;
-    private final int yDiffText;
 
-    public ArrowButton(int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int yDiffTextIn, ResourceLocation resourceLocationIn, OnPress onPressIn) {
-        super(xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, yDiffTextIn, resourceLocationIn, onPressIn);
-        this.xTexStart = xTexStartIn;
-        this.yTexStart = yTexStartIn;
-        this.yDiffText = yDiffTextIn;
-        this.resourceLocation = resourceLocationIn;
+    public ArrowButton(int xIn, int yIn, Direction direction, OnPress onPressIn) {
+        super(xIn, yIn, 12, 12, TextComponent.EMPTY, onPressIn);
+        switch (direction){
+            case UP:
+                xTexStart = 0;
+                break;
+            case DOWN:
+                xTexStart = 12;
+                break;
+            case LEFT:
+                xTexStart = 24;
+                break;
+            default:
+                xTexStart = 36;
+        }
     }
 
     @Override
-    public void renderButton(@Nonnull PoseStack matrix, int mouseX, int mouseY, float partialTicks) {
+    public void renderButton(@NotNull PoseStack matrix, int mouseX, int mouseY, float partialTicks) {
         Minecraft minecraft = Minecraft.getInstance();
-        minecraft.getTextureManager().bind(this.resourceLocation);
+        minecraft.getTextureManager().bind(arrowButtonTexture);
         RenderSystem.disableDepthTest();
-        int i = this.yTexStart;
         if (this.active) {
-            if (this.isHovered()) {
-                i += this.yDiffText;
-            }
-            blit(matrix, this.x, this.y, (float)this.xTexStart, (float)i, this.width, this.height, 64, 64);
+            blit(matrix, this.x, this.y, (float)this.xTexStart, this.isHovered() ? 12f : 0f, this.width, this.height, 64, 64);
         } else {
-            blit(matrix, this.x, this.y, (float)48, (float)i, this.width, this.height, 64, 64);
+            blit(matrix, this.x, this.y, 48f, 0f, this.width, this.height, 64, 64);
         }
 
         RenderSystem.enableDepthTest();

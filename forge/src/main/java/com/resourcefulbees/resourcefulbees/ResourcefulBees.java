@@ -24,7 +24,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RecipesUpdatedEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -77,7 +76,7 @@ public class ResourcefulBees {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::loadComplete);
         MinecraftForge.EVENT_BUS.addListener(BeeSetup::onBiomeLoad);
         MinecraftForge.EVENT_BUS.addListener(this::serverLoaded);
-        MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, this::recipesLoaded);
+
 
         MinecraftForge.EVENT_BUS.addListener(this::trade);
         //MinecraftForge.EVENT_BUS.addListener(EntityEventHandlers::entityDies);
@@ -87,15 +86,11 @@ public class ResourcefulBees {
         MinecraftForge.EVENT_BUS.register(this);
     }
 
-    private void recipesLoaded(RecipesUpdatedEvent event){
-        MutationSetup.setupMutations();
-        FlowerSetup.setupFlowers();
-    }
-
     private void serverLoaded(FMLServerStartedEvent event) {
         if (event.getServer().isDedicatedServer()){
             MutationSetup.setupMutations();
             FlowerSetup.setupFlowers();
+            BreedingSetup.setupFeedItems();
         }
         ModPotions.createMixes();
     }

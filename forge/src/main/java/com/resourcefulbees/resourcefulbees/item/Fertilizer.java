@@ -38,7 +38,7 @@ public class Fertilizer extends Item {
         }
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public InteractionResult useOn(UseOnContext context) {
 

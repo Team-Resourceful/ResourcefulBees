@@ -13,9 +13,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
-
-public class MechanicalCentrifugeContainer extends AbstractContainerMenu {
+public class MechanicalCentrifugeContainer extends ContainerWithStackMove {
 
     private final MechanicalCentrifugeTileEntity centrifugeTileEntity;
     private final Player player;
@@ -58,39 +56,24 @@ public class MechanicalCentrifugeContainer extends AbstractContainerMenu {
         }
     }
 
+    @Override
+    public int getContainerInputEnd() {
+        return 2;
+    }
+
+    @Override
+    public int getInventoryStart() {
+        return 5;
+    }
+
     /**
      * Determines whether supplied player can use this container
      *
      * @param player the player
      */
     @Override
-    public boolean stillValid(@Nonnull Player player) {
+    public boolean stillValid(@NotNull Player player) {
         return true;
-    }
-
-    @Nonnull
-    @Override
-    public ItemStack quickMoveStack(@Nonnull Player playerIn, int index) {
-        ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = this.slots.get(index);
-        if (slot != null && slot.hasItem()) {
-            ItemStack itemstack1 = slot.getItem();
-            itemstack = itemstack1.copy();
-            if (index <= 4) {
-                if (!this.moveItemStackTo(itemstack1, 5, slots.size(), true)) {
-                    return ItemStack.EMPTY;
-                }
-            } else if (!this.moveItemStackTo(itemstack1, 0, 2, false)) {
-                return ItemStack.EMPTY;
-            }
-
-            if (itemstack1.isEmpty()) {
-                slot.set(ItemStack.EMPTY);
-            } else {
-                slot.setChanged();
-            }
-        }
-        return itemstack;
     }
 
     public MechanicalCentrifugeTileEntity getCentrifugeTileEntity() {

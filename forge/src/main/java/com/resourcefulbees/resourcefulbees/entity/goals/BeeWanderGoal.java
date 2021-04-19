@@ -5,15 +5,15 @@ import com.resourcefulbees.resourcefulbees.utils.RandomPositionGenerator;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.Objects;
 
-public class BeeWanderGoal2 extends Goal {
+public class BeeWanderGoal extends Goal {
     private final ModBeeEntity modBeeEntity;
 
-    public BeeWanderGoal2(ModBeeEntity modBeeEntity) {
+    public BeeWanderGoal(ModBeeEntity modBeeEntity) {
         this.modBeeEntity = modBeeEntity;
         this.setFlags(EnumSet.of(Goal.Flag.MOVE));
     }

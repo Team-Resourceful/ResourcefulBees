@@ -13,9 +13,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
-
-public class ApiaryStorageContainer extends AbstractContainerMenu {
+public class ApiaryStorageContainer extends ContainerWithStackMove {
 
     private final ApiaryStorageTileEntity apiaryStorageTileEntity;
     private final Inventory playerInventory;
@@ -35,7 +33,7 @@ public class ApiaryStorageContainer extends AbstractContainerMenu {
      * @param player the player
      */
     @Override
-    public boolean stillValid(@Nonnull Player player) {
+    public boolean stillValid(@NotNull Player player) {
         return true;
     }
 
@@ -100,31 +98,14 @@ public class ApiaryStorageContainer extends AbstractContainerMenu {
     }
 
 
-
-
-    @Nonnull
     @Override
-    public ItemStack quickMoveStack(@Nonnull Player playerIn, int index) {
-        ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = this.slots.get(index);
-        if (slot != null && slot.hasItem()) {
-            ItemStack itemstack1 = slot.getItem();
-            itemstack = itemstack1.copy();
-            if (index <= getNumberOfSlots()) {
-                if (!this.moveItemStackTo(itemstack1, getNumberOfSlots(), slots.size(), true)) {
-                    return ItemStack.EMPTY;
-                }
-            } else if (!this.moveItemStackTo(itemstack1, 0, 1, false)) {
-                return ItemStack.EMPTY;
-            }
+    public int getContainerInputEnd() {
+        return 1;
+    }
 
-            if (itemstack1.isEmpty()) {
-                slot.set(ItemStack.EMPTY);
-            } else {
-                slot.setChanged();
-            }
-        }
-        return itemstack;
+    @Override
+    public int getInventoryStart() {
+        return 1 + getNumberOfSlots();
     }
 
     public Inventory getPlayerInventory() {

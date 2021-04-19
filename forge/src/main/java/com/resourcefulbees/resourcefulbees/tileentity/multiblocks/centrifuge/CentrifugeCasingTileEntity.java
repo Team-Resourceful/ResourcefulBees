@@ -10,9 +10,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class CentrifugeCasingTileEntity extends BlockEntity {
     private BlockPos controllerPos;
@@ -48,9 +47,9 @@ public class CentrifugeCasingTileEntity extends BlockEntity {
         return null;
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
         if (isLinked() && this.level != null) {
             CentrifugeControllerTileEntity controller = getController();
             if (controller != null && controller.isValidStructure()) {
@@ -60,32 +59,32 @@ public class CentrifugeCasingTileEntity extends BlockEntity {
         return super.getCapability(cap, side);
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public CompoundTag save(@Nonnull CompoundTag tag) {
+    public CompoundTag save(@NotNull CompoundTag tag) {
         if (isLinked())
             tag.put(NBTConstants.NBT_CONTROLLER_POS, NbtUtils.writeBlockPos(controllerPos));
         return super.save(tag);
     }
 
     @Override
-    public void load(@Nonnull BlockState state, CompoundTag tag) {
+    public void load(@NotNull BlockState state, CompoundTag tag) {
         if (tag.contains(NBTConstants.NBT_CONTROLLER_POS))
             controllerPos = NbtUtils.readBlockPos(tag.getCompound(NBTConstants.NBT_CONTROLLER_POS));
         super.load(state, tag);
     }
 
-    @Nonnull
+    @Override
+    public void handleUpdateTag(@NotNull BlockState state, CompoundTag tag) {
+        this.load(state, tag);
+    }
+
+    @NotNull
     @Override
     public CompoundTag getUpdateTag() {
         CompoundTag nbtTagCompound = new CompoundTag();
         save(nbtTagCompound);
         return nbtTagCompound;
-    }
-
-    @Override
-    public void handleUpdateTag(@Nonnull BlockState state, CompoundTag tag) {
-        this.load(state, tag);
     }
 
 

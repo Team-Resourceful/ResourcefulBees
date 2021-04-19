@@ -1,6 +1,7 @@
 package com.resourcefulbees.resourcefulbees.init;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.resourcefulbees.resourcefulbees.data.BeeTrait;
 import com.resourcefulbees.resourcefulbees.data.JsonBeeTrait;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
@@ -18,6 +19,8 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.Locale;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -33,120 +36,44 @@ public class TraitSetup {
     private static Path dictionaryPath;
 
     public static void buildCustomTraits() {
+        LOGGER.info("Registering Custom Traits...");
         addTraits();
-    }
-
-    private static void parseType(File file) throws IOException {
-        String name = file.getName();
-        name = name.substring(0, name.indexOf('.'));
-
-        Reader r = Files.newBufferedReader(file.toPath());
-
-        parseType(r, name);
-    }
-
-    private static void parseType(ZipFile zf, ZipEntry zipEntry) throws IOException {
-        String name = zipEntry.getName();
-        name = name.substring(name.lastIndexOf("/") + 1, name.indexOf('.'));
-
-        InputStream input = zf.getInputStream(zipEntry);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(input, StandardCharsets.UTF_8));
-
-        parseType(reader, name);
     }
 
     private static void parseType(Reader reader, String name) {
         Gson gson = new Gson();
-        JsonBeeTrait.JsonTrait jsonTrait = gson.fromJson(reader, JsonBeeTrait.JsonTrait.class);
-        BeeTrait.Builder builder = new BeeTrait.Builder(name);
-        parseDamageImmunities(jsonTrait, builder);
-        parseDamageTypes(jsonTrait, builder);
-        parseSpecialAbilities(jsonTrait, builder);
-        parseParticle(jsonTrait, builder);
-        parsePotionImmunities(jsonTrait, builder);
-        parsePotionDamageEffects(jsonTrait, builder);
-        parseBeepediaItem(jsonTrait, builder);
-        TraitRegistry.getRegistry().register(name, builder.build());
-    }
-
-    private static void parseDamageImmunities(JsonBeeTrait.JsonTrait jsonTrait, BeeTrait.Builder builder){
-        if (jsonTrait.getDamageImmunities() != null && jsonTrait.getDamageImmunities().length > 0) {
-            for (String damageImmunity : jsonTrait.getDamageImmunities()) {
-                DamageSource source;
-                switch (damageImmunity) {
-                    case "inFire":
-                        source = DamageSource.IN_FIRE;
-                        break;
-                    case "lightningBolt":
-                        source = DamageSource.LIGHTNING_BOLT;
-                        break;
-                    case "onFire":
-                        source = DamageSource.ON_FIRE;
-                        break;
-                    case "lava":
-                        source = DamageSource.LAVA;
-                        break;
-                    case "hotFloor":
-                        source = DamageSource.HOT_FLOOR;
-                        break;
-                    case "inWall":
-                        source = DamageSource.IN_WALL;
-                        break;
-                    case "cramming":
-                        source = DamageSource.CRAMMING;
-                        break;
-                    case "drown":
-                        source = DamageSource.DROWN;
-                        break;
-                    case "starve":
-                        source = DamageSource.STARVE;
-                        break;
-                    case "cactus":
-                        source = DamageSource.CACTUS;
-                        break;
-                    case "fall":
-                        source = DamageSource.FALL;
-                        break;
-                    case "flyIntoWall":
-                        source = DamageSource.FLY_INTO_WALL;
-                        break;
-                    case "generic":
-                        source = DamageSource.GENERIC;
-                        break;
-                    case "magic":
-                        source = DamageSource.MAGIC;
-                        break;
-                    case "wither":
-                        source = DamageSource.WITHER;
-                        break;
-                    case "anvil":
-                        source = DamageSource.ANVIL;
-                        break;
-                    case "fallingBlock":
-                        source = DamageSource.FALLING_BLOCK;
-                        break;
-                    case "dragonBreath":
-                        source = DamageSource.DRAGON_BREATH;
-                        break;
-                    case "dryout":
-                        source = DamageSource.DRY_OUT;
-                        break;
-                    default:
-                        throw new IllegalArgumentException("Damage Source supplied not valid.");
-                }
-                builder.addDamageImmunity(source);
-            }
+        name = name.toLowerCase(Locale.ENGLISH).replace(" ", "_");
+        try {
+            JsonBeeTrait.JsonTrait jsonTrait = gson.fromJson(reader, JsonBeeTrait.JsonTrait.class);
+            BeeTrait.Builder builder = new BeeTrait.Builder(name);
+            parseDamageImmunities(jsonTrait, builder);
+            parseDamageTypes(jsonTrait, builder);
+            parseSpecialAbilities(jsonTrait, builder);
+            parseParticle(jsonTrait, builder);
+            parsePotionImmunities(jsonTrait, builder);
+            parsePotionDamageEffects(jsonTrait, builder);
+            parseBeepediaItem(jsonTrait, builder);
+            TraitRegistry.getRegistry().register(name, builder.build());
+        } catch (JsonSyntaxException e) {
+            String exception = String.format("Error was found trying to parse trait: %s. Json is invalid, validate it here : https://jsonlint.com/", name);
+            throw new JsonSyntaxException(exception);
         }
     }
 
-    private static void parseDamageTypes(JsonBeeTrait.JsonTrait jsonTrait, BeeTrait.Builder builder){
+    private static void parseDamageImmunities(JsonBeeTrait.JsonTrait jsonTrait, BeeTrait.Builder builder) {
+        if (jsonTrait.getDamageImmunities() != null && jsonTrait.getDamageImmunities().length > 0) {
+            Arrays.stream(jsonTrait.getDamageImmunities()).forEach(builder::addDamageImmunity);
+        }
+    }
+
+    private static void parseDamageTypes(JsonBeeTrait.JsonTrait jsonTrait, BeeTrait.Builder builder) {
         if (jsonTrait.getDamageTypes() != null && !jsonTrait.getDamageTypes().isEmpty()) {
             jsonTrait.getDamageTypes().forEach(damageType ->
                     builder.addDamageType(Pair.of(damageType.getDamageType(), damageType.getAmplifier())));
         }
     }
 
-    private static void parseSpecialAbilities(JsonBeeTrait.JsonTrait jsonTrait, BeeTrait.Builder builder){
+    private static void parseSpecialAbilities(JsonBeeTrait.JsonTrait jsonTrait, BeeTrait.Builder builder) {
         if (jsonTrait.getSpecialAbilities() != null && jsonTrait.getSpecialAbilities().length > 0) {
             for (String ability : jsonTrait.getSpecialAbilities()) {
                 builder.addSpecialAbility(ability);
@@ -154,7 +81,7 @@ public class TraitSetup {
         }
     }
 
-    private static void parseParticle(JsonBeeTrait.JsonTrait jsonTrait, BeeTrait.Builder builder){
+    private static void parseParticle(JsonBeeTrait.JsonTrait jsonTrait, BeeTrait.Builder builder) {
         if (jsonTrait.getParticleName() != null
                 && !jsonTrait.getParticleName().isEmpty()
                 && ForgeRegistries.PARTICLE_TYPES.getValue(new ResourceLocation(jsonTrait.getParticleName())) instanceof SimpleParticleType) {
@@ -162,7 +89,7 @@ public class TraitSetup {
         }
     }
 
-    private static void parsePotionImmunities(JsonBeeTrait.JsonTrait jsonTrait, BeeTrait.Builder builder){
+    private static void parsePotionImmunities(JsonBeeTrait.JsonTrait jsonTrait, BeeTrait.Builder builder) {
         if (jsonTrait.getPotionImmunities() != null && jsonTrait.getPotionImmunities().length > 0) {
             for (String immunity : jsonTrait.getPotionImmunities()) {
                 MobEffect potion = ForgeRegistries.POTIONS.getValue(new ResourceLocation(immunity));
@@ -172,7 +99,7 @@ public class TraitSetup {
         }
     }
 
-    private static void parsePotionDamageEffects(JsonBeeTrait.JsonTrait jsonTrait, BeeTrait.Builder builder){
+    private static void parsePotionDamageEffects(JsonBeeTrait.JsonTrait jsonTrait, BeeTrait.Builder builder) {
         if (jsonTrait.getPotionDamageEffects() != null && !jsonTrait.getPotionDamageEffects().isEmpty()) {
             jsonTrait.getPotionDamageEffects().forEach((traitPotionDamageEffect -> {
                 MobEffect potion = ForgeRegistries.POTIONS.getValue(new ResourceLocation(traitPotionDamageEffect.getEffectID()));
@@ -182,7 +109,7 @@ public class TraitSetup {
         }
     }
 
-    private static void parseBeepediaItem(JsonBeeTrait.JsonTrait jsonTrait, BeeTrait.Builder builder){
+    private static void parseBeepediaItem(JsonBeeTrait.JsonTrait jsonTrait, BeeTrait.Builder builder) {
         if (jsonTrait.getBeepediaItemID() != null && !jsonTrait.getBeepediaItemID().isEmpty()) {
             Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(jsonTrait.getBeepediaItemID()));
             if (item != null) {
@@ -206,7 +133,7 @@ public class TraitSetup {
     private static void addType(Path file) {
         File f = file.toFile();
         try {
-            parseType(f);
+            ModSetup.parseType(f, TraitSetup::parseType);
         } catch (IOException e) {
             LOGGER.error("File not found when parsing biome types");
         }
@@ -217,7 +144,7 @@ public class TraitSetup {
             zf.stream().forEach(zipEntry -> {
                 if (zipEntry.getName().endsWith(".json")) {
                     try {
-                        parseType(zf, zipEntry);
+                        ModSetup.parseType(zf, zipEntry, TraitSetup::parseType);
                     } catch (IOException e) {
                         String name = zipEntry.getName();
                         name = name.substring(name.lastIndexOf("/") + 1, name.indexOf('.'));

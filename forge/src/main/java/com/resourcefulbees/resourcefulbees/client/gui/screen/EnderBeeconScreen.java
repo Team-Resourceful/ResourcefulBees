@@ -24,7 +24,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.text.DecimalFormat;
 import java.util.LinkedList;
 import java.util.List;
@@ -61,9 +60,9 @@ public class EnderBeeconScreen extends AbstractContainerScreen<EnderBeeconContai
     }
 
     @Override
-    protected void renderBg(@Nonnull PoseStack matrix, float partialTicks, int mouseX, int mouseY) {
+    protected void renderBg(@NotNull PoseStack matrix, float partialTicks, int mouseX, int mouseY) {
         ResourceLocation texture = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/ender_beecon/ender_beecon.png");
-        if (minecraft != null) {
+        if (minecraft != null && tileEntity != null) {
             minecraft.getTextureManager().bind(texture);
             int i = this.leftPos;
             int j = this.topPos;
@@ -221,7 +220,7 @@ public class EnderBeeconScreen extends AbstractContainerScreen<EnderBeeconContai
     }
 
     @Override
-    public void render(@Nonnull PoseStack matrix, int mouseX, int mouseY, float partialTicks) {
+    public void render(@NotNull PoseStack matrix, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrix);
         super.render(matrix, mouseX, mouseY, partialTicks);
     }

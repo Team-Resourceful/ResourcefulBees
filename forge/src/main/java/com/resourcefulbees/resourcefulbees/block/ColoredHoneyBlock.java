@@ -1,5 +1,6 @@
 package com.resourcefulbees.resourcefulbees.block;
 
+import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
 import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
@@ -43,13 +44,18 @@ public class ColoredHoneyBlock extends HalfTransparentBlock {
     protected static final VoxelShape SHAPE = Block.box(1.0D, 0.0D, 1.0D, 15.0D, 15.0D, 15.0D);
     protected final int color;
     protected final boolean isRainbow;
+    protected final HoneyBottleData data;
 
-    public ColoredHoneyBlock(int color, boolean isRainbow) {
+    public ColoredHoneyBlock(HoneyBottleData honeyData) {
         super(BlockBehaviour.Properties.of(Material.CLAY).speedFactor(0.4F).jumpFactor(0.5F).noOcclusion().sound(SoundType.HONEY_BLOCK));
-        this.color = color;
-        this.isRainbow = isRainbow;
+        this.color = honeyData.getHoneyColorInt();
+        this.isRainbow = honeyData.isRainbow();
+        this.data = honeyData;
     }
 
+    public HoneyBottleData getData() {
+        return data;
+    }
 
     //region Color stuff
     public int getHoneyColor() {
@@ -80,7 +86,7 @@ public class ColoredHoneyBlock extends HalfTransparentBlock {
     //region Item stuff
     @NotNull
     @Override
-    public List<ItemStack> getDrops(BlockState p_220076_1_, LootContext.Builder p_220076_2_) {
+    public List<ItemStack> getDrops(@NotNull BlockState state, @NotNull LootContext.Builder builder) {
         return Collections.singletonList(this.asItem().getDefaultInstance());
     }
 
@@ -90,6 +96,7 @@ public class ColoredHoneyBlock extends HalfTransparentBlock {
     }
 
     //endregion
+
     @Override
     @NotNull
     public VoxelShape getCollisionShape(@NotNull BlockState blockState, @NotNull BlockGetter blockReader, @NotNull BlockPos blockPos, @NotNull CollisionContext selectionContext) {
@@ -111,7 +118,7 @@ public class ColoredHoneyBlock extends HalfTransparentBlock {
 
     }
 
-    private boolean isSliding(BlockPos pos, Entity entity){
+    private boolean isSliding(BlockPos pos, Entity entity) {
         if (entity.isOnGround()) {
             return false;
         } else if (entity.getY() > (double) pos.getY() + 0.9375D - 1.0E-7D) {

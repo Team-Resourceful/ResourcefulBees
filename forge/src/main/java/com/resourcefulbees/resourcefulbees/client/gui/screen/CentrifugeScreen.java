@@ -16,6 +16,7 @@ import com.resourcefulbees.resourcefulbees.utils.color.Color;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.ImageButton;
+import net.minecraft.client.gui.components.Widget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -118,7 +119,7 @@ public class CentrifugeScreen extends AbstractContainerScreen<CentrifugeContaine
     }
 
     @Override
-    protected void renderBg(@Nonnull PoseStack matrix, float partialTicks, int mouseX, int mouseY) {
+    protected void renderBg(@NotNull PoseStack matrix, float partialTicks, int mouseX, int mouseY) {
         Minecraft client = this.minecraft;
         if (client != null) {
             client.getTextureManager().bind(BACKGROUND);
@@ -138,22 +139,26 @@ public class CentrifugeScreen extends AbstractContainerScreen<CentrifugeContaine
     }
 
     @Override
-    public void render(@Nonnull PoseStack matrix, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(matrix);
-        this.redstoneButton.render(matrix, mouseX, mouseY, partialTicks);
-        this.fluidDispButton.render(matrix, mouseX, mouseY, partialTicks);
-        super.render(matrix, mouseX, mouseY, partialTicks);
-        this.renderTooltip(matrix, mouseX, mouseY);
-        //TODO see if the rest of this method can be condensed a bit further
-        int x = this.leftPos + 10;
-        int y = this.topPos + 38;
-        if (MathUtils.inRangeInclusive(mouseX, x, x + 12) && MathUtils.inRangeInclusive(mouseY, y, y + 58)){
-            if (Screen.hasShiftDown() || this.menu.getEnergy() < 500) this.renderTooltip(matrix, new TextComponent(this.menu.getEnergy() + " RF"), mouseX, mouseY);
-            else this.renderTooltip(matrix, new TextComponent(ModConstants.DECIMAL_FORMAT.format(this.menu.getEnergy() / 1000) + " kRF"), mouseX, mouseY);
-        }
+    public void render(@NotNull PoseStack matrix, int mouseX, int mouseY, float partialTicks) {
+        if (this.menu.getCentrifugeTileEntity() != null) {
+            this.renderBackground(matrix);
+            this.redstoneButton.render(matrix, mouseX, mouseY, partialTicks);
+            this.fluidDispButton.render(matrix, mouseX, mouseY, partialTicks);
+            super.render(matrix, mouseX, mouseY, partialTicks);
+            this.renderTooltip(matrix, mouseX, mouseY);
+            //TODO see if the rest of this method can be condensed a bit further
+            int x = this.leftPos + 10;
+            int y = this.topPos + 38;
+            if (MathUtils.inRangeInclusive(mouseX, x, x + 12) && MathUtils.inRangeInclusive(mouseY, y, y + 58)) {
+                if (Screen.hasShiftDown() || this.menu.getEnergy() < 500)
+                    this.renderTooltip(matrix, new TextComponent(this.menu.getEnergy() + " RF"), mouseX, mouseY);
+                else
+                    this.renderTooltip(matrix, new TextComponent(ModConstants.DECIMAL_FORMAT.format(this.menu.getEnergy() / 1000) + " kRF"), mouseX, mouseY);
+            }
 
-        if (this.menu.shouldDisplayFluids()) {
-            displayFluids(matrix, mouseX, mouseY);
+            if (this.menu.shouldDisplayFluids()) {
+                displayFluids(matrix, mouseX, mouseY);
+            }
         }
     }
 
@@ -175,7 +180,7 @@ public class CentrifugeScreen extends AbstractContainerScreen<CentrifugeContaine
     }
 
     @Override
-    public void renderLabels(@Nonnull PoseStack matrix, int mouseX, int mouseY) {
+    public void renderLabels(@NotNull PoseStack matrix, int mouseX, int mouseY) {
         for (AbstractWidget widget : this.buttons) {
             if (widget.isHovered()) {
                 widget.renderToolTip(matrix, mouseX - this.leftPos, mouseY - this.topPos);
@@ -307,7 +312,7 @@ public class CentrifugeScreen extends AbstractContainerScreen<CentrifugeContaine
         return Screen.hasShiftDown() || amount < 500f ? amount + "mb" : ModConstants.DECIMAL_FORMAT.format((float) amount / 1000f) + "B";
     }
 
-    public String getFluidNamespace(@Nonnull Fluid fluid) {
+    public String getFluidNamespace(@NotNull Fluid fluid) {
         //noinspection deprecation
         return WordUtils.capitalize(Objects.requireNonNull(fluid.getRegistryName()).getNamespace());
     }

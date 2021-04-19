@@ -1,8 +1,10 @@
 package com.resourcefulbees.resourcefulbees.api.beedata;
 
 import com.resourcefulbees.resourcefulbees.config.Config;
+import com.resourcefulbees.resourcefulbees.lib.ApiaryOutput;
 import com.resourcefulbees.resourcefulbees.lib.BaseModelTypes;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
+import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -18,7 +20,7 @@ public class CustomBeeData extends AbstractBeeData {
     /**
      * Which flowers the bee pollinates.
      */
-    private final String flower;
+    private String flower;
 
     /**
      * List of all block bees flowers
@@ -33,29 +35,29 @@ public class CustomBeeData extends AbstractBeeData {
     /**
      * The base texture the bee uses if it uses a custom texture.
      */
-    private final String baseLayerTexture;
+    private String baseLayerTexture;
 
     /**
      * The base model the bee uses
      */
-    private final BaseModelTypes baseModelType;
+    private BaseModelTypes baseModelType;
 
     /**
      * How long the bee can stay in a hive.
      */
-    private final int maxTimeInHive;
+    private int maxTimeInHive;
 
     /**
      * How big the bee is.
      */
-    private final float sizeModifier;
+    private float sizeModifier;
 
     /**
      * The special attributes can have.
      * <p>
      * With that it can as example port like an enderman.
      */
-    private final String[] traits;
+    private String[] traits;
 
     /**
      * The name of the bee for the registry.
@@ -65,7 +67,7 @@ public class CustomBeeData extends AbstractBeeData {
     /**
      * If the bee has a comb.
      */
-    private final boolean hasHoneycomb;
+    private boolean hasHoneycomb;
 
     /**
      * If a custom item should drop when normally combs drop.
@@ -80,7 +82,9 @@ public class CustomBeeData extends AbstractBeeData {
     /**
      * How much should come out of apiaries in combs.
      */
-    private final int[] apiaryOutputAmounts;
+    private int[] apiaryOutputAmounts = new int[]{Config.T1_APIARY_QUANTITY.get(), Config.T2_APIARY_QUANTITY.get(), Config.T3_APIARY_QUANTITY.get(), Config.T4_APIARY_QUANTITY.get()};
+
+    private ApiaryOutput[] apiaryOutputTypes = BeeInfoUtils.getDefaultApiaryTypes();
 
     private transient boolean shouldResourcefulBeesDoForgeRegistration;
 
@@ -92,37 +96,37 @@ public class CustomBeeData extends AbstractBeeData {
     /**
      * Data for Breeding the Bee
      */
-    private final BreedData BreedData;
+    private BreedData BreedData = null;
 
     /**
      * Data for Comb outputs
      */
-    private final CentrifugeData CentrifugeData;
+    private CentrifugeData CentrifugeData = null;
 
     /**
      * Data for the coloring of the bee
      */
-    private final ColorData ColorData;
+    private ColorData ColorData = null;
 
     /**
      * Data for the combat skills of the bee
      */
-    private final CombatData CombatData;
+    private CombatData CombatData = null;
 
     /**
      * Data for Block Mutation
      */
-    private final MutationData MutationData;
+    private MutationData MutationData = null;
 
     /**
      * Data for spawning of the Bee
      */
-    private final SpawnData SpawnData;
+    private SpawnData SpawnData = null;
 
     /**
      * Data for Bee traits
      */
-    private TraitData TraitData;
+    private TraitData TraitData = null;
 
     private transient Supplier<ItemStack> combSupplier;
     private transient Supplier<ItemStack> combBlockItemSupplier;
@@ -157,7 +161,12 @@ public class CustomBeeData extends AbstractBeeData {
      */
     private final transient boolean isEasterEggBee;
 
-    private CustomBeeData(String flower, String baseLayerTexture, BaseModelTypes baseModelType, int maxTimeInHive, float sizeModifier, String[] traits, int[] apiaryOutputAmounts, String name, boolean hasHoneycomb, MutationData mutationData, ColorData colorData, CombatData combatData, CentrifugeData centrifugeData, BreedData breedData, SpawnData spawnData, TraitData traitData, boolean isEasterEggBee) {
+    private CustomBeeData() {
+        super("CustomBeeData");
+        isEasterEggBee = false;
+    }
+
+    private CustomBeeData(String flower, String baseLayerTexture, BaseModelTypes baseModelType, int maxTimeInHive, float sizeModifier, String[] traits, int[] apiaryOutputAmounts, ApiaryOutput[] apiaryOutputTypes, String name, boolean hasHoneycomb, MutationData mutationData, ColorData colorData, CombatData combatData, CentrifugeData centrifugeData, BreedData breedData, SpawnData spawnData, TraitData traitData, boolean isEasterEggBee) {
         super("CustomBeeData");
         this.flower = flower;
         this.baseLayerTexture = baseLayerTexture;
@@ -166,6 +175,7 @@ public class CustomBeeData extends AbstractBeeData {
         this.sizeModifier = sizeModifier;
         this.traits = traits;
         this.apiaryOutputAmounts = apiaryOutputAmounts;
+        this.apiaryOutputTypes = apiaryOutputTypes;
         this.name = name;
         this.hasHoneycomb = hasHoneycomb;
         this.BreedData = breedData;
@@ -222,6 +232,11 @@ public class CustomBeeData extends AbstractBeeData {
     public int[] getApiaryOutputAmounts() {
         return apiaryOutputAmounts;
     }
+
+    public ApiaryOutput[] getApiaryOutputsTypes() {
+        return apiaryOutputTypes != null ? apiaryOutputTypes : BeeInfoUtils.getDefaultApiaryTypes();
+    }
+
 
     public boolean hasCustomDrop() {
         return (customCombDrop != null && !customCombDrop.isEmpty() && customCombBlockDrop != null && !customCombBlockDrop.isEmpty()) || isEasterEggBee();
@@ -381,6 +396,8 @@ public class CustomBeeData extends AbstractBeeData {
         this.shouldResourcefulBeesDoForgeRegistration = shouldResourcefulBeesDoForgeRegistration;
     }
 
+
+
     public static class Builder {
         private final String flower;
         private String baseLayerTexture;
@@ -399,6 +416,7 @@ public class CustomBeeData extends AbstractBeeData {
         private final SpawnData spawnData;
         private final TraitData traitData;
         private boolean isEasterEggBee = false;
+        private ApiaryOutput[] apiaryOutputTypes = BeeInfoUtils.getDefaultApiaryTypes();
 
         public Builder(String name, String flower, boolean hasHoneycomb, MutationData mutationData, ColorData colorData, CombatData combatData, CentrifugeData centrifugeData, BreedData breedData, SpawnData spawnData, TraitData traitData) {
             this.name = name;
@@ -413,6 +431,10 @@ public class CustomBeeData extends AbstractBeeData {
             this.traitData = traitData;
         }
 
+        public Builder setApiaryOutputTypes(ApiaryOutput[] outputs) {
+            this.apiaryOutputTypes = outputs;
+            return this;
+        }
 
         public Builder setEasterEggBee(boolean easterEggBee) {
             isEasterEggBee = easterEggBee;
@@ -450,7 +472,7 @@ public class CustomBeeData extends AbstractBeeData {
         }
 
         public CustomBeeData createCustomBee() {
-            return new CustomBeeData(flower, baseLayerTexture, baseModelType, maxTimeInHive, sizeModifier, traits, apiaryOutputAmounts, name, hasHoneycomb, mutationData, colorData, combatData, centrifugeData, breedData, spawnData, traitData, isEasterEggBee);
+            return new CustomBeeData(flower, baseLayerTexture, baseModelType, maxTimeInHive, sizeModifier, traits, apiaryOutputAmounts, apiaryOutputTypes, name, hasHoneycomb, mutationData, colorData, combatData, centrifugeData, breedData, spawnData, traitData, isEasterEggBee);
         }
     }
 }

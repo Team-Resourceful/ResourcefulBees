@@ -7,7 +7,6 @@ import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -28,13 +27,10 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.ItemStackHandler;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -48,20 +44,13 @@ public class HoneyGenerator extends Block {
         registerDefaultState(defaultBlockState().setValue(PROPERTY_ON, false).setValue(FACING, Direction.NORTH));
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public InteractionResult use(@Nonnull BlockState state, Level world, @Nonnull BlockPos pos, @Nonnull Player player, @Nonnull InteractionHand hand, @Nonnull BlockHitResult rayTraceResult) {
-        ItemStack heldItem = player.getItemInHand(hand);
-        boolean hasCapability = heldItem.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent();
+    public InteractionResult use(@NotNull BlockState state, Level world, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult rayTraceResult) {
         BlockEntity tileEntity = world.getBlockEntity(pos);
 
         if (tileEntity instanceof HoneyGeneratorTileEntity) {
-            if (hasCapability) {
-                tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
-                        .ifPresent(iFluidHandler -> FluidUtil.interactWithFluidHandler(player, hand, world, pos, null));
-            } else if (!player.isShiftKeyDown() && !world.isClientSide) {
-                NetworkHooks.openGui((ServerPlayer) player, (MenuProvider) tileEntity, pos);
-            }
+            CentrifugeBlock.capabilityOrGuiUse(tileEntity, player, world, pos, hand);
             return InteractionResult.SUCCESS;
         }
         return super.use(state, world, pos, player, hand, rayTraceResult);
@@ -69,12 +58,12 @@ public class HoneyGenerator extends Block {
 
     @Nullable
     @Override
-    public MenuProvider getMenuProvider(@Nonnull BlockState state, Level worldIn, @Nonnull BlockPos pos) {
+    public MenuProvider getMenuProvider(@NotNull BlockState state, Level worldIn, @NotNull BlockPos pos) {
         return (MenuProvider) worldIn.getBlockEntity(pos);
     }
 
     @Override
-    public void onRemove(@Nonnull BlockState state1, Level world, @Nonnull BlockPos pos, @Nonnull BlockState state, boolean isMoving) {
+    public void onRemove(@NotNull BlockState state1, Level world, @NotNull BlockPos pos, @NotNull BlockState state, boolean isMoving) {
         BlockEntity blockEntity = world.getBlockEntity(pos);
         if (blockEntity instanceof HoneyGeneratorTileEntity && state.getBlock() != state1.getBlock()) {
             HoneyGeneratorTileEntity honeyGeneratorTileEntity = (HoneyGeneratorTileEntity) blockEntity;
@@ -85,13 +74,13 @@ public class HoneyGenerator extends Block {
     }
 
     @Override
-    public boolean hasTileEntity(BlockState state) {
-        return true;
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
+        return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
+    public boolean hasTileEntity(BlockState state) {
+        return true;
     }
 
     @Nullable
@@ -107,7 +96,7 @@ public class HoneyGenerator extends Block {
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void appendHoverText(@Nonnull ItemStack stack, @Nullable BlockGetter worldIn, @Nonnull List<Component> tooltip, @Nonnull TooltipFlag flagIn) {
+    public void appendHoverText(@NotNull ItemStack stack, @Nullable BlockGetter worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         tooltip.addAll(new TooltipBuilder()
                 .addTip(I18n.get("block.resourcefulbees.generator.tooltip.info"), ChatFormatting.GOLD)
                 .build());

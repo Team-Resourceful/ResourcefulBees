@@ -41,7 +41,7 @@ public class HoneyEffect {
     }
 
     public boolean isEffectIDValid() {
-        return effectID != null && effectID.matches(ValidatorUtils.SINGLE_RESOURCE_PATTERN.pattern());
+        return ResourceLocation.tryParse(effectID) != null;
     }
 
     public MobEffect getEffect() {

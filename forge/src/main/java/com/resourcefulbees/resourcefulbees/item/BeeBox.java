@@ -90,9 +90,9 @@ public class BeeBox extends Item {
         return entities;
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public InteractionResult interactLivingEntity(@Nonnull ItemStack stack, @Nonnull Player player, LivingEntity targetIn, @Nonnull InteractionHand hand) {
+    public InteractionResult interactLivingEntity(@NotNull ItemStack stack, @NotNull Player player, LivingEntity targetIn, @NotNull InteractionHand hand) {
         if (targetIn.getCommandSenderWorld().isClientSide() || (!(targetIn instanceof Bee) || !targetIn.isAlive())) {
             return InteractionResult.FAIL;
         }

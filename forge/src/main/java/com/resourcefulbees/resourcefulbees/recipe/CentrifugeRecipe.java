@@ -16,7 +16,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -30,7 +29,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -78,7 +76,7 @@ public class CentrifugeRecipe implements Recipe<Container> {
     }
 
     @Override
-    public boolean matches(Container inventory, @Nonnull Level world) {
+    public boolean matches(Container inventory, @NotNull Level world) {
         ItemStack stack = inventory.getItem(0);
         ItemStack bottle = inventory.getItem(1);
 
@@ -152,7 +150,7 @@ public class CentrifugeRecipe implements Recipe<Container> {
         }
 
         @Override
-        public @NotNull T fromJson(@Nonnull ResourceLocation id, @NotNull JsonObject json) {
+        public @NotNull T fromJson(@NotNull ResourceLocation id, @NotNull JsonObject json) {
             Ingredient ingredient;
             if (GsonHelper.isArrayNode(json, INGREDIENT_STRING)) {
                 ingredient = Ingredient.fromJson(GsonHelper.getAsJsonArray(json, INGREDIENT_STRING));
@@ -214,7 +212,7 @@ public class CentrifugeRecipe implements Recipe<Container> {
             return this.factory.create(id, ingredient, outputs, fluidOutput, time, multiblockTime, multiblock, hasFluidOutput, noBottle);
         }
 
-        public T fromNetwork(@Nonnull ResourceLocation id, @NotNull FriendlyByteBuf buffer) {
+        public T fromNetwork(@NotNull ResourceLocation id, @NotNull FriendlyByteBuf buffer) {
             Ingredient ingredient = Ingredient.fromNetwork(buffer);
             List<Pair<ItemStack, Float>> itemOutputs = new ArrayList<>();
             List<Pair<FluidStack, Float>> fluidOutput = new ArrayList<>();

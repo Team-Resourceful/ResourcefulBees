@@ -3,12 +3,13 @@ package com.resourcefulbees.resourcefulbees.client.gui.widget;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ImageButton;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
-
-public class ModImageButton extends ImageButton {
+public class ModImageButton extends Button {
 
     protected final ResourceLocation resourceLocation;
     protected final int xTexStart;
@@ -18,7 +19,7 @@ public class ModImageButton extends ImageButton {
     protected final int imageHeight;
 
     public ModImageButton(int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int yDiffTextIn, ResourceLocation resourceLocationIn, int imageWidth, int imageHeight, OnPress onPressIn) {
-        super(xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, yDiffTextIn, resourceLocationIn, imageWidth, imageHeight, onPressIn);
+        super(xIn, yIn, widthIn, heightIn, TextComponent.EMPTY, onPressIn);
         this.resourceLocation = resourceLocationIn;
         this.xTexStart = xTexStartIn;
         this.yTexStart = yTexStartIn;
@@ -32,7 +33,7 @@ public class ModImageButton extends ImageButton {
     }
 
     @Override
-    public void renderButton(@Nonnull PoseStack matrix, int mouseX, int mouseY, float partialTick) {
+    public void renderButton(@NotNull PoseStack matrix, int mouseX, int mouseY, float partialTick) {
         Minecraft minecraft = Minecraft.getInstance();
         minecraft.getTextureManager().bind(this.resourceLocation);
         RenderSystem.disableDepthTest();

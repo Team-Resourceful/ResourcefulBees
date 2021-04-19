@@ -111,7 +111,7 @@ public class TraitPage extends BeepediaPage {
     private void addDamageImmunities() {
         if (trait.hasDamageImmunities()) {
             TranslatableComponent title = new TranslatableComponent("gui.resourcefulbees.beepedia.tab.traits.damage_immunities");
-            String typeList = trait.getDamageImmunities().stream().map(DamageSource::getMsgId).collect(Collectors.joining(", "));
+            String typeList = String.join(", ", trait.getDamageImmunities());
             traitSections.add(new TraitSection(title, new ItemStack(Items.IRON_CHESTPLATE), new TextComponent(typeList)));
         }
     }
@@ -166,7 +166,7 @@ public class TraitPage extends BeepediaPage {
 
     private void initTranslation() {
         translation = "";
-        translation += trait.getDamageImmunities().stream().map(damageSource -> damageSource.msgId).collect(Collectors.joining(" "));
+        translation += String.join(" ", trait.getDamageImmunities());
         translation += String.join(" ", trait.getSpecialAbilities());
         translation += trait.getPotionImmunities().stream().map(effect -> effect.getDisplayName().getString()).collect(Collectors.joining(" "));
         translation += trait.getDamageTypes().stream().map(Pair::getLeft).collect(Collectors.joining(" "));
@@ -225,12 +225,11 @@ public class TraitPage extends BeepediaPage {
         for (Map.Entry<String, BeePage> e : beePages.entrySet()) {
             ItemStack stack = new ItemStack(ModItems.BEE_JAR.get());
             BeeJar.fillJar(stack, e.getValue().beeData);
-            Component translation = e.getValue().beeData.getTranslation();
             Button.OnPress onPress = button -> {
                 BeepediaScreen.saveScreenState();
                 beepedia.setActive(BeepediaScreen.PageType.BEE, e.getKey());
             };
-            ListButton button = new ListButton(0, 0, 100, 20, 0, 0, 20, listImage, stack, 2, 2, translation, 22, 6, onPress);
+            ListButton button = new ListButton(0, 0, 100, 20, 0, 0, 20, listImage, stack, 2, 2, e.getValue().beeData.getTranslation(), 22, 6, onPress);
             beepedia.addButton(button);
             button.visible = false;
             buttons.put(e.getKey(), button);

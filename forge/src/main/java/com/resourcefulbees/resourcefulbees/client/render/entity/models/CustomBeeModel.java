@@ -13,6 +13,7 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 
@@ -30,22 +31,10 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableListModel<
     private final ModelPart rightAntenna;
     private float bodyPitch;
 
-    private float beeSize = 0;
+    private float sizeModifier = 0;
 
     public CustomBeeModel(ModelTypes modelType) {
-        super(false, 24.0F, 0.0F);
-        this.texWidth = 64;
-        this.texHeight = 64;
-        this.body = new ModelPart(this);
-        this.torso = new ModelPart(this);
-        this.stinger = new ModelPart(this, 26, 7);
-        this.leftAntenna = new ModelPart(this, 2, 0);
-        this.rightAntenna = new ModelPart(this, 2, 3);
-        this.rightWing = new ModelPart(this, 0, 18);
-        this.leftWing = new ModelPart(this, 0, 18);
-        this.frontLegs = new ModelPart(this);
-        this.middleLegs = new ModelPart(this);
-        this.backLegs = new ModelPart(this);
+        this();
 
         switch (modelType) {
             case GELATINOUS:
@@ -78,6 +67,17 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableListModel<
     }
 
     public CustomBeeModel(BaseModelTypes modelType) {
+        this();
+
+
+        if (modelType.equals(BaseModelTypes.KITTEN)) {
+            addKittenParts();
+        } else if (modelType.equals(BaseModelTypes.DEFAULT)) {
+            addDefaultParts();
+        }
+    }
+
+    public CustomBeeModel() {
         super(false, 24.0F, 0.0F);
         this.texWidth = 64;
         this.texHeight = 64;
@@ -91,17 +91,10 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableListModel<
         this.frontLegs = new ModelPart(this);
         this.middleLegs = new ModelPart(this);
         this.backLegs = new ModelPart(this);
-
-
-        if (modelType.equals(BaseModelTypes.KITTEN)) {
-            addKittenParts();
-        } else if (modelType.equals(BaseModelTypes.DEFAULT)) {
-            addDefaultParts();
-        }
     }
 
     @Override
-    public void prepareMobModel(@Nonnull T entityIn, float limbSwing, float limbSwingAmount, float partialTick) {
+    public void prepareMobModel(@NotNull T entityIn, float limbSwing, float limbSwingAmount, float partialTick) {
         super.prepareMobModel(entityIn, limbSwing, limbSwingAmount, partialTick);
         this.bodyPitch = entityIn.getRollAmount(partialTick);
         this.stinger.visible = !entityIn.hasStung();
@@ -139,8 +132,8 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableListModel<
             this.body.xRot = ModelUtils.rotlerpRad(this.body.xRot, 3.0915928F, this.bodyPitch);
         }
 
-        beeSize = entityIn.getBeeData().getSizeModifier();
-        if (young) beeSize *= Config.CHILD_SIZE_MODIFIER.get();
+        sizeModifier = entityIn.getBeeData().getSizeModifier();
+        if (young) sizeModifier *= Config.CHILD_SIZE_MODIFIER.get();
     }
 
     @Nonnull
@@ -154,10 +147,10 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableListModel<
     }
 
     @Override
-    public void renderToBuffer(@Nonnull PoseStack matrixStackIn, @Nonnull VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+    public void renderToBuffer(@NotNull PoseStack matrixStackIn, @NotNull VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
         matrixStackIn.pushPose();
-        matrixStackIn.translate(0, 1.5 - beeSize * 1.5, 0);
-        matrixStackIn.scale(beeSize, beeSize, beeSize);
+        matrixStackIn.translate(0, 1.5 - sizeModifier * 1.5, 0);
+        matrixStackIn.scale(sizeModifier, sizeModifier, sizeModifier);
         super.renderToBuffer(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
         matrixStackIn.popPose();
     }
@@ -408,9 +401,9 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableListModel<
         armored.texOffs(0, 25).addBox(-3.5F, -4.0F, -5.0F, 7.0F, 7.0F, 10.0F, 0.25F, false);
     }
 
-    public void setRotationAngle(ModelPart ModelPart, float x, float y, float z) {
-        ModelPart.xRot = x;
-        ModelPart.yRot = y;
-        ModelPart.zRot = z;
+    public void setRotationAngle(ModelPart modelPart, float x, float y, float z) {
+        modelPart.xRot = x;
+        modelPart.yRot = y;
+        modelPart.zRot = z;
     }
 }

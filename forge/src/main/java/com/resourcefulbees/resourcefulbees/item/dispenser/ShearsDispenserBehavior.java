@@ -12,6 +12,7 @@ import net.minecraft.world.level.block.BeehiveBlock;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 
@@ -27,9 +28,9 @@ public class ShearsDispenserBehavior extends DefaultDispenseItemBehavior {
         DEFAULT_SHEARS_DISPENSE_BEHAVIOR = defaultShearsDispenseBehavior;
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    protected ItemStack execute(@Nonnull BlockSource source, @Nonnull  ItemStack stack) {
+    protected ItemStack execute(@NotNull BlockSource source, @NotNull  ItemStack stack) {
         ServerLevel world = source.getLevel();
         BlockPos blockpos = source.getPos().relative(source.getBlockState().getValue(DispenserBlock.FACING));
         BlockState blockstate = world.getBlockState(blockpos);

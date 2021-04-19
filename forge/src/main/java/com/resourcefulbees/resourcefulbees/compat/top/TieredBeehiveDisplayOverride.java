@@ -108,16 +108,17 @@ public class TieredBeehiveDisplayOverride implements IBlockDisplayOverride {
 
     private void buildHoneycombList(TieredBeehiveTileEntity tileEntity, List<ItemStack> combs) {
         tileEntity.getHoneycombs().iterator().forEachRemaining(honeycomb -> {
+            ItemStack comb = honeycomb.copy();
             Iterator<ItemStack> iterator = combs.iterator();
-            while (iterator.hasNext() && !honeycomb.isEmpty()) {
+            while (iterator.hasNext() && !comb.isEmpty()) {
                 ItemStack stackInList = iterator.next();
                 if (AbstractContainerMenu.consideredTheSameItem(honeycomb, stackInList)) {
                     combs.get(combs.indexOf(stackInList)).grow(1);
-                    honeycomb.setCount(0);
+                    comb.setCount(0);
                 }
             }
 
-            if (!honeycomb.isEmpty()) combs.add(honeycomb);
+            if (!comb.isEmpty()) combs.add(comb);
         });
     }
 

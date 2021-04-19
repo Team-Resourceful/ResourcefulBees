@@ -3,11 +3,14 @@ package com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
+import com.resourcefulbees.resourcefulbees.api.beedata.mutation.EntityMutation;
+import com.resourcefulbees.resourcefulbees.api.beedata.mutation.ItemMutation;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.resourcefulbees.resourcefulbees.client.gui.widget.TabImageButton;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.item.BeeJar;
+import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import com.resourcefulbees.resourcefulbees.utils.RenderUtils;
 import net.minecraft.ChatFormatting;
@@ -79,7 +82,7 @@ public class BeePage extends BeepediaPage {
             );
             tabs.add(traitListPage);
         }
-        if (beeData.hasHoneycomb() && (!Config.BEEPEDIA_HIDE_LOCKED.get() || beeUnlocked)) {
+        if (beeData.hasHoneycomb() && (!Config.BEEPEDIA_HIDE_LOCKED.get() || beeUnlocked) && beeData.getCombRegistryObject().isPresent()) {
             centrifugePage = Pair.of(
                     getTabButton(new ItemStack(Items.HONEYCOMB), onPress -> setSubPage(SubPageType.HONEYCOMB),
                             new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.honeycombs")),
@@ -95,11 +98,13 @@ public class BeePage extends BeepediaPage {
             );
             tabs.add(spawningPage);
         }
-        if (beeData.getBreedData().isBreedable()) {
+        List<EntityMutation> breedMutations = BeeRegistry.getRegistry().getMutationsContaining(beeData);
+        List<ItemMutation> itemBreedMutation = BeeRegistry.getRegistry().getItemMutationsContaining(beeData);
+        if (beeData.getBreedData().isBreedable() || !breedMutations.isEmpty() || !itemBreedMutation.isEmpty()) {
             breedingPage = Pair.of(
                     getTabButton(new ItemStack(ModItems.GOLD_FLOWER_ITEM.get()), onPress -> setSubPage(SubPageType.BREEDING),
                             new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding")),
-                    new BreedingPage(beepedia, beeData, subX, subY, this)
+                    new BreedingPage(beepedia, beeData, subX, subY, breedMutations, itemBreedMutation, this)
             );
             tabs.add(breedingPage);
         }

@@ -55,7 +55,7 @@ public class JEICompat implements IModPlugin {
         registration.addRecipeCategories(new ApiaryCategory(helper));
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public ResourceLocation getPluginUid() {
         return new ResourceLocation(ResourcefulBees.MOD_ID, "jei");
@@ -78,7 +78,7 @@ public class JEICompat implements IModPlugin {
     }
 
     @Override
-    public void registerRecipes(@Nonnull IRecipeRegistration registration) {
+    public void registerRecipes(@NotNull IRecipeRegistration registration) {
         Level clientWorld = Minecraft.getInstance().level;
         if (clientWorld != null) {
             RecipeManager recipeManager = Minecraft.getInstance().level.getRecipeManager();

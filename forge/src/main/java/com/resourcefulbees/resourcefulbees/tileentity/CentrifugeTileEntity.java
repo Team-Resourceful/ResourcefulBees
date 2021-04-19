@@ -14,8 +14,10 @@ import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
 import com.resourcefulbees.resourcefulbees.network.packets.SyncGUIMessage;
 import com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe;
 import com.resourcefulbees.resourcefulbees.registry.ModContainers;
+import com.resourcefulbees.resourcefulbees.utils.MathUtils;
 import com.resourcefulbees.resourcefulbees.utils.NBTUtils;
 import io.netty.buffer.Unpooled;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
@@ -24,15 +26,17 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Containers;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.ContainerListener;
-import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.TickableBlockEntity;
@@ -48,12 +52,14 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import static net.minecraft.world.inventory.AbstractContainerMenu.consideredTheSameItem;
 
@@ -64,6 +70,8 @@ public class CentrifugeTileEntity extends BlockEntity implements TickableBlockEn
     public static final int OUTPUT1 = 2;
     public static final int OUTPUT2 = 3;
     public static final int HONEY_BOTTLE = 4;
+    private static final int INPUTS = 1;
+    private static final int TANK_CAPACITY = 5000;
 
     protected int[] honeycombSlots;
     protected int[] outputSlots;
@@ -83,17 +91,7 @@ public class CentrifugeTileEntity extends BlockEntity implements TickableBlockEn
     protected boolean isPoweredByRedstone;
     protected boolean requiresRedstone;
 
-    private final SimpleContainerData times = new SimpleContainerData(1) {
-        @Override
-        public int get(int i) {
-            return time[0];
-        }
-
-        @Override
-        public void set(int i, int i1) {
-            time[0] = i1;
-        }
-    };
+    private final ContainerData times = new TimesArray(1);
 
     public CentrifugeTileEntity(BlockEntityType<?> tileEntityType) {
         super(tileEntityType);
@@ -197,7 +195,7 @@ public class CentrifugeTileEntity extends BlockEntity implements TickableBlockEn
             if (chance >= level.random.nextFloat()) {
                 FluidStack fluid = fluidOutput.getLeft().copy();
                 int tank = getValidTank(fluid);
-                fluidTanks.fill(tank, fluid, IFluidHandler.FluidAction.EXECUTE);
+                if (tank != -1) fluidTanks.fill(tank, fluid, IFluidHandler.FluidAction.EXECUTE);
             }
         }
         if (!depositStacks.isEmpty()) {
@@ -304,7 +302,7 @@ public class CentrifugeTileEntity extends BlockEntity implements TickableBlockEn
 
     //Override this for subclasses
     public int getNumberOfInputs() {
-        return 1;
+        return INPUTS;
     }
 
     public int getTotalTanks() {
@@ -312,7 +310,7 @@ public class CentrifugeTileEntity extends BlockEntity implements TickableBlockEn
     }
 
     public int getMaxTankCapacity() {
-        return 5000;
+        return TANK_CAPACITY;
     }
 
     public int getRecipeTime(int i) {
@@ -410,9 +408,9 @@ public class CentrifugeTileEntity extends BlockEntity implements TickableBlockEn
     }
 
     //region NBT
-    @Nonnull
+    @NotNull
     @Override
-    public CompoundTag save(@Nonnull CompoundTag tag) {
+    public CompoundTag save(@NotNull CompoundTag tag) {
         super.save(tag);
         return saveToNBT(tag);
     }
@@ -441,12 +439,12 @@ public class CentrifugeTileEntity extends BlockEntity implements TickableBlockEn
     }
 
     @Override
-    public void load(@Nonnull BlockState state, @Nonnull CompoundTag tag) {
+    public void load(@NotNull BlockState state, @NotNull CompoundTag tag) {
         this.loadFromNBT(tag);
         super.load(state, tag);
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public CompoundTag getUpdateTag() {
         CompoundTag nbtTagCompound = new CompoundTag();
@@ -455,7 +453,7 @@ public class CentrifugeTileEntity extends BlockEntity implements TickableBlockEn
     }
 
     @Override
-    public void handleUpdateTag(@Nonnull BlockState state, CompoundTag tag) {
+    public void handleUpdateTag(@NotNull BlockState state, CompoundTag tag) {
         this.load(state, tag);
     }
 
@@ -470,12 +468,19 @@ public class CentrifugeTileEntity extends BlockEntity implements TickableBlockEn
         CompoundTag nbt = pkt.getTag();
         loadFromNBT(nbt);
     }
+
+    public void dropInventory(Level world, @NotNull BlockPos pos) {
+        IntStream.range(0, this.itemStackHandler.getSlots())
+                .mapToObj(this.itemStackHandler::getStackInSlot)
+                .filter(s -> !s.isEmpty())
+                .forEach(stack -> Containers.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack));
+    }
     //endregion
 
     //region Capabilities
-    @Nonnull
+    @NotNull
     @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
         if (cap.equals(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)) return lazyOptional.cast();
         if (cap.equals(CapabilityEnergy.ENERGY)) return energyOptional.cast();
         if (cap.equals(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)) return fluidOptional.cast();
@@ -504,12 +509,12 @@ public class CentrifugeTileEntity extends BlockEntity implements TickableBlockEn
 
     @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int id, @Nonnull Inventory playerInventory, @Nonnull Player playerEntity) {
+    public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player playerEntity) {
         assert level != null;
         return new CentrifugeContainer(ModContainers.CENTRIFUGE_CONTAINER.get(), id, level, worldPosition, playerInventory, times);
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public Component getDisplayName() {
         return new TranslatableComponent("gui.resourcefulbees.centrifuge");
@@ -564,6 +569,32 @@ public class CentrifugeTileEntity extends BlockEntity implements TickableBlockEn
         protected void onContentsChanged(int slot) {
             super.onContentsChanged(slot);
             setChanged();
+        }
+    }
+
+    protected class TimesArray implements ContainerData {
+        private final int count;
+
+        public TimesArray(int count) {
+            this.count = count;
+        }
+
+        @Override
+        public int get(int index) {
+            return MathUtils.inRangeExclusive(index, -1, this.getCount())
+                    ? CentrifugeTileEntity.this.time[index]
+                    : 0;
+        }
+
+        @Override
+        public void set(int index, int value) {
+            if (!MathUtils.inRangeExclusive(index, -1, this.getCount())) return;
+            CentrifugeTileEntity.this.time[index] = value;
+        }
+
+        @Override
+        public int getCount() {
+            return count;
         }
     }
 }

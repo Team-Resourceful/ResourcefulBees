@@ -29,11 +29,11 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.ItemStackHandler;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.stream.IntStream;
 
 @SuppressWarnings("deprecation")
 public class CentrifugeBlock extends Block {
@@ -44,7 +44,7 @@ public class CentrifugeBlock extends Block {
         registerDefaultState(defaultBlockState().setValue(PROPERTY_ON,false));
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public InteractionResult use(@Nonnull BlockState state, Level world, @Nonnull BlockPos pos, @Nonnull Player player, @Nonnull InteractionHand hand, @Nonnull BlockHitResult rayTraceResult) {
         ItemStack heldItem = player.getItemInHand(hand);
@@ -52,17 +52,26 @@ public class CentrifugeBlock extends Block {
         BlockEntity tileEntity = world.getBlockEntity(pos);
 
         if (tileEntity instanceof CentrifugeTileEntity) {
-            if (hasCapability) {
-                tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
-                        .ifPresent(iFluidHandler -> FluidUtil.interactWithFluidHandler(player, hand, world, pos, null));
-            } else if (!player.isShiftKeyDown() && !world.isClientSide) {
-                NetworkHooks.openGui((ServerPlayer) player, (MenuProvider) tileEntity, pos);
-            }
-
+            capabilityOrGuiUse(tileEntity, player, world, pos, hand);
             return InteractionResult.SUCCESS;
         }
 
         return super.use(state, world, pos, player, hand, rayTraceResult);
+    }
+
+    public static void capabilityOrGuiUse(BlockEntity tileEntity, Player player, Level world, BlockPos pos, InteractionHand hand){
+        if (player.getItemInHand(hand).getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent()) {
+            tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+                    .ifPresent(iFluidHandler -> FluidUtil.interactWithFluidHandler(player, hand, world, pos, null));
+        } else if (!player.isShiftKeyDown() && !world.isClientSide) {
+            NetworkHooks.openGui((ServerPlayer) player, (MenuProvider) tileEntity, pos);
+        }
+    }
+
+    @Nullable
+    @Override
+    public MenuProvider getMenuProvider(@NotNull BlockState state, Level worldIn, @NotNull BlockPos pos) {
+        return (MenuProvider)worldIn.getBlockEntity(pos);
     }
 
     @Override
@@ -74,19 +83,11 @@ public class CentrifugeBlock extends Block {
         }
     }
 
-    @Nullable
     @Override
-    public MenuProvider getMenuProvider(@Nonnull BlockState state, Level worldIn, @Nonnull BlockPos pos) {
-        return (MenuProvider) worldIn.getBlockEntity(pos);
-    }
-
-    @Override
-    public void onRemove(@Nonnull BlockState state1, Level world, @Nonnull BlockPos pos, @Nonnull BlockState state, boolean isMoving) {
+    public void onRemove(@NotNull BlockState state1, Level world, @NotNull BlockPos pos, @NotNull BlockState state, boolean isMoving) {
         BlockEntity blockEntity = world.getBlockEntity(pos);
         if (blockEntity instanceof CentrifugeTileEntity && state.getBlock() != state1.getBlock()){
-            CentrifugeTileEntity centrifugeTileEntity = (CentrifugeTileEntity)blockEntity;
-            ItemStackHandler h = centrifugeTileEntity.getItemStackHandler();
-            IntStream.range(0, h.getSlots()).mapToObj(h::getStackInSlot).filter(s -> !s.isEmpty()).forEach(stack -> Containers.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack));
+            ((CentrifugeTileEntity) blockEntity).dropInventory(world, pos);
         }
         super.onRemove(state1, world, pos, state, isMoving);
     }

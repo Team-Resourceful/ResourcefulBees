@@ -1,8 +1,14 @@
 package com.resourcefulbees.resourcefulbees.api.beedata;
 
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
+import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 
 public class BreedData extends AbstractBeeData {
     /**
@@ -32,6 +38,11 @@ public class BreedData extends AbstractBeeData {
     private final String feedItem;
 
     /**
+     * The item that gets returned to the player after the bee has been fed its {@link #feedItem}
+     */
+    private final String feedReturnItem;
+
+    /**
      * The amount the single parent needs to be feed with the item.
      */
     private final int feedAmount;
@@ -46,7 +57,9 @@ public class BreedData extends AbstractBeeData {
      */
     private final int breedDelay;
 
-    private BreedData( boolean isBreedable, double breedWeight, float breedChance, String parent1, String parent2, String feedItem, int feedAmount, int childGrowthDelay, int breedDelay) {
+    private transient HashSet<Item> feedingItems;
+
+    private BreedData( boolean isBreedable, double breedWeight, float breedChance, String parent1, String parent2, String feedItem, String feedReturnItem, int feedAmount, int childGrowthDelay, int breedDelay) {
         super("BreedData");
         this.isBreedable = isBreedable;
         this.breedWeight = breedWeight;
@@ -54,6 +67,7 @@ public class BreedData extends AbstractBeeData {
         this.parent1 = parent1;
         this.parent2 = parent2;
         this.feedItem = feedItem;
+        this.feedReturnItem = feedReturnItem;
         this.feedAmount = feedAmount;
         this.childGrowthDelay = childGrowthDelay;
         this.breedDelay = breedDelay;
@@ -87,6 +101,26 @@ public class BreedData extends AbstractBeeData {
         return feedItem != null ? feedItem.toLowerCase(Locale.ENGLISH) : BeeConstants.FLOWER_TAG_ALL;
     }
 
+    public void addFeedItem(Item item) {
+        if (this.feedingItems == null) this.feedingItems = new HashSet<>();
+        this.feedingItems.add(item);
+    }
+
+    public Set<Item> getFeedItems() {
+        return this.feedingItems != null ? Collections.unmodifiableSet(this.feedingItems) : new HashSet<>();
+    }
+
+    public boolean hasFeedItems() {
+        return this.feedingItems != null && !this.feedingItems.isEmpty();
+    }
+
+    public Item getFeedReturnItem() {
+        if (feedReturnItem == null) return Items.AIR;
+        Item item = BeeInfoUtils.getItem(feedReturnItem.toLowerCase(Locale.ENGLISH));
+        if (item == null) return Items.AIR;
+        else return item;
+    }
+
     public int getFeedAmount() {
         return Math.max(1, feedAmount);
     }
@@ -112,6 +146,7 @@ public class BreedData extends AbstractBeeData {
         private float breedChance;
         private String parent1, parent2;
         private String feedItem;
+        private String feedReturnItem;
         private int feedAmount;
         private int childGrowthDelay;
         private int breedDelay;
@@ -145,6 +180,11 @@ public class BreedData extends AbstractBeeData {
             return this;
         }
 
+        public Builder setFeedReturnItem(String feedReturnItem) {
+            this.feedReturnItem = feedReturnItem;
+            return this;
+        }
+
         public Builder setFeedAmount(int feedAmount) {
             this.feedAmount = feedAmount;
             return this;
@@ -161,7 +201,7 @@ public class BreedData extends AbstractBeeData {
         }
 
         public BreedData createBreedData() {
-            return new BreedData(isBreedable, breedWeight, breedChance, parent1, parent2, feedItem, feedAmount, childGrowthDelay, breedDelay);
+            return new BreedData(isBreedable, breedWeight, breedChance, parent1, parent2, feedItem, feedReturnItem, feedAmount, childGrowthDelay, breedDelay);
         }
     }
 

@@ -87,10 +87,10 @@ public class BeeRewardRender extends RenderLayer<AbstractClientPlayer, PlayerMod
         this.backLegs.addBox("backLegBox", -5.0F, 0.0F, 0.0F, 7, 2, 0, 0.0F, 26, 5);
     }
 
-    private void setRotationAngle(ModelPart ModelPart, float y) {
-        ModelPart.xRot = 0f;
-        ModelPart.yRot = y;
-        ModelPart.zRot = 0f;
+    private void setRotationAngle(ModelPart modelPart, float y) {
+        modelPart.xRot = 0f;
+        modelPart.yRot = y;
+        modelPart.zRot = 0f;
     }
 
     private void updateAngles(float ticks){

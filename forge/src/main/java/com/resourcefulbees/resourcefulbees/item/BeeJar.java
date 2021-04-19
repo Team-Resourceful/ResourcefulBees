@@ -36,13 +36,14 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.text.WordUtils;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
 public class BeeJar extends Item {
-    public BeeJar(Properties properties) {
+    public BeeJar(Item.Properties properties) {
         super(properties);
     }
 
@@ -58,7 +59,7 @@ public class BeeJar extends Item {
         return !stack.isEmpty() && stack.hasTag() && stack.getTag() != null && stack.getTag().contains(NBTConstants.NBT_ENTITY);
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public InteractionResult useOn(UseOnContext context) {
         Player player = context.getPlayer();
@@ -117,9 +118,9 @@ public class BeeJar extends Item {
         return null;
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public InteractionResult interactLivingEntity(@Nonnull ItemStack stack, @Nonnull Player player, LivingEntity targetIn, @Nonnull InteractionHand hand) {
+    public InteractionResult interactLivingEntity(@NotNull ItemStack stack, @NotNull Player player, LivingEntity targetIn, @NotNull InteractionHand hand) {
         if (targetIn.getCommandSenderWorld().isClientSide() || (!(targetIn instanceof Bee) || !targetIn.isAlive()) || (isFilled(stack))) {
             return InteractionResult.FAIL;
         }
@@ -167,9 +168,9 @@ public class BeeJar extends Item {
         }
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public String getDescriptionId(@Nonnull ItemStack stack) {
+    public String getDescriptionId(@NotNull ItemStack stack) {
         String name;
         if (isFilled(stack)) {
             name = "item." + ResourcefulBees.MOD_ID + ".bee_jar_filled";
@@ -180,7 +181,7 @@ public class BeeJar extends Item {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(@Nonnull ItemStack stack, @Nullable Level world, @Nonnull List<Component> tooltip, @Nonnull TooltipFlag flag) {
+    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level world, @NotNull List<Component> tooltip, @NotNull TooltipFlag flag) {
         super.appendHoverText(stack, world, tooltip, flag);
         CompoundTag tag = stack.getTag();
         if (tag != null && isFilled(stack)) {

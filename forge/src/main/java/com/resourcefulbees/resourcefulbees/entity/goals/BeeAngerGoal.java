@@ -6,6 +6,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.phys.AABB;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -24,7 +25,7 @@ public class BeeAngerGoal extends HurtByTargetGoal {
     }
 
     @Override
-    protected void alertOther(@Nonnull Mob mobIn, @Nonnull LivingEntity targetIn) {
+    protected void alertOther(@NotNull Mob mobIn, @NotNull LivingEntity targetIn) {
         if (mobIn instanceof Bee && this.mob.canSee(targetIn)) {
             mobIn.setTarget(targetIn);
         }

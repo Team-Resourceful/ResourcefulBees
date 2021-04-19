@@ -1,7 +1,9 @@
 package com.resourcefulbees.resourcefulbees.network.packets;
 
 import com.resourcefulbees.resourcefulbees.tileentity.CentrifugeTileEntity;
+import com.resourcefulbees.resourcefulbees.tileentity.HoneyCongealerTileEntity;
 import com.resourcefulbees.resourcefulbees.tileentity.HoneyGeneratorTileEntity;
+import com.resourcefulbees.resourcefulbees.tileentity.HoneyTankTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.core.BlockPos;
@@ -29,7 +31,7 @@ public class SyncGUIMessage {
         return new SyncGUIMessage(buffer.readBlockPos(), buffer);
     }
 
-    public static void handle(SyncGUIMessage message, Supplier<NetworkEvent.Context> context){
+    public static void handle(SyncGUIMessage message, Supplier<NetworkEvent.Context> context) {
         context.get().enqueueWork(() -> {
             AbstractClientPlayer player = Minecraft.getInstance().player;
             if (player != null && player.level.isLoaded(message.pos)) {
@@ -39,6 +41,12 @@ public class SyncGUIMessage {
                 }
                 if (tileEntity instanceof HoneyGeneratorTileEntity) {
                     ((HoneyGeneratorTileEntity) tileEntity).handleGUINetworkPacket(message.buffer);
+                }
+                if (tileEntity instanceof HoneyCongealerTileEntity) {
+                    ((HoneyCongealerTileEntity) tileEntity).handleGUINetworkPacket(message.buffer);
+                }
+                if (tileEntity instanceof HoneyTankTileEntity) {
+                    ((HoneyTankTileEntity) tileEntity).handleGUINetworkPacket(message.buffer);
                 }
             }
         });

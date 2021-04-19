@@ -19,12 +19,12 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.items.ItemStackHandler;
-
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Shadows
  * Taken from Actually Additions owned by Ellpeck
+ * Edited to to update to offical mappings
  */
 @SuppressWarnings("unused")
 public class AutomationSensitiveItemStackHandler extends ItemStackHandler {
@@ -61,9 +61,9 @@ public class AutomationSensitiveItemStackHandler extends ItemStackHandler {
         return this.stacks;
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
+    public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
         return this.insertItem(slot, stack, simulate, true);
     }
 
@@ -88,7 +88,7 @@ public class AutomationSensitiveItemStackHandler extends ItemStackHandler {
         onLoad();
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public ItemStack extractItem(int slot, int amount, boolean simulate) {
         return this.extractItem(slot, amount, simulate, true);
