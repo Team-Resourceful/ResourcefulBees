@@ -38,11 +38,7 @@ allprojects {
     group = rootProject.maven_group
 
     repositories {
-        maven { url "https://maven.tterrag.com/" }
-        maven { url "https://maven.blamejared.com" }
-        maven { url "https://dvs1.progwml6.com/files/maven/" }
-        maven { url "https://modmaven.k-4u.nl" }
-        maven { url 'https://modmaven.dev/' }
+        maven { url "https://nexus.resourcefulbees.com/repository/maven-public/" }
     }
 
     tasks.withType(JavaCompile) {
