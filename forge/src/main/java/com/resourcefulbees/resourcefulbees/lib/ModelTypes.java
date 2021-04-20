@@ -9,5 +9,6 @@ public enum ModelTypes {
     VILLAGER,
     MUSHROOM,
     CROP,
-    ARMORED;
+    ARMORED,
+    GUARDIAN;
 }
