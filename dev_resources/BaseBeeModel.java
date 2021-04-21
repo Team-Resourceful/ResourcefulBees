@@ -1,5 +1,5 @@
-// Made with Blockbench 3.7.5
-// Exported for Minecraft version 1.15
+// Made with Blockbench 3.8.3
+// Exported for Minecraft version 1.15 - 1.16
 // Paste this class into your mod and generate all required imports
 
 
@@ -36,6 +36,19 @@ public class BaseBeeModel extends EntityModel<Entity> {
 	private final ModelRenderer crop3_r1;
 	private final ModelRenderer crop3_r2;
 	private final ModelRenderer armored;
+	private final ModelRenderer guardian;
+	private final ModelRenderer cube_r1;
+	private final ModelRenderer cube_r2;
+	private final ModelRenderer cube_r3;
+	private final ModelRenderer cube_r4;
+	private final ModelRenderer cube_r5;
+	private final ModelRenderer cube_r6;
+	private final ModelRenderer cube_r7;
+	private final ModelRenderer cube_r8;
+	private final ModelRenderer cube_r9;
+	private final ModelRenderer cube_r10;
+	private final ModelRenderer cube_r11;
+	private final ModelRenderer cube_r12;
 
 	public BaseBeeModel() {
 		textureWidth = 64;
@@ -227,6 +240,83 @@ public class BaseBeeModel extends EntityModel<Entity> {
 		body.addChild(armored);
 		armored.setTextureOffset(34, 3).addBox(-3.5F, -4.0F, -5.0F, 7.0F, 7.0F, 7.0F, 0.75F, false);
 		armored.setTextureOffset(0, 25).addBox(-3.5F, -4.0F, -5.0F, 7.0F, 7.0F, 10.0F, 0.25F, false);
+
+		guardian = new ModelRenderer(this);
+		guardian.setRotationPoint(0.0F, 5.0F, 0.0F);
+		body.addChild(guardian);
+		guardian.setTextureOffset(0, 25).addBox(-3.5F, -9.0F, -5.0F, 7.0F, 7.0F, 10.0F, 0.4F, false);
+
+		cube_r1 = new ModelRenderer(this);
+		cube_r1.setRotationPoint(3.5F, -5.5F, 5.0F);
+		guardian.addChild(cube_r1);
+		setRotationAngle(cube_r1, 0.0F, 2.3562F, 0.0F);
+		cube_r1.setTextureOffset(40, 24).addBox(-2.5F, -0.5F, -0.5F, 3.0F, 1.0F, 1.0F, 0.25F, false);
+
+		cube_r2 = new ModelRenderer(this);
+		cube_r2.setRotationPoint(-3.5F, -5.5F, -5.0F);
+		guardian.addChild(cube_r2);
+		setRotationAngle(cube_r2, 0.0F, -0.7854F, 0.0F);
+		cube_r2.setTextureOffset(40, 22).addBox(-2.5F, -0.5F, -0.5F, 3.0F, 1.0F, 1.0F, 0.25F, false);
+
+		cube_r3 = new ModelRenderer(this);
+		cube_r3.setRotationPoint(3.5F, -5.5F, -4.75F);
+		guardian.addChild(cube_r3);
+		setRotationAngle(cube_r3, 0.0F, -2.3562F, 0.0F);
+		cube_r3.setTextureOffset(40, 20).addBox(-2.5F, -0.5F, -0.5F, 3.0F, 1.0F, 1.0F, 0.25F, false);
+
+		cube_r4 = new ModelRenderer(this);
+		cube_r4.setRotationPoint(-3.5F, -5.5F, 5.0F);
+		guardian.addChild(cube_r4);
+		setRotationAngle(cube_r4, 0.0F, 0.7854F, 0.0F);
+		cube_r4.setTextureOffset(40, 18).addBox(-2.5F, -0.5F, -0.5F, 3.0F, 1.0F, 1.0F, 0.25F, false);
+
+		cube_r5 = new ModelRenderer(this);
+		cube_r5.setRotationPoint(-3.5F, -2.0F, 0.0F);
+		guardian.addChild(cube_r5);
+		setRotationAngle(cube_r5, 0.0F, 0.0F, -0.7854F);
+		cube_r5.setTextureOffset(32, 24).addBox(-2.5F, -0.5F, -0.5F, 3.0F, 1.0F, 1.0F, 0.25F, false);
+
+		cube_r6 = new ModelRenderer(this);
+		cube_r6.setRotationPoint(0.0F, -2.0F, 5.0F);
+		guardian.addChild(cube_r6);
+		setRotationAngle(cube_r6, 1.5708F, 2.3562F, 1.5708F);
+		cube_r6.setTextureOffset(32, 22).addBox(-2.5F, -0.75F, -0.5F, 3.0F, 1.0F, 1.0F, 0.25F, false);
+
+		cube_r7 = new ModelRenderer(this);
+		cube_r7.setRotationPoint(0.0F, -2.0F, -5.0F);
+		guardian.addChild(cube_r7);
+		setRotationAngle(cube_r7, -1.5708F, -2.3562F, 1.5708F);
+		cube_r7.setTextureOffset(32, 20).addBox(-2.5F, -0.5F, -0.5F, 3.0F, 1.0F, 1.0F, 0.25F, false);
+
+		cube_r8 = new ModelRenderer(this);
+		cube_r8.setRotationPoint(3.5F, -2.0F, 0.0F);
+		guardian.addChild(cube_r8);
+		setRotationAngle(cube_r8, 0.0F, 3.1416F, 0.7854F);
+		cube_r8.setTextureOffset(32, 18).addBox(-2.5F, -0.5F, -0.5F, 3.0F, 1.0F, 1.0F, 0.25F, false);
+
+		cube_r9 = new ModelRenderer(this);
+		cube_r9.setRotationPoint(0.0F, -9.0F, 5.0F);
+		guardian.addChild(cube_r9);
+		setRotationAngle(cube_r9, 1.5708F, 0.7854F, 1.5708F);
+		cube_r9.setTextureOffset(24, 24).addBox(-2.5F, -0.5F, -0.5F, 3.0F, 1.0F, 1.0F, 0.25F, false);
+
+		cube_r10 = new ModelRenderer(this);
+		cube_r10.setRotationPoint(0.0F, -9.0F, -5.0F);
+		guardian.addChild(cube_r10);
+		setRotationAngle(cube_r10, -1.5708F, -0.7854F, 1.5708F);
+		cube_r10.setTextureOffset(24, 22).addBox(-2.5F, -0.5F, -0.5F, 3.0F, 1.0F, 1.0F, 0.25F, false);
+
+		cube_r11 = new ModelRenderer(this);
+		cube_r11.setRotationPoint(3.5F, -9.0F, 0.0F);
+		guardian.addChild(cube_r11);
+		setRotationAngle(cube_r11, 3.1416F, 0.0F, 2.3562F);
+		cube_r11.setTextureOffset(24, 20).addBox(-2.5F, -0.5F, -0.5F, 3.0F, 1.0F, 1.0F, 0.25F, false);
+
+		cube_r12 = new ModelRenderer(this);
+		cube_r12.setRotationPoint(-3.5F, -9.0F, 0.0F);
+		guardian.addChild(cube_r12);
+		setRotationAngle(cube_r12, 0.0F, 0.0F, 0.7854F);
+		cube_r12.setTextureOffset(24, 18).addBox(-2.5F, -0.5F, -0.5F, 3.0F, 1.0F, 1.0F, 0.25F, false);
 	}
 
 	@Override

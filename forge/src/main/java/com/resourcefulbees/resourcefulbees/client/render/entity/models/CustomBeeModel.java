@@ -61,10 +61,15 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableListModel<
             case CROP:
                 addCrops();
                 break;
+            case GUARDIAN:
+                addSpikes();
+                break;
             case DEFAULT:
                 addDefaultParts();
         }
     }
+
+
 
     public CustomBeeModel(BaseModelTypes modelType) {
         this();
@@ -399,6 +404,85 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableListModel<
         body.addChild(armored);
         armored.texOffs(34, 3).addBox(-3.5F, -4.0F, -5.0F, 7.0F, 7.0F, 7.0F, 0.6F, false);
         armored.texOffs(0, 25).addBox(-3.5F, -4.0F, -5.0F, 7.0F, 7.0F, 10.0F, 0.25F, false);
+    }
+
+    private void addSpikes() {
+        ModelPart guardian = new ModelPart(this);
+        guardian.setPos(0.0F, 5.0F, 0.0F);
+        body.addChild(guardian);
+        guardian.texOffs(0, 25).addBox(-3.5F, -9.0F, -5.0F, 7.0F, 7.0F, 10.0F, 0.4F, false);
+
+        ModelPart cube1 = new ModelPart(this);
+        cube1.setPos(3.5F, -5.5F, 5.0F);
+        guardian.addChild(cube1);
+        setRotationAngle(cube1, 0.0F, 2.3562F, 0.0F);
+        cube1.texOffs(40, 24).addBox(-2.5F, -0.5F, -0.5F, 3.0F, 1.0F, 1.0F, 0.25F, false);
+
+        ModelPart cube2 = new ModelPart(this);
+        cube2.setPos(-3.5F, -5.5F, -5.0F);
+        guardian.addChild(cube2);
+        setRotationAngle(cube2, 0.0F, -0.7854F, 0.0F);
+        cube2.texOffs(40, 22).addBox(-2.5F, -0.5F, -0.5F, 3.0F, 1.0F, 1.0F, 0.25F, false);
+
+        ModelPart cube3 = new ModelPart(this);
+        cube3.setPos(3.5F, -5.5F, -4.75F);
+        guardian.addChild(cube3);
+        setRotationAngle(cube3, 0.0F, -2.3562F, 0.0F);
+        cube3.texOffs(40, 20).addBox(-2.5F, -0.5F, -0.5F, 3.0F, 1.0F, 1.0F, 0.25F, false);
+
+        ModelPart cube4 = new ModelPart(this);
+        cube4.setPos(-3.5F, -5.5F, 5.0F);
+        guardian.addChild(cube4);
+        setRotationAngle(cube4, 0.0F, 0.7854F, 0.0F);
+        cube4.texOffs(40, 18).addBox(-2.5F, -0.5F, -0.5F, 3.0F, 1.0F, 1.0F, 0.25F, false);
+
+        ModelPart cube5 = new ModelPart(this);
+        cube5.setPos(-3.5F, -2.0F, 0.0F);
+        guardian.addChild(cube5);
+        setRotationAngle(cube5, 0.0F, 0.0F, -0.7854F);
+        cube5.texOffs(32, 24).addBox(-2.5F, -0.5F, -0.5F, 3.0F, 1.0F, 1.0F, 0.25F, false);
+
+        ModelPart cube6 = new ModelPart(this);
+        cube6.setPos(0.0F, -2.0F, 5.0F);
+        guardian.addChild(cube6);
+        setRotationAngle(cube6, 1.5708F, 2.3562F, 1.5708F);
+        cube6.texOffs(32, 22).addBox(-2.5F, -0.75F, -0.5F, 3.0F, 1.0F, 1.0F, 0.25F, false);
+
+        ModelPart cube7 = new ModelPart(this);
+        cube7.setPos(0.0F, -2.0F, -5.0F);
+        guardian.addChild(cube7);
+        setRotationAngle(cube7, -1.5708F, -2.3562F, 1.5708F);
+        cube7.texOffs(32, 20).addBox(-2.5F, -0.5F, -0.5F, 3.0F, 1.0F, 1.0F, 0.25F, false);
+
+        ModelPart cube8 = new ModelPart(this);
+        cube8.setPos(3.5F, -2.0F, 0.0F);
+        guardian.addChild(cube8);
+        setRotationAngle(cube8, 0.0F, 3.1416F, 0.7854F);
+        cube8.texOffs(32, 18).addBox(-2.5F, -0.5F, -0.5F, 3.0F, 1.0F, 1.0F, 0.25F, false);
+
+        ModelPart cube9 = new ModelPart(this);
+        cube9.setPos(0.0F, -9.0F, 5.0F);
+        guardian.addChild(cube9);
+        setRotationAngle(cube9, 1.5708F, 0.7854F, 1.5708F);
+        cube9.texOffs(24, 24).addBox(-2.5F, -0.5F, -0.5F, 3.0F, 1.0F, 1.0F, 0.25F, false);
+
+        ModelPart cube10 = new ModelPart(this);
+        cube10.setPos(0.0F, -9.0F, -5.0F);
+        guardian.addChild(cube10);
+        setRotationAngle(cube10, -1.5708F, -0.7854F, 1.5708F);
+        cube10.texOffs(24, 22).addBox(-2.5F, -0.5F, -0.5F, 3.0F, 1.0F, 1.0F, 0.25F, false);
+
+        ModelPart cube11 = new ModelPart(this);
+        cube11.setPos(3.5F, -9.0F, 0.0F);
+        guardian.addChild(cube11);
+        setRotationAngle(cube11, 3.1416F, 0.0F, 2.3562F);
+        cube11.texOffs(24, 20).addBox(-2.5F, -0.5F, -0.5F, 3.0F, 1.0F, 1.0F, 0.25F, false);
+
+        ModelPart cube12 = new ModelPart(this);
+        cube12.setPos(-3.5F, -9.0F, 0.0F);
+        guardian.addChild(cube12);
+        setRotationAngle(cube12, 0.0F, 0.0F, 0.7854F);
+        cube12.texOffs(24, 18).addBox(-2.5F, -0.5F, -0.5F, 3.0F, 1.0F, 1.0F, 0.25F, false);
     }
 
     public void setRotationAngle(ModelPart modelPart, float x, float y, float z) {
