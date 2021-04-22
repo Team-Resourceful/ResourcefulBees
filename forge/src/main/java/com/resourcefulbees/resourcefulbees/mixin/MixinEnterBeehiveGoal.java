@@ -34,7 +34,7 @@ public abstract class MixinEnterBeehiveGoal {
                 }
             } else if (tileentity instanceof ApiaryTileEntity) {
                 ApiaryTileEntity apiaryTileEntity = (ApiaryTileEntity) tileentity;
-                if (!apiaryTileEntity.isFullOfBees()) {
+                if (apiaryTileEntity.hasSpace()) {
                     cir.setReturnValue(true);
                 } else {
                     beeEntity.hivePos = null;

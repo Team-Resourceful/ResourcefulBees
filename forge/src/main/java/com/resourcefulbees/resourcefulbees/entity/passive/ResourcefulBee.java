@@ -7,11 +7,14 @@ import com.resourcefulbees.resourcefulbees.api.beedata.mutation.outputs.BlockOut
 import com.resourcefulbees.resourcefulbees.api.beedata.mutation.outputs.EntityOutput;
 import com.resourcefulbees.resourcefulbees.api.beedata.mutation.outputs.ItemOutput;
 import com.resourcefulbees.resourcefulbees.config.Config;
-import com.resourcefulbees.resourcefulbees.registry.ModEffects;
-import com.resourcefulbees.resourcefulbees.entity.goals.*;
+import com.resourcefulbees.resourcefulbees.entity.goals.BeeAngerGoal;
+import com.resourcefulbees.resourcefulbees.entity.goals.BeeBreedGoal;
+import com.resourcefulbees.resourcefulbees.entity.goals.BeeTemptGoal;
+import com.resourcefulbees.resourcefulbees.entity.goals.PollinateGoal;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.lib.TraitConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
+import com.resourcefulbees.resourcefulbees.registry.ModEffects;
 import com.resourcefulbees.resourcefulbees.tileentity.TieredBeehiveTileEntity;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
@@ -56,7 +59,7 @@ public class ResourcefulBee extends CustomBeeEntity {
 
     private boolean wasColliding;
     private int numberOfMutations;
-    private BeePollinateGoal pollinateGoal;
+    private PollinateGoal pollinateGoal;
     private int explosiveCooldown = 0;
 
     public ResourcefulBee(EntityType<? extends Bee> type, Level world, CustomBeeData beeData) {
@@ -84,7 +87,7 @@ public class ResourcefulBee extends CustomBeeEntity {
             this.goalSelector.addGoal(3, new BeeTemptGoal(this, 1.25D));
             this.goalSelector.addGoal(5, new FollowParentGoal(this, 1.25D));
         }
-        this.pollinateGoal = new BeePollinateGoal();
+        this.pollinateGoal = new PollinateGoal(this);
         this.goalSelector.addGoal(4, this.pollinateGoal);
 
         this.beePollinateGoal = new FakePollinateGoal();
@@ -457,17 +460,17 @@ public class ResourcefulBee extends CustomBeeEntity {
         @Override
         public boolean canBeeUse() {
             if (ResourcefulBee.this.hasHive() && ResourcefulBee.this.wantsToEnterHive() && ResourcefulBee.this.hivePos != null && ResourcefulBee.this.hivePos.closerThan(ResourcefulBee.this.position(), 2.0D)) {
-                BlockEntity tileentity = ResourcefulBee.this.level.getBlockEntity(ResourcefulBee.this.hivePos);
-                if (tileentity instanceof BeehiveBlockEntity) {
-                    BeehiveBlockEntity beehivetileentity = (BeehiveBlockEntity) tileentity;
-                    if (!beehivetileentity.isFull()) {
+                BlockEntity blockEntity = ResourcefulBee.this.level.getBlockEntity(ResourcefulBee.this.hivePos);
+                if (blockEntity instanceof BeehiveBlockEntity) {
+                    BeehiveBlockEntity beehiveBlockEntity = (BeehiveBlockEntity) blockEntity;
+                    if (!beehiveBlockEntity.isFull()) {
                         return true;
                     }
 
                     ResourcefulBee.this.hivePos = null;
-                } else if (tileentity instanceof ApiaryTileEntity) {
-                    ApiaryTileEntity beehivetileentity = (ApiaryTileEntity) tileentity;
-                    if (!beehivetileentity.isFullOfBees()) {
+                } else if (blockEntity instanceof ApiaryTileEntity) {
+                    ApiaryTileEntity apiaryTileEntity = (ApiaryTileEntity) blockEntity;
+                    if (apiaryTileEntity.hasSpace()) {
                         return true;
                     }
 
@@ -486,14 +489,14 @@ public class ResourcefulBee extends CustomBeeEntity {
         @Override
         public void start() {
             if (ResourcefulBee.this.hivePos != null) {
-                BlockEntity tileentity = ResourcefulBee.this.level.getBlockEntity(ResourcefulBee.this.hivePos);
-                if (tileentity != null) {
-                    if (tileentity instanceof BeehiveBlockEntity) {
-                        BeehiveBlockEntity beehivetileentity = (BeehiveBlockEntity) tileentity;
-                        beehivetileentity.addOccupant(ResourcefulBee.this, ResourcefulBee.this.hasNectar());
-                    } else if (tileentity instanceof ApiaryTileEntity) {
-                        ApiaryTileEntity beehivetileentity = (ApiaryTileEntity) tileentity;
-                        beehivetileentity.tryEnterHive(ResourcefulBee.this, ResourcefulBee.this.hasNectar(), false);
+                BlockEntity blockEntity = ResourcefulBee.this.level.getBlockEntity(ResourcefulBee.this.hivePos);
+                if (blockEntity != null) {
+                    if (blockEntity instanceof BeehiveBlockEntity) {
+                        BeehiveBlockEntity beehiveBlockEntity = (BeehiveBlockEntity) blockEntity;
+                        beehiveBlockEntity.addOccupant(ResourcefulBee.this, ResourcefulBee.this.hasNectar());
+                    } else if (blockEntity instanceof ApiaryTileEntity) {
+                        ApiaryTileEntity apiaryTileEntity = (ApiaryTileEntity) blockEntity;
+                        apiaryTileEntity.tryEnterHive(ResourcefulBee.this, ResourcefulBee.this.hasNectar(), false);
                     }
                 }
             }

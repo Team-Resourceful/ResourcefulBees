@@ -96,12 +96,12 @@ public class CentrifugeControllerTileEntity extends CentrifugeTileEntity {
     }
 
     //region NBT
-    @NotNull
+/*    @NotNull
     @Override
     public CompoundTag save(@NotNull CompoundTag tag) {
         super.save(tag);
         return saveToNBT(tag);
-    }
+    }*/
 
     @Override
     protected CompoundTag saveToNBT(CompoundTag tag) {

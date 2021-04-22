@@ -34,7 +34,7 @@ public abstract class MixinBeeEntity extends Animal {
     private void doesHiveHaveSpace(BlockPos pos, CallbackInfoReturnable<Boolean> callback) {
         BlockEntity tileentity = this.level.getBlockEntity(pos);
         if ((tileentity instanceof TieredBeehiveTileEntity && !((TieredBeehiveTileEntity) tileentity).isFull())
-                || (tileentity instanceof ApiaryTileEntity && !((ApiaryTileEntity) tileentity).isFullOfBees())
+                || (tileentity instanceof ApiaryTileEntity && ((ApiaryTileEntity) tileentity).hasSpace())
                 || (tileentity instanceof BeehiveBlockEntity && !((BeehiveBlockEntity) tileentity).isFull())) {
             callback.setReturnValue(true);
         }

@@ -10,7 +10,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
@@ -20,7 +19,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-public class BeePollinateGoal extends Goal {
+public class PollinateGoal extends Goal {
 
     private int pollinationTicks;
     private int lastPollinationTick;
@@ -43,7 +42,7 @@ public class BeePollinateGoal extends Goal {
         }
     }
 
-    public BeePollinateGoal(CustomBeeEntity beeEntity) {
+    public PollinateGoal(CustomBeeEntity beeEntity) {
         this.setFlags(EnumSet.of(Goal.Flag.MOVE));
         this.bee = beeEntity;
     }
@@ -90,11 +89,11 @@ public class BeePollinateGoal extends Goal {
         return this.pollinationTicks > 400;
     }
 
-    public boolean isRunning() {
+    public boolean isPollinating() {
         return this.running;
     }
 
-    public void cancel() {
+    public void stopPollinating() {
         this.clearTask();
         this.running = false;
     }
@@ -146,53 +145,69 @@ public class BeePollinateGoal extends Goal {
         if (this.ticks > 600) {
             this.clearTask();
         } else if ((!bee.getBeeData().hasEntityFlower() || bee.getFlowerEntityID() >= 0)) {
-            if (bee.tickCount % 5 == 0 && bee.getBeeData().hasEntityFlower()) {
-                Entity flowerEntity = bee.level.getEntity(bee.getFlowerEntityID());
-                if (flowerEntity != null) {
-                    boundingBox = new Vec3(flowerEntity.getBoundingBox().getCenter().x(), flowerEntity.getBoundingBox().maxY, flowerEntity.getBoundingBox().getCenter().z());
-                    bee.setSavedFlowerPos(flowerEntity.blockPosition());
-                } else this.clearTask();
-            }
-            if (bee.savedFlowerPos != null) {
-                Vec3 vector3d = Vec3.atBottomCenterOf(bee.savedFlowerPos).add(0.0D, 0.6F, 0.0D);
-                if (boundingBox != null) vector3d = boundingBox.add(0.0D, 0.4F, 0.0D);
-                if (vector3d.distanceTo(bee.position()) > 1D) {
+            handleEntityFlower();
+            handleBlockFlower();
+        }
+    }
+
+    private void handleBlockFlower() {
+        if (bee.savedFlowerPos != null) {
+            Vec3 vector3d = Vec3.atBottomCenterOf(bee.savedFlowerPos).add(0.0D, 0.6F, 0.0D);
+            if (boundingBox != null) vector3d = boundingBox.add(0.0D, 0.4F, 0.0D);
+            if (vector3d.distanceTo(bee.position()) > 1D) {
+                this.nextTarget = vector3d;
+                this.moveToNextTarget();
+            } else {
+                if (this.nextTarget == null) {
                     this.nextTarget = vector3d;
-                    this.moveToNextTarget();
-                } else {
-                    if (this.nextTarget == null) {
-                        this.nextTarget = vector3d;
-                    }
-
-                    boolean closeToTarget = bee.position().distanceTo(this.nextTarget) <= 0.1D;
-                    boolean shouldMoveToNewTarget = true;
-                    if (!closeToTarget && this.ticks > 600) {
-                        this.clearTask();
-                    } else {
-                        if (closeToTarget) {
-                            if (bee.getRandom().nextInt(25) == 0) {
-                                this.nextTarget = new Vec3(vector3d.x() + this.getRandomOffset(), vector3d.y(), vector3d.z() + this.getRandomOffset());
-                                bee.getNavigation().stop();
-                            } else {
-                                shouldMoveToNewTarget = false;
-                            }
-
-                            bee.getLookControl().setLookAt(vector3d.x(), vector3d.y(), vector3d.z());
-                        }
-
-                        if (shouldMoveToNewTarget) {
-                            this.moveToNextTarget();
-                        }
-
-                        ++this.pollinationTicks;
-                        if (bee.getRandom().nextFloat() < 0.05F && this.pollinationTicks > this.lastPollinationTick + 60) {
-                            this.lastPollinationTick = this.pollinationTicks;
-                            bee.playSound(SoundEvents.BEE_POLLINATE, 1.0F, 1.0F);
-                        }
-
-                    }
                 }
+
+                pollinateFlower(vector3d);
             }
+        }
+    }
+
+    private void pollinateFlower(Vec3 vector3d) {
+        boolean closeToTarget = bee.position().distanceTo(this.nextTarget) <= 0.1D;
+        boolean shouldMoveToNewTarget = true;
+        if (!closeToTarget && this.ticks > 600) {
+            this.clearTask();
+        } else {
+            if (closeToTarget) {
+                if (bee.getRandom().nextInt(25) == 0) {
+                    this.nextTarget = new Vec3(vector3d.x() + this.getRandomOffset(), vector3d.y(), vector3d.z() + this.getRandomOffset());
+                    bee.getNavigation().stop();
+                } else {
+                    shouldMoveToNewTarget = false;
+                }
+
+                bee.getLookControl().setLookAt(vector3d.x(), vector3d.y(), vector3d.z());
+            }
+
+            if (shouldMoveToNewTarget) {
+                this.moveToNextTarget();
+            }
+
+            ++this.pollinationTicks;
+            playPollinationSound();
+
+        }
+    }
+
+    private void playPollinationSound() {
+        if (bee.getRandom().nextFloat() < 0.05F && this.pollinationTicks > this.lastPollinationTick + 60) {
+            this.lastPollinationTick = this.pollinationTicks;
+            bee.playSound(SoundEvents.BEE_POLLINATE, 1.0F, 1.0F);
+        }
+    }
+
+    private void handleEntityFlower() {
+        if (bee.tickCount % 5 == 0 && bee.getBeeData().hasEntityFlower()) {
+            Entity flowerEntity = bee.level.getEntity(bee.getFlowerEntityID());
+            if (flowerEntity != null) {
+                boundingBox = new Vec3(flowerEntity.getBoundingBox().getCenter().x(), flowerEntity.getBoundingBox().maxY, flowerEntity.getBoundingBox().getCenter().z());
+                bee.setSavedFlowerPos(flowerEntity.blockPosition());
+            } else this.clearTask();
         }
     }
 
