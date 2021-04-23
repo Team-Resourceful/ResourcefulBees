@@ -23,13 +23,20 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
+import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 public class BeePage extends BeepediaPage {
 
@@ -38,18 +45,26 @@ public class BeePage extends BeepediaPage {
     private Entity bee = null;
     protected Pair<TabImageButton, BeeDataPage> subPage;
     Pair<TabImageButton, BeeDataPage> beeInfoPage;
-    Pair<TabImageButton, BeeDataPage> mutations;
-    Pair<TabImageButton, BeeDataPage> traitListPage;
-    Pair<TabImageButton, BeeDataPage> centrifugePage;
-    Pair<TabImageButton, BeeDataPage> spawningPage;
-    Pair<TabImageButton, BeeDataPage> breedingPage;
+    Pair<TabImageButton, BeeDataPage> mutationsPage = null;
+    Pair<TabImageButton, BeeDataPage> traitListPage = null;
+    Pair<TabImageButton, BeeDataPage> centrifugePage = null;
+    Pair<TabImageButton, BeeDataPage> spawningPage = null;
+    Pair<TabImageButton, BeeDataPage> breedingPage = null;
     List<Pair<TabImageButton, BeeDataPage>> tabs = new ArrayList<>();
     ResourceLocation buttonImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/button.png");
+
+    private List<String> searchBiomes = new LinkedList<>();
+    private List<String> searchBeeTags = new LinkedList<>();
+    private List<String> searchTraits = new LinkedList<>();
+    private List<String> searchBees = new LinkedList<>();
+    private List<String> searchExtra = new LinkedList<>();
+    private List<String> searchItems = new LinkedList<>();
+    private List<String> searchEntity = new LinkedList<>();
+    private List<String> searchAll = new LinkedList<>();
 
     private int tabCounter;
     MutableComponent label;
     public boolean beeUnlocked;
-    private String search = null;
 
     public BeePage(BeepediaScreen beepedia, CustomBeeData beeData, String id, int xPos, int yPos) {
         super(beepedia, xPos, yPos, id);
@@ -67,12 +82,12 @@ public class BeePage extends BeepediaPage {
         subPage = beeInfoPage;
         tabs.add(beeInfoPage);
         if (beeData.getMutationData().testMutations() && (!Config.BEEPEDIA_HIDE_LOCKED.get() || beeUnlocked)) {
-            mutations = Pair.of(
+            mutationsPage = Pair.of(
                     getTabButton(new ItemStack(Items.FERMENTED_SPIDER_EYE), onPress -> setSubPage(SubPageType.MUTATIONS),
                             new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.mutations")),
                     new MutationListPage(beepedia, beeData, subX, subY, this)
             );
-            tabs.add(mutations);
+            tabs.add(mutationsPage);
         }
         if (beeData.getTraitData().hasTraits() && beeData.hasTraitNames() && (!Config.BEEPEDIA_HIDE_LOCKED.get() || beeUnlocked)) {
             traitListPage = Pair.of(
@@ -115,6 +130,8 @@ public class BeePage extends BeepediaPage {
         star.append(beeData.getTranslation());
         label = star;
         newListButton(beeJar, label);
+
+        addSearch();
     }
 
     public TabImageButton getTabButton(ItemStack stack, Button.OnPress pressable, Component tooltip) {
@@ -166,14 +183,67 @@ public class BeePage extends BeepediaPage {
     }
 
     @Override
-    public String getSearch() {
-        if (search == null) {
-            search = beeData.getTranslation().getString();
-            for (Pair<TabImageButton, BeeDataPage> tab : tabs) {
-                search = String.format("%s %s", search, tab.getRight().getSearch());
+    public void addSearch() {
+        addSearchBee(bee, id);
+        // init page tags
+        if (breedingPage != null) addSearchBeeTag("canBreed");
+        if (traitListPage != null) addSearchBeeTag("hasTraits");
+        if (centrifugePage != null) addSearchBeeTag("hasComb");
+        if (beeData.getCentrifugeData().hasCentrifugeOutput()) addSearchBeeTag("hasCentrifuge");
+        if (mutationsPage != null) addSearchBeeTag("hasMutations");
+        if (spawningPage != null) addSearchBeeTag("canSpawn");
+        // generate search terms
+        for (Pair<TabImageButton, BeeDataPage> tab : tabs) {
+            tab.getRight().addSearch();
+        }
+        // reduce lists
+        searchBees = searchBees.stream().distinct().collect(Collectors.toList());
+        searchEntity = searchEntity.stream().distinct().collect(Collectors.toList());
+        searchItems = searchItems.stream().distinct().collect(Collectors.toList());
+        searchBiomes = searchBiomes.stream().distinct().collect(Collectors.toList());
+        searchBeeTags = searchBeeTags.stream().distinct().collect(Collectors.toList());
+        searchTraits = searchTraits.stream().distinct().collect(Collectors.toList());
+        searchExtra = searchExtra.stream().distinct().collect(Collectors.toList());
+        // set up prefixless searching
+        searchAll.addAll(searchBees);
+        searchAll.addAll(searchEntity);
+        searchAll.addAll(searchItems);
+        searchAll.addAll(searchBiomes);
+        searchAll.addAll(searchBeeTags);
+        searchAll.addAll(searchTraits);
+        searchAll.addAll(searchExtra);
+        searchAll = searchAll.stream().distinct().collect(Collectors.toList());
+    }
+
+    public boolean getBeeFromSearch(String search) {
+        String[] params = search.split(" ");
+        for (String param : params) {
+            param = param.trim();
+            switch (param.charAt(0)) {
+                case '$':
+                    if (!getSearch(searchBees, param.replaceFirst("\\$", ""))) return false;
+                    break;
+                case '#':
+                    if (!getSearch(searchBeeTags, param.replaceFirst("#", ""))) return false;
+                    break;
+                case '!':
+                    if (!getSearch(searchTraits, param.replaceFirst("!", ""))) return false;
+                    break;
+                case '&':
+                    if (!getSearch(searchItems, param.replaceFirst("&", ""))) return false;
+                    break;
+                case '@':
+                    if (!getSearch(searchBiomes, param.replaceFirst("@", ""))) return false;
+                    break;
+                case '-':
+                    if (!getSearch(searchEntity, param.replaceFirst("-", ""))) return false;
+                    break;
+                default:
+                    if (!getSearch(searchAll, param)) return false;
+                    break;
             }
         }
-        return search;
+        return true;
     }
 
     @Override
@@ -210,7 +280,7 @@ public class BeePage extends BeepediaPage {
                 page = spawningPage;
                 break;
             case MUTATIONS:
-                page = mutations;
+                page = mutationsPage;
                 break;
             case HONEYCOMB:
                 page = centrifugePage;
@@ -241,10 +311,55 @@ public class BeePage extends BeepediaPage {
         BeepediaScreen.currScreenState.setBeeSubPage(beeSubPage);
     }
 
+    public void addSearchBiome(String biome) {
+        searchBiomes.add(biome);
+    }
+
+    public void addSearchBeeTag(String beeTag) {
+        searchBeeTags.add(beeTag);
+    }
+
+    public void addSearchTrait(String trait) {
+        searchTraits.add(trait);
+    }
+
+    public void addSearchExtra(String extra) {
+        searchExtra.add(extra);
+    }
+
+    public void addSearchItem(String item) {
+        searchItems.add(item);
+    }
+
+    public void addSearchItem(Block b) {
+        addSearchItem(b.getName().getString());
+        if (b.getRegistryName() != null) addSearchItem(b.getRegistryName().getPath());
+    }
+
+    public void addSearchItem(Item b) {
+        addSearchItem(new ItemStack(b).getDisplayName().getString());
+        if (b.getRegistryName() != null) addSearchItem(b.getRegistryName().getPath());
+    }
+
+    public void addSearchItem(FluidStack fluid) {
+        addSearchItem(fluid.getDisplayName().getString());
+        if (fluid.getFluid().getRegistryName() != null) addSearchItem(fluid.getFluid().getRegistryName().getPath());
+    }
+
+    public void addSearchBee(Entity entity, String bee) {
+        searchBees.add(bee);
+        searchBees.add(entity.getName().getString());
+    }
+
+    public void addSearchEntity(Entity entity) {
+        searchEntity.add(entity.getName().getString());
+    }
+
     public Entity getBee() {
         if (bee == null) bee = beepedia.initEntity(beeData.getEntityTypeRegistryID());
         return bee;
     }
+
 
     public enum SubPageType {
         INFO,
@@ -252,6 +367,6 @@ public class BeePage extends BeepediaPage {
         BREEDING,
         MUTATIONS,
         HONEYCOMB,
-        TRAIT_LIST
+        TRAIT_LIST;
     }
 }

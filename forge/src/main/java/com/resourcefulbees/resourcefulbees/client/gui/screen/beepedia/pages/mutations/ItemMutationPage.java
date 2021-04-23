@@ -1,9 +1,9 @@
 package com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.mutations;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.api.beedata.mutation.outputs.ItemOutput;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
+import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.BeePage;
 import com.resourcefulbees.resourcefulbees.item.BeeSpawnEggItem;
 import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
@@ -28,20 +28,20 @@ public class ItemMutationPage extends MutationsPage {
     List<Pair<Double, ItemOutput>> outputs = new ArrayList<>();
     private Double outputChance;
 
-    public ItemMutationPage(EntityType<?> bee, List<Block> blocks, Pair<Double, RandomCollection<ItemOutput>> outputs, MutationTypes type, int mutationCount, BeepediaScreen beepedia) {
-        super(bee.create(Objects.requireNonNull(beepedia.getMinecraft().level)), type, mutationCount, beepedia);
+    public ItemMutationPage(EntityType<?> bee, BeePage parent, List<Block> blocks, Pair<Double, RandomCollection<ItemOutput>> outputs, MutationTypes type, int mutationCount, BeepediaScreen beepedia) {
+        super(bee.create(Objects.requireNonNull(beepedia.getMinecraft().level)), parent, type, mutationCount, beepedia);
         inputs = blocks;
         initOutputs(outputs);
     }
 
-    public ItemMutationPage(Entity bee, Tag<?> blocks, Pair<Double, RandomCollection<ItemOutput>> outputs, MutationTypes type, int mutationCount, BeepediaScreen beepedia) {
-        super(bee, type, mutationCount, beepedia);
+    public ItemMutationPage(Entity bee, BeePage parent, Tag<?> blocks, Pair<Double, RandomCollection<ItemOutput>> outputs, MutationTypes type, int mutationCount, BeepediaScreen beepedia) {
+        super(bee, parent, type, mutationCount, beepedia);
         inputs = (List<Block>) blocks.getValues();
         initOutputs(outputs);
     }
 
-    public ItemMutationPage(Entity bee, Block block, Pair<Double, RandomCollection<ItemOutput>> outputs, MutationTypes type, int mutationCount, BeepediaScreen beepedia) {
-        super(bee, type, mutationCount, beepedia);
+    public ItemMutationPage(Entity bee, BeePage parent, Block block, Pair<Double, RandomCollection<ItemOutput>> outputs, MutationTypes type, int mutationCount, BeepediaScreen beepedia) {
+        super(bee, parent, type, mutationCount, beepedia);
         inputs = new LinkedList<>(Collections.singleton(block));
         initOutputs(outputs);
     }
@@ -106,14 +106,12 @@ public class ItemMutationPage extends MutationsPage {
     }
 
     @Override
-    public String getSearch() {
-        String search = "";
+    public void addSearch() {
         for (Block input : inputs) {
-            search = String.format("%s %s", search, input.getName().getString());
+            parent.addSearchItem(input);
         }
         for (Pair<Double, ItemOutput> output : outputs) {
-            search = String.format("%s %s", search, output.getRight().getItem().getName(new ItemStack(output.getRight().getItem())).getString());
+            parent.addSearchItem(output.getRight().getItem());
         }
-        return search;
     }
 }

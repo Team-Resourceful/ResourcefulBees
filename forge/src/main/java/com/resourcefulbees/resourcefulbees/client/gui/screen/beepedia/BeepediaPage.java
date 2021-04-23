@@ -7,6 +7,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
+import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.atomic.AtomicReference;
+
 public abstract class BeepediaPage {
 
     public final int yPos;
@@ -55,7 +59,7 @@ public abstract class BeepediaPage {
         // override to implement
     }
 
-    public abstract String getSearch();
+    public abstract void addSearch();
 
     public void tick(int ticksActive) {
         // override to implement
@@ -75,5 +79,14 @@ public abstract class BeepediaPage {
         return false;
     }
 
+    public boolean getSearch(List<String> list, String search) {
+        AtomicReference<Boolean> result = new AtomicReference<>(false);
+        list.forEach(i -> {
+            if (i.toLowerCase(Locale.ENGLISH).contains(search.toLowerCase(Locale.ENGLISH))) {
+                result.set(true);
+            }
+        });
+        return result.get();
+    }
 
 }

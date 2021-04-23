@@ -30,6 +30,7 @@ import org.lwjgl.opengl.GL11;
 
 import java.text.DecimalFormat;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class HoneyPage extends BeepediaPage {
 
@@ -45,6 +46,12 @@ public class HoneyPage extends BeepediaPage {
     private final ItemStack bottle;
     private List<HoneyEffect> effects = new ArrayList<>();
 
+    private List<String> searchEffects = new LinkedList<>();
+    private List<String> searchItems = new LinkedList<>();
+    private List<String> searchBees = new LinkedList<>();
+    private List<String> searchTags = new LinkedList<>();
+    private List<String> searchAll = new LinkedList<>();
+
     private static final int LIST_HEIGHT = 102;
 
     ResourceLocation hungerBar = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/hunger_bar.png");
@@ -54,7 +61,6 @@ public class HoneyPage extends BeepediaPage {
     public HoneyPage(BeepediaScreen beepedia, HoneyBottleData bottleData, String id, int left, int top) {
         super(beepedia, left, top, id);
         this.bottleData = bottleData;
-        initSearch();
         if (bottleData instanceof DefaultHoneyBottleData) {
             DefaultHoneyBottleData data = (DefaultHoneyBottleData) bottleData;
             this.bottle = new ItemStack(data.bottle);
@@ -84,18 +90,6 @@ public class HoneyPage extends BeepediaPage {
     private void toggleTab() {
         BeepediaScreen.currScreenState.setHoneyEffectsActive(!BeepediaScreen.currScreenState.isHoneyEffectsActive());
         beeList.setActive(effects.isEmpty() || !BeepediaScreen.currScreenState.isHoneyEffectsActive());
-    }
-
-    private void initSearch() {
-        honeySearch = "";
-        if (bottleData.getHoneyBottleRegistryObject() != null)
-            honeySearch += " " + new TranslatableComponent(bottleData.getHoneyBottleRegistryObject().get().getDescriptionId()).getString();
-        if (bottleData.getHoneyFluidBlockRegistryObject() != null)
-            honeySearch += " " + new TranslatableComponent(bottleData.getHoneyFluidBlockRegistryObject().get().getDescriptionId()).getString();
-        if (bottleData.getHoneyBlockItemRegistryObject() != null)
-            honeySearch += " " + new TranslatableComponent(bottleData.getHoneyBlockItemRegistryObject().get().getDescriptionId()).getString();
-        if (bottleData.getHoneyBucketItemRegistryObject() != null)
-            honeySearch += " " + new TranslatableComponent(bottleData.getHoneyBucketItemRegistryObject().get().getDescriptionId()).getString();
     }
 
     @Override
@@ -201,9 +195,55 @@ public class HoneyPage extends BeepediaPage {
     }
 
     @Override
-    public String getSearch() {
-        return honeySearch;
+    public void addSearch() {
+        beeList.getReducedList().forEach((s, b) -> {
+            searchBees.add(s);
+            if (b instanceof BeePage) searchBees.add(((BeePage) b).getBee().getDisplayName().getString());
+        });
+        effects.forEach(e -> searchEffects.add(e.getEffect().getDisplayName().getString()));
+        if (bottleData.getHoneyBottleRegistryObject() != null)
+            searchItems.add(new TranslatableComponent(bottleData.getHoneyBottleRegistryObject().get().getDescriptionId()).getString());
+        if (bottleData.getHoneyFluidBlockRegistryObject() != null)
+            searchItems.add(new TranslatableComponent(bottleData.getHoneyFluidBlockRegistryObject().get().getDescriptionId()).getString());
+        if (bottleData.getHoneyBlockItemRegistryObject() != null)
+            searchItems.add(new TranslatableComponent(bottleData.getHoneyBlockItemRegistryObject().get().getDescriptionId()).getString());
+        if (bottleData.getHoneyBucketItemRegistryObject() != null)
+            searchItems.add(new TranslatableComponent(bottleData.getHoneyBucketItemRegistryObject().get().getDescriptionId()).getString());
+        if (bottleData.isRainbow()) searchTags.add("isRainbow");
+        if (!effects.isEmpty()) searchTags.add("hasEffects");
+        if (!beeList.getReducedList().isEmpty()) searchTags.add("hasBees");
+        searchAll.add(id);
+        searchAll.addAll(searchItems);
+        searchAll.addAll(searchBees);
+        searchAll.addAll(searchTags);
     }
+
+    public boolean getHoneyFromSearch(String search) {
+        String[] params = search.split(" ");
+        for (String param : params) {
+            param = param.trim();
+            switch (param.charAt(0)) {
+                case '$':
+                    if (!getSearch(searchBees, param.replaceFirst("\\$", ""))) return false;
+                    break;
+                case '#':
+                    if (!getSearch(searchTags, param.replaceFirst("#", ""))) return false;
+                    break;
+                case '&':
+                    if (!getSearch(searchItems, param.replaceFirst("&", ""))) return false;
+                    break;
+                case '!':
+                    if (!getSearch(searchEffects, param.replaceFirst("=", ""))) return false;
+                    break;
+                default:
+                    if (!getSearch(searchAll, param)) return false;
+                    break;
+            }
+        }
+        return true;
+    }
+
+
 
     @Override
     public void openPage() {

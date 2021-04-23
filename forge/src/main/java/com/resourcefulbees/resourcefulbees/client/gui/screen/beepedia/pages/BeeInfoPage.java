@@ -3,6 +3,8 @@ package com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
+import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
+import com.resourcefulbees.resourcefulbees.entity.passive.ResourcefulBee;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.RenderUtils;
 import net.minecraft.ChatFormatting;
@@ -87,13 +89,20 @@ public class BeeInfoPage extends BeeDataPage {
     }
 
     @Override
-    public String getSearch() {
-        return String.format("%s %s %s %s %s",
-                BeeInfoUtils.getSizeName(beeData.getSizeModifier()).getString(),
-                beeData.getFlower(),
-                beeData.getCombatData().isPassive() ? "passive" : "",
-                beeData.getCombatData().inflictsPoison() ? "poison" : "",
-                beeData.getCombatData().removeStingerOnAttack() ? "stinger" : "");
+    public void addSearch() {
+        parent.addSearchBeeTag(beeData.getCombatData().isPassive() ? "passive" : "aggressive");
+        if (beeData.getCombatData().inflictsPoison()) parent.addSearchBeeTag("poisonous");
+        if (beeData.getCombatData().removeStingerOnAttack()) parent.addSearchBeeTag("stinger");
+        if (beeData.hasEntityFlower()) {
+            if (entityFlower instanceof CustomBeeEntity) {
+                parent.addSearchBee(entityFlower, ((CustomBeeEntity) entityFlower).getBeeType());
+            } else {
+                parent.addSearchEntity(entityFlower);
+            }
+        } else {
+            beeData.getBlockFlowers().forEach(b -> parent.addSearchItem(b));
+        }
+        parent.addSearchBeeTag(BeeInfoUtils.getSizeName(beeData.getSizeModifier()).getString());
     }
 
     @Override

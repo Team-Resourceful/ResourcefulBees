@@ -20,7 +20,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.FormattedCharSequence;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -42,12 +41,17 @@ public class TraitPage extends BeepediaPage {
     TranslatableComponent name;
     private final List<TraitSection> traitSections = new LinkedList<>();
 
+    private List<String> searchImmunities = new LinkedList<>();
+    private List<String> searchDamage = new LinkedList<>();
+    private List<String> searchSpecial = new LinkedList<>();
+    private List<String> searchBees = new LinkedList<>();
+    private List<String> searchAll = new LinkedList<>();
+
     private static final int LIST_HEIGHT = 102;
 
     public TraitPage(BeepediaScreen beepedia, BeeTrait trait, String id, int left, int top) {
         super(beepedia, left, top, id);
         this.trait = trait;
-        initTranslation();
         name = new TranslatableComponent(trait.getTranslationKey());
         ItemStack stack = new ItemStack(trait.getBeepediaItem());
         newListButton(stack, name);
@@ -63,6 +67,7 @@ public class TraitPage extends BeepediaPage {
         addPotionDamageEffects();
         addDamageTypes();
         addParticle();
+        addSearch();
     }
 
     private void addParticle() {
@@ -164,15 +169,6 @@ public class TraitPage extends BeepediaPage {
         list.setActive(!BeepediaScreen.currScreenState.isTraitsEffectsActive());
     }
 
-    private void initTranslation() {
-        translation = "";
-        translation += String.join(" ", trait.getDamageImmunities());
-        translation += String.join(" ", trait.getSpecialAbilities());
-        translation += trait.getPotionImmunities().stream().map(effect -> effect.getDisplayName().getString()).collect(Collectors.joining(" "));
-        translation += trait.getDamageTypes().stream().map(Pair::getLeft).collect(Collectors.joining(" "));
-        translation += trait.getPotionDamageEffects().stream().map(pair -> pair.getLeft().getDisplayName().getString()).collect(Collectors.joining(" "));
-    }
-
     @Override
     public void renderBackground(PoseStack matrix, float partialTick, int mouseX, int mouseY) {
         if (list == null) return;
@@ -238,9 +234,49 @@ public class TraitPage extends BeepediaPage {
         list.setActive(false);
     }
 
+
     @Override
-    public String getSearch() {
-        return translation;
+    public void addSearch() {
+        list.getReducedList().forEach((s, b) -> {
+            searchBees.add(s);
+            if (b instanceof BeePage) searchBees.add(((BeePage) b).getBee().getDisplayName().getString());
+        });
+        trait.getDamageTypes().forEach(pair -> searchDamage.add(pair.getLeft()));
+        trait.getPotionDamageEffects().forEach(pair -> searchDamage.add(pair.getLeft().getDisplayName().getString()));
+        trait.getPotionImmunities().forEach(p -> searchImmunities.add(p.getDisplayName().getString()));
+        searchImmunities.addAll(trait.getDamageImmunities());
+        searchSpecial.addAll(trait.getSpecialAbilities());
+        searchAll.add(id);
+        searchAll.addAll(searchDamage);
+        searchAll.addAll(searchSpecial);
+        searchAll.addAll(searchBees);
+        searchAll.addAll(searchImmunities);
+        searchAll = searchAll.stream().distinct().collect(Collectors.toList());
+    }
+
+    public boolean getTraitFromSearch(String search) {
+        String[] params = search.split(" ");
+        for (String param : params) {
+            param = param.trim();
+            switch (param.charAt(0)) {
+                case '$':
+                    if (!getSearch(searchBees, param.replaceFirst("\\$", ""))) return false;
+                    break;
+                case '#':
+                    if (!getSearch(searchSpecial, param.replaceFirst("#", ""))) return false;
+                    break;
+                case '!':
+                    if (!getSearch(searchImmunities, param.replaceFirst("!", ""))) return false;
+                    break;
+                case '&':
+                    if (!getSearch(searchDamage, param.replaceFirst("&", ""))) return false;
+                    break;
+                default:
+                    if (!getSearch(searchAll, param)) return false;
+                    break;
+            }
+        }
+        return true;
     }
 
     @Override

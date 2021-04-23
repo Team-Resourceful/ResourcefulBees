@@ -1,7 +1,6 @@
 package com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.mutations.BlockMutationPage;
@@ -9,18 +8,13 @@ import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.muta
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.mutations.ItemMutationPage;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.mutations.MutationsPage;
 import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
-import com.resourcefulbees.resourcefulbees.utils.RenderUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ImageButton;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.resources.ResourceLocation;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
@@ -58,15 +52,15 @@ public class MutationListPage extends BeeDataPage {
         List<MutationsPage> itemMutations = new ArrayList<>();
         List<MutationsPage> entityMutations = new ArrayList<>();
         if (beeData.getMutationData().hasBlockMutations()) {
-            beeData.getMutationData().getJeiBlockMutations().forEach((b, m) -> blockMutations.add(new BlockMutationPage(parent.getBee(), b, m, MutationTypes.BLOCK, beeData.getMutationData().getMutationCount(), beepedia)));
-            beeData.getMutationData().getJeiBlockTagMutations().forEach((b, m) -> blockMutations.add(new BlockMutationPage(parent.getBee(), b, m, MutationTypes.BLOCK, beeData.getMutationData().getMutationCount(), beepedia)));
+            beeData.getMutationData().getJeiBlockMutations().forEach((b, m) -> blockMutations.add(new BlockMutationPage(parent.getBee(), parent, b, m, MutationTypes.BLOCK, beeData.getMutationData().getMutationCount(), beepedia)));
+            beeData.getMutationData().getJeiBlockTagMutations().forEach((b, m) -> blockMutations.add(new BlockMutationPage(parent.getBee(), parent, b, m, MutationTypes.BLOCK, beeData.getMutationData().getMutationCount(), beepedia)));
         }
         if (beeData.getMutationData().hasItemMutations()) {
-            beeData.getMutationData().getJeiItemMutations().forEach((b, m) -> itemMutations.add(new ItemMutationPage(parent.getBee(), b, m, MutationTypes.ITEM, beeData.getMutationData().getMutationCount(), beepedia)));
-            beeData.getMutationData().getJeiBlockTagItemMutations().forEach((b, m) -> itemMutations.add(new ItemMutationPage(parent.getBee(), b, m, MutationTypes.ITEM, beeData.getMutationData().getMutationCount(), beepedia)));
+            beeData.getMutationData().getJeiItemMutations().forEach((b, m) -> itemMutations.add(new ItemMutationPage(parent.getBee(), parent, b, m, MutationTypes.ITEM, beeData.getMutationData().getMutationCount(), beepedia)));
+            beeData.getMutationData().getJeiBlockTagItemMutations().forEach((b, m) -> itemMutations.add(new ItemMutationPage(parent.getBee(), parent, b, m, MutationTypes.ITEM, beeData.getMutationData().getMutationCount(), beepedia)));
         }
         if (beeData.getMutationData().hasEntityMutations()) {
-            beeData.getMutationData().getEntityMutations().forEach((b, m) -> entityMutations.add(new EntityMutationPage(parent.getBee(), b, m, MutationTypes.ENTITY, beeData.getMutationData().getMutationCount(), beepedia)));
+            beeData.getMutationData().getEntityMutations().forEach((b, m) -> entityMutations.add(new EntityMutationPage(parent.getBee(), parent, b, m, MutationTypes.ENTITY, beeData.getMutationData().getMutationCount(), beepedia)));
         }
         if (!blockMutations.isEmpty()) {
             mutations.add(Pair.of(MutationTypes.BLOCK, blockMutations));
@@ -142,15 +136,14 @@ public class MutationListPage extends BeeDataPage {
     }
 
     @Override
-    public String getSearch() {
+    public void addSearch() {
         String search = "";
         for (Pair<MutationTypes, List<MutationsPage>> mutation : mutations) {
             search = String.format("%s %s", search, mutation.getLeft());
             for (MutationsPage mutationsPage : mutation.getRight()) {
-                search = String.format("%s %s", search, mutationsPage.getSearch());
+                mutationsPage.addSearch();
             }
         }
-        return search;
     }
 
     @Override

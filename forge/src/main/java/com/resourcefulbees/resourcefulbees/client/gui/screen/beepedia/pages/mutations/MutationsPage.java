@@ -2,9 +2,8 @@ package com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.mut
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
-import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
-import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
+import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.BeePage;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
 import com.resourcefulbees.resourcefulbees.utils.RenderUtils;
@@ -28,9 +27,9 @@ import static com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.Bee
 public abstract class MutationsPage {
     int mutationCount;
     protected final BeepediaScreen beepedia;
-    Entity parent;
+    Entity entityParent;
     MutationTypes type;
-    CustomBeeData beeData;
+    BeePage parent;
     protected int inputCounter;
     protected int outputCounter;
     protected final ResourceLocation infoIcon = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/icons.png");
@@ -38,7 +37,8 @@ public abstract class MutationsPage {
     protected final ResourceLocation mutationChanceImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/mutation_sparkles.png");
 
 
-    protected MutationsPage(Entity parent, MutationTypes type, int mutationCount, BeepediaScreen beepedia) {
+    protected MutationsPage(Entity entityParent, BeePage parent, MutationTypes type, int mutationCount, BeepediaScreen beepedia) {
+        this.entityParent = entityParent;
         this.parent = parent;
         this.type = type;
         this.mutationCount = mutationCount;
@@ -55,12 +55,12 @@ public abstract class MutationsPage {
         GuiComponent.blit(matrix, xPos, yPos, 0, 0, 169, 84, 169, 84);
         Minecraft.getInstance().getTextureManager().bind(mutationChanceImage);
         GuiComponent.blit(matrix, xPos, yPos, 0, 0, 16, 16, 16, 16);
-        RenderUtils.renderEntity(matrix, parent, beepedia.getMinecraft().level, (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - 15, (float) yPos + 6, 45, 1.25f);
+        RenderUtils.renderEntity(matrix, entityParent, beepedia.getMinecraft().level, (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - 15, (float) yPos + 6, 45, 1.25f);
     }
 
     public boolean mouseClick(int xPos, int yPos, int mouseX, int mouseY) {
-        if (parent instanceof CustomBeeEntity) {
-            CustomBeeEntity beeEntity = (CustomBeeEntity) parent;
+        if (entityParent instanceof CustomBeeEntity) {
+            CustomBeeEntity beeEntity = (CustomBeeEntity) entityParent;
             if (BeepediaScreen.mouseHovering((float) xPos + ((float) SUB_PAGE_WIDTH / 2) - 20, (float) yPos + 6, 30, 30, mouseX, mouseY)) {
                 if (BeepediaScreen.currScreenState.getPageID().equals((beeEntity.getBeeData().getName()))) return false;
                 BeepediaScreen.saveScreenState();
@@ -74,8 +74,8 @@ public abstract class MutationsPage {
     public void drawTooltips(PoseStack matrix, int xPos, int yPos, int mouseX, int mouseY) {
         if (BeepediaScreen.mouseHovering((float) xPos + ((float) SUB_PAGE_WIDTH / 2) - 20, (float) yPos + 6, 30, 30, mouseX, mouseY)) {
             List<Component> tooltip = new ArrayList<>();
-            MutableComponent name = parent.getName().plainCopy();
-            MutableComponent id = new TextComponent(parent.getEncodeId()).withStyle(ChatFormatting.DARK_GRAY);
+            MutableComponent name = entityParent.getName().plainCopy();
+            MutableComponent id = new TextComponent(entityParent.getEncodeId()).withStyle(ChatFormatting.DARK_GRAY);
             tooltip.add(name);
             tooltip.add(id);
             beepedia.renderComponentTooltip(matrix, tooltip, mouseX, mouseY);
@@ -100,5 +100,5 @@ public abstract class MutationsPage {
     }
 
 
-    public abstract String getSearch();
+    public abstract void addSearch();
 }

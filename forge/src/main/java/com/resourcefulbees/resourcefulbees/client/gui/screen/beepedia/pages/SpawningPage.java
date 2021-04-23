@@ -79,10 +79,13 @@ public class SpawningPage extends BeeDataPage {
     }
 
     @Override
-    public String getSearch() {
-        return String.format("%s %s",
-                biomeList.stream().map(b -> new TranslatableComponent(String.format("biome.%s.%s", b.getNamespace(), b.getPath())).getString()).collect(Collectors.joining(" ")),
-                BeeInfoUtils.getLightName(beeData.getSpawnData().getLightLevel()).getString());
+    public void addSearch() {
+        biomeList.forEach(b -> {
+            //todo add biome tags
+            parent.addSearchBiome(b.getPath());
+            parent.addSearchBiome(new TranslatableComponent(String.format("biome.%s.%s", b.getNamespace(), b.getPath())).getString());
+        });
+        parent.addSearchBeeTag(BeeInfoUtils.getLightName(beeData.getSpawnData().getLightLevel()).getString());
     }
 
     @Override
