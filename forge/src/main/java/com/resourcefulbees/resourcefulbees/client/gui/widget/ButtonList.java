@@ -2,6 +2,9 @@ package com.resourcefulbees.resourcefulbees.client.gui.widget;
 
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
+import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.BeePage;
+import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.HoneyPage;
+import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.TraitPage;
 
 import java.util.Map;
 import java.util.SortedMap;
@@ -18,7 +21,7 @@ public class ButtonList {
     protected int scrollPos = 0;
     public final TabImageButton button;
     protected boolean active = false;
-    Map<String, ? extends BeepediaPage> list;
+    private Map<String, ? extends BeepediaPage> list;
     SortedMap<String, BeepediaPage> reducedList = new TreeMap<>();
 
     public ButtonList(int xPos, int yPos, int width, int height, int itemHeight, TabImageButton button, Map<String, ? extends BeepediaPage> list) {
@@ -59,12 +62,26 @@ public class ButtonList {
     }
 
     private void reduceList(String search, String s, BeepediaPage b) {
-        if (s.contains(search.toLowerCase()) || b.getSearch().toLowerCase().contains(search.toLowerCase())) {
+        boolean pageFound = false;
+        if ((b instanceof BeePage && ((BeePage) b).getBeeFromSearch(search)) ||
+                (b instanceof HoneyPage && ((HoneyPage) b).getHoneyFromSearch(search)) ||
+                (b instanceof TraitPage && ((TraitPage) b).getTraitFromSearch(search))) {
+            pageFound = true;
+        }
+        if (pageFound) {
             reducedList.put(s, b);
             if (active) b.listButton.visible = true;
         } else {
             if (active) b.listButton.visible = false;
         }
+    }
+
+    public Map<String, ? extends BeepediaPage> getList() {
+        return list;
+    }
+
+    public SortedMap<String, BeepediaPage> getReducedList() {
+        return reducedList;
     }
 
     public void updatePos(int newPos) {

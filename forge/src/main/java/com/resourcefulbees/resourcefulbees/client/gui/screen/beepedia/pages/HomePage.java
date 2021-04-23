@@ -85,8 +85,8 @@ public class HomePage extends BeepediaPage {
     }
 
     @Override
-    public String getSearch() {
-        return new TranslatableComponent("gui.resourcefulbees.beepedia.home_button").getString();
+    public void addSearch() {
+        // does nothing
     }
 
     @Override

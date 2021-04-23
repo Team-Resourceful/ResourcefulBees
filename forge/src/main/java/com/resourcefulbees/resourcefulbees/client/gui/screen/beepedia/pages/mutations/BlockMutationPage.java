@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.api.beedata.mutation.outputs.BlockOutput;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
+import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.BeePage;
 import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
@@ -30,8 +31,8 @@ public class BlockMutationPage extends MutationsPage {
     double outputChance;
     List<Pair<Double, BlockOutput>> outputs = new ArrayList<>();
 
-    public BlockMutationPage(Entity bee, Tag<?> blocks, Pair<Double, RandomCollection<BlockOutput>> outputs, MutationTypes type, int mutationCount, BeepediaScreen beepedia) {
-        super(bee, type, mutationCount, beepedia);
+    public BlockMutationPage(Entity bee, BeePage parent, Tag<?> blocks, Pair<Double, RandomCollection<BlockOutput>> outputs, MutationTypes type, int mutationCount, BeepediaScreen beepedia) {
+        super(bee, parent, type, mutationCount, beepedia);
         if (blocks.getValues().get(0) instanceof Fluid) {
             inputs = blocks.getValues().stream().map(f -> ((Fluid) f).defaultFluidState().createLegacyBlock().getBlock()).distinct().collect(Collectors.toList());
         } else {
@@ -40,8 +41,8 @@ public class BlockMutationPage extends MutationsPage {
         initOutputs(outputs);
     }
 
-    public BlockMutationPage(Entity bee, Block block, Pair<Double, RandomCollection<BlockOutput>> outputs, MutationTypes type, int mutationCount, BeepediaScreen beepedia) {
-        super(bee, type, mutationCount, beepedia);
+    public BlockMutationPage(Entity bee, BeePage parent, Block block, Pair<Double, RandomCollection<BlockOutput>> outputs, MutationTypes type, int mutationCount, BeepediaScreen beepedia) {
+        super(bee, parent, type, mutationCount, beepedia);
         inputs = new LinkedList<>(Collections.singleton(block));
         initOutputs(outputs);
     }
@@ -106,14 +107,13 @@ public class BlockMutationPage extends MutationsPage {
     }
 
     @Override
-    public String getSearch() {
-        String search = "";
+    public void addSearch() {
+        if (parent == null) return;
         for (Block input : inputs) {
-            search = String.format("%s %s", search, input.getName().getString());
+            parent.addSearchItem(input);
         }
         for (Pair<Double, BlockOutput> output : outputs) {
-            search = String.format("%s %s", search, output.getRight().getBlock().getName().getString());
+            parent.addSearchItem(output.getRight().getBlock());
         }
-        return search;
     }
 }

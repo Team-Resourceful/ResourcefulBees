@@ -8,6 +8,7 @@ import com.resourcefulbees.resourcefulbees.api.beedata.mutation.ItemMutation;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.mutations.EntityMutationPage;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.mutations.ItemMutationPage;
+import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
@@ -68,8 +69,8 @@ public class BreedingPage extends BeeDataPage {
         parents = BeeRegistry.getRegistry().getParents(beeData);
         children.forEach((p, l) -> l.getMap().forEach((w, b) -> childrenBreeding.add(new BreedingObject(p, b))));
         parents.forEach((p, b) -> parentBreeding.add(new BreedingObject(p, b)));
-        mutations.forEach(b -> entityMutationBreeding.add(new EntityMutationPage(b.getParent(), b.getInput(), b.getOutputs(), MutationTypes.ENTITY, b.getMutaionCount(), beepedia)));
-        itemBreedMutation.forEach(b -> itemMutationBreeding.add(new ItemMutationPage(b.getParent(), b.getInputs(), b.getOutputs(), MutationTypes.ITEM, b.getMutationCount(), beepedia)));
+        mutations.forEach(b -> entityMutationBreeding.add(new EntityMutationPage(b.getParent(), parent, b.getInput(), b.getOutputs(), MutationTypes.ENTITY, b.getMutaionCount(), beepedia)));
+        itemBreedMutation.forEach(b -> itemMutationBreeding.add(new ItemMutationPage(b.getParent(), parent, b.getInputs(), b.getOutputs(), MutationTypes.ITEM, b.getMutationCount(), beepedia)));
         leftArrow = new ImageButton(xPos + (SUB_PAGE_WIDTH / 2) - 28, yPos + SUB_PAGE_HEIGHT - 16, 8, 11, 0, 0, 11, arrowImage, 16, 33, button -> prevPage());
         rightArrow = new ImageButton(xPos + (SUB_PAGE_WIDTH / 2) + 20, yPos + SUB_PAGE_HEIGHT - 16, 8, 11, 8, 0, 11, arrowImage, 16, 33, button -> nextPage());
         prevTab = new ImageButton(xPos + (SUB_PAGE_WIDTH / 2) - 48, yPos + 6, 8, 11, 0, 0, 11, arrowImage, 16, 33, button -> prevTab());
@@ -259,23 +260,19 @@ public class BreedingPage extends BeeDataPage {
     }
 
     @Override
-    public String getSearch() {
-        String search = "";
+    public void addSearch() {
         for (BreedingObject breedingObject : childrenBreeding) {
-            search = String.format("%s %s %s %s",
-                    search,
-                    breedingObject.child.name.getString(),
-                    breedingObject.parent1Name.getString(),
-                    breedingObject.parent2Name.getString());
+            addBreedSearch(breedingObject);
         }
         for (BreedingObject breedingObject : parentBreeding) {
-            search = String.format("%s %s %s %s",
-                    search,
-                    breedingObject.child.name.getString(),
-                    breedingObject.parent1Name.getString(),
-                    breedingObject.parent2Name.getString());
+            addBreedSearch(breedingObject);
         }
-        return search;
+    }
+
+    public void addBreedSearch(BreedingObject breedingObject) {
+        parent.addSearchBee(breedingObject.child.entity, ((CustomBeeEntity) breedingObject.child.entity).getBeeType());
+        parent.addSearchBee(breedingObject.parent1Entity, ((CustomBeeEntity) breedingObject.parent1Entity).getBeeType());
+        parent.addSearchBee(breedingObject.parent2Entity, ((CustomBeeEntity) breedingObject.parent2Entity).getBeeType());
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.api.beedata.mutation.outputs.EntityOutput;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
+import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.BeePage;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
@@ -29,12 +30,12 @@ public class EntityMutationPage extends MutationsPage {
     List<Pair<Double, EntityOutput>> outputs = new ArrayList<>();
     private Double outputChance;
 
-    public EntityMutationPage(EntityType<?> parentEntity, EntityType<?> entity, Pair<Double, RandomCollection<EntityOutput>> outputs, MutationTypes type, int mutationCount, BeepediaScreen beepedia) {
-        this(parentEntity.create(Objects.requireNonNull(beepedia.getMinecraft().level)), entity, outputs, type, mutationCount, beepedia);
+    public EntityMutationPage(EntityType<?> parentEntity, BeePage parent, EntityType<?> entity, Pair<Double, RandomCollection<EntityOutput>> outputs, MutationTypes type, int mutationCount, BeepediaScreen beepedia) {
+        this(parentEntity.create(Objects.requireNonNull(beepedia.getMinecraft().level)), parent, entity, outputs, type, mutationCount, beepedia);
     }
 
-    public EntityMutationPage(Entity parentEntity, EntityType<?> entity, Pair<Double, RandomCollection<EntityOutput>> outputs, MutationTypes type, int mutationCount, BeepediaScreen beepedia) {
-        super(parentEntity, type, mutationCount, beepedia);
+    public EntityMutationPage(Entity parentEntity, BeePage parent, EntityType<?> entity, Pair<Double, RandomCollection<EntityOutput>> outputs, MutationTypes type, int mutationCount, BeepediaScreen beepedia) {
+        super(parentEntity, parent, type, mutationCount, beepedia);
         input = entity.create(beepedia.getMinecraft().level);
         initOutputs(outputs);
     }
@@ -132,11 +133,18 @@ public class EntityMutationPage extends MutationsPage {
     }
 
     @Override
-    public String getSearch() {
-        String search = input.getName().getString();
-        for (Pair<Double, EntityOutput> output : outputs) {
-            search = String.format("%s %s", search, output.getRight().getGuiEntity(beepedia.getMinecraft().level).getDisplayName().getString());
+    public void addSearch() {
+        if (input instanceof CustomBeeEntity) {
+            parent.addSearchBee(input, ((CustomBeeEntity) input).getBeeType());
+        } else {
+            parent.addSearchEntity(input);
         }
-        return search;
+        for (Pair<Double, EntityOutput> output : outputs) {
+            if (output.getRight().getGuiEntity(beepedia.getMinecraft().level) instanceof CustomBeeEntity) {
+                parent.addSearchBee(output.getRight().getGuiEntity(beepedia.getMinecraft().level), ((CustomBeeEntity) input).getBeeType());
+            } else {
+                parent.addSearchEntity(output.getRight().getGuiEntity(beepedia.getMinecraft().level));
+            }
+        }
     }
 }
