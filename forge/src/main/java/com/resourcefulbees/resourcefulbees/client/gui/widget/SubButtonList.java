@@ -41,6 +41,10 @@ public class SubButtonList extends ButtonList {
         });
     }
 
+    public SortedMap<String, ListButton> getSubList() {
+        return subList;
+    }
+
     @Override
     public void setActive(boolean active) {
         this.active = active;

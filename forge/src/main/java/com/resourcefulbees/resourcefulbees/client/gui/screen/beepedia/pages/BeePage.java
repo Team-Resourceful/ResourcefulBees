@@ -184,7 +184,7 @@ public class BeePage extends BeepediaPage {
 
     @Override
     public void addSearch() {
-        addSearchBee(bee, id);
+        addSearchBee(getBee(), id);
         // init page tags
         if (breedingPage != null) addSearchBeeTag("canBreed");
         if (traitListPage != null) addSearchBeeTag("hasTraits");

@@ -209,7 +209,7 @@ public class CustomBeeData extends AbstractBeeData {
     }
 
     public Set<Block> getBlockFlowers() {
-        return Collections.unmodifiableSet(this.blockFlowers);
+        return blockFlowers != null ? Collections.unmodifiableSet(this.blockFlowers) : Collections.emptySet();
     }
 
     public boolean hasBlockFlowers() {
@@ -395,8 +395,6 @@ public class CustomBeeData extends AbstractBeeData {
     public void setShouldResourcefulBeesDoForgeRegistration(boolean shouldResourcefulBeesDoForgeRegistration) {
         this.shouldResourcefulBeesDoForgeRegistration = shouldResourcefulBeesDoForgeRegistration;
     }
-
-
 
     public static class Builder {
         private final String flower;

@@ -85,6 +85,7 @@ public class HoneyPage extends BeepediaPage {
         beepedia.addButton(prevTab);
         nextTab.visible = false;
         prevTab.visible = false;
+        initBeeList();
     }
 
     private void toggleTab() {
@@ -196,9 +197,9 @@ public class HoneyPage extends BeepediaPage {
 
     @Override
     public void addSearch() {
-        beeList.getReducedList().forEach((s, b) -> {
+        beeList.getSubList().forEach((s, b) -> {
             searchBees.add(s);
-            if (b instanceof BeePage) searchBees.add(((BeePage) b).getBee().getDisplayName().getString());
+            searchBees.add(beepedia.getBee(s).getBee().getDisplayName().getString());
         });
         effects.forEach(e -> searchEffects.add(e.getEffect().getDisplayName().getString()));
         if (bottleData.getHoneyBottleRegistryObject() != null)
@@ -211,7 +212,7 @@ public class HoneyPage extends BeepediaPage {
             searchItems.add(new TranslatableComponent(bottleData.getHoneyBucketItemRegistryObject().get().getDescriptionId()).getString());
         if (bottleData.isRainbow()) searchTags.add("isRainbow");
         if (!effects.isEmpty()) searchTags.add("hasEffects");
-        if (!beeList.getReducedList().isEmpty()) searchTags.add("hasBees");
+        if (!beeList.getSubList().isEmpty()) searchTags.add("hasBees");
         searchAll.add(id);
         searchAll.addAll(searchItems);
         searchAll.addAll(searchBees);
@@ -248,7 +249,6 @@ public class HoneyPage extends BeepediaPage {
     @Override
     public void openPage() {
         super.openPage();
-        if (beeList == null) initBeeList();
         nextTab.visible = !effects.isEmpty();
         prevTab.visible = !effects.isEmpty();
         beeList.setActive(effects.isEmpty() || !BeepediaScreen.currScreenState.isHoneyEffectsActive());

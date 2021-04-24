@@ -33,6 +33,13 @@ public class BeeInfoPage extends BeeDataPage {
         flowers = beeData.hasBlockFlowers() ? new ArrayList<>(beeData.getBlockFlowers()) : new ArrayList<>();
         counter = 0;
         size = flowers.size();
+        if (beeData.hasEntityFlower()) {
+            EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(beeData.getEntityFlower());
+            // makes sure the entity is valid
+            if (entityType.equals(EntityType.PIG) && (!beeData.getEntityFlower().equals(new ResourceLocation("minecraft:pig"))))
+                return;
+            entityFlower = entityType.create(beepedia.getMinecraft().level);
+        }
     }
 
     @Override
@@ -76,13 +83,6 @@ public class BeeInfoPage extends BeeDataPage {
                 beepedia.drawSlot(matrix, flowers.get(counter), xPos + 36, yPos + 70);
             }
         } else if (beeData.hasEntityFlower()) {
-            if (entityFlower == null) {
-                EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(beeData.getEntityFlower());
-                // makes sure the entity is valid
-                if (entityType.equals(EntityType.PIG) && (!beeData.getEntityFlower().equals(new ResourceLocation("minecraft:pig"))))
-                    return;
-                entityFlower = entityType.create(beepedia.getMinecraft().level);
-            }
             font.draw(matrix, flowerName.withStyle(ChatFormatting.GRAY), (float) xPos, (float) yPos + 80, -1);
             RenderUtils.renderEntity(matrix, entityFlower, beepedia.getMinecraft().level, (float) xPos + 45, (float) yPos + 75, -45, 1.25f);
         }

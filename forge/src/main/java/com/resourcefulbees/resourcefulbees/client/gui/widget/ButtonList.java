@@ -80,10 +80,6 @@ public class ButtonList {
         return list;
     }
 
-    public SortedMap<String, BeepediaPage> getReducedList() {
-        return reducedList;
-    }
-
     public void updatePos(int newPos) {
         // update position of list
         if (height > reducedList.size() * itemHeight) return;

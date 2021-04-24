@@ -151,6 +151,9 @@ public class BeepediaScreen extends Screen {
         searchBox.visible = false;
         addWidget(searchBox);
         initSidebar();
+        bees.forEach((s, b) -> b.addSearch());
+        traits.forEach((s, b) -> b.addSearch());
+        honey.forEach((s, b) -> b.addSearch());
         returnState(false);
     }
 
@@ -622,6 +625,10 @@ public class BeepediaScreen extends Screen {
 
     private boolean mapContainsTraitName(BeePage page, String traitName) {
         return page.beeData.hasTraitNames() && Arrays.asList(page.beeData.getTraitNames()).contains(traitName);
+    }
+
+    public BeePage getBee(String s) {
+        return bees.get(s);
     }
 
 

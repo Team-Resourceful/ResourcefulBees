@@ -267,6 +267,8 @@ public class BreedingPage extends BeeDataPage {
         for (BreedingObject breedingObject : parentBreeding) {
             addBreedSearch(breedingObject);
         }
+        itemMutationBreeding.forEach(i -> i.addSearch(parent));
+        entityMutationBreeding.forEach(e -> e.addSearch(parent));
     }
 
     public void addBreedSearch(BreedingObject breedingObject) {

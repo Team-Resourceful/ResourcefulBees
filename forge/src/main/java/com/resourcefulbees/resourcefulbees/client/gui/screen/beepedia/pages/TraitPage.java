@@ -67,7 +67,7 @@ public class TraitPage extends BeepediaPage {
         addPotionDamageEffects();
         addDamageTypes();
         addParticle();
-        addSearch();
+        initList();
     }
 
     private void addParticle() {
@@ -237,9 +237,9 @@ public class TraitPage extends BeepediaPage {
 
     @Override
     public void addSearch() {
-        list.getReducedList().forEach((s, b) -> {
+        list.getSubList().forEach((s, b) -> {
             searchBees.add(s);
-            if (b instanceof BeePage) searchBees.add(((BeePage) b).getBee().getDisplayName().getString());
+            searchBees.add(beepedia.getBee(s).getBee().getDisplayName().getString());
         });
         trait.getDamageTypes().forEach(pair -> searchDamage.add(pair.getLeft()));
         trait.getPotionDamageEffects().forEach(pair -> searchDamage.add(pair.getLeft().getDisplayName().getString()));
@@ -282,7 +282,6 @@ public class TraitPage extends BeepediaPage {
     @Override
     public void openPage() {
         super.openPage();
-        if (list == null) initList();
         list.setActive(!BeepediaScreen.currScreenState.isTraitsEffectsActive());
         list.setScrollPos(BeepediaScreen.currScreenState.getTraitBeeListPos());
         nextTab.visible = true;
