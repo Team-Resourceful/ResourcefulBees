@@ -48,8 +48,7 @@ public class FirstPhaseValidator {
 
     private static void validateColorData(String color, String name, String colorType) {
         if (!Color.validate(color)) {
-            logError(name);
-            throw new IllegalArgumentException(String.format("%1$s Color: %2$s is not valid!!", colorType, color));
+            logError(name, String.format("%1$s Color: %2$s is not valid!!", colorType, color));
         }
     }
 
@@ -70,8 +69,7 @@ public class FirstPhaseValidator {
 
     private static void validateCentrifugeData(String data, String name, String dataType) {
         if (!data.isEmpty() && ValidatorUtils.isInvalidLocation(data)) {
-            logError(name);
-            throw new IllegalArgumentException(String.format("Centrifuge %1$s: %2$s has invalid syntax!!", dataType, data));
+            logError(name, String.format("Centrifuge %1$s: %2$s has invalid syntax!!", dataType, data));
         }
     }
 
@@ -88,8 +86,7 @@ public class FirstPhaseValidator {
                     String p1 = parent1.next();
                     String p2 = parent2.next();
                     if (p1.equals(p2)) {
-                        logError(name);
-                        throw new IllegalArgumentException(String.format("Parent 1: %1$s and Parent 2: %2$s are the same parents!!", p1, p2));
+                        logError(name, String.format("Parent 1: %1$s and Parent 2: %2$s are the same parents!!", p1, p2));
                     }
                 }
             }
@@ -99,15 +96,13 @@ public class FirstPhaseValidator {
     //parameter names are shit
     private static void validateParents(String p1, String p2, String name, String type1, String type2) {
         if (!p1.isEmpty() && p2.isEmpty()) {
-            logError(name);
-            throw new IllegalArgumentException(String.format("Parent %1$s is empty while Parent %2$s is not!!", type1, type2));
+            logError(name, String.format("Parent %1$s is empty while Parent %2$s is not!!", type1, type2));
         }
     }
 
     private static void validateFlower(CustomBeeData beeData, String name) {
         if (beeData.getFlower() == null) {
-            logError(name);
-            throw new IllegalArgumentException("Flower is missing!");
+            logError(name, "Flower is missing!");
         }
 
         if (!(TAG_RESOURCE_PATTERN.matcher(beeData.getFlower()).matches()
@@ -116,16 +111,14 @@ public class FirstPhaseValidator {
                 || beeData.getFlower().equals(BeeConstants.FLOWER_TAG_ALL)
                 || beeData.getFlower().equals(BeeConstants.FLOWER_TAG_SMALL)
                 || beeData.getFlower().equals(BeeConstants.FLOWER_TAG_TALL))) {
-            logError(name);
-            throw new IllegalArgumentException(String.format("Flower: %1$s has invalid syntax!", beeData.getFlower()));
+            logError(name, String.format("Flower: %1$s has invalid syntax!", beeData.getFlower()));
         }
     }
 
     private static void validateCustomApiaryOutputAmounts(CustomBeeData beeData, String name) {
         for (int i = 0; i < 4; i++) {
             if (beeData.getApiaryOutputAmounts()[i] == 0 || beeData.getApiaryOutputAmounts()[i] < -1) {
-                logError(name);
-                throw new IllegalArgumentException(String.format("Custom Apiary output amount at index %2$s is invalid! Value: %1$s", beeData.getApiaryOutputAmounts()[i], i));
+                logError(name, String.format("Custom Apiary output amount at index %2$s is invalid! Value: %1$s", beeData.getApiaryOutputAmounts()[i], i));
             }
         }
     }
@@ -134,15 +127,15 @@ public class FirstPhaseValidator {
         if (honeyData.getEffects() != null && !honeyData.getEffects().isEmpty()) {
             honeyData.getEffects().forEach(honeyEffect -> {
                 if (!honeyEffect.isEffectIDValid()) {
-                    logError(name);
-                    throw new IllegalArgumentException(String.format("Custom effect is not valid! Value: %s", honeyEffect.getEffectID()));
+                    logError(name, String.format("Custom effect is not valid! Value: %s", honeyEffect.getEffectID()));
                 }
             });
         }
     }
 
-    private static void logError(String name) {
+    private static void logError(String name, String reason) {
         LOGGER.error("{} bee has failed validation!", name);
+        throw new IllegalArgumentException(String.format("%s bee has failed validation, Reason: %s", name, reason));
     }
 
 
