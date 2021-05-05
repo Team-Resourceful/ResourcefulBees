@@ -7,9 +7,6 @@ public class NBTConstants {
     }
 
 
-
-
-
     public static final String NBT_ROOT = "ResourcefulBees";
     public static final String NBT_COLOR = "Color";
     public static final String NBT_BEE_TYPE = "BeeType";
