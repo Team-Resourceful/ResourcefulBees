@@ -6,6 +6,7 @@ public class NBTConstants {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
 
+
     public static final String NBT_ROOT = "ResourcefulBees";
     public static final String NBT_COLOR = "Color";
     public static final String NBT_BEE_TYPE = "BeeType";
@@ -36,6 +37,7 @@ public class NBTConstants {
     public static final String NBT_BREED_TIME = "BreedTimeModifier";
     public static final String NBT_BEE_NAME = "DisplayName";
     public static final String NBT_TANKS = "Tanks";
+    public static final String NBT_BEECON_RANGE = "range";
     public static final String NBT_RECIPES = "Recipes";
     public static final String NBT_ID = "id";
     public static final String NBT_ENERGY = "energy";

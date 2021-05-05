@@ -28,6 +28,11 @@
                       "source": "tier",
                       "target": "tier",
                       "op": "replace"
+                    },
+                    {
+                      "source": "range",
+                      "target": "range",
+                      "op": "replace"
                     }
                   ]
                 }
