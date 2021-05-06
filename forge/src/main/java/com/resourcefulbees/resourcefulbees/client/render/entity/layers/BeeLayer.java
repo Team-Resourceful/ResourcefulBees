@@ -11,6 +11,7 @@ import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.ModelTypes;
 import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
@@ -18,11 +19,11 @@ import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 
 @OnlyIn(Dist.CLIENT)
@@ -101,12 +102,20 @@ public class BeeLayer extends RenderLayer<CustomBeeEntity, CustomBeeModel<Custom
         if (isEmissive) {
             renderGlowingLayer(matrixStackIn, bufferIn, packedLightIn, customBeeEntity, texture);
         } else {
-            renderColoredCutoutModel(this.getParentModel(), texture, matrixStackIn, bufferIn, packedLightIn, customBeeEntity, color[0], color[1], color[2]);
+            renderColoredModel(this.getParentModel(), texture, matrixStackIn, bufferIn, packedLightIn, customBeeEntity, color[0], color[1], color[2]);
             if (additionModel != null) {
                 VertexConsumer ivertexbuilder = bufferIn.getBuffer(RenderType.entityTranslucent(texture));
                 additionModel.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, LivingEntityRenderer.getOverlayCoords(customBeeEntity, 0.0F), color[0], color[1], color[2], 1.0F);
             }
         }
+    }
+
+    /***
+     * Method overrides renderColoredCutoutModel from RenderLayer.class
+     */
+    protected static <T extends LivingEntity> void renderColoredModel(EntityModel<T> arg, ResourceLocation arg2, PoseStack arg3, MultiBufferSource arg4, int i, T arg5, float f, float g, float h) {
+        VertexConsumer lv = arg4.getBuffer(RenderType.entityTranslucent(arg2));
+        arg.renderToBuffer(arg3, lv, i, LivingEntityRenderer.getOverlayCoords(arg5, 0.0F), f, g, h, 1.0F);
     }
 
     private void renderGlowingLayer(@NotNull PoseStack matrixStackIn, @NotNull MultiBufferSource bufferIn, int packedLightIn, @NotNull CustomBeeEntity customBeeEntity, ResourceLocation texture) {
