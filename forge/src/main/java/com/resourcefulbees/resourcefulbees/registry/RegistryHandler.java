@@ -145,7 +145,7 @@ public class RegistryHandler {
                 .build(name + "_bee"));
 
         ModItems.ITEMS.register(name + "_bee_spawn_egg",
-                () -> new BeeSpawnEggItem(customBeeEntity, 0xffcc33, 0x303030, beeData, new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
+                () -> new BeeSpawnEggItem(customBeeEntity, 0xffcc33, 0x303030, name, new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
 
         ModEntities.getModBees().put(name, customBeeEntity);
     }

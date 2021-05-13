@@ -1,8 +1,7 @@
 package com.resourcefulbees.resourcefulbees.item;
 
-import com.google.gson.JsonElement;
-import com.mojang.serialization.JsonOps;
-import com.resourcefulbees.resourcefulbees.api.beedata.ColorData;
+import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
+import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -32,14 +31,12 @@ public class BeeSpawnEggItem extends SpawnEggItem {
 
     protected static final List<BeeSpawnEggItem> eggsToAdd = new ArrayList<>();
 	private final Lazy<? extends EntityType<?>> entityType;
-	private final ColorData colorData;
-	private final JsonElement beeData;
+	private final CustomBeeData beeData;
 
-	public BeeSpawnEggItem(RegistryObject<? extends EntityType<?>> entityTypeSupplier, int firstColor, int secondColor, JsonElement beeData, Properties properties) {
+	public BeeSpawnEggItem(RegistryObject<? extends EntityType<?>> entityTypeSupplier, int firstColor, int secondColor, String beeType, Properties properties) {
 		super(null, firstColor, secondColor, properties);
-		this.beeData = beeData;
+		this.beeData = BeeRegistry.getRegistry().getBeeData(beeType);
 		this.entityType = Lazy.of(entityTypeSupplier);
-		this.colorData = ColorData.CODEC.fieldOf("ColorData").orElse(ColorData.DEFAULT).codec().fieldOf("RenderData").codec().parse(JsonOps.INSTANCE, beeData).get().orThrow();
 		eggsToAdd.add(this);
 	}
 
@@ -49,13 +46,13 @@ public class BeeSpawnEggItem extends SpawnEggItem {
 	}
 
 	//try to remove this
-    public JsonElement getBeeData() {
+    public CustomBeeData getBeeData() {
         return beeData;
     }
 
     public static int getColor(ItemStack stack, int tintIndex) {
-	    int primaryColor = ((BeeSpawnEggItem)stack.getItem()).colorData.getSpawnEggPrimaryColor().getC();
-	    int secondaryColor = ((BeeSpawnEggItem)stack.getItem()).colorData.getSpawnEggSecondaryColor().getC();
+	    int primaryColor = ((BeeSpawnEggItem)stack.getItem()).beeData.getRenderData().getColorData().getSpawnEggPrimaryColor().getC();
+	    int secondaryColor = ((BeeSpawnEggItem)stack.getItem()).beeData.getRenderData().getColorData().getSpawnEggSecondaryColor().getC();
         return tintIndex == 0 ? primaryColor: secondaryColor;
     }
 
