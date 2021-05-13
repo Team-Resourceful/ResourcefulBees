@@ -40,7 +40,7 @@ public class JEICompat implements IModPlugin {
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
         IGuiHelper helper = registration.getJeiHelpers().getGuiHelper();
-        registration.addRecipeCategories(new BeeHiveCategory(helper));
+        registration.addRecipeCategories(new HiveCategory(helper));
         registration.addRecipeCategories(new BeeBreedingCategory(helper));
         registration.addRecipeCategories(new FlowersCategory(helper));
         registration.addRecipeCategories(new EntityFlowerCategory(helper));
@@ -48,7 +48,6 @@ public class JEICompat implements IModPlugin {
         registration.addRecipeCategories(new BlockMutation(helper));
         registration.addRecipeCategories(new EntityToEntity(helper));
         registration.addRecipeCategories(new BlockToItem(helper));
-        registration.addRecipeCategories(new ApiaryCategory(helper));
     }
 
     @NotNull
@@ -59,10 +58,11 @@ public class JEICompat implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(new ItemStack(ModItems.T1_APIARY_ITEM.get()), ApiaryCategory.ID);
-        registration.addRecipeCatalyst(new ItemStack(ModItems.T2_APIARY_ITEM.get()), ApiaryCategory.ID);
-        registration.addRecipeCatalyst(new ItemStack(ModItems.T3_APIARY_ITEM.get()), ApiaryCategory.ID);
-        registration.addRecipeCatalyst(new ItemStack(ModItems.T4_APIARY_ITEM.get()), ApiaryCategory.ID);
+        registration.addRecipeCatalyst(new ItemStack(ModItems.T1_APIARY_ITEM.get()), HiveCategory.ID);
+        registration.addRecipeCatalyst(new ItemStack(ModItems.T2_APIARY_ITEM.get()), HiveCategory.ID);
+        registration.addRecipeCatalyst(new ItemStack(ModItems.T3_APIARY_ITEM.get()), HiveCategory.ID);
+        registration.addRecipeCatalyst(new ItemStack(ModItems.T4_APIARY_ITEM.get()), HiveCategory.ID);
+        for (ItemStack stack:HiveCategory.NESTS) registration.addRecipeCatalyst(stack, HiveCategory.ID);
         registration.addRecipeCatalyst(new ItemStack(ModItems.CENTRIFUGE_ITEM.get()), CentrifugeRecipeCategory.ID);
         registration.addRecipeCatalyst(new ItemStack(ModItems.MECHANICAL_CENTRIFUGE_ITEM.get()), CentrifugeRecipeCategory.ID);
         registration.addRecipeCatalyst(new ItemStack(ModItems.CENTRIFUGE_CONTROLLER_ITEM.get()), CentrifugeRecipeCategory.ID);
@@ -74,13 +74,12 @@ public class JEICompat implements IModPlugin {
         Level clientWorld = Minecraft.getInstance().level;
         if (clientWorld != null) {
             RecipeManager recipeManager = Minecraft.getInstance().level.getRecipeManager();
-            registration.addRecipes(BeeHiveCategory.getHoneycombRecipes(), BeeHiveCategory.ID);
+            registration.addRecipes(HiveCategory.getHoneycombRecipes(), HiveCategory.ID);
             registration.addRecipes(recipeManager.byType(CENTRIFUGE_RECIPE_TYPE).values(), CentrifugeRecipeCategory.ID);
-            registration.addRecipes(BeeBreedingCategory.getBreedingRecipes(), BeeBreedingCategory.ID);
+            //registration.addRecipes(BeeBreedingCategory.getBreedingRecipes(), BeeBreedingCategory.ID);
             registration.addRecipes(BlockMutation.getMutationRecipes(), BlockMutation.ID);
             registration.addRecipes(BlockToItem.getMutationRecipes(), BlockToItem.ID);
             registration.addRecipes(EntityToEntity.getMutationRecipes(), EntityToEntity.ID);
-            registration.addRecipes(ApiaryCategory.getHoneycombRecipes(), ApiaryCategory.ID);
             registration.addRecipes(FlowersCategory.getFlowersRecipes(), FlowersCategory.ID);
             registration.addRecipes(EntityFlowerCategory.getFlowersRecipes(), EntityFlowerCategory.ID);
             registerInfoDesc(registration);

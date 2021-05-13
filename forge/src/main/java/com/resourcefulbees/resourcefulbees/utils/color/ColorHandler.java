@@ -30,8 +30,8 @@ public final class ColorHandler {
 
     public static void onItemColors(ColorHandlerEvent.Item event) {
         ItemColors colors = event.getItemColors();
-        BEE_REGISTRY.getRawBees().forEach(((s, beeData) -> {
-            HoneycombTypes honeycombType = HoneycombTypes.CODEC.fieldOf("honeycombType").orElse(HoneycombTypes.DEFAULT).codec().fieldOf("HoneycombData").codec().parse(JsonOps.INSTANCE, beeData).get().orThrow();
+        BEE_REGISTRY.getBees().forEach(((s, beeData) -> {
+            HoneycombTypes honeycombType = beeData.getHoneycombData().getHoneycombType();
             if (honeycombType.equals(HoneycombTypes.DEFAULT)) {
                 registerItems(colors, HoneycombItem::getColor, BeeInfoUtils.getItem(ResourcefulBees.MOD_ID + ":" + s + "_honeycomb"));
                 registerItems(colors, HoneycombBlock::getItemColor, BeeInfoUtils.getItem(ResourcefulBees.MOD_ID + ":" + s + "_honeycomb_block"));
@@ -52,8 +52,8 @@ public final class ColorHandler {
 
     public static void onBlockColors(ColorHandlerEvent.Block event) {
         BlockColors colors = event.getBlockColors();
-        BEE_REGISTRY.getRawBees().forEach(((s, beeData) -> {
-            HoneycombTypes honeycombType = HoneycombTypes.CODEC.fieldOf("honeycombType").orElse(HoneycombTypes.DEFAULT).codec().fieldOf("HoneycombData").codec().parse(JsonOps.INSTANCE, beeData).get().orThrow();
+        BEE_REGISTRY.getBees().forEach(((s, beeData) -> {
+            HoneycombTypes honeycombType = beeData.getHoneycombData().getHoneycombType();
             if (honeycombType.equals(HoneycombTypes.DEFAULT)) {
                 registerBlocks(colors, HoneycombBlock::getBlockColor, BeeInfoUtils.getBlock(ResourcefulBees.MOD_ID + ":" + s + "_honeycomb_block"));
             }
