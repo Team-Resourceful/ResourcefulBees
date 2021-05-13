@@ -75,8 +75,8 @@ public class CentrifugeTileEntity extends BlockEntity implements TickableBlockEn
     protected int[] honeycombSlots;
     protected int[] outputSlots;
 
-    protected final AutomationSensitiveItemStackHandler itemStackHandler;
-    protected final MultiFluidTank fluidTanks;
+    protected AutomationSensitiveItemStackHandler itemStackHandler;
+    protected MultiFluidTank fluidTanks;
     protected final CustomEnergyStorage energyStorage = createEnergy();
     protected final LazyOptional<IItemHandler> lazyOptional = LazyOptional.of(() -> itemStackHandler);
     protected final LazyOptional<IEnergyStorage> energyOptional = LazyOptional.of(() -> energyStorage);
