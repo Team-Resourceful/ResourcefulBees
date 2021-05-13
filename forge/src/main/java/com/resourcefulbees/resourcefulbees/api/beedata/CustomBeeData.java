@@ -10,14 +10,16 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 
+import java.util.function.Consumer;
+
 
 public class CustomBeeData {
 
     public static Codec<CustomBeeData> codec(String name) {
         return RecordCodecBuilder.create(instance -> instance.group(
-                CoreData.codec(name).fieldOf("CoreData").forGetter(CustomBeeData::getCoreData),
+                CoreData.codec(name).fieldOf("CoreData").orElseGet((Consumer<String>) s -> ResourcefulBees.LOGGER.error("CoreData is REQUIRED!"), null).forGetter(CustomBeeData::getCoreData),
                 HoneycombData.CODEC.fieldOf("HoneycombData").orElse(HoneycombData.DEFAULT).forGetter(CustomBeeData::getHoneycombData),
-                RenderData.CODEC.fieldOf("RenderData").forGetter(CustomBeeData::getRenderData),
+                RenderData.CODEC.fieldOf("RenderData").orElseGet((Consumer<String>) s -> ResourcefulBees.LOGGER.error("RenderData is REQUIRED!"), null).forGetter(CustomBeeData::getRenderData),
                 BreedData.CODEC.fieldOf("BreedData").orElse(BreedData.createDefault()).forGetter(CustomBeeData::getBreedData),
                 CentrifugeData.CODEC.fieldOf("CentrifugeData").orElse(CentrifugeData.createDefault()).forGetter(CustomBeeData::getCentrifugeData),
                 CombatData.CODEC.fieldOf("CombatData").orElse(CombatData.createDefault()).forGetter(CustomBeeData::getCombatData),
