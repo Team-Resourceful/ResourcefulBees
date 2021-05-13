@@ -2,7 +2,6 @@ package com.resourcefulbees.resourcefulbees.utils.color;
 
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 
-import java.awt.Color;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -20,9 +19,9 @@ public class RainbowColor {
 
     public static Color getColor() { return new Color(r,g,b); }
 
-    public static float[] getColorFloats() { return getColor().getColorComponents(null); }
+    public static float[] getColorFloats() { return getColor().getRGBComponents(null); }
 
-    public static int getRGB() { return getColor().getRGB(); }
+    public static int getRGB() { return getColor().getC(); }
 
 
     private static class ColorChange extends TimerTask {

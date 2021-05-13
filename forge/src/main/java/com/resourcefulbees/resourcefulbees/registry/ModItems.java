@@ -60,10 +60,6 @@ public class ModItems {
     public static final RegistryObject<Item> BEEPEDIA = ITEMS.register("beepedia", () -> new Beepedia(new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES).stacksTo(1)));
     public static final RegistryObject<Item> HONEY_DIPPER = ITEMS.register("honey_dipper", () -> new HoneyDipper(new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES).stacksTo(1)));
 
-    public static final RegistryObject<Item> T1_BEEHIVE_ITEM = ITEMS.register("t1_beehive", () -> new BlockItem(ModBlocks.T1_BEEHIVE.get(), new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
-    public static final RegistryObject<Item> T2_BEEHIVE_ITEM = ITEMS.register("t2_beehive", () -> new BlockItem(ModBlocks.T2_BEEHIVE.get(), new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
-    public static final RegistryObject<Item> T3_BEEHIVE_ITEM = ITEMS.register("t3_beehive", () -> new BlockItem(ModBlocks.T3_BEEHIVE.get(), new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
-    public static final RegistryObject<Item> T4_BEEHIVE_ITEM = ITEMS.register("t4_beehive", () -> new BlockItem(ModBlocks.T4_BEEHIVE.get(), new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
     public static final RegistryObject<Item> SCRAPER = ITEMS.register("scraper", () -> new Item(new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES).stacksTo(1)) {
         @Override
         public void appendHoverText(@NotNull ItemStack stack, @Nullable Level worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
@@ -81,8 +77,6 @@ public class ModItems {
             return 400;
         }
     });
-    public static final RegistryObject<Item> POLLEN = ITEMS.register("pollen", () -> new Pollen(new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
-    public static final RegistryObject<Item> FERTILIZER = ITEMS.register("fertilizer", () -> new Fertilizer(new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
     public static final RegistryObject<Item> CENTRIFUGE_ITEM = ITEMS.register("centrifuge", () -> new BlockItem(ModBlocks.CENTRIFUGE.get(), new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
     public static final RegistryObject<Item> MECHANICAL_CENTRIFUGE_ITEM = ITEMS.register("mechanical_centrifuge", () -> new BlockItem(ModBlocks.MECHANICAL_CENTRIFUGE.get(), new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
     public static final RegistryObject<Item> CENTRIFUGE_CONTROLLER_ITEM = ITEMS.register("centrifuge_controller", () -> new BlockItem(ModBlocks.CENTRIFUGE_CONTROLLER.get(), new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));

@@ -17,12 +17,11 @@ import org.jetbrains.annotations.NotNull;
 public class HoneyTankContainer extends ContainerWithStackMove {
 
     private final HoneyTankTileEntity honeyTankTileEntity;
-    private final Player player;
 
     public HoneyTankContainer(int id, Level world, BlockPos pos, Inventory inv) {
         super(ModContainers.HONEY_TANK_CONTAINER.get(), id);
 
-        this.player = inv.player;
+        Player player = inv.player;
         honeyTankTileEntity = (HoneyTankTileEntity) world.getBlockEntity(pos);
 
         if (getHoneyTankTileEntity() != null) {

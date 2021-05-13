@@ -1,28 +1,20 @@
 package com.resourcefulbees.resourcefulbees.init;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
-import com.resourcefulbees.resourcefulbees.data.BeeTrait;
-import com.resourcefulbees.resourcefulbees.data.JsonBeeTrait;
+import com.google.gson.JsonObject;
+import com.mojang.serialization.JsonOps;
+import com.resourcefulbees.resourcefulbees.api.beedata.BeeTrait;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.registry.TraitRegistry;
-import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.item.Item;
-import net.minecraftforge.registries.ForgeRegistries;
-import org.apache.commons.lang3.tuple.Pair;
+import net.minecraft.util.GsonHelper;
 
-import java.io.*;
-import java.nio.charset.StandardCharsets;
+import java.io.File;
+import java.io.IOException;
+import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.Locale;
 import java.util.stream.Stream;
-import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import static com.resourcefulbees.resourcefulbees.ResourcefulBees.LOGGER;
@@ -34,88 +26,18 @@ public class TraitSetup {
     }
 
     private static Path dictionaryPath;
+    private static final Gson GSON = new Gson();
 
     public static void buildCustomTraits() {
         LOGGER.info("Registering Custom Traits...");
         addTraits();
     }
 
-    private static void parseType(Reader reader, String name) {
-        Gson gson = new Gson();
+    private static void parseTrait(Reader reader, String name) {
         name = name.toLowerCase(Locale.ENGLISH).replace(" ", "_");
-        try {
-            JsonBeeTrait.JsonTrait jsonTrait = gson.fromJson(reader, JsonBeeTrait.JsonTrait.class);
-            BeeTrait.Builder builder = new BeeTrait.Builder(name);
-            parseDamageImmunities(jsonTrait, builder);
-            parseDamageTypes(jsonTrait, builder);
-            parseSpecialAbilities(jsonTrait, builder);
-            parseParticle(jsonTrait, builder);
-            parsePotionImmunities(jsonTrait, builder);
-            parsePotionDamageEffects(jsonTrait, builder);
-            parseBeepediaItem(jsonTrait, builder);
-            TraitRegistry.getRegistry().register(name, builder.build());
-        } catch (JsonSyntaxException e) {
-            String exception = String.format("Error was found trying to parse trait: %s. Json is invalid, validate it here : https://jsonlint.com/", name);
-            throw new JsonSyntaxException(exception);
-        }
-    }
-
-    private static void parseDamageImmunities(JsonBeeTrait.JsonTrait jsonTrait, BeeTrait.Builder builder) {
-        if (jsonTrait.getDamageImmunities() != null && jsonTrait.getDamageImmunities().length > 0) {
-            Arrays.stream(jsonTrait.getDamageImmunities()).forEach(builder::addDamageImmunity);
-        }
-    }
-
-    private static void parseDamageTypes(JsonBeeTrait.JsonTrait jsonTrait, BeeTrait.Builder builder) {
-        if (jsonTrait.getDamageTypes() != null && !jsonTrait.getDamageTypes().isEmpty()) {
-            jsonTrait.getDamageTypes().forEach(damageType ->
-                    builder.addDamageType(Pair.of(damageType.getDamageType(), damageType.getAmplifier())));
-        }
-    }
-
-    private static void parseSpecialAbilities(JsonBeeTrait.JsonTrait jsonTrait, BeeTrait.Builder builder) {
-        if (jsonTrait.getSpecialAbilities() != null && jsonTrait.getSpecialAbilities().length > 0) {
-            for (String ability : jsonTrait.getSpecialAbilities()) {
-                builder.addSpecialAbility(ability);
-            }
-        }
-    }
-
-    private static void parseParticle(JsonBeeTrait.JsonTrait jsonTrait, BeeTrait.Builder builder) {
-        if (jsonTrait.getParticleName() != null
-                && !jsonTrait.getParticleName().isEmpty()
-                && ForgeRegistries.PARTICLE_TYPES.getValue(new ResourceLocation(jsonTrait.getParticleName())) instanceof SimpleParticleType) {
-            builder.setParticleEffect((SimpleParticleType) ForgeRegistries.PARTICLE_TYPES.getValue(new ResourceLocation(jsonTrait.getParticleName())));
-        }
-    }
-
-    private static void parsePotionImmunities(JsonBeeTrait.JsonTrait jsonTrait, BeeTrait.Builder builder) {
-        if (jsonTrait.getPotionImmunities() != null && jsonTrait.getPotionImmunities().length > 0) {
-            for (String immunity : jsonTrait.getPotionImmunities()) {
-                MobEffect potion = ForgeRegistries.POTIONS.getValue(new ResourceLocation(immunity));
-                if (potion != null)
-                    builder.addPotionImmunity(potion);
-            }
-        }
-    }
-
-    private static void parsePotionDamageEffects(JsonBeeTrait.JsonTrait jsonTrait, BeeTrait.Builder builder) {
-        if (jsonTrait.getPotionDamageEffects() != null && !jsonTrait.getPotionDamageEffects().isEmpty()) {
-            jsonTrait.getPotionDamageEffects().forEach((traitPotionDamageEffect -> {
-                MobEffect potion = ForgeRegistries.POTIONS.getValue(new ResourceLocation(traitPotionDamageEffect.getEffectID()));
-                if (potion != null)
-                    builder.addDamagePotionEffect(Pair.of(potion, Mth.clamp(traitPotionDamageEffect.getStrength(), 0, 255)));
-            }));
-        }
-    }
-
-    private static void parseBeepediaItem(JsonBeeTrait.JsonTrait jsonTrait, BeeTrait.Builder builder) {
-        if (jsonTrait.getBeepediaItemID() != null && !jsonTrait.getBeepediaItemID().isEmpty()) {
-            Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(jsonTrait.getBeepediaItemID()));
-            if (item != null) {
-                builder.setBeepediaItem(item);
-            }
-        }
+        JsonObject jsonObject = GsonHelper.fromJson(GSON, reader, JsonObject.class);
+        BeeTrait beeTrait = BeeTrait.getCodec(name).parse(JsonOps.INSTANCE, jsonObject).getOrThrow(false, s -> LOGGER.error("Could not Create Bee Trait"));
+        TraitRegistry.getRegistry().register(name, beeTrait);
     }
 
     private static void addTraits() {
@@ -124,16 +46,16 @@ public class TraitSetup {
             zipStream.filter(f -> f.getFileName().toString().endsWith(".zip"))
                     .forEach(TraitSetup::addZippedType);
             jsonStream.filter(f -> f.getFileName().toString().endsWith(".json"))
-                    .forEach(TraitSetup::addType);
+                    .forEach(TraitSetup::addTrait);
         } catch (IOException e) {
             LOGGER.error("Could not stream custom traits!!", e);
         }
     }
 
-    private static void addType(Path file) {
+    private static void addTrait(Path file) {
         File f = file.toFile();
         try {
-            ModSetup.parseType(f, TraitSetup::parseType);
+            ModSetup.parseType(f, TraitSetup::parseTrait);
         } catch (IOException e) {
             LOGGER.error("File not found when parsing biome types");
         }
@@ -144,7 +66,7 @@ public class TraitSetup {
             zf.stream().forEach(zipEntry -> {
                 if (zipEntry.getName().endsWith(".json")) {
                     try {
-                        ModSetup.parseType(zf, zipEntry, TraitSetup::parseType);
+                        ModSetup.parseType(zf, zipEntry, TraitSetup::parseTrait);
                     } catch (IOException e) {
                         String name = zipEntry.getName();
                         name = name.substring(name.lastIndexOf("/") + 1, name.indexOf('.'));

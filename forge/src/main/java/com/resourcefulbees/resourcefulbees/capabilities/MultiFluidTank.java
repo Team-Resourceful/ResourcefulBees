@@ -9,15 +9,15 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.function.Predicate;
 
+@SuppressWarnings("UnusedReturnValue")
 public class MultiFluidTank implements IFluidHandler {
 
-    protected FluidTank[] fluidTanks;
+    protected final FluidTank[] fluidTanks;
 
     public MultiFluidTank(int capacity, int numberOfTanks) { this(capacity, numberOfTanks, fluidStack -> true); }
 

@@ -1,8 +1,7 @@
 package com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.mutations;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
-import com.resourcefulbees.resourcefulbees.api.beedata.mutation.outputs.BlockOutput;
+import com.resourcefulbees.resourcefulbees.api.beedata.outputs.BlockOutput;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.BeePage;
 import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
@@ -11,46 +10,29 @@ import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.*;
-import net.minecraft.tags.Tag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.material.Fluid;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.*;
 
 import static com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaPage.SUB_PAGE_WIDTH;
 
 public class BlockMutationPage extends MutationsPage {
 
-    List<Block> inputs;
+    final Set<Block> inputs;
     double outputChance;
-    List<Pair<Double, BlockOutput>> outputs = new ArrayList<>();
+    final List<Pair<Double, BlockOutput>> outputs = new ArrayList<>();
 
-    public BlockMutationPage(Entity bee, BeePage parent, Tag<?> blocks, Pair<Double, RandomCollection<BlockOutput>> outputs, MutationTypes type, int mutationCount, BeepediaScreen beepedia) {
+    public BlockMutationPage(Entity bee, BeePage parent, Block block, RandomCollection<BlockOutput> outputs, MutationTypes type, int mutationCount, BeepediaScreen beepedia) {
         super(bee, parent, type, mutationCount, beepedia);
-        if (blocks.getValues().get(0) instanceof Fluid) {
-            inputs = blocks.getValues().stream().map(f -> ((Fluid) f).defaultFluidState().createLegacyBlock().getBlock()).distinct().collect(Collectors.toList());
-        } else {
-            inputs = (List<Block>) blocks.getValues();
-        }
+        inputs = Collections.singleton(block);
         initOutputs(outputs);
     }
 
-    public BlockMutationPage(Entity bee, BeePage parent, Block block, Pair<Double, RandomCollection<BlockOutput>> outputs, MutationTypes type, int mutationCount, BeepediaScreen beepedia) {
-        super(bee, parent, type, mutationCount, beepedia);
-        inputs = new LinkedList<>(Collections.singleton(block));
-        initOutputs(outputs);
-    }
-
-    private void initOutputs(Pair<Double, RandomCollection<BlockOutput>> outputs) {
-        outputChance = outputs.getKey();
-        RandomCollection<BlockOutput> collection = outputs.getRight();
-        collection.getMap().forEach((b, m) -> this.outputs.add(Pair.of(collection.getAdjustedWeight(m.getWeight()), m)));
+    private void initOutputs(RandomCollection<BlockOutput> outputs) {
+        outputChance = outputs.next().getChance();
+        outputs.forEach(blockOutput -> this.outputs.add(Pair.of(outputs.getAdjustedWeight(blockOutput.getWeight()), blockOutput)));
     }
 
     @Override
@@ -66,7 +48,7 @@ public class BlockMutationPage extends MutationsPage {
     @Override
     public void draw(PoseStack matrix, int xPos, int yPos) {
         super.draw(matrix, xPos, yPos);
-        beepedia.drawSlot(matrix, inputs.get(inputCounter), xPos + 32, yPos + 32);
+        beepedia.drawSlot(matrix, inputs.iterator().next(), xPos + 32, yPos + 32);
         beepedia.drawSlotNoToolTip(matrix, outputs.get(outputCounter).getRight().getBlock(), xPos + 112, yPos + 32);
         drawWeight(matrix, outputs.get(outputCounter).getLeft(), xPos + 122, yPos + 54);
         if (outputChance < 1) {
@@ -91,9 +73,9 @@ public class BlockMutationPage extends MutationsPage {
             MutableComponent id = new TextComponent(output.getBlock().getRegistryName().toString()).withStyle(ChatFormatting.DARK_GRAY);
             tooltip.add(name);
             tooltip.add(id);
-            if (!output.getCompoundNBT().isEmpty()) {
+            if (output.getCompoundNBT().isPresent()) {
                 if (BeeInfoUtils.isShiftPressed()) {
-                    List<String> lore = BeeInfoUtils.getLoreLines(output.getCompoundNBT());
+                    List<String> lore = BeeInfoUtils.getLoreLines(output.getCompoundNBT().get());
                     lore.forEach(l -> tooltip.add(new TextComponent(l).withStyle(Style.EMPTY.withColor(TextColor.parseColor("dark_purple")))));
                 } else {
                     tooltip.add(new TranslatableComponent("gui.resourcefulbees.jei.tooltip.show_nbt").withStyle(Style.EMPTY.withColor(TextColor.parseColor("dark_purple"))));

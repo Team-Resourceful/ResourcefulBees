@@ -15,11 +15,13 @@ import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.fluids.HoneyFlowingFluid;
 import com.resourcefulbees.resourcefulbees.item.BeeJar;
 import com.resourcefulbees.resourcefulbees.item.CustomHoneyBottleItem;
-import com.resourcefulbees.resourcefulbees.lib.*;
+import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
+import com.resourcefulbees.resourcefulbees.lib.LightLevels;
+import com.resourcefulbees.resourcefulbees.lib.ModConstants;
+import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.ModFluids;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
-import com.resourcefulbees.resourcefulbees.utils.validation.ValidatorUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -42,7 +44,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
@@ -52,15 +53,14 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static com.resourcefulbees.resourcefulbees.lib.BeeConstants.*;
+import static com.resourcefulbees.resourcefulbees.lib.BeeConstants.VANILLA_BEE_COLOR;
 
 public class BeeInfoUtils {
 
@@ -70,8 +70,8 @@ public class BeeInfoUtils {
 
     public static void buildFamilyTree(CustomBeeData bee) {
         if (bee.getBreedData().hasParents()) {
-            Iterator<String> parent1 = Splitter.on(",").trimResults().split(bee.getBreedData().getParent1()).iterator();
-            Iterator<String> parent2 = Splitter.on(",").trimResults().split(bee.getBreedData().getParent2()).iterator();
+            Iterator<String> parent1 = bee.getBreedData().getParent1().iterator();
+            Iterator<String> parent2 = bee.getBreedData().getParent2().iterator();
 
             while (parent1.hasNext() && parent2.hasNext()) {
                 String p1 = parent1.next();
@@ -80,7 +80,7 @@ public class BeeInfoUtils {
             }
         }
 
-        BeeRegistry.getRegistry().familyTree.computeIfAbsent(Pair.of(bee.getName(), bee.getName()), k -> new RandomCollection<>()).add(bee.getBreedData().getBreedWeight(), bee);
+        BeeRegistry.getRegistry().familyTree.computeIfAbsent(Pair.of(bee.getCoreData().getName(), bee.getCoreData().getName()), k -> new RandomCollection<>()).add(bee.getBreedData().getBreedWeight(), bee);
     }
 
     public static Pair<String, String> sortParents(String parent1, String parent2) {
@@ -142,62 +142,48 @@ public class BeeInfoUtils {
      * @param resource Resource input as String in the form of "mod_id:item_or_block_id".
      * @return Returns New Resource Location for given input.
      */
-    public static ResourceLocation getResource(String resource) {
-        return new ResourceLocation(resource);
-    }
-
-    public static boolean isValidBlock(Block block) {
-        return block != null && block != Blocks.AIR;
-    }
-
-    public static boolean isValidFluid(Fluid fluid) {
-        return fluid != null && fluid != Fluids.EMPTY;
-    }
-
-    public static boolean isValidItem(Item item) {
-        return item != null && item != Items.AIR;
-    }
-
-    public static boolean isValidEntityType(EntityType<?> entityType) {
-        return entityType != null;
+    public static @Nullable ResourceLocation getResource(String resource) {
+        return ResourceLocation.tryParse(resource);
     }
 
     public static Item getItem(String itemName) {
-        return ForgeRegistries.ITEMS.getValue(getResource(itemName));
+        return ForgeRegistries.ITEMS.getValue(ResourceLocation.tryParse(itemName));
     }
 
     public static Block getBlock(String blockName) {
-        return ForgeRegistries.BLOCKS.getValue(getResource(blockName));
+        return ForgeRegistries.BLOCKS.getValue(ResourceLocation.tryParse(blockName));
     }
 
     public static Fluid getFluid(String fluidName) {
-        return ForgeRegistries.FLUIDS.getValue(getResource(fluidName));
+        return ForgeRegistries.FLUIDS.getValue(ResourceLocation.tryParse(fluidName));
     }
 
     public static Biome getBiome(String biomeName) {
-        return ForgeRegistries.BIOMES.getValue(getResource(biomeName));
+        return ForgeRegistries.BIOMES.getValue(ResourceLocation.tryParse(biomeName));
     }
 
-    @Nullable
-    public static EntityType<?> getEntityType(String entityName) {
-        return ForgeRegistries.ENTITIES.getValue(getResource(entityName));
+    public static ResourceLocation getCustomBeeEntityRegistryID(String beeType) {
+        return new ResourceLocation(ResourcefulBees.MOD_ID + ":" + beeType + "_bee");
     }
 
-    @Nullable
-    public static EntityType<?> getEntityType(ResourceLocation entityId) {
+    public static @Nullable EntityType<?> getEntityType(String entityName) {
+        return ForgeRegistries.ENTITIES.getValue(ResourceLocation.tryParse(entityName));
+    }
+
+    public static @Nullable EntityType<?> getEntityType(ResourceLocation entityId) {
         return ForgeRegistries.ENTITIES.getValue(entityId);
     }
 
     public static Tag<Item> getItemTag(String itemTag) {
-        return ItemTags.getAllTags().getTag(getResource(itemTag));
+        return ItemTags.getAllTags().getTag(ResourceLocation.tryParse(itemTag));
     }
 
     public static Tag<Fluid> getFluidTag(String fluidTag) {
-        return FluidTags.func_226157_a_().getTag(getResource(fluidTag));
+        return FluidTags.func_226157_a_().getTag(ResourceLocation.tryParse(fluidTag));
     }
 
     public static Tag<Block> getBlockTag(String blockTag) {
-        return BlockTags.getAllTags().getTag(getResource(blockTag));
+        return BlockTags.getAllTags().getTag(ResourceLocation.tryParse(blockTag));
     }
 
     public static Tag<Block> getValidApiaryTag() {
@@ -209,16 +195,6 @@ public class BeeInfoUtils {
     }
 
     private static final ResourceLocation VALID_APIARY = new ResourceLocation("resourcefulbees:valid_apiary");
-
-    public static boolean isTag(String input) {
-        if (ValidatorUtils.TAG_RESOURCE_PATTERN.matcher(input).matches()) {
-            return true;
-        } else if (input.equals(FLOWER_TAG_TALL)) {
-            return true;
-        } else if (input.equals(FLOWER_TAG_SMALL)) {
-            return true;
-        } else return input.equals(FLOWER_TAG_ALL);
-    }
 
     public static boolean isValidBreedItem(@NotNull ItemStack stack, BreedData breedData) {
         return breedData.getFeedItems().contains(stack.getItem());
@@ -262,32 +238,8 @@ public class BeeInfoUtils {
         }
     }
 
-    public static List<Block> getFlowers(String flower) {
-        List<Block> flowers = new LinkedList<>();
-        if (flower.equals(FLOWER_TAG_ALL)) {
-            Tag<Block> itemTag = BlockTags.FLOWERS;
-            if (itemTag != null) flowers.addAll(itemTag.getValues());
-        } else if (flower.equals(FLOWER_TAG_SMALL)) {
-            Tag<Block> itemTag = BlockTags.SMALL_FLOWERS;
-            if (itemTag != null) flowers.addAll(itemTag.getValues());
-        } else if (flower.equals(FLOWER_TAG_TALL)) {
-            Tag<Block> itemTag = BlockTags.TALL_FLOWERS;
-            if (itemTag != null) flowers.addAll(itemTag.getValues());
-        } else if (flower.startsWith(TAG_PREFIX)) {
-            Tag<Block> itemTag = BeeInfoUtils.getBlockTag(flower.replace(TAG_PREFIX, ""));
-            if (itemTag != null) flowers.addAll(itemTag.getValues());
-        } else {
-            flowers.add(getBlock(flower));
-        }
-        return flowers;
-    }
-
     public static Component getYesNo(boolean bool) {
-        if (bool) {
-            return new TranslatableComponent("gui.resourcefulbees.yes");
-        } else {
-            return new TranslatableComponent("gui.resourcefulbees.no");
-        }
+        return bool ? new TranslatableComponent("gui.resourcefulbees.yes") : new TranslatableComponent("gui.resourcefulbees.no");
     }
 
     public static TranslatableComponent getLightName(LightLevels light) {
@@ -301,9 +253,9 @@ public class BeeInfoUtils {
         }
     }
 
-    public static List<ItemStack> getBreedItems(CustomBeeData parent1Data) {
-        if (!parent1Data.getBreedData().hasFeedItems()) return Collections.emptyList();
-        return parent1Data.getBreedData().getFeedItems().stream().map(f -> new ItemStack(f, parent1Data.getBreedData().getFeedAmount())).collect(Collectors.toList());
+    public static List<ItemStack> getBreedItems(BreedData parent1Data) {
+        if (!parent1Data.getFeedItems().isEmpty()) return Collections.emptyList();
+        return parent1Data.getFeedItems().stream().map(f -> new ItemStack(f, parent1Data.getFeedAmount())).collect(Collectors.toList());
     }
 
     public static void ageBee(int ticksInHive, Bee beeEntity) {
@@ -343,13 +295,7 @@ public class BeeInfoUtils {
         if (beeEntity instanceof ICustomBee) {
             ICustomBee iCustomBee = (ICustomBee) beeEntity;
             nbt.putString(NBTConstants.NBT_BEE_TYPE, iCustomBee.getBeeType());
-            if (iCustomBee.getBeeData().getColorData().hasPrimaryColor()) {
-                beeColor = iCustomBee.getBeeData().getColorData().getPrimaryColor();
-            } else if (iCustomBee.getBeeData().getColorData().isRainbowBee()) {
-                beeColor = RAINBOW_COLOR;
-            } else if (iCustomBee.getBeeData().getColorData().hasHoneycombColor()) {
-                beeColor = iCustomBee.getBeeData().getColorData().getHoneycombColor();
-            }
+            beeColor = iCustomBee.getRenderData().getColorData().getJarColor().toString();
         }
 
         nbt.putString(NBTConstants.NBT_COLOR, beeColor);
@@ -410,9 +356,5 @@ public class BeeInfoUtils {
 
     public static Predicate<FluidStack> getHoneyPredicate() {
         return fluidStack -> fluidStack.getFluid().is(BeeInfoUtils.getFluidTag("forge:honey"));
-    }
-
-    public static ApiaryOutput[] getDefaultApiaryTypes() {
-        return new ApiaryOutput[]{Config.T1_APIARY_OUTPUT.get(), Config.T2_APIARY_OUTPUT.get(), Config.T3_APIARY_OUTPUT.get(), Config.T4_APIARY_OUTPUT.get()};
     }
 }

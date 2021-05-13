@@ -1,16 +1,20 @@
 {
-  "flower": "ALL",
-  "maxTimeInHive": 600,
-  "hasHoneycomb": true,
-  "baseLayerTexture": "/creeper/creeper_bee",
-  "traits" : ["creeper"],
-  "ColorData": {
-    "isBeeColored": false,
+  "CoreData":{
+    "flower": "minecraft:flowers",
+    "maxTimeInHive": 600,
+    "traits" : ["creeper"]
+  },
+  "HoneycombData": {
+    "honeycombType": "DEFAULT",
     "honeycombColor": "#0C9F0A",
-    "isGlowing": true,
-    "glowColor": "#E2D3D3",
-    "glowingPulse": 2,
-    "emissiveLayerTexture": "/creeper/creeper_bee_emissive"
+    "honeycomb": "resourcefulbees:creeper_honeycomb",
+    "honeycombBlock": "resourcefulbees:creeper_honeycomb_block"
+  },
+  "RenderData": {
+    "layers": [
+      {"texture": "/creeper/creeper_bee"},
+      {"isGlowing": true, "texture": "/creeper/creeper_bee_emissive", "color": "#E2D3D3", "pulseFrequency": 10}
+    ]
   },
   "MutationData": {
     "hasMutation": true,
@@ -27,8 +31,9 @@
   },
   "CentrifugeData": {
     "hasCentrifugeOutput": true,
-    "mainOutput": "minecraft:gunpowder",
-    "mainOutputCount": 4
+    "itemOutputs": [
+      {"id": "minecraft:gunpowder", "count": 4}
+    ]
   },
   "SpawnData": {
     "canSpawnInWorld": true,

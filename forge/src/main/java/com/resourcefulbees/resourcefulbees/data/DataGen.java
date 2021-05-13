@@ -2,14 +2,17 @@ package com.resourcefulbees.resourcefulbees.data;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.IBeeRegistry;
+import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.init.BeeSetup;
+import com.resourcefulbees.resourcefulbees.lib.HoneycombTypes;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.ModEntities;
 import com.resourcefulbees.resourcefulbees.registry.TraitRegistry;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.BlockItem;
 import net.minecraftforge.fml.RegistryObject;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
@@ -149,22 +152,26 @@ public class DataGen {
     private static void generateCombItemTags() {
         TAGS.put(new ResourceLocation(ResourcefulBees.MOD_ID, "tags/items/resourceful_honeycomb.json"),
                 BEE_REGISTRY.getBees().values().stream()
-                        .filter(bee -> bee.hasHoneycomb() && !bee.hasCustomDrop())
-                        .map(bee -> bee.getCombRegistryObject().getId()).collect(Collectors.toSet()));
+                        .map(CustomBeeData::getHoneycombData)
+                        .filter(honeycombDataCodec -> honeycombDataCodec.getHoneycombType() == HoneycombTypes.DEFAULT)
+                        .map(honeycombDataCodec -> honeycombDataCodec.getHoneycomb().getRegistryName()).collect(Collectors.toSet()));
     }
 
     private static void generateCombBlockItemTags() {
         TAGS.put(new ResourceLocation(ResourcefulBees.MOD_ID, "tags/items/resourceful_honeycomb_block.json"),
                 BEE_REGISTRY.getBees().values().stream()
-                        .filter(bee -> bee.hasHoneycomb() && !bee.hasCustomDrop())
-                        .map(bee -> bee.getCombBlockItemRegistryObject().getId()).collect(Collectors.toSet()));
+                        .map(CustomBeeData::getHoneycombData)
+                        .filter(honeycombDataCodec -> honeycombDataCodec.getHoneycombType() == HoneycombTypes.DEFAULT)
+                        .map(honeycombDataCodec -> honeycombDataCodec.getHoneycombBlock().getRegistryName()).collect(Collectors.toSet()));
     }
 
     private static void generateCombBlockTags() {
         TAGS.put(new ResourceLocation(ResourcefulBees.MOD_ID, "tags/blocks/resourceful_honeycomb_block.json"),
                 BEE_REGISTRY.getBees().values().stream()
-                .filter(bee -> bee.hasHoneycomb() && !bee.hasCustomDrop())
-                .map(bee -> bee.getCombBlockRegistryObject().getId()).collect(Collectors.toSet()));
+                        .map(CustomBeeData::getHoneycombData)
+                        .filter(honeycombDataCodec -> honeycombDataCodec.getHoneycombType() == HoneycombTypes.DEFAULT)
+                        .filter(honeycombDataCodec -> honeycombDataCodec.getHoneycombBlock() instanceof BlockItem)
+                        .map(honeycombDataCodec -> ((BlockItem) honeycombDataCodec.getHoneycombBlock()).getBlock().getRegistryName()).collect(Collectors.toSet()));
     }
 
     private static void generateHoneyBottleTags() {

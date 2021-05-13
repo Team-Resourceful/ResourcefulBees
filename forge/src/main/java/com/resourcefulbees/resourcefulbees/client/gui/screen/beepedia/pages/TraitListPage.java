@@ -1,10 +1,10 @@
 package com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.resourcefulbees.resourcefulbees.client.gui.widget.ListButton;
 import com.resourcefulbees.resourcefulbees.client.gui.widget.SubButtonList;
+import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -35,16 +35,14 @@ public class TraitListPage extends BeeDataPage {
 
     @Override
     public void addSearch() {
-        for (String traitName : beeData.getTraitNames()) {
-            parent.addSearchTrait(traitName);
-        }
+        beeData.getTraitData().getTraits().forEach(s -> parent.addSearchTrait(s));
     }
 
     private void initList() {
         Map<String, TraitPage> traitPages = beepedia.getTraits(beeData);
         SortedMap<String, ListButton> buttons = new TreeMap<>();
         for (Map.Entry<String, TraitPage> e : traitPages.entrySet()) {
-            ItemStack stack = new ItemStack(e.getValue().trait.getBeepediaItem());
+            ItemStack stack = new ItemStack(e.getValue().trait.getDisplayItem());
             TranslatableComponent text = new TranslatableComponent(e.getValue().trait.getTranslationKey());
             Button.OnPress onPress = button -> {
                 BeepediaScreen.saveScreenState();

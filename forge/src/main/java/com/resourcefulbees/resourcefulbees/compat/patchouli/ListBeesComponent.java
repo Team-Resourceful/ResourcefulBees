@@ -13,7 +13,6 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import vazkii.patchouli.api.IComponentRenderContext;
@@ -27,7 +26,7 @@ import java.util.function.UnaryOperator;
 
 public class ListBeesComponent implements ICustomComponent {
 
-    transient float defaultRotation = -45.0F;
+    final transient float defaultRotation = -45.0F;
     transient float renderScale;
     transient float offset;
     transient int page;
@@ -37,11 +36,11 @@ public class ListBeesComponent implements ICustomComponent {
     transient int xOffset;
     transient int yOffset;
 
-    transient List<Pair<EntityType<?>, Optional<Entity>>> bees = new LinkedList<>();
+    final transient List<Pair<EntityType<?>, Optional<Entity>>> bees = new LinkedList<>();
 
     @Override
     public void build(int xOffset, int yOffset, int page) {
-        BeeRegistry.getRegistry().getBees().forEach((s, b) -> bees.add(Pair.of(ForgeRegistries.ENTITIES.getValue(b.getEntityTypeRegistryID()), Optional.empty())));
+        BeeRegistry.getRegistry().getBees().forEach((s, b) -> bees.add(Pair.of(b.getEntityType(), Optional.empty())));
         pageCount = bees.size();
         this.xOffset = xOffset;
         this.yOffset = yOffset;

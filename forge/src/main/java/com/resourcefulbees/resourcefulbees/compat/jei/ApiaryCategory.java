@@ -1,9 +1,11 @@
 package com.resourcefulbees.resourcefulbees.compat.jei;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
+import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.compat.jei.ingredients.EntityIngredient;
 import com.resourcefulbees.resourcefulbees.config.Config;
-import com.resourcefulbees.resourcefulbees.lib.ApiaryOutput;
+import com.resourcefulbees.resourcefulbees.lib.ApiaryOutputs;
+import com.resourcefulbees.resourcefulbees.lib.HoneycombTypes;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import mezz.jei.api.constants.VanillaTypes;
@@ -18,7 +20,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -41,13 +42,13 @@ public class ApiaryCategory extends BaseCategory<ApiaryCategory.Recipe> {
         final List<Item> apiaryTiers = new ArrayList<>(Arrays.asList(ModItems.T1_APIARY_ITEM.get(), ModItems.T2_APIARY_ITEM.get(), ModItems.T3_APIARY_ITEM.get(), ModItems.T4_APIARY_ITEM.get()));
 
         BeeRegistry.getRegistry().getBees().forEach(((s, customBeeData) -> {
-            ApiaryOutput[] outputs = customBeeData.getApiaryOutputsTypes();
-            int[] customAmounts = customBeeData.getApiaryOutputAmounts();
-            if (customBeeData.hasHoneycomb()) {
+            List<ApiaryOutputs> outputs = customBeeData.getHoneycombData().getApiaryOutputTypes();
+            List<Integer> customAmounts = customBeeData.getHoneycombData().getApiaryOutputAmounts();
+            if (customBeeData.getHoneycombData().getHoneycombType() != HoneycombTypes.NONE) {
                 for (int i = 0; i < 4; i++){
-                    Item outputItem = outputs[i].equals(ApiaryOutput.COMB) ? customBeeData.getCombRegistryObject().get() : customBeeData.getCombBlockItemRegistryObject().get();
-                    ItemStack outputStack = new ItemStack(outputItem, customAmounts != null && customAmounts[i] > 0 ? customAmounts[i] :  outputQuantities[i]);
-                    recipes.add(new Recipe(outputStack, customBeeData.getName(), new ItemStack(apiaryTiers.get(i))));
+                    Item outputItem = outputs.get(i).equals(ApiaryOutputs.COMB) ? customBeeData.getHoneycombData().getHoneycomb() : customBeeData.getHoneycombData().getHoneycombBlock();
+                    ItemStack outputStack = new ItemStack(outputItem, customAmounts != null && customAmounts.get(i) > 0 ? customAmounts.get(i) :  outputQuantities[i]);
+                    recipes.add(new Recipe(outputStack, customBeeData, new ItemStack(apiaryTiers.get(i))));
                 }
             }
         }));
@@ -75,10 +76,10 @@ public class ApiaryCategory extends BaseCategory<ApiaryCategory.Recipe> {
 
     public static class Recipe {
         private final ItemStack comb;
-        private final String beeType;
+        private final CustomBeeData beeType;
         private final ItemStack apiary;
 
-        public Recipe(ItemStack comb, String beeType, ItemStack apiary) {
+        public Recipe(ItemStack comb, CustomBeeData beeType, ItemStack apiary) {
             this.comb = comb;
             this.beeType = beeType;
             this.apiary = apiary;
@@ -87,7 +88,7 @@ public class ApiaryCategory extends BaseCategory<ApiaryCategory.Recipe> {
         public ItemStack getComb() {
             return this.comb;
         }
-        public String getBeeType() {
+        public CustomBeeData getBeeType() {
             return this.beeType;
         }
         public ItemStack getApiary() { return this.apiary; }

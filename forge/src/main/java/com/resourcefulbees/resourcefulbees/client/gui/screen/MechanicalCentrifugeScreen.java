@@ -10,13 +10,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
-
 public class MechanicalCentrifugeScreen extends AbstractContainerScreen<MechanicalCentrifugeContainer> {
     public MechanicalCentrifugeScreen(MechanicalCentrifugeContainer screenContainer, Inventory inventory, Component titleIn) {
         super(screenContainer, inventory, titleIn);
     }
-    int textColor = 0x404040;
+    final int textColor = 0x404040;
 
     @Override
     protected void renderBg(@NotNull PoseStack matrix, float partialTicks, int mouseX, int mouseY) {

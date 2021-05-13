@@ -34,8 +34,8 @@ public class AutomationSensitiveItemStackHandler extends ItemStackHandler {
     public static final IAcceptor ACCEPT_FALSE = (a, b, c) -> false;
     public static final IRemover REMOVE_FALSE = (a, b) -> false;
 
-    IAcceptor acceptor;
-    IRemover remover;
+    final IAcceptor acceptor;
+    final IRemover remover;
 
     public AutomationSensitiveItemStackHandler(NonNullList<ItemStack> stacks, IAcceptor acceptor, IRemover remover) {
         super(stacks);

@@ -49,7 +49,7 @@ public class UpgradeItem extends Item {
 
     public static class Builder {
 
-        CompoundTag upgradeData = new CompoundTag();
+        final CompoundTag upgradeData = new CompoundTag();
 
         public CompoundTag build() {
             return upgradeData.isEmpty() ? null : upgradeData;

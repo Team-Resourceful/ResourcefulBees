@@ -2,7 +2,6 @@ package com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
-import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.BeePage;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.HomePage;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.HoneyPage;
@@ -10,6 +9,7 @@ import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.Trai
 import com.resourcefulbees.resourcefulbees.client.gui.widget.ButtonList;
 import com.resourcefulbees.resourcefulbees.client.gui.widget.ModImageButton;
 import com.resourcefulbees.resourcefulbees.client.gui.widget.TabImageButton;
+import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.entity.passive.KittenBee;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
@@ -65,15 +65,15 @@ public class BeepediaScreen extends Screen {
 
     EditBox searchBox;
 
-    protected int xSize;
-    protected int ySize;
+    protected final int xSize;
+    protected final int ySize;
     protected int guiLeft;
     protected int guiTop;
     protected int ticksOpen = 0;
 
-    public Map<String, BeePage> bees = new TreeMap<>();
-    protected Map<String, TraitPage> traits = new TreeMap<>();
-    protected Map<String, HoneyPage> honey = new TreeMap<>();
+    public final Map<String, BeePage> bees = new TreeMap<>();
+    protected final Map<String, TraitPage> traits = new TreeMap<>();
+    protected final Map<String, HoneyPage> honey = new TreeMap<>();
 
     ButtonList beesList;
     ButtonList traitsList;
@@ -84,9 +84,9 @@ public class BeepediaScreen extends Screen {
     PageType activeListType = PageType.BEE;
     ButtonList activeList = null;
 
-    ResourceLocation background = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/screen.png");
-    ResourceLocation buttonImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/button.png");
-    ResourceLocation slotImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/slot.png");
+    final ResourceLocation background = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/screen.png");
+    final ResourceLocation buttonImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/button.png");
+    final ResourceLocation slotImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/slot.png");
     private Button backButton;
     private final ResourceLocation homeButtons = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/home_buttons.png");
     private final List<ItemTooltip> itemTooltips = new LinkedList<>();
@@ -402,8 +402,8 @@ public class BeepediaScreen extends Screen {
 
     public Map<String, TraitPage> getTraits(CustomBeeData beeData) {
         Map<String, TraitPage> pages = new HashMap<>();
-        if (beeData.getTraitNames() == null || beeData.getTraitNames().length == 0) return pages;
-        for (String traitName : beeData.getTraitNames()) {
+        if (!beeData.getTraitData().getTraits().isEmpty()) return pages;
+        for (String traitName : beeData.getTraitData().getTraits()) {
             if (traitName != null) pages.put(traitName, traits.get(traitName));
         }
         return pages;
@@ -609,7 +609,7 @@ public class BeepediaScreen extends Screen {
     }
 
     private boolean mapContainsBottle(BeePage page, ItemStack bottleData) {
-        Item beeBottle = BeeInfoUtils.getItem(page.beeData.getCentrifugeData().getBottleOutput());
+        Item beeBottle = null;    /////BOTTLE OUTPUTS DON'T EXIST ANYMORE
         return beeBottle == bottleData.getItem();
     }
 
@@ -621,7 +621,7 @@ public class BeepediaScreen extends Screen {
     }
 
     private boolean mapContainsTraitName(BeePage page, String traitName) {
-        return page.beeData.hasTraitNames() && Arrays.asList(page.beeData.getTraitNames()).contains(traitName);
+        return !page.beeData.getTraitData().getTraits().isEmpty() && page.beeData.getTraitData().getTraits().contains(traitName);
     }
 
 
@@ -629,7 +629,7 @@ public class BeepediaScreen extends Screen {
         // main pages
         BEE,
         HONEY,
-        TRAIT;
+        TRAIT
     }
 
     private class ItemTooltip {
@@ -671,9 +671,9 @@ public class BeepediaScreen extends Screen {
     }
 
     private static class Interaction {
-        int xPos;
-        int yPos;
-        Supplier<Boolean> supplier;
+        final int xPos;
+        final int yPos;
+        final Supplier<Boolean> supplier;
 
         public Interaction(int xPos, int yPos, Supplier<Boolean> supplier) {
             this.xPos = xPos;

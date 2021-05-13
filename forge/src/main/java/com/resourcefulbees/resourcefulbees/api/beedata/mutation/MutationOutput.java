@@ -1,40 +1,45 @@
 package com.resourcefulbees.resourcefulbees.api.beedata.mutation;
 
-import com.google.gson.JsonElement;
-import com.mojang.serialization.JsonOps;
-import com.resourcefulbees.resourcefulbees.api.beedata.MutationData;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.nbt.CompoundTag;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Locale;
+import net.minecraft.resources.ResourceLocation;
 
 public class MutationOutput {
-    private final String outputID;
-    private JsonElement nbtData;
-    private transient CompoundTag nbt;
+
+    public static final Codec<MutationOutput> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            ResourceLocation.CODEC.fieldOf("outputID").forGetter(MutationOutput::getOutputID),
+            Codec.INT.fieldOf("count").orElse(1).forGetter(MutationOutput::getCount),
+            Codec.DOUBLE.fieldOf("weight").orElse(1d).forGetter(MutationOutput::getWeight),
+            CompoundTag.CODEC.fieldOf("nbtData").orElse(new CompoundTag()).forGetter(MutationOutput::getNbt)
+            ).apply(instance, MutationOutput::new));
+
+    private final ResourceLocation outputID;
+    private final CompoundTag nbt;
+    private final int count;
     private final double weight;
 
-    public MutationOutput(String outputID, double weight, CompoundTag nbt) {
+    public MutationOutput(ResourceLocation outputID, int count, double weight, CompoundTag tag) {
         this.outputID = outputID;
+        this.count = count;
         this.weight = weight;
-        this.nbt = nbt;
+        this.nbt = tag;
     }
 
     public CompoundTag getNbt() {
-        return nbt == null ? initNbt() : nbt;
-    }
-
-    private CompoundTag initNbt() {
-        nbt = nbtData == null ? new CompoundTag() : CompoundTag.CODEC.parse(JsonOps.INSTANCE, nbtData).resultOrPartial(e -> MutationData.LOGGER.warn("Could not deserialize NBT: [{}]", nbtData)).orElse(new CompoundTag());
         return nbt;
     }
 
-    public double getWeight() {
-        return weight <= 0 ? 1 : weight;
+    public int getCount() {
+        return count;
     }
 
-    public @Nullable String getOutputID() {
-        return outputID.toLowerCase(Locale.ENGLISH);
+    public double getWeight() {
+        return weight;
+    }
+
+    public ResourceLocation getOutputID() {
+        return outputID;
     }
 
     @Override

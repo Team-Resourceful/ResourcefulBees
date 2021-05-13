@@ -45,7 +45,7 @@ public class ValidatedApiaryScreen extends AbstractContainerScreen<ValidatedApia
     private float sliderProgress;
     private boolean clickedOnScroll;
 
-    private ApiaryTileEntity apiaryTileEntity;
+    private final ApiaryTileEntity apiaryTileEntity;
 
     private Button importButton;
     private Button exportButton;

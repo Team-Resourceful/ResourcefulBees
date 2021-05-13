@@ -26,7 +26,6 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +33,7 @@ public class BeeBox extends Item {
 
     private static final String ITEM_DOT = "item.";
 
-    boolean isTemp;
+    final boolean isTemp;
 
     public BeeBox(Properties properties, boolean isTemp) {
         super(properties);

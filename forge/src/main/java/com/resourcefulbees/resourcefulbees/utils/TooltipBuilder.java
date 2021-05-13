@@ -11,7 +11,7 @@ import java.util.List;
 
 public class TooltipBuilder {
 
-    List<Component> tooltip = new ArrayList<>();
+    final List<Component> tooltip = new ArrayList<>();
 
     public TooltipBuilder addTip(String text) {
         tooltip.add(new TextComponent(text));

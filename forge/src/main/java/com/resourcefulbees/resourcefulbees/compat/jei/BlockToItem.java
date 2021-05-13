@@ -3,8 +3,9 @@ package com.resourcefulbees.resourcefulbees.compat.jei;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.IBeeRegistry;
+import com.resourcefulbees.resourcefulbees.api.beedata.outputs.ItemOutput;
+import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.api.beedata.MutationData;
-import com.resourcefulbees.resourcefulbees.api.beedata.mutation.outputs.ItemOutput;
 import com.resourcefulbees.resourcefulbees.compat.jei.ingredients.EntityIngredient;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import mezz.jei.api.constants.VanillaTypes;
@@ -15,10 +16,8 @@ import mezz.jei.api.ingredients.IIngredients;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.Tag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.material.Fluid;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -42,38 +41,23 @@ public class BlockToItem extends BaseCategory<BlockToItem.Recipe> {
     public static List<Recipe> getMutationRecipes() {
         List<Recipe> recipes = new ArrayList<>();
 
-        BEE_REGISTRY.getBees().forEach(((s, beeData) -> {
+        BEE_REGISTRY.getBees().values().forEach((beeData -> {
             MutationData mutationData = beeData.getMutationData();
-            if (mutationData.hasMutation()) {
-                if (mutationData.hasJeiBlockTagItemMutations()) {
-                    mutationData.getJeiBlockTagItemMutations()
-                            .forEach((iTag, doubleRandomCollectionPair) -> doubleRandomCollectionPair.getRight()
-                                    .forEach(itemOutput -> recipes.add(new Recipe(null, iTag, itemOutput, doubleRandomCollectionPair.getLeft(), RecipeUtils.getEffectiveWeight(doubleRandomCollectionPair.getRight(), itemOutput.getWeight()), s)))
-                            );
-                }
-                if (mutationData.hasJeiItemMutations()) {
-                    mutationData.getJeiItemMutations()
-                            .forEach((block, doubleRandomCollectionPair) -> doubleRandomCollectionPair.getRight()
-                                    .forEach(itemOutput -> recipes.add(new Recipe(block, null, itemOutput, doubleRandomCollectionPair.getLeft(), RecipeUtils.getEffectiveWeight(doubleRandomCollectionPair.getRight(), itemOutput.getWeight()), s)))
-                            );
-                }
+            if (mutationData.hasMutation() && !mutationData.getBlockMutations().isEmpty()) {
+                mutationData.getItemMutations()
+                        .forEach((block, collection) ->  collection
+                            .forEach(itemOutput -> recipes.add(new Recipe(block, itemOutput, itemOutput.getChance(), RecipeUtils.getEffectiveWeight(collection, itemOutput.getWeight()), beeData)))
+                        );
             }
         }));
         return recipes;
     }
 
     @Override
-    public void setIngredients(BlockToItem.Recipe recipe, @NotNull IIngredients ingredients) {
-        if (recipe.tagInput != null && recipe.tagInput.getValues().get(0) instanceof Fluid) {
-            RecipeUtils.setFluidInput(ingredients, recipe.tagInput, recipe.blockInput);
-        } else {
-            RecipeUtils.setBlockInput(ingredients, recipe.tagInput, recipe.blockInput);
-        }
+    public void setIngredients(BlockToItem.@NotNull Recipe recipe, @NotNull IIngredients ingredients) {
+        RecipeUtils.setBlockInput(ingredients, null, recipe.blockInput);
 
         ItemStack itemStack = new ItemStack(recipe.itemOutput.getItem());
-        if (!recipe.itemOutput.getCompoundNBT().isEmpty()) {
-            itemStack.setTag(recipe.itemOutput.getCompoundNBT());
-        }
         ingredients.setOutput(VanillaTypes.ITEM, itemStack);
         ingredients.setInput(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(recipe.beeType, -45.0f));
     }
@@ -100,15 +84,13 @@ public class BlockToItem extends BaseCategory<BlockToItem.Recipe> {
 
     protected static class Recipe {
         private final @Nullable Block blockInput;
-        private final @Nullable Tag<?> tagInput;
         private final @NotNull ItemOutput itemOutput;
         private final double chance;
         private final double weight;
-        private final @NotNull String beeType;
+        private final @NotNull CustomBeeData beeType;
 
-        public Recipe(@Nullable Block blockInput, @Nullable Tag<?> tagInput, @NotNull ItemOutput itemOutput, double chance, double weight, @NotNull String beeType) {
+        public Recipe(@Nullable Block blockInput, @NotNull ItemOutput itemOutput, double chance, double weight, @NotNull CustomBeeData beeType) {
             this.blockInput = blockInput;
-            this.tagInput = tagInput;
             this.itemOutput = itemOutput;
             this.chance = chance;
             this.weight = weight;

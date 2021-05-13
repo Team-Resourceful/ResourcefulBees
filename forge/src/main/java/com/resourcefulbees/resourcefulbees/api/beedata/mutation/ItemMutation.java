@@ -1,30 +1,21 @@
 package com.resourcefulbees.resourcefulbees.api.beedata.mutation;
 
 
-import com.resourcefulbees.resourcefulbees.api.beedata.mutation.outputs.ItemOutput;
+import com.resourcefulbees.resourcefulbees.api.beedata.outputs.ItemOutput;
 import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
-import net.minecraft.tags.Tag;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Block;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Collections;
 import java.util.List;
 
 public class ItemMutation {
-    private EntityType<?> parent;
-    private List<Block> inputs;
-    private Pair<Double, RandomCollection<ItemOutput>> outputs;
-    private int mutationCount;
+    private final EntityType<?> parent;
+    private final List<Block> inputs;
+    private final RandomCollection<ItemOutput> outputs;
+    private final int mutationCount;
 
-    public ItemMutation(EntityType<?> parent, Tag<?> inputs, Pair<Double, RandomCollection<ItemOutput>> outputs, int mutationCount) {
-        this.parent = parent;
-        this.inputs = (List<Block>) inputs.getValues();
-        this.outputs = outputs;
-        this.mutationCount = mutationCount;
-    }
-
-    public ItemMutation(EntityType<?> parent, Block input, Pair<Double, RandomCollection<ItemOutput>> outputs, int mutationCount) {
+    public ItemMutation(EntityType<?> parent, Block input, RandomCollection<ItemOutput> outputs, int mutationCount) {
         this.parent = parent;
         this.inputs = Collections.singletonList(input);
         this.outputs = outputs;
@@ -39,7 +30,7 @@ public class ItemMutation {
         return inputs;
     }
 
-    public Pair<Double, RandomCollection<ItemOutput>> getOutputs() {
+    public RandomCollection<ItemOutput> getOutputs() {
         return outputs;
     }
 

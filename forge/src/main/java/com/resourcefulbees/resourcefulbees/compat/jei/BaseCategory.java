@@ -32,7 +32,7 @@ public class BaseCategory<T> implements IRecipeCategory<T> {
         this.icon = icon;
         this.recipeClass = recipeClass;
 
-        this.beeHive = guiHelper.createDrawableIngredient(new ItemStack(ModItems.T1_BEEHIVE_ITEM.get()));
+        this.beeHive = guiHelper.createDrawableIngredient(new ItemStack(ModItems.OAK_BEE_NEST_ITEM.get()));
         this.info = guiHelper.createDrawable(ICONS, 16, 0, 9, 9);
     }
 

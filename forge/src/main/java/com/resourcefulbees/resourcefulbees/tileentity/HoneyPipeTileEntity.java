@@ -22,8 +22,8 @@ public class HoneyPipeTileEntity extends BlockEntity implements TickableBlockEnt
 
     private Direction inputSide = null;
 
-    FluidTank tank = new FluidTank(Config.MAX_PIPE_FLOW.get(), BeeInfoUtils.getHoneyPredicate());
-    private LazyOptional<IFluidHandler> fluidOptional = LazyOptional.of(this::getFluidTank);
+    final FluidTank tank = new FluidTank(Config.MAX_PIPE_FLOW.get(), BeeInfoUtils.getHoneyPredicate());
+    private final LazyOptional<IFluidHandler> fluidOptional = LazyOptional.of(this::getFluidTank);
 
     public HoneyPipeTileEntity() {
         super(ModBlockEntityTypes.HONEY_PIPE_TILE_ENTITY.get());
@@ -39,7 +39,8 @@ public class HoneyPipeTileEntity extends BlockEntity implements TickableBlockEnt
 
     @Override
     public void tick() {
-        if (inputSide == null) return;
+        if (inputSide == null) {
+        }
     }
 
     public @NotNull FluidTank getFluidTank() {

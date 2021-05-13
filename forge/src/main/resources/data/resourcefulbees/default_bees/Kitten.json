@@ -1,0 +1,42 @@
+{
+  "CoreData": {
+    "flower": "minecraft:beds",
+    "maxTimeInHive": 600,
+    "sizeModifier": 0.75,
+    "apiaryOutputAmounts": [1,2,3,4]
+  },
+  "HoneycombData": {
+    "honeycombType": "CUSTOM",
+    "honeycomb": "resourcefulbees:catnip_honeycomb",
+    "honeycombBlock": "resourcefulbees:catnip_honeycomb_block"
+  },
+  "CentrifugeData": {
+    "hasCentrifugeOutput": true,
+    "itemOutputs": [
+      {"item":{"id": "minecraft:cat_spawn_egg"}, "weight": 0.01},
+      {"item":{"id": "resourcefulbees:catnip_honey_bottle"}, "weight": 0.1}
+    ]
+  },
+  "RenderData": {
+    "isBeeColored": false,
+    "layers": [{"texture": "/kitten/bee"}],
+    "ColorData": {
+      "primaryColor": "#EAA939",
+      "secondaryColor": "#4C483B"
+    },
+    "baseModelType": "KITTEN"
+  },
+  "SpawnData": {
+    "canSpawnInWorld": true,
+    "biomeWhitelist": "tag:rare",
+    "biomeBlacklist": "",
+    "spawnWeight": 3,
+    "minGroupSize": 1,
+    "maxGroupSize": 1,
+    "lightLevel": "DAY"
+  },
+  "TraitData": {
+    "hasTraits": true,
+    "traits": [ "kitten" ]
+  }
+}

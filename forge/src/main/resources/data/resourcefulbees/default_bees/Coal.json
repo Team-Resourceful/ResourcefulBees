@@ -1,11 +1,18 @@
 {
-  "flower": "tag:forge:storage_blocks/coal",
-  "maxTimeInHive": 600,
-  "hasHoneycomb": true,
-  "baseLayerTexture": "ores/coal/coal_bee",
-  "ColorData": {
-    "isBeeColored": false,
+  "CoreData": {
+    "flower": [
+      "minecraft:coal_block"
+    ],
+    "maxTimeInHive": 600
+  },
+  "HoneycombData": {
+    "honeycombType": "DEFAULT",
     "honeycombColor": "#303030",
+    "honeycomb": "resourcefulbees:diamondold_honeycomb",
+    "honeycombBlock": "resourcefulbees:diamondold_honeycomb_block"
+  },
+  "RenderData": {
+    "layers": [{ "texture": "ores/coal/coal_bee"}],
     "modelType": "ORE"
   },
   "MutationData": {
@@ -23,8 +30,9 @@
   },
   "CentrifugeData": {
     "hasCentrifugeOutput": true,
-    "mainOutput": "minecraft:coal",
-    "mainOutputCount": 16
+    "itemOutputs": [
+      {"item":{"id": "minecraft:coal", "Count": 16}}
+    ]
   },
   "SpawnData": {
     "canSpawnInWorld": true,
@@ -35,6 +43,5 @@
     "feedItem": "minecraft:poppy",
     "feedAmount": 4,
     "isBreedable": true
-  },
-  "TraitData": {}
+  }
 }

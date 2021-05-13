@@ -1,5 +1,6 @@
 package com.resourcefulbees.resourcefulbees.api;
 
+import com.google.gson.JsonObject;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
 
@@ -12,6 +13,7 @@ import java.util.Set;
  *     If you want to work with a already there implementation look at com.resourcefulbees.resourcefulbees.registry.BeeRegistry
  * </p>
  */
+@SuppressWarnings("ALL")
 public interface IBeeRegistry {
 
     /**
@@ -21,6 +23,14 @@ public interface IBeeRegistry {
      *  @return Returns a BeeData object for the given bee type.
      */
     CustomBeeData getBeeData(String bee);
+
+    /**
+     * Returns a JsonObject for the given bee type.
+     *
+     * @param bee Bee type for which BeeData is requested.
+     * @return Returns a JsonObject for the given bee type.
+     */
+    JsonObject getRawBeeData(String bee);
 
     /**
      * Returns true if supplied parents can make a child bee.
@@ -48,7 +58,7 @@ public interface IBeeRegistry {
      *  @param child BeeData object for the child.
      *  @return Returns random bee type as a string.
      */
-    double getAdjustedWeightForChild(CustomBeeData child, String parent1, String parent2);
+    double getAdjustedWeightForChild(CustomBeeData child, CustomBeeData parent1, CustomBeeData parent2);
 
     /**
      * Registers the supplied Bee Type and associated data to the mod.
@@ -83,4 +93,8 @@ public interface IBeeRegistry {
      *  @return Returns unmodifiable copy of honey registry.
      */
     Map<String, HoneyBottleData> getHoneyBottles();
+
+    void cacheRawBeeData(String name, JsonObject beeData);
+
+    Map<String, JsonObject> getRawBees();
 }

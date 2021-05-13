@@ -30,7 +30,6 @@ import org.lwjgl.opengl.GL11;
 
 import java.text.DecimalFormat;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class HoneyPage extends BeepediaPage {
 
@@ -46,17 +45,17 @@ public class HoneyPage extends BeepediaPage {
     private final ItemStack bottle;
     private List<HoneyEffect> effects = new ArrayList<>();
 
-    private List<String> searchEffects = new LinkedList<>();
-    private List<String> searchItems = new LinkedList<>();
-    private List<String> searchBees = new LinkedList<>();
-    private List<String> searchTags = new LinkedList<>();
-    private List<String> searchAll = new LinkedList<>();
+    private final List<String> searchEffects = new LinkedList<>();
+    private final List<String> searchItems = new LinkedList<>();
+    private final List<String> searchBees = new LinkedList<>();
+    private final List<String> searchTags = new LinkedList<>();
+    private final List<String> searchAll = new LinkedList<>();
 
     private static final int LIST_HEIGHT = 102;
 
-    ResourceLocation hungerBar = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/hunger_bar.png");
-    ResourceLocation hungerIcons = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/hunger.png");
-    ResourceLocation saturationIcons = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/saturation.png");
+    final ResourceLocation hungerBar = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/hunger_bar.png");
+    final ResourceLocation hungerIcons = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/hunger.png");
+    final ResourceLocation saturationIcons = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/saturation.png");
 
     public HoneyPage(BeepediaScreen beepedia, HoneyBottleData bottleData, String id, int left, int top) {
         super(beepedia, left, top, id);

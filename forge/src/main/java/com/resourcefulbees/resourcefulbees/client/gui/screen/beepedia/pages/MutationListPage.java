@@ -1,12 +1,12 @@
 package com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.mutations.BlockMutationPage;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.mutations.EntityMutationPage;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.mutations.ItemMutationPage;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.mutations.MutationsPage;
+import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -22,17 +22,17 @@ import java.util.List;
 
 public class MutationListPage extends BeeDataPage {
 
-    List<Pair<MutationTypes, List<MutationsPage>>> mutations = new ArrayList<>();
+    final List<Pair<MutationTypes, List<MutationsPage>>> mutations = new ArrayList<>();
 
     private List<MutationsPage> activeList = null;
     int tab;
     private int page;
     private MutationsPage activePage = null;
 
-    Button prevTab;
-    Button nextTab;
-    Button leftArrow;
-    Button rightArrow;
+    final Button prevTab;
+    final Button nextTab;
+    final Button leftArrow;
+    final Button rightArrow;
 
     public MutationListPage(BeepediaScreen beepedia, CustomBeeData beeData, int xPos, int yPos, BeePage parent) {
         super(beepedia, beeData, xPos, yPos, parent);
@@ -51,15 +51,13 @@ public class MutationListPage extends BeeDataPage {
         List<MutationsPage> blockMutations = new ArrayList<>();
         List<MutationsPage> itemMutations = new ArrayList<>();
         List<MutationsPage> entityMutations = new ArrayList<>();
-        if (beeData.getMutationData().hasBlockMutations()) {
-            beeData.getMutationData().getJeiBlockMutations().forEach((b, m) -> blockMutations.add(new BlockMutationPage(parent.getBee(), parent, b, m, MutationTypes.BLOCK, beeData.getMutationData().getMutationCount(), beepedia)));
-            beeData.getMutationData().getJeiBlockTagMutations().forEach((b, m) -> blockMutations.add(new BlockMutationPage(parent.getBee(), parent, b, m, MutationTypes.BLOCK, beeData.getMutationData().getMutationCount(), beepedia)));
+        if (!beeData.getMutationData().getBlockMutations().isEmpty()) {
+            beeData.getMutationData().getBlockMutations().forEach((block, collection) ->  blockMutations.add(new BlockMutationPage(parent.getBee(), parent, block, collection, MutationTypes.BLOCK, beeData.getMutationData().getMutationCount(), beepedia)));
         }
-        if (beeData.getMutationData().hasItemMutations()) {
-            beeData.getMutationData().getJeiItemMutations().forEach((b, m) -> itemMutations.add(new ItemMutationPage(parent.getBee(), parent, b, m, MutationTypes.ITEM, beeData.getMutationData().getMutationCount(), beepedia)));
-            beeData.getMutationData().getJeiBlockTagItemMutations().forEach((b, m) -> itemMutations.add(new ItemMutationPage(parent.getBee(), parent, b, m, MutationTypes.ITEM, beeData.getMutationData().getMutationCount(), beepedia)));
+        if (!beeData.getMutationData().getItemMutations().isEmpty()) {
+            beeData.getMutationData().getItemMutations().forEach((b, m) -> itemMutations.add(new ItemMutationPage(parent.getBee(), parent, b, m, MutationTypes.ITEM, beeData.getMutationData().getMutationCount(), beepedia)));
         }
-        if (beeData.getMutationData().hasEntityMutations()) {
+        if (!beeData.getMutationData().getEntityMutations().isEmpty()) {
             beeData.getMutationData().getEntityMutations().forEach((b, m) -> entityMutations.add(new EntityMutationPage(parent.getBee(), parent, b, m, MutationTypes.ENTITY, beeData.getMutationData().getMutationCount(), beepedia)));
         }
         if (!blockMutations.isEmpty()) {

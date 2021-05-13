@@ -8,6 +8,7 @@ import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
+@SuppressWarnings("SameReturnValue")
 public class BeeDisplayOverride implements IEntityDisplayOverride {
     @Override
     public boolean overrideStandardInfo(ProbeMode probeMode, IProbeInfo iProbeInfo, Player playerEntity, Level world, Entity entity, IProbeHitEntityData iProbeHitEntityData) {

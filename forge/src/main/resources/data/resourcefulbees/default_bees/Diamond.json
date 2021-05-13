@@ -1,11 +1,16 @@
 {
-  "flower": "tag:forge:storage_blocks/diamond",
-  "maxTimeInHive": 600,
-  "hasHoneycomb": true,
-  "baseLayerTexture": "ores/diamond/diamond_bee",
-  "ColorData": {
-    "isBeeColored": false,
-    "honeycombColor": "#00ffff",
+  "CoreData": {
+    "flower": "forge:storage_blocks/diamond",
+    "maxTimeInHive": 600
+  },
+  "HoneycombData": {
+    "honeycombType": "DEFAULT",
+    "color": "#00ffff",
+    "honeycomb": "resourcefulbees:diamond_honeycomb",
+    "honeycombBlock": "resourcefulbees:diamond_honeycomb_block"
+  },
+  "RenderData": {
+    "layers": [{ "texture": "ores/diamond/diamond_bee"}],
     "modelType": "ORE"
   },
   "MutationData": {
@@ -23,8 +28,9 @@
   },
   "CentrifugeData": {
     "hasCentrifugeOutput": true,
-    "mainOutput": "minecraft:diamond",
-    "mainOutputCount": 1
+    "itemOutputs": [
+      {"id": "minecraft:diamond"}
+    ]
   },
   "SpawnData": {
     "canSpawnInWorld": true,

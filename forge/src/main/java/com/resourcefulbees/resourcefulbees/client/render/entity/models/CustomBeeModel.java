@@ -64,7 +64,7 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableListModel<
             case GUARDIAN:
                 addSpikes();
                 break;
-            case DEFAULT:
+            default:
                 addDefaultParts();
         }
     }
@@ -137,7 +137,7 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableListModel<
             this.body.xRot = ModelUtils.rotlerpRad(this.body.xRot, 3.0915928F, this.bodyPitch);
         }
 
-        sizeModifier = entityIn.getBeeData().getSizeModifier();
+        sizeModifier = entityIn.getRenderData().getSizeModifier();
         if (young) sizeModifier *= Config.CHILD_SIZE_MODIFIER.get();
     }
 

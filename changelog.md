@@ -1,3 +1,6 @@
+# ----- [1.0.0-alpha] -----
+- It's a brand new mod.
+
 # ----- [0.6.7_1b] -----
 - Fixed a crash when attempting to breed bees with no feed return item
 
@@ -9,7 +12,7 @@
 - Added Bottomless Honey Pot, this block allows for voiding of honey with ease.
 - Added 7 more patreon reward textures.
 - Added the ability for each bee to have their apiary output types set individually 
-  (e.g. `"apiaryOutputTypes" : ["COMB", "COMB", "BLOCK", "COMB"],`)
+  (e.g. `"apiaryOutputsTypes" : ["COMB", "COMB", "BLOCK", "COMB"],`)
 - Mutations that result or use a bee will now show up in the beepedia breeding tab of that bee
 - Spawn egg item mutations will now show up in the beepedia breeding tab of that bee
 - Added flower and hive positions for bees to TOP display 

@@ -3,10 +3,10 @@ package com.resourcefulbees.resourcefulbees.compat.jei;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.IBeeRegistry;
+import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.compat.jei.ingredients.EntityIngredient;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.ModBlocks;
-import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -46,11 +46,11 @@ public class EntityFlowerCategory extends BaseCategory<EntityFlowerCategory.Reci
     public static List<EntityFlowerCategory.Recipe> getFlowersRecipes() {
         List<EntityFlowerCategory.Recipe> recipes = new ArrayList<>();
         BEE_REGISTRY.getBees().forEach(((s, beeData) -> {
-            if (beeData.hasEntityFlower()) {
-                EntityType<?> entityType = BeeInfoUtils.getEntityType(beeData.getEntityFlower());
+            if (beeData.getCoreData().getEntityFlower().isPresent()) {
+                EntityType<?> entityType = beeData.getCoreData().getFlowerEntityType();
                 if (entityType != null) {
                     Item spawnEggItem = SpawnEggItem.byId(entityType);
-                    recipes.add(new Recipe(beeData.getName(), entityType, spawnEggItem != null ? new ItemStack(spawnEggItem) : null));
+                    recipes.add(new Recipe(beeData, entityType, spawnEggItem != null ? new ItemStack(spawnEggItem) : null));
                 }
             }
         }));
@@ -58,13 +58,13 @@ public class EntityFlowerCategory extends BaseCategory<EntityFlowerCategory.Reci
     }
 
     @Override
-    public void setIngredients(Recipe recipe, @NotNull IIngredients ingredients) {
+    public void setIngredients(@NotNull Recipe recipe, @NotNull IIngredients ingredients) {
         if (recipe.spawnEgg != null) ingredients.setInput(VanillaTypes.ITEM, recipe.spawnEgg);
         ingredients.setInput(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(recipe.beeType, -45.0f));
     }
 
     @Override
-    public void setRecipe(IRecipeLayout iRecipeLayout, @NotNull Recipe recipe, @NotNull IIngredients ingredients) {
+    public void setRecipe(@NotNull IRecipeLayout iRecipeLayout, @NotNull Recipe recipe, @NotNull IIngredients ingredients) {
         IGuiItemStackGroup itemStacks = iRecipeLayout.getItemStacks();
         if (recipe.spawnEgg != null){
             itemStacks.init(0, false, 41, 55);
@@ -106,11 +106,11 @@ public class EntityFlowerCategory extends BaseCategory<EntityFlowerCategory.Reci
     }
 
     public static class Recipe {
-        private final String beeType;
+        private final CustomBeeData beeType;
         private final EntityType<?> entityType;
         private final ItemStack spawnEgg;
 
-        public Recipe(String beeType, EntityType<?> entityType, ItemStack spawnEgg) {
+        public Recipe(CustomBeeData beeType, EntityType<?> entityType, ItemStack spawnEgg) {
             this.beeType = beeType;
             this.entityType = entityType;
             this.spawnEgg = spawnEgg;

@@ -1,6 +1,5 @@
 package com.resourcefulbees.resourcefulbees.compat.jei;
 
-import com.google.common.base.Splitter;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.IBeeRegistry;
@@ -20,13 +19,13 @@ import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.text.DecimalFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class BeeBreedingCategory extends BaseCategory<BeeBreedingCategory.Recipe> {
     public static final ResourceLocation GUI_BACK = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/breeding.png");
@@ -49,8 +48,8 @@ public class BeeBreedingCategory extends BaseCategory<BeeBreedingCategory.Recipe
                 .forEach(beeData -> {
                     if (beeHasParents(beeData)) {
 
-                        Iterator<String> parent1 = Splitter.on(",").trimResults().split(beeData.getBreedData().getParent1()).iterator();
-                        Iterator<String> parent2 = Splitter.on(",").trimResults().split(beeData.getBreedData().getParent2()).iterator();
+                        Iterator<String> parent1 = beeData.getBreedData().getParent1().iterator();
+                        Iterator<String> parent2 = beeData.getBreedData().getParent2().iterator();
 
                         while (parent1.hasNext() && parent2.hasNext()) {
                             Recipe parentsRecipe = getParentsRecipe(beeData, parent1, parent2);
@@ -96,15 +95,11 @@ public class BeeBreedingCategory extends BaseCategory<BeeBreedingCategory.Recipe
     public void setIngredients(@NotNull Recipe recipe, @NotNull IIngredients ingredients) {
         List<List<ItemStack>> list = new ArrayList<>();
 
-        if (recipe.p1FeedItems != null) {
-            List<ItemStack> stackList = new ArrayList<>();
-            recipe.p1FeedItems.forEach(item -> stackList.add(new ItemStack(item, recipe.p1FeedAmount)));
-            list.add(stackList);
+        if (!recipe.parent1.getBreedData().getFeedItems().isEmpty()) {
+            list.add(recipe.getParent1FeedItems());
         }
-        if (recipe.p2FeedItems != null) {
-            List<ItemStack> stackList = new ArrayList<>();
-            recipe.p2FeedItems.forEach(item -> stackList.add(new ItemStack(item, recipe.p2FeedAmount)));
-            list.add(stackList);
+        if (!recipe.parent2.getBreedData().getFeedItems().isEmpty()) {
+            list.add(recipe.getParent2FeedItems());
         }
 
         ingredients.setInputLists(VanillaTypes.ITEM, list);
@@ -145,9 +140,9 @@ public class BeeBreedingCategory extends BaseCategory<BeeBreedingCategory.Recipe
         Minecraft minecraft = Minecraft.getInstance();
         Font fontRenderer = minecraft.font;
         DecimalFormat decimalFormat = new DecimalFormat("##%");
-        fontRenderer.draw(matrix, decimalFormat.format(beeRegistry.getAdjustedWeightForChild(beeRegistry.getBeeData(recipe.child), recipe.parent1, recipe.parent2)), 90, 35, 0xff808080);
-        if (recipe.chance < 1) {
-            fontRenderer.draw(matrix, decimalFormat.format(recipe.chance), 130, 40, 0xff808080);
+        fontRenderer.draw(matrix, decimalFormat.format(beeRegistry.getAdjustedWeightForChild(recipe.child, recipe.parent1, recipe.parent2)), 90, 35, 0xff808080);
+        if (recipe.child.getBreedData().getBreedChance() < 1) {
+            fontRenderer.draw(matrix, decimalFormat.format(recipe.child.getBreedData().getBreedChance()), 130, 40, 0xff808080);
             info.draw(matrix, 115, 40);
         }
     }
@@ -157,37 +152,37 @@ public class BeeBreedingCategory extends BaseCategory<BeeBreedingCategory.Recipe
     public List<Component> getTooltipStrings(@NotNull Recipe recipe, double mouseX, double mouseY) {
         double infoX = 115D;
         double infoY = 40D;
-        if (mouseX >= infoX && mouseX <= infoX + 9D && mouseY >= infoY && mouseY <= infoY + 9D && recipe.chance < 1) {
+        if (mouseX >= infoX && mouseX <= infoX + 9D && mouseY >= infoY && mouseY <= infoY + 9D && recipe.child.getBreedData().getBreedChance() < 1) {
             return Collections.singletonList(new TextComponent(I18n.get("gui." + ResourcefulBees.MOD_ID + ".jei.category.breed_chance.info")));
         }
         return super.getTooltipStrings(recipe, mouseX, mouseY);
     }
 
     public static class Recipe {
-        private final String parent1;
-        private final String parent2;
-        private final String child;
-        private final float chance;
-
-        private final Set<Item> p1FeedItems;
-        private final Set<Item> p2FeedItems;
-
-        private final int p1FeedAmount;
-        private final int p2FeedAmount;
+        private final CustomBeeData parent1;
+        private final CustomBeeData parent2;
+        private final CustomBeeData child;
 
         public Recipe(CustomBeeData data){
             this(data, data, data);
         }
 
         public Recipe(CustomBeeData parent1, CustomBeeData parent2, CustomBeeData child) {
-            this.parent1 = parent1.getName();
-            this.parent2 = parent2.getName();
-            this.child = child.getName();
-            this.chance = child.getBreedData().getBreedChance();
-            this.p1FeedItems = parent1.getBreedData().hasFeedItems() ? parent1.getBreedData().getFeedItems() : null;
-            this.p2FeedItems = parent2.getBreedData().hasFeedItems() ? parent2.getBreedData().getFeedItems() : null;
-            this.p1FeedAmount = parent1.getBreedData().getFeedAmount();
-            this.p2FeedAmount = parent2.getBreedData().getFeedAmount();
+            this.parent1 = parent1;
+            this.parent2 = parent2;
+            this.child = child;
+        }
+
+        private List<ItemStack> getParentFeedItems(CustomBeeData parent) {
+            return parent.getBreedData().getFeedItems().stream().map(item -> new ItemStack(item, parent.getBreedData().getFeedAmount())).collect(Collectors.toList());
+        }
+
+        public List<ItemStack> getParent1FeedItems() {
+            return getParentFeedItems(parent1);
+        }
+
+        public List<ItemStack> getParent2FeedItems() {
+            return getParentFeedItems(parent2);
         }
     }
 }

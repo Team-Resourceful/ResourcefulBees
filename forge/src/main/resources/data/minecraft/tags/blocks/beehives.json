@@ -1,10 +1,6 @@
 {
   "replace": false,
   "values": [
-    "resourcefulbees:t1_beehive",
-    "resourcefulbees:t2_beehive",
-    "resourcefulbees:t3_beehive",
-    "resourcefulbees:t4_beehive",
     "resourcefulbees:bee_nest",
     "resourcefulbees:acacia_bee_nest",
     "resourcefulbees:jungle_bee_nest",

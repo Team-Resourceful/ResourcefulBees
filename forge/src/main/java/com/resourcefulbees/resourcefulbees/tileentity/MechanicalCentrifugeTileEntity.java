@@ -1,6 +1,7 @@
 package com.resourcefulbees.resourcefulbees.tileentity;
 
 import com.google.gson.JsonElement;
+import com.resourcefulbees.resourcefulbees.api.beedata.outputs.ItemOutput;
 import com.resourcefulbees.resourcefulbees.block.MechanicalCentrifugeBlock;
 import com.resourcefulbees.resourcefulbees.container.AutomationSensitiveItemStackHandler;
 import com.resourcefulbees.resourcefulbees.container.MechanicalCentrifugeContainer;
@@ -81,11 +82,11 @@ public class MechanicalCentrifugeTileEntity extends BlockEntity implements Ticka
     }
 
     public boolean canProcess(@Nullable CentrifugeRecipe recipe) {
-        if (recipe != null && !recipe.multiblock) {
-            List<Pair<ItemStack, Float>> outputs = recipe.itemOutputs;
+        if (recipe != null && !recipe.isMultiblock()) {
+            List<ItemOutput> outputs = recipe.getItemOutputs();
             ItemStack glassBottle = getItemStackHandler().getStackInSlot(BOTTLE_SLOT);
             ItemStack combs = getItemStackHandler().getStackInSlot(HONEYCOMB_SLOT);
-            JsonElement count = recipe.ingredient.toJson().getAsJsonObject().get(BeeConstants.INGREDIENT_COUNT);
+            JsonElement count = recipe.getIngredient().toJson().getAsJsonObject().get(BeeConstants.INGREDIENT_COUNT);
             int inputAmount = count !=null ? count.getAsInt() : 1;
             List<ItemStack> outputSlots = new ArrayList<>(
                     Arrays.asList(
@@ -98,8 +99,8 @@ public class MechanicalCentrifugeTileEntity extends BlockEntity implements Ticka
             if (outputSlots.get(0).isEmpty() && outputSlots.get(1).isEmpty() && outputSlots.get(2).isEmpty() && glassBottle.getItem() == Items.GLASS_BOTTLE && combs.getCount() >= inputAmount) return true;
             else {
                 for(int i=0;i<3;i++) {
-                    if (outputSlots.get(i).isEmpty() || (outputSlots.get(i).getItem() == outputs.get(i).getLeft().getItem()
-                            && outputSlots.get(i).getCount() + outputs.get(i).getLeft().getCount() <= outputSlots.get(i).getMaxStackSize())) {
+                    if (outputSlots.get(i).isEmpty() || (outputSlots.get(i).getItem() == outputs.get(i).getItem()
+                            && outputSlots.get(i).getCount() + outputs.get(i).getCount() <= outputSlots.get(i).getMaxStackSize())) {
                         processScore++;
                     }
                 }
@@ -121,7 +122,7 @@ public class MechanicalCentrifugeTileEntity extends BlockEntity implements Ticka
 
     private void processItem(@Nullable CentrifugeRecipe recipe) {
         if (recipe != null && this.canProcess(recipe)) {
-            JsonElement count = recipe.ingredient.toJson().getAsJsonObject().get(BeeConstants.INGREDIENT_COUNT);
+            JsonElement count = recipe.getIngredient().toJson().getAsJsonObject().get(BeeConstants.INGREDIENT_COUNT);
             int inputAmount = count !=null ? count.getAsInt() : 1;
             ItemStack comb = getItemStackHandler().getStackInSlot(HONEYCOMB_SLOT);
             ItemStack glassBottle = getItemStackHandler().getStackInSlot(BOTTLE_SLOT);
@@ -134,12 +135,12 @@ public class MechanicalCentrifugeTileEntity extends BlockEntity implements Ticka
             );
             if (level != null)
                 for(int i = 0; i < 3; i++){
-                    Pair<ItemStack, Float> output = recipe.itemOutputs.get(i);
-                    if (output.getRight() >= level.random.nextDouble()) {
+                    ItemOutput output = recipe.getItemOutputs().get(i);
+                    if (output.getChance() >= level.random.nextDouble()) {
                         if (slots.get(i).getLeft().isEmpty()) {
-                            this.getItemStackHandler().setStackInSlot(slots.get(i).getRight(), output.getLeft().copy());
-                        } else if (slots.get(i).getLeft().getItem() == output.getLeft().getItem()) {
-                            slots.get(i).getLeft().grow(output.getLeft().getCount());
+                            this.getItemStackHandler().setStackInSlot(slots.get(i).getRight(), output.getItemStack());
+                        } else if (slots.get(i).getLeft().getItem() == output.getItem()) {
+                            slots.get(i).getLeft().grow(output.getCount());
                         }
                         if (slots.get(i).getRight().equals(HONEY_BOTTLE)) glassBottle.shrink(1);
                     }

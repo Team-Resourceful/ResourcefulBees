@@ -5,7 +5,7 @@ import java.util.SortedMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class SubButtonList extends ButtonList {
-    SortedMap<String, ListButton> subList;
+    final SortedMap<String, ListButton> subList;
 
     public SubButtonList(int xPos, int yPos, int width, int height, int itemHeight, TabImageButton button, SortedMap<String, ListButton> list) {
         super(xPos, yPos, width, height, itemHeight, button, null);

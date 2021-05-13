@@ -11,7 +11,7 @@ import net.minecraftforge.fml.RegistryObject;
 
 public class DefaultHoneyBottleData extends HoneyBottleData {
 
-    public Item bottle = Items.HONEY_BOTTLE;
+    public final Item bottle = Items.HONEY_BOTTLE;
     public Item blockItem = Items.HONEY_BLOCK;
     public Block block = Blocks.HONEY_BLOCK;
     public RegistryObject<FlowingFluid> flowingFluid = ModFluids.HONEY_FLOWING;

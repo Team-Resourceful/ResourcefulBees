@@ -25,11 +25,11 @@ import java.util.List;
 import static com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaPage.SUB_PAGE_WIDTH;
 
 public abstract class MutationsPage {
-    int mutationCount;
+    final int mutationCount;
     protected final BeepediaScreen beepedia;
-    Entity entityParent;
-    MutationTypes type;
-    BeePage parent;
+    final Entity entityParent;
+    final MutationTypes type;
+    final BeePage parent;
     protected int inputCounter;
     protected int outputCounter;
     protected final ResourceLocation infoIcon = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/icons.png");
@@ -62,9 +62,9 @@ public abstract class MutationsPage {
         if (entityParent instanceof CustomBeeEntity) {
             CustomBeeEntity beeEntity = (CustomBeeEntity) entityParent;
             if (BeepediaScreen.mouseHovering((float) xPos + ((float) SUB_PAGE_WIDTH / 2) - 20, (float) yPos + 6, 30, 30, mouseX, mouseY)) {
-                if (BeepediaScreen.currScreenState.getPageID().equals((beeEntity.getBeeData().getName()))) return false;
+                if (BeepediaScreen.currScreenState.getPageID().equals((beeEntity.getCoreData().getName()))) return false;
                 BeepediaScreen.saveScreenState();
-                beepedia.setActive(BeepediaScreen.PageType.BEE, beeEntity.getBeeData().getName());
+                beepedia.setActive(BeepediaScreen.PageType.BEE, beeEntity.getCoreData().getName());
                 return true;
             }
         }

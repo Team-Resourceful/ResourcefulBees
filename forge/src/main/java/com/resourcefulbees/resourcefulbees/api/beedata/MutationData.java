@@ -1,51 +1,34 @@
 package com.resourcefulbees.resourcefulbees.api.beedata;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.resourcefulbees.resourcefulbees.api.beedata.mutation.Mutation;
-import com.resourcefulbees.resourcefulbees.api.beedata.mutation.outputs.BlockOutput;
-import com.resourcefulbees.resourcefulbees.api.beedata.mutation.outputs.EntityOutput;
-import com.resourcefulbees.resourcefulbees.api.beedata.mutation.outputs.ItemOutput;
+import com.resourcefulbees.resourcefulbees.api.beedata.outputs.BlockOutput;
+import com.resourcefulbees.resourcefulbees.api.beedata.outputs.EntityOutput;
+import com.resourcefulbees.resourcefulbees.api.beedata.outputs.ItemOutput;
 import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
+import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
-import net.minecraft.tags.Tag;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
-import org.apache.commons.lang3.tuple.Pair;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.*;
 
-public class MutationData extends AbstractBeeData {
+public class MutationData {
 
-    public static final Logger LOGGER = LogManager.getLogger();
-    /**
-     * The Input that is getting mutated
-     *
-     * @deprecated To be removed in 1.17
-     */
-    @Deprecated
-    private final String mutationInput;
-
-    /**
-     * The new muted output
-     *
-     * @deprecated To be removed in 1.17
-     */
-    @Deprecated
-    private final String mutationOutput;
-
-    /**
-     * What type of mutation it is
-     *
-     * @deprecated To be removed in 1.17
-     */
-    @Deprecated
-    private final MutationTypes mutationType;
+    public static final Codec<MutationData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            Codec.BOOL.fieldOf("hasMutation").orElse(false).forGetter(MutationData::hasMutation),
+            Codec.INT.fieldOf("mutationCount").orElse(10).forGetter(MutationData::getMutationCount),
+            Mutation.CODEC.listOf().fieldOf("mutations").orElse(new ArrayList<>()).forGetter(mutationDataCodec -> mutationDataCodec.mutations)
+    ).apply(instance, MutationData::new));
 
     /**
      * If the bee has a mutation
      */
-    private boolean hasMutation;
+    private final boolean hasMutation;
 
     /**
      * how many inputs in a radius get mutated
@@ -57,197 +40,128 @@ public class MutationData extends AbstractBeeData {
      */
     private final List<Mutation> mutations;
 
-    private transient Map<Block, Pair<Double, RandomCollection<BlockOutput>>> blockMutations; //IN WORLD
-    private transient Map<Tag<?>, Pair<Double, RandomCollection<BlockOutput>>> jeiBlockTagMutations; // JEI ONLY
-    private transient Map<Block, Pair<Double, RandomCollection<BlockOutput>>> jeiBlockMutations; //JEI ONLY
+    private final Map<Block, RandomCollection<BlockOutput>> blockMutations = new HashMap<>();
+    private final Map<EntityType<?>, RandomCollection<EntityOutput>> entityMutations = new HashMap<>();
+    private final Map<Block, RandomCollection<ItemOutput>> itemMutations = new HashMap<>();
 
-    private transient Map<EntityType<?>, Pair<Double, RandomCollection<EntityOutput>>> entityMutations;
-
-    private transient Map<Block, Pair<Double, RandomCollection<ItemOutput>>> itemMutations; //IN WORLD
-    private transient Map<Tag<?>, Pair<Double, RandomCollection<ItemOutput>>> jeiBlockTagItemMutations; //JEI ONLY
-    private transient Map<Block, Pair<Double, RandomCollection<ItemOutput>>> jeiItemMutations; //JEI ONLY
-
-
-    private MutationData(String mutationInput, String mutationOutput, int mutationCount, boolean hasMutation, MutationTypes mutationType, List<Mutation> mutations) {
-        super("MutationData");
-        this.mutationInput = mutationInput;
-        this.mutationOutput = mutationOutput;
+    private MutationData(boolean hasMutation, int mutationCount, List<Mutation> mutations) {
         this.mutationCount = mutationCount;
         this.hasMutation = hasMutation;
-        this.mutationType = mutationType;
         this.mutations = mutations;
+        setupMutations();
     }
 
     public int getMutationCount() {
-        return mutationCount <= 0 ? 10 : mutationCount;
+        return mutationCount;
     }
 
     public boolean hasMutation() {
         return hasMutation;
     }
 
+    public Map<EntityType<?>, RandomCollection<EntityOutput>> getEntityMutations() {
+        return Collections.unmodifiableMap(entityMutations);
+    }
+
+    public Map<Block, RandomCollection<BlockOutput>> getBlockMutations() {
+        return Collections.unmodifiableMap(blockMutations);
+    }
+
+    public Map<Block, RandomCollection<ItemOutput>> getItemMutations() {
+        return Collections.unmodifiableMap(itemMutations);
+    }
+
     public boolean testMutations() {
-        return hasMutation && ((blockMutations != null && !blockMutations.isEmpty())
-                || (entityMutations != null && !entityMutations.isEmpty())
-                || (itemMutations != null && !itemMutations.isEmpty()));
-    }
-
-    public void setHasMutation(boolean hasMutation) {
-        this.hasMutation = hasMutation;
-    }
-
-    public String getMutationInput() {
-        return mutationInput == null ? "" : mutationInput;
-    }
-
-    public String getMutationOutput() {
-        return mutationOutput == null ? "" : mutationOutput;
-    }
-
-    public MutationTypes getMutationType() {
-        return mutationType == null ? MutationTypes.NONE : mutationType;
-    }
-
-    public List<Mutation> getMutations() {
-        return mutations == null ? new LinkedList<>() : mutations;
-    }
-
-    public void initializeMutations() {
-        this.blockMutations = new HashMap<>();
-        this.jeiBlockMutations = new HashMap<>();
-        this.jeiBlockTagMutations = new HashMap<>();
-        this.entityMutations = new HashMap<>();
-        this.itemMutations = new HashMap<>();
-        this.jeiBlockTagItemMutations = new HashMap<>();
-        this.jeiItemMutations = new HashMap<>();
-    }
-
-    public void addBlockMutation(Block input, RandomCollection<BlockOutput> outputs, double chance) {
-        this.blockMutations.put(input, Pair.of(chance, outputs));
-    }
-
-    public void addEntityMutation(EntityType<?> input, RandomCollection<EntityOutput> outputs, double chance) {
-        this.entityMutations.put(input, Pair.of(chance, outputs));
-    }
-
-    public void addItemMutation(Block input, RandomCollection<ItemOutput> outputs, double chance) {
-        this.itemMutations.put(input, Pair.of(chance, outputs));
-    }
-
-    public void addJeiBlockMutation(Block input, RandomCollection<BlockOutput> outputs, double chance) {
-        this.jeiBlockMutations.put(input, Pair.of(chance, outputs));
-    }
-
-    public void addJeiBlockTagItemMutation(Tag<?> input, RandomCollection<ItemOutput> outputs, double chance) {
-        this.jeiBlockTagItemMutations.put(input, Pair.of(chance, outputs));
-    }
-
-    public void addJeiItemMutation(Block input, RandomCollection<ItemOutput> outputs, double chance) {
-        this.jeiItemMutations.put(input, Pair.of(chance, outputs));
-    }
-
-    public void addJeiBlockTagMutation(Tag<?> input, RandomCollection<BlockOutput> outputs, double chance) {
-        this.jeiBlockTagMutations.put(input, Pair.of(chance, outputs));
-    }
-
-
-    public boolean hasBlockMutations() {
-        return this.blockMutations != null && !this.blockMutations.isEmpty();
-    }
-
-    public boolean hasBlockTagMutations() {
-        return this.jeiBlockTagMutations != null && !this.jeiBlockTagMutations.isEmpty();
-    }
-
-    public boolean hasEntityMutations() {
-        return this.entityMutations != null && !this.entityMutations.isEmpty();
-    }
-
-    public boolean hasItemMutations() {
-        return this.itemMutations != null && !this.itemMutations.isEmpty();
-    }
-
-    public boolean hasJeiBlockTagItemMutations() {
-        return this.jeiBlockTagItemMutations != null && !this.jeiBlockTagItemMutations.isEmpty();
-    }
-
-    public boolean hasJeiItemMutations() {
-        return this.jeiItemMutations != null && !this.jeiItemMutations.isEmpty();
-    }
-
-    public boolean hasJeiBlockMutations() {
-        return this.jeiBlockMutations != null && !this.jeiBlockMutations.isEmpty();
-    }
-
-    public Map<Tag<?>, Pair<Double, RandomCollection<BlockOutput>>> getJeiBlockTagMutations() {
-        return Collections.unmodifiableMap(this.jeiBlockTagMutations);
-    }
-
-    public Map<Block, Pair<Double, RandomCollection<BlockOutput>>> getBlockMutations() {
-        return Collections.unmodifiableMap(this.blockMutations);
-    }
-
-    public Map<EntityType<?>, Pair<Double, RandomCollection<EntityOutput>>> getEntityMutations() {
-        return Collections.unmodifiableMap(this.entityMutations);
-    }
-
-    public Map<Block, Pair<Double, RandomCollection<ItemOutput>>> getItemMutations() {
-        return Collections.unmodifiableMap(this.itemMutations);
-    }
-
-    public Map<Tag<?>, Pair<Double, RandomCollection<ItemOutput>>> getJeiBlockTagItemMutations() {
-        return Collections.unmodifiableMap(this.jeiBlockTagItemMutations);
-    }
-
-    public Map<Block, Pair<Double, RandomCollection<ItemOutput>>> getJeiItemMutations() {
-        return Collections.unmodifiableMap(this.jeiItemMutations);
-    }
-
-    public Map<Block, Pair<Double, RandomCollection<BlockOutput>>> getJeiBlockMutations() {
-        return Collections.unmodifiableMap(this.jeiBlockMutations);
-    }
-
-    @SuppressWarnings("unused")
-    public static class Builder {
-        private String mutationInput;
-        private String mutationOutput;
-        private int mutationCount;
-        private final boolean hasMutation;
-        private final MutationTypes mutationType;
-        private final List<Mutation> mutations = new LinkedList<>();
-
-        public Builder(boolean hasMutation, MutationTypes mutationType) {
-            this.hasMutation = hasMutation;
-            this.mutationType = mutationType;
-        }
-
-        public Builder setMutationInput(String mutationInput) {
-            this.mutationInput = mutationInput;
-            return this;
-        }
-
-        public Builder setMutationOutput(String mutationOutput) {
-            this.mutationOutput = mutationOutput;
-            return this;
-        }
-
-        public Builder setMutationCount(int mutationCount) {
-            this.mutationCount = mutationCount;
-            return this;
-        }
-
-        /**
-         * @return Builds the MutationData object
-         * @deprecated This method will change in 1.17 to match the removal of legacy mutation syntax
-         */
-        @Deprecated
-        public MutationData createMutationData() {
-            return new MutationData(mutationInput, mutationOutput, mutationCount, hasMutation, mutationType, mutations);
-        }
+        return hasMutation && (!blockMutations.isEmpty() || !entityMutations.isEmpty() || !itemMutations.isEmpty());
     }
 
     public static MutationData createDefault() {
-        return new Builder(false, MutationTypes.NONE).createMutationData();
+        return new MutationData(false, 0, Collections.emptyList());
     }
+
+
+    //Setup methods below this line
+
+    private void setupMutations() {
+        mutations.stream()
+                .filter(mutation -> !mutation.getType().equals(MutationTypes.NONE))
+                .forEach(mutation -> {
+                    switch (mutation.getType()) {
+                        case ITEM:
+                            addBlockItemMutation(mutation);
+                            break;
+                        case ENTITY:
+                            addEntityMutation(mutation);
+                            break;
+                        case BLOCK:
+                            addBlockMutation(mutation);
+                            break;
+                        default:
+                            //do nothing
+                    }
+                });
+    }
+
+    private void addBlockItemMutation(Mutation mutation) {
+        Set<Block> inputBlocks = mutation.getBlockInputs();
+        RandomCollection<ItemOutput> randomCollection = createRandomItemCollection(mutation);
+        inputBlocks.stream().filter(block -> !block.equals(Blocks.AIR)).forEach(block -> {
+            if (!randomCollection.isEmpty()) {
+                itemMutations.computeIfAbsent(block, block1 -> randomCollection);
+            }
+        });
+    }
+
+    private void addBlockMutation(Mutation mutation) {
+        Set<Block> inputBlocks = mutation.getBlockInputs();
+        RandomCollection<BlockOutput> randomCollection = createRandomBlockCollection(mutation);
+        inputBlocks.stream().filter(block -> !block.equals(Blocks.AIR)).forEach(block -> {
+            if (!randomCollection.isEmpty()) {
+                blockMutations.computeIfAbsent(block, block1 -> randomCollection);
+            }
+        });
+    }
+
+    private void addEntityMutation(Mutation mutation) {
+        EntityType<?> input = BeeInfoUtils.getEntityType(mutation.getEntityInput().orElse(null));
+
+        RandomCollection<EntityOutput> randomCollection = new RandomCollection<>();
+        mutation.getOutputs().forEach(mutationOutput -> {
+            if (mutationOutput.getOutputID() != null) {
+                EntityType<?> output = BeeInfoUtils.getEntityType(mutationOutput.getOutputID());
+                if (output != null) {
+                    randomCollection.add(mutationOutput.getWeight(), new EntityOutput(output, Optional.of(mutationOutput.getNbt()), mutationOutput.getWeight(), mutation.getChance()));
+                }
+            }
+        });
+
+        if (input != null && !randomCollection.isEmpty()) {
+            entityMutations.put(input, randomCollection);
+        }
+    }
+
+    private RandomCollection<ItemOutput> createRandomItemCollection(Mutation mutation) {
+        RandomCollection<ItemOutput> randomCollection = new RandomCollection<>();
+        mutation.getOutputs().forEach(mutationOutput -> {
+            ItemStack output = new ItemStack(ForgeRegistries.ITEMS.getValue(mutationOutput.getOutputID()), mutationOutput.getCount());
+            if (!output.equals(ItemStack.EMPTY)) {
+                output.setTag(mutationOutput.getNbt());
+                randomCollection.add(mutationOutput.getWeight(), new ItemOutput(output, mutationOutput.getWeight(), mutation.getChance()));
+            }
+        });
+        return randomCollection;
+    }
+
+    private RandomCollection<BlockOutput> createRandomBlockCollection(Mutation mutation) {
+        RandomCollection<BlockOutput> randomCollection = new RandomCollection<>();
+        mutation.getOutputs().forEach(mutationOutput -> {
+            Block output = ForgeRegistries.BLOCKS.getValue(mutationOutput.getOutputID());
+            if (output != (Blocks.AIR)) {
+                randomCollection.add(mutationOutput.getWeight(), new BlockOutput(output, Optional.of(mutationOutput.getNbt()), mutationOutput.getWeight(), mutation.getChance()));
+            }
+        });
+        return randomCollection;
+    }
+
 }
 

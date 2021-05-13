@@ -48,8 +48,8 @@ public class HoneyCongealerTileEntity extends AbstractHoneyTank implements Ticka
 
     public float getProcessPercent() {
         if (!canProcessFill()) return 0;
-        if (processingFill == Config.HONEY_PROCEESS_TIME.get() * Config.CONGEALER_TIME_MODIFIER.get()) return 1;
-        return processingFill / ((float) Config.HONEY_PROCEESS_TIME.get() * Config.CONGEALER_TIME_MODIFIER.get());
+        if (processingFill == Config.HONEY_PROCESS_TIME.get() * Config.CONGEALER_TIME_MODIFIER.get()) return 1;
+        return processingFill / ((float) Config.HONEY_PROCESS_TIME.get() * Config.CONGEALER_TIME_MODIFIER.get());
     }
 
     @Override
@@ -113,7 +113,7 @@ public class HoneyCongealerTileEntity extends AbstractHoneyTank implements Ticka
     @Override
     public void tick() {
         if (canProcessFill()) {
-            if (processingFill >= Config.HONEY_PROCEESS_TIME.get() * Config.CONGEALER_TIME_MODIFIER.get()) {
+            if (processingFill >= Config.HONEY_PROCESS_TIME.get() * Config.CONGEALER_TIME_MODIFIER.get()) {
                 processFill();
                 processingFill = 0;
             }

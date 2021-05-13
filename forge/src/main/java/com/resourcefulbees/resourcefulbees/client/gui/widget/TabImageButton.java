@@ -15,7 +15,7 @@ public class TabImageButton extends ModImageButton {
     protected final int itemY;
 
     public TabImageButton(int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int yDiffTextIn, ResourceLocation resourceLocationIn, @NotNull ItemStack displayItem, int itemX, int itemY, OnPress onPressIn, int textureWidth, int textureHeight) {
-        super(xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, yDiffTextIn, resourceLocationIn, textureHeight, textureWidth, onPressIn);
+        super(xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, yDiffTextIn, resourceLocationIn, textureWidth, textureHeight, onPressIn);
         this.displayItem = displayItem;
         this.itemX = itemX;
         this.itemY = itemY;

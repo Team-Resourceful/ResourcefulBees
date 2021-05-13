@@ -2,9 +2,8 @@ package com.resourcefulbees.resourcefulbees.registry;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
+import com.resourcefulbees.resourcefulbees.recipe.ApiaryUpgradeRecipe;
 import com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe;
-import com.resourcefulbees.resourcefulbees.recipe.FertiliserRecipe;
-import com.resourcefulbees.resourcefulbees.recipe.HiveUpgradeRecipe;
 import com.resourcefulbees.resourcefulbees.recipe.HoneyTankRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraftforge.fml.RegistryObject;
@@ -23,8 +22,6 @@ public class ModRecipeSerializers {
     public static final RegistryObject<RecipeSerializer<?>> CENTRIFUGE_RECIPE = RECIPE_SERIALIZERS.register("centrifuge",
             () -> new CentrifugeRecipe.Serializer<>(CentrifugeRecipe::new));
 
-    public static final RegistryObject<RecipeSerializer<?>> FERTILIZER_RECIPE = RECIPE_SERIALIZERS.register("fertilizer_crafting",
-            FertiliserRecipe.Serializer::new);
     public static final RegistryObject<RecipeSerializer<?>> HONEY_TANK_RECIPE = RECIPE_SERIALIZERS.register("honey_tank_recipe", HoneyTankRecipe.Serializer::new);
-    public static final RegistryObject<RecipeSerializer<?>> APIARY_UPGRADE_RECIPE = RECIPE_SERIALIZERS.register("hive_upgrade_recipe", HiveUpgradeRecipe.Serializer::new);
+    public static final RegistryObject<RecipeSerializer<?>> APIARY_UPGRADE_RECIPE = RECIPE_SERIALIZERS.register("hive_upgrade_recipe", ApiaryUpgradeRecipe.Serializer::new);
 }

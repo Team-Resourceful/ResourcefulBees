@@ -273,10 +273,10 @@ public class HoneyBottleData {
     }
 
     public static class Builder {
-        private String name;
-        private int hunger;
-        private float saturation;
-        private String honeyColor;
+        private final String name;
+        private final int hunger;
+        private final float saturation;
+        private final String honeyColor;
         private boolean isRainbow = false;
         private boolean generateHoneyBlock = true;
         private boolean honeyBlockRecipe = true;

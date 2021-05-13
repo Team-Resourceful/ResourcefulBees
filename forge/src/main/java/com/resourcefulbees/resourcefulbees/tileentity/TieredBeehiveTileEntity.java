@@ -6,6 +6,7 @@ import com.resourcefulbees.resourcefulbees.api.ICustomBee;
 import com.resourcefulbees.resourcefulbees.block.TieredBeehiveBlock;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
+import com.resourcefulbees.resourcefulbees.lib.HoneycombTypes;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.mixin.BTEBeeAccessor;
 import com.resourcefulbees.resourcefulbees.registry.ModBlockEntityTypes;
@@ -120,8 +121,8 @@ public class TieredBeehiveTileEntity extends BeehiveBlockEntity {
                             vanillaBeeEntity.dropOffNectar();
                             int i = getHoneyLevel(state);
                             if (i < 5) {
-                                if (entity instanceof ICustomBee && ((ICustomBee)entity).getBeeData().hasHoneycomb()) {
-                                    honeycomb = ((ICustomBee)entity).getBeeData().getCombStack();
+                                if (entity instanceof ICustomBee && !((ICustomBee)entity).getHoneycombData().getHoneycombType().equals(HoneycombTypes.NONE)) {
+                                    honeycomb = ((ICustomBee)entity).getHoneycombData().getHoneycomb().getDefaultInstance();
                                 }
 
                                 if (!honeycomb.isEmpty()) this.honeycombs.add(0, honeycomb);
@@ -151,7 +152,7 @@ public class TieredBeehiveTileEntity extends BeehiveBlockEntity {
             bee.save(nbt);
 
             if (this.level != null && bee instanceof Bee) {
-                int maxTimeInHive = getMaxTimeInHive(bee instanceof ICustomBee ? ((ICustomBee) bee).getBeeData().getMaxTimeInHive() : BeeConstants.MAX_TIME_IN_HIVE);
+                int maxTimeInHive = getMaxTimeInHive(bee instanceof ICustomBee ? ((ICustomBee) bee).getCoreData().getMaxTimeInHive() : BeeConstants.MAX_TIME_IN_HIVE);
                 this.stored.add(new BeeData(nbt, ticksInHive,  hasNectar ? maxTimeInHive : MIN_HIVE_TIME));
                 BlockPos pos = this.getBlockPos();
                 this.level.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BEEHIVE_ENTER, SoundSource.BLOCKS, 1.0F, 1.0F);
@@ -237,10 +238,6 @@ public class TieredBeehiveTileEntity extends BeehiveBlockEntity {
         nbt.putFloat(NBTConstants.NBT_TIER_MODIFIER, getTierModifier());
         return nbt;
     }
-
-    @Nullable
-    @Override
-    public ClientboundBlockEntityDataPacket getUpdatePacket() { return super.getUpdatePacket(); }
 
     public ListTag writeHoneycombs() {
         ListTag nbtTagList = new ListTag();

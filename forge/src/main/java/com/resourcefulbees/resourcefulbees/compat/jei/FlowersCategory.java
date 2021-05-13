@@ -2,6 +2,7 @@ package com.resourcefulbees.resourcefulbees.compat.jei;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.IBeeRegistry;
+import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.compat.jei.ingredients.EntityIngredient;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.ModBlocks;
@@ -50,14 +51,14 @@ public class FlowersCategory extends BaseCategory<FlowersCategory.Recipe> {
         List<Recipe> recipes = new ArrayList<>();
 
         BEE_REGISTRY.getBees().forEach(((s, beeData) -> {
-            if (beeData.hasBlockFlowers()) {
-                if (beeData.getBlockFlowers().stream().allMatch(LiquidBlock.class::isInstance)){
-                    Set<Fluid> fluids = beeData.getBlockFlowers().stream().map(b -> ((LiquidBlock) b).getFluid().getSource()).collect(Collectors.toSet());
-                    recipes.add(new Recipe(fluids, null, beeData.getName()));
+            if (!beeData.getCoreData().getBlockFlowers().isEmpty()) {
+                if (beeData.getCoreData().getBlockFlowers().stream().allMatch(LiquidBlock.class::isInstance)){
+                    Set<Fluid> fluids = beeData.getCoreData().getBlockFlowers().stream().map(b -> ((LiquidBlock) b).getFluid().getSource()).collect(Collectors.toSet());
+                    recipes.add(new Recipe(fluids, null, beeData));
                 }else {
-                    List<ItemStack> items = beeData.getBlockFlowers().stream()
+                    List<ItemStack> items = beeData.getCoreData().getBlockFlowers().stream()
                             .map(b -> b.asItem() != Items.AIR ? new ItemStack(b.asItem()) : getErrorItem(b)).collect(Collectors.toList());
-                    recipes.add(new Recipe(null, items, beeData.getName()));
+                    recipes.add(new Recipe(null, items, beeData));
                 }
             }
         }));
@@ -104,15 +105,15 @@ public class FlowersCategory extends BaseCategory<FlowersCategory.Recipe> {
         private final Set<Fluid> flowerFluids;
         private final List<ItemStack> flowerItems;
 
-        private final String beeType;
+        private final CustomBeeData beeType;
 
-        public Recipe(@Nullable Set<Fluid> flowerFluids, @Nullable List<ItemStack> flowerItems, String beeType){
+        public Recipe(@Nullable Set<Fluid> flowerFluids, @Nullable List<ItemStack> flowerItems, CustomBeeData beeType){
             this.flowerFluids = flowerFluids;
             this.flowerItems = flowerItems;
             this.beeType = beeType;
         }
 
 
-        public String getBeeType() { return this.beeType; }
+        public CustomBeeData getBeeType() { return this.beeType; }
     }
 }

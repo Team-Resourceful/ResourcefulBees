@@ -1,18 +1,20 @@
 package com.resourcefulbees.resourcefulbees.init;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.JsonOps;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
-import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
+import com.resourcefulbees.resourcefulbees.api.beedata.SpawnData;
 import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
-import com.resourcefulbees.resourcefulbees.entity.passive.KittenBee;
-import com.resourcefulbees.resourcefulbees.entity.passive.OreoBee;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.ModEntities;
 import com.resourcefulbees.resourcefulbees.registry.ModFeatures;
+import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.SpawnPlacements;
@@ -23,7 +25,6 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.moddiscovery.ModFileInfo;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -35,7 +36,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import static com.resourcefulbees.resourcefulbees.ResourcefulBees.LOGGER;
-import static com.resourcefulbees.resourcefulbees.config.Config.ENABLE_EASTER_EGG_BEES;
 import static com.resourcefulbees.resourcefulbees.config.Config.GENERATE_DEFAULTS;
 
 public class BeeSetup {
@@ -46,6 +46,7 @@ public class BeeSetup {
 
     private static final String JSON = ".json";
     private static final String ZIP = ".zip";
+    private static final Gson GSON = new Gson();
 
     private static Path beePath;
     private static Path resourcePath;
@@ -68,15 +69,14 @@ public class BeeSetup {
     }
 
     public static void setupBees() {
-        if (Boolean.TRUE.equals(ENABLE_EASTER_EGG_BEES.get())) {
-            OreoBee.register();
-            KittenBee.register();
-        }
         if (Boolean.TRUE.equals(GENERATE_DEFAULTS.get())) {
             setupDefaultBees();
             setupDefaultHoney();
         }
         addBees();
+        Config.GENERATE_DEFAULTS.set(false);
+        Config.GENERATE_DEFAULTS.save();
+        BeeRegistry.getRegistry().regenerateCustomBeeData();
         addHoney();
     }
 
@@ -101,16 +101,8 @@ public class BeeSetup {
 
     private static void parseBee(Reader reader, String name) {
         name = name.toLowerCase(Locale.ENGLISH).replace(" ", "_");
-        Gson gson = new Gson();
-        try {
-            CustomBeeData bee = gson.fromJson(reader, CustomBeeData.class);
-            bee.setName(name);
-            bee.setShouldResourcefulBeesDoForgeRegistration(true);
-            BeeRegistry.getRegistry().registerBee(name, bee);
-        } catch (JsonSyntaxException e) {
-            String exception = String.format("Error was found trying to parse bee: %s. Json is invalid, validate it here : https://jsonlint.com/", name);
-            throw new JsonSyntaxException(exception);
-        }
+        JsonObject jsonObject = GsonHelper.fromJson(GSON, reader, JsonObject.class);
+        BeeRegistry.getRegistry().cacheRawBeeData(name, jsonObject);
     }
 
     private static void parseHoney(File file) throws IOException {
@@ -300,7 +292,7 @@ public class BeeSetup {
     public static void onBiomeLoad(BiomeLoadingEvent event) {
         if (event.getName() != null && BeeRegistry.getSpawnableBiomes().containsKey(event.getName())) {
             BeeRegistry.getSpawnableBiomes().get(event.getName()).forEach(customBeeData -> {
-                EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(customBeeData.getEntityTypeRegistryID());
+                EntityType<?> entityType = customBeeData.getEntityType();
                 if (entityType != null) {
                     event.getSpawns().getSpawner(MobCategory.CREATURE)
                             .add(new MobSpawnSettings.SpawnerData(entityType,
@@ -329,8 +321,8 @@ public class BeeSetup {
 
     public static void registerBeePlacements() {
         ModEntities.getModBees().forEach((s, entityTypeRegistryObject) -> {
-            CustomBeeData beeData = BeeRegistry.getRegistry().getBeeData(s);
-            if (beeData.getSpawnData().canSpawnInWorld()) {
+            boolean canSpawnInWorld = Codec.BOOL.fieldOf("canSpawnInWorld").orElse(false).codec().fieldOf("SpawnData").orElse(SpawnData.createDefault().canSpawnInWorld()).codec().parse(JsonOps.INSTANCE, BeeRegistry.getRegistry().getRawBeeData(s)).get().orThrow();
+            if (canSpawnInWorld) {
                 SpawnPlacements.register(entityTypeRegistryObject.get(),
                         SpawnPlacements.Type.ON_GROUND,
                         Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,

@@ -36,8 +36,8 @@ public abstract class AbstractHoneyTankContainer extends AbstractHoneyTank imple
 
     public float getProcessEmptyPercent() {
         if (!canProcessFluid()) return 0;
-        if (processingEmpty == Config.HONEY_PROCEESS_TIME.get()) return 1;
-        return processingEmpty / (float) Config.HONEY_PROCEESS_TIME.get();
+        if (processingEmpty == Config.HONEY_PROCESS_TIME.get()) return 1;
+        return processingEmpty / (float) Config.HONEY_PROCESS_TIME.get();
     }
 
     public void setTileStackHandler(AutomationSensitiveItemStackHandler tileStackHandler) {
@@ -190,7 +190,7 @@ public abstract class AbstractHoneyTankContainer extends AbstractHoneyTank imple
     @Override
     public void tick() {
         if (canProcessFluid()) {
-            if (processingEmpty >= Config.HONEY_PROCEESS_TIME.get()) {
+            if (processingEmpty >= Config.HONEY_PROCESS_TIME.get()) {
                 processFluid();
                 processingEmpty = 0;
             }

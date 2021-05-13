@@ -9,10 +9,7 @@ import com.resourcefulbees.resourcefulbees.container.ApiaryStorageContainer;
 import com.resourcefulbees.resourcefulbees.container.AutomationSensitiveItemStackHandler;
 import com.resourcefulbees.resourcefulbees.item.BeeJar;
 import com.resourcefulbees.resourcefulbees.item.UpgradeItem;
-import com.resourcefulbees.resourcefulbees.lib.ApiaryOutput;
-import com.resourcefulbees.resourcefulbees.lib.ApiaryTabs;
-import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
-import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
+import com.resourcefulbees.resourcefulbees.lib.*;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.ModBlockEntityTypes;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
@@ -33,7 +30,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -47,11 +43,12 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static net.minecraft.world.inventory.AbstractContainerMenu.consideredTheSameItem;
 
@@ -59,6 +56,8 @@ public class ApiaryStorageTileEntity extends BlockEntity implements MenuProvider
 
     public static final int UPGRADE_SLOT = 0;
     private static final IBeeRegistry BEE_REGISTRY = BeeRegistry.getRegistry();
+    private static final List<Integer> OUTPUT_AMOUNTS = Arrays.asList(Config.T1_APIARY_QUANTITY.get(), Config.T2_APIARY_QUANTITY.get(), Config.T3_APIARY_QUANTITY.get(), Config.T4_APIARY_QUANTITY.get());
+    private static final List<ApiaryOutputs> OUTPUT_TYPES = Arrays.asList(Config.T1_APIARY_OUTPUT.get(), Config.T2_APIARY_OUTPUT.get(), Config.T3_APIARY_OUTPUT.get(), Config.T4_APIARY_OUTPUT.get());
 
     private BlockPos apiaryPos;
     private ApiaryTileEntity apiary;
@@ -199,7 +198,7 @@ public class ApiaryStorageTileEntity extends BlockEntity implements MenuProvider
 
     public void deliverHoneycomb(Bee entity, int apiaryTier) {
         String beeType;
-        if (entity instanceof ICustomBee && ((ICustomBee) entity).getBeeData().hasHoneycomb()) {
+        if (entity instanceof ICustomBee && !((ICustomBee) entity).getHoneycombData().getHoneycombType().equals(HoneycombTypes.NONE)) {
             beeType = ((ICustomBee) entity).getBeeType();
         } else if (!(entity instanceof ICustomBee)) {
             beeType = BeeConstants.VANILLA_BEE_TYPE;
@@ -207,44 +206,36 @@ public class ApiaryStorageTileEntity extends BlockEntity implements MenuProvider
             return;
         }
 
-        ItemStack itemstack;
-        ItemStack comb = beeType.equals(BeeConstants.VANILLA_BEE_TYPE) ? new ItemStack(Items.HONEYCOMB) : ((ICustomBee) entity).getBeeData().getCombStack();
-        ItemStack combBlock = beeType.equals(BeeConstants.VANILLA_BEE_TYPE) ? new ItemStack(Items.HONEYCOMB_BLOCK) : ((ICustomBee) entity).getBeeData().getCombBlockItemStack();
-        int[] outputAmounts = beeType.equals(BeeConstants.VANILLA_BEE_TYPE) ? null : BEE_REGISTRY.getBeeData(beeType).getApiaryOutputAmounts();
-        ApiaryOutput[] outputTypes = !beeType.equals(BeeConstants.VANILLA_BEE_TYPE) ? BEE_REGISTRY.getBeeData(beeType).getApiaryOutputsTypes() : BeeInfoUtils.getDefaultApiaryTypes();
 
-        switch (apiaryTier) {
-            case 8:
-                itemstack = (outputTypes[3] == ApiaryOutput.BLOCK) ? combBlock.copy() : comb.copy();
-                itemstack.setCount(outputAmounts != null && outputAmounts[3] != -1 ? outputAmounts[3] : Config.T4_APIARY_QUANTITY.get());
-                break;
-            case 7:
-                itemstack = (outputTypes[2] == ApiaryOutput.BLOCK) ? combBlock.copy() : comb.copy();
-                itemstack.setCount(outputAmounts != null && outputAmounts[2] != -1 ? outputAmounts[2] : Config.T3_APIARY_QUANTITY.get());
-                break;
-            case 6:
-                itemstack = (outputTypes[1] == ApiaryOutput.BLOCK) ? combBlock.copy() : comb.copy();
-                itemstack.setCount(outputAmounts != null && outputAmounts[1] != -1 ? outputAmounts[1] : Config.T2_APIARY_QUANTITY.get());
-                break;
-            default:
-                itemstack = (outputTypes[0] == ApiaryOutput.BLOCK) ? combBlock.copy() : comb.copy();
-                itemstack.setCount(outputAmounts != null && outputAmounts[0] != -1 ? outputAmounts[0] : Config.T1_APIARY_QUANTITY.get());
-                break;
-        }
-        depositItemStack(itemstack);
+        ItemStack comb = beeType.equals(BeeConstants.VANILLA_BEE_TYPE) ? new ItemStack(Items.HONEYCOMB) : ((ICustomBee) entity).getHoneycombData().getHoneycomb().getDefaultInstance();
+        ItemStack combBlock = beeType.equals(BeeConstants.VANILLA_BEE_TYPE) ? new ItemStack(Items.HONEYCOMB_BLOCK) : ((ICustomBee) entity).getHoneycombData().getHoneycombBlock().getDefaultInstance();
+        List<Integer> outputAmounts = beeType.equals(BeeConstants.VANILLA_BEE_TYPE) ? null : ((ICustomBee) entity).getHoneycombData().getApiaryOutputAmounts();
+        List<ApiaryOutputs> outputTypes = !beeType.equals(BeeConstants.VANILLA_BEE_TYPE) ? ((ICustomBee) entity).getHoneycombData().getApiaryOutputTypes() : OUTPUT_TYPES;
+
+        depositItemStack(getApiaryOutput(apiaryTier, comb, combBlock, outputAmounts, outputTypes));
     }
+
+    private ItemStack getApiaryOutput(int apiaryTier, ItemStack comb, ItemStack combBlock, List<Integer> outputAmounts, List<ApiaryOutputs> outputTypes) {
+        ItemStack itemstack;
+        int index = apiaryTier - 5;
+        itemstack = (outputTypes.get(index) == ApiaryOutputs.BLOCK) ? combBlock : comb;
+        itemstack.setCount(outputAmounts != null && outputAmounts.get(index) != -1 ? outputAmounts.get(index) : OUTPUT_AMOUNTS.get(index));
+        return itemstack;
+    }
+
+
 
     public boolean breedComplete(String p1, String p2) {
         if (inventoryHasSpace()) {
             CustomBeeData childBeeData = BEE_REGISTRY.getWeightedChild(p1, p2);
-            float breedChance = BeeRegistry.getRegistry().getBreedChance(p1, p2, childBeeData);
-            EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(childBeeData.getEntityTypeRegistryID());
+            float breedChance = BeeRegistry.getRegistry().getBreedChance(p1, p2, childBeeData.getBreedData());
+            EntityType<?> entityType = BeeInfoUtils.getEntityType(childBeeData.getCoreData().getName());
 
             BreedData p1BreedData = BEE_REGISTRY.getBeeData(p1).getBreedData();
             BreedData p2BreedData = BEE_REGISTRY.getBeeData(p2).getBreedData();
             
-            Item p1Returnable = p1BreedData.getFeedReturnItem();
-            Item p2Returnable = p2BreedData.getFeedReturnItem();
+            Item p1Returnable = p1BreedData.getFeedReturnItem().orElse(null);
+            Item p2Returnable = p2BreedData.getFeedReturnItem().orElse(null);
 
             if (level != null && entityType != null) {
                 Entity entity = entityType.create(level);

@@ -1,8 +1,7 @@
 package com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.mutations;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
-import com.resourcefulbees.resourcefulbees.api.beedata.mutation.outputs.EntityOutput;
+import com.resourcefulbees.resourcefulbees.api.beedata.outputs.EntityOutput;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.BeePage;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
@@ -26,25 +25,24 @@ import static com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.Bee
 
 public class EntityMutationPage extends MutationsPage {
 
-    Entity input;
-    List<Pair<Double, EntityOutput>> outputs = new ArrayList<>();
+    final Entity input;
+    final List<Pair<Double, EntityOutput>> outputs = new ArrayList<>();
     private Double outputChance;
 
-    public EntityMutationPage(EntityType<?> parentEntity, BeePage parent, EntityType<?> entity, Pair<Double, RandomCollection<EntityOutput>> outputs, MutationTypes type, int mutationCount, BeepediaScreen beepedia) {
+    public EntityMutationPage(EntityType<?> parentEntity, BeePage parent, EntityType<?> entity, RandomCollection<EntityOutput> outputs, MutationTypes type, int mutationCount, BeepediaScreen beepedia) {
         this(parentEntity.create(Objects.requireNonNull(beepedia.getMinecraft().level)), parent, entity, outputs, type, mutationCount, beepedia);
     }
 
-    public EntityMutationPage(Entity parentEntity, BeePage parent, EntityType<?> entity, Pair<Double, RandomCollection<EntityOutput>> outputs, MutationTypes type, int mutationCount, BeepediaScreen beepedia) {
+    public EntityMutationPage(Entity parentEntity, BeePage parent, EntityType<?> entity, RandomCollection<EntityOutput> outputs, MutationTypes type, int mutationCount, BeepediaScreen beepedia) {
         super(parentEntity, parent, type, mutationCount, beepedia);
         input = entity.create(beepedia.getMinecraft().level);
         initOutputs(outputs);
     }
 
 
-    private void initOutputs(Pair<Double, RandomCollection<EntityOutput>> outputs) {
-        outputChance = outputs.getKey();
-        RandomCollection<EntityOutput> collection = outputs.getRight();
-        collection.getMap().forEach((b, m) -> this.outputs.add(Pair.of(collection.getAdjustedWeight(m.getWeight()), m)));
+    private void initOutputs(RandomCollection<EntityOutput> outputs) {
+        outputChance = outputs.next().getChance();
+        outputs.forEach(entityOutput ->  this.outputs.add(Pair.of(outputs.getAdjustedWeight(entityOutput.getWeight()), entityOutput)));
     }
 
     @Override
@@ -61,9 +59,9 @@ public class EntityMutationPage extends MutationsPage {
         RenderUtils.renderEntity(matrix, input, beepedia.getMinecraft().level, (float) xPos + 27, (float) yPos + 32, 45, 1.25f);
         EntityOutput output = outputs.get(outputCounter).getRight();
         Entity entity = output.getGuiEntity(beepedia.getMinecraft().level);
-        if (!output.getCompoundNBT().isEmpty()) {
+        if (output.getCompoundNBT().isPresent()) {
             CompoundTag nbt = entity.saveWithoutId(new CompoundTag());
-            nbt.merge(output.getCompoundNBT());
+            nbt.merge(output.getCompoundNBT().get());
             entity.load(nbt);
         }
         RenderUtils.renderEntity(matrix, entity, beepedia.getMinecraft().level, (float) xPos + 117, (float) yPos + 32, -45, 1.25f);
@@ -81,9 +79,9 @@ public class EntityMutationPage extends MutationsPage {
         if (input instanceof CustomBeeEntity) {
             CustomBeeEntity beeEntity = (CustomBeeEntity) input;
             if (BeepediaScreen.mouseHovering((float) xPos + 22, (float) yPos + 27, 30, 30, mouseX, mouseY)) {
-                if (BeepediaScreen.currScreenState.getPageID().equals((beeEntity.getBeeData().getName()))) return false;
+                if (BeepediaScreen.currScreenState.getPageID().equals((beeEntity.getBeeType()))) return false;
                 BeepediaScreen.saveScreenState();
-                beepedia.setActive(BeepediaScreen.PageType.BEE, beeEntity.getBeeData().getName());
+                beepedia.setActive(BeepediaScreen.PageType.BEE, beeEntity.getBeeType());
                 return true;
             }
         }
@@ -91,9 +89,9 @@ public class EntityMutationPage extends MutationsPage {
         if (output instanceof CustomBeeEntity) {
             CustomBeeEntity beeEntity = (CustomBeeEntity) output;
             if (BeepediaScreen.mouseHovering((float) xPos + 112, (float) yPos + 27, 30, 30, mouseX, mouseY)) {
-                if (BeepediaScreen.currScreenState.getPageID().equals((beeEntity.getBeeData().getName()))) return false;
+                if (BeepediaScreen.currScreenState.getPageID().equals(beeEntity.getBeeType())) return false;
                 BeepediaScreen.saveScreenState();
-                beepedia.setActive(BeepediaScreen.PageType.BEE, beeEntity.getBeeData().getName());
+                beepedia.setActive(BeepediaScreen.PageType.BEE, beeEntity.getBeeType());
                 return true;
             }
         }
@@ -117,9 +115,9 @@ public class EntityMutationPage extends MutationsPage {
             MutableComponent id = new TextComponent(output.getEntityType().getRegistryName().toString()).withStyle(ChatFormatting.DARK_GRAY);
             tooltip.add(name);
             tooltip.add(id);
-            if (!output.getCompoundNBT().isEmpty()) {
+            if (output.getCompoundNBT().isPresent()) {
                 if (BeeInfoUtils.isShiftPressed()) {
-                    List<String> lore = BeeInfoUtils.getLoreLines(output.getCompoundNBT());
+                    List<String> lore = BeeInfoUtils.getLoreLines(output.getCompoundNBT().get());
                     lore.forEach(l -> tooltip.add(new TextComponent(l).withStyle(Style.EMPTY.withColor(TextColor.parseColor("dark_purple")))));
                 } else {
                     tooltip.add(new TranslatableComponent("gui.resourcefulbees.jei.tooltip.show_nbt").withStyle(Style.EMPTY.withColor(TextColor.parseColor("dark_purple"))));

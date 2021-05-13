@@ -120,7 +120,6 @@ public class RenderUtils {
         //noinspection deprecation
         RenderSystem.color4f(red, green, blue, alpha);
         RenderUtils.drawTiledSprite(matrix, xPos, yPos, height, width, height, sprite, 16, 16, zOffset);
-        //noinspection deprecation
         resetColor();
     }
 
@@ -135,7 +134,7 @@ public class RenderUtils {
         if (entity instanceof LivingEntity) {
             if (mc.player != null) entity.tickCount = mc.player.tickCount;
             if (entity instanceof CustomBeeEntity) {
-                scaledSize = 20 / ((CustomBeeEntity) entity).getBeeData().getSizeModifier();
+                scaledSize = 20 / ((CustomBeeEntity) entity).getRenderData().getSizeModifier();
             } else {
                 scaledSize = 20 / (Math.max(entity.getBbWidth(), entity.getBbHeight()));
             }

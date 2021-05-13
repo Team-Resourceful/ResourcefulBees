@@ -1,19 +1,17 @@
 package com.resourcefulbees.resourcefulbees.compat.jei.ingredients;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
-import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
-import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
+import com.resourcefulbees.resourcefulbees.item.BeeSpawnEggItem;
 import mezz.jei.api.ingredients.IIngredientHelper;
 import mezz.jei.api.recipe.IFocus;
 import mezz.jei.api.recipe.IFocusFactory;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Iterator;
+import java.util.Objects;
+import java.util.stream.StreamSupport;
 
 public class EntityIngredientHelper implements IIngredientHelper<EntityIngredient> {
 
@@ -26,36 +24,27 @@ public class EntityIngredientHelper implements IIngredientHelper<EntityIngredien
     @Nullable
     @Override
     public EntityIngredient getMatch(Iterable<EntityIngredient> iterable, @NotNull EntityIngredient entityIngredient) {
-        Iterator<EntityIngredient> var3 = iterable.iterator();
-
-        EntityIngredient entity;
-        do {
-            if (!var3.hasNext()) {
-                return null;
-            }
-
-            entity = var3.next();
-        } while(entityIngredient.getBeeType().equals(entity.getBeeType()));
-
-        return entity;
+        return StreamSupport.stream(iterable.spliterator(), false)
+                .filter(ingredient -> ingredient.getBeeData().getRegistryID().equals(entityIngredient.getBeeData().getRegistryID()))
+                .findFirst().orElse(null);
     }
 
     @NotNull
     @Override
     public String getDisplayName(EntityIngredient entityIngredient) {
-        return I18n.get("entity.resourcefulbees." + entityIngredient.getBeeType());
+        return I18n.get("entity.resourcefulbees." + entityIngredient.getBeeData().getCoreData().getName() + "_bee");
     }
 
     @NotNull
     @Override
     public ItemStack getCheatItemStack(EntityIngredient ingredient) {
-        return ingredient.getBeeType().equals(BeeConstants.VANILLA_BEE_TYPE) ? new ItemStack(Items.BEE_SPAWN_EGG) : new ItemStack(BeeRegistry.getRegistry().getBeeData(ingredient.getBeeType()).getSpawnEggItemRegistryObject().get());
+        return Objects.requireNonNull(BeeSpawnEggItem.byId(ingredient.getBeeData().getEntityType())).getDefaultInstance();
     }
 
     @NotNull
     @Override
     public String getUniqueId(EntityIngredient entityIngredient) {
-        return "bee:" + entityIngredient.getBeeType();
+        return "bee:" + entityIngredient.getBeeData().getRegistryID().toString();
     }
 
     @NotNull
@@ -73,7 +62,7 @@ public class EntityIngredientHelper implements IIngredientHelper<EntityIngredien
     @NotNull
     @Override
     public String getResourceId(EntityIngredient entityIngredient) {
-        return entityIngredient.getBeeType();
+        return entityIngredient.getBeeData().getRegistryID().getPath();
     }
 
     @NotNull

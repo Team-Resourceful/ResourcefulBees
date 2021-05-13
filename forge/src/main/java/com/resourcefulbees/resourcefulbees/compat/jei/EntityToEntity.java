@@ -3,6 +3,7 @@ package com.resourcefulbees.resourcefulbees.compat.jei;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.IBeeRegistry;
+import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.api.beedata.MutationData;
 import com.resourcefulbees.resourcefulbees.compat.jei.ingredients.EntityIngredient;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
@@ -52,16 +53,16 @@ public class EntityToEntity extends BaseCategory<EntityToEntity.Recipe> {
 
         BEE_REGISTRY.getBees().forEach(((s, beeData) -> {
             MutationData mutationData = beeData.getMutationData();
-            if (mutationData.hasMutation() && mutationData.hasEntityMutations()) {
-                beeData.getMutationData().getEntityMutations().forEach((entityType, doubleRandomCollectionPair) -> {
+            if (mutationData.hasMutation() && !mutationData.getEntityMutations().isEmpty()) {
+                mutationData.getEntityMutations().forEach((entityType, collection) ->  {
                     SpawnEggItem inputSpawnEgg = SpawnEggItem.byId(entityType);
                     ItemStack inputEgg = inputSpawnEgg != null ? new ItemStack(inputSpawnEgg) : null;
-                    doubleRandomCollectionPair.getRight().forEach(entityOutput -> {
+                    collection.forEach(entityOutput -> {
                         SpawnEggItem outputSpawnEgg = SpawnEggItem.byId(entityOutput.getEntityType());
                         ItemStack outputEgg = outputSpawnEgg != null ? new ItemStack(outputSpawnEgg) : null;
 
-                        double effectiveWeight = RecipeUtils.getEffectiveWeight(doubleRandomCollectionPair.getRight(), entityOutput.getWeight());
-                        recipes.add(new Recipe(entityType, entityOutput.getEntityType(), inputEgg, outputEgg, entityOutput.getCompoundNBT(), beeData.getName(), effectiveWeight, doubleRandomCollectionPair.getLeft()));
+                        double effectiveWeight = RecipeUtils.getEffectiveWeight(collection, entityOutput.getWeight());
+                        recipes.add(new Recipe(entityType, entityOutput.getEntityType(), inputEgg, outputEgg, entityOutput.getCompoundNBT().orElse(null), beeData, effectiveWeight, entityOutput.getChance()));
                     });
                 });
             }
@@ -70,7 +71,7 @@ public class EntityToEntity extends BaseCategory<EntityToEntity.Recipe> {
     }
 
     @Override
-    public void setIngredients(Recipe recipe, @NotNull IIngredients ingredients) {
+    public void setIngredients(@NotNull Recipe recipe, @NotNull IIngredients ingredients) {
         if (recipe.input != null)
             ingredients.setInput(VanillaTypes.ITEM, recipe.input);
         if (recipe.output != null)
@@ -164,14 +165,14 @@ public class EntityToEntity extends BaseCategory<EntityToEntity.Recipe> {
         private final EntityType<?> outputEntity;
         private final ItemStack input;
         private final ItemStack output;
-        private final String beeType;
+        private final CustomBeeData beeType;
 
         private final double weight;
         private final double chance;
 
         public final CompoundTag outputNBT;
 
-        public Recipe(EntityType<?> inputEntity, EntityType<?> outputEntity, ItemStack inputEgg, ItemStack outputEgg, CompoundTag outputNBT, String beeType, double weight, double chance) {
+        public Recipe(EntityType<?> inputEntity, EntityType<?> outputEntity, ItemStack inputEgg, ItemStack outputEgg, CompoundTag outputNBT, CustomBeeData beeType, double weight, double chance) {
             this.inputEntity = inputEntity;
             this.outputEntity = outputEntity;
             this.input = inputEgg;

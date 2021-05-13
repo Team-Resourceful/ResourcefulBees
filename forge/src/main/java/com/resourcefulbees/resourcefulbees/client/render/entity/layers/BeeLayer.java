@@ -2,15 +2,12 @@ package com.resourcefulbees.resourcefulbees.client.render.entity.layers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.resourcefulbees.resourcefulbees.ResourcefulBees;
-import com.resourcefulbees.resourcefulbees.api.beedata.ColorData;
-import com.resourcefulbees.resourcefulbees.client.render.entity.CustomBeeRenderer;
 import com.resourcefulbees.resourcefulbees.client.render.entity.models.CustomBeeModel;
+import com.resourcefulbees.resourcefulbees.api.beedata.LayerData;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
-import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.ModelTypes;
 import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
@@ -18,79 +15,30 @@ import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
-import java.io.IOException;
-
 @OnlyIn(Dist.CLIENT)
 public class BeeLayer extends RenderLayer<CustomBeeEntity, CustomBeeModel<CustomBeeEntity>> {
 
-    private static final String PNG_SUFFIX = ".png";
-    private static final String ANGRY_PNG_SUFFIX = "_angry.png";
-    //private static final Logger LOGGER = LogManager.getLogger();
+    private final LayerData layerData;
 
-    private final boolean isEmissive;
-    private final int glowingPulse;
-    private final boolean isEnchanted;
     private final CustomBeeModel<CustomBeeEntity> additionModel;
-    private ResourceLocation layerTexture;
-    private ResourceLocation angerLayerTexture;
     private float[] color;
-    private final boolean isRainbowBee;
 
-    public BeeLayer(RenderLayerParent<CustomBeeEntity, CustomBeeModel<CustomBeeEntity>> renderer, CustomBeeRenderer.LayerType layerType, ModelTypes addition, ColorData colorData) {
+    public BeeLayer(RenderLayerParent<CustomBeeEntity, CustomBeeModel<CustomBeeEntity>> renderer, LayerData layerData, ModelTypes modelType) {
         super(renderer);
-        this.additionModel = addition == ModelTypes.DEFAULT ? null : new CustomBeeModel<>(addition);
-        this.isRainbowBee = colorData.isRainbowBee();
-        this.isEnchanted = colorData.isEnchanted();
-        this.glowingPulse = colorData.getGlowingPulse();
-
-        switch (layerType) {
-            case PRIMARY:
-                this.isEmissive = false;
-                this.layerTexture = ResourceLocation.tryParse(ResourcefulBees.MOD_ID + ":" + BeeConstants.ENTITY_TEXTURES_DIR + colorData.getPrimaryLayerTexture() + PNG_SUFFIX);
-                this.angerLayerTexture = ResourceLocation.tryParse(ResourcefulBees.MOD_ID + ":" + BeeConstants.ENTITY_TEXTURES_DIR + colorData.getPrimaryLayerTexture() + ANGRY_PNG_SUFFIX);
-                this.color = isRainbowBee ? RainbowColor.getColorFloats() : colorData.getPrimaryColorFloats();
-                break;
-            case SECONDARY:
-                this.isEmissive = false;
-                this.layerTexture = ResourceLocation.tryParse(ResourcefulBees.MOD_ID + ":" + BeeConstants.ENTITY_TEXTURES_DIR + colorData.getSecondaryLayerTexture() + PNG_SUFFIX);
-                this.angerLayerTexture = ResourceLocation.tryParse(ResourcefulBees.MOD_ID + ":" + BeeConstants.ENTITY_TEXTURES_DIR + colorData.getSecondaryLayerTexture() + ANGRY_PNG_SUFFIX);
-                this.color = isRainbowBee ? RainbowColor.getColorFloats() : colorData.getSecondaryColorFloats();
-                break;
-            case EMISSIVE:
-                this.isEmissive = true;
-                this.layerTexture = ResourceLocation.tryParse(ResourcefulBees.MOD_ID + ":" + BeeConstants.ENTITY_TEXTURES_DIR + colorData.getEmissiveLayerTexture() + PNG_SUFFIX);
-                this.angerLayerTexture = ResourceLocation.tryParse(ResourcefulBees.MOD_ID + ":" + BeeConstants.ENTITY_TEXTURES_DIR + colorData.getEmissiveLayerTexture() + ANGRY_PNG_SUFFIX);
-                this.color = isRainbowBee ? RainbowColor.getColorFloats() : colorData.getGlowColorFloats();
-                break;
-            default:
-                throw new IllegalStateException("You dun screwed up, did you add a new layer?");
-        }
-        if (!textureExists(layerTexture)) {
-            layerTexture = BeeConstants.MISSING_TEXTURE;
-        }
-        if (!textureExists(angerLayerTexture)) {
-            angerLayerTexture = layerTexture;
-        }
-    }
-
-    public static boolean textureExists(ResourceLocation texture) {
-        try {
-            Minecraft.getInstance().getResourceManager().getResource(texture);
-            return true;
-        } catch (IOException e) {
-            return false;
-        }
+        this.layerData = layerData;
+        this.color = layerData.getColor().getRGBComponents(null);
+        this.additionModel = modelType == ModelTypes.DEFAULT ? null : new CustomBeeModel<>(modelType);
     }
 
     @Override
     public void render(@NotNull PoseStack matrixStackIn, @NotNull MultiBufferSource bufferIn, int packedLightIn, @NotNull CustomBeeEntity customBeeEntity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        if (isRainbowBee) color = RainbowColor.getColorFloats();
-        ResourceLocation texture = customBeeEntity.isAngry() ? angerLayerTexture : layerTexture;
+        if (layerData.isRainbow()) color = RainbowColor.getColorFloats();
+        ResourceLocation texture = customBeeEntity.isAngry() ? layerData.getBeeTexture().getAngryTexture() : layerData.getBeeTexture().getNormalTexture();
 
         if (additionModel != null) {
             this.getParentModel().copyPropertiesTo(additionModel);
@@ -98,10 +46,25 @@ public class BeeLayer extends RenderLayer<CustomBeeEntity, CustomBeeModel<Custom
             additionModel.setupAnim(customBeeEntity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
         }
 
-        if (isEmissive) {
-            renderGlowingLayer(matrixStackIn, bufferIn, packedLightIn, customBeeEntity, texture);
+        renderLayers(matrixStackIn, bufferIn, packedLightIn, customBeeEntity, texture);
+    }
+
+    private void renderLayers(@NotNull PoseStack matrixStackIn, @NotNull MultiBufferSource bufferIn, int packedLightIn, @NotNull CustomBeeEntity customBeeEntity, ResourceLocation texture) {
+        if (layerData.isEnchanted()) {
+            this.getParentModel().renderToBuffer(matrixStackIn, bufferIn.getBuffer(RenderType.entityGlint()), packedLightIn, OverlayTexture.NO_OVERLAY, 0.0F, 0.0F, 0.0F, 0.0F);
+            if (additionModel != null) {
+                additionModel.renderToBuffer(matrixStackIn, bufferIn.getBuffer(RenderType.entityGlint()), packedLightIn, LivingEntityRenderer.getOverlayCoords(customBeeEntity, 0.0F), 0.0F, 0.0F, 0.0F, 0.0F);
+            }
+        } else if (layerData.isEmissive()) {
+            VertexConsumer vertexConsumer = bufferIn.getBuffer(RenderType.eyes(texture));
+            if (layerData.getPulseFrequency() == 0 || customBeeEntity.tickCount % layerData.getPulseFrequency() == 0.0f) {
+                this.getParentModel().renderToBuffer(matrixStackIn, vertexConsumer, 15728640, OverlayTexture.NO_OVERLAY, color[0], color[1], color[2], 1.0F);
+                if (additionModel != null) {
+                    additionModel.renderToBuffer(matrixStackIn, vertexConsumer, 15728640, LivingEntityRenderer.getOverlayCoords(customBeeEntity, 0.0F), color[0], color[1], color[2], 1.0F);
+                }
+            }
         } else {
-            renderColoredCutoutModel(this.getParentModel(), texture, matrixStackIn, bufferIn, packedLightIn, customBeeEntity, color[0], color[1], color[2]);
+            renderColoredModel(this.getParentModel(), texture, matrixStackIn, bufferIn, packedLightIn, customBeeEntity, color[0], color[1], color[2]);
             if (additionModel != null) {
                 VertexConsumer ivertexbuilder = bufferIn.getBuffer(RenderType.entityTranslucent(texture));
                 additionModel.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, LivingEntityRenderer.getOverlayCoords(customBeeEntity, 0.0F), color[0], color[1], color[2], 1.0F);
@@ -109,20 +72,11 @@ public class BeeLayer extends RenderLayer<CustomBeeEntity, CustomBeeModel<Custom
         }
     }
 
-    private void renderGlowingLayer(@NotNull PoseStack matrixStackIn, @NotNull MultiBufferSource bufferIn, int packedLightIn, @NotNull CustomBeeEntity customBeeEntity, ResourceLocation texture) {
-        if (isEnchanted) {
-            this.getParentModel().renderToBuffer(matrixStackIn, bufferIn.getBuffer(RenderType.entityGlint()), packedLightIn, OverlayTexture.NO_OVERLAY, 0.0F, 0.0F, 0.0F, 0.0F);
-            if (additionModel != null) {
-                additionModel.renderToBuffer(matrixStackIn, bufferIn.getBuffer(RenderType.entityGlint()), packedLightIn, LivingEntityRenderer.getOverlayCoords(customBeeEntity, 0.0F), 0.0F, 0.0F, 0.0F, 0.0F);
-            }
-        } else {
-            VertexConsumer ivertexbuilder = bufferIn.getBuffer(RenderType.eyes(texture));
-            if (glowingPulse == 0 || customBeeEntity.tickCount / 5 % glowingPulse == 0) {
-                this.getParentModel().renderToBuffer(matrixStackIn, ivertexbuilder, 15728640, OverlayTexture.NO_OVERLAY, color[0], color[1], color[2], 1.0F);
-                if (additionModel != null) {
-                    additionModel.renderToBuffer(matrixStackIn, ivertexbuilder, 15728640, LivingEntityRenderer.getOverlayCoords(customBeeEntity, 0.0F), color[0], color[1], color[2], 1.0F);
-                }
-            }
-        }
+    /***
+     * Method overrides renderColoredCutoutModel from RenderLayer.class
+     */
+    protected static <T extends LivingEntity> void renderColoredModel(EntityModel<T> arg, ResourceLocation arg2, PoseStack arg3, MultiBufferSource arg4, int i, T arg5, float f, float g, float h) {
+        VertexConsumer lv = arg4.getBuffer(RenderType.entityTranslucent(arg2));
+        arg.renderToBuffer(arg3, lv, i, LivingEntityRenderer.getOverlayCoords(arg5, 0.0F), f, g, h, 1.0F);
     }
 }

@@ -2,6 +2,7 @@
 package com.resourcefulbees.resourcefulbees.tileentity;
 
 import com.google.gson.JsonElement;
+import com.resourcefulbees.resourcefulbees.api.beedata.outputs.FluidOutput;
 import com.resourcefulbees.resourcefulbees.block.CentrifugeBlock;
 import com.resourcefulbees.resourcefulbees.capabilities.CustomEnergyStorage;
 import com.resourcefulbees.resourcefulbees.capabilities.MultiFluidTank;
@@ -51,10 +52,8 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
-import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -76,14 +75,14 @@ public class CentrifugeTileEntity extends BlockEntity implements TickableBlockEn
     protected int[] honeycombSlots;
     protected int[] outputSlots;
 
-    protected AutomationSensitiveItemStackHandler itemStackHandler;
-    protected MultiFluidTank fluidTanks;
-    protected CustomEnergyStorage energyStorage = createEnergy();
-    protected LazyOptional<IItemHandler> lazyOptional = LazyOptional.of(() -> itemStackHandler);
-    protected LazyOptional<IEnergyStorage> energyOptional = LazyOptional.of(() -> energyStorage);
-    protected LazyOptional<MultiFluidTank> fluidOptional = LazyOptional.of(() -> fluidTanks);
+    protected final AutomationSensitiveItemStackHandler itemStackHandler;
+    protected final MultiFluidTank fluidTanks;
+    protected final CustomEnergyStorage energyStorage = createEnergy();
+    protected final LazyOptional<IItemHandler> lazyOptional = LazyOptional.of(() -> itemStackHandler);
+    protected final LazyOptional<IEnergyStorage> energyOptional = LazyOptional.of(() -> energyStorage);
+    protected final LazyOptional<MultiFluidTank> fluidOptional = LazyOptional.of(() -> fluidTanks);
     protected int[] time;
-    protected List<CentrifugeRecipe> recipes;
+    protected final List<CentrifugeRecipe> recipes;
     protected ItemStack failedMatch = ItemStack.EMPTY;
     protected boolean dirty;
     protected boolean[] isProcessing;
@@ -181,23 +180,20 @@ public class CentrifugeTileEntity extends BlockEntity implements TickableBlockEn
         }
         CentrifugeRecipe recipe = recipes.get(i);
 
-        for (int j = 0; j < recipe.itemOutputs.size(); j++) {
-            float chance = recipe.itemOutputs.get(j).getRight();
+        recipe.getItemOutputs().stream().limit(3).forEach(itemOutput -> {
+            double chance = itemOutput.getChance();
             if (chance >= level.random.nextFloat()) {
-                depositStacks.add(recipe.itemOutputs.get(j).getLeft().copy());
-                if (j == 2 && !recipe.noBottleInput) {
-                    glassBottle.shrink(recipes.get(i).itemOutputs.get(2).getLeft().getCount());
-                }
+                depositStacks.add(itemOutput.getItemStack());
             }
-        }
-        for (Pair<FluidStack, Float> fluidOutput : recipe.fluidOutput) {
-            float chance = fluidOutput.getRight();
+        });
+        recipe.getFluidOutputs().stream().limit(3).forEach(fluidOutput -> {
+            double chance = fluidOutput.getChance();
             if (chance >= level.random.nextFloat()) {
-                FluidStack fluid = fluidOutput.getLeft().copy();
+                FluidStack fluid = fluidOutput.getFluidStack();
                 int tank = getValidTank(fluid);
                 if (tank != -1) fluidTanks.fill(tank, fluid, IFluidHandler.FluidAction.EXECUTE);
             }
-        }
+        });
         if (!depositStacks.isEmpty()) {
             depositItemStacks(depositStacks);
         }
@@ -206,9 +202,9 @@ public class CentrifugeTileEntity extends BlockEntity implements TickableBlockEn
 
     private boolean tanksHasSpace(CentrifugeRecipe centrifugeRecipe) {
         if (centrifugeRecipe == null) return false;
-        for (Pair<FluidStack, Float> f : centrifugeRecipe.fluidOutput) {
-            if (f.getLeft().isEmpty()) continue;
-            if (getValidTank(f.getKey()) < 0) {
+        for (FluidOutput f : centrifugeRecipe.getFluidOutputs()) {
+            if (f.getFluidStack().isEmpty()) continue;
+            if (getValidTank(f.getFluidStack()) < 0) {
                 return false;
             }
         }
@@ -241,7 +237,7 @@ public class CentrifugeTileEntity extends BlockEntity implements TickableBlockEn
 
     protected void consumeInput(int i) {
         ItemStack combInput = itemStackHandler.getStackInSlot(honeycombSlots[i]);
-        JsonElement count = recipes.get(i).ingredient.toJson().getAsJsonObject().get(BeeConstants.INGREDIENT_COUNT);
+        JsonElement count = recipes.get(i).getIngredient().toJson().getAsJsonObject().get(BeeConstants.INGREDIENT_COUNT);
         int inputAmount = count != null ? count.getAsInt() : 1;
         combInput.shrink(inputAmount);
     }
@@ -249,7 +245,7 @@ public class CentrifugeTileEntity extends BlockEntity implements TickableBlockEn
     protected boolean canStartCentrifugeProcess(int i) {
         if (!isProcessing[i] && !itemStackHandler.getStackInSlot(honeycombSlots[i]).isEmpty() && canProcessRecipe(i)) {
             ItemStack combInput = itemStackHandler.getStackInSlot(honeycombSlots[i]);
-            JsonElement count = recipes.get(i).ingredient.toJson().getAsJsonObject().get(BeeConstants.INGREDIENT_COUNT);
+            JsonElement count = recipes.get(i).getIngredient().toJson().getAsJsonObject().get(BeeConstants.INGREDIENT_COUNT);
             int inputAmount = count != null ? count.getAsInt() : 1;
 
             return combInput.getCount() >= inputAmount;
@@ -258,7 +254,7 @@ public class CentrifugeTileEntity extends BlockEntity implements TickableBlockEn
     }
 
     protected boolean canProcessRecipe(int i) {
-        return recipes.get(i) != null && !recipes.get(i).multiblock;
+        return recipes.get(i) != null && !recipes.get(i).isMultiblock();
     }
 
     protected boolean canProcess(int i) {
@@ -314,7 +310,7 @@ public class CentrifugeTileEntity extends BlockEntity implements TickableBlockEn
     }
 
     public int getRecipeTime(int i) {
-        return getRecipe(i) != null ? Math.max(5, getRecipe(i).time) : Config.GLOBAL_CENTRIFUGE_RECIPE_TIME.get();
+        return getRecipe(i) != null ? Math.max(5, getRecipe(i).getTime()) : Config.GLOBAL_CENTRIFUGE_RECIPE_TIME.get();
     }
     //endregion
 
@@ -356,8 +352,8 @@ public class CentrifugeTileEntity extends BlockEntity implements TickableBlockEn
 
         boolean hasSpace = true;
         int i = 0;
-        while (recipe != null && hasSpace && i < recipe.itemOutputs.size()) {
-            ItemStack output = recipe.itemOutputs.get(i).getLeft();
+        while (recipe != null && hasSpace && i < recipe.getItemOutputs().size()) {
+            ItemStack output = recipe.getItemOutputs().get(i).getItemStack();
             if (!output.isEmpty() && !(i == 2 && itemStackHandler.getStackInSlot(BOTTLE_SLOT).isEmpty())) {
                 int count = output.getCount();
                 int j = outputSlots[0];

@@ -1,12 +1,17 @@
 {
-  "flower": "tag:forge:storage_blocks/netherite",
-  "maxTimeInHive": 600,
-  "hasHoneycomb": true,
-  "baseLayerTexture": "ores/netherite/netherite_bee",
-  "traits": ["nether", "wither"],
-  "ColorData": {
-    "isBeeColored": false,
-    "honeycombColor": "#654740"
+  "CoreData": {
+    "flower": "forge:storage_blocks/netherite",
+    "maxTimeInHive": 600,
+    "traits": ["nether", "wither"]
+  },
+  "HoneycombData": {
+    "honeycombType": "DEFAULT",
+    "honeycombColor": "#654740",
+    "honeycomb": "resourcefulbees:netherite_honeycomb",
+    "honeycombBlock": "resourcefulbees:netherite_honeycomb_block"
+  },
+  "RenderData": {
+    "layers": [{"texture": "ores/netherite/netherite_bee"}]
   },
   "MutationData": {
     "hasMutation": true,
@@ -23,8 +28,9 @@
   },
   "CentrifugeData": {
     "hasCentrifugeOutput": true,
-    "mainOutput": "minecraft:netherite_ingot",
-    "mainOutputWeight": 0.05
+    "itemOutputs": [
+      {"id": "minecraft:netherite_ingot", "weight": 0.05}
+    ]
   },
   "SpawnData": {
     "canSpawnInWorld": true,

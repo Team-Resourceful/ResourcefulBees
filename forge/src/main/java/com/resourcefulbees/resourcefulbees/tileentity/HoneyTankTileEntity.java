@@ -17,10 +17,10 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.inventory.ContainerListener;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerListener;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -50,8 +50,8 @@ public class HoneyTankTileEntity extends AbstractHoneyTankContainer {
 
         private final RegistryObject<Block> tankBlock;
         private final RegistryObject<Item> tankItem;
-        int maxFillAmount;
-        int tier;
+        final int maxFillAmount;
+        final int tier;
 
         TankTier(int tier, int maxFillAmount, RegistryObject<Block> tankBlock, RegistryObject<Item> tankItem) {
             this.tier = tier;
@@ -111,8 +111,8 @@ public class HoneyTankTileEntity extends AbstractHoneyTankContainer {
 
     public float getProcessFillPercent() {
         if (!canProcessFill()) return 0;
-        if (processingFill == Config.HONEY_PROCEESS_TIME.get()) return 1;
-        return processingFill / (float) Config.HONEY_PROCEESS_TIME.get();
+        if (processingFill == Config.HONEY_PROCESS_TIME.get()) return 1;
+        return processingFill / (float) Config.HONEY_PROCESS_TIME.get();
     }
 
     @Override
@@ -147,8 +147,7 @@ public class HoneyTankTileEntity extends AbstractHoneyTankContainer {
 
     public void processFill() {
         ItemStack inputStack = getTileStackHandler().getStackInSlot(BOTTLE_INPUT_FILL);
-        boolean isBottle = true;
-        if (inputStack.getItem() == Items.BUCKET) isBottle = false;
+        boolean isBottle = inputStack.getItem() != Items.BUCKET;
         inputStack.shrink(1);
         FluidStack fluidStack = new FluidStack(getFluidTank().getFluid(), isBottle ? ModConstants.HONEY_PER_BOTTLE : 1000);
         getTileStackHandler().setStackInSlot(BOTTLE_INPUT_FILL, inputStack);
@@ -174,7 +173,7 @@ public class HoneyTankTileEntity extends AbstractHoneyTankContainer {
     @Override
     public void tick() {
         if (canProcessFill()) {
-            if (processingFill >= Config.HONEY_PROCEESS_TIME.get()) {
+            if (processingFill >= Config.HONEY_PROCESS_TIME.get()) {
                 processFill();
                 processingFill = 0;
             }

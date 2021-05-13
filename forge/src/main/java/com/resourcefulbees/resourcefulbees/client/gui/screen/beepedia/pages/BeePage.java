@@ -2,14 +2,15 @@ package com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
-import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.api.beedata.mutation.EntityMutation;
 import com.resourcefulbees.resourcefulbees.api.beedata.mutation.ItemMutation;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.resourcefulbees.resourcefulbees.client.gui.widget.TabImageButton;
+import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.item.BeeJar;
+import com.resourcefulbees.resourcefulbees.lib.HoneycombTypes;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import com.resourcefulbees.resourcefulbees.utils.RenderUtils;
@@ -34,24 +35,22 @@ import org.lwjgl.opengl.GL11;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 public class BeePage extends BeepediaPage {
 
-    public CustomBeeData beeData;
+    public final CustomBeeData beeData;
 
     private Entity bee = null;
     protected Pair<TabImageButton, BeeDataPage> subPage;
-    Pair<TabImageButton, BeeDataPage> beeInfoPage;
+    final Pair<TabImageButton, BeeDataPage> beeInfoPage;
     Pair<TabImageButton, BeeDataPage> mutationsPage = null;
     Pair<TabImageButton, BeeDataPage> traitListPage = null;
     Pair<TabImageButton, BeeDataPage> centrifugePage = null;
     Pair<TabImageButton, BeeDataPage> spawningPage = null;
     Pair<TabImageButton, BeeDataPage> breedingPage = null;
-    List<Pair<TabImageButton, BeeDataPage>> tabs = new ArrayList<>();
-    ResourceLocation buttonImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/button.png");
+    final List<Pair<TabImageButton, BeeDataPage>> tabs = new ArrayList<>();
+    final ResourceLocation buttonImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/button.png");
 
     private List<String> searchBiomes = new LinkedList<>();
     private List<String> searchBeeTags = new LinkedList<>();
@@ -63,8 +62,8 @@ public class BeePage extends BeepediaPage {
     private List<String> searchAll = new LinkedList<>();
 
     private int tabCounter;
-    MutableComponent label;
-    public boolean beeUnlocked;
+    final MutableComponent label;
+    public final boolean beeUnlocked;
 
     public BeePage(BeepediaScreen beepedia, CustomBeeData beeData, String id, int xPos, int yPos) {
         super(beepedia, xPos, yPos, id);
@@ -89,7 +88,7 @@ public class BeePage extends BeepediaPage {
             );
             tabs.add(mutationsPage);
         }
-        if (beeData.getTraitData().hasTraits() && beeData.hasTraitNames() && (!Config.BEEPEDIA_HIDE_LOCKED.get() || beeUnlocked)) {
+        if (beeData.getTraitData().hasTraits() && !beeData.getTraitData().getTraits().isEmpty() && (!Config.BEEPEDIA_HIDE_LOCKED.get() || beeUnlocked)) {
             traitListPage = Pair.of(
                     getTabButton(new ItemStack(Items.BLAZE_POWDER), onPress -> setSubPage(SubPageType.TRAIT_LIST),
                             new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.traits")),
@@ -97,7 +96,7 @@ public class BeePage extends BeepediaPage {
             );
             tabs.add(traitListPage);
         }
-        if (beeData.hasHoneycomb() && (!Config.BEEPEDIA_HIDE_LOCKED.get() || beeUnlocked) && beeData.getCombRegistryObject().isPresent()) {
+        if (!beeData.getHoneycombData().getHoneycombType().equals(HoneycombTypes.NONE) && (!Config.BEEPEDIA_HIDE_LOCKED.get() || beeUnlocked)) {
             centrifugePage = Pair.of(
                     getTabButton(new ItemStack(Items.HONEYCOMB), onPress -> setSubPage(SubPageType.HONEYCOMB),
                             new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.honeycombs")),
@@ -356,7 +355,7 @@ public class BeePage extends BeepediaPage {
     }
 
     public Entity getBee() {
-        if (bee == null) bee = beepedia.initEntity(beeData.getEntityTypeRegistryID());
+        if (bee == null) bee = beepedia.initEntity(beeData.getRegistryID());
         return bee;
     }
 
@@ -367,6 +366,6 @@ public class BeePage extends BeepediaPage {
         BREEDING,
         MUTATIONS,
         HONEYCOMB,
-        TRAIT_LIST;
+        TRAIT_LIST
     }
 }

@@ -1,6 +1,6 @@
 package com.resourcefulbees.resourcefulbees.item;
 
-import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
+import com.resourcefulbees.resourcefulbees.api.beedata.CoreData;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryTileEntity;
 import net.minecraft.ChatFormatting;
@@ -44,8 +44,8 @@ public class HoneyDipper extends Item {
             Block clickedBlock = useContext.getLevel().getBlockState(useContext.getClickedPos()).getBlock();
 
             if (selectedBee instanceof CustomBeeEntity) {
-                CustomBeeData beeData = ((CustomBeeEntity) selectedBee).getBeeData();
-                if (beeData.hasBlockFlowers() && beeData.getBlockFlowers().contains(clickedBlock)) {
+                CoreData beeData = ((CustomBeeEntity) selectedBee).getCoreData();
+                if (!beeData.getBlockFlowers().isEmpty() && beeData.getBlockFlowers().contains(clickedBlock)) {
                     setFlowerPosition(useContext);
                     return InteractionResult.SUCCESS;
                 }
@@ -113,8 +113,8 @@ public class HoneyDipper extends Item {
     private boolean setEntityFlowerPos(Player player, LivingEntity entity) {
         if (selectedBee instanceof CustomBeeEntity) {
             CustomBeeEntity customBee = (CustomBeeEntity) selectedBee;
-            if (customBee.getBeeData().hasEntityFlower()) {
-                ResourceLocation resourceLocation = customBee.getBeeData().getEntityFlower();
+            if (customBee.getCoreData().getEntityFlower().isPresent()) {
+                ResourceLocation resourceLocation = customBee.getCoreData().getEntityFlower().get();
                 if (entity.getType().getRegistryName() != null && entity.getType().getRegistryName().equals(resourceLocation)) {
                     customBee.setFlowerEntityID(entity.getId());
                     customBee.setSavedFlowerPos(entity.blockPosition());

@@ -1,13 +1,18 @@
 {
-  "flower": "tag:forge:mushrooms",
-  "hasHoneycomb": false,
-  "traits": ["slimy"],
-  "maxTimeInHive": 1200,
-  "baseLayerTexture": "slime/slime_bee",
-  "ColorData": {
+  "CoreData":{
+    "flower": "forge:mushrooms",
+    "traits": ["slimy"],
+    "maxTimeInHive": 1200
+  },
+  "HoneycombData": {
+    "honeycombType": "NONE"
+  },
+  "RenderData": {
     "modelType": "GELATINOUS",
-    "gelLayerTexture": "/slime/slime_gel_Layer",
-    "honeycombColor": "#62B64A"
+    "layers": [
+      {"texture": "slime/slime_bee"},
+      {"texture": "/slime/slime_gel_Layer"}
+    ]
   },
   "MutationData": {
     "hasMutation": true,

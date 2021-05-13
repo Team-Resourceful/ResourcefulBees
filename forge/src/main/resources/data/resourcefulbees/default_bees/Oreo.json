@@ -1,0 +1,28 @@
+{
+  "CoreData": {
+    "flower": [ "minecraft:flowers" ],
+    "maxTimeInHive": 6000,
+    "sizeModifier": 1.25,
+    "traits": [ "oreo" ],
+    "apiaryOutputAmounts": [1,2,3,4]
+  },
+  "HoneycombData": {
+    "honeycombType": "CUSTOM",
+    "honeycomb": "resourcefulbees:oreo_cookie",
+    "honeycombBlock": "resourcefulbees:oreo_cookie"
+  },
+  "RenderData": {
+    "layers": [{"texture": "/oreo/oreo_bee"}],
+    "primaryColor": "#442920",
+    "secondaryColor": "#e1d9b8"
+  },
+  "SpawnData": {
+    "canSpawnInWorld": true,
+    "biomeWhitelist": "tag:rare",
+    "biomeBlacklist": "",
+    "spawnWeight": 3,
+    "minGroupSize": 1,
+    "maxGroupSize": 1,
+    "lightLevel": "DAY"
+  }
+}

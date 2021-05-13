@@ -44,7 +44,7 @@ public class EnderBeeconScreen extends AbstractContainerScreen<EnderBeeconContai
     private static final Component activeLabel = new TranslatableComponent("block.resourcefulbees.ender_beecon.is_active");
     private static final ResourceLocation BUTTON_CALMING = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/ender_beecon/calming_button.png");
 
-    List<PowerButton> powerButtons = new LinkedList<>();
+    final List<PowerButton> powerButtons = new LinkedList<>();
 
     private void preInit() {
         this.imageWidth = 230;

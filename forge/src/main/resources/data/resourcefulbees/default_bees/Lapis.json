@@ -1,11 +1,16 @@
 {
-  "flower": "tag:forge:storage_blocks/lapis",
-  "maxTimeInHive": 600,
-  "hasHoneycomb": true,
-  "baseLayerTexture": "ores/lapis/lapis_bee",
-  "ColorData": {
-    "isBeeColored": false,
+  "CoreData": {
+    "flower": "forge:storage_blocks/lapis",
+    "maxTimeInHive": 600
+  },
+  "HoneycombData": {
+    "honeycombType": "DEFAULT",
     "honeycombColor": "#345ec3",
+    "honeycomb": "resourcefulbees:iron_honeycomb",
+    "honeycombBlock": "resourcefulbees:iron_honeycomb_block"
+  },
+  "RenderData": {
+    "layers": [{"texture": "ores/lapis/lapis_bee"}],
     "modelType": "ORE"
   },
   "MutationData": {
@@ -23,8 +28,9 @@
   },
   "CentrifugeData": {
     "hasCentrifugeOutput": true,
-    "mainOutput": "minecraft:lapis_lazuli",
-    "mainOutputCount": 8
+    "itemOutputs": [
+      {"id": "minecraft:lapis_lazuli", "count": 8}
+    ]
   },
   "SpawnData": {
     "canSpawnInWorld": true,

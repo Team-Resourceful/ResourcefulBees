@@ -3,7 +3,7 @@
   "ingredient": {
     "item": "minecraft:honeycomb_block"
   },
-  "results": [
+  "itemOutputs": [
     {
       "item": "minecraft:sugar",
       "count" : 9

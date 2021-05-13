@@ -1,5 +1,6 @@
 package com.resourcefulbees.resourcefulbees.compat.jei.ingredients;
 
+import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.language.I18n;
@@ -12,16 +13,16 @@ import java.util.List;
 
 public class EntityIngredient {
 
-    private final String beeType;
+    private final CustomBeeData beeData;
     private final float rotation;
 
-    public EntityIngredient(String beeType, float rotation) {
-        this.beeType = beeType;
+    public EntityIngredient(CustomBeeData beeData, float rotation) {
+        this.beeData = beeData;
         this.rotation = rotation;
     }
 
-    public String getBeeType() {
-        return beeType;
+    public CustomBeeData getBeeData() {
+        return beeData;
     }
 
     public float getRotation() {
@@ -29,7 +30,7 @@ public class EntityIngredient {
     }
 
     public Component getDisplayName() {
-        return new TranslatableComponent("entity.resourcefulbees." + beeType + "_bee");
+        return new TranslatableComponent("entity.resourcefulbees." + beeData.getCoreData().getName() + "_bee");
     }
 
     public List<Component> getTooltip() {
@@ -41,7 +42,7 @@ public class EntityIngredient {
             tooltip.add(new TextComponent(s).withStyle(ChatFormatting.GOLD));
         }
         if (Minecraft.getInstance().options.advancedItemTooltips) {
-            tooltip.add(new TextComponent("resourcefulbees:" + beeType + "_bee").withStyle(ChatFormatting.DARK_GRAY));
+            tooltip.add(new TextComponent(beeData.getRegistryID().toString()).withStyle(ChatFormatting.DARK_GRAY));
         }
         return tooltip;
     }

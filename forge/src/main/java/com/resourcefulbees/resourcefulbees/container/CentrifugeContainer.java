@@ -27,7 +27,7 @@ public class CentrifugeContainer extends ContainerWithStackMove {
     private boolean displayFluids;
     protected int inputXPos;
     protected int outputXPos;
-    protected DataSlot requiresRedstone = new DataSlot() {
+    protected final DataSlot requiresRedstone = new DataSlot() {
         @Override
         public int get() { return centrifugeTileEntity.getRequiresRedstone() ? 1 : 0; }
 

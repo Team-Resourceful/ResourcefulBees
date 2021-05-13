@@ -1,13 +1,21 @@
 {
-  "flower": "tag:forge:storage_blocks/quartz",
-  "maxTimeInHive": 1000,
-  "hasHoneycomb": true,
-  "traits": ["nether"],
-  "ColorData": {
-    "isBeeColored": true,
+  "CoreData": {
+    "flower": "forge:storage_blocks/quartz",
+    "maxTimeInHive": 1000,
+    "traits": ["nether"]
+  },
+  "HoneycombData": {
+    "honeycombType": "DEFAULT",
     "honeycombColor": "#D4CABA",
-    "primaryColor": "#D4CABA",
-    "secondaryColor": "#303030"
+    "honeycomb": "resourcefulbees:nether_honeycomb",
+    "honeycombBlock": "resourcefulbees:nether_honeycomb_block"
+  },
+  "RenderData": {
+    "layers": [
+      {"texture": "custom/bee"},
+      {"isColored": true, "color": "#D4CABA", "texture": "custom/primary_layer"},
+      {"isColored": true, "color": "#303030", "texture": "custom/secondary_layer"}
+    ]
   },
   "MutationData": {
     "hasMutation": true,
@@ -24,8 +32,9 @@
   },
   "CentrifugeData": {
     "hasCentrifugeOutput": true,
-    "mainOutput": "minecraft:quartz",
-    "mainOutputCount": 2
+    "itemOutputs": [
+      {"id": "minecraft:quartz", "count": 2}
+    ]
   },
   "SpawnData": {
     "canSpawnInWorld": true,

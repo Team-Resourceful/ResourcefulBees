@@ -1,5 +1,7 @@
 package com.resourcefulbees.resourcefulbees.lib;
 
+import com.mojang.serialization.Codec;
+
 public enum ModelTypes {
     DEFAULT,
     ORE,
@@ -11,4 +13,6 @@ public enum ModelTypes {
     CROP,
     ARMORED,
     GUARDIAN;
+
+    public static final Codec<ModelTypes> CODEC = Codec.STRING.xmap(ModelTypes::valueOf, ModelTypes::toString);
 }

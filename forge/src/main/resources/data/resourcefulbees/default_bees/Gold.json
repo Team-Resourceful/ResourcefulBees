@@ -1,11 +1,16 @@
 {
-  "flower": "tag:forge:storage_blocks/gold",
-  "hasHoneycomb": true,
-  "maxTimeInHive": 800,
-  "baseLayerTexture": "ores/gold/gold_bee",
-  "ColorData": {
-    "isBeeColored": false,
+  "CoreData": {
+    "flower": "forge:storage_blocks/gold",
+    "maxTimeInHive": 800
+  },
+  "HoneycombData": {
+    "honeycombType": "DEFAULT",
     "honeycombColor": "#FFDC00",
+    "honeycomb": "resourcefulbees:gold_honeycomb",
+    "honeycombBlock": "resourcefulbees:gold_honeycomb_block"
+  },
+  "RenderData": {
+    "layers": [{"texture": "ores/gold/gold_bee"}],
     "modelType": "ORE"
   },
   "MutationData": {
@@ -23,6 +28,9 @@
   },
   "CentrifugeData": {
     "hasCentrifugeOutput": true,
+    "itemOutputs": [
+      {"id": "minecraft:gold_ingot"}
+    ],
     "mainOutput": "minecraft:gold_ingot"
   },
   "SpawnData": {

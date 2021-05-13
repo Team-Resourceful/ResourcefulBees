@@ -2,11 +2,13 @@ package com.resourcefulbees.resourcefulbees.client.models;
 
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
+import com.mojang.serialization.JsonOps;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
-import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
+import com.resourcefulbees.resourcefulbees.lib.HoneycombTypes;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
+import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
@@ -33,6 +35,7 @@ public class ModelHandler {
     private static final String MODEL_INVENTORY_TAG = "inventory";
     private static final String ITEM_MODEL_PATH = "item/models/";
     private static final String JSON_FILE_EXTENSION = ".json";
+    private static final String HONEYCOMB_BLOCK = "_honeycomb_block";
 
 
     private ModelHandler() {
@@ -40,8 +43,8 @@ public class ModelHandler {
     }
 
     //region Bee Model Registries
-    private static void registerHoneycombBlockstate(@NotNull CustomBeeData customBeeData, ResourceManager resourceManager){
-        Block honeycombBlock = customBeeData.getCombBlockRegistryObject() != null ? customBeeData.getCombBlockRegistryObject().get() : null;
+    private static void registerHoneycombBlockState(String s, ResourceManager resourceManager){
+        Block honeycombBlock = BeeInfoUtils.getBlock(ResourcefulBees.MOD_ID + ":" + s + HONEYCOMB_BLOCK);
         if (honeycombBlock != null && honeycombBlock.getRegistryName() != null && !resourceManager.hasResource(new ResourceLocation(ResourcefulBees.MOD_ID, "blockstates/" + honeycombBlock.getRegistryName().getPath() + JSON_FILE_EXTENSION))) {
             honeycombBlock.getStateDefinition().getPossibleStates().forEach(state -> {
                 String propertyMapString = BlockModelShaper.statePropertiesToString(state.getValues());
@@ -52,8 +55,8 @@ public class ModelHandler {
         }
     }
 
-    private static void registerHoneycombBlockItem(@NotNull CustomBeeData customBeeData, ResourceManager resourceManager){
-        Item honeycombBlockItem = customBeeData.getCombBlockItemRegistryObject() != null ? customBeeData.getCombBlockItemRegistryObject().get() : null;
+    private static void registerHoneycombBlockItem(String s, ResourceManager resourceManager){
+        Item honeycombBlockItem = BeeInfoUtils.getItem(ResourcefulBees.MOD_ID + ":" + s + HONEYCOMB_BLOCK);/// <<- create utility methods to get these objects from the bee type.
         if (honeycombBlockItem != null && honeycombBlockItem.getRegistryName() != null && !resourceManager.hasResource(new ResourceLocation(ResourcefulBees.MOD_ID, ITEM_MODEL_PATH + honeycombBlockItem.getRegistryName().getPath() + JSON_FILE_EXTENSION))) {
             ModelResourceLocation defaultModelLocation = new ModelResourceLocation(ResourcefulBees.MOD_ID + ":honeycomb_block", MODEL_INVENTORY_TAG);
             ModelLoader.addSpecialModel(defaultModelLocation);
@@ -61,8 +64,8 @@ public class ModelHandler {
         }
     }
 
-    private static void registerHoneycombItem(@NotNull CustomBeeData customBeeData, ResourceManager resourceManager){
-        Item honeycomb = customBeeData.getCombRegistryObject() != null ? customBeeData.getCombRegistryObject().get() : null;
+    private static void registerHoneycombItem(String s, ResourceManager resourceManager){
+        Item honeycomb = BeeInfoUtils.getItem(ResourcefulBees.MOD_ID + ":" + s + HONEYCOMB_BLOCK);/// <<- create utility methods to get these objects from the bee type.
         if (honeycomb != null && honeycomb.getRegistryName() != null && !resourceManager.hasResource(new ResourceLocation(ResourcefulBees.MOD_ID, ITEM_MODEL_PATH + honeycomb.getRegistryName().getPath() + JSON_FILE_EXTENSION))) {
             ModelResourceLocation defaultModelLocation = new ModelResourceLocation(ResourcefulBees.MOD_ID + ":honeycomb", MODEL_INVENTORY_TAG);
             ModelLoader.addSpecialModel(defaultModelLocation);
@@ -70,8 +73,8 @@ public class ModelHandler {
         }
     }
 
-    private static void registerBeeSpawnegg(@NotNull CustomBeeData customBeeData, ResourceManager resourceManager){
-        Item spawnEgg = customBeeData.getSpawnEggItemRegistryObject() != null ? customBeeData.getSpawnEggItemRegistryObject().get() : null;
+    private static void registerBeeSpawnEgg(String s, ResourceManager resourceManager){
+        Item spawnEgg = BeeInfoUtils.getItem(ResourcefulBees.MOD_ID + ":" + s + "_bee_spawn_egg");  /// <<- create utility methods to get these objects from the bee type.
         if (spawnEgg != null && spawnEgg.getRegistryName() != null && !resourceManager.hasResource(new ResourceLocation(ResourcefulBees.MOD_ID, ITEM_MODEL_PATH + spawnEgg.getRegistryName().getPath() + JSON_FILE_EXTENSION))) {
             ModelResourceLocation defaultModelLocation = new ModelResourceLocation(
                     "minecraft:template_spawn_egg", MODEL_INVENTORY_TAG);
@@ -149,16 +152,14 @@ public class ModelHandler {
     public static void registerModels(ModelRegistryEvent event) {
         ResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
 
-        BeeRegistry.getRegistry().getBees().forEach((string, customBee) -> {
-            if (customBee.shouldResourcefulBeesDoForgeRegistration()) {
-
-                if (customBee.hasHoneycomb() && !customBee.hasCustomDrop()) {
-                    registerHoneycombBlockstate(customBee, resourceManager);
-                    registerHoneycombBlockItem(customBee, resourceManager);
-                    registerHoneycombItem(customBee, resourceManager);
+        BeeRegistry.getRegistry().getRawBees().forEach((s, beeData) -> {
+            HoneycombTypes honeycombType = HoneycombTypes.CODEC.fieldOf("honeycombType").orElse(HoneycombTypes.DEFAULT).codec().fieldOf("HoneycombData").codec().parse(JsonOps.INSTANCE, beeData).get().orThrow();
+                if (honeycombType.equals(HoneycombTypes.DEFAULT)) {
+                    registerHoneycombBlockState(s, resourceManager);
+                    registerHoneycombBlockItem(s, resourceManager);
+                    registerHoneycombItem(s, resourceManager);
                 }
-                registerBeeSpawnegg(customBee, resourceManager);
-            }
+                registerBeeSpawnEgg(s, resourceManager);
         });
 
         BeeRegistry.getRegistry().getHoneyBottles().forEach((string, honeyData) -> {

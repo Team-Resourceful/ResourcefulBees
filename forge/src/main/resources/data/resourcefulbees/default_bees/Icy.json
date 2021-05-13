@@ -1,14 +1,19 @@
 {
-  "flower": "minecraft:water",
-  "hasHoneycomb": false,
-  "traits": ["can_swim"],
-  "maxTimeInHive": 1200,
-  "sizeModifier": 0.75,
-  "ColorData": {
-    "isBeeColored": true,
-    "honeycombColor": "#92b9fe",
-    "primaryColor": "#92b9fe",
-    "secondaryColor": "#303030"
+  "CoreData": {
+    "flower": ["minecraft:water"],
+    "traits": ["can_swim"],
+    "maxTimeInHive": 1200,
+    "sizeModifier": 0.75
+  },
+  "HoneycombData": {
+    "honeycombType": "NONE"
+  },
+  "RenderData": {
+    "layers": [
+      {"texture": "custom/bee"},
+      {"isColored": true, "color": "#92b9fe", "texture": "custom/primary_layer"},
+      {"isColored": true, "color": "#303030", "texture": "custom/secondary_layer"}
+    ]
   },
   "MutationData": {
     "hasMutation": true,

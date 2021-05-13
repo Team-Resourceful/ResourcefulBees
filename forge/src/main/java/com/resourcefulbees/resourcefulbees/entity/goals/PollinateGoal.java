@@ -54,8 +54,8 @@ public class PollinateGoal extends Goal {
             return false;
         } else if (bee.getRandom().nextFloat() < 0.7F) {
             return false;
-        } else if ((!Config.MANUAL_MODE.get() || bee.getBeeData().hasEntityFlower()) && bee.savedFlowerPos == null && (bee.tickCount < 20 || bee.tickCount % 5 == 0)) {
-            Optional<BlockPos> optional = this.findFlower(5.0D, bee.getBeeData().hasEntityFlower(), bee.getBeeData().getEntityFlower());
+        } else if ((!Config.MANUAL_MODE.get() || bee.getCoreData().getEntityFlower().isPresent()) && bee.savedFlowerPos == null && (bee.tickCount < 20 || bee.tickCount % 5 == 0)) {
+            Optional<BlockPos> optional = this.findFlower(5.0D, bee.getCoreData().getEntityFlower().isPresent(), bee.getCoreData().getEntityFlower().get());
             if (optional.isPresent()) {
                 bee.savedFlowerPos = optional.get();
                 bee.getNavigation().moveTo(bee.savedFlowerPos.getX() + 0.5D, bee.savedFlowerPos.getY() + 0.5D, bee.savedFlowerPos.getZ() + 0.5D, 1.2D);
@@ -144,7 +144,7 @@ public class PollinateGoal extends Goal {
         ++this.ticks;
         if (this.ticks > 600) {
             this.clearTask();
-        } else if ((!bee.getBeeData().hasEntityFlower() || bee.getFlowerEntityID() >= 0)) {
+        } else if ((bee.getCoreData().getEntityFlower().isPresent() || bee.getFlowerEntityID() >= 0)) {
             handleEntityFlower();
             handleBlockFlower();
         }
@@ -202,7 +202,7 @@ public class PollinateGoal extends Goal {
     }
 
     private void handleEntityFlower() {
-        if (bee.tickCount % 5 == 0 && bee.getBeeData().hasEntityFlower()) {
+        if (bee.tickCount % 5 == 0 && bee.getCoreData().getEntityFlower().isPresent()) {
             Entity flowerEntity = bee.level.getEntity(bee.getFlowerEntityID());
             if (flowerEntity != null) {
                 boundingBox = new Vec3(flowerEntity.getBoundingBox().getCenter().x(), flowerEntity.getBoundingBox().maxY, flowerEntity.getBoundingBox().getCenter().z());
@@ -245,11 +245,11 @@ public class PollinateGoal extends Goal {
 
     public Predicate<BlockPos> getFlowerBlockPredicate() {
         return pos -> {
-            if (bee.level != null && bee.getBeeData().hasBlockFlowers()){
+            if (bee.level != null && !bee.getCoreData().getBlockFlowers().isEmpty()){
                 if (!MathUtils.inRangeInclusive(pos.getY(), 0, 256)) return false;
                 BlockState state = bee.level.getBlockState(pos);
                 if (state.isAir()) return false;
-                return bee.getBeeData().getBlockFlowers().contains(state.getBlock());
+                return bee.getCoreData().getBlockFlowers().contains(state.getBlock());
             }
             return false;
         };

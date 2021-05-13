@@ -1,11 +1,20 @@
 {
-  "flower": "tag:forge:storage_blocks/iron",
-  "hasHoneycomb": true,
-  "maxTimeInHive": 600,
-  "baseLayerTexture": "ores/iron/iron_bee",
-  "ColorData": {
-    "isBeeColored": false,
+  "CoreData": {
+    "flower": "forge:storage_blocks/iron",
+    "maxTimeInHive": 600
+  },
+  "HoneycombData": {
+    "honeycombType": "DEFAULT",
     "honeycombColor": "#ffcc99",
+    "honeycomb": "resourcefulbees:iron_honeycomb",
+    "honeycombBlock": "resourcefulbees:iron_honeycomb_block"
+  },
+  "RenderData": {
+    "layers": [
+      {
+        "texture": "ores/iron/iron_bee"
+      }
+    ],
     "modelType": "ORE"
   },
   "MutationData": {
@@ -23,7 +32,9 @@
   },
   "CentrifugeData": {
     "hasCentrifugeOutput": true,
-    "mainOutput": "minecraft:iron_ingot"
+    "itemOutputs": [
+      {"id": "minecraft:iron_ingot"}
+    ]
   },
   "SpawnData": {
     "canSpawnInWorld": true,

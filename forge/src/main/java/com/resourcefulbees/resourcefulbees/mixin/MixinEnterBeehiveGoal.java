@@ -4,7 +4,9 @@ import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryT
 import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import org.spongepowered.asm.mixin.*;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -24,16 +26,16 @@ public abstract class MixinEnterBeehiveGoal {
     @Inject(at = @At("HEAD"), method = "canBeeUse()Z", cancellable = true)
     public void canBeeStart(CallbackInfoReturnable<Boolean> cir) {
         if (beeEntity.hasHive() && beeEntity.wantsToEnterHive() && beeEntity.hivePos != null && beeEntity.hivePos.closerThan(beeEntity.position(), 2.0D)) {
-            BlockEntity tileentity = beeEntity.level.getBlockEntity(beeEntity.hivePos);
-            if (tileentity instanceof BeehiveBlockEntity) {
-                BeehiveBlockEntity beehivetileentity = (BeehiveBlockEntity) tileentity;
+            BlockEntity blockEntity = beeEntity.level.getBlockEntity(beeEntity.hivePos);
+            if (blockEntity instanceof BeehiveBlockEntity) {
+                BeehiveBlockEntity beehivetileentity = (BeehiveBlockEntity) blockEntity;
                 if (!beehivetileentity.isFull()) {
                     cir.setReturnValue(true);
                 } else {
                     beeEntity.hivePos = null;
                 }
-            } else if (tileentity instanceof ApiaryTileEntity) {
-                ApiaryTileEntity apiaryTileEntity = (ApiaryTileEntity) tileentity;
+            } else if (blockEntity instanceof ApiaryTileEntity) {
+                ApiaryTileEntity apiaryTileEntity = (ApiaryTileEntity) blockEntity;
                 if (apiaryTileEntity.hasSpace()) {
                     cir.setReturnValue(true);
                 } else {

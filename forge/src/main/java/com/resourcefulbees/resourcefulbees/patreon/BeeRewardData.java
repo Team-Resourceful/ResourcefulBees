@@ -47,9 +47,9 @@ public class BeeRewardData {
         WARPED(new ResourceLocation("resourcefulbees:textures/entity/mushroom/warped_alchemist_bee.png")),
         GHAST(new ResourceLocation("resourcefulbees:textures/entity/ghast/ghast_bee.png"));
 
-        ResourceLocation resourceLocation;
+        final ResourceLocation resourceLocation;
         ResourceLocation secondaryResourceLocation;
-        boolean hasSecondaryLayer;
+        final boolean hasSecondaryLayer;
 
         BeeTextures(ResourceLocation resourceLocation){
             this.resourceLocation = resourceLocation;

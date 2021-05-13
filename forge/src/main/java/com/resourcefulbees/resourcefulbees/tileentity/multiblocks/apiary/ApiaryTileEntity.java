@@ -43,7 +43,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static com.resourcefulbees.resourcefulbees.lib.BeeConstants.MIN_HIVE_TIME;
-import static com.resourcefulbees.resourcefulbees.lib.BeeConstants.RAINBOW_COLOR;
 
 public class ApiaryTileEntity extends ApiaryController implements MenuProvider, IApiaryMultiblock {
     public static final int IMPORT = 0;
@@ -162,13 +161,7 @@ public class ApiaryTileEntity extends ApiaryController implements MenuProvider, 
     private String getBeeColor(Entity bee) {
         if (bee instanceof ICustomBee) {
             ICustomBee iCustomBee = (ICustomBee) bee;
-            if (iCustomBee.getBeeData().getColorData().hasPrimaryColor()) {
-                return iCustomBee.getBeeData().getColorData().getPrimaryColor();
-            } else if (iCustomBee.getBeeData().getColorData().isRainbowBee()) {
-                return RAINBOW_COLOR;
-            } else if (iCustomBee.getBeeData().getColorData().hasHoneycombColor()) {
-                return iCustomBee.getBeeData().getColorData().getHoneycombColor();
-            }
+            return iCustomBee.getRenderData().getColorData().getJarColor().toString();
         }
         return BeeConstants.VANILLA_BEE_COLOR;
     }
@@ -178,7 +171,7 @@ public class ApiaryTileEntity extends ApiaryController implements MenuProvider, 
     }
 
     private int getMaxTimeInHive(@NotNull Entity bee) {
-        return getMaxTimeInHive(bee instanceof ICustomBee ? ((ICustomBee) bee).getBeeData().getMaxTimeInHive() : BeeConstants.MAX_TIME_IN_HIVE);
+        return getMaxTimeInHive(bee instanceof ICustomBee ? ((ICustomBee) bee).getCoreData().getMaxTimeInHive() : BeeConstants.MAX_TIME_IN_HIVE);
     }
 
     private int getMaxTimeInHive(int timeInput) {

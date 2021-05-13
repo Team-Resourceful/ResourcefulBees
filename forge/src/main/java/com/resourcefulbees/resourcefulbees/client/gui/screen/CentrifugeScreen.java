@@ -16,7 +16,6 @@ import com.resourcefulbees.resourcefulbees.utils.color.Color;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.ImageButton;
-import net.minecraft.client.gui.components.Widget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -54,12 +53,12 @@ public class CentrifugeScreen extends AbstractContainerScreen<CentrifugeContaine
     protected static final int INV_START_Y = 103; //player inventory height from top
     protected static final int TAB_BG_WIDTH = 25; //Width of the tab background
 
-    protected int bgRpt; //Calculated Background filler repeat
-    protected int numInputs;
+    protected final int bgRpt; //Calculated Background filler repeat
+    protected final int numInputs;
     protected int inputStartX;
     protected int outputStartX;
     protected int rBdrCor; //Right border correction amount - used to have even padding all the way around
-    protected int screenWidth;
+    protected final int screenWidth;
 
     private TabToggleImageButton redstoneButton;
     private TabToggleImageButton fluidDispButton;

@@ -1,8 +1,8 @@
 package com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
+import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.compat.jei.BiomeParser;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import net.minecraft.ChatFormatting;
@@ -16,14 +16,13 @@ import net.minecraft.resources.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class SpawningPage extends BeeDataPage {
 
     private int subScrollPos;
     private final int scrollHeight;
 
-    List<ResourceLocation> biomeList;
+    final List<ResourceLocation> biomeList;
 
     private final Button prevTab;
     private final Button nextTab;

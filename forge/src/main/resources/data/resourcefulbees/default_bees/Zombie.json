@@ -1,12 +1,18 @@
 {
-  "flower": "tag:minecraft:bee_growables",
-  "maxTimeInHive": 600,
-  "hasHoneycomb": true,
-  "baseLayerTexture": "zombie/zombie_bee",
-  "traits": ["zombie"],
-  "ColorData": {
-    "isBeeColored": false,
-    "honeycombColor": "#2F4E32"
+  "CoreData": {
+    "flower": "minecraft:bee_growables",
+    "maxTimeInHive": 600,
+    "traits": ["zombie"],
+    "name": "zombee"
+  },
+  "HoneycombData": {
+    "honeycombType": "DEFAULT",
+    "honeycombColor": "#2F4E32",
+    "honeycomb": "resourcefulbees:zombie_honeycomb",
+    "honeycombBlock": "resourcefulbees:zombie_honeycomb_block"
+  },
+  "RenderData": {
+    "layers": [{"texture": "zombie/zombie_bee"}]
   },
   "MutationData": {
     "hasMutation": true,
@@ -23,7 +29,9 @@
   },
   "CentrifugeData": {
     "hasCentrifugeOutput": true,
-    "mainOutput": "minecraft:rotten_flesh"
+    "itemOutputs": [
+      {"id": "minecraft:rotten_flesh"}
+    ]
   },
   "SpawnData": {
     "canSpawnInWorld": true,

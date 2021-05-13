@@ -1,15 +1,15 @@
 package com.resourcefulbees.resourcefulbees.entity.passive;
 
+import com.google.gson.JsonObject;
 import com.resourcefulbees.resourcefulbees.api.ICustomBee;
-import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
-import com.resourcefulbees.resourcefulbees.api.beedata.SpawnData;
-import com.resourcefulbees.resourcefulbees.api.beedata.TraitData;
+import com.resourcefulbees.resourcefulbees.api.beedata.*;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.mixin.AnimalEntityAccessor;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
-import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
+import com.resourcefulbees.resourcefulbees.utils.MathUtils;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -20,18 +20,21 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgableMob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.NameTagItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -42,27 +45,39 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
 
     private static final EntityDataAccessor<Integer> FEED_COUNT = SynchedEntityData.defineId(CustomBeeEntity.class, EntityDataSerializers.INT);
 
-    protected final CustomBeeData beeData;
-    protected int timeWithoutHive;  //<- does not need to be initialized to 0 that is done by default - oreo
+    protected final JsonObject rawBeeData;
+    protected final CustomBeeData customBeeData;
+    protected final String beeType;
+    protected int timeWithoutHive;
     protected int flowerID;
     private BlockPos lastFlower;
     private boolean hasHiveInRange;
     private int disruptorInRange;
 
-    public CustomBeeEntity(EntityType<? extends Bee> type, Level world, CustomBeeData beeData) {
+    public CustomBeeEntity(EntityType<? extends Bee> type, Level world, String beeType, JsonObject beeData) {
         super(type, world);
-        this.beeData = beeData;
+        this.rawBeeData = beeData;
+        this.beeType = beeType;
+        this.customBeeData = BeeRegistry.getRegistry().getBeeData(beeType);
     }
 
     public static AttributeSupplier.Builder createBeeAttributes(String key) {
-        CustomBeeData beeData = BeeRegistry.getRegistry().getBeeData(key);
-        return createMobAttributes().add(Attributes.MAX_HEALTH, beeData.getCombatData().getBaseHealth()).add(Attributes.FLYING_SPEED, 0.6F).add(Attributes.MOVEMENT_SPEED, 0.3F).add(Attributes.ATTACK_DAMAGE, beeData.getCombatData().getAttackDamage()).add(Attributes.FOLLOW_RANGE, 48.0D);
+        CombatData combatData = BeeRegistry.getRegistry().getBeeData(key).getCombatData();
+        return createMobAttributes()
+                .add(Attributes.MAX_HEALTH, combatData.getBaseHealth())
+                .add(Attributes.FLYING_SPEED, 0.6D)
+                .add(Attributes.MOVEMENT_SPEED, 0.3D)
+                .add(Attributes.ATTACK_DAMAGE, combatData.getAttackDamage())
+                .add(Attributes.FOLLOW_RANGE, 48.0D)
+                .add(Attributes.ARMOR, combatData.getArmor())
+                .add(Attributes.ARMOR_TOUGHNESS, combatData.getArmorToughness())
+                .add(Attributes.ATTACK_KNOCKBACK, combatData.getKnockback());
     }
 
     //region BEE INFO RELATED METHODS BELOW
 
     public String getBeeType() {
-        return beeData.getName();
+        return beeType;
     }
 
     public BlockPos getLastFlower() {
@@ -73,8 +88,44 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
         this.lastFlower = lastFlower;
     }
 
-    public CustomBeeData getBeeData() {
-        return beeData;
+    public JsonObject getRawBeeData() {
+        return rawBeeData;
+    }
+
+    public CoreData getCoreData() {
+        return customBeeData.getCoreData();
+    }
+
+    public HoneycombData getHoneycombData() {
+        return customBeeData.getHoneycombData();
+    }
+
+    public RenderData getRenderData() {
+        return customBeeData.getRenderData();
+    }
+
+    public BreedData getBreedData() {
+        return customBeeData.getBreedData();
+    }
+
+    public CentrifugeData getCentrifugeData() {
+        return customBeeData.getCentrifugeData();
+    }
+
+    public CombatData getCombatData() {
+        return customBeeData.getCombatData();
+    }
+
+    public MutationData getMutationData() {
+        return customBeeData.getMutationData();
+    }
+
+    public SpawnData getSpawnData() {
+        return customBeeData.getSpawnData();
+    }
+
+    public TraitData getTraitData() {
+        return customBeeData.getTraitData();
     }
 
     public int getFlowerEntityID() {
@@ -105,7 +156,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
 
     @Override
     public boolean isInvulnerableTo(@NotNull DamageSource source) {
-        TraitData info = getBeeData().getTraitData();
+        TraitData info = getTraitData();
         if (hasEffect(MobEffects.WATER_BREATHING) && source == DamageSource.DROWN) {
             return true;
         }
@@ -120,7 +171,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
 
     @Override
     public boolean canBeAffected(@NotNull MobEffectInstance effectInstance) {
-        TraitData info = getBeeData().getTraitData();
+        TraitData info = getTraitData();
         if (info.hasTraits() && info.hasPotionImmunities()) {
             MobEffect potionEffect = effectInstance.getEffect();
             return info.getPotionImmunities().stream().noneMatch(potionEffect::equals);
@@ -132,11 +183,11 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
     public void aiStep() {
         if (this.level.isClientSide) {
             if (this.tickCount % 40 == 0) {
-                TraitData info = getBeeData().getTraitData();
+                TraitData info = getTraitData();
                 if (info.hasTraits() && info.hasParticleEffects()) {
                     info.getParticleEffects().forEach(basicParticleType -> {
                         for (int i = 0; i < 10; ++i) {
-                            this.level.addParticle(basicParticleType, this.getRandomX(0.5D),
+                            this.level.addParticle((ParticleOptions) basicParticleType, this.getRandomX(0.5D),
                                     this.getRandomY() - 0.25D, this.getRandomZ(0.5D),
                                     (this.random.nextDouble() - 0.5D) * 2.0D, -this.random.nextDouble(),
                                     (this.random.nextDouble() - 0.5D) * 2.0D);
@@ -182,7 +233,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
             case NATURAL:
             case CHUNK_GENERATION:
                 if (spawnData.canSpawnInWorld()) {
-                    if (pos.getY() < spawnData.getMinYLevel() || pos.getY() > spawnData.getMaxYLevel()) {
+                    if (!MathUtils.inRangeInclusive(pos.getY(), spawnData.getMinYLevel(), spawnData.getMaxYLevel())) {
                         return false;
                     }
                     switch (spawnData.getLightLevel()) {
@@ -191,6 +242,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
                         case NIGHT:
                             return worldIn.getMaxLocalRawBrightness(pos) <= 7;
                         case ANY:
+                        default:
                             return true;
                     }
                 }
@@ -222,7 +274,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
     }
 
     public AgableMob createSelectedChild(CustomBeeData customBeeData) {
-        EntityType<?> entityType = Objects.requireNonNull(ForgeRegistries.ENTITIES.getValue(customBeeData.getEntityTypeRegistryID()));
+        EntityType<?> entityType = Objects.requireNonNull(customBeeData.getEntityType());
         Entity entity = entityType.create(level);
         return (AgableMob) entity;
     }
@@ -253,7 +305,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
 
     @Override
     public boolean isFood(@NotNull ItemStack stack) {
-        return BeeInfoUtils.isValidBreedItem(stack, this.getBeeData().getBreedData());
+        return this.getBreedData().getFeedItems().contains(stack.getItem());
     }
 
     @NotNull
@@ -267,9 +319,9 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
         if (this.isFood(itemstack)) {
             if (!this.level.isClientSide && this.getAge() == 0 && !this.isInLove()) {
                 this.usePlayerItem(player, itemstack);
-                player.addItem(new ItemStack(this.beeData.getBreedData().getFeedReturnItem()));
+                player.addItem(new ItemStack(getBreedData().getFeedReturnItem().orElse(Items.AIR)));
                 this.addFeedCount();
-                if (this.getFeedCount() >= this.getBeeData().getBreedData().getFeedAmount()) {
+                if (this.getFeedCount() >= getBreedData().getFeedAmount()) {
                     this.setInLove(player);
                 }
                 player.swing(hand, true);

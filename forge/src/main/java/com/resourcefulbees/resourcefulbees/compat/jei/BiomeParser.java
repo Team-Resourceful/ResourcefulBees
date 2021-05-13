@@ -2,6 +2,7 @@ package com.resourcefulbees.resourcefulbees.compat.jei;
 
 import com.google.common.base.Splitter;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
+import com.resourcefulbees.resourcefulbees.api.beedata.SpawnData;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
@@ -20,12 +21,12 @@ public class BiomeParser {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
 
-    public static String parseBiomes(CustomBeeData bee) {
-        if (!bee.getSpawnData().getBiomeWhitelist().isEmpty()) {
-            Set<ResourceLocation> whitelist = new HashSet<>(getBiomeSet(bee.getSpawnData().getBiomeWhitelist()));
+    public static String parseBiomes(SpawnData bee) {
+        if (!bee.getBiomeWhitelist().isEmpty()) {
+            Set<ResourceLocation> whitelist = new HashSet<>(getBiomeSet(bee.getBiomeWhitelist()));
             Set<ResourceLocation> blacklist = new HashSet<>();
-            if (!bee.getSpawnData().getBiomeBlacklist().isEmpty())
-                blacklist = getBiomeSet(bee.getSpawnData().getBiomeBlacklist());
+            if (!bee.getBiomeBlacklist().isEmpty())
+                blacklist = getBiomeSet(bee.getBiomeBlacklist());
             return buildReturnString(whitelist, blacklist);
         }
 
@@ -81,42 +82,6 @@ public class BiomeParser {
                 .forEach(resourceLocation -> returnList.add(WordUtils.capitalize(resourceLocation.getPath().replace("_", " "))));
         return returnList.toString();
     }
-
-
-
-
-    // TODO: 24/02/2021 Oreo pls look at the below and see if it can replace the above parsing
-
-    // WHY? where does List<String> whitelistStrings come from, how is it derived?
-    // Without more context to understand the need for the change it seems the change isn't worth doing
-
-    private static List<ResourceLocation> getBiomesFromList(List<String> whitelistStrings) {
-        List<ResourceLocation> biomes = new ArrayList<>();
-        for (String whitelistString : whitelistStrings) {
-            if (whitelistString.startsWith(BeeConstants.TAG_PREFIX)) {
-                biomes.addAll(getBiomesFromTag(whitelistString.replace(BeeConstants.TAG_PREFIX, "")));
-            } else {
-                biomes.add(getBiomeFromString(whitelistString));
-            }
-        }
-        return biomes;
-    }
-
-    private static ResourceLocation getBiomeFromString(String whitelistString) {
-        return new ResourceLocation(whitelistString);
-    }
-
-    private static List<ResourceLocation> getBiomesFromTag(String s) {
-        if (Config.USE_FORGE_DICTIONARIES.get()) {
-            return new ArrayList<>(getForgeBiomeLocations(getForgeType(s)));
-        } else {
-            if (BiomeDictionary.getTypes().containsKey(s)) {
-                return new ArrayList<>(BiomeDictionary.getTypes().get(s));
-            }
-        }
-        return new ArrayList<>();
-    }
-
 
     private static Set<ResourceKey<Biome>> getForgeBiomes(net.minecraftforge.common.BiomeDictionary.Type type) {
         return net.minecraftforge.common.BiomeDictionary.getBiomes(type);

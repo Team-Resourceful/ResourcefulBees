@@ -2,16 +2,17 @@ package com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
-import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.api.beedata.mutation.EntityMutation;
 import com.resourcefulbees.resourcefulbees.api.beedata.mutation.ItemMutation;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.mutations.EntityMutationPage;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.mutations.ItemMutationPage;
+import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
+import com.resourcefulbees.resourcefulbees.utils.CycledArray;
 import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
 import com.resourcefulbees.resourcefulbees.utils.RenderUtils;
 import net.minecraft.ChatFormatting;
@@ -27,32 +28,28 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec2;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class BreedingPage extends BeeDataPage {
 
-    Map<Pair<String, String>, RandomCollection<CustomBeeData>> children;
-    Map<Pair<String, String>, CustomBeeData> parents;
-    List<BreedingObject> parentBreeding = new LinkedList<>();
+    final Map<Pair<String, String>, RandomCollection<CustomBeeData>> children;
+    final Map<Pair<String, String>, CustomBeeData> parents;
+    final List<BreedingObject> parentBreeding = new LinkedList<>();
     List<BreedingObject> childrenBreeding = new LinkedList<>();
-    List<EntityMutationPage> entityMutationBreeding = new LinkedList<>();
-    List<ItemMutationPage> itemMutationBreeding = new LinkedList<>();
+    final List<EntityMutationPage> entityMutationBreeding = new LinkedList<>();
+    final List<ItemMutationPage> itemMutationBreeding = new LinkedList<>();
 
-    List<BreedingPageType> subPages = new LinkedList<>();
+    final List<BreedingPageType> subPages = new LinkedList<>();
 
     BreedingPageType activeSubPage;
 
-    Button leftArrow;
-    Button rightArrow;
-    Button prevTab;
-    Button nextTab;
+    final Button leftArrow;
+    final Button rightArrow;
+    final Button prevTab;
+    final Button nextTab;
 
     private final ResourceLocation breedingImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/breeding.png");
     private final ResourceLocation infoIcon = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/icons.png");
@@ -69,7 +66,7 @@ public class BreedingPage extends BeeDataPage {
         parents = BeeRegistry.getRegistry().getParents(beeData);
         children.forEach((p, l) -> l.getMap().forEach((w, b) -> childrenBreeding.add(new BreedingObject(p, b))));
         parents.forEach((p, b) -> parentBreeding.add(new BreedingObject(p, b)));
-        mutations.forEach(b -> entityMutationBreeding.add(new EntityMutationPage(b.getParent(), parent, b.getInput(), b.getOutputs(), MutationTypes.ENTITY, b.getMutaionCount(), beepedia)));
+        mutations.forEach(b -> entityMutationBreeding.add(new EntityMutationPage(b.getParent(), parent, b.getInput(), b.getOutputs(), MutationTypes.ENTITY, b.getMutationCount(), beepedia)));
         itemBreedMutation.forEach(b -> itemMutationBreeding.add(new ItemMutationPage(b.getParent(), parent, b.getInputs(), b.getOutputs(), MutationTypes.ITEM, b.getMutationCount(), beepedia)));
         leftArrow = new ImageButton(xPos + (SUB_PAGE_WIDTH / 2) - 28, yPos + SUB_PAGE_HEIGHT - 16, 8, 11, 0, 0, 11, arrowImage, 16, 33, button -> prevPage());
         rightArrow = new ImageButton(xPos + (SUB_PAGE_WIDTH / 2) + 20, yPos + SUB_PAGE_HEIGHT - 16, 8, 11, 8, 0, 11, arrowImage, 16, 33, button -> nextPage());
@@ -338,8 +335,8 @@ public class BreedingPage extends BeeDataPage {
         Entity parent2Entity;
         CustomBeeData parent1Data;
         CustomBeeData parent2Data;
-        List<ItemStack> parent1Items = new LinkedList<>();
-        List<ItemStack> parent2Items = new LinkedList<>();
+        CycledArray<ItemStack> parent1Items = new CycledArray<>(Collections.emptyList());
+        CycledArray<ItemStack> parent2Items = new CycledArray<>(Collections.emptyList());
         TranslatableComponent parent1Name;
         TranslatableComponent parent2Name;
         Vec2 parent1Pos;
@@ -348,20 +345,20 @@ public class BreedingPage extends BeeDataPage {
         Vec2 chancePos;
         int parent1Counter = 0;
         int parent2Counter = 0;
-        Child child;
-        boolean isParent;
-        DecimalFormat decimalFormat = new DecimalFormat("##%");
-        public boolean isBase;
+        final Child child;
+        final boolean isParent;
+        final DecimalFormat decimalFormat = new DecimalFormat("##%");
+        public final boolean isBase;
 
         private void initParents(Pair<String, String> parents) {
             parent1Data = BeeRegistry.getRegistry().getBeeData(parents.getLeft());
             parent2Data = BeeRegistry.getRegistry().getBeeData(parents.getRight());
-            parent1Entity = ForgeRegistries.ENTITIES.getValue(parent1Data.getEntityTypeRegistryID()).create(beepedia.getMinecraft().level);
+            parent1Entity = parent1Data.getEntityType().create(beepedia.getMinecraft().level);
             parent1Name = parent1Data.getTranslation();
-            parent2Entity = ForgeRegistries.ENTITIES.getValue(parent2Data.getEntityTypeRegistryID()).create(beepedia.getMinecraft().level);
+            parent2Entity = parent1Data.getEntityType().create(beepedia.getMinecraft().level);
             parent2Name = parent2Data.getTranslation();
-            parent1Items = BeeInfoUtils.getBreedItems(parent1Data);
-            parent2Items = BeeInfoUtils.getBreedItems(parent2Data);
+            parent1Items = new CycledArray<>(parent1Data.getBreedData().getFeedItemStacks());
+            parent2Items = new CycledArray<>(parent2Data.getBreedData().getFeedItemStacks());
             parent1Pos = new Vec2((float) xPos + 6, (float) yPos + 22);
             parent2Pos = new Vec2((float) xPos + 60, (float) yPos + 22);
             childPos = new Vec2((float) xPos + 130, (float) yPos + 32);
@@ -371,7 +368,7 @@ public class BreedingPage extends BeeDataPage {
         public BreedingObject(Pair<String, String> parents, CustomBeeData child) {
             initParents(parents);
             this.child = new Child(parents, child);
-            isBase = parents.getLeft().equals(parents.getRight()) && parents.getLeft().equals(child.getName());
+            isBase = parents.getLeft().equals(parents.getRight()) && parents.getLeft().equals(child.getCoreData().getName());
             isParent = false;
         }
 
@@ -401,20 +398,18 @@ public class BreedingPage extends BeeDataPage {
 
         public void drawParent1Item(PoseStack matrix) {
             if (parent1Items.isEmpty()) return;
-            beepedia.drawSlot(matrix, parent1Items.get(parent1Counter), xPos + 5, yPos + 53);
+            beepedia.drawSlot(matrix, parent1Items.get(), xPos + 5, yPos + 53);
         }
 
         public void drawParent2Item(PoseStack matrix) {
             if (parent1Items.isEmpty()) return;
-            beepedia.drawSlot(matrix, parent2Items.get(parent2Counter), xPos + 59, yPos + 53);
+            beepedia.drawSlot(matrix, parent2Items.get(), xPos + 59, yPos + 53);
         }
 
         public void tick(int ticksActive) {
             if (ticksActive % 20 == 0 && !BeeInfoUtils.isShiftPressed()) {
-                parent1Counter++;
-                if (parent1Counter >= parent1Items.size()) parent1Counter = 0;
-                parent2Counter++;
-                if (parent2Counter >= parent2Items.size()) parent2Counter = 0;
+                parent1Items.cycle();
+                parent2Items.cycle();
             }
         }
 
@@ -436,7 +431,7 @@ public class BreedingPage extends BeeDataPage {
         private void drawTooltip(PoseStack matrixStack, CustomBeeData beeData, int mouseX, int mouseY) {
             List<Component> tooltip = new ArrayList<>();
             tooltip.add(beeData.getTranslation());
-            tooltip.add(new TextComponent(beeData.getEntityTypeRegistryID().toString()).withStyle(ChatFormatting.DARK_GRAY));
+            tooltip.add(new TextComponent(beeData.getRegistryID().toString()).withStyle(ChatFormatting.DARK_GRAY));
             beepedia.renderComponentTooltip(matrixStack, tooltip, mouseX, mouseY);
         }
 
@@ -463,23 +458,25 @@ public class BreedingPage extends BeeDataPage {
         }
 
         private boolean openBeePage(CustomBeeData beeData) {
-            if (beeData.getName().equals(id)) return false;
+            if (beeData.getCoreData().getName().equals(id)) return false;
             BeepediaScreen.saveScreenState();
-            beepedia.setActive(BeepediaScreen.PageType.BEE, beeData.getName());
+            beepedia.setActive(BeepediaScreen.PageType.BEE, beeData.getCoreData().getName());
             return true;
         }
 
         public class Child {
-            Entity entity;
-            TranslatableComponent name;
-            double weight;
-            double chance;
-            CustomBeeData beeData;
+            final Entity entity;
+            final TranslatableComponent name;
+            final double weight;
+            final double chance;
+            final CustomBeeData beeData;
 
             public Child(Pair<String, String> parents, CustomBeeData beeData) {
-                entity = ForgeRegistries.ENTITIES.getValue(beeData.getEntityTypeRegistryID()).create(beepedia.getMinecraft().level);
+                CustomBeeData parent1Data = BeeRegistry.getRegistry().getBeeData(parents.getLeft());
+                CustomBeeData parent2Data = BeeRegistry.getRegistry().getBeeData(parents.getRight());
+                entity = beeData.getEntityType().create(beepedia.getMinecraft().level);
                 name = beeData.getTranslation();
-                weight = BeeRegistry.getRegistry().getAdjustedWeightForChild(beeData, parents.getLeft(), parents.getRight());
+                weight = BeeRegistry.getRegistry().getAdjustedWeightForChild(beeData, parent1Data, parent2Data);
                 chance = beeData.getBreedData().getBreedChance();
                 this.beeData = beeData;
             }
@@ -490,6 +487,6 @@ public class BreedingPage extends BeeDataPage {
         PARENTS,
         CHILDREN,
         ENTITY_MUTATIONS,
-        ITEM_MUTATIONS;
+        ITEM_MUTATIONS
     }
 }

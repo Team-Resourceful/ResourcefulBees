@@ -17,6 +17,7 @@ public class CentrifugeDisplayOverride implements IBlockDisplayOverride {
         return tileEntity instanceof CentrifugeTileEntity && createCentrifugeProbeData(iProbeInfo, blockState, (CentrifugeTileEntity) tileEntity);
     }
 
+    @SuppressWarnings("SameReturnValue")
     private boolean createCentrifugeProbeData(IProbeInfo probeInfo, BlockState blockState, CentrifugeTileEntity tileEntity) {
         probeInfo.horizontal()
                 .item(new ItemStack(blockState.getBlock().asItem()))

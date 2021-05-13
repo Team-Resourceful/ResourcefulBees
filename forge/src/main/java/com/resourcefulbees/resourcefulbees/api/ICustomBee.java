@@ -1,6 +1,7 @@
 package com.resourcefulbees.resourcefulbees.api;
 
-import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
+import com.google.gson.JsonObject;
+import com.resourcefulbees.resourcefulbees.api.beedata.*;
 import net.minecraft.world.entity.AgableMob;
 
 /**
@@ -22,7 +23,23 @@ public interface ICustomBee {
      *
      *  @return "This" bee's info card.
      */
-    CustomBeeData getBeeData();
+    JsonObject getRawBeeData();
+
+    CoreData getCoreData();
+
+    HoneycombData getHoneycombData();
+
+    RenderData getRenderData();
+
+    BreedData getBreedData();
+
+    CentrifugeData getCentrifugeData();
+
+    CombatData getCombatData();
+
+    MutationData getMutationData();
+
+    SpawnData getSpawnData();
 
     /**
      * Gets "this" bee's current number of times fed.

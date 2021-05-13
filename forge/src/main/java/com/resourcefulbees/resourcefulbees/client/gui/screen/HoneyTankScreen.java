@@ -20,7 +20,7 @@ import java.text.DecimalFormat;
 
 public class HoneyTankScreen extends AbstractContainerScreen<HoneyTankContainer> {
 
-    HoneyTankTileEntity tileEntity;
+    final HoneyTankTileEntity tileEntity;
 
     public HoneyTankScreen(HoneyTankContainer container, Inventory inventory, Component displayName) {
         super(container, inventory, displayName);

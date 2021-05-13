@@ -8,7 +8,6 @@ import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 
 public class BeeAngerGoal extends HurtByTargetGoal {

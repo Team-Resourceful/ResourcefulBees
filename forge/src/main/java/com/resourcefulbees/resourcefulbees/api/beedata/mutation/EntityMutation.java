@@ -1,17 +1,16 @@
 package com.resourcefulbees.resourcefulbees.api.beedata.mutation;
 
-import com.resourcefulbees.resourcefulbees.api.beedata.mutation.outputs.EntityOutput;
+import com.resourcefulbees.resourcefulbees.api.beedata.outputs.EntityOutput;
 import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
 import net.minecraft.world.entity.EntityType;
-import org.apache.commons.lang3.tuple.Pair;
 
 public class EntityMutation {
-    EntityType<?> parent;
-    EntityType<?> input;
-    Pair<Double, RandomCollection<EntityOutput>> outputs;
-    private int mutationCount;
+    final EntityType<?> parent;
+    final EntityType<?> input;
+    final RandomCollection<EntityOutput> outputs;
+    private final int mutationCount;
 
-    public EntityMutation(EntityType<?> parent, EntityType<?> input, Pair<Double, RandomCollection<EntityOutput>> outputs, int mutationCount) {
+    public EntityMutation(EntityType<?> parent, EntityType<?> input, RandomCollection<EntityOutput> outputs, int mutationCount) {
         this.parent = parent;
         this.input = input;
         this.outputs = outputs;
@@ -26,11 +25,11 @@ public class EntityMutation {
         return input;
     }
 
-    public Pair<Double, RandomCollection<EntityOutput>> getOutputs() {
+    public RandomCollection<EntityOutput> getOutputs() {
         return outputs;
     }
 
-    public int getMutaionCount() {
+    public int getMutationCount() {
         return mutationCount;
     }
 }

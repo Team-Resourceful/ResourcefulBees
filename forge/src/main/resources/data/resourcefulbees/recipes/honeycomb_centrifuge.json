@@ -3,7 +3,7 @@
   "ingredient": {
     "item": "minecraft:honeycomb"
   },
-  "results": [
+  "itemOutputs": [
     {
       "item": "minecraft:sugar"
     },

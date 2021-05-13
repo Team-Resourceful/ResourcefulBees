@@ -1,6 +1,5 @@
 package com.resourcefulbees.resourcefulbees.api.honeydata;
 
-import com.resourcefulbees.resourcefulbees.utils.validation.ValidatorUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;

@@ -83,10 +83,10 @@ public class CentrifugeControllerTileEntity extends CentrifugeTileEntity {
     public int getMaxTankCapacity() { return TANK_CAPACITY; }
 
     @Override
-    public int getRecipeTime(int i) { return getRecipe(i) != null ? Math.max(5, getRecipe(i).multiblockTime) : Config.GLOBAL_CENTRIFUGE_RECIPE_TIME.get(); }
+    public int getRecipeTime(int i) { return getRecipe(i) != null ? Math.max(5, getRecipe(i).getMultiblockTime()) : Config.GLOBAL_CENTRIFUGE_RECIPE_TIME.get(); }
 
     @Override
-    protected boolean canProcessRecipe(int i) { return recipes.get(i) != null && (!Config.MULTIBLOCK_RECIPES_ONLY.get() || recipes.get(i).multiblock); }
+    protected boolean canProcessRecipe(int i) { return recipes.get(i) != null && (!Config.MULTIBLOCK_RECIPES_ONLY.get() || recipes.get(i).isMultiblock()); }
 
     //endregion
 
@@ -96,12 +96,6 @@ public class CentrifugeControllerTileEntity extends CentrifugeTileEntity {
     }
 
     //region NBT
-/*    @NotNull
-    @Override
-    public CompoundTag save(@NotNull CompoundTag tag) {
-        super.save(tag);
-        return saveToNBT(tag);
-    }*/
 
     @Override
     protected CompoundTag saveToNBT(CompoundTag tag) {

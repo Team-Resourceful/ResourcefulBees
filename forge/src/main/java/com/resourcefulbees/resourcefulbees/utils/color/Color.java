@@ -20,6 +20,11 @@ package com.resourcefulbees.resourcefulbees.utils.color;
 import com.google.common.primitives.UnsignedInts;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.Dynamic;
+import com.mojang.serialization.JsonOps;
 import com.resourcefulbees.resourcefulbees.utils.MathUtils;
 
 import java.util.HashMap;
@@ -34,6 +39,8 @@ public class Color {
     private static final Pattern PATTERN_HEX_CODE = Pattern.compile("(#|0x)[0-9a-f]{1,8}", Pattern.CASE_INSENSITIVE); //Removed `?` to force requirement
 
     public static final int VALUE_WHITE = 0xFFFFFF;
+
+    public static final Codec<Color> CODEC = Codec.PASSTHROUGH.comapFlatMap(Color::decodeColor, color -> new Dynamic<>(JsonOps.INSTANCE, new JsonPrimitive(color.c)));
 
     //region CSS Colors
     public static final Color ALICEBLUE = named("AliceBlue", 0xF0F8FF);
@@ -191,6 +198,8 @@ public class Color {
     private final int g;
     private final int b;
     private final int alpha;
+    private final float[] frgbvalue = null;
+    private final float falpha = 0.0f;
 
     public Color(int c) {
         this.r = (c >> 16) & 0xFF;
@@ -253,6 +262,11 @@ public class Color {
      */
     public static String format(int color) {
         return String.format(color > 0xFFFFFF ? "#%08X" : "#%06X", color);
+    }
+
+    @Override
+    public String toString() {
+        return String.format(c > 0xFFFFFF ? "#%08X" : "#%06X", c);
     }
 
     /**
@@ -322,6 +336,14 @@ public class Color {
         return Color.parse(element.getAsString());
     }
 
+    public static DataResult<Color> decodeColor(Dynamic<?> dynamic) {
+        if (dynamic.asNumber().result().isPresent()) {
+            return DataResult.success(new Color(dynamic.asInt(0xffffff)));
+        } else if (dynamic.asString().result().isPresent()) {
+            return DataResult.success(Color.parse(dynamic.asString("WHITE")));
+        }
+        return DataResult.error("Color input not valid!");
+    }
     //endregion
 
     public Color blendWith(Color other) {
@@ -398,5 +420,26 @@ public class Color {
 
     public int getAlphaInt() {
         return alpha;
+    }
+
+    public float[] getRGBComponents(float[] compArray) {
+        float[] f;
+        if (compArray == null) {
+            f = new float[4];
+        } else {
+            f = compArray;
+        }
+        if (frgbvalue == null) {
+            f[0] = getR();
+            f[1] = getG();
+            f[2] = getB();
+            f[3] = getAlpha();
+        } else {
+            f[0] = frgbvalue[0];
+            f[1] = frgbvalue[1];
+            f[2] = frgbvalue[2];
+            f[3] = falpha;
+        }
+        return f;
     }
 }

@@ -12,8 +12,6 @@ import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
-
 public class ScraperDispenserBehavior extends DefaultDispenseItemBehavior {
 
     @NotNull

@@ -1,13 +1,21 @@
 {
-  "flower": "minecraft:chorus_flower",
-  "hasHoneycomb": true,
-  "traits": ["ender"],
-  "maxTimeInHive": 1800,
-  "ColorData": {
-    "isBeeColored": true,
+  "CoreData": {
+    "flower": ["minecraft:chorus_flower"],
+    "traits": ["ender"],
+    "maxTimeInHive": 1800
+  },
+  "HoneycombData": {
+    "honeycombType": "DEFAULT",
     "honeycombColor": "#339786",
-    "primaryColor": "#339786",
-    "secondaryColor": "#303030"
+    "honeycomb": "resourcefulbees:ender_honeycomb",
+    "honeycombBlock": "resourcefulbees:ender_honeycomb_block"
+  },
+  "RenderData": {
+    "layers": [
+      {"texture": "custom/bee"},
+      {"isColored": true, "color": "#339786", "texture": "custom/primary_layer"},
+      {"isColored": true, "color": "#303030", "texture": "custom/secondary_layer"}
+    ]
   },
   "MutationData": {
     "hasMutation": true,
@@ -24,8 +32,10 @@
   },
   "CentrifugeData": {
     "hasCentrifugeOutput": true,
-    "mainOutput": "minecraft:ender_pearl",
-    "bottleOutput" : "minecraft:dragon_breath"
+    "itemOutputs": [
+      {"id": "minecraft:ender_pearl"},
+      {"id": "minecraft:dragon_breath"}
+    ]
   },
   "SpawnData": {
     "canSpawnInWorld": true,

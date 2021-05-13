@@ -11,8 +11,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
-
 public class ItemGroupResourcefulBees {
 
     private ItemGroupResourcefulBees() {
@@ -25,7 +23,7 @@ public class ItemGroupResourcefulBees {
         @NotNull
         @OnlyIn(Dist.CLIENT)
         public ItemStack makeIcon() {
-            return new ItemStack(ModItems.T1_BEEHIVE_ITEM.get());
+            return new ItemStack(ModItems.OAK_BEE_NEST_ITEM.get());
         }
 
         @Override

@@ -94,9 +94,9 @@ public class RecipeUtils {
     }
 
     private static void addMutationToolTip(int slotIndex, BlockMutation.Recipe recipe, List<Component> tooltip) {
-        if (slotIndex == 0 && !recipe.getBlockOutput().getCompoundNBT().isEmpty()) {
+        if (slotIndex == 0 && !recipe.getBlockOutput().getCompoundNBT().isPresent()) {
             if (BeeInfoUtils.isShiftPressed()) {
-                List<String> lore = BeeInfoUtils.getLoreLines(recipe.getBlockOutput().getCompoundNBT());
+                List<String> lore = BeeInfoUtils.getLoreLines(recipe.getBlockOutput().getCompoundNBT().get());
                 lore.forEach(l -> tooltip.add(new TextComponent(l).withStyle(Style.EMPTY.withColor(TextColor.parseColor("dark_purple")))));
             } else {
                 tooltip.add(new TranslatableComponent("gui.resourcefulbees.jei.tooltip.show_nbt").withStyle(Style.EMPTY.withColor(TextColor.parseColor("dark_purple"))));

@@ -1,7 +1,9 @@
 package com.resourcefulbees.resourcefulbees.compat.jei;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
+import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.compat.jei.ingredients.EntityIngredient;
+import com.resourcefulbees.resourcefulbees.lib.HoneycombTypes;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import mezz.jei.api.constants.VanillaTypes;
@@ -14,9 +16,9 @@ import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.block.Blocks;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -29,31 +31,31 @@ public class BeeHiveCategory extends BaseCategory<BeeHiveCategory.Recipe> {
         super(guiHelper, ID,
                 I18n.get("gui.resourcefulbees.jei.category.hive"),
                 guiHelper.drawableBuilder(GUI_BACK, 0, 0, 160, 26).addPadding(0, 0, 0, 0).build(),
-                guiHelper.createDrawableIngredient(new ItemStack(ModItems.T1_BEEHIVE_ITEM.get())),
+                guiHelper.createDrawableIngredient(new ItemStack(ModItems.OAK_BEE_NEST_ITEM.get())),
                 BeeHiveCategory.Recipe.class);
     }
 
     public static List<Recipe> getHoneycombRecipes() {
         List<Recipe> recipes = new ArrayList<>();
         BeeRegistry.getRegistry().getBees().forEach(((s, customBeeData) -> {
-            if (customBeeData.hasHoneycomb()) {
-                ItemStack honeyCombItemStack = new ItemStack(customBeeData.getCombRegistryObject().get());
-                recipes.add(new Recipe(honeyCombItemStack, customBeeData.getName()));
+            if (customBeeData.getHoneycombData().getHoneycombType() != HoneycombTypes.NONE) {
+                ItemStack honeyCombItemStack = customBeeData.getHoneycombData().getHoneycomb().getDefaultInstance();
+                recipes.add(new Recipe(honeyCombItemStack, customBeeData));
             }
         }));
         return recipes;
     }
 
     @Override
-    public void setIngredients(Recipe recipe, IIngredients ingredients) {
-        List<Ingredient> list = new ArrayList<>(Collections.singletonList(Ingredient.of(ModItems.T1_BEEHIVE_ITEM.get(), ModItems.T2_BEEHIVE_ITEM.get(), ModItems.T3_BEEHIVE_ITEM.get(), ModItems.T4_BEEHIVE_ITEM.get())));
+    public void setIngredients(@NotNull Recipe recipe, @NotNull IIngredients ingredients) {
+        List<Ingredient> list = new ArrayList<>(Collections.singletonList(Ingredient.of(Blocks.STONE)));
         ingredients.setOutput(VanillaTypes.ITEM, recipe.getComb());
         ingredients.setInputIngredients(list);
         ingredients.setInput(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(recipe.beeType, -45.0f));
     }
 
     @Override
-    public void setRecipe(IRecipeLayout iRecipeLayout, @NotNull Recipe recipe, @NotNull IIngredients ingredients) {
+    public void setRecipe(@NotNull IRecipeLayout iRecipeLayout, @NotNull Recipe recipe, @NotNull IIngredients ingredients) {
         IGuiItemStackGroup itemStacks = iRecipeLayout.getItemStacks();
         itemStacks.init(0, false, 138, 4);
         itemStacks.init(1, true, 62, 4);
@@ -66,9 +68,9 @@ public class BeeHiveCategory extends BaseCategory<BeeHiveCategory.Recipe> {
 
     public static class Recipe {
         private final ItemStack comb;
-        private final String beeType;
+        private final CustomBeeData beeType;
 
-        public Recipe(ItemStack comb, String beeType) {
+        public Recipe(ItemStack comb, CustomBeeData beeType) {
             this.comb = comb;
             this.beeType = beeType;
         }
@@ -76,7 +78,7 @@ public class BeeHiveCategory extends BaseCategory<BeeHiveCategory.Recipe> {
         public ItemStack getComb() {
             return this.comb;
         }
-        public String getBeeType() {
+        public CustomBeeData getBeeType() {
             return this.beeType;
         }
     }

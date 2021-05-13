@@ -34,11 +34,9 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.text.WordUtils;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
@@ -91,8 +89,8 @@ public class BeeJar extends Item {
             beeEntity.setTarget(player);
             if (beeEntity instanceof ResourcefulBee){
                 ResourcefulBee customBee = (ResourcefulBee) beeEntity;
-                TraitData traitData = customBee.getBeeData().getTraitData();
-                if (traitData.hasDamageTypes() && traitData.getDamageTypes().stream().anyMatch(t -> t.getLeft().equals(TraitConstants.EXPLOSIVE))) {
+                TraitData traitData = customBee.getTraitData();
+                if (traitData.getDamageTypes().stream().anyMatch(damageType -> damageType.getType().equals(TraitConstants.EXPLOSIVE))) {
                     customBee.setExplosiveCooldown(60);
                 }
             }
@@ -158,7 +156,7 @@ public class BeeJar extends Item {
 
     @OnlyIn(Dist.CLIENT)
     public static void fillJar(ItemStack stack, CustomBeeData beeData) {
-        EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(beeData.getEntityTypeRegistryID());
+        EntityType<?> entityType = beeData.getEntityType();
         Level world = Minecraft.getInstance().level;
         if (world == null || entityType == null) return;
         Entity entity = entityType.create(world);

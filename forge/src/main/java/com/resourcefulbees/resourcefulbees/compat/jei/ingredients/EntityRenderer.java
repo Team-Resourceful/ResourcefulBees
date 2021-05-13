@@ -2,9 +2,7 @@ package com.resourcefulbees.resourcefulbees.compat.jei.ingredients;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
-import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
-import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
-import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
+import com.resourcefulbees.resourcefulbees.api.beedata.RenderData;
 import mezz.jei.api.ingredients.IIngredientRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -14,7 +12,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
@@ -28,8 +25,8 @@ public class EntityRenderer implements IIngredientRenderer<EntityIngredient> {
     public void render(@NotNull PoseStack matrixStack, int x, int y, @Nullable EntityIngredient entityIngredient) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.level != null && entityIngredient != null && mc.player != null) {
-            CustomBeeData beeData = BeeRegistry.getRegistry().getBeeData(entityIngredient.getBeeType());
-            EntityType<?> entityType = entityIngredient.getBeeType().equals(BeeConstants.VANILLA_BEE_TYPE) ? EntityType.BEE : ForgeRegistries.ENTITIES.getValue(beeData.getEntityTypeRegistryID());
+            RenderData coreData = entityIngredient.getBeeData().getRenderData();
+            EntityType<?> entityType = entityIngredient.getBeeData().getEntityType();
             if (entityType != null) {
                 Entity entity = entityType.create(mc.level);
                 if (entity instanceof Bee) {
@@ -39,15 +36,15 @@ public class EntityRenderer implements IIngredientRenderer<EntityIngredient> {
 
                     beeEntity.tickCount = mc.player.tickCount;
                     beeEntity.yBodyRot = entityIngredient.getRotation() - 90;
-                    float scaledSize = entityIngredient.getBeeType().equals(BeeConstants.VANILLA_BEE_TYPE) ? 20 : 20 / beeData.getSizeModifier();
+                    float scaledSize = 20 / coreData.getSizeModifier();
                     matrixStack.translate(x, y, 1);
                     matrixStack.mulPose(Vector3f.ZP.rotationDegrees(180.0F));
                     matrixStack.translate(0.0F, -0.2F, 1);
                     matrixStack.scale(-scaledSize, scaledSize, 30);
                     matrixStack.mulPose(Vector3f.YP.rotationDegrees(270.0F));
-                    EntityRenderDispatcher entityrenderermanager = mc.getEntityRenderDispatcher();
+                    EntityRenderDispatcher entityRenderDispatcher = mc.getEntityRenderDispatcher();
                     MultiBufferSource.BufferSource typeBuffer = mc.renderBuffers().bufferSource();
-                    entityrenderermanager.render(beeEntity, 0, 0, 0.0D, mc.getFrameTime(), 1, matrixStack, typeBuffer, 15728880);
+                    entityRenderDispatcher.render(beeEntity, 0, 0, 0.0D, mc.getFrameTime(), 1, matrixStack, typeBuffer, 15728880);
                     typeBuffer.endBatch();
                     matrixStack.popPose();
                 }

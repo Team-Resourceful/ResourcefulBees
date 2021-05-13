@@ -14,12 +14,11 @@ import org.jetbrains.annotations.NotNull;
 public class HoneyCongealerContainer extends ContainerWithStackMove {
 
     private final HoneyCongealerTileEntity honeyCongealerTileEntity;
-    private final Player player;
 
     public HoneyCongealerContainer(int id, Level world, BlockPos pos, Inventory inv) {
         super(ModContainers.HONEY_CONGEALER_CONTAINER.get(), id);
 
-        this.player = inv.player;
+        Player player = inv.player;
         honeyCongealerTileEntity = (HoneyCongealerTileEntity) world.getBlockEntity(pos);
 
         if (getHoneyCongealerTileEntity() != null) {

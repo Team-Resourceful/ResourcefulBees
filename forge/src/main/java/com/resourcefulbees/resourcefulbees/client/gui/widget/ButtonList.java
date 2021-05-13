@@ -21,7 +21,7 @@ public class ButtonList {
     protected int scrollPos = 0;
     public final TabImageButton button;
     protected boolean active = false;
-    private Map<String, ? extends BeepediaPage> list;
+    private final Map<String, ? extends BeepediaPage> list;
     SortedMap<String, BeepediaPage> reducedList = new TreeMap<>();
 
     public ButtonList(int xPos, int yPos, int width, int height, int itemHeight, TabImageButton button, Map<String, ? extends BeepediaPage> list) {
@@ -62,12 +62,9 @@ public class ButtonList {
     }
 
     private void reduceList(String search, String s, BeepediaPage b) {
-        boolean pageFound = false;
-        if ((b instanceof BeePage && ((BeePage) b).getBeeFromSearch(search)) ||
+        boolean pageFound = (b instanceof BeePage && ((BeePage) b).getBeeFromSearch(search)) ||
                 (b instanceof HoneyPage && ((HoneyPage) b).getHoneyFromSearch(search)) ||
-                (b instanceof TraitPage && ((TraitPage) b).getTraitFromSearch(search))) {
-            pageFound = true;
-        }
+                (b instanceof TraitPage && ((TraitPage) b).getTraitFromSearch(search));
         if (pageFound) {
             reducedList.put(s, b);
             if (active) b.listButton.visible = true;

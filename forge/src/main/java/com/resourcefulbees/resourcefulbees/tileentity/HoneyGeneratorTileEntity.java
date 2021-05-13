@@ -148,7 +148,7 @@ public class HoneyGeneratorTileEntity extends AbstractHoneyTankContainer impleme
 
     @NotNull
     @Override
-    public CompoundTag save(CompoundTag tag) {
+    public CompoundTag save(@NotNull CompoundTag tag) {
         CompoundTag inv = this.getTileStackHandler().serializeNBT();
         tag.put(NBTConstants.NBT_INVENTORY, inv);
         tag.put(NBTConstants.NBT_ENERGY, energyStorage.serializeNBT());
@@ -168,7 +168,7 @@ public class HoneyGeneratorTileEntity extends AbstractHoneyTankContainer impleme
     }
 
     @Override
-    public void load(@NotNull BlockState state, CompoundTag tag) {
+    public void load(@NotNull BlockState state, @NotNull CompoundTag tag) {
         CompoundTag invTag = tag.getCompound(NBTConstants.NBT_INVENTORY);
         getTileStackHandler().deserializeNBT(invTag);
         energyStorage.deserializeNBT(tag.getCompound(NBTConstants.NBT_ENERGY));

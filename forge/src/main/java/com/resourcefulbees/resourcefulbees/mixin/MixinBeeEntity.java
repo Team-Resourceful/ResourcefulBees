@@ -32,19 +32,13 @@ public abstract class MixinBeeEntity extends Animal {
 
     @Inject(at = @At("HEAD"), method = "doesHiveHaveSpace(Lnet/minecraft/core/BlockPos;)Z", cancellable = true)
     private void doesHiveHaveSpace(BlockPos pos, CallbackInfoReturnable<Boolean> callback) {
-        BlockEntity tileentity = this.level.getBlockEntity(pos);
-        if ((tileentity instanceof TieredBeehiveTileEntity && !((TieredBeehiveTileEntity) tileentity).isFull())
-                || (tileentity instanceof ApiaryTileEntity && ((ApiaryTileEntity) tileentity).hasSpace())
-                || (tileentity instanceof BeehiveBlockEntity && !((BeehiveBlockEntity) tileentity).isFull())) {
+        BlockEntity blockEntity = this.level.getBlockEntity(pos);
+        if ((blockEntity instanceof TieredBeehiveTileEntity && !((TieredBeehiveTileEntity) blockEntity).isFull())
+                || (blockEntity instanceof ApiaryTileEntity && ((ApiaryTileEntity) blockEntity).hasSpace())
+                || (blockEntity instanceof BeehiveBlockEntity && !((BeehiveBlockEntity) blockEntity).isFull())) {
             callback.setReturnValue(true);
         }
     }
-
-    //Leaving this here for now - oreo
-    /*@Inject(at = @At("HEAD"), method = "getStandingEyeHeight(Lnet/minecraft/entity/Pose;Lnet/minecraft/entity/EntitySize;)F", cancellable = true)
-    public void getStandingEyeHeight(Pose pose, EntitySize size, CallbackInfoReturnable<Float> callback) {
-        callback.setReturnValue(this.isBaby() ? size.height * 0.25F : size.height * 0.5F);
-    }*/
 
     @Inject(at = @At("HEAD"), method = "isHiveValid()Z", cancellable = true)
     public void isHiveValid(CallbackInfoReturnable<Boolean> callback) {

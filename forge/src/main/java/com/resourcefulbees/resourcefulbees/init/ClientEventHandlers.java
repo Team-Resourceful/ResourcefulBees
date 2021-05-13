@@ -1,6 +1,5 @@
 package com.resourcefulbees.resourcefulbees.init;
 
-import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.*;
 import com.resourcefulbees.resourcefulbees.client.models.ModelHandler;
 import com.resourcefulbees.resourcefulbees.client.render.entity.CustomBeeRenderer;
@@ -45,8 +44,10 @@ public class ClientEventHandlers {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ColorHandler::onItemColors);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ColorHandler::onBlockColors);
         MinecraftForge.EVENT_BUS.addListener(FluidRender::honeyOverlay);
+
         MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, ClientEventHandlers::recipesLoaded);
         MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, ClientEventHandlers::onTagsUpdated);
+
     }
 
     public static void recipesLoaded(RecipesUpdatedEvent event){
@@ -64,9 +65,7 @@ public class ClientEventHandlers {
     private static void startSetups() {
         if (!setupsDone) {
             setupsDone = true;
-            MutationSetup.setupMutations();
-            FlowerSetup.setupFlowers();
-            BreedingSetup.setupFeedItems();
+            BeeRegistry.getRegistry().regenerateCustomBeeData();
         }
     }
 
@@ -77,10 +76,7 @@ public class ClientEventHandlers {
     }
 
     private static void doClientStuff(final FMLClientSetupEvent event) {
-        ModEntities.getModBees().forEach((s, customBee) -> RenderingRegistry.registerEntityRenderingHandler(customBee.get(), manager -> {
-            CustomBeeData data = BeeRegistry.getRegistry().getBeeData(s);
-            return new CustomBeeRenderer(data.getBaseModelType(), manager, data);
-        }));
+        ModEntities.getModBees().forEach((s, customBee) -> RenderingRegistry.registerEntityRenderingHandler(customBee.get(), manager -> new CustomBeeRenderer(manager, BeeRegistry.getRegistry().getBeeData(s).getRenderData())));
         MenuScreens.register(ModContainers.CENTRIFUGE_CONTAINER.get(), CentrifugeScreen::new);
         MenuScreens.register(ModContainers.MECHANICAL_CENTRIFUGE_CONTAINER.get(), MechanicalCentrifugeScreen::new);
         MenuScreens.register(ModContainers.CENTRIFUGE_MULTIBLOCK_CONTAINER.get(), CentrifugeMultiblockScreen::new);
@@ -122,11 +118,6 @@ public class ClientEventHandlers {
         ItemBlockRenderTypes.setRenderLayer(ModBlocks.PRISMARINE_BEE_NEST.get(), RenderType.translucent());
         ItemBlockRenderTypes.setRenderLayer(ModBlocks.PURPUR_BEE_NEST.get(), RenderType.translucent());
         ItemBlockRenderTypes.setRenderLayer(ModBlocks.WITHER_BEE_NEST.get(), RenderType.translucent());
-
-        ItemBlockRenderTypes.setRenderLayer(ModBlocks.T1_BEEHIVE.get(), RenderType.translucent());
-        ItemBlockRenderTypes.setRenderLayer(ModBlocks.T2_BEEHIVE.get(), RenderType.translucent());
-        ItemBlockRenderTypes.setRenderLayer(ModBlocks.T3_BEEHIVE.get(), RenderType.translucent());
-        ItemBlockRenderTypes.setRenderLayer(ModBlocks.T4_BEEHIVE.get(), RenderType.translucent());
 
         ItemModelPropertiesHandler.registerProperties();
         ClientRegistry.bindTileEntityRenderer(ModBlockEntityTypes.HONEY_TANK_TILE_ENTITY.get(), RenderHoneyTank::new);

@@ -9,20 +9,17 @@ import com.resourcefulbees.resourcefulbees.compat.jei.ingredients.EntityIngredie
 import com.resourcefulbees.resourcefulbees.compat.jei.ingredients.EntityIngredientHelper;
 import com.resourcefulbees.resourcefulbees.compat.jei.ingredients.EntityRenderer;
 import com.resourcefulbees.resourcefulbees.item.Beepedia;
-import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
-import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.handlers.IGuiClickableArea;
 import mezz.jei.api.gui.handlers.IGuiContainerHandler;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.registration.*;
-import mezz.jei.api.runtime.IIngredientManager;
-import mezz.jei.api.runtime.IJeiRuntime;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeManager;
@@ -31,7 +28,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.util.*;
 
 import static com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE;
@@ -63,10 +59,6 @@ public class JEICompat implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(new ItemStack(ModItems.T1_BEEHIVE_ITEM.get()), BeeHiveCategory.ID);
-        registration.addRecipeCatalyst(new ItemStack(ModItems.T2_BEEHIVE_ITEM.get()), BeeHiveCategory.ID);
-        registration.addRecipeCatalyst(new ItemStack(ModItems.T3_BEEHIVE_ITEM.get()), BeeHiveCategory.ID);
-        registration.addRecipeCatalyst(new ItemStack(ModItems.T4_BEEHIVE_ITEM.get()), BeeHiveCategory.ID);
         registration.addRecipeCatalyst(new ItemStack(ModItems.T1_APIARY_ITEM.get()), ApiaryCategory.ID);
         registration.addRecipeCatalyst(new ItemStack(ModItems.T2_APIARY_ITEM.get()), ApiaryCategory.ID);
         registration.addRecipeCatalyst(new ItemStack(ModItems.T3_APIARY_ITEM.get()), ApiaryCategory.ID);
@@ -117,12 +109,12 @@ public class JEICompat implements IModPlugin {
 
     @Override
     public void registerItemSubtypes(ISubtypeRegistration registration) {
-        registration.registerSubtypeInterpreter(ModItems.BEEPEDIA.get(), itemStack -> itemStack.hasTag() && itemStack.getTag().contains(Beepedia.CREATIVE_TAG) ? "creative.beepedia" : "");
+        registration.registerSubtypeInterpreter(ModItems.BEEPEDIA.get(), (ingredient, context) -> ingredient.hasTag() && ingredient.getTag() != null && ingredient.getTag().contains(Beepedia.CREATIVE_TAG) ? "creative.beepedia" : "");
     }
 
     public void registerInfoDesc(IRecipeRegistration registration) {
         for (EntityIngredient bee : EntityIngredientFactory.create()) {
-            CustomBeeData beeData = BeeRegistry.getRegistry().getBeeData(bee.getBeeType());
+            CustomBeeData beeData = bee.getBeeData();
 
             StringBuilder stats = new StringBuilder();
             String aqua = ChatFormatting.DARK_AQUA.toString();
@@ -131,8 +123,8 @@ public class JEICompat implements IModPlugin {
 
             stats.append(aqua).append(" Base Health: ").append(purple).append(beeData.getCombatData().getBaseHealth()).append("\n");
             stats.append(aqua).append(" Attack Damage: ").append(purple).append(beeData.getCombatData().getAttackDamage()).append("\n");
-            stats.append(aqua).append(" Has Honeycomb: ").append(purple).append(StringUtils.capitalize(String.valueOf(beeData.hasHoneycomb()))).append("\n");
-            stats.append(aqua).append(" Max Time in Hive: ").append(purple).append(beeData.getMaxTimeInHive()).append(" ticks\n");
+            stats.append(aqua).append(" Honeycomb Type: ").append(purple).append(StringUtils.capitalize(beeData.getHoneycombData().getHoneycombType().toString())).append("\n");
+            stats.append(aqua).append(" Max Time in Hive: ").append(purple).append(beeData.getCoreData().getMaxTimeInHive()).append(" ticks\n");
 
             stats.append(aqua).append(" Has Mutation: ").append(purple).append(StringUtils.capitalize(String.valueOf(beeData.getMutationData().hasMutation()))).append("\n");
             if (beeData.getMutationData().hasMutation()) {
@@ -141,15 +133,22 @@ public class JEICompat implements IModPlugin {
 
             stats.append(aqua).append(" Is Breedable: ").append(purple).append(StringUtils.capitalize(String.valueOf(beeData.getBreedData().isBreedable()))).append("\n");
             if (beeData.getBreedData().isBreedable() && beeData.getBreedData().hasParents()) {
-                stats.append(aqua).append(" Parents: ").append(purple).append(StringUtils.capitalize(beeData.getBreedData().getParent1())).append(" Bee, ")
-                        .append(StringUtils.capitalize(beeData.getBreedData().getParent2())).append(" Bee\n");
+                stats.append(aqua).append(" Parents: ").append(purple);
+
+                Iterator<String> parent1 = beeData.getBreedData().getParent1().iterator();
+                Iterator<String> parent2 = beeData.getBreedData().getParent2().iterator();
+
+                while (parent1.hasNext() && parent2.hasNext()) {
+                    stats.append(StringUtils.capitalize(parent1.next())).append(" Bee, ")
+                            .append(StringUtils.capitalize(parent2.next())).append(" Bee\n");
+                }
             }
 
-            if (beeData.hasTraitNames()) {
+            if (beeData.getTraitData().hasTraits()) {
                 StringJoiner traits = new StringJoiner(", ");
                 //noinspection deprecation
-                Arrays.stream(beeData.getTraitNames()).forEach(trait -> traits.add(WordUtils.capitalize(trait.replace("_", " "))));
-                stats.append(aqua).append(" Traits: ").append(purple).append(traits.toString()).append("\n");
+                beeData.getTraitData().getTraits().forEach(trait -> traits.add(WordUtils.capitalize(trait.replace("_", " "))));
+                stats.append(aqua).append(" Traits: ").append(purple).append(traits).append("\n");
             }
 
             stats.append(aqua).append(" Spawns in World: ").append(purple).append(StringUtils.capitalize(String.valueOf(beeData.getSpawnData().canSpawnInWorld()))).append("\n");
@@ -159,16 +158,15 @@ public class JEICompat implements IModPlugin {
                 stats.append(aqua).append(" Max Y Level: ").append(purple).append(beeData.getSpawnData().getMaxYLevel()).append("\n");
                 stats.append(aqua).append(" Min Group Size: ").append(purple).append(beeData.getSpawnData().getMinGroupSize()).append("\n");
                 stats.append(aqua).append(" Max Group Size: ").append(purple).append(beeData.getSpawnData().getMaxGroupSize()).append("\n");
-                stats.append(aqua).append(" Biomes: ").append(purple).append(BiomeParser.parseBiomes(beeData));
+                stats.append(aqua).append(" Biomes: ").append(purple).append(BiomeParser.parseBiomes(beeData.getSpawnData()));
             }
 
-            registration.addIngredientInfo(bee, ENTITY_INGREDIENT, stats.toString());
+            registration.addIngredientInfo(bee, ENTITY_INGREDIENT, new TextComponent(stats.toString()));
         }
     }
 
-    @Override
+/*    @Override
     public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
         IIngredientManager ingredientManager = jeiRuntime.getIngredientManager();
-        ingredientManager.removeIngredientsAtRuntime(VanillaTypes.ITEM, Arrays.asList(ModItems.POLLEN.get().getDefaultInstance(), ModItems.FERTILIZER.get().getDefaultInstance()));
-    }
+    }*/
 }

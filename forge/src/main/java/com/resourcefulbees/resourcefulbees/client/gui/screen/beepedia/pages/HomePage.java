@@ -29,13 +29,13 @@ public class HomePage extends BeepediaPage {
 
 
     int counter = 0;
-    List<BeePage> bees;
-    ModImageButton discord;
-    ModImageButton patreon;
-    ModImageButton issues;
-    ModImageButton wiki;
+    final List<BeePage> bees;
+    final ModImageButton discord;
+    final ModImageButton patreon;
+    final ModImageButton issues;
+    final ModImageButton wiki;
 
-    ResourceLocation logo = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/logo.png");
+    final ResourceLocation logo = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/logo.png");
 
     public HomePage(BeepediaScreen beepedia, int left, int top) {
         super(beepedia, left, top, "home");

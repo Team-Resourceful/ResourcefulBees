@@ -1,6 +1,6 @@
 package com.resourcefulbees.resourcefulbees.config;
 
-import com.resourcefulbees.resourcefulbees.lib.ApiaryOutput;
+import com.resourcefulbees.resourcefulbees.lib.ApiaryOutputs;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.*;
@@ -38,10 +38,10 @@ public class Config {
     public static IntValue NETHER_NEST_GENERATION_CHANCE;
     public static IntValue END_NEST_GENERATION_CHANCE;
 
-    public static EnumValue<ApiaryOutput> T1_APIARY_OUTPUT;
-    public static EnumValue<ApiaryOutput> T2_APIARY_OUTPUT;
-    public static EnumValue<ApiaryOutput> T3_APIARY_OUTPUT;
-    public static EnumValue<ApiaryOutput> T4_APIARY_OUTPUT;
+    public static EnumValue<ApiaryOutputs> T1_APIARY_OUTPUT;
+    public static EnumValue<ApiaryOutputs> T2_APIARY_OUTPUT;
+    public static EnumValue<ApiaryOutputs> T3_APIARY_OUTPUT;
+    public static EnumValue<ApiaryOutputs> T4_APIARY_OUTPUT;
 
     public static IntValue T1_APIARY_QUANTITY;
     public static IntValue T2_APIARY_QUANTITY;
@@ -56,7 +56,7 @@ public class Config {
 
     public static IntValue HONEY_FILL_AMOUNT;
     public static IntValue HONEY_DRAIN_AMOUNT;
-    public static IntValue HONEY_PROCEESS_TIME;
+    public static IntValue HONEY_PROCESS_TIME;
     public static IntValue CONGEALER_TIME_MODIFIER;
     public static IntValue MAX_PIPE_FLOW;
     public static IntValue ENERGY_FILL_AMOUNT;
@@ -109,7 +109,7 @@ public class Config {
             throw new IllegalStateException(ModConstants.UTILITY_CLASS);
         }
 
-        public static ForgeConfigSpec COMMON_CONFIG;
+        public static final ForgeConfigSpec COMMON_CONFIG;
 
 
         static {
@@ -128,7 +128,7 @@ public class Config {
                     .defineInRange("smokerDurability", 1000, 100, 5000);
             BEEPEDIA_HIDE_LOCKED = COMMON_BUILDER.comment("\nSet to true to hide certain data in the Beepedia until the player has unlocked the bee. [true/false]")
                     .define("beepediaHideLocked", false);
-            HONEY_PROCEESS_TIME = COMMON_BUILDER.comment("\nAmount of time in ticks required to finish processing a honey bottle.")
+            HONEY_PROCESS_TIME = COMMON_BUILDER.comment("\nAmount of time in ticks required to finish processing a honey bottle.")
                     .defineInRange("honeyProcessTime", 5, 0, 2400);
             CONGEALER_TIME_MODIFIER = COMMON_BUILDER.comment("\nMultiplier to the amount of ticks needed to process honey into honey blocks in the congealer." +
                     "\nThis value is multiplying the honeyProcessTime.")
@@ -206,19 +206,19 @@ public class Config {
 
             COMMON_BUILDER.push("Apiary Options");
             T1_APIARY_OUTPUT = COMMON_BUILDER.comment("\nTier 1 Apiary Output")
-                    .defineEnum("tierOneApiaryOutput", ApiaryOutput.COMB, ApiaryOutput.COMB, ApiaryOutput.BLOCK);
+                    .defineEnum("tierOneApiaryOutput", ApiaryOutputs.COMB, ApiaryOutputs.COMB, ApiaryOutputs.BLOCK);
             T1_APIARY_QUANTITY = COMMON_BUILDER.comment("\nTier 1 Apiary Output Quantity")
                     .defineInRange("tierOneApiaryQuantity", 8, 1, Integer.MAX_VALUE);
             T2_APIARY_OUTPUT = COMMON_BUILDER.comment("\nTier 2 Apiary Output")
-                    .defineEnum("tierTwoApiaryOutput", ApiaryOutput.COMB, ApiaryOutput.COMB, ApiaryOutput.BLOCK);
+                    .defineEnum("tierTwoApiaryOutput", ApiaryOutputs.COMB, ApiaryOutputs.COMB, ApiaryOutputs.BLOCK);
             T2_APIARY_QUANTITY = COMMON_BUILDER.comment("\nTier 2 Apiary Output Quantity")
                     .defineInRange("tierTwoApiaryQuantity", 16, 1, Integer.MAX_VALUE);
             T3_APIARY_OUTPUT = COMMON_BUILDER.comment("\nTier 3 Apiary Output")
-                    .defineEnum("tierThreeApiaryOutput", ApiaryOutput.BLOCK, ApiaryOutput.COMB, ApiaryOutput.BLOCK);
+                    .defineEnum("tierThreeApiaryOutput", ApiaryOutputs.BLOCK, ApiaryOutputs.COMB, ApiaryOutputs.BLOCK);
             T3_APIARY_QUANTITY = COMMON_BUILDER.comment("\nTier 3 Apiary Output Quantity")
                     .defineInRange("tierThreeApiaryQuantity", 4, 1, Integer.MAX_VALUE);
             T4_APIARY_OUTPUT = COMMON_BUILDER.comment("\nTier 4 Apiary Output")
-                    .defineEnum("tierFourApiaryOutput", ApiaryOutput.BLOCK, ApiaryOutput.COMB, ApiaryOutput.BLOCK);
+                    .defineEnum("tierFourApiaryOutput", ApiaryOutputs.BLOCK, ApiaryOutputs.COMB, ApiaryOutputs.BLOCK);
             T4_APIARY_QUANTITY = COMMON_BUILDER.comment("\nTier 4 Apiary Output Quantity")
                     .defineInRange("tierFourApiaryQuantity", 8, 1, Integer.MAX_VALUE);
             APIARY_MAX_BEES = COMMON_BUILDER.comment("\nMaximum number of UNIQUE bees allowed in the Apiary.")
@@ -288,7 +288,7 @@ public class Config {
             throw new IllegalStateException(ModConstants.UTILITY_CLASS);
         }
 
-        public static ForgeConfigSpec CLIENT_CONFIG;
+        public static final ForgeConfigSpec CLIENT_CONFIG;
 
 
         static {

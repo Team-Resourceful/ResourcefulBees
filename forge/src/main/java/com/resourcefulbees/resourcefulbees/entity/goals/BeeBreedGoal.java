@@ -46,15 +46,15 @@ public class BeeBreedGoal extends BreedGoal {
         String parent1 = ((ICustomBee)this.partner).getBeeType();
         String parent2 = ((ICustomBee)this.animal).getBeeType();
         CustomBeeData childData = BeeRegistry.getRegistry().getWeightedChild(parent1, parent2);
-        float breedChance = BeeRegistry.getRegistry().getBreedChance(parent1, parent2, childData);
+        float breedChance = BeeRegistry.getRegistry().getBreedChance(parent1, parent2, childData.getBreedData());
         AgableMob ageableentity = bee.createSelectedChild(childData);
 
         final BabyEntitySpawnEvent event = new BabyEntitySpawnEvent(animal, partner, ageableentity);
         final boolean cancelled = MinecraftForge.EVENT_BUS.post(event);
         ageableentity = event.getChild();
         if (cancelled) {
-            int p1BreedDelay = ((ICustomBee)this.animal).getBeeData().getBreedData().getBreedDelay();
-            int p2BreedDelay = ((ICustomBee)this.partner).getBeeData().getBreedData().getBreedDelay();
+            int p1BreedDelay = ((ICustomBee)this.animal).getBreedData().getBreedDelay();
+            int p2BreedDelay = ((ICustomBee)this.partner).getBreedData().getBreedDelay();
 
             resetBreed(p1BreedDelay, p2BreedDelay);
             return;
@@ -69,8 +69,8 @@ public class BeeBreedGoal extends BreedGoal {
                 serverplayerentity.awardStat(Stats.ANIMALS_BRED);
                 CriteriaTriggers.BRED_ANIMALS.trigger(serverplayerentity, this.animal, this.partner, ageableentity);
             }
-            int p1BreedDelay = ((ICustomBee)this.animal).getBeeData().getBreedData().getBreedDelay();
-            int p2BreedDelay = ((ICustomBee)this.partner).getBeeData().getBreedData().getBreedDelay();
+            int p1BreedDelay = ((ICustomBee)this.animal).getBreedData().getBreedDelay();
+            int p2BreedDelay = ((ICustomBee)this.partner).getBreedData().getBreedDelay();
             resetBreed(p1BreedDelay, p2BreedDelay);
 
 

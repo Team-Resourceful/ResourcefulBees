@@ -6,7 +6,7 @@ import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaPa
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.resourcefulbees.resourcefulbees.client.gui.widget.ListButton;
 import com.resourcefulbees.resourcefulbees.client.gui.widget.SubButtonList;
-import com.resourcefulbees.resourcefulbees.data.BeeTrait;
+import com.resourcefulbees.resourcefulbees.api.beedata.BeeTrait;
 import com.resourcefulbees.resourcefulbees.item.BeeJar;
 import com.resourcefulbees.resourcefulbees.lib.TraitConstants;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
@@ -25,7 +25,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
-import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.opengl.GL11;
 
 import java.util.*;
@@ -38,13 +37,13 @@ public class TraitPage extends BeepediaPage {
     private final ImageButton nextTab;
     String translation;
     private SubButtonList list;
-    TranslatableComponent name;
+    final TranslatableComponent name;
     private final List<TraitSection> traitSections = new LinkedList<>();
 
-    private List<String> searchImmunities = new LinkedList<>();
-    private List<String> searchDamage = new LinkedList<>();
-    private List<String> searchSpecial = new LinkedList<>();
-    private List<String> searchBees = new LinkedList<>();
+    private final List<String> searchImmunities = new LinkedList<>();
+    private final List<String> searchDamage = new LinkedList<>();
+    private final List<String> searchSpecial = new LinkedList<>();
+    private final List<String> searchBees = new LinkedList<>();
     private List<String> searchAll = new LinkedList<>();
 
     private static final int LIST_HEIGHT = 102;
@@ -53,7 +52,7 @@ public class TraitPage extends BeepediaPage {
         super(beepedia, left, top, id);
         this.trait = trait;
         name = new TranslatableComponent(trait.getTranslationKey());
-        ItemStack stack = new ItemStack(trait.getBeepediaItem());
+        ItemStack stack = trait.getDisplayItem().getDefaultInstance();
         newListButton(stack, name);
         prevTab = new ImageButton(xPos + (SUB_PAGE_WIDTH / 2) - 48, yPos + 40, 8, 11, 0, 0, 11, arrowImage, 16, 33, button -> toggleTab());
         nextTab = new ImageButton(xPos + (SUB_PAGE_WIDTH / 2) + 40, yPos + 40, 8, 11, 8, 0, 11, arrowImage, 16, 33, button -> toggleTab());
@@ -71,9 +70,9 @@ public class TraitPage extends BeepediaPage {
     }
 
     private void addParticle() {
-        if (trait.hasParticleEffect()) {
+        if (trait.hasParticleEffects()) {
             TranslatableComponent title = new TranslatableComponent("gui.resourcefulbees.beepedia.tab.traits.particle");
-            TextComponent text = new TextComponent(trait.getParticleEffect().writeToString());
+            TextComponent text = new TextComponent(trait.getParticleEffects().iterator().next().getRegistryName().toString()); ///MOST LIKELY NEEDS TO BE FIXED/IS BROKEN
             traitSections.add(new TraitSection(title, new ItemStack(Items.FIREWORK_ROCKET), text));
         }
     }
@@ -82,15 +81,12 @@ public class TraitPage extends BeepediaPage {
         if (trait.hasDamageTypes()) {
             TranslatableComponent title = new TranslatableComponent("gui.resourcefulbees.beepedia.tab.traits.damageTypes");
             TextComponent text = new TextComponent("");
-            for (int i = 0; i < trait.getDamageTypes().size(); i++) {
-                Pair<String, Integer> damage = trait.getDamageTypes().get(i);
-                text.append(damage.getKey() + " ");
+            trait.getDamageTypes().forEach(damageType -> {
+                text.append(damageType.getType() + " ");
                 text.append(new TranslatableComponent("gui.resourcefulbees.beepedia.tab.traits.amplifier"));
-                text.append(damage.getRight().toString());
-                if (i != trait.getPotionDamageEffects().size() - 1) {
-                    text.append(", ");
-                }
-            }
+                text.append(String.valueOf(damageType.getAmplifier()));
+                text.append(", ");
+            });
             traitSections.add(new TraitSection(title, new ItemStack(Items.IRON_SWORD), text));
         }
     }
@@ -99,16 +95,12 @@ public class TraitPage extends BeepediaPage {
         if (trait.hasDamagePotionEffects()) {
             TranslatableComponent title = new TranslatableComponent("gui.resourcefulbees.beepedia.tab.traits.potion_damage_effects");
             TextComponent text = new TextComponent("");
-            for (int i = 0; i < trait.getPotionDamageEffects().size(); i++) {
-                Pair<MobEffect, Integer> effect = trait.getPotionDamageEffects().get(i);
-                text.append(effect.getKey().getDisplayName());
+            trait.getPotionDamageEffects().forEach(effect -> {
+                text.append(effect.getEffect().getDisplayName());
                 text.append(" ");
-
-                if (effect.getRight() > 0) text.append(new TextComponent(effect.getRight().toString()));
-                if (i != trait.getPotionDamageEffects().size() - 1) {
-                    text.append(", ");
-                }
-            }
+                if (effect.getStrength() > 0) text.append(String.valueOf(effect.getStrength()));
+                text.append(", ");
+            });
             traitSections.add(new TraitSection(title, PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.HARMING), text));
         }
     }
@@ -173,7 +165,7 @@ public class TraitPage extends BeepediaPage {
     public void renderBackground(PoseStack matrix, float partialTick, int mouseX, int mouseY) {
         if (list == null) return;
         list.updateList();
-        beepedia.drawSlotNoToolTip(matrix, trait.getBeepediaItem(), xPos, yPos + 10);
+        beepedia.drawSlotNoToolTip(matrix, trait.getDisplayItem(), xPos, yPos + 10);
         beepedia.getMinecraft().textureManager.bind(splitterImage);
         GuiComponent.blit(matrix, xPos, yPos - 14, 0, 0, 165, 100, 165, 100);
         Font font = Minecraft.getInstance().font;
@@ -241,8 +233,8 @@ public class TraitPage extends BeepediaPage {
             searchBees.add(s);
             if (b instanceof BeePage) searchBees.add(((BeePage) b).getBee().getDisplayName().getString());
         });
-        trait.getDamageTypes().forEach(pair -> searchDamage.add(pair.getLeft()));
-        trait.getPotionDamageEffects().forEach(pair -> searchDamage.add(pair.getLeft().getDisplayName().getString()));
+        trait.getDamageTypes().forEach(damageType -> searchDamage.add(damageType.getType()));
+        trait.getPotionDamageEffects().forEach(effect -> searchDamage.add(effect.getEffect().getDisplayName().getString()));
         trait.getPotionImmunities().forEach(p -> searchImmunities.add(p.getDisplayName().getString()));
         searchImmunities.addAll(trait.getDamageImmunities());
         searchSpecial.addAll(trait.getSpecialAbilities());
@@ -331,11 +323,11 @@ public class TraitPage extends BeepediaPage {
     }
 
     private class TraitSection {
-        Font font;
-        Component title;
-        ItemStack displaySlot;
-        Component text;
-        int width = BeepediaPage.SUB_PAGE_WIDTH;
+        final Font font;
+        final Component title;
+        final ItemStack displaySlot;
+        final Component text;
+        final int width = BeepediaPage.SUB_PAGE_WIDTH;
 
         public TraitSection(Component title, ItemStack displaySlot, Component text) {
             this.title = new TextComponent(title.getString()).withStyle(ChatFormatting.WHITE);

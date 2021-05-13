@@ -27,6 +27,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModList;
@@ -55,7 +56,6 @@ public class ResourcefulBees {
         RegistryHandler.init();
         ResourcefulBeesAPI.setBeeRegistry(BeeRegistry.getRegistry());
         ResourcefulBeesAPI.setTraitRegistry(TraitRegistry.getRegistry());
-        BeeRegistry.getRegistry().allowRegistration();
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.CommonConfig.COMMON_CONFIG, "resourcefulbees/common.toml");
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Config.ClientConfig.CLIENT_CONFIG, "resourcefulbees/client.toml");
@@ -63,7 +63,6 @@ public class ResourcefulBees {
         ConfigLoader.load(Config.CommonConfig.COMMON_CONFIG, "resourcefulbees/common.toml");
 
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> IncompatibleModWarning::init);
-
 
         BiomeDictionarySetup.buildDictionary();
         BeeSetup.setupBees();
@@ -76,25 +75,22 @@ public class ResourcefulBees {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::loadComplete);
         MinecraftForge.EVENT_BUS.addListener(BeeSetup::onBiomeLoad);
         MinecraftForge.EVENT_BUS.addListener(this::serverLoaded);
-
-
         MinecraftForge.EVENT_BUS.addListener(this::trade);
-        //MinecraftForge.EVENT_BUS.addListener(EntityEventHandlers::entityDies);
 
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ClientEventHandlers::clientStuff);
 
         MinecraftForge.EVENT_BUS.register(this);
     }
 
-    private void serverLoaded(FMLServerStartedEvent event) {
+    @SubscribeEvent
+    public void serverLoaded(FMLServerStartedEvent event) {
         if (event.getServer().isDedicatedServer()){
-            MutationSetup.setupMutations();
-            FlowerSetup.setupFlowers();
-            BreedingSetup.setupFeedItems();
+            BeeRegistry.getRegistry().regenerateCustomBeeData();
         }
         ModPotions.createMixes();
     }
 
+    @SubscribeEvent
     public void trade(VillagerTradesEvent event) {
         List<VillagerTrades.ItemListing> level1 = event.getTrades().get(1);
         List<VillagerTrades.ItemListing> level2 = event.getTrades().get(2);
@@ -137,28 +133,27 @@ public class ResourcefulBees {
         }
     }
 
-    private void setup(final FMLCommonSetupEvent event) {
+    @SubscribeEvent(priority = EventPriority.LOW)
+    public void setup(final FMLCommonSetupEvent event) {
         BeeInfoUtils.makeValidApiaryTag();
-
         event.enqueueWork(ModSetup::registerDispenserBehaviors);
-
         NetPacketHandler.init();
-
         MinecraftForge.EVENT_BUS.register(new RecipeBuilder());
-
         ModFeatures.ConfiguredFeatures.registerConfiguredFeatures();
     }
 
+    @SubscribeEvent
     public void onInterModEnqueue(InterModEnqueueEvent event) {
         if (ModList.get().isLoaded("theoneprobe"))
             InterModComms.sendTo("theoneprobe", "getTheOneProbe", TopCompat::new);
     }
 
-    private void loadComplete(FMLLoadCompleteEvent event) {
+    @SubscribeEvent
+    public void loadComplete(FMLLoadCompleteEvent event) {
         TraitRegistry.registerDefaultTraits();
         TraitSetup.buildCustomTraits();
         TraitRegistry.setTraitRegistryClosed();
-        TraitRegistry.applyBeeTraits();
+        //TraitRegistry.applyBeeTraits();
         BeeSetup.registerBeePlacements();
         BeeSpawnEggItem.initSpawnEggs();
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> DataGen::generateClientData);

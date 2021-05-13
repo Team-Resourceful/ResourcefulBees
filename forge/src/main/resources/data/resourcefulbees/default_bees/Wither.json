@@ -1,12 +1,17 @@
 {
-  "flower": "minecraft:wither_rose",
-  "maxTimeInHive": 600,
-  "hasHoneycomb": true,
-  "baseLayerTexture": "wither/wither_bee",
-  "traits": ["nether", "wither"],
-  "ColorData": {
-    "isBeeColored": false,
-    "honeycombColor": "#444444"
+  "CoreData": {
+    "flower": ["minecraft:wither_rose"],
+    "maxTimeInHive": 600,
+    "traits": ["nether", "wither"]
+  },
+  "HoneycombData": {
+    "honeycombType": "DEFAULT",
+    "honeycombColor": "#444444",
+    "honeycomb": "resourcefulbees:wither_honeycomb",
+    "honeycombBlock": "resourcefulbees:wither_honeycomb_block"
+  },
+  "RenderData": {
+    "layers": [{"texture": "wither/wither_bee"}]
   },
   "MutationData": {
     "hasMutation": true,
@@ -23,8 +28,9 @@
   },
   "CentrifugeData": {
     "hasCentrifugeOutput": true,
-    "mainOutput": "minecraft:nether_star",
-    "mainOutputWeight": 0.01
+    "itemOutputs": [
+      {"id": "minecraft:nether_star", "weight": 0.01}
+    ]
   },
   "SpawnData": {},
   "BreedData": {

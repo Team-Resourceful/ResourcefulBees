@@ -1,11 +1,16 @@
 {
-  "flower": "tag:forge:storage_blocks/redstone",
-  "maxTimeInHive": 800,
-  "hasHoneycomb": true,
-  "baseLayerTexture": "ores/redstone/redstone_bee",
-  "ColorData": {
-    "isBeeColored": false,
-    "honeycombColor": "#aa0f01",
+  "CoreData": {
+    "flower": "storage_blocks/redstone",
+    "maxTimeInHive": 800
+  },
+  "HoneycombData": {
+    "honeycombType": "DEFAULT",
+    "color": "#aa0f01",
+    "honeycomb": "resourcefulbees:redstone_honeycomb",
+    "honeycombBlock": "resourcefulbees:redstone_honeycomb_block"
+  },
+  "RenderData": {
+    "layers": [{ "texture": "ores/redstone/redstone_bee"}],
     "modelType": "ORE"
   },
   "MutationData": {
@@ -23,8 +28,9 @@
   },
   "CentrifugeData": {
     "hasCentrifugeOutput": true,
-    "mainOutput": "minecraft:redstone",
-    "mainOutputCount": 4
+    "itemOutputs": [
+      {"id": "minecraft:redstone", "count": 4}
+    ]
   },
   "SpawnData": {
     "canSpawnInWorld": true,

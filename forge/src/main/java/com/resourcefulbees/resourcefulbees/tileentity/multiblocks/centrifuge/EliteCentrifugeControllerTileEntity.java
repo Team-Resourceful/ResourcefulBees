@@ -32,7 +32,7 @@ public class EliteCentrifugeControllerTileEntity extends CentrifugeControllerTil
     public int getMaxTankCapacity() { return TANK_CAPACITY; }
 
     @Override
-    public int getRecipeTime(int i) { return getRecipe(i) != null ? Math.max(5, (int)(getRecipe(i).multiblockTime * 0.5)) : Config.GLOBAL_CENTRIFUGE_RECIPE_TIME.get(); }
+    public int getRecipeTime(int i) { return getRecipe(i) != null ? Math.max(5, (int)(getRecipe(i).getMultiblockTime() * 0.5)) : Config.GLOBAL_CENTRIFUGE_RECIPE_TIME.get(); }
 
     @Override
     protected CustomEnergyStorage createEnergy() {

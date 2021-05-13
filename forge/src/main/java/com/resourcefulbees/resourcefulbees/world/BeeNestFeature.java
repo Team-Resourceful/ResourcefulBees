@@ -28,11 +28,13 @@ import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
@@ -130,7 +132,7 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
                 bee.setPos(nestPos.getX(), nestPos.getY(), nestPos.getZ());
                 CompoundTag compoundNBT = new CompoundTag();
                 bee.save(compoundNBT);
-                int timeInHive = rand.nextInt(data.getMaxTimeInHive());
+                int timeInHive = rand.nextInt(data.getCoreData().getMaxTimeInHive());
                 BeehiveBlockEntity.BeeData beehiveTileEntityBee = new BeehiveBlockEntity.BeeData(compoundNBT, 0, timeInHive);
                 nest.stored.add(beehiveTileEntityBee);
             }
@@ -147,7 +149,7 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
             for (int i = rand.nextInt(maxBees); i < maxBees ; i++) {
                 if (biomeKey != null && BeeRegistry.getSpawnableBiomes().containsKey(biomeKey.location())) {
                     CustomBeeData beeData = BeeRegistry.getSpawnableBiomes().get(biomeKey.location()).next();
-                    EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(beeData.getEntityTypeRegistryID());
+                    EntityType<?> entityType = beeData.getEntityType();
                     addBeeToNest(entityType, worldIn, nestPos, beeData, rand, nestTE);
                 } else logMissingBiome(biomeKey);
             }

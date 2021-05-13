@@ -37,9 +37,9 @@ import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.fml.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -443,14 +443,14 @@ public class ApiaryController extends BlockEntity implements TickableBlockEntity
     }
 
     @Override
-    public void load(@Nonnull BlockState state, @Nonnull CompoundTag nbt) {
+    public void load(@NotNull BlockState state, @NotNull CompoundTag nbt) {
         super.load(state, nbt);
         this.loadFromNBT(nbt);
     }
 
     @NotNull
     @Override
-    public CompoundTag save(@Nonnull CompoundTag nbt) {
+    public CompoundTag save(@NotNull CompoundTag nbt) {
         super.save(nbt);
         return this.saveToNBT(nbt);
     }
@@ -486,12 +486,6 @@ public class ApiaryController extends BlockEntity implements TickableBlockEntity
         if (getBreederPos() != null)
             nbt.put(NBTConstants.NBT_BREEDER_POS, NbtUtils.writeBlockPos(getBreederPos()));
         return nbt;
-    }
-
-    @Nullable
-    @Override
-    public ClientboundBlockEntityDataPacket getUpdatePacket() {
-        return super.getUpdatePacket();
     }
 
     @NotNull

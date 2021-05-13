@@ -1,11 +1,16 @@
 {
-  "flower": "minecraft:bone_block",
-  "maxTimeInHive": 600,
-  "hasHoneycomb": true,
-  "baseLayerTexture": "skeleton/skeleton_bee",
-  "ColorData": {
-    "isBeeColored": false,
-    "honeycombColor": "#F6F2E6"
+  "CoreData": {
+    "flower": ["minecraft:bone_block"],
+    "maxTimeInHive": 600
+  },
+  "HoneycombData": {
+    "honeycombType": "DEFAULT",
+    "honeycombColor": "#F6F2E6",
+    "honeycomb": "resourcefulbees:rgbee_honeycomb",
+    "honeycombBlock": "resourcefulbees:rgbee_honeycomb_block"
+  },
+  "RenderData": {
+    "layers": [{"texture": "skeleton/skeleton_bee"}]
   },
   "MutationData": {
     "hasMutation": true,
@@ -21,7 +26,9 @@
   },
   "CentrifugeData": {
     "hasCentrifugeOutput": true,
-    "mainOutput": "minecraft:bone"
+    "itemOutputs": [
+      {"id": "minecraft:bone"}
+    ]
   },
   "SpawnData": {
     "canSpawnInWorld": true,
