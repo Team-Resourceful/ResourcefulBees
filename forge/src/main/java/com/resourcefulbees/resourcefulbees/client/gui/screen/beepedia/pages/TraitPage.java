@@ -66,7 +66,7 @@ public class TraitPage extends BeepediaPage {
         addPotionDamageEffects();
         addDamageTypes();
         addParticle();
-        addSearch();
+        initList();
     }
 
     private void addParticle() {
@@ -146,6 +146,9 @@ public class TraitPage extends BeepediaPage {
                         break;
                     case TraitConstants.TELEPORT:
                         item = new ItemStack(Items.ENDER_PEARL);
+                        break;
+                    case TraitConstants.SPIDER:
+                        item = new ItemStack(Items.COBWEB);
                         break;
                     default:
                         item = new ItemStack(Items.BARRIER);
@@ -229,9 +232,9 @@ public class TraitPage extends BeepediaPage {
 
     @Override
     public void addSearch() {
-        list.getReducedList().forEach((s, b) -> {
+        list.getSubList().forEach((s, b) -> {
             searchBees.add(s);
-            if (b instanceof BeePage) searchBees.add(((BeePage) b).getBee().getDisplayName().getString());
+            searchBees.add(beepedia.getBee(s).getBee().getDisplayName().getString());
         });
         trait.getDamageTypes().forEach(damageType -> searchDamage.add(damageType.getType()));
         trait.getPotionDamageEffects().forEach(effect -> searchDamage.add(effect.getEffect().getDisplayName().getString()));
@@ -274,7 +277,6 @@ public class TraitPage extends BeepediaPage {
     @Override
     public void openPage() {
         super.openPage();
-        if (list == null) initList();
         list.setActive(!BeepediaScreen.currScreenState.isTraitsEffectsActive());
         list.setScrollPos(BeepediaScreen.currScreenState.getTraitBeeListPos());
         nextTab.visible = true;

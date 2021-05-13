@@ -55,8 +55,6 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class EnderBeeconTileEntity extends AbstractHoneyTankContainer implements TickableBlockEntity, MenuProvider {
-    //TODO see about trimming the duplicate code if possible - epic
-
 
     private List<BeamSegment> beamSegments = Lists.newArrayList();
     private List<BeamSegment> beams = Lists.newArrayList();
@@ -70,6 +68,7 @@ public class EnderBeeconTileEntity extends AbstractHoneyTankContainer implements
     private static final int FLUID_PULL_RATE = Config.BEECON_PULL_AMOUNT.get();
 
     private List<BeeconEffect> effects;
+    private int range = 1;
 
     public EnderBeeconTileEntity(BlockEntityType<?> tileEntityType) {
         super(tileEntityType);
@@ -97,6 +96,7 @@ public class EnderBeeconTileEntity extends AbstractHoneyTankContainer implements
         tag.put(NBTConstants.NBT_INVENTORY, inv);
         tag.putBoolean(NBTConstants.NBT_SHOW_BEAM, isShowBeam());
         tag.putBoolean(NBTConstants.NBT_PLAY_SOUND, playSound);
+        tag.putInt(NBTConstants.NBT_BEECON_RANGE, range);
         if (effects != null && !effects.isEmpty()) {
             tag.put("active_effects", writeEffectsToNBT(new CompoundTag()));
         }
@@ -109,6 +109,8 @@ public class EnderBeeconTileEntity extends AbstractHoneyTankContainer implements
         getTileStackHandler().deserializeNBT(invTag);
         getFluidTank().readFromNBT(tag.getCompound(NBTConstants.NBT_FLUID));
         effects = readEffectsFromNBT(tag.getCompound("active_effects"));
+        range = tag.getInt(NBTConstants.NBT_BEECON_RANGE);
+        range = range > 0 ? range : 1;
         if (tag.contains(NBTConstants.NBT_SHOW_BEAM)) setShowBeam(tag.getBoolean(NBTConstants.NBT_SHOW_BEAM));
         if (tag.contains(NBTConstants.NBT_PLAY_SOUND)) playSound = tag.getBoolean(NBTConstants.NBT_PLAY_SOUND);
         super.readNBT(tag);
@@ -257,7 +259,6 @@ public class EnderBeeconTileEntity extends AbstractHoneyTankContainer implements
         NetPacketHandler.sendToAllLoaded(new UpdateClientBeeconMessage(pos, data), world, pos);
     }
 
-
     @OnlyIn(Dist.CLIENT)
     public List<EnderBeeconTileEntity.BeamSegment> getBeamSegments() {
         return beamSegments;
@@ -269,7 +270,8 @@ public class EnderBeeconTileEntity extends AbstractHoneyTankContainer implements
 
     public AABB getEffectBox() {
         assert this.level != null;
-        return (new AABB(this.worldPosition)).inflate(getRange()).expandTowards(0.0D, this.level.getMaxBuildHeight(), 0.0D);
+        AABB pos = new AABB(this.worldPosition).inflate(getAdjustedRange());
+        return new AABB(pos.minX, 0, pos.minZ, pos.maxX, this.level.getMaxBuildHeight(), pos.maxZ);
     }
 
     public void toggleBeam() {
@@ -333,12 +335,18 @@ public class EnderBeeconTileEntity extends AbstractHoneyTankContainer implements
         }
     }
 
+    public int getAdjustedRange() {
+        return range * Config.BEECON_RANGE_PER_EFFECT.get();
+    }
+
     public int getRange() {
-        int range = Config.BEECON_RANGE_PER_EFFECT.get();
-        for (BeeconEffect effect : effects) {
-            if (effect.isActive()) range += Config.BEECON_RANGE_PER_EFFECT.get();
-        }
         return range;
+    }
+
+    public void setRange(int range) {
+        this.range = range;
+        setDirty();
+        syncApiaryToPlayersUsing(this.level, this.getBlockPos(), this.writeNBT(new CompoundTag()));
     }
 
     public boolean doEffects() {
@@ -356,18 +364,16 @@ public class EnderBeeconTileEntity extends AbstractHoneyTankContainer implements
                 e.setActive(active);
             }
         }
+        setDirty();
         syncApiaryToPlayersUsing(this.level, this.getBlockPos(), this.writeNBT(new CompoundTag()));
     }
 
     public int getDrain() {
         double base = Config.BEECON_BASE_DRAIN.get();
         for (BeeconEffect e : effects) {
-            if (Config.BEECON_DO_MULTIPLIER.get()) {
-                if (e.isActive()) base *= e.getValue();
-            } else {
-                if (e.isActive()) base += e.getValue();
-            }
+            if (e.isActive()) base += e.getValue();
         }
+        base = (base * (range * Config.BEECON_RANGE_MULTIPLIER.get()));
         return (int) Math.ceil(base);
     }
 

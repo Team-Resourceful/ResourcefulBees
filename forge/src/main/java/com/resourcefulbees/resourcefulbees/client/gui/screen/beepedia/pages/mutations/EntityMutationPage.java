@@ -132,6 +132,11 @@ public class EntityMutationPage extends MutationsPage {
 
     @Override
     public void addSearch() {
+        addSearch(parent);
+    }
+
+    public void addSearch(BeePage parent) {
+        if (entityParent instanceof CustomBeeEntity) parent.addSearchBee(entityParent.getEntity(), ((CustomBeeEntity) entityParent).getBeeType());
         if (input instanceof CustomBeeEntity) {
             parent.addSearchBee(input, ((CustomBeeEntity) input).getBeeType());
         } else {

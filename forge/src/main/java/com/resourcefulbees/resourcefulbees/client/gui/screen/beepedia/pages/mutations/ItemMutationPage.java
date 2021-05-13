@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.resourcefulbees.resourcefulbees.api.beedata.outputs.ItemOutput;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.BeePage;
+import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.item.BeeSpawnEggItem;
 import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
@@ -102,6 +103,11 @@ public class ItemMutationPage extends MutationsPage {
 
     @Override
     public void addSearch() {
+        addSearch(parent);
+    }
+
+    public void addSearch(BeePage parent) {
+        if (entityParent instanceof CustomBeeEntity) parent.addSearchBee(entityParent.getEntity(), ((CustomBeeEntity) entityParent).getBeeType());
         for (Block input : inputs) {
             parent.addSearchItem(input);
         }

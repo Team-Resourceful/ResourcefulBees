@@ -84,12 +84,12 @@ public class Config {
     public static BooleanValue HONEY_GENERATE_BLOCKS;
     public static BooleanValue HONEY_BLOCK_RECIPES;
 
-    public static BooleanValue BEECON_DO_MULTIPLIER;
     public static IntValue BEECON_RANGE_PER_EFFECT;
     public static DoubleValue BEECON_CALMING_VALUE;
     public static DoubleValue BEECON_WATER_BREATHING_VALUE;
     public static DoubleValue BEECON_FIRE_RESISTANCE_VALUE;
     public static DoubleValue BEECON_REGENERATION_VALUE;
+    public static DoubleValue BEECON_RANGE_MULTIPLIER;
     public static IntValue BEECON_BASE_DRAIN;
     public static IntValue BEECON_PULL_AMOUNT;
 
@@ -110,6 +110,8 @@ public class Config {
         }
 
         public static final ForgeConfigSpec COMMON_CONFIG;
+
+
 
 
         static {
@@ -177,8 +179,6 @@ public class Config {
             COMMON_BUILDER.pop();
 
             COMMON_BUILDER.push("Ender Beecon Options");
-            BEECON_DO_MULTIPLIER = COMMON_BUILDER.comment("\nIf true, the below values will be multiplied with the base value, if false they will be added instead.")
-                    .define("beeconDoMultiplier", true);
             BEECON_CALMING_VALUE = COMMON_BUILDER.comment("\nMultiplier for the drain rate for the Ender Beecon when the Calming effect is active.")
                     .defineInRange("beeconCalmingValue", 2d, 1d, 128d);
             BEECON_WATER_BREATHING_VALUE = COMMON_BUILDER.comment("\nMultiplier for the drain rate for the Ender Beecon when the Water Breathing effect is active.")
@@ -187,8 +187,10 @@ public class Config {
                     .defineInRange("beeconFireResistanceValue", 2d, 1d, 128d);
             BEECON_REGENERATION_VALUE = COMMON_BUILDER.comment("\nMultiplier for the drain rate for the Ender Beecon when the Regeneration effect is active.")
                     .defineInRange("beeconRegenerationValue", 2.5d, 1d, 128d);
-            BEECON_RANGE_PER_EFFECT = COMMON_BUILDER.comment("\nRange in blocks added for each effect that is currently active.")
-                    .defineInRange("beeconRangePerEffect", 10, 1, 25);
+            BEECON_RANGE_PER_EFFECT = COMMON_BUILDER.comment("\nRange in blocks added for each level of range.")
+                    .defineInRange("beeconBlocksPerRange", 10, 1, 25);
+            BEECON_RANGE_MULTIPLIER = COMMON_BUILDER.comment("\nMultiplier for each level of range applied to the Ender Beecon's drain.")
+                    .defineInRange("beeconRangeMultiplier", 0.33, 0, 2);
             BEECON_BASE_DRAIN = COMMON_BUILDER.comment("\nThe base drain rate for the Ender Beecon when an effect is active.")
                     .defineInRange("beeconBaseDrain", 1, 1, 128);
             BEECON_PULL_AMOUNT = COMMON_BUILDER.comment("\nThe amount of fluid per tick the Ender Beecon can pull from below blocks.")
