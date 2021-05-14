@@ -105,7 +105,7 @@ public class HoneyTank extends Block {
         }
         if (tank.getFluidTank().getFluid().getFluid() instanceof HoneyFlowingFluid) {
             HoneyFlowingFluid fluid = (HoneyFlowingFluid) tank.getFluidTank().getFluid().getFluid();
-            if (fluid.getHoneyData().isRainbow()) {
+            if (fluid.getHoneyData().getColorData().isRainbow()) {
                 world.sendBlockUpdated(pos, stateIn, stateIn, 2);
             }
         }

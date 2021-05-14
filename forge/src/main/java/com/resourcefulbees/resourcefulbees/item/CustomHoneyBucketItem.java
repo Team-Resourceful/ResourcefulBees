@@ -26,13 +26,13 @@ public class CustomHoneyBucketItem extends BucketItem {
     public static int getColor(ItemStack stack, int tintIndex) {
         if (tintIndex == 1) {
             CustomHoneyBucketItem honeyBottleItem = (CustomHoneyBucketItem) stack.getItem();
-            return honeyBottleItem.honeyBottleData.isRainbow() ? RainbowColor.getRGB() : honeyBottleItem.getHoneyBucketColor();
+            return honeyBottleItem.honeyBottleData.getColorData().isRainbow() ? RainbowColor.getRGB() : honeyBottleItem.getHoneyBucketColor();
         }
         return BeeConstants.DEFAULT_ITEM_COLOR;
     }
 
     public int getHoneyBucketColor() {
-        return honeyBottleData.getHoneyColorInt();
+        return honeyBottleData.getColorData().getColor().getC();
     }
 
     @Override

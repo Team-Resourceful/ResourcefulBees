@@ -1,11 +1,12 @@
 {
   "hunger": 3,
-  "honeyColor": "#FFFFFF",
   "saturation": 0.25,
-  "isRainbow" : true,
-  "effects": [
+  "colorData" : {
+    "isRainbow" : true
+  },
+  "honeyEffects": [
     {
-      "effectID": "minecraft:glowing",
+      "effect": "minecraft:glowing",
       "duration": 2400,
       "strength": 0,
       "chance": 1

@@ -1,5 +1,8 @@
 package com.resourcefulbees.resourcefulbees.api.honeydata;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -10,26 +13,20 @@ import org.apache.logging.log4j.Logger;
 public class HoneyEffect {
 
     public static final Logger LOGGER = LogManager.getLogger();
+    public static final Codec<HoneyEffect> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            Registry.MOB_EFFECT.fieldOf("effect").forGetter(HoneyEffect::getEffect),
+            Codec.INT.fieldOf("duration").orElse(300).forGetter(HoneyEffect::getDuration),
+            Codec.INT.fieldOf("strength").orElse(0).forGetter(HoneyEffect::getStrength),
+            Codec.FLOAT.fieldOf("chance").orElse(1.0f).forGetter(HoneyEffect::getChance)
+    ).apply(instance, HoneyEffect::new));
 
-    /**
-     * effect : generated from the effect id
-     * instance : generated from the effect, duration and strength
-     * effectID : used to define the effect used
-     * duration : duration in ticks of the effect
-     * strength : strength of the potion effect
-     * chance : chance for effect to proc on drinking honey
-     */
-    public String effectID;
-    public int duration = 60;
-    public int strength = 0;
-    public float chance = 1;
-    private transient MobEffect effect = null;
+    private final int duration;
+    private final int strength;
+    private final float chance;
+    private final MobEffect effect;
 
-    public HoneyEffect() {
-    }
-
-    public HoneyEffect(String effectID, int duration, int strength, float chance) {
-        this.effectID = effectID;
+    public HoneyEffect(MobEffect effect, int duration, int strength, float chance) {
+        this.effect = effect;
         this.duration = duration;
         this.strength = strength;
         this.chance = chance;
@@ -39,21 +36,19 @@ public class HoneyEffect {
         return new MobEffectInstance(getEffect(), duration, strength);
     }
 
-    public boolean isEffectIDValid() {
-        return ResourceLocation.tryParse(effectID) != null;
-    }
-
     public MobEffect getEffect() {
-        if (effect != null) return effect;
-        ResourceLocation location = ResourceLocation.tryParse(effectID);
-        return effectID == null || location == null ? null : ForgeRegistries.POTIONS.getValue(location);
+        return effect;
     }
 
-    public void setEffect(MobEffect effect) {
-        this.effect = effect;
+    public int getDuration() {
+        return duration;
     }
 
-    public String getEffectID() {
-        return effectID;
+    public int getStrength() {
+        return strength;
+    }
+
+    public float getChance() {
+        return chance;
     }
 }

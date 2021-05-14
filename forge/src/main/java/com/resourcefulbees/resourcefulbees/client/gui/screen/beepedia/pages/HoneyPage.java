@@ -10,6 +10,8 @@ import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaSc
 import com.resourcefulbees.resourcefulbees.client.gui.widget.ListButton;
 import com.resourcefulbees.resourcefulbees.client.gui.widget.SubButtonList;
 import com.resourcefulbees.resourcefulbees.item.BeeJar;
+import com.resourcefulbees.resourcefulbees.registry.ModBlocks;
+import com.resourcefulbees.resourcefulbees.registry.ModFluids;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -26,6 +28,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.food.Foods;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import org.lwjgl.opengl.GL11;
 
 import java.text.DecimalFormat;
@@ -36,7 +39,8 @@ public class HoneyPage extends BeepediaPage {
     private final ImageButton prevTab;
     private final ImageButton nextTab;
     private SubButtonList beeList = null;
-    private final HoneyBottleData bottleData;
+    private boolean isDefault;
+    private HoneyBottleData bottleData;
     private String honeySearch;
     private final TranslatableComponent text;
 
@@ -57,20 +61,20 @@ public class HoneyPage extends BeepediaPage {
     final ResourceLocation hungerIcons = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/hunger.png");
     final ResourceLocation saturationIcons = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/saturation.png");
 
-    public HoneyPage(BeepediaScreen beepedia, HoneyBottleData bottleData, String id, int left, int top) {
+    public HoneyPage(BeepediaScreen beepedia, HoneyBottleData bottleData, String id, int left, int top, boolean isDefault) {
         super(beepedia, left, top, id);
-        this.bottleData = bottleData;
-        if (bottleData instanceof DefaultHoneyBottleData) {
-            DefaultHoneyBottleData data = (DefaultHoneyBottleData) bottleData;
-            this.bottle = new ItemStack(data.bottle);
+        this.isDefault = isDefault;
+        if (isDefault) {
+            this.bottle = new ItemStack(DefaultHoneyBottleData.bottle);
             this.hunger = Foods.HONEY_BOTTLE.getNutrition();
             this.saturation = Foods.HONEY_BOTTLE.getSaturationModifier();
             this.text = new TranslatableComponent("fluid.resourcefulbees.honey");
         } else {
+            this.bottleData = bottleData;
             this.bottle = new ItemStack(bottleData.getHoneyBottleRegistryObject().get());
             this.hunger = bottleData.getHunger();
             this.saturation = bottleData.getSaturation();
-            this.effects = bottleData.getEffects();
+            this.effects = bottleData.getHoneyEffects();
             if (bottleData.doGenerateHoneyFluid()) {
                 this.text = bottleData.getFluidTranslation();
             } else {
@@ -146,9 +150,9 @@ public class HoneyPage extends BeepediaPage {
             // init effect
             MobEffect effect = effects.get(i).getEffect();
             TranslatableComponent name = new TranslatableComponent(effect.getDescriptionId());
-            int duration = effects.get(i).duration;
+            int duration = effects.get(i).getDuration();
             name.append(new TextComponent(String.format(" (%02d:%02d)", (duration / 20) / 60, (duration / 20) % 60)));
-            TextComponent chance = new TextComponent(new DecimalFormat("##%").format(effects.get(i).chance));
+            TextComponent chance = new TextComponent(new DecimalFormat("##%").format(effects.get(i).getChance()));
             int pos = yPos + 20 + (i * 21) + BeepediaScreen.currScreenState.getHoneyEffectsListPos();
 
             // create culling mask
@@ -165,7 +169,7 @@ public class HoneyPage extends BeepediaPage {
             GuiComponent.blit(matrix, xPos + 1, pos + 1, beepedia.getBlitOffset(), 18, 18, sprite);
             // draw text
             font.draw(matrix, name.withStyle(effect.isBeneficial() ? ChatFormatting.BLUE : ChatFormatting.RED), (float) xPos + 22, (float) pos + 1, -1);
-            if (effects.get(i).chance < 1) {
+            if (effects.get(i).getChance() < 1) {
                 font.draw(matrix, chance.withStyle(ChatFormatting.DARK_GRAY), (float) xPos + 22, (float) pos + 11, -1);
             }
             GL11.glDisable(GL11.GL_SCISSOR_TEST);
@@ -201,15 +205,22 @@ public class HoneyPage extends BeepediaPage {
             searchBees.add(beepedia.getBee(s).getBee().getDisplayName().getString());
         });
         effects.forEach(e -> searchEffects.add(e.getEffect().getDisplayName().getString()));
-        if (bottleData.getHoneyBottleRegistryObject() != null)
-            searchItems.add(new TranslatableComponent(bottleData.getHoneyBottleRegistryObject().get().getDescriptionId()).getString());
-        if (bottleData.getHoneyFluidBlockRegistryObject() != null)
-            searchItems.add(new TranslatableComponent(bottleData.getHoneyFluidBlockRegistryObject().get().getDescriptionId()).getString());
-        if (bottleData.getHoneyBlockItemRegistryObject() != null)
-            searchItems.add(new TranslatableComponent(bottleData.getHoneyBlockItemRegistryObject().get().getDescriptionId()).getString());
-        if (bottleData.getHoneyBucketItemRegistryObject() != null)
-            searchItems.add(new TranslatableComponent(bottleData.getHoneyBucketItemRegistryObject().get().getDescriptionId()).getString());
-        if (bottleData.isRainbow()) searchTags.add("isRainbow");
+        if (isDefault) {
+            searchItems.add(new TranslatableComponent(Items.HONEY_BOTTLE.getDescriptionId()).getString());
+            searchItems.add(new TranslatableComponent(Items.HONEY_BLOCK.getDescriptionId()).getString());
+            searchItems.add(new TranslatableComponent(ModBlocks.HONEY_FLUID_BLOCK.get().getDescriptionId()).getString());
+            searchItems.add(new TranslatableComponent(ModItems.HONEY_FLUID_BUCKET.get().getDescriptionId()).getString());
+        }else {
+            if (bottleData.getHoneyBottleRegistryObject() != null)
+                searchItems.add(new TranslatableComponent(bottleData.getHoneyBottleRegistryObject().get().getDescriptionId()).getString());
+            if (bottleData.getHoneyFluidBlockRegistryObject() != null)
+                searchItems.add(new TranslatableComponent(bottleData.getHoneyFluidBlockRegistryObject().get().getDescriptionId()).getString());
+            if (bottleData.getHoneyBlockItemRegistryObject() != null)
+                searchItems.add(new TranslatableComponent(bottleData.getHoneyBlockItemRegistryObject().get().getDescriptionId()).getString());
+            if (bottleData.getHoneyBucketItemRegistryObject() != null)
+                searchItems.add(new TranslatableComponent(bottleData.getHoneyBucketItemRegistryObject().get().getDescriptionId()).getString());
+            if (bottleData.getColorData().isRainbow()) searchTags.add("isRainbow");
+        }
         if (!effects.isEmpty()) searchTags.add("hasEffects");
         if (!beeList.getSubList().isEmpty()) searchTags.add("hasBees");
         searchAll.add(id);

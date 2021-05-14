@@ -21,7 +21,7 @@ public class CustomHoneyBottleItem extends HoneyBottleItem {
     public static int getColor(ItemStack stack, int tintIndex) {
         if (tintIndex == 0) {
             CustomHoneyBottleItem honeyBottleItem = (CustomHoneyBottleItem) stack.getItem();
-            return honeyBottleItem.honeyBottleData.isRainbow() ? RainbowColor.getRGB() : honeyBottleItem.getHoneyBottleColor();
+            return honeyBottleItem.honeyBottleData.getColorData().isRainbow() ? RainbowColor.getRGB() : honeyBottleItem.getHoneyBottleColor();
         }
         return BeeConstants.DEFAULT_ITEM_COLOR;
     }
@@ -38,7 +38,7 @@ public class CustomHoneyBottleItem extends HoneyBottleItem {
     }
 
     public int getHoneyBottleColor() {
-        return honeyBottleData.getHoneyColorInt();
+        return honeyBottleData.getColorData().getColor().getC();
     }
 
     public HoneyBottleData getHoneyData() {

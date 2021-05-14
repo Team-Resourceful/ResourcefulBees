@@ -88,6 +88,7 @@ public class BreedingPage extends BeeDataPage {
         if (!entityMutationBreeding.isEmpty()) subPages.add(BreedingPageType.ENTITY_MUTATIONS);
         if (!itemMutationBreeding.isEmpty()) subPages.add(BreedingPageType.ITEM_MUTATIONS);
 
+        if (subPages.isEmpty()) return;
         if (BeepediaScreen.currScreenState.getBreedingTab() >= subPages.size())
             BeepediaScreen.currScreenState.setBreedingTab(subPages.size() - 1);
 

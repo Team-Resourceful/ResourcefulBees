@@ -125,16 +125,8 @@ public class BeeSetup {
 
     private static void parseHoney(Reader reader, String name) {
         name = name.toLowerCase(Locale.ENGLISH).replace(" ", "_");
-        Gson gson = new Gson();
-        try {
-            HoneyBottleData honey = gson.fromJson(reader, HoneyBottleData.class);
-            if (honey.getName() == null) honey.setName(name);
-            honey.setShouldResourcefulBeesDoForgeRegistration(true);
-            BeeRegistry.getRegistry().registerHoney(honey.getName(), honey);
-        } catch (JsonSyntaxException e) {
-            String exception = String.format("Error was found trying to parse honey: %s. Json is invalid, validate it here : https://jsonlint.com/", name);
-            throw new JsonSyntaxException(exception);
-        }
+        JsonObject jsonObject = GsonHelper.fromJson(GSON, reader, JsonObject.class);
+        BeeRegistry.getRegistry().cacheRawHoneyData(name, jsonObject);
     }
 
     private static void addBees() {

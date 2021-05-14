@@ -9,13 +9,14 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraftforge.fml.RegistryObject;
 
-public class DefaultHoneyBottleData extends HoneyBottleData {
+import java.util.List;
 
-    public final Item bottle = Items.HONEY_BOTTLE;
-    public Item blockItem = Items.HONEY_BLOCK;
-    public Block block = Blocks.HONEY_BLOCK;
-    public RegistryObject<FlowingFluid> flowingFluid = ModFluids.HONEY_FLOWING;
-    public RegistryObject<FlowingFluid> stillFluid = ModFluids.HONEY_STILL;
-    public RegistryObject<Item> bucket = ModItems.HONEY_FLUID_BUCKET;
+public class DefaultHoneyBottleData {
 
+    public static final Item bottle = Items.HONEY_BOTTLE;
+    public static Item blockItem = Items.HONEY_BLOCK;
+    public static Block block = Blocks.HONEY_BLOCK;
+    public static RegistryObject<FlowingFluid> flowingFluid = ModFluids.HONEY_FLOWING;
+    public static RegistryObject<FlowingFluid> stillFluid = ModFluids.HONEY_STILL;
+    public static RegistryObject<Item> bucket = ModItems.HONEY_FLUID_BUCKET;
 }

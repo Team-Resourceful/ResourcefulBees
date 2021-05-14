@@ -42,6 +42,4 @@ public class BeeConstants {
     public static final int DEFAULT_ITEM_COLOR = -1;
     public static final ResourceLocation MISSING_TEXTURE = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/entity/missing_texture.png");
     public static final int MAX_BEES_BEE_BOX = 10;
-
-    public static final HoneyBottleData defaultHoney = new DefaultHoneyBottleData();
 }

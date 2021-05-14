@@ -1,5 +1,7 @@
 package com.resourcefulbees.resourcefulbees.api.honeydata;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.resourcefulbees.resourcefulbees.registry.ItemGroupResourcefulBees;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.food.FoodProperties;
@@ -13,56 +15,42 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class HoneyBottleData {
 
+    public static final Codec<HoneyBottleData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            Codec.INT.fieldOf("hunger").orElse(1).forGetter(HoneyBottleData::getHunger),
+            Codec.FLOAT.fieldOf("saturation").orElse(1.0f).forGetter(HoneyBottleData::getSaturation),
+            HoneyColor.CODEC.fieldOf("colorData").orElse(HoneyColor.DEFAULT).forGetter(HoneyBottleData::getColorData),
+            Codec.BOOL.fieldOf("generateHoneyBlock").orElse(true).forGetter(HoneyBottleData::doGenerateHoneyBlock),
+            Codec.BOOL.fieldOf("generateBlockRecipe").orElse(true).forGetter(HoneyBottleData::doGenerateHoneyBlock),
+            Codec.BOOL.fieldOf("generateHoneyFluid").orElse(true).forGetter(HoneyBottleData::doGenerateHoneyFluid),
+            HoneyEffect.CODEC.listOf().fieldOf("honeyEffects").orElse(Collections.emptyList()).forGetter(HoneyBottleData::getHoneyEffects)
+    ).apply(instance, HoneyBottleData::new));
+
     public static final Logger LOGGER = LogManager.getLogger();
 
-    /**
-     * optional: name of the bee
-     */
-    private String name = null;
 
-    /**
-     * hunger replenished when drunk
-     */
-    private int hunger = 1;
+    private String name;
+    private final int hunger;
+    private final float saturation;
+    private final HoneyColor colorData;
+    private final boolean generateHoneyBlock;
+    private final boolean generateBlockRecipe;
+    private final boolean generateHoneyFluid;
+    private final List<HoneyEffect> honeyEffects;
 
-    /**
-     * saturation replenished when drunk
-     */
-    private float saturation = 1.0f;
-
-    /**
-     * color of the honey fluid
-     */
-    private String honeyColor = "#FFFFFF";
-
-    /**
-     * optional: defines if honey is rainbow
-     */
-    private boolean isRainbow = false;
-
-    /**
-     * optional: defines if a honey block should be generated
-     */
-    private boolean generateHoneyBlock = true;
-
-    /**
-     * optional: defines if a honey block should be generated
-     */
-    private boolean honeyBlockRecipe = true;
-
-    /**
-     * optional: defines if honey fluid should be generated
-     */
-    private boolean generateHoneyFluid = true;
-
-    /**
-     * optional: list of effects given by drinking the item
-     */
-    private List<HoneyEffect> effects;
+    public HoneyBottleData(int hunger, float saturation, HoneyColor colorData, boolean generateHoneyBlock, boolean generateBlockRecipe, boolean generateHoneyFluid, List<HoneyEffect> honeyEffects) {
+        this.hunger = hunger;
+        this.saturation = saturation;
+        this.colorData = colorData;
+        this.generateHoneyBlock = generateHoneyBlock;
+        this.generateBlockRecipe = generateBlockRecipe;
+        this.generateHoneyFluid = generateHoneyFluid;
+        this.honeyEffects = honeyEffects;
+    }
 
     /**
      * The RegistryObject of the Honey Bottle Item
@@ -99,41 +87,17 @@ public class HoneyBottleData {
      */
     private transient RegistryObject<LiquidBlock> honeyFluidBlockRegistryObject;
 
-    private transient boolean shouldResourcefulBeesDoForgeRegistration;
-
-    public HoneyBottleData() {
-    }
-
-    public HoneyBottleData(String name, int hunger, float saturation, String honeyColor, boolean isRainbow, boolean generateHoneyBlock, boolean generateHoneyFluid, boolean honeyBlockRecipe, List<HoneyEffect> effects) {
+    public HoneyBottleData setName(String name) {
         this.name = name;
-        this.hunger = hunger;
-        this.saturation = saturation;
-        this.honeyColor = honeyColor;
-        this.isRainbow = isRainbow;
-        this.generateHoneyBlock = generateHoneyBlock;
-        this.generateHoneyFluid = generateHoneyFluid;
-        this.honeyBlockRecipe = honeyBlockRecipe;
-        this.effects = effects;
-    }
-
-    public int getHoneyColorInt() {
-        return com.resourcefulbees.resourcefulbees.utils.color.Color.parseInt(honeyColor);
-    }
-
-    public void setName(String name) {
-        this.name = name;
+        return this;
     }
 
     public String getName() {
         return name;
     }
 
-    public boolean hasHoneyColor() {
-        return honeyColor != null && !honeyColor.isEmpty();
-    }
-
-    public String getHoneyColor() {
-        return honeyColor == null ? "#ffffff" : honeyColor;
+    public HoneyColor getColorData() {
+        return colorData;
     }
 
     public int getHunger() {
@@ -144,12 +108,8 @@ public class HoneyBottleData {
         return saturation;
     }
 
-    public boolean isRainbow() {
-        return isRainbow;
-    }
-
-    public List<HoneyEffect> getEffects() {
-        return effects == null ? new ArrayList<>() : effects;
+    public List<HoneyEffect> getHoneyEffects() {
+        return honeyEffects == null ? new ArrayList<>() : honeyEffects;
     }
 
     public void setHoneyBottleRegistryObject(RegistryObject<Item> honeyBottleRegistryObject) {
@@ -218,15 +178,15 @@ public class HoneyBottleData {
     public FoodProperties getFood() {
         FoodProperties.Builder builder = new FoodProperties.Builder().nutrition(hunger).saturationMod(saturation);
         if (hasEffects()) {
-            for (HoneyEffect honeyEffect : effects) {
-                builder.effect(honeyEffect::getInstance, honeyEffect.chance);
+            for (HoneyEffect honeyEffect : honeyEffects) {
+                builder.effect(honeyEffect::getInstance, honeyEffect.getChance());
             }
         }
         return builder.build();
     }
 
     private boolean hasEffects() {
-        return effects != null && !effects.isEmpty();
+        return honeyEffects != null && !honeyEffects.isEmpty();
     }
 
     public boolean doGenerateHoneyBlock() {
@@ -238,23 +198,9 @@ public class HoneyBottleData {
     }
 
     public boolean doHoneyBlockRecipe() {
-        return honeyBlockRecipe;
+        return generateBlockRecipe;
     }
 
-    public void setEffects(List<HoneyEffect> effects) {
-        this.effects = effects;
-    }
-
-    /**
-     * If the ResourcefulBees mod should handle the registration
-     */
-    public boolean shouldResourcefulBeesDoForgeRegistration() {
-        return shouldResourcefulBeesDoForgeRegistration;
-    }
-
-    public void setShouldResourcefulBeesDoForgeRegistration(boolean shouldResourcefulBeesDoForgeRegistration) {
-        this.shouldResourcefulBeesDoForgeRegistration = shouldResourcefulBeesDoForgeRegistration;
-    }
 
     public TranslatableComponent getFluidTranslation() {
         return new TranslatableComponent(String.format("fluid.resourcefulbees.%s_honey", name));
@@ -270,53 +216,5 @@ public class HoneyBottleData {
 
     public TranslatableComponent getBucketTranslation() {
         return new TranslatableComponent(String.format("item.resourcefulbees.%s_honey_fluid_bucket", name));
-    }
-
-    public static class Builder {
-        private final String name;
-        private final int hunger;
-        private final float saturation;
-        private final String honeyColor;
-        private boolean isRainbow = false;
-        private boolean generateHoneyBlock = true;
-        private boolean honeyBlockRecipe = true;
-        private boolean generateHoneyFluid = true;
-        private final List<HoneyEffect> effects = new ArrayList<>();
-
-        public Builder(String name, int hunger, float saturation, String honeyColor) {
-            this.name = name;
-            this.hunger = hunger;
-            this.saturation = saturation;
-            this.honeyColor = honeyColor;
-        }
-
-        public Builder setRainbow(boolean rainbow) {
-            isRainbow = rainbow;
-            return this;
-        }
-
-        public Builder setGenerateHoneyBlock(boolean generateHoneyBlock) {
-            this.generateHoneyBlock = generateHoneyBlock;
-            return this;
-        }
-
-        public Builder setHoneyBlockRecipe(boolean honeyBlockRecipe) {
-            this.honeyBlockRecipe = honeyBlockRecipe;
-            return this;
-        }
-
-        public Builder setGenerateHoneyFluid(boolean generateHoneyFluid) {
-            this.generateHoneyFluid = generateHoneyFluid;
-            return this;
-        }
-
-        public Builder addEffect(HoneyEffect effect) {
-            effects.add(effect);
-            return this;
-        }
-
-        public HoneyBottleData build() {
-            return new HoneyBottleData(name, hunger, saturation, honeyColor, isRainbow, generateHoneyBlock, generateHoneyFluid, honeyBlockRecipe, effects);
-        }
     }
 }

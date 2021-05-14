@@ -39,6 +39,7 @@ public class BeeRegistry implements IBeeRegistry {
     }
 
     private final Map<String, JsonObject> rawBeeData = new LinkedHashMap<>();
+    private final Map<String, JsonObject> rawHoneyData = new LinkedHashMap<>();
     private final Map<String, CustomBeeData> beeData = new LinkedHashMap<>();
     private final Map<String, HoneyBottleData> honeyInfo = new LinkedHashMap<>();
     public final Map<Pair<String, String>, RandomCollection<CustomBeeData>> familyTree = new HashMap<>();
@@ -163,6 +164,10 @@ public class BeeRegistry implements IBeeRegistry {
         rawBeeData.computeIfAbsent(beeType, s -> beeData);
     }
 
+    public void cacheRawHoneyData(String name, JsonObject jsonObject) {
+        rawHoneyData.computeIfAbsent(name, s -> jsonObject);
+    }
+
     public Map<String, JsonObject> getRawBees() {
         return Collections.unmodifiableMap(rawBeeData);
     }
@@ -207,11 +212,8 @@ public class BeeRegistry implements IBeeRegistry {
      */
     @SuppressWarnings("UnusedReturnValue")
     public boolean registerHoney(String honeyType, HoneyBottleData honeyData) {
-        if (allowRegistration && !honeyInfo.containsKey(honeyType)) {
-            honeyInfo.put(honeyType, honeyData);
-            return true;
-        }
-        return false;
+        honeyInfo.putIfAbsent(honeyType, honeyData);
+        return true;
     }
 
     public float getBreedChance(String parent1, String parent2, BreedData childData) {
@@ -266,5 +268,9 @@ public class BeeRegistry implements IBeeRegistry {
             }))
         );
         return mutations;
+    }
+
+    public Map<String, JsonObject> getRawHoney() {
+        return rawHoneyData;
     }
 }

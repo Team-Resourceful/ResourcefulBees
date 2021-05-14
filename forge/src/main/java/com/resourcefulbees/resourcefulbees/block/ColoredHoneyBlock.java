@@ -48,8 +48,8 @@ public class ColoredHoneyBlock extends HalfTransparentBlock {
 
     public ColoredHoneyBlock(HoneyBottleData honeyData) {
         super(BlockBehaviour.Properties.of(Material.CLAY).speedFactor(0.4F).jumpFactor(0.5F).noOcclusion().sound(SoundType.HONEY_BLOCK));
-        this.color = honeyData.getHoneyColorInt();
-        this.isRainbow = honeyData.isRainbow();
+        this.color = honeyData.getColorData().getColor().getC();
+        this.isRainbow = honeyData.getColorData().isRainbow();
         this.data = honeyData;
     }
 
