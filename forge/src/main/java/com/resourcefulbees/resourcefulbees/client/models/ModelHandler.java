@@ -2,7 +2,6 @@ package com.resourcefulbees.resourcefulbees.client.models;
 
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
-import com.mojang.serialization.JsonOps;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
 import com.resourcefulbees.resourcefulbees.lib.HoneycombTypes;
@@ -65,7 +64,7 @@ public class ModelHandler {
         }
     }
 
-    private static void registerHoneycombItem(String s, ResourceManager resourceManager) {
+    private static void registerHoneycombItem(String s, ResourceManager resourceManager){
         Item honeycomb = BeeInfoUtils.getItem(ResourcefulBees.MOD_ID + ":" + s + HONEYCOMB);/// <<- create utility methods to get these objects from the bee type.
         if (honeycomb != null && honeycomb.getRegistryName() != null && !resourceManager.hasResource(new ResourceLocation(ResourcefulBees.MOD_ID, ITEM_MODEL_PATH + honeycomb.getRegistryName().getPath() + JSON_FILE_EXTENSION))) {
             ModelResourceLocation defaultModelLocation = new ModelResourceLocation(ResourcefulBees.MOD_ID + ":honeycomb", MODEL_INVENTORY_TAG);
@@ -153,8 +152,8 @@ public class ModelHandler {
     public static void registerModels(ModelRegistryEvent event) {
         ResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
 
-        BeeRegistry.getRegistry().getRawBees().forEach((s, beeData) -> {
-            HoneycombTypes honeycombType = HoneycombTypes.CODEC.fieldOf("honeycombType").orElse(HoneycombTypes.DEFAULT).codec().fieldOf("HoneycombData").codec().parse(JsonOps.INSTANCE, beeData).get().orThrow();
+        BeeRegistry.getRegistry().getBees().forEach((s, beeData) -> {
+            HoneycombTypes honeycombType = beeData.getHoneycombData().getHoneycombType();
             if (honeycombType.equals(HoneycombTypes.DEFAULT)) {
                 registerHoneycombBlockState(s, resourceManager);
                 registerHoneycombBlockItem(s, resourceManager);
