@@ -8,12 +8,10 @@ import java.util.Locale;
 public class BeeRewardData {
 
     private final Color color;
-    private final boolean rainbow;
     private final BeeTextures textures;
 
-    public BeeRewardData(Color colors, boolean rainbow, BeeTextures textures) {
+    public BeeRewardData(Color colors, BeeTextures textures) {
         this.color = colors;
-        this.rainbow = rainbow;
         this.textures = textures;
     }
 
@@ -21,11 +19,7 @@ public class BeeRewardData {
         return color;
     }
 
-    public boolean isRainbow() {
-        return rainbow;
-    }
-
-    public BeeTextures getTextures() {
+    public BeeTextures getTexture() {
         return textures;
     }
 

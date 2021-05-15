@@ -5,7 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Vector3f;
 import com.resourcefulbees.resourcefulbees.patreon.BeeRewardData;
 import com.resourcefulbees.resourcefulbees.patreon.PatreonInfo;
-import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
+import com.resourcefulbees.resourcefulbees.utils.color.Color;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.player.AbstractClientPlayer;
@@ -131,17 +131,15 @@ public class BeeRewardRender extends RenderLayer<AbstractClientPlayer, PlayerMod
 
 
         stack.pushPose();
-        VertexConsumer ivertexbuilder = buffer.getBuffer(RenderType.entityCutoutNoCull(data.getTextures().getResourceLocation()));
+        VertexConsumer ivertexbuilder = buffer.getBuffer(RenderType.entityCutoutNoCull(data.getTexture().getResourceLocation()));
         body.render(stack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY);
         stack.popPose();
 
-        if (data.getTextures().hasSecondaryLayer()) {
+        if (data.getTexture().hasSecondaryLayer()) {
             stack.pushPose();
-            VertexConsumer ivertexbuilder2 = buffer.getBuffer(RenderType.entityCutoutNoCull(data.getTextures().getSecondaryResourceLocation()));
-            float r = data.isRainbow() ? RainbowColor.getColorFloats()[0] : data.getColor().getR();
-            float g = data.isRainbow() ? RainbowColor.getColorFloats()[1] : data.getColor().getG();
-            float b = data.isRainbow() ? RainbowColor.getColorFloats()[2] : data.getColor().getB();
-            body.render(stack, ivertexbuilder2, packedLightIn, LivingEntityRenderer.getOverlayCoords(playerEntity, 0.0F), r, g, b, 1.0f);
+            VertexConsumer ivertexbuilder2 = buffer.getBuffer(RenderType.entityCutoutNoCull(data.getTexture().getSecondaryResourceLocation()));
+            Color color = data.getColor();
+            body.render(stack, ivertexbuilder2, packedLightIn, LivingEntityRenderer.getOverlayCoords(playerEntity, 0.0F), color.getFloatRed(), color.getFloatGreen(), color.getFloatBlue(), 1.0f);
             stack.popPose();
         }
 

@@ -5,29 +5,23 @@
     "traits": [ "ender", "nether", "wither" ]
   },
   "HoneycombData": {
-    "honeycombType": "DEFAULT",
-    "honeycomb": "resourcefulbees:dragon_honeycomb",
-    "honeycombBlock": "resourcefulbees:dragon_honeycomb_block"
+    "type": "DEFAULT",
+    "color": "#E400FF",
+    "item": "resourcefulbees:dragon_honeycomb",
+    "block": "resourcefulbees:dragon_honeycomb_block"
   },
   "RenderData": {
     "layers": [
       { "texture": "dragon/dragon_bee" },
-      { "isColored": true, "texture": "dragon/dragon_bee_primary", "color": "#222222" },
-      { "isColored": true, "texture": "dragon/dragon_bee_secondary", "color": "#171717" },
+      { "texture": "dragon/dragon_bee_primary", "color": "#222222" },
+      { "texture": "dragon/dragon_bee_secondary", "color": "#171717" },
       { "isGlowing": true, "texture": "dragon/dragon_bee_emissive", "color": "#E400FF" }
     ],
-
-    "isBeeColored": true,
-    "isGlowing": true,
-    "modelType": "DRAGON",
-    "primaryLayerTexture": "dragon/dragon_bee_primary",
-    "secondaryLayerTexture": "dragon/dragon_bee_secondary",
-    "emissiveLayerTexture": "dragon/dragon_bee_emissive",
-    "baseLayerTexture" : "dragon/dragon_bee",
-    "primaryColor": "#222222",
-    "secondaryColor": "#171717",
-    "glowColor": "#E400FF",
-    "honeycombColor": "#E400FF"
+    "ColorData": {
+      "spawnEggPrimaryColor": "#222222",
+      "spawnEggSecondaryColor": "#303030"
+    },
+    "modelType": "DRAGON"
   },
   "MutationData": {
     "hasMutation": true,

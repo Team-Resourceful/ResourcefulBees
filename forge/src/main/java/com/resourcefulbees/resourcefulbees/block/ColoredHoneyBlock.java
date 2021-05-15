@@ -1,7 +1,7 @@
 package com.resourcefulbees.resourcefulbees.block;
 
 import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
-import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
+import com.resourcefulbees.resourcefulbees.utils.color.Color;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -42,14 +42,12 @@ import java.util.Random;
 public class ColoredHoneyBlock extends HalfTransparentBlock {
 
     protected static final VoxelShape SHAPE = Block.box(1.0D, 0.0D, 1.0D, 15.0D, 15.0D, 15.0D);
-    protected final int color;
-    protected final boolean isRainbow;
+    protected final Color color;
     protected final HoneyBottleData data;
 
     public ColoredHoneyBlock(HoneyBottleData honeyData) {
         super(BlockBehaviour.Properties.of(Material.CLAY).speedFactor(0.4F).jumpFactor(0.5F).noOcclusion().sound(SoundType.HONEY_BLOCK));
-        this.color = honeyData.getColorData().getColor().getC();
-        this.isRainbow = honeyData.getColorData().isRainbow();
+        this.color = honeyData.getColorData().getColor();
         this.data = honeyData;
     }
 
@@ -58,25 +56,23 @@ public class ColoredHoneyBlock extends HalfTransparentBlock {
     }
 
     //region Color stuff
-    public int getHoneyColor() {
+    public Color getHoneyColor() {
         return color;
     }
 
     public static int getBlockColor(BlockState state, @Nullable BlockGetter world, @Nullable BlockPos pos, int tintIndex) {
-        ColoredHoneyBlock honeycombBlock = ((ColoredHoneyBlock) state.getBlock());
-        return honeycombBlock.isRainbow ? RainbowColor.getRGB() : honeycombBlock.getHoneyColor();
+        return ((ColoredHoneyBlock) state.getBlock()).getHoneyColor().getValue();
     }
 
     public static int getItemColor(ItemStack stack, int tintIndex) {
         BlockItem blockItem = (BlockItem) stack.getItem();
         if (!(blockItem.getBlock() instanceof ColoredHoneyBlock)) return -1;
-        ColoredHoneyBlock honeycombBlock = (ColoredHoneyBlock) blockItem.getBlock();
-        return honeycombBlock.isRainbow ? RainbowColor.getRGB() : honeycombBlock.getHoneyColor();
+        return ((ColoredHoneyBlock) blockItem.getBlock()).getHoneyColor().getValue();
     }
 
     @Override
     public void animateTick(@NotNull BlockState stateIn, @NotNull Level world, @NotNull BlockPos pos, @NotNull Random rand) {
-        if (isRainbow) world.sendBlockUpdated(pos, stateIn, stateIn, 2);
+        if (color.isRainbow()) world.sendBlockUpdated(pos, stateIn, stateIn, 2);
         super.animateTick(stateIn, world, pos, rand);
     }
 

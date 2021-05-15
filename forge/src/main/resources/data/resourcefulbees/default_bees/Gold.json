@@ -4,14 +4,18 @@
     "maxTimeInHive": 800
   },
   "HoneycombData": {
-    "honeycombType": "DEFAULT",
-    "honeycombColor": "#FFDC00",
-    "honeycomb": "resourcefulbees:gold_honeycomb",
-    "honeycombBlock": "resourcefulbees:gold_honeycomb_block"
+    "type": "DEFAULT",
+    "color": "#FFDC00",
+    "item": "resourcefulbees:gold_honeycomb",
+    "block": "resourcefulbees:gold_honeycomb_block"
   },
   "RenderData": {
     "layers": [{"texture": "ores/gold/gold_bee"}],
-    "modelType": "ORE"
+    "modelType": "ORE",
+    "ColorData": {
+      "spawnEggPrimaryColor": "#FFDC00",
+      "spawnEggSecondaryColor": "#303030"
+    }
   },
   "MutationData": {
     "hasMutation": true,

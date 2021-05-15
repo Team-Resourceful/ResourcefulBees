@@ -4,11 +4,15 @@
     "maxTimeInHive": 1200
   },
   "HoneycombData": {
-    "honeycombType": "NONE"
+    "type": "NONE"
   },
   "RenderData": {
     "layers": [{"texture": "dungeon/dungeon_bee"}],
-    "modelType": "MUSHROOM"
+    "modelType": "MUSHROOM",
+    "ColorData": {
+      "spawnEggPrimaryColor": "#406278",
+      "spawnEggSecondaryColor": "#303030"
+    }
   },
   "CentrifugeData": {
     "hasCentrifugeOutput": false

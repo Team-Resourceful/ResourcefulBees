@@ -1,7 +1,6 @@
 package com.resourcefulbees.resourcefulbees.fluids;
 
 import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
-import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.BlockAndTintGetter;
@@ -38,7 +37,7 @@ public class HoneyFluidAttributes extends FluidAttributes {
 
     @Override
     public int getColor(){
-        return honeyData.getColorData().isRainbow() ? RainbowColor.getRGB() : honeyData.getColorData().getColor().getC() | 0xff000000;
+        return honeyData.getColorData().getColor().getValue() | 0xff000000;
     }
 
     public static Builder builder(ResourceLocation stillTexture, ResourceLocation flowingTexture, HoneyBottleData honeyData) {

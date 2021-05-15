@@ -2,11 +2,11 @@ package com.resourcefulbees.resourcefulbees.client.render.entity.layers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.resourcefulbees.resourcefulbees.client.render.entity.models.CustomBeeModel;
 import com.resourcefulbees.resourcefulbees.api.beedata.LayerData;
+import com.resourcefulbees.resourcefulbees.client.render.entity.models.CustomBeeModel;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.lib.ModelTypes;
-import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
+import com.resourcefulbees.resourcefulbees.utils.color.Color;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -26,18 +26,17 @@ public class BeeLayer extends RenderLayer<CustomBeeEntity, CustomBeeModel<Custom
     private final LayerData layerData;
 
     private final CustomBeeModel<CustomBeeEntity> additionModel;
-    private float[] color;
+    private final Color color;
 
     public BeeLayer(RenderLayerParent<CustomBeeEntity, CustomBeeModel<CustomBeeEntity>> renderer, LayerData layerData, ModelTypes modelType) {
         super(renderer);
         this.layerData = layerData;
-        this.color = layerData.getColor().getRGBComponents(null);
+        this.color = layerData.getColor();
         this.additionModel = modelType == ModelTypes.DEFAULT ? null : new CustomBeeModel<>(modelType);
     }
 
     @Override
     public void render(@NotNull PoseStack matrixStackIn, @NotNull MultiBufferSource bufferIn, int packedLightIn, @NotNull CustomBeeEntity customBeeEntity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        if (layerData.isRainbow()) color = RainbowColor.getColorFloats();
         ResourceLocation texture = customBeeEntity.isAngry() ? layerData.getBeeTexture().getAngryTexture() : layerData.getBeeTexture().getNormalTexture();
 
         if (additionModel != null) {
@@ -58,16 +57,16 @@ public class BeeLayer extends RenderLayer<CustomBeeEntity, CustomBeeModel<Custom
         } else if (layerData.isEmissive()) {
             VertexConsumer vertexConsumer = bufferIn.getBuffer(RenderType.eyes(texture));
             if (layerData.getPulseFrequency() == 0 || customBeeEntity.tickCount % layerData.getPulseFrequency() == 0.0f) {
-                this.getParentModel().renderToBuffer(matrixStackIn, vertexConsumer, 15728640, OverlayTexture.NO_OVERLAY, color[0], color[1], color[2], 1.0F);
+                this.getParentModel().renderToBuffer(matrixStackIn, vertexConsumer, 15728640, OverlayTexture.NO_OVERLAY, color.getFloatRed(), color.getFloatGreen(), color.getFloatBlue(), 1.0F);
                 if (additionModel != null) {
-                    additionModel.renderToBuffer(matrixStackIn, vertexConsumer, 15728640, LivingEntityRenderer.getOverlayCoords(customBeeEntity, 0.0F), color[0], color[1], color[2], 1.0F);
+                    additionModel.renderToBuffer(matrixStackIn, vertexConsumer, 15728640, LivingEntityRenderer.getOverlayCoords(customBeeEntity, 0.0F), color.getFloatRed(), color.getFloatGreen(), color.getFloatBlue(), 1.0F);
                 }
             }
         } else {
-            renderColoredModel(this.getParentModel(), texture, matrixStackIn, bufferIn, packedLightIn, customBeeEntity, color[0], color[1], color[2]);
+            renderColoredModel(this.getParentModel(), texture, matrixStackIn, bufferIn, packedLightIn, customBeeEntity, color.getFloatRed(), color.getFloatGreen(), color.getFloatBlue());
             if (additionModel != null) {
                 VertexConsumer ivertexbuilder = bufferIn.getBuffer(RenderType.entityTranslucent(texture));
-                additionModel.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, LivingEntityRenderer.getOverlayCoords(customBeeEntity, 0.0F), color[0], color[1], color[2], 1.0F);
+                additionModel.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, LivingEntityRenderer.getOverlayCoords(customBeeEntity, 0.0F), color.getFloatRed(), color.getFloatGreen(), color.getFloatBlue(), 1.0F);
             }
         }
     }

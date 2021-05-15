@@ -15,7 +15,6 @@ import java.nio.charset.StandardCharsets;
 public class PatreonDataLoader {
     private static final Gson gson = new Gson();
 
-
     private PatreonDataLoader()  {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
@@ -51,17 +50,12 @@ public class PatreonDataLoader {
 
     private static BeeRewardData getRewardData(JsonObject patreon){
         BeeRewardData.BeeTextures textures = BeeRewardData.BeeTextures.BASE;
-        int color = -1;
-        boolean rainbow = false;
+        Color color = patreon.has("color") ? Color.parse(patreon.get("color").getAsString()) : Color.DEFAULT;
         if (patreon.has("texture")){
             textures = BeeRewardData.BeeTextures.getTexture(patreon.get("texture").getAsString());
         }
-        if (patreon.has("color")){
-            color = patreon.get("color").getAsInt();
-        }
-        if (patreon.has("rainbow")){
-            rainbow = patreon.get("rainbow").getAsBoolean();
-        }
-        return new BeeRewardData(new Color(color), rainbow, textures);
+        if (patreon.has("rainbow") && patreon.get("rainbow").getAsBoolean())
+            color = Color.RAINBOW;
+        return new BeeRewardData(color, textures);
     }
 }

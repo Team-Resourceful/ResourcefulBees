@@ -5,13 +5,17 @@
     "traits": ["nether", "wither"]
   },
   "HoneycombData": {
-    "honeycombType": "DEFAULT",
-    "honeycombColor": "#444444",
-    "honeycomb": "resourcefulbees:wither_honeycomb",
-    "honeycombBlock": "resourcefulbees:wither_honeycomb_block"
+    "type": "DEFAULT",
+    "color": "#444444",
+    "item": "resourcefulbees:wither_honeycomb",
+    "block": "resourcefulbees:wither_honeycomb_block"
   },
   "RenderData": {
-    "layers": [{"texture": "wither/wither_bee"}]
+    "layers": [{"texture": "wither/wither_bee"}],
+    "ColorData": {
+      "spawnEggPrimaryColor": "#444444",
+      "spawnEggSecondaryColor": "#303030"
+    }
   },
   "MutationData": {
     "hasMutation": true,

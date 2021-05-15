@@ -2,7 +2,7 @@
   "hunger": 3,
   "saturation": 0.25,
   "colorData" : {
-    "isRainbow" : true
+    "color" : "rainbow"
   },
   "honeyEffects": [
     {

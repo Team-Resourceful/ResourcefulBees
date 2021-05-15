@@ -5,13 +5,12 @@
     "maxTimeInHive": 1200
   },
   "HoneycombData": {
-    "honeycombType": "NONE"
+    "type": "NONE"
   },
   "RenderData": {
     "modelType": "GELATINOUS",
     "layers": [
-      {"texture": "slime/slime_bee"},
-      {"texture": "/slime/slime_gel_Layer"}
+      {"texture": "slime/slime_bee"}
     ]
   },
   "MutationData": {

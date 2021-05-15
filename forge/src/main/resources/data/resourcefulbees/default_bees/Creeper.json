@@ -5,16 +5,20 @@
     "traits" : ["creeper"]
   },
   "HoneycombData": {
-    "honeycombType": "DEFAULT",
-    "honeycombColor": "#0C9F0A",
-    "honeycomb": "resourcefulbees:creeper_honeycomb",
-    "honeycombBlock": "resourcefulbees:creeper_honeycomb_block"
+    "type": "DEFAULT",
+    "color": "#0C9F0A",
+    "item": "resourcefulbees:creeper_honeycomb",
+    "block": "resourcefulbees:creeper_honeycomb_block"
   },
   "RenderData": {
     "layers": [
       {"texture": "/creeper/creeper_bee"},
       {"isGlowing": true, "texture": "/creeper/creeper_bee_emissive", "color": "#E2D3D3", "pulseFrequency": 10}
-    ]
+    ],
+    "ColorData": {
+      "spawnEggPrimaryColor": "#0C9F0A",
+      "spawnEggSecondaryColor": "#303030"
+    }
   },
   "MutationData": {
     "hasMutation": true,

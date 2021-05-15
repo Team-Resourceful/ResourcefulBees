@@ -4,14 +4,18 @@
     "maxTimeInHive": 600
   },
   "HoneycombData": {
-    "honeycombType": "DEFAULT",
+    "type": "DEFAULT",
     "color": "#00ffff",
-    "honeycomb": "resourcefulbees:diamond_honeycomb",
-    "honeycombBlock": "resourcefulbees:diamond_honeycomb_block"
+    "item": "resourcefulbees:diamond_honeycomb",
+    "block": "resourcefulbees:diamond_honeycomb_block"
   },
   "RenderData": {
     "layers": [{ "texture": "ores/diamond/diamond_bee"}],
-    "modelType": "ORE"
+    "modelType": "ORE",
+    "ColorData": {
+      "spawnEggPrimaryColor": "#00ffff",
+      "spawnEggSecondaryColor": "#303030"
+    }
   },
   "MutationData": {
     "hasMutation": true,

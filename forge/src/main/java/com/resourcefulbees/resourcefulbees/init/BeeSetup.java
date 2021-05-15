@@ -2,12 +2,10 @@ package com.resourcefulbees.resourcefulbees.init;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.beedata.SpawnData;
-import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
@@ -100,8 +98,8 @@ public class BeeSetup {
     }
 
     private static void parseBee(Reader reader, String name) {
-        name = name.toLowerCase(Locale.ENGLISH).replace(" ", "_");
         JsonObject jsonObject = GsonHelper.fromJson(GSON, reader, JsonObject.class);
+        name = Codec.STRING.fieldOf("name").orElse(name).codec().fieldOf("CoreData").codec().parse(JsonOps.INSTANCE, jsonObject).get().orThrow();
         BeeRegistry.getRegistry().cacheRawBeeData(name, jsonObject);
     }
 

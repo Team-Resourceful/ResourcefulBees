@@ -1,6 +1,5 @@
 package com.resourcefulbees.resourcefulbees.api.beedata;
 
-import com.google.common.collect.Sets;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.resourcefulbees.resourcefulbees.lib.BaseModelTypes;
@@ -12,7 +11,7 @@ import java.util.Set;
 public class RenderData {
 
     public static final Codec<RenderData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            CodecUtils.createSetCodec(LayerData.CODEC).fieldOf("layers").orElse(Sets.newHashSet(LayerData.DEFAULT)).forGetter(RenderData::getLayers),
+            CodecUtils.createLinkedSetCodec(LayerData.CODEC).fieldOf("layers").orElse(CodecUtils.newLinkedHashSet(LayerData.DEFAULT)).forGetter(RenderData::getLayers),
             ColorData.CODEC.fieldOf("ColorData").orElse(ColorData.DEFAULT).forGetter(RenderData::getColorData),
             ModelTypes.CODEC.fieldOf("modelType").orElse(ModelTypes.DEFAULT).forGetter(RenderData::getModelType),
             BaseModelTypes.CODEC.fieldOf("baseModelType").orElse(BaseModelTypes.DEFAULT).forGetter(RenderData::getBaseModelType),

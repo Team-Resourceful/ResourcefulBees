@@ -161,7 +161,7 @@ public class BeeRegistry implements IBeeRegistry {
      * @param beeData       Raw BeeData of the bee being registered
      */
     public void cacheRawBeeData(String beeType, JsonObject beeData) {
-        rawBeeData.computeIfAbsent(beeType, s -> beeData);
+        rawBeeData.computeIfAbsent(beeType.toLowerCase(Locale.ENGLISH).replace(" ", "_"), s -> beeData);
     }
 
     public void cacheRawHoneyData(String name, JsonObject jsonObject) {

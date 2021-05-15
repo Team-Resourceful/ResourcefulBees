@@ -5,7 +5,6 @@ import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.mixin.BeeEntityAccessor;
 import com.resourcefulbees.resourcefulbees.utils.MathUtils;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -55,7 +54,7 @@ public class PollinateGoal extends Goal {
         } else if (bee.getRandom().nextFloat() < 0.7F) {
             return false;
         } else if ((!Config.MANUAL_MODE.get() || bee.getCoreData().getEntityFlower().isPresent()) && bee.savedFlowerPos == null && (bee.tickCount < 20 || bee.tickCount % 5 == 0)) {
-            Optional<BlockPos> optional = this.findFlower(5.0D, bee.getCoreData().getEntityFlower().isPresent(), bee.getCoreData().getEntityFlower().get());
+            Optional<BlockPos> optional = this.findFlower(5.0D);
             if (optional.isPresent()) {
                 bee.savedFlowerPos = optional.get();
                 bee.getNavigation().moveTo(bee.savedFlowerPos.getX() + 0.5D, bee.savedFlowerPos.getY() + 0.5D, bee.savedFlowerPos.getZ() + 0.5D, 1.2D);
@@ -219,9 +218,17 @@ public class PollinateGoal extends Goal {
         return ((double) bee.getRandom().nextFloat() * 2.0D - 1.0D) * 0.33333334D;
     }
 
-    public Optional<BlockPos> findFlower(double range, boolean isEntity, ResourceLocation entityRegistryName) {
+    public Optional<BlockPos> findFlower(double range) {
         BlockPos beePos = bee.blockPosition();
-        if (!isEntity) {
+        if (bee.getCoreData().getEntityFlower().isPresent()){
+            List<Entity> entityList = bee.level.getEntities(bee, (new AABB(bee.blockPosition())).inflate(range),
+                    entity -> entity.getEncodeId() != null && entity.getEncodeId().equals(bee.getCoreData().getEntityFlower().get().toString()));
+            if (!entityList.isEmpty()) {
+                Entity firstEntity = entityList.get(0);
+                bee.setFlowerEntityID(firstEntity.getId());
+                return Optional.of(firstEntity.blockPosition());
+            }
+        } else {
             BlockPos.MutableBlockPos flowerPos = beePos.mutable();
             for (BlockPos blockPos : positionOffsets){
                 flowerPos.setWithOffset(beePos, blockPos.getX(), blockPos.getY(), blockPos.getZ());
@@ -230,14 +237,6 @@ public class PollinateGoal extends Goal {
                 }
             }
             return Optional.empty();
-        } else {
-            List<Entity> entityList = bee.level.getEntities(bee, (new AABB(bee.blockPosition())).inflate(range),
-                    entity -> entity.getEncodeId() != null && entity.getEncodeId().equals(entityRegistryName.toString()));
-            if (!entityList.isEmpty()) {
-                Entity firstEntity = entityList.get(0);
-                bee.setFlowerEntityID(firstEntity.getId());
-                return Optional.of(firstEntity.blockPosition());
-            }
         }
 
         return Optional.empty();

@@ -6,9 +6,9 @@
     "apiaryOutputAmounts": [1,2,3,4]
   },
   "HoneycombData": {
-    "honeycombType": "CUSTOM",
-    "honeycomb": "resourcefulbees:catnip_honeycomb",
-    "honeycombBlock": "resourcefulbees:catnip_honeycomb_block"
+    "type": "CUSTOM",
+    "item": "resourcefulbees:catnip_honeycomb",
+    "block": "resourcefulbees:catnip_honeycomb_block"
   },
   "CentrifugeData": {
     "hasCentrifugeOutput": true,
@@ -21,8 +21,8 @@
     "isBeeColored": false,
     "layers": [{"texture": "/kitten/bee"}],
     "ColorData": {
-      "primaryColor": "#EAA939",
-      "secondaryColor": "#4C483B"
+      "spawnEggPrimaryColor": "#EAA939",
+      "spawnEggSecondaryColor": "#4C483B"
     },
     "baseModelType": "KITTEN"
   },

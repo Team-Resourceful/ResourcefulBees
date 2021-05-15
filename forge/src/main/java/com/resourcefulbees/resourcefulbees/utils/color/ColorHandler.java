@@ -1,8 +1,8 @@
 package com.resourcefulbees.resourcefulbees.utils.color;
 
-import com.mojang.serialization.JsonOps;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.IBeeRegistry;
+import com.resourcefulbees.resourcefulbees.api.beedata.HoneycombData;
 import com.resourcefulbees.resourcefulbees.block.ColoredHoneyBlock;
 import com.resourcefulbees.resourcefulbees.block.HoneycombBlock;
 import com.resourcefulbees.resourcefulbees.config.Config;
@@ -31,12 +31,14 @@ public final class ColorHandler {
     public static void onItemColors(ColorHandlerEvent.Item event) {
         ItemColors colors = event.getItemColors();
         BEE_REGISTRY.getBees().forEach(((s, beeData) -> {
-            HoneycombTypes honeycombType = beeData.getHoneycombData().getHoneycombType();
-            if (honeycombType.equals(HoneycombTypes.DEFAULT)) {
+            HoneycombData honeycombData = beeData.getHoneycombData();
+            if (honeycombData.getHoneycombType().equals(HoneycombTypes.DEFAULT) && (!honeycombData.getColor().isDefault())) {
                 registerItems(colors, HoneycombItem::getColor, BeeInfoUtils.getItem(ResourcefulBees.MOD_ID + ":" + s + "_honeycomb"));
                 registerItems(colors, HoneycombBlock::getItemColor, BeeInfoUtils.getItem(ResourcefulBees.MOD_ID + ":" + s + "_honeycomb_block"));
             }
-            registerItems(colors, BeeSpawnEggItem::getColor, BeeInfoUtils.getItem(ResourcefulBees.MOD_ID + ":" + s + "_bee_spawn_egg"));
+            if (!beeData.getRenderData().getColorData().getSpawnEggPrimaryColor().isDefault() && !beeData.getRenderData().getColorData().getSpawnEggSecondaryColor().isDefault()) {
+                registerItems(colors, BeeSpawnEggItem::getColor, BeeInfoUtils.getItem(ResourcefulBees.MOD_ID + ":" + s + "_bee_spawn_egg"));
+            }
         }));
         BEE_REGISTRY.getHoneyBottles().forEach((h, honeyData) -> {
             registerItems(colors, CustomHoneyBottleItem::getColor, honeyData.getHoneyBottleRegistryObject().get());
@@ -53,8 +55,8 @@ public final class ColorHandler {
     public static void onBlockColors(ColorHandlerEvent.Block event) {
         BlockColors colors = event.getBlockColors();
         BEE_REGISTRY.getBees().forEach(((s, beeData) -> {
-            HoneycombTypes honeycombType = beeData.getHoneycombData().getHoneycombType();
-            if (honeycombType.equals(HoneycombTypes.DEFAULT)) {
+            HoneycombData honeycombData = beeData.getHoneycombData();
+            if (honeycombData.getHoneycombType().equals(HoneycombTypes.DEFAULT) && (!honeycombData.getColor().isDefault())) {
                 registerBlocks(colors, HoneycombBlock::getBlockColor, BeeInfoUtils.getBlock(ResourcefulBees.MOD_ID + ":" + s + "_honeycomb_block"));
             }
         }));
