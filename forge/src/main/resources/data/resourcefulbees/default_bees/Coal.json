@@ -8,8 +8,8 @@
   "HoneycombData": {
     "honeycombType": "DEFAULT",
     "honeycombColor": "#303030",
-    "honeycomb": "resourcefulbees:diamondold_honeycomb",
-    "honeycombBlock": "resourcefulbees:diamondold_honeycomb_block"
+    "honeycomb": "resourcefulbees:coal_honeycomb",
+    "honeycombBlock": "resourcefulbees:coal_honeycomb_block"
   },
   "RenderData": {
     "layers": [{ "texture": "ores/coal/coal_bee"}],
@@ -20,10 +20,10 @@
     "mutations" : [
       {
         "type": "BLOCK",
-        "inputID": "minecraft:stone",
+        "input": "minecraft:stone",
         "chance": 0.75,
         "outputs": [
-          {"outputID": "minecraft:coal_ore", "weight": 10}
+          {"outputID": "minecraft:coal_ore"}
         ]
       }
     ]

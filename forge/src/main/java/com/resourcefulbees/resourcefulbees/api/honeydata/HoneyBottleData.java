@@ -55,37 +55,37 @@ public class HoneyBottleData {
     /**
      * The RegistryObject of the Honey Bottle Item
      */
-    private transient RegistryObject<Item> honeyBottleRegistryObject;
+    private RegistryObject<Item> honeyBottleRegistryObject;
 
     /**
      * The RegistryObject of the Honey Block Item
      */
-    private transient RegistryObject<Item> honeyBlockItemRegistryObject;
+    private RegistryObject<Item> honeyBlockItemRegistryObject;
 
     /**
      * The RegistryObject of the Honey Block
      */
-    private transient RegistryObject<Block> honeyBlockRegistryObject;
+    private RegistryObject<Block> honeyBlockRegistryObject;
 
     /**
      * The RegistryObject of the Still Honey Fluid
      */
-    private transient RegistryObject<FlowingFluid> honeyStillFluidRegistryObject;
+    private RegistryObject<FlowingFluid> honeyStillFluidRegistryObject;
 
     /**
      * The RegistryObject of the Flowing Honey Fluid
      */
-    private transient RegistryObject<FlowingFluid> honeyFlowingFluidRegistryObject;
+    private RegistryObject<FlowingFluid> honeyFlowingFluidRegistryObject;
 
     /**
      * The RegistryObject of the Honey Bucket Item
      */
-    private transient RegistryObject<Item> honeyBucketItemRegistryObject;
+    private RegistryObject<Item> honeyBucketItemRegistryObject;
 
     /**
      * The RegistryObject of the Honey Flowing Block
      */
-    private transient RegistryObject<LiquidBlock> honeyFluidBlockRegistryObject;
+    private RegistryObject<LiquidBlock> honeyFluidBlockRegistryObject;
 
     public HoneyBottleData setName(String name) {
         this.name = name;

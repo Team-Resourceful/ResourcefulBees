@@ -8,19 +8,19 @@ import net.minecraft.resources.ResourceLocation;
 public class MutationOutput {
 
     public static final Codec<MutationOutput> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            ResourceLocation.CODEC.fieldOf("outputID").forGetter(MutationOutput::getOutputID),
+            ResourceLocation.CODEC.fieldOf("output").forGetter(MutationOutput::getOutput),
             Codec.INT.fieldOf("count").orElse(1).forGetter(MutationOutput::getCount),
             Codec.DOUBLE.fieldOf("weight").orElse(1d).forGetter(MutationOutput::getWeight),
             CompoundTag.CODEC.fieldOf("nbtData").orElse(new CompoundTag()).forGetter(MutationOutput::getNbt)
             ).apply(instance, MutationOutput::new));
 
-    private final ResourceLocation outputID;
+    private final ResourceLocation output;
     private final CompoundTag nbt;
     private final int count;
     private final double weight;
 
-    public MutationOutput(ResourceLocation outputID, int count, double weight, CompoundTag tag) {
-        this.outputID = outputID;
+    public MutationOutput(ResourceLocation output, int count, double weight, CompoundTag tag) {
+        this.output = output;
         this.count = count;
         this.weight = weight;
         this.nbt = tag;
@@ -38,12 +38,12 @@ public class MutationOutput {
         return weight;
     }
 
-    public ResourceLocation getOutputID() {
-        return outputID;
+    public ResourceLocation getOutput() {
+        return output;
     }
 
     @Override
     public String toString() {
-        return "[" + getOutputID() + ", " + getWeight() + ", " + getNbt().toString() + "]";
+        return "[" + getOutput() + ", " + getWeight() + ", " + getNbt().toString() + "]";
     }
 }

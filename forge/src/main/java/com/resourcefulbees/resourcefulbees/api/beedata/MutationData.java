@@ -127,8 +127,8 @@ public class MutationData {
 
         RandomCollection<EntityOutput> randomCollection = new RandomCollection<>();
         mutation.getOutputs().forEach(mutationOutput -> {
-            if (mutationOutput.getOutputID() != null) {
-                EntityType<?> output = BeeInfoUtils.getEntityType(mutationOutput.getOutputID());
+            if (mutationOutput.getOutput() != null) {
+                EntityType<?> output = BeeInfoUtils.getEntityType(mutationOutput.getOutput());
                 if (output != null) {
                     randomCollection.add(mutationOutput.getWeight(), new EntityOutput(output, Optional.of(mutationOutput.getNbt()), mutationOutput.getWeight(), mutation.getChance()));
                 }
@@ -143,7 +143,7 @@ public class MutationData {
     private RandomCollection<ItemOutput> createRandomItemCollection(Mutation mutation) {
         RandomCollection<ItemOutput> randomCollection = new RandomCollection<>();
         mutation.getOutputs().forEach(mutationOutput -> {
-            ItemStack output = new ItemStack(ForgeRegistries.ITEMS.getValue(mutationOutput.getOutputID()), mutationOutput.getCount());
+            ItemStack output = new ItemStack(ForgeRegistries.ITEMS.getValue(mutationOutput.getOutput()), mutationOutput.getCount());
             if (!output.equals(ItemStack.EMPTY)) {
                 output.setTag(mutationOutput.getNbt());
                 randomCollection.add(mutationOutput.getWeight(), new ItemOutput(output, mutationOutput.getWeight(), mutation.getChance()));
@@ -155,7 +155,7 @@ public class MutationData {
     private RandomCollection<BlockOutput> createRandomBlockCollection(Mutation mutation) {
         RandomCollection<BlockOutput> randomCollection = new RandomCollection<>();
         mutation.getOutputs().forEach(mutationOutput -> {
-            Block output = ForgeRegistries.BLOCKS.getValue(mutationOutput.getOutputID());
+            Block output = ForgeRegistries.BLOCKS.getValue(mutationOutput.getOutput());
             if (output != (Blocks.AIR)) {
                 randomCollection.add(mutationOutput.getWeight(), new BlockOutput(output, Optional.of(mutationOutput.getNbt()), mutationOutput.getWeight(), mutation.getChance()));
             }
