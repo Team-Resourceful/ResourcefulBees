@@ -5,17 +5,21 @@
     "maxTimeInHive": 1800
   },
   "HoneycombData": {
-    "honeycombType": "DEFAULT",
-    "honeycombColor": "#339786",
-    "honeycomb": "resourcefulbees:ender_honeycomb",
-    "honeycombBlock": "resourcefulbees:ender_honeycomb_block"
+    "type": "DEFAULT",
+    "color": "#339786",
+    "item": "resourcefulbees:ender_honeycomb",
+    "block": "resourcefulbees:ender_honeycomb_block"
   },
   "RenderData": {
     "layers": [
-      {"texture": "custom/bee"},
-      {"isColored": true, "color": "#339786", "texture": "custom/primary_layer"},
-      {"isColored": true, "color": "#303030", "texture": "custom/secondary_layer"}
-    ]
+      { "texture": "custom/bee" },
+      { "color": "#339786", "texture": "custom/primary_layer" },
+      { "color": "#303030", "texture": "custom/secondary_layer" }
+    ],
+    "ColorData": {
+      "spawnEggPrimaryColor": "#339786",
+      "spawnEggSecondaryColor": "#303030"
+    }
   },
   "MutationData": {
     "hasMutation": true,

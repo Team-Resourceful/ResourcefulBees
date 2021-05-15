@@ -1,5 +1,6 @@
 package com.resourcefulbees.resourcefulbees.api.beedata;
 
+import com.google.common.collect.Sets;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
@@ -100,5 +101,15 @@ public class CodecUtils {
 
     public static <A> Codec<Set<A>> createSetCodec(Codec<A> codec) {
         return codec.listOf().xmap(HashSet::new, ArrayList::new);
+    }
+
+    public static <A> Codec<Set<A>> createLinkedSetCodec(Codec<A> codec) {
+        return codec.listOf().xmap(LinkedHashSet::new, ArrayList::new);
+    }
+
+    public static <E> LinkedHashSet<E> newLinkedHashSet(E... elements) {
+        LinkedHashSet<E> set = Sets.newLinkedHashSet();
+        Collections.addAll(set, elements);
+        return set;
     }
 }

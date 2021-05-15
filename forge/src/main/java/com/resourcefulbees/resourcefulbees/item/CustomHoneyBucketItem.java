@@ -2,7 +2,6 @@ package com.resourcefulbees.resourcefulbees.item;
 
 import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
-import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.ItemStack;
@@ -26,13 +25,13 @@ public class CustomHoneyBucketItem extends BucketItem {
     public static int getColor(ItemStack stack, int tintIndex) {
         if (tintIndex == 1) {
             CustomHoneyBucketItem honeyBottleItem = (CustomHoneyBucketItem) stack.getItem();
-            return honeyBottleItem.honeyBottleData.getColorData().isRainbow() ? RainbowColor.getRGB() : honeyBottleItem.getHoneyBucketColor();
+            return honeyBottleItem.getHoneyBucketColor();
         }
         return BeeConstants.DEFAULT_ITEM_COLOR;
     }
 
     public int getHoneyBucketColor() {
-        return honeyBottleData.getColorData().getColor().getC();
+        return honeyBottleData.getColorData().getColor().getValue();
     }
 
     @Override

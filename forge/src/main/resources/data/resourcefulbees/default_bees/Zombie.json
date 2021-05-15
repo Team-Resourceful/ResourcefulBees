@@ -6,13 +6,17 @@
     "name": "zombee"
   },
   "HoneycombData": {
-    "honeycombType": "DEFAULT",
-    "honeycombColor": "#2F4E32",
-    "honeycomb": "resourcefulbees:zombie_honeycomb",
-    "honeycombBlock": "resourcefulbees:zombie_honeycomb_block"
+    "type": "DEFAULT",
+    "color": "#2F4E32",
+    "item": "resourcefulbees:zombie_honeycomb",
+    "block": "resourcefulbees:zombie_honeycomb_block"
   },
   "RenderData": {
-    "layers": [{"texture": "zombie/zombie_bee"}]
+    "layers": [{"texture": "zombie/zombie_bee"}],
+    "ColorData": {
+      "spawnEggPrimaryColor": "#2F4E32",
+      "spawnEggSecondaryColor": "#303030"
+    }
   },
   "MutationData": {
     "hasMutation": true,

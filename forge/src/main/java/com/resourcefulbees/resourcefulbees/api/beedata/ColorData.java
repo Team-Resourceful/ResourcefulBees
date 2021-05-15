@@ -7,12 +7,12 @@ import com.resourcefulbees.resourcefulbees.utils.color.Color;
 public class ColorData {
 
     public static final Codec<ColorData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Color.CODEC.fieldOf("spawnEggPrimaryColor").orElse(Color.WHITE).forGetter(ColorData::getJarColor),
-            Color.CODEC.fieldOf("spawnEggSecondaryColor").orElse(Color.WHITE).forGetter(ColorData::getJarColor),
-            Color.CODEC.fieldOf("jarColor").orElse(Color.WHITE).forGetter(ColorData::getJarColor)
+            Color.CODEC.fieldOf("spawnEggPrimaryColor").orElse(Color.DEFAULT).forGetter(ColorData::getSpawnEggPrimaryColor),
+            Color.CODEC.fieldOf("spawnEggSecondaryColor").orElse(Color.DEFAULT).forGetter(ColorData::getSpawnEggSecondaryColor),
+            Color.CODEC.fieldOf("jarColor").orElse(Color.DEFAULT).forGetter(ColorData::getJarColor)
     ).apply(instance, ColorData::new));
 
-    public static final ColorData DEFAULT = new ColorData(Color.WHITE, Color.WHITE, Color.WHITE);
+    public static final ColorData DEFAULT = new ColorData(Color.DEFAULT, Color.DEFAULT, Color.DEFAULT);
 
     private final Color spawnEggPrimaryColor;
     private final Color spawnEggSecondaryColor;

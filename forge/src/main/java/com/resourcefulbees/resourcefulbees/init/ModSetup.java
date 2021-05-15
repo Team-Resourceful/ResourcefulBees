@@ -5,7 +5,6 @@ import com.resourcefulbees.resourcefulbees.item.dispenser.ScraperDispenserBehavi
 import com.resourcefulbees.resourcefulbees.item.dispenser.ShearsDispenserBehavior;
 import com.resourcefulbees.resourcefulbees.mixin.DispenserBlockInvoker;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
-import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.packs.FolderPackResources;
 import net.minecraft.server.packs.repository.Pack;
@@ -39,7 +38,6 @@ public class ModSetup {
     public static void initialize() {
         setupPaths();
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ModSetup::loadResources);
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> RainbowColor::init);
     }
 
     private static void setupPaths() {

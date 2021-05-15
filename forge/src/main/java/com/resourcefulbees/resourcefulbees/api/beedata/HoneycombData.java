@@ -21,35 +21,29 @@ public class HoneycombData {
 
 
     public static final Codec<HoneycombData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            HoneycombTypes.CODEC.fieldOf("honeycombType").orElse(HoneycombTypes.DEFAULT).forGetter(HoneycombData::getHoneycombType),
-            Registry.ITEM.fieldOf("honeycomb").orElse(Items.BARRIER).forGetter(HoneycombData::getHoneycomb),
-            Registry.ITEM.fieldOf("honeycombBlock").orElse(Items.BARRIER).forGetter(HoneycombData::getHoneycombBlock),
-            Color.CODEC.fieldOf("color").orElse(Color.WHITE).forGetter(HoneycombData::getColor),
-            Codec.BOOL.fieldOf("isColored").orElse(true).forGetter(HoneycombData::isColored),
-            Codec.BOOL.fieldOf("isRainbow").orElse(false).forGetter(HoneycombData::isColored),
+            HoneycombTypes.CODEC.fieldOf("type").orElse(HoneycombTypes.DEFAULT).forGetter(HoneycombData::getHoneycombType),
+            Registry.ITEM.fieldOf("item").orElse(Items.BARRIER).forGetter(HoneycombData::getHoneycomb),
+            Registry.ITEM.fieldOf("block").orElse(Items.BARRIER).forGetter(HoneycombData::getHoneycombBlock),
+            Color.CODEC.fieldOf("color").orElse(Color.DEFAULT).forGetter(HoneycombData::getColor),
             Codec.INT.listOf().fieldOf("apiaryOutputAmounts").orElse(DEFAULT_APIARY_AMOUNTS).forGetter(HoneycombData::getApiaryOutputAmounts),
             ApiaryOutputs.CODEC.listOf().fieldOf("apiaryOutputTypes").orElse(DEFAULT_APIARY_OUTPUTS).forGetter(HoneycombData::getApiaryOutputTypes)
     ).apply(instance, HoneycombData::new));
 
-    public static final HoneycombData DEFAULT = new HoneycombData(HoneycombTypes.NONE, Items.AIR, Items.AIR, Color.WHITE, false, false, DEFAULT_APIARY_AMOUNTS, DEFAULT_APIARY_OUTPUTS);
+    public static final HoneycombData DEFAULT = new HoneycombData(HoneycombTypes.NONE, Items.AIR, Items.AIR, Color.DEFAULT, DEFAULT_APIARY_AMOUNTS, DEFAULT_APIARY_OUTPUTS);
 
     private final HoneycombTypes honeycombType;
     private final Item honeycomb;
     private final Item honeycombBlock;
     private final Color color;
-    private final boolean isColored;
-    private final boolean isRainbow;
     private final List<Integer> apiaryOutputAmounts;
     private final List<ApiaryOutputs> apiaryOutputsTypes;
 
 
-    public HoneycombData(HoneycombTypes honeycombType, Item honeycomb, Item honeycombBlock, Color color, boolean isColored, boolean isRainbow, List<Integer> apiaryOutputAmounts, List<ApiaryOutputs> apiaryOutputsTypes) {
+    public HoneycombData(HoneycombTypes honeycombType, Item honeycomb, Item honeycombBlock, Color color, List<Integer> apiaryOutputAmounts, List<ApiaryOutputs> apiaryOutputsTypes) {
         this.honeycombType = honeycombType;
         this.honeycomb = honeycomb;
         this.honeycombBlock = honeycombBlock;
         this.color = color;
-        this.isColored = isColored;
-        this.isRainbow = isRainbow;
         this.apiaryOutputAmounts = apiaryOutputAmounts;
         this.apiaryOutputsTypes = apiaryOutputsTypes;
     }
@@ -68,14 +62,6 @@ public class HoneycombData {
 
     public Color getColor() {
         return color;
-    }
-
-    public boolean isColored() {
-        return isColored;
-    }
-
-    public boolean isRainbow() {
-        return isRainbow;
     }
 
     public List<Integer> getApiaryOutputAmounts() {

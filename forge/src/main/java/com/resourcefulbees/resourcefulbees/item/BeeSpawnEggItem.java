@@ -1,5 +1,6 @@
 package com.resourcefulbees.resourcefulbees.item;
 
+import com.resourcefulbees.resourcefulbees.api.beedata.ColorData;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import net.minecraft.core.BlockPos;
@@ -51,9 +52,8 @@ public class BeeSpawnEggItem extends SpawnEggItem {
     }
 
     public static int getColor(ItemStack stack, int tintIndex) {
-	    int primaryColor = ((BeeSpawnEggItem)stack.getItem()).beeData.getRenderData().getColorData().getSpawnEggPrimaryColor().getC();
-	    int secondaryColor = ((BeeSpawnEggItem)stack.getItem()).beeData.getRenderData().getColorData().getSpawnEggSecondaryColor().getC();
-        return tintIndex == 0 ? primaryColor: secondaryColor;
+        ColorData colorData = ((BeeSpawnEggItem)stack.getItem()).beeData.getRenderData().getColorData();
+        return tintIndex == 0 ? colorData.getSpawnEggPrimaryColor().getValue(): colorData.getSpawnEggSecondaryColor().getValue();
     }
 
     public static void initSpawnEggs() {

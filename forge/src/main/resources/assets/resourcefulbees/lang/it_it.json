@@ -64,7 +64,7 @@
 	"block.resourcefulbees.pigman_honeycomb_block": "Blocco di favo di Pigman",
 	"block.resourcefulbees.skeleton_honeycomb_block": "Blocco di favo di Scheletro",
 	"block.resourcefulbees.wither_honeycomb_block": "Blocco di favo di Wither",
-	"block.resourcefulbees.zombie_honeycomb_block": "Blocco di favo di Zombi",
+	"block.resourcefulbees.zombee_honeycomb_block": "Blocco di favo di Zombi",
 
 	"item.resourcefulbees.gold_honeycomb": "Favo d'Oro",
 	"item.resourcefulbees.iron_honeycomb": "Favo di Ferro",
@@ -80,7 +80,7 @@
 	"item.resourcefulbees.pigman_honeycomb": "Favo di Pigman",
 	"item.resourcefulbees.skeleton_honeycomb": "Favo di Scheletro",
 	"item.resourcefulbees.wither_honeycomb": "Favo di Wither",
-	"item.resourcefulbees.zombie_honeycomb": "Favo di Zombi",
+	"item.resourcefulbees.zombee_honeycomb": "Favo di Zombi",
 
 	"item.resourcefulbees.gold_bee_spawn_egg": "Uovo dell'Ape di Oro",
 	"item.resourcefulbees.iron_bee_spawn_egg": "Uovo dell'Ape di Ferro",
@@ -96,7 +96,7 @@
 	"item.resourcefulbees.pigman_bee_spawn_egg": "Uovo dell'Ape di Pigman",
 	"item.resourcefulbees.skeleton_bee_spawn_egg": "Uovo dell'Ape di Scheletro",
 	"item.resourcefulbees.wither_bee_spawn_egg": "Uovo dell'Ape di Wither",
-	"item.resourcefulbees.zombie_bee_spawn_egg": "Uovo dell'Ape di Zombi",
+	"item.resourcefulbees.zombee_bee_spawn_egg": "Uovo dell'Ape di Zombi",
 
 	"entity.resourcefulbees.gold_bee": "Ape d'Oro",
 	"entity.resourcefulbees.iron_bee": "Ape di Ferro",
@@ -112,7 +112,7 @@
 	"entity.resourcefulbees.pigman_bee": "Ape di  Pigman",
 	"entity.resourcefulbees.skeleton_bee": "Ape di Scheletro",
 	"entity.resourcefulbees.wither_bee": "Ape di Wither",
-	"entity.resourcefulbees.zombie_bee": "Ape di Zombi",
+	"entity.resourcefulbees.zombee_bee": "Ape di Zombi",
 
 
 	"entity.minecraft.villager.resourcefulbees.beekeeper": "Apicoltore"

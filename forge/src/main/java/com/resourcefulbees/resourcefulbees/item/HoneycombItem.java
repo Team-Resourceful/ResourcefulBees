@@ -2,7 +2,6 @@ package com.resourcefulbees.resourcefulbees.item;
 
 import com.resourcefulbees.resourcefulbees.api.beedata.HoneycombData;
 import com.resourcefulbees.resourcefulbees.config.Config;
-import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -23,10 +22,10 @@ public class HoneycombItem extends Item {
     @SuppressWarnings("unusedParameter")
     public static int getColor(ItemStack stack, int tintIndex) {
         HoneycombItem honeycombItem = (HoneycombItem) stack.getItem();
-        return honeycombItem.honeycombData.isRainbow() ? RainbowColor.getRGB() : honeycombItem.getHoneycombColor();
+        return honeycombItem.getHoneycombColor();
     }
 
-    public int getHoneycombColor() { return honeycombData.getColor().getC(); }
+    public int getHoneycombColor() { return honeycombData.getColor().getValue(); }
 
     public String getBeeType() { return beeType; }
 

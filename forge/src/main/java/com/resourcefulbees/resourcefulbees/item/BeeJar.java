@@ -10,7 +10,6 @@ import com.resourcefulbees.resourcefulbees.lib.TraitConstants;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.color.Color;
-import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.language.I18n;
@@ -48,7 +47,7 @@ public class BeeJar extends Item {
     public static int getColor(ItemStack stack, int tintIndex) {
         CompoundTag tag = stack.getTag();
         if (tintIndex == 1 && tag != null && tag.contains(NBTConstants.NBT_COLOR) && !tag.getString(NBTConstants.NBT_COLOR).equals(BeeConstants.STRING_DEFAULT_ITEM_COLOR)) {
-            return tag.getString(NBTConstants.NBT_COLOR).equals(BeeConstants.RAINBOW_COLOR) ? RainbowColor.getRGB() : Color.parseInt(tag.getString(NBTConstants.NBT_COLOR));
+            return Color.parse(tag.getString(NBTConstants.NBT_COLOR)).getValue();
         }
         return BeeConstants.DEFAULT_ITEM_COLOR;
     }

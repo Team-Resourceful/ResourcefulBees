@@ -3,14 +3,18 @@
     "flower": "forge:storage_blocks/emerald"
   },
   "HoneycombData": {
-    "honeycombType": "DEFAULT",
-    "honeycombColor": "#18eb09",
-    "honeycomb": "resourcefulbees:emerald_honeycomb",
-    "honeycombBlock": "resourcefulbees:emerald_honeycomb_block"
+    "type": "DEFAULT",
+    "color": "#18eb09",
+    "item": "resourcefulbees:emerald_honeycomb",
+    "block": "resourcefulbees:emerald_honeycomb_block"
   },
   "RenderData": {
     "layers": [{"texture": "ores/emerald/emerald_bee"}],
-    "modelType": "ORE"
+    "modelType": "ORE",
+    "ColorData": {
+      "spawnEggPrimaryColor": "#18eb09",
+      "spawnEggSecondaryColor": "#303030"
+    }
   },
   "MutationData": {
     "hasMutation": true,

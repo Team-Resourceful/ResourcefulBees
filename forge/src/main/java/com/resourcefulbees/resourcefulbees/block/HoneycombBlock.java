@@ -2,7 +2,6 @@
 package com.resourcefulbees.resourcefulbees.block;
 
 import com.resourcefulbees.resourcefulbees.api.beedata.HoneycombData;
-import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
@@ -31,19 +30,19 @@ public class HoneycombBlock extends Block {
         this.beeType = beeType;
     }
 
-    public int getHoneycombColor() { return honeycombData.getColor().getC(); }
+    public int getHoneycombColor() { return honeycombData.getColor().getValue(); }
 
     public String getBeeType() { return beeType; }
 
     public static int getBlockColor(BlockState state, @Nullable BlockGetter world, @Nullable BlockPos pos, int tintIndex){
         HoneycombBlock honeycombBlock = ((HoneycombBlock) state.getBlock());
-        return honeycombBlock.honeycombData.isRainbow() ? RainbowColor.getRGB() : honeycombBlock.getHoneycombColor();
+        return honeycombBlock.getHoneycombColor();
     }
 
     public static int getItemColor(ItemStack stack, int tintIndex){
         BlockItem blockItem = (BlockItem) stack.getItem();
         HoneycombBlock honeycombBlock = (HoneycombBlock) blockItem.getBlock();
-        return honeycombBlock.honeycombData.isRainbow() ? RainbowColor.getRGB() : honeycombBlock.getHoneycombColor();
+        return honeycombBlock.getHoneycombColor();
     }
 
     @NotNull
@@ -56,7 +55,7 @@ public class HoneycombBlock extends Block {
 
     @Override
     public void animateTick(@NotNull BlockState stateIn, @NotNull Level world, @NotNull BlockPos pos, @NotNull Random rand) {
-        if (honeycombData.isRainbow())
+        if (honeycombData.getColor().isRainbow())
             world.sendBlockUpdated(pos, stateIn, stateIn, 2);
         super.animateTick(stateIn, world, pos, rand);
     }

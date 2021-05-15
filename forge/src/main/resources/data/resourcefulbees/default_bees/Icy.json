@@ -6,14 +6,18 @@
     "sizeModifier": 0.75
   },
   "HoneycombData": {
-    "honeycombType": "NONE"
+    "type": "NONE"
   },
   "RenderData": {
     "layers": [
-      {"texture": "custom/bee"},
-      {"isColored": true, "color": "#92b9fe", "texture": "custom/primary_layer"},
-      {"isColored": true, "color": "#303030", "texture": "custom/secondary_layer"}
-    ]
+      { "texture": "custom/bee" },
+      { "color": "#92b9fe", "texture": "custom/primary_layer" },
+      { "color": "#303030", "texture": "custom/secondary_layer" }
+    ],
+    "ColorData": {
+      "spawnEggPrimaryColor": "#92b9fe",
+      "spawnEggSecondaryColor": "#303030"
+    }
   },
   "MutationData": {
     "hasMutation": true,

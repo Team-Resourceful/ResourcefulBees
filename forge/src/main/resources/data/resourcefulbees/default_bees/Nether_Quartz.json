@@ -5,17 +5,21 @@
     "traits": ["nether"]
   },
   "HoneycombData": {
-    "honeycombType": "DEFAULT",
-    "honeycombColor": "#D4CABA",
-    "honeycomb": "resourcefulbees:nether_honeycomb",
-    "honeycombBlock": "resourcefulbees:nether_honeycomb_block"
+    "type": "DEFAULT",
+    "color": "#D4CABA",
+    "item": "resourcefulbees:nether_honeycomb",
+    "block": "resourcefulbees:nether_honeycomb_block"
   },
   "RenderData": {
     "layers": [
       {"texture": "custom/bee"},
       {"isColored": true, "color": "#D4CABA", "texture": "custom/primary_layer"},
       {"isColored": true, "color": "#303030", "texture": "custom/secondary_layer"}
-    ]
+    ],
+    "ColorData": {
+      "spawnEggPrimaryColor": "#D4CABA",
+      "spawnEggSecondaryColor": "#303030"
+    }
   },
   "MutationData": {
     "hasMutation": true,
