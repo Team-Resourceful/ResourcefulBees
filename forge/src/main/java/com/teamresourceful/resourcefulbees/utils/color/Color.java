@@ -94,6 +94,8 @@ public class Color {
         Objects.requireNonNull(color);
         if (color.startsWith("0x") || color.startsWith("#"))
             return Long.decode(color).intValue();
+        else if (colorsWithNames.containsKey(color.toLowerCase()))
+            return colorsWithNames.get(color.toLowerCase()).getValue();
         return 0;
     }
 
@@ -146,6 +148,12 @@ public class Color {
     public boolean isDefault(){ return defaultValue; }
 
     public boolean isRainbow(){ return rainbow; }
+
+    @Override
+    public String toString() {
+        if (this.rainbow) return "rainbow";
+        return String.format("#%x", this.value);
+    }
 
     public float[] getRGBComponents(float[] compArray) {
         float[] f = compArray == null ? new float[4] : compArray;
