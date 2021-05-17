@@ -10,9 +10,9 @@ import net.minecraftforge.fluids.FluidStack;
 public class FluidOutput extends AbstractOutput{
 
     public static final Codec<FluidOutput> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            CodecUtils.FLUID_STACK_CODEC.fieldOf("id").orElse(FluidStack.EMPTY).forGetter(FluidOutput::getFluidStack),
-            Codec.DOUBLE.fieldOf("weight").orElse(1.0d).forGetter(FluidOutput::getWeight),
-            Codec.DOUBLE.fieldOf("chance").orElse(1.0).forGetter(FluidOutput::getChance)
+            CodecUtils.FLUID_STACK_CODEC.fieldOf("fluid").orElse(FluidStack.EMPTY).forGetter(FluidOutput::getFluidStack),
+            Codec.doubleRange(1.0d, Double.MAX_VALUE).fieldOf("weight").orElse(1.0d).forGetter(FluidOutput::getWeight),
+            Codec.doubleRange(0.0d, 1.0d).fieldOf("chance").orElse(1.0).forGetter(FluidOutput::getChance)
     ).apply(instance, FluidOutput::new));
 
     public static final FluidOutput EMPTY = new FluidOutput(FluidStack.EMPTY, 0, 0);

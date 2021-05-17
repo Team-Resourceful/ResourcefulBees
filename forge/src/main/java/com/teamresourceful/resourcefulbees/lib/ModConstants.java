@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.lib;
 
+import com.google.gson.Gson;
 import net.minecraft.ChatFormatting;
 
 import java.text.DecimalFormat;
@@ -7,6 +8,7 @@ import java.text.DecimalFormat;
 public class ModConstants {
 
     public static final String UTILITY_CLASS = "Utility Class";
+    public static final Gson GSON = new Gson();
 
     private ModConstants() {
         throw new IllegalStateException(UTILITY_CLASS);

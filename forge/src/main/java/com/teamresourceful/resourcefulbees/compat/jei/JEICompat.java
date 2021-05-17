@@ -111,6 +111,10 @@ public class JEICompat implements IModPlugin {
         registration.registerSubtypeInterpreter(ModItems.BEEPEDIA.get(), (ingredient, context) -> ingredient.hasTag() && ingredient.getTag() != null && ingredient.getTag().contains(Beepedia.CREATIVE_TAG) ? "creative.beepedia" : "");
     }
 
+
+    //gravy, we could add Kube hooks for this, but the info card is a one-stop-shop for all bee data at a glance
+    //I'm not entirely sure what other data should be defined here using Kube that we don't already provide
+    //since we're already adding a "Lore" field and "Author" field
     public void registerInfoDesc(IRecipeRegistration registration) {
         for (EntityIngredient bee : EntityIngredientFactory.create()) {
             CustomBeeData beeData = bee.getBeeData();
@@ -157,7 +161,7 @@ public class JEICompat implements IModPlugin {
                 stats.append(aqua).append(" Max Y Level: ").append(purple).append(beeData.getSpawnData().getMaxYLevel()).append("\n");
                 stats.append(aqua).append(" Min Group Size: ").append(purple).append(beeData.getSpawnData().getMinGroupSize()).append("\n");
                 stats.append(aqua).append(" Max Group Size: ").append(purple).append(beeData.getSpawnData().getMaxGroupSize()).append("\n");
-                stats.append(aqua).append(" Biomes: ").append(purple).append(BiomeParser.parseBiomes(beeData.getSpawnData()));
+                stats.append(aqua).append(" Biomes: ").append(purple).append(beeData.getSpawnData().getSpawnableBiomesAsString());
             }
 
             registration.addIngredientInfo(bee, ENTITY_INGREDIENT, new TextComponent(stats.toString()));

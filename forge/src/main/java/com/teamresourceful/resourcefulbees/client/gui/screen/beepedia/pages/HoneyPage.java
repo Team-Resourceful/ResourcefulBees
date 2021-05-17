@@ -218,7 +218,7 @@ public class HoneyPage extends BeepediaPage {
                 searchItems.add(new TranslatableComponent(bottleData.getHoneyBlockItemRegistryObject().get().getDescriptionId()).getString());
             if (bottleData.getHoneyBucketItemRegistryObject() != null)
                 searchItems.add(new TranslatableComponent(bottleData.getHoneyBucketItemRegistryObject().get().getDescriptionId()).getString());
-            if (bottleData.getColorData().isRainbow()) searchTags.add("isRainbow");
+            if (bottleData.getColor().isRainbow()) searchTags.add("isRainbow");
         }
         if (!effects.isEmpty()) searchTags.add("hasEffects");
         if (!beeList.getSubList().isEmpty()) searchTags.add("hasBees");

@@ -24,7 +24,7 @@ public class CustomHoneyFluidBlock extends LiquidBlock {
     }
 
     public int getHoneyColor() {
-        return honeyData.getColorData().getColor().getValue();
+        return honeyData.getColor().getValue();
     }
 
     public static int getBlockColor(BlockState state, @Nullable BlockGetter world, @Nullable BlockPos pos, int tintIndex) {
@@ -34,7 +34,7 @@ public class CustomHoneyFluidBlock extends LiquidBlock {
 
     @Override
     public void animateTick(@NotNull BlockState stateIn, @NotNull Level world, @NotNull BlockPos pos, @NotNull Random rand) {
-        if (honeyData.getColorData().isRainbow())
+        if (honeyData.getColor().isRainbow())
             world.sendBlockUpdated(pos, stateIn, stateIn, 2);
         super.animateTick(stateIn, world, pos, rand);
     }

@@ -1,8 +1,7 @@
 {
   "CoreData": {
     "flower": ["minecraft:obsidian"],
-    "maxTimeInHive": 2400,
-    "traits": [ "ender", "nether", "wither" ]
+    "maxTimeInHive": 2400
   },
   "HoneycombData": {
     "type": "DEFAULT",
@@ -19,7 +18,8 @@
     ],
     "ColorData": {
       "spawnEggPrimaryColor": "#222222",
-      "spawnEggSecondaryColor": "#303030"
+      "spawnEggSecondaryColor": "#303030",
+      "jarColor": "#222222"
     },
     "modelType": "DRAGON"
   },
@@ -28,10 +28,10 @@
     "mutations" : [
       {
         "type": "BLOCK",
-        "inputID": "minecraft:stone",
+        "input": "minecraft:stone",
         "chance": 0.5,
         "outputs": [
-          {"outputID": "minecraft:end_stone", "weight": 10}
+          {"output": "minecraft:end_stone"}
         ]
       }
     ]
@@ -39,19 +39,19 @@
   "CentrifugeData": {
     "hasCentrifugeOutput": true,
     "itemOutputs": [
-      {"item": {"id": "minecraft:dragon_egg"}, "weight": 0.01},
-      {"item": {"id": "minecraft:dragon_breath"}, "weight": 0.5}
+      {"item": {"id": "minecraft:dragon_egg"}, "weight": 1},
+      {"item": {"id": "minecraft:dragon_breath"}, "weight": 50}
     ]
   },
-  "SpawnData": {},
   "BreedData": {
     "isBreedable": true,
-    "parent1": "Wither",
-    "parent2": "Ender",
-    "feedItem": "minecraft:end_stone",
+    "parent1": ["Wither"],
+    "parent2": ["Ender"],
+    "feedItem": ["minecraft:end_stone"],
     "feedAmount": 12
   },
   "TraitData": {
-    "hasTraits": true
+    "hasTraits": true,
+    "traits": [ "ender", "nether", "wither" ]
   }
 }

@@ -11,8 +11,8 @@ public class MutationOutput {
             ResourceLocation.CODEC.fieldOf("output").forGetter(MutationOutput::getOutput),
             Codec.INT.fieldOf("count").orElse(1).forGetter(MutationOutput::getCount),
             Codec.DOUBLE.fieldOf("weight").orElse(1d).forGetter(MutationOutput::getWeight),
-            CompoundTag.CODEC.fieldOf("nbtData").orElse(new CompoundTag()).forGetter(MutationOutput::getNbt)
-            ).apply(instance, MutationOutput::new));
+            CompoundTag.CODEC.fieldOf("tag").orElse(new CompoundTag()).forGetter(MutationOutput::getNbt)
+    ).apply(instance, MutationOutput::new));
 
     private final ResourceLocation output;
     private final CompoundTag nbt;

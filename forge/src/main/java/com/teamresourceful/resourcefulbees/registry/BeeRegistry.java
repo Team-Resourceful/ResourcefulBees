@@ -8,7 +8,6 @@ import com.teamresourceful.resourcefulbees.api.beedata.BreedData;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.beedata.mutation.EntityMutation;
 import com.teamresourceful.resourcefulbees.api.beedata.mutation.ItemMutation;
-import com.teamresourceful.resourcefulbees.api.honeydata.HoneyBottleData;
 import com.teamresourceful.resourcefulbees.item.BeeSpawnEggItem;
 import com.teamresourceful.resourcefulbees.utils.BeeInfoUtils;
 import com.teamresourceful.resourcefulbees.utils.RandomCollection;
@@ -33,26 +32,13 @@ public class BeeRegistry implements IBeeRegistry {
         return INSTANCE;
     }
 
-    private BeeRegistry() {
-        this.allowRegistration = true;
-        ResourcefulBees.LOGGER.info("Bee Registration Enabled...");
-    }
-
     private final Map<String, JsonObject> rawBeeData = new LinkedHashMap<>();
-    private final Map<String, JsonObject> rawHoneyData = new LinkedHashMap<>();
     private final Map<String, CustomBeeData> beeData = new LinkedHashMap<>();
-    private final Map<String, HoneyBottleData> honeyInfo = new LinkedHashMap<>();
     public final Map<Pair<String, String>, RandomCollection<CustomBeeData>> familyTree = new HashMap<>();
 
-    private boolean allowRegistration;
 
     public static Map<ResourceLocation, RandomCollection<CustomBeeData>> getSpawnableBiomes() {
         return spawnableBiomes;
-    }
-
-    public void denyRegistration() {
-        this.allowRegistration = false;
-        ResourcefulBees.LOGGER.info("Bee Registration Disabled...");
     }
 
     /**
@@ -66,13 +52,9 @@ public class BeeRegistry implements IBeeRegistry {
                 .getOrThrow(false, s -> ResourcefulBees.LOGGER.error("Could not create Custom Bee Data for {} bee", bee));
     }
 
-    //TODO Look at calling this method early on to reduce method calls and number of created objects in addition to where it is called now
     public void regenerateCustomBeeData() {
-        rawBeeData.forEach((s, jsonObject) -> {
-            System.out.println(s);
-            beeData.compute(s, (s1, customBeeDataCodec) ->  CustomBeeData.codec(s).parse(JsonOps.INSTANCE, jsonObject)
-                    .getOrThrow(false, s2 -> ResourcefulBees.LOGGER.error("Could not create Custom Bee Data for {} bee", s)));
-        });
+        rawBeeData.forEach((s, jsonObject) -> beeData.compute(s, (s1, customBeeDataCodec) ->  CustomBeeData.codec(s).parse(JsonOps.INSTANCE, jsonObject)
+                .getOrThrow(false, s2 -> ResourcefulBees.LOGGER.error("Could not create Custom Bee Data for {} bee", s))));
     }
 
     /**
@@ -84,16 +66,6 @@ public class BeeRegistry implements IBeeRegistry {
     @Override
     public JsonObject getRawBeeData(String bee) {
         return rawBeeData.get(bee);
-    }
-
-    /**
-     * Returns a HoneyBottleData object for the given honey type.
-     *
-     * @param honey Honey type for which HoneyData is requested.
-     * @return Returns a HoneyBottleData object for the given bee type.
-     */
-    public HoneyBottleData getHoneyData(String honey) {
-        return honeyInfo.get(honey);
     }
 
     /**
@@ -139,19 +111,18 @@ public class BeeRegistry implements IBeeRegistry {
      * @return Returns false if bee already exists in the registry.
      */
     public boolean registerBee(String beeType, CustomBeeData customBeeData) {
-
-        beeData.put(beeType, customBeeData);
-        return true;
-/*
-
-        if (allowRegistration && !beeInfo.containsKey(beeType) && FirstPhaseValidator.validate(customBeeData)) {
-            beeInfo.put(beeType, customBeeData);
-            if (customBeeData.getBreedData().isBreedable()) BeeInfoUtils.buildFamilyTree(customBeeData);
-            if (customBeeData.getSpawnData().canSpawnInWorld()) BeeInfoUtils.parseBiomes(customBeeData);
+        if (!beeData.containsKey(beeType)) {
+            beeData.put(beeType, customBeeData);
+            if (customBeeData.getBreedData().isBreedable()) {
+                buildFamilyTree(customBeeData);
+            }
+            if (customBeeData.getSpawnData().canSpawnInWorld()) {
+                customBeeData.getSpawnData().getSpawnableBiomes()
+                        .forEach(resourceLocation -> spawnableBiomes.computeIfAbsent(resourceLocation, k -> new RandomCollection<>()).add(customBeeData.getSpawnData().getSpawnWeight(), customBeeData));
+            }
             return true;
         }
         return false;
-*/
     }
 
     /**
@@ -162,10 +133,6 @@ public class BeeRegistry implements IBeeRegistry {
      */
     public void cacheRawBeeData(String beeType, JsonObject beeData) {
         rawBeeData.computeIfAbsent(beeType.toLowerCase(Locale.ENGLISH).replace(" ", "_"), s -> beeData);
-    }
-
-    public void cacheRawHoneyData(String name, JsonObject jsonObject) {
-        rawHoneyData.computeIfAbsent(name, s -> jsonObject);
     }
 
     public Map<String, JsonObject> getRawBees() {
@@ -190,30 +157,6 @@ public class BeeRegistry implements IBeeRegistry {
      */
     public Set<CustomBeeData> getSetOfBees() {
         return Collections.unmodifiableSet(new HashSet<>(beeData.values()));
-    }
-
-    /**
-     * Returns an unmodifiable copy of the Honey Registry.
-     * This is useful for iterating over all honey without worry of changing data
-     *
-     * @return Returns unmodifiable copy of honey registry.
-     */
-    public Map<String, HoneyBottleData> getHoneyBottles() {
-        return Collections.unmodifiableMap(honeyInfo);
-    }
-
-    /**
-     * Registers the supplied Honey Type and associated data to the mod.
-     * If the bee already exists in the registry the method will return false.
-     *
-     * @param honeyType Honey Type of the honey being registered.
-     * @param honeyData HoneyData of the honey being registered
-     * @return Returns false if bee already exists in the registry.
-     */
-    @SuppressWarnings("UnusedReturnValue")
-    public boolean registerHoney(String honeyType, HoneyBottleData honeyData) {
-        honeyInfo.putIfAbsent(honeyType, honeyData);
-        return true;
     }
 
     public float getBreedChance(String parent1, String parent2, BreedData childData) {
@@ -270,7 +213,16 @@ public class BeeRegistry implements IBeeRegistry {
         return mutations;
     }
 
-    public Map<String, JsonObject> getRawHoney() {
-        return rawHoneyData;
+    private static void buildFamilyTree(CustomBeeData bee) {
+        if (bee.getBreedData().hasParents()) {
+            Iterator<String> parent1 = bee.getBreedData().getParent1().iterator();
+            Iterator<String> parent2 = bee.getBreedData().getParent2().iterator();
+
+            while (parent1.hasNext() && parent2.hasNext()) {
+                getRegistry().familyTree.computeIfAbsent(BeeInfoUtils.sortParents(parent1.next(), parent2.next()), k -> new RandomCollection<>()).add(bee.getBreedData().getBreedWeight(), bee);
+            }
+        }
+
+        getRegistry().familyTree.computeIfAbsent(Pair.of(bee.getCoreData().getName(), bee.getCoreData().getName()), k -> new RandomCollection<>()).add(bee.getBreedData().getBreedWeight(), bee);
     }
 }

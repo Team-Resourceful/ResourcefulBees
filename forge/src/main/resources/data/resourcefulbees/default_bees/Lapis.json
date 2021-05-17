@@ -13,7 +13,8 @@
     "layers": [{"texture": "ores/lapis/lapis_bee"}],
     "ColorData": {
       "spawnEggPrimaryColor": "#345ec3",
-      "spawnEggSecondaryColor": "#303030"
+      "spawnEggSecondaryColor": "#303030",
+      "jarColor": "#345ec3"
     },
     "modelType": "ORE"
   },
@@ -22,10 +23,10 @@
     "mutations" : [
       {
         "type": "BLOCK",
-        "inputID": "minecraft:stone",
+        "input": "minecraft:stone",
         "outputs": [
-          {"outputID": "minecraft:lapis_ore", "weight": 10},
-          {"outputID": "minecraft:cobblestone", "weight": 10}
+          {"output": "minecraft:lapis_ore", "weight": 10},
+          {"output": "minecraft:cobblestone", "weight": 10}
         ]
       }
     ]
@@ -33,16 +34,13 @@
   "CentrifugeData": {
     "hasCentrifugeOutput": true,
     "itemOutputs": [
-      {"id": "minecraft:lapis_lazuli", "count": 8}
+      {"item": {"id": "minecraft:lapis_lazuli", "count": 8}}
     ]
   },
   "SpawnData": {
-    "canSpawnInWorld": true,
-    "biomeWhitelist": "tag:OVERWORLD",
-    "biomeBlacklist": "tag:ocean"
+    "canSpawnInWorld": true
   },
   "BreedData": {
     "isBreedable": true
-  },
-  "TraitData": {}
+  }
 }

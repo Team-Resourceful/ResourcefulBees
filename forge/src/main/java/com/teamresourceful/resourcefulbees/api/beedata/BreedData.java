@@ -12,13 +12,14 @@ import java.util.stream.Collectors;
 
 public class BreedData {
 
-    //Consider modifying this class such that parents are two arrays of strings and feedReturnItem is an Optional
-    //
+    // TODO
+    //  Consider modifying this class such that parents is a single list of "Breed Pair" Objects
+    //  Change chance to be a double instead of a float to remain consistent with other usages
 
     public static final Codec<BreedData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.BOOL.fieldOf("isBreedable").orElse(false).forGetter(BreedData::isBreedable),
-            Codec.DOUBLE.fieldOf("breedWeight").orElse(BeeConstants.DEFAULT_BREED_WEIGHT).forGetter(BreedData::getBreedWeight),
-            Codec.FLOAT.fieldOf("breedChance").orElse(BeeConstants.DEFAULT_BREED_CHANCE).forGetter(BreedData::getBreedChance),
+            Codec.doubleRange(0.0d, Double.MAX_VALUE).fieldOf("weight").orElse(BeeConstants.DEFAULT_BREED_WEIGHT).forGetter(BreedData::getBreedWeight),
+            Codec.floatRange(0.0f, 1.0f).fieldOf("chance").orElse(BeeConstants.DEFAULT_BREED_CHANCE).forGetter(BreedData::getBreedChance),
             Codec.STRING.listOf().fieldOf("parent1").orElse(new ArrayList<>()).forGetter(BreedData::getParent1),
             Codec.STRING.listOf().fieldOf("parent2").orElse(new ArrayList<>()).forGetter(BreedData::getParent2),
             CodecUtils.ITEM_SET_CODEC.fieldOf("feedItem").orElse(new HashSet<>()).forGetter(BreedData::getFeedItems),

@@ -13,8 +13,8 @@ public class CentrifugeData {
 
     public static final Codec<CentrifugeData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.BOOL.fieldOf("hasCentrifugeOutput").orElse(false).forGetter(CentrifugeData::hasCentrifugeOutput),
-            Codec.INT.fieldOf("recipeTime").orElse(200).forGetter(CentrifugeData::getRecipeTime),
-            Codec.INT.fieldOf("inputCount").orElse(1).forGetter(CentrifugeData::getInputCount),
+            Codec.intRange(1, Integer.MAX_VALUE).fieldOf("recipeTime").orElse(200).forGetter(CentrifugeData::getRecipeTime),
+            Codec.intRange(1, Integer.MAX_VALUE).fieldOf("inputCount").orElse(1).forGetter(CentrifugeData::getInputCount),
             ItemOutput.CODEC.listOf().fieldOf("itemOutputs").orElse(new ArrayList<>()).forGetter(CentrifugeData::getItemOutputs),
             FluidOutput.CODEC.listOf().fieldOf("fluidOutputs").orElse(new ArrayList<>()).forGetter(CentrifugeData::getFluidOutputs)
     ).apply(instance, CentrifugeData::new));

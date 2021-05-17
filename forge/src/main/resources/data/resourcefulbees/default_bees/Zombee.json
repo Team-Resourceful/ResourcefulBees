@@ -1,9 +1,7 @@
 {
   "CoreData": {
     "flower": "minecraft:bee_growables",
-    "maxTimeInHive": 600,
-    "traits": ["zombie"],
-    "name": "zombee"
+    "maxTimeInHive": 600
   },
   "HoneycombData": {
     "type": "DEFAULT",
@@ -23,10 +21,10 @@
     "mutations" : [
       {
         "type": "BLOCK",
-        "inputID": "minecraft:stone",
+        "input": "minecraft:stone",
         "outputs": [
-          {"outputID": "minecraft:cobblestone", "weight": 10},
-          {"outputID": "minecraft:cobblestone", "weight": 30}
+          {"output": "minecraft:mossy_cobblestone", "weight": 10},
+          {"output": "minecraft:cobblestone", "weight": 30}
         ]
       }
     ]
@@ -34,19 +32,18 @@
   "CentrifugeData": {
     "hasCentrifugeOutput": true,
     "itemOutputs": [
-      {"id": "minecraft:rotten_flesh"}
+      {"item": {"id": "minecraft:rotten_flesh"}}
     ]
   },
   "SpawnData": {
     "canSpawnInWorld": true,
-    "biomeWhitelist": "tag:OVERWORLD",
-    "biomeBlacklist": "tag:ocean",
     "lightLevel": "NIGHT"
   },
   "BreedData": {
     "isBreedable": true
   },
   "TraitData": {
-    "hasTraits": true
+    "hasTraits": true,
+    "traits": ["zombie"]
   }
 }

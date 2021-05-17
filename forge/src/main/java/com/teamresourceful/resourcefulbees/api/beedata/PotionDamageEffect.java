@@ -9,8 +9,8 @@ import net.minecraft.world.effect.MobEffects;
 public class PotionDamageEffect {
 
     public static final Codec<PotionDamageEffect> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Registry.MOB_EFFECT.fieldOf("effectID").orElse(MobEffects.BAD_OMEN).forGetter(PotionDamageEffect::getEffect),
-            Codec.INT.fieldOf("strength").orElse(1).forGetter(PotionDamageEffect::getStrength)
+            Registry.MOB_EFFECT.fieldOf("effect").orElse(MobEffects.BAD_OMEN).forGetter(PotionDamageEffect::getEffect),
+            Codec.intRange(0, Integer.MAX_VALUE).fieldOf("strength").orElse(1).forGetter(PotionDamageEffect::getStrength)
     ).apply(instance, PotionDamageEffect::new));
 
     private final MobEffect effect;

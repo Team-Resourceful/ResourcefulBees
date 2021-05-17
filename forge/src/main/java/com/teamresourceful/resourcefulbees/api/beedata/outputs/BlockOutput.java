@@ -14,8 +14,8 @@ public class BlockOutput extends AbstractOutput{
     public static final Codec<BlockOutput> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Registry.BLOCK.fieldOf("block").orElse(Blocks.AIR).forGetter(BlockOutput::getBlock),
             CompoundTag.CODEC.optionalFieldOf("tag").forGetter(BlockOutput::getCompoundNBT),
-            Codec.DOUBLE.fieldOf("weight").orElse(1.0d).forGetter(BlockOutput::getWeight),
-            Codec.DOUBLE.fieldOf("chance").orElse(1.0d).forGetter(BlockOutput::getChance)
+            Codec.doubleRange(1.0d, Double.MAX_VALUE).fieldOf("weight").orElse(1.0d).forGetter(BlockOutput::getWeight),
+            Codec.doubleRange(0.0d, 1.0).fieldOf("chance").orElse(1.0d).forGetter(BlockOutput::getChance)
     ).apply(instance, BlockOutput::new));
 
     private final Block block;

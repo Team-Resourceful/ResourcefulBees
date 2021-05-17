@@ -2,17 +2,29 @@ package com.teamresourceful.resourcefulbees.api.beedata;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.teamresourceful.resourcefulbees.config.Config;
 import com.teamresourceful.resourcefulbees.lib.LightLevels;
+import com.teamresourceful.resourcefulbees.registry.BiomeDictionary;
+import net.minecraft.resources.ResourceLocation;
+import org.apache.commons.lang3.text.WordUtils;
+
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.StringJoiner;
 
 public class SpawnData {
+
+    private static final Set<ResourceLocation> DEFAULT_WHITELIST = Collections.singleton(new ResourceLocation("tag:overworld"));
+    private static final Set<ResourceLocation> DEFAULT_BLACKLIST = Collections.singleton(new ResourceLocation("tag:ocean"));
 
     public static final Codec<SpawnData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.BOOL.fieldOf("canSpawnInWorld").orElse(false).forGetter(SpawnData::canSpawnInWorld),
             Codec.intRange(0, Integer.MAX_VALUE).fieldOf("spawnWeight").orElse(8).forGetter(SpawnData::getSpawnWeight),
             Codec.intRange(0, Integer.MAX_VALUE).fieldOf("minGroupSize").orElse(0).forGetter(SpawnData::getMinGroupSize),
             Codec.intRange(0, Integer.MAX_VALUE).fieldOf("maxGroupSize").orElse(3).forGetter(SpawnData::getMaxGroupSize),
-            Codec.STRING.fieldOf("biomeWhitelist").orElse("tag:overworld").forGetter(SpawnData::getBiomeWhitelist),
-            Codec.STRING.fieldOf("biomeBlacklist").orElse("tag:ocean").forGetter(SpawnData::getBiomeBlacklist),
+            CodecUtils.createSetCodec(ResourceLocation.CODEC).fieldOf("biomeWhitelist").orElse(DEFAULT_WHITELIST).forGetter(SpawnData::getBiomeWhitelist),
+            CodecUtils.createSetCodec(ResourceLocation.CODEC).fieldOf("biomeBlacklist").orElse(DEFAULT_BLACKLIST).forGetter(SpawnData::getBiomeBlacklist),
             LightLevels.CODEC.fieldOf("lightLevel").orElse(LightLevels.ANY).forGetter(SpawnData::getLightLevel),
             Codec.intRange(-1, 256).fieldOf("minYLevel").orElse(-1).forGetter(SpawnData::getMinYLevel),
             Codec.intRange(-1, 256).fieldOf("maxYLevel").orElse(256).forGetter(SpawnData::getMaxYLevel)
@@ -42,12 +54,12 @@ public class SpawnData {
     /**
      * What biomes the bee can only spawn in.
      */
-    private final String biomeWhitelist;
+    private final Set<ResourceLocation> biomeWhitelist;
 
     /**
      * What biomes the bee will not spawn. No matter if the are in the whitelist.
      */
-    private final String biomeBlacklist;
+    private final Set<ResourceLocation> biomeBlacklist;
 
     /**
      * What LightLevel the Bee needs to spawn.
@@ -58,7 +70,9 @@ public class SpawnData {
 
     private final int maxYLevel;
 
-    public SpawnData(boolean canSpawnInWorld, int spawnWeight, int minGroupSize, int maxGroupSize, String biomeWhitelist, String biomeBlacklist, LightLevels lightLevel, int minYLevel, int maxYLevel) {
+    private final Set<ResourceLocation> spawnableBiomes = new HashSet<>();
+
+    private SpawnData(boolean canSpawnInWorld, int spawnWeight, int minGroupSize, int maxGroupSize, Set<ResourceLocation> biomeWhitelist, Set<ResourceLocation> biomeBlacklist, LightLevels lightLevel, int minYLevel, int maxYLevel) {
         this.canSpawnInWorld = canSpawnInWorld;
         this.spawnWeight = spawnWeight;
         this.minGroupSize = minGroupSize;
@@ -68,6 +82,7 @@ public class SpawnData {
         this.lightLevel = lightLevel;
         this.minYLevel = minYLevel;
         this.maxYLevel = maxYLevel;
+        if (!biomeWhitelist.isEmpty()) buildSpawnableBiomes();
     }
 
     public boolean canSpawnInWorld() { return canSpawnInWorld; }
@@ -78,9 +93,9 @@ public class SpawnData {
 
     public int getMaxGroupSize() { return maxGroupSize; }
 
-    public String getBiomeWhitelist() { return biomeWhitelist; }
+    public Set<ResourceLocation> getBiomeWhitelist() { return biomeWhitelist; }
 
-    public String getBiomeBlacklist() { return biomeBlacklist; }
+    public Set<ResourceLocation> getBiomeBlacklist() { return biomeBlacklist; }
 
     public LightLevels getLightLevel() { return lightLevel; }
 
@@ -88,7 +103,58 @@ public class SpawnData {
 
     public int getMaxYLevel() { return maxYLevel; }
 
+    public Set<ResourceLocation> getSpawnableBiomes() {
+        return spawnableBiomes;
+    }
+
+    public String getSpawnableBiomesAsString() {
+        StringJoiner returnList = new StringJoiner(", ");
+        spawnableBiomes.forEach(resourceLocation -> returnList.add(WordUtils.capitalize(resourceLocation.getPath().replace("_", " "))));
+        return returnList.toString();
+    }
+
     public static SpawnData createDefault() {
-        return new SpawnData(false, 0, 0, 0, "", "", LightLevels.ANY, 0, 0);
+        return new SpawnData(false, 0, 0, 0, Collections.emptySet(), Collections.emptySet(), LightLevels.ANY, 0, 0);
+    }
+
+    private void buildSpawnableBiomes() {
+        biomeWhitelist.stream()
+                .filter(resourceLocation -> resourceLocation.getNamespace().equals("tag"))
+                .forEach(this::addBiomesFromTag);
+        biomeWhitelist.stream()
+                .filter(resourceLocation -> !resourceLocation.getNamespace().equals("tag"))
+                .forEach(spawnableBiomes::add);
+        biomeBlacklist.stream()
+                .filter(resourceLocation -> resourceLocation.getNamespace().equals("tag"))
+                .forEach(this::removeBiomesFromTag);
+        biomeBlacklist.stream()
+                .filter(resourceLocation -> resourceLocation.getNamespace().equals("tag"))
+                .forEach(spawnableBiomes::remove);
+    }
+
+    private void addBiomesFromTag(ResourceLocation resourceLocation) {
+        if (Config.USE_FORGE_DICTIONARIES.get()) {
+            net.minecraftforge.common.BiomeDictionary.Type type = BiomeDictionary.getForgeType(resourceLocation);
+            if (type != null) {
+                spawnableBiomes.addAll(BiomeDictionary.getForgeBiomeLocations(type));
+            }
+        }  else {
+            if (BiomeDictionary.get().containsKey(resourceLocation.getPath())) {
+                spawnableBiomes.addAll(BiomeDictionary.get().get(resourceLocation.getPath()).getBiomes());
+            }
+        }
+    }
+
+    private void removeBiomesFromTag(ResourceLocation resourceLocation) {
+        if (Config.USE_FORGE_DICTIONARIES.get()) {
+            net.minecraftforge.common.BiomeDictionary.Type type = BiomeDictionary.getForgeType(resourceLocation);
+            if (type != null) {
+                spawnableBiomes.removeAll(BiomeDictionary.getForgeBiomeLocations(type));
+            }
+        }  else {
+            if (BiomeDictionary.get().containsKey(resourceLocation.getPath())) {
+                spawnableBiomes.removeAll(BiomeDictionary.get().get(resourceLocation.getPath()).getBiomes());
+            }
+        }
     }
 }

@@ -1,37 +1,39 @@
 {
   "CoreData":{
     "flower": "forge:mushrooms",
-    "traits": ["slimy"],
     "maxTimeInHive": 1200
-  },
-  "HoneycombData": {
-    "type": "NONE"
   },
   "RenderData": {
     "modelType": "GELATINOUS",
     "layers": [
       {"texture": "slime/slime_bee"}
-    ]
+    ],
+    "ColorData": {
+      "spawnEggPrimaryColor": "#62B64A",
+      "spawnEggSecondaryColor": "#303030",
+      "jarColor": "#62B64A"
+    }
   },
   "MutationData": {
     "hasMutation": true,
     "mutations" : [
       {
         "type": "BLOCK",
-        "inputID": "minecraft:honey_block",
+        "input": "minecraft:honey_block",
         "chance": 0.8,
         "outputs": [
-          {"outputID": "minecraft:slime_block", "weight": 10}
+          {"output": "minecraft:slime_block"}
         ]
       }
     ]
   },
   "BreedData": {
     "isBreedable": true,
-    "parent1": "rgbee",
-    "parent2": "zombie"
+    "parent1": ["rgbee"],
+    "parent2": ["zombie"]
   },
   "TraitData": {
-    "hasTraits": true
+    "hasTraits": true,
+    "traits": ["slimy"]
   }
 }

@@ -9,6 +9,7 @@ import com.teamresourceful.resourcefulbees.config.Config;
 import com.teamresourceful.resourcefulbees.lib.HoneycombTypes;
 import com.teamresourceful.resourcefulbees.recipe.CentrifugeRecipe;
 import com.teamresourceful.resourcefulbees.registry.BeeRegistry;
+import com.teamresourceful.resourcefulbees.registry.HoneyRegistry;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -57,7 +58,7 @@ public class RecipeBuilder implements ResourceManagerReloadListener {
         });
 
         if (Config.HONEY_BLOCK_RECIPES.get() && Config.HONEY_GENERATE_BLOCKS.get()) {
-            BEE_REGISTRY.getHoneyBottles().forEach((s, honeyData) -> {
+            HoneyRegistry.getRegistry().getHoneyBottles().forEach((s, honeyData) -> {
                 if (honeyData.doGenerateHoneyBlock() && honeyData.doHoneyBlockRecipe()) {
                     Recipe<?> honeyBlock = this.makeHoneyBlockRecipe(honeyData);
                     Recipe<?> honeyBottle = this.makeHoneyBottleRecipe(honeyData);

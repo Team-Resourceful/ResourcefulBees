@@ -6,7 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 public class DamageType {
     public static final Codec<DamageType> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.STRING.fieldOf("damageType").orElse("").forGetter(DamageType::getType),
-            Codec.INT.fieldOf("amplifier").orElse(0).forGetter(DamageType::getAmplifier)
+            Codec.intRange(0, Integer.MAX_VALUE).fieldOf("amplifier").orElse(0).forGetter(DamageType::getAmplifier)
     ).apply(instance, DamageType::new));
 
     private final String type;

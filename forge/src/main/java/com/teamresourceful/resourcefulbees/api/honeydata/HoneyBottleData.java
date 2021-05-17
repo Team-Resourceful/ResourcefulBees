@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.api.honeydata;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.registry.ItemGroupResourcefulBees;
+import com.teamresourceful.resourcefulbees.utils.color.Color;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
@@ -23,7 +24,7 @@ public class HoneyBottleData {
     public static final Codec<HoneyBottleData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.INT.fieldOf("hunger").orElse(1).forGetter(HoneyBottleData::getHunger),
             Codec.FLOAT.fieldOf("saturation").orElse(1.0f).forGetter(HoneyBottleData::getSaturation),
-            HoneyColor.CODEC.fieldOf("colorData").orElse(HoneyColor.DEFAULT).forGetter(HoneyBottleData::getColorData),
+            Color.CODEC.fieldOf("colorData").orElse(Color.DEFAULT).forGetter(HoneyBottleData::getColor),
             Codec.BOOL.fieldOf("generateHoneyBlock").orElse(true).forGetter(HoneyBottleData::doGenerateHoneyBlock),
             Codec.BOOL.fieldOf("generateBlockRecipe").orElse(true).forGetter(HoneyBottleData::doGenerateHoneyBlock),
             Codec.BOOL.fieldOf("generateHoneyFluid").orElse(true).forGetter(HoneyBottleData::doGenerateHoneyFluid),
@@ -36,16 +37,16 @@ public class HoneyBottleData {
     private String name;
     private final int hunger;
     private final float saturation;
-    private final HoneyColor colorData;
+    private final Color color;
     private final boolean generateHoneyBlock;
     private final boolean generateBlockRecipe;
     private final boolean generateHoneyFluid;
     private final List<HoneyEffect> honeyEffects;
 
-    public HoneyBottleData(int hunger, float saturation, HoneyColor colorData, boolean generateHoneyBlock, boolean generateBlockRecipe, boolean generateHoneyFluid, List<HoneyEffect> honeyEffects) {
+    public HoneyBottleData(int hunger, float saturation, Color color, boolean generateHoneyBlock, boolean generateBlockRecipe, boolean generateHoneyFluid, List<HoneyEffect> honeyEffects) {
         this.hunger = hunger;
         this.saturation = saturation;
-        this.colorData = colorData;
+        this.color = color;
         this.generateHoneyBlock = generateHoneyBlock;
         this.generateBlockRecipe = generateBlockRecipe;
         this.generateHoneyFluid = generateHoneyFluid;
@@ -96,8 +97,8 @@ public class HoneyBottleData {
         return name;
     }
 
-    public HoneyColor getColorData() {
-        return colorData;
+    public Color getColor() {
+        return color;
     }
 
     public int getHunger() {

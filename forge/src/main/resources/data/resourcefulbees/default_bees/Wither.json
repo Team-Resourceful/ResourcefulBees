@@ -1,8 +1,7 @@
 {
   "CoreData": {
     "flower": ["minecraft:wither_rose"],
-    "maxTimeInHive": 600,
-    "traits": ["nether", "wither"]
+    "maxTimeInHive": 600
   },
   "HoneycombData": {
     "type": "DEFAULT",
@@ -45,6 +44,7 @@
     "feedAmount": 12
   },
   "TraitData": {
-    "hasTraits": true
+    "hasTraits": true,
+    "traits": ["nether", "wither"]
   }
 }

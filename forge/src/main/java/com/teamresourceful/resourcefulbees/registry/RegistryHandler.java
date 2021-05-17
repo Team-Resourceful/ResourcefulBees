@@ -17,23 +17,26 @@ import com.teamresourceful.resourcefulbees.item.BeeSpawnEggItem;
 import com.teamresourceful.resourcefulbees.item.CustomHoneyBottleItem;
 import com.teamresourceful.resourcefulbees.item.CustomHoneyBucketItem;
 import com.teamresourceful.resourcefulbees.item.HoneycombItem;
+import com.teamresourceful.resourcefulbees.item.dispenser.ScraperDispenserBehavior;
+import com.teamresourceful.resourcefulbees.item.dispenser.ShearsDispenserBehavior;
 import com.teamresourceful.resourcefulbees.lib.HoneycombTypes;
+import com.teamresourceful.resourcefulbees.mixin.DispenserBlockInvoker;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Material;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -80,7 +83,7 @@ public class RegistryHandler {
     }
 
     public static void registerDynamicHoney() {
-        BeeRegistry.getRegistry().getRawHoney().forEach(RegistryHandler::registerHoneyBottle);
+        HoneyRegistry.getRegistry().getRawHoney().forEach(RegistryHandler::registerHoneyBottle);
     }
 
     private static final Map<String, RegistryObject<FlowingFluid>> stillFluids = new HashMap<>();
@@ -148,14 +151,12 @@ public class RegistryHandler {
             honeyBottleData.setHoneyBucketItemRegistryObject(honeyBuckets.get(name));
             honeyBottleData.setHoneyFluidBlockRegistryObject(fluidBlocks.get(name));
         }
-        BeeRegistry.getRegistry().registerHoney(name, honeyBottleData);
+        HoneyRegistry.getRegistry().registerHoney(name, honeyBottleData);
     }
 
-
-    @SubscribeEvent
-    public void onRegisterBlocks(RegistryEvent.Register<Block> event) {
-        //Exists to disallow further bee registrations
-        //preventing potential for NPE's
-        BeeRegistry.getRegistry().denyRegistration();
+    public static void registerDispenserBehaviors() {
+        ShearsDispenserBehavior.setDefaultShearsDispenseBehavior(((DispenserBlockInvoker) Blocks.DISPENSER).invokeGetBehavior(new ItemStack(Items.SHEARS)));
+        DispenserBlock.registerBehavior(Items.SHEARS.asItem(), new ShearsDispenserBehavior());
+        DispenserBlock.registerBehavior(ModItems.SCRAPER.get().asItem(), new ScraperDispenserBehavior());
     }
 }

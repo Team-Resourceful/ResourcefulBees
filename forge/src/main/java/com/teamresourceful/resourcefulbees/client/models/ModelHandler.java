@@ -7,6 +7,7 @@ import com.teamresourceful.resourcefulbees.api.honeydata.HoneyBottleData;
 import com.teamresourceful.resourcefulbees.lib.HoneycombTypes;
 import com.teamresourceful.resourcefulbees.lib.ModConstants;
 import com.teamresourceful.resourcefulbees.registry.BeeRegistry;
+import com.teamresourceful.resourcefulbees.registry.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.utils.BeeInfoUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
@@ -162,7 +163,7 @@ public class ModelHandler {
             registerBeeSpawnEgg(s, resourceManager);
         });
 
-        BeeRegistry.getRegistry().getHoneyBottles().forEach((string, honeyData) -> {
+        HoneyRegistry.getRegistry().getHoneyBottles().forEach((string, honeyData) -> {
             registerHoneyFluid(honeyData);
 
             registerHoneyBottleItem(honeyData, resourceManager);

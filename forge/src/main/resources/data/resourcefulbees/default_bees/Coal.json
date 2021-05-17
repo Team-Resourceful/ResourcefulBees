@@ -1,8 +1,6 @@
 {
   "CoreData": {
-    "flower": [
-      "minecraft:coal_block"
-    ],
+    "flower": ["minecraft:coal_block"],
     "maxTimeInHive": 600
   },
   "HoneycombData": {
@@ -15,8 +13,9 @@
     "layers": [{ "texture": "ores/coal/coal_bee"}],
     "modelType": "ORE",
     "ColorData": {
-      "spawnEggPrimaryColor": "#303030",
-      "spawnEggSecondaryColor": "#303030"
+      "spawnEggPrimaryColor": "#101010",
+      "spawnEggSecondaryColor": "#303030",
+      "jarColor": "#303030"
     }
   },
   "MutationData": {
@@ -27,7 +26,9 @@
         "input": "minecraft:stone",
         "chance": 0.75,
         "outputs": [
-          {"outputID": "minecraft:coal_ore"}
+          {
+            "output": "minecraft:coal_ore"
+          }
         ]
       }
     ]
@@ -35,16 +36,14 @@
   "CentrifugeData": {
     "hasCentrifugeOutput": true,
     "itemOutputs": [
-      {"item":{"id": "minecraft:coal", "Count": 16}}
+      {"item":{"id": "minecraft:coal", "count": 16}}
     ]
   },
   "SpawnData": {
-    "canSpawnInWorld": true,
-    "biomeWhitelist": "tag:overworld",
-    "biomeBlacklist": "tag:ocean"
+    "canSpawnInWorld": true
   },
   "BreedData": {
-    "feedItem": "minecraft:poppy",
+    "feedItem": ["minecraft:poppy"],
     "feedAmount": 4,
     "isBreedable": true
   }

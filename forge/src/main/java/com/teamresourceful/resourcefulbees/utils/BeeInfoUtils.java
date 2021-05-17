@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.utils;
 
-import com.google.common.base.Splitter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
@@ -10,12 +9,10 @@ import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.ICustomBee;
 import com.teamresourceful.resourcefulbees.api.beedata.BreedData;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
-import com.teamresourceful.resourcefulbees.config.Config;
 import com.teamresourceful.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.fluids.HoneyFlowingFluid;
 import com.teamresourceful.resourcefulbees.item.BeeJar;
 import com.teamresourceful.resourcefulbees.item.CustomHoneyBottleItem;
-import com.teamresourceful.resourcefulbees.lib.BeeConstants;
 import com.teamresourceful.resourcefulbees.lib.LightLevels;
 import com.teamresourceful.resourcefulbees.lib.ModConstants;
 import com.teamresourceful.resourcefulbees.lib.NBTConstants;
@@ -48,7 +45,6 @@ import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
@@ -68,72 +64,8 @@ public class BeeInfoUtils {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
 
-    public static void buildFamilyTree(CustomBeeData bee) {
-        if (bee.getBreedData().hasParents()) {
-            Iterator<String> parent1 = bee.getBreedData().getParent1().iterator();
-            Iterator<String> parent2 = bee.getBreedData().getParent2().iterator();
-
-            while (parent1.hasNext() && parent2.hasNext()) {
-                String p1 = parent1.next();
-                String p2 = parent2.next();
-                BeeRegistry.getRegistry().familyTree.computeIfAbsent(sortParents(p1, p2), k -> new RandomCollection<>()).add(bee.getBreedData().getBreedWeight(), bee);
-            }
-        }
-
-        BeeRegistry.getRegistry().familyTree.computeIfAbsent(Pair.of(bee.getCoreData().getName(), bee.getCoreData().getName()), k -> new RandomCollection<>()).add(bee.getBreedData().getBreedWeight(), bee);
-    }
-
     public static Pair<String, String> sortParents(String parent1, String parent2) {
         return parent1.compareTo(parent2) > 0 ? Pair.of(parent1, parent2) : Pair.of(parent2, parent1);
-    }
-
-    public static void parseBiomes(CustomBeeData bee) {
-        if (!bee.getSpawnData().getBiomeWhitelist().isEmpty()) {
-            Set<ResourceLocation> whitelist = new HashSet<>(getBiomeSet(bee.getSpawnData().getBiomeWhitelist()));
-            Set<ResourceLocation> blacklist = new HashSet<>();
-            if (!bee.getSpawnData().getBiomeBlacklist().isEmpty())
-                blacklist = getBiomeSet(bee.getSpawnData().getBiomeBlacklist());
-            updateSpawnableBiomes(whitelist, blacklist, bee);
-        }
-    }
-
-    private static Set<ResourceLocation> getBiomeSet(String list) {
-        Set<ResourceLocation> set = new HashSet<>();
-        if (list.contains(BeeConstants.TAG_PREFIX))
-            set.addAll(parseBiomeListFromTag(list));
-        else
-            set.addAll(parseBiomeList(list));
-        return set;
-    }
-
-    private static Set<ResourceLocation> parseBiomeListFromTag(String list) {
-        Set<ResourceLocation> biomeSet = new HashSet<>();
-        if (Config.USE_FORGE_DICTIONARIES.get()) {
-            Splitter.on(",").trimResults().split(list.replace(BeeConstants.TAG_PREFIX, ""))
-                    .forEach(s -> BiomeDictionary.getBiomes(BiomeDictionary.Type.getType(s))
-                            .forEach(biomeRegistryKey -> biomeSet.add(biomeRegistryKey.location())));
-        } else {
-            Splitter.on(",").trimResults().split(list.replace(BeeConstants.TAG_PREFIX, "")).forEach(s -> {
-                if (com.teamresourceful.resourcefulbees.registry.BiomeDictionary.getTypes().containsKey(s)) {
-                    biomeSet.addAll(com.teamresourceful.resourcefulbees.registry.BiomeDictionary.getTypes().get(s));
-                }
-            });
-        }
-
-        return biomeSet;
-    }
-
-    private static Set<ResourceLocation> parseBiomeList(String list) {
-        Set<ResourceLocation> biomeSet = new HashSet<>();
-        Splitter.on(',').trimResults().split(list).forEach(s -> biomeSet.add(new ResourceLocation(s)));
-
-        return biomeSet;
-    }
-
-    private static void updateSpawnableBiomes(Set<ResourceLocation> whitelist, Set<ResourceLocation> blacklist, CustomBeeData bee) {
-        whitelist.stream()
-                .filter(resourceLocation -> !blacklist.contains(resourceLocation))
-                .forEach(resourceLocation -> BeeRegistry.getSpawnableBiomes().computeIfAbsent(resourceLocation, k -> new RandomCollection<>()).add(bee.getSpawnData().getSpawnWeight(), bee));
     }
 
     /**

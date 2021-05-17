@@ -16,14 +16,14 @@ public class TraitData extends BeeTrait {
     public static Codec<TraitData> codec(String name) {
         return RecordCodecBuilder.create(instance -> instance.group(
                 Codec.BOOL.fieldOf("hasTraits").orElse(false).forGetter(TraitData::hasTraits),
-                Codec.STRING.fieldOf("name").orElse(name).forGetter(BeeTrait::getName),
+                Codec.STRING.fieldOf("name").orElse(name).forGetter(TraitData::getName),
                 CodecUtils.createSetCodec(Codec.STRING).fieldOf("traits").orElse(new HashSet<>()).forGetter(TraitData::getTraits),
                 CodecUtils.createSetCodec(PotionDamageEffect.CODEC).fieldOf("potionDamageEffects").orElse(new HashSet<>()).forGetter(TraitData::getPotionDamageEffects),
                 CodecUtils.createSetCodec(Codec.STRING).fieldOf("damageImmunities").orElse(new HashSet<>()).forGetter(TraitData::getDamageImmunities),
                 CodecUtils.createSetCodec(Registry.MOB_EFFECT).fieldOf("potionImmunities").orElse(new HashSet<>()).forGetter(TraitData::getPotionImmunities),
                 CodecUtils.createSetCodec(DamageType.CODEC).fieldOf("damageTypes").orElse(new HashSet<>()).forGetter(TraitData::getDamageTypes),
                 CodecUtils.createSetCodec(Codec.STRING).fieldOf("specialAbilities").orElse(new HashSet<>()).forGetter(TraitData::getSpecialAbilities),
-                CodecUtils.createSetCodec(Registry.PARTICLE_TYPE).fieldOf("particleType").forGetter(TraitData::getParticleEffects)
+                CodecUtils.createSetCodec(Registry.PARTICLE_TYPE).fieldOf("particles").forGetter(TraitData::getParticleEffects)
         ).apply(instance, TraitData::new));
     }
 

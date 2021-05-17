@@ -41,7 +41,7 @@ public class CodecUtils {
 
     //Codec for getting an ItemStack
     public static final Codec<ItemStack> ITEM_STACK_CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Registry.ITEM.fieldOf("item").forGetter(ItemStack::getItem),
+            Registry.ITEM.fieldOf("id").forGetter(ItemStack::getItem),
             Codec.INT.fieldOf("count").orElse(1).forGetter(ItemStack::getCount),
             CompoundTag.CODEC.optionalFieldOf("tag").forGetter(o -> Optional.ofNullable(o.getTag()))
     ).apply(instance, CodecUtils::createItemStack));

@@ -6,8 +6,8 @@
   "HoneycombData": {
     "type": "DEFAULT",
     "color": "rainbow",
-    "honeycomb": "resourcefulbees:rgbee_honeycomb",
-    "honeycombBlock": "resourcefulbees:rgbee_honeycomb_block"
+    "item": "resourcefulbees:rgbee_honeycomb",
+    "block": "resourcefulbees:rgbee_honeycomb_block"
   },
   "RenderData": {
     "layers": [
@@ -16,24 +16,22 @@
     ],
     "ColorData": {
       "spawnEggPrimaryColor": "rainbow",
-      "spawnEggSecondaryColor": "#303030"
+      "spawnEggSecondaryColor": "#303030",
+      "jarColor": "rainbow"
     }
   },
   "CentrifugeData": {
     "hasCentrifugeOutput": true,
     "itemOutputs": [
-      {"id": "minecraft:red_dye"},
-      {"id": "minecraft:green_dye"},
-      {"id": "resourcefulbees:rainbow_honey_bottle", "weight": 0.02}
+      {"item": {"id": "minecraft:red_dye"}},
+      {"item": {"id": "minecraft:green_dye"}},
+      {"item": {"id": "resourcefulbees:rainbow_honey_bottle", "weight": 0.02}}
     ]
   },
   "SpawnData": {
-    "canSpawnInWorld": true,
-    "biomeWhitelist": "TAG:OVerWorld",
-    "biomeBlacklist": "tag:ocean"
+    "canSpawnInWorld": true
   },
   "BreedData": {
     "isBreedable": true
-  },
-  "TraitData": {}
+  }
 }

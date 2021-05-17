@@ -64,7 +64,7 @@ public class ResourcefulBees {
 
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> IncompatibleModWarning::init);
 
-        BiomeDictionarySetup.buildDictionary();
+        BiomeDictionary.build();
         BeeSetup.setupBees();
         RegistryHandler.registerDynamicBees();
         RegistryHandler.registerDynamicHoney();
@@ -136,7 +136,7 @@ public class ResourcefulBees {
     @SubscribeEvent(priority = EventPriority.LOW)
     public void setup(final FMLCommonSetupEvent event) {
         BeeInfoUtils.makeValidApiaryTag();
-        event.enqueueWork(ModSetup::registerDispenserBehaviors);
+        event.enqueueWork(RegistryHandler::registerDispenserBehaviors);
         NetPacketHandler.init();
         MinecraftForge.EVENT_BUS.register(new RecipeBuilder());
         ModFeatures.ConfiguredFeatures.registerConfiguredFeatures();
@@ -153,7 +153,6 @@ public class ResourcefulBees {
         TraitRegistry.registerDefaultTraits();
         TraitSetup.buildCustomTraits();
         TraitRegistry.setTraitRegistryClosed();
-        //TraitRegistry.applyBeeTraits();
         BeeSetup.registerBeePlacements();
         BeeSpawnEggItem.initSpawnEggs();
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> DataGen::generateClientData);

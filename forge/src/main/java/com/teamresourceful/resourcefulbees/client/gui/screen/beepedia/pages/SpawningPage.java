@@ -3,7 +3,6 @@ package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
-import com.teamresourceful.resourcefulbees.compat.jei.BiomeParser;
 import com.teamresourceful.resourcefulbees.utils.BeeInfoUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -15,6 +14,7 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SpawningPage extends BeeDataPage {
@@ -36,7 +36,7 @@ public class SpawningPage extends BeeDataPage {
         beepedia.addButton(prevTab);
         nextTab.visible = false;
         prevTab.visible = false;
-        biomeList = BiomeParser.getBiomes(beeData);
+        biomeList = new ArrayList<>(beeData.getSpawnData().getSpawnableBiomes());
         scrollHeight = biomeList.size() * 12;
     }
 

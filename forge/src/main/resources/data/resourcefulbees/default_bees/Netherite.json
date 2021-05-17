@@ -1,8 +1,7 @@
 {
   "CoreData": {
     "flower": "forge:storage_blocks/netherite",
-    "maxTimeInHive": 600,
-    "traits": ["nether", "wither"]
+    "maxTimeInHive": 600
   },
   "HoneycombData": {
     "type": "DEFAULT",
@@ -14,7 +13,8 @@
     "layers": [{"texture": "ores/netherite/netherite_bee"}],
     "ColorData": {
       "spawnEggPrimaryColor": "#654740",
-      "spawnEggSecondaryColor": "#303030"
+      "spawnEggSecondaryColor": "#303030",
+      "jarColor": "#654740"
     }
   },
   "MutationData": {
@@ -22,10 +22,10 @@
     "mutations" : [
       {
         "type": "BLOCK",
-        "inputID": "minecraft:blackstone",
+        "input": "minecraft:blackstone",
         "outputs": [
-          {"outputID": "minecraft:gilded_blackstone", "weight": 10},
-          {"outputID": "minecraft:netherrack", "weight": 10}
+          {"output": "minecraft:gilded_blackstone", "weight": 10},
+          {"output": "minecraft:netherrack", "weight": 10}
         ]
       }
     ]
@@ -33,20 +33,21 @@
   "CentrifugeData": {
     "hasCentrifugeOutput": true,
     "itemOutputs": [
-      {"id": "minecraft:netherite_ingot", "weight": 0.05}
+      {"item": {"id": "minecraft:netherite_ingot"}}
     ]
   },
   "SpawnData": {
     "canSpawnInWorld": true,
-    "biomeWhitelist": "tag:nether",
+    "biomeWhitelist": ["tag:nether"],
     "lightLevel": "NIGHT"
   },
   "BreedData": {
     "isBreedable": true,
-    "parent1": "Wither",
-    "parent2": "Diamond"
+    "parent1": ["Wither"],
+    "parent2": ["Diamond"]
   },
   "TraitData": {
-    "hasTraits": true
+    "hasTraits": true,
+    "traits": ["nether", "wither"]
   }
 }

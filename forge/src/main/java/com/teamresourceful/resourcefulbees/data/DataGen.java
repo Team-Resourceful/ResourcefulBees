@@ -9,6 +9,7 @@ import com.teamresourceful.resourcefulbees.init.BeeSetup;
 import com.teamresourceful.resourcefulbees.lib.HoneycombTypes;
 import com.teamresourceful.resourcefulbees.lib.ModConstants;
 import com.teamresourceful.resourcefulbees.registry.BeeRegistry;
+import com.teamresourceful.resourcefulbees.registry.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.registry.ModEntities;
 import com.teamresourceful.resourcefulbees.registry.TraitRegistry;
 import net.minecraft.resources.ResourceLocation;
@@ -98,7 +99,7 @@ public class DataGen {
             generateLangEntry(builder, "entity.resourcefulbees.", name, "_bee", displayName, "Bee");
 
         }));
-        BEE_REGISTRY.getHoneyBottles().forEach((name, honeyData) -> {
+        HoneyRegistry.getRegistry().getHoneyBottles().forEach((name, honeyData) -> {
             String displayName = StringUtils.replace(name, "_", " ");
             displayName = WordUtils.capitalizeFully(displayName);
 
@@ -176,21 +177,21 @@ public class DataGen {
 
     private static void generateHoneyBottleTags() {
         TAGS.put(new ResourceLocation("forge", "tags/items/honey_bottle.json"),
-                BEE_REGISTRY.getHoneyBottles().values().stream()
+                HoneyRegistry.getRegistry().getHoneyBottles().values().stream()
                         .filter(HoneyBottleData::doGenerateHoneyBlock)
                         .map(honey -> honey.getHoneyBottleRegistryObject().getId()).collect(Collectors.toSet()));
     }
 
     private static void generateHoneyBlockTags() {
         TAGS.put(new ResourceLocation(ResourcefulBees.MOD_ID, "tags/blocks/resourceful_honey_block.json"),
-                BEE_REGISTRY.getHoneyBottles().values().stream()
+                HoneyRegistry.getRegistry().getHoneyBottles().values().stream()
                         .filter(HoneyBottleData::doGenerateHoneyBlock)
                         .map(honey -> honey.getHoneyBlockRegistryObject().getId()).collect(Collectors.toSet()));
     }
 
     private static void generateHoneyBlockItemTags() {
         TAGS.put(new ResourceLocation(ResourcefulBees.MOD_ID, "tags/items/resourceful_honey_block.json"),
-                BEE_REGISTRY.getHoneyBottles().values().stream()
+                HoneyRegistry.getRegistry().getHoneyBottles().values().stream()
                         .filter(HoneyBottleData::doGenerateHoneyBlock)
                         .map(honey -> honey.getHoneyBlockItemRegistryObject().getId()).collect(Collectors.toSet()));
     }
@@ -203,7 +204,7 @@ public class DataGen {
 
     private static void generateHoneyTags() {
         TAGS.put(new ResourceLocation("forge", "tags/fluids/honey.json"),
-                BEE_REGISTRY.getHoneyBottles().values().stream()
+                HoneyRegistry.getRegistry().getHoneyBottles().values().stream()
                         .filter(HoneyBottleData::doGenerateHoneyFluid)
                         .flatMap(hbd -> Stream.of(hbd.getHoneyFlowingFluidRegistryObject().getId(), hbd.getHoneyStillFluidRegistryObject().getId()))
                         .collect(Collectors.toSet()));

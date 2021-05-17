@@ -6,14 +6,15 @@
   "HoneycombData": {
     "type": "DEFAULT",
     "color": "#F6F2E6",
-    "honeycomb": "resourcefulbees:rgbee_honeycomb",
-    "honeycombBlock": "resourcefulbees:rgbee_honeycomb_block"
+    "item": "resourcefulbees:rgbee_honeycomb",
+    "block": "resourcefulbees:rgbee_honeycomb_block"
   },
   "RenderData": {
     "layers": [{"texture": "skeleton/skeleton_bee"}],
     "ColorData": {
       "spawnEggPrimaryColor": "#F6F2E6",
-      "spawnEggSecondaryColor": "#303030"
+      "spawnEggSecondaryColor": "#303030",
+      "jarColor": "#F6F2E6"
     }
   },
   "MutationData": {
@@ -21,9 +22,9 @@
     "mutations" : [
       {
         "type": "BLOCK",
-        "inputID": "minecraft:stone",
+        "input": "minecraft:stone",
         "outputs": [
-          {"outputID": "minecraft:gravel", "weight": 10}
+          {"output": "minecraft:gravel"}
         ]
       }
     ]
@@ -31,19 +32,16 @@
   "CentrifugeData": {
     "hasCentrifugeOutput": true,
     "itemOutputs": [
-      {"id": "minecraft:bone"}
+      {"item": {"id": "minecraft:bone"}}
     ]
   },
   "SpawnData": {
     "canSpawnInWorld": true,
-    "biomeWhitelist": "tag:OVERWORLD",
-    "biomeBlacklist": "tag:ocean",
     "lightLevel": "NIGHT"
   },
   "BreedData": {
     "isBreedable": true,
-    "feedItem": "small",
+    "feedItem": ["small"],
     "feedAmount": 8
-  },
-  "TraitData": {}
+  }
 }

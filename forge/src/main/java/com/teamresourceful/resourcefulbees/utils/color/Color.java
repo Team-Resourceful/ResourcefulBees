@@ -10,28 +10,27 @@ import net.minecraftforge.fml.DistExecutor;
 
 import java.util.*;
 
+@SuppressWarnings("unused")
 public class Color {
-    public static final Map<String, Color> colorsWithNames = new HashMap<>();
+    protected static final Map<String, Color> colorsWithNames = new HashMap<>();
 
     public static final Codec<Color> CODEC = Codec.PASSTHROUGH.comapFlatMap(Color::decodeColor, color -> new Dynamic<>(JsonOps.INSTANCE, new JsonPrimitive(color.value)));
-
     public static final Color DEFAULT = defaultColor();
-
     public static final Color RAINBOW;
 
     static {
-        RAINBOW = rainbowColor();
+        RAINBOW = createRainbowColor();
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> Color::initRainbow);
     }
 
     private int r;
     private int g;
     private int b;
-    private int a;
+    private final int a;
     private int value;
 
     private boolean defaultValue;
-    private boolean rainbow;
+    private boolean isRainbow;
 
     private float[] rgbaValue;
 
@@ -67,9 +66,9 @@ public class Color {
         return color;
     }
 
-    private static Color rainbowColor() {
+    private static Color createRainbowColor() {
         Color color = new Color(0xff0000);
-        color.rainbow = true;
+        color.isRainbow = true;
         colorsWithNames.put("rainbow", color);
         return color;
     }
@@ -145,7 +144,7 @@ public class Color {
 
     public boolean isDefault(){ return defaultValue; }
 
-    public boolean isRainbow(){ return rainbow; }
+    public boolean isRainbow(){ return isRainbow; }
 
     public float[] getRGBComponents(float[] compArray) {
         float[] f = compArray == null ? new float[4] : compArray;

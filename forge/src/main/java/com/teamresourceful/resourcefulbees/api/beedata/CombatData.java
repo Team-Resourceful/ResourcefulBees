@@ -7,13 +7,13 @@ public class CombatData {
 
     public static final Codec<CombatData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.BOOL.fieldOf("isPassive").orElse(false).forGetter(CombatData::isPassive),
-            Codec.DOUBLE.fieldOf("attackDamage").orElse(1.0d).forGetter(CombatData::getAttackDamage),
+            Codec.doubleRange(1, Double.MAX_VALUE).fieldOf("attackDamage").orElse(1.0d).forGetter(CombatData::getAttackDamage),
             Codec.BOOL.fieldOf("removeStingerOnAttack").orElse(true).forGetter(CombatData::removeStingerOnAttack),
             Codec.BOOL.fieldOf("inflictsPoison").orElse(true).forGetter(CombatData::inflictsPoison),
-            Codec.DOUBLE.fieldOf("baseHealth").orElse(10.0d).forGetter(CombatData::getBaseHealth),
-            Codec.DOUBLE.fieldOf("armor").orElse(0.0d).forGetter(CombatData::getArmor),
-            Codec.DOUBLE.fieldOf("armorToughness").orElse(0.0d).forGetter(CombatData::getArmorToughness),
-            Codec.DOUBLE.fieldOf("knockback").orElse(0.0d).forGetter(CombatData::getKnockback)
+            Codec.doubleRange(1, Double.MAX_VALUE).fieldOf("baseHealth").orElse(10.0d).forGetter(CombatData::getBaseHealth),
+            Codec.doubleRange(0, Double.MAX_VALUE).fieldOf("armor").orElse(0.0d).forGetter(CombatData::getArmor),
+            Codec.doubleRange(0, Double.MAX_VALUE).fieldOf("armorToughness").orElse(0.0d).forGetter(CombatData::getArmorToughness),
+            Codec.doubleRange(0, Double.MAX_VALUE).fieldOf("knockback").orElse(0.0d).forGetter(CombatData::getKnockback)
     ).apply(instance, CombatData::new));
 
     private final double baseHealth;

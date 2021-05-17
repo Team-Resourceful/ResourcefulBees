@@ -57,7 +57,7 @@ public class HoneyCongealer extends Block {
         }
         if (tank.getFluidTank().getFluid().getFluid() instanceof HoneyFlowingFluid) {
             HoneyFlowingFluid fluid = (HoneyFlowingFluid) tank.getFluidTank().getFluid().getFluid();
-            if (fluid.getHoneyData().getColorData().isRainbow()) {
+            if (fluid.getHoneyData().getColor().isRainbow()) {
                 world.sendBlockUpdated(pos, stateIn, stateIn, 2);
             }
         }

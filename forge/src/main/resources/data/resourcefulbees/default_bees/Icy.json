@@ -1,12 +1,7 @@
 {
   "CoreData": {
     "flower": ["minecraft:water"],
-    "traits": ["can_swim"],
-    "maxTimeInHive": 1200,
-    "sizeModifier": 0.75
-  },
-  "HoneycombData": {
-    "type": "NONE"
+    "maxTimeInHive": 1200
   },
   "RenderData": {
     "layers": [
@@ -16,33 +11,34 @@
     ],
     "ColorData": {
       "spawnEggPrimaryColor": "#92b9fe",
-      "spawnEggSecondaryColor": "#303030"
-    }
+      "spawnEggSecondaryColor": "#303030",
+      "jarColor": "#92b9fe"
+    },
+    "sizeModifier": 0.75
   },
   "MutationData": {
     "hasMutation": true,
     "mutations" : [
       {
         "type": "BLOCK",
-        "inputID": "minecraft:water",
+        "input": "minecraft:water",
         "chance": 0.65,
         "outputs": [
-          {"outputID": "minecraft:ice", "weight": 7},
-          {"outputID": "minecraft:packed_ice", "weight": 3}
+          {"output": "minecraft:ice", "weight": 7},
+          {"output": "minecraft:packed_ice", "weight": 3}
         ]
       }
     ]
   },
-  "CentrifugeData": {
-    "hasCentrifugeOutput": false
-  },
   "SpawnData": {
-    "canSpawnInWorld": false
+    "canSpawnInWorld": true,
+    "biomeWhitelist": ["tag:cold", "tag:snowy"]
   },
   "BreedData": {
     "isBreedable": true
   },
   "TraitData": {
-    "hasTraits": true
+    "hasTraits": true,
+    "traits": ["can_swim"]
   }
 }

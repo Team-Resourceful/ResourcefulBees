@@ -6,14 +6,15 @@
   "HoneycombData": {
     "type": "DEFAULT",
     "color": "#aa0f01",
-    "honeycomb": "resourcefulbees:redstone_honeycomb",
-    "honeycombBlock": "resourcefulbees:redstone_honeycomb_block"
+    "item": "resourcefulbees:redstone_honeycomb",
+    "block": "resourcefulbees:redstone_honeycomb_block"
   },
   "RenderData": {
     "layers": [{ "texture": "ores/redstone/redstone_bee"}],
     "ColorData": {
       "spawnEggPrimaryColor": "#aa0f01",
-      "spawnEggSecondaryColor": "#303030"
+      "spawnEggSecondaryColor": "#303030",
+      "jarColor": "#aa0f01"
     },
     "modelType": "ORE"
   },
@@ -22,10 +23,10 @@
     "mutations" : [
       {
         "type": "BLOCK",
-        "inputID": "minecraft:stone",
+        "input": "minecraft:stone",
         "outputs": [
-          {"outputID": "minecraft:redstone", "weight": 10},
-          {"outputID": "minecraft:cobblestone", "weight": 10}
+          {"output": "minecraft:redstone", "weight": 10},
+          {"output": "minecraft:cobblestone", "weight": 10}
         ]
       }
     ]
@@ -33,16 +34,13 @@
   "CentrifugeData": {
     "hasCentrifugeOutput": true,
     "itemOutputs": [
-      {"id": "minecraft:redstone", "count": 4}
+      {"item": {"id": "minecraft:redstone", "count": 4}}
     ]
   },
   "SpawnData": {
-    "canSpawnInWorld": true,
-    "biomeWhitelist": "tag:OVERWORLD",
-    "biomeBlacklist": "tag:ocean"
+    "canSpawnInWorld": true
   },
   "BreedData": {
     "isBreedable": true
-  },
-  "TraitData": {}
+  }
 }

@@ -1,30 +1,43 @@
 {
   "CoreData": {
     "flower": [ "minecraft:flowers" ],
-    "maxTimeInHive": 6000,
-    "sizeModifier": 1.25,
-    "traits": [ "oreo" ],
-    "apiaryOutputAmounts": [1,2,3,4]
+    "maxTimeInHive": 6000
   },
   "HoneycombData": {
     "type": "CUSTOM",
     "item": "resourcefulbees:oreo_cookie",
-    "block": "resourcefulbees:oreo_cookie"
+    "block": "resourcefulbees:oreo_cookie",
+    "apiaryOutputAmounts": [1,2,3,4]
   },
   "RenderData": {
     "layers": [{"texture": "/oreo/oreo_bee"}],
     "ColorData": {
       "spawnEggPrimaryColor": "#442920",
-      "spawnEggSecondaryColor": "#e1d9b8"
-    }
+      "spawnEggSecondaryColor": "#e1d9b8",
+      "jarColor": "#442920"
+    },
+    "sizeModifier": 1.25
   },
   "SpawnData": {
     "canSpawnInWorld": true,
-    "biomeWhitelist": "tag:rare",
-    "biomeBlacklist": "",
+    "biomeWhitelist": ["tag:rare"],
+    "biomeBlacklist": [""],
     "spawnWeight": 3,
     "minGroupSize": 1,
     "maxGroupSize": 1,
     "lightLevel": "DAY"
+  },
+  "TraitData": {
+    "hasTraits": true,
+    "traits": [ "oreo" ]
+  },
+  "CombatData": {
+    "removeStingerOnAttack": false,
+    "attackDamage": 0,
+    "inflictsPoison": false,
+    "baseHealth": 2,
+    "armor": 5.0,
+    "armorToughness": 10.0,
+    "knockback": 3.0
   }
 }

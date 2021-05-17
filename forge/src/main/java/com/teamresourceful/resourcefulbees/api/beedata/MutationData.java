@@ -21,7 +21,7 @@ public class MutationData {
 
     public static final Codec<MutationData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.BOOL.fieldOf("hasMutation").orElse(false).forGetter(MutationData::hasMutation),
-            Codec.INT.fieldOf("mutationCount").orElse(10).forGetter(MutationData::getMutationCount),
+            Codec.intRange(1, Integer.MAX_VALUE).fieldOf("mutationCount").orElse(10).forGetter(MutationData::getMutationCount),
             Mutation.CODEC.listOf().fieldOf("mutations").orElse(new ArrayList<>()).forGetter(mutationDataCodec -> mutationDataCodec.mutations)
     ).apply(instance, MutationData::new));
 

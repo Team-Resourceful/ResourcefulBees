@@ -2,7 +2,6 @@ package com.teamresourceful.resourcefulbees.api;
 
 import com.google.gson.JsonObject;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
-import com.teamresourceful.resourcefulbees.api.honeydata.HoneyBottleData;
 
 import java.util.Map;
 import java.util.Set;
@@ -85,14 +84,6 @@ public interface IBeeRegistry {
      *  @return Returns a set containing all registered CustomBeeData.
      */
     Set<CustomBeeData> getSetOfBees();
-
-    /**
-     * Returns an unmodifiable copy of the Honey Registry.
-     * This is useful for iterating over all honey without worry of changing data
-     *
-     *  @return Returns unmodifiable copy of honey registry.
-     */
-    Map<String, HoneyBottleData> getHoneyBottles();
 
     void cacheRawBeeData(String name, JsonObject beeData);
 

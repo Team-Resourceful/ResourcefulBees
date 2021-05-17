@@ -13,7 +13,8 @@
     "modelType": "ORE",
     "ColorData": {
       "spawnEggPrimaryColor": "#18eb09",
-      "spawnEggSecondaryColor": "#303030"
+      "spawnEggSecondaryColor": "#303030",
+      "jarColor": "#18eb09"
     }
   },
   "MutationData": {
@@ -21,10 +22,10 @@
     "mutations" : [
       {
         "type": "BLOCK",
-        "inputID": "minecraft:stone",
+        "input": "minecraft:stone",
         "chance": 0.75,
         "outputs": [
-          {"outputID": "minecraft:lava", "weight": 10}
+          {"output": "minecraft:lava"}
         ]
       }
     ]
@@ -32,16 +33,15 @@
   "CentrifugeData": {
     "hasCentrifugeOutput": true,
     "itemOutputs": [
-      {"id": "minecraft:emerald"}
+      {"item": {"id": "minecraft:emerald"}}
     ]
   },
   "SpawnData": {
     "canSpawnInWorld": true,
-    "biomeWhitelist": "TAG:Mountain,Hills"
+    "biomeWhitelist": ["tag:mountain","tag:hills"]
   },
   "BreedData": {
     "isBreedable": true,
     "spawnWeight": 4
-  },
-  "TraitData": {}
+  }
 }

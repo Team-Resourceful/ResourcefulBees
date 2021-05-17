@@ -9,6 +9,7 @@ import com.teamresourceful.resourcefulbees.config.Config;
 import com.teamresourceful.resourcefulbees.item.*;
 import com.teamresourceful.resourcefulbees.lib.HoneycombTypes;
 import com.teamresourceful.resourcefulbees.registry.BeeRegistry;
+import com.teamresourceful.resourcefulbees.registry.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.registry.ModItems;
 import com.teamresourceful.resourcefulbees.utils.BeeInfoUtils;
 import net.minecraft.client.color.block.BlockColor;
@@ -40,7 +41,7 @@ public final class ColorHandler {
                 registerItems(colors, BeeSpawnEggItem::getColor, BeeInfoUtils.getItem(ResourcefulBees.MOD_ID + ":" + s + "_bee_spawn_egg"));
             }
         }));
-        BEE_REGISTRY.getHoneyBottles().forEach((h, honeyData) -> {
+        HoneyRegistry.getRegistry().getHoneyBottles().forEach((h, honeyData) -> {
             registerItems(colors, CustomHoneyBottleItem::getColor, honeyData.getHoneyBottleRegistryObject().get());
             if (Config.HONEY_GENERATE_BLOCKS.get() && honeyData.doGenerateHoneyBlock()) {
                 registerItems(colors, ColoredHoneyBlock::getItemColor, honeyData.getHoneyBlockItemRegistryObject().get());
@@ -60,7 +61,7 @@ public final class ColorHandler {
                 registerBlocks(colors, HoneycombBlock::getBlockColor, BeeInfoUtils.getBlock(ResourcefulBees.MOD_ID + ":" + s + "_honeycomb_block"));
             }
         }));
-        BEE_REGISTRY.getHoneyBottles().forEach((h, honeyData) -> {
+        HoneyRegistry.getRegistry().getHoneyBottles().forEach((h, honeyData) -> {
             if (Config.HONEY_GENERATE_BLOCKS.get() && honeyData.doGenerateHoneyBlock()) {
                 registerBlocks(colors, ColoredHoneyBlock::getBlockColor, honeyData.getHoneyBlockRegistryObject().get());
             }

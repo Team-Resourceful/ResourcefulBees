@@ -1,0 +1,157 @@
+{
+  "CoreData": {
+    "name": "defaults to json file name",
+    "flower": ["can be a single tag or a list of blocks/fluid ex. minecraft:coal_block"],
+    "entityFlower": "alternatively the flower can be a single entity",
+    "maxTimeInHive": 2400
+  },
+  "HoneycombData": {
+    "honeycombType": "can be one of three options: NONE, DEFAULT, CUSTOM",
+    "color": "either a color name or a hex color, can also be named rainbow",
+    "item": "the id for the bees honeycomb, this is required even if it uses a default honeycomb",
+    "block": "the id for the bees honeycomb block, this is required even if it uses a default honeycomb",
+    "apiaryOutputAmounts": [1,2,3,4],
+    "apiaryOutputTypes": ["COMB","COMB","BLOCK","BLOCK"]
+  },
+  "RenderData": {
+    "layers": [
+      {
+        "color": "either a color name or a hex color, can also be named rainbow",
+        "texture": "path to texture, can have multiple layers up to 6",
+        "isGlowing": false,
+        "isEnchanted": false,
+        "pulseFrequency": 0
+      }
+    ],
+    "ColorData": {
+      "spawnEggPrimaryColor": "either a color name or a hex color, can also be named rainbow",
+      "spawnEggSecondaryColor": "either a color name or a hex color, can also be named rainbow",
+      "jarColor": "either a color name or a hex color, can also be named rainbow"
+    },
+    "modelType": "options available: DEFAULT, ORE, GELATINOUS, DRAGON, QUEEN, VILLAGER, MUSHROOM, CROP, ARMORED, GUARDIAN",
+    "baseModelType": "options available: DEFAULT, KITTEN",
+    "sizeModifier": 1.0
+  },
+  "MutationData": {
+    "hasMutation": true,
+    "mutationCount": 10,
+    "mutations" : [
+      {
+        "type": "options are NONE, ITEM, BLOCK, ENTITY",
+        "input": ["can be a single tag or a list of blocks/fluids ex. minecraft:coal_block"],
+        "entityInput": "alternatively the flower can be a single entity",
+        "tag" : "put nbt data for the input here",
+        "chance": 0.75,
+        "outputs": [
+          {
+            "output": "put the namespace:id for whatever the output is here - can have multiple outputs as specified by the {}",
+            "count": 1,
+            "weight": 1,
+            "tag" : "put nbt data for the output here"
+          }
+        ]
+      }
+    ]
+  },
+  "CentrifugeData": {
+    "hasCentrifugeOutput": true,
+    "recipeTime": 200,
+    "inputCount": 1,
+    "itemOutputs": [
+      {
+        "chance": 0.75,
+        "item": {
+          "id": "put the namespace:id for whatever the output is here - can have up to 3 item outputs as specified by the {}",
+          "count": 1,
+          "tag": "put nbt data for the output here"
+        }
+      }
+    ],
+    "fluidOutputs": [
+      {
+        "chance": 0.75,
+        "item": {
+          "id": "put the namespace:id for whatever the output is here - can have up to 3 fluid outputs as specified by the {}",
+          "amount": 1000,
+          "tag": "put nbt data for the output here"
+        }
+      }
+    ]
+  },
+  "SpawnData": {
+    "canSpawnInWorld": false,
+    "spawnWeight": 8,
+    "minGroupSize": 0,
+    "maxGroupSize": 3,
+    "lightLevel": "options available: DAY, NIGHT, ANY",
+    "minYLevel": 0,
+    "maxYLevel": 256,
+    "biomeWhitelist": [
+      "can be a mixed list",
+      "containing either biome ID's: minecraft:plains",
+      "or biome type tags as specified by the tag prefix:  tag:overworld"
+    ],
+    "biomeBlacklist": [
+      "can be a mixed list",
+      "containing either biome ID's: minecraft:plains",
+      "or biome type tags as specified by the tag prefix:  tag:overworld"
+    ]
+  },
+  "BreedData": {
+    "isBreedable": true,
+    "weight": 1,
+    "chance": 0.5,
+    "parent1": [
+      "a list of parents matching",
+      " up with the parents in parent2"
+    ],
+    "parent2": [
+      "a list of parents matching",
+      " up with the parents in parent1"
+    ],
+    "feedItem": ["can be a single tag'' or a list[] of blocks/fluids ex. minecraft:coal_block"],
+    "feedReturnItem": "the ID of the item returned to the player. this is good for stuff like fluid buckets",
+    "feedAmount": 1,
+    "childGrowthDelay": -24000,
+    "breedDelay": 6000
+  },
+  "CombatData": {
+    "isPassive": false,
+    "removeStingerOnAttack": true,
+    "attackDamage": 1,
+    "inflictsPoison": true,
+    "baseHealth": 10,
+    "armor": 0.0,
+    "armorToughness": 0.0,
+    "knockback": 0.0
+  },
+  "TraitData": {
+    "hasTraits": true,
+    "traits": [
+      "a list of traits to apply to the bee. options available are:",
+      "wither, blaze, can_swim, creeper, zombie, pigman, ender, nether, slimy, desert, flammable, teleport, setOnFire, explosive, angry, spider",
+      "you can also custom define trait data to a specific bee as seen below"
+    ],
+    "potionDamageEffects": [
+      {
+        "effect": "namespace:ID of the Mob Effect - can be a list of effects as indicated by the {}",
+        "strength": 1
+      }
+    ],
+    "potionImmunities": [
+      "namespace:ID of the Mob Effect - can be a list of effect ID's"
+    ],
+    "damageTypes": [
+      {
+        "damageType": "can be either 'setOnFire' or 'explosive' - can be list but really there's only two choices soo",
+        "amplifier": 1
+      }
+    ],
+    "specialAbilities": [
+      "a list of special abilities custom coded in the mod. options are: teleport, flammable, slimy, setOnFire, spider"
+    ],
+    "particles": [
+      "a list of ID's for any particle registered in the game including modded."
+    ]
+  }
+}

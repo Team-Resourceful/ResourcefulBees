@@ -1,31 +1,20 @@
 package com.teamresourceful.resourcefulbees.init;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.item.dispenser.ScraperDispenserBehavior;
-import com.teamresourceful.resourcefulbees.item.dispenser.ShearsDispenserBehavior;
-import com.teamresourceful.resourcefulbees.mixin.DispenserBlockInvoker;
-import com.teamresourceful.resourcefulbees.registry.ModItems;
+import com.teamresourceful.resourcefulbees.registry.BiomeDictionary;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.packs.FolderPackResources;
 import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackSource;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.loading.FMLPaths;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.function.BiConsumer;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
 import static com.teamresourceful.resourcefulbees.ResourcefulBees.LOGGER;
 
@@ -51,8 +40,8 @@ public class ModSetup {
         BeeSetup.setBeePath(rbBeesPath);
         BeeSetup.setResourcePath(rbAssetsPath);
         BeeSetup.setHoneyPath(rbHoneyPath);
-        BiomeDictionarySetup.setDictionaryPath(rbBiomePath);
-        TraitSetup.setDictionaryPath(rbTraitPath);
+        BiomeDictionary.setPath(rbBiomePath);
+        TraitSetup.setPath(rbTraitPath);
 
         try { Files.createDirectories(rbBeesPath);
         } catch (FileAlreadyExistsException ignored) { //ignored
@@ -81,15 +70,7 @@ public class ModSetup {
         } catch (IOException e) { LOGGER.error("Failed to create pack.mcmeta file for resource loading");}
     }
 
-    public static void registerDispenserBehaviors() {
-        ShearsDispenserBehavior.setDefaultShearsDispenseBehavior(((DispenserBlockInvoker) Blocks.DISPENSER).invokeGetBehavior(new ItemStack(Items.SHEARS)));
-
-        DispenserBlock.registerBehavior(Items.SHEARS.asItem(), new ShearsDispenserBehavior());
-
-        DispenserBlock.registerBehavior(ModItems.SCRAPER.get().asItem(), new ScraperDispenserBehavior());
-    }
-
-    public static void loadResources() {
+    private static void loadResources() {
         Minecraft.getInstance().getResourcePackRepository().addPackFinder((consumer, factory) -> {
             final Pack packInfo = Pack.create(
                     ResourcefulBees.MOD_ID,
@@ -112,22 +93,4 @@ public class ModSetup {
         });
     }
 
-    public static void parseType(File file, BiConsumer<Reader, String> consumer) throws IOException {
-        String name = file.getName();
-        name = name.substring(0, name.indexOf('.'));
-
-        Reader r = Files.newBufferedReader(file.toPath());
-
-        consumer.accept(r, name);
-    }
-
-    public static void parseType(ZipFile zf, ZipEntry zipEntry, BiConsumer<Reader, String> consumer) throws IOException {
-        String name = zipEntry.getName();
-        name = name.substring(name.lastIndexOf("/") + 1, name.indexOf('.'));
-
-        InputStream input = zf.getInputStream(zipEntry);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(input, StandardCharsets.UTF_8));
-
-        consumer.accept(reader, name);
-    }
 }
