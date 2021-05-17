@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.compat.jei;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.compat.jei.ingredients.EntityIngredient;
@@ -10,6 +11,7 @@ import com.teamresourceful.resourcefulbees.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.registry.ModItems;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IGuiIngredientGroup;
 import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
@@ -27,8 +29,12 @@ import java.util.List;
 
 public class HiveCategory extends BaseCategory<HiveCategory.Recipe> {
 
-    public static final ResourceLocation GUI_BACK = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/beehive.png");
+    public static final ResourceLocation HIVE_BACK = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/beehive.png");
+    public static final ResourceLocation APIARY_BACK = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/apiary.png");
     public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "hive");
+
+    private final IDrawable HIVE_BACKGROUND;
+    private final IDrawable APIARY_BACKGROUND;
 
     public static final List<ItemStack> NESTS = Arrays.asList(
             ModItems.OAK_BEE_NEST_ITEM.get().getDefaultInstance(),
@@ -54,9 +60,13 @@ public class HiveCategory extends BaseCategory<HiveCategory.Recipe> {
     public HiveCategory(IGuiHelper guiHelper) {
         super(guiHelper, ID,
                 I18n.get("gui.resourcefulbees.jei.category.hive"),
-                guiHelper.drawableBuilder(GUI_BACK, 0, 0, 160, 26).addPadding(0, 0, 0, 0).build(),
+                guiHelper.createBlankDrawable(160, 26),
                 guiHelper.createDrawableIngredient(new ItemStack(ModItems.OAK_BEE_NEST_ITEM.get())),
                 HiveCategory.Recipe.class);
+
+        HIVE_BACKGROUND = guiHelper.drawableBuilder(HIVE_BACK, 0, 0, 160, 26).addPadding(0, 0, 0, 0).build();
+        APIARY_BACKGROUND = guiHelper.drawableBuilder(APIARY_BACK, 0, 0, 160, 26).addPadding(0, 0, 0, 0).build();
+
     }
 
     public static List<Recipe> getHoneycombRecipes() {
@@ -80,7 +90,7 @@ public class HiveCategory extends BaseCategory<HiveCategory.Recipe> {
             List<Integer> customAmounts = customBeeData.getHoneycombData().getApiaryOutputAmounts();
 
             if (customBeeData.getHoneycombData().getHoneycombType() != HoneycombTypes.NONE) {
-                recipes.add(new Recipe(customBeeData.getHoneycombData().getHoneycomb().getDefaultInstance(), NESTS, customBeeData));
+                recipes.add(new Recipe(customBeeData.getHoneycombData().getHoneycomb().getDefaultInstance(), NESTS, customBeeData, false));
                 for (int i = 0; i < 4; i++){
                     Item outputItem = outputs.get(i).equals(ApiaryOutputs.COMB)
                             ? customBeeData.getHoneycombData().getHoneycomb()
@@ -90,7 +100,7 @@ public class HiveCategory extends BaseCategory<HiveCategory.Recipe> {
                     ItemStack outputStack = new ItemStack(outputItem, amount);
 
 
-                    recipes.add(new Recipe(outputStack, apiaryTiers[i].getDefaultInstance(), customBeeData));
+                    recipes.add(new Recipe(outputStack, apiaryTiers[i].getDefaultInstance(), customBeeData, true));
                 }
             }
 
@@ -118,19 +128,27 @@ public class HiveCategory extends BaseCategory<HiveCategory.Recipe> {
         ingredientStacks.set(0, ingredients.getInputs(JEICompat.ENTITY_INGREDIENT).get(0));
     }
 
+    @Override
+    public void draw(@NotNull Recipe recipe, @NotNull PoseStack matrixStack, double mouseX, double mouseY) {
+        if (recipe.isApiary) this.APIARY_BACKGROUND.draw(matrixStack);
+        else this.HIVE_BACKGROUND.draw(matrixStack);
+    }
+
     public static class Recipe {
         private final ItemStack comb;
         private final CustomBeeData beeType;
         private final List<ItemStack> hives;
+        private final boolean isApiary;
 
-        public Recipe(ItemStack comb, List<ItemStack> hives, CustomBeeData beeType) {
+        public Recipe(ItemStack comb, List<ItemStack> hives, CustomBeeData beeType, boolean isApiary) {
             this.comb = comb;
             this.beeType = beeType;
             this.hives = hives;
+            this.isApiary = isApiary;
         }
 
-        public Recipe(ItemStack comb, ItemStack hive, CustomBeeData beeType) {
-            this(comb,Collections.singletonList(hive), beeType);
+        public Recipe(ItemStack comb, ItemStack hive, CustomBeeData beeType, boolean isApiary) {
+            this(comb,Collections.singletonList(hive), beeType, isApiary);
         }
     }
 
