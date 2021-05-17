@@ -1,9 +1,7 @@
 {
   "hunger": 3,
   "saturation": 0.25,
-  "colorData" : {
-    "color" : "rainbow"
-  },
+  "color" : "rainbow",
   "honeyEffects": [
     {
       "effect": "minecraft:glowing",

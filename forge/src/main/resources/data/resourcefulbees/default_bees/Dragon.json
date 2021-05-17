@@ -28,7 +28,7 @@
     "mutations" : [
       {
         "type": "BLOCK",
-        "input": "minecraft:stone",
+        "input": ["minecraft:stone"],
         "chance": 0.5,
         "outputs": [
           {"output": "minecraft:end_stone"}

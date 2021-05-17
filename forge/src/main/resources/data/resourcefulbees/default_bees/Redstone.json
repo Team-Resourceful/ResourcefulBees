@@ -23,7 +23,7 @@
     "mutations" : [
       {
         "type": "BLOCK",
-        "input": "minecraft:stone",
+        "input": ["minecraft:stone"],
         "outputs": [
           {"output": "minecraft:redstone", "weight": 10},
           {"output": "minecraft:cobblestone", "weight": 10}

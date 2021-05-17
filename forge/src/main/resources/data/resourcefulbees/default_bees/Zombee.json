@@ -6,8 +6,8 @@
   "HoneycombData": {
     "type": "DEFAULT",
     "color": "#2F4E32",
-    "item": "resourcefulbees:zombie_honeycomb",
-    "block": "resourcefulbees:zombie_honeycomb_block"
+    "item": "resourcefulbees:zombee_honeycomb",
+    "block": "resourcefulbees:zombee_honeycomb_block"
   },
   "RenderData": {
     "layers": [{"texture": "zombie/zombie_bee"}],
@@ -21,7 +21,7 @@
     "mutations" : [
       {
         "type": "BLOCK",
-        "input": "minecraft:stone",
+        "input": ["minecraft:stone"],
         "outputs": [
           {"output": "minecraft:mossy_cobblestone", "weight": 10},
           {"output": "minecraft:cobblestone", "weight": 30}

@@ -25,7 +25,7 @@
     "mutations" : [
       {
         "type": "BLOCK",
-        "inputID": "minecraft:lava",
+        "input":[ "minecraft:lava"],
         "chance": 0.75,
         "outputs": [
           {"outputID": "minecraft:mossy_cobblestone"}
@@ -33,7 +33,7 @@
       },
       {
         "type": "BLOCK",
-        "input": "minecraft:coal_block",
+        "input": ["minecraft:coal_block"],
         "chance": 0.25,
         "outputs": [
           {"output": "minecraft:tnt"}

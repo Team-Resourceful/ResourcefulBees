@@ -24,7 +24,7 @@ public class HoneyBottleData {
     public static final Codec<HoneyBottleData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.INT.fieldOf("hunger").orElse(1).forGetter(HoneyBottleData::getHunger),
             Codec.FLOAT.fieldOf("saturation").orElse(1.0f).forGetter(HoneyBottleData::getSaturation),
-            Color.CODEC.fieldOf("colorData").orElse(Color.DEFAULT).forGetter(HoneyBottleData::getColor),
+            Color.CODEC.fieldOf("color").orElse(Color.DEFAULT).forGetter(HoneyBottleData::getColor),
             Codec.BOOL.fieldOf("generateHoneyBlock").orElse(true).forGetter(HoneyBottleData::doGenerateHoneyBlock),
             Codec.BOOL.fieldOf("generateBlockRecipe").orElse(true).forGetter(HoneyBottleData::doGenerateHoneyBlock),
             Codec.BOOL.fieldOf("generateHoneyFluid").orElse(true).forGetter(HoneyBottleData::doGenerateHoneyFluid),

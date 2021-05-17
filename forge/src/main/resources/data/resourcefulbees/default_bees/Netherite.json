@@ -22,7 +22,7 @@
     "mutations" : [
       {
         "type": "BLOCK",
-        "input": "minecraft:blackstone",
+        "input": ["minecraft:blackstone"],
         "outputs": [
           {"output": "minecraft:gilded_blackstone", "weight": 10},
           {"output": "minecraft:netherrack", "weight": 10}

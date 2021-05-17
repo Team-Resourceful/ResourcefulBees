@@ -4,10 +4,9 @@
     "maxTimeInHive": 1200
   },
   "RenderData": {
+    "modelType": "GELATINOUS",
     "layers": [
-      { "texture": "custom/bee" },
-      { "color": "#92b9fe", "texture": "custom/primary_layer" },
-      { "color": "#303030", "texture": "custom/secondary_layer" }
+      {"texture": "icy/icy_bee"}
     ],
     "ColorData": {
       "spawnEggPrimaryColor": "#92b9fe",
@@ -21,7 +20,7 @@
     "mutations" : [
       {
         "type": "BLOCK",
-        "input": "minecraft:water",
+        "input": ["minecraft:water"],
         "chance": 0.65,
         "outputs": [
           {"output": "minecraft:ice", "weight": 7},

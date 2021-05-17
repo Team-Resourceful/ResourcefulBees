@@ -19,7 +19,7 @@
     "mutations" : [
       {
         "type": "BLOCK",
-        "input": "minecraft:honey_block",
+        "input": ["minecraft:honey_block"],
         "chance": 0.8,
         "outputs": [
           {"output": "minecraft:slime_block"}

@@ -23,7 +23,7 @@
     "mutations" : [
       {
         "type": "BLOCK",
-        "input": "minecraft:stone",
+        "input": ["minecraft:stone"],
         "chance": 0.75,
         "outputs": [
           {

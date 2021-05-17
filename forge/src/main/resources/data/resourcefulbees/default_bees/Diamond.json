@@ -23,7 +23,7 @@
     "mutations" : [
       {
         "type": "BLOCK",
-        "input": "minecraft:lava",
+        "input": ["minecraft:lava"],
         "chance": 0.75,
         "outputs": [
           {"output": "minecraft:water"}

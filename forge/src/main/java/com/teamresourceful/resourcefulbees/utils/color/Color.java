@@ -150,7 +150,7 @@ public class Color {
 
     @Override
     public String toString() {
-        if (this.rainbow) return "rainbow";
+        if (this.isRainbow) return "rainbow";
         return String.format("#%x", this.value);
     }
 

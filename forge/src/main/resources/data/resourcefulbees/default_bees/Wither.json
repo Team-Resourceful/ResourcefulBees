@@ -21,7 +21,7 @@
     "mutations" : [
       {
         "type": "BLOCK",
-        "inputID": "minecraft:lava",
+        "inputID": ["minecraft:lava"],
         "outputs": [
           {"outputID": "minecraft:obsidian", "weight": 10},
           {"outputID": "minecraft:stone", "weight": 10}

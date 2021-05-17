@@ -22,7 +22,7 @@
     "mutations" : [
       {
         "type": "BLOCK",
-        "input": "minecraft:stone",
+        "input": ["minecraft:stone"],
         "outputs": [
           {"output": "minecraft:gravel"}
         ]

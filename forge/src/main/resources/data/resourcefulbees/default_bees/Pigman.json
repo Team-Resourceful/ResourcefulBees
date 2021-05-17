@@ -22,7 +22,7 @@
     "mutations" : [
       {
         "type": "BLOCK",
-        "input": "minecraft:netherrack",
+        "input": ["minecraft:netherrack"],
         "outputs": [
           {"output": "minecraft:glowstone", "weight": 10},
           {"output": "minecraft:cobblestone", "weight": 10}
