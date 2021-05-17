@@ -102,4 +102,8 @@ public class Beepedia extends Item {
         }
 
     }
+
+    public static boolean isCreative(ItemStack stack){
+        return !stack.isEmpty() && stack.hasTag() && stack.getTag() != null && stack.getTag().getBoolean(CREATIVE_TAG);
+    }
 }
