@@ -131,13 +131,11 @@ public class RenderUtils {
         if (world == null) return;
         float scaledSize = 20;
         Minecraft mc = Minecraft.getInstance();
-        if (entity instanceof LivingEntity) {
-            if (mc.player != null) entity.tickCount = mc.player.tickCount;
-            if (entity instanceof CustomBeeEntity) {
-                scaledSize = 20 / ((CustomBeeEntity) entity).getRenderData().getSizeModifier();
-            } else {
-                scaledSize = 20 / (Math.max(entity.getBbWidth(), entity.getBbHeight()));
-            }
+        if (mc.player != null) entity.tickCount = mc.player.tickCount;
+        if (entity instanceof CustomBeeEntity) {
+            scaledSize = 20 / ((CustomBeeEntity) entity).getRenderData().getSizeModifier();
+        } else {
+            scaledSize = 20 / (Math.max(entity.getBbWidth(), entity.getBbHeight()));
         }
         if (mc.player != null) {
             matrixStack.pushPose();

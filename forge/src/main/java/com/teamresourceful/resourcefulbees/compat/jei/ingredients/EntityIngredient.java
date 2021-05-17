@@ -47,4 +47,8 @@ public class EntityIngredient {
         return tooltip;
     }
 
+    @Override
+    public String toString() {
+        return beeData.getCoreData().getName();
+    }
 }

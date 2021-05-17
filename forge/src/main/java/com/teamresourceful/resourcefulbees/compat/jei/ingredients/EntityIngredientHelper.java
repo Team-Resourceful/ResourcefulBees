@@ -74,6 +74,6 @@ public class EntityIngredientHelper implements IIngredientHelper<EntityIngredien
     @NotNull
     @Override
     public String getErrorInfo(@Nullable EntityIngredient entityIngredient) {
-        return "BEE INGREDIENT ERROR IN JEI";
+        return entityIngredient == null ? "null" : entityIngredient.toString();
     }
 }
