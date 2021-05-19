@@ -17,8 +17,8 @@
       { "isGlowing": true, "texture": "dragon/dragon_bee_emissive", "color": "#E400FF" }
     ],
     "ColorData": {
-      "spawnEggPrimaryColor": "#222222",
-      "spawnEggSecondaryColor": "#303030",
+      "spawnEggPrimaryColor": "#171717",
+      "spawnEggSecondaryColor": "#E400FF",
       "jarColor": "#222222"
     },
     "modelType": "DRAGON"
