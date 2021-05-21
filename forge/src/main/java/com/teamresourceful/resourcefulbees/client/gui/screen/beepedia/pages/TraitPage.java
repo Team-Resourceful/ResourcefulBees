@@ -35,7 +35,6 @@ public class TraitPage extends BeepediaPage {
     public final BeeTrait trait;
     private final ImageButton prevTab;
     private final ImageButton nextTab;
-    String translation;
     private SubButtonList list;
     final TranslatableComponent name;
     private final List<TraitSection> traitSections = new LinkedList<>();

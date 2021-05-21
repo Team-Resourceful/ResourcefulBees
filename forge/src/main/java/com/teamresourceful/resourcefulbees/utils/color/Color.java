@@ -5,6 +5,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.JsonOps;
+import net.minecraft.network.chat.TextColor;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 
@@ -141,6 +142,8 @@ public class Color {
     public int getIntAlpha() { return a; }
 
     //endregion
+
+    public TextColor getTextColor() { return TextColor.fromRgb(value); }
 
     public int getValue() { return value; }
 

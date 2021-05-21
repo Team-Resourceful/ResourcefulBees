@@ -10,6 +10,7 @@ import com.teamresourceful.resourcefulbees.client.gui.widget.ButtonList;
 import com.teamresourceful.resourcefulbees.client.gui.widget.ModImageButton;
 import com.teamresourceful.resourcefulbees.client.gui.widget.TabImageButton;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
+import com.teamresourceful.resourcefulbees.client.gui.widget.ToolTip;
 import com.teamresourceful.resourcefulbees.config.Config;
 import com.teamresourceful.resourcefulbees.entity.passive.KittenBee;
 import com.teamresourceful.resourcefulbees.registry.BeeRegistry;
@@ -47,7 +48,6 @@ import java.text.DecimalFormat;
 import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
-
 
 public class BeepediaScreen extends Screen {
 
@@ -89,8 +89,7 @@ public class BeepediaScreen extends Screen {
     final ResourceLocation slotImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/slot.png");
     private Button backButton;
     private final ResourceLocation homeButtons = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/home_buttons.png");
-    private final List<ItemTooltip> itemTooltips = new LinkedList<>();
-    private final List<FluidTooltip> fluidTooltips = new LinkedList<>();
+    private final List<ToolTip> tooltips = new LinkedList<>();
     private final List<Interaction> interactions = new LinkedList<>();
     private ModImageButton homeButton;
 
@@ -132,7 +131,7 @@ public class BeepediaScreen extends Screen {
      * Collect all data to use for the beepedia pages and create pages for each value.
      *
      * @param subX x position of the sub window
-     * @param y top right corner y position
+     * @param y    top right corner y position
      */
     private void registerData(int subX, int y) {
         BeeRegistry.getRegistry().getBees().forEach((s, b) -> bees.put(s, new BeePage(this, b, s, subX, y)));
@@ -146,8 +145,8 @@ public class BeepediaScreen extends Screen {
      * Registering of home row buttons. (Search button, Home button, Back button)
      *
      * @param subX x position of the sub window
-     * @param x top right corner x position
-     * @param y top right corner y position
+     * @param x    top right corner x position
+     * @param y    top right corner y position
      */
     private void registerButtons(int subX, int x, int y) {
         home = new HomePage(this, subX, y);
@@ -350,8 +349,7 @@ public class BeepediaScreen extends Screen {
     @Override
     public void render(@NotNull PoseStack matrixStack, int mouseX, int mouseY, float partialTick) {
         renderBackground(matrixStack, 0);
-        itemTooltips.clear();
-        fluidTooltips.clear();
+        tooltips.clear();
         interactions.clear();
         drawBackground(matrixStack, partialTick, mouseX, mouseY);
         updateSearch();
@@ -444,8 +442,7 @@ public class BeepediaScreen extends Screen {
         beesList.button.renderToolTip(matrixStack, mouseX, mouseY);
         traitsList.button.renderToolTip(matrixStack, mouseX, mouseY);
         honeyList.button.renderToolTip(matrixStack, mouseX, mouseY);
-        itemTooltips.forEach(t -> t.draw(matrixStack, mouseX, mouseY));
-        fluidTooltips.forEach(t -> t.draw(matrixStack, mouseX, mouseY));
+        tooltips.forEach(t -> t.draw(this, matrixStack, mouseX, mouseY));
     }
 
     public Map<String, TraitPage> getTraits(CustomBeeData beeData) {
@@ -579,24 +576,12 @@ public class BeepediaScreen extends Screen {
         blit(matrix, xPos, yPos, 0, 0, 20, 20, 20, 20);
     }
 
-    private void renderFluidTooltip(PoseStack matrix, FluidStack fluidStack, int mouseX, int mouseY, boolean showAmount) {
-        List<Component> tooltip = new ArrayList<>();
-        tooltip.add(fluidStack.getDisplayName());
-        if (showAmount) {
-            DecimalFormat decimalFormat = new DecimalFormat("##0.0");
-            String amount = fluidStack.getAmount() < 500 || BeeInfoUtils.isShiftPressed() ? String.format("%,d", fluidStack.getAmount()) + " mb" : decimalFormat.format((float) fluidStack.getAmount() / 1000) + " B";
-            tooltip.add(new TextComponent(amount));
-        }
-        tooltip.add(new TextComponent(fluidStack.getFluid().getRegistryName().toString()).withStyle(ChatFormatting.DARK_GRAY));
-        renderComponentTooltip(matrix, tooltip, mouseX, mouseY);
-    }
-
     private void registerItemTooltip(ItemStack item, int xPos, int yPos) {
-        itemTooltips.add(new ItemTooltip(item, xPos, yPos));
+        tooltips.add(new ToolTip(xPos + 2, yPos + 2, 16, 16, item));
     }
 
-    private void registerFluidTooltip(FluidStack fluid, int xPos, int yPos, boolean drawAmount) {
-        fluidTooltips.add(new FluidTooltip(fluid, xPos, yPos, drawAmount));
+    private void registerFluidTooltip(FluidStack fluid, int xPos, int yPos, boolean showAmount) {
+        tooltips.add(new ToolTip(xPos + 2, yPos + 2, 16, 16, fluid, showAmount));
     }
 
     private void registerInteraction(int xPos, int yPos, Supplier<Boolean> supplier) {
@@ -682,44 +667,6 @@ public class BeepediaScreen extends Screen {
         BEE,
         HONEY,
         TRAIT
-    }
-
-    private class ItemTooltip {
-        private final ItemStack item;
-        private final int xPos;
-        private final int yPos;
-
-        public ItemTooltip(ItemStack item, int xPos, int yPos) {
-            this.item = item;
-            this.xPos = xPos;
-            this.yPos = yPos;
-        }
-
-        public void draw(PoseStack matrix, int mouseX, int mouseY) {
-            if (mouseX >= xPos && mouseY >= yPos && mouseX <= xPos + 20 && mouseY <= yPos + 20) {
-                renderTooltip(matrix, item, mouseX, mouseY);
-            }
-        }
-    }
-
-    private class FluidTooltip {
-        private final FluidStack fluid;
-        private final int xPos;
-        private final int yPos;
-        private final boolean showAmount;
-
-        public FluidTooltip(FluidStack fluid, int xPos, int yPos, boolean showAmount) {
-            this.fluid = fluid;
-            this.xPos = xPos;
-            this.yPos = yPos;
-            this.showAmount = showAmount;
-        }
-
-        public void draw(PoseStack matrix, int mouseX, int mouseY) {
-            if (mouseX >= xPos && mouseY >= yPos && mouseX <= xPos + 20 && mouseY <= yPos + 20) {
-                renderFluidTooltip(matrix, fluid, mouseX, mouseY, showAmount);
-            }
-        }
     }
 
     private static class Interaction {

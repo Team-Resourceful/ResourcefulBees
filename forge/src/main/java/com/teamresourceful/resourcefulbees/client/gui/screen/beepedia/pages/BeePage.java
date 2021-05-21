@@ -43,12 +43,12 @@ public class BeePage extends BeepediaPage {
 
     private Entity bee = null;
     protected Pair<TabImageButton, BeeDataPage> subPage;
-    final Pair<TabImageButton, BeeDataPage> beeInfoPage;
-    Pair<TabImageButton, BeeDataPage> mutationsPage = null;
-    Pair<TabImageButton, BeeDataPage> traitListPage = null;
-    Pair<TabImageButton, BeeDataPage> centrifugePage = null;
-    Pair<TabImageButton, BeeDataPage> spawningPage = null;
-    Pair<TabImageButton, BeeDataPage> breedingPage = null;
+    private Pair<TabImageButton, BeeDataPage> beeInfoPage;
+    private Pair<TabImageButton, BeeDataPage> mutationsPage = null;
+    private Pair<TabImageButton, BeeDataPage> traitListPage = null;
+    private Pair<TabImageButton, BeeDataPage> centrifugePage = null;
+    private Pair<TabImageButton, BeeDataPage> spawningPage = null;
+    private Pair<TabImageButton, BeeDataPage> breedingPage = null;
     final List<Pair<TabImageButton, BeeDataPage>> tabs = new ArrayList<>();
     final ResourceLocation buttonImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/button.png");
 
@@ -73,6 +73,25 @@ public class BeePage extends BeepediaPage {
         beeUnlocked = beepedia.itemBees.contains(id) || beepedia.complete;
 
         tabCounter = 0;
+
+        registerInfoPage(subX, subY);
+        registerMutationListPage(subX, subY);
+        registerTraitListPage(subX, subY);
+        registerHoneycombPage(subX, subY);
+        registerSpawningPage(subX, subY);
+        registerBreedPage(subX, subY);
+
+        ItemStack beeJar = new ItemStack(ModItems.BEE_JAR.get());
+        BeeJar.fillJar(beeJar, beeData);
+        MutableComponent star = new TextComponent(beeUnlocked ? ChatFormatting.GREEN + "✦ " + ChatFormatting.RESET : "✧ ");
+        star.append(beeData.getTranslation());
+        label = star;
+        newListButton(beeJar, label);
+
+        addSearch();
+    }
+
+    private void registerInfoPage(int subX, int subY) {
         beeInfoPage = Pair.of(
                 getTabButton(new ItemStack(Items.BOOK), onPress -> setSubPage(SubPageType.INFO),
                         new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.info")),
@@ -80,6 +99,9 @@ public class BeePage extends BeepediaPage {
         );
         subPage = beeInfoPage;
         tabs.add(beeInfoPage);
+    }
+
+    private void registerMutationListPage(int subX, int subY) {
         if (beeData.getMutationData().testMutations() && (!Config.BEEPEDIA_HIDE_LOCKED.get() || beeUnlocked)) {
             mutationsPage = Pair.of(
                     getTabButton(new ItemStack(Items.FERMENTED_SPIDER_EYE), onPress -> setSubPage(SubPageType.MUTATIONS),
@@ -88,6 +110,9 @@ public class BeePage extends BeepediaPage {
             );
             tabs.add(mutationsPage);
         }
+    }
+
+    private void registerTraitListPage(int subX, int subY) {
         if (beeData.getTraitData().hasTraits() && !beeData.getTraitData().getTraits().isEmpty() && (!Config.BEEPEDIA_HIDE_LOCKED.get() || beeUnlocked)) {
             traitListPage = Pair.of(
                     getTabButton(new ItemStack(Items.BLAZE_POWDER), onPress -> setSubPage(SubPageType.TRAIT_LIST),
@@ -96,6 +121,9 @@ public class BeePage extends BeepediaPage {
             );
             tabs.add(traitListPage);
         }
+    }
+
+    private void registerHoneycombPage(int subX, int subY) {
         if (!beeData.getHoneycombData().getHoneycombType().equals(HoneycombTypes.NONE) && (!Config.BEEPEDIA_HIDE_LOCKED.get() || beeUnlocked)) {
             centrifugePage = Pair.of(
                     getTabButton(new ItemStack(Items.HONEYCOMB), onPress -> setSubPage(SubPageType.HONEYCOMB),
@@ -104,6 +132,9 @@ public class BeePage extends BeepediaPage {
             );
             tabs.add(centrifugePage);
         }
+    }
+
+    private void registerSpawningPage(int subX, int subY) {
         if (beeData.getSpawnData().canSpawnInWorld()) {
             spawningPage = Pair.of(
                     getTabButton(new ItemStack(Items.SPAWNER), onPress -> setSubPage(SubPageType.SPAWNING),
@@ -112,6 +143,9 @@ public class BeePage extends BeepediaPage {
             );
             tabs.add(spawningPage);
         }
+    }
+
+    private void registerBreedPage(int subX, int subY) {
         List<EntityMutation> breedMutations = BeeRegistry.getRegistry().getMutationsContaining(beeData);
         List<ItemMutation> itemBreedMutation = BeeRegistry.getRegistry().getItemMutationsContaining(beeData);
         if (beeData.getBreedData().isBreedable() || !breedMutations.isEmpty() || !itemBreedMutation.isEmpty()) {
@@ -122,15 +156,6 @@ public class BeePage extends BeepediaPage {
             );
             tabs.add(breedingPage);
         }
-
-        ItemStack beeJar = new ItemStack(ModItems.BEE_JAR.get());
-        BeeJar.fillJar(beeJar, beeData);
-        MutableComponent star = new TextComponent(beeUnlocked ? ChatFormatting.GREEN + "✦ " + ChatFormatting.RESET : "✧ ");
-        star.append(beeData.getTranslation());
-        label = star;
-        newListButton(beeJar, label);
-
-        addSearch();
     }
 
     public TabImageButton getTabButton(ItemStack stack, Button.OnPress pressable, Component tooltip) {

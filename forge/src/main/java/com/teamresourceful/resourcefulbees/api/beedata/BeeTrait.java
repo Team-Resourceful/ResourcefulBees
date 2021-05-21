@@ -88,7 +88,7 @@ public class BeeTrait {
 
     public static class Builder {
         final String name;
-        Item beepediaItem;
+        Item beepediaItem = Items.BLAZE_POWDER;
         final Set<PotionDamageEffect> potionDamageEffects = new HashSet<>();
         final Set<String> damageImmunities = new HashSet<>();
         final Set<MobEffect> potionImmunities = new HashSet<>();

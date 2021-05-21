@@ -66,7 +66,7 @@ public class BeeInfoPage extends BeeDataPage {
         if (!beeData.getCoreData().getBlockFlowers().isEmpty()) {
             font.draw(matrix, flowerName.withStyle(ChatFormatting.GRAY), (float) xPos, (float) yPos + 75, -1);
             beepedia.drawSlot(matrix, flowers.get(), xPos + 36, yPos + 70);
-        } else if (!beeData.getCoreData().getEntityFlower().isPresent()) {
+        } else if (beeData.getCoreData().getEntityFlower().isPresent()) {
             if (entityFlower == null) {
                 EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(beeData.getCoreData().getEntityFlower().get());
                 entityFlower = entityType.create(beepedia.getMinecraft().level);
@@ -97,6 +97,7 @@ public class BeeInfoPage extends BeeDataPage {
     public void tick(int ticksActive) {
         if (BeeInfoUtils.isShiftPressed()) return;
         if (ticksActive % 20 == 0) {
+            if (flowers.isEmpty()) return;
             flowers.cycle();
         }
     }
