@@ -203,6 +203,7 @@
 	"block.resourcefulbees.ender_beecon.drain": "枯竭: ",
 	"block.resourcefulbees.ender_beecon.range": "范围: ",
 	"block.resourcefulbees.ender_beecon.is_active": "是否启用: ",
+	"block.resourcefulbees.ender_beecon.blocks": "方块",
 	"block.resourcefulbees.purpur_honey_tank": "紫珀蜂蜜储罐",
 	"block.resourcefulbees.nether_honey_tank": "下界蜂蜜储罐",
 	"block.resourcefulbees.wooden_honey_tank": "木质蜂蜜储罐",
@@ -352,11 +353,13 @@
 	"trait.resourcefulbees.angry": "愤怒",
 	"trait.resourcefulbees.teleport": "可传送",
 	"trait.resourcefulbees.flammable": "可燃烧",
+	"trait.resourcefulbees.spider": "蜘蛛",
 
 	"trait.resourcefulbees.special.teleport": "白天时蜜蜂会随机传送到4个方块内的一个空位置。这个能力可以被末影蜂标和蜂巢防止。",
 	"trait.resourcefulbees.special.flammable": "此效果会随机点燃蜜蜂。",
 	"trait.resourcefulbees.special.angry": "拥有此种效果的蜜蜂将变得具有攻击性, 并且会吸引周围的蜜蜂参与攻击。他们将会攻击你, 镇定效果可以使它们停止愤怒。",
 	"trait.resourcefulbees.special.slimy": "史莱姆蜜蜂会发出黏液的声音并随机发射出史莱姆粒子",
+	"trait.resourcefulbees.special.spider": "允许蜜蜂在蜘蛛网中毫无阻碍地飞翔",
 
 	"entity.minecraft.villager.resourcefulbees.beekeeper": "养蜂人",
 	"block.resourcefulbees.mech_centrifuge.tooltip.info": "按住 SHIFT + 右键 以处理蜜脾",
