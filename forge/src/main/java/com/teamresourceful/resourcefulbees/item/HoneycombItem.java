@@ -37,6 +37,9 @@ public class HoneycombItem extends Item {
     @Nullable
     @Override
     public FoodProperties getFoodProperties() {
+        if (Config.EDIBLE_HONEYCOMBS.get() && !honeycombData.isEdible()) {
+            return super.getFoodProperties();
+        }
         return new FoodProperties.Builder()
                 .nutrition(Config.HONEYCOMB_HUNGER.get())
                 .saturationMod(Config.HONEYCOMB_SATURATION.get().floatValue())

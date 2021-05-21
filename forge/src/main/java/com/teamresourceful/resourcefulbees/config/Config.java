@@ -2,18 +2,18 @@ package com.teamresourceful.resourcefulbees.config;
 
 import com.teamresourceful.resourcefulbees.lib.ApiaryOutputs;
 import com.teamresourceful.resourcefulbees.lib.ModConstants;
+import com.teamresourceful.resourcefulbees.registry.BiomeDictionary;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.*;
 
 public class Config {
 
 
-
     //TODO Rewrite config names in 1.17 to be more informative also update comments if needed
-
     private Config() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
+
 
     public static BooleanValue GENERATE_DEFAULTS;
     public static BooleanValue GENERATE_BIOME_DICTIONARIES;
@@ -75,6 +75,7 @@ public class Config {
     public static BooleanValue BEE_DIES_FROM_STING;
     public static BooleanValue BEES_INFLICT_POISON;
 
+    public static BooleanValue EDIBLE_HONEYCOMBS;
     public static IntValue HONEYCOMB_HUNGER;
     public static DoubleValue HONEYCOMB_SATURATION;
 
@@ -260,6 +261,8 @@ public class Config {
             COMMON_BUILDER.pop();
 
             COMMON_BUILDER.push("Honeycomb Options");
+            EDIBLE_HONEYCOMBS = COMMON_BUILDER.comment("\nWhether all honeycombs should be edible by default or not.").
+                    define("honeycombsEdible", true);
             HONEYCOMB_HUNGER = COMMON_BUILDER.comment("\nThe amount of hunger restored when eating a honeycomb.")
                     .defineInRange("honeycombHunger", 1, 0, 8);
             HONEYCOMB_SATURATION = COMMON_BUILDER.comment("\nThe amount of saturation restored when eating a honeycomb.")

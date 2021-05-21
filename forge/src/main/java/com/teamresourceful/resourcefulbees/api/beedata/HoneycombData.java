@@ -25,11 +25,12 @@ public class HoneycombData {
             Registry.ITEM.fieldOf("item").orElse(Items.BARRIER).forGetter(HoneycombData::getHoneycomb),
             Registry.ITEM.fieldOf("block").orElse(Items.BARRIER).forGetter(HoneycombData::getHoneycombBlock),
             Color.CODEC.fieldOf("color").orElse(Color.DEFAULT).forGetter(HoneycombData::getColor),
+            Codec.BOOL.fieldOf("edible").orElse(true).forGetter(HoneycombData::isEdible),
             Codec.intRange(-1, Integer.MAX_VALUE).listOf().fieldOf("apiaryOutputAmounts").orElse(DEFAULT_APIARY_AMOUNTS).forGetter(HoneycombData::getApiaryOutputAmounts),
             ApiaryOutputs.CODEC.listOf().fieldOf("apiaryOutputTypes").orElse(DEFAULT_APIARY_OUTPUTS).forGetter(HoneycombData::getApiaryOutputTypes)
     ).apply(instance, HoneycombData::new));
 
-    public static final HoneycombData DEFAULT = new HoneycombData(HoneycombTypes.NONE, Items.AIR, Items.AIR, Color.DEFAULT, DEFAULT_APIARY_AMOUNTS, DEFAULT_APIARY_OUTPUTS);
+    public static final HoneycombData DEFAULT = new HoneycombData(HoneycombTypes.NONE, Items.AIR, Items.AIR, Color.DEFAULT, true, DEFAULT_APIARY_AMOUNTS, DEFAULT_APIARY_OUTPUTS);
 
     private final HoneycombTypes honeycombType;
     private final Item honeycomb;
@@ -37,13 +38,15 @@ public class HoneycombData {
     private final Color color;
     private final List<Integer> apiaryOutputAmounts;
     private final List<ApiaryOutputs> apiaryOutputsTypes;
+    private final boolean edible;
 
 
-    public HoneycombData(HoneycombTypes honeycombType, Item honeycomb, Item honeycombBlock, Color color, List<Integer> apiaryOutputAmounts, List<ApiaryOutputs> apiaryOutputsTypes) {
+    public HoneycombData(HoneycombTypes honeycombType, Item honeycomb, Item honeycombBlock, Color color, boolean edible, List<Integer> apiaryOutputAmounts, List<ApiaryOutputs> apiaryOutputsTypes) {
         this.honeycombType = honeycombType;
         this.honeycomb = honeycomb;
         this.honeycombBlock = honeycombBlock;
         this.color = color;
+        this.edible = edible;
         this.apiaryOutputAmounts = apiaryOutputAmounts;
         this.apiaryOutputsTypes = apiaryOutputsTypes;
     }
@@ -62,6 +65,10 @@ public class HoneycombData {
 
     public Color getColor() {
         return color;
+    }
+
+    public boolean isEdible() {
+        return edible;
     }
 
     public List<Integer> getApiaryOutputAmounts() {
