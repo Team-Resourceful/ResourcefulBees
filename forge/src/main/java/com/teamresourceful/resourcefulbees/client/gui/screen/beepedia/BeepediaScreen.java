@@ -121,11 +121,35 @@ public class BeepediaScreen extends Screen {
         int x = this.guiLeft;
         int y = this.guiTop;
         int subX = x + 112;
+        registerData(subX, y);
+        registerButtons(subX, x, y);
+        registerSearch(x, y);
+        registerTabs(x, y);
+        returnState(false);
+    }
+
+    /**
+     * Collect all data to use for the beepedia pages and create pages for each value.
+     *
+     * @param subX x position of the sub window
+     * @param y top right corner y position
+     */
+    private void registerData(int subX, int y) {
         BeeRegistry.getRegistry().getBees().forEach((s, b) -> bees.put(s, new BeePage(this, b, s, subX, y)));
         TraitRegistry.getRegistry().getTraits().forEach((s, b) -> traits.put(s, new TraitPage(this, b, s, subX, y)));
         honey.put("honey", new HoneyPage(this, null, "honey", subX, y, true));
         honey.put("catnip", new HoneyPage(this, KittenBee.getHoneyBottleData(), "catnip", subX, y, false));
         HoneyRegistry.getRegistry().getHoneyBottles().forEach((s, h) -> honey.put(s, new HoneyPage(this, h, s, subX, y, false)));
+    }
+
+    /**
+     * Registering of home row buttons. (Search button, Home button, Back button)
+     *
+     * @param subX x position of the sub window
+     * @param x top right corner x position
+     * @param y top right corner y position
+     */
+    private void registerButtons(int subX, int x, int y) {
         home = new HomePage(this, subX, y);
         homeButton = new ModImageButton(x + (xSize / 2) - 10, y + ySize - 25, 20, 20, 20, 0, 20, homeButtons, 60, 60, onPress -> selectPage(home));
         backButton = new ModImageButton(x + (xSize / 2) + 20, y + ySize - 25, 20, 20, 40, 0, 20, homeButtons, 60, 60, onPress -> {
@@ -147,21 +171,53 @@ public class BeepediaScreen extends Screen {
         bees.forEach((s, b) -> addButton(b.listButton));
         traits.forEach((s, b) -> addButton(b.listButton));
         honey.forEach((s, b) -> addButton(b.listButton));
+    }
+
+    /**
+     * Register the beepedia search bar and register search parameters for each page.
+     *
+     * @param x top right corner x position
+     * @param y top right corner y position
+     */
+    private void registerSearch(int x, int y) {
         searchBox = new EditBox(Minecraft.getInstance().font, x + 10, y + 143, 98, 10, new TranslatableComponent("gui.resourcefulbees.beepedia.search"));
         searchBox.visible = false;
         addWidget(searchBox);
-        initSidebar();
         bees.forEach((s, b) -> b.addSearch());
         traits.forEach((s, b) -> b.addSearch());
         honey.forEach((s, b) -> b.addSearch());
-        returnState(false);
     }
 
+    /**
+     * Register the page lists and the tab buttons to switch between them.
+     *
+     * @param x top right corner x position
+     * @param y top right corner y position
+     */
+    public void registerTabs(int x, int y) {
+        ItemStack beeItem = new ItemStack(Items.BEEHIVE);
+        ItemStack traitItem = new ItemStack(Items.BLAZE_POWDER);
+        ItemStack honeyItem = new ItemStack(Items.HONEY_BOTTLE);
+        TabImageButton beesButton = new TabImageButton(x + 45, y + 8, 20, 20, 0, 0, 20, buttonImage, beeItem, 2, 2, onPress ->
+                setActiveList(beesList, PageType.BEE), getTooltipProvider(new TranslatableComponent("gui.resourcefulbees.beepedia.tab.bees")));
+        TabImageButton traitsButton = new TabImageButton(x + 66, y + 8, 20, 20, 0, 0, 20, buttonImage, traitItem, 2, 2, onPress ->
+                setActiveList(traitsList, PageType.TRAIT), getTooltipProvider(new TranslatableComponent("gui.resourcefulbees.beepedia.tab.traits")));
+        TabImageButton honeyButton = new TabImageButton(x + 87, y + 8, 20, 20, 0, 0, 20, buttonImage, honeyItem, 2, 2, onPress ->
+                setActiveList(honeyList, PageType.HONEY), getTooltipProvider(new TranslatableComponent("gui.resourcefulbees.beepedia.tab.honey")));
 
-    private static void goBackState() {
-        currScreenState = pastStates.pop();
+        addButton(beesButton);
+        addButton(traitsButton);
+        addButton(honeyButton);
+        beesList = new ButtonList(x + 8, y + 31, 100, 123, 21, beesButton, bees);
+        traitsList = new ButtonList(x + 8, y + 31, 100, 123, 21, traitsButton, traits);
+        honeyList = new ButtonList(x + 8, y + 31, 100, 123, 21, honeyButton, honey);
     }
 
+    /**
+     * Reloads the beepedia screen to the last saved state.
+     *
+     * @param goingBack whether the beepedia is reloading from a back button click or not.1
+     */
     private void returnState(boolean goingBack) {
         setActive(currScreenState.getPageType(), currScreenState.getPageID(), goingBack);
         searchBox.visible = isSearchVisible();
@@ -169,6 +225,13 @@ public class BeepediaScreen extends Screen {
         if (beesScroll != 0) beesList.setScrollPos(beesScroll);
         if (honeyScroll != 0) honeyList.setScrollPos(honeyScroll);
         if (traitScroll != 0) traitsList.setScrollPos(traitScroll);
+    }
+
+    /**
+     * Removes the most recently saved state.
+     */
+    private static void goBackState() {
+        currScreenState = pastStates.pop();
     }
 
     /***
@@ -268,6 +331,9 @@ public class BeepediaScreen extends Screen {
         this.activePage.openPage();
     }
 
+    /**
+     * saves the current state to the state list
+     */
     public static void saveScreenState() {
         pastStates.push(currScreenState);
         currScreenState = new BeepediaScreenState();
@@ -279,27 +345,6 @@ public class BeepediaScreen extends Screen {
         if (this.activeList != null) this.activeList.setActive(false, true);
         this.activeList = buttonList;
         this.activeList.setActive(true, true);
-    }
-
-    public void initSidebar() {
-        ItemStack beeItem = new ItemStack(Items.BEEHIVE);
-        ItemStack traitItem = new ItemStack(Items.BLAZE_POWDER);
-        ItemStack honeyItem = new ItemStack(Items.HONEY_BOTTLE);
-        int x = this.guiLeft;
-        int y = this.guiTop;
-        TabImageButton beesButton = new TabImageButton(x + 45, y + 8, 20, 20, 0, 0, 20, buttonImage, beeItem, 2, 2, onPress ->
-            setActiveList(beesList, PageType.BEE), getTooltipProvider(new TranslatableComponent("gui.resourcefulbees.beepedia.tab.bees")));
-        TabImageButton traitsButton = new TabImageButton(x + 66, y + 8, 20, 20, 0, 0, 20, buttonImage, traitItem, 2, 2, onPress ->
-            setActiveList(traitsList, PageType.TRAIT), getTooltipProvider(new TranslatableComponent("gui.resourcefulbees.beepedia.tab.traits")));
-        TabImageButton honeyButton = new TabImageButton(x + 87, y + 8, 20, 20, 0, 0, 20, buttonImage, honeyItem, 2, 2, onPress ->
-            setActiveList(honeyList, PageType.HONEY), getTooltipProvider(new TranslatableComponent("gui.resourcefulbees.beepedia.tab.honey")));
-
-        addButton(beesButton);
-        addButton(traitsButton);
-        addButton(honeyButton);
-        beesList = new ButtonList(x + 8, y + 31, 100, 123, 21, beesButton, bees);
-        traitsList = new ButtonList(x + 8, y + 31, 100, 123, 21, traitsButton, traits);
-        honeyList = new ButtonList(x + 8, y + 31, 100, 123, 21, honeyButton, honey);
     }
 
     @Override
