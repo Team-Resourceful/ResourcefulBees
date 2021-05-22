@@ -131,7 +131,7 @@ public class BeepediaScreen extends Screen {
      * Collect all data to use for the beepedia pages and create pages for each value.
      *
      * @param subX x position of the sub window
-     * @param y    top right corner y position
+     * @param y    top left corner y position
      */
     private void registerData(int subX, int y) {
         BeeRegistry.getRegistry().getBees().forEach((s, b) -> bees.put(s, new BeePage(this, b, s, subX, y)));
@@ -145,8 +145,8 @@ public class BeepediaScreen extends Screen {
      * Registering of home row buttons. (Search button, Home button, Back button)
      *
      * @param subX x position of the sub window
-     * @param x    top right corner x position
-     * @param y    top right corner y position
+     * @param x    top left corner x position
+     * @param y    top left corner y position
      */
     private void registerButtons(int subX, int x, int y) {
         home = new HomePage(this, subX, y);
@@ -175,8 +175,8 @@ public class BeepediaScreen extends Screen {
     /**
      * Register the beepedia search bar and register search parameters for each page.
      *
-     * @param x top right corner x position
-     * @param y top right corner y position
+     * @param x top left corner x position
+     * @param y top left corner y position
      */
     private void registerSearch(int x, int y) {
         searchBox = new EditBox(Minecraft.getInstance().font, x + 10, y + 143, 98, 10, new TranslatableComponent("gui.resourcefulbees.beepedia.search"));
@@ -190,8 +190,8 @@ public class BeepediaScreen extends Screen {
     /**
      * Register the page lists and the tab buttons to switch between them.
      *
-     * @param x top right corner x position
-     * @param y top right corner y position
+     * @param x top left corner x position
+     * @param y top left corner y position
      */
     public void registerTabs(int x, int y) {
         ItemStack beeItem = new ItemStack(Items.BEEHIVE);
