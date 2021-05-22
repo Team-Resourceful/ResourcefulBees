@@ -10,8 +10,7 @@
     "block": "resourcefulbees:gold_honeycomb_block"
   },
   "RenderData": {
-    "layers": [{"texture": "ores/gold/gold_bee"}],
-    "modelType": "ORE",
+    "layers": [{"texture": "ores/gold/gold_bee","modelType": "ORE"}],
     "ColorData": {
       "spawnEggPrimaryColor": "#FFDC00",
       "spawnEggSecondaryColor": "#303030",

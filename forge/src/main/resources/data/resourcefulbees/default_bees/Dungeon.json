@@ -4,8 +4,7 @@
     "maxTimeInHive": 1200
   },
   "RenderData": {
-    "layers": [{"texture": "dungeon/dungeon_bee"}],
-    "modelType": "MUSHROOM",
+    "layers": [{"texture": "dungeon/dungeon_bee", "modelType": "MUSHROOM"}],
     "ColorData": {
       "spawnEggPrimaryColor": "#406278",
       "spawnEggSecondaryColor": "#303030",

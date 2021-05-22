@@ -28,11 +28,11 @@ public class BeeLayer extends RenderLayer<CustomBeeEntity, CustomBeeModel<Custom
     private final CustomBeeModel<CustomBeeEntity> additionModel;
     private final Color color;
 
-    public BeeLayer(RenderLayerParent<CustomBeeEntity, CustomBeeModel<CustomBeeEntity>> renderer, LayerData layerData, ModelTypes modelType) {
+    public BeeLayer(RenderLayerParent<CustomBeeEntity, CustomBeeModel<CustomBeeEntity>> renderer, LayerData layerData) {
         super(renderer);
         this.layerData = layerData;
         this.color = layerData.getColor();
-        this.additionModel = modelType == ModelTypes.DEFAULT ? null : new CustomBeeModel<>(modelType);
+        this.additionModel = layerData.getModelType() == ModelTypes.DEFAULT ? null : new CustomBeeModel<>(layerData.getModelType());
     }
 
     @Override

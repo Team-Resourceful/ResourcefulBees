@@ -10,13 +10,12 @@
     "block": "resourcefulbees:redstone_honeycomb_block"
   },
   "RenderData": {
-    "layers": [{ "texture": "ores/redstone/redstone_bee"}],
+    "layers": [{ "texture": "ores/redstone/redstone_bee", "modelType": "ORE"}],
     "ColorData": {
       "spawnEggPrimaryColor": "#aa0f01",
       "spawnEggSecondaryColor": "#303030",
       "jarColor": "#aa0f01"
-    },
-    "modelType": "ORE"
+    }
   },
   "MutationData": {
     "hasMutation": true,

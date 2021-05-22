@@ -10,8 +10,7 @@
     "block": "resourcefulbees:coal_honeycomb_block"
   },
   "RenderData": {
-    "layers": [{ "texture": "ores/coal/coal_bee"}],
-    "modelType": "ORE",
+    "layers": [{ "texture": "ores/coal/coal_bee", "modelType": "ORE"}],
     "ColorData": {
       "spawnEggPrimaryColor": "#101010",
       "spawnEggSecondaryColor": "#303030",

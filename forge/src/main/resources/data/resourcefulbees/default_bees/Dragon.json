@@ -11,17 +11,16 @@
   },
   "RenderData": {
     "layers": [
-      { "texture": "dragon/dragon_bee" },
-      { "texture": "dragon/dragon_bee_primary", "color": "#222222" },
-      { "texture": "dragon/dragon_bee_secondary", "color": "#171717" },
+      { "texture": "dragon/dragon_bee", "modelType": "DRAGON" },
+      { "texture": "dragon/dragon_bee_primary", "color": "#222222", "modelType": "DRAGON" },
+      { "texture": "dragon/dragon_bee_secondary", "color": "#171717", "modelType": "DRAGON" },
       { "isGlowing": true, "texture": "dragon/dragon_bee_emissive", "color": "#E400FF" }
     ],
     "ColorData": {
       "spawnEggPrimaryColor": "#171717",
       "spawnEggSecondaryColor": "#E400FF",
       "jarColor": "#222222"
-    },
-    "modelType": "DRAGON"
+    }
   },
   "MutationData": {
     "hasMutation": true,

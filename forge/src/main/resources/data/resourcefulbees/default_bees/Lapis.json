@@ -10,13 +10,12 @@
     "block": "resourcefulbees:iron_honeycomb_block"
   },
   "RenderData": {
-    "layers": [{"texture": "ores/lapis/lapis_bee"}],
+    "layers": [{"texture": "ores/lapis/lapis_bee","modelType": "ORE"}],
     "ColorData": {
       "spawnEggPrimaryColor": "#345ec3",
       "spawnEggSecondaryColor": "#303030",
       "jarColor": "#345ec3"
-    },
-    "modelType": "ORE"
+    }
   },
   "MutationData": {
     "hasMutation": true,

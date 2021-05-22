@@ -10,8 +10,7 @@
     "block": "resourcefulbees:diamond_honeycomb_block"
   },
   "RenderData": {
-    "layers": [{ "texture": "ores/diamond/diamond_bee"}],
-    "modelType": "ORE",
+    "layers": [{ "texture": "ores/diamond/diamond_bee", "modelType": "ORE"}],
     "ColorData": {
       "spawnEggPrimaryColor": "#00ffff",
       "spawnEggSecondaryColor": "#303030",

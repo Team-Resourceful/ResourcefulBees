@@ -4,9 +4,8 @@
     "maxTimeInHive": 1200
   },
   "RenderData": {
-    "modelType": "GELATINOUS",
     "layers": [
-      {"texture": "slime/slime_bee"}
+      {"texture": "slime/slime_bee", "modelType": "GELATINOUS"}
     ],
     "ColorData": {
       "spawnEggPrimaryColor": "#62B64A",
