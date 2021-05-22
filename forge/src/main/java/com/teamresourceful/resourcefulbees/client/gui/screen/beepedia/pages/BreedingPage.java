@@ -58,6 +58,7 @@ public class BreedingPage extends BeeDataPage {
     private final TranslatableComponent childrenTitle = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding.children_title");
     private final TranslatableComponent entityMutationsTitle = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding.entity_mutations_title");
     private final TranslatableComponent itemMutationsTitle = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding.item_mutations_title");
+    private final TranslatableComponent errorTitle = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding.error_title");
     private int activePage = 0;
 
     public BreedingPage(BeepediaScreen beepedia, CustomBeeData beeData, int xPos, int yPos, List<EntityMutation> mutations, List<ItemMutation> itemBreedMutation, BeePage parent) {
@@ -151,6 +152,7 @@ public class BreedingPage extends BeeDataPage {
                 activeSubPage = BreedingPageType.ENTITY_MUTATIONS;
                 break;
             default:
+                activeSubPage = BreedingPageType.ERROR;
                 activePage = 0;
         }
     }
@@ -188,7 +190,6 @@ public class BreedingPage extends BeeDataPage {
     }
 
     private int getCurrentListSize() {
-        if (activeSubPage == null) return 0;
         switch (activeSubPage) {
             case ENTITY_MUTATIONS:
                 return entityMutationBreeding.size();
@@ -208,10 +209,7 @@ public class BreedingPage extends BeeDataPage {
         showButtons();
         Font font = Minecraft.getInstance().font;
         TranslatableComponent title;
-        if (activeSubPage == null) {
-            // show error page
-            return;
-        }
+
         switch (activeSubPage) {
             case CHILDREN:
                 title = childrenTitle;
@@ -222,8 +220,12 @@ public class BreedingPage extends BeeDataPage {
             case ENTITY_MUTATIONS:
                 title = entityMutationsTitle;
                 break;
-            default:
+            case PARENTS:
                 title = parentsTitle;
+                break;
+            default:
+                title = errorTitle;
+                // show error page
                 break;
         }
         int padding = font.width(title) / 2;
@@ -252,7 +254,6 @@ public class BreedingPage extends BeeDataPage {
 
     @Override
     public void renderForeground(PoseStack matrix, int mouseX, int mouseY) {
-        if (activeSubPage == null) return;
         switch (activeSubPage) {
             case CHILDREN:
                 childrenBreeding.get(activePage).draw(matrix);
@@ -292,7 +293,6 @@ public class BreedingPage extends BeeDataPage {
 
     @Override
     public void tick(int ticksActive) {
-        if (activeSubPage == null) return;
         switch (activeSubPage) {
             case CHILDREN:
                 childrenBreeding.get(activePage).tick(ticksActive);
@@ -314,7 +314,6 @@ public class BreedingPage extends BeeDataPage {
 
     @Override
     public void drawTooltips(PoseStack matrixStack, int mouseX, int mouseY) {
-        if (activeSubPage == null) return;
         switch (activeSubPage) {
             case CHILDREN:
                 childrenBreeding.get(activePage).drawTooltips(matrixStack, mouseX, mouseY);
@@ -336,7 +335,6 @@ public class BreedingPage extends BeeDataPage {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
-        if (activeSubPage == null) return false;
         switch (activeSubPage) {
             case CHILDREN:
                 return childrenBreeding.get(activePage).mouseClicked(mouseX, mouseY);
@@ -508,6 +506,7 @@ public class BreedingPage extends BeeDataPage {
         PARENTS,
         CHILDREN,
         ENTITY_MUTATIONS,
-        ITEM_MUTATIONS
+        ITEM_MUTATIONS,
+        ERROR
     }
 }
