@@ -23,7 +23,7 @@ public class BeeTrait {
     protected final Set<ParticleType<?>> particleEffects;
 
     private BeeTrait(String name, Item displayItem, Set<PotionDamageEffect> potionDamageEffects, Set<String> damageImmunities, Set<MobEffect> potionImmunities, Set<DamageType> damageTypes, Set<String> specialAbilities, Set<ParticleType<?>> particleEffects) {
-        this.name = name;
+        this.name = name.toLowerCase(Locale.ENGLISH).replace(" ", "_");
         this.displayItem = displayItem;
         this.potionDamageEffects = potionDamageEffects;
         this.damageImmunities = damageImmunities;

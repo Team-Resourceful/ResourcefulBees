@@ -40,8 +40,14 @@
     "lightLevel": "NIGHT"
   },
   "BreedData": {
+    "parents": [
+      {
+        "parent1": "skeleton",
+        "parent2": "skeleton"
+      }
+    ],
     "isBreedable": true,
-    "feedItem": ["small"],
+    "feedItem": "minecraft:flowers",
     "feedAmount": 8
   }
 }

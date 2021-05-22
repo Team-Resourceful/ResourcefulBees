@@ -47,7 +47,7 @@ public class BeeTemptGoal extends Goal {
     }
 
     protected boolean isTempting(ItemStack stack) {
-        return BeeInfoUtils.isValidBreedItem(stack, this.beeEntity.getBreedData());
+        return this.beeEntity.getBreedData().getFeedItems().contains(stack.getItem());
     }
 
     /**

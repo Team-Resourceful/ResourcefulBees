@@ -12,6 +12,7 @@ import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -91,7 +92,7 @@ public class HomePage extends BeepediaPage {
 
     @Override
     public void tick(int ticksActive) {
-        if (ticksActive % 20 == 0 && !BeeInfoUtils.isShiftPressed()) {
+        if (ticksActive % 20 == 0 && !Screen.hasShiftDown()) {
             counter++;
             if (counter >= bees.size()) counter = 0;
             BeepediaScreen.currScreenState.setHomeCounter(counter);

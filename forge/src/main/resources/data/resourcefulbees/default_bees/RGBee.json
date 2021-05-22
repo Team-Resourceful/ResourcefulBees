@@ -32,6 +32,12 @@
     "canSpawnInWorld": true
   },
   "BreedData": {
-    "isBreedable": true
+    "isBreedable": true,
+    "parents": [
+      {
+        "parent1": "rgbee",
+        "parent2": "rgbee"
+      }
+    ]
   }
 }

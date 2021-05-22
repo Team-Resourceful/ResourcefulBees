@@ -43,6 +43,12 @@
     "canSpawnInWorld": true
   },
   "BreedData": {
+    "parents": [
+      {
+        "parent1": "coal",
+        "parent2": "coal"
+      }
+    ],
     "feedItem": ["minecraft:poppy"],
     "feedAmount": 4,
     "isBreedable": true

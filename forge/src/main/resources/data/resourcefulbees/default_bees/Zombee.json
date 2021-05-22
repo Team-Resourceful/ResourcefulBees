@@ -40,7 +40,13 @@
     "lightLevel": "NIGHT"
   },
   "BreedData": {
-    "isBreedable": true
+    "isBreedable": true,
+    "parents": [
+      {
+        "parent1": "zombee",
+        "parent2": "zombee"
+      }
+    ]
   },
   "TraitData": {
     "hasTraits": true,

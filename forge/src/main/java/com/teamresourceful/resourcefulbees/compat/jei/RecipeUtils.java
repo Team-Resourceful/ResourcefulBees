@@ -13,6 +13,7 @@ import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.ingredients.IIngredients;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.*;
 import net.minecraft.tags.Tag;
@@ -95,7 +96,7 @@ public class RecipeUtils {
 
     private static void addMutationToolTip(int slotIndex, BlockMutation.Recipe recipe, List<Component> tooltip) {
         if (slotIndex == 0 && !recipe.getBlockOutput().getCompoundNBT().isPresent()) {
-            if (BeeInfoUtils.isShiftPressed()) {
+            if (Screen.hasShiftDown()) {
                 List<String> lore = BeeInfoUtils.getLoreLines(recipe.getBlockOutput().getCompoundNBT().get());
                 lore.forEach(l -> tooltip.add(new TextComponent(l).withStyle(Style.EMPTY.withColor(TextColor.parseColor("dark_purple")))));
             } else {

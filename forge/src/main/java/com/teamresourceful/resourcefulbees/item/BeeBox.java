@@ -5,6 +5,7 @@ import com.teamresourceful.resourcefulbees.lib.BeeConstants;
 import com.teamresourceful.resourcefulbees.lib.NBTConstants;
 import com.teamresourceful.resourcefulbees.utils.BeeInfoUtils;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -130,7 +131,7 @@ public class BeeBox extends Item {
         } else {
             tooltip.add(new TranslatableComponent(ITEM_DOT + ResourcefulBees.MOD_ID + ".information.bee_box.info").withStyle(ChatFormatting.GOLD));
         }
-        if (BeeInfoUtils.isShiftPressed() && isFilled(stack)) {
+        if (Screen.hasShiftDown() && isFilled(stack)) {
             tooltip.add(new TranslatableComponent(ITEM_DOT + ResourcefulBees.MOD_ID + ".information.bee_box.bees").withStyle(ChatFormatting.YELLOW));
 
             //noinspection ConstantConditions

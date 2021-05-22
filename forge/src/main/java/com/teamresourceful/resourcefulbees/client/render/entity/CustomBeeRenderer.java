@@ -20,7 +20,7 @@ public class CustomBeeRenderer extends MobRenderer<CustomBeeEntity, CustomBeeMod
 
     public CustomBeeRenderer(EntityRenderDispatcher manager, RenderData renderData) {
         super(manager, new CustomBeeModel<>(renderData.getBaseModelType()), 0.4F * renderData.getSizeModifier());
-        renderData.getLayers().forEach(layerData -> addLayer(new BeeLayer(this, layerData, renderData.getModelType())));
+        renderData.getLayers().stream().limit(6).forEach(layerData -> addLayer(new BeeLayer(this, layerData, renderData.getModelType())));
     }
 
     @NotNull

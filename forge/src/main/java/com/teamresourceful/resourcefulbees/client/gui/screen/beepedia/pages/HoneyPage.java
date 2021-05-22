@@ -118,7 +118,7 @@ public class HoneyPage extends BeepediaPage {
         for (Map.Entry<String, BeePage> e : beePages.entrySet()) {
             ItemStack stack = new ItemStack(ModItems.BEE_JAR.get());
             BeeJar.fillJar(stack, e.getValue().beeData);
-            Component translation = e.getValue().beeData.getTranslation();
+            Component translation = e.getValue().beeData.getDisplayName();
             Button.OnPress onPress = button -> {
                 BeepediaScreen.saveScreenState();
                 beepedia.setActive(BeepediaScreen.PageType.BEE, e.getKey());

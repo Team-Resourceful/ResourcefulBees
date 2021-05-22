@@ -45,8 +45,13 @@
   },
   "BreedData": {
     "isBreedable": true,
-    "parent1": ["Wither"],
-    "parent2": ["Ender"],
+    "parents": [
+      {
+        "parent1": "wither",
+        "parent2": "ender",
+        "chance": 0.25
+      }
+    ],
     "feedItem": ["minecraft:end_stone"],
     "feedAmount": 12
   },

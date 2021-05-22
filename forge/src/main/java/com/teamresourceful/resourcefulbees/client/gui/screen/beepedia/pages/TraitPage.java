@@ -219,7 +219,7 @@ public class TraitPage extends BeepediaPage {
                 BeepediaScreen.saveScreenState();
                 beepedia.setActive(BeepediaScreen.PageType.BEE, e.getKey());
             };
-            ListButton button = new ListButton(0, 0, 100, 20, 0, 0, 20, listImage, stack, 2, 2, e.getValue().beeData.getTranslation(), 22, 6, onPress);
+            ListButton button = new ListButton(0, 0, 100, 20, 0, 0, 20, listImage, stack, 2, 2, e.getValue().beeData.getDisplayName(), 22, 6, onPress);
             beepedia.addButton(button);
             button.visible = false;
             buttons.put(e.getKey(), button);

@@ -46,7 +46,13 @@
     "lightLevel": "NIGHT"
   },
   "BreedData": {
-    "isBreedable": true
+    "isBreedable": true,
+    "parents": [
+      {
+        "parent1": "nether_quartz",
+        "parent2": "coal"
+      }
+    ]
   },
   "TraitData": {
     "hasTraits": true,

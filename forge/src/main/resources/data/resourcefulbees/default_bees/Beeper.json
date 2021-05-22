@@ -52,6 +52,12 @@
     "lightLevel": "NIGHT"
   },
   "BreedData": {
+    "parents": [
+      {
+        "parent1": "beeper",
+        "parent2": "beeper"
+      }
+    ],
     "isBreedable": true
   },
   "TraitData": {

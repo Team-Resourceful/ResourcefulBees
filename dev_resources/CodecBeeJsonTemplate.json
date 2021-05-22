@@ -99,15 +99,19 @@
   },
   "BreedData": {
     "isBreedable": true,
-    "weight": 1,
-    "chance": 0.5,
-    "parent1": [
-      "a list of parents matching",
-      " up with the parents in parent2"
-    ],
-    "parent2": [
-      "a list of parents matching",
-      " up with the parents in parent1"
+    "parents": [
+      {
+        "weight": 1,
+        "chance": 0.5,
+        "parent1": "name of parent 1",
+        "parent2": "name of parent 2"
+      },
+      {
+        "weight": 1,
+        "chance": 0.5,
+        "parent1": "name of parent 1",
+        "parent2": "name of parent 2"
+      }
     ],
     "feedItem": ["can be a single tag'' or a list[] of blocks/fluids ex. minecraft:coal_block"],
     "feedReturnItem": "the ID of the item returned to the player. this is good for stuff like fluid buckets",

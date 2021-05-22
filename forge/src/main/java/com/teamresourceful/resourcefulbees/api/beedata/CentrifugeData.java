@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class CentrifugeData {
+    public static final CentrifugeData DEFAULT = new CentrifugeData(false, 0,0, Collections.emptyList(), Collections.emptyList());
 
     public static final Codec<CentrifugeData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.BOOL.fieldOf("hasCentrifugeOutput").orElse(false).forGetter(CentrifugeData::hasCentrifugeOutput),
@@ -53,9 +54,5 @@ public class CentrifugeData {
 
     public List<FluidOutput> getFluidOutputs() {
         return fluidOutputs;
-    }
-
-    public static CentrifugeData createDefault() {
-        return new CentrifugeData(false, 0,0, Collections.emptyList(), Collections.emptyList());
     }
 }

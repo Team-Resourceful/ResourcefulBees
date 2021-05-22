@@ -17,6 +17,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ImageButton;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.network.chat.TextComponent;
@@ -189,7 +190,7 @@ public class HoneycombPage extends BeeDataPage {
 
     @Override
     public void tick(int ticksActive) {
-        if (ticksActive % 20 == 0 && !BeeInfoUtils.isShiftPressed()) {
+        if (ticksActive % 20 == 0 && !Screen.hasShiftDown()) {
             counter++;
             if (counter >= max) counter = 0;
         }

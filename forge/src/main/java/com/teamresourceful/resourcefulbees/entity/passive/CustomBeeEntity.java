@@ -50,7 +50,6 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
     protected final String beeType;
     protected int timeWithoutHive;
     protected int flowerID;
-    private BlockPos lastFlower;
     private boolean hasHiveInRange;
     private int disruptorInRange;
 
@@ -78,14 +77,6 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
 
     public String getBeeType() {
         return beeType;
-    }
-
-    public BlockPos getLastFlower() {
-        return lastFlower;
-    }
-
-    public void setLastFlower(BlockPos lastFlower) {
-        this.lastFlower = lastFlower;
     }
 
     public JsonObject getRawBeeData() {
@@ -273,8 +264,8 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
         compound.putInt(NBTConstants.NBT_FEED_COUNT, this.getFeedCount());
     }
 
-    public AgableMob createSelectedChild(CustomBeeData customBeeData) {
-        EntityType<?> entityType = Objects.requireNonNull(customBeeData.getEntityType());
+    public AgableMob createSelectedChild(BeeFamily beeFamily) {
+        EntityType<?> entityType = Objects.requireNonNull(beeFamily.getChildData().getEntityType());
         Entity entity = entityType.create(level);
         return (AgableMob) entity;
     }

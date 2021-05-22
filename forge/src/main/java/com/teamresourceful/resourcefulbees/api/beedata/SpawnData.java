@@ -14,6 +14,7 @@ import java.util.Set;
 import java.util.StringJoiner;
 
 public class SpawnData {
+    public static final SpawnData DEFAULT = new SpawnData(false, 0, 0, 0, Collections.emptySet(), Collections.emptySet(), LightLevels.ANY, 0, 0);
 
     private static final Set<ResourceLocation> DEFAULT_WHITELIST = Collections.singleton(new ResourceLocation("tag:overworld"));
     private static final Set<ResourceLocation> DEFAULT_BLACKLIST = Collections.singleton(new ResourceLocation("tag:ocean"));
@@ -111,10 +112,6 @@ public class SpawnData {
         StringJoiner returnList = new StringJoiner(", ");
         spawnableBiomes.forEach(resourceLocation -> returnList.add(WordUtils.capitalize(resourceLocation.getPath().replace("_", " "))));
         return returnList.toString();
-    }
-
-    public static SpawnData createDefault() {
-        return new SpawnData(false, 0, 0, 0, Collections.emptySet(), Collections.emptySet(), LightLevels.ANY, 0, 0);
     }
 
     private void buildSpawnableBiomes() {

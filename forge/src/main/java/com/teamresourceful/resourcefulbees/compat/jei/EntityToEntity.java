@@ -17,6 +17,7 @@ import mezz.jei.api.gui.ingredient.ITooltipCallback;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.*;
@@ -144,7 +145,7 @@ public class EntityToEntity extends BaseCategory<EntityToEntity.Recipe> {
             tooltip.add(new TextComponent(recipe.outputEntity.getRegistryName().toString()).withStyle(ChatFormatting.GRAY));
         }
         if (!recipe.outputNBT.isEmpty()) {
-            if (BeeInfoUtils.isShiftPressed()) {
+            if (Screen.hasShiftDown()) {
                 List<String> lore = BeeInfoUtils.getLoreLines(recipe.outputNBT);
                 lore.forEach(l -> tooltip.add(new TextComponent(l).withStyle(Style.EMPTY.withColor(TextColor.parseColor(DARK_PURPLE)))));
             } else {

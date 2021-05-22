@@ -100,24 +100,24 @@ public class ClientEventHandlers {
         ItemBlockRenderTypes.setRenderLayer(ModBlocks.WOODEN_HONEY_TANK.get(), RenderType.translucent());
         ItemBlockRenderTypes.setRenderLayer(ModBlocks.HONEY_GENERATOR.get(), RenderType.translucent());
 
-        // bee nests need transparency for overlay
-        ItemBlockRenderTypes.setRenderLayer(ModBlocks.OAK_BEE_NEST.get(), RenderType.translucent());
-        ItemBlockRenderTypes.setRenderLayer(ModBlocks.SPRUCE_BEE_NEST.get(), RenderType.translucent());
-        ItemBlockRenderTypes.setRenderLayer(ModBlocks.BIRCH_BEE_NEST.get(), RenderType.translucent());
-        ItemBlockRenderTypes.setRenderLayer(ModBlocks.BROWN_MUSHROOM_BEE_NEST.get(), RenderType.translucent());
-        ItemBlockRenderTypes.setRenderLayer(ModBlocks.CRIMSON_BEE_NEST.get(), RenderType.translucent());
-        ItemBlockRenderTypes.setRenderLayer(ModBlocks.CRIMSON_NYLIUM_BEE_NEST.get(), RenderType.translucent());
-        ItemBlockRenderTypes.setRenderLayer(ModBlocks.DARK_OAK_BEE_NEST.get(), RenderType.translucent());
-        ItemBlockRenderTypes.setRenderLayer(ModBlocks.RED_MUSHROOM_BEE_NEST.get(), RenderType.translucent());
-        ItemBlockRenderTypes.setRenderLayer(ModBlocks.WARPED_BEE_NEST.get(), RenderType.translucent());
-        ItemBlockRenderTypes.setRenderLayer(ModBlocks.WARPED_NYLIUM_BEE_NEST.get(), RenderType.translucent());
-        ItemBlockRenderTypes.setRenderLayer(ModBlocks.ACACIA_BEE_NEST.get(), RenderType.translucent());
-        ItemBlockRenderTypes.setRenderLayer(ModBlocks.GRASS_BEE_NEST.get(), RenderType.translucent());
-        ItemBlockRenderTypes.setRenderLayer(ModBlocks.JUNGLE_BEE_NEST.get(), RenderType.translucent());
-        ItemBlockRenderTypes.setRenderLayer(ModBlocks.NETHER_BEE_NEST.get(), RenderType.translucent());
-        ItemBlockRenderTypes.setRenderLayer(ModBlocks.PRISMARINE_BEE_NEST.get(), RenderType.translucent());
-        ItemBlockRenderTypes.setRenderLayer(ModBlocks.PURPUR_BEE_NEST.get(), RenderType.translucent());
-        ItemBlockRenderTypes.setRenderLayer(ModBlocks.WITHER_BEE_NEST.get(), RenderType.translucent());
+        // bee nests need cutout for overlay
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.OAK_BEE_NEST.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.SPRUCE_BEE_NEST.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.BIRCH_BEE_NEST.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.BROWN_MUSHROOM_BEE_NEST.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.CRIMSON_BEE_NEST.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.CRIMSON_NYLIUM_BEE_NEST.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.DARK_OAK_BEE_NEST.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.RED_MUSHROOM_BEE_NEST.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.WARPED_BEE_NEST.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.WARPED_NYLIUM_BEE_NEST.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.ACACIA_BEE_NEST.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.GRASS_BEE_NEST.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.JUNGLE_BEE_NEST.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.NETHER_BEE_NEST.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.PRISMARINE_BEE_NEST.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.PURPUR_BEE_NEST.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.WITHER_BEE_NEST.get(), RenderType.cutout());
 
         ItemModelPropertiesHandler.registerProperties();
         ClientRegistry.bindTileEntityRenderer(ModBlockEntityTypes.HONEY_TANK_TILE_ENTITY.get(), RenderHoneyTank::new);

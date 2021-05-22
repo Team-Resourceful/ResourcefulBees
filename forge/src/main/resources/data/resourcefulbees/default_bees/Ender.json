@@ -48,7 +48,13 @@
     "spawnWeight": 20
   },
   "BreedData": {
-    "isBreedable": true
+    "isBreedable": true,
+    "parents": [
+      {
+        "parent1": "ender",
+        "parent2": "ender"
+      }
+    ]
   },
   "TraitData": {
     "hasTraits": true,

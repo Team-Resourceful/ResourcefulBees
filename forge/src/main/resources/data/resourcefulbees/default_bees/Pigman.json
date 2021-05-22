@@ -42,7 +42,13 @@
     "lightLevel": "NIGHT"
   },
   "BreedData": {
-    "isBreedable": true
+    "isBreedable": true,
+    "parents": [
+      {
+        "parent1": "pigman",
+        "parent2": "pigman"
+      }
+    ]
   },
   "TraitData": {
     "hasTraits": true,

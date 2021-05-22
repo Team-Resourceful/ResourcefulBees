@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.tileentity.multiblocks.apiary;
 import com.teamresourceful.resourcefulbees.api.IBeeRegistry;
 import com.teamresourceful.resourcefulbees.api.ICustomBee;
 import com.teamresourceful.resourcefulbees.api.beedata.BreedData;
-import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
+import com.teamresourceful.resourcefulbees.api.beedata.BeeFamily;
 import com.teamresourceful.resourcefulbees.config.Config;
 import com.teamresourceful.resourcefulbees.container.ApiaryStorageContainer;
 import com.teamresourceful.resourcefulbees.container.AutomationSensitiveItemStackHandler;
@@ -227,9 +227,9 @@ public class ApiaryStorageTileEntity extends BlockEntity implements MenuProvider
 
     public boolean breedComplete(String p1, String p2) {
         if (inventoryHasSpace()) {
-            CustomBeeData childBeeData = BEE_REGISTRY.getWeightedChild(p1, p2);
-            float breedChance = BeeRegistry.getRegistry().getBreedChance(p1, p2, childBeeData.getBreedData());
-            EntityType<?> entityType = BeeInfoUtils.getEntityType(childBeeData.getCoreData().getName());
+            BeeFamily beeFamily = BEE_REGISTRY.getWeightedChild(p1, p2);
+            double breedChance = beeFamily.getChance();
+            EntityType<?> entityType = beeFamily.getChildData().getEntityType();
 
             BreedData p1BreedData = BEE_REGISTRY.getBeeData(p1).getBreedData();
             BreedData p2BreedData = BEE_REGISTRY.getBeeData(p2).getBreedData();

@@ -192,7 +192,7 @@ public class ApiaryBreederTileEntity extends BlockEntity implements TickableBloc
                 int p1FeedAmount = ((CustomBeeEntity) p1Entity).getBreedData().getFeedAmount();
                 int p2FeedAmount = ((CustomBeeEntity) p2Entity).getBreedData().getFeedAmount();
 
-                return (canBreed && BeeInfoUtils.isValidBreedItem(f1Stack, p1BreedData) && BeeInfoUtils.isValidBreedItem(f2Stack, p2BreedData)
+                return (canBreed && p1BreedData.getFeedItems().contains(f1Stack.getItem()) && p2BreedData.getFeedItems().contains(f2Stack.getItem())
                         && f1StackCount >= p1FeedAmount && f2StackCount >= p2FeedAmount && !getTileStackHandler().getStackInSlot(getEmptyJarSlots()[slot]).isEmpty());
             }
         }

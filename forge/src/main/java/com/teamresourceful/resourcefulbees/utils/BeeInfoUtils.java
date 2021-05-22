@@ -128,10 +128,6 @@ public class BeeInfoUtils {
 
     private static final ResourceLocation VALID_APIARY = new ResourceLocation("resourcefulbees:valid_apiary");
 
-    public static boolean isValidBreedItem(@NotNull ItemStack stack, BreedData breedData) {
-        return breedData.getFeedItems().contains(stack.getItem());
-    }
-
 
     public static void flagBeesInRange(BlockPos pos, Level world) {
         BoundingBox box = BoundingBox.createProper(pos.getX() + 10, pos.getY() + 10, pos.getZ() + 10, pos.getX() - 10, pos.getY() - 10, pos.getZ() - 10);
@@ -149,11 +145,6 @@ public class BeeInfoUtils {
         JsonElement je = jp.parse(outputNBT.toString());
         String nbtString = "NBT: " + gson.toJson(je);
         return Arrays.asList(nbtString.split("\n"));
-    }
-
-    public static boolean isShiftPressed() {
-        long windowID = Minecraft.getInstance().getWindow().getWindow();
-        return InputConstants.isKeyDown(windowID, GLFW.GLFW_KEY_LEFT_SHIFT) || InputConstants.isKeyDown(windowID, GLFW.GLFW_KEY_RIGHT_SHIFT);
     }
 
     public static TranslatableComponent getSizeName(float sizeModifier) {
@@ -183,11 +174,6 @@ public class BeeInfoUtils {
             default:
                 return new TranslatableComponent("gui.resourcefulbees.light.any");
         }
-    }
-
-    public static List<ItemStack> getBreedItems(BreedData parent1Data) {
-        if (!parent1Data.getFeedItems().isEmpty()) return Collections.emptyList();
-        return parent1Data.getFeedItems().stream().map(f -> new ItemStack(f, parent1Data.getFeedAmount())).collect(Collectors.toList());
     }
 
     public static void ageBee(int ticksInHive, Bee beeEntity) {

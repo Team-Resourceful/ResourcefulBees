@@ -1,21 +1,26 @@
 package com.teamresourceful.resourcefulbees.api.beedata;
 
+import com.google.common.collect.Sets;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.lib.BeeConstants;
 import com.teamresourceful.resourcefulbees.utils.BeeInfoUtils;
 import com.teamresourceful.resourcefulbees.utils.color.Color;
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import javax.annotation.concurrent.Immutable;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
+@Immutable
 public class CoreData {
+    public static final CoreData DEFAULT = new CoreData("error");
 
     private final Set<Block> blockFlowers;
     private final Optional<ResourceLocation> entityFlower;
@@ -81,19 +86,15 @@ public class CoreData {
         return BeeInfoUtils.getEntityType(entityFlower.orElse(null));
     }
 
-    public static CoreData createDefault() {
-        return new CoreData("ERROR");
-    }
-
     public static Codec<CoreData> codec(String name) {
         return RecordCodecBuilder.create(instance -> instance.group(
                 Codec.STRING.fieldOf("name").orElse(name).forGetter(CoreData::getName),
-                CodecUtils.BLOCK_SET_CODEC.fieldOf("flower").orElse(new HashSet<>()).forGetter(CoreData::getBlockFlowers),
+                CodecUtils.BLOCK_SET_CODEC.fieldOf("flower").orElse(Sets.newHashSet(Blocks.POPPY)).forGetter(CoreData::getBlockFlowers),
                 ResourceLocation.CODEC.optionalFieldOf("entityFlower").forGetter(CoreData::getEntityFlower),
                 Codec.intRange(600, Integer.MAX_VALUE).fieldOf("maxTimeInHive").orElse(2400).forGetter(CoreData::getMaxTimeInHive),
                 Codec.STRING.optionalFieldOf("lore").forGetter(CoreData::getLore),
                 Codec.STRING.optionalFieldOf("creator").forGetter(CoreData::getCreator),
                 Color.CODEC.fieldOf("loreColor").orElse(Color.DEFAULT).forGetter(CoreData::getLoreColor)
-                ).apply(instance, CoreData::new));
+        ).apply(instance, CoreData::new));
     }
 }

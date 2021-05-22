@@ -84,7 +84,7 @@ public class BeePage extends BeepediaPage {
         ItemStack beeJar = new ItemStack(ModItems.BEE_JAR.get());
         BeeJar.fillJar(beeJar, beeData);
         MutableComponent star = new TextComponent(beeUnlocked ? ChatFormatting.GREEN + "✦ " + ChatFormatting.RESET : "✧ ");
-        star.append(beeData.getTranslation());
+        star.append(beeData.getDisplayName());
         label = star;
         newListButton(beeJar, label);
 
@@ -148,7 +148,7 @@ public class BeePage extends BeepediaPage {
     private void registerBreedPage(int subX, int subY) {
         List<EntityMutation> breedMutations = BeeRegistry.getRegistry().getMutationsContaining(beeData);
         List<ItemMutation> itemBreedMutation = BeeRegistry.getRegistry().getItemMutationsContaining(beeData);
-        if (beeData.getBreedData().isBreedable() || !breedMutations.isEmpty() || !itemBreedMutation.isEmpty()) {
+        if (beeData.getBreedData().hasParents() || !breedMutations.isEmpty() || !itemBreedMutation.isEmpty()) {
             breedingPage = Pair.of(
                     getTabButton(new ItemStack(ModItems.GOLD_FLOWER_ITEM.get()), onPress -> setSubPage(SubPageType.BREEDING),
                             new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding")),

@@ -41,6 +41,12 @@
     "canSpawnInWorld": true
   },
   "BreedData": {
-    "isBreedable": true
+    "isBreedable": true,
+    "parents": [
+      {
+        "parent1": "redstone",
+        "parent2": "redstone"
+      }
+    ]
   }
 }

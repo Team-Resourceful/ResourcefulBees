@@ -10,6 +10,7 @@ import com.teamresourceful.resourcefulbees.utils.RenderUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.Entity;
@@ -95,7 +96,7 @@ public class BeeInfoPage extends BeeDataPage {
 
     @Override
     public void tick(int ticksActive) {
-        if (BeeInfoUtils.isShiftPressed()) return;
+        if (Screen.hasShiftDown()) return;
         if (ticksActive % 20 == 0) {
             if (flowers.isEmpty()) return;
             flowers.cycle();

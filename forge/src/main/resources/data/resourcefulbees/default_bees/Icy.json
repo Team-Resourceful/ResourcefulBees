@@ -34,7 +34,13 @@
     "biomeWhitelist": ["tag:cold", "tag:snowy"]
   },
   "BreedData": {
-    "isBreedable": true
+    "isBreedable": true,
+    "parents": [
+      {
+        "parent1": "icy",
+        "parent2": "icy"
+      }
+    ]
   },
   "TraitData": {
     "hasTraits": true,

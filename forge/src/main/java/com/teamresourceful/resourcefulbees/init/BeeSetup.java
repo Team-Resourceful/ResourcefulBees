@@ -3,7 +3,6 @@ package com.teamresourceful.resourcefulbees.init;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
-import com.teamresourceful.resourcefulbees.api.beedata.SpawnData;
 import com.teamresourceful.resourcefulbees.config.Config;
 import com.teamresourceful.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.lib.ModConstants;
@@ -16,6 +15,7 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.levelgen.GenerationStep;
@@ -58,8 +58,9 @@ public class BeeSetup {
         if (Config.GENERATE_DEFAULTS.get()) {
             FileUtils.setupDefaultFiles("/data/resourcefulbees/default_bees", beePath);
             FileUtils.setupDefaultFiles("/data/resourcefulbees/default_honey", honeyPath);
-            Config.GENERATE_DEFAULTS.set(false);
-            Config.GENERATE_DEFAULTS.save();
+            // REQUIRED RE-ENABLE THIS BEFORE RELEASE!!!
+            //Config.GENERATE_DEFAULTS.set(false);
+            //Config.GENERATE_DEFAULTS.save();
         }
         LOGGER.info("Loading Custom Bees...");
         FileUtils.streamFilesAndParse(beePath, BeeSetup::parseBee, "Could not stream bees!!");

@@ -35,12 +35,15 @@
       {"id": "minecraft:nether_star", "weight": 0.01}
     ]
   },
-  "SpawnData": {},
   "BreedData": {
     "isBreedable": true,
-    "parent1": "Coal",
-    "parent2": "Skeleton",
-    "feedItem": "minecraft:rotten_flesh",
+    "parents": [
+      {
+        "parent1": "coal",
+        "parent2": "skeleton"
+      }
+    ],
+    "feedItem": ["minecraft:rotten_flesh"],
     "feedAmount": 12
   },
   "TraitData": {

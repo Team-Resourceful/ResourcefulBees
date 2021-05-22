@@ -45,9 +45,12 @@
   },
   "BreedData": {
     "isBreedable": true,
-    "parent1": ["Coal"],
-    "parent2": ["Skeleton"],
+    "parents": [
+      {
+        "parent1": "coal",
+        "parent2": "skeleton"
+      }
+    ],
     "feedItem": "forge:ores"
-  },
-  "TraitData": {}
+  }
 }

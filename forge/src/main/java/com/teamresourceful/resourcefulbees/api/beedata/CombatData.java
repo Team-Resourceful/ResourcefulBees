@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 public class CombatData {
+    public static final CombatData DEFAULT = new CombatData(false, 1.0d, true, true, 10.0d, 0.0d, 0.0d, 0.0d);
 
     public static final Codec<CombatData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.BOOL.fieldOf("isPassive").orElse(false).forGetter(CombatData::isPassive),
@@ -66,9 +67,5 @@ public class CombatData {
 
     public double getKnockback() {
         return knockback;
-    }
-
-    public static CombatData createDefault() {
-        return new CombatData(false, 1.0d, true, true, 10.0d, 0.0d, 0.0d, 0.0d);
     }
 }

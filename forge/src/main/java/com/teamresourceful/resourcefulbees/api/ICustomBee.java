@@ -58,5 +58,5 @@ public interface ICustomBee {
      */
     void addFeedCount();
 
-    AgableMob createSelectedChild(CustomBeeData beeType);
+    AgableMob createSelectedChild(BeeFamily beeType);
 }

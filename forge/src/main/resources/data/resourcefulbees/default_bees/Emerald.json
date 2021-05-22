@@ -41,6 +41,12 @@
     "biomeWhitelist": ["tag:mountain","tag:hills"]
   },
   "BreedData": {
+    "parents": [
+      {
+        "parent1": "emerald",
+        "parent2": "emerald"
+      }
+    ],
     "isBreedable": true,
     "spawnWeight": 4
   }

@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class TraitData extends BeeTrait {
+    public static final TraitData DEFAULT = new TraitData(false, "null", Collections.emptySet(), Collections.emptySet(), Collections.emptySet(), Collections.emptySet(), Collections.emptySet(), Collections.emptySet(), Collections.emptySet());
 
     public static Codec<TraitData> codec(String name) {
         return RecordCodecBuilder.create(instance -> instance.group(
@@ -55,9 +56,4 @@ public class TraitData extends BeeTrait {
     }
 
     public boolean hasTraits() { return hasTraits; }
-
-
-    public static TraitData createDefault() {
-        return new TraitData(false, "null", Collections.emptySet(), Collections.emptySet(), Collections.emptySet(), Collections.emptySet(), Collections.emptySet(), Collections.emptySet(), Collections.emptySet());
-    }
 }

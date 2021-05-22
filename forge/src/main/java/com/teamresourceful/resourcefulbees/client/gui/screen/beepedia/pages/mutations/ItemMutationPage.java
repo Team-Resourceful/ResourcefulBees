@@ -10,6 +10,7 @@ import com.teamresourceful.resourcefulbees.lib.MutationTypes;
 import com.teamresourceful.resourcefulbees.utils.BeeInfoUtils;
 import com.teamresourceful.resourcefulbees.utils.RandomCollection;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.tags.Tag;
 import net.minecraft.world.entity.Entity;
@@ -55,7 +56,7 @@ public class ItemMutationPage extends MutationsPage {
 
     @Override
     public void tick(int ticksActive) {
-        if (ticksActive % 20 == 0 && !BeeInfoUtils.isShiftPressed()) {
+        if (ticksActive % 20 == 0 && !Screen.hasShiftDown()) {
             inputCounter++;
             outputCounter++;
             if (inputCounter >= inputs.size()) inputCounter = 0;

@@ -18,6 +18,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import java.util.*;
 
 public class MutationData {
+    public static final MutationData DEFAULT = new MutationData(false, 0, Collections.emptyList());
 
     public static final Codec<MutationData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.BOOL.fieldOf("hasMutation").orElse(false).forGetter(MutationData::hasMutation),
@@ -73,10 +74,6 @@ public class MutationData {
 
     public boolean testMutations() {
         return hasMutation && (!blockMutations.isEmpty() || !entityMutations.isEmpty() || !itemMutations.isEmpty());
-    }
-
-    public static MutationData createDefault() {
-        return new MutationData(false, 0, Collections.emptyList());
     }
 
 

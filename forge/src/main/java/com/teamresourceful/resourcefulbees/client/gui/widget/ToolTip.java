@@ -68,7 +68,7 @@ public class ToolTip {
         if (mouseX > minX && mouseX < maxX && mouseY > minY && mouseY < maxY) {
             if (bee != null) {
                 List<Component> tooltip = new LinkedList<>();
-                tooltip.add(bee.getTranslation());
+                tooltip.add(bee.getDisplayName());
                 if (bee.getCoreData().getLore().isPresent()) {
                     tooltip.add(new TextComponent(bee.getCoreData().getLore().get()).withStyle(bee.getCoreData().getLoreColorStyle()));
                 }
@@ -88,7 +88,7 @@ public class ToolTip {
                 tooltip.add(fluid.getDisplayName());
                 if (fluid.getAmount() > 1) {
                     DecimalFormat decimalFormat = new DecimalFormat("##0.0");
-                    String amount = fluid.getAmount() < 500 || BeeInfoUtils.isShiftPressed() ? String.format("%,d", fluid.getAmount()) + " mb" : decimalFormat.format((float) fluid.getAmount() / 1000) + " B";
+                    String amount = fluid.getAmount() < 500 || Screen.hasShiftDown() ? String.format("%,d", fluid.getAmount()) + " mb" : decimalFormat.format((float) fluid.getAmount() / 1000) + " B";
                     tooltip.add(new TextComponent(amount));
                 }
                 tooltip.add(new TextComponent(fluid.getFluid().getRegistryName().toString()).withStyle(ChatFormatting.DARK_GRAY));

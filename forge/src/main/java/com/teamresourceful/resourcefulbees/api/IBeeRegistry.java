@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.api;
 
 import com.google.gson.JsonObject;
+import com.teamresourceful.resourcefulbees.api.beedata.BeeFamily;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 
 import java.util.Map;
@@ -12,7 +13,7 @@ import java.util.Set;
  *     If you want to work with a already there implementation look at com.resourcefulbees.resourcefulbees.registry.BeeRegistry
  * </p>
  */
-@SuppressWarnings("ALL")
+@SuppressWarnings("unused")
 public interface IBeeRegistry {
 
     /**
@@ -47,17 +48,17 @@ public interface IBeeRegistry {
      *  @param parent2 Bee type for parent 2.
      *  @return Returns a weighted random bee type as a string.
      */
-    CustomBeeData getWeightedChild(String parent1, String parent2);
+    BeeFamily getWeightedChild(String parent1, String parent2);
 
     /**
      * Returns the adjusted weight for the supplied child's data.
      * The returned value is an adjusted percentage in the range of 0 - 100 represented as a double.
      * This value is calculated based on the weighting of all possible children the supplied child's parents can have.
      *
-     *  @param child BeeData object for the child.
+     *  @param beeFamily BeeData object for the child.
      *  @return Returns random bee type as a string.
      */
-    double getAdjustedWeightForChild(CustomBeeData child, CustomBeeData parent1, CustomBeeData parent2);
+    double getAdjustedWeightForChild(BeeFamily beeFamily);
 
     /**
      * Registers the supplied Bee Type and associated data to the mod.
@@ -67,7 +68,7 @@ public interface IBeeRegistry {
      *  @param customBeeData BeeData of the bee being registered
      *  @return Returns false if bee already exists in the registry.
      */
-    boolean registerBee(String beeType, CustomBeeData customBeeData);
+    //boolean registerBee(String beeType, CustomBeeData customBeeData);
 
     /**
      * Returns an unmodifiable copy of the Bee Registry.

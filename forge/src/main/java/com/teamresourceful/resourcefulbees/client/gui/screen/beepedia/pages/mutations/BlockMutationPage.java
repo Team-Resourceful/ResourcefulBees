@@ -10,6 +10,7 @@ import com.teamresourceful.resourcefulbees.utils.BeeInfoUtils;
 import com.teamresourceful.resourcefulbees.utils.RandomCollection;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.*;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.Block;
@@ -38,7 +39,7 @@ public class BlockMutationPage extends MutationsPage {
 
     @Override
     public void tick(int ticksActive) {
-        if (ticksActive % 20 == 0 && !BeeInfoUtils.isShiftPressed()) {
+        if (ticksActive % 20 == 0 && !Screen.hasShiftDown()) {
             inputCounter++;
             outputCounter++;
             if (inputCounter >= inputs.size()) inputCounter = 0;
@@ -75,7 +76,7 @@ public class BlockMutationPage extends MutationsPage {
             tooltip.add(name);
             tooltip.add(id);
             if (output.getCompoundNBT().isPresent()) {
-                if (BeeInfoUtils.isShiftPressed()) {
+                if (Screen.hasShiftDown()) {
                     List<String> lore = BeeInfoUtils.getLoreLines(output.getCompoundNBT().get());
                     lore.forEach(l -> tooltip.add(new TextComponent(l).withStyle(Style.EMPTY.withColor(TextColor.parseColor("dark_purple")))));
                 } else {

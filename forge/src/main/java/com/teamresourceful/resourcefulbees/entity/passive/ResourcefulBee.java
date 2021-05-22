@@ -75,7 +75,7 @@ public class ResourcefulBee extends CustomBeeEntity {
         String beeType = namespaceID.substring(namespaceID.lastIndexOf(":") + 1, namespaceID.length() - 4);
         CustomBeeData customBeeData = BeeRegistry.getRegistry().getBeeData(beeType);
         boolean isPassive = customBeeData.getCombatData().isPassive();
-        boolean isBreedable = customBeeData.getBreedData().isBreedable();
+        boolean isBreedable = customBeeData.getBreedData().hasParents();
         boolean hasMutation = customBeeData.getMutationData().hasMutation();
 
         if (!isPassive) {
@@ -86,7 +86,7 @@ public class ResourcefulBee extends CustomBeeEntity {
         this.goalSelector.addGoal(1, new EnterBeehiveGoal2());
 
         if (isBreedable) {
-            this.goalSelector.addGoal(2, new BeeBreedGoal(this, 1.0D));
+            this.goalSelector.addGoal(2, new BeeBreedGoal(this, 1.0D, beeType));
             this.goalSelector.addGoal(3, new BeeTemptGoal(this, 1.25D));
             this.goalSelector.addGoal(5, new FollowParentGoal(this, 1.25D));
         }

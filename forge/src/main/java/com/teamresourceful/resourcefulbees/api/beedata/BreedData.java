@@ -1,54 +1,39 @@
 package com.teamresourceful.resourcefulbees.api.beedata;
 
+import com.google.common.collect.Sets;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.lib.BeeConstants;
 import net.minecraft.core.Registry;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
-import java.util.*;
+import javax.annotation.concurrent.Immutable;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
+@Immutable
 public class BreedData {
+    public static final BreedData DEFAULT = new BreedData(Collections.emptySet(), Collections.emptySet(), Optional.empty(), 0, 0, 0);
 
-    // TODO
-    //  Consider modifying this class such that parents is a single list of "Breed Pair" Objects
-    //  Change chance to be a double instead of a float to remain consistent with other usages
 
-    public static final Codec<BreedData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Codec.BOOL.fieldOf("isBreedable").orElse(false).forGetter(BreedData::isBreedable),
-            Codec.doubleRange(0.0d, Double.MAX_VALUE).fieldOf("weight").orElse(BeeConstants.DEFAULT_BREED_WEIGHT).forGetter(BreedData::getBreedWeight),
-            Codec.floatRange(0.0f, 1.0f).fieldOf("chance").orElse(BeeConstants.DEFAULT_BREED_CHANCE).forGetter(BreedData::getBreedChance),
-            Codec.STRING.listOf().fieldOf("parent1").orElse(new ArrayList<>()).forGetter(BreedData::getParent1),
-            Codec.STRING.listOf().fieldOf("parent2").orElse(new ArrayList<>()).forGetter(BreedData::getParent2),
-            CodecUtils.ITEM_SET_CODEC.fieldOf("feedItem").orElse(new HashSet<>()).forGetter(BreedData::getFeedItems),
-            Registry.ITEM.optionalFieldOf("feedReturnItem").forGetter(BreedData::getFeedReturnItem),
-            Codec.intRange(1, Integer.MAX_VALUE).fieldOf("feedAmount").orElse(1).forGetter(BreedData::getFeedAmount),
-            Codec.intRange(Integer.MIN_VALUE, 0).fieldOf("childGrowthDelay").orElse(BeeConstants.CHILD_GROWTH_DELAY).forGetter(BreedData::getChildGrowthDelay),
-            Codec.intRange(0, Integer.MAX_VALUE).fieldOf("breedDelay").orElse(BeeConstants.BREED_DELAY).forGetter(BreedData::getBreedDelay)
-    ).apply(instance, BreedData::new));
+    public static Codec<BreedData> codec(String name) {
+        return RecordCodecBuilder.create(instance -> instance.group(
+                CodecUtils.createSetCodec(BeeFamily.codec(name)).fieldOf("parents").orElse(new HashSet<>()).forGetter(BreedData::getParents),
+                CodecUtils.ITEM_SET_CODEC.fieldOf("feedItem").orElse(Sets.newHashSet(Items.POPPY)).forGetter(BreedData::getFeedItems),
+                Registry.ITEM.optionalFieldOf("feedReturnItem").forGetter(BreedData::getFeedReturnItem),
+                Codec.intRange(1, Integer.MAX_VALUE).fieldOf("feedAmount").orElse(1).forGetter(BreedData::getFeedAmount),
+                Codec.intRange(Integer.MIN_VALUE, 0).fieldOf("childGrowthDelay").orElse(BeeConstants.CHILD_GROWTH_DELAY).forGetter(BreedData::getChildGrowthDelay),
+                Codec.intRange(0, Integer.MAX_VALUE).fieldOf("breedDelay").orElse(BeeConstants.BREED_DELAY).forGetter(BreedData::getBreedDelay)
+        ).apply(instance, BreedData::new));
+    }
 
-    /**
-     * If bee can be bred from 2 parents.
-     */
-    private final boolean isBreedable;
-
-    /**
-     * The weight specified for that bee. The weight is calculated against all the other bees the bees parents can make with the same item.
-     */
-    private final double breedWeight;
-
-    /**
-     * The the chance that when trying to breed this bee the breed will succeed, if the breed fails, items will be consumed but no bee will be made.
-     */
-    private final float breedChance;
-
-    /**
-     * Strings of the parent bees needed to be breed.
-     */
-    private final List<String> parent1;
-    private final List<String> parent2;
+    private final Set<BeeFamily> parents;
 
     /**
      * The item the parents need to be fed with for breeding.
@@ -75,12 +60,8 @@ public class BreedData {
      */
     private final int breedDelay;
 
-    public BreedData(boolean isBreedable, double breedWeight, float breedChance, List<String> parent1, List<String> parent2, Set<Item> items, Optional<Item> feedReturnItem, int feedAmount, int childGrowthDelay, int breedDelay) {
-        this.isBreedable = isBreedable;
-        this.breedWeight = breedWeight;
-        this.breedChance = breedChance;
-        this.parent1 = parent1;
-        this.parent2 = parent2;
+    public BreedData(Set<BeeFamily> parents, Set<Item> items, Optional<Item> feedReturnItem, int feedAmount, int childGrowthDelay, int breedDelay) {
+        this.parents = parents;
         this.items = items;
         this.feedReturnItem = feedReturnItem;
         this.feedAmount = feedAmount;
@@ -88,28 +69,12 @@ public class BreedData {
         this.breedDelay = breedDelay;
     }
 
-    public boolean isBreedable() {
-        return isBreedable;
-    }
-
-    public double getBreedWeight() {
-        return breedWeight;
-    }
-
-    public float getBreedChance() {
-        return breedChance;
-    }
-
-    public List<String> getParent1() {
-        return parent1;
-    }
-
-    public List<String> getParent2() {
-        return parent2;
+    public Set<BeeFamily> getParents() {
+        return parents;
     }
 
     public boolean hasParents() {
-        return !parent1.isEmpty() && !parent2.isEmpty();
+        return !parents.isEmpty();
     }
 
     public Set<Item> getFeedItems() {
@@ -137,10 +102,4 @@ public class BreedData {
     public int getBreedDelay() {
         return breedDelay;
     }
-
-    public static BreedData createDefault() {
-        return new BreedData(false, 0, 0, Collections.emptyList(), Collections.emptyList(), Collections.emptySet(), Optional.empty(), 0, 0, 0);
-    }
-
-
 }

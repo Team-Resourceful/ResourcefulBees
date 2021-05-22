@@ -29,8 +29,12 @@
   },
   "BreedData": {
     "isBreedable": true,
-    "parent1": ["rgbee"],
-    "parent2": ["zombie"]
+    "parents": [
+      {
+        "parent1": "rgbee",
+        "parent2": "zombee"
+      }
+    ]
   },
   "TraitData": {
     "hasTraits": true,

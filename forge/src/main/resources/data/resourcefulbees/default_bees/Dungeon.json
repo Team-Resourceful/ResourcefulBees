@@ -44,6 +44,12 @@
     "lightLevel": "NIGHT"
   },
   "BreedData": {
+    "parents": [
+      {
+        "parent1": "dungeon",
+        "parent2": "dungeon"
+      }
+    ],
     "isBreedable": true,
     "feedItem": ["minecraft:mossy_cobblestone"],
     "feedAmount": 4

@@ -75,7 +75,7 @@ public class JEICompat implements IModPlugin {
             RecipeManager recipeManager = Minecraft.getInstance().level.getRecipeManager();
             registration.addRecipes(HiveCategory.getHoneycombRecipes(), HiveCategory.ID);
             registration.addRecipes(recipeManager.byType(CENTRIFUGE_RECIPE_TYPE).values(), CentrifugeRecipeCategory.ID);
-            //registration.addRecipes(BeeBreedingCategory.getBreedingRecipes(), BeeBreedingCategory.ID);
+            registration.addRecipes(BeeBreedingCategory.getBreedingRecipes(), BeeBreedingCategory.ID);
             registration.addRecipes(BlockMutation.getMutationRecipes(), BlockMutation.ID);
             registration.addRecipes(BlockToItem.getMutationRecipes(), BlockToItem.ID);
             registration.addRecipes(EntityToEntity.getMutationRecipes(), EntityToEntity.ID);
@@ -132,17 +132,17 @@ public class JEICompat implements IModPlugin {
                 stats.append(aqua).append(" Mutation Count: ").append(purple).append(StringUtils.capitalize(String.valueOf(beeData.getMutationData().getMutationCount()))).append("\n");
             }
 
-            stats.append(aqua).append(" Is Breedable: ").append(purple).append(StringUtils.capitalize(String.valueOf(beeData.getBreedData().isBreedable()))).append("\n");
-            if (beeData.getBreedData().isBreedable() && beeData.getBreedData().hasParents()) {
+            stats.append(aqua).append(" Is Breedable: ").append(purple).append(StringUtils.capitalize(String.valueOf(beeData.getBreedData().hasParents()))).append("\n");
+            if (beeData.getBreedData().hasParents()) {
                 stats.append(aqua).append(" Parents: ").append(purple);
-
-                Iterator<String> parent1 = beeData.getBreedData().getParent1().iterator();
+                //NEED TO SETUP WITH NEW BeeFamily OBJECT
+/*                Iterator<String> parent1 = beeData.getBreedData().getParent1().iterator();
                 Iterator<String> parent2 = beeData.getBreedData().getParent2().iterator();
 
                 while (parent1.hasNext() && parent2.hasNext()) {
                     stats.append(StringUtils.capitalize(parent1.next())).append(" Bee, ")
                             .append(StringUtils.capitalize(parent2.next())).append(" Bee\n");
-                }
+                }*/
             }
 
             if (beeData.getTraitData().hasTraits()) {
