@@ -10,6 +10,7 @@ import com.teamresourceful.resourcefulbees.lib.HoneycombTypes;
 import com.teamresourceful.resourcefulbees.recipe.CentrifugeRecipe;
 import com.teamresourceful.resourcefulbees.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.registry.HoneyRegistry;
+import com.teamresourceful.resourcefulbees.utils.BeeInfoUtils;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -196,8 +197,9 @@ public class RecipeBuilder implements ResourceManagerReloadListener {
         ResourceLocation recipeLoc = isBlockRecipe ? new ResourceLocation(ResourcefulBees.MOD_ID, beeType + "_honeycomb_block_centrifuge")
                 : new ResourceLocation(ResourcefulBees.MOD_ID, beeType + "_honeycomb_centrifuge");
 
-        Ingredient ingredient = isBlockRecipe ? Ingredient.of(new ItemStack(honeycombData.getHoneycombBlock(), centrifugeData.getInputCount())) :
-                Ingredient.of(new ItemStack(honeycombData.getHoneycomb(), centrifugeData.getInputCount()));
+
+        Ingredient ingredient = Ingredient.of(new ItemStack(BeeInfoUtils.getOurItem(beeType, isBlockRecipe ? "_honeycomb_block": "_honeycomb"), centrifugeData.getInputCount()));
+
 
         return new CentrifugeRecipe(
                 recipeLoc, ingredient,

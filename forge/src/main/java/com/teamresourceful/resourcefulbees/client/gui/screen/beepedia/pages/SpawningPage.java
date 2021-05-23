@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
-import com.teamresourceful.resourcefulbees.utils.BeeInfoUtils;
+import com.teamresourceful.resourcefulbees.utils.BeepediaUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -69,7 +69,7 @@ public class SpawningPage extends BeeDataPage {
             groupName.append(new TextComponent(String.format("%d - %d", beeData.getSpawnData().getMinGroupSize(), beeData.getSpawnData().getMaxGroupSize())));
             heightName.append(new TextComponent(String.format("%d - %d", beeData.getSpawnData().getMinYLevel(), beeData.getSpawnData().getMaxYLevel())));
             weightName.append(new TextComponent(String.format("%d", beeData.getSpawnData().getSpawnWeight())));
-            lightName.append(BeeInfoUtils.getLightName(beeData.getSpawnData().getLightLevel()));
+            lightName.append(BeepediaUtils.getLightName(beeData.getSpawnData().getLightLevel()));
             font.draw(matrix, groupName.withStyle(ChatFormatting.GRAY), xPos, (float) yPos + 22f, -1);
             font.draw(matrix, heightName.withStyle(ChatFormatting.GRAY), xPos, (float) yPos + 34f, -1);
             font.draw(matrix, weightName.withStyle(ChatFormatting.GRAY), xPos, (float) yPos + 46f, -1);
@@ -84,7 +84,7 @@ public class SpawningPage extends BeeDataPage {
             parent.addSearchBiome(b.getPath());
             parent.addSearchBiome(new TranslatableComponent(String.format("biome.%s.%s", b.getNamespace(), b.getPath())).getString());
         });
-        parent.addSearchBeeTag(BeeInfoUtils.getLightName(beeData.getSpawnData().getLightLevel()).getString());
+        parent.addSearchBeeTag(BeepediaUtils.getLightName(beeData.getSpawnData().getLightLevel()).getString());
     }
 
     @Override

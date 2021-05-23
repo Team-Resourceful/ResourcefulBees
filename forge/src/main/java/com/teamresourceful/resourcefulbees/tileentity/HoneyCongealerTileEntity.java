@@ -68,7 +68,7 @@ public class HoneyCongealerTileEntity extends AbstractHoneyTank implements Ticka
     public boolean canProcessFill() {
         FluidStack fluidStack = getFluidTank().getFluid();
         ItemStack outputStack = getTileStackHandler().getStackInSlot(BOTTLE_OUTPUT);
-        Item outputHoney = BeeInfoUtils.getHoneyBlock(fluidStack.getFluid());
+        Item outputHoney = BeeInfoUtils.getHoneyBlockFromFluid(fluidStack.getFluid());
 
         boolean isTankReady = !fluidStack.isEmpty() && getFluidTank().getFluidAmount() >= 1000;
         boolean hasHoneyBlock = outputHoney != Items.AIR;
@@ -80,7 +80,7 @@ public class HoneyCongealerTileEntity extends AbstractHoneyTank implements Ticka
     public void processFill() {
         FluidStack fluidStack = new FluidStack(getFluidTank().getFluid(), 1000);
         ItemStack outputStack = getTileStackHandler().getStackInSlot(BOTTLE_OUTPUT);
-        if (outputStack.isEmpty()) outputStack = new ItemStack(BeeInfoUtils.getHoneyBlock(fluidStack.getFluid()));
+        if (outputStack.isEmpty()) outputStack = new ItemStack(BeeInfoUtils.getHoneyBlockFromFluid(fluidStack.getFluid()));
         else outputStack.grow(1);
         getTileStackHandler().setStackInSlot(BOTTLE_OUTPUT, outputStack);
         getFluidTank().drain(fluidStack, IFluidHandler.FluidAction.EXECUTE);

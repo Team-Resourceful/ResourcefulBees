@@ -31,9 +31,9 @@ public class CentrifugeData {
         this.recipeTime = recipeTime;
         this.inputCount = inputCount;
         this.itemOutputs = new ArrayList<>(itemOutputs);
-        this.itemOutputs.add(0, ItemOutput.EMPTY);
+        //this.itemOutputs.add(0, ItemOutput.EMPTY);
         this.fluidOutputs = new ArrayList<>(fluidOutputs);
-        this.fluidOutputs.add(0, FluidOutput.EMPTY);
+        //this.fluidOutputs.add(0, FluidOutput.EMPTY);
     }
 
     public boolean hasCentrifugeOutput() {

@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.compat.jei;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.IBeeRegistry;
@@ -97,12 +96,11 @@ public class BeeBreedingCategory extends BaseCategory<BeeFamily> {
         Minecraft minecraft = Minecraft.getInstance();
         Font fontRenderer = minecraft.font;
         DecimalFormat decimalFormat = new DecimalFormat("##%");
-        fontRenderer.draw(matrix, decimalFormat.format(BEE_REGISTRY.getAdjustedWeightForChild(beeFamily)), 90, 35, 0xff808080);
         if (beeFamily.getChance() < 1) {
-            fontRenderer.draw(matrix, decimalFormat.format(beeFamily.getChance()), 130, 40, 0xff808080);
-            RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
             info.draw(matrix, 115, 40);
+            fontRenderer.draw(matrix, decimalFormat.format(beeFamily.getChance()), 130, 40, 0xff808080);;
         }
+        fontRenderer.draw(matrix, decimalFormat.format(BEE_REGISTRY.getAdjustedWeightForChild(beeFamily)), 90, 35, 0xff808080);
     }
 
     @NotNull
