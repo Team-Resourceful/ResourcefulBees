@@ -4,22 +4,17 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import com.mojang.blaze3d.platform.InputConstants;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.ICustomBee;
-import com.teamresourceful.resourcefulbees.api.beedata.BreedData;
-import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.entity.passive.CustomBeeEntity;
-import com.teamresourceful.resourcefulbees.fluids.HoneyFlowingFluid;
+import com.teamresourceful.resourcefulbees.fluids.CustomHoneyFluid;
 import com.teamresourceful.resourcefulbees.item.BeeJar;
 import com.teamresourceful.resourcefulbees.item.CustomHoneyBottleItem;
 import com.teamresourceful.resourcefulbees.lib.LightLevels;
 import com.teamresourceful.resourcefulbees.lib.ModConstants;
 import com.teamresourceful.resourcefulbees.lib.NBTConstants;
-import com.teamresourceful.resourcefulbees.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.registry.ModFluids;
 import com.teamresourceful.resourcefulbees.registry.ModItems;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -50,11 +45,9 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.*;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import static com.teamresourceful.resourcefulbees.lib.BeeConstants.VANILLA_BEE_COLOR;
 
@@ -241,8 +234,8 @@ public class BeeInfoUtils {
     public static Item getHoneyBottle(Fluid fluid) {
         if (fluid == ModFluids.CATNIP_HONEY_STILL.get()) {
             return ModItems.CATNIP_HONEY_BOTTLE.get();
-        } else if (fluid instanceof HoneyFlowingFluid) {
-            HoneyFlowingFluid customfluid = (HoneyFlowingFluid) fluid;
+        } else if (fluid instanceof CustomHoneyFluid) {
+            CustomHoneyFluid customfluid = (CustomHoneyFluid) fluid;
             return customfluid.getHoneyData().getHoneyBottleRegistryObject().get();
         } else {
             return Items.HONEY_BOTTLE;
@@ -252,8 +245,8 @@ public class BeeInfoUtils {
     public static Item getHoneyBucket(Fluid fluid) {
         if (fluid == ModFluids.CATNIP_HONEY_STILL.get()) {
             return ModItems.CATNIP_HONEY_FLUID_BUCKET.get();
-        } else if (fluid instanceof HoneyFlowingFluid) {
-            HoneyFlowingFluid customfluid = (HoneyFlowingFluid) fluid;
+        } else if (fluid instanceof CustomHoneyFluid) {
+            CustomHoneyFluid customfluid = (CustomHoneyFluid) fluid;
             return customfluid.getHoneyData().getHoneyBucketItemRegistryObject().get();
         } else {
             return ModItems.HONEY_FLUID_BUCKET.get();
@@ -263,8 +256,8 @@ public class BeeInfoUtils {
     public static Item getHoneyBlock(Fluid fluid) {
         if (fluid == ModFluids.CATNIP_HONEY_STILL.get()) {
             return ModItems.CATNIP_HONEY_BLOCK_ITEM.get();
-        } else if (fluid instanceof HoneyFlowingFluid) {
-            HoneyFlowingFluid customfluid = (HoneyFlowingFluid) fluid;
+        } else if (fluid instanceof CustomHoneyFluid) {
+            CustomHoneyFluid customfluid = (CustomHoneyFluid) fluid;
             if (!customfluid.getHoneyData().doGenerateHoneyBlock()) return Items.AIR;
             return customfluid.getHoneyData().getHoneyBlockItemRegistryObject().get();
         } else {

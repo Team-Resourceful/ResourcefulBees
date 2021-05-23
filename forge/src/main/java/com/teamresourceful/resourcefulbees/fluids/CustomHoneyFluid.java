@@ -7,11 +7,11 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class HoneyFlowingFluid extends ForgeFlowingFluid {
+public abstract class CustomHoneyFluid extends ForgeFlowingFluid {
 
     private final HoneyBottleData honeyData;
 
-    protected HoneyFlowingFluid(Properties properties, HoneyBottleData honeyData) {
+    protected CustomHoneyFluid(Properties properties, HoneyBottleData honeyData) {
         super(properties);
         this.honeyData = honeyData;
     }
@@ -20,7 +20,7 @@ public abstract class HoneyFlowingFluid extends ForgeFlowingFluid {
         return honeyData;
     }
 
-    public static class Flowing extends HoneyFlowingFluid {
+    public static class Flowing extends CustomHoneyFluid {
 
         public Flowing(Properties properties, HoneyBottleData honeyData) {
             super(properties, honeyData);
@@ -42,7 +42,7 @@ public abstract class HoneyFlowingFluid extends ForgeFlowingFluid {
         }
     }
 
-    public static class Source extends HoneyFlowingFluid {
+    public static class Source extends CustomHoneyFluid {
 
         public Source(Properties properties, HoneyBottleData honeyData) {
             super(properties, honeyData);

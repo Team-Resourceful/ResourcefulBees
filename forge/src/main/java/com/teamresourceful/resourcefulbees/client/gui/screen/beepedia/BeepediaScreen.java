@@ -6,11 +6,8 @@ import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.BeeP
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.HomePage;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.HoneyPage;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.TraitPage;
-import com.teamresourceful.resourcefulbees.client.gui.widget.ButtonList;
-import com.teamresourceful.resourcefulbees.client.gui.widget.ModImageButton;
-import com.teamresourceful.resourcefulbees.client.gui.widget.TabImageButton;
+import com.teamresourceful.resourcefulbees.client.gui.widget.*;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
-import com.teamresourceful.resourcefulbees.client.gui.widget.ToolTip;
 import com.teamresourceful.resourcefulbees.config.Config;
 import com.teamresourceful.resourcefulbees.entity.passive.KittenBee;
 import com.teamresourceful.resourcefulbees.registry.BeeRegistry;
@@ -536,7 +533,6 @@ public class BeepediaScreen extends Screen {
         drawFluidSlot(matrix, fluidStack, xPos, yPos, true);
     }
 
-
     public void drawFluidSlot(PoseStack matrix, FluidStack fluidStack, int xPos, int yPos, boolean showAmount) {
         if (fluidStack.isEmpty()) return;
         drawFluidSlotNoToolTip(matrix, fluidStack, xPos, yPos);
@@ -584,8 +580,8 @@ public class BeepediaScreen extends Screen {
         tooltips.add(new ToolTip(xPos + 2, yPos + 2, 16, 16, fluid, showAmount));
     }
 
-    private void registerInteraction(int xPos, int yPos, Supplier<Boolean> supplier) {
-        interactions.add(new Interaction(xPos, yPos, supplier));
+    public void registerInteraction(int xPos, int yPos, Supplier<Boolean> supplier) {
+        interactions.add(new Interaction(xPos+2 , yPos + 2, 16, 16, supplier));
     }
 
     @Override
@@ -667,24 +663,5 @@ public class BeepediaScreen extends Screen {
         BEE,
         HONEY,
         TRAIT
-    }
-
-    private static class Interaction {
-        final int xPos;
-        final int yPos;
-        final Supplier<Boolean> supplier;
-
-        public Interaction(int xPos, int yPos, Supplier<Boolean> supplier) {
-            this.xPos = xPos;
-            this.yPos = yPos;
-            this.supplier = supplier;
-        }
-
-        public boolean onMouseClick(int mouseX, int mouseY) {
-            if (mouseX >= xPos && mouseY >= yPos && mouseX <= xPos + 20 && mouseY <= yPos + 20) {
-                return supplier.get();
-            }
-            return false;
-        }
     }
 }

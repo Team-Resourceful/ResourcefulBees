@@ -7,6 +7,10 @@ import com.teamresourceful.resourcefulbees.api.beedata.outputs.ItemOutput;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.beedata.HoneycombData;
+import com.teamresourceful.resourcefulbees.config.Config;
+import com.teamresourceful.resourcefulbees.fluids.CustomHoneyFluid;
+import com.teamresourceful.resourcefulbees.item.BeeSpawnEggItem;
+import com.teamresourceful.resourcefulbees.item.CustomHoneyBottleItem;
 import com.teamresourceful.resourcefulbees.lib.ApiaryOutputs;
 import com.teamresourceful.resourcefulbees.recipe.CentrifugeRecipe;
 import com.teamresourceful.resourcefulbees.registry.ModItems;
@@ -27,6 +31,7 @@ import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraftforge.fluids.FluidStack;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -83,10 +88,8 @@ public class HoneycombPage extends BeeDataPage {
         apiary4Output = getApiaryOutput(3, beeData.getHoneycombData(), apiaryAmounts);
 
         ClientLevel world = beepedia.getMinecraft().level;
-        recipes.add(new RecipeObject(false, true, beeData, world));
-        recipes.add(new RecipeObject(false, false, beeData, world));
-        recipes.add(new RecipeObject(true, true, beeData, world));
-        recipes.add(new RecipeObject(true, false, beeData, world));
+        recipes.add(new RecipeObject(false, beeData, world));
+        recipes.add(new RecipeObject(true, beeData, world));
         recipes.removeIf(b -> b.recipe == null);
 
         leftArrow = new ImageButton(xPos + (SUB_PAGE_WIDTH / 2) - 28, yPos + SUB_PAGE_HEIGHT - 16, 8, 11, 0, 0, 11, arrowImage, 16, 33, button -> prevPage());
@@ -203,7 +206,6 @@ public class HoneycombPage extends BeeDataPage {
 
     private class RecipeObject {
         final boolean isBlock;
-        final boolean hasBottle;
         final ItemStack inputItem;
         ItemStack bottleItem = ItemStack.EMPTY;
         List<ItemOutput> outputItems;
@@ -211,23 +213,16 @@ public class HoneycombPage extends BeeDataPage {
         final CentrifugeRecipe recipe;
         final CustomBeeData beeData;
 
-        public RecipeObject(boolean isBlock, boolean hasBottle, CustomBeeData beeData, ClientLevel world) {
+        public RecipeObject(boolean isBlock, CustomBeeData beeData, ClientLevel world) {
             this.isBlock = isBlock;
-            this.hasBottle = hasBottle;
             this.beeData = beeData;
 
             if (isBlock) {
                 inputItem = beeData.getHoneycombData().getHoneycombBlock().getDefaultInstance();
-                if (hasBottle) {
-                    bottleItem = new ItemStack(Items.GLASS_BOTTLE, 9);
-                }
             } else {
                 inputItem = beeData.getHoneycombData().getHoneycomb().getDefaultInstance();
-                if (hasBottle) {
-                    bottleItem = new ItemStack(Items.GLASS_BOTTLE);
-                }
             }
-            SimpleContainer inventory = new SimpleContainer(inputItem, bottleItem);
+            SimpleContainer inventory = new SimpleContainer(inputItem);
             recipe = world.getRecipeManager().getRecipeFor(CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE, inventory, world).orElse(null);
             if (recipe != null) {
                 outputItems = recipe.getItemOutputs();
@@ -237,83 +232,48 @@ public class HoneycombPage extends BeeDataPage {
 
         public void draw(PoseStack matrix, int xPos, int yPos, int mouseX, int mouseY) {
             beepedia.drawSlot(matrix, inputItem, xPos + 25, yPos + 3);
-            if (bottleItem.isEmpty()) beepedia.drawEmptySlot(matrix, xPos + 25, yPos + 23);
-            else beepedia.drawSlot(matrix, bottleItem, xPos + 25, yPos + 23);
 
-            //Commented out until can be rewritten to support new recipe
+            List<ItemOutput> items = recipe.getItemOutputs();
+            List<FluidOutput> fluids = recipe.getFluidOutputs();
 
-/*            if (recipe.hasFluidOutput) {
-                if (outputItems.get(0).getLeft().isEmpty()) {
-                    beepedia.drawFluidSlot(matrix, outputFluids.get(0).getLeft(), xPos + 124, yPos + 3);
-                    drawWeight(matrix, outputFluids.get(0).getRight(), xPos + 112, yPos + 9);
-                } else {
-                    beepedia.drawFluidSlot(matrix, outputFluids.get(0).getLeft(), xPos + 124, yPos + 43);
-                    drawWeight(matrix, outputFluids.get(0).getRight(), xPos + 112, yPos + 49);
-                    beepedia.drawSlot(matrix, outputItems.get(0).getLeft(), xPos + 124, yPos + 3);
-                    drawWeight(matrix, outputItems.get(0).getRight(), xPos + 112, yPos + 9);
+            // draw items
+            for (int i = 0; i < items.size(); i++) {
+                ItemOutput item = items.get(i);
+                beepedia.drawSlot(matrix, item.getItemStack(), xPos + 20, yPos + 10 + (40 * i));
+                if (item.getItem() instanceof CustomHoneyBottleItem) {
+                    CustomHoneyBottleItem honey = (CustomHoneyBottleItem) item.getItem();
+                    beepedia.registerInteraction(xPos + 10 + (40 * i), yPos + 10, () -> {
+                        BeepediaScreen.saveScreenState();
+                        beepedia.setActive(BeepediaScreen.PageType.HONEY, honey.getHoneyData().getName());
+                        return true;
+                    });
+                } else if (item.getItem() instanceof BeeSpawnEggItem) {
+                    BeeSpawnEggItem egg = (BeeSpawnEggItem) item.getItem();
+                    beepedia.registerInteraction(xPos + 20, yPos + 10 + (40 * i), () -> {
+                        BeepediaScreen.saveScreenState();
+                        beepedia.setActive(BeepediaScreen.PageType.BEE, egg.getBeeData().getCoreData().getName());
+                        return true;
+                    });
                 }
-            } else {
-                beepedia.drawSlot(matrix, outputItems.get(0).getLeft(), xPos + 124, yPos + 3);
-                drawWeight(matrix, outputItems.get(0).getRight(), xPos + 112, yPos + 9);
             }
-            beepedia.drawSlot(matrix, outputItems.get(1).getLeft(), xPos + 124, yPos + 23);
-            drawWeight(matrix, outputItems.get(1).getRight(), xPos + 112, yPos + 30);
+            // draw fluids
+            for (int i = 0; i < fluids.size(); i++) {
+                FluidOutput fluid = fluids.get(i);
+                beepedia.drawFluidSlot(matrix, fluid.getFluidStack(), xPos + 10 + (40 * i), yPos + 10, true);
+                if (fluid.getFluid() instanceof CustomHoneyFluid) {
+                    CustomHoneyFluid honey = (CustomHoneyFluid) fluid.getFluid();
+                    beepedia.registerInteraction(xPos + 10 + (40 * i), yPos + 10, () -> {
+                        BeepediaScreen.saveScreenState();
+                        beepedia.setActive(BeepediaScreen.PageType.HONEY, honey.getHoneyData().getName());
+                        return true;
+                    });
+                }
+            }
+
             if (isBlock || Config.MULTIBLOCK_RECIPES_ONLY.get()) {
                 Minecraft.getInstance().getTextureManager().bind(multiblockOnlyImage);
                 GuiComponent.blit(matrix, xPos + 28, yPos + 45, 0, 0, 16, 16, 16, 16);
-            }*/
-            if (hasBottle) {
-                drawHoneyBottle(matrix, xPos, yPos, mouseX, mouseY);
-            } else {
-                drawHoneyFluid(matrix, xPos, yPos, mouseX, mouseY);
             }
-        }
-
-        private void drawHoneyBottle(PoseStack matrix, int xPos, int yPos, int mouseX, int mouseY) {
-/*            Item bottle = outputItems.get(2).getLeft().getItem();
-            String pageID = null;
-            if (bottle == Items.HONEY_BOTTLE) {
-                pageID = "honey";
-            } else if (bottle instanceof CustomHoneyBottleItem) {
-                pageID = ((CustomHoneyBottleItem) bottle).honeyBottleData.getName();
-            }
-
-            if (pageID != null) {
-                String finalPageID = pageID;
-                Supplier<Boolean> supplier = () -> {
-                    BeepediaScreen.saveScreenState();
-                    beepedia.setActive(BeepediaScreen.PageType.HONEY, finalPageID);
-                    return true;
-                };
-                beepedia.drawInteractiveSlot(matrix, outputItems.get(2).getLeft(), xPos + 75, yPos + 43, mouseX, mouseY, supplier);
-            } else {
-                beepedia.drawSlot(matrix, outputItems.get(2).getLeft(), xPos + 75, yPos + 43);
-            }
-            drawWeight(matrix, outputItems.get(2).getRight(), xPos + 64, yPos + 49);*/
-        }
-
-        private void drawHoneyFluid(PoseStack matrix, int xPos, int yPos, int mouseX, int mouseY) {
-/*            FluidStack fluidStack = outputFluids.get(1).getLeft();
-            String pageID = null;
-            if (fluidStack.getFluid() == ModFluids.HONEY_STILL.get()) {
-                pageID = "honey";
-            } else if (fluidStack.getFluid() instanceof HoneyFlowingFluid) {
-                HoneyFlowingFluid fluid = (HoneyFlowingFluid) fluidStack.getFluid();
-                pageID = fluid.getHoneyData().getName();
-            }
-
-            if (pageID != null) {
-                String finalPageID = pageID;
-                Supplier<Boolean> supplier = () -> {
-                    BeepediaScreen.saveScreenState();
-                    beepedia.setActive(BeepediaScreen.PageType.HONEY, finalPageID);
-                    return true;
-                };
-                beepedia.drawInteractiveFluidSlot(matrix, outputFluids.get(1).getLeft(), xPos + 75, yPos + 43, mouseX, mouseY, supplier);
-            } else {
-                beepedia.drawFluidSlot(matrix, outputFluids.get(1).getLeft(), xPos + 75, yPos + 43);
-            }
-            drawWeight(matrix, outputFluids.get(1).getRight(), xPos + 64, yPos + 49);*/
         }
 
         private void drawWeight(PoseStack matrix, Float right, int xPos, int yPos) {

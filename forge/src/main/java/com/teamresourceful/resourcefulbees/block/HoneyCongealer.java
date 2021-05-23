@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.block;
 
-import com.teamresourceful.resourcefulbees.fluids.HoneyFlowingFluid;
+import com.teamresourceful.resourcefulbees.fluids.CustomHoneyFluid;
 import com.teamresourceful.resourcefulbees.tileentity.HoneyCongealerTileEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
@@ -55,8 +55,8 @@ public class HoneyCongealer extends Block {
         if (tank == null) {
             return;
         }
-        if (tank.getFluidTank().getFluid().getFluid() instanceof HoneyFlowingFluid) {
-            HoneyFlowingFluid fluid = (HoneyFlowingFluid) tank.getFluidTank().getFluid().getFluid();
+        if (tank.getFluidTank().getFluid().getFluid() instanceof CustomHoneyFluid) {
+            CustomHoneyFluid fluid = (CustomHoneyFluid) tank.getFluidTank().getFluid().getFluid();
             if (fluid.getHoneyData().getColor().isRainbow()) {
                 world.sendBlockUpdated(pos, stateIn, stateIn, 2);
             }

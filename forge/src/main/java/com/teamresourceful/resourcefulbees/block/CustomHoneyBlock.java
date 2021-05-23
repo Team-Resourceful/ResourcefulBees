@@ -39,13 +39,13 @@ import java.util.List;
 import java.util.Random;
 
 @SuppressWarnings({"unused", "deprecation"})
-public class ColoredHoneyBlock extends HalfTransparentBlock {
+public class CustomHoneyBlock extends HalfTransparentBlock {
 
     protected static final VoxelShape SHAPE = Block.box(1.0D, 0.0D, 1.0D, 15.0D, 15.0D, 15.0D);
     protected final Color color;
     protected final HoneyBottleData data;
 
-    public ColoredHoneyBlock(HoneyBottleData honeyData) {
+    public CustomHoneyBlock(HoneyBottleData honeyData) {
         super(BlockBehaviour.Properties.of(Material.CLAY).speedFactor(0.4F).jumpFactor(0.5F).noOcclusion().sound(SoundType.HONEY_BLOCK));
         this.color = honeyData.getColor();
         this.data = honeyData;
@@ -61,13 +61,13 @@ public class ColoredHoneyBlock extends HalfTransparentBlock {
     }
 
     public static int getBlockColor(BlockState state, @Nullable BlockGetter world, @Nullable BlockPos pos, int tintIndex) {
-        return ((ColoredHoneyBlock) state.getBlock()).getHoneyColor().getValue();
+        return ((CustomHoneyBlock) state.getBlock()).getHoneyColor().getValue();
     }
 
     public static int getItemColor(ItemStack stack, int tintIndex) {
         BlockItem blockItem = (BlockItem) stack.getItem();
-        if (!(blockItem.getBlock() instanceof ColoredHoneyBlock)) return -1;
-        return ((ColoredHoneyBlock) blockItem.getBlock()).getHoneyColor().getValue();
+        if (!(blockItem.getBlock() instanceof CustomHoneyBlock)) return -1;
+        return ((CustomHoneyBlock) blockItem.getBlock()).getHoneyColor().getValue();
     }
 
     @Override
