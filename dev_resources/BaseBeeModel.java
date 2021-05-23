@@ -1,4 +1,4 @@
-// Made with Blockbench 3.8.3
+// Made with Blockbench 3.8.4
 // Exported for Minecraft version 1.15 - 1.16
 // Paste this class into your mod and generate all required imports
 
@@ -49,6 +49,10 @@ public class BaseBeeModel extends EntityModel<Entity> {
 	private final ModelRenderer cube_r10;
 	private final ModelRenderer cube_r11;
 	private final ModelRenderer cube_r12;
+	private final ModelRenderer yeti_horns;
+	private final ModelRenderer cube_r13;
+	private final ModelRenderer cube_r14;
+	private final ModelRenderer cloaked;
 
 	public BaseBeeModel() {
 		textureWidth = 64;
@@ -181,7 +185,7 @@ public class BaseBeeModel extends EntityModel<Entity> {
 		mushroom = new ModelRenderer(this);
 		mushroom.setRotationPoint(0.0F, 0.0F, 0.0F);
 		body.addChild(mushroom);
-		mushroom.setTextureOffset(0, 25).addBox(-3.5F, -4.0F, -5.0F, 7.0F, 7.0F, 10.0F, 0.4F, false);
+		
 
 		frontMushroom1 = new ModelRenderer(this);
 		frontMushroom1.setRotationPoint(-1.5F, -4.0F, 0.0F);
@@ -209,7 +213,7 @@ public class BaseBeeModel extends EntityModel<Entity> {
 		crop = new ModelRenderer(this);
 		crop.setRotationPoint(0.0F, 0.0F, 0.0F);
 		body.addChild(crop);
-		crop.setTextureOffset(0, 25).addBox(-3.5F, -4.0F, -5.0F, 7.0F, 7.0F, 10.0F, 0.4F, false);
+		
 
 		crop2 = new ModelRenderer(this);
 		crop2.setRotationPoint(-1.6F, -4.0F, 1.5F);
@@ -244,7 +248,7 @@ public class BaseBeeModel extends EntityModel<Entity> {
 		guardian = new ModelRenderer(this);
 		guardian.setRotationPoint(0.0F, 5.0F, 0.0F);
 		body.addChild(guardian);
-		guardian.setTextureOffset(0, 25).addBox(-3.5F, -9.0F, -5.0F, 7.0F, 7.0F, 10.0F, 0.4F, false);
+		
 
 		cube_r1 = new ModelRenderer(this);
 		cube_r1.setRotationPoint(3.5F, -5.5F, 5.0F);
@@ -317,6 +321,28 @@ public class BaseBeeModel extends EntityModel<Entity> {
 		guardian.addChild(cube_r12);
 		setRotationAngle(cube_r12, 0.0F, 0.0F, 0.7854F);
 		cube_r12.setTextureOffset(24, 18).addBox(-2.5F, -0.5F, -0.5F, 3.0F, 1.0F, 1.0F, 0.25F, false);
+
+		yeti_horns = new ModelRenderer(this);
+		yeti_horns.setRotationPoint(0.0F, 0.0F, 0.0F);
+		body.addChild(yeti_horns);
+		
+
+		cube_r13 = new ModelRenderer(this);
+		cube_r13.setRotationPoint(-2.0F, -4.0F, -4.0F);
+		yeti_horns.addChild(cube_r13);
+		setRotationAngle(cube_r13, 0.0F, 0.0F, -0.9599F);
+		cube_r13.setTextureOffset(34, 12).addBox(-2.0F, -3.0F, -0.5F, 2.0F, 3.0F, 2.0F, 0.0F, true);
+
+		cube_r14 = new ModelRenderer(this);
+		cube_r14.setRotationPoint(2.0F, -4.0F, -4.0F);
+		yeti_horns.addChild(cube_r14);
+		setRotationAngle(cube_r14, 0.0F, 0.0F, 0.9599F);
+		cube_r14.setTextureOffset(34, 12).addBox(0.0F, -3.0F, -0.5F, 2.0F, 3.0F, 2.0F, 0.0F, false);
+
+		cloaked = new ModelRenderer(this);
+		cloaked.setRotationPoint(0.0F, 5.0F, 0.0F);
+		body.addChild(cloaked);
+		cloaked.setTextureOffset(0, 25).addBox(-3.5F, -9.0F, -5.0F, 7.0F, 7.0F, 10.0F, 0.4F, false);
 	}
 
 	@Override

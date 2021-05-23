@@ -37,7 +37,7 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableListModel<
         this();
 
         switch (modelType) {
-            case GELATINOUS:
+            case SLIME:
                 addGelatinousParts();
                 break;
             case ORE:
@@ -64,11 +64,16 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableListModel<
             case GUARDIAN:
                 addSpikes();
                 break;
+            case CLOAKED:
+                addCloak();
+                break;
+            case YETI:
+                addHorns();
+                break;
             default:
                 addDefaultParts();
         }
     }
-
 
 
     public CustomBeeModel(BaseModelTypes modelType) {
@@ -160,8 +165,8 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableListModel<
         matrixStackIn.popPose();
     }
 
-    // base bee parts
 
+    // base bee parts
     private void addDefaultParts() {
         this.body.setPos(0.0F, 19.0F, 0.0F);
         this.torso.setPos(0.0F, 0.0F, 0.0F);
@@ -248,8 +253,8 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableListModel<
         backLegs.texOffs(24, 0).addBox(0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F, 0.0F, false);
     }
 
-    // extra parts
 
+    // extra parts
     private void addGelatinousParts() {
         this.body.setPos(0.0F, 19.0F, 0.0F);
         this.torso.setPos(0.0F, 0.0F, 0.0F);
@@ -337,11 +342,9 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableListModel<
     }
 
     private void addMushrooms() {
-
         ModelPart mushroom = new ModelPart(this);
         mushroom.setPos(0.0F, 0.0F, 0.0F);
         body.addChild(mushroom);
-        mushroom.texOffs(0, 25).addBox(-3.5F, -4.0F, -5.0F, 7.0F, 7.0F, 10.0F, 0.4F, false);
 
         ModelPart frontMushroom1 = new ModelPart(this);
         frontMushroom1.setPos(-1.5F, -4.0F, 0.0F);
@@ -371,7 +374,6 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableListModel<
         ModelPart crop = new ModelPart(this);
         crop.setPos(0.0F, 0.0F, 0.0F);
         body.addChild(crop);
-        crop.texOffs(0, 25).addBox(-3.5F, -4.0F, -5.0F, 7.0F, 7.0F, 10.0F, 0.4F, false);
 
         ModelPart crop2 = new ModelPart(this);
         crop2.setPos(-1.6F, -4.0F, 1.5F);
@@ -410,7 +412,6 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableListModel<
         ModelPart guardian = new ModelPart(this);
         guardian.setPos(0.0F, 5.0F, 0.0F);
         body.addChild(guardian);
-        guardian.texOffs(0, 25).addBox(-3.5F, -9.0F, -5.0F, 7.0F, 7.0F, 10.0F, 0.4F, false);
 
         ModelPart cube1 = new ModelPart(this);
         cube1.setPos(3.5F, -5.5F, 5.0F);
@@ -483,6 +484,32 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableListModel<
         guardian.addChild(cube12);
         setRotationAngle(cube12, 0.0F, 0.0F, 0.7854F);
         cube12.texOffs(24, 18).addBox(-2.5F, -0.5F, -0.5F, 3.0F, 1.0F, 1.0F, 0.25F, false);
+    }
+
+    private void addCloak() {
+        ModelPart cloak = new ModelPart(this);
+        cloak.setPos(0.0F, 0.0F, 0.0F);
+        body.addChild(cloak);
+        cloak.texOffs(0, 25).addBox(-3.5F, -4.0F, -5.0F, 7.0F, 7.0F, 10.0F, 0.4F, false);
+    }
+
+    private void addHorns() {
+        ModelPart yeti_horns = new ModelPart(this);
+        yeti_horns.setPos(0.0F, 0.0F, 0.0F);
+        body.addChild(yeti_horns);
+
+
+        ModelPart horn1 = new ModelPart(this);
+        horn1.setPos(-2.0F, -4.0F, -4.0F);
+        yeti_horns.addChild(horn1);
+        setRotationAngle(horn1, 0.0F, 0.0F, -0.9599F);
+        horn1.texOffs(34, 12).addBox(-2.0F, -3.0F, -0.5F, 2.0F, 3.0F, 2.0F, 0.0F, true);
+
+        ModelPart horn2 = new ModelPart(this);
+        horn2.setPos(2.0F, -4.0F, -4.0F);
+        yeti_horns.addChild(horn2);
+        setRotationAngle(horn2, 0.0F, 0.0F, 0.9599F);
+        horn2.texOffs(34, 12).addBox(0.0F, -3.0F, -0.5F, 2.0F, 3.0F, 2.0F, 0.0F, false);
     }
 
     public void setRotationAngle(ModelPart modelPart, float x, float y, float z) {
