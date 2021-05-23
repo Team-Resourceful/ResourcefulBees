@@ -1,7 +1,6 @@
 package com.teamresourceful.resourcefulbees.data;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.api.IBeeRegistry;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.honeydata.HoneyBottleData;
 import com.teamresourceful.resourcefulbees.config.Config;
@@ -13,7 +12,6 @@ import com.teamresourceful.resourcefulbees.registry.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.registry.ModEntities;
 import com.teamresourceful.resourcefulbees.registry.TraitRegistry;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.BlockItem;
 import net.minecraftforge.fml.RegistryObject;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
@@ -37,8 +35,6 @@ public class DataGen {
     private DataGen() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
-
-    private static final IBeeRegistry BEE_REGISTRY = BeeRegistry.getRegistry();
 
     private static final String ITEM_RESOURCEFULBEES = "item.resourcefulbees.";
 
@@ -82,18 +78,23 @@ public class DataGen {
         LOGGER.info("Generating English Lang...");
         StringBuilder builder = new StringBuilder();
         builder.append("{\n");
-        BEE_REGISTRY.getBees().forEach(((name, customBeeData) -> {
+        BeeRegistry.getRegistry().getSetOfBees().forEach(((customBeeData) -> {
+            String name = customBeeData.getCoreData().getName();
             String displayName = StringUtils.replace(name, "_", " ");
             displayName = WordUtils.capitalizeFully(displayName);
 
-            //block
-            generateLangEntry(builder, "block.resourcefulbees.", name, "_honeycomb_block", displayName, "Honeycomb Block");
 
-            //comb
-            generateLangEntry(builder, ITEM_RESOURCEFULBEES, name, "_honeycomb", displayName, "Honeycomb");
+            if (customBeeData.getHoneycombData().getHoneycombType() == HoneycombTypes.DEFAULT) {
+                //block
+                generateLangEntry(builder, "block.resourcefulbees.", name, "_honeycomb_block", displayName, "Honeycomb Block");
+
+                //comb
+                generateLangEntry(builder, ITEM_RESOURCEFULBEES, name, "_honeycomb", displayName, "Honeycomb");
+            }
 
             //spawn egg
             generateLangEntry(builder, ITEM_RESOURCEFULBEES, name, "_bee_spawn_egg", displayName, "Bee Spawn Egg");
+
 
             //entity
             generateLangEntry(builder, "entity.resourcefulbees.", name, "_bee", displayName, "Bee");
@@ -138,76 +139,89 @@ public class DataGen {
     }
 
     private static void generateLangEntry(StringBuilder builder, String prefix, String name, String suffix, String displayName, String displaySuffix){
-        builder.append("\"");
-        builder.append(prefix);
-        builder.append(name);
-        builder.append(suffix);
-        builder.append("\": \"");
-        builder.append(displayName);
-        builder.append(" ");
-        builder.append(displaySuffix);
-        builder.append("\",\n");
+        builder.append("\"")
+                .append(prefix)
+                .append(name)
+                .append(suffix)
+                .append("\": \"")
+                .append(displayName)
+                .append(" ")
+                .append(displaySuffix)
+                .append("\",\n");
     }
 
+    private static ResourceLocation genModResourceLocation(CustomBeeData data, String suffix){
+        return new ResourceLocation(ResourcefulBees.MOD_ID, data.getCoreData().getName() + suffix);
+    }
 
     private static void generateCombItemTags() {
         TAGS.put(new ResourceLocation(ResourcefulBees.MOD_ID, "tags/items/resourceful_honeycomb.json"),
-                BEE_REGISTRY.getBees().values().stream()
-                        .map(CustomBeeData::getHoneycombData)
-                        .filter(honeycombDataCodec -> honeycombDataCodec.getHoneycombType() == HoneycombTypes.DEFAULT)
-                        .map(honeycombDataCodec -> honeycombDataCodec.getHoneycomb().getRegistryName()).collect(Collectors.toSet()));
+                BeeRegistry.getRegistry().getSetOfBees().stream()
+                        .filter(beeData -> beeData.getHoneycombData().getHoneycombType() == HoneycombTypes.DEFAULT)
+                        .map(beeData -> genModResourceLocation(beeData, "_honeycomb"))
+                        .collect(Collectors.toSet()));
     }
 
     private static void generateCombBlockItemTags() {
         TAGS.put(new ResourceLocation(ResourcefulBees.MOD_ID, "tags/items/resourceful_honeycomb_block.json"),
-                BEE_REGISTRY.getBees().values().stream()
-                        .map(CustomBeeData::getHoneycombData)
-                        .filter(honeycombDataCodec -> honeycombDataCodec.getHoneycombType() == HoneycombTypes.DEFAULT)
-                        .map(honeycombDataCodec -> honeycombDataCodec.getHoneycombBlock().getRegistryName()).collect(Collectors.toSet()));
+                BeeRegistry.getRegistry().getSetOfBees().stream()
+                        .filter(beeData -> beeData.getHoneycombData().getHoneycombType() == HoneycombTypes.DEFAULT)
+                        .map(beeData -> genModResourceLocation(beeData, "_honeycomb_block"))
+                        .collect(Collectors.toSet()));
     }
 
     private static void generateCombBlockTags() {
         TAGS.put(new ResourceLocation(ResourcefulBees.MOD_ID, "tags/blocks/resourceful_honeycomb_block.json"),
-                BEE_REGISTRY.getBees().values().stream()
-                        .map(CustomBeeData::getHoneycombData)
-                        .filter(honeycombDataCodec -> honeycombDataCodec.getHoneycombType() == HoneycombTypes.DEFAULT)
-                        .filter(honeycombDataCodec -> honeycombDataCodec.getHoneycombBlock() instanceof BlockItem)
-                        .map(honeycombDataCodec -> ((BlockItem) honeycombDataCodec.getHoneycombBlock()).getBlock().getRegistryName()).collect(Collectors.toSet()));
-    }
-
-    private static void generateHoneyBottleTags() {
-        TAGS.put(new ResourceLocation("forge", "tags/items/honey_bottle.json"),
-                HoneyRegistry.getRegistry().getHoneyBottles().values().stream()
-                        .filter(HoneyBottleData::doGenerateHoneyBlock)
-                        .map(honey -> honey.getHoneyBottleRegistryObject().getId()).collect(Collectors.toSet()));
-    }
-
-    private static void generateHoneyBlockTags() {
-        TAGS.put(new ResourceLocation(ResourcefulBees.MOD_ID, "tags/blocks/resourceful_honey_block.json"),
-                HoneyRegistry.getRegistry().getHoneyBottles().values().stream()
-                        .filter(HoneyBottleData::doGenerateHoneyBlock)
-                        .map(honey -> honey.getHoneyBlockRegistryObject().getId()).collect(Collectors.toSet()));
-    }
-
-    private static void generateHoneyBlockItemTags() {
-        TAGS.put(new ResourceLocation(ResourcefulBees.MOD_ID, "tags/items/resourceful_honey_block.json"),
-                HoneyRegistry.getRegistry().getHoneyBottles().values().stream()
-                        .filter(HoneyBottleData::doGenerateHoneyBlock)
-                        .map(honey -> honey.getHoneyBlockItemRegistryObject().getId()).collect(Collectors.toSet()));
+                BeeRegistry.getRegistry().getSetOfBees().stream()
+                        .filter(beeData -> beeData.getHoneycombData().getHoneycombType() == HoneycombTypes.DEFAULT)
+                        .map(beeData -> genModResourceLocation(beeData, "_honeycomb_block"))
+                        .collect(Collectors.toSet()));
     }
 
     private static void generateBeeTags() {
         TAGS.put(new ResourceLocation("minecraft", "tags/entity_types/beehive_inhabitors.json"),
-                ModEntities.getModBees().values().stream()
-                        .map(RegistryObject::getId).collect(Collectors.toSet()));
+                ModEntities.getSetofModBees().stream()
+                        .map(RegistryObject::getId)
+                        .collect(Collectors.toSet()));
+    }
+
+
+    //Note: we dont need to make the tags for honey stuff via their names because honey things are stored in registry
+    //objects and the data doesnt need to be regenerated to access the items and blocks
+    //region Honey Tags
+
+    private static void generateHoneyBottleTags() {
+        TAGS.put(new ResourceLocation("forge", "tags/items/honey_bottle.json"),
+                HoneyRegistry.getRegistry().getSetOfHoney().stream()
+                        .filter(HoneyBottleData::doGenerateHoneyBlock)
+                        .map(honey -> honey.getHoneyBottleRegistryObject().getId())
+                        .collect(Collectors.toSet()));
+    }
+
+    private static void generateHoneyBlockTags() {
+        TAGS.put(new ResourceLocation(ResourcefulBees.MOD_ID, "tags/blocks/resourceful_honey_block.json"),
+                HoneyRegistry.getRegistry().getSetOfHoney().stream()
+                        .filter(HoneyBottleData::doGenerateHoneyBlock)
+                        .map(honey -> honey.getHoneyBlockRegistryObject().getId())
+                        .collect(Collectors.toSet()));
+    }
+
+    private static void generateHoneyBlockItemTags() {
+        TAGS.put(new ResourceLocation(ResourcefulBees.MOD_ID, "tags/items/resourceful_honey_block.json"),
+                HoneyRegistry.getRegistry().getSetOfHoney().stream()
+                        .filter(HoneyBottleData::doGenerateHoneyBlock)
+                        .map(honey -> honey.getHoneyBlockItemRegistryObject().getId())
+                        .collect(Collectors.toSet()));
     }
 
     private static void generateHoneyTags() {
         TAGS.put(new ResourceLocation("forge", "tags/fluids/honey.json"),
-                HoneyRegistry.getRegistry().getHoneyBottles().values().stream()
+                HoneyRegistry.getRegistry().getSetOfHoney().stream()
                         .filter(HoneyBottleData::doGenerateHoneyFluid)
                         .flatMap(hbd -> Stream.of(hbd.getHoneyFlowingFluidRegistryObject().getId(), hbd.getHoneyStillFluidRegistryObject().getId()))
                         .collect(Collectors.toSet()));
     }
+
+    //endregion
 
 }

@@ -4,9 +4,7 @@ import com.google.gson.JsonObject;
 import com.teamresourceful.resourcefulbees.api.IHoneyRegistry;
 import com.teamresourceful.resourcefulbees.api.honeydata.HoneyBottleData;
 
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 public class HoneyRegistry implements IHoneyRegistry {
 
@@ -46,6 +44,16 @@ public class HoneyRegistry implements IHoneyRegistry {
      */
     public Map<String, HoneyBottleData> getHoneyBottles() {
         return Collections.unmodifiableMap(honeyInfo);
+    }
+
+    /**
+     * Returns a set containing all registered HoneyBottleData.
+     * This is useful for iterating over all honey without worry of changing data
+     *
+     * @return Returns a set containing all registered HoneyBottleData.
+     */
+    public Set<HoneyBottleData> getSetOfHoney() {
+        return Collections.unmodifiableSet(new HashSet<>(honeyInfo.values()));
     }
 
     /**

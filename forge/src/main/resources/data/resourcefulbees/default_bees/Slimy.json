@@ -5,7 +5,7 @@
   },
   "RenderData": {
     "layers": [
-      {"texture": "slime/slime_bee", "modelType": "GELATINOUS"}
+      {"texture": "slime/slime_bee", "modelType": "SLIME"}
     ],
     "ColorData": {
       "spawnEggPrimaryColor": "#62B64A",

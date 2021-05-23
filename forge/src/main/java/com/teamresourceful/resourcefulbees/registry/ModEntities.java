@@ -5,8 +5,7 @@ import com.teamresourceful.resourcefulbees.lib.ModConstants;
 import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.fml.RegistryObject;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class ModEntities {
 
@@ -18,5 +17,9 @@ public class ModEntities {
 
     public static Map<String, RegistryObject<EntityType<? extends CustomBeeEntity>>> getModBees() {
         return MOD_BEES;
+    }
+
+    public static Set<RegistryObject<EntityType<? extends CustomBeeEntity>>> getSetofModBees() {
+        return new HashSet<>(MOD_BEES.values());
     }
 }
