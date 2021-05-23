@@ -13,10 +13,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Predicate;
 
 public class BeePollinateGoal extends Goal {
@@ -29,6 +26,7 @@ public class BeePollinateGoal extends Goal {
     private final CustomBeeEntity bee;
     private Vector3d boundingBox;
     private static final ArrayList<BlockPos> positionOffsets = new ArrayList<>();
+    private static final Random random = new Random();
 
     static {
         for(int i = 0; (double)i <= 5; i = i > 0 ? -i : 1 - i) {
@@ -218,7 +216,7 @@ public class BeePollinateGoal extends Goal {
             List<Entity> entityList = bee.level.getEntities(bee, (new AxisAlignedBB(bee.blockPosition())).inflate(range),
                     entity -> entity.getEncodeId() != null && entity.getEncodeId().equals(entityRegistryName.toString()));
             if (!entityList.isEmpty()) {
-                Entity firstEntity = entityList.get(0);
+                Entity firstEntity = entityList.get(random.nextInt(entityList.size()));
                 bee.setFlowerEntityID(firstEntity.getId());
                 return Optional.of(firstEntity.blockPosition());
             }
