@@ -136,7 +136,7 @@ public class HoneyTankTileEntity extends AbstractHoneyTankContainer {
 
         boolean isBottle = stack.getItem() == Items.GLASS_BOTTLE;
 
-        Item outputItem = isBottle ? BeeInfoUtils.getHoneyBottle(fluidStack.getFluid()) : BeeInfoUtils.getHoneyBucket(fluidStack.getFluid());
+        Item outputItem = isBottle ? BeeInfoUtils.getHoneyBottleFromFluid(fluidStack.getFluid()) : fluidStack.getRawFluid().getBucket();
 
         boolean isTankReady = !fluidStack.isEmpty() && getFluidTank().getFluidAmount() >= (isBottle ? ModConstants.HONEY_PER_BOTTLE : 1000);
         boolean hasInput = !stack.isEmpty();
@@ -153,8 +153,8 @@ public class HoneyTankTileEntity extends AbstractHoneyTankContainer {
         getTileStackHandler().setStackInSlot(BOTTLE_INPUT_FILL, inputStack);
         ItemStack outputStack = getTileStackHandler().getStackInSlot(BOTTLE_OUTPUT_FILL);
         if (outputStack.isEmpty()) {
-            outputStack = isBottle ? new ItemStack(BeeInfoUtils.getHoneyBottle(fluidStack.getFluid())) :
-                    new ItemStack(BeeInfoUtils.getHoneyBucket(fluidStack.getFluid()));
+            outputStack = isBottle ? BeeInfoUtils.getHoneyBottleFromFluid(fluidStack.getFluid()).getDefaultInstance() :
+                    fluidStack.getRawFluid().getBucket().getDefaultInstance();
         } else outputStack.grow(1);
         getTileStackHandler().setStackInSlot(BOTTLE_OUTPUT_FILL, outputStack);
         getFluidTank().drain(fluidStack, IFluidHandler.FluidAction.EXECUTE);

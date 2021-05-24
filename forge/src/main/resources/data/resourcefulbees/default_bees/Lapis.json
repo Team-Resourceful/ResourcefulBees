@@ -6,8 +6,8 @@
   "HoneycombData": {
     "type": "DEFAULT",
     "color": "#345ec3",
-    "item": "resourcefulbees:iron_honeycomb",
-    "block": "resourcefulbees:iron_honeycomb_block"
+    "item": "resourcefulbees:lapis_honeycomb",
+    "block": "resourcefulbees:lapis_honeycomb_block"
   },
   "RenderData": {
     "layers": [{"texture": "ores/lapis/lapis_bee","modelType": "ORE"}],

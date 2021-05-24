@@ -10,7 +10,6 @@ import com.teamresourceful.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.fluids.CustomHoneyFluid;
 import com.teamresourceful.resourcefulbees.item.BeeJar;
 import com.teamresourceful.resourcefulbees.item.CustomHoneyBottleItem;
-import com.teamresourceful.resourcefulbees.lib.LightLevels;
 import com.teamresourceful.resourcefulbees.lib.ModConstants;
 import com.teamresourceful.resourcefulbees.lib.NBTConstants;
 import com.teamresourceful.resourcefulbees.registry.ModFluids;
@@ -18,8 +17,6 @@ import com.teamresourceful.resourcefulbees.registry.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
@@ -46,7 +43,9 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.function.Predicate;
 
 import static com.teamresourceful.resourcefulbees.lib.BeeConstants.VANILLA_BEE_COLOR;
@@ -87,10 +86,6 @@ public class BeeInfoUtils {
         return ForgeRegistries.BIOMES.getValue(ResourceLocation.tryParse(biomeName));
     }
 
-    public static ResourceLocation getCustomBeeEntityRegistryID(String beeType) {
-        return new ResourceLocation(ResourcefulBees.MOD_ID + ":" + beeType + "_bee");
-    }
-
     public static @Nullable EntityType<?> getEntityType(String entityName) {
         return ForgeRegistries.ENTITIES.getValue(ResourceLocation.tryParse(entityName));
     }
@@ -121,6 +116,9 @@ public class BeeInfoUtils {
 
     private static final ResourceLocation VALID_APIARY = new ResourceLocation("resourcefulbees:valid_apiary");
 
+    public static Item getOurItem(String name, String suffix){
+        return BeeInfoUtils.getItem(ResourcefulBees.MOD_ID + ":" + name + suffix);
+    }
 
     public static void flagBeesInRange(BlockPos pos, Level world) {
         BoundingBox box = BoundingBox.createProper(pos.getX() + 10, pos.getY() + 10, pos.getZ() + 10, pos.getX() - 10, pos.getY() - 10, pos.getZ() - 10);
@@ -138,35 +136,6 @@ public class BeeInfoUtils {
         JsonElement je = jp.parse(outputNBT.toString());
         String nbtString = "NBT: " + gson.toJson(je);
         return Arrays.asList(nbtString.split("\n"));
-    }
-
-    public static TranslatableComponent getSizeName(float sizeModifier) {
-        if (sizeModifier < 0.75) {
-            return new TranslatableComponent("bees.resourcefulbees.size.tiny");
-        } else if (sizeModifier < 1) {
-            return new TranslatableComponent("bees.resourcefulbees.size.small");
-        } else if (sizeModifier == 1) {
-            return new TranslatableComponent("bees.resourcefulbees.size.regular");
-        } else if (sizeModifier <= 1.5) {
-            return new TranslatableComponent("bees.resourcefulbees.size.large");
-        } else {
-            return new TranslatableComponent("bees.resourcefulbees.size.giant");
-        }
-    }
-
-    public static Component getYesNo(boolean bool) {
-        return bool ? new TranslatableComponent("gui.resourcefulbees.yes") : new TranslatableComponent("gui.resourcefulbees.no");
-    }
-
-    public static TranslatableComponent getLightName(LightLevels light) {
-        switch (light) {
-            case DAY:
-                return new TranslatableComponent("gui.resourcefulbees.light.day");
-            case NIGHT:
-                return new TranslatableComponent("gui.resourcefulbees.light.night");
-            default:
-                return new TranslatableComponent("gui.resourcefulbees.light.any");
-        }
     }
 
     public static void ageBee(int ticksInHive, Bee beeEntity) {
@@ -215,10 +184,10 @@ public class BeeInfoUtils {
     }
 
     public static boolean isBeeInJarOurs(@NotNull ItemStack stack) {
-        return stack.getItem() instanceof BeeJar && BeeJar.isFilled(stack) && stack.getTag().getString(NBTConstants.NBT_ENTITY).startsWith(ResourcefulBees.MOD_ID);
+        return BeeJar.isFilled(stack) && stack.getTag().getString(NBTConstants.NBT_ENTITY).startsWith(ResourcefulBees.MOD_ID);
     }
 
-    public static Fluid getFluidFromBottle(ItemStack bottleOutput) {
+    public static Fluid getHoneyFluidFromBottle(ItemStack bottleOutput) {
         Item item = bottleOutput.getItem();
         if (item == Items.HONEY_BOTTLE) {
             return ModFluids.HONEY_STILL.get().getSource();
@@ -231,7 +200,7 @@ public class BeeInfoUtils {
         return Fluids.EMPTY;
     }
 
-    public static Item getHoneyBottle(Fluid fluid) {
+    public static Item getHoneyBottleFromFluid(Fluid fluid) {
         if (fluid == ModFluids.CATNIP_HONEY_STILL.get()) {
             return ModItems.CATNIP_HONEY_BOTTLE.get();
         } else if (fluid instanceof CustomHoneyFluid) {
@@ -242,18 +211,7 @@ public class BeeInfoUtils {
         }
     }
 
-    public static Item getHoneyBucket(Fluid fluid) {
-        if (fluid == ModFluids.CATNIP_HONEY_STILL.get()) {
-            return ModItems.CATNIP_HONEY_FLUID_BUCKET.get();
-        } else if (fluid instanceof CustomHoneyFluid) {
-            CustomHoneyFluid customfluid = (CustomHoneyFluid) fluid;
-            return customfluid.getHoneyData().getHoneyBucketItemRegistryObject().get();
-        } else {
-            return ModItems.HONEY_FLUID_BUCKET.get();
-        }
-    }
-
-    public static Item getHoneyBlock(Fluid fluid) {
+    public static Item getHoneyBlockFromFluid(Fluid fluid) {
         if (fluid == ModFluids.CATNIP_HONEY_STILL.get()) {
             return ModItems.CATNIP_HONEY_BLOCK_ITEM.get();
         } else if (fluid instanceof CustomHoneyFluid) {

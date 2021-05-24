@@ -4,7 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.entity.passive.CustomBeeEntity;
-import com.teamresourceful.resourcefulbees.utils.BeeInfoUtils;
+import com.teamresourceful.resourcefulbees.utils.BeepediaUtils;
 import com.teamresourceful.resourcefulbees.utils.CycledArray;
 import com.teamresourceful.resourcefulbees.utils.RenderUtils;
 import net.minecraft.ChatFormatting;
@@ -42,12 +42,12 @@ public class BeeInfoPage extends BeeDataPage {
         TranslatableComponent poisonName = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.info.poison");
         TranslatableComponent timeName = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.info.time");
 
-        sizeName.append(BeeInfoUtils.getSizeName(beeData.getRenderData().getSizeModifier()));
+        sizeName.append(BeepediaUtils.getSizeName(beeData.getRenderData().getSizeModifier()));
         damageName.append(new TextComponent("" + (int) beeData.getCombatData().getAttackDamage()));
         healthName.append(new TextComponent("" + (int) beeData.getCombatData().getBaseHealth()));
-        stingerName.append(BeeInfoUtils.getYesNo(beeData.getCombatData().removeStingerOnAttack()));
-        passiveName.append(BeeInfoUtils.getYesNo(beeData.getCombatData().isPassive()));
-        poisonName.append(BeeInfoUtils.getYesNo(beeData.getCombatData().inflictsPoison()));
+        stingerName.append(BeepediaUtils.getYesNo(beeData.getCombatData().removeStingerOnAttack()));
+        passiveName.append(BeepediaUtils.getYesNo(beeData.getCombatData().isPassive()));
+        poisonName.append(BeepediaUtils.getYesNo(beeData.getCombatData().inflictsPoison()));
         timeName.append(beeData.getCoreData().getMaxTimeInHive() / 20 + "s");
 
         font.draw(matrix, title.withStyle(ChatFormatting.WHITE), xPos, (float) yPos + 8, -1);
@@ -91,7 +91,7 @@ public class BeeInfoPage extends BeeDataPage {
         } else {
             beeData.getCoreData().getBlockFlowers().forEach(b -> parent.addSearchItem(b));
         }
-        parent.addSearchBeeTag(BeeInfoUtils.getSizeName(beeData.getRenderData().getSizeModifier()).getString());
+        parent.addSearchBeeTag(BeepediaUtils.getSizeName(beeData.getRenderData().getSizeModifier()).getString());
     }
 
     @Override

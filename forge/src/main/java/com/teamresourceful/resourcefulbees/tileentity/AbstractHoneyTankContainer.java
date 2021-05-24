@@ -122,7 +122,7 @@ public abstract class AbstractHoneyTankContainer extends AbstractHoneyTank imple
                     output.grow(1);
                 }
             } else {
-                FluidStack fluidStack = new FluidStack(BeeInfoUtils.getFluidFromBottle(stack), HONEY_FILL_AMOUNT);
+                FluidStack fluidStack = new FluidStack(BeeInfoUtils.getHoneyFluidFromBottle(stack), HONEY_FILL_AMOUNT);
                 if (!fluidStack.isEmpty()) getFluidTank().fill(fluidStack, IFluidHandler.FluidAction.EXECUTE);
                 stack.shrink(1);
                 if (output.isEmpty()) {
@@ -154,7 +154,7 @@ public abstract class AbstractHoneyTankContainer extends AbstractHoneyTank imple
             fluid = item.getFluid();
         } else {
             spaceLeft = (getFluidTank().getFluidAmount() + HONEY_FILL_AMOUNT) <= getFluidTank().getCapacity();
-            fluid = BeeInfoUtils.getFluidFromBottle(stack);
+            fluid = BeeInfoUtils.getHoneyFluidFromBottle(stack);
         }
         return spaceLeft && (getFluidTank().getFluid().getFluid() == fluid || getFluidTank().isEmpty());
     }

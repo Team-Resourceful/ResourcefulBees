@@ -16,21 +16,16 @@ import mezz.jei.api.gui.ingredient.IGuiFluidStackGroup;
 import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CentrifugeRecipeCategory extends BaseCategory<CentrifugeRecipe> {
 
@@ -58,23 +53,11 @@ public class CentrifugeRecipeCategory extends BaseCategory<CentrifugeRecipe> {
     public void setIngredients(@NotNull CentrifugeRecipe recipe, @NotNull IIngredients iIngredients) {
         List<ItemOutput> outputs = recipe.getItemOutputs();
         List<FluidOutput> fluidOutputs = recipe.getFluidOutputs();
-        List<ItemStack> stacks = new ArrayList<>();
-        List<FluidStack> fluids = new ArrayList<>();
 
-        fluids.add(fluidOutputs.get(0).getFluidStack());
-
-        if (outputs.get(0).getItemStack().isEmpty()) {
-            stacks.add(new ItemStack(Items.STONE));
-        } else {
-            stacks.add(outputs.get(0).getItemStack());
-        }
-        stacks.add(outputs.get(0).getItemStack().isEmpty() ? new ItemStack(Items.STONE) : outputs.get(0).getItemStack());
-        stacks.add(outputs.get(1).getItemStack());
         iIngredients.setInputIngredients(Lists.newArrayList(recipe.getIngredient()));
-        fluids.add(fluidOutputs.get(1).getFluidStack());
 
-        iIngredients.setOutputs(VanillaTypes.ITEM, stacks);
-        iIngredients.setOutputs(VanillaTypes.FLUID, fluids);
+        iIngredients.setOutputs(VanillaTypes.ITEM, outputs.stream().map(ItemOutput::getItemStack).collect(Collectors.toList()));
+        iIngredients.setOutputs(VanillaTypes.FLUID, fluidOutputs.stream().map(FluidOutput::getFluidStack).collect(Collectors.toList()));
     }
 
     @Override
@@ -102,40 +85,40 @@ public class CentrifugeRecipeCategory extends BaseCategory<CentrifugeRecipe> {
     }
 
     @Override
-    public void draw(CentrifugeRecipe recipe, @NotNull PoseStack matrix, double mouseX, double mouseY) {
+    public void draw(@NotNull CentrifugeRecipe recipe, @NotNull PoseStack matrix, double mouseX, double mouseY) {
         this.arrow.draw(matrix, 31, 14);
 
-        final double output1 = recipe.getItemOutputs().get(0).getChance();
-        final double output2 = recipe.getItemOutputs().get(1).getChance();
-        final double output3 = recipe.getItemOutputs().size() < 3 ? recipe.getFluidOutputs().get(1).getChance() : recipe.getItemOutputs().get(2).getChance();
-        final double fluid = recipe.getFluidOutputs().get(0).getChance();
-
-        DecimalFormat decimalFormat = new DecimalFormat("##%");
-        String honeyBottleString = decimalFormat.format(output3);
-        String beeOutputString = decimalFormat.format(output1);
-        String beeswaxString = decimalFormat.format(output2);
-        String fluidString = decimalFormat.format(fluid);
-
-        Minecraft minecraft = Minecraft.getInstance();
-        Font fontRenderer = minecraft.font;
-        int honeyBottleOffset = fontRenderer.width(honeyBottleString) / 2;
-        int beeOutputOffset = fontRenderer.width(beeOutputString) / 2;
-        int beeswaxOffset = fontRenderer.width(beeswaxString) / 2;
-        int fluidOffset = fontRenderer.width(fluidString) / 2;
-
-        if (output1 < 1.0)
-            fontRenderer.draw(matrix, beeOutputString, (float) 95 - beeOutputOffset, (float) 10, 0xff808080);
-        if (output2 < 1.0) fontRenderer.draw(matrix, beeswaxString, (float) 95 - beeswaxOffset, (float) 30, 0xff808080);
-        if (fluid < 1.0 && !(recipe.getItemOutputs().get(0).getItemStack().isEmpty()))
-            fontRenderer.draw(matrix, fluidString, (float) 95 - fluidOffset, (float) 46, 0xff808080);
-        if (output3 < 1.0)
-            fontRenderer.draw(matrix, honeyBottleString, (float) 45 - honeyBottleOffset, (float) 49, 0xff808080);
-        if (recipe.isMultiblock()) {
-            multiblock.draw(matrix, 10, 45);
-        }
-        if (recipe.getItemOutputs().get(0).getItemStack().isEmpty()) {
-            this.fluidHider.draw(matrix, 108, 41);
-        }
+        //final double output1 = recipe.getItemOutputs().get(0).getChance();
+        //final double output2 = recipe.getItemOutputs().get(1).getChance();
+        //final double output3 = recipe.getItemOutputs().size() < 3 ? recipe.getFluidOutputs().get(1).getChance() : recipe.getItemOutputs().get(2).getChance();
+        //final double fluid = recipe.getFluidOutputs().get(0).getChance();
+//
+//        DecimalFormat decimalFormat = new DecimalFormat("##%");
+//        String honeyBottleString = decimalFormat.format(output3);
+//        String beeOutputString = decimalFormat.format(output1);
+//        String beeswaxString = decimalFormat.format(output2);
+//        String fluidString = decimalFormat.format(fluid);
+//
+//        Minecraft minecraft = Minecraft.getInstance();
+//        Font fontRenderer = minecraft.font;
+//        int honeyBottleOffset = fontRenderer.width(honeyBottleString) / 2;
+//        int beeOutputOffset = fontRenderer.width(beeOutputString) / 2;
+//        int beeswaxOffset = fontRenderer.width(beeswaxString) / 2;
+//        int fluidOffset = fontRenderer.width(fluidString) / 2;
+//
+//        if (output1 < 1.0)
+//            fontRenderer.draw(matrix, beeOutputString, (float) 95 - beeOutputOffset, (float) 10, 0xff808080);
+//        if (output2 < 1.0) fontRenderer.draw(matrix, beeswaxString, (float) 95 - beeswaxOffset, (float) 30, 0xff808080);
+//        if (fluid < 1.0 && !(recipe.getItemOutputs().get(0).getItemStack().isEmpty()))
+//            fontRenderer.draw(matrix, fluidString, (float) 95 - fluidOffset, (float) 46, 0xff808080);
+//        if (output3 < 1.0)
+//            fontRenderer.draw(matrix, honeyBottleString, (float) 45 - honeyBottleOffset, (float) 49, 0xff808080);
+//        if (recipe.isMultiblock()) {
+//            multiblock.draw(matrix, 10, 45);
+//        }
+//        if (recipe.getItemOutputs().get(0).getItemStack().isEmpty()) {
+//            this.fluidHider.draw(matrix, 108, 41);
+//        }
     }
 
     @Override

@@ -143,7 +143,7 @@ public class AbstractHoneyTank extends BlockEntity {
 
     public void fillBottle(Player player, InteractionHand hand) {
         FluidStack fluidStack = new FluidStack(getFluidTank().getFluid(), ModConstants.HONEY_PER_BOTTLE);
-        ItemStack itemStack = new ItemStack(BeeInfoUtils.getHoneyBottle(getFluidTank().getFluid().getFluid()), 1);
+        ItemStack itemStack = new ItemStack(BeeInfoUtils.getHoneyBottleFromFluid(getFluidTank().getFluid().getFluid()), 1);
         if (getFluidTank().isEmpty()) return;
         if (getFluidTank().getFluidAmount() >= ModConstants.HONEY_PER_BOTTLE) {
             getFluidTank().drain(fluidStack, IFluidHandler.FluidAction.EXECUTE);
@@ -159,7 +159,7 @@ public class AbstractHoneyTank extends BlockEntity {
     }
 
     public void emptyBottle(Player player, InteractionHand hand) {
-        FluidStack fluidStack = new FluidStack(BeeInfoUtils.getFluidFromBottle(player.getItemInHand(hand)), ModConstants.HONEY_PER_BOTTLE);
+        FluidStack fluidStack = new FluidStack(BeeInfoUtils.getHoneyFluidFromBottle(player.getItemInHand(hand)), ModConstants.HONEY_PER_BOTTLE);
         if (!getFluidTank().getFluid().isFluidEqual(fluidStack) && !getFluidTank().isEmpty()) {
             return;
         }

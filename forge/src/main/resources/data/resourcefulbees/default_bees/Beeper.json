@@ -6,8 +6,8 @@
   "HoneycombData": {
     "type": "DEFAULT",
     "color": "#0C9F0A",
-    "item": "resourcefulbees:creeper_honeycomb",
-    "block": "resourcefulbees:creeper_honeycomb_block"
+    "item": "resourcefulbees:beeper_honeycomb",
+    "block": "resourcefulbees:beeper_honeycomb_block"
   },
   "RenderData": {
     "layers": [

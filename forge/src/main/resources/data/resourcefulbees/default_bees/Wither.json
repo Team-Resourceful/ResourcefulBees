@@ -32,7 +32,7 @@
   "CentrifugeData": {
     "hasCentrifugeOutput": true,
     "itemOutputs": [
-      {"id": "minecraft:nether_star", "weight": 0.01}
+      {"item": {"id": "minecraft:nether_star", "count": 8}, "weight": 0.01}
     ]
   },
   "BreedData": {

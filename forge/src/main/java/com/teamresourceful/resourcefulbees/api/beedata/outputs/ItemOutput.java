@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.api.beedata.outputs;
 
+import com.google.common.base.MoreObjects;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.beedata.CodecUtils;
@@ -33,5 +34,14 @@ public class ItemOutput extends AbstractOutput{
 
     public int getCount() {
         return itemStack.getCount();
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("Item", getItem())
+                .add("Count", getCount())
+                .add("Chance", getChance())
+                .add("Weight", getWeight()).toString();
     }
 }
