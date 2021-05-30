@@ -100,7 +100,7 @@ public class BeepediaScreen extends Screen {
         }
         this.itemBees = bees;
         this.complete = complete;
-        this.xSize = 286;
+        this.xSize = 307;
         this.ySize = 182;
     }
 
