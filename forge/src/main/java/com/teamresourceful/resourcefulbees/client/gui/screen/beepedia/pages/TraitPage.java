@@ -169,7 +169,7 @@ public class TraitPage extends BeepediaPage {
         list.updateList();
         beepedia.drawSlotNoToolTip(matrix, trait.getDisplayItem(), xPos, yPos + 10);
         beepedia.getMinecraft().textureManager.bind(splitterImage);
-        GuiComponent.blit(matrix, xPos, yPos - 14, 0, 0, 165, 100, 165, 100);
+        GuiComponent.blit(matrix, xPos, yPos - 14, 0, 0, 186, 100, 186, 100);
         Font font = Minecraft.getInstance().font;
         TextComponent key = new TextComponent(id);
         font.draw(matrix, name.withStyle(ChatFormatting.WHITE), (float) xPos + 24, (float) yPos + 12, -1);

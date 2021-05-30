@@ -2,10 +2,15 @@
   "CoreData": {
     "flower": "minecraft:beds",
     "maxTimeInHive": 600,
-    "apiaryOutputAmounts": [1,2,3,4]
+
+    "lore": "Cute little baby kitty bee.",
+    "loreColor": "rainbow",
+    "creator": "Dawn_Felstar"
   },
   "HoneycombData": {
     "type": "CUSTOM",
+    "apiaryOutputTypes": ["COMB", "COMB", "COMB", "COMB"],
+    "apiaryOutputAmounts": [2,3,4,5],
     "item": "resourcefulbees:catnip_honeycomb",
     "block": "resourcefulbees:catnip_honeycomb_block"
   },
@@ -37,5 +42,11 @@
   "TraitData": {
     "hasTraits": true,
     "traits": [ "kitten" ]
+  },
+  "CombatData": {
+    "removeStingerOnAttack": false,
+    "attackDamage": 0,
+    "inflictsPoison": false,
+    "baseHealth": 10
   }
 }

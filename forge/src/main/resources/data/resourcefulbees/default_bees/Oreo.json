@@ -1,7 +1,10 @@
 {
   "CoreData": {
     "flower": "minecraft:flowers",
-    "maxTimeInHive": 6000
+    "maxTimeInHive": 6000,
+    "creator" : "Epic_Oreo",
+    "lore": "A Delicious Bee",
+    "loreColor": "rainbow"
   },
   "HoneycombData": {
     "type": "CUSTOM",

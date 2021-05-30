@@ -101,7 +101,7 @@ public class HoneyPage extends BeepediaPage {
         beeList.updateList();
         beepedia.drawSlotNoToolTip(matrix, bottle, xPos, yPos + 10);
         beepedia.getMinecraft().textureManager.bind(splitterImage);
-        GuiComponent.blit(matrix, xPos, yPos - 14, 0, 0, 165, 100, 165, 100);
+        GuiComponent.blit(matrix, xPos, yPos - 14, 0, 0, 186, 100, 186, 100);
         Font font = Minecraft.getInstance().font;
         font.draw(matrix, text.withStyle(ChatFormatting.WHITE), (float) xPos + 24, (float) yPos + 12, -1);
         drawHungerBar(matrix);
@@ -178,7 +178,7 @@ public class HoneyPage extends BeepediaPage {
     private void drawHungerBar(PoseStack matrix) {
         TextureManager manager = Minecraft.getInstance().getTextureManager();
         manager.bind(hungerBar);
-        GuiComponent.blit(matrix, xPos + 23, yPos + 21, 0, 0, 90, 9, 90, 9);
+        GuiComponent.blit(matrix, xPos + 24, yPos + 21, 0, 0, 90, 9, 90, 9);
         int pipPosition = 105;
         int pipCounter = Math.min(hunger, 20);
         manager.bind(hungerIcons);

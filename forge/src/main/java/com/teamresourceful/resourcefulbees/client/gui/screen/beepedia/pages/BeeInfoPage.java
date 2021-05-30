@@ -34,30 +34,15 @@ public class BeeInfoPage extends BeeDataPage {
         Font font = Minecraft.getInstance().font;
         TranslatableComponent title = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.info");
         TranslatableComponent sizeName = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.info.size");
-
-        TranslatableComponent healthName = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.info.health");
-        TranslatableComponent damageName = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.info.damage");
-        TranslatableComponent stingerName = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.info.stinger");
-        TranslatableComponent passiveName = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.info.passive");
-        TranslatableComponent poisonName = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.info.poison");
         TranslatableComponent timeName = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.info.time");
 
         sizeName.append(BeepediaUtils.getSizeName(beeData.getRenderData().getSizeModifier()));
-        damageName.append(new TextComponent("" + (int) beeData.getCombatData().getAttackDamage()));
-        healthName.append(new TextComponent("" + (int) beeData.getCombatData().getBaseHealth()));
-        stingerName.append(BeepediaUtils.getYesNo(beeData.getCombatData().removeStingerOnAttack()));
-        passiveName.append(BeepediaUtils.getYesNo(beeData.getCombatData().isPassive()));
-        poisonName.append(BeepediaUtils.getYesNo(beeData.getCombatData().inflictsPoison()));
         timeName.append(beeData.getCoreData().getMaxTimeInHive() / 20 + "s");
 
         font.draw(matrix, title.withStyle(ChatFormatting.WHITE), xPos, (float) yPos + 8, -1);
         font.draw(matrix, sizeName.withStyle(ChatFormatting.GRAY), xPos, (float) yPos + 22, -1);
-        font.draw(matrix, timeName.withStyle(ChatFormatting.GRAY), (float) xPos + 76, (float) yPos + 22, -1);
-        font.draw(matrix, healthName.withStyle(ChatFormatting.GRAY), xPos, (float) yPos + 34, -1);
-        font.draw(matrix, damageName.withStyle(ChatFormatting.GRAY), (float) xPos + 76, (float) yPos + 34, -1);
-        font.draw(matrix, passiveName.withStyle(ChatFormatting.GRAY), xPos, (float) yPos + 46, -1);
-        font.draw(matrix, poisonName.withStyle(ChatFormatting.GRAY), (float) xPos + 76, (float) yPos + 46, -1);
-        font.draw(matrix, stingerName.withStyle(ChatFormatting.GRAY), xPos, (float) yPos + 58, -1);
+        font.draw(matrix, timeName.withStyle(ChatFormatting.GRAY), (float) xPos + 86, (float) yPos + 22, -1);
+
     }
 
     @Override

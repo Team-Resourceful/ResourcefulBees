@@ -26,7 +26,7 @@
 
 	"tooltip.resourcefulbees.jei.click_bee_info": "Click or Right-Click for more info!",
 	"tooltip.resourcefulbees.jei.coal": "Coal Bee",
-	"tooltip.resourcefulbees.bee.creator": "Creator - ",
+	"tooltip.resourcefulbees.bee.creator": "- ",
 
 	"info.resourcefulbees.jei.coal": "Coal Bee",
 
@@ -82,7 +82,7 @@
 	"item.resourcefulbees.beepedia": "Beepedia",
 	"item.resourcefulbees.creative_beepedia": "Creative Beepedia",
 	"item.resourcefulbees.information.beepedia": "Use on a bee to see it's information",
-	"gui.resourcefulbees.beepedia": "Beepedia v1.0",
+	"gui.resourcefulbees.beepedia": "Beepedia v2.0",
 	"gui.resourcefulbees.beepedia.home.discord": "Join us on Discord!",
 	"gui.resourcefulbees.beepedia.home.patreon": "Support us on Patreon!",
 	"gui.resourcefulbees.beepedia.home.issues": "Found a bug/issue? submit it here.",
@@ -90,6 +90,7 @@
 	"gui.resourcefulbees.beepedia.home.progress": "Bees Found: ",
 	"gui.resourcefulbees.beepedia.search": "Search",
 	"gui.resourcefulbees.beepedia.tab.bees": "Bees",
+	"gui.resourcefulbees.beepedia.tab.combs": "Combs",
 	"gui.resourcefulbees.beepedia.tab.traits": "Traits",
 	"gui.resourcefulbees.beepedia.tab.traits.effects_list": "Trait Effects",
 	"gui.resourcefulbees.beepedia.tab.traits.bees_list": "Bees",

@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.api.beedata.CombatData;
 import com.teamresourceful.resourcefulbees.api.beedata.mutation.EntityMutation;
 import com.teamresourceful.resourcefulbees.api.beedata.mutation.ItemMutation;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
@@ -44,6 +45,7 @@ public class BeePage extends BeepediaPage {
     private Entity bee = null;
     protected Pair<TabImageButton, BeeDataPage> subPage;
     private Pair<TabImageButton, BeeDataPage> beeInfoPage;
+    private Pair<TabImageButton, BeeDataPage> beeCombatPage = null;
     private Pair<TabImageButton, BeeDataPage> mutationsPage = null;
     private Pair<TabImageButton, BeeDataPage> traitListPage = null;
     private Pair<TabImageButton, BeeDataPage> centrifugePage = null;
@@ -75,6 +77,7 @@ public class BeePage extends BeepediaPage {
         tabCounter = 0;
 
         registerInfoPage(subX, subY);
+        registerCombatPage(subX, subY);
         registerMutationListPage(subX, subY);
         registerTraitListPage(subX, subY);
         registerHoneycombPage(subX, subY);
@@ -91,6 +94,7 @@ public class BeePage extends BeepediaPage {
         addSearch();
     }
 
+
     private void registerInfoPage(int subX, int subY) {
         beeInfoPage = Pair.of(
                 getTabButton(new ItemStack(Items.BOOK), onPress -> setSubPage(SubPageType.INFO),
@@ -99,6 +103,18 @@ public class BeePage extends BeepediaPage {
         );
         subPage = beeInfoPage;
         tabs.add(beeInfoPage);
+    }
+
+    private void registerCombatPage(int subX, int subY) {
+        if (!beeData.getCombatData().equals(CombatData.DEFAULT)) {
+            beeCombatPage = Pair.of(
+                    getTabButton(new ItemStack(Items.IRON_SWORD), onPress -> setSubPage(SubPageType.COMBAT),
+                            new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.combat")),
+                    new BeeCombatPage(beepedia, beeData, subX, subY, this)
+            );
+            subPage = beeCombatPage;
+            tabs.add(beeCombatPage);
+        }
     }
 
     private void registerMutationListPage(int subX, int subY) {
@@ -170,7 +186,7 @@ public class BeePage extends BeepediaPage {
     @Override
     public void renderBackground(PoseStack matrix, float partialTick, int mouseX, int mouseY) {
         beepedia.getMinecraft().textureManager.bind(splitterImage);
-        GuiComponent.blit(matrix, xPos, yPos, 0, 0, 165, 100, 165, 100);
+        GuiComponent.blit(matrix, xPos, yPos, 0, 0, 186, 100, 186, 100);
         Minecraft.getInstance().font.draw(matrix, label.withStyle(ChatFormatting.WHITE), (float) xPos + 40, (float) yPos + 10, -1);
         subPage.getRight().renderBackground(matrix, partialTick, mouseX, mouseY);
 
@@ -312,6 +328,9 @@ public class BeePage extends BeepediaPage {
             case TRAIT_LIST:
                 page = traitListPage;
                 break;
+            case COMBAT:
+                page = beeCombatPage;
+                break;
             default:
                 throw new IllegalStateException("Unexpected value: " + beeSubPage);
         }
@@ -391,6 +410,7 @@ public class BeePage extends BeepediaPage {
         BREEDING,
         MUTATIONS,
         HONEYCOMB,
-        TRAIT_LIST
+        TRAIT_LIST,
+        COMBAT;
     }
 }
