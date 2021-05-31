@@ -312,10 +312,10 @@ public class BreedingPage extends BeeDataPage {
                 children.get(activePage).drawTooltips(matrixStack, mouseX, mouseY);
                 break;
             case ENTITY_MUTATIONS:
-                entityMutationBreeding.get(activePage).drawTooltips(matrixStack, xPos, yPos + 22, mouseX, mouseY);
+                entityMutationBreeding.get(activePage).drawTooltips(matrixStack, xPos, yPos + 31, mouseX, mouseY);
                 break;
             case ITEM_MUTATIONS:
-                itemMutationBreeding.get(activePage).drawTooltips(matrixStack, xPos, yPos + 22, mouseX, mouseY);
+                itemMutationBreeding.get(activePage).drawTooltips(matrixStack, xPos, yPos + 31, mouseX, mouseY);
                 break;
             case PARENTS:
                 parents.get(activePage).drawTooltips(matrixStack, mouseX, mouseY);
@@ -364,10 +364,10 @@ public class BreedingPage extends BeeDataPage {
             childEntity = beeFamily.createChildDisplayEntity(beepedia.getMinecraft().level);
             parent1Items = new CycledArray<>(beeFamily.getParent1FeedItemStacks());
             parent2Items = new CycledArray<>(beeFamily.getParent2FeedItemStacks());
-            parent1Pos = new Vec2((float) xPos + 6, (float) yPos + 22);
-            parent2Pos = new Vec2((float) xPos + 60, (float) yPos + 22);
-            childPos = new Vec2((float) xPos + 130, (float) yPos + 32);
-            chancePos = new Vec2((float) xPos + SUB_PAGE_WIDTH - 17, (float) yPos + 20);
+            parent1Pos = new Vec2((float) xPos + 6, (float) yPos + 34);
+            parent2Pos = new Vec2((float) xPos + 60, (float) yPos + 34);
+            childPos = new Vec2((float) xPos + 130, (float) yPos + 44);
+            chancePos = new Vec2((float) xPos + SUB_PAGE_WIDTH - 17, (float) yPos + 32);
             adjustedWeight = BeeRegistry.getRegistry().getAdjustedWeightForChild(beeFamily);
             isSelf = beeFamily.getParent1().equals(beeFamily.getChild()) && beeFamily.getParent2().equals(beeFamily.getChild());
         }
@@ -389,21 +389,21 @@ public class BreedingPage extends BeeDataPage {
                 int padding = font.width(text) / 2;
                 Minecraft.getInstance().textureManager.bind(infoIcon);
                 beepedia.blit(matrix, (int) chancePos.x, (int) chancePos.y, 16, 0, 9, 9);
-                font.draw(matrix, text.withStyle(ChatFormatting.GRAY), (float) xPos + 140 - (float) padding, (float) yPos + 21, -1);
+                font.draw(matrix, text.withStyle(ChatFormatting.GRAY), (float) xPos + 140 - (float) padding, (float) yPos + 33, -1);
             }
             TextComponent text = new TextComponent(decimalFormat.format(adjustedWeight));
             int padding = font.width(text) / 2;
-            font.draw(matrix, text.withStyle(ChatFormatting.GRAY), (float) xPos + 103f - (float) padding, (float) yPos + 56, -1);
+            font.draw(matrix, text.withStyle(ChatFormatting.GRAY), (float) xPos + 103f - (float) padding, (float) yPos + 68, -1);
         }
 
         public void drawParent1Item(PoseStack matrix) {
             if (parent1Items.isEmpty()) return;
-            beepedia.drawSlot(matrix, parent1Items.get(), xPos + 5, yPos + 53);
+            beepedia.drawSlot(matrix, parent1Items.get(), xPos + 5, yPos + 65);
         }
 
         public void drawParent2Item(PoseStack matrix) {
             if (parent1Items.isEmpty()) return;
-            beepedia.drawSlot(matrix, parent2Items.get(), xPos + 59, yPos + 53);
+            beepedia.drawSlot(matrix, parent2Items.get(), xPos + 59, yPos + 65);
         }
 
         public void tick(int ticksActive) {
@@ -437,7 +437,7 @@ public class BreedingPage extends BeeDataPage {
 
         public void draw(PoseStack matrix) {
             Minecraft.getInstance().textureManager.bind(breedingImage);
-            GuiComponent.blit(matrix, xPos, yPos + 22, 0, 0, 128, 64, 128, 64);
+            GuiComponent.blit(matrix, xPos, yPos + 34, 0, 0, 128, 64, 128, 64);
             drawParent1(matrix);
             drawParent2(matrix);
             drawChild(matrix);

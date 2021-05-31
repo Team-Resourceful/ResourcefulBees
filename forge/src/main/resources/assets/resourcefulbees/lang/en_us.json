@@ -138,6 +138,7 @@
 	"gui.resourcefulbees.beepedia.bee_subtab.traits": "Traits",
 	"gui.resourcefulbees.beepedia.bee_subtab.honeycombs": "Honeycomb",
 	"gui.resourcefulbees.beepedia.bee_subtab.centrifuge": "Centrifuge",
+	"gui.resourcefulbees.beepedia.bee_subtab.combat": "Combat Data",
 	"gui.resourcefulbees.beepedia.bee_subtab.centrifuge.requires_multiblock": "Multiblock centrifuge required for this recipe.",
 
 	"bees.resourcefulbees.size.tiny": "Tiny",

@@ -30,8 +30,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraftforge.fluids.FluidStack;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -154,8 +152,6 @@ public class HoneycombPage extends BeeDataPage {
         int padding = font.width(title) / 2;
         font.draw(matrix, title.withStyle(ChatFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, -1);
         if (BeepediaScreen.currScreenState.isCentrifugeOpen() && !recipes.isEmpty()) {
-            manager.bind(centrifugeImage);
-            GuiComponent.blit(matrix, xPos, yPos + 22, 0, 0, 169, 84, 169, 84);
             recipes.get(activePage).draw(matrix, xPos, yPos + 22, mouseX, mouseY);
             if (recipes.size() > 1) {
                 TextComponent page = new TextComponent(String.format("%d / %d", activePage + 1, recipes.size()));
@@ -231,30 +227,23 @@ public class HoneycombPage extends BeeDataPage {
         }
 
         public void draw(PoseStack matrix, int xPos, int yPos, int mouseX, int mouseY) {
-            beepedia.drawSlot(matrix, inputItem, xPos + 25, yPos + 3);
+            TextureManager manager = Minecraft.getInstance().getTextureManager();
+
+            manager.bind(centrifugeImage);
+            GuiComponent.blit(matrix, xPos, yPos + 9, 0, 0, 169, 84, 169, 84);
+
+            beepedia.drawSlot(matrix, inputItem, xPos + 25, yPos + 22);
 
             List<ItemOutput> items = recipe.getItemOutputs();
             List<FluidOutput> fluids = recipe.getFluidOutputs();
 
+
+            int totalItemsOffset = items.size() * 21;
+            int startItems = HoneycombPage.this.yPos + 54 - totalItemsOffset / 2;
             // draw items
             for (int i = 0; i < items.size(); i++) {
-                ItemOutput item = items.get(i);
-                beepedia.drawSlot(matrix, item.getItemStack(), xPos + 20, yPos + 10 + (40 * i));
-                if (item.getItem() instanceof CustomHoneyBottleItem) {
-                    CustomHoneyBottleItem honey = (CustomHoneyBottleItem) item.getItem();
-                    beepedia.registerInteraction(xPos + 10 + (40 * i), yPos + 10, () -> {
-                        BeepediaScreen.saveScreenState();
-                        beepedia.setActive(BeepediaScreen.PageType.HONEY, honey.getHoneyData().getName());
-                        return true;
-                    });
-                } else if (item.getItem() instanceof BeeSpawnEggItem) {
-                    BeeSpawnEggItem egg = (BeeSpawnEggItem) item.getItem();
-                    beepedia.registerInteraction(xPos + 20, yPos + 10 + (40 * i), () -> {
-                        BeepediaScreen.saveScreenState();
-                        beepedia.setActive(BeepediaScreen.PageType.BEE, egg.getBeeData().getCoreData().getName());
-                        return true;
-                    });
-                }
+                ItemStack item = new ItemStack(items.get(i).getItem(), items.get(i).getCount() * (recipe.isMultiblock() ? 9 : 1));
+                drawItem(matrix, items.get(i), item, HoneycombPage.this.xPos + 124, startItems + i * 21);
             }
             // draw fluids
             for (int i = 0; i < fluids.size(); i++) {
@@ -276,7 +265,27 @@ public class HoneycombPage extends BeeDataPage {
             }
         }
 
-        private void drawWeight(PoseStack matrix, Float right, int xPos, int yPos) {
+        private void drawItem(PoseStack matrix, ItemOutput output, ItemStack item, int xPos, int yPos) {
+            beepedia.drawSlot(matrix, item, xPos, yPos);
+            drawChance(matrix, output.getChance(), xPos + 30, yPos + 7);
+            if (item.getItem() instanceof CustomHoneyBottleItem) {
+                CustomHoneyBottleItem honey = (CustomHoneyBottleItem) item.getItem();
+                beepedia.registerInteraction(xPos, yPos, () -> {
+                    BeepediaScreen.saveScreenState();
+                    beepedia.setActive(BeepediaScreen.PageType.HONEY, honey.getHoneyData().getName());
+                    return true;
+                });
+            } else if (item.getItem() instanceof BeeSpawnEggItem) {
+                BeeSpawnEggItem egg = (BeeSpawnEggItem) item.getItem();
+                beepedia.registerInteraction(xPos, yPos, () -> {
+                    BeepediaScreen.saveScreenState();
+                    beepedia.setActive(BeepediaScreen.PageType.BEE, egg.getBeeData().getCoreData().getName());
+                    return true;
+                });
+            }
+        }
+
+        private void drawChance(PoseStack matrix, double right, int xPos, int yPos) {
             if (right == 1) return;
             Font font = Minecraft.getInstance().font;
             DecimalFormat decimalFormat = new DecimalFormat("##%");
