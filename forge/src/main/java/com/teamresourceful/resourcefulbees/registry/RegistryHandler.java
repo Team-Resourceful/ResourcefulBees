@@ -19,7 +19,8 @@ import com.teamresourceful.resourcefulbees.item.CustomHoneyBucketItem;
 import com.teamresourceful.resourcefulbees.item.HoneycombItem;
 import com.teamresourceful.resourcefulbees.item.dispenser.ScraperDispenserBehavior;
 import com.teamresourceful.resourcefulbees.item.dispenser.ShearsDispenserBehavior;
-import com.teamresourceful.resourcefulbees.lib.HoneycombTypes;
+import com.teamresourceful.resourcefulbees.lib.enums.HoneycombType;
+import com.teamresourceful.resourcefulbees.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.mixin.DispenserBlockInvoker;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EntityType;
@@ -48,6 +49,10 @@ import java.util.Map;
 
 public class RegistryHandler {
 
+    private RegistryHandler() {
+        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+    }
+
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITIES, ResourcefulBees.MOD_ID);
 
     public static void init() {
@@ -75,10 +80,10 @@ public class RegistryHandler {
     public static void registerDynamicBees() {
         BeeRegistry.getRegistry().getBees().forEach((name, beeData) -> {
             HoneycombData honeyData = beeData.getHoneycombData();
-            if (honeyData.getHoneycombType().equals(HoneycombTypes.DEFAULT)) {
+            if (honeyData.getHoneycombType().equals(HoneycombType.DEFAULT)) {
                 registerHoneycomb(name, honeyData);
             }
-            registerBee(name, beeData.getRawData(), beeData.getRenderData().getSizeModifier());
+            registerBee(name, beeData.getRenderData().getSizeModifier());
         });
     }
 
@@ -112,9 +117,9 @@ public class RegistryHandler {
         ModItems.ITEMS.register(name + "_honeycomb_block", () -> new BlockItem(customHoneycombBlock.get(), new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
     }
 
-    private static void registerBee(String name, JsonObject beeData, float sizeModifier) {
+    private static void registerBee(String name, float sizeModifier) {
         final RegistryObject<EntityType<? extends CustomBeeEntity>> customBeeEntity = ENTITY_TYPES.register(name + "_bee", () -> EntityType.Builder
-                .<ResourcefulBee>of((type, world) -> new ResourcefulBee(type, world, name, beeData), MobCategory.CREATURE)
+                .<ResourcefulBee>of((type, world) -> new ResourcefulBee(type, world, name), MobCategory.CREATURE)
                 .sized(0.7F * sizeModifier, 0.6F * sizeModifier)
                 .build(name + "_bee"));
 
@@ -124,6 +129,7 @@ public class RegistryHandler {
         ModEntities.getModBees().put(name, customBeeEntity);
     }
 
+    // TODO does this need to use the codec? - epic
     private static void registerHoneyBottle(String name, JsonObject honeyData) {
         HoneyBottleData honeyBottleData = HoneyBottleData.CODEC.parse(JsonOps.INSTANCE, honeyData)
                 .getOrThrow(false, s -> ResourcefulBees.LOGGER.error("Could not create Custom Honey Data for {} honey", name));

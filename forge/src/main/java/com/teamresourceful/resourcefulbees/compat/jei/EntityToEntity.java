@@ -4,7 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.IBeeRegistry;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
-import com.teamresourceful.resourcefulbees.api.beedata.MutationData;
+import com.teamresourceful.resourcefulbees.api.beedata.mutation.MutationData;
 import com.teamresourceful.resourcefulbees.compat.jei.ingredients.EntityIngredient;
 import com.teamresourceful.resourcefulbees.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.utils.BeeInfoUtils;

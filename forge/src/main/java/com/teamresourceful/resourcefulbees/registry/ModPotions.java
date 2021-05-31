@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.registry;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.lib.ModConstants;
+import com.teamresourceful.resourcefulbees.lib.constants.ModConstants;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;

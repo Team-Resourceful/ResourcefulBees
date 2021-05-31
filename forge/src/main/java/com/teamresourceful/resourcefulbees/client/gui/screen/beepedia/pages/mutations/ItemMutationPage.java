@@ -6,8 +6,7 @@ import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaSc
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.BeePage;
 import com.teamresourceful.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.item.BeeSpawnEggItem;
-import com.teamresourceful.resourcefulbees.lib.MutationTypes;
-import com.teamresourceful.resourcefulbees.utils.BeeInfoUtils;
+import com.teamresourceful.resourcefulbees.lib.enums.MutationType;
 import com.teamresourceful.resourcefulbees.utils.RandomCollection;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
@@ -30,19 +29,19 @@ public class ItemMutationPage extends MutationsPage {
     final List<Pair<Double, ItemOutput>> outputs = new ArrayList<>();
     private Double outputChance;
 
-    public ItemMutationPage(EntityType<?> bee, BeePage parent, List<Block> blocks, RandomCollection<ItemOutput> outputs, MutationTypes type, int mutationCount, BeepediaScreen beepedia) {
+    public ItemMutationPage(EntityType<?> bee, BeePage parent, List<Block> blocks, RandomCollection<ItemOutput> outputs, MutationType type, int mutationCount, BeepediaScreen beepedia) {
         super(bee.create(Objects.requireNonNull(beepedia.getMinecraft().level)), parent, type, mutationCount, beepedia);
         inputs = blocks;
         initOutputs(outputs);
     }
 
-    public ItemMutationPage(Entity bee, BeePage parent, Tag<?> blocks, RandomCollection<ItemOutput> outputs, MutationTypes type, int mutationCount, BeepediaScreen beepedia) {
+    public ItemMutationPage(Entity bee, BeePage parent, Tag<?> blocks, RandomCollection<ItemOutput> outputs, MutationType type, int mutationCount, BeepediaScreen beepedia) {
         super(bee, parent, type, mutationCount, beepedia);
         inputs = (List<Block>) blocks.getValues();
         initOutputs(outputs);
     }
 
-    public ItemMutationPage(Entity bee, BeePage parent, Block block, RandomCollection<ItemOutput> outputs, MutationTypes type, int mutationCount, BeepediaScreen beepedia) {
+    public ItemMutationPage(Entity bee, BeePage parent, Block block, RandomCollection<ItemOutput> outputs, MutationType type, int mutationCount, BeepediaScreen beepedia) {
         super(bee, parent, type, mutationCount, beepedia);
         inputs = new LinkedList<>(Collections.singleton(block));
         initOutputs(outputs);

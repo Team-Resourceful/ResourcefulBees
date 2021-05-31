@@ -5,8 +5,8 @@ import com.teamresourceful.resourcefulbees.block.multiblocks.apiary.ApiaryBreede
 import com.teamresourceful.resourcefulbees.block.multiblocks.apiary.ApiaryStorageBlock;
 import com.teamresourceful.resourcefulbees.container.UnvalidatedApiaryContainer;
 import com.teamresourceful.resourcefulbees.container.ValidatedApiaryContainer;
-import com.teamresourceful.resourcefulbees.lib.ApiaryTabs;
-import com.teamresourceful.resourcefulbees.lib.NBTConstants;
+import com.teamresourceful.resourcefulbees.lib.enums.ApiaryTab;
+import com.teamresourceful.resourcefulbees.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.network.packets.UpdateClientApiaryMessage;
 import com.teamresourceful.resourcefulbees.registry.ModBlocks;
@@ -192,8 +192,7 @@ public class ApiaryController extends BlockEntity implements TickableBlockEntity
                 if (blockPos.getX() == box.x0 || blockPos.getX() == box.x1 ||
                         blockPos.getY() == box.y0 || blockPos.getY() == box.y1 ||
                         blockPos.getZ() == box.z0 || blockPos.getZ() == box.z1) {
-                    BlockPos savedPos = new BlockPos(blockPos.getX(), blockPos.getY(), blockPos.getZ());
-                    structureBlocks.add(savedPos);
+                    structureBlocks.add(blockPos.immutable());
                 }
             }));
         }
@@ -408,12 +407,12 @@ public class ApiaryController extends BlockEntity implements TickableBlockEntity
     }
 
     @Override
-    public void switchTab(ServerPlayer player, ApiaryTabs tab) {
+    public void switchTab(ServerPlayer player, ApiaryTab tab) {
         if (level != null) {
-            if (tab == ApiaryTabs.STORAGE) {
+            if (tab == ApiaryTab.STORAGE) {
                 NetworkHooks.openGui(player, getApiaryStorage(), getStoragePos());
             }
-            if (tab == ApiaryTabs.BREED) {
+            if (tab == ApiaryTab.BREED) {
                 NetworkHooks.openGui(player, getApiaryBreeder(), getBreederPos());
             }
         }

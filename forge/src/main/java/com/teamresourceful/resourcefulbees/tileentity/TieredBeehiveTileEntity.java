@@ -5,9 +5,9 @@ package com.teamresourceful.resourcefulbees.tileentity;
 import com.teamresourceful.resourcefulbees.api.ICustomBee;
 import com.teamresourceful.resourcefulbees.block.TieredBeehiveBlock;
 import com.teamresourceful.resourcefulbees.config.Config;
-import com.teamresourceful.resourcefulbees.lib.BeeConstants;
-import com.teamresourceful.resourcefulbees.lib.HoneycombTypes;
-import com.teamresourceful.resourcefulbees.lib.NBTConstants;
+import com.teamresourceful.resourcefulbees.lib.constants.BeeConstants;
+import com.teamresourceful.resourcefulbees.lib.enums.HoneycombType;
+import com.teamresourceful.resourcefulbees.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.mixin.BTEBeeAccessor;
 import com.teamresourceful.resourcefulbees.registry.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.utils.BeeInfoUtils;
@@ -37,8 +37,8 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.teamresourceful.resourcefulbees.lib.BeeConstants.MIN_HIVE_TIME;
-import static com.teamresourceful.resourcefulbees.lib.BeeConstants.SMOKE_TIME;
+import static com.teamresourceful.resourcefulbees.lib.constants.BeeConstants.MIN_HIVE_TIME;
+import static com.teamresourceful.resourcefulbees.lib.constants.BeeConstants.SMOKE_TIME;
 
 public class TieredBeehiveTileEntity extends BeehiveBlockEntity {
 
@@ -120,7 +120,7 @@ public class TieredBeehiveTileEntity extends BeehiveBlockEntity {
                             vanillaBeeEntity.dropOffNectar();
                             int i = getHoneyLevel(state);
                             if (i < 5) {
-                                if (entity instanceof ICustomBee && !((ICustomBee)entity).getHoneycombData().getHoneycombType().equals(HoneycombTypes.NONE)) {
+                                if (entity instanceof ICustomBee && !((ICustomBee)entity).getHoneycombData().getHoneycombType().equals(HoneycombType.NONE)) {
                                     honeycomb = ((ICustomBee)entity).getHoneycombData().getHoneycomb().getDefaultInstance();
                                 }
 

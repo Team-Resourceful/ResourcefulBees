@@ -4,64 +4,86 @@ import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.IBeeRegistry;
-import com.teamresourceful.resourcefulbees.api.beedata.BeeFamily;
+import com.teamresourceful.resourcefulbees.api.RegisterBeeEvent;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
-import com.teamresourceful.resourcefulbees.api.beedata.mutation.EntityMutation;
-import com.teamresourceful.resourcefulbees.api.beedata.mutation.ItemMutation;
-import com.teamresourceful.resourcefulbees.item.BeeSpawnEggItem;
+import com.teamresourceful.resourcefulbees.api.beedata.breeding.BeeFamily;
 import com.teamresourceful.resourcefulbees.utils.BeeInfoUtils;
 import com.teamresourceful.resourcefulbees.utils.RandomCollection;
 import net.minecraft.resources.ResourceLocation;
 import org.apache.commons.lang3.tuple.Pair;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
+@Unmodifiable
 public class BeeRegistry implements IBeeRegistry {
 
     private static final Map<ResourceLocation, RandomCollection<CustomBeeData>> spawnableBiomes = new LinkedHashMap<>();
-
+    private static final Map<String, JsonObject> rawBeeData = new LinkedHashMap<>();
+    private static final Map<String, CustomBeeData> beeData = new LinkedHashMap<>();
+    private static final Map<Pair<String, String>, RandomCollection<BeeFamily>> familyTree = new LinkedHashMap<>();
     private static final BeeRegistry INSTANCE = new BeeRegistry();
 
     /**
-     * Return the instance of this class. This is useful for calling methods to the mod from a static or threaded context.
+     * Returns an instance of the {@link BeeRegistry} for accessing data from the registry.
+     * The bee Registry is a central point for getting any bee data pertinent to
+     * <i>Resourceful Bees</i>. The registry contains a cache of {@link JsonObject}'s and
+     * {@link CustomBeeData} objects for all bees registered to the mod. The registry also
+     * contains the spawn rules and breeding rules for bees created by <i>Resourceful Bees</i>.
      *
-     * @return Instance of this class
+     * @return Returns an instance of the {@link BeeRegistry} for accessing data from the registry.
      */
     public static BeeRegistry getRegistry() {
         return INSTANCE;
     }
 
-    private final Map<String, JsonObject> rawBeeData = new LinkedHashMap<>();
-    private final Map<String, CustomBeeData> beeData = new LinkedHashMap<>();
-    public final Map<Pair<String, String>, RandomCollection<BeeFamily>> familyTree = new LinkedHashMap<>();
+    public static boolean isSpawnableBiome(ResourceLocation biome) {
+        return spawnableBiomes.containsKey(biome);
+    }
 
+    public static RandomCollection<CustomBeeData> getSpawnableBiome(ResourceLocation biome) {
+        return spawnableBiomes.get(biome);
+    }
 
-    public static Map<ResourceLocation, RandomCollection<CustomBeeData>> getSpawnableBiomes() {
-        return spawnableBiomes;
+    public static boolean containsBeeType(String beeType) {
+        return beeData.containsKey(beeType);
+    }
+
+    public Map<Pair<String, String>, RandomCollection<BeeFamily>> getFamilyTree() {
+        return familyTree;
     }
 
     /**
-     * Returns a BeeData object for the given bee type.
+     * Returns a {@link CustomBeeData} object for the given bee type.
      *
      * @param beeType Bee type for which BeeData is requested.
-     * @return Returns a BeeData object for the given bee type.
+     * @return Returns a {@link CustomBeeData} object for the given bee type.
      */
     public CustomBeeData getBeeData(String beeType) {
         return beeData.getOrDefault(beeType, CustomBeeData.DEFAULT);
-
-        /*return CustomBeeData.codec(bee).parse(JsonOps.INSTANCE, rawBeeData.get(bee))
-                .getOrThrow(false, s -> ResourcefulBees.LOGGER.error("Could not create Custom Bee Data for {} bee", bee));*/
     }
 
+    /**
+     * This method first iterates over the internal map of raw data and populates
+     * the registry with new {@link CustomBeeData} objects that have been parsed
+     * using the codecs. A {@link RegisterBeeEvent} is then posted for other mods
+     * to register {@link CustomBeeData} objects they want Resourceful Bees to have
+     * compatibility with. Post Init methods are then ran on BeeFamilies to ensure
+     * data has populated correctly. Finally, the family trees and spawnable biomes
+     * maps are constructed.
+     */
     public void regenerateCustomBeeData() {
         rawBeeData.forEach((s, jsonObject) -> beeData.compute(s, (s1, customBeeDataCodec) ->
                 CustomBeeData.codec(s).parse(JsonOps.INSTANCE, jsonObject)
                 .getOrThrow(false, s2 -> ResourcefulBees.LOGGER.error("Could not create Custom Bee Data for {} bee", s))));
+        //TODO verify this arch event works correctly - and figure out how forge
+        // accesses it - does not load in testing apparently. fails due to not being
+        // a forge event. - something must be missing or bc it's in forge module.
+        //MinecraftForge.EVENT_BUS.post(new RegisterBeeEvent(beeData)); <- forge event
+        //RegisterBeeEvent.EVENT.invoker().act(new RegisterBeeEvent(beeData)); <- arch event
         beeData.values().forEach(customBeeData -> {
             //post init stuff gets called here
-            customBeeData.getBreedData().getParents().forEach(BeeFamily::postInit);
+            customBeeData.getBreedData().getFamilies().forEach(BeeFamily::postInit);
         });
         BeeRegistry.buildFamilyTree();
         BeeRegistry.buildSpawnableBiomes();
@@ -113,123 +135,71 @@ public class BeeRegistry implements IBeeRegistry {
     }
 
     /**
-     * Registers the supplied Bee Type and associated data to the mod.
-     * If the bee already exists in the registry the method will return false.
+     * Registers the supplied Bee Type and associated data, in the form
+     * of a {@link JsonObject}, to the mod.
      *
-     * @param beeType       Bee Type of the bee being registered.
-     * @param customBeeData BeeData of the bee being registered
-     * @return Returns false if bee already exists in the registry.
-     */
-/*    public boolean registerBee(String beeType, @NotNull CustomBeeData customBeeData) {
-        if (!beeData.containsKey(beeType)) {
-            beeData.put(beeType, Objects.requireNonNull(customBeeData, "Cannot register 'null' bee data!"));
-            if (customBeeData.getBreedData().hasParents()) {
-                buildFamilyTree(customBeeData);
-            }
-            if (customBeeData.getSpawnData().canSpawnInWorld()) {
-                customBeeData.getSpawnData().getSpawnableBiomes()
-                        .forEach(resourceLocation -> spawnableBiomes.computeIfAbsent(resourceLocation, k -> new RandomCollection<>()).add(customBeeData.getSpawnData().getSpawnWeight(), customBeeData));
-            }
-            return true;
-        }
-        return false;
-    }*/
-
-    /**
-     * Registers the supplied Bee Type and associated data to the mod.
-     *
-     * @param beeType       Bee Type of the bee being registered.
-     * @param beeData       Raw BeeData of the bee being registered
+     * @param beeType The Bee Type of the bee being registered.
+     * @param beeData The raw BeeData of the bee being registered
      */
     public void cacheRawBeeData(String beeType, JsonObject beeData) {
-        rawBeeData.computeIfAbsent(beeType.toLowerCase(Locale.ENGLISH).replace(" ", "_"), s -> beeData);
+        rawBeeData.computeIfAbsent(beeType.toLowerCase(Locale.ENGLISH).replace(" ", "_"), s -> Objects.requireNonNull(beeData));
     }
 
+    /**
+     * Returns an unmodifiable copy of the internal {@link JsonObject} map representing
+     * the raw json data. This is useful for iterating over all bees without worry of
+     * changing registry data as the objects contained in the map are immutable.
+     *
+     * @return Returns unmodifiable copy of the internal {@link JsonObject} map representing
+     * the raw json data.
+     */
     public Map<String, JsonObject> getRawBees() {
         return Collections.unmodifiableMap(rawBeeData);
     }
 
     /**
-     * Returns an unmodifiable copy of the Bee Registry.
+     * Returns an unmodifiable copy of the internal {@link CustomBeeData} map.
      * This is useful for iterating over all bees without worry of changing registry data
+     * as the objects contained in the map are immutable.
      *
-     * @return Returns unmodifiable copy of bee registry.
+     * @return Returns an unmodifiable copy of the internal {@link CustomBeeData} map.
      */
     public Map<String, CustomBeeData> getBees() {
         return Collections.unmodifiableMap(beeData);
     }
 
     /**
-     * Returns a set containing all registered CustomBeeData.
-     * This is useful for iterating over all bees without worry of changing registry data
+     * A helper method that returns an unmodifiable set of the values contained in the internal
+     * {@link CustomBeeData} map. This is useful for iterating over all bees without
+     * worry of changing registry data as the objects contained in the map are immutable.
      *
-     * @return Returns a set containing all registered CustomBeeData.
+     * @return Returns an unmodifiable set of the values contained in the internal
+     * {@link CustomBeeData} map
      */
     public Set<CustomBeeData> getSetOfBees() {
         return Collections.unmodifiableSet(new HashSet<>(beeData.values()));
     }
 
-    public List<BeeFamily> getChildren(CustomBeeData parent) {
-        return familyTree.entrySet().stream()
-                .filter(mapEntry -> parentMatchesBee(mapEntry.getKey(), parent))
-                .flatMap(entry -> entry.getValue().getMap().values().stream())
-                .collect(Collectors.toList());
-    }
-
-    private boolean parentMatchesBee(Pair<String, String> parents, CustomBeeData beeData) {
-        return parents.getRight().equals(beeData.getCoreData().getName()) || parents.getLeft().equals(beeData.getCoreData().getName());
-    }
-
-    public List<EntityMutation> getMutationsContaining(CustomBeeData beeData) {
-        List<EntityMutation> mutations = new LinkedList<>();
-        getBees().forEach((s, bee) ->  bee.getMutationData().getEntityMutations().forEach((entityType, randomCollection) ->  {
-            if (entityType.getRegistryName() != null && entityType.getRegistryName().equals(beeData.getRegistryID())) {
-                mutations.add(new EntityMutation(BeeInfoUtils.getEntityType(beeData.getRegistryID()), entityType, randomCollection, bee.getMutationData().getMutationCount()));
-            } else {
-                randomCollection.forEach(entityOutput -> {
-                    if (entityOutput.getEntityType().getRegistryName() != null && entityOutput.getEntityType().getRegistryName().equals(beeData.getRegistryID())) {
-                        mutations.add(new EntityMutation(beeData.getEntityType(), entityType, randomCollection, bee.getMutationData().getMutationCount()));
-                    }
-                });
-            }
-        }));
-        return mutations;
-    }
-
-    public List<ItemMutation> getItemMutationsContaining(CustomBeeData beeData) {
-        List<ItemMutation> mutations = new LinkedList<>();
-        INSTANCE.getBees().forEach((s, beeData1) ->   //THIS MAY BE BROKE AND NEED FIXING!
-            beeData1.getMutationData().getItemMutations().forEach((block, randomCollection) ->  randomCollection.forEach(itemOutput -> {
-                if (itemOutput.getItem() == BeeSpawnEggItem.byId(beeData.getEntityType())) {
-                    mutations.add(new ItemMutation(BeeInfoUtils.getEntityType(beeData1.getRegistryID()), block, randomCollection, beeData1.getMutationData().getMutationCount()));
-                }
-            }))
-        );
-        return mutations;
-    }
-
-    public static void buildSpawnableBiomes() {
+    //region Setup
+    private static void buildSpawnableBiomes() {
         spawnableBiomes.clear();
-        getRegistry().getBees().values().stream()
+        beeData.values().stream()
                 .filter(customBeeData -> customBeeData.getSpawnData().canSpawnInWorld())
                 .forEach(customBeeData -> customBeeData.getSpawnData().getSpawnableBiomes()
                 .forEach(resourceLocation -> spawnableBiomes.computeIfAbsent(resourceLocation, k -> new RandomCollection<>()).add(customBeeData.getSpawnData().getSpawnWeight(), customBeeData)));
     }
 
-    public static void buildFamilyTree() {
-        getRegistry().familyTree.clear();
-        getRegistry().getBees().values().stream()
+    private static void buildFamilyTree() {
+        familyTree.clear();
+        beeData.values().stream()
                 .filter(customBeeData -> customBeeData.getBreedData().hasParents())
-                .flatMap(customBeeData -> customBeeData.getBreedData().getParents().stream())
+                .flatMap(customBeeData -> customBeeData.getBreedData().getFamilies().stream())
                 .filter(BeeFamily::hasValidParents)
                 .forEach(BeeRegistry::addBreedPairToFamilyTree);
     }
 
     private static void addBreedPairToFamilyTree(BeeFamily beeFamily) {
-        getRegistry().familyTree.computeIfAbsent(beeFamily.getParents(), k -> new RandomCollection<>()).add(beeFamily.getWeight(), beeFamily);
+        familyTree.computeIfAbsent(beeFamily.getParents(), k -> new RandomCollection<>()).add(beeFamily.getWeight(), beeFamily);
     }
-
-    public static boolean containsBeeType(String beeType) {
-        return getRegistry().getBees().containsKey(beeType);
-    }
+    //endregion
 }

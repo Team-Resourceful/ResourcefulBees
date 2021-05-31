@@ -2,6 +2,12 @@ package com.teamresourceful.resourcefulbees.api;
 
 import com.google.gson.JsonObject;
 import com.teamresourceful.resourcefulbees.api.beedata.*;
+import com.teamresourceful.resourcefulbees.api.beedata.breeding.BeeFamily;
+import com.teamresourceful.resourcefulbees.api.beedata.breeding.BreedData;
+import com.teamresourceful.resourcefulbees.api.beedata.centrifuge.CentrifugeData;
+import com.teamresourceful.resourcefulbees.api.beedata.mutation.MutationData;
+import com.teamresourceful.resourcefulbees.api.beedata.render.RenderData;
+import com.teamresourceful.resourcefulbees.api.beedata.spawning.SpawnData;
 import net.minecraft.world.entity.AgableMob;
 
 /**

@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.item;
 
-import com.teamresourceful.resourcefulbees.api.beedata.ColorData;
+import com.teamresourceful.resourcefulbees.api.beedata.render.ColorData;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.registry.BeeRegistry;
 import net.minecraft.core.BlockPos;

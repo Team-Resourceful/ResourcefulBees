@@ -5,8 +5,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.teamresourceful.resourcefulbees.config.Config;
 import com.teamresourceful.resourcefulbees.entity.passive.CustomBeeEntity;
-import com.teamresourceful.resourcefulbees.lib.BaseModelTypes;
-import com.teamresourceful.resourcefulbees.lib.ModelTypes;
+import com.teamresourceful.resourcefulbees.lib.enums.BaseModelType;
+import com.teamresourceful.resourcefulbees.lib.enums.ModelType;
 import net.minecraft.client.model.AgeableListModel;
 import net.minecraft.client.model.ModelUtils;
 import net.minecraft.client.model.geom.ModelPart;
@@ -33,7 +33,7 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableListModel<
 
     private float sizeModifier = 0;
 
-    public CustomBeeModel(ModelTypes modelType) {
+    public CustomBeeModel(ModelType modelType) {
         this();
 
         switch (modelType) {
@@ -76,13 +76,13 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableListModel<
     }
 
 
-    public CustomBeeModel(BaseModelTypes modelType) {
+    public CustomBeeModel(BaseModelType modelType) {
         this();
 
 
-        if (modelType.equals(BaseModelTypes.KITTEN)) {
+        if (modelType.equals(BaseModelType.KITTEN)) {
             addKittenParts();
-        } else if (modelType.equals(BaseModelTypes.DEFAULT)) {
+        } else if (modelType.equals(BaseModelType.DEFAULT)) {
             addDefaultParts();
         }
     }

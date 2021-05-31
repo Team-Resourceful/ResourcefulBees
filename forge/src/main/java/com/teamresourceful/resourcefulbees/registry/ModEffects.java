@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.registry;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.lib.ModConstants;
+import com.teamresourceful.resourcefulbees.lib.constants.ModConstants;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;

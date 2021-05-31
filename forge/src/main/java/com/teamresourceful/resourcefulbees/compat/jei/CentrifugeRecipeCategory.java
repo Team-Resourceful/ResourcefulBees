@@ -1,10 +1,7 @@
 package com.teamresourceful.resourcefulbees.compat.jei;
 
-import com.google.common.collect.Lists;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.api.beedata.outputs.FluidOutput;
-import com.teamresourceful.resourcefulbees.api.beedata.outputs.ItemOutput;
 import com.teamresourceful.resourcefulbees.recipe.CentrifugeRecipe;
 import com.teamresourceful.resourcefulbees.registry.ModItems;
 import com.teamresourceful.resourcefulbees.tileentity.CentrifugeTileEntity;
@@ -25,7 +22,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class CentrifugeRecipeCategory extends BaseCategory<CentrifugeRecipe> {
 
@@ -51,13 +47,13 @@ public class CentrifugeRecipeCategory extends BaseCategory<CentrifugeRecipe> {
 
     @Override
     public void setIngredients(@NotNull CentrifugeRecipe recipe, @NotNull IIngredients iIngredients) {
-        List<ItemOutput> outputs = recipe.getItemOutputs();
+/*        List<ItemOutput> outputs = recipe.getItemOutputs();
         List<FluidOutput> fluidOutputs = recipe.getFluidOutputs();
 
         iIngredients.setInputIngredients(Lists.newArrayList(recipe.getIngredient()));
 
         iIngredients.setOutputs(VanillaTypes.ITEM, outputs.stream().map(ItemOutput::getItemStack).collect(Collectors.toList()));
-        iIngredients.setOutputs(VanillaTypes.FLUID, fluidOutputs.stream().map(FluidOutput::getFluidStack).collect(Collectors.toList()));
+        iIngredients.setOutputs(VanillaTypes.FLUID, fluidOutputs.stream().map(FluidOutput::getFluidStack).collect(Collectors.toList()));*/
     }
 
     @Override

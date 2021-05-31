@@ -2,10 +2,10 @@ package com.teamresourceful.resourcefulbees.client.render.entity.layers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.teamresourceful.resourcefulbees.api.beedata.LayerData;
+import com.teamresourceful.resourcefulbees.api.beedata.render.LayerData;
 import com.teamresourceful.resourcefulbees.client.render.entity.models.CustomBeeModel;
 import com.teamresourceful.resourcefulbees.entity.passive.CustomBeeEntity;
-import com.teamresourceful.resourcefulbees.lib.ModelTypes;
+import com.teamresourceful.resourcefulbees.lib.enums.ModelType;
 import com.teamresourceful.resourcefulbees.utils.color.Color;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -32,7 +32,7 @@ public class BeeLayer extends RenderLayer<CustomBeeEntity, CustomBeeModel<Custom
         super(renderer);
         this.layerData = layerData;
         this.color = layerData.getColor();
-        this.additionModel = layerData.getModelType() == ModelTypes.DEFAULT ? null : new CustomBeeModel<>(layerData.getModelType());
+        this.additionModel = layerData.getModelType() == ModelType.DEFAULT ? null : new CustomBeeModel<>(layerData.getModelType());
     }
 
     @Override

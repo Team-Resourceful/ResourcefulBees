@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.patreon;
 
-import com.teamresourceful.resourcefulbees.lib.ModConstants;
+import com.teamresourceful.resourcefulbees.lib.constants.ModConstants;
 
 import java.util.Collections;
 import java.util.HashMap;

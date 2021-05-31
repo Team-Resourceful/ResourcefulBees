@@ -2,7 +2,6 @@ package com.teamresourceful.resourcefulbees.client.gui.widget;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
-import com.teamresourceful.resourcefulbees.utils.BeeInfoUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
@@ -91,7 +90,7 @@ public class ToolTip {
                     String amount = fluid.getAmount() < 500 || Screen.hasShiftDown() ? String.format("%,d", fluid.getAmount()) + " mb" : decimalFormat.format((float) fluid.getAmount() / 1000) + " B";
                     tooltip.add(new TextComponent(amount));
                 }
-                tooltip.add(new TextComponent(fluid.getFluid().getRegistryName().toString()).withStyle(ChatFormatting.DARK_GRAY));
+                tooltip.add(new TextComponent(String.valueOf(fluid.getFluid().getRegistryName())).withStyle(ChatFormatting.DARK_GRAY));
                 screen.renderComponentTooltip(matrix, tooltip, mouseX, mouseY);
             }
         }

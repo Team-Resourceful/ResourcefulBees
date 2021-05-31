@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.registry;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.container.*;
-import com.teamresourceful.resourcefulbees.lib.ModConstants;
+import com.teamresourceful.resourcefulbees.lib.constants.ModConstants;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.fml.RegistryObject;

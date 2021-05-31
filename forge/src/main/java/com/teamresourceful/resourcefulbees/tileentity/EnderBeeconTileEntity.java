@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import com.teamresourceful.resourcefulbees.config.Config;
 import com.teamresourceful.resourcefulbees.container.EnderBeeconContainer;
 import com.teamresourceful.resourcefulbees.entity.passive.CustomBeeEntity;
-import com.teamresourceful.resourcefulbees.lib.NBTConstants;
+import com.teamresourceful.resourcefulbees.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.network.packets.SyncGUIMessage;
 import com.teamresourceful.resourcefulbees.network.packets.UpdateClientBeeconMessage;

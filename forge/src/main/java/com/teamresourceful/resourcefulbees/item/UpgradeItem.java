@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.item;
 
-import com.teamresourceful.resourcefulbees.lib.NBTConstants;
+import com.teamresourceful.resourcefulbees.lib.constants.NBTConstants;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;

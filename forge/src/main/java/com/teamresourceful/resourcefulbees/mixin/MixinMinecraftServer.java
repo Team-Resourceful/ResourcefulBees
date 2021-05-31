@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.mixin;
 
 import com.teamresourceful.resourcefulbees.data.DataPackLoader;
-import com.teamresourceful.resourcefulbees.lib.ModConstants;
+import com.teamresourceful.resourcefulbees.lib.constants.ModConstants;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.packs.repository.PackRepository;
 import net.minecraft.world.level.DataPackConfig;

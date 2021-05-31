@@ -1,8 +1,7 @@
 package com.teamresourceful.resourcefulbees.config;
 
-import com.teamresourceful.resourcefulbees.lib.ApiaryOutputs;
-import com.teamresourceful.resourcefulbees.lib.ModConstants;
-import com.teamresourceful.resourcefulbees.registry.BiomeDictionary;
+import com.teamresourceful.resourcefulbees.lib.enums.ApiaryOutputType;
+import com.teamresourceful.resourcefulbees.lib.constants.ModConstants;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.*;
 
@@ -38,10 +37,10 @@ public class Config {
     public static IntValue NETHER_NEST_GENERATION_CHANCE;
     public static IntValue END_NEST_GENERATION_CHANCE;
 
-    public static EnumValue<ApiaryOutputs> T1_APIARY_OUTPUT;
-    public static EnumValue<ApiaryOutputs> T2_APIARY_OUTPUT;
-    public static EnumValue<ApiaryOutputs> T3_APIARY_OUTPUT;
-    public static EnumValue<ApiaryOutputs> T4_APIARY_OUTPUT;
+    public static EnumValue<ApiaryOutputType> T1_APIARY_OUTPUT;
+    public static EnumValue<ApiaryOutputType> T2_APIARY_OUTPUT;
+    public static EnumValue<ApiaryOutputType> T3_APIARY_OUTPUT;
+    public static EnumValue<ApiaryOutputType> T4_APIARY_OUTPUT;
 
     public static IntValue T1_APIARY_QUANTITY;
     public static IntValue T2_APIARY_QUANTITY;
@@ -209,19 +208,19 @@ public class Config {
 
             COMMON_BUILDER.push("Apiary Options");
             T1_APIARY_OUTPUT = COMMON_BUILDER.comment("\nTier 1 Apiary Output")
-                    .defineEnum("tierOneApiaryOutput", ApiaryOutputs.COMB, ApiaryOutputs.COMB, ApiaryOutputs.BLOCK);
+                    .defineEnum("tierOneApiaryOutput", ApiaryOutputType.COMB, ApiaryOutputType.COMB, ApiaryOutputType.BLOCK);
             T1_APIARY_QUANTITY = COMMON_BUILDER.comment("\nTier 1 Apiary Output Quantity")
                     .defineInRange("tierOneApiaryQuantity", 8, 1, Integer.MAX_VALUE);
             T2_APIARY_OUTPUT = COMMON_BUILDER.comment("\nTier 2 Apiary Output")
-                    .defineEnum("tierTwoApiaryOutput", ApiaryOutputs.COMB, ApiaryOutputs.COMB, ApiaryOutputs.BLOCK);
+                    .defineEnum("tierTwoApiaryOutput", ApiaryOutputType.COMB, ApiaryOutputType.COMB, ApiaryOutputType.BLOCK);
             T2_APIARY_QUANTITY = COMMON_BUILDER.comment("\nTier 2 Apiary Output Quantity")
                     .defineInRange("tierTwoApiaryQuantity", 16, 1, Integer.MAX_VALUE);
             T3_APIARY_OUTPUT = COMMON_BUILDER.comment("\nTier 3 Apiary Output")
-                    .defineEnum("tierThreeApiaryOutput", ApiaryOutputs.BLOCK, ApiaryOutputs.COMB, ApiaryOutputs.BLOCK);
+                    .defineEnum("tierThreeApiaryOutput", ApiaryOutputType.BLOCK, ApiaryOutputType.COMB, ApiaryOutputType.BLOCK);
             T3_APIARY_QUANTITY = COMMON_BUILDER.comment("\nTier 3 Apiary Output Quantity")
                     .defineInRange("tierThreeApiaryQuantity", 4, 1, Integer.MAX_VALUE);
             T4_APIARY_OUTPUT = COMMON_BUILDER.comment("\nTier 4 Apiary Output")
-                    .defineEnum("tierFourApiaryOutput", ApiaryOutputs.BLOCK, ApiaryOutputs.COMB, ApiaryOutputs.BLOCK);
+                    .defineEnum("tierFourApiaryOutput", ApiaryOutputType.BLOCK, ApiaryOutputType.COMB, ApiaryOutputType.BLOCK);
             T4_APIARY_QUANTITY = COMMON_BUILDER.comment("\nTier 4 Apiary Output Quantity")
                     .defineInRange("tierFourApiaryQuantity", 8, 1, Integer.MAX_VALUE);
             APIARY_MAX_BEES = COMMON_BUILDER.comment("\nMaximum number of UNIQUE bees allowed in the Apiary.")

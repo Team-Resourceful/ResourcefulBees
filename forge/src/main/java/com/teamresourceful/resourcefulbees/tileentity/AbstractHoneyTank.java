@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.tileentity;
 
-import com.teamresourceful.resourcefulbees.lib.ModConstants;
+import com.teamresourceful.resourcefulbees.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.utils.BeeInfoUtils;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;

@@ -9,11 +9,11 @@ import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.entity.player.Player;
@@ -29,6 +29,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Optional;
 
 public class HoneyDipper extends Item {
 
@@ -113,18 +114,19 @@ public class HoneyDipper extends Item {
     private boolean setEntityFlowerPos(Player player, LivingEntity entity) {
         if (selectedBee instanceof CustomBeeEntity) {
             CustomBeeEntity customBee = (CustomBeeEntity) selectedBee;
-            if (customBee.getCoreData().getEntityFlower().isPresent()) {
-                ResourceLocation resourceLocation = customBee.getCoreData().getEntityFlower().get();
-                if (entity.getType().getRegistryName() != null && entity.getType().getRegistryName().equals(resourceLocation)) {
-                    customBee.setFlowerEntityID(entity.getId());
-                    customBee.setSavedFlowerPos(entity.blockPosition());
-                    sendMessageToPlayer(player, MessageTypes.FLOWER, entity.blockPosition());
-                    selectedBee = null;
-                    return true;
-                }
+            if (entityTypesMatch(entity, customBee.getCoreData().getEntityFlower())) {
+                customBee.setFlowerEntityID(entity.getId());
+                customBee.setSavedFlowerPos(entity.blockPosition());
+                sendMessageToPlayer(player, MessageTypes.FLOWER, entity.blockPosition());
+                selectedBee = null;
+                return true;
             }
         }
         return false;
+    }
+
+    private boolean entityTypesMatch(LivingEntity entity, Optional<EntityType<?>> entityType) {
+        return entityType.isPresent() && entity.getType().getRegistryName() != null && entity.getType().getRegistryName().equals(entityType.get().getRegistryName());
     }
 
     @Override

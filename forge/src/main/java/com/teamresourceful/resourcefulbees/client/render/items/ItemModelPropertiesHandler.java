@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.client.render.items;
 
 import com.teamresourceful.resourcefulbees.item.BeeJar;
 import com.teamresourceful.resourcefulbees.item.Beepedia;
-import com.teamresourceful.resourcefulbees.lib.ModConstants;
+import com.teamresourceful.resourcefulbees.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.registry.ModItems;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;

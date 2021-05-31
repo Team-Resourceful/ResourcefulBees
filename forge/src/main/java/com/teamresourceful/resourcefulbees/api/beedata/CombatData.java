@@ -2,10 +2,16 @@ package com.teamresourceful.resourcefulbees.api.beedata;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import org.jetbrains.annotations.Unmodifiable;
 
+@Unmodifiable
 public class CombatData {
     public static final CombatData DEFAULT = new CombatData(false, 1.0d, true, true, 10.0d, 0.0d, 0.0d, 0.0d);
 
+    /**
+     * A {@link Codec<CombatData>} that can be parsed to create a
+     * {@link CombatData} object.
+     */
     public static final Codec<CombatData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.BOOL.fieldOf("isPassive").orElse(false).forGetter(CombatData::isPassive),
             Codec.doubleRange(1, Double.MAX_VALUE).fieldOf("attackDamage").orElse(1.0d).forGetter(CombatData::getAttackDamage),
@@ -17,14 +23,14 @@ public class CombatData {
             Codec.doubleRange(0, Double.MAX_VALUE).fieldOf("knockback").orElse(0.0d).forGetter(CombatData::getKnockback)
     ).apply(instance, CombatData::new));
 
-    private final double baseHealth;
-    private final double attackDamage;
-    private final boolean removeStingerOnAttack;
-    private final boolean isPassive;
-    private final boolean inflictsPoison;
-    private final double armor;
-    private final double armorToughness;
-    private final double knockback;
+    protected double baseHealth;
+    protected double attackDamage;
+    protected boolean removeStingerOnAttack;
+    protected boolean isPassive;
+    protected boolean inflictsPoison;
+    protected double armor;
+    protected double armorToughness;
+    protected double knockback;
 
     private CombatData(boolean isPassive, double attackDamage, boolean removeStingerOnAttack, boolean inflictsPoison, double baseHealth, double armor, double armorToughness, double knockback) {
         this.isPassive = isPassive;
@@ -37,35 +43,131 @@ public class CombatData {
         this.knockback = knockback;
     }
 
+    /**
+     *
+     * @return Returns the base health amount for the bee before any
+     * modifications are made.
+     */
     public double getBaseHealth() {
         return baseHealth;
     }
 
+    /**
+     *
+     * @return Returns the base attack damage amount for the bee before any
+     * modifications are made.
+     */
     public double getAttackDamage() {
         return attackDamage;
     }
 
+    /**
+     *
+     * @return Returns <tt>true</tt>> if the bees stinger should be removed after attacking.
+     */
     public boolean removeStingerOnAttack() {
         return removeStingerOnAttack;
     }
 
+    /**
+     *
+     * @return Returns <tt>true</tt>> if the associated bee gets angry and attacks players.
+     */
     public boolean isPassive() {
         return isPassive;
     }
 
+    /**
+     *
+     * @return Returns <tt>true</tt>> if the associated bee inflicts poison when attacking players.
+     */
     public boolean inflictsPoison() {
         return inflictsPoison;
     }
 
+    /**
+     *
+     * @return Returns armor amount the associated bee has before any
+     * modifications are made.
+     */
     public double getArmor() {
         return armor;
     }
 
+    /**
+     *
+     * @return Returns armor amount the associated bee has before any
+     * modifications are made.
+     */
     public double getArmorToughness() {
         return armorToughness;
     }
 
+    /**
+     *
+     * @return Returns Knockback amount the associated bee has before any
+     * modifications are made.
+     */
     public double getKnockback() {
         return knockback;
+    }
+
+    public CombatData toImmutable() {
+        return this;
+    }
+
+    public static class Mutable extends CombatData {
+        public Mutable(boolean isPassive, double attackDamage, boolean removeStingerOnAttack, boolean inflictsPoison, double baseHealth, double armor, double armorToughness, double knockback) {
+            super(isPassive, attackDamage, removeStingerOnAttack, inflictsPoison, baseHealth, armor, armorToughness, knockback);
+        }
+
+        public Mutable() {
+            super(false, 1, true, true, 10, 0, 0, 0);
+        }
+
+        public Mutable setBaseHealth(double baseHealth) {
+            this.baseHealth = baseHealth;
+            return this;
+        }
+
+        public Mutable setAttackDamage(double attackDamage) {
+            this.attackDamage = attackDamage;
+            return this;
+        }
+
+        public Mutable setRemoveStingerOnAttack(boolean removeStingerOnAttack) {
+            this.removeStingerOnAttack = removeStingerOnAttack;
+            return this;
+        }
+
+        public Mutable setPassive(boolean passive) {
+            isPassive = passive;
+            return this;
+        }
+
+        public Mutable setInflictsPoison(boolean inflictsPoison) {
+            this.inflictsPoison = inflictsPoison;
+            return this;
+        }
+
+        public Mutable setArmor(double armor) {
+            this.armor = armor;
+            return this;
+        }
+
+        public Mutable setArmorToughness(double armorToughness) {
+            this.armorToughness = armorToughness;
+            return this;
+        }
+
+        public Mutable setKnockback(double knockback) {
+            this.knockback = knockback;
+            return this;
+        }
+
+        @Override
+        public CombatData toImmutable() {
+            return this;
+        }
     }
 }

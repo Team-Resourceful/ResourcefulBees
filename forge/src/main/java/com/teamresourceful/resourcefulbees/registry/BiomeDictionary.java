@@ -3,19 +3,17 @@ package com.teamresourceful.resourcefulbees.registry;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
 import com.teamresourceful.resourcefulbees.config.Config;
-import com.teamresourceful.resourcefulbees.lib.BiomeType;
-import com.teamresourceful.resourcefulbees.lib.ModConstants;
+import com.teamresourceful.resourcefulbees.api.beedata.spawning.BiomeType;
+import com.teamresourceful.resourcefulbees.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.utils.FileUtils;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
-import net.minecraft.world.level.biome.Biome;
 
 import java.io.Reader;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.teamresourceful.resourcefulbees.ResourcefulBees.LOGGER;

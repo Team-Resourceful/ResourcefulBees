@@ -74,11 +74,9 @@ public class FlowersCategory extends BaseCategory<FlowersCategory.Recipe> {
                     recipes.add(Recipe.createFluidRecipe(beeData, fluids));
                 }
 
-            }else if (beeData.getCoreData().getEntityFlower().isPresent()){
-                EntityType<?> entity = beeData.getCoreData().getFlowerEntityType();
-                if (entity != null) {
-                    recipes.add(Recipe.createEntityRecipe(beeData, entity));
-                }
+            } else if (beeData.getCoreData().getEntityFlower().isPresent()){
+                EntityType<?> entity = beeData.getCoreData().getEntityFlower().get();
+                recipes.add(Recipe.createEntityRecipe(beeData, entity));
             }
         }));
         return recipes;

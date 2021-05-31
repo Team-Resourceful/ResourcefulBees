@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.compat.top;
 
-import com.teamresourceful.resourcefulbees.lib.BeeConstants;
+import com.teamresourceful.resourcefulbees.lib.constants.BeeConstants;
 import mcjty.theoneprobe.api.*;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.entity.Entity;

@@ -6,9 +6,9 @@ import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaPa
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.teamresourceful.resourcefulbees.client.gui.widget.ListButton;
 import com.teamresourceful.resourcefulbees.client.gui.widget.SubButtonList;
-import com.teamresourceful.resourcefulbees.api.beedata.BeeTrait;
+import com.teamresourceful.resourcefulbees.api.beedata.traits.BeeTrait;
 import com.teamresourceful.resourcefulbees.item.BeeJar;
-import com.teamresourceful.resourcefulbees.lib.TraitConstants;
+import com.teamresourceful.resourcefulbees.lib.constants.TraitConstants;
 import com.teamresourceful.resourcefulbees.registry.ModItems;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -91,7 +91,7 @@ public class TraitPage extends BeepediaPage {
     }
 
     private void addPotionDamageEffects() {
-        if (trait.hasDamagePotionEffects()) {
+        if (trait.hasPotionDamageEffects()) {
             TranslatableComponent title = new TranslatableComponent("gui.resourcefulbees.beepedia.tab.traits.potion_damage_effects");
             TextComponent text = new TextComponent("");
             trait.getPotionDamageEffects().forEach(effect -> {

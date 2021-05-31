@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.utils;
 
-import com.teamresourceful.resourcefulbees.lib.ModConstants;
+import com.teamresourceful.resourcefulbees.lib.constants.ModConstants;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 

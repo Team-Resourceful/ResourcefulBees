@@ -2,16 +2,16 @@ package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
+import com.teamresourceful.resourcefulbees.api.beedata.centrifuge.CentrifugeFluidOutput;
+import com.teamresourceful.resourcefulbees.api.beedata.centrifuge.CentrifugeItemOutput;
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.FluidOutput;
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.ItemOutput;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
-import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
-import com.teamresourceful.resourcefulbees.api.beedata.HoneycombData;
 import com.teamresourceful.resourcefulbees.config.Config;
 import com.teamresourceful.resourcefulbees.fluids.CustomHoneyFluid;
 import com.teamresourceful.resourcefulbees.item.BeeSpawnEggItem;
 import com.teamresourceful.resourcefulbees.item.CustomHoneyBottleItem;
-import com.teamresourceful.resourcefulbees.lib.ApiaryOutputs;
 import com.teamresourceful.resourcefulbees.recipe.CentrifugeRecipe;
 import com.teamresourceful.resourcefulbees.registry.ModItems;
 import com.teamresourceful.resourcefulbees.utils.BeeInfoUtils;
@@ -30,10 +30,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraftforge.fluids.FluidStack;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,18 +43,12 @@ public class HoneycombPage extends BeeDataPage {
     private final int max;
 
     private final ItemStack hiveOutput;
-    private final ItemStack apiary1Output;
-    private final ItemStack apiary2Output;
-    private final ItemStack apiary3Output;
-    private final ItemStack apiary4Output;
 
     final List<RecipeObject> recipes = new ArrayList<>();
 
     final List<Item> hives = BeeInfoUtils.getItemTag("minecraft:beehives").getValues();
-    final ItemStack apiary1 = new ItemStack(ModItems.T1_APIARY_ITEM.get());
-    final ItemStack apiary2 = new ItemStack(ModItems.T2_APIARY_ITEM.get());
-    final ItemStack apiary3 = new ItemStack(ModItems.T3_APIARY_ITEM.get());
-    final ItemStack apiary4 = new ItemStack(ModItems.T4_APIARY_ITEM.get());
+
+    private static final Item[] APIARIES = {ModItems.T1_APIARY_ITEM.get(), ModItems.T2_APIARY_ITEM.get(), ModItems.T3_APIARY_ITEM.get(), ModItems.T4_APIARY_ITEM.get()};
 
     final ResourceLocation honeycombsImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/honeycombs.png");
     final ResourceLocation centrifugeImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/centrifuge.png");
@@ -80,12 +71,7 @@ public class HoneycombPage extends BeeDataPage {
         counter = 0;
         max = hives.size();
 
-        List<Integer> apiaryAmounts = beeData.getHoneycombData().getApiaryOutputAmounts();
         hiveOutput = beeData.getHoneycombData().getHoneycomb().getDefaultInstance();
-        apiary1Output = getApiaryOutput(0, beeData.getHoneycombData(), apiaryAmounts);
-        apiary2Output = getApiaryOutput(1, beeData.getHoneycombData(), apiaryAmounts);
-        apiary3Output = getApiaryOutput(2, beeData.getHoneycombData(), apiaryAmounts);
-        apiary4Output = getApiaryOutput(3, beeData.getHoneycombData(), apiaryAmounts);
 
         ClientLevel world = beepedia.getMinecraft().level;
         recipes.add(new RecipeObject(false, beeData, world));
@@ -98,10 +84,6 @@ public class HoneycombPage extends BeeDataPage {
         beepedia.addButton(rightArrow);
         leftArrow.visible = false;
         rightArrow.visible = false;
-    }
-
-    private ItemStack getApiaryOutput(int index, HoneycombData honeycombData, List<Integer> apiaryAmounts) {
-        return new ItemStack(honeycombData.getApiaryOutputTypes().get(index) == ApiaryOutputs.COMB ? honeycombData.getHoneycomb() : honeycombData.getHoneycombBlock(), apiaryAmounts.get(index));
     }
 
     private void toggleTab() {
@@ -166,27 +148,34 @@ public class HoneycombPage extends BeeDataPage {
             manager.bind(honeycombsImage);
             GuiComponent.blit(matrix, xPos, yPos + 22, 0, 0, 169, 84, 169, 84);
             beepedia.drawSlot(matrix, hives.get(counter), xPos + 14, yPos + 23);
-            beepedia.drawSlot(matrix, apiary1, xPos + 43, yPos + 23);
-            beepedia.drawSlot(matrix, apiary2, xPos + 72, yPos + 23);
-            beepedia.drawSlot(matrix, apiary3, xPos + 101, yPos + 23);
-            beepedia.drawSlot(matrix, apiary4, xPos + 130, yPos + 23);
-
+            drawApiaries(matrix);
             beepedia.drawSlot(matrix, hiveOutput, xPos + 14, yPos + 82);
-            beepedia.drawSlot(matrix, apiary1Output, xPos + 43, yPos + 82);
-            beepedia.drawSlot(matrix, apiary2Output, xPos + 72, yPos + 82);
-            beepedia.drawSlot(matrix, apiary3Output, xPos + 101, yPos + 82);
-            beepedia.drawSlot(matrix, apiary4Output, xPos + 130, yPos + 82);
+            drawApiaryOutputs(matrix);
+        }
+    }
+
+    private void drawApiaries(PoseStack matrix) {
+        for (int i = 0; i < 4; i++) {
+            beepedia.drawSlot(matrix, APIARIES[i], xPos + 43 + (i * 29), yPos + 23);
+        }
+    }
+
+    private void drawApiaryOutputs(PoseStack matrix) {
+        for (int i = 0; i < 4; i++) {
+            beepedia.drawSlot(matrix, beeData.getHoneycombData().createApiaryOutput(i), xPos + 43 + (i * 29), yPos + 82);
         }
     }
 
     @Override
     public void addSearch() {
         for (RecipeObject recipe : recipes) {
-            for (FluidOutput outputFluid : recipe.outputFluids) {
-                parent.addSearchItem(outputFluid.getFluid().toString()); //Not sure if this is correct for this
+            for (CentrifugeFluidOutput outputFluid : recipe.outputFluids) {
+                // TODO This is broke!!!! ------------------v
+                parent.addSearchItem(outputFluid.getPool().next().getFluid().toString()); //Not sure if this is correct for this
             }
-            for (ItemOutput outputItem : recipe.outputItems) {
-                parent.addSearchItem(outputItem.getItem().toString()); //Not sure if this is correct for this
+            for (CentrifugeItemOutput outputItem : recipe.outputItems) {
+                // TODO This is broke!!!! ------------------v
+                parent.addSearchItem(outputItem.getPool().next().getItem().toString()); //Not sure if this is correct for this
             }
         }
     }
@@ -207,9 +196,8 @@ public class HoneycombPage extends BeeDataPage {
     private class RecipeObject {
         final boolean isBlock;
         final ItemStack inputItem;
-        ItemStack bottleItem = ItemStack.EMPTY;
-        List<ItemOutput> outputItems;
-        List<FluidOutput> outputFluids;
+        List<CentrifugeItemOutput> outputItems;
+        List<CentrifugeFluidOutput> outputFluids;
         final CentrifugeRecipe recipe;
         final CustomBeeData beeData;
 
@@ -233,12 +221,12 @@ public class HoneycombPage extends BeeDataPage {
         public void draw(PoseStack matrix, int xPos, int yPos, int mouseX, int mouseY) {
             beepedia.drawSlot(matrix, inputItem, xPos + 25, yPos + 3);
 
-            List<ItemOutput> items = recipe.getItemOutputs();
-            List<FluidOutput> fluids = recipe.getFluidOutputs();
+            List<CentrifugeItemOutput> items = recipe.getItemOutputs();
+            List<CentrifugeFluidOutput> fluids = recipe.getFluidOutputs();
 
             // draw items
             for (int i = 0; i < items.size(); i++) {
-                ItemOutput item = items.get(i);
+                ItemOutput item = items.get(i).getPool().next(); //TODO <------- please fix me!!
                 beepedia.drawSlot(matrix, item.getItemStack(), xPos + 20, yPos + 10 + (40 * i));
                 if (item.getItem() instanceof CustomHoneyBottleItem) {
                     CustomHoneyBottleItem honey = (CustomHoneyBottleItem) item.getItem();
@@ -258,7 +246,7 @@ public class HoneycombPage extends BeeDataPage {
             }
             // draw fluids
             for (int i = 0; i < fluids.size(); i++) {
-                FluidOutput fluid = fluids.get(i);
+                FluidOutput fluid = fluids.get(i).getPool().next(); //TODO <------- please fix me!!
                 beepedia.drawFluidSlot(matrix, fluid.getFluidStack(), xPos + 10 + (40 * i), yPos + 10, true);
                 if (fluid.getFluid() instanceof CustomHoneyFluid) {
                     CustomHoneyFluid honey = (CustomHoneyFluid) fluid.getFluid();
@@ -274,15 +262,6 @@ public class HoneycombPage extends BeeDataPage {
                 Minecraft.getInstance().getTextureManager().bind(multiblockOnlyImage);
                 GuiComponent.blit(matrix, xPos + 28, yPos + 45, 0, 0, 16, 16, 16, 16);
             }
-        }
-
-        private void drawWeight(PoseStack matrix, Float right, int xPos, int yPos) {
-            if (right == 1) return;
-            Font font = Minecraft.getInstance().font;
-            DecimalFormat decimalFormat = new DecimalFormat("##%");
-            TextComponent text = new TextComponent(decimalFormat.format(right));
-            int padding = font.width(text) / 2;
-            font.draw(matrix, text.withStyle(ChatFormatting.GRAY), (float) xPos - padding, yPos, -1);
         }
 
         public void drawTooltip(PoseStack matrix, int mouseX, int mouseY) {

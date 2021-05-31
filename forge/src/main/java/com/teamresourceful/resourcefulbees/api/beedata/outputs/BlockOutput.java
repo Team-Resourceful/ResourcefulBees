@@ -6,9 +6,11 @@ import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Optional;
 
+@Unmodifiable
 public class BlockOutput extends AbstractOutput{
 
     public static final Codec<BlockOutput> CODEC = RecordCodecBuilder.create(instance -> instance.group(

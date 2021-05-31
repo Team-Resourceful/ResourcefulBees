@@ -5,7 +5,7 @@ import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.IBeeRegistry;
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.ItemOutput;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
-import com.teamresourceful.resourcefulbees.api.beedata.MutationData;
+import com.teamresourceful.resourcefulbees.api.beedata.mutation.MutationData;
 import com.teamresourceful.resourcefulbees.compat.jei.ingredients.EntityIngredient;
 import com.teamresourceful.resourcefulbees.registry.BeeRegistry;
 import mezz.jei.api.constants.VanillaTypes;

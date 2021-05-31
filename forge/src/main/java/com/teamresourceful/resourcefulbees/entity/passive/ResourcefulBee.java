@@ -1,10 +1,9 @@
 package com.teamresourceful.resourcefulbees.entity.passive;
 
-import com.google.gson.JsonObject;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
-import com.teamresourceful.resourcefulbees.api.beedata.MutationData;
-import com.teamresourceful.resourcefulbees.api.beedata.TraitData;
+import com.teamresourceful.resourcefulbees.api.beedata.mutation.MutationData;
+import com.teamresourceful.resourcefulbees.api.beedata.traits.TraitData;
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.BlockOutput;
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.EntityOutput;
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.ItemOutput;
@@ -13,8 +12,8 @@ import com.teamresourceful.resourcefulbees.entity.goals.BeeAngerGoal;
 import com.teamresourceful.resourcefulbees.entity.goals.BeeBreedGoal;
 import com.teamresourceful.resourcefulbees.entity.goals.BeeTemptGoal;
 import com.teamresourceful.resourcefulbees.entity.goals.PollinateGoal;
-import com.teamresourceful.resourcefulbees.lib.NBTConstants;
-import com.teamresourceful.resourcefulbees.lib.TraitConstants;
+import com.teamresourceful.resourcefulbees.lib.constants.NBTConstants;
+import com.teamresourceful.resourcefulbees.lib.constants.TraitConstants;
 import com.teamresourceful.resourcefulbees.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.registry.ModEffects;
 import com.teamresourceful.resourcefulbees.tileentity.TieredBeehiveTileEntity;
@@ -63,8 +62,8 @@ public class ResourcefulBee extends CustomBeeEntity {
     private PollinateGoal pollinateGoal;
     private int explosiveCooldown = 0;
 
-    public ResourcefulBee(EntityType<? extends Bee> type, Level world, String beeType, JsonObject beeData) {
-        super(type, world, beeType, beeData);
+    public ResourcefulBee(EntityType<? extends Bee> type, Level world, String beeType) {
+        super(type, world, beeType);
     }
 
     @Override
@@ -379,7 +378,7 @@ public class ResourcefulBee extends CustomBeeEntity {
                         this.explode(i / damageType.getAmplifier());
                 });
             }
-            if (i > 0 && info.hasTraits() && info.hasDamagePotionEffects()) {
+            if (i > 0 && info.hasTraits() && info.hasPotionDamageEffects()) {
                 info.getPotionDamageEffects().forEach(damageEffect -> ((LivingEntity) entityIn).addEffect(new MobEffectInstance(damageEffect.getEffect(), i * 20, damageEffect.getStrength())));
             }
             if (canPoison(info))
@@ -408,7 +407,7 @@ public class ResourcefulBee extends CustomBeeEntity {
     }
 
     private boolean canPoison(TraitData info) {
-        return (Config.BEES_INFLICT_POISON.get() && this.getCombatData().inflictsPoison()) && info.hasTraits() && !info.hasDamagePotionEffects() && !info.hasDamageTypes();
+        return (Config.BEES_INFLICT_POISON.get() && this.getCombatData().inflictsPoison()) && info.hasTraits() && !info.hasPotionDamageEffects() && !info.hasDamageTypes();
     }
 
     private void explode(int radius) {

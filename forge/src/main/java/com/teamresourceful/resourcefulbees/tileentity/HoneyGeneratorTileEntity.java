@@ -5,7 +5,7 @@ import com.teamresourceful.resourcefulbees.capabilities.CustomEnergyStorage;
 import com.teamresourceful.resourcefulbees.config.Config;
 import com.teamresourceful.resourcefulbees.container.AutomationSensitiveItemStackHandler;
 import com.teamresourceful.resourcefulbees.container.HoneyGeneratorContainer;
-import com.teamresourceful.resourcefulbees.lib.NBTConstants;
+import com.teamresourceful.resourcefulbees.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.network.packets.SyncGUIMessage;
 import com.teamresourceful.resourcefulbees.registry.ModBlockEntityTypes;

@@ -5,7 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.client.gui.widget.TabToggleImageButton;
 import com.teamresourceful.resourcefulbees.container.CentrifugeContainer;
-import com.teamresourceful.resourcefulbees.lib.ModConstants;
+import com.teamresourceful.resourcefulbees.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.network.packets.DrainCentrifugeTankMessage;
 import com.teamresourceful.resourcefulbees.network.packets.UpdateRedstoneReqMessage;

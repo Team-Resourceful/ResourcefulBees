@@ -6,9 +6,11 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Optional;
 
+@Unmodifiable
 public class EntityOutput extends AbstractOutput{
     private final EntityType<?> entityType;
     private final Optional<CompoundTag> compoundNBT;

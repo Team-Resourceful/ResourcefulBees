@@ -4,8 +4,8 @@ import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.honeydata.HoneyBottleData;
-import com.teamresourceful.resourcefulbees.lib.HoneycombTypes;
-import com.teamresourceful.resourcefulbees.lib.ModConstants;
+import com.teamresourceful.resourcefulbees.lib.enums.HoneycombType;
+import com.teamresourceful.resourcefulbees.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.registry.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.utils.BeeInfoUtils;
@@ -154,8 +154,8 @@ public class ModelHandler {
         ResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
 
         BeeRegistry.getRegistry().getBees().forEach((s, beeData) -> {
-            HoneycombTypes honeycombType = beeData.getHoneycombData().getHoneycombType();
-            if (honeycombType.equals(HoneycombTypes.DEFAULT)) {
+            HoneycombType honeycombType = beeData.getHoneycombData().getHoneycombType();
+            if (honeycombType.equals(HoneycombType.DEFAULT)) {
                 registerHoneycombBlockState(s, resourceManager);
                 registerHoneycombBlockItem(s, resourceManager);
                 registerHoneycombItem(s, resourceManager);

@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.tileentity.multiblocks.centrifuge;
 
-import com.teamresourceful.resourcefulbees.lib.NBTConstants;
+import com.teamresourceful.resourcefulbees.lib.constants.NBTConstants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;

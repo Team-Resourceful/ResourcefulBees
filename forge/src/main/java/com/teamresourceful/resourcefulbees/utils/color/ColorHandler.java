@@ -7,7 +7,7 @@ import com.teamresourceful.resourcefulbees.block.CustomHoneyBlock;
 import com.teamresourceful.resourcefulbees.block.HoneycombBlock;
 import com.teamresourceful.resourcefulbees.config.Config;
 import com.teamresourceful.resourcefulbees.item.*;
-import com.teamresourceful.resourcefulbees.lib.HoneycombTypes;
+import com.teamresourceful.resourcefulbees.lib.enums.HoneycombType;
 import com.teamresourceful.resourcefulbees.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.registry.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.registry.ModItems;
@@ -33,7 +33,7 @@ public final class ColorHandler {
         ItemColors colors = event.getItemColors();
         BEE_REGISTRY.getBees().forEach(((s, beeData) -> {
             HoneycombData honeycombData = beeData.getHoneycombData();
-            if (honeycombData.getHoneycombType().equals(HoneycombTypes.DEFAULT) && (!honeycombData.getColor().isDefault())) {
+            if (honeycombData.getHoneycombType().equals(HoneycombType.DEFAULT) && !honeycombData.getColor().isDefault()) {
                 registerItems(colors, HoneycombItem::getColor, BeeInfoUtils.getItem(ResourcefulBees.MOD_ID + ":" + s + "_honeycomb"));
                 registerItems(colors, HoneycombBlock::getItemColor, BeeInfoUtils.getItem(ResourcefulBees.MOD_ID + ":" + s + "_honeycomb_block"));
             }
@@ -57,7 +57,7 @@ public final class ColorHandler {
         BlockColors colors = event.getBlockColors();
         BEE_REGISTRY.getBees().forEach(((s, beeData) -> {
             HoneycombData honeycombData = beeData.getHoneycombData();
-            if (honeycombData.getHoneycombType().equals(HoneycombTypes.DEFAULT) && (!honeycombData.getColor().isDefault())) {
+            if (honeycombData.getHoneycombType().equals(HoneycombType.DEFAULT) && (!honeycombData.getColor().isDefault())) {
                 registerBlocks(colors, HoneycombBlock::getBlockColor, BeeInfoUtils.getBlock(ResourcefulBees.MOD_ID + ":" + s + "_honeycomb_block"));
             }
         }));

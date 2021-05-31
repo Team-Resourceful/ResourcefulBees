@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.api;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.lib.ModConstants;
+import com.teamresourceful.resourcefulbees.lib.constants.ModConstants;
 import net.minecraftforge.fml.ModLoadingContext;
 
 public class ResourcefulBeesAPI {
@@ -37,6 +37,7 @@ public class ResourcefulBeesAPI {
 
     public static IBeeRegistry getBeeRegistry() { return beeRegistry; }
 
+    //TODO provide proper access - epic
     public static ITraitRegistry getTraitRegistry() { return traitRegistry; }
 
 }

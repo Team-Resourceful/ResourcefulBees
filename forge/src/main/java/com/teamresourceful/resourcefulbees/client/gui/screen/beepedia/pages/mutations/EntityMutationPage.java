@@ -5,7 +5,7 @@ import com.teamresourceful.resourcefulbees.api.beedata.outputs.EntityOutput;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.BeePage;
 import com.teamresourceful.resourcefulbees.entity.passive.CustomBeeEntity;
-import com.teamresourceful.resourcefulbees.lib.MutationTypes;
+import com.teamresourceful.resourcefulbees.lib.enums.MutationType;
 import com.teamresourceful.resourcefulbees.utils.BeeInfoUtils;
 import com.teamresourceful.resourcefulbees.utils.RandomCollection;
 import com.teamresourceful.resourcefulbees.utils.RenderUtils;
@@ -30,11 +30,11 @@ public class EntityMutationPage extends MutationsPage {
     final List<Pair<Double, EntityOutput>> outputs = new ArrayList<>();
     private Double outputChance;
 
-    public EntityMutationPage(EntityType<?> parentEntity, BeePage parent, EntityType<?> entity, RandomCollection<EntityOutput> outputs, MutationTypes type, int mutationCount, BeepediaScreen beepedia) {
+    public EntityMutationPage(EntityType<?> parentEntity, BeePage parent, EntityType<?> entity, RandomCollection<EntityOutput> outputs, MutationType type, int mutationCount, BeepediaScreen beepedia) {
         this(parentEntity.create(Objects.requireNonNull(beepedia.getMinecraft().level)), parent, entity, outputs, type, mutationCount, beepedia);
     }
 
-    public EntityMutationPage(Entity parentEntity, BeePage parent, EntityType<?> entity, RandomCollection<EntityOutput> outputs, MutationTypes type, int mutationCount, BeepediaScreen beepedia) {
+    public EntityMutationPage(Entity parentEntity, BeePage parent, EntityType<?> entity, RandomCollection<EntityOutput> outputs, MutationType type, int mutationCount, BeepediaScreen beepedia) {
         super(parentEntity, parent, type, mutationCount, beepedia);
         input = entity.create(beepedia.getMinecraft().level);
         initOutputs(outputs);

@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.network;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.lib.ModConstants;
+import com.teamresourceful.resourcefulbees.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.network.packets.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;

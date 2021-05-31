@@ -3,8 +3,15 @@ package com.teamresourceful.resourcefulbees.entity.passive;
 import com.google.gson.JsonObject;
 import com.teamresourceful.resourcefulbees.api.ICustomBee;
 import com.teamresourceful.resourcefulbees.api.beedata.*;
+import com.teamresourceful.resourcefulbees.api.beedata.breeding.BeeFamily;
+import com.teamresourceful.resourcefulbees.api.beedata.breeding.BreedData;
+import com.teamresourceful.resourcefulbees.api.beedata.centrifuge.CentrifugeData;
+import com.teamresourceful.resourcefulbees.api.beedata.mutation.MutationData;
+import com.teamresourceful.resourcefulbees.api.beedata.render.RenderData;
+import com.teamresourceful.resourcefulbees.api.beedata.spawning.SpawnData;
+import com.teamresourceful.resourcefulbees.api.beedata.traits.TraitData;
 import com.teamresourceful.resourcefulbees.config.Config;
-import com.teamresourceful.resourcefulbees.lib.NBTConstants;
+import com.teamresourceful.resourcefulbees.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.mixin.AnimalEntityAccessor;
 import com.teamresourceful.resourcefulbees.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.utils.MathUtils;
@@ -45,7 +52,6 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
 
     private static final EntityDataAccessor<Integer> FEED_COUNT = SynchedEntityData.defineId(CustomBeeEntity.class, EntityDataSerializers.INT);
 
-    protected final JsonObject rawBeeData;
     protected final CustomBeeData customBeeData;
     protected final String beeType;
     protected int timeWithoutHive;
@@ -53,9 +59,8 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
     private boolean hasHiveInRange;
     private int disruptorInRange;
 
-    public CustomBeeEntity(EntityType<? extends Bee> type, Level world, String beeType, JsonObject beeData) {
+    public CustomBeeEntity(EntityType<? extends Bee> type, Level world, String beeType) {
         super(type, world);
-        this.rawBeeData = beeData;
         this.beeType = beeType;
         this.customBeeData = BeeRegistry.getRegistry().getBeeData(beeType);
     }
@@ -79,8 +84,9 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
         return beeType;
     }
 
+    @Nullable
     public JsonObject getRawBeeData() {
-        return rawBeeData;
+        return customBeeData.getRawData();
     }
 
     public CoreData getCoreData() {

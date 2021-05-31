@@ -142,6 +142,12 @@
         "strength": 1
       }
     ],
+    "damageImmunities": [
+      "Damage source immunities the bee has. Options available are: ",
+      "inFire, lightningBolt, onFire, lava, hotFloor, inWall,",
+      "cramming, drown, starve, cactus, fall, flyIntoWall, generic, magic,",
+      "wither, anvil, fallingBlock, dragonBreath, dryout"
+    ],
     "potionImmunities": [
       "namespace:ID of the Mob Effect - can be a list of effect ID's"
     ],
@@ -152,7 +158,7 @@
       }
     ],
     "specialAbilities": [
-      "a list of special abilities custom coded in the mod. options are: teleport, flammable, slimy, setOnFire, spider"
+      "a list of special abilities custom coded in the mod. options are: teleport, flammable, slimy, angry, spider"
     ],
     "particles": [
       "a list of ID's for any particle registered in the game including modded."

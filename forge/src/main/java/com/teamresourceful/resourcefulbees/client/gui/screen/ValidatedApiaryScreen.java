@@ -5,8 +5,8 @@ import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.client.gui.widget.TabImageButton;
 import com.teamresourceful.resourcefulbees.config.Config;
 import com.teamresourceful.resourcefulbees.container.ValidatedApiaryContainer;
-import com.teamresourceful.resourcefulbees.lib.ApiaryTabs;
-import com.teamresourceful.resourcefulbees.lib.NBTConstants;
+import com.teamresourceful.resourcefulbees.lib.enums.ApiaryTab;
+import com.teamresourceful.resourcefulbees.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.network.packets.ApiaryTabMessage;
 import com.teamresourceful.resourcefulbees.network.packets.ExportBeeMessage;
@@ -77,7 +77,7 @@ public class ValidatedApiaryScreen extends AbstractContainerScreen<ValidatedApia
         int t = i + this.imageWidth - 25;
 
         this.addButton(new TabImageButton(t+1, j+17, 18, 18, 110, 0, 18, TABS_BG, new ItemStack(ModItems.BEE_JAR.get()), 1, 1,
-                onPress -> this.changeScreen(ApiaryTabs.MAIN), 128, 128) {
+                onPress -> this.changeScreen(ApiaryTab.MAIN), 128, 128) {
 
             @Override
             public void renderToolTip(@NotNull PoseStack matrix, int mouseX, int mouseY) {
@@ -87,7 +87,7 @@ public class ValidatedApiaryScreen extends AbstractContainerScreen<ValidatedApia
         }).active = false;
 
         storageTabButton = this.addButton(new TabImageButton(t + 1, j + 37, 18, 18, 110, 0, 18, TABS_BG, new ItemStack(Items.HONEYCOMB),2, 1,
-                onPress -> this.changeScreen(ApiaryTabs.STORAGE), 128, 128) {
+                onPress -> this.changeScreen(ApiaryTab.STORAGE), 128, 128) {
 
             @Override
             public void renderToolTip(@NotNull PoseStack matrix, int mouseX, int mouseY) {
@@ -97,7 +97,7 @@ public class ValidatedApiaryScreen extends AbstractContainerScreen<ValidatedApia
         });
 
         breedTabButton = this.addButton(new TabImageButton(t + 1, j + 57, 18, 18, 110, 0, 18, TABS_BG, new ItemStack(ModItems.GOLD_FLOWER_ITEM.get()), 1, 1,
-                onPress -> this.changeScreen(ApiaryTabs.BREED), 128, 128) {
+                onPress -> this.changeScreen(ApiaryTab.BREED), 128, 128) {
 
             @Override
             public void renderToolTip(@NotNull PoseStack matrix, int mouseX, int mouseY) {
@@ -107,15 +107,15 @@ public class ValidatedApiaryScreen extends AbstractContainerScreen<ValidatedApia
         });
     }
 
-    private void changeScreen(ApiaryTabs tab) {
+    private void changeScreen(ApiaryTab tab) {
         switch (tab) {
             case BREED:
                 if (breedTabButton.active)
-                    NetPacketHandler.sendToServer(new ApiaryTabMessage(apiaryTileEntity.getBlockPos(), ApiaryTabs.BREED));
+                    NetPacketHandler.sendToServer(new ApiaryTabMessage(apiaryTileEntity.getBlockPos(), ApiaryTab.BREED));
                 break;
             case STORAGE:
                 if (storageTabButton.active)
-                    NetPacketHandler.sendToServer(new ApiaryTabMessage(apiaryTileEntity.getBlockPos(), ApiaryTabs.STORAGE));
+                    NetPacketHandler.sendToServer(new ApiaryTabMessage(apiaryTileEntity.getBlockPos(), ApiaryTab.STORAGE));
                 break;
             case MAIN:
         }

@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.entity.passive;
 
 import com.teamresourceful.resourcefulbees.api.honeydata.HoneyBottleData;
 import com.teamresourceful.resourcefulbees.api.honeydata.HoneyEffect;
-import com.teamresourceful.resourcefulbees.lib.ModConstants;
+import com.teamresourceful.resourcefulbees.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.registry.ModBlocks;
 import com.teamresourceful.resourcefulbees.registry.ModFluids;
 import com.teamresourceful.resourcefulbees.registry.ModItems;

@@ -1,8 +1,8 @@
 package com.teamresourceful.resourcefulbees.utils;
 
 import com.google.gson.JsonElement;
-import com.teamresourceful.resourcefulbees.lib.BeeConstants;
-import com.teamresourceful.resourcefulbees.lib.ModConstants;
+import com.teamresourceful.resourcefulbees.lib.constants.BeeConstants;
+import com.teamresourceful.resourcefulbees.lib.constants.ModConstants;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.Item;

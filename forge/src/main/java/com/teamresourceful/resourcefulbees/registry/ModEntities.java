@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.registry;
 
 import com.teamresourceful.resourcefulbees.entity.passive.CustomBeeEntity;
-import com.teamresourceful.resourcefulbees.lib.ModConstants;
+import com.teamresourceful.resourcefulbees.lib.constants.ModConstants;
 import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.fml.RegistryObject;
 

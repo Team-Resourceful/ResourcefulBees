@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.tileentity;
 
+import com.teamresourceful.resourcefulbees.api.beedata.centrifuge.CentrifugeItemOutput;
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.ItemOutput;
 import com.teamresourceful.resourcefulbees.block.MechanicalCentrifugeBlock;
 import com.teamresourceful.resourcefulbees.container.AutomationSensitiveItemStackHandler;
@@ -81,13 +82,14 @@ public class MechanicalCentrifugeTileEntity extends BlockEntity implements Ticka
         return ItemStack.isSame(slot, item) && (item.getCount() + slot.getCount()) <= slot.getMaxStackSize();
     }
 
+    //TODO THIS MAY HAVE BROKE AFTER ADDING CENTRIFUGE OUTPUT OBJECTS!!! - epic
     public boolean canProcess(@Nullable CentrifugeRecipe recipe) {
         if (recipe != null && !recipe.isMultiblock()) {
-            List<ItemOutput> outputs = recipe.getItemOutputs();
+            List<CentrifugeItemOutput> outputs = recipe.getItemOutputs();
             ItemStack comb = getItemStackHandler().getStackInSlot(HONEYCOMB_SLOT);
             List<ItemStack> outputSlots = Arrays.asList(getItemStackHandler().getStackInSlot(OUTPUT1), getItemStackHandler().getStackInSlot(OUTPUT2), getItemStackHandler().getStackInSlot(OUTPUT3));
-
-            for(int i=0;i<3;i++) if (!isSlotValid(outputSlots.get(i), outputs.get(i).getItemStack())) return false;
+            // see this ------------------------------------------------------------------------v
+            for(int i=0;i<3;i++) if (!isSlotValid(outputSlots.get(i), outputs.get(i).getPool().next().getItemStack())) return false;
             if (comb.getCount() >= RecipeUtils.getIngredientCount(recipe.getIngredient())) {
                 if (level != null) {
                     level.setBlockAndUpdate(worldPosition, getBlockState().setValue(MechanicalCentrifugeBlock.PROPERTY_ON, false));
@@ -98,12 +100,14 @@ public class MechanicalCentrifugeTileEntity extends BlockEntity implements Ticka
         return false;
     }
 
+    //TODO THIS MAY HAVE BROKE AFTER ADDING CENTRIFUGE OUTPUT OBJECTS!!! - epic
     private void processItem(@Nullable CentrifugeRecipe recipe) {
         if (recipe != null && this.canProcess(recipe) && level != null) {
             ItemStack comb = getItemStackHandler().getStackInSlot(HONEYCOMB_SLOT);
             List<ItemStack> slots = Arrays.asList(getItemStackHandler().getStackInSlot(OUTPUT1), getItemStackHandler().getStackInSlot(OUTPUT2), getItemStackHandler().getStackInSlot(OUTPUT3));
             for(int i = 0; i < 3; i++){
-                ItemOutput output = recipe.getItemOutputs().get(i);
+                // see this --------------------------------------------------v
+                ItemOutput output = recipe.getItemOutputs().get(i).getPool().next();
                 if (output.getChance() >= level.random.nextDouble()) {
                     if (slots.get(i).isEmpty()) {
                         getItemStackHandler().setStackInSlot(i + 1, output.getItemStack());

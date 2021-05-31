@@ -1,8 +1,8 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
+import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.teamresourceful.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.utils.BeepediaUtils;
 import com.teamresourceful.resourcefulbees.utils.CycledArray;
@@ -16,9 +16,16 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public class BeeInfoPage extends BeeDataPage {
+    private static final TranslatableComponent title = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.info");
+    private static final TranslatableComponent sizeName = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.info.size");
+    private static final TranslatableComponent healthName = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.info.health");
+    private static final TranslatableComponent damageName = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.info.damage");
+    private static final TranslatableComponent stingerName = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.info.stinger");
+    private static final TranslatableComponent passiveName = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.info.passive");
+    private static final TranslatableComponent poisonName = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.info.poison");
+    private static final TranslatableComponent timeName = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.info.time");
 
     private Entity entityFlower = null;
     private final CycledArray<Block> flowers;
@@ -32,23 +39,13 @@ public class BeeInfoPage extends BeeDataPage {
     @Override
     public void renderBackground(PoseStack matrix, float partialTick, int mouseX, int mouseY) {
         Font font = Minecraft.getInstance().font;
-        TranslatableComponent title = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.info");
-        TranslatableComponent sizeName = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.info.size");
-
-        TranslatableComponent healthName = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.info.health");
-        TranslatableComponent damageName = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.info.damage");
-        TranslatableComponent stingerName = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.info.stinger");
-        TranslatableComponent passiveName = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.info.passive");
-        TranslatableComponent poisonName = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.info.poison");
-        TranslatableComponent timeName = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.info.time");
-
-        sizeName.append(BeepediaUtils.getSizeName(beeData.getRenderData().getSizeModifier()));
-        damageName.append(new TextComponent("" + (int) beeData.getCombatData().getAttackDamage()));
-        healthName.append(new TextComponent("" + (int) beeData.getCombatData().getBaseHealth()));
-        stingerName.append(BeepediaUtils.getYesNo(beeData.getCombatData().removeStingerOnAttack()));
-        passiveName.append(BeepediaUtils.getYesNo(beeData.getCombatData().isPassive()));
-        poisonName.append(BeepediaUtils.getYesNo(beeData.getCombatData().inflictsPoison()));
-        timeName.append(beeData.getCoreData().getMaxTimeInHive() / 20 + "s");
+        sizeName.copy().append(BeepediaUtils.getSizeName(beeData.getRenderData().getSizeModifier()));
+        damageName.copy().append(new TextComponent("" + (int) beeData.getCombatData().getAttackDamage()));
+        healthName.copy().append(new TextComponent("" + (int) beeData.getCombatData().getBaseHealth()));
+        stingerName.copy().append(BeepediaUtils.getYesNo(beeData.getCombatData().removeStingerOnAttack()));
+        passiveName.copy().append(BeepediaUtils.getYesNo(beeData.getCombatData().isPassive()));
+        poisonName.copy().append(BeepediaUtils.getYesNo(beeData.getCombatData().inflictsPoison()));
+        timeName.copy().append(beeData.getCoreData().getMaxTimeInHive() / 20 + "s");
 
         font.draw(matrix, title.withStyle(ChatFormatting.WHITE), xPos, (float) yPos + 8, -1);
         font.draw(matrix, sizeName.withStyle(ChatFormatting.GRAY), xPos, (float) yPos + 22, -1);
@@ -68,10 +65,8 @@ public class BeeInfoPage extends BeeDataPage {
             font.draw(matrix, flowerName.withStyle(ChatFormatting.GRAY), (float) xPos, (float) yPos + 75, -1);
             beepedia.drawSlot(matrix, flowers.get(), xPos + 36, yPos + 70);
         } else if (beeData.getCoreData().getEntityFlower().isPresent()) {
-            if (entityFlower == null) {
-                EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(beeData.getCoreData().getEntityFlower().get());
-                entityFlower = entityType.create(beepedia.getMinecraft().level);
-            }
+            EntityType<?> entityType = beeData.getCoreData().getEntityFlower().get();
+            entityFlower = entityType.create(beepedia.getMinecraft().level);
             font.draw(matrix, flowerName.withStyle(ChatFormatting.GRAY), (float) xPos, (float) yPos + 80, -1);
             RenderUtils.renderEntity(matrix, entityFlower, beepedia.getMinecraft().level, (float) xPos + 45, (float) yPos + 75, -45, 1.25f);
         }
@@ -89,7 +84,7 @@ public class BeeInfoPage extends BeeDataPage {
                 parent.addSearchEntity(entityFlower);
             }
         } else {
-            beeData.getCoreData().getBlockFlowers().forEach(b -> parent.addSearchItem(b));
+            beeData.getCoreData().getBlockFlowers().forEach(parent::addSearchItem);
         }
         parent.addSearchBeeTag(BeepediaUtils.getSizeName(beeData.getRenderData().getSizeModifier()).getString());
     }

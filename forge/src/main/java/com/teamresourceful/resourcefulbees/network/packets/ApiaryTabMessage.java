@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.network.packets;
 
-import com.teamresourceful.resourcefulbees.lib.ApiaryTabs;
+import com.teamresourceful.resourcefulbees.lib.enums.ApiaryTab;
 import com.teamresourceful.resourcefulbees.tileentity.multiblocks.apiary.IApiaryMultiblock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -13,9 +13,9 @@ import java.util.function.Supplier;
 public class ApiaryTabMessage {
 
         private final BlockPos pos;
-        private final ApiaryTabs tab;
+        private final ApiaryTab tab;
 
-        public ApiaryTabMessage(BlockPos pos, ApiaryTabs tab){
+        public ApiaryTabMessage(BlockPos pos, ApiaryTab tab){
             this.pos = pos;
             this.tab = tab;
         }
@@ -26,7 +26,7 @@ public class ApiaryTabMessage {
         }
 
         public static ApiaryTabMessage decode(FriendlyByteBuf buffer){
-            return new ApiaryTabMessage(buffer.readBlockPos(), buffer.readEnum(ApiaryTabs.class));
+            return new ApiaryTabMessage(buffer.readBlockPos(), buffer.readEnum(ApiaryTab.class));
         }
 
         public static void handle(ApiaryTabMessage message, Supplier<NetworkEvent.Context> context){

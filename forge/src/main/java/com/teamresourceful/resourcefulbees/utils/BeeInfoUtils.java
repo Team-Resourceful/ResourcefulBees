@@ -10,8 +10,8 @@ import com.teamresourceful.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.fluids.CustomHoneyFluid;
 import com.teamresourceful.resourcefulbees.item.BeeJar;
 import com.teamresourceful.resourcefulbees.item.CustomHoneyBottleItem;
-import com.teamresourceful.resourcefulbees.lib.ModConstants;
-import com.teamresourceful.resourcefulbees.lib.NBTConstants;
+import com.teamresourceful.resourcefulbees.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.registry.ModFluids;
 import com.teamresourceful.resourcefulbees.registry.ModItems;
 import net.minecraft.core.BlockPos;
@@ -48,7 +48,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Predicate;
 
-import static com.teamresourceful.resourcefulbees.lib.BeeConstants.VANILLA_BEE_COLOR;
+import static com.teamresourceful.resourcefulbees.lib.constants.BeeConstants.VANILLA_BEE_COLOR;
 
 public class BeeInfoUtils {
 
@@ -115,10 +115,6 @@ public class BeeInfoUtils {
     }
 
     private static final ResourceLocation VALID_APIARY = new ResourceLocation("resourcefulbees:valid_apiary");
-
-    public static Item getOurItem(String name, String suffix){
-        return BeeInfoUtils.getItem(ResourcefulBees.MOD_ID + ":" + name + suffix);
-    }
 
     public static void flagBeesInRange(BlockPos pos, Level world) {
         BoundingBox box = BoundingBox.createProper(pos.getX() + 10, pos.getY() + 10, pos.getZ() + 10, pos.getX() - 10, pos.getY() - 10, pos.getZ() - 10);

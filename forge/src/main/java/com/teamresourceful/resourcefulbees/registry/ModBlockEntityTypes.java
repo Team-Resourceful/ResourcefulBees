@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.registry;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.lib.ModConstants;
+import com.teamresourceful.resourcefulbees.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.tileentity.*;
 import com.teamresourceful.resourcefulbees.tileentity.multiblocks.apiary.ApiaryBreederTileEntity;
 import com.teamresourceful.resourcefulbees.tileentity.multiblocks.apiary.ApiaryStorageTileEntity;

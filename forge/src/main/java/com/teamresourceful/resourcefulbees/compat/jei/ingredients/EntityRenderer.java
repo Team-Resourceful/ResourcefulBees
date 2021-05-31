@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.compat.jei.ingredients;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
-import com.teamresourceful.resourcefulbees.api.beedata.RenderData;
+import com.teamresourceful.resourcefulbees.api.beedata.render.RenderData;
 import mezz.jei.api.ingredients.IIngredientRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -27,27 +27,25 @@ public class EntityRenderer implements IIngredientRenderer<EntityIngredient> {
         if (mc.level != null && entityIngredient != null && mc.player != null) {
             RenderData coreData = entityIngredient.getBeeData().getRenderData();
             EntityType<?> entityType = entityIngredient.getBeeData().getEntityType();
-            if (entityType != null) {
-                Entity entity = entityType.create(mc.level);
-                if (entity instanceof Bee) {
-                    Bee beeEntity = (Bee) entity;
-                    matrixStack.pushPose();
-                    matrixStack.translate(8, 14, 0.5D);
+            Entity entity = entityType.create(mc.level);
+            if (entity instanceof Bee) {
+                Bee beeEntity = (Bee) entity;
+                matrixStack.pushPose();
+                matrixStack.translate(8, 14, 0.5D);
 
-                    beeEntity.tickCount = mc.player.tickCount;
-                    beeEntity.yBodyRot = entityIngredient.getRotation() - 90;
-                    float scaledSize = 20 / coreData.getSizeModifier();
-                    matrixStack.translate(x, y, 1);
-                    matrixStack.mulPose(Vector3f.ZP.rotationDegrees(180.0F));
-                    matrixStack.translate(0.0F, -0.2F, 1);
-                    matrixStack.scale(-scaledSize, scaledSize, 30);
-                    matrixStack.mulPose(Vector3f.YP.rotationDegrees(270.0F));
-                    EntityRenderDispatcher entityRenderDispatcher = mc.getEntityRenderDispatcher();
-                    MultiBufferSource.BufferSource typeBuffer = mc.renderBuffers().bufferSource();
-                    entityRenderDispatcher.render(beeEntity, 0, 0, 0.0D, mc.getFrameTime(), 1, matrixStack, typeBuffer, 15728880);
-                    typeBuffer.endBatch();
-                    matrixStack.popPose();
-                }
+                beeEntity.tickCount = mc.player.tickCount;
+                beeEntity.yBodyRot = entityIngredient.getRotation() - 90;
+                float scaledSize = 20 / coreData.getSizeModifier();
+                matrixStack.translate(x, y, 1);
+                matrixStack.mulPose(Vector3f.ZP.rotationDegrees(180.0F));
+                matrixStack.translate(0.0F, -0.2F, 1);
+                matrixStack.scale(-scaledSize, scaledSize, 30);
+                matrixStack.mulPose(Vector3f.YP.rotationDegrees(270.0F));
+                EntityRenderDispatcher entityRenderDispatcher = mc.getEntityRenderDispatcher();
+                MultiBufferSource.BufferSource typeBuffer = mc.renderBuffers().bufferSource();
+                entityRenderDispatcher.render(beeEntity, 0, 0, 0.0D, mc.getFrameTime(), 1, matrixStack, typeBuffer, 15728880);
+                typeBuffer.endBatch();
+                matrixStack.popPose();
             }
         }
     }

@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.registry;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.config.Config;
-import com.teamresourceful.resourcefulbees.lib.ModConstants;
+import com.teamresourceful.resourcefulbees.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.world.BeeNestFeature;
 import net.minecraft.core.Registry;
 import net.minecraft.data.BuiltinRegistries;

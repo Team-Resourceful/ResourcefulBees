@@ -2,15 +2,15 @@
 package com.teamresourceful.resourcefulbees.tileentity;
 
 import com.google.gson.JsonElement;
-import com.teamresourceful.resourcefulbees.api.beedata.outputs.FluidOutput;
+import com.teamresourceful.resourcefulbees.api.beedata.centrifuge.CentrifugeFluidOutput;
 import com.teamresourceful.resourcefulbees.block.CentrifugeBlock;
 import com.teamresourceful.resourcefulbees.capabilities.CustomEnergyStorage;
 import com.teamresourceful.resourcefulbees.capabilities.MultiFluidTank;
 import com.teamresourceful.resourcefulbees.config.Config;
 import com.teamresourceful.resourcefulbees.container.AutomationSensitiveItemStackHandler;
 import com.teamresourceful.resourcefulbees.container.CentrifugeContainer;
-import com.teamresourceful.resourcefulbees.lib.BeeConstants;
-import com.teamresourceful.resourcefulbees.lib.NBTConstants;
+import com.teamresourceful.resourcefulbees.lib.constants.BeeConstants;
+import com.teamresourceful.resourcefulbees.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.network.packets.SyncGUIMessage;
 import com.teamresourceful.resourcefulbees.recipe.CentrifugeRecipe;
@@ -172,7 +172,6 @@ public class CentrifugeTileEntity extends BlockEntity implements TickableBlockEn
             return;
         }
         consumeInput(i);
-        ItemStack glassBottle = itemStackHandler.getStackInSlot(BOTTLE_SLOT);
         List<ItemStack> depositStacks = new ArrayList<>();
         if (level == null) {
             resetProcess(i);
@@ -180,16 +179,16 @@ public class CentrifugeTileEntity extends BlockEntity implements TickableBlockEn
         }
         CentrifugeRecipe recipe = recipes.get(i);
 
-        recipe.getItemOutputs().stream().limit(3).forEach(itemOutput -> {
-            double chance = itemOutput.getChance();
+        recipe.getItemOutputs().stream().limit(3).forEach(centrifugeItemOutput -> {
+            double chance = centrifugeItemOutput.getChance();
             if (chance >= level.random.nextFloat()) {
-                depositStacks.add(itemOutput.getItemStack());
+                depositStacks.add(centrifugeItemOutput.getPool().next().getItemStack());
             }
         });
-        recipe.getFluidOutputs().stream().limit(3).forEach(fluidOutput -> {
-            double chance = fluidOutput.getChance();
+        recipe.getFluidOutputs().stream().limit(3).forEach(centrifugeFluidOutput -> {
+            double chance = centrifugeFluidOutput.getChance();
             if (chance >= level.random.nextFloat()) {
-                FluidStack fluid = fluidOutput.getFluidStack();
+                FluidStack fluid = centrifugeFluidOutput.getPool().next().getFluidStack();
                 int tank = getValidTank(fluid);
                 if (tank != -1) fluidTanks.fill(tank, fluid, IFluidHandler.FluidAction.EXECUTE);
             }
@@ -202,9 +201,9 @@ public class CentrifugeTileEntity extends BlockEntity implements TickableBlockEn
 
     private boolean tanksHasSpace(CentrifugeRecipe centrifugeRecipe) {
         if (centrifugeRecipe == null) return false;
-        for (FluidOutput f : centrifugeRecipe.getFluidOutputs()) {
-            if (f.getFluidStack().isEmpty()) continue;
-            if (getValidTank(f.getFluidStack()) < 0) {
+        for (CentrifugeFluidOutput f : centrifugeRecipe.getFluidOutputs()) {
+            if (f.getPool().next().getFluidStack().isEmpty()) continue; // TODO FIX ME!!
+            if (getValidTank(f.getPool().next().getFluidStack()) < 0) { // TODO FIX ME!!
                 return false;
             }
         }
@@ -353,7 +352,7 @@ public class CentrifugeTileEntity extends BlockEntity implements TickableBlockEn
         boolean hasSpace = true;
         int i = 0;
         while (recipe != null && hasSpace && i < recipe.getItemOutputs().size()) {
-            ItemStack output = recipe.getItemOutputs().get(i).getItemStack();
+            ItemStack output = recipe.getItemOutputs().get(i).getPool().next().getItemStack(); // TODO FIX ME!!!!!
             if (!output.isEmpty() && !(i == 2 && itemStackHandler.getStackInSlot(BOTTLE_SLOT).isEmpty())) {
                 int count = output.getCount();
                 int j = outputSlots[0];

@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.item;
 
 import com.teamresourceful.resourcefulbees.entity.passive.CustomBeeEntity;
-import com.teamresourceful.resourcefulbees.lib.NBTConstants;
+import com.teamresourceful.resourcefulbees.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.utils.BeepediaUtils;
 import net.minecraft.ChatFormatting;

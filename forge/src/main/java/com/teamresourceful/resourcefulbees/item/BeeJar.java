@@ -2,11 +2,11 @@ package com.teamresourceful.resourcefulbees.item;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
-import com.teamresourceful.resourcefulbees.api.beedata.TraitData;
+import com.teamresourceful.resourcefulbees.api.beedata.traits.TraitData;
 import com.teamresourceful.resourcefulbees.entity.passive.ResourcefulBee;
-import com.teamresourceful.resourcefulbees.lib.BeeConstants;
-import com.teamresourceful.resourcefulbees.lib.NBTConstants;
-import com.teamresourceful.resourcefulbees.lib.TraitConstants;
+import com.teamresourceful.resourcefulbees.lib.constants.BeeConstants;
+import com.teamresourceful.resourcefulbees.lib.constants.NBTConstants;
+import com.teamresourceful.resourcefulbees.lib.constants.TraitConstants;
 import com.teamresourceful.resourcefulbees.registry.ModItems;
 import com.teamresourceful.resourcefulbees.utils.BeeInfoUtils;
 import com.teamresourceful.resourcefulbees.utils.color.Color;

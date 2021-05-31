@@ -2,18 +2,17 @@ package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.BeePage;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.HomePage;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.HoneyPage;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.TraitPage;
 import com.teamresourceful.resourcefulbees.client.gui.widget.*;
-import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.config.Config;
 import com.teamresourceful.resourcefulbees.entity.passive.KittenBee;
 import com.teamresourceful.resourcefulbees.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.registry.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.registry.TraitRegistry;
-import com.teamresourceful.resourcefulbees.utils.BeeInfoUtils;
 import com.teamresourceful.resourcefulbees.utils.RenderUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -23,7 +22,6 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
@@ -41,7 +39,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
-import java.text.DecimalFormat;
 import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -176,6 +173,7 @@ public class BeepediaScreen extends Screen {
      * @param y top left corner y position
      */
     private void registerSearch(int x, int y) {
+        if (this.minecraft != null) this.minecraft.keyboardHandler.setSendRepeatsToGui(true);
         searchBox = new EditBox(Minecraft.getInstance().font, x + 10, y + 143, 98, 10, new TranslatableComponent("gui.resourcefulbees.beepedia.search"));
         searchBox.visible = false;
         addWidget(searchBox);

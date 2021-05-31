@@ -5,7 +5,7 @@ import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.BeePage;
 import com.teamresourceful.resourcefulbees.entity.passive.CustomBeeEntity;
-import com.teamresourceful.resourcefulbees.lib.MutationTypes;
+import com.teamresourceful.resourcefulbees.lib.enums.MutationType;
 import com.teamresourceful.resourcefulbees.utils.RenderUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -28,7 +28,7 @@ public abstract class MutationsPage {
     final int mutationCount;
     protected final BeepediaScreen beepedia;
     final Entity entityParent;
-    final MutationTypes type;
+    final MutationType type;
     final BeePage parent;
     protected int inputCounter;
     protected int outputCounter;
@@ -37,7 +37,7 @@ public abstract class MutationsPage {
     protected final ResourceLocation mutationChanceImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/mutation_sparkles.png");
 
 
-    protected MutationsPage(Entity entityParent, BeePage parent, MutationTypes type, int mutationCount, BeepediaScreen beepedia) {
+    protected MutationsPage(Entity entityParent, BeePage parent, MutationType type, int mutationCount, BeepediaScreen beepedia) {
         this.entityParent = entityParent;
         this.parent = parent;
         this.type = type;

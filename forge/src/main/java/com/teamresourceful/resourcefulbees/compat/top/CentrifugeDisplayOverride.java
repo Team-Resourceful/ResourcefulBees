@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.compat.top;
 
-import com.teamresourceful.resourcefulbees.lib.BeeConstants;
+import com.teamresourceful.resourcefulbees.lib.constants.BeeConstants;
 import com.teamresourceful.resourcefulbees.tileentity.CentrifugeTileEntity;
 import mcjty.theoneprobe.api.*;
 import net.minecraft.world.entity.player.Player;

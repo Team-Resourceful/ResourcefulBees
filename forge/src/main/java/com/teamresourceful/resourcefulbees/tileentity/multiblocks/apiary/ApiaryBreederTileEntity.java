@@ -1,15 +1,15 @@
 package com.teamresourceful.resourcefulbees.tileentity.multiblocks.apiary;
 
 import com.teamresourceful.resourcefulbees.api.ICustomBee;
-import com.teamresourceful.resourcefulbees.api.beedata.BreedData;
+import com.teamresourceful.resourcefulbees.api.beedata.breeding.BreedData;
 import com.teamresourceful.resourcefulbees.config.Config;
 import com.teamresourceful.resourcefulbees.container.ApiaryBreederContainer;
 import com.teamresourceful.resourcefulbees.container.AutomationSensitiveItemStackHandler;
 import com.teamresourceful.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.item.BeeJar;
 import com.teamresourceful.resourcefulbees.item.UpgradeItem;
-import com.teamresourceful.resourcefulbees.lib.ApiaryTabs;
-import com.teamresourceful.resourcefulbees.lib.NBTConstants;
+import com.teamresourceful.resourcefulbees.lib.enums.ApiaryTab;
+import com.teamresourceful.resourcefulbees.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.registry.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.utils.BeeInfoUtils;
@@ -42,7 +42,7 @@ import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static com.teamresourceful.resourcefulbees.lib.NBTConstants.NBT_BREEDER_COUNT;
+import static com.teamresourceful.resourcefulbees.lib.constants.NBTConstants.NBT_BREEDER_COUNT;
 
 public class ApiaryBreederTileEntity extends BlockEntity implements TickableBlockEntity, MenuProvider, IApiaryMultiblock {
 
@@ -326,13 +326,13 @@ public class ApiaryBreederTileEntity extends BlockEntity implements TickableBloc
     }
 
     @Override
-    public void switchTab(ServerPlayer player, ApiaryTabs tab) {
+    public void switchTab(ServerPlayer player, ApiaryTab tab) {
         if (level != null && apiaryPos != null) {
-            if (tab == ApiaryTabs.MAIN) {
+            if (tab == ApiaryTab.MAIN) {
                 BlockEntity tile = level.getBlockEntity(apiaryPos);
                 NetworkHooks.openGui(player, (MenuProvider) tile, apiaryPos);
             }
-            if (tab == ApiaryTabs.STORAGE) {
+            if (tab == ApiaryTab.STORAGE) {
                 BlockEntity tile = level.getBlockEntity(apiary.getStoragePos());
                 NetworkHooks.openGui(player, (MenuProvider) tile, apiary.getStoragePos());
             }

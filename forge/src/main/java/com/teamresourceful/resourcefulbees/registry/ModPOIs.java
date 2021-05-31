@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableSet;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.block.TieredBeehiveBlock;
 import com.teamresourceful.resourcefulbees.block.multiblocks.apiary.ApiaryBlock;
-import com.teamresourceful.resourcefulbees.lib.ModConstants;
+import com.teamresourceful.resourcefulbees.lib.constants.ModConstants;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;

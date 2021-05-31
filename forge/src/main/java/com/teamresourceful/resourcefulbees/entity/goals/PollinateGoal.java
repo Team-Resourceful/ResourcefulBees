@@ -218,13 +218,14 @@ public class PollinateGoal extends Goal {
         return ((double) bee.getRandom().nextFloat() * 2.0D - 1.0D) * 0.33333334D;
     }
 
+    //TODO test this change!!
     public Optional<BlockPos> findFlower(double range) {
         BlockPos beePos = bee.blockPosition();
         if (bee.getCoreData().getEntityFlower().isPresent()){
-            List<Entity> entityList = bee.level.getEntities(bee, (new AABB(bee.blockPosition())).inflate(range),
-                    entity -> entity.getEncodeId() != null && entity.getEncodeId().equals(bee.getCoreData().getEntityFlower().get().toString()));
+            List<?> entityList = bee.level.getEntities(bee.getCoreData().getEntityFlower().get(), (new AABB(bee.blockPosition())).inflate(range),
+                    entity -> entity.getEncodeId() != null && entity.getEncodeId().equals(bee.getCoreData().getEntityFlowerRegistryID()));
             if (!entityList.isEmpty()) {
-                Entity firstEntity = entityList.get(0);
+                Entity firstEntity = (Entity) entityList.get(0);
                 bee.setFlowerEntityID(firstEntity.getId());
                 return Optional.of(firstEntity.blockPosition());
             }

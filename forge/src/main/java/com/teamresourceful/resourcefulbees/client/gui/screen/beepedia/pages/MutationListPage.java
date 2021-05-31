@@ -7,7 +7,7 @@ import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.muta
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.mutations.ItemMutationPage;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.mutations.MutationsPage;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
-import com.teamresourceful.resourcefulbees.lib.MutationTypes;
+import com.teamresourceful.resourcefulbees.lib.enums.MutationType;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -22,7 +22,7 @@ import java.util.List;
 
 public class MutationListPage extends BeeDataPage {
 
-    final List<Pair<MutationTypes, List<MutationsPage>>> mutations = new ArrayList<>();
+    final List<Pair<MutationType, List<MutationsPage>>> mutations = new ArrayList<>();
 
     private List<MutationsPage> activeList = null;
     int tab;
@@ -52,22 +52,22 @@ public class MutationListPage extends BeeDataPage {
         List<MutationsPage> itemMutations = new ArrayList<>();
         List<MutationsPage> entityMutations = new ArrayList<>();
         if (!beeData.getMutationData().getBlockMutations().isEmpty()) {
-            beeData.getMutationData().getBlockMutations().forEach((block, collection) ->  blockMutations.add(new BlockMutationPage(parent.getBee(), parent, block, collection, MutationTypes.BLOCK, beeData.getMutationData().getMutationCount(), beepedia)));
+            beeData.getMutationData().getBlockMutations().forEach((block, collection) ->  blockMutations.add(new BlockMutationPage(parent.getBee(), parent, block, collection, MutationType.BLOCK, beeData.getMutationData().getMutationCount(), beepedia)));
         }
         if (!beeData.getMutationData().getItemMutations().isEmpty()) {
-            beeData.getMutationData().getItemMutations().forEach((b, m) -> itemMutations.add(new ItemMutationPage(parent.getBee(), parent, b, m, MutationTypes.ITEM, beeData.getMutationData().getMutationCount(), beepedia)));
+            beeData.getMutationData().getItemMutations().forEach((b, m) -> itemMutations.add(new ItemMutationPage(parent.getBee(), parent, b, m, MutationType.ITEM, beeData.getMutationData().getMutationCount(), beepedia)));
         }
         if (!beeData.getMutationData().getEntityMutations().isEmpty()) {
-            beeData.getMutationData().getEntityMutations().forEach((b, m) -> entityMutations.add(new EntityMutationPage(parent.getBee(), parent, b, m, MutationTypes.ENTITY, beeData.getMutationData().getMutationCount(), beepedia)));
+            beeData.getMutationData().getEntityMutations().forEach((b, m) -> entityMutations.add(new EntityMutationPage(parent.getBee(), parent, b, m, MutationType.ENTITY, beeData.getMutationData().getMutationCount(), beepedia)));
         }
         if (!blockMutations.isEmpty()) {
-            mutations.add(Pair.of(MutationTypes.BLOCK, blockMutations));
+            mutations.add(Pair.of(MutationType.BLOCK, blockMutations));
         }
         if (!itemMutations.isEmpty()) {
-            mutations.add(Pair.of(MutationTypes.ITEM, itemMutations));
+            mutations.add(Pair.of(MutationType.ITEM, itemMutations));
         }
         if (!entityMutations.isEmpty()) {
-            mutations.add(Pair.of(MutationTypes.ENTITY, entityMutations));
+            mutations.add(Pair.of(MutationType.ENTITY, entityMutations));
         }
     }
 
@@ -136,7 +136,7 @@ public class MutationListPage extends BeeDataPage {
     @Override
     public void addSearch() {
         String search = "";
-        for (Pair<MutationTypes, List<MutationsPage>> mutation : mutations) {
+        for (Pair<MutationType, List<MutationsPage>> mutation : mutations) {
             search = String.format("%s %s", search, mutation.getLeft());
             for (MutationsPage mutationsPage : mutation.getRight()) {
                 mutationsPage.addSearch();

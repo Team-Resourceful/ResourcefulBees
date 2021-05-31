@@ -1,12 +1,11 @@
 package com.teamresourceful.resourcefulbees.utils;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.init.BeeSetup;
 import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.loading.moddiscovery.ModFileInfo;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileSystem;
 import java.nio.file.*;
 import java.util.function.BiConsumer;
 import java.util.stream.Stream;
@@ -19,6 +18,7 @@ public class FileUtils {
 
     public static final String JSON = ".json";
     public static final String ZIP = ".zip";
+    public static final Path MOD_ROOT = ModList.get().getModFileById(ResourcefulBees.MOD_ID).getFile().getFilePath();
 
     private FileUtils() {
         throw new IllegalStateException("Utility Class");
@@ -79,27 +79,18 @@ public class FileUtils {
     }
 
     public static void setupDefaultFiles(String dataPath, Path targetPath) {
-        ModFileInfo mod = ModList.get().getModFileById(ResourcefulBees.MOD_ID);
-        Path source = mod.getFile().getFilePath();
-
-        try {
-            if (Files.isRegularFile(source)) {
-                createFileSystem(source, dataPath, targetPath);
-            } else if (Files.isDirectory(source)) {
-                copyFiles(Paths.get(source.toString(), dataPath), targetPath);
+        if (Files.isRegularFile(MOD_ROOT)) {
+            try(FileSystem fileSystem = FileSystems.newFileSystem(FileUtils.MOD_ROOT, null)) {
+                Path path = fileSystem.getPath(dataPath);
+                if (Files.exists(path)) {
+                    copyFiles(path, targetPath);
+                }
+            } catch (IOException e) {
+                LOGGER.error("Could not load source {}!!", FileUtils.MOD_ROOT);
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            LOGGER.error("Could not load source {}!!", source);
-            e.printStackTrace();
-        }
-    }
-
-    private static void createFileSystem(Path source, String dataPath, Path targetPath) throws IOException {
-        try (FileSystem fileSystem = FileSystems.newFileSystem(source, null)) {
-            Path path = fileSystem.getPath(dataPath);
-            if (Files.exists(path)) {
-                copyFiles(path, targetPath);
-            }
+        } else if (Files.isDirectory(MOD_ROOT)) {
+            copyFiles(Paths.get(MOD_ROOT.toString(), dataPath), targetPath);
         }
     }
 

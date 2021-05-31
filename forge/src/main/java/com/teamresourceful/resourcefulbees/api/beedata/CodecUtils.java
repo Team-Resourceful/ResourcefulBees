@@ -1,11 +1,10 @@
 package com.teamresourceful.resourcefulbees.api.beedata;
 
-import com.google.common.collect.Sets;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.teamresourceful.resourcefulbees.lib.ModConstants;
+import com.teamresourceful.resourcefulbees.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.utils.BeeInfoUtils;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
@@ -21,6 +20,7 @@ import net.minecraftforge.fluids.FluidStack;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@SuppressWarnings("unused")
 public class CodecUtils {
 
     private CodecUtils() {
@@ -43,7 +43,7 @@ public class CodecUtils {
     public static final Codec<ItemStack> ITEM_STACK_CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Registry.ITEM.fieldOf("id").forGetter(ItemStack::getItem),
             Codec.INT.fieldOf("count").orElse(1).forGetter(ItemStack::getCount),
-            CompoundTag.CODEC.optionalFieldOf("tag").forGetter(o -> Optional.ofNullable(o.getTag()))
+            CompoundTag.CODEC.optionalFieldOf("nbt").forGetter(o -> Optional.ofNullable(o.getTag()))
     ).apply(instance, CodecUtils::createItemStack));
 
     //Codec for converting an ItemStack to an Ingredient
@@ -53,7 +53,7 @@ public class CodecUtils {
     public static final Codec<FluidStack> FLUID_STACK_CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Registry.FLUID.fieldOf("id").forGetter(FluidStack::getFluid),
             Codec.INT.fieldOf("amount").orElse(1000).forGetter(FluidStack::getAmount),
-            CompoundTag.CODEC.optionalFieldOf("tag").forGetter(o -> Optional.ofNullable(o.getTag()))
+            CompoundTag.CODEC.optionalFieldOf("nbt").forGetter(o -> Optional.ofNullable(o.getTag()))
     ).apply(instance, CodecUtils::createFluidStack));
 
 
@@ -104,12 +104,11 @@ public class CodecUtils {
     }
 
     public static <A> Codec<Set<A>> createLinkedSetCodec(Codec<A> codec) {
-        return codec.listOf().xmap(LinkedHashSet::new, ArrayList::new);
+        return codec.listOf().xmap(LinkedHashSet::new, LinkedList::new);
     }
 
-    public static <E> LinkedHashSet<E> newLinkedHashSet(E... elements) {
-        LinkedHashSet<E> set = Sets.newLinkedHashSet();
-        Collections.addAll(set, elements);
-        return set;
+    @SafeVarargs
+    public static <E> Set<E> newLinkedHashSet(E... elements) {
+        return new LinkedHashSet<>(Arrays.asList(elements));
     }
 }

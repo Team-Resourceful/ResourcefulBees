@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.registry;
 
 import com.google.common.collect.ImmutableSet;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.lib.ModConstants;
+import com.teamresourceful.resourcefulbees.lib.constants.ModConstants;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraftforge.fml.RegistryObject;

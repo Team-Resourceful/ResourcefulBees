@@ -5,8 +5,8 @@ import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.honeydata.HoneyBottleData;
 import com.teamresourceful.resourcefulbees.config.Config;
 import com.teamresourceful.resourcefulbees.init.BeeSetup;
-import com.teamresourceful.resourcefulbees.lib.HoneycombTypes;
-import com.teamresourceful.resourcefulbees.lib.ModConstants;
+import com.teamresourceful.resourcefulbees.lib.enums.HoneycombType;
+import com.teamresourceful.resourcefulbees.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.registry.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.registry.ModEntities;
@@ -84,7 +84,7 @@ public class DataGen {
             displayName = WordUtils.capitalizeFully(displayName);
 
 
-            if (customBeeData.getHoneycombData().getHoneycombType() == HoneycombTypes.DEFAULT) {
+            if (customBeeData.getHoneycombData().getHoneycombType() == HoneycombType.DEFAULT) {
                 //block
                 generateLangEntry(builder, "block.resourcefulbees.", name, "_honeycomb_block", displayName, "Honeycomb Block");
 
@@ -157,7 +157,7 @@ public class DataGen {
     private static void generateCombItemTags() {
         TAGS.put(new ResourceLocation(ResourcefulBees.MOD_ID, "tags/items/resourceful_honeycomb.json"),
                 BeeRegistry.getRegistry().getSetOfBees().stream()
-                        .filter(beeData -> beeData.getHoneycombData().getHoneycombType() == HoneycombTypes.DEFAULT)
+                        .filter(beeData -> beeData.getHoneycombData().getHoneycombType() == HoneycombType.DEFAULT)
                         .map(beeData -> genModResourceLocation(beeData, "_honeycomb"))
                         .collect(Collectors.toSet()));
     }
@@ -165,7 +165,7 @@ public class DataGen {
     private static void generateCombBlockItemTags() {
         TAGS.put(new ResourceLocation(ResourcefulBees.MOD_ID, "tags/items/resourceful_honeycomb_block.json"),
                 BeeRegistry.getRegistry().getSetOfBees().stream()
-                        .filter(beeData -> beeData.getHoneycombData().getHoneycombType() == HoneycombTypes.DEFAULT)
+                        .filter(beeData -> beeData.getHoneycombData().getHoneycombType() == HoneycombType.DEFAULT)
                         .map(beeData -> genModResourceLocation(beeData, "_honeycomb_block"))
                         .collect(Collectors.toSet()));
     }
@@ -173,7 +173,7 @@ public class DataGen {
     private static void generateCombBlockTags() {
         TAGS.put(new ResourceLocation(ResourcefulBees.MOD_ID, "tags/blocks/resourceful_honeycomb_block.json"),
                 BeeRegistry.getRegistry().getSetOfBees().stream()
-                        .filter(beeData -> beeData.getHoneycombData().getHoneycombType() == HoneycombTypes.DEFAULT)
+                        .filter(beeData -> beeData.getHoneycombData().getHoneycombType() == HoneycombType.DEFAULT)
                         .map(beeData -> genModResourceLocation(beeData, "_honeycomb_block"))
                         .collect(Collectors.toSet()));
     }

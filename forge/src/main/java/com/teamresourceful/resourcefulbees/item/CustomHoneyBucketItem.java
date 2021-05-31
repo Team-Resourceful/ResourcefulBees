@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.item;
 
 import com.teamresourceful.resourcefulbees.api.honeydata.HoneyBottleData;
-import com.teamresourceful.resourcefulbees.lib.BeeConstants;
+import com.teamresourceful.resourcefulbees.lib.constants.BeeConstants;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.ItemStack;

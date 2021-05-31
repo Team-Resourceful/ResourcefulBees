@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.block.multiblocks.apiary;
 
 import com.teamresourceful.resourcefulbees.config.Config;
-import com.teamresourceful.resourcefulbees.lib.ApiaryOutputs;
+import com.teamresourceful.resourcefulbees.lib.enums.ApiaryOutputType;
 import com.teamresourceful.resourcefulbees.tileentity.multiblocks.apiary.ApiaryTileEntity;
 import com.teamresourceful.resourcefulbees.utils.TooltipBuilder;
 import net.minecraft.ChatFormatting;
@@ -123,7 +123,7 @@ public class ApiaryBlock extends Block {
                 .applyStyle(ChatFormatting.GOLD)
                 .build());
       }
-      ApiaryOutputs outputTypeEnum;
+      ApiaryOutputType outputTypeEnum;
       int outputQuantity;
 
       switch (tier) {
@@ -144,7 +144,7 @@ public class ApiaryBlock extends Block {
           outputQuantity = Config.T1_APIARY_QUANTITY.get();
       }
 
-      String outputType = outputTypeEnum.equals(ApiaryOutputs.COMB) ? I18n.get("honeycomb.resourcefulbees") : I18n.get("honeycomb_block.resourcefulbees");
+      String outputType = outputTypeEnum.equals(ApiaryOutputType.COMB) ? I18n.get("honeycomb.resourcefulbees") : I18n.get("honeycomb_block.resourcefulbees");
 
       tooltip.addAll(new TooltipBuilder()
               .addTip(I18n.get("block.resourcefulbees.apiary.tooltip.output_type"))

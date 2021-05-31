@@ -10,7 +10,7 @@ import com.teamresourceful.resourcefulbees.client.render.tileentity.RenderEnderB
 import com.teamresourceful.resourcefulbees.client.render.tileentity.RenderHoneyCongealer;
 import com.teamresourceful.resourcefulbees.client.render.tileentity.RenderHoneyGenerator;
 import com.teamresourceful.resourcefulbees.client.render.tileentity.RenderHoneyTank;
-import com.teamresourceful.resourcefulbees.lib.ModConstants;
+import com.teamresourceful.resourcefulbees.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.registry.*;
 import com.teamresourceful.resourcefulbees.utils.PreviewHandler;
 import com.teamresourceful.resourcefulbees.utils.color.ColorHandler;

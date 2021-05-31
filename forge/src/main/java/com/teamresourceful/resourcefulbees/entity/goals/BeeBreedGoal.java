@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.entity.goals;
 
 import com.teamresourceful.resourcefulbees.api.ICustomBee;
-import com.teamresourceful.resourcefulbees.api.beedata.BeeFamily;
+import com.teamresourceful.resourcefulbees.api.beedata.breeding.BeeFamily;
 import com.teamresourceful.resourcefulbees.registry.BeeRegistry;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.particles.ParticleOptions;

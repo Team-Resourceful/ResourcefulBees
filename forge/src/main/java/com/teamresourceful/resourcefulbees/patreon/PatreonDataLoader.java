@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.patreon;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.teamresourceful.resourcefulbees.lib.ModConstants;
+import com.teamresourceful.resourcefulbees.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.utils.color.Color;
 import org.apache.commons.io.IOUtils;
 

@@ -1,9 +1,6 @@
 package com.teamresourceful.resourcefulbees.utils;
 
-import java.util.NavigableMap;
-import java.util.Objects;
-import java.util.Random;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.function.Consumer;
 
 public class RandomCollection<E> {
@@ -22,7 +19,7 @@ public class RandomCollection<E> {
     public RandomCollection<E> add(double weight, E result) {
         if (weight <= 0) return this;
         total += weight;
-        map.put(total, result);
+        map.put(Math.min(total, Double.MAX_VALUE), result);
         return this;
     }
 
@@ -48,5 +45,9 @@ public class RandomCollection<E> {
 
     public boolean isEmpty() {
         return map.isEmpty();
+    }
+
+    public int getSize() {
+        return map.size();
     }
 }

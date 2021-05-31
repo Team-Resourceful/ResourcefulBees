@@ -10,7 +10,7 @@ import com.teamresourceful.resourcefulbees.block.multiblocks.centrifuge.Centrifu
 import com.teamresourceful.resourcefulbees.block.multiblocks.centrifuge.EliteCentrifugeCasingBlock;
 import com.teamresourceful.resourcefulbees.block.multiblocks.centrifuge.EliteCentrifugeControllerBlock;
 import com.teamresourceful.resourcefulbees.entity.passive.KittenBee;
-import com.teamresourceful.resourcefulbees.lib.ModConstants;
+import com.teamresourceful.resourcefulbees.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.tileentity.HoneyTankTileEntity;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.level.block.Block;

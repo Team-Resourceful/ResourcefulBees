@@ -1,17 +1,19 @@
 package com.teamresourceful.resourcefulbees.api;
 
 import com.google.gson.JsonObject;
-import com.teamresourceful.resourcefulbees.api.beedata.BeeFamily;
+import com.teamresourceful.resourcefulbees.api.beedata.breeding.BeeFamily;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 
 import java.util.Map;
 import java.util.Set;
 
 /**
- * Interface for custom Bee registration.
- * <p>
- *     If you want to work with a already there implementation look at com.resourcefulbees.resourcefulbees.registry.BeeRegistry
- * </p>
+ * An interface for working with the Bee Registry. The bee Registry
+ * is a central point for getting any bee data pertinent to
+ * <i>Resourceful Bees</i>. The registry contains a cache of {@link JsonObject}'s
+ * and {@link CustomBeeData} objects for all bees registered to the mod.
+ * The registry also contains the spawn rules and breeding rules
+ * for bees created by <i>Resourceful Bees</i>.
  */
 @SuppressWarnings("unused")
 public interface IBeeRegistry {
@@ -61,16 +63,6 @@ public interface IBeeRegistry {
     double getAdjustedWeightForChild(BeeFamily beeFamily);
 
     /**
-     * Registers the supplied Bee Type and associated data to the mod.
-     * If the bee already exists in the registry the method will return false.
-     *
-     *  @param beeType Bee Type of the bee being registered.
-     *  @param customBeeData BeeData of the bee being registered
-     *  @return Returns false if bee already exists in the registry.
-     */
-    //boolean registerBee(String beeType, CustomBeeData customBeeData);
-
-    /**
      * Returns an unmodifiable copy of the Bee Registry.
      * This is useful for iterating over all bees without worry of changing data
      *
@@ -86,7 +78,7 @@ public interface IBeeRegistry {
      */
     Set<CustomBeeData> getSetOfBees();
 
-    void cacheRawBeeData(String name, JsonObject beeData);
+    //void cacheRawBeeData(String name, JsonObject beeData);
 
     Map<String, JsonObject> getRawBees();
 }

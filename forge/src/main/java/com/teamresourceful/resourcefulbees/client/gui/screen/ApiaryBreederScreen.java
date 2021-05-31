@@ -4,7 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.client.gui.widget.TabImageButton;
 import com.teamresourceful.resourcefulbees.container.ApiaryBreederContainer;
-import com.teamresourceful.resourcefulbees.lib.ApiaryTabs;
+import com.teamresourceful.resourcefulbees.lib.enums.ApiaryTab;
 import com.teamresourceful.resourcefulbees.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.network.packets.ApiaryTabMessage;
 import com.teamresourceful.resourcefulbees.registry.ModItems;
@@ -53,7 +53,7 @@ public class ApiaryBreederScreen extends AbstractContainerScreen<ApiaryBreederCo
         int t = i + this.imageWidth - 24;
 
         mainTabButton = this.addButton(new TabImageButton(t+1, j+17, 18, 18, 110, 0, 18, TABS_BG, new ItemStack(ModItems.BEE_JAR.get()), 1, 1,
-                onPress -> this.changeScreen(ApiaryTabs.MAIN), 128, 128) {
+                onPress -> this.changeScreen(ApiaryTab.MAIN), 128, 128) {
 
             @Override
             public void renderToolTip(@NotNull PoseStack matrix, int mouseX, int mouseY) {
@@ -63,7 +63,7 @@ public class ApiaryBreederScreen extends AbstractContainerScreen<ApiaryBreederCo
         });
 
         storageTabButton = this.addButton(new TabImageButton(t + 1, j + 37, 18, 18, 110, 0, 18, TABS_BG, new ItemStack(Items.HONEYCOMB), 2, 1,
-                onPress -> this.changeScreen(ApiaryTabs.STORAGE), 128, 128) {
+                onPress -> this.changeScreen(ApiaryTab.STORAGE), 128, 128) {
 
             @Override
             public void renderToolTip(@NotNull PoseStack matrix,int mouseX, int mouseY) {
@@ -73,7 +73,7 @@ public class ApiaryBreederScreen extends AbstractContainerScreen<ApiaryBreederCo
         });
 
         this.addButton(new TabImageButton(t + 1, j + 57, 18, 18, 110, 0, 18, TABS_BG, new ItemStack(ModItems.GOLD_FLOWER_ITEM.get()), 1, 1,
-                onPress -> this.changeScreen(ApiaryTabs.BREED), 128, 128) {
+                onPress -> this.changeScreen(ApiaryTab.BREED), 128, 128) {
 
             @Override
             public void renderToolTip(@NotNull PoseStack matrix, int mouseX, int mouseY) {
@@ -83,17 +83,17 @@ public class ApiaryBreederScreen extends AbstractContainerScreen<ApiaryBreederCo
         }).active = false;
     }
 
-    private void changeScreen(ApiaryTabs tab) {
+    private void changeScreen(ApiaryTab tab) {
         switch (tab) {
             case BREED:
                 break;
             case STORAGE:
                 if (storageTabButton.active && getApiaryBreederTileEntity() != null)
-                    NetPacketHandler.sendToServer(new ApiaryTabMessage(getApiaryBreederTileEntity().getBlockPos(), ApiaryTabs.STORAGE));
+                    NetPacketHandler.sendToServer(new ApiaryTabMessage(getApiaryBreederTileEntity().getBlockPos(), ApiaryTab.STORAGE));
                 break;
             case MAIN:
                 if (mainTabButton.active && getApiaryBreederTileEntity() != null)
-                    NetPacketHandler.sendToServer(new ApiaryTabMessage(getApiaryBreederTileEntity().getBlockPos(), ApiaryTabs.MAIN));
+                    NetPacketHandler.sendToServer(new ApiaryTabMessage(getApiaryBreederTileEntity().getBlockPos(), ApiaryTab.MAIN));
         }
     }
 

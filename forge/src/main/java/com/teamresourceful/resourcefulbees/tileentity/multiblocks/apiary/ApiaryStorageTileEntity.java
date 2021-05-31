@@ -2,14 +2,17 @@ package com.teamresourceful.resourcefulbees.tileentity.multiblocks.apiary;
 
 import com.teamresourceful.resourcefulbees.api.IBeeRegistry;
 import com.teamresourceful.resourcefulbees.api.ICustomBee;
-import com.teamresourceful.resourcefulbees.api.beedata.BreedData;
-import com.teamresourceful.resourcefulbees.api.beedata.BeeFamily;
-import com.teamresourceful.resourcefulbees.config.Config;
+import com.teamresourceful.resourcefulbees.api.beedata.HoneycombData;
+import com.teamresourceful.resourcefulbees.api.beedata.breeding.BeeFamily;
+import com.teamresourceful.resourcefulbees.api.beedata.breeding.BreedData;
 import com.teamresourceful.resourcefulbees.container.ApiaryStorageContainer;
 import com.teamresourceful.resourcefulbees.container.AutomationSensitiveItemStackHandler;
 import com.teamresourceful.resourcefulbees.item.BeeJar;
 import com.teamresourceful.resourcefulbees.item.UpgradeItem;
-import com.teamresourceful.resourcefulbees.lib.*;
+import com.teamresourceful.resourcefulbees.lib.constants.NBTConstants;
+import com.teamresourceful.resourcefulbees.lib.enums.ApiaryOutputType;
+import com.teamresourceful.resourcefulbees.lib.enums.ApiaryTab;
+import com.teamresourceful.resourcefulbees.lib.enums.HoneycombType;
 import com.teamresourceful.resourcefulbees.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.registry.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.registry.ModItems;
@@ -47,17 +50,14 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
-import java.util.Arrays;
-import java.util.List;
-
 import static net.minecraft.world.inventory.AbstractContainerMenu.consideredTheSameItem;
 
 public class ApiaryStorageTileEntity extends BlockEntity implements MenuProvider, TickableBlockEntity, IApiaryMultiblock {
 
     public static final int UPGRADE_SLOT = 0;
     private static final IBeeRegistry BEE_REGISTRY = BeeRegistry.getRegistry();
-    private static final List<Integer> OUTPUT_AMOUNTS = Arrays.asList(Config.T1_APIARY_QUANTITY.get(), Config.T2_APIARY_QUANTITY.get(), Config.T3_APIARY_QUANTITY.get(), Config.T4_APIARY_QUANTITY.get());
-    private static final List<ApiaryOutputs> OUTPUT_TYPES = Arrays.asList(Config.T1_APIARY_OUTPUT.get(), Config.T2_APIARY_OUTPUT.get(), Config.T3_APIARY_OUTPUT.get(), Config.T4_APIARY_OUTPUT.get());
+    private static final ItemStack VANILLA_HONEYCOMB = new ItemStack(Items.HONEYCOMB);
+    private static final ItemStack VANILLA_HONEYCOMB_BLOCK = new ItemStack(Items.HONEYCOMB_BLOCK);
 
     private BlockPos apiaryPos;
     private ApiaryTileEntity apiary;
@@ -197,33 +197,18 @@ public class ApiaryStorageTileEntity extends BlockEntity implements MenuProvider
     }
 
     public void deliverHoneycomb(Bee entity, int apiaryTier) {
-        String beeType;
-        if (entity instanceof ICustomBee && !((ICustomBee) entity).getHoneycombData().getHoneycombType().equals(HoneycombTypes.NONE)) {
-            beeType = ((ICustomBee) entity).getBeeType();
+        if (entity instanceof ICustomBee && !((ICustomBee) entity).getHoneycombData().getHoneycombType().equals(HoneycombType.NONE)) {
+            depositItemStack(((ICustomBee) entity).getHoneycombData().createApiaryOutput(apiaryTier - 5));
         } else if (!(entity instanceof ICustomBee)) {
-            beeType = BeeConstants.VANILLA_BEE_TYPE;
-        } else {
-            return;
+            depositItemStack(getVanillaOutput(apiaryTier - 5));
         }
-
-
-        ItemStack comb = beeType.equals(BeeConstants.VANILLA_BEE_TYPE) ? new ItemStack(Items.HONEYCOMB) : ((ICustomBee) entity).getHoneycombData().getHoneycomb().getDefaultInstance();
-        ItemStack combBlock = beeType.equals(BeeConstants.VANILLA_BEE_TYPE) ? new ItemStack(Items.HONEYCOMB_BLOCK) : ((ICustomBee) entity).getHoneycombData().getHoneycombBlock().getDefaultInstance();
-        List<Integer> outputAmounts = beeType.equals(BeeConstants.VANILLA_BEE_TYPE) ? null : ((ICustomBee) entity).getHoneycombData().getApiaryOutputAmounts();
-        List<ApiaryOutputs> outputTypes = !beeType.equals(BeeConstants.VANILLA_BEE_TYPE) ? ((ICustomBee) entity).getHoneycombData().getApiaryOutputTypes() : OUTPUT_TYPES;
-
-        depositItemStack(getApiaryOutput(apiaryTier, comb, combBlock, outputAmounts, outputTypes));
     }
 
-    private ItemStack getApiaryOutput(int apiaryTier, ItemStack comb, ItemStack combBlock, List<Integer> outputAmounts, List<ApiaryOutputs> outputTypes) {
-        ItemStack itemstack;
-        int index = apiaryTier - 5;
-        itemstack = (outputTypes.get(index) == ApiaryOutputs.BLOCK) ? combBlock : comb;
-        itemstack.setCount(outputAmounts != null && outputAmounts.get(index) != -1 ? outputAmounts.get(index) : OUTPUT_AMOUNTS.get(index));
+    private static ItemStack getVanillaOutput(int apiaryTier) {
+        ItemStack itemstack = (HoneycombData.DEFAULT_APIARY_OUTPUTS.get(apiaryTier) == ApiaryOutputType.BLOCK) ? VANILLA_HONEYCOMB_BLOCK.copy() : VANILLA_HONEYCOMB.copy();
+        itemstack.setCount(HoneycombData.DEFAULT_APIARY_AMOUNTS.get(apiaryTier));
         return itemstack;
     }
-
-
 
     public boolean breedComplete(String p1, String p2) {
         if (inventoryHasSpace()) {
@@ -237,7 +222,7 @@ public class ApiaryStorageTileEntity extends BlockEntity implements MenuProvider
             Item p1Returnable = p1BreedData.getFeedReturnItem().orElse(null);
             Item p2Returnable = p2BreedData.getFeedReturnItem().orElse(null);
 
-            if (level != null && entityType != null) {
+            if (level != null) {
                 Entity entity = entityType.create(level);
                 if (entity != null) {
                     ICustomBee beeEntity = (ICustomBee) entity;
@@ -357,12 +342,12 @@ public class ApiaryStorageTileEntity extends BlockEntity implements MenuProvider
     }
 
     @Override
-    public void switchTab(ServerPlayer player, ApiaryTabs tab) {
+    public void switchTab(ServerPlayer player, ApiaryTab tab) {
         if (level != null && apiaryPos != null) {
-            if (tab == ApiaryTabs.MAIN) {
+            if (tab == ApiaryTab.MAIN) {
                 BlockEntity tile = level.getBlockEntity(apiaryPos);
                 NetworkHooks.openGui(player, (MenuProvider) tile, apiaryPos);
-            } else if (tab == ApiaryTabs.BREED) {
+            } else if (tab == ApiaryTab.BREED) {
                 BlockEntity tile = level.getBlockEntity(apiary.getBreederPos());
                 NetworkHooks.openGui(player, (MenuProvider) tile, apiary.getBreederPos());
             }

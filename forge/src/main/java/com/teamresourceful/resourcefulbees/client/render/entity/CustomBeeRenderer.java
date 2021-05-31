@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.client.render.entity;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.client.render.entity.layers.BeeLayer;
 import com.teamresourceful.resourcefulbees.client.render.entity.models.CustomBeeModel;
-import com.teamresourceful.resourcefulbees.api.beedata.RenderData;
+import com.teamresourceful.resourcefulbees.api.beedata.render.RenderData;
 import com.teamresourceful.resourcefulbees.entity.passive.CustomBeeEntity;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.MobRenderer;

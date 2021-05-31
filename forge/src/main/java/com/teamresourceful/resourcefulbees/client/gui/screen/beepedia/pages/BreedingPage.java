@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.api.beedata.BeeFamily;
+import com.teamresourceful.resourcefulbees.api.beedata.breeding.BeeFamily;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.beedata.mutation.EntityMutation;
 import com.teamresourceful.resourcefulbees.api.beedata.mutation.ItemMutation;
@@ -10,8 +10,9 @@ import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaSc
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.mutations.EntityMutationPage;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.mutations.ItemMutationPage;
 import com.teamresourceful.resourcefulbees.entity.passive.CustomBeeEntity;
-import com.teamresourceful.resourcefulbees.lib.MutationTypes;
+import com.teamresourceful.resourcefulbees.lib.enums.MutationType;
 import com.teamresourceful.resourcefulbees.registry.BeeRegistry;
+import com.teamresourceful.resourcefulbees.utils.BeepediaUtils;
 import com.teamresourceful.resourcefulbees.utils.CycledArray;
 import com.teamresourceful.resourcefulbees.utils.RenderUtils;
 import net.minecraft.ChatFormatting;
@@ -103,11 +104,11 @@ public class BreedingPage extends BeeDataPage {
     }
 
     private void registerData(List<EntityMutation> mutations, List<ItemMutation> itemBreedMutation) {
-        BeeRegistry.getRegistry().getChildren(beeData).forEach(beeFamily -> children.add(new BreedingObject(beeFamily)));
-        beeData.getBreedData().getParents().forEach(beeFamily ->  parents.add(new BreedingObject(beeFamily)));
+        BeepediaUtils.getChildren(beeData).forEach(beeFamily -> children.add(new BreedingObject(beeFamily)));
+        beeData.getBreedData().getFamilies().forEach(beeFamily ->  parents.add(new BreedingObject(beeFamily)));
         children.removeIf(breedingObject -> breedingObject.isSelf);
-        mutations.forEach(b -> entityMutationBreeding.add(new EntityMutationPage(b.getParent(), parent, b.getInput(), b.getOutputs(), MutationTypes.ENTITY, b.getMutationCount(), beepedia)));
-        itemBreedMutation.forEach(b -> itemMutationBreeding.add(new ItemMutationPage(b.getParent(), parent, b.getInputs(), b.getOutputs(), MutationTypes.ITEM, b.getMutationCount(), beepedia)));
+        mutations.forEach(b -> entityMutationBreeding.add(new EntityMutationPage(b.getParent(), parent, b.getInput(), b.getOutputs(), MutationType.ENTITY, b.getMutationCount(), beepedia)));
+        itemBreedMutation.forEach(b -> itemMutationBreeding.add(new ItemMutationPage(b.getParent(), parent, b.getInputs(), b.getOutputs(), MutationType.ITEM, b.getMutationCount(), beepedia)));
     }
 
     private void nextTab() {

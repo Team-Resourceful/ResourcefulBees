@@ -2,11 +2,11 @@ package com.teamresourceful.resourcefulbees.registry;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.ITraitRegistry;
-import com.teamresourceful.resourcefulbees.api.beedata.BeeTrait;
-import com.teamresourceful.resourcefulbees.api.beedata.DamageType;
-import com.teamresourceful.resourcefulbees.api.beedata.PotionDamageEffect;
-import com.teamresourceful.resourcefulbees.lib.BeeConstants;
-import com.teamresourceful.resourcefulbees.lib.TraitConstants;
+import com.teamresourceful.resourcefulbees.api.beedata.traits.BeeTrait;
+import com.teamresourceful.resourcefulbees.api.beedata.traits.DamageType;
+import com.teamresourceful.resourcefulbees.api.beedata.traits.PotionDamageEffect;
+import com.teamresourceful.resourcefulbees.lib.constants.BeeConstants;
+import com.teamresourceful.resourcefulbees.lib.constants.TraitConstants;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
@@ -52,7 +52,7 @@ public class TraitRegistry implements ITraitRegistry {
      * @return Returns a BeeTrait object for the given bee type.
      */
     public BeeTrait getTrait(String name) {
-        return TRAIT_REGISTRY.get(name);
+        return TRAIT_REGISTRY.getOrDefault(name, BeeTrait.DEFAULT);
     }
 
     /**
@@ -71,21 +71,21 @@ public class TraitRegistry implements ITraitRegistry {
 
     public static void registerDefaultTraits() {
         ResourcefulBees.LOGGER.info("Registering Default Bee Traits...");
-        getRegistry().register(TraitConstants.WITHER, new BeeTrait.Builder(TraitConstants.WITHER).addPotionImmunity(MobEffects.WITHER).addDamagePotionEffect(PotionDamageEffect.create(MobEffects.WITHER, 1)).setBeepediaItem(Items.WITHER_ROSE).build());
-        getRegistry().register(TraitConstants.BLAZE, new BeeTrait.Builder(TraitConstants.BLAZE)
+        getRegistry().register(TraitConstants.WITHER, new BeeTrait.Mutable().setName(TraitConstants.WITHER).addPotionImmunity(MobEffects.WITHER).addDamagePotionEffect(PotionDamageEffect.create(MobEffects.WITHER, 1)).setDisplayItem(Items.WITHER_ROSE).toImmutable());
+        getRegistry().register(TraitConstants.BLAZE, new BeeTrait.Mutable().setName(TraitConstants.BLAZE)
                 .addDamageImmunities(Arrays.asList(DamageSource.LAVA.msgId, DamageSource.IN_FIRE.msgId, DamageSource.ON_FIRE.msgId, DamageSource.HOT_FLOOR.msgId))
-                .addDamageType(DamageType.create(TraitConstants.SET_ON_FIRE, 1)).addSpecialAbility(TraitConstants.FLAMMABLE).addParticleEffect(ParticleTypes.FLAME).setBeepediaItem(Items.BLAZE_ROD).build());
-        getRegistry().register(TraitConstants.CAN_SWIM, new BeeTrait.Builder(TraitConstants.CAN_SWIM).addDamageImmunity(DamageSource.DROWN.msgId).setBeepediaItem(Items.WATER_BUCKET).build());
-        getRegistry().register(TraitConstants.CREEPER, new BeeTrait.Builder(TraitConstants.CREEPER).addDamageType(DamageType.create(TraitConstants.EXPLOSIVE, 4)).setBeepediaItem(Items.TNT).build());
-        getRegistry().register(TraitConstants.ZOMBIE, new BeeTrait.Builder(TraitConstants.ZOMBIE).addDamagePotionEffect(PotionDamageEffect.create(MobEffects.HUNGER, 20)).setBeepediaItem(Items.ROTTEN_FLESH).build());
-        getRegistry().register(TraitConstants.PIGMAN, new BeeTrait.Builder(TraitConstants.PIGMAN).addDamagePotionEffect(PotionDamageEffect.create(MobEffects.DIG_SLOWDOWN, 0)).setBeepediaItem(Items.GOLD_NUGGET).build());
-        getRegistry().register(TraitConstants.ENDER, new BeeTrait.Builder(TraitConstants.ENDER).addSpecialAbility(TraitConstants.TELEPORT).addParticleEffect(ParticleTypes.PORTAL).setBeepediaItem(Items.ENDER_PEARL).build());
-        getRegistry().register(TraitConstants.NETHER, new BeeTrait.Builder(TraitConstants.NETHER).addDamageImmunities(Arrays.asList(DamageSource.LAVA.msgId, DamageSource.IN_FIRE.msgId, DamageSource.ON_FIRE.msgId, DamageSource.HOT_FLOOR.msgId)).setBeepediaItem(Items.NETHERRACK).build());
-        getRegistry().register(BeeConstants.OREO_BEE, new BeeTrait.Builder(BeeConstants.OREO_BEE).addDamagePotionEffect(PotionDamageEffect.create(MobEffects.HEAL, 2)).setBeepediaItem(ModItems.OREO_COOKIE.get()).build());
-        getRegistry().register(BeeConstants.KITTEN_BEE, new BeeTrait.Builder(BeeConstants.KITTEN_BEE).addDamagePotionEffect(PotionDamageEffect.create(MobEffects.MOVEMENT_SPEED, 2)).setBeepediaItem(Items.RED_BED).build());
-        getRegistry().register(TraitConstants.SLIMY, new BeeTrait.Builder(TraitConstants.SLIMY).addSpecialAbility(TraitConstants.SLIMY).setBeepediaItem(Items.SLIME_BALL).build());
-        getRegistry().register(TraitConstants.DESERT, new BeeTrait.Builder(TraitConstants.DESERT).addDamageImmunity(DamageSource.CACTUS.msgId).setBeepediaItem(Items.CACTUS).build());
-        getRegistry().register(TraitConstants.ANGRY, new BeeTrait.Builder(TraitConstants.ANGRY).addSpecialAbility(TraitConstants.ANGRY).build());
-        getRegistry().register(TraitConstants.SPIDER, new BeeTrait.Builder(TraitConstants.SPIDER).addSpecialAbility(TraitConstants.SPIDER).setBeepediaItem(Items.COBWEB).build());
+                .addDamageType(DamageType.create(TraitConstants.SET_ON_FIRE, 1)).addSpecialAbility(TraitConstants.FLAMMABLE).addParticleEffect(ParticleTypes.FLAME).setDisplayItem(Items.BLAZE_ROD).toImmutable());
+        getRegistry().register(TraitConstants.CAN_SWIM, new BeeTrait.Mutable().setName(TraitConstants.CAN_SWIM).addDamageImmunity(DamageSource.DROWN.msgId).setDisplayItem(Items.WATER_BUCKET).toImmutable());
+        getRegistry().register(TraitConstants.CREEPER, new BeeTrait.Mutable().setName(TraitConstants.CREEPER).addDamageType(DamageType.create(TraitConstants.EXPLOSIVE, 4)).setDisplayItem(Items.TNT).toImmutable());
+        getRegistry().register(TraitConstants.ZOMBIE, new BeeTrait.Mutable().setName(TraitConstants.ZOMBIE).addDamagePotionEffect(PotionDamageEffect.create(MobEffects.HUNGER, 20)).setDisplayItem(Items.ROTTEN_FLESH).toImmutable());
+        getRegistry().register(TraitConstants.PIGMAN, new BeeTrait.Mutable().setName(TraitConstants.PIGMAN).addDamagePotionEffect(PotionDamageEffect.create(MobEffects.DIG_SLOWDOWN, 0)).setDisplayItem(Items.GOLD_NUGGET).toImmutable());
+        getRegistry().register(TraitConstants.ENDER, new BeeTrait.Mutable().setName(TraitConstants.ENDER).addSpecialAbility(TraitConstants.TELEPORT).addParticleEffect(ParticleTypes.PORTAL).setDisplayItem(Items.ENDER_PEARL).toImmutable());
+        getRegistry().register(TraitConstants.NETHER, new BeeTrait.Mutable().setName(TraitConstants.NETHER).addDamageImmunities(Arrays.asList(DamageSource.LAVA.msgId, DamageSource.IN_FIRE.msgId, DamageSource.ON_FIRE.msgId, DamageSource.HOT_FLOOR.msgId)).setDisplayItem(Items.NETHERRACK).toImmutable());
+        getRegistry().register(BeeConstants.OREO_BEE, new BeeTrait.Mutable().setName(BeeConstants.OREO_BEE).addDamagePotionEffect(PotionDamageEffect.create(MobEffects.HEAL, 2)).setDisplayItem(ModItems.OREO_COOKIE.get()).toImmutable());
+        getRegistry().register(BeeConstants.KITTEN_BEE, new BeeTrait.Mutable().setName(BeeConstants.KITTEN_BEE).addDamagePotionEffect(PotionDamageEffect.create(MobEffects.MOVEMENT_SPEED, 2)).setDisplayItem(Items.RED_BED).toImmutable());
+        getRegistry().register(TraitConstants.SLIMY, new BeeTrait.Mutable().setName(TraitConstants.SLIMY).addSpecialAbility(TraitConstants.SLIMY).setDisplayItem(Items.SLIME_BALL).toImmutable());
+        getRegistry().register(TraitConstants.DESERT, new BeeTrait.Mutable().setName(TraitConstants.DESERT).addDamageImmunity(DamageSource.CACTUS.msgId).setDisplayItem(Items.CACTUS).toImmutable());
+        getRegistry().register(TraitConstants.ANGRY, new BeeTrait.Mutable().setName(TraitConstants.ANGRY).addSpecialAbility(TraitConstants.ANGRY).toImmutable());
+        getRegistry().register(TraitConstants.SPIDER, new BeeTrait.Mutable().setName(TraitConstants.SPIDER).addSpecialAbility(TraitConstants.SPIDER).setDisplayItem(Items.COBWEB).toImmutable());
     }
 }

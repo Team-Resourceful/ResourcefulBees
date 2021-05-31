@@ -5,7 +5,7 @@ import com.teamresourceful.resourcefulbees.api.beedata.outputs.BlockOutput;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.BeePage;
 import com.teamresourceful.resourcefulbees.entity.passive.CustomBeeEntity;
-import com.teamresourceful.resourcefulbees.lib.MutationTypes;
+import com.teamresourceful.resourcefulbees.lib.enums.MutationType;
 import com.teamresourceful.resourcefulbees.utils.BeeInfoUtils;
 import com.teamresourceful.resourcefulbees.utils.RandomCollection;
 import net.minecraft.ChatFormatting;
@@ -26,7 +26,7 @@ public class BlockMutationPage extends MutationsPage {
     double outputChance;
     final List<Pair<Double, BlockOutput>> outputs = new ArrayList<>();
 
-    public BlockMutationPage(Entity bee, BeePage parent, Block block, RandomCollection<BlockOutput> outputs, MutationTypes type, int mutationCount, BeepediaScreen beepedia) {
+    public BlockMutationPage(Entity bee, BeePage parent, Block block, RandomCollection<BlockOutput> outputs, MutationType type, int mutationCount, BeepediaScreen beepedia) {
         super(bee, parent, type, mutationCount, beepedia);
         inputs = Collections.singleton(block);
         initOutputs(outputs);

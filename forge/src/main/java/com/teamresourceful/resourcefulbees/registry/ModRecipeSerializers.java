@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.registry;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.lib.ModConstants;
+import com.teamresourceful.resourcefulbees.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.recipe.ApiaryUpgradeRecipe;
 import com.teamresourceful.resourcefulbees.recipe.CentrifugeRecipe;
 import com.teamresourceful.resourcefulbees.recipe.HoneyTankRecipe;

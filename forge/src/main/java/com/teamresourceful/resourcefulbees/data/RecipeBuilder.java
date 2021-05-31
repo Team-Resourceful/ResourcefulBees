@@ -2,15 +2,14 @@ package com.teamresourceful.resourcefulbees.data;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.IBeeRegistry;
-import com.teamresourceful.resourcefulbees.api.beedata.CentrifugeData;
 import com.teamresourceful.resourcefulbees.api.beedata.HoneycombData;
+import com.teamresourceful.resourcefulbees.api.beedata.centrifuge.CentrifugeData;
 import com.teamresourceful.resourcefulbees.api.honeydata.HoneyBottleData;
 import com.teamresourceful.resourcefulbees.config.Config;
-import com.teamresourceful.resourcefulbees.lib.HoneycombTypes;
+import com.teamresourceful.resourcefulbees.lib.enums.HoneycombType;
 import com.teamresourceful.resourcefulbees.recipe.CentrifugeRecipe;
 import com.teamresourceful.resourcefulbees.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.registry.HoneyRegistry;
-import com.teamresourceful.resourcefulbees.utils.BeeInfoUtils;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -44,13 +43,13 @@ public class RecipeBuilder implements ResourceManagerReloadListener {
             CentrifugeData centrifugeData = beeData.getCentrifugeData();
             HoneycombData honeycombData = beeData.getHoneycombData();
 
-            if (centrifugeData.hasCentrifugeOutput() && honeycombData.getHoneycombType().equals(HoneycombTypes.DEFAULT)) {
+            if (centrifugeData.hasCentrifugeOutput() && honeycombData.getHoneycombType().equals(HoneycombType.DEFAULT)) {
                 Recipe<?> honeycombCentrifuge = this.centrifugeRecipe(s, centrifugeData, honeycombData, 1);
                 Recipe<?> honeycombBlockCentrifuge = this.centrifugeRecipe(s, centrifugeData, honeycombData, 9);
                 getRecipeManager().recipes.computeIfAbsent(honeycombCentrifuge.getType(), t -> new HashMap<>()).put(honeycombCentrifuge.getId(), honeycombCentrifuge);
                 getRecipeManager().recipes.computeIfAbsent(honeycombBlockCentrifuge.getType(), t -> new HashMap<>()).put(honeycombBlockCentrifuge.getId(), honeycombBlockCentrifuge);
             }
-            if (Config.HONEYCOMB_BLOCK_RECIPES.get() && honeycombData.getHoneycombType().equals(HoneycombTypes.DEFAULT)) {
+            if (Config.HONEYCOMB_BLOCK_RECIPES.get() && honeycombData.getHoneycombType().equals(HoneycombType.DEFAULT)) {
                 Recipe<?> honeycombBlock = this.makeHoneycombRecipe(s, honeycombData);
                 Recipe<?> honeycomb = this.combBlockToCombRecipe(s, honeycombData);
                 getRecipeManager().recipes.computeIfAbsent(honeycombBlock.getType(), t -> new HashMap<>()).put(honeycombBlock.getId(), honeycombBlock);
@@ -197,9 +196,7 @@ public class RecipeBuilder implements ResourceManagerReloadListener {
         ResourceLocation recipeLoc = isBlockRecipe ? new ResourceLocation(ResourcefulBees.MOD_ID, beeType + "_honeycomb_block_centrifuge")
                 : new ResourceLocation(ResourcefulBees.MOD_ID, beeType + "_honeycomb_centrifuge");
 
-
-        Ingredient ingredient = Ingredient.of(new ItemStack(BeeInfoUtils.getOurItem(beeType, isBlockRecipe ? "_honeycomb_block": "_honeycomb"), centrifugeData.getInputCount()));
-
+        Ingredient ingredient = Ingredient.of(new ItemStack(isBlockRecipe ? honeycombData.getHoneycombBlock() : honeycombData.getHoneycomb(), centrifugeData.getInputCount()));
 
         return new CentrifugeRecipe(
                 recipeLoc, ingredient,

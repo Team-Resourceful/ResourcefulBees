@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.compat.jei;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.IBeeRegistry;
-import com.teamresourceful.resourcefulbees.api.beedata.BeeFamily;
+import com.teamresourceful.resourcefulbees.api.beedata.breeding.BeeFamily;
 import com.teamresourceful.resourcefulbees.compat.jei.ingredients.EntityIngredient;
 import com.teamresourceful.resourcefulbees.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.registry.ModBlocks;
@@ -43,7 +43,7 @@ public class BeeBreedingCategory extends BaseCategory<BeeFamily> {
 
     public static List<BeeFamily> getBreedingRecipes() {
         List<BeeFamily> recipes = new ArrayList<>();
-        BeeRegistry.getRegistry().familyTree.values().forEach(children -> children.forEach(recipes::add));
+        BeeRegistry.getRegistry().getFamilyTree().values().forEach(children -> children.forEach(recipes::add));
         return recipes;
     }
 

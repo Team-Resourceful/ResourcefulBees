@@ -6,8 +6,8 @@ import com.teamresourceful.resourcefulbees.block.multiblocks.apiary.ApiaryBlock;
 import com.teamresourceful.resourcefulbees.config.Config;
 import com.teamresourceful.resourcefulbees.container.AutomationSensitiveItemStackHandler;
 import com.teamresourceful.resourcefulbees.item.BeeJar;
-import com.teamresourceful.resourcefulbees.lib.BeeConstants;
-import com.teamresourceful.resourcefulbees.lib.NBTConstants;
+import com.teamresourceful.resourcefulbees.lib.constants.BeeConstants;
+import com.teamresourceful.resourcefulbees.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.registry.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.registry.ModItems;
 import com.teamresourceful.resourcefulbees.utils.BeeInfoUtils;
@@ -42,7 +42,7 @@ import javax.annotation.Nullable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static com.teamresourceful.resourcefulbees.lib.BeeConstants.MIN_HIVE_TIME;
+import static com.teamresourceful.resourcefulbees.lib.constants.BeeConstants.MIN_HIVE_TIME;
 
 public class ApiaryTileEntity extends ApiaryController implements MenuProvider, IApiaryMultiblock {
     public static final int IMPORT = 0;

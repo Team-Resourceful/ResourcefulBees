@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.client.gui.screen;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.container.HoneyGeneratorContainer;
-import com.teamresourceful.resourcefulbees.lib.ModConstants;
+import com.teamresourceful.resourcefulbees.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.tileentity.HoneyGeneratorTileEntity;
 import com.teamresourceful.resourcefulbees.utils.MathUtils;
 import net.minecraft.client.Minecraft;

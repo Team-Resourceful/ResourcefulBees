@@ -5,8 +5,8 @@ import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.compat.jei.ingredients.EntityIngredient;
 import com.teamresourceful.resourcefulbees.config.Config;
-import com.teamresourceful.resourcefulbees.lib.ApiaryOutputs;
-import com.teamresourceful.resourcefulbees.lib.HoneycombTypes;
+import com.teamresourceful.resourcefulbees.lib.enums.ApiaryOutputType;
+import com.teamresourceful.resourcefulbees.lib.enums.HoneycombType;
 import com.teamresourceful.resourcefulbees.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.registry.ModItems;
 import mezz.jei.api.constants.VanillaTypes;
@@ -86,13 +86,13 @@ public class HiveCategory extends BaseCategory<HiveCategory.Recipe> {
 
         List<Recipe> recipes = new ArrayList<>();
         BeeRegistry.getRegistry().getBees().forEach(((s, customBeeData) -> {
-            List<ApiaryOutputs> outputs = customBeeData.getHoneycombData().getApiaryOutputTypes();
+            List<ApiaryOutputType> outputs = customBeeData.getHoneycombData().getApiaryOutputTypes();
             List<Integer> customAmounts = customBeeData.getHoneycombData().getApiaryOutputAmounts();
 
-            if (customBeeData.getHoneycombData().getHoneycombType() != HoneycombTypes.NONE) {
+            if (customBeeData.getHoneycombData().getHoneycombType() != HoneycombType.NONE) {
                 recipes.add(new Recipe(customBeeData.getHoneycombData().getHoneycomb().getDefaultInstance(), NESTS, customBeeData, false));
                 for (int i = 0; i < 4; i++){
-                    Item outputItem = outputs.get(i).equals(ApiaryOutputs.COMB)
+                    Item outputItem = outputs.get(i).equals(ApiaryOutputType.COMB)
                             ? customBeeData.getHoneycombData().getHoneycomb()
                             : customBeeData.getHoneycombData().getHoneycombBlock();
 

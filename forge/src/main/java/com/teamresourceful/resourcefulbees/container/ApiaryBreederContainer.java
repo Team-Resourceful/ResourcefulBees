@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.container;
 
 import com.teamresourceful.resourcefulbees.item.UpgradeItem;
-import com.teamresourceful.resourcefulbees.lib.NBTConstants;
+import com.teamresourceful.resourcefulbees.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.registry.ModContainers;
 import com.teamresourceful.resourcefulbees.tileentity.multiblocks.apiary.ApiaryBreederTileEntity;
 import com.teamresourceful.resourcefulbees.utils.MathUtils;
