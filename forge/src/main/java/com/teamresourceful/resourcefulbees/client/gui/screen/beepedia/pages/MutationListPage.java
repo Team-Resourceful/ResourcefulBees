@@ -124,7 +124,7 @@ public class MutationListPage extends BeeDataPage {
         if (activePage != null) {
             int padding = font.width(title) / 2;
             font.draw(matrix, title.withStyle(ChatFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, -1);
-            activePage.draw(matrix, xPos, yPos + 22);
+            activePage.draw(matrix, xPos, yPos + 31);
             if (activeList.size() > 1) {
                 TextComponent pageInfo = new TextComponent(String.format("%d / %d", this.page + 1, activeList.size()));
                 padding = font.width(pageInfo) / 2;

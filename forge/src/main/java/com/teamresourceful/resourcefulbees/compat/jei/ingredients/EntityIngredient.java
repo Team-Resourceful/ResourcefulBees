@@ -9,12 +9,14 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class EntityIngredient {
 
     private final CustomBeeData beeData;
     private final float rotation;
+    private static final TranslatableComponent CREATOR_PREFIX = new TranslatableComponent("tooltip.resourcefulbees.bee.creator");
 
     public EntityIngredient(CustomBeeData beeData, float rotation) {
         this.beeData = beeData;
@@ -36,6 +38,16 @@ public class EntityIngredient {
     public List<Component> getTooltip() {
         List<Component> tooltip = new ArrayList<>();
 
+        if (beeData.getCoreData().getLore().isPresent()) {
+            String lore = beeData.getCoreData().getLore().get();
+            String[] loreTooltip = lore.split("\\r?\\n");
+            for (String s: loreTooltip) {
+                tooltip.add(new TextComponent(s).withStyle(beeData.getCoreData().getLoreColorStyle()));
+            }
+        }
+        if (beeData.getCoreData().getCreator().isPresent()) {
+            tooltip.add(CREATOR_PREFIX.copy().append(beeData.getCoreData().getCreator().get()).withStyle(ChatFormatting.GRAY));
+        }
         String desc = I18n.get("tooltip.resourcefulbees.jei.click_bee_info");
         String[] descTooltip = desc.split("\\r?\\n");
         for (String s : descTooltip) {

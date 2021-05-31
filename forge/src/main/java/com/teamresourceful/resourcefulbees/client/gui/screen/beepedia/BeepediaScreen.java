@@ -3,10 +3,8 @@ package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
-import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.BeePage;
-import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.HomePage;
-import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.HoneyPage;
-import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.TraitPage;
+import com.teamresourceful.resourcefulbees.api.beedata.HoneycombData;
+import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.*;
 import com.teamresourceful.resourcefulbees.client.gui.widget.*;
 import com.teamresourceful.resourcefulbees.config.Config;
 import com.teamresourceful.resourcefulbees.entity.passive.KittenBee;
@@ -48,6 +46,7 @@ public class BeepediaScreen extends Screen {
     private static int beesScroll = 0;
     private static int honeyScroll = 0;
     private static int traitScroll = 0;
+    private static int combScroll = 0;
     private static boolean searchVisible = false;
     private static String search = null;
     private static String lastSearch = null;
@@ -68,10 +67,12 @@ public class BeepediaScreen extends Screen {
     public final Map<String, BeePage> bees = new TreeMap<>();
     protected final Map<String, TraitPage> traits = new TreeMap<>();
     protected final Map<String, HoneyPage> honey = new TreeMap<>();
+    protected final Map<String, CombPage> combs = new TreeMap<>();
 
     ButtonList beesList;
     ButtonList traitsList;
     ButtonList honeyList;
+    ButtonList combsList;
 
     BeepediaPage home;
     BeepediaPage activePage;
@@ -97,8 +98,8 @@ public class BeepediaScreen extends Screen {
         }
         this.itemBees = bees;
         this.complete = complete;
-        this.xSize = 286;
-        this.ySize = 182;
+        this.xSize = 328;
+        this.ySize = 200;
     }
 
     public static boolean listChanged() {
@@ -113,7 +114,7 @@ public class BeepediaScreen extends Screen {
         this.guiTop = (this.height - this.ySize) / 2;
         int x = this.guiLeft;
         int y = this.guiTop;
-        int subX = x + 112;
+        int subX = x + 133;
         registerData(subX, y);
         registerButtons(subX, x, y);
         registerSearch(x, y);
@@ -133,6 +134,7 @@ public class BeepediaScreen extends Screen {
         honey.put("honey", new HoneyPage(this, null, "honey", subX, y, true));
         honey.put("catnip", new HoneyPage(this, KittenBee.getHoneyBottleData(), "catnip", subX, y, false));
         HoneyRegistry.getRegistry().getHoneyBottles().forEach((s, h) -> honey.put(s, new HoneyPage(this, h, s, subX, y, false)));
+        combs.put("catnip", new CombPage(this, HoneycombData.DEFAULT, subX, y, "catnip"));
     }
 
     /**
@@ -158,12 +160,14 @@ public class BeepediaScreen extends Screen {
             updateSearch(beesList, true);
             updateSearch(traitsList, true);
             updateSearch(honeyList, true);
+            updateSearch(combsList, true);
         }));
         backButton.active = false;
         addButton(backButton);
         bees.forEach((s, b) -> addButton(b.listButton));
         traits.forEach((s, b) -> addButton(b.listButton));
         honey.forEach((s, b) -> addButton(b.listButton));
+        combs.forEach((s, b) -> addButton(b.listButton));
     }
 
     /**
@@ -180,6 +184,7 @@ public class BeepediaScreen extends Screen {
         bees.forEach((s, b) -> b.addSearch());
         traits.forEach((s, b) -> b.addSearch());
         honey.forEach((s, b) -> b.addSearch());
+        combs.forEach((s, b) -> b.addSearch());
     }
 
     /**
@@ -192,19 +197,24 @@ public class BeepediaScreen extends Screen {
         ItemStack beeItem = new ItemStack(Items.BEEHIVE);
         ItemStack traitItem = new ItemStack(Items.BLAZE_POWDER);
         ItemStack honeyItem = new ItemStack(Items.HONEY_BOTTLE);
+        ItemStack combItem = new ItemStack(Items.HONEYCOMB);
         TabImageButton beesButton = new TabImageButton(x + 45, y + 8, 20, 20, 0, 0, 20, buttonImage, beeItem, 2, 2, onPress ->
                 setActiveList(beesList, PageType.BEE), getTooltipProvider(new TranslatableComponent("gui.resourcefulbees.beepedia.tab.bees")));
         TabImageButton traitsButton = new TabImageButton(x + 66, y + 8, 20, 20, 0, 0, 20, buttonImage, traitItem, 2, 2, onPress ->
                 setActiveList(traitsList, PageType.TRAIT), getTooltipProvider(new TranslatableComponent("gui.resourcefulbees.beepedia.tab.traits")));
         TabImageButton honeyButton = new TabImageButton(x + 87, y + 8, 20, 20, 0, 0, 20, buttonImage, honeyItem, 2, 2, onPress ->
                 setActiveList(honeyList, PageType.HONEY), getTooltipProvider(new TranslatableComponent("gui.resourcefulbees.beepedia.tab.honey")));
+        TabImageButton combButton = new TabImageButton(x + 108, y + 8, 20, 20, 0, 0, 20, buttonImage, combItem, 2, 2, onPress ->
+                setActiveList(combsList, PageType.COMB), getTooltipProvider(new TranslatableComponent("gui.resourcefulbees.beepedia.tab.combs")));
 
         addButton(beesButton);
         addButton(traitsButton);
         addButton(honeyButton);
-        beesList = new ButtonList(x + 8, y + 31, 100, 123, 21, beesButton, bees);
-        traitsList = new ButtonList(x + 8, y + 31, 100, 123, 21, traitsButton, traits);
-        honeyList = new ButtonList(x + 8, y + 31, 100, 123, 21, honeyButton, honey);
+        addButton(combButton);
+        beesList = new ButtonList(x + 8, y + 31, 121, 141, 21, beesButton, bees);
+        traitsList = new ButtonList(x + 8, y + 31, 121, 141, 21, traitsButton, traits);
+        honeyList = new ButtonList(x + 8, y + 31, 121, 141, 21, honeyButton, honey);
+        combsList = new ButtonList(x + 8, y + 31, 121, 141, 21, combButton, combs);
     }
 
     /**
@@ -219,6 +229,7 @@ public class BeepediaScreen extends Screen {
         if (beesScroll != 0) beesList.setScrollPos(beesScroll);
         if (honeyScroll != 0) honeyList.setScrollPos(honeyScroll);
         if (traitScroll != 0) traitsList.setScrollPos(traitScroll);
+        if (combScroll != 0) combsList.setScrollPos(combScroll);
     }
 
     /**
@@ -241,6 +252,8 @@ public class BeepediaScreen extends Screen {
             setActive(PageType.TRAIT, activePage.id);
         } else if (activePage instanceof HoneyPage) {
             setActive(PageType.HONEY, activePage.id);
+        } else if (activePage instanceof CombPage) {
+            setActive(PageType.COMB, activePage.id);
         }
     }
 
@@ -278,12 +291,16 @@ public class BeepediaScreen extends Screen {
                 page = traits.get(pageID);
                 list = traitsList;
                 break;
+            case COMB:
+                page = combs.get(pageID);
+                list = combsList;
         }
         // collect page if page does not match active list type.
         // this can be inaccurate as some pages may share IDs
         if (page == null) page = bees.get(pageID);
         if (page == null) page = honey.get(pageID);
         if (page == null) page = traits.get(pageID);
+        if (page == null) page = combs.get(pageID);
         activatePage(pageType, page, list, goingBack);
     }
 
@@ -362,7 +379,7 @@ public class BeepediaScreen extends Screen {
             client.getTextureManager().bind(background);
             int x = this.guiLeft;
             int y = this.guiTop;
-            blit(matrix, x, y, 0, 0, this.xSize, this.ySize, 286, 182);
+            blit(matrix, x, y, 0, 0, this.xSize, this.ySize, this.xSize, this.ySize);
         }
         activePage.renderBackground(matrix, partialTick, mouseX, mouseY);
         activeList.updateList();
@@ -424,6 +441,9 @@ public class BeepediaScreen extends Screen {
             case HONEY:
                 title = new TranslatableComponent("gui.resourcefulbees.beepedia.tab.honey");
                 break;
+            case COMB:
+                title = new TranslatableComponent("gui.resourcefulbees.beepedia.tab.combs");
+                break;
             default:
                 title = new TranslatableComponent("gui.resourcefulbees.beepedia.tab.bees");
                 break;
@@ -437,6 +457,7 @@ public class BeepediaScreen extends Screen {
         beesList.button.renderToolTip(matrixStack, mouseX, mouseY);
         traitsList.button.renderToolTip(matrixStack, mouseX, mouseY);
         honeyList.button.renderToolTip(matrixStack, mouseX, mouseY);
+        combsList.button.renderToolTip(matrixStack, mouseX, mouseY);
         tooltips.forEach(t -> t.draw(this, matrixStack, mouseX, mouseY));
     }
 
@@ -457,7 +478,7 @@ public class BeepediaScreen extends Screen {
         if (activeList != null) {
             activeList.updatePos((int) (scrollAmount * 8));
         }
-        updateScrollPos(beesList, traitsList, honeyList);
+        updateScrollPos(beesList, traitsList, honeyList, combsList);
         return super.mouseScrolled(mouseX, mouseY, scrollAmount);
     }
 
@@ -475,10 +496,11 @@ public class BeepediaScreen extends Screen {
         return super.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
-    public static void updateScrollPos(ButtonList beesList, ButtonList traitsList, ButtonList honeyList) {
+    public static void updateScrollPos(ButtonList beesList, ButtonList traitsList, ButtonList honeyList, ButtonList combsList) {
         beesScroll = beesList.getScrollPos();
         traitScroll = traitsList.getScrollPos();
         honeyScroll = honeyList.getScrollPos();
+        combScroll = combsList.getScrollPos();
     }
 
     public static void setSearch(String search) {
@@ -660,6 +682,7 @@ public class BeepediaScreen extends Screen {
         // main pages
         BEE,
         HONEY,
-        TRAIT
+        COMB,
+        TRAIT;
     }
 }

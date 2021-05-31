@@ -17,7 +17,7 @@ public abstract class BeepediaPage {
     public final int xPos;
     public final BeepediaScreen beepedia;
     public static final int SUB_PAGE_WIDTH = 169;
-    public static final int SUB_PAGE_HEIGHT = 106;
+    public static final int SUB_PAGE_HEIGHT = 124;
 
     public ListButton listButton = null;
 

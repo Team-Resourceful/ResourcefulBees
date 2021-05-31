@@ -46,18 +46,18 @@ public class HoneycombPage extends BeeDataPage {
 
     final List<RecipeObject> recipes = new ArrayList<>();
 
-    final List<Item> hives = BeeInfoUtils.getItemTag("minecraft:beehives").getValues();
+    private static final List<Item> hives = BeeInfoUtils.getItemTag("minecraft:beehives").getValues();
 
     private static final Item[] APIARIES = {ModItems.T1_APIARY_ITEM.get(), ModItems.T2_APIARY_ITEM.get(), ModItems.T3_APIARY_ITEM.get(), ModItems.T4_APIARY_ITEM.get()};
 
-    final ResourceLocation honeycombsImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/honeycombs.png");
-    final ResourceLocation centrifugeImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/centrifuge.png");
-    ResourceLocation multiblockOnlyImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/multiblock_only.png");
+    private static final ResourceLocation honeycombsImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/honeycombs.png");
+    private static final ResourceLocation centrifugeImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/centrifuge.png");
+    private static final ResourceLocation multiblockOnlyImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/multiblock_only.png");
 
-    final Button leftArrow;
-    final Button rightArrow;
+    private final Button leftArrow;
+    private final Button rightArrow;
 
-    int activePage = 0;
+    private int activePage = 0;
 
 
     public HoneycombPage(BeepediaScreen beepedia, CustomBeeData beeData, int xPos, int yPos, BeePage parent) {
@@ -136,8 +136,6 @@ public class HoneycombPage extends BeeDataPage {
         int padding = font.width(title) / 2;
         font.draw(matrix, title.withStyle(ChatFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, -1);
         if (BeepediaScreen.currScreenState.isCentrifugeOpen() && !recipes.isEmpty()) {
-            manager.bind(centrifugeImage);
-            GuiComponent.blit(matrix, xPos, yPos + 22, 0, 0, 169, 84, 169, 84);
             recipes.get(activePage).draw(matrix, xPos, yPos + 22, mouseX, mouseY);
             if (recipes.size() > 1) {
                 TextComponent page = new TextComponent(String.format("%d / %d", activePage + 1, recipes.size()));
@@ -219,30 +217,24 @@ public class HoneycombPage extends BeeDataPage {
         }
 
         public void draw(PoseStack matrix, int xPos, int yPos, int mouseX, int mouseY) {
-            beepedia.drawSlot(matrix, inputItem, xPos + 25, yPos + 3);
+            TextureManager manager = Minecraft.getInstance().getTextureManager();
+
+            manager.bind(centrifugeImage);
+            GuiComponent.blit(matrix, xPos, yPos + 9, 0, 0, 169, 84, 169, 84);
+
+            beepedia.drawSlot(matrix, inputItem, xPos + 25, yPos + 22);
 
             List<CentrifugeItemOutput> items = recipe.getItemOutputs();
             List<CentrifugeFluidOutput> fluids = recipe.getFluidOutputs();
 
+
+            int totalItemsOffset = items.size() * 21;
+            int startItems = HoneycombPage.this.yPos + 54 - totalItemsOffset / 2;
             // draw items
             for (int i = 0; i < items.size(); i++) {
-                ItemOutput item = items.get(i).getPool().next(); //TODO <------- please fix me!!
-                beepedia.drawSlot(matrix, item.getItemStack(), xPos + 20, yPos + 10 + (40 * i));
-                if (item.getItem() instanceof CustomHoneyBottleItem) {
-                    CustomHoneyBottleItem honey = (CustomHoneyBottleItem) item.getItem();
-                    beepedia.registerInteraction(xPos + 10 + (40 * i), yPos + 10, () -> {
-                        BeepediaScreen.saveScreenState();
-                        beepedia.setActive(BeepediaScreen.PageType.HONEY, honey.getHoneyData().getName());
-                        return true;
-                    });
-                } else if (item.getItem() instanceof BeeSpawnEggItem) {
-                    BeeSpawnEggItem egg = (BeeSpawnEggItem) item.getItem();
-                    beepedia.registerInteraction(xPos + 20, yPos + 10 + (40 * i), () -> {
-                        BeepediaScreen.saveScreenState();
-                        beepedia.setActive(BeepediaScreen.PageType.BEE, egg.getBeeData().getCoreData().getName());
-                        return true;
-                    });
-                }
+                ItemOutput itemOutput = items.get(i).getPool().next();
+                ItemStack item = new ItemStack(itemOutput.getItem(), itemOutput.getCount() * (recipe.isMultiblock() ? 9 : 1));
+                drawItem(matrix, itemOutput, item, HoneycombPage.this.xPos + 124, startItems + i * 21);
             }
             // draw fluids
             for (int i = 0; i < fluids.size(); i++) {
@@ -262,6 +254,35 @@ public class HoneycombPage extends BeeDataPage {
                 Minecraft.getInstance().getTextureManager().bind(multiblockOnlyImage);
                 GuiComponent.blit(matrix, xPos + 28, yPos + 45, 0, 0, 16, 16, 16, 16);
             }
+        }
+
+        private void drawItem(PoseStack matrix, ItemOutput output, ItemStack item, int xPos, int yPos) {
+            beepedia.drawSlot(matrix, item, xPos, yPos);
+            drawChance(matrix, output.getChance(), xPos + 30, yPos + 7);
+            if (item.getItem() instanceof CustomHoneyBottleItem) {
+                CustomHoneyBottleItem honey = (CustomHoneyBottleItem) item.getItem();
+                beepedia.registerInteraction(xPos, yPos, () -> {
+                    BeepediaScreen.saveScreenState();
+                    beepedia.setActive(BeepediaScreen.PageType.HONEY, honey.getHoneyData().getName());
+                    return true;
+                });
+            } else if (item.getItem() instanceof BeeSpawnEggItem) {
+                BeeSpawnEggItem egg = (BeeSpawnEggItem) item.getItem();
+                beepedia.registerInteraction(xPos, yPos, () -> {
+                    BeepediaScreen.saveScreenState();
+                    beepedia.setActive(BeepediaScreen.PageType.BEE, egg.getBeeData().getCoreData().getName());
+                    return true;
+                });
+            }
+        }
+
+        private void drawChance(PoseStack matrix, double right, int xPos, int yPos) {
+            if (right == 1) return;
+            Font font = Minecraft.getInstance().font;
+            DecimalFormat decimalFormat = new DecimalFormat("##%");
+            TextComponent text = new TextComponent(decimalFormat.format(right));
+            int padding = font.width(text) / 2;
+            font.draw(matrix, text.withStyle(ChatFormatting.GRAY), (float) xPos - padding, yPos, -1);
         }
 
         public void drawTooltip(PoseStack matrix, int mouseX, int mouseY) {

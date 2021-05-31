@@ -18,14 +18,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Block;
 
 public class BeeInfoPage extends BeeDataPage {
-    private static final TranslatableComponent title = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.info");
-    private static final TranslatableComponent sizeName = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.info.size");
-    private static final TranslatableComponent healthName = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.info.health");
-    private static final TranslatableComponent damageName = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.info.damage");
-    private static final TranslatableComponent stingerName = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.info.stinger");
-    private static final TranslatableComponent passiveName = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.info.passive");
-    private static final TranslatableComponent poisonName = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.info.poison");
-    private static final TranslatableComponent timeName = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.info.time");
 
     private Entity entityFlower = null;
     private final CycledArray<Block> flowers;
@@ -39,22 +31,17 @@ public class BeeInfoPage extends BeeDataPage {
     @Override
     public void renderBackground(PoseStack matrix, float partialTick, int mouseX, int mouseY) {
         Font font = Minecraft.getInstance().font;
-        sizeName.copy().append(BeepediaUtils.getSizeName(beeData.getRenderData().getSizeModifier()));
-        damageName.copy().append(new TextComponent("" + (int) beeData.getCombatData().getAttackDamage()));
-        healthName.copy().append(new TextComponent("" + (int) beeData.getCombatData().getBaseHealth()));
-        stingerName.copy().append(BeepediaUtils.getYesNo(beeData.getCombatData().removeStingerOnAttack()));
-        passiveName.copy().append(BeepediaUtils.getYesNo(beeData.getCombatData().isPassive()));
-        poisonName.copy().append(BeepediaUtils.getYesNo(beeData.getCombatData().inflictsPoison()));
-        timeName.copy().append(beeData.getCoreData().getMaxTimeInHive() / 20 + "s");
+        TranslatableComponent title = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.info");
+        TranslatableComponent sizeName = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.info.size");
+        TranslatableComponent timeName = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.info.time");
+
+        sizeName.append(BeepediaUtils.getSizeName(beeData.getRenderData().getSizeModifier()));
+        timeName.append(beeData.getCoreData().getMaxTimeInHive() / 20 + "s");
 
         font.draw(matrix, title.withStyle(ChatFormatting.WHITE), xPos, (float) yPos + 8, -1);
         font.draw(matrix, sizeName.withStyle(ChatFormatting.GRAY), xPos, (float) yPos + 22, -1);
-        font.draw(matrix, timeName.withStyle(ChatFormatting.GRAY), (float) xPos + 76, (float) yPos + 22, -1);
-        font.draw(matrix, healthName.withStyle(ChatFormatting.GRAY), xPos, (float) yPos + 34, -1);
-        font.draw(matrix, damageName.withStyle(ChatFormatting.GRAY), (float) xPos + 76, (float) yPos + 34, -1);
-        font.draw(matrix, passiveName.withStyle(ChatFormatting.GRAY), xPos, (float) yPos + 46, -1);
-        font.draw(matrix, poisonName.withStyle(ChatFormatting.GRAY), (float) xPos + 76, (float) yPos + 46, -1);
-        font.draw(matrix, stingerName.withStyle(ChatFormatting.GRAY), xPos, (float) yPos + 58, -1);
+        font.draw(matrix, timeName.withStyle(ChatFormatting.GRAY), (float) xPos + 86, (float) yPos + 22, -1);
+
     }
 
     @Override
