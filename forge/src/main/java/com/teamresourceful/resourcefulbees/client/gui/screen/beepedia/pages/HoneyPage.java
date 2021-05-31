@@ -74,7 +74,7 @@ public class HoneyPage extends BeepediaPage {
             this.hunger = bottleData.getHunger();
             this.saturation = bottleData.getSaturation();
             this.effects = bottleData.getHoneyEffects();
-            if (bottleData.doGenerateHoneyFluid()) {
+            if (bottleData.doGenerateHoneyFluid() || bottleData.getHoneyFlowingFluidRegistryObject() != null) {
                 this.text = bottleData.getFluidTranslation();
             } else {
                 this.text = bottleData.getBottleTranslation();

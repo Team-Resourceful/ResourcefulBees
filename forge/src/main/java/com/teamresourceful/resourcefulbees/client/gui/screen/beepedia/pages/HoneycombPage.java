@@ -51,20 +51,20 @@ public class HoneycombPage extends BeeDataPage {
 
     final List<RecipeObject> recipes = new ArrayList<>();
 
-    final List<Item> hives = BeeInfoUtils.getItemTag("minecraft:beehives").getValues();
-    final ItemStack apiary1 = new ItemStack(ModItems.T1_APIARY_ITEM.get());
-    final ItemStack apiary2 = new ItemStack(ModItems.T2_APIARY_ITEM.get());
-    final ItemStack apiary3 = new ItemStack(ModItems.T3_APIARY_ITEM.get());
-    final ItemStack apiary4 = new ItemStack(ModItems.T4_APIARY_ITEM.get());
+    private static final List<Item> hives = BeeInfoUtils.getItemTag("minecraft:beehives").getValues();
+    private static final ItemStack apiary1 = new ItemStack(ModItems.T1_APIARY_ITEM.get());
+    private static final ItemStack apiary2 = new ItemStack(ModItems.T2_APIARY_ITEM.get());
+    private static final ItemStack apiary3 = new ItemStack(ModItems.T3_APIARY_ITEM.get());
+    private static final ItemStack apiary4 = new ItemStack(ModItems.T4_APIARY_ITEM.get());
 
-    final ResourceLocation honeycombsImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/honeycombs.png");
-    final ResourceLocation centrifugeImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/centrifuge.png");
-    ResourceLocation multiblockOnlyImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/multiblock_only.png");
+    private static final ResourceLocation honeycombsImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/honeycombs.png");
+    private static final ResourceLocation centrifugeImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/centrifuge.png");
+    private static final ResourceLocation multiblockOnlyImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/multiblock_only.png");
 
-    final Button leftArrow;
-    final Button rightArrow;
+    private final Button leftArrow;
+    private final Button rightArrow;
 
-    int activePage = 0;
+    private int activePage = 0;
 
 
     public HoneycombPage(BeepediaScreen beepedia, CustomBeeData beeData, int xPos, int yPos, BeePage parent) {

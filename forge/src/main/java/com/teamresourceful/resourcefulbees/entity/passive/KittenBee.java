@@ -26,7 +26,8 @@ public class KittenBee {
             effects.add(new HoneyEffect(MobEffects.MOVEMENT_SPEED, 2400, 2, 1));
             effects.add(new HoneyEffect(MobEffects.JUMP, 2400, 1, 1));
             effects.add(new HoneyEffect(MobEffects.NIGHT_VISION, 2400, 0, 1));
-            honeyBottleData = new HoneyBottleData(8, 0.9f, Color.parse("#BD5331"), false, false, false, effects).setName("cantnip");
+            honeyBottleData = new HoneyBottleData(8, 0.9f, Color.parse("#BD5331"), false, false, false, effects)
+                    .setName("catnip");
             honeyBottleData.setHoneyBlockRegistryObject(ModBlocks.CATNIP_HONEY_BLOCK);
             honeyBottleData.setHoneyStillFluidRegistryObject(ModFluids.CATNIP_HONEY_STILL);
             honeyBottleData.setHoneyFlowingFluidRegistryObject(ModFluids.CATNIP_HONEY_FLOWING);

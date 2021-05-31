@@ -403,7 +403,6 @@ public class BeePage extends BeepediaPage {
         return bee;
     }
 
-
     public enum SubPageType {
         INFO,
         SPAWNING,
