@@ -37,6 +37,7 @@ public class ItemMutationPage extends MutationsPage {
 
     public ItemMutationPage(Entity bee, BeePage parent, Tag<?> blocks, RandomCollection<ItemOutput> outputs, MutationType type, int mutationCount, BeepediaScreen beepedia) {
         super(bee, parent, type, mutationCount, beepedia);
+        //noinspection unchecked
         inputs = (List<Block>) blocks.getValues();
         initOutputs(outputs);
     }

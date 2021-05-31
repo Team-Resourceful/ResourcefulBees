@@ -38,7 +38,7 @@ public class HoneyPage extends BeepediaPage {
     private final ImageButton prevTab;
     private final ImageButton nextTab;
     private SubButtonList beeList = null;
-    private boolean isDefault;
+    private final boolean isDefault;
     private HoneyBottleData bottleData;
     private String honeySearch;
     private final TranslatableComponent text;

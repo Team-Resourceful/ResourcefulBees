@@ -157,7 +157,7 @@ public class BeeJar extends Item {
     public static void fillJar(ItemStack stack, CustomBeeData beeData) {
         EntityType<?> entityType = beeData.getEntityType();
         Level world = Minecraft.getInstance().level;
-        if (world == null || entityType == null) return;
+        if (world == null) return;
         Entity entity = entityType.create(world);
         if (entity instanceof Bee) {
             stack.setTag(BeeInfoUtils.createJarBeeTag((Bee) entity, NBTConstants.NBT_ENTITY));

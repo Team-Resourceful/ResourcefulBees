@@ -98,7 +98,7 @@ public class BeeBreedingCategory extends BaseCategory<BeeFamily> {
         DecimalFormat decimalFormat = new DecimalFormat("##%");
         if (beeFamily.getChance() < 1) {
             info.draw(matrix, 115, 40);
-            fontRenderer.draw(matrix, decimalFormat.format(beeFamily.getChance()), 130, 40, 0xff808080);;
+            fontRenderer.draw(matrix, decimalFormat.format(beeFamily.getChance()), 130, 40, 0xff808080);
         }
         fontRenderer.draw(matrix, decimalFormat.format(BEE_REGISTRY.getAdjustedWeightForChild(beeFamily)), 90, 35, 0xff808080);
     }

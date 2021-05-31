@@ -43,12 +43,12 @@ public class BeeTrait {
 
     protected String name;
     protected Item displayItem;
-    protected Set<PotionDamageEffect> potionDamageEffects;
-    protected Set<String> damageImmunities;
-    protected Set<MobEffect> potionImmunities;
-    protected Set<DamageType> damageTypes;
-    protected Set<String> specialAbilities;
-    protected Set<ParticleType<?>> particleEffects;
+    protected final Set<PotionDamageEffect> potionDamageEffects;
+    protected final Set<String> damageImmunities;
+    protected final Set<MobEffect> potionImmunities;
+    protected final Set<DamageType> damageTypes;
+    protected final Set<String> specialAbilities;
+    protected final Set<ParticleType<?>> particleEffects;
 
     protected BeeTrait(String name, Item displayItem, Set<PotionDamageEffect> potionDamageEffects, Set<String> damageImmunities, Set<MobEffect> potionImmunities, Set<DamageType> damageTypes, Set<String> specialAbilities, Set<ParticleType<?>> particleEffects) {
         this.name = name.toLowerCase(Locale.ENGLISH).replace(" ", "_");

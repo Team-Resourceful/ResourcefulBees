@@ -35,7 +35,7 @@ public class HoneycombData {
             ApiaryOutputType.CODEC.listOf().fieldOf("apiaryOutputTypes").orElse(DEFAULT_APIARY_OUTPUTS).forGetter(HoneycombData::getApiaryOutputTypes)
     ).apply(instance, HoneycombData::new));
 
-    protected HoneycombType honeycombType;
+    protected final HoneycombType honeycombType;
     protected Item honeycomb;
     protected Item honeycombBlock;
     protected Color color;

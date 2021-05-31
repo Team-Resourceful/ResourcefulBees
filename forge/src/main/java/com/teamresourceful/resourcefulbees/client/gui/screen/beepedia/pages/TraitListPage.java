@@ -35,7 +35,7 @@ public class TraitListPage extends BeeDataPage {
 
     @Override
     public void addSearch() {
-        beeData.getTraitData().getTraits().forEach(s -> parent.addSearchTrait(s));
+        beeData.getTraitData().getTraits().forEach(parent::addSearchTrait);
     }
 
     private void initList() {

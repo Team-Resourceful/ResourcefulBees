@@ -25,7 +25,7 @@ public class CentrifugeData {
             CentrifugeFluidOutput.CODEC.listOf().fieldOf("fluidOutputs").orElse(new ArrayList<>()).forGetter(CentrifugeData::getFluidOutputs)
     ).apply(instance, CentrifugeData::new));
 
-    protected boolean hasCentrifugeOutput;
+    protected final boolean hasCentrifugeOutput;
     protected int recipeTime;
     protected int inputCount;
     protected List<CentrifugeItemOutput> itemOutputs;

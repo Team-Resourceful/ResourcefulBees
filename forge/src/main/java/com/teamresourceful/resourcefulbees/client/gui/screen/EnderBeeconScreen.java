@@ -122,7 +122,7 @@ public class EnderBeeconScreen extends AbstractContainerScreen<EnderBeeconContai
 
         for (PowerButton widget : this.powerButtons) {
             EnderBeeconTileEntity.BeeconEffect effect = tileEntity.getEffect(widget.effect);
-            if (true) {
+            if (true) { //TODO UMM DAWN??? - epic
                 drawCenteredString(matrixStack, this.font, new TextComponent("x" + effect.getValue()), buttonStartX, buttonY, 14737632);
             } else {
                 drawCenteredString(matrixStack, this.font, new TextComponent("+" + effect.getValue()), buttonStartX, buttonY, 14737632);

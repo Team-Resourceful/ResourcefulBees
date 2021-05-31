@@ -317,7 +317,7 @@ public class BeepediaScreen extends Screen {
         // close active page and reset screen state
         if (this.activePage != null) {
             if (!this.activePage.getClass().equals(activePage.getClass()) && !(this.activePage instanceof HomePage) && !goingBack) {
-                saveScreenState();
+                saveScreenState(); //TODO umm ^^^? why???
             }
             this.activePage.closePage();
         }
@@ -659,7 +659,7 @@ public class BeepediaScreen extends Screen {
 
     private boolean mapContainsBottle(BeePage page, ItemStack bottleData) {
         Item beeBottle = null;    /////BOTTLE OUTPUTS DON'T EXIST ANYMORE
-        return beeBottle == bottleData.getItem();
+        return null == bottleData.getItem();
     }
 
 
@@ -683,6 +683,6 @@ public class BeepediaScreen extends Screen {
         BEE,
         HONEY,
         COMB,
-        TRAIT;
+        TRAIT
     }
 }

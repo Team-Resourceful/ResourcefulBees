@@ -11,6 +11,7 @@ public class CycledArray<T> {
         this.list = list;
     }
 
+    @SuppressWarnings("unchecked")
     public CycledArray(Collection<T> list) {
         this.list = (T[]) list.toArray();
     }

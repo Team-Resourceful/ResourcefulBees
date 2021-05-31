@@ -10,8 +10,8 @@ import java.util.Set;
 @Unmodifiable
 public class AbstractOutput {
 
-    protected double weight;
-    protected double chance;
+    protected final double weight;
+    protected final double chance;
 
     AbstractOutput(double weight, double chance) {
         this.weight = weight;

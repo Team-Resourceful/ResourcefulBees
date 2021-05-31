@@ -410,6 +410,6 @@ public class BeePage extends BeepediaPage {
         MUTATIONS,
         HONEYCOMB,
         TRAIT_LIST,
-        COMBAT;
+        COMBAT
     }
 }

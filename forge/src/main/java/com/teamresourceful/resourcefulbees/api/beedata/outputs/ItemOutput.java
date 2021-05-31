@@ -22,7 +22,7 @@ public class ItemOutput extends AbstractOutput{
 
     public static final ItemOutput EMPTY = new ItemOutput(ItemStack.EMPTY, 0, 0);
 
-    protected ItemStack itemStack;
+    protected final ItemStack itemStack;
 
     public ItemOutput(ItemStack itemStack, double weight, double chance) {
         super(weight, chance);

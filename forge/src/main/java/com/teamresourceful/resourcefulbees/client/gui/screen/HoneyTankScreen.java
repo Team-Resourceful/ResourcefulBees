@@ -60,7 +60,7 @@ public class HoneyTankScreen extends AbstractContainerScreen<HoneyTankContainer>
             this.renderProgressBar(matrix);
             this.renderTooltip(matrix, mouseX, mouseY);
             DecimalFormat decimalFormat = new DecimalFormat("##0.0");
-            if (tileEntity != null && MathUtils.inRangeInclusive(mouseX, this.leftPos + 81, this.leftPos + 93) && MathUtils.inRangeInclusive(mouseY, this.topPos + 12, this.topPos + 74)) {
+            if (MathUtils.inRangeInclusive(mouseX, this.leftPos + 81, this.leftPos + 93) && MathUtils.inRangeInclusive(mouseY, this.topPos + 12, this.topPos + 74)) {
                 if (Screen.hasShiftDown() || tileEntity.getFluidTank().getFluidAmount() < 500) {
                     this.renderTooltip(matrix, new TextComponent(tileEntity.getFluidTank().getFluidAmount() + " MB"), mouseX, mouseY);
                 } else {

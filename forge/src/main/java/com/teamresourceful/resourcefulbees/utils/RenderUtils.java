@@ -128,7 +128,7 @@ public class RenderUtils {
 
     public static void renderEntity(PoseStack matrixStack, Entity entity, ClientLevel world, float x, float y, float rotation, float renderScale) {
         if (world == null) return;
-        float scaledSize = 20;
+        float scaledSize;
         Minecraft mc = Minecraft.getInstance();
         if (mc.player != null) entity.tickCount = mc.player.tickCount;
         if (entity instanceof CustomBeeEntity) {
