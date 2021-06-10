@@ -140,7 +140,7 @@ public class BeeBox extends Item {
                     .forEach(compoundNBT -> {
                         String id = compoundNBT.getCompound(NBTConstants.ENTITY_DATA).getString("id");
                         EntityType<?> entityType = BeeInfoUtils.getEntityType(id);
-                        Component name = entityType == null ? new TranslatableComponent("NULL_NAME") : entityType.getDescription();
+                        Component name = entityType == null ? new TextComponent("NULL_ENTITY") : entityType.getDescription();
                         tooltip.add(new TextComponent("  - ").append(name).withStyle(ChatFormatting.WHITE));
                     });
         } else if (isFilled(stack)) {

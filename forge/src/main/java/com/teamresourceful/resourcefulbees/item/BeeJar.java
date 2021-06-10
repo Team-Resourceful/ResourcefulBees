@@ -83,6 +83,8 @@ public class BeeJar extends Item {
         return InteractionResult.FAIL;
     }
 
+
+
     public static void setBeeAngry(Bee beeEntity, Player player){
         if (beeEntity.isAngry()){
             beeEntity.setTarget(player);
@@ -184,7 +186,7 @@ public class BeeJar extends Item {
         if (tag != null && isFilled(stack)) {
             String id = tag.getString(NBTConstants.NBT_ENTITY);
             EntityType<?> entityType = BeeInfoUtils.getEntityType(id);
-            Component name = entityType == null ? new TranslatableComponent("NULL_NAME") : entityType.getDescription();
+            Component name = entityType == null ? new TextComponent("NULL_ENTITY") : entityType.getDescription();
             tooltip.add(new TextComponent("  - ").append(name).withStyle(ChatFormatting.WHITE));
         }
     }
