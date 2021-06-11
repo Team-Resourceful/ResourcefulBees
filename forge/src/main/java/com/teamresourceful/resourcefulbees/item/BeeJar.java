@@ -2,7 +2,9 @@ package com.teamresourceful.resourcefulbees.item;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
+import com.teamresourceful.resourcefulbees.api.beedata.render.RenderData;
 import com.teamresourceful.resourcefulbees.api.beedata.traits.TraitData;
+import com.teamresourceful.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.entity.passive.ResourcefulBee;
 import com.teamresourceful.resourcefulbees.lib.constants.BeeConstants;
 import com.teamresourceful.resourcefulbees.lib.constants.NBTConstants;
@@ -35,6 +37,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.commons.lang3.text.WordUtils;
 import org.jetbrains.annotations.NotNull;
+import org.lwjgl.system.CallbackI;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -46,8 +49,26 @@ public class BeeJar extends Item {
 
     public static int getColor(ItemStack stack, int tintIndex) {
         CompoundTag tag = stack.getTag();
-        if (tintIndex == 1 && tag != null && tag.contains(NBTConstants.NBT_COLOR) && !tag.getString(NBTConstants.NBT_COLOR).equals(BeeConstants.STRING_DEFAULT_ITEM_COLOR)) {
-            return Color.parse(tag.getString(NBTConstants.NBT_COLOR)).getValue();
+        if (tintIndex == 1 && tag != null) {
+            if (tag.contains(NBTConstants.NBT_COLOR) && !tag.getString(NBTConstants.NBT_COLOR).equals(BeeConstants.STRING_DEFAULT_ITEM_COLOR)) {
+                return Color.parse(tag.getString(NBTConstants.NBT_COLOR)).getValue();
+            } else if (!tag.contains(NBTConstants.NBT_COLOR) && tag.contains(NBTConstants.NBT_ENTITY) && Minecraft.getInstance().level != null) {
+                // one time check for a bee's color, if customBeeEntity, set the jar's color to the bee's color, else set it to default.
+                // this code should only ever run once per beejar if the beejar does not have a color.
+                String id = tag.getString(NBTConstants.NBT_ENTITY);
+                EntityType<?> entityType = BeeInfoUtils.getEntityType(id);
+                if (entityType != null) {
+                    Entity entity = entityType.create(Minecraft.getInstance().level);
+                    if (entity instanceof CustomBeeEntity) {
+                        RenderData renderData = ((CustomBeeEntity) entity).getRenderData();
+                        tag.putString(NBTConstants.NBT_COLOR, renderData.getColorData().getJarColor().toString());
+                        return renderData.getColorData().getJarColor().getValue();
+                    }
+                }
+                tag.putString(NBTConstants.NBT_COLOR, BeeConstants.STRING_DEFAULT_ITEM_COLOR);
+                stack.setTag(tag);
+            }
+            return BeeConstants.VANILLA_BEE_INT_COLOR;
         }
         return BeeConstants.DEFAULT_ITEM_COLOR;
     }
@@ -84,11 +105,10 @@ public class BeeJar extends Item {
     }
 
 
-
-    public static void setBeeAngry(Bee beeEntity, Player player){
-        if (beeEntity.isAngry()){
+    public static void setBeeAngry(Bee beeEntity, Player player) {
+        if (beeEntity.isAngry()) {
             beeEntity.setTarget(player);
-            if (beeEntity instanceof ResourcefulBee){
+            if (beeEntity instanceof ResourcefulBee) {
                 ResourcefulBee customBee = (ResourcefulBee) beeEntity;
                 TraitData traitData = customBee.getTraitData();
                 if (traitData.getDamageTypes().stream().anyMatch(damageType -> damageType.getType().equals(TraitConstants.EXPLOSIVE))) {
@@ -144,15 +164,20 @@ public class BeeJar extends Item {
         return InteractionResult.PASS;
     }
 
-    public static void renameJar(ItemStack stack, Bee target) {
+    public static void renameJar(ItemStack stack, Entity target, String name) {
+        if (stack.getTag() == null || stack.getTag().contains(NBTConstants.NBT_DISPLAY)) return;
         CompoundTag nbt = stack.getOrCreateTag();
         Component beeName = target.getName();
-        TranslatableComponent bottleName = new TranslatableComponent(stack.getItem().getDescriptionId(stack));
+        TranslatableComponent bottleName = new TranslatableComponent(name);
         bottleName.append(" - ").append(beeName);
         bottleName.setStyle(Style.EMPTY.withItalic(false));
         CompoundTag displayNBT = new CompoundTag();
         displayNBT.putString("Name", Component.Serializer.toJson(bottleName));
-        nbt.put("display", displayNBT);
+        nbt.put(NBTConstants.NBT_DISPLAY, displayNBT);
+    }
+
+    public static void renameJar(ItemStack stack, Bee target) {
+        renameJar(stack, target, stack.getItem().getDescriptionId(stack));
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -161,9 +186,22 @@ public class BeeJar extends Item {
         Level world = Minecraft.getInstance().level;
         if (world == null) return;
         Entity entity = entityType.create(world);
-        if (entity instanceof Bee) {
+        if (entity != null) {
             stack.setTag(BeeInfoUtils.createJarBeeTag((Bee) entity, NBTConstants.NBT_ENTITY));
             renameJar(stack, (Bee) entity);
+        }
+    }
+
+    private void renameJar(ItemStack stack, CompoundTag tag, String name) {
+        if (stack.getTag() == null || stack.getTag().contains(NBTConstants.NBT_DISPLAY)) return;
+        if (Minecraft.getInstance().level == null) return;
+        String id = tag.getString(NBTConstants.NBT_ENTITY);
+        EntityType<?> entityType = BeeInfoUtils.getEntityType(id);
+        if (entityType != null) {
+            Entity entity = entityType.create(Minecraft.getInstance().level);
+            if (entity != null) {
+                renameJar(stack, entity, name);
+            }
         }
     }
 
@@ -173,6 +211,7 @@ public class BeeJar extends Item {
         String name;
         if (isFilled(stack)) {
             name = "item." + ResourcefulBees.MOD_ID + ".bee_jar_filled";
+            renameJar(stack, stack.getTag(), name);
         } else
             name = "item." + ResourcefulBees.MOD_ID + ".bee_jar_empty";
         return name;
