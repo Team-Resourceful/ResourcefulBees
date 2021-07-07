@@ -8,6 +8,7 @@ import com.teamresourceful.resourcefulbees.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.utils.TooltipBuilder;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -31,11 +32,12 @@ public class ModItems {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
 
-    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, ResourcefulBees.MOD_ID);
 
+    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, ResourcefulBees.MOD_ID);
     private static Item.Properties getItemProperties() {
         return new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES);
     }
+
 
     @SuppressWarnings("deprecation")
     public static final RegistryObject<Item> OREO_COOKIE = ITEMS.register("oreo_cookie", () -> new Item(getItemProperties().food(new FoodProperties.Builder()
@@ -52,6 +54,8 @@ public class ModItems {
             .alwaysEat()
             .build())
             .rarity(Rarity.EPIC)));
+
+
 
     public static final RegistryObject<Item> CATNIP_HONEYCOMB = ITEMS.register("catnip_honeycomb", () -> new Item(getItemProperties().rarity(Rarity.EPIC)));
     public static final RegistryObject<Item> CATNIP_HONEY_BOTTLE = ITEMS.register("catnip_honey_bottle", () -> new CustomHoneyBottleItem(KittenBee.getHoneyBottleData().getProperties().rarity(Rarity.EPIC), KittenBee.getHoneyBottleData()));
@@ -244,4 +248,7 @@ public class ModItems {
             super.appendHoverText(stack, worldIn, tooltip, flagIn);
         }
     });
+
+    // HIDDEN ITEMS
+    public static final RegistryObject<Item> MUTATION_ITEM = ITEMS.register("mutation_icon", () -> new Item(new Item.Properties()));
 }

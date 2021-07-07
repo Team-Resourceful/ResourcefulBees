@@ -12,16 +12,20 @@ import com.teamresourceful.resourcefulbees.item.Beepedia;
 import com.teamresourceful.resourcefulbees.registry.ModItems;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.handlers.IGuiClickableArea;
 import mezz.jei.api.gui.handlers.IGuiContainerHandler;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.registration.*;
+import mezz.jei.api.runtime.IJeiRuntime;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.Level;
 import org.apache.commons.lang3.StringUtils;
@@ -82,6 +86,9 @@ public class JEICompat implements IModPlugin {
             registration.addRecipes(FlowersCategory.getFlowersRecipes(), FlowersCategory.ID);
             registerInfoDesc(registration);
         }
+        List<ItemStack> blacklistedItems = new LinkedList<>();
+        blacklistedItems.add(ModItems.MUTATION_ITEM.get().getDefaultInstance());
+        registration.getIngredientManager().removeIngredientsAtRuntime(VanillaTypes.ITEM,  blacklistedItems);
     }
 
     @Override
@@ -166,8 +173,5 @@ public class JEICompat implements IModPlugin {
         }
     }
 
-/*    @Override
-    public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
-        IIngredientManager ingredientManager = jeiRuntime.getIngredientManager();
-    }*/
+
 }
