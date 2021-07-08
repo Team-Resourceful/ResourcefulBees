@@ -10,6 +10,7 @@ import com.teamresourceful.resourcefulbees.utils.BeeInfoUtils;
 import com.teamresourceful.resourcefulbees.utils.RandomCollection;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -39,13 +40,19 @@ public class MutationData {
 
     private MutationData(int mutationCount, List<Mutation> mutations) {
         this.mutationCount = mutationCount;
-        this.hasMutation = !mutations.isEmpty();
         this.mutations = mutations;
+        this.hasMutation = hasMutations();
         setupMutations();
     }
 
+    private boolean hasMutations() {
+        if (mutations.isEmpty()) return false;
+        List<Mutation> test = new LinkedList<>(mutations);
+        test.removeIf(mutation -> mutation.getType() == MutationType.ENTITY && !mutation.getEntityInput().isPresent());
+        return !test.isEmpty();
+    }
+
     /**
-     *
      * @return Returns the number of times this bee can attempt a mutation
      * before needing to enter a hive or apiary
      */
@@ -54,7 +61,6 @@ public class MutationData {
     }
 
     /**
-     *
      * @return Returns <tt>true</tt> if the mutations list is empty.
      */
     public boolean hasMutation() {
@@ -62,7 +68,6 @@ public class MutationData {
     }
 
     /**
-     *
      * @return Returns and unmodifiable map of {@link EntityType} inputs to {@link EntityOutput}s.
      */
     public Map<EntityType<?>, RandomCollection<EntityOutput>> getEntityMutations() {
@@ -70,7 +75,6 @@ public class MutationData {
     }
 
     /**
-     *
      * @return Returns and unmodifiable map of {@link Block} inputs to {@link BlockOutput}s.
      */
     public Map<Block, RandomCollection<BlockOutput>> getBlockMutations() {
@@ -78,7 +82,6 @@ public class MutationData {
     }
 
     /**
-     *
      * @return Returns and unmodifiable map of {@link Block} inputs to {@link ItemOutput}s.
      */
     public Map<Block, RandomCollection<ItemOutput>> getItemMutations() {

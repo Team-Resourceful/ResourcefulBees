@@ -17,9 +17,12 @@
     "block": "resourcefulbees:red_mushroom_honeycomb_block"
   },
   "CentrifugeData": {
-    "hasCentrifugeOutput": true,
     "itemOutputs": [
-      {"item":{"id": "minecraft:red_mushroom"}}
+      {
+        "pool": [{
+          "item": {"id": "minecraft:red_mushroom"}
+        }]
+      }
     ]
   },
   "MutationData": {

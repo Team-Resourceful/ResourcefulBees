@@ -17,9 +17,12 @@
     "block": "resourcefulbees:crimson_fungus_honeycomb_block"
   },
   "CentrifugeData": {
-    "hasCentrifugeOutput": true,
     "itemOutputs": [
-      {"item":{"id": "minecraft:crimson_fungus"}}
+      {
+        "pool": [{
+          "item": {"id": "minecraft:crimson_fungus"}
+        }]
+      }
     ]
   },
   "MutationData": {

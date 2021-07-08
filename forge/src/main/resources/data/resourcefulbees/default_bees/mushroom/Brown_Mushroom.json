@@ -17,9 +17,12 @@
     "block": "resourcefulbees:brown_mushroom_honeycomb_block"
   },
   "CentrifugeData": {
-    "hasCentrifugeOutput": true,
     "itemOutputs": [
-      {"item":{"id": "minecraft:brown_mushroom"}}
+      {
+        "pool": [{
+          "item": {"id": "minecraft:brown_mushroom"}
+        }]
+      }
     ]
   },
   "MutationData": {

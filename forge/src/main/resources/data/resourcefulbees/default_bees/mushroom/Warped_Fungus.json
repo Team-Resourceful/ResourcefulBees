@@ -17,9 +17,12 @@
     "block": "resourcefulbees:warped_fungus_honeycomb_block"
   },
   "CentrifugeData": {
-    "hasCentrifugeOutput": true,
     "itemOutputs": [
-      {"item":{"id": "minecraft:warped_fungus"}}
+      {
+        "pool": [{
+          "item": {"id": "minecraft:warped_fungus"}
+        }]
+      }
     ]
   },
   "MutationData": {
