@@ -10,6 +10,7 @@ import com.teamresourceful.resourcefulbees.config.Config;
 import com.teamresourceful.resourcefulbees.entity.passive.KittenBee;
 import com.teamresourceful.resourcefulbees.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.registry.HoneyRegistry;
+import com.teamresourceful.resourcefulbees.registry.ModItems;
 import com.teamresourceful.resourcefulbees.registry.TraitRegistry;
 import com.teamresourceful.resourcefulbees.utils.RenderUtils;
 import net.minecraft.ChatFormatting;
@@ -195,7 +196,7 @@ public class BeepediaScreen extends Screen {
      */
     public void registerTabs(int x, int y) {
         ItemStack beeItem = new ItemStack(Items.BEEHIVE);
-        ItemStack traitItem = new ItemStack(Items.BLAZE_POWDER);
+        ItemStack traitItem = new ItemStack(ModItems.TRAIT_ICON.get());
         ItemStack honeyItem = new ItemStack(Items.HONEY_BOTTLE);
         ItemStack combItem = new ItemStack(Items.HONEYCOMB);
         TabImageButton beesButton = new TabImageButton(x + 45, y + 8, 20, 20, 0, 0, 20, buttonImage, beeItem, 2, 2, onPress ->

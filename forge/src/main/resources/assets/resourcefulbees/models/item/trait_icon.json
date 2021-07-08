@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "resourcefulbees:item/mutation_icon"
+    "layer0": "resourcefulbees:item/trait_icon"
   }
 }

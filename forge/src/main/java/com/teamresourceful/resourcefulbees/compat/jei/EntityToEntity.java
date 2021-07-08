@@ -7,6 +7,7 @@ import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.beedata.mutation.MutationData;
 import com.teamresourceful.resourcefulbees.compat.jei.ingredients.EntityIngredient;
 import com.teamresourceful.resourcefulbees.registry.BeeRegistry;
+import com.teamresourceful.resourcefulbees.registry.ModItems;
 import com.teamresourceful.resourcefulbees.utils.BeeInfoUtils;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
@@ -44,7 +45,7 @@ public class EntityToEntity extends BaseCategory<EntityToEntity.Recipe> {
         super(guiHelper, ID,
                 I18n.get("gui.resourcefulbees.jei.category.entity_to_entity_mutation"),
                 guiHelper.drawableBuilder(GUI_BACK, -12, 0, 99, 75).addPadding(0, 0, 0, 0).build(),
-                guiHelper.createDrawable(ICONS, 0, 0, 16, 16),
+                guiHelper.createDrawableIngredient(new ItemStack(ModItems.MUTATION_ENTITY_ICON.get())),
                 EntityToEntity.Recipe.class);
         this.nonRegisteredEgg = guiHelper.createDrawable(ICONS, 41, 0, 16, 16);
     }

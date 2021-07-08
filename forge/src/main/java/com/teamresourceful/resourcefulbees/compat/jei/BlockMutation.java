@@ -8,6 +8,8 @@ import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.beedata.mutation.MutationData;
 import com.teamresourceful.resourcefulbees.compat.jei.ingredients.EntityIngredient;
 import com.teamresourceful.resourcefulbees.registry.BeeRegistry;
+import com.teamresourceful.resourcefulbees.registry.ModBlocks;
+import com.teamresourceful.resourcefulbees.registry.ModItems;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.ingredient.IGuiFluidStackGroup;
@@ -19,6 +21,7 @@ import net.minecraft.client.resources.language.I18n;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LiquidBlock;
 import org.jetbrains.annotations.NotNull;
@@ -37,7 +40,7 @@ public class BlockMutation extends BaseCategory<BlockMutation.Recipe> {
         super(guiHelper, ID,
                 I18n.get("gui.resourcefulbees.jei.category.block_mutation"),
                 guiHelper.drawableBuilder(GUI_BACK, -12, 0, 99, 75).addPadding(0, 0, 0, 0).build(),
-                guiHelper.createDrawable(ICONS, 0, 0, 16, 16),
+                guiHelper.createDrawableIngredient(new ItemStack(ModItems.MUTATION_BLOCK_ICON.get())),
                 BlockMutation.Recipe.class);
     }
 

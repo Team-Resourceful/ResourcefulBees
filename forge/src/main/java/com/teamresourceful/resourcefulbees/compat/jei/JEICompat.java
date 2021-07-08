@@ -86,9 +86,9 @@ public class JEICompat implements IModPlugin {
             registration.addRecipes(FlowersCategory.getFlowersRecipes(), FlowersCategory.ID);
             registerInfoDesc(registration);
         }
-        List<ItemStack> blacklistedItems = new LinkedList<>();
-        blacklistedItems.add(ModItems.MUTATION_ITEM.get().getDefaultInstance());
-        registration.getIngredientManager().removeIngredientsAtRuntime(VanillaTypes.ITEM,  blacklistedItems);
+//        List<ItemStack> blacklistedItems = new LinkedList<>();
+//        blacklistedItems.add(ModItems.MUTATION_ITEM.get().getDefaultInstance());
+//        registration.getIngredientManager().removeIngredientsAtRuntime(VanillaTypes.ITEM,  blacklistedItems);
     }
 
     @Override

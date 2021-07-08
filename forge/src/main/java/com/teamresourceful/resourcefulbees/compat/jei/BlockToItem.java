@@ -8,6 +8,7 @@ import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.beedata.mutation.MutationData;
 import com.teamresourceful.resourcefulbees.compat.jei.ingredients.EntityIngredient;
 import com.teamresourceful.resourcefulbees.registry.BeeRegistry;
+import com.teamresourceful.resourcefulbees.registry.ModItems;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.ingredient.IGuiIngredientGroup;
@@ -34,7 +35,7 @@ public class BlockToItem extends BaseCategory<BlockToItem.Recipe> {
         super(guiHelper, ID,
                 I18n.get("gui.resourcefulbees.jei.category.block_to_item_mutation"),
                 guiHelper.drawableBuilder(GUI_BACK, -12, 0, 99, 75).addPadding(0, 0, 0, 0).build(),
-                guiHelper.createDrawable(ICONS, 0, 0, 16, 16),
+                guiHelper.createDrawableIngredient(new ItemStack(ModItems.MUTATION_ITEM_ICON.get())),
                 BlockToItem.Recipe.class);
     }
 

@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.beedata.CodecUtils;
+import com.teamresourceful.resourcefulbees.registry.ModItems;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.world.effect.MobEffect;
@@ -31,7 +32,7 @@ public class BeeTrait {
     public static Codec<BeeTrait> getCodec(String name) {
         return RecordCodecBuilder.create(instance -> instance.group(
                 Codec.STRING.fieldOf("name").orElse(name).forGetter(BeeTrait::getName),
-                Registry.ITEM.fieldOf("displayItem").orElse(Items.BLAZE_POWDER).forGetter(BeeTrait::getDisplayItem),
+                Registry.ITEM.fieldOf("displayItem").orElse(ModItems.TRAIT_ICON.get()).forGetter(BeeTrait::getDisplayItem),
                 CodecUtils.createSetCodec(PotionDamageEffect.CODEC).fieldOf("potionDamageEffects").orElse(new HashSet<>()).forGetter(BeeTrait::getPotionDamageEffects),
                 CodecUtils.createSetCodec(Codec.STRING).fieldOf("damageImmunities").orElse(new HashSet<>()).forGetter(BeeTrait::getDamageImmunities),
                 CodecUtils.createSetCodec(Registry.MOB_EFFECT).fieldOf("potionImmunities").orElse(new HashSet<>()).forGetter(BeeTrait::getPotionImmunities),

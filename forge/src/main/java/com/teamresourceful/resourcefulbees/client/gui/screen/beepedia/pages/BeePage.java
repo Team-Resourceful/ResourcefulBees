@@ -120,7 +120,7 @@ public class BeePage extends BeepediaPage {
     private void registerMutationListPage(int subX, int subY) {
         if (beeData.getMutationData().hasMutation() && (!Config.BEEPEDIA_HIDE_LOCKED.get() || beeUnlocked)) {
             mutationsPage = Pair.of(
-                    getTabButton(new ItemStack(Items.FERMENTED_SPIDER_EYE), onPress -> setSubPage(SubPageType.MUTATIONS),
+                    getTabButton(new ItemStack(ModItems.MUTATION_ICON.get()), onPress -> setSubPage(SubPageType.MUTATIONS),
                             new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.mutations")),
                     new MutationListPage(beepedia, beeData, subX, subY, this)
             );
@@ -131,7 +131,7 @@ public class BeePage extends BeepediaPage {
     private void registerTraitListPage(int subX, int subY) {
         if (beeData.getTraitData().hasTraits() && !beeData.getTraitData().getTraits().isEmpty() && (!Config.BEEPEDIA_HIDE_LOCKED.get() || beeUnlocked)) {
             traitListPage = Pair.of(
-                    getTabButton(new ItemStack(Items.BLAZE_POWDER), onPress -> setSubPage(SubPageType.TRAIT_LIST),
+                    getTabButton(new ItemStack(ModItems.TRAIT_ICON.get()), onPress -> setSubPage(SubPageType.TRAIT_LIST),
                             new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.traits")),
                     new TraitListPage(beepedia, beeData, subX, subY, this)
             );
