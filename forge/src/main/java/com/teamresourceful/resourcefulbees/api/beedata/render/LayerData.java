@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Unmodifiable;
 
 @Unmodifiable
 public class LayerData {
-    public static final LayerData DEFAULT = new LayerData(Color.DEFAULT, ModelType.DEFAULT,  BeeTexture.MISSING_TEXTURE, false, false, 0);
+    public static final LayerData DEFAULT = new LayerData(Color.DEFAULT, ModelType.DEFAULT,  BeeTexture.MISSING_TEXTURE, false, false, false, 0);
 
     /**
      * A {@link Codec<LayerData>} that can be parsed to create a {@link LayerData} object.
@@ -21,6 +21,7 @@ public class LayerData {
             BeeTexture.CODEC.fieldOf("texture").orElse(BeeTexture.MISSING_TEXTURE).forGetter(LayerData::getBeeTexture),
             Codec.BOOL.fieldOf("isGlowing").orElse(false).forGetter(LayerData::isEmissive),
             Codec.BOOL.fieldOf("isEnchanted").orElse(false).forGetter(LayerData::isEnchanted),
+            Codec.BOOL.fieldOf("isPollen").orElse(false).forGetter(LayerData::isEnchanted),
             Codec.floatRange(5f, 100f).fieldOf("pulseFrequency").orElse(0f).forGetter(LayerData::getPulseFrequency)
     ).apply(instance, LayerData::new));
 
@@ -30,14 +31,16 @@ public class LayerData {
     private final boolean isEmissive;
     private final boolean isEnchanted;
     private final float pulseFrequency;
+    private final boolean isPollen;
 
-    private LayerData(Color color, ModelType modelType, BeeTexture beeTexture, boolean isEmissive, boolean isEnchanted, float pulseFrequency) {
+    private LayerData(Color color, ModelType modelType, BeeTexture beeTexture, boolean isEmissive, boolean isEnchanted, boolean isPollen, float pulseFrequency) {
         this.color = color;
         this.modelType = modelType;
         this.beeTexture = beeTexture;
         this.isEmissive = isEmissive;
         this.isEnchanted = isEnchanted;
         this.pulseFrequency = pulseFrequency;
+        this.isPollen = isPollen;
     }
 
     /**
@@ -101,5 +104,14 @@ public class LayerData {
      */
     public float getPulseFrequency() {
         return pulseFrequency;
+    }
+
+    /**
+     * This setting allows layers to set to be only visible if the bee has pollen.
+     *
+     * @return Returns <b>true</b> if this layer is for use when the bee has pollen.
+     */
+    public boolean isPollen() {
+        return isPollen;
     }
 }

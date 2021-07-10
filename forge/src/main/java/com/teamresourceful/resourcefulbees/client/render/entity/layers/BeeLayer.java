@@ -49,6 +49,7 @@ public class BeeLayer extends RenderLayer<CustomBeeEntity, CustomBeeModel<Custom
     }
 
     private void renderLayers(@NotNull PoseStack matrixStackIn, @NotNull MultiBufferSource bufferIn, int packedLightIn, @NotNull CustomBeeEntity customBeeEntity, ResourceLocation texture) {
+        if (!customBeeEntity.hasNectar() && layerData.isPollen()) return;
         if (layerData.isEnchanted()) {
             this.getParentModel().renderToBuffer(matrixStackIn, bufferIn.getBuffer(RenderType.entityGlint()), packedLightIn, OverlayTexture.NO_OVERLAY, 0.0F, 0.0F, 0.0F, 0.0F);
             if (additionModel != null) {
