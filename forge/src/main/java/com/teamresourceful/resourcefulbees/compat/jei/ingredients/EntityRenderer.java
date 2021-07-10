@@ -8,8 +8,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.item.TooltipFlag;
 import org.jetbrains.annotations.NotNull;
@@ -24,12 +22,10 @@ public class EntityRenderer implements IIngredientRenderer<EntityIngredient> {
     @Override
     public void render(@NotNull PoseStack matrixStack, int x, int y, @Nullable EntityIngredient entityIngredient) {
         Minecraft mc = Minecraft.getInstance();
-        if (mc.level != null && entityIngredient != null && mc.player != null) {
+        if (mc.level != null && entityIngredient != null && mc.player != null && entityIngredient.getEntity() != null) {
             RenderData coreData = entityIngredient.getBeeData().getRenderData();
-            EntityType<?> entityType = entityIngredient.getBeeData().getEntityType();
-            Entity entity = entityType.create(mc.level);
-            if (entity instanceof Bee) {
-                Bee beeEntity = (Bee) entity;
+            if (entityIngredient.getEntity() instanceof Bee) {
+                Bee beeEntity = (Bee) entityIngredient.getEntity();
                 matrixStack.pushPose();
                 matrixStack.translate(8, 14, 0.5D);
 

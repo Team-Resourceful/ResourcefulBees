@@ -7,12 +7,15 @@ import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class EntityIngredient {
 
+    private final Entity entity;
     private final CustomBeeData beeData;
     private final float rotation;
     private static final TranslatableComponent CREATOR_PREFIX = new TranslatableComponent("tooltip.resourcefulbees.bee.creator");
@@ -20,6 +23,13 @@ public class EntityIngredient {
     public EntityIngredient(CustomBeeData beeData, float rotation) {
         this.beeData = beeData;
         this.rotation = rotation;
+        Minecraft mc = Minecraft.getInstance();
+        if (mc != null && mc.level != null) {
+            EntityType<?> entityType = beeData.getEntityType();
+            entity = entityType.create(mc.level);
+        }else {
+            entity = null;
+        }
     }
 
     public CustomBeeData getBeeData() {
@@ -28,6 +38,10 @@ public class EntityIngredient {
 
     public float getRotation() {
         return rotation;
+    }
+
+    public Entity getEntity() {
+        return entity;
     }
 
     public Component getDisplayName() {
