@@ -14,7 +14,6 @@ import com.teamresourceful.resourcefulbees.utils.BeeInfoUtils;
 import com.teamresourceful.resourcefulbees.utils.color.Color;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -35,9 +34,7 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.apache.commons.lang3.text.WordUtils;
 import org.jetbrains.annotations.NotNull;
-import org.lwjgl.system.CallbackI;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -124,13 +121,13 @@ public class BeeJar extends Item {
     }
 
     @Nullable
-    public Entity getEntityFromStack(ItemStack stack, Level world, boolean withInfo) {
+    public static Entity getEntityFromStack(ItemStack stack, Level world, boolean withInfo) {
         CompoundTag tag = stack.getTag();
         if (tag != null) {
             EntityType<?> type = EntityType.byString(tag.getString(NBTConstants.NBT_ENTITY)).orElse(null);
             if (type != null) {
                 Entity entity = type.create(world);
-                if (entity != null && withInfo) entity.load(stack.getTag());
+                if (entity != null && withInfo) entity.load(tag);
                 return entity;
             }
         }

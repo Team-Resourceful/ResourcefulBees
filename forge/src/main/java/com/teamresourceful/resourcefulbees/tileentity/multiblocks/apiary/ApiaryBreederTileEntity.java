@@ -168,11 +168,8 @@ public class ApiaryBreederTileEntity extends BlockEntity implements TickableBloc
         ItemStack p1Stack = getTileStackHandler().getStackInSlot(getParent1Slots()[slot]);
         ItemStack p2Stack = getTileStackHandler().getStackInSlot(getParent2Slots()[slot]);
         if (p1Stack.getItem() instanceof BeeJar && p2Stack.getItem() instanceof BeeJar) {
-            BeeJar p1Jar = (BeeJar) p1Stack.getItem();
-            BeeJar p2Jar = (BeeJar) p2Stack.getItem();
-
-            Entity p1Entity = p1Jar.getEntityFromStack(p1Stack, level, true);
-            Entity p2Entity = p2Jar.getEntityFromStack(p2Stack, level, true);
+            Entity p1Entity = BeeJar.getEntityFromStack(p1Stack, level, true);
+            Entity p2Entity = BeeJar.getEntityFromStack(p2Stack, level, true);
 
             if (p1Entity instanceof CustomBeeEntity && p2Entity instanceof CustomBeeEntity) {
                 String p1Type = ((CustomBeeEntity) p1Entity).getBeeType();
@@ -204,11 +201,8 @@ public class ApiaryBreederTileEntity extends BlockEntity implements TickableBloc
             ItemStack p1Stack = getTileStackHandler().getStackInSlot(getParent1Slots()[slot]);
             ItemStack p2Stack = getTileStackHandler().getStackInSlot(getParent2Slots()[slot]);
             if (p1Stack.getItem() instanceof BeeJar && p2Stack.getItem() instanceof BeeJar) {
-                BeeJar p1Jar = (BeeJar) p1Stack.getItem();
-                BeeJar p2Jar = (BeeJar) p2Stack.getItem();
-
-                Entity p1Entity = p1Jar.getEntityFromStack(p1Stack, level, true);
-                Entity p2Entity = p2Jar.getEntityFromStack(p2Stack, level, true);
+                Entity p1Entity = BeeJar.getEntityFromStack(p1Stack, level, true);
+                Entity p2Entity = BeeJar.getEntityFromStack(p2Stack, level, true);
 
                 if (p1Entity instanceof ICustomBee && p2Entity instanceof ICustomBee) {
                     ICustomBee bee1 = (ICustomBee) p1Entity;

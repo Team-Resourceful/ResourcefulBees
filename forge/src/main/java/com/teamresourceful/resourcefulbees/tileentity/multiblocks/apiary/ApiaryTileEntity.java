@@ -320,7 +320,7 @@ public class ApiaryTileEntity extends ApiaryController implements MenuProvider, 
 
             if (filledJar.getItem() instanceof BeeJar) {
                 BeeJar jarItem = (BeeJar) filledJar.getItem();
-                Entity entity = jarItem.getEntityFromStack(filledJar, this.level, true);
+                Entity entity = BeeJar.getEntityFromStack(filledJar, this.level, true);
 
                 if (entity instanceof Bee) {
                     Bee beeEntity = (Bee) entity;
