@@ -85,6 +85,10 @@ public class RecipeBuilder implements ResourceManagerReloadListener {
     public void onAddReloadListeners(AddReloadListenerEvent event) {
         event.addListener(this);
         setRecipeManager(event.getDataPackRegistries().getRecipeManager());
+        //REQUIRED Check if this can be put in another place
+        //its here so it can have the items in the data before the
+        //recipes are generated.
+        BeeRegistry.getRegistry().regenerateCustomBeeData();
         LOGGER.info("Adding Reload Listener: 'resourcefulbees recipe manager'");
     }
 
@@ -193,8 +197,7 @@ public class RecipeBuilder implements ResourceManagerReloadListener {
     private Recipe<?> centrifugeRecipe(String beeType, CentrifugeData centrifugeData, HoneycombData honeycombData, int multiplier) {
         boolean isBlockRecipe = multiplier != 1;
 
-        ResourceLocation recipeLoc = isBlockRecipe ? new ResourceLocation(ResourcefulBees.MOD_ID, beeType + "_honeycomb_block_centrifuge")
-                : new ResourceLocation(ResourcefulBees.MOD_ID, beeType + "_honeycomb_centrifuge");
+        ResourceLocation recipeLoc = new ResourceLocation(ResourcefulBees.MOD_ID, beeType + (isBlockRecipe? "_honeycomb_block" : "_honeycomb") + "_centrifuge");
 
         Ingredient ingredient = Ingredient.of(new ItemStack(isBlockRecipe ? honeycombData.getHoneycombBlock() : honeycombData.getHoneycomb(), centrifugeData.getInputCount()));
 

@@ -1,12 +1,11 @@
 package com.teamresourceful.resourcefulbees.entity.passive;
 
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.beedata.mutation.MutationData;
-import com.teamresourceful.resourcefulbees.api.beedata.traits.TraitData;
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.BlockOutput;
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.EntityOutput;
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.ItemOutput;
+import com.teamresourceful.resourcefulbees.api.beedata.traits.TraitData;
 import com.teamresourceful.resourcefulbees.config.Config;
 import com.teamresourceful.resourcefulbees.entity.goals.BeeAngerGoal;
 import com.teamresourceful.resourcefulbees.entity.goals.BeeBreedGoal;
@@ -18,7 +17,6 @@ import com.teamresourceful.resourcefulbees.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.registry.ModEffects;
 import com.teamresourceful.resourcefulbees.tileentity.TieredBeehiveTileEntity;
 import com.teamresourceful.resourcefulbees.tileentity.multiblocks.apiary.ApiaryTileEntity;
-import com.teamresourceful.resourcefulbees.utils.BeeInfoUtils;
 import com.teamresourceful.resourcefulbees.utils.RandomCollection;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -37,7 +35,6 @@ import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.FollowParentGoal;
 import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -46,7 +43,6 @@ import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
@@ -500,11 +496,6 @@ public class ResourcefulBee extends CustomBeeEntity {
                 }
             }
         }
-    }
-
-    @Override
-    public ItemStack getPickedResult(HitResult target) {
-        return new ItemStack(BeeInfoUtils.getItem(ResourcefulBees.MOD_ID + ":" + beeType + "_spawn_egg"));
     }
 
     protected class FindPollinationTargetGoal2 extends Bee.BeeGrowCropGoal {
