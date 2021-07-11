@@ -23,6 +23,11 @@ public class RandomCollection<E> {
         return this;
     }
 
+    public E get(int index) {
+        Double key = new LinkedList<>(map.keySet()).get(index);
+        return map.get(key);
+    }
+
     public E next() {
         double value = random.nextDouble() * total;
         return map.higherEntry(value).getValue();

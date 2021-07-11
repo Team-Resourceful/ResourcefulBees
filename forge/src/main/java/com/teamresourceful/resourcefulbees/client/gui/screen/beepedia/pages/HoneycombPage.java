@@ -30,10 +30,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 
 public class HoneycombPage extends BeeDataPage {
@@ -167,16 +167,16 @@ public class HoneycombPage extends BeeDataPage {
 
     @Override
     public void addSearch() {
-        for (RecipeObject recipe : recipes) {
-            for (CentrifugeFluidOutput outputFluid : recipe.outputFluids) {
-                // TODO This is broke!!!! ------------------v
-                parent.addSearchItem(outputFluid.getPool().next().getFluid().toString()); //Not sure if this is correct for this
-            }
-            for (CentrifugeItemOutput outputItem : recipe.outputItems) {
-                // TODO This is broke!!!! ------------------v
-                parent.addSearchItem(outputItem.getPool().next().getItem().toString()); //Not sure if this is correct for this
-            }
-        }
+//        for (RecipeObject recipe : recipes) {
+//            for (CentrifugeFluidOutput outputFluid : recipe.outputFluids) {
+//                // TODO This is broke!!!! ------------------v
+//                parent.addSearchItem(outputFluid.getPool().next().getFluid().toString()); //Not sure if this is correct for this
+//            }
+//            for (CentrifugeItemOutput outputItem : recipe.outputItems) {
+//                // TODO This is broke!!!! ------------------v
+//                parent.addSearchItem(outputItem.getPool().next().getItem().toString()); //Not sure if this is correct for this
+//            }
+//        }
     }
 
     @Override
@@ -185,6 +185,8 @@ public class HoneycombPage extends BeeDataPage {
             counter++;
             if (counter >= max) counter = 0;
         }
+        if (recipes.isEmpty()) return;
+        recipes.get(activePage).tick(ticksActive);
     }
 
     @Override
@@ -195,8 +197,8 @@ public class HoneycombPage extends BeeDataPage {
     private class RecipeObject {
         final boolean isBlock;
         final ItemStack inputItem;
-        List<CentrifugeItemOutput> outputItems;
-        List<CentrifugeFluidOutput> outputFluids;
+        Map<CentrifugeItemOutput, Integer> outputItems = new LinkedHashMap<>();
+        Map<CentrifugeFluidOutput, Integer> outputFluids = new LinkedHashMap<>();
         final CentrifugeRecipe recipe;
         final CustomBeeData beeData;
 
@@ -212,48 +214,52 @@ public class HoneycombPage extends BeeDataPage {
             SimpleContainer inventory = new SimpleContainer(inputItem);
             recipe = world.getRecipeManager().getRecipeFor(CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE, inventory, world).orElse(null);
             if (recipe != null) {
-                outputItems = recipe.getItemOutputs();
-                outputFluids = recipe.getFluidOutputs();
+                recipe.getItemOutputs().forEach(c -> outputItems.put(c, 0));
+                recipe.getFluidOutputs().forEach(c -> outputFluids.put(c, 0));
             }
         }
 
         public void draw(PoseStack matrix, int xPos, int yPos, int mouseX, int mouseY) {
             TextureManager manager = Minecraft.getInstance().getTextureManager();
 
+            // TODO Gravy have a look at the following to see if it can be further optimised
             manager.bind(centrifugeImage);
             GuiComponent.blit(matrix, xPos, yPos + 9, 0, 0, 169, 84, 169, 84);
 
             beepedia.drawSlot(matrix, inputItem, xPos + 25, yPos + 22);
 
-            List<CentrifugeItemOutput> items = recipe.getItemOutputs();
-            List<CentrifugeFluidOutput> fluids = recipe.getFluidOutputs();
-
-
-            int totalItemsOffset = items.size() * 21;
-            int startItems = HoneycombPage.this.yPos + 54 - totalItemsOffset / 2;
+            int totalItemsOffset = outputItems.size() * 21;
+            int startItems = 32 + yPos - totalItemsOffset / 2;
             // draw items
-            for (int i = 0; i < items.size(); i++) {
-                ItemOutput itemOutput = items.get(i).getPool().next();
-                ItemStack item = new ItemStack(itemOutput.getItem(), itemOutput.getCount() * (recipe.isMultiblock() ? 9 : 1));
-                drawItem(matrix, itemOutput, item, HoneycombPage.this.xPos + 124, startItems + i * 21);
-            }
-            // draw fluids
-            for (int i = 0; i < fluids.size(); i++) {
-                FluidOutput fluid = fluids.get(i).getPool().next(); //TODO <------- please fix me!!
-                beepedia.drawFluidSlot(matrix, fluid.getFluidStack(), xPos + 10 + (40 * i), yPos + 10, true);
-                if (fluid.getFluid() instanceof CustomHoneyFluid) {
-                    CustomHoneyFluid honey = (CustomHoneyFluid) fluid.getFluid();
-                    beepedia.registerInteraction(xPos + 10 + (40 * i), yPos + 10, () -> {
-                        BeepediaScreen.saveScreenState();
-                        beepedia.setActive(BeepediaScreen.PageType.HONEY, honey.getHoneyData().getName());
-                        return true;
-                    });
-                }
-            }
+            final int[] k = {0};
+            outputItems.forEach((c, i) -> {
+                ItemStack item = new ItemStack(c.getPool().get(i).getItem(), c.getPool().get(i).getCount() * (recipe.isMultiblock() ? 9 : 1));
+                drawItem(matrix, c.getPool().get(i), item, xPos + 124, startItems + k[0] * 21);
+                k[0]++;
+            });
+            k[0] = 0;
+            outputFluids.forEach((c, i) -> {
+                FluidStack fluid = new FluidStack(c.getPool().get(i).getFluid(), c.getPool().get(i).getAmount() * (recipe.isMultiblock() ? 9 : 1));
+                drawFluid(matrix, c.getPool().get(i), fluid, xPos + 10 + (40 * k[0]), yPos + 10);
+                k[0]++;
+            });
 
             if (isBlock || Config.MULTIBLOCK_RECIPES_ONLY.get()) {
                 Minecraft.getInstance().getTextureManager().bind(multiblockOnlyImage);
                 GuiComponent.blit(matrix, xPos + 28, yPos + 45, 0, 0, 16, 16, 16, 16);
+            }
+        }
+
+        private void drawFluid(PoseStack matrix, FluidOutput output, FluidStack fluid, int xPos, int yPos) {
+            beepedia.drawFluidSlot(matrix, fluid, xPos, yPos, true);
+            drawChance(matrix, output.getChance(), xPos + 30, yPos + 7);
+            if (fluid.getFluid() instanceof CustomHoneyFluid) {
+                CustomHoneyFluid honey = (CustomHoneyFluid) fluid.getFluid();
+                beepedia.registerInteraction(xPos , yPos, () -> {
+                    BeepediaScreen.saveScreenState();
+                    beepedia.setActive(BeepediaScreen.PageType.HONEY, honey.getHoneyData().getName());
+                    return true;
+                });
             }
         }
 
@@ -289,6 +295,21 @@ public class HoneycombPage extends BeeDataPage {
         public void drawTooltip(PoseStack matrix, int mouseX, int mouseY) {
             if (BeepediaScreen.mouseHovering((float) xPos + 28, (float) yPos + 67, 20, 20, mouseX, mouseY)) {
                 beepedia.renderTooltip(matrix, new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.centrifuge.requires_multiblock"), mouseX, mouseY);
+            }
+        }
+
+        public void tick(int ticksActive) {
+            if (ticksActive % 20 == 0 && !Screen.hasShiftDown()) {
+                outputItems.forEach((c, i) -> {
+                    i++;
+                    if (i == c.getPool().getSize()) i = 0;
+                    outputItems.put(c, i);
+                });
+                outputFluids.forEach((c, i) -> {
+                    i++;
+                    if (i == c.getPool().getSize()) i = 0;
+                    outputFluids.put(c, i);
+                });
             }
         }
     }
