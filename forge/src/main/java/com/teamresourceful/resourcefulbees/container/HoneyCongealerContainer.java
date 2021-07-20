@@ -22,7 +22,7 @@ public class HoneyCongealerContainer extends ContainerWithStackMove {
         honeyCongealerTileEntity = (HoneyCongealerTileEntity) world.getBlockEntity(pos);
 
         if (getHoneyCongealerTileEntity() != null) {
-            this.addSlot(new OutputSlot(getHoneyCongealerTileEntity().getTileStackHandler(), HoneyCongealerTileEntity.BOTTLE_OUTPUT, 93, 54));
+            this.addSlot(new OutputSlot(getHoneyCongealerTileEntity().getTileStackHandler(), HoneyCongealerTileEntity.BLOCK_OUTPUT, 93, 54));
 
             for (int i = 0; i < 3; ++i) {
                 for (int j = 0; j < 9; ++j) {

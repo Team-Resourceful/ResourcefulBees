@@ -117,7 +117,7 @@ public class BeeSetup {
         EntityType<?> entityType = customBeeData.getEntityType();
         if (event.getName() != null) {
             SpawnData spawnData = customBeeData.getSpawnData();
-            event.getSpawns().getSpawner(MobCategory.CREATURE)
+            event.getSpawns().getSpawner(ModConstants.BEE_MOB_CATEGORY)
                     .add(spawnData.getSpawnerData(entityType, isFlowerForest));
         }
     }

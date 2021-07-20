@@ -50,6 +50,9 @@ dependencies {
     modRuntime "mekanism:Mekanism:${mekanism_version}:additions"// Mekanism: Additions
     modRuntime "mekanism:Mekanism:${mekanism_version}:generators"// Mekanism: Generators
     modRuntime "mekanism:Mekanism:${mekanism_version}:tools"// Mekanism: Tools
+
+    modRuntime "curse.maven:create-${rootProject.create_version_1}:${rootProject.create_version_2}"
+    modRuntime "curse.maven:flywheel-${rootProject.flywheel_version_1}:${rootProject.flywheel_version_2}"
 }
 
 processResources {

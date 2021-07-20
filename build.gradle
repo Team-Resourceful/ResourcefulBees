@@ -39,6 +39,12 @@ allprojects {
 
     repositories {
         maven { url "https://nexus.resourcefulbees.com/repository/maven-public/" }
+        maven {
+            url "https://www.cursemaven.com"
+            content {
+                includeGroup "curse.maven"
+            }
+        }
     }
 
     tasks.withType(JavaCompile) {

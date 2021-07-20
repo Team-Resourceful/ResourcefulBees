@@ -36,7 +36,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class HoneyCongealerTileEntity extends AbstractHoneyTank implements TickableBlockEntity, MenuProvider {
 
-    public static final int BOTTLE_OUTPUT = 0;
+    public static final int BLOCK_OUTPUT = 0;
     private final AutomationSensitiveItemStackHandler tileStackHandler = new TileStackHandler(2, getAcceptor(), getRemover());
     private final LazyOptional<IItemHandler> lazyOptional = LazyOptional.of(this::getTileStackHandler);
     private boolean dirty;
@@ -47,7 +47,7 @@ public class HoneyCongealerTileEntity extends AbstractHoneyTank implements Ticka
     }
 
     public float getProcessPercent() {
-        if (!canProcessFill()) return 0;
+        if (!canProcessHoney()) return 0;
         if (processingFill == Config.HONEY_PROCESS_TIME.get() * Config.CONGEALER_TIME_MODIFIER.get()) return 1;
         return processingFill / ((float) Config.HONEY_PROCESS_TIME.get() * Config.CONGEALER_TIME_MODIFIER.get());
     }
@@ -65,9 +65,9 @@ public class HoneyCongealerTileEntity extends AbstractHoneyTank implements Ticka
         return new HoneyCongealerContainer(id, level, worldPosition, inventory);
     }
 
-    public boolean canProcessFill() {
+    public boolean canProcessHoney() {
         FluidStack fluidStack = getFluidTank().getFluid();
-        ItemStack outputStack = getTileStackHandler().getStackInSlot(BOTTLE_OUTPUT);
+        ItemStack outputStack = getTileStackHandler().getStackInSlot(BLOCK_OUTPUT);
         Item outputHoney = BeeInfoUtils.getHoneyBlockFromFluid(fluidStack.getFluid());
 
         boolean isTankReady = !fluidStack.isEmpty() && getFluidTank().getFluidAmount() >= 1000;
@@ -77,12 +77,12 @@ public class HoneyCongealerTileEntity extends AbstractHoneyTank implements Ticka
         return isTankReady && hasHoneyBlock && canOutput;
     }
 
-    public void processFill() {
+    public void processHoney() {
         FluidStack fluidStack = new FluidStack(getFluidTank().getFluid(), 1000);
-        ItemStack outputStack = getTileStackHandler().getStackInSlot(BOTTLE_OUTPUT);
+        ItemStack outputStack = getTileStackHandler().getStackInSlot(BLOCK_OUTPUT);
         if (outputStack.isEmpty()) outputStack = new ItemStack(BeeInfoUtils.getHoneyBlockFromFluid(fluidStack.getFluid()));
         else outputStack.grow(1);
-        getTileStackHandler().setStackInSlot(BOTTLE_OUTPUT, outputStack);
+        getTileStackHandler().setStackInSlot(BLOCK_OUTPUT, outputStack);
         getFluidTank().drain(fluidStack, IFluidHandler.FluidAction.EXECUTE);
     }
 
@@ -95,7 +95,7 @@ public class HoneyCongealerTileEntity extends AbstractHoneyTank implements Ticka
     }
 
     public AutomationSensitiveItemStackHandler.IRemover getRemover() {
-        return (slot, automation) -> !automation || slot == BOTTLE_OUTPUT;
+        return (slot, automation) -> !automation || slot == BLOCK_OUTPUT;
     }
 
     public void sendGUINetworkPacket(ContainerListener player) {
@@ -112,9 +112,9 @@ public class HoneyCongealerTileEntity extends AbstractHoneyTank implements Ticka
 
     @Override
     public void tick() {
-        if (canProcessFill()) {
+        if (canProcessHoney()) {
             if (processingFill >= Config.HONEY_PROCESS_TIME.get() * Config.CONGEALER_TIME_MODIFIER.get()) {
-                processFill();
+                processHoney();
                 processingFill = 0;
             }
             processingFill++;
@@ -128,8 +128,8 @@ public class HoneyCongealerTileEntity extends AbstractHoneyTank implements Ticka
 
     @NotNull
     @Override
-    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @org.jetbrains.annotations.Nullable Direction side) {
-        return cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? lazyOptional.cast() :
+    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
+        return cap.equals(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) ? lazyOptional.cast() :
                 super.getCapability(cap, side);
     }
 

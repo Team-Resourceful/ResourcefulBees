@@ -45,19 +45,15 @@ public abstract class AbstractHoneyTankContainer extends AbstractHoneyTank imple
         lazyOptional = LazyOptional.of(this::getTileStackHandler);
     }
 
-    public boolean isDirty() {
-        return dirty;
-    }
-
     public void setDirty() {
         this.dirty = true;
     }
 
-    public AbstractHoneyTankContainer(BlockEntityType<?> tileEntityType, int level) {
+    protected AbstractHoneyTankContainer(BlockEntityType<?> tileEntityType, int level) {
         super(tileEntityType, level);
     }
 
-    public AbstractHoneyTankContainer(BlockEntityType<?> tileEntityType) {
+    protected AbstractHoneyTankContainer(BlockEntityType<?> tileEntityType) {
         super(tileEntityType);
     }
 
@@ -188,6 +184,12 @@ public abstract class AbstractHoneyTankContainer extends AbstractHoneyTank imple
     }
 
     @Override
+    protected void invalidateCaps() {
+        this.lazyOptional.invalidate();
+        super.invalidateCaps();
+    }
+
+    @Override
     public void tick() {
         if (canProcessFluid()) {
             if (processingEmpty >= Config.HONEY_PROCESS_TIME.get()) {
@@ -203,10 +205,11 @@ public abstract class AbstractHoneyTankContainer extends AbstractHoneyTank imple
         }
     }
 
+    @NotNull
     @Override
-    public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) return lazyOptional.cast();
-        return super.getCapability(cap, side);
+    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
+        return cap.equals(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) ? lazyOptional.cast() :
+                super.getCapability(cap, side);
     }
 
     protected class TileStackHandler extends AutomationSensitiveItemStackHandler {

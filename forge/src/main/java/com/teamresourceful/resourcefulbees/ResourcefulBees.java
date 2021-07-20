@@ -20,6 +20,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
@@ -83,6 +84,7 @@ public class ResourcefulBees {
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ClientEventHandlers::clientStuff);
 
         MinecraftForge.EVENT_BUS.register(this);
+
     }
 
     @SubscribeEvent
