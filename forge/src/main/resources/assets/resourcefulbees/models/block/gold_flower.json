@@ -1,7 +1,0 @@
-{
-  "parent": "block/cross",
-  "textures": {
-    "particle": "resourcefulbees:block/gold_flower",
-    "cross": "resourcefulbees:block/gold_flower"
-  }
-}

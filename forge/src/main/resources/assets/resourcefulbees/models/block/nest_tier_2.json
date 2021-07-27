@@ -1,6 +1,0 @@
-{
-  "parent": "block/cube_all",
-  "textures": {
-    "all": "resourcefulbees:block/bee_nest/tier_overlay/tier_2"
-  }
-}
