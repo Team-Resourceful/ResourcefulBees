@@ -1,0 +1,10 @@
+{
+    "ctm":{
+        "ctm_version": 1,
+        "type":"CTM",
+        "layer":"SOLID",
+        "textures":[
+            "resourcefulbees:block/elite_centrifuge_casing_ctm"
+        ]
+    }
+}

@@ -1,0 +1,14 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "resourcefulbees:item/beepedia"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "creative": 1
+      },
+      "model": "resourcefulbees:item/beepedia_creative"
+    }
+  ]
+}

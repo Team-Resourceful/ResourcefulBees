@@ -1,0 +1,51 @@
+{
+  "CoreData": {
+    "flower": "forge:storage_blocks/lapis",
+    "maxTimeInHive": 600
+  },
+  "HoneycombData": {
+    "type": "DEFAULT",
+    "color": "#345ec3",
+    "item": "resourcefulbees:lapis_honeycomb",
+    "block": "resourcefulbees:lapis_honeycomb_block"
+  },
+  "RenderData": {
+    "layers": [{"texture": "ores/lapis/lapis_bee","modelType": "ORE"}],
+    "ColorData": {
+      "spawnEggPrimaryColor": "#345ec3",
+      "spawnEggSecondaryColor": "#303030",
+      "jarColor": "#345ec3"
+    }
+  },
+  "MutationData": {
+    "hasMutation": true,
+    "mutations" : [
+      {
+        "type": "BLOCK",
+        "input": ["minecraft:stone"],
+        "outputs": [
+          {"output": "minecraft:lapis_ore", "weight": 10},
+          {"output": "minecraft:cobblestone", "weight": 10}
+        ]
+      }
+    ]
+  },
+  "CentrifugeData": {
+    "hasCentrifugeOutput": true,
+    "itemOutputs": [
+      {"item": {"id": "minecraft:lapis_lazuli", "count": 8}}
+    ]
+  },
+  "SpawnData": {
+    "canSpawnInWorld": true
+  },
+  "BreedData": {
+    "isBreedable": true,
+    "parents": [
+      {
+        "parent1": "lapis",
+        "parent2": "lapis"
+      }
+    ]
+  }
+}

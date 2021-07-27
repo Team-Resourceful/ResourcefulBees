@@ -1,0 +1,48 @@
+{
+  "CoreData": {
+    "flower": ["minecraft:water"],
+    "maxTimeInHive": 1200
+  },
+  "RenderData": {
+    "layers": [
+      {"texture": "icy/icy_bee","modelType": "SLIME"}
+    ],
+    "ColorData": {
+      "spawnEggPrimaryColor": "#92b9fe",
+      "spawnEggSecondaryColor": "#303030",
+      "jarColor": "#92b9fe"
+    },
+    "sizeModifier": 0.75
+  },
+  "MutationData": {
+    "hasMutation": true,
+    "mutations" : [
+      {
+        "type": "BLOCK",
+        "input": ["minecraft:water"],
+        "chance": 0.65,
+        "outputs": [
+          {"output": "minecraft:ice", "weight": 7},
+          {"output": "minecraft:packed_ice", "weight": 3}
+        ]
+      }
+    ]
+  },
+  "SpawnData": {
+    "canSpawnInWorld": true,
+    "biomeWhitelist": ["tag:cold", "tag:snowy"]
+  },
+  "BreedData": {
+    "isBreedable": true,
+    "parents": [
+      {
+        "parent1": "icy",
+        "parent2": "icy"
+      }
+    ]
+  },
+  "TraitData": {
+    "hasTraits": true,
+    "traits": ["can_swim"]
+  }
+}

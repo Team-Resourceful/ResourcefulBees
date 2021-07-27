@@ -1,0 +1,35 @@
+{
+  "parent": "resourcefulbees:resourcefulbees/apiary_storage",
+  "display": {
+    "icon": {
+      "item": "resourcefulbees:iron_storage_upgrade"
+    },
+    "title": {
+      "translate": "advancements.resourcefulbees.iron_storage_upgrade.title"
+    },
+    "description": {
+      "translate": "advancements.resourcefulbees.iron_storage_upgrade.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "iron_storage_upgrade": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "resourcefulbees:iron_storage_upgrade"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "iron_storage_upgrade"
+    ]
+  ]
+}

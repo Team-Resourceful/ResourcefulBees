@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "on=false": {
+      "model": "resourcefulbees:block/centrifuge"
+    },
+    "on=true": {
+      "model": "resourcefulbees:block/centrifuge_on"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+    "name": "book.resourcefulbees.honeycomb_category.scraper",
+    "icon": "resourcefulbees:scraper",
+    "category": "resourcefulbees:honeycomb_gathering",
+    "sortnum": 2,
+    "pages": [
+        {
+            "type": "text",
+            "text": "book.resourcefulbees.honeycomb_category.scraper.1"
+        },
+        {
+            "type": "crafting",
+            "recipe": "resourcefulbees:scraper"
+        }
+    ]
+}

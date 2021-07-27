@@ -1,0 +1,53 @@
+{
+  "CoreData": {
+    "flower": ["minecraft:bone_block"],
+    "maxTimeInHive": 600
+  },
+  "HoneycombData": {
+    "type": "DEFAULT",
+    "color": "#F6F2E6",
+    "item": "resourcefulbees:skeleton_honeycomb",
+    "block": "resourcefulbees:skeleton_honeycomb_block"
+  },
+  "RenderData": {
+    "layers": [{"texture": "skeleton/skeleton_bee"}],
+    "ColorData": {
+      "spawnEggPrimaryColor": "#F6F2E6",
+      "spawnEggSecondaryColor": "#303030",
+      "jarColor": "#F6F2E6"
+    }
+  },
+  "MutationData": {
+    "hasMutation": true,
+    "mutations" : [
+      {
+        "type": "BLOCK",
+        "input": ["minecraft:stone"],
+        "outputs": [
+          {"output": "minecraft:gravel"}
+        ]
+      }
+    ]
+  },
+  "CentrifugeData": {
+    "hasCentrifugeOutput": true,
+    "itemOutputs": [
+      {"item": {"id": "minecraft:bone"}}
+    ]
+  },
+  "SpawnData": {
+    "canSpawnInWorld": true,
+    "lightLevel": "NIGHT"
+  },
+  "BreedData": {
+    "parents": [
+      {
+        "parent1": "skeleton",
+        "parent2": "skeleton"
+      }
+    ],
+    "isBreedable": true,
+    "feedItem": "minecraft:flowers",
+    "feedAmount": 8
+  }
+}

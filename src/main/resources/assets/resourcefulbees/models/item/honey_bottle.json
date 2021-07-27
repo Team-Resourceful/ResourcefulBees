@@ -1,0 +1,7 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "resourcefulbees:item/honey_bottle_contents",
+    "layer1": "resourcefulbees:item/honey_bottle"
+  }
+}

@@ -1,0 +1,17 @@
+{
+    "name": "book.resourcefulbees.ess_tools_category.honey_dipper",
+    "icon": "resourcefulbees:honey_dipper",
+    "category": "resourcefulbees:essential_tools",
+    "sortnum": 3,
+    "pages": [
+        {
+            "type": "text",
+            "text": "book.resourcefulbees.ess_tools_category.honey_dipper.1"
+        },
+        {
+            "type": "crafting",
+            "recipe": "resourcefulbees:honey_dipper",
+            "text": "book.resourcefulbees.ess_tools_category.honey_dipper.2"
+        }
+    ]
+}

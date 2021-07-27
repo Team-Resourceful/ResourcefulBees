@@ -1,0 +1,35 @@
+{
+  "parent": "resourcefulbees:resourcefulbees/root",
+  "display": {
+    "icon": {
+      "item": "resourcefulbees:beepedia"
+    },
+    "title": {
+      "translate": "advancements.resourcefulbees.beepedia.title"
+    },
+    "description": {
+      "translate": "advancements.resourcefulbees.beepedia.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "beepedia": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "resourcefulbees:beepedia"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "beepedia"
+    ]
+  ]
+}

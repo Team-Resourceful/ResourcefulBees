@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "PPP",
+    "GEG",
+    "POP"
+  ],
+  "key": {
+    "E": { "tag": "forge:ender_pearls" },
+    "P": { "item": "minecraft:purpur_block" },
+    "G": { "tag": "forge:glass" },
+    "O": { "tag": "forge:obsidian" }
+  },
+  "result": {
+    "item": "resourcefulbees:ender_beecon"
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "CoreData":{
+    "flower": "minecraft:flowers",
+    "maxTimeInHive": 600
+  },
+  "HoneycombData": {
+    "type": "DEFAULT",
+    "color": "#0C9F0A",
+    "item": "resourcefulbees:beeper_honeycomb",
+    "block": "resourcefulbees:beeper_honeycomb_block"
+  },
+  "RenderData": {
+    "layers": [
+      {"texture": "/creeper/creeper_bee"},
+      {"isGlowing": true, "texture": "/creeper/creeper_bee_emissive", "color": "#E2D3D3", "pulseFrequency": 10}
+    ],
+    "ColorData": {
+      "spawnEggPrimaryColor": "#0C9F0A",
+      "spawnEggSecondaryColor": "#303030",
+      "jarColor": "#0C9F0A"
+    }
+  },
+  "MutationData": {
+    "hasMutation": true,
+    "mutations" : [
+      {
+        "type": "BLOCK",
+        "input":[ "minecraft:lava"],
+        "chance": 0.75,
+        "outputs": [
+          {"outputID": "minecraft:mossy_cobblestone"}
+        ]
+      },
+      {
+        "type": "BLOCK",
+        "input": ["minecraft:coal_block"],
+        "chance": 0.25,
+        "outputs": [
+          {"output": "minecraft:tnt"}
+        ]
+      }
+    ]
+  },
+  "CentrifugeData": {
+    "hasCentrifugeOutput": true,
+    "itemOutputs": [
+      {"item": {"id": "minecraft:gunpowder", "count": 4}}
+    ]
+  },
+  "SpawnData": {
+    "canSpawnInWorld": true,
+    "lightLevel": "NIGHT"
+  },
+  "BreedData": {
+    "parents": [
+      {
+        "parent1": "beeper",
+        "parent2": "beeper"
+      }
+    ],
+    "isBreedable": true
+  },
+  "TraitData": {
+    "hasTraits": true,
+    "traits" : ["creeper"]
+  }
+}

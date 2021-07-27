@@ -1,0 +1,24 @@
+{
+  "required": true,
+  "package": "com.teamresourceful.resourcefulbees.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "resourcefulbees.refmap.json",
+  "mixins": [
+    "AnimalEntityAccessor",
+    "BeeEntityAccessor",
+    "BeeEntityInvoker",
+    "BeeHiveTileEntityAccessor",
+    "BreedGoalInvoker",
+    "BTEBeeAccessor",
+    "ContainerAccessor",
+    "DispenserBlockInvoker",
+    "FindBeehiveGoalInvoker",
+    "MixinBeeEntity",
+    "MixinEnterBeehiveGoal",
+    "MixinFindBeehiveGoal",
+    "MixinMinecraftServer",
+    "MixinUpdateBeehiveGoal",
+    "RecipeManagerAccessorInvoker"
+  ],
+  "minVersion": "0.8.1"
+}

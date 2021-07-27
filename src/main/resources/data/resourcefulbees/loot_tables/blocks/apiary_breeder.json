@@ -1,0 +1,42 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:copy_nbt",
+              "source": "block_entity",
+              "ops": [
+                {
+                  "source": "inv",
+                  "target": "BlockEntityTag.inv",
+                  "op": "replace"
+                },
+                {
+                  "source": "time",
+                  "target": "BlockEntityTag.time",
+                  "op": "replace"
+                },
+                {
+                  "source": "totalTime",
+                  "target": "BlockEntityTag.totalTime",
+                  "op": "replace"
+                },
+                {
+                  "source": "BreederCount",
+                  "target": "BlockEntityTag.BreederCount",
+                  "op": "replace"
+                }
+              ]
+            }
+          ],
+          "name": "resourcefulbees:apiary_breeder"
+        }
+      ]
+    }
+  ]
+}
