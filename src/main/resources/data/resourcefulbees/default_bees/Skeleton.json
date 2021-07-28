@@ -10,7 +10,7 @@
     "block": "resourcefulbees:skeleton_honeycomb_block"
   },
   "RenderData": {
-    "layers": [{"texture": "skeleton/skeleton_bee"}],
+    "texture": "skeleton/skeleton_bee",
     "ColorData": {
       "spawnEggPrimaryColor": "#F6F2E6",
       "spawnEggSecondaryColor": "#303030",

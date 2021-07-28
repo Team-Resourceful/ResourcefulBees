@@ -10,10 +10,11 @@
     "block": "resourcefulbees:rgbee_honeycomb_block"
   },
   "RenderData": {
+    "texture": "custom/bee",
+    "model": "resourcefulbees:geo/crystal.geo.json",
     "layers": [
-      { "texture": "custom/bee" },
-      { "isPollen": true, "color": "rainbow", "texture": "ores/custom/custom_bee_secondary", "modelType": "ORE"},
-      { "isPollen" : true, "isGlowing": true, "color": "rainbow", "texture": "ores/custom/custom_bee_emissive", "modelType": "ORE"},
+      { "isPollen": true, "color": "rainbow", "texture": "ores/custom/custom_bee_secondary" },
+      { "isPollen" : true, "isGlowing": true, "color": "rainbow", "texture": "ores/custom/custom_bee_emissive" },
       { "isGlowing": true, "color": "rainbow", "texture": "custom/emissive_layer" }
     ],
     "ColorData": {

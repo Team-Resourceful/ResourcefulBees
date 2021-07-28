@@ -10,7 +10,7 @@
     "block": "resourcefulbees:pigman_honeycomb_block"
   },
   "RenderData": {
-    "layers": [{"texture": "pigman/pigman_bee"}],
+    "texture": "pigman/pigman_bee",
     "ColorData": {
       "spawnEggPrimaryColor": "#885956",
       "spawnEggSecondaryColor": "#303030",

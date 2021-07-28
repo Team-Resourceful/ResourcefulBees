@@ -10,7 +10,7 @@
     "block": "resourcefulbees:zombee_honeycomb_block"
   },
   "RenderData": {
-    "layers": [{"texture": "zombie/zombie_bee"}],
+    "texture": "zombie/zombie_bee",
     "ColorData": {
       "spawnEggPrimaryColor": "#2F4E32",
       "spawnEggSecondaryColor": "#303030"

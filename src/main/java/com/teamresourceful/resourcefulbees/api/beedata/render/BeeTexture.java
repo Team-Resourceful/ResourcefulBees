@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.lib.constants.BeeConstants;
+import net.minecraft.entity.IAngerable;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.Unmodifiable;
 
@@ -53,6 +54,10 @@ public class BeeTexture {
      */
     public ResourceLocation getAngryTexture() {
         return angryTexture;
+    }
+
+    public ResourceLocation getTexture(IAngerable angerable) {
+        return angerable.isAngry() ? angryTexture : normalTexture;
     }
 
     @Override

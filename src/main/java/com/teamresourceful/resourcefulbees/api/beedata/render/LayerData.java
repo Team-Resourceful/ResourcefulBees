@@ -3,21 +3,18 @@ package com.teamresourceful.resourcefulbees.api.beedata.render;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.client.render.entity.CustomBeeRenderer;
-import com.teamresourceful.resourcefulbees.client.render.entity.models.CustomBeeModel;
-import com.teamresourceful.resourcefulbees.lib.enums.ModelType;
 import com.teamresourceful.resourcefulbees.utils.color.Color;
 import org.jetbrains.annotations.Unmodifiable;
 
 @Unmodifiable
 public class LayerData {
-    public static final LayerData DEFAULT = new LayerData(Color.DEFAULT, ModelType.DEFAULT,  BeeTexture.MISSING_TEXTURE, false, false, false, 0);
+    public static final LayerData DEFAULT = new LayerData(Color.DEFAULT, BeeTexture.MISSING_TEXTURE, false, false, false, 0);
 
     /**
      * A {@link Codec<LayerData>} that can be parsed to create a {@link LayerData} object.
      */
     public static final Codec<LayerData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Color.CODEC.fieldOf("color").orElse(Color.DEFAULT).forGetter(LayerData::getColor),
-            ModelType.CODEC.fieldOf("modelType").orElse(ModelType.DEFAULT).forGetter(LayerData::getModelType),
             BeeTexture.CODEC.fieldOf("texture").orElse(BeeTexture.MISSING_TEXTURE).forGetter(LayerData::getBeeTexture),
             Codec.BOOL.fieldOf("isGlowing").orElse(false).forGetter(LayerData::isEmissive),
             Codec.BOOL.fieldOf("isEnchanted").orElse(false).forGetter(LayerData::isEnchanted),
@@ -26,16 +23,14 @@ public class LayerData {
     ).apply(instance, LayerData::new));
 
     private final Color color;
-    private final ModelType modelType;
     private final BeeTexture beeTexture;
     private final boolean isEmissive;
     private final boolean isEnchanted;
     private final float pulseFrequency;
     private final boolean isPollen;
 
-    private LayerData(Color color, ModelType modelType, BeeTexture beeTexture, boolean isEmissive, boolean isEnchanted, boolean isPollen, float pulseFrequency) {
+    private LayerData(Color color, BeeTexture beeTexture, boolean isEmissive, boolean isEnchanted, boolean isPollen, float pulseFrequency) {
         this.color = color;
-        this.modelType = modelType;
         this.beeTexture = beeTexture;
         this.isEmissive = isEmissive;
         this.isEnchanted = isEnchanted;
@@ -52,15 +47,6 @@ public class LayerData {
     public Color getColor() {
         return color;
     }
-
-    /**
-     * Gets the {@link ModelType} for this layer in the {@link CustomBeeRenderer}
-     * as a {@link CustomBeeModel}.
-     * The default value is {@link ModelType#DEFAULT}.
-     *
-     * @return Returns the {@link ModelType} for this layer.
-     */
-    public ModelType getModelType() { return modelType; }
 
     /**
      * Gets the {@link BeeTexture} for this layer in the {@link CustomBeeRenderer}.

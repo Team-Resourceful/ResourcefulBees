@@ -10,7 +10,8 @@
     "apiaryOutputAmounts": [1,2,3,4]
   },
   "RenderData": {
-    "layers": [{"texture": "/yeti/yeti_bee"}],
+    "texture": "/yeti/yeti_bee",
+    "model":  "resourcefulbees:geo/yeti.geo.json",
     "ColorData": {
       "spawnEggPrimaryColor": "#442920",
       "spawnEggSecondaryColor": "#e1d9b8",

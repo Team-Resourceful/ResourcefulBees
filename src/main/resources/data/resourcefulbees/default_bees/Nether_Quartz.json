@@ -10,10 +10,10 @@
     "block": "resourcefulbees:nether_quartz_honeycomb_block"
   },
   "RenderData": {
+    "texture": "custom/bee",
     "layers": [
-      {"texture": "custom/bee"},
-      {"isColored": true, "color": "#D4CABA", "texture": "custom/primary_layer"},
-      {"isColored": true, "color": "#303030", "texture": "custom/secondary_layer"}
+      { "color": "#D4CABA", "texture": "custom/primary_layer" },
+      { "color": "#303030", "texture": "custom/secondary_layer" }
     ],
     "ColorData": {
       "spawnEggPrimaryColor": "#D4CABA",

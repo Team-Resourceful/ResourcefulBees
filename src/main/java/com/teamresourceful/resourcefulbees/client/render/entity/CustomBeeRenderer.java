@@ -1,30 +1,35 @@
 package com.teamresourceful.resourcefulbees.client.render.entity;
 
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.teamresourceful.resourcefulbees.api.beedata.render.RenderData;
-import com.teamresourceful.resourcefulbees.client.render.entity.layers.BeeLayer;
+import com.teamresourceful.resourcefulbees.client.render.entity.layers.CustomBeeLayer;
 import com.teamresourceful.resourcefulbees.client.render.entity.models.CustomBeeModel;
 import com.teamresourceful.resourcefulbees.entity.passive.CustomBeeEntity;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import org.jetbrains.annotations.NotNull;
+import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
-@OnlyIn(Dist.CLIENT)
-public class CustomBeeRenderer extends MobRenderer<CustomBeeEntity, CustomBeeModel<CustomBeeEntity>> {
+public class CustomBeeRenderer<E extends CustomBeeEntity> extends GeoEntityRenderer<E> {
 
-    private static final ResourceLocation TEXTURE = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/entity/empty_layer.png");
-
-    public CustomBeeRenderer(EntityRendererManager manager, RenderData renderData) {
-        super(manager, new CustomBeeModel<>(renderData.getBaseModelType()), 0.4F * renderData.getSizeModifier());
-        renderData.getLayers().stream().limit(6).forEach(layerData -> addLayer(new BeeLayer(this, layerData)));
+    public CustomBeeRenderer(EntityRendererManager renderManager, RenderData renderData) {
+        super(renderManager, new CustomBeeModel<>());
+        renderData.getLayers().stream().limit(6).forEach(layerData -> addLayer(new CustomBeeLayer<>(this, renderData, layerData)));
     }
 
-    @NotNull
     @Override
-    public ResourceLocation getTextureLocation(@NotNull CustomBeeEntity entity) {
-       return TEXTURE;
+    public void renderEarly(E bee, MatrixStack stackIn, float ticks, IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float partialTicks) {
+        super.renderEarly(bee, stackIn, ticks, renderTypeBuffer, vertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, partialTicks);
+        stackIn.scale(bee.getRenderData().getSizeModifier(), bee.getRenderData().getSizeModifier(), bee.getRenderData().getSizeModifier());
+        if (bee.isBaby()){
+            stackIn.scale(0.5f, 0.5f, 0.5f);
+        }
+    }
+
+    @Override
+    public RenderType getRenderType(E animatable, float partialTicks, MatrixStack stack, IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn, ResourceLocation textureLocation) {
+        return RenderType.entityTranslucent(getTextureLocation(animatable));
     }
 }

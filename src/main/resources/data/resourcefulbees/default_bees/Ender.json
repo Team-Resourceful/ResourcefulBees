@@ -10,8 +10,8 @@
     "block": "resourcefulbees:ender_honeycomb_block"
   },
   "RenderData": {
+    "texture": "custom/bee",
     "layers": [
-      { "texture": "custom/bee" },
       { "color": "#339786", "texture": "custom/primary_layer" },
       { "color": "#303030", "texture": "custom/secondary_layer" }
     ],

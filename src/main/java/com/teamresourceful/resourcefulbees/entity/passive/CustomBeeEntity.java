@@ -48,6 +48,10 @@ import net.minecraftforge.common.util.FakePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
@@ -57,6 +61,11 @@ import java.util.Random;
 public class CustomBeeEntity extends ModBeeEntity implements ICustomBee, IAnimatable {
 
     private static final DataParameter<Integer> FEED_COUNT = EntityDataManager.defineId(CustomBeeEntity.class, DataSerializers.INT);
+
+    private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
+        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.bee.fly", true));
+        return PlayState.CONTINUE;
+    }
 
     private final AnimationFactory factory = new AnimationFactory(this);
 
@@ -361,7 +370,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee, IAnimat
 
     @Override
     public void registerControllers(AnimationData data) {
-
+        data.addAnimationController(new AnimationController<>(this, "bee_controller", 0, this::predicate));
     }
 
     @Override

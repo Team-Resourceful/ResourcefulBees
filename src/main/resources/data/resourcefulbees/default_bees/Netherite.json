@@ -10,7 +10,7 @@
     "block": "resourcefulbees:netherite_honeycomb_block"
   },
   "RenderData": {
-    "layers": [{"texture": "ores/netherite/netherite_bee"}],
+    "texture": "ores/netherite/netherite_bee",
     "ColorData": {
       "spawnEggPrimaryColor": "#654740",
       "spawnEggSecondaryColor": "#303030",

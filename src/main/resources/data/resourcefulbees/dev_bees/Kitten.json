@@ -23,13 +23,13 @@
   },
   "RenderData": {
     "sizeModifier": 0.75,
-    "layers": [{"texture": "/kitten/bee"}],
+    "texture": "/kitten/bee",
+    "model": "resourcefulbees:geo/kitten.geo.json",
     "ColorData": {
       "spawnEggPrimaryColor": "#EAA939",
       "spawnEggSecondaryColor": "#4C483B",
       "jarColor": "#EAA939"
-    },
-    "baseModelType": "KITTEN"
+    }
   },
   "SpawnData": {
     "canSpawnInWorld": true,

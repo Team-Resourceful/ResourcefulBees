@@ -13,7 +13,7 @@
     "apiaryOutputAmounts": [1,2,3,4]
   },
   "RenderData": {
-    "layers": [{"texture": "/oreo/oreo_bee"}],
+    "texture": "/oreo/oreo_bee",
     "ColorData": {
       "spawnEggPrimaryColor": "#442920",
       "spawnEggSecondaryColor": "#e1d9b8",

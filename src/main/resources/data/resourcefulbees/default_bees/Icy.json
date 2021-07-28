@@ -4,9 +4,8 @@
     "maxTimeInHive": 1200
   },
   "RenderData": {
-    "layers": [
-      {"texture": "icy/icy_bee","modelType": "SLIME"}
-    ],
+    "texture": "icy/icy_bee",
+    "model": "resourcefulbees:geo/slime.geo.json",
     "ColorData": {
       "spawnEggPrimaryColor": "#92b9fe",
       "spawnEggSecondaryColor": "#303030",

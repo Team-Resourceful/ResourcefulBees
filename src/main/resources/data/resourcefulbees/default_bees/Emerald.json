@@ -9,7 +9,8 @@
     "block": "resourcefulbees:emerald_honeycomb_block"
   },
   "RenderData": {
-    "layers": [{"texture": "ores/emerald/emerald_bee", "modelType": "ORE"}],
+    "texture": "ores/emerald/emerald_bee",
+    "model": "resourcefulbees:geo/crystal.geo.json",
     "ColorData": {
       "spawnEggPrimaryColor": "#18eb09",
       "spawnEggSecondaryColor": "#303030",

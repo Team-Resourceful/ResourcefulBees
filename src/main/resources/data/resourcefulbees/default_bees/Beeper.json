@@ -10,8 +10,8 @@
     "block": "resourcefulbees:beeper_honeycomb_block"
   },
   "RenderData": {
+    "texture": "/creeper/creeper_bee",
     "layers": [
-      {"texture": "/creeper/creeper_bee"},
       {"isGlowing": true, "texture": "/creeper/creeper_bee_emissive", "color": "#E2D3D3", "pulseFrequency": 10}
     ],
     "ColorData": {

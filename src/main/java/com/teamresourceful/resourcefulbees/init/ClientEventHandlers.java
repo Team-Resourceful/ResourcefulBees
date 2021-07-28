@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.init;
 
 import com.teamresourceful.resourcefulbees.client.gui.screen.*;
 import com.teamresourceful.resourcefulbees.client.models.ModelHandler;
-import com.teamresourceful.resourcefulbees.client.render.entity.GeckoBeeRenderer;
+import com.teamresourceful.resourcefulbees.client.render.entity.CustomBeeRenderer;
 import com.teamresourceful.resourcefulbees.client.render.fluid.FluidRender;
 import com.teamresourceful.resourcefulbees.client.render.items.ItemModelPropertiesHandler;
 import com.teamresourceful.resourcefulbees.client.render.patreon.BeeRewardRender;
@@ -27,8 +27,6 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import software.bernie.example.client.renderer.entity.ExampleGeoRenderer;
-import software.bernie.example.registry.EntityRegistry;
 
 public class ClientEventHandlers {
 
@@ -79,15 +77,9 @@ public class ClientEventHandlers {
     }
 
     private static void doClientStuff(final FMLClientSetupEvent event) {
-        //ModEntities.getModBees().forEach((s, entityType) ->
-        //        RenderingRegistry.registerEntityRenderingHandler(entityType,
-        //                manager -> new CustomBeeRenderer(manager, BeeRegistry.getRegistry().getBeeData(s).getRenderData())));
-
         ModEntities.getModBees().forEach((s, entityType) ->
-                RenderingRegistry.registerEntityRenderingHandler(entityType, GeckoBeeRenderer::new));
-
-        RenderingRegistry.registerEntityRenderingHandler(EntityRegistry.GEO_EXAMPLE_ENTITY.get(),
-                ExampleGeoRenderer::new);
+                RenderingRegistry.registerEntityRenderingHandler(entityType,
+                        manager -> new CustomBeeRenderer<>(manager, BeeRegistry.getRegistry().getBeeData(s).getRenderData())));
 
         ScreenManager.register(ModContainers.CENTRIFUGE_CONTAINER.get(), CentrifugeScreen::new);
         ScreenManager.register(ModContainers.MECHANICAL_CENTRIFUGE_CONTAINER.get(), MechanicalCentrifugeScreen::new);

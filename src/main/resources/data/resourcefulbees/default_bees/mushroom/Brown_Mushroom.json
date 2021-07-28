@@ -5,10 +5,8 @@
     "maxTimeInHive": 1200
   },
   "RenderData": {
-    "layers": [
-      { "texture": "mushroom/bee_brown", "modelType": "MUSHROOM"},
-      { "texture": "mushroom/bee_brown", "modelType": "CLOAKED"}
-    ]
+    "texture": "mushroom/bee_brown",
+    "model": "resourcefulbees:geo/flower_moss.geo.json"
   },
   "HoneycombData": {
     "type": "DEFAULT",

@@ -10,7 +10,7 @@
     "block": "resourcefulbees:wither_honeycomb_block"
   },
   "RenderData": {
-    "layers": [{"texture": "wither/wither_bee"}],
+    "texture": "wither/wither_bee",
     "ColorData": {
       "spawnEggPrimaryColor": "#444444",
       "spawnEggSecondaryColor": "#303030"
