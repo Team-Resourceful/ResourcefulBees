@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.item;
 
 import com.teamresourceful.resourcefulbees.entity.passive.CustomBeeEntity;
+import com.teamresourceful.resourcefulbees.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.utils.BeepediaUtils;
@@ -15,6 +16,7 @@ import net.minecraft.nbt.StringNBT;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -23,6 +25,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
+import vazkii.patchouli.api.PatchouliAPI;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -40,7 +43,13 @@ public class Beepedia extends Item {
     public void checkAndAddBees(ItemStack stack, CustomBeeEntity entity) {
         CompoundNBT nbt = stack.hasTag() && stack.getTag() != null ? stack.getTag() : new CompoundNBT();
         ListNBT listNBT;
-        if (nbt.getBoolean(CREATIVE_TAG)) return;
+        if (nbt.getBoolean(CREATIVE_TAG)) {
+            if (entity != null) {
+                nbt.putUUID(NBTConstants.NBT_ENTITY_ID, entity.getUUID());
+                stack.setTag(nbt);
+            }
+            return;
+        }
         if (nbt.contains(NBTConstants.NBT_BEES)) {
             listNBT = nbt.getList(NBTConstants.NBT_BEES, 8).copy();
         } else {
@@ -54,25 +63,32 @@ public class Beepedia extends Item {
             listNBT = listNBT.stream().distinct().collect(Collectors.toCollection(ListNBT::new));
             nbt.putBoolean(COMPLETE_TAG, listNBT.size() == BeeRegistry.getRegistry().getBees().size());
             nbt.put(NBTConstants.NBT_BEES, listNBT);
+            nbt.putUUID(NBTConstants.NBT_ENTITY_ID, entity.getUUID());
             stack.setTag(nbt);
         }
     }
 
+
+
     @Override
-    public @NotNull ActionResult<ItemStack> use(World world, PlayerEntity playerEntity, @NotNull Hand hand) {
-        ItemStack itemstack = playerEntity.getItemInHand(hand);
+    public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
+        ItemStack itemstack = player.getItemInHand(hand);
+        ItemStack book = PatchouliAPI.get().getBookStack(ModConstants.SHADES_OF_BEES);
+        boolean hasShades = player.inventory.contains(book);
         checkAndAddBees(itemstack, null);
         if (world.isClientSide) {
-            BeepediaUtils.loadBeepedia(itemstack, null);
+            BeepediaUtils.loadBeepedia(itemstack, null, hasShades);
         }
         return ActionResult.sidedSuccess(itemstack, world.isClientSide());
     }
 
     @Override
-    public @NotNull ActionResultType interactLivingEntity(@NotNull ItemStack stack, @NotNull PlayerEntity player, @NotNull LivingEntity entity, @NotNull Hand hand) {
+    public ActionResultType interactLivingEntity(ItemStack stack, PlayerEntity player, LivingEntity entity, Hand hand) {
+        ItemStack book = PatchouliAPI.get().getBookStack(new ResourceLocation("resourcefulbees:fifty_shades_of_bees"));
+        boolean hasShades = player.inventory.contains(book);
         if (entity instanceof CustomBeeEntity) {
             checkAndAddBees(stack, (CustomBeeEntity) entity);
-            if (player.level.isClientSide) BeepediaUtils.loadBeepedia(stack, entity);
+            if (player.level.isClientSide) BeepediaUtils.loadBeepedia(stack, entity, hasShades);
             player.setItemInHand(hand, stack);
             return ActionResultType.SUCCESS;
         }

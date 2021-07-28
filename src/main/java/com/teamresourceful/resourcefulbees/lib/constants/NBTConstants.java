@@ -8,6 +8,7 @@ public class NBTConstants {
 
 
 
+
     public static final String NBT_ROOT = "ResourcefulBees";
     public static final String NBT_COLOR = "Color";
     public static final String NBT_BEE_TYPE = "BeeType";
@@ -40,6 +41,7 @@ public class NBTConstants {
     public static final String NBT_TANKS = "Tanks";
     public static final String NBT_BEECON_RANGE = "range";
     public static final String NBT_RECIPES = "Recipes";
+    public static final String NBT_ENTITY_ID = "EntityID";
     public static final String NBT_ID = "id";
     public static final String NBT_ENERGY = "energy";
     public static final String NBT_FLUID = "fluid";

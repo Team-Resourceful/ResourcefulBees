@@ -32,14 +32,14 @@ public class BeepediaUtils {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
 
-    public static void loadBeepedia(ItemStack itemstack, Entity entity) {
+    public static void loadBeepedia(ItemStack itemstack, Entity entity, boolean hasShades) {
         boolean complete = false;
         List<String> bees = new LinkedList<>();
         if (itemstack.hasTag() && itemstack.getTag() != null && !itemstack.isEmpty()) {
             complete = itemstack.getTag().getBoolean(Beepedia.COMPLETE_TAG) || itemstack.getTag().getBoolean(Beepedia.CREATIVE_TAG);
             bees = getBees(itemstack.getTag());
         }
-        Minecraft.getInstance().setScreen(new BeepediaScreen(entity == null ? null : ((CustomBeeEntity) entity).getBeeType(), bees, complete));
+        Minecraft.getInstance().setScreen(new BeepediaScreen(entity == null ? null : (CustomBeeEntity) entity, bees, complete, hasShades, itemstack));
     }
 
     private static List<String> getBees(CompoundNBT tag) {

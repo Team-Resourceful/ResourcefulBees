@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.lib.constants;
 
 import com.google.gson.Gson;
 import net.minecraft.entity.EntityClassification;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 
 import java.text.DecimalFormat;
@@ -10,6 +11,7 @@ public class ModConstants {
 
     public static final String UTILITY_CLASS = "Utility Class";
     public static final Gson GSON = new Gson();
+    public static final ResourceLocation SHADES_OF_BEES = new ResourceLocation("resourcefulbees:fifty_shades_of_bees");
 
     private ModConstants() {
         throw new IllegalStateException(UTILITY_CLASS);
