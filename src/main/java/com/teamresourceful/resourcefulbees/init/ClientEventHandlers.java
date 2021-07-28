@@ -2,7 +2,6 @@ package com.teamresourceful.resourcefulbees.init;
 
 import com.teamresourceful.resourcefulbees.client.gui.screen.*;
 import com.teamresourceful.resourcefulbees.client.models.ModelHandler;
-import com.teamresourceful.resourcefulbees.client.render.entity.CustomBeeRenderer;
 import com.teamresourceful.resourcefulbees.client.render.entity.GeckoBeeRenderer;
 import com.teamresourceful.resourcefulbees.client.render.fluid.FluidRender;
 import com.teamresourceful.resourcefulbees.client.render.items.ItemModelPropertiesHandler;
@@ -81,11 +80,11 @@ public class ClientEventHandlers {
 
     private static void doClientStuff(final FMLClientSetupEvent event) {
         //ModEntities.getModBees().forEach((s, entityType) ->
-        //        RenderingRegistry.registerEntityRenderingHandler(entityType.get(),
+        //        RenderingRegistry.registerEntityRenderingHandler(entityType,
         //                manager -> new CustomBeeRenderer(manager, BeeRegistry.getRegistry().getBeeData(s).getRenderData())));
 
         ModEntities.getModBees().forEach((s, entityType) ->
-                RenderingRegistry.registerEntityRenderingHandler(entityType.get(), GeckoBeeRenderer::new));
+                RenderingRegistry.registerEntityRenderingHandler(entityType, GeckoBeeRenderer::new));
 
         RenderingRegistry.registerEntityRenderingHandler(EntityRegistry.GEO_EXAMPLE_ENTITY.get(),
                 ExampleGeoRenderer::new);

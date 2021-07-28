@@ -132,11 +132,13 @@ public class BeeSetup {
         }
     }
 
+
+
     public static void registerBeePlacements() {
         ModEntities.getModBees().forEach((s, entityType) -> {
             boolean canSpawnInWorld = BeeRegistry.getRegistry().getBeeData(s).getSpawnData().canSpawnInWorld();
             if (canSpawnInWorld) {
-                EntitySpawnPlacementRegistry.register(entityType.get(),
+                EntitySpawnPlacementRegistry.register(entityType,
                         EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
                         Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
                         CustomBeeEntity::canBeeSpawn);

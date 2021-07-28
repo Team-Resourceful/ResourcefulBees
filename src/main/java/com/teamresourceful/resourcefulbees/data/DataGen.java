@@ -11,8 +11,8 @@ import com.teamresourceful.resourcefulbees.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.registry.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.registry.ModEntities;
 import com.teamresourceful.resourcefulbees.registry.TraitRegistry;
+import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.RegistryObject;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
 
@@ -180,8 +180,8 @@ public class DataGen {
 
     private static void generateBeeTags() {
         TAGS.put(new ResourceLocation("minecraft", "tags/entity_types/beehive_inhabitors.json"),
-                ModEntities.getSetofModBees().stream()
-                        .map(RegistryObject::getId)
+                ModEntities.getSetOfModBees().stream()
+                        .map(EntityType::getRegistryName)
                         .collect(Collectors.toSet()));
     }
 

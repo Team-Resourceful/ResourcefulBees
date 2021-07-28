@@ -36,8 +36,6 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -48,15 +46,13 @@ public class RegistryHandler {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
 
-    public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITIES, ResourcefulBees.MOD_ID);
-
     public static void init() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         ModItems.ITEMS.register(bus);
         ModEffects.EFFECTS.register(bus);
         ModBlocks.BLOCKS.register(bus);
         ModFluids.FLUIDS.register(bus);
-        ENTITY_TYPES.register(bus);
+        ModEntities.ENTITY_TYPES.register(bus);
         ModBlockEntityTypes.TILE_ENTITY_TYPES.register(bus);
         ModPOIs.POIS.register(bus);
         ModPotions.POTIONS.register(bus);
@@ -69,7 +65,7 @@ public class RegistryHandler {
     //Dynamic|Iterative Registration Stuff below this line
 
     public static void addEntityAttributes(EntityAttributeCreationEvent event) {
-        ModEntities.getModBees().forEach((s, customBee) -> event.put(customBee.get(), CustomBeeEntity.createBeeAttributes(s).build()));
+        ModEntities.getModBees().forEach((s, entityType) -> event.put(entityType, CustomBeeEntity.createBeeAttributes(s).build()));
     }
 
     public static void registerDynamicBees() {
@@ -113,17 +109,14 @@ public class RegistryHandler {
     }
 
     private static void registerBee(String name, float sizeModifier) {
-        EntityType<? extends CustomBeeEntity> entityType = EntityType.Builder
+        final EntityType<? extends CustomBeeEntity> beeEntityType = EntityType.Builder
                 .<ResourcefulBee>of((type, world) -> new ResourcefulBee(type, world, name), ModConstants.BEE_MOB_CATEGORY)
                 .sized(0.7F * sizeModifier, 0.6F * sizeModifier)
                 .build(name + "_bee");
-
-        final RegistryObject<EntityType<? extends CustomBeeEntity>> customBeeEntity = ENTITY_TYPES.register(name + "_bee", () -> entityType);
-
+        ModEntities.ENTITY_TYPES.register(name + "_bee", () -> beeEntityType);
         ModItems.ITEMS.register(name + "_bee_spawn_egg",
-                () -> new BeeSpawnEggItem(entityType, 0xffcc33, 0x303030, name, new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
-
-        ModEntities.getModBees().put(name, customBeeEntity);
+                () -> new BeeSpawnEggItem(beeEntityType, 0xffcc33, 0x303030, name, new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
+        ModEntities.getModBees().put(name, beeEntityType);
     }
 
     // TODO does this need to use the codec? - epic
@@ -154,7 +147,7 @@ public class RegistryHandler {
             honeyBottleData.setHoneyBucketItemRegistryObject(honeyBuckets.get(name));
             honeyBottleData.setHoneyFluidBlockRegistryObject(fluidBlocks.get(name));
         }
-        HoneyRegistry.getRegistry().registerHoney(name, honeyBottleData);
+        HoneyRegistry.getRegistry().registerHoney(name, honeyBottleData); //do this separately so it can be called in the reload command that is to be added
     }
 
     public static void registerDispenserBehaviors() {

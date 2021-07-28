@@ -107,6 +107,7 @@ public class RenderUtils {
         RenderSystem.color4f(red, green, blue, alpha);
         RenderUtils.drawTiledSprite(matrix, xPos, yPos, height, width, effectiveHeight, sprite, 16, 16, zOffset);
         resetColor();
+        renderFluid(matrix, stack, xPos, yPos, width, height, zOffset);
     }
 
     public static void renderFluid(MatrixStack matrix, FluidTank fluidTank, int xPos, int yPos, int width, int height, int zOffset) {

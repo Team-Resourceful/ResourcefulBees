@@ -1,17 +1,20 @@
 package com.teamresourceful.resourcefulbees.container;
 
+import com.teamresourceful.resourcefulbees.mixin.ContainerAccessor;
 import com.teamresourceful.resourcefulbees.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.network.packets.LockBeeMessage;
 import com.teamresourceful.resourcefulbees.registry.ModContainers;
 import com.teamresourceful.resourcefulbees.tileentity.multiblocks.apiary.ApiaryTileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.IntReferenceHolder;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
 public class ValidatedApiaryContainer extends ContainerWithStackMove {
@@ -29,34 +32,11 @@ public class ValidatedApiaryContainer extends ContainerWithStackMove {
         this.pos = pos;
         this.apiaryTileEntity = (ApiaryTileEntity) world.getBlockEntity(pos);
 
-        if (getApiaryTileEntity() != null) {
-            this.addSlot(new SlotItemHandlerUnconditioned(getApiaryTileEntity().getTileStackHandler(), ApiaryTileEntity.IMPORT, 74, 37) {
-                @Override
-                public int getMaxStackSize() {
-                    return getApiaryTileEntity().getTileStackHandler().getSlotLimit(ApiaryTileEntity.IMPORT);
-                }
-
-                @Override
-                public boolean mayPlace(ItemStack stack) {
-                    return getApiaryTileEntity().getTileStackHandler().isItemValid(ApiaryTileEntity.IMPORT, stack);
-                }
-            });
-            this.addSlot(new SlotItemHandlerUnconditioned(getApiaryTileEntity().getTileStackHandler(), ApiaryTileEntity.EMPTY_JAR, 128, 37) {
-                @Override
-                public int getMaxStackSize() {
-                    return getApiaryTileEntity().getTileStackHandler().getSlotLimit(ApiaryTileEntity.EMPTY_JAR);
-                }
-
-                @Override
-                public boolean mayPlace(ItemStack stack) {
-                    return getApiaryTileEntity().getTileStackHandler().isItemValid(ApiaryTileEntity.EMPTY_JAR, stack);
-                }
-            });
-            this.addSlot(new OutputSlot(getApiaryTileEntity().getTileStackHandler(), ApiaryTileEntity.EXPORT, 182, 37));
-            if (!world.isClientSide) {
-                this.getApiaryTileEntity().setNumPlayersUsing(this.getApiaryTileEntity().getNumPlayersUsing() + 1);
-                ApiaryTileEntity.syncApiaryToPlayersUsing(world, pos, this.getApiaryTileEntity().saveToNBT(new CompoundNBT()));
-            }
+        if (apiaryTileEntity != null) {
+            addInputSlot(apiaryTileEntity, ApiaryTileEntity.IMPORT, 74);
+            addInputSlot(getApiaryTileEntity(), ApiaryTileEntity.EMPTY_JAR, 128);
+            this.addSlot(new OutputSlot(apiaryTileEntity.getTileStackHandler(), ApiaryTileEntity.EXPORT, 182, 37));
+            if (!world.isClientSide) apiaryTileEntity.syncApiaryToPlayersUsing();
         }
 
         for (int i = 0; i < 3; ++i) {
@@ -70,18 +50,33 @@ public class ValidatedApiaryContainer extends ContainerWithStackMove {
         }
     }
 
+    private void addInputSlot(ApiaryTileEntity apiaryTileEntity, int slot, int xPos) {
+        this.addSlot(new SlotItemHandlerUnconditioned(apiaryTileEntity.getTileStackHandler(), slot, xPos, 37) {
+            @Override
+            public int getMaxStackSize() {
+                return apiaryTileEntity.getTileStackHandler().getSlotLimit(slot);
+            }
+
+            @Override
+            public boolean mayPlace(ItemStack stack) {
+                return apiaryTileEntity.getTileStackHandler().isItemValid(slot, stack);
+            }
+        });
+    }
+
     @Override
     public boolean stillValid(@NotNull PlayerEntity playerIn) {
         return true;
     }
 
-    @Override
+    //TODO is this an artifact left over from the unstash? - oreo
+/*    @Override
     public void removed(@NotNull PlayerEntity playerIn) {
         World world = this.getApiaryTileEntity().getLevel();
         if (world != null && !world.isClientSide)
             this.getApiaryTileEntity().setNumPlayersUsing(this.getApiaryTileEntity().getNumPlayersUsing() - 1);
         super.removed(playerIn);
-    }
+    }*/
 
     @Override
     public int getContainerInputEnd() {
@@ -131,5 +126,20 @@ public class ValidatedApiaryContainer extends ContainerWithStackMove {
 
     public void setBeeList(String[] beeList) {
         this.beeList = beeList;
+    }
+
+    @Override
+    public void addSlotListener(@NotNull IContainerListener listener) {
+        super.addSlotListener(listener);
+        apiaryTileEntity.setListeners(((ContainerAccessor) this).getListeners());
+        //apiaryTileEntity.setNumPlayersUsing(((ContainerAccessor) this).getListeners().size());
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    @Override
+    public void removeSlotListener(@NotNull IContainerListener listener) {
+        super.removeSlotListener(listener);
+        apiaryTileEntity.setListeners(((ContainerAccessor) this).getListeners());
+        //apiaryTileEntity.setNumPlayersUsing(((ContainerAccessor) this).getListeners().size());
     }
 }

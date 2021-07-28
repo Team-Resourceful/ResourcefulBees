@@ -34,7 +34,7 @@ public class ApiaryStorageScreen extends ContainerScreen<ApiaryStorageContainer>
     private ResourceLocation background;
 
     private TabImageButton mainTabButton;
-    private TabImageButton breedTabButton;
+    //private TabImageButton breedTabButton;
 
     public ApiaryStorageScreen(ApiaryStorageContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
         super(screenContainer, inv, titleIn);
@@ -98,7 +98,7 @@ public class ApiaryStorageScreen extends ContainerScreen<ApiaryStorageContainer>
             }
         }).active = false;
 
-        breedTabButton = this.addButton(new TabImageButton(t + 1, j + 57, 18, 18, 110, 0, 18, TABS_BG, new ItemStack(ModItems.GOLD_FLOWER_ITEM.get()), 1, 1,
+/*        breedTabButton = this.addButton(new TabImageButton(t + 1, j + 57, 18, 18, 110, 0, 18, TABS_BG, new ItemStack(ModItems.GOLD_FLOWER_ITEM.get()), 1, 1,
                 onPress -> this.changeScreen(ApiaryTab.BREED), 128, 128) {
 
             @Override
@@ -106,15 +106,15 @@ public class ApiaryStorageScreen extends ContainerScreen<ApiaryStorageContainer>
                 TranslationTextComponent s = new TranslationTextComponent("gui.resourcefulbees.apiary.button.breed_screen");
                 ApiaryStorageScreen.this.renderTooltip(matrix, s, mouseX, mouseY);
             }
-        });
+        });*/
     }
 
     private void changeScreen(ApiaryTab tab) {
         switch (tab) {
-            case BREED:
+/*            case BREED:
                 if (breedTabButton.active)
                     NetPacketHandler.sendToServer(new ApiaryTabMessage(getApiaryStorageTileEntity().getBlockPos(), ApiaryTab.BREED));
-                break;
+                break;*/
             case STORAGE:
                 break;
             case MAIN:
@@ -132,7 +132,7 @@ public class ApiaryStorageScreen extends ContainerScreen<ApiaryStorageContainer>
         }
 
         mainTabButton.active = getApiaryStorageTileEntity().getApiary() != null;
-        breedTabButton.active = getApiaryStorageTileEntity().getApiary() != null && getApiaryStorageTileEntity().getApiary().getBreederPos() != null;
+        //breedTabButton.active = getApiaryStorageTileEntity().getApiary() != null && getApiaryStorageTileEntity().getApiary().getBreederPos() != null;
 
         Minecraft client = this.minecraft;
         if (client != null) {

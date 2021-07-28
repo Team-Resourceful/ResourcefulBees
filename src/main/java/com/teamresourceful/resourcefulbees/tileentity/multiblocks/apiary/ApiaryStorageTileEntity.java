@@ -346,10 +346,10 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
             if (tab == ApiaryTab.MAIN) {
                 TileEntity tile = level.getBlockEntity(apiaryPos);
                 NetworkHooks.openGui(player, (INamedContainerProvider) tile, apiaryPos);
-            } else if (tab == ApiaryTab.BREED) {
-                TileEntity tile = level.getBlockEntity(apiary.getBreederPos());
-                NetworkHooks.openGui(player, (INamedContainerProvider) tile, apiary.getBreederPos());
-            }
+            }/* else if (tab == ApiaryTab.BREED) {
+                BlockEntity tile = level.getBlockEntity(apiary.getBreederPos());
+                NetworkHooks.openGui(player, (MenuProvider) tile, apiary.getBreederPos());
+            }*/
         }
     }
 

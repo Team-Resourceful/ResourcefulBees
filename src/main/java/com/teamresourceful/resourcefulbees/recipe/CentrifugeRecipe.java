@@ -9,12 +9,8 @@ import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.beedata.CodecUtils;
 import com.teamresourceful.resourcefulbees.api.beedata.centrifuge.CentrifugeFluidOutput;
 import com.teamresourceful.resourcefulbees.api.beedata.centrifuge.CentrifugeItemOutput;
-import com.teamresourceful.resourcefulbees.api.beedata.outputs.FluidOutput;
-import com.teamresourceful.resourcefulbees.api.beedata.outputs.ItemOutput;
 import com.teamresourceful.resourcefulbees.config.Config;
 import com.teamresourceful.resourcefulbees.registry.ModRecipeSerializers;
-import com.teamresourceful.resourcefulbees.utils.RandomCollection;
-import com.teamresourceful.resourcefulbees.utils.RecipeUtils;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
@@ -25,11 +21,11 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.FluidStack;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -153,84 +149,40 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
     }
 
     //REQUIRED This needs serious testing to ensure it is working properly before pushing update!!!
-    public static class Serializer<T extends CentrifugeRecipe> extends net.minecraftforge.registries.ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<T> {
-        final IRecipeFactory<T> factory;
+    public static class Serializer extends net.minecraftforge.registries.ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<CentrifugeRecipe> {
+        final IRecipeFactory factory;
 
-        public Serializer(Serializer.IRecipeFactory<T> factory) {
+        public Serializer(Serializer.IRecipeFactory factory) {
             this.factory = factory;
         }
 
         @Override
-        public @NotNull T fromJson(@NotNull ResourceLocation id, @NotNull JsonObject json) {
+        public @NotNull CentrifugeRecipe fromJson(@NotNull ResourceLocation id, @NotNull JsonObject json) {
             CentrifugeRecipe recipe = CentrifugeRecipe.CODEC.parse(JsonOps.INSTANCE, json).getOrThrow(false, s -> ResourcefulBees.LOGGER.error("Could not parse Centrifuge Recipe!!"));
             return this.factory.create(id, recipe.ingredient, recipe.itemOutputs, recipe.fluidOutputs, recipe.time, recipe.multiblockTime, recipe.multiblock);
         }
 
-        public T fromNetwork(@NotNull ResourceLocation id, @NotNull PacketBuffer buffer) {
-            Ingredient ingredient = Ingredient.fromNetwork(buffer);
-            List<CentrifugeItemOutput> itemOutputs = getItemOutputs(buffer);
-            List<CentrifugeFluidOutput> fluidOutputs = getFluidOutputs(buffer);
-            int time = buffer.readInt();
-            int multiblockTime = buffer.readInt();
-            boolean multiblock = buffer.readBoolean();
-            return this.factory.create(id, ingredient, itemOutputs, fluidOutputs, time, multiblockTime, multiblock);
-        }
-
-        private List<CentrifugeItemOutput> getItemOutputs(PacketBuffer buffer) {
-            List<CentrifugeItemOutput> itemOutputs = new ArrayList<>();
-            for (int i = 0; i < buffer.readInt(); i++) {
-                double chance = buffer.readDouble();
-                RandomCollection<ItemOutput> pool = new RandomCollection<>();
-                for (int j = 0; j < buffer.readInt(); j++) {
-                    double weight = buffer.readDouble();
-                    pool.add(weight, new ItemOutput(RecipeUtils.readItemStack(buffer), weight, chance));
-                }
-                itemOutputs.add(new CentrifugeItemOutput(chance, pool));
+        @Override
+        public CentrifugeRecipe fromNetwork(@NotNull ResourceLocation id, @NotNull PacketBuffer buffer) {
+            try {
+                return buffer.readWithCodec(CODEC);
+            } catch (IOException e) {
+                throw new IllegalArgumentException();
             }
-            return itemOutputs;
         }
 
-        private List<CentrifugeFluidOutput> getFluidOutputs(PacketBuffer buffer) {
-            List<CentrifugeFluidOutput> fluidOutputs = new ArrayList<>();
-            for (int i = 0; i < buffer.readInt(); i++) {
-                double chance = buffer.readDouble();
-                RandomCollection<FluidOutput> pool = new RandomCollection<>();
-                for (int j = 0; j < buffer.readInt(); j++) {
-                    double weight = buffer.readDouble();
-                    pool.add(weight, new FluidOutput(FluidStack.readFromPacket(buffer), weight, chance));
-                }
-                fluidOutputs.add(new CentrifugeFluidOutput(chance, pool));
+        //REQUIRED TEST THIS ON SERVERS!!!!!!!!!!!
+        @Override
+        public void toNetwork(@NotNull PacketBuffer buffer, @NotNull CentrifugeRecipe recipe) {
+            try {
+                buffer.writeWithCodec(CODEC, recipe);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            return fluidOutputs;
         }
 
-        public void toNetwork(@NotNull PacketBuffer buffer, T recipe) {
-            recipe.getIngredient().toNetwork(buffer);
-            buffer.writeInt(recipe.getItemOutputs().size());
-            recipe.getItemOutputs().forEach(centrifugeItemOutput -> {
-                buffer.writeDouble(centrifugeItemOutput.getChance());
-                buffer.writeInt(centrifugeItemOutput.getPool().getSize());
-                centrifugeItemOutput.getPool().forEach(itemOutput -> {
-                    buffer.writeDouble(itemOutput.getWeight());
-                    RecipeUtils.writeItemStack(itemOutput.getItemStack(), buffer);
-                });
-            });
-            buffer.writeInt(recipe.getFluidOutputs().size());
-            recipe.getFluidOutputs().forEach(centrifugeFluidOutput -> {
-                buffer.writeDouble(centrifugeFluidOutput.getChance());
-                buffer.writeInt(centrifugeFluidOutput.getPool().getSize());
-                centrifugeFluidOutput.getPool().forEach(fluidOutput -> {
-                    buffer.writeDouble(fluidOutput.getWeight());
-                    fluidOutput.getFluidStack().writeToPacket(buffer);
-                });
-            });
-            buffer.writeInt(recipe.getTime());
-            buffer.writeInt(recipe.getMultiblockTime());
-            buffer.writeBoolean(recipe.isMultiblock());
-        }
-
-        public interface IRecipeFactory<T extends CentrifugeRecipe> {
-            T create(ResourceLocation id, Ingredient input, List<CentrifugeItemOutput> itemOutputs, List<CentrifugeFluidOutput> fluidOutputs, int time, int multiblockTime, boolean multiblock);
+        public interface IRecipeFactory {
+            CentrifugeRecipe create(ResourceLocation id, Ingredient input, List<CentrifugeItemOutput> itemOutputs, List<CentrifugeFluidOutput> fluidOutputs, int time, int multiblockTime, boolean multiblock);
         }
     }
 }

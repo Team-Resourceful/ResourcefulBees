@@ -44,7 +44,7 @@ public class CodecUtils {
             Registry.ITEM.fieldOf("id").forGetter(ItemStack::getItem),
             Codec.INT.fieldOf("count").orElse(1).forGetter(ItemStack::getCount),
             CompoundNBT.CODEC.optionalFieldOf("nbt").forGetter(o -> Optional.ofNullable(o.getTag()))
-    ).apply(instance, CodecUtils::createItemStack));
+    ).apply(instance, CodecUtils::createItemStack)); //can't use this method in 1.17 due to constructor being removed!!!
 
     //Codec for converting an ItemStack to an Ingredient
     public static final Codec<Ingredient> INGREDIENT_CODEC = ITEM_STACK_CODEC.comapFlatMap(CodecUtils::convertToIngredient, CodecUtils::ingredientToString);

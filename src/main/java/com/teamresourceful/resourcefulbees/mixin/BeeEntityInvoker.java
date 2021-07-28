@@ -25,6 +25,4 @@ public interface BeeEntityInvoker {
 
     @Invoker
     boolean callIsTiredOfLookingForNectar();
-
-
 }

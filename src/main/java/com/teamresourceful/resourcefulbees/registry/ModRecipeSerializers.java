@@ -20,7 +20,7 @@ public class ModRecipeSerializers {
 
 
     public static final RegistryObject<IRecipeSerializer<?>> CENTRIFUGE_RECIPE = RECIPE_SERIALIZERS.register("centrifuge",
-            () -> new CentrifugeRecipe.Serializer<>(CentrifugeRecipe::new));
+            () -> new CentrifugeRecipe.Serializer(CentrifugeRecipe::new));
 
     public static final RegistryObject<IRecipeSerializer<?>> HONEY_TANK_RECIPE = RECIPE_SERIALIZERS.register("honey_tank_recipe", HoneyTankRecipe.Serializer::new);
     public static final RegistryObject<IRecipeSerializer<?>> APIARY_UPGRADE_RECIPE = RECIPE_SERIALIZERS.register("hive_upgrade_recipe", ApiaryUpgradeRecipe.Serializer::new);

@@ -1,18 +1,18 @@
 package com.teamresourceful.resourcefulbees.tileentity.multiblocks.apiary;
 
 import com.teamresourceful.resourcefulbees.block.multiblocks.apiary.ApiaryBlock;
-import com.teamresourceful.resourcefulbees.block.multiblocks.apiary.ApiaryBreederBlock;
 import com.teamresourceful.resourcefulbees.block.multiblocks.apiary.ApiaryStorageBlock;
 import com.teamresourceful.resourcefulbees.container.UnvalidatedApiaryContainer;
 import com.teamresourceful.resourcefulbees.container.ValidatedApiaryContainer;
 import com.teamresourceful.resourcefulbees.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.lib.enums.ApiaryTab;
 import com.teamresourceful.resourcefulbees.network.NetPacketHandler;
-import com.teamresourceful.resourcefulbees.network.packets.UpdateClientApiaryMessage;
+import com.teamresourceful.resourcefulbees.network.packets.SyncGUIMessage;
 import com.teamresourceful.resourcefulbees.registry.ModBlocks;
 import com.teamresourceful.resourcefulbees.tileentity.multiblocks.MultiBlockHelper;
 import com.teamresourceful.resourcefulbees.utils.BeeInfoUtils;
 import com.teamresourceful.resourcefulbees.utils.MathUtils;
+import io.netty.buffer.Unpooled;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -24,21 +24,23 @@ import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.NetworkManager;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.awt.event.ContainerListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -53,13 +55,10 @@ public class ApiaryController extends TileEntity implements ITickableTileEntity,
     private int width = 7;
     private int height = 6;
     private int depth = 7;
-    private int numPlayersUsing;
+    private List<ContainerListener> listeners = new ArrayList<>();
     private int ticksSinceValidation;
-    private int ticksSinceSync;
     private BlockPos storagePos;
-    private BlockPos breederPos;
     private ApiaryStorageTileEntity apiaryStorage;
-    private ApiaryBreederTileEntity apiaryBreeder;
 
 
     public ApiaryController(TileEntityType<?> entityType) {
@@ -67,32 +66,25 @@ public class ApiaryController extends TileEntity implements ITickableTileEntity,
     }
 
     //region PLAYER SYNCING
-    public static int calculatePlayersUsingSync(World world, ApiaryController apiaryTileEntity, int ticksSinceSync, int posX, int posY, int posZ, int numPlayersUsing) {
-        if (!world.isClientSide && numPlayersUsing != 0 && (ticksSinceSync + posX + posY + posZ) % 200 == 0) {
-            numPlayersUsing = calculatePlayersUsing(world, apiaryTileEntity, posX, posY, posZ);
+    public void sendGUINetworkPacket(ContainerListener player) {
+        if (player instanceof ServerPlayerEntity && !(player instanceof FakePlayer)) {
+            PacketBuffer buffer = new PacketBuffer(Unpooled.buffer());
+            buffer.writeNbt(saveToNBT(new CompoundNBT()));
+            NetPacketHandler.sendToPlayer(new SyncGUIMessage(this.worldPosition, buffer), (ServerPlayerEntity) player);
         }
-
-        return numPlayersUsing;
     }
 
-    public static int calculatePlayersUsing(World world, ApiaryController apiaryTileEntity, int posX, int posY, int posZ) {
-        int i = 0;
-        float f = 5.0F;
-
-        for (PlayerEntity playerentity : world.getEntitiesOfClass(PlayerEntity.class, new AxisAlignedBB(posX - f, posY - f, posZ - f, (posX + 1) + f, (posY + 1) + f, (posZ + 1) + f))) {
-            if (playerentity.containerMenu instanceof ValidatedApiaryContainer) {
-                ApiaryTileEntity apiaryTileEntity1 = ((ValidatedApiaryContainer) playerentity.containerMenu).getApiaryTileEntity();
-                if (apiaryTileEntity1 == apiaryTileEntity) {
-                    ++i;
-                }
-            }
-        }
-
-        return i;
+    public void handleGUINetworkPacket(PacketBuffer buffer) {
+        CompoundNBT nbt = buffer.readNbt();
+        if (nbt != null) loadFromNBT(nbt);
     }
 
-    public static void syncApiaryToPlayersUsing(World world, BlockPos pos, CompoundNBT data) {
-        NetPacketHandler.sendToAllLoaded(new UpdateClientApiaryMessage(pos, data), world, pos);
+    public void syncApiaryToPlayersUsing() {
+        this.listeners.forEach(this::sendGUINetworkPacket);
+    }
+
+    public void setListeners(List<ContainerListener> listeners) {
+        this.listeners = listeners;
     }
     //endregion
 
@@ -114,21 +106,11 @@ public class ApiaryController extends TileEntity implements ITickableTileEntity,
         return null;
     }
 
-    public ApiaryBreederTileEntity getApiaryBreeder() {
-        if (level != null && getBreederPos() != null) {
-            TileEntity tile = level.getBlockEntity(getBreederPos());
-            if (tile instanceof ApiaryBreederTileEntity) {
-                return (ApiaryBreederTileEntity) tile;
-            }
-        }
-        setBreederPos(null);
-        return null;
-    }
-
     public void runStructureValidation(@Nullable ServerPlayerEntity validatingPlayer) {
         if (this.level != null && !this.level.isClientSide()) {
-            if (!this.isValidApiary || structureBlocks.isEmpty())
+            if (!this.isValidApiary || structureBlocks.isEmpty()) {
                 buildStructureBlockList();
+            }
             this.isValidApiary = validateStructure(this.level, validatingPlayer);
             this.level.setBlockAndUpdate(this.getBlockPos(), getBlockState().setValue(ApiaryBlock.VALIDATED, this.isValidApiary));
             if (validatingPlayer != null && this.isValidApiary) {
@@ -141,7 +123,6 @@ public class ApiaryController extends TileEntity implements ITickableTileEntity,
     public boolean validateStructure(World worldIn, @Nullable ServerPlayerEntity validatingPlayer) {
         AtomicBoolean isStructureValid = new AtomicBoolean(true);
         this.apiaryStorage = getApiaryStorage();
-        this.apiaryBreeder = getApiaryBreeder();
         validateLinks();
         isStructureValid.set(validateBlocks(isStructureValid, worldIn, validatingPlayer));
 
@@ -159,19 +140,21 @@ public class ApiaryController extends TileEntity implements ITickableTileEntity,
     }
 
     private boolean validateBlocks(AtomicBoolean isStructureValid, World worldIn, @Nullable ServerPlayerEntity validatingPlayer) {
-        structureBlocks.forEach(pos -> {
-            Block block = worldIn.getBlockState(pos).getBlock();
-            if (block.is(BeeInfoUtils.getValidApiaryTag()) || block instanceof ApiaryBreederBlock || block instanceof ApiaryStorageBlock || block instanceof ApiaryBlock) {
-                TileEntity tile = worldIn.getBlockEntity(pos);
-                linkStorageAndBreeder(tile);
+        for (BlockPos pos : structureBlocks) {
+            if (isValidApiaryBlock(worldIn.getBlockState(pos).getBlock())) {
+                tryLinkStorage(worldIn.getBlockEntity(pos));
             } else {
                 isStructureValid.set(false);
                 if (validatingPlayer != null)
                     validatingPlayer.displayClientMessage(new StringTextComponent(String.format("Block at position (X: %1$s Y: %2$s Z: %3$s) is invalid!", pos.getX(), pos.getY(), pos.getZ())), false);
             }
-        });
+        }
 
         return isStructureValid.get();
+    }
+
+    private boolean isValidApiaryBlock(Block block) {
+        return block.is(BeeInfoUtils.getValidApiaryTag()) || block instanceof ApiaryStorageBlock || block instanceof ApiaryBlock;
     }
 
 
@@ -187,37 +170,41 @@ public class ApiaryController extends TileEntity implements ITickableTileEntity,
         if (this.level != null) {
             MutableBoundingBox box = buildStructureBounds(this.getHorizontalOffset(), this.getVerticalOffset());
             structureBlocks.clear();
-            BlockPos.betweenClosedStream(box).forEach((blockPos -> {
-                if (blockPos.getX() == box.x0 || blockPos.getX() == box.x1 ||
-                        blockPos.getY() == box.y0 || blockPos.getY() == box.y1 ||
-                        blockPos.getZ() == box.z0 || blockPos.getZ() == box.z1) {
-                    structureBlocks.add(blockPos.immutable());
-                }
-            }));
+            BlockPos.betweenClosedStream(box)
+                    .filter(blockPos -> isValidStructurePos(box, blockPos))
+                    .forEach(blockPos -> structureBlocks.add(blockPos.immutable()));
         }
+    }
+
+    private boolean isValidStructurePos(MutableBoundingBox box, BlockPos blockPos) {
+        return blockPos.getX() == box.x0 || blockPos.getX() == box.x1 ||
+                blockPos.getY() == box.y0 || blockPos.getY() == box.y1 ||
+                blockPos.getZ() == box.z0 || blockPos.getZ() == box.z1;
     }
 
     public void runCreativeBuild(ServerPlayerEntity player) {
         if (this.level != null) {
             buildStructureBlockList();
-            boolean addedStorage = false;
-            for (BlockPos pos : structureBlocks) {
-                Block block = this.level.getBlockState(pos).getBlock();
-                if (!(block instanceof ApiaryBlock)) {
-                    if (addedStorage) {
-                        this.level.setBlockAndUpdate(pos, Blocks.GLASS.defaultBlockState());
-                    } else {
-                        this.level.setBlockAndUpdate(pos, ModBlocks.APIARY_STORAGE_BLOCK.get().defaultBlockState());
-                        addedStorage = true;
-                    }
-                }
-            }
+            AtomicBoolean addedStorage = new AtomicBoolean(false);
+            structureBlocks.stream()
+                    .filter(this::blockAtPosIsNotApiary)
+                    .forEach(blockPos -> {
+                        if (addedStorage.get()) {
+                            this.level.setBlockAndUpdate(blockPos, Blocks.GLASS.defaultBlockState());
+                        } else {
+                            this.level.setBlockAndUpdate(blockPos, ModBlocks.APIARY_STORAGE_BLOCK.get().defaultBlockState());
+                            addedStorage.set(true);
+                        }
+                    });
             runStructureValidation(player);
         }
     }
 
-    @SuppressWarnings("UnusedReturnValue")
-    public boolean linkStorageAndBreeder(TileEntity tile) {
+    private boolean blockAtPosIsNotApiary(BlockPos blockPos) {
+        return this.level != null && !(this.level.getBlockState(blockPos).getBlock() instanceof ApiaryBlock);
+    }
+
+    public void tryLinkStorage(TileEntity tile) {
         if (tile instanceof ApiaryStorageTileEntity && apiaryStorage == null && ((ApiaryStorageTileEntity) tile).getApiaryPos() == null) {
             apiaryStorage = (ApiaryStorageTileEntity) tile;
             setStoragePos(apiaryStorage.getBlockPos());
@@ -225,42 +212,22 @@ public class ApiaryController extends TileEntity implements ITickableTileEntity,
             if (level != null) {
                 level.sendBlockUpdated(getStoragePos(), apiaryStorage.getBlockState(), apiaryStorage.getBlockState(), 2);
             }
-            return true;
         }
-
-        if (tile instanceof ApiaryBreederTileEntity && apiaryBreeder == null && ((ApiaryBreederTileEntity) tile).getApiaryPos() == null) {
-            apiaryBreeder = (ApiaryBreederTileEntity) tile;
-            setBreederPos(apiaryBreeder.getBlockPos());
-            apiaryBreeder.setApiaryPos(this.worldPosition);
-            if (level != null) {
-                level.sendBlockUpdated(getBreederPos(), apiaryBreeder.getBlockState(), apiaryBreeder.getBlockState(), 2);
-            }
-            return true;
-        }
-
-        return false;
     }
 
-    @SuppressWarnings("UnusedReturnValue")
-    private boolean validateLinks() {
-        boolean linksValid = true;
-        if (apiaryStorage != null && (apiaryStorage.getApiaryPos() == null || positionsMismatch(apiaryStorage.getApiaryPos()))) {
+    private void validateLinks() {
+        boolean brokenLink = false;
+        if (apiaryStorage != null && (apiaryStorage.getApiaryPos() == null || positionMismatch(apiaryStorage.getApiaryPos()))) {
             apiaryStorage = null;
-            setStoragePos(null);
-            linksValid = false;
+            storagePos = null;
+            brokenLink = true;
         }
-        if (apiaryBreeder != null && (apiaryBreeder.getApiaryPos() == null || positionsMismatch(apiaryBreeder.getApiaryPos()))) {
-            apiaryBreeder = null;
-            setBreederPos(null);
-            linksValid = false;
-        }
-        if (!linksValid) {
+        if (brokenLink) {
             setChanged();
         }
-        return linksValid;
     }
 
-    private boolean positionsMismatch(BlockPos pos) {
+    private boolean positionMismatch(BlockPos pos) {
         return pos.compareTo(this.worldPosition) != 0;
     }
 
@@ -300,14 +267,6 @@ public class ApiaryController extends TileEntity implements ITickableTileEntity,
         this.verticalOffset = verticalOffset;
     }
 
-    public int getNumPlayersUsing() {
-        return numPlayersUsing;
-    }
-
-    public void setNumPlayersUsing(int numPlayersUsing) {
-        this.numPlayersUsing = numPlayersUsing;
-    }
-
     public boolean isPreviewed() {
         return previewed;
     }
@@ -322,14 +281,6 @@ public class ApiaryController extends TileEntity implements ITickableTileEntity,
 
     public void setStoragePos(BlockPos storagePos) {
         this.storagePos = storagePos;
-    }
-
-    public BlockPos getBreederPos() {
-        return breederPos;
-    }
-
-    public void setBreederPos(BlockPos breederPos) {
-        this.breederPos = breederPos;
     }
 
     /**
@@ -396,7 +347,6 @@ public class ApiaryController extends TileEntity implements ITickableTileEntity,
     @Override
     public Container createMenu(int i, @NotNull PlayerInventory playerInventory, @NotNull PlayerEntity playerEntity) {
         if (level != null) {
-            setNumPlayersUsing(getNumPlayersUsing() + 1);
             if (isValidApiary(true)) {
                 return new ValidatedApiaryContainer(i, level, worldPosition, playerInventory);
             }
@@ -407,30 +357,16 @@ public class ApiaryController extends TileEntity implements ITickableTileEntity,
 
     @Override
     public void switchTab(ServerPlayerEntity player, ApiaryTab tab) {
-        if (level != null) {
-            if (tab == ApiaryTab.STORAGE) {
-                NetworkHooks.openGui(player, getApiaryStorage(), getStoragePos());
-            }
-            if (tab == ApiaryTab.BREED) {
-                NetworkHooks.openGui(player, getApiaryBreeder(), getBreederPos());
-            }
+        if (level != null && tab == ApiaryTab.STORAGE) {
+            NetworkHooks.openGui(player, getApiaryStorage(), getStoragePos());
         }
     }
 
     @Override
     public void tick() {
-        if (level != null) {
-            BlockPos blockpos = this.getBlockPos();
-            int x = blockpos.getX();
-            int y = blockpos.getY();
-            int z = blockpos.getZ();
-            ++ticksSinceSync;
-            this.setNumPlayersUsing(calculatePlayersUsingSync(this.level, this, this.ticksSinceSync, x, y, z, this.getNumPlayersUsing()));
-
-            if (!level.isClientSide && isValidApiary) {
-                if (ticksSinceValidation >= 20) runStructureValidation(null);
-                else ticksSinceValidation++;
-            }
+        if (level != null && !level.isClientSide && isValidApiary) {
+            if (ticksSinceValidation >= 20) runStructureValidation(null);
+            else ticksSinceValidation++;
         }
     }
 
@@ -468,8 +404,6 @@ public class ApiaryController extends TileEntity implements ITickableTileEntity,
             this.setDepth(nbt.getInt(NBTConstants.NBT_DEPTH));
         if (nbt.contains(NBTConstants.NBT_STORAGE_POS))
             setStoragePos(NBTUtil.readBlockPos(nbt.getCompound(NBTConstants.NBT_STORAGE_POS)));
-        if (nbt.contains(NBTConstants.NBT_BREEDER_POS))
-            setBreederPos(NBTUtil.readBlockPos(nbt.getCompound(NBTConstants.NBT_BREEDER_POS)));
     }
 
     public CompoundNBT saveToNBT(CompoundNBT nbt) {
@@ -479,10 +413,7 @@ public class ApiaryController extends TileEntity implements ITickableTileEntity,
         nbt.putInt(NBTConstants.NBT_WIDTH, getWidth());
         nbt.putInt(NBTConstants.NBT_HEIGHT, getHeight());
         nbt.putInt(NBTConstants.NBT_DEPTH, getDepth());
-        if (getStoragePos() != null)
-            nbt.put(NBTConstants.NBT_STORAGE_POS, NBTUtil.writeBlockPos(getStoragePos()));
-        if (getBreederPos() != null)
-            nbt.put(NBTConstants.NBT_BREEDER_POS, NBTUtil.writeBlockPos(getBreederPos()));
+        if (getStoragePos() != null) nbt.put(NBTConstants.NBT_STORAGE_POS, NBTUtil.writeBlockPos(getStoragePos()));
         return nbt;
     }
 

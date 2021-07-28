@@ -17,7 +17,7 @@ public class ItemGroupResourcefulBees {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
 
-    public static final ItemGroup RESOURCEFUL_BEES = (new ItemGroup(ResourcefulBees.MOD_ID) {
+    public static final ItemGroup RESOURCEFUL_BEES = new ItemGroup(ResourcefulBees.MOD_ID) {
 
         @Override
         @NotNull
@@ -35,7 +35,5 @@ public class ItemGroupResourcefulBees {
             creativeBeepedia.setTag(tag);
             itemstacks.add(creativeBeepedia);
         }
-    });
-
-
+    };
 }
