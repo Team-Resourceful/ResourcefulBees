@@ -8,6 +8,7 @@ import com.teamresourceful.resourcefulbees.tileentity.CentrifugeTileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.ContainerType;
+import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -21,8 +22,6 @@ import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import org.jetbrains.annotations.NotNull;
-
-import java.awt.event.ContainerListener;
 
 public class CentrifugeContainer extends ContainerWithStackMove {
 
@@ -186,7 +185,7 @@ public class CentrifugeContainer extends ContainerWithStackMove {
             return;
         }
 
-        for (ContainerListener listener : ((ContainerAccessor) this).getListeners()) {
+        for (IContainerListener listener : ((ContainerAccessor) this).getListeners()) {
             centrifugeTileEntity.sendGUINetworkPacket(listener);
         }
     }

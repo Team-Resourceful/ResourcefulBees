@@ -5,12 +5,11 @@ import com.teamresourceful.resourcefulbees.registry.ModContainers;
 import com.teamresourceful.resourcefulbees.tileentity.HoneyCongealerTileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
-
-import java.awt.event.ContainerListener;
 
 public class HoneyCongealerContainer extends ContainerWithStackMove {
 
@@ -54,7 +53,7 @@ public class HoneyCongealerContainer extends ContainerWithStackMove {
             return;
         }
 
-        for (ContainerListener listener : ((ContainerAccessor) this).getListeners()) {
+        for (IContainerListener listener : ((ContainerAccessor) this).getListeners()) {
             getHoneyCongealerTileEntity().sendGUINetworkPacket(listener);
         }
     }

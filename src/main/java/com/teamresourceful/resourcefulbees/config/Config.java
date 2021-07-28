@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.config;
 
-import com.teamresourceful.resourcefulbees.lib.enums.ApiaryOutputType;
 import com.teamresourceful.resourcefulbees.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.lib.enums.ApiaryOutputType;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.*;
 

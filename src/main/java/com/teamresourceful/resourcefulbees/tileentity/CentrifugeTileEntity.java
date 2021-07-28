@@ -25,6 +25,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
@@ -53,7 +54,6 @@ import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import java.awt.event.ContainerListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -523,7 +523,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
         };
     }
 
-    public void sendGUINetworkPacket(ContainerListener player) {
+    public void sendGUINetworkPacket(IContainerListener player) {
         if (player instanceof ServerPlayerEntity && (!(player instanceof FakePlayer))) {
             PacketBuffer buffer = new PacketBuffer(Unpooled.buffer());
 

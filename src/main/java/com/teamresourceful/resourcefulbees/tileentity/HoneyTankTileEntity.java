@@ -17,6 +17,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -34,7 +35,6 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import java.awt.event.ContainerListener;
 
 public class HoneyTankTileEntity extends AbstractHoneyTankContainer {
 
@@ -187,7 +187,7 @@ public class HoneyTankTileEntity extends AbstractHoneyTankContainer {
         return new AxisAlignedBB(this.getBlockPos().below().south().west(), this.getBlockPos().above().north().east());
     }
 
-    public void sendGUINetworkPacket(ContainerListener player) {
+    public void sendGUINetworkPacket(IContainerListener player) {
         if (player instanceof ServerPlayerEntity && (!(player instanceof FakePlayer))) {
             PacketBuffer buffer = new PacketBuffer(Unpooled.buffer());
             buffer.writeFluidStack(getFluidTank().getFluid());

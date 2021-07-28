@@ -1,8 +1,8 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages;
 
+import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
-import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 
 public abstract class BeeDataPage extends BeepediaPage {
 

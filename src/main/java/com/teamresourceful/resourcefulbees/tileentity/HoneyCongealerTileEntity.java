@@ -13,6 +13,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -31,8 +32,6 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.awt.event.ContainerListener;
 
 public class HoneyCongealerTileEntity extends AbstractHoneyTank implements ITickableTileEntity, ISyncableGUI {
 
@@ -98,7 +97,7 @@ public class HoneyCongealerTileEntity extends AbstractHoneyTank implements ITick
         return (slot, automation) -> !automation || slot == BLOCK_OUTPUT;
     }
 
-    public void sendGUINetworkPacket(ContainerListener player) {
+    public void sendGUINetworkPacket(IContainerListener player) {
         if (player instanceof ServerPlayerEntity && (!(player instanceof FakePlayer))) {
             PacketBuffer buffer = new PacketBuffer(Unpooled.buffer());
             buffer.writeFluidStack(getFluidTank().getFluid());

@@ -43,8 +43,8 @@ import vazkii.patchouli.api.PatchouliAPI;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 

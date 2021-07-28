@@ -5,6 +5,7 @@ import com.teamresourceful.resourcefulbees.registry.ModContainers;
 import com.teamresourceful.resourcefulbees.tileentity.HoneyGeneratorTileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -12,8 +13,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import org.jetbrains.annotations.NotNull;
-
-import java.awt.event.ContainerListener;
 
 public class HoneyGeneratorContainer extends ContainerWithStackMove {
 
@@ -82,7 +81,7 @@ public class HoneyGeneratorContainer extends ContainerWithStackMove {
             return;
         }
 
-        for (ContainerListener listener : ((ContainerAccessor) this).getListeners()) {
+        for (IContainerListener listener : ((ContainerAccessor) this).getListeners()) {
             getHoneyGeneratorTileEntity().sendGUINetworkPacket(listener);
         }
     }

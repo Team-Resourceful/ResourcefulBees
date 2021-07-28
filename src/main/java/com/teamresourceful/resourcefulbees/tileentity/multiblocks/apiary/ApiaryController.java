@@ -20,6 +20,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
@@ -40,7 +41,6 @@ import net.minecraftforge.fml.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.awt.event.ContainerListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -55,7 +55,7 @@ public class ApiaryController extends TileEntity implements ITickableTileEntity,
     private int width = 7;
     private int height = 6;
     private int depth = 7;
-    private List<ContainerListener> listeners = new ArrayList<>();
+    private List<IContainerListener> listeners = new ArrayList<>();
     private int ticksSinceValidation;
     private BlockPos storagePos;
     private ApiaryStorageTileEntity apiaryStorage;
@@ -66,7 +66,7 @@ public class ApiaryController extends TileEntity implements ITickableTileEntity,
     }
 
     //region PLAYER SYNCING
-    public void sendGUINetworkPacket(ContainerListener player) {
+    public void sendGUINetworkPacket(IContainerListener player) {
         if (player instanceof ServerPlayerEntity && !(player instanceof FakePlayer)) {
             PacketBuffer buffer = new PacketBuffer(Unpooled.buffer());
             buffer.writeNbt(saveToNBT(new CompoundNBT()));
@@ -83,7 +83,7 @@ public class ApiaryController extends TileEntity implements ITickableTileEntity,
         this.listeners.forEach(this::sendGUINetworkPacket);
     }
 
-    public void setListeners(List<ContainerListener> listeners) {
+    public void setListeners(List<IContainerListener> listeners) {
         this.listeners = listeners;
     }
     //endregion

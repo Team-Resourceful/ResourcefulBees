@@ -11,6 +11,7 @@ import com.teamresourceful.resourcefulbees.utils.BeeInfoUtils;
 import io.netty.buffer.Unpooled;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.item.*;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tags.ITag;
@@ -26,8 +27,6 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.awt.event.ContainerListener;
 
 public abstract class AbstractHoneyTankContainer extends AbstractHoneyTank implements ITickableTileEntity, ISyncableGUI {
 
@@ -166,7 +165,7 @@ public abstract class AbstractHoneyTankContainer extends AbstractHoneyTank imple
         return tileStackHandler;
     }
 
-    public void sendGUINetworkPacket(ContainerListener player) {
+    public void sendGUINetworkPacket(IContainerListener player) {
         if (player instanceof ServerPlayerEntity && (!(player instanceof FakePlayer))) {
             PacketBuffer buffer = new PacketBuffer(Unpooled.buffer());
             buffer.writeFluidStack(getFluidTank().getFluid());
