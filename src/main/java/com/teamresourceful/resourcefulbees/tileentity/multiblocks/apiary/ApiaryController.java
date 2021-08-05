@@ -1,19 +1,17 @@
 package com.teamresourceful.resourcefulbees.tileentity.multiblocks.apiary;
 
 import com.teamresourceful.resourcefulbees.block.multiblocks.apiary.ApiaryBlock;
-import com.teamresourceful.resourcefulbees.block.multiblocks.apiary.ApiaryStorageBlock;
 import com.teamresourceful.resourcefulbees.container.UnvalidatedApiaryContainer;
 import com.teamresourceful.resourcefulbees.container.ValidatedApiaryContainer;
 import com.teamresourceful.resourcefulbees.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.lib.enums.ApiaryTab;
+import com.teamresourceful.resourcefulbees.mixin.BlockAccessor;
 import com.teamresourceful.resourcefulbees.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.network.packets.SyncGUIMessage;
 import com.teamresourceful.resourcefulbees.registry.ModBlocks;
 import com.teamresourceful.resourcefulbees.tileentity.multiblocks.MultiBlockHelper;
-import com.teamresourceful.resourcefulbees.utils.BeeInfoUtils;
 import com.teamresourceful.resourcefulbees.utils.MathUtils;
 import io.netty.buffer.Unpooled;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
@@ -88,6 +86,16 @@ public class ApiaryController extends TileEntity implements ITickableTileEntity,
     }
     //endregion
 
+    private static boolean isValidApiaryBlock(BlockAccessor block) {
+        return block.getHasCollision();
+    }
+
+    private static boolean isValidStructurePos(MutableBoundingBox box, BlockPos blockPos) {
+        return blockPos.getX() == box.x0 || blockPos.getX() == box.x1 ||
+                blockPos.getY() == box.y0 || blockPos.getY() == box.y1 ||
+                blockPos.getZ() == box.z0 || blockPos.getZ() == box.z1;
+    }
+
     public boolean isValidApiary(boolean runValidation) {
         if (runValidation) {
             runStructureValidation(null);
@@ -123,7 +131,7 @@ public class ApiaryController extends TileEntity implements ITickableTileEntity,
     public boolean validateStructure(World worldIn, @Nullable ServerPlayerEntity validatingPlayer) {
         AtomicBoolean isStructureValid = new AtomicBoolean(true);
         this.apiaryStorage = getApiaryStorage();
-        validateLinks();
+        validateStorageLink();
         isStructureValid.set(validateBlocks(isStructureValid, worldIn, validatingPlayer));
 
         if (apiaryStorage == null) {
@@ -141,7 +149,7 @@ public class ApiaryController extends TileEntity implements ITickableTileEntity,
 
     private boolean validateBlocks(AtomicBoolean isStructureValid, World worldIn, @Nullable ServerPlayerEntity validatingPlayer) {
         for (BlockPos pos : structureBlocks) {
-            if (isValidApiaryBlock(worldIn.getBlockState(pos).getBlock())) {
+            if (isValidApiaryBlock((BlockAccessor) worldIn.getBlockState(pos).getBlock())) {
                 tryLinkStorage(worldIn.getBlockEntity(pos));
             } else {
                 isStructureValid.set(false);
@@ -152,11 +160,6 @@ public class ApiaryController extends TileEntity implements ITickableTileEntity,
 
         return isStructureValid.get();
     }
-
-    private boolean isValidApiaryBlock(Block block) {
-        return block.is(BeeInfoUtils.getValidApiaryTag()) || block instanceof ApiaryStorageBlock || block instanceof ApiaryBlock;
-    }
-
 
     public MutableBoundingBox buildStructureBounds(int horizontalOffset, int verticalOffset) {
         return MultiBlockHelper.buildStructureBounds(this.getBlockPos(), width, height, depth, getAdjustedHOffset(horizontalOffset), -verticalOffset - 2, 0, this.getBlockState().getValue(ApiaryBlock.FACING));
@@ -174,12 +177,6 @@ public class ApiaryController extends TileEntity implements ITickableTileEntity,
                     .filter(blockPos -> isValidStructurePos(box, blockPos))
                     .forEach(blockPos -> structureBlocks.add(blockPos.immutable()));
         }
-    }
-
-    private boolean isValidStructurePos(MutableBoundingBox box, BlockPos blockPos) {
-        return blockPos.getX() == box.x0 || blockPos.getX() == box.x1 ||
-                blockPos.getY() == box.y0 || blockPos.getY() == box.y1 ||
-                blockPos.getZ() == box.z0 || blockPos.getZ() == box.z1;
     }
 
     public void runCreativeBuild(ServerPlayerEntity player) {
@@ -204,7 +201,7 @@ public class ApiaryController extends TileEntity implements ITickableTileEntity,
         return this.level != null && !(this.level.getBlockState(blockPos).getBlock() instanceof ApiaryBlock);
     }
 
-    public void tryLinkStorage(TileEntity tile) {
+    private void tryLinkStorage(TileEntity tile) {
         if (tile instanceof ApiaryStorageTileEntity && apiaryStorage == null && ((ApiaryStorageTileEntity) tile).getApiaryPos() == null) {
             apiaryStorage = (ApiaryStorageTileEntity) tile;
             setStoragePos(apiaryStorage.getBlockPos());
@@ -215,14 +212,10 @@ public class ApiaryController extends TileEntity implements ITickableTileEntity,
         }
     }
 
-    private void validateLinks() {
-        boolean brokenLink = false;
+    private void validateStorageLink() {
         if (apiaryStorage != null && (apiaryStorage.getApiaryPos() == null || positionMismatch(apiaryStorage.getApiaryPos()))) {
             apiaryStorage = null;
             storagePos = null;
-            brokenLink = true;
-        }
-        if (brokenLink) {
             setChanged();
         }
     }

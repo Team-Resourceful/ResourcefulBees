@@ -7,12 +7,17 @@ import com.teamresourceful.resourcefulbees.config.Config;
 import com.teamresourceful.resourcefulbees.init.BeeSetup;
 import com.teamresourceful.resourcefulbees.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.lib.enums.HoneycombType;
+import com.teamresourceful.resourcefulbees.mixin.BlockAccessor;
 import com.teamresourceful.resourcefulbees.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.registry.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.registry.ModEntities;
 import com.teamresourceful.resourcefulbees.registry.TraitRegistry;
+import net.minecraft.block.Block;
 import net.minecraft.entity.EntityType;
+import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.ForgeRegistryEntry;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
 
@@ -53,6 +58,7 @@ public class DataGen {
         generateCombBlockItemTags();
         generateCombBlockTags();
         generateCombItemTags();
+        generateValidApiaryTag();
 
         //custom honey data
         generateHoneyBottleTags();
@@ -152,6 +158,16 @@ public class DataGen {
 
     private static ResourceLocation genModResourceLocation(CustomBeeData data, String suffix){
         return new ResourceLocation(ResourcefulBees.MOD_ID, data.getCoreData().getName() + suffix);
+    }
+
+    private static void generateValidApiaryTag() {
+        TAGS.put(new ResourceLocation(ResourcefulBees.MOD_ID, "tags/items/valid_apiary.json"),
+                ForgeRegistries.BLOCKS.getValues().stream()
+                        .filter(block -> ((BlockAccessor)block).getHasCollision() )
+                        .map(Block::asItem)
+                        .filter(item -> item != Items.AIR)
+                        .map(ForgeRegistryEntry::getRegistryName)
+                        .collect(Collectors.toSet()));
     }
 
     private static void generateCombItemTags() {

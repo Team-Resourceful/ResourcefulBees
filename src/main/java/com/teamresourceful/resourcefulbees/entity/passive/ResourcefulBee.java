@@ -7,10 +7,7 @@ import com.teamresourceful.resourcefulbees.api.beedata.outputs.EntityOutput;
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.ItemOutput;
 import com.teamresourceful.resourcefulbees.api.beedata.traits.TraitData;
 import com.teamresourceful.resourcefulbees.config.Config;
-import com.teamresourceful.resourcefulbees.entity.goals.BeeAngerGoal;
-import com.teamresourceful.resourcefulbees.entity.goals.BeeBreedGoal;
-import com.teamresourceful.resourcefulbees.entity.goals.BeeTemptGoal;
-import com.teamresourceful.resourcefulbees.entity.goals.BeeWanderGoal;
+import com.teamresourceful.resourcefulbees.entity.goals.*;
 import com.teamresourceful.resourcefulbees.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.lib.constants.TraitConstants;
 import com.teamresourceful.resourcefulbees.mixin.BeeEntityAccessor;
@@ -58,7 +55,7 @@ import java.util.Map;
 public class ResourcefulBee extends CustomBeeEntity {
     private boolean wasColliding;
     private int numberOfMutations;
-    private PollinateGoal pollinateGoal;
+    private BeePollinateGoal pollinateGoal;
     private int explosiveCooldown = 0;
 
     public ResourcefulBee(EntityType<? extends BeeEntity> type, World world, String beeType) {
@@ -88,7 +85,7 @@ public class ResourcefulBee extends CustomBeeEntity {
             this.goalSelector.addGoal(3, new BeeTemptGoal(this, 1.25D));
             this.goalSelector.addGoal(5, new FollowParentGoal(this, 1.25D));
         }
-        this.pollinateGoal = new PollinateGoal();
+        this.pollinateGoal = new BeePollinateGoal(this);
         this.goalSelector.addGoal(4, this.pollinateGoal);
 
         ((BeeEntityAccessor)this).setPollinateGoal(new FakePollinateGoal());
@@ -219,6 +216,8 @@ public class ResourcefulBee extends CustomBeeEntity {
         if (output.getChance() >= level.random.nextFloat()) {
 
             level.setBlockAndUpdate(blockPos, output.getBlock().defaultBlockState());
+            //TODO clean up these .isPresent code smells by first allocating to a method local Optional field.
+            // There's several instances where this occurs - oreo
             if (output.getCompoundNBT().isPresent()) {
                 TileEntity tile = level.getBlockEntity(blockPos);
                 CompoundNBT nbt = output.getCompoundNBT().get();
@@ -266,6 +265,8 @@ public class ResourcefulBee extends CustomBeeEntity {
     protected void customServerAiStep() {
         TraitData info = getTraitData();
 
+        //TODO change out this switch for a prefilled map of consumers. might be able handle it directly in TraitData to reduce number of loops
+        // **may have to change methods to public to do so**
         if (info.hasTraits() && info.hasSpecialAbilities()) {
             info.getSpecialAbilities().forEach(ability -> {
                 switch (ability) {
@@ -314,7 +315,7 @@ public class ResourcefulBee extends CustomBeeEntity {
                 float f1 = this.random.nextFloat() * 0.5F + 0.5F;
                 float f2 = MathHelper.sin(f) * 1 * 0.5F * f1;
                 float f3 = MathHelper.cos(f) * 1 * 0.5F * f1;
-                this.level.addParticle(ParticleTypes.ITEM_SLIME, this.getX() + (double) f2, this.getY(), this.getZ() + (double) f3, 0.0D, 0.0D, 0.0D);
+                this.level.addParticle(ParticleTypes.ITEM_SLIME, this.getX() + f2, this.getY(), this.getZ() + f3, 0.0D, 0.0D, 0.0D);
             }
 
             this.playSound(SoundEvents.SLIME_SQUISH, this.getSoundVolume(), ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F) / 0.8F);
@@ -329,7 +330,7 @@ public class ResourcefulBee extends CustomBeeEntity {
     protected void teleportRandomly() {
         if (!this.level.isClientSide() && this.isAlive()) {
             double d0 = this.getX() + (this.random.nextDouble() - 0.5D) * 4.0D;
-            double d1 = this.getY() + (double) (this.random.nextInt(4) - 2);
+            double d1 = this.getY() + (this.random.nextInt(4) - 2);
             double d2 = this.getZ() + (this.random.nextDouble() - 0.5D) * 4.0D;
             this.teleportToPos(d0, d1, d2);
         }
@@ -346,7 +347,7 @@ public class ResourcefulBee extends CustomBeeEntity {
         boolean canMove = blockstate.getMaterial().blocksMotion();
         boolean water = blockstate.getFluidState().is(FluidTags.WATER);
         if (canMove && !water) {
-            EnderTeleportEvent event = new EnderTeleportEvent(this, x, y, z, 0);
+            EnderTeleportEvent event = new EnderTeleportEvent(this, x, y, z, 0); //TODO fix this event call since it is removed in 1.17 anyway
             if (MinecraftForge.EVENT_BUS.post(event)) return;
             boolean teleported = this.randomTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), true);
             if (teleported) {
@@ -427,7 +428,7 @@ public class ResourcefulBee extends CustomBeeEntity {
             areaeffectcloudentity.setRadiusOnUse(-0.5F);
             areaeffectcloudentity.setWaitTime(10);
             areaeffectcloudentity.setDuration(areaeffectcloudentity.getDuration() / 2);
-            areaeffectcloudentity.setRadiusPerTick(-areaeffectcloudentity.getRadius() / (float) areaeffectcloudentity.getDuration());
+            areaeffectcloudentity.setRadiusPerTick(-areaeffectcloudentity.getRadius() / areaeffectcloudentity.getDuration());
 
             for (EffectInstance effectinstance : collection) {
                 areaeffectcloudentity.addEffect(new EffectInstance(effectinstance));

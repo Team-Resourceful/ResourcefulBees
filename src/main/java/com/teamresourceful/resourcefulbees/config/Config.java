@@ -6,8 +6,6 @@ import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.*;
 
 public class Config {
-
-
     //TODO Rewrite config names in 1.17 to be more informative also update comments if needed
     private Config() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
@@ -224,7 +222,7 @@ public class Config {
             T4_APIARY_QUANTITY = COMMON_BUILDER.comment("\nTier 4 Apiary Output Quantity")
                     .defineInRange("tierFourApiaryQuantity", 8, 1, Integer.MAX_VALUE);
             APIARY_MAX_BEES = COMMON_BUILDER.comment("\nMaximum number of UNIQUE bees allowed in the Apiary.")
-                    .defineInRange("apiaryMaxBees", 9, 1, 16);
+                    .defineInRange("apiaryMaxBees", 16, 1, 24);
             APIARY_MAX_BREED_TIME = COMMON_BUILDER.comment("\nMaximum breed time before upgrades are applied.")
                     .defineInRange("apiaryMaxBreedTime", 2400, 1200, 4800);
             COMMON_BUILDER.pop();

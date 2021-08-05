@@ -94,6 +94,8 @@ public class BeeInfoUtils {
         return ForgeRegistries.ENTITIES.getValue(entityId);
     }
 
+    // TODO Below get methods have the potential to cause NPE crashes and need fixing! - oreo
+
     public static ITag<Item> getItemTag(String itemTag) {
         return ItemTags.getAllTags().getTag(ResourceLocation.tryParse(itemTag));
     }
@@ -105,16 +107,6 @@ public class BeeInfoUtils {
     public static ITag<Block> getBlockTag(String blockTag) {
         return BlockTags.getAllTags().getTag(ResourceLocation.tryParse(blockTag));
     }
-
-    public static ITag<Block> getValidApiaryTag() {
-        return BlockTags.getAllTags().getTag(VALID_APIARY);
-    }
-
-    public static void makeValidApiaryTag() {
-        BlockTags.bind("resourcefulbees:valid_apiary");
-    }
-
-    private static final ResourceLocation VALID_APIARY = new ResourceLocation("resourcefulbees:valid_apiary");
 
     public static void flagBeesInRange(BlockPos pos, World world) {
         MutableBoundingBox box = MutableBoundingBox.createProper(pos.getX() + 10, pos.getY() + 10, pos.getZ() + 10, pos.getX() - 10, pos.getY() - 10, pos.getZ() - 10);

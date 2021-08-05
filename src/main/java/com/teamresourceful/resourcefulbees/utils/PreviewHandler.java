@@ -4,6 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.teamresourceful.resourcefulbees.block.multiblocks.apiary.ApiaryBlock;
 import com.teamresourceful.resourcefulbees.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.mixin.BlockAccessor;
 import com.teamresourceful.resourcefulbees.registry.ModBlocks;
 import com.teamresourceful.resourcefulbees.tileentity.multiblocks.apiary.ApiaryTileEntity;
 import net.minecraft.block.BlockState;
@@ -23,6 +24,8 @@ import net.minecraftforge.client.model.data.EmptyModelData;
 import java.util.ArrayList;
 import java.util.List;
 
+
+//TODO clean this class up badly.... -oreo
 public class PreviewHandler {
     private static BlockPos apiaryPos = null;
     private static final List<BlockPos> STRUCTURE_PREVIEW_POS = new ArrayList<>();
@@ -66,8 +69,7 @@ public class PreviewHandler {
                             if (world.getBlockState(pos).equals(Blocks.AIR.defaultBlockState()))
                                 renderBlockAt(ms, buffer, ModBlocks.PREVIEW_BLOCK.get().defaultBlockState(), pos);
                             else {
-                                if (BeeInfoUtils.getBlockTag("resourcefulbees:valid_apiary") != null
-                                        && !world.getBlockState(pos).is(BeeInfoUtils.getBlockTag("resourcefulbees:valid_apiary"))) {
+                                if (((BlockAccessor) world.getBlockState(pos).getBlock()).getHasCollision()) {
                                     renderBlockAt(ms, buffer, ModBlocks.ERRORED_PREVIEW_BLOCK.get().defaultBlockState(), pos);
                                 }
                             }
@@ -95,9 +97,9 @@ public class PreviewHandler {
         ms.translate(pos.getX(), pos.getY(), pos.getZ());
         IBakedModel model = brd.getBlockModel(state);
         int color = Minecraft.getInstance().getBlockColors().getColor(state, null, null, 0);
-        float r = (float) (color >> 16 & 255) / 255.0F;
-        float g = (float) (color >> 8 & 255) / 255.0F;
-        float b = (float) (color & 255) / 255.0F;
+        float r = (color >> 16 & 255) / 255.0F;
+        float g = (color >> 8 & 255) / 255.0F;
+        float b = (color & 255) / 255.0F;
         brd.getModelRenderer().renderModel(ms.last(), buffer, state, model, r, g, b, 16777215, OverlayTexture.NO_OVERLAY, EmptyModelData.INSTANCE);
 
         ms.popPose();

@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-public class PollinateGoal extends Goal {
+public class BeePollinateGoal extends Goal {
 
     private int pollinationTicks;
     private int lastPollinationTick;
@@ -42,7 +42,7 @@ public class PollinateGoal extends Goal {
         }
     }
 
-    public PollinateGoal(CustomBeeEntity beeEntity) {
+    public BeePollinateGoal(CustomBeeEntity beeEntity) {
         this.setFlags(EnumSet.of(Goal.Flag.MOVE));
         this.bee = beeEntity;
     }

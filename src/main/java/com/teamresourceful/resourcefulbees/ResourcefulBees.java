@@ -14,7 +14,6 @@ import com.teamresourceful.resourcefulbees.init.TraitSetup;
 import com.teamresourceful.resourcefulbees.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.patreon.PatreonDataLoader;
 import com.teamresourceful.resourcefulbees.registry.*;
-import com.teamresourceful.resourcefulbees.utils.BeeInfoUtils;
 import net.minecraft.entity.merchant.villager.VillagerTrades;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
@@ -51,11 +50,8 @@ import java.util.List;
 public class ResourcefulBees {
 
     public static final String MOD_ID = "resourcefulbees";
-
     public static final Logger LOGGER = LogManager.getLogger();
 
-    //need to determine how everything in this method can be moved to common module safely
-    //oh and figure out how the hell to handle event priorities so the mod doesn't break functionality
     public ResourcefulBees() {
         GeckoLib.initialize();
         ModSetup.initialize();
@@ -86,11 +82,10 @@ public class ResourcefulBees {
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ClientEventHandlers::clientStuff);
 
         MinecraftForge.EVENT_BUS.register(this);
-
     }
 
     @SubscribeEvent
-    public void serverLoaded(FMLServerStartedEvent event) { //arch has an event for this
+    public void serverLoaded(FMLServerStartedEvent event) {
         if (event.getServer().isDedicatedServer()){
             BeeRegistry.getRegistry().regenerateCustomBeeData();
         }
@@ -98,7 +93,7 @@ public class ResourcefulBees {
     }
 
     @SubscribeEvent
-    public void trade(VillagerTradesEvent event) {//arch should have an event for this
+    public void trade(VillagerTradesEvent event) {
         List<VillagerTrades.ITrade> level1 = event.getTrades().get(1);
         List<VillagerTrades.ITrade> level2 = event.getTrades().get(2);
         List<VillagerTrades.ITrade> level3 = event.getTrades().get(3);
@@ -141,13 +136,11 @@ public class ResourcefulBees {
     }
 
     @SubscribeEvent(priority = EventPriority.LOW)
-    public void setup(FMLCommonSetupEvent event) { //find arch method for this to make tag
-        BeeInfoUtils.makeValidApiaryTag();
-        event.enqueueWork(RegistryHandler::registerDispenserBehaviors); //use arch method for this
-        NetPacketHandler.init(); //find arch method for this
-        //me.shedaniel.architectury.registry.ReloadListeners#registerReloadListener gets put in init() when moved to arch setup.
+    public void setup(FMLCommonSetupEvent event) {
+        event.enqueueWork(RegistryHandler::registerDispenserBehaviors);
+        NetPacketHandler.init();
         MinecraftForge.EVENT_BUS.register(new RecipeBuilder());
-        ModFeatures.ConfiguredFeatures.registerConfiguredFeatures(); //find arch method for this
+        ModFeatures.ConfiguredFeatures.registerConfiguredFeatures();
     }
 
     @SubscribeEvent
@@ -158,8 +151,6 @@ public class ResourcefulBees {
 
     @SubscribeEvent
     public void loadComplete(FMLLoadCompleteEvent event) {
-        //arch has client event for the client stuff - need to figure out where to
-        // handle the traits and how to register spawn placements
         TraitRegistry.registerDefaultTraits();
         TraitSetup.buildCustomTraits();
         TraitRegistry.setTraitRegistryClosed();

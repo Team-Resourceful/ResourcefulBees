@@ -38,6 +38,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -185,7 +186,7 @@ public class ApiaryTileEntity extends ApiaryController {
     @Override
     public void tick() {
         super.tick();
-        this.bees.values().stream()
+        new HashSet<>(this.bees.values()).stream()
                 .filter(apiaryBee -> !(canRelease(apiaryBee) && releaseBee(this.getBlockState(), apiaryBee, false)))
                 .forEach(this::tickBee);
 
@@ -234,7 +235,7 @@ public class ApiaryTileEntity extends ApiaryController {
     @Nonnull
     public ListNBT writeBees() {
         ListNBT listTag = new ListNBT();
-        this.bees.forEach((key, apiaryBee) -> {
+        this.bees.values().forEach(apiaryBee -> {
             apiaryBee.entityData.remove("UUID");
             CompoundNBT compoundnbt = new CompoundNBT();
             compoundnbt.put("EntityData", apiaryBee.entityData);
@@ -379,12 +380,6 @@ public class ApiaryTileEntity extends ApiaryController {
 
     public LazyOptional<IItemHandler> getLazyOptional() {
         return lazyOptional;
-    }
-
-    public enum State {
-        HONEY_DELIVERED,
-        BEE_RELEASED,
-        EMERGENCY
     }
 
     public static class ApiaryBee {

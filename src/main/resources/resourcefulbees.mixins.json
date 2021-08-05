@@ -8,6 +8,7 @@
     "BeeEntityAccessor",
     "BeeEntityInvoker",
     "BeeHiveTileEntityAccessor",
+    "BlockAccessor",
     "BreedGoalInvoker",
     "BTEBeeAccessor",
     "ContainerAccessor",
