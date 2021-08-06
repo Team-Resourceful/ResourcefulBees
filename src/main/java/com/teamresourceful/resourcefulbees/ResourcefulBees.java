@@ -12,7 +12,7 @@ import com.teamresourceful.resourcefulbees.common.init.ClientEventHandlers;
 import com.teamresourceful.resourcefulbees.common.init.ModSetup;
 import com.teamresourceful.resourcefulbees.common.init.TraitSetup;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
-import com.teamresourceful.resourcefulbees.common.patreon.PatreonDataLoader;
+import com.teamresourceful.resourcefulbees.client.pets.PetLoader;
 import com.teamresourceful.resourcefulbees.common.registry.*;
 import net.minecraft.entity.merchant.villager.VillagerTrades;
 import net.minecraft.item.DyeColor;
@@ -158,6 +158,6 @@ public class ResourcefulBees {
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> DataGen::generateClientData);
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ClientEventHandlers::registerPatreonRender);
         DataGen.generateCommonData();
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> PatreonDataLoader::loadAPI);
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> PetLoader::loadAPI);
     }
 }

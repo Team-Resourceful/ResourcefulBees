@@ -5,7 +5,7 @@ import com.teamresourceful.resourcefulbees.client.models.ModelHandler;
 import com.teamresourceful.resourcefulbees.client.render.entity.CustomBeeRenderer;
 import com.teamresourceful.resourcefulbees.client.render.fluid.FluidRender;
 import com.teamresourceful.resourcefulbees.client.render.items.ItemModelPropertiesHandler;
-import com.teamresourceful.resourcefulbees.client.render.patreon.BeeRewardRender;
+import com.teamresourceful.resourcefulbees.client.render.pet.BeeRewardRender;
 import com.teamresourceful.resourcefulbees.client.render.tileentity.RenderEnderBeecon;
 import com.teamresourceful.resourcefulbees.client.render.tileentity.RenderHoneyCongealer;
 import com.teamresourceful.resourcefulbees.client.render.tileentity.RenderHoneyGenerator;

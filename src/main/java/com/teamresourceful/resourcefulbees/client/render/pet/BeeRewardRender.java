@@ -1,9 +1,9 @@
-package com.teamresourceful.resourcefulbees.client.render.patreon;
+package com.teamresourceful.resourcefulbees.client.render.pet;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-import com.teamresourceful.resourcefulbees.common.patreon.BeeRewardData;
-import com.teamresourceful.resourcefulbees.common.patreon.PatreonInfo;
+import com.teamresourceful.resourcefulbees.client.pets.BeeRewardData;
+import com.teamresourceful.resourcefulbees.client.pets.PetInfo;
 import com.teamresourceful.resourcefulbees.common.utils.color.Color;
 import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -118,8 +118,8 @@ public class BeeRewardRender extends LayerRenderer<AbstractClientPlayerEntity, P
 
     @Override
     public void render(@NotNull MatrixStack stack, @NotNull IRenderTypeBuffer buffer, int packedLightIn, @NotNull AbstractClientPlayerEntity playerEntity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        if (!PatreonInfo.isPatreon(playerEntity.getUUID())) return;
-        BeeRewardData data = PatreonInfo.getPatreon(playerEntity.getUUID());
+        if (!PetInfo.hasPet(playerEntity.getUUID())) return;
+        BeeRewardData data = PetInfo.getPet(playerEntity.getUUID());
         updateAngles(ageInTicks);
         stack.pushPose();
 

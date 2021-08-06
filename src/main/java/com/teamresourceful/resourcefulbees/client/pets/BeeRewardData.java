@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.patreon;
+package com.teamresourceful.resourcefulbees.client.pets;
 
 import com.teamresourceful.resourcefulbees.common.utils.color.Color;
 import net.minecraft.util.ResourceLocation;
@@ -10,8 +10,8 @@ public class BeeRewardData {
     private final Color color;
     private final BeeTextures textures;
 
-    public BeeRewardData(Color colors, BeeTextures textures) {
-        this.color = colors;
+    public BeeRewardData(Color color, BeeTextures textures) {
+        this.color = color;
         this.textures = textures;
     }
 
