@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.init;
+package com.teamresourceful.resourcefulbees.client.event;
 
 import com.teamresourceful.resourcefulbees.client.gui.screen.*;
 import com.teamresourceful.resourcefulbees.client.models.ModelHandler;

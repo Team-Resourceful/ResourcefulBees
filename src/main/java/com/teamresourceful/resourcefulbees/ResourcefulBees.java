@@ -8,7 +8,7 @@ import com.teamresourceful.resourcefulbees.common.config.ConfigLoader;
 import com.teamresourceful.resourcefulbees.common.data.DataGen;
 import com.teamresourceful.resourcefulbees.common.data.RecipeBuilder;
 import com.teamresourceful.resourcefulbees.common.init.BeeSetup;
-import com.teamresourceful.resourcefulbees.common.init.ClientEventHandlers;
+import com.teamresourceful.resourcefulbees.client.event.ClientEventHandlers;
 import com.teamresourceful.resourcefulbees.common.init.ModSetup;
 import com.teamresourceful.resourcefulbees.common.init.TraitSetup;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
