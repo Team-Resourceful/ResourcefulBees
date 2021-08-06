@@ -7,7 +7,7 @@ import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.muta
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.mutations.EntityMutationPage;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.mutations.ItemMutationPage;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.mutations.MutationsPage;
-import com.teamresourceful.resourcefulbees.lib.enums.MutationType;
+import com.teamresourceful.resourcefulbees.common.lib.enums.MutationType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.widget.button.Button;

@@ -25,7 +25,6 @@ public class ToolTip {
     private Supplier<ITextComponent> text = null;
     private ItemStack item = null;
     private FluidStack fluid = null;
-    private boolean showFluidAmount = true;
     private CustomBeeData bee = null;
 
     private static final TranslationTextComponent CREATOR_PREFIX = new TranslationTextComponent("tooltip.resourcefulbees.bee.creator");
@@ -52,7 +51,6 @@ public class ToolTip {
         this.maxX = minX + sizeX;
         this.maxY = minY + sizeY;
         this.fluid = fluid;
-        this.showFluidAmount = showFluidAmount;
     }
 
     public ToolTip(int minX, int minY, int sizeX, int sizeY, CustomBeeData bee) {
@@ -68,7 +66,7 @@ public class ToolTip {
             if (bee != null) {
                 List<ITextComponent> tooltip = new LinkedList<>();
                 tooltip.add(bee.getDisplayName());
-                if (bee.getCoreData().getLore().isPresent()) {
+                if (bee.getCoreData().getLore().isPresent()) { //TODO Optional#isPresent fix
                     tooltip.add(new StringTextComponent(bee.getCoreData().getLore().get()).withStyle(bee.getCoreData().getLoreColorStyle()));
                 }
                 if (bee.getCoreData().getCreator().isPresent()) {

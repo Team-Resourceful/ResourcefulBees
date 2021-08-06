@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.api.beedata.render;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.lib.constants.BeeConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import net.minecraft.entity.IAngerable;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.Unmodifiable;

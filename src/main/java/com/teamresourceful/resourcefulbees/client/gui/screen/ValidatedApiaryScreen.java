@@ -3,17 +3,17 @@ package com.teamresourceful.resourcefulbees.client.gui.screen;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.client.gui.widget.TabImageButton;
-import com.teamresourceful.resourcefulbees.config.Config;
-import com.teamresourceful.resourcefulbees.container.ValidatedApiaryContainer;
-import com.teamresourceful.resourcefulbees.lib.enums.ApiaryTab;
-import com.teamresourceful.resourcefulbees.network.NetPacketHandler;
-import com.teamresourceful.resourcefulbees.network.packets.ApiaryTabMessage;
-import com.teamresourceful.resourcefulbees.network.packets.ExportBeeMessage;
-import com.teamresourceful.resourcefulbees.network.packets.ImportBeeMessage;
-import com.teamresourceful.resourcefulbees.registry.BeeRegistry;
-import com.teamresourceful.resourcefulbees.registry.ModItems;
-import com.teamresourceful.resourcefulbees.tileentity.multiblocks.apiary.ApiaryTileEntity;
-import com.teamresourceful.resourcefulbees.utils.RenderUtils;
+import com.teamresourceful.resourcefulbees.common.config.Config;
+import com.teamresourceful.resourcefulbees.common.container.ValidatedApiaryContainer;
+import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTab;
+import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
+import com.teamresourceful.resourcefulbees.common.network.packets.ApiaryTabMessage;
+import com.teamresourceful.resourcefulbees.common.network.packets.ExportBeeMessage;
+import com.teamresourceful.resourcefulbees.common.network.packets.ImportBeeMessage;
+import com.teamresourceful.resourcefulbees.common.registry.BeeRegistry;
+import com.teamresourceful.resourcefulbees.common.registry.ModItems;
+import com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary.ApiaryTileEntity;
+import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -76,6 +76,7 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
         storageTabButton = addTabImageButton(j + 37, t, ApiaryTab.STORAGE, STORAGE_SCREEN, HONEYCOMB); // may need to pass in itemX so it can be 2 like the old code
     }
 
+    //TODO ummmmm clean this up? yes/no? - epic
     private TabImageButton addTabImageButton(int j, int t, ApiaryTab tab, TextComponent text, ItemStack displayItem) {
         return this.addButton(new TabImageButton(t+1, j, 18, 18, 110, 0, 18, TABS_BG, displayItem, 1, 1,
                 onPress -> this.changeScreen(tab), 128, 128) {

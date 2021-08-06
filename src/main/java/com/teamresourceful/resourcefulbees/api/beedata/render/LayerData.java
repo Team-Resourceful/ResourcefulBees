@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.api.beedata.render;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.client.render.entity.CustomBeeRenderer;
-import com.teamresourceful.resourcefulbees.utils.color.Color;
+import com.teamresourceful.resourcefulbees.common.utils.color.Color;
 import org.jetbrains.annotations.Unmodifiable;
 
 @Unmodifiable

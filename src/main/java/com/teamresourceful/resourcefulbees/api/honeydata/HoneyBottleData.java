@@ -2,8 +2,8 @@ package com.teamresourceful.resourcefulbees.api.honeydata;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.teamresourceful.resourcefulbees.registry.ItemGroupResourcefulBees;
-import com.teamresourceful.resourcefulbees.utils.color.Color;
+import com.teamresourceful.resourcefulbees.common.registry.ItemGroupResourcefulBees;
+import com.teamresourceful.resourcefulbees.common.utils.color.Color;
 import net.minecraft.block.Block;
 import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.fluid.FlowingFluid;

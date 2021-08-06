@@ -2,10 +2,10 @@ package com.teamresourceful.resourcefulbees.client.gui.screen;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.container.HoneyGeneratorContainer;
-import com.teamresourceful.resourcefulbees.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.tileentity.HoneyGeneratorTileEntity;
-import com.teamresourceful.resourcefulbees.utils.MathUtils;
+import com.teamresourceful.resourcefulbees.common.container.HoneyGeneratorContainer;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.tileentity.HoneyGeneratorTileEntity;
+import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;

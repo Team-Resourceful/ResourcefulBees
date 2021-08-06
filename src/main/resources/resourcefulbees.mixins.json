@@ -1,6 +1,6 @@
 {
   "required": true,
-  "package": "com.teamresourceful.resourcefulbees.mixin",
+  "package": "com.teamresourceful.resourcefulbees.common.mixin",
   "compatibilityLevel": "JAVA_8",
   "refmap": "resourcefulbees.refmap.json",
   "mixins": [

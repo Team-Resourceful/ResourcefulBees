@@ -2,10 +2,10 @@ package com.teamresourceful.resourcefulbees.api.beedata;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.teamresourceful.resourcefulbees.config.Config;
-import com.teamresourceful.resourcefulbees.lib.enums.ApiaryOutputType;
-import com.teamresourceful.resourcefulbees.lib.enums.HoneycombType;
-import com.teamresourceful.resourcefulbees.utils.color.Color;
+import com.teamresourceful.resourcefulbees.common.config.Config;
+import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryOutputType;
+import com.teamresourceful.resourcefulbees.common.lib.enums.HoneycombType;
+import com.teamresourceful.resourcefulbees.common.utils.color.Color;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;

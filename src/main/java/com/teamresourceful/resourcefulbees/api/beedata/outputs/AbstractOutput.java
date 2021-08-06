@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.api.beedata.outputs;
 
 import com.mojang.serialization.DataResult;
-import com.teamresourceful.resourcefulbees.utils.RandomCollection;
+import com.teamresourceful.resourcefulbees.common.utils.RandomCollection;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.HashSet;

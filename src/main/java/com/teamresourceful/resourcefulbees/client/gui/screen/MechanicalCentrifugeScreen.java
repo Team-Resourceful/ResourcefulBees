@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.client.gui.screen;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.container.MechanicalCentrifugeContainer;
+import com.teamresourceful.resourcefulbees.common.container.MechanicalCentrifugeContainer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
@@ -14,7 +14,7 @@ public class MechanicalCentrifugeScreen extends ContainerScreen<MechanicalCentri
     public MechanicalCentrifugeScreen(MechanicalCentrifugeContainer screenContainer, PlayerInventory inventory, ITextComponent titleIn) {
         super(screenContainer, inventory, titleIn);
     }
-    final int textColor = 0x404040;
+    private static final int TEXT_COLOR = 0x404040;
 
     @Override
     protected void renderBg(@NotNull MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
@@ -40,6 +40,6 @@ public class MechanicalCentrifugeScreen extends ContainerScreen<MechanicalCentri
 
     @Override
     protected void renderLabels(@NotNull MatrixStack matrix, int mouseX, int mouseY) {
-        this.font.draw(matrix, this.title.getString(), 25, 5, textColor);
+        this.font.draw(matrix, this.title.getString(), 25, 5, TEXT_COLOR);
     }
 }

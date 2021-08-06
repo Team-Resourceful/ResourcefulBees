@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen;
 
-import com.teamresourceful.resourcefulbees.container.CentrifugeContainer;
+import com.teamresourceful.resourcefulbees.common.container.CentrifugeContainer;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.text.ITextComponent;
 

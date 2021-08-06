@@ -4,15 +4,15 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.client.gui.widget.TabToggleImageButton;
-import com.teamresourceful.resourcefulbees.container.CentrifugeContainer;
-import com.teamresourceful.resourcefulbees.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.network.NetPacketHandler;
-import com.teamresourceful.resourcefulbees.network.packets.DrainCentrifugeTankMessage;
-import com.teamresourceful.resourcefulbees.network.packets.UpdateRedstoneReqMessage;
-import com.teamresourceful.resourcefulbees.tileentity.CentrifugeTileEntity;
-import com.teamresourceful.resourcefulbees.utils.MathUtils;
-import com.teamresourceful.resourcefulbees.utils.RenderUtils;
-import com.teamresourceful.resourcefulbees.utils.color.Color;
+import com.teamresourceful.resourcefulbees.common.container.CentrifugeContainer;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
+import com.teamresourceful.resourcefulbees.common.network.packets.DrainCentrifugeTankMessage;
+import com.teamresourceful.resourcefulbees.common.network.packets.UpdateRedstoneReqMessage;
+import com.teamresourceful.resourcefulbees.common.tileentity.CentrifugeTileEntity;
+import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
+import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
+import com.teamresourceful.resourcefulbees.common.utils.color.Color;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -308,7 +308,7 @@ public class CentrifugeScreen extends ContainerScreen<CentrifugeContainer> {
     }
 
     public String formatFluidAmount(int amount) {
-        return Screen.hasShiftDown() || amount < 500f ? amount + "mb" : ModConstants.DECIMAL_FORMAT.format((float) amount / 1000f) + "B";
+        return Screen.hasShiftDown() || amount < 500f ? amount + "mb" : ModConstants.DECIMAL_FORMAT.format(amount / 1000f) + "B";
     }
 
     public String getFluidNamespace(@NotNull Fluid fluid) {

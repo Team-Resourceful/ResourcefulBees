@@ -2,9 +2,9 @@ package com.teamresourceful.resourcefulbees.client.render.fluid;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.registry.ModBlocks;
-import com.teamresourceful.resourcefulbees.registry.ModFluids;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.registry.ModBlocks;
+import com.teamresourceful.resourcefulbees.common.registry.ModFluids;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;

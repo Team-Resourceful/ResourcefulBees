@@ -3,12 +3,12 @@ package com.teamresourceful.resourcefulbees.client.gui.screen;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.client.gui.widget.TabImageButton;
-import com.teamresourceful.resourcefulbees.container.ApiaryStorageContainer;
-import com.teamresourceful.resourcefulbees.lib.enums.ApiaryTab;
-import com.teamresourceful.resourcefulbees.network.NetPacketHandler;
-import com.teamresourceful.resourcefulbees.network.packets.ApiaryTabMessage;
-import com.teamresourceful.resourcefulbees.registry.ModItems;
-import com.teamresourceful.resourcefulbees.tileentity.multiblocks.apiary.ApiaryStorageTileEntity;
+import com.teamresourceful.resourcefulbees.common.container.ApiaryStorageContainer;
+import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTab;
+import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
+import com.teamresourceful.resourcefulbees.common.network.packets.ApiaryTabMessage;
+import com.teamresourceful.resourcefulbees.common.registry.ModItems;
+import com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary.ApiaryStorageTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.widget.Widget;
@@ -30,11 +30,8 @@ public class ApiaryStorageScreen extends ContainerScreen<ApiaryStorageContainer>
     private static final ResourceLocation TABS_BG = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/apiary/apiary_gui_tabs.png");
 
     private final ApiaryStorageTileEntity apiaryStorageTileEntity;
-
     private ResourceLocation background;
-
     private TabImageButton mainTabButton;
-    //private TabImageButton breedTabButton;
 
     public ApiaryStorageScreen(ApiaryStorageContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
         super(screenContainer, inv, titleIn);
@@ -97,24 +94,10 @@ public class ApiaryStorageScreen extends ContainerScreen<ApiaryStorageContainer>
                 ApiaryStorageScreen.this.renderTooltip(matrix, s, mouseX, mouseY);
             }
         }).active = false;
-
-/*        breedTabButton = this.addButton(new TabImageButton(t + 1, j + 57, 18, 18, 110, 0, 18, TABS_BG, new ItemStack(ModItems.GOLD_FLOWER_ITEM.get()), 1, 1,
-                onPress -> this.changeScreen(ApiaryTab.BREED), 128, 128) {
-
-            @Override
-            public void renderToolTip(@NotNull MatrixStack matrix,int mouseX, int mouseY) {
-                TranslationTextComponent s = new TranslationTextComponent("gui.resourcefulbees.apiary.button.breed_screen");
-                ApiaryStorageScreen.this.renderTooltip(matrix, s, mouseX, mouseY);
-            }
-        });*/
     }
 
     private void changeScreen(ApiaryTab tab) {
         switch (tab) {
-/*            case BREED:
-                if (breedTabButton.active)
-                    NetPacketHandler.sendToServer(new ApiaryTabMessage(getApiaryStorageTileEntity().getBlockPos(), ApiaryTab.BREED));
-                break;*/
             case STORAGE:
                 break;
             case MAIN:
@@ -132,7 +115,6 @@ public class ApiaryStorageScreen extends ContainerScreen<ApiaryStorageContainer>
         }
 
         mainTabButton.active = getApiaryStorageTileEntity().getApiary() != null;
-        //breedTabButton.active = getApiaryStorageTileEntity().getApiary() != null && getApiaryStorageTileEntity().getApiary().getBreederPos() != null;
 
         Minecraft client = this.minecraft;
         if (client != null) {

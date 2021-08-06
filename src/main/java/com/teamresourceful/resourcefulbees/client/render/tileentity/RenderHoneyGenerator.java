@@ -2,9 +2,9 @@ package com.teamresourceful.resourcefulbees.client.render.tileentity;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-import com.teamresourceful.resourcefulbees.tileentity.HoneyGeneratorTileEntity;
-import com.teamresourceful.resourcefulbees.utils.CubeModel;
-import com.teamresourceful.resourcefulbees.utils.RenderCuboid;
+import com.teamresourceful.resourcefulbees.common.tileentity.HoneyGeneratorTileEntity;
+import com.teamresourceful.resourcefulbees.common.utils.CubeModel;
+import com.teamresourceful.resourcefulbees.common.utils.RenderCuboid;
 import net.minecraft.client.renderer.Atlases;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;

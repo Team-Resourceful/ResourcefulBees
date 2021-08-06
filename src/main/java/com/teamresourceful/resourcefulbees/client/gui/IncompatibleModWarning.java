@@ -1,8 +1,8 @@
 package com.teamresourceful.resourcefulbees.client.gui;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.teamresourceful.resourcefulbees.config.Config;
-import com.teamresourceful.resourcefulbees.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.config.Config;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ServerListScreen;

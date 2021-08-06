@@ -44,7 +44,7 @@ public class ArrowButton extends Button {
         minecraft.getTextureManager().bind(arrowButtonTexture);
         RenderSystem.disableDepthTest();
         if (this.active) {
-            blit(matrix, this.x, this.y, (float)this.xTexStart, this.isHovered() ? 12f : 0f, this.width, this.height, 64, 64);
+            blit(matrix, this.x, this.y, this.xTexStart, this.isHovered() ? 12f : 0f, this.width, this.height, 64, 64);
         } else {
             blit(matrix, this.x, this.y, 48f, 0f, this.width, this.height, 64, 64);
         }

@@ -5,7 +5,7 @@ import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.teamresourceful.resourcefulbees.api.beedata.render.RenderData;
 import com.teamresourceful.resourcefulbees.client.render.entity.layers.CustomBeeLayer;
 import com.teamresourceful.resourcefulbees.client.render.entity.models.CustomBeeModel;
-import com.teamresourceful.resourcefulbees.entity.passive.CustomBeeEntity;
+import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererManager;

@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.api;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import net.minecraftforge.fml.ModLoadingContext;
 
 public class ResourcefulBeesAPI {

@@ -9,9 +9,9 @@ import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaPa
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.teamresourceful.resourcefulbees.client.gui.widget.ListButton;
 import com.teamresourceful.resourcefulbees.client.gui.widget.SubButtonList;
-import com.teamresourceful.resourcefulbees.item.BeeJar;
-import com.teamresourceful.resourcefulbees.registry.ModBlocks;
-import com.teamresourceful.resourcefulbees.registry.ModItems;
+import com.teamresourceful.resourcefulbees.common.item.BeeJar;
+import com.teamresourceful.resourcefulbees.common.registry.ModBlocks;
+import com.teamresourceful.resourcefulbees.common.registry.ModItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.FontRenderer;
