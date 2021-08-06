@@ -246,11 +246,11 @@ public class Config {
             CHILD_SIZE_MODIFIER = COMMON_BUILDER.comment("\nThis value scales the child size for all Resource Bees.")
                     .defineInRange("global_child_size_modifier", 1.0, 1.0, 2.0);
             BEE_DIES_FROM_STING = COMMON_BUILDER.comment("\nShould bees die from stinging?\nNote: Bees will continue to attack until they are no longer angry!")
-                    .define("beeDiesFromSting", true); //TODO 1.17 change to "beesDieFromSting"
+                    .define("beesDieFromSting", true);
             BEES_INFLICT_POISON = COMMON_BUILDER.comment("\nShould bees inflict poison damage?\nNote: Poison is only inflicted if a bee has not been given a trait with a special damage output.\nSet to false if you want to configure bees individually.")
                     .define("beesInflictPoison", true);
             BEES_DIE_IN_VOID = COMMON_BUILDER.comment("\nShould bees die when their Y-level is below 0?\nNote: If false, bees will get stuck just below y-0 and not move. **May not be useful with new AI**")
-                    .define("beeDiesInVoid", true); //TODO 1.17 change to "beesDieInVoid" Also change comment above to reflect y level changes
+                    .define("beesDieInVoid", true); //TODO change comment above to reflect 1.17 y level changes
             MANUAL_MODE = COMMON_BUILDER.comment("\nThis is an experimental setting. Using this setting means bees will need to be told by the player which flower and hive to use.",
                     "Bees will not scan surroundings for flowers or hives and will instead go to their designated spot until changed.",
                     "WARNING: For now, this will prevent bees from having their wander goal attached which effectively makes them dumb (seriously, they'll just hover in one spot), however it would also significantly improve performance until pathfinding can be optimized.")
