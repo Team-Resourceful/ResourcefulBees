@@ -2,7 +2,6 @@ buildscript {
     repositories {
         maven { url = 'https://files.minecraftforge.net/maven' }
         maven { url='https://repo.spongepowered.org/maven' }
-        jcenter()
         mavenCentral()
     }
     dependencies {
@@ -23,14 +22,7 @@ apply plugin: 'signing'
 
 repositories {
     //mappings
-    maven { url "https://www.dogforce-games.com/maven/" }
-    maven { url "https://maven.tterrag.com/" }
-    maven { url "https://maven.blamejared.com" }
-    maven { url "https://dvs1.progwml6.com/files/maven/" }
-    maven { url "https://modmaven.k-4u.nl" }
-    maven { url 'https://modmaven.dev/' }
-
-    //flatDir { dirs 'C:\\Users\\James\\Documents\\Minecraft Modding\\Test Mods'}
+    maven { url "https://nexus.resourcefulbees.com/repository/maven-public/" }
 }
 
 version = "${mod_version}"
