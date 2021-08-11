@@ -13,6 +13,7 @@ import com.resourcefulbees.resourcefulbees.item.BeeJar;
 import com.resourcefulbees.resourcefulbees.lib.ApiaryTabs;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
+import com.resourcefulbees.resourcefulbees.mixin.BlockAccessor;
 import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
 import com.resourcefulbees.resourcefulbees.network.packets.UpdateClientApiaryMessage;
 import com.resourcefulbees.resourcefulbees.registry.ModBlocks;
@@ -20,6 +21,7 @@ import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import com.resourcefulbees.resourcefulbees.registry.ModTileEntityTypes;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.MultiBlockHelper;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.BeehiveBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -36,6 +38,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
@@ -573,8 +576,8 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
 
     private boolean validateBlocks(AtomicBoolean isStructureValid, World worldIn, @Nullable ServerPlayerEntity validatingPlayer) {
         structureBlocks.forEach(pos -> {
-            Block block = worldIn.getBlockState(pos).getBlock();
-            if (block.is(BeeInfoUtils.getValidApiaryTag()) || block instanceof ApiaryBreederBlock || block instanceof ApiaryStorageBlock || block instanceof ApiaryBlock) {
+            BlockAccessor block = (BlockAccessor) worldIn.getBlockState(pos).getBlock();
+            if (block.getHasCollision()) {
                 TileEntity tile = worldIn.getBlockEntity(pos);
                 linkStorageAndBreeder(tile);
             } else {
