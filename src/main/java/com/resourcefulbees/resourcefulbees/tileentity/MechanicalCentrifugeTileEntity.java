@@ -85,8 +85,8 @@ public class MechanicalCentrifugeTileEntity extends TileEntity implements ITicka
             List<Pair<ItemStack, Float>> outputs = recipe.itemOutputs;
             ItemStack glassBottle = getItemStackHandler().getStackInSlot(BOTTLE_SLOT);
             ItemStack combs = getItemStackHandler().getStackInSlot(HONEYCOMB_SLOT);
-            JsonElement count = recipe.ingredient.toJson().getAsJsonObject().get(BeeConstants.INGREDIENT_COUNT);
-            int inputAmount = count !=null ? count.getAsInt() : 1;
+            ItemStack[] stacks = recipe.ingredient.getItems();
+            int inputAmount = stacks.length == 1 ? stacks[0].getCount() : 1;
             List<ItemStack> outputSlots = new ArrayList<>(
                     Arrays.asList(
                             getItemStackHandler().getStackInSlot(OUTPUT1),
@@ -121,8 +121,8 @@ public class MechanicalCentrifugeTileEntity extends TileEntity implements ITicka
 
     private void processItem(@Nullable CentrifugeRecipe recipe) {
         if (recipe != null && this.canProcess(recipe)) {
-            JsonElement count = recipe.ingredient.toJson().getAsJsonObject().get(BeeConstants.INGREDIENT_COUNT);
-            int inputAmount = count !=null ? count.getAsInt() : 1;
+            ItemStack[] stacks = recipe.ingredient.getItems();
+            int inputAmount = stacks.length == 1 ? stacks[0].getCount() : 1;
             ItemStack comb = getItemStackHandler().getStackInSlot(HONEYCOMB_SLOT);
             ItemStack glassBottle = getItemStackHandler().getStackInSlot(BOTTLE_SLOT);
             List<Pair<ItemStack, Integer>> slots = new ArrayList<>(

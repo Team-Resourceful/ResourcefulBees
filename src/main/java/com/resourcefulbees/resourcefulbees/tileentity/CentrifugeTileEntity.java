@@ -240,16 +240,16 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
 
     protected void consumeInput(int i) {
         ItemStack combInput = itemStackHandler.getStackInSlot(honeycombSlots[i]);
-        JsonElement count = recipes.get(i).ingredient.toJson().getAsJsonObject().get(BeeConstants.INGREDIENT_COUNT);
-        int inputAmount = count != null ? count.getAsInt() : 1;
+        ItemStack[] stacks = recipes.get(i).ingredient.getItems();
+        int inputAmount = stacks.length == 1 ? stacks[0].getCount() : 1;
         combInput.shrink(inputAmount);
     }
 
     protected boolean canStartCentrifugeProcess(int i) {
         if (!isProcessing[i] && !itemStackHandler.getStackInSlot(honeycombSlots[i]).isEmpty() && canProcessRecipe(i)) {
             ItemStack combInput = itemStackHandler.getStackInSlot(honeycombSlots[i]);
-            JsonElement count = recipes.get(i).ingredient.toJson().getAsJsonObject().get(BeeConstants.INGREDIENT_COUNT);
-            int inputAmount = count != null ? count.getAsInt() : 1;
+            ItemStack[] stacks = recipes.get(i).ingredient.getItems();
+            int inputAmount = stacks.length == 1 ? stacks[0].getCount() : 1;
 
             return combInput.getCount() >= inputAmount;
         }
