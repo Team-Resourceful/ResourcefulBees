@@ -81,19 +81,16 @@ public class ResourcefulBee extends CustomBeeEntity {
 
         if (customBeeData.getBreedData().isBreedable()) {
             this.goalSelector.addGoal(2, new BeeBreedGoal(this, 1.0D));
-            this.goalSelector.addGoal(3, new BeeTemptGoal(this, 1.25D));
             this.goalSelector.addGoal(5, new FollowParentGoal(this, 1.25D));
         }
+        this.goalSelector.addGoal(3, new BeeTemptGoal(this, 1.25D));
+
         this.pollinateGoal = new BeePollinateGoal(this);
         this.goalSelector.addGoal(4, this.pollinateGoal);
-
         this.beePollinateGoal = new FakePollinateGoal();
-
         this.goalSelector.addGoal(5, new ResourcefulBee.UpdateBeehiveGoal2());
-
         this.goToHiveGoal = new ResourcefulBee.FindBeehiveGoal2();
         this.goalSelector.addGoal(5, this.goToHiveGoal);
-
         this.goToKnownFlowerGoal = new BeeEntity.FindFlowerGoal();
         this.goalSelector.addGoal(6, this.goToKnownFlowerGoal);
 
