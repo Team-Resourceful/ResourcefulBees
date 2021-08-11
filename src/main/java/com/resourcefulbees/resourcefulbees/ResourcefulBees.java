@@ -137,14 +137,9 @@ public class ResourcefulBees {
     }
 
     private void setup(final FMLCommonSetupEvent event) {
-        BeeInfoUtils.makeValidApiaryTag();
-
         event.enqueueWork(ModSetup::registerDispenserBehaviors);
-
         NetPacketHandler.init();
-
         MinecraftForge.EVENT_BUS.register(new RecipeBuilder());
-
         ModFeatures.ConfiguredFeatures.registerConfiguredFeatures();
     }
 
