@@ -6,13 +6,14 @@
   "mixins": [
     "AnimalEntityAccessor",
     "BeeEntityAccessor",
+    "BlockAccessor",
     "BTEBeeAccessor",
     "ContainerAccessor",
     "DispenserBlockInvoker",
     "MixinBeeEntity",
-    "MixinMinecraftServer",
     "MixinEnterBeehiveGoal",
     "MixinFindBeehiveGoal",
+    "MixinMinecraftServer",
     "MixinUpdateBeehiveGoal"
   ],
   "minVersion": "0.8.1"
