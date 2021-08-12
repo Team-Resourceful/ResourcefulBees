@@ -46,8 +46,8 @@ public class YetiBee {
                 .setMaxTimeInHive(6000)
                 .setSizeModifier(1.25f)
                 .setCreator("Joosh")
-                .setLore("Dawwww Look at Theeem!")
-                .setLoreColor(BeeConstants.RAINBOW_COLOR)
+                .setLore("A pretty §ocool§r bee.\nHe's here to bee your best friend :)")
+                .setLoreColor("#ADD8E6")
                 .setTraits(new String[]{BeeConstants.OREO_BEE})
                 .setApiaryOutputAmounts(new int[]{1, 2, 3, 4})
                 .createCustomBee();
