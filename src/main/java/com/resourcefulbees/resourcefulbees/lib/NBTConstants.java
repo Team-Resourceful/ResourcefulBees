@@ -48,4 +48,5 @@ public class NBTConstants {
     public static final String NBT_MUTATION_COUNT = "mutationCount";
     public static final String NBT_BLOCK_ENTITY_TAG = "BlockEntityTag";
     public static final String NBT_PLAY_SOUND = "playSound";
+    public static final String NBT_DISPLAY = "display";
 }
