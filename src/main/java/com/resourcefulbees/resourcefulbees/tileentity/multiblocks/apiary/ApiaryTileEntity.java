@@ -21,10 +21,7 @@ import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import com.resourcefulbees.resourcefulbees.registry.ModTileEntityTypes;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.MultiBlockHelper;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.BeehiveBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
+import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.BeeEntity;
@@ -576,8 +573,8 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
 
     private boolean validateBlocks(AtomicBoolean isStructureValid, World worldIn, @Nullable ServerPlayerEntity validatingPlayer) {
         structureBlocks.forEach(pos -> {
-            BlockAccessor block = (BlockAccessor) worldIn.getBlockState(pos).getBlock();
-            if (block.getHasCollision()) {
+            Block block =  worldIn.getBlockState(pos).getBlock();
+            if (((BlockAccessor) block).getHasCollision() || block.is(BeeInfoUtils.getValidApiaryTag())) {
                 TileEntity tile = worldIn.getBlockEntity(pos);
                 linkStorageAndBreeder(tile);
             } else {
@@ -592,45 +589,51 @@ public class ApiaryTileEntity extends TileEntity implements ITickableTileEntity,
 
 
     public MutableBoundingBox buildStructureBounds(int horizontalOffset, int verticalOffset) {
-        return MultiBlockHelper.buildStructureBounds(this.getBlockPos(), 7, 6, 7, -horizontalOffset - 3, -verticalOffset - 2, 0, this.getBlockState().getValue(ApiaryBlock.FACING));
+        return MultiBlockHelper.buildStructureBounds(this.getBlockPos(), 7, 5, 7, -horizontalOffset - 3, -verticalOffset - 1, 0, this.getBlockState().getValue(ApiaryBlock.FACING));
     }
 
     private void buildStructureBlockList() {
         if (this.level != null) {
             MutableBoundingBox box = buildStructureBounds(this.getHorizontalOffset(), this.getVerticalOffset());
             structureBlocks.clear();
-            BlockPos.betweenClosedStream(box).forEach((blockPos -> {
-                if (blockPos.getX() == box.x0 || blockPos.getX() == box.x1 ||
-                        blockPos.getY() == box.y0 || blockPos.getY() == box.y1 ||
-                        blockPos.getZ() == box.z0 || blockPos.getZ() == box.z1) {
-                    BlockPos savedPos = new BlockPos(blockPos.getX(), blockPos.getY(), blockPos.getZ());
-                    structureBlocks.add(savedPos);
-                }
-            }));
+            BlockPos.betweenClosedStream(box)
+                    .filter(blockPos -> isStructurePosition(blockPos, box))
+                    .forEach((blockPos -> structureBlocks.add(blockPos.immutable())));
         }
+    }
+
+    private static boolean isStructurePosition(BlockPos blockPos, MutableBoundingBox box) {
+        return blockPos.getX() == box.x0 ||
+                blockPos.getX() == box.x1 ||
+                blockPos.getY() == box.y1 ||
+                blockPos.getZ() == box.z0 ||
+                blockPos.getZ() == box.z1;
     }
 
     public void runCreativeBuild(ServerPlayerEntity player) {
         if (this.level != null) {
             buildStructureBlockList();
-            boolean addedStorage = false;
-            for (BlockPos pos : structureBlocks) {
-                Block block = this.level.getBlockState(pos).getBlock();
-                if (!(block instanceof ApiaryBlock)) {
-                    if (addedStorage) {
-                        this.level.setBlockAndUpdate(pos, net.minecraft.block.Blocks.GLASS.defaultBlockState());
-                    } else {
-                        this.level.setBlockAndUpdate(pos, ModBlocks.APIARY_STORAGE_BLOCK.get().defaultBlockState());
-                        addedStorage = true;
-                    }
-                }
-            }
+            AtomicBoolean addedStorage = new AtomicBoolean(false);
+            structureBlocks.stream()
+                    .filter(this::blockAtPosIsNotApiary)
+                    .forEach(blockPos -> {
+                        if (addedStorage.get()) {
+                            this.level.setBlockAndUpdate(blockPos, Blocks.GLASS.defaultBlockState());
+                        } else {
+                            this.level.setBlockAndUpdate(blockPos, ModBlocks.APIARY_STORAGE_BLOCK.get().defaultBlockState());
+                            addedStorage.set(true);
+                        }
+                    });
             runStructureValidation(player);
         }
     }
 
+    private boolean blockAtPosIsNotApiary(BlockPos blockPos) {
+        return this.level != null && !(this.level.getBlockState(blockPos).getBlock() instanceof ApiaryBlock);
+    }
+
     @SuppressWarnings("UnusedReturnValue")
-    public boolean linkStorageAndBreeder(TileEntity tile) {
+    private boolean linkStorageAndBreeder(TileEntity tile) {
         if (tile instanceof ApiaryStorageTileEntity && apiaryStorage == null && ((ApiaryStorageTileEntity) tile).getApiaryPos() == null) {
             apiaryStorage = (ApiaryStorageTileEntity) tile;
             setStoragePos(apiaryStorage.getBlockPos());

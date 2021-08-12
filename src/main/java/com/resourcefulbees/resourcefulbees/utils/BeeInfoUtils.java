@@ -199,6 +199,16 @@ public class BeeInfoUtils {
         return BlockTags.getAllTags().getTag(getResource(blockTag));
     }
 
+    public static ITag<Block> getValidApiaryTag() {
+        return BlockTags.getAllTags().getTag(VALID_APIARY);
+    }
+
+    public static void makeValidApiaryTag() {
+        BlockTags.bind("resourcefulbees:valid_apiary");
+    }
+
+    private static final ResourceLocation VALID_APIARY = new ResourceLocation("resourcefulbees:valid_apiary");
+
     public static boolean isTag(String input) {
         if (ValidatorUtils.TAG_RESOURCE_PATTERN.matcher(input).matches()) {
             return true;
