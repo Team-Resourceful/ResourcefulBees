@@ -1,7 +1,9 @@
 package com.resourcefulbees.resourcefulbees.compat.jei.ingredients;
 
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
+import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
+import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.*;
@@ -14,8 +16,6 @@ public class EntityIngredient {
     private final String beeType;
     private final CustomBeeData beeData;
     private final float rotation;
-
-    private static final TranslationTextComponent CREATOR_PREFIX = new TranslationTextComponent("tooltip.resourcefulbees.bee.creator");
 
     public EntityIngredient(String beeType, float rotation) {
         this.beeType = beeType;
@@ -38,16 +38,7 @@ public class EntityIngredient {
     public List<ITextComponent> getTooltip() {
         List<ITextComponent> tooltip = new ArrayList<>();
 
-        if (beeData.getLore() != null && !beeData.getLore().isEmpty()) {
-            String lore = beeData.getLore();
-            String[] loreTooltip = lore.split("\\r?\\n");
-            for (String s: loreTooltip) {
-                tooltip.add(new StringTextComponent(s).withStyle(beeData.getLoreColor()));
-            }
-        }
-        if (beeData.getCreator() != null && !beeData.getLore().isEmpty()) {
-            tooltip.add(CREATOR_PREFIX.copy().append(beeData.getCreator()).withStyle(TextFormatting.GRAY));
-        }
+        tooltip.addAll(BeeInfoUtils.getBeeLore(beeData));
         String desc = I18n.get("tooltip.resourcefulbees.jei.click_bee_info");
         String[] descTooltip = desc.split("\\r?\\n");
         for (String s : descTooltip) {

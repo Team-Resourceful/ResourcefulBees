@@ -12,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.Color;
 import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.RegistryObject;
 import org.lwjgl.system.CallbackI;
@@ -211,12 +212,16 @@ public class CustomBeeData extends AbstractBeeData {
 
     public Style getLoreColor() {
         net.minecraft.util.text.Color color;
-        if (loreColor.equals(BeeConstants.RAINBOW_COLOR)) {
-            color = net.minecraft.util.text.Color.fromRgb(RainbowColor.getRGB());
+        if (loreColor != null) {
+            if (loreColor.equals(BeeConstants.RAINBOW_COLOR)) {
+                color = net.minecraft.util.text.Color.fromRgb(RainbowColor.getRGB());
+            } else {
+                color = net.minecraft.util.text.Color.parseColor(loreColor);
+            }
+            return Style.EMPTY.withColor(color);
         } else {
-            color = net.minecraft.util.text.Color.parseColor(loreColor);
+            return Style.EMPTY.withColor(TextFormatting.WHITE);
         }
-        return Style.EMPTY.withColor(color);
     }
 
     public boolean isEasterEggBee() {

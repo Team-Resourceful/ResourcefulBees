@@ -44,6 +44,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -413,5 +415,29 @@ public class BeeInfoUtils {
 
     public static ApiaryOutput[] getDefaultApiaryTypes() {
         return new ApiaryOutput[]{Config.T1_APIARY_OUTPUT.get(), Config.T2_APIARY_OUTPUT.get(), Config.T3_APIARY_OUTPUT.get(), Config.T4_APIARY_OUTPUT.get()};
+    }
+
+    public static List<ITextComponent> getBeeLore(EntityType<?> entityType) {
+        Entity entity = entityType.create(Minecraft.getInstance().level);
+        if (entity instanceof CustomBeeEntity){
+            return getBeeLore(((CustomBeeEntity) entity).getBeeData());
+        }else {
+            return new ArrayList<>();
+        }
+    }
+
+    public static List<ITextComponent> getBeeLore(CustomBeeData beeData) {
+        List<ITextComponent> tooltip = new LinkedList<>();
+        if (beeData.getLore() != null && !beeData.getLore().isEmpty()) {
+            String lore = beeData.getLore();
+            String[] loreTooltip = lore.split("\\r?\\n");
+            for (String s: loreTooltip) {
+                tooltip.add(new StringTextComponent(s).withStyle(beeData.getLoreColor()));
+            }
+        }
+        if (beeData.getCreator() != null && !beeData.getLore().isEmpty()) {
+            tooltip.add(BeeConstants.CREATOR_LORE_PREFIX.copy().append(beeData.getCreator()).withStyle(TextFormatting.GRAY));
+        }
+        return tooltip;
     }
 }

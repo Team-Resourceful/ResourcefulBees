@@ -8,6 +8,7 @@ import com.resourcefulbees.resourcefulbees.api.beedata.mutation.ItemMutation;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.mutations.EntityMutationPage;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.mutations.ItemMutationPage;
+import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
@@ -18,6 +19,7 @@ import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.gui.widget.button.ImageButton;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -423,24 +425,17 @@ public class BreedingPage extends BeeDataPage {
 
         public void drawTooltips(MatrixStack matrixStack, int mouseX, int mouseY) {
             if (BeepediaScreen.mouseHovering(parent1Pos.x, parent1Pos.y, 20, 20, mouseX, mouseY)) {
-                drawTooltip(matrixStack, parent1Data, mouseX, mouseY);
+                beepedia.drawEntityTooltip(matrixStack, parent1Data, mouseX, mouseY);
             }
             if (BeepediaScreen.mouseHovering(parent2Pos.x, parent2Pos.y, 20, 20, mouseX, mouseY)) {
-                drawTooltip(matrixStack, parent2Data, mouseX, mouseY);
+                beepedia.drawEntityTooltip(matrixStack, parent2Data, mouseX, mouseY);
             }
             if (BeepediaScreen.mouseHovering(childPos.x, childPos.y, 20, 20, mouseX, mouseY)) {
-                drawTooltip(matrixStack, child.beeData, mouseX, mouseY);
+                beepedia.drawEntityTooltip(matrixStack, child.beeData, mouseX, mouseY);
             }
             if (BeepediaScreen.mouseHovering(chancePos.x, chancePos.y, 9, 9, mouseX, mouseY) && child.chance < 1) {
                 beepedia.renderTooltip(matrixStack, new TranslationTextComponent("gui.resourcefulbees.jei.category.breed_chance.info"), mouseX, mouseY);
             }
-        }
-
-        private void drawTooltip(MatrixStack matrixStack, CustomBeeData beeData, int mouseX, int mouseY) {
-            List<ITextComponent> tooltip = new ArrayList<>();
-            tooltip.add(beeData.getTranslation());
-            tooltip.add(new StringTextComponent(beeData.getEntityTypeRegistryID().toString()).withStyle(TextFormatting.DARK_GRAY));
-            beepedia.renderComponentTooltip(matrixStack, tooltip, mouseX, mouseY);
         }
 
         public void draw(MatrixStack matrix) {

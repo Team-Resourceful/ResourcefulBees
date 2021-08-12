@@ -4,6 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.api.beedata.mutation.outputs.BlockOutput;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
+import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.BeePage;
 import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
@@ -29,8 +30,8 @@ public class BlockMutationPage extends MutationsPage {
     double outputChance;
     List<Pair<Double, BlockOutput>> outputs = new ArrayList<>();
 
-    public BlockMutationPage(Entity bee, ITag<?> blocks, Pair<Double, RandomCollection<BlockOutput>> outputs, MutationTypes type, int mutationCount, BeepediaScreen beepedia) {
-        super(bee, type, mutationCount, beepedia);
+    public BlockMutationPage(BeePage parent, ITag<?> blocks, Pair<Double, RandomCollection<BlockOutput>> outputs, MutationTypes type, int mutationCount, BeepediaScreen beepedia) {
+        super(parent, type, mutationCount, beepedia);
         if (blocks.getValues().get(0) instanceof Fluid) {
             inputs = blocks.getValues().stream().map(f -> ((Fluid) f).defaultFluidState().createLegacyBlock().getBlock()).distinct().collect(Collectors.toList());
         } else {
@@ -39,8 +40,8 @@ public class BlockMutationPage extends MutationsPage {
         initOutputs(outputs);
     }
 
-    public BlockMutationPage(Entity bee, Block block, Pair<Double, RandomCollection<BlockOutput>> outputs, MutationTypes type, int mutationCount, BeepediaScreen beepedia) {
-        super(bee, type, mutationCount, beepedia);
+    public BlockMutationPage(BeePage parent, Block block, Pair<Double, RandomCollection<BlockOutput>> outputs, MutationTypes type, int mutationCount, BeepediaScreen beepedia) {
+        super(parent, type, mutationCount, beepedia);
         inputs = new LinkedList<>(Collections.singleton(block));
         initOutputs(outputs);
     }
