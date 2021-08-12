@@ -140,7 +140,7 @@ public class BeePage extends BeepediaPage {
             centrifugePage = Pair.of(
                     getTabButton(new ItemStack(Items.HONEYCOMB), onPress -> setSubPage(SubPageType.HONEYCOMB),
                             new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.honeycombs")),
-                    new HoneycombPage(beepedia, beeData, subX, subY, this)
+                    new BeeCombPage(beepedia, beeData, subX, subY, this)
             );
             tabs.add(centrifugePage);
         }

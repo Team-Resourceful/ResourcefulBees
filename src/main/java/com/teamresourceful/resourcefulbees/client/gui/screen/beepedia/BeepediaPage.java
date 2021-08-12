@@ -89,4 +89,5 @@ public abstract class BeepediaPage {
         return result.get();
     }
 
+    public abstract BeepediaState createState();
 }
