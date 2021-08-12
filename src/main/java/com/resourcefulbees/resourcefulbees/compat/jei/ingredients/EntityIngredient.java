@@ -36,9 +36,7 @@ public class EntityIngredient {
     }
 
     public List<ITextComponent> getTooltip() {
-        List<ITextComponent> tooltip = new ArrayList<>();
-
-        tooltip.addAll(BeeInfoUtils.getBeeLore(beeData));
+        List<ITextComponent> tooltip = new ArrayList<>(BeeInfoUtils.getBeeLore(beeData));
         String desc = I18n.get("tooltip.resourcefulbees.jei.click_bee_info");
         String[] descTooltip = desc.split("\\r?\\n");
         for (String s : descTooltip) {
