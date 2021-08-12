@@ -231,7 +231,7 @@ public class ResourcefulBee extends CustomBeeEntity {
             level.levelEvent(2005, blockPos, 0);
             level.removeBlock(blockPos, false);
             ItemStack stack = new ItemStack(itemOutput.getItem());
-            stack.setTag(itemOutput.getCompoundNBT());
+            if (!itemOutput.getCompoundNBT().isEmpty()) stack.setTag(itemOutput.getCompoundNBT());
             level.addFreshEntity(new ItemEntity(level, blockPos.getX(), blockPos.getY(), blockPos.getZ(), stack));
         }
     }
