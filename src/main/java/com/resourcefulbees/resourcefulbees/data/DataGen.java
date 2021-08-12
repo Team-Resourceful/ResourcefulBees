@@ -6,11 +6,16 @@ import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.init.BeeSetup;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
+import com.resourcefulbees.resourcefulbees.mixin.BlockAccessor;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.ModEntities;
 import com.resourcefulbees.resourcefulbees.registry.TraitRegistry;
+import net.minecraft.block.Block;
+import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.ForgeRegistryEntry;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
 
@@ -50,6 +55,7 @@ public class DataGen {
         generateCombBlockItemTags();
         generateCombBlockTags();
         generateCombItemTags();
+        generateValidApiaryTag();
 
         //custom honey data
         generateHoneyBottleTags();
@@ -142,6 +148,15 @@ public class DataGen {
         builder.append("\",\n");
     }
 
+    private static void generateValidApiaryTag() {
+        TAGS.put(new ResourceLocation(ResourcefulBees.MOD_ID, "tags/items/valid_apiary.json"),
+                ForgeRegistries.BLOCKS.getValues().stream()
+                        .filter(block -> ((BlockAccessor)block).getHasCollision() )
+                        .map(Block::asItem)
+                        .filter(item -> item != Items.AIR)
+                        .map(ForgeRegistryEntry::getRegistryName)
+                        .collect(Collectors.toSet()));
+    }
 
     private static void generateCombItemTags() {
         TAGS.put(new ResourceLocation(ResourcefulBees.MOD_ID, "tags/items/resourceful_honeycomb.json"),
