@@ -5,12 +5,16 @@ import com.resourcefulbees.resourcefulbees.lib.ApiaryOutput;
 import com.resourcefulbees.resourcefulbees.lib.BaseModelTypes;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
+import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.Color;
+import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.RegistryObject;
+import org.lwjgl.system.CallbackI;
 
 import java.util.*;
 import java.util.function.Supplier;
@@ -21,6 +25,12 @@ public class CustomBeeData extends AbstractBeeData {
      * Which flowers the bee pollinates.
      */
     private String flower;
+
+    private String creator;
+
+    private String lore;
+
+    private String loreColor;
 
     /**
      * List of all block bees flowers
@@ -166,7 +176,7 @@ public class CustomBeeData extends AbstractBeeData {
         isEasterEggBee = false;
     }
 
-    private CustomBeeData(String flower, String baseLayerTexture, BaseModelTypes baseModelType, int maxTimeInHive, float sizeModifier, String[] traits, int[] apiaryOutputAmounts, ApiaryOutput[] apiaryOutputTypes, String name, boolean hasHoneycomb, MutationData mutationData, ColorData colorData, CombatData combatData, CentrifugeData centrifugeData, BreedData breedData, SpawnData spawnData, TraitData traitData, boolean isEasterEggBee) {
+    private CustomBeeData(String flower, String baseLayerTexture, BaseModelTypes baseModelType, int maxTimeInHive, float sizeModifier, String[] traits, int[] apiaryOutputAmounts, ApiaryOutput[] apiaryOutputTypes, String name, boolean hasHoneycomb, MutationData mutationData, ColorData colorData, CombatData combatData, CentrifugeData centrifugeData, BreedData breedData, SpawnData spawnData, TraitData traitData, boolean isEasterEggBee, String lore, String loreColor, String creator) {
         super("CustomBeeData");
         this.flower = flower;
         this.baseLayerTexture = baseLayerTexture;
@@ -186,6 +196,27 @@ public class CustomBeeData extends AbstractBeeData {
         this.TraitData = traitData;
         this.CombatData = combatData;
         this.isEasterEggBee = isEasterEggBee;
+        this.lore = lore;
+        this.loreColor = loreColor;
+        this.creator = creator;
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public String getLore() {
+        return lore;
+    }
+
+    public Style getLoreColor() {
+        net.minecraft.util.text.Color color;
+        if (loreColor.equals(BeeConstants.RAINBOW_COLOR)) {
+            color = net.minecraft.util.text.Color.fromRgb(RainbowColor.getRGB());
+        } else {
+            color = net.minecraft.util.text.Color.parseColor(loreColor);
+        }
+        return Style.EMPTY.withColor(color);
     }
 
     public boolean isEasterEggBee() {
@@ -397,9 +428,11 @@ public class CustomBeeData extends AbstractBeeData {
     }
 
 
-
     public static class Builder {
         private final String flower;
+        private String lore;
+        private String loreColor;
+        private String creator;
         private String baseLayerTexture;
         private BaseModelTypes baseModelType = BaseModelTypes.DEFAULT;
         private int maxTimeInHive;
@@ -429,6 +462,21 @@ public class CustomBeeData extends AbstractBeeData {
             this.breedData = breedData;
             this.spawnData = spawnData;
             this.traitData = traitData;
+        }
+
+        public Builder setLore(String lore) {
+            this.lore = lore;
+            return this;
+        }
+
+        public Builder setLoreColor(String loreColor) {
+            this.loreColor = loreColor;
+            return this;
+        }
+
+        public Builder setCreator(String creator) {
+            this.creator = creator;
+            return this;
         }
 
         public Builder setApiaryOutputTypes(ApiaryOutput[] outputs) {
@@ -472,7 +520,7 @@ public class CustomBeeData extends AbstractBeeData {
         }
 
         public CustomBeeData createCustomBee() {
-            return new CustomBeeData(flower, baseLayerTexture, baseModelType, maxTimeInHive, sizeModifier, traits, apiaryOutputAmounts, apiaryOutputTypes, name, hasHoneycomb, mutationData, colorData, combatData, centrifugeData, breedData, spawnData, traitData, isEasterEggBee);
+            return new CustomBeeData(flower, baseLayerTexture, baseModelType, maxTimeInHive, sizeModifier, traits, apiaryOutputAmounts, apiaryOutputTypes, name, hasHoneycomb, mutationData, colorData, combatData, centrifugeData, breedData, spawnData, traitData, isEasterEggBee, lore, loreColor, creator);
         }
     }
 }

@@ -55,6 +55,9 @@ public class KittenBee {
                 .setBaseModelType(BaseModelTypes.KITTEN)
                 .setSizeModifier(0.75f)
                 .setTraits(new String[]{BeeConstants.KITTEN_BEE})
+                .setCreator("Dawn Felstar")
+                .setLore("Cute little baby kitty bee.")
+                .setLoreColor(BeeConstants.RAINBOW_COLOR)
                 .createCustomBee();
 
         data.setShouldResourcefulBeesDoForgeRegistration(true);

@@ -26,6 +26,7 @@
 
 	"tooltip.resourcefulbees.jei.click_bee_info": "Click or Right-Click for more info!",
 	"tooltip.resourcefulbees.jei.coal": "Coal Bee",
+	"tooltip.resourcefulbees.bee.creator": "- ",
 
 	"info.resourcefulbees.jei.coal": "Coal Bee",
 
@@ -308,6 +309,7 @@
 	"item.resourcefulbees.slimy_bee_spawn_egg": "Slimy Bee Spawn Egg",
 	"item.resourcefulbees.icy_bee_spawn_egg": "Icy Bee Spawn Egg",
 	"item.resourcefulbees.kitten_bee_spawn_egg": "Kitten Bee Spawn Egg",
+	"item.resourcefulbees.yeti_bee_spawn_egg": "Yeti Bee Spawn Egg",
 	"item.resourcefulbees.dragon_bee_spawn_egg": "Dragon Bee Spawn Egg",
 	"item.resourcefulbees.dungeon_bee_spawn_egg": "Dungeon Bee Spawn Egg",
 
@@ -333,6 +335,7 @@
 	"entity.resourcefulbees.slimy_bee": "Slimy Bee",
 	"entity.resourcefulbees.icy_bee": "Icy Bee",
 	"entity.resourcefulbees.kitten_bee": "Kitten Bee",
+	"entity.resourcefulbees.yeti_bee": "Yeti Bee",
 	"entity.resourcefulbees.dragon_bee": "Dragon Bee",
 	"entity.resourcefulbees.dungeon_bee": "Dungeon Bee",
 
@@ -352,11 +355,14 @@
 	"trait.resourcefulbees.angry": "Angry",
 	"trait.resourcefulbees.teleport": "Teleport",
 	"trait.resourcefulbees.flammable": "Flammable",
+	"trait.resourcefulbees.spider": "Spider",
 
 	"trait.resourcefulbees.special.teleport": "During the day the bee can randomly teleport to an empty position within 4 blocks. This ability is stopped by the Ender Beecon and Bee Hives.",
 	"trait.resourcefulbees.special.flammable": "This effect will randomly light the bee on fire.",
 	"trait.resourcefulbees.special.angry": "Bees with this effect will become aggressive and cause bees around to join them. They can and will attack you, Calming effects will stop them from being angry.",
 	"trait.resourcefulbees.special.slimy": "Slimy bees will make squishy sounds and spurt out slime particles at random.",
+	"trait.resourcefulbees.special.spider": "Allows bees to fly through spiderwebs without issues.",
+
 
 	"entity.minecraft.villager.resourcefulbees.beekeeper": "Beekeeper",
 	"block.resourcefulbees.mech_centrifuge.tooltip.info": "Hold SHIFT & right-click block to process honeycombs.",

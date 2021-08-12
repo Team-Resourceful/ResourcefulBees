@@ -149,6 +149,9 @@ public class TraitPage extends BeepediaPage {
                     case TraitConstants.TELEPORT:
                         item = new ItemStack(Items.ENDER_PEARL);
                         break;
+                    case TraitConstants.SPIDER:
+                        item = new ItemStack(Items.COBWEB);
+                        break;
                     default:
                         item = new ItemStack(Items.BARRIER);
                         break;
