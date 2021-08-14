@@ -3,6 +3,7 @@ package com.resourcefulbees.resourcefulbees.api.beedata;
 import com.resourcefulbees.resourcefulbees.lib.ModelTypes;
 
 import java.awt.*;
+import java.util.Locale;
 
 @SuppressWarnings("unused")
 public class ColorData extends AbstractBeeData {
@@ -100,13 +101,38 @@ public class ColorData extends AbstractBeeData {
 
     public String getGlowColor() { return glowColor == null ? WHITE : glowColor; }
 
-    public String getPrimaryLayerTexture() { return primaryLayerTexture == null ? "custom/primary_layer" : primaryLayerTexture; }
+    public String getPrimaryLayerTexture() {
+        if (primaryLayerTexture != null) {
+            return primaryLayerTexture.startsWith("/")
+                    ? primaryLayerTexture.replaceFirst("/", "").toLowerCase(Locale.ENGLISH)
+                    : primaryLayerTexture.toLowerCase(Locale.ENGLISH);
+        }
+        return "custom/primary_layer";
+    }
 
-    public String getSecondaryLayerTexture() { return secondaryLayerTexture == null ? "custom/secondary_layer" : secondaryLayerTexture; }
+    public String getSecondaryLayerTexture() {
+        if (secondaryLayerTexture != null) {
+            return secondaryLayerTexture.startsWith("/")
+                    ? secondaryLayerTexture.replaceFirst("/", "").toLowerCase(Locale.ENGLISH)
+                    : secondaryLayerTexture.toLowerCase(Locale.ENGLISH);
+        }
+        return "custom/secondary_layer";
+    }
 
-    public String getEmissiveLayerTexture() { return emissiveLayerTexture == null ? "custom/emissive_layer" : emissiveLayerTexture; }
+    public String getEmissiveLayerTexture() {
+        if (emissiveLayerTexture != null) {
+            return emissiveLayerTexture.startsWith("/")
+                    ? emissiveLayerTexture.replaceFirst("/", "").toLowerCase(Locale.ENGLISH)
+                    : emissiveLayerTexture.toLowerCase(Locale.ENGLISH);
+        }
+        return "custom/emissive_layer";
+    }
 
-    public String getGelLayerTexture() { return gelLayerTexture; }
+    public String getGelLayerTexture() {
+        return gelLayerTexture.startsWith("/")
+                ? gelLayerTexture.replaceFirst("/", "").toLowerCase(Locale.ENGLISH)
+                : gelLayerTexture.toLowerCase(Locale.ENGLISH);
+    }
 
     public boolean isBeeColored() { return isBeeColored; }
 
