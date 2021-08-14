@@ -1,6 +1,5 @@
 package com.resourcefulbees.resourcefulbees.init;
 
-import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.*;
 import com.resourcefulbees.resourcefulbees.client.models.ModelHandler;
@@ -103,6 +102,8 @@ public class ClientEventHandlers {
         RenderTypeLookup.setRenderLayer(ModBlocks.NETHER_HONEY_TANK.get(), RenderType.translucent());
         RenderTypeLookup.setRenderLayer(ModBlocks.WOODEN_HONEY_TANK.get(), RenderType.translucent());
         RenderTypeLookup.setRenderLayer(ModBlocks.HONEY_GENERATOR.get(), RenderType.translucent());
+        RenderTypeLookup.setRenderLayer(ModBlocks.HONEY_GLASS.get(), RenderType.translucent());
+        RenderTypeLookup.setRenderLayer(ModBlocks.HONEY_GLASS_PLAYER.get(), RenderType.translucent());
 
         // bee nests need transparency for overlay
         RenderTypeLookup.setRenderLayer(ModBlocks.OAK_BEE_NEST.get(), RenderType.translucent());

@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "HG",
+    "GH"
+  ],
+  "key": {
+    "G": { "tag": "forge:glass" },
+    "H": { "item": "minecraft:honey_block" }
+  },
+  "result": {
+    "count": 4,
+    "item": "resourcefulbees:honey_glass"
+  }
+}

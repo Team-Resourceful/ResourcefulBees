@@ -265,6 +265,8 @@
 	"block.resourcefulbees.rainbow_honey_block": "Rainbow Honey Block",
 	"block.resourcefulbees.catnip_honeycomb_block": "Catnip Honeycomb Block",
 	"block.resourcefulbees.catnip_honey_block": "Catnip Honey Block",
+	"block.resourcefulbees.honey_glass": "Honey Glass (Bee)",
+	"block.resourcefulbees.honey_glass_player": "Honey Glass (Player)",
 
 
 	"fluid.resourcefulbees.honey": "Honey",
@@ -382,6 +384,8 @@
 	"block.resourcefulbees.beehive.tooltip.bees": "Bees:",
 	"block.resourcefulbees.beehive.tooltip.honeycombs": "Honeycombs:",
 	"item.resourcefulbees.hive_upgrade.tooltip.info": "Use on a previous tier nest to upgrade it",
+	"block.resourcefulbees.honey_glass.tooltip": "Allows bees to fly through.",
+	"block.resourcefulbees.honey_glass_player.tooltip": "Allows players to pass through.",
 
 
 	"effect.resourcefulbees.calming": "Calming",
