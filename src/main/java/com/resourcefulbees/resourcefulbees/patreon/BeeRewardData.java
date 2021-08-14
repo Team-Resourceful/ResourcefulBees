@@ -45,7 +45,8 @@ public class BeeRewardData {
         NETHER(new ResourceLocation("resourcefulbees:textures/entity/mushroom/nether_wart_bee.png")),
         CRIMSON(new ResourceLocation("resourcefulbees:textures/entity/mushroom/crimson_alchemist_bee.png")),
         WARPED(new ResourceLocation("resourcefulbees:textures/entity/mushroom/warped_alchemist_bee.png")),
-        GHAST(new ResourceLocation("resourcefulbees:textures/entity/ghast/ghast_bee.png"));
+        GHAST(new ResourceLocation("resourcefulbees:textures/entity/ghast/ghast_bee.png")),
+        YETI(new ResourceLocation("resourcefulbees:textures/entity/yeti/yeti_bee"));
 
         ResourceLocation resourceLocation;
         ResourceLocation secondaryResourceLocation;
