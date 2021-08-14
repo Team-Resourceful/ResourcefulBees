@@ -184,6 +184,9 @@ public class BeePage extends BeepediaPage {
 
     @Override
     public void drawTooltips(MatrixStack matrixStack, int mouseX, int mouseY) {
+        if (BeepediaScreen.mouseHovering((float) xPos, (float) yPos + 9, 38, 38, mouseX, mouseY)) {
+            beepedia.drawEntityLore(matrixStack, beeData, mouseX, mouseY);
+        }
         subPage.getRight().drawTooltips(matrixStack, mouseX, mouseY);
         tabs.forEach(p -> p.getLeft().renderToolTip(matrixStack, mouseX, mouseY));
     }

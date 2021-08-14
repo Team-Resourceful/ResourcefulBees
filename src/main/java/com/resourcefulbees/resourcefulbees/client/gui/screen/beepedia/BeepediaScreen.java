@@ -11,6 +11,7 @@ import com.resourcefulbees.resourcefulbees.client.gui.widget.ButtonList;
 import com.resourcefulbees.resourcefulbees.client.gui.widget.ModImageButton;
 import com.resourcefulbees.resourcefulbees.client.gui.widget.TabImageButton;
 import com.resourcefulbees.resourcefulbees.config.Config;
+import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.entity.passive.KittenBee;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
@@ -221,9 +222,18 @@ public class BeepediaScreen extends Screen {
         }
         // collect page if page does not match active list type.
         // this can be inaccurate as some pages may share IDs
-        if (page == null) page = bees.get(pageID);
-        if (page == null) page = honey.get(pageID);
-        if (page == null) page = traits.get(pageID);
+        if (page == null) {
+            page = bees.get(pageID);
+            list = beesList;
+        }
+        if (page == null) {
+            page = honey.get(pageID);
+            list = honeyList;
+        }
+        if (page == null) {
+            page = traits.get(pageID);
+            list = traitsList;
+        }
         activatePage(pageType, page, list, goingBack);
     }
 
@@ -285,11 +295,11 @@ public class BeepediaScreen extends Screen {
         int x = this.guiLeft;
         int y = this.guiTop;
         TabImageButton beesButton = new TabImageButton(x + 45, y + 8, 20, 20, 0, 0, 20, buttonImage, beeItem, 2, 2, onPress ->
-            setActiveList(beesList, PageType.BEE), getTooltipProvider(new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.bees")));
+                setActiveList(beesList, PageType.BEE), getTooltipProvider(new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.bees")));
         TabImageButton traitsButton = new TabImageButton(x + 66, y + 8, 20, 20, 0, 0, 20, buttonImage, traitItem, 2, 2, onPress ->
-            setActiveList(traitsList, PageType.TRAIT), getTooltipProvider(new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits")));
+                setActiveList(traitsList, PageType.TRAIT), getTooltipProvider(new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits")));
         TabImageButton honeyButton = new TabImageButton(x + 87, y + 8, 20, 20, 0, 0, 20, buttonImage, honeyItem, 2, 2, onPress ->
-            setActiveList(honeyList, PageType.HONEY), getTooltipProvider(new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.honey")));
+                setActiveList(honeyList, PageType.HONEY), getTooltipProvider(new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.honey")));
 
         addButton(beesButton);
         addButton(traitsButton);
@@ -622,6 +632,33 @@ public class BeepediaScreen extends Screen {
 
     private boolean mapContainsTraitName(BeePage page, String traitName) {
         return page.beeData.hasTraitNames() && Arrays.asList(page.beeData.getTraitNames()).contains(traitName);
+    }
+
+    public void drawEntityTooltip(MatrixStack matrixStack, Entity entity, int mouseX, int mouseY) {
+        List<ITextComponent> tooltip = new ArrayList<>();
+        tooltip.add(entity.getDisplayName());
+        if (entity instanceof CustomBeeEntity) {
+            tooltip.addAll(BeeInfoUtils.getBeeLore(((CustomBeeEntity) entity).getBeeData()));
+        }
+        if (Minecraft.getInstance().options.advancedItemTooltips) {
+            tooltip.add(new StringTextComponent(entity.getType().getRegistryName().toString()).withStyle(TextFormatting.DARK_GRAY));
+        }
+        renderComponentTooltip(matrixStack, tooltip, mouseX, mouseY);
+    }
+
+    public void drawEntityTooltip(MatrixStack matrixStack, CustomBeeData beeData, int mouseX, int mouseY) {
+        List<ITextComponent> tooltip = new ArrayList<>();
+        tooltip.add(beeData.getTranslation());
+        tooltip.addAll(BeeInfoUtils.getBeeLore(beeData));
+        if (Minecraft.getInstance().options.advancedItemTooltips) {
+            tooltip.add(new StringTextComponent(beeData.getEntityTypeRegistryID().toString()).withStyle(TextFormatting.DARK_GRAY));
+        }
+        renderComponentTooltip(matrixStack, tooltip, mouseX, mouseY);
+    }
+
+    public void drawEntityLore(MatrixStack matrixStack, CustomBeeData beeData, int mouseX, int mouseY) {
+        List<ITextComponent> tooltip = BeeInfoUtils.getBeeLore(beeData);
+        renderComponentTooltip(matrixStack, tooltip, mouseX, mouseY);
     }
 
 

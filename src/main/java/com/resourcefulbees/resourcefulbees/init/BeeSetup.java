@@ -9,6 +9,7 @@ import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.entity.passive.KittenBee;
 import com.resourcefulbees.resourcefulbees.entity.passive.OreoBee;
+import com.resourcefulbees.resourcefulbees.entity.passive.YetiBee;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.ModEntities;
@@ -71,6 +72,7 @@ public class BeeSetup {
         if (Boolean.TRUE.equals(ENABLE_EASTER_EGG_BEES.get())) {
             OreoBee.register();
             KittenBee.register();
+            YetiBee.register();
         }
         if (Boolean.TRUE.equals(GENERATE_DEFAULTS.get())) {
             setupDefaultBees();

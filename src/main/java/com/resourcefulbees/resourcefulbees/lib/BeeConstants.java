@@ -4,9 +4,12 @@ import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.honeydata.DefaultHoneyBottleData;
 import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
 import com.resourcefulbees.resourcefulbees.config.Config;
+import io.netty.util.AsciiString;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TranslationTextComponent;
 
 public class BeeConstants {
+
 
     private BeeConstants() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
@@ -28,6 +31,7 @@ public class BeeConstants {
     public static final String RAINBOW_COLOR = "rainbow";
     public static final String OREO_BEE = "oreo";
     public static final String KITTEN_BEE = "kitten";
+    public static final String YETI_BEE = "yeti";
 
     public static final int SMOKE_TIME = 600;
     public static final int MIN_HIVE_TIME = 600;
@@ -44,6 +48,8 @@ public class BeeConstants {
     public static final int DEFAULT_ITEM_COLOR = -1;
     public static final ResourceLocation MISSING_TEXTURE = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/entity/missing_texture.png");
     public static final int MAX_BEES_BEE_BOX = 10;
+
+    public static final TranslationTextComponent CREATOR_LORE_PREFIX = new TranslationTextComponent("tooltip.resourcefulbees.bee.creator");
 
     public static final HoneyBottleData defaultHoney = new DefaultHoneyBottleData();
 }

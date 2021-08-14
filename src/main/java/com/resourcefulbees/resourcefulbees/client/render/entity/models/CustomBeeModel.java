@@ -59,10 +59,18 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
             case CROP:
                 addCrops();
                 break;
+            case GUARDIAN:
+                addSpikes();
+                break;
+            case YETI:
+                addYetiHorns();
+                break;
             case DEFAULT:
                 addDefaultParts();
         }
     }
+
+
 
     public CustomBeeModel(BaseModelTypes modelType) {
         this();
@@ -397,6 +405,104 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
         body.addChild(armored);
         armored.texOffs(34, 3).addBox(-3.5F, -4.0F, -5.0F, 7.0F, 7.0F, 7.0F, 0.6F, false);
         armored.texOffs(0, 25).addBox(-3.5F, -4.0F, -5.0F, 7.0F, 7.0F, 10.0F, 0.25F, false);
+    }
+
+    private void addSpikes() {
+        ModelRenderer guardian = new ModelRenderer(this);
+        guardian.setPos(0.0F, 5.0F, 0.0F);
+        body.addChild(guardian);
+        guardian.texOffs(0, 25).addBox(-3.5F, -9.0F, -5.0F, 7.0F, 7.0F, 10.0F, 0.4F, false);
+
+        ModelRenderer spike1 = new ModelRenderer(this);
+        spike1.setPos(3.5F, -5.5F, 5.0F);
+        guardian.addChild(spike1);
+        setRotationAngle(spike1, 0.0F, 2.3562F, 0.0F);
+        spike1.texOffs(40, 24).addBox(-2.5F, -0.5F, -0.5F, 3.0F, 1.0F, 1.0F, 0.25F, false);
+
+        ModelRenderer spike2 = new ModelRenderer(this);
+        spike2.setPos(-3.5F, -5.5F, -5.0F);
+        guardian.addChild(spike2);
+        setRotationAngle(spike2, 0.0F, -0.7854F, 0.0F);
+        spike2.texOffs(40, 22).addBox(-2.5F, -0.5F, -0.5F, 3.0F, 1.0F, 1.0F, 0.25F, false);
+
+        ModelRenderer spike3 = new ModelRenderer(this);
+        spike3.setPos(3.5F, -5.5F, -4.75F);
+        guardian.addChild(spike3);
+        setRotationAngle(spike3, 0.0F, -2.3562F, 0.0F);
+        spike3.texOffs(40, 20).addBox(-2.5F, -0.5F, -0.5F, 3.0F, 1.0F, 1.0F, 0.25F, false);
+
+        ModelRenderer spike4 = new ModelRenderer(this);
+        spike4.setPos(-3.5F, -5.5F, 5.0F);
+        guardian.addChild(spike4);
+        setRotationAngle(spike4, 0.0F, 0.7854F, 0.0F);
+        spike4.texOffs(40, 18).addBox(-2.5F, -0.5F, -0.5F, 3.0F, 1.0F, 1.0F, 0.25F, false);
+
+        ModelRenderer spike5 = new ModelRenderer(this);
+        spike5.setPos(-3.5F, -2.0F, 0.0F);
+        guardian.addChild(spike5);
+        setRotationAngle(spike5, 0.0F, 0.0F, -0.7854F);
+        spike5.texOffs(32, 24).addBox(-2.5F, -0.5F, -0.5F, 3.0F, 1.0F, 1.0F, 0.25F, false);
+
+        ModelRenderer spike6 = new ModelRenderer(this);
+        spike6.setPos(0.0F, -2.0F, 5.0F);
+        guardian.addChild(spike6);
+        setRotationAngle(spike6, 1.5708F, 2.3562F, 1.5708F);
+        spike6.texOffs(32, 22).addBox(-2.5F, -0.75F, -0.5F, 3.0F, 1.0F, 1.0F, 0.25F, false);
+
+        ModelRenderer spike7 = new ModelRenderer(this);
+        spike7.setPos(0.0F, -2.0F, -5.0F);
+        guardian.addChild(spike7);
+        setRotationAngle(spike7, -1.5708F, -2.3562F, 1.5708F);
+        spike7.texOffs(32, 20).addBox(-2.5F, -0.5F, -0.5F, 3.0F, 1.0F, 1.0F, 0.25F, false);
+
+        ModelRenderer spike8 = new ModelRenderer(this);
+        spike8.setPos(3.5F, -2.0F, 0.0F);
+        guardian.addChild(spike8);
+        setRotationAngle(spike8, 0.0F, 3.1416F, 0.7854F);
+        spike8.texOffs(32, 18).addBox(-2.5F, -0.5F, -0.5F, 3.0F, 1.0F, 1.0F, 0.25F, false);
+
+        ModelRenderer spike9 = new ModelRenderer(this);
+        spike9.setPos(0.0F, -9.0F, 5.0F);
+        guardian.addChild(spike9);
+        setRotationAngle(spike9, 1.5708F, 0.7854F, 1.5708F);
+        spike9.texOffs(24, 24).addBox(-2.5F, -0.5F, -0.5F, 3.0F, 1.0F, 1.0F, 0.25F, false);
+
+        ModelRenderer spike10 = new ModelRenderer(this);
+        spike10.setPos(0.0F, -9.0F, -5.0F);
+        guardian.addChild(spike10);
+        setRotationAngle(spike10, -1.5708F, -0.7854F, 1.5708F);
+        spike10.texOffs(24, 22).addBox(-2.5F, -0.5F, -0.5F, 3.0F, 1.0F, 1.0F, 0.25F, false);
+
+        ModelRenderer spike11 = new ModelRenderer(this);
+        spike11.setPos(3.5F, -9.0F, 0.0F);
+        guardian.addChild(spike11);
+        setRotationAngle(spike11, 3.1416F, 0.0F, 2.3562F);
+        spike11.texOffs(24, 20).addBox(-2.5F, -0.5F, -0.5F, 3.0F, 1.0F, 1.0F, 0.25F, false);
+
+        ModelRenderer spike12 = new ModelRenderer(this);
+        spike12.setPos(-3.5F, -9.0F, 0.0F);
+        guardian.addChild(spike12);
+        setRotationAngle(spike12, 0.0F, 0.0F, 0.7854F);
+        spike12.texOffs(24, 18).addBox(-2.5F, -0.5F, -0.5F, 3.0F, 1.0F, 1.0F, 0.25F, false);
+    }
+
+    private void addYetiHorns() {
+        ModelRenderer yetiHorns = new ModelRenderer(this);
+        yetiHorns.setPos(0.0F, 0.0F, 0.0F);
+        body.addChild(yetiHorns);
+
+
+        ModelRenderer rightHorn = new ModelRenderer(this);
+        rightHorn.setPos(-2.0F, -4.0F, -4.0F);
+        yetiHorns.addChild(rightHorn);
+        setRotationAngle(rightHorn, 0.0F, 0.0F, -0.9599F);
+        rightHorn.texOffs(34, 12).addBox(-2.0F, -3.0F, -0.5F, 2.0F, 3.0F, 2.0F, 0.0F, true);
+
+        ModelRenderer leftHorn = new ModelRenderer(this);
+        leftHorn.setPos(2.0F, -4.0F, -4.0F);
+        yetiHorns.addChild(leftHorn);
+        setRotationAngle(leftHorn, 0.0F, 0.0F, 0.9599F);
+        leftHorn.texOffs(34, 12).addBox(0.0F, -3.0F, -0.5F, 2.0F, 3.0F, 2.0F, 0.0F, false);
     }
 
     public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {

@@ -4,25 +4,27 @@ import com.resourcefulbees.resourcefulbees.api.beedata.*;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.LightLevels;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
+import com.resourcefulbees.resourcefulbees.lib.ModelTypes;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 
-public class OreoBee {
+public class YetiBee {
 
-    private OreoBee() {
+    private YetiBee() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
 
     public static void register() {
-        BeeRegistry.getRegistry().registerBee(BeeConstants.OREO_BEE, getOreoBeeData());
+        BeeRegistry.getRegistry().registerBee(BeeConstants.YETI_BEE, getOreoBeeData());
     }
 
     private static CustomBeeData getOreoBeeData() {
-        CustomBeeData data = new CustomBeeData.Builder(BeeConstants.OREO_BEE, "all", true,
+        CustomBeeData data = new CustomBeeData.Builder(BeeConstants.YETI_BEE, "minecraft:snow_block", true,
                 MutationData.createDefault(),
                 new ColorData.Builder(false)
-                        .setPrimaryColor("#442920")
-                        .setSecondaryColor("#e1d9b8")
+                        .setPrimaryColor("#E9F4F6")
+                        .setSecondaryColor("#777E86")
+                        .setModelType(ModelTypes.YETI)
                         .createColorData(),
                 new CombatData.Builder(false)
                         .setAttackDamage(0f)
@@ -40,12 +42,12 @@ public class OreoBee {
                         .createSpawnData(),
                 new TraitData(true))
                 .setEasterEggBee(true)
-                .setBaseLayerTexture("/oreo/oreo_bee")
+                .setBaseLayerTexture("/yeti/yeti_bee")
                 .setMaxTimeInHive(6000)
                 .setSizeModifier(1.25f)
-                .setCreator("Epic Oreo")
-                .setLore("A Delicious Bee")
-                .setLoreColor(BeeConstants.RAINBOW_COLOR)
+                .setCreator("Joosh")
+                .setLore("A pretty §ocool§r bee.\nHe's here to bee your best friend :)")
+                .setLoreColor("#ADD8E6")
                 .setTraits(new String[]{BeeConstants.OREO_BEE})
                 .setApiaryOutputAmounts(new int[]{1, 2, 3, 4})
                 .createCustomBee();

@@ -4,6 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.api.beedata.mutation.outputs.ItemOutput;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
+import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.BeePage;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.item.BeeSpawnEggItem;
 import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
@@ -30,19 +31,19 @@ public class ItemMutationPage extends MutationsPage {
     private Double outputChance;
 
     public ItemMutationPage(EntityType<?> bee, List<Block> blocks, Pair<Double, RandomCollection<ItemOutput>> outputs, MutationTypes type, int mutationCount, BeepediaScreen beepedia) {
-        super(bee.create(Objects.requireNonNull(beepedia.getMinecraft().level)), type, mutationCount, beepedia);
+        super(bee, type, mutationCount, beepedia);
         inputs = blocks;
         initOutputs(outputs);
     }
 
-    public ItemMutationPage(Entity bee, ITag<?> blocks, Pair<Double, RandomCollection<ItemOutput>> outputs, MutationTypes type, int mutationCount, BeepediaScreen beepedia) {
-        super(bee, type, mutationCount, beepedia);
+    public ItemMutationPage(BeePage parent, ITag<?> blocks, Pair<Double, RandomCollection<ItemOutput>> outputs, MutationTypes type, int mutationCount, BeepediaScreen beepedia) {
+        super(parent, type, mutationCount, beepedia);
         inputs = (List<Block>) blocks.getValues();
         initOutputs(outputs);
     }
 
-    public ItemMutationPage(Entity bee, Block block, Pair<Double, RandomCollection<ItemOutput>> outputs, MutationTypes type, int mutationCount, BeepediaScreen beepedia) {
-        super(bee, type, mutationCount, beepedia);
+    public ItemMutationPage(BeePage parent, Block block, Pair<Double, RandomCollection<ItemOutput>> outputs, MutationTypes type, int mutationCount, BeepediaScreen beepedia) {
+        super(parent, type, mutationCount, beepedia);
         inputs = new LinkedList<>(Collections.singleton(block));
         initOutputs(outputs);
     }
