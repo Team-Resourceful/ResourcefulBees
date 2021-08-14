@@ -1,3 +1,20 @@
+# ----- [0.9.9] -----
+- Fixed an issue where centrifuge input counts weren't respected.
+- Added Honey Glass. (Glass which allows only players or only bees to pass through)
+- Added a texture for creative beepedia.
+- Added angry dungeon bee texture.
+- Added a Yeti Dev Bee.
+- Made it so that apiaries don't require a floor and now check for if a block has collision for if it's a valid block.
+- Valid apiary blocks using `hasCollision` check now have the tag added to their items. (This will allow you to search for it in JEI)
+- Fixed Item Mutations outputting items with a blank nbt tag.
+- Bees can be parents in a breed without needing to have a self breed option. (`isBreedable` is false but has feed item)
+- Added lore options to bees in JEI.
+- Added 2 new models Yeti Horns and Guardian Spikes.
+- Fixed layer textures not loading properly when defined with a preceding `/`
+
+# ----- [0.6.7.2b] -----
+- Fixed an error trying to process bee damage immunities, in doing so we actually added the ability for all damage sources including modded ones to be allowed.
+
 # ----- [0.6.7_1b] -----
 - Fixed a crash when attempting to breed bees with no feed return item
 
