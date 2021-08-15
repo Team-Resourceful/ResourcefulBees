@@ -113,7 +113,7 @@ public class EntityMutationPage extends MutationsPage {
             IFormattableTextComponent id = new StringTextComponent(output.getEntityType().getRegistryName().toString()).withStyle(TextFormatting.DARK_GRAY);
             tooltip.add(name);
             tooltip.add(id);
-            tooltip.addAll(BeeInfoUtils.getBeeLore(output.getEntityType()));
+            tooltip.addAll(BeeInfoUtils.getBeeLore(output.getEntityType(), Minecraft.getInstance().level));
             if (!output.getCompoundNBT().isEmpty()) {
                 if (BeeInfoUtils.isShiftPressed()) {
                     List<String> lore = BeeInfoUtils.getLoreLines(output.getCompoundNBT());

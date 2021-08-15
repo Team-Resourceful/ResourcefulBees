@@ -49,6 +49,8 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -224,7 +226,6 @@ public class BeeInfoUtils {
     public static boolean isValidBreedItem(@NotNull ItemStack stack, BreedData breedData) {
         return breedData.getFeedItems().contains(stack.getItem());
     }
-
 
     public static void flagBeesInRange(BlockPos pos, World world) {
         MutableBoundingBox box = MutableBoundingBox.createProper(pos.getX() + 10, pos.getY() + 10, pos.getZ() + 10, pos.getX() - 10, pos.getY() - 10, pos.getZ() - 10);
@@ -417,8 +418,8 @@ public class BeeInfoUtils {
         return new ApiaryOutput[]{Config.T1_APIARY_OUTPUT.get(), Config.T2_APIARY_OUTPUT.get(), Config.T3_APIARY_OUTPUT.get(), Config.T4_APIARY_OUTPUT.get()};
     }
 
-    public static List<ITextComponent> getBeeLore(EntityType<?> entityType) {
-        Entity entity = entityType.create(Minecraft.getInstance().level);
+    public static List<ITextComponent> getBeeLore(EntityType<?> entityType, World world) {
+        Entity entity = entityType.create(world);
         if (entity instanceof CustomBeeEntity){
             return getBeeLore(((CustomBeeEntity) entity).getBeeData());
         }else {
@@ -439,5 +440,10 @@ public class BeeInfoUtils {
             tooltip.add(BeeConstants.CREATOR_LORE_PREFIX.copy().append(beeData.getCreator()).withStyle(TextFormatting.GRAY));
         }
         return tooltip;
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static World getClientWorld() {
+        return Minecraft.getInstance().level;
     }
 }

@@ -29,8 +29,13 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.*;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.loading.FMLCommonLaunchHandler;
+import net.minecraftforge.fml.loading.FMLLoader;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -47,13 +52,13 @@ public class BeeJar extends Item {
         if (tintIndex == 1 && tag != null) {
             if (tag.contains(NBTConstants.NBT_COLOR) && !tag.getString(NBTConstants.NBT_COLOR).equals(BeeConstants.STRING_DEFAULT_ITEM_COLOR)) {
                 return tag.getString(NBTConstants.NBT_COLOR).equals(BeeConstants.RAINBOW_COLOR) ? RainbowColor.getRGB() : Color.parseInt(tag.getString(NBTConstants.NBT_COLOR));
-            } else if (!tag.contains(NBTConstants.NBT_COLOR) && tag.contains(NBTConstants.NBT_ENTITY) && Minecraft.getInstance().level != null) {
+            } else if (!tag.contains(NBTConstants.NBT_COLOR) && tag.contains(NBTConstants.NBT_ENTITY) && getWorld() != null) {
                 // one time check for a bee's color, if customBeeEntity, set the jar's color to the bee's color, else set it to default.
                 // this code should only ever run once per beejar if the beejar does not have a color.
                 String id = tag.getString(NBTConstants.NBT_ENTITY);
                 EntityType<?> entityType = BeeInfoUtils.getEntityType(id);
                 if (entityType != null) {
-                    Entity entity = entityType.create(Minecraft.getInstance().level);
+                    Entity entity = entityType.create(getWorld());
                     if (entity instanceof CustomBeeEntity) {
                         ColorData renderData = ((CustomBeeEntity) entity).getBeeData().getColorData();
                         String beeColor = BeeConstants.VANILLA_BEE_COLOR;
@@ -185,7 +190,7 @@ public class BeeJar extends Item {
     @OnlyIn(Dist.CLIENT)
     public static void fillJar(ItemStack stack, CustomBeeData beeData) {
         EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(beeData.getEntityTypeRegistryID());
-        World world = Minecraft.getInstance().level;
+        World world = getWorld();
         if (world == null) return;
         Entity entity = entityType.create(world);
         if (entity != null) {
@@ -194,13 +199,22 @@ public class BeeJar extends Item {
         }
     }
 
+    private static World getWorld() {
+        if (FMLLoader.getDist().isClient()) {
+            return BeeInfoUtils.getClientWorld();
+        }else {
+            return ServerLifecycleHooks.getCurrentServer().overworld();
+        }
+    }
+
     private void renameJar(ItemStack stack, CompoundNBT tag, String name) {
+        World world = getWorld();
+        if (world == null) return;
         if (stack.getTag() == null || stack.getTag().contains(NBTConstants.NBT_DISPLAY)) return;
-        if (Minecraft.getInstance().level == null) return;
         String id = tag.getString(NBTConstants.NBT_ENTITY);
         EntityType<?> entityType = BeeInfoUtils.getEntityType(id);
         if (entityType != null) {
-            Entity entity = entityType.create(Minecraft.getInstance().level);
+            Entity entity = entityType.create(world);
             if (entity != null) {
                 renameJar(stack, entity, name);
             }
