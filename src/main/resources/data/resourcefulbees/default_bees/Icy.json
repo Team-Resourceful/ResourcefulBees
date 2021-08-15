@@ -4,11 +4,13 @@
   "traits": ["can_swim"],
   "maxTimeInHive": 1200,
   "sizeModifier": 0.75,
+  "baseLayerTexture": "natural/icy_bee",
   "ColorData": {
-    "isBeeColored": true,
+    "isBeeColored": false,
     "honeycombColor": "#92b9fe",
     "primaryColor": "#92b9fe",
-    "secondaryColor": "#303030"
+    "secondaryColor": "#303030",
+    "modelType": "GELATINOUS"
   },
   "MutationData": {
     "hasMutation": true,
@@ -28,7 +30,9 @@
     "hasCentrifugeOutput": false
   },
   "SpawnData": {
-    "canSpawnInWorld": false
+    "canSpawnInWorld": true,
+    "biomeWhitelist": "tag:COLD",
+    "biomeBlacklist": "tag:ocean"
   },
   "BreedData": {
     "isBreedable": true
