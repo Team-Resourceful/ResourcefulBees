@@ -39,8 +39,6 @@ import java.util.stream.Collectors;
 
 public class BeeNestFeature extends Feature<NoFeatureConfig> {
 
-   // private static final EnumSet<Direction> ALLOWED_DIRECTIONS = EnumSet.of(Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST);
-
     private static final RandomCollection<Block> overworldBlocks = new RandomCollection<>();
 
     static {
@@ -71,10 +69,9 @@ public class BeeNestFeature extends Feature<NoFeatureConfig> {
     }
 
     private BlockPos getYPos(ISeedReader worldIn, Random rand, Biome.Category category, BlockPos initPos){
-        BlockPos newPos;
         if (category == Biome.Category.NETHER || worldIn.dimensionType().hasCeiling()) {
             int ceilHeight = worldIn.getHeight();
-            newPos = new BlockPos(initPos.getX(), MathUtils.nextIntInclusive(32, ceilHeight), initPos.getZ())
+            BlockPos newPos = new BlockPos(initPos.getX(), MathUtils.nextIntInclusive(32, ceilHeight), initPos.getZ())
                     .south(rand.nextInt(15))
                     .east(rand.nextInt(15));
             while (worldIn.isEmptyBlock(newPos.below())) {
@@ -84,18 +81,14 @@ public class BeeNestFeature extends Feature<NoFeatureConfig> {
                 newPos = newPos.above();
             }
             if (newPos.getY() >= ceilHeight) {
-                return new BlockPos(0,0,0);
+                return BlockPos.ZERO;
             }
-            if (worldIn.getBlockState(newPos.below()).getBlock().equals(Blocks.LAVA) &&
-                    rand.nextInt(10) != 0
-            ){
-                return new BlockPos(0,0,0);
+            if (worldIn.getBlockState(newPos.below()).getBlock().equals(Blocks.LAVA) && rand.nextInt(10) != 0) {
+                return BlockPos.ZERO;
             }
-        } else {
-            int y = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, initPos.getX(), initPos.getZ());
-            newPos = new BlockPos(initPos.getX(), y, initPos.getZ());
+            return newPos;
         }
-        return newPos;
+        return worldIn.getHeightmapPos(Heightmap.Type.WORLD_SURFACE_WG, initPos);
     }
 
     private Block selectNest(boolean headsOrTails, Block blockOne, Block blockTwo){

@@ -21,6 +21,7 @@ import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
+import net.minecraftforge.fml.loading.FMLLoader;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -57,15 +58,16 @@ public class BeeSetup {
 
     public static void setupBees() {
         if (Config.ENABLE_EASTER_EGG_BEES.get()) {
-            setupDevBees() ;
+            setupDevBees();
         }
 
         if (Config.GENERATE_DEFAULTS.get()) {
             FileUtils.setupDefaultFiles("/data/resourcefulbees/default_bees", beePath);
             FileUtils.setupDefaultFiles("/data/resourcefulbees/default_honey", honeyPath);
-            // REQUIRED RE-ENABLE THIS BEFORE RELEASE!!!
-            //Config.GENERATE_DEFAULTS.set(false);
-            //Config.GENERATE_DEFAULTS.save();
+            if (!FMLLoader.isProduction()) {
+                Config.GENERATE_DEFAULTS.set(false);
+                Config.GENERATE_DEFAULTS.save();
+            }
         }
         LOGGER.info("Loading Custom Bees...");
         FileUtils.streamFilesAndParse(beePath, BeeSetup::parseBee, "Could not stream bees!!");

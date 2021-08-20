@@ -4,7 +4,7 @@
       "x": 58,
       "y": 0,
       "type": "custom",
-      "class": "com.teamresourceful.resourcefulbees.compat.patchouli.EffectComponent",
+      "class": "com.teamresourceful.resourcefulbees.common.compat.patchouli.EffectComponent",
       "effectID": "#id"
     },
     {
