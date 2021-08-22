@@ -71,7 +71,7 @@ public class Beepedia extends Item {
 
 
     @Override
-    public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
+    public @NotNull ActionResult<ItemStack> use(World world, PlayerEntity player, @NotNull Hand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         ItemStack book = PatchouliAPI.get().getBookStack(ModConstants.SHADES_OF_BEES);
         boolean hasShades = player.inventory.contains(book);
@@ -83,7 +83,7 @@ public class Beepedia extends Item {
     }
 
     @Override
-    public ActionResultType interactLivingEntity(ItemStack stack, PlayerEntity player, LivingEntity entity, Hand hand) {
+    public @NotNull ActionResultType interactLivingEntity(@NotNull ItemStack stack, PlayerEntity player, @NotNull LivingEntity entity, @NotNull Hand hand) {
         ItemStack book = PatchouliAPI.get().getBookStack(new ResourceLocation("resourcefulbees:fifty_shades_of_bees"));
         boolean hasShades = player.inventory.contains(book);
         if (entity instanceof CustomBeeEntity) {

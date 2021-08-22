@@ -46,7 +46,7 @@ public class DataGen {
     private static final Map<ResourceLocation, Set<ResourceLocation>> TAGS = new HashMap<>();
 
     public static void generateClientData() {
-        if (Config.GENERATE_ENGLISH_LANG.get().equals(Boolean.TRUE)) generateEnglishLang();
+        if (Boolean.TRUE.equals(Config.GENERATE_ENGLISH_LANG.get())) generateEnglishLang();
     }
 
     public static Map<ResourceLocation, Set<ResourceLocation>> getTags() {
@@ -62,11 +62,11 @@ public class DataGen {
 
         //custom honey data
         generateHoneyBottleTags();
-        if (Config.HONEY_GENERATE_BLOCKS.get().equals(Boolean.TRUE)) {
+        if (Boolean.TRUE.equals(Config.HONEY_GENERATE_BLOCKS.get())) {
             generateHoneyBlockTags();
             generateHoneyBlockItemTags();
         }
-        if (Config.HONEY_GENERATE_FLUIDS.get().equals(Boolean.TRUE)) {
+        if (Boolean.TRUE.equals(Config.HONEY_GENERATE_FLUIDS.get())) {
             generateHoneyTags();
         }
     }

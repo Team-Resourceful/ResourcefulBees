@@ -211,9 +211,10 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
     }
 
     public static RecipeManager getRecipeManager() {
-        if (!((RecipeManagerAccessorInvoker)recipeManager).getRecipes().getClass().equals(HashMap.class)) {
-            ((RecipeManagerAccessorInvoker)recipeManager).setRecipes(new HashMap<>(((RecipeManagerAccessorInvoker)recipeManager).getRecipes()));
-            ((RecipeManagerAccessorInvoker)getRecipeManager()).getRecipes().replaceAll((t, v) -> new HashMap<>(((RecipeManagerAccessorInvoker)recipeManager).getRecipes().get(t)));
+        RecipeManagerAccessorInvoker recipeManagerInvoker = (RecipeManagerAccessorInvoker)recipeManager;
+        if (!recipeManagerInvoker.getRecipes().getClass().equals(HashMap.class)) {
+            recipeManagerInvoker.setRecipes(new HashMap<>(recipeManagerInvoker.getRecipes()));
+            recipeManagerInvoker.getRecipes().replaceAll((t, v) -> new HashMap<>(recipeManagerInvoker.getRecipes().get(t)));
         }
 
         return recipeManager;
