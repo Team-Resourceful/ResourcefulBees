@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.common.item;
 
 import com.teamresourceful.resourcefulbees.api.beedata.CoreData;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
-import com.teamresourceful.resourcefulbees.common.mixin.BeeEntityAccessor;
+import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeeEntityAccessor;
 import com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary.ApiaryTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.client.util.ITooltipFlag;

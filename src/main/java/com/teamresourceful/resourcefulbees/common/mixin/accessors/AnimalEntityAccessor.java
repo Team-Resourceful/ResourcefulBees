@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.mixin;
+package com.teamresourceful.resourcefulbees.common.mixin.accessors;
 
 import net.minecraft.entity.passive.AnimalEntity;
 import org.spongepowered.asm.mixin.Mixin;

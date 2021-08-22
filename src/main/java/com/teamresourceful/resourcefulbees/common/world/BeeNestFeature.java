@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.common.config.Config;
-import com.teamresourceful.resourcefulbees.common.mixin.BeeHiveTileEntityAccessor;
+import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeeHiveTileEntityAccessor;
 import com.teamresourceful.resourcefulbees.common.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.tileentity.TieredBeehiveTileEntity;

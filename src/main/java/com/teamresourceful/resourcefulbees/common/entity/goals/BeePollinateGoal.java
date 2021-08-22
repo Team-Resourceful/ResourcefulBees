@@ -2,8 +2,8 @@ package com.teamresourceful.resourcefulbees.common.entity.goals;
 
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.config.Config;
-import com.teamresourceful.resourcefulbees.common.mixin.BeeEntityAccessor;
-import com.teamresourceful.resourcefulbees.common.mixin.BeeEntityInvoker;
+import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeeEntityAccessor;
+import com.teamresourceful.resourcefulbees.common.mixin.invokers.BeeEntityInvoker;
 import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;

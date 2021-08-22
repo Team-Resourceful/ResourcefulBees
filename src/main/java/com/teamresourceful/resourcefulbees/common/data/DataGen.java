@@ -7,7 +7,7 @@ import com.teamresourceful.resourcefulbees.common.config.Config;
 import com.teamresourceful.resourcefulbees.common.init.BeeSetup;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.HoneycombType;
-import com.teamresourceful.resourcefulbees.common.mixin.BlockAccessor;
+import com.teamresourceful.resourcefulbees.common.mixin.accessors.BlockAccessor;
 import com.teamresourceful.resourcefulbees.common.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.ModEntities;

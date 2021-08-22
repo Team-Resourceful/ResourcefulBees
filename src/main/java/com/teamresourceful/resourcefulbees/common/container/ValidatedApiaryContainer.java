@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.container;
 
-import com.teamresourceful.resourcefulbees.common.mixin.ContainerAccessor;
+import com.teamresourceful.resourcefulbees.common.mixin.accessors.ContainerAccessor;
 import com.teamresourceful.resourcefulbees.common.network.packets.LockBeeMessage;
 import com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary.ApiaryTileEntity;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;

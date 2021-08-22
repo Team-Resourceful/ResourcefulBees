@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.mixin;
+package com.teamresourceful.resourcefulbees.common.mixin.invokers;
 
 import net.minecraft.entity.ai.goal.BreedGoal;
 import net.minecraft.entity.passive.AnimalEntity;

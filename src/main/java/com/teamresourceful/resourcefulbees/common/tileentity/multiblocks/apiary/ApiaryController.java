@@ -6,7 +6,7 @@ import com.teamresourceful.resourcefulbees.common.network.packets.SyncGUIMessage
 import com.teamresourceful.resourcefulbees.common.container.UnvalidatedApiaryContainer;
 import com.teamresourceful.resourcefulbees.common.container.ValidatedApiaryContainer;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
-import com.teamresourceful.resourcefulbees.common.mixin.BlockAccessor;
+import com.teamresourceful.resourcefulbees.common.mixin.accessors.BlockAccessor;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.registry.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.MultiBlockHelper;
@@ -90,10 +90,12 @@ public class ApiaryController extends TileEntity implements ITickableTileEntity,
         return block.getHasCollision();
     }
 
-    private static boolean isValidStructurePos(MutableBoundingBox box, BlockPos blockPos) {
-        return blockPos.getX() == box.x0 || blockPos.getX() == box.x1 ||
-                blockPos.getY() == box.y0 || blockPos.getY() == box.y1 ||
-                blockPos.getZ() == box.z0 || blockPos.getZ() == box.z1;
+    private static boolean isStructurePosition(BlockPos blockPos, MutableBoundingBox box) {
+        return blockPos.getX() == box.x0 ||
+                blockPos.getX() == box.x1 ||
+                blockPos.getY() == box.y1 ||
+                blockPos.getZ() == box.z0 ||
+                blockPos.getZ() == box.z1;
     }
 
     public boolean isValidApiary(boolean runValidation) {
@@ -174,7 +176,7 @@ public class ApiaryController extends TileEntity implements ITickableTileEntity,
             MutableBoundingBox box = buildStructureBounds(this.getHorizontalOffset(), this.getVerticalOffset());
             structureBlocks.clear();
             BlockPos.betweenClosedStream(box)
-                    .filter(blockPos -> isValidStructurePos(box, blockPos))
+                    .filter(blockPos -> isStructurePosition(blockPos, box))
                     .forEach(blockPos -> structureBlocks.add(blockPos.immutable()));
         }
     }

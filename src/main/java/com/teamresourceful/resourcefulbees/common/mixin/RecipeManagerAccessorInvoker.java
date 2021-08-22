@@ -21,6 +21,6 @@ public interface RecipeManagerAccessorInvoker {
     void setRecipes(Map<IRecipeType<?>, Map<ResourceLocation, IRecipe<?>>> recipes);
 
     @Invoker
-    <C extends IInventory, T extends IRecipe<C>> Map<ResourceLocation, IRecipe<C>> callByType(IRecipeType<T> p_215366_1_);
+    <C extends IInventory, T extends IRecipe<C>> Map<ResourceLocation, IRecipe<C>> callByType(IRecipeType<T> recipeType);
 
 }

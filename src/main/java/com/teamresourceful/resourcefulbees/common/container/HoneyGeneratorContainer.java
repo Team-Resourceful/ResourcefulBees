@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.container;
 
-import com.teamresourceful.resourcefulbees.common.mixin.ContainerAccessor;
+import com.teamresourceful.resourcefulbees.common.mixin.accessors.ContainerAccessor;
 import com.teamresourceful.resourcefulbees.common.tileentity.HoneyGeneratorTileEntity;
 import com.teamresourceful.resourcefulbees.common.registry.ModContainers;
 import net.minecraft.entity.player.PlayerEntity;

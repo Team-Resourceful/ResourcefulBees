@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.common.container;
 
 import com.teamresourceful.resourcefulbees.common.capabilities.MultiFluidTank;
 import com.teamresourceful.resourcefulbees.common.config.Config;
-import com.teamresourceful.resourcefulbees.common.mixin.ContainerAccessor;
+import com.teamresourceful.resourcefulbees.common.mixin.accessors.ContainerAccessor;
 import com.teamresourceful.resourcefulbees.common.tileentity.CentrifugeTileEntity;
 import com.teamresourceful.resourcefulbees.common.registry.ModContainers;
 import net.minecraft.entity.player.PlayerEntity;

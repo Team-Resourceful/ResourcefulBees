@@ -134,5 +134,4 @@ public class CentrifugeData {
             return new CentrifugeData(this.recipeTime, this.inputCount, this.itemOutputs, this.fluidOutputs);
         }
     }
-
 }
