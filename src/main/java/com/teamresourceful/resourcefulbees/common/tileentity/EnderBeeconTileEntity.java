@@ -7,7 +7,7 @@ import com.teamresourceful.resourcefulbees.common.config.Config;
 import com.teamresourceful.resourcefulbees.common.container.EnderBeeconContainer;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
-import com.teamresourceful.resourcefulbees.common.registry.ModEffects;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModEffects;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;

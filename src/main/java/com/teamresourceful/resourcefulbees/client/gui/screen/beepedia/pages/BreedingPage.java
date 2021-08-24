@@ -11,7 +11,7 @@ import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.muta
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.mutations.ItemMutationPage;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.lib.enums.MutationType;
-import com.teamresourceful.resourcefulbees.common.registry.BeeRegistry;
+import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.utils.BeepediaUtils;
 import com.teamresourceful.resourcefulbees.common.utils.CycledArray;
 import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;

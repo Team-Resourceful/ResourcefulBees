@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import com.teamresourceful.resourcefulbees.common.config.Config;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.ModPaths;
-import com.teamresourceful.resourcefulbees.common.registry.HoneyRegistry;
+import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.common.utils.FileUtils;
 import net.minecraft.util.JSONUtils;
 

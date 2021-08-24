@@ -16,7 +16,7 @@ import com.teamresourceful.resourcefulbees.api.beedata.traits.TraitData;
 import com.teamresourceful.resourcefulbees.common.config.Config;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.AnimalEntityAccessor;
-import com.teamresourceful.resourcefulbees.common.registry.BeeRegistry;
+import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.Entity;

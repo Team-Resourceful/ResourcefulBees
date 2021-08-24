@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.common.item;
 
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.beedata.render.ColorData;
-import com.teamresourceful.resourcefulbees.common.registry.BeeRegistry;
+import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;

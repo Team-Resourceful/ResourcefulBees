@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.api.beedata.traits;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.beedata.CodecUtils;
-import com.teamresourceful.resourcefulbees.common.registry.TraitRegistry;
+import com.teamresourceful.resourcefulbees.common.registry.custom.TraitRegistry;
 import net.minecraft.item.Item;
 import net.minecraft.particles.ParticleType;
 import net.minecraft.potion.Effect;

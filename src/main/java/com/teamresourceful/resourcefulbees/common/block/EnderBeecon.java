@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.block;
 
-import com.teamresourceful.resourcefulbees.common.registry.ModBlockEntityTypes;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.tileentity.EnderBeeconTileEntity;
 import com.teamresourceful.resourcefulbees.common.tileentity.HoneyTankTileEntity;
 import com.teamresourceful.resourcefulbees.common.utils.TooltipBuilder;

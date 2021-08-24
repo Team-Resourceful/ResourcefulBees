@@ -5,7 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.beedata.CodecUtils;
 import com.teamresourceful.resourcefulbees.common.config.Config;
 import com.teamresourceful.resourcefulbees.common.lib.enums.LightLevel;
-import com.teamresourceful.resourcefulbees.common.registry.BiomeDictionary;
+import com.teamresourceful.resourcefulbees.common.registry.custom.BiomeDictionary;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.MobSpawnInfo;

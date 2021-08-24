@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.tileentity;
 
-import com.teamresourceful.resourcefulbees.common.registry.ModBlockEntityTypes;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;

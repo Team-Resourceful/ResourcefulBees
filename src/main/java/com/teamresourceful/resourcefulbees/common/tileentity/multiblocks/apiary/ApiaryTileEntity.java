@@ -8,8 +8,8 @@ import com.teamresourceful.resourcefulbees.common.container.AutomationSensitiveI
 import com.teamresourceful.resourcefulbees.common.item.BeeJar;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
-import com.teamresourceful.resourcefulbees.common.registry.ModBlockEntityTypes;
-import com.teamresourceful.resourcefulbees.common.registry.ModItems;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
 import net.minecraft.block.BeehiveBlock;
 import net.minecraft.block.Block;

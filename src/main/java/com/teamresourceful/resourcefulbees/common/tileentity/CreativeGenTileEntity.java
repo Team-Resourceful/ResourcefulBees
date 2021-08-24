@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.tileentity;
 
 import com.teamresourceful.resourcefulbees.common.capabilities.CustomEnergyStorage;
-import com.teamresourceful.resourcefulbees.common.registry.ModBlockEntityTypes;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;

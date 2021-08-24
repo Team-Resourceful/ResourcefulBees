@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.mixin;
 
 import com.teamresourceful.resourcefulbees.common.mixin.invokers.BeeEntityInvoker;
-import com.teamresourceful.resourcefulbees.common.registry.ModPOIs;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModPOIs;
 import net.minecraft.entity.passive.BeeEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.village.PointOfInterest;

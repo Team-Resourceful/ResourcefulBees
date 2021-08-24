@@ -6,7 +6,7 @@ import com.teamresourceful.resourcefulbees.common.block.MechanicalCentrifugeBloc
 import com.teamresourceful.resourcefulbees.common.container.AutomationSensitiveItemStackHandler;
 import com.teamresourceful.resourcefulbees.common.container.MechanicalCentrifugeContainer;
 import com.teamresourceful.resourcefulbees.common.recipe.CentrifugeRecipe;
-import com.teamresourceful.resourcefulbees.common.registry.ModBlockEntityTypes;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.utils.RecipeUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;

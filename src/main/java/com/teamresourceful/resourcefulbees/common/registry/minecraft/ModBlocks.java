@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.registry;
+package com.teamresourceful.resourcefulbees.common.registry.minecraft;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.block.*;

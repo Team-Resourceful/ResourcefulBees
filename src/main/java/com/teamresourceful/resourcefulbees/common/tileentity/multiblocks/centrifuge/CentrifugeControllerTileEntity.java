@@ -5,7 +5,7 @@ import com.teamresourceful.resourcefulbees.common.block.multiblocks.centrifuge.C
 import com.teamresourceful.resourcefulbees.common.capabilities.CustomEnergyStorage;
 import com.teamresourceful.resourcefulbees.common.config.Config;
 import com.teamresourceful.resourcefulbees.common.container.CentrifugeMultiblockContainer;
-import com.teamresourceful.resourcefulbees.common.registry.ModContainers;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModContainers;
 import com.teamresourceful.resourcefulbees.common.tileentity.CentrifugeTileEntity;
 import com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.MultiBlockHelper;
 import com.teamresourceful.resourcefulbees.common.utils.MathUtils;

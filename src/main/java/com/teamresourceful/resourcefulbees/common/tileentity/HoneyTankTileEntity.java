@@ -7,9 +7,9 @@ import com.teamresourceful.resourcefulbees.common.container.AutomationSensitiveI
 import com.teamresourceful.resourcefulbees.common.container.HoneyTankContainer;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
-import com.teamresourceful.resourcefulbees.common.registry.ModBlockEntityTypes;
-import com.teamresourceful.resourcefulbees.common.registry.ModBlocks;
-import com.teamresourceful.resourcefulbees.common.registry.ModItems;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
 import io.netty.buffer.Unpooled;
 import net.minecraft.block.Block;

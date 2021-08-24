@@ -15,6 +15,11 @@ import com.teamresourceful.resourcefulbees.common.init.ModSetup;
 import com.teamresourceful.resourcefulbees.common.init.TraitSetup;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.registry.*;
+import com.teamresourceful.resourcefulbees.common.registry.custom.*;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFeatures;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModPotions;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModVillagerProfessions;
 import net.minecraft.entity.merchant.villager.VillagerTrades;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
@@ -60,6 +65,7 @@ public class ResourcefulBees {
         RegistryHandler.init();
         ResourcefulBeesAPI.setBeeRegistry(BeeRegistry.getRegistry());
         ResourcefulBeesAPI.setTraitRegistry(TraitRegistry.getRegistry());
+        DefaultTraitAbilities.registerDefaultAbilities(TraitAbilityRegistry.getRegistry());
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.CommonConfig.COMMON_CONFIG, "resourcefulbees/common.toml");
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Config.ClientConfig.CLIENT_CONFIG, "resourcefulbees/client.toml");
@@ -158,6 +164,7 @@ public class ResourcefulBees {
 
     @SubscribeEvent
     public void loadComplete(FMLLoadCompleteEvent event) {
+        TraitAbilityRegistry.closeAbilityRegistry();
         TraitRegistry.registerDefaultTraits();
         TraitSetup.buildCustomTraits();
         TraitRegistry.setTraitRegistryClosed();

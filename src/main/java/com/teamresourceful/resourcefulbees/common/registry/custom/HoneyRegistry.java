@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.registry;
+package com.teamresourceful.resourcefulbees.common.registry.custom;
 
 import com.google.gson.JsonObject;
 import com.teamresourceful.resourcefulbees.api.IHoneyRegistry;

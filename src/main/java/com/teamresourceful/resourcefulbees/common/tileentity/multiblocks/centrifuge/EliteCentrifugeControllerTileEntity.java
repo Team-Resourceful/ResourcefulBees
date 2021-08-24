@@ -5,7 +5,7 @@ import com.teamresourceful.resourcefulbees.common.capabilities.CustomEnergyStora
 import com.teamresourceful.resourcefulbees.common.config.Config;
 import com.teamresourceful.resourcefulbees.common.container.CentrifugeContainer;
 import com.teamresourceful.resourcefulbees.common.container.EliteCentrifugeMultiblockContainer;
-import com.teamresourceful.resourcefulbees.common.registry.ModContainers;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModContainers;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;

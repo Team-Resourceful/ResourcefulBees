@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.common.container;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.ContainerAccessor;
 import com.teamresourceful.resourcefulbees.common.tileentity.AbstractHoneyTankContainer;
 import com.teamresourceful.resourcefulbees.common.tileentity.HoneyTankTileEntity;
-import com.teamresourceful.resourcefulbees.common.registry.ModContainers;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModContainers;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.IContainerListener;

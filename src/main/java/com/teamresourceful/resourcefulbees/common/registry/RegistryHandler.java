@@ -21,6 +21,9 @@ import com.teamresourceful.resourcefulbees.common.item.dispenser.ScraperDispense
 import com.teamresourceful.resourcefulbees.common.item.dispenser.ShearsDispenserBehavior;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.mixin.invokers.DispenserBlockInvoker;
+import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
+import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyRegistry;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.*;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityType;

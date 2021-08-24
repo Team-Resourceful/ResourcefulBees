@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.api.honeydata;
 
-import com.teamresourceful.resourcefulbees.common.registry.ModFluids;
-import com.teamresourceful.resourcefulbees.common.registry.ModItems;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFluids;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.fluid.FlowingFluid;

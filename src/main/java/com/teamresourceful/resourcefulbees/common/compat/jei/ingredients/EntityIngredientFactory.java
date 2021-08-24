@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.compat.jei.ingredients;
 
-import com.teamresourceful.resourcefulbees.common.registry.BeeRegistry;
+import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 
 import java.util.ArrayList;
 import java.util.List;

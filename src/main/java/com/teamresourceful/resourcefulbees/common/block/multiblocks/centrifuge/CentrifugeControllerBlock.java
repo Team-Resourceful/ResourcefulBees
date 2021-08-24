@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.block.multiblocks.centrifuge;
 
-import com.teamresourceful.resourcefulbees.common.registry.ModBlockEntityTypes;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.tileentity.CentrifugeTileEntity;
 import com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.centrifuge.CentrifugeControllerTileEntity;
 import com.teamresourceful.resourcefulbees.common.utils.TooltipBuilder;

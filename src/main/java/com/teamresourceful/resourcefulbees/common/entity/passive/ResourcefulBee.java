@@ -13,8 +13,8 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.TraitConstants;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeeEntityAccessor;
 import com.teamresourceful.resourcefulbees.common.mixin.invokers.BeeEntityInvoker;
 import com.teamresourceful.resourcefulbees.common.mixin.invokers.FindBeehiveGoalInvoker;
-import com.teamresourceful.resourcefulbees.common.registry.BeeRegistry;
-import com.teamresourceful.resourcefulbees.common.registry.ModEffects;
+import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
+import com.teamresourceful.resourcefulbees.common.registry.custom.TraitAbilityRegistry;
 import com.teamresourceful.resourcefulbees.common.tileentity.TieredBeehiveTileEntity;
 import com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary.ApiaryTileEntity;
 import com.teamresourceful.resourcefulbees.common.utils.RandomCollection;
@@ -28,29 +28,24 @@ import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.passive.BeeEntity;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.tileentity.BeehiveTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.Direction;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.living.EnderTeleportEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class ResourcefulBee extends CustomBeeEntity {
     private boolean wasColliding;
@@ -264,97 +259,31 @@ public class ResourcefulBee extends CustomBeeEntity {
     @Override
     protected void customServerAiStep() {
         TraitData info = getTraitData();
+        TraitAbilityRegistry registry = TraitAbilityRegistry.getRegistry();
 
-        //TODO change out this switch for a prefilled map of consumers. might be able handle it directly in TraitData to reduce number of loops
-        // **may have to change methods to public to do so**
-        if (info.hasTraits() && info.hasSpecialAbilities()) {
-            info.getSpecialAbilities().forEach(ability -> {
-                switch (ability) {
-                    case TraitConstants.TELEPORT:
-                        doTeleportEffect();
-                        break;
-                    case TraitConstants.FLAMMABLE:
-                        doFlameEffect();
-                        break;
-                    case TraitConstants.SLIMY:
-                        doSlimeEffect();
-                        break;
-                    case TraitConstants.ANGRY:
-                        doAngryEffect();
-                        break;
-                    default:
-                        //do nothing
-                }
-            });
+        if (!info.hasTraits() || !info.hasSpecialAbilities()) {
+            super.customServerAiStep();
+            return;
         }
+
+        info.getSpecialAbilities().stream()
+                .map(registry::getAbility)
+                .filter(Objects::nonNull)
+                .forEach(consumer -> consumer.accept(this));
+
         super.customServerAiStep();
     }
 
-    private void doAngryEffect() {
-        if (getEffect(ModEffects.CALMING.get()) == null) {
-            Entity player = level.getNearestPlayer(getEntity(), 20);
-            setPersistentAngerTarget(player != null ? player.getUUID() : null);
-            setRemainingPersistentAngerTime(1000);
-        }
+    public void setColliding() {
+        wasColliding = true;
     }
 
-    private void doTeleportEffect() {
-        if (canTeleport() && !hasHiveInRange() && !getDisruptorInRange()) {
-            this.teleportRandomly();
-        }
+    public boolean wasColliding() {
+        return wasColliding;
     }
 
-    private void doFlameEffect() {
-        if (this.tickCount % 150 == 0) this.setSecondsOnFire(3);
-    }
-
-    private void doSlimeEffect() {
-        if (!checkSpawnObstruction(level) && !wasColliding) {
-            for (int j = 0; j < 8; ++j) {
-                float f = this.random.nextFloat() * ((float) Math.PI * 2F);
-                float f1 = this.random.nextFloat() * 0.5F + 0.5F;
-                float f2 = MathHelper.sin(f) * 1 * 0.5F * f1;
-                float f3 = MathHelper.cos(f) * 1 * 0.5F * f1;
-                this.level.addParticle(ParticleTypes.ITEM_SLIME, this.getX() + f2, this.getY(), this.getZ() + f3, 0.0D, 0.0D, 0.0D);
-            }
-
-            this.playSound(SoundEvents.SLIME_SQUISH, this.getSoundVolume(), ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F) / 0.8F);
-            wasColliding = true;
-        }
-    }
-
-    private boolean canTeleport() {
-        return !hasCustomName() && this.tickCount % 150 == 0 && this.level.isDay() && !this.pollinateGoal.isPollinating();
-    }
-
-    protected void teleportRandomly() {
-        if (!this.level.isClientSide() && this.isAlive()) {
-            double d0 = this.getX() + (this.random.nextDouble() - 0.5D) * 4.0D;
-            double d1 = this.getY() + (this.random.nextInt(4) - 2);
-            double d2 = this.getZ() + (this.random.nextDouble() - 0.5D) * 4.0D;
-            this.teleportToPos(d0, d1, d2);
-        }
-    }
-
-    private void teleportToPos(double x, double y, double z) {
-        BlockPos.Mutable blockPos = new BlockPos.Mutable(x, y, z);
-
-        while (blockPos.getY() > 0 && !this.level.getBlockState(blockPos).getMaterial().blocksMotion()) {
-            blockPos.move(Direction.DOWN);
-        }
-
-        BlockState blockstate = this.level.getBlockState(blockPos);
-        boolean canMove = blockstate.getMaterial().blocksMotion();
-        boolean water = blockstate.getFluidState().is(FluidTags.WATER);
-        if (canMove && !water) {
-            EnderTeleportEvent event = new EnderTeleportEvent(this, x, y, z, 0); //TODO fix this event call since it is removed in 1.17 anyway
-            if (MinecraftForge.EVENT_BUS.post(event)) return;
-            boolean teleported = this.randomTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), true);
-            if (teleported) {
-                this.level.playSound(null, this.xo, this.yo, this.zo, SoundEvents.ENDERMAN_TELEPORT, this.getSoundSource(), 1.0F, 1.0F);
-                this.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
-            }
-        }
+    public boolean isPollinating() {
+        return this.pollinateGoal.isPollinating();
     }
 
     @Override

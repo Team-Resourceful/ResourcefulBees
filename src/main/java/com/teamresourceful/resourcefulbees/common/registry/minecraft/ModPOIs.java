@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.registry;
+package com.teamresourceful.resourcefulbees.common.registry.minecraft;
 
 import com.google.common.collect.ImmutableSet;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;

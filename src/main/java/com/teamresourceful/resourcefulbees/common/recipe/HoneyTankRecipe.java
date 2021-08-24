@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.common.recipe;
 import com.google.gson.JsonObject;
 import com.teamresourceful.resourcefulbees.common.block.HoneyTank;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
-import com.teamresourceful.resourcefulbees.common.registry.ModRecipeSerializers;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeSerializers;
 import com.teamresourceful.resourcefulbees.common.tileentity.HoneyTankTileEntity;
 import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
 import net.minecraft.block.Block;

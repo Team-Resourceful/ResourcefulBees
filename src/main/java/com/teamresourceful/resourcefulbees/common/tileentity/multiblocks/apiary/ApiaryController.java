@@ -8,7 +8,7 @@ import com.teamresourceful.resourcefulbees.common.container.ValidatedApiaryConta
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BlockAccessor;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
-import com.teamresourceful.resourcefulbees.common.registry.ModBlocks;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.MultiBlockHelper;
 import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
 import io.netty.buffer.Unpooled;
