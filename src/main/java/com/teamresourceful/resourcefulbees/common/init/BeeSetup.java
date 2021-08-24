@@ -5,11 +5,11 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.beedata.spawning.SpawnData;
-import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.config.Config;
+import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
+import com.teamresourceful.resourcefulbees.common.lib.ModPaths;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.BeeRegistry;
-import com.teamresourceful.resourcefulbees.common.registry.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.ModEntities;
 import com.teamresourceful.resourcefulbees.common.registry.ModFeatures;
 import com.teamresourceful.resourcefulbees.common.utils.FileUtils;
@@ -21,7 +21,6 @@ import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
-import net.minecraftforge.fml.loading.FMLLoader;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -36,56 +35,23 @@ public class BeeSetup {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
 
-    private static Path beePath;
-    private static Path resourcePath;
-    private static Path honeyPath;
-
-    public static void setBeePath(Path path) {
-        beePath = path;
-    }
-
-    public static void setResourcePath(Path path) {
-        resourcePath = path;
-    }
-
-    public static Path getResourcePath() {
-        return resourcePath;
-    }
-
-    public static void setHoneyPath(Path path) {
-        honeyPath = path;
-    }
-
     public static void setupBees() {
-        if (Config.ENABLE_EASTER_EGG_BEES.get()) {
+        if (Boolean.TRUE.equals(Config.ENABLE_EASTER_EGG_BEES.get())) {
             setupDevBees();
         }
 
-        if (Config.GENERATE_DEFAULTS.get()) {
-            FileUtils.setupDefaultFiles("/data/resourcefulbees/default_bees", beePath);
-            FileUtils.setupDefaultFiles("/data/resourcefulbees/default_honey", honeyPath);
-            if (!FMLLoader.isProduction()) {
-                Config.GENERATE_DEFAULTS.set(false);
-                Config.GENERATE_DEFAULTS.save();
-            }
+        if (Boolean.TRUE.equals(Config.GENERATE_DEFAULTS.get())) {
+            FileUtils.setupDefaultFiles("/data/resourcefulbees/default_bees", ModPaths.BEES);
         }
         LOGGER.info("Loading Custom Bees...");
-        FileUtils.streamFilesAndParse(beePath, BeeSetup::parseBee, "Could not stream bees!!");
+        FileUtils.streamFilesAndParse(ModPaths.BEES, BeeSetup::parseBee, "Could not stream bees!!");
         BeeRegistry.getRegistry().regenerateCustomBeeData();
-
-        LOGGER.info("Loading Custom Honeys..");
-        FileUtils.streamFilesAndParse(honeyPath, BeeSetup::parseHoney, "Could not stream honey!!");
     }
 
     private static void parseBee(Reader reader, String name) {
         JsonObject jsonObject = JSONUtils.fromJson(ModConstants.GSON, reader, JsonObject.class);
         name = Codec.STRING.fieldOf("name").orElse(name).codec().fieldOf("CoreData").codec().parse(JsonOps.INSTANCE, jsonObject).get().orThrow();
         BeeRegistry.getRegistry().cacheRawBeeData(name.toLowerCase(Locale.ENGLISH).replace(" ", "_"), jsonObject);
-    }
-
-    private static void parseHoney(Reader reader, String name) {
-        JsonObject jsonObject = JSONUtils.fromJson(ModConstants.GSON, reader, JsonObject.class);
-        HoneyRegistry.getRegistry().cacheRawHoneyData(name.toLowerCase(Locale.ENGLISH).replace(" ", "_"), jsonObject);
     }
 
     private static void setupDevBees() {
@@ -108,7 +74,7 @@ public class BeeSetup {
         if (event.getName() != null && BeeRegistry.isSpawnableBiome(event.getName())) {
             boolean isFlowerForest = event.getName().equals(Biomes.FLOWER_FOREST.getRegistryName());
             BeeRegistry.getSpawnableBiome(event.getName()).forEach(customBeeData -> addSpawnSetting(customBeeData, event, isFlowerForest));
-            if (Config.GENERATE_BEE_NESTS.get()) {
+            if (Boolean.TRUE.equals(Config.GENERATE_BEE_NESTS.get())) {
                 addNestFeature(event);
             }
         }
@@ -133,8 +99,6 @@ public class BeeSetup {
             event.getGeneration().addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, ModFeatures.ConfiguredFeatures.OVERWORLD_NESTS);
         }
     }
-
-
 
     public static void registerBeePlacements() {
         ModEntities.getModBees().forEach((s, entityType) -> {

@@ -20,7 +20,6 @@ import com.teamresourceful.resourcefulbees.common.item.HoneycombItem;
 import com.teamresourceful.resourcefulbees.common.item.dispenser.ScraperDispenserBehavior;
 import com.teamresourceful.resourcefulbees.common.item.dispenser.ShearsDispenserBehavior;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.lib.enums.HoneycombType;
 import com.teamresourceful.resourcefulbees.common.mixin.invokers.DispenserBlockInvoker;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
@@ -70,10 +69,10 @@ public class RegistryHandler {
 
     public static void registerDynamicBees() {
         BeeRegistry.getRegistry().getBees().forEach((name, beeData) -> {
-            HoneycombData honeyData = beeData.getHoneycombData();
+/*            HoneycombData honeyData = beeData.getHoneycombData();
             if (honeyData.getHoneycombType().equals(HoneycombType.DEFAULT)) {
                 registerHoneycomb(name, honeyData);
-            }
+            }*/
             registerBee(name, beeData.getRenderData().getSizeModifier());
         });
     }

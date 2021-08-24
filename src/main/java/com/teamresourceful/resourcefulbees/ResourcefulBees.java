@@ -1,18 +1,19 @@
 package com.teamresourceful.resourcefulbees;
 
 import com.teamresourceful.resourcefulbees.api.ResourcefulBeesAPI;
+import com.teamresourceful.resourcefulbees.client.event.ClientEventHandlers;
 import com.teamresourceful.resourcefulbees.client.gui.IncompatibleModWarning;
+import com.teamresourceful.resourcefulbees.client.pets.PetLoader;
 import com.teamresourceful.resourcefulbees.common.compat.top.TopCompat;
 import com.teamresourceful.resourcefulbees.common.config.Config;
 import com.teamresourceful.resourcefulbees.common.config.ConfigLoader;
 import com.teamresourceful.resourcefulbees.common.data.DataGen;
 import com.teamresourceful.resourcefulbees.common.data.RecipeBuilder;
 import com.teamresourceful.resourcefulbees.common.init.BeeSetup;
-import com.teamresourceful.resourcefulbees.client.event.ClientEventHandlers;
+import com.teamresourceful.resourcefulbees.common.init.HoneySetup;
 import com.teamresourceful.resourcefulbees.common.init.ModSetup;
 import com.teamresourceful.resourcefulbees.common.init.TraitSetup;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
-import com.teamresourceful.resourcefulbees.client.pets.PetLoader;
 import com.teamresourceful.resourcefulbees.common.registry.*;
 import net.minecraft.entity.merchant.villager.VillagerTrades;
 import net.minecraft.item.DyeColor;
@@ -40,6 +41,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import software.bernie.geckolib3.GeckoLib;
@@ -69,7 +71,12 @@ public class ResourcefulBees {
         BiomeDictionary.build();
         BeeSetup.setupBees();
         RegistryHandler.registerDynamicBees();
+        HoneySetup.setupHoney();
         RegistryHandler.registerDynamicHoney();
+        if (!FMLLoader.isProduction()) {
+            Config.GENERATE_DEFAULTS.set(false);
+            Config.GENERATE_DEFAULTS.save();
+        }
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener(RegistryHandler::addEntityAttributes);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(EventPriority.LOW, this::setup);

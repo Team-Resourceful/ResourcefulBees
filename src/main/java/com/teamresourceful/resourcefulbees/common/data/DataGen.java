@@ -4,7 +4,7 @@ import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.honeydata.HoneyBottleData;
 import com.teamresourceful.resourcefulbees.common.config.Config;
-import com.teamresourceful.resourcefulbees.common.init.BeeSetup;
+import com.teamresourceful.resourcefulbees.common.lib.ModPaths;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.HoneycombType;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BlockAccessor;
@@ -134,7 +134,7 @@ public class DataGen {
         builder.deleteCharAt(builder.lastIndexOf(","));
         builder.append("}");
 
-        String langPath = BeeSetup.getResourcePath().toString() + "/assets/resourcefulbees/lang/";
+        String langPath = ModPaths.RESOURCES + "/assets/resourcefulbees/lang/";
         String langFile = "en_us.json";
         try {
             writeFile(langPath, langFile, builder.toString());
