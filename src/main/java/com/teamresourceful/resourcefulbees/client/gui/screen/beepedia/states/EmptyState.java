@@ -4,23 +4,20 @@ import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaPa
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaState;
 import com.teamresourceful.resourcefulbees.client.gui.widget.BeepediaScreenArea;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.Map;
+public class EmptyState extends BeepediaState {
 
-public class HoneyState extends BeepediaState {
-
-    public HoneyState(@Nullable BeepediaState parent, @NotNull BeepediaPage page, @Nullable Map<String, BeepediaPage> subStates, @Nullable String defaultState, @NotNull BeepediaScreenArea screenArea) {
-        super(parent, page, screenArea);
+    public EmptyState(@NotNull BeepediaPage page, @NotNull BeepediaScreenArea screenArea) {
+        super(page, screenArea);
     }
 
     @Override
     protected void initState() {
-
+        // is not used
     }
 
     @Override
     protected void postInitState() {
-
+        // is not used
     }
 }

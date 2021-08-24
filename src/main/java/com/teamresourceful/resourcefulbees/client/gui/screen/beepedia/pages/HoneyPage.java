@@ -1,12 +1,14 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.honeydata.DefaultHoneyBottleData;
 import com.teamresourceful.resourcefulbees.api.honeydata.HoneyBottleData;
 import com.teamresourceful.resourcefulbees.api.honeydata.HoneyEffect;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
+import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.enums.SubPageTypes;
+import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.search.HoneyBeepediaStats;
+import com.teamresourceful.resourcefulbees.client.gui.widget.BeepediaScreenArea;
 import com.teamresourceful.resourcefulbees.client.gui.widget.ListButton;
 import com.teamresourceful.resourcefulbees.client.gui.widget.SubButtonList;
 import com.teamresourceful.resourcefulbees.item.BeeJar;
@@ -23,7 +25,6 @@ import net.minecraft.item.Foods;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.potion.Effect;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -55,14 +56,19 @@ public class HoneyPage extends BeepediaPage {
     private final List<String> searchAll = new LinkedList<>();
 
     private static final int LIST_HEIGHT = 102;
+    private HoneyBeepediaStats stats;
 
-    final ResourceLocation hungerBar = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/hunger_bar.png");
-    final ResourceLocation hungerIcons = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/hunger.png");
-    final ResourceLocation saturationIcons = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/saturation.png");
+    public static void initPages() {
 
-    public HoneyPage(BeepediaScreen beepedia, HoneyBottleData bottleData, String id, int left, int top, boolean isDefault) {
-        super(beepedia, left, top, id);
-        this.isDefault = isDefault;
+    }
+
+    public void preInit(BeepediaScreen beepedia, HoneyBeepediaStats stats) {
+        super.preInit(beepedia, beeStats.get(listItem), subPage, subPageTab);
+        this.stats = stats;
+    }
+
+    public HoneyPage(BeepediaScreenArea screenArea) {
+        super(screenArea);
         if (isDefault) {
             this.bottle = new ItemStack(DefaultHoneyBottleData.bottle);
             this.hunger = Foods.HONEY_BOTTLE.getNutrition();

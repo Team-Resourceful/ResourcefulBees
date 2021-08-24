@@ -2,22 +2,26 @@ package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia;
 
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.teamresourceful.resourcefulbees.client.gui.widget.SubScreenArea;
-import org.jetbrains.annotations.NotNull;
+import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.enums.BeepediaListTypes;
+import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.enums.PageTypes;
+import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.enums.SubPageTab;
+import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.enums.SubPageTypes;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Map;
+import java.util.LinkedList;
+import java.util.List;
 
-public abstract class BeepediaState {
-
-
+public class BeepediaState {
     /***
      *
      *  State Tree
      *
+     *  BEES/INFO/
      *  <ListPage>
      *   - <HomePage>
+     *       - <INFO>
      *   - <HelpPage>
+     *       - <INFO>
      *       - <SearchHelpPage>
      *       - <BreedingHelpPage>
      *       - <MutationHelpPage>
@@ -51,73 +55,48 @@ public abstract class BeepediaState {
      *       - <CombInfoPage>
      *       - <CombBeesPage>
      */
+    public static BeepediaState currentState = new BeepediaState();
+    public static List<BeepediaState> savedStates = new LinkedList<>();
 
-    @NotNull
-    private BeepediaPage page;
-    @Nullable
-    private final BeepediaState parent;
-    @Nullable
-    private BeepediaState child = null;
-    @Nullable
-    private Map<String, BeepediaPage> subStates;
-    @NotNull
-    private final SubScreenArea screenArea;
-    @Nullable
-    private final String defaultState;
-    private int scrollHeight = 0;
+    public BeepediaListTypes selectedList;
+    public PageTypes page;
+    public String listItem;
+    public SubPageTypes subPage;
+    public SubPageTab subPageTab;
 
-    public BeepediaState(@Nullable BeepediaState parent, @NotNull BeepediaPage page, @Nullable Map<String, BeepediaPage> subStates, @Nullable String defaultState, @NotNull SubScreenArea screenArea) {
-        this.parent = parent;
-        this.page = page;
-        this.subStates = subStates;
-        this.screenArea = screenArea;
-        this.defaultState = defaultState;
-        initState();
-        if (subStates != null && defaultState != null) {
-            if (!subStates.containsKey(defaultState)) throw new IllegalStateException("could not find default state in subStates List");
-            child = subStates.get(defaultState).createState();
-            child.initState();
-        }
-        postInitState();
-        if (child != null) child.postInitState();
+    public BeepediaState(BeepediaListTypes selectedList, PageTypes page, String listItem, SubPageTypes subPage, SubPageTab subPageTab) {
+        this.selectedList = selectedList == null ? BeepediaListTypes.BEES : selectedList;
+        this.page = page == null ? PageTypes.HOME : page;
+        this.listItem = listItem;
+        this.subPage = subPage == null ? SubPageTypes.INFO : subPage;
+        this.subPageTab = subPageTab == null ? SubPageTab.NONE : subPageTab;
     }
 
-    public void switchState(StateEnum newState) {
-        if (subStates == null || defaultState == null) return;
-        if (!subStates.containsKey(newState)) return;
-        child = subStates.get(newState).createState();
-        if (child == null) return;
-        child.initState();
-        child.postInitState();
+    public BeepediaState() {
+        this(null, null, null, null, null);
     }
 
-    public void drawState(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
-        page.renderBackground(matrix, partialTick, mouseX, mouseY);
-        page.renderForeground(matrix, mouseX, mouseY);
-        if (child != null) {
-            child.drawState(matrix, partialTick, mouseX, mouseY);
-        }
+    public BeepediaState(BeepediaState currentState) {
+        this(currentState.selectedList, currentState.page, currentState.listItem, currentState.subPage, currentState.subPageTab);
     }
 
-    public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
-        if (child != null && child.screenArea.isHovered(mouseX, mouseY)) return child.mouseClicked(mouseX, mouseY, mouseButton);
-        return page.mouseClicked(mouseX, mouseY, mouseButton);
+    public void renderStates(BeepediaScreen beepedia, MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
+        BeepediaHandler.drawList(beepedia, matrix, partialTicks, mouseX, mouseY);
+        BeepediaHandler.drawPage(beepedia, matrix, partialTicks, mouseX, mouseY);
     }
 
-    public boolean mouseScrolled(double mouseX, double mouseY, double scrollAmount){
-        if (child != null && child.screenArea.isHovered(mouseX, mouseY)) return child.mouseScrolled(mouseX, mouseY, scrollAmount);
-        return page.mouseScrolled(mouseX, mouseY, scrollAmount);
+    public void newState(@Nullable BeepediaListTypes selectedList, @Nullable PageTypes page, @Nullable String listItem, @Nullable SubPageTypes subPage, @Nullable SubPageTab subPageTab) {
+        savedStates.add(new BeepediaState(currentState));
+        updateState(selectedList, page, listItem, subPage, subPageTab);
     }
 
-    protected abstract void initState();
-
-    protected abstract void postInitState();
-
-    public BeepediaState getParent() {
-        return parent;
-    }
-
-    public BeepediaState getChild() {
-        return child;
+    public void updateState(@Nullable BeepediaListTypes selectedList, @Nullable PageTypes page, @Nullable String listItem, @Nullable SubPageTypes subPage, @Nullable SubPageTab subPageTab) {
+        BeepediaHandler.closeState();
+        if (selectedList != null) this.selectedList = selectedList;
+        if (page != null) this.page = page;
+        this.listItem = listItem;
+        if (subPage != null) this.subPage = subPage;
+        if (subPageTab != null) this.subPageTab = subPageTab;
+        BeepediaHandler.openState();
     }
 }

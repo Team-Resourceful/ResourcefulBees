@@ -1,4 +1,4 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.states;
 
-public class BreedingState {
+public class BeeBreedingState {
 }

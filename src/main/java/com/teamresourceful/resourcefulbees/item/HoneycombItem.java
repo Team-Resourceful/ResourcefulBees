@@ -19,6 +19,10 @@ public class HoneycombItem extends Item {
         this.beeType = beeType;
     }
 
+    public HoneycombData getHoneycombData() {
+        return honeycombData;
+    }
+
     @SuppressWarnings("unusedParameter")
     public static int getColor(ItemStack stack, int tintIndex) {
         HoneycombItem honeycombItem = (HoneycombItem) stack.getItem();

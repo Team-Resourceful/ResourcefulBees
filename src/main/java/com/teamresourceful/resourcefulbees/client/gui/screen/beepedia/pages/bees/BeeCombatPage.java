@@ -1,8 +1,10 @@
-package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages;
+package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.bees;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
+import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
+import com.teamresourceful.resourcefulbees.client.gui.widget.BeepediaScreenArea;
 import com.teamresourceful.resourcefulbees.utils.BeepediaUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -12,8 +14,9 @@ import net.minecraft.util.text.TranslationTextComponent;
 
 public class BeeCombatPage extends BeeDataPage {
 
-    protected BeeCombatPage(BeepediaScreen beepedia, CustomBeeData beeData, int xPos, int yPos, BeePage parent) {
-        super(beepedia, beeData, xPos, yPos, parent);
+    @Override
+    protected void preInit(BeepediaScreen beepedia, BeepediaScreenArea screenArea, CustomBeeData beeData) {
+        super.preInit(beepedia, screenArea, beeData);
     }
 
     @Override
@@ -31,15 +34,15 @@ public class BeeCombatPage extends BeeDataPage {
         passiveName.append(BeepediaUtils.getYesNo(beeData.getCombatData().isPassive()));
         poisonName.append(BeepediaUtils.getYesNo(beeData.getCombatData().inflictsPoison()));
 
-        font.draw(matrix, healthName.withStyle(TextFormatting.GRAY), xPos, (float) yPos + 34, -1);
-        font.draw(matrix, damageName.withStyle(TextFormatting.GRAY), (float) xPos + 86, (float) yPos + 34, -1);
-        font.draw(matrix, passiveName.withStyle(TextFormatting.GRAY), xPos, (float) yPos + 46, -1);
-        font.draw(matrix, poisonName.withStyle(TextFormatting.GRAY), (float) xPos + 86, (float) yPos + 46, -1);
-        font.draw(matrix, stingerName.withStyle(TextFormatting.GRAY), xPos, (float) yPos + 58, -1);
+        font.draw(matrix, healthName.withStyle(TextFormatting.GRAY), getXPos(), getYPos() + 34, -1);
+        font.draw(matrix, damageName.withStyle(TextFormatting.GRAY), getXPos() + 86, getYPos() + 34, -1);
+        font.draw(matrix, passiveName.withStyle(TextFormatting.GRAY), getXPos(), getYPos() + 46, -1);
+        font.draw(matrix, poisonName.withStyle(TextFormatting.GRAY), getXPos() + 86, getYPos() + 46, -1);
+        font.draw(matrix, stingerName.withStyle(TextFormatting.GRAY), getXPos(), getYPos() + 58, -1);
     }
 
     @Override
-    public void addSearch() {
+    public void addSearch(BeepediaPage parent) {
 
     }
 }

@@ -40,33 +40,33 @@ public class Beepedia extends Item {
         super(properties);
     }
 
-    public void checkAndAddBees(ItemStack stack, CustomBeeEntity entity) {
-        CompoundNBT nbt = stack.hasTag() && stack.getTag() != null ? stack.getTag() : new CompoundNBT();
-        ListNBT listNBT;
-        if (nbt.getBoolean(CREATIVE_TAG)) {
-            if (entity != null) {
-                nbt.putUUID(NBTConstants.NBT_ENTITY_ID, entity.getUUID());
-                stack.setTag(nbt);
-            }
-            return;
-        }
-        if (nbt.contains(NBTConstants.NBT_BEES)) {
-            listNBT = nbt.getList(NBTConstants.NBT_BEES, 8).copy();
-        } else {
-            listNBT = new ListNBT();
-        }
-        if (entity != null) {
-            if (!listNBT.contains(StringNBT.valueOf(entity.getBeeType()))) {
-                listNBT.add(StringNBT.valueOf(entity.getBeeType()));
-            }
-            listNBT.removeIf(b -> BeeRegistry.getRegistry().getBeeData(b.getAsString()) == null);
-            listNBT = listNBT.stream().distinct().collect(Collectors.toCollection(ListNBT::new));
-            nbt.putBoolean(COMPLETE_TAG, listNBT.size() == BeeRegistry.getRegistry().getBees().size());
-            nbt.put(NBTConstants.NBT_BEES, listNBT);
-            nbt.putUUID(NBTConstants.NBT_ENTITY_ID, entity.getUUID());
-            stack.setTag(nbt);
-        }
-    }
+//    public void checkAndAddBees(ItemStack stack, CustomBeeEntity entity) {
+//        CompoundNBT nbt = stack.hasTag() && stack.getTag() != null ? stack.getTag() : new CompoundNBT();
+//        ListNBT listNBT;
+//        if (nbt.getBoolean(CREATIVE_TAG)) {
+//            if (entity != null) {
+//                nbt.putUUID(NBTConstants.NBT_ENTITY_ID, entity.getUUID());
+//                stack.setTag(nbt);
+//            }
+//            return;
+//        }
+//        if (nbt.contains(NBTConstants.NBT_BEES)) {
+//            listNBT = nbt.getList(NBTConstants.NBT_BEES, 8).copy();
+//        } else {
+//            listNBT = new ListNBT();
+//        }
+//        if (entity != null) {
+//            if (!listNBT.contains(StringNBT.valueOf(entity.getBeeType()))) {
+//                listNBT.add(StringNBT.valueOf(entity.getBeeType()));
+//            }
+//            listNBT.removeIf(b -> BeeRegistry.getRegistry().getBeeData(b.getAsString()) == null);
+//            listNBT = listNBT.stream().distinct().collect(Collectors.toCollection(ListNBT::new));
+//            nbt.putBoolean(COMPLETE_TAG, listNBT.size() == BeeRegistry.getRegistry().getBees().size());
+//            nbt.put(NBTConstants.NBT_BEES, listNBT);
+//            nbt.putUUID(NBTConstants.NBT_ENTITY_ID, entity.getUUID());
+//            stack.setTag(nbt);
+//        }
+//    }
 
 
 
@@ -75,7 +75,6 @@ public class Beepedia extends Item {
         ItemStack itemstack = player.getItemInHand(hand);
         ItemStack book = PatchouliAPI.get().getBookStack(ModConstants.SHADES_OF_BEES);
         boolean hasShades = player.inventory.contains(book);
-        checkAndAddBees(itemstack, null);
         if (world.isClientSide) {
             BeepediaUtils.loadBeepedia(itemstack, null, hasShades);
         }
@@ -87,12 +86,18 @@ public class Beepedia extends Item {
         ItemStack book = PatchouliAPI.get().getBookStack(new ResourceLocation("resourcefulbees:fifty_shades_of_bees"));
         boolean hasShades = player.inventory.contains(book);
         if (entity instanceof CustomBeeEntity) {
-            checkAndAddBees(stack, (CustomBeeEntity) entity);
+            if (!player.level.isClientSide) {
+                sendPacket(entity, player);
+            }
             if (player.level.isClientSide) BeepediaUtils.loadBeepedia(stack, entity, hasShades);
             player.setItemInHand(hand, stack);
             return ActionResultType.SUCCESS;
         }
         return super.interactLivingEntity(stack, player, entity, hand);
+    }
+
+    private void sendPacket(LivingEntity entity, PlayerEntity player) {
+
     }
 
     @Override

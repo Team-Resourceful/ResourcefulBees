@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages;
+package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.bees;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
@@ -7,6 +7,8 @@ import com.teamresourceful.resourcefulbees.api.beedata.breeding.BeeFamily;
 import com.teamresourceful.resourcefulbees.api.beedata.mutation.EntityMutation;
 import com.teamresourceful.resourcefulbees.api.beedata.mutation.ItemMutation;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
+import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.BeePage;
+import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.bees.BeeDataPage;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.mutations.EntityMutationPage;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.mutations.ItemMutationPage;
 import com.teamresourceful.resourcefulbees.entity.passive.CustomBeeEntity;
@@ -35,7 +37,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class BreedingPage extends BeeDataPage {
+public class BeeBreedingPage extends BeeDataPage {
 
     // REQUIRED: Feed Item Tags not rendering properly for non-vanilla tags - however working in JEI - must fix
     private final List<BreedingObject> parents = new LinkedList<>();
@@ -64,8 +66,7 @@ public class BreedingPage extends BeeDataPage {
     private final TranslationTextComponent errorTitle = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding.error_title");
     private int activePage = 0;
 
-    public BreedingPage(BeepediaScreen beepedia, CustomBeeData beeData, int xPos, int yPos, List<EntityMutation> mutations, List<ItemMutation> itemBreedMutation, BeePage parent) {
-        super(beepedia, beeData, xPos, yPos, parent);
+    public BeeBreedingPage() {
         registerData(mutations, itemBreedMutation);
         registerArrows();
 

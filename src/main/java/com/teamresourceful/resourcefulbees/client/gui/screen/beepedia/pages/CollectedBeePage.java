@@ -3,17 +3,12 @@ package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
-import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.enums.SubPageTypes;
 import com.teamresourceful.resourcefulbees.client.gui.widget.BeepediaScreenArea;
 
-public class HelpPage extends BeepediaPage {
+public class CollectedBeePage extends BeepediaPage {
 
-    public HelpPage(BeepediaScreenArea screenArea) {
+    public CollectedBeePage(BeepediaScreenArea screenArea) {
         super(screenArea);
-    }
-
-    public void preInit(BeepediaScreen beepedia, SubPageTypes subPage) {
-        super.preInit(beepedia);
     }
 
     @Override

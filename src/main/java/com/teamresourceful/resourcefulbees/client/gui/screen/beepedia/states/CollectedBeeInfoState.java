@@ -8,9 +8,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
-public class HoneyState extends BeepediaState {
+public class CollectedBeeInfoState extends BeepediaState {
 
-    public HoneyState(@Nullable BeepediaState parent, @NotNull BeepediaPage page, @Nullable Map<String, BeepediaPage> subStates, @Nullable String defaultState, @NotNull BeepediaScreenArea screenArea) {
+    public CollectedBeeInfoState(@Nullable BeepediaState parent, @NotNull BeepediaPage page, @Nullable Map<String, BeepediaPage> subStates, @Nullable String defaultState, @NotNull BeepediaScreenArea screenArea) {
         super(parent, page, screenArea);
     }
 

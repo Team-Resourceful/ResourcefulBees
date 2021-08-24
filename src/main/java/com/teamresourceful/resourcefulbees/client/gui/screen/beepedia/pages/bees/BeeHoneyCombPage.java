@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages;
+package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.bees;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
@@ -8,6 +8,7 @@ import com.teamresourceful.resourcefulbees.api.beedata.centrifuge.CentrifugeItem
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.FluidOutput;
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.ItemOutput;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
+import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.BeePage;
 import com.teamresourceful.resourcefulbees.config.Config;
 import com.teamresourceful.resourcefulbees.fluids.CustomHoneyFluid;
 import com.teamresourceful.resourcefulbees.item.BeeSpawnEggItem;
@@ -38,7 +39,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class BeeCombPage extends BeeDataPage {
+public class BeeHoneyCombPage extends BeeDataPage {
 
     final Button prevTab;
     final Button nextTab;
@@ -63,8 +64,7 @@ public class BeeCombPage extends BeeDataPage {
     private int activePage = 0;
 
 
-    public BeeCombPage(BeepediaScreen beepedia, CustomBeeData beeData, int xPos, int yPos, BeePage parent) {
-        super(beepedia, beeData, xPos, yPos, parent);
+    public BeeHoneyCombPage() {
         prevTab = new ImageButton(xPos + (SUB_PAGE_WIDTH / 2) - 48, yPos + 6, 8, 11, 0, 0, 11, arrowImage, 16, 33, button -> toggleTab());
         nextTab = new ImageButton(xPos + (SUB_PAGE_WIDTH / 2) + 40, yPos + 6, 8, 11, 8, 0, 11, arrowImage, 16, 33, button -> toggleTab());
         beepedia.addButton(nextTab);

@@ -1,8 +1,10 @@
-package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages;
+package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.bees;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
+import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.BeePage;
+import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.bees.BeeDataPage;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.mutations.BlockMutationPage;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.mutations.EntityMutationPage;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.mutations.ItemMutationPage;
@@ -20,7 +22,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MutationListPage extends BeeDataPage {
+public class BeeMutationListPage extends BeeDataPage {
 
     final List<Pair<MutationType, List<MutationsPage>>> mutations = new ArrayList<>();
 
@@ -34,8 +36,7 @@ public class MutationListPage extends BeeDataPage {
     final Button leftArrow;
     final Button rightArrow;
 
-    public MutationListPage(BeepediaScreen beepedia, CustomBeeData beeData, int xPos, int yPos, BeePage parent) {
-        super(beepedia, beeData, xPos, yPos, parent);
+    public BeeMutationListPage() {
         prevTab = new ImageButton(xPos + (SUB_PAGE_WIDTH / 2) - 48, yPos + 6, 8, 11, 0, 0, 11, arrowImage, 16, 33, button -> prevTab());
         nextTab = new ImageButton(xPos + (SUB_PAGE_WIDTH / 2) + 40, yPos + 6, 8, 11, 8, 0, 11, arrowImage, 16, 33, button -> nextTab());
         leftArrow = new ImageButton(xPos + (SUB_PAGE_WIDTH / 2) - 28, yPos + SUB_PAGE_HEIGHT - 16, 8, 11, 0, 0, 11, arrowImage, 16, 33, button -> prevPage());

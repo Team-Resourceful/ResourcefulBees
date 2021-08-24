@@ -1,8 +1,11 @@
-package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages;
+package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.bees;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
+import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.BeePage;
+import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.TraitPage;
+import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.bees.BeeDataPage;
 import com.teamresourceful.resourcefulbees.client.gui.widget.ListButton;
 import com.teamresourceful.resourcefulbees.client.gui.widget.SubButtonList;
 import net.minecraft.client.Minecraft;
@@ -16,13 +19,9 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-public class TraitListPage extends BeeDataPage {
+public class BeeTraitListPage extends BeeDataPage {
 
     private SubButtonList list = null;
-
-    public TraitListPage(BeepediaScreen beepedia, CustomBeeData beeData, int xPos, int yPos, BeePage parent) {
-        super(beepedia, beeData, xPos, yPos, parent);
-    }
 
     @Override
     public void renderBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {

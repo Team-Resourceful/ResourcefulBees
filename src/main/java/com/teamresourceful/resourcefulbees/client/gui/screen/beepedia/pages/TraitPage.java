@@ -2,9 +2,11 @@ package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.api.beedata.traits.BeeTrait;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
+import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.enums.SubPageTypes;
+import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.search.TraitBeepediaStats;
+import com.teamresourceful.resourcefulbees.client.gui.widget.BeepediaScreenArea;
 import com.teamresourceful.resourcefulbees.client.gui.widget.ListButton;
 import com.teamresourceful.resourcefulbees.client.gui.widget.SubButtonList;
 import com.teamresourceful.resourcefulbees.item.BeeJar;
@@ -32,7 +34,6 @@ import java.util.stream.Collectors;
 
 public class TraitPage extends BeepediaPage {
 
-    public final BeeTrait trait;
     private final ImageButton prevTab;
     private final ImageButton nextTab;
     private SubButtonList list;
@@ -46,10 +47,10 @@ public class TraitPage extends BeepediaPage {
     private List<String> searchAll = new LinkedList<>();
 
     private static final int LIST_HEIGHT = 102;
+    private TraitBeepediaStats stats;
 
-    public TraitPage(BeepediaScreen beepedia, BeeTrait trait, String id, int left, int top) {
-        super(beepedia, left, top, id);
-        this.trait = trait;
+    public TraitPage(BeepediaScreenArea screenArea) {
+        super(screenArea);
         name = new TranslationTextComponent(trait.getTranslationKey());
         ItemStack stack = trait.getDisplayItem().getDefaultInstance();
         newListButton(stack, name);
@@ -66,6 +67,15 @@ public class TraitPage extends BeepediaPage {
         addDamageTypes();
         addParticle();
         initList();
+    }
+
+    public void preInit(BeepediaScreen beepedia, TraitBeepediaStats stats) {
+        super.preInit(beepedia, beeStats.get(listItem), subPage, subPageTab);
+        this.stats = stats;
+    }
+
+    public static void initPages() {
+
     }
 
     private void addParticle() {

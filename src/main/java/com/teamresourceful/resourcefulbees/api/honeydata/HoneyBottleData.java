@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.api.honeydata;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.registry.ItemGroupResourcefulBees;
 import com.teamresourceful.resourcefulbees.utils.color.Color;
 import net.minecraft.block.Block;
@@ -10,6 +11,7 @@ import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.item.Food;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.RegistryObject;
 import org.apache.logging.log4j.LogManager;
@@ -217,5 +219,9 @@ public class HoneyBottleData {
 
     public TranslationTextComponent getBucketTranslation() {
         return new TranslationTextComponent(String.format("item.resourcefulbees.%s_honey_fluid_bucket", name));
+    }
+
+    public ResourceLocation getRegistryID() {
+        return new ResourceLocation(ResourcefulBees.MOD_ID, String.format("%s_honey", name));
     }
 }
