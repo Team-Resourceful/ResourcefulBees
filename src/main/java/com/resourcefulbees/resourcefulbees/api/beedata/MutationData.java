@@ -247,7 +247,9 @@ public class MutationData extends AbstractBeeData {
     }
 
     public static MutationData createDefault() {
-        return new Builder(false, MutationTypes.NONE).createMutationData();
+        MutationData data = new Builder(false, MutationTypes.NONE).createMutationData();
+        data.initializeMutations();
+        return data;
     }
 }
 
