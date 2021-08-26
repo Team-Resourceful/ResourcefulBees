@@ -327,7 +327,7 @@ public class EnderBeeconTileEntity extends AbstractHoneyTankContainer implements
             for (BeeEntity mob : bees) {
                 for (BeeconEffect effect : effects) {
                     if (!effect.isActive()) continue;
-                    mob.addEffect(new EffectInstance(effect.getEffect(), 120, 0, true, true));
+                    mob.addEffect(new EffectInstance(effect.getEffect(), 120, 0, false, false));
                 }
             }
         }
