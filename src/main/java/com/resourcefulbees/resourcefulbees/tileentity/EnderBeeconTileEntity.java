@@ -1,6 +1,5 @@
 package com.resourcefulbees.resourcefulbees.tileentity;
 
-import com.google.common.collect.Lists;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.container.EnderBeeconContainer;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
@@ -10,9 +9,7 @@ import com.resourcefulbees.resourcefulbees.network.packets.SyncGUIMessage;
 import com.resourcefulbees.resourcefulbees.network.packets.UpdateClientBeeconMessage;
 import com.resourcefulbees.resourcefulbees.registry.ModEffects;
 import io.netty.buffer.Unpooled;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.entity.passive.BeeEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -37,7 +34,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.Heightmap;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.FakePlayer;
@@ -49,7 +45,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Predicate;
@@ -234,25 +229,6 @@ public class EnderBeeconTileEntity extends AbstractHoneyTankContainer implements
 
     public void setShowBeam(boolean showBeam) {
         this.showBeam = showBeam;
-    }
-
-    public static class BeamSegment {
-        private final float[] colors;
-        private int height;
-
-        public BeamSegment(float[] colors) {
-            this.colors = colors;
-            this.height = 1;
-        }
-
-        protected void incrementHeight() {
-            ++this.height;
-        }
-
-        @OnlyIn(Dist.CLIENT)
-        public int getHeight() {
-            return this.height;
-        }
     }
 
     public class BeeconFluidTank extends InternalFluidTank {
