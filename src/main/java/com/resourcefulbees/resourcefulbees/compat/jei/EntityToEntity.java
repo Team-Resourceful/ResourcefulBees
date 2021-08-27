@@ -145,18 +145,6 @@ public class EntityToEntity extends BaseCategory<EntityToEntity.Recipe> {
     @Override
     public void draw(@NotNull Recipe recipe, @NotNull MatrixStack stack, double mouseX, double mouseY) {
         RecipeUtils.drawMutationScreen(stack, this.beeHive, this.info, recipe.weight, recipe.chance);
-        if (Minecraft.getInstance().level == null) return;
-        if (recipe.ouputEntity == null) {
-            recipe.ouputEntity = recipe.outputEntityType.create(Minecraft.getInstance().level);
-            if (!recipe.outputNBT.isEmpty()) {
-                CompoundNBT nbt = recipe.ouputEntity.saveWithoutId(new CompoundNBT());
-                nbt.merge(recipe.outputNBT);
-                recipe.ouputEntity.load(nbt);
-            }
-        }
-        if (recipe.inputEntity == null) {
-            recipe.inputEntity = recipe.inputEntityType.create(Minecraft.getInstance().level);
-        }
         RenderUtils.renderEntity(stack, recipe.inputEntity, Minecraft.getInstance().level, 14, 55, 45, 1);
         RenderUtils.renderEntity(stack, recipe.ouputEntity, Minecraft.getInstance().level, 64, 45, -45, 1);
     }
@@ -179,12 +167,21 @@ public class EntityToEntity extends BaseCategory<EntityToEntity.Recipe> {
         public Recipe(EntityType<?> inputEntityType, EntityType<?> outputEntityType, ItemStack inputEgg, ItemStack outputEgg, CompoundNBT outputNBT, String beeType, double weight, double chance) {
             this.inputEntityType = inputEntityType;
             this.outputEntityType = outputEntityType;
+
             this.input = inputEgg;
             this.output = outputEgg;
             this.outputNBT = outputNBT;
             this.beeType = beeType;
             this.weight = weight;
             this.chance = chance;
+
+            this.ouputEntity = this.outputEntityType.create(Minecraft.getInstance().level);
+            if (!this.outputNBT.isEmpty()) {
+                CompoundNBT nbt = this.ouputEntity.saveWithoutId(new CompoundNBT());
+                nbt.merge(this.outputNBT);
+                this.ouputEntity.load(nbt);
+            }
+            this.inputEntity = this.inputEntityType.create(Minecraft.getInstance().level);
         }
     }
 }
