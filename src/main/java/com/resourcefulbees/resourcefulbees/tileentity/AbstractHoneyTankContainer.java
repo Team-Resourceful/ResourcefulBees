@@ -29,7 +29,7 @@ public abstract class AbstractHoneyTankContainer extends AbstractHoneyTank imple
     public static final int BOTTLE_INPUT_EMPTY = 0;
     public static final int BOTTLE_OUTPUT_EMPTY = 1;
     public static final int HONEY_FILL_AMOUNT = ModConstants.HONEY_PER_BOTTLE;
-    private AutomationSensitiveItemStackHandler tileStackHandler = new EnderBeeconTileEntity.TileStackHandler(2, getAcceptor(), getRemover());
+    private AutomationSensitiveItemStackHandler tileStackHandler = new TileStackHandler(2, getAcceptor(), getRemover());
     private LazyOptional<IItemHandler> lazyOptional = LazyOptional.of(this::getTileStackHandler);
     private boolean dirty;
     private int processingEmpty;

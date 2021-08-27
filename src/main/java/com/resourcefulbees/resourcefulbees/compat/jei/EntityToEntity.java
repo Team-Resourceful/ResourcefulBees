@@ -7,6 +7,7 @@ import com.resourcefulbees.resourcefulbees.api.beedata.MutationData;
 import com.resourcefulbees.resourcefulbees.compat.jei.ingredients.EntityIngredient;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
+import com.resourcefulbees.resourcefulbees.utils.RenderUtils;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -15,7 +16,9 @@ import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.gui.ingredient.ITooltipCallback;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SpawnEggItem;
@@ -85,22 +88,19 @@ public class EntityToEntity extends BaseCategory<EntityToEntity.Recipe> {
             return list;
         }
         //OUTPUT
-        if (recipe.output == null && mouseX > 64 && mouseX < 84 && mouseY > 47 && mouseY < 66){
-            if (recipe.outputNBT.isEmpty()) {
-                return Collections.singletonList(recipe.outputEntity.getDescription().plainCopy());
-            } else {
-                List<ITextComponent> tooltip = new ArrayList<>();
-                addTooltip(recipe, tooltip);
-                return tooltip;
-            }
+        if (mouseX > 64 && mouseX < 84 && mouseY > 47 && mouseY < 66) {
+            List<ITextComponent> tooltip = new ArrayList<>();
+            addTooltip(recipe, tooltip);
+            return tooltip;
         }
 
         //INPUT
-        if (recipe.input == null && mouseX > 15 && mouseX < 32 && mouseY > 57 && mouseY < 74){
+        if (mouseX > 15 && mouseX < 32 && mouseY > 57 && mouseY < 74) {
             List<ITextComponent> tooltip = new ArrayList<>();
-            tooltip.add(recipe.inputEntity.getDescription().plainCopy());
-            if (recipe.outputEntity.getRegistryName() != null) {
-                tooltip.add(new StringTextComponent(recipe.outputEntity.getRegistryName().toString()).withStyle(TextFormatting.GRAY));
+            tooltip.add(recipe.inputEntityType.getDescription().plainCopy());
+            tooltip.addAll(BeeInfoUtils.getBeeLore(recipe.inputEntity));
+            if (recipe.outputEntityType.getRegistryName() != null) {
+                tooltip.add(new StringTextComponent(recipe.outputEntityType.getRegistryName().toString()).withStyle(TextFormatting.DARK_GRAY));
             }
             return tooltip;
         }
@@ -110,20 +110,10 @@ public class EntityToEntity extends BaseCategory<EntityToEntity.Recipe> {
 
     @Override
     public void setRecipe(@NotNull IRecipeLayout iRecipeLayout, @NotNull Recipe recipe, @NotNull IIngredients ingredients) {
-        IGuiItemStackGroup itemStacks = iRecipeLayout.getItemStacks();
-        if (recipe.output != null) {
-            itemStacks.init(0, false, 65, 48);
-            itemStacks.set(0, ingredients.getOutputs(VanillaTypes.ITEM).get(0));
-            itemStacks.addTooltipCallback(getItemStackTooltipCallback(recipe));
-        }
-        if (recipe.input != null) {
-            itemStacks.init(1, true, 15, 57);
-            itemStacks.set(1, ingredients.getInputs(VanillaTypes.ITEM).get(0));
-            itemStacks.addTooltipCallback(getItemStackTooltipCallback(recipe));
-        }
         IGuiIngredientGroup<EntityIngredient> ingredientStacks = iRecipeLayout.getIngredientsGroup(JEICompat.ENTITY_INGREDIENT);
         ingredientStacks.init(0, true, 16, 10);
         ingredientStacks.set(0, ingredients.getInputs(JEICompat.ENTITY_INGREDIENT).get(0));
+        ingredientStacks.init(1, false, 15, 57);
     }
 
     @NotNull
@@ -137,9 +127,10 @@ public class EntityToEntity extends BaseCategory<EntityToEntity.Recipe> {
     }
 
     private void addTooltip(@NotNull Recipe recipe, List<ITextComponent> tooltip) {
-        tooltip.add(recipe.outputEntity.getDescription().plainCopy());
-        if (recipe.outputEntity.getRegistryName() != null) {
-            tooltip.add(new StringTextComponent(recipe.outputEntity.getRegistryName().toString()).withStyle(TextFormatting.GRAY));
+        tooltip.add(recipe.outputEntityType.getDescription().plainCopy());
+        tooltip.addAll(BeeInfoUtils.getBeeLore(recipe.ouputEntity));
+        if (recipe.outputEntityType.getRegistryName() != null) {
+            tooltip.add(new StringTextComponent(recipe.outputEntityType.getRegistryName().toString()).withStyle(TextFormatting.DARK_GRAY));
         }
         if (!recipe.outputNBT.isEmpty()) {
             if (BeeInfoUtils.isShiftPressed()) {
@@ -154,25 +145,40 @@ public class EntityToEntity extends BaseCategory<EntityToEntity.Recipe> {
     @Override
     public void draw(@NotNull Recipe recipe, @NotNull MatrixStack stack, double mouseX, double mouseY) {
         RecipeUtils.drawMutationScreen(stack, this.beeHive, this.info, recipe.weight, recipe.chance);
-        if (recipe.output == null){ this.nonRegisteredEgg.draw(stack, 66, 49); }
-        if (recipe.input == null){ this.nonRegisteredEgg.draw(stack, 15, 57); }
+        if (Minecraft.getInstance().level == null) return;
+        if (recipe.ouputEntity == null) {
+            recipe.ouputEntity = recipe.outputEntityType.create(Minecraft.getInstance().level);
+            if (!recipe.outputNBT.isEmpty()) {
+                CompoundNBT nbt = recipe.ouputEntity.saveWithoutId(new CompoundNBT());
+                nbt.merge(recipe.outputNBT);
+                recipe.ouputEntity.load(nbt);
+            }
+        }
+        if (recipe.inputEntity == null) {
+            recipe.inputEntity = recipe.inputEntityType.create(Minecraft.getInstance().level);
+        }
+        RenderUtils.renderEntity(stack, recipe.inputEntity, Minecraft.getInstance().level, 14, 55, 45, 1);
+        RenderUtils.renderEntity(stack, recipe.ouputEntity, Minecraft.getInstance().level, 64, 45, -45, 1);
     }
 
     public static class Recipe {
-        private final EntityType<?> inputEntity;
-        private final EntityType<?> outputEntity;
+        private final EntityType<?> inputEntityType;
+        private final EntityType<?> outputEntityType;
         private final ItemStack input;
         private final ItemStack output;
         private final String beeType;
+        private Entity ouputEntity = null;
+        private Entity inputEntity = null;
+
 
         private final double weight;
         private final double chance;
 
         public final CompoundNBT outputNBT;
 
-        public Recipe(EntityType<?> inputEntity, EntityType<?> outputEntity, ItemStack inputEgg, ItemStack outputEgg, CompoundNBT outputNBT, String beeType, double weight, double chance) {
-            this.inputEntity = inputEntity;
-            this.outputEntity = outputEntity;
+        public Recipe(EntityType<?> inputEntityType, EntityType<?> outputEntityType, ItemStack inputEgg, ItemStack outputEgg, CompoundNBT outputNBT, String beeType, double weight, double chance) {
+            this.inputEntityType = inputEntityType;
+            this.outputEntityType = outputEntityType;
             this.input = inputEgg;
             this.output = outputEgg;
             this.outputNBT = outputNBT;

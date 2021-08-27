@@ -427,6 +427,14 @@ public class BeeInfoUtils {
         }
     }
 
+    public static List<ITextComponent> getBeeLore(Entity entity) {
+        if (entity instanceof CustomBeeEntity){
+            return getBeeLore(((CustomBeeEntity) entity).getBeeData());
+        }else {
+            return new ArrayList<>();
+        }
+    }
+
     public static List<ITextComponent> getBeeLore(CustomBeeData beeData) {
         List<ITextComponent> tooltip = new LinkedList<>();
         if (beeData.getLore() != null && !beeData.getLore().isEmpty()) {
