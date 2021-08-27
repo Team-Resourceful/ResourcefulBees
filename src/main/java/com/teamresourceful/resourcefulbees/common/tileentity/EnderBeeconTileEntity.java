@@ -1,16 +1,13 @@
 package com.teamresourceful.resourcefulbees.common.tileentity;
 
-import com.google.common.collect.Lists;
-import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
-import com.teamresourceful.resourcefulbees.common.network.packets.UpdateClientBeeconMessage;
 import com.teamresourceful.resourcefulbees.common.config.Config;
 import com.teamresourceful.resourcefulbees.common.container.EnderBeeconContainer;
+import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
+import com.teamresourceful.resourcefulbees.common.network.packets.UpdateClientBeeconMessage;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModEffects;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.entity.passive.BeeEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -30,7 +27,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.Heightmap;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.LazyOptional;
@@ -41,17 +37,12 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Predicate;
 
 public class EnderBeeconTileEntity extends AbstractHoneyTankContainer {
 
-    private List<BeamSegment> beamSegments = Lists.newArrayList();
-    private List<BeamSegment> beams = Lists.newArrayList();
-    private int worldHeight = -1;
-    private final float[] afloat = {255f, 255f, 255f};
     private boolean updateBeecon = true;
     private boolean beeconActive = false;
     private boolean playSound = true;
@@ -110,54 +101,14 @@ public class EnderBeeconTileEntity extends AbstractHoneyTankContainer {
 
     @Override
     public void tick() {
-        int i = this.worldPosition.getX();
-        int j = this.worldPosition.getY();
-        int k = this.worldPosition.getZ();
-        BlockPos blockpos;
-        if (this.worldHeight < j) {
-            blockpos = this.worldPosition;
-            this.beams = Lists.newArrayList();
-            this.worldHeight = blockpos.getY() - 1;
-        } else {
-            blockpos = new BlockPos(i, this.worldHeight + 1, k);
-        }
+        if (this.level == null) return;
+        // do drain tank
         if (doEffects()) {
             getFluidTank().drain(getDrain(), IFluidHandler.FluidAction.EXECUTE);
         }
 
-        BeamSegment segment = this.beams.isEmpty() ? null : this.beams.get(this.beams.size() - 1);
-        assert this.level != null; //will fix later - epic
-        int l = this.level.getHeight(Heightmap.Type.WORLD_SURFACE, i, k);
-
-        for (int i1 = 0; i1 < 10 && blockpos.getY() <= l; ++i1) {
-            BlockState blockstate = this.level.getBlockState(blockpos);
-            Block block = blockstate.getBlock();
-            if (afloat != null) {
-                if (this.beams.size() <= 1) {
-                    segment = new EnderBeeconTileEntity.BeamSegment(afloat);
-                    this.beams.add(segment);
-                } else if (segment != null) {
-                    if (Arrays.equals(afloat, segment.colors)) {
-                        segment.incrementHeight();
-                    } else {
-                        segment = new EnderBeeconTileEntity.BeamSegment(new float[]{afloat[0], afloat[1], afloat[2]});
-                        this.beams.add(segment);
-                    }
-                }
-            } else {
-                if (segment == null || blockstate.getLightBlock(this.level, blockpos) >= 15 && block != Blocks.BEDROCK) {
-                    this.beams.clear();
-                    this.worldHeight = l;
-                    break;
-                }
-                segment.incrementHeight();
-            }
-            blockpos = blockpos.above();
-            ++this.worldHeight;
-        }
-
-
-        if (this.level.getGameTime() % 80L == 0L && !this.beamSegments.isEmpty() && !getFluidTank().isEmpty()) {
+        // give effects
+        if (this.level.getGameTime() % 80L == 0L && !getFluidTank().isEmpty()) {
             AxisAlignedBB box = getEffectBox();
             List<BeeEntity> bees = level.getEntitiesOfClass(BeeEntity.class, box);
             bees.stream()
@@ -168,23 +119,20 @@ public class EnderBeeconTileEntity extends AbstractHoneyTankContainer {
             if (playSound) this.playSound(SoundEvents.BEACON_AMBIENT);
         }
 
+        // pull from below containers
         doPullProcess();
 
-        int j1 = getFluidTank().getFluidAmount();
-        if (this.worldHeight >= l) {
-            this.worldHeight = -1;
-            boolean flag = j1 > 0;
-            this.beamSegments = this.beams;
-            if (!this.level.isClientSide) {
-                if (flag && updateBeecon && !beeconActive) {
-                    this.playSound(SoundEvents.BEACON_ACTIVATE);
-                    beeconActive = true;
-                } else if (!flag && updateBeecon && beeconActive) {
-                    this.playSound(SoundEvents.BEACON_DEACTIVATE);
-                    beeconActive = false;
-                }
-                updateBeecon = false;
+        // play activation sounds
+        boolean flag = getFluidTank().getFluidAmount() > 0;
+        if (!this.level.isClientSide) {
+            if (flag && updateBeecon && !beeconActive) {
+                this.playSound(SoundEvents.BEACON_ACTIVATE);
+                beeconActive = true;
+            } else if (!flag && updateBeecon && beeconActive) {
+                this.playSound(SoundEvents.BEACON_DEACTIVATE);
+                beeconActive = false;
             }
+            updateBeecon = false;
         }
         super.tick();
     }
@@ -243,11 +191,6 @@ public class EnderBeeconTileEntity extends AbstractHoneyTankContainer {
         NetPacketHandler.sendToAllLoaded(new UpdateClientBeeconMessage(pos, data), world, pos);
     }
 
-    @OnlyIn(Dist.CLIENT)
-    public List<EnderBeeconTileEntity.BeamSegment> getBeamSegments() {
-        return beamSegments;
-    }
-
     public List<BeeconEffect> getEffects() {
         return effects;
     }
@@ -273,25 +216,6 @@ public class EnderBeeconTileEntity extends AbstractHoneyTankContainer {
 
     public void setShowBeam(boolean showBeam) {
         this.showBeam = showBeam;
-    }
-
-    public static class BeamSegment {
-        private final float[] colors;
-        private int height;
-
-        public BeamSegment(float[] colors) {
-            this.colors = colors;
-            this.height = 1;
-        }
-
-        protected void incrementHeight() {
-            ++this.height;
-        }
-
-        @OnlyIn(Dist.CLIENT)
-        public int getHeight() {
-            return this.height;
-        }
     }
 
     public class BeeconFluidTank extends InternalFluidTank {
