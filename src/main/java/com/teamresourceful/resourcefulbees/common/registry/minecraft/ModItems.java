@@ -7,6 +7,7 @@ import com.teamresourceful.resourcefulbees.common.item.*;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.utils.TooltipBuilder;
+import net.minecraft.block.Block;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.*;
 import net.minecraft.potion.EffectInstance;
@@ -15,6 +16,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -30,12 +32,18 @@ public class ModItems {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
 
-
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, ResourcefulBees.MOD_ID);
+    public static final DeferredRegister<Item> HONEYCOMB_ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, ResourcefulBees.MOD_ID);
+    public static final DeferredRegister<Item> HONEYCOMB_BLOCK_ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, ResourcefulBees.MOD_ID);
+
     private static Item.Properties getItemProperties() {
         return new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES);
     }
-
+    public static void initializeRegistries(IEventBus bus) {
+        ITEMS.register(bus);
+        HONEYCOMB_ITEMS.register(bus);
+        HONEYCOMB_BLOCK_ITEMS.register(bus);
+    }
 
     @SuppressWarnings("deprecation")
     public static final RegistryObject<Item> OREO_COOKIE = ITEMS.register("oreo_cookie", () -> new Item(getItemProperties().food(new Food.Builder()

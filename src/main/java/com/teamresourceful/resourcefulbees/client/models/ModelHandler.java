@@ -149,7 +149,8 @@ public class ModelHandler {
     }
     //endregion
 
-
+    //TODO THIS NEEDS TO GET CHANGED TO LOOP THROUGH HoneycombRegistry Deferred Registries!!!
+    // same for the bees when that is done
     public static void registerModels(ModelRegistryEvent event) {
         IResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
 

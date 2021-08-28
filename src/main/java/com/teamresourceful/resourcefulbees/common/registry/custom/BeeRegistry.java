@@ -18,11 +18,11 @@ import java.util.*;
 @Unmodifiable
 public class BeeRegistry implements IBeeRegistry {
 
-    private static final Map<ResourceLocation, RandomCollection<CustomBeeData>> spawnableBiomes = new LinkedHashMap<>();
-    private static final Map<String, JsonObject> rawBeeData = new LinkedHashMap<>();
-    private static final Map<String, CustomBeeData> beeData = new LinkedHashMap<>();
-    private static final Map<Pair<String, String>, RandomCollection<BeeFamily>> familyTree = new LinkedHashMap<>();
     private static final BeeRegistry INSTANCE = new BeeRegistry();
+    private static final Map<String, JsonObject> RAW_DATA = new LinkedHashMap<>();
+    private static final Map<String, CustomBeeData> CUSTOM_DATA = new LinkedHashMap<>();
+    private static final Map<Pair<String, String>, RandomCollection<BeeFamily>> FAMILY_TREE = new LinkedHashMap<>();
+    private static final Map<ResourceLocation, RandomCollection<CustomBeeData>> SPAWNABLE_BIOMES = new LinkedHashMap<>();
 
     /**
      * Returns an instance of the {@link BeeRegistry} for accessing data from the registry.
@@ -38,19 +38,19 @@ public class BeeRegistry implements IBeeRegistry {
     }
 
     public static boolean isSpawnableBiome(ResourceLocation biome) {
-        return spawnableBiomes.containsKey(biome);
+        return SPAWNABLE_BIOMES.containsKey(biome);
     }
 
     public static RandomCollection<CustomBeeData> getSpawnableBiome(ResourceLocation biome) {
-        return spawnableBiomes.get(biome);
+        return SPAWNABLE_BIOMES.get(biome);
     }
 
     public static boolean containsBeeType(String beeType) {
-        return beeData.containsKey(beeType);
+        return CUSTOM_DATA.containsKey(beeType);
     }
 
     public Map<Pair<String, String>, RandomCollection<BeeFamily>> getFamilyTree() {
-        return familyTree;
+        return FAMILY_TREE;
     }
 
     /**
@@ -60,7 +60,7 @@ public class BeeRegistry implements IBeeRegistry {
      * @return Returns a {@link CustomBeeData} object for the given bee type.
      */
     public CustomBeeData getBeeData(String beeType) {
-        return beeData.getOrDefault(beeType, CustomBeeData.DEFAULT);
+        return CUSTOM_DATA.getOrDefault(beeType, CustomBeeData.DEFAULT);
     }
 
     /**
@@ -73,15 +73,11 @@ public class BeeRegistry implements IBeeRegistry {
      * maps are constructed.
      */
     public void regenerateCustomBeeData() {
-        rawBeeData.forEach((s, jsonObject) -> beeData.compute(s, (s1, customBeeDataCodec) ->
+        RAW_DATA.forEach((s, jsonObject) -> CUSTOM_DATA.compute(s, (s1, customBeeDataCodec) ->
                 CustomBeeData.codec(s).parse(JsonOps.INSTANCE, jsonObject)
                 .getOrThrow(false, s2 -> ResourcefulBees.LOGGER.error("Could not create Custom Bee Data for {} bee", s))));
-        //TODO verify this arch event works correctly - and figure out how forge
-        // accesses it - does not load in testing apparently. fails due to not being
-        // a forge event. - something must be missing or bc it's in forge module.
-        //MinecraftForge.EVENT_BUS.post(new RegisterBeeEvent(beeData)); <- forge event
-        //RegisterBeeEvent.EVENT.invoker().act(new RegisterBeeEvent(beeData)); <- arch event
-        beeData.values().forEach(customBeeData -> {
+        //MinecraftForge.EVENT_BUS.post(new RegisterBeeEvent(beeData));
+        CUSTOM_DATA.values().forEach(customBeeData -> {
             //post init stuff gets called here
             customBeeData.getBreedData().getFamilies().forEach(BeeFamily::postInit);
         });
@@ -97,7 +93,7 @@ public class BeeRegistry implements IBeeRegistry {
      */
     @Override
     public JsonObject getRawBeeData(String bee) {
-        return rawBeeData.get(bee);
+        return RAW_DATA.get(bee);
     }
 
     /**
@@ -108,7 +104,7 @@ public class BeeRegistry implements IBeeRegistry {
      * @return Returns true/false if parents can breed.
      */
     public boolean canParentsBreed(String parent1, String parent2) {
-        return familyTree.containsKey(BeeInfoUtils.sortParents(parent1, parent2));
+        return FAMILY_TREE.containsKey(BeeInfoUtils.sortParents(parent1, parent2));
     }
 
     /**
@@ -119,7 +115,7 @@ public class BeeRegistry implements IBeeRegistry {
      * @return Returns a weighted random bee type as a string.
      */
     public BeeFamily getWeightedChild(String parent1, String parent2) {
-        return familyTree.get(BeeInfoUtils.sortParents(parent1, parent2)).next();
+        return FAMILY_TREE.get(BeeInfoUtils.sortParents(parent1, parent2)).next();
     }
 
     /**
@@ -131,7 +127,7 @@ public class BeeRegistry implements IBeeRegistry {
      * @return Returns random bee type as a string.
      */
     public double getAdjustedWeightForChild(BeeFamily beeFamily) {
-        return familyTree.get(beeFamily.getParents()).getAdjustedWeight(beeFamily.getWeight());
+        return FAMILY_TREE.get(beeFamily.getParents()).getAdjustedWeight(beeFamily.getWeight());
     }
 
     /**
@@ -142,7 +138,7 @@ public class BeeRegistry implements IBeeRegistry {
      * @param beeData The raw BeeData of the bee being registered
      */
     public void cacheRawBeeData(String beeType, JsonObject beeData) {
-        rawBeeData.computeIfAbsent(beeType.toLowerCase(Locale.ENGLISH).replace(" ", "_"), s -> Objects.requireNonNull(beeData));
+        RAW_DATA.computeIfAbsent(beeType.toLowerCase(Locale.ENGLISH).replace(" ", "_"), s -> Objects.requireNonNull(beeData));
     }
 
     /**
@@ -154,7 +150,7 @@ public class BeeRegistry implements IBeeRegistry {
      * the raw json data.
      */
     public Map<String, JsonObject> getRawBees() {
-        return Collections.unmodifiableMap(rawBeeData);
+        return Collections.unmodifiableMap(RAW_DATA);
     }
 
     /**
@@ -165,7 +161,7 @@ public class BeeRegistry implements IBeeRegistry {
      * @return Returns an unmodifiable copy of the internal {@link CustomBeeData} map.
      */
     public Map<String, CustomBeeData> getBees() {
-        return Collections.unmodifiableMap(beeData);
+        return Collections.unmodifiableMap(CUSTOM_DATA);
     }
 
     /**
@@ -177,21 +173,21 @@ public class BeeRegistry implements IBeeRegistry {
      * {@link CustomBeeData} map
      */
     public Set<CustomBeeData> getSetOfBees() {
-        return Collections.unmodifiableSet(new HashSet<>(beeData.values()));
+        return Collections.unmodifiableSet(new HashSet<>(CUSTOM_DATA.values()));
     }
 
     //region Setup
     private static void buildSpawnableBiomes() {
-        spawnableBiomes.clear();
-        beeData.values().stream()
+        SPAWNABLE_BIOMES.clear();
+        CUSTOM_DATA.values().stream()
                 .filter(customBeeData -> customBeeData.getSpawnData().canSpawnInWorld())
                 .forEach(customBeeData -> customBeeData.getSpawnData().getSpawnableBiomes()
-                .forEach(resourceLocation -> spawnableBiomes.computeIfAbsent(resourceLocation, k -> new RandomCollection<>()).add(customBeeData.getSpawnData().getSpawnWeight(), customBeeData)));
+                .forEach(resourceLocation -> SPAWNABLE_BIOMES.computeIfAbsent(resourceLocation, k -> new RandomCollection<>()).add(customBeeData.getSpawnData().getSpawnWeight(), customBeeData)));
     }
 
     private static void buildFamilyTree() {
-        familyTree.clear();
-        beeData.values().stream()
+        FAMILY_TREE.clear();
+        CUSTOM_DATA.values().stream()
                 .filter(customBeeData -> customBeeData.getBreedData().hasParents())
                 .flatMap(customBeeData -> customBeeData.getBreedData().getFamilies().stream())
                 .filter(BeeFamily::hasValidParents)
@@ -199,7 +195,7 @@ public class BeeRegistry implements IBeeRegistry {
     }
 
     private static void addBreedPairToFamilyTree(BeeFamily beeFamily) {
-        familyTree.computeIfAbsent(beeFamily.getParents(), k -> new RandomCollection<>()).add(beeFamily.getWeight(), beeFamily);
+        FAMILY_TREE.computeIfAbsent(beeFamily.getParents(), k -> new RandomCollection<>()).add(beeFamily.getWeight(), beeFamily);
     }
     //endregion
 }

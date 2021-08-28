@@ -38,7 +38,6 @@ public class CodecUtils {
     public static final Codec<Set<Block>> BLOCK_SET_FROM_FLUID_TAG = Codec.STRING.comapFlatMap(CodecUtils::convertFluidTagToBlockSet, CodecUtils::convertTagSetToString);
     public static final Codec<Set<Block>> BLOCK_SET_CODEC = Codec.either(Codec.either(SET_FROM_BLOCK_TAG, BLOCK_SET_FROM_FLUID_TAG).xmap(either -> either.map(list -> list, list -> list), Either::left), SET_FROM_BLOCK_LIST).xmap(either -> either.map(list -> list, list -> list), Either::left);
 
-
     //Codec for getting an ItemStack
     public static final Codec<ItemStack> ITEM_STACK_CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Registry.ITEM.fieldOf("id").forGetter(ItemStack::getItem),

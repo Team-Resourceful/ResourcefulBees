@@ -8,7 +8,6 @@ import com.teamresourceful.resourcefulbees.api.honeydata.HoneyBottleData;
 import com.teamresourceful.resourcefulbees.common.config.Config;
 import com.teamresourceful.resourcefulbees.common.lib.enums.HoneycombType;
 import com.teamresourceful.resourcefulbees.common.mixin.RecipeManagerAccessorInvoker;
-import com.teamresourceful.resourcefulbees.common.recipe.CentrifugeRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyRegistry;
 import net.minecraft.item.ItemStack;
@@ -44,10 +43,10 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
             CentrifugeData centrifugeData = beeData.getCentrifugeData();
             HoneycombData honeycombData = beeData.getHoneycombData();
 
-            if (centrifugeData.hasCentrifugeOutput() && honeycombData.getHoneycombType().equals(HoneycombType.DEFAULT)) {
+/*            if (centrifugeData.hasCentrifugeOutput() && honeycombData.getHoneycombType().equals(HoneycombType.DEFAULT)) {
                 addRecipe(this.makeCentrifugeRecipe(s, centrifugeData, honeycombData, 1));
                 addRecipe(this.makeCentrifugeRecipe(s, centrifugeData, honeycombData, 9));
-            }
+            }*/
             if (Config.HONEYCOMB_BLOCK_RECIPES.get() && honeycombData.getHoneycombType().equals(HoneycombType.DEFAULT)) {
                 addRecipe(this.makeHoneycombRecipe(s, honeycombData));
                 addRecipe(this.makeCombBlockToCombRecipe(s, honeycombData));
@@ -181,23 +180,6 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
                         bottleItem, bottleItem,
                         bottleItem
                 )
-        );
-    }
-
-
-    private IRecipe<?> makeCentrifugeRecipe(String beeType, CentrifugeData centrifugeData, HoneycombData honeycombData, int multiplier) {
-        boolean isBlockRecipe = multiplier != 1;
-        ResourceLocation recipeLoc = new ResourceLocation(ResourcefulBees.MOD_ID, beeType + (isBlockRecipe? "_honeycomb_block" : "_honeycomb") + "_centrifuge");
-
-        Ingredient ingredient = Ingredient.of(new ItemStack(isBlockRecipe ? honeycombData.getHoneycombBlock() : honeycombData.getHoneycomb(), centrifugeData.getInputCount()));
-
-        return new CentrifugeRecipe(
-                recipeLoc, ingredient,
-                centrifugeData.getItemOutputs(),
-                centrifugeData.getFluidOutputs(),
-                centrifugeData.getRecipeTime(),
-                (centrifugeData.getRecipeTime() - Config.MULTIBLOCK_RECIPE_TIME_REDUCTION.get()) * (isBlockRecipe ? 3 : 1),
-                isBlockRecipe
         );
     }
 

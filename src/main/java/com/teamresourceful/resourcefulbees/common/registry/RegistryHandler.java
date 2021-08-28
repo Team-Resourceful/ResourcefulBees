@@ -3,11 +3,9 @@ package com.teamresourceful.resourcefulbees.common.registry;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.api.beedata.HoneycombData;
 import com.teamresourceful.resourcefulbees.api.honeydata.HoneyBottleData;
 import com.teamresourceful.resourcefulbees.common.block.CustomHoneyBlock;
 import com.teamresourceful.resourcefulbees.common.block.CustomHoneyFluidBlock;
-import com.teamresourceful.resourcefulbees.common.block.HoneycombBlock;
 import com.teamresourceful.resourcefulbees.common.config.Config;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.entity.passive.ResourcefulBee;
@@ -16,7 +14,6 @@ import com.teamresourceful.resourcefulbees.common.fluids.HoneyFluidAttributes;
 import com.teamresourceful.resourcefulbees.common.item.BeeSpawnEggItem;
 import com.teamresourceful.resourcefulbees.common.item.CustomHoneyBottleItem;
 import com.teamresourceful.resourcefulbees.common.item.CustomHoneyBucketItem;
-import com.teamresourceful.resourcefulbees.common.item.HoneycombItem;
 import com.teamresourceful.resourcefulbees.common.item.dispenser.ScraperDispenserBehavior;
 import com.teamresourceful.resourcefulbees.common.item.dispenser.ShearsDispenserBehavior;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
@@ -50,9 +47,9 @@ public class RegistryHandler {
 
     public static void init() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-        ModItems.ITEMS.register(bus);
+        ModItems.initializeRegistries(bus);
+        ModBlocks.initializeRegistries(bus);
         ModEffects.EFFECTS.register(bus);
-        ModBlocks.BLOCKS.register(bus);
         ModFluids.FLUIDS.register(bus);
         ModEntities.ENTITY_TYPES.register(bus);
         ModBlockEntityTypes.TILE_ENTITY_TYPES.register(bus);
@@ -71,11 +68,10 @@ public class RegistryHandler {
     }
 
     public static void registerDynamicBees() {
+
+
         BeeRegistry.getRegistry().getBees().forEach((name, beeData) -> {
-/*            HoneycombData honeyData = beeData.getHoneycombData();
-            if (honeyData.getHoneycombType().equals(HoneycombType.DEFAULT)) {
-                registerHoneycomb(name, honeyData);
-            }*/
+
             registerBee(name, beeData.getRenderData().getSizeModifier());
         });
     }
@@ -84,10 +80,10 @@ public class RegistryHandler {
         HoneyRegistry.getRegistry().getRawHoney().forEach(RegistryHandler::registerHoneyBottle);
     }
 
-    private static final Map<String, RegistryObject<FlowingFluid>> stillFluids = new HashMap<>();
-    private static final Map<String, RegistryObject<FlowingFluid>> flowingFluids = new HashMap<>();
-    private static final Map<String, RegistryObject<Item>> honeyBuckets = new HashMap<>();
-    private static final Map<String, RegistryObject<FlowingFluidBlock>> fluidBlocks = new HashMap<>();
+    private static final Map<String, RegistryObject<FlowingFluid>> STILL_FLUIDS = new HashMap<>();
+    private static final Map<String, RegistryObject<FlowingFluid>> FLOWING_FLUIDS = new HashMap<>();
+    private static final Map<String, RegistryObject<Item>> HONEY_BUCKETS = new HashMap<>();
+    private static final Map<String, RegistryObject<FlowingFluidBlock>> FLUID_BLOCKS = new HashMap<>();
 
     private static ForgeFlowingFluid.Properties makeProperties(String name, HoneyBottleData honeyData) {
         HoneyFluidAttributes.Builder builder;
@@ -98,16 +94,10 @@ public class RegistryHandler {
         builder.temperature(300);
         builder.viscosity(1800);
 
-        return new ForgeFlowingFluid.Properties(stillFluids.get(name), flowingFluids.get(name), builder)
-                .bucket(honeyBuckets.get(name))
-                .block(fluidBlocks.get(name))
+        return new ForgeFlowingFluid.Properties(STILL_FLUIDS.get(name), FLOWING_FLUIDS.get(name), builder)
+                .bucket(HONEY_BUCKETS.get(name))
+                .block(FLUID_BLOCKS.get(name))
                 .tickRate(20);
-    }
-
-    private static void registerHoneycomb(String name, HoneycombData honeycombData) {
-        final RegistryObject<Block> customHoneycombBlock = ModBlocks.BLOCKS.register(name + "_honeycomb_block", () -> new HoneycombBlock(name, honeycombData, AbstractBlock.Properties.copy(Blocks.HONEYCOMB_BLOCK)));
-        ModItems.ITEMS.register(name + "_honeycomb", () -> new HoneycombItem(name, honeycombData, new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
-        ModItems.ITEMS.register(name + "_honeycomb_block", () -> new BlockItem(customHoneycombBlock.get(), new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
     }
 
     private static void registerBee(String name, float sizeModifier) {
@@ -139,15 +129,15 @@ public class RegistryHandler {
         }
 
         if (Config.HONEY_GENERATE_FLUIDS.get() && honeyBottleData.doGenerateHoneyFluid()) {
-            stillFluids.put(name, ModFluids.FLUIDS.register(name + "_honey", () -> new CustomHoneyFluid.Source(makeProperties(name, honeyBottleData), honeyBottleData)));
-            flowingFluids.put(name, ModFluids.FLUIDS.register(name + "_honey_flowing", () -> new CustomHoneyFluid.Flowing(makeProperties(name, honeyBottleData), honeyBottleData)));
-            honeyBuckets.put(name, ModItems.ITEMS.register(name + "_honey_fluid_bucket", () -> new CustomHoneyBucketItem(stillFluids.get(name), new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES).craftRemainder(Items.BUCKET).stacksTo(1), honeyBottleData)));
-            fluidBlocks.put(name, ModBlocks.BLOCKS.register(name + "_honey", () -> new CustomHoneyFluidBlock(stillFluids.get(name), AbstractBlock.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops(), honeyBottleData)));
+            STILL_FLUIDS.put(name, ModFluids.FLUIDS.register(name + "_honey", () -> new CustomHoneyFluid.Source(makeProperties(name, honeyBottleData), honeyBottleData)));
+            FLOWING_FLUIDS.put(name, ModFluids.FLUIDS.register(name + "_honey_flowing", () -> new CustomHoneyFluid.Flowing(makeProperties(name, honeyBottleData), honeyBottleData)));
+            HONEY_BUCKETS.put(name, ModItems.ITEMS.register(name + "_honey_fluid_bucket", () -> new CustomHoneyBucketItem(STILL_FLUIDS.get(name), new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES).craftRemainder(Items.BUCKET).stacksTo(1), honeyBottleData)));
+            FLUID_BLOCKS.put(name, ModBlocks.BLOCKS.register(name + "_honey", () -> new CustomHoneyFluidBlock(STILL_FLUIDS.get(name), AbstractBlock.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops(), honeyBottleData)));
 
-            honeyBottleData.setHoneyStillFluidRegistryObject(stillFluids.get(name));
-            honeyBottleData.setHoneyFlowingFluidRegistryObject(flowingFluids.get(name));
-            honeyBottleData.setHoneyBucketItemRegistryObject(honeyBuckets.get(name));
-            honeyBottleData.setHoneyFluidBlockRegistryObject(fluidBlocks.get(name));
+            honeyBottleData.setHoneyStillFluidRegistryObject(STILL_FLUIDS.get(name));
+            honeyBottleData.setHoneyFlowingFluidRegistryObject(FLOWING_FLUIDS.get(name));
+            honeyBottleData.setHoneyBucketItemRegistryObject(HONEY_BUCKETS.get(name));
+            honeyBottleData.setHoneyFluidBlockRegistryObject(FLUID_BLOCKS.get(name));
         }
         HoneyRegistry.getRegistry().registerHoney(name, honeyBottleData); //do this separately so it can be called in the reload command that is to be added
     }

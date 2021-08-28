@@ -35,6 +35,23 @@ public class HoneycombData {
             ApiaryOutputType.CODEC.listOf().fieldOf("apiaryOutputTypes").orElse(DEFAULT_APIARY_OUTPUTS).forGetter(HoneycombData::getApiaryOutputTypes)
     ).apply(instance, HoneycombData::new));
 
+    /*
+    *
+    * "apairyOutput": [
+  {"id":"resourcefulbees:diamond_comb"}
+  {"id":"resourcefulbees:diamond_comb", "count": 4}
+  {"id":"resourcefulbees:diamond_comb", "count": 8}
+  {"id":"resourcefulbees:diamond_comb_block", "count": 4}
+  {"id":"resourcefulbees:diamond_comb_block", "count": 8}
+]
+    *
+    *
+    *
+    * */
+
+
+
+
     protected final HoneycombType honeycombType;
     protected Item honeycomb;
     protected Item honeycombBlock;
