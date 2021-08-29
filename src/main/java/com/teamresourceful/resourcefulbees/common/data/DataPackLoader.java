@@ -3,7 +3,6 @@ package com.teamresourceful.resourcefulbees.common.data;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 import net.minecraft.resources.*;
 import net.minecraft.resources.data.IMetadataSectionSerializer;
 import net.minecraft.tags.Tag;
@@ -16,7 +15,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -52,27 +54,16 @@ public class DataPackLoader implements IPackFinder {
 
     private static class MemoryDataPack implements IResourcePack {
 
-        private static final JsonObject meta = new JsonObject();
-        static {
-            meta.add("pack_format", new JsonPrimitive(4));
-            meta.add("description", new JsonPrimitive("Data for resourcefulbees tags."));
-        }
-
-        private final HashMap<ResourceLocation, Supplier<? extends InputStream>> assets = new HashMap<>();
+        private static final JsonObject META = GSON.fromJson("{\"pack_format\": 4, \"description\": \"Data for resourcefulbees tags.\"}", JsonObject.class);
         private final HashMap<ResourceLocation, Supplier<? extends InputStream>> data = new HashMap<>();
 
-        @Nullable
-        private HashMap<ResourceLocation, Supplier<? extends InputStream>> getResourcePackTypeMap(ResourcePackType type){
-            if (type.equals(ResourcePackType.CLIENT_RESOURCES)) return assets;
-            else if (type.equals(ResourcePackType.SERVER_DATA)) return data;
-            else return null;
+        private boolean isServerData(ResourcePackType type) {
+            return ResourcePackType.SERVER_DATA.equals(type);
         }
 
         public void putJson(ResourcePackType type, ResourceLocation location, JsonElement json) {
-            HashMap<ResourceLocation, Supplier<? extends InputStream>> map = getResourcePackTypeMap(type);
-            if (map != null){
-                map.put(location, () -> new ByteArrayInputStream(GSON.toJson(json).getBytes(StandardCharsets.UTF_8)));
-            }
+            if (!isServerData(type)) return;
+            data.put(location, () -> new ByteArrayInputStream(GSON.toJson(json).getBytes(StandardCharsets.UTF_8)));
         }
 
         @Override
@@ -85,19 +76,14 @@ public class DataPackLoader implements IPackFinder {
 
         @Override
         public @NotNull InputStream getResource(@NotNull ResourcePackType type, @NotNull ResourceLocation location) throws IOException {
-            Map<ResourceLocation, Supplier<? extends InputStream>> map = getResourcePackTypeMap(type);
-            if(map != null && map.containsKey(location)) {
-                return map.get(location).get();
-            }
+            if(this.hasResource(type, location)) return data.get(location).get();
             throw new FileNotFoundException(location.toString());
         }
 
         @Override
         public @NotNull Collection<ResourceLocation> getResources(@NotNull ResourcePackType type, @NotNull String namespace, @NotNull String path, int maxFolderWalk, @NotNull Predicate<String> predicate) {
-            Map<ResourceLocation, Supplier<? extends InputStream>> map = getResourcePackTypeMap(type);
-            if (map == null) return Collections.emptyList();
-
-            return map.keySet().stream()
+            if (!isServerData(type)) return Collections.emptyList();
+            return data.keySet().stream()
                     .filter(location->location.getNamespace().equals(namespace))
                     .filter(location->location.getPath().split("/").length < maxFolderWalk)
                     .filter(location->location.getPath().startsWith(path))
@@ -107,21 +93,19 @@ public class DataPackLoader implements IPackFinder {
 
         @Override
         public boolean hasResource(@NotNull ResourcePackType type, @NotNull ResourceLocation location) {
-            Map<ResourceLocation, Supplier<? extends InputStream>> map = getResourcePackTypeMap(type);
-            return map != null && map.containsKey(location);
+            return isServerData(type) && data.containsKey(location);
         }
 
         @Override
         public @NotNull Set<String> getNamespaces(@NotNull ResourcePackType type) {
-            Map<ResourceLocation, Supplier<? extends InputStream>> map = getResourcePackTypeMap(type);
-            if (map == null) return Collections.emptySet();
-            return map.keySet().stream().map(ResourceLocation::getNamespace).collect(Collectors.toSet());
+            if (!isServerData(type)) return Collections.emptySet();
+            return data.keySet().stream().map(ResourceLocation::getNamespace).collect(Collectors.toSet());
         }
 
         @Nullable
         @Override
         public <T> T getMetadataSection(@NotNull IMetadataSectionSerializer<T> serializer) {
-            return serializer.fromJson(meta);
+            return serializer.fromJson(META);
         }
 
         @Override
