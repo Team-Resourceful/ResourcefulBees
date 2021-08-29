@@ -6,8 +6,6 @@ public class TraitConstants {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
 
-    //TODO consider changing these to enums (TraitType) for better (de)serialization and error handling
-    // if possible - may affect custom defined data.
     public static final String WITHER = "wither";
     public static final String BLAZE = "blaze";
     public static final String CAN_SWIM = "can_swim";

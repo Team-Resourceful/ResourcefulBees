@@ -3,12 +3,7 @@
     "flower": "forge:storage_blocks/quartz",
     "maxTimeInHive": 1000
   },
-  "HoneycombData": {
-    "type": "DEFAULT",
-    "color": "#D4CABA",
-    "item": "resourcefulbees:nether_quartz_honeycomb",
-    "block": "resourcefulbees:nether_quartz_honeycomb_block"
-  },
+  "honeycombVariation": "diamond",
   "RenderData": {
     "texture": "custom/bee",
     "layers": [

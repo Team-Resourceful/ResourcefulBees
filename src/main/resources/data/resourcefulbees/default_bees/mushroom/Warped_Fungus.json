@@ -8,12 +8,7 @@
     "texture": "mushroom/bee_warped",
     "model": "resourcefulbees:geo/flower_moss.geo.json"
   },
-  "HoneycombData": {
-    "type": "DEFAULT",
-    "color": "#A42429",
-    "item": "resourcefulbees:warped_fungus_honeycomb",
-    "block": "resourcefulbees:warped_fungus_honeycomb_block"
-  },
+  "honeycombVariation": "diamond",
   "CentrifugeData": {
     "itemOutputs": [
       {

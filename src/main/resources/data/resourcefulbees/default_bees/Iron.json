@@ -3,12 +3,7 @@
     "flower": "forge:storage_blocks/iron",
     "maxTimeInHive": 600
   },
-  "HoneycombData": {
-    "type": "DEFAULT",
-    "color": "#ffcc99",
-    "item": "resourcefulbees:iron_honeycomb",
-    "block": "resourcefulbees:iron_honeycomb_block"
-  },
+  "honeycombVariation": "diamond",
   "RenderData": {
     "texture": "ores/iron/iron_bee",
     "model": "resourcefulbees:geo/crystal.geo.json",

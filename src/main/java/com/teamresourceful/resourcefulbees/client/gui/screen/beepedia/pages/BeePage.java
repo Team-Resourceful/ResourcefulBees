@@ -9,9 +9,8 @@ import com.teamresourceful.resourcefulbees.api.beedata.mutation.ItemMutation;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.teamresourceful.resourcefulbees.client.gui.widget.TabImageButton;
-import com.teamresourceful.resourcefulbees.common.config.Config;
+import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.item.BeeJar;
-import com.teamresourceful.resourcefulbees.common.lib.enums.HoneycombType;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.utils.BeepediaUtils;
 import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
@@ -114,7 +113,7 @@ public class BeePage extends BeepediaPage {
     }
 
     private void registerMutationListPage(int subX, int subY) {
-        if (beeData.getMutationData().hasMutation() && (!Config.BEEPEDIA_HIDE_LOCKED.get() || beeUnlocked)) {
+        if (beeData.getMutationData().hasMutation() && (!CommonConfig.BEEPEDIA_HIDE_LOCKED.get() || beeUnlocked)) {
             mutationsPage = Pair.of(
                     getTabButton(new ItemStack(ModItems.MUTATION_ICON.get()), onPress -> setSubPage(SubPageType.MUTATIONS),
                             new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.mutations")),
@@ -125,7 +124,7 @@ public class BeePage extends BeepediaPage {
     }
 
     private void registerTraitListPage(int subX, int subY) {
-        if (beeData.getTraitData().hasTraits() && !beeData.getTraitData().getTraits().isEmpty() && (!Config.BEEPEDIA_HIDE_LOCKED.get() || beeUnlocked)) {
+        if (beeData.getTraitData().hasTraits() && !beeData.getTraitData().getTraits().isEmpty() && (!CommonConfig.BEEPEDIA_HIDE_LOCKED.get() || beeUnlocked)) {
             traitListPage = Pair.of(
                     getTabButton(new ItemStack(ModItems.TRAIT_ICON.get()), onPress -> setSubPage(SubPageType.TRAIT_LIST),
                             new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.traits")),
@@ -136,7 +135,7 @@ public class BeePage extends BeepediaPage {
     }
 
     private void registerHoneycombPage(int subX, int subY) {
-        if (!beeData.getHoneycombData().getHoneycombType().equals(HoneycombType.NONE) && (!Config.BEEPEDIA_HIDE_LOCKED.get() || beeUnlocked)) {
+        if (beeData.getHoneycombData() != null && (!CommonConfig.BEEPEDIA_HIDE_LOCKED.get() || beeUnlocked)) {
             centrifugePage = Pair.of(
                     getTabButton(new ItemStack(Items.HONEYCOMB), onPress -> setSubPage(SubPageType.HONEYCOMB),
                             new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.honeycombs")),

@@ -3,12 +3,7 @@
     "flower": "minecraft:flowers",
     "maxTimeInHive": 600
   },
-  "HoneycombData": {
-    "type": "DEFAULT",
-    "color": "#0C9F0A",
-    "item": "resourcefulbees:beeper_honeycomb",
-    "block": "resourcefulbees:beeper_honeycomb_block"
-  },
+  "honeycombVariation": "diamond",
   "RenderData": {
     "texture": "/creeper/creeper_bee",
     "layers": [

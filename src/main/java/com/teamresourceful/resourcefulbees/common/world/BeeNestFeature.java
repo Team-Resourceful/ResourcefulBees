@@ -3,7 +3,8 @@ package com.teamresourceful.resourcefulbees.common.world;
 import com.mojang.serialization.Codec;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
-import com.teamresourceful.resourcefulbees.common.config.Config;
+import com.teamresourceful.resourcefulbees.client.config.ClientConfig;
+import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeeHiveTileEntityAccessor;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
@@ -110,7 +111,7 @@ public class BeeNestFeature extends Feature<NoFeatureConfig> {
     }
 
     private void logMissingBiome(RegistryKey<Biome> biomeKey){
-        if (biomeKey != null && Config.SHOW_DEBUG_INFO.get()) {
+        if (biomeKey != null && ClientConfig.SHOW_DEBUG_INFO.get()) {
             ResourcefulBees.LOGGER.warn("*****************************************************");
             ResourcefulBees.LOGGER.warn("Could not load bees into nest during chunk generation");
             ResourcefulBees.LOGGER.warn("Biome: {}", biomeKey.location());
@@ -137,7 +138,7 @@ public class BeeNestFeature extends Feature<NoFeatureConfig> {
 
         if (tileEntity instanceof TieredBeehiveTileEntity) {
             TieredBeehiveTileEntity nestTE = (TieredBeehiveTileEntity) tileEntity;
-            int maxBees = Math.round(Config.HIVE_MAX_BEES.get() * 0.5f);
+            int maxBees = Math.round(CommonConfig.HIVE_MAX_BEES.get() * 0.5f);
 
             for (int i = rand.nextInt(maxBees); i < maxBees ; i++) {
                 if (biomeKey != null && BeeRegistry.isSpawnableBiome(biomeKey.location())) {
@@ -152,7 +153,7 @@ public class BeeNestFeature extends Feature<NoFeatureConfig> {
 
     @Override
     public boolean place(@NotNull ISeedReader worldIn, @NotNull ChunkGenerator generator, @NotNull Random rand, @NotNull BlockPos pos, @NotNull NoFeatureConfig config) {
-        if(!Config.GENERATE_BEE_NESTS.get()) {
+        if(!CommonConfig.GENERATE_BEE_NESTS.get()) {
             return false;
         }
 

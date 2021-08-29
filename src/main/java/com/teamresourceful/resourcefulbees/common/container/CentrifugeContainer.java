@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.container;
 
 import com.teamresourceful.resourcefulbees.common.capabilities.MultiFluidTank;
-import com.teamresourceful.resourcefulbees.common.config.Config;
+import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.ContainerAccessor;
 import com.teamresourceful.resourcefulbees.common.tileentity.CentrifugeTileEntity;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModContainers;
@@ -135,7 +135,7 @@ public class CentrifugeContainer extends ContainerWithStackMove {
     }
 
     public int getMaxEnergy() {
-        return centrifugeTileEntity.getCapability(CapabilityEnergy.ENERGY).map(IEnergyStorage::getMaxEnergyStored).orElse(Config.MAX_CENTRIFUGE_RF.get());
+        return centrifugeTileEntity.getCapability(CapabilityEnergy.ENERGY).map(IEnergyStorage::getMaxEnergyStored).orElse(CommonConfig.MAX_CENTRIFUGE_RF.get());
     }
 
     public FluidStack getFluidInTank(int i) {

@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.item.dispenser;
 
 import com.teamresourceful.resourcefulbees.common.block.TieredBeehiveBlock;
-import com.teamresourceful.resourcefulbees.common.config.Config;
+import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import net.minecraft.block.BeehiveBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.DispenserBlock;
@@ -33,7 +33,7 @@ public class ShearsDispenserBehavior extends DefaultDispenseItemBehavior {
         BlockPos blockpos = source.getPos().relative(source.getBlockState().getValue(DispenserBlock.FACING));
         BlockState blockstate = world.getBlockState(blockpos);
         if (blockstate.getBlock() instanceof TieredBeehiveBlock) {
-            if (Config.ALLOW_SHEARS.get()) {
+            if (CommonConfig.ALLOW_SHEARS.get()) {
                 int i = blockstate.getValue(BeehiveBlock.HONEY_LEVEL);
                 if (i >= 5) {
                     if (stack.hurt(1, world.random, null)) {

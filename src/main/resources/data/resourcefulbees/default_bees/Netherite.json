@@ -3,12 +3,7 @@
     "flower": "forge:storage_blocks/netherite",
     "maxTimeInHive": 600
   },
-  "HoneycombData": {
-    "type": "DEFAULT",
-    "color": "#654740",
-    "item": "resourcefulbees:netherite_honeycomb",
-    "block": "resourcefulbees:netherite_honeycomb_block"
-  },
+  "honeycombVariation": "diamond",
   "RenderData": {
     "texture": "ores/netherite/netherite_bee",
     "ColorData": {

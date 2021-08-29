@@ -2,12 +2,7 @@
   "CoreData":{
     "flower": "forge:storage_blocks/emerald"
   },
-  "HoneycombData": {
-    "type": "DEFAULT",
-    "color": "#18eb09",
-    "item": "resourcefulbees:emerald_honeycomb",
-    "block": "resourcefulbees:emerald_honeycomb_block"
-  },
+  "honeycombVariation": "diamond",
   "RenderData": {
     "texture": "ores/emerald/emerald_bee",
     "model": "resourcefulbees:geo/crystal.geo.json",

@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.common.registry.custom;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
 import com.teamresourceful.resourcefulbees.api.beedata.spawning.BiomeType;
-import com.teamresourceful.resourcefulbees.common.config.Config;
+import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.lib.ModPaths;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.utils.FileUtils;
@@ -30,7 +30,7 @@ public class BiomeDictionary extends HashMap<String, BiomeType> {
 
     public static void build() {
         LOGGER.info("Building Biome Dictionary...");
-        if (Boolean.TRUE.equals(Config.GENERATE_BIOME_DICTIONARIES.get())) {
+        if (Boolean.TRUE.equals(CommonConfig.GENERATE_BIOME_DICTIONARIES.get())) {
             FileUtils.setupDefaultFiles("/data/resourcefulbees/biome_dictionary", ModPaths.BIOME_DICTIONARY);
         }
         FileUtils.streamFilesAndParse(ModPaths.BIOME_DICTIONARY, BiomeDictionary::parseType, "Could not stream biome dictionary!!");

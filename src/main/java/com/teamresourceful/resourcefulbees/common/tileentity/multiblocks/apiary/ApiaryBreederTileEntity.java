@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary
 import com.teamresourceful.resourcefulbees.api.ICustomBee;
 import com.teamresourceful.resourcefulbees.api.beedata.breeding.BreedData;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
-import com.teamresourceful.resourcefulbees.common.config.Config;
+import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.container.ApiaryBreederContainer;
 import com.teamresourceful.resourcefulbees.common.container.AutomationSensitiveItemStackHandler;
 import com.teamresourceful.resourcefulbees.common.item.BeeJar;
@@ -52,7 +52,7 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
     private final ApiaryBreederTileEntity.TileStackHandler tileStackHandler = new ApiaryBreederTileEntity.TileStackHandler(29);
     private final LazyOptional<IItemHandler> lazyOptional = LazyOptional.of(this::getTileStackHandler);
     private int[] time = {0, 0, 0, 0, 0};
-    private int totalTime = Config.APIARY_MAX_BREED_TIME.get();
+    private int totalTime = CommonConfig.APIARY_MAX_BREED_TIME.get();
     private int numberOfBreeders = 1;
 
     protected final IIntArray times = new IIntArray() {
@@ -449,7 +449,7 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
         }
 
         private void updateBreedTime(TileStackHandler tileStackHandler) {
-            int newTotalTime = Config.APIARY_MAX_BREED_TIME.get();
+            int newTotalTime = CommonConfig.APIARY_MAX_BREED_TIME.get();
             for (int i = 0; i < 4; i++) {
                 if (!tileStackHandler.getStackInSlot(getUpgradeSlots()[i]).isEmpty()) {
                     ItemStack upgradeItem = tileStackHandler.getStackInSlot(getUpgradeSlots()[i]);

@@ -6,7 +6,7 @@ import com.teamresourceful.resourcefulbees.api.beedata.outputs.BlockOutput;
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.EntityOutput;
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.ItemOutput;
 import com.teamresourceful.resourcefulbees.api.beedata.traits.TraitData;
-import com.teamresourceful.resourcefulbees.common.config.Config;
+import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.entity.goals.*;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TraitConstants;
@@ -96,7 +96,7 @@ public class ResourcefulBee extends CustomBeeEntity {
         if (hasMutation) {
             this.goalSelector.addGoal(7, new ResourcefulBee.FindPollinationTargetGoal2());
         }
-        if (!Config.MANUAL_MODE.get()) this.goalSelector.addGoal(8, new BeeWanderGoal(this));
+        if (!CommonConfig.MANUAL_MODE.get()) this.goalSelector.addGoal(8, new BeeWanderGoal(this));
         this.goalSelector.addGoal(9, new SwimGoal(this));
     }
 
@@ -316,7 +316,7 @@ public class ResourcefulBee extends CustomBeeEntity {
 
         this.setTarget(null);
 
-        ((BeeEntityInvoker)this).callSetFlag(4, Config.BEE_DIES_FROM_STING.get() && this.getCombatData().removeStingerOnAttack());
+        ((BeeEntityInvoker)this).callSetFlag(4, CommonConfig.BEE_DIES_FROM_STING.get() && this.getCombatData().removeStingerOnAttack());
         this.playSound(SoundEvents.BEE_STING, 1.0F, 1.0F);
 
         return flag;
@@ -336,7 +336,7 @@ public class ResourcefulBee extends CustomBeeEntity {
     }
 
     private boolean canPoison(TraitData info) {
-        return (Config.BEES_INFLICT_POISON.get() && this.getCombatData().inflictsPoison()) && info.hasTraits() && !info.hasPotionDamageEffects() && !info.hasDamageTypes();
+        return (CommonConfig.BEES_INFLICT_POISON.get() && this.getCombatData().inflictsPoison()) && info.hasTraits() && !info.hasPotionDamageEffects() && !info.hasDamageTypes();
     }
 
     private void explode(int radius) {
@@ -472,7 +472,7 @@ public class ResourcefulBee extends CustomBeeEntity {
 
         @Override
         public void dropHive() {
-            if (!Config.MANUAL_MODE.get()) {
+            if (!CommonConfig.MANUAL_MODE.get()) {
                 super.dropHive();
             }  // double check blacklist as it may need to be cleared - epic
         }
@@ -501,7 +501,7 @@ public class ResourcefulBee extends CustomBeeEntity {
 
         @Override
         public boolean canBeeUse() {
-            if (!Config.MANUAL_MODE.get()) {
+            if (!CommonConfig.MANUAL_MODE.get()) {
                 return super.canBeeUse();
             }
             return false;

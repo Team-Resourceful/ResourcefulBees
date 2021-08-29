@@ -3,13 +3,13 @@ package com.teamresourceful.resourcefulbees.api;
 import com.google.gson.JsonObject;
 import com.teamresourceful.resourcefulbees.api.beedata.CombatData;
 import com.teamresourceful.resourcefulbees.api.beedata.CoreData;
-import com.teamresourceful.resourcefulbees.api.beedata.HoneycombData;
 import com.teamresourceful.resourcefulbees.api.beedata.breeding.BeeFamily;
 import com.teamresourceful.resourcefulbees.api.beedata.breeding.BreedData;
 import com.teamresourceful.resourcefulbees.api.beedata.centrifuge.CentrifugeData;
 import com.teamresourceful.resourcefulbees.api.beedata.mutation.MutationData;
 import com.teamresourceful.resourcefulbees.api.beedata.render.RenderData;
 import com.teamresourceful.resourcefulbees.api.beedata.spawning.SpawnData;
+import com.teamresourceful.resourcefulbees.api.honeycombdata.OutputVariation;
 import net.minecraft.entity.AgeableEntity;
 
 /**
@@ -35,7 +35,7 @@ public interface ICustomBee {
 
     CoreData getCoreData();
 
-    HoneycombData getHoneycombData();
+    OutputVariation getHoneycombData();
 
     RenderData getRenderData();
 

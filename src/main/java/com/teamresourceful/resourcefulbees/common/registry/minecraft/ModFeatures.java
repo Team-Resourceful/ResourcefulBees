@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.registry.minecraft;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.common.config.Config;
+import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.world.BeeNestFeature;
 import net.minecraft.util.ResourceLocation;
@@ -33,21 +33,21 @@ public class ModFeatures {
         public static final ConfiguredFeature<?, ?> OVERWORLD_NESTS = BEE_NEST_FEATURE.get()
                 .configured(IFeatureConfig.NONE)
                 .decorated(Placement.HEIGHTMAP_WORLD_SURFACE.configured(NoPlacementConfig.INSTANCE))
-                .chance(Config.OVERWORLD_NEST_GENERATION_CHANCE.get())
+                .chance(CommonConfig.OVERWORLD_NEST_GENERATION_CHANCE.get())
                 .squared()
                 .countRandom(3);
 
         public static final ConfiguredFeature<?, ?> THE_END_NESTS = BEE_NEST_FEATURE.get()
                 .configured(IFeatureConfig.NONE)
                 .decorated(Placement.HEIGHTMAP_WORLD_SURFACE.configured(NoPlacementConfig.INSTANCE))
-                .chance(Config.END_NEST_GENERATION_CHANCE.get())
+                .chance(CommonConfig.END_NEST_GENERATION_CHANCE.get())
                 .squared()
                 .countRandom(2);
 
         public static final ConfiguredFeature<?, ?> NETHER_NESTS = BEE_NEST_FEATURE.get()
                 .configured(IFeatureConfig.NONE)
                 .decorated(Features.Placements.RANGE_10_20_ROOFED)
-                .chance(Config.NETHER_NEST_GENERATION_CHANCE.get())
+                .chance(CommonConfig.NETHER_NEST_GENERATION_CHANCE.get())
                 .squared()
                 .countRandom(4);
 

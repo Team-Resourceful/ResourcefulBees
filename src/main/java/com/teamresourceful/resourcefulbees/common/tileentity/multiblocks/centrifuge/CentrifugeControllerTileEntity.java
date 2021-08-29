@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.centri
 import com.teamresourceful.resourcefulbees.common.block.multiblocks.centrifuge.CentrifugeCasingBlock;
 import com.teamresourceful.resourcefulbees.common.block.multiblocks.centrifuge.CentrifugeControllerBlock;
 import com.teamresourceful.resourcefulbees.common.capabilities.CustomEnergyStorage;
-import com.teamresourceful.resourcefulbees.common.config.Config;
+import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.container.CentrifugeMultiblockContainer;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModContainers;
 import com.teamresourceful.resourcefulbees.common.tileentity.CentrifugeTileEntity;
@@ -83,10 +83,10 @@ public class CentrifugeControllerTileEntity extends CentrifugeTileEntity {
     public int getMaxTankCapacity() { return TANK_CAPACITY; }
 
     @Override
-    public int getRecipeTime(int i) { return getRecipe(i) != null ? Math.max(5, getRecipe(i).getMultiblockTime()) : Config.GLOBAL_CENTRIFUGE_RECIPE_TIME.get(); }
+    public int getRecipeTime(int i) { return getRecipe(i) != null ? Math.max(5, getRecipe(i).getMultiblockTime()) : CommonConfig.GLOBAL_CENTRIFUGE_RECIPE_TIME.get(); }
 
     @Override
-    protected boolean canProcessRecipe(int i) { return recipes.get(i) != null && (!Config.MULTIBLOCK_RECIPES_ONLY.get() || recipes.get(i).isMultiblock()); }
+    protected boolean canProcessRecipe(int i) { return recipes.get(i) != null && (!CommonConfig.MULTIBLOCK_RECIPES_ONLY.get() || recipes.get(i).isMultiblock()); }
 
     //endregion
 
@@ -129,7 +129,7 @@ public class CentrifugeControllerTileEntity extends CentrifugeTileEntity {
 
     @Override
     protected CustomEnergyStorage createEnergy() {
-        return new CustomEnergyStorage(Config.MAX_CENTRIFUGE_RF.get() * 5, 500, 0) {
+        return new CustomEnergyStorage(CommonConfig.MAX_CENTRIFUGE_RF.get() * 5, 500, 0) {
             @Override
             protected void onEnergyChanged() { setChanged(); }
         };

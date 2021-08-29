@@ -7,7 +7,7 @@ import com.teamresourceful.resourcefulbees.common.block.CentrifugeBlock;
 import com.teamresourceful.resourcefulbees.common.capabilities.CustomEnergyStorage;
 import com.teamresourceful.resourcefulbees.common.capabilities.MultiFluidTank;
 import com.teamresourceful.resourcefulbees.common.network.packets.SyncGUIMessage;
-import com.teamresourceful.resourcefulbees.common.config.Config;
+import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.container.AutomationSensitiveItemStackHandler;
 import com.teamresourceful.resourcefulbees.common.container.CentrifugeContainer;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
@@ -224,7 +224,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
 
     protected void processRecipe(int i) {
         if (canProcess(i)) {
-            energyStorage.consumeEnergy(Config.RF_TICK_CENTRIFUGE.get());
+            energyStorage.consumeEnergy(CommonConfig.RF_TICK_CENTRIFUGE.get());
             ++time[i];
             processCompleted[i] = time[i] >= getRecipeTime(i);
             this.dirty = true;
@@ -265,7 +265,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
     }
 
     protected boolean canProcessEnergy() {
-        return energyStorage.getEnergyStored() >= Config.RF_TICK_CENTRIFUGE.get();
+        return energyStorage.getEnergyStored() >= CommonConfig.RF_TICK_CENTRIFUGE.get();
     }
 
     public CentrifugeRecipe getRecipe(int i) {
@@ -308,7 +308,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
     }
 
     public int getRecipeTime(int i) {
-        return getRecipe(i) != null ? Math.max(5, getRecipe(i).getTime()) : Config.GLOBAL_CENTRIFUGE_RECIPE_TIME.get();
+        return getRecipe(i) != null ? Math.max(5, getRecipe(i).getTime()) : CommonConfig.GLOBAL_CENTRIFUGE_RECIPE_TIME.get();
     }
     //endregion
 
@@ -515,7 +515,7 @@ public class CentrifugeTileEntity extends TileEntity implements ITickableTileEnt
     }
 
     protected CustomEnergyStorage createEnergy() {
-        return new CustomEnergyStorage(Config.MAX_CENTRIFUGE_RF.get(), Config.MAX_CENTRIFUGE_RECEIVE_RATE.get(), 0) {
+        return new CustomEnergyStorage(CommonConfig.MAX_CENTRIFUGE_RF.get(), CommonConfig.MAX_CENTRIFUGE_RECEIVE_RATE.get(), 0) {
             @Override
             protected void onEnergyChanged() {
                 setChanged();

@@ -4,8 +4,7 @@ package com.teamresourceful.resourcefulbees.common.tileentity;
 
 import com.teamresourceful.resourcefulbees.api.ICustomBee;
 import com.teamresourceful.resourcefulbees.common.block.TieredBeehiveBlock;
-import com.teamresourceful.resourcefulbees.common.lib.enums.HoneycombType;
-import com.teamresourceful.resourcefulbees.common.config.Config;
+import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BTEBeeAccessor;
@@ -71,9 +70,9 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
 
     public float getTierModifier() { return tierModifier; }
 
-    public int getMaxCombs() { return Math.round((float) Config.HIVE_MAX_COMBS.get() * getTierModifier()); }
+    public int getMaxCombs() { return Math.round((float) CommonConfig.HIVE_MAX_COMBS.get() * getTierModifier()); }
 
-    public int getMaxBees() { return Math.round((float) Config.HIVE_MAX_BEES.get() * getTierModifier()); }
+    public int getMaxBees() { return Math.round((float) CommonConfig.HIVE_MAX_BEES.get() * getTierModifier()); }
 
     public void recalculateHoneyLevel() {
         float combsInHive = this.getHoneycombs().size();
@@ -120,8 +119,8 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
                             vanillaBeeEntity.dropOffNectar();
                             int i = getHoneyLevel(state);
                             if (i < 5) {
-                                if (entity instanceof ICustomBee && !((ICustomBee)entity).getHoneycombData().getHoneycombType().equals(HoneycombType.NONE)) {
-                                    honeycomb = ((ICustomBee)entity).getHoneycombData().getHoneycomb().getDefaultInstance();
+                                if (entity instanceof ICustomBee && ((ICustomBee)entity).getHoneycombData() != null) {
+                                    honeycomb = ((ICustomBee)entity).getHoneycombData().getHiveOutput(tier);
                                 }
 
                                 if (!honeycomb.isEmpty()) this.honeycombs.add(0, honeycomb);

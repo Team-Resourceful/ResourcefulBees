@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.api.beedata.spawning;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.beedata.CodecUtils;
-import com.teamresourceful.resourcefulbees.common.config.Config;
+import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.lib.enums.LightLevel;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BiomeDictionary;
 import net.minecraft.entity.EntityType;
@@ -96,7 +96,7 @@ public class SpawnData {
      * the associated bees spawn to biomes.
      */
     public MobSpawnInfo.Spawners getSpawnerData(EntityType<?> entityType, boolean isFlowerForest) {
-        return new MobSpawnInfo.Spawners(entityType, isFlowerForest ? spawnWeight + Config.BEE_FLOWER_FOREST_MULTIPLIER.get() : spawnWeight, minGroupSize, maxGroupSize);
+        return new MobSpawnInfo.Spawners(entityType, isFlowerForest ? spawnWeight + CommonConfig.BEE_FLOWER_FOREST_MULTIPLIER.get() : spawnWeight, minGroupSize, maxGroupSize);
     }
 
     /**
@@ -203,7 +203,7 @@ public class SpawnData {
     }
 
     private void addBiomesFromTag(ResourceLocation resourceLocation) {
-        if (Config.USE_FORGE_DICTIONARIES.get()) {
+        if (CommonConfig.USE_FORGE_DICTIONARIES.get()) {
             net.minecraftforge.common.BiomeDictionary.Type type = BiomeDictionary.getForgeType(resourceLocation);
             if (type != null) {
                 spawnableBiomes.addAll(BiomeDictionary.getForgeBiomeLocations(type));
@@ -216,7 +216,7 @@ public class SpawnData {
     }
 
     private void removeBiomesFromTag(ResourceLocation resourceLocation) {
-        if (Config.USE_FORGE_DICTIONARIES.get()) {
+        if (CommonConfig.USE_FORGE_DICTIONARIES.get()) {
             net.minecraftforge.common.BiomeDictionary.Type type = BiomeDictionary.getForgeType(resourceLocation);
             if (type != null) {
                 spawnableBiomes.removeAll(BiomeDictionary.getForgeBiomeLocations(type));

@@ -5,7 +5,6 @@ import com.teamresourceful.resourcefulbees.api.ICustomBee;
 import com.teamresourceful.resourcefulbees.api.beedata.CombatData;
 import com.teamresourceful.resourcefulbees.api.beedata.CoreData;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
-import com.teamresourceful.resourcefulbees.api.beedata.HoneycombData;
 import com.teamresourceful.resourcefulbees.api.beedata.breeding.BeeFamily;
 import com.teamresourceful.resourcefulbees.api.beedata.breeding.BreedData;
 import com.teamresourceful.resourcefulbees.api.beedata.centrifuge.CentrifugeData;
@@ -13,7 +12,8 @@ import com.teamresourceful.resourcefulbees.api.beedata.mutation.MutationData;
 import com.teamresourceful.resourcefulbees.api.beedata.render.RenderData;
 import com.teamresourceful.resourcefulbees.api.beedata.spawning.SpawnData;
 import com.teamresourceful.resourcefulbees.api.beedata.traits.TraitData;
-import com.teamresourceful.resourcefulbees.common.config.Config;
+import com.teamresourceful.resourcefulbees.api.honeycombdata.OutputVariation;
+import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.AnimalEntityAccessor;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
@@ -110,7 +110,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee, IAnimat
         return customBeeData.getCoreData();
     }
 
-    public HoneycombData getHoneycombData() {
+    public OutputVariation getHoneycombData() {
         return customBeeData.getHoneycombData();
     }
 
@@ -210,7 +210,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee, IAnimat
                 }
             }
         } else {
-            if (Config.BEES_DIE_IN_VOID.get() && this.position().y <= 0) {
+            if (CommonConfig.BEES_DIE_IN_VOID.get() && this.position().y <= 0) {
                 this.remove();
             }
             if (!hasCustomName() && this.tickCount % 100 == 0) {

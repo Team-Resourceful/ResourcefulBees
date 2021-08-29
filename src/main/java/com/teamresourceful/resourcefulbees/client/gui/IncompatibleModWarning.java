@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.client.gui;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.teamresourceful.resourcefulbees.common.config.Config;
+import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
@@ -30,7 +30,7 @@ public class IncompatibleModWarning {
 
     private static void guiOpened(GuiOpenEvent event) {
         Screen curr = event.getGui();
-        if (isPerformantLoaded && !hasBeenShownOnce && (curr instanceof WorldSelectionScreen || curr instanceof ServerListScreen) && !Config.BYPASS_PERFORMANT_CHECK.get()) {
+        if (isPerformantLoaded && !hasBeenShownOnce && (curr instanceof WorldSelectionScreen || curr instanceof ServerListScreen) && !CommonConfig.BYPASS_PERFORMANT_CHECK.get()) {
             event.setGui(new ModWarningScreen(curr));
             hasBeenShownOnce = true;
         }

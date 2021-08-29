@@ -4,7 +4,7 @@ import com.teamresourceful.resourcefulbees.api.honeydata.HoneyBottleData;
 import com.teamresourceful.resourcefulbees.common.block.CustomHoneyBlock;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.network.packets.SyncGUIMessage;
-import com.teamresourceful.resourcefulbees.common.config.Config;
+import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.container.AutomationSensitiveItemStackHandler;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
@@ -42,8 +42,8 @@ public abstract class AbstractHoneyTankContainer extends AbstractHoneyTank imple
 
     public float getProcessEmptyPercent() {
         if (!canProcessFluid()) return 0;
-        if (processingEmpty == Config.HONEY_PROCESS_TIME.get()) return 1;
-        return processingEmpty / (float) Config.HONEY_PROCESS_TIME.get();
+        if (processingEmpty == CommonConfig.HONEY_PROCESS_TIME.get()) return 1;
+        return processingEmpty / (float) CommonConfig.HONEY_PROCESS_TIME.get();
     }
 
     public void setTileStackHandler(AutomationSensitiveItemStackHandler tileStackHandler) {
@@ -210,7 +210,7 @@ public abstract class AbstractHoneyTankContainer extends AbstractHoneyTank imple
     @Override
     public void tick() {
         if (canProcessFluid()) {
-            if (processingEmpty >= Config.HONEY_PROCESS_TIME.get()) {
+            if (processingEmpty >= CommonConfig.HONEY_PROCESS_TIME.get()) {
                 processFluid();
                 processingEmpty = 0;
             }

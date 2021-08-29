@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.tileentity;
 
-import com.teamresourceful.resourcefulbees.common.config.Config;
+import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
 import net.minecraft.block.BlockState;
@@ -22,7 +22,7 @@ public class HoneyPipeTileEntity extends TileEntity implements ITickableTileEnti
 
     private Direction inputSide = null;
 
-    final FluidTank tank = new FluidTank(Config.MAX_PIPE_FLOW.get(), BeeInfoUtils.getHoneyPredicate());
+    final FluidTank tank = new FluidTank(CommonConfig.MAX_PIPE_FLOW.get(), BeeInfoUtils.getHoneyPredicate());
     private final LazyOptional<IFluidHandler> fluidOptional = LazyOptional.of(this::getFluidTank);
 
     public HoneyPipeTileEntity() {

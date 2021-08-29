@@ -3,12 +3,7 @@
     "flower": "forge:storage_blocks/lapis",
     "maxTimeInHive": 600
   },
-  "HoneycombData": {
-    "type": "DEFAULT",
-    "color": "#345ec3",
-    "item": "resourcefulbees:lapis_honeycomb",
-    "block": "resourcefulbees:lapis_honeycomb_block"
-  },
+  "honeycombVariation": "diamond",
   "RenderData": {
     "texture": "ores/lapis/lapis_bee",
     "model": "resourcefulbees:geo/crystal.geo.json",

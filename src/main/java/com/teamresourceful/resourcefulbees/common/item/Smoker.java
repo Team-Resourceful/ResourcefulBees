@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.item;
 
-import com.teamresourceful.resourcefulbees.common.config.Config;
+import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.tileentity.TieredBeehiveTileEntity;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
@@ -89,7 +89,7 @@ public class Smoker extends Item {
 
     @Override
     public int getMaxDamage(ItemStack stack) {
-        return Config.SMOKER_DURABILITY.get();
+        return CommonConfig.SMOKER_DURABILITY.get();
     }
 
     @Override

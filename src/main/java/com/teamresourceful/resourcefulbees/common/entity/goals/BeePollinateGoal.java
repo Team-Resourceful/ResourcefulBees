@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.entity.goals;
 
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
-import com.teamresourceful.resourcefulbees.common.config.Config;
+import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeeEntityAccessor;
 import com.teamresourceful.resourcefulbees.common.mixin.invokers.BeeEntityInvoker;
 import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
@@ -54,7 +54,7 @@ public class BeePollinateGoal extends Goal {
             return false;
         } else if (bee.getRandom().nextFloat() < 0.7F) {
             return false;
-        } else if ((!Config.MANUAL_MODE.get() || bee.getCoreData().getEntityFlower().isPresent()) && bee.getSavedFlowerPos() == null && (bee.tickCount < 20 || bee.tickCount % 5 == 0)) {
+        } else if ((!CommonConfig.MANUAL_MODE.get() || bee.getCoreData().getEntityFlower().isPresent()) && bee.getSavedFlowerPos() == null && (bee.tickCount < 20 || bee.tickCount % 5 == 0)) {
             Optional<BlockPos> optional = this.findFlower(5.0D);
             if (optional.isPresent()) {
                 bee.setSavedFlowerPos(optional.get());
@@ -132,7 +132,7 @@ public class BeePollinateGoal extends Goal {
     }
 
     public void clearTask() {
-        if (!Config.MANUAL_MODE.get()) {
+        if (!CommonConfig.MANUAL_MODE.get()) {
             bee.setSavedFlowerPos(null);
             bee.setFlowerEntityID(-1);
             boundingBox = null;

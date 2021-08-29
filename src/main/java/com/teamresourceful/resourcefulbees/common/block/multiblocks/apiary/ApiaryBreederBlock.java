@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.block.multiblocks.apiary;
 
-import com.teamresourceful.resourcefulbees.common.config.Config;
+import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary.ApiaryBreederTileEntity;
 import com.teamresourceful.resourcefulbees.common.utils.TooltipBuilder;
 import net.minecraft.block.Block;
@@ -73,7 +73,7 @@ public class ApiaryBreederBlock extends Block {
         tooltip.addAll(new TooltipBuilder()
                 .addTranslatableTip("block.resourcefulbees.apiary_breeder.tooltip.info", TextFormatting.GOLD)
                 .addTip("block.resourcefulbees.apiary_breeder.tooltip.info1", TextFormatting.GOLD)
-                .appendText(String.format("%1$s ticks", Config.APIARY_MAX_BREED_TIME.get()), TextFormatting.GOLD)
+                .appendText(String.format("%1$s ticks", CommonConfig.APIARY_MAX_BREED_TIME.get()), TextFormatting.GOLD)
                 .addTip("block.resourcefulbees.apiary_breeder.tooltip.info2", TextFormatting.GOLD)
                 .build());
         super.appendHoverText(stack, worldIn, tooltip, flagIn);

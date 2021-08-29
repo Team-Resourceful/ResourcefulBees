@@ -2,17 +2,16 @@ package com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary
 
 import com.teamresourceful.resourcefulbees.api.IBeeRegistry;
 import com.teamresourceful.resourcefulbees.api.ICustomBee;
-import com.teamresourceful.resourcefulbees.api.beedata.HoneycombData;
 import com.teamresourceful.resourcefulbees.api.beedata.breeding.BeeFamily;
 import com.teamresourceful.resourcefulbees.api.beedata.breeding.BreedData;
-import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryOutputType;
-import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTab;
-import com.teamresourceful.resourcefulbees.common.lib.enums.HoneycombType;
+import com.teamresourceful.resourcefulbees.api.honeycombdata.OutputVariation;
 import com.teamresourceful.resourcefulbees.common.container.ApiaryStorageContainer;
 import com.teamresourceful.resourcefulbees.common.container.AutomationSensitiveItemStackHandler;
 import com.teamresourceful.resourcefulbees.common.item.BeeJar;
 import com.teamresourceful.resourcefulbees.common.item.UpgradeItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
+import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryOutputType;
+import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTab;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
@@ -196,16 +195,16 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
     }
 
     public void deliverHoneycomb(BeeEntity entity, int apiaryTier) {
-        if (entity instanceof ICustomBee && !((ICustomBee) entity).getHoneycombData().getHoneycombType().equals(HoneycombType.NONE)) {
-            depositItemStack(((ICustomBee) entity).getHoneycombData().createApiaryOutput(apiaryTier - 5));
+        if (entity instanceof ICustomBee && ((ICustomBee) entity).getHoneycombData() != null) {
+            depositItemStack(((ICustomBee) entity).getHoneycombData().getApiaryOutput(apiaryTier - 5));
         } else if (!(entity instanceof ICustomBee)) {
             depositItemStack(getVanillaOutput(apiaryTier - 5));
         }
     }
 
     private static ItemStack getVanillaOutput(int apiaryTier) {
-        ItemStack itemstack = (HoneycombData.DEFAULT_APIARY_OUTPUTS.get(apiaryTier) == ApiaryOutputType.BLOCK) ? VANILLA_HONEYCOMB_BLOCK.copy() : VANILLA_HONEYCOMB.copy();
-        itemstack.setCount(HoneycombData.DEFAULT_APIARY_AMOUNTS.get(apiaryTier));
+        ItemStack itemstack = (OutputVariation.DEFAULT_APIARY_OUTPUT_TYPES.get(apiaryTier) == ApiaryOutputType.BLOCK) ? VANILLA_HONEYCOMB_BLOCK.copy() : VANILLA_HONEYCOMB.copy();
+        itemstack.setCount(OutputVariation.DEFAULT_APIARY_AMOUNTS.get(apiaryTier));
         return itemstack;
     }
 

@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.client.gui.screen;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.client.gui.widget.TabImageButton;
-import com.teamresourceful.resourcefulbees.common.config.Config;
+import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.container.ValidatedApiaryContainer;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTab;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
@@ -132,7 +132,7 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
                 this.menu.selectBee(0);
             }
             exportButton.active = this.menu.getSelectedBee() != -1;
-            importButton.active = apiaryTileEntity.getBeeCount() < Config.APIARY_MAX_BEES.get();
+            importButton.active = apiaryTileEntity.getBeeCount() < CommonConfig.APIARY_MAX_BEES.get();
             storageTabButton.active = apiaryTileEntity.getApiaryStorage() != null;
 
             this.menu.setBeeList(Arrays.copyOf(apiaryTileEntity.bees.keySet().toArray(), apiaryTileEntity.getBeeCount(), String[].class));
@@ -159,7 +159,7 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
 
     @Override
     protected void renderLabels(@NotNull MatrixStack matrix, int mouseX, int mouseY) {
-        String s = String.format("(%1$s/%2$s) Bees", apiaryTileEntity.getBeeCount(), Config.APIARY_MAX_BEES.get());
+        String s = String.format("(%1$s/%2$s) Bees", apiaryTileEntity.getBeeCount(), CommonConfig.APIARY_MAX_BEES.get());
         this.font.draw(matrix, s, 4, 7, 0x404040);
 
         for (Widget widget : this.buttons) {

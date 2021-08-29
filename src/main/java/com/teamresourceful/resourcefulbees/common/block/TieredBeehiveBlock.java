@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.block;
 
-import com.teamresourceful.resourcefulbees.common.config.Config;
+import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.item.UpgradeItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
@@ -97,7 +97,7 @@ public class TieredBeehiveBlock extends BeehiveBlock {
         ItemStack itemstack = player.getItemInHand(handIn);
 
         if (state.getValue(HONEY_LEVEL) >= 5) {
-            boolean isShear = Config.ALLOW_SHEARS.get() && itemstack.getItem().is(BeeInfoUtils.getItemTag(SHEARS_TAG));
+            boolean isShear = CommonConfig.ALLOW_SHEARS.get() && itemstack.getItem().is(BeeInfoUtils.getItemTag(SHEARS_TAG));
             boolean isScraper = itemstack.getItem().equals(ModItems.SCRAPER.get());
 
             if (isShear || isScraper) {
@@ -213,10 +213,10 @@ public class TieredBeehiveBlock extends BeehiveBlock {
                 //.appendText(String.valueOf(localTier))
                 //.applyStyle(ChatFormatting.GOLD)
                 .addTranslatableTip("block.resourcefulbees.beehive.tooltip.max_bees")
-                .appendText(" " + Math.round(Config.HIVE_MAX_BEES.get() * localTierModifier))
+                .appendText(" " + Math.round(CommonConfig.HIVE_MAX_BEES.get() * localTierModifier))
                 .applyStyle(TextFormatting.GOLD)
                 .addTranslatableTip("block.resourcefulbees.beehive.tooltip.max_combs")
-                .appendText(" " + Math.round(Config.HIVE_MAX_COMBS.get() * localTierModifier))
+                .appendText(" " + Math.round(CommonConfig.HIVE_MAX_COMBS.get() * localTierModifier))
                 .applyStyle(TextFormatting.GOLD)
                 .build());
 

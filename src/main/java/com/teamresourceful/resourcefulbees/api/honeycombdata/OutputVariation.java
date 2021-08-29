@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.beedata.CodecUtils;
-import com.teamresourceful.resourcefulbees.common.config.Config;
+import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryOutputType;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Unmodifiable;
@@ -18,8 +18,8 @@ import java.util.function.Consumer;
 @Unmodifiable
 public class OutputVariation {
 
-    private static final List<Integer> DEFAULT_APIARY_AMOUNTS = Arrays.asList(Config.T1_APIARY_QUANTITY.get(), Config.T2_APIARY_QUANTITY.get(), Config.T3_APIARY_QUANTITY.get(), Config.T4_APIARY_QUANTITY.get());
-    private static final List<ApiaryOutputType> DEFAULT_APIARY_OUTPUT_TYPES = Arrays.asList(Config.T1_APIARY_OUTPUT.get(), Config.T2_APIARY_OUTPUT.get(), Config.T3_APIARY_OUTPUT.get(), Config.T4_APIARY_OUTPUT.get());
+    public static final List<Integer> DEFAULT_APIARY_AMOUNTS = Arrays.asList(CommonConfig.T1_APIARY_QUANTITY.get(), CommonConfig.T2_APIARY_QUANTITY.get(), CommonConfig.T3_APIARY_QUANTITY.get(), CommonConfig.T4_APIARY_QUANTITY.get());
+    public static final List<ApiaryOutputType> DEFAULT_APIARY_OUTPUT_TYPES = Arrays.asList(CommonConfig.T1_APIARY_OUTPUT.get(), CommonConfig.T2_APIARY_OUTPUT.get(), CommonConfig.T3_APIARY_OUTPUT.get(), CommonConfig.T4_APIARY_OUTPUT.get());
     private static final String MISSING_ID = "Identifier is REQUIRED!";
     private static final String MISSING_APIARY_COMB = "Default comb must be present when list is empty and config contains combs!!!";
     private static final String MISSING_APIARY_BLOCK = "Default block must be present when list is empty and config contains blocks!!!";

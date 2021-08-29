@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.common.init;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
-import com.teamresourceful.resourcefulbees.common.config.Config;
+import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.lib.ModPaths;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.custom.HoneycombRegistry;
@@ -26,7 +26,7 @@ public class HoneycombSetup {
             setupDevCombs();
         }*/
 
-        if (Boolean.TRUE.equals(Config.GENERATE_DEFAULTS.get())) {
+        if (Boolean.TRUE.equals(CommonConfig.GENERATE_DEFAULTS.get())) {
             FileUtils.setupDefaultFiles("/data/resourcefulbees/default_honeycombs", ModPaths.HONEYCOMBS);
         }
         LOGGER.info("Loading Custom Honeycombs...");

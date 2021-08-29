@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.common.tileentity;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.network.packets.SyncGUIMessage;
-import com.teamresourceful.resourcefulbees.common.config.Config;
+import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.container.AutomationSensitiveItemStackHandler;
 import com.teamresourceful.resourcefulbees.common.container.HoneyTankContainer;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
@@ -111,8 +111,8 @@ public class HoneyTankTileEntity extends AbstractHoneyTankContainer {
 
     public float getProcessFillPercent() {
         if (!canProcessFill()) return 0;
-        if (processingFill == Config.HONEY_PROCESS_TIME.get()) return 1;
-        return processingFill / (float) Config.HONEY_PROCESS_TIME.get();
+        if (processingFill == CommonConfig.HONEY_PROCESS_TIME.get()) return 1;
+        return processingFill / (float) CommonConfig.HONEY_PROCESS_TIME.get();
     }
 
     @Override
@@ -173,7 +173,7 @@ public class HoneyTankTileEntity extends AbstractHoneyTankContainer {
     @Override
     public void tick() {
         if (canProcessFill()) {
-            if (processingFill >= Config.HONEY_PROCESS_TIME.get()) {
+            if (processingFill >= CommonConfig.HONEY_PROCESS_TIME.get()) {
                 processFill();
                 processingFill = 0;
             }

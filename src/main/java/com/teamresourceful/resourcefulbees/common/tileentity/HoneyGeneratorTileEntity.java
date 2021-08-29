@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.common.tileentity;
 import com.teamresourceful.resourcefulbees.common.block.HoneyGenerator;
 import com.teamresourceful.resourcefulbees.common.capabilities.CustomEnergyStorage;
 import com.teamresourceful.resourcefulbees.common.network.packets.SyncGUIMessage;
-import com.teamresourceful.resourcefulbees.common.config.Config;
+import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.container.AutomationSensitiveItemStackHandler;
 import com.teamresourceful.resourcefulbees.common.container.HoneyGeneratorContainer;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
@@ -50,11 +50,11 @@ public class HoneyGeneratorTileEntity extends AbstractHoneyTankContainer impleme
 
     public static final int HONEY_BOTTLE_INPUT = 0;
     public static final int BOTTLE_OUTPUT = 1;
-    public static final int HONEY_DRAIN_AMOUNT = Config.HONEY_DRAIN_AMOUNT.get();
-    public static final int ENERGY_FILL_AMOUNT = Config.ENERGY_FILL_AMOUNT.get();
-    public static final int ENERGY_TRANSFER_AMOUNT = Config.ENERGY_TRANSFER_AMOUNT.get();
-    public static final int MAX_ENERGY_CAPACITY = Config.MAX_ENERGY_CAPACITY.get();
-    public static final int MAX_TANK_STORAGE = Config.MAX_TANK_STORAGE.get();
+    public static final int HONEY_DRAIN_AMOUNT = CommonConfig.HONEY_DRAIN_AMOUNT.get();
+    public static final int ENERGY_FILL_AMOUNT = CommonConfig.ENERGY_FILL_AMOUNT.get();
+    public static final int ENERGY_TRANSFER_AMOUNT = CommonConfig.ENERGY_TRANSFER_AMOUNT.get();
+    public static final int MAX_ENERGY_CAPACITY = CommonConfig.MAX_ENERGY_CAPACITY.get();
+    public static final int MAX_TANK_STORAGE = CommonConfig.MAX_TANK_STORAGE.get();
 
 
     private final HoneyGeneratorTileEntity.TileStackHandler tileStackHandler = new HoneyGeneratorTileEntity.TileStackHandler(5, getAcceptor(), getRemover());

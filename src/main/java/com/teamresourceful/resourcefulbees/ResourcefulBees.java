@@ -1,11 +1,12 @@
 package com.teamresourceful.resourcefulbees;
 
 import com.teamresourceful.resourcefulbees.api.ResourcefulBeesAPI;
+import com.teamresourceful.resourcefulbees.client.config.ClientConfig;
 import com.teamresourceful.resourcefulbees.client.event.ClientEventHandlers;
 import com.teamresourceful.resourcefulbees.client.gui.IncompatibleModWarning;
 import com.teamresourceful.resourcefulbees.client.pets.PetLoader;
 import com.teamresourceful.resourcefulbees.common.compat.top.TopCompat;
-import com.teamresourceful.resourcefulbees.common.config.Config;
+import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.config.ConfigLoader;
 import com.teamresourceful.resourcefulbees.common.data.DataGen;
 import com.teamresourceful.resourcefulbees.common.data.RecipeBuilder;
@@ -41,7 +42,7 @@ import software.bernie.geckolib3.GeckoLib;
 
 @Mod("resourcefulbees")
 public class ResourcefulBees {
-    //TESTING COMMIT
+
     public static final String MOD_ID = "resourcefulbees";
     public static final Logger LOGGER = LogManager.getLogger();
 
@@ -53,10 +54,10 @@ public class ResourcefulBees {
         ResourcefulBeesAPI.setTraitRegistry(TraitRegistry.getRegistry());
         DefaultTraitAbilities.registerDefaultAbilities(TraitAbilityRegistry.getRegistry());
 
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.CommonConfig.COMMON_CONFIG, "resourcefulbees/common.toml");
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Config.ClientConfig.CLIENT_CONFIG, "resourcefulbees/client.toml");
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfig.COMMON_CONFIG, "resourcefulbees/common.toml");
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfig.CLIENT_CONFIG, "resourcefulbees/client.toml");
 
-        ConfigLoader.load(Config.CommonConfig.COMMON_CONFIG, "resourcefulbees/common.toml");
+        ConfigLoader.load(CommonConfig.COMMON_CONFIG, "resourcefulbees/common.toml");
 
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> IncompatibleModWarning::init);
 
@@ -69,9 +70,9 @@ public class ResourcefulBees {
         RegistryHandler.registerDynamicBees();
         HoneySetup.setupHoney();
         RegistryHandler.registerDynamicHoney();
-        if (!FMLLoader.isProduction()) {
-            Config.GENERATE_DEFAULTS.set(false);
-            Config.GENERATE_DEFAULTS.save();
+        if (FMLLoader.isProduction()) {
+            CommonConfig.GENERATE_DEFAULTS.set(false);
+            CommonConfig.GENERATE_DEFAULTS.save();
         }
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener(RegistryHandler::addEntityAttributes);
@@ -105,7 +106,7 @@ public class ResourcefulBees {
     }
 
     @SubscribeEvent
-    public void onInterModEnqueue(InterModEnqueueEvent event) { // determine if TOP is on fabric - if not, add forge impl and find fabric alternatives
+    public void onInterModEnqueue(InterModEnqueueEvent event) {
         if (ModList.get().isLoaded("theoneprobe"))
             InterModComms.sendTo("theoneprobe", "getTheOneProbe", TopCompat::new);
     }
@@ -121,6 +122,6 @@ public class ResourcefulBees {
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ClientEventHandlers::registerPatreonRender);
         DataGen.generateCommonData();
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> PetLoader::loadAPI);
-        //HoneycombRegistry.getRegistry().regenerateVariationData();   uncomment this for testing purposes
+        HoneycombRegistry.getRegistry().regenerateVariationData();
     }
 }

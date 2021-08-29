@@ -1,15 +1,13 @@
 package com.teamresourceful.resourcefulbees.common.data;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.api.IBeeRegistry;
-import com.teamresourceful.resourcefulbees.api.beedata.HoneycombData;
-import com.teamresourceful.resourcefulbees.api.beedata.centrifuge.CentrifugeData;
 import com.teamresourceful.resourcefulbees.api.honeydata.HoneyBottleData;
-import com.teamresourceful.resourcefulbees.common.config.Config;
-import com.teamresourceful.resourcefulbees.common.lib.enums.HoneycombType;
+import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
+import com.teamresourceful.resourcefulbees.common.item.HoneycombItem;
 import com.teamresourceful.resourcefulbees.common.mixin.RecipeManagerAccessorInvoker;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyRegistry;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.*;
@@ -20,16 +18,18 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 import static com.teamresourceful.resourcefulbees.ResourcefulBees.LOGGER;
 
+@SuppressWarnings("deprecation")
 public class RecipeBuilder implements IResourceManagerReloadListener {
     private static RecipeManager recipeManager;
-
-    private static final IBeeRegistry BEE_REGISTRY = BeeRegistry.getRegistry();
 
     private static void setRecipeManager(RecipeManager recipeManager) {
         RecipeBuilder.recipeManager = recipeManager;
@@ -37,33 +37,32 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
 
     @Override
     public void onResourceManagerReload(@NotNull IResourceManager resourceManager) {
-        LOGGER.info("Generating comb recipes for {} bees...", BEE_REGISTRY.getBees().size());
+        if (CommonConfig.HONEYCOMB_BLOCK_RECIPES.get()) {
+            LOGGER.info("Generating comb recipes for {} honeycombs...", ModItems.HONEYCOMB_ITEMS.getEntries().size());
+            ModItems.HONEYCOMB_ITEMS.getEntries().stream()
+                    .filter(RegistryObject::isPresent)
+                    .map(RegistryObject::get)
+                    .filter(HoneycombItem.class::isInstance)
+                    .map(HoneycombItem.class::cast)
+                    .filter(HoneycombItem::hasStorageBlockItem)
+                    .flatMap(comb -> Stream.of(makeHoneycombRecipe(comb), makeCombBlockToCombRecipe(comb)))
+                    .forEach(this::addRecipe);
+        }
 
-        BEE_REGISTRY.getBees().forEach((s, beeData) -> {
-            CentrifugeData centrifugeData = beeData.getCentrifugeData();
-            HoneycombData honeycombData = beeData.getHoneycombData();
-
-/*            if (centrifugeData.hasCentrifugeOutput() && honeycombData.getHoneycombType().equals(HoneycombType.DEFAULT)) {
-                addRecipe(this.makeCentrifugeRecipe(s, centrifugeData, honeycombData, 1));
-                addRecipe(this.makeCentrifugeRecipe(s, centrifugeData, honeycombData, 9));
-            }*/
-            if (Config.HONEYCOMB_BLOCK_RECIPES.get() && honeycombData.getHoneycombType().equals(HoneycombType.DEFAULT)) {
-                addRecipe(this.makeHoneycombRecipe(s, honeycombData));
-                addRecipe(this.makeCombBlockToCombRecipe(s, honeycombData));
-            }
-        });
-
-        if (Config.HONEY_BLOCK_RECIPES.get() && Config.HONEY_GENERATE_BLOCKS.get()) {
-            HoneyRegistry.getRegistry().getHoneyBottles().forEach((s, honeyData) -> {
-                if (honeyData.doGenerateHoneyBlock() && honeyData.doHoneyBlockRecipe()) {
-                    addRecipe(this.makeHoneyBlockRecipe(honeyData));
-                    addRecipe(this.makeHoneyBottleRecipe(honeyData));
-                    addRecipe(this.makeBottleToBucketRecipe(honeyData));
-                    addRecipe(this.makeBucketToBottleRecipe(honeyData));
-                    addRecipe(this.makeBlockToBucketRecipe(honeyData));
-                    addRecipe(this.makeBucketToBlockRecipe(honeyData));
-                }
-            });
+        if (CommonConfig.HONEY_BLOCK_RECIPES.get() && CommonConfig.HONEY_GENERATE_BLOCKS.get()) {
+            HoneyRegistry.getRegistry().getHoneyBottles().values().stream()
+                    .filter(data -> data.doGenerateHoneyBlock() && data.doHoneyBlockRecipe())
+                    .flatMap(data ->
+                        Stream.of(
+                            makeHoneyBlockRecipe(data),
+                            makeHoneyBottleRecipe(data),
+                            makeBottleToBucketRecipe(data),
+                            makeBucketToBottleRecipe(data),
+                            makeBlockToBucketRecipe(data),
+                            makeBucketToBlockRecipe(data)
+                        )
+                    )
+                    .forEach(this::addRecipe);
         }
     }
 
@@ -82,10 +81,10 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
         LOGGER.info("Adding Reload Listener: 'resourcefulbees recipe manager'");
     }
 
-    private IRecipe<?> makeHoneycombRecipe(String beeType, HoneycombData info) {
-        Ingredient honeycombItem = Ingredient.of(info.getHoneycomb());
+    private IRecipe<?> makeHoneycombRecipe(HoneycombItem comb) {
+        Ingredient honeycombItem = Ingredient.of(comb);
         return new ShapedRecipe(
-                new ResourceLocation(ResourcefulBees.MOD_ID, beeType + "_honeycomb_block"),
+                Objects.requireNonNull(comb.getStorageBlockItem().getRegistryName()),
                 "",
                 3,
                 3,
@@ -94,7 +93,7 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
                         honeycombItem, honeycombItem, honeycombItem,
                         honeycombItem, honeycombItem, honeycombItem
                 ),
-                new ItemStack(info.getHoneycombBlock())
+                new ItemStack(comb.getStorageBlockItem())
         );
     }
 
@@ -183,12 +182,12 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
         );
     }
 
-    private IRecipe<?> makeCombBlockToCombRecipe(String beeType, HoneycombData info) {
+    private IRecipe<?> makeCombBlockToCombRecipe(HoneycombItem comb) {
         return new ShapelessRecipe(
-                new ResourceLocation(ResourcefulBees.MOD_ID, beeType + "_block_to_honeycomb"),
+                Objects.requireNonNull(comb.getRegistryName()),
                 "",
-                new ItemStack(info.getHoneycomb(), 9),
-                NonNullList.of(Ingredient.EMPTY, Ingredient.of(new ItemStack(info.getHoneycombBlock())))
+                new ItemStack(comb, 9),
+                NonNullList.of(Ingredient.EMPTY, Ingredient.of(comb.getStorageBlockItem()))
         );
     }
 

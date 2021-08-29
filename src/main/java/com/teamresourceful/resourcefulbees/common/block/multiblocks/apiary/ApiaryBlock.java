@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.block.multiblocks.apiary;
 
-import com.teamresourceful.resourcefulbees.common.config.Config;
+import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryOutputType;
 import com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary.ApiaryTileEntity;
 import com.teamresourceful.resourcefulbees.common.utils.TooltipBuilder;
@@ -106,7 +106,7 @@ public class ApiaryBlock extends Block {
     {
       tooltip.addAll(new TooltipBuilder()
               .addTranslatableTip("block.resourcefulbees.beehive.tooltip.max_bees")
-              .appendText(" " + Config.APIARY_MAX_BEES.get())
+              .appendText(" " + CommonConfig.APIARY_MAX_BEES.get())
               .appendText(" " + I18n.get("block.resourcefulbees.beehive.tooltip.unique_bees"), TextFormatting.BOLD)
               .appendText( TextFormatting.GOLD + " Bees", TextFormatting.RESET)
               .applyStyle(TextFormatting.GOLD)
@@ -124,20 +124,20 @@ public class ApiaryBlock extends Block {
 
       switch (tier) {
         case 8:
-          outputTypeEnum = Config.T4_APIARY_OUTPUT.get();
-          outputQuantity = Config.T4_APIARY_QUANTITY.get();
+          outputTypeEnum = CommonConfig.T4_APIARY_OUTPUT.get();
+          outputQuantity = CommonConfig.T4_APIARY_QUANTITY.get();
           break;
         case 7:
-          outputTypeEnum = Config.T3_APIARY_OUTPUT.get();
-          outputQuantity = Config.T3_APIARY_QUANTITY.get();
+          outputTypeEnum = CommonConfig.T3_APIARY_OUTPUT.get();
+          outputQuantity = CommonConfig.T3_APIARY_QUANTITY.get();
           break;
         case 6:
-          outputTypeEnum = Config.T2_APIARY_OUTPUT.get();
-          outputQuantity = Config.T2_APIARY_QUANTITY.get();
+          outputTypeEnum = CommonConfig.T2_APIARY_OUTPUT.get();
+          outputQuantity = CommonConfig.T2_APIARY_QUANTITY.get();
           break;
         default:
-          outputTypeEnum = Config.T1_APIARY_OUTPUT.get();
-          outputQuantity = Config.T1_APIARY_QUANTITY.get();
+          outputTypeEnum = CommonConfig.T1_APIARY_OUTPUT.get();
+          outputQuantity = CommonConfig.T1_APIARY_QUANTITY.get();
       }
 
       String outputType = outputTypeEnum.equals(ApiaryOutputType.COMB) ? I18n.get("honeycomb.resourcefulbees") : I18n.get("honeycomb_block.resourcefulbees");

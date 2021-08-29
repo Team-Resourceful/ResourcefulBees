@@ -7,9 +7,9 @@ import com.teamresourceful.resourcefulbees.client.gui.screen.MechanicalCentrifug
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityIngredient;
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityIngredientFactory;
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityIngredientHelper;
-import com.teamresourceful.resourcefulbees.common.mixin.RecipeManagerAccessorInvoker;
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityRenderer;
 import com.teamresourceful.resourcefulbees.common.item.Beepedia;
+import com.teamresourceful.resourcefulbees.common.mixin.RecipeManagerAccessorInvoker;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
@@ -65,7 +65,7 @@ public class JEICompat implements IModPlugin {
         registration.addRecipeCatalyst(new ItemStack(ModItems.T2_APIARY_ITEM.get()), HiveCategory.ID);
         registration.addRecipeCatalyst(new ItemStack(ModItems.T3_APIARY_ITEM.get()), HiveCategory.ID);
         registration.addRecipeCatalyst(new ItemStack(ModItems.T4_APIARY_ITEM.get()), HiveCategory.ID);
-        for (ItemStack stack:HiveCategory.NESTS) registration.addRecipeCatalyst(stack, HiveCategory.ID);
+        for (ItemStack stack:HiveCategory.NESTS_0) registration.addRecipeCatalyst(stack, HiveCategory.ID);
         registration.addRecipeCatalyst(new ItemStack(ModItems.CENTRIFUGE_ITEM.get()), CentrifugeRecipeCategory.ID);
         registration.addRecipeCatalyst(new ItemStack(ModItems.MECHANICAL_CENTRIFUGE_ITEM.get()), CentrifugeRecipeCategory.ID);
         registration.addRecipeCatalyst(new ItemStack(ModItems.CENTRIFUGE_CONTROLLER_ITEM.get()), CentrifugeRecipeCategory.ID);
@@ -131,7 +131,6 @@ public class JEICompat implements IModPlugin {
 
             stats.append(aqua).append(" Base Health: ").append(purple).append(beeData.getCombatData().getBaseHealth()).append("\n");
             stats.append(aqua).append(" Attack Damage: ").append(purple).append(beeData.getCombatData().getAttackDamage()).append("\n");
-            stats.append(aqua).append(" Honeycomb Type: ").append(purple).append(StringUtils.capitalize(beeData.getHoneycombData().getHoneycombType().toString())).append("\n");
             stats.append(aqua).append(" Max Time in Hive: ").append(purple).append(beeData.getCoreData().getMaxTimeInHive()).append(" ticks\n");
 
             stats.append(aqua).append(" Has Mutation: ").append(purple).append(StringUtils.capitalize(String.valueOf(beeData.getMutationData().hasMutation()))).append("\n");

@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.tileentity;
 
-import com.teamresourceful.resourcefulbees.common.config.Config;
+import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.container.EnderBeeconContainer;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
@@ -48,7 +48,7 @@ public class EnderBeeconTileEntity extends AbstractHoneyTankContainer {
     private boolean playSound = true;
     private boolean showBeam = true;
 
-    private static final int FLUID_PULL_RATE = Config.BEECON_PULL_AMOUNT.get();
+    private static final int FLUID_PULL_RATE = CommonConfig.BEECON_PULL_AMOUNT.get();
 
     private List<BeeconEffect> effects;
     private int range = 1;
@@ -244,7 +244,7 @@ public class EnderBeeconTileEntity extends AbstractHoneyTankContainer {
     }
 
     public int getAdjustedRange() {
-        return range * Config.BEECON_RANGE_PER_EFFECT.get();
+        return range * CommonConfig.BEECON_RANGE_PER_EFFECT.get();
     }
 
     public int getRange() {
@@ -277,11 +277,11 @@ public class EnderBeeconTileEntity extends AbstractHoneyTankContainer {
     }
 
     public int getDrain() {
-        double base = Config.BEECON_BASE_DRAIN.get();
+        double base = CommonConfig.BEECON_BASE_DRAIN.get();
         for (BeeconEffect e : effects) {
             if (e.isActive()) base += e.getValue();
         }
-        base = (base * (range * Config.BEECON_RANGE_MULTIPLIER.get()));
+        base = (base * (range * CommonConfig.BEECON_RANGE_MULTIPLIER.get()));
         return (int) Math.ceil(base);
     }
 
@@ -307,10 +307,10 @@ public class EnderBeeconTileEntity extends AbstractHoneyTankContainer {
 
     public List<BeeconEffect> readEffectsFromNBT(CompoundNBT nbt) {
         List<BeeconEffect> beeconEffects = new LinkedList<>();
-        beeconEffects.add(new BeeconEffect(ModEffects.CALMING.get(), Config.BEECON_CALMING_VALUE.get(), nbt.getBoolean("calming")));
-        beeconEffects.add(new BeeconEffect(Effects.WATER_BREATHING, Config.BEECON_WATER_BREATHING_VALUE.get(), nbt.getBoolean("water_breathing")));
-        beeconEffects.add(new BeeconEffect(Effects.FIRE_RESISTANCE, Config.BEECON_FIRE_RESISTANCE_VALUE.get(), nbt.getBoolean("fire_resistance")));
-        beeconEffects.add(new BeeconEffect(Effects.REGENERATION, Config.BEECON_REGENERATION_VALUE.get(), nbt.getBoolean("regeneration")));
+        beeconEffects.add(new BeeconEffect(ModEffects.CALMING.get(), CommonConfig.BEECON_CALMING_VALUE.get(), nbt.getBoolean("calming")));
+        beeconEffects.add(new BeeconEffect(Effects.WATER_BREATHING, CommonConfig.BEECON_WATER_BREATHING_VALUE.get(), nbt.getBoolean("water_breathing")));
+        beeconEffects.add(new BeeconEffect(Effects.FIRE_RESISTANCE, CommonConfig.BEECON_FIRE_RESISTANCE_VALUE.get(), nbt.getBoolean("fire_resistance")));
+        beeconEffects.add(new BeeconEffect(Effects.REGENERATION, CommonConfig.BEECON_REGENERATION_VALUE.get(), nbt.getBoolean("regeneration")));
         return beeconEffects;
     }
 

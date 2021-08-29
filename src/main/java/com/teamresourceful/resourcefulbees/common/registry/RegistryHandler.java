@@ -6,7 +6,7 @@ import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.honeydata.HoneyBottleData;
 import com.teamresourceful.resourcefulbees.common.block.CustomHoneyBlock;
 import com.teamresourceful.resourcefulbees.common.block.CustomHoneyFluidBlock;
-import com.teamresourceful.resourcefulbees.common.config.Config;
+import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.entity.passive.ResourcefulBee;
 import com.teamresourceful.resourcefulbees.common.fluids.CustomHoneyFluid;
@@ -50,7 +50,7 @@ public class RegistryHandler {
         ModItems.initializeRegistries(bus);
         ModBlocks.initializeRegistries(bus);
         ModEffects.EFFECTS.register(bus);
-        ModFluids.FLUIDS.register(bus);
+        ModFluids.initializeRegistries(bus);
         ModEntities.ENTITY_TYPES.register(bus);
         ModBlockEntityTypes.TILE_ENTITY_TYPES.register(bus);
         ModPOIs.POIS.register(bus);
@@ -114,24 +114,24 @@ public class RegistryHandler {
     private static void registerHoneyBottle(String name, JsonObject honeyData) {
         HoneyBottleData honeyBottleData = HoneyBottleData.CODEC.parse(JsonOps.INSTANCE, honeyData)
                 .getOrThrow(false, s -> ResourcefulBees.LOGGER.error("Could not create Custom Honey Data for {} honey", name));
-        final RegistryObject<Item> customHoneyBottle = ModItems.ITEMS.register(name + "_honey_bottle", () -> new CustomHoneyBottleItem(honeyBottleData.getProperties(), honeyBottleData));
+        final RegistryObject<Item> customHoneyBottle = ModItems.HONEY_BOTTLE_ITEMS.register(name + "_honey_bottle", () -> new CustomHoneyBottleItem(honeyBottleData.getProperties(), honeyBottleData));
 
         honeyBottleData.setHoneyBottleRegistryObject(customHoneyBottle);
         honeyBottleData.setName(name);
 
-        if (Config.HONEY_GENERATE_BLOCKS.get() && honeyBottleData.doGenerateHoneyBlock()) {
-            final RegistryObject<Block> customHoneyBlock = ModBlocks.BLOCKS.register(name + "_honey_block", () -> new CustomHoneyBlock(honeyBottleData));
-            final RegistryObject<Item> customHoneyBlockItem = ModItems.ITEMS.register(name + "_honey_block", () -> new BlockItem(customHoneyBlock.get(), new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
+        if (CommonConfig.HONEY_GENERATE_BLOCKS.get() && honeyBottleData.doGenerateHoneyBlock()) {
+            final RegistryObject<Block> customHoneyBlock = ModBlocks.HONEY_BLOCKS.register(name + "_honey_block", () -> new CustomHoneyBlock(honeyBottleData));
+            final RegistryObject<Item> customHoneyBlockItem = ModItems.HONEY_BLOCK_ITEMS.register(name + "_honey_block", () -> new BlockItem(customHoneyBlock.get(), new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
 
             honeyBottleData.setHoneyBlockRegistryObject(customHoneyBlock);
             honeyBottleData.setHoneyBlockItemRegistryObject(customHoneyBlockItem);
         }
 
-        if (Config.HONEY_GENERATE_FLUIDS.get() && honeyBottleData.doGenerateHoneyFluid()) {
-            STILL_FLUIDS.put(name, ModFluids.FLUIDS.register(name + "_honey", () -> new CustomHoneyFluid.Source(makeProperties(name, honeyBottleData), honeyBottleData)));
-            FLOWING_FLUIDS.put(name, ModFluids.FLUIDS.register(name + "_honey_flowing", () -> new CustomHoneyFluid.Flowing(makeProperties(name, honeyBottleData), honeyBottleData)));
-            HONEY_BUCKETS.put(name, ModItems.ITEMS.register(name + "_honey_fluid_bucket", () -> new CustomHoneyBucketItem(STILL_FLUIDS.get(name), new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES).craftRemainder(Items.BUCKET).stacksTo(1), honeyBottleData)));
-            FLUID_BLOCKS.put(name, ModBlocks.BLOCKS.register(name + "_honey", () -> new CustomHoneyFluidBlock(STILL_FLUIDS.get(name), AbstractBlock.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops(), honeyBottleData)));
+        if (CommonConfig.HONEY_GENERATE_FLUIDS.get() && honeyBottleData.doGenerateHoneyFluid()) {
+            STILL_FLUIDS.put(name, ModFluids.STILL_HONEY_FLUIDS.register(name + "_honey", () -> new CustomHoneyFluid.Source(makeProperties(name, honeyBottleData), honeyBottleData)));
+            FLOWING_FLUIDS.put(name, ModFluids.FLOWING_HONEY_FLUIDS.register(name + "_honey_flowing", () -> new CustomHoneyFluid.Flowing(makeProperties(name, honeyBottleData), honeyBottleData)));
+            HONEY_BUCKETS.put(name, ModItems.HONEY_BUCKET_ITEMS.register(name + "_honey_fluid_bucket", () -> new CustomHoneyBucketItem(STILL_FLUIDS.get(name), new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES).craftRemainder(Items.BUCKET).stacksTo(1), honeyBottleData)));
+            FLUID_BLOCKS.put(name, ModBlocks.HONEY_FLUID_BLOCKS.register(name + "_honey", () -> new CustomHoneyFluidBlock(STILL_FLUIDS.get(name), AbstractBlock.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops(), honeyBottleData)));
 
             honeyBottleData.setHoneyStillFluidRegistryObject(STILL_FLUIDS.get(name));
             honeyBottleData.setHoneyFlowingFluidRegistryObject(FLOWING_FLUIDS.get(name));

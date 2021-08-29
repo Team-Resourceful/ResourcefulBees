@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.tileentity;
 
 import com.teamresourceful.resourcefulbees.common.network.packets.SyncGUIMessage;
-import com.teamresourceful.resourcefulbees.common.config.Config;
+import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.container.AutomationSensitiveItemStackHandler;
 import com.teamresourceful.resourcefulbees.common.container.HoneyCongealerContainer;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
@@ -47,8 +47,8 @@ public class HoneyCongealerTileEntity extends AbstractHoneyTank implements ITick
 
     public float getProcessPercent() {
         if (!canProcessHoney()) return 0;
-        if (processingFill == Config.HONEY_PROCESS_TIME.get() * Config.CONGEALER_TIME_MODIFIER.get()) return 1;
-        return processingFill / ((float) Config.HONEY_PROCESS_TIME.get() * Config.CONGEALER_TIME_MODIFIER.get());
+        if (processingFill == CommonConfig.HONEY_PROCESS_TIME.get() * CommonConfig.CONGEALER_TIME_MODIFIER.get()) return 1;
+        return processingFill / ((float) CommonConfig.HONEY_PROCESS_TIME.get() * CommonConfig.CONGEALER_TIME_MODIFIER.get());
     }
 
     @Override
@@ -112,7 +112,7 @@ public class HoneyCongealerTileEntity extends AbstractHoneyTank implements ITick
     @Override
     public void tick() {
         if (canProcessHoney()) {
-            if (processingFill >= Config.HONEY_PROCESS_TIME.get() * Config.CONGEALER_TIME_MODIFIER.get()) {
+            if (processingFill >= CommonConfig.HONEY_PROCESS_TIME.get() * CommonConfig.CONGEALER_TIME_MODIFIER.get()) {
                 processHoney();
                 processingFill = 0;
             }

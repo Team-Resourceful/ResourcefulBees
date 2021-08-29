@@ -27,6 +27,7 @@ import net.minecraftforge.client.event.RecipesUpdatedEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TagsUpdatedEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -109,23 +110,10 @@ public class ClientEventHandlers {
         RenderTypeLookup.setRenderLayer(ModBlocks.HONEY_GENERATOR.get(), RenderType.translucent());
 
         // bee nests need cutout for overlay
-        RenderTypeLookup.setRenderLayer(ModBlocks.OAK_BEE_NEST.get(), RenderType.cutout());
-        RenderTypeLookup.setRenderLayer(ModBlocks.SPRUCE_BEE_NEST.get(), RenderType.cutout());
-        RenderTypeLookup.setRenderLayer(ModBlocks.BIRCH_BEE_NEST.get(), RenderType.cutout());
-        RenderTypeLookup.setRenderLayer(ModBlocks.BROWN_MUSHROOM_BEE_NEST.get(), RenderType.cutout());
-        RenderTypeLookup.setRenderLayer(ModBlocks.CRIMSON_BEE_NEST.get(), RenderType.cutout());
-        RenderTypeLookup.setRenderLayer(ModBlocks.CRIMSON_NYLIUM_BEE_NEST.get(), RenderType.cutout());
-        RenderTypeLookup.setRenderLayer(ModBlocks.DARK_OAK_BEE_NEST.get(), RenderType.cutout());
-        RenderTypeLookup.setRenderLayer(ModBlocks.RED_MUSHROOM_BEE_NEST.get(), RenderType.cutout());
-        RenderTypeLookup.setRenderLayer(ModBlocks.WARPED_BEE_NEST.get(), RenderType.cutout());
-        RenderTypeLookup.setRenderLayer(ModBlocks.WARPED_NYLIUM_BEE_NEST.get(), RenderType.cutout());
-        RenderTypeLookup.setRenderLayer(ModBlocks.ACACIA_BEE_NEST.get(), RenderType.cutout());
-        RenderTypeLookup.setRenderLayer(ModBlocks.GRASS_BEE_NEST.get(), RenderType.cutout());
-        RenderTypeLookup.setRenderLayer(ModBlocks.JUNGLE_BEE_NEST.get(), RenderType.cutout());
-        RenderTypeLookup.setRenderLayer(ModBlocks.NETHER_BEE_NEST.get(), RenderType.cutout());
-        RenderTypeLookup.setRenderLayer(ModBlocks.PRISMARINE_BEE_NEST.get(), RenderType.cutout());
-        RenderTypeLookup.setRenderLayer(ModBlocks.PURPUR_BEE_NEST.get(), RenderType.cutout());
-        RenderTypeLookup.setRenderLayer(ModBlocks.WITHER_BEE_NEST.get(), RenderType.cutout());
+        ModBlocks.NEST_BLOCKS.getEntries().stream()
+                .filter(RegistryObject::isPresent)
+                .map(RegistryObject::get)
+                .forEach(nest -> RenderTypeLookup.setRenderLayer(nest, RenderType.cutout()));
 
         ItemModelPropertiesHandler.registerProperties();
         ClientRegistry.bindTileEntityRenderer(ModBlockEntityTypes.HONEY_TANK_TILE_ENTITY.get(), RenderHoneyTank::new);

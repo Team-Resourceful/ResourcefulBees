@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.init;
 
 import com.google.gson.JsonObject;
-import com.teamresourceful.resourcefulbees.common.config.Config;
+import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.ModPaths;
 import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyRegistry;
@@ -20,7 +20,7 @@ public class HoneySetup {
     }
 
     public static void setupHoney() {
-        if (Boolean.TRUE.equals(Config.GENERATE_DEFAULTS.get())) {
+        if (Boolean.TRUE.equals(CommonConfig.GENERATE_DEFAULTS.get())) {
             FileUtils.setupDefaultFiles("/data/resourcefulbees/default_honey", ModPaths.HONEY);
         }
 

@@ -10,7 +10,9 @@ import com.teamresourceful.resourcefulbees.api.beedata.mutation.MutationData;
 import com.teamresourceful.resourcefulbees.api.beedata.render.RenderData;
 import com.teamresourceful.resourcefulbees.api.beedata.spawning.SpawnData;
 import com.teamresourceful.resourcefulbees.api.beedata.traits.TraitData;
+import com.teamresourceful.resourcefulbees.api.honeycombdata.OutputVariation;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
+import com.teamresourceful.resourcefulbees.common.registry.custom.HoneycombRegistry;
 import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
@@ -28,7 +30,7 @@ public class CustomBeeData {
      * A default implementation of {@link CustomBeeData} that can be
      * used to prevent {@link NullPointerException}'s
      */
-    public static final CustomBeeData DEFAULT = new CustomBeeData(CoreData.DEFAULT, HoneycombData.DEFAULT, RenderData.DEFAULT, BreedData.DEFAULT, CentrifugeData.DEFAULT, CombatData.DEFAULT, MutationData.DEFAULT, SpawnData.DEFAULT, TraitData.DEFAULT);
+    public static final CustomBeeData DEFAULT = new CustomBeeData(CoreData.DEFAULT, "", RenderData.DEFAULT, BreedData.DEFAULT, CentrifugeData.DEFAULT, CombatData.DEFAULT, MutationData.DEFAULT, SpawnData.DEFAULT, TraitData.DEFAULT);
 
     /**
      * Returns a {@link Codec<CustomBeeData>} that can be parsed to create a
@@ -43,7 +45,7 @@ public class CustomBeeData {
     public static Codec<CustomBeeData> codec(String name) {
         return RecordCodecBuilder.create(instance -> instance.group(
                 CoreData.codec(name).fieldOf("CoreData").orElseGet((Consumer<String>) s -> ResourcefulBees.LOGGER.error("CoreData is REQUIRED!"), null).forGetter(CustomBeeData::getCoreData),
-                HoneycombData.CODEC.fieldOf("HoneycombData").orElse(HoneycombData.DEFAULT).forGetter(CustomBeeData::getHoneycombData),
+                Codec.STRING.fieldOf("honeycombVariation").orElse("").forGetter(s -> s.honeycombIdentifier),
                 RenderData.CODEC.fieldOf("RenderData").orElseGet((Consumer<String>) s -> ResourcefulBees.LOGGER.error("RenderData is REQUIRED!"), null).forGetter(CustomBeeData::getRenderData),
                 BreedData.codec(name).fieldOf("BreedData").orElse(BreedData.DEFAULT).forGetter(CustomBeeData::getBreedData),
                 CentrifugeData.CODEC.fieldOf("CentrifugeData").orElse(CentrifugeData.DEFAULT).forGetter(CustomBeeData::getCentrifugeData),
@@ -55,7 +57,7 @@ public class CustomBeeData {
     }
 
     protected CoreData coreData;
-    protected HoneycombData honeycombData;
+    protected String honeycombIdentifier;
     protected RenderData renderData;
     protected BreedData breedData;
     protected CentrifugeData centrifugeData;
@@ -68,9 +70,9 @@ public class CustomBeeData {
     protected EntityType<?> entityType;
     protected TranslationTextComponent displayName;
 
-    private CustomBeeData(CoreData coreData, HoneycombData honeycombData, RenderData renderData, BreedData breedData, CentrifugeData centrifugeData, CombatData combatData, MutationData mutationData, SpawnData spawnData, TraitData traitData) {
+    private CustomBeeData(CoreData coreData, String honeycombIdentifier, RenderData renderData, BreedData breedData, CentrifugeData centrifugeData, CombatData combatData, MutationData mutationData, SpawnData spawnData, TraitData traitData) {
         this.coreData = coreData;
-        this.honeycombData = honeycombData;
+        this.honeycombIdentifier = honeycombIdentifier;
         this.renderData = renderData;
         this.breedData = breedData;
         this.centrifugeData = centrifugeData;
@@ -86,7 +88,7 @@ public class CustomBeeData {
 
     private CustomBeeData(Mutable mutable) {
         this.coreData = mutable.coreData.toImmutable();
-        this.honeycombData = mutable.honeycombData.toImmutable();
+        this.honeycombIdentifier = mutable.honeycombIdentifier;
         this.renderData = mutable.renderData;
         this.breedData = mutable.breedData.toImmutable();
         this.centrifugeData = mutable.centrifugeData.toImmutable();
@@ -113,16 +115,16 @@ public class CustomBeeData {
     }
 
     /**
-     * Returns a {@link HoneycombData} object containing information regarding the
+     * Returns a {@link OutputVariation} object containing information regarding the
      * honeycomb a bee produces if it is specified to produce one.
      *
      * Omitting this object from the bee json results in a default object where the bee
      * <b>does not</b> produce a honeycomb.
      *
-     * @return Returns an immutable {@link HoneycombData} object.
+     * @return Returns an immutable {@link OutputVariation} object.
      */
-    public HoneycombData getHoneycombData() {
-        return honeycombData;
+    public OutputVariation getHoneycombData() {
+        return HoneycombRegistry.getOutputVariation(honeycombIdentifier);
     }
 
     /**
@@ -163,13 +165,13 @@ public class CustomBeeData {
     }
 
     /**
-     * Returns a {@link HoneycombData} object containing information regarding the
+     * Returns a {@link CombatData} object containing information regarding the
      * honeycomb a bee produces if it is specified to produce one.
      *
      * Omitting this object from the bee json results in a default object where the bee
      * <b>does not</b> produce a honeycomb.
      *
-     * @return Returns an immutable {@link HoneycombData} object.
+     * @return Returns an immutable {@link CombatData} object.
      */
     public CombatData getCombatData() {
         return combatData;
@@ -242,12 +244,12 @@ public class CustomBeeData {
 
     //TODO: javadoc this sub class
     public static class Mutable extends CustomBeeData {
-        public Mutable(CoreData coreData, HoneycombData honeycombData, RenderData renderData, BreedData breedData, CentrifugeData centrifugeData, CombatData combatData, MutationData mutationData, SpawnData spawnData, TraitData traitData) {
-            super(coreData, honeycombData, renderData, breedData, centrifugeData, combatData, mutationData, spawnData, traitData);
+        public Mutable(CoreData coreData, String honeycombIdentifier, RenderData renderData, BreedData breedData, CentrifugeData centrifugeData, CombatData combatData, MutationData mutationData, SpawnData spawnData, TraitData traitData) {
+            super(coreData, honeycombIdentifier, renderData, breedData, centrifugeData, combatData, mutationData, spawnData, traitData);
         }
 
         public Mutable() {
-            super(CoreData.DEFAULT, HoneycombData.DEFAULT, RenderData.DEFAULT, BreedData.DEFAULT, CentrifugeData.DEFAULT, CombatData.DEFAULT, MutationData.DEFAULT, SpawnData.DEFAULT, TraitData.DEFAULT);
+            super(CoreData.DEFAULT, "", RenderData.DEFAULT, BreedData.DEFAULT, CentrifugeData.DEFAULT, CombatData.DEFAULT, MutationData.DEFAULT, SpawnData.DEFAULT, TraitData.DEFAULT);
         }
 
         public Mutable setCoreData(CoreData coreData) {
@@ -255,8 +257,8 @@ public class CustomBeeData {
             return this;
         }
 
-        public Mutable setHoneycombData(HoneycombData honeycombData) {
-            this.honeycombData = honeycombData;
+        public Mutable setHoneycombData(String honeycombIdentifier) {
+            this.honeycombIdentifier = honeycombIdentifier;
             return this;
         }
 

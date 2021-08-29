@@ -9,7 +9,7 @@ import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.beedata.CodecUtils;
 import com.teamresourceful.resourcefulbees.api.beedata.centrifuge.CentrifugeFluidOutput;
 import com.teamresourceful.resourcefulbees.api.beedata.centrifuge.CentrifugeItemOutput;
-import com.teamresourceful.resourcefulbees.common.config.Config;
+import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeSerializers;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Container;
@@ -47,8 +47,8 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
             CodecUtils.INGREDIENT_CODEC.fieldOf("ingredient").forGetter(CentrifugeRecipe::getIngredient),
             CentrifugeItemOutput.CODEC.listOf().fieldOf("itemOutputs").orElse(new ArrayList<>()).forGetter(CentrifugeRecipe::getItemOutputs),
             CentrifugeFluidOutput.CODEC.listOf().fieldOf("fluidOutputs").orElse(new ArrayList<>()).forGetter(CentrifugeRecipe::getFluidOutputs),
-            Codec.INT.fieldOf("time").orElse(Config.GLOBAL_CENTRIFUGE_RECIPE_TIME.get()).forGetter(CentrifugeRecipe::getTime),
-            Codec.INT.fieldOf("multiblockTime").orElse((Config.GLOBAL_CENTRIFUGE_RECIPE_TIME.get()-Config.MULTIBLOCK_RECIPE_TIME_REDUCTION.get())*3).forGetter(CentrifugeRecipe::getMultiblockTime),
+            Codec.INT.fieldOf("time").orElse(CommonConfig.GLOBAL_CENTRIFUGE_RECIPE_TIME.get()).forGetter(CentrifugeRecipe::getTime),
+            Codec.INT.fieldOf("multiblockTime").orElse((CommonConfig.GLOBAL_CENTRIFUGE_RECIPE_TIME.get()- CommonConfig.MULTIBLOCK_RECIPE_TIME_REDUCTION.get())*3).forGetter(CentrifugeRecipe::getMultiblockTime),
             Codec.BOOL.fieldOf("multiblock").orElse(false).forGetter(CentrifugeRecipe::isMultiblock)
     ).apply(instance, CentrifugeRecipe::new));
 

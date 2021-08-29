@@ -3,12 +3,7 @@
     "flower": ["minecraft:bone_block"],
     "maxTimeInHive": 600
   },
-  "HoneycombData": {
-    "type": "DEFAULT",
-    "color": "#F6F2E6",
-    "item": "resourcefulbees:skeleton_honeycomb",
-    "block": "resourcefulbees:skeleton_honeycomb_block"
-  },
+  "honeycombVariation": "diamond",
   "RenderData": {
     "texture": "skeleton/skeleton_bee",
     "ColorData": {

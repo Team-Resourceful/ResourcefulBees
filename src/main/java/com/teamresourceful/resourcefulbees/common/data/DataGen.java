@@ -1,21 +1,24 @@
 package com.teamresourceful.resourcefulbees.common.data;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.honeydata.HoneyBottleData;
-import com.teamresourceful.resourcefulbees.common.config.Config;
+import com.teamresourceful.resourcefulbees.client.config.ClientConfig;
+import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.lib.ModPaths;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.lib.enums.HoneycombType;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BlockAccessor;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyRegistry;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModEntities;
 import com.teamresourceful.resourcefulbees.common.registry.custom.TraitRegistry;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModEntities;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityType;
+import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 import org.apache.commons.lang3.StringUtils;
@@ -46,7 +49,7 @@ public class DataGen {
     private static final Map<ResourceLocation, Set<ResourceLocation>> TAGS = new HashMap<>();
 
     public static void generateClientData() {
-        if (Boolean.TRUE.equals(Config.GENERATE_ENGLISH_LANG.get())) generateEnglishLang();
+        if (Boolean.TRUE.equals(ClientConfig.GENERATE_ENGLISH_LANG.get())) generateEnglishLang();
     }
 
     public static Map<ResourceLocation, Set<ResourceLocation>> getTags() {
@@ -62,11 +65,11 @@ public class DataGen {
 
         //custom honey data
         generateHoneyBottleTags();
-        if (Boolean.TRUE.equals(Config.HONEY_GENERATE_BLOCKS.get())) {
+        if (Boolean.TRUE.equals(CommonConfig.HONEY_GENERATE_BLOCKS.get())) {
             generateHoneyBlockTags();
             generateHoneyBlockItemTags();
         }
-        if (Boolean.TRUE.equals(Config.HONEY_GENERATE_FLUIDS.get())) {
+        if (Boolean.TRUE.equals(CommonConfig.HONEY_GENERATE_FLUIDS.get())) {
             generateHoneyTags();
         }
     }
@@ -89,15 +92,6 @@ public class DataGen {
             String displayName = StringUtils.replace(name, "_", " ");
             displayName = WordUtils.capitalizeFully(displayName);
 
-
-            if (customBeeData.getHoneycombData().getHoneycombType() == HoneycombType.DEFAULT) {
-                //block
-                generateLangEntry(builder, "block.resourcefulbees.", name, "_honeycomb_block", displayName, "Honeycomb Block");
-
-                //comb
-                generateLangEntry(builder, ITEM_RESOURCEFULBEES, name, "_honeycomb", displayName, "Honeycomb");
-            }
-
             //spawn egg
             generateLangEntry(builder, ITEM_RESOURCEFULBEES, name, "_bee_spawn_egg", displayName, "Bee Spawn Egg");
 
@@ -106,6 +100,21 @@ public class DataGen {
             generateLangEntry(builder, "entity.resourcefulbees.", name, "_bee", displayName, "Bee");
 
         }));
+
+        for (RegistryObject<Item> comb : ModItems.HONEYCOMB_ITEMS.getEntries()) {
+            if (!comb.isPresent()) continue;
+            String displayName = WordUtils.capitalizeFully(StringUtils.replace(comb.getId().getPath(), "_", " "));
+            //comb
+            generateLangEntry(builder, ITEM_RESOURCEFULBEES, comb.getId().getPath(), displayName);
+        }
+
+        for (RegistryObject<Block> combBlock : ModBlocks.HONEYCOMB_BLOCKS.getEntries()) {
+            if (!combBlock.isPresent()) continue;
+            String displayName = WordUtils.capitalizeFully(StringUtils.replace(combBlock.getId().getPath(), "_", " "));
+            //comb
+            generateLangEntry(builder, "block.resourcefulbees.", combBlock.getId().getPath(), displayName);
+        }
+
         HoneyRegistry.getRegistry().getHoneyBottles().forEach((name, honeyData) -> {
             String displayName = StringUtils.replace(name, "_", " ");
             displayName = WordUtils.capitalizeFully(displayName);
@@ -114,11 +123,11 @@ public class DataGen {
             generateLangEntry(builder, ITEM_RESOURCEFULBEES, name, "_honey_bottle", displayName, "Honey Bottle");
 
             //honey block
-            if (Boolean.TRUE.equals(Config.HONEY_GENERATE_BLOCKS.get()) && honeyData.doGenerateHoneyBlock()) {
+            if (Boolean.TRUE.equals(CommonConfig.HONEY_GENERATE_BLOCKS.get()) && honeyData.doGenerateHoneyBlock()) {
                 generateLangEntry(builder, "block.resourcefulbees.", name, "_honey_block", displayName, "Honey Block");
             }
 
-            if (Boolean.TRUE.equals(Config.HONEY_GENERATE_FLUIDS.get()) && honeyData.doGenerateHoneyFluid()) {
+            if (Boolean.TRUE.equals(CommonConfig.HONEY_GENERATE_FLUIDS.get()) && honeyData.doGenerateHoneyFluid()) {
                 //honey bucket
                 generateLangEntry(builder, ITEM_RESOURCEFULBEES, name, "_honey_fluid_bucket", displayName, "Honey Bucket");
 
@@ -156,8 +165,13 @@ public class DataGen {
                 .append("\",\n");
     }
 
-    private static ResourceLocation genModResourceLocation(CustomBeeData data, String suffix){
-        return new ResourceLocation(ResourcefulBees.MOD_ID, data.getCoreData().getName() + suffix);
+    private static void generateLangEntry(StringBuilder builder, String prefix, String name, String displayName){
+        builder.append("\"")
+                .append(prefix)
+                .append(name)
+                .append("\": \"")
+                .append(displayName)
+                .append("\",\n");
     }
 
     private static void generateValidApiaryTag() {
@@ -172,25 +186,25 @@ public class DataGen {
 
     private static void generateCombItemTags() {
         TAGS.put(new ResourceLocation(ResourcefulBees.MOD_ID, "tags/items/resourceful_honeycomb.json"),
-                BeeRegistry.getRegistry().getSetOfBees().stream()
-                        .filter(beeData -> beeData.getHoneycombData().getHoneycombType() == HoneycombType.DEFAULT)
-                        .map(beeData -> genModResourceLocation(beeData, "_honeycomb"))
-                        .collect(Collectors.toSet()));
+                ModItems.HONEYCOMB_ITEMS.getEntries().stream()
+                .filter(RegistryObject::isPresent)
+                .map(RegistryObject::getId)
+                .collect(Collectors.toSet()));
     }
 
     private static void generateCombBlockItemTags() {
         TAGS.put(new ResourceLocation(ResourcefulBees.MOD_ID, "tags/items/resourceful_honeycomb_block.json"),
-                BeeRegistry.getRegistry().getSetOfBees().stream()
-                        .filter(beeData -> beeData.getHoneycombData().getHoneycombType() == HoneycombType.DEFAULT)
-                        .map(beeData -> genModResourceLocation(beeData, "_honeycomb_block"))
+                ModBlocks.HONEYCOMB_BLOCKS.getEntries().stream()
+                        .filter(RegistryObject::isPresent)
+                        .map(RegistryObject::getId)
                         .collect(Collectors.toSet()));
     }
 
     private static void generateCombBlockTags() {
         TAGS.put(new ResourceLocation(ResourcefulBees.MOD_ID, "tags/blocks/resourceful_honeycomb_block.json"),
-                BeeRegistry.getRegistry().getSetOfBees().stream()
-                        .filter(beeData -> beeData.getHoneycombData().getHoneycombType() == HoneycombType.DEFAULT)
-                        .map(beeData -> genModResourceLocation(beeData, "_honeycomb_block"))
+                ModBlocks.HONEYCOMB_BLOCKS.getEntries().stream()
+                        .filter(RegistryObject::isPresent)
+                        .map(RegistryObject::getId)
                         .collect(Collectors.toSet()));
     }
 

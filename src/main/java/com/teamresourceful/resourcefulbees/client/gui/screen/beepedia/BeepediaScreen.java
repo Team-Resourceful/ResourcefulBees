@@ -6,7 +6,7 @@ import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.beedata.HoneycombData;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.*;
 import com.teamresourceful.resourcefulbees.client.gui.widget.*;
-import com.teamresourceful.resourcefulbees.common.config.Config;
+import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.entity.passive.KittenBee;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
@@ -732,7 +732,7 @@ public class BeepediaScreen extends Screen {
 
     public Map<String, BeePage> getBees(ItemStack bottleData) {
         return bees.entrySet().stream()
-                .filter(entrySet -> mapContainsBottle(entrySet.getValue(), bottleData) && (!Config.BEEPEDIA_HIDE_LOCKED.get() || entrySet.getValue().beeUnlocked))
+                .filter(entrySet -> mapContainsBottle(entrySet.getValue(), bottleData) && (!CommonConfig.BEEPEDIA_HIDE_LOCKED.get() || entrySet.getValue().beeUnlocked))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
@@ -744,7 +744,7 @@ public class BeepediaScreen extends Screen {
 
     public Map<String, BeePage> getBees(String traitName) {
         return bees.entrySet().stream()
-                .filter(entrySet -> mapContainsTraitName(entrySet.getValue(), traitName) && (!Config.BEEPEDIA_HIDE_LOCKED.get() || entrySet.getValue().beeUnlocked))
+                .filter(entrySet -> mapContainsTraitName(entrySet.getValue(), traitName) && (!CommonConfig.BEEPEDIA_HIDE_LOCKED.get() || entrySet.getValue().beeUnlocked))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 

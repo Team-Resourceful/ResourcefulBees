@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary
 
 import com.teamresourceful.resourcefulbees.api.ICustomBee;
 import com.teamresourceful.resourcefulbees.common.block.multiblocks.apiary.ApiaryBlock;
-import com.teamresourceful.resourcefulbees.common.config.Config;
+import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.container.AutomationSensitiveItemStackHandler;
 import com.teamresourceful.resourcefulbees.common.item.BeeJar;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
@@ -72,7 +72,7 @@ public class ApiaryTileEntity extends ApiaryController {
     }
 
     public int getMaxBees() {
-        return Config.APIARY_MAX_BEES.get();
+        return CommonConfig.APIARY_MAX_BEES.get();
     }
 
     public int getBeeCount() {

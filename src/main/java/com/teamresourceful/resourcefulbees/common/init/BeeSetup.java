@@ -5,7 +5,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.beedata.spawning.SpawnData;
-import com.teamresourceful.resourcefulbees.common.config.Config;
+import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.lib.ModPaths;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
@@ -36,11 +36,11 @@ public class BeeSetup {
     }
 
     public static void setupBees() {
-        if (Boolean.TRUE.equals(Config.ENABLE_EASTER_EGG_BEES.get())) {
+        if (Boolean.TRUE.equals(CommonConfig.ENABLE_EASTER_EGG_BEES.get())) {
             setupDevBees();
         }
 
-        if (Boolean.TRUE.equals(Config.GENERATE_DEFAULTS.get())) {
+        if (Boolean.TRUE.equals(CommonConfig.GENERATE_DEFAULTS.get())) {
             FileUtils.setupDefaultFiles("/data/resourcefulbees/default_bees", ModPaths.BEES);
         }
         LOGGER.info("Loading Custom Bees...");
@@ -74,7 +74,7 @@ public class BeeSetup {
         if (event.getName() != null && BeeRegistry.isSpawnableBiome(event.getName())) {
             boolean isFlowerForest = event.getName().equals(Biomes.FLOWER_FOREST.getRegistryName());
             BeeRegistry.getSpawnableBiome(event.getName()).forEach(customBeeData -> addSpawnSetting(customBeeData, event, isFlowerForest));
-            if (Boolean.TRUE.equals(Config.GENERATE_BEE_NESTS.get())) {
+            if (Boolean.TRUE.equals(CommonConfig.GENERATE_BEE_NESTS.get())) {
                 addNestFeature(event);
             }
         }

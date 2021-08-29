@@ -8,7 +8,7 @@ import com.teamresourceful.resourcefulbees.api.beedata.centrifuge.CentrifugeItem
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.FluidOutput;
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.ItemOutput;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
-import com.teamresourceful.resourcefulbees.common.config.Config;
+import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.fluids.CustomHoneyFluid;
 import com.teamresourceful.resourcefulbees.common.item.BeeSpawnEggItem;
 import com.teamresourceful.resourcefulbees.common.item.CustomHoneyBottleItem;
@@ -74,7 +74,7 @@ public class HoneycombPage extends BeeDataPage {
         counter = 0;
         max = hives.size();
 
-        hiveOutput = beeData.getHoneycombData().getHoneycomb().getDefaultInstance();
+        hiveOutput = beeData.getHoneycombData().getHiveOutput(0).copy();
 
         ClientWorld world = beepedia.getMinecraft().level;
         recipes.add(new RecipeObject(false, beeData, world));
@@ -163,7 +163,7 @@ public class HoneycombPage extends BeeDataPage {
 
     private void drawApiaryOutputs(MatrixStack matrix) {
         for (int i = 0; i < 4; i++) {
-            beepedia.drawSlot(matrix, beeData.getHoneycombData().createApiaryOutput(i), xPos + 43 + (i * 29), yPos + 82);
+            beepedia.drawSlot(matrix, beeData.getHoneycombData().getApiaryOutput(i), xPos + 43 + (i * 29), yPos + 82);
         }
     }
 
@@ -198,7 +198,7 @@ public class HoneycombPage extends BeeDataPage {
 
     private class RecipeObject {
         final boolean isBlock;
-        final ItemStack inputItem;
+        final ItemStack inputItem = ItemStack.EMPTY;
         Map<CentrifugeItemOutput, Integer> outputItems = new LinkedHashMap<>();
         Map<CentrifugeFluidOutput, Integer> outputFluids = new LinkedHashMap<>();
         final CentrifugeRecipe recipe;
@@ -208,11 +208,11 @@ public class HoneycombPage extends BeeDataPage {
             this.isBlock = isBlock;
             this.beeData = beeData;
 
-            if (isBlock) {
-                inputItem = beeData.getHoneycombData().getHoneycombBlock().getDefaultInstance();
-            } else {
-                inputItem = beeData.getHoneycombData().getHoneycomb().getDefaultInstance();
-            }
+//            if (isBlock) {
+//                inputItem = beeData.getHoneycombData().getHoneycombBlock().getDefaultInstance();
+//            } else {
+//                inputItem = beeData.getHoneycombData().getHoneycomb().getDefaultInstance();
+//            }
             Inventory inventory = new Inventory(inputItem);
             recipe = world.getRecipeManager().getRecipeFor(CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE, inventory, world).orElse(null);
             if (recipe != null) {
@@ -246,7 +246,7 @@ public class HoneycombPage extends BeeDataPage {
                 k[0]++;
             });
 
-            if (isBlock || Config.MULTIBLOCK_RECIPES_ONLY.get()) {
+            if (isBlock || CommonConfig.MULTIBLOCK_RECIPES_ONLY.get()) {
                 Minecraft.getInstance().getTextureManager().bind(multiblockOnlyImage);
                 AbstractGui.blit(matrix, xPos + 28, yPos + 45, 0, 0, 16, 16, 16, 16);
             }

@@ -3,12 +3,7 @@
     "flower": ["minecraft:coal_block"],
     "maxTimeInHive": 600
   },
-  "HoneycombData": {
-    "honeycombType": "DEFAULT",
-    "color": "#303030",
-    "item": "resourcefulbees:coal_honeycomb",
-    "block": "resourcefulbees:coal_honeycomb_block"
-  },
+  "honeycombVariation": "diamond",
   "RenderData": {
     "texture": "ores/coal/coal_bee",
     "model": "resourcefulbees:geo/crystal.geo.json",

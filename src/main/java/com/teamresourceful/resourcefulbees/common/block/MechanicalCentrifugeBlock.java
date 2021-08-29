@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.block;
 
-import com.teamresourceful.resourcefulbees.common.config.Config;
+import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.tileentity.MechanicalCentrifugeTileEntity;
 import com.teamresourceful.resourcefulbees.common.utils.TooltipBuilder;
 import net.minecraft.block.Block;
@@ -56,7 +56,7 @@ public class MechanicalCentrifugeBlock extends Block {
         MechanicalCentrifugeTileEntity tile = (MechanicalCentrifugeTileEntity) world.getBlockEntity(pos);
         if (player.isShiftKeyDown() && !(player instanceof FakePlayer)) {
             if (!world.isClientSide && tile != null && tile.canProcess(tile.getRecipe())) {
-                player.causeFoodExhaustion(Config.PLAYER_EXHAUSTION.get().floatValue());
+                player.causeFoodExhaustion(CommonConfig.PLAYER_EXHAUSTION.get().floatValue());
                 tile.setClicks(tile.getClicks() + 1);
                 if (state.getValue(PROPERTY_ROTATION) == 7)
                     world.playSound(null, pos, SoundEvents.LODESTONE_COMPASS_LOCK, SoundCategory.BLOCKS, 0.5F, 0.1F);

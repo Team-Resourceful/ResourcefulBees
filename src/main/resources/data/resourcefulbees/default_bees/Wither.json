@@ -3,12 +3,7 @@
     "flower": ["minecraft:wither_rose"],
     "maxTimeInHive": 600
   },
-  "HoneycombData": {
-    "type": "DEFAULT",
-    "color": "#444444",
-    "item": "resourcefulbees:wither_honeycomb",
-    "block": "resourcefulbees:wither_honeycomb_block"
-  },
+  "honeycombVariation": "diamond",
   "RenderData": {
     "texture": "wither/wither_bee",
     "ColorData": {

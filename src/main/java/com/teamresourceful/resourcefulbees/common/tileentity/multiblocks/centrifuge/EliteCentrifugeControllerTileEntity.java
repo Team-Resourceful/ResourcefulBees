@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.centri
 
 import com.teamresourceful.resourcefulbees.common.block.multiblocks.centrifuge.EliteCentrifugeCasingBlock;
 import com.teamresourceful.resourcefulbees.common.capabilities.CustomEnergyStorage;
-import com.teamresourceful.resourcefulbees.common.config.Config;
+import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.container.CentrifugeContainer;
 import com.teamresourceful.resourcefulbees.common.container.EliteCentrifugeMultiblockContainer;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModContainers;
@@ -33,11 +33,11 @@ public class EliteCentrifugeControllerTileEntity extends CentrifugeControllerTil
     public int getMaxTankCapacity() { return TANK_CAPACITY; }
 
     @Override
-    public int getRecipeTime(int i) { return getRecipe(i) != null ? Math.max(5, (int)(getRecipe(i).getMultiblockTime() * 0.5)) : Config.GLOBAL_CENTRIFUGE_RECIPE_TIME.get(); }
+    public int getRecipeTime(int i) { return getRecipe(i) != null ? Math.max(5, (int)(getRecipe(i).getMultiblockTime() * 0.5)) : CommonConfig.GLOBAL_CENTRIFUGE_RECIPE_TIME.get(); }
 
     @Override
     protected CustomEnergyStorage createEnergy() {
-        return new CustomEnergyStorage(Config.MAX_CENTRIFUGE_RF.get() * 10, 1000, 0) {
+        return new CustomEnergyStorage(CommonConfig.MAX_CENTRIFUGE_RF.get() * 10, 1000, 0) {
             @Override
             protected void onEnergyChanged() { setChanged(); }
         };
