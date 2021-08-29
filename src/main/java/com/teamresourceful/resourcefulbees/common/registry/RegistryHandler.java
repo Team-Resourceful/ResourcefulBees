@@ -106,8 +106,7 @@ public class RegistryHandler {
                 .sized(0.7F * sizeModifier, 0.6F * sizeModifier)
                 .build(name + "_bee");
         ModEntities.ENTITY_TYPES.register(name + "_bee", () -> beeEntityType);
-        ModItems.ITEMS.register(name + "_bee_spawn_egg",
-                () -> new BeeSpawnEggItem(beeEntityType, 0xffcc33, 0x303030, name, new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
+        ModItems.SPAWN_EGG_ITEMS.register(name + "_bee_spawn_egg", () -> new BeeSpawnEggItem(beeEntityType, name));
         ModEntities.getModBees().put(name, beeEntityType);
     }
 

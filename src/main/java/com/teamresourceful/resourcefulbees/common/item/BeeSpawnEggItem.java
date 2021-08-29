@@ -3,11 +3,13 @@ package com.teamresourceful.resourcefulbees.common.item;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.beedata.render.ColorData;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ItemGroupResourcefulBees;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.item.SpawnEggItem;
@@ -25,8 +27,8 @@ import java.util.Optional;
 public class BeeSpawnEggItem extends SpawnEggItem {
     private final CustomBeeData beeData;
 
-	public BeeSpawnEggItem(EntityType<?> entityType, int firstColor, int secondColor, String beeType, Properties properties) {
-		super(entityType, firstColor, secondColor, properties);
+	public BeeSpawnEggItem(EntityType<?> entityType, String beeType) {
+		super(entityType, 0xffcc33, 0x303030, new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES));
 		this.beeData = BeeRegistry.getRegistry().getBeeData(beeType);
 	}
 
