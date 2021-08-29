@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
+import com.teamresourceful.resourcefulbees.capabilities.BeepediaData;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.*;
 import com.teamresourceful.resourcefulbees.client.gui.widget.*;
 import com.teamresourceful.resourcefulbees.config.Config;
@@ -45,8 +46,9 @@ public class BeepediaScreen extends Screen {
     private String search = null;
     private String lastSearch = null;
 
-    private final boolean isCreative;
-    private final boolean hasShades;
+    public final boolean isCreative;
+    public final boolean hasShades;
+    public final BeepediaData data;
 
     TextFieldWidget searchBox;
     public int guiLeft;
@@ -63,11 +65,12 @@ public class BeepediaScreen extends Screen {
     private ModImageButton searchButton;
 
     @OnlyIn(Dist.CLIENT)
-    public BeepediaScreen(boolean isCreative, boolean hasShades) {
+    public BeepediaScreen(boolean isCreative, boolean hasShades, BeepediaData data) {
         super(BeepediaLang.INTERFACE_NAME);
         BeepediaHandler.initBeepediaStates();
         this.hasShades = hasShades;
         this.isCreative = isCreative;
+        this.data = data;
     }
 
     public static void receiveBeeMessage(BeepediaEntityMessage message) {
@@ -432,12 +435,20 @@ public class BeepediaScreen extends Screen {
         blit(matrix, xPos, yPos, 0, 0, 20, 20, 20, 20);
     }
 
-    private void registerItemTooltip(ItemStack item, int xPos, int yPos) {
+    public void registerItemTooltip(ItemStack item, int xPos, int yPos) {
         tooltips.add(new ToolTip(xPos + 2, yPos + 2, 16, 16, item));
     }
 
-    private void registerFluidTooltip(FluidStack fluid, int xPos, int yPos, boolean showAmount) {
+    public void registerFluidTooltip(FluidStack fluid, int xPos, int yPos, boolean showAmount) {
         tooltips.add(new ToolTip(xPos + 2, yPos + 2, 16, 16, fluid, showAmount));
+    }
+
+    public void registerTooltip(ITextComponent textComponent, int xPos, int yPos, int width, int height) {
+        tooltips.add(new ToolTip(xPos, yPos, width, height, () -> textComponent));
+    }
+
+    public void registerTooltip(Supplier<ITextComponent> textComponent, int xPos, int yPos, int width, int height) {
+        tooltips.add(new ToolTip(xPos, yPos, width, height, textComponent));
     }
 
     public void registerInteraction(int xPos, int yPos, Supplier<Boolean> supplier) {
@@ -489,6 +500,7 @@ public class BeepediaScreen extends Screen {
     public void drawInteractiveFluidSlot(MatrixStack matrix, FluidStack fluidStack, int xPos, int yPos, int mouseX, int mouseY, boolean showAmount, Supplier<Boolean> supplier) {
         if (fluidStack.isEmpty()) return; // TODO REMOVE DUPLICATE CODE
         registerInteraction(xPos, yPos, supplier);
+
         getMinecraft().getTextureManager().bind(BeepediaImages.BUTTON_IMAGE);
         if (mouseHovering(xPos, yPos, 20, 20, mouseX, mouseY)) {
             blit(matrix, xPos, yPos, 0, 20, 20, 20, 20, 60);

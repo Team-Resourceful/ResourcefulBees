@@ -16,19 +16,29 @@ public abstract class BeepediaPage {
 
     public final BeepediaScreenArea screenArea;
     public BeepediaScreen beepedia;
-
     public List<Button> pageButtons;
 
+    /**
+     * this will be run when the beepedia is first initialized and will never be rerun.
+     * @param screenArea the screen area of the page
+     */
     protected BeepediaPage(BeepediaScreenArea screenArea) {
         pageButtons = new ArrayList<>();
         this.screenArea = screenArea;
     }
 
-
+    /**
+     * register any data or tooltips here.
+     * @param beepedia the main screen class
+     */
     public void preInit(BeepediaScreen beepedia) {
         this.beepedia = beepedia;
     }
 
+    /**
+     * only register buttons here, this method will only be run when the beepedia screen is opened
+     * @param beepedia the main screen class
+     */
     public abstract void registerButtons(BeepediaScreen beepedia);
 
     @OverridingMethodsMustInvokeSuper
@@ -43,13 +53,20 @@ public abstract class BeepediaPage {
 
     public abstract void renderBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY);
 
-    public abstract void renderForeground(MatrixStack matrix, int mouseX, int mouseY);
+    public void renderForeground(MatrixStack matrix, int mouseX, int mouseY) {
+        // override to implement
+    }
 
+    @Deprecated
     public abstract void drawTooltips(MatrixStack matrixStack, int mouseX, int mouseY);
 
-    public abstract boolean mouseScrolled(double mouseX, double mouseY, double scrollAmount);
+    public boolean mouseScrolled(double mouseX, double mouseY, double scrollAmount) {
+        return false;
+    }
 
-    public abstract boolean mouseClicked(double mouseX, double mouseY, int mouseButton);
+    public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
+        return false;
+    }
 
     public abstract void addSearch(BeepediaPage parent);
 

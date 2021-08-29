@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.search;
+package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.stats;
 
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaImages;
 import com.teamresourceful.resourcefulbees.client.gui.widget.TabImageButton;

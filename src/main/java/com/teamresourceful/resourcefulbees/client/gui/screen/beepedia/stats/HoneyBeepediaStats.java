@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.search;
+package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.stats;
 
 import com.teamresourceful.resourcefulbees.api.honeydata.HoneyBottleData;
 

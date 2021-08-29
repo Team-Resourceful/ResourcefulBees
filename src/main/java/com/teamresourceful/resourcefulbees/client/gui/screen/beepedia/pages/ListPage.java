@@ -1,8 +1,8 @@
-package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.states;
+package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.*;
-import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.search.BeepediaStats;
+import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.stats.BeepediaStats;
 import com.teamresourceful.resourcefulbees.client.gui.widget.BeepediaScreenArea;
 import com.teamresourceful.resourcefulbees.client.gui.widget.ButtonList;
 import com.teamresourceful.resourcefulbees.client.gui.widget.TabImageButton;

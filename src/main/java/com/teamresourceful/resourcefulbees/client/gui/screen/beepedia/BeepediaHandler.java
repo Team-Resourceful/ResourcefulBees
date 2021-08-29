@@ -5,13 +5,11 @@ import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.enums.Beep
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.enums.PageTypes;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.enums.SubPageTypes;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.*;
-import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.search.BeeBeepediaStats;
-import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.search.CombBeepediaStats;
-import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.search.HoneyBeepediaStats;
-import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.search.TraitBeepediaStats;
-import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.states.CollectedBeeInfoState;
-import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.states.HelpState;
-import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.states.ListPage;
+import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.stats.BeeBeepediaStats;
+import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.stats.CombBeepediaStats;
+import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.stats.HoneyBeepediaStats;
+import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.stats.TraitBeepediaStats;
+import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.ListPage;
 import com.teamresourceful.resourcefulbees.client.gui.widget.BeepediaScreenArea;
 import com.teamresourceful.resourcefulbees.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.network.packets.BeepediaEntityMessage;
@@ -42,58 +40,47 @@ public class BeepediaHandler {
      */
     protected static BeepediaState currScreenState = null;
 
-    /**
-     * the currently selected bee
-     * <p>
-     * when a bee is interacted with with a beepedia store the data in this state.
-     */
-    protected static CollectedBeeInfoState collectedBeeState = null;
-
-    /**
-     * all of the help pages that can be selected
-     */
-    protected static Map<String, HelpState> helpStates = null;
 
     /**
      * list of bee states
      * <p>
      * generate when the beepedia is opened for the first time
      */
-    protected static Map<String, BeeBeepediaStats> beeStats = new LinkedHashMap<>();
+    public static Map<String, BeeBeepediaStats> beeStats = new LinkedHashMap<>();
 
-    protected static BeePage beePage = new BeePage(SUB_SCREEN_AREA);
+    public static BeePage beePage = new BeePage(SUB_SCREEN_AREA);
 
     /**
      * list of trait states
      * <p>
      * generate when the beepedia is opened for the first time
      */
-    protected static Map<String, TraitBeepediaStats> traitStats = new LinkedHashMap<>();
+    public static Map<String, TraitBeepediaStats> traitStats = new LinkedHashMap<>();
 
-    protected static TraitPage traitPage = new TraitPage(SUB_SCREEN_AREA);
+    public static TraitPage traitPage = new TraitPage(SUB_SCREEN_AREA);
 
     /**
      * list of honey states
      * <p>
      * generate when the beepedia is opened for the first time
      */
-    protected static Map<String, HoneyBeepediaStats> honeyStats = new LinkedHashMap<>();
+    public static Map<String, HoneyBeepediaStats> honeyStats = new LinkedHashMap<>();
 
-    protected static HoneyPage honeyPage = new HoneyPage(SUB_SCREEN_AREA);
+    public static HoneyPage honeyPage = new HoneyPage(SUB_SCREEN_AREA);
 
     /**
      * list of trait states
      * <p>
      * generate when the beepedia is opened for the first time
      */
-    protected static Map<String, CombBeepediaStats> combStats = new LinkedHashMap<>();
+    public static Map<String, CombBeepediaStats> combStats = new LinkedHashMap<>();
 
-    protected static CombPage combPage = new CombPage(SUB_SCREEN_AREA);
+    public static CombPage combPage = new CombPage(SUB_SCREEN_AREA);
 
     /**
      * list of all lists that can be selected
      */
-    protected static Map<BeepediaListTypes, ListPage> listStates = new LinkedHashMap<BeepediaListTypes, ListPage>();
+    public static Map<BeepediaListTypes, ListPage> listStates = new LinkedHashMap<BeepediaListTypes, ListPage>();
 
     private static HomePage homePage = new HomePage(SUB_SCREEN_AREA);
     private static HelpPage helpPage = new HelpPage(SUB_SCREEN_AREA);
