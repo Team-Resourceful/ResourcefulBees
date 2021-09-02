@@ -1,12 +1,13 @@
 package com.teamresourceful.resourcefulbees.common.entity.goals;
 
-import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
+import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeeEntityAccessor;
 import com.teamresourceful.resourcefulbees.common.mixin.invokers.BeeEntityInvoker;
 import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -219,11 +220,11 @@ public class BeePollinateGoal extends Goal {
         return ((double) bee.getRandom().nextFloat() * 2.0D - 1.0D) * 0.33333334D;
     }
 
-    //TODO test this change!!
     public Optional<BlockPos> findFlower(double range) {
         BlockPos beePos = bee.blockPosition();
-        if (bee.getCoreData().getEntityFlower().isPresent()){
-            List<?> entityList = bee.level.getEntities(bee.getCoreData().getEntityFlower().get(), (new AxisAlignedBB(bee.blockPosition())).inflate(range),
+        Optional<EntityType<?>> entityFlower = bee.getCoreData().getEntityFlower();
+        if (entityFlower.isPresent()) {
+            List<?> entityList = bee.level.getEntities(entityFlower.get(), (new AxisAlignedBB(bee.blockPosition())).inflate(range),
                     entity -> entity.getEncodeId() != null && entity.getEncodeId().equals(bee.getCoreData().getEntityFlowerRegistryID()));
             if (!entityList.isEmpty()) {
                 Entity firstEntity = (Entity) entityList.get(0);
