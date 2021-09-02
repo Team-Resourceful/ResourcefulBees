@@ -20,13 +20,16 @@ public class CombatData extends AbstractBeeData {
 
     private boolean inflictsPoison;
 
-    private CombatData(boolean isPassive, Float attackDamage, boolean removeStingerOnAttack, boolean inflictsPoison, Float baseHealth) {
+    private boolean isInvulnerable;
+
+    private CombatData(boolean isPassive, Float attackDamage, boolean removeStingerOnAttack, boolean inflictsPoison, Float baseHealth, boolean isInvulnerable) {
         super("CombatData");
         this.isPassive = isPassive;
         this.attackDamage = attackDamage;
         this.removeStingerOnAttack = removeStingerOnAttack;
         this.inflictsPoison = inflictsPoison;
         this.baseHealth = baseHealth;
+        this.isInvulnerable = isInvulnerable;
     }
 
     public float getBaseHealth() {
@@ -49,6 +52,10 @@ public class CombatData extends AbstractBeeData {
         return inflictsPoison;
     }
 
+    public boolean isInvulnerable() {
+        return isInvulnerable;
+    }
+
     public static class Builder {
 
         private final boolean isPassive;
@@ -56,6 +63,7 @@ public class CombatData extends AbstractBeeData {
         private Float attackDamage;
         private boolean removeStingerOnAttack;
         private boolean inflictsPoison;
+        private boolean isInvulnerable;
 
         public Builder(boolean isPassive) {
             this.isPassive = isPassive;
@@ -79,10 +87,16 @@ public class CombatData extends AbstractBeeData {
         public Builder setInflictsPoison(boolean inflictsPoison) {
             this.inflictsPoison = inflictsPoison;
             return this;
+
+        }
+
+        public Builder setIsInvulnerable(boolean isInvulnerable) {
+            this.isInvulnerable = isInvulnerable;
+            return this;
         }
 
         public CombatData create() {
-            return new CombatData(isPassive, attackDamage, removeStingerOnAttack, inflictsPoison, baseHealth);
+            return new CombatData(isPassive, attackDamage, removeStingerOnAttack, inflictsPoison, baseHealth, isInvulnerable);
         }
     }
 
