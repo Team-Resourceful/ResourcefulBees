@@ -21,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 
+import java.util.Optional;
 import java.util.function.Consumer;
 
 @Unmodifiable
@@ -115,16 +116,16 @@ public class CustomBeeData {
     }
 
     /**
-     * Returns a {@link OutputVariation} object containing information regarding the
+     * Returns an {@link Optional}&lt;{@link OutputVariation}&gt; object containing information regarding the
      * honeycomb a bee produces if it is specified to produce one.
      *
      * Omitting this object from the bee json results in a default object where the bee
      * <b>does not</b> produce a honeycomb.
      *
-     * @return Returns an immutable {@link OutputVariation} object.
+     * @return Returns an {@link Optional}&lt;{@link OutputVariation}&gt; with the contained data being immutable.
      */
-    public OutputVariation getHoneycombData() {
-        return HoneycombRegistry.getOutputVariation(honeycombIdentifier);
+    public Optional<OutputVariation> getHoneycombData() {
+        return Optional.ofNullable(HoneycombRegistry.getOutputVariation(honeycombIdentifier));
     }
 
     /**

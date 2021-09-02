@@ -18,6 +18,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.RegistryObject;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.*;
@@ -53,7 +54,7 @@ public class HoneycombRegistry {
      * @param identifier The identifier of the variation requested.
      * @return Returns an {@link OutputVariation} object for the given identifier.
      */
-    public static OutputVariation getOutputVariation(String identifier) {
+    public static @Nullable OutputVariation getOutputVariation(String identifier) {
         return VARIATION_DATA.get(identifier);
     }
 

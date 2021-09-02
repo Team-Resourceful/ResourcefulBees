@@ -119,8 +119,8 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
                             vanillaBeeEntity.dropOffNectar();
                             int i = getHoneyLevel(state);
                             if (i < 5) {
-                                if (entity instanceof ICustomBee && ((ICustomBee)entity).getHoneycombData() != null) {
-                                    honeycomb = ((ICustomBee)entity).getHoneycombData().getHiveOutput(tier);
+                                if (entity instanceof ICustomBee && ((ICustomBee) entity).getHoneycombData().isPresent()) {
+                                    honeycomb = ((ICustomBee)entity).getHoneycombData().get().getHiveOutput(tier);
                                 }
 
                                 if (!honeycomb.isEmpty()) this.honeycombs.add(0, honeycomb);

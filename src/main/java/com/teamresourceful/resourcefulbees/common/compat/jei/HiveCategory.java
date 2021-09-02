@@ -5,7 +5,6 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityIngredient;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
@@ -68,9 +67,9 @@ public class HiveCategory extends BaseCategory<HiveCategory.Recipe> {
 
     private static Stream<Recipe> createRecipes(CustomBeeData beeData){
         List<Recipe> recipes = new ArrayList<>();
-        if (beeData.getHoneycombData() != null) {
-            for (int i = 0; i < 5; i++) recipes.add(new Recipe(beeData.getHoneycombData().getHiveOutput(i), NESTS.get(i), beeData, false));
-            for (int i = 0; i < 4; i++) recipes.add(new Recipe(beeData.getHoneycombData().getApiaryOutput(i), APIARIES.get(i), beeData, true));
+        if (beeData.getHoneycombData().isPresent()) {
+            for (int i = 0; i < 5; i++) recipes.add(new Recipe(beeData.getHoneycombData().get().getHiveOutput(i), NESTS.get(i), beeData, false));
+            for (int i = 0; i < 4; i++) recipes.add(new Recipe(beeData.getHoneycombData().get().getApiaryOutput(i), APIARIES.get(i), beeData, true));
         }
         return recipes.stream();
     }

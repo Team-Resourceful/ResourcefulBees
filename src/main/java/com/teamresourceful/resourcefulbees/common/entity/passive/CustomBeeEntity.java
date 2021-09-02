@@ -56,6 +56,7 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Random;
 
 public class CustomBeeEntity extends ModBeeEntity implements ICustomBee, IAnimatable {
@@ -110,7 +111,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee, IAnimat
         return customBeeData.getCoreData();
     }
 
-    public OutputVariation getHoneycombData() {
+    public Optional<OutputVariation> getHoneycombData() {
         return customBeeData.getHoneycombData();
     }
 

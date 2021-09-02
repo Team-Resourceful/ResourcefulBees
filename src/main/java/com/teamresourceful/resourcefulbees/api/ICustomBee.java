@@ -12,6 +12,8 @@ import com.teamresourceful.resourcefulbees.api.beedata.spawning.SpawnData;
 import com.teamresourceful.resourcefulbees.api.honeycombdata.OutputVariation;
 import net.minecraft.entity.AgeableEntity;
 
+import java.util.Optional;
+
 /**
  * Implemented in CustomBeeEntity and ResourcefulBee
  *
@@ -35,7 +37,7 @@ public interface ICustomBee {
 
     CoreData getCoreData();
 
-    OutputVariation getHoneycombData();
+    Optional<OutputVariation> getHoneycombData();
 
     RenderData getRenderData();
 

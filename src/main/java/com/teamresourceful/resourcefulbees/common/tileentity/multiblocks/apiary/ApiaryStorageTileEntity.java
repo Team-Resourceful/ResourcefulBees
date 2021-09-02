@@ -195,8 +195,8 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
     }
 
     public void deliverHoneycomb(BeeEntity entity, int apiaryTier) {
-        if (entity instanceof ICustomBee && ((ICustomBee) entity).getHoneycombData() != null) {
-            depositItemStack(((ICustomBee) entity).getHoneycombData().getApiaryOutput(apiaryTier - 5));
+        if (entity instanceof ICustomBee && ((ICustomBee) entity).getHoneycombData().isPresent()) {
+            depositItemStack(((ICustomBee) entity).getHoneycombData().get().getApiaryOutput(apiaryTier - 5));
         } else if (!(entity instanceof ICustomBee)) {
             depositItemStack(getVanillaOutput(apiaryTier - 5));
         }

@@ -26,6 +26,7 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -74,7 +75,7 @@ public class HoneycombPage extends BeeDataPage {
         counter = 0;
         max = hives.size();
 
-        hiveOutput = beeData.getHoneycombData().getHiveOutput(0).copy();
+        hiveOutput = beeData.getHoneycombData().isPresent() ? beeData.getHoneycombData().get().getHiveOutput(0) : Items.BARRIER.getDefaultInstance();
 
         ClientWorld world = beepedia.getMinecraft().level;
         recipes.add(new RecipeObject(false, beeData, world));
@@ -163,7 +164,9 @@ public class HoneycombPage extends BeeDataPage {
 
     private void drawApiaryOutputs(MatrixStack matrix) {
         for (int i = 0; i < 4; i++) {
-            beepedia.drawSlot(matrix, beeData.getHoneycombData().getApiaryOutput(i), xPos + 43 + (i * 29), yPos + 82);
+            if (beeData.getHoneycombData().isPresent()) {
+                beepedia.drawSlot(matrix, beeData.getHoneycombData().get().getApiaryOutput(i), xPos + 43 + (i * 29), yPos + 82);
+            }
         }
     }
 
