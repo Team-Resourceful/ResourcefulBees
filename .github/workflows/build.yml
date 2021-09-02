@@ -2,7 +2,7 @@ name: Build
 on:
   push:
     branches:
-      - master
+      - 1.0.0-Forge
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:
