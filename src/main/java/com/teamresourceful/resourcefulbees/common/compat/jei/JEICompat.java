@@ -50,7 +50,7 @@ public class JEICompat implements IModPlugin {
         registration.addRecipeCategories(new CentrifugeRecipeCategory(helper));
         registration.addRecipeCategories(new BlockMutation(helper));
         registration.addRecipeCategories(new EntityToEntity(helper));
-        registration.addRecipeCategories(new com.teamresourceful.resourcefulbees.common.common.compat.jei.BlockToItem(helper));
+        registration.addRecipeCategories(new BlockToItem(helper));
     }
 
     @NotNull
@@ -81,7 +81,7 @@ public class JEICompat implements IModPlugin {
             registration.addRecipes(((RecipeManagerAccessorInvoker)recipeManager).callByType(CENTRIFUGE_RECIPE_TYPE).values(), CentrifugeRecipeCategory.ID);
             registration.addRecipes(BeeBreedingCategory.getBreedingRecipes(), BeeBreedingCategory.ID);
             registration.addRecipes(BlockMutation.getMutationRecipes(), BlockMutation.ID);
-            registration.addRecipes(com.teamresourceful.resourcefulbees.common.common.compat.jei.BlockToItem.getMutationRecipes(), com.teamresourceful.resourcefulbees.common.common.compat.jei.BlockToItem.ID);
+            registration.addRecipes(BlockToItem.getMutationRecipes(), BlockToItem.ID);
             registration.addRecipes(EntityToEntity.getMutationRecipes(), EntityToEntity.ID);
             registration.addRecipes(FlowersCategory.getFlowersRecipes(), FlowersCategory.ID);
             registerInfoDesc(registration);

@@ -111,10 +111,10 @@ public class ApiaryBlock extends Block {
               .appendText( TextFormatting.GOLD + " Bees", TextFormatting.RESET)
               .applyStyle(TextFormatting.GOLD)
               .build());
-      if (tier != 1) {
-        int timeReduction = (int)((0.1 + (tier * .05)) * 100);
+      if (tier >= 0) {
+        int timeReduction = (int)((0.1 + (tier * .1)) * 100);
         tooltip.addAll(new TooltipBuilder()
-                .addTip(I18n.get("block.resourcefulbees.beehive.tooltip.hive_time"))
+                .addTranslatableTip("block.resourcefulbees.beehive.tooltip.hive_time")
                 .appendText(" -" + timeReduction + "%")
                 .applyStyle(TextFormatting.GOLD)
                 .build());

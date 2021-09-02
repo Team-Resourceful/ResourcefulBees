@@ -17,6 +17,8 @@ import java.util.List;
 
 @Unmodifiable
 public class HoneycombData {
+    //TODO REMOVE THIS CLASS AFTER BEEPEDIA IS FIXED!!
+
     public static final List<Integer> DEFAULT_APIARY_AMOUNTS = Arrays.asList(CommonConfig.T1_APIARY_QUANTITY.get(), CommonConfig.T2_APIARY_QUANTITY.get(), CommonConfig.T3_APIARY_QUANTITY.get(), CommonConfig.T4_APIARY_QUANTITY.get());
     public static final List<ApiaryOutputType> DEFAULT_APIARY_OUTPUTS = Arrays.asList(CommonConfig.T1_APIARY_OUTPUT.get(), CommonConfig.T2_APIARY_OUTPUT.get(), CommonConfig.T3_APIARY_OUTPUT.get(), CommonConfig.T4_APIARY_OUTPUT.get());
     public static final HoneycombData DEFAULT = new HoneycombData(HoneycombType.NONE, Items.AIR, Items.AIR, Color.DEFAULT, true, DEFAULT_APIARY_AMOUNTS, DEFAULT_APIARY_OUTPUTS);

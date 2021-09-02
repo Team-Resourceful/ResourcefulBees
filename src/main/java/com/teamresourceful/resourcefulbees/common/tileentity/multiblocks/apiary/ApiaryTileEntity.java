@@ -173,14 +173,7 @@ public class ApiaryTileEntity extends ApiaryController {
     }
 
     private int getMaxTimeInHive(int timeInput) {
-        if (this.tier != 1) {
-            if (this.tier == 0) {
-                return (int) (timeInput * 1.05);
-            } else {
-                return (int) (timeInput * (1 - getTier() * .05));
-            }
-        }
-        return timeInput;
+        return this.tier >= 0 ? (int) (timeInput * (1 - (getTier() * .1)) - .1) : timeInput;
     }
 
     @Override

@@ -209,9 +209,6 @@ public class TieredBeehiveBlock extends BeehiveBlock {
         tooltip.add(new TranslationTextComponent("resourcefulbees.shift_info").withStyle(TextFormatting.YELLOW));
 
         tooltip.addAll(new TooltipBuilder()
-                //.addTranslatableTip("gui.resourcefulbees.beehive.tier")
-                //.appendText(String.valueOf(localTier))
-                //.applyStyle(ChatFormatting.GOLD)
                 .addTranslatableTip("block.resourcefulbees.beehive.tooltip.max_bees")
                 .appendText(" " + Math.round(CommonConfig.HIVE_MAX_BEES.get() * localTierModifier))
                 .applyStyle(TextFormatting.GOLD)

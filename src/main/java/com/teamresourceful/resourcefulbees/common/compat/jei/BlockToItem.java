@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.common.compat.jei;
+package com.teamresourceful.resourcefulbees.common.compat.jei;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
@@ -6,9 +6,6 @@ import com.teamresourceful.resourcefulbees.api.IBeeRegistry;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.beedata.mutation.MutationData;
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.ItemOutput;
-import com.teamresourceful.resourcefulbees.common.compat.jei.BaseCategory;
-import com.teamresourceful.resourcefulbees.common.compat.jei.JEICompat;
-import com.teamresourceful.resourcefulbees.common.compat.jei.RecipeUtils;
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityIngredient;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
