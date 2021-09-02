@@ -17,7 +17,7 @@ import java.util.Set;
 
 public class BeepediaData implements IBeepediaData {
 
-    private Set<ResourceLocation> bees;
+    private Set<ResourceLocation> bees = new HashSet<>();
 
     @Override
     public Set<ResourceLocation> getBeeList() {

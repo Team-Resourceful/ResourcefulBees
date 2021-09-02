@@ -1,8 +1,6 @@
 package com.teamresourceful.resourcefulbees;
 
 import com.teamresourceful.resourcefulbees.api.ResourcefulBeesAPI;
-import com.teamresourceful.resourcefulbees.api.capabilities.IBeepediaData;
-import com.teamresourceful.resourcefulbees.capabilities.BeepediaData;
 import com.teamresourceful.resourcefulbees.capabilities.Capabilities;
 import com.teamresourceful.resourcefulbees.client.gui.IncompatibleModWarning;
 import com.teamresourceful.resourcefulbees.compat.top.TopCompat;
@@ -19,7 +17,6 @@ import com.teamresourceful.resourcefulbees.patreon.PatreonDataLoader;
 import com.teamresourceful.resourcefulbees.registry.*;
 import com.teamresourceful.resourcefulbees.utils.BeeInfoUtils;
 import net.minecraft.entity.merchant.villager.VillagerTrades;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -31,7 +28,6 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.EventPriority;

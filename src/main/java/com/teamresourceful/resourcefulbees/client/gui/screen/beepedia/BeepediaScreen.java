@@ -70,7 +70,7 @@ public class BeepediaScreen extends Screen {
         BeepediaHandler.initBeepediaStates();
         this.hasShades = hasShades;
         this.isCreative = isCreative;
-        this.data = data;
+        this.data = data == null ? new BeepediaData() : data;
     }
 
     public static void receiveBeeMessage(BeepediaEntityMessage message) {

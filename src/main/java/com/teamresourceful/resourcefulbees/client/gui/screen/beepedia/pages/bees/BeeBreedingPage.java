@@ -1,14 +1,13 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.bees;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.beedata.breeding.BeeFamily;
 import com.teamresourceful.resourcefulbees.api.beedata.mutation.EntityMutation;
 import com.teamresourceful.resourcefulbees.api.beedata.mutation.ItemMutation;
+import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaImages;
+import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaLang;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
-import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.BeePage;
-import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.bees.BeeDataPage;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.mutations.EntityMutationPage;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.mutations.ItemMutationPage;
 import com.teamresourceful.resourcefulbees.entity.passive.CustomBeeEntity;
@@ -25,7 +24,6 @@ import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.gui.widget.button.ImageButton;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector2f;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -56,14 +54,6 @@ public class BeeBreedingPage extends BeeDataPage {
     private Button prevTab;
     private Button nextTab;
 
-    private final ResourceLocation breedingImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/breeding.png");
-    private final ResourceLocation infoIcon = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/icons.png");
-
-    private final TranslationTextComponent parentsTitle = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding.parents_title");
-    private final TranslationTextComponent childrenTitle = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding.children_title");
-    private final TranslationTextComponent entityMutationsTitle = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding.entity_mutations_title");
-    private final TranslationTextComponent itemMutationsTitle = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding.item_mutations_title");
-    private final TranslationTextComponent errorTitle = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding.error_title");
     private int activePage = 0;
 
     public BeeBreedingPage() {
@@ -211,19 +201,19 @@ public class BeeBreedingPage extends BeeDataPage {
 
         switch (activeSubPage) {
             case CHILDREN:
-                title = childrenTitle;
+                title = BeepediaLang.CHILDREN_TITLE;
                 break;
             case ITEM_MUTATIONS:
-                title = itemMutationsTitle;
+                title = BeepediaLang.ITEM_MUTATIONS_TITLE;
                 break;
             case ENTITY_MUTATIONS:
-                title = entityMutationsTitle;
+                title = BeepediaLang.ENTITY_MUTATIONS_TITLE;
                 break;
             case PARENTS:
-                title = parentsTitle;
+                title = BeepediaLang.PARENTS_TITLE;
                 break;
             default:
-                title = errorTitle;
+                title = BeepediaLang.ERROR_TITLE;
                 // show error page
                 break;
         }
@@ -389,7 +379,7 @@ public class BeeBreedingPage extends BeeDataPage {
             if (beeFamily.getChance() < 1 && !isSelf) {
                 StringTextComponent text = new StringTextComponent(decimalFormat.format(beeFamily.getChance()));
                 int padding = font.width(text) / 2;
-                Minecraft.getInstance().textureManager.bind(infoIcon);
+                Minecraft.getInstance().textureManager.bind(BeepediaImages.INFO_ICON);
                 beepedia.blit(matrix, (int) chancePos.x, (int) chancePos.y, 16, 0, 9, 9);
                 font.draw(matrix, text.withStyle(TextFormatting.GRAY), (float) xPos + 140 - (float) padding, (float) yPos + 33, -1);
             }
@@ -438,7 +428,7 @@ public class BeeBreedingPage extends BeeDataPage {
         }
 
         public void draw(MatrixStack matrix) {
-            Minecraft.getInstance().textureManager.bind(breedingImage);
+            Minecraft.getInstance().textureManager.bind(BeepediaImages.BREEDING_IMAGE);
             AbstractGui.blit(matrix, xPos, yPos + 34, 0, 0, 128, 64, 128, 64);
             drawParent1(matrix);
             drawParent2(matrix);

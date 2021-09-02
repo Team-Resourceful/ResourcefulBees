@@ -19,4 +19,9 @@ public class BeepediaLang {
     public static final TranslationTextComponent TOOLTIP_WIKI = new TranslationTextComponent("gui.resourcefulbees.beepedia.home.wiki");
     public static final TranslationTextComponent COLLECTION_PROGRESS = new TranslationTextComponent("gui.resourcefulbees.beepedia.home.progress");
     public static final TranslationTextComponent ITEM_GROUP = new TranslationTextComponent("itemGroup.resourcefulbees");
+    public static final TranslationTextComponent PARENTS_TITLE = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding.parents_title");
+    public static final TranslationTextComponent CHILDREN_TITLE = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding.children_title");
+    public static final TranslationTextComponent ENTITY_MUTATIONS_TITLE = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding.entity_mutations_title");
+    public static final TranslationTextComponent ITEM_MUTATIONS_TITLE = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding.item_mutations_title");
+    public static final TranslationTextComponent ERROR_TITLE = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding.error_title");
 }
