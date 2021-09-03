@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.registry.custom;
 
+import com.mojang.serialization.JsonOps;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.ITraitRegistry;
 import com.teamresourceful.resourcefulbees.api.beedata.traits.BeeTrait;
@@ -68,25 +69,5 @@ public class TraitRegistry implements ITraitRegistry {
 
     public static void setTraitRegistryClosed() {
         closed = true;
-    }
-
-    public static void registerDefaultTraits() {
-        ResourcefulBees.LOGGER.info("Registering Default Bee Traits...");
-        getRegistry().register(TraitConstants.WITHER, new BeeTrait.Mutable().setName(TraitConstants.WITHER).addPotionImmunity(Effects.WITHER).addDamagePotionEffect(PotionDamageEffect.create(Effects.WITHER, 1)).setDisplayItem(Items.WITHER_ROSE).toImmutable());
-        getRegistry().register(TraitConstants.BLAZE, new BeeTrait.Mutable().setName(TraitConstants.BLAZE)
-                .addDamageImmunities(Arrays.asList(DamageSource.LAVA.msgId, DamageSource.IN_FIRE.msgId, DamageSource.ON_FIRE.msgId, DamageSource.HOT_FLOOR.msgId))
-                .addDamageType(DamageType.create(TraitConstants.SET_ON_FIRE, 1)).addSpecialAbility(TraitConstants.FLAMMABLE).addParticleEffect(ParticleTypes.FLAME).setDisplayItem(Items.BLAZE_ROD).toImmutable());
-        getRegistry().register(TraitConstants.CAN_SWIM, new BeeTrait.Mutable().setName(TraitConstants.CAN_SWIM).addDamageImmunity(DamageSource.DROWN.msgId).setDisplayItem(Items.WATER_BUCKET).toImmutable());
-        getRegistry().register(TraitConstants.CREEPER, new BeeTrait.Mutable().setName(TraitConstants.CREEPER).addDamageType(DamageType.create(TraitConstants.EXPLOSIVE, 4)).setDisplayItem(Items.TNT).toImmutable());
-        getRegistry().register(TraitConstants.ZOMBIE, new BeeTrait.Mutable().setName(TraitConstants.ZOMBIE).addDamagePotionEffect(PotionDamageEffect.create(Effects.HUNGER, 20)).setDisplayItem(Items.ROTTEN_FLESH).toImmutable());
-        getRegistry().register(TraitConstants.PIGMAN, new BeeTrait.Mutable().setName(TraitConstants.PIGMAN).addDamagePotionEffect(PotionDamageEffect.create(Effects.DIG_SLOWDOWN, 0)).setDisplayItem(Items.GOLD_NUGGET).toImmutable());
-        getRegistry().register(TraitConstants.ENDER, new BeeTrait.Mutable().setName(TraitConstants.ENDER).addSpecialAbility(TraitConstants.TELEPORT).addParticleEffect(ParticleTypes.PORTAL).setDisplayItem(Items.ENDER_PEARL).toImmutable());
-        getRegistry().register(TraitConstants.NETHER, new BeeTrait.Mutable().setName(TraitConstants.NETHER).addDamageImmunities(Arrays.asList(DamageSource.LAVA.msgId, DamageSource.IN_FIRE.msgId, DamageSource.ON_FIRE.msgId, DamageSource.HOT_FLOOR.msgId)).setDisplayItem(Items.NETHERRACK).toImmutable());
-        getRegistry().register(BeeConstants.OREO_BEE, new BeeTrait.Mutable().setName(BeeConstants.OREO_BEE).addDamagePotionEffect(PotionDamageEffect.create(Effects.HEAL, 2)).setDisplayItem(ModItems.OREO_COOKIE.get()).toImmutable());
-        getRegistry().register(BeeConstants.KITTEN_BEE, new BeeTrait.Mutable().setName(BeeConstants.KITTEN_BEE).addDamagePotionEffect(PotionDamageEffect.create(Effects.MOVEMENT_SPEED, 2)).setDisplayItem(Items.RED_BED).toImmutable());
-        getRegistry().register(TraitConstants.SLIMY, new BeeTrait.Mutable().setName(TraitConstants.SLIMY).addSpecialAbility(TraitConstants.SLIMY).setDisplayItem(Items.SLIME_BALL).toImmutable());
-        getRegistry().register(TraitConstants.DESERT, new BeeTrait.Mutable().setName(TraitConstants.DESERT).addDamageImmunity(DamageSource.CACTUS.msgId).setDisplayItem(Items.CACTUS).toImmutable());
-        getRegistry().register(TraitConstants.ANGRY, new BeeTrait.Mutable().setName(TraitConstants.ANGRY).addSpecialAbility(TraitConstants.ANGRY).toImmutable());
-        getRegistry().register(TraitConstants.SPIDER, new BeeTrait.Mutable().setName(TraitConstants.SPIDER).addSpecialAbility(TraitConstants.SPIDER).setDisplayItem(Items.COBWEB).toImmutable());
     }
 }

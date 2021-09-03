@@ -2,8 +2,7 @@ package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.api.honeydata.DefaultHoneyBottleData;
-import com.teamresourceful.resourcefulbees.api.honeydata.HoneyBottleData;
+import com.teamresourceful.resourcefulbees.api.honeydata.HoneyData;
 import com.teamresourceful.resourcefulbees.api.honeydata.HoneyEffect;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
@@ -39,7 +38,7 @@ public class HoneyPage extends BeepediaPage {
     private final ImageButton nextTab;
     private SubButtonList beeList = null;
     private final boolean isDefault;
-    private HoneyBottleData bottleData;
+    private HoneyData bottleData;
     private String honeySearch;
     private final TranslationTextComponent text;
 
@@ -60,24 +59,24 @@ public class HoneyPage extends BeepediaPage {
     final ResourceLocation hungerIcons = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/hunger.png");
     final ResourceLocation saturationIcons = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/saturation.png");
 
-    public HoneyPage(BeepediaScreen beepedia, HoneyBottleData bottleData, String id, int left, int top, boolean isDefault) {
+    public HoneyPage(BeepediaScreen beepedia, HoneyData bottleData, String id, int left, int top, boolean isDefault) {
         super(beepedia, left, top, id);
         this.isDefault = isDefault;
         if (isDefault) {
-            this.bottle = new ItemStack(DefaultHoneyBottleData.bottle);
+            this.bottle = new ItemStack(Items.HONEY_BOTTLE);
             this.hunger = Foods.HONEY_BOTTLE.getNutrition();
             this.saturation = Foods.HONEY_BOTTLE.getSaturationModifier();
             this.text = new TranslationTextComponent("fluid.resourcefulbees.honey");
         } else {
             this.bottleData = bottleData;
-            this.bottle = new ItemStack(bottleData.getHoneyBottleRegistryObject().get());
-            this.hunger = bottleData.getHunger();
-            this.saturation = bottleData.getSaturation();
-            this.effects = bottleData.getHoneyEffects();
-            if (bottleData.doGenerateHoneyFluid() || bottleData.getHoneyFlowingFluidRegistryObject() != null) {
-                this.text = bottleData.getFluidTranslation();
+            this.bottle = new ItemStack(bottleData.getBottleData().getHoneyBottle().get());
+            this.hunger = bottleData.getBottleData().getHunger();
+            this.saturation = bottleData.getBottleData().getSaturation();
+            this.effects = bottleData.getBottleData().getEffects();
+            if (bottleData.getFluidData().getStillFluid() != null) {
+                this.text = new TranslationTextComponent(String.format("fluid.resourcefulbees.%s_honey", bottleData.getName()));
             } else {
-                this.text = bottleData.getBottleTranslation();
+                this.text = new TranslationTextComponent(String.format("item.resourcefulbees.%s_honey_bottle", bottleData.getName()));
             }
         }
         newListButton(bottle, text);
@@ -210,15 +209,16 @@ public class HoneyPage extends BeepediaPage {
             searchItems.add(new TranslationTextComponent(ModBlocks.HONEY_FLUID_BLOCK.get().getDescriptionId()).getString());
             searchItems.add(new TranslationTextComponent(ModItems.HONEY_FLUID_BUCKET.get().getDescriptionId()).getString());
         }else {
-            if (bottleData.getHoneyBottleRegistryObject() != null)
-                searchItems.add(new TranslationTextComponent(bottleData.getHoneyBottleRegistryObject().get().getDescriptionId()).getString());
-            if (bottleData.getHoneyFluidBlockRegistryObject() != null)
-                searchItems.add(new TranslationTextComponent(bottleData.getHoneyFluidBlockRegistryObject().get().getDescriptionId()).getString());
-            if (bottleData.getHoneyBlockItemRegistryObject() != null)
-                searchItems.add(new TranslationTextComponent(bottleData.getHoneyBlockItemRegistryObject().get().getDescriptionId()).getString());
-            if (bottleData.getHoneyBucketItemRegistryObject() != null)
-                searchItems.add(new TranslationTextComponent(bottleData.getHoneyBucketItemRegistryObject().get().getDescriptionId()).getString());
-            if (bottleData.getColor().isRainbow()) searchTags.add("isRainbow");
+            if (bottleData.getBottleData().getHoneyBottle() != null)
+                searchItems.add(new TranslationTextComponent(bottleData.getBottleData().getHoneyBottle().get().getDescriptionId()).getString());
+            if (bottleData.getFluidData().getFluidBlock() != null)
+                searchItems.add(new TranslationTextComponent(bottleData.getFluidData().getFluidBlock().get().getDescriptionId()).getString());
+            if (bottleData.getBlockData().getBlockItem() != null)
+                searchItems.add(new TranslationTextComponent(bottleData.getBlockData().getBlockItem().get().getDescriptionId()).getString());
+            if (bottleData.getFluidData().getFluidBucket() != null)
+                searchItems.add(new TranslationTextComponent(bottleData.getFluidData().getFluidBucket().get().getDescriptionId()).getString());
+            if (bottleData.getBottleData().getColor().isRainbow() || bottleData.getBlockData().getColor().isRainbow() || bottleData.getFluidData().getColor().isRainbow())
+                searchTags.add("isRainbow");
         }
         if (!effects.isEmpty()) searchTags.add("hasEffects");
         if (!beeList.getSubList().isEmpty()) searchTags.add("hasBees");

@@ -1,12 +1,13 @@
 package com.teamresourceful.resourcefulbees.common.tileentity;
 
-import com.teamresourceful.resourcefulbees.api.honeydata.HoneyBottleData;
+import com.teamresourceful.resourcefulbees.api.honeydata.HoneyData;
 import com.teamresourceful.resourcefulbees.common.block.CustomHoneyBlock;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.network.packets.SyncGUIMessage;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.container.AutomationSensitiveItemStackHandler;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
+import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
 import io.netty.buffer.Unpooled;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -78,7 +79,8 @@ public abstract class AbstractHoneyTankContainer extends AbstractHoneyTank imple
                 blockItem = (BlockItem) stack.getItem();
             }
             if (blockItem != null && blockItem.getBlock() instanceof CustomHoneyBlock) {
-                stackValid = ((CustomHoneyBlock) blockItem.getBlock()).getData().doGenerateHoneyFluid();
+                HoneyData data = HoneyRegistry.getRegistry().getHoneyData(((CustomHoneyBlock) blockItem.getBlock()).getData().getName());
+                stackValid = data.getFluidData().getStillFluid() != null;
                 isBlock = true;
             } else if (stack.getItem() instanceof BucketItem) {
                 BucketItem bucket = (BucketItem) stack.getItem();
@@ -112,8 +114,8 @@ public abstract class AbstractHoneyTankContainer extends AbstractHoneyTank imple
             }
             if (blockItem != null && blockItem.getBlock() instanceof CustomHoneyBlock) {
                 stack.shrink(1);
-                HoneyBottleData data = ((CustomHoneyBlock) blockItem.getBlock()).getData();
-                getFluidTank().fill(new FluidStack(data.getHoneyStillFluidRegistryObject().get(), 1000), IFluidHandler.FluidAction.EXECUTE);
+                HoneyData data = HoneyRegistry.getRegistry().getHoneyData(((CustomHoneyBlock) blockItem.getBlock()).getData().getName());
+                getFluidTank().fill(new FluidStack(data.getFluidData().getStillFluid().get(), 1000), IFluidHandler.FluidAction.EXECUTE);
             } else if (stack.getItem() instanceof BucketItem) {
                 BucketItem bucket = (BucketItem) stack.getItem();
                 getFluidTank().fill(new FluidStack(bucket.getFluid(), 1000), IFluidHandler.FluidAction.EXECUTE);
@@ -147,9 +149,9 @@ public abstract class AbstractHoneyTankContainer extends AbstractHoneyTank imple
             blockItem = (BlockItem) stack.getItem();
         }
         if (blockItem != null && blockItem.getBlock() instanceof CustomHoneyBlock) {
-            HoneyBottleData item = ((CustomHoneyBlock) blockItem.getBlock()).getData();
+            HoneyData data = HoneyRegistry.getRegistry().getHoneyData(((CustomHoneyBlock) blockItem.getBlock()).getData().getName());
             spaceLeft = (getFluidTank().getFluidAmount() + 1000) <= getFluidTank().getCapacity();
-            fluid = item.getHoneyStillFluidRegistryObject().get();
+            fluid = data.getFluidData().getStillFluid().get();
         } else if (stack.getItem() instanceof BucketItem) {
             BucketItem item = (BucketItem) stack.getItem();
             spaceLeft = (getFluidTank().getFluidAmount() + 1000) <= getFluidTank().getCapacity();
@@ -183,8 +185,8 @@ public abstract class AbstractHoneyTankContainer extends AbstractHoneyTank imple
             blockItem = (BlockItem) stack.getItem();
         }
         if (blockItem != null && blockItem.getBlock() instanceof CustomHoneyBlock) {
-            CustomHoneyBlock block = (CustomHoneyBlock) blockItem.getBlock();
-            return block.getData().doGenerateHoneyFluid();
+            HoneyData data = HoneyRegistry.getRegistry().getHoneyData(((CustomHoneyBlock) blockItem.getBlock()).getData().getName());
+            return data.getFluidData().getStillFluid() != null;
         } else if (stack.getItem() instanceof BucketItem) {
             BucketItem bucket = (BucketItem) stack.getItem();
             return bucket.getFluid().is(HONEY_FLUID_TAG);

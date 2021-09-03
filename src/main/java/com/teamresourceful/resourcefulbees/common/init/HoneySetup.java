@@ -2,8 +2,8 @@ package com.teamresourceful.resourcefulbees.common.init;
 
 import com.google.gson.JsonObject;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.ModPaths;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.common.utils.FileUtils;
 import net.minecraft.util.JSONUtils;
@@ -20,12 +20,16 @@ public class HoneySetup {
     }
 
     public static void setupHoney() {
+        if (Boolean.TRUE.equals(CommonConfig.ENABLE_EASTER_EGG_BEES.get())) {
+            FileUtils.setupDevResources("/data/resourcefulbees/dev/dev_honey", HoneySetup::parseHoney, "Could not stream dev honey!");
+        }
+
         if (Boolean.TRUE.equals(CommonConfig.GENERATE_DEFAULTS.get())) {
-            FileUtils.setupDefaultFiles("/data/resourcefulbees/default_honey", ModPaths.HONEY);
+            FileUtils.setupDefaultFiles("/data/resourcefulbees/defaults/default_honey", ModPaths.HONEY);
         }
 
         LOGGER.info("Loading Custom Honeys..");
-        FileUtils.streamFilesAndParse(ModPaths.HONEY, HoneySetup::parseHoney, "Could not stream honey!!");
+        FileUtils.streamFilesAndParse(ModPaths.HONEY, HoneySetup::parseHoney, "Could not stream honey!");
     }
 
     static void parseHoney(Reader reader, String name) {

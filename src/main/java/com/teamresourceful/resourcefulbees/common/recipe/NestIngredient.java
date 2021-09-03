@@ -2,7 +2,6 @@ package com.teamresourceful.resourcefulbees.common.recipe;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import net.minecraft.item.Item;
@@ -34,7 +33,7 @@ public class NestIngredient extends Ingredient {
     }
 
     @SuppressWarnings("ConstantConditions")
-    private static Collection<ItemStack> getNests(int tier) {
+    public static Collection<ItemStack> getNests(int tier) {
         return NESTS.stream().map(stack ->  {
             stack = stack.copy();
             stack.setTag(new CompoundNBT());

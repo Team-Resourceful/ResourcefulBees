@@ -1,0 +1,21 @@
+{
+  "bottleData": {
+    "color": "rainbow",
+    "hunger": 3,
+    "saturation": 0.25,
+    "effects": [
+      {
+        "effect": "minecraft:glowing",
+        "duration": 2400,
+        "strength": 0,
+        "chance": 1
+      }
+    ]
+  },
+  "blockData": {
+    "color": "rainbow"
+  },
+  "fluidData": {
+    "color": "rainbow"
+  }
+}

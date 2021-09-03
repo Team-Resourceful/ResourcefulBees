@@ -3,17 +3,15 @@ package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
-import com.teamresourceful.resourcefulbees.api.beedata.HoneycombData;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.*;
 import com.teamresourceful.resourcefulbees.client.gui.widget.*;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
-import com.teamresourceful.resourcefulbees.common.entity.passive.KittenBee;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyRegistry;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.registry.custom.TraitRegistry;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.FlowingFluidBlock;
@@ -152,9 +150,7 @@ public class BeepediaScreen extends Screen {
         BeeRegistry.getRegistry().getBees().forEach((s, b) -> bees.put(s, new BeePage(this, b, s, subX, y)));
         TraitRegistry.getRegistry().getTraits().forEach((s, b) -> traits.put(s, new TraitPage(this, b, s, subX, y)));
         honey.put("honey", new HoneyPage(this, null, "honey", subX, y, true));
-        honey.put("catnip", new HoneyPage(this, KittenBee.getHoneyBottleData(), "catnip", subX, y, false));
         HoneyRegistry.getRegistry().getHoneyBottles().forEach((s, h) -> honey.put(s, new HoneyPage(this, h, s, subX, y, false)));
-        combs.put("catnip", new CombPage(this, HoneycombData.DEFAULT, subX, y, "catnip"));
     }
 
     /**

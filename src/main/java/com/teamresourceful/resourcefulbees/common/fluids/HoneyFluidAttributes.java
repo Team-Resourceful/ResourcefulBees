@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.fluids;
 
-import com.teamresourceful.resourcefulbees.api.honeydata.HoneyBottleData;
+import com.teamresourceful.resourcefulbees.api.honeydata.HoneyData;
+import com.teamresourceful.resourcefulbees.api.honeydata.HoneyFluidData;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -12,11 +13,11 @@ import java.util.function.BiFunction;
 
 public class HoneyFluidAttributes extends FluidAttributes {
 
-    private final HoneyBottleData honeyData;
+    private final HoneyFluidData data;
 
-    protected HoneyFluidAttributes(FluidAttributes.Builder builder, Fluid fluid, HoneyBottleData honeyData) {
+    protected HoneyFluidAttributes(FluidAttributes.Builder builder, Fluid fluid, HoneyFluidData data) {
         super(builder, fluid);
-        this.honeyData = honeyData;
+        this.data = data;
     }
 
     public static class Builder extends FluidAttributes.Builder {
@@ -37,10 +38,10 @@ public class HoneyFluidAttributes extends FluidAttributes {
 
     @Override
     public int getColor(){
-        return honeyData.getColor().getValue() | 0xff000000;
+        return data.getColor().getValue() | 0xff000000;
     }
 
-    public static Builder builder(ResourceLocation stillTexture, ResourceLocation flowingTexture, HoneyBottleData honeyData) {
-        return new Builder(stillTexture, flowingTexture, (builder, fluid) -> new HoneyFluidAttributes(builder, fluid, honeyData));
+    public static Builder builder(ResourceLocation stillTexture, ResourceLocation flowingTexture, HoneyFluidData data) {
+        return new Builder(stillTexture, flowingTexture, (builder, fluid) -> new HoneyFluidAttributes(builder, fluid, data));
     }
 }

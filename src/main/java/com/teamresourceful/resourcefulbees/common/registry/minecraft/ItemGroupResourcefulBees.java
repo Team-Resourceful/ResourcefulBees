@@ -3,9 +3,9 @@ package com.teamresourceful.resourcefulbees.common.registry.minecraft;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.item.Beepedia;
+import com.teamresourceful.resourcefulbees.common.recipe.NestIngredient;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -27,13 +27,31 @@ public class ItemGroupResourcefulBees {
         }
 
         @Override
-        public void fillItemList(@NotNull NonNullList<ItemStack> itemstacks) {
-            super.fillItemList(itemstacks);
+        public void fillItemList(@NotNull NonNullList<ItemStack> stacks) {
+            super.fillItemList(stacks);
+
             ItemStack creativeBeepedia = new ItemStack(ModItems.BEEPEDIA.get());
-            CompoundNBT tag = new CompoundNBT();
-            tag.putBoolean(Beepedia.CREATIVE_TAG, true);
-            creativeBeepedia.setTag(tag);
-            itemstacks.add(creativeBeepedia);
+            creativeBeepedia.getOrCreateTag().putBoolean(Beepedia.CREATIVE_TAG, true);
+            stacks.add(creativeBeepedia);
+        }
+    };
+
+    public static final ItemGroup RESOURCEFUL_BEES_HIVES = new ItemGroup(ResourcefulBees.MOD_ID + "_hives") {
+
+        @Override
+        @NotNull
+        @OnlyIn(Dist.CLIENT)
+        public ItemStack makeIcon() {
+            return new ItemStack(ModItems.OAK_BEE_NEST_ITEM.get());
+        }
+
+        @Override
+        public void fillItemList(@NotNull NonNullList<ItemStack> stacks) {
+            super.fillItemList(stacks);
+            stacks.addAll(NestIngredient.getNests(1));
+            stacks.addAll(NestIngredient.getNests(2));
+            stacks.addAll(NestIngredient.getNests(3));
+            stacks.addAll(NestIngredient.getNests(4));
         }
     };
 }

@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees;
 
 import com.teamresourceful.resourcefulbees.api.ResourcefulBeesAPI;
 import com.teamresourceful.resourcefulbees.client.config.ClientConfig;
+import com.teamresourceful.resourcefulbees.client.data.LangGeneration;
 import com.teamresourceful.resourcefulbees.client.event.ClientEventHandlers;
 import com.teamresourceful.resourcefulbees.client.gui.IncompatibleModWarning;
 import com.teamresourceful.resourcefulbees.client.pets.PetLoader;
@@ -114,11 +115,10 @@ public class ResourcefulBees {
     @SubscribeEvent
     public void loadComplete(FMLLoadCompleteEvent event) {
         TraitAbilityRegistry.closeAbilityRegistry();
-        TraitRegistry.registerDefaultTraits();
         TraitSetup.buildCustomTraits();
         TraitRegistry.setTraitRegistryClosed();
         BeeSetup.registerBeePlacements();
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> DataGen::generateClientData);
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> LangGeneration::generateEnglishLang);
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ClientEventHandlers::registerPatreonRender);
         DataGen.generateCommonData();
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> PetLoader::loadAPI);

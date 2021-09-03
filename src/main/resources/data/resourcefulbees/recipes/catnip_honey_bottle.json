@@ -1,5 +1,20 @@
 {
   "type": "minecraft:crafting_shapeless",
+  "conditions": [
+    {
+      "type": "forge:and",
+      "values": [
+        {
+          "type": "forge:item_exists",
+          "item": "resourcefulbees:catnip_honey_bottle"
+        },
+        {
+          "type": "forge:item_exists",
+          "item": "resourcefulbees:catnip_honey_block"
+        }
+      ]
+    }
+  ],
   "ingredients": [
     {"item": "resourcefulbees:catnip_honey_block"},
     {"item": "minecraft:glass_bottle"},

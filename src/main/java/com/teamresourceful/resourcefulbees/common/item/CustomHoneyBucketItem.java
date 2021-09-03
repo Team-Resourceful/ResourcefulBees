@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.item;
 
-import com.teamresourceful.resourcefulbees.api.honeydata.HoneyBottleData;
+import com.teamresourceful.resourcefulbees.api.honeydata.HoneyFluidData;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.BucketItem;
@@ -15,11 +15,11 @@ import java.util.function.Supplier;
 
 public class CustomHoneyBucketItem extends BucketItem {
 
-    private final HoneyBottleData honeyBottleData;
+    private final HoneyFluidData data;
 
-    public CustomHoneyBucketItem(Supplier<? extends Fluid> supplier, Properties builder, HoneyBottleData honeyBottleData) {
+    public CustomHoneyBucketItem(Supplier<? extends Fluid> supplier, Properties builder, HoneyFluidData data) {
         super(supplier, builder);
-        this.honeyBottleData = honeyBottleData;
+        this.data = data;
     }
 
     public static int getColor(ItemStack stack, int tintIndex) {
@@ -31,7 +31,7 @@ public class CustomHoneyBucketItem extends BucketItem {
     }
 
     public int getHoneyBucketColor() {
-        return honeyBottleData.getColor().getValue();
+        return data.getColor().getValue();
     }
 
     @Override

@@ -1,5 +1,20 @@
 {
   "type": "minecraft:crafting_shapeless",
+  "conditions": [
+    {
+      "type": "forge:and",
+      "values": [
+        {
+          "type": "forge:item_exists",
+          "item": "resourcefulbees:catnip_honey_bottle"
+        },
+        {
+          "type": "forge:item_exists",
+          "item": "resourcefulbees:catnip_honey_bucket"
+        }
+      ]
+    }
+  ],
   "ingredients": [
     {"item": "resourcefulbees:catnip_honey_bottle"},
     {"item": "resourcefulbees:catnip_honey_bottle"},
@@ -8,7 +23,7 @@
     {"item": "minecraft:bucket"}
   ],
   "result": {
-    "item": "resourcefulbees:catnip_honey_fluid_bucket",
+    "item": "resourcefulbees:catnip_honey_bucket",
     "count": 1
   }
 }

@@ -1,0 +1,14 @@
+{
+  "variations": [
+    {
+      "identifier": "oreo",
+      "defaultComb": {"id":  "resourcefulbees:oreo_cookie"},
+      "apiaryCombs": [
+        {"id":  "resourcefulbees:oreo_cookie", "amount":  1},
+        {"id":  "resourcefulbees:oreo_cookie", "count":  2},
+        {"id":  "resourcefulbees:oreo_cookie", "count":  3},
+        {"id":  "resourcefulbees:oreo_cookie", "count":  4}
+      ]
+    }
+  ]
+}

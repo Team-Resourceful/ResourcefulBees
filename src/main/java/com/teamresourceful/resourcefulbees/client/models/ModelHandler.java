@@ -3,15 +3,10 @@ package com.teamresourceful.resourcefulbees.client.models;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.api.honeydata.HoneyBottleData;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
-import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
-import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
 import net.minecraft.block.Block;
-import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockModelShapes;
 import net.minecraft.client.renderer.RenderType;
@@ -19,15 +14,15 @@ import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ModelBakery;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.fluid.FlowingFluid;
+import net.minecraft.client.renderer.texture.MissingTextureSprite;
 import net.minecraft.item.Item;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.fml.RegistryObject;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
@@ -90,7 +85,12 @@ public class ModelHandler {
         IBakedModel missingModel = modelRegistry.get(ModelBakery.MISSING_MODEL_LOCATION);
         MODEL_MAP.asMap().forEach(((resourceLocation, resourceLocations) -> {
             IBakedModel defaultModel = modelRegistry.getOrDefault(resourceLocation, missingModel);
-            resourceLocations.forEach(modelLocation -> modelRegistry.put(modelLocation, defaultModel));
+            resourceLocations.forEach(modelLocation ->
+                modelRegistry.computeIfPresent(modelLocation, (resourceLocation1, iBakedModel) -> {
+                    if (iBakedModel.getParticleTexture(EmptyModelData.INSTANCE) instanceof MissingTextureSprite) return defaultModel;
+                    else return iBakedModel;
+                })
+            );
         }));
     }
 }

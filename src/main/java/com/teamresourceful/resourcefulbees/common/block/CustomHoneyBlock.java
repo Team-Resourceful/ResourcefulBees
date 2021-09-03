@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.block;
 
-import com.teamresourceful.resourcefulbees.api.honeydata.HoneyBottleData;
+import com.teamresourceful.resourcefulbees.api.honeydata.HoneyBlockData;
 import com.teamresourceful.resourcefulbees.common.utils.color.Color;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.*;
@@ -37,15 +37,15 @@ public class CustomHoneyBlock extends BreakableBlock {
 
     protected static final VoxelShape SHAPE = Block.box(1.0D, 0.0D, 1.0D, 15.0D, 15.0D, 15.0D);
     protected final Color color;
-    protected final HoneyBottleData data;
+    protected final HoneyBlockData data;
 
-    public CustomHoneyBlock(HoneyBottleData honeyData) {
-        super(AbstractBlock.Properties.of(Material.CLAY).speedFactor(0.4F).jumpFactor(0.5F).noOcclusion().sound(SoundType.HONEY_BLOCK));
-        this.color = honeyData.getColor();
-        this.data = honeyData;
+    public CustomHoneyBlock(HoneyBlockData data) {
+        super(AbstractBlock.Properties.of(Material.CLAY).speedFactor(data.getSpeedFactor()).jumpFactor(data.getJumpFactor()).noOcclusion().sound(SoundType.HONEY_BLOCK));
+        this.color = data.getColor();
+        this.data = data;
     }
 
-    public HoneyBottleData getData() {
+    public HoneyBlockData getData() {
         return data;
     }
 

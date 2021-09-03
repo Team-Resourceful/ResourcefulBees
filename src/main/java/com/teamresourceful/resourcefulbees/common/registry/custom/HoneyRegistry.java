@@ -2,14 +2,14 @@ package com.teamresourceful.resourcefulbees.common.registry.custom;
 
 import com.google.gson.JsonObject;
 import com.teamresourceful.resourcefulbees.api.IHoneyRegistry;
-import com.teamresourceful.resourcefulbees.api.honeydata.HoneyBottleData;
+import com.teamresourceful.resourcefulbees.api.honeydata.HoneyData;
 
 import java.util.*;
 
 public class HoneyRegistry implements IHoneyRegistry {
 
     private final Map<String, JsonObject> rawHoneyData = new LinkedHashMap<>(); //MOVE THIS TO HONEY REGISTRY - DOES NOT BELONG HERE
-    private final Map<String, HoneyBottleData> honeyInfo = new LinkedHashMap<>(); //MOVE THIS TO HONEY REGISTRY - DOES NOT BELONG HERE
+    private final Map<String, HoneyData> honeyInfo = new LinkedHashMap<>(); //MOVE THIS TO HONEY REGISTRY - DOES NOT BELONG HERE
 
     private static final HoneyRegistry INSTANCE = new HoneyRegistry();
 
@@ -28,7 +28,7 @@ public class HoneyRegistry implements IHoneyRegistry {
      * @param honey Honey type for which HoneyData is requested.
      * @return Returns a HoneyBottleData object for the given bee type.
      */
-    public HoneyBottleData getHoneyData(String honey) {
+    public HoneyData getHoneyData(String honey) {
         return honeyInfo.get(honey);
     }
 
@@ -42,7 +42,7 @@ public class HoneyRegistry implements IHoneyRegistry {
      *
      * @return Returns unmodifiable copy of honey registry.
      */
-    public Map<String, HoneyBottleData> getHoneyBottles() {
+    public Map<String, HoneyData> getHoneyBottles() {
         return Collections.unmodifiableMap(honeyInfo);
     }
 
@@ -52,7 +52,7 @@ public class HoneyRegistry implements IHoneyRegistry {
      *
      * @return Returns a set containing all registered HoneyBottleData.
      */
-    public Set<HoneyBottleData> getSetOfHoney() {
+    public Set<HoneyData> getSetOfHoney() {
         return Collections.unmodifiableSet(new HashSet<>(honeyInfo.values()));
     }
 
@@ -65,7 +65,7 @@ public class HoneyRegistry implements IHoneyRegistry {
      * @return Returns false if bee already exists in the registry.
      */
     @SuppressWarnings("UnusedReturnValue")
-    public boolean registerHoney(String honeyType, HoneyBottleData honeyData) {
+    public boolean registerHoney(String honeyType, HoneyData honeyData) {
         honeyInfo.putIfAbsent(honeyType, honeyData);
         return true;
     }

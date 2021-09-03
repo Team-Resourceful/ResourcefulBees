@@ -109,4 +109,20 @@ public class FileUtils {
             LOGGER.error("Could not stream source files: {}", source);
         }
     }
+
+    public static void setupDevResources(String devPath, BiConsumer<Reader, String> parser, String errorMessage) {
+        if (Files.isRegularFile(FileUtils.MOD_ROOT)) {
+            try(FileSystem fileSystem = FileSystems.newFileSystem(FileUtils.MOD_ROOT, null)) {
+                Path path = fileSystem.getPath(devPath);
+                if (Files.exists(path)) {
+                    FileUtils.streamFilesAndParse(path, parser, errorMessage);
+                }
+            } catch (IOException e) {
+                LOGGER.error("Could not load source {}!", FileUtils.MOD_ROOT);
+                e.printStackTrace();
+            }
+        } else if (Files.isDirectory(FileUtils.MOD_ROOT)) {
+            FileUtils.streamFilesAndParse(Paths.get(FileUtils.MOD_ROOT.toString(), devPath), parser, errorMessage);
+        }
+    }
 }
