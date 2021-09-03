@@ -35,9 +35,8 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -225,7 +224,7 @@ public class ApiaryTileEntity extends ApiaryController {
 
     //region NBT HANDLING
 
-    @Nonnull
+    @NotNull
     public ListNBT writeBees() {
         ListNBT listTag = new ListNBT();
         this.bees.values().forEach(apiaryBee -> {

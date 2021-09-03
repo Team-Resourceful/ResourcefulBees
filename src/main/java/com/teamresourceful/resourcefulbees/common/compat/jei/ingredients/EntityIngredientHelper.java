@@ -8,8 +8,8 @@ import mezz.jei.api.recipe.IFocusFactory;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.stream.StreamSupport;
 

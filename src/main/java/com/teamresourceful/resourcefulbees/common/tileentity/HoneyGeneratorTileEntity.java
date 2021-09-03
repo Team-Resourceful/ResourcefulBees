@@ -2,12 +2,12 @@ package com.teamresourceful.resourcefulbees.common.tileentity;
 
 import com.teamresourceful.resourcefulbees.common.block.HoneyGenerator;
 import com.teamresourceful.resourcefulbees.common.capabilities.CustomEnergyStorage;
-import com.teamresourceful.resourcefulbees.common.network.packets.SyncGUIMessage;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.container.AutomationSensitiveItemStackHandler;
 import com.teamresourceful.resourcefulbees.common.container.HoneyGeneratorContainer;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
+import com.teamresourceful.resourcefulbees.common.network.packets.SyncGUIMessage;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
 import io.netty.buffer.Unpooled;
@@ -41,8 +41,8 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.awt.event.ContainerListener;
 import java.util.Arrays;
 

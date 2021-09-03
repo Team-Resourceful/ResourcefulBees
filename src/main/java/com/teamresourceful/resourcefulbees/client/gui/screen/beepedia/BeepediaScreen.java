@@ -39,7 +39,6 @@ import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 import vazkii.patchouli.api.PatchouliAPI;
 
-import javax.annotation.Nonnull;
 import java.awt.*;
 import java.util.List;
 import java.util.*;
@@ -409,7 +408,7 @@ public class BeepediaScreen extends Screen {
                 18, 36) {
 
             @Override
-            public void renderToolTip(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
+            public void renderToolTip(@NotNull MatrixStack matrix, int mouseX, int mouseY) {
                 TranslationTextComponent s = new TranslationTextComponent("book.resourcefulbees.name");
                 BeepediaScreen.this.renderTooltip(matrix, s, mouseX, mouseY);
             }

@@ -57,7 +57,7 @@ public class HoneyCongealerTileEntity extends AbstractHoneyTank implements ITick
         return new TranslationTextComponent("gui.resourcefulbees.honey_congealer");
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     @Override
     public Container createMenu(int id, @NotNull PlayerInventory playerInventory, @NotNull PlayerEntity playerEntity) {
         if (level == null) return null;

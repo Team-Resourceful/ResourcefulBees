@@ -1,10 +1,10 @@
 package com.teamresourceful.resourcefulbees.common.container;
 
 import com.teamresourceful.resourcefulbees.common.item.UpgradeItem;
-import com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary.ApiaryBreederTileEntity;
-import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModContainers;
+import com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary.ApiaryBreederTileEntity;
+import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Slot;
@@ -15,8 +15,6 @@ import net.minecraft.util.IntArray;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nonnull;
 
 public class ApiaryBreederContainer extends ContainerWithStackMove {
 
@@ -41,7 +39,7 @@ public class ApiaryBreederContainer extends ContainerWithStackMove {
     }
 
     @Override
-    public boolean stillValid(@Nonnull PlayerEntity player) {
+    public boolean stillValid(@NotNull PlayerEntity player) {
         return true;
     }
 

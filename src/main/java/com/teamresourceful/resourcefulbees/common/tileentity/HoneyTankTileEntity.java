@@ -33,8 +33,7 @@ import net.minecraftforge.fml.RegistryObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public class HoneyTankTileEntity extends AbstractHoneyTankContainer {
 
@@ -187,6 +186,7 @@ public class HoneyTankTileEntity extends AbstractHoneyTankContainer {
         return new AxisAlignedBB(this.getBlockPos().below().south().west(), this.getBlockPos().above().north().east());
     }
 
+    @Override
     public void sendGUINetworkPacket(IContainerListener player) {
         if (player instanceof ServerPlayerEntity && (!(player instanceof FakePlayer))) {
             PacketBuffer buffer = new PacketBuffer(Unpooled.buffer());
@@ -195,6 +195,7 @@ public class HoneyTankTileEntity extends AbstractHoneyTankContainer {
         }
     }
 
+    @Override
     public void handleGUINetworkPacket(PacketBuffer buffer) {
         getFluidTank().setFluid(buffer.readFluidStack());
     }

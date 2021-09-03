@@ -42,7 +42,6 @@ import net.minecraftforge.fluids.capability.templates.FluidTank;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Random;
 
@@ -85,7 +84,7 @@ public class HoneyTank extends AbstractTank {
         this.registerDefaultState(defaultState);
     }
 
-    private static HoneyTankTileEntity getTileEntity(@Nonnull IWorldReader world, @Nonnull BlockPos pos) {
+    private static HoneyTankTileEntity getTileEntity(@NotNull IWorldReader world, @NotNull BlockPos pos) {
         TileEntity entity = world.getBlockEntity(pos);
         if (entity instanceof HoneyTankTileEntity) {
             return (HoneyTankTileEntity) entity;
