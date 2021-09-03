@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 @SuppressWarnings("deprecation")
-public class HoneyGenerator extends Block {
+public class HoneyGenerator extends AbstractTank {
     public static final DirectionProperty FACING = HorizontalBlock.FACING;
     public static final BooleanProperty PROPERTY_ON = BooleanProperty.create("on");
 
@@ -49,7 +49,7 @@ public class HoneyGenerator extends Block {
         TileEntity tileEntity = world.getBlockEntity(pos);
 
         if (tileEntity instanceof HoneyGeneratorTileEntity) {
-            CentrifugeBlock.capabilityOrGuiUse(tileEntity, player, world, pos, hand);
+            capabilityOrGuiUse(tileEntity, player, world, pos, hand);
             return ActionResultType.SUCCESS;
         }
         return super.use(state, world, pos, player, hand, rayTraceResult);

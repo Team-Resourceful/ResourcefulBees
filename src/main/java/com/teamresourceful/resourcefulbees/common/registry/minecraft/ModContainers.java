@@ -18,14 +18,6 @@ public class ModContainers {
     public static final DeferredRegister<ContainerType<?>> CONTAINER_TYPES = DeferredRegister.create(ForgeRegistries.CONTAINERS, ResourcefulBees.MOD_ID);
 
 
-    public static final RegistryObject<ContainerType<CentrifugeContainer>> CENTRIFUGE_CONTAINER = CONTAINER_TYPES.register("centrifuge", () -> IForgeContainerType
-            .create((id, inv, c) -> new CentrifugeContainer(id, inv.player.level, c.readBlockPos(), inv)));
-    public static final RegistryObject<ContainerType<MechanicalCentrifugeContainer>> MECHANICAL_CENTRIFUGE_CONTAINER = CONTAINER_TYPES.register("mechanical_centrifuge", () -> IForgeContainerType
-            .create((id, inv, c) -> new MechanicalCentrifugeContainer(id, inv.player.level, c.readBlockPos(), inv)));
-    public static final RegistryObject<ContainerType<CentrifugeMultiblockContainer>> CENTRIFUGE_MULTIBLOCK_CONTAINER = CONTAINER_TYPES.register("centrifuge_multiblock", () -> IForgeContainerType
-            .create((id, inv, c) -> new CentrifugeMultiblockContainer(id, inv.player.level, c.readBlockPos(), inv)));
-    public static final RegistryObject<ContainerType<EliteCentrifugeMultiblockContainer>> ELITE_CENTRIFUGE_MULTIBLOCK_CONTAINER = CONTAINER_TYPES.register("elite_centrifuge_multiblock", () -> IForgeContainerType
-            .create((id, inv, c) -> new EliteCentrifugeMultiblockContainer(id, inv.player.level, c.readBlockPos(), inv)));
     public static final RegistryObject<ContainerType<HoneyGeneratorContainer>> HONEY_GENERATOR_CONTAINER = CONTAINER_TYPES.register("honey_generator", () -> IForgeContainerType
             .create((id, inv, c) -> new HoneyGeneratorContainer(id, inv.player.level, c.readBlockPos(), inv)));
     public static final RegistryObject<ContainerType<UnvalidatedApiaryContainer>> UNVALIDATED_APIARY_CONTAINER = CONTAINER_TYPES.register("unvalidated_apiary", () -> IForgeContainerType

@@ -2,13 +2,12 @@ package com.teamresourceful.resourcefulbees.common.compat.jei;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
-import com.teamresourceful.resourcefulbees.client.gui.screen.CentrifugeScreen;
-import com.teamresourceful.resourcefulbees.client.gui.screen.MechanicalCentrifugeScreen;
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityIngredient;
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityIngredientFactory;
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityIngredientHelper;
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityRenderer;
 import com.teamresourceful.resourcefulbees.common.item.Beepedia;
+import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.mixin.RecipeManagerAccessorInvoker;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import mezz.jei.api.IModPlugin;
@@ -21,6 +20,7 @@ import mezz.jei.api.registration.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.RecipeManager;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -47,7 +47,6 @@ public class JEICompat implements IModPlugin {
         registration.addRecipeCategories(new HiveCategory(helper));
         registration.addRecipeCategories(new BeeBreedingCategory(helper));
         registration.addRecipeCategories(new FlowersCategory(helper));
-        registration.addRecipeCategories(new CentrifugeRecipeCategory(helper));
         registration.addRecipeCategories(new BlockMutation(helper));
         registration.addRecipeCategories(new EntityToEntity(helper));
         registration.addRecipeCategories(new BlockToItem(helper));
@@ -66,10 +65,6 @@ public class JEICompat implements IModPlugin {
         registration.addRecipeCatalyst(new ItemStack(ModItems.T3_APIARY_ITEM.get()), HiveCategory.ID);
         registration.addRecipeCatalyst(new ItemStack(ModItems.T4_APIARY_ITEM.get()), HiveCategory.ID);
         for (ItemStack stack:HiveCategory.NESTS_0) registration.addRecipeCatalyst(stack, HiveCategory.ID);
-        registration.addRecipeCatalyst(new ItemStack(ModItems.CENTRIFUGE_ITEM.get()), CentrifugeRecipeCategory.ID);
-        registration.addRecipeCatalyst(new ItemStack(ModItems.MECHANICAL_CENTRIFUGE_ITEM.get()), CentrifugeRecipeCategory.ID);
-        registration.addRecipeCatalyst(new ItemStack(ModItems.CENTRIFUGE_CONTROLLER_ITEM.get()), CentrifugeRecipeCategory.ID);
-        registration.addRecipeCatalyst(new ItemStack(ModItems.ELITE_CENTRIFUGE_CONTROLLER_ITEM.get()), CentrifugeRecipeCategory.ID);
     }
 
     @Override
@@ -78,7 +73,6 @@ public class JEICompat implements IModPlugin {
         if (clientWorld != null) {
             RecipeManager recipeManager = Minecraft.getInstance().level.getRecipeManager();
             registration.addRecipes(HiveCategory.getHoneycombRecipes(), HiveCategory.ID);
-            registration.addRecipes(((RecipeManagerAccessorInvoker)recipeManager).callByType(CENTRIFUGE_RECIPE_TYPE).values(), CentrifugeRecipeCategory.ID);
             registration.addRecipes(BeeBreedingCategory.getBreedingRecipes(), BeeBreedingCategory.ID);
             registration.addRecipes(BlockMutation.getMutationRecipes(), BlockMutation.ID);
             registration.addRecipes(BlockToItem.getMutationRecipes(), BlockToItem.ID);
@@ -86,24 +80,8 @@ public class JEICompat implements IModPlugin {
             registration.addRecipes(FlowersCategory.getFlowersRecipes(), FlowersCategory.ID);
             registerInfoDesc(registration);
         }
-//        List<ItemStack> blacklistedItems = new LinkedList<>();
-//        blacklistedItems.add(ModItems.MUTATION_ITEM.get().getDefaultInstance());
-//        registration.getIngredientManager().removeIngredientsAtRuntime(VanillaTypes.ITEM,  blacklistedItems);
     }
 
-    @Override
-    public void registerGuiHandlers(IGuiHandlerRegistration registration) {
-        registration.addRecipeClickArea(MechanicalCentrifugeScreen.class, 80, 30, 18, 18, CentrifugeRecipeCategory.ID);
-
-        registration.addGuiContainerHandler(CentrifugeScreen.class, new IGuiContainerHandler<CentrifugeScreen>() {
-
-            @Override
-            public @NotNull Collection<IGuiClickableArea> getGuiClickableAreas(@NotNull CentrifugeScreen screen, double mouseX, double mouseY) {
-                IGuiClickableArea clickableArea = IGuiClickableArea.createBasic(screen.getXSize() - 25, 50, 18, 18, CentrifugeRecipeCategory.ID);
-                return Collections.singleton(clickableArea);
-            }
-        });
-    }
 
     @Override
     public void registerIngredients(IModIngredientRegistration registration) {
@@ -114,12 +92,15 @@ public class JEICompat implements IModPlugin {
     @Override
     public void registerItemSubtypes(ISubtypeRegistration registration) {
         registration.registerSubtypeInterpreter(ModItems.BEEPEDIA.get(), (ingredient, context) -> ingredient.hasTag() && ingredient.getTag() != null && ingredient.getTag().contains(Beepedia.CREATIVE_TAG) ? "creative.beepedia" : "");
+        registration.registerSubtypeInterpreter(ModItems.OAK_BEE_NEST_ITEM.get(), (itemStack, uidContext) -> {
+            CompoundNBT tag = itemStack.getTag();
+            if (tag != null && tag.contains(NBTConstants.NBT_BLOCK_ENTITY_TAG)) {
+                return "tier." + tag.getCompound(NBTConstants.NBT_BLOCK_ENTITY_TAG).getInt(NBTConstants.NBT_TIER) + "." + itemStack.getItem().getName(itemStack);
+            }
+            return "";
+        });
     }
 
-
-    //gravy, we could add Kube hooks for this, but the info card is a one-stop-shop for all bee data at a glance
-    //I'm not entirely sure what other data should be defined here using Kube that we don't already provide
-    //since we're already adding a "Lore" field and "Author" field
     public void registerInfoDesc(IRecipeRegistration registration) {
         for (EntityIngredient bee : EntityIngredientFactory.create()) {
             CustomBeeData beeData = bee.getBeeData();

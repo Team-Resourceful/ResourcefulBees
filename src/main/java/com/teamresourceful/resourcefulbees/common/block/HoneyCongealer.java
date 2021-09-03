@@ -20,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Random;
 
 @SuppressWarnings("deprecation")
-public class HoneyCongealer extends Block {
+public class HoneyCongealer extends AbstractTank {
 
     protected static final VoxelShape VOXEL_SHAPE = Block.box(1.0D, 0.0D, 1.0D, 15.0D, 16.0D, 15.0D);
 
@@ -42,7 +42,7 @@ public class HoneyCongealer extends Block {
 
         if (tileEntity instanceof HoneyCongealerTileEntity) {
             if (!world.isClientSide) {
-                CentrifugeBlock.capabilityOrGuiUse(tileEntity, player, world, pos, hand);
+                capabilityOrGuiUse(tileEntity, player, world, pos, hand);
             }
             return ActionResultType.SUCCESS;
         }

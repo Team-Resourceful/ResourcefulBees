@@ -47,7 +47,7 @@ import java.util.List;
 import java.util.Random;
 
 @SuppressWarnings("deprecation")
-public class HoneyTank extends Block {
+public class HoneyTank extends AbstractTank {
 
     protected static final VoxelShape VOXEL_SHAPE = Block.box(1.0D, 0.0D, 1.0D, 15.0D, 16.0D, 15.0D);
 
@@ -136,7 +136,7 @@ public class HoneyTank extends Block {
                 } else if (usingHoney) {
                     tank.emptyBottle(player, hand);
                 } else {
-                    CentrifugeBlock.capabilityOrGuiUse(tileEntity, player, world, pos, hand);
+                    capabilityOrGuiUse(tileEntity, player, world, pos, hand);
                 }
             }
             return ActionResultType.SUCCESS;
