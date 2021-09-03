@@ -8,6 +8,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.utils.TooltipBuilder;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.*;
+import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.text.ITextComponent;
@@ -63,16 +64,15 @@ public class ModItems {
         HONEY_BUCKET_ITEMS.register(bus);
     }
 
-    @SuppressWarnings("deprecation")
     public static final RegistryObject<Item> OREO_COOKIE = ITEMS.register("oreo_cookie", () -> new Item(getItemProperties().food(new Food.Builder()
-            .effect(new EffectInstance(Effects.REGENERATION, 600, 1), 1)
-            .effect(new EffectInstance(Effects.ABSORPTION, 2400, 3), 1)
-            .effect(new EffectInstance(Effects.SATURATION, 2400, 1), 1)
-            .effect(new EffectInstance(Effects.LUCK, 600, 3), 1)
-            .effect(new EffectInstance(Effects.FIRE_RESISTANCE, 6000, 0), 1)
-            .effect(new EffectInstance(Effects.DAMAGE_RESISTANCE, 6000, 0), 1)
-            .effect(new EffectInstance(Effects.WATER_BREATHING, 6000, 0), 1)
-            .effect(new EffectInstance(Effects.NIGHT_VISION, 1200, 0), 1)
+            .effect(() -> new EffectInstance(Effects.REGENERATION, 600, 1), 1)
+            .effect(() -> new EffectInstance(Effects.ABSORPTION, 2400, 3), 1)
+            .effect(() -> new EffectInstance(Effects.SATURATION, 2400, 1), 1)
+            .effect(() -> new EffectInstance(Effects.LUCK, 600, 3), 1)
+            .effect(() -> new EffectInstance(Effects.FIRE_RESISTANCE, 6000, 0), 1)
+            .effect(() -> new EffectInstance(Effects.DAMAGE_RESISTANCE, 6000, 0), 1)
+            .effect(() -> new EffectInstance(Effects.WATER_BREATHING, 6000, 0), 1)
+            .effect(() -> new EffectInstance(Effects.NIGHT_VISION, 1200, 0), 1)
             .nutrition(8)
             .saturationMod(2)
             .alwaysEat()
@@ -101,7 +101,7 @@ public class ModItems {
 
     public static final RegistryObject<Item> WAX = ITEMS.register("wax", () -> new Item(getItemProperties()) {
         @Override
-        public int getBurnTime(ItemStack itemStack) {
+        public int getBurnTime(ItemStack itemStack, IRecipeType<?> recipeType) {
             return 400;
         }
     });
@@ -116,7 +116,7 @@ public class ModItems {
 
     public static final RegistryObject<Item> WAX_BLOCK_ITEM = ITEMS.register("wax_block", () -> new BlockItem(ModBlocks.WAX_BLOCK.get(), getItemProperties()) {
         @Override
-        public int getBurnTime(ItemStack itemStack) {
+        public int getBurnTime(ItemStack itemStack, IRecipeType<?> recipeType) {
             return 4000;
         }
     });

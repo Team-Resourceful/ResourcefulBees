@@ -32,9 +32,8 @@ import java.util.List;
 
 public class CentrifugeRecipe implements IRecipe<IInventory> {
 
-    public static final Logger LOGGER = LogManager.getLogger();
-
     public static final IRecipeType<CentrifugeRecipe> CENTRIFUGE_RECIPE_TYPE = IRecipeType.register(ResourcefulBees.MOD_ID + ":centrifuge");
+
     private final ResourceLocation id;
     private final Ingredient ingredient;
     private final List<CentrifugeItemOutput> itemOutputs;
@@ -43,14 +42,16 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
     private final int multiblockTime;
     private final boolean multiblock;
 
-    public static final Codec<CentrifugeRecipe> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            CodecUtils.INGREDIENT_CODEC.fieldOf("ingredient").forGetter(CentrifugeRecipe::getIngredient),
-            CentrifugeItemOutput.CODEC.listOf().fieldOf("itemOutputs").orElse(new ArrayList<>()).forGetter(CentrifugeRecipe::getItemOutputs),
-            CentrifugeFluidOutput.CODEC.listOf().fieldOf("fluidOutputs").orElse(new ArrayList<>()).forGetter(CentrifugeRecipe::getFluidOutputs),
-            Codec.INT.fieldOf("time").orElse(CommonConfig.GLOBAL_CENTRIFUGE_RECIPE_TIME.get()).forGetter(CentrifugeRecipe::getTime),
-            Codec.INT.fieldOf("multiblockTime").orElse((CommonConfig.GLOBAL_CENTRIFUGE_RECIPE_TIME.get()- CommonConfig.MULTIBLOCK_RECIPE_TIME_REDUCTION.get())*3).forGetter(CentrifugeRecipe::getMultiblockTime),
-            Codec.BOOL.fieldOf("multiblock").orElse(false).forGetter(CentrifugeRecipe::isMultiblock)
-    ).apply(instance, CentrifugeRecipe::new));
+    public static Codec<CentrifugeRecipe> codec(ResourceLocation id) {
+        return RecordCodecBuilder.create(instance -> instance.group(
+                CodecUtils.INGREDIENT_CODEC.fieldOf("ingredient").forGetter(CentrifugeRecipe::getIngredient),
+                CentrifugeItemOutput.CODEC.listOf().fieldOf("itemOutputs").orElse(new ArrayList<>()).forGetter(CentrifugeRecipe::getItemOutputs),
+                CentrifugeFluidOutput.CODEC.listOf().fieldOf("fluidOutputs").orElse(new ArrayList<>()).forGetter(CentrifugeRecipe::getFluidOutputs),
+                Codec.INT.fieldOf("time").orElse(CommonConfig.GLOBAL_CENTRIFUGE_RECIPE_TIME.get()).forGetter(CentrifugeRecipe::getTime),
+                Codec.INT.fieldOf("multiblockTime").orElse((CommonConfig.GLOBAL_CENTRIFUGE_RECIPE_TIME.get()- CommonConfig.MULTIBLOCK_RECIPE_TIME_REDUCTION.get())*3).forGetter(CentrifugeRecipe::getMultiblockTime),
+                Codec.BOOL.fieldOf("multiblock").orElse(false).forGetter(CentrifugeRecipe::isMultiblock)
+        ).apply(instance, (i, io, fo, t, mt, m) -> new CentrifugeRecipe(id, i, io, fo, t, mt, m)));
+    }
 
     public CentrifugeRecipe(ResourceLocation id, Ingredient ingredient, List<CentrifugeItemOutput> itemOutputs, List<CentrifugeFluidOutput> fluidOutputs, int time, int multiblockTime, boolean multiblock) {
         this.id = id;
@@ -60,10 +61,6 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
         this.time = time;
         this.multiblockTime = multiblockTime;
         this.multiblock = multiblock;
-    }
-
-    public CentrifugeRecipe(Ingredient ingredient, List<CentrifugeItemOutput> itemOutputs, List<CentrifugeFluidOutput> fluidOutputs, int time, int multiblockTime, boolean multiblock) {
-        this(null, ingredient, itemOutputs, fluidOutputs, time, multiblockTime, multiblock);
     }
 
     @Override
@@ -150,22 +147,16 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
 
     //REQUIRED This needs serious testing to ensure it is working properly before pushing update!!!
     public static class Serializer extends net.minecraftforge.registries.ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<CentrifugeRecipe> {
-        final IRecipeFactory factory;
-
-        public Serializer(Serializer.IRecipeFactory factory) {
-            this.factory = factory;
-        }
 
         @Override
         public @NotNull CentrifugeRecipe fromJson(@NotNull ResourceLocation id, @NotNull JsonObject json) {
-            CentrifugeRecipe recipe = CentrifugeRecipe.CODEC.parse(JsonOps.INSTANCE, json).getOrThrow(false, s -> ResourcefulBees.LOGGER.error("Could not parse Centrifuge Recipe!!"));
-            return this.factory.create(id, recipe.ingredient, recipe.itemOutputs, recipe.fluidOutputs, recipe.time, recipe.multiblockTime, recipe.multiblock);
+            return CentrifugeRecipe.codec(id).parse(JsonOps.INSTANCE, json).getOrThrow(false, s -> ResourcefulBees.LOGGER.error("Could not parse Centrifuge Recipe!!"));
         }
 
         @Override
         public CentrifugeRecipe fromNetwork(@NotNull ResourceLocation id, @NotNull PacketBuffer buffer) {
             try {
-                return buffer.readWithCodec(CODEC);
+                return buffer.readWithCodec(CentrifugeRecipe.codec(id));
             } catch (IOException e) {
                 throw new IllegalArgumentException();
             }
@@ -175,14 +166,10 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
         @Override
         public void toNetwork(@NotNull PacketBuffer buffer, @NotNull CentrifugeRecipe recipe) {
             try {
-                buffer.writeWithCodec(CODEC, recipe);
+                buffer.writeWithCodec(CentrifugeRecipe.codec(recipe.id), recipe);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
-
-        public interface IRecipeFactory {
-            CentrifugeRecipe create(ResourceLocation id, Ingredient input, List<CentrifugeItemOutput> itemOutputs, List<CentrifugeFluidOutput> fluidOutputs, int time, int multiblockTime, boolean multiblock);
         }
     }
 }
