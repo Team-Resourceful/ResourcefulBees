@@ -237,17 +237,6 @@ public class HoneycombPage extends BeeDataPage {
             int startItems = 32 + yPos - totalItemsOffset / 2;
             // draw items
             final int[] k = {0};
-            outputItems.forEach((c, i) -> {
-                ItemStack item = new ItemStack(c.getPool().get(i).getItem(), c.getPool().get(i).getCount() * (recipe.isMultiblock() ? 9 : 1));
-                drawItem(matrix, c.getPool().get(i), item, xPos + 124, startItems + k[0] * 21);
-                k[0]++;
-            });
-            k[0] = 0;
-            outputFluids.forEach((c, i) -> {
-                FluidStack fluid = new FluidStack(c.getPool().get(i).getFluid(), c.getPool().get(i).getAmount() * (recipe.isMultiblock() ? 9 : 1));
-                drawFluid(matrix, c.getPool().get(i), fluid, xPos + 10 + (40 * k[0]), yPos + 10);
-                k[0]++;
-            });
 
             if (isBlock || CommonConfig.MULTIBLOCK_RECIPES_ONLY.get()) {
                 Minecraft.getInstance().getTextureManager().bind(multiblockOnlyImage);

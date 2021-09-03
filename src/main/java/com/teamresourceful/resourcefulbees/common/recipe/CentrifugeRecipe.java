@@ -2,8 +2,7 @@
 package com.teamresourceful.resourcefulbees.common.recipe;
 
 import com.google.gson.JsonObject;
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.JsonOps;
+import com.mojang.serialization.*;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.beedata.CodecUtils;
@@ -21,8 +20,7 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import net.minecraftforge.registries.ForgeRegistryEntry;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -39,28 +37,26 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
     private final List<CentrifugeItemOutput> itemOutputs;
     private final List<CentrifugeFluidOutput> fluidOutputs;
     private final int time;
-    private final int multiblockTime;
-    private final boolean multiblock;
+    private final int energyPerTick;
 
     public static Codec<CentrifugeRecipe> codec(ResourceLocation id) {
         return RecordCodecBuilder.create(instance -> instance.group(
+                MapCodec.of(Encoder.empty(), Decoder.unit(() -> id)).forGetter(CentrifugeRecipe::getId),
                 CodecUtils.INGREDIENT_CODEC.fieldOf("ingredient").forGetter(CentrifugeRecipe::getIngredient),
                 CentrifugeItemOutput.CODEC.listOf().fieldOf("itemOutputs").orElse(new ArrayList<>()).forGetter(CentrifugeRecipe::getItemOutputs),
                 CentrifugeFluidOutput.CODEC.listOf().fieldOf("fluidOutputs").orElse(new ArrayList<>()).forGetter(CentrifugeRecipe::getFluidOutputs),
                 Codec.INT.fieldOf("time").orElse(CommonConfig.GLOBAL_CENTRIFUGE_RECIPE_TIME.get()).forGetter(CentrifugeRecipe::getTime),
-                Codec.INT.fieldOf("multiblockTime").orElse((CommonConfig.GLOBAL_CENTRIFUGE_RECIPE_TIME.get()- CommonConfig.MULTIBLOCK_RECIPE_TIME_REDUCTION.get())*3).forGetter(CentrifugeRecipe::getMultiblockTime),
-                Codec.BOOL.fieldOf("multiblock").orElse(false).forGetter(CentrifugeRecipe::isMultiblock)
-        ).apply(instance, (i, io, fo, t, mt, m) -> new CentrifugeRecipe(id, i, io, fo, t, mt, m)));
+                Codec.INT.fieldOf("energyPerTick").orElse(CommonConfig.RF_TICK_CENTRIFUGE.get()).forGetter(CentrifugeRecipe::getEnergyPerTick)
+        ).apply(instance, CentrifugeRecipe::new));
     }
 
-    public CentrifugeRecipe(ResourceLocation id, Ingredient ingredient, List<CentrifugeItemOutput> itemOutputs, List<CentrifugeFluidOutput> fluidOutputs, int time, int multiblockTime, boolean multiblock) {
+    public CentrifugeRecipe(ResourceLocation id, Ingredient ingredient, List<CentrifugeItemOutput> itemOutputs, List<CentrifugeFluidOutput> fluidOutputs, int time, int energyPerTick) {
         this.id = id;
         this.ingredient = ingredient;
         this.itemOutputs = itemOutputs;
         this.fluidOutputs = fluidOutputs;
         this.time = time;
-        this.multiblockTime = multiblockTime;
-        this.multiblock = multiblock;
+        this.energyPerTick = energyPerTick;
     }
 
     @Override
@@ -137,16 +133,12 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
         return time;
     }
 
-    public int getMultiblockTime() {
-        return multiblockTime;
-    }
-
-    public boolean isMultiblock() {
-        return multiblock;
+    public int getEnergyPerTick() {
+        return energyPerTick;
     }
 
     //REQUIRED This needs serious testing to ensure it is working properly before pushing update!!!
-    public static class Serializer extends net.minecraftforge.registries.ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<CentrifugeRecipe> {
+    public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<CentrifugeRecipe> {
 
         @Override
         public @NotNull CentrifugeRecipe fromJson(@NotNull ResourceLocation id, @NotNull JsonObject json) {

@@ -1,6 +1,9 @@
 package com.teamresourceful.resourcefulbees.api.honeydata;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.Decoder;
+import com.mojang.serialization.Encoder;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.common.item.CustomHoneyBottleItem;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ItemGroupResourcefulBees;
@@ -22,11 +25,12 @@ public class HoneyBottleData {
 
     public static Codec<HoneyBottleData> codec(String name) {
         return RecordCodecBuilder.create(instance -> instance.group(
+                MapCodec.of(Encoder.empty(), Decoder.unit(() -> name)).forGetter(HoneyBottleData::getName),
                 Color.CODEC.fieldOf("color").orElse(Color.DEFAULT).forGetter(HoneyBottleData::getColor),
                 Codec.INT.fieldOf("hunger").orElse(1).forGetter(HoneyBottleData::getHunger),
                 Codec.FLOAT.fieldOf("saturation").orElse(1.0f).forGetter(HoneyBottleData::getSaturation),
                 HoneyEffect.CODEC.listOf().fieldOf("effects").orElse(Collections.emptyList()).forGetter(HoneyBottleData::getEffects)
-        ).apply(instance, (c, h, s, e) -> new HoneyBottleData(name, c, h, s, e)));
+        ).apply(instance, HoneyBottleData::new));
     }
 
     private final String name;

@@ -25,8 +25,8 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -143,29 +143,29 @@ public class ApiaryBlock extends Block {
       String outputType = outputTypeEnum.equals(ApiaryOutputType.COMB) ? I18n.get("honeycomb.resourcefulbees") : I18n.get("honeycomb_block.resourcefulbees");
 
       tooltip.addAll(new TooltipBuilder()
-              .addTip(I18n.get("block.resourcefulbees.apiary.tooltip.output_type"))
+              .addTranslatableTip("block.resourcefulbees.apiary.tooltip.output_type")
               .appendText(" " + outputType)
               .applyStyle(TextFormatting.GOLD)
-              .addTip(I18n.get("block.resourcefulbees.apiary.tooltip.output_quantity"))
+              .addTranslatableTip("block.resourcefulbees.apiary.tooltip.output_quantity")
               .appendText(" " + outputQuantity)
               .applyStyle(TextFormatting.GOLD)
               .build());
     }
     else if (Screen.hasControlDown()){
       tooltip.addAll(new TooltipBuilder()
-              .addTip(I18n.get("block.resourcefulbees.apiary.tooltip.structure_size"), TextFormatting.AQUA)
-              .addTip(I18n.get("block.resourcefulbees.apiary.tooltip.requisites"), TextFormatting.AQUA)
-              .addTip(I18n.get("block.resourcefulbees.apiary.tooltip.drops"), TextFormatting.AQUA)
-              .addTip(I18n.get("block.resourcefulbees.apiary.tooltip.tags"), TextFormatting.AQUA)
-              .addTip(I18n.get("block.resourcefulbees.apiary.tooltip.offset"), TextFormatting.AQUA)
-              .addTip(I18n.get("block.resourcefulbees.apiary.tooltip.lock"), TextFormatting.AQUA)
-              .addTip(I18n.get("block.resourcefulbees.apiary.tooltip.lock_2"), TextFormatting.AQUA)
+              .addTranslatableTip("block.resourcefulbees.apiary.tooltip.structure_size", TextFormatting.AQUA)
+              .addTranslatableTip("block.resourcefulbees.apiary.tooltip.requisites", TextFormatting.AQUA)
+              .addTranslatableTip("block.resourcefulbees.apiary.tooltip.drops", TextFormatting.AQUA)
+              .addTranslatableTip("block.resourcefulbees.apiary.tooltip.tags", TextFormatting.AQUA)
+              .addTranslatableTip("block.resourcefulbees.apiary.tooltip.offset", TextFormatting.AQUA)
+              .addTranslatableTip("block.resourcefulbees.apiary.tooltip.lock", TextFormatting.AQUA)
+              .addTranslatableTip("block.resourcefulbees.apiary.tooltip.lock_2", TextFormatting.AQUA)
               .build());
     }
     else
     {
-      tooltip.add(new StringTextComponent(TextFormatting.YELLOW + I18n.get("resourcefulbees.shift_info")));
-      tooltip.add(new StringTextComponent(TextFormatting.AQUA + I18n.get("resourcefulbees.ctrl_info")));
+      tooltip.add(new TranslationTextComponent("resourcefulbees.shift_info").withStyle(TextFormatting.YELLOW));
+      tooltip.add(new TranslationTextComponent("resourcefulbees.ctrl_info").withStyle(TextFormatting.AQUA));
     }
 
     super.appendHoverText(stack, worldIn, tooltip, flagIn);

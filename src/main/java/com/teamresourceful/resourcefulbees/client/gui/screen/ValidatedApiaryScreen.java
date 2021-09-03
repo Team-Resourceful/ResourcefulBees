@@ -19,7 +19,6 @@ import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
@@ -28,7 +27,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import org.jetbrains.annotations.NotNull;
@@ -183,8 +181,8 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
                 int minTicks = apiaryBee.minOccupationTicks;
                 int ticksLeft = Math.max(minTicks - ticksInHive, 0);
                 beeInfo.add(apiaryBee.displayName);
-                beeInfo.add(new StringTextComponent(I18n.get("gui.resourcefulbees.apiary.bee.ticks_in_hive") + ": " + ticksInHive));
-                beeInfo.add(new StringTextComponent(I18n.get("gui.resourcefulbees.apiary.bee.ticks_left") + ": " + ticksLeft));
+                beeInfo.add(new TranslationTextComponent("gui.resourcefulbees.apiary.bee.ticks_in_hive").append(": ").append(String.valueOf(ticksInHive)));
+                beeInfo.add(new TranslationTextComponent("gui.resourcefulbees.apiary.bee.ticks_left").append(": ").append(String.valueOf(ticksLeft)));
                 this.renderComponentTooltip(matrix, beeInfo, mouseX, mouseY);
             }
         }

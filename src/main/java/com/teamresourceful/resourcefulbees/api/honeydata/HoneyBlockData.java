@@ -1,6 +1,9 @@
 package com.teamresourceful.resourcefulbees.api.honeydata;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.Decoder;
+import com.mojang.serialization.Encoder;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.common.block.CustomHoneyBlock;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
@@ -21,10 +24,12 @@ public class HoneyBlockData {
 
     public static Codec<HoneyBlockData> codec(String name) {
         return RecordCodecBuilder.create(instance -> instance.group(
+                MapCodec.of(Encoder.empty(), Decoder.unit(() -> true)).forGetter(honeyBlockData -> true),
+                MapCodec.of(Encoder.empty(), Decoder.unit(() -> name)).forGetter(HoneyBlockData::getName),
                 Color.CODEC.fieldOf("color").orElse(Color.DEFAULT).forGetter(HoneyBlockData::getColor),
                 Codec.FLOAT.fieldOf("jumpFactor").orElse(0.5f).forGetter(HoneyBlockData::getJumpFactor),
                 Codec.FLOAT.fieldOf("speedFactor").orElse(0.4f).forGetter(HoneyBlockData::getSpeedFactor)
-        ).apply(instance, (c, j, s) -> new HoneyBlockData(true, name, c, j, s)));
+        ).apply(instance, HoneyBlockData::new));
     }
 
     private final String name;

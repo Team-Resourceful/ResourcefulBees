@@ -29,22 +29,27 @@ public class TooltipBuilder {
     }
 
     public TooltipBuilder applyStyle(TextFormatting formatting) {
-        StringTextComponent textComponent = new StringTextComponent(formatting + tooltip.remove(tooltip.size() - 1).getString());
-        tooltip.add(textComponent);
+        ((IFormattableTextComponent)tooltip.get(tooltip.size() - 1)).withStyle(formatting);
         return this;
     }
 
     public TooltipBuilder appendText(String text) {
-        IFormattableTextComponent textComponent = (IFormattableTextComponent) tooltip.remove(tooltip.size() - 1);
-        textComponent.append(text);
-        tooltip.add(textComponent);
+        ((IFormattableTextComponent)tooltip.get(tooltip.size() - 1)).append(text);
         return this;
     }
 
     public TooltipBuilder appendText(String text, TextFormatting formatting) {
-        IFormattableTextComponent textComponent = (IFormattableTextComponent) tooltip.remove(tooltip.size() - 1);
-        textComponent.append(formatting + text);
-        tooltip.add(textComponent);
+        ((IFormattableTextComponent)tooltip.get(tooltip.size() - 1)).append(formatting + text);
+        return this;
+    }
+
+    public TooltipBuilder appendTranslatableText(String key) {
+        ((IFormattableTextComponent)tooltip.get(tooltip.size() - 1)).append(new TranslationTextComponent(key));
+        return this;
+    }
+
+    public TooltipBuilder appendTranslatableText(String key, TextFormatting formatting) {
+        ((IFormattableTextComponent)tooltip.get(tooltip.size() - 1)).append(new TranslationTextComponent(key).withStyle(formatting));
         return this;
     }
 

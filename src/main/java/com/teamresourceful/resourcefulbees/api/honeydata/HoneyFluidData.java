@@ -1,6 +1,9 @@
 package com.teamresourceful.resourcefulbees.api.honeydata;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.Decoder;
+import com.mojang.serialization.Encoder;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.block.CustomHoneyFluidBlock;
@@ -39,6 +42,8 @@ public class HoneyFluidData {
 
     public static Codec<HoneyFluidData> codec(String name) {
         return RecordCodecBuilder.create(instance -> instance.group(
+                MapCodec.of(Encoder.empty(), Decoder.unit(() -> true)).forGetter(honeyFluidData -> true),
+                MapCodec.of(Encoder.empty(), Decoder.unit(() -> name)).forGetter(HoneyFluidData::getName),
                 Color.CODEC.fieldOf("color").orElse(Color.DEFAULT).forGetter(HoneyFluidData::getColor),
                 ResourceLocation.CODEC.fieldOf("stillTexture").orElse(CUSTOM_FLUID_STILL).forGetter(HoneyFluidData::getStillTexture),
                 ResourceLocation.CODEC.fieldOf("flowingTexture").orElse(CUSTOM_FLUID_FLOWING).forGetter(HoneyFluidData::getFlowingTexture),
@@ -48,7 +53,7 @@ public class HoneyFluidData {
                 Codec.INT.fieldOf("density").orElse(1300).forGetter(h -> h.density),
                 Codec.INT.fieldOf("temperature").orElse(300).forGetter(h -> h.temperature),
                 Codec.INT.fieldOf("viscosity").orElse(1800).forGetter(h -> h.viscosity)
-        ).apply(instance, (c, s, f, o, p, e, d, t, v) -> new HoneyFluidData(true, name, c, s, f, o, p, e, d, t, v)));
+        ).apply(instance, HoneyFluidData::new));
     }
 
     private final String name;
