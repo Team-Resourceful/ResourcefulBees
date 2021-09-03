@@ -84,15 +84,12 @@ public class EnderBeecon extends HoneyTank {
                     beecon.toggleSound();
                 } else if (usingStick) {
                     beecon.toggleBeam();
-                } else if (hasCapability) {
-                    tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
-                            .ifPresent(iFluidHandler -> FluidUtil.interactWithFluidHandler(player, hand, world, pos, null));
                 } else if (usingBottle) {
                     beecon.fillBottle(player, hand);
                 } else if (usingHoney) {
                     beecon.emptyBottle(player, hand);
-                } else if (!player.isShiftKeyDown()) {
-                    NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, pos);
+                } else {
+                    capabilityOrGuiUse(tileEntity, player, world, pos, hand);
                 }
             }
             return ActionResultType.SUCCESS;
