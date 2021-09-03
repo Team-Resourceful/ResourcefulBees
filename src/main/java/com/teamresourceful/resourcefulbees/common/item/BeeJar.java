@@ -91,7 +91,15 @@ public class BeeJar extends Item {
                 entity.absMoveTo(blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5, 0, 0);
                 worldIn.addFreshEntity(entity);
             }
-            stack.setTag(null);
+            if (player.isCreative()) return ActionResultType.SUCCESS;
+            if (stack.getCount() > 1) {
+                if (!player.addItem(new ItemStack(ModItems.BEE_JAR.get()))) {
+                    player.drop(new ItemStack(ModItems.BEE_JAR.get()), false);
+                }
+                stack.shrink(1);
+            } else {
+                stack.setTag(null);
+            }
             return ActionResultType.SUCCESS;
         }
         return ActionResultType.FAIL;

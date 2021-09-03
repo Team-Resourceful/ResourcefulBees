@@ -24,6 +24,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 import java.util.Optional;
 
+/**
+ This class is required for use to disable the use of bees in spawners as a lot of devs use bee spawn eggs in crafting recipes.
+ **/
 public class BeeSpawnEggItem extends SpawnEggItem {
     private final CustomBeeData beeData;
 

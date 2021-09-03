@@ -1,0 +1,36 @@
+{
+  "bottleData": {
+    "hunger": 8,
+    "saturation": 0.9,
+    "effects": [
+      {
+        "effect": "speed",
+        "duration": 2400,
+        "strength": 2,
+        "chance": 1
+      },
+      {
+        "effect": "jump_boost",
+        "duration": 2400,
+        "strength": 1,
+        "chance": 1
+      },
+      {
+        "effect": "night_vision",
+        "duration": 2400,
+        "strength": 0,
+        "chance": 1
+      }
+    ]
+  },
+  "blockData": {
+    "jumpFactor": 0.5,
+    "speedFactor": 0.4
+  },
+  "fluidData": {
+    "color": "#BD5331",
+    "stillTexture": "resourcefulbees:block/honey/catnip_honey_still",
+    "flowingTexture": "resourcefulbees:block/honey/catnip_honey_flow",
+    "overlayTexture": "resourcefulbees:block/honey/catnip_honey_overlay"
+  }
+}

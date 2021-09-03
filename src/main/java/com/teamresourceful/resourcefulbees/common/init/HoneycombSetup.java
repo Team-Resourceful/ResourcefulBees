@@ -22,15 +22,16 @@ public class HoneycombSetup {
     }
 
     public static void setupHoneycombs() {
-/*        if (Boolean.TRUE.equals(Config.ENABLE_EASTER_EGG_BEES.get())) {
-            setupDevCombs();
-        }*/
+        if (Boolean.TRUE.equals(CommonConfig.ENABLE_EASTER_EGG_BEES.get())) {
+            FileUtils.setupDevResources("/data/resourcefulbees/dev/dev_honeycombs", HoneycombSetup::parseHoneycomb, "Could not stream dev honeycombs!");
+        }
 
         if (Boolean.TRUE.equals(CommonConfig.GENERATE_DEFAULTS.get())) {
-            FileUtils.setupDefaultFiles("/data/resourcefulbees/default_honeycombs", ModPaths.HONEYCOMBS);
+            FileUtils.setupDefaultFiles("/data/resourcefulbees/defaults/default_honeycombs", ModPaths.HONEYCOMBS);
         }
+
         LOGGER.info("Loading Custom Honeycombs...");
-        FileUtils.streamFilesAndParse(ModPaths.HONEYCOMBS, HoneycombSetup::parseHoneycomb, "Could not stream honeycombs!!");
+        FileUtils.streamFilesAndParse(ModPaths.HONEYCOMBS, HoneycombSetup::parseHoneycomb, "Could not stream honeycombs!");
 
         if (!HoneycombRegistry.areItemsRegistered()) {
             HoneycombRegistry.registerHoneycombItems();
@@ -41,24 +42,8 @@ public class HoneycombSetup {
 
     private static void parseHoneycomb(Reader reader, String name) {
         JsonObject jsonObject = JSONUtils.fromJson(ModConstants.GSON, reader, JsonObject.class);
-        name = Codec.STRING.fieldOf("name").orElse(name).codec().fieldOf("honeycomb").codec().parse(JsonOps.INSTANCE, jsonObject).get().orThrow();
+        name = Codec.STRING.fieldOf("name").orElse(name).codec().fieldOf("honeycomb").codec().parse(JsonOps.INSTANCE, jsonObject).result().orElse(name);
         HoneycombRegistry.getRegistry().cacheRawHoneycombData(name.toLowerCase(Locale.ENGLISH).replace(" ", "_"), jsonObject);
     }
-
-/*    private static void setupDevCombs() {
-        if (Files.isRegularFile(FileUtils.MOD_ROOT)) {
-            try(FileSystem fileSystem = FileSystems.newFileSystem(FileUtils.MOD_ROOT, null)) {
-                Path path = fileSystem.getPath("/data/resourcefulbees/dev_bees");
-                if (Files.exists(path)) {
-                    FileUtils.streamFilesAndParse(path, BeeSetup::parseBee, "Could not stream dev bees!!");
-                }
-            } catch (IOException e) {
-                LOGGER.error("Could not load source {}!!", FileUtils.MOD_ROOT);
-                e.printStackTrace();
-            }
-        } else if (Files.isDirectory(FileUtils.MOD_ROOT)) {
-            FileUtils.streamFilesAndParse(Paths.get(FileUtils.MOD_ROOT.toString(), "/data/resourcefulbees/dev_bees"), BeeSetup::parseBee, "Could not stream dev bees!!");
-        }
-    }*/
 
 }

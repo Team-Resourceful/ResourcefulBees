@@ -1,17 +1,14 @@
 {
   "CoreData": {
     "flower": "minecraft:flowers",
-    "maxTimeInHive": 6000
+    "maxTimeInHive": 6000,
+    "creator" : "Epic_Oreo",
+    "lore": "A Delicious Bee",
+    "loreColor": "rainbow"
   },
-  "HoneycombData": {
-    "type": "CUSTOM",
-    "item": "resourcefulbees:oreo_cookie",
-    "block": "resourcefulbees:oreo_cookie",
-    "apiaryOutputAmounts": [1,2,3,4]
-  },
+  "honeycombVariation": "oreo",
   "RenderData": {
-    "texture": "/yeti/yeti_bee",
-    "model":  "resourcefulbees:geo/yeti.geo.json",
+    "texture": "/oreo/oreo_bee",
     "ColorData": {
       "spawnEggPrimaryColor": "#442920",
       "spawnEggSecondaryColor": "#e1d9b8",

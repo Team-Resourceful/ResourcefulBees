@@ -6,12 +6,16 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.ICustomBee;
+import com.teamresourceful.resourcefulbees.api.honeydata.HoneyBlockData;
+import com.teamresourceful.resourcefulbees.api.honeydata.HoneyBottleData;
+import com.teamresourceful.resourcefulbees.api.honeydata.HoneyFluidData;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.fluids.CustomHoneyFluid;
 import com.teamresourceful.resourcefulbees.common.item.BeeJar;
 import com.teamresourceful.resourcefulbees.common.item.CustomHoneyBottleItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
+import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFluids;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import net.minecraft.block.Block;
@@ -179,33 +183,29 @@ public class BeeInfoUtils {
         Item item = bottleOutput.getItem();
         if (item == Items.HONEY_BOTTLE) {
             return ModFluids.HONEY_STILL.get().getSource();
-        } else if (item == ModItems.CATNIP_HONEY_BOTTLE.get()) {
-            return ModFluids.CATNIP_HONEY_STILL.get().getSource();
         } else if (item instanceof CustomHoneyBottleItem) {
             CustomHoneyBottleItem honey = (CustomHoneyBottleItem) item;
-            return honey.getHoneyData().getHoneyStillFluidRegistryObject().get().getSource();
+            HoneyFluidData fluidData = HoneyRegistry.getRegistry().getHoneyData(honey.getHoneyData().getName()).getFluidData();
+            return fluidData.getStillFluid().get().getSource();
         }
         return Fluids.EMPTY;
     }
 
     public static Item getHoneyBottleFromFluid(Fluid fluid) {
-        if (fluid == ModFluids.CATNIP_HONEY_STILL.get()) {
-            return ModItems.CATNIP_HONEY_BOTTLE.get();
-        } else if (fluid instanceof CustomHoneyFluid) {
+        if (fluid instanceof CustomHoneyFluid) {
             CustomHoneyFluid customfluid = (CustomHoneyFluid) fluid;
-            return customfluid.getHoneyData().getHoneyBottleRegistryObject().get();
+            return HoneyRegistry.getRegistry().getHoneyData(customfluid.getHoneyData().getName()).getBottleData().getHoneyBottle().get();
         } else {
             return Items.HONEY_BOTTLE;
         }
     }
 
     public static Item getHoneyBlockFromFluid(Fluid fluid) {
-        if (fluid == ModFluids.CATNIP_HONEY_STILL.get()) {
-            return ModItems.CATNIP_HONEY_BLOCK_ITEM.get();
-        } else if (fluid instanceof CustomHoneyFluid) {
+        if (fluid instanceof CustomHoneyFluid) {
             CustomHoneyFluid customfluid = (CustomHoneyFluid) fluid;
-            if (!customfluid.getHoneyData().doGenerateHoneyBlock()) return Items.AIR;
-            return customfluid.getHoneyData().getHoneyBlockItemRegistryObject().get();
+            HoneyBlockData blockData = HoneyRegistry.getRegistry().getHoneyData(customfluid.getHoneyData().getName()).getBlockData();
+            if (blockData.getBlockItem() == null) return Items.AIR;
+            return blockData.getBlockItem().get();
         } else {
             return Items.HONEY_BLOCK;
         }

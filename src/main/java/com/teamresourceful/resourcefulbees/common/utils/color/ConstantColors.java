@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.utils.color;
 
+@SuppressWarnings("unused")
 public class ConstantColors {
 
     //You can add colors here when needed.

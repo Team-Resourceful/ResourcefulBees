@@ -37,14 +37,16 @@ public class BeeSetup {
 
     public static void setupBees() {
         if (Boolean.TRUE.equals(CommonConfig.ENABLE_EASTER_EGG_BEES.get())) {
-            setupDevBees();
+            FileUtils.setupDevResources("/data/resourcefulbees/dev/dev_bees", BeeSetup::parseBee, "Could not stream dev bees!");
         }
 
         if (Boolean.TRUE.equals(CommonConfig.GENERATE_DEFAULTS.get())) {
-            FileUtils.setupDefaultFiles("/data/resourcefulbees/default_bees", ModPaths.BEES);
+            FileUtils.setupDefaultFiles("/data/resourcefulbees/defaults/default_bees", ModPaths.BEES);
         }
+
         LOGGER.info("Loading Custom Bees...");
-        FileUtils.streamFilesAndParse(ModPaths.BEES, BeeSetup::parseBee, "Could not stream bees!!");
+        FileUtils.streamFilesAndParse(ModPaths.BEES, BeeSetup::parseBee, "Could not stream bees!");
+
         BeeRegistry.getRegistry().regenerateCustomBeeData();
     }
 
@@ -52,22 +54,6 @@ public class BeeSetup {
         JsonObject jsonObject = JSONUtils.fromJson(ModConstants.GSON, reader, JsonObject.class);
         name = Codec.STRING.fieldOf("name").orElse(name).codec().fieldOf("CoreData").codec().parse(JsonOps.INSTANCE, jsonObject).get().orThrow();
         BeeRegistry.getRegistry().cacheRawBeeData(name.toLowerCase(Locale.ENGLISH).replace(" ", "_"), jsonObject);
-    }
-
-    private static void setupDevBees() {
-        if (Files.isRegularFile(FileUtils.MOD_ROOT)) {
-            try(FileSystem fileSystem = FileSystems.newFileSystem(FileUtils.MOD_ROOT, null)) {
-                Path path = fileSystem.getPath("/data/resourcefulbees/dev_bees");
-                if (Files.exists(path)) {
-                    FileUtils.streamFilesAndParse(path, BeeSetup::parseBee, "Could not stream dev bees!!");
-                }
-            } catch (IOException e) {
-                LOGGER.error("Could not load source {}!!", FileUtils.MOD_ROOT);
-                e.printStackTrace();
-            }
-        } else if (Files.isDirectory(FileUtils.MOD_ROOT)) {
-            FileUtils.streamFilesAndParse(Paths.get(FileUtils.MOD_ROOT.toString(), "/data/resourcefulbees/dev_bees"), BeeSetup::parseBee, "Could not stream dev bees!!");
-        }
     }
 
     public static void onBiomeLoad(BiomeLoadingEvent event) {

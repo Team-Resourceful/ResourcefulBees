@@ -5,7 +5,6 @@ import com.teamresourceful.resourcefulbees.common.block.*;
 import com.teamresourceful.resourcefulbees.common.block.multiblocks.apiary.ApiaryBlock;
 import com.teamresourceful.resourcefulbees.common.block.multiblocks.apiary.ApiaryBreederBlock;
 import com.teamresourceful.resourcefulbees.common.block.multiblocks.apiary.ApiaryStorageBlock;
-import com.teamresourceful.resourcefulbees.common.entity.passive.KittenBee;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.tileentity.HoneyTankTileEntity;
 import net.minecraft.block.*;
@@ -85,7 +84,6 @@ public class ModBlocks {
     public static final RegistryObject<Block> APIARY_STORAGE_BLOCK = BLOCKS.register("apiary_storage", () -> new ApiaryStorageBlock(NEST_PROPERTIES));
     public static final RegistryObject<Block> HONEY_GENERATOR = BLOCKS.register("honey_generator", () -> new HoneyGenerator(CENTRIFUGE_PROPERTIES));
     public static final RegistryObject<FlowingFluidBlock> HONEY_FLUID_BLOCK = BLOCKS.register("honey_fluid_block", () -> new FlowingFluidBlock(ModFluids.HONEY_STILL, AbstractBlock.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
-    public static final RegistryObject<FlowingFluidBlock> CATNIP_HONEY_FLUID_BLOCK = BLOCKS.register("catnip_honey_fluid_block", () -> new FlowingFluidBlock(ModFluids.CATNIP_HONEY_STILL, AbstractBlock.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
     public static final RegistryObject<Block> CREATIVE_GEN = BLOCKS.register("creative_gen", () -> new CreativeGen(CENTRIFUGE_PROPERTIES));
     public static final RegistryObject<Block> ACCELERATOR = BLOCKS.register("accelerator", () -> new AcceleratorBlock(CENTRIFUGE_PROPERTIES));
     public static final RegistryObject<Block> ENDER_BEECON = BLOCKS.register("ender_beecon", () -> new EnderBeecon(EnderBeecon.PROPERTIES));
@@ -93,8 +91,6 @@ public class ModBlocks {
     public static final RegistryObject<Block> NETHER_HONEY_TANK = BLOCKS.register("nether_honey_tank", () -> new HoneyTank(HoneyTank.NETHER, HoneyTankTileEntity.TankTier.NETHER));
     public static final RegistryObject<Block> WOODEN_HONEY_TANK = BLOCKS.register("wooden_honey_tank", () -> new HoneyTank(HoneyTank.WOODEN, HoneyTankTileEntity.TankTier.WOODEN));
     public static final RegistryObject<Block> HONEY_CONGEALER = BLOCKS.register("honey_congealer", () -> new HoneyCongealer(AbstractBlock.Properties.of(Material.STONE).sound(SoundType.GLASS).strength(1.5f).requiresCorrectToolForDrops().harvestTool(ToolType.PICKAXE).harvestLevel(1)));
-    public static final RegistryObject<Block> CATNIP_HONEYCOMB_BLOCK = BLOCKS.register("catnip_honeycomb_block", () -> new Block(AbstractBlock.Properties.of(Material.CLAY).sound(SoundType.SNOW).strength(0.3F)));
-    public static final RegistryObject<Block> CATNIP_HONEY_BLOCK = BLOCKS.register("catnip_honey_block", () -> new CustomHoneyBlock(KittenBee.getHoneyBottleData()));
     public static final RegistryObject<Block> HONEY_PIPE = BLOCKS.register("honey_pipe", () -> new HoneyPipe(AbstractBlock.Properties.of(Material.METAL).sound(SoundType.METAL).strength(1.5f).requiresCorrectToolForDrops().harvestTool(ToolType.PICKAXE).harvestLevel(1)));
     public static final RegistryObject<Block> BOTTOMLESS_HONEY_POT = BLOCKS.register("bottomless_honey_pot", () -> new BottomlessHoneyPot(AbstractBlock.Properties.of(Material.STONE).sound(SoundType.STONE).strength(1.5f).requiresCorrectToolForDrops().harvestLevel(1).harvestTool(ToolType.PICKAXE)));
 }

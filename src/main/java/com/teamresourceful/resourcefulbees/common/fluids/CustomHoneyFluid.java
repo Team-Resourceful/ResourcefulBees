@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.fluids;
 
-import com.teamresourceful.resourcefulbees.api.honeydata.HoneyBottleData;
+import com.teamresourceful.resourcefulbees.api.honeydata.HoneyData;
+import com.teamresourceful.resourcefulbees.api.honeydata.HoneyFluidData;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.state.StateContainer;
@@ -9,21 +10,21 @@ import org.jetbrains.annotations.NotNull;
 
 public abstract class CustomHoneyFluid extends ForgeFlowingFluid {
 
-    private final HoneyBottleData honeyData;
+    private final HoneyFluidData data;
 
-    protected CustomHoneyFluid(Properties properties, HoneyBottleData honeyData) {
+    protected CustomHoneyFluid(Properties properties, HoneyFluidData data) {
         super(properties);
-        this.honeyData = honeyData;
+        this.data = data;
     }
 
-    public HoneyBottleData getHoneyData() {
-        return honeyData;
+    public HoneyFluidData getHoneyData() {
+        return data;
     }
 
     public static class Flowing extends CustomHoneyFluid {
 
-        public Flowing(Properties properties, HoneyBottleData honeyData) {
-            super(properties, honeyData);
+        public Flowing(Properties properties, HoneyFluidData data) {
+            super(properties, data);
             registerDefaultState(getStateDefinition().any().setValue(LEVEL, 7));
         }
 
@@ -44,7 +45,7 @@ public abstract class CustomHoneyFluid extends ForgeFlowingFluid {
 
     public static class Source extends CustomHoneyFluid {
 
-        public Source(Properties properties, HoneyBottleData honeyData) {
+        public Source(Properties properties, HoneyFluidData honeyData) {
             super(properties, honeyData);
         }
 

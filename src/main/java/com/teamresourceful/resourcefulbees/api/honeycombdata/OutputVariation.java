@@ -89,7 +89,7 @@ public class OutputVariation {
     private void fixHiveCombs() {
         do {
             if (hiveCombs.isEmpty() && defaultComb.isPresent()) {
-                hiveCombs.add(defaultComb.get());
+                hiveCombs.add(defaultComb.get().copy());
             } else if (hiveCombs.isEmpty()) {
                 throw new IllegalArgumentException("HiveCombs list can't be empty without a default comb supplied!!");
             } else {
@@ -108,6 +108,7 @@ public class OutputVariation {
             checkDefaultsAreOK();
             for (int i = 0; i < 4; i++) {
                 ItemStack stack = DEFAULT_APIARY_OUTPUT_TYPES.get(i).equals(ApiaryOutputType.COMB) ? defaultComb.get() : defaultCombBlock.get();
+                stack = stack.copy();
                 stack.setCount(DEFAULT_APIARY_AMOUNTS.get(i));
                 apiaryCombs.add(stack);
             }

@@ -50,9 +50,5 @@ public class FluidRender {
         RenderTypeLookup.setRenderLayer(ModBlocks.HONEY_FLUID_BLOCK.get(), RenderType.translucent());
         RenderTypeLookup.setRenderLayer(ModFluids.HONEY_STILL.get(), RenderType.translucent());
         RenderTypeLookup.setRenderLayer(ModFluids.HONEY_FLOWING.get(), RenderType.translucent());
-        RenderTypeLookup.setRenderLayer(ModFluids.CATNIP_HONEY_FLOWING.get(), RenderType.translucent());
-        RenderTypeLookup.setRenderLayer(ModFluids.CATNIP_HONEY_STILL.get(), RenderType.translucent());
-        RenderTypeLookup.setRenderLayer(ModBlocks.CATNIP_HONEY_BLOCK.get(), RenderType.translucent());
-        RenderTypeLookup.setRenderLayer(ModBlocks.CATNIP_HONEY_FLUID_BLOCK.get(), RenderType.translucent());
     }
 }

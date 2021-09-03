@@ -2,22 +2,22 @@ package com.teamresourceful.resourcefulbees.common.compat.jei;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
+import com.teamresourceful.resourcefulbees.client.config.ClientConfig;
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityIngredient;
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityIngredientFactory;
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityIngredientHelper;
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityRenderer;
 import com.teamresourceful.resourcefulbees.common.item.Beepedia;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
-import com.teamresourceful.resourcefulbees.common.mixin.RecipeManagerAccessorInvoker;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
-import mezz.jei.api.gui.handlers.IGuiClickableArea;
-import mezz.jei.api.gui.handlers.IGuiContainerHandler;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredientType;
+import mezz.jei.api.ingredients.subtypes.IIngredientSubtypeInterpreter;
 import mezz.jei.api.registration.*;
 import net.minecraft.client.Minecraft;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.nbt.CompoundNBT;
@@ -25,16 +25,13 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.RegistryObject;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.StringJoiner;
-
-import static com.teamresourceful.resourcefulbees.common.recipe.CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE;
 
 @JeiPlugin
 public class JEICompat implements IModPlugin {
@@ -92,13 +89,19 @@ public class JEICompat implements IModPlugin {
     @Override
     public void registerItemSubtypes(ISubtypeRegistration registration) {
         registration.registerSubtypeInterpreter(ModItems.BEEPEDIA.get(), (ingredient, context) -> ingredient.hasTag() && ingredient.getTag() != null && ingredient.getTag().contains(Beepedia.CREATIVE_TAG) ? "creative.beepedia" : "");
-        registration.registerSubtypeInterpreter(ModItems.OAK_BEE_NEST_ITEM.get(), (itemStack, uidContext) -> {
-            CompoundNBT tag = itemStack.getTag();
-            if (tag != null && tag.contains(NBTConstants.NBT_BLOCK_ENTITY_TAG)) {
-                return "tier." + tag.getCompound(NBTConstants.NBT_BLOCK_ENTITY_TAG).getInt(NBTConstants.NBT_TIER) + "." + itemStack.getItem().getName(itemStack);
+
+        if (Boolean.TRUE.equals(ClientConfig.SHOW_TIERS_IN_JEI.get())) {
+            for (RegistryObject<Item> nest : ModItems.NESTS_ITEMS.getEntries()) {
+                registration.registerSubtypeInterpreter(nest.get(), (stack, context) -> {
+                    if (!stack.hasTag() || stack.getTag() == null) return IIngredientSubtypeInterpreter.NONE;
+                    if (!stack.getTag().contains(NBTConstants.NBT_BLOCK_ENTITY_TAG))
+                        return IIngredientSubtypeInterpreter.NONE;
+                    CompoundNBT blockTag = stack.getTag().getCompound(NBTConstants.NBT_BLOCK_ENTITY_TAG);
+                    if (!blockTag.contains(NBTConstants.NBT_TIER)) return IIngredientSubtypeInterpreter.NONE;
+                    return "tier." + blockTag.getInt(NBTConstants.NBT_TIER) + "." + nest.getId().getPath();
+                });
             }
-            return "";
-        });
+        }
     }
 
     public void registerInfoDesc(IRecipeRegistration registration) {

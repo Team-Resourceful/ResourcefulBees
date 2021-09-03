@@ -1,7 +1,7 @@
 
 package com.teamresourceful.resourcefulbees.common.block;
 
-import com.teamresourceful.resourcefulbees.api.honeydata.HoneyBottleData;
+import com.teamresourceful.resourcefulbees.api.honeydata.HoneyFluidData;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.fluid.FlowingFluid;
@@ -16,15 +16,15 @@ import java.util.function.Supplier;
 
 public class CustomHoneyFluidBlock extends FlowingFluidBlock {
 
-    public final HoneyBottleData honeyData;
+    public final HoneyFluidData data;
 
-    public CustomHoneyFluidBlock(Supplier<? extends FlowingFluid> supplier, Properties properties, HoneyBottleData honeyData) {
+    public CustomHoneyFluidBlock(Supplier<? extends FlowingFluid> supplier, Properties properties, HoneyFluidData data) {
         super(supplier, properties);
-        this.honeyData = honeyData;
+        this.data = data;
     }
 
     public int getHoneyColor() {
-        return honeyData.getColor().getValue();
+        return data.getColor().getValue();
     }
 
     public static int getBlockColor(BlockState state, @Nullable IWorldReader world, @Nullable BlockPos pos, int tintIndex) {
@@ -34,7 +34,7 @@ public class CustomHoneyFluidBlock extends FlowingFluidBlock {
 
     @Override
     public void animateTick(@NotNull BlockState stateIn, @NotNull World world, @NotNull BlockPos pos, @NotNull Random rand) {
-        if (honeyData.getColor().isRainbow())
+        if (data.getColor().isRainbow())
             world.sendBlockUpdated(pos, stateIn, stateIn, 2);
         super.animateTick(stateIn, world, pos, rand);
     }

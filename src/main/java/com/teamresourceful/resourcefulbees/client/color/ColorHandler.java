@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.utils.color;
+package com.teamresourceful.resourcefulbees.client.color;
 
 import com.teamresourceful.resourcefulbees.common.block.CustomHoneyBlock;
 import com.teamresourceful.resourcefulbees.common.block.HoneycombBlock;
