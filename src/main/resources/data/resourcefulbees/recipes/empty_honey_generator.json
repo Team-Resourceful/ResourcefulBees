@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "resourcefulbees:honey_generator"
+    }
+  ],
+  "result": {
+    "item": "resourcefulbees:honey_generator",
+    "count": 1
+  }
+}
