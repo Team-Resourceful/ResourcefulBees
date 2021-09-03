@@ -11,6 +11,7 @@ import com.resourcefulbees.resourcefulbees.init.*;
 import com.resourcefulbees.resourcefulbees.item.BeeSpawnEggItem;
 import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
 import com.resourcefulbees.resourcefulbees.patreon.PatreonDataLoader;
+import com.resourcefulbees.resourcefulbees.recipe.HiveIngredient;
 import com.resourcefulbees.resourcefulbees.registry.*;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import net.minecraft.entity.merchant.villager.VillagerTrades;
@@ -20,10 +21,12 @@ import net.minecraft.item.MerchantOffer;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.tileentity.BannerPattern;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.fml.DistExecutor;
@@ -142,6 +145,7 @@ public class ResourcefulBees {
         NetPacketHandler.init();
         MinecraftForge.EVENT_BUS.register(new RecipeBuilder());
         ModFeatures.ConfiguredFeatures.registerConfiguredFeatures();
+        CraftingHelper.register(new ResourceLocation(ResourcefulBees.MOD_ID, "hive"), HiveIngredient.Serializer.INSTANCE);
     }
 
     public void onInterModEnqueue(InterModEnqueueEvent event) {

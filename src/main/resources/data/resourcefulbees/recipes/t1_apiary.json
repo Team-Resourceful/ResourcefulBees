@@ -7,7 +7,10 @@
   ],
   "key": {
     "N": { "item": "minecraft:nether_star" },
-    "B": { "item": "resourcefulbees:t4_beehive" },
+    "B": {
+      "type": "resourcefulbees:hive",
+      "tier": 4
+    },
     "H": { "tag": "resourcefulbees:resourceful_honeycomb_block"}
   },
   "result": {
