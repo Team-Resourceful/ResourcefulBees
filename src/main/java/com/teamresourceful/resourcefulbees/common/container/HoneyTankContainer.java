@@ -22,7 +22,6 @@ public class HoneyTankContainer extends ContainerWithStackMove {
     public HoneyTankContainer(int id, World world, BlockPos pos, PlayerInventory inv) {
         super(ModContainers.HONEY_TANK_CONTAINER.get(), id);
 
-        PlayerEntity player = inv.player;
         honeyTankTileEntity = (HoneyTankTileEntity) world.getBlockEntity(pos);
 
         if (getHoneyTankTileEntity() != null) {

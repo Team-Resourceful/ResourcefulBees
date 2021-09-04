@@ -2,6 +2,9 @@ package com.teamresourceful.resourcefulbees.api.beedata;
 
 import com.google.common.collect.Sets;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.Decoder;
+import com.mojang.serialization.Encoder;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import com.teamresourceful.resourcefulbees.common.utils.color.Color;
@@ -37,7 +40,7 @@ public class CoreData {
      */
     public static Codec<CoreData> codec(String name) {
         return RecordCodecBuilder.create(instance -> instance.group(
-                Codec.STRING.fieldOf("name").orElse(name).forGetter(CoreData::getName),
+                MapCodec.of(Encoder.empty(), Decoder.unit(() -> name)).forGetter(CoreData::getName),
                 CodecUtils.BLOCK_SET_CODEC.fieldOf("flower").orElse(Sets.newHashSet(Blocks.POPPY)).forGetter(CoreData::getBlockFlowers),
                 Registry.ENTITY_TYPE.optionalFieldOf("entityFlower").forGetter(CoreData::getEntityFlower),
                 Codec.intRange(600, Integer.MAX_VALUE).fieldOf("maxTimeInHive").orElse(2400).forGetter(CoreData::getMaxTimeInHive),

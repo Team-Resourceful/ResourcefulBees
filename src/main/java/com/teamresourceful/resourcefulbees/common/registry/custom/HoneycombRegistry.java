@@ -1,8 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.registry.custom;
 
 import com.google.gson.JsonObject;
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.JsonOps;
+import com.mojang.serialization.*;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.honeycombdata.OutputVariation;
@@ -115,7 +114,7 @@ public class HoneycombRegistry {
 
         private static Codec<RegistryData> codec(String name) {
             return RecordCodecBuilder.create(instance -> instance.group(
-                    Codec.STRING.fieldOf("name").orElse(name).forGetter(registryData -> registryData.name),
+                    MapCodec.of(Encoder.empty(), Decoder.unit(() -> name)).forGetter(registryData -> registryData.name),
                     Color.CODEC.fieldOf("color").orElse(Color.DEFAULT).forGetter(registryData -> registryData.color),
                     Codec.BOOL.fieldOf("edible").orElse(true).forGetter(registryData -> registryData.isEdible),
                     Codec.BOOL.fieldOf("block").orElse(true).forGetter(registryData -> registryData.hasBlock)

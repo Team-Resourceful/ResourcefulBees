@@ -1,6 +1,9 @@
 package com.teamresourceful.resourcefulbees.api.beedata.breeding;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.Decoder;
+import com.mojang.serialization.Encoder;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
@@ -23,8 +26,9 @@ public class BeeFamily {
                 Codec.doubleRange(0.0d, Double.MAX_VALUE).fieldOf("weight").orElse(BeeConstants.DEFAULT_BREED_WEIGHT).forGetter(BeeFamily::getWeight),
                 Codec.doubleRange(0.0d, 1.0d).fieldOf("chance").orElse(BeeConstants.DEFAULT_BREED_CHANCE).forGetter(BeeFamily::getChance),
                 Codec.STRING.fieldOf("parent1").orElse("").forGetter(BeeFamily::getParent1),
-                Codec.STRING.fieldOf("parent2").orElse("").forGetter(BeeFamily::getParent2)
-        ).apply(instance, (weight, chance, parent1, parent2) -> new BeeFamily(weight, chance, parent1, parent2, name)));
+                Codec.STRING.fieldOf("parent2").orElse("").forGetter(BeeFamily::getParent2),
+                MapCodec.of(Encoder.empty(), Decoder.unit(() -> name)).forGetter(BeeFamily::getChild)
+        ).apply(instance, BeeFamily::new));
     }
 
     protected double weight;

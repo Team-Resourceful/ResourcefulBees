@@ -64,7 +64,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee, IAnimat
     private static final DataParameter<Integer> FEED_COUNT = EntityDataManager.defineId(CustomBeeEntity.class, DataSerializers.INT);
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.bee.fly", true));
+        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.bee.fly", true).addAnimation("animation.bee.fly.bobbing", true));
         return PlayState.CONTINUE;
     }
 

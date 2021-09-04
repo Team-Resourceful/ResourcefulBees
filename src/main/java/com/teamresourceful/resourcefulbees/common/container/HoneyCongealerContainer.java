@@ -18,7 +18,6 @@ public class HoneyCongealerContainer extends ContainerWithStackMove {
     public HoneyCongealerContainer(int id, World world, BlockPos pos, PlayerInventory inv) {
         super(ModContainers.HONEY_CONGEALER_CONTAINER.get(), id);
 
-        PlayerEntity player = inv.player;
         honeyCongealerTileEntity = (HoneyCongealerTileEntity) world.getBlockEntity(pos);
 
         if (getHoneyCongealerTileEntity() != null) {
