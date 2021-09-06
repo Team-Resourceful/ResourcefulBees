@@ -1,6 +1,6 @@
 name: Publish To Maven
 on:
-  workflow-dispatch:
+  workflow_dispatch:
     branches:
       - 1.16.5
 jobs:
