@@ -1,8 +1,6 @@
 name: Publish To Maven
 on:
   workflow_dispatch:
-    branches:
-      - 1.16.5
 jobs:
   publish:
     runs-on: ubuntu-latest
