@@ -1,10 +1,8 @@
 package com.resourcefulbees.resourcefulbees.tileentity;
 
-import com.google.gson.JsonElement;
 import com.resourcefulbees.resourcefulbees.block.MechanicalCentrifugeBlock;
 import com.resourcefulbees.resourcefulbees.container.AutomationSensitiveItemStackHandler;
 import com.resourcefulbees.resourcefulbees.container.MechanicalCentrifugeContainer;
-import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe;
 import com.resourcefulbees.resourcefulbees.registry.ModTileEntityTypes;
 import net.minecraft.block.BlockState;
@@ -95,7 +93,7 @@ public class MechanicalCentrifugeTileEntity extends TileEntity implements ITicka
                     )
             );
             int processScore = 0;
-            if (outputSlots.get(0).isEmpty() && outputSlots.get(1).isEmpty() && outputSlots.get(2).isEmpty() && glassBottle.getItem() == Items.GLASS_BOTTLE && combs.getCount() >= inputAmount) return true;
+            if (outputSlots.get(0).isEmpty() && outputSlots.get(1).isEmpty() && outputSlots.get(2).isEmpty() && glassBottle.getItem() == Items.GLASS_BOTTLE && combs.getCount() >= inputAmount && glassBottle.getCount() >= outputs.get(2).getLeft().getCount()) return true;
             else {
                 for(int i=0;i<3;i++) {
                     if (outputSlots.get(i).isEmpty() || (outputSlots.get(i).getItem() == outputs.get(i).getLeft().getItem()
@@ -106,7 +104,7 @@ public class MechanicalCentrifugeTileEntity extends TileEntity implements ITicka
                 if (combs.getCount() >= inputAmount) {
                     processScore++;
                 }
-                if (processScore == 4 && glassBottle.getItem() == Items.GLASS_BOTTLE) {
+                if (processScore == 4 && glassBottle.getItem() == Items.GLASS_BOTTLE && glassBottle.getCount() >= outputs.get(2).getLeft().getCount()) {
                     return true;
                 } else {
                     if (level != null) {
@@ -141,7 +139,7 @@ public class MechanicalCentrifugeTileEntity extends TileEntity implements ITicka
                         } else if (slots.get(i).getLeft().getItem() == output.getLeft().getItem()) {
                             slots.get(i).getLeft().grow(output.getLeft().getCount());
                         }
-                        if (slots.get(i).getRight().equals(HONEY_BOTTLE)) glassBottle.shrink(1);
+                        if (slots.get(i).getRight().equals(HONEY_BOTTLE)) glassBottle.shrink(output.getLeft().getCount());
                     }
                 }
             comb.shrink(inputAmount);
