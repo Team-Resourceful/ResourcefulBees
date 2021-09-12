@@ -9,7 +9,6 @@ import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.network.packets.BuildApiaryMessage;
 import com.teamresourceful.resourcefulbees.common.network.packets.ValidateApiaryMessage;
 import com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary.ApiaryTileEntity;
-import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
 import com.teamresourceful.resourcefulbees.common.utils.PreviewHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -21,6 +20,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
@@ -96,8 +96,8 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
             default:
                 horizontalOffset++;
         }
-        verticalOffset = MathUtils.clamp(verticalOffset, -1, 2);
-        horizontalOffset = MathUtils.clamp(horizontalOffset, -2, 2);
+        verticalOffset = MathHelper.clamp(verticalOffset, -1, 2);
+        horizontalOffset = MathHelper.clamp(horizontalOffset, -2, 2);
 
         apiaryTileEntity.setVerticalOffset(verticalOffset);
         apiaryTileEntity.setHorizontalOffset(horizontalOffset);
