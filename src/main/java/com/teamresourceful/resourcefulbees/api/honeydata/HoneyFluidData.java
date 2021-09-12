@@ -98,7 +98,7 @@ public class HoneyFluidData {
 
             stillFluid = ModFluids.STILL_HONEY_FLUIDS.register(name + "_honey", () -> new CustomHoneyFluid.Source(properties[0], this));
             flowingFluid = ModFluids.FLOWING_HONEY_FLUIDS.register(name + "_honey_flowing", () -> new CustomHoneyFluid.Flowing(properties[0], this));
-            fluidBucket = ModItems.HONEY_BUCKET_ITEMS.register(name + "_honey_bucket", () -> new CustomHoneyBucketItem(this.stillFluid, new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES).craftRemainder(Items.BUCKET).stacksTo(1), this));
+            fluidBucket = ModItems.HONEY_BUCKET_ITEMS.register(name + "_honey_bucket", () -> new CustomHoneyBucketItem(this.stillFluid, new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES_HONEY).craftRemainder(Items.BUCKET).stacksTo(1), this));
             fluidBlock = ModBlocks.HONEY_FLUID_BLOCKS.register(name + "_honey", () -> new CustomHoneyFluidBlock(this.stillFluid, AbstractBlock.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops(), this));
 
             properties[0] = new ForgeFlowingFluid.Properties(this.stillFluid, this.flowingFluid, builder)

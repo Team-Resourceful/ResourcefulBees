@@ -31,7 +31,7 @@ public class BeeSpawnEggItem extends SpawnEggItem {
     private final CustomBeeData beeData;
 
 	public BeeSpawnEggItem(EntityType<?> entityType, String beeType) {
-		super(entityType, 0xffcc33, 0x303030, new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES));
+		super(entityType, 0xffcc33, 0x303030, new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES_BEES));
 		this.beeData = BeeRegistry.getRegistry().getBeeData(beeType);
 	}
 

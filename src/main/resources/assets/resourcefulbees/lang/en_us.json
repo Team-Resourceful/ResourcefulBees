@@ -1,5 +1,9 @@
 {
 	"itemGroup.resourcefulbees": "Resourceful Bees",
+	"itemGroup.resourcefulbees.hives": "Resourceful Bees - Hives",
+	"itemGroup.resourcefulbees.honey": "Resourceful Bees - Honey",
+	"itemGroup.resourcefulbees.combs": "Resourceful Bees - Combs",
+	"itemGroup.resourcefulbees.bees": "Resourceful Bees - Spawn Eggs",
 
 	"resourcefulbees.information.bee_type.vanilla": "Bee Type: Minecraft",
 	"resourcefulbees.information.bee_type.unknown": "Bee Type: Unknown",

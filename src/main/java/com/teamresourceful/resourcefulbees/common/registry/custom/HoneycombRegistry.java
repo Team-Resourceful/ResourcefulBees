@@ -129,7 +129,7 @@ public class HoneycombRegistry {
         private RegistryData(String name, Color color, boolean isEdible, boolean hasBlock) {
             if (hasBlock) {
                 RegistryObject<Block> customHoneycombBlock = ModBlocks.HONEYCOMB_BLOCKS.register(name + "_honeycomb_block", () -> new HoneycombBlock(color, AbstractBlock.Properties.copy(Blocks.HONEYCOMB_BLOCK)));
-                final RegistryObject<Item> blockItem = ModItems.HONEYCOMB_BLOCK_ITEMS.register(name + "_honeycomb_block", () -> new BlockItem(customHoneycombBlock.get(), new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
+                final RegistryObject<Item> blockItem = ModItems.HONEYCOMB_BLOCK_ITEMS.register(name + "_honeycomb_block", () -> new BlockItem(customHoneycombBlock.get(), new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES_COMBS)));
                 ModItems.HONEYCOMB_ITEMS.register(name + "_honeycomb", () -> new HoneycombItem(color, isEdible, blockItem));
             }else {
                 ModItems.HONEYCOMB_ITEMS.register(name + "_honeycomb", () -> new HoneycombItem(color, isEdible, null));

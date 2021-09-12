@@ -80,7 +80,7 @@ public class HoneyBottleData {
 
     public Item.Properties getProperties() {
         return new Item.Properties()
-                .tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES)
+                .tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES_HONEY)
                 .craftRemainder(Items.GLASS_BOTTLE)
                 .stacksTo(16);
     }

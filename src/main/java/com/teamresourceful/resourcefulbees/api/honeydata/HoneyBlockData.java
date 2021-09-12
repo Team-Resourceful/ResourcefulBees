@@ -47,7 +47,7 @@ public class HoneyBlockData {
 
         if (CommonConfig.HONEY_GENERATE_BLOCKS.get() && generate) {
             block = ModBlocks.HONEY_BLOCKS.register(name + "_honey_block", () -> new CustomHoneyBlock(this));
-            blockItem = ModItems.HONEY_BLOCK_ITEMS.register(name + "_honey_block", () -> new BlockItem(block.get(), new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
+            blockItem = ModItems.HONEY_BLOCK_ITEMS.register(name + "_honey_block", () -> new BlockItem(block.get(), new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES_HONEY)));
         }
     }
 

@@ -16,7 +16,7 @@ public class HoneycombItem extends Item {
     private final boolean isEdible;
 
     public HoneycombItem(Color color, boolean isEdible, RegistryObject<Item> storageBlock) {
-        super(new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES));
+        super(new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES_COMBS));
         this.color = color;
         this.isEdible = isEdible;
         this.storageBlock = storageBlock;
