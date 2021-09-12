@@ -1,5 +1,4 @@
-{
-  "biomes": [
+[
     "minecraft:forest",
     "minecraft:taiga",
     "minecraft:wooded_hills",
@@ -23,5 +22,4 @@
     "minecraft:snowy_taiga_mountains",
     "minecraft:crimson_forest",
     "minecraft:warped_forest"
-  ]
-}
+]

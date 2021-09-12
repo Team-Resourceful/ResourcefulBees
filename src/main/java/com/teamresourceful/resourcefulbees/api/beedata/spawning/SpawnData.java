@@ -210,7 +210,7 @@ public class SpawnData {
             }
         }  else {
             if (BiomeDictionary.get().containsKey(resourceLocation.getPath())) {
-                spawnableBiomes.addAll(BiomeDictionary.get().get(resourceLocation.getPath()).getBiomes());
+                spawnableBiomes.addAll(BiomeDictionary.get().get(resourceLocation.getPath()));
             }
         }
     }
@@ -223,7 +223,7 @@ public class SpawnData {
             }
         }  else {
             if (BiomeDictionary.get().containsKey(resourceLocation.getPath())) {
-                spawnableBiomes.removeAll(BiomeDictionary.get().get(resourceLocation.getPath()).getBiomes());
+                spawnableBiomes.removeAll(BiomeDictionary.get().get(resourceLocation.getPath()));
             }
         }
     }

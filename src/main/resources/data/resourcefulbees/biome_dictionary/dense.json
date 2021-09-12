@@ -1,5 +1,4 @@
-{
-  "biomes": [
+[
     "minecraft:jungle",
     "minecraft:jungle_hills",
     "minecraft:dark_forest",
@@ -9,5 +8,4 @@
     "minecraft:dark_forest_hills",
     "minecraft:giant_spruce_taiga",
     "minecraft:giant_spruce_taiga_hills"
-  ]
-}
+]

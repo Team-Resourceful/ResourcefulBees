@@ -1,5 +1,4 @@
-{
-  "biomes": [
+[
     "minecraft:wooded_mountains",
     "minecraft:savanna",
     "minecraft:savanna_plateau",
@@ -12,5 +11,4 @@
     "minecraft:eroded_badlands",
     "minecraft:modified_wooded_badlands_plateau",
     "minecraft:modified_badlands_plateau"
-  ]
-}
+]

@@ -1,5 +1,4 @@
-{
-  "biomes": [
+[
     "minecraft:desert",
     "minecraft:nether_wastes",
     "minecraft:desert_hills",
@@ -18,5 +17,4 @@
     "minecraft:eroded_badlands",
     "minecraft:modified_wooded_badlands_plateau",
     "minecraft:modified_badlands_plateau"
-  ]
-}
+]
