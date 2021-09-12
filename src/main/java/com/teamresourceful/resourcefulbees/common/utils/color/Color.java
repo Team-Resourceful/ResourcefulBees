@@ -5,6 +5,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.JsonOps;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 
@@ -169,11 +170,21 @@ public class Color {
 
     //region Codec utils
 
+    public static final Codec<Color> COLOR_CODEC = RecordCodecBuilder.create(instance -> instance.group(
+        Codec.INT.fieldOf("r").orElse(255).forGetter(Color::getIntRed),
+        Codec.INT.fieldOf("g").orElse(255).forGetter(Color::getIntGreen),
+        Codec.INT.fieldOf("b").orElse(255).forGetter(Color::getIntBlue),
+        Codec.INT.fieldOf("a").orElse(255).forGetter(Color::getIntAlpha)
+    ).apply(instance, Color::new));
+
     public static DataResult<Color> decodeColor(Dynamic<?> dynamic) {
+        DataResult<Color> colorResult = COLOR_CODEC.parse(dynamic);
         if (dynamic.asNumber().result().isPresent()) {
             return DataResult.success(new Color(dynamic.asInt(0xffffff)));
         } else if (dynamic.asString().result().isPresent()) {
             return DataResult.success(Color.parse(dynamic.asString("WHITE")));
+        } else if (colorResult.result().isPresent()) {
+            return DataResult.success(colorResult.result().get());
         }
         return DataResult.error("Color input not valid!");
     }
