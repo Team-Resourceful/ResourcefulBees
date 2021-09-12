@@ -4,7 +4,6 @@ import com.teamresourceful.resourcefulbees.common.item.UpgradeItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModContainers;
 import com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary.ApiaryBreederTileEntity;
-import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Slot;
@@ -13,6 +12,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.IntArray;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
@@ -69,7 +69,7 @@ public class ApiaryBreederContainer extends ContainerWithStackMove {
                         ItemStack upgradeItem = getItem();
                         CompoundNBT data = UpgradeItem.getUpgradeData(upgradeItem);
                         if (data != null && data.getString(NBTConstants.NBT_UPGRADE_TYPE).equals(NBTConstants.NBT_BREEDER_UPGRADE) && data.contains(NBTConstants.NBT_BREEDER_COUNT)) {
-                            count = (int) MathUtils.clamp(data.getFloat(NBTConstants.NBT_BREEDER_COUNT), 1F, 5);
+                            count = (int) MathHelper.clamp(data.getFloat(NBTConstants.NBT_BREEDER_COUNT), 1F, 5);
                             int numBreeders = getApiaryBreederTileEntity().getNumberOfBreeders();
                             for (int j = numBreeders - count; j < numBreeders; j++) {
                                 if (!areSlotsEmpty(j)) {

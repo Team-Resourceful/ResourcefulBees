@@ -1,16 +1,15 @@
 package com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary;
 
 import com.teamresourceful.resourcefulbees.common.block.multiblocks.apiary.ApiaryBlock;
-import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTab;
-import com.teamresourceful.resourcefulbees.common.network.packets.SyncGUIMessage;
 import com.teamresourceful.resourcefulbees.common.container.UnvalidatedApiaryContainer;
 import com.teamresourceful.resourcefulbees.common.container.ValidatedApiaryContainer;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
+import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTab;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BlockAccessor;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
+import com.teamresourceful.resourcefulbees.common.network.packets.SyncGUIMessage;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.MultiBlockHelper;
-import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
 import io.netty.buffer.Unpooled;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -29,6 +28,7 @@ import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -295,7 +295,7 @@ public class ApiaryController extends TileEntity implements ITickableTileEntity,
      * @param width Sets the width of the apiary structure.
      */
     public void setWidth(int width) {
-        this.width = MathUtils.clamp(width, 7, 16);
+        this.width = MathHelper.clamp(width, 7, 16);
     }
 
     /**
@@ -315,7 +315,7 @@ public class ApiaryController extends TileEntity implements ITickableTileEntity,
      * @param height Sets the width of the apiary structure.
      */
     public void setHeight(int height) {
-        this.height = MathUtils.clamp(height, 6, 10);
+        this.height = MathHelper.clamp(height, 6, 10);
     }
 
     /**
@@ -335,7 +335,7 @@ public class ApiaryController extends TileEntity implements ITickableTileEntity,
      * @param depth Sets the width of the apiary structure.
      */
     public void setDepth(int depth) {
-        this.depth = MathUtils.clamp(depth, 7, 16);
+        this.depth = MathHelper.clamp(depth, 7, 16);
     }
 
     @Nullable

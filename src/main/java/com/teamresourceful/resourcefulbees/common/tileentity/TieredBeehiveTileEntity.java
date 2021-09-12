@@ -28,6 +28,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.util.Constants;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -77,7 +78,7 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
     public void recalculateHoneyLevel() {
         float combsInHive = this.getHoneycombs().size();
         float percentValue = (combsInHive / getMaxCombs()) * 100;
-        int newState = (int) MathUtils.clamp((percentValue - (percentValue % 20)) / 20, 0, 5) ;
+        int newState = (int) MathHelper.clamp((percentValue - (percentValue % 20)) / 20, 0, 5) ;
         assert this.level != null;
         this.level.setBlockAndUpdate(this.getBlockPos(), this.getBlockState().setValue(BeehiveBlock.HONEY_LEVEL, newState));
     }

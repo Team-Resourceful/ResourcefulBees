@@ -16,7 +16,6 @@ import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
-import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -39,6 +38,7 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.capabilities.Capability;
@@ -123,7 +123,7 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
                 CompoundNBT data = UpgradeItem.getUpgradeData(upgradeItem);
 
                 if (data != null && data.getString(NBTConstants.NBT_UPGRADE_TYPE).equals(NBTConstants.NBT_STORAGE_UPGRADE)) {
-                    count = (int) MathUtils.clamp(data.getFloat(NBTConstants.NBT_SLOT_UPGRADE), 1F, 108F);
+                    count = (int) MathHelper.clamp(data.getFloat(NBTConstants.NBT_SLOT_UPGRADE), 1F, 108F);
                 }
             }
         }

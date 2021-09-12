@@ -9,7 +9,6 @@ import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeeHiveTileEnt
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.tileentity.TieredBeehiveTileEntity;
-import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
 import com.teamresourceful.resourcefulbees.common.utils.RandomCollection;
 import net.minecraft.block.BeehiveBlock;
 import net.minecraft.block.Block;
@@ -72,7 +71,7 @@ public class BeeNestFeature extends Feature<NoFeatureConfig> {
     private BlockPos getYPos(ISeedReader worldIn, Random rand, Biome.Category category, BlockPos initPos){
         if (category == Biome.Category.NETHER || worldIn.dimensionType().hasCeiling()) {
             int ceilHeight = worldIn.getHeight();
-            BlockPos newPos = new BlockPos(initPos.getX(), MathUtils.nextIntInclusive(32, ceilHeight), initPos.getZ())
+            BlockPos newPos = new BlockPos(initPos.getX(), rand.nextInt(ceilHeight - 33) + 32, initPos.getZ())
                     .south(rand.nextInt(15))
                     .east(rand.nextInt(15));
             while (worldIn.isEmptyBlock(newPos.below())) {

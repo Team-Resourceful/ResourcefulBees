@@ -36,12 +36,12 @@ public class PetLoader {
             }
 
             if (json.has("users")){
-                JsonArray users = json.getAsJsonArray("users");
-                for (JsonElement user : users) {
+                for (JsonElement user : json.getAsJsonArray("users")) {
                     if (!user.isJsonObject()) continue;
 
-                    if (user.getAsJsonObject().has("uuid")){
-                        PetInfo.addUser(user.getAsJsonObject().get("uuid").getAsString(), getRewardData(user.getAsJsonObject()));
+                    JsonObject userObject = user.getAsJsonObject();
+                    if (userObject.has("uuid")){
+                        PetInfo.addUser(userObject.get("uuid").getAsString(), getRewardData(userObject));
                     }
                 }
             }

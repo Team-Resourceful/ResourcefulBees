@@ -13,8 +13,6 @@ public class BeeConstants {
     public static final String VANILLA_BEE_TYPE = "minecraft";
     public static final String VANILLA_BEE_COLOR = "#edc343";
     public static final int VANILLA_BEE_INT_COLOR = 15582019;
-    public static final String OREO_BEE = "oreo";
-    public static final String KITTEN_BEE = "kitten";
 
     public static final int SMOKE_TIME = 600;
     public static final int MIN_HIVE_TIME = 600;

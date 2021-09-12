@@ -2,10 +2,10 @@ package com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary
 
 import com.teamresourceful.resourcefulbees.api.ICustomBee;
 import com.teamresourceful.resourcefulbees.api.beedata.breeding.BreedData;
-import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.container.ApiaryBreederContainer;
 import com.teamresourceful.resourcefulbees.common.container.AutomationSensitiveItemStackHandler;
+import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.item.BeeJar;
 import com.teamresourceful.resourcefulbees.common.item.UpgradeItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
@@ -29,6 +29,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.capabilities.Capability;
@@ -438,7 +439,7 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
                         CompoundNBT data = UpgradeItem.getUpgradeData(upgradeItem);
 
                         if (data != null && data.getString(NBTConstants.NBT_UPGRADE_TYPE).equals(NBTConstants.NBT_BREEDER_UPGRADE)) {
-                            count += (int) MathUtils.clamp(data.getFloat(NBTConstants.NBT_BREEDER_COUNT), 0F, 5);
+                            count += (int) MathHelper.clamp(data.getFloat(NBTConstants.NBT_BREEDER_COUNT), 0F, 5);
                         }
                     }
                 }
@@ -457,13 +458,13 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
                         CompoundNBT data = UpgradeItem.getUpgradeData(upgradeItem);
 
                         if (data != null && data.getString(NBTConstants.NBT_UPGRADE_TYPE).equals(NBTConstants.NBT_BREEDER_UPGRADE)) {
-                            newTotalTime -= (int) MathUtils.clamp(data.getFloat(NBTConstants.NBT_BREED_TIME), 100, 600);
+                            newTotalTime -= (int) MathHelper.clamp(data.getFloat(NBTConstants.NBT_BREED_TIME), 100, 600);
                         }
                     }
                 }
             }
 
-            ApiaryBreederTileEntity.this.setTotalTime(MathUtils.clamp(newTotalTime, 300, 4800));
+            ApiaryBreederTileEntity.this.setTotalTime(MathHelper.clamp(newTotalTime, 300, 4800));
         }
 
         private void rebuildOpenContainers() {
