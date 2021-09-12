@@ -1,19 +1,19 @@
 package com.teamresourceful.resourcefulbees.common.compat.jei;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
-import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
-public class BaseCategory<T> implements IRecipeCategory<T> {
+public abstract class BaseCategory<T> implements IRecipeCategory<T> {
 
-    public static final ResourceLocation ICONS = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/icons.png");
+    protected static final BeeRegistry BEE_REGISTRY = BeeRegistry.getRegistry();
+    private static final ResourceLocation ICONS = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/icons.png");
 
     private final ResourceLocation categoryId;
     private final String localizedName;
@@ -23,7 +23,6 @@ public class BaseCategory<T> implements IRecipeCategory<T> {
 
     public final IDrawable info;
     public final IDrawable beeHive;
-
 
     public BaseCategory(IGuiHelper guiHelper, ResourceLocation categoryId, String localizedName, IDrawable background, IDrawable icon, Class<? extends T> recipeClass) {
         this.categoryId = categoryId;
@@ -59,15 +58,5 @@ public class BaseCategory<T> implements IRecipeCategory<T> {
     @Override
     public @NotNull IDrawable getIcon() {
         return icon;
-    }
-
-    @Override
-    public void setIngredients(@NotNull T t, @NotNull IIngredients iIngredients) {
-        //required for the implementation and needed for the children.
-    }
-
-    @Override
-    public void setRecipe(@NotNull IRecipeLayout iRecipeLayout, @NotNull T t, @NotNull IIngredients iIngredients) {
-        //required for the implementation and needed for the children.
     }
 }

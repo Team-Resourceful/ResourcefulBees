@@ -2,11 +2,9 @@ package com.teamresourceful.resourcefulbees.common.compat.jei;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.api.IBeeRegistry;
 import com.teamresourceful.resourcefulbees.api.beedata.breeding.BeeFamily;
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityIngredient;
-import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.ingredient.IGuiIngredientGroup;
@@ -30,20 +28,18 @@ import java.util.List;
 public class BeeBreedingCategory extends BaseCategory<BeeFamily> {
     public static final ResourceLocation GUI_BACK = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/breeding.png");
     public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "breeding");
-    private static final IBeeRegistry BEE_REGISTRY = BeeRegistry.getRegistry();
-
 
     public BeeBreedingCategory(IGuiHelper guiHelper) {
         super(guiHelper, ID,
                 I18n.get("gui.resourcefulbees.jei.category.breeding"),
                 guiHelper.drawableBuilder(GUI_BACK, 0, 0, 160, 60).addPadding(0, 0, 0, 0).build(),
-                guiHelper.createDrawableIngredient(new ItemStack(ModBlocks.GOLD_FLOWER.get())),
+                guiHelper.createDrawableIngredient(ModItems.APIARY_BREEDER_ITEM.get().getDefaultInstance()),
                 BeeFamily.class);
     }
 
     public static List<BeeFamily> getBreedingRecipes() {
         List<BeeFamily> recipes = new ArrayList<>();
-        BeeRegistry.getRegistry().getFamilyTree().values().forEach(children -> children.forEach(recipes::add));
+        BEE_REGISTRY.getFamilyTree().values().forEach(children -> children.forEach(recipes::add));
         return recipes;
     }
 
@@ -61,11 +57,11 @@ public class BeeBreedingCategory extends BaseCategory<BeeFamily> {
         ingredients.setInputLists(VanillaTypes.ITEM, list);
 
         List<EntityIngredient> entities = new ArrayList<>();
-        entities.add(new EntityIngredient(beeFamily.getParent1Data(), -45.0f));
-        entities.add(new EntityIngredient(beeFamily.getParent2Data(), 45.0F));
+        entities.add(new EntityIngredient(beeFamily.getParent1Data().getEntityType(), 45.0f));
+        entities.add(new EntityIngredient(beeFamily.getParent2Data().getEntityType(), -45.0F));
 
         ingredients.setInputs(JEICompat.ENTITY_INGREDIENT, entities);
-        ingredients.setOutput(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(beeFamily.getChildData(), -45.0f));
+        ingredients.setOutput(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(beeFamily.getChildData().getEntityType(), -45.0f));
     }
 
     @Override

@@ -146,7 +146,7 @@ public class RenderUtils {
             matrixStack.translate(10, 20 * renderScale, 0.5);
             matrixStack.translate(x, y, 1);
             matrixStack.mulPose(Vector3f.ZP.rotationDegrees(180.0F));
-            matrixStack.translate(0, 0, 1);
+            matrixStack.translate(0, 0, 100);
             matrixStack.scale(-(scaledSize * renderScale), (scaledSize * renderScale), 30);
             matrixStack.mulPose(Vector3f.YP.rotationDegrees(rotation));
             EntityRendererManager entityrenderermanager = mc.getEntityRenderDispatcher();

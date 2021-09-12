@@ -35,8 +35,6 @@ public class HiveCategory extends BaseCategory<HiveCategory.Recipe> {
     public static final ResourceLocation APIARY_BACK = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/apiary.png");
     public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "hive");
 
-    private final IDrawable HIVE_BACKGROUND;
-    private final IDrawable APIARY_BACKGROUND;
 
     public static final List<ItemStack> NESTS_0 = ModItems.NESTS_ITEMS.getEntries().stream()
             .filter(RegistryObject::isPresent).map(RegistryObject::get).map(Item::getDefaultInstance).collect(Collectors.toList());
@@ -49,6 +47,10 @@ public class HiveCategory extends BaseCategory<HiveCategory.Recipe> {
     private static final List<List<ItemStack>> NESTS = Lists.newArrayList(NESTS_0, NESTS_1, NESTS_2, NESTS_3, NESTS_4);
     private static final List<ItemStack> APIARIES = Lists.newArrayList(ModItems.T1_APIARY_ITEM.get().getDefaultInstance(), ModItems.T2_APIARY_ITEM.get().getDefaultInstance(), ModItems.T3_APIARY_ITEM.get().getDefaultInstance(), ModItems.T4_APIARY_ITEM.get().getDefaultInstance());
 
+
+    private final IDrawable hiveBackground;
+    private final IDrawable apiaryBackground;
+
     public HiveCategory(IGuiHelper guiHelper) {
         super(guiHelper, ID,
                 I18n.get("gui.resourcefulbees.jei.category.hive"),
@@ -56,8 +58,8 @@ public class HiveCategory extends BaseCategory<HiveCategory.Recipe> {
                 guiHelper.createDrawableIngredient(new ItemStack(ModItems.OAK_BEE_NEST_ITEM.get())),
                 HiveCategory.Recipe.class);
 
-        HIVE_BACKGROUND = guiHelper.drawableBuilder(HIVE_BACK, 0, 0, 160, 26).addPadding(0, 0, 0, 0).build();
-        APIARY_BACKGROUND = guiHelper.drawableBuilder(APIARY_BACK, 0, 0, 160, 26).addPadding(0, 0, 0, 0).build();
+        hiveBackground = guiHelper.drawableBuilder(HIVE_BACK, 0, 0, 160, 26).addPadding(0, 0, 0, 0).build();
+        apiaryBackground = guiHelper.drawableBuilder(APIARY_BACK, 0, 0, 160, 26).addPadding(0, 0, 0, 0).build();
 
     }
 
@@ -87,7 +89,7 @@ public class HiveCategory extends BaseCategory<HiveCategory.Recipe> {
     public void setIngredients(@NotNull Recipe recipe, @NotNull IIngredients ingredients) {
         ingredients.setOutput(VanillaTypes.ITEM, recipe.comb);
         ingredients.setInputLists(VanillaTypes.ITEM, Collections.singletonList(recipe.hives));
-        ingredients.setInput(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(recipe.beeType, -45.0f));
+        ingredients.setInput(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(recipe.beeType.getEntityType(), 45.0f));
     }
 
     @Override
@@ -104,8 +106,8 @@ public class HiveCategory extends BaseCategory<HiveCategory.Recipe> {
 
     @Override
     public void draw(@NotNull Recipe recipe, @NotNull MatrixStack matrixStack, double mouseX, double mouseY) {
-        if (recipe.isApiary) this.APIARY_BACKGROUND.draw(matrixStack);
-        else this.HIVE_BACKGROUND.draw(matrixStack);
+        if (recipe.isApiary) this.apiaryBackground.draw(matrixStack);
+        else this.hiveBackground.draw(matrixStack);
     }
 
     public static class Recipe {

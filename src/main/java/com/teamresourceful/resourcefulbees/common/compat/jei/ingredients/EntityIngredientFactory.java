@@ -11,7 +11,7 @@ public final class EntityIngredientFactory {
 
     public static List<EntityIngredient> create() {
         List<EntityIngredient> list = new ArrayList<>();
-        BeeRegistry.getRegistry().getBees().forEach((s, beeData) -> list.add(new EntityIngredient(beeData, 45.0f)));
+        BeeRegistry.getRegistry().getBees().forEach((s, beeData) -> list.add(new EntityIngredient(beeData.getEntityType(), -45.0f)));
         return list;
     }
 }
