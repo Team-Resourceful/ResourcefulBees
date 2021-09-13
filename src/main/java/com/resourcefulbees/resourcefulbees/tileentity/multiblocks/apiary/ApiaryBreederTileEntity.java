@@ -275,8 +275,10 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
         setTotalTime(nbt.getInt("totalTime"));
         if (nbt.contains(NBTConstants.NBT_APIARY_POS))
             apiaryPos = NBTUtil.readBlockPos(nbt.getCompound(NBTConstants.NBT_APIARY_POS));
-        if (nbt.contains(NBT_BREEDER_COUNT))
+        if (nbt.contains(NBT_BREEDER_COUNT)) {
             this.setNumberOfBreeders(nbt.getInt(NBT_BREEDER_COUNT));
+            tileStackHandler.setMaxSlots(3 + this.getNumberOfBreeders() * 5);
+        }
     }
 
     @Override
