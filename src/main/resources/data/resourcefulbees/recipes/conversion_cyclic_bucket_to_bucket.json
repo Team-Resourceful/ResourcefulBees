@@ -7,8 +7,8 @@
     }
   ],
   "ingredients": [
-    { "item": "cyclic:honey_bucket" }
-    
+    { "item": "cyclic:honey_bucket" },
+    { "item":  "minecraft:bucket" }
   ],
   "result": {
     "item": "resourcefulbees:honey_fluid_bucket",
