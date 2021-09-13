@@ -62,6 +62,9 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
     private BlockPos apiaryPos;
     private ApiaryTileEntity apiary;
 
+    private boolean update = false;
+    private final boolean[] valid = {false, false, false, false, false};
+
     protected final IIntArray times = new IIntArray() {
         @Override
         public int get(int index) {
@@ -140,13 +143,20 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
     @Override
     public void tick() {
         if (level != null && !level.isClientSide) {
+            if (update) {
+                updateCanProcess();
+                update = false;
+            }
+
+
             validateApiaryLink();
             boolean dirty = false;
             for (int i = 0; i < getNumberOfBreeders(); i++) {
                 if (!getTileStackHandler().getStackInSlot(getParent1Slots()[i]).isEmpty() && !getTileStackHandler().getStackInSlot(getFeed1Slots()[i]).isEmpty()
                         && !getTileStackHandler().getStackInSlot(getParent2Slots()[i]).isEmpty() && !getTileStackHandler().getStackInSlot(getFeed2Slots()[i]).isEmpty()
                         && !getTileStackHandler().getStackInSlot(getEmptyJarSlots()[i]).isEmpty()) {
-                    if (canProcess(i)) {
+
+                    if (valid[i]) {
                         ++this.getTime()[i];
                         if (this.getTime()[i] >= this.getTotalTime()) {
                             this.getTime()[i] = 0;
@@ -160,6 +170,18 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
                 if (dirty) {
                     this.setChanged();
                 }
+            }
+        }
+    }
+
+    protected void updateCanProcess() {
+        for (int i = 0; i < getNumberOfBreeders(); i++) {
+            if (!getTileStackHandler().getStackInSlot(getParent1Slots()[i]).isEmpty() && !getTileStackHandler().getStackInSlot(getFeed1Slots()[i]).isEmpty()
+                    && !getTileStackHandler().getStackInSlot(getParent2Slots()[i]).isEmpty() && !getTileStackHandler().getStackInSlot(getFeed2Slots()[i]).isEmpty()
+                    && !getTileStackHandler().getStackInSlot(getEmptyJarSlots()[i]).isEmpty()) {
+                valid[i] = canProcess(i);
+            } else {
+                valid[i] = false;
             }
         }
     }
@@ -232,6 +254,7 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
             }
         }
         this.getTime()[slot] = 0;
+        update = true;
     }
 
     @NotNull
@@ -279,6 +302,7 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
             this.setNumberOfBreeders(nbt.getInt(NBT_BREEDER_COUNT));
             tileStackHandler.setMaxSlots(3 + this.getNumberOfBreeders() * 5);
         }
+        update = true;
     }
 
     @Override
@@ -404,6 +428,12 @@ public class ApiaryBreederTileEntity extends TileEntity implements ITickableTile
                     break;
                 }
             }
+
+            update = true;
+        }
+
+        public void contentsChanged(int slot) {
+            onContentsChanged(slot);
         }
 
         @Override

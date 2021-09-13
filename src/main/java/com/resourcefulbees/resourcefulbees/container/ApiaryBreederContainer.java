@@ -53,7 +53,7 @@ public class ApiaryBreederContainer extends ContainerWithStackMove {
 
             for (int i=0; i<4; i++){
                 int finalI = i;
-                this.addSlot(new SlotItemHandlerUnconditioned(getApiaryBreederTileEntity().getTileStackHandler(), getUpgradeSlots()[finalI], 6, 22 + (finalI *18)) {
+                this.addSlot(new ChangedItemSlot(getApiaryBreederTileEntity().getTileStackHandler(), getUpgradeSlots()[finalI], 6, 22 + (finalI *18)) {
                     @Override
                     public int getMaxStackSize() {
                         return getApiaryBreederTileEntity().getTileStackHandler().getSlotLimit(getUpgradeSlots()[finalI]);
@@ -96,7 +96,7 @@ public class ApiaryBreederContainer extends ContainerWithStackMove {
 
             for (int i = 0; i< getNumberOfBreeders(); i++) {
                 int finalI = i;
-                this.addSlot(new SlotItemHandlerUnconditioned(getApiaryBreederTileEntity().getTileStackHandler(), getParent1Slots()[finalI], 33, 18 +(finalI *20)){
+                this.addSlot(new ChangedItemSlot(getApiaryBreederTileEntity().getTileStackHandler(), getParent1Slots()[finalI], 33, 18 +(finalI *20)){
 
                     @Override
                     public int getMaxStackSize() {
@@ -108,14 +108,14 @@ public class ApiaryBreederContainer extends ContainerWithStackMove {
                         return getApiaryBreederTileEntity().getTileStackHandler().isItemValid(getParent1Slots()[finalI], stack);
                     }
                 });
-                this.addSlot(new SlotItemHandlerUnconditioned(getApiaryBreederTileEntity().getTileStackHandler(), getFeed1Slots()[i], 69, 18 +(i*20)){
+                this.addSlot(new ChangedItemSlot(getApiaryBreederTileEntity().getTileStackHandler(), getFeed1Slots()[i], 69, 18 +(i*20)){
 
                     @Override
                     public boolean mayPlace(ItemStack stack) {
                         return getApiaryBreederTileEntity().getTileStackHandler().isItemValid(getFeed1Slots()[finalI], stack);
                     }
                 });
-                this.addSlot(new SlotItemHandlerUnconditioned(getApiaryBreederTileEntity().getTileStackHandler(), getParent2Slots()[i], 105, 18 +(i*20)){
+                this.addSlot(new ChangedItemSlot(getApiaryBreederTileEntity().getTileStackHandler(), getParent2Slots()[i], 105, 18 +(i*20)){
 
                     @Override
                     public int getMaxStackSize() {
@@ -127,14 +127,14 @@ public class ApiaryBreederContainer extends ContainerWithStackMove {
                         return getApiaryBreederTileEntity().getTileStackHandler().isItemValid(getParent2Slots()[finalI], stack);
                     }
                 });
-                this.addSlot(new SlotItemHandlerUnconditioned(getApiaryBreederTileEntity().getTileStackHandler(), getFeed2Slots()[i], 141, 18 +(i*20)){
+                this.addSlot(new ChangedItemSlot(getApiaryBreederTileEntity().getTileStackHandler(), getFeed2Slots()[i], 141, 18 +(i*20)){
 
                     @Override
                     public boolean mayPlace(ItemStack stack) {
                         return getApiaryBreederTileEntity().getTileStackHandler().isItemValid(getFeed2Slots()[finalI], stack);
                     }
                 });
-                this.addSlot(new SlotItemHandlerUnconditioned(getApiaryBreederTileEntity().getTileStackHandler(), getEmptyJarSlots()[i], 177, 18 +(i*20)){
+                this.addSlot(new ChangedItemSlot(getApiaryBreederTileEntity().getTileStackHandler(), getEmptyJarSlots()[i], 177, 18 +(i*20)){
 
                     @Override
                     public int getMaxStackSize() {
@@ -190,5 +190,20 @@ public class ApiaryBreederContainer extends ContainerWithStackMove {
 
     public void setRebuild(boolean rebuild) {
         this.rebuild = rebuild;
+    }
+
+    public static class ChangedItemSlot extends SlotItemHandlerUnconditioned {
+
+        public ChangedItemSlot(AutomationSensitiveItemStackHandler h, int index, int xPosition, int yPosition) {
+            super(h, index, xPosition, yPosition);
+        }
+
+        @Override
+        public void setChanged() {
+            super.setChanged();
+            if (this.getItemHandler() instanceof ApiaryBreederTileEntity.TileStackHandler) {
+                ((ApiaryBreederTileEntity.TileStackHandler)this.getItemHandler()).contentsChanged(this.getSlotIndex());
+            }
+        }
     }
 }
