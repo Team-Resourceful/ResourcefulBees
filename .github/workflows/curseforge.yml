@@ -1,0 +1,17 @@
+name: Publish To Curseforge
+on:
+  workflow_dispatch:
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+      - name: Publish package
+        run: ./gradlew curseforge
+        env:
+          CURSE_API_KEY: ${{ secrets.CURSE_API_KEY}}
