@@ -108,7 +108,7 @@ Alpha Features
 
 # ----- [0.6.0b] -----
 
-##IMPORTANT INFO FOR PACK DEVS:
+## IMPORTANT INFO FOR PACK DEVS:
 - removed "defaultChance" AND "defaultWeight" from mutation objects and "chance" from mutation outputs, replaced with "chance" in the main mutation object
 - Simplified mutation types to just BLOCK, ITEM, and ENTITY (BLOCK_TO_BLOCK, BLOCK_TO_FLUID, FLUID_TO_BLOCK, and FLUID_TO_FLUID all now use BLOCK)
 - old mutation types will still work for the time being but when 1.17 hits those old types will be removed.
@@ -126,7 +126,7 @@ Alpha Features
 }  
 ```
 
-###Additions:
+### Additions:
 - Added platforms for hives over lava or water
 - Added DungeonBee texture
 - Bees can now have their min and max y-level for spawning configured
@@ -143,7 +143,7 @@ Alpha Features
 - silk touched hives containing bees can now be used in hive upgrade recipes
 - ADDED CHECK FOR PERFORMANT MOD - WILL NOW DISPLAY WARNING TO USER WHEN INSTALLED ALONGSIDE
 
-###Fixes:
+### Fixes:
 - fixed prismarine hives showing up in ice spikes.
 - a LOT of code clean up, and hopefully some significant performance increases
 - bees should find their flowers easier
@@ -155,7 +155,7 @@ Alpha Features
 - hives/apiaries weren't aging bees properly
 - fixed recipe loading in jei which *should* eliminate some funky behaviors
 
-###Changes:
+### Changes:
 - Bee Jars will now clear a bees stored hive and flower position upon release
 - pick block on bee gives spawn egg in creative mode
 - botania flower (polydisiac sp?) will no longer breed our bees
