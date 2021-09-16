@@ -140,7 +140,7 @@ jar {
 
 java {
     withSourcesJar()
-    withJavadocJar()
+    //withJavadocJar()
 }
 
 def reobfFile = file("$buildDir/reobfJar/output.jar")
@@ -155,18 +155,18 @@ def sourcesArtifact = artifacts.add('default', sourcesFile) {
     builtBy 'sourcesJar'
 }
 
-def javadocFile = file("$buildDir/libs/$archivesBaseName-$version-javadoc.jar")
-def javadocArtifact = artifacts.add('default', javadocFile) {
-    type 'jar'
-    builtBy 'javadocJar'
-}
+//def javadocFile = file("$buildDir/libs/$archivesBaseName-$version-javadoc.jar")
+//def javadocArtifact = artifacts.add('default', javadocFile) {
+//    type 'jar'
+//    builtBy 'javadocJar'
+//}
 
 publishing {
     publications {
         mavenJava(MavenPublication) {
             artifact reobfArtifact
             artifact sourcesJar
-            artifact javadocJar
+            //artifact javadocJar
 
             pom {
                 name = 'ResourcefulBees'
