@@ -11,7 +11,7 @@ jobs:
         with:
           java-version: '11'
           distribution: 'adopt'
-      - name: Publish package
+      - name: Publish Curse
         run: ./gradlew curseforge
         env:
           CURSE_API_KEY: ${{ secrets.CURSE_API_KEY}}
