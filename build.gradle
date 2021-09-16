@@ -35,15 +35,6 @@ def releasesRepoUrl = "https://nexus.resourcefulbees.com/repository/maven-releas
 def snapshotsRepoUrl = "https://nexus.resourcefulbees.com/repository/maven-snapshots/"
 def ENV = System.getenv()
 
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
-}
-
-task sourcesJar(type: Jar) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
-}
-
 sonarqube {
     properties {
         property "sonar.projectKey", "Resourceful-Bees_ResourcefulBees"
@@ -104,10 +95,6 @@ minecraft {
     }
 }
 
-artifacts {
-    archives sourcesJar
-}
-
 mixin {
     add sourceSets.main, "${modid}.refmap.json"
 }
@@ -151,16 +138,35 @@ jar {
     }
 }
 
+java {
+    withSourcesJar()
+    withJavadocJar()
+}
+
 def reobfFile = file("$buildDir/reobfJar/output.jar")
 def reobfArtifact = artifacts.add('default', reobfFile) {
     type 'jar'
     builtBy 'reobfJar'
 }
 
+def sourcesFile = file("$buildDir/libs/$archivesBaseName-$version-sources.jar")
+def sourcesArtifact = artifacts.add('default', sourcesFile) {
+    type 'jar'
+    builtBy 'sourcesJar'
+}
+
+def javadocFile = file("$buildDir/libs/$archivesBaseName-$version-javadoc.jar")
+def javadocArtifact = artifacts.add('default', javadocFile) {
+    type 'jar'
+    builtBy 'javadocJar'
+}
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
             artifact reobfArtifact
+            artifact sourcesJar
+            artifact javadocJar
 
             pom {
                 name = 'ResourcefulBees'
