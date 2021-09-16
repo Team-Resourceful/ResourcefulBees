@@ -163,7 +163,7 @@ curseforge {
     changelog = file("changelog.md")
     changelogType = "markdown"
     releaseType = "release"
-    addGameVersion = "${mc_version}
+    addGameVersion = "${mc_version}"
     displayName = "Resourceful Bees ${version}"
   }
 }
