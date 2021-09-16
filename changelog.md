@@ -1,21 +1,39 @@
+**please continue to report any bugs/issues to https://issues.resourcefullbees.com/**
+
+# ----- [0.9.9.4] -----
+- stacked filled bee jars (i.e. ones you get from mutations and quests) no longer clear all nbt data when you spawn a bee with them, it will now just decrease the stack size.
+- added "isInvulnerable" option to CombatData
+- removed unnessacary validApiary block and item tags (we forgot to remove them when we changed how apiaries are validated, you can still use the tag to add blocks to apiaries, that hasn't been removed)
+
+# ----- [0.9.9.3] -----
+- Changed Entity to Entity mutations in JEI to show the entity model rather than a spawnegg, this should hopefully remove a lot of confusion.  (The beepedia still shows entity models like always)
+
+# ----- [0.9.9.2] -----
+- Fixed an edge case crash when mutationData isn't added to the bee json  
+- Removed particles from Ender Beecon effects. (This should fix issue with performance when a beecon is granting a lot of effects to bees)
+
+# ----- [0.9.9.1] -----
+- Fixed an issue where you couldn't start a server with resourcefulbees
+- fixed default icy bee not spawning 
+
 # ----- [0.9.9] -----
-- Fixed an issue where centrifuge input counts weren't respected.
-- Added Honey Glass. (Glass which allows only players or only bees to pass through)
-- Added a texture for creative beepedia.
-- Added angry dungeon bee texture.
-- Added a Yeti Dev Bee.
-- Made it so that apiaries don't require a floor and now check for if a block has collision for if it's a valid block.
+- Fixed an issue where centrifuge input counts weren't respected. 
+- Added Honey Glass. (Glass which allows only players or only bees to pass through) 
+- Added a texture for creative beepedia. 
+- Added angry dungeon bee texture. 
+- Added a Yeti Dev Bee. 
+- Made it so that apiaries don't require a floor and now check for if a block has collision for if it's a valid block. 
 - Valid apiary blocks using `hasCollision` check now have the tag added to their items. (This will allow you to search for it in JEI)
-- Fixed Item Mutations outputting items with a blank nbt tag.
-- Bees can be parents in a breed without needing to have a self breed option. (`isBreedable` is false but has feed item)
-- Added lore options to bees in JEI.
-- Added 2 new models Yeti Horns and Guardian Spikes.
+- Fixed Item Mutations outputting items with a blank nbt tag. 
+- Bees can be parents in a breed without needing to have a self breed option. (`isBreedable` is false but has feed item) 
+- Added lore options to bees in JEI and Beepedia. 
+- Added 2 new models Yeti Horns and Guardian Spikes. 
 - Fixed layer textures not loading properly when defined with a preceding `/`
 
 # ----- [0.6.7.2b] -----
 - Fixed an error trying to process bee damage immunities, in doing so we actually added the ability for all damage sources including modded ones to be allowed.
 
-# ----- [0.6.7_1b] -----
+# ----- [0.6.7.1b] -----
 - Fixed a crash when attempting to breed bees with no feed return item
 
 # ----- [0.6.7b] -----
@@ -145,4 +163,3 @@ Alpha Features
 
 Under the hood there has been tons of code cleanup and general performance fixes/optimizations/null checks etc. 
 Overall the mod should feel much better than it did before. There is like stuff that was fixed/changed/added not listed above.
-please continue to report any bugs/issues to https://issues.resourcefulebees.com/
