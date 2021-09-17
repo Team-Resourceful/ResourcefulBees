@@ -1,5 +1,16 @@
 **please continue to report any bugs/issues to https://issues.resourcefullbees.com/**
 
+# ----- [0.9.9.6] -----
+- Fixed hive ingredient crashing servers, closing #283
+
+# ----- [0.9.9.5] -----
+- Changed how the apiary recipe works to allow for upgraded hives and nests that have been upgraded with a hive upgrade item.
+- Added a recipe to empty honey generators
+- Fixed the manual centrifuge not respecting bottle output count, therefore closing #274
+- Fixed #280 by updating the item handler on load instead of only on upgrade change.
+- Fixed #266 Updated the apiary breeder to only update processes when a slot has changed, still requires a change in the future to not be called as much but reduces it to be called a lot less than every tick. and as precaution I kept the check when its about to process to check again just in case if it didn't update correctly.
+- Fixed the conversion recipes to duplicating buckets. Closes #257 
+
 # ----- [0.9.9.4] -----
 - stacked filled bee jars (i.e. ones you get from mutations and quests) no longer clear all nbt data when you spawn a bee with them, it will now just decrease the stack size.
 - added "isInvulnerable" option to CombatData

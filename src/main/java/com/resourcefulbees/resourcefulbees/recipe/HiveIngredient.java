@@ -22,6 +22,11 @@ import java.util.stream.Stream;
 
 public class HiveIngredient extends Ingredient {
 
+    @Override
+    public @NotNull IIngredientSerializer<? extends Ingredient> getSerializer() {
+        return Serializer.INSTANCE;
+    }
+
     public static final List<ItemStack> NESTS = Arrays.asList(
         ModItems.OAK_BEE_NEST_ITEM.get().getDefaultInstance(),
         ModItems.ACACIA_BEE_NEST_ITEM.get().getDefaultInstance(),
