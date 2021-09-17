@@ -47,7 +47,7 @@ public abstract class MixinEnterBeehiveGoal {
 
     /**
      * @author epic_oreo
-     * @reason crashes when switching to vanilla code due to hivePos being null. retained vanilla checks in overwrite.
+     * reason crashes when switching to vanilla code due to hivePos being null. retained vanilla checks in overwrite.
      */
     @Overwrite()
     public void start() {

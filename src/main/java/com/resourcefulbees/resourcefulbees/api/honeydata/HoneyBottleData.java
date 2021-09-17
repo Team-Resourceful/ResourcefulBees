@@ -247,6 +247,8 @@ public class HoneyBottleData {
 
     /**
      * If the ResourcefulBees mod should handle the registration
+     *
+     * @return Returns <code>true</code> if the Resourceful Bees mod should handle registering of the custom honey bottle, et al.
      */
     public boolean shouldResourcefulBeesDoForgeRegistration() {
         return shouldResourcefulBeesDoForgeRegistration;

@@ -198,6 +198,7 @@ public class BeepediaScreen extends Screen {
      * activates a page
      * @param pageType the page type, this is used to select the right list
      * @param pageID the page id of the page
+     * @param goingBack idk what this does - ask dawn
      */
     public void setActive(PageType pageType, String pageID, boolean goingBack) {
         if (pageType == null || pageID == null) {

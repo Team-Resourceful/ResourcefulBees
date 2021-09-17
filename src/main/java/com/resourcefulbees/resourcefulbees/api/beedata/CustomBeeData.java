@@ -428,6 +428,8 @@ public class CustomBeeData extends AbstractBeeData {
 
     /**
      * If the ResourcefulBees mod should handle the registration
+     *
+     * @return Returns <code>true</code> if the Resourceful Bees mod should handle registering of the custom bee entity, et al.
      */
     public boolean shouldResourcefulBeesDoForgeRegistration() {
         return shouldResourcefulBeesDoForgeRegistration;

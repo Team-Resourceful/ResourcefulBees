@@ -41,6 +41,10 @@ public final class MathUtils {
 
     /**
      * Compare if two doubles are equal, using precision constant {@link #DOUBLES_EQUAL_PRECISION}.
+     *
+     * @param a value being compared
+     * @param b other value being compared
+     * @return returns <code>true</code> if both values are equal
      */
     public static boolean doublesEqual(double a, double b) {
         return doublesEqual(a, b, DOUBLES_EQUAL_PRECISION);
@@ -50,6 +54,9 @@ public final class MathUtils {
      * Compare if two doubles are equal, within the given level of precision.
      *
      * @param precision Should be a small, positive number (like {@link #DOUBLES_EQUAL_PRECISION})
+     * @param a value being compared
+     * @param b other value being compared
+     * @return returns <code>true</code> if both values are equal
      */
     public static boolean doublesEqual(double a, double b, double precision) {
         return Math.abs(b - a) < precision;
@@ -57,6 +64,9 @@ public final class MathUtils {
 
     /**
      * Compare if two floats are equal, using precision constant {@link #DOUBLES_EQUAL_PRECISION}.
+     * @param a value being compared
+     * @param b other value being compared
+     * @return returns <code>true</code> if both values are equal
      */
     public static boolean floatsEqual(float a, float b) {
         return floatsEqual(a, b, (float) DOUBLES_EQUAL_PRECISION);
@@ -66,6 +76,9 @@ public final class MathUtils {
      * Compare if two floats are equal, within the given level of precision.
      *
      * @param precision Should be a small, positive number (like {@link #DOUBLES_EQUAL_PRECISION})
+     * @param a value being compared
+     * @param b other value being compared
+     * @return returns <code>true</code> if both values are equal
      */
     public static boolean floatsEqual(float a, float b, float precision) {
         return Math.abs(b - a) < precision;

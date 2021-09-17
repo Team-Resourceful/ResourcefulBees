@@ -86,6 +86,7 @@ public class MultiFluidTank implements IFluidHandler {
      *
      * @param resource FluidStack representing the Fluid and maximum amount of fluid to be drained.
      * @param action   If SIMULATE, drain will only be simulated.
+     * @param tank The tank being drained.
      * @return FluidStack representing the Fluid and amount that was (or would have been, if
      * simulated) drained.
      */
@@ -105,6 +106,7 @@ public class MultiFluidTank implements IFluidHandler {
      *
      * @param maxDrain Maximum amount of fluid to drain.
      * @param action   If SIMULATE, drain will only be simulated.
+     * @param tank The tank being drained.
      * @return FluidStack representing the Fluid and amount that was (or would have been, if
      * simulated) drained.
      */

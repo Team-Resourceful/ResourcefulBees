@@ -45,6 +45,8 @@ public interface IBeeRegistry {
      * The returned value is an adjusted percentage in the range of 0 - 100 represented as a double.
      * This value is calculated based on the weighting of all possible children the supplied child's parents can have.
      *
+     *  @param parent1 One of the parents being checked
+     *  @param parent2 One of the parents being checked
      *  @param child BeeData object for the child.
      *  @return Returns random bee type as a string.
      */
