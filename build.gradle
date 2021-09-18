@@ -24,6 +24,7 @@ apply plugin: 'signing'
 
 repositories {
     maven { url "https://nexus.resourcefulbees.com/repository/maven-public/" }
+    mavenCentral()
 }
 
 version = "${mod_version}"
@@ -54,7 +55,6 @@ minecraft {
             arg "-mixin.config=resourcefulbees.mixins.json"
 
             property 'forge.logging.console.level', 'debug'
-            //property 'mixin.env.disableRefMap', 'true'
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
             property 'fml.earlyprogresswindow','false'
@@ -71,7 +71,6 @@ minecraft {
             arg "-mixin.config=resourcefulbees.mixins.json"
 
             property 'forge.logging.console.level', 'debug'
-            //property 'mixin.env.disableRefMap', 'true'
             property 'fml.earlyprogresswindow','false'
 
             mods {
@@ -100,7 +99,7 @@ mixin {
 }
 
 dependencies {
-    minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}" //21
+    minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
 
     compileOnly fg.deobf("mezz.jei:jei-1.16.4:${jei_version}:api")
     runtimeOnly fg.deobf("mezz.jei:jei-1.16.4:${jei_version}")
@@ -119,7 +118,7 @@ dependencies {
     runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:additions")// Mekanism: Additions
     runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:generators")// Mekanism: Generators
     runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:tools")// Mekanism: Tools
-    compileOnly 'org.jetbrains:annotations:20.1.0'
+    compileOnly 'org.jetbrains:annotations:22.0.0'
     annotationProcessor 'org.spongepowered:mixin:0.8:processor'
 }
 
@@ -138,23 +137,7 @@ jar {
     }
 }
 
-def reobfFile = file("$buildDir/reobfJar/output.jar")
-def reobfArtifact = artifacts.add('default', reobfFile) {
-    type 'jar'
-    builtBy 'reobfJar'
-}
-
-/*def sourcesFile = file("$buildDir/libs/$archivesBaseName-$version-sources.jar")
-def sourcesArtifact = artifacts.add('default', sourcesFile) {
-    type 'jar'
-    builtBy 'sourcesJar'
-}*/
-
-/*def javadocFile = file("$buildDir/libs/$archivesBaseName-$version-javadoc.jar")
-def javadocArtifact = artifacts.add('default', javadocFile) {
-    type 'jar'
-    builtBy 'javadocJar'
-}*/
+jar.finalizedBy('reobfJar')
 
 task sourcesJar(type: Jar) {
     classifier = "sources"
@@ -177,15 +160,15 @@ task javadocJar(type: Jar, dependsOn: javadocs) {
 }
 
 artifacts {
-    archives javadocJar
+    archives jar
     archives sourcesJar
-    archives reobfArtifact
+    archives javadocJar
 }
 
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            artifact reobfArtifact
+            artifact jar
             artifact sourcesJar
             artifact javadocJar
 
@@ -202,7 +185,7 @@ publishing {
 
                 licenses {
                     license {
-                        name = 'GNU General Public License v3.0'
+                        name = 'GNU Lesser General Public License v3.0'
                         url = 'https://raw.githubusercontent.com/Resourceful-Bees/ResourcefulBees/master/LICENSE'
                     }
                 }
@@ -221,11 +204,6 @@ publishing {
                     developer {
                         id = 'dawn_felstar'
                         name = 'Dawn Felstar'
-                        email = 'admin@resourcefulbees.com'
-                    }
-                    developer {
-                        id = 'vikthoor'
-                        name = 'Vik'
                         email = 'admin@resourcefulbees.com'
                     }
                 }
