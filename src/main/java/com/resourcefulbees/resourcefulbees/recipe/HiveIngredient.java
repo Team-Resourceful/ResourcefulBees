@@ -44,11 +44,7 @@ public class HiveIngredient extends Ingredient {
         ModItems.RED_MUSHROOM_NEST_ITEM.get().getDefaultInstance(),
         ModItems.SPRUCE_BEE_NEST_ITEM.get().getDefaultInstance(),
         ModItems.WARPED_BEE_NEST_ITEM.get().getDefaultInstance(),
-        ModItems.WARPED_NYLIUM_BEE_NEST_ITEM.get().getDefaultInstance(),
-        ModItems.T1_BEEHIVE_ITEM.get().getDefaultInstance(),
-        ModItems.T2_BEEHIVE_ITEM.get().getDefaultInstance(),
-        ModItems.T3_BEEHIVE_ITEM.get().getDefaultInstance(),
-        ModItems.T4_BEEHIVE_ITEM.get().getDefaultInstance()
+        ModItems.WARPED_NYLIUM_BEE_NEST_ITEM.get().getDefaultInstance()
     );
 
     public int tier;
@@ -70,37 +66,18 @@ public class HiveIngredient extends Ingredient {
             stack.getTag().put(NBTConstants.NBT_BLOCK_ENTITY_TAG, tag);
             return stack;
         }).forEach(nests::add);
-        switch (tier) {
-            case 1: nests.add(ModItems.T1_BEEHIVE_ITEM.get().getDefaultInstance());
-            case 2: nests.add(ModItems.T2_BEEHIVE_ITEM.get().getDefaultInstance());
-            case 3: nests.add(ModItems.T3_BEEHIVE_ITEM.get().getDefaultInstance());
-            case 4: nests.add(ModItems.T4_BEEHIVE_ITEM.get().getDefaultInstance());
-        }
         return nests;
     }
 
     @Override
     public boolean test(@Nullable ItemStack stack) {
         if (stack == null) return false;
-        Item item = stack.getItem();
-        boolean isHiveAndHasTier = false;
-        if (ModItems.T1_BEEHIVE_ITEM.get().equals(item)) {
-            isHiveAndHasTier = tier == 1;
-        } else if (ModItems.T2_BEEHIVE_ITEM.get().equals(item)) {
-            isHiveAndHasTier = tier == 2;
-        } else if (ModItems.T3_BEEHIVE_ITEM.get().equals(item)) {
-            isHiveAndHasTier = tier == 3;
-        } else if (ModItems.T4_BEEHIVE_ITEM.get().equals(item)) {
-            isHiveAndHasTier = tier == 4;
-        }
-        if (!isHiveAndHasTier) {
-            for (ItemStack nest : NESTS) {
-                if (nest.getItem().equals(stack.getItem())) {
-                    return tier == getTier(stack);
-                }
+        for (ItemStack nest : NESTS) {
+            if (nest.getItem().equals(stack.getItem())) {
+                return tier == getTier(stack);
             }
         }
-        return isHiveAndHasTier;
+        return false;
     }
 
     @SuppressWarnings("ConstantConditions")
