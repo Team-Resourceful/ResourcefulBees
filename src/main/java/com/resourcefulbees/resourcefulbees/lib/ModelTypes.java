@@ -11,5 +11,6 @@ public enum ModelTypes {
     CROP,
     ARMORED,
     GUARDIAN,
-    YETI;
+    YETI,
+    WITCH;
 }

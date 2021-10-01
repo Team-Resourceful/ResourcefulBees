@@ -65,10 +65,14 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
             case YETI:
                 addYetiHorns();
                 break;
+            case WITCH:
+                addHat();
+                break;
             case DEFAULT:
                 addDefaultParts();
         }
     }
+
 
 
 
@@ -503,6 +507,36 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
         yetiHorns.addChild(leftHorn);
         setRotationAngle(leftHorn, 0.0F, 0.0F, 0.9599F);
         leftHorn.texOffs(34, 12).addBox(0.0F, -3.0F, -0.5F, 2.0F, 3.0F, 2.0F, 0.0F, false);
+    }
+
+    private void addHat() {
+        ModelRenderer witch = new ModelRenderer(this);
+        witch.setPos(0.0F, 0.0F, 0.0F);
+        body.addChild(witch);
+        witch.texOffs(0, 25).addBox(-3.5F, -4.0F, -5.0F, 7.0F, 7.0F, 10.0F, 0.4F, false);
+
+        ModelRenderer hat1 = new ModelRenderer(this);
+        hat1.setPos(0.0F, 0.0F, 0.0F);
+        witch.addChild(hat1);
+        witch.texOffs(0, 57).addBox(-3.0F, -5.0F, -4.5F, 6.0F, 1.0F, 6.0F, 0.0F, false);
+
+        ModelRenderer hat2 = new ModelRenderer(this);
+        hat2.setPos(0.0F, 0.0F, 0.0F);
+        witch.addChild(hat2);
+        setRotationAngle(hat2, 0.0F, 0.0F, -0.3054F);
+        hat2.texOffs(24, 55).addBox(1.8F, -9.6F, -2.0F, 1.0F, 1.0F, 1.0F, 0.0F, false);
+
+        ModelRenderer hat3 = new ModelRenderer(this);
+        hat3.setPos(0.0F, 0.0F, 0.0F);
+        witch.addChild(hat3);
+        setRotationAngle(hat3, 0.0F, 0.0F, -0.1745F);
+        hat3.texOffs(16, 53).addBox(0.2F, -8.9F, -2.5F, 2.0F, 2.0F, 2.0F, 0.0F, false);
+
+        ModelRenderer hat4 = new ModelRenderer(this);
+        hat4.setPos(0.0F, 0.0F, 0.0F);
+        witch.addChild(hat4);
+        setRotationAngle(hat4, 0.0F, 0.0F, -0.0698F);
+        hat4.texOffs(0, 50).addBox(-1.6F, -7.3F, -3.5F, 4.0F, 3.0F, 4.0F, 0.0F, false);
     }
 
     public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {
