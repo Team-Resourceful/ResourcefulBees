@@ -1,5 +1,10 @@
 **please continue to report any bugs/issues to https://issues.resourcefullbees.com/**
 
+# ----- [0.9.9.7] -----
+- Added WITCH model type
+- Fixed base layer of bees not accepting transparency 
+  (This was fixed in a dev build before we started on 1.0.0 but it never made it to the live build)
+
 # ----- [0.9.9.6] -----
 - Fixed hive ingredient crashing servers, closing #283
 
