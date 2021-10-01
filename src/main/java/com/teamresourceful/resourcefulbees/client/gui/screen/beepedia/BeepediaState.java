@@ -10,6 +10,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
+import java.util.Stack;
 
 public class BeepediaState {
     /***
@@ -56,7 +58,7 @@ public class BeepediaState {
      *       - <CombBeesPage>
      */
     public static BeepediaState currentState = new BeepediaState();
-    public static List<BeepediaState> savedStates = new LinkedList<>();
+    public static Stack<BeepediaState> savedStates = new Stack<>();
 
     public BeepediaListTypes selectedList;
     public PageTypes page;
@@ -80,9 +82,19 @@ public class BeepediaState {
         this(currentState.selectedList, currentState.page, currentState.listItem, currentState.subPage, currentState.subPageTab);
     }
 
-    public void renderStates(BeepediaScreen beepedia, MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
-        BeepediaHandler.drawList(beepedia, matrix, partialTicks, mouseX, mouseY);
-        BeepediaHandler.drawPage(beepedia, matrix, partialTicks, mouseX, mouseY);
+    public static void goBackState() {
+        if (savedStates.isEmpty()) return;
+        BeepediaHandler.closeState();
+        currentState = savedStates.pop();
+        BeepediaHandler.openState();
+    }
+
+    public static boolean isHomeState() {
+        return currentState.page == PageTypes.HOME;
+    }
+
+    public static boolean hasPastStates() {
+        return !savedStates.isEmpty();
     }
 
     public void newState(@Nullable BeepediaListTypes selectedList, @Nullable PageTypes page, @Nullable String listItem, @Nullable SubPageTypes subPage, @Nullable SubPageTab subPageTab) {

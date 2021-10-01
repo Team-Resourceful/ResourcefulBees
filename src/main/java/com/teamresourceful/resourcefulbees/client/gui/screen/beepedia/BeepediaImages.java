@@ -25,4 +25,5 @@ public class BeepediaImages {
     public static final ResourceLocation LOGO = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/logo.png");
     public static final ResourceLocation BREEDING_IMAGE = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/breeding.png");
     public static final ResourceLocation INFO_ICON = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/icons.png");
+    public static final ResourceLocation SEARCH_BUTTONS = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/search_buttons.png");
 }

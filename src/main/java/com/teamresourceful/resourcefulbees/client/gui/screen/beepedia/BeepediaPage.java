@@ -27,6 +27,16 @@ public abstract class BeepediaPage {
         this.screenArea = screenArea;
     }
 
+    public int getXPos() {
+        if (beepedia == null) return 0;
+        return screenArea.getX(beepedia);
+    }
+
+    public int getYPos() {
+        if (beepedia == null) return 0;
+        return screenArea.getY(beepedia);
+    }
+
     /**
      * register any data or tooltips here.
      * @param beepedia the main screen class

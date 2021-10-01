@@ -17,8 +17,8 @@ public class ListPage extends BeepediaPage {
     private final ItemStack item;
     private final ITextComponent tooltip;
     private final Map<String, ? extends BeepediaStats> stats;
-    private final int buttonX;
-    private final int buttonY;
+//    private final int buttonX;
+//    private final int buttonY;
 
     public ListPage(String type, ItemStack item, BeepediaScreenArea screenArea, int offset, ITextComponent tooltip, Map<String, ? extends BeepediaStats> stats) {
         super(screenArea);
@@ -26,17 +26,21 @@ public class ListPage extends BeepediaPage {
         this.stats = stats;
         this.item = item;
         this.tooltip = tooltip;
-        this.screenArea = screenArea;
-        this.buttonX = x + offset;
-        this.buttonY = y + 8;
+//        this.buttonX = x + offset;
+//        this.buttonY = y + 8;
     }
+
+//    @Override
+//    public void registerButtons(BeepediaScreen beepedia) {
+//        TabImageButton button = new TabImageButton(buttonX, buttonY, 20, 20, 0, 0, 20, BeepediaImages.BUTTON_IMAGE, item, 2, 2, onPress ->
+//                BeepediaHandler.setActiveList(type), beepedia.getTooltipProvider(tooltip));
+//        beepedia.addButton(button);
+//        ButtonList buttonList = new ButtonList(beepedia.guiLeft + 8, beepedia.guiTop + 31, 121, 141, 21, button, stats);
+//    }
 
     @Override
     public void registerButtons(BeepediaScreen beepedia) {
-        TabImageButton button = new TabImageButton(buttonX, buttonY, 20, 20, 0, 0, 20, BeepediaImages.BUTTON_IMAGE, item, 2, 2, onPress ->
-                BeepediaHandler.setActiveList(type), beepedia.getTooltipProvider(tooltip));
-        beepedia.addButton(button);
-        ButtonList buttonList = new ButtonList(beepedia.guiLeft + 8, beepedia.guiTop + 31, 121, 141, 21, button, stats);
+
     }
 
     @Override

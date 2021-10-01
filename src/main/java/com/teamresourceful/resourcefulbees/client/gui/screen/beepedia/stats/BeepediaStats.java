@@ -24,12 +24,12 @@ public abstract class BeepediaStats {
         return result.get();
     }
 
-    public TabImageButton getTabButton(ItemStack stack, Button.IPressable pressable, ITextComponent tooltip) {
-        TabImageButton button = new TabImageButton(this.xPos + 40 + tabCounter * 21, this.yPos + 27,
-                20, 20, 0, 0, 20, BeepediaImages.BUTTON_IMAGE, stack, 2, 2, pressable, beepedia.getTooltipProvider(tooltip));
-        beepedia.addButton(button);
-        button.visible = false;
-        tabCounter++;
-        return button;
-    }
+//    public TabImageButton getTabButton(ItemStack stack, Button.IPressable pressable, ITextComponent tooltip) {
+//        TabImageButton button = new TabImageButton(this.xPos + 40 + tabCounter * 21, this.yPos + 27,
+//                20, 20, 0, 0, 20, BeepediaImages.BUTTON_IMAGE, stack, 2, 2, pressable, beepedia.getTooltipProvider(tooltip));
+//        beepedia.addButton(button);
+//        button.visible = false;
+//        tabCounter++;
+//        return button;
+//    }
 }

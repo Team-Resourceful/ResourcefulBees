@@ -33,6 +33,15 @@ public class BeeInfoPage extends BeeDataPage {
     private CustomBeeData beeData;
     private int slot = 0;
 
+    public BeeInfoPage(BeepediaScreenArea screenArea) {
+        super(screenArea);
+    }
+
+    @Override
+    public void registerButtons(BeepediaScreen beepedia) {
+
+    }
+
     @Override
     public void preInit(BeepediaScreen beepedia, BeepediaScreenArea screenArea, CustomBeeData beeData) {
         super.preInit(beepedia, screenArea, beeData);
@@ -47,11 +56,6 @@ public class BeeInfoPage extends BeeDataPage {
                 entityFlower = Pair.of(beeData.getCoreData().getEntityFlower().get(), beeData.getCoreData().getEntityFlower().get().create(Minecraft.getInstance().level));
             }
         }
-    }
-
-    @Override
-    public void registerButtons(BeepediaScreen beepedia) {
-
     }
 
     public void renderBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
@@ -79,20 +83,20 @@ public class BeeInfoPage extends BeeDataPage {
 
     @Override
     public void addSearch(BeepediaPage parent) {
-        if (beeData == null) throw new IllegalStateException("preInit not implemented");
-        parent.addSearchBeeTag(beeData.getCombatData().isPassive() ? "passive" : "aggressive");
-        if (beeData.getCombatData().inflictsPoison()) parent.addSearchBeeTag("poisonous");
-        if (beeData.getCombatData().removeStingerOnAttack()) parent.addSearchBeeTag("stinger");
-        if (beeData.getCoreData().getEntityFlower().isPresent()) {
-            if (entityFlower.getRight() instanceof CustomBeeEntity) {
-                parent.addSearchBee(entityFlower.getRight(), ((CustomBeeEntity) entityFlower.getRight()).getBeeType());
-            } else {
-                parent.addSearchEntity(entityFlower.getRight());
-            }
-        } else {
-            beeData.getCoreData().getBlockFlowers().forEach(parent::addSearchItem);
-        }
-        parent.addSearchBeeTag(BeepediaUtils.getSizeName(beeData.getRenderData().getSizeModifier()).getString());
+//        if (beeData == null) throw new IllegalStateException("preInit not implemented");
+//        parent.addSearchBeeTag(beeData.getCombatData().isPassive() ? "passive" : "aggressive");
+//        if (beeData.getCombatData().inflictsPoison()) parent.addSearchBeeTag("poisonous");
+//        if (beeData.getCombatData().removeStingerOnAttack()) parent.addSearchBeeTag("stinger");
+//        if (beeData.getCoreData().getEntityFlower().isPresent()) {
+//            if (entityFlower.getRight() instanceof CustomBeeEntity) {
+//                parent.addSearchBee(entityFlower.getRight(), ((CustomBeeEntity) entityFlower.getRight()).getBeeType());
+//            } else {
+//                parent.addSearchEntity(entityFlower.getRight());
+//            }
+//        } else {
+//            beeData.getCoreData().getBlockFlowers().forEach(parent::addSearchItem);
+//        }
+//        parent.addSearchBeeTag(BeepediaUtils.getSizeName(beeData.getRenderData().getSizeModifier()).getString());
     }
 
     @Override

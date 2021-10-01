@@ -1,5 +1,7 @@
 package com.teamresourceful.resourcefulbees.item;
 
+import com.teamresourceful.resourcefulbees.api.capabilities.IBeepediaData;
+import com.teamresourceful.resourcefulbees.capabilities.Capabilities;
 import com.teamresourceful.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.lib.constants.NBTConstants;
@@ -10,13 +12,9 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.StringNBT;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -24,12 +22,12 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 import vazkii.patchouli.api.PatchouliAPI;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Beepedia extends Item {
 
@@ -72,24 +70,26 @@ public class Beepedia extends Item {
 
     @Override
     public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
+        LazyOptional<IBeepediaData> data = player.getCapability(Capabilities.BEEPEDIA_DATA);
         ItemStack itemstack = player.getItemInHand(hand);
         ItemStack book = PatchouliAPI.get().getBookStack(ModConstants.SHADES_OF_BEES);
         boolean hasShades = player.inventory.contains(book);
         if (world.isClientSide) {
-            BeepediaUtils.loadBeepedia(itemstack, null, hasShades);
+            BeepediaUtils.loadBeepedia(itemstack, hasShades, data);
         }
         return ActionResult.sidedSuccess(itemstack, world.isClientSide());
     }
 
     @Override
     public ActionResultType interactLivingEntity(ItemStack stack, PlayerEntity player, LivingEntity entity, Hand hand) {
-        ItemStack book = PatchouliAPI.get().getBookStack(new ResourceLocation("resourcefulbees:fifty_shades_of_bees"));
+        LazyOptional<IBeepediaData> data = player.getCapability(Capabilities.BEEPEDIA_DATA);
+        ItemStack book = PatchouliAPI.get().getBookStack(ModConstants.SHADES_OF_BEES);
         boolean hasShades = player.inventory.contains(book);
         if (entity instanceof CustomBeeEntity) {
             if (!player.level.isClientSide) {
                 sendPacket(entity, player);
             }
-            if (player.level.isClientSide) BeepediaUtils.loadBeepedia(stack, entity, hasShades);
+            if (player.level.isClientSide) BeepediaUtils.loadBeepedia(stack, hasShades, data);
             player.setItemInHand(hand, stack);
             return ActionResultType.SUCCESS;
         }

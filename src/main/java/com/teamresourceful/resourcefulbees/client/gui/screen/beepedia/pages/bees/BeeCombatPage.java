@@ -14,9 +14,18 @@ import net.minecraft.util.text.TranslationTextComponent;
 
 public class BeeCombatPage extends BeeDataPage {
 
+    public BeeCombatPage(BeepediaScreenArea screenArea) {
+        super(screenArea);
+    }
+
     @Override
     protected void preInit(BeepediaScreen beepedia, BeepediaScreenArea screenArea, CustomBeeData beeData) {
         super.preInit(beepedia, screenArea, beeData);
+    }
+
+    @Override
+    public void registerButtons(BeepediaScreen beepedia) {
+
     }
 
     @Override

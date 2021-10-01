@@ -4,21 +4,18 @@ import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.beedata.breeding.BeeFamily;
 import com.teamresourceful.resourcefulbees.api.beedata.mutation.EntityMutation;
 import com.teamresourceful.resourcefulbees.api.beedata.mutation.ItemMutation;
+import com.teamresourceful.resourcefulbees.api.capabilities.IBeepediaData;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
-import com.teamresourceful.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.item.BeeSpawnEggItem;
 import com.teamresourceful.resourcefulbees.item.Beepedia;
 import com.teamresourceful.resourcefulbees.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.lib.enums.LightLevel;
 import com.teamresourceful.resourcefulbees.registry.BeeRegistry;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.common.util.LazyOptional;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.LinkedList;
@@ -32,22 +29,12 @@ public class BeepediaUtils {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
 
-    public static void loadBeepedia(ItemStack itemstack, Entity entity, boolean hasShades) {
+    public static void loadBeepedia(ItemStack itemstack, boolean hasShades, LazyOptional<IBeepediaData> data) {
         boolean complete = false;
-        List<String> bees = new LinkedList<>();
         if (itemstack.hasTag() && itemstack.getTag() != null && !itemstack.isEmpty()) {
             complete = itemstack.getTag().getBoolean(Beepedia.COMPLETE_TAG) || itemstack.getTag().getBoolean(Beepedia.CREATIVE_TAG);
-            bees = getBees(itemstack.getTag());
         }
-        Minecraft.getInstance().setScreen(new BeepediaScreen(entity == null ? null : (CustomBeeEntity) entity, bees, complete, hasShades, itemstack));
-    }
-
-    private static List<String> getBees(CompoundNBT tag) {
-        if (tag.contains(NBTConstants.NBT_BEES)) {
-            return tag.getList(NBTConstants.NBT_BEES, 8).copy().stream().map(INBT::getAsString).collect(Collectors.toList());
-        } else {
-            return new LinkedList<>();
-        }
+        Minecraft.getInstance().setScreen(new BeepediaScreen(complete, hasShades, data));
     }
 
     public static TranslationTextComponent getSizeName(float sizeModifier) {

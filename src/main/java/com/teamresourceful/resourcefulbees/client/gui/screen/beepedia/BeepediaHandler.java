@@ -24,6 +24,8 @@ import java.util.*;
 
 public class BeepediaHandler {
 
+    private static BeepediaPage selectedPage;
+
     private BeepediaHandler() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
@@ -80,7 +82,7 @@ public class BeepediaHandler {
     /**
      * list of all lists that can be selected
      */
-    public static Map<BeepediaListTypes, ListPage> listStates = new LinkedHashMap<BeepediaListTypes, ListPage>();
+    public static Map<BeepediaListTypes, ListPage> listStates = new LinkedHashMap<>();
 
     private static HomePage homePage = new HomePage(SUB_SCREEN_AREA);
     private static HelpPage helpPage = new HelpPage(SUB_SCREEN_AREA);
@@ -124,9 +126,11 @@ public class BeepediaHandler {
 
         // register buttons for all pages
         for (BeepediaPage page : allPages) {
+            page.pageButtons.clear();
             page.registerButtons(beepedia);
             page.closePage();
         }
+        openState();
     }
 
     private static void registerLists(BeepediaScreen beepedia) {
@@ -159,8 +163,8 @@ public class BeepediaHandler {
         listStates.get(BeepediaState.currentState.selectedList).drawTooltips(matrix, mouseX, mouseY);
     }
 
-    public static void drawPage(BeepediaScreen beepedia, MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
-        BeepediaPage selectedPage = homePage;
+    public static void preInit(BeepediaScreen beepedia) {
+        selectedPage = homePage;
         switch (BeepediaState.currentState.page) {
             case BEES:
                 if (beeStats.containsKey(BeepediaState.currentState.listItem)) {
@@ -199,6 +203,9 @@ public class BeepediaHandler {
                 break;
             default:
         }
+    }
+
+    public static void drawPage(MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
         selectedPage.renderBackground(matrix, partialTicks, mouseX, mouseY);
         selectedPage.renderForeground(matrix, mouseX, mouseY);
         selectedPage.drawTooltips(matrix, mouseX, mouseY);
@@ -256,5 +263,14 @@ public class BeepediaHandler {
                 break;
             default:
         }
+    }
+
+    public static void openHomeScreen() {
+
+    }
+
+    public static void tick(int ticksOpen) {
+        if (selectedPage == null) return;
+        selectedPage.tick(ticksOpen);
     }
 }

@@ -1,18 +1,17 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
+import com.teamresourceful.resourcefulbees.api.capabilities.IBeepediaData;
 import com.teamresourceful.resourcefulbees.capabilities.BeepediaData;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.*;
 import com.teamresourceful.resourcefulbees.client.gui.widget.*;
-import com.teamresourceful.resourcefulbees.config.Config;
 import com.teamresourceful.resourcefulbees.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.network.packets.BeepediaEntityMessage;
 import com.teamresourceful.resourcefulbees.utils.RenderUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SimpleSound;
+import net.minecraft.client.gui.IGuiEventListener;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.Widget;
@@ -22,23 +21,20 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IItemProvider;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 import vazkii.patchouli.api.PatchouliAPI;
 
 import javax.annotation.Nonnull;
-import java.awt.*;
 import java.util.List;
 import java.util.*;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 public class BeepediaScreen extends Screen {
 
@@ -48,9 +44,8 @@ public class BeepediaScreen extends Screen {
 
     public final boolean isCreative;
     public final boolean hasShades;
-    public final BeepediaData data;
+    public final IBeepediaData data;
 
-    TextFieldWidget searchBox;
     public int guiLeft;
     public int guiTop;
     protected int ticksOpen = 0;
@@ -64,13 +59,16 @@ public class BeepediaScreen extends Screen {
     private ModImageButton homeButton;
     private ModImageButton searchButton;
 
+    public BeepediaSearchHandler searchHandler;
+
     @OnlyIn(Dist.CLIENT)
-    public BeepediaScreen(boolean isCreative, boolean hasShades, BeepediaData data) {
+    public BeepediaScreen(boolean isCreative, boolean hasShades, LazyOptional<IBeepediaData> data) {
         super(BeepediaLang.INTERFACE_NAME);
         BeepediaHandler.initBeepediaStates();
         this.hasShades = hasShades;
         this.isCreative = isCreative;
-        this.data = data == null ? new BeepediaData() : data;
+        this.data = data.orElseGet(BeepediaData::new);
+        searchHandler = new BeepediaSearchHandler(this);
     }
 
     public static void receiveBeeMessage(BeepediaEntityMessage message) {
@@ -105,47 +103,27 @@ public class BeepediaScreen extends Screen {
         ItemStack book = PatchouliAPI.get().getBookStack(ModConstants.SHADES_OF_BEES);
 
         homeButton = new ModImageButton(x + (SCREEN_WIDTH / 2) - 10, y + SCREEN_HEIGHT - 25, 20, 20, 20, 0, 20, BeepediaImages.HOME_BUTTONS, 60, 60, onPress -> BeepediaHandler.openHomeScreen());
-        backButton = new ModImageButton(x + (SCREEN_WIDTH / 2) + 20, y + SCREEN_HEIGHT - 25, 20, 20, 40, 0, 20, BeepediaImages.HOME_BUTTONS, 60, 60, onPress -> BeepediaHandler.goBackState());
+        backButton = new ModImageButton(x + (SCREEN_WIDTH / 2) + 20, y + SCREEN_HEIGHT - 25, 20, 20, 40, 0, 20, BeepediaImages.HOME_BUTTONS, 60, 60, onPress -> BeepediaState.goBackState());
         searchButton = new ModImageButton(x + (SCREEN_WIDTH / 2) - 40, y + SCREEN_HEIGHT - 25, 20, 20, 0, 0, 20, BeepediaImages.HOME_BUTTONS, 60, 60, onPress -> {
-            searchBox.visible = !searchBox.visible;
-            setSearchVisible(searchBox.visible);
-            updateSearch(beesList, true);
-            updateSearch(traitsList, true);
-            updateSearch(honeyList, true);
-            updateSearch(combsList, true);
+            searchHandler.toggleSearch();
+//            setSearchVisible(searchBox.visible);
+//            updateSearch(beesList, true);
+//            updateSearch(traitsList, true);
+//            updateSearch(honeyList, true);
+//            updateSearch(combsList, true);
         });
         TabImageButton shadesButton = new TabImageButton(shadesButtonX + 6, shadesButtonY + 6, 18, 18, 0, 0, 18,
                 BeepediaImages.SHADES_BUTTON_IMAGE, book, 1, 1, onPress -> PatchouliAPI.get().openBookGUI(ModConstants.SHADES_OF_BEES),
-                18, 36) {
-
-            @Override
-            public void renderToolTip(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
-                TranslationTextComponent s = new TranslationTextComponent("book.resourcefulbees.name");
-                BeepediaScreen.this.renderTooltip(matrix, s, mouseX, mouseY);
-            }
+                18, 36, BeepediaLang.FIFTY_SHADES_BUTTON) {
         };
         // add buttons to button array
         addButtons(homeButton, backButton, searchButton, shadesButton);
         backButton.active = false;
         shadesButton.visible = hasShades;
+
+        searchHandler.registerSearch(x, y);
     }
 
-    /**
-     * Register the beepedia search bar and register search parameters for each page.
-     *
-     * @param x top left corner x position
-     * @param y top left corner y position
-     */
-    private void registerSearch(int x, int y) {
-        if (this.minecraft != null) this.minecraft.keyboardHandler.setSendRepeatsToGui(true);
-        searchBox = new TextFieldWidget(Minecraft.getInstance().font, x + 10, y + 143, 98, 10, new TranslationTextComponent("gui.resourcefulbees.beepedia.search"));
-        searchBox.visible = false;
-        addWidget(searchBox);
-        bees.forEach((s, b) -> b.addSearch());
-        traits.forEach((s, b) -> b.addSearch());
-        honey.forEach((s, b) -> b.addSearch());
-        combs.forEach((s, b) -> b.addSearch());
-    }
 
     /**
      * Register the page lists and the tab buttons to switch between them.
@@ -159,22 +137,33 @@ public class BeepediaScreen extends Screen {
 
     @Override
     public void render(@NotNull MatrixStack matrixStack, int mouseX, int mouseY, float partialTick) {
-        renderBackground(matrixStack, 0);
         tooltips.clear();
         interactions.clear();
+        // initialises the current page's data
+        BeepediaHandler.preInit(this);
+        renderBackground(matrixStack, 0);
         drawBackground(matrixStack, partialTick, mouseX, mouseY);
-        updateSearch();
-        if (entity != null) {
-            drawEntityData(matrixStack);
-        }
+//        updateSearch();
+//        if (entity != null) {
+//            drawEntityData(matrixStack);
+//        }
         if (hasShades) {
             drawShadesButton(matrixStack);
         }
-        super.render(matrixStack, mouseX, mouseY, partialTick);
-        searchBox.render(matrixStack, mouseX, mouseY, partialTick);
-        drawForeground(matrixStack, mouseX, mouseY);
-        drawTooltips(matrixStack, mouseX, mouseY);
+        for (Widget button : this.buttons) {
+            button.render(matrixStack, mouseX, mouseY, partialTick);
+        }
 
+        searchHandler.render(matrixStack, mouseX, mouseY, partialTick);
+//        drawForeground(matrixStack, mouseX, mouseY);
+        drawTooltips(matrixStack, mouseX, mouseY);
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        ticksOpen++;
+        BeepediaHandler.tick(ticksOpen);
     }
 
     private void drawShadesButton(MatrixStack matrix) {
@@ -184,183 +173,174 @@ public class BeepediaScreen extends Screen {
         blit(matrix, shadesButtonX, shadesButtonY, 0, 0, 30, 30, 30, 30);
     }
 
-    private void drawEntityData(@NotNull MatrixStack matrix) {
-        int x = this.guiLeft;
-        int y = this.guiTop;
-
-        int boxX = x + SCREEN_WIDTH + 12;
-        int boxY = y + 10;
-        String blockFormat = "[%d, %d, %d]";
-        this.font.draw(matrix, entity.getDisplayName(), boxX, boxY, Color.WHITE.getRGB());
-        this.font.draw(matrix, String.format("Health: %.0f/%.0f", this.entity.getHealth(), this.entity.getMaxHealth()), boxX, boxY + 10.0f, 5592405);
-        BlockPos currentPos = entity.blockPosition();
-        BlockPos hivePos = entity.getHivePos();
-        BlockPos flowerPos = entity.getSavedFlowerPos();
-        this.font.draw(matrix, String.format(blockFormat, currentPos.getX(), currentPos.getY(), currentPos.getZ()), boxX, boxY + 20.0f, 5592405);
-        if (hivePos != null) {
-            this.font.draw(matrix, String.format(blockFormat, hivePos.getX(), hivePos.getY(), hivePos.getZ()), boxX, boxY + 30.0f, 5592405);
-        }
-        if (flowerPos != null) {
-            this.font.draw(matrix, String.format(blockFormat, flowerPos.getX(), flowerPos.getY(), flowerPos.getZ()), boxX, boxY + 40.0f, 5592405);
-        }
-        if (this.entity.hasNectar()) {
-            this.font.draw(matrix, "pollenated", boxX, boxY + 50.0F, 5592405);
-        }
-    }
+//    private void drawEntityData(@NotNull MatrixStack matrix) {
+//        int x = this.guiLeft;
+//        int y = this.guiTop;
+//
+//        int boxX = x + SCREEN_WIDTH + 12;
+//        int boxY = y + 10;
+//        String blockFormat = "[%d, %d, %d]";
+//        this.font.draw(matrix, entity.getDisplayName(), boxX, boxY, Color.WHITE.getRGB());
+//        this.font.draw(matrix, String.format("Health: %.0f/%.0f", this.entity.getHealth(), this.entity.getMaxHealth()), boxX, boxY + 10.0f, 5592405);
+//        BlockPos currentPos = entity.blockPosition();
+//        BlockPos hivePos = entity.getHivePos();
+//        BlockPos flowerPos = entity.getSavedFlowerPos();
+//        this.font.draw(matrix, String.format(blockFormat, currentPos.getX(), currentPos.getY(), currentPos.getZ()), boxX, boxY + 20.0f, 5592405);
+//        if (hivePos != null) {
+//            this.font.draw(matrix, String.format(blockFormat, hivePos.getX(), hivePos.getY(), hivePos.getZ()), boxX, boxY + 30.0f, 5592405);
+//        }
+//        if (flowerPos != null) {
+//            this.font.draw(matrix, String.format(blockFormat, flowerPos.getX(), flowerPos.getY(), flowerPos.getZ()), boxX, boxY + 40.0f, 5592405);
+//        }
+//        if (this.entity.hasNectar()) {
+//            this.font.draw(matrix, "pollenated", boxX, boxY + 50.0F, 5592405);
+//        }
+//    }
 
     protected void drawBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
         Minecraft client = this.minecraft;
-        homeButton.active = activePage != home;
-        backButton.active = !pastStates.isEmpty();
+        homeButton.active = BeepediaState.isHomeState();
+        backButton.active = BeepediaState.hasPastStates();
         int x = this.guiLeft;
         int y = this.guiTop;
         if (client != null) {
             client.getTextureManager().bind(BeepediaImages.BACKGROUND);
             blit(matrix, x, y, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT);
         }
-        if (entity != null) {
-            int boxX = x + SCREEN_WIDTH + 2;
-            Minecraft.getInstance().getTextureManager().bind(BeepediaImages.BEE_INFO_IMAGE);
-            blit(matrix, boxX, y, 0, 0, 100, 150, 100, 150);
-        }
-        activePage.renderBackground(matrix, partialTick, mouseX, mouseY);
-        activeList.updateList();
-        if (searchBox.visible) activeList.setSearchHeight();
-        else activeList.resetHeight();
+//        if (entity != null) {
+//            int boxX = x + SCREEN_WIDTH + 2;
+//            Minecraft.getInstance().getTextureManager().bind(BeepediaImages.BEE_INFO_IMAGE);
+//            blit(matrix, boxX, y, 0, 0, 100, 150, 100, 150);
+//        }
+        BeepediaHandler.drawList(this, matrix, partialTick, mouseX, mouseY);
+        BeepediaHandler.drawPage(matrix, partialTick, mouseX, mouseY);
+//        if (searchBox.visible) activeList.setSearchHeight();
+//        else activeList.resetHeight();
     }
 
-    private void updateSearch() {
-        if (searchBox.visible) {
-            setFocused(searchBox);
-            searchBox.setFocus(true);
-        }
-        if (searchBox.isFocused()) {
-            String text = searchBox.getValue();
-            if (text.isEmpty()) {
-                setSearch(null);
-            } else {
-                setSearch(text);
-            }
-        }
-        updateSearch(beesList, false);
-        updateSearch(honeyList, false);
-        updateSearch(traitsList, false);
-    }
+//    private void updateSearch() {
+//        if (searchBox.visible) {
+//            setFocused(searchBox);
+//            searchBox.setFocus(true);
+//        }
+//        if (searchBox.isFocused()) {
+//            String text = searchBox.getValue();
+//            if (text.isEmpty()) {
+//                setSearch(null);
+//            } else {
+//                setSearch(text);
+//            }
+//        }
+//        updateSearch(beesList, false);
+//        updateSearch(honeyList, false);
+//        updateSearch(traitsList, false);
+//    }
 
-    private void updateSearch(ButtonList list, boolean isSearchToggled) {
-        if (!searchUpdated() && !isSearchToggled) return;
-        if (isSearchVisible()) {
-            if (getSearch() != null) {
-                list.updateReducedList(searchBox.getValue(), true);
-            } else {
-                list.updateReducedList(null, true);
-            }
-        } else {
-            list.updateReducedList(null, true);
-        }
-    }
+//    private void updateSearch(ButtonList list, boolean isSearchToggled) {
+//        if (!searchUpdated() && !isSearchToggled) return;
+//        if (isSearchVisible()) {
+//            if (getSearch() != null) {
+//                list.updateReducedList(searchBox.getValue(), true);
+//            } else {
+//                list.updateReducedList(null, true);
+//            }
+//        } else {
+//            list.updateReducedList(null, true);
+//        }
+//    }
 
-    public static boolean searchUpdated() {
-        if (lastSearch == null) return search != null;
-        return !lastSearch.equals(search);
-    }
+//    public static boolean searchUpdated() {
+//        if (lastSearch == null) return search != null;
+//        return !lastSearch.equals(search);
+//    }
 
-    @Override
-    public void tick() {
-        super.tick();
-        ticksOpen++;
-        activePage.tick(ticksOpen);
-    }
-
-    protected void drawForeground(MatrixStack matrixStack, int mouseX, int mouseY) {
-        this.font.draw(matrixStack, this.title, (float) this.guiLeft + 10, (float) this.guiTop + SCREEN_HEIGHT - 20, 5592405);
-        activePage.renderForeground(matrixStack, mouseX, mouseY);
-        TranslationTextComponent title;
-        switch (activeListType) {
-            case TRAIT:
-                title = BeepediaLang.TAB_BEES;
-                break;
-            case HONEY:
-                title = BeepediaLang.TAB_TRAITS;
-                break;
-            case COMB:
-                title = BeepediaLang.TAB_HONEY;
-                break;
-            default:
-                title = BeepediaLang.TAB_COMBS;
-                break;
-        }
-        this.font.draw(matrixStack, title.withStyle(TextFormatting.WHITE), (float) this.guiLeft + 10, (float) this.guiTop + 20, -1);
-    }
+//    protected void drawForeground(MatrixStack matrixStack, int mouseX, int mouseY) {
+//        this.font.draw(matrixStack, this.title, (float) this.guiLeft + 10, (float) this.guiTop + SCREEN_HEIGHT - 20, 5592405);
+//        activePage.renderForeground(matrixStack, mouseX, mouseY);
+//        TranslationTextComponent title;
+//        switch (activeListType) {
+//            case TRAIT:
+//                title = BeepediaLang.TAB_BEES;
+//                break;
+//            case HONEY:
+//                title = BeepediaLang.TAB_TRAITS;
+//                break;
+//            case COMB:
+//                title = BeepediaLang.TAB_HONEY;
+//                break;
+//            default:
+//                title = BeepediaLang.TAB_COMBS;
+//                break;
+//        }
+//        this.font.draw(matrixStack, title.withStyle(TextFormatting.WHITE), (float) this.guiLeft + 10, (float) this.guiTop + 20, -1);
+//    }
 
 
     private void drawTooltips(MatrixStack matrixStack, int mouseX, int mouseY) {
-        activePage.drawTooltips(matrixStack, mouseX, mouseY);
-        beesList.button.renderToolTip(matrixStack, mouseX, mouseY);
-        traitsList.button.renderToolTip(matrixStack, mouseX, mouseY);
-        honeyList.button.renderToolTip(matrixStack, mouseX, mouseY);
-        combsList.button.renderToolTip(matrixStack, mouseX, mouseY);
+        buttons.forEach(b -> {
+            if (b.visible && !b.getMessage().getString().isEmpty()) registerTooltip(b.getMessage(), b.x, b.y, b.getWidth(), b.getHeight());
+        });
         tooltips.forEach(t -> t.draw(this, matrixStack, mouseX, mouseY));
     }
 
-    public Map<String, TraitPage> getTraits(CustomBeeData beeData) {
-        Map<String, TraitPage> pages = new HashMap<>();
-        if (!beeData.getTraitData().getTraits().isEmpty()) return pages;
-        for (String traitName : beeData.getTraitData().getTraits()) {
-            if (traitName != null) pages.put(traitName, traits.get(traitName));
-        }
-        return pages;
-    }
+//    public Map<String, TraitPage> getTraits(CustomBeeData beeData) {
+//        Map<String, TraitPage> pages = new HashMap<>();
+//        if (!beeData.getTraitData().getTraits().isEmpty()) return pages;
+//        for (String traitName : beeData.getTraitData().getTraits()) {
+//            if (traitName != null) pages.put(traitName, traits.get(traitName));
+//        }
+//        return pages;
+//    }
 
-    @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double scrollAmount) {
-        boolean subScrolled = activePage.mouseScrolled(mouseX, mouseY, scrollAmount);
-        if (subScrolled) return true;
+//    @Override
+//    public boolean mouseScrolled(double mouseX, double mouseY, double scrollAmount) {
+//        boolean subScrolled = activePage.mouseScrolled(mouseX, mouseY, scrollAmount);
+//        if (subScrolled) return true;
+//
+//        if (activeList != null) {
+//            activeList.updatePos((int) (scrollAmount * 8));
+//        }
+//        updateScrollPos(beesList, traitsList, honeyList, combsList);
+//        return super.mouseScrolled(mouseX, mouseY, scrollAmount);
+//    }
 
-        if (activeList != null) {
-            activeList.updatePos((int) (scrollAmount * 8));
-        }
-        updateScrollPos(beesList, traitsList, honeyList, combsList);
-        return super.mouseScrolled(mouseX, mouseY, scrollAmount);
-    }
+//    @Override
+//    public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
+//        if (activePage.mouseClicked(mouseX, mouseY, mouseButton)) {
+//            Minecraft.getInstance().getSoundManager().play(SimpleSound.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+//            return true;
+//        }
+//        interactions.forEach(b -> {
+//            if (b.onMouseClick((int) mouseX, (int) mouseY)) {
+//                Minecraft.getInstance().getSoundManager().play(SimpleSound.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+//            }
+//        });
+//        return super.mouseClicked(mouseX, mouseY, mouseButton);
+//    }
 
-    @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
-        if (activePage.mouseClicked(mouseX, mouseY, mouseButton)) {
-            Minecraft.getInstance().getSoundManager().play(SimpleSound.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
-            return true;
-        }
-        interactions.forEach(b -> {
-            if (b.onMouseClick((int) mouseX, (int) mouseY)) {
-                Minecraft.getInstance().getSoundManager().play(SimpleSound.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
-            }
-        });
-        return super.mouseClicked(mouseX, mouseY, mouseButton);
-    }
-
-    public static void updateScrollPos(ButtonList beesList, ButtonList traitsList, ButtonList honeyList, ButtonList combsList) {
-        beesScroll = beesList.getScrollPos();
-        traitScroll = traitsList.getScrollPos();
-        honeyScroll = honeyList.getScrollPos();
-        combScroll = combsList.getScrollPos();
-    }
-
-    public static void setSearch(String search) {
-        BeepediaScreen.lastSearch = BeepediaScreen.search;
-        BeepediaScreen.search = search;
-    }
-
-    public static String getSearch() {
-        return search;
-    }
-
-    public static void setSearchVisible(boolean visible) {
-        BeepediaScreen.searchVisible = visible;
-    }
-
-    public static boolean isSearchVisible() {
-        return searchVisible;
-    }
+//    public static void updateScrollPos(ButtonList beesList, ButtonList traitsList, ButtonList honeyList, ButtonList combsList) {
+//        beesScroll = beesList.getScrollPos();
+//        traitScroll = traitsList.getScrollPos();
+//        honeyScroll = honeyList.getScrollPos();
+//        combScroll = combsList.getScrollPos();
+//    }
+//
+//    public static void setSearch(String search) {
+//        BeepediaScreen.lastSearch = BeepediaScreen.search;
+//        BeepediaScreen.search = search;
+//    }
+//
+//    public static String getSearch() {
+//        return search;
+//    }
+//
+//    public static void setSearchVisible(boolean visible) {
+//        BeepediaScreen.searchVisible = visible;
+//    }
+//
+//    public static boolean isSearchVisible() {
+//        return searchVisible;
+//    }
 
     @Override
     public boolean isPauseScreen() {
@@ -460,8 +440,13 @@ public class BeepediaScreen extends Screen {
         return super.addButton(widget);
     }
 
+    @Override
+    public <T extends IGuiEventListener> @NotNull T addWidget(@NotNull T widget) {
+        return super.addWidget(widget);
+    }
+
     public <T extends Widget> void addButtons(List<@NotNull T> widgets) {
-        widgets.forEach(super::addButton);
+        widgets.forEach(this::addButton);
     }
 
     public <T extends Widget> void addButtons(@NotNull T... widgets) {
@@ -526,29 +511,29 @@ public class BeepediaScreen extends Screen {
         registerItemTooltip(item, xPos, yPos);
     }
 
-    public Map<String, BeePage> getBees(ItemStack bottleData) {
-        return bees.entrySet().stream()
-                .filter(entrySet -> mapContainsBottle(entrySet.getValue(), bottleData) && (!Config.BEEPEDIA_HIDE_LOCKED.get() || entrySet.getValue().beeUnlocked))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-    }
+//    public Map<String, BeePage> getBees(ItemStack bottleData) {
+//        return bees.entrySet().stream()
+//                .filter(entrySet -> mapContainsBottle(entrySet.getValue(), bottleData) && (!Config.BEEPEDIA_HIDE_LOCKED.get() || entrySet.getValue().beeUnlocked))
+//                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+//    }
 
     private boolean mapContainsBottle(BeePage page, ItemStack bottleData) {
         Item beeBottle = null;    /////BOTTLE OUTPUTS DON'T EXIST ANYMORE
         return null == bottleData.getItem();
     }
+//
+//
+//    public Map<String, BeePage> getBees(String traitName) {
+//        return bees.entrySet().stream()
+//                .filter(entrySet -> mapContainsTraitName(entrySet.getValue(), traitName) && (!Config.BEEPEDIA_HIDE_LOCKED.get() || entrySet.getValue().beeUnlocked))
+//                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+//    }
 
+//    private boolean mapContainsTraitName(BeePage page, String traitName) {
+//        return !page.beeData.getTraitData().getTraits().isEmpty() && page.beeData.getTraitData().getTraits().contains(traitName);
+//    }
 
-    public Map<String, BeePage> getBees(String traitName) {
-        return bees.entrySet().stream()
-                .filter(entrySet -> mapContainsTraitName(entrySet.getValue(), traitName) && (!Config.BEEPEDIA_HIDE_LOCKED.get() || entrySet.getValue().beeUnlocked))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-    }
-
-    private boolean mapContainsTraitName(BeePage page, String traitName) {
-        return !page.beeData.getTraitData().getTraits().isEmpty() && page.beeData.getTraitData().getTraits().contains(traitName);
-    }
-
-    public BeePage getBee(String s) {
-        return bees.get(s);
-    }
+//    public BeePage getBee(String s) {
+//        return bees.get(s);
+//    }
 }

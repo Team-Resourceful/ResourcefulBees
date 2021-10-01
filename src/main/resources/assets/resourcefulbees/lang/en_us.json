@@ -141,6 +141,15 @@
 	"gui.resourcefulbees.beepedia.bee_subtab.combat": "Combat Data",
 	"gui.resourcefulbees.beepedia.bee_subtab.centrifuge.requires_multiblock": "Multiblock centrifuge required for this recipe.",
 
+	"gui.resourcefulbees.beepedia.bee_search.starred": "Discovered",
+	"gui.resourcefulbees.beepedia.bee_search.not_starred": "Not Discovered",
+	"gui.resourcefulbees.beepedia.bee_search.world": "Spawns In World",
+	"gui.resourcefulbees.beepedia.bee_search.not_world": "Does Not Spawn in World",
+	"gui.resourcefulbees.beepedia.bee_search.breedable": "Breedable",
+	"gui.resourcefulbees.beepedia.bee_search.not_breedable": "Not Breedable",
+	"gui.resourcefulbees.beepedia.bee_search.mutates": "Has Mutations",
+	"gui.resourcefulbees.beepedia.bee_search.help": "Display Bee Search Prefixes",
+
 	"bees.resourcefulbees.size.tiny": "Tiny",
 	"bees.resourcefulbees.size.small": "Small",
 	"bees.resourcefulbees.size.regular": "Regular",

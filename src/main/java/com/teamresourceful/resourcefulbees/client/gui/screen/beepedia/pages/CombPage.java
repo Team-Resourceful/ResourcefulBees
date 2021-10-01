@@ -15,7 +15,7 @@ public class CombPage extends BeepediaPage {
     }
 
     public void preInit(BeepediaScreen beepedia, CombBeepediaStats stats) {
-        super.preInit(beepedia, beeStats.get(listItem), subPage, subPageTab);
+        super.preInit(beepedia);
         this.stats = stats;
     }
 
@@ -55,11 +55,6 @@ public class CombPage extends BeepediaPage {
 
     @Override
     public void addSearch(BeepediaPage parent) {
-
-    }
-
-    @Override
-    public void addSearch() {
 
     }
 }
