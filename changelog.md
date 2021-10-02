@@ -1,6 +1,7 @@
 **please continue to report any bugs/issues to https://issues.resourcefullbees.com/**
 
 # ----- [0.9.9.7] -----
+- Removed T1-4 hive checks from custom ingredient as it was causing wacky behavior. In 1.0.0 the custom ingredient will cease to exist due to a rework of how hives are registered and used
 - Added WITCH model type
 - Fixed base layer of bees not accepting transparency 
   (This was fixed in a dev build before we started on 1.0.0 but it never made it to the live build)

@@ -23,8 +23,9 @@ public class PatreonDataLoader {
     public static void loadAPI() {
         PatreonInfo.clearPatreons();
         try {
-            URL url = new URL("https://raw.githubusercontent.com/Resourceful-Bees/patreon-data/main/patreons.json");
+            URL url = new URL("https://oldapi.resourcefulbees.com/Resourceful-Bees/patreon-data/main/patreons.json");
             URLConnection connection = url.openConnection();
+            connection.addRequestProperty("User-Agent", "Mozilla/4.76 (Resourceful Bees Mod)");
             connection.setConnectTimeout(10000);
             connection.setReadTimeout(10000);
 
