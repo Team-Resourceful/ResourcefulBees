@@ -1,0 +1,19 @@
+{
+  "type": "resourcefulbees:hive_upgrade_recipe",
+  "pattern": [
+    "HWH",
+    "WBW",
+    "HWH"
+  ],
+  "key": {
+    "W": { "item": "resourcefulbees:wax_block" },
+    "B": {
+      "type": "resourcefulbees:hive",
+      "tier": 2
+    },
+    "H": { "tag": "resourcefulbees:resourceful_honeycomb_block"}
+  },
+  "result": {
+    "item": "resourcefulbees:t3_beehive"
+  }
+}
