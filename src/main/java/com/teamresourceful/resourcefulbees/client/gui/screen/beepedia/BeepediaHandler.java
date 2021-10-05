@@ -15,10 +15,7 @@ import com.teamresourceful.resourcefulbees.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.network.packets.BeepediaEntityMessage;
 import com.teamresourceful.resourcefulbees.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.registry.HoneyRegistry;
-import com.teamresourceful.resourcefulbees.registry.ModItems;
 import com.teamresourceful.resourcefulbees.registry.TraitRegistry;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 
 import java.util.*;
 
@@ -79,10 +76,7 @@ public class BeepediaHandler {
 
     public static CombPage combPage = new CombPage(SUB_SCREEN_AREA);
 
-    /**
-     * list of all lists that can be selected
-     */
-    public static Map<BeepediaListTypes, ListPage> listStates = new LinkedHashMap<>();
+    public static ListPage listPage = new ListPage(new BeepediaScreenArea(0, 0, 121, BeepediaScreen.SCREEN_HEIGHT));
 
     private static HomePage homePage = new HomePage(SUB_SCREEN_AREA);
     private static HelpPage helpPage = new HelpPage(SUB_SCREEN_AREA);
@@ -99,6 +93,7 @@ public class BeepediaHandler {
         HoneyPage.initPages();
         TraitPage.initPages();
         CombPage.initPages();
+        allPages.add(listPage);
         allPages.add(homePage);
         allPages.add(beePage);
         allPages.add(traitPage);
@@ -109,8 +104,6 @@ public class BeepediaHandler {
         BeeRegistry.getRegistry().getBees().forEach((s, b) -> beeStats.put(b.getRegistryID().toString(), new BeeBeepediaStats(b)));
         TraitRegistry.getRegistry().getTraits().forEach((s, t) -> traitStats.put(s, new TraitBeepediaStats(t)));
         HoneyRegistry.getRegistry().getHoneyBottles().forEach((s, h) -> honeyStats.put(h.getRegistryID().toString(), new HoneyBeepediaStats(h)));
-//        BeeInfoUtils.getHoneycombs().forEach((s, b) -> combStats.put())
-
         init = true;
     }
 
@@ -122,93 +115,65 @@ public class BeepediaHandler {
     }
 
     public static void registerScreen(BeepediaScreen beepedia) {
-        registerLists(beepedia);
-
         // register buttons for all pages
         for (BeepediaPage page : allPages) {
             page.pageButtons.clear();
-            page.registerButtons(beepedia);
+            page.registerScreen(beepedia);
             page.closePage();
         }
         openState();
+        listPage.openPage();
     }
 
-    private static void registerLists(BeepediaScreen beepedia) {
-        int x = beepedia.guiLeft;
-        int y = beepedia.guiTop;
 
-        BeepediaScreenArea screenArea = new BeepediaScreenArea(0, 0, 121, BeepediaScreen.SCREEN_HEIGHT);
-
-        ItemStack beeItem = new ItemStack(Items.BEEHIVE);
-        ItemStack traitItem = new ItemStack(ModItems.TRAIT_ICON.get());
-        ItemStack honeyItem = new ItemStack(Items.HONEY_BOTTLE);
-        ItemStack combItem = new ItemStack(Items.HONEYCOMB);
-
-        ListPage beeList = new ListPage(BeepediaListTypes.BEES.name(), beeItem, screenArea, 45, BeepediaLang.TAB_BEES, beeStats);
-        ListPage traitList = new ListPage(BeepediaListTypes.TRAITS.name(), traitItem, screenArea, 66, BeepediaLang.TAB_TRAITS, traitStats);
-        ListPage honeyList = new ListPage(BeepediaListTypes.HONEY.name(), honeyItem, screenArea, 87, BeepediaLang.TAB_HONEY, honeyStats);
-        ListPage combList = new ListPage(BeepediaListTypes.COMBS.name(), combItem, screenArea, 108, BeepediaLang.TAB_COMBS, combStats);
-
-        listStates.put(BeepediaListTypes.BEES, beeList);
-        listStates.put(BeepediaListTypes.TRAITS, traitList);
-        listStates.put(BeepediaListTypes.HONEY, honeyList);
-        listStates.put(BeepediaListTypes.COMBS, combList);
-        allPages.addAll(listStates.values());
-    }
-
-    public static void drawList(BeepediaScreen beepedia, MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
-        listStates.get(BeepediaState.currentState.selectedList).preInit(beepedia);
-        listStates.get(BeepediaState.currentState.selectedList).renderBackground(matrix, partialTick, mouseX, mouseY);
-        listStates.get(BeepediaState.currentState.selectedList).renderForeground(matrix, mouseX, mouseY);
-        listStates.get(BeepediaState.currentState.selectedList).drawTooltips(matrix, mouseX, mouseY);
-    }
-
-    public static void preInit(BeepediaScreen beepedia) {
+    public static void preInit() {
+        listPage.preInit();
         selectedPage = homePage;
         switch (BeepediaState.currentState.page) {
             case BEES:
                 if (beeStats.containsKey(BeepediaState.currentState.listItem)) {
-                    beePage.preInit(beepedia, beeStats.get(BeepediaState.currentState.listItem));
+                    beePage.preInit(beeStats.get(BeepediaState.currentState.listItem));
                     selectedPage = beePage;
                 }
                 break;
             case TRAITS:
                 if (traitStats.containsKey(BeepediaState.currentState.listItem)) {
-                    traitPage.preInit(beepedia, traitStats.get(BeepediaState.currentState.listItem));
+                    traitPage.preInit(traitStats.get(BeepediaState.currentState.listItem));
                     selectedPage = traitPage;
                 }
                 break;
             case HONEY:
                 if (honeyStats.containsKey(BeepediaState.currentState.listItem)) {
-                    honeyPage.preInit(beepedia, honeyStats.get(BeepediaState.currentState.listItem));
+                    honeyPage.preInit(honeyStats.get(BeepediaState.currentState.listItem));
                     selectedPage = honeyPage;
                 }
                 break;
             case COMBS:
                 if (combStats.containsKey(BeepediaState.currentState.listItem)) {
-                    combPage.preInit(beepedia, combStats.get(BeepediaState.currentState.listItem));
+                    combPage.preInit(combStats.get(BeepediaState.currentState.listItem));
                     selectedPage = combPage;
                 }
                 break;
             case HELP:
-                helpPage.preInit(beepedia);
+                helpPage.preInit();
                 selectedPage = helpPage;
                 break;
             case COLLECTED:
-                collectedPage.preInit(beepedia);
+                collectedPage.preInit();
                 selectedPage = collectedPage;
                 break;
             case HOME:
-                selectedPage.preInit(beepedia);
+                selectedPage.preInit();
                 break;
             default:
         }
     }
 
     public static void drawPage(MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
+        listPage.renderBackground(matrix, partialTicks, mouseX, mouseY);
         selectedPage.renderBackground(matrix, partialTicks, mouseX, mouseY);
+        listPage.renderForeground(matrix, mouseX, mouseY);
         selectedPage.renderForeground(matrix, mouseX, mouseY);
-        selectedPage.drawTooltips(matrix, mouseX, mouseY);
     }
 
     public static void closeState() {

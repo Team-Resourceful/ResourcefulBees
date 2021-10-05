@@ -32,5 +32,6 @@ public class BeepediaLang {
     public static final TranslationTextComponent BEE_SEARCH_BREEDABLE = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_search.breedable");
     public static final TranslationTextComponent BEE_SEARCH_NOT_BREEDABLE = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_search.not_breedable");
     public static final TranslationTextComponent BEE_SEARCH_MUTATES = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_search.mutates");
-    public static final TranslationTextComponent BEE_SEARCH_HELP = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_search.help");;
+    public static final TranslationTextComponent BEE_SEARCH_HELP = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_search.help");
+    public static final TranslationTextComponent VERSION_NUMBER = new TranslationTextComponent("gui.resourcefulbees.beepedia");
 }

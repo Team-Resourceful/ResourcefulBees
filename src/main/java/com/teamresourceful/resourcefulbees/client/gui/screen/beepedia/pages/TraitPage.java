@@ -1,35 +1,12 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.stats.TraitBeepediaStats;
 import com.teamresourceful.resourcefulbees.client.gui.widget.BeepediaScreenArea;
-import com.teamresourceful.resourcefulbees.client.gui.widget.ListButton;
-import com.teamresourceful.resourcefulbees.client.gui.widget.SubButtonList;
-import com.teamresourceful.resourcefulbees.item.BeeJar;
-import com.teamresourceful.resourcefulbees.lib.constants.TraitConstants;
-import com.teamresourceful.resourcefulbees.registry.ModItems;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.gui.widget.button.ImageButton;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.PotionUtils;
-import net.minecraft.potion.Potions;
-import net.minecraft.util.IReorderingProcessor;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import org.lwjgl.opengl.GL11;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class TraitPage extends BeepediaPage {
 
@@ -69,12 +46,12 @@ public class TraitPage extends BeepediaPage {
     }
 
     @Override
-    public void registerButtons(BeepediaScreen beepedia) {
+    public void registerScreen(BeepediaScreen beepedia) {
+        super.registerScreen(beepedia);
 
     }
 //
-    public void preInit(BeepediaScreen beepedia, TraitBeepediaStats stats) {
-        super.preInit(beepedia);
+    public void preInit(TraitBeepediaStats stats) {
         this.stats = stats;
     }
 

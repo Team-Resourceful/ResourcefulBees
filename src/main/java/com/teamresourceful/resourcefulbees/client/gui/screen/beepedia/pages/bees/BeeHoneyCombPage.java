@@ -113,7 +113,7 @@ public class BeeHoneyCombPage extends BeeDataPage {
 //    }
 
     @Override
-    public void registerButtons(BeepediaScreen beepedia) {
+    public void registerScreen(BeepediaScreen beepedia) {
 
     }
 

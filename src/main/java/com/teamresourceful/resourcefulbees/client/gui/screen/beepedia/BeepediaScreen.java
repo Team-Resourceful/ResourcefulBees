@@ -13,7 +13,6 @@ import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.IGuiEventListener;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.entity.Entity;
@@ -22,8 +21,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.LazyOptional;
@@ -31,7 +29,6 @@ import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 import vazkii.patchouli.api.PatchouliAPI;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.*;
 import java.util.function.Supplier;
@@ -106,11 +103,6 @@ public class BeepediaScreen extends Screen {
         backButton = new ModImageButton(x + (SCREEN_WIDTH / 2) + 20, y + SCREEN_HEIGHT - 25, 20, 20, 40, 0, 20, BeepediaImages.HOME_BUTTONS, 60, 60, onPress -> BeepediaState.goBackState());
         searchButton = new ModImageButton(x + (SCREEN_WIDTH / 2) - 40, y + SCREEN_HEIGHT - 25, 20, 20, 0, 0, 20, BeepediaImages.HOME_BUTTONS, 60, 60, onPress -> {
             searchHandler.toggleSearch();
-//            setSearchVisible(searchBox.visible);
-//            updateSearch(beesList, true);
-//            updateSearch(traitsList, true);
-//            updateSearch(honeyList, true);
-//            updateSearch(combsList, true);
         });
         TabImageButton shadesButton = new TabImageButton(shadesButtonX + 6, shadesButtonY + 6, 18, 18, 0, 0, 18,
                 BeepediaImages.SHADES_BUTTON_IMAGE, book, 1, 1, onPress -> PatchouliAPI.get().openBookGUI(ModConstants.SHADES_OF_BEES),
@@ -140,7 +132,7 @@ public class BeepediaScreen extends Screen {
         tooltips.clear();
         interactions.clear();
         // initialises the current page's data
-        BeepediaHandler.preInit(this);
+        BeepediaHandler.preInit();
         renderBackground(matrixStack, 0);
         drawBackground(matrixStack, partialTick, mouseX, mouseY);
 //        updateSearch();
@@ -206,13 +198,13 @@ public class BeepediaScreen extends Screen {
         if (client != null) {
             client.getTextureManager().bind(BeepediaImages.BACKGROUND);
             blit(matrix, x, y, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT);
+            Minecraft.getInstance().font.draw(matrix, BeepediaLang.VERSION_NUMBER, x + 12.0f, y + SCREEN_HEIGHT - 20.0f, 5592405);
         }
 //        if (entity != null) {
 //            int boxX = x + SCREEN_WIDTH + 2;
 //            Minecraft.getInstance().getTextureManager().bind(BeepediaImages.BEE_INFO_IMAGE);
 //            blit(matrix, boxX, y, 0, 0, 100, 150, 100, 150);
 //        }
-        BeepediaHandler.drawList(this, matrix, partialTick, mouseX, mouseY);
         BeepediaHandler.drawPage(matrix, partialTick, mouseX, mouseY);
 //        if (searchBox.visible) activeList.setSearchHeight();
 //        else activeList.resetHeight();

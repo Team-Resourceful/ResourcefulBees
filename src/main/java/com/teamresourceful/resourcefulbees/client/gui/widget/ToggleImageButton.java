@@ -49,7 +49,7 @@ public class ToggleImageButton extends Button {
         Minecraft minecraft = Minecraft.getInstance();
         minecraft.getTextureManager().bind(this.resourceLocation);
         int i = this.yTexStart;
-        if (this.isHovered()) {
+        if (this.isHovered() && active) {
             i += this.yDiffTex;
         } else if (this.enabled) {
             i += this.yDiffTex * 2;

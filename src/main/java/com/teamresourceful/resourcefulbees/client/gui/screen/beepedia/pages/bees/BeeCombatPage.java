@@ -24,11 +24,6 @@ public class BeeCombatPage extends BeeDataPage {
     }
 
     @Override
-    public void registerButtons(BeepediaScreen beepedia) {
-
-    }
-
-    @Override
     public void renderBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
         FontRenderer font = Minecraft.getInstance().font;
         TranslationTextComponent healthName = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.info.health");

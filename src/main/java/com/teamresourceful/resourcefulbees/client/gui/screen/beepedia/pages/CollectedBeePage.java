@@ -12,11 +12,6 @@ public class CollectedBeePage extends BeepediaPage {
     }
 
     @Override
-    public void registerButtons(BeepediaScreen beepedia) {
-
-    }
-
-    @Override
     public void renderBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
 
     }

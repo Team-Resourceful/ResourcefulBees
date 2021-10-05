@@ -12,12 +12,9 @@ public class HelpPage extends BeepediaPage {
         super(screenArea);
     }
 
-    public void preInit(BeepediaScreen beepedia, SubPageTypes subPage) {
-        super.preInit(beepedia);
-    }
-
     @Override
-    public void registerButtons(BeepediaScreen beepedia) {
+    public void registerScreen(BeepediaScreen beepedia) {
+        super.registerScreen(beepedia);
 
     }
 

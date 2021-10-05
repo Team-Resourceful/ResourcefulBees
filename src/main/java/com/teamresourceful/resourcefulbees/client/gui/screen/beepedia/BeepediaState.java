@@ -97,18 +97,18 @@ public class BeepediaState {
         return !savedStates.isEmpty();
     }
 
-    public void newState(@Nullable BeepediaListTypes selectedList, @Nullable PageTypes page, @Nullable String listItem, @Nullable SubPageTypes subPage, @Nullable SubPageTab subPageTab) {
+    public static void newState(@Nullable BeepediaListTypes selectedList, @Nullable PageTypes page, @Nullable String listItem, @Nullable SubPageTypes subPage, @Nullable SubPageTab subPageTab) {
         savedStates.add(new BeepediaState(currentState));
         updateState(selectedList, page, listItem, subPage, subPageTab);
     }
 
-    public void updateState(@Nullable BeepediaListTypes selectedList, @Nullable PageTypes page, @Nullable String listItem, @Nullable SubPageTypes subPage, @Nullable SubPageTab subPageTab) {
+    public static void updateState(@Nullable BeepediaListTypes selectedList, @Nullable PageTypes page, @Nullable String listItem, @Nullable SubPageTypes subPage, @Nullable SubPageTab subPageTab) {
         BeepediaHandler.closeState();
-        if (selectedList != null) this.selectedList = selectedList;
-        if (page != null) this.page = page;
-        this.listItem = listItem;
-        if (subPage != null) this.subPage = subPage;
-        if (subPageTab != null) this.subPageTab = subPageTab;
+        if (selectedList != null) currentState.selectedList = selectedList;
+        if (page != null) currentState.page = page;
+        if (listItem != null) currentState.listItem = listItem;
+        if (subPage != null) currentState.subPage = subPage;
+        if (subPageTab != null) currentState.subPageTab = subPageTab;
         BeepediaHandler.openState();
     }
 }

@@ -19,7 +19,6 @@ public abstract class BeeDataPage extends BeepediaPage {
 
     @OverridingMethodsMustInvokeSuper
     protected void preInit(BeepediaScreen beepedia, BeepediaScreenArea screenArea, CustomBeeData beeData) {
-        super.preInit(beepedia);
         this.beeData = beeData;
     }
 

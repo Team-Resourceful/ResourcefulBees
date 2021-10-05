@@ -14,14 +14,8 @@ public class CombPage extends BeepediaPage {
         super(screenArea);
     }
 
-    public void preInit(BeepediaScreen beepedia, CombBeepediaStats stats) {
-        super.preInit(beepedia);
+    public void preInit(CombBeepediaStats stats) {
         this.stats = stats;
-    }
-
-    @Override
-    public void registerButtons(BeepediaScreen beepedia) {
-
     }
 
     public static void initPages() {

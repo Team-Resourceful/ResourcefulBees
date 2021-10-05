@@ -39,17 +39,19 @@ public abstract class BeepediaPage {
 
     /**
      * register any data or tooltips here.
-     * @param beepedia the main screen class
      */
-    public void preInit(BeepediaScreen beepedia) {
-        this.beepedia = beepedia;
+    public void preInit() {
+
     }
 
     /**
      * only register buttons here, this method will only be run when the beepedia screen is opened
      * @param beepedia the main screen class
      */
-    public abstract void registerButtons(BeepediaScreen beepedia);
+    @OverridingMethodsMustInvokeSuper
+    public void registerScreen(BeepediaScreen beepedia){
+        this.beepedia = beepedia;
+    }
 
     @OverridingMethodsMustInvokeSuper
     public void openPage() {

@@ -33,7 +33,8 @@ public class HomePage extends BeepediaPage {
     }
 
     @Override
-    public void registerButtons(BeepediaScreen beepedia) {
+    public void registerScreen(BeepediaScreen beepedia) {
+        super.registerScreen(beepedia);
         counter = 0;
         int xPos = screenArea.getX(beepedia);
         int yPos = screenArea.getY(beepedia);

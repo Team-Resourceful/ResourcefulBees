@@ -1,23 +1,12 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaImages;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.enums.SubPageTypes;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.bees.*;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.stats.BeeBeepediaStats;
 import com.teamresourceful.resourcefulbees.client.gui.widget.BeepediaScreenArea;
-import com.teamresourceful.resourcefulbees.utils.RenderUtils;
-import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.entity.Entity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.*;
-import net.minecraftforge.fluids.FluidStack;
-import org.lwjgl.opengl.GL11;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -43,8 +32,9 @@ public class BeePage extends BeepediaPage {
     }
 
     @Override
-    public void registerButtons(BeepediaScreen beepedia) {
-
+    public void registerScreen(BeepediaScreen beepedia) {
+        super.registerScreen(beepedia);
+        pages.forEach((s, beeDataPage) -> beeDataPage.registerScreen(beepedia));
     }
 
     public static void initPages() {
@@ -66,8 +56,7 @@ public class BeePage extends BeepediaPage {
         init = true;
     }
 
-    public void preInit(BeepediaScreen beepedia, BeeBeepediaStats stats) {
-        super.preInit(beepedia);
+    public void preInit(BeeBeepediaStats stats) {
         this.stats = stats;
     }
 
