@@ -9,6 +9,7 @@ import java.util.UUID;
 
 public class PatreonInfo {
 
+    private static BeeRewardData defaultBee = null;
     private static final Map<UUID, BeeRewardData> patreons = new HashMap<>();
 
     public static Map<UUID, BeeRewardData> getPatreons(){
@@ -29,15 +30,21 @@ public class PatreonInfo {
         }
     }
 
+    protected static void setDefaultBee(BeeRewardData data) {
+        defaultBee = data;
+    }
+
     public static boolean isPatreon(UUID uuid){
-        return patreons.containsKey(uuid);
+        return patreons.containsKey(uuid) || defaultBee != null;
     }
 
     public static BeeRewardData getPatreon(UUID uuid){
-        return patreons.get(uuid);
+        BeeRewardData data = patreons.get(uuid);
+        return data != null ? data : defaultBee;
     }
 
     public static void clearPatreons(){
         patreons.clear();
+        defaultBee = null;
     }
 }

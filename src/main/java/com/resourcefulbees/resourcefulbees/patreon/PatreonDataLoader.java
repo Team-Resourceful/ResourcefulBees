@@ -31,6 +31,11 @@ public class PatreonDataLoader {
 
             String rep = IOUtils.toString(new BufferedInputStream(connection.getInputStream()), StandardCharsets.UTF_8);
             JsonObject json = gson.fromJson(rep, JsonObject.class);
+
+            if (json.has("defaultBee")) {
+                PatreonInfo.setDefaultBee(getRewardData(json.getAsJsonObject("defaultBee")));
+            }
+
             if (json.has("patreons")){
                 JsonArray patreons = json.getAsJsonArray("patreons");
                 patreons.forEach(jsonElement -> {

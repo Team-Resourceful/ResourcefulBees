@@ -46,7 +46,15 @@ public class BeeRewardData {
         CRIMSON(new ResourceLocation("resourcefulbees:textures/entity/mushroom/crimson_alchemist_bee.png")),
         WARPED(new ResourceLocation("resourcefulbees:textures/entity/mushroom/warped_alchemist_bee.png")),
         GHAST(new ResourceLocation("resourcefulbees:textures/entity/ghast/ghast_bee.png")),
-        YETI(new ResourceLocation("resourcefulbees:textures/entity/yeti/yeti_bee"));
+        YETI(new ResourceLocation("resourcefulbees:textures/entity/yeti/yeti_bee.png")),
+        BI(new ResourceLocation("resourcefulbees:textures/entity/pride/bi_bee.png")),
+        TRANS(new ResourceLocation("resourcefulbees:textures/entity/pride/trans_bee.png")),
+        LESBIAN(new ResourceLocation("resourcefulbees:textures/entity/pride/lesbian_bee.png")),
+        ASEXUAL(new ResourceLocation("resourcefulbees:textures/entity/pride/asexual_bee.png")),
+        PAN(new ResourceLocation("resourcefulbees:textures/entity/pride/pan_bee.png")),
+        NB(new ResourceLocation("resourcefulbees:textures/entity/pride/nb_bee.png")),
+        PRIDE(new ResourceLocation("resourcefulbees:textures/entity/pride/pride_bee.png"));
+
 
         ResourceLocation resourceLocation;
         ResourceLocation secondaryResourceLocation;
