@@ -1,5 +1,8 @@
 **please continue to report any bugs/issues to https://issues.resourcefullbees.com/**
 
+# ----- [0.9.9.8] -----
+- Fixed a bug with the last update where you could not make an apiary with a normal t4 beehive.
+
 # ----- [0.9.9.7] -----
 - Removed T1-4 hive checks from custom ingredient as it was causing wacky behavior. In 1.0.0 the custom ingredient will cease to exist due to a rework of how hives are registered and used
 - Added WITCH model type
