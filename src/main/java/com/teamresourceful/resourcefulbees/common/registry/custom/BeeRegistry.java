@@ -3,7 +3,6 @@ package com.teamresourceful.resourcefulbees.common.registry.custom;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.utils.CombBlockPair;
 import com.teamresourceful.resourcefulbees.api.IBeeRegistry;
 import com.teamresourceful.resourcefulbees.api.RegisterBeeEvent;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
@@ -47,11 +46,11 @@ public class BeeRegistry implements IBeeRegistry {
     }
 
     public static CustomBeeData getBeeData(ResourceLocation beeType) {
-        return beeData.getOrDefault(beeType.getPath().replaceAll("_bee$", ""), CustomBeeData.DEFAULT);
+        return CUSTOM_DATA.getOrDefault(beeType.getPath().replaceAll("_bee$", ""), CustomBeeData.DEFAULT);
     }
 
     public static boolean containsBeeType(ResourceLocation beeType) {
-        return beeData.containsKey(beeType.getPath().replaceAll("_bee$", ""));
+        return CUSTOM_DATA.containsKey(beeType.getPath().replaceAll("_bee$", ""));
     }
 
     public static boolean containsBeeType(String beeType) {

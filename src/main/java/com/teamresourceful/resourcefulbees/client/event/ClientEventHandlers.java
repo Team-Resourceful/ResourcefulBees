@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.client.event;
 
+import com.teamresourceful.resourcefulbees.client.color.ColorHandler;
 import com.teamresourceful.resourcefulbees.client.gui.screen.*;
 import com.teamresourceful.resourcefulbees.client.models.ModelHandler;
 import com.teamresourceful.resourcefulbees.client.render.entity.CustomBeeRenderer;
@@ -10,13 +11,12 @@ import com.teamresourceful.resourcefulbees.client.render.tileentity.RenderEnderB
 import com.teamresourceful.resourcefulbees.client.render.tileentity.RenderHoneyCongealer;
 import com.teamresourceful.resourcefulbees.client.render.tileentity.RenderHoneyGenerator;
 import com.teamresourceful.resourcefulbees.client.render.tileentity.RenderHoneyTank;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModContainers;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModEntities;
-import com.teamresourceful.resourcefulbees.client.color.ColorHandler;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.utils.PreviewHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;

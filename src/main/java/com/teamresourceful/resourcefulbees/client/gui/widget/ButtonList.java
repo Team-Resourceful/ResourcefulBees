@@ -1,15 +1,10 @@
 package com.teamresourceful.resourcefulbees.client.gui.widget;
 
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
-import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
-import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.BeePage;
-import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.HoneyPage;
-import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.TraitPage;
 
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class ButtonList {
     public final int xPos;

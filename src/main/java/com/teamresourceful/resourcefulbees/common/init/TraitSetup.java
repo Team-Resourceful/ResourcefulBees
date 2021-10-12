@@ -7,7 +7,6 @@ import com.teamresourceful.resourcefulbees.api.beedata.traits.BeeTrait;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.lib.ModPaths;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.registry.custom.HoneycombRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.custom.TraitRegistry;
 import com.teamresourceful.resourcefulbees.common.utils.FileUtils;
 import net.minecraft.util.JSONUtils;

@@ -1,16 +1,12 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia;
 
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.enums.BeepediaListTypes;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.enums.PageTypes;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.enums.SubPageTab;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.enums.SubPageTypes;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
 import java.util.Stack;
 
 public class BeepediaState {

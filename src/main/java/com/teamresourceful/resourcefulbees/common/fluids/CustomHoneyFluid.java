@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.common.fluids;
 
-import com.teamresourceful.resourcefulbees.api.honeydata.HoneyData;
 import com.teamresourceful.resourcefulbees.api.honeydata.HoneyFluidData;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;

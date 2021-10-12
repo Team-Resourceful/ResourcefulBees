@@ -1,20 +1,9 @@
 package com.teamresourceful.resourcefulbees.common.registry.custom;
 
-import com.mojang.serialization.JsonOps;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.ITraitRegistry;
 import com.teamresourceful.resourcefulbees.api.beedata.traits.BeeTrait;
-import com.teamresourceful.resourcefulbees.api.beedata.traits.DamageType;
-import com.teamresourceful.resourcefulbees.api.beedata.traits.PotionDamageEffect;
-import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
-import com.teamresourceful.resourcefulbees.common.lib.constants.TraitConstants;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
-import net.minecraft.item.Items;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.DamageSource;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;

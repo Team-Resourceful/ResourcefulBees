@@ -1,20 +1,13 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.mutations;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.EntityOutput;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.BeePage;
-import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.lib.enums.MutationType;
-import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
 import com.teamresourceful.resourcefulbees.common.utils.RandomCollection;
-import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.text.*;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;

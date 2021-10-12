@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees;
 
 import com.teamresourceful.resourcefulbees.api.ResourcefulBeesAPI;
+import com.teamresourceful.resourcefulbees.capabilities.Capabilities;
 import com.teamresourceful.resourcefulbees.client.config.ClientConfig;
 import com.teamresourceful.resourcefulbees.client.data.LangGeneration;
 import com.teamresourceful.resourcefulbees.client.event.ClientEventHandlers;
@@ -23,6 +24,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
@@ -82,6 +84,7 @@ public class ResourcefulBees {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::loadComplete);
         MinecraftForge.EVENT_BUS.addListener(BeeSetup::onBiomeLoad);
         MinecraftForge.EVENT_BUS.addListener(this::serverLoaded);
+        MinecraftForge.EVENT_BUS.addListener(Beekeeper::setupBeekeeper);
         MinecraftForge.EVENT_BUS.addListener(this::cloneEvent);
 
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ClientEventHandlers::clientStuff);
@@ -104,6 +107,12 @@ public class ResourcefulBees {
         MinecraftForge.EVENT_BUS.register(new RecipeBuilder());
         ModFeatures.ConfiguredFeatures.registerConfiguredFeatures();
         CraftingHelper.register(new ResourceLocation(ResourcefulBees.MOD_ID, "nest"), NestIngredient.Serializer.INSTANCE);
+    }
+
+    @SubscribeEvent
+    public void cloneEvent(PlayerEvent.Clone event) {
+        event.getOriginal().getCapability(Capabilities.BEEPEDIA_DATA).ifPresent(cap ->
+                event.getPlayer().getCapability(Capabilities.BEEPEDIA_DATA).ifPresent(c -> c.deserializeNBT(cap.serializeNBT())));
     }
 
     @SubscribeEvent

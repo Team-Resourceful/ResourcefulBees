@@ -1,5 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.item;
 
+import com.teamresourceful.resourcefulbees.api.capabilities.IBeepediaData;
+import com.teamresourceful.resourcefulbees.capabilities.Capabilities;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;

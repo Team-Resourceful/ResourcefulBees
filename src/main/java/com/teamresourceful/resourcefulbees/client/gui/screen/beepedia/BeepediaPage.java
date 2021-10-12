@@ -2,11 +2,7 @@ package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.client.gui.widget.BeepediaScreenArea;
-import com.teamresourceful.resourcefulbees.client.gui.widget.ListButton;
 import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import org.jline.reader.Widget;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.util.ArrayList;

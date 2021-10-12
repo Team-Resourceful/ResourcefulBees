@@ -15,6 +15,7 @@ import org.jetbrains.annotations.Unmodifiable;
 import java.util.Arrays;
 import java.util.List;
 
+@Deprecated
 @Unmodifiable
 public class HoneycombData {
     //TODO REMOVE THIS CLASS AFTER BEEPEDIA IS FIXED!!

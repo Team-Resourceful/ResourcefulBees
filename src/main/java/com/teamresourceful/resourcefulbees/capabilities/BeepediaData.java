@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.capabilities;
 
 import com.teamresourceful.resourcefulbees.api.capabilities.IBeepediaData;
-import com.teamresourceful.resourcefulbees.lib.constants.NBTConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;

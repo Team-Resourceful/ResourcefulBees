@@ -1,11 +1,11 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.stats;
 
-import com.teamresourceful.resourcefulbees.api.honeydata.HoneyBottleData;
+import com.teamresourceful.resourcefulbees.api.honeydata.HoneyData;
 
 public class HoneyBeepediaStats extends BeepediaStats {
 
-    HoneyBottleData honeyData;
-    public HoneyBeepediaStats(HoneyBottleData honeyData) {
+    HoneyData honeyData;
+    public HoneyBeepediaStats(HoneyData honeyData) {
         this.honeyData = honeyData;
     }
 

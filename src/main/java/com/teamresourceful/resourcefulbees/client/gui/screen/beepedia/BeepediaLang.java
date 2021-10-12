@@ -1,11 +1,7 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia;
 
-import net.minecraft.util.IReorderingProcessor;
-import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-
-import java.util.List;
 
 public class BeepediaLang {
     public static final ITextComponent INTERFACE_NAME = new TranslationTextComponent("gui.resourcefulbees.beepedia");

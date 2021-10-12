@@ -2,44 +2,15 @@ package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.bee
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
-import com.teamresourceful.resourcefulbees.api.beedata.centrifuge.CentrifugeFluidOutput;
-import com.teamresourceful.resourcefulbees.api.beedata.centrifuge.CentrifugeItemOutput;
-import com.teamresourceful.resourcefulbees.api.beedata.outputs.FluidOutput;
-import com.teamresourceful.resourcefulbees.api.beedata.outputs.ItemOutput;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
-import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.BeePage;
 import com.teamresourceful.resourcefulbees.client.gui.widget.BeepediaScreenArea;
-import com.teamresourceful.resourcefulbees.config.Config;
-import com.teamresourceful.resourcefulbees.fluids.CustomHoneyFluid;
-import com.teamresourceful.resourcefulbees.item.BeeSpawnEggItem;
-import com.teamresourceful.resourcefulbees.item.CustomHoneyBottleItem;
-import com.teamresourceful.resourcefulbees.recipe.CentrifugeRecipe;
-import com.teamresourceful.resourcefulbees.registry.ModItems;
-import com.teamresourceful.resourcefulbees.utils.BeeInfoUtils;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.gui.widget.button.ImageButton;
-import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.inventory.Inventory;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
+import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.fluids.FluidStack;
 
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 public class BeeHoneyCombPage extends BeeDataPage {
 

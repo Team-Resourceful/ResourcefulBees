@@ -3,19 +3,17 @@ package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.*;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.enums.BeepediaListTypes;
-import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.stats.BeepediaStats;
-import com.teamresourceful.resourcefulbees.client.gui.widget.*;
-import com.teamresourceful.resourcefulbees.registry.ModItems;
+import com.teamresourceful.resourcefulbees.client.gui.widget.BeepediaScreenArea;
+import com.teamresourceful.resourcefulbees.client.gui.widget.ButtonTemplate;
+import com.teamresourceful.resourcefulbees.client.gui.widget.ToggleItemImageButton;
+
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.util.text.Color;
 import net.minecraft.util.text.ITextComponent;
-import software.bernie.shadowed.eliotlash.mclib.math.functions.limit.Min;
-
-import java.util.Map;
 
 public class ListPage extends BeepediaPage {
 

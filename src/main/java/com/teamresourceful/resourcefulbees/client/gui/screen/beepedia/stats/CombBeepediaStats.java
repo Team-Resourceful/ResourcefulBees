@@ -1,13 +1,13 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.stats;
 
-import com.teamresourceful.resourcefulbees.utils.CombBlockPair;
+import com.teamresourceful.resourcefulbees.api.honeycombdata.OutputVariation;
 
 public class CombBeepediaStats extends BeepediaStats {
 
-    public final CombBlockPair combData;
+    public final OutputVariation variation;
 
-    public CombBeepediaStats(CombBlockPair combData) {
-        this.combData = combData;
+    public CombBeepediaStats(OutputVariation variation) {
+        this.variation = variation;
     }
 
     @Override

@@ -9,13 +9,12 @@ import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.stats.BeeB
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.stats.CombBeepediaStats;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.stats.HoneyBeepediaStats;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.stats.TraitBeepediaStats;
-import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.ListPage;
 import com.teamresourceful.resourcefulbees.client.gui.widget.BeepediaScreenArea;
-import com.teamresourceful.resourcefulbees.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
+import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyRegistry;
+import com.teamresourceful.resourcefulbees.common.registry.custom.TraitRegistry;
 import com.teamresourceful.resourcefulbees.network.packets.BeepediaEntityMessage;
-import com.teamresourceful.resourcefulbees.registry.BeeRegistry;
-import com.teamresourceful.resourcefulbees.registry.HoneyRegistry;
-import com.teamresourceful.resourcefulbees.registry.TraitRegistry;
 
 import java.util.*;
 
