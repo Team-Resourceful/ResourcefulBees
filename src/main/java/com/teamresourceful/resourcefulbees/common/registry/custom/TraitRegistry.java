@@ -1,0 +1,73 @@
+package com.teamresourceful.resourcefulbees.common.registry.custom;
+
+import com.mojang.serialization.JsonOps;
+import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.api.ITraitRegistry;
+import com.teamresourceful.resourcefulbees.api.beedata.traits.BeeTrait;
+import com.teamresourceful.resourcefulbees.api.beedata.traits.DamageType;
+import com.teamresourceful.resourcefulbees.api.beedata.traits.PotionDamageEffect;
+import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.TraitConstants;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
+import net.minecraft.item.Items;
+import net.minecraft.particles.ParticleTypes;
+import net.minecraft.potion.Effects;
+import net.minecraft.util.DamageSource;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+public class TraitRegistry implements ITraitRegistry {
+
+    private static final HashMap<String, BeeTrait> TRAIT_REGISTRY = new HashMap<>();
+    private static boolean closed = false;
+
+    private static final TraitRegistry INSTANCE = new TraitRegistry();
+
+    public static TraitRegistry getRegistry() {
+        return INSTANCE;
+    }
+
+    /**
+     * Registers the supplied Trait Name and associated data to the mod.
+     * If the trait already exists in the registry the method will return false.
+     *
+     * @param name Trait Name of the trait being registered.
+     * @param data BeeTrait of the trait being registered
+     * @return Returns false if trait already exists in the registry.
+     */
+    public boolean register(String name, BeeTrait data) {
+        if (closed || TRAIT_REGISTRY.containsKey(name)) {
+            ResourcefulBees.LOGGER.error("Trait is already registered or registration is closed: {}", name);
+            return false;
+        }
+        TRAIT_REGISTRY.put(name, data);
+        return true;
+    }
+
+    /**
+     * Returns a BeeTrait object for the given trait name.
+     *
+     * @param name Trait name for which BeeTrait is requested.
+     * @return Returns a BeeTrait object for the given bee type.
+     */
+    public BeeTrait getTrait(String name) {
+        return TRAIT_REGISTRY.getOrDefault(name, BeeTrait.DEFAULT);
+    }
+
+    /**
+     * Returns an unmodifiable copy of the Trait Registry.
+     * This is useful for iterating over all traits without worry of changing data
+     *
+     * @return Returns unmodifiable copy of trait registry.
+     */
+    public Map<String, BeeTrait> getTraits() {
+        return Collections.unmodifiableMap(TRAIT_REGISTRY);
+    }
+
+    public static void setTraitRegistryClosed() {
+        closed = true;
+    }
+}

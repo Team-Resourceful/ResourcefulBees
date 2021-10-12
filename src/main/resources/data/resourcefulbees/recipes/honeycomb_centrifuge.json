@@ -5,15 +5,33 @@
   },
   "itemOutputs": [
     {
-      "item": "minecraft:sugar"
+      "pool": [
+        {
+          "item": {
+            "id" : "minecraft:sugar"
+          }
+        }
+      ]
     },
     {
-      "item": "resourcefulbees:wax",
-      "chance": 0.25
+      "pool": [
+        {
+          "item": {
+            "id": "resourcefulbees:wax"
+          },
+          "chance": 0.25
+        }
+      ]
     },
     {
-      "item": "minecraft:honey_bottle",
-      "chance": 0.20
+      "pool": [
+        {
+          "item": {
+            "id": "minecraft:honey_bottle"
+          },
+          "chance": 0.20
+        }
+      ]
     }
   ],
   "time": 200

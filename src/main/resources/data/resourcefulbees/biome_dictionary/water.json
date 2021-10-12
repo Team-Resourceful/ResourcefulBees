@@ -1,5 +1,4 @@
-{
-  "biomes": [
+[
     "minecraft:river",
     "minecraft:frozen_river",
     "minecraft:ocean",
@@ -11,5 +10,4 @@
     "minecraft:deep_warm_ocean",
     "minecraft:lukewarm_ocean",
     "minecraft:deep_lukewarm_ocean"
-  ]
-}
+]

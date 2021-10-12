@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.api;
 
-import com.teamresourceful.resourcefulbees.api.honeydata.HoneyBottleData;
+import com.teamresourceful.resourcefulbees.api.honeydata.HoneyData;
 
 import java.util.Map;
 
@@ -12,5 +12,5 @@ public interface IHoneyRegistry {
      *
      *  @return Returns unmodifiable copy of honey registry.
      */
-    Map<String, HoneyBottleData> getHoneyBottles();
+    Map<String, HoneyData> getHoneyBottles();
 }

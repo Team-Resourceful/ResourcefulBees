@@ -51,7 +51,7 @@ public class ModImageButton extends Button {
         } else if (this.isHovered()) {
             i += this.yDiffText;
         }
-        blit(matrix, this.x, this.y, (float) this.xTexStart, (float) i, this.width, this.height, imageWidth, imageHeight);
+        blit(matrix, this.x, this.y, this.xTexStart, i, this.width, this.height, imageWidth, imageHeight);
         RenderSystem.enableDepthTest();
     }
 }

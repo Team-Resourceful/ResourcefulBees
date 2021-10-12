@@ -4,13 +4,12 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.client.gui.widget.ArrowButton;
-import com.teamresourceful.resourcefulbees.container.UnvalidatedApiaryContainer;
-import com.teamresourceful.resourcefulbees.network.NetPacketHandler;
-import com.teamresourceful.resourcefulbees.network.packets.BuildApiaryMessage;
-import com.teamresourceful.resourcefulbees.network.packets.ValidateApiaryMessage;
-import com.teamresourceful.resourcefulbees.tileentity.multiblocks.apiary.ApiaryTileEntity;
-import com.teamresourceful.resourcefulbees.utils.MathUtils;
-import com.teamresourceful.resourcefulbees.utils.PreviewHandler;
+import com.teamresourceful.resourcefulbees.common.container.UnvalidatedApiaryContainer;
+import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
+import com.teamresourceful.resourcefulbees.common.network.packets.BuildApiaryMessage;
+import com.teamresourceful.resourcefulbees.common.network.packets.ValidateApiaryMessage;
+import com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary.ApiaryTileEntity;
+import com.teamresourceful.resourcefulbees.common.utils.PreviewHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -21,6 +20,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
@@ -96,8 +96,8 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
             default:
                 horizontalOffset++;
         }
-        verticalOffset = MathUtils.clamp(verticalOffset, -1, 2);
-        horizontalOffset = MathUtils.clamp(horizontalOffset, -2, 2);
+        verticalOffset = MathHelper.clamp(verticalOffset, -1, 2);
+        horizontalOffset = MathHelper.clamp(horizontalOffset, -2, 2);
 
         apiaryTileEntity.setVerticalOffset(verticalOffset);
         apiaryTileEntity.setHorizontalOffset(horizontalOffset);
@@ -159,7 +159,7 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
 
 
     public void drawRightAlignedString(@NotNull MatrixStack matrix, FontRenderer fontRenderer, @NotNull String s, int posX, int posY, int color) {
-        fontRenderer.draw(matrix, s, (float) (posX - fontRenderer.width(s)), (float) posY, color);
+        fontRenderer.draw(matrix, s, (posX - fontRenderer.width(s)), posY, color);
     }
 
     private enum Direction {
@@ -220,7 +220,7 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
                     i += this.yDiffText;
                 }
             }
-            blit(matrix, this.x, this.y, (float) j, (float) i, this.width, this.height, 64, 64);
+            blit(matrix, this.x, this.y, j, i, this.width, this.height, 64, 64);
             RenderSystem.enableDepthTest();
         }
 

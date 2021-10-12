@@ -62,8 +62,8 @@ public class ListButton extends TabImageButton {
     }
 
     private void drawButton(@NotNull MatrixStack matrix, float texYPos) {
-        blit(matrix, this.x, this.y, (float) this.xTexStart, texYPos, this.width, this.height, width, yDiffText * 3);
-        fontRenderer.draw(matrix, text.copy().withStyle(this.active ? TextFormatting.GRAY : TextFormatting.WHITE), (float) (this.x + textX), (float) (this.y + textY), -1);
+        blit(matrix, this.x, this.y, this.xTexStart, texYPos, this.width, this.height, width, yDiffText * 3);
+        fontRenderer.draw(matrix, text.copy().withStyle(this.active ? TextFormatting.GRAY : TextFormatting.WHITE), (this.x + textX), (this.y + textY), -1);
         if (this.displayItem != null)
             Minecraft.getInstance().getItemRenderer().renderAndDecorateItem(this.displayItem, this.x + this.itemX, this.y + this.itemY);
         RenderSystem.enableDepthTest();

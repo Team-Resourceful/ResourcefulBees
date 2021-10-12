@@ -1,0 +1,9 @@
+{
+  "displayItem": "minecraft:rotten_flesh",
+  "potionDamageEffects": [
+    {
+      "effect": "minecraft:hunger",
+      "strength": 20
+    }
+  ]
+}

@@ -2,10 +2,10 @@ package com.teamresourceful.resourcefulbees.api.beedata;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.teamresourceful.resourcefulbees.config.Config;
-import com.teamresourceful.resourcefulbees.lib.enums.ApiaryOutputType;
-import com.teamresourceful.resourcefulbees.lib.enums.HoneycombType;
-import com.teamresourceful.resourcefulbees.utils.color.Color;
+import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
+import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryOutputType;
+import com.teamresourceful.resourcefulbees.common.lib.enums.HoneycombType;
+import com.teamresourceful.resourcefulbees.common.utils.color.Color;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -17,8 +17,10 @@ import java.util.List;
 
 @Unmodifiable
 public class HoneycombData {
-    public static final List<Integer> DEFAULT_APIARY_AMOUNTS = Arrays.asList(Config.T1_APIARY_QUANTITY.get(), Config.T2_APIARY_QUANTITY.get(), Config.T3_APIARY_QUANTITY.get(), Config.T4_APIARY_QUANTITY.get());
-    public static final List<ApiaryOutputType> DEFAULT_APIARY_OUTPUTS = Arrays.asList(Config.T1_APIARY_OUTPUT.get(), Config.T2_APIARY_OUTPUT.get(), Config.T3_APIARY_OUTPUT.get(), Config.T4_APIARY_OUTPUT.get());
+    //TODO REMOVE THIS CLASS AFTER BEEPEDIA IS FIXED!!
+
+    public static final List<Integer> DEFAULT_APIARY_AMOUNTS = Arrays.asList(CommonConfig.T1_APIARY_QUANTITY.get(), CommonConfig.T2_APIARY_QUANTITY.get(), CommonConfig.T3_APIARY_QUANTITY.get(), CommonConfig.T4_APIARY_QUANTITY.get());
+    public static final List<ApiaryOutputType> DEFAULT_APIARY_OUTPUTS = Arrays.asList(CommonConfig.T1_APIARY_OUTPUT.get(), CommonConfig.T2_APIARY_OUTPUT.get(), CommonConfig.T3_APIARY_OUTPUT.get(), CommonConfig.T4_APIARY_OUTPUT.get());
     public static final HoneycombData DEFAULT = new HoneycombData(HoneycombType.NONE, Items.AIR, Items.AIR, Color.DEFAULT, true, DEFAULT_APIARY_AMOUNTS, DEFAULT_APIARY_OUTPUTS);
 
     /**
@@ -34,6 +36,23 @@ public class HoneycombData {
             Codec.intRange(-1, Integer.MAX_VALUE).listOf().fieldOf("apiaryOutputAmounts").orElse(DEFAULT_APIARY_AMOUNTS).forGetter(HoneycombData::getApiaryOutputAmounts),
             ApiaryOutputType.CODEC.listOf().fieldOf("apiaryOutputTypes").orElse(DEFAULT_APIARY_OUTPUTS).forGetter(HoneycombData::getApiaryOutputTypes)
     ).apply(instance, HoneycombData::new));
+
+    /*
+    *
+    * "apairyOutput": [
+  {"id":"resourcefulbees:diamond_comb"}
+  {"id":"resourcefulbees:diamond_comb", "count": 4}
+  {"id":"resourcefulbees:diamond_comb", "count": 8}
+  {"id":"resourcefulbees:diamond_comb_block", "count": 4}
+  {"id":"resourcefulbees:diamond_comb_block", "count": 8}
+]
+    *
+    *
+    *
+    * */
+
+
+
 
     protected final HoneycombType honeycombType;
     protected Item honeycomb;

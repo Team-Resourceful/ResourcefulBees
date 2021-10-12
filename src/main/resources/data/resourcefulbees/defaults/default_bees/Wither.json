@@ -1,0 +1,48 @@
+{
+  "CoreData": {
+    "flower": ["minecraft:wither_rose"],
+    "maxTimeInHive": 600
+  },
+  "honeycombVariation": "diamond",
+  "RenderData": {
+    "texture": "wither/wither_bee",
+    "ColorData": {
+      "spawnEggPrimaryColor": "#444444",
+      "spawnEggSecondaryColor": "#303030"
+    }
+  },
+  "MutationData": {
+    "hasMutation": true,
+    "mutations" : [
+      {
+        "type": "BLOCK",
+        "inputID": ["minecraft:lava"],
+        "outputs": [
+          {"outputID": "minecraft:obsidian", "weight": 10},
+          {"outputID": "minecraft:stone", "weight": 10}
+        ]
+      }
+    ]
+  },
+  "CentrifugeData": {
+    "hasCentrifugeOutput": true,
+    "itemOutputs": [
+      {"item": {"id": "minecraft:nether_star", "count": 8}, "chance": 0.01}
+    ]
+  },
+  "BreedData": {
+    "isBreedable": true,
+    "parents": [
+      {
+        "parent1": "coal",
+        "parent2": "skeleton"
+      }
+    ],
+    "feedItem": ["minecraft:rotten_flesh"],
+    "feedAmount": 12
+  },
+  "TraitData": {
+    "hasTraits": true,
+    "traits": ["nether", "wither"]
+  }
+}

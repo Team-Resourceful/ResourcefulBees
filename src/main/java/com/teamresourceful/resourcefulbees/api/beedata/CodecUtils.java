@@ -4,8 +4,8 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.teamresourceful.resourcefulbees.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.utils.BeeInfoUtils;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
 import net.minecraft.block.Block;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
@@ -37,7 +37,6 @@ public class CodecUtils {
     public static final Codec<Set<Block>> SET_FROM_BLOCK_TAG = Codec.STRING.comapFlatMap(CodecUtils::convertBlockTagToSet, CodecUtils::convertTagSetToString);
     public static final Codec<Set<Block>> BLOCK_SET_FROM_FLUID_TAG = Codec.STRING.comapFlatMap(CodecUtils::convertFluidTagToBlockSet, CodecUtils::convertTagSetToString);
     public static final Codec<Set<Block>> BLOCK_SET_CODEC = Codec.either(Codec.either(SET_FROM_BLOCK_TAG, BLOCK_SET_FROM_FLUID_TAG).xmap(either -> either.map(list -> list, list -> list), Either::left), SET_FROM_BLOCK_LIST).xmap(either -> either.map(list -> list, list -> list), Either::left);
-
 
     //Codec for getting an ItemStack
     public static final Codec<ItemStack> ITEM_STACK_CODEC = RecordCodecBuilder.create(instance -> instance.group(

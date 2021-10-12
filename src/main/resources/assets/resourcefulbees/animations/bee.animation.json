@@ -146,6 +146,15 @@
 					}
 				}
 			}
+		},
+		"animation.bee.fly.bobbing": {
+			"loop": true,
+			"bones": {
+				"body": {
+					"position": [ 0.0, "math.cos(query.life_time * 343.774) * 1.6", 0.0 ],
+					"rotation": [ 0, "20 * math.cos(query.life_time * 343.774 / 2)", 0 ]
+				}
+			}
 		}
 	},
 	"geckolib_format_version": 2

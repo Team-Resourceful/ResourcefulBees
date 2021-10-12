@@ -1,6 +1,4 @@
-{
-  "biomes":[
+[
     "minecraft:mushroom_fields",
     "minecraft:mushroom_field_shore"
-  ]
-}
+]

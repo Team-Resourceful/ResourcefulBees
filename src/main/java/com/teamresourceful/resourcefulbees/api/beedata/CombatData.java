@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Unmodifiable;
 
 @Unmodifiable
 public class CombatData {
-    public static final CombatData DEFAULT = new CombatData(false, 1.0d, true, true, 10.0d, 0.0d, 0.0d, 0.0d);
+    public static final CombatData DEFAULT = new CombatData(false, 1.0d, true, true, 10.0d, 0.0d, 0.0d, 0.0d, false);
 
     /**
      * A {@link Codec<CombatData>} that can be parsed to create a
@@ -20,7 +20,8 @@ public class CombatData {
             Codec.doubleRange(1, Double.MAX_VALUE).fieldOf("baseHealth").orElse(10.0d).forGetter(CombatData::getBaseHealth),
             Codec.doubleRange(0, Double.MAX_VALUE).fieldOf("armor").orElse(0.0d).forGetter(CombatData::getArmor),
             Codec.doubleRange(0, Double.MAX_VALUE).fieldOf("armorToughness").orElse(0.0d).forGetter(CombatData::getArmorToughness),
-            Codec.doubleRange(0, Double.MAX_VALUE).fieldOf("knockback").orElse(0.0d).forGetter(CombatData::getKnockback)
+            Codec.doubleRange(0, Double.MAX_VALUE).fieldOf("knockback").orElse(0.0d).forGetter(CombatData::getKnockback),
+            Codec.BOOL.fieldOf("isInvulnerable").orElse(true).forGetter(CombatData::inflictsPoison)
     ).apply(instance, CombatData::new));
 
     protected double baseHealth;
@@ -31,8 +32,9 @@ public class CombatData {
     protected double armor;
     protected double armorToughness;
     protected double knockback;
+    protected boolean isInvulnerable;
 
-    private CombatData(boolean isPassive, double attackDamage, boolean removeStingerOnAttack, boolean inflictsPoison, double baseHealth, double armor, double armorToughness, double knockback) {
+    private CombatData(boolean isPassive, double attackDamage, boolean removeStingerOnAttack, boolean inflictsPoison, double baseHealth, double armor, double armorToughness, double knockback, boolean isInvulnerable) {
         this.isPassive = isPassive;
         this.attackDamage = attackDamage;
         this.removeStingerOnAttack = removeStingerOnAttack;
@@ -41,6 +43,7 @@ public class CombatData {
         this.armor = armor;
         this.armorToughness = armorToughness;
         this.knockback = knockback;
+        this.isInvulnerable = isInvulnerable;
     }
 
     /**
@@ -112,17 +115,21 @@ public class CombatData {
         return knockback;
     }
 
+    public boolean isInvulnerable() {
+        return isInvulnerable;
+    }
+
     public CombatData toImmutable() {
         return this;
     }
 
     public static class Mutable extends CombatData {
-        public Mutable(boolean isPassive, double attackDamage, boolean removeStingerOnAttack, boolean inflictsPoison, double baseHealth, double armor, double armorToughness, double knockback) {
-            super(isPassive, attackDamage, removeStingerOnAttack, inflictsPoison, baseHealth, armor, armorToughness, knockback);
+        public Mutable(boolean isPassive, double attackDamage, boolean removeStingerOnAttack, boolean inflictsPoison, double baseHealth, double armor, double armorToughness, double knockback, boolean isInvulnerable) {
+            super(isPassive, attackDamage, removeStingerOnAttack, inflictsPoison, baseHealth, armor, armorToughness, knockback, isInvulnerable);
         }
 
         public Mutable() {
-            super(false, 1, true, true, 10, 0, 0, 0);
+            super(false, 1, true, true, 10, 0, 0, 0, false);
         }
 
         public Mutable setBaseHealth(double baseHealth) {
@@ -162,6 +169,11 @@ public class CombatData {
 
         public Mutable setKnockback(double knockback) {
             this.knockback = knockback;
+            return this;
+        }
+
+        public Mutable setIsInvulnerable(boolean isInvulnerable) {
+            this.isInvulnerable = isInvulnerable;
             return this;
         }
 

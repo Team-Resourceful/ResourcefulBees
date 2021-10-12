@@ -2,9 +2,9 @@ package com.teamresourceful.resourcefulbees.client.render.fluid;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.registry.ModBlocks;
-import com.teamresourceful.resourcefulbees.registry.ModFluids;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFluids;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -50,9 +50,5 @@ public class FluidRender {
         RenderTypeLookup.setRenderLayer(ModBlocks.HONEY_FLUID_BLOCK.get(), RenderType.translucent());
         RenderTypeLookup.setRenderLayer(ModFluids.HONEY_STILL.get(), RenderType.translucent());
         RenderTypeLookup.setRenderLayer(ModFluids.HONEY_FLOWING.get(), RenderType.translucent());
-        RenderTypeLookup.setRenderLayer(ModFluids.CATNIP_HONEY_FLOWING.get(), RenderType.translucent());
-        RenderTypeLookup.setRenderLayer(ModFluids.CATNIP_HONEY_STILL.get(), RenderType.translucent());
-        RenderTypeLookup.setRenderLayer(ModBlocks.CATNIP_HONEY_BLOCK.get(), RenderType.translucent());
-        RenderTypeLookup.setRenderLayer(ModBlocks.CATNIP_HONEY_FLUID_BLOCK.get(), RenderType.translucent());
     }
 }

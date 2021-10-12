@@ -1,5 +1,4 @@
-{
-  "biomes": [
+[
     "minecraft:mushroom_fields",
     "minecraft:mushroom_field_shore",
     "minecraft:jungle_edge",
@@ -25,5 +24,4 @@
     "minecraft:eroded_badlands",
     "minecraft:modified_wooded_badlands_plateau",
     "minecraft:modified_badlands_plateau"
-  ]
-}
+]

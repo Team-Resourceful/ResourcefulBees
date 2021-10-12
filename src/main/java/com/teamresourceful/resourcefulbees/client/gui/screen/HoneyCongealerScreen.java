@@ -2,9 +2,9 @@ package com.teamresourceful.resourcefulbees.client.gui.screen;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.container.HoneyCongealerContainer;
-import com.teamresourceful.resourcefulbees.tileentity.HoneyCongealerTileEntity;
-import com.teamresourceful.resourcefulbees.utils.RenderUtils;
+import com.teamresourceful.resourcefulbees.common.container.HoneyCongealerContainer;
+import com.teamresourceful.resourcefulbees.common.tileentity.HoneyCongealerTileEntity;
+import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;

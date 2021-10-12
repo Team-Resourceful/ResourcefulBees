@@ -1,0 +1,47 @@
+{
+  "CoreData": {
+    "flower": "tag:minecraft:mushroom_grow_block",
+    "creator": "Team Resourceful",
+    "maxTimeInHive": 1200
+  },
+  "RenderData": {
+    "texture": "mushroom/bee_red",
+    "model": "resourcefulbees:geo/flower_moss.geo.json"
+  },
+  "honeycombVariation": "diamond",
+  "CentrifugeData": {
+    "itemOutputs": [
+      {
+        "pool": [{
+          "item": {"id": "minecraft:red_mushroom"}
+        }]
+      }
+    ]
+  },
+  "MutationData": {
+    "mutationCount": 15,
+    "mutations": [
+      {
+        "type" : "BLOCK",
+        "input": ["minecraft:grass"],
+        "outputs" : [
+          {"output": "minecraft:red_mushroom"}
+        ]
+      },
+      {
+        "type": "ENTITY",
+        "entityInput": "minecraft:cow",
+        "outputs": [{"output": "minecraft:mooshroom"}]
+      }
+    ]
+  },
+  "SpawnData": {
+    "canSpawnInWorld": true,
+    "biomeWhitelist": "tag:MUSHROOM,SPOOKY,CONIFEROUS"
+  },
+  "BreedData": {
+    "isBreedable": true,
+    "feedItem": "minecraft:red_mushroom",
+    "feedAmount": 4
+  }
+}

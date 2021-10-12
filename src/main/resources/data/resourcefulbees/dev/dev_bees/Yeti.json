@@ -1,0 +1,38 @@
+{
+  "CoreData": {
+    "flower": "minecraft:flowers",
+    "maxTimeInHive": 6000
+  },
+  "RenderData": {
+    "texture": "/yeti/yeti_bee",
+    "model":  "resourcefulbees:geo/yeti.geo.json",
+    "ColorData": {
+      "spawnEggPrimaryColor": "#442920",
+      "spawnEggSecondaryColor": "#e1d9b8",
+      "jarColor": "#442920"
+    },
+    "sizeModifier": 1.25
+  },
+  "SpawnData": {
+    "canSpawnInWorld": true,
+    "biomeWhitelist": ["tag:rare"],
+    "biomeBlacklist": [""],
+    "spawnWeight": 3,
+    "minGroupSize": 1,
+    "maxGroupSize": 1,
+    "lightLevel": "DAY"
+  },
+  "TraitData": {
+    "hasTraits": true,
+    "traits": [ "oreo" ]
+  },
+  "CombatData": {
+    "removeStingerOnAttack": false,
+    "attackDamage": 0,
+    "inflictsPoison": false,
+    "baseHealth": 2,
+    "armor": 5.0,
+    "armorToughness": 10.0,
+    "knockback": 3.0
+  }
+}

@@ -3,9 +3,9 @@ package com.teamresourceful.resourcefulbees.client.render.tileentity;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-import com.teamresourceful.resourcefulbees.tileentity.EnderBeeconTileEntity;
-import com.teamresourceful.resourcefulbees.utils.CubeModel;
-import com.teamresourceful.resourcefulbees.utils.RenderCuboid;
+import com.teamresourceful.resourcefulbees.common.tileentity.EnderBeeconTileEntity;
+import com.teamresourceful.resourcefulbees.common.utils.CubeModel;
+import com.teamresourceful.resourcefulbees.common.utils.RenderCuboid;
 import net.minecraft.client.renderer.Atlases;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.tileentity.BeaconTileEntityRenderer;
@@ -15,8 +15,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 public class RenderEnderBeecon extends TileEntityRenderer<EnderBeeconTileEntity> {
 
@@ -31,10 +29,9 @@ public class RenderEnderBeecon extends TileEntityRenderer<EnderBeeconTileEntity>
         if (tile.getLevel() == null) return;
         FluidStack stack = tile.getFluidTank().getFluid();
         long gameTime = tile.getLevel().getGameTime();
-        List<EnderBeeconTileEntity.BeamSegment> list = tile.getBeamSegments();
-        int currentHeight = 0;
 
         if (!stack.isEmpty()) {
+            // render tank
             int level = tile.getFluidLevel();
             int color = stack.getFluid().getAttributes().getColor();
             ResourceLocation stillTexture = stack.getFluid().getAttributes().getStillTexture();
@@ -44,17 +41,19 @@ public class RenderEnderBeecon extends TileEntityRenderer<EnderBeeconTileEntity>
             CubeModel model = new CubeModel(start, end);
             model.setTextures(stillTexture);
             RenderCuboid.INSTANCE.renderCube(model, matrix, builder, color, light, overlayLight);
+            // render beam
             if (!tile.isShowBeam()) return;
             float red = RenderCuboid.getRed(color);
             float green = RenderCuboid.getGreen(color);
             float blue = RenderCuboid.getBlue(color);
             float alpha = RenderCuboid.getAlpha(color);
             float[] afloats = {red, green, blue, alpha};
-            for (int k = 0; k < list.size(); ++k) {
-                EnderBeeconTileEntity.BeamSegment segment = list.get(k);
-                BeaconTileEntityRenderer.renderBeaconBeam(matrix, renderer, TEXTURE_BEACON_BEAM, partialTick, 1.0F, gameTime, currentHeight, k == list.size() - 1 ? 1024 : segment.getHeight(), afloats, 0.2F, 0.25F);
-                currentHeight += segment.getHeight();
-            }
+            BeaconTileEntityRenderer.renderBeaconBeam(matrix, renderer, TEXTURE_BEACON_BEAM, partialTick, 1.0F, gameTime, 0, 1024, afloats, 0.2F, 0.25F);
         }
+    }
+
+    @Override
+    public boolean shouldRenderOffScreen(@NotNull EnderBeeconTileEntity tile) {
+        return true;
     }
 }

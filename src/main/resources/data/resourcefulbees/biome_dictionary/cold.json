@@ -1,5 +1,4 @@
-{
-  "biomes": [
+[
     "minecraft:taiga",
     "minecraft:the_end",
     "minecraft:frozen_ocean",
@@ -18,5 +17,4 @@
     "minecraft:taiga_mountains",
     "minecraft:ice_spikes",
     "minecraft:snowy_taiga_mountains"
-  ]
-}
+]

@@ -1,5 +1,9 @@
 {
 	"itemGroup.resourcefulbees": "Resourceful Bees",
+	"itemGroup.resourcefulbees.hives": "Resourceful Bees - Hives",
+	"itemGroup.resourcefulbees.honey": "Resourceful Bees - Honey",
+	"itemGroup.resourcefulbees.combs": "Resourceful Bees - Combs",
+	"itemGroup.resourcefulbees.bees": "Resourceful Bees - Spawn Eggs",
 
 	"resourcefulbees.information.bee_type.vanilla": "Bee Type: Minecraft",
 	"resourcefulbees.information.bee_type.unknown": "Bee Type: Unknown",
@@ -85,7 +89,7 @@
 	"gui.resourcefulbees.beepedia": "Beepedia v2.0 ALPHA",
 	"gui.resourcefulbees.beepedia.home.discord": "Join us on Discord!",
 	"gui.resourcefulbees.beepedia.home.patreon": "Support us on Patreon!",
-	"gui.resourcefulbees.beepedia.home.issues": "Found a bug/issue? submit it here.",
+	"gui.resourcefulbees.beepedia.home.issues": "Found a bug/issue? Submit it here.",
 	"gui.resourcefulbees.beepedia.home.wiki": "Browse the wiki.",
 	"gui.resourcefulbees.beepedia.home.progress": "Bees Found: ",
 	"gui.resourcefulbees.beepedia.search": "Search",

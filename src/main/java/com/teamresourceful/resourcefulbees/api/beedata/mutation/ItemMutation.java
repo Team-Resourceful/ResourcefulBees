@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.api.beedata.mutation;
 
 
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.ItemOutput;
-import com.teamresourceful.resourcefulbees.utils.RandomCollection;
+import com.teamresourceful.resourcefulbees.common.utils.RandomCollection;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityType;
 

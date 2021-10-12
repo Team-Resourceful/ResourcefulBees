@@ -1,0 +1,58 @@
+{
+  "CoreData": {
+    "flower": "tag:minecraft:mushroom_grow_block",
+    "creator": "Team Resourceful",
+    "maxTimeInHive": 1200
+  },
+  "RenderData": {
+    "texture": "mushroom/bee_warped",
+    "model": "resourcefulbees:geo/flower_moss.geo.json"
+  },
+  "honeycombVariation": "diamond",
+  "CentrifugeData": {
+    "itemOutputs": [
+      {
+        "pool": [{
+          "item": {"id": "minecraft:warped_fungus"}
+        }]
+      }
+    ]
+  },
+  "MutationData": {
+    "mutationCount": 15,
+    "mutations": [
+      {
+        "type" : "BLOCK",
+        "input": ["minecraft:brown_mushroom"],
+        "outputs" : [
+          {"output": "minecraft:warped_fungus"}
+        ]
+      },
+      {
+        "type": "ENTITY",
+        "entityInput": "minecraft:zoglin",
+        "outputs": [
+          {
+            "output": "minecraft:hoglin",
+            "tag": {
+              "IsImmuneToZombification": true
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "SpawnData": {
+    "canSpawnInWorld": true,
+    "biomeWhitelist": "warped_forest"
+  },
+  "BreedData": {
+    "isBreedable": true,
+    "feedItem": "minecraft:warped_fungus",
+    "feedAmount": 4
+  },
+  "TraitData" : {
+    "hasTraits" : true,
+    "traits": ["nether"]
+  }
+}

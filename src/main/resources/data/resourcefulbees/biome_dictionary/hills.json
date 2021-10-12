@@ -1,5 +1,4 @@
-{
-  "biomes": [
+[
     "minecraft:mountains",
     "minecraft:desert_hills",
     "minecraft:wooded_hills",
@@ -18,5 +17,4 @@
     "minecraft:giant_spruce_taiga_hills",
     "minecraft:shattered_savanna_plateau",
     "minecraft:modified_wooded_badlands_plateau"
-  ]
-}
+]

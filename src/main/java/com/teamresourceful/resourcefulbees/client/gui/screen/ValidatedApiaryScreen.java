@@ -3,23 +3,22 @@ package com.teamresourceful.resourcefulbees.client.gui.screen;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.client.gui.widget.TabImageButton;
-import com.teamresourceful.resourcefulbees.config.Config;
-import com.teamresourceful.resourcefulbees.container.ValidatedApiaryContainer;
-import com.teamresourceful.resourcefulbees.lib.enums.ApiaryTab;
-import com.teamresourceful.resourcefulbees.network.NetPacketHandler;
-import com.teamresourceful.resourcefulbees.network.packets.ApiaryTabMessage;
-import com.teamresourceful.resourcefulbees.network.packets.ExportBeeMessage;
-import com.teamresourceful.resourcefulbees.network.packets.ImportBeeMessage;
-import com.teamresourceful.resourcefulbees.registry.BeeRegistry;
-import com.teamresourceful.resourcefulbees.registry.ModItems;
-import com.teamresourceful.resourcefulbees.tileentity.multiblocks.apiary.ApiaryTileEntity;
-import com.teamresourceful.resourcefulbees.utils.RenderUtils;
+import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
+import com.teamresourceful.resourcefulbees.common.container.ValidatedApiaryContainer;
+import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTab;
+import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
+import com.teamresourceful.resourcefulbees.common.network.packets.ApiaryTabMessage;
+import com.teamresourceful.resourcefulbees.common.network.packets.ExportBeeMessage;
+import com.teamresourceful.resourcefulbees.common.network.packets.ImportBeeMessage;
+import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
+import com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary.ApiaryTileEntity;
+import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
@@ -28,7 +27,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import org.jetbrains.annotations.NotNull;
@@ -76,6 +74,7 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
         storageTabButton = addTabImageButton(j + 37, t, ApiaryTab.STORAGE, STORAGE_SCREEN, HONEYCOMB); // may need to pass in itemX so it can be 2 like the old code
     }
 
+    //TODO ummmmm clean this up? yes/no? - epic
     private TabImageButton addTabImageButton(int j, int t, ApiaryTab tab, TextComponent text, ItemStack displayItem) {
         return this.addButton(new TabImageButton(t+1, j, 18, 18, 110, 0, 18, TABS_BG, displayItem, 1, 1,
                 onPress -> this.changeScreen(tab), 128, 128) {
@@ -131,7 +130,7 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
                 this.menu.selectBee(0);
             }
             exportButton.active = this.menu.getSelectedBee() != -1;
-            importButton.active = apiaryTileEntity.getBeeCount() < Config.APIARY_MAX_BEES.get();
+            importButton.active = apiaryTileEntity.getBeeCount() < CommonConfig.APIARY_MAX_BEES.get();
             storageTabButton.active = apiaryTileEntity.getApiaryStorage() != null;
 
             this.menu.setBeeList(Arrays.copyOf(apiaryTileEntity.bees.keySet().toArray(), apiaryTileEntity.getBeeCount(), String[].class));
@@ -158,7 +157,7 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
 
     @Override
     protected void renderLabels(@NotNull MatrixStack matrix, int mouseX, int mouseY) {
-        String s = String.format("(%1$s/%2$s) Bees", apiaryTileEntity.getBeeCount(), Config.APIARY_MAX_BEES.get());
+        String s = String.format("(%1$s/%2$s) Bees", apiaryTileEntity.getBeeCount(), CommonConfig.APIARY_MAX_BEES.get());
         this.font.draw(matrix, s, 4, 7, 0x404040);
 
         for (Widget widget : this.buttons) {
@@ -182,8 +181,8 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
                 int minTicks = apiaryBee.minOccupationTicks;
                 int ticksLeft = Math.max(minTicks - ticksInHive, 0);
                 beeInfo.add(apiaryBee.displayName);
-                beeInfo.add(new StringTextComponent(I18n.get("gui.resourcefulbees.apiary.bee.ticks_in_hive") + ": " + ticksInHive));
-                beeInfo.add(new StringTextComponent(I18n.get("gui.resourcefulbees.apiary.bee.ticks_left") + ": " + ticksLeft));
+                beeInfo.add(new TranslationTextComponent("gui.resourcefulbees.apiary.bee.ticks_in_hive").append(": ").append(String.valueOf(ticksInHive)));
+                beeInfo.add(new TranslationTextComponent("gui.resourcefulbees.apiary.bee.ticks_left").append(": ").append(String.valueOf(ticksLeft)));
                 this.renderComponentTooltip(matrix, beeInfo, mouseX, mouseY);
             }
         }

@@ -5,18 +5,30 @@
   },
   "itemOutputs": [
     {
-      "item": "minecraft:sugar",
-      "count" : 9
+      "pool": [
+        {
+          "item": "minecraft:sugar",
+          "count": 9
+        }
+      ]
     },
     {
-      "item": "resourcefulbees:wax",
-      "count": 9,
-      "chance": 0.25
+      "pool": [
+        {
+          "item": "resourcefulbees:wax",
+          "count": 9,
+          "chance": 0.25
+        }
+      ]
     },
     {
-      "item": "minecraft:honey_bottle",
-      "count": 9,
-      "chance": 0.20
+      "pool": [
+        {
+          "item": "minecraft:honey_bottle",
+          "count": 9,
+          "chance": 0.20
+        }
+      ]
     }
   ],
   "time": 200

@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.api.beedata.centrifuge;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.ItemOutput;
-import com.teamresourceful.resourcefulbees.utils.RandomCollection;
+import com.teamresourceful.resourcefulbees.common.utils.RandomCollection;
 
 public class CentrifugeItemOutput {
     public static final Codec<CentrifugeItemOutput> CODEC = RecordCodecBuilder.create(instance -> instance.group(

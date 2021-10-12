@@ -1,5 +1,4 @@
-{
-  "biomes": [
+[
     "minecraft:mountains",
     "minecraft:mountain_edge",
     "minecraft:snowy_mountains",
@@ -13,5 +12,4 @@
     "minecraft:shattered_savanna",
     "minecraft:eroded_badlands",
     "minecraft:modified_badlands_plateau"
-  ]
-}
+]

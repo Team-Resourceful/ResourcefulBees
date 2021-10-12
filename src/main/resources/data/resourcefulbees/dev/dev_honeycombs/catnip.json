@@ -1,0 +1,13 @@
+{
+  "honeycomb": {
+    "edible": true,
+    "block": true
+  },
+  "variations": [
+    {
+      "identifier": "catnip",
+      "defaultComb": {"id":  "resourcefulbees:catnip_honeycomb"},
+      "defaultCombBlock": {"id":  "resourcefulbees:catnip_honeycomb_block"}
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "CoreData": {
+    "flower": "minecraft:beds",
+    "maxTimeInHive": 600,
+
+    "lore": "Cute little baby kitty bee.",
+    "loreColor": "rainbow",
+    "creator": "Dawn_Felstar"
+  },
+  "honeycombVariation": "catnip",
+  "CentrifugeData": {
+    "hasCentrifugeOutput": true,
+    "itemOutputs": [
+      {"item":{"id": "minecraft:cat_spawn_egg"}, "chance": 1},
+      {"item":{"id": "resourcefulbees:catnip_honey_bottle"}, "chance": 10}
+    ]
+  },
+  "RenderData": {
+    "sizeModifier": 0.75,
+    "texture": "/kitten/bee",
+    "model": "resourcefulbees:geo/kitten.geo.json",
+    "ColorData": {
+      "spawnEggPrimaryColor": "#EAA939",
+      "spawnEggSecondaryColor": "#4C483B",
+      "jarColor": "#EAA939"
+    }
+  },
+  "SpawnData": {
+    "canSpawnInWorld": true,
+    "biomeWhitelist": ["tag:rare"],
+    "spawnWeight": 3,
+    "minGroupSize": 1,
+    "maxGroupSize": 1,
+    "lightLevel": "DAY"
+  },
+  "TraitData": {
+    "hasTraits": true,
+    "traits": [ "kitten" ]
+  },
+  "CombatData": {
+    "removeStingerOnAttack": false,
+    "attackDamage": 0,
+    "inflictsPoison": false,
+    "baseHealth": 10
+  }
+}

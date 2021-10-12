@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.api.beedata.mutation;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.beedata.CodecUtils;
-import com.teamresourceful.resourcefulbees.lib.enums.MutationType;
+import com.teamresourceful.resourcefulbees.common.lib.enums.MutationType;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityType;
 import net.minecraft.nbt.CompoundNBT;
