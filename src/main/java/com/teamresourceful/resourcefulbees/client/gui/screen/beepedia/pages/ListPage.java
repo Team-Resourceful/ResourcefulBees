@@ -19,10 +19,10 @@ import java.util.Map;
 
 public class ListPage extends BeepediaPage {
 
-    ToggleItemImageButton bees;
-    ToggleItemImageButton traits;
-    ToggleItemImageButton honey;
-    ToggleItemImageButton combs;
+    private ToggleItemImageButton bees;
+    private ToggleItemImageButton traits;
+    private ToggleItemImageButton honey;
+    private ToggleItemImageButton combs;
 
     public ListPage(BeepediaScreenArea screenArea) {
         super(screenArea);
@@ -32,8 +32,10 @@ public class ListPage extends BeepediaPage {
         return BeepediaState.currentState.selectedList == type;
     }
 
-    private void updateState(BeepediaListTypes type) {
-        BeepediaState.updateState(type, null, null, null, null);
+    @Override
+    public void tick(int ticksActive) {
+        super.tick(ticksActive);
+        BeepediaListTypes type = BeepediaState.currentState.selectedList;
         bees.enabled = type == BeepediaListTypes.BEES;
         traits.enabled = type == BeepediaListTypes.TRAITS;
         honey.enabled = type == BeepediaListTypes.HONEY;
@@ -42,6 +44,10 @@ public class ListPage extends BeepediaPage {
         traits.active = type != BeepediaListTypes.TRAITS;
         honey.active = type != BeepediaListTypes.HONEY;
         combs.active = type != BeepediaListTypes.COMBS;
+    }
+
+    private void updateState(BeepediaListTypes type) {
+        BeepediaState.updateState(type, null, null, null, null);
     }
 
     private ToggleItemImageButton createButton(int xOffset, int yOffset, ButtonTemplate template, BeepediaListTypes type, ITextComponent tooltip, Item item) {

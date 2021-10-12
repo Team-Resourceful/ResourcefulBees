@@ -236,6 +236,7 @@ public class BeepediaHandler {
 
     public static void tick(int ticksOpen) {
         if (selectedPage == null) return;
+        listPage.tick(ticksOpen);
         selectedPage.tick(ticksOpen);
     }
 }
