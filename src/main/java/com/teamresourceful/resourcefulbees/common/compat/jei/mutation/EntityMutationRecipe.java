@@ -41,11 +41,6 @@ public class EntityMutationRecipe implements IMutationRecipe {
     }
 
     @Override
-    public boolean isEntityMutation() {
-        return true;
-    }
-
-    @Override
     public Optional<CompoundNBT> getNBT() {
         return Optional.ofNullable(nbt);
     }

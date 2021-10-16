@@ -13,7 +13,6 @@ public interface IMutationRecipe {
     CustomBeeData getBeeData();
     double chance();
     double weight();
-    default boolean isEntityMutation() { return false; }
     default Optional<CompoundNBT> getNBT() { return Optional.empty(); }
     default Optional<ItemStack> getInputItem() { return Optional.empty(); }
     default Optional<ItemStack> getOutputItem() { return Optional.empty(); }
