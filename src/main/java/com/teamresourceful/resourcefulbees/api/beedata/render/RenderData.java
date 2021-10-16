@@ -16,9 +16,8 @@ import java.util.Set;
 //of the bee if they wish for us to register the entity type.
 @Unmodifiable
 public class RenderData {
-    private static final ResourceLocation BASE_MODEL = new ResourceLocation(ResourcefulBees.MOD_ID, "geo/base.geo.json");
-    private static final ResourceLocation BASE_ANIMATION = new ResourceLocation(ResourcefulBees.MOD_ID, "animations/bee.animation.json");
-
+    public static final ResourceLocation BASE_MODEL = new ResourceLocation(ResourcefulBees.MOD_ID, "geo/base.geo.json");
+    public static final ResourceLocation BASE_ANIMATION = new ResourceLocation(ResourcefulBees.MOD_ID, "animations/bee.animation.json");
 
     public static final RenderData DEFAULT = new RenderData(Collections.emptySet(), ColorData.DEFAULT, BASE_MODEL, BeeTexture.MISSING_TEXTURE, BASE_ANIMATION, 1.0f);
 
