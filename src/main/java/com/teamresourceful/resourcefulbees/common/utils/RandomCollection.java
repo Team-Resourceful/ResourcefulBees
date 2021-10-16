@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.common.utils;
 
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 public class RandomCollection<E> {
     private final NavigableMap<Double, E> map = new TreeMap<>();
@@ -46,6 +47,10 @@ public class RandomCollection<E> {
         for (E e : map.values()) {
             action.accept(e);
         }
+    }
+
+    public Stream<E> stream() {
+        return map.values().stream();
     }
 
     public boolean isEmpty() {

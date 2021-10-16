@@ -10,6 +10,8 @@ import com.teamresourceful.resourcefulbees.common.compat.jei.mutation.MutationCa
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.item.Beepedia;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
+import com.teamresourceful.resourcefulbees.common.mixin.RecipeManagerAccessorInvoker;
+import com.teamresourceful.resourcefulbees.common.recipe.CentrifugeRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import mezz.jei.api.IModPlugin;
@@ -21,6 +23,7 @@ import mezz.jei.api.registration.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
@@ -46,6 +49,7 @@ public class JEICompat implements IModPlugin {
         registration.addRecipeCategories(new BeeBreedingCategory(helper));
         registration.addRecipeCategories(new FlowersCategory(helper));
         registration.addRecipeCategories(new MutationCategory(helper));
+        registration.addRecipeCategories(new CentrifugeCategory(helper));
     }
 
     @NotNull
@@ -68,10 +72,12 @@ public class JEICompat implements IModPlugin {
     public void registerRecipes(@NotNull IRecipeRegistration registration) {
         World clientWorld = Minecraft.getInstance().level;
         if (clientWorld != null) {
+            RecipeManager recipeManager = Minecraft.getInstance().level.getRecipeManager();
             registration.addRecipes(HiveCategory.getHoneycombRecipes(), HiveCategory.ID);
             registration.addRecipes(BeeBreedingCategory.getBreedingRecipes(), BeeBreedingCategory.ID);
             registration.addRecipes(MutationCategory.getMutationRecipes(), MutationCategory.ID);
             registration.addRecipes(FlowersCategory.getFlowersRecipes(), FlowersCategory.ID);
+            registration.addRecipes(CentrifugeCategory.getRecipes(((RecipeManagerAccessorInvoker)recipeManager).callByType(CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE).values()), CentrifugeCategory.ID);
             registerInfoDesc(registration);
         }
     }
