@@ -12,13 +12,18 @@ import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.*;
+import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.loading.moddiscovery.ModFile;
+import net.minecraftforge.fml.loading.moddiscovery.ModInfo;
+import net.minecraftforge.fml.packs.ModFileResourcePack;
+import net.minecraftforge.fml.packs.ResourcePackLoader;
+import net.minecraftforge.forgespi.language.IModInfo;
 import org.lwjgl.opengl.GL11;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 public class HomePage extends BeepediaPage {
 
@@ -75,6 +80,14 @@ public class HomePage extends BeepediaPage {
         font.draw(matrix, new TranslationTextComponent("itemGroup.resourcefulbees").withStyle(TextFormatting.GRAY), xPos + 32F, yPos + 81F, -1);
         Minecraft.getInstance().getTextureManager().bind(logo);
         AbstractGui.blit(matrix, xPos + (SUB_PAGE_WIDTH / 2) - 52, yPos + 90, 0, 0, 104, 16, 104, 16);
+
+        Optional<ModFileResourcePack> pack = ResourcePackLoader.getResourcePackFor(ResourcefulBees.MOD_ID);
+        if (pack.isPresent()) {
+            IModInfo file = pack.get().getModFile().getModInfos().get(0);
+            ITextComponent version = new StringTextComponent("v" + file.getVersion().getQualifier()).withStyle(TextFormatting.DARK_GRAY);
+            int length = font.width(version);
+            font.draw(matrix, version, xPos + 164.0f - length, yPos + 10.0f, -1);
+        }
     }
 
     private IFormattableTextComponent getProgress() {
