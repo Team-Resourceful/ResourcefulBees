@@ -1,11 +1,11 @@
 package com.teamresourceful.resourcefulbees.common.compat.jei.ingredients;
 
-import com.teamresourceful.resourcefulbees.common.item.BeeSpawnEggItem;
 import mezz.jei.api.ingredients.IIngredientHelper;
 import mezz.jei.api.recipe.IFocus;
 import mezz.jei.api.recipe.IFocusFactory;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.SpawnEggItem;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -41,7 +41,7 @@ public class EntityIngredientHelper implements IIngredientHelper<EntityIngredien
     @NotNull
     @Override
     public ItemStack getCheatItemStack(EntityIngredient ingredient) {
-        return Objects.requireNonNull(BeeSpawnEggItem.byId(ingredient.getEntityType())).getDefaultInstance();
+        return Objects.requireNonNull(SpawnEggItem.byId(ingredient.getEntityType())).getDefaultInstance();
     }
 
     @NotNull

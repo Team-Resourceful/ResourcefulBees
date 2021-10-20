@@ -6,6 +6,7 @@ import com.teamresourceful.resourcefulbees.api.beedata.outputs.ItemOutput;
 import net.minecraft.block.Block;
 import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.Optional;
@@ -19,6 +20,7 @@ public class BlockToMutationRecipe implements IMutationRecipe {
     private ItemStack outputItem = null;
     private FluidStack inputFluid = null;
     private FluidStack outputFluid = null;
+    private Optional<CompoundNBT> nbt = null;
 
     public BlockToMutationRecipe(CustomBeeData beeData, double chance, double weight, Block input, ItemOutput output){
         this.beeData = beeData;
@@ -52,6 +54,7 @@ public class BlockToMutationRecipe implements IMutationRecipe {
                 if (!nbt.isEmpty()) outputItem.setTag(nbt);
             });
         }
+        this.nbt = output.getCompoundNBT();
     }
 
     @Override
@@ -67,6 +70,11 @@ public class BlockToMutationRecipe implements IMutationRecipe {
     @Override
     public double weight() {
         return weight;
+    }
+
+    @Override
+    public Optional<CompoundNBT> getNBT() {
+        return nbt;
     }
 
     @Override

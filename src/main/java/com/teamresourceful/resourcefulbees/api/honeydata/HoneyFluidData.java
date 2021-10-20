@@ -86,7 +86,7 @@ public class HoneyFluidData {
         this.temperature = temperature;
         this.viscosity = viscosity;
 
-        if (CommonConfig.HONEY_GENERATE_FLUIDS.get() && generate) {
+        if (Boolean.TRUE.equals(CommonConfig.HONEY_GENERATE_FLUIDS.get()) && generate) {
             FluidAttributes.Builder builder = HoneyFluidAttributes.builder(this.stillTexture, this.flowingTexture, this)
                     .overlay(this.overlayTexture)
                     .sound(this.pickupSound, this.emptySound)

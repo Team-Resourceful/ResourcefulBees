@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.Optional;
 
 public class PetLoader {
-    private static final Gson gson = new Gson();
 
     private PetLoader()  {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
@@ -27,7 +26,7 @@ public class PetLoader {
             connection.setReadTimeout(10000);
 
             String rep = IOUtils.toString(new BufferedInputStream(connection.getInputStream()), StandardCharsets.UTF_8);
-            JsonObject json = gson.fromJson(rep, JsonObject.class);
+            JsonObject json = ModConstants.GSON.fromJson(rep, JsonObject.class);
 
             //TODO 1.17 change all to an inline instanceof.
 

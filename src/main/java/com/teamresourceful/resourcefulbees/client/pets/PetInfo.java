@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.client.pets;
 
+import com.mojang.util.UUIDTypeAdapter;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -30,7 +31,7 @@ public class PetInfo {
 
     private static Optional<UUID> getUUID(String uuid) throws IllegalArgumentException {
         if (uuid.length() == 36 && uuid.contains("-")) {
-            return Optional.of(UUID.fromString(uuid.replaceFirst("(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)", "$1-$2-$3-$4-$5")));
+            return Optional.of(UUIDTypeAdapter.fromString(uuid));
         } else if (uuid.length() == 32) {
             return Optional.of(UUID.fromString(uuid));
         }
