@@ -4,10 +4,13 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.api.capabilities.IBeepediaData;
 import com.teamresourceful.resourcefulbees.capabilities.BeepediaData;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.BeePage;
+import com.teamresourceful.resourcefulbees.client.gui.tooltip.FluidTooltip;
+import com.teamresourceful.resourcefulbees.client.gui.tooltip.ItemTooltip;
+import com.teamresourceful.resourcefulbees.client.gui.tooltip.AbstractTooltip;
+import com.teamresourceful.resourcefulbees.client.gui.tooltip.Tooltip;
 import com.teamresourceful.resourcefulbees.client.gui.widget.Interaction;
 import com.teamresourceful.resourcefulbees.client.gui.widget.ModImageButton;
 import com.teamresourceful.resourcefulbees.client.gui.widget.TabImageButton;
-import com.teamresourceful.resourcefulbees.client.gui.widget.ToolTip;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
 import com.teamresourceful.resourcefulbees.network.packets.BeepediaEntityMessage;
@@ -53,7 +56,7 @@ public class BeepediaScreen extends Screen {
     public static final int SCREEN_WIDTH = 328;
     public static final int SCREEN_HEIGHT = 200;
 
-    private final List<ToolTip> tooltips = new LinkedList<>();
+    private final List<AbstractTooltip> tooltips = new LinkedList<>();
     private final List<Interaction> interactions = new LinkedList<>();
     private Button backButton;
     private ModImageButton homeButton;
@@ -411,19 +414,19 @@ public class BeepediaScreen extends Screen {
     }
 
     public void registerItemTooltip(ItemStack item, int xPos, int yPos) {
-        tooltips.add(new ToolTip(xPos + 2, yPos + 2, 16, 16, item));
+        tooltips.add(new ItemTooltip(xPos + 2, yPos + 2, 16, 16, item));
     }
 
     public void registerFluidTooltip(FluidStack fluid, int xPos, int yPos, boolean showAmount) {
-        tooltips.add(new ToolTip(xPos + 2, yPos + 2, 16, 16, fluid, showAmount));
+        tooltips.add(new FluidTooltip(xPos + 2, yPos + 2, 16, 16, fluid, showAmount));
     }
 
     public void registerTooltip(ITextComponent textComponent, int xPos, int yPos, int width, int height) {
-        tooltips.add(new ToolTip(xPos, yPos, width, height, () -> textComponent));
+        tooltips.add(new Tooltip(xPos, yPos, width, height, () -> textComponent));
     }
 
     public void registerTooltip(Supplier<ITextComponent> textComponent, int xPos, int yPos, int width, int height) {
-        tooltips.add(new ToolTip(xPos, yPos, width, height, textComponent));
+        tooltips.add(new Tooltip(xPos, yPos, width, height, textComponent));
     }
 
     public void registerInteraction(int xPos, int yPos, Supplier<Boolean> supplier) {

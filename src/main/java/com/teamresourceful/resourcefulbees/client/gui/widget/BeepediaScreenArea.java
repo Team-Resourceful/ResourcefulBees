@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.client.gui.widget;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import javafx.geometry.BoundingBox;
 
+@Deprecated
 public class BeepediaScreenArea {
 
     private final int xPos;

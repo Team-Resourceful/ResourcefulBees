@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.stats;
 
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
+import com.teamresourceful.resourcefulbees.client.gui.widget.BeepediaListButton;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 
@@ -20,6 +21,8 @@ public class BeeBeepediaStats extends BeepediaStats {
     private List<String> searchItems = new LinkedList<>();
     private List<String> searchEntity = new LinkedList<>();
     private List<String> searchAll = new LinkedList<>();
+
+    BeepediaListButton button;
 
     /**
      * Generates all of the valid search values for each bee

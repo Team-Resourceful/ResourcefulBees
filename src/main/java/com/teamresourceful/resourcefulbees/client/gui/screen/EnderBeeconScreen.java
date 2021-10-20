@@ -4,7 +4,6 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.client.gui.widget.ModImageButton;
-import com.teamresourceful.resourcefulbees.client.gui.widget.ToolTip;
 import com.teamresourceful.resourcefulbees.common.container.EnderBeeconContainer;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.network.packets.UpdateBeeconMessage;

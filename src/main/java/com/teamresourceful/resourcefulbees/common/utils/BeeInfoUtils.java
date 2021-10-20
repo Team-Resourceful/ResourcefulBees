@@ -6,12 +6,15 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.ICustomBee;
+import com.teamresourceful.resourcefulbees.api.beedata.CoreData;
+import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.honeydata.HoneyBlockData;
 import com.teamresourceful.resourcefulbees.api.honeydata.HoneyFluidData;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.fluids.CustomHoneyFluid;
 import com.teamresourceful.resourcefulbees.common.item.BeeJar;
 import com.teamresourceful.resourcefulbees.common.item.CustomHoneyBottleItem;
+import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyRegistry;
@@ -37,6 +40,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fluids.FluidStack;
@@ -45,6 +51,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -207,6 +214,38 @@ public class BeeInfoUtils {
         } else {
             return Items.HONEY_BLOCK;
         }
+    }
+
+    public static List<ITextComponent> getBeeLore(EntityType<?> entityType, World world) {
+        Entity entity = entityType.create(world);
+        if (entity instanceof CustomBeeEntity){
+            return getBeeLore(((CustomBeeEntity) entity).getCoreData());
+        }else {
+            return new ArrayList<>();
+        }
+    }
+
+    public static List<ITextComponent> getBeeLore(Entity entity) {
+        if (entity instanceof CustomBeeEntity){
+            return getBeeLore(((CustomBeeEntity) entity).getCoreData());
+        }else {
+            return new ArrayList<>();
+        }
+    }
+
+    public static List<ITextComponent> getBeeLore(CoreData coreData) {
+        List<ITextComponent> tooltip = new LinkedList<>();
+        if (coreData.getLore().isPresent()) { //TODO Optional#isPresent fix
+            String lore = coreData.getLore().get();
+            String[] loreTooltip = lore.split("\\r?\\n");
+            for (String s: loreTooltip) {
+                tooltip.add(new StringTextComponent(s).withStyle(coreData.getLoreColor().getAsStyle()));
+            }
+        }
+        if (coreData.getCreator().isPresent()) {
+            tooltip.add(BeeConstants.CREATOR_LORE_PREFIX.copy().append(coreData.getCreator().get()).withStyle(TextFormatting.GRAY));
+        }
+        return tooltip;
     }
 
     public static Predicate<FluidStack> getHoneyPredicate() {

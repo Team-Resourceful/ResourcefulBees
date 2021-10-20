@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+@Deprecated
 public class ButtonList {
     public final int xPos;
     public final int yPos;

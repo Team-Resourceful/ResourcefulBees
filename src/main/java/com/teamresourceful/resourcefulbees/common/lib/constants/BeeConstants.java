@@ -1,10 +1,15 @@
 package com.teamresourceful.resourcefulbees.common.lib.constants;
 
+import io.netty.buffer.ReadOnlyByteBuf;
+import net.minecraft.util.text.TranslationTextComponent;
+
 public class BeeConstants {
+
 
     private BeeConstants() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
+
 
     public static final String MOD_NAME = "Resourceful Bees";
     public static final String ENTITY_TEXTURES_DIR = "textures/entity/";
@@ -24,4 +29,6 @@ public class BeeConstants {
 
     public static final int DEFAULT_ITEM_COLOR = -1;
     public static final int MAX_BEES_BEE_BOX = 10;
+
+    public static final TranslationTextComponent CREATOR_LORE_PREFIX = new TranslationTextComponent("tooltip.resourcefulbees.bee.creator");
 }
