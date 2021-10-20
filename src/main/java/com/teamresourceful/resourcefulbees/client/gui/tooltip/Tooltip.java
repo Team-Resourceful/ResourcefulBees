@@ -12,8 +12,8 @@ import java.util.stream.Collectors;
 
 public class Tooltip extends AbstractTooltip {
 
-    Supplier<List<ITextComponent>> textList = null;
-    Supplier<ITextComponent> text = null;
+    private Supplier<List<ITextComponent>> textList = null;
+    private Supplier<ITextComponent> text = null;
 
     public Tooltip(int x, int y, int hoverWidth, int hoverHeight, String text) {
         super(x, y, hoverWidth, hoverHeight);

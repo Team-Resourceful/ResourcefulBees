@@ -216,38 +216,6 @@ public class BeeInfoUtils {
         }
     }
 
-    public static List<ITextComponent> getBeeLore(EntityType<?> entityType, World world) {
-        Entity entity = entityType.create(world);
-        if (entity instanceof CustomBeeEntity){
-            return getBeeLore(((CustomBeeEntity) entity).getCoreData());
-        }else {
-            return new ArrayList<>();
-        }
-    }
-
-    public static List<ITextComponent> getBeeLore(Entity entity) {
-        if (entity instanceof CustomBeeEntity){
-            return getBeeLore(((CustomBeeEntity) entity).getCoreData());
-        }else {
-            return new ArrayList<>();
-        }
-    }
-
-    public static List<ITextComponent> getBeeLore(CoreData coreData) {
-        List<ITextComponent> tooltip = new LinkedList<>();
-        if (coreData.getLore().isPresent()) { //TODO Optional#isPresent fix
-            String lore = coreData.getLore().get();
-            String[] loreTooltip = lore.split("\\r?\\n");
-            for (String s: loreTooltip) {
-                tooltip.add(new StringTextComponent(s).withStyle(coreData.getLoreColor().getAsStyle()));
-            }
-        }
-        if (coreData.getCreator().isPresent()) {
-            tooltip.add(BeeConstants.CREATOR_LORE_PREFIX.copy().append(coreData.getCreator().get()).withStyle(TextFormatting.GRAY));
-        }
-        return tooltip;
-    }
-
     public static Predicate<FluidStack> getHoneyPredicate() {
         return fluidStack -> fluidStack.getFluid().is(BeeInfoUtils.getFluidTag("forge:honey"));
     }
