@@ -3,8 +3,8 @@ package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.client.gui.widget.ButtonTemplate;
 import com.teamresourceful.resourcefulbees.client.gui.widget.ToggleImageButton;
+import com.teamresourceful.resourcefulbees.client.gui.widget.TooltipTextFieldWidget;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.LinkedList;
@@ -26,7 +26,7 @@ public class BeepediaSearchHandler {
     private final BeepediaScreen beepedia;
 
     // session buttons
-    private TextFieldWidget searchBox;
+    private TooltipTextFieldWidget searchBox;
     private ToggleImageButton beeStarredButton;
     private ToggleImageButton beeNotStarredButton;
     private ToggleImageButton beeWorldButton;
@@ -51,7 +51,7 @@ public class BeepediaSearchHandler {
     public void registerSearch(int x, int y) {
         beeButtons.clear();
         Minecraft.getInstance().keyboardHandler.setSendRepeatsToGui(true);
-        searchBox = new TextFieldWidget(Minecraft.getInstance().font, x + 10, y + 147, 117, 10, new TranslationTextComponent("gui.resourcefulbees.beepedia.search"));
+        searchBox = new TooltipTextFieldWidget(Minecraft.getInstance().font, x + 10, y + 147, 117, 10, new TranslationTextComponent("gui.resourcefulbees.beepedia.search"));
         searchBox.visible = false;
         beepedia.addWidget(searchBox);
 

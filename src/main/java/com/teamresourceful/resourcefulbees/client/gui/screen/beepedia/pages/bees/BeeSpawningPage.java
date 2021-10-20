@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.bee
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
-import com.teamresourceful.resourcefulbees.client.gui.widget.BeepediaScreenArea;
+import com.teamresourceful.resourcefulbees.client.gui.widget.ScreenArea;
 
 public class BeeSpawningPage extends BeeDataPage {
 //
@@ -15,7 +15,7 @@ public class BeeSpawningPage extends BeeDataPage {
 //    private final Button prevTab;
 //    private final Button nextTab;
 
-    public BeeSpawningPage(BeepediaScreenArea screenArea) {
+    public BeeSpawningPage(ScreenArea screenArea) {
         super(screenArea);
     }
 //
@@ -105,25 +105,5 @@ public class BeeSpawningPage extends BeeDataPage {
     @Override
     public void registerScreen(BeepediaScreen beepedia) {
 
-    }
-
-    @Override
-    public void openPage() {
-        super.openPage();
-//        nextTab.visible = true;
-//        prevTab.visible = true;
-//        subScrollPos = BeepediaScreen.currScreenState.getSpawningScroll();
-//        int boxHeight = SUB_PAGE_HEIGHT - 22;
-//        if (boxHeight > scrollHeight) {
-//            BeepediaScreen.currScreenState.setSpawningScroll(0);
-//            subScrollPos = 0;
-//        }
-    }
-
-    @Override
-    public void closePage() {
-//        nextTab.visible = false;
-//        prevTab.visible = false;
-        super.closePage();
     }
 }

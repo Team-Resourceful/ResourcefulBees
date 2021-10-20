@@ -10,7 +10,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
-public class ToggleImageButton extends Button {
+public class ToggleImageButton extends TooltipButton {
 
     private final int textureWidth;
     private final int textureHeight;
@@ -26,7 +26,7 @@ public class ToggleImageButton extends Button {
     }
 
     public ToggleImageButton(int xPos, int yPos, int width, int height, int xTexStart, boolean enabled, int yTexStart, int yDiffTex, ResourceLocation resourceLocation, int textureWidth, int textureHeight, IPressable pressable, ITextComponent message) {
-        super(xPos, yPos, width, height, message, p -> {}, (t1, t2, t3, t4) -> {});
+        super(xPos, yPos, width, height, message, p -> {});
         this.pressable = pressable;
         this.textureWidth = textureWidth;
         this.textureHeight = textureHeight;
@@ -56,11 +56,6 @@ public class ToggleImageButton extends Button {
 
         RenderSystem.enableDepthTest();
         blit(matrixStack, this.x, this.y, (float)this.xTexStart, (float)i, this.width, this.height, this.textureWidth, this.textureHeight);
-    }
-
-    @Override
-    public void renderToolTip(@NotNull MatrixStack matrixStack, int mouseX, int mouseY) {
-        this.onTooltip.onTooltip(this, matrixStack, mouseX, mouseY);
     }
 
     @OnlyIn(Dist.CLIENT)

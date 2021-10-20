@@ -4,7 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
-import com.teamresourceful.resourcefulbees.client.gui.widget.BeepediaScreenArea;
+import com.teamresourceful.resourcefulbees.client.gui.widget.ScreenArea;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
 import net.minecraft.item.Item;
@@ -36,7 +36,7 @@ public class BeeHoneyCombPage extends BeeDataPage {
 
     private int activePage = 0;
 
-    public BeeHoneyCombPage(BeepediaScreenArea screenArea) {
+    public BeeHoneyCombPage(ScreenArea screenArea) {
         super(screenArea);
     }
 
@@ -86,15 +86,6 @@ public class BeeHoneyCombPage extends BeeDataPage {
     @Override
     public void registerScreen(BeepediaScreen beepedia) {
 
-    }
-
-    @Override
-    public void openPage() {
-        super.openPage();
-//        updateButtonVisibility();
-//        activePage = BeepediaScreen.currScreenState.getCentrifugePage();
-//        if (activePage >= recipes.size()) activePage = 0;
-//        BeepediaScreen.currScreenState.setBreedingPage(activePage);
     }
 
     private void updateButtonVisibility() {

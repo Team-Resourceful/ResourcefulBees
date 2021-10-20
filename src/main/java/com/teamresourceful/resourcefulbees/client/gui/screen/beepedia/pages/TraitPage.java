@@ -4,7 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.stats.TraitBeepediaStats;
-import com.teamresourceful.resourcefulbees.client.gui.widget.BeepediaScreenArea;
+import com.teamresourceful.resourcefulbees.client.gui.widget.ScreenArea;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -26,7 +26,7 @@ public class TraitPage extends BeepediaPage {
     private static final int LIST_HEIGHT = 102;
     private TraitBeepediaStats stats;
 
-    public TraitPage(BeepediaScreenArea screenArea) {
+    public TraitPage(ScreenArea screenArea) {
         super(screenArea);
 //        name = new TranslationTextComponent(trait.getTranslationKey());
 //        ItemStack stack = trait.getDisplayItem().getDefaultInstance();
@@ -174,11 +174,6 @@ public class TraitPage extends BeepediaPage {
     }
 
     @Override
-    public void drawTooltips(MatrixStack matrixStack, int mouseX, int mouseY) {
-
-    }
-
-    @Override
     public void addSearch(BeepediaPage parent) {
 
     }
@@ -275,28 +270,6 @@ public class TraitPage extends BeepediaPage {
 //        return true;
 //    }
 
-    @Override
-    public void openPage() {
-        super.openPage();
-//        list.setActive(!BeepediaScreen.currScreenState.isTraitsEffectsActive());
-//        list.setScrollPos(BeepediaScreen.currScreenState.getTraitBeeListPos());
-//        nextTab.visible = true;
-//        prevTab.visible = true;
-//        int effectsHeight = traitSections.stream().mapToInt(TraitSection::getHeight).sum();
-//        if (effectsHeight < LIST_HEIGHT) {
-//            BeepediaScreen.currScreenState.setTraitEffectsListPos(0);
-//        } else if (BeepediaScreen.currScreenState.getTraitEffectsListPos() > effectsHeight - LIST_HEIGHT) {
-//            BeepediaScreen.currScreenState.setTraitEffectsListPos(effectsHeight - LIST_HEIGHT);
-//        }
-    }
-
-    @Override
-    public void closePage() {
-        super.closePage();
-//        list.setActive(false);
-//        nextTab.visible = false;
-//        prevTab.visible = false;
-    }
 
 //    @Override
 //    public boolean mouseScrolled(double mouseX, double mouseY, double scrollAmount) {

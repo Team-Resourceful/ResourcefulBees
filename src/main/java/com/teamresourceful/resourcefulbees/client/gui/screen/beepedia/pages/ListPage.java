@@ -3,7 +3,6 @@ package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.*;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.enums.BeepediaListTypes;
-import com.teamresourceful.resourcefulbees.client.gui.widget.BeepediaScreenArea;
 import com.teamresourceful.resourcefulbees.client.gui.widget.ButtonTemplate;
 import com.teamresourceful.resourcefulbees.client.gui.widget.ToggleItemImageButton;
 
@@ -22,8 +21,8 @@ public class ListPage extends BeepediaPage {
     private ToggleItemImageButton honey;
     private ToggleItemImageButton combs;
 
-    public ListPage(BeepediaScreenArea screenArea) {
-        super(screenArea);
+    public ListPage(int x, int y, int width, int height) {
+        super(x, y, width, height);
     }
 
     private boolean isActive(BeepediaListTypes type) {
@@ -56,18 +55,17 @@ public class ListPage extends BeepediaPage {
     @Override
     public void registerScreen(BeepediaScreen beepedia) {
         super.registerScreen(beepedia);
-        int x = getXPos() + 46;
-        int y = getYPos() + 8;
+        int x = this.x + 46;
+        int y = this.y + 8;
         ButtonTemplate template = new ButtonTemplate(20, 20, 0, 0, 20, 20, 60, BeepediaImages.BUTTON_IMAGE);
         bees = createButton(x, y, template, BeepediaListTypes.BEES, BeepediaLang.TAB_BEES, Items.BEEHIVE);
         traits = createButton(x + 21, y, template, BeepediaListTypes.TRAITS, BeepediaLang.TAB_TRAITS, ModItems.TRAIT_ICON.get());
         honey = createButton(x + 42, y, template, BeepediaListTypes.HONEY, BeepediaLang.TAB_HONEY, Items.HONEY_BOTTLE);
         combs = createButton(x + 63, y, template, BeepediaListTypes.COMBS, BeepediaLang.TAB_COMBS, Items.HONEYCOMB);
-        pageButtons.add(bees);
-        pageButtons.add(traits);
-        pageButtons.add(honey);
-        pageButtons.add(combs);
-        beepedia.addButtons(pageButtons);
+        children.add(bees);
+        children.add(traits);
+        children.add(honey);
+        children.add(combs);
     }
 
     @Override
@@ -88,16 +86,11 @@ public class ListPage extends BeepediaPage {
                 title = BeepediaLang.TAB_BEES;
                 break;
         }
-        font.draw(matrix, title, getXPos() + 10.0f, getYPos() + 20.0f, 16777215);
+        font.draw(matrix, title, x + 10.0f, y + 20.0f, 16777215);
     }
 
     @Override
     public void renderForeground(MatrixStack matrix, int mouseX, int mouseY) {
-
-    }
-
-    @Override
-    public void drawTooltips(MatrixStack matrixStack, int mouseX, int mouseY) {
 
     }
 

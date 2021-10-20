@@ -3,13 +3,13 @@ package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.stats.CombBeepediaStats;
-import com.teamresourceful.resourcefulbees.client.gui.widget.BeepediaScreenArea;
+import com.teamresourceful.resourcefulbees.client.gui.widget.ScreenArea;
 
 public class CombPage extends BeepediaPage {
 
     private CombBeepediaStats stats;
 
-    public CombPage(BeepediaScreenArea screenArea) {
+    public CombPage(ScreenArea screenArea) {
         super(screenArea);
     }
 
@@ -28,11 +28,6 @@ public class CombPage extends BeepediaPage {
 
     @Override
     public void renderForeground(MatrixStack matrix, int mouseX, int mouseY) {
-
-    }
-
-    @Override
-    public void drawTooltips(MatrixStack matrixStack, int mouseX, int mouseY) {
 
     }
 

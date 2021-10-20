@@ -9,7 +9,7 @@ import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.stats.BeeB
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.stats.CombBeepediaStats;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.stats.HoneyBeepediaStats;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.stats.TraitBeepediaStats;
-import com.teamresourceful.resourcefulbees.client.gui.widget.BeepediaScreenArea;
+import com.teamresourceful.resourcefulbees.client.gui.widget.ScreenArea;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyRegistry;
@@ -29,7 +29,7 @@ public class BeepediaHandler {
 
     protected static final LinkedList<Queue<String>> pastStates = new LinkedList<>();
 
-    private static final BeepediaScreenArea SUB_SCREEN_AREA = new BeepediaScreenArea(122, 0, BeepediaScreen.SCREEN_WIDTH - 122, BeepediaScreen.SCREEN_HEIGHT);
+    private static final ScreenArea SUB_SCREEN_AREA = new ScreenArea(122, 0, BeepediaScreen.SCREEN_WIDTH - 122, BeepediaScreen.SCREEN_HEIGHT);
 
     /**
      * currently selected state
@@ -75,7 +75,7 @@ public class BeepediaHandler {
 
     public static CombPage combPage = new CombPage(SUB_SCREEN_AREA);
 
-    public static ListPage listPage = new ListPage(new BeepediaScreenArea(0, 0, 121, BeepediaScreen.SCREEN_HEIGHT));
+    public static ListPage listPage = new ListPage(0, 0, 121, BeepediaScreen.SCREEN_HEIGHT);
 
     private static HomePage homePage = new HomePage(SUB_SCREEN_AREA);
     private static HelpPage helpPage = new HelpPage(SUB_SCREEN_AREA);
@@ -116,12 +116,12 @@ public class BeepediaHandler {
     public static void registerScreen(BeepediaScreen beepedia) {
         // register buttons for all pages
         for (BeepediaPage page : allPages) {
-            page.pageButtons.clear();
+            page.reset();
             page.registerScreen(beepedia);
-            page.closePage();
+
         }
         openState();
-        listPage.openPage();
+        listPage.visible = true;
     }
 
 
@@ -178,25 +178,25 @@ public class BeepediaHandler {
     public static void closeState() {
         switch (BeepediaState.currentState.page) {
             case HOME:
-                homePage.closePage();
+                homePage.visible = false;
                 break;
             case HELP:
-                helpPage.closePage();
+                helpPage.visible = false;
                 break;
             case BEES:
-                beePage.closePage();
+                beePage.visible = false;
                 break;
             case TRAITS:
-                traitPage.closePage();
+                traitPage.visible = false;
                 break;
             case HONEY:
-                honeyPage.closePage();
+                honeyPage.visible = false;
                 break;
             case COMBS:
-                combPage.closePage();
+                combPage.visible = false;
                 break;
             case COLLECTED:
-                collectedPage.closePage();
+                collectedPage.visible = false;
                 break;
             default:
         }
@@ -205,25 +205,25 @@ public class BeepediaHandler {
     public static void openState() {
         switch (BeepediaState.currentState.page) {
             case HOME:
-                homePage.openPage();
+                homePage.visible = true;
                 break;
             case HELP:
-                helpPage.openPage();
+                helpPage.visible = true;
                 break;
             case BEES:
-                beePage.openPage();
+                beePage.visible = true;
                 break;
             case TRAITS:
-                traitPage.openPage();
+                traitPage.visible = true;
                 break;
             case HONEY:
-                honeyPage.openPage();
+                honeyPage.visible = true;
                 break;
             case COMBS:
-                combPage.openPage();
+                combPage.visible = true;
                 break;
             case COLLECTED:
-                collectedPage.openPage();
+                collectedPage.visible = true;
                 break;
             default:
         }

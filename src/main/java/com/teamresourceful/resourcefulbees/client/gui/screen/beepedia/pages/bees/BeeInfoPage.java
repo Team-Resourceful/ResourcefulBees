@@ -4,7 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
-import com.teamresourceful.resourcefulbees.client.gui.widget.BeepediaScreenArea;
+import com.teamresourceful.resourcefulbees.client.gui.widget.ScreenArea;
 import com.teamresourceful.resourcefulbees.common.utils.BeepediaUtils;
 import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
 import net.minecraft.block.Block;
@@ -32,7 +32,7 @@ public class BeeInfoPage extends BeeDataPage {
     private CustomBeeData beeData;
     private int slot = 0;
 
-    public BeeInfoPage(BeepediaScreenArea screenArea) {
+    public BeeInfoPage(ScreenArea screenArea) {
         super(screenArea);
     }
 
@@ -42,7 +42,7 @@ public class BeeInfoPage extends BeeDataPage {
     }
 
     @Override
-    public void preInit(BeepediaScreen beepedia, BeepediaScreenArea screenArea, CustomBeeData beeData) {
+    public void preInit(BeepediaScreen beepedia, ScreenArea screenArea, CustomBeeData beeData) {
         super.preInit(beepedia, screenArea, beeData);
         if (Minecraft.getInstance().level == null) return;
         if (!beeData.getCoreData().getBlockFlowers().isEmpty()) {
@@ -62,9 +62,9 @@ public class BeeInfoPage extends BeeDataPage {
         FontRenderer font = Minecraft.getInstance().font;
         SIZE_NAME.append(BeepediaUtils.getSizeName(beeData.getRenderData().getSizeModifier()));
         TIME_NAME.append(beeData.getCoreData().getMaxTimeInHive() / 20 + "s");
-        font.draw(matrix, TITLE.withStyle(TextFormatting.WHITE), getXPos(), getYPos() + 8, -1);
-        font.draw(matrix, SIZE_NAME.withStyle(TextFormatting.GRAY), getXPos(), getYPos() + 22, -1);
-        font.draw(matrix, TIME_NAME.withStyle(TextFormatting.GRAY), getXPos() + 86, getYPos() + 22, -1);
+        font.draw(matrix, TITLE.withStyle(TextFormatting.WHITE), x, y + 8, -1);
+        font.draw(matrix, SIZE_NAME.withStyle(TextFormatting.GRAY),x, y + 22, -1);
+        font.draw(matrix, TIME_NAME.withStyle(TextFormatting.GRAY), x + 86, y + 22, -1);
     }
 
     @Override
@@ -72,11 +72,11 @@ public class BeeInfoPage extends BeeDataPage {
         if (beeData == null) throw new IllegalStateException("preInit not implemented");
         FontRenderer font = Minecraft.getInstance().font;
         if (!beeData.getCoreData().getBlockFlowers().isEmpty()) {
-            font.draw(matrix, FLOWER_NAME.withStyle(TextFormatting.GRAY), getXPos(), getYPos() + 75, -1);
-            beepedia.drawSlot(matrix, blockFlowers.get(slot), getXPos() + 36, getYPos() + 70);
+            font.draw(matrix, FLOWER_NAME.withStyle(TextFormatting.GRAY), x, y + 75, -1);
+//            beepedia.drawSlot(matrix, blockFlowers.get(slot), x + 36, y + 70);
         } else if (beeData.getCoreData().getEntityFlower().isPresent()) {
-            font.draw(matrix, FLOWER_NAME.withStyle(TextFormatting.GRAY), getXPos(), getYPos() + 80, -1);
-            RenderUtils.renderEntity(matrix, entityFlower.getValue(), Minecraft.getInstance().level, getXPos() + 45, getYPos() + 75, -45, 1.25f);
+            font.draw(matrix, FLOWER_NAME.withStyle(TextFormatting.GRAY), x, y + 80, -1);
+            RenderUtils.renderEntity(matrix, entityFlower.getValue(), Minecraft.getInstance().level, x + 45, y + 75, -45, 1.25f);
         }
     }
 

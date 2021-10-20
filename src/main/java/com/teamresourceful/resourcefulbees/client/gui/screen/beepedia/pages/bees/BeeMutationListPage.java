@@ -4,7 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.mutations.MutationsPage;
-import com.teamresourceful.resourcefulbees.client.gui.widget.BeepediaScreenArea;
+import com.teamresourceful.resourcefulbees.client.gui.widget.ScreenArea;
 
 import com.teamresourceful.resourcefulbees.common.lib.enums.MutationType;
 import org.apache.commons.lang3.tuple.Pair;
@@ -26,7 +26,7 @@ public class BeeMutationListPage extends BeeDataPage {
 //    final Button leftArrow;
 //    final Button rightArrow;
 
-    public BeeMutationListPage(BeepediaScreenArea screenArea) {
+    public BeeMutationListPage(ScreenArea screenArea) {
         super(screenArea);
     }
 
@@ -144,21 +144,6 @@ public class BeeMutationListPage extends BeeDataPage {
 
     }
 
-    @Override
-    public void openPage() {
-        super.openPage();
-//        // get current Tab
-//        tab = BeepediaScreen.currScreenState.getCurrentMutationTab();
-//        if (tab >= mutations.size()) tab = 0;
-//        BeepediaScreen.currScreenState.setCurrentMutationTab(tab);
-//        activeList = mutations.get(tab).getRight();
-//
-//        // get current page
-//        selectPage(activeList);
-//        prevTab.visible = mutations.size() > 1;
-//        nextTab.visible = mutations.size() > 1;
-    }
-
     private void selectPage(List<MutationsPage> activeList) {
 //        if (activeList != null) {
 //            page = BeepediaScreen.currScreenState.getMutationsPage();
@@ -172,23 +157,10 @@ public class BeeMutationListPage extends BeeDataPage {
     }
 
     @Override
-    public void closePage() {
-        super.closePage();
-//        prevTab.visible = false;
-//        nextTab.visible = false;
-//        leftArrow.visible = false;
-//        rightArrow.visible = false;
-    }
-
-    @Override
     public void tick(int ticksActive) {
         if (activePage != null) activePage.tick(ticksActive);
     }
 
-    @Override
-    public void drawTooltips(MatrixStack matrix, int mouseX, int mouseY) {
-//        if (activePage != null) activePage.drawTooltips(matrix, xPos, yPos + 22, mouseX, mouseY);
-    }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {

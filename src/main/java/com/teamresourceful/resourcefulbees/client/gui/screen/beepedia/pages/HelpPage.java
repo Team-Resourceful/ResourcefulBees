@@ -3,11 +3,11 @@ package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
-import com.teamresourceful.resourcefulbees.client.gui.widget.BeepediaScreenArea;
+import com.teamresourceful.resourcefulbees.client.gui.widget.ScreenArea;
 
 public class HelpPage extends BeepediaPage {
 
-    public HelpPage(BeepediaScreenArea screenArea) {
+    public HelpPage(ScreenArea screenArea) {
         super(screenArea);
     }
 
@@ -24,11 +24,6 @@ public class HelpPage extends BeepediaPage {
 
     @Override
     public void renderForeground(MatrixStack matrix, int mouseX, int mouseY) {
-
-    }
-
-    @Override
-    public void drawTooltips(MatrixStack matrixStack, int mouseX, int mouseY) {
 
     }
 

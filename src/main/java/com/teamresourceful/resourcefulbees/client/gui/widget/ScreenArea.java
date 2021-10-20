@@ -3,31 +3,22 @@ package com.teamresourceful.resourcefulbees.client.gui.widget;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import javafx.geometry.BoundingBox;
 
-@Deprecated
-public class BeepediaScreenArea {
+public class ScreenArea {
 
-    private final int xPos;
-    private final int yPos;
+    public final int xPos;
+    public final int yPos;
     public final int height;
     public final int width;
 
-    public BeepediaScreenArea(int xPos, int yPos, int width, int height) {
+    public ScreenArea(int xPos, int yPos, int width, int height) {
         this.xPos = xPos;
         this.yPos = yPos;
         this.height = height;
         this.width = width;
     }
 
-    public int getX(BeepediaScreen beepedia) {
-        return beepedia.guiLeft + xPos;
-    }
-
-    public int getY(BeepediaScreen beepedia) {
-        return beepedia.guiTop + yPos;
-    }
-
     public BoundingBox getBoundingBox(BeepediaScreen beepedia) {
-        return new BoundingBox(getX(beepedia), getY(beepedia), width, height);
+        return new BoundingBox(xPos, yPos, width, height);
     }
 
     public boolean isHovered(BeepediaScreen beepedia, double mouseX, double mouseY) {

@@ -4,7 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
-import com.teamresourceful.resourcefulbees.client.gui.widget.BeepediaScreenArea;
+import com.teamresourceful.resourcefulbees.client.gui.widget.ScreenArea;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
@@ -13,18 +13,13 @@ public abstract class BeeDataPage extends BeepediaPage {
 
     public CustomBeeData beeData;
 
-    public BeeDataPage(BeepediaScreenArea screenArea) {
+    public BeeDataPage(ScreenArea screenArea) {
         super(screenArea);
     }
 
     @OverridingMethodsMustInvokeSuper
-    protected void preInit(BeepediaScreen beepedia, BeepediaScreenArea screenArea, CustomBeeData beeData) {
+    protected void preInit(BeepediaScreen beepedia, ScreenArea screenArea, CustomBeeData beeData) {
         this.beeData = beeData;
-    }
-
-    @Override
-    public void drawTooltips(MatrixStack matrixStack, int mouseX, int mouseY) {
-        // override to implement
     }
 
     @Override

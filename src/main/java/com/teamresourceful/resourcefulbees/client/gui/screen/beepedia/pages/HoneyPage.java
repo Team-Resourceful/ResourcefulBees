@@ -5,7 +5,7 @@ import com.teamresourceful.resourcefulbees.api.honeydata.HoneyEffect;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.stats.HoneyBeepediaStats;
-import com.teamresourceful.resourcefulbees.client.gui.widget.BeepediaScreenArea;
+import com.teamresourceful.resourcefulbees.client.gui.widget.ScreenArea;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -43,7 +43,7 @@ public class HoneyPage extends BeepediaPage {
         this.stats = stats;
     }
 
-    public HoneyPage(BeepediaScreenArea screenArea) {
+    public HoneyPage(ScreenArea screenArea) {
         super(screenArea);
 //        if (isDefault) {
 //            this.bottle = new ItemStack(DefaultHoneyBottleData.bottle);
@@ -98,11 +98,6 @@ public class HoneyPage extends BeepediaPage {
 //        } else {
 //            drawBeesList(matrix, xPos, yPos + 34);
 //        }
-    }
-
-    @Override
-    public void drawTooltips(MatrixStack matrixStack, int mouseX, int mouseY) {
-
     }
 
     @Override
@@ -251,31 +246,6 @@ public class HoneyPage extends BeepediaPage {
 //        return true;
 //    }
 
-
-
-    @Override
-    public void openPage() {
-        super.openPage();
-//        nextTab.visible = !effects.isEmpty();
-//        prevTab.visible = !effects.isEmpty();
-//        beeList.setActive(effects.isEmpty() || !BeepediaScreen.currScreenState.isHoneyEffectsActive());
-//        beeList.setScrollPos(BeepediaScreen.currScreenState.getHoneyBeeListPos());
-//        int iconHeight = 21;
-//        int effectsHeight = effects.size() * iconHeight;
-//        if (effectsHeight < LIST_HEIGHT) {
-//            BeepediaScreen.currScreenState.setHoneyEffectsListPos(0);
-//        } else if (BeepediaScreen.currScreenState.getHoneyEffectsListPos() > effectsHeight - LIST_HEIGHT) {
-//            BeepediaScreen.currScreenState.setHoneyEffectsListPos(effectsHeight - LIST_HEIGHT);
-//        }
-    }
-
-    @Override
-    public void closePage() {
-        super.closePage();
-//        nextTab.visible = false;
-//        prevTab.visible = false;
-//        if (beeList != null) beeList.setActive(false);
-    }
 
 //    @Override
 //    public boolean mouseScrolled(double mouseX, double mouseY, double scrollAmount) {

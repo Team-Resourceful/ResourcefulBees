@@ -1,13 +1,10 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.teamresourceful.resourcefulbees.client.gui.widget.BeepediaScreenArea;
 import com.teamresourceful.resourcefulbees.client.gui.widget.Pane;
-import net.minecraft.client.gui.widget.button.Button;
+import com.teamresourceful.resourcefulbees.client.gui.widget.ScreenArea;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
-import java.util.ArrayList;
-import java.util.List;
 
 public abstract class BeepediaPage extends Pane {
 
@@ -17,6 +14,11 @@ public abstract class BeepediaPage extends Pane {
     public BeepediaPage(int xPos, int yPos, int viewWidth, int viewHeight) {
         super(xPos, yPos, viewWidth, viewHeight);
     }
+
+    public BeepediaPage(ScreenArea screenArea) {
+        super(screenArea);
+    }
+
 
     /**
      * register any data or tooltips here.

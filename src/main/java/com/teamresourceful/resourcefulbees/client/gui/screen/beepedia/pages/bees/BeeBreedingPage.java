@@ -5,7 +5,7 @@ import com.teamresourceful.resourcefulbees.api.beedata.mutation.EntityMutation;
 import com.teamresourceful.resourcefulbees.api.beedata.mutation.ItemMutation;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
-import com.teamresourceful.resourcefulbees.client.gui.widget.BeepediaScreenArea;
+import com.teamresourceful.resourcefulbees.client.gui.widget.ScreenArea;
 import net.minecraft.client.gui.widget.button.Button;
 
 import java.util.LinkedList;
@@ -32,7 +32,7 @@ public class BeeBreedingPage extends BeeDataPage {
 
     private int activePage = 0;
 
-    public BeeBreedingPage(BeepediaScreenArea screenArea) {
+    public BeeBreedingPage(ScreenArea screenArea) {
         super(screenArea);
     }
 
@@ -141,26 +141,6 @@ public class BeeBreedingPage extends BeeDataPage {
     @Override
     public void registerScreen(BeepediaScreen beepedia) {
 
-    }
-
-    @Override
-    public void openPage() {
-        super.openPage();
-//        int tab = BeepediaScreen.currScreenState.getBreedingTab();
-//        if (tab >= subPages.size()) tab = subPages.size() - 1;
-//        if (subPages.isEmpty()) return;
-//        BeepediaScreen.currScreenState.setBreedingTab(tab);
-//        activeSubPage = subPages.get(tab);
-    }
-
-
-    @Override
-    public void closePage() {
-        super.closePage();
-//        leftArrow.visible = false;
-//        rightArrow.visible = false;
-//        prevTab.visible = false;
-//        nextTab.visible = false;
     }
 
 //    private int getCurrentListSize() {
@@ -274,27 +254,6 @@ public class BeeBreedingPage extends BeeDataPage {
 //                break;
 //            case PARENTS:
 //                parents.get(activePage).tick(ticksActive);
-//                break;
-//            default:
-//                // do nothing this should never happen
-//                break;
-//        }
-    }
-
-    @Override
-    public void drawTooltips(MatrixStack matrixStack, int mouseX, int mouseY) {
-//        switch (activeSubPage) {
-//            case CHILDREN:
-//                children.get(activePage).drawTooltips(matrixStack, mouseX, mouseY);
-//                break;
-//            case ENTITY_MUTATIONS:
-//                entityMutationBreeding.get(activePage).drawTooltips(matrixStack, xPos, yPos + 31, mouseX, mouseY);
-//                break;
-//            case ITEM_MUTATIONS:
-//                itemMutationBreeding.get(activePage).drawTooltips(matrixStack, xPos, yPos + 31, mouseX, mouseY);
-//                break;
-//            case PARENTS:
-//                parents.get(activePage).drawTooltips(matrixStack, mouseX, mouseY);
 //                break;
 //            default:
 //                // do nothing this should never happen

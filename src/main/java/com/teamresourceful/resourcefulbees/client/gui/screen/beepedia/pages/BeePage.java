@@ -6,7 +6,7 @@ import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaSc
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.enums.SubPageTypes;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.bees.*;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.stats.BeeBeepediaStats;
-import com.teamresourceful.resourcefulbees.client.gui.widget.BeepediaScreenArea;
+import com.teamresourceful.resourcefulbees.client.gui.widget.ScreenArea;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,14 +20,14 @@ public class BeePage extends BeepediaPage {
     public static BeeHoneyCombPage honeycomb;
     public static BeeSpawningPage spawning;
     public static BeeBreedingPage breeding;
-    public static final BeepediaScreenArea subScreenArea = new BeepediaScreenArea(0, 0, 100, 100);
+    public static final ScreenArea subScreenArea = new ScreenArea(0, 0, 100, 100);
 
     public static Map<String, BeeDataPage> pages = new HashMap<>();
 
     public static boolean init = false;
     private BeeBeepediaStats stats;
 
-    public BeePage(BeepediaScreenArea screenArea) {
+    public BeePage(ScreenArea screenArea) {
         super(screenArea);
     }
 
@@ -77,32 +77,10 @@ public class BeePage extends BeepediaPage {
     }
 
     @Override
-    public void openPage() {
-//        super.openPage();
-//        if (BeepediaScreen.currScreenState.getPageID() != null) {
-//            setSubPage(BeepediaScreen.currScreenState.getBeeSubPage());
-//        } else {
-//            setSubPage(SubPageType.INFO);
-//        }
-//        tabs.forEach(p -> p.getLeft().visible = true);
-    }
-
-    @Override
-    public void closePage() {
-//        super.closePage();
-//        if (subPage != null) this.subPage.getRight().closePage();
-//        tabs.forEach(p -> p.getLeft().visible = false);
-    }
-
-    @Override
     public void renderForeground(MatrixStack matrix, int mouseX, int mouseY) {
 //        subPage.getRight().renderForeground(matrix, mouseX, mouseY);
     }
 
-    @Override
-    public void drawTooltips(MatrixStack matrixStack, int mouseX, int mouseY) {
-
-    }
 
     @Override
     public void addSearch(BeepediaPage parent) {

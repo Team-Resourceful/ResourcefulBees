@@ -3,14 +3,14 @@ package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.bee
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
-import com.teamresourceful.resourcefulbees.client.gui.widget.BeepediaScreenArea;
+import com.teamresourceful.resourcefulbees.client.gui.widget.ScreenArea;
 import com.teamresourceful.resourcefulbees.client.gui.widget.SubButtonList;
 
 public class BeeTraitListPage extends BeeDataPage {
 
     private SubButtonList list = null;
 
-    public BeeTraitListPage(BeepediaScreenArea screenArea) {
+    public BeeTraitListPage(ScreenArea screenArea) {
         super(screenArea);
     }
 
@@ -65,19 +65,5 @@ public class BeeTraitListPage extends BeeDataPage {
     @Override
     public void registerScreen(BeepediaScreen beepedia) {
 
-    }
-
-    @Override
-    public void openPage() {
-        super.openPage();
-//        if (list == null) initList();
-//        list.setActive(true);
-//        list.setScrollPos(BeepediaScreen.currScreenState.getTraitsScroll());
-    }
-
-    @Override
-    public void closePage() {
-        super.closePage();
-        if (list != null) list.setActive(false);
     }
 }
