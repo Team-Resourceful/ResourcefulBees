@@ -11,7 +11,6 @@ import org.jetbrains.annotations.NotNull;
 
 public class TabImageButton extends ModImageButton {
 
-    protected final ITooltip tooltipProvider;
     protected final ItemStack displayItem;
     protected final int itemX;
     protected final int itemY;
@@ -21,7 +20,6 @@ public class TabImageButton extends ModImageButton {
         this.displayItem = displayItem;
         this.itemX = itemX;
         this.itemY = itemY;
-        this.tooltipProvider = null;
     }
 
     public TabImageButton(int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int yDiffTextIn, ResourceLocation resourceLocationIn, @NotNull ItemStack displayItem, int itemX, int itemY, IPressable onPressIn, int textureWidth, int textureHeight) {
@@ -29,23 +27,14 @@ public class TabImageButton extends ModImageButton {
     }
 
     public TabImageButton(int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int yDiffTextIn, ResourceLocation resourceLocationIn, @NotNull ItemStack displayItem, int itemX, int itemY, IPressable onPressIn, ITextComponent message) {
-        this(xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, yDiffTextIn, resourceLocationIn, displayItem, itemX, itemY, onPressIn, widthIn, yDiffTextIn * 3, message);
-    }
-
-    public TabImageButton(int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int yDiffTextIn, ResourceLocation resourceLocationIn, @NotNull ItemStack displayItem, int itemX, int itemY, IPressable onPressIn) {
-        this(xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, yDiffTextIn, resourceLocationIn, displayItem, itemX, itemY, onPressIn, StringTextComponent.EMPTY);
-    }
-
-    public TabImageButton(int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int yDiffTextIn, ResourceLocation resourceLocationIn, @NotNull ItemStack displayItem, int itemX, int itemY, IPressable onPressIn, ITooltip tooltipProvider, ITextComponent message) {
         super(xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, yDiffTextIn, resourceLocationIn, onPressIn, message);
         this.displayItem = displayItem;
         this.itemX = itemX;
         this.itemY = itemY;
-        this.tooltipProvider = tooltipProvider;
     }
 
-    public TabImageButton(int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int yDiffTextIn, ResourceLocation resourceLocationIn, @NotNull ItemStack displayItem, int itemX, int itemY, IPressable onPressIn, ITooltip tooltipProvider) {
-        this(xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, yDiffTextIn, resourceLocationIn, displayItem, itemX, itemY, onPressIn, tooltipProvider, StringTextComponent.EMPTY);
+    public TabImageButton(int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int yDiffTextIn, ResourceLocation resourceLocationIn, @NotNull ItemStack displayItem, int itemX, int itemY, IPressable onPressIn) {
+        this(xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, yDiffTextIn, resourceLocationIn, displayItem, itemX, itemY, onPressIn, StringTextComponent.EMPTY);
     }
 
     @Override
@@ -54,13 +43,6 @@ public class TabImageButton extends ModImageButton {
         if (this.displayItem != null)
             Minecraft.getInstance().getItemRenderer().renderAndDecorateItem(this.displayItem, this.x + this.itemX, this.y + this.itemY);
         RenderSystem.enableDepthTest();
-    }
-
-    @Override
-    public void renderToolTip(@NotNull MatrixStack matrix, int mouseX, int mouseY) {
-        if (this.isHovered() && tooltipProvider != null) {
-            tooltipProvider.onTooltip(this, matrix, mouseX, mouseY);
-        }
     }
 
 }

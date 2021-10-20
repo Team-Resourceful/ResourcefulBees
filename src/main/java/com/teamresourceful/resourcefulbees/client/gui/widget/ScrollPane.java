@@ -1,7 +1,6 @@
 package com.teamresourceful.resourcefulbees.client.gui.widget;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 
@@ -39,7 +38,7 @@ public class ScrollPane extends Pane {
     }
 
     @Override
-    public void add(Widget widget) {
+    public void add(TooltipWidget widget) {
         super.add(widget);
         if (widget.y < minY) minY = widget.y;
         else if (widget.y + widget.getHeight() > maxY) maxY = widget.y + widget.getHeight();

@@ -58,7 +58,7 @@ public class BeepediaScreen extends Screen {
 
     private final List<AbstractTooltip> tooltips = new LinkedList<>();
     private final List<Interaction> interactions = new LinkedList<>();
-    private Button backButton;
+    private ModImageButton backButton;
     private ModImageButton homeButton;
     private ModImageButton searchButton;
 

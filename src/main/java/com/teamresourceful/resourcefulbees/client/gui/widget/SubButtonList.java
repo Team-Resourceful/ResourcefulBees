@@ -4,13 +4,13 @@ package com.teamresourceful.resourcefulbees.client.gui.widget;
 import java.util.SortedMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@Deprecated
 public class SubButtonList extends ButtonList {
     final SortedMap<String, BeepediaListButton> subList;
 
     public SubButtonList(int xPos, int yPos, int width, int height, int itemHeight, TabImageButton button, SortedMap<String, BeepediaListButton> list) {
         super(xPos, yPos, width, height, itemHeight, button, null);
         this.subList = list;
-        list.forEach((s, b) -> b.setParent(this));
     }
 
     @Override

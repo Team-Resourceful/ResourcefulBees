@@ -3,6 +3,8 @@ package com.teamresourceful.resourcefulbees.client.gui.screen;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.client.gui.tooltip.AbstractTooltip;
+import com.teamresourceful.resourcefulbees.client.gui.tooltip.Tooltip;
 import com.teamresourceful.resourcefulbees.client.gui.widget.ModImageButton;
 import com.teamresourceful.resourcefulbees.common.container.EnderBeeconContainer;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
@@ -49,7 +51,7 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
     ModImageButton leftArrow;
     ModImageButton rightArrow;
 
-    List<ToolTip> toolTips = new LinkedList<>();
+    List<AbstractTooltip> toolTips = new LinkedList<>();
     List<PowerButton> powerButtons = new LinkedList<>();
 
     int localRange;
@@ -90,12 +92,12 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
             button.active = true;
             button.setSelected(effect.isActive());
             powerButtons.add(button);
-            toolTips.add(new ToolTip(buttonStartX, buttonY, 22, 22, () -> new TranslationTextComponent(effect.getEffect().getDescriptionId())));
+            toolTips.add(new Tooltip(buttonStartX, buttonY, 22, 22, () -> new TranslationTextComponent(effect.getEffect().getDescriptionId())));
             buttonStartX += buttonWidth + padding;
         }
 
         // fluid tank tooltip
-        toolTips.add(new ToolTip(xPos + 207, yPos + 30, 14, 62, () -> {
+        toolTips.add(new Tooltip(xPos + 207, yPos + 30, 14, 62, () -> {
             DecimalFormat decimalFormat = new DecimalFormat("##0.0");
             if (tileEntity.getFluidTank().getFluidAmount() < 1000f || Screen.hasShiftDown()) {
                 return new StringTextComponent(decimalFormat.format(tileEntity.getFluidTank().getFluidAmount()) + " mb");
@@ -132,7 +134,7 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
     public void render(@NotNull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrix);
         super.render(matrix, mouseX, mouseY, partialTicks);
-        for (ToolTip toolTip : toolTips) {
+        for (AbstractTooltip toolTip : toolTips) {
             toolTip.draw(this, matrix, mouseX, mouseY);
         }
     }

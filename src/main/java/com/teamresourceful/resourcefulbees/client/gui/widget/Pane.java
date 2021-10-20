@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.client.gui.widget;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -12,9 +13,9 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Pane extends Widget {
+public class Pane extends TooltipWidget {
 
-    protected final Set<Widget> children = new HashSet<>();
+    protected final Set<TooltipWidget> children = new HashSet<>();
     private boolean doScissor = false;
 
     public Pane(int xPos, int yPos, int viewWidth, int viewHeight, ITextComponent message) {
@@ -74,7 +75,7 @@ public class Pane extends Widget {
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double scrollAmount) {
-        for (Widget child: children) {
+        for (Widget child : children) {
             boolean scrolled = child.mouseScrolled(mouseX + x, mouseY + y, scrollAmount);
             if (scrolled) return true;
         }
@@ -93,7 +94,7 @@ public class Pane extends Widget {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
-        for (Widget child: children) {
+        for (Widget child : children) {
             boolean clicked = child.mouseClicked(mouseX + x, mouseY + y, mouseButton);
             if (clicked) return true;
         }
@@ -102,7 +103,7 @@ public class Pane extends Widget {
 
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int mouseButton) {
-        for (Widget child: children) {
+        for (Widget child : children) {
             boolean released = child.mouseReleased(mouseX + x, mouseY + y, mouseButton);
             if (released) return true;
         }
@@ -111,7 +112,7 @@ public class Pane extends Widget {
 
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int p_231045_5_, double p_231045_6_, double p_231045_8_) {
-        for (Widget child: children) {
+        for (TooltipWidget child : children) {
             boolean dragged = child.mouseDragged(mouseX + x, mouseY + y, p_231045_5_, p_231045_6_, p_231045_8_);
             if (dragged) return true;
         }
@@ -119,8 +120,9 @@ public class Pane extends Widget {
     }
 
     @Override
-    public void renderToolTip(@NotNull MatrixStack matrix, int mouseX, int mouseY) {
-        children.forEach(c -> c.renderToolTip(matrix, mouseX, mouseY));
+    public void drawTooltips(@NotNull MatrixStack matrix, Screen screen, int mouseX, int mouseY) {
+        super.drawTooltips(matrix, screen, mouseX, mouseY);
+        children.forEach(c -> c.renderToolTip(matrix, mouseX + x, mouseY + y));
     }
 
     @Override
@@ -130,7 +132,7 @@ public class Pane extends Widget {
 
     @Override
     public boolean keyPressed(int keycode, int scanCode, int modifiers) {
-        for (Widget child: children) {
+        for (Widget child : children) {
             boolean pressed = child.keyPressed(keycode, scanCode, modifiers);
             if (pressed) return true;
         }
@@ -139,7 +141,7 @@ public class Pane extends Widget {
 
     @Override
     public boolean keyReleased(int keycode, int scanCode, int modifiers) {
-        for (Widget child: children) {
+        for (Widget child : children) {
             boolean pressed = child.keyReleased(keycode, scanCode, modifiers);
             if (pressed) return true;
         }
@@ -148,14 +150,14 @@ public class Pane extends Widget {
 
     @Override
     public boolean charTyped(char character, int p_231042_2_) {
-        for (Widget child: children) {
+        for (Widget child : children) {
             boolean typed = child.charTyped(character, p_231042_2_);
             if (typed) return true;
         }
         return super.charTyped(character, p_231042_2_);
     }
 
-    public void add(Widget widget) {
+    public void add(TooltipWidget widget) {
         children.add(widget);
     }
 

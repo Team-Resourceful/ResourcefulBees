@@ -5,7 +5,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 
-public class BeepediaSlot extends Widget {
+public class BeepediaSlot extends TooltipWidget {
 
     private final ITextComponent tooltip;
     private final ItemStack stack;

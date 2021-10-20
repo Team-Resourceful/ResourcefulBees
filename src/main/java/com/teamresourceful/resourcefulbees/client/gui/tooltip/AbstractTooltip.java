@@ -32,7 +32,7 @@ public abstract class AbstractTooltip {
         this.hoverHeight = hoverHeight;
     }
 
-    private boolean isHovered(int mouseX, int mouseY) {
+    public boolean isHovered(int mouseX, int mouseY) {
         return mouseX >= (double) this.x && mouseY >= (double) this.y && mouseX < (double) (this.x + this.hoverWidth) && mouseY < (double) (this.y + this.hoverHeight);
     }
 

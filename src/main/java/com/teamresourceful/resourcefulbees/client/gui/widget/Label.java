@@ -2,12 +2,11 @@ package com.teamresourceful.resourcefulbees.client.gui.widget;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import org.jetbrains.annotations.NotNull;
 
-public class Label extends Widget {
+public class Label extends TooltipWidget {
 
     public ITextComponent text;
     private final int color;
