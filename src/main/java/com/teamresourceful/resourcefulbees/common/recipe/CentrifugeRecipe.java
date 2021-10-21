@@ -38,6 +38,7 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
     private final List<CentrifugeFluidOutput> fluidOutputs;
     private final int time;
     private final int energyPerTick;
+    private final boolean conditioned;
 
     public static Codec<CentrifugeRecipe> codec(ResourceLocation id) {
         return RecordCodecBuilder.create(instance -> instance.group(
@@ -46,17 +47,19 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
                 CentrifugeItemOutput.CODEC.listOf().fieldOf("itemOutputs").orElse(new ArrayList<>()).forGetter(CentrifugeRecipe::getItemOutputs),
                 CentrifugeFluidOutput.CODEC.listOf().fieldOf("fluidOutputs").orElse(new ArrayList<>()).forGetter(CentrifugeRecipe::getFluidOutputs),
                 Codec.INT.fieldOf("time").orElse(CommonConfig.GLOBAL_CENTRIFUGE_RECIPE_TIME.get()).forGetter(CentrifugeRecipe::getTime),
-                Codec.INT.fieldOf("energyPerTick").orElse(CommonConfig.RF_TICK_CENTRIFUGE.get()).forGetter(CentrifugeRecipe::getEnergyPerTick)
+                Codec.INT.fieldOf("energyPerTick").orElse(CommonConfig.RF_TICK_CENTRIFUGE.get()).forGetter(CentrifugeRecipe::getEnergyPerTick),
+                CodecUtils.RECIPE_CONDITION_CODEC.fieldOf("conditions").orElse(true).forGetter(CentrifugeRecipe::matchesConditions)
         ).apply(instance, CentrifugeRecipe::new));
     }
 
-    public CentrifugeRecipe(ResourceLocation id, Ingredient ingredient, List<CentrifugeItemOutput> itemOutputs, List<CentrifugeFluidOutput> fluidOutputs, int time, int energyPerTick) {
+    public CentrifugeRecipe(ResourceLocation id, Ingredient ingredient, List<CentrifugeItemOutput> itemOutputs, List<CentrifugeFluidOutput> fluidOutputs, int time, int energyPerTick, boolean conditioned) {
         this.id = id;
         this.ingredient = ingredient;
         this.itemOutputs = itemOutputs;
         this.fluidOutputs = fluidOutputs;
         this.time = time;
         this.energyPerTick = energyPerTick;
+        this.conditioned = conditioned;
     }
 
     @Override
@@ -70,6 +73,10 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
                 return Arrays.stream(matchingStacks).anyMatch(itemStack -> Container.consideredTheSameItem(stack, itemStack));
             }
         }
+    }
+
+    public boolean matchesConditions() {
+        return conditioned;
     }
 
     @Override
@@ -141,8 +148,9 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
     public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<CentrifugeRecipe> {
 
         @Override
-        public @NotNull CentrifugeRecipe fromJson(@NotNull ResourceLocation id, @NotNull JsonObject json) {
-            return CentrifugeRecipe.codec(id).parse(JsonOps.INSTANCE, json).getOrThrow(false, s -> ResourcefulBees.LOGGER.error("Could not parse Centrifuge Recipe!!"));
+        public CentrifugeRecipe fromJson(@NotNull ResourceLocation id, @NotNull JsonObject json) {
+            CentrifugeRecipe recipe = CentrifugeRecipe.codec(id).parse(JsonOps.INSTANCE, json).getOrThrow(false, s -> ResourcefulBees.LOGGER.error("Could not parse Centrifuge Recipe!!"));
+            return recipe.matchesConditions() ? recipe : null;
         }
 
         @Override
