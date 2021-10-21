@@ -5,7 +5,7 @@ import com.teamresourceful.resourcefulbees.common.block.CustomHoneyBlock;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.network.packets.SyncGUIMessage;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
-import com.teamresourceful.resourcefulbees.common.container.AutomationSensitiveItemStackHandler;
+import com.teamresourceful.resourcefulbees.common.inventory.AutomationSensitiveItemStackHandler;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;

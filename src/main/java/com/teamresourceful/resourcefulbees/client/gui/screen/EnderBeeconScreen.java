@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.client.gui.screen;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.common.container.EnderBeeconContainer;
+import com.teamresourceful.resourcefulbees.common.inventory.containers.EnderBeeconContainer;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.network.packets.UpdateBeeconMessage;
 import com.teamresourceful.resourcefulbees.common.tileentity.EnderBeeconTileEntity;

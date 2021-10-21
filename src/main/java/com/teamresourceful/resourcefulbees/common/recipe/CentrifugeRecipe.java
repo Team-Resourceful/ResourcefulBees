@@ -6,10 +6,12 @@ import com.mojang.serialization.*;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.beedata.CodecUtils;
-import com.teamresourceful.resourcefulbees.api.beedata.centrifuge.CentrifugeFluidOutput;
-import com.teamresourceful.resourcefulbees.api.beedata.centrifuge.CentrifugeItemOutput;
+import com.teamresourceful.resourcefulbees.api.beedata.outputs.AbstractOutput;
+import com.teamresourceful.resourcefulbees.api.beedata.outputs.FluidOutput;
+import com.teamresourceful.resourcefulbees.api.beedata.outputs.ItemOutput;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeSerializers;
+import com.teamresourceful.resourcefulbees.common.utils.RandomCollection;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
@@ -34,23 +36,26 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
 
     private final ResourceLocation id;
     private final Ingredient ingredient;
-    private final List<CentrifugeItemOutput> itemOutputs;
-    private final List<CentrifugeFluidOutput> fluidOutputs;
+    private final List<Output<ItemOutput>> itemOutputs;
+    private final List<Output<FluidOutput>> fluidOutputs;
     private final int time;
     private final int energyPerTick;
 
+    //TODO for simplification and quick lookup when handling recipes, add an inputAmount field to this class and include it in the codec below
+    // See CentrifugeInputEntity#canProcess for use-case
+    //TODO consider overriding ingredient#test method by making a centrifuge ingredient class to add nbt checking
     public static Codec<CentrifugeRecipe> codec(ResourceLocation id) {
         return RecordCodecBuilder.create(instance -> instance.group(
                 MapCodec.of(Encoder.empty(), Decoder.unit(() -> id)).forGetter(CentrifugeRecipe::getId),
                 CodecUtils.INGREDIENT_CODEC.fieldOf("ingredient").forGetter(CentrifugeRecipe::getIngredient),
-                CentrifugeItemOutput.CODEC.listOf().fieldOf("itemOutputs").orElse(new ArrayList<>()).forGetter(CentrifugeRecipe::getItemOutputs),
-                CentrifugeFluidOutput.CODEC.listOf().fieldOf("fluidOutputs").orElse(new ArrayList<>()).forGetter(CentrifugeRecipe::getFluidOutputs),
+                Output.ITEM_OUTPUT_CODEC.listOf().fieldOf("itemOutputs").orElse(new ArrayList<>()).forGetter(CentrifugeRecipe::getItemOutputs),
+                Output.FLUID_OUTPUT_CODEC.listOf().fieldOf("fluidOutputs").orElse(new ArrayList<>()).forGetter(CentrifugeRecipe::getFluidOutputs),
                 Codec.INT.fieldOf("time").orElse(CommonConfig.GLOBAL_CENTRIFUGE_RECIPE_TIME.get()).forGetter(CentrifugeRecipe::getTime),
                 Codec.INT.fieldOf("energyPerTick").orElse(CommonConfig.RF_TICK_CENTRIFUGE.get()).forGetter(CentrifugeRecipe::getEnergyPerTick)
         ).apply(instance, CentrifugeRecipe::new));
     }
 
-    public CentrifugeRecipe(ResourceLocation id, Ingredient ingredient, List<CentrifugeItemOutput> itemOutputs, List<CentrifugeFluidOutput> fluidOutputs, int time, int energyPerTick) {
+    public CentrifugeRecipe(ResourceLocation id, Ingredient ingredient, List<Output<ItemOutput>> itemOutputs, List<Output<FluidOutput>> fluidOutputs, int time, int energyPerTick) {
         this.id = id;
         this.ingredient = ingredient;
         this.itemOutputs = itemOutputs;
@@ -121,11 +126,11 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
         return ingredient;
     }
 
-    public List<CentrifugeItemOutput> getItemOutputs() {
+    public List<Output<ItemOutput>> getItemOutputs() {
         return itemOutputs;
     }
 
-    public List<CentrifugeFluidOutput> getFluidOutputs() {
+    public List<Output<FluidOutput>> getFluidOutputs() {
         return fluidOutputs;
     }
 
@@ -162,6 +167,34 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    public static class Output<T extends AbstractOutput> {
+        public static final Codec<Output<ItemOutput>> ITEM_OUTPUT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                Codec.doubleRange(0d, 1.0d).fieldOf("chance").orElse(1.0d).forGetter(Output::getChance),
+                ItemOutput.RANDOM_COLLECTION_CODEC.fieldOf("pool").orElse(new RandomCollection<>()).forGetter(Output::getPool)
+        ).apply(instance, Output::new));
+
+        public static final Codec<Output<FluidOutput>> FLUID_OUTPUT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                Codec.doubleRange(0d, 1.0d).fieldOf("chance").orElse(1.0d).forGetter(Output::getChance),
+                FluidOutput.RANDOM_COLLECTION_CODEC.fieldOf("pool").orElse(new RandomCollection<>()).forGetter(Output::getPool)
+        ).apply(instance, Output::new));
+
+        private final RandomCollection<T> pool;
+        private final double chance;
+
+        public Output(double chance, RandomCollection<T> pool) {
+            this.chance = chance;
+            this.pool = pool;
+        }
+
+        public RandomCollection<T> getPool() {
+            return pool;
+        }
+
+        public double getChance() {
+            return chance;
         }
     }
 }

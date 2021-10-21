@@ -3,8 +3,6 @@ package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
-import com.teamresourceful.resourcefulbees.api.beedata.centrifuge.CentrifugeFluidOutput;
-import com.teamresourceful.resourcefulbees.api.beedata.centrifuge.CentrifugeItemOutput;
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.FluidOutput;
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.ItemOutput;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
@@ -202,8 +200,8 @@ public class HoneycombPage extends BeeDataPage {
     private class RecipeObject {
         final boolean isBlock;
         final ItemStack inputItem = ItemStack.EMPTY;
-        Map<CentrifugeItemOutput, Integer> outputItems = new LinkedHashMap<>();
-        Map<CentrifugeFluidOutput, Integer> outputFluids = new LinkedHashMap<>();
+        Map<CentrifugeRecipe.Output<ItemOutput>, Integer> outputItems = new LinkedHashMap<>();
+        Map<CentrifugeRecipe.Output<FluidOutput>, Integer> outputFluids = new LinkedHashMap<>();
         final CentrifugeRecipe recipe;
         final CustomBeeData beeData;
 

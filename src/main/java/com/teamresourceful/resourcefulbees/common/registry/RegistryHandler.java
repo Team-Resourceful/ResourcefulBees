@@ -35,7 +35,7 @@ public class RegistryHandler {
         ModEffects.EFFECTS.register(bus);
         ModFluids.initializeRegistries(bus);
         ModEntities.ENTITY_TYPES.register(bus);
-        ModBlockEntityTypes.TILE_ENTITY_TYPES.register(bus);
+        ModBlockEntityTypes.BLOCK_ENTITY_TYPES.register(bus);
         ModPOIs.POIS.register(bus);
         ModPotions.POTIONS.register(bus);
         ModContainers.CONTAINER_TYPES.register(bus);

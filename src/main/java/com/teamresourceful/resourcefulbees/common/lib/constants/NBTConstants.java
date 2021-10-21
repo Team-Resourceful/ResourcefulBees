@@ -6,6 +6,7 @@ public class NBTConstants {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
 
+
     public static final String NBT_ROOT = "ResourcefulBees";
     public static final String NBT_COLOR = "Color";
     public static final String NBT_BEE_TYPE = "BeeType";
@@ -19,6 +20,7 @@ public class NBTConstants {
     public static final String NBT_APIARY_POS = "ApiaryPos";
     public static final String NBT_BREEDER_POS = "BreederPos";
     public static final String NBT_INVENTORY = "inv";
+    public static final String NBT_FILTER_INVENTORY = "filterInv";
     public static final String NBT_VALID_APIARY = "isValid";
     public static final String NBT_VERT_OFFSET = "verticalOffset";
     public static final String NBT_HOR_OFFSET = "horizontalOffset";
@@ -45,6 +47,13 @@ public class NBTConstants {
     public static final String NBT_ENERGY_FILLED = "energyFilled";
     public static final String NBT_FLUID_FILLED = "fluidFilled";
     public static final String NBT_IS_PROCESSING = "isProcessing";
+    public static final String NBT_PROCESS_STAGE = "processStage";
+    public static final String NBT_PROCESS_TIME = "processTime";
+    public static final String NBT_PROCESS_ENERGY = "processEnergy";
+    public static final String NBT_PROCESS_RECIPE = "processRecipe";
+    public static final String NBT_ITEM_OUTPUTS = "itemOutputs";
+    public static final String NBT_FLUID_OUTPUTS = "fluidOutputs";
+    public static final String NBT_LOCATIONS = "locations";
     public static final String NBT_SHOW_BEAM = "showBeam";
     public static final String NBT_CONTROLLER_POS = "controllerPos";
     public static final String NBT_MUTATION_COUNT = "mutationCount";

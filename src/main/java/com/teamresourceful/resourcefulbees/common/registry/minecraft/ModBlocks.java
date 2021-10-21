@@ -6,6 +6,7 @@ import com.teamresourceful.resourcefulbees.common.block.multiblocks.apiary.Apiar
 import com.teamresourceful.resourcefulbees.common.block.multiblocks.apiary.ApiaryBreederBlock;
 import com.teamresourceful.resourcefulbees.common.block.multiblocks.apiary.ApiaryStorageBlock;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.blocks.*;
 import com.teamresourceful.resourcefulbees.common.tileentity.HoneyTankTileEntity;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
@@ -25,11 +26,16 @@ public class ModBlocks {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
 
-    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, ResourcefulBees.MOD_ID);
-    public static final DeferredRegister<Block> NEST_BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, ResourcefulBees.MOD_ID);
-    public static final DeferredRegister<Block> HONEYCOMB_BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, ResourcefulBees.MOD_ID);
-    public static final DeferredRegister<Block> HONEY_BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, ResourcefulBees.MOD_ID);
-    public static final DeferredRegister<Block> HONEY_FLUID_BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, ResourcefulBees.MOD_ID);
+    public static final DeferredRegister<Block> BLOCKS = createBlockRegistry();
+    public static final DeferredRegister<Block> NEST_BLOCKS = createBlockRegistry();
+    public static final DeferredRegister<Block> HONEYCOMB_BLOCKS = createBlockRegistry();
+    public static final DeferredRegister<Block> HONEY_BLOCKS = createBlockRegistry();
+    public static final DeferredRegister<Block> HONEY_FLUID_BLOCKS = createBlockRegistry();
+    public static final DeferredRegister<Block> CENTRIFUGE_BLOCKS = createBlockRegistry();
+
+    private static DeferredRegister<Block> createBlockRegistry() {
+        return DeferredRegister.create(ForgeRegistries.BLOCKS, ResourcefulBees.MOD_ID);
+    }
 
     public static void initializeRegistries(IEventBus bus) {
         BLOCKS.register(bus);
@@ -37,10 +43,11 @@ public class ModBlocks {
         HONEYCOMB_BLOCKS.register(bus);
         HONEY_BLOCKS.register(bus);
         HONEY_FLUID_BLOCKS.register(bus);
+        CENTRIFUGE_BLOCKS.register(bus);
     }
 
 
-    private static final AbstractBlock.Properties CENTRIFUGE_PROPERTIES = AbstractBlock.Properties.of(Material.METAL).strength(2).sound(SoundType.METAL);
+    public static final AbstractBlock.Properties CENTRIFUGE_PROPERTIES = AbstractBlock.Properties.of(Material.METAL).strength(2).sound(SoundType.METAL);
     private static final AbstractBlock.Properties NEST_PROPERTIES = AbstractBlock.Properties.of(Material.WOOD).strength(1F).sound(SoundType.WOOD);
 
     private static AbstractBlock.Properties makeNestProperty(Material material, MaterialColor color, SoundType soundType){
@@ -59,6 +66,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> PREVIEW_BLOCK = BLOCKS.register("preview_block", () -> new Block(AbstractBlock.Properties.of(Material.DECORATION).sound(SoundType.GLASS)));
     public static final RegistryObject<Block> ERRORED_PREVIEW_BLOCK = BLOCKS.register("error_preview_block", () -> new Block(AbstractBlock.Properties.of(Material.DECORATION).sound(SoundType.GLASS)));
     public static final RegistryObject<Block> GOLD_FLOWER = BLOCKS.register("gold_flower", () -> new FlowerBlock(Effects.INVISIBILITY, 10, AbstractBlock.Properties.of(Material.PLANT).noCollission().strength(0).sound(SoundType.GRASS)));
+    //region nests
     public static final RegistryObject<Block> OAK_BEE_NEST = NEST_BLOCKS.register("bee_nest", createWoodNest());
     public static final RegistryObject<Block> BIRCH_BEE_NEST = NEST_BLOCKS.register("birch_bee_nest", createWoodNest());
     public static final RegistryObject<Block> BROWN_MUSHROOM_BEE_NEST = NEST_BLOCKS.register("brown_mushroom_bee_nest", createNest(Material.WOOD, MaterialColor.DIRT, SoundType.WOOD));
@@ -76,12 +84,15 @@ public class ModBlocks {
     public static final RegistryObject<Block> PRISMARINE_BEE_NEST = NEST_BLOCKS.register("prismarine_bee_nest", createNest(Material.STONE, MaterialColor.DIAMOND, SoundType.STONE));
     public static final RegistryObject<Block> PURPUR_BEE_NEST = NEST_BLOCKS.register("purpur_bee_nest", createNest(Material.STONE, MaterialColor.COLOR_MAGENTA, SoundType.STONE));
     public static final RegistryObject<Block> WITHER_BEE_NEST = NEST_BLOCKS.register("wither_bee_nest", createNest(Material.STONE, MaterialColor.COLOR_BLACK, SoundType.BASALT));
+    //endregion
+    //region apiary blocks
     public static final RegistryObject<Block> T1_APIARY_BLOCK = BLOCKS.register("t1_apiary", () -> new ApiaryBlock(1, 5, 6));
     public static final RegistryObject<Block> T2_APIARY_BLOCK = BLOCKS.register("t2_apiary", () -> new ApiaryBlock(2, 5, 6));
     public static final RegistryObject<Block> T3_APIARY_BLOCK = BLOCKS.register("t3_apiary", () -> new ApiaryBlock(3, 6, 8));
     public static final RegistryObject<Block> T4_APIARY_BLOCK = BLOCKS.register("t4_apiary", () -> new ApiaryBlock(4, 6, 8));
-    public static final RegistryObject<Block> APIARY_BREEDER_BLOCK = BLOCKS.register("apiary_breeder", () -> new ApiaryBreederBlock(NEST_PROPERTIES));
     public static final RegistryObject<Block> APIARY_STORAGE_BLOCK = BLOCKS.register("apiary_storage", () -> new ApiaryStorageBlock(NEST_PROPERTIES));
+    public static final RegistryObject<Block> APIARY_BREEDER_BLOCK = BLOCKS.register("apiary_breeder", () -> new ApiaryBreederBlock(NEST_PROPERTIES));
+    //endregion
     public static final RegistryObject<Block> HONEY_GENERATOR = BLOCKS.register("honey_generator", () -> new HoneyGenerator(CENTRIFUGE_PROPERTIES));
     public static final RegistryObject<FlowingFluidBlock> HONEY_FLUID_BLOCK = BLOCKS.register("honey_fluid_block", () -> new FlowingFluidBlock(ModFluids.HONEY_STILL, AbstractBlock.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
     public static final RegistryObject<Block> CREATIVE_GEN = BLOCKS.register("creative_gen", () -> new CreativeGen(CENTRIFUGE_PROPERTIES));
@@ -93,4 +104,40 @@ public class ModBlocks {
     public static final RegistryObject<Block> HONEY_CONGEALER = BLOCKS.register("honey_congealer", () -> new HoneyCongealer(AbstractBlock.Properties.of(Material.STONE).sound(SoundType.GLASS).strength(1.5f).requiresCorrectToolForDrops().harvestTool(ToolType.PICKAXE).harvestLevel(1)));
     public static final RegistryObject<Block> HONEY_PIPE = BLOCKS.register("honey_pipe", () -> new HoneyPipe(AbstractBlock.Properties.of(Material.METAL).sound(SoundType.METAL).strength(1.5f).requiresCorrectToolForDrops().harvestTool(ToolType.PICKAXE).harvestLevel(1)));
     public static final RegistryObject<Block> BOTTOMLESS_HONEY_POT = BLOCKS.register("bottomless_honey_pot", () -> new BottomlessHoneyPot(AbstractBlock.Properties.of(Material.STONE).sound(SoundType.STONE).strength(1.5f).requiresCorrectToolForDrops().harvestLevel(1).harvestTool(ToolType.PICKAXE)));
+
+    //region Centrifuge Multiblock Blocks
+    public static final RegistryObject<Block> CENTRIFUGE_CASING = CENTRIFUGE_BLOCKS.register("centrifuge_casing", () -> new CentrifugeCasing(CENTRIFUGE_PROPERTIES));
+    public static final RegistryObject<Block> CENTRIFUGE_PROCESSOR = CENTRIFUGE_BLOCKS.register("centrifuge_processor", () -> new CentrifugeProcessor(CENTRIFUGE_PROPERTIES));
+    public static final RegistryObject<Block> CENTRIFUGE_GEARBOX = CENTRIFUGE_BLOCKS.register("centrifuge_gearbox", () -> new CentrifugeGearbox(CENTRIFUGE_PROPERTIES));
+
+    public static final RegistryObject<Block> CENTRIFUGE_BASIC_TERMINAL = CENTRIFUGE_BLOCKS.register("centrifuge_basic_terminal", () -> new CentrifugeTerminal(CENTRIFUGE_PROPERTIES, ModBlockEntityTypes.CENTRIFUGE_BASIC_TERMINAL_ENTITY));
+    public static final RegistryObject<Block> CENTRIFUGE_ADVANCED_TERMINAL = CENTRIFUGE_BLOCKS.register("centrifuge_advanced_terminal", () -> new CentrifugeTerminal(CENTRIFUGE_PROPERTIES, ModBlockEntityTypes.CENTRIFUGE_ADVANCED_TERMINAL_ENTITY));
+    public static final RegistryObject<Block> CENTRIFUGE_ELITE_TERMINAL = CENTRIFUGE_BLOCKS.register("centrifuge_elite_terminal", () -> new CentrifugeTerminal(CENTRIFUGE_PROPERTIES, ModBlockEntityTypes.CENTRIFUGE_ELITE_TERMINAL_ENTITY));
+    public static final RegistryObject<Block> CENTRIFUGE_ULTIMATE_TERMINAL = CENTRIFUGE_BLOCKS.register("centrifuge_ultimate_terminal", () -> new CentrifugeTerminal(CENTRIFUGE_PROPERTIES, ModBlockEntityTypes.CENTRIFUGE_ULTIMATE_TERMINAL_ENTITY));
+
+    public static final RegistryObject<Block> CENTRIFUGE_BASIC_INPUT = CENTRIFUGE_BLOCKS.register("centrifuge_basic_input", () -> new CentrifugeInput(CENTRIFUGE_PROPERTIES, ModBlockEntityTypes.CENTRIFUGE_BASIC_INPUT_ENTITY));
+    public static final RegistryObject<Block> CENTRIFUGE_ADVANCED_INPUT = CENTRIFUGE_BLOCKS.register("centrifuge_advanced_input", () -> new CentrifugeInput(CENTRIFUGE_PROPERTIES, ModBlockEntityTypes.CENTRIFUGE_ADVANCED_INPUT_ENTITY));
+    public static final RegistryObject<Block> CENTRIFUGE_ELITE_INPUT = CENTRIFUGE_BLOCKS.register("centrifuge_elite_input", () -> new CentrifugeInput(CENTRIFUGE_PROPERTIES, ModBlockEntityTypes.CENTRIFUGE_ELITE_INPUT_ENTITY));
+    public static final RegistryObject<Block> CENTRIFUGE_ULTIMATE_INPUT = CENTRIFUGE_BLOCKS.register("centrifuge_ultimate_input", () -> new CentrifugeInput(CENTRIFUGE_PROPERTIES, ModBlockEntityTypes.CENTRIFUGE_ULTIMATE_INPUT_ENTITY));
+
+    public static final RegistryObject<Block> CENTRIFUGE_BASIC_VOID = CENTRIFUGE_BLOCKS.register("centrifuge_basic_void", () -> new CentrifugeVoid(CENTRIFUGE_PROPERTIES, ModBlockEntityTypes.CENTRIFUGE_BASIC_VOID_ENTITY));
+    public static final RegistryObject<Block> CENTRIFUGE_ADVANCED_VOID = CENTRIFUGE_BLOCKS.register("centrifuge_advanced_void", () -> new CentrifugeVoid(CENTRIFUGE_PROPERTIES, ModBlockEntityTypes.CENTRIFUGE_ADVANCED_VOID_ENTITY));
+    public static final RegistryObject<Block> CENTRIFUGE_ELITE_VOID = CENTRIFUGE_BLOCKS.register("centrifuge_elite_void", () -> new CentrifugeVoid(CENTRIFUGE_PROPERTIES, ModBlockEntityTypes.CENTRIFUGE_ELITE_VOID_ENTITY));
+    public static final RegistryObject<Block> CENTRIFUGE_ULTIMATE_VOID = CENTRIFUGE_BLOCKS.register("centrifuge_ultimate_void", () -> new CentrifugeVoid(CENTRIFUGE_PROPERTIES, ModBlockEntityTypes.CENTRIFUGE_ULTIMATE_VOID_ENTITY));
+
+    public static final RegistryObject<Block> CENTRIFUGE_BASIC_ENERGY_PORT = CENTRIFUGE_BLOCKS.register("centrifuge_basic_energy_port", () -> new CentrifugeEnergyPort(CENTRIFUGE_PROPERTIES, ModBlockEntityTypes.CENTRIFUGE_BASIC_ENERGY_PORT_ENTITY));
+    public static final RegistryObject<Block> CENTRIFUGE_ADVANCED_ENERGY_PORT = CENTRIFUGE_BLOCKS.register("centrifuge_advanced_energy_port", () -> new CentrifugeEnergyPort(CENTRIFUGE_PROPERTIES, ModBlockEntityTypes.CENTRIFUGE_ADVANCED_ENERGY_PORT_ENTITY));
+    public static final RegistryObject<Block> CENTRIFUGE_ELITE_ENERGY_PORT = CENTRIFUGE_BLOCKS.register("centrifuge_elite_energy_port", () -> new CentrifugeEnergyPort(CENTRIFUGE_PROPERTIES, ModBlockEntityTypes.CENTRIFUGE_ELITE_ENERGY_PORT_ENTITY));
+    public static final RegistryObject<Block> CENTRIFUGE_ULTIMATE_ENERGY_PORT = CENTRIFUGE_BLOCKS.register("centrifuge_ultimate_energy_port", () -> new CentrifugeEnergyPort(CENTRIFUGE_PROPERTIES, ModBlockEntityTypes.CENTRIFUGE_ULTIMATE_ENERGY_PORT_ENTITY));
+
+    public static final RegistryObject<Block> CENTRIFUGE_BASIC_ITEM_OUTPUT = CENTRIFUGE_BLOCKS.register("centrifuge_basic_item_output", () -> new CentrifugeItemOutput(CENTRIFUGE_PROPERTIES, ModBlockEntityTypes.CENTRIFUGE_BASIC_ITEM_OUTPUT_ENTITY));
+    public static final RegistryObject<Block> CENTRIFUGE_ADVANCED_ITEM_OUTPUT = CENTRIFUGE_BLOCKS.register("centrifuge_advanced_item_output", () -> new CentrifugeItemOutput(CENTRIFUGE_PROPERTIES, ModBlockEntityTypes.CENTRIFUGE_ADVANCED_ITEM_OUTPUT_ENTITY));
+    public static final RegistryObject<Block> CENTRIFUGE_ELITE_ITEM_OUTPUT = CENTRIFUGE_BLOCKS.register("centrifuge_elite_item_output", () -> new CentrifugeItemOutput(CENTRIFUGE_PROPERTIES, ModBlockEntityTypes.CENTRIFUGE_ELITE_ITEM_OUTPUT_ENTITY));
+    public static final RegistryObject<Block> CENTRIFUGE_ULTIMATE_ITEM_OUTPUT = CENTRIFUGE_BLOCKS.register("centrifuge_ultimate_item_output", () -> new CentrifugeItemOutput(CENTRIFUGE_PROPERTIES, ModBlockEntityTypes.CENTRIFUGE_ULTIMATE_ITEM_OUTPUT_ENTITY));
+
+    public static final RegistryObject<Block> CENTRIFUGE_BASIC_FLUID_OUTPUT = CENTRIFUGE_BLOCKS.register("centrifuge_basic_fluid_output", () -> new CentrifugeFluidOutput(CENTRIFUGE_PROPERTIES, ModBlockEntityTypes.CENTRIFUGE_BASIC_FLUID_OUTPUT_ENTITY));
+    public static final RegistryObject<Block> CENTRIFUGE_ADVANCED_FLUID_OUTPUT = CENTRIFUGE_BLOCKS.register("centrifuge_advanced_fluid_output", () -> new CentrifugeFluidOutput(CENTRIFUGE_PROPERTIES, ModBlockEntityTypes.CENTRIFUGE_ADVANCED_FLUID_OUTPUT_ENTITY));
+    public static final RegistryObject<Block> CENTRIFUGE_ELITE_FLUID_OUTPUT = CENTRIFUGE_BLOCKS.register("centrifuge_elite_fluid_output", () -> new CentrifugeFluidOutput(CENTRIFUGE_PROPERTIES, ModBlockEntityTypes.CENTRIFUGE_ELITE_FLUID_OUTPUT_ENTITY));
+    public static final RegistryObject<Block> CENTRIFUGE_ULTIMATE_FLUID_OUTPUT = CENTRIFUGE_BLOCKS.register("centrifuge_ultimate_fluid_output", () -> new CentrifugeFluidOutput(CENTRIFUGE_PROPERTIES, ModBlockEntityTypes.CENTRIFUGE_ULTIMATE_FLUID_OUTPUT_ENTITY));
+    //endregion
 }

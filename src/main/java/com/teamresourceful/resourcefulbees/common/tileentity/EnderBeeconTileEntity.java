@@ -1,11 +1,12 @@
 package com.teamresourceful.resourcefulbees.common.tileentity;
 
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
-import com.teamresourceful.resourcefulbees.common.container.EnderBeeconContainer;
+import com.teamresourceful.resourcefulbees.common.inventory.containers.EnderBeeconContainer;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.network.packets.UpdateClientBeeconMessage;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModEffects;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.passive.BeeEntity;
@@ -18,7 +19,6 @@ import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvents;
@@ -53,8 +53,8 @@ public class EnderBeeconTileEntity extends AbstractHoneyTankContainer {
     private List<BeeconEffect> effects;
     private int range = 1;
 
-    public EnderBeeconTileEntity(TileEntityType<?> tileEntityType) {
-        super(tileEntityType);
+    public EnderBeeconTileEntity() {
+        super(ModBlockEntityTypes.ENDER_BEECON_TILE_ENTITY.get());
         setFluidTank(new BeeconFluidTank(16000, honeyFluidPredicate(), this));
         setFluidOptional(LazyOptional.of(this::getFluidTank));
         effects = readEffectsFromNBT(new CompoundNBT());

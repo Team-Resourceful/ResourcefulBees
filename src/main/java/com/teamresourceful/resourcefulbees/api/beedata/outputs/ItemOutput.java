@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Unmodifiable;
 
 @Unmodifiable
-public class ItemOutput extends AbstractOutput{
+public class ItemOutput extends AbstractOutput {
 
     public static final Codec<ItemOutput> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             CodecUtils.ITEM_STACK_CODEC.fieldOf("item").orElse(ItemStack.EMPTY).forGetter(ItemOutput::getItemStack),

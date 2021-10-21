@@ -1,8 +1,9 @@
 package com.teamresourceful.resourcefulbees.common.registry.minecraft;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.common.container.*;
+import com.teamresourceful.resourcefulbees.common.inventory.containers.*;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.containers.*;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.fml.RegistryObject;
@@ -34,4 +35,16 @@ public class ModContainers {
             .create((id, inv, c) -> new HoneyCongealerContainer(id, inv.player.level, c.readBlockPos(), inv)));
     public static final RegistryObject<ContainerType<HoneyTankContainer>> HONEY_TANK_CONTAINER = CONTAINER_TYPES.register("honey_tank", () -> IForgeContainerType
             .create((id, inv, c) -> new HoneyTankContainer(id, inv.player.level, c.readBlockPos(), inv)));
+    // region Centrifuge Containers
+    public static final RegistryObject<ContainerType<CentrifugeTerminalContainer>> CENTRIFUGE_TERMINAL_CONTAINER = CONTAINER_TYPES.register("centrifuge_terminal", () -> IForgeContainerType
+            .create(CentrifugeTerminalContainer::new));
+    public static final RegistryObject<ContainerType<CentrifugeInputContainer>> CENTRIFUGE_INPUT_CONTAINER = CONTAINER_TYPES.register("centrifuge_input", () -> IForgeContainerType
+            .create(CentrifugeInputContainer::new));
+    public static final RegistryObject<ContainerType<CentrifugeItemOutputContainer>> CENTRIFUGE_ITEM_OUTPUT_CONTAINER = CONTAINER_TYPES.register("centrifuge_output_item", () -> IForgeContainerType
+            .create(CentrifugeItemOutputContainer::new));
+    public static final RegistryObject<ContainerType<CentrifugeFluidOutputContainer>> CENTRIFUGE_FLUID_OUTPUT_CONTAINER = CONTAINER_TYPES.register("centrifuge_output_fluid", () -> IForgeContainerType
+            .create(CentrifugeFluidOutputContainer::new));
+    public static final RegistryObject<ContainerType<CentrifugeVoidContainer>> CENTRIFUGE_VOID_CONTAINER = CONTAINER_TYPES.register("centrifuge_void", () -> IForgeContainerType
+            .create(CentrifugeVoidContainer::new));
+    // endregion
 }

@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.common.block;
 
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.tileentity.EnderBeeconTileEntity;
 import com.teamresourceful.resourcefulbees.common.tileentity.HoneyTankTileEntity;
 import com.teamresourceful.resourcefulbees.common.utils.TooltipBuilder;
@@ -99,7 +98,7 @@ public class EnderBeecon extends HoneyTank {
 
     @Override
     public @Nullable TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new EnderBeeconTileEntity(ModBlockEntityTypes.ENDER_BEECON_TILE_ENTITY.get());
+        return new EnderBeeconTileEntity();
     }
 
     @NotNull
