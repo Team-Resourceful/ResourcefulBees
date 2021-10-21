@@ -88,7 +88,15 @@ public class BeeNestFeature extends Feature<NoFeatureConfig> {
             }
             return newPos;
         }
-        return worldIn.getHeightmapPos(Heightmap.Type.WORLD_SURFACE_WG, initPos);
+
+        BlockPos pos = worldIn.getHeightmapPos(Heightmap.Type.WORLD_SURFACE_WG, initPos);
+
+        if ((category == Biome.Category.OCEAN || category == Biome.Category.RIVER)
+                && rand.nextInt(10) != 0
+                && worldIn.getBlockState(pos.below()).getBlock().equals(Blocks.WATER)) {
+            return BlockPos.ZERO;
+        }
+        return pos;
     }
 
     private Block selectNest(boolean headsOrTails, Block blockOne, Block blockTwo){
