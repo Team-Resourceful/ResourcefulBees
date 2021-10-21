@@ -27,10 +27,11 @@ public class PetModelData implements IAnimatable {
     ).apply(instance, PetModelData::new));
 
     static {
+        //noinspection unchecked
         AnimationController.addModelFetcher((IAnimatable object) -> object instanceof PetModelData ? ((PetModelData) object).getModel() : null);
     }
 
-    private final PetBeeModel model = new PetBeeModel();
+    private final PetBeeModel<PetModelData> model = new PetBeeModel<>();
     private final AnimationFactory factory = new AnimationFactory(this);
 
     private final String id;
@@ -49,6 +50,7 @@ public class PetModelData implements IAnimatable {
         return id;
     }
 
+    @SuppressWarnings("rawtypes")
     public PetBeeModel getModel() {
         return model;
     }
@@ -67,7 +69,7 @@ public class PetModelData implements IAnimatable {
 
     @Override
     public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController<>(this, "bee_controller", 0, (event) -> {
+        data.addAnimationController(new AnimationController<>(this, "bee_controller", 0, event -> {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.bee.fly", true).addAnimation("animation.bee.fly.bobbing", true));
             return PlayState.CONTINUE;
         }));

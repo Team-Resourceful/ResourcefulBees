@@ -49,7 +49,8 @@ public class BeeRewardRender extends LayerRenderer<AbstractClientPlayerEntity, P
         RenderType cutoutNoCullRenderType = RenderType.entityCutoutNoCull(data.getTexture());
         IVertexBuilder ivertexbuilder = buffer.getBuffer(cutoutNoCullRenderType);
 
-        PetBeeModel modelProvider = data.getModel();
+        @SuppressWarnings("unchecked")
+        PetBeeModel<PetModelData> modelProvider = data.getModel();
         GeoModel model = modelProvider.getModel(data);
 
         AnimationEvent<PetModelData> event = new AnimationEvent<>(data, 0, 0, Minecraft.getInstance().getFrameTime(), false, Collections.emptyList());
