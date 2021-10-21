@@ -32,6 +32,11 @@ public class NestIngredient extends Ingredient {
         this.tier = tier;
     }
 
+    @Override
+    public @NotNull IIngredientSerializer<? extends Ingredient> getSerializer() {
+        return Serializer.INSTANCE;
+    }
+
     @SuppressWarnings("ConstantConditions")
     public static Collection<ItemStack> getNests(int tier) {
         return NESTS.stream().map(stack ->  {

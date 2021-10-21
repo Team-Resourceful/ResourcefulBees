@@ -66,12 +66,7 @@ public class ToolTip {
             if (bee != null) {
                 List<ITextComponent> tooltip = new LinkedList<>();
                 tooltip.add(bee.getDisplayName());
-                if (bee.getCoreData().getLore().isPresent()) { //TODO Optional#isPresent fix
-                    tooltip.add(new StringTextComponent(bee.getCoreData().getLore().get()).withStyle(bee.getCoreData().getLoreColorStyle()));
-                }
-                if (bee.getCoreData().getCreator().isPresent()) {
-                    tooltip.add(CREATOR_PREFIX.append(bee.getCoreData().getCreator().get()).withStyle(TextFormatting.GOLD));
-                }
+                tooltip.addAll(bee.getCoreData().getLore());
                 if (Minecraft.getInstance().options.advancedItemTooltips) {
                     tooltip.add(new StringTextComponent(bee.getRegistryID().toString()).withStyle(TextFormatting.GRAY));
                 }

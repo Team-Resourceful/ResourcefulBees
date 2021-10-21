@@ -55,7 +55,7 @@ public class BeePollinateGoal extends Goal {
             return false;
         } else if (bee.getRandom().nextFloat() < 0.7F) {
             return false;
-        } else if ((!CommonConfig.MANUAL_MODE.get() || bee.getCoreData().getEntityFlower().isPresent()) && bee.getSavedFlowerPos() == null && (bee.tickCount < 20 || bee.tickCount % 5 == 0)) {
+        } else if ((Boolean.FALSE.equals(CommonConfig.MANUAL_MODE.get()) || bee.getCoreData().getEntityFlower().isPresent()) && bee.getSavedFlowerPos() == null && (bee.tickCount < 20 || bee.tickCount % 5 == 0)) {
             Optional<BlockPos> optional = this.findFlower(5.0D);
             if (optional.isPresent()) {
                 bee.setSavedFlowerPos(optional.get());

@@ -8,7 +8,6 @@ import com.teamresourceful.resourcefulbees.common.compat.jei.JEICompat;
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityIngredient;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
-import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawableStatic;
@@ -20,6 +19,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -39,6 +39,8 @@ public class MutationCategory extends BaseCategory<IMutationRecipe> {
     public static final ResourceLocation OUTPUT_SLOT = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/output_slot.png");
     public static final ResourceLocation GUI_BACK = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/beemutation.png");
     public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "mutation");
+
+    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("##%");
 
     private final IDrawableStatic slot;
     private final IDrawableStatic outputSlot;
@@ -87,7 +89,7 @@ public class MutationCategory extends BaseCategory<IMutationRecipe> {
 
     @Override
     public void setIngredients(@NotNull IMutationRecipe recipe, @NotNull IIngredients ingredients) {
-        if (recipe.isEntityMutation() && recipe.getInputEntity().isPresent() && recipe.getOutputEntity().isPresent()) {
+        if (recipe.getInputEntity().isPresent() && recipe.getOutputEntity().isPresent()) {
             ingredients.setInputs(JEICompat.ENTITY_INGREDIENT, Arrays.asList(
                     new EntityIngredient(recipe.getBeeData().getEntityType(), 45.0f),
                     new EntityIngredient(recipe.getInputEntity().get(), 45.0f)
@@ -111,50 +113,58 @@ public class MutationCategory extends BaseCategory<IMutationRecipe> {
         entityIngredients.init(0, true, 16, 7);
         entityIngredients.set(0, ingredients.getInputs(JEICompat.ENTITY_INGREDIENT).get(0));
 
-        if (recipe.getInputItem().isPresent()) {
+        recipe.getInputItem().ifPresent(item -> {
             itemIngredients.init(0, true, 15, 52);
             itemIngredients.set(0, ingredients.getInputs(VanillaTypes.ITEM).get(0));
-        }
+        });
 
-        if (recipe.getOutputItem().isPresent()) {
+        recipe.getOutputItem().ifPresent(item -> {
             itemIngredients.init(1, false, 89, 47);
             itemIngredients.set(1, ingredients.getOutputs(VanillaTypes.ITEM).get(0));
-        }
+            recipe.getNBT().ifPresent(nbt -> {
+                if (!nbt.isEmpty()) {
+                    itemIngredients.addTooltipCallback((index, isInput, ingredient, tooltip) -> addMutationTooltip(tooltip, nbt, index, 1));
+                }
+            });
+        });
 
-        if (recipe.getInputFluid().isPresent()) {
+        recipe.getInputFluid().ifPresent(fluid -> {
             fluidIngredients.init(0, true, 16, 53);
             fluidIngredients.set(0, ingredients.getInputs(VanillaTypes.FLUID).get(0));
-        }
+        });
 
-        if (recipe.getOutputFluid().isPresent()) {
+        recipe.getOutputFluid().ifPresent(fluid -> {
             fluidIngredients.init(1, false, 90, 48);
             fluidIngredients.set(1, ingredients.getOutputs(VanillaTypes.FLUID).get(0));
-        }
+        });
 
-        if (recipe.getInputEntity().isPresent()) {
+        recipe.getInputEntity().ifPresent(entity -> {
             entityIngredients.init(1, true, 16, 53);
             entityIngredients.set(1, ingredients.getInputs(JEICompat.ENTITY_INGREDIENT).get(1));
-        }
+        });
 
-        if (recipe.getOutputEntity().isPresent()) {
+        recipe.getOutputEntity().ifPresent(entity -> {
             entityIngredients.init(2, false, 90, 48);
             entityIngredients.set(2, ingredients.getOutputs(JEICompat.ENTITY_INGREDIENT).get(0));
             recipe.getNBT().ifPresent(nbt -> {
                 if (!nbt.isEmpty()) {
-                    entityIngredients.addTooltipCallback((index, isInput, ingredient, tooltip) -> {
-                        if (index == 2) {
-                            if (Screen.hasShiftDown()) {
-                                List<String> lore = BeeInfoUtils.getLoreLines(nbt);
-                                lore.forEach(l -> tooltip.add(new StringTextComponent(l).withStyle(TextFormatting.DARK_PURPLE)));
-                            } else {
-                                tooltip.add(new TranslationTextComponent("gui.resourcefulbees.jei.tooltip.show_nbt").withStyle(TextFormatting.DARK_PURPLE));
-                            }
-                        }
-                    });
+                    entityIngredients.addTooltipCallback((index, isInput, ingredient, tooltip) -> addMutationTooltip(tooltip, nbt, index, 2));
                 }
             });
-        }
+        });
+    }
 
+    private static void addMutationTooltip(List<ITextComponent> tooltip, CompoundNBT nbt, int index, int wantedIndex) {
+        if (index == wantedIndex) {
+            if (Screen.hasShiftDown()) {
+                String tag = nbt.getPrettyDisplay(" ", 0).getString();
+                for (String s : tag.split("\n")) {
+                    tooltip.add(new StringTextComponent(s).withStyle(TextFormatting.DARK_PURPLE));
+                }
+            } else {
+                tooltip.add(new TranslationTextComponent("gui.resourcefulbees.jei.tooltip.show_nbt").withStyle(TextFormatting.DARK_PURPLE));
+            }
+        }
     }
 
     @Override
@@ -173,15 +183,14 @@ public class MutationCategory extends BaseCategory<IMutationRecipe> {
         beeHive.draw(stack, 65, 10);
         info.draw(stack, 63, 8);
         FontRenderer fontRenderer = Minecraft.getInstance().font;
-        DecimalFormat decimalFormat = new DecimalFormat("##%");
         if (recipe.chance() < 1) {
-            String chanceString = decimalFormat.format(recipe.chance());
-            int padding2 = fontRenderer.width(chanceString) / 2;
+            String chanceString = DECIMAL_FORMAT.format(recipe.chance());
+            int padding = fontRenderer.width(chanceString) / 2;
             info.draw(stack, 54, 34);
-            fontRenderer.draw(stack, chanceString, 76F - padding2, 35, 0xff808080);
+            fontRenderer.draw(stack, chanceString, 76F - padding, 35, 0xff808080);
         }
         if (recipe.weight() < 1) {
-            String weightString = decimalFormat.format(recipe.weight());
+            String weightString = DECIMAL_FORMAT.format(recipe.weight());
             int padding = fontRenderer.width(weightString) / 2;
             fontRenderer.draw(stack, weightString, 48F - padding, 66, 0xff808080);
         }

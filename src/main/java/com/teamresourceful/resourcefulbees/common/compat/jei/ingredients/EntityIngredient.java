@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.common.compat.jei.ingredients;
 
-import com.teamresourceful.resourcefulbees.api.beedata.CoreData;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
@@ -18,8 +17,6 @@ import java.util.List;
 import java.util.Optional;
 
 public class EntityIngredient {
-
-    private static final TranslationTextComponent CREATOR_PREFIX = new TranslationTextComponent("tooltip.resourcefulbees.bee.creator");
 
     @Nullable
     private final Entity entity;
@@ -64,22 +61,9 @@ public class EntityIngredient {
 
         if (entity != null) {
             if (entity instanceof CustomBeeEntity) {
-                CoreData beeData = ((CustomBeeEntity) entity).getCoreData();
-                if (beeData.getLore().isPresent()) {
-                    String lore = beeData.getLore().get();
-                    String[] loreTooltip = lore.split("\\r?\\n");
-                    for (String s : loreTooltip) {
-                        tooltip.add(new StringTextComponent(s).withStyle(beeData.getLoreColorStyle()));
-                    }
-                }
-                if (beeData.getCreator().isPresent()) {
-                    tooltip.add(CREATOR_PREFIX.copy().append(beeData.getCreator().get()).withStyle(TextFormatting.GRAY));
-                }
+                tooltip.addAll(((CustomBeeEntity) entity).getCoreData().getLore());
                 String desc = I18n.get("tooltip.resourcefulbees.jei.click_bee_info");
-                String[] descTooltip = desc.split("\\r?\\n");
-                for (String s : descTooltip) {
-                    tooltip.add(new StringTextComponent(s).withStyle(TextFormatting.GOLD));
-                }
+                for (String s : desc.split("\\r?\\n")) tooltip.add(new StringTextComponent(s).withStyle(TextFormatting.GOLD));
             }
             if (Minecraft.getInstance().options.advancedItemTooltips && entityType.getRegistryName() != null) {
                 tooltip.add(new StringTextComponent(entityType.getRegistryName().toString()).withStyle(TextFormatting.DARK_GRAY));

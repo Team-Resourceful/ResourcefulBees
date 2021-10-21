@@ -27,7 +27,7 @@
           {
             "output": "minecraft:chest",
             "weight": 1,
-            "nbtData": {
+            "tag": {
               "LootTable": "minecraft:chests/simple_dungeon"
             }
           }

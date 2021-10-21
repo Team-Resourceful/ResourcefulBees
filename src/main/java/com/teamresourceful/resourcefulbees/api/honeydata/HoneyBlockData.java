@@ -45,7 +45,7 @@ public class HoneyBlockData {
         this.jumpFactor = jumpFactor;
         this.speedFactor = speedFactor;
 
-        if (CommonConfig.HONEY_GENERATE_BLOCKS.get() && generate) {
+        if (Boolean.TRUE.equals(CommonConfig.HONEY_GENERATE_BLOCKS.get()) && generate) {
             block = ModBlocks.HONEY_BLOCKS.register(name + "_honey_block", () -> new CustomHoneyBlock(this));
             blockItem = ModItems.HONEY_BLOCK_ITEMS.register(name + "_honey_block", () -> new BlockItem(block.get(), new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES_HONEY)));
         }
