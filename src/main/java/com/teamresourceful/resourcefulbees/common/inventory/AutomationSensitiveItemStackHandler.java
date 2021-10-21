@@ -11,7 +11,7 @@
  *  This files name has been changed.
  *  and additional code has been implemented.
  */
-package com.teamresourceful.resourcefulbees.common.container;
+package com.teamresourceful.resourcefulbees.common.inventory;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;

@@ -1,5 +1,6 @@
-package com.teamresourceful.resourcefulbees.common.container;
+package com.teamresourceful.resourcefulbees.common.inventory.containers;
 
+import com.teamresourceful.resourcefulbees.common.inventory.slots.OutputSlot;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.ContainerAccessor;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModContainers;
 import com.teamresourceful.resourcefulbees.common.tileentity.HoneyCongealerTileEntity;
@@ -43,6 +44,11 @@ public class HoneyCongealerContainer extends ContainerWithStackMove {
     @Override
     public int getInventoryStart() {
         return 1;
+    }
+
+    @Override
+    public int getContainerInputStart() {
+        return 0;
     }
 
     @Override

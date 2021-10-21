@@ -2,8 +2,8 @@ package com.teamresourceful.resourcefulbees.common.tileentity;
 
 import com.teamresourceful.resourcefulbees.common.network.packets.SyncGUIMessage;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
-import com.teamresourceful.resourcefulbees.common.container.AutomationSensitiveItemStackHandler;
-import com.teamresourceful.resourcefulbees.common.container.HoneyCongealerContainer;
+import com.teamresourceful.resourcefulbees.common.inventory.AutomationSensitiveItemStackHandler;
+import com.teamresourceful.resourcefulbees.common.inventory.containers.HoneyCongealerContainer;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;

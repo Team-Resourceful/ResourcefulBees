@@ -1,5 +1,7 @@
-package com.teamresourceful.resourcefulbees.common.container;
+package com.teamresourceful.resourcefulbees.common.inventory.containers;
 
+import com.teamresourceful.resourcefulbees.common.inventory.slots.OutputSlot;
+import com.teamresourceful.resourcefulbees.common.inventory.slots.SlotItemHandlerUnconditioned;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.ContainerAccessor;
 import com.teamresourceful.resourcefulbees.common.network.packets.LockBeeMessage;
 import com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary.ApiaryTileEntity;
@@ -86,6 +88,11 @@ public class ValidatedApiaryContainer extends ContainerWithStackMove {
     @Override
     public int getInventoryStart() {
         return 3;
+    }
+
+    @Override
+    public int getContainerInputStart() {
+        return 0;
     }
 
     public boolean selectBee(int id) {

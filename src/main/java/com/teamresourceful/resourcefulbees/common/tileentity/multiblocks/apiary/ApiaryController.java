@@ -1,8 +1,8 @@
 package com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary;
 
 import com.teamresourceful.resourcefulbees.common.block.multiblocks.apiary.ApiaryBlock;
-import com.teamresourceful.resourcefulbees.common.container.UnvalidatedApiaryContainer;
-import com.teamresourceful.resourcefulbees.common.container.ValidatedApiaryContainer;
+import com.teamresourceful.resourcefulbees.common.inventory.containers.UnvalidatedApiaryContainer;
+import com.teamresourceful.resourcefulbees.common.inventory.containers.ValidatedApiaryContainer;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTab;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BlockAccessor;
@@ -182,7 +182,7 @@ public class ApiaryController extends TileEntity implements ITickableTileEntity,
     }
 
     public void runCreativeBuild(ServerPlayerEntity player) {
-        if (this.level != null) {
+        if (this.level != null && player.isCreative()) {
             buildStructureBlockList();
             AtomicBoolean addedStorage = new AtomicBoolean(false);
             structureBlocks.stream()

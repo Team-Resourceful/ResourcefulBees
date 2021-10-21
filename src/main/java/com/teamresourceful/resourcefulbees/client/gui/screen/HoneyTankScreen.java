@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.client.gui.screen;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.common.container.HoneyTankContainer;
+import com.teamresourceful.resourcefulbees.common.inventory.containers.HoneyTankContainer;
 import com.teamresourceful.resourcefulbees.common.tileentity.HoneyTankTileEntity;
 import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
 import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;

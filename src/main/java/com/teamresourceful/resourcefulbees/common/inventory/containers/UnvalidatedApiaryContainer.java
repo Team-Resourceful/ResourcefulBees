@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.container;
+package com.teamresourceful.resourcefulbees.common.inventory.containers;
 
 import com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary.ApiaryTileEntity;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModContainers;

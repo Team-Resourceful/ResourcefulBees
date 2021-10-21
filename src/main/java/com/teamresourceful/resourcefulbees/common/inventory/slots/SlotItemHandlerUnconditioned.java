@@ -8,8 +8,9 @@
  * © 2015-2017 Ellpeck
  */
 
-package com.teamresourceful.resourcefulbees.common.container;
+package com.teamresourceful.resourcefulbees.common.inventory.slots;
 
+import com.teamresourceful.resourcefulbees.common.inventory.AutomationSensitiveItemStackHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.SlotItemHandler;

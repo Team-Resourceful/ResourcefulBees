@@ -1,5 +1,6 @@
-package com.teamresourceful.resourcefulbees.common.container;
+package com.teamresourceful.resourcefulbees.common.inventory.containers;
 
+import com.teamresourceful.resourcefulbees.common.inventory.slots.SlotItemHandlerUnconditioned;
 import com.teamresourceful.resourcefulbees.common.item.UpgradeItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModContainers;
@@ -167,7 +168,12 @@ public class ApiaryBreederContainer extends ContainerWithStackMove {
 
     @Override
     public int getInventoryStart() {
-        return 4 + getNumberOfBreeders() * 5;
+        return getContainerInputEnd();
+    }
+
+    @Override
+    public int getContainerInputStart() {
+        return 0;
     }
 
     public ApiaryBreederTileEntity getApiaryBreederTileEntity() {

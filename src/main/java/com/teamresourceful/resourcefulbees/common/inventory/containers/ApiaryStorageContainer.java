@@ -1,5 +1,7 @@
-package com.teamresourceful.resourcefulbees.common.container;
+package com.teamresourceful.resourcefulbees.common.inventory.containers;
 
+import com.teamresourceful.resourcefulbees.common.inventory.slots.OutputSlot;
+import com.teamresourceful.resourcefulbees.common.inventory.slots.SlotItemHandlerUnconditioned;
 import com.teamresourceful.resourcefulbees.common.item.UpgradeItem;
 import com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary.ApiaryStorageTileEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
@@ -105,6 +107,11 @@ public class ApiaryStorageContainer extends ContainerWithStackMove {
     @Override
     public int getInventoryStart() {
         return 1 + getNumberOfSlots();
+    }
+
+    @Override
+    public int getContainerInputStart() {
+        return 0;
     }
 
     public PlayerInventory getPlayerInventory() {

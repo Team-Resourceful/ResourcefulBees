@@ -1,5 +1,7 @@
-package com.teamresourceful.resourcefulbees.common.container;
+package com.teamresourceful.resourcefulbees.common.inventory.containers;
 
+import com.teamresourceful.resourcefulbees.common.inventory.slots.OutputSlot;
+import com.teamresourceful.resourcefulbees.common.inventory.slots.SlotItemHandlerUnconditioned;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.ContainerAccessor;
 import com.teamresourceful.resourcefulbees.common.tileentity.AbstractHoneyTankContainer;
 import com.teamresourceful.resourcefulbees.common.tileentity.EnderBeeconTileEntity;
@@ -54,6 +56,11 @@ public class EnderBeeconContainer extends ContainerWithStackMove {
     @Override
     public int getInventoryStart() {
         return 2;
+    }
+
+    @Override
+    public int getContainerInputStart() {
+        return 0;
     }
 
     @Override

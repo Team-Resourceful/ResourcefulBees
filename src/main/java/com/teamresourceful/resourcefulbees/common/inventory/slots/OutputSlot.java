@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.container;
+package com.teamresourceful.resourcefulbees.common.inventory.slots;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;

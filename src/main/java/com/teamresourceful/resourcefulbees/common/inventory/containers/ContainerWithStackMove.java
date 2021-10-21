@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.container;
+package com.teamresourceful.resourcefulbees.common.inventory.containers;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.Container;
@@ -18,6 +18,8 @@ public abstract class ContainerWithStackMove extends Container {
     public abstract int getContainerInputEnd();
 
     public abstract int getInventoryStart();
+
+    public abstract int getContainerInputStart();
 
     @Override
     public @NotNull ItemStack quickMoveStack(@NotNull PlayerEntity player, int index) {

@@ -4,7 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.client.gui.widget.ArrowButton;
-import com.teamresourceful.resourcefulbees.common.container.UnvalidatedApiaryContainer;
+import com.teamresourceful.resourcefulbees.common.inventory.containers.UnvalidatedApiaryContainer;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.network.packets.BuildApiaryMessage;
 import com.teamresourceful.resourcefulbees.common.network.packets.ValidateApiaryMessage;
