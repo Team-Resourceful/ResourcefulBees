@@ -87,72 +87,57 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
     @Override
     public void draw(@NotNull CentrifugeRecipeAdapter recipe, @NotNull MatrixStack matrixStack, double mouseX, double mouseY) {
         super.draw(recipe, matrixStack, mouseX, mouseY);
-
         Minecraft.getInstance().getTextureManager().bind(GUI_BACK);
-        for (int i = 0; i < 3; i++) {
-            if (recipe.items.get(i+1) == null) continue;
-            boolean inBounds = MathUtils.inRangeInclusive((int) mouseX, 61, 70) && MathUtils.inRangeInclusive((int) mouseY, 6 + (18*i), 6 + (18*i) + 9);
-            GuiUtils.drawTexturedModalRect(matrixStack, 61, 6 + (18*i), 134, (inBounds ? 18 : 0), 9,9, 100);
-            inBounds = MathUtils.inRangeInclusive((int) mouseX, 61, 70) && MathUtils.inRangeInclusive((int) mouseY, 15 + (18*i), 15 + (18*i) + 9);
-            GuiUtils.drawTexturedModalRect(matrixStack, 61, 15 + (18*i), 134, 9 + (inBounds ? 18 : 0), 9,9, 100);
-        }
+        for (int i = 0; i < 3; i++) if (recipe.items.get(i+1) != null) drawWeightAndChance(matrixStack, 61, mouseX, mouseY, i);
+        for (int i = 0; i < 3; i++) if (recipe.fluids.get(i) != null) drawWeightAndChance(matrixStack, 97, mouseX, mouseY, i);
+    }
 
-        for (int i = 0; i < 3; i++) {
-            if (recipe.fluids.get(i) == null) continue;
-            boolean inBounds = MathUtils.inRangeInclusive((int) mouseX, 97, 106) && MathUtils.inRangeInclusive((int) mouseY, 6 + (18*i), 6 + (18*i) + 9);
-            GuiUtils.drawTexturedModalRect(matrixStack, 97, 6 + (18*i), 134, (inBounds ? 18 : 0), 9,9, 100);
-            inBounds = MathUtils.inRangeInclusive((int) mouseX, 97, 106) && MathUtils.inRangeInclusive((int) mouseY, 15 + (18*i), 15 + (18*i) + 9);
-            GuiUtils.drawTexturedModalRect(matrixStack, 97, 15 + (18*i), 134, 9 + (inBounds ? 18 : 0), 9,9, 100);
-        }
-
+    private static void drawWeightAndChance(MatrixStack matrixStack, int start, double mouseX, double mouseY, int i){
+        boolean inBounds = MathUtils.inRangeInclusive((int) mouseX, start, start+9) && MathUtils.inRangeInclusive((int) mouseY, 6 + (18*i), 6 + (18*i) + 9);
+        GuiUtils.drawTexturedModalRect(matrixStack, start, 6 + (18*i), 134, (inBounds ? 18 : 0), 9,9, 100);
+        inBounds = MathUtils.inRangeInclusive((int) mouseX, start, start+9) && MathUtils.inRangeInclusive((int) mouseY, 15 + (18*i), 15 + (18*i) + 9);
+        GuiUtils.drawTexturedModalRect(matrixStack, start, 15 + (18*i), 134, 9 + (inBounds ? 18 : 0), 9,9, 100);
     }
 
     @Override
     public @NotNull List<ITextComponent> getTooltipStrings(@NotNull CentrifugeRecipeAdapter recipe, double mouseX, double mouseY) {
         for (int i = 0; i < 3; i++) {
-            Double weight = recipe.getItemWeight(i+1);
-            boolean inBounds = MathUtils.inRangeInclusive((int) mouseX, 61, 70) && MathUtils.inRangeInclusive((int) mouseY, 6 + (18 * i), 6 + (18 * i) + 9);
-            if (weight != null && inBounds) {
-                ItemStack ingredient = recipe.items.get(i+1).getDisplayedIngredient();
-                List<ITextComponent> tooltip = new ArrayList<>();
-                if (ingredient != null) {
-                    tooltip.add(ingredient.getDisplayName());
-                }
-                tooltip.add(new StringTextComponent("Weight: " + DECIMAL_FORMAT.format(weight)));
-                return tooltip;
-            }
-            inBounds = MathUtils.inRangeInclusive((int) mouseX, 61, 70) && MathUtils.inRangeInclusive((int) mouseY, 15 + (18*i), 15 + (18*i) + 9);
-            if (inBounds) {
-                if (recipe.getRecipe().getItemOutputs().size() > i) {
-                    return Collections.singletonList(new StringTextComponent("Pool Chance: " + DECIMAL_FORMAT.format(recipe.getRecipe().getItemOutputs().get(i).getChance())));
-                } else {
-                    return Collections.singletonList(new StringTextComponent("Pool Chance: POOL EMPTY"));
-                }
-            }
-        }
+            Double itemWeight = recipe.getItemWeight(i+1);
+            ItemStack item = recipe.items.get(i+1).getDisplayedIngredient();
+            double itemChance = recipe.getRecipe().getFluidOutputs().get(i).getChance();
+            List<ITextComponent> itemTooltip = drawTooltip(item == null ? null : item.getDisplayName(), itemWeight, itemChance, mouseX, mouseY, i, recipe.getRecipe().getItemOutputs().size(), 61, 70);
+            if (!itemTooltip.isEmpty()) return itemTooltip;
 
-        for (int i = 0; i < 3; i++) {
-            Double weight = recipe.getFluidWeight(i);
-            boolean inBounds = MathUtils.inRangeInclusive((int) mouseX, 97, 106) && MathUtils.inRangeInclusive((int) mouseY, 6 + (18*i), 6 + (18*i) + 9);
-            if (weight != null && inBounds) {
-                FluidStack ingredient = recipe.fluids.get(i).getDisplayedIngredient();
-                List<ITextComponent> tooltip = new ArrayList<>();
-                if (ingredient != null) {
-                    tooltip.add(ingredient.getDisplayName());
-                }
-                tooltip.add(new StringTextComponent("Weight: " + DECIMAL_FORMAT.format(weight)));
-                return tooltip;
-            }
-            inBounds = MathUtils.inRangeInclusive((int) mouseX, 97, 106) && MathUtils.inRangeInclusive((int) mouseY, 15 + (18*i), 15 + (18*i) + 9);
-            if (inBounds) {
-                if (recipe.getRecipe().getFluidOutputs().size() > i)
-                    return Collections.singletonList(new StringTextComponent("Pool Chance: " + DECIMAL_FORMAT.format(recipe.getRecipe().getFluidOutputs().get(i).getChance())));
-                else {
-                    return Collections.singletonList(new StringTextComponent("Pool Chance: POOL EMPTY"));
-                }
-            }
+            Double fluidWeight = recipe.getFluidWeight(i);
+            FluidStack fluid = recipe.fluids.get(i).getDisplayedIngredient();
+            double fluidChance = recipe.getRecipe().getFluidOutputs().get(i).getChance();
+            List<ITextComponent> fluidTooltip = drawTooltip(fluid == null ? null : fluid.getDisplayName(), fluidWeight, fluidChance, mouseX, mouseY, i, recipe.getRecipe().getFluidOutputs().size(), 97, 106);
+            if (!itemTooltip.isEmpty()) return fluidTooltip;
         }
         return super.getTooltipStrings(recipe, mouseX, mouseY);
+    }
+
+    private static List<ITextComponent> drawTooltip(ITextComponent displayname, Double weight, double chance, double mouseX, double mouseY, int i, int outputSize, int min, int max) {
+        boolean inBounds = MathUtils.inRangeInclusive((int) mouseX, min, max) && MathUtils.inRangeInclusive((int) mouseY, 6 + (18*i), 6 + (18*i) + 9);
+        if (inBounds) {
+            List<ITextComponent> tooltip = new ArrayList<>();
+            if (displayname != null) tooltip.add(displayname);
+            if (weight != null) {
+                tooltip.add(new StringTextComponent("Weight: " + DECIMAL_FORMAT.format(weight)));
+            } else {
+                tooltip.add(new StringTextComponent("Weight: SLOT EMPTY"));
+            }
+            return tooltip;
+        }
+        inBounds = MathUtils.inRangeInclusive((int) mouseX, min, max) && MathUtils.inRangeInclusive((int) mouseY, 15 + (18*i), 15 + (18*i) + 9);
+        if (inBounds) {
+            if (outputSize > i)
+                return Collections.singletonList(new StringTextComponent("Pool Chance: " + DECIMAL_FORMAT.format(chance)));
+            else {
+                return Collections.singletonList(new StringTextComponent("Pool Chance: POOL EMPTY"));
+            }
+        }
+        return Collections.emptyList();
     }
 
     protected static class CentrifugeRecipeAdapter {
