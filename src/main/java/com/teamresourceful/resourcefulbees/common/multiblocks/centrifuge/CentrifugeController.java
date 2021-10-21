@@ -7,7 +7,6 @@ import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entitie
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeEnergyStorage;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeTier;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.states.CentrifugeActivity;
-import net.minecraft.block.AirBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
@@ -41,8 +40,9 @@ public class CentrifugeController extends RectangularMultiblockController<Centri
     public CentrifugeController(@NotNull World world) {
         super(world, AbstractCentrifugeEntity.class::isInstance , AbstractCentrifuge.class::isInstance);
         minSize.set(3);
-        maxSize.set(16);
-        interiorValidator = AirBlock.class::isInstance;
+        //maxSize.set(16);
+        maxSize.set(7, 8, 7);
+        interiorValidator = block -> block.defaultBlockState().isAir();
         setAssemblyValidator(centrifugeController -> {
             checkRequiredBlocksExist(terminals, "no_terminal");
             checkRequiredBlocksExist(inputs, "no_input");

@@ -1,12 +1,23 @@
 package com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers;
 
-public enum CentrifugeTier {
+import com.mojang.serialization.Codec;
+import net.minecraft.util.IStringSerializable;
+import net.minecraftforge.common.IExtensibleEnum;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Arrays;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+public enum CentrifugeTier implements IExtensibleEnum, IStringSerializable {
     ERROR("error", 0, 0, 0, 0),
     BASIC("basic", 1, 4000, 50000, 512),
     ADVANCED("advanced", 4, 16000, 500000, 8192),
     ELITE("elite", 8, 64000, 5000000, 65536),
     ULTIMATE("ultimate", 16, 256000, 50000000, 262144);
 
+    public static final Codec<CentrifugeTier> CODEC = IExtensibleEnum.createCodecForExtensibleEnum(CentrifugeTier::values, CentrifugeTier::byName);
+    private static final Map<String, CentrifugeTier> BY_NAME = Arrays.stream(values()).collect(Collectors.toMap(CentrifugeTier::getName, tier -> tier));
     private final String name;
     private final int slots;
     private final int tankCapacity;
@@ -39,5 +50,19 @@ public enum CentrifugeTier {
 
     public int getEnergyReceiveRate() {
         return energyReceiveRate;
+    }
+
+    public static CentrifugeTier byName(String s) {
+        return BY_NAME.get(s);
+    }
+
+    @SuppressWarnings("unused")
+    public static CentrifugeTier create(String name, String id, int slots, int tankCapacity, int energyCapacity, int energyReceiveRate) {
+        throw new IllegalStateException("Enum not extended");
+    }
+
+    @Override
+    public @NotNull String getSerializedName() {
+        return this.name;
     }
 }

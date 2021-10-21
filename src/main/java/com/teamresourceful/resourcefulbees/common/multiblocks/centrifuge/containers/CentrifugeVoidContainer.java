@@ -25,10 +25,10 @@ public class CentrifugeVoidContainer extends CentrifugeContainer<CentrifugeVoidE
 
     protected void setupSlots() {
         int rows = tier.equals(CentrifugeTier.BASIC) ? 1 : tier.getSlots()/4;
-        int columns = tier.equals(CentrifugeTier.BASIC) ? 1 : 4;
-        for (int r = 1; r <= rows; r++) {
+        int columns = tier.equals(CentrifugeTier.BASIC) ? 2 : 8;
+        for (int r = 0; r < rows; r++) {
             for (int c = 0; c < columns; c++) {
-                if (entity != null) this.addSlot(new FilterSlot(entity.getFilterInventory(), -1+c+r*4, 30 + c * 20, -10+r*20));
+                if (entity != null) this.addSlot(new FilterSlot(entity.getFilterInventory(), c + r * 4, 30 + c * 18, 10 + r * 20));
             }
         }
 
@@ -37,12 +37,12 @@ public class CentrifugeVoidContainer extends CentrifugeContainer<CentrifugeVoidE
 
     @Override
     protected int getInvOffsetX() {
-        return 0;
+        return 10;
     }
 
     @Override
     protected int getInvOffsetY() {
-        return 0;
+        return 90;
     }
 
     @Override

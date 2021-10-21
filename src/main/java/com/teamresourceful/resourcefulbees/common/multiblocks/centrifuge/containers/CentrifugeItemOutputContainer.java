@@ -26,7 +26,7 @@ public class CentrifugeItemOutputContainer extends CentrifugeContainer<Centrifug
         int columns = tier.equals(CentrifugeTier.BASIC) ? 1 : 4;
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < columns; c++) {
-                if (entity != null) this.addSlot(new SlotItemHandler(entity.getInventoryHandler(), c+r*4, 30 + c * 20, 10+r*20));
+                if (entity != null) this.addSlot(new SlotItemHandler(entity.getInventoryHandler(), c+r*4, 30 + c * 18, 10 + r * 18));
             }
         }
 
@@ -40,12 +40,12 @@ public class CentrifugeItemOutputContainer extends CentrifugeContainer<Centrifug
     }
 
     @Override
-    protected int getInvOffsetX() {
+    public int getInvOffsetX() {
         return 10;
     }
 
     @Override
-    protected int getInvOffsetY() {
+    public int getInvOffsetY() {
         return 90;
     }
 

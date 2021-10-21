@@ -33,6 +33,10 @@ public abstract class CentrifugeContainer <T extends AbstractTieredCentrifugeEnt
         setupSlots();
     }
 
+    public CentrifugeTier getTier() {
+        return tier;
+    }
+
     protected abstract void setupSlots();
 
     protected abstract int getInvOffsetX();
