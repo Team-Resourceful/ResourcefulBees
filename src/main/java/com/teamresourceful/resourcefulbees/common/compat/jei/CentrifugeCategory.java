@@ -3,8 +3,6 @@ package com.teamresourceful.resourcefulbees.common.compat.jei;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.api.beedata.centrifuge.CentrifugeFluidOutput;
-import com.teamresourceful.resourcefulbees.api.beedata.centrifuge.CentrifugeItemOutput;
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.FluidOutput;
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.ItemOutput;
 import com.teamresourceful.resourcefulbees.common.recipe.CentrifugeRecipe;
@@ -92,8 +90,7 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
 
         Minecraft.getInstance().getTextureManager().bind(GUI_BACK);
         for (int i = 0; i < 3; i++) {
-            IGuiIngredient<ItemStack> ingredinet = recipe.items.get(i+1);
-            if (ingredinet == null) continue;
+            if (recipe.items.get(i+1) == null) continue;
             boolean inBounds = MathUtils.inRangeInclusive((int) mouseX, 61, 70) && MathUtils.inRangeInclusive((int) mouseY, 6 + (18*i), 6 + (18*i) + 9);
             GuiUtils.drawTexturedModalRect(matrixStack, 61, 6 + (18*i), 134, (inBounds ? 18 : 0), 9,9, 100);
             inBounds = MathUtils.inRangeInclusive((int) mouseX, 61, 70) && MathUtils.inRangeInclusive((int) mouseY, 15 + (18*i), 15 + (18*i) + 9);
@@ -101,8 +98,7 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
         }
 
         for (int i = 0; i < 3; i++) {
-            IGuiIngredient<FluidStack> ingredinet = recipe.fluids.get(i);
-            if (ingredinet == null) continue;
+            if (recipe.fluids.get(i) == null) continue;
             boolean inBounds = MathUtils.inRangeInclusive((int) mouseX, 97, 106) && MathUtils.inRangeInclusive((int) mouseY, 6 + (18*i), 6 + (18*i) + 9);
             GuiUtils.drawTexturedModalRect(matrixStack, 97, 6 + (18*i), 134, (inBounds ? 18 : 0), 9,9, 100);
             inBounds = MathUtils.inRangeInclusive((int) mouseX, 97, 106) && MathUtils.inRangeInclusive((int) mouseY, 15 + (18*i), 15 + (18*i) + 9);
@@ -172,7 +168,7 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
         public CentrifugeRecipeAdapter(CentrifugeRecipe recipe) {
             this.recipe = recipe;
 
-            List<CentrifugeItemOutput> itemOutputList = this.recipe.getItemOutputs();
+            List<CentrifugeRecipe.Output<ItemOutput>> itemOutputList = this.recipe.getItemOutputs();
 
             for (int i = 0; i < itemOutputList.size(); i++) {
                 RandomCollection<ItemOutput> pool = itemOutputList.get(i).getPool();
@@ -181,7 +177,7 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
                 itemWeights.put(i+1, weights);
             }
 
-            List<CentrifugeFluidOutput> fluidOutputList = this.recipe.getFluidOutputs();
+            List<CentrifugeRecipe.Output<FluidOutput>> fluidOutputList = this.recipe.getFluidOutputs();
 
             for (int i = 0; i < fluidOutputList.size(); i++) {
                 RandomCollection<FluidOutput> pool = fluidOutputList.get(i).getPool();
