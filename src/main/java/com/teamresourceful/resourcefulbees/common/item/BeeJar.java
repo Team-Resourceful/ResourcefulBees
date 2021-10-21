@@ -41,6 +41,7 @@ public class BeeJar extends Item {
         super(properties);
     }
 
+    @OnlyIn(Dist.CLIENT)
     public static int getColor(ItemStack stack, int tintIndex) {
         CompoundNBT tag = stack.getTag();
         if (tintIndex == 1 && tag != null) {
@@ -193,6 +194,7 @@ public class BeeJar extends Item {
         }
     }
 
+    @OnlyIn(Dist.CLIENT)
     private void renameJar(ItemStack stack, CompoundNBT tag, String name) {
         if (stack.getTag() == null || stack.getTag().contains(NBTConstants.NBT_DISPLAY)) return;
         if (Minecraft.getInstance().level == null) return;

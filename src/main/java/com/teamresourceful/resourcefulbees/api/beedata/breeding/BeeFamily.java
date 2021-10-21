@@ -12,6 +12,8 @@ import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Unmodifiable;
 
@@ -92,14 +94,17 @@ public class BeeFamily {
         return parent2Data.getBreedData().getFeedItemStacks();
     }
 
+    @OnlyIn(Dist.CLIENT)
     public Entity createParent1DisplayEntity(ClientWorld level) {
         return parent1Data.getEntityType().create(level);
     }
 
+    @OnlyIn(Dist.CLIENT)
     public Entity createParent2DisplayEntity(ClientWorld level) {
         return parent2Data.getEntityType().create(level);
     }
 
+    @OnlyIn(Dist.CLIENT)
     public Entity createChildDisplayEntity(ClientWorld level) {
         return childData.getEntityType().create(level);
     }

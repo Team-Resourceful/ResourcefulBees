@@ -166,9 +166,7 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
                 new ResourceLocation(ResourcefulBees.MOD_ID, info.getName() + "_bucket_to_block"),
                 "",
                 new ItemStack(info.getBlockData().getBlockItem().get()),
-                NonNullList.of(Ingredient.EMPTY,
-                        honeyBucketItem
-                )
+                NonNullList.of(Ingredient.EMPTY, honeyBucketItem)
         );
     }
 

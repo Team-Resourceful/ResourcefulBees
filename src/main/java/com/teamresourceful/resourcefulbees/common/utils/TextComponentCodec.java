@@ -33,7 +33,7 @@ public class TextComponentCodec {
             Codec.BOOL.fieldOf("obfuscated").orElse(false).forGetter(Style::isObfuscated),
             Codec.STRING.optionalFieldOf("insertion").forGetter(style -> Optional.ofNullable(style.getInsertion())),
             ResourceLocation.CODEC.fieldOf("font").orElse(Style.DEFAULT_FONT).forGetter(Style::getFont)
-    ).apply(instance, (color, bold, italic, underlined, strikethrough, obfuscated, insertion, font) -> Style.EMPTY.withColor(color).withBold(bold).withItalic(italic).withUnderlined(underlined).setStrikethrough(strikethrough).setObfuscated(obfuscated).withInsertion(insertion.orElse(null)).withFont(font)));
+    ).apply(instance, (color, bold, italic, underlined, strikethrough, obfuscated, insertion, font) -> Style.EMPTY.withColor(color).withBold(bold).withItalic(italic).setUnderlined(underlined).setStrikethrough(strikethrough).setObfuscated(obfuscated).withInsertion(insertion.orElse(null)).withFont(font)));
 
     private static final Codec<StringTextComponent> TEXT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.STRING.fieldOf("text").forGetter(StringTextComponent::getText),
