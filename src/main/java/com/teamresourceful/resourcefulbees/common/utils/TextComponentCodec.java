@@ -5,6 +5,7 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.*;
 
@@ -16,10 +17,14 @@ import java.util.stream.Collectors;
 
 public class TextComponentCodec {
 
+    private TextComponentCodec()  {
+        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+    }
+
     public static final Codec<ITextComponent> CODEC = Codec.PASSTHROUGH.comapFlatMap(TextComponentCodec::decodeComponent,
             component -> new Dynamic<>(JsonOps.INSTANCE));
 
-    private static final Codec<Color> COLOR_CODEC = Codec.STRING.comapFlatMap(input -> {
+    public static final Codec<Color> COLOR_CODEC = Codec.STRING.comapFlatMap(input -> {
         Color color = Color.parseColor(input);
         return color == null ? DataResult.error("Invalid Color") : DataResult.success(color);
     }, Color::toString);
@@ -84,6 +89,7 @@ public class TextComponentCodec {
     ).apply(instance, (nbt, interpret, id, style) -> (NBTTextComponent.Storage)new NBTTextComponent.Storage(nbt, interpret, id).withStyle(style)));
 
     private static DataResult<ITextComponent> decodeComponent(Dynamic<?> dynamic) {
+        Optional<String> stringResult = dynamic.asString().result();
         Optional<StringTextComponent> textResult = TEXT_CODEC.parse(dynamic).result();
         Optional<TranslationTextComponent> translationResult = TRANSLATABLE_CODEC.parse(dynamic).result();
         Optional<ScoreTextComponent> scoreResult = SCORE_CODEC.parse(dynamic).result();
@@ -94,7 +100,7 @@ public class TextComponentCodec {
         Optional<NBTTextComponent.Storage> storageResult = NBT_STORAGE_CODEC.parse(dynamic).result();
         Optional<List<DataResult<ITextComponent>>> listResult = dynamic.asListOpt(TextComponentCodec::decodeComponent).result();
 
-        if (dynamic.asString().result().isPresent()) return DataResult.success(new StringTextComponent(dynamic.asString().result().get()));
+        if (stringResult.isPresent()) return DataResult.success(new StringTextComponent(stringResult.get()));
         else if (textResult.isPresent()) return DataResult.success(textResult.get());
         else if (translationResult.isPresent()) return DataResult.success(translationResult.get());
         else if (scoreResult.isPresent()) return DataResult.success(scoreResult.get());

@@ -71,16 +71,15 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
     @Override
     public void setRecipe(@NotNull IRecipeLayout recipeLayout, @NotNull CentrifugeRecipeAdapter recipe, @NotNull IIngredients ingredients) {
         IGuiIngredientGroup<ItemStack> guiItemStacks = recipeLayout.getIngredientsGroup(VanillaTypes.ITEM);
+        IGuiIngredientGroup<FluidStack> guiFluidStacks = recipeLayout.getIngredientsGroup(VanillaTypes.FLUID);
         guiItemStacks.init(0, true, 9, 24);
         for (int i = 0; i < 3; i++) {
-            guiItemStacks.init(i+1, false, 71, 6+(i*18));
-        }
-        guiItemStacks.set(ingredients);
-        IGuiIngredientGroup<FluidStack> guiFluidStacks = recipeLayout.getIngredientsGroup(VanillaTypes.FLUID);
-        for (int i = 0; i < 3; i++) {
-            guiFluidStacks.init(i, false, 107, 6+(i*18));
+            guiItemStacks.init(i + 1, false, 71, 6 + (i * 18));
+            guiFluidStacks.init(i, false, 107, 6 + (i * 18));
         }
         guiFluidStacks.set(ingredients);
+        guiItemStacks.set(ingredients);
+
         recipe.setIngredients(recipeLayout.getItemStacks().getGuiIngredients(), recipeLayout.getFluidStacks().getGuiIngredients());
     }
 
@@ -88,8 +87,10 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
     public void draw(@NotNull CentrifugeRecipeAdapter recipe, @NotNull MatrixStack matrixStack, double mouseX, double mouseY) {
         super.draw(recipe, matrixStack, mouseX, mouseY);
         Minecraft.getInstance().getTextureManager().bind(GUI_BACK);
-        for (int i = 0; i < 3; i++) if (recipe.items.get(i+1) != null) drawWeightAndChance(matrixStack, 61, mouseX, mouseY, i);
-        for (int i = 0; i < 3; i++) if (recipe.fluids.get(i) != null) drawWeightAndChance(matrixStack, 97, mouseX, mouseY, i);
+        for (int i = 0; i < 3; i++) {
+            if (recipe.items.get(i+1) != null) drawWeightAndChance(matrixStack, 61, mouseX, mouseY, i);
+            if (recipe.fluids.get(i) != null) drawWeightAndChance(matrixStack, 97, mouseX, mouseY, i);
+        }
     }
 
     private static void drawWeightAndChance(MatrixStack matrixStack, int start, double mouseX, double mouseY, int i){
