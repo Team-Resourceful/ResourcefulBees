@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.api.beedata;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.Decoder;
@@ -7,17 +8,15 @@ import com.mojang.serialization.Encoder;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
-import com.teamresourceful.resourcefulbees.common.utils.color.Color;
+import com.teamresourceful.resourcefulbees.common.utils.TextComponentCodec;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.util.text.Style;
+import net.minecraft.util.text.ITextComponent;
 import org.jetbrains.annotations.Unmodifiable;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Unmodifiable
 public class CoreData {
@@ -44,28 +43,22 @@ public class CoreData {
                 CodecUtils.BLOCK_SET_CODEC.fieldOf("flower").orElse(Sets.newHashSet(Blocks.POPPY)).forGetter(CoreData::getBlockFlowers),
                 Registry.ENTITY_TYPE.optionalFieldOf("entityFlower").forGetter(CoreData::getEntityFlower),
                 Codec.intRange(600, Integer.MAX_VALUE).fieldOf("maxTimeInHive").orElse(2400).forGetter(CoreData::getMaxTimeInHive),
-                Codec.STRING.optionalFieldOf("lore").forGetter(CoreData::getLore),
-                Codec.STRING.optionalFieldOf("creator").forGetter(CoreData::getCreator),
-                Color.CODEC.fieldOf("loreColor").orElse(Color.DEFAULT).forGetter(CoreData::getLoreColor)
+                TextComponentCodec.CODEC.listOf().fieldOf("lore").orElse(Lists.newArrayList()).forGetter(CoreData::getLore)
         ).apply(instance, CoreData::new));
     }
 
     protected Set<Block> blockFlowers;
     protected Optional<EntityType<?>> entityFlower;
-    protected Optional<String> lore;
-    protected Optional<String> creator;
+    protected List<ITextComponent> lore;
     protected int maxTimeInHive;
     protected String name;
-    protected Color loreColor;
 
-    private CoreData(String name, Set<Block> blockFlowers, Optional<EntityType<?>> entityFlower, int maxTimeInHive, Optional<String> lore, Optional<String> creator, Color loreColor){
+    private CoreData(String name, Set<Block> blockFlowers, Optional<EntityType<?>> entityFlower, int maxTimeInHive, List<ITextComponent> lore){
         this.name = name;
         this.blockFlowers = blockFlowers;
         this.entityFlower = entityFlower;
         this.maxTimeInHive = maxTimeInHive;
         this.lore = lore;
-        this.creator = creator;
-        this.loreColor = loreColor;
     }
 
     private CoreData(String name) {
@@ -73,9 +66,7 @@ public class CoreData {
         this.blockFlowers = new HashSet<>();
         this.entityFlower = Optional.empty();
         this.maxTimeInHive = BeeConstants.MAX_TIME_IN_HIVE;
-        this.lore = Optional.empty();
-        this.creator = Optional.empty();
-        this.loreColor = Color.DEFAULT;
+        this.lore = new ArrayList<>();
     }
 
     /**
@@ -136,39 +127,12 @@ public class CoreData {
      * Gets any information or lore data optionally provided to the bee.
      * This data is useful for pack devs to add extra notes about a bee.
      *
-     * @return Returns an {@link Optional<String>} containing extra bee information.
+     * @return Returns an {@link Optional<List<ITextComponent>>} containing extra bee information.
      */
-    public Optional<String> getLore() {
+    public List<ITextComponent> getLore() {
         return lore;
     }
 
-    /**
-     * Gets the name of the person who originally created this bee if one was provided
-     *
-     * @return Returns an {@link Optional<String>} containing the name of the bee creator.
-     */
-    public Optional<String> getCreator() {
-        return creator;
-    }
-
-    /**
-     * Gets the color used when displaying the lore text
-     *
-     * @return Returns a {@link Color} object that defaults to white.
-     */
-    public Color getLoreColor() {
-        return loreColor;
-    }
-
-    /**
-     * Creates a {@link Style} component using the lore {@link Color} that can be
-     * applied to implementations of {@link net.minecraft.util.text.TextComponent}s.
-     *
-     * @return Returns a {@link Style} component using the lore {@link Color}.
-     */
-    public Style getLoreColorStyle() {
-        return Style.EMPTY.withColor(loreColor.getTextColor());
-    }
 
     public CoreData toImmutable() {
         return this;
@@ -176,8 +140,8 @@ public class CoreData {
 
     public static class Mutable extends CoreData {
 
-        public Mutable(String name, Set<Block> blockFlowers, Optional<EntityType<?>> entityFlower, int maxTimeInHive, Optional<String> lore, Optional<String> creator, Color loreColor) {
-            super(name, blockFlowers, entityFlower, maxTimeInHive, lore, creator, loreColor);
+        public Mutable(String name, Set<Block> blockFlowers, Optional<EntityType<?>> entityFlower, int maxTimeInHive, List<ITextComponent> lore) {
+            super(name, blockFlowers, entityFlower, maxTimeInHive, lore);
         }
 
         public Mutable(String name) {
@@ -194,13 +158,8 @@ public class CoreData {
             return this;
         }
 
-        public Mutable setLore(Optional<String> lore) {
+        public Mutable setLore(List<ITextComponent> lore) {
             this.lore = lore;
-            return this;
-        }
-
-        public Mutable setCreator(Optional<String> creator) {
-            this.creator = creator;
             return this;
         }
 
@@ -214,14 +173,9 @@ public class CoreData {
             return this;
         }
 
-        public Mutable setLoreColor(Color loreColor) {
-            this.loreColor = loreColor;
-            return this;
-        }
-
         @Override
         public CoreData toImmutable() {
-            return new CoreData(this.name, this.blockFlowers, this.entityFlower, this.maxTimeInHive, this.lore, this.creator, this.loreColor);
+            return new CoreData(this.name, this.blockFlowers, this.entityFlower, this.maxTimeInHive, this.lore);
         }
     }
 }

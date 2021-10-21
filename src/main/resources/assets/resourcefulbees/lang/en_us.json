@@ -30,7 +30,7 @@
 
 	"tooltip.resourcefulbees.jei.click_bee_info": "Click or Right-Click for more info!",
 	"tooltip.resourcefulbees.jei.coal": "Coal Bee",
-	"tooltip.resourcefulbees.bee.creator": "- ",
+	"tooltip.resourcefulbees.bee.creator": "§7- %s",
 
 	"info.resourcefulbees.jei.coal": "Coal Bee",
 
