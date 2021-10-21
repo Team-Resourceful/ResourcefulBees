@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.client.event;
 
+import com.teamresourceful.resourcefulbees.client.color.ColorHandler;
 import com.teamresourceful.resourcefulbees.client.gui.screen.*;
 import com.teamresourceful.resourcefulbees.client.models.ModelHandler;
 import com.teamresourceful.resourcefulbees.client.render.entity.CustomBeeRenderer;
@@ -10,13 +11,12 @@ import com.teamresourceful.resourcefulbees.client.render.tileentity.RenderEnderB
 import com.teamresourceful.resourcefulbees.client.render.tileentity.RenderHoneyCongealer;
 import com.teamresourceful.resourcefulbees.client.render.tileentity.RenderHoneyGenerator;
 import com.teamresourceful.resourcefulbees.client.render.tileentity.RenderHoneyTank;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModContainers;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModEntities;
-import com.teamresourceful.resourcefulbees.client.color.ColorHandler;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.utils.PreviewHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
@@ -35,6 +35,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 public class ClientEventHandlers {
 
+    //TODO some methods here get called from distRunWhenOn's and could probably be merged into the FMLClientSetupEvent instead
     private ClientEventHandlers() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
@@ -45,7 +46,7 @@ public class ClientEventHandlers {
         MinecraftForge.EVENT_BUS.addListener(PreviewHandler::onWorldRenderLast);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ModelHandler::registerModels);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ModelHandler::onModelBake);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientEventHandlers::doClientStuff);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientEventHandlers::clientSetup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ColorHandler::onItemColors);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ColorHandler::onBlockColors);
         MinecraftForge.EVENT_BUS.addListener(FluidRender::honeyOverlay);
@@ -81,20 +82,27 @@ public class ClientEventHandlers {
         manager.getSkinMap().get("slim").addLayer(new BeeRewardRender(manager.getSkinMap().get("default")));
     }
 
-    private static void doClientStuff(final FMLClientSetupEvent event) {
+    private static void clientSetup(final FMLClientSetupEvent event) {
         ModEntities.getModBees().forEach((s, entityType) ->
                 RenderingRegistry.registerEntityRenderingHandler(entityType,
                         manager -> new CustomBeeRenderer<>(manager, BeeRegistry.getRegistry().getBeeData(s).getRenderData())));
 
-        ScreenManager.register(ModContainers.UNVALIDATED_APIARY_CONTAINER.get(), UnvalidatedApiaryScreen::new);
-        ScreenManager.register(ModContainers.VALIDATED_APIARY_CONTAINER.get(), ValidatedApiaryScreen::new);
-        ScreenManager.register(ModContainers.APIARY_STORAGE_CONTAINER.get(), ApiaryStorageScreen::new);
-        ScreenManager.register(ModContainers.APIARY_BREEDER_CONTAINER.get(), ApiaryBreederScreen::new);
-        ScreenManager.register(ModContainers.HONEY_GENERATOR_CONTAINER.get(), HoneyGeneratorScreen::new);
-        ScreenManager.register(ModContainers.ENDER_BEECON_CONTAINER.get(), EnderBeeconScreen::new);
-        ScreenManager.register(ModContainers.HONEY_CONGEALER_CONTAINER.get(), HoneyCongealerScreen::new);
-        ScreenManager.register(ModContainers.HONEY_TANK_CONTAINER.get(), HoneyTankScreen::new);
+        registerScreens();
+        registerRenderTypes();
 
+        ItemModelPropertiesHandler.registerProperties();
+        registerTERs();
+        event.enqueueWork(FluidRender::setHoneyRenderType);
+    }
+
+    private static void registerTERs() {
+        ClientRegistry.bindTileEntityRenderer(ModBlockEntityTypes.HONEY_TANK_TILE_ENTITY.get(), RenderHoneyTank::new);
+        ClientRegistry.bindTileEntityRenderer(ModBlockEntityTypes.HONEY_GENERATOR_ENTITY.get(), RenderHoneyGenerator::new);
+        ClientRegistry.bindTileEntityRenderer(ModBlockEntityTypes.HONEY_CONGEALER_TILE_ENTITY.get(), RenderHoneyCongealer::new);
+        ClientRegistry.bindTileEntityRenderer(ModBlockEntityTypes.ENDER_BEECON_TILE_ENTITY.get(), RenderEnderBeecon::new);
+    }
+
+    private static void registerRenderTypes() {
         RenderTypeLookup.setRenderLayer(ModBlocks.GOLD_FLOWER.get(), RenderType.cutout());
         RenderTypeLookup.setRenderLayer(ModBlocks.PREVIEW_BLOCK.get(), RenderType.cutout());
         RenderTypeLookup.setRenderLayer(ModBlocks.ERRORED_PREVIEW_BLOCK.get(), RenderType.cutout());
@@ -110,12 +118,21 @@ public class ClientEventHandlers {
                 .filter(RegistryObject::isPresent)
                 .map(RegistryObject::get)
                 .forEach(nest -> RenderTypeLookup.setRenderLayer(nest, RenderType.cutout()));
+    }
 
-        ItemModelPropertiesHandler.registerProperties();
-        ClientRegistry.bindTileEntityRenderer(ModBlockEntityTypes.HONEY_TANK_TILE_ENTITY.get(), RenderHoneyTank::new);
-        ClientRegistry.bindTileEntityRenderer(ModBlockEntityTypes.HONEY_GENERATOR_ENTITY.get(), RenderHoneyGenerator::new);
-        ClientRegistry.bindTileEntityRenderer(ModBlockEntityTypes.HONEY_CONGEALER_TILE_ENTITY.get(), RenderHoneyCongealer::new);
-        ClientRegistry.bindTileEntityRenderer(ModBlockEntityTypes.ENDER_BEECON_TILE_ENTITY.get(), RenderEnderBeecon::new);
-        event.enqueueWork(FluidRender::setHoneyRenderType);
+    private static void registerScreens() {
+        ScreenManager.register(ModContainers.UNVALIDATED_APIARY_CONTAINER.get(), UnvalidatedApiaryScreen::new);
+        ScreenManager.register(ModContainers.VALIDATED_APIARY_CONTAINER.get(), ValidatedApiaryScreen::new);
+        ScreenManager.register(ModContainers.APIARY_STORAGE_CONTAINER.get(), ApiaryStorageScreen::new);
+        ScreenManager.register(ModContainers.APIARY_BREEDER_CONTAINER.get(), ApiaryBreederScreen::new);
+        ScreenManager.register(ModContainers.HONEY_GENERATOR_CONTAINER.get(), HoneyGeneratorScreen::new);
+        ScreenManager.register(ModContainers.ENDER_BEECON_CONTAINER.get(), EnderBeeconScreen::new);
+        ScreenManager.register(ModContainers.HONEY_CONGEALER_CONTAINER.get(), HoneyCongealerScreen::new);
+        ScreenManager.register(ModContainers.HONEY_TANK_CONTAINER.get(), HoneyTankScreen::new);
+
+        ScreenManager.register(ModContainers.CENTRIFUGE_INPUT_CONTAINER.get(), CentrifugeInputScreen::new);
+        ScreenManager.register(ModContainers.CENTRIFUGE_ITEM_OUTPUT_CONTAINER.get(), CentrifugeItemOutputScreen::new);
+        ScreenManager.register(ModContainers.CENTRIFUGE_VOID_CONTAINER.get(), CentrifugeVoidScreen::new);
     }
 }
+
