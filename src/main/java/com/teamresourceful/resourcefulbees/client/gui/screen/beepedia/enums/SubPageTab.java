@@ -1,7 +1,11 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.enums;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
 import java.util.Locale;
 
+@OnlyIn(Dist.CLIENT)
 public enum SubPageTab {
     NONE,
     INFO,

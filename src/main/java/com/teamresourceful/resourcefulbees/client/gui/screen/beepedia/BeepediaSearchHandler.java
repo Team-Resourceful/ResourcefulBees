@@ -6,10 +6,13 @@ import com.teamresourceful.resourcefulbees.client.gui.widget.ToggleImageButton;
 import com.teamresourceful.resourcefulbees.client.gui.widget.TooltipTextFieldWidget;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.LinkedList;
 import java.util.List;
 
+@OnlyIn(Dist.CLIENT)
 public class BeepediaSearchHandler {
 
     // stored data

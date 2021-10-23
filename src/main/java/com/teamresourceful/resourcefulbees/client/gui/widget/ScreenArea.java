@@ -2,7 +2,10 @@ package com.teamresourceful.resourcefulbees.client.gui.widget;
 
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import javafx.geometry.BoundingBox;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 public class ScreenArea {
 
     public final int xPos;

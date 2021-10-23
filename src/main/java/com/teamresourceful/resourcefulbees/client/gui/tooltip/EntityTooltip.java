@@ -6,14 +6,18 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Supplier;
 
+@OnlyIn(Dist.CLIENT)
 public class EntityTooltip extends AbstractTooltip{
 
     Supplier<Entity> entitySupplier;
+    boolean showNBT = false;
 
     public EntityTooltip(int x, int y, int hoverWidth, int hoverHeight, Entity entity) {
         super(x, y, hoverWidth, hoverHeight);
@@ -28,21 +32,32 @@ public class EntityTooltip extends AbstractTooltip{
     @Override
     public List<ITextComponent> getTooltip() {
         Entity entity = this.entitySupplier.get();
-        if (entity instanceof CustomBeeEntity) return BeeTooltip.getTooltip(((CustomBeeEntity) entity).getBeeData(),true);
-        List<ITextComponent> tooltips = new LinkedList<>();
-        tooltips.add(entity.getDisplayName());
-        CompoundNBT nbt = entity.saveWithoutId(new CompoundNBT());
-        tooltips.addAll(getNbtTooltips(nbt));
+        List<ITextComponent> tooltips;
+        if (entity instanceof CustomBeeEntity) {
+             tooltips = BeeTooltip.getTooltip(((CustomBeeEntity) entity).getBeeData(),true);
+        }else {
+            tooltips = new LinkedList<>();
+            tooltips.add(entity.getDisplayName());
+        }
+        if (showNBT) {
+            CompoundNBT nbt = entity.saveWithoutId(new CompoundNBT());
+            tooltips.addAll(getNbtTooltips(nbt));
+        }
         return tooltips;
     }
 
     @Override
     public List<ITextComponent> getAdvancedTooltip() {
         Entity entity = entitySupplier.get();
-        if (entity instanceof CustomBeeEntity) return BeeTooltip.getAdvancedTooltip(((CustomBeeEntity) entity).getBeeData(),true);
         List<ITextComponent> tooltips = getTooltip();
         if (entity.getType().getRegistryName() == null) return getTooltip();
         tooltips.add(new StringTextComponent(entity.getType().getRegistryName().toString()).withStyle(TextFormatting.DARK_GRAY));
         return tooltips;
+    }
+
+
+    public EntityTooltip setDoNBT(boolean showNBT) {
+        this.showNBT = showNBT;
+        return this;
     }
 }

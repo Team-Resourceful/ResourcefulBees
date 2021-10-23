@@ -12,11 +12,14 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.DecimalFormat;
 
 
+@OnlyIn(Dist.CLIENT)
 public class HoneyCongealerScreen extends ContainerScreen<HoneyCongealerContainer> {
 
     private final HoneyCongealerTileEntity tileEntity;

@@ -8,12 +8,15 @@ import com.teamresourceful.resourcefulbees.common.utils.RandomCollection;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@OnlyIn(Dist.CLIENT)
 public class EntityMutationPage extends MutationsPage {
 
     final Entity input;

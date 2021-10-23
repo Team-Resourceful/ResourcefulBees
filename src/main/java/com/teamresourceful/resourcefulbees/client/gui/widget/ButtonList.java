@@ -1,12 +1,15 @@
 package com.teamresourceful.resourcefulbees.client.gui.widget;
 
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
 @Deprecated
+@OnlyIn(Dist.CLIENT)
 public class ButtonList {
     public final int xPos;
     public final int yPos;

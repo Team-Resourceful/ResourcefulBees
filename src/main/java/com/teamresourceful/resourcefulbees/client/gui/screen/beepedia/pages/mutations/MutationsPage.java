@@ -11,10 +11,13 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.text.DecimalFormat;
 
 
+@OnlyIn(Dist.CLIENT)
 public abstract class MutationsPage {
     final int mutationCount;
     protected final BeepediaScreen beepedia;

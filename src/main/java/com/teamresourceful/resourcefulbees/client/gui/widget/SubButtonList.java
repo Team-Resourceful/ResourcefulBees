@@ -1,10 +1,14 @@
 package com.teamresourceful.resourcefulbees.client.gui.widget;
 
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
 import java.util.SortedMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Deprecated
+@OnlyIn(Dist.CLIENT)
 public class SubButtonList extends ButtonList {
     final SortedMap<String, BeepediaListButton> subList;
 

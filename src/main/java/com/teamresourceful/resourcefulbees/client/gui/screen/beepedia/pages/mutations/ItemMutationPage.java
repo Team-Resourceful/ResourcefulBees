@@ -10,11 +10,14 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.tags.Tag;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
 
 
+@OnlyIn(Dist.CLIENT)
 public class ItemMutationPage extends MutationsPage {
 
     final List<Block> inputs;

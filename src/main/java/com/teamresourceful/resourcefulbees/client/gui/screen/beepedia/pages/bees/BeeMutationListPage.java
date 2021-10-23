@@ -7,11 +7,14 @@ import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.muta
 import com.teamresourceful.resourcefulbees.client.gui.widget.ScreenArea;
 
 import com.teamresourceful.resourcefulbees.common.lib.enums.MutationType;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@OnlyIn(Dist.CLIENT)
 public class BeeMutationListPage extends BeeDataPage {
 
     final List<Pair<MutationType, List<MutationsPage>>> mutations = new ArrayList<>();

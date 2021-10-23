@@ -5,7 +5,10 @@ import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaPa
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.teamresourceful.resourcefulbees.client.gui.widget.ScreenArea;
 import com.teamresourceful.resourcefulbees.client.gui.widget.SubButtonList;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 public class BeeTraitListPage extends BeeDataPage {
 
     private SubButtonList list = null;

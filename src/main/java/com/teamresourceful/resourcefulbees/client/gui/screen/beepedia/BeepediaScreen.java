@@ -26,6 +26,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+@OnlyIn(Dist.CLIENT)
 public class BeepediaScreen extends Screen {
 
     public final boolean isCreative;

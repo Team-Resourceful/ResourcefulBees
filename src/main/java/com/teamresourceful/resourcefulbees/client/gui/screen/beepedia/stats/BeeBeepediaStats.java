@@ -4,11 +4,14 @@ import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.client.gui.widget.BeepediaListButton;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@OnlyIn(Dist.CLIENT)
 public class BeeBeepediaStats extends BeepediaStats {
 
     private final CustomBeeData beeData;

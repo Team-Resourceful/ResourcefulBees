@@ -3,7 +3,10 @@ package com.teamresourceful.resourcefulbees.client.gui.widget;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 public class ScrollPane extends Pane {
 
     private final int startHeight;

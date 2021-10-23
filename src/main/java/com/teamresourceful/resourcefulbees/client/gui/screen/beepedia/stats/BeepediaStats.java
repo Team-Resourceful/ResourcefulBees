@@ -1,9 +1,13 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.stats;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicReference;
 
+@OnlyIn(Dist.CLIENT)
 public abstract class BeepediaStats {
     abstract void initSearchTerms();
     abstract boolean isValidSearch(String search);

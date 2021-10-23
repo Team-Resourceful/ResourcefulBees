@@ -31,6 +31,7 @@ import java.text.DecimalFormat;
 import java.util.LinkedList;
 import java.util.List;
 
+@OnlyIn(Dist.CLIENT)
 public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
 
     private final EnderBeeconTileEntity tileEntity;

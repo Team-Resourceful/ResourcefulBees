@@ -2,6 +2,8 @@ package com.teamresourceful.resourcefulbees.client.gui.tooltip;
 
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,6 +12,7 @@ import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+@OnlyIn(Dist.CLIENT)
 public class Tooltip extends AbstractTooltip {
 
     private Supplier<List<ITextComponent>> textList = null;

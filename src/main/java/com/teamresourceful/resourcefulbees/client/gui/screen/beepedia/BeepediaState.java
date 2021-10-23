@@ -5,10 +5,13 @@ import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.enums.Beep
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.enums.PageTypes;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.enums.SubPageTab;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.enums.SubPageTypes;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Stack;
 
+@OnlyIn(Dist.CLIENT)
 public class BeepediaState {
     /***
      *

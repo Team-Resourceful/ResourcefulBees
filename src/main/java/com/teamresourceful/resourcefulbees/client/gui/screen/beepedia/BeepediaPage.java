@@ -3,9 +3,12 @@ package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.client.gui.widget.Pane;
 import com.teamresourceful.resourcefulbees.client.gui.widget.ScreenArea;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
+@OnlyIn(Dist.CLIENT)
 public abstract class BeepediaPage extends Pane {
 
 

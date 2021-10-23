@@ -11,7 +11,10 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 public class BeeCombatPage extends BeeDataPage {
 
     public BeeCombatPage(ScreenArea screenArea) {

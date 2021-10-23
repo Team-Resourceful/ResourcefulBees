@@ -15,9 +15,12 @@ import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.custom.TraitRegistry;
 import com.teamresourceful.resourcefulbees.network.packets.BeepediaEntityMessage;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.*;
 
+@OnlyIn(Dist.CLIENT)
 public class BeepediaHandler {
 
     private static BeepediaPage selectedPage;

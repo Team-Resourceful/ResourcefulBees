@@ -2,7 +2,10 @@ package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 public class BeepediaImages {
 
     public static final ResourceLocation arrowImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/arrows.png");

@@ -4,11 +4,14 @@ import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Supplier;
 
+@OnlyIn(Dist.CLIENT)
 public class BeeTooltip extends AbstractTooltip {
 
     Supplier<CustomBeeData> beeDataSupplier;

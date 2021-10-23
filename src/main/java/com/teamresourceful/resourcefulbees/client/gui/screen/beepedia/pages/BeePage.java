@@ -7,10 +7,13 @@ import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.enums.SubP
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.bees.*;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.stats.BeeBeepediaStats;
 import com.teamresourceful.resourcefulbees.client.gui.widget.ScreenArea;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@OnlyIn(Dist.CLIENT)
 public class BeePage extends BeepediaPage {
 
     public static BeeInfoPage info;

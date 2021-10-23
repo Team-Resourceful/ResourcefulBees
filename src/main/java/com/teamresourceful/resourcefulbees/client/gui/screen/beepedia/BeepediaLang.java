@@ -2,7 +2,10 @@ package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia;
 
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 public class BeepediaLang {
     public static final ITextComponent INTERFACE_NAME = new TranslationTextComponent("gui.resourcefulbees.beepedia");
     public static final TranslationTextComponent TAB_BEES = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.bees");
