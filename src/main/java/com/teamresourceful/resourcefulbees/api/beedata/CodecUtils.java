@@ -19,6 +19,7 @@ import net.minecraft.tags.ITag;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.registry.Registry;
 import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.common.crafting.NBTIngredient;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.*;
@@ -50,7 +51,7 @@ public class CodecUtils {
     ).apply(instance, CodecUtils::createItemStack)); //can't use this method in 1.17 due to constructor being removed!!!
 
     //Codec for converting an ItemStack to an Ingredient
-    public static final Codec<Ingredient> INGREDIENT_CODEC = ITEM_STACK_CODEC.comapFlatMap(CodecUtils::convertToIngredient, CodecUtils::ingredientToString);
+    public static final Codec<Ingredient> INGREDIENT_CODEC = ITEM_STACK_CODEC.comapFlatMap(CodecUtils::convertToIngredient, CodecUtils::ingredientToItemStack);
 
     //Codec for getting a FluidStack
     public static final Codec<FluidStack> FLUID_STACK_CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -95,10 +96,10 @@ public class CodecUtils {
     }
 
     private static DataResult<Ingredient> convertToIngredient(ItemStack stack) {
-        return DataResult.success(Ingredient.of(stack));
+        return DataResult.success(new NBTIngredient(stack){});
     }
 
-    private static ItemStack ingredientToString(Ingredient ingredient) {
+    private static ItemStack ingredientToItemStack(Ingredient ingredient) {
         return ingredient.getItems()[0];
     }
 

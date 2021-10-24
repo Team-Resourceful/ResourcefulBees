@@ -35,6 +35,7 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
     public static final IRecipeType<CentrifugeRecipe> CENTRIFUGE_RECIPE_TYPE = IRecipeType.register(ResourcefulBees.MOD_ID + ":centrifuge");
 
     private final ResourceLocation id;
+    private final int inputAmount;
     private final Ingredient ingredient;
     private final List<Output<ItemOutput>> itemOutputs;
     private final List<Output<FluidOutput>> fluidOutputs;
@@ -42,9 +43,6 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
     private final int energyPerTick;
     private final boolean conditioned;
 
-    //TODO for simplification and quick lookup when handling recipes, add an inputAmount field to this class and include it in the codec below
-    // See CentrifugeInputEntity#canProcess for use-case
-    //TODO consider overriding ingredient#test method by making a centrifuge ingredient class to add nbt checking
     public static Codec<CentrifugeRecipe> codec(ResourceLocation id) {
         return RecordCodecBuilder.create(instance -> instance.group(
                 MapCodec.of(Encoder.empty(), Decoder.unit(() -> id)).forGetter(CentrifugeRecipe::getId),
@@ -60,6 +58,7 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
     public CentrifugeRecipe(ResourceLocation id, Ingredient ingredient, List<Output<ItemOutput>> itemOutputs, List<Output<FluidOutput>> fluidOutputs, int time, int energyPerTick, boolean conditioned) {
         this.id = id;
         this.ingredient = ingredient;
+        this.inputAmount = this.ingredient.getItems()[0].getCount();
         this.itemOutputs = itemOutputs;
         this.fluidOutputs = fluidOutputs;
         this.time = time;
@@ -81,7 +80,11 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
     }
 
     public boolean matchesConditions() {
-        return conditioned;
+        return this.conditioned;
+    }
+
+    public int getInputAmount() {
+        return this.inputAmount;
     }
 
     @Override

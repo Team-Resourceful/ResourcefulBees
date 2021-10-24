@@ -83,7 +83,6 @@ public class CustomBeeData {
         this.traitData = traitData;
         this.rawData = BeeRegistry.getRegistry().getRawBeeData(coreData.getName());
         this.registryID = new ResourceLocation(ResourcefulBees.MOD_ID + ":" + coreData.getName() + "_bee");
-        this.entityType = BeeInfoUtils.getEntityType(registryID);
         this.displayName = new TranslationTextComponent("entity.resourcefulbees." + coreData.getName() + "_bee");
     }
 
@@ -217,6 +216,9 @@ public class CustomBeeData {
     }
 
     public @NotNull EntityType<?> getEntityType() {
+        if (entityType == null) {
+            this.entityType = BeeInfoUtils.getEntityType(registryID);
+        }
         return entityType == null ? EntityType.BEE : entityType;
     }
 
