@@ -28,6 +28,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.potion.Effect;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ITag;
@@ -70,6 +71,10 @@ public class BeeInfoUtils {
      */
     public static @Nullable ResourceLocation getResource(String resource) {
         return ResourceLocation.tryParse(resource);
+    }
+
+    public static Effect getEffect(String effectName) {
+        return ForgeRegistries.POTIONS.getValue(ResourceLocation.tryParse(effectName));
     }
 
     public static Item getItem(String itemName) {

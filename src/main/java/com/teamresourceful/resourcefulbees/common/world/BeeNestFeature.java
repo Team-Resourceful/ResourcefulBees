@@ -160,9 +160,7 @@ public class BeeNestFeature extends Feature<NoFeatureConfig> {
 
     @Override
     public boolean place(@NotNull ISeedReader worldIn, @NotNull ChunkGenerator generator, @NotNull Random rand, @NotNull BlockPos pos, @NotNull NoFeatureConfig config) {
-        if(!CommonConfig.GENERATE_BEE_NESTS.get()) {
-            return false;
-        }
+        if(Boolean.FALSE.equals(CommonConfig.GENERATE_BEE_NESTS.get())) return false;
 
         Biome biome = worldIn.getBiome(pos);
         Optional<RegistryKey<Biome>> biomeKey = worldIn.getBiomeName(pos);
@@ -171,9 +169,7 @@ public class BeeNestFeature extends Feature<NoFeatureConfig> {
         boolean headsOrTails = rand.nextBoolean();
         BlockPos newPos = getYPos(worldIn, rand, category, pos);
 
-        if (newPos.getY() == 0) {
-            return false;
-        }
+        if (newPos.getY() == 0) return false;
 
         Direction direction;
 

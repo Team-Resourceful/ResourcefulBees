@@ -5,6 +5,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.Tessellator;
@@ -14,26 +15,16 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.inventory.container.PlayerContainer;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
 import org.lwjgl.opengl.GL11;
 
 public class RenderUtils {
 
     private RenderUtils() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
-    }
-
-    public static TextureAtlasSprite getSprite(ResourceLocation spriteLocation) {
-        return Minecraft.getInstance().getModelManager().getAtlas(PlayerContainer.BLOCK_ATLAS).getSprite(spriteLocation);
-    }
-
-    public static TextureAtlasSprite getStillFluidTexture(FluidStack fluidStack) {
-        return getSprite(fluidStack.getFluid().getAttributes().getStillTexture(fluidStack));
     }
 
     public static void resetColor() {
@@ -94,26 +85,6 @@ public class RenderUtils {
         RenderSystem.disableBlend();
     }
 
-    public static void renderFluid(MatrixStack matrix, FluidTank fluidTank, int tankNumber, int xPos, int yPos, int width, int height, int zOffset) {
-        FluidStack stack = fluidTank.getFluidInTank(tankNumber);
-        TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(PlayerContainer.BLOCK_ATLAS).apply(stack.getFluid().getAttributes().getStillTexture());
-        int color = stack.getFluid().getAttributes().getColor();
-        float red = RenderCuboid.getRed(color);
-        float green = RenderCuboid.getGreen(color);
-        float blue = RenderCuboid.getBlue(color);
-        float alpha = RenderCuboid.getAlpha(color);
-        int effectiveHeight = (int) (((float) stack.getAmount() / (float) fluidTank.getTankCapacity(tankNumber)) * height);
-        //noinspection deprecation
-        RenderSystem.color4f(red, green, blue, alpha);
-        RenderUtils.drawTiledSprite(matrix, xPos, yPos, height, width, effectiveHeight, sprite, 16, 16, zOffset);
-        resetColor();
-        renderFluid(matrix, stack, xPos, yPos, width, height, zOffset);
-    }
-
-    public static void renderFluid(MatrixStack matrix, FluidTank fluidTank, int xPos, int yPos, int width, int height, int zOffset) {
-        renderFluid(matrix, fluidTank, 0, xPos, yPos, width, height, zOffset);
-    }
-
     public static void renderFluid(MatrixStack matrix, FluidStack fluidStack, int xPos, int yPos, int width, int height, int zOffset) {
         TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(PlayerContainer.BLOCK_ATLAS).apply(fluidStack.getFluid().getAttributes().getStillTexture());
         int color = fluidStack.getFluid().getAttributes().getColor();
@@ -155,5 +126,19 @@ public class RenderUtils {
             renderTypeBuffer.endBatch();
         }
         matrixStack.popPose();
+    }
+
+    public static void drawFluid(MatrixStack matrix, int height, int width, FluidStack fluidStack, int x, int y, int blitOffset) {
+        Minecraft mc = Minecraft.getInstance();
+        mc.getTextureManager().bind(PlayerContainer.BLOCK_ATLAS);
+        TextureAtlasSprite sprite = mc.getTextureAtlas(PlayerContainer.BLOCK_ATLAS).apply(fluidStack.getFluid().getAttributes().getStillTexture());
+        int remainder = height % 16;
+        int splits = (height - remainder) / 16;
+        if (remainder != 0) splits++;
+        int fluidColor = fluidStack.getFluid().getAttributes().getColor();
+
+        RenderSystem.color4f(((fluidColor >> 16) & 0xFF)/ 255.0F, ((fluidColor >> 8) & 0xFF)/ 255.0F, (fluidColor & 0xFF)/ 255.0F,  ((fluidColor >> 24) & 0xFF)/ 255.0F);
+        for (int i = 0; i < splits; i++)
+            AbstractGui.blit(matrix,x, y + (i * 16), blitOffset, width, i+1 == splits ? remainder : 16, sprite);
     }
 }

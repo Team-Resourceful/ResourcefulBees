@@ -1,7 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.compat.jei;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.api.beedata.breeding.BeeFamily;
 import com.teamresourceful.resourcefulbees.client.config.ClientConfig;
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityIngredient;
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityIngredientHelper;
@@ -21,7 +20,6 @@ import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.ingredients.subtypes.IIngredientSubtypeInterpreter;
 import mezz.jei.api.registration.*;
 import net.minecraft.client.Minecraft;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.nbt.CompoundNBT;
@@ -29,7 +27,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.RegistryObject;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
 import org.jetbrains.annotations.NotNull;
@@ -97,21 +94,20 @@ public class JEICompat implements IModPlugin {
         registration.registerSubtypeInterpreter(ModItems.BEEPEDIA.get(), (ingredient, context) -> ingredient.hasTag() && ingredient.getTag() != null && ingredient.getTag().contains(Beepedia.CREATIVE_TAG) ? "creative.beepedia" : "");
 
         if (Boolean.TRUE.equals(ClientConfig.SHOW_TIERS_IN_JEI.get())) {
-            for (RegistryObject<Item> nest : ModItems.NESTS_ITEMS.getEntries()) {
+            ModItems.NESTS_ITEMS.getEntries().forEach(nest ->
                 registration.registerSubtypeInterpreter(nest.get(), (stack, context) -> {
                     if (!stack.hasTag() || stack.getTag() == null) return IIngredientSubtypeInterpreter.NONE;
-                    if (!stack.getTag().contains(NBTConstants.NBT_BLOCK_ENTITY_TAG)) return IIngredientSubtypeInterpreter.NONE;
                     CompoundNBT blockTag = stack.getTag().getCompound(NBTConstants.NBT_BLOCK_ENTITY_TAG);
                     if (!blockTag.contains(NBTConstants.NBT_TIER)) return IIngredientSubtypeInterpreter.NONE;
                     return "tier." + blockTag.getInt(NBTConstants.NBT_TIER) + "." + nest.getId().getPath();
-                });
-            }
+                })
+            );
         }
     }
 
     public void registerInfoDesc(IRecipeRegistration registration) {
         for (EntityIngredient ingredient : registration.getIngredientManager().getAllIngredients(ENTITY_INGREDIENT)) {
-            if (ingredient.getEntity() != null && ingredient.getEntity() instanceof CustomBeeEntity) {
+            if (ingredient.getEntity() instanceof CustomBeeEntity) {
                 CustomBeeEntity customBee = ((CustomBeeEntity) ingredient.getEntity());
 
                 StringBuilder stats = new StringBuilder();
@@ -131,10 +127,9 @@ public class JEICompat implements IModPlugin {
                 stats.append(aqua).append(" Is Breedable: ").append(purple).append(StringUtils.capitalize(String.valueOf(customBee.getBreedData().hasParents()))).append("\n");
                 if (customBee.getBreedData().hasParents()) {
                     stats.append(aqua).append(" Parents: ").append(purple);
-                    for (BeeFamily family : customBee.getBreedData().getFamilies()) {
-                        stats.append(StringUtils.capitalize(family.getParent1())).append(" Bee, ")
-                                .append(StringUtils.capitalize(family.getParent2())).append(" Bee\n");
-                    }
+
+                    customBee.getBreedData().getFamilies().forEach(family -> stats.append(StringUtils.capitalize(family.getParent1())).append(" Bee, ")
+                            .append(StringUtils.capitalize(family.getParent2())).append(" Bee\n"));
                 }
 
                 if (customBee.getTraitData().hasTraits()) {

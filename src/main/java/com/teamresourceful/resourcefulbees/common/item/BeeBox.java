@@ -99,13 +99,9 @@ public class BeeBox extends Item {
         if (isTemp) return ActionResultType.FAIL;
         BeeEntity target = (BeeEntity) targetIn;
 
-        CompoundNBT tag = stack.getTag() == null
-                ? new CompoundNBT()
-                : stack.getTag();
+        CompoundNBT tag = stack.getTag() == null ? new CompoundNBT() : stack.getTag();
 
-        ListNBT bees = tag.contains(NBTConstants.NBT_BEES)
-                ? tag.getList(NBTConstants.NBT_BEES, 10)
-                : new ListNBT();
+        ListNBT bees = tag.contains(NBTConstants.NBT_BEES) ? tag.getList(NBTConstants.NBT_BEES, 10) : new ListNBT();
 
         if (bees.size() == BeeConstants.MAX_BEES_BEE_BOX) return ActionResultType.FAIL;
         CompoundNBT entityData = new CompoundNBT();

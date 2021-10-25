@@ -6,7 +6,6 @@ import com.teamresourceful.resourcefulbees.api.beedata.mutation.EntityMutation;
 import com.teamresourceful.resourcefulbees.api.beedata.mutation.ItemMutation;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
-import com.teamresourceful.resourcefulbees.common.item.BeeSpawnEggItem;
 import com.teamresourceful.resourcefulbees.common.item.Beepedia;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
@@ -15,6 +14,7 @@ import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.SpawnEggItem;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.util.text.ITextComponent;
@@ -99,7 +99,7 @@ public class BeepediaUtils {
         List<ItemMutation> mutations = new LinkedList<>();
         BeeRegistry.getRegistry().getBees().forEach((s, beeData1) ->   //THIS MAY BE BROKE AND NEED FIXING!
                 beeData1.getMutationData().getItemMutations().forEach((block, randomCollection) ->  randomCollection.forEach(itemOutput -> {
-                    if (itemOutput.getItem() == BeeSpawnEggItem.byId(beeData.getEntityType())) {
+                    if (itemOutput.getItem() == SpawnEggItem.byId(beeData.getEntityType())) {
                         mutations.add(new ItemMutation(BeeInfoUtils.getEntityType(beeData1.getRegistryID()), block, randomCollection, beeData1.getMutationData().getMutationCount()));
                     }
                 }))

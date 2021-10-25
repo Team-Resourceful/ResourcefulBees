@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.client.color;
 import com.teamresourceful.resourcefulbees.common.block.CustomHoneyBlock;
 import com.teamresourceful.resourcefulbees.common.block.HoneycombBlock;
 import com.teamresourceful.resourcefulbees.common.item.*;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import net.minecraft.block.Block;
@@ -23,6 +24,7 @@ import static com.teamresourceful.resourcefulbees.ResourcefulBees.LOGGER;
 public final class ColorHandler {
 
     private ColorHandler() {
+        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
 
     public static void onItemColors(ColorHandlerEvent.Item event) {

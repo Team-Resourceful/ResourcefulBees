@@ -52,9 +52,8 @@ public class HoneyGeneratorScreen extends ContainerScreen<HoneyGeneratorContaine
             this.renderBackground(matrix);
             super.render(matrix, mouseX, mouseY, partialTicks);
             this.renderTooltip(matrix, mouseX, mouseY);
-            DecimalFormat decimalFormat = new DecimalFormat("##0.0");
-            renderFluidTooltip(matrix, mouseX, mouseY, decimalFormat);
-            renderEnergyTooltip(matrix, mouseX, mouseY, decimalFormat);
+            renderFluidTooltip(matrix, mouseX, mouseY, ModConstants.DECIMAL_FORMAT);
+            renderEnergyTooltip(matrix, mouseX, mouseY, ModConstants.DECIMAL_FORMAT);
         }
     }
 

@@ -1,7 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.item;
 
 import com.teamresourceful.resourcefulbees.api.honeydata.HoneyBottleData;
-import com.teamresourceful.resourcefulbees.api.honeydata.HoneyData;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import net.minecraft.item.Food;
 import net.minecraft.item.HoneyBottleItem;

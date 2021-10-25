@@ -95,9 +95,7 @@ public class HoneyGenerator extends AbstractTank {
     @OnlyIn(Dist.CLIENT)
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable IBlockReader worldIn, @NotNull List<ITextComponent> tooltip, @NotNull ITooltipFlag flagIn) {
-        tooltip.addAll(new TooltipBuilder()
-                .addTranslatableTip("block.resourcefulbees.generator.tooltip.info", TextFormatting.GOLD)
-                .build());
+        tooltip.addAll(new TooltipBuilder().addTranslatableTip("block.resourcefulbees.generator.tooltip.info", TextFormatting.GOLD).build());
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
     }
 }

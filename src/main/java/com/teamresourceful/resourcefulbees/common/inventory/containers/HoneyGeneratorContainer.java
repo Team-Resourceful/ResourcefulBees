@@ -51,11 +51,11 @@ public class HoneyGeneratorContainer extends ContainerWithStackMove {
 
     public int getEnergy() { return getHoneyGeneratorTileEntity().getCapability(CapabilityEnergy.ENERGY).map(IEnergyStorage::getEnergyStored).orElse(0); }
     
-    public int getFluidAmount() { return getHoneyGeneratorTileEntity().getFluidTank().getFluidAmount(); }
+    public int getFluidAmount() { return getHoneyGeneratorTileEntity().getTank().getFluidAmount(); }
     
     public int getMaxEnergy() { return getHoneyGeneratorTileEntity().getEnergyStorage().getMaxEnergyStored(); }
 
-    public int getMaxFluid() { return getHoneyGeneratorTileEntity().getFluidTank().getCapacity(); }
+    public int getMaxFluid() { return getHoneyGeneratorTileEntity().getTank().getCapacity(); }
 
     public int getTime() { return getHoneyGeneratorTileEntity().getFluidFilled(); }
 
@@ -84,13 +84,9 @@ public class HoneyGeneratorContainer extends ContainerWithStackMove {
     @Override
     public void broadcastChanges() {
         super.broadcastChanges();
-        if (getHoneyGeneratorTileEntity() == null) {
-            return;
-        }
+        if (getHoneyGeneratorTileEntity() == null) return;
 
-        for (IContainerListener listener : ((ContainerAccessor) this).getListeners()) {
-            getHoneyGeneratorTileEntity().sendGUINetworkPacket(listener);
-        }
+        for (IContainerListener listener : ((ContainerAccessor) this).getListeners()) getHoneyGeneratorTileEntity().sendGUINetworkPacket(listener);
     }
 
     public HoneyGeneratorTileEntity getHoneyGeneratorTileEntity() {
