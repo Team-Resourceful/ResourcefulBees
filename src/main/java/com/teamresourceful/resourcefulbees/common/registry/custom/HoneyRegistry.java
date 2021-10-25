@@ -8,8 +8,8 @@ import java.util.*;
 
 public class HoneyRegistry implements IHoneyRegistry {
 
-    private final Map<String, JsonObject> rawHoneyData = new LinkedHashMap<>(); //MOVE THIS TO HONEY REGISTRY - DOES NOT BELONG HERE
-    private final Map<String, HoneyData> honeyInfo = new LinkedHashMap<>(); //MOVE THIS TO HONEY REGISTRY - DOES NOT BELONG HERE
+    private final Map<String, JsonObject> rawHoneyData = new LinkedHashMap<>();
+    private final Map<String, HoneyData> honeyInfo = new LinkedHashMap<>();
 
     private static final HoneyRegistry INSTANCE = new HoneyRegistry();
 

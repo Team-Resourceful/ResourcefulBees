@@ -32,7 +32,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-@SuppressWarnings({"unused", "deprecation"})
+@SuppressWarnings("deprecation")
 public class CustomHoneyBlock extends BreakableBlock {
 
     protected static final VoxelShape SHAPE = Block.box(1.0D, 0.0D, 1.0D, 15.0D, 15.0D, 15.0D);
@@ -54,10 +54,12 @@ public class CustomHoneyBlock extends BreakableBlock {
         return color;
     }
 
+    @SuppressWarnings("unused")
     public static int getBlockColor(BlockState state, @Nullable IBlockReader world, @Nullable BlockPos pos, int tintIndex) {
         return ((CustomHoneyBlock) state.getBlock()).getHoneyColor().getValue();
     }
 
+    @SuppressWarnings("unused")
     public static int getItemColor(ItemStack stack, int tintIndex) {
         BlockItem blockItem = (BlockItem) stack.getItem();
         if (!(blockItem.getBlock() instanceof CustomHoneyBlock)) return -1;

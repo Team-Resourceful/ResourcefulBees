@@ -110,22 +110,28 @@ public class TextComponentCodec {
         else if (entityResult.isPresent()) return DataResult.success(entityResult.get());
         else if (storageResult.isPresent()) return DataResult.success(storageResult.get());
         else if (listResult.isPresent()) {
-            IFormattableTextComponent startComponent = null;
-            for (DataResult<ITextComponent> iTextComponentDataResult : listResult.get()) {
-                Optional<ITextComponent> result = iTextComponentDataResult.result();
-                if (result.isPresent()) {
-                    if (startComponent == null) {
-                        startComponent = result.get().copy();
-                    } else {
-                        startComponent.append(result.get());
-                    }
-                }
-            }
-            if (startComponent != null) {
-                return DataResult.success(startComponent);
-            }
+            DataResult<ITextComponent> listComponentResult = getListComponent(listResult.get());
+            if (listComponentResult != null) return listComponentResult;
         }
         return DataResult.error("Component Invalid");
+    }
+
+    private static DataResult<ITextComponent> getListComponent(List<DataResult<ITextComponent>> listResult) {
+        IFormattableTextComponent startComponent = null;
+        for (DataResult<ITextComponent> iTextComponentDataResult : listResult) {
+            Optional<ITextComponent> result = iTextComponentDataResult.result();
+            if (result.isPresent()) {
+                if (startComponent == null) {
+                    startComponent = result.get().copy();
+                } else {
+                    startComponent.append(result.get());
+                }
+            }
+        }
+        if (startComponent != null) {
+            return DataResult.success(startComponent);
+        }
+        return null;
     }
 
 }

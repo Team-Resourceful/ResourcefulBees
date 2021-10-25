@@ -7,37 +7,17 @@ import net.minecraft.nbt.CompoundNBT;
 
 import java.util.Optional;
 
-public class EntityMutationRecipe implements IMutationRecipe {
+public class EntityMutationRecipe extends BaseMutationRecipe {
 
-    private final CustomBeeData beeData;
-    private final double chance;
-    private final double weight;
     private final EntityType<?> input;
     private final EntityType<?> output;
     private final CompoundNBT nbt;
 
     public EntityMutationRecipe(CustomBeeData beeData, double chance, double weight, EntityType<?> input, EntityOutput output) {
-        this.beeData = beeData;
-        this.chance = chance;
-        this.weight = weight;
+        super(beeData, chance, weight);
         this.input = input;
         this.output = output.getEntityType();
         this.nbt = output.getCompoundNBT().orElse(null);
-    }
-
-    @Override
-    public CustomBeeData getBeeData() {
-        return beeData;
-    }
-
-    @Override
-    public double chance() {
-        return chance;
-    }
-
-    @Override
-    public double weight() {
-        return weight;
     }
 
     @Override
