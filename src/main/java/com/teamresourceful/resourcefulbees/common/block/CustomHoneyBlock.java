@@ -106,14 +106,14 @@ public class CustomHoneyBlock extends BreakableBlock {
     private boolean isSliding(BlockPos pos, Entity entity) {
         if (entity.isOnGround()) {
             return false;
-        } else if (entity.getY() > (double) pos.getY() + 0.9375D - 1.0E-7D) {
+        } else if (entity.getY() > pos.getY() + 0.9375D - 1.0E-7D) {
             return false;
         } else if (entity.getDeltaMovement().y >= -0.08D) {
             return false;
         } else {
-            double d0 = Math.abs((double) pos.getX() + 0.5D - entity.getX());
-            double d1 = Math.abs((double) pos.getZ() + 0.5D - entity.getZ());
-            double d2 = 0.4375D + (double) (entity.getBbWidth() / 2.0F);
+            double d0 = Math.abs(pos.getX() + 0.5D - entity.getX());
+            double d1 = Math.abs(pos.getZ() + 0.5D - entity.getZ());
+            double d2 = 0.4375D + (entity.getBbWidth() / 2.0F);
             return d0 + 1.0E-7D > d2 || d1 + 1.0E-7D > d2;
         }
     }

@@ -34,9 +34,7 @@ public class HoneycombBlock extends Block {
     }
 
     public static int getItemColor(ItemStack stack, int tintIndex) {
-        BlockItem blockItem = (BlockItem) stack.getItem();
-        HoneycombBlock honeycombBlock = (HoneycombBlock) blockItem.getBlock();
-        return honeycombBlock.getHoneycombColor();
+        return ((HoneycombBlock) ((BlockItem) stack.getItem()).getBlock()).getHoneycombColor();
     }
 
     @NotNull

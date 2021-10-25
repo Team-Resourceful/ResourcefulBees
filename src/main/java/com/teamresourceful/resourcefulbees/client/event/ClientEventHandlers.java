@@ -10,7 +10,6 @@ import com.teamresourceful.resourcefulbees.client.render.pet.BeeRewardRender;
 import com.teamresourceful.resourcefulbees.client.render.tileentity.RenderEnderBeecon;
 import com.teamresourceful.resourcefulbees.client.render.tileentity.RenderHoneyCongealer;
 import com.teamresourceful.resourcefulbees.client.render.tileentity.RenderHoneyGenerator;
-import com.teamresourceful.resourcefulbees.client.render.tileentity.RenderHoneyTank;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
@@ -23,6 +22,7 @@ import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.PlayerRenderer;
 import net.minecraftforge.client.event.RecipesUpdatedEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TagsUpdatedEvent;
@@ -77,9 +77,9 @@ public class ClientEventHandlers {
 
     public static void registerPatreonRender() {
         EntityRendererManager manager =  Minecraft.getInstance().getEntityRenderDispatcher();
-
-        manager.getSkinMap().get("default").addLayer(new BeeRewardRender(manager.getSkinMap().get("default")));
-        manager.getSkinMap().get("slim").addLayer(new BeeRewardRender(manager.getSkinMap().get("default")));
+        PlayerRenderer defaultRenderer = manager.getSkinMap().get("default");
+        defaultRenderer.addLayer(new BeeRewardRender(defaultRenderer));
+        manager.getSkinMap().get("slim").addLayer(new BeeRewardRender(defaultRenderer));
     }
 
     private static void clientSetup(final FMLClientSetupEvent event) {
@@ -96,7 +96,6 @@ public class ClientEventHandlers {
     }
 
     private static void registerTERs() {
-        ClientRegistry.bindTileEntityRenderer(ModBlockEntityTypes.HONEY_TANK_TILE_ENTITY.get(), RenderHoneyTank::new);
         ClientRegistry.bindTileEntityRenderer(ModBlockEntityTypes.HONEY_GENERATOR_ENTITY.get(), RenderHoneyGenerator::new);
         ClientRegistry.bindTileEntityRenderer(ModBlockEntityTypes.HONEY_CONGEALER_TILE_ENTITY.get(), RenderHoneyCongealer::new);
         ClientRegistry.bindTileEntityRenderer(ModBlockEntityTypes.ENDER_BEECON_TILE_ENTITY.get(), RenderEnderBeecon::new);
@@ -108,9 +107,6 @@ public class ClientEventHandlers {
         RenderTypeLookup.setRenderLayer(ModBlocks.ERRORED_PREVIEW_BLOCK.get(), RenderType.cutout());
         RenderTypeLookup.setRenderLayer(ModBlocks.ENDER_BEECON.get(), RenderType.translucent());
         RenderTypeLookup.setRenderLayer(ModBlocks.HONEY_CONGEALER.get(), RenderType.translucent());
-        RenderTypeLookup.setRenderLayer(ModBlocks.PURPUR_HONEY_TANK.get(), RenderType.translucent());
-        RenderTypeLookup.setRenderLayer(ModBlocks.NETHER_HONEY_TANK.get(), RenderType.translucent());
-        RenderTypeLookup.setRenderLayer(ModBlocks.WOODEN_HONEY_TANK.get(), RenderType.translucent());
         RenderTypeLookup.setRenderLayer(ModBlocks.HONEY_GENERATOR.get(), RenderType.translucent());
 
         // bee nests need cutout for overlay
@@ -128,7 +124,7 @@ public class ClientEventHandlers {
         ScreenManager.register(ModContainers.HONEY_GENERATOR_CONTAINER.get(), HoneyGeneratorScreen::new);
         ScreenManager.register(ModContainers.ENDER_BEECON_CONTAINER.get(), EnderBeeconScreen::new);
         ScreenManager.register(ModContainers.HONEY_CONGEALER_CONTAINER.get(), HoneyCongealerScreen::new);
-        ScreenManager.register(ModContainers.HONEY_TANK_CONTAINER.get(), HoneyTankScreen::new);
+        ScreenManager.register(ModContainers.HONEY_POT_CONTAINER.get(), HoneyPotScreen::new);
 
         ScreenManager.register(ModContainers.CENTRIFUGE_INPUT_CONTAINER.get(), CentrifugeInputScreen::new);
         ScreenManager.register(ModContainers.CENTRIFUGE_ITEM_OUTPUT_CONTAINER.get(), CentrifugeItemOutputScreen::new);

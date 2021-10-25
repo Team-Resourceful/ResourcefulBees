@@ -28,14 +28,12 @@ public class CustomHoneyFluidBlock extends FlowingFluidBlock {
     }
 
     public static int getBlockColor(BlockState state, @Nullable IWorldReader world, @Nullable BlockPos pos, int tintIndex) {
-        CustomHoneyFluidBlock honeycombBlock = ((CustomHoneyFluidBlock) state.getBlock());
-        return honeycombBlock.getHoneyColor();
+        return ((CustomHoneyFluidBlock) state.getBlock()).getHoneyColor();
     }
 
     @Override
     public void animateTick(@NotNull BlockState stateIn, @NotNull World world, @NotNull BlockPos pos, @NotNull Random rand) {
-        if (data.getColor().isRainbow())
-            world.sendBlockUpdated(pos, stateIn, stateIn, 2);
+        if (data.getColor().isRainbow()) world.sendBlockUpdated(pos, stateIn, stateIn, 2);
         super.animateTick(stateIn, world, pos, rand);
     }
 }

@@ -22,7 +22,7 @@ public class HoneyCongealerContainer extends ContainerWithStackMove {
         honeyCongealerTileEntity = (HoneyCongealerTileEntity) world.getBlockEntity(pos);
 
         if (getHoneyCongealerTileEntity() != null) {
-            this.addSlot(new OutputSlot(getHoneyCongealerTileEntity().getTileStackHandler(), HoneyCongealerTileEntity.BLOCK_OUTPUT, 93, 54));
+            this.addSlot(new OutputSlot(getHoneyCongealerTileEntity().getInventory(), HoneyCongealerTileEntity.BLOCK_OUTPUT, 93, 54));
 
             for (int i = 0; i < 3; ++i) {
                 for (int j = 0; j < 9; ++j) {
@@ -54,13 +54,9 @@ public class HoneyCongealerContainer extends ContainerWithStackMove {
     @Override
     public void broadcastChanges() {
         super.broadcastChanges();
-        if (getHoneyCongealerTileEntity() == null) {
-            return;
-        }
+        if (getHoneyCongealerTileEntity() == null) return;
 
-        for (IContainerListener listener : ((ContainerAccessor) this).getListeners()) {
-            getHoneyCongealerTileEntity().sendGUINetworkPacket(listener);
-        }
+        for (IContainerListener listener : ((ContainerAccessor) this).getListeners()) getHoneyCongealerTileEntity().sendGUINetworkPacket(listener);
     }
 
     @Override

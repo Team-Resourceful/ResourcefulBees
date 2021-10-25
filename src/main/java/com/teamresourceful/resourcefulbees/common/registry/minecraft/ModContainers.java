@@ -33,8 +33,9 @@ public class ModContainers {
             .create((id, inv, c) -> new EnderBeeconContainer(id, inv.player.level, c.readBlockPos(), inv)));
     public static final RegistryObject<ContainerType<HoneyCongealerContainer>> HONEY_CONGEALER_CONTAINER = CONTAINER_TYPES.register("honey_congealer", () -> IForgeContainerType
             .create((id, inv, c) -> new HoneyCongealerContainer(id, inv.player.level, c.readBlockPos(), inv)));
-    public static final RegistryObject<ContainerType<HoneyTankContainer>> HONEY_TANK_CONTAINER = CONTAINER_TYPES.register("honey_tank", () -> IForgeContainerType
-            .create((id, inv, c) -> new HoneyTankContainer(id, inv.player.level, c.readBlockPos(), inv)));
+    public static final RegistryObject<ContainerType<HoneyPotContainer>> HONEY_POT_CONTAINER = CONTAINER_TYPES.register("honey_pot", () -> IForgeContainerType
+            .create((id, inv, c) -> new HoneyPotContainer(id, inv.player.level, c.readBlockPos(), inv)));
+
     // region Centrifuge Containers
     public static final RegistryObject<ContainerType<CentrifugeTerminalContainer>> CENTRIFUGE_TERMINAL_CONTAINER = CONTAINER_TYPES.register("centrifuge_terminal", () -> IForgeContainerType
             .create(CentrifugeTerminalContainer::new));

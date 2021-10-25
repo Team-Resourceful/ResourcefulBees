@@ -38,6 +38,7 @@ public class NBTConstants {
     public static final String NBT_BREED_TIME = "BreedTimeModifier";
     public static final String NBT_BEE_NAME = "DisplayName";
     public static final String NBT_TANKS = "Tanks";
+    public static final String NBT_TANK = "Tank";
     public static final String NBT_BEECON_RANGE = "range";
     public static final String NBT_RECIPES = "Recipes";
     public static final String NBT_ENTITY_ID = "EntityID";
@@ -54,13 +55,19 @@ public class NBTConstants {
     public static final String NBT_ITEM_OUTPUTS = "itemOutputs";
     public static final String NBT_FLUID_OUTPUTS = "fluidOutputs";
     public static final String NBT_LOCATIONS = "locations";
-    public static final String NBT_SHOW_BEAM = "showBeam";
     public static final String NBT_CONTROLLER_POS = "controllerPos";
     public static final String NBT_MUTATION_COUNT = "mutationCount";
     public static final String NBT_BLOCK_ENTITY_TAG = "BlockEntityTag";
-    public static final String NBT_PLAY_SOUND = "playSound";
     public static final String NBT_WIDTH = "Width";
     public static final String NBT_HEIGHT = "Height";
     public static final String NBT_DEPTH = "Depth";
     public static final String NBT_DISPLAY = "display";
+
+    public static class Beecon {
+
+        private Beecon() {throw new IllegalStateException(ModConstants.UTILITY_CLASS);}
+
+        public static final String RANGE = "range";
+        public static final String ACTIVE_EFFECTS = "active_effects";
+    }
 }

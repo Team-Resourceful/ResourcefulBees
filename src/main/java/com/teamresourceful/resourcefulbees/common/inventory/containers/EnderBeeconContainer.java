@@ -1,16 +1,12 @@
 package com.teamresourceful.resourcefulbees.common.inventory.containers;
 
-import com.teamresourceful.resourcefulbees.common.inventory.slots.OutputSlot;
-import com.teamresourceful.resourcefulbees.common.inventory.slots.SlotItemHandlerUnconditioned;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.ContainerAccessor;
-import com.teamresourceful.resourcefulbees.common.tileentity.AbstractHoneyTankContainer;
-import com.teamresourceful.resourcefulbees.common.tileentity.EnderBeeconTileEntity;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModContainers;
+import com.teamresourceful.resourcefulbees.common.tileentity.EnderBeeconTileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
@@ -26,25 +22,14 @@ public class EnderBeeconContainer extends ContainerWithStackMove {
         this.player = inv.player;
         enderBeeconTileEntity = (EnderBeeconTileEntity) world.getBlockEntity(pos);
 
-        if (getEnderBeeconTileEntity() != null) {
-            this.addSlot(new SlotItemHandlerUnconditioned(getEnderBeeconTileEntity().getTileStackHandler(), AbstractHoneyTankContainer.BOTTLE_INPUT_EMPTY, 184, 34) {
-
-                @Override
-                public boolean mayPlace(ItemStack stack) {
-                    return AbstractHoneyTankContainer.isItemValid(stack);
-                }
-            });
-            this.addSlot(new OutputSlot(getEnderBeeconTileEntity().getTileStackHandler(), AbstractHoneyTankContainer.BOTTLE_OUTPUT_EMPTY, 184, 72));
-
-            for (int i = 0; i < 3; ++i) {
-                for (int j = 0; j < 9; ++j) {
-                    this.addSlot(new Slot(inv, j + i * 9 + 9, 36 + j * 18, 118 + i * 18));
-                }
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 9; ++j) {
+                this.addSlot(new Slot(inv, j + i * 9 + 9, 36 + j * 18, 118 + i * 18));
             }
+        }
 
-            for (int k = 0; k < 9; ++k) {
-                this.addSlot(new Slot(inv, k, 36 + k * 18, 176));
-            }
+        for (int k = 0; k < 9; ++k) {
+            this.addSlot(new Slot(inv, k, 36 + k * 18, 176));
         }
     }
 
@@ -69,12 +54,8 @@ public class EnderBeeconContainer extends ContainerWithStackMove {
     }
 
     public int getFluid() {
-        return getEnderBeeconTileEntity().getFluidTank().getFluidAmount();
+        return getEnderBeeconTileEntity().getTank().getFluidAmount();
     }
-
-    public int getMaxFluid() {
-        return getEnderBeeconTileEntity().getFluidTank().getCapacity();
-    } // TODO Unused?
 
     @Override
     public void broadcastChanges() {

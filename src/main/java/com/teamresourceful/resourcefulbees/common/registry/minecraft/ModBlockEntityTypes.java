@@ -49,17 +49,11 @@ public class ModBlockEntityTypes {
     public static final RegistryObject<TileEntityType<EnderBeeconTileEntity>> ENDER_BEECON_TILE_ENTITY = BLOCK_ENTITY_TYPES.register("ender_beecon", () -> TileEntityType.Builder
             .of(EnderBeeconTileEntity::new, ModBlocks.ENDER_BEECON.get())
             .build(null));
-    public static final RegistryObject<TileEntityType<HoneyTankTileEntity>> HONEY_TANK_TILE_ENTITY = BLOCK_ENTITY_TYPES.register("honey_tank", () -> TileEntityType.Builder
-            .of(() -> new HoneyTankTileEntity(HoneyTankTileEntity.TankTier.WOODEN), ModBlocks.PURPUR_HONEY_TANK.get(), ModBlocks.NETHER_HONEY_TANK.get(), ModBlocks.WOODEN_HONEY_TANK.get())
-            .build(null));
     public static final RegistryObject<TileEntityType<HoneyCongealerTileEntity>> HONEY_CONGEALER_TILE_ENTITY = BLOCK_ENTITY_TYPES.register("honey_congealer", () -> TileEntityType.Builder
             .of(HoneyCongealerTileEntity::new, ModBlocks.HONEY_CONGEALER.get())
             .build(null));
-    public static final RegistryObject<TileEntityType<HoneyPipeTileEntity>> HONEY_PIPE_TILE_ENTITY = BLOCK_ENTITY_TYPES.register("honey_pipe", () -> TileEntityType.Builder
-            .of(HoneyPipeTileEntity::new, ModBlocks.HONEY_PIPE.get())
-            .build(null));
-    public static final RegistryObject<TileEntityType<BottomlessHoneyPotTileEntity>> BOTTOMLESS_HONEY_POT_TILE_ENTITY = BLOCK_ENTITY_TYPES.register("bottomless_honey_pot", () -> TileEntityType.Builder
-            .of(BottomlessHoneyPotTileEntity::new, ModBlocks.BOTTOMLESS_HONEY_POT.get())
+    public static final RegistryObject<TileEntityType<HoneyPotTileEntity>> HONEY_POT_TILE_ENTITY = BLOCK_ENTITY_TYPES.register("honey_pot", () -> TileEntityType.Builder
+            .of(HoneyPotTileEntity::new, ModBlocks.HONEY_POT.get())
             .build(null));
 
     //region Centrifuge Block Entity Types
