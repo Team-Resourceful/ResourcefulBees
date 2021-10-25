@@ -1,6 +1,7 @@
 
 package com.teamresourceful.resourcefulbees.common.recipe;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.*;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -10,6 +11,7 @@ import com.teamresourceful.resourcefulbees.api.beedata.outputs.AbstractOutput;
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.FluidOutput;
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.ItemOutput;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeSerializers;
 import com.teamresourceful.resourcefulbees.common.utils.RandomCollection;
 import net.minecraft.inventory.IInventory;
@@ -22,13 +24,13 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 public class CentrifugeRecipe implements IRecipe<IInventory> {
 
@@ -161,60 +163,28 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
             return recipe.matchesConditions() ? recipe : null;
         }
 
+        /**
+         * THE REASON
+         * <br>-----------------------------<br>
+         * So if we used buffer.writeWithCodec we would exceed buffer max capacity and would error the client and won't allow
+         * the player to join.
+         * Writing a string with normal json also causes an error with buffer max capacity.
+         * From our testing Compressed json allows for a lot of data, (test case: tested with a pool of 1050 elements)
+         * and worked fine.
+         * Please don't be stupid and test as much as possible if trying to change this in the future.
+         */
+
         @Override
         public CentrifugeRecipe fromNetwork(@NotNull ResourceLocation id, @NotNull PacketBuffer buffer) {
-            Ingredient ingredient = Ingredient.fromNetwork(buffer);
-            List<Output<ItemOutput>> itemOutputs = new ArrayList<>();
-            for (int i = 0; i < buffer.readInt(); i++) {
-                RandomCollection<ItemOutput> pool = new RandomCollection<>();
-                for (int j = 0; j < buffer.readInt(); j++) {
-                    ItemStack stack = buffer.readItem();
-                    double chance = buffer.readDouble();
-                    double weight = buffer.readDouble();
-                    pool.add(weight, new ItemOutput(stack, weight, chance));
-                }
-                itemOutputs.add(new Output<>(buffer.readDouble(), pool));
-            }
-            List<Output<FluidOutput>> fluidOutputs = new ArrayList<>();
-            for (int i = 0; i < buffer.readInt(); i++) {
-                RandomCollection<FluidOutput> pool = new RandomCollection<>();
-                for (int j = 0; j < buffer.readInt(); j++) {
-                    FluidStack stack = buffer.readFluidStack();
-                    double chance = buffer.readDouble();
-                    double weight = buffer.readDouble();
-                    pool.add(weight, new FluidOutput(stack, weight, chance));
-                }
-                fluidOutputs.add(new Output<>(buffer.readDouble(), pool));
-            }
-            return new CentrifugeRecipe(id, ingredient, itemOutputs, fluidOutputs, buffer.readInt(), buffer.readInt(), true);
+            Optional<CentrifugeRecipe> result = CentrifugeRecipe.codec(id).parse(JsonOps.COMPRESSED, ModConstants.GSON.fromJson(buffer.readUtf(), JsonArray.class)).result();
+            return result.orElse(null);
+
         }
 
         //REQUIRED TEST THIS ON SERVERS!!!!!!!!!!!
         @Override
         public void toNetwork(@NotNull PacketBuffer buffer, @NotNull CentrifugeRecipe recipe) {
-            recipe.ingredient.toNetwork(buffer);
-            buffer.writeInt(recipe.itemOutputs.size());
-            for (Output<ItemOutput> itemOutput : recipe.itemOutputs) {
-                buffer.writeInt(itemOutput.pool.getSize());
-                itemOutput.pool.forEach(output -> {
-                    buffer.writeItem(output.getItemStack());
-                    buffer.writeDouble(output.getChance());
-                    buffer.writeDouble(output.getWeight());
-                });
-                buffer.writeDouble(itemOutput.chance);
-            }
-            buffer.writeInt(recipe.fluidOutputs.size());
-            for (Output<FluidOutput> fluidOutput : recipe.fluidOutputs) {
-                buffer.writeInt(fluidOutput.pool.getSize());
-                fluidOutput.pool.forEach(output -> {
-                    buffer.writeFluidStack(output.getFluidStack());
-                    buffer.writeDouble(output.getChance());
-                    buffer.writeDouble(output.getWeight());
-                });
-                buffer.writeDouble(fluidOutput.chance);
-            }
-            buffer.writeInt(recipe.time);
-            buffer.writeInt(recipe.energyPerTick);
+            CentrifugeRecipe.codec(recipe.id).encodeStart(JsonOps.COMPRESSED, recipe).result().ifPresent(element -> buffer.writeUtf(element.toString()));
         }
     }
 
