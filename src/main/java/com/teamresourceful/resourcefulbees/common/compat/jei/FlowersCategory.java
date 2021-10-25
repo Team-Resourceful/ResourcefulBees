@@ -47,7 +47,7 @@ public class FlowersCategory extends BaseCategory<FlowersCategory.Recipe> {
                 Set<ItemStack> stacks = new HashSet<>();
                 Set<FluidStack> fluids = new HashSet<>();
 
-                for (Block block : beeData.getCoreData().getBlockFlowers()) {
+                beeData.getCoreData().getBlockFlowers().forEach(block -> {
                     if (block instanceof FlowingFluidBlock){
                         fluids.add(new FluidStack(((FlowingFluidBlock) block).getFluid().getSource(), 1000 ));
                     }else if (block.asItem() != Items.AIR){
@@ -55,7 +55,7 @@ public class FlowersCategory extends BaseCategory<FlowersCategory.Recipe> {
                     }else {
                         stacks.add(getErrorItem(block));
                     }
-                }
+                });
 
                 if (!stacks.isEmpty()){
                     recipes.add(Recipe.getItemRecipe(beeData, stacks));

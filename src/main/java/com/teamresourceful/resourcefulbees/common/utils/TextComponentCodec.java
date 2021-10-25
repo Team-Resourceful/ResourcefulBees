@@ -47,7 +47,7 @@ public class TextComponentCodec {
 
     private static final Codec<TranslationTextComponent> TRANSLATABLE_CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.STRING.fieldOf("translate").forGetter(TranslationTextComponent::getKey),
-            Codec.STRING.listOf().fieldOf("args").orElse(new ArrayList<>()).forGetter((t) -> Arrays.stream(t.getArgs()).map(Object::toString).collect(Collectors.toList())),
+            Codec.STRING.listOf().fieldOf("args").orElse(new ArrayList<>()).forGetter(t -> Arrays.stream(t.getArgs()).map(Object::toString).collect(Collectors.toList())),
             STYLE_CODEC.fieldOf("style").orElse(Style.EMPTY).forGetter(TranslationTextComponent::getStyle)
     ).apply(instance, (text, args, style) -> (TranslationTextComponent)new TranslationTextComponent(text, args.toArray()).withStyle(style)));
 

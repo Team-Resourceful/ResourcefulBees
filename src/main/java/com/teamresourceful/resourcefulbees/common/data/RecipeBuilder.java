@@ -37,7 +37,7 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
 
     @Override
     public void onResourceManagerReload(@NotNull IResourceManager resourceManager) {
-        if (CommonConfig.HONEYCOMB_BLOCK_RECIPES.get()) {
+        if (Boolean.TRUE.equals(CommonConfig.HONEYCOMB_BLOCK_RECIPES.get())) {
             LOGGER.info("Generating comb recipes for {} honeycombs...", ModItems.HONEYCOMB_ITEMS.getEntries().size());
             ModItems.HONEYCOMB_ITEMS.getEntries().stream()
                     .filter(RegistryObject::isPresent)

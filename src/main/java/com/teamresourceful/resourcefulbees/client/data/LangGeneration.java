@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.client.data;
 
 import com.teamresourceful.resourcefulbees.client.config.ClientConfig;
 import com.teamresourceful.resourcefulbees.common.lib.ModPaths;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.custom.TraitRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
@@ -23,6 +24,10 @@ public class LangGeneration {
 
     private static final String ITEM_RESOURCEFULBEES = "item.resourcefulbees.";
     private static final String BLOCK_RESOURCEFULBEES = "block.resourcefulbees.";
+
+    private LangGeneration() {
+        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+    }
 
     public static void generateEnglishLang() {
         if (Boolean.FALSE.equals(ClientConfig.GENERATE_ENGLISH_LANG.get())) return;
