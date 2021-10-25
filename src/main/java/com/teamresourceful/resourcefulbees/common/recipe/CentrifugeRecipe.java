@@ -22,10 +22,10 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -163,21 +163,58 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
 
         @Override
         public CentrifugeRecipe fromNetwork(@NotNull ResourceLocation id, @NotNull PacketBuffer buffer) {
-            try {
-                return buffer.readWithCodec(CentrifugeRecipe.codec(id));
-            } catch (IOException e) {
-                throw new IllegalArgumentException();
+            Ingredient ingredient = Ingredient.fromNetwork(buffer);
+            List<Output<ItemOutput>> itemOutputs = new ArrayList<>();
+            for (int i = 0; i < buffer.readInt(); i++) {
+                RandomCollection<ItemOutput> pool = new RandomCollection<>();
+                for (int j = 0; j < buffer.readInt(); j++) {
+                    ItemStack stack = buffer.readItem();
+                    double chance = buffer.readDouble();
+                    double weight = buffer.readDouble();
+                    pool.add(weight, new ItemOutput(stack, weight, chance));
+                }
+                itemOutputs.add(new Output<>(buffer.readDouble(), pool));
             }
+            List<Output<FluidOutput>> fluidOutputs = new ArrayList<>();
+            for (int i = 0; i < buffer.readInt(); i++) {
+                RandomCollection<FluidOutput> pool = new RandomCollection<>();
+                for (int j = 0; j < buffer.readInt(); j++) {
+                    FluidStack stack = buffer.readFluidStack();
+                    double chance = buffer.readDouble();
+                    double weight = buffer.readDouble();
+                    pool.add(weight, new FluidOutput(stack, weight, chance));
+                }
+                fluidOutputs.add(new Output<>(buffer.readDouble(), pool));
+            }
+            return new CentrifugeRecipe(id, ingredient, itemOutputs, fluidOutputs, buffer.readInt(), buffer.readInt(), true);
         }
 
         //REQUIRED TEST THIS ON SERVERS!!!!!!!!!!!
         @Override
         public void toNetwork(@NotNull PacketBuffer buffer, @NotNull CentrifugeRecipe recipe) {
-            try {
-                buffer.writeWithCodec(CentrifugeRecipe.codec(recipe.id), recipe);
-            } catch (IOException e) {
-                e.printStackTrace();
+            recipe.ingredient.toNetwork(buffer);
+            buffer.writeInt(recipe.itemOutputs.size());
+            for (Output<ItemOutput> itemOutput : recipe.itemOutputs) {
+                buffer.writeInt(itemOutput.pool.getSize());
+                itemOutput.pool.forEach(output -> {
+                    buffer.writeItem(output.getItemStack());
+                    buffer.writeDouble(output.getChance());
+                    buffer.writeDouble(output.getWeight());
+                });
+                buffer.writeDouble(itemOutput.chance);
             }
+            buffer.writeInt(recipe.fluidOutputs.size());
+            for (Output<FluidOutput> fluidOutput : recipe.fluidOutputs) {
+                buffer.writeInt(fluidOutput.pool.getSize());
+                fluidOutput.pool.forEach(output -> {
+                    buffer.writeFluidStack(output.getFluidStack());
+                    buffer.writeDouble(output.getChance());
+                    buffer.writeDouble(output.getWeight());
+                });
+                buffer.writeDouble(fluidOutput.chance);
+            }
+            buffer.writeInt(recipe.time);
+            buffer.writeInt(recipe.energyPerTick);
         }
     }
 
