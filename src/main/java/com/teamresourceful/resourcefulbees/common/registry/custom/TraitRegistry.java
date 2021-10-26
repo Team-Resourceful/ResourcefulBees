@@ -1,20 +1,9 @@
 package com.teamresourceful.resourcefulbees.common.registry.custom;
 
-import com.mojang.serialization.JsonOps;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.ITraitRegistry;
 import com.teamresourceful.resourcefulbees.api.beedata.traits.BeeTrait;
-import com.teamresourceful.resourcefulbees.api.beedata.traits.DamageType;
-import com.teamresourceful.resourcefulbees.api.beedata.traits.PotionDamageEffect;
-import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
-import com.teamresourceful.resourcefulbees.common.lib.constants.TraitConstants;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
-import net.minecraft.item.Items;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.DamageSource;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,6 +27,7 @@ public class TraitRegistry implements ITraitRegistry {
      * @param data BeeTrait of the trait being registered
      * @return Returns false if trait already exists in the registry.
      */
+    @Override
     public boolean register(String name, BeeTrait data) {
         if (closed || TRAIT_REGISTRY.containsKey(name)) {
             ResourcefulBees.LOGGER.error("Trait is already registered or registration is closed: {}", name);
@@ -53,6 +43,7 @@ public class TraitRegistry implements ITraitRegistry {
      * @param name Trait name for which BeeTrait is requested.
      * @return Returns a BeeTrait object for the given bee type.
      */
+    @Override
     public BeeTrait getTrait(String name) {
         return TRAIT_REGISTRY.getOrDefault(name, BeeTrait.DEFAULT);
     }
@@ -63,6 +54,7 @@ public class TraitRegistry implements ITraitRegistry {
      *
      * @return Returns unmodifiable copy of trait registry.
      */
+    @Override
     public Map<String, BeeTrait> getTraits() {
         return Collections.unmodifiableMap(TRAIT_REGISTRY);
     }

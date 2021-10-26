@@ -51,12 +51,7 @@ public class RegistryHandler {
     }
 
     public static void registerDynamicBees() {
-
-
-        BeeRegistry.getRegistry().getBees().forEach((name, beeData) -> {
-
-            registerBee(name, beeData.getRenderData().getSizeModifier());
-        });
+        BeeRegistry.getRegistry().getBees().forEach((name, beeData) -> registerBee(name, beeData.getRenderData().getSizeModifier()));
     }
 
     public static void registerDynamicHoney() {
@@ -73,11 +68,10 @@ public class RegistryHandler {
         ModEntities.getModBees().put(name, beeEntityType);
     }
 
-    // TODO does this need to use the codec? - epic
     private static void registerHoneyBottle(String name, JsonObject honeyData) {
         HoneyData honeyBottleData = HoneyData.codec(name).parse(JsonOps.INSTANCE, honeyData)
                 .getOrThrow(false, s -> ResourcefulBees.LOGGER.error("Could not create Custom Honey Data for {} honey", name));
-        HoneyRegistry.getRegistry().registerHoney(name, honeyBottleData); //do this separately so it can be called in the reload command that is to be added
+        HoneyRegistry.getRegistry().registerHoney(name, honeyBottleData);
     }
 
     public static void registerDispenserBehaviors() {

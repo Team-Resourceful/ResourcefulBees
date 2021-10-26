@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Random;
 
-@SuppressWarnings({"deprecation", "unused"})
+@SuppressWarnings("deprecation")
 public class HoneycombBlock extends Block {
 
     private final Color color;
@@ -29,10 +29,12 @@ public class HoneycombBlock extends Block {
     public int getHoneycombColor() { return color.getValue(); }
 
 
+    @SuppressWarnings("unused")
     public static int getBlockColor(BlockState state, @Nullable IBlockReader world, @Nullable BlockPos pos, int tintIndex){
         return ((HoneycombBlock) state.getBlock()).getHoneycombColor();
     }
 
+    @SuppressWarnings("unused")
     public static int getItemColor(ItemStack stack, int tintIndex) {
         return ((HoneycombBlock) ((BlockItem) stack.getItem()).getBlock()).getHoneycombColor();
     }

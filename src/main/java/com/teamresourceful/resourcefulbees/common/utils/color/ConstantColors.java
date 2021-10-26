@@ -1,7 +1,13 @@
 package com.teamresourceful.resourcefulbees.common.utils.color;
 
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+
 @SuppressWarnings("unused")
 public class ConstantColors {
+
+    private ConstantColors() {
+        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+    }
 
     //You can add colors here when needed.
 
