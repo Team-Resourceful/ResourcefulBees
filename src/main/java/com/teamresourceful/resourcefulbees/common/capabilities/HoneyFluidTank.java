@@ -19,7 +19,11 @@ public class HoneyFluidTank extends FluidTank {
     private static final Predicate<FluidStack> FLUID_VALIDATOR = fluidStack -> fluidStack.getFluid().is(BeeInfoUtils.getFluidTag("forge:honey"));
 
     public HoneyFluidTank(int capacity) {
-        super(capacity, FLUID_VALIDATOR);
+        this(capacity, FLUID_VALIDATOR);
+    }
+
+    public HoneyFluidTank(int capacity, Predicate<FluidStack> validator) {
+        super(capacity, validator);
     }
 
     public void fillBottle(PlayerEntity player, Hand hand) {
