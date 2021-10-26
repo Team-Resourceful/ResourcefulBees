@@ -51,6 +51,7 @@ public class HoneyCongealerTileEntity extends TileEntity implements ITickableTil
     private boolean dirty;
     private int processingFill;
 
+    //TODO make this block use the recipe system instead
     public HoneyCongealerTileEntity() {
         super(ModBlockEntityTypes.HONEY_CONGEALER_TILE_ENTITY.get());
     }
