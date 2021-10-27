@@ -5,13 +5,11 @@
     "lore": [
       {
         "text":"Cute little baby kitty bee.",
-        "style": {
-          "color": "light_purple"
-        }
+        "color": "light_purple"
       },
       {
         "translate":"tooltip.resourcefulbees.bee.creator",
-        "args": ["§6Dawn_Felstar"]
+        "with": ["§6Dawn_Felstar"]
       }
     ]
   },
