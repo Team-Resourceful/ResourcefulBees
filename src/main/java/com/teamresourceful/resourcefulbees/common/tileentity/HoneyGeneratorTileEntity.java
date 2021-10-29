@@ -174,7 +174,7 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
         CompoundNBT invTag = tag.getCompound(NBTConstants.NBT_INVENTORY);
         getTileStackHandler().deserializeNBT(invTag);
         energyStorage.deserializeNBT(tag.getCompound(NBTConstants.NBT_ENERGY));
-        tank.readFromNBT(tag.getCompound(NBTConstants.NBT_FLUID));
+        tank.readFromNBT(tag.getCompound(NBTConstants.NBT_TANK));
         if (tag.contains(NBTConstants.NBT_ENERGY_FILLED)) setEnergyFilled(tag.getInt(NBTConstants.NBT_ENERGY_FILLED));
         if (tag.contains(NBTConstants.NBT_FLUID_FILLED)) setFluidFilled(tag.getInt(NBTConstants.NBT_FLUID_FILLED));
         if (tag.contains(NBTConstants.NBT_IS_PROCESSING)) isProcessing = tag.getBoolean(NBTConstants.NBT_IS_PROCESSING);
