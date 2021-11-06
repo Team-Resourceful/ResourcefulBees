@@ -10,7 +10,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.network.packets.SyncGUIMessage;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
-import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModTags;
 import io.netty.buffer.Unpooled;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -67,8 +67,8 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
     private final LazyOptional<IEnergyStorage> energyOptional = LazyOptional.of(() -> energyStorage);
     private final LazyOptional<FluidTank> tankOptional = LazyOptional.of(() -> tank);
 
-    public static final ITag<Fluid> HONEY_FLUID_TAG = BeeInfoUtils.getFluidTag("forge:honey");
-    public static final ITag<Item> HONEY_BOTTLE_TAG = BeeInfoUtils.getItemTag("forge:honey_bottle");
+    public static final ITag<Fluid> HONEY_FLUID_TAG = ModTags.Fluids.HONEY;
+    public static final ITag<Item> HONEY_BOTTLE_TAG = ModTags.Items.HONEY_BOTTLES;
 
     private int fluidFilled;
     private int energyFilled;
