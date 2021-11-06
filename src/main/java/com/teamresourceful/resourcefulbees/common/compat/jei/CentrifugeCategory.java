@@ -103,17 +103,21 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
     @Override
     public @NotNull List<ITextComponent> getTooltipStrings(@NotNull CentrifugeRecipeAdapter recipe, double mouseX, double mouseY) {
         for (int i = 0; i < 3; i++) {
-            Double itemWeight = recipe.getItemWeight(i+1);
-            ItemStack item = recipe.items.get(i+1).getDisplayedIngredient();
-            double itemChance = recipe.getRecipe().getFluidOutputs().get(i).getChance();
-            List<ITextComponent> itemTooltip = drawTooltip(item == null ? null : item.getDisplayName(), itemWeight, itemChance, mouseX, mouseY, i, recipe.getRecipe().getItemOutputs().size(), 61, 70);
-            if (!itemTooltip.isEmpty()) return itemTooltip;
+            if (recipe.getRecipe().getItemOutputs().size() > i) {
+                Double itemWeight = recipe.getItemWeight(i + 1);
+                ItemStack item = recipe.items.get(i + 1).getDisplayedIngredient();
+                double itemChance = recipe.getRecipe().getItemOutputs().get(i).getChance();
+                List<ITextComponent> itemTooltip = drawTooltip(item == null ? null : item.getDisplayName(), itemWeight, itemChance, mouseX, mouseY, i, recipe.getRecipe().getItemOutputs().size(), 61, 70);
+                if (!itemTooltip.isEmpty()) return itemTooltip;
+            }
 
-            Double fluidWeight = recipe.getFluidWeight(i);
-            FluidStack fluid = recipe.fluids.get(i).getDisplayedIngredient();
-            double fluidChance = recipe.getRecipe().getFluidOutputs().get(i).getChance();
-            List<ITextComponent> fluidTooltip = drawTooltip(fluid == null ? null : fluid.getDisplayName(), fluidWeight, fluidChance, mouseX, mouseY, i, recipe.getRecipe().getFluidOutputs().size(), 97, 106);
-            if (!itemTooltip.isEmpty()) return fluidTooltip;
+            if (recipe.getRecipe().getFluidOutputs().size() > i) {
+                Double fluidWeight = recipe.getFluidWeight(i);
+                FluidStack fluid = recipe.fluids.get(i).getDisplayedIngredient();
+                double fluidChance = recipe.getRecipe().getFluidOutputs().get(i).getChance();
+                List<ITextComponent> fluidTooltip = drawTooltip(fluid == null ? null : fluid.getDisplayName(), fluidWeight, fluidChance, mouseX, mouseY, i, recipe.getRecipe().getFluidOutputs().size(), 97, 106);
+                if (!fluidTooltip.isEmpty()) return fluidTooltip;
+            }
         }
         return super.getTooltipStrings(recipe, mouseX, mouseY);
     }
