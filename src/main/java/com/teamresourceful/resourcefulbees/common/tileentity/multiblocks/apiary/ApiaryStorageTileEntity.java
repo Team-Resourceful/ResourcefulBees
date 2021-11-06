@@ -201,7 +201,7 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
         }
     }
 
-    private static ItemStack getVanillaOutput(int apiaryTier) {
+    public static ItemStack getVanillaOutput(int apiaryTier) {
         ItemStack itemstack = (OutputVariation.DEFAULT_APIARY_OUTPUT_TYPES.get(apiaryTier) == ApiaryOutputType.BLOCK) ? VANILLA_HONEYCOMB_BLOCK.copy() : VANILLA_HONEYCOMB.copy();
         itemstack.setCount(OutputVariation.DEFAULT_APIARY_AMOUNTS.get(apiaryTier));
         return itemstack;
