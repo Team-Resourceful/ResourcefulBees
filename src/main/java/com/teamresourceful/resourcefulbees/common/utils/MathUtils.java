@@ -1,11 +1,13 @@
 package com.teamresourceful.resourcefulbees.common.utils;
 
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+
 import java.util.Random;
 
 public final class MathUtils {
 
     private MathUtils() {
-        throw new IllegalAccessError("Utility class");
+        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
     }
 
     public static boolean inRangeInclusive(int value, int min, int max) {
