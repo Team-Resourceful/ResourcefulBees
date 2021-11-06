@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CSC",
+    "SMS",
+    "CSC"
+  ],
+  "key": {
+    "C": {
+      "tag": "resourcefulbees:resourceful_honeycomb_block"
+    },
+    "S": {
+      "item": "minecraft:honey_block"
+    },
+    "M": {
+      "tag": "minecraft:planks"
+    }
+  },
+  "result": {
+    "item": "resourcefulbees:t4_hive_upgrade"
+  }
+}

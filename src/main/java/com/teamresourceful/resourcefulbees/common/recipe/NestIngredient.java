@@ -38,7 +38,7 @@ public class NestIngredient extends Ingredient {
     }
 
     @Override
-    public JsonElement toJson() {
+    public @NotNull JsonElement toJson() {
         JsonObject json = new JsonObject();
         json.addProperty("type", "resourcefulbees:nest");
         json.addProperty("tier", tier);
