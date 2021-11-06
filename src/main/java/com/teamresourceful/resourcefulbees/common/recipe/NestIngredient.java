@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.recipe;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
@@ -30,6 +31,18 @@ public class NestIngredient extends Ingredient {
     protected NestIngredient(int tier) {
         super(Stream.of(new StackList(getNests(tier))));
         this.tier = tier;
+    }
+
+    public static NestIngredient ofTier(int tier) {
+        return new NestIngredient(tier);
+    }
+
+    @Override
+    public JsonElement toJson() {
+        JsonObject json = new JsonObject();
+        json.addProperty("type", "resourcefulbees:nest");
+        json.addProperty("tier", tier);
+        return json;
     }
 
     @Override
