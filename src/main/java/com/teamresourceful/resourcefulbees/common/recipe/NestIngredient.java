@@ -23,10 +23,10 @@ import java.util.stream.Stream;
 
 public class NestIngredient extends Ingredient {
 
-    public static final List<ItemStack> NESTS = ModItems.NESTS_ITEMS.getEntries().stream()
+    private static final List<ItemStack> NESTS = ModItems.NESTS_ITEMS.getEntries().stream()
             .filter(RegistryObject::isPresent).map(RegistryObject::get).map(Item::getDefaultInstance).collect(Collectors.toList());
 
-    public int tier;
+    private final int tier;
 
     protected NestIngredient(int tier) {
         super(Stream.of(new StackList(getNests(tier))));

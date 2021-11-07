@@ -18,6 +18,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.EntityType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
@@ -29,10 +30,7 @@ import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class MutationCategory extends BaseCategory<IMutationRecipe> {
 
@@ -89,12 +87,15 @@ public class MutationCategory extends BaseCategory<IMutationRecipe> {
 
     @Override
     public void setIngredients(@NotNull IMutationRecipe recipe, @NotNull IIngredients ingredients) {
-        if (recipe.getInputEntity().isPresent() && recipe.getOutputEntity().isPresent()) {
+        Optional<EntityType<?>> inputEntity = recipe.getInputEntity();
+        Optional<EntityType<?>> outputEntity = recipe.getOutputEntity();
+
+        if (inputEntity.isPresent() && outputEntity.isPresent()) {
             ingredients.setInputs(JEICompat.ENTITY_INGREDIENT, Arrays.asList(
                     new EntityIngredient(recipe.getBeeData().getEntityType(), 45.0f),
-                    new EntityIngredient(recipe.getInputEntity().get(), 45.0f)
+                    new EntityIngredient(inputEntity.get(), 45.0f)
             ));
-            ingredients.setOutput(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(recipe.getOutputEntity().get(), -45.0f, recipe.getNBT()));
+            ingredients.setOutput(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(outputEntity.get(), -45.0f, recipe.getNBT()));
         }else {
             recipe.getInputItem().ifPresent(item -> ingredients.setInput(VanillaTypes.ITEM, item));
             recipe.getInputFluid().ifPresent(fluid-> ingredients.setInput(VanillaTypes.FLUID, fluid));

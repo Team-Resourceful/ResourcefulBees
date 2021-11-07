@@ -16,14 +16,14 @@ import org.jetbrains.annotations.NotNull;
 
 public class ShearsDispenserBehavior extends DefaultDispenseItemBehavior {
 
-    private static IDispenseItemBehavior DEFAULT_SHEARS_DISPENSE_BEHAVIOR;
+    private static IDispenseItemBehavior defaultShearsDispenseBehavior;
 
     public static IDispenseItemBehavior getDefaultShearsDispenseBehavior() {
-        return DEFAULT_SHEARS_DISPENSE_BEHAVIOR;
+        return defaultShearsDispenseBehavior;
     }
 
     public static void setDefaultShearsDispenseBehavior(IDispenseItemBehavior defaultShearsDispenseBehavior) {
-        DEFAULT_SHEARS_DISPENSE_BEHAVIOR = defaultShearsDispenseBehavior;
+        ShearsDispenserBehavior.defaultShearsDispenseBehavior = defaultShearsDispenseBehavior;
     }
 
     @NotNull
@@ -33,7 +33,7 @@ public class ShearsDispenserBehavior extends DefaultDispenseItemBehavior {
         BlockPos blockpos = source.getPos().relative(source.getBlockState().getValue(DispenserBlock.FACING));
         BlockState blockstate = world.getBlockState(blockpos);
         if (blockstate.getBlock() instanceof TieredBeehiveBlock) {
-            if (CommonConfig.ALLOW_SHEARS.get()) {
+            if (Boolean.TRUE.equals(CommonConfig.ALLOW_SHEARS.get())) {
                 int i = blockstate.getValue(BeehiveBlock.HONEY_LEVEL);
                 if (i >= 5) {
                     if (stack.hurt(1, world.random, null)) {

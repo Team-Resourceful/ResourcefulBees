@@ -29,6 +29,10 @@ import java.util.Map;
 
 public abstract class BaseAdvancementProvider implements IDataProvider {
     private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
+    private static final String TRANSLATIONS_PREFIX = "advancements.resourcefulbees.";
+    private static final String TITLE_SUFFIX = ".title";
+    private static final String DESCRIPTION_SUFFIX = ".description";
+
     private final String modDisplayName;
     private final DataGenerator generator;
     private final Map<ResourceLocation, Advancement> advancements = new HashMap<>();
@@ -56,13 +60,13 @@ public abstract class BaseAdvancementProvider implements IDataProvider {
 
     protected static Advancement.Builder createAdvancement(ItemStack item, String id, Advancement parent) {
         return Advancement.Builder.advancement()
-                .display(item, new TranslationTextComponent("advancements.resourcefulbees."+id+".title"), new TranslationTextComponent("advancements.resourcefulbees."+id+".description"), null, FrameType.TASK, true, true, false)
+                .display(item, new TranslationTextComponent(TRANSLATIONS_PREFIX+id+TITLE_SUFFIX), new TranslationTextComponent(TRANSLATIONS_PREFIX+id+DESCRIPTION_SUFFIX), null, FrameType.TASK, true, true, false)
                 .parent(parent);
     }
 
     protected static Advancement.Builder createAdvancement(RegistryObject<Item> item, String id, Advancement parent) {
         return Advancement.Builder.advancement()
-                .display(item.get().getDefaultInstance(), new TranslationTextComponent("advancements.resourcefulbees."+id+".title"), new TranslationTextComponent("advancements.resourcefulbees."+id+".description"), null, FrameType.TASK, true, true, false)
+                .display(item.get().getDefaultInstance(), new TranslationTextComponent(TRANSLATIONS_PREFIX+id+TITLE_SUFFIX), new TranslationTextComponent(TRANSLATIONS_PREFIX+id+DESCRIPTION_SUFFIX), null, FrameType.TASK, true, true, false)
                 .parent(parent);
     }
 
@@ -74,13 +78,13 @@ public abstract class BaseAdvancementProvider implements IDataProvider {
 
     protected static Advancement.Builder createChallengeAchivement(ItemStack item, String id, Advancement parent) {
         return Advancement.Builder.advancement()
-                .display(item, new TranslationTextComponent("advancements.resourcefulbees."+id+".title"), new TranslationTextComponent("advancements.resourcefulbees."+id+".description"), null, FrameType.CHALLENGE, true, true, true)
+                .display(item, new TranslationTextComponent(TRANSLATIONS_PREFIX+id+TITLE_SUFFIX), new TranslationTextComponent(TRANSLATIONS_PREFIX+id+DESCRIPTION_SUFFIX), null, FrameType.CHALLENGE, true, true, true)
                 .parent(parent);
     }
 
     protected static Advancement.Builder createChallengeAchivement(RegistryObject<Item> item, String id, Advancement parent) {
         return Advancement.Builder.advancement()
-                .display(item.get().getDefaultInstance(), new TranslationTextComponent("advancements.resourcefulbees."+id+".title"), new TranslationTextComponent("advancements.resourcefulbees."+id+".description"), null, FrameType.CHALLENGE, true, true, true)
+                .display(item.get().getDefaultInstance(), new TranslationTextComponent(TRANSLATIONS_PREFIX+id+TITLE_SUFFIX), new TranslationTextComponent(TRANSLATIONS_PREFIX+id+DESCRIPTION_SUFFIX), null, FrameType.CHALLENGE, true, true, true)
                 .parent(parent);
     }
 

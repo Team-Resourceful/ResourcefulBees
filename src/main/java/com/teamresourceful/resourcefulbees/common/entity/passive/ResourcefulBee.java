@@ -96,7 +96,7 @@ public class ResourcefulBee extends CustomBeeEntity {
         if (hasMutation) {
             this.goalSelector.addGoal(7, new ResourcefulBee.FindPollinationTargetGoal2());
         }
-        if (!CommonConfig.MANUAL_MODE.get()) this.goalSelector.addGoal(8, new BeeWanderGoal(this));
+        if (Boolean.FALSE.equals(CommonConfig.MANUAL_MODE.get())) this.goalSelector.addGoal(8, new BeeWanderGoal(this));
         this.goalSelector.addGoal(9, new SwimGoal(this));
     }
 
@@ -179,7 +179,7 @@ public class ResourcefulBee extends CustomBeeEntity {
                 EntityOutput entityOutput = output.next();
                 if (entityOutput.getChance() >= level.random.nextFloat()) {
                     CompoundNBT nbt = new CompoundNBT();
-                    nbt.put("EntityTag", entityOutput.getCompoundNBT().orElse(null));
+                    entityOutput.getCompoundNBT().ifPresent(tag -> nbt.put("EntityTag", tag));
                     entityOutput.getEntityType().spawn((ServerWorld) level, nbt, null, null, entityList.get(0).blockPosition(), SpawnReason.NATURAL, false, false);
                     entityList.get(0).remove();
                     level.levelEvent(2005, this.blockPosition().below(1), 0);
@@ -211,18 +211,15 @@ public class ResourcefulBee extends CustomBeeEntity {
         if (output.getChance() >= level.random.nextFloat()) {
 
             level.setBlockAndUpdate(blockPos, output.getBlock().defaultBlockState());
-            //TODO clean up these .isPresent code smells by first allocating to a method local Optional field.
-            // There's several instances where this occurs - oreo
-            if (output.getCompoundNBT().isPresent()) {
+            output.getCompoundNBT().ifPresent(nbt -> {
                 TileEntity tile = level.getBlockEntity(blockPos);
-                CompoundNBT nbt = output.getCompoundNBT().get();
                 if (tile != null) {
                     nbt.putInt("x", blockPos.getX());
                     nbt.putInt("y", blockPos.getY());
                     nbt.putInt("z", blockPos.getZ());
                     tile.load(output.getBlock().defaultBlockState(), nbt);
                 }
-            }
+            });
         }
     }
 
@@ -465,7 +462,7 @@ public class ResourcefulBee extends CustomBeeEntity {
 
         @Override
         public void dropHive() {
-            if (!CommonConfig.MANUAL_MODE.get()) {
+            if (Boolean.FALSE.equals(CommonConfig.MANUAL_MODE.get())) {
                 super.dropHive();
             }  // double check blacklist as it may need to be cleared - epic
         }
@@ -494,7 +491,7 @@ public class ResourcefulBee extends CustomBeeEntity {
 
         @Override
         public boolean canBeeUse() {
-            if (!CommonConfig.MANUAL_MODE.get()) {
+            if (Boolean.FALSE.equals(CommonConfig.MANUAL_MODE.get())) {
                 return super.canBeeUse();
             }
             return false;

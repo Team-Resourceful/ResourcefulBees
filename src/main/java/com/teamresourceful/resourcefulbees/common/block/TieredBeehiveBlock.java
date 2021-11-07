@@ -46,7 +46,6 @@ import java.util.List;
 @SuppressWarnings("deprecation")
 public class TieredBeehiveBlock extends BeehiveBlock {
 
-    private static final String SHEARS_TAG = "forge:shears";
     private static final StringTextComponent NONE_TEXT = new StringTextComponent("     NONE");
     public static final IntegerProperty TIER_PROPERTY = IntegerProperty.create("tier", 0, 4);
     private final int tier;
