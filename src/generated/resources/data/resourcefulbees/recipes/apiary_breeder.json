@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CSC",
+    "SMS",
+    "CSC"
+  ],
+  "key": {
+    "C": {
+      "item": "resourcefulbees:bee_jar"
+    },
+    "S": {
+      "tag": "minecraft:flowers"
+    },
+    "M": {
+      "item": "resourcefulbees:apiary_storage"
+    }
+  },
+  "result": {
+    "item": "resourcefulbees:apiary_breeder"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SSS",
+    "SMS",
+    "SSS"
+  ],
+  "key": {
+    "S": {
+      "item": "minecraft:grass"
+    },
+    "M": {
+      "tag": "minecraft:planks"
+    }
+  },
+  "result": {
+    "item": "resourcefulbees:t1_hive_upgrade"
+  }
+}

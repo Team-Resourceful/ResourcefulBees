@@ -45,7 +45,6 @@ public class NBTConstants {
     public static final String NBT_ENTITY_ID = "EntityID";
     public static final String NBT_ID = "id";
     public static final String NBT_ENERGY = "energy";
-    public static final String NBT_FLUID = "fluid";
     public static final String NBT_ENERGY_FILLED = "energyFilled";
     public static final String NBT_FLUID_FILLED = "fluidFilled";
     public static final String NBT_IS_PROCESSING = "isProcessing";

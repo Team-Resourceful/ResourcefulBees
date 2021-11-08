@@ -22,9 +22,7 @@ import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 
-import java.io.IOException;
 import java.io.Reader;
-import java.nio.file.*;
 import java.util.Locale;
 
 import static com.teamresourceful.resourcefulbees.ResourcefulBees.LOGGER;

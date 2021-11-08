@@ -10,7 +10,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.network.packets.SyncGUIMessage;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
-import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModTags;
 import io.netty.buffer.Unpooled;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -67,8 +67,8 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
     private final LazyOptional<IEnergyStorage> energyOptional = LazyOptional.of(() -> energyStorage);
     private final LazyOptional<FluidTank> tankOptional = LazyOptional.of(() -> tank);
 
-    public static final ITag<Fluid> HONEY_FLUID_TAG = BeeInfoUtils.getFluidTag("forge:honey");
-    public static final ITag<Item> HONEY_BOTTLE_TAG = BeeInfoUtils.getItemTag("forge:honey_bottle");
+    public static final ITag<Fluid> HONEY_FLUID_TAG = ModTags.Fluids.HONEY;
+    public static final ITag<Item> HONEY_BOTTLE_TAG = ModTags.Items.HONEY_BOTTLES;
 
     private int fluidFilled;
     private int energyFilled;
@@ -174,7 +174,7 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
         CompoundNBT invTag = tag.getCompound(NBTConstants.NBT_INVENTORY);
         getTileStackHandler().deserializeNBT(invTag);
         energyStorage.deserializeNBT(tag.getCompound(NBTConstants.NBT_ENERGY));
-        tank.readFromNBT(tag.getCompound(NBTConstants.NBT_FLUID));
+        tank.readFromNBT(tag.getCompound(NBTConstants.NBT_TANK));
         if (tag.contains(NBTConstants.NBT_ENERGY_FILLED)) setEnergyFilled(tag.getInt(NBTConstants.NBT_ENERGY_FILLED));
         if (tag.contains(NBTConstants.NBT_FLUID_FILLED)) setFluidFilled(tag.getInt(NBTConstants.NBT_FLUID_FILLED));
         if (tag.contains(NBTConstants.NBT_IS_PROCESSING)) isProcessing = tag.getBoolean(NBTConstants.NBT_IS_PROCESSING);

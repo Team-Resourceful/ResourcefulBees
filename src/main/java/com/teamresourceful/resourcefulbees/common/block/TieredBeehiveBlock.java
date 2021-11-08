@@ -5,8 +5,8 @@ import com.teamresourceful.resourcefulbees.common.item.UpgradeItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.tileentity.TieredBeehiveTileEntity;
-import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
 import com.teamresourceful.resourcefulbees.common.utils.TooltipBuilder;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModTags;
 import net.minecraft.block.BeehiveBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -46,7 +46,6 @@ import java.util.List;
 @SuppressWarnings("deprecation")
 public class TieredBeehiveBlock extends BeehiveBlock {
 
-    private static final String SHEARS_TAG = "forge:shears";
     private static final StringTextComponent NONE_TEXT = new StringTextComponent("     NONE");
     public static final IntegerProperty TIER_PROPERTY = IntegerProperty.create("tier", 0, 4);
     private final int tier;
@@ -97,7 +96,7 @@ public class TieredBeehiveBlock extends BeehiveBlock {
         ItemStack itemstack = player.getItemInHand(handIn);
 
         if (state.getValue(HONEY_LEVEL) >= 5) {
-            boolean isShear = CommonConfig.ALLOW_SHEARS.get() && itemstack.getItem().is(BeeInfoUtils.getItemTag(SHEARS_TAG));
+            boolean isShear = CommonConfig.ALLOW_SHEARS.get() && itemstack.getItem().is(ModTags.Items.SHEARS);
             boolean isScraper = itemstack.getItem().equals(ModItems.SCRAPER.get());
 
             if (isShear || isScraper) {

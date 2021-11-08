@@ -133,7 +133,7 @@ public class BeePollinateGoal extends Goal {
     }
 
     public void clearTask() {
-        if (!CommonConfig.MANUAL_MODE.get()) {
+        if (Boolean.FALSE.equals(CommonConfig.MANUAL_MODE.get())) {
             bee.setSavedFlowerPos(null);
             bee.setFlowerEntityID(-1);
             boundingBox = null;
@@ -217,7 +217,7 @@ public class BeePollinateGoal extends Goal {
     }
 
     private double getRandomOffset() {
-        return ((double) bee.getRandom().nextFloat() * 2.0D - 1.0D) * 0.33333334D;
+        return (bee.getRandom().nextFloat() * 2.0D - 1.0D) * 0.33333334D;
     }
 
     public Optional<BlockPos> findFlower(double range) {

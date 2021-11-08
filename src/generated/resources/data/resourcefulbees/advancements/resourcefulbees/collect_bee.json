@@ -1,0 +1,37 @@
+{
+  "parent": "resourcefulbees:resourcefulbees/bee_jar",
+  "display": {
+    "icon": {
+      "item": "resourcefulbees:bee_jar",
+      "nbt": "{Entity:\"minecraft:bee\",Color:\"#edc343\"}"
+    },
+    "title": {
+      "translate": "advancements.resourcefulbees.collect_bee.title"
+    },
+    "description": {
+      "translate": "advancements.resourcefulbees.collect_bee.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "has_filled_jar": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "resourcefulbees:bee_jar",
+            "nbt": "{id:\"resourcefulbees:bee_jar\",Count:1b,tag:{Entity:\"minecraft:bee\",Color:\"#edc343\"}}"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_filled_jar"
+    ]
+  ]
+}
