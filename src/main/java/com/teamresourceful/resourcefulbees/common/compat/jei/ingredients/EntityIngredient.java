@@ -1,8 +1,8 @@
 package com.teamresourceful.resourcefulbees.common.compat.jei.ingredients;
 
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
+import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.nbt.CompoundNBT;
@@ -62,8 +62,7 @@ public class EntityIngredient {
         if (entity != null) {
             if (entity instanceof CustomBeeEntity) {
                 tooltip.addAll(((CustomBeeEntity) entity).getCoreData().getLore());
-                String desc = I18n.get("tooltip.resourcefulbees.jei.click_bee_info");
-                for (String s : desc.split("\\r?\\n")) tooltip.add(new StringTextComponent(s).withStyle(TextFormatting.GOLD));
+                tooltip.add(TranslationConstants.Jei.CLICK_INFO.withStyle(TextFormatting.GOLD));
             }
             if (Minecraft.getInstance().options.advancedItemTooltips && entityType.getRegistryName() != null) {
                 tooltip.add(new StringTextComponent(entityType.getRegistryName().toString()).withStyle(TextFormatting.DARK_GRAY));

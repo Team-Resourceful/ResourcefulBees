@@ -6,6 +6,7 @@ import com.teamresourceful.resourcefulbees.api.beedata.mutation.MutationData;
 import com.teamresourceful.resourcefulbees.common.compat.jei.BaseCategory;
 import com.teamresourceful.resourcefulbees.common.compat.jei.JEICompat;
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityIngredient;
+import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import mezz.jei.api.constants.VanillaTypes;
@@ -25,7 +26,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -45,7 +45,7 @@ public class MutationCategory extends BaseCategory<IMutationRecipe> {
 
     public MutationCategory(IGuiHelper guiHelper) {
         super(guiHelper, ID,
-                I18n.get("gui.resourcefulbees.jei.category.mutation"),
+                I18n.get(TranslationConstants.Jei.MUTATIONS),
                 guiHelper.drawableBuilder(GUI_BACK, -12, 0, 117, 75).addPadding(0, 0, 0, 0).build(),
                 guiHelper.createDrawableIngredient(new ItemStack(ModItems.MUTATION_ENTITY_ICON.get())),
                 IMutationRecipe.class);
@@ -163,7 +163,7 @@ public class MutationCategory extends BaseCategory<IMutationRecipe> {
                     tooltip.add(new StringTextComponent(s).withStyle(TextFormatting.DARK_PURPLE));
                 }
             } else {
-                tooltip.add(new TranslationTextComponent("gui.resourcefulbees.jei.tooltip.show_nbt").withStyle(TextFormatting.DARK_PURPLE));
+                tooltip.add(TranslationConstants.Jei.NBT.withStyle(TextFormatting.DARK_PURPLE));
             }
         }
     }
@@ -171,10 +171,10 @@ public class MutationCategory extends BaseCategory<IMutationRecipe> {
     @Override
     public @NotNull List<ITextComponent> getTooltipStrings(@NotNull IMutationRecipe recipe, double mouseX, double mouseY) {
         if (mouseX >= 63 && mouseX <= 72 && mouseY >= 8 && mouseY <= 17) {
-            return Collections.singletonList(new TranslationTextComponent("gui." + ResourcefulBees.MOD_ID + ".jei.category.mutation.info"));
+            return Collections.singletonList(TranslationConstants.Jei.MUTATION_INFO);
         }
         if (mouseX >= 54 && mouseX <= 63 && mouseY >= 34 && mouseY <= 43 && recipe.chance() < 1) {
-            return Collections.singletonList(new TranslationTextComponent("gui." + ResourcefulBees.MOD_ID + ".jei.category.mutation_chance.info"));
+            return Collections.singletonList(TranslationConstants.Jei.MUTATION_CHANCE_INFO);
         }
         return super.getTooltipStrings(recipe, mouseX, mouseY);
     }

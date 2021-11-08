@@ -6,6 +6,7 @@ import com.teamresourceful.resourcefulbees.client.gui.widget.BeeconEffectWidget;
 import com.teamresourceful.resourcefulbees.client.gui.widget.ToggleImageButton;
 import com.teamresourceful.resourcefulbees.common.block.EnderBeecon;
 import com.teamresourceful.resourcefulbees.common.inventory.containers.EnderBeeconContainer;
+import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.network.packets.BeeconChangeMessage;
 import com.teamresourceful.resourcefulbees.common.tileentity.EnderBeeconTileEntity;
@@ -17,7 +18,6 @@ import net.minecraft.potion.Effect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,14 +27,6 @@ import java.util.List;
 public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
 
     private static final ResourceLocation BACKGROUND = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/ender_beecon/ender_beecon.png");
-
-    private static final ITextComponent PRIMARY_LABEL = new TranslationTextComponent("block.resourcefulbees.ender_beecon.primary");
-    private static final ITextComponent DRAIN_LABEL = new TranslationTextComponent("block.resourcefulbees.ender_beecon.drain");
-    private static final ITextComponent RANGE_LABEL = new TranslationTextComponent("block.resourcefulbees.ender_beecon.range");
-    private static final ITextComponent ACTIVE_LABEL = new TranslationTextComponent("block.resourcefulbees.ender_beecon.is_active");
-    private static final ITextComponent FLUID_LABEL = new TranslationTextComponent("block.resourcefulbees.ender_beecon.fluid");
-    private static final ITextComponent FLUID_AMOUNT_LABEL = new TranslationTextComponent("block.resourcefulbees.ender_beecon.fluid_amount");
-    private static final ITextComponent NO_FLUID_LABEL = new TranslationTextComponent("block.resourcefulbees.ender_beecon.no_fluid");
 
     private final EnderBeeconTileEntity tileEntity;
 
@@ -102,20 +94,20 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
     @Override
     protected void renderLabels(@NotNull MatrixStack matrixStack, int mouseX, int mouseY) {
         super.renderLabels(matrixStack, mouseX, mouseY);
-        this.font.draw(matrixStack, PRIMARY_LABEL, 10, 6, 4210752);
+        this.font.draw(matrixStack, TranslationConstants.Guis.EnderBeecon.PRIMARY_LABEL, 10, 6, 4210752);
 
-        drawString(matrixStack, font, ACTIVE_LABEL, 110, 20, 14737632);
+        drawString(matrixStack, font, TranslationConstants.Guis.EnderBeecon.ACTIVE_LABEL, 110, 20, 14737632);
         drawString(matrixStack, font, tileEntity.doEffects() ? "Yes" : "No", 160, 20, tileEntity.doEffects() ? 47104 : 12320768);
-        drawString(matrixStack, font, DRAIN_LABEL, 110, 32, 14737632);
+        drawString(matrixStack, font, TranslationConstants.Guis.EnderBeecon.DRAIN_LABEL, 110, 32, 14737632);
         drawString(matrixStack, font, tileEntity.getDrain() + " mb/t", 141, 32, 16751628);
-        drawString(matrixStack, font, RANGE_LABEL, 110, 44, 14737632);
+        drawString(matrixStack, font, TranslationConstants.Guis.EnderBeecon.RANGE_LABEL, 110, 44, 14737632);
         drawString(matrixStack, font, tileEntity.getRange() + " blocks", 145, 44, 34815);
 
         FluidStack fluidStack = menu.getEnderBeeconTileEntity().getTank().getFluid();
 
-        drawString(matrixStack, font, FLUID_LABEL, 110, 56, 14737632);
-        drawString(matrixStack, font, fluidStack.isEmpty() ? NO_FLUID_LABEL : fluidStack.getDisplayName(), 137, 56, 16751628);
-        drawString(matrixStack, font, FLUID_AMOUNT_LABEL, 110, 68, 14737632);
+        drawString(matrixStack, font, TranslationConstants.Guis.EnderBeecon.FLUID_LABEL, 110, 56, 14737632);
+        drawString(matrixStack, font, fluidStack.isEmpty() ? TranslationConstants.Guis.EnderBeecon.NO_FLUID_LABEL : fluidStack.getDisplayName(), 137, 56, 16751628);
+        drawString(matrixStack, font, TranslationConstants.Guis.EnderBeecon.FLUID_AMOUNT_LABEL, 110, 68, 14737632);
         drawString(matrixStack, font, fluidStack.getAmount()+"mB", 148, 68, 47104);
     }
 

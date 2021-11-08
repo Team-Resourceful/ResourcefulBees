@@ -5,6 +5,7 @@ import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.BeePage;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
+import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.MutationType;
 import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
@@ -77,9 +78,8 @@ public abstract class MutationsPage {
             tooltip.add(id);
             beepedia.renderComponentTooltip(matrix, tooltip, mouseX, mouseY);
         }
-        if (BeepediaScreen.mouseHovering(xPos, yPos - 9, 16, 16, mouseX, mouseY)) {
-            TranslationTextComponent text = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.mutations.mutation_count.tooltip");
-            beepedia.renderTooltip(matrix, text, mouseX, mouseY);
+        if (BeepediaScreen.mouseHovering(xPos, yPos - 9f, 16, 16, mouseX, mouseY)) {
+            beepedia.renderTooltip(matrix, TranslationConstants.Beepedia.Mutations.MUTATION_COUNT, mouseX, mouseY);
         }
     }
 

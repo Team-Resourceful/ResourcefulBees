@@ -22,8 +22,8 @@ import static com.teamresourceful.resourcefulbees.ResourcefulBees.LOGGER;
 
 public class LangGeneration {
 
-    private static final String ITEM_RESOURCEFULBEES = "item.resourcefulbees.";
-    private static final String BLOCK_RESOURCEFULBEES = "block.resourcefulbees.";
+    public static final String ITEM_RESOURCEFULBEES = "item.resourcefulbees.";
+    public static final String BLOCK_RESOURCEFULBEES = "block.resourcefulbees.";
 
     private LangGeneration() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);

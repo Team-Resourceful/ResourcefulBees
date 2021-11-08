@@ -8,7 +8,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.text.DecimalFormat;
@@ -26,8 +25,6 @@ public class ToolTip {
     private ItemStack item = null;
     private FluidStack fluid = null;
     private CustomBeeData bee = null;
-
-    private static final TranslationTextComponent CREATOR_PREFIX = new TranslationTextComponent("tooltip.resourcefulbees.bee.creator");
 
     public ToolTip(int minX, int minY, int sizeX, int sizeY, Supplier<ITextComponent> text) {
         this.minX = minX;

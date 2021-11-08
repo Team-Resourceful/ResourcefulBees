@@ -11,10 +11,10 @@
     "description": {
       "translate": "advancements.resourcefulbees.kitten_bee.description"
     },
-    "frame": "task",
+    "frame": "challenge",
     "show_toast": true,
     "announce_to_chat": true,
-    "hidden": false
+    "hidden": true
   },
   "criteria": {
     "has_kitten_jar": {

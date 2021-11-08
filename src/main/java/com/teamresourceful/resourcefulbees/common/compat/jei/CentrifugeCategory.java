@@ -5,6 +5,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.FluidOutput;
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.ItemOutput;
+import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.recipe.CentrifugeRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
@@ -23,7 +24,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.client.gui.GuiUtils;
 import org.jetbrains.annotations.NotNull;
@@ -41,7 +42,7 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
 
     public CentrifugeCategory(IGuiHelper guiHelper) {
         super(guiHelper, ID,
-                I18n.get("gui.resourcefulbees.jei.category.centrifuge"),
+                I18n.get(TranslationConstants.Jei.CENTRIFUGE),
                 guiHelper.drawableBuilder(GUI_BACK, 0, 0, 134, 66).addPadding(0, 0, 0, 0).build(),
                 guiHelper.createDrawableIngredient(ModItems.APIARY_BREEDER_ITEM.get().getDefaultInstance()),
                 CentrifugeRecipeAdapter.class);
@@ -128,18 +129,18 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
             List<ITextComponent> tooltip = new ArrayList<>();
             if (displayname != null) tooltip.add(displayname);
             if (weight != null) {
-                tooltip.add(new StringTextComponent("Weight: " + DECIMAL_FORMAT.format(weight)));
+                tooltip.add(new TranslationTextComponent(TranslationConstants.Jei.CENTRIFUGE_WEIGHT, DECIMAL_FORMAT.format(weight)));
             } else {
-                tooltip.add(new StringTextComponent("Weight: SLOT EMPTY"));
+                tooltip.add(TranslationConstants.Jei.CENTRIFUGE_WEIGHT_EMPTY);
             }
             return tooltip;
         }
         inBounds = MathUtils.inRangeInclusive((int) mouseX, min, max) && MathUtils.inRangeInclusive((int) mouseY, 15 + (18*i), 15 + (18*i) + 9);
         if (inBounds) {
             if (outputSize > i)
-                return Collections.singletonList(new StringTextComponent("Pool Chance: " + DECIMAL_FORMAT.format(chance)));
+                return Collections.singletonList(new TranslationTextComponent(TranslationConstants.Jei.CENTRIFUGE_CHANCE, DECIMAL_FORMAT.format(chance)));
             else {
-                return Collections.singletonList(new StringTextComponent("Pool Chance: POOL EMPTY"));
+                return Collections.singletonList(TranslationConstants.Jei.CENTRIFUGE_CHANCE_EMPTY);
             }
         }
         return Collections.emptyList();

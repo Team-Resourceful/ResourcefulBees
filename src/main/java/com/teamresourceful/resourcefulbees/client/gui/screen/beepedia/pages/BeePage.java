@@ -11,6 +11,7 @@ import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaSc
 import com.teamresourceful.resourcefulbees.client.gui.widget.TabImageButton;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.item.BeeJar;
+import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.utils.BeepediaUtils;
 import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
@@ -92,8 +93,7 @@ public class BeePage extends BeepediaPage {
 
     private void registerInfoPage(int subX, int subY) {
         beeInfoPage = Pair.of(
-                getTabButton(new ItemStack(Items.BOOK), onPress -> setSubPage(SubPageType.INFO),
-                        new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.info")),
+                getTabButton(new ItemStack(Items.BOOK), onPress -> setSubPage(SubPageType.INFO), TranslationConstants.Beepedia.Info.INFO),
                 new BeeInfoPage(beepedia, beeData, subX, subY, this)
         );
         subPage = beeInfoPage;
@@ -103,8 +103,7 @@ public class BeePage extends BeepediaPage {
     private void registerCombatPage(int subX, int subY) {
         if (!beeData.getCombatData().equals(CombatData.DEFAULT)) {
             beeCombatPage = Pair.of(
-                    getTabButton(new ItemStack(Items.IRON_SWORD), onPress -> setSubPage(SubPageType.COMBAT),
-                            new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.combat")),
+                    getTabButton(new ItemStack(Items.IRON_SWORD), onPress -> setSubPage(SubPageType.COMBAT), TranslationConstants.Beepedia.Combat.TITLE),
                     new BeeCombatPage(beepedia, beeData, subX, subY, this)
             );
             subPage = beeCombatPage;
@@ -115,8 +114,7 @@ public class BeePage extends BeepediaPage {
     private void registerMutationListPage(int subX, int subY) {
         if (beeData.getMutationData().hasMutation() && (!CommonConfig.BEEPEDIA_HIDE_LOCKED.get() || beeUnlocked)) {
             mutationsPage = Pair.of(
-                    getTabButton(new ItemStack(ModItems.MUTATION_ICON.get()), onPress -> setSubPage(SubPageType.MUTATIONS),
-                            new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.mutations")),
+                    getTabButton(new ItemStack(ModItems.MUTATION_ICON.get()), onPress -> setSubPage(SubPageType.MUTATIONS), TranslationConstants.Beepedia.Mutations.TITLE),
                     new MutationListPage(beepedia, beeData, subX, subY, this)
             );
             tabs.add(mutationsPage);
@@ -126,8 +124,7 @@ public class BeePage extends BeepediaPage {
     private void registerTraitListPage(int subX, int subY) {
         if (beeData.getTraitData().hasTraits() && !beeData.getTraitData().getTraits().isEmpty() && (!CommonConfig.BEEPEDIA_HIDE_LOCKED.get() || beeUnlocked)) {
             traitListPage = Pair.of(
-                    getTabButton(new ItemStack(ModItems.TRAIT_ICON.get()), onPress -> setSubPage(SubPageType.TRAIT_LIST),
-                            new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.traits")),
+                    getTabButton(new ItemStack(ModItems.TRAIT_ICON.get()), onPress -> setSubPage(SubPageType.TRAIT_LIST), TranslationConstants.Beepedia.Traits.TITLE),
                     new TraitListPage(beepedia, beeData, subX, subY, this)
             );
             tabs.add(traitListPage);
@@ -137,8 +134,7 @@ public class BeePage extends BeepediaPage {
     private void registerHoneycombPage(int subX, int subY) {
         if (beeData.getHoneycombData() != null && (!CommonConfig.BEEPEDIA_HIDE_LOCKED.get() || beeUnlocked)) {
             centrifugePage = Pair.of(
-                    getTabButton(new ItemStack(Items.HONEYCOMB), onPress -> setSubPage(SubPageType.HONEYCOMB),
-                            new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.honeycombs")),
+                    getTabButton(new ItemStack(Items.HONEYCOMB), onPress -> setSubPage(SubPageType.HONEYCOMB), TranslationConstants.Beepedia.Honeycombs.TITLE),
                     new HoneycombPage(beepedia, beeData, subX, subY, this)
             );
             tabs.add(centrifugePage);
@@ -148,8 +144,7 @@ public class BeePage extends BeepediaPage {
     private void registerSpawningPage(int subX, int subY) {
         if (beeData.getSpawnData().canSpawnInWorld()) {
             spawningPage = Pair.of(
-                    getTabButton(new ItemStack(Items.SPAWNER), onPress -> setSubPage(SubPageType.SPAWNING),
-                            new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.spawning")),
+                    getTabButton(new ItemStack(Items.SPAWNER), onPress -> setSubPage(SubPageType.SPAWNING), TranslationConstants.Beepedia.Spawning.TITLE),
                     new SpawningPage(beepedia, beeData, subX, subY, this)
             );
             tabs.add(spawningPage);
@@ -161,8 +156,7 @@ public class BeePage extends BeepediaPage {
         List<ItemMutation> itemBreedMutation = BeepediaUtils.getItemMutationsContaining(beeData);
         if (beeData.getBreedData().hasParents() || !breedMutations.isEmpty() || !itemBreedMutation.isEmpty()) {
             breedingPage = Pair.of(
-                    getTabButton(new ItemStack(ModItems.GOLD_FLOWER_ITEM.get()), onPress -> setSubPage(SubPageType.BREEDING),
-                            new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding")),
+                    getTabButton(new ItemStack(ModItems.GOLD_FLOWER_ITEM.get()), onPress -> setSubPage(SubPageType.BREEDING), TranslationConstants.Beepedia.Breeding.TITLE),
                     new BreedingPage(beepedia, beeData, subX, subY, breedMutations, itemBreedMutation, this)
             );
             tabs.add(breedingPage);

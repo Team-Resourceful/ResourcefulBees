@@ -1,23 +1,23 @@
 package com.teamresourceful.resourcefulbees.common.lib.enums;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.util.text.ITextComponent;
+import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import net.minecraft.util.text.TranslationTextComponent;
 
 public enum LightLevel {
-    DAY("gui.resourcefulbees.light.day"),
-    NIGHT("gui.resourcefulbees.light.night"),
-    ANY("gui.resourcefulbees.light.any");
+    DAY(TranslationConstants.LightLevel.DAY),
+    NIGHT(TranslationConstants.LightLevel.NIGHT),
+    ANY(TranslationConstants.LightLevel.ANY);
 
-    TranslationTextComponent translationComponent;
+    TranslationTextComponent component;
 
-    LightLevel(String translationKey) {
-        this.translationComponent = new TranslationTextComponent(translationKey);
+    LightLevel(TranslationTextComponent component) {
+        this.component = component;
     }
 
     public static final Codec<LightLevel> CODEC = Codec.STRING.xmap(LightLevel::valueOf, LightLevel::toString);
 
-    public ITextComponent getDisplay() {
-        return translationComponent;
+    public TranslationTextComponent getDisplay() {
+        return component;
     }
 }

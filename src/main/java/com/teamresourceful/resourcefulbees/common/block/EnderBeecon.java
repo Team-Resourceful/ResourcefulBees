@@ -2,8 +2,8 @@ package com.teamresourceful.resourcefulbees.common.block;
 
 import com.teamresourceful.resourcefulbees.common.capabilities.HoneyFluidTank;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.tileentity.EnderBeeconTileEntity;
-import com.teamresourceful.resourcefulbees.common.utils.TooltipBuilder;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -32,6 +32,7 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
@@ -151,10 +152,8 @@ public class EnderBeecon extends AbstractTank {
     @OnlyIn(Dist.CLIENT)
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable IBlockReader worldIn, @NotNull List<ITextComponent> tooltip, @NotNull ITooltipFlag flagIn) {
-        tooltip.addAll(new TooltipBuilder()
-                .addTranslatableTip("block.resourcefulbees.beecon.tooltip.info", TextFormatting.LIGHT_PURPLE)
-                .addTranslatableTip("block.resourcefulbees.beecon.tooltip.info.1", TextFormatting.LIGHT_PURPLE)
-                .build());
+        tooltip.add(TranslationConstants.Items.BEECON_TOOLTIP.withStyle(TextFormatting.LIGHT_PURPLE));
+        tooltip.add(TranslationConstants.Items.BEECON_TOOLTIP_1.withStyle(TextFormatting.LIGHT_PURPLE));
 
         if (!stack.hasTag()) return;
         if (!stack.getTag().contains(NBTConstants.NBT_BLOCK_ENTITY_TAG)) return;
@@ -163,10 +162,9 @@ public class EnderBeecon extends AbstractTank {
         FluidTank tank = new FluidTank(16000).readFromNBT(stack.getTag().getCompound(NBTConstants.NBT_BLOCK_ENTITY_TAG).getCompound(NBTConstants.NBT_TANK));
         FluidStack fluid = tank.getFluid();
         if (!fluid.isEmpty()) {
-            tooltip.addAll(new TooltipBuilder()
-                    .addTranslatableTip(fluid.getTranslationKey())
-                    .appendText(": [" + tank.getFluidAmount() + "/" + tank.getCapacity() + "]")
-                    .applyStyle(TextFormatting.GOLD).build());
+            tooltip.add(new TranslationTextComponent(fluid.getTranslationKey())
+                    .append(": [" + tank.getFluidAmount() + "/" + tank.getCapacity() + "]")
+                    .withStyle(TextFormatting.GOLD));
         }
     }
 

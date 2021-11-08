@@ -5,6 +5,8 @@ import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.teamresourceful.resourcefulbees.client.gui.widget.ModImageButton;
+import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ItemGroupResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
@@ -72,16 +74,13 @@ public class HomePage extends BeepediaPage {
         ITextComponent completeStatus = getProgress();
         int padding = font.width(completeStatus) / 2;
         font.draw(matrix, completeStatus, xPos + (SUB_PAGE_WIDTH / 2F) - padding, yPos + 115F, -1);
-        font.draw(matrix, new TranslationTextComponent("itemGroup.resourcefulbees").withStyle(TextFormatting.GRAY), xPos + 32F, yPos + 81F, -1);
+        font.draw(matrix, ItemGroupResourcefulBees.RESOURCEFUL_BEES.getDisplayName().copy().withStyle(TextFormatting.GRAY), xPos + 32F, yPos + 81F, -1);
         Minecraft.getInstance().getTextureManager().bind(logo);
         AbstractGui.blit(matrix, xPos + (SUB_PAGE_WIDTH / 2) - 52, yPos + 90, 0, 0, 104, 16, 104, 16);
     }
 
     private ITextComponent getProgress() {
-        TranslationTextComponent prefix = new TranslationTextComponent("gui.resourcefulbees.beepedia.home.progress");
-        prefix.append(String.format("%d / %d", beepedia.complete ? beepedia.bees.size() : beepedia.itemBees.size(), beepedia.bees.size()));
-        prefix.withStyle(TextFormatting.GRAY);
-        return prefix;
+        return new TranslationTextComponent(TranslationConstants.Beepedia.PROGRESS, beepedia.complete ? beepedia.bees.size() : beepedia.itemBees.size(), beepedia.bees.size()).withStyle(TextFormatting.GRAY);
     }
 
     @Override
@@ -101,16 +100,16 @@ public class HomePage extends BeepediaPage {
     @Override
     public void drawTooltips(MatrixStack matrixStack, int mouseX, int mouseY) {
         if (BeepediaScreen.mouseHovering(xPos + 139f, yPos + 129f, 25, 25, mouseX, mouseY)) {
-            beepedia.renderTooltip(matrixStack, new TranslationTextComponent("gui.resourcefulbees.beepedia.home.discord"), mouseX, mouseY);
+            beepedia.renderTooltip(matrixStack, TranslationConstants.Beepedia.Home.DISCORD, mouseX, mouseY);
         }
         if (BeepediaScreen.mouseHovering(xPos + 114f, yPos + 129f, 25, 25, mouseX, mouseY)) {
-            beepedia.renderTooltip(matrixStack, new TranslationTextComponent("gui.resourcefulbees.beepedia.home.patreon"), mouseX, mouseY);
+            beepedia.renderTooltip(matrixStack, TranslationConstants.Beepedia.Home.PATREON, mouseX, mouseY);
         }
         if (BeepediaScreen.mouseHovering(xPos + 89f, yPos + 129f, 25, 25, mouseX, mouseY)) {
-            beepedia.renderTooltip(matrixStack, new TranslationTextComponent("gui.resourcefulbees.beepedia.home.issues"), mouseX, mouseY);
+            beepedia.renderTooltip(matrixStack, TranslationConstants.Beepedia.Home.ISSUES, mouseX, mouseY);
         }
         if (BeepediaScreen.mouseHovering(xPos + 64f, yPos + 129f, 25, 25, mouseX, mouseY)) {
-            beepedia.renderTooltip(matrixStack, new TranslationTextComponent("gui.resourcefulbees.beepedia.home.wiki"), mouseX, mouseY);
+            beepedia.renderTooltip(matrixStack, TranslationConstants.Beepedia.Home.WIKI, mouseX, mouseY);
         }
     }
 

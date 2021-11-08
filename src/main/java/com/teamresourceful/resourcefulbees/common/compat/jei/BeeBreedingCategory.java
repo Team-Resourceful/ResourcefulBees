@@ -4,6 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.beedata.breeding.BeeFamily;
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityIngredient;
+import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
@@ -17,7 +18,6 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.DecimalFormat;
@@ -31,7 +31,7 @@ public class BeeBreedingCategory extends BaseCategory<BeeFamily> {
 
     public BeeBreedingCategory(IGuiHelper guiHelper) {
         super(guiHelper, ID,
-                I18n.get("gui.resourcefulbees.jei.category.breeding"),
+                I18n.get(TranslationConstants.Jei.BREEDING),
                 guiHelper.drawableBuilder(GUI_BACK, 0, 0, 160, 60).addPadding(0, 0, 0, 0).build(),
                 guiHelper.createDrawableIngredient(ModItems.APIARY_BREEDER_ITEM.get().getDefaultInstance()),
                 BeeFamily.class);
@@ -105,7 +105,7 @@ public class BeeBreedingCategory extends BaseCategory<BeeFamily> {
         double infoX = 115D;
         double infoY = 40D;
         if (mouseX >= infoX && mouseX <= infoX + 9D && mouseY >= infoY && mouseY <= infoY + 9D && beeFamily.getChance() < 1) {
-            return Collections.singletonList(new StringTextComponent(I18n.get("gui." + ResourcefulBees.MOD_ID + ".jei.category.breed_chance.info")));
+            return Collections.singletonList(TranslationConstants.Jei.BREED_CHANCE_INFO);
         }
         return super.getTooltipStrings(beeFamily, mouseX, mouseY);
     }

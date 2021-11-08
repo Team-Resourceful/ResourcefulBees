@@ -8,6 +8,7 @@ import com.teamresourceful.resourcefulbees.client.gui.widget.*;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.custom.TraitRegistry;
@@ -103,7 +104,7 @@ public class BeepediaScreen extends Screen {
 
     @OnlyIn(Dist.CLIENT)
     public BeepediaScreen(CustomBeeEntity entity, List<String> bees, boolean complete, boolean hasShades, ItemStack itemstack) {
-        super(new TranslationTextComponent("gui.resourcefulbees.beepedia"));
+        super(TranslationConstants.Beepedia.NAME);
         if (entity != null) {
             currScreenState.setPageType(PageType.BEE);
             currScreenState.setPageID(entity.getBeeType());
@@ -193,7 +194,7 @@ public class BeepediaScreen extends Screen {
      */
     private void registerSearch(int x, int y) {
         if (this.minecraft != null) this.minecraft.keyboardHandler.setSendRepeatsToGui(true);
-        searchBox = new TextFieldWidget(Minecraft.getInstance().font, x + 10, y + 143, 98, 10, new TranslationTextComponent("gui.resourcefulbees.beepedia.search"));
+        searchBox = new TextFieldWidget(Minecraft.getInstance().font, x + 10, y + 143, 98, 10, TranslationConstants.Beepedia.SEARCH);
         searchBox.visible = false;
         addWidget(searchBox);
         bees.forEach((s, b) -> b.addSearch());
@@ -214,13 +215,13 @@ public class BeepediaScreen extends Screen {
         ItemStack honeyItem = new ItemStack(Items.HONEY_BOTTLE);
         ItemStack combItem = new ItemStack(Items.HONEYCOMB);
         TabImageButton beesButton = new TabImageButton(x + 45, y + 8, 20, 20, 0, 0, 20, buttonImage, beeItem, 2, 2, onPress ->
-                setActiveList(beesList, PageType.BEE), getTooltipProvider(new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.bees")));
+                setActiveList(beesList, PageType.BEE), getTooltipProvider(TranslationConstants.Beepedia.BEE_LIST));
         TabImageButton traitsButton = new TabImageButton(x + 66, y + 8, 20, 20, 0, 0, 20, buttonImage, traitItem, 2, 2, onPress ->
-                setActiveList(traitsList, PageType.TRAIT), getTooltipProvider(new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits")));
+                setActiveList(traitsList, PageType.TRAIT), getTooltipProvider(TranslationConstants.Beepedia.Traits.TITLE));
         TabImageButton honeyButton = new TabImageButton(x + 87, y + 8, 20, 20, 0, 0, 20, buttonImage, honeyItem, 2, 2, onPress ->
-                setActiveList(honeyList, PageType.HONEY), getTooltipProvider(new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.honey")));
+                setActiveList(honeyList, PageType.HONEY), getTooltipProvider(TranslationConstants.Beepedia.HONEY));
         TabImageButton combButton = new TabImageButton(x + 108, y + 8, 20, 20, 0, 0, 20, buttonImage, combItem, 2, 2, onPress ->
-                setActiveList(combsList, PageType.COMB), getTooltipProvider(new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.combs")));
+                setActiveList(combsList, PageType.COMB), getTooltipProvider(TranslationConstants.Beepedia.Honeycombs.TITLE));
 
         addButton(beesButton);
         addButton(traitsButton);
@@ -409,8 +410,7 @@ public class BeepediaScreen extends Screen {
 
             @Override
             public void renderToolTip(@NotNull MatrixStack matrix, int mouseX, int mouseY) {
-                TranslationTextComponent s = new TranslationTextComponent("book.resourcefulbees.name");
-                BeepediaScreen.this.renderTooltip(matrix, s, mouseX, mouseY);
+                BeepediaScreen.this.renderTooltip(matrix, TranslationConstants.Items.BOOK_NAME, mouseX, mouseY);
             }
         };
         this.addButton(shadesButton);
@@ -510,16 +510,16 @@ public class BeepediaScreen extends Screen {
         TranslationTextComponent title;
         switch (activeListType) {
             case TRAIT:
-                title = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits");
+                title = TranslationConstants.Beepedia.Traits.TITLE;
                 break;
             case HONEY:
-                title = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.honey");
+                title = TranslationConstants.Beepedia.HONEY;
                 break;
             case COMB:
-                title = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.combs");
+                title = TranslationConstants.Beepedia.Honeycombs.TITLE;
                 break;
             default:
-                title = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.bees");
+                title = TranslationConstants.Beepedia.BEE_LIST;
                 break;
         }
         this.font.draw(matrixStack, title.withStyle(TextFormatting.WHITE), (float) this.guiLeft + 10, (float) this.guiTop + 20, -1);

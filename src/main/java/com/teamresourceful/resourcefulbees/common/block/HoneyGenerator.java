@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.block;
 
+import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.tileentity.HoneyGeneratorTileEntity;
-import com.teamresourceful.resourcefulbees.common.utils.TooltipBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalBlock;
@@ -95,7 +95,7 @@ public class HoneyGenerator extends AbstractTank {
     @OnlyIn(Dist.CLIENT)
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable IBlockReader worldIn, @NotNull List<ITextComponent> tooltip, @NotNull ITooltipFlag flagIn) {
-        tooltip.addAll(new TooltipBuilder().addTranslatableTip("block.resourcefulbees.generator.tooltip.info", TextFormatting.GOLD).build());
+        tooltip.add(TranslationConstants.Items.GEN_TOOLTIP.withStyle(TextFormatting.GOLD));
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
     }
 }

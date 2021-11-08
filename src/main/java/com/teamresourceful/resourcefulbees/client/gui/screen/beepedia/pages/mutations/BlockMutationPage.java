@@ -5,6 +5,7 @@ import com.teamresourceful.resourcefulbees.api.beedata.outputs.BlockOutput;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.BeePage;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
+import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.MutationType;
 import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
 import com.teamresourceful.resourcefulbees.common.utils.RandomCollection;
@@ -82,13 +83,13 @@ public class BlockMutationPage extends MutationsPage {
                     List<String> lore = BeeInfoUtils.getLoreLines(output.getCompoundNBT().get());
                     lore.forEach(l -> tooltip.add(new StringTextComponent(l).withStyle(Style.EMPTY.withColor(Color.parseColor("dark_purple")))));
                 } else {
-                    tooltip.add(new TranslationTextComponent("gui.resourcefulbees.jei.tooltip.show_nbt").withStyle(Style.EMPTY.withColor(Color.parseColor("dark_purple"))));
+                    tooltip.add(TranslationConstants.Jei.NBT.withStyle(TextFormatting.DARK_PURPLE));
                 }
             }
             beepedia.renderComponentTooltip(matrix, tooltip, mouseX, mouseY);
         }
         if (outputChance < 1 && BeepediaScreen.mouseHovering((float) xPos + ((float) SUB_PAGE_WIDTH / 2) - 20, (float) yPos + 51, 8, 8, mouseX, mouseY)) {
-            beepedia.renderTooltip(matrix, new TranslationTextComponent("gui.resourcefulbees.jei.category.mutation_chance.info"), mouseX, mouseY);
+            beepedia.renderTooltip(matrix, TranslationConstants.Jei.MUTATION_CHANCE_INFO, mouseX, mouseY);
         }
     }
 

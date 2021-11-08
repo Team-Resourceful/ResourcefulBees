@@ -7,6 +7,7 @@ import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.muta
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.mutations.EntityMutationPage;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.mutations.ItemMutationPage;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.mutations.MutationsPage;
+import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.MutationType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -109,13 +110,13 @@ public class MutationListPage extends BeeDataPage {
         TranslationTextComponent title;
         switch (mutations.get(BeepediaScreen.currScreenState.getCurrentMutationTab()).getLeft()) {
             case BLOCK:
-                title = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.mutations.block");
+                title = TranslationConstants.Beepedia.Mutations.BLOCK;
                 break;
             case ENTITY:
-                title = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.mutations.entity");
+                title = TranslationConstants.Beepedia.Mutations.ENTITY;
                 break;
             case ITEM:
-                title = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.mutations.item");
+                title = TranslationConstants.Beepedia.Mutations.ITEM;
                 break;
             default:
                 throw new UnsupportedOperationException(String.format("found a legacy mutation. %s", BeepediaScreen.currScreenState.getCurrentMutationTab()));
@@ -123,12 +124,12 @@ public class MutationListPage extends BeeDataPage {
 
         if (activePage != null) {
             int padding = font.width(title) / 2;
-            font.draw(matrix, title.withStyle(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, -1);
+            font.draw(matrix, title.withStyle(TextFormatting.WHITE), xPos + (SUB_PAGE_WIDTH / 2f) - padding, yPos + 8f, -1);
             activePage.draw(matrix, xPos, yPos + 31);
             if (activeList.size() > 1) {
                 StringTextComponent pageInfo = new StringTextComponent(String.format("%d / %d", this.page + 1, activeList.size()));
                 padding = font.width(pageInfo) / 2;
-                font.draw(matrix, pageInfo.withStyle(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + SUB_PAGE_HEIGHT - 14, -1);
+                font.draw(matrix, pageInfo.withStyle(TextFormatting.WHITE), xPos + (SUB_PAGE_WIDTH / 2f) - padding, (float) yPos + SUB_PAGE_HEIGHT - 14f, -1);
             }
         }
     }

@@ -2,11 +2,11 @@ package com.teamresourceful.resourcefulbees.common.block;
 
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.item.UpgradeItem;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModTags;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.tileentity.TieredBeehiveTileEntity;
-import com.teamresourceful.resourcefulbees.common.utils.TooltipBuilder;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModTags;
 import net.minecraft.block.BeehiveBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -205,25 +205,15 @@ public class TieredBeehiveBlock extends BeehiveBlock {
         }
 
 
-        tooltip.add(new TranslationTextComponent("resourcefulbees.shift_info").withStyle(TextFormatting.YELLOW));
+        tooltip.add(TranslationConstants.Items.MORE_INFO.withStyle(TextFormatting.YELLOW));
+        tooltip.add(new TranslationTextComponent(TranslationConstants.BeeHive.MAX_BEES, Math.round(CommonConfig.HIVE_MAX_BEES.get() * localTierModifier)).withStyle(TextFormatting.GOLD));
+        tooltip.add(new TranslationTextComponent(TranslationConstants.BeeHive.MAX_COMBS, Math.round(CommonConfig.HIVE_MAX_COMBS.get() * localTierModifier)).withStyle(TextFormatting.GOLD));
 
-        tooltip.addAll(new TooltipBuilder()
-                .addTranslatableTip("block.resourcefulbees.beehive.tooltip.max_bees")
-                .appendText(" " + Math.round(CommonConfig.HIVE_MAX_BEES.get() * localTierModifier))
-                .applyStyle(TextFormatting.GOLD)
-                .addTranslatableTip("block.resourcefulbees.beehive.tooltip.max_combs")
-                .appendText(" " + Math.round(CommonConfig.HIVE_MAX_COMBS.get() * localTierModifier))
-                .applyStyle(TextFormatting.GOLD)
-                .build());
 
         if (localTier != 1) {
             int timeReduction = localTier > 1 ? (int) ((localTier * .05) * 100) : (int) (.05 * 100);
             String sign = localTier > 1 ? "-" : "+";
-            tooltip.addAll(new TooltipBuilder()
-                    .addTranslatableTip("block.resourcefulbees.beehive.tooltip.hive_time")
-                    .appendText(" " + sign + timeReduction + "%")
-                    .applyStyle(TextFormatting.GOLD)
-                    .build());
+            tooltip.add(new TranslationTextComponent(TranslationConstants.BeeHive.HIVE_TIME, sign, timeReduction).withStyle(TextFormatting.GOLD));
         }
     }
 
@@ -236,12 +226,10 @@ public class TieredBeehiveBlock extends BeehiveBlock {
                 createHoneycombsTooltip(tooltip, blockEntityTag);
             }
         } else {
-            tooltip.add(new TranslationTextComponent("block.resourcefulbees.beehive.tooltip.bees")
-                    .withStyle(TextFormatting.GOLD));
+            tooltip.add(TranslationConstants.BeeHive.BEES.withStyle(TextFormatting.GOLD));
             tooltip.add(NONE_TEXT);
             tooltip.add(StringTextComponent.EMPTY);
-            tooltip.add(new TranslationTextComponent("block.resourcefulbees.beehive.tooltip.honeycombs")
-                    .withStyle(TextFormatting.GOLD));
+            tooltip.add(TranslationConstants.BeeHive.HONEYCOMBS.withStyle(TextFormatting.GOLD));
             tooltip.add(NONE_TEXT);
         }
     }
@@ -252,8 +240,7 @@ public class TieredBeehiveBlock extends BeehiveBlock {
     }
 
     private void createHoneycombsTooltip(@NotNull List<ITextComponent> tooltip, CompoundNBT blockEntityTag) {
-        tooltip.add(new TranslationTextComponent("block.resourcefulbees.beehive.tooltip.honeycombs")
-                .withStyle(TextFormatting.GOLD));
+        tooltip.add(TranslationConstants.BeeHive.HONEYCOMBS.withStyle(TextFormatting.GOLD));
         if (blockEntityTag.contains(NBTConstants.NBT_HONEYCOMBS_TE, Constants.NBT.TAG_LIST)) {
             HashMap<String, Integer> combs = new HashMap<>();
             ListNBT combList = blockEntityTag.getList(NBTConstants.NBT_HONEYCOMBS_TE, Constants.NBT.TAG_COMPOUND);
@@ -274,9 +261,7 @@ public class TieredBeehiveBlock extends BeehiveBlock {
     }
 
     private void createBeesTooltip(@NotNull List<ITextComponent> tooltip, CompoundNBT blockEntityTag) {
-        tooltip.add(new TranslationTextComponent("block.resourcefulbees.beehive.tooltip.bees")
-                .withStyle(TextFormatting.GOLD));
-
+        tooltip.add(TranslationConstants.BeeHive.BEES.withStyle(TextFormatting.GOLD));
         if (blockEntityTag.contains("Bees", Constants.NBT.TAG_LIST)) {
             HashMap<String, Integer> bees = new HashMap<>();
             ListNBT beeList = blockEntityTag.getList(NBTConstants.NBT_BEES, Constants.NBT.TAG_COMPOUND);

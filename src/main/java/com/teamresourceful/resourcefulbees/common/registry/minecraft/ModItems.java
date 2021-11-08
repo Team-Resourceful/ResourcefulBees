@@ -5,7 +5,7 @@ import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.item.*;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
-import com.teamresourceful.resourcefulbees.common.utils.TooltipBuilder;
+import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.*;
 import net.minecraft.item.crafting.IRecipeType;
@@ -13,7 +13,6 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
@@ -91,8 +90,8 @@ public class ModItems {
 
         @Override
         public void appendHoverText(@NotNull ItemStack stack, @Nullable World worldIn, @NotNull List<ITextComponent> tooltip, @NotNull ITooltipFlag flagIn) {
-            tooltip.add(new TranslationTextComponent("item.resourcefulbees.scraper.tooltip").withStyle(TextFormatting.GOLD));
-            tooltip.add(new TranslationTextComponent("item.resourcefulbees.scraper.tooltip.1").withStyle(TextFormatting.GOLD));
+            tooltip.add(TranslationConstants.Items.SCRAPER_TOOLTIP.withStyle(TextFormatting.GOLD));
+            tooltip.add(TranslationConstants.Items.SCRAPER_TOOLTIP_1.withStyle(TextFormatting.GOLD));
             super.appendHoverText(stack, worldIn, tooltip, flagIn);
         }
     });
@@ -177,9 +176,7 @@ public class ModItems {
                     .build()) {
         @Override
         public void appendHoverText(@NotNull ItemStack stack, @Nullable World worldIn, @NotNull List<ITextComponent> tooltip, @NotNull ITooltipFlag flagIn) {
-            tooltip.addAll(new TooltipBuilder()
-                    .addTranslatableTip("item.resourcefulbees.apiary_breeder_upgrade.tooltip.info", TextFormatting.GOLD)
-                    .build());
+            tooltip.add(TranslationConstants.Items.BREEDER_UPGRADE.withStyle(TextFormatting.GOLD));
             super.appendHoverText(stack, worldIn, tooltip, flagIn);
         }
     });
@@ -191,9 +188,7 @@ public class ModItems {
                     .build()) {
         @Override
         public void appendHoverText(@NotNull ItemStack stack, @Nullable World worldIn, @NotNull List<ITextComponent> tooltip, @NotNull ITooltipFlag flagIn) {
-            tooltip.addAll(new TooltipBuilder()
-                    .addTranslatableTip("item.resourcefulbees.apiary_breed_time_upgrade.tooltip.info", TextFormatting.GOLD)
-                    .build());
+            tooltip.add(TranslationConstants.Items.BREED_TIME_UPGRADE.withStyle(TextFormatting.GOLD));
             super.appendHoverText(stack, worldIn, tooltip, flagIn);
         }
     });
@@ -208,9 +203,7 @@ public class ModItems {
                     .build()) {
         @Override
         public void appendHoverText(@NotNull ItemStack stack, @Nullable World worldIn, @NotNull List<ITextComponent> tooltip, @NotNull ITooltipFlag flagIn) {
-            tooltip.addAll(new TooltipBuilder()
-                    .addTranslatableTip(ModConstants.HIVE_UPGRADE_TOOLTIP, TextFormatting.GOLD)
-                    .build());
+            tooltip.add(TranslationConstants.Items.HIVE_UPGRADE.withStyle(TextFormatting.GOLD));
             super.appendHoverText(stack, worldIn, tooltip, flagIn);
         }
     });
@@ -223,9 +216,7 @@ public class ModItems {
                     .build()) {
         @Override
         public void appendHoverText(@NotNull ItemStack stack, @Nullable World worldIn, @NotNull List<ITextComponent> tooltip, @NotNull ITooltipFlag flagIn) {
-            tooltip.addAll(new TooltipBuilder()
-                    .addTranslatableTip(ModConstants.HIVE_UPGRADE_TOOLTIP, TextFormatting.GOLD)
-                    .build());
+            tooltip.add(TranslationConstants.Items.HIVE_UPGRADE.withStyle(TextFormatting.GOLD));
             super.appendHoverText(stack, worldIn, tooltip, flagIn);
         }
     });
@@ -238,9 +229,7 @@ public class ModItems {
                     .build()) {
         @Override
         public void appendHoverText(@NotNull ItemStack stack, @Nullable World worldIn, @NotNull List<ITextComponent> tooltip, @NotNull ITooltipFlag flagIn) {
-            tooltip.addAll(new TooltipBuilder()
-                    .addTranslatableTip(ModConstants.HIVE_UPGRADE_TOOLTIP, TextFormatting.GOLD)
-                    .build());
+            tooltip.add(TranslationConstants.Items.HIVE_UPGRADE.withStyle(TextFormatting.GOLD));
             super.appendHoverText(stack, worldIn, tooltip, flagIn);
         }
     });
@@ -253,9 +242,7 @@ public class ModItems {
                     .build()) {
         @Override
         public void appendHoverText(@NotNull ItemStack stack, @Nullable World worldIn, @NotNull List<ITextComponent> tooltip, @NotNull ITooltipFlag flagIn) {
-            tooltip.addAll(new TooltipBuilder()
-                    .addTranslatableTip(ModConstants.HIVE_UPGRADE_TOOLTIP, TextFormatting.GOLD)
-                    .build());
+            tooltip.add(TranslationConstants.Items.HIVE_UPGRADE.withStyle(TextFormatting.GOLD));
             super.appendHoverText(stack, worldIn, tooltip, flagIn);
         }
     });

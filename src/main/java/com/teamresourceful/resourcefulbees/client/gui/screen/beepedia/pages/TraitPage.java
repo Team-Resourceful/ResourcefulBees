@@ -9,6 +9,7 @@ import com.teamresourceful.resourcefulbees.client.gui.widget.ListButton;
 import com.teamresourceful.resourcefulbees.client.gui.widget.SubButtonList;
 import com.teamresourceful.resourcefulbees.common.item.BeeJar;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TraitConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
@@ -70,29 +71,26 @@ public class TraitPage extends BeepediaPage {
 
     private void addParticle() {
         if (trait.hasParticleEffects()) {
-            TranslationTextComponent title = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits.particle");
             StringTextComponent text = new StringTextComponent(trait.getParticleEffects().iterator().next().getRegistryName().toString()); ///MOST LIKELY NEEDS TO BE FIXED/IS BROKEN
-            traitSections.add(new TraitSection(title, new ItemStack(Items.FIREWORK_ROCKET), text));
+            traitSections.add(new TraitSection(TranslationConstants.Beepedia.Traits.PARTICLES, new ItemStack(Items.FIREWORK_ROCKET), text));
         }
     }
 
     private void addDamageTypes() {
         if (trait.hasDamageTypes()) {
-            TranslationTextComponent title = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits.damageTypes");
             StringTextComponent text = new StringTextComponent("");
             trait.getDamageTypes().forEach(damageType -> {
                 text.append(damageType.getType() + " ");
-                text.append(new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits.amplifier"));
+                text.append(TranslationConstants.Beepedia.Traits.AMPLIFIER);
                 text.append(String.valueOf(damageType.getAmplifier()));
                 text.append(", ");
             });
-            traitSections.add(new TraitSection(title, new ItemStack(Items.IRON_SWORD), text));
+            traitSections.add(new TraitSection(TranslationConstants.Beepedia.Traits.DAMAGE_TYPES, new ItemStack(Items.IRON_SWORD), text));
         }
     }
 
     private void addPotionDamageEffects() {
         if (trait.hasPotionDamageEffects()) {
-            TranslationTextComponent title = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits.potion_damage_effects");
             StringTextComponent text = new StringTextComponent("");
             trait.getPotionDamageEffects().forEach(effect -> {
                 text.append(effect.getEffect().getDisplayName());
@@ -100,21 +98,19 @@ public class TraitPage extends BeepediaPage {
                 if (effect.getStrength() > 0) text.append(String.valueOf(effect.getStrength()));
                 text.append(", ");
             });
-            traitSections.add(new TraitSection(title, PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.HARMING), text));
+            traitSections.add(new TraitSection(TranslationConstants.Beepedia.Traits.POTION_DAMAGE_EFFECTS, PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.HARMING), text));
         }
     }
 
     private void addDamageImmunities() {
         if (trait.hasDamageImmunities()) {
-            TranslationTextComponent title = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits.damage_immunities");
             String typeList = String.join(", ", trait.getDamageImmunities());
-            traitSections.add(new TraitSection(title, new ItemStack(Items.IRON_CHESTPLATE), new StringTextComponent(typeList)));
+            traitSections.add(new TraitSection(TranslationConstants.Beepedia.Traits.DAMAGE_IMMUNITIES, new ItemStack(Items.IRON_CHESTPLATE), new StringTextComponent(typeList)));
         }
     }
 
     private void addPotionImmunities() {
         if (trait.hasPotionImmunities()) {
-            TranslationTextComponent title = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits.potion_immunities");
             List<ITextComponent> effectNames = trait.getPotionImmunities().stream().map(Effect::getDisplayName).collect(Collectors.toList());
             StringTextComponent text = new StringTextComponent("");
             for (int i = 0; i < effectNames.size(); i++) {
@@ -123,7 +119,7 @@ public class TraitPage extends BeepediaPage {
                     text.append(", ");
                 }
             }
-            traitSections.add(new TraitSection(title, new ItemStack(Items.MILK_BUCKET), text));
+            traitSections.add(new TraitSection(TranslationConstants.Beepedia.Traits.POTION_IMMUNITIES, new ItemStack(Items.MILK_BUCKET), text));
         }
     }
 
@@ -183,16 +179,16 @@ public class TraitPage extends BeepediaPage {
 
     private void drawBeesList(MatrixStack matrix, int xPos, int yPos) {
         FontRenderer font = Minecraft.getInstance().font;
-        TranslationTextComponent title = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits.bees_list");
+        TranslationTextComponent title = TranslationConstants.Beepedia.BEE_LIST;
         int padding = font.width(title) / 2;
-        font.draw(matrix, title.withStyle(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, -1);
+        font.draw(matrix, title.withStyle(TextFormatting.WHITE), xPos + (SUB_PAGE_WIDTH / 2f) - padding, yPos + 8f, -1);
     }
 
     private void drawEffectsList(MatrixStack matrix, int xPos, int yPos) {
         FontRenderer font = Minecraft.getInstance().font;
-        TranslationTextComponent title = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits.effects_list");
+        TranslationTextComponent title = TranslationConstants.Beepedia.EFFECTS_LIST;
         int padding = font.width(title) / 2;
-        font.draw(matrix, title.withStyle(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, -1);
+        font.draw(matrix, title.withStyle(TextFormatting.WHITE), xPos + (SUB_PAGE_WIDTH / 2f) - padding, yPos + 8f, -1);
 
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
         double scale = beepedia.getMinecraft().getWindow().getGuiScale();
