@@ -7,6 +7,7 @@ public class NBTConstants {
     }
 
 
+
     public static final String NBT_ROOT = "ResourcefulBees";
     public static final String NBT_COLOR = "Color";
     public static final String NBT_BEE_TYPE = "BeeType";
@@ -52,6 +53,7 @@ public class NBTConstants {
     public static final String NBT_PROCESS_TIME = "processTime";
     public static final String NBT_PROCESS_ENERGY = "processEnergy";
     public static final String NBT_PROCESS_RECIPE = "processRecipe";
+    public static final String NBT_FILTER_RECIPE = "filterRecipe";
     public static final String NBT_ITEM_OUTPUTS = "itemOutputs";
     public static final String NBT_FLUID_OUTPUTS = "fluidOutputs";
     public static final String NBT_LOCATIONS = "locations";

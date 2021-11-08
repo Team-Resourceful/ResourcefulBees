@@ -1,0 +1,7 @@
+{
+  "parent": "block/orientable",
+  "textures": {
+    "front": "resourcefulbees:block/centrifuge/void",
+    "side": "resourcefulbees:block/centrifuge/casing"
+  }
+}

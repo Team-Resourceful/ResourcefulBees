@@ -4,7 +4,7 @@
         "type":"CTM",
         "layer":"SOLID",
         "textures":[
-            "resourcefulbees:block/elite_centrifuge_casing_ctm"
+            "resourcefulbees:block/centrifuge/casing_ctm"
         ]
     }
 }

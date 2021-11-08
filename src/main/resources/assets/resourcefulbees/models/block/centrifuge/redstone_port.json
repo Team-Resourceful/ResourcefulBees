@@ -1,0 +1,7 @@
+{
+  "parent": "block/orientable",
+  "textures": {
+    "front": "resourcefulbees:block/centrifuge/redstone_port",
+    "side": "resourcefulbees:block/centrifuge/casing"
+  }
+}
