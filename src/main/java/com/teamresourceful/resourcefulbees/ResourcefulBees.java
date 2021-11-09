@@ -97,7 +97,7 @@ public class ResourcefulBees {
         if (event.getServer().isDedicatedServer()){
             BeeRegistry.getRegistry().regenerateCustomBeeData();
         }
-        ModPotions.createMixes();
+
     }
 
     @SubscribeEvent(priority = EventPriority.LOW)
@@ -107,6 +107,7 @@ public class ResourcefulBees {
         MinecraftForge.EVENT_BUS.register(new RecipeBuilder());
         ModFeatures.ConfiguredFeatures.registerConfiguredFeatures();
         CraftingHelper.register(new ResourceLocation(ResourcefulBees.MOD_ID, "nest"), NestIngredient.Serializer.INSTANCE);
+        ModPotions.createMixes();
     }
 
     @SubscribeEvent
