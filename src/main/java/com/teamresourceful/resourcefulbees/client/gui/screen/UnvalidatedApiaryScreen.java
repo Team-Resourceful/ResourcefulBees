@@ -5,6 +5,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.client.gui.widget.ArrowButton;
 import com.teamresourceful.resourcefulbees.common.inventory.containers.UnvalidatedApiaryContainer;
+import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.network.packets.BuildApiaryMessage;
 import com.teamresourceful.resourcefulbees.common.network.packets.ValidateApiaryMessage;
@@ -53,8 +54,8 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
     @Override
     protected void init() {
         super.init();
-        this.addButton(new Button(getGuiLeft() + 116, getGuiTop() + 10, 50, 20, new TranslationTextComponent("gui.resourcefulbees.apiary.button.validate"), onPress -> this.validate()));
-        BuildButton buildStructureButton = this.addButton(new BuildButton(getGuiLeft() + 116, getGuiTop() + 35, 50, 20, new TranslationTextComponent("gui.resourcefulbees.apiary.button.build"), onPress -> this.build()));
+        this.addButton(new Button(getGuiLeft() + 116, getGuiTop() + 10, 50, 20, TranslationConstants.Apiary.VALIDATE_BUTTON, onPress -> this.validate()));
+        BuildButton buildStructureButton = this.addButton(new BuildButton(getGuiLeft() + 116, getGuiTop() + 35, 50, 20, TranslationConstants.Apiary.BUILD_BUTTON, onPress -> this.build()));
         if (!this.player.isCreative()) {
             buildStructureButton.active = false;
         }
@@ -178,8 +179,7 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
         @Override
         public void renderToolTip(@NotNull MatrixStack matrix, int mouseX, int mouseY) {
             if (!this.active) {
-                TranslationTextComponent s = new TranslationTextComponent("gui.resourcefulbees.apiary.button.build.creative");
-                UnvalidatedApiaryScreen.this.renderTooltip(matrix, s, mouseX, mouseY);
+                UnvalidatedApiaryScreen.this.renderTooltip(matrix, TranslationConstants.Apiary.CREATIVE_BUILD_BUTTON, mouseX, mouseY);
             }
         }
     }
@@ -226,13 +226,7 @@ public class UnvalidatedApiaryScreen extends ContainerScreen<UnvalidatedApiaryCo
 
         @Override
         public void renderToolTip(@NotNull MatrixStack matrix, int mouseX, int mouseY) {
-            TranslationTextComponent s;
-            if (!isTriggered()) {
-                s = new TranslationTextComponent("gui.resourcefulbees.apiary.button.preview.enable");
-            }
-            else {
-                s = new TranslationTextComponent("gui.resourcefulbees.apiary.button.preview.disable");
-            }
+            TranslationTextComponent s = isTriggered() ? TranslationConstants.Apiary.PREVIEW_DISABLED : TranslationConstants.Apiary.PREVIEW_ENABLED;
             UnvalidatedApiaryScreen.this.renderTooltip(matrix, s, mouseX, mouseY);
         }
 

@@ -4,6 +4,7 @@ import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.datagen.providers.advancements.ModAdvancementProvider;
 import com.teamresourceful.resourcefulbees.datagen.providers.blockstates.ModBlockStateProvider;
+import com.teamresourceful.resourcefulbees.datagen.providers.lang.ModLanguageProvider;
 import com.teamresourceful.resourcefulbees.datagen.providers.loottables.ModLootTableProvider;
 import com.teamresourceful.resourcefulbees.datagen.providers.recipes.ModRecipeProvider;
 import com.teamresourceful.resourcefulbees.datagen.providers.tags.ModBlockTagProvider;
@@ -38,6 +39,10 @@ public class ResourcefulBeesDataGenerator {
             generator.addProvider(new ModFluidTagProvider(generator, existingFileHelper));
             generator.addProvider(new ModRecipeProvider(generator));
             generator.addProvider(new ModAdvancementProvider(generator));
+        }
+
+        if (event.includeClient()) {
+            generator.addProvider(new ModLanguageProvider(generator));
         }
     }
 }

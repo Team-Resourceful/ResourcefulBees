@@ -10,6 +10,7 @@ import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaSc
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.mutations.EntityMutationPage;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.mutations.ItemMutationPage;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
+import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.MutationType;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.utils.BeepediaUtils;
@@ -57,11 +58,6 @@ public class BreedingPage extends BeeDataPage {
     private final ResourceLocation breedingImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/breeding.png");
     private final ResourceLocation infoIcon = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/icons.png");
 
-    private final TranslationTextComponent parentsTitle = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding.parents_title");
-    private final TranslationTextComponent childrenTitle = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding.children_title");
-    private final TranslationTextComponent entityMutationsTitle = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding.entity_mutations_title");
-    private final TranslationTextComponent itemMutationsTitle = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding.item_mutations_title");
-    private final TranslationTextComponent errorTitle = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding.error_title");
     private int activePage = 0;
 
     public BreedingPage(BeepediaScreen beepedia, CustomBeeData beeData, int xPos, int yPos, List<EntityMutation> mutations, List<ItemMutation> itemBreedMutation, BeePage parent) {
@@ -210,28 +206,28 @@ public class BreedingPage extends BeeDataPage {
 
         switch (activeSubPage) {
             case CHILDREN:
-                title = childrenTitle;
+                title = TranslationConstants.Beepedia.Breeding.CHILDREN;
                 break;
             case ITEM_MUTATIONS:
-                title = itemMutationsTitle;
+                title = TranslationConstants.Beepedia.Breeding.ITEM_MUTATIONS;
                 break;
             case ENTITY_MUTATIONS:
-                title = entityMutationsTitle;
+                title = TranslationConstants.Beepedia.Breeding.ENTITY_MUTATIONS;
                 break;
             case PARENTS:
-                title = parentsTitle;
+                title = TranslationConstants.Beepedia.Breeding.PARENTS;
                 break;
             default:
-                title = errorTitle;
+                title = TranslationConstants.Beepedia.Breeding.ERROR;
                 // show error page
                 break;
         }
         int padding = font.width(title) / 2;
-        font.draw(matrix, title.withStyle(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, -1);
+        font.draw(matrix, title.withStyle(TextFormatting.WHITE), xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, -1);
         if (getCurrentListSize() > 1) {
             StringTextComponent page = new StringTextComponent(String.format("%d / %d", activePage + 1, getCurrentListSize()));
             padding = font.width(page) / 2;
-            font.draw(matrix, page.withStyle(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + SUB_PAGE_HEIGHT - 14, -1);
+            font.draw(matrix, page.withStyle(TextFormatting.WHITE), xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + SUB_PAGE_HEIGHT - 14, -1);
         }
     }
 
@@ -390,11 +386,11 @@ public class BreedingPage extends BeeDataPage {
                 int padding = font.width(text) / 2;
                 Minecraft.getInstance().textureManager.bind(infoIcon);
                 beepedia.blit(matrix, (int) chancePos.x, (int) chancePos.y, 16, 0, 9, 9);
-                font.draw(matrix, text.withStyle(TextFormatting.GRAY), (float) xPos + 140 - (float) padding, (float) yPos + 33, -1);
+                font.draw(matrix, text.withStyle(TextFormatting.GRAY), xPos + 140f - padding, yPos + 33f, -1);
             }
             StringTextComponent text = new StringTextComponent(decimalFormat.format(adjustedWeight));
             int padding = font.width(text) / 2;
-            font.draw(matrix, text.withStyle(TextFormatting.GRAY), (float) xPos + 103f - (float) padding, (float) yPos + 68, -1);
+            font.draw(matrix, text.withStyle(TextFormatting.GRAY), xPos + 103f - padding, yPos + 68f, -1);
         }
 
         public void drawParent1Item(MatrixStack matrix) {
@@ -425,7 +421,7 @@ public class BreedingPage extends BeeDataPage {
                 drawTooltip(matrixStack, beeFamily.getChildData(), mouseX, mouseY);
             }
             if (BeepediaScreen.mouseHovering(chancePos.x, chancePos.y, 9, 9, mouseX, mouseY) && beeFamily.getChance() < 1) {
-                beepedia.renderTooltip(matrixStack, new TranslationTextComponent("gui.resourcefulbees.jei.category.breed_chance.info"), mouseX, mouseY);
+                beepedia.renderTooltip(matrixStack, TranslationConstants.Jei.BREED_CHANCE_INFO, mouseX, mouseY);
             }
         }
 

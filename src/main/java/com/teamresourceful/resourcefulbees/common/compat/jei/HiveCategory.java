@@ -6,6 +6,7 @@ import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityIngredient;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary.ApiaryStorageTileEntity;
@@ -39,7 +40,7 @@ public class HiveCategory extends BaseCategory<HiveCategory.Recipe> {
     public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "hive");
 
 
-    public static final List<ItemStack> NESTS_0 = ModItems.NESTS_ITEMS.getEntries().stream()
+    protected static final List<ItemStack> NESTS_0 = ModItems.NESTS_ITEMS.getEntries().stream()
             .filter(RegistryObject::isPresent).map(RegistryObject::get).map(Item::getDefaultInstance).collect(Collectors.toList());
 
     private static final List<ItemStack> NESTS_1 = NESTS_0.stream().map(stack -> getNestWithTier(stack, 1, 1f)).collect(Collectors.toList());
@@ -56,7 +57,7 @@ public class HiveCategory extends BaseCategory<HiveCategory.Recipe> {
 
     public HiveCategory(IGuiHelper guiHelper) {
         super(guiHelper, ID,
-                I18n.get("gui.resourcefulbees.jei.category.hive"),
+                I18n.get(TranslationConstants.Jei.HIVE),
                 guiHelper.createBlankDrawable(160, 26),
                 guiHelper.createDrawableIngredient(new ItemStack(ModItems.OAK_BEE_NEST_ITEM.get())),
                 HiveCategory.Recipe.class);

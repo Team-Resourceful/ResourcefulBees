@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.item;
 
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
+import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.tileentity.TieredBeehiveTileEntity;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
@@ -20,7 +21,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
@@ -101,10 +101,10 @@ public class Smoker extends Item {
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(@NotNull ItemStack stack, @Nullable World worldIn, @NotNull List<ITextComponent> tooltip, @NotNull ITooltipFlag flagIn) {
         if(Screen.hasShiftDown()) {
-            tooltip.add(new TranslationTextComponent("item.resourcefulbees.smoker.tooltip").withStyle(TextFormatting.GOLD));
-            tooltip.add(new TranslationTextComponent("item.resourcefulbees.smoker.tooltip.1").withStyle(TextFormatting.GOLD));
+            tooltip.add(TranslationConstants.Items.SMOKER_TOOLTIP.withStyle(TextFormatting.GOLD));
+            tooltip.add(TranslationConstants.Items.SMOKER_TOOLTIP1.withStyle(TextFormatting.GOLD));
         } else {
-            tooltip.add(new TranslationTextComponent("resourcefulbees.shift_info").withStyle(TextFormatting.YELLOW));
+            tooltip.add(TranslationConstants.Items.MORE_INFO.withStyle(TextFormatting.YELLOW));
         }
     }
 }

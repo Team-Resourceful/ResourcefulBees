@@ -90,7 +90,7 @@ public class FileUtils {
                 e.printStackTrace();
             }
         } else if (Files.isDirectory(MOD_ROOT)) {
-            copyFiles(Paths.get(MOD_ROOT.toString(), dataPath), targetPath);
+            copyFiles(MOD_ROOT.resolve(dataPath), targetPath);
         }
     }
 
@@ -98,9 +98,8 @@ public class FileUtils {
         try (Stream<Path> sourceStream = Files.walk(source)) {
             sourceStream.filter(f -> f.getFileName().toString().endsWith(JSON))
                     .forEach(path -> {
-                        File targetFile = new File(String.valueOf(Paths.get(targetPath.toString(), "/", path.getFileName().toString())));
                         try {
-                            Files.copy(path, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                            Files.copy(path, targetPath.resolve(path.getFileName()), StandardCopyOption.REPLACE_EXISTING);
                         } catch (IOException e) {
                             LOGGER.error("Could not copy file: {}, Target: {}", path, targetPath);
                         }
@@ -122,7 +121,7 @@ public class FileUtils {
                 e.printStackTrace();
             }
         } else if (Files.isDirectory(FileUtils.MOD_ROOT)) {
-            FileUtils.streamFilesAndParse(Paths.get(FileUtils.MOD_ROOT.toString(), devPath), parser, errorMessage);
+            FileUtils.streamFilesAndParse(FileUtils.MOD_ROOT.resolve(devPath), parser, errorMessage);
         }
     }
 }

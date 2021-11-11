@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.entity.villager;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModVillagerProfessions;
 import net.minecraft.entity.merchant.villager.VillagerTrades;
@@ -12,7 +13,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.tileentity.BannerPattern;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 
 import java.util.List;
@@ -35,7 +35,7 @@ public class Beekeeper {
             CompoundNBT compoundnbt = queenBeeBanner.getOrCreateTagElement("BlockEntityTag");
             ListNBT listnbt = new BannerPattern.Builder().addPattern(BannerPattern.RHOMBUS_MIDDLE, DyeColor.LIGHT_BLUE).addPattern(BannerPattern.STRIPE_DOWNRIGHT, DyeColor.YELLOW).addPattern(BannerPattern.STRIPE_DOWNLEFT, DyeColor.YELLOW).addPattern(BannerPattern.STRIPE_BOTTOM, DyeColor.YELLOW).addPattern(BannerPattern.TRIANGLE_TOP, DyeColor.YELLOW).addPattern(BannerPattern.CURLY_BORDER, DyeColor.YELLOW).toListTag();
             compoundnbt.put("Patterns", listnbt);
-            queenBeeBanner.setHoverName(new TranslationTextComponent("block.resourcefulbees.queen_bee_banner").withStyle(TextFormatting.GOLD));
+            queenBeeBanner.setHoverName(TranslationConstants.Items.QUEEN_BEE_BANNER.withStyle(TextFormatting.GOLD));
             queenBeeBanner.setCount(1);
 
             level1.add((entity, rand) -> new MerchantOffer(

@@ -1,13 +1,12 @@
 package com.teamresourceful.resourcefulbees.common.block.multiblocks.apiary;
 
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
+import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryOutputType;
 import com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary.ApiaryTileEntity;
-import com.teamresourceful.resourcefulbees.common.utils.TooltipBuilder;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -104,20 +103,14 @@ public class ApiaryBlock extends Block {
   public void appendHoverText(@NotNull ItemStack stack, @Nullable IBlockReader worldIn, @NotNull List<ITextComponent> tooltip, @NotNull ITooltipFlag flagIn) {
     if(Screen.hasShiftDown())
     {
-      tooltip.addAll(new TooltipBuilder()
-              .addTranslatableTip("block.resourcefulbees.beehive.tooltip.max_bees")
-              .appendText(" " + CommonConfig.APIARY_MAX_BEES.get())
-              .appendText(" " + I18n.get("block.resourcefulbees.beehive.tooltip.unique_bees"), TextFormatting.BOLD)
-              .appendText( TextFormatting.GOLD + " Bees", TextFormatting.RESET)
-              .applyStyle(TextFormatting.GOLD)
-              .build());
+      tooltip.add(new TranslationTextComponent(TranslationConstants.BeeHive.MAX_BEES, CommonConfig.APIARY_MAX_BEES.get())
+              .append(TranslationConstants.BeeHive.UNIQUE.withStyle(TextFormatting.BOLD))
+              .withStyle(TextFormatting.GOLD)
+      );
+
       if (tier >= 0) {
         int timeReduction = (int)((0.1 + (tier * .1)) * 100);
-        tooltip.addAll(new TooltipBuilder()
-                .addTranslatableTip("block.resourcefulbees.beehive.tooltip.hive_time")
-                .appendText(" -" + timeReduction + "%")
-                .applyStyle(TextFormatting.GOLD)
-                .build());
+        tooltip.add(new TranslationTextComponent(TranslationConstants.BeeHive.HIVE_TIME, "-", timeReduction).withStyle(TextFormatting.GOLD));
       }
       ApiaryOutputType outputTypeEnum;
       int outputQuantity;
@@ -140,32 +133,22 @@ public class ApiaryBlock extends Block {
           outputQuantity = CommonConfig.T1_APIARY_QUANTITY.get();
       }
 
-      String outputType = outputTypeEnum.equals(ApiaryOutputType.COMB) ? I18n.get("honeycomb.resourcefulbees") : I18n.get("honeycomb_block.resourcefulbees");
+      TranslationTextComponent outputType = outputTypeEnum.equals(ApiaryOutputType.COMB) ? TranslationConstants.Apiary.HONEYCOMB : TranslationConstants.Apiary.HONEYCOMB_BLOCK;
 
-      tooltip.addAll(new TooltipBuilder()
-              .addTranslatableTip("block.resourcefulbees.apiary.tooltip.output_type")
-              .appendText(" " + outputType)
-              .applyStyle(TextFormatting.GOLD)
-              .addTranslatableTip("block.resourcefulbees.apiary.tooltip.output_quantity")
-              .appendText(" " + outputQuantity)
-              .applyStyle(TextFormatting.GOLD)
-              .build());
+      tooltip.add(new TranslationTextComponent(TranslationConstants.Apiary.OUTPUT_TYPE, outputType).withStyle(TextFormatting.GOLD));
+      tooltip.add(new TranslationTextComponent(TranslationConstants.Apiary.OUTPUT_QUANTITY, outputQuantity).withStyle(TextFormatting.GOLD));
     }
     else if (Screen.hasControlDown()){
-      tooltip.addAll(new TooltipBuilder()
-              .addTranslatableTip("block.resourcefulbees.apiary.tooltip.structure_size", TextFormatting.AQUA)
-              .addTranslatableTip("block.resourcefulbees.apiary.tooltip.requisites", TextFormatting.AQUA)
-              .addTranslatableTip("block.resourcefulbees.apiary.tooltip.drops", TextFormatting.AQUA)
-              .addTranslatableTip("block.resourcefulbees.apiary.tooltip.tags", TextFormatting.AQUA)
-              .addTranslatableTip("block.resourcefulbees.apiary.tooltip.offset", TextFormatting.AQUA)
-              .addTranslatableTip("block.resourcefulbees.apiary.tooltip.lock", TextFormatting.AQUA)
-              .addTranslatableTip("block.resourcefulbees.apiary.tooltip.lock_2", TextFormatting.AQUA)
-              .build());
-    }
-    else
-    {
-      tooltip.add(new TranslationTextComponent("resourcefulbees.shift_info").withStyle(TextFormatting.YELLOW));
-      tooltip.add(new TranslationTextComponent("resourcefulbees.ctrl_info").withStyle(TextFormatting.AQUA));
+      tooltip.add(TranslationConstants.Apiary.STRUCTURE_SIZE.withStyle(TextFormatting.AQUA));
+      tooltip.add(TranslationConstants.Apiary.REQUISITES.withStyle(TextFormatting.AQUA));
+      tooltip.add(TranslationConstants.Apiary.DROPS.withStyle(TextFormatting.AQUA));
+      tooltip.add(TranslationConstants.Apiary.TAGS.withStyle(TextFormatting.AQUA));
+      tooltip.add(TranslationConstants.Apiary.OFFSET.withStyle(TextFormatting.AQUA));
+      tooltip.add(TranslationConstants.Apiary.LOCK.withStyle(TextFormatting.AQUA));
+      tooltip.add(TranslationConstants.Apiary.LOCK2.withStyle(TextFormatting.AQUA));
+    } else {
+      tooltip.add(TranslationConstants.Items.MORE_INFO.withStyle(TextFormatting.YELLOW));
+      tooltip.add(TranslationConstants.Items.MULTIBLOCK_INFO.withStyle(TextFormatting.AQUA));
     }
 
     super.appendHoverText(stack, worldIn, tooltip, flagIn);

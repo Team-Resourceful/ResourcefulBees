@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.compat.top;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.tileentity.TieredBeehiveTileEntity;
 import mcjty.theoneprobe.api.*;
 import net.minecraft.block.BeehiveBlock;
@@ -36,13 +37,10 @@ public class TieredBeehiveDisplayOverride implements IBlockDisplayOverride {
 
         probeInfo.horizontal()
                 .vertical()
-                .text(new TranslationTextComponent("gui.resourcefulbees.beehive.tier").append(getHiveTier(tileEntity)))
-                .text(new TranslationTextComponent("gui.resourcefulbees.beehive.bees")
-                        .append(getHiveBeeCount(tileEntity))
-                        .append(" / ")
-                        .append(getHiveMaxBees(tileEntity)))
-                .text(new TranslationTextComponent("gui.resourcefulbees.beehive.honeylevel").append(getHoneyLevel(tileEntity)))
-                .text(new TranslationTextComponent("gui.resourcefulbees.beehive.smoked").append(getSmokedStatus(tileEntity)));
+                .text(new TranslationTextComponent(TranslationConstants.Top.TIER, getHiveTier(tileEntity)))
+                .text(new TranslationTextComponent(TranslationConstants.Top.BEES, getHiveBeeCount(tileEntity), getHiveMaxBees(tileEntity)))
+                .text(new TranslationTextComponent(TranslationConstants.Top.HONEY_LEVEL, getHoneyLevel(tileEntity)))
+                .text(new TranslationTextComponent(TranslationConstants.Top.SMOKED, getSmokedStatus(tileEntity)));
 
         createSmokedProbeData(probeInfo, tileEntity);
 
@@ -124,7 +122,7 @@ public class TieredBeehiveDisplayOverride implements IBlockDisplayOverride {
     private void createSmokedProbeData(IProbeInfo probeInfo, TieredBeehiveTileEntity tileEntity) {
         if (tileEntity.getTicksSmoked() != -1) {
             probeInfo.horizontal().vertical()
-                    .text(new TranslationTextComponent("gui.resourcefulbees.beehive.smoke_time"))
+                    .text(TranslationConstants.Top.SMOKE_TIME)
                     .progress((int) Math.floor(tileEntity.getTicksSmoked() / 20.0), 30);
         }
     }

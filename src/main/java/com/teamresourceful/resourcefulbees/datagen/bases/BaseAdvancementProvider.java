@@ -29,9 +29,9 @@ import java.util.Map;
 
 public abstract class BaseAdvancementProvider implements IDataProvider {
     private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
-    private static final String TRANSLATIONS_PREFIX = "advancements.resourcefulbees.";
-    private static final String TITLE_SUFFIX = ".title";
-    private static final String DESCRIPTION_SUFFIX = ".description";
+    public static final String TRANSLATIONS_PREFIX = "advancements.resourcefulbees.";
+    public static final String TITLE_SUFFIX = ".title";
+    public static final String DESCRIPTION_SUFFIX = ".description";
 
     private final String modDisplayName;
     private final DataGenerator generator;

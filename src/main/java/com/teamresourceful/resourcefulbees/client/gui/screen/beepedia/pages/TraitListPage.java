@@ -5,6 +5,7 @@ import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.teamresourceful.resourcefulbees.client.gui.widget.ListButton;
 import com.teamresourceful.resourcefulbees.client.gui.widget.SubButtonList;
+import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.widget.button.Button;
@@ -27,9 +28,8 @@ public class TraitListPage extends BeeDataPage {
     @Override
     public void renderBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
         if (list == null) return;
-        TranslationTextComponent title = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.traits");
         FontRenderer font = Minecraft.getInstance().font;
-        font.draw(matrix, title.withStyle(TextFormatting.WHITE), xPos, (float) yPos + 8, -1);
+        font.draw(matrix, TranslationConstants.Beepedia.Traits.TITLE.withStyle(TextFormatting.WHITE), xPos, (float) yPos + 8, -1);
         list.updateList();
     }
 

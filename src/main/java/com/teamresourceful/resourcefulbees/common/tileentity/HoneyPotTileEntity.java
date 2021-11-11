@@ -1,11 +1,12 @@
 package com.teamresourceful.resourcefulbees.common.tileentity;
 
+import com.teamresourceful.resourcefulbees.common.capabilities.HoneyFluidTank;
 import com.teamresourceful.resourcefulbees.common.inventory.containers.HoneyPotContainer;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.network.packets.SyncGUIMessage;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
-import com.teamresourceful.resourcefulbees.common.capabilities.HoneyFluidTank;
 import io.netty.buffer.Unpooled;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -18,7 +19,6 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.LazyOptional;
@@ -67,7 +67,7 @@ public class HoneyPotTileEntity extends TileEntity implements ISyncableGUI {
 
     @Override
     public @NotNull ITextComponent getDisplayName() {
-        return new TranslationTextComponent("gui.resourcefulbees.honey_pot");
+        return TranslationConstants.Guis.POT;
     }
 
     @Override

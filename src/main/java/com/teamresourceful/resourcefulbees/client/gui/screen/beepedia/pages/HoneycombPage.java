@@ -10,6 +10,7 @@ import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.fluids.CustomHoneyFluid;
 import com.teamresourceful.resourcefulbees.common.item.BeeSpawnEggItem;
 import com.teamresourceful.resourcefulbees.common.item.CustomHoneyBottleItem;
+import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.recipe.CentrifugeRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
@@ -134,7 +135,7 @@ public class HoneycombPage extends BeeDataPage {
     public void renderBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
         FontRenderer font = Minecraft.getInstance().font;
         TextureManager manager = Minecraft.getInstance().getTextureManager();
-        TranslationTextComponent title = new TranslationTextComponent(BeepediaScreen.currScreenState.isCentrifugeOpen() ? "gui.resourcefulbees.beepedia.bee_subtab.centrifuge" : "gui.resourcefulbees.beepedia.bee_subtab.honeycombs");
+        TranslationTextComponent title = BeepediaScreen.currScreenState.isCentrifugeOpen() ? TranslationConstants.Beepedia.Centrifuge.TITLE : TranslationConstants.Beepedia.Honeycombs.TITLE;
         int padding = font.width(title) / 2;
         font.draw(matrix, title.withStyle(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, -1);
         if (BeepediaScreen.currScreenState.isCentrifugeOpen() && !recipes.isEmpty()) {
@@ -286,7 +287,7 @@ public class HoneycombPage extends BeeDataPage {
 
         public void drawTooltip(MatrixStack matrix, int mouseX, int mouseY) {
             if (BeepediaScreen.mouseHovering((float) xPos + 28, (float) yPos + 67, 20, 20, mouseX, mouseY)) {
-                beepedia.renderTooltip(matrix, new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.centrifuge.requires_multiblock"), mouseX, mouseY);
+                beepedia.renderTooltip(matrix, TranslationConstants.Beepedia.Centrifuge.MULTIBLOCK, mouseX, mouseY);
             }
         }
 

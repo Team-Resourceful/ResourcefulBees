@@ -4,6 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.client.gui.widget.TabImageButton;
 import com.teamresourceful.resourcefulbees.common.inventory.containers.ApiaryStorageContainer;
+import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTab;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.network.packets.ApiaryTabMessage;
@@ -17,7 +18,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 import org.jetbrains.annotations.NotNull;
 
 public class ApiaryStorageScreen extends ContainerScreen<ApiaryStorageContainer> {
@@ -80,8 +80,7 @@ public class ApiaryStorageScreen extends ContainerScreen<ApiaryStorageContainer>
 
             @Override
             public void renderToolTip(@NotNull MatrixStack matrix, int mouseX, int mouseY) {
-                TranslationTextComponent s = new TranslationTextComponent("gui.resourcefulbees.apiary.button.main_screen");
-                ApiaryStorageScreen.this.renderTooltip(matrix, s, mouseX, mouseY);
+                ApiaryStorageScreen.this.renderTooltip(matrix, TranslationConstants.Apiary.MAIN_SCREEN, mouseX, mouseY);
             }
         });
 
@@ -90,8 +89,7 @@ public class ApiaryStorageScreen extends ContainerScreen<ApiaryStorageContainer>
 
             @Override
             public void renderToolTip(@NotNull MatrixStack matrix,int mouseX, int mouseY) {
-                TranslationTextComponent s = new TranslationTextComponent("gui.resourcefulbees.apiary.button.storage_screen");
-                ApiaryStorageScreen.this.renderTooltip(matrix, s, mouseX, mouseY);
+                ApiaryStorageScreen.this.renderTooltip(matrix, TranslationConstants.Apiary.STORAGE_SCREEN, mouseX, mouseY);
             }
         }).active = false;
     }

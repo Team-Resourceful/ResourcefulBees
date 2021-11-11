@@ -9,6 +9,7 @@ import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaSc
 import com.teamresourceful.resourcefulbees.client.gui.widget.ListButton;
 import com.teamresourceful.resourcefulbees.client.gui.widget.SubButtonList;
 import com.teamresourceful.resourcefulbees.common.item.BeeJar;
+import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import net.minecraft.client.Minecraft;
@@ -133,16 +134,16 @@ public class HoneyPage extends BeepediaPage {
 
     private void drawBeesList(MatrixStack matrix, int xPos, int yPos) {
         FontRenderer font = Minecraft.getInstance().font;
-        TranslationTextComponent title = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.honey.bees_list");
+        TranslationTextComponent title = TranslationConstants.Beepedia.BEE_LIST;
         int padding = font.width(title) / 2;
-        font.draw(matrix, title.withStyle(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, -1);
+        font.draw(matrix, title.withStyle(TextFormatting.WHITE), xPos + (SUB_PAGE_WIDTH / 2f) - padding, yPos + 8f, -1);
     }
 
     private void drawEffectsList(MatrixStack matrix, int xPos, int yPos) {
         FontRenderer font = Minecraft.getInstance().font;
-        TranslationTextComponent title = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.honey.effects_list");
+        TranslationTextComponent title = TranslationConstants.Beepedia.EFFECTS_LIST;
         int padding = font.width(title) / 2;
-        font.draw(matrix, title.withStyle(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, -1);
+        font.draw(matrix, title.withStyle(TextFormatting.WHITE), xPos + (SUB_PAGE_WIDTH / 2f) - padding, yPos + 8f, -1);
         for (int i = 0; i < effects.size(); i++) {
 
             // init effect

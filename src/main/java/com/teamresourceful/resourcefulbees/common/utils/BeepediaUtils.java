@@ -9,6 +9,7 @@ import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity
 import com.teamresourceful.resourcefulbees.common.item.Beepedia;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.LightLevel;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import net.minecraft.client.Minecraft;
@@ -51,32 +52,19 @@ public class BeepediaUtils {
     }
 
     public static TranslationTextComponent getSizeName(float sizeModifier) {
-        if (sizeModifier < 0.75) {
-            return new TranslationTextComponent("bees.resourcefulbees.size.tiny");
-        } else if (sizeModifier < 1) {
-            return new TranslationTextComponent("bees.resourcefulbees.size.small");
-        } else if (sizeModifier == 1) {
-            return new TranslationTextComponent("bees.resourcefulbees.size.regular");
-        } else if (sizeModifier <= 1.5) {
-            return new TranslationTextComponent("bees.resourcefulbees.size.large");
-        } else {
-            return new TranslationTextComponent("bees.resourcefulbees.size.giant");
-        }
+        if (sizeModifier < 0.75) return TranslationConstants.Sizes.TINY;
+        else if (sizeModifier < 1) return TranslationConstants.Sizes.SMALL;
+        else if (sizeModifier == 1) return TranslationConstants.Sizes.REGULAR;
+        else if (sizeModifier <= 1.5) return TranslationConstants.Sizes.LARGE;
+        else return TranslationConstants.Sizes.GIANT;
     }
 
     public static ITextComponent getYesNo(boolean bool) {
-        return bool ? new TranslationTextComponent("gui.resourcefulbees.yes") : new TranslationTextComponent("gui.resourcefulbees.no");
+        return bool ? TranslationConstants.Booleans.YES : TranslationConstants.Booleans.NO;
     }
 
     public static TranslationTextComponent getLightName(LightLevel light) {
-        switch (light) {
-            case DAY:
-                return new TranslationTextComponent("gui.resourcefulbees.light.day");
-            case NIGHT:
-                return new TranslationTextComponent("gui.resourcefulbees.light.night");
-            default:
-                return new TranslationTextComponent("gui.resourcefulbees.light.any");
-        }
+        return light.getDisplay();
     }
 
     public static List<EntityMutation> getMutationsContaining(CustomBeeData beeData) {
