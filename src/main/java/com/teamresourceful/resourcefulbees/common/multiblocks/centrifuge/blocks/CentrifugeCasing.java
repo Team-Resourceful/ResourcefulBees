@@ -25,6 +25,6 @@ public class CentrifugeCasing extends AbstractCentrifuge {
 
     @Override
     public boolean usesAxisPositions() {
-        return true;
+        return false;
     }
 }

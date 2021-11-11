@@ -54,8 +54,9 @@ public class CentrifugeFluidOutputEntity extends AbstractTieredCentrifugeEntity 
         super.invalidateCaps();
     }
 
-    public boolean depositResult(CentrifugeRecipe.Output<FluidOutput> output) {
+    public boolean depositResult(CentrifugeRecipe.Output<FluidOutput> output, int processQuantity) {
         FluidStack result = output.getPool().next().getFluidStack();
+        result.setAmount(result.getAmount() * processQuantity);
         if (result.isEmpty() || controller.dumpsContainFluid(result)) return true;
         boolean canDeposit = (voidExcess || simulateDeposit(result)) && result.isFluidEqual(fluidTank.getFluid());
 

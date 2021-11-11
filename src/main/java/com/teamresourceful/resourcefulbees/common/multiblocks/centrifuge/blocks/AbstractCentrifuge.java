@@ -16,16 +16,15 @@ public abstract class AbstractCentrifuge extends RectangularMultiblockBlock<Cent
         super(properties);
 
         if (usesCentrifugeState()) {
-            registerDefaultState(defaultBlockState().setValue(CentrifugeActivity.CENTRIFUGE_ACTIVITY_ENUM_PROPERTY, CentrifugeActivity.INACTIVE));
+            registerDefaultState(defaultBlockState().setValue(CentrifugeActivity.PROPERTY, CentrifugeActivity.INACTIVE));
         }
     }
-
 
     @Override
     protected void createBlockStateDefinition(@NotNull StateContainer.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         if (usesCentrifugeState()) {
-            builder.add(CentrifugeActivity.CENTRIFUGE_ACTIVITY_ENUM_PROPERTY);
+            builder.add(CentrifugeActivity.PROPERTY);
         }
     }
 

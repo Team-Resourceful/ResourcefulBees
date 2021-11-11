@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "assembled=false,facing=north": {
+      "model": "resourcefulbees:block/centrifuge/input/energy/advanced"
+    },
+    "assembled=true,facing=north": {
+      "model": "resourcefulbees:block/centrifuge/input/energy/advanced"
+    },
+    "assembled=false,facing=south": {
+      "model": "resourcefulbees:block/centrifuge/input/energy/advanced",
+      "y": 180
+    },
+    "assembled=true,facing=south": {
+      "model": "resourcefulbees:block/centrifuge/input/energy/advanced",
+      "y": 180
+    },
+    "assembled=false,facing=west": {
+      "model": "resourcefulbees:block/centrifuge/input/energy/advanced",
+      "y": 270
+    },
+    "assembled=true,facing=west": {
+      "model": "resourcefulbees:block/centrifuge/input/energy/advanced",
+      "y": 270
+    },
+    "assembled=false,facing=east": {
+      "model": "resourcefulbees:block/centrifuge/input/energy/advanced",
+      "y": 90
+    },
+    "assembled=true,facing=east": {
+      "model": "resourcefulbees:block/centrifuge/input/energy/advanced",
+      "y": 90
+    }
+  }
+}

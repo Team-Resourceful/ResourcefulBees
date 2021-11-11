@@ -1,7 +1,9 @@
 package com.teamresourceful.resourcefulbees.datagen;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.datagen.providers.advancements.ModAdvancementProvider;
+import com.teamresourceful.resourcefulbees.datagen.providers.blockstates.ModBlockStateProvider;
 import com.teamresourceful.resourcefulbees.datagen.providers.loottables.ModLootTableProvider;
 import com.teamresourceful.resourcefulbees.datagen.providers.recipes.ModRecipeProvider;
 import com.teamresourceful.resourcefulbees.datagen.providers.tags.ModBlockTagProvider;
@@ -16,14 +18,18 @@ import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
 @Mod.EventBusSubscriber(modid = ResourcefulBees.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ResourcefulBeesDataGenerator {
 
-    public ResourcefulBeesDataGenerator() {
-        ResourcefulBees.LOGGER.info("Data Generator Loaded!");
+    private ResourcefulBeesDataGenerator() {
+        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
 
     @SubscribeEvent
     public static void gatherData(GatherDataEvent event) {
+        ResourcefulBees.LOGGER.info("Data Generator Loaded!");
         DataGenerator generator = event.getGenerator();
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
+        if (event.includeClient()) {
+            generator.addProvider(new ModBlockStateProvider(generator, existingFileHelper));
+        }
         if (event.includeServer()) {
             generator.addProvider(new ModLootTableProvider(generator));
             ModBlockTagProvider blockTagProvider = new ModBlockTagProvider(generator, existingFileHelper);

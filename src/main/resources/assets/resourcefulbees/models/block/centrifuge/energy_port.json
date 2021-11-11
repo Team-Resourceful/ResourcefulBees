@@ -1,7 +1,0 @@
-{
-  "parent": "block/orientable",
-  "textures": {
-    "front": "resourcefulbees:block/centrifuge/energy_port",
-    "side": "resourcefulbees:block/centrifuge/casing"
-  }
-}

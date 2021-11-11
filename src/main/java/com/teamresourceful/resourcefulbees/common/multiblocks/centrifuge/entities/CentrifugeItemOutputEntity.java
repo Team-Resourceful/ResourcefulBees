@@ -54,8 +54,9 @@ public class CentrifugeItemOutputEntity extends AbstractTieredCentrifugeEntity i
         this.voidExcess = voidExcess;
     }
 
-    public boolean depositResult(CentrifugeRecipe.Output<ItemOutput> recipeOutput) {
+    public boolean depositResult(CentrifugeRecipe.Output<ItemOutput> recipeOutput, int processQuantity) {
         ItemStack result = recipeOutput.getPool().next().getItemStack();
+        result.setCount(result.getCount() * processQuantity);
         return inventoryHandler.depositResult(result);
     }
 

@@ -40,7 +40,6 @@ public class CentrifugeController extends RectangularMultiblockController<Centri
     public CentrifugeController(@NotNull World world) {
         super(world, AbstractCentrifugeEntity.class::isInstance , AbstractCentrifuge.class::isInstance);
         minSize.set(3);
-        //maxSize.set(16);
         maxSize.set(7, 8, 7);
         interiorValidator = block -> block.defaultBlockState().isAir();
         setAssemblyValidator(centrifugeController -> {
@@ -105,6 +104,10 @@ public class CentrifugeController extends RectangularMultiblockController<Centri
         }
         for (CentrifugeFluidOutputEntity fluidOutputOutput : fluidOutputs) {
             mutablePos.set(fluidOutputOutput.getBlockPos());
+            if (mutablePos.getY() == maxCoord().y()) throwValidationError("wrong_output_location");
+        }
+        for (CentrifugeVoidEntity dump : dumps) {
+            mutablePos.set(dump.getBlockPos());
             if (mutablePos.getY() == maxCoord().y()) throwValidationError("wrong_output_location");
         }
     }
@@ -215,7 +218,7 @@ public class CentrifugeController extends RectangularMultiblockController<Centri
 
     public void updateBlockStates() {
         terminals.forEach(terminal -> {
-            world.setBlockAndUpdate(terminal.getBlockPos(), terminal.getBlockState().setValue(CentrifugeActivity.CENTRIFUGE_ACTIVITY_ENUM_PROPERTY, centrifugeActivity));
+            world.setBlockAndUpdate(terminal.getBlockPos(), terminal.getBlockState().setValue(CentrifugeActivity.PROPERTY, centrifugeActivity));
             terminal.setChanged();
         });
     }

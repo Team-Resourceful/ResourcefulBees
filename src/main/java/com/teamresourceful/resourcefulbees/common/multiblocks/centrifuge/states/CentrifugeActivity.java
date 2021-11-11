@@ -8,7 +8,7 @@ public enum CentrifugeActivity implements IStringSerializable {
     ACTIVE((byte)1),
     INACTIVE((byte)0);
 
-    public static final EnumProperty<CentrifugeActivity> CENTRIFUGE_ACTIVITY_ENUM_PROPERTY = EnumProperty.create("centrifugeactivity", CentrifugeActivity.class);
+    public static final EnumProperty<CentrifugeActivity> PROPERTY = EnumProperty.create("centrifuge_activity", CentrifugeActivity.class);
 
     private final byte state;
 

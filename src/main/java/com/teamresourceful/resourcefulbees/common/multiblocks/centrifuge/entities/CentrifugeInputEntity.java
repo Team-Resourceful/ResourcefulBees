@@ -9,6 +9,7 @@ import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.contain
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.AbstractTieredCentrifugeEntity;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.ICentrifugeOutput;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeTier;
+import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeUtils;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.OutputLocations;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.network.packets.SyncGUIMessage;
@@ -19,7 +20,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.inventory.container.INamedContainerProvider;
@@ -54,9 +54,6 @@ import java.util.Locale;
 
 public class CentrifugeInputEntity extends AbstractTieredCentrifugeEntity implements INamedContainerProvider, ITickableMultiblockTile, IOnAssemblyTile {
 
-    //TODO need to handle condition where slots contain items and recipe has changed - *somewhere*
-    // *MAYBE* only accept and process if recipe slot has recipe, if not then do all recipes.
-
     public static final int RECIPE_SLOT = 0;
 
     private final OutputLocations<CentrifugeItemOutputEntity> itemOutputs = new OutputLocations<>();
@@ -65,10 +62,12 @@ public class CentrifugeInputEntity extends AbstractTieredCentrifugeEntity implem
     private final InventoryHandler inventoryHandler;
     private final LazyOptional<IItemHandler> lazyOptional;
     private CentrifugeRecipe filterRecipe = null; //recipe in the recipe slot
+    private ResourceLocation filterRecipeID = null;//needed to load the recipe on world load for client
     private CentrifugeRecipe processRecipe = null; //recipe currently being processed
     private ResourceLocation processRecipeID = null; //needed to load the recipe on world load
     private int processTime; //ticks left to complete processed recipe
     private int processEnergy; //energy needed per tick for processed recipe
+    private int processQuantity; //# of inputs being currently being processed
     private ProcessStage processStage = ProcessStage.IDLE;
 
     public CentrifugeInputEntity(RegistryObject<TileEntityType<CentrifugeInputEntity>> entityType, CentrifugeTier tier) {
@@ -107,10 +106,10 @@ public class CentrifugeInputEntity extends AbstractTieredCentrifugeEntity implem
     @Override
     public void tick() {
         if (level != null && !level.isClientSide) {
-            if (processStage == ProcessStage.IDLE && canProcess()) startProcess();
-            if (processStage == ProcessStage.PROCESSING) processRecipe();
-            if (processStage == ProcessStage.FINALIZING) depositResults();
-            if (processStage == ProcessStage.COMPLETED) processCompleted();
+            if (processStage.equals(ProcessStage.IDLE) && canProcess()) startProcess();
+            if (processStage.equals(ProcessStage.PROCESSING)) processRecipe();
+            if (processStage.equals(ProcessStage.FINALIZING)) depositResults();
+            if (processStage.equals(ProcessStage.COMPLETED)) processCompleted();
         }
     }
 
@@ -121,24 +120,34 @@ public class CentrifugeInputEntity extends AbstractTieredCentrifugeEntity implem
     private void startProcess() {
         setProcessStage(ProcessStage.PROCESSING);
         processRecipe = filterRecipe;
+        processRecipeID = processRecipe.getId();
         processTime = getRecipeTime();
         processEnergy = processRecipe.getEnergyPerTick() * this.controller.getRecipePowerModifier();
         consumeInputs(false);
+        setChanged();
     }
 
     private boolean consumeInputs(boolean simulate) {
-        Ingredient ingredient = filterRecipe.getIngredient();
-        int needed = ingredient.getItems()[0].getCount();
-
-        for (int slot = 0; needed > 0 && slot < inventoryHandler.getSlots(); slot++) {
-            ItemStack stackInSlot = inventoryHandler.getStackInSlot(slot);
-            if (stackInSlot == ItemStack.EMPTY || !ingredient.test(stackInSlot)) continue;
-            int found = stackInSlot.getCount();
-            if (!simulate) stackInSlot.shrink(needed);
-            needed -= Math.min(found, needed);
+        if (filterRecipe == null) {
+            processCompleted();
+            return false;
         }
 
-        return needed == 0;
+        Ingredient ingredient = filterRecipe.getIngredient();
+        int needed = simulate ? filterRecipe.getInputAmount() * controller.getMaxInputRecipes() : processQuantity;
+        int collected = 0;
+
+        for (int slot = 0; collected < needed && slot < inventoryHandler.getSlots(); slot++) {
+            ItemStack stackInSlot = inventoryHandler.getStackInSlot(slot);
+            if (stackInSlot == ItemStack.EMPTY || !ingredient.test(stackInSlot)) continue;
+            int found = Math.min(needed-collected, stackInSlot.getCount());
+            collected += found;
+            if (!simulate) stackInSlot.shrink(found);
+        }
+
+        if (simulate) processQuantity = collected - collected % filterRecipe.getInputAmount();
+
+        return collected >= filterRecipe.getInputAmount();
     }
 
     private void processRecipe() {
@@ -148,14 +157,13 @@ public class CentrifugeInputEntity extends AbstractTieredCentrifugeEntity implem
         }
     }
 
-    //TODO need to handle multiple recipes via CPUs either simply multiply outputs (easier) or roll outputs X times (harder)
+    //TODO determine an optimal way of rolling outputs based on process quantity vs just multiplying them
+    // - low priority and not necessary for release
     private void depositResults() {
         if (processRecipe == null || depositResults(processRecipe.getItemOutputs(), itemOutputs) && depositResults(processRecipe.getFluidOutputs(), fluidOutputs)) {
             setProcessStage(ProcessStage.COMPLETED);
         }
     }
-
-
 
     private <T extends AbstractOutput, A extends TileEntity & ICentrifugeOutput<T>> boolean depositResults(List<CentrifugeRecipe.Output<T>> recipeOutputs, OutputLocations<A> outputLocations) {
         for (int i = 0; i < recipeOutputs.size(); i++) {
@@ -163,7 +171,7 @@ public class CentrifugeInputEntity extends AbstractTieredCentrifugeEntity implem
             if (recipeOutput.getChance() >= MathUtils.RANDOM.nextFloat()) {
                 A location = outputLocations.get(i).getTile();
                 if (location == null) return false;
-                if (!outputLocations.isDeposited(i)) outputLocations.setDeposited(i, location.depositResult(recipeOutput));
+                if (!outputLocations.isDeposited(i)) outputLocations.setDeposited(i, location.depositResult(recipeOutput, processQuantity));
                 if (!outputLocations.isDeposited(i)) return false;
             }
         }
@@ -172,15 +180,17 @@ public class CentrifugeInputEntity extends AbstractTieredCentrifugeEntity implem
 
     private void processCompleted() {
         processRecipe = null;
-        itemOutputs.resetDeposited();
-        fluidOutputs.resetDeposited();
+        processRecipeID = null;
+        processQuantity = 0;
+        processEnergy = 0;
+        itemOutputs.resetProcessData();
+        fluidOutputs.resetProcessData();
         setProcessStage(ProcessStage.IDLE);
     }
 
     public void updateRecipe() {
-        ItemStack recipeStack = filterInventory.getStackInSlot(RECIPE_SLOT);
-        Inventory inventory = new Inventory(recipeStack);
-        if (level != null) filterRecipe = level.getRecipeManager().getRecipeFor(CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE, inventory, level).orElse(null);
+        filterRecipe = CentrifugeUtils.getRecipe(level, filterInventory.getStackInSlot(RECIPE_SLOT)).orElse(null);
+        filterRecipeID =  filterRecipe == null ? null : filterRecipe.getId();
     }
 
     //region CAPABILITIES
@@ -203,35 +213,33 @@ public class CentrifugeInputEntity extends AbstractTieredCentrifugeEntity implem
     @Nullable
     @Override
     public SUpdateTileEntityPacket getUpdatePacket() {
-        CompoundNBT tag = new CompoundNBT();
-        tag.putInt(NBTConstants.NBT_PROCESS_TIME, processTime);
-        return new SUpdateTileEntityPacket(worldPosition, 0, tag);
+        return new SUpdateTileEntityPacket(worldPosition, 0, writeNBT());
     }
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-        CompoundNBT tag = pkt.getTag();
-        processTime = tag.getInt(NBTConstants.NBT_PROCESS_TIME);
+        readNBT(pkt.getTag());
     }
 
     @NotNull
     @Override
     public CompoundNBT getUpdateTag() {
-        CompoundNBT nbtTagCompound = new CompoundNBT();
-        save(nbtTagCompound);
-        return nbtTagCompound;
+        return save(new CompoundNBT());
     }
 
     @Override
-    public void handleUpdateTag(@NotNull BlockState state, CompoundNBT tag) {
-        this.load(state, tag);
+    public void handleUpdateTag(BlockState state, CompoundNBT tag) {
+        load(state, tag);
     }
 
-    //TODO Load recipe here after caching resource location
     @Override
     public void onLoad() {
-        updateRecipe();
-        if (level != null) processRecipe = (CentrifugeRecipe) ((RecipeManagerAccessorInvoker) level.getRecipeManager()).callByType(CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE).get(processRecipeID);
+        if (level != null) {
+            filterRecipe = (CentrifugeRecipe) ((RecipeManagerAccessorInvoker) level.getRecipeManager()).callByType(CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE).get(filterRecipeID);
+            processRecipe = (CentrifugeRecipe) ((RecipeManagerAccessorInvoker) level.getRecipeManager()).callByType(CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE).get(processRecipeID);
+            itemOutputs.onLoad(CentrifugeItemOutputEntity.class, level); //TODO remove this in 1.18
+            fluidOutputs.onLoad(CentrifugeFluidOutputEntity.class, level); //TODO remove this in 1.18
+        }
         super.onLoad();
     }
 
@@ -243,12 +251,18 @@ public class CentrifugeInputEntity extends AbstractTieredCentrifugeEntity implem
         processTime = tag.getInt(NBTConstants.NBT_PROCESS_TIME);
         processEnergy = tag.getInt(NBTConstants.NBT_PROCESS_ENERGY);
         if (tag.contains(NBTConstants.NBT_PROCESS_RECIPE)) processRecipeID = ResourceLocation.tryParse(tag.getString(NBTConstants.NBT_PROCESS_RECIPE));
-        itemOutputs.deserialize(tag.getCompound(NBTConstants.NBT_ITEM_OUTPUTS), CentrifugeItemOutputEntity.class, level);
-        fluidOutputs.deserialize(tag.getCompound(NBTConstants.NBT_FLUID_OUTPUTS), CentrifugeFluidOutputEntity.class, level);
+        if (tag.contains(NBTConstants.NBT_FILTER_RECIPE)) filterRecipeID = ResourceLocation.tryParse(tag.getString(NBTConstants.NBT_FILTER_RECIPE));
+        itemOutputs.deserialize(tag.getCompound(NBTConstants.NBT_ITEM_OUTPUTS));
+        fluidOutputs.deserialize(tag.getCompound(NBTConstants.NBT_FLUID_OUTPUTS));
+        //TODO remove this block in 1.18 when onLoad is called properly
+        if (level != null && level.isClientSide) {
+            filterRecipe = (CentrifugeRecipe) ((RecipeManagerAccessorInvoker) level.getRecipeManager()).callByType(CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE).get(filterRecipeID);
+            processRecipe = (CentrifugeRecipe) ((RecipeManagerAccessorInvoker) level.getRecipeManager()).callByType(CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE).get(processRecipeID);
+            itemOutputs.onLoad(CentrifugeItemOutputEntity.class, level);
+            fluidOutputs.onLoad(CentrifugeFluidOutputEntity.class, level);
+        }
         super.readNBT(tag);
     }
-    // TODO Recipes aren't being updated correctly on world load!! figure out how to access the recipes
-    //  server level is null when reading nbt and client level isn't but client doesn't have the tag to parse
 
     @NotNull
     @Override
@@ -259,13 +273,16 @@ public class CentrifugeInputEntity extends AbstractTieredCentrifugeEntity implem
         tag.putString(NBTConstants.NBT_PROCESS_STAGE, processStage.toString().toLowerCase(Locale.ROOT));
         tag.putInt(NBTConstants.NBT_PROCESS_TIME, processTime);
         tag.putInt(NBTConstants.NBT_PROCESS_ENERGY, processEnergy);
-        if (processRecipe != null) tag.putString(NBTConstants.NBT_PROCESS_RECIPE, processRecipe.getId().toString());
+        if (processRecipe != null && processRecipeID != null) tag.putString(NBTConstants.NBT_PROCESS_RECIPE, processRecipeID.toString());
+        if (filterRecipe != null && filterRecipeID != null) tag.putString(NBTConstants.NBT_FILTER_RECIPE, filterRecipeID.toString());
         tag.put(NBTConstants.NBT_ITEM_OUTPUTS, itemOutputs.serialize());
         tag.put(NBTConstants.NBT_FLUID_OUTPUTS, fluidOutputs.serialize());
         return tag;
     }
     //endregion
 
+    //TODO see the line below
+    // REQUIRED remove this method and logic after implementing linking code in gui - this is only for dev/testing
     @Override
     public void onAssembly() {
         ArrayList<CentrifugeItemOutputEntity> iout = new ArrayList<>(this.controller.getItemOutputs());
@@ -300,11 +317,15 @@ public class CentrifugeInputEntity extends AbstractTieredCentrifugeEntity implem
 
         @Override
         public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-            assert level != null;
-            return level.getRecipeManager().getRecipeFor(CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE, new Inventory(stack), level).isPresent();
+            return CentrifugeUtils.getRecipe(level, stack).isPresent();
         }
     }
 
+    //TODO figure out issue with clicking items into slots after world load
+    // issue is fixed after removing item in recipe slot and adding it back in
+    // leading to believe that client or server has the wrong info on load until the changes are made
+    // check onLoad and updateRecipe - verify first by checking the validation of the item when
+    // clicking into a slot on world load to see if one side has the wrong info and returns a false/null
     private class InventoryHandler extends ItemStackHandler {
         protected InventoryHandler(int slots) {
             super(slots);
@@ -321,5 +342,4 @@ public class CentrifugeInputEntity extends AbstractTieredCentrifugeEntity implem
             setChanged();
         }
     }
-
 }

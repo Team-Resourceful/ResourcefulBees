@@ -12,50 +12,29 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
+
 public class OutputLocations<T extends TileEntity & ICentrifugeOutput<?>> {
 
-    private final Output<T> first = new Output<>();
-    private final Output<T> second = new Output<>();
-    private final Output<T> third = new Output<>();
+    //TODO decide if most of the methods in this class should be moved to the inner class or not
+
+    //TODO test for class cast exceptions then suppress warnings
+    private final Output<T>[] outputs = Arrays.asList(new Output<T>(), new Output<T>(), new Output<T>()).toArray(new Output[3]);
 
     public void setFirst(@Nullable T tile, @Nullable BlockPos pos) {
-        set(first, tile, pos);
+        set(outputs[0], tile, pos);
     }
 
     public void setSecond(@Nullable T tile, @Nullable BlockPos pos) {
-        set(second, tile, pos);
+        set(outputs[1], tile, pos);
     }
 
     public void setThird(@Nullable T tile, @Nullable BlockPos pos) {
-        set(third, tile, pos);
-    }
-
-    public Output<T> getFirst() {
-        return first;
-    }
-
-    public Output<T> getSecond() {
-        return second;
-    }
-
-    public Output<T> getThird() {
-        return third;
-    }
-
-    public Output<T> get(int i) {
-        switch (i) {
-            case 2: return third;
-            case 1: return second;
-            default: return first;
-        }
+        set(outputs[2], tile, pos);
     }
 
     public void set(int i, @Nullable T tile, @Nullable BlockPos pos) {
-        switch (i) {
-            case 2: setThird(tile, pos); break;
-            case 1: setSecond(tile, pos); break;
-            default: setFirst(tile, pos);
-        }
+        set(outputs[i], tile, pos);
     }
 
     public void set(Output<T> output, @Nullable T tile, @Nullable BlockPos pos) {
@@ -63,37 +42,67 @@ public class OutputLocations<T extends TileEntity & ICentrifugeOutput<?>> {
         output.pos = tile == null ? null : pos;
     }
 
+    public Output<T> getFirst() {
+        return outputs[0];
+    }
+
+    public Output<T> getSecond() {
+        return outputs[1];
+    }
+
+    public Output<T> getThird() {
+        return outputs[2];
+    }
+
+    public Output<T> get(int i) {
+        return outputs[i];
+    }
+
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isDeposited(int i) {
-        switch (i) {
-            case 2: return third.deposited;
-            case 1: return second.deposited;
-            default: return first.deposited;
-        }
+        return outputs[i].deposited;
     }
 
     public void setDeposited(int i, boolean deposited) {
-        switch (i) {
-            case 2: third.deposited = deposited; break;
-            case 1: second.deposited = deposited; break;
-            default: first.deposited = deposited;
+        outputs[i].deposited = deposited;
+    }
+
+    public void resetProcessData() {
+        for (int i = 0; i < 3; i++) {
+            outputs[i].deposited = false;
+            //outputs[i].rollsLeft = 0;
         }
     }
 
-    public void resetDeposited() {
-        first.deposited = false;
-        second.deposited =false;
-        third.deposited = false;
+/*    public int getRollsLeft(int i) {
+        return outputs[i].rollsLeft;
     }
 
-    public void deserialize(CompoundNBT tag, Class<T> clazz, @Nullable World level) {
+    public void setRollsLeft(int i, int rollsLeft) {
+        outputs[i].rollsLeft = rollsLeft;
+    }
+
+    public void decreaseRollsLeft(int i) {
+        outputs[i].rollsLeft--;
+    }*/
+
+    // merge this back into #deserialize in 1.18
+    public void onLoad(Class<T> clazz, @Nullable World level) {
+        for (int i = 0; i < 3; i++) {
+            BlockPos pos = outputs[i].pos;
+            if (pos != null) set(i, WorldUtils.getTileEntity(clazz, level, pos), pos);
+        }
+    }
+
+    public void deserialize(CompoundNBT tag) {
         if (tag.contains(NBTConstants.NBT_LOCATIONS)) {
             ListNBT listTag = tag.getList(NBTConstants.NBT_LOCATIONS, Constants.NBT.TAG_COMPOUND);
             for (int i = 0; i < listTag.size(); i++) {
                 CompoundNBT location = listTag.getCompound(i);
                 if (location.getInt("id") != i) continue;
                 BlockPos pos = NBTUtil.readBlockPos(location.getCompound("pos"));
-                set(i, WorldUtils.getTileEntity(clazz, level, pos), pos);
+                outputs[i].pos = pos;
+                //set(i, WorldUtils.getTileEntity(clazz, level, pos), pos); //TODO reimplement this in 1.18
             }
         }
     }
@@ -101,12 +110,13 @@ public class OutputLocations<T extends TileEntity & ICentrifugeOutput<?>> {
     public CompoundNBT serialize() {
         ListNBT nbtTagList = new ListNBT();
         for (int i = 0; i < 3; i++) {
-            Output<T> output = get(i);
+            Output<T> output = outputs[i];
             if (output.tile == null || output.pos == null) continue;
-            CompoundNBT location = new CompoundNBT();
-            location.putInt("id", i);
-            location.put("pos", NBTUtil.writeBlockPos(output.pos));
-            nbtTagList.add(location);
+            CompoundNBT nbt = new CompoundNBT();
+            nbt.putInt("id", i);
+            nbt.put("pos", NBTUtil.writeBlockPos(output.pos));
+            nbt.putBoolean("resultDeposited", output.deposited);
+            nbtTagList.add(nbt);
         }
         CompoundNBT nbt = new CompoundNBT();
         nbt.put(NBTConstants.NBT_LOCATIONS, nbtTagList);
@@ -117,6 +127,7 @@ public class OutputLocations<T extends TileEntity & ICentrifugeOutput<?>> {
         private @Nullable T tile = null;
         private @Nullable BlockPos pos = null;
         private boolean deposited = false;
+        //private int rollsLeft = 0;
 
         public @Nullable T getTile() {
             return tile;
