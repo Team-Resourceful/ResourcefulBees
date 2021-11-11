@@ -72,7 +72,7 @@ public class BeeTemptGoal extends Goal {
      */
     @Override
     public void tick() {
-        this.beeEntity.getLookControl().setLookAt(this.closestPlayer, (float) (this.beeEntity.getMaxHeadYRot() + 20), (float) this.beeEntity.getMaxHeadXRot());
+        this.beeEntity.getLookControl().setLookAt(this.closestPlayer, (this.beeEntity.getMaxHeadYRot() + 20), this.beeEntity.getMaxHeadXRot());
         if (this.beeEntity.distanceToSqr(this.closestPlayer) < 6.25D) {
             this.beeEntity.getNavigation().stop();
         } else {

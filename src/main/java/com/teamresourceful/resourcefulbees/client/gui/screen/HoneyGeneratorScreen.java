@@ -4,7 +4,6 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.inventory.containers.HoneyGeneratorContainer;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.tileentity.HoneyGeneratorTileEntity;
 import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
@@ -18,7 +17,6 @@ import org.jetbrains.annotations.NotNull;
 import java.text.DecimalFormat;
 
 public class HoneyGeneratorScreen extends ContainerScreen<HoneyGeneratorContainer> {
-    private static final int ENERGY_PER_BOTTLE = (ModConstants.HONEY_PER_BOTTLE/HoneyGeneratorTileEntity.HONEY_DRAIN_AMOUNT)*HoneyGeneratorTileEntity.ENERGY_FILL_AMOUNT;
 
     public HoneyGeneratorScreen(HoneyGeneratorContainer screenContainer, PlayerInventory inventory, ITextComponent titleIn) {
         super(screenContainer, inventory, titleIn);
@@ -37,11 +35,7 @@ public class HoneyGeneratorScreen extends ContainerScreen<HoneyGeneratorContaine
             this.blit(matrix, i + 130, j + 12 + (62-scaledRF), 215, (62-scaledRF), 11, scaledRF);
             int scaledTank = 62 * this.menu.getFluidAmount() / Math.max(this.menu.getMaxFluid(),1);
             this.blit(matrix, i + 83, j + 12 + (62-scaledTank), 226, (62-scaledTank), 14, scaledTank);
-            int scaledProgressX = 21 * this.menu.getTime() / Math.max(ModConstants.HONEY_PER_BOTTLE,1);
-            int scaledProgressY = 20 * this.menu.getTime() / Math.max(ModConstants.HONEY_PER_BOTTLE,1);
-            int energyScaledProgressX = 21 * this.menu.getEnergyTime() / Math.max(ENERGY_PER_BOTTLE,1);
-            this.blit(matrix, i + 35, j + 37, 176, 0, 18, scaledProgressY);
-            this.blit(matrix, i + 57, j + 42, 194, 0, scaledProgressX, 10);
+            int energyScaledProgressX = (int)(21 * (this.menu.getProcessingTime() / 10f));
             this.blit(matrix, i + 103, j + 42, 194, 0, energyScaledProgressX, 10);
         }
     }

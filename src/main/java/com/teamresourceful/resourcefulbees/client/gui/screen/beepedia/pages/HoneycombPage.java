@@ -10,10 +10,10 @@ import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.fluids.CustomHoneyFluid;
 import com.teamresourceful.resourcefulbees.common.item.BeeSpawnEggItem;
 import com.teamresourceful.resourcefulbees.common.item.CustomHoneyBottleItem;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModTags;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.recipe.CentrifugeRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
-import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.FontRenderer;
@@ -49,7 +49,7 @@ public class HoneycombPage extends BeeDataPage {
 
     final List<RecipeObject> recipes = new ArrayList<>();
 
-    private static final List<Item> hives = BeeInfoUtils.getItemTag("minecraft:beehives").getValues();
+    private static final List<Item> hives = ModTags.Items.BEEHIVES.getValues();
 
     private static final Item[] APIARIES = {ModItems.T1_APIARY_ITEM.get(), ModItems.T2_APIARY_ITEM.get(), ModItems.T3_APIARY_ITEM.get(), ModItems.T4_APIARY_ITEM.get()};
 

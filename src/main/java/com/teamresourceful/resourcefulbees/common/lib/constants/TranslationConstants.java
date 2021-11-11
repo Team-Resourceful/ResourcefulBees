@@ -236,7 +236,7 @@ public class TranslationConstants {
         @Translate("Honey Congealer")
         public static final TranslationTextComponent CONGEALER = new TranslationTextComponent("gui.resourcefulbees.honey_congealer");
 
-        @Translate("Honey Congealer")
+        @Translate("Honey Generator")
         public static final TranslationTextComponent GENERATOR = new TranslationTextComponent("gui.resourcefulbees.honey_generator");
 
         @Translate("Honey Pot")

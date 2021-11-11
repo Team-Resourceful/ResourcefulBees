@@ -1,15 +1,12 @@
 package com.teamresourceful.resourcefulbees.common.inventory.containers;
 
-import com.teamresourceful.resourcefulbees.common.inventory.slots.OutputSlot;
-import com.teamresourceful.resourcefulbees.common.inventory.slots.SlotItemHandlerUnconditioned;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.ContainerAccessor;
-import com.teamresourceful.resourcefulbees.common.tileentity.HoneyGeneratorTileEntity;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModContainers;
+import com.teamresourceful.resourcefulbees.common.tileentity.HoneyGeneratorTileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -26,26 +23,16 @@ public class HoneyGeneratorContainer extends ContainerWithStackMove {
 
         this.player = inv.player;
 
-        honeyGeneratorTileEntity = (HoneyGeneratorTileEntity) world.getBlockEntity(pos);
-        if (honeyGeneratorTileEntity != null) {
-            this.addSlot(new SlotItemHandlerUnconditioned(honeyGeneratorTileEntity.getTileStackHandler(), HoneyGeneratorTileEntity.HONEY_BOTTLE_INPUT, 36, 20) {
+        honeyGeneratorTileEntity = ((HoneyGeneratorTileEntity) world.getBlockEntity(pos));
 
-                @Override
-                public boolean mayPlace(ItemStack stack) {
-                    return honeyGeneratorTileEntity.getTileStackHandler().isItemValid(HoneyGeneratorTileEntity.HONEY_BOTTLE_INPUT, stack);
-                }
-            });
-            this.addSlot(new OutputSlot(honeyGeneratorTileEntity.getTileStackHandler(), HoneyGeneratorTileEntity.BOTTLE_OUTPUT, 36, 58));
-
-            for (int i = 0; i < 3; ++i) {
-                for (int j = 0; j < 9; ++j) {
-                    this.addSlot(new Slot(inv, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
-                }
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 9; ++j) {
+                this.addSlot(new Slot(inv, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
             }
+        }
 
-            for (int k = 0; k < 9; ++k) {
-                this.addSlot(new Slot(inv, k, 8 + k * 18, 142));
-            }
+        for (int k = 0; k < 9; ++k) {
+            this.addSlot(new Slot(inv, k, 8 + k * 18, 142));
         }
     }
 
@@ -57,9 +44,7 @@ public class HoneyGeneratorContainer extends ContainerWithStackMove {
 
     public int getMaxFluid() { return getHoneyGeneratorTileEntity().getTank().getCapacity(); }
 
-    public int getTime() { return getHoneyGeneratorTileEntity().getFluidFilled(); }
-
-    public int getEnergyTime() { return getHoneyGeneratorTileEntity().getEnergyFilled(); }
+    public int getProcessingTime() { return getHoneyGeneratorTileEntity().getProcessingTime(); }
 
     @Override
     public boolean stillValid(@NotNull PlayerEntity player) {
@@ -68,12 +53,12 @@ public class HoneyGeneratorContainer extends ContainerWithStackMove {
 
     @Override
     public int getContainerInputEnd() {
-        return 1;
+        return 0;
     }
 
     @Override
     public int getInventoryStart() {
-        return 2;
+        return 0;
     }
 
     @Override
@@ -85,7 +70,6 @@ public class HoneyGeneratorContainer extends ContainerWithStackMove {
     public void broadcastChanges() {
         super.broadcastChanges();
         if (getHoneyGeneratorTileEntity() == null) return;
-
         for (IContainerListener listener : ((ContainerAccessor) this).getListeners()) getHoneyGeneratorTileEntity().sendGUINetworkPacket(listener);
     }
 
