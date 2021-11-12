@@ -1,8 +1,8 @@
-package com.teamresourceful.resourcefulbees.client.gui.screen;
+package com.teamresourceful.resourcefulbees.client.gui.screen.centrifuge;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.containers.CentrifugeInputContainer;
+import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.containers.CentrifugeItemOutputContainer;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeTier;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -11,13 +11,12 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import org.jetbrains.annotations.NotNull;
 
-public class CentrifugeInputScreen extends ContainerScreen<CentrifugeInputContainer> {
+public class CentrifugeItemOutputScreen extends ContainerScreen<CentrifugeItemOutputContainer> {
 
     public static final ResourceLocation SLOT_BG = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/centrifuges/slot_bg.png");
     private final CentrifugeTier tier;
 
-
-    public CentrifugeInputScreen(CentrifugeInputContainer pMenu, PlayerInventory pPlayerInventory, ITextComponent pTitle) {
+    public CentrifugeItemOutputScreen(CentrifugeItemOutputContainer pMenu, PlayerInventory pPlayerInventory, ITextComponent pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
         this.tier = pMenu.getTier();
     }
@@ -29,8 +28,6 @@ public class CentrifugeInputScreen extends ContainerScreen<CentrifugeInputContai
             this.minecraft.getTextureManager().bind(SLOT_BG);
             int i = this.leftPos;
             int j = this.topPos;
-
-            blit(matrix, i + 9, j + 9, 0, 0, 18, 18);
 
             int rows = tier.equals(CentrifugeTier.BASIC) ? 1 : tier.getSlots() / 4;
             int columns = tier.equals(CentrifugeTier.BASIC) ? 1 : 4;

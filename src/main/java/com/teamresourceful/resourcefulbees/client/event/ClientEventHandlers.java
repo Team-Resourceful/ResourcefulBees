@@ -2,6 +2,9 @@ package com.teamresourceful.resourcefulbees.client.event;
 
 import com.teamresourceful.resourcefulbees.client.color.ColorHandler;
 import com.teamresourceful.resourcefulbees.client.gui.screen.*;
+import com.teamresourceful.resourcefulbees.client.gui.screen.centrifuge.CentrifugeInputScreen;
+import com.teamresourceful.resourcefulbees.client.gui.screen.centrifuge.CentrifugeItemOutputScreen;
+import com.teamresourceful.resourcefulbees.client.gui.screen.centrifuge.CentrifugeVoidScreen;
 import com.teamresourceful.resourcefulbees.client.models.ModelHandler;
 import com.teamresourceful.resourcefulbees.client.render.entity.CustomBeeRenderer;
 import com.teamresourceful.resourcefulbees.client.render.fluid.FluidRender;

@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.client.gui.screen;
+package com.teamresourceful.resourcefulbees.client.gui.screen.centrifuge;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.containers.CentrifugeVoidContainer;

@@ -42,7 +42,7 @@ public class CentrifugeTerminalContainer extends CentrifugeContainer<CentrifugeT
 
     @Override
     protected void setupSlots() {
-        addPlayerInvSlots();
+        //addPlayerInvSlots();
     }
 
     @Override
