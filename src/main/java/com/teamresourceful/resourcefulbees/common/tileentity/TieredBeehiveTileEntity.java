@@ -235,21 +235,17 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
     @Override
     public CompoundNBT save(@NotNull CompoundNBT nbt) {
         super.save(nbt);
-        if (!getHoneycombs().isEmpty()) nbt.put(NBTConstants.NBT_HONEYCOMBS_TE, writeHoneycombs());
+        List<ItemStack> combs = getHoneycombs();
+        if (!combs.isEmpty()) nbt.put(NBTConstants.NBT_HONEYCOMBS_TE, writeHoneycombs(combs));
         nbt.putBoolean(NBTConstants.NBT_SMOKED_TE, isSmoked);
         nbt.putInt(NBTConstants.NBT_TIER, getTier());
         nbt.putFloat(NBTConstants.NBT_TIER_MODIFIER, getTierModifier());
         return nbt;
     }
 
-    public ListNBT writeHoneycombs() {
+    public ListNBT writeHoneycombs(List<ItemStack> combs) {
         ListNBT nbtTagList = new ListNBT();
-        for (int i = 0; i < numberOfCombs(); i++) {
-            CompoundNBT itemTag = new CompoundNBT();
-            itemTag.putInt(String.valueOf(i), i);
-            getHoneycombs().get(i).save(itemTag);
-            nbtTagList.add(itemTag);
-        }
+        for (ItemStack honeycomb : combs) nbtTagList.add(honeycomb.save(new CompoundNBT()));
         return nbtTagList;
     }
 
