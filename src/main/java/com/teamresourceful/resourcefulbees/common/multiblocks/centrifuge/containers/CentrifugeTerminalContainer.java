@@ -2,21 +2,25 @@ package com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.contai
 
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.blocks.CentrifugeTerminal;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.CentrifugeTerminalEntity;
+import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.states.CentrifugeState;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModContainers;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.IWorldPosCallable;
+import net.roguelogix.phosphophyllite.gui.GuiSync;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class CentrifugeTerminalContainer extends CentrifugeContainer<CentrifugeTerminalEntity> {
+public class CentrifugeTerminalContainer extends CentrifugeContainer<CentrifugeTerminalEntity> implements GuiSync.IGUIPacketProvider {
 
     public CentrifugeTerminalContainer(int id, PlayerInventory inv, PacketBuffer buffer) {
         this(id, inv, getTileFromBuf(buffer, CentrifugeTerminalEntity.class));
     }
 
     public CentrifugeTerminalContainer(int id, PlayerInventory inv, CentrifugeTerminalEntity entity) {
-        super(ModContainers.CENTRIFUGE_FLUID_OUTPUT_CONTAINER.get(), id, inv, entity);
+        super(ModContainers.CENTRIFUGE_TERMINAL_CONTAINER.get(), id, inv, entity);
+        this.getGuiPacket();
     }
 
     @Override
@@ -53,5 +57,21 @@ public class CentrifugeTerminalContainer extends CentrifugeContainer<CentrifugeT
     @Override
     protected int getInvOffsetY() {
         return 90;
+    }
+
+    @Nullable
+    @Override
+    public GuiSync.IGUIPacket getGuiPacket() {
+        return this.entity == null ?  new CentrifugeState(null) : this.entity.getState();
+    }
+
+    @Override
+    public void runRequest(@NotNull String requestName, @Nullable Object requestData) {
+        GuiSync.IGUIPacketProvider.super.runRequest(requestName, requestData);
+    }
+
+    @Override
+    public void executeRequest(String requestName, Object requestData) {
+        GuiSync.IGUIPacketProvider.super.executeRequest(requestName, requestData);
     }
 }

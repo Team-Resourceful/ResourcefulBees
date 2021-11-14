@@ -60,7 +60,7 @@ public class CentrifugeInputScreen extends ContainerScreen<CentrifugeInputContai
     }
 
     @Override
-    protected void renderLabels(MatrixStack pMatrixStack, int pX, int pY) {
+    protected void renderLabels(@NotNull MatrixStack pMatrixStack, int pX, int pY) {
         //do nothing
     }
 }

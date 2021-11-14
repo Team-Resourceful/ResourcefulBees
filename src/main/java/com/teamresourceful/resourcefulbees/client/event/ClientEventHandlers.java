@@ -4,6 +4,7 @@ import com.teamresourceful.resourcefulbees.client.color.ColorHandler;
 import com.teamresourceful.resourcefulbees.client.gui.screen.*;
 import com.teamresourceful.resourcefulbees.client.gui.screen.centrifuge.CentrifugeInputScreen;
 import com.teamresourceful.resourcefulbees.client.gui.screen.centrifuge.CentrifugeItemOutputScreen;
+import com.teamresourceful.resourcefulbees.client.gui.screen.centrifuge.CentrifugeTerminalScreen;
 import com.teamresourceful.resourcefulbees.client.gui.screen.centrifuge.CentrifugeVoidScreen;
 import com.teamresourceful.resourcefulbees.client.models.ModelHandler;
 import com.teamresourceful.resourcefulbees.client.render.entity.CustomBeeRenderer;
@@ -129,9 +130,11 @@ public class ClientEventHandlers {
         ScreenManager.register(ModContainers.HONEY_CONGEALER_CONTAINER.get(), HoneyCongealerScreen::new);
         ScreenManager.register(ModContainers.HONEY_POT_CONTAINER.get(), HoneyPotScreen::new);
 
+        //centrifuge
         ScreenManager.register(ModContainers.CENTRIFUGE_INPUT_CONTAINER.get(), CentrifugeInputScreen::new);
         ScreenManager.register(ModContainers.CENTRIFUGE_ITEM_OUTPUT_CONTAINER.get(), CentrifugeItemOutputScreen::new);
         ScreenManager.register(ModContainers.CENTRIFUGE_VOID_CONTAINER.get(), CentrifugeVoidScreen::new);
+        ScreenManager.register(ModContainers.CENTRIFUGE_TERMINAL_CONTAINER.get(), CentrifugeTerminalScreen::new);
     }
 }
 

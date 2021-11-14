@@ -7,6 +7,7 @@ import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entitie
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeEnergyStorage;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeTier;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.states.CentrifugeActivity;
+import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.states.CentrifugeState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
@@ -17,6 +18,8 @@ import net.roguelogix.phosphophyllite.multiblock.rectangular.RectangularMultiblo
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -33,6 +36,10 @@ public class CentrifugeController extends RectangularMultiblockController<Centri
     private final Set<CentrifugeEnergyPortEntity> energyPorts = new HashSet<>();
     private final Set<CentrifugeTerminalEntity> terminals = new HashSet<>();
     private final CentrifugeEnergyStorage energyStorage = new CentrifugeEnergyStorage();
+
+    private final HashMap<BlockPos, ArrayList<BlockPos>> inputOutputMap = new HashMap<>();
+
+    private CentrifugeTerminalEntity terminal;
 
     //region structure building and validation
 
@@ -51,8 +58,9 @@ public class CentrifugeController extends RectangularMultiblockController<Centri
             checkHasTooManyBlocks(terminals, 1,"too_many_terminal" );
             checkHasTooManyBlocks(processors, 63, "too_many_cpu");
             checkHasTooManyBlocks(gearboxes, 64, "too_many_gearbox");
-            terminals.stream().findFirst().ifPresent(terminal -> {
-                CentrifugeTier tier = terminal.getTier();
+            terminals.stream().findFirst().ifPresent(entity -> {
+                this.terminal = entity;
+                CentrifugeTier tier = entity.getTier();
                 checkBlockExceedsTier(dumps, tier, "void_exceeds_tier");
                 checkBlockExceedsTier(inputs, tier, "input_exceeds_tier");
                 checkBlockExceedsTier(itemOutputs, tier, "item_output_exceeds_tier");
@@ -269,6 +277,24 @@ public class CentrifugeController extends RectangularMultiblockController<Centri
 
     @Override
     protected void onMerge(@NotNull CentrifugeController otherController) {
-        super.onMerge(otherController);
+        energyStorage.storeEnergy(otherController.energyStorage.getStored());
+        energyStorage.increaseCapacity(otherController.energyStorage.getCapacity());
+        //TODO test this ^^ make two separate centrifuges 3x3x3 with a one block space in between then combine the
+    }
+
+    public void updateCentrifugeState(CentrifugeState centrifugeState) {
+        centrifugeState.centrifugeActivity = centrifugeActivity;
+        centrifugeState.maxCentrifugeTier = terminal.getTier();
+        centrifugeState.energyStored = energyStorage.getStored();
+        centrifugeState.energyCapacity = energyStorage.getCapacity();
+        centrifugeState.numInputs = inputs.size();
+        centrifugeState.numItemOutputs = itemOutputs.size();
+        centrifugeState.numFluidOutputs = fluidOutputs.size();
+        centrifugeState.numEnergyPorts = energyPorts.size();
+        centrifugeState.numDumps = dumps.size();
+        centrifugeState.numGearboxes = gearboxes.size();
+        centrifugeState.numProcessors = processors.size();
+        centrifugeState.recipePowerModifier = getRecipePowerModifier();
+        centrifugeState.recipeTimeModifier = getRecipeTimeModifier();
     }
 }
