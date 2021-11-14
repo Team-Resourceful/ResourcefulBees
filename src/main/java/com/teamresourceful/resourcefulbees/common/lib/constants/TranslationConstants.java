@@ -522,4 +522,10 @@ public class TranslationConstants {
 
     }
 
+    public static class Centrifuge {
+
+        @Translate("Close")
+        public static final TranslationTextComponent CLOSE = new TranslationTextComponent("gui.resourcefulbees.centrifuge.close");
+    }
+
 }

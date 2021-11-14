@@ -1,19 +1,18 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen.centrifuge;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.google.common.collect.Lists;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.containers.CentrifugeTerminalContainer;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeTier;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.states.CentrifugeState;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.util.text.StringTextComponent;
+import org.jetbrains.annotations.Nullable;
 
-public class CentrifugeTerminalScreen extends ContainerScreen<CentrifugeTerminalContainer> {
+import java.util.List;
 
-    private static final ResourceLocation BACKGROUND = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/centrifuges/background.png");
+public class CentrifugeTerminalScreen extends BaseCrentrifugeScreen<CentrifugeTerminalContainer> {
+
     private final CentrifugeTier tier;
     private final CentrifugeState initialState;
 
@@ -23,19 +22,16 @@ public class CentrifugeTerminalScreen extends ContainerScreen<CentrifugeTerminal
         super(pMenu, pPlayerInventory, pTitle);
         this.tier = pMenu.getTier();
         this.initialState = (CentrifugeState) pMenu.getGuiPacket();
-        this.imageWidth = 396;
-        this.imageHeight = 240;
     }
 
     @Override
-    protected void renderLabels(@NotNull MatrixStack pMatrixStack, int pX, int pY) {
-        minecraft.textureManager.bind(BACKGROUND);
-        this.blit(pMatrixStack, 0, 0, this.imageWidth, this.imageHeight, 0, 0, 396, 240, 396, 240);
+    @Nullable List<ITextComponent> getInfoTooltip() {
+        return Lists.newArrayList(new StringTextComponent("INFO TEXT"));
     }
 
     @Override
-    protected void renderBg(MatrixStack pMatrixStack, float pPartialTicks, int pX, int pY) {
-        this.renderBackground(pMatrixStack);
+    void closeScreen() {
+        if (minecraft != null) minecraft.setScreen(null);
     }
 
 
