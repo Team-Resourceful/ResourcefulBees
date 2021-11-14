@@ -2,6 +2,7 @@ package com.resourcefulbees.resourcefulbees.registry;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
+import com.resourcefulbees.resourcefulbees.recipe.TagPotionRecipe;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -18,12 +19,16 @@ import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class ModPotions {
 
     private ModPotions() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
+
+    public static final Logger LOGGER = LogManager.getLogger();
 
     public static final DeferredRegister<Potion> POTIONS = DeferredRegister.create(ForgeRegistries.POTION_TYPES, ResourcefulBees.MOD_ID);
 
@@ -33,20 +38,21 @@ public class ModPotions {
     private static final ITag<Item> HONEY_BOTTLE_TAG = ItemTags.createOptional(new ResourceLocation("forge", "honey_bottle"));
 
     public static void createMixes() {
-        addMix(Potions.AWKWARD, Ingredient.of(HONEY_BOTTLE_TAG), CALMING_POTION.get());
-        addMix(CALMING_POTION.get(), Ingredient.of(Items.GLOWSTONE_DUST), LONG_CALMING_POTION.get());
+        LOGGER.info("Generation Potion Mixes");
+        addMix(Potions.AWKWARD, HONEY_BOTTLE_TAG, CALMING_POTION.get());
+        addMix(CALMING_POTION.get(), Tags.Items.DUSTS_GLOWSTONE, LONG_CALMING_POTION.get());
     }
 
-    private static void addMix(Potion basePotion, Ingredient fromTag, Potion outputPotion) {
+    private static void addMix(Potion basePotion, ITag<Item> fromTag, Potion outputPotion) {
+        LOGGER.info("Generating Potion Recipe for: {}", outputPotion.getRegistryName());
         ItemStack splashPotion = new ItemStack(Items.SPLASH_POTION);
         ItemStack lingeringPotion = new ItemStack(Items.LINGERING_POTION);
-        Ingredient gunpowder = Ingredient.of(Tags.Items.GUNPOWDER);
         Ingredient dragonBreath = Ingredient.of(Items.DRAGON_BREATH);
         Ingredient baseIngredient = Ingredient.of(PotionUtils.setPotion(new ItemStack(Items.POTION), basePotion));
         ItemStack outputStack = PotionUtils.setPotion(new ItemStack(Items.POTION), outputPotion);
         Ingredient potionIngredient = Ingredient.of(outputStack);
-        BrewingRecipeRegistry.addRecipe(baseIngredient, fromTag, outputStack);
-        BrewingRecipeRegistry.addRecipe(potionIngredient, gunpowder, PotionUtils.setPotion(splashPotion, outputPotion));
+        BrewingRecipeRegistry.addRecipe(new TagPotionRecipe(baseIngredient, fromTag, outputStack));
+        BrewingRecipeRegistry.addRecipe(new TagPotionRecipe(potionIngredient, Tags.Items.GUNPOWDER, PotionUtils.setPotion(splashPotion, outputPotion)));
         BrewingRecipeRegistry.addRecipe(potionIngredient, dragonBreath, PotionUtils.setPotion(lingeringPotion, outputPotion));
     }
 }
