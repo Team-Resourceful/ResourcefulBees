@@ -23,16 +23,19 @@ public class CentrifugeTerminalScreen extends ContainerScreen<CentrifugeTerminal
         super(pMenu, pPlayerInventory, pTitle);
         this.tier = pMenu.getTier();
         this.initialState = (CentrifugeState) pMenu.getGuiPacket();
-    }
-
-    @Override
-    protected void renderBg(@NotNull MatrixStack pMatrixStack, float pPartialTicks, int pX, int pY) {
-        fill(pMatrixStack, 0, 0, width, height, 0xFF0000);
+        this.imageWidth = 396;
+        this.imageHeight = 240;
     }
 
     @Override
     protected void renderLabels(@NotNull MatrixStack pMatrixStack, int pX, int pY) {
-        //do nothing
+        minecraft.textureManager.bind(BACKGROUND);
+        this.blit(pMatrixStack, 0, 0, this.imageWidth, this.imageHeight, 0, 0, 396, 240, 396, 240);
+    }
+
+    @Override
+    protected void renderBg(MatrixStack pMatrixStack, float pPartialTicks, int pX, int pY) {
+        this.renderBackground(pMatrixStack);
     }
 
 
